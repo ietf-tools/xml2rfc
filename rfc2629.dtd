@@ -76,7 +76,8 @@
           seriesNo    %NUMBER;           #IMPLIED
           ipr         (full2026|noDerivativeWorks2026|none)
                                          #IMPLIED
-          docName     %ATEXT;            #IMPLIED> 
+          docName     %ATEXT;            #IMPLIED
+          xml:lang    %ATEXT;            "en">
 
 
 <!--
@@ -200,17 +201,17 @@
           anchor      ID                 #IMPLIED
           title       %ATEXT;            "">
 
-<!ELEMENT preamble    (%TEXT;|xref|eref|iref)*>
+<!ELEMENT preamble    (%TEXT;|xref|eref|iref|spanx)*>
 <!ELEMENT artwork     (%TEXT;)*>
 <!ATTLIST artwork
           xml:space   (default|preserve) "preserve"
           name        %ATEXT;            ""
           type        %ATEXT;            ""
-          src         %URI;              ""
+          src         %URI;              #IMPLIED
           width       %ATEXT;            ""
           height      %ATEXT;            "">
 
-<!ELEMENT postamble   (%TEXT;|xref|eref|iref)*>
+<!ELEMENT postamble   (%TEXT;|xref|eref|iref|spanx)*>
     
 <!ELEMENT texttable   (preamble?,ttcol+,c*,postamble?)>
 <!ATTLIST texttable
@@ -220,7 +221,7 @@
 <!ATTLIST ttcol
           width       %ATEXT;           #IMPLIED
           align       (left|center|right) "left">
-<!ELEMENT c           (%TEXT;|xref|eref|iref)*>
+<!ELEMENT c           (%TEXT;|xref|eref|iref|spanx)*>
 
 
 <!--
@@ -247,4 +248,4 @@
           target      %URI;              #IMPLIED
           type        %ATEXT;            #REQUIRED
           octets      %NUMBER;           #IMPLIED>
-<!ELEMENT annotation  (%TEXT;|xref|eref|iref)*>
+<!ELEMENT annotation  (%TEXT;|xref|eref|iref|spanx)*>

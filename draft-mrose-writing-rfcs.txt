@@ -2,7 +2,7 @@
 
                                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                           July 24, 2003
+                                                               July 2003
 
 
                Writing I-Ds and RFCs using XML (revised)
@@ -25,30 +25,30 @@ Table of Contents
    2.2.2 The author Element . . . . . . . . . . . . . . . . . . . . .  7
    2.2.3 The date Element . . . . . . . . . . . . . . . . . . . . . .  8
    2.2.4 Meta Data Elements . . . . . . . . . . . . . . . . . . . . .  8
-   2.2.5 The abstract Element . . . . . . . . . . . . . . . . . . . .  8
+   2.2.5 The abstract Element . . . . . . . . . . . . . . . . . . . .  9
    2.2.6 The note Element . . . . . . . . . . . . . . . . . . . . . .  9
    2.2.7 Status, Copyright Notice, Table of Contents  . . . . . . . .  9
    2.2.8 Everything in the Front  . . . . . . . . . . . . . . . . . . 10
    2.3   The Middle . . . . . . . . . . . . . . . . . . . . . . . . . 11
-   2.3.1 The section Element  . . . . . . . . . . . . . . . . . . . . 11
-   2.3.2 The appendix Element . . . . . . . . . . . . . . . . . . . . 19
-   2.4   Back matter  . . . . . . . . . . . . . . . . . . . . . . . . 20
-   2.4.1 The references Element . . . . . . . . . . . . . . . . . . . 20
-   2.4.2 Appendices . . . . . . . . . . . . . . . . . . . . . . . . . 21
-   2.4.3 Copyright Status . . . . . . . . . . . . . . . . . . . . . . 21
-   3.    Processing the XML Source File . . . . . . . . . . . . . . . 22
-   3.1   Editing  . . . . . . . . . . . . . . . . . . . . . . . . . . 22
-   3.1.1 Checking . . . . . . . . . . . . . . . . . . . . . . . . . . 22
-   3.2   Converting to Text Format  . . . . . . . . . . . . . . . . . 23
-   3.3   Converting to HTML Format  . . . . . . . . . . . . . . . . . 23
-   3.4   Searching  . . . . . . . . . . . . . . . . . . . . . . . . . 23
-   A.    The rfc Element  . . . . . . . . . . . . . . . . . . . . . . 24
-   B.    The DTD  . . . . . . . . . . . . . . . . . . . . . . . . . . 25
-   C.    Changes from RFC 2629  . . . . . . . . . . . . . . . . . . . 31
-   D.    Acknowledgements . . . . . . . . . . . . . . . . . . . . . . 33
-   4.    Security Considerations  . . . . . . . . . . . . . . . . . . 34
-         References . . . . . . . . . . . . . . . . . . . . . . . . . 35
-         Author's Address . . . . . . . . . . . . . . . . . . . . . . 35
+   2.3.1 The section Element  . . . . . . . . . . . . . . . . . . . . 12
+   2.3.2 The appendix Element . . . . . . . . . . . . . . . . . . . . 20
+   2.4   Back matter  . . . . . . . . . . . . . . . . . . . . . . . . 21
+   2.4.1 The references Element . . . . . . . . . . . . . . . . . . . 21
+   2.4.2 Appendices . . . . . . . . . . . . . . . . . . . . . . . . . 22
+   2.4.3 Copyright Status . . . . . . . . . . . . . . . . . . . . . . 23
+   3.    Processing the XML Source File . . . . . . . . . . . . . . . 24
+   3.1   Editing  . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+   3.1.1 Checking . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+   3.2   Converting to Text Format  . . . . . . . . . . . . . . . . . 25
+   3.3   Converting to HTML Format  . . . . . . . . . . . . . . . . . 25
+   3.4   Searching  . . . . . . . . . . . . . . . . . . . . . . . . . 25
+   A.    The rfc Element  . . . . . . . . . . . . . . . . . . . . . . 26
+   B.    The DTD  . . . . . . . . . . . . . . . . . . . . . . . . . . 27
+   C.    Changes from RFC 2629  . . . . . . . . . . . . . . . . . . . 33
+   D.    Acknowledgements . . . . . . . . . . . . . . . . . . . . . . 35
+   4.    Security Considerations  . . . . . . . . . . . . . . . . . . 36
+         References . . . . . . . . . . . . . . . . . . . . . . . . . 37
+         Author's Address . . . . . . . . . . . . . . . . . . . . . . 37
 
 
 
@@ -57,7 +57,7 @@ Rose                                                            [Page 1]
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
 
-         Index  . . . . . . . . . . . . . . . . . . . . . . . . . . . 36
+         Index  . . . . . . . . . . . . . . . . . . . . . . . . . . . 38
 
 
 
@@ -433,14 +433,14 @@ Rose                                                            [Page 7]
    the workgroup elements identify the IETF working groups that produced
    the document, and the keyword elements identify useful search terms.
 
-2.2.5 The abstract Element
 
-   A document may have an abstract element, which contains one or more t
-   elements (Section 2.3.1.1). In general, only a single t element is
-   present, e.g.,
 
-       <abstract>
-           <t>This memo presents a technique for using XML
+
+
+
+
+
+
 
 
 
@@ -449,6 +449,14 @@ Rose                                                            [Page 8]
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
 
+2.2.5 The abstract Element
+
+   A document may have an abstract element, which contains one or more t
+   elements (Section 2.3.1.1). In general, only a single t element is
+   present, e.g.,
+
+       <abstract>
+           <t>This memo presents a technique for using XML
            (Extensible Markup Language) as a source format
            for documents in the Internet-Drafts (I-Ds) and
            Request for Comments (RFC) series.</t>
@@ -488,14 +496,6 @@ Rose                                                            [Page 8]
       except that the right to produce derivative works is not granted;
       or,
 
-   none: indicating that the document is NOT offered in accordance with
-      Section 10 of RFC 2026, and the author does not provide the IETF
-      with any rights other than to publish as an Internet-Draft.
-
-   In the latter case, a copyright notice will not be automatically
-   inserted during processing by an XML application.
-
-   Consult [3] for further details.
 
 
 
@@ -505,16 +505,27 @@ Rose                                                            [Page 9]
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
 
-   Finally, if the Internet-Draft is being submitted to an automated
-   process, then the docName attribute should be present in the <rfc>
-   tag at the beginning of the file. The value of this attribute
-   contains the document (not file) name associated with this
-   Internet-Draft, e.g.,
+   none: indicating that the document is NOT offered in accordance with
+      Section 10 of RFC 2026, and the author does not provide the IETF
+      with any rights other than to publish as an Internet-Draft.
+
+   In the latter case, a copyright notice will not be automatically
+   inserted during processing by an XML application.
+
+   Consult [3] for further details.
+
+   If the Internet-Draft is being submitted to an automated process,
+   then the docName attribute should be present in the <rfc> tag at the
+   beginning of the file. The value of this attribute contains the
+   document (not file) name associated with this Internet-Draft, e.g.,
 
        <rfc ipr='full2026' docName='draft-mrose-writing-rfcs-01'>
            ...
        </rfc>
 
+   Finally, an xml:lang attribute may be present to indicate that the
+   document is written in some language other than English (for writing
+   things other than RFCs).
 
 2.2.8 Everything in the Front
 
@@ -542,6 +553,14 @@ Rose                                                            [Page 9]
                </address>
            </author>
 
+
+
+
+Rose                                                           [Page 10]
+
+               Writing I-Ds and RFCs using XML (revised)       July 2003
+
+
            <date month='February' year='1999' />
 
            <area>General</area>
@@ -553,14 +572,6 @@ Rose                                                            [Page 9]
            <keyword>XML</keyword>
            <keyword>Extensible Markup Language</keyword>
            <abstract>
-
-
-
-Rose                                                           [Page 10]
-
-               Writing I-Ds and RFCs using XML (revised)       July 2003
-
-
                <t>This memo presents a technique for using XML
                (Extensible Markup Language) as a source format
                for documents in the Internet-Drafts (I-Ds) and
@@ -594,6 +605,18 @@ Rose                                                           [Page 10]
    optionally followed by one or more appendix elements, optionally
    followed by one or more section elements.
 
+
+
+
+
+
+
+
+Rose                                                           [Page 11]
+
+               Writing I-Ds and RFCs using XML (revised)       July 2003
+
+
 2.3.1 The section Element
 
    Each section element contains a section of the document. There is a
@@ -608,14 +631,6 @@ Rose                                                           [Page 10]
    The section element is recursive -- each contains any number and
    combination of t, figure, texttable, iref, and section elements,
    e.g.,
-
-
-
-
-Rose                                                           [Page 11]
-
-               Writing I-Ds and RFCs using XML (revised)       July 2003
-
 
        <section title='The Middle'>
            ...
@@ -648,6 +663,16 @@ Rose                                                           [Page 11]
                element.
 
 
+
+
+
+
+
+Rose                                                           [Page 12]
+
+               Writing I-Ds and RFCs using XML (revised)       July 2003
+
+
 2.3.1.2 The list Element
 
    The list element contains one or more items. Each item is a t
@@ -665,14 +690,6 @@ Rose                                                           [Page 11]
 
    The list element has an optional attribute, style, having the value
    "numbers" (for numeric lists), "letters" (for alphabetic lists),
-
-
-
-Rose                                                           [Page 12]
-
-               Writing I-Ds and RFCs using XML (revised)       July 2003
-
-
    "symbols" (for bulleted lists), "hanging" (for hanging lists),
    "format" (for auto-formatted lists), or, "empty" (for indented text).
    If a list element is nested, the default value is taken from its
@@ -698,6 +715,20 @@ Rose                                                           [Page 12]
            than to publish as an Internet-Draft.</t>
        </list>
 
+
+
+
+
+
+
+
+
+
+Rose                                                           [Page 13]
+
+               Writing I-Ds and RFCs using XML (revised)       July 2003
+
+
    The style attribute value for an auto-formatted list starts with the
    seven letters "format ", and is followed by a string which must
    contain exactly one instance of "%d" and "%c". Hanging text is
@@ -721,14 +752,6 @@ Rose                                                           [Page 12]
 
    If the list is auto-formatted, then the optional counter attribute is
    consulted, which controls the numbering. By default, the value of
-
-
-
-Rose                                                           [Page 13]
-
-               Writing I-Ds and RFCs using XML (revised)       July 2003
-
-
    this attribute is the same as the formatting string, e.g.,
 
        <list style='format R%d:' counter='R%d:'>
@@ -746,6 +769,21 @@ Rose                                                           [Page 13]
        <list style='format R%d:' counter='R%d:'>
            <t>Text for R3.</t>
        </list>
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                           [Page 14]
+
+               Writing I-Ds and RFCs using XML (revised)       July 2003
+
 
    If the style attribute has the value "hanging" or "format", then a
    second, optional, attribute called hangIndent is consulted. This
@@ -777,14 +815,6 @@ Rose                                                           [Page 13]
    a cross-reference is needed to a section, figure, table, or
    reference, the xref element (Section 2.3.1.5) is used; similarly, if
    an external-reference is needed, the eref element (Section 2.3.1.6)
-
-
-
-Rose                                                           [Page 14]
-
-               Writing I-Ds and RFCs using XML (revised)       July 2003
-
-
    is used. Indexing of text is provided by the the iref element
    (Section 2.3.1.7).
 
@@ -792,6 +822,24 @@ Rose                                                           [Page 14]
    Unlike text contained in the t, preamble, or postamble elements, both
    horizontal and vertical whitespace is significant in the artwork
    element.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                           [Page 15]
+
+               Writing I-Ds and RFCs using XML (revised)       July 2003
+
 
    So, putting it all together, we have, e.g.,
 
@@ -833,14 +881,6 @@ Rose                                                           [Page 14]
    artwork, an XML application producing a text version of the document
    should attempt to keep these elements on the same page. Because RFC
    2223 [2] allows no more than 69 characters by 49 lines of content on
-
-
-
-Rose                                                           [Page 15]
-
-               Writing I-Ds and RFCs using XML (revised)       July 2003
-
-
    each page, XML applications should be prepared to prematurely
    introduce page breaks to allow for better visual grouping.
 
@@ -848,6 +888,14 @@ Rose                                                           [Page 15]
    type. The former is used to suggest a filename to use when storing
    the content of the artwork element, whilst the latter contains a
    suggestive data-typing for the content.
+
+
+
+
+Rose                                                           [Page 16]
+
+               Writing I-Ds and RFCs using XML (revised)       July 2003
+
 
 2.3.1.4 The texttable Element
 
@@ -889,18 +937,21 @@ Rose                                                           [Page 15]
            <c>c #4</c>
            <c>c #5</c>
            <c>c #6</c>
-
-
-
-Rose                                                           [Page 16]
-
-               Writing I-Ds and RFCs using XML (revised)       July 2003
-
-
            <postamble>which is a very simple example.</postamble>
        </texttable>
 
    which is a very simple example.
+
+
+
+
+
+
+
+Rose                                                           [Page 17]
+
+               Writing I-Ds and RFCs using XML (revised)       July 2003
+
 
    So, putting it all together, we have, e.g.,
 
@@ -945,16 +996,18 @@ Rose                                                           [Page 16]
    title: the title attribute of the corresponding element is rendered
       (e.g., "XML Basics"); or,
 
+   default: a suitable designation is rendered, e.g., "Section 2.1" or
+      "<a href='#xml_basics'>XML Basics</a>" (the default).
 
 
 
-Rose                                                           [Page 17]
+
+
+
+Rose                                                           [Page 18]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
-
-   default: a suitable designation is rendered, e.g., "Section 2.1" or
-      "<a href='#xml_basics'>XML Basics</a>" (the default).
 
    If used with content, e.g.,
 
@@ -971,7 +1024,7 @@ Rose                                                           [Page 17]
    The eref element is used to reference external documents. The
    mandatory target attribute is a URI [4], e.g.,
 
-       <eref target='http://metalab.unc.edu/xml/'>Cafe con Leche</eref>
+       <eref target='http://www.ibiblio.org/xml/'>Cafe con Leche</eref>
 
    Note that while the target attribute is always present, the eref
    element may be empty, e.g.,
@@ -1001,17 +1054,16 @@ Rose                                                           [Page 17]
 
    The spanx element, which may occur only inside the t element, is used
    by the author to provide formatting guidance to the XML application.
-
-
-
-Rose                                                           [Page 18]
-
-               Writing I-Ds and RFCs using XML (revised)       July 2003
-
-
    There is an attribute, style, that indicates how the text inside the
    element should be rendered. (Note that leading and trailing
    whitespace is significant.)
+
+
+
+Rose                                                           [Page 19]
+
+               Writing I-Ds and RFCs using XML (revised)       July 2003
+
 
    At this time, the list of possible values for the style isn't
    enumerated, but implementations should, at a minimum, support:
@@ -1058,16 +1110,16 @@ Rose                                                           [Page 18]
    2.3.1). It has the same attributes (the mandatory title and the
    optional anchor).
 
-
-
-Rose                                                           [Page 19]
-
-               Writing I-Ds and RFCs using XML (revised)       July 2003
-
-
    As with the section element, it is recursive -- each appendix element
    contains any number and combination of t, figure, texttable, iref,
    and appendix elements.
+
+
+
+Rose                                                           [Page 20]
+
+               Writing I-Ds and RFCs using XML (revised)       July 2003
+
 
 2.4 Back matter
 
@@ -1105,6 +1157,26 @@ Rose                                                           [Page 19]
    The seriesInfo element has two attributes, name and value that
    identify the document series and series entry, respectively.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                           [Page 21]
+
+               Writing I-Ds and RFCs using XML (revised)       July 2003
+
+
    The reference element has an optional anchor attribute that is used
    for cross-referencing with the xref element (Section 2.3.1.5), e.g.,
 
@@ -1113,14 +1185,6 @@ Rose                                                           [Page 19]
                <title>Internet Official Protocol Standards</title>
                <author initials='J.' surname='Postel'
                        fullname='Jon Postel'>
-
-
-
-Rose                                                           [Page 20]
-
-               Writing I-Ds and RFCs using XML (revised)       July 2003
-
-
                    <organization abbrev='ISI'>
                    USC/Information Sciences Institute
                    </organization>
@@ -1159,6 +1223,16 @@ Rose                                                           [Page 20]
    To include appendices after the bibliography, simply add more section
    elements.
 
+
+
+
+
+
+Rose                                                           [Page 22]
+
+               Writing I-Ds and RFCs using XML (revised)       July 2003
+
+
 2.4.3 Copyright Status
 
    The copyright status for the document is not included in the
@@ -1172,7 +1246,45 @@ Rose                                                           [Page 20]
 
 
 
-Rose                                                           [Page 21]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                           [Page 23]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
@@ -1228,7 +1340,7 @@ Rose                                                           [Page 21]
 
 
 
-Rose                                                           [Page 22]
+Rose                                                           [Page 24]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
@@ -1284,7 +1396,7 @@ Rose                                                           [Page 22]
 
 
 
-Rose                                                           [Page 23]
+Rose                                                           [Page 25]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
@@ -1340,7 +1452,7 @@ Appendix A. The rfc Element
 
 
 
-Rose                                                           [Page 24]
+Rose                                                           [Page 26]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
@@ -1396,7 +1508,7 @@ Appendix B. The DTD
 
 
 
-Rose                                                           [Page 25]
+Rose                                                           [Page 27]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
@@ -1432,7 +1544,8 @@ Rose                                                           [Page 25]
              seriesNo    %NUMBER;           #IMPLIED
              ipr         (full2026|noDerivativeWorks2026|none)
                                             #IMPLIED
-             docName     %ATEXT;            #IMPLIED>
+             docName     %ATEXT;            #IMPLIED
+             xml:lang    %ATEXT;            "en">
 
 
    <!--
@@ -1448,15 +1561,15 @@ Rose                                                           [Page 25]
    <!ATTLIST title
              abbrev      %ATEXT;            #IMPLIED>
 
-   <!ELEMENT author      (organization,address?)>
 
 
 
-Rose                                                           [Page 26]
+Rose                                                           [Page 28]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
 
+   <!ELEMENT author      (organization,address?)>
    <!ATTLIST author
              initials    %ATEXT;            #IMPLIED
              surname     %ATEXT;            #IMPLIED
@@ -1507,8 +1620,7 @@ Rose                                                           [Page 26]
 
 
 
-
-Rose                                                           [Page 27]
+Rose                                                           [Page 29]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
@@ -1564,7 +1676,7 @@ Rose                                                           [Page 27]
 
 
 
-Rose                                                           [Page 28]
+Rose                                                           [Page 30]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
@@ -1577,14 +1689,14 @@ Rose                                                           [Page 28]
              anchor      ID                 #IMPLIED
              title       %ATEXT;            "">
 
-   <!ELEMENT preamble    (%TEXT;|xref|eref|iref)*>
+   <!ELEMENT preamble    (%TEXT;|xref|eref|iref|spanx)*>
    <!ELEMENT artwork     (%TEXT;)*>
    <!ATTLIST artwork
              xml:space   (default|preserve) "preserve"
              name        %ATEXT;            ""
              type        %ATEXT;            "">
 
-   <!ELEMENT postamble   (%TEXT;|xref|eref|iref)*>
+   <!ELEMENT postamble   (%TEXT;|xref|eref|iref|spanx)*>
 
    <!ELEMENT texttable   (preamble?,ttcol+,c*,postamble?>
    <!ATTLIST texttable
@@ -1594,7 +1706,7 @@ Rose                                                           [Page 28]
    <!ATTLIST ttcol
              width       %ATEXT;           #IMPLIED
              align       (left|center|right) "left">
-   <!ELEMENT c           (%TEXT;|xref|eref|iref)*>
+   <!ELEMENT c           (%TEXT;|xref|eref|iref|spanx)*>
 
 
    <!--
@@ -1620,7 +1732,7 @@ Rose                                                           [Page 28]
 
 
 
-Rose                                                           [Page 29]
+Rose                                                           [Page 31]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
@@ -1629,7 +1741,7 @@ Rose                                                           [Page 29]
              target      %URI;              #IMPLIED
              type        %ATEXT;            #REQUIRED
              octets      %NUMBER;           #IMPLIED>
-   <!ELEMENT annotation  (%TEXT;|xref|eref|iref)*>
+   <!ELEMENT annotation  (%TEXT;|xref|eref|iref|spanx)*>
 
 
 
@@ -1676,7 +1788,7 @@ Rose                                                           [Page 29]
 
 
 
-Rose                                                           [Page 30]
+Rose                                                           [Page 32]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
@@ -1698,13 +1810,15 @@ Appendix C. Changes from RFC 2629
 
       list style:  "letters"
 
-      list style:  formatted (starts with "format ")
+      list style:  formatted (starts with "format")
 
    o  Previously mandatory attributes, now optional:
 
       date:  month
 
    o  New, optional attributes:
+
+               rfc:  xml:lang
 
             author:  role
 
@@ -1725,17 +1839,17 @@ Appendix C. Changes from RFC 2629
       references:  may occur more than once in the back element (e.g.,
                    for normative and non-normative references)
 
-          format:  may occur zero or more times in the reference element
 
 
 
 
 
-
-Rose                                                           [Page 31]
+Rose                                                           [Page 33]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
+
+          format:  may occur zero or more times in the reference element
 
           figure:  should not appear within a t element
 
@@ -1786,9 +1900,7 @@ Rose                                                           [Page 31]
 
 
 
-
-
-Rose                                                           [Page 32]
+Rose                                                           [Page 34]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
@@ -1844,7 +1956,7 @@ Appendix D. Acknowledgements
 
 
 
-Rose                                                           [Page 33]
+Rose                                                           [Page 35]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
@@ -1900,7 +2012,7 @@ Rose                                                           [Page 33]
 
 
 
-Rose                                                           [Page 34]
+Rose                                                           [Page 36]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
@@ -1926,7 +2038,7 @@ References
    [6]  Rose, M., "Writing I-Ds and RFCs using XML", RFC 2629, June
         1999.
 
-   [7]   <http://metalab.unc.edu/xml/>
+   [7]   <http://www.ibiblio.org/xml/>
 
    [8]   <http://www.menteith.com/tdtd/>
 
@@ -1940,7 +2052,7 @@ References
 
    [13]  <http://xml.resource.org/authoring/rfc2629.xslt>
 
-   [14]  <http://www.cs.helsinki.fi/~jjaakkol/sgrep.html>
+   [14]  <http://www.cs.Helsinki.FI/u/jjaakkol/sgrep.html>
 
 
 Author's Address
@@ -1956,7 +2068,7 @@ Author's Address
 
 
 
-Rose                                                           [Page 35]
+Rose                                                           [Page 37]
 
                Writing I-Ds and RFCs using XML (revised)       July 2003
 
@@ -1965,7 +2077,7 @@ Index
 
 I
    indexing
-      how to  18
+      how to  19
 
 
 
@@ -2012,5 +2124,5 @@ I
 
 
 
-Rose                                                           [Page 36]
+Rose                                                           [Page 38]
 

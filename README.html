@@ -1,95 +1,135 @@
-<html><head><title>The README file: xml2rfc v1.20</title>
-<meta http-equiv="Expires" content="Thu, 24 Jul 2003 20:48:02 +0000">
-<STYLE type='text/css'>
-    .title { color: #990000; font-size: 22px; line-height: 22px; font-weight: bold; text-align: right;
-             font-family: helvetica, arial, sans-serif }
-    .filename { color: #666666; font-size: 18px; line-height: 28px; font-weight: bold; text-align: right;
-                  font-family: helvetica, arial, sans-serif }
-    p.copyright { color: #000000; font-size: 10px;
-                  font-family: verdana, charcoal, helvetica, arial, sans-serif }
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en"><head><title>The README file: xml2rfc v1.21</title>
+<meta http-equiv="Expires" content="Sun, 19 Oct 2003 02:38:29 +0000">
+<meta name="description" content="xml2rfc v1.21">
+<meta name="generator" content="xml2rfc v1.21 (http://xml.resource.org/)">
+<style type='text/css'>
+<!--
+    body {
+        font-family: verdana, charcoal, helvetica, arial, sans-serif;
+        font-size: small ; color: #000000 ; background-color: #ffffff ; }
+    .title { color: #990000; font-size: x-large ;
+        font-weight: bold; text-align: right;
+        font-family: helvetica, monaco, "MS Sans Serif", arial, sans-serif;
+        background-color: transparent; }
+    .filename { color: #666666; font-size: 18px; line-height: 28px;
+        font-weight: bold; text-align: right;
+        font-family: helvetica, arial, sans-serif;
+        background-color: transparent; }
+    td.rfcbug { background-color: #000000 ; width: 30px ; height: 30px ; 
+        text-align: justify; vertical-align: middle ; padding-top: 2px ; }
+    td.rfcbug span.RFC { color: #666666; font-weight: bold; text-decoration: none;
+        background-color: #000000 ;
+        font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+        font-size: x-small ; }
+    td.rfcbug span.hotText { color: #ffffff; font-weight: normal; text-decoration: none;
+        text-align: center ;
+        font-family: charcoal, monaco, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+        font-size: x-small ; background-color: #000000; }
+
+     A { font-weight: bold; }
+     A:link { color: #990000; background-color: transparent ; }
+     A:visited { color: #333333; background-color: transparent ; }
+     A:active { color: #333333; background-color: transparent ; }
+
     p { margin-left: 2em; margin-right: 2em; }
+    p.copyright { font-size: x-small ; }
+    p.toc { font-size: small ; font-weight: bold ; margin-left: 3em ;}
+
     span.emph { font-style: italic; }
     span.strong { font-weight: bold; }
-    span.verb { font-style: oblique; }
-    li { margin-left: 3em;  }
-    ol { margin-left: 2em; margin-right: 2em; }
+    span.verb { font-family: "Courier New", Courier, monospace ; }
+
+    ol.text { margin-left: 2em; margin-right: 2em; }
     ul.text { margin-left: 2em; margin-right: 2em; }
-    pre { margin-left: 3em; color: #333333 }
-    ul.toc { color: #000000; line-height: 16px;
-             font-family: verdana, charcoal, helvetica, arial, sans-serif }
-    H3 { color: #333333; font-size: 16px; line-height: 16px; font-family: helvetica, arial, sans-serif }
-    H4 { color: #000000; font-size: 14px; font-family: helvetica, arial, sans-serif }
-    TD.header { color: #ffffff; font-size: 10px; font-family: arial, helvetica, san-serif; valign: top }
-    TD.author-text { color: #000000; font-size: 10px;
-                     font-family: verdana, charcoal, helvetica, arial, sans-serif }
-    TD.author { color: #000000; font-weight: bold; margin-left: 4em; font-size: 10px; font-family: verdana, charcoal, helvetica, arial, sans-serif }
-     A:link { color: #990000; font-weight: bold;
-              font-family: MS Sans Serif, verdana, charcoal, helvetica, arial, sans-serif }
-     A:visited { color: #333333; font-weight: bold;
-                 font-family: MS Sans Serif, verdana, charcoal, helvetica, arial, sans-serif }
-     A:name { color: #333333; font-weight: bold;
-              font-family: MS Sans Serif, verdana, charcoal, helvetica, arial, sans-serif }
-    .link2 { color:#ffffff; font-weight: bold; text-decoration: none;
-             font-family: monaco, charcoal, geneva, MS Sans Serif, helvetica, monotype, verdana, sans-serif;
-             font-size: 9px }
-    .RFC { color:#666666; font-weight: bold; text-decoration: none;
-           font-family: monaco, charcoal, geneva, MS Sans Serif, helvetica, monotype, verdana, sans-serif;
-           font-size: 9px }
-    .hotText { color:#ffffff; font-weight: normal; text-decoration: none;
-               font-family: charcoal, monaco, geneva, MS Sans Serif, helvetica, monotype, verdana, sans-serif;
-               font-size: 9px }
+    li { margin-left: 3em;  }
+
+    pre { margin-left: 3em; color: #333333;  background-color: transparent;
+        font-family: "Courier New", Courier, monospace ; font-size: small ;
+        }
+
+    h3 { color: #333333; font-size: medium ;
+        font-family: helvetica, arial, sans-serif ;
+        background-color: transparent; }
+    h4 { font-size: small; font-family: helvetica, arial, sans-serif ; }
+
+    table.bug { width: 30px ; height: 15px ; }
+    td.bug { color: #ffffff ; background-color: #990000 ;
+        text-align: center ; width: 30px ; height: 15px ;
+         }
+    td.bug A.link2 { color: #ffffff ; font-weight: bold;
+        text-decoration: none;
+        font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, sans-serif;
+        font-size: x-small ; background-color: transparent }
+
+    td.header { color: #ffffff; font-size: x-small ;
+        font-family: arial, helvetica, sans-serif; vertical-align: top;
+        background-color: #666666 ; width: 33% ; }
+    td.author { font-weight: bold; margin-left: 4em; font-size: x-small ; }
+    td.author-text { font-size: x-small; }
+    table.data { vertical-align: top ; border-collapse: collapse ;
+        border-style: solid solid solid solid ;
+        border-color: black black black black ;
+        font-size: small ; text-align: center ; }
+    table.data th { font-weight: bold ;
+        border-style: solid solid solid solid ;
+        border-color: black black black black ; }
+    table.data td {
+        border-style: solid solid solid solid ;
+        border-color: #333333 #333333 #333333 #333333 ; }
+
+    hr { height: 1px }
+-->
 </style>
 </head>
-<body bgcolor="#ffffff" text="#000000" alink="#000000" vlink="#666666" link="#990000">
-<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
-<table width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table width="100%" border="0" cellpadding="2" cellspacing="1">
-<tr valign="top"><td width="33%" bgcolor="#666666" class="header">The README file</td><td width="33%" bgcolor="#666666" class="header">M. Rose</td></tr>
-<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">Dover Beach Consulting, Inc.</td></tr>
-<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">July 24, 2003</td></tr>
+<body>
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
+<table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tr><td class="header">The README file</td><td class="header">M. Rose</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">Dover Beach Consulting, Inc.</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">October 18, 2003</td></tr>
 </table></td></tr></table>
-<div align="right"><font face="monaco, MS Sans Serif" color="#990000" size="+3"><b><br><span class="title">xml2rfc v1.20</span></b></font></div>
-<font face="verdana, helvetica, arial, sans-serif" size="2">
-<a name="toc"><br><hr size="1" shade="0"></a>
-<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<div align="right"><span class="title"><br />xml2rfc v1.21</span></div>
+<a name="toc"></a><br /><hr />
 <h3>Table of Contents</h3>
-<ul compact class="toc">
-<b><a href="#anchor1">1.</a>&nbsp;
-Introduction<br></b>
-<b><a href="#anchor2">2.</a>&nbsp;
-Requirements<br></b>
-<b><a href="#anchor3">3.</a>&nbsp;
-Testing<br></b>
-<b><a href="#anchor4">3.1</a>&nbsp;
-Testing under a windowing system<br></b>
-<b><a href="#anchor5">3.2</a>&nbsp;
-Testing without a windowing system<br></b>
-<b><a href="#anchor6">4.</a>&nbsp;
-Next steps<br></b>
-<b><a href="#processing.instructions">4.1</a>&nbsp;
-Processing Instructions<br></b>
-<b><a href="#anchor7">4.1.1</a>&nbsp;
-Option Settings<br></b>
-<b><a href="#anchor8">4.1.2</a>&nbsp;
-Include Files<br></b>
-<b><a href="#anchor9">5.</a>&nbsp;
-Additions to RFC 2629<br></b>
-<b><a href="#anchor10">6.</a>&nbsp;
-Limitations of xml2rfc<br></b>
-<b><a href="#rfc.references1">&#167;</a>&nbsp;
-References<br></b>
-<b><a href="#rfc.authors">&#167;</a>&nbsp;
-Author's Address<br></b>
-<b><a href="#anchor11">A.</a>&nbsp;
-MacOS 9 Installation (courtesy of Ned Freed)<br></b>
-<b><a href="#anchor12">B.</a>&nbsp;
-rfc2629.xslt (courtesy of Julian Reschke)<br></b>
-<b><a href="#anchor13">C.</a>&nbsp;
-Copyrights<br></b>
-</ul>
-<br clear="all">
+<p class="toc">
+<a href="#anchor1">1.</a>&nbsp;
+Introduction<br />
+<a href="#anchor2">2.</a>&nbsp;
+Requirements<br />
+<a href="#anchor3">3.</a>&nbsp;
+Testing<br />
+<a href="#anchor4">3.1</a>&nbsp;
+Testing under a windowing system<br />
+<a href="#anchor5">3.2</a>&nbsp;
+Testing without a windowing system<br />
+<a href="#anchor6">4.</a>&nbsp;
+Next steps<br />
+<a href="#processing.instructions">4.1</a>&nbsp;
+Processing Instructions<br />
+<a href="#anchor7">4.1.1</a>&nbsp;
+Option Settings<br />
+<a href="#anchor8">4.1.2</a>&nbsp;
+Include Files<br />
+<a href="#anchor9">5.</a>&nbsp;
+Additions to RFC 2629<br />
+<a href="#anchor10">6.</a>&nbsp;
+Limitations of xml2rfc<br />
+<a href="#rfc.references1">&#167;</a>&nbsp;
+References<br />
+<a href="#rfc.authors">&#167;</a>&nbsp;
+Author's Address<br />
+<a href="#anchor11">A.</a>&nbsp;
+MacOS 9 Installation (courtesy of Ned Freed)<br />
+<a href="#anchor12">B.</a>&nbsp;
+rfc2629.xslt (courtesy of Julian Reschke)<br />
+<a href="#anchor13">C.</a>&nbsp;
+Copyrights<br />
+</p>
+<br clear="all" />
 
-<a name="anchor1"><br><hr size="1" shade="0"></a>
-<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<a name="anchor1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.1"></a><h3>1.&nbsp;Introduction</h3>
 
 <p>This is a package to convert memos written in XML to the RFC format.
@@ -98,8 +138,8 @@ Copyrights<br></b>
 you can use the
 <a href="http://xml.resource.org/">web-based service</a>.
 </p>
-<a name="anchor2"><br><hr size="1" shade="0"></a>
-<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<a name="anchor2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.2"></a><h3>2.&nbsp;Requirements</h3>
 
 <p>You need to have Tcl/Tk version 8 running on your system.
@@ -140,8 +180,8 @@ in the distribution.
 It contains some extra functionality for a few special users &#151;
 so, if you don't know what it is, don't worry about it...
 </p>
-<a name="anchor3"><br><hr size="1" shade="0"></a>
-<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<a name="anchor3"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.3"></a><h3>3.&nbsp;Testing</h3>
 
 <p>Now test your installation.
@@ -189,8 +229,8 @@ so, if you don't know what it is, don't worry about it...
            or "xml2nroff inputfile"
 </pre>
 
-<a name="anchor6"><br><hr size="1" shade="0"></a>
-<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<a name="anchor6"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4"></a><h3>4.&nbsp;Next steps</h3>
 
 <p>Read the <a href="draft-mrose-writing-rfcs.html">2629bis</a>
@@ -216,11 +256,11 @@ you don't need any PIs in your input file!
 <a name="rfc.section.4.1.1"></a><h4><a name="anchor7">4.1.1</a>&nbsp;Option Settings</h4>
 
 <p>The list of valid keywords are:
-</p><table border="1" align="center" valign="top">
+</p><table class="data" align="center" border="1" cellpadding="2" cellspacing="2">
 <tr>
-<td align="right" width="20%">keyword</td>
-<td align="center" width="20%">default</td>
-<td align="left" width="60%">meaning</td>
+<th align="right" width="20%">keyword</th>
+<th align="center" width="20%">default</th>
+<th align="left" width="60%">meaning</th>
 </tr>
 <tr>
 <td align="right">strict</td>
@@ -245,7 +285,8 @@ you don't need any PIs in your input file!
 <tr>
 <td align="right">subcompact</td>
 <td align="center">compact</td>
-<td align="left">if compact is "yes", then setting this to "no" will make things a little less compact</td>
+<td align="left">if compact is "yes",
+then you can make things a little less compact by setting this to "no"</td>
 </tr>
 <tr>
 <td align="right">toc</td>
@@ -372,8 +413,8 @@ set env(XML_LIBRARY) $library
 <p>There are links to various bibliographic databases (RFCs, I-Ds, and so on)
 on the <span class="strong">xml2rfc</span><a href="http://xml.resource.org/">homepage</a>.
 </p>
-<a name="anchor9"><br><hr size="1" shade="0"></a>
-<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<a name="anchor9"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.5"></a><h3>5.&nbsp;Additions to RFC 2629</h3>
 
 <p>A few additions have been made to the format originally defined in
@@ -390,7 +431,7 @@ but only if HTML is being generated,
 e.g.,
 </p>
 <pre>
-       &lt;figure>&lt;artwork src='layers.gif' />&lt;/figure>
+       &lt;figure&gt;&lt;artwork src='layers.gif' /&gt;&lt;/figure&gt;
 </pre>
 <p>
 
@@ -400,12 +441,12 @@ and the textual contents of the <span class="strong">artwork</span>,
        <span class="strong">preamble</span>, and
 <span class="strong">postamble</span> elements are ignored.
 </p>
-</p>
-<a name="anchor10"><br><hr size="1" shade="0"></a>
-<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+
+<a name="anchor10"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6"></a><h3>6.&nbsp;Limitations of xml2rfc</h3>
 
-<p>
+<p></p>
 <ul class="text">
 <li>The <span class="strong">figure</span> element's <span class="strong">title</span> attribute is ignored,
 except when generating HTML.
@@ -413,18 +454,18 @@ except when generating HTML.
 <li>The <span class="strong">xref</span> element's
 <span class="strong">pageno</span> attribute is ignored.
 </li>
-</ul><p>
-</p>
-<a name="rfc.references2"><br><hr size="1" shade="0"></a>
-<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+</ul>
+
+<a name="rfc.references1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <h3>References</h3>
 <table width="99%" border="0">
-<tr><td class="author-text" valign="top"><b><a name="RFC2026">[1]</a></b></td>
+<tr><td class="author-text" valign="top"><a name="RFC2026">[1]</a></td>
 <td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, "<a href="ftp://ftp.isi.edu/in-notes/rfc2026.txt">The Internet Standards Process -- Revision 3</a>", BCP 9, RFC 2026, October 1996.</td></tr>
 </table>
 
-<a name="rfc.authors"><br><hr size="1" shade="0"></a>
-<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<a name="rfc.authors"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <h3>Author's Address</h3>
 <table width="99%" border="0" cellpadding="0" cellspacing="0">
 <tr><td class="author-text">&nbsp;</td>
@@ -443,11 +484,11 @@ except when generating HTML.
 <td class="author-text"><a href="mailto:mrose@dbc.mtview.ca.us">mrose@dbc.mtview.ca.us</a></td></tr>
 </table>
 
-<a name="anchor11"><br><hr size="1" shade="0"></a>
-<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<a name="anchor11"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;MacOS 9 Installation (courtesy of Ned Freed)</h3>
 
-<p>
+<p></p>
 <ol class="text">
 <li>Install Tcl/Tk 8.3.4
 </li>
@@ -469,10 +510,10 @@ select <span class="verb">Wish 8.3.4</span>.
 application will write out an executable version of
 <span class="strong">xml2rfc</span>.
 </li>
-</ol><p>
-</p>
-<a name="anchor12"><br><hr size="1" shade="0"></a>
-<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+</ol>
+
+<a name="anchor12"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;rfc2629.xslt (courtesy of Julian Reschke)</h3>
 
 <p>The file <span class="verb">rfc2629.xslt</span> can be used with
@@ -482,11 +523,11 @@ A word of warning though:
 the XSLT script doesn't support the processing instructions discussed
 <a href="#processing.instructions">earlier</a>.
 </p>
-<a name="anchor13"><br><hr size="1" shade="0"></a>
-<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<a name="anchor13"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.C"></a><h3>Appendix C.&nbsp;Copyrights</h3>
 
 <p>(c) 2003 Marshall T. Rose
 </p>
 <p>Hold harmless the author, and any lawful use is allowed.
-</p></font></body></html>
+</p></body></html>

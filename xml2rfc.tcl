@@ -2318,10 +2318,10 @@ proc ::textutil::adjust::Configure { args } {
     foreach { option value } $args {
         switch -exact -- $option {
             -full {
-                if { ![ string is boolean -strict $value ] } then {
+                if { ![ StringIsBoolean -strict $value ] } then {
                     error "expected boolean but got \"$value\""
                 }
-                set FullLine [ string is true $value ]
+                set FullLine [ StringIsTrue $value ]
             }
             -justify {
                 set lovalue [ string tolower $value ]
@@ -2338,7 +2338,7 @@ proc ::textutil::adjust::Configure { args } {
                 }   
             }
             -length {
-                if { ![ string is integer $value ] } then {
+                if { ![ StringIsInteger $value ] } then {
                     error "expected positive integer but got \"$value\""
                 }
                 if { $value < 1 } then {
@@ -2347,10 +2347,10 @@ proc ::textutil::adjust::Configure { args } {
                 set Length $value
             }
             -strictlength {
-                if { ![ string is boolean -strict $value ] } then {
+                if { ![ StringIsBoolean -strict $value ] } then {
                     error "expected boolean but got \"$value\""
                 }
-                set StrictLength [ string is true $value ]
+                set StrictLength [ StringIsTrue $value ]
             }
             default {
                 error "bad option \"$option\": must be -full, -justify, -length, or -strictlength"
@@ -2359,6 +2359,27 @@ proc ::textutil::adjust::Configure { args } {
     }
 
     return ""
+}
+
+proc ::textutil::adjust::StringIsBoolean { arg value } {
+    switch -- [string tolower $value] {
+        0 - false - no - off { return 1 }
+        default { return [StringIsTrue $value] }
+    }
+}
+
+proc ::textutil::adjust::StringIsTrue { value } {
+    switch -- [string tolower $value] {
+        1 - true - yes - on { return 1 }
+        default { return 0 }
+    }
+}
+
+proc ::textutil::adjust::StringIsInteger { value } {
+    if {[catch { incr value }]} {
+        return 0
+    }
+    return 1
 }
 
 proc ::textutil::adjust::Adjust { varOrigName varNewName } {
@@ -2842,6 +2863,7 @@ proc prexml_cdata {stream} {
         set y [string range $stream 0 [expr $x-1]]
         regsub -all {&} $y {\&amp;} y
         regsub -all {<} $y {\&lt;}  y
+        regsub -all {>} $y {\&gt;}  y
         append data $y
         set stream [string range $stream [expr $x+$litO] end]
     }
@@ -3144,7 +3166,7 @@ proc around2fl {result} {
 #       elemN - index of current element
 #        elem - array, indexed by elemN, having:
 #               list of element attributes,
-#               plus ".CHILDREN", ".COUNTER", ".CTEXT"/".CLINES", ".NAME",
+#               plus ".CHILDREN", ".COUNTER", ".CTEXT", ".NAME",
 #                    ".ANCHOR", ".EDITNO"
 #      passno - 1 or 2 (or maybe 3, if generating a TOC)
 #       stack - the stack of elements, each frame having:
@@ -3173,6 +3195,7 @@ proc pass {tag} {
                 set anchorN 0
                 set root [list {}]
             }
+            catch { unset counter(references) }
             set elemN 0
             catch { unset options }
             array set options [list background  ""  \
@@ -3187,7 +3210,7 @@ proc pass {tag} {
                                     slides      no  \
                                     strict      no  \
                                     sortrefs    no  \
-                                    subcompact  no  \
+                                    subcompact  yes \
                                     symrefs     no  \
                                     toc         no  \
                                     tocdepth    3   \
@@ -3719,8 +3742,6 @@ proc pcdata {text} {
             } else {
                 append attrs(.CTEXT) $text
             }
-        } else {
-            set attrs(.CLINES) [llength [split $text "\n"]]
         }
         set elem($elemX) [array get attrs]
 
@@ -3878,6 +3899,9 @@ proc normalize_options {} {
         }
 
         html {
+            if {$options(.SLIDES)} {
+                set options(.TOC) 0
+            }
             if {1 || ($options(.SLIDES))} {
                 set passmax 3
             }
@@ -4036,7 +4060,8 @@ proc pass2begin_rfc {elemX} {
     global options copyrightP iprP
 
     array set attrs [list number ""     obsoletes "" updates "" \
-                          category info seriesNo  "" ipr     ""]
+                          category info seriesNo  "" ipr     "" \
+                          xml:lang en]
     array set attrs $elem($elemX)
     set elem($elemX) [array get attrs]
 
@@ -4307,8 +4332,8 @@ proc pass2begin_front {elemX} {
         set first ""
         if {(![string compare $rv(number) ""]) \
                 && ([string compare \
-                             [set workgroup [find_element workgroup \
-                                 $attrs(.CHILDREN)]] ""])} {
+                             [set workgroup [lindex [find_element workgroup \
+                                 $attrs(.CHILDREN)] 0]] ""])} {
             array set wv $elem($workgroup)
             set first [string trim $wv(.CTEXT)]
         }
@@ -4479,7 +4504,14 @@ proc pass2begin_front {elemX} {
 
     regsub -all %YEAR% $copyshort $dv(year) copying
 
-    front_${mode}_begin $left $right $top $bottom $title $status $copying
+    set keywords {}
+    foreach child [find_element keyword $attrs(.CHILDREN)] {
+        array set kv $elem($child)
+        lappend keywords $kv(.CTEXT)
+    }
+
+    front_${mode}_begin $left $right $top $bottom $title $status $copying \
+                        $keywords $rv(xml:lang)
 }
 
 proc pass2end_front {elemX} {
@@ -4749,6 +4781,9 @@ proc pass2begin_list {elemX} {
                 }
                 if {![string compare [set c $attrs(counter)] ""]} {
                     set c $format
+                } elseif {[set x [string first "%d" $c]] >= 0} {
+                } elseif {[set x [string first "%c" $c]] >= 0} {
+                    set c  [streplace $c $x [expr $x+1] %s]
                 }
                 if {![info exists counter($c)]} {
                     set counter($c) 0
@@ -4771,7 +4806,8 @@ proc pass2begin_list {elemX} {
         catch { set hangText $tv(hangText) }
     }
 
-    list_$mode begin $counters $attrs(style) $attrs(hangIndent) $hangText
+    list_$mode begin $counters $attrs(style) $attrs(hangIndent) $hangText \
+               [lsearch0 $stack t]
 }
 
 proc pass2end_list {elemX} {
@@ -4780,7 +4816,7 @@ proc pass2end_list {elemX} {
 
     array set attrs $elem($elemX)
 
-    list_$mode end "" $attrs(style) "" ""
+    list_$mode end "" $attrs(style) "" "" [lsearch0 $stack t]
 }
 
 
@@ -4807,7 +4843,7 @@ proc pass2begin_figure {elemX {internal 0}} {
     array set av $elem($artwork)
 
 # if artwork is empty!
-    catch { incr lines $av(.CLINES) }
+    catch { incr lines [llength [split $av(.CTEXT) "\n"]] }
 
     if {$internal} {
         return $lines
@@ -5574,7 +5610,8 @@ proc rfc_txt {irefs iprstmt copying} {
     return $result
 }
 
-proc front_txt_begin {left right top bottom title status copying} {
+proc front_txt_begin {left right top bottom title status copying keywords
+                      lang} {
     global options copyrightP iprP
     global ifile mode ofile
     global header footer lineno pageno blankP
@@ -5813,7 +5850,6 @@ proc t_txt {tag counter style hangText editNo} {
                 set counter "  "
             }
         }
-        flush_text
         if {![have_lines $lines]} {
             end_page_txt
         }
@@ -5847,7 +5883,7 @@ proc offset2letters {offset depth} {
     return $letters
 }
 
-proc list_txt {tag counters style hangIndent hangText} {
+proc list_txt {tag counters style hangIndent hangText suprT} {
     global options
     global eatP
 
@@ -5929,10 +5965,12 @@ proc figure_txt {tag lines anchor title args} {
 
 proc preamble_txt {tag {editNo ""}} {
     global options
+    global eatP
     global mode
 
     switch -- $tag {
         begin {
+            set eatP 1
             if {$options(.EDITING)} {
                 write_editno_$mode $editNo
             } else {
@@ -6136,7 +6174,7 @@ proc cellE {} {
     if {$allP} {
         set image $prefix
         foreach col $cols {
-            append image "+-[textutil::strRepeat "-" $col]-"
+            append image "+-[::textutil::strRepeat "-" $col]-"
         }
         append image "+"
         write_line_$mode $image
@@ -6145,7 +6183,7 @@ proc cellE {} {
     foreach cell [array names cells *,*] {
         set column [expr [lindex [split $cell ,] 1]-1]
         
-        set cells($cell) [textutil::adjust $cells($cell) \
+        set cells($cell) [::textutil::adjust::adjust $cells($cell) \
                               -justify      [lindex $cells(align) $column] \
                               -length       [lindex $cols $column] \
                               -full         true \
@@ -6208,7 +6246,7 @@ proc cellE {} {
             set image $prefix
             foreach col $cols {
                 append image \
-                       "$rowC$dashC[textutil::strRepeat $dashC $col]$dashC"
+                       "$rowC$dashC[::textutil::strRepeat $dashC $col]$dashC"
             }
             append image "$rowC"
             write_line_$mode $image
@@ -6886,14 +6924,20 @@ proc two_spaces {glop} {
 
 proc pi_txt {key value} {
     global mode
+    global passno
 
     switch -- $key {
         needLines {
-            flush_text
             if {![have_lines $value]} {
                 end_page_$mode
             }
         }
+
+	typeout {
+	    if {$passno == 2} {
+		puts stdout $value
+	    }
+	}
 
         default {
             error ""
@@ -6926,7 +6970,7 @@ proc rfc_html {irefs iprstmt copying} {
             foreach {L item subitem flags pages} $iref { break }
 
             if {[string compare $L ""]} {
-                write_html "<tr><td><b>$L</b></td><td>&nbsp;</td></tr>"
+                write_html "<tr><td><span class=\"strong\">$L</span></td><td>&nbsp;</td></tr>"
             }
             
             if {[string compare $subitem ""]} {
@@ -6987,7 +7031,7 @@ proc rfc_html {irefs iprstmt copying} {
         write_html "</p>"
     }
 
-    write_html "</font></body></html>"
+    write_html "</body></html>"
 
     return ""
 }
@@ -6995,55 +7039,96 @@ proc rfc_html {irefs iprstmt copying} {
 global htmlstyle
 
 set htmlstyle \
-"<STYLE type='text/css'>
-    .title { color: #990000; font-size: 22px; line-height: 22px; font-weight: bold; text-align: right;
-             font-family: helvetica, arial, sans-serif }
-    .filename { color: #666666; font-size: 18px; line-height: 28px; font-weight: bold; text-align: right;
-                  font-family: helvetica, arial, sans-serif }
-    p.copyright { color: #000000; font-size: 10px;
-                  font-family: verdana, charcoal, helvetica, arial, sans-serif }
+"<style type='text/css'>
+<!--
+    body {
+        font-family: verdana, charcoal, helvetica, arial, sans-serif;
+        font-size: small ; color: #000000 ; background-color: #ffffff ; }
+    .title { color: #990000; font-size: x-large ;
+        font-weight: bold; text-align: right;
+        font-family: helvetica, monaco, \"MS Sans Serif\", arial, sans-serif;
+        background-color: transparent; }
+    .filename { color: #666666; font-size: 18px; line-height: 28px;
+        font-weight: bold; text-align: right;
+        font-family: helvetica, arial, sans-serif;
+        background-color: transparent; }
+    td.rfcbug { background-color: #000000 ; width: 30px ; height: 30px ; 
+        text-align: justify; vertical-align: middle ; padding-top: 2px ; }
+    td.rfcbug span.RFC { color: #666666; font-weight: bold; text-decoration: none;
+        background-color: #000000 ;
+        font-family: monaco, charcoal, geneva, \"MS Sans Serif\", helvetica, verdana, sans-serif;
+        font-size: x-small ; }
+    td.rfcbug span.hotText { color: #ffffff; font-weight: normal; text-decoration: none;
+        text-align: center ;
+        font-family: charcoal, monaco, geneva, \"MS Sans Serif\", helvetica, verdana, sans-serif;
+        font-size: x-small ; background-color: #000000; }
+
+     A { font-weight: bold; }
+     A:link { color: #990000; background-color: transparent ; }
+     A:visited { color: #333333; background-color: transparent ; }
+     A:active { color: #333333; background-color: transparent ; }
+
     p { margin-left: 2em; margin-right: 2em; }
+    p.copyright { font-size: x-small ; }
+    p.toc { font-size: small ; font-weight: bold ; margin-left: 3em ;}
+
     span.emph { font-style: italic; }
     span.strong { font-weight: bold; }
-    span.verb { font-style: oblique; }
-    li { margin-left: 3em;  }
-    ol { margin-left: 2em; margin-right: 2em; }
+    span.verb { font-family: \"Courier New\", Courier, monospace ; }
+
+    ol.text { margin-left: 2em; margin-right: 2em; }
     ul.text { margin-left: 2em; margin-right: 2em; }
-    pre { margin-left: 3em; color: #333333 }
-    ul.toc { color: #000000; line-height: 16px;
-             font-family: verdana, charcoal, helvetica, arial, sans-serif }
-    H3 { color: #333333; font-size: 16px; line-height: 16px; font-family: helvetica, arial, sans-serif }
-    H4 { color: #000000; font-size: 14px; font-family: helvetica, arial, sans-serif }
-    TD.header { color: #ffffff; font-size: 10px; font-family: arial, helvetica, san-serif; valign: top }
-    TD.author-text { color: #000000; font-size: 10px;
-                     font-family: verdana, charcoal, helvetica, arial, sans-serif }
-    TD.author { color: #000000; font-weight: bold; margin-left: 4em; font-size: 10px; font-family: verdana, charcoal, helvetica, arial, sans-serif }
-     A:link { color: #990000; font-weight: bold;
-              font-family: MS Sans Serif, verdana, charcoal, helvetica, arial, sans-serif }
-     A:visited { color: #333333; font-weight: bold;
-                 font-family: MS Sans Serif, verdana, charcoal, helvetica, arial, sans-serif }
-     A:name { color: #333333; font-weight: bold;
-              font-family: MS Sans Serif, verdana, charcoal, helvetica, arial, sans-serif }
-    .link2 { color:#ffffff; font-weight: bold; text-decoration: none;
-             font-family: monaco, charcoal, geneva, MS Sans Serif, helvetica, monotype, verdana, sans-serif;
-             font-size: 9px }
-    .RFC { color:#666666; font-weight: bold; text-decoration: none;
-           font-family: monaco, charcoal, geneva, MS Sans Serif, helvetica, monotype, verdana, sans-serif;
-           font-size: 9px }
-    .hotText { color:#ffffff; font-weight: normal; text-decoration: none;
-               font-family: charcoal, monaco, geneva, MS Sans Serif, helvetica, monotype, verdana, sans-serif;
-               font-size: 9px }
+    li { margin-left: 3em;  }
+
+    pre { margin-left: 3em; color: #333333;  background-color: transparent;
+        font-family: \"Courier New\", Courier, monospace ; font-size: small ;
+        }
+
+    h3 { color: #333333; font-size: medium ;
+        font-family: helvetica, arial, sans-serif ;
+        background-color: transparent; }
+    h4 { font-size: small; font-family: helvetica, arial, sans-serif ; }
+
+    table.bug { width: 30px ; height: 15px ; }
+    td.bug { color: #ffffff ; background-color: #990000 ;
+        text-align: center ; width: 30px ; height: 15px ;
+         }
+    td.bug A.link2 { color: #ffffff ; font-weight: bold;
+        text-decoration: none;
+        font-family: monaco, charcoal, geneva, \"MS Sans Serif\", helvetica, sans-serif;
+        font-size: x-small ; background-color: transparent }
+
+    td.header { color: #ffffff; font-size: x-small ;
+        font-family: arial, helvetica, sans-serif; vertical-align: top;
+        background-color: #666666 ; width: 33% ; }
+    td.author { font-weight: bold; margin-left: 4em; font-size: x-small ; }
+    td.author-text { font-size: x-small; }
+    table.data { vertical-align: top ; border-collapse: collapse ;
+        border-style: solid solid solid solid ;
+        border-color: black black black black ;
+        font-size: small ; text-align: center ; }
+    table.data th { font-weight: bold ;
+        border-style: solid solid solid solid ;
+        border-color: black black black black ; }
+    table.data td {
+        border-style: solid solid solid solid ;
+        border-color: #333333 #333333 #333333 #333333 ; }
+
+    hr { height: 1px }
+-->
 </style>"
 
 
-proc front_html_begin {left right top bottom title status copying} {
+proc front_html_begin {left right top bottom title status copying keywords
+                       lang} {
     global options copyrightP iprP
     global htmlstyle
-    global doingP hangP
+    global doingP hangP needP
     global imgP
 
     set doingP 0
     set hangP 0
+    set needP 0
     set imgP 0
 
     if {$options(.SLIDES) \
@@ -7051,7 +7136,8 @@ proc front_html_begin {left right top bottom title status copying} {
         return
     }
 
-    write_html -nonewline "<html><head><title>"
+    write_html "<\!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">"
+    write_html -nonewline "<html lang=\"$lang\"><head><title>"
     if {($options(.PRIVATE)) \
             && ([string compare [string trim $options(private)] ""])} {
         pcdata_html "$options(private): "
@@ -7065,17 +7151,39 @@ proc front_html_begin {left right top bottom title status copying} {
                                      -gmt true]
         write_html "\">"
     }
+# begin new meta tags
+
+    write_html -nonewline "<meta name=\"description\" content=\""
+# need to look for " in title and escape ?
+    pcdata_html [lindex $title 0]
+    write_html "\">"
+
+#   write out meta tag with keywords if they exist
+    if {[llength $keywords] > 0} {
+        write_html -nonewline "<meta name=\"keywords\" content=\""
+        set s ""
+        foreach kw $keywords {
+            pcdata_html $s$kw
+            set s ", "
+        }
+        write_html "\">" 
+    }
+
+     write_html -nonewline "<meta name=\"generator\" content=\"xml2rfc v1.21 "
+     write_html "(http://xml.resource.org/)\">"
+#end new meta tags
+
     write_html "$htmlstyle\n</head>"
-    write_html -nonewline "<body bgcolor=\"#ffffff\""
+    write_html -nonewline "<body"
     if {[string compare $options(background) ""]} {
         write_html -nonewline " background=\"$options(background)\""
     }
-    write_html " text=\"#000000\" alink=\"#000000\" vlink=\"#666666\" link=\"#990000\">" 
+    write_html ">"
 
     xxxx_html
 
     if {$options(.TOPBLOCK)} {
-        write_html "<table width=\"66%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
+        write_html "<table summary=\"layout\" width=\"66%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td><table summary=\"layout\" width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
         set left [munge_long $left]
         set right [munge_long $right]
         set lc ""
@@ -7091,25 +7199,18 @@ proc front_html_begin {left right top bottom title status copying} {
             } else {
                 set r "&nbsp;"
             }
-            write_html "<tr valign=\"top\"><td width=\"33%\" bgcolor=\"#666666\" class=\"header\">$l</td><td width=\"33%\" bgcolor=\"#666666\" class=\"header\">$r</td></tr>"
+            write_html "<tr><td class=\"header\">$l</td><td class=\"header\">$r</td></tr>"
         }
         write_html "</table></td></tr></table>"
     }
 
-    set color 990000
-    set size 3
-    set br <br>
     set class title
     foreach line $title {
-        write_html -nonewline "<div align=\"right\"><font face=\"monaco, MS Sans Serif\" color=\"#$color\" size=\"+$size\"><b>$br<span class=\"$class\">"
+        write_html -nonewline "<div align=\"right\"><span class=\"$class\"><br />"
         pcdata_html $line
-        write_html "</span></b></font></div>"
-        set color 666666
+        write_html "</span></div>"
         set size 2
-        set br ""
-        set class filename
     }
-    write_html "<font face=\"verdana, helvetica, arial, sans-serif\" size=\"2\">"
 
     if {!$options(.PRIVATE)} {
         write_html ""
@@ -7141,7 +7242,7 @@ proc front_html_end {toc irefP} {
     xxxx_html toc
 
     write_html "<h3>Table of Contents</h3>"
-    write_html "<ul compact class=\"toc\">"
+    write_html "<p class=\"toc\">"
     set last [lindex $toc end]
     if {[string compare [lindex $last 1] $noticeT]} {
         set last ""
@@ -7155,14 +7256,14 @@ proc front_html_end {toc irefP} {
         lappend toc $last
     }
     foreach c $toc {
-        write_html -nonewline "<b><a href=\"#[lindex $c 2]\">"
+        write_html -nonewline "<a href=\"#[lindex $c 2]\">"
         pcdata_html [lindex $c 0]
         write_html "</a>&nbsp;"
         pcdata_html [lindex $c 1]
-        write_html "<br></b>"
+        write_html "<br />"
     }
-    write_html "</ul>"
-    write_html "<br clear=\"all\">"
+    write_html "</p>"
+    write_html "<br clear=\"all\" />"
 }
 
 proc abstract_html {} {
@@ -7225,10 +7326,11 @@ proc section_html {prefix top title {lines 0} anchor} {
 
 proc t_html {tag counter style hangText editNo} {
     global options
-    global doingP hangP
+    global doingP hangP needP
 
     if {[string compare $tag begin]} {
         set s /
+        set needP 0
     } else {
         set s ""
     }
@@ -7254,8 +7356,13 @@ proc t_html {tag counter style hangText editNo} {
 
         set hangP 0
     } else {
-        set doingP [string compare $tag end]
-        write_html -nonewline "<${s}p>"
+        if {[string compare $tag end]} {
+            set doingP 1
+        }
+        if {$doingP} {
+            set doingP [string compare $tag end]
+            write_html -nonewline "<${s}p>"
+        }
 
         set hangP 0
     }
@@ -7266,8 +7373,8 @@ proc t_html {tag counter style hangText editNo} {
     }
 }
 
-proc list_html {tag counters style hangIndent hangText} {
-    global doingP hangP
+proc list_html {tag counters style hangIndent hangText suprT} {
+    global doingP hangP needP
 
     if {[string compare $tag begin]} {
         set s /
@@ -7275,6 +7382,10 @@ proc list_html {tag counters style hangIndent hangText} {
     } else {
         set s ""
         set c " class=\"text\""
+        if {$doingP} {
+            write_html -nonewline "</p>"
+            set doingP 0
+        }
     }
     write_html ""
     switch -- $style {
@@ -7301,11 +7412,9 @@ proc list_html {tag counters style hangIndent hangText} {
         }
     }
 
-    if {[string compare $tag begin]} {
-        set doingP 1
-        write_html -nonewline "<p>"
+    if {($suprT >= 0) && ([string compare $tag begin])} {
+        set needP 1
     }
-
     set hangP 0
 }
 
@@ -7317,7 +7426,7 @@ proc figure_html {tag lines anchor title {av {}}} {
     switch -- $tag {
         begin {
             if {[string compare $title ""]} {
-                write_html "<br><hr size=\"1\" shade=\"0\">"
+                write_html "<br /><hr />"
             }
             if {[string compare $anchor ""]} {
                 write_html "<a name=\"$anchor\"></a>"
@@ -7331,14 +7440,14 @@ proc figure_html {tag lines anchor title {av {}}} {
                         write_html -nonewline " $k=\"$v\""
                     }
                 }
-                write_html "></img></p>"
+                write_html " /></p>"
                 set imgP 1
             }
         }
 
         end {
             if {[string compare $title ""]} {
-                write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" align=\"center\"><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br></td></tr></table><hr size=\"1\" shade=\"0\">"
+                write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" align=\"center\"><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br /></td></tr></table><hr size=\"1\" shade=\"0\">"
             }
         }
     }
@@ -7356,7 +7465,7 @@ proc texttable_html {tag lines anchor title {didP 0}} {
     switch -- $tag {
         begin {
             if {[string compare $title ""]} {
-                write_html "<br><hr size=\"1\" shade=\"0\">"
+                write_html "<br /><hr />"
             }
             if {[string compare $anchor ""]} {
                 write_html "<a name=\"$anchor\"></a>"
@@ -7365,7 +7474,7 @@ proc texttable_html {tag lines anchor title {didP 0}} {
 
         end {
             if {[string compare $title ""]} {
-                write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" align=\"center\"><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br></td></tr></table><hr size=\"1\" shade=\"0\">"
+                write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" align=\"center\"><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br /></td></tr></table><hr size=\"1\" shade=\"0\">"
             }
         }
     }
@@ -7373,12 +7482,12 @@ proc texttable_html {tag lines anchor title {didP 0}} {
 
 proc ttcol_html {text align col width} {
     if {[lindex $col 0] == 1} {
-        write_html "<table border=\"1\" align=\"center\" valign=\"top\">"
+        write_html "<table class=\"data\" align=\"center\" border=\"1\" cellpadding=\"2\" cellspacing=\"2\">"
         write_html "<tr>"
     }
-    write_html -nonewline "<td align=\"$align\" width=\"$width%\">"
+    write_html -nonewline "<th align=\"$align\" width=\"$width%\">"
     pcdata_html $text
-    write_html "</td>"
+    write_html "</th>"
     if {[lindex $col 0] == [lindex $col 1]} {
         write_html "</tr>"
     }
@@ -7536,7 +7645,7 @@ proc iref_html {item subitem flags} {
 
 proc vspace_html {lines} {
     global options
-    global doingP hangP
+    global doingP hangP needP
 
     if {$lines > 5} {
         if {$options(.SLIDES) && [end_page_slides]} {
@@ -7548,7 +7657,7 @@ proc vspace_html {lines} {
     incr lines -$hangP
     while {$lines >= 0} {
         incr lines -1
-        write_html "<br>"
+        write_html "<br />"
     }
 
     set hangP 0
@@ -7602,7 +7711,7 @@ proc reference_html {prefix names title series formats date anchor target
     if {[string compare $anchor ""]} {
         set prefix "<a name=\"$anchor\">\[$prefix\]</a>"
     }
-    write_html "<tr><td class=\"author-text\" valign=\"top\"><b>$prefix</b></td>"
+    write_html "<tr><td class=\"author-text\" valign=\"top\">$prefix</td>"
 
     set text ""
 
@@ -7769,24 +7878,19 @@ proc xxxx_html {{anchor {}}} {
     }                               
 
     if {[string compare $anchor ""]} {
-        write_html "<a name=\"$anchor\"><hr size=\"1\" shade=\"0\"></a>"
+        write_html "<a name=\"$anchor\"></a><hr />"
     }
 
     write_html "
-<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" width=\"30\" height=\"30\" align=\"right\">
+<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" width=\"30\" align=\"right\">
     <tr>
-        <td bgcolor=\"#000000\" align=\"center\" valign=\"center\" width=\"30\" height=\"30\">
-            <font face=\"monaco, MS Sans Serif\" color=\"#666666\" size=\"1\">
-                <b><span class=\"RFC\">&nbsp;RFC&nbsp;</span></b>
-            </font>
-            <font face=\"charcoal, MS Sans Serif, helvetica, arial, sans-serif\" size=\"1\" color=\"#ffffff\">
-                <span class=\"hotText\">$number</span>
-            </font>
+        <td class=\"rfcbug\">
+                <span class=\"RFC\">&nbsp;RFC&nbsp;</span><br /><span class=\"hotText\">&nbsp;$number&nbsp;</span>
         </td>
     </tr>"
 
     if {$options(.TOC)} {
-        write_html "    <tr><td bgcolor=\"#990000\" align=\"center\" width=\"30\" height=\"15\"><a href=\"#toc\" CLASS=\"link2\"><font face=\"monaco, MS Sans Serif\" color=\"#ffffff\" size=\"1\"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr>"
+        write_html "    <tr><td class=\"bug\"><a href=\"#toc\" class=\"link2\">&nbsp;TOC&nbsp;</a><br /></td></tr>"
     }
     write_html "</table>"
 }
@@ -7795,20 +7899,22 @@ proc toc_html {anchor} {
     global options
 
     if {[string compare $anchor ""]} {
-        write_html "<a name=\"$anchor\"><br><hr size=\"1\" shade=\"0\"></a>"
+        write_html "<a name=\"$anchor\"></a><br /><hr />"
     }
 
     if {!$options(.TOC)} {
         return
     }
 
-    write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" width=\"30\" height=\"15\" align=\"right\"><tr><td bgcolor=\"#990000\" align=\"center\" width=\"30\" height=\"15\"><a href=\"#toc\" CLASS=\"link2\"><font face=\"monaco, MS Sans Serif\" color=\"#ffffff\" size=\"1\"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>"
+    if {[string compare $anchor toc]} {
+        write_html "<table summary=\"layout\" cellpadding=\"0\" cellspacing=\"2\" class=\"bug\" align=\"right\"><tr><td class=\"bug\"><a href=\"#toc\" class=\"link2\">&nbsp;TOC&nbsp;</a></td></tr></table>"
+    }
 }
 
 proc pcdata_html {text {pre 0}} {
     global entities
     global options
-    global doingP hangP
+    global doingP hangP needP
     global imgP
     global emptyP
 
@@ -7816,18 +7922,17 @@ proc pcdata_html {text {pre 0}} {
         return
     }
 
-    set font "<font face=\"verdana, helvetica, arial, sans-serif\" size=\"2\">"
-
     set lines ""
 
     regsub -all -nocase {&apos;} $text {\&#039;} text
     regsub -all "&rfc.number;" $text [lindex $entities 1] text
     if {$pre} {
+        set needP 0
         if {![slide_pre $text]} {
             if {$doingP} {
                 append lines "</p>\n"
             }
-            append lines "</font><pre>$text</pre>$font"
+            append lines "<pre>$text</pre>"
             if {$doingP} {
                 append lines "<p>\n"
             }
@@ -7840,6 +7945,11 @@ proc pcdata_html {text {pre 0}} {
         append lines $text
     }
     if {![cellP $lines]} {
+        if {$needP} {
+            set doingP 1
+            set needP 0
+            write_html -nonewline "<p>"
+        }
         write_html -nonewline $lines
         set emptyP 0
     }
@@ -7948,7 +8058,7 @@ proc front_slides_begin {left right top bottom title} {
     }
 
     set size 4
-    puts $stdout "<br><br><br><br><p align=\"right\">"
+    puts $stdout "<br /><br /><br /><br /><p align=\"right\">"
     puts $stdout "<table width=\"75%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
     puts $stdout "<tr><td>"
     puts $stdout "<table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
@@ -8010,19 +8120,20 @@ proc start_page_slides {{title ""}} {
     } else {
         set p ""
     }
+    write_html "<\!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">"
     puts $stdout "<html><head><title>"
     pcdata_html $p$title
     puts $stdout "</title></head>"
     puts $stdout "<body text=\"#000000\" vlink=\"#006600\" alink=\"#ccddcc\" link=\"#006600\"\n      bgcolor=\"#ffffff\">"
-    puts $stdout "<font face=\"arial, helvetica, sans\">"
-    puts $stdout "<table height=\"100%\" cellSpacing=0 cellPadding=0 width=\"100%\" border=0>"
-    puts $stdout "<tbody><tr><td valign=top>"
+    puts $stdout "<font face=\"arial, helvetica, sans-serif\">"
+    puts $stdout "<table height=\"100%\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" border=\"0\">"
+    puts $stdout "<tbody><tr><td valign=\"top\">"
 
-    puts $stdout "<table height=\"100%\" cellSpacing=\"0\" cellPadding=\"0\" width=\"100%\" border=\"0\">"
-    puts $stdout "<tbody><tr><td valign=top>"
+    puts $stdout "<table height=\"100%\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" border=\"0\">"
+    puts $stdout "<tbody><tr><td valign=\"top\">"
     puts $stdout "<p><font color=\"#006600\" size=\"+5\">$title</font></p>"
 
-    puts $stdout "<br><br>"
+    puts $stdout "<br /><br />"
     puts $stdout "<font size=\"+3\">"
 }
 
@@ -8054,14 +8165,14 @@ proc end_page_slides {} {
     puts -nonewline \
          $stdout "<p align=\"right\"><nobr>"
     puts -nonewline \
-         $stdout "<a href=\"$left\"><img src=\"left.gif\"   border=\"0\" width=\"20\" height=\"22\"></img></a>"
+         $stdout "<a href=\"$left\"><img src=\"left.gif\" border=\"0\" width=\"20\" height=\"22\" /></a>"
     puts -nonewline \
-         $stdout "<a href=\"$up\"><img src=\"up.gif\"       border=\"0\" width=\"20\" height=\"22\"></img></a>"
+         $stdout "<a href=\"$up\"><img src=\"up.gif\" border=\"0\" width=\"20\" height=\"22\" /></a>"
     puts -nonewline \
-         $stdout "<a href=\"$right\"><img src=\"right.gif\" border=\"0\"></img></a>"
+         $stdout "<a href=\"$right\"><img src=\"right.gif\" border=\"0\" /></a>"
     puts $stdout "</nobr></p>"
     puts $stdout "</td></tr>"
-    puts $stdout "<tr><td align=\"right\" colspan=2>"
+    puts $stdout "<tr><td align=\"right\" colspan=\"2\">"
     puts $stdout "<font color=\"#006600\" size=\"-3\">"
     pcdata_html $slideft
     pcdata_html "</font>"
@@ -8079,12 +8190,13 @@ proc end_page_slides {} {
 proc slide_pre {text} {
     global passno indexpg
     global stdout
-    global doingP hangP
+    global doingP hangP needP
 
     if {$passno < 3} {
         return 0
     }
 
+    set needP 0
     if {$doingP} {
         puts $stdout "</p>"
     }
@@ -8105,7 +8217,9 @@ proc slide_foo {n} {
 
 proc pi_html {key value} {
     switch -- $key {
-        needLines {
+        needLines
+	    -
+	typeout {
         }
 
         default {
@@ -8243,7 +8357,8 @@ proc rfc_nr {irefs iprstmt copying} {
     return $result
 }
 
-proc front_nr_begin {left right top bottom title status copying} {
+proc front_nr_begin {left right top bottom title status copying keywords
+                     lang} {
     global options copyrightP iprP
     global ifile mode ofile
     global header footer lineno pageno blankP
@@ -8257,7 +8372,7 @@ proc front_nr_begin {left right top bottom title status copying} {
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.20 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.21 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -8487,7 +8602,6 @@ proc t_nr {tag counter style hangText editNo} {
                 set counter "  "
             }
         }
-        flush_text
         if {![have_lines $lines]} {
             end_page_nr
         }
@@ -8510,7 +8624,7 @@ proc t_nr {tag counter style hangText editNo} {
     set eatP 1
 }
 
-proc list_nr {tag counters style hangIndent hangText} {
+proc list_nr {tag counters style hangIndent hangText suprT} {
     global options
     global eatP
     global indent lastin
@@ -9104,9 +9218,15 @@ global oentities
 # &amp; must always be last...
 set oentities { {&lt;}     {<} {&gt;}     {>}
                 {&apos;}   {'} {&quot;}   {"}
-                {&#8211;}  {-} {&#151;}   {--}
-                {&endash;} {-} {&emdash;} {--}
-                {&amp;}    {\&} }
+                {&#8211;}  {-} {&#8212;}  {--}
+                {&#x2013;} {-} {&#x2014;} {--}
+                {&#151;}   {--}
+                {&endash;} {-} {&emdash;} {--} }
+for {set c 32} {$c < 127} {incr c} {
+    lappend oentities "&#$c;" [format %c $c]
+    lappend oentities [format "&#x%x;" $c] [format %c $c]
+}
+lappend oentities     {&amp;} {\&}
 
 
 proc push_indent {pos} {
@@ -9213,6 +9333,7 @@ proc write_url {url} {
 proc have_lines {cnt} {
     global header footer lineno pageno blankP
 
+    flush_text
     if {($cnt < 40) && ($lineno+$cnt > 52)} {
         return 0
     }
@@ -9582,7 +9703,7 @@ set xdv::dtd(rfc2629.cmodel) \
                               area              "*"  \
                               workgroup         "*"  \
                               keyword           "*"  \
-                              abstract          "*"  \
+                              abstract          "?"  \
                               note              "*"] \
           middle        [list section           "+"  \
                               appendix          "*"  \
@@ -9663,7 +9784,11 @@ set xdv::dtd(rfc2629.cmodel) \
                               format            "*"  \
                               annotation        "*"] \
           seriesInfo    {}                           \
-          format        {}]
+          format        {}                           \
+          annotation    [list [list xref             \
+                                    eref             \
+                                    iref             \
+                                    spanx]      "*"]]
 
 set xdv::dtd(rfc2629.pcdata) \
     [list annotation   \
@@ -9710,7 +9835,8 @@ set xdv::dtd(rfc2629.oattrs) \
                               category    \
                               seriesNo    \
                               ipr         \
-                              docName]    \
+                              docName     \
+                              xml:lang]   \
           title         [list abbrev]     \
           author        [list initials    \
                               surname     \
@@ -9732,14 +9858,16 @@ set xdv::dtd(rfc2629.oattrs) \
           spanx         [list xml:space   \
                               style]      \
           vspace        [list blankLines] \
-          figure        [list anchor]     \
+          figure        [list anchor      \
+                              title]      \
           artwork       [list xml:space   \
                               name        \
                               type        \
                               src         \
                               width       \
                               height]     \
-          texttable     [list anchor]     \
+          texttable     [list anchor      \
+                              title]      \
           ttcol         [list width       \
                               align]      \
           references    [list title]      \
@@ -10051,3 +10179,4 @@ if {[llength $argv] > 1} {
         pack $f -fill x -padx 1c -pady 3
     }
 }
+
