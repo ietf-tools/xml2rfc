@@ -2,10 +2,10 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                           April 2, 2004
+                                                          April 27, 2004
 
 
-                             xml2rfc v1.23
+                             xml2rfc v1.24
 
 
 Table of Contents
@@ -17,15 +17,15 @@ Table of Contents
    3.2   Testing without a windowing system . . . . . . . . . . . . .  4
    4.    Next steps . . . . . . . . . . . . . . . . . . . . . . . . .  5
    4.1   Processing Instructions  . . . . . . . . . . . . . . . . . .  5
-   4.1.1 Option Settings  . . . . . . . . . . . . . . . . . . . . . .  5
+   4.1.1 Option Settings  . . . . . . . . . . . . . . . . . . . . . .  6
    4.1.2 Include Files  . . . . . . . . . . . . . . . . . . . . . . .  7
-   5.    Additions to RFC 2629  . . . . . . . . . . . . . . . . . . .  8
-   6.    Limitations of xml2rfc . . . . . . . . . . . . . . . . . . .  9
-   7.    References . . . . . . . . . . . . . . . . . . . . . . . . .  9
-         Author's Address . . . . . . . . . . . . . . . . . . . . . .  9
-   A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . . 10
-   B.    rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . . 11
-   C.    Copyrights . . . . . . . . . . . . . . . . . . . . . . . . . 12
+   5.    Additions to RFC 2629  . . . . . . . . . . . . . . . . . . .  9
+   6.    Limitations of xml2rfc . . . . . . . . . . . . . . . . . . . 10
+   7.    References . . . . . . . . . . . . . . . . . . . . . . . . . 10
+         Author's Address . . . . . . . . . . . . . . . . . . . . . . 10
+   A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . . 11
+   B.    rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . . 12
+   C.    Copyrights . . . . . . . . . . . . . . . . . . . . . . . . . 13
 
 
 
@@ -54,15 +54,15 @@ Table of Contents
 
 Rose                                                            [Page 1]
 
-README                       xml2rfc v1.23                    April 2004
+README                       xml2rfc v1.24                    April 2004
 
 
 1.  Introduction
 
    This is a package to convert memos written in XML to the RFC format.
 
-   If you don't want to install any software, you can use the <http://
-   xml.resource.org/>.
+   If you don't want to install any software, you can use the
+   <http://xml.resource.org/>.
 
 
 
@@ -110,19 +110,19 @@ README                       xml2rfc v1.23                    April 2004
 
 Rose                                                            [Page 2]
 
-README                       xml2rfc v1.23                    April 2004
+README                       xml2rfc v1.24                    April 2004
 
 
 2.  Requirements
 
-   You need to have Tcl/Tk version 8 running on your system. Tcl is a
+   You need to have Tcl/Tk version 8 running on your system.  Tcl is a
    scripting language, Tk is Tcl with support for your windowing system.
 
    To get a source or binary distribution for your system, go to the
-   <http://www.scriptics.com/software/tcltk/8.4.html> and install it. If
-   you get the binary distribution, this is pretty simple.
+   <http://www.scriptics.com/software/tcltk/8.4.html> and install it.
+   If you get the binary distribution, this is pretty simple.
 
-   Of course, you may already have Tcl version 8. To find out, try
+   Of course, you may already have Tcl version 8.  To find out, try
    typing this command from the shell (or the "MS-DOS Prompt"):
 
        % tclsh
@@ -138,7 +138,7 @@ README                       xml2rfc v1.23                    April 2004
    good to go with Tk version 8.
 
    Finally, you may notice a file called "xml2sgml.tcl" in the
-   distribution. It contains some extra functionality for a few special
+   distribution.  It contains some extra functionality for a few special
    users -- so, if you don't know what it is, don't worry about it...
 
 
@@ -166,7 +166,7 @@ README                       xml2rfc v1.23                    April 2004
 
 Rose                                                            [Page 3]
 
-README                       xml2rfc v1.23                    April 2004
+README                       xml2rfc v1.24                    April 2004
 
 
 3.  Testing
@@ -222,17 +222,17 @@ README                       xml2rfc v1.23                    April 2004
 
 Rose                                                            [Page 4]
 
-README                       xml2rfc v1.23                    April 2004
+README                       xml2rfc v1.24                    April 2004
 
 
 4.  Next steps
 
-   Read the <draft-mrose-writing-rfcs.html> document. In particular,
+   Read the <draft-mrose-writing-rfcs.html> document.  In particular,
    <draft-mrose-writing-rfcs.html#anchor13> has some good information.
 
 4.1  Processing Instructions
 
-   A *processing instruction* is a directive to an XML application. If
+   A *processing instruction* is a directive to an XML application.  If
    you want to give directives to 'xml2rfc', the processing instructions
    (PIs) look like this:
 
@@ -241,6 +241,46 @@ README                       xml2rfc v1.23                    April 2004
    Of course, if you like the default behavior, you don't need any PIs
    in your input file!
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                            [Page 5]
+
+README                       xml2rfc v1.24                    April 2004
+
+
 4.1.1  Option Settings
 
    The list of valid keywords are:
@@ -248,6 +288,17 @@ README                       xml2rfc v1.23                    April 2004
    +--------------+--------------+-------------------------------------+
    |      keyword |    default   | meaning                             |
    +--------------+--------------+-------------------------------------+
+   |   autobreaks |      yes     | automatically force page breaks to  |
+   |              |              | avoid widows and orphans (not       |
+   |              |              | perfect)                            |
+   |              |              |                                     |
+   |     comments |      no      | render <cref> information           |
+   |              |              |                                     |
+   |       inline |      no      | if comments is "yes", then render   |
+   |              |              | comments inline; otherwise render   |
+   |              |              | them in an "Editorial Comments"     |
+   |              |              | section                             |
+   |              |              |                                     |
    |       strict |      no      | try to enforce the ID-nits          |
    |              |              | conventions and DTD validity        |
    |              |              |                                     |
@@ -273,19 +324,19 @@ README                       xml2rfc v1.23                    April 2004
    |     tocdepth |       3      | if toc is "yes", then this          |
    |              |              | determines the depth of the         |
    |              |              | table-of-contents                   |
-
-
-
-Rose                                                            [Page 5]
-
-README                       xml2rfc v1.23                    April 2004
-
-
    |              |              |                                     |
    |    tocindent |      no      | if toc is "yes", then setting this  |
    |              |              | to "yes" will indent subsections in |
    |              |              | the table-of-contents               |
    |              |              |                                     |
+
+
+
+Rose                                                            [Page 6]
+
+README                       xml2rfc v1.24                    April 2004
+
+
    |      editing |      no      | insert editing marks for ease of    |
    |              |              | discussing draft versions           |
    |              |              |                                     |
@@ -323,20 +374,6 @@ README                       xml2rfc v1.23                    April 2004
    these processing instructions at the beginning of the document (right
    after the XML declartion).
 
-
-
-
-
-
-
-
-
-
-Rose                                                            [Page 6]
-
-README                       xml2rfc v1.23                    April 2004
-
-
 4.1.2  Include Files
 
    'xml2rfc' has an include-file facility, e.g.,
@@ -344,9 +381,17 @@ README                       xml2rfc v1.23                    April 2004
        <?rfc include='file'?>
 
    'xml2rfc' will consult the $XML_LIBRARY environment variable for a
-   search path of where to look for files. (If this envariable isn't
+   search path of where to look for files.  (If this envariable isn't
    set, the directory containing the file that contains the include-file
    directive is used.)
+
+
+
+
+Rose                                                            [Page 7]
+
+README                       xml2rfc v1.24                    April 2004
+
 
    You can also have 'xml2rfc' set this envariable directly, by creating
    a file called ".xml2rfc.rc" in the directory where your main file is,
@@ -388,15 +433,26 @@ README                       xml2rfc v1.23                    April 2004
 
 
 
-Rose                                                            [Page 7]
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                            [Page 8]
 
-README                       xml2rfc v1.23                    April 2004
+README                       xml2rfc v1.24                    April 2004
 
 
 5.  Additions to RFC 2629
 
    A few additions have been made to the format originally defined in
-   RFC 2629. In particular, <draft-mrose-writing-rfcs.html#anchor19> of
+   RFC 2629.  In particular, <draft-mrose-writing-rfcs.html#anchor19> of
    the 2629bis document enumerates the additions.
 
    In addition, 'xml2rfc' recognizes an undocumented 'src' attribute in
@@ -444,9 +500,9 @@ README                       xml2rfc v1.23                    April 2004
 
 
 
-Rose                                                            [Page 8]
+Rose                                                            [Page 9]
 
-README                       xml2rfc v1.23                    April 2004
+README                       xml2rfc v1.24                    April 2004
 
 
 6.  Limitations of xml2rfc
@@ -500,9 +556,9 @@ Author's Address
 
 
 
-Rose                                                            [Page 9]
+Rose                                                           [Page 10]
 
-README                       xml2rfc v1.23                    April 2004
+README                       xml2rfc v1.24                    April 2004
 
 
 Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
@@ -510,7 +566,7 @@ Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
    1.  Install Tcl/Tk 8.3.4
 
    2.  When you performed Step 1, a folder in your "Extensions" folder
-       called "Tool Command Language" was created. Create a new folder
+       called "Tool Command Language" was created.  Create a new folder
        under "Extensions", with any name you like.
 
    3.  Drag the file "xml2rfc.tcl" onto the "Drag & Drop Tclets"
@@ -556,15 +612,15 @@ Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
 
 
 
-Rose                                                           [Page 10]
+Rose                                                           [Page 11]
 
-README                       xml2rfc v1.23                    April 2004
+README                       xml2rfc v1.24                    April 2004
 
 
 Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
 
    The file "rfc2629.xslt" can be used with an XSLT-capable formatter
-   (i.e., IE6) to produce HTML. A word of warning though: the XSLT
+   (i.e., IE6) to produce HTML.  A word of warning though: the XSLT
    script doesn't support the processing instructions discussed earlier
    (Section 4.1).
 
@@ -612,14 +668,14 @@ Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
 
 
 
-Rose                                                           [Page 11]
+Rose                                                           [Page 12]
 
-README                       xml2rfc v1.23                    April 2004
+README                       xml2rfc v1.24                    April 2004
 
 
 Appendix C.  Copyrights
 
-   (c) 2003 Marshall T. Rose
+   (c) 2003 Marshall T.  Rose
 
    Hold harmless the author, and any lawful use is allowed.
 
@@ -668,5 +724,5 @@ Appendix C.  Copyrights
 
 
 
-Rose                                                           [Page 12]
+Rose                                                           [Page 13]
 

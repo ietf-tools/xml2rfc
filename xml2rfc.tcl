@@ -5,6 +5,27 @@ elif test ! -z "$1";       then exec tclsh "$0" "$0" "$@"; \
 else                            echo "usage: $0 filename" >&2; exit 1; fi
 
 
+# NOTE FROM CLIVE
+# Problems with nroff output
+# - an empty hangText in a hanging list seems to not generate a .ti
+#   fixed by change CLIVE#1
+# - blocks of text <t> within <list> within <t> generate a wrong .ti
+#   fixed by change CLIVE#2
+# - references and author indented wrongly
+#   fixed by change CLIVE#3
+# - words with dashes in them need \% at the front
+#   fixed by change CLIVE#4
+# - tables are indented wrongly
+#   fixed by change CLIVE#5
+# - URLs can be split across a line
+#   fixed by change CLIVE#6
+
+# Problems with text output
+# - URLs can be split across a line
+#   fixed by change CLIVE#7
+# - indentation is wrong after <figure>
+#   unsolved
+
 #
 # xml2rfc.tcl - convert technical memos written using XML to TXT/HTML/NROFF
 #
@@ -3199,13 +3220,15 @@ proc pass {tag} {
             catch { unset counter(references) }
             set elemN 0
             catch { unset options }
-            array set options [list background  ""  \
+            array set options [list autobreaks  yes \
+                                    background  ""  \
                                     comments    no  \
                                     compact     no  \
                                     editing     no  \
                                     emoticonic  no  \
                                     footer      ""  \
                                     header      ""  \
+                                    inline      no  \
                                     iprnotified no  \
                                     linkmailto  yes \
                                     private     ""  \
@@ -3349,7 +3372,7 @@ proc begin {name {av {}}} {
     foreach {k v} $av {
         lappend kv $k
         regsub -all {\\\[} $v {[} v
-        lappend kv [chars_expand $v 0]
+        lappend kv $v
     }
     set av $kv
 
@@ -3578,6 +3601,22 @@ proc begin {name {av {}}} {
                     lappend counter(firstxref) $target
                 }
             }
+
+            cref {
+                if {[catch { set attrs(anchor) }]} {
+                    set attrs(anchor) anchor[incr anchorN]
+                }
+                if {$options(.SYMREFS)} {
+                    set value $attrs(anchor)
+                } else {
+                    if {[catch { incr counter(comment) }]} {
+                        set counter(comment) 1
+                    }
+                    set value Comment.$counter(comment)
+                }
+                set attrs(.COUNTER) $value
+                set elem($elemN) [array get attrs]
+            }
         }
 
         if {![catch { set anchor $attrs(anchor) }]} {
@@ -3730,15 +3769,15 @@ proc end {name} {
                 }
             }
 
-	    back {
-		if {[llength [set c [find_element references \
-						     $attrs(.CHILDREN)]]] \
-		        == 1} {
-		    array set cv $elem($c)
-		    set cv(.COUNTER) [lindex [split $cv(.COUNTER) .] 0]
-		    set elem($c) [array get cv]
-		}
-	    }
+            back {
+                if {[llength [set c [find_element references \
+                                                     $attrs(.CHILDREN)]]] \
+                        == 1} {
+                    array set cv $elem($c)
+                    set cv(.COUNTER) [lindex [split $cv(.COUNTER) .] 0]
+                    set elem($c) [array get cv]
+                }
+            }
         }
 
         return
@@ -3916,10 +3955,12 @@ proc normalize_options {} {
         set options(slides) no
     }
     set subcompactP 0
-    foreach {o O} [list compact     .COMPACT     \
+    foreach {o O} [list autobreaks  .AUTOBREAKS  \
+                        compact     .COMPACT     \
                         comments    .COMMENTS    \
                         editing     .EDITING     \
                         emoticonic  .EMOTICONIC  \
+                        inline      .INLINE      \
                         iprnotified .IPRNOTIFIED \
                         linkmailto  .LINKMAILTO  \
                         slides      .SLIDES      \
@@ -3933,7 +3974,7 @@ proc normalize_options {} {
                         topblock    .TOPBLOCK] {
         if {![string compare $o subcompact]} {
             set subcompactP 1
-	}
+        }
         switch -- $options($o) {
             yes - true - 1 {
                 set options($O) 1
@@ -3976,6 +4017,9 @@ proc normalize_options {} {
                 set passmax 3
             }
         }
+    }
+    if {!$options(.COMMENTS)} {
+        set options(.INLINE) 0
     }
     if {!$subcompactP} {
         set options(.SUBCOMPACT) $options(.COMPACT)
@@ -4139,8 +4183,8 @@ described in this document or the extent to which any license
 under such rights might or might not be available; nor does it
 represent that it has made any independent effort to identify any
 such rights.
-Information on the IETF's procedures with respect to
-rights in IETF Documents can be found in BCP 78 and BCP 79."
+Information on the procedures with respect to
+rights in RFC documents can be found in BCP 78 and BCP 79."
 
 "Copies of IPR disclosures made to the IETF Secretariat and any
 assurances of licenses to be made available,
@@ -4725,7 +4769,7 @@ proc pass2end_front {elemX} {
                 }
 
                 back {
-                    if {($options(.COMMENTS)) && ([array size crefs] > 0)} {
+                    if {(!$options(.INLINE)) && ([array size crefs] > 0)} {
                         set anchor ""
                         if {($passno == 3) && (![string compare $mode html])} {
                             set anchor rfc.comments
@@ -4767,18 +4811,18 @@ proc pass2end_front {elemX} {
                     if {[catch { set title $cv(title) }]} {
                         set title References
                     }
-                    if {($options(.COMMENTS)) && ([array size crefs] > 0)} {
+                    if {(!$options(.INLINE)) && ([array size crefs] > 0)} {
                         set offset 2
                     } else {
                         set offset 1
                     }
-		    set l [split $label .]
-		    if {([llength $l] == 2) \
-		            && (![string compare [lindex $l 1] 1])} {
+                    set l [split $label .]
+                    if {([llength $l] == 2) \
+                            && (![string compare [lindex $l 1] 1])} {
                         set toc [linsert $toc [expr [llength $toc]-$offset] \
                                          [list [lindex $l 0]. \
                                                References $anchor]]
-		    }
+                    }
                     if {[string first . $label] < 0} {
                         append label .
                     }
@@ -4870,6 +4914,16 @@ proc pass2begin_section {elemX {appendP 0}} {
 proc pass2begin_appendix {elemX {appendP 0}} {
     pass2begin_section $elemX 1
 }
+
+proc section_title {elemX} {
+    global counter depth elemN elem passno stack xref
+
+    array set attrs [list anchor "" title ""]
+    array set attrs $elem($elemX)
+
+    return $attrs(title)
+}
+
 
 # the t element
 
@@ -5304,29 +5358,25 @@ proc pass2begin_cref {elemX} {
     global mode
     global options
 
+    array set attrs [list anchor "" source ""]
     array set attrs $elem($elemX)
 
     if {!$options(.COMMENTS)} {
         return
     }
 
-    if {$passno == 2} {
-        if {![info exists counter(reference)]} {
-            set counter(reference) 0
-        }
-
-        switch -- $mode {
-            nr  -
-            txt {
-                incr counter(reference)
-            }
-        }
-        set attrs(.COUNTER) $counter(reference)
-        set elem($elemX) [array get attrs]
-    }
-
-    cref_$mode $attrs(.CTEXT) $attrs(.COUNTER) $attrs(source)
+    cref_$mode $attrs(.CTEXT) $attrs(.COUNTER) $attrs(source) $attrs(anchor)
 }
+
+proc cref_title {elemX} {
+    global counter depth elemN elem passno stack xref
+
+    array set attrs [list anchor "" source ""]
+    array set attrs $elem($elemX)
+
+    return $attrs(.CTEXT)
+}
+
 
 
 # the iref element
@@ -5400,7 +5450,7 @@ proc pass2begin_back {elemX} {
     if {(!$erefP) && ([array size erefs] > 0)} {
         erefs_$mode URIs
     }
-    if {($options(.COMMENTS)) && ([array size crefs] > 0)} {
+    if {(!$options(.INLINE)) && ([array size crefs] > 0)} {
         crefs_$mode "Editorial Comments"
     }
 
@@ -5501,7 +5551,7 @@ proc pass2begin_references {elemX erefP} {
     array set attrs $elem($elemX)
 
     if {[llength [split [set prefix $attrs(.COUNTER)] .]] == 1} {
-	append prefix .
+        append prefix .
     }
     set attrs(.ANCHOR) [references_$mode begin $attrs(.COUNTER) $attrs(title)]
     set elem($elemX) [array get attrs]
@@ -6579,6 +6629,10 @@ proc xref_txt {text av target format {hackP 0}} {
             set line "Table $attrs(value)"
         }
 
+        cref {
+            set line "Comment $attrs(value)"
+        }
+
         default {
             set line "\[$attrs(value)\]"
         }
@@ -6655,7 +6709,8 @@ proc eref_txt {text counter target} {
     set eatP -1
 }
 
-proc cref_txt {text counter source} {
+proc cref_txt {text counter source anchor} {
+    global options
     global eatP
     global crefs erefs
     global mode
@@ -6665,9 +6720,17 @@ proc cref_txt {text counter source} {
         set comments "${source}: "
     }
     append comments $text
-    set crefs($counter) [list $source $text $comments]
+    set crefs($counter) [list $anchor $source $text $comments]
 
-    set line "\[$counter\]"
+    if {$options(.INLINE)} {
+        set line "\[\[$counter: $text"
+        if {[string compare $source ""]} {
+            append line " --$source"
+        }
+        append line "\]\]"
+    } else {
+        set line "\[$counter\]"
+    }
     if {![cellP $line]} {
         set eatP 0
         write_text_$mode $line
@@ -6738,7 +6801,7 @@ proc references_txt {tag args} {
             set prefix [lindex $args 0]
             set title [lindex $args 1]
             if {($depth(references) > 1) \
-		    && (![info exists counter(references)])} {
+                    && (![info exists counter(references)])} {
                 set counter(references) 0
                 section_txt [lindex [split $prefix .] 0]. 1 References 0 ""
             }
@@ -6818,8 +6881,15 @@ proc crefs_txt {title} {
         write_line_txt $title
     }
 
-    set names  [lsort -integer [array names crefs]]
-    set width [expr [string length [lindex $names end]]+2]
+    set names  [lsort -dictionary [array names crefs]]
+    set width 0
+    foreach cref $names {
+        set x [string length $cref]
+        if {$x > $width} {
+            set width $x
+        }
+    }
+    incr width 2
     foreach cref $names {
         write_line_txt ""
 
@@ -6832,7 +6902,7 @@ proc crefs_txt {title} {
         push_indent $i
 
         write_text_txt "  "
-        write_text_txt [lindex $crefs($cref) 2]
+        write_text_txt [lindex $crefs($cref) 3]
         pop_indent
     }
 
@@ -7147,6 +7217,10 @@ proc write_text_txt {text {direction l}} {
             } else {
                 set z $y
             }
+# CLIVE#7 added the next three lines:
+            if {[string last "://" [string range $line 0 70]] > $x} {
+                set y 0
+            }
             if {$x < $y} {
                 set x $y
             }
@@ -7241,20 +7315,16 @@ proc two_spaces {glop} {
         }
 
         set pre [string range $glop 0 [expr $x+1]]
-        set glop [string range $glop [expr $x+2] end]
+        set glop [string trimleft [string range $glop [expr $x+2] end]]
         append post $pre
 
         # Check for likely abbreviation.  Do not insert two spaces in
         # this case.
-        if {[catch { regexp {(?:[A-Z][A-Z]|[A-Z][a-z][a-z]\.)$} $pre } y]} {
-            if {![set y [string match {*[A-Z][A-Z].} $pre]]} {
-                set y [string match {*[A-Z][a-z][a-z].} $pre]
-            }
+        if {![set y [string match {*[A-Z][A-Z] .} $pre]]} {
+            set y [string match {*[A-Z][a-z][a-z] .} $pre]
         }
-        if {$y} {
-            if {[string first " " $glop] != 0} {
-                append post " "
-            }
+        if {!$y} {
+            append post " "
         }
     }
 
@@ -7544,7 +7614,7 @@ proc front_html_begin {left right top bottom title status copying keywords
         write_html "\">" 
     }
 
-     write_html -nonewline "<meta name=\"generator\" content=\"xml2rfc v1.23 "
+     write_html -nonewline "<meta name=\"generator\" content=\"xml2rfc v1.24 "
      write_html "(http://xml.resource.org/)\">"
 #end new meta tags
 
@@ -7919,23 +7989,31 @@ proc xref_html {text av target format {hackP 0}} {
     switch -- $attrs(type) {
         section {
             set line "Section $attrs(value)"
+            set title [section_title $elemY]
         }
 
         appendix {
             set line "Appendix $attrs(value)"
+            set title [section_title $elemY]
         }
 
         figure {
             set line "Figure $attrs(value)"
+            set title [section_title $elemY]
         }
 
         texttable {
             set line "Table $attrs(value)"
+            set title [section_title $elemY]
+        }
+
+        cref {
+            set line "Comment $attrs(value)"
+            set title [cref_title $elemY]
         }
 
         reference {
             set line "\[$attrs(value)\]"
-            set title ""
 
             set s ""
             set nameA 1
@@ -7951,18 +8029,18 @@ proc xref_html {text av target format {hackP 0}} {
                 }
             }
             append title ", [ref_title $elemY], [ref_date $elemY]."
-            regsub -all {"} $title {\&quot;} title
-            regsub -all "\r" $title { } title
-            regsub -all "\n" $title { } title
-if {0} {
-            set title " title=\"$title\""
-}
         }
 
         default {
             set line "\[$attrs(value)\]"
         }
     }
+    regsub -all {"} $title {\&quot;} title
+    regsub -all "\r" $title { } title
+    regsub -all "\n" $title { } title
+if {0} {
+    set title " title=\"$title\""
+}
 
     if {![string compare $format none]} {
         if {![string compare $text ""]} {
@@ -8009,7 +8087,11 @@ if {0} {
 if {0} {
     set line "<a href=\"#$target\"$title>$text</a>$post"
 } else {
-    set line "<a class=\"info\" href=\"#$target\">$text<span>$title</span></a>$post"
+    set line "<a class=\"info\" href=\"#$target\">$text"
+    if {[string compare $title ""]} {
+        append line "<span>$title</span>"
+    }
+    append line "</a>$post"
 }
     if {$hackP} {
         return $line
@@ -8034,7 +8116,7 @@ proc eref_html {text counter target} {
     }
 }
 
-proc cref_html {text counter source} {
+proc cref_html {text counter source anchor} {
     global crefs erefs
 
     set comments ""
@@ -8042,18 +8124,18 @@ proc cref_html {text counter source} {
         set comments "${source}: "
     }
     append comments $text
-    set crefs($counter) [list $source $text $comments]
+    set crefs($counter) [list $anchor $source $text $comments]
 
     regsub -all {"} $comments {\&quot;} comments
     regsub -all "\r" $comments { } comments
     regsub -all "\n" $comments { } comments
 
 if {0} {
-    set line "<a href=\"#comment.$counter\" title=\"$comments\">\[Comment $counter\]</a>"
+    set line "<a href=\"#comment.$counter\" title=\"$comments\">\[$counter\]</a>"
 } else {
-    set line "<a class=\"info\" href=\"#comment.$counter\">\[Comment $counter\]<span>$comments</span></a>"
+    set line "<a class=\"info\" href=\"#comment.$counter\">\[$counter\]<span>$comments</span></a>"
 }
-    append line "<a name=\"tnemmoc.$counter\"></a>"
+    append line "<a name=\"$anchor\"></a>"
 
     if {![cellP $line]} {
         write_html -nonewline $line
@@ -8112,19 +8194,19 @@ proc references_html {tag args} {
             set prefix [lindex $args 0]
             set title [lindex $args 1]
             if {($depth(references) > 1) \
-		    && (![info exists counter(references)])} {
+                    && (![info exists counter(references)])} {
                 set counter(references) 0
                 section_html [lindex [split $prefix .] 0]. 1 References 0 \
                              rfc.references
             }
 
             write_html ""
-	    if {![info exists counter(references)]} {
-		set suffix 1
-	    } else {
-		set suffix [incr counter(references)]
-	    }
-	    toc_html rfc.references$suffix
+            if {![info exists counter(references)]} {
+                set suffix 1
+            } else {
+                set suffix [incr counter(references)]
+            }
+            toc_html rfc.references$suffix
             write_html -nonewline "<h3>$prefix&nbsp;"
             pcdata_html $title
             write_html "</h3>"
@@ -8241,24 +8323,22 @@ proc crefs_html {title} {
 
     write_html "<table width=\"99%\" border=\"0\">"
 
-    set names  [lsort -integer [array names crefs]]
+    set names [lsort -dictionary [array names crefs]]
     foreach cref $names {
 if {0} {
         write_html "<tr><td class=\"author-text\" valign=\"top\">"
-        write_html "<a href=\"#tnemmoc.$cref\" title=\"Comment $cref\">"
-        pcdata_html [lindex $crefs($cref) 0]
+        write_html "<a href=\"#[lindex $crefs($cref) 0]\" title=\"$cref\">"
+        pcdata_html [lindex $crefs($cref) 1]
         write_html "</a><a name=\"comment.$cref\"></a>:"
         write_html "</td><td class=\"author-text\">"
-        pcdata_html [lindex $crefs($cref) 1]
+        pcdata_html [lindex $crefs($cref) 2]
         write_html "</td></tr>"
 } else {
         write_html "<tr><td class=\"author-text\" valign=\"top\">"
-        write_html "<a class=\"info\" href=\"#tnemmoc.$cref\">"
-        pcdata_html [lindex $crefs($cref) 0]
-        write_html "<span>Comment $cref</span>"
-        write_html "</a><a name=\"comment.$cref\"></a>:"
+        write_html "<a class=\"info\" href=\"#[lindex $crefs($cref) 0]\">"
+        write_html "$cref</a><a name=\"comment.$cref\"></a>:"
         write_html "</td><td class=\"author-text\">"
-        pcdata_html [lindex $crefs($cref) 1]
+        pcdata_html [lindex $crefs($cref) 2]
         write_html "</td></tr>"
 }
     }
@@ -8866,7 +8946,7 @@ proc front_nr_begin {left right top bottom title status copying keywords
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.23 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.24 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -8882,6 +8962,7 @@ proc front_nr_begin {left right top bottom title status copying keywords
     write_it ".ds RH [chars_expand [lindex $top 2]]"
     write_it ".ds CH [chars_expand [lindex $top 1]]"
     write_it ".hy 0"
+    write_it ".nh"
     write_it ".ad l"
     write_it ".nf"
     set nofillP -1
@@ -8937,6 +9018,7 @@ proc front_nr_begin {left right top bottom title status copying keywords
 proc front_nr_end {toc irefP} {
     global options copyrightP iprP noticeT
     global header footer lineno pageno blankP
+    global indents indent lastin
     global passno indexpg
     global nofillP
 
@@ -8959,7 +9041,8 @@ proc front_nr_end {toc irefP} {
         } else {
             write_line_nr "" -1
         }
-        write_it ".ti 0"
+        write_it ".in [set lastin [set indent 0]]"
+        set indents {}
         write_line_nr "Table of Contents"
         write_line_nr "" -1
 
@@ -9109,6 +9192,8 @@ proc t_nr {tag counter style hangText editNo} {
 
             default {
                 set counter "  "
+# CLIVE#2 added next line
+                set left -2
             }
         }
         if {![have_lines $lines]} {
@@ -9197,14 +9282,40 @@ proc preamble_nr {tag {editNo ""}} {
 }
 
 proc postamble_nr {tag {editNo ""}} {
+# CLIVE#5 added the next line:
+    global tblindent
+
     postamble_txt $tag $editNo
+
+# CLIVE#5 added the next six lines:
+    # It may seem odd to do this after postamble_txt, but it ensures
+    # that the last cell has been flushed.
+    if {![string compare $tag "begin"] && ($tblindent > 0)} {
+        write_it ".in $tblindent"
+        set tblindent 0
+    }
 }
 
 proc texttable_nr {tag lines anchor title {didP 0}} {
+# CLIVE#5 added the next line:
+    global tblindent
+
     texttable_txt $tag $lines $anchor $title $didP
+# CLIVE#5 added the next four lines:
+    if {![string compare $tag "end"] && ($tblindent > 0)} {
+        write_it ".in $tblindent"
+    }
+    set tblindent 0
 }
 
 proc ttcol_nr {text align col width} {
+# CLIVE#5 added the next 6 lines:
+    global tblindent indent
+    if {$tblindent == 0} {
+        flush_text
+        set tblindent $indent
+        write_it ".in 0"
+    }
     ttcol_txt $text $align $col $width
 }
 
@@ -9220,8 +9331,8 @@ proc eref_nr {text counter target} {
     eref_txt $text $counter $target
 }
 
-proc cref_nr {text counter source} {
-    cref_txt $text $counter $source
+proc cref_nr {text counter source anchor} {
+    cref_txt $text $counter $source $anchor
 }
 
 proc iref_nr {item subitem flags} {
@@ -9231,7 +9342,23 @@ proc iref_nr {item subitem flags} {
 }
 
 proc vspace_nr {lines} {
-    vspace_txt $lines
+    global header footer lineno pageno blankP
+    global eatP
+    global mode
+
+    flush_text
+    if {$lineno+$lines >= 51} {
+        end_page_$mode
+    } else {
+        if {$lines > 0} {
+            write_it ".sp $lines"
+        } else {
+            write_it ".br"
+        }
+        incr lineno $lines
+    }
+
+    set eatP 1
 }
 
 proc spanx_nr {text style} {
@@ -9249,7 +9376,7 @@ proc references_nr {tag args} {
             set prefix [lindex $args 0]
             set title [lindex $args 1]
             if {($depth(references) > 1) \
-		    && (![info exists counter(references)])} {
+                    && (![info exists counter(references)])} {
                 set counter(references) 0
                 section_nr [lindex [split $prefix .] 0]. 1 References 0 ""
             }
@@ -9341,14 +9468,21 @@ proc crefs_nr {title} {
         write_line_nr $title
     }
 
-    set names  [lsort -integer [array names crefs]]
-    set width [expr [string length [lindex $names end]]+2]
+    set names  [lsort -dictionary [array names crefs]]
+    set width 0
+    foreach cref $names {
+        set x [string length $cref]
+        if {$x > $width} {
+            set width $x
+        }
+    }
+    incr width 2
     foreach cref $names {
         write_line_nr ""
 
         indent_text_nr "[format %-*.*s $width $width "\[$cref\]"]  " -1
 
-        write_text_nr [lindex $crefs($cref) 2]
+        write_text_nr [lindex $crefs($cref) 3]
         flush_text
 
         pop_indent
@@ -9385,7 +9519,8 @@ proc reference_nr {prefix names title series formats date anchor target
         write_line_nr $prefix
         write_it ".br"
     } else {
-        indent_text_nr "$prefix  " -1
+# CLIVE#3 changed -1 to 3 in next line
+        indent_text_nr "$prefix  " 3
     }
 
     set s ""
@@ -9448,9 +9583,11 @@ proc back_nr {authors} {
     }
     set result $pageno
 
-    if {$lastin != $indent} {
+# CLIVE#3 conditional removed, push_indent added
+#   if {$lastin != $indent} {
+        push_indent 3
         write_it ".in [set lastin $indent]"
-    }
+#   }
     write_it ".nf"
     set nofillP 1
 
@@ -9508,6 +9645,8 @@ proc back_nr {authors} {
         }
     }
 
+# CLIVE#3 added the next line
+    pop_indent
     return $result
 }
 
@@ -9601,17 +9740,21 @@ proc indent_text_nr {prefix {left ""}} {
         }
         push_indent 3
     } elseif {$left < 0} {
-        set left $indent
+# CLIVE#2 added conditional on next line
+        if {$left == -1} { set left $indent }
+# WAS   set left $indent
         push_indent [string length $prefix]
+# CLIVE#2 added next line
+        if {$left == -2} { set left $indent }
     } else {
         push_indent [expr $left+[string length $prefix]-$indent]
     }
     if {$lastin != $indent} {
         write_it ".in [set lastin $indent]"
     }
-    if {$indent != $left} {
+# CLIVE#1 commented-out   if {$indent != $left} {
         write_it ".ti $left"
-    }
+# CLIVE#1 commented-out   }
     set buffer [format %*.*s $left $left ""]
     write_text_nr $prefix
 }
@@ -9663,6 +9806,10 @@ proc write_text_nr {text {direction l} {magic 0}} {
                 }
             } else {
                 set z $y
+            }
+# CLIVE#6 added the next three lines:
+            if {[string last "://" [string range $line 0 70]] > $x} {
+                set y 0
             }
             if {$x < $y} {
                 set x $y
@@ -9740,6 +9887,10 @@ proc write_line_nr {line {pre 0} {magic 0}} {
     regsub -all "$nbsp" $line "\\\\0" line
     if {[string first "." $line] == 0} {
         set line "\\&$line"
+    }
+# CLIVE#4 added the next three lines:
+    if {!($pre)} {
+        regsub -all "\[^ \t\n\]*-" $line "\\%\&" line
     }
     write_it $line
     incr lineno
@@ -9919,13 +10070,17 @@ proc munge_line {line} {
 proc write_url {url} {
     global mode
 
-    write_text_$mode <$url>
+    write_text_$mode <[chars_expand $url]>
 }
 
 proc have_lines {cnt} {
     global header footer lineno pageno blankP
+    global options
 
     flush_text
+    if (!$options(.AUTOBREAKS)) {
+        return 1
+    }
     if {($cnt < 40) && ($lineno+$cnt > 52)} {
         return 0
     }
@@ -10524,7 +10679,8 @@ set xdv::dtd(rfc2629.oattrs) \
                               format]     \
           iref          [list subitem     \
                               primary]    \
-          cref          [list source]     \
+          cref          [list anchor      \
+                              source]     \
           spanx         [list xml:space   \
                               style]      \
           vspace        [list blankLines] \
