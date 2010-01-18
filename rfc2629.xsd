@@ -71,7 +71,7 @@
       <xs:attribute name="number" type="NUMBER"/>
       <xs:attribute name="obsoletes" default="" type="NUMBERS"/>
       <xs:attribute name="updates" default="" type="NUMBERS"/>
-      <xs:attribute name="category" default="info">
+      <xs:attribute name="category">
         <xs:simpleType>
           <xs:restriction base="xs:token">
             <xs:enumeration value="std"/>
@@ -99,6 +99,14 @@
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="iprExtract" type="xs:IDREF"/>
+      <xs:attribute name="submissionType" default="IETF">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="IETF"/>
+            <xs:enumeration value="independent"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="docName" type="ATEXT"/>
       <xs:attribute ref="xml:lang" default="en"/>
     </xs:complexType>

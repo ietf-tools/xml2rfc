@@ -2,6 +2,7 @@
 <!DOCTYPE rfc SYSTEM 'rfc2629.dtd'>
 
 <?rfc comments='yes'?>
+<?rfc docmapping='yes'?>
 <?rfc inline='no'?>
 <?rfc compact='no'?>
 <?rfc editing='no'?>
@@ -14,7 +15,7 @@
 
 <rfc>
 <front>
-<title>xml2rfc v1.31</title>
+<title>xml2rfc v1.32</title>
 
 <author initials='M.T.' surname='Rose' fullname='Marshall T. Rose'>
 <organization>Dover Beach Consulting, Inc.</organization>
@@ -31,20 +32,35 @@
 </address>
 </author>
 
+<author fullname="Bill Fenner" initials="B." surname="Fenner">
+<organization>AT&amp;T Labs - Research</organization>
+<address>
+<postal>
+<street>1 River Oaks Place</street>
+<city>San Jose</city>
+<region>CA</region>
+<code>95134-1918</code>
+<country>US</country>
+</postal>
+<phone>+1 408 493-8505</phone>
+<email>fenner@research.att.com</email>
+</address>
+</author>
+
 <author initials='C.' surname='Levert' fullname='Charles Levert'>
 <organization/>
 <address>
 <postal>
 <street/>
 <city>Montr&eacute;al</city>
-<region>Qc</region>
+<region>QC</region>
 <country>Canada</country>
 </postal>
 <email>charles.levert@gmail.com</email>
 </address>
 </author>
 
-<date month='July' year='2006' />
+<date month='January' year='2007' />
 </front>
 
 <middle>
@@ -195,6 +211,10 @@ single or double quotes.</postamble>
 <ttcol align='center'>default</ttcol>
 <ttcol align='left'>meaning</ttcol>
 
+<c>authorship</c>
+<c>yes</c>
+<c>render author information</c>
+
 <c>autobreaks</c>
 <c>yes</c>
 <c>automatically force page breaks to avoid widows and orphans (not perfect)</c>
@@ -215,6 +235,11 @@ single or double quotes.</postamble>
 <c>(rfcedstyle)</c>
 <c>when producing a txt/nroff file, try to conserve vertical whitespace
 (the default value is the current value of the rfcedstyle PI)</c>
+
+<c>docmapping</c>
+<c>no</c>
+<c>use hierarchical tags (e.g., &lt;h1>, &lt;h2>, etc.)
+for (sub)section titles</c>
 
 <c>editing</c>
 <c>no</c>
@@ -253,6 +278,10 @@ otherwise render them in an &ldquo;Editorial Comments&rdquo; section</c>
 <c>yes</c>
 <c>generate mailto: URL, as appropriate</c>
 
+<c>notedraftinprogress</c>
+<c>yes</c>
+<c>generates "(work in progress)", as appropriate</c>
+
 <c>linefile</c>
 <c>n/a</c>
 <c>a string like "35:file.xml" or just "35"
@@ -269,6 +298,10 @@ for warning and error reporting purposes (line numbers are 1-based)</c>
 <c>private</c>
 <c>""</c>
 <c>produce a private memo rather than an RFC or Internet-Draft</c>
+
+<c>refparent</c>
+<c>"References"</c>
+<c>title of the top-level section containing all references</c>
 
 <c>rfcedstyle</c>
 <c>no</c>
@@ -339,13 +372,13 @@ then you can make things a little less compact by setting this to "no"
 <c>if toc is "yes", then setting this to "yes" will indent subsections
 in the table-of-contents</c>
 
-<c>tocompact</c>
-<c>yes</c>
-<c>if toc is "yes", then setting this to "no" will make it a little less compact</c>
-
 <c>tocnarrow</c>
 <c>yes</c>
 <c>affects horizontal spacing in the table-of-content</c>
+
+<c>tocompact</c>
+<c>yes</c>
+<c>if toc is "yes", then setting this to "no" will make it a little less compact</c>
 
 <c>topblock</c>
 <c>yes</c>

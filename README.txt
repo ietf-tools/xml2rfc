@@ -3,11 +3,13 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
+                                                               B. Fenner
+                                                    AT&T Labs - Research
                                                                C. Levert
-                                                           July 22, 2006
+                                                        January 15, 2007
 
 
-                             xml2rfc v1.31
+                             xml2rfc v1.32
 
 
 Table of Contents
@@ -20,20 +22,20 @@ Table of Contents
    4.      Next steps . . . . . . . . . . . . . . . . . . . . . . . .  5
    4.1.    Processing Instructions  . . . . . . . . . . . . . . . . .  5
    4.1.1.  Option Settings  . . . . . . . . . . . . . . . . . . . . .  5
-   4.1.2.  Include Files  . . . . . . . . . . . . . . . . . . . . . .  9
-   5.      The Page Model . . . . . . . . . . . . . . . . . . . . . . 10
-   6.      Additions to RFC 2629  . . . . . . . . . . . . . . . . . . 11
-   6.1.    Extra Attributes . . . . . . . . . . . . . . . . . . . . . 11
-   6.2.    Typed-Artwork Interpretation . . . . . . . . . . . . . . . 12
-   7.      Limitations of xml2rfc . . . . . . . . . . . . . . . . . . 14
-   8.      References . . . . . . . . . . . . . . . . . . . . . . . . 15
-   A.      MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . 16
-   B.      rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . 17
+   4.1.2.  Include Files  . . . . . . . . . . . . . . . . . . . . . . 10
+   5.      The Page Model . . . . . . . . . . . . . . . . . . . . . . 12
+   6.      Additions to RFC 2629  . . . . . . . . . . . . . . . . . . 13
+   6.1.    Extra Attributes . . . . . . . . . . . . . . . . . . . . . 13
+   6.2.    Typed-Artwork Interpretation . . . . . . . . . . . . . . . 14
+   7.      Limitations of xml2rfc . . . . . . . . . . . . . . . . . . 16
+   8.      References . . . . . . . . . . . . . . . . . . . . . . . . 17
+   A.      MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . 18
+   B.      rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . 19
    C.      MS-Windows XP/Cygwin Installation (courtesy of Joe
-           Touch) . . . . . . . . . . . . . . . . . . . . . . . . . . 18
-   D.      A Special Thanks . . . . . . . . . . . . . . . . . . . . . 19
-   E.      Copyrights . . . . . . . . . . . . . . . . . . . . . . . . 20
-           Authors' Addresses . . . . . . . . . . . . . . . . . . . . 21
+           Touch) . . . . . . . . . . . . . . . . . . . . . . . . . . 20
+   D.      A Special Thanks . . . . . . . . . . . . . . . . . . . . . 21
+   E.      Copyrights . . . . . . . . . . . . . . . . . . . . . . . . 22
+           Authors' Addresses . . . . . . . . . . . . . . . . . . . . 23
 
 
 
@@ -50,11 +52,9 @@ Table of Contents
 
 
 
-
-
-Rose & Levert                                                   [Page 1]
+Rose, et al.                                                    [Page 1]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 1.  Introduction
@@ -108,9 +108,9 @@ README                        xml2rfc v1.31                    July 2006
 
 
 
-Rose & Levert                                                   [Page 2]
+Rose, et al.                                                    [Page 2]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 2.  Requirements
@@ -164,9 +164,9 @@ README                        xml2rfc v1.31                    July 2006
 
 
 
-Rose & Levert                                                   [Page 3]
+Rose, et al.                                                    [Page 3]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 3.  Testing
@@ -220,9 +220,9 @@ README                        xml2rfc v1.31                    July 2006
 
 
 
-Rose & Levert                                                   [Page 4]
+Rose, et al.                                                    [Page 4]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 4.  Next steps
@@ -251,185 +251,268 @@ README                        xml2rfc v1.31                    July 2006
 
                       The list of valid keywords are:
 
-   +-------------+--------------+--------------------------------------+
-   |     keyword |    default   | meaning                              |
-   +-------------+--------------+--------------------------------------+
-   |  autobreaks |      yes     | automatically force page breaks to   |
-   |             |              | avoid widows and orphans (not        |
-   |             |              | perfect)                             |
-   |             |              |                                      |
-   |  background |      ""      | when producing a html file, use this |
-   |             |              | image                                |
-   |             |              |                                      |
-   |  colonspace |      no      | put two spaces instead of one after  |
-   |             |              | each colon (":") in txt or nroff     |
-   |             |              | files                                |
-   |             |              |                                      |
-   |    comments |      no      | render <cref> information            |
-   |             |              |                                      |
-   |     compact | (rfcedstyle) | when producing a txt/nroff file, try |
-   |             |              | to conserve vertical whitespace (the |
-   |             |              | default value is the current value   |
-   |             |              | of the rfcedstyle PI)                |
-   |             |              |                                      |
+   +---------------------+--------------+------------------------------+
+   |             keyword |    default   | meaning                      |
+   +---------------------+--------------+------------------------------+
+   |          authorship |      yes     | render author information    |
+   |                     |              |                              |
+   |          autobreaks |      yes     | automatically force page     |
+   |                     |              | breaks to avoid widows and   |
+   |                     |              | orphans (not perfect)        |
+   |                     |              |                              |
+   |          background |      ""      | when producing a html file,  |
+   |                     |              | use this image               |
+   |                     |              |                              |
+   |          colonspace |      no      | put two spaces instead of    |
+   |                     |              | one after each colon (":")   |
+   |                     |              | in txt or nroff files        |
+   |                     |              |                              |
+   |            comments |      no      | render <cref> information    |
+   |                     |              |                              |
 
 
 
 
-Rose & Levert                                                   [Page 5]
+
+
+
+Rose, et al.                                                    [Page 5]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
-   |     editing |      no      | insert editing marks for ease of     |
-   |             |              | discussing draft versions            |
-   |             |              |                                      |
-   |  emoticonic |      no      | automatically replaces input         |
-   |             |              | sequences such as "|*text|" by,      |
-   |             |              | e.g., "<strong>text</strong>" in     |
-   |             |              | html output                          |
-   |             |              |                                      |
-   |      footer |      ""      | override the center footer string    |
-   |             |              |                                      |
-   |      header |      ""      | override the leftmost header string  |
-   |             |              |                                      |
-   |     include |      n/a     | see Section 4.1.2                    |
-   |             |              |                                      |
-   |      inline |      no      | if comments is "yes", then render    |
-   |             |              | comments inline; otherwise render    |
-   |             |              | them in an "Editorial Comments"      |
-   |             |              | section                              |
-   |             |              |                                      |
-   | iprnotified |      no      | include boilerplate from             |
-   |             |              | Section 10.4(d) of [1]               |
-   |             |              |                                      |
-   |  linkmailto |      yes     | generate mailto: URL, as appropriate |
-   |             |              |                                      |
-   |    linefile |      n/a     | a string like "35:file.xml" or just  |
-   |             |              | "35" (file name then defaults to the |
-   |             |              | containing file's real name or to    |
-   |             |              | the latest linefile specification    |
-   |             |              | that changed it) that will be used   |
-   |             |              | to override *xml2rfc*'s reckoning of |
-   |             |              | the current input position (right    |
-   |             |              | after this PI) for warning and error |
-   |             |              | reporting purposes (line numbers are |
-   |             |              | 1-based)                             |
-   |             |              |                                      |
-   |   needLines |      n/a     | an integer hint indicating how many  |
-   |             |              | contiguous lines are needed at this  |
-   |             |              | point in the output                  |
-   |             |              |                                      |
-   |     private |      ""      | produce a private memo rather than   |
-   |             |              | an RFC or Internet-Draft             |
-   |             |              |                                      |
-
-
-
+   |             compact | (rfcedstyle) | when producing a txt/nroff   |
+   |                     |              | file, try to conserve        |
+   |                     |              | vertical whitespace (the     |
+   |                     |              | default value is the current |
+   |                     |              | value of the rfcedstyle PI)  |
+   |                     |              |                              |
+   |          docmapping |      no      | use hierarchical tags (e.g., |
+   |                     |              | <h1>, <h2>, etc.) for        |
+   |                     |              | (sub)section titles          |
+   |                     |              |                              |
+   |             editing |      no      | insert editing marks for     |
+   |                     |              | ease of discussing draft     |
+   |                     |              | versions                     |
+   |                     |              |                              |
+   |          emoticonic |      no      | automatically replaces input |
+   |                     |              | sequences such as "|*text|"  |
+   |                     |              | by, e.g.,                    |
+   |                     |              | "<strong>text</strong>" in   |
+   |                     |              | html output                  |
+   |                     |              |                              |
+   |              footer |      ""      | override the center footer   |
+   |                     |              | string                       |
+   |                     |              |                              |
+   |              header |      ""      | override the leftmost header |
+   |                     |              | string                       |
+   |                     |              |                              |
+   |             include |      n/a     | see Section 4.1.2            |
+   |                     |              |                              |
+   |              inline |      no      | if comments is "yes", then   |
+   |                     |              | render comments inline;      |
+   |                     |              | otherwise render them in an  |
+   |                     |              | "Editorial Comments" section |
+   |                     |              |                              |
+   |         iprnotified |      no      | include boilerplate from     |
+   |                     |              | Section 10.4(d) of [1]       |
+   |                     |              |                              |
+   |          linkmailto |      yes     | generate mailto: URL, as     |
+   |                     |              | appropriate                  |
+   |                     |              |                              |
+   | notedraftinprogress |      yes     | generates "(work in          |
+   |                     |              | progress)", as appropriate   |
+   |                     |              |                              |
 
 
 
 
 
 
-Rose & Levert                                                   [Page 6]
+
+
+
+Rose, et al.                                                    [Page 6]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
-   |  rfcedstyle |      no      | attempt to closely follow finer      |
-   |             |              | details from the latest observable   |
-   |             |              | RFC-Editor style so as to minimize   |
-   |             |              | the probability of being sent back   |
-   |             |              | corrections after submission; this   |
-   |             |              | directive is a kludge whose exact    |
-   |             |              | behavior is likely to change on a    |
-   |             |              | regular basis to match the current   |
-   |             |              | flavor of the month; presently, it   |
-   |             |              | will capitalize the adjective "This" |
-   |             |              | in automatically generated headings, |
-   |             |              | use the variant "acknowledgement"    |
-   |             |              | spelling instead of Merriam          |
-   |             |              | Webster's main "acknowledgment"      |
-   |             |              | dictionary entry, use the "eMail"    |
-   |             |              | spelling instead of Knuth's more     |
-   |             |              | modern "email" spelling, only put    |
-   |             |              | one blank line instead of two before |
-   |             |              | top sections, omit "Intellectual     |
-   |             |              | Property and Copyright Statements"   |
-   |             |              | and "Author's Address" from the      |
-   |             |              | table of content, and not limit the  |
-   |             |              | indentation to a maximum tag length  |
-   |             |              | in <references> sections.            |
-   |             |              |                                      |
-   |  rfcprocack |      no      | if there already is an automatically |
-   |             |              | generated Acknowledg(e)ment section, |
-   |             |              | pluralize its title and add a short  |
-   |             |              | sentence acknowledging that          |
-   |             |              | *xml2rfc* was used in the document's |
-   |             |              | production to process an input XML   |
-   |             |              | source file in RFC-2629 format       |
-   |             |              |                                      |
-   |      slides |      no      | when producing a html file, produce  |
-   |             |              | multiple files for a slide show      |
-   |             |              |                                      |
-   |    sortrefs |      no      | sort references                      |
-   |             |              |                                      |
-   |      strict |      no      | try to enforce the ID-nits           |
-   |             |              | conventions and DTD validity         |
-   |             |              |                                      |
-   |  subcompact |   (compact)  | if compact is "yes", then you can    |
-   |             |              | make things a little less compact by |
-   |             |              | setting this to "no" (the default    |
-   |             |              | value is the current value of the    |
-   |             |              | compact PI)                          |
-   |             |              |                                      |
+   |            linefile |      n/a     | a string like "35:file.xml"  |
+   |                     |              | or just "35" (file name then |
+   |                     |              | defaults to the containing   |
+   |                     |              | file's real name or to the   |
+   |                     |              | latest linefile              |
+   |                     |              | specification that changed   |
+   |                     |              | it) that will be used to     |
+   |                     |              | override *xml2rfc*'s         |
+   |                     |              | reckoning of the current     |
+   |                     |              | input position (right after  |
+   |                     |              | this PI) for warning and     |
+   |                     |              | error reporting purposes     |
+   |                     |              | (line numbers are 1-based)   |
+   |                     |              |                              |
+   |           needLines |      n/a     | an integer hint indicating   |
+   |                     |              | how many contiguous lines    |
+   |                     |              | are needed at this point in  |
+   |                     |              | the output                   |
+   |                     |              |                              |
+   |             private |      ""      | produce a private memo       |
+   |                     |              | rather than an RFC or        |
+   |                     |              | Internet-Draft               |
+   |                     |              |                              |
+   |           refparent | "References" | title of the top-level       |
+   |                     |              | section containing all       |
+   |                     |              | references                   |
+   |                     |              |                              |
 
 
 
 
-Rose & Levert                                                   [Page 7]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose, et al.                                                    [Page 7]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
-   |     symrefs |      no      | use anchors rather than numbers for  |
-   |             |              | references                           |
-   |             |              |                                      |
-   |         toc |      no      | generate a table-of-contents         |
-   |             |              |                                      |
-   | tocappendix |      yes     | control whether the word "Appendix"  |
-   |             |              | appears in the table-of-content      |
-   |             |              |                                      |
-   |    tocdepth |       3      | if toc is "yes", then this           |
-   |             |              | determines the depth of the          |
-   |             |              | table-of-contents                    |
-   |             |              |                                      |
-   |   tocindent |      yes     | if toc is "yes", then setting this   |
-   |             |              | to "yes" will indent subsections in  |
-   |             |              | the table-of-contents                |
-   |             |              |                                      |
-   |   tocompact |      yes     | if toc is "yes", then setting this   |
-   |             |              | to "no" will make it a little less   |
-   |             |              | compact                              |
-   |             |              |                                      |
-   |   tocnarrow |      yes     | affects horizontal spacing in the    |
-   |             |              | table-of-content                     |
-   |             |              |                                      |
-   |    topblock |      yes     | put the famous header block on the   |
-   |             |              | first page                           |
-   |             |              |                                      |
-   |     typeout |      n/a     | during processing pass 2, print the  |
-   |             |              | value to standard output at that     |
-   |             |              | point in processing                  |
-   |             |              |                                      |
-   |   useobject |      no      | when producing a html file, use the  |
-   |             |              | "<object>" html element with inner   |
-   |             |              | replacement content instead of the   |
-   |             |              | "<img>" html element, when a source  |
-   |             |              | xml element includes an "src"        |
-   |             |              | attribute                            |
-   +-------------+--------------+--------------------------------------+
+   |          rfcedstyle |      no      | attempt to closely follow    |
+   |                     |              | finer details from the       |
+   |                     |              | latest observable RFC-Editor |
+   |                     |              | style so as to minimize the  |
+   |                     |              | probability of being sent    |
+   |                     |              | back corrections after       |
+   |                     |              | submission; this directive   |
+   |                     |              | is a kludge whose exact      |
+   |                     |              | behavior is likely to change |
+   |                     |              | on a regular basis to match  |
+   |                     |              | the current flavor of the    |
+   |                     |              | month; presently, it will    |
+   |                     |              | capitalize the adjective     |
+   |                     |              | "This" in automatically      |
+   |                     |              | generated headings, use the  |
+   |                     |              | variant "acknowledgement"    |
+   |                     |              | spelling instead of Merriam  |
+   |                     |              | Webster's main               |
+   |                     |              | "acknowledgment" dictionary  |
+   |                     |              | entry, use the "eMail"       |
+   |                     |              | spelling instead of Knuth's  |
+   |                     |              | more modern "email"          |
+   |                     |              | spelling, only put one blank |
+   |                     |              | line instead of two before   |
+   |                     |              | top sections, omit           |
+   |                     |              | "Intellectual Property and   |
+   |                     |              | Copyright Statements" and    |
+   |                     |              | "Author's Address" from the  |
+   |                     |              | table of content, and not    |
+   |                     |              | limit the indentation to a   |
+   |                     |              | maximum tag length in        |
+   |                     |              | <references> sections.       |
+   |                     |              |                              |
+   |          rfcprocack |      no      | if there already is an       |
+   |                     |              | automatically generated      |
+   |                     |              | Acknowledg(e)ment section,   |
+   |                     |              | pluralize its title and add  |
+   |                     |              | a short sentence             |
+   |                     |              | acknowledging that *xml2rfc* |
+   |                     |              | was used in the document's   |
+   |                     |              | production to process an     |
+   |                     |              | input XML source file in     |
+   |                     |              | RFC-2629 format              |
+   |                     |              |                              |
+   |              slides |      no      | when producing a html file,  |
+   |                     |              | produce multiple files for a |
+   |                     |              | slide show                   |
+   |                     |              |                              |
+
+
+
+Rose, et al.                                                    [Page 8]
+
+README                        xml2rfc v1.32                 January 2007
+
+
+   |            sortrefs |      no      | sort references              |
+   |                     |              |                              |
+   |              strict |      no      | try to enforce the ID-nits   |
+   |                     |              | conventions and DTD validity |
+   |                     |              |                              |
+   |          subcompact |   (compact)  | if compact is "yes", then    |
+   |                     |              | you can make things a little |
+   |                     |              | less compact by setting this |
+   |                     |              | to "no" (the default value   |
+   |                     |              | is the current value of the  |
+   |                     |              | compact PI)                  |
+   |                     |              |                              |
+   |             symrefs |      no      | use anchors rather than      |
+   |                     |              | numbers for references       |
+   |                     |              |                              |
+   |                 toc |      no      | generate a table-of-contents |
+   |                     |              |                              |
+   |         tocappendix |      yes     | control whether the word     |
+   |                     |              | "Appendix" appears in the    |
+   |                     |              | table-of-content             |
+   |                     |              |                              |
+   |            tocdepth |       3      | if toc is "yes", then this   |
+   |                     |              | determines the depth of the  |
+   |                     |              | table-of-contents            |
+   |                     |              |                              |
+   |           tocindent |      yes     | if toc is "yes", then        |
+   |                     |              | setting this to "yes" will   |
+   |                     |              | indent subsections in the    |
+   |                     |              | table-of-contents            |
+   |                     |              |                              |
+   |           tocnarrow |      yes     | affects horizontal spacing   |
+   |                     |              | in the table-of-content      |
+   |                     |              |                              |
+   |           tocompact |      yes     | if toc is "yes", then        |
+   |                     |              | setting this to "no" will    |
+   |                     |              | make it a little less        |
+   |                     |              | compact                      |
+   |                     |              |                              |
+   |            topblock |      yes     | put the famous header block  |
+   |                     |              | on the first page            |
+   |                     |              |                              |
+   |             typeout |      n/a     | during processing pass 2,    |
+   |                     |              | print the value to standard  |
+   |                     |              | output at that point in      |
+   |                     |              | processing                   |
+   |                     |              |                              |
+
+
+
+
+
+Rose, et al.                                                    [Page 9]
+
+README                        xml2rfc v1.32                 January 2007
+
+
+   |           useobject |      no      | when producing a html file,  |
+   |                     |              | use the "<object>" html      |
+   |                     |              | element with inner           |
+   |                     |              | replacement content instead  |
+   |                     |              | of the "<img>" html element, |
+   |                     |              | when a source xml element    |
+   |                     |              | includes an "src" attribute  |
+   +---------------------+--------------+------------------------------+
 
     Remember that, as with everything else in XML, keywords and values
                             are case-sensitive.
@@ -437,17 +520,6 @@ README                        xml2rfc v1.31                    July 2006
    With the exception of the "needLines", "typeout", and "include"
    directives, you normally put all of these processing instructions at
    the beginning of the document (right after the XML declaration).
-
-
-
-
-
-
-
-Rose & Levert                                                   [Page 8]
-
-README                        xml2rfc v1.31                    July 2006
-
 
 4.1.2.  Include Files
 
@@ -465,6 +537,29 @@ README                        xml2rfc v1.31                    July 2006
    are generally case-sensitive and that an input file that is
    distributed to the outside world may be processed on a different
    operating system than that used by its author.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose, et al.                                                   [Page 10]
+
+README                        xml2rfc v1.32                 January 2007
+
 
    You can also have *xml2rfc* set the "XML_LIBRARY" environment
    variable directly, by creating a file called ".xml2rfc.rc" in the
@@ -500,9 +595,26 @@ README                        xml2rfc v1.31                    July 2006
 
 
 
-Rose & Levert                                                   [Page 9]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose, et al.                                                   [Page 11]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 5.  The Page Model
@@ -556,9 +668,9 @@ README                        xml2rfc v1.31                    July 2006
 
 
 
-Rose & Levert                                                  [Page 10]
+Rose, et al.                                                   [Page 12]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 6.  Additions to RFC 2629
@@ -612,9 +724,9 @@ README                        xml2rfc v1.31                    July 2006
 
 
 
-Rose & Levert                                                  [Page 11]
+Rose, et al.                                                   [Page 13]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
    *xml2rfc* also recognizes an undocumented "align" attribute (with
@@ -668,9 +780,9 @@ README                        xml2rfc v1.31                    July 2006
 
 
 
-Rose & Levert                                                  [Page 12]
+Rose, et al.                                                   [Page 14]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
    For example (to be viewed in HTML):
@@ -724,9 +836,9 @@ README                        xml2rfc v1.31                    July 2006
 
 
 
-Rose & Levert                                                  [Page 13]
+Rose, et al.                                                   [Page 15]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 7.  Limitations of xml2rfc
@@ -780,9 +892,9 @@ README                        xml2rfc v1.31                    July 2006
 
 
 
-Rose & Levert                                                  [Page 14]
+Rose, et al.                                                   [Page 16]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 8.  References
@@ -836,9 +948,9 @@ README                        xml2rfc v1.31                    July 2006
 
 
 
-Rose & Levert                                                  [Page 15]
+Rose, et al.                                                   [Page 17]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
@@ -892,9 +1004,9 @@ Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
 
 
 
-Rose & Levert                                                  [Page 16]
+Rose, et al.                                                   [Page 18]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
@@ -948,9 +1060,9 @@ Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
 
 
 
-Rose & Levert                                                  [Page 17]
+Rose, et al.                                                   [Page 19]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 Appendix C.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
@@ -1004,9 +1116,9 @@ Appendix C.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
 
 
 
-Rose & Levert                                                  [Page 18]
+Rose, et al.                                                   [Page 20]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 Appendix D.  A Special Thanks
@@ -1060,9 +1172,9 @@ Appendix D.  A Special Thanks
 
 
 
-Rose & Levert                                                  [Page 19]
+Rose, et al.                                                   [Page 21]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 Appendix E.  Copyrights
@@ -1116,9 +1228,9 @@ Appendix E.  Copyrights
 
 
 
-Rose & Levert                                                  [Page 20]
+Rose, et al.                                                   [Page 22]
 
-README                        xml2rfc v1.31                    July 2006
+README                        xml2rfc v1.32                 January 2007
 
 
 Authors' Addresses
@@ -1133,8 +1245,18 @@ Authors' Addresses
    Email: mrose@dbc.mtview.ca.us
 
 
+   Bill Fenner
+   AT&T Labs - Research
+   1 River Oaks Place
+   San Jose, CA  95134-1918
+   US
+
+   Phone: +1 408 493-8505
+   Email: fenner@research.att.com
+
+
    Charles Levert
-   Montreal, Qc
+   Montreal, QC
    Canada
 
    Email: charles.levert@gmail.com
@@ -1162,15 +1284,5 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-Rose & Levert                                                  [Page 21]
+Rose, et al.                                                   [Page 23]
 
