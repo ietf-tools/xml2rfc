@@ -1,5 +1,5 @@
-<html><head><title>The README file: xml2rfc v1.11</title>
-<meta http-equiv="Expires" content="Sun, 03 Mar 2002 23:34:37 +0000">
+<html><head><title>The README file: xml2rfc v1.13</title>
+<meta http-equiv="Expires" content="Mon, 10 Jun 2002 02:33:15 +0000">
 <STYLE type='text/css'>
     .title { color: #990000; font-size: 22px; line-height: 22px; font-weight: bold; text-align: right;
              font-family: helvetica, arial, sans-serif }
@@ -42,9 +42,9 @@
 <table width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header">The README file</td><td width="33%" bgcolor="#666666" class="header">M. Rose</td></tr>
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">Dover Beach Consulting, Inc.</td></tr>
-<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">March 3, 2002</td></tr>
+<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">June 9, 2002</td></tr>
 </table></td></tr></table>
-<div align="right"><font face="monaco, MS Sans Serif" color="#990000" size="+3"><b><br><span class="title">xml2rfc v1.11</span></b></font></div>
+<div align="right"><font face="monaco, MS Sans Serif" color="#990000" size="+3"><b><br><span class="title">xml2rfc v1.13</span></b></font></div>
 <font face="verdana, helvetica, arial, sans-serif" size="2">
 <a name="toc"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
@@ -62,20 +62,22 @@ Testing under a windowing system<br></b>
 Testing without a windowing system<br></b>
 <b><a href="#anchor6">4.</a>&nbsp;
 Next steps<br></b>
-<b><a href="#anchor7">4.1</a>&nbsp;
+<b><a href="#processing.instructions">4.1</a>&nbsp;
 Processing Instructions<br></b>
-<b><a href="#anchor8">4.1.1</a>&nbsp;
+<b><a href="#anchor7">4.1.1</a>&nbsp;
 Option Settings<br></b>
-<b><a href="#anchor9">4.1.2</a>&nbsp;
+<b><a href="#anchor8">4.1.2</a>&nbsp;
 Include Files<br></b>
-<b><a href="#anchor10">5.</a>&nbsp;
+<b><a href="#anchor9">5.</a>&nbsp;
 Additions to RFC 2629<br></b>
-<b><a href="#anchor11">6.</a>&nbsp;
+<b><a href="#anchor10">6.</a>&nbsp;
 Limitations<br></b>
 <b><a href="#rfc.authors">&#167;</a>&nbsp;
 Author's Address<br></b>
-<b><a href="#anchor12">A.</a>&nbsp;
+<b><a href="#anchor11">A.</a>&nbsp;
 MacOS 9 Installation (courtesy of Ned Freed)<br></b>
+<b><a href="#anchor12">B.</a>&nbsp;
+rfc2629.xslt (courtesy of Julian Reschke)<br></b>
 </ul>
 <br clear="all">
 
@@ -83,92 +85,68 @@ MacOS 9 Installation (courtesy of Ned Freed)<br></b>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
 <a name="rfc.section.1"></a><h3>1.&nbsp;Introduction</h3>
 
-<p>
-This is a package to convert memos written in XML to the RFC format.
+<p>This is a package to convert memos written in XML to the RFC format.
 </p>
-
-<p>
-If you don't want to install any software,
+<p>If you don't want to install any software,
 you can use the
 <a href="http://xml.resource.org/">web-based service</a>.
 </p>
-
 <a name="anchor2"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
 <a name="rfc.section.2"></a><h3>2.&nbsp;Requirements</h3>
 
-<p>
-You need to have Tcl/Tk version 8 running on your system.
+<p>You need to have Tcl/Tk version 8 running on your system.
 Tcl is a scripting language,
 Tk is Tcl with support for your windowing system.
 </p>
-
-<p>
-To get a source or binary distribution for your system,
+<p>To get a source or binary distribution for your system,
 go to the
 <a href="http://www.scriptics.com/software/tcltk/8.4.html">Scriptics website</a>
 and install it.
 If you get the binary distribution,
 this is pretty simple.
 </p>
-
-<p>
-Of course,
+<p>Of course,
 you may already have Tcl version 8.
 To find out,
 try typing this command from the shell
 (including the "MS-DOS Prompt"):
-</p>
-</font><pre>
+</p></font><pre>
     % tclsh
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
-<p>
-If the program launches,
+<p>If the program launches,
 you're good to go with Tcl version 8.
 </p>
-
-<p>
-If you are running under a windowing system (e.g., X or Windows),
+<p>If you are running under a windowing system (e.g., X or Windows),
 you can also try:
-</p>
-</font><pre>
+</p></font><pre>
     % wish
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
-<p>
-If a new window comes up along with a "Console" window,
+<p>If a new window comes up along with a "Console" window,
 then you're good to go with Tk version 8.
 </p>
-
-<p>
-Finally,
+<p>Finally,
 you may notice a file called <b>xml2sgml.tcl</b> in the distribution.
 It contains some extra functionality for a few special users &#151;
 so, if you don't know what it is, don't worry about it...
 </p>
-
 <a name="anchor3"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
 <a name="rfc.section.3"></a><h3>3.&nbsp;Testing</h3>
 
-<p>
-Now test your installation.
+<p>Now test your installation.
 </p>
-
 <a name="rfc.section.3.1"></a><h4><a name="anchor4">3.1</a>&nbsp;Testing under a windowing system</h4>
 
-<p>
-Type this command from the shell:
-</p>
-</font><pre>
+<p>Type this command from the shell:
+</p></font><pre>
     % xml2rfc.tcl
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
-<p>
-A new window should come up that looks like this:
-</p>
-</font><pre>
+<p>A new window should come up that looks like this:
+</p></font><pre>
     +------------------------------------------------------------+
     |                     Convert XML to RFC                     |
     |                                                            |
@@ -181,30 +159,22 @@ A new window should come up that looks like this:
     +------------------------------------------------------------+
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
-<p>
-Fill-in the blanks and click on [Convert].
+<p>Fill-in the blanks and click on [Convert].
 </p>
-
 <a name="rfc.section.3.2"></a><h4><a name="anchor5">3.2</a>&nbsp;Testing without a windowing system</h4>
 
-<p>
-Type this command from the shell:
-</p>
-</font><pre>
+<p>Type this command from the shell:
+</p></font><pre>
     % tclsh
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
-<p>
-If the program launches, type this command to it:
-</p>
-</font><pre>
+<p>If the program launches, type this command to it:
+</p></font><pre>
     % source xml2rfc.tcl
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
-<p>
-and you should see these four lines:
-</p>
-</font><pre>
+<p>and you should see these four lines:
+</p></font><pre>
     invoke as "xml2rfc   inputfile outputfile"
            or "xml2txt   inputfile"
            or "xml2html  inputfile"
@@ -215,32 +185,26 @@ and you should see these four lines:
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
 <a name="rfc.section.4"></a><h3>4.&nbsp;Next steps</h3>
 
-<p>
-Read the <a href="draft-mrose-writing-rfcs.html">2629bis</a>
+<p>Read the <a href="draft-mrose-writing-rfcs.html">2629bis</a>
 document.
 In particular,
 <a href="draft-mrose-writing-rfcs.html#anchor13">Section 3</a>
 has some good information.
 </p>
+<a name="rfc.section.4.1"></a><h4><a name="processing.instructions">4.1</a>&nbsp;Processing Instructions</h4>
 
-<a name="rfc.section.4.1"></a><h4><a name="anchor7">4.1</a>&nbsp;Processing Instructions</h4>
-
-<p>
-A <strong>processing instruction</strong> is a directive to an XML
+<p>A <strong>processing instruction</strong> is a directive to an XML
 application.
 If you want to give directives to <b>xml2rfc</b>,
 the PIs look like this:
-</p>
-</font><pre>
+</p></font><pre>
     &lt;?rfc keyword='value'?>
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
-<a name="rfc.section.4.1.1"></a><h4><a name="anchor8">4.1.1</a>&nbsp;Option Settings</h4>
+<a name="rfc.section.4.1.1"></a><h4><a name="anchor7">4.1.1</a>&nbsp;Option Settings</h4>
 
-<p>
-The list of valid keywords are:
-</p>
-</font><pre>
+<p>The list of valid keywords are:
+</p></font><pre>
     keyword     default     meaning
     =======     =======     =======
     compact     no          when producing a .txt file, try to
@@ -254,6 +218,9 @@ The list of valid keywords are:
 
     tocompact   yes         if toc is "yes", then setting this to
                             "no" will make it a little less compact
+
+    tocdepth    3           if toc is "yes", then this determines the
+                            depth of the table-of-contents
 
     editing     no          insert editing marks for ease of
                             discussing draft versions
@@ -277,37 +244,29 @@ The list of valid keywords are:
                             image
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
-<p>
-Remember,
+<p>Remember,
 that as with everything else in XML,
 keywords and values are case-sensitive.
 </p>
+<a name="rfc.section.4.1.2"></a><h4><a name="anchor8">4.1.2</a>&nbsp;Include Files</h4>
 
-<a name="rfc.section.4.1.2"></a><h4><a name="anchor9">4.1.2</a>&nbsp;Include Files</h4>
-
-<p>
-<b>xml2rfc</b> has an include-file facility,
+<p><b>xml2rfc</b> has an include-file facility,
 e.g.,
-</p>
-</font><pre>
+</p></font><pre>
     &lt;?rfc include='file'?>
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
-<p>
-<b>xml2rfc</b> will consult the $XML_LIBRARY environment variable
+<p><b>xml2rfc</b> will consult the $XML_LIBRARY environment variable
 for a search path of where to look for files.
 (If this envariable isn't set,
 the directory containing the file that contains the include-file
 directive is used.)
 </p>
-
-<p>
-You can also have <b>xml2rfc</b> set this envariable directly,
+<p>You can also have <b>xml2rfc</b> set this envariable directly,
 by including a file called <b>.xml2rfc.rc</b> in the directory where your
 main file is,
 e.g.,
-</p>
-</font><pre>
+</p></font><pre>
 global env
 
 if {![info exists env(XML_LIBRARY)]} {
@@ -320,92 +279,66 @@ if {[lsearch [split $env(XML_LIBRARY) ";"] $nativeD] &lt; 0} {
 }
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
-<p>
-which,
+<p>which,
 on Windows,
 sets the envariable to a default value,
 and then inserts, at the front,
 the directory where your main file is.
 </p>
-
-<p>
-There are links to various bibliographic databases (RFCs, I-Ds, and so on)
+<p>There are links to various bibliographic databases (RFCs, I-Ds, and so on)
 on the <b>xml2rfc</b> <a href="http://xml.resource.org/">homepage</a>.
 </p>
-
-<a name="anchor10"><br><hr size="1" shade="0"></a>
+<a name="anchor9"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
 <a name="rfc.section.5"></a><h3>5.&nbsp;Additions to RFC 2629</h3>
 
 <p>
-
 <ul class="text">
-
-<li>
-The <b>artwork</b> element has an undocumented <b>src</b> attribute that is
+<li>The <b>artwork</b> element has an undocumented <b>src</b> attribute that is
 consulted only if slides are being generated,
 e.g.,
+</p>
 </font><pre>
        &lt;figure>&lt;artwork src='layers.gif' />&lt;/figure>
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+<p>
 
 </li>
-
-<li>
-The <b>artwork</b> element has optional <b>name</b> and <b>type</b> attributes.
+<li>The <b>artwork</b> element has optional <b>name</b> and <b>type</b> attributes.
 </li>
-
-<li>
-The <b>references</b> element may occur more than once in the <b>back</b> element
+<li>The <b>references</b> element may occur more than once in the <b>back</b> element
 (e.g., for normative and non-normative references).
 Further,
 the element has an optional <b>title</b> attribute.
 </li>
-
-<li>
-The value of the <b>list</b> element's <b>style</b> attribute can start with
+<li>The value of the <b>list</b> element's <b>style</b> attribute can start with
 <b>"format "</b>.
 </li>
-
-<li>
-If the <b>style</b> attribute of the <b>list</b> element has either of the
+<li>If the <b>style</b> attribute of the <b>list</b> element has either of the
 values <b>"hanging"</b> or <b>"format"</b>,
 then a second,
 optional attribute,
 called <b>hangIndent</b> is consulted.
 </li>
-
-</ul>
-<p>
-
+</ul><p>
 For more information on these last two additions,
 see Section 2.3.1.2 of the
 <a href="draft-mrose-writing-rfcs.html#list">2629bis</a>
 document for the details.
 </p>
-
-<a name="anchor11"><br><hr size="1" shade="0"></a>
+<a name="anchor10"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
 <a name="rfc.section.6"></a><h3>6.&nbsp;Limitations</h3>
 
 <p>
-
 <ul class="text">
-
-<li>
-The <b>figure</b> element's <b>title</b> attribute is ignored,
+<li>The <b>figure</b> element's <b>title</b> attribute is ignored,
 except when generating HTML.
 </li>
-
-<li>
-The <b>xref</b> element's <b>pageno</b> attribute is ignored.
+<li>The <b>xref</b> element's <b>pageno</b> attribute is ignored.
 </li>
-
-</ul>
-<p>
-
+</ul><p>
 </p>
-
 <a name="rfc.authors"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
 <h3>Author's Address</h3>
@@ -426,43 +359,38 @@ The <b>xref</b> element's <b>pageno</b> attribute is ignored.
 <td class="author-text"><a href="mailto:mrose@dbc.mtview.ca.us">mrose@dbc.mtview.ca.us</a></td></tr>
 </table>
 
-<a name="anchor12"><br><hr size="1" shade="0"></a>
+<a name="anchor11"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;MacOS 9 Installation (courtesy of Ned Freed)</h3>
 
 <p>
-
 <ol class="text">
-
-<li>
-Install Tcl/Tk 8.3.4
+<li>Install Tcl/Tk 8.3.4
 </li>
-
-<li>
-When you performed Step 1,
+<li>When you performed Step 1,
 a folder in your <b>"Extensions"</b> folder called <b>"Tool Command Language"</b> was 
 created.
 Create a new folder under <b>"Extensions"</b>,
 with any name you like.
 </li>
-
-<li>
-Drag the file <b>xml2rfc.tcl</b> onto the <b>"Drag & Drop Tclets"</b>
+<li>Drag the file <b>xml2rfc.tcl</b> onto the <b>"Drag &amp; Drop Tclets"</b>
 application that was installed in Step 1.
 </li>
-
-<li>
-When asked for an appropriate <b>wish</b> stub,
+<li>When asked for an appropriate <b>wish</b> stub,
 select <b>"Wish 8.3.4"</b>.
 </li>
-
-<li>
-The <b>"Drap & Drop Tclets"</b> application will write out an
+<li>The <b>"Drap &amp; Drop Tclets"</b> application will write out an
 executable version of <b>xml2rfc</b>.
 </li>
-
-</ol>
-<p>
-
+</ol><p>
 </p>
-</font></body></html>
+<a name="anchor12"><br><hr size="1" shade="0"></a>
+<table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
+<a name="rfc.section.B"></a><h3>Appendix B.&nbsp;rfc2629.xslt (courtesy of Julian Reschke)</h3>
+
+<p>The file <b>rfc2629.xslt</b> can be used with an XSLT-capable formatter
+(i.e., IE6) to produce HTML.
+A word of warning though:
+the XSLT script doesn't support the processing instructions discussed
+<a href="#processing.instructions">earlier</a>.
+</p></font></body></html>

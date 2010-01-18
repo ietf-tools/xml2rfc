@@ -1,17 +1,17 @@
 <?xml version='1.0'?>
 <!DOCTYPE rfc SYSTEM 'rfc2629.dtd'>
 
-<?rfc editing='no'?>
 <?rfc compact='no'?>
-<?rfc subcompact='no'?>
+<?rfc editing='no'?>
 <?rfc emoticonic='yes'?>
-<?rfc private='The README file'?>
-<?rfc toc='yes'?>
 <?rfc header='README'?>
+<?rfc private='The README file'?>
+<?rfc subcompact='no'?>
+<?rfc toc='yes'?>
 
 <rfc>
 <front>
-<title>xml2rfc v1.11</title>
+<title>xml2rfc v1.13</title>
 
 <author initials='M.T.' surname='Rose' fullname='Marshall T. Rose'>
 <organization>Dover Beach Consulting, Inc.</organization>
@@ -28,7 +28,7 @@
 </address>
 </author>
 
-<date month='March' year='2002'/>
+<date month='June' year='2002'/>
 </front>
 
 <middle>
@@ -144,7 +144,7 @@ In particular,
 <eref target='draft-mrose-writing-rfcs.html#anchor13'>Section 3</eref>
 has some good information.</t>
 
-<section title='Processing Instructions'>
+<section anchor='processing.instructions' title='Processing Instructions'>
 <figure>
 <preamble>A |*processing instruction| is a directive to an XML
 application.
@@ -172,6 +172,9 @@ the PIs look like this:</preamble>
 
     tocompact   yes         if toc is "yes", then setting this to
                             "no" will make it a little less compact
+
+    tocdepth    3           if toc is "yes", then this determines the
+                            depth of the table-of-contents
 
     editing     no          insert editing marks for ease of
                             discussing draft versions
@@ -298,15 +301,23 @@ created.
 Create a new folder under |""Extensions"|,
 with any name you like.</t>
 
-<t>Drag the file |"xml2rfc.tcl| onto the |""Drag & Drop Tclets"|
+<t>Drag the file |"xml2rfc.tcl| onto the |""Drag &amp; Drop Tclets"|
 application that was installed in Step 1.</t>
 
 <t>When asked for an appropriate |"wish| stub,
 select |""Wish 8.3.4"|.</t>
 
-<t>The |""Drap & Drop Tclets"| application will write out an
+<t>The |""Drap &amp; Drop Tclets"| application will write out an
 executable version of |'xml2rfc|.</t>
 </list></t>
+</section>
+
+<section title='rfc2629.xslt (courtesy of Julian Reschke)'>
+<t>The file |"rfc2629.xslt| can be used with an XSLT-capable formatter
+(i.e., IE6) to produce HTML.
+A word of warning though:
+the XSLT script doesn't support the processing instructions discussed
+<xref target='processing.instructions'>earlier</xref>.</t>
 </section>
 </back>
 </rfc>
