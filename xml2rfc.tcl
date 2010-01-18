@@ -439,6 +439,7 @@ proc pass {tag} {
                                     subcompact no \
                                     toc        no \
                                     editing    no \
+                                    emoticonic no \
                                     private    "" \
                                     header     "" \
                                     footer     "" \
@@ -945,6 +946,7 @@ proc normalize_options {} {
                         subcompact .SUBCOMPACT \
                         toc        .TOC        \
                         editing    .EDITING    \
+                        emoticonic .EMOTICONIC \
                         symrefs    .SYMREFS    \
                         sortrefs   .SORTREFS   \
                         slides     .SLIDES] {
@@ -2693,6 +2695,7 @@ proc back_txt {authors} {
 
 proc pcdata_txt {text {pre 0}} {
     global eatP
+    global options
 
     if {(!$pre) && ($eatP)} {
         set text [string trimleft $text]
@@ -2703,6 +2706,10 @@ proc pcdata_txt {text {pre 0}} {
         regsub -all "\n\[ \t\n\]*" $text "\n" text
         regsub -all "\[ \t\]*\n\[ \t\]*" $text "\n" text
         set prefix ""
+
+        if {$options(.EMOTICONIC)} {
+            set text [emoticonic_txt $text]
+        }
     }
 
     foreach line [split $text "\n"] {
@@ -2716,6 +2723,31 @@ proc pcdata_txt {text {pre 0}} {
     }
 }
 
+proc emoticonic_txt {text} {
+    foreach {ei begin end} [list * * * \
+                                 ' ' '] {
+        set body ""
+        while {[set x [string first "|$ei" $text]] >= 0} {
+            if {$x > 0} {
+                append body [string range $text 0 [expr $x-1]]
+            }
+            append body "$begin"
+            set text [string range $text [expr $x+2] end]
+            if {[set x [string first "|" $text]] < 0} {
+                error "missing close for |$ei"
+            }
+            if {$x > 0} {
+                append body [string range $text 0 [expr $x-1]]
+            }
+            append body "$end"
+            set text [string range $text [expr $x+1] end]
+        }
+        append body $text
+        set text $body
+    }
+
+    return $text
+}
 
 proc start_page_txt {} {
     global stdout
@@ -3033,7 +3065,7 @@ proc front_html_begin {left right top bottom title status copying} {
     if {[string compare $options(background) ""]} {
         puts -nonewline $stdout " background=\"$options(background)\""
     }
-    puts $stdout "text=\"#000000\" alink=\"#000000\" vlink=\"#666666\" link=\"#990000\">" 
+    puts $stdout " text=\"#000000\" alink=\"#000000\" vlink=\"#666666\" link=\"#990000\">" 
 
     xxxx_html
 
@@ -3597,14 +3629,40 @@ proc toc_html {anchor} {
 
 proc pcdata_html {text {pre 0}} {
     global entities
+    global options
     global stdout
+
+    set font "<font face=\"verdana, helvetica, arial, sans-serif\" size=\"2\">"
 
     regsub -all -nocase {&apos;} $text {\&#039;} text
     regsub -all "&rfc.number;" $text [lindex $entities 1] text
     if {$pre} {
         if {![slide_pre $text]} {
-            puts $stdout "</font><pre>$text</pre><font face=\"verdana, helvetica, arial, sans-serif\" size=\"2\">"
+            puts $stdout "</font><pre>$text</pre>$font"
         }
+    } elseif {$options(.EMOTICONIC)} {
+        foreach {ei begin end} [list * <strong> </strong> \
+                                     ' <b>      </b>] {
+            set body ""
+            while {[set x [string first "|$ei" $text]] >= 0} {
+                if {$x > 0} {
+                    append body [string range $text 0 [expr $x-1]]
+                }
+                append body "$begin"
+                set text [string range $text [expr $x+2] end]
+                if {[set x [string first "|" $text]] < 0} {
+                    error "missing close for |$ei"
+                }
+                if {$x > 0} {
+                    append body [string range $text 0 [expr $x-1]]
+                }
+                append body "$end"
+                set text [string range $text [expr $x+1] end]
+            }
+            append body $text
+            set text $body
+        }
+        puts -nonewline $stdout $text
     } else {
         puts -nonewline $stdout $text
     }
@@ -3849,8 +3907,9 @@ proc rfc_nr {irefs copying} {
     if {[llength $irefs] > 0} {
         set indexpg $pageno
 
-        if {0 != $lastin} {
-            write_it ".in [set lastin 0]"
+        if {$lastin != 0} {
+	    write_it ".in [set lastin [set indent 0]]"
+	    set indents {}
         }
         write_line_nr "Index"
 
@@ -3889,6 +3948,10 @@ proc rfc_nr {irefs copying} {
     if {(!$options(.PRIVATE)) && $copyrightP} {
         set result $pageno
 
+	if {$lastin != 3} {
+	    write_it ".in [set lastin [set indent 3]]"
+	    set indents {}
+        }
         write_it ".ti 0"
         write_line_nr "Full Copyright Statement"
 
@@ -3919,7 +3982,7 @@ proc front_nr_begin {left right top bottom title status copying} {
     global options copyrightP
     global ifile mode ofile
     global header footer lineno pageno blankP
-    global eatP nofillP lastin
+    global eatP nofillP indent lastin
     global passno indexpg
 
     set lineno 1
@@ -3929,7 +3992,7 @@ proc front_nr_begin {left right top bottom title status copying} {
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.7 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.8 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -3970,6 +4033,10 @@ proc front_nr_begin {left right top bottom title status copying} {
     }
 
     write_line_nr "" -1
+
+    if {$lastin != $indent} {
+        write_it ".in [set lastin $indent]"
+    }
 
     if {!$options(.PRIVATE)} {
         write_it ".ti 0"
@@ -4092,6 +4159,7 @@ proc note_nr {title depth} {
 proc section_nr {prefix top title lines anchor} {
     global options
     global header footer lineno pageno blankP
+    global indents indent lastin
 
     if {($top && !$options(.COMPACT)) || (![have_lines [expr $lines+5]])} {
         end_page_nr
@@ -4103,6 +4171,11 @@ proc section_nr {prefix top title lines anchor} {
     write_text_nr [chars_expand $title]
     flush_text
     pop_indent
+
+    if {$lastin != 3} {
+	write_it ".in [set lastin [set indent 3]]"
+	set indents {}
+    }
 
     return $pageno
 }
@@ -4160,6 +4233,7 @@ proc t_nr {tag counter style hangText editNo} {
 proc list_nr {tag counters style hangText} {
     global options
     global eatP
+    global indent lastin
 
     switch -- $tag {
         begin {
@@ -4195,6 +4269,10 @@ proc list_nr {tag counters style hangText} {
             pop_indent
 
             set eatP 1
+
+	    if {$lastin != $indent} {
+	        write_it ".in [set lastin $indent]"
+	    }
         }
     }
 }
@@ -4321,7 +4399,7 @@ proc vspace_nr {lines} {
 proc references_nr {tag {title ""}} {
     global options
     global header footer lineno pageno blankP
-    global nofillP
+    global nofillP lastin
 
     switch -- $tag {
         begin {
@@ -4334,6 +4412,7 @@ proc references_nr {tag {title ""}} {
                 flush_text
                 write_it ".fi"
                 set nofillP 0
+		set lastin -1
             }
             write_it ".ti 0"
             write_line_nr $title
@@ -4423,7 +4502,7 @@ proc back_nr {authors} {
     }
     set result $pageno
 
-    if {$indent != $lastin} {
+    if {$lastin != $indent} {
         write_it ".in [set lastin $indent]"
     }
     write_it ".nf"
@@ -4488,7 +4567,8 @@ proc back_nr {authors} {
 
 proc pcdata_nr {text {pre 0}} {
     global eatP
-    global nofillP
+    global nofillP lastin
+    global options
 
     if {(!$pre) && ($eatP)} {
         set text [string trimleft $text]
@@ -4499,6 +4579,10 @@ proc pcdata_nr {text {pre 0}} {
         regsub -all "\n\[ \t\n\]*" $text "\n" text
         regsub -all "\[ \t\]*\n\[ \t\]*" $text "\n" text
         set prefix ""
+
+        if {$options(.EMOTICONIC)} {
+            set text [emoticonic_txt $text]
+        }
     }
 
     if {$nofillP != $pre} {
@@ -4507,6 +4591,7 @@ proc pcdata_nr {text {pre 0}} {
             write_it ".nf"
         } else {
             write_it ".fi"
+	    set lastin -1
         }
         set nofillP $pre
     }
@@ -4555,6 +4640,7 @@ proc indent_text_nr {prefix {left ""}} {
     if {$nofillP} {
         write_it ".fi"
         set nofillP 0
+	set lastin -1
     }
 
     if {![string compare $left ""]} {
@@ -4570,7 +4656,7 @@ proc indent_text_nr {prefix {left ""}} {
     } else {
         push_indent [expr $left+[string length $prefix]-$indent]
     }
-    if {$indent != $lastin} {
+    if {$lastin != $indent} {
         write_it ".in [set lastin $indent]"
     }
     if {$indent != $left} {
@@ -4613,7 +4699,7 @@ proc write_text_nr {text {direction l}} {
         flush_text
     }
     if {(![string compare $buffer$direction l]) \
-            && ($indent != $lastin)} {
+            && ($lastin != $indent)} {
         write_it ".in [set lastin $indent]"
     }
     if {![string compare $buffer ""]} {

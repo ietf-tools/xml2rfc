@@ -2,10 +2,10 @@
 
 The README file                                                  M. Rose
                                                   Invisible Worlds, Inc.
-                                                         August 22, 2001
+                                                             August 2001
 
 
-                              xml2rfc v1.7
+                              xml2rfc v1.8
 
 
 1. Introduction
@@ -54,7 +54,7 @@ The README file                                                  M. Rose
 
 Rose                                                            [Page 1]
 
-README                        xml2rfc v1.7                   August 2001
+README                        xml2rfc v1.8                   August 2001
 
 
 2.2 TclXML version 1.1.1
@@ -110,7 +110,7 @@ README                        xml2rfc v1.7                   August 2001
 
 Rose                                                            [Page 2]
 
-README                        xml2rfc v1.7                   August 2001
+README                        xml2rfc v1.8                   August 2001
 
 
 3.2 Testing without a windowing system
@@ -166,7 +166,7 @@ README                        xml2rfc v1.7                   August 2001
 
 Rose                                                            [Page 3]
 
-README                        xml2rfc v1.7                   August 2001
+README                        xml2rfc v1.8                   August 2001
 
 
 4. Next steps
@@ -222,7 +222,7 @@ README                        xml2rfc v1.7                   August 2001
 
 Rose                                                            [Page 4]
 
-README                        xml2rfc v1.7                   August 2001
+README                        xml2rfc v1.8                   August 2001
 
 
    The list of valid keywords are:
@@ -278,7 +278,7 @@ README                        xml2rfc v1.7                   August 2001
 
 Rose                                                            [Page 5]
 
-README                        xml2rfc v1.7                   August 2001
+README                        xml2rfc v1.8                   August 2001
 
 
    You can also have xml2rfc set this envariable directly, by including
@@ -334,7 +334,7 @@ References
 
 Rose                                                            [Page 6]
 
-README                        xml2rfc v1.7                   August 2001
+README                        xml2rfc v1.8                   August 2001
 
 
 Author's Address
