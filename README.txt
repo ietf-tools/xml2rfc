@@ -2,10 +2,10 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                         August 16, 2002
+                                                           November 2002
 
 
-                             xml2rfc v1.14
+                             xml2rfc v1.15
 
 
 Table of Contents
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose                                                            [Page 1]
 
-README                       xml2rfc v1.14                   August 2002
+README                       xml2rfc v1.15                 November 2002
 
 
 1. Introduction
@@ -110,7 +110,7 @@ README                       xml2rfc v1.14                   August 2002
 
 Rose                                                            [Page 2]
 
-README                       xml2rfc v1.14                   August 2002
+README                       xml2rfc v1.15                 November 2002
 
 
 2. Requirements
@@ -166,7 +166,7 @@ README                       xml2rfc v1.14                   August 2002
 
 Rose                                                            [Page 3]
 
-README                       xml2rfc v1.14                   August 2002
+README                       xml2rfc v1.15                 November 2002
 
 
 3. Testing
@@ -222,7 +222,7 @@ README                       xml2rfc v1.14                   August 2002
 
 Rose                                                            [Page 4]
 
-README                       xml2rfc v1.14                   August 2002
+README                       xml2rfc v1.15                 November 2002
 
 
 4. Next steps
@@ -247,6 +247,10 @@ README                       xml2rfc v1.14                   August 2002
 
        keyword     default     meaning
        =======     =======     =======
+       strict      no          try to enforce the ID-nits conventions
+
+       iprnotified no          included 2026 10.4(d) boilerplate
+
        compact     no          when producing a txt/nroff file, try
                                to conserve vertical whitespace
 
@@ -270,17 +274,16 @@ README                       xml2rfc v1.14                   August 2002
 
        header      ""          override the leftmost header string
 
-       footer      ""          override the center footer string
-
-       slides      no          when producing an html file, produce
-
 
 
 Rose                                                            [Page 5]
 
-README                       xml2rfc v1.14                   August 2002
+README                       xml2rfc v1.15                 November 2002
 
 
+       footer      ""          override the center footer string
+
+       slides      no          when producing an html file, produce
                                multiple files for a slide show
 
        sortrefs    no          sort references
@@ -294,8 +297,16 @@ README                       xml2rfc v1.14                   August 2002
        background  ""          when producing an html file, use this
                                image
 
+       needLines   n/a         an integer hint indicating how many
+                               contiguous lines are needed at this
+   			    point in the output
+
    Remember, that as with everything else in XML, keywords and values
    are case-sensitive.
+
+   With the exception of the 'needLines' PI, you normally put all of
+   these processing instructions at the beginning of the document (right
+   after the XML declartion).
 
 4.1.2 Include Files
 
@@ -321,20 +332,9 @@ README                       xml2rfc v1.14                   August 2002
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 Rose                                                            [Page 6]
 
-README                       xml2rfc v1.14                   August 2002
+README                       xml2rfc v1.15                 November 2002
 
 
    You can also have 'xml2rfc' set this envariable directly, by creating
@@ -390,7 +390,7 @@ README                       xml2rfc v1.14                   August 2002
 
 Rose                                                            [Page 7]
 
-README                       xml2rfc v1.14                   August 2002
+README                       xml2rfc v1.15                 November 2002
 
 
 5. Additions to RFC 2629
@@ -400,13 +400,13 @@ README                       xml2rfc v1.14                   August 2002
    enumerates the additions.
 
    In addition, 'xml2rfc' recognizes an undocumented 'src' attribute in
-   the 'artwork' element, that is consulted only if slides are being
-   generated, e.g.,
+   the 'artwork' element, but only if HTML is being generated, e.g.,
 
           <figure><artwork src='layers.gif' /></figure>
 
-
-
+   In this case, an 'img' tag is placed in the HTML output, and the
+   textual contents of the 'artwork', 'preamble', and 'postamble'
+   elements are ignored.
 
 
 
@@ -446,7 +446,7 @@ README                       xml2rfc v1.14                   August 2002
 
 Rose                                                            [Page 8]
 
-README                       xml2rfc v1.14                   August 2002
+README                       xml2rfc v1.15                 November 2002
 
 
 6. Limitations of xml2rfc
@@ -502,7 +502,7 @@ README                       xml2rfc v1.14                   August 2002
 
 Rose                                                            [Page 9]
 
-README                       xml2rfc v1.14                   August 2002
+README                       xml2rfc v1.15                 November 2002
 
 
 URIs
@@ -558,7 +558,7 @@ Author's Address
 
 Rose                                                           [Page 10]
 
-README                       xml2rfc v1.14                   August 2002
+README                       xml2rfc v1.15                 November 2002
 
 
 Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
@@ -614,7 +614,7 @@ Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
 
 Rose                                                           [Page 11]
 
-README                       xml2rfc v1.14                   August 2002
+README                       xml2rfc v1.15                 November 2002
 
 
 Appendix B. rfc2629.xslt (courtesy of Julian Reschke)

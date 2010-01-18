@@ -2494,16 +2494,16 @@ proc prexml_include {stream inputD inputF path} {
                 && ([set len [string first "?>" $body]] >= 0)} {
             set start [expr [string length $include]-[string length $body]]
             incr len
-            set include [string replace $include $start [expr $start+$len] \
-                                [format " %*.*s" $len $len ""]]
+            set include [streplace $include $start [expr $start+$len] \
+                                  [format " %*.*s" $len $len ""]]
 
             set body [string trimleft $include]
         }
         if {([string first "<!DOCTYPE " [string toupper $body]] == 0) 
                 && ([set len [string first ">" $body]] >= 0)} {
             set start [expr [string length $include]-[string length $body]]
-            set include [string replace $include $start [expr $start+$len] \
-                                [format " %*.*s" $len $len ""]]
+            set include [streplace $include $start [expr $start+$len] \
+                                  [format " %*.*s" $len $len ""]]
         }
 
         set len [numlines $include]
@@ -2600,8 +2600,8 @@ proc prexml_entity {stream path httpP} {
                 && ([set len [string first "?>" $body]] >= 0)} {
             set start [expr [string length $include]-[string length $body]]
             incr len
-            set include [string replace $include $start [expr $start+$len] \
-                                [format " %*.*s" $len $len ""]]
+            set include [streplace $include $start [expr $start+$len] \
+                                  [format " %*.*s" $len $len ""]]
 
             set body [string trimleft $include]
         }
@@ -2610,20 +2610,20 @@ proc prexml_entity {stream path httpP} {
             if {([set len2 [string first {[} $body]] < $len) \
                     && ([set len3 [string first {]} $body]] > $len)} {
                 set start [expr [string length $include]-[string length $body]]
-                set include [string replace $include $start \
-                                    [expr $start+$len2] \
-                                    [format " %*.*s" $len2 $len2 ""]]
+                set include [streplace $include $start \
+                                      [expr $start+$len2] \
+                                      [format " %*.*s" $len2 $len2 ""]]
                 set start [string first {]} $include]
                 set len [string first ">" \
                                  [string range $include $start end]]
-                set include [string replace $include $start \
-                                    [expr $start+$len] \
-                                    [format " %*.*s" $len $len ""]]
+                set include [streplace $include $start \
+                                      [expr $start+$len] \
+                                      [format " %*.*s" $len $len ""]]
             } else {
                 set start [expr [string length $include]-[string length $body]]
-                set include [string replace $include $start \
-                                    [expr $start+$len] \
-                                    [format " %*.*s" $len $len ""]]
+                set include [streplace $include $start \
+                                      [expr $start+$len] \
+                                      [format " %*.*s" $len $len ""]]
             }
         }
         set extentities($entity) [list $file $include]
@@ -2768,21 +2768,23 @@ proc pass {tag} {
             }
             set elemN 0
             catch { unset options }
-            array set options [list background ""  \
-                                    compact    no  \
-                                    editing    no  \
-                                    emoticonic no  \
-                                    footer     ""  \
-                                    header     ""  \
-                                    private    ""  \
-                                    slides     no  \
-                                    sortrefs   no  \
-                                    subcompact no  \
-                                    symrefs    no  \
-                                    toc        no  \
-                                    tocdepth   3   \
-                                    tocompact  yes \
-                                    topblock   yes]
+            array set options [list background  ""  \
+                                    compact     no  \
+                                    editing     no  \
+                                    emoticonic  no  \
+                                    footer      ""  \
+                                    header      ""  \
+                                    iprnotified no  \
+                                    private     ""  \
+                                    slides      no  \
+                                    strict      no  \
+                                    sortrefs    no  \
+                                    subcompact  no  \
+                                    symrefs     no  \
+                                    toc         no  \
+                                    tocdepth    3   \
+                                    tocompact   yes \
+                                    topblock    yes]
             normalize_options
             catch { unset stack }
         }
@@ -2969,6 +2971,13 @@ proc begin {name {av {}}} {
                 }
                 set attrs(.ANCHOR) $attrs(anchor)
                 set elem($elemN) [array get attrs]
+                switch -- [set t [string tolower $attrs(title)]] {
+                    "iana considerations"
+                        -
+                    "security considerations" {
+                        set counter($t) 1
+                    }
+                }
             }
 
             list {
@@ -3009,6 +3018,17 @@ proc begin {name {av {}}} {
                 set elem($elemN) [array get attrs]
             }
 
+            references {
+                if {[info exists attrs(title)]} {
+                    switch -- [set t [string tolower $attrs(title)]] {
+                        "normative references"
+                            -
+                        "informative references" {
+                            set counter($t) 1
+                    }   }
+                }
+            }
+
             reference {
                 if {$options(.SYMREFS)} {
                     set value $attrs(anchor)
@@ -3022,7 +3042,16 @@ proc begin {name {av {}}} {
                 set elem($elemN) [array get attrs]
             }
 
+            eref {
+                if {($options(.STRICT)) && ([lsearch0 $stack abstract] >= 0)} {
+                    unexpected error "eref element in abstract"
+                }
+            }
+
             xref {
+                if {($options(.STRICT)) && ([lsearch0 $stack abstract] >= 0)} {
+                    unexpected error "xref element in abstract"
+                }
                 set target $attrs(target)
                 if {(![info exists counter(firstxref)]) \
                         || [lsearch -exact $counter(firstxref) $target] < 0} {
@@ -3236,6 +3265,7 @@ proc pcdata {text} {
 proc pi {args} {
     global options
     global counter depth elemN elem passno stack xref
+    global mode
 
     switch -- [lindex $args 0]/[llength $args] {
         xml/2 {
@@ -3272,7 +3302,11 @@ proc pi {args} {
                 if {![string compare $key include]} {
                     return
                 }
-                set options($key) $value
+		if {[info exists options($key)]} {
+		    set options($key) $value
+		} elseif {$passno > 1} {
+		    pi_$mode $key $value
+		}
             }]} {
                 unexpected error "invalid rfc instruction: $text"
             }
@@ -3295,16 +3329,18 @@ proc normalize_options {} {
     if {$remoteP} {
         set options(slides) no
     }
-    foreach {o O} [list compact    .COMPACT    \
-                        editing    .EDITING    \
-                        emoticonic .EMOTICONIC \
-                        slides     .SLIDES     \
-                        sortrefs   .SORTREFS   \
-                        subcompact .SUBCOMPACT \
-                        symrefs    .SYMREFS    \
-                        toc        .TOC        \
-                        tocompact  .TOCOMPACT  \
-                        topblock   .TOPBLOCK] {
+    foreach {o O} [list compact     .COMPACT     \
+                        editing     .EDITING     \
+                        emoticonic  .EMOTICONIC  \
+                        iprnotified .IPRNOTIFIED \
+                        slides      .SLIDES      \
+                        sortrefs    .SORTREFS    \
+                        strict      .STRICT      \
+                        subcompact  .SUBCOMPACT  \
+                        symrefs     .SYMREFS     \
+                        toc         .TOC         \
+                        tocompact   .TOCOMPACT   \
+                        topblock    .TOPBLOCK] {
         switch -- $options($o) {
             yes - true - 1 {
                 set options($O) 1
@@ -3442,7 +3478,7 @@ followed, or as required to translate it into languages other than
 English."
 
 "The limited permissions granted above are perpetual and will not be
-revoked by the Internet Society or its successors or assigns."
+revoked by the Internet Society or its successors or assignees."
 
 "This document and the information contained herein is provided on an
 &quot;AS IS&quot; basis and THE INTERNET SOCIETY AND THE INTERNET ENGINEERING
@@ -3450,6 +3486,40 @@ TASK FORCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
 BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
 HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF
 MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE."
+}
+
+global iprlong
+
+set iprlong {
+"The IETF takes no position regarding the validity or scope of
+any intellectual property or other rights that might be claimed
+to  pertain to the implementation or use of the technology
+described in this document or the extent to which any license
+under such rights might or might not be available; neither does
+it represent that it has made any effort to identify any such
+rights. Information on the IETF's procedures with respect to
+rights in standards-track and standards-related documentation
+can be found in BCP-11. Copies of claims of rights made
+available for publication and any assurances of licenses to
+be made available, or the result of an attempt made
+to obtain a general license or permission for the use of such
+proprietary rights by implementors or users of this
+specification can be obtained from the IETF Secretariat."
+
+"The IETF invites any interested party to bring to its
+attention any copyrights, patents or patent applications, or
+other proprietary rights which may cover technology that may be
+required to practice this standard. Please address the
+information to the IETF Executive Director."
+}
+
+global iprextra
+
+set iprextra {
+"The IETF has been notified of intellectual property rights
+claimed in regard to some or all of the specification contained
+in this document. For more information consult the online list
+of claimed rights."
 }
 
 global funding
@@ -3461,7 +3531,7 @@ Internet Society."
 
 proc pass2begin_rfc {elemX} {
     global counter depth elemN elem passno stack xref
-    global options copyrightP
+    global options copyrightP iprP
 
     array set attrs [list number ""     obsoletes "" updates "" \
                           category info seriesNo  "" ipr     ""]
@@ -3478,6 +3548,12 @@ proc pass2begin_rfc {elemX} {
         set copyrightP 0
     } else {
         set copyrightP 1
+        if {(![string compare $attrs(number) ""]) \
+                || (![string compare $attrs(category) std])} {
+            set iprP 1
+        } else {
+            set iprP 0
+        }
     }
 
     set firstxref [list ""]
@@ -3536,7 +3612,9 @@ proc pass2end_rfc {elemX} {
     global counter depth elemN elem passno stack xref
     global elemZ
     global mode
-    global copylong
+    global copylong iprlong iprextra
+    global options
+    global pageno
 
     array set attrs $elem($elemX)
 
@@ -3576,6 +3654,11 @@ SUCH DAMAGES."
         regsub -all %UWHO% $copying [string toupper $who] copying
     }
 
+    set iprstmt $iprlong
+    if {$options(.IPRNOTIFIED)} {
+        set iprstmt [concat $iprstmt $iprextra]
+    }
+
     array set index ""
     for {set elemY 1} {$elemY <= $elemZ} {incr elemY} {
         catch { unset iv }
@@ -3612,9 +3695,12 @@ SUCH DAMAGES."
         lappend irefs $iref
     }
 
-
-    set attrs(.ANCHOR) [rfc_$mode $irefs $copying]
+    set attrs(.ANCHOR) [rfc_$mode $irefs $iprstmt $copying]
     set elem($elemX) [array get attrs]
+
+    if {($options(.STRICT)) && (!$options(.TOC)) && ($pageno > 15)} {
+        unexpected error "no table of contents, but $pageno pages"
+    }
 }
 
 
@@ -3735,21 +3821,48 @@ proc pass2begin_front {elemX} {
                 lappend left \
                         "[lindex [lindex $categories $cindex] 2]: $rv(seriesNo)"
             }
+
             if {[string compare $rv(updates) ""]} {
                 lappend left "Updates: $rv(updates)"
             }
             if {[string compare $rv(obsoletes) ""]} {
                 lappend left "Obsoletes: $rv(obsoletes)"
             }
+
             set category [lindex [lindex $categories $cindex] 1]
             lappend left "Category: $category"
             set status [list [lindex [lindex $categories $cindex] 3]]
         } else {
-            if {![info exists counter(abstract)]} {
-                unexpected error "I-D missing abstract"
+            if {$options(.STRICT)} {
+                foreach t [list Abstract "Security Considerations"] {
+                    if {![info exists counter([string tolower $t])]} {
+                        unexpected error "missing $t"
+                    }
+                }
+                if {$counter(reference)} {
+                    set hitP 0
+                    foreach t [list "Normative References" \
+                                    "Informative References"] {
+                        if {[info exists counter([string tolower $t])]} {
+                            set hitP 1
+                        }
+                    }
+                    if {!$hitP} {
+                        unexpected error \
+                                   "missing Normative/Informative References"
+                    }
+                }
             }
 
             lappend left "Internet-Draft"
+
+            if {[string compare $rv(updates) ""]} {
+                lappend left "Updates: $rv(updates) (if approved)"
+            }
+            if {[string compare $rv(obsoletes) ""]} {
+                lappend left "Obsoletes: $rv(obsoletes) (if approved)"
+            }
+
             if {[catch { set day $dv(day) }]} {
                 set day 1
             }
@@ -3854,7 +3967,7 @@ proc pass2begin_front {elemX} {
 proc pass2end_front {elemX} {
     global counter depth elemN elem passno stack xref
     global elemZ
-    global options copyrightP
+    global options copyrightP iprP noticeT
     global mode
 
     set toc ""
@@ -3875,8 +3988,14 @@ proc pass2end_front {elemX} {
                         } else {
                             set label ""
                         }
-                        set last [list $label "Full Copyright Statement" \
-                                       $anchor]
+                        if {$iprP} {
+                            set noticeT "Intellectual Property and Copyright Statements"
+                        } else {
+                            set noticeT "Full Copyright Statement"
+                        }
+                        set last [list $label $noticeT $anchor]
+                    } else {
+                        set noticeT ""
                     }
                 }
 
@@ -4136,7 +4255,6 @@ proc pass2begin_figure {elemX {internal 0}} {
     }
 
     set artwork [find_element artwork $attrs(.CHILDREN)]
-    array set av [list src ""]
     array set av $elem($artwork)
 
 # if artwork is empty!
@@ -4146,7 +4264,10 @@ proc pass2begin_figure {elemX {internal 0}} {
         return $lines
     }
 
-    figure_$mode begin $lines $attrs(anchor) $av(src) $attrs(title)
+    foreach k [list xml:space name type] {
+        catch { unset av($k) }
+    }
+    figure_$mode begin $lines $attrs(anchor) $attrs(title) [array get av]
 }
 
 proc pass2end_figure {elemX} {
@@ -4156,7 +4277,7 @@ proc pass2end_figure {elemX} {
     array set attrs [list anchor "" title ""]
     array set attrs $elem($elemX)
 
-    figure_$mode end "" $attrs(anchor) "" $attrs(title)
+    figure_$mode end "" $attrs(anchor) $attrs(title)
 }
 
 
@@ -4279,6 +4400,7 @@ proc pass2begin_back {elemX} {
     global counter depth elemN elem passno stack xref
     global mode
     global erefs
+    global options
 
     array set attrs $elem($elemX)
 
@@ -4369,6 +4491,11 @@ proc pass2begin_back {elemX} {
         lappend authors [list $block1 $block2]
     }
 
+
+    if {($options(.STRICT)) && ([set l [llength $authors]] > 5)} {
+        unexpected error "$l authors, maximum of 5 allowed"
+    }
+
     set attrs(.ANCHOR) [back_$mode $authors]
     set elem($elemX) [array get attrs]
 }
@@ -4395,6 +4522,9 @@ proc pass2begin_references {elemX erefP} {
         }
 
         unset x
+    }
+    if {$width > 7} {
+        set width 7
     }
     foreach child $children {
         pass2begin_reference $child $width
@@ -4600,8 +4730,8 @@ proc lsearch0 {list exact} {
 #
 
 
-proc rfc_txt {irefs copying} {
-    global options copyrightP
+proc rfc_txt {irefs iprstmt copying} {
+    global options copyrightP iprP
     global funding
     global header footer lineno pageno blankP
     global indexpg
@@ -4646,13 +4776,25 @@ proc rfc_txt {irefs copying} {
     if {(!$options(.PRIVATE)) && $copyrightP} {
         set result $pageno
 
+        if {$iprP} {
+            write_line_txt "Intellectual Property Statement"
+
+            foreach para $iprstmt {
+                write_line_txt ""
+                pcdata_txt $para
+            }
+            write_line_txt "" -1
+            write_line_txt "" -1
+        }
+
         write_line_txt "Full Copyright Statement"
 
         foreach para $copying {
             write_line_txt ""
             pcdata_txt $para
         }
-        write_line_txt ""
+        write_line_txt "" -1
+        write_line_txt "" -1
 
         if {![have_lines 4]} {
             end_page_txt
@@ -4670,7 +4812,7 @@ proc rfc_txt {irefs copying} {
 }
 
 proc front_txt_begin {left right top bottom title status copying} {
-    global options copyrightP
+    global options copyrightP iprP
     global ifile mode ofile
     global header footer lineno pageno blankP
     global eatP
@@ -4745,13 +4887,13 @@ proc three_parts {stuff} {
 }
 
 proc front_txt_end {toc irefP} {
-    global options
+    global options copyrightP iprP noticeT
     global header footer lineno pageno blankP
     global passno indexpg
 
     if {$options(.TOC)} {
         set last [lindex $toc end]
-        if {[string compare [lindex $last 1] "Full Copyright Statement"]} {
+        if {[string compare [lindex $last 1] $noticeT]} {
             set last ""
         } else {
             set toc [lreplace $toc end end]
@@ -4879,6 +5021,7 @@ proc t_txt {tag counter style hangText editNo} {
     if {[string compare $counter ""]} {
         set pos [pop_indent]
         set l [split $counter .]
+        set lines 3
         switch -- $style {
             letters {
                 set counter [offset2letters [lindex $l end] [llength $l]]
@@ -4895,6 +5038,7 @@ proc t_txt {tag counter style hangText editNo} {
 
             hanging {
                 set counter "[chars_expand $hangText] "
+                set lines 5
             }
 
             default {
@@ -4902,6 +5046,9 @@ proc t_txt {tag counter style hangText editNo} {
             }
         }
         flush_text
+        if {![have_lines $lines]} {
+            end_page_txt
+        }
         if {$options(.EDITING)} {
             write_editno_txt $editNo
         } elseif {!$options(.SUBCOMPACT)} {
@@ -4982,7 +5129,7 @@ proc list_txt {tag counters style hangIndent hangText} {
     }
 }
 
-proc figure_txt {tag lines anchor src title} {
+proc figure_txt {tag lines anchor title args} {
     global counter depth elemN elem passno stack xref
 
     switch -- $tag {
@@ -4993,27 +5140,18 @@ proc figure_txt {tag lines anchor src title} {
             if {![have_lines $lines]} {
                 end_page_txt
             }
-            if {[string compare $title ""]} {
-                write_line_txt ""
-                write_line_txt \
-                    "   ---------------------------------------------------------------------"
-                write_line_txt ""
-            }
+	    flush_text
         }
 
         end {
-            if {[string compare $title ""]} {
-                if {[string compare $anchor ""]} {
-                    array set av $xref($anchor)
-                    set prefix "Figure $av(value): "
-                } else {
-                    set prefix ""
-                }
+            if {[string compare $anchor ""]} {
+		array set av $xref($anchor)
+		set prefix "Figure $av(value)"
+		if {[string compare $title ""]} {
+		    append prefix ": [chars_expand $title]"
+		}
                 write_line_txt ""
-                write_text_txt "$prefix[chars_expand $title]" c
-                write_line_txt ""
-                write_line_txt \
-                    "   ---------------------------------------------------------------------"
+                write_text_txt $prefix c
                 write_line_txt ""
             }
         }
@@ -5201,12 +5339,19 @@ proc reference_txt {prefix names title series formats date anchor target
     incr width 2
     set i [expr [string length \
                         [set prefix \
-                             [format %-*.*s $width $width "\[$prefix\]"]]+2]]
+                             [format %-*s $width "\[$prefix\]"]]+2]]
     write_text_txt $prefix
+
+    if {$i > 11} {
+        set i 11
+        set s ""
+        flush_text
+    } else {
+        set s "  "
+    }
 
     push_indent $i
 
-    set s "  "
     set nameA 1
     set nameN [llength $names]
     foreach name $names {
@@ -5452,20 +5597,28 @@ proc write_text_txt {text {direction l}} {
     while {([set i [string length $buffer]] > 72) || ($flush)} {
         if {$i > 72} {
             set x [string last " " [set line [string range $buffer 0 72]]]
-            set y [string last "-" [string range $line 0 71]]
-            set z [string last "/" [string range $line 0 71]]
-            if {$y < $z} {
-                set y $z
+            set y [string last "/" [string range $line 0 71]]
+            if {0} {
+                set z [string last "-" [string range $line 0 71]]
+                if {$y < $z} {
+                    set y $z
+                }
+            } else {
+                set z $y
             }
             if {$x < $y} {
                 set x $y
             }
             if {$x < 0} {
                 set x [string last " " $buffer]
-                set y [string last "-" $buffer]
-                set z [string last "/" $buffer]
-                if {$y > $z} {
-                    set y $z
+                set y [string last "/" $buffer]
+                if {0} {
+                    set z [string last "-" $buffer]
+                    if {$y > $z} {
+                        set y $z
+                    }
+                } else {
+                    set z $y
                 }
                 if {$x > $y} {
                     set x $y
@@ -5506,6 +5659,7 @@ proc write_line_txt {line {pre 0}} {
     global header footer lineno pageno blankP
     global buffer
     global nbsp
+    global options
 
     flush_text
     if {$lineno == 0} {
@@ -5526,8 +5680,12 @@ proc write_line_txt {line {pre 0}} {
         set pre ""
     }
     regsub -all "$nbsp" $line " " line
-    write_it [string trimright $pre$line]
+    write_it [set line [string trimright $pre$line]]
     incr lineno
+    if {($options(.STRICT)) && ([string length $line] > 72)} {
+        unexpected error \
+            "page $pageno, line $lineno length greater than 72 characters"
+    }
     if {$lineno >= 51} {
         end_page_txt
     }
@@ -5552,6 +5710,22 @@ proc two_spaces {glop} {
     return $post
 }
 
+proc pi_txt {key value} {
+    switch -- $key {
+	needLines {
+	    flush_text
+	    if {![have_lines $value]} {
+		end_page_txt
+	    }
+	}
+
+	default {
+	    error ""
+	}
+    }
+}
+
+
 #
 # html output
 #
@@ -5559,8 +5733,8 @@ proc two_spaces {glop} {
 
 # don't need to return anything even though rfc_txt does...
 
-proc rfc_html {irefs copying} {
-    global options copyrightP
+proc rfc_html {irefs iprstmt copying} {
+    global options copyrightP iprP
     global funding
     global stdout
 
@@ -5614,6 +5788,16 @@ proc rfc_html {irefs copying} {
 
     if {(!$options(.PRIVATE)) && $copyrightP} {
         toc_html rfc.copyright
+        if {$iprP} {
+            puts $stdout "<h3>Intellectual Property Statement</h3>"
+
+            foreach para $iprstmt {
+                puts $stdout "<p class='copyright'>"
+                pcdata_html $para
+                puts $stdout "</p>"
+            }
+        }
+
         puts $stdout "<h3>Full Copyright Statement</h3>"
 
         foreach para $copying {
@@ -5675,13 +5859,15 @@ set htmlstyle \
 
 
 proc front_html_begin {left right top bottom title status copying} {
-    global options copyrightP
+    global options copyrightP iprP
     global stdout
     global htmlstyle
     global doingP hangP
+    global imgP
 
     set doingP 0
     set hangP 0
+    set imgP 0
 
     if {$options(.SLIDES) \
             && [front_slides_begin $left $right $top $bottom $title]} {
@@ -5768,7 +5954,7 @@ proc front_html_begin {left right top bottom title status copying} {
 }
 
 proc front_html_end {toc irefP} {
-    global options copyrightP
+    global options copyrightP iprP noticeT
     global stdout
     global passno indexpg
 
@@ -5781,7 +5967,7 @@ proc front_html_end {toc irefP} {
     puts $stdout "<h3>Table of Contents</h3>"
     puts $stdout "<ul compact class=\"toc\">"
     set last [lindex $toc end]
-    if {[string compare [lindex $last 1] "Full Copyright Statement"]} {
+    if {[string compare [lindex $last 1] $noticeT]} {
         set last ""
     } else {
         set toc [lreplace $toc end end]
@@ -5952,10 +6138,12 @@ proc list_html {tag counters style hangIndent hangText} {
     set hangP 0
 }
 
-proc figure_html {tag lines anchor src title} {
+proc figure_html {tag lines anchor title {av {}}} {
     global options
     global stdout
+    global imgP
 
+    set imgP 0
     switch -- $tag {
         begin {
             if {[string compare $title ""]} {
@@ -5964,8 +6152,17 @@ proc figure_html {tag lines anchor src title} {
             if {[string compare $anchor ""]} {
                 puts $stdout "<a name=\"$anchor\"></a>"
             }
-            if {$options(.SLIDES) && ([string compare $src ""])} {
-                puts $stdout "<img src=\"$src\"></img>"
+            if {([set x [lsearch -exact $av src]] >= 0) && ([incr x]%2)} {
+                puts -nonewline $stdout "<p><img"
+                foreach {k v} $av {
+                    if {[string first . $k] != 0} {
+                        puts -nonewline $stdout ""
+                        regsub -all {"} $v {&quot;} v
+                        puts -nonewline $stdout " $k=\"$v\""
+                    }
+                }
+                puts $stdout "></img></p>"
+                set imgP 1
             }
         }
 
@@ -6117,7 +6314,7 @@ proc references_html {tag {title ""} {erefP 0}} {
     if {$options(.SLIDES) \
             && (![string compare $tag begin]) \
             && [end_page_slides]} {
-        [start_page_slides Abstract]
+        start_page_slides References
         return
     }
 
@@ -6349,6 +6546,11 @@ proc pcdata_html {text {pre 0}} {
     global options
     global stdout
     global doingP hangP
+    global imgP
+
+    if {$imgP} {
+        return
+    }
 
     set font "<font face=\"verdana, helvetica, arial, sans-serif\" size=\"2\">"
 
@@ -6631,12 +6833,24 @@ proc slide_foo {n} {
 }
 
 
+proc pi_html {key value} {
+    switch -- $key {
+	needLines {
+	}
+
+	default {
+	    error ""
+	}
+    }
+}
+
+
 #
 # nroff output
 #
 
-proc rfc_nr {irefs copying} {
-    global options copyrightP
+proc rfc_nr {irefs iprstmt copying} {
+    global options copyrightP iprP
     global funding
     global header footer lineno pageno blankP
     global indents indent lastin
@@ -6694,6 +6908,19 @@ proc rfc_nr {irefs copying} {
             write_it ".in [set lastin [set indent 3]]"
             set indents {}
         }
+
+        if {$iprP} {
+            write_it ".ti 0"
+            write_line_nr "Intellectual Property Statement"
+
+            foreach para $iprstmt {
+                write_line_nr ""
+                pcdata_nr $para
+            }
+            write_line_nr "" -1
+            write_line_nr "" -1
+        }
+
         write_it ".ti 0"
         write_line_nr "Full Copyright Statement"
 
@@ -6701,7 +6928,8 @@ proc rfc_nr {irefs copying} {
             write_line_nr ""
             pcdata_nr $para
         }
-        write_line_nr ""
+        write_line_nr "" -1
+        write_line_nr "" -1
 
         if {![have_lines 4]} {
             end_page_nr
@@ -6721,7 +6949,7 @@ proc rfc_nr {irefs copying} {
 }
 
 proc front_nr_begin {left right top bottom title status copying} {
-    global options copyrightP
+    global options copyrightP iprP
     global ifile mode ofile
     global header footer lineno pageno blankP
     global eatP nofillP indent lastin
@@ -6734,7 +6962,7 @@ proc front_nr_begin {left right top bottom title status copying} {
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.14 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.15 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -6803,14 +7031,14 @@ proc front_nr_begin {left right top bottom title status copying} {
 }
 
 proc front_nr_end {toc irefP} {
-    global options
+    global options copyrightP iprP noticeT
     global header footer lineno pageno blankP
     global passno indexpg
     global nofillP
 
     if {$options(.TOC)} {
         set last [lindex $toc end]
-        if {[string compare [lindex $last 1] "Full Copyright Statement"]} {
+        if {[string compare [lindex $last 1] $noticeT]} {
             set last ""
         } else {
             set toc [lreplace $toc end end]
@@ -6948,6 +7176,7 @@ proc t_nr {tag counter style hangText editNo} {
         set pos [pop_indent]
         set l [split $counter .]
         set left -1
+        set lines 3
         switch -- $style {
             letters {
                 set counter [offset2letters [lindex $l end] [llength $l]]
@@ -6965,6 +7194,7 @@ proc t_nr {tag counter style hangText editNo} {
             hanging {
                 set counter "[chars_expand $hangText] "
                 set left ""
+                set lines 5
             }
 
             default {
@@ -6972,6 +7202,9 @@ proc t_nr {tag counter style hangText editNo} {
             }
         }
         flush_text
+        if {![have_lines $lines]} {
+            end_page_txt
+        }
         if {$options(.EDITING)} {
             write_editno_nr $editNo
         } elseif {!$options(.SUBCOMPACT)} {
@@ -7046,7 +7279,7 @@ proc list_nr {tag counters style hangIndent hangText} {
     }
 }
 
-proc figure_nr {tag lines anchor src title} {
+proc figure_nr {tag lines anchor title args} {
     global counter depth elemN elem passno stack xref
 
     switch -- $tag {
@@ -7058,27 +7291,17 @@ proc figure_nr {tag lines anchor src title} {
                 end_page_nr
             }
             flush_text
-            if {[string compare $title ""]} {
-                write_line_nr ""
-                write_line_nr \
-                    "---------------------------------------------------------------------"
-                write_line_nr ""
-            }
         }
 
         end {
-            if {[string compare $title ""]} {
-                if {[string compare $anchor ""]} {
-                    array set av $xref($anchor)
-                    set prefix "Figure $av(value): "
-                } else {
-                    set prefix ""
-                }
+	    if {[string compare $anchor ""]} {
+		array set av $xref($anchor)
+		set prefix "Figure $av(value)"
+		if {[string compare $title ""]} {
+		    append prefix ": [chars_expand $title]"
+		}
                 write_line_nr ""
-                write_text_nr "$prefix[chars_expand $title]" c
-                write_line_nr ""
-                write_line_nr \
-                    "---------------------------------------------------------------------"
+                write_text_nr $prefix c
                 write_line_nr ""
             }
         }
@@ -7273,7 +7496,31 @@ proc reference_nr {prefix names title series formats date anchor target
     write_line_nr ""
 
     incr width 2
-    indent_text_nr "[format %-*.*s $width $width "\[$prefix\]"]  " -1
+    set i [expr [string length \
+                        [set prefix \
+                             [format %-*s $width "\[$prefix\]"]]+2]]
+
+    if {$i > 11} {
+# the indent_text_nr abstraction isn't robust enough to figure this out...
+
+        global indent lastin
+        global nofillP
+
+        flush_text
+        if {$nofillP} {
+            write_it ".fi"
+            set nofillP 0
+        }
+
+        push_indent 14
+
+        write_it ".in [set lastin [set indent 14]]"
+        write_it ".ti 3"
+        write_line_nr $prefix
+        write_it ".br"
+    } else {
+        indent_text_nr "$prefix  " -1
+    }
 
     set s ""
     set nameA 1
@@ -7534,20 +7781,28 @@ proc write_text_nr {text {direction l}} {
     while {([set i [string length $buffer]] > 72) || ($flush)} {
         if {$i > 72} {
             set x [string last " " [set line [string range $buffer 0 72]]]
-            set y [string last "-" [string range $line 0 71]]
-            set z [string last "/" [string range $line 0 71]]
-            if {$y < $z} {
-                set y $z
+            set y [string last "/" [string range $line 0 71]]
+            if {0} {
+                set z [string last "-" [string range $line 0 71]]
+                if {$y < $z} {
+                    set y $z
+                }
+            } else {
+                set z $y
             }
             if {$x < $y} {
                 set x $y
             }
             if {$x < 0} {
                 set x [string last " " $buffer]
-                set y [string last "-" $buffer]
-                set z [string last "/" $buffer]
-                if {$y > $z} {
-                    set y $z
+                set y [string last "/" $buffer]
+                if {0} {
+                    set z [string last "-" $buffer]
+                    if {$y > $z} {
+                        set y $z
+                    }
+                } else {
+                    set z $y
                 }
                 if {$x > $y} {
                     set x $y
@@ -7613,6 +7868,21 @@ proc write_line_nr {line {pre 0}} {
     incr lineno
     if {$lineno >= 51} {
         end_page_nr
+    }
+}
+
+proc pi_nr {key value} {
+    switch -- $key {
+	needLines {
+	    flush_text
+	    if {![have_lines $value]} {
+		end_page_nr
+	    }
+	}
+
+	default {
+	    error ""
+	}
     }
 }
 
@@ -7746,7 +8016,7 @@ proc write_url {url} {
 proc have_lines {cnt} {
     global header footer lineno pageno blankP
 
-    if {($cnt < 40) && ($lineno+$cnt > 51)} {
+    if {($cnt < 40) && ($lineno+$cnt > 52)} {
         return 0
     }
     return 1
@@ -8050,6 +8320,48 @@ proc ref::end_rfc {token frame} {
     append state(body) "</reference>
 "
 }
+
+
+proc stindex {sindex len} {
+    switch -regexp -- $sindex {
+        {^[Ee][Nn][Dd]*$} {
+            incr len -1
+
+            return [expr $len[string range $sindex 3 end]]
+        }
+
+        {^[Ll][Ee][Nn]*$} {
+            return [expr $len[string range $sindex 3 end]]
+        }
+
+        default {
+            return $sindex
+        }
+    }
+}
+
+proc streplace {string first last {newstring ""}} {
+    set first [stindex $first [set len [string length $string]]]
+    set last [stindex $last $len]
+    if {($first > $last) || ($first > $len) || ($last < 0)} {
+        return $string
+    }
+
+    if {$first > 0} {
+        set left [string range $string 0 [expr $first-1]]
+    } else {
+        set left ""
+    }
+
+    if {$last < $len} {
+        set right [string range $string $last end]
+    } else {
+        set right ""
+    }
+
+    return $left$newstring$right
+}
+
 
 
 #

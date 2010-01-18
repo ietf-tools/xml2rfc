@@ -1,5 +1,5 @@
-<html><head><title>The README file: xml2rfc v1.14</title>
-<meta http-equiv="Expires" content="Fri, 16 Aug 2002 21:29:57 +0000">
+<html><head><title>The README file: xml2rfc v1.15</title>
+<meta http-equiv="Expires" content="Tue, 10 Dec 2002 05:28:43 +0000">
 <STYLE type='text/css'>
     .title { color: #990000; font-size: 22px; line-height: 22px; font-weight: bold; text-align: right;
              font-family: helvetica, arial, sans-serif }
@@ -42,9 +42,9 @@
 <table width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header">The README file</td><td width="33%" bgcolor="#666666" class="header">M. Rose</td></tr>
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">Dover Beach Consulting, Inc.</td></tr>
-<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">August 16, 2002</td></tr>
+<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">November 2002</td></tr>
 </table></td></tr></table>
-<div align="right"><font face="monaco, MS Sans Serif" color="#990000" size="+3"><b><br><span class="title">xml2rfc v1.14</span></b></font></div>
+<div align="right"><font face="monaco, MS Sans Serif" color="#990000" size="+3"><b><br><span class="title">xml2rfc v1.15</span></b></font></div>
 <font face="verdana, helvetica, arial, sans-serif" size="2">
 <a name="toc"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
@@ -211,6 +211,10 @@ you don't need any PIs in your input file!
 </p></font><pre>
     keyword     default     meaning
     =======     =======     =======
+    strict      no          try to enforce the ID-nits conventions
+
+    iprnotified no          included 2026 10.4(d) boilerplate
+
     compact     no          when producing a txt/nroff file, try
                             to conserve vertical whitespace
     
@@ -249,11 +253,20 @@ you don't need any PIs in your input file!
 
     background  ""          when producing an html file, use this
                             image
+
+    needLines   n/a         an integer hint indicating how many
+                            contiguous lines are needed at this
+			    point in the output
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
 <p>Remember,
 that as with everything else in XML,
 keywords and values are case-sensitive.
+</p>
+<p>With the exception of the <b>needLines</b> PI,
+you normally put all of these processing instructions at the beginning
+of the document
+(right after the XML declartion).
 </p>
 <a name="rfc.section.4.1.2"></a><h4><a name="anchor8">4.1.2</a>&nbsp;Include Files</h4>
 
@@ -314,7 +327,7 @@ of the 2629bis document enumerates the additions.
 <p>In addition,
 <b>xml2rfc</b> recognizes an undocumented <b>src</b> attribute in the
 <b>artwork</b> element,
-that is consulted only if slides are being generated,
+but only if HTML is being generated,
 e.g.,
 </p>
 </font><pre>
@@ -322,6 +335,11 @@ e.g.,
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 <p>
 
+<p>In this case,
+an <b>img</b> tag is placed in the HTML output,
+and the textual contents of the <b>artwork</b>, <b>preamble</b>, and
+<b>postamble</b> elements are ignored.
+</p>
 </p>
 <a name="anchor10"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>

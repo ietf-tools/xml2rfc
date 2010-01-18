@@ -11,7 +11,7 @@
 
 <rfc>
 <front>
-<title>xml2rfc v1.14</title>
+<title>xml2rfc v1.15</title>
 
 <author initials='M.T.' surname='Rose' fullname='Marshall T. Rose'>
 <organization>Dover Beach Consulting, Inc.</organization>
@@ -28,7 +28,7 @@
 </address>
 </author>
 
-<date month='August' year='2002'/>
+<date month='November' year='2002'/>
 </front>
 
 <middle>
@@ -164,6 +164,10 @@ you don't need any PIs in your input file!</postamble>
 <artwork>
     keyword     default     meaning
     =======     =======     =======
+    strict      no          try to enforce the ID-nits conventions
+
+    iprnotified no          included 2026 10.4(d) boilerplate
+
     compact     no          when producing a txt/nroff file, try
                             to conserve vertical whitespace
     
@@ -202,11 +206,20 @@ you don't need any PIs in your input file!</postamble>
 
     background  ""          when producing an html file, use this
                             image
+
+    needLines   n/a         an integer hint indicating how many
+                            contiguous lines are needed at this
+			    point in the output
 </artwork>
 <postamble>Remember,
 that as with everything else in XML,
 keywords and values are case-sensitive.</postamble>
 </figure>
+
+<t>With the exception of the |'needLines| PI,
+you normally put all of these processing instructions at the beginning
+of the document
+(right after the XML declartion).</t>
 </section>
 
 <section title='Include Files'>
@@ -270,12 +283,16 @@ of the 2629bis document enumerates the additions.</t>
 <t>In addition,
 |'xml2rfc| recognizes an undocumented |'src| attribute in the
 |'artwork| element,
-that is consulted only if slides are being generated,
+but only if HTML is being generated,
 e.g.,
 <figure>
 <artwork><![CDATA[
        <figure><artwork src='layers.gif' /></figure>
 ]]></artwork>
+<postamble>In this case,
+an |'img| tag is placed in the HTML output,
+and the textual contents of the |'artwork|, |'preamble|, and
+|'postamble| elements are ignored.</postamble>
 </figure></t>
 </section>
 
