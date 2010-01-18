@@ -218,17 +218,6 @@ proc xml2ref {input output} {
 
 proc prexml {stream inputD {inputF ""}} {
     global env tcl_platform
-    global fldata
-
-# an MTR hack...
-
-#
-# whenever "%include.whatever;" is encountered, act as if the DTD contains
-#
-#       <!ENTITY % include.whatever SYSTEM "whatever.xml">
-#
-# this yields a nested (and cheap-and-easy) include facility.
-#
 
     if {[catch { set path $env(XML_LIBRARY) }]} {
         set path [list $inputD]
@@ -244,9 +233,64 @@ proc prexml {stream inputD {inputF ""}} {
     }
     set path [split $path $c]
 
+    set stream [prexmlaux 1 [prexmlaux 0 $stream $inputD $inputF $path] \
+                          $inputD $inputF $path]
+
+# because <![CDATA[ ... ]]> isn't supported in TclXML...
     set data ""
-    set litN [string length [set litS "%include."]]
-    set litO [string length [set litT ";"]]
+    set litN [string length [set litS "<!\[CDATA\["]]
+    set litO [string length [set litT "\]\]>"]]
+    while {[set x [string first $litS $stream]] >= 0} {
+        append data [string range $stream 0 [expr $x-1]]
+        set stream [string range $stream [expr $x+$litN] end]
+        if {[set x [string first $litT $stream]] < 0} {
+            error "missing close to CDATA"
+        }
+        set y [string range $stream 0 [expr $x-1]]
+        regsub -all {&} $y {\&amp;} y
+        regsub -all {<} $y {\&lt;}  y
+        append data $y
+        set stream [string range $stream [expr $x+$litO] end]
+    }
+    append data $stream
+
+    return $data
+}
+
+
+proc prexmlaux {newP stream inputD inputF path} {
+    global fldata
+
+# an MTR hack...
+
+# the old way:
+#
+# whenever "%include.whatever;" is encountered, act as if the DTD contains
+#
+#       <!ENTITY % include.whatever SYSTEM "whatever.xml">
+#
+# this yields a nested (and cheap-and-easy) include facility.
+#
+
+# the new way:
+#
+# <?rfc include='whatever' ?>
+#
+# note that this occurs *before* the xml parsing occurs, so they aren't hidden
+# inside a <![CDATA[ ... ]]> block.
+#
+
+    if {$newP} {
+        set litS "<?rfc include="
+        set litT "?>"
+    } else {
+        set litS "%include."
+        set litT ";"
+    }
+    set litN [string length $litS]
+    set litO [string length $litT]
+
+    set data ""
     set fldata [list [list $inputF [set lineno 1] [numlines $stream]]]
     while {[set x [string first $litS $stream]] >= 0} {
         incr lineno [numlines [set initial \
@@ -257,8 +301,16 @@ proc prexml {stream inputD {inputF ""}} {
             error "missing close to %include.*"
         }
         set y [string range $stream 0 [expr $x-1]]
+        if {$newP} {
+            set y [string trim $y]
+            if {[set quoteP [string first "'" $y]]} {
+                regsub -- {^"([^"]*)"$} $y {\1} y
+            } else {
+                regsub -- {^'([^']*)'$} $y {\1} y
+            }
+        }
         if {![regexp -nocase -- {^[a-z0-9.-]+$} $y]} {
-            error "invalid %include $y"
+            error "invalid include $y"
         }
         set include ""
         foreach dir $path {
@@ -267,7 +319,6 @@ proc prexml {stream inputD {inputF ""}} {
                 continue
             }
             set fd [open $file { RDONLY }]
-#            set include [join [lrange [split [read $fd] "\n"] 2 end] "\n"]
             set include [read $fd]
             catch { close $fd }
             break
@@ -291,28 +342,10 @@ proc prexml {stream inputD {inputF ""}} {
         set stream $include[string range $stream [expr $x+$litO] end]
     }
     append data $stream
-    set stream $data
-
-# because <![CDATA[ ... ]]> isn't supported in TclXML...
-    set data ""
-    set litN [string length [set litS "<!\[CDATA\["]]
-    set litO [string length [set litT "\]\]>"]]
-    while {[set x [string first $litS $stream]] >= 0} {
-        append data [string range $stream 0 [expr $x-1]]
-        set stream [string range $stream [expr $x+$litN] end]
-        if {[set x [string first $litT $stream]] < 0} {
-            error "missing close to CDATA"
-        }
-        set y [string range $stream 0 [expr $x-1]]
-        regsub -all {&} $y {\&amp;} y
-        regsub -all {<} $y {\&lt;}  y
-        append data $y
-        set stream [string range $stream [expr $x+$litO] end]
-    }
-    append data $stream
 
     return $data
 }
+
 
 proc numlines {text} {
     set n [llength [split $text "\n"]]
@@ -374,7 +407,7 @@ proc around2fl {result} {
 #        elem - array, indexed by elemN, having:
 #               list of element attributes,
 #               plus ".CHILDREN", ".COUNTER", ".CTEXT"/".CLINES", ".NAME",
-#                    ".ANCHOR"
+#                    ".ANCHOR", ".EDITNO"
 #      passno - 1 or 2 (or maybe 3, if generating a TOC)
 #       stack - the stack of elements, each frame having:
 #               { element-name "elemN" elemN "children" { elemN... }
@@ -405,6 +438,7 @@ proc pass {tag} {
             array set options [list compact    no \
                                     subcompact no \
                                     toc        no \
+                                    editing    no \
                                     private    "" \
                                     header     "" \
                                     footer     "" \
@@ -601,6 +635,11 @@ proc begin {name {av {}}} {
             }
 
             t {
+                if {[catch { incr counter(editno) }]} {
+                    set counter(editno) 1
+                }
+                set attrs(.EDITNO) $counter(editno)
+                set elem($elemN) [array get attrs]
                 if {[lsearch0 $stack list] >= 0} {
                     set counter(list) [counting $counter(list) $depth(list)]
                     set attrs(.COUNTER) $counter(list)
@@ -613,6 +652,16 @@ proc begin {name {av {}}} {
                     set counter(figure) 1
                 }
                 set attrs(.COUNTER) [set value $counter(figure)]
+                set elem($elemN) [array get attrs]
+            }
+
+            preamble
+                -
+            postamble {
+                if {[catch { incr counter(editno) }]} {
+                    set counter(editno) 1
+                }
+                set attrs(.EDITNO) $counter(editno)
                 set elem($elemN) [array get attrs]
             }
 
@@ -861,11 +910,14 @@ proc pi {args} {
                 }
                 set key [lindex $params 0]
                 set value [lindex $params 1]
-		if {[string first "'" $value]} {
+                if {[string first "'" $value]} {
                     regsub -- {^"([^"]*)"$} $value {\1} value
-		} else {
+                } else {
                     regsub -- {^'([^']*)'$} $value {\1} value
-		}
+                }
+                if {![string compare $key include]} {
+                    return
+                }
                 set options($key) $value
             }]} {
                 unexpected error "invalid rfc instruction: $text"
@@ -892,6 +944,7 @@ proc normalize_options {} {
     foreach {o O} [list compact    .COMPACT    \
                         subcompact .SUBCOMPACT \
                         toc        .TOC        \
+                        editing    .EDITING    \
                         symrefs    .SYMREFS    \
                         sortrefs   .SORTREFS   \
                         slides     .SLIDES] {
@@ -1285,6 +1338,7 @@ proc pass2begin_front {elemX} {
     }
 
     set authors ""
+    set names ""
     foreach child [find_element author $attrs(.CHILDREN)] {
         array set av [list initials "" surname "" fullname ""]
         array set av $elem($child)
@@ -1450,9 +1504,9 @@ proc pass2begin_note {elemX} {
 
     set d 0
     foreach frame $stack {
-	if {![string compare [lindex $frame 0] note]} {
-	    incr d
-	}
+        if {![string compare [lindex $frame 0] note]} {
+            incr d
+        }
     }
 
     array set attrs $elem($elemX)
@@ -1530,7 +1584,8 @@ proc pass2begin_t {elemX} {
         set elem($elemX) [array get attrs]
     }
 
-    t_$mode begin $attrs(.COUNTER) $attrs(style) $attrs(hangText)
+    t_$mode begin $attrs(.COUNTER) $attrs(style) $attrs(hangText) \
+            $attrs(.EDITNO)
 }
 
 proc pass2end_t {elemX} {
@@ -1539,7 +1594,7 @@ proc pass2end_t {elemX} {
 
     array set attrs $elem($elemX)
 
-    t_$mode end $attrs(.COUNTER) $attrs(style) $attrs(hangText)
+    t_$mode end $attrs(.COUNTER) $attrs(style) $attrs(hangText) ""
 }
 
 # the list element
@@ -1613,7 +1668,6 @@ proc pass2end_list {elemX} {
 
 proc pass2begin_figure {elemX {internal 0}} {
     global counter depth elemN elem passno stack xref
-    global options copyrightP
     global mode
 
     array set attrs [list anchor ""]
@@ -1640,20 +1694,19 @@ proc pass2begin_figure {elemX {internal 0}} {
         return $lines
     }
 
-    figure_$mode $lines $attrs(anchor)
-    if {$options(.SLIDES) && ([string compare $av(src) ""])} {
-        global stdout
-        puts $stdout "<img src=\"$av(src)\"></img>"
-    }
+    figure_$mode $lines $attrs(anchor) $av(src)
 }
 
 
 # the preamble/postamble elements
 
 proc pass2begin_preamble {elemX} {
+    global counter depth elemN elem passno stack xref
     global mode
 
-    preamble_$mode begin
+    array set attrs $elem($elemX)
+
+    preamble_$mode begin $attrs(.EDITNO)
 }
 
 proc pass2end_preamble {elemX} {
@@ -1663,9 +1716,12 @@ proc pass2end_preamble {elemX} {
 }
 
 proc pass2begin_postamble {elemX} {
+    global counter depth elemN elem passno stack xref
     global mode
 
-    postamble_$mode begin
+    array set attrs $elem($elemX)
+
+    postamble_$mode begin $attrs(.EDITNO)
 }
 
 proc pass2end_postamble {elemX} {
@@ -1884,7 +1940,7 @@ proc pass2begin_reference {elemX width} {
     global counter depth elemN elem passno stack xref
     global mode
 
-    array set attrs [list anchor "" target ""]
+    array set attrs [list anchor "" target "" target2 ""]
     array set attrs $elem($elemX)
 
     set front [find_element front $attrs(.CHILDREN)]
@@ -1900,10 +1956,12 @@ proc pass2begin_reference {elemX width} {
         array set av $elem($child)
 
         set organization [find_element organization $av(.CHILDREN)]
-        array set ov [list abbrev ""]
-        array set ov $elem($organization)
-        if {![string compare $ov(abbrev) ""]} {
-            set ov(abbrev) $ov(.CTEXT)
+        array set ov [list .CTEXT "" abbrev ""]
+        if {[string compare $organization ""]} {
+            array set ov $elem($organization)
+            if {![string compare $ov(abbrev) ""]} {
+                set ov(abbrev) $ov(.CTEXT)
+            }
         }
 
         set mref ""
@@ -1944,6 +2002,7 @@ proc pass2begin_reference {elemX width} {
     }
     
     set title [find_element title $fv(.CHILDREN)]
+
     array set tv [list abbrev ""]
     array set tv $elem($title)
     set title $tv(.CTEXT)
@@ -1968,7 +2027,7 @@ proc pass2begin_reference {elemX width} {
     }
 
     reference_$mode $attrs(.COUNTER) $names $title $series $date \
-                    $attrs(anchor) $attrs(target) $width
+                    $attrs(anchor) $attrs(target) $attrs(target2) $width
 }
 
 proc find_element {name children} {
@@ -2260,7 +2319,7 @@ proc section_txt {prefix top title lines anchor} {
     return $pageno
 }
 
-proc t_txt {tag counter style hangText} {
+proc t_txt {tag counter style hangText editNo} {
     global options
     global eatP
 
@@ -2289,13 +2348,19 @@ proc t_txt {tag counter style hangText} {
             }
         }
         flush_text
-        if {!$options(.SUBCOMPACT)} {
+        if {$options(.EDITING)} {
+            write_editno_txt $editNo
+        } elseif {!$options(.SUBCOMPACT)} {
             write_line_txt ""
         }
         write_text_txt "$counter "
         push_indent $pos
     } else {
-        write_line_txt ""
+        if {$options(.EDITING)} {
+            write_editno_txt $editNo
+        } else {
+            write_line_txt ""
+        }
     }
 
     set eatP 1
@@ -2343,26 +2408,36 @@ proc list_txt {tag counters style hangText} {
     }
 }
 
-proc figure_txt {lines anchor} {
+proc figure_txt {lines anchor src} {
     if {![have_lines $lines]} {
         end_page_txt
     }
 }
 
-proc preamble_txt {tag} {
+proc preamble_txt {tag {editNo ""}} {
+    global options
+
     switch -- $tag {
         begin {
-            write_line_txt ""
+            if {$options(.EDITING)} {
+                write_editno_txt $editNo
+            } else {
+                write_line_txt ""
+            }
         }
     }
 }
 
-proc postamble_txt {tag} {
+proc postamble_txt {tag {editNo ""}} {
+    global options
     global eatP
 
     switch -- $tag {
         begin {
             set eatP 1
+            if {$options(.EDITING)} {
+                write_editno_txt $editNo
+            }
         }
     }
 }
@@ -2492,7 +2567,8 @@ proc references_txt {tag {title ""}} {
     }
 }
 
-proc reference_txt {prefix names title series date anchor target width} {
+proc reference_txt {prefix names title series date anchor target target2
+                    width} {
     write_line_txt ""
 
     incr width 2
@@ -2559,12 +2635,20 @@ proc back_txt {authors} {
     }
     set result $pageno
 
-    if {[llength $authors] > 1} {
-        set s1 "s'"
-        set s2 es
-    } else {
-        set s1 "'s"
-        set s2 ""
+    switch -- [llength $authors] {
+        0 {
+            return $result
+        }
+
+        1 {
+            set s1 "'s"
+            set s2 ""
+        }
+
+        default {
+            set s1 "s'"
+            set s2 "es"
+        }
     }
     set s "Author$s1 Address$s2"
 
@@ -2682,6 +2766,17 @@ proc write_pcdata_txt {text} {
     set buffer [two_spaces $buffer]
 
     write_text_txt ""
+}
+
+proc write_editno_txt {editNo} {
+    global buffer
+    global indents indent
+
+    if {[string compare $buffer ""]} {
+        flush_text
+    }
+    set buffer <$editNo>
+    flush_text
 }
 
 proc write_text_txt {text {direction l}} {
@@ -3051,7 +3146,7 @@ proc note_html {title depth} {
     if {$options(.SLIDES) && [end_page_slides]} {
         start_page_slides $title
     } else {
-	incr depth 3
+        incr depth 3
 
         puts $stdout ""
         puts -nonewline $stdout "<h$depth>"
@@ -3085,7 +3180,8 @@ proc section_html {prefix top title {lines 0} anchor} {
     return $anchor
 }
 
-proc t_html {tag counter style hangText} {
+proc t_html {tag counter style hangText editNo} {
+    global options
     global stdout
     global hangP
 
@@ -3111,6 +3207,11 @@ proc t_html {tag counter style hangText} {
         puts $stdout "<${s}p>"
 
         set hangP 0
+    }
+    if {$options(.EDITING) \
+            && (![string compare $tag begin]) \
+            && ([string compare $editNo ""])} {
+        puts $stdout "<sup><small>$editNo</small></sup>"
     }
 }
 
@@ -3155,20 +3256,24 @@ proc list_html {tag counters style hangText} {
     set hangP 0
 }
 
-proc figure_html {lines anchor} {
+proc figure_html {lines anchor src} {
+    global options
     global stdout
 
     if {[string compare $anchor ""]} {
         puts $stdout "<a name=\"$anchor\"></a>"
     }
+    if {$options(.SLIDES) && ([string compare $src ""])} {
+        puts $stdout "<img src=\"$src\"></img>"
+    }
 }
 
-proc preamble_html {tag} {
-    t_html $tag "" "" ""
+proc preamble_html {tag {editNo ""}} {
+    t_html $tag "" "" "" $editNo
 }
 
-proc postamble_html {tag} {
-    t_html $tag "" "" ""
+proc postamble_html {tag {editNo ""}} {
+    t_html $tag "" "" "" $editNo
 }
 
 proc xref_html {text av target} {
@@ -3295,11 +3400,15 @@ proc references_html {tag {title ""}} {
     }
 }
 
-proc reference_html {prefix names title series date anchor target width} {
+proc reference_html {prefix names title series date anchor target target2
+                     width} {
     global rfcTxtHome idTxtHome
     global rfcHtmlHome
     global stdout
 
+    if {[string compare $target2 ""]} {
+        set prefix "<a href=\"$target2\">$prefix</a>"
+    }
     if {[string compare $anchor ""]} {
         set prefix "<a name=\"$anchor\">\[$prefix\]</a>"
     }
@@ -3374,12 +3483,20 @@ proc back_html {authors} {
     global stdout
     global contacts
 
-    if {[llength $authors] > 1} {
-        set s1 "s'"
-        set s2 "es"
-    } else {
-        set s1 "'s"
-        set s2 ""
+    switch -- [llength $authors] {
+        0 {
+            return
+        }
+
+        1 {
+            set s1 "'s"
+            set s2 ""
+        }
+
+        default {
+            set s1 "s'"
+            set s2 "es"
+        }
     }
     puts $stdout ""
 
@@ -3812,7 +3929,7 @@ proc front_nr_begin {left right top bottom title status copying} {
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.6 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.7 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -3990,7 +4107,7 @@ proc section_nr {prefix top title lines anchor} {
     return $pageno
 }
 
-proc t_nr {tag counter style hangText} {
+proc t_nr {tag counter style hangText editNo} {
     global options
     global eatP
 
@@ -4021,14 +4138,20 @@ proc t_nr {tag counter style hangText} {
             }
         }
         flush_text
-        if {!$options(.SUBCOMPACT)} {
+        if {$options(.EDITING)} {
+            write_editno_nr $editNo
+        } elseif {!$options(.SUBCOMPACT)} {
             write_line_nr ""
         }
         indent_text_nr "$counter " $left
         pop_indent
         push_indent $pos
     } else {
-        write_line_nr ""
+        if {$options(.EDITING)} {
+            write_editno_nr $editNo
+        } else {
+            write_line_nr ""
+        }
     }
 
     set eatP 1
@@ -4076,27 +4199,37 @@ proc list_nr {tag counters style hangText} {
     }
 }
 
-proc figure_nr {lines anchor} {
+proc figure_nr {lines anchor src} {
     if {![have_lines $lines]} {
         end_page_nr
     }
     flush_text
 }
 
-proc preamble_nr {tag} {
+proc preamble_nr {tag {editNo ""}} {
+    global options
+
     switch -- $tag {
         begin {
-            write_line_nr ""
+            if {$options(.EDITING)} {
+                write_editno_nr $editNo
+            } else {
+                write_line_nr ""
+            }
         }
     }
 }
 
-proc postamble_nr {tag} {
+proc postamble_nr {tag {editNo ""}} {
+    global options
     global eatP
 
     switch -- $tag {
         begin {
             set eatP 1
+            if {$options(.EDITING)} {
+                write_editno_nr $editNo
+            }
         }
     }
 }
@@ -4225,7 +4358,8 @@ proc references_nr {tag {title ""}} {
     }
 }
 
-proc reference_nr {prefix names title series date anchor target width} {
+proc reference_nr {prefix names title series date anchor target target2 
+                   width} {
     write_line_nr ""
 
     incr width 2
@@ -4295,12 +4429,20 @@ proc back_nr {authors} {
     write_it ".nf"
     set nofillP 1
 
-    if {[llength $authors] > 1} {
-        set s1 "s'"
-        set s2 es
-    } else {
-        set s1 "'s"
-        set s2 ""
+    switch -- [llength $authors] {
+        0 {
+            return $result
+        }
+
+        1 {
+            set s1 "'s"
+            set s2 ""
+        }
+
+        default {
+            set s1 "s'"
+            set s2 "es"
+        }
     }
     set s "Author$s1 Address$s2"
 
@@ -4449,6 +4591,18 @@ proc write_pcdata_nr {text} {
     set buffer [two_spaces $buffer]
 
     write_text_nr ""
+}
+
+proc write_editno_nr {editNo} {
+    global buffer
+    global indents indent
+
+    if {[string compare $buffer ""]} {
+        flush_text
+    }
+    write_it ".ti 0"
+    write_it <$editNo>
+    write_it ".br"
 }
 
 proc write_text_nr {text {direction l}} {

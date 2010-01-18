@@ -2,10 +2,10 @@
 
 The README file                                                  M. Rose
                                                   Invisible Worlds, Inc.
-                                                              March 2001
+                                                         August 22, 2001
 
 
-                              xml2rfc v1.6
+                              xml2rfc v1.7
 
 
 1. Introduction
@@ -17,29 +17,29 @@ The README file                                                  M. Rose
 
 2. Requirements
 
-2.1 Tcl/Tk version 8.0 (or later)
+2.1 Tcl/Tk version 8
 
-   You need to have Tcl/Tk version 8.0 running on your system.  Tcl is a
+   You need to have Tcl/Tk version 8 running on your system.  Tcl is a
    scripting language, Tk is Tcl with support for your windowing system.
 
    To get a source or binary distribution for your system, go to the
    Scriptics website[3] and install it.  If you get the binary
    distribution, this is pretty simple.
 
-   Of course, you may already have Tcl version 8.0.  To find out, try
+   Of course, you may already have Tcl version 8.  To find out, try
    typing this command from the shell (including the "MS-DOS Prompt"):
 
-       % tclsh80
+       % tclsh
 
-   If the program launches, you're good to go with Tcl version 8.0.
+   If the program launches, you're good to go with Tcl version 8.
 
    If you are running under a windowing system (e.g., X or Windows), you
    can also try:
 
-       % wish80
+       % wish
 
    If a new window comes up along with a "Console" window, then you're
-   good to go with Tk version 8.0.
+   good to go with Tk version 8.
 
 
 
@@ -54,7 +54,7 @@ The README file                                                  M. Rose
 
 Rose                                                            [Page 1]
 
-README                        xml2rfc v1.6                    March 2001
+README                        xml2rfc v1.7                   August 2001
 
 
 2.2 TclXML version 1.1.1
@@ -110,20 +110,20 @@ README                        xml2rfc v1.6                    March 2001
 
 Rose                                                            [Page 2]
 
-README                        xml2rfc v1.6                    March 2001
+README                        xml2rfc v1.7                   August 2001
 
 
 3.2 Testing without a windowing system
 
    Type this command from the shell:
 
-       % tclsh80
+       % tclsh
 
    If the program launches, type this command to it:
 
        % source xml2rfc.tcl
 
-   and you should see these three lines:
+   and you should see these four lines:
 
        invoke as "xml2rfc   inputfile outputfile"
               or "xml2txt   inputfile"
@@ -166,20 +166,64 @@ README                        xml2rfc v1.6                    March 2001
 
 Rose                                                            [Page 3]
 
-README                        xml2rfc v1.6                    March 2001
+README                        xml2rfc v1.7                   August 2001
 
 
 4. Next steps
 
-   Read either rfc2629.txt [1] or rfc2629.html.  In particular, Section
-   3 has some good information.
+   Read either rfc2629.txt [1] or rfc2629.html[5].  In particular,
+   Section 3 has some good information.
 
-4.1 xml2rfc-specific Processing Instructions
+4.1 Processing Instructions
 
    A "processing instruction" is a directive to an XML application.  If
    you want to give directives to xml2rfc, the PIs look like this:
 
-       <?rfc keyword="value"?>
+       <?rfc keyword="value" ?>
+
+
+4.1.1 Option Settings
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                            [Page 4]
+
+README                        xml2rfc v1.7                   August 2001
+
 
    The list of valid keywords are:
 
@@ -193,6 +237,9 @@ README                        xml2rfc v1.6                    March 2001
                                little less compact
 
        toc         no          generate a table-of-contents
+
+       editing     no          insert editing marks for ease of
+                               discussing draft versions
 
        private     ""          produce a private memo rather than
                                an RFC or Internet-Draft.
@@ -215,17 +262,44 @@ README                        xml2rfc v1.6                    March 2001
    Remember, that as with everything else in XML, keywords and values
    are case-sensitive.
 
+4.1.2 Include Files
+
+   xml2rfc has an include-file facility, e.g.,
+
+       <?rfc include="file" ?>
+
+   xml2rfc will consult the $XML_LIBRARY environment variable for a
+   search path of where to look for files.  (If this envariable isn't
+   set, the directory containing the file that contains the include-file
+   directive is used.)
 
 
 
 
-
-Rose                                                            [Page 4]
+Rose                                                            [Page 5]
 
-README                        xml2rfc v1.6                    March 2001
+README                        xml2rfc v1.7                   August 2001
 
 
-4.2 xml2rfc-specific Limitations
+   You can also have xml2rfc set this envariable directly, by including
+   a file called ".xml2rfc.rc" in the directory where your main file is,
+   e.g.,
+
+   global env
+
+   if {![info exists env(XML_LIBRARY)]} {
+       set env(XML_LIBRARY) \
+           ";\\home\\rfcs\\include;\\home\\rfcs\\bibxml"
+   }
+   set nativeD [file nativename $inputD]
+   if {[lsearch [split $env(XML_LIBRARY) ";"] $nativeD] < 0} {
+       set env(XML_LIBRARY) "$nativeD;$env(XML_LIBRARY)"
+   }
+
+   which, on Windows, sets the envariable to a default value, and then
+   inserts, at the front, the directory where your main file is.
+
+5. Limitations
 
    o  The "figure" element's "title" attribute is ignored.
 
@@ -238,6 +312,9 @@ README                        xml2rfc v1.6                    March 2001
 
    o  The "xref" element's "pageno" attribute is ignored.
 
+   o  The "references" elemeht has a non-standard "title" attribute,
+      which can be used as an override.
+
 References
 
    [1]  Rose, M., "Writing I-Ds and RFCs using XML", RFC 2629, June
@@ -245,9 +322,19 @@ References
 
    [2]  <http://xml.resource.org/>
 
-   [3]  <http://dev.ajubasolutions.com/software/tcltk/downloadnow84.tml>
+   [3]  <http://www.scriptics.com/software/tcltk/8.4.html>
 
    [4]  <http://www.zveno.com/zm.cgi/in-tclxml/>
+
+   [5]  <rfc2629-author.html>
+
+
+
+
+
+Rose                                                            [Page 6]
+
+README                        xml2rfc v1.7                   August 2001
 
 
 Author's Address
@@ -276,5 +363,30 @@ Author's Address
 
 
 
-Rose                                                            [Page 5]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                            [Page 7]
 
