@@ -92,6 +92,9 @@
             <xs:enumeration value="full3667"/>
             <xs:enumeration value="noModification3667"/>
             <xs:enumeration value="noDerivatives3667"/>
+            <xs:enumeration value="full3978"/>
+            <xs:enumeration value="noModification3978"/>
+            <xs:enumeration value="noDerivatives3978"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -156,6 +159,7 @@
     </xs:complexType>
   </xs:element>
   <!--
+    this content model should be more strict: 
     at most one of each the city, region, code, and country
     elements may be present
   -->
@@ -259,6 +263,7 @@
         <xs:element ref="spanx"/>
         <xs:element ref="vspace"/>
       </xs:choice>
+      <xs:attribute name="anchor" type="xs:ID"/>
       <xs:attribute name="hangText" type="ATEXT"/>
     </xs:complexType>
   </xs:element>
@@ -362,6 +367,16 @@
       <xs:attribute name="name" default="" type="ATEXT"/>
       <xs:attribute name="type" type="ATEXT"/>
       <xs:attribute name="src" type="URI"/>
+      <xs:attribute name="align" default="left">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="center"/>
+            <xs:enumeration value="right"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="alt" type="ATEXT"/>
       <xs:attribute name="width" type="ATEXT"/>
       <xs:attribute name="height" type="ATEXT"/>
     </xs:complexType>

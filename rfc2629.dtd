@@ -75,7 +75,8 @@
                                          "info"
           seriesNo    %NUMBER;           #IMPLIED
           ipr         (full2026|noDerivativeWorks2026|none
-                      |full3667|noModification3667|noDerivatives3667)
+                      |full3667|noModification3667|noDerivatives3667
+                      |full3978|noModification3978|noDerivatives3978)
                                          #IMPLIED
           iprExtract  IDREF              #IMPLIED
           docName     %ATEXT;            #IMPLIED
@@ -109,7 +110,8 @@
  
 <!ELEMENT address     (postal?,phone?,facsimile?,email?,uri?)>
 
-<!-- at most one of each the city, region, code, and country
+<!-- this content model should be more strict:
+     at most one of each the city, region, code, and country
      elements may be present -->
 <!ELEMENT postal      (street+,(city|region|code|country)*)>
 <!ELEMENT street      (%CTEXT;)>
@@ -166,6 +168,7 @@
 <!-- use of <figure/> is deprecated... -->
 <!ELEMENT t           (%TEXT;|list|figure|xref|eref|iref|cref|spanx|vspace)*>
 <!ATTLIST t
+          anchor      ID                 #IMPLIED
           hangText    %ATEXT;            #IMPLIED>
 
 <!-- the value of the style attribute is inherited from the closest 
@@ -218,6 +221,8 @@
           name        %ATEXT;            ""
           type        %ATEXT;            ""
           src         %URI;              #IMPLIED
+          align       (left|center|right) "left"
+          alt         %ATEXT;            ""
           width       %ATEXT;            ""
           height      %ATEXT;            "">
 

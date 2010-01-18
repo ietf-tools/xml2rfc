@@ -3,10 +3,10 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                        January 16, 2005
+                                                           April 5, 2005
 
 
-                             xml2rfc v1.28
+                             xml2rfc v1.29
 
 
 Table of Contents
@@ -18,18 +18,18 @@ Table of Contents
    3.2   Testing without a windowing system . . . . . . . . . . . . .  4
    4.    Next steps . . . . . . . . . . . . . . . . . . . . . . . . .  5
    4.1   Processing Instructions  . . . . . . . . . . . . . . . . . .  5
-   4.1.1 Option Settings  . . . . . . . . . . . . . . . . . . . . . .  6
-   4.1.2 Include Files  . . . . . . . . . . . . . . . . . . . . . . .  7
-   5.    Additions to RFC 2629  . . . . . . . . . . . . . . . . . . .  9
-   6.    Limitations of xml2rfc . . . . . . . . . . . . . . . . . . . 10
-   7.    References . . . . . . . . . . . . . . . . . . . . . . . . . 10
-         Author's Address . . . . . . . . . . . . . . . . . . . . . . 10
-   A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . . 11
-   B.    rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . . 12
-   C.    Windows XP/Cygwin Installation (courtesy of Joe Touch) . . . 13
-   D.    Copyrights . . . . . . . . . . . . . . . . . . . . . . . . . 14
-
-
+   4.1.1 Option Settings  . . . . . . . . . . . . . . . . . . . . . .  5
+   4.1.2 Include Files  . . . . . . . . . . . . . . . . . . . . . . .  8
+   5.    The Page Model . . . . . . . . . . . . . . . . . . . . . . .  9
+   6.    Additions to RFC 2629  . . . . . . . . . . . . . . . . . . . 10
+   7.    Limitations of xml2rfc . . . . . . . . . . . . . . . . . . . 12
+   8.    References . . . . . . . . . . . . . . . . . . . . . . . . . 12
+         Author's Address . . . . . . . . . . . . . . . . . . . . . . 12
+   A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . . 13
+   B.    rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . . 14
+   C.    MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)  . 15
+   D.    A Special Thanks . . . . . . . . . . . . . . . . . . . . . . 16
+   E.    Copyrights . . . . . . . . . . . . . . . . . . . . . . . . . 17
 
 
 
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose                                                            [Page 1]
 
-README                        xml2rfc v1.28                 January 2005
+README                        xml2rfc v1.29                   April 2005
 
 
 1.  Introduction
@@ -110,7 +110,7 @@ README                        xml2rfc v1.28                 January 2005
 
 Rose                                                            [Page 2]
 
-README                        xml2rfc v1.28                 January 2005
+README                        xml2rfc v1.29                   April 2005
 
 
 2.  Requirements
@@ -118,8 +118,8 @@ README                        xml2rfc v1.28                 January 2005
    You need to have Tcl/Tk version 8 running on your system.  Tcl is a
    scripting language, Tk is Tcl with support for your windowing system.
 
-   To get a source or binary distribution for your system, go to the
-   Scriptics website [3] and install it.  If you get the binary
+   To get a source or binary distribution for your system, go to the Tcl
+   Developer Xchange website [3] and install it.  If you get the binary
    distribution, this is pretty simple.
 
    Of course, you may already have Tcl version 8.  To find out, try
@@ -129,8 +129,8 @@ README                        xml2rfc v1.28                 January 2005
 
    If the program launches, you're good to go with Tcl version 8.
 
-   If you are running under a windowing system (e.g., X or Windows), you
-   can also try:
+   If you are running under a windowing system (e.g., X or MS-Windows),
+   you can also try:
 
        % wish
 
@@ -166,7 +166,7 @@ README                        xml2rfc v1.28                 January 2005
 
 Rose                                                            [Page 3]
 
-README                        xml2rfc v1.28                 January 2005
+README                        xml2rfc v1.29                   April 2005
 
 
 3.  Testing
@@ -222,7 +222,7 @@ README                        xml2rfc v1.28                 January 2005
 
 Rose                                                            [Page 4]
 
-README                        xml2rfc v1.28                 January 2005
+README                        xml2rfc v1.29                   April 2005
 
 
 4.  Next steps
@@ -232,54 +232,20 @@ README                        xml2rfc v1.28                 January 2005
 
 4.1  Processing Instructions
 
-   A _processing instruction_ is a directive to an XML application.  If
-   you want to give directives to *xml2rfc*, the processing instructions
-   (PIs) look like this:
+   A _processing instruction_ contains directives to an XML application.
+   If you want to give directives to *xml2rfc*, the processing
+   instructions (PIs) look like this:
 
        <?rfc keyword='value'?>
 
-   Of course, if you like the default behavior, you don't need any PIs
-   in your input file!
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Rose                                                            [Page 5]
-
-README                        xml2rfc v1.28                 January 2005
-
+   Of course, if you like the default behavior, you don't need any
+   behavior-modifying directives in your input file!  Although *xml2rfc*
+   supports putting several attribute-like directives in one PI, be
+   warned that rfc2629.xslt (Appendix B) does not support it and that
+   there are issues in doing this for a non-include-file directive
+   following an include-file directive (Section 4.1.2).  It is good
+   practice to always surround the value with either single or double
+   quotes.
 
 4.1.1  Option Settings
 
@@ -292,87 +258,140 @@ README                        xml2rfc v1.28                 January 2005
    |              |              | avoid widows and orphans (not       |
    |              |              | perfect)                            |
    |              |              |                                     |
+   |   background |      ""      | when producing a html file, use     |
+   |              |              | this image                          |
+   |              |              |                                     |
+   |   colonspace |      no      | put two spaces instead of one after |
+   |              |              | each colon (":") in txt or nroff    |
+   |              |              | files                               |
+   |              |              |                                     |
    |     comments |      no      | render <cref> information           |
+   |              |              |                                     |
+   |      compact |      no      | when producing a txt/nroff file,    |
+   |              |              | try to conserve vertical whitespace |
+   |              |              |                                     |
+   |      editing |      no      | insert editing marks for ease of    |
+   |              |              | discussing draft versions           |
+   |              |              |                                     |
+
+
+
+Rose                                                            [Page 5]
+
+README                        xml2rfc v1.29                   April 2005
+
+
+   |   emoticonic |      no      | automatically replaces input        |
+   |              |              | sequences such as "|*text|" by,     |
+   |              |              | e.g., "<strong>text</strong;>" in   |
+   |              |              | html output                         |
+   |              |              |                                     |
+   |       footer |      ""      | override the center footer string   |
+   |              |              |                                     |
+   |       header |      ""      | override the leftmost header string |
+   |              |              |                                     |
+   |      include |      n/a     | see Section 4.1.2                   |
    |              |              |                                     |
    |       inline |      no      | if comments is "yes", then render   |
    |              |              | comments inline; otherwise render   |
    |              |              | them in an "Editorial Comments"     |
    |              |              | section                             |
    |              |              |                                     |
-   |       strict |      no      | try to enforce the ID-nits          |
-   |              |              | conventions and DTD validity        |
-   |              |              |                                     |
-   |  iprnotified |      no      | include boilerplate from Section    |
-   |              |              | 10.4(d) of [1]                      |
+   |  iprnotified |      no      | include boilerplate from            |
+   |              |              | Section 10.4(d) of [1]              |
    |              |              |                                     |
    |   linkmailto |      yes     | generate mailto: URL, as            |
    |              |              | appropriate                         |
    |              |              |                                     |
-   |      compact |      no      | when producing a txt/nroff file,    |
-   |              |              | try to conserve vertical whitespace |
+   |     linefile |      n/a     | a string like "35:file.xml" or just |
+   |              |              | "35" (file name then defaults to    |
+   |              |              | the containing file's real name or  |
+   |              |              | to the latest linefile              |
+   |              |              | specification that changed it) that |
+   |              |              | will be used to override            |
+   |              |              | *xml2rfc*'s reckoning of the        |
+   |              |              | current input position (right after |
+   |              |              | this PI) for warning and error      |
+   |              |              | reporting purposes (line numbers    |
+   |              |              | are 1-based)                        |
    |              |              |                                     |
-   |   subcompact |    compact   | if compact is "yes", then you can   |
-   |              |              | make things a little less compact   |
-   |              |              | by setting this to "no"             |
+   |    needLines |      n/a     | an integer hint indicating how many |
+   |              |              | contiguous lines are needed at this |
+   |              |              | point in the output                 |
    |              |              |                                     |
-   |          toc |      no      | generate a table-of-contents        |
+   |      private |      ""      | produce a private memo rather than  |
+   |              |              | an RFC or Internet-Draft            |
    |              |              |                                     |
-   |    tocompact |      yes     | if toc is "yes", then setting this  |
-   |              |              | to "no" will make it a little less  |
-   |              |              | compact                             |
+   |       slides |      no      | when producing a html file, produce |
+   |              |              | multiple files for a slide show     |
    |              |              |                                     |
-   |     tocdepth |       3      | if toc is "yes", then this          |
-   |              |              | determines the depth of the         |
-   |              |              | table-of-contents                   |
+   |     sortrefs |      no      | sort references                     |
    |              |              |                                     |
-   |    tocindent |      no      | if toc is "yes", then setting this  |
-   |              |              | to "yes" will indent subsections in |
-   |              |              | the table-of-contents               |
-   |              |              |                                     |
+   |       strict |      no      | try to enforce the ID-nits          |
+   |              |              | conventions and DTD validity        |
 
 
 
 Rose                                                            [Page 6]
 
-README                        xml2rfc v1.28                 January 2005
+README                        xml2rfc v1.29                   April 2005
 
 
-   |      editing |      no      | insert editing marks for ease of    |
-   |              |              | discussing draft versions           |
-   |              |              |                                     |
-   |      private |      ""      | produce a private memo rather than  |
-   |              |              | an RFC or Internet-Draft.           |
-   |              |              |                                     |
-   |       header |      ""      | override the leftmost header string |
-   |              |              |                                     |
-   |       footer |      ""      | override the center footer string   |
-   |              |              |                                     |
-   |       slides |      no      | when producing an html file,        |
-   |              |              | produce multiple files for a slide  |
-   |              |              | show                                |
-   |              |              |                                     |
-   |     sortrefs |      no      | sort references                     |
+   |   subcompact |   (compact)  | if compact is "yes", then you can   |
+   |              |              | make things a little less compact   |
+   |              |              | by setting this to "no" (the        |
+   |              |              | default value is the current value  |
+   |              |              | of the compact PI)                  |
    |              |              |                                     |
    |      symrefs |      no      | use anchors rather than numbers for |
    |              |              | references                          |
    |              |              |                                     |
+   |          toc |      no      | generate a table-of-contents        |
+   |              |              |                                     |
+   |     tocdepth |       3      | if toc is "yes", then this          |
+   |              |              | determines the depth of the         |
+   |              |              | table-of-contents                   |
+   |              |              |                                     |
+   |    tocindent |      yes     | if toc is "yes", then setting this  |
+   |              |              | to "yes" will indent subsections in |
+   |              |              | the table-of-contents               |
+   |              |              |                                     |
+   |    tocompact |      yes     | if toc is "yes", then setting this  |
+   |              |              | to "no" will make it a little less  |
+   |              |              | compact                             |
+   |              |              |                                     |
    |     topblock |      yes     | put the famous header block on the  |
    |              |              | first page                          |
    |              |              |                                     |
-   |   background |      ""      | when producing an html file, use    |
-   |              |              | this image                          |
+   |      typeout |      n/a     | during processing pass 2, print the |
+   |              |              | value to standard output at that    |
+   |              |              | point in processing                 |
    |              |              |                                     |
-   |    needLines |      n/a     | an integer hint indicating how many |
-   |              |              | contiguous lines are needed at this |
-   |              |              | point in the output                 |
+   |    useobject |      no      | when producing a html file, use the |
+   |              |              | "<object>" html element with inner  |
+   |              |              | replacement content instead of the  |
+   |              |              | "<img>" html element, when a source |
+   |              |              | xml element includes an "src"       |
+   |              |              | attribute                           |
    +--------------+--------------+-------------------------------------+
 
-   Remember, that as with everything else in XML, keywords and values
+   Remember that, as with everything else in XML, keywords and values
    are case-sensitive.
 
-   With the exception of the *needLines* PI, you normally put all of
-   these processing instructions at the beginning of the document (right
-   after the XML declartion).
+   With the exception of the "needLines", "typeout", and "include"
+   directives, you normally put all of these processing instructions at
+   the beginning of the document (right after the XML declaration).
+
+
+
+
+
+
+
+Rose                                                            [Page 7]
+
+README                        xml2rfc v1.29                   April 2005
+
 
 4.1.2  Include Files
 
@@ -380,22 +399,20 @@ README                        xml2rfc v1.28                 January 2005
 
        <?rfc include='file'?>
 
-   *xml2rfc* will consult the $XML_LIBRARY environment variable for a
-   search path of where to look for files.  (If this envariable isn't
-   set, the directory containing the file that contains the include-file
-   directive is used.)
+   *xml2rfc* will consult the "XML_LIBRARY" environment variable for a
+   search path of where to look for files.  (If this environment
+   variable isn't set, the directory containing the file that contains
+   the include-file directive is used.)  The file's contents are
+   inserted right after the PI.  Putting non-include-file directives
+   (especially needLines ones) after an include-file one in the same PI
+   may not work as expected because of this.  Remember that file names
+   are generally case-sensitive and that an input file that is
+   distributed to the outside world may be processed on a different
+   operating system than that used by its author.
 
-
-
-
-Rose                                                            [Page 7]
-
-README                        xml2rfc v1.28                 January 2005
-
-
-   You can also have *xml2rfc* set this envariable directly, by creating
-   a file called ".xml2rfc.rc" in the directory where your main file is,
-   e.g.,
+   You can also have *xml2rfc* set the "XML_LIBRARY" environment
+   variable directly, by creating a file called ".xml2rfc.rc" in the
+   directory where your main file is, e.g.,
 
    global env tcl_platform
 
@@ -421,24 +438,7 @@ README                        xml2rfc v1.28                 January 2005
    set env(XML_LIBRARY) $library
 
    There are links to various bibliographic databases (RFCs, I-Ds, and
-   so on) on the *xml2rfc*homepage [5].
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   so on) on the *xml2rfc* homepage [2].
 
 
 
@@ -446,136 +446,136 @@ README                        xml2rfc v1.28                 January 2005
 
 Rose                                                            [Page 8]
 
-README                        xml2rfc v1.28                 January 2005
+README                        xml2rfc v1.29                   April 2005
 
 
-5.  Additions to RFC 2629
+5.  The Page Model
 
-   A few additions have been made to the format originally defined in
-   RFC 2629.  In particular, Appendix C of the 2629bis document
-   enumerates the additions.
+   The *html* rendering engine does not need to have a tightly defined
+   page model.
 
-   In addition, *xml2rfc* recognizes an undocumented *src* attribute in
-   the *artwork* element, but only if HTML is being generated, e.g.,
+   The *txt* and *nr* rendering engines assume the following page model.
 
-          <figure><artwork src='layers.gif' /></figure>
+   Each line has at most 72 columns from the left edge, including any
+   left margin, but excluding the line terminator.  Every output
+   character is from the ASCII repertoire and the only control character
+   used is the line-feed (LF); the character-tabulation (HT) character
+   is never used.
 
-   In this case, an *img* tag is placed in the HTML output, and the
-   textual contents of the *artwork*, *preamble*, and *postamble*
-   elements are ignored.
+   Each page has the following lines (in 1-based numbering, as reported
+   to the user, but contrary to *xml2rfc*'s internal 0-based numbering):
 
+       1:  header line (blank line on first page)
 
+       2:  blank line
 
+       3:  blank line
 
+       4:  1st line of content
 
+      ...
 
+      51:  48th line of content
 
+      52:  blank line
 
+      53:  blank line
 
+      54:  blank line
 
+      55:  footer line
 
+      56:  form-feed character (followed by line terminator)
 
+   Once processed through *nroff* and the "fix.sh" script (from
+   2-nroff.template [5]), the *nr* output differs from this in two ways.
+   It has three extra blank lines (that could be numbered -2, -1, and 0,
+   for a total of six) at the very beginning of the document (so the
+   first page is that much longer).  It also has no line terminator
+   following the very last form-feed character of the file.  These
+   differences originate in the design of the "fix.sh" script.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   Header and footer lines each have three parts: left, center, and
+   right.
 
 
 
 Rose                                                            [Page 9]
 
-README                        xml2rfc v1.28                 January 2005
+README                        xml2rfc v1.29                   April 2005
 
 
-6.  Limitations of xml2rfc
+6.  Additions to RFC 2629
 
-   o  The *figure* element's *title* attribute is ignored, except when
-      generating HTML.
+   A few additions have been made to the format originally defined in
+   RFC 2629.  In particular, Appendix C of the 2629bis document
+   enumerates the additions.
 
-   o  The *xref* element's *pageno* attribute is ignored.
+   In addition, *xml2rfc* recognizes the undocumented "src", "alt",
+   "width", and "height" attributes in the "figure" and "artwork"
+   elements, but only if HTML is being generated.  Here are two
+   examples, one for each case.
 
+   Here, the attributes are added to the "artwork" element.
 
-7.  References
+             <figure>
+                 <preamble>This is the preamble.</preamble>
+                 <artwork src='layers.png'
+                          alt='[picture of layers only]'>
+             .-----------.
+             | ASCII art |
+             `-----------'
+             </artwork>
+                 <postamble>This is the postamble.</postamble>
+             </figure>
 
-   [1]  Bradner, S., "The Internet Standards Process -- Revision 3",
-        BCP 9, RFC 2026, October 1996.
+   In this case, the "preamble" and "postamble" elements are kept and an
+   "img" tag is placed in the HTML output to replace the whole "artwork"
+   element and its textual drawing, which are ignored.
 
-   [2]  <http://xml.resource.org/>
+   Here, the attributes are added to the "figure" element.
 
-   [3]  <http://www.scriptics.com/software/tcltk/8.4.html>
+             <figure src='layers.png'
+                     alt='[picture of layers and explanation]'>
+                 <preamble>This is the preamble.</preamble>
+                 <artwork>
+             .-----------.
+             | ASCII art |
+             `-----------'
+             </artwork>
+                 <postamble>This is the postamble.</postamble>
+             </figure>
 
-   [4]  <draft-mrose-writing-rfcs.html>
+   In this case, an "img" tag is placed in the HTML output to replace
+   the whole contents of the "figure" element (the "preamble",
+   "artwork", and "postamble" inner elements and the textual drawing
+   itself) which are ignored.
 
-   [5]  <http://xml.resource.org/>
-
-
-Author's Address
-
-   Marshall T. Rose
-   Dover Beach Consulting, Inc.
-   POB 255268
-   Sacramento, CA  95865-5268
-   US
-
-   Phone: +1 916 483 8878
-   Email: mrose@dbc.mtview.ca.us
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   *xml2rfc* also recognizes an undocumented "align" attribute (with
+   possible values "left", "center", or "right") in the "figure" and
 
 
 
 Rose                                                           [Page 10]
 
-README                        xml2rfc v1.28                 January 2005
+README                        xml2rfc v1.29                   April 2005
 
 
-Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
+   "artwork" elements.  It affects the whole content of the targeted
+   element for all types of generated output.  Its default is inherited
+   from the parent of its element.
 
-   1.  Install Tcl/Tk 8.3.4
 
-   2.  When you performed Step 1, a folder in your "Extensions" folder
-       called "Tool Command Language" was created.  Create a new folder
-       under "Extensions", with any name you like.
 
-   3.  Drag the file "xml2rfc.tcl" onto the "Drag & Drop Tclets"
-       application that was installed in Step 1.
 
-   4.  When asked for an appropriate "wish" stub, select "Wish 8.3.4".
 
-   5.  The "Drap & Drop Tclets" application will write out an executable
-       version of *xml2rfc*.
+
+
+
+
+
+
+
 
 
 
@@ -614,49 +614,49 @@ Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
 
 Rose                                                           [Page 11]
 
-README                        xml2rfc v1.28                 January 2005
+README                        xml2rfc v1.29                   April 2005
 
 
-Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
+7.  Limitations of xml2rfc
 
-   The file "rfc2629.xslt" can be used with an XSLT-capable formatter
-   (i.e., IE6) to produce HTML.  A word of warning though: the XSLT
-   script doesn't support the processing instructions discussed earlier
-   (Section 4.1).
+   o  The "figure" element's "title" attribute is ignored, except when
+      generating HTML.
 
-
+   o  The "xref" element's "pageno" attribute is ignored.
 
 
+8.  References
+
+   [1]  Bradner, S., "The Internet Standards Process -- Revision 3",
+        BCP 9, RFC 2026, October 1996.
+
+   [2]  <http://xml.resource.org/>
+
+   [3]  <http://www.tcl.tk/software/tcltk/8.4.html>
+
+   [4]  <draft-mrose-writing-rfcs.html>
+
+   [5]  <ftp://ftp.rfc-editor.org/in-notes/rfc-editor/2-nroff.template>
+
+   [6]  <http://greenbytes.de/tech/webdav/>
+
+   [7]  <http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html>
+
+   [8]  <http://www.cygwin.com/>
+
+   [9]  <http://wiki.tcl.tk/2?cygwin>
 
 
+Author's Address
 
+   Marshall T. Rose
+   Dover Beach Consulting, Inc.
+   POB 255268
+   Sacramento, CA  95865-5268
+   US
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   Phone: +1 916 483 8878
+   Email: mrose@dbc.mtview.ca.us
 
 
 
@@ -670,12 +670,125 @@ Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
 
 Rose                                                           [Page 12]
 
-README                        xml2rfc v1.28                 January 2005
+README                        xml2rfc v1.29                   April 2005
 
 
-Appendix C.  Windows XP/Cygwin Installation (courtesy of Joe Touch)
+Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
 
-   1.  install Cygwin: follow instructions at cygwin.org,  make sure to
+   1.  Install Tcl/Tk 8.3.4
+
+   2.  When you performed Step 1, a folder in your "Extensions" folder
+       called "Tool Command Language" was created.  Create a new folder
+       under "Extensions", with any name you like.
+
+   3.  Drag the file "xml2rfc.tcl" onto the "Drag & Drop Tclets"
+       application that was installed in Step 1.
+
+   4.  When asked for an appropriate "wish" stub, select "Wish 8.3.4".
+
+   5.  The "Drag & Drop Tclets" application will write out an executable
+       version of *xml2rfc*.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                           [Page 13]
+
+README                        xml2rfc v1.29                   April 2005
+
+
+Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
+
+   The file "rfc2629.xslt" can be used with an XSLT-capable formatter
+   (e.g., Saxon, Xalan, xsltproc, or MSIE6) to produce HTML.  A word of
+   warning though: the XSLT script only supports a limited subset of the
+   processing instruction directives discussed earlier (Section 4.1) and
+   each attribute-like directive must be in its own PI (i.e., "<?rfc
+   keyword='value'?>").  The latest version can be downloaded from the
+   original site [6] which also hosts its documentation [7].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                           [Page 14]
+
+README                        xml2rfc v1.29                   April 2005
+
+
+Appendix C.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
+
+   1.  install Cygwin: follow instructions at the Cygwin website [8]
+       (also visit the Cygwin pages on the Tcl Wiki [9]), make sure to
        select "tcltk" in "Libs"
 
    2.  place a copy of xml2rfc files on a local drive,  e.g., in
@@ -685,18 +798,17 @@ Appendix C.  Windows XP/Cygwin Installation (courtesy of Joe Touch)
        "C:\xmlbib\"
 
    4.  edit ".xml2rfc.rc" to indicate the "bibxml*" library path, e.g.,
-       as per step #3, change "~/rfca/bibxml/*" to
-       "/cygdrive/c/xmlbib/*"
+       as per Step 3, change "~/rfca/bibxml/*" to "/cygdrive/c/xmlbib/*"
 
    5.  run xml2rfc as follows: "tclsh /cygdrive/c/xml2rfc/xml2rfc.tcl"
 
    NOTE: for xml2rfc-1.26 and earlier ONLY, add an additional
-   modification in step #3:
+   modification in Step 3:
 
-      Patch .xml2rfc.rc (xml2rfc-1.26 and earlier).  The purpose of the
-      patch is to append library names in a format compatible with the
-      OS; on Windows XP, this replaces the Cygwin's "/" with Windows'
-      "\".
+      Patch ".xml2rfc.rc" (xml2rfc-1.26 and earlier).  The purpose of
+      the patch is to append library names in a format compatible with
+      the OS; on MS-Windows XP, this replaces the Cygwin's "/" with MS-
+      Windows' "\".
 
 
    --- .xml2rfc.rc.orig    Thu Jul 24 13:58:00 2003
@@ -724,14 +836,70 @@ Appendix C.  Windows XP/Cygwin Installation (courtesy of Joe Touch)
 
 
 
-Rose                                                           [Page 13]
+Rose                                                           [Page 15]
 
-README                        xml2rfc v1.28                 January 2005
+README                        xml2rfc v1.29                   April 2005
 
 
-Appendix D.  Copyrights
+Appendix D.  A Special Thanks
 
-   (c) 2003-2005 Marshall T.  Rose
+   A special thanks to Charles Levert for the v1.29 release, which
+   includes many internal improvements made to the rendering engines.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                           [Page 16]
+
+README                        xml2rfc v1.29                   April 2005
+
+
+Appendix E.  Copyrights
+
+   Copyright (C) 2003-2005 Marshall T. Rose
 
    Hold harmless the author, and any lawful use is allowed.
 
@@ -780,5 +948,5 @@ Appendix D.  Copyrights
 
 
 
-Rose                                                           [Page 14]
+Rose                                                           [Page 17]
 

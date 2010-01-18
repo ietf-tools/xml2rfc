@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en"><head><title>Writing I-Ds and RFCs using XML (revised)</title>
-<meta http-equiv="Expires" content="Tue, 28 Sep 2004 17:12:44 +0000">
+<meta http-equiv="Expires" content="Tue, 05 Apr 2005 15:41:52 +0000">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Writing I-Ds and RFCs using XML (revised)">
 <meta name="keywords" content="RFC, Request for Comments, I-D, Internet-Draft, XML, Extensible Markup Language">
-<meta name="generator" content="xml2rfc v1.27 (http://xml.resource.org/)">
+<meta name="generator" content="xml2rfc v1.29 (http://xml.resource.org/)">
 <style type='text/css'>
 <!--
     body {
@@ -19,7 +19,7 @@
         font-weight: bold; text-align: right;
         font-family: helvetica, arial, sans-serif;
         background-color: transparent; }
-    td.rfcbug { background-color: #000000 ; width: 30px ; height: 30px ; 
+    td.rfcbug { background-color: #000000 ; width: 30px ; height: 30px ;
         text-align: justify; vertical-align: middle ; padding-top: 2px ; }
     td.rfcbug span.RFC { color: #666666; font-weight: bold; text-decoration: none;
         background-color: #000000 ;
@@ -41,7 +41,7 @@
 
     a.info span{display: none}
 
-    a.info:hover span{ /*the span will display just on :hover state*/
+    a.info:hover span.info{ /*the span will display just on :hover state*/
         display:block;
         position:absolute;
         font-size: smaller ;
@@ -62,7 +62,11 @@
 
     span.emph { font-style: italic; }
     span.strong { font-weight: bold; }
-    span.verb { font-family: "Courier New", Courier, monospace ; }
+    span.verb, span.vbare { font-family: "Courier New", Courier, monospace ; }
+
+    span.vemph { font-style: italic; font-family: "Courier New", Courier, monospace ; }
+    span.vstrong { font-weight: bold; font-family: "Courier New", Courier, monospace ; }
+    span.vdeluxe { font-weight: bold; font-style: italic; font-family: "Courier New", Courier, monospace ; }
 
     ol.text { margin-left: 2em; margin-right: 2em; }
     ul.text { margin-left: 2em; margin-right: 2em; }
@@ -70,6 +74,7 @@
 
     pre { margin-left: 3em; color: #333333;  background-color: transparent;
         font-family: "Courier New", Courier, monospace ; font-size: small ;
+        text-align: left;
         }
 
     h3 { color: #333333; font-size: medium ;
@@ -111,7 +116,7 @@
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header"> </td><td class="header">M. Rose</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Dover Beach Consulting, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">September 28, 2004</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">April 5, 2005</td></tr>
 </table></td></tr></table>
 <div align="right"><span class="title"><br />Writing I-Ds and RFCs using XML (revised)</span></div>
 
@@ -182,7 +187,7 @@ The DTD<br />
 <a href="#anchor19">C.</a>&nbsp;
 Changes from RFC 2629<br />
 <a href="#anchor20">D.</a>&nbsp;
-Conformance with RFC 2026 (Historic)<br />
+Conformance with RFC 2026 or RFC 3667 (Historic)<br />
 <a href="#anchor21">E.</a>&nbsp;
 Acknowledgements<br />
 <a href="#anchor22">4.</a>&nbsp;
@@ -201,7 +206,7 @@ Index<br />
 <a name="rfc.section.1"></a><h3>1.&nbsp;Introduction</h3>
 
 <p>This memo describes how to write a document for the I-D and RFC series
-using <a class="info" href="#W3C.REC-xml-20001006">the Extensible Markup Language<span>Bray, T., Paoli, J., Sperberg-McQueen, C. and E. Maler, Extensible Markup Language (XML) 1.0 (Second Edition), October 2000.</span></a>[1]
+using <a class="info" href="#W3C.REC-xml-20001006">the Extensible Markup Language<span> (</span><span class="info">Paoli, J., Sperberg-McQueen, C., Bray, T., and E. Maler, &ldquo;Extensible Markup Language (XML) 1.0 (Second Edition),&rdquo; October&nbsp;2000.</span><span>)</span></a>[1]
 (XML).
 This memo has three goals:
 </p>
@@ -213,7 +218,7 @@ qualities.
 </li>
 <li>To describe software that processes XML source files,
 including a tool that produces documents
-conforming to <a class="info" href="#RFC2223">RFC 2223<span>Postel, J. and J. Reynolds, Instructions to RFC Authors, October 1997.</span></a>[2],
+conforming to <a class="info" href="#RFC2223">RFC 2223<span> (</span><span class="info">Postel, J. and J. Reynolds, &ldquo;Instructions to RFC Authors,&rdquo; October&nbsp;1997.</span><span>)</span></a>[2],
 HTML format, and so on.
 </li>
 <li>To provide the proof-of-concept for the first two goals
@@ -249,7 +254,7 @@ this section discusses just enough XML to use a Document Type
 Declaration (DTD) to write RFC-like documents.
 </p>
 <p>If you're already familiar with XML,
-skip to <a class="info" href="#rfc.dtd">Appendix B<span>The DTD</span></a> to look at the DTD.
+skip to <a class="info" href="#rfc.dtd">Appendix&nbsp;B<span> (</span><span class="info">The DTD</span><span>)</span></a> to look at the DTD.
 </p>
 <a name="rfc.section.2.1"></a><h4><a name="xml_basics">2.1</a>&nbsp;XML basics</h4>
 
@@ -411,7 +416,7 @@ one or more optional note elements.
 
 <p>The title element identifies the title of the document.
 Because the title will be used in the headers of the document when formatted
-according to <a class="info" href="#RFC2223">[2]<span>Postel, J. and J. Reynolds, Instructions to RFC Authors, October 1997.</span></a>,
+according to <a class="info" href="#RFC2223">[2]<span> (</span><span class="info">Postel, J. and J. Reynolds, &ldquo;Instructions to RFC Authors,&rdquo; October&nbsp;1997.</span><span>)</span></a>,
 if the title is more than 42 characters,
 then an abbreviation should also be provided,
 e.g.,
@@ -546,7 +551,7 @@ and the keyword elements identify useful search terms.
 <a name="rfc.section.2.2.5"></a><h4><a name="anchor5">2.2.5</a>&nbsp;The abstract Element</h4>
 
 <p>A document may have an abstract element,
-which contains one or more <a class="info" href="#t">t elements<span>The t Element</span></a>.
+which contains one or more <a class="info" href="#t">t elements<span> (</span><span class="info">The t Element</span><span>)</span></a>.
 In general,
 only a single t element is present,
 e.g.,
@@ -562,7 +567,7 @@ e.g.,
 <a name="rfc.section.2.2.6"></a><h4><a name="anchor6">2.2.6</a>&nbsp;The note Element</h4>
 
 <p>A document may have one or more note elements,
-each of which contains one or more <a class="info" href="#t">t elements<span>The t Element</span></a>.
+each of which contains one or more <a class="info" href="#t">t elements<span> (</span><span class="info">The t Element</span><span>)</span></a>.
 There is a mandatory title attribute.
 In general,
 the note element contains text from the IESG,
@@ -580,35 +585,23 @@ table of contents is not included in the document's markup &#8212; this is
 automatically inserted by an XML application when it produces either
 a text or HTML version of the document.
 </p>
-<a name="rfc.section.2.2.7.1"></a><h4><a name="ipr">2.2.7.1</a>&nbsp;Conformance with RFC 3667</h4>
+<a name="rfc.section.2.2.7.1"></a><h4><a name="ipr">2.2.7.1</a>&nbsp;Conformance with RFC 3978</h4>
 
 <p>If an Internet-Draft is being produced,
 then the ipr attribute should be present in the <span class="verb">&lt;rfc&gt;</span> tag
 at the beginning of the file.
 The value of the attribute should be one of:
-</p>
-<blockquote class="text"><dl>
-<dt>full3667:</dt>
-<dd>indicating that the document conforms with
-Section 5.1 of RFC 3667;
-</dd>
-<dt>noModification3667:</dt>
-<dd>indicating that the document conforms with
-Sections 5.1 and 5.2(a) of RFC 3667;
-or,
-</dd>
-<dt>noDerivatives3667:</dt>
-<dd>indicating that the document conforms with
-Sections 5.1 and 5.2(b) of RFC 3667.
-</dd>
-</dl></blockquote><p>
+<span class="verb">full3978</span>,
+<span class="verb">noModification3978</span>,
+or
+<span class="verb">noDerivatives3978</span>.
 For the latter two options,
 an additional attribute, iprExtract, will be consulted.
 If present,
 its value is an anchor that is used to cross-reference the section of
 the document that may be extracted as-is for separate use.
 </p>
-<p>Consult <a class="info" href="#RFC3667">[3]<span>Bradner, S., IETF Rights in Contributions, February 2004.</span></a> for further details.
+<p>Consult <a class="info" href="#RFC3978">[3]<span> (</span><span class="info">Bradner, S., &ldquo;IETF Rights in Contributions,&rdquo; March&nbsp;2005.</span><span>)</span></a> for further details.
 </p>
 <p>If the Internet-Draft is being submitted to an automated process,
 then the docName attribute should be present in the
@@ -616,7 +609,7 @@ then the docName attribute should be present in the
 The value of this attribute contains the document (not file) name
 associated with this Internet-Draft, e.g.,
 </p><pre>
-    &lt;rfc ipr='full3667' docName='draft-mrose-writing-rfcs-01'&gt;
+    &lt;rfc ipr='full3978' docName='draft-mrose-writing-rfcs-01'&gt;
         ...
     &lt;/rfc&gt;
 </pre>
@@ -714,7 +707,7 @@ that identifies the title of the section.
 There are also two optional attributes,
 anchor,
 that is used for cross-referencing with
-<a class="info" href="#xref">the xref element<span>The xref Element</span></a>,
+<a class="info" href="#xref">the xref element<span> (</span><span class="info">The xref Element</span><span>)</span></a>,
 e.g.,
 </p><pre>
     &lt;section anchor='intro' title='Introduction'&gt;
@@ -765,12 +758,12 @@ paragraphs,
 in any number or combination.
 </p>
 <p>If a cross-reference is needed to a section, figure, table, or reference,
-<a class="info" href="#xref">the xref element<span>The xref Element</span></a> is used;
+<a class="info" href="#xref">the xref element<span> (</span><span class="info">The xref Element</span><span>)</span></a> is used;
 similarly,
 if an external-reference is needed,
-<a class="info" href="#eref">the eref element<span>The eref Element</span></a> is used.
+<a class="info" href="#eref">the eref element<span> (</span><span class="info">The eref Element</span><span>)</span></a> is used.
 Indexing of text is provided by the
-<a class="info" href="#iref">the iref element<span>The iref Element</span></a>.
+<a class="info" href="#iref">the iref element<span> (</span><span class="info">The iref Element</span><span>)</span></a>.
 </p>
 <p></p>
 <blockquote class="text"><dl>
@@ -821,16 +814,21 @@ the t element has an optional attribute,
 hangText that specifies the text to be inserted, e.g.,
 </p><pre>
     &lt;list style='hanging'&gt;
-        &lt;t hangText='full3667:'&gt;indicating that the document
-        conforms with Section 5.1 of RFC 3667;&lt;/t&gt;
+        &lt;t hangText="counter:"&gt;the "counting designation" is
+        rendered
+        (e.g., "2.1" or "A.2");&lt;/t&gt;
 
-        &lt;t hangText='noModification3667:'&gt;indicating that the
-        document conforms with Sections 5.1 and 5.2(a) of RFC 3667;
+        &lt;t hangText="title:"&gt;the title attribute of the
+        corresponding element is rendered
+        (e.g., "XML Basics");&lt;/t&gt;
+
+        &lt;t hangText="none:"&gt;no additional designation is rendered;
         or,&lt;/t&gt;
 
-        &lt;t hangText='noDerivatives3667:'&gt;indicating that the
-        document conforms with Sections 5.1 and 5.2(b) of
-        RFC 3667.&lt;/t&gt;
+        &lt;t hangText="default:"&gt;a suitable designation is rendered,
+        e.g., "Section 2.1" or
+        "&amp;lt;a href='#xml_basics'&gt;XML Basics&amp;lt;/a&gt;"
+        (the default).&lt;/t&gt;
     &lt;/list&gt;
 </pre>
 
@@ -908,7 +906,7 @@ an artwork element,
 and an optional postamble element together.
 The figure element also has an optional anchor attribute that is
 used for cross-referencing with
-<a class="info" href="#xref">the xref element<span>The xref Element</span></a>.
+<a class="info" href="#xref">the xref element<span> (</span><span class="info">The xref Element</span><span>)</span></a>.
 There is also an optional title attribute that identifies the title
 of the figure.
 </p>
@@ -916,12 +914,12 @@ of the figure.
 if present,
 are simply text.
 If a cross-reference is needed to a section, figure, table, or reference,
-<a class="info" href="#xref">the xref element<span>The xref Element</span></a> is used;
+<a class="info" href="#xref">the xref element<span> (</span><span class="info">The xref Element</span><span>)</span></a> is used;
 similarly,
 if an external-reference is needed,
-<a class="info" href="#eref">the eref element<span>The eref Element</span></a> is used.
+<a class="info" href="#eref">the eref element<span> (</span><span class="info">The eref Element</span><span>)</span></a> is used.
 Indexing of text is provided by the
-<a class="info" href="#iref">the iref element<span>The iref Element</span></a>.
+<a class="info" href="#iref">the iref element<span> (</span><span class="info">The iref Element</span><span>)</span></a>.
 </p>
 <p>The artwork element,
 which must be present,
@@ -976,7 +974,7 @@ the XML application.
 and artwork,
 an XML application producing a text version of the document should
 attempt to keep these elements on the same page.
-Because <a class="info" href="#RFC2223">RFC 2223<span>Postel, J. and J. Reynolds, Instructions to RFC Authors, October 1997.</span></a>[2] allows no more than 69
+Because <a class="info" href="#RFC2223">RFC 2223<span> (</span><span class="info">Postel, J. and J. Reynolds, &ldquo;Instructions to RFC Authors,&rdquo; October&nbsp;1997.</span><span>)</span></a>[2] allows no more than 69
 characters by 49 lines of content on each page,
 XML applications should be prepared to prematurely introduce page
 breaks to allow for better visual grouping.
@@ -996,12 +994,12 @@ zero or more c elements,
 and an optional postamble element together.
 The texttable element also has an optional anchor attribute that is
 used for cross-referencing with
-<a class="info" href="#xref">the xref element<span>The xref Element</span></a>.
+<a class="info" href="#xref">the xref element<span> (</span><span class="info">The xref Element</span><span>)</span></a>.
 There is also an optional title attribute that identifies the title
 of the table.
 </p>
 <p>The preamble and postamble elements have already been described in
-<a class="info" href="#figure">Section 2.3.1.3<span>The figure Element</span></a>.
+<a class="info" href="#figure">Section&nbsp;2.3.1.3<span> (</span><span class="info">The figure Element</span><span>)</span></a>.
 </p>
 <p>The ttcol element,
 of which at least one must be present,
@@ -1085,7 +1083,7 @@ tables, and references.
 The mandatory target attribute is used to link back to the anchor
 attribute of the section, figure, and reference elements.
 The value of the anchor and target attributes should be formatted
-according to the token syntax in <a class="info" href="#xml_basics">Section 2.1<span>XML basics</span></a>.
+according to the token syntax in <a class="info" href="#xml_basics">Section&nbsp;2.1<span> (</span><span class="info">XML basics</span><span>)</span></a>.
 </p>
 <p>If used as an empty element,
 e.g.,
@@ -1136,7 +1134,7 @@ its choice is consistent throughout the processing of the document.
 
 <p>The eref element is used to reference external documents.
 The mandatory target attribute is a
-<a class="info" href="#RFC2396">URI<span>Berners-Lee, T., Fielding, R. and L. Masinter, Uniform Resource Identifiers (URI): Generic Syntax, August 1998.</span></a>[5], e.g.,
+<a class="info" href="#RFC2396">URI<span> (</span><span class="info">Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;Uniform Resource Identifiers (URI): Generic Syntax,&rdquo; August&nbsp;1998.</span><span>)</span></a>[6], e.g.,
 </p><pre>
     &lt;eref target='http://www.ibiblio.org/xml/'&gt;Cafe con Leche&lt;/eref&gt;
 </pre>
@@ -1251,7 +1249,7 @@ contains any text.
 <a name="rfc.section.2.3.2"></a><h4><a name="appendix">2.3.2</a>&nbsp;The appendix Element</h4>
 
 <p>The appendix element is identical to the
-<a class="info" href="#section">the section element<span>The section Element</span></a>.
+<a class="info" href="#section">the section element<span> (</span><span class="info">The section Element</span><span>)</span></a>.
 It has the same attributes
 (the mandatory title
 and the optional anchor).
@@ -1303,7 +1301,7 @@ one or more optional format elements,
 and one or more optional annotation elements.
 </p>
 <p>We've already discussed the front element back in
-<a class="info" href="#front_matter">Section 2.2<span>Front matter</span></a>.
+<a class="info" href="#front_matter">Section&nbsp;2.2<span> (</span><span class="info">Front matter</span><span>)</span></a>.
 </p>
 <p>The seriesInfo element has two attributes,
 name and value that identify the document series and series entry,
@@ -1311,7 +1309,7 @@ respectively.
 </p>
 <p>The reference element has an optional anchor
 attribute that is used for cross-referencing with
-<a class="info" href="#xref">the xref element<span>The xref Element</span></a>, e.g.,
+<a class="info" href="#xref">the xref element<span> (</span><span class="info">The xref Element</span><span>)</span></a>, e.g.,
 </p><pre>
     &lt;reference anchor='RFC2200'&gt;
         &lt;front&gt;
@@ -1346,7 +1344,7 @@ and,
 
 <p>The reference element also has an optional target
 attribute that is used for external references
-(c.f., <a class="info" href="#eref">Section 2.3.1.6<span>The eref Element</span></a>).
+(c.f., <a class="info" href="#eref">Section&nbsp;2.3.1.6<span> (</span><span class="info">The eref Element</span><span>)</span></a>).
 The XML application,
 if producing an HTML version of the document will use the target
 attribute accordingly;
@@ -1386,7 +1384,7 @@ e.g.,
 </p>
 <p>There are two kinds of XML tools: validating and non-validating.
 Both check that the source file conforms to the rules given in
-<a class="info" href="#xml_basics">Section 2.1<span>XML basics</span></a>.
+<a class="info" href="#xml_basics">Section&nbsp;2.1<span> (</span><span class="info">XML basics</span><span>)</span></a>.
 However,
 in addition to making sure that the source file is well-formed,
 a validating tool also reads the DTD referenced by the source file
@@ -1460,7 +1458,7 @@ which runs a validator prior to invoking the tool.
 </p>
 <a name="rfc.section.3.3"></a><h4><a name="anchor17">3.3</a>&nbsp;Converting to HTML Format</h4>
 
-<p><a class="info" href="#W3C.REC-xslt-19991116">Extensible Style Language<span>Clark, J., XSL Transformations (XSLT) Version 1.0, November 1999.</span></a>[6] (XSLT) is
+<p><a class="info" href="#W3C.REC-xslt-19991116">Extensible Style Language<span> (</span><span class="info">Clark, J., &ldquo;XSL Transformations (XSLT) Version 1.0,&rdquo; November&nbsp;1999.</span><span>)</span></a>[7] (XSLT) is
 used to describe transformations from the source file into some other
 structured file.
 So,
@@ -1506,7 +1504,7 @@ e.g.
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;The rfc Element</h3>
 
 <p>The &lt;rfc&gt; tag at the beginning of the file,
-with only <a class="info" href="#ipr">an ipr attribute<span>Conformance with RFC 3667</span></a>,
+with only <a class="info" href="#ipr">an ipr attribute<span> (</span><span class="info">Conformance with RFC 3978</span><span>)</span></a>,
 produces an Internet-Draft.
 However,
 when other attributes are added to this tag by the RFC editor,
@@ -1644,7 +1642,8 @@ the appropriate substitution (or <span class="verb">XXXX</span>) will occur.
                                          "info"
           seriesNo    %NUMBER;           #IMPLIED
           ipr         (full2026|noDerivativeWorks2026|none
-                      |full3667|noModification3667|noDerivatives3667)
+                      |full3667|noModification3667|noDerivatives3667
+                      |full3978|noModification3978|noDerivatives3978)
                                          #IMPLIED
           iprExtract  ID                 #IMPLIED
           docName     %ATEXT;            #IMPLIED
@@ -1678,7 +1677,8 @@ the appropriate substitution (or <span class="verb">XXXX</span>) will occur.
 
 &lt;!ELEMENT address     (postal?,phone?,facsimile?,email?,uri?)&gt;
 
-&lt;!-- at most one of each the city, region, code, and country
+&lt;!-- this content model should be more strict:
+     at most one of each the city, region, code, and country
      elements may be present --&gt;
 &lt;!ELEMENT postal      (street+,(city|region|code|country)*)&gt;
 &lt;!ELEMENT street      (%CTEXT;)&gt;
@@ -1787,7 +1787,7 @@ the appropriate substitution (or <span class="verb">XXXX</span>) will occur.
 
 &lt;!ELEMENT postamble   (%TEXT;|xref|eref|iref|cref|spanx)*&gt;
 
-&lt;!ELEMENT texttable   (preamble?,ttcol+,c*,postamble?&gt;
+&lt;!ELEMENT texttable   (preamble?,ttcol+,c*,postamble?)&gt;
 &lt;!ATTLIST texttable
           anchor      ID                 #IMPLIED
           title       %ATEXT;            ""&gt;
@@ -1830,7 +1830,7 @@ the appropriate substitution (or <span class="verb">XXXX</span>) will occur.
 <a name="rfc.section.C"></a><h3>Appendix C.&nbsp;Changes from RFC 2629</h3>
 
 <p>The following changes were made from the format originally defined
-in <a class="info" href="#RFC2629">RFC 2629<span>Rose, M., Writing I-Ds and RFCs using XML, June 1999.</span></a>[7]:
+in <a class="info" href="#RFC2629">RFC 2629<span> (</span><span class="info">Rose, M., &ldquo;Writing I-Ds and RFCs using XML,&rdquo; June&nbsp;1999.</span><span>)</span></a>[8]:
 </p>
 <ul class="text">
 <li>New elements:
@@ -1850,12 +1850,16 @@ in <a class="info" href="#RFC2629">RFC 2629<span>Rose, M., Writing I-Ds and RFCs
 
 <blockquote class="text"><dl>
 <dt>rfc ipr: </dt>
-<dd><span class="verb">full3667</span>,
-<span class="verb">noModification3667</span>, and
-<span class="verb">noDerivatives3667</span>
+<dd>
+<span class="verb">full3978</span>,
+<span class="verb">noModification3978</span>, and
+<span class="verb">noDerivatives3978</span>
+
 </dd>
 <dt>list style: </dt>
-<dd><span class="verb">letters</span>
+<dd>
+<span class="verb">letters</span>
+
 </dd>
 <dt>list style: </dt>
 <dd>formatted
@@ -1931,9 +1935,10 @@ section element
 
 <a name="anchor20"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.D"></a><h3>Appendix D.&nbsp;Conformance with RFC 2026 (Historic)</h3>
+<a name="rfc.section.D"></a><h3>Appendix D.&nbsp;Conformance with RFC 2026 or RFC 3667 (Historic)</h3>
 
-<p>If an Internet-Draft is being produced in conformance with RFC 2026,
+<p>If an Internet-Draft is being produced in conformance with RFC 2026
+or RFC 3667,
 then the ipr attribute should be present in the <span class="verb">&lt;rfc&gt;</span> tag
 at the beginning of the file,
 and the value of the attribute should be one of:
@@ -1946,20 +1951,34 @@ conformance with all the provisions of Section 10 of RFC 2026;
 <dt>noDerivativeWorks2026:</dt>
 <dd>indicating that the document is in full
 conformance with all the provisions of Section 10 of RFC 2026 except that the
-right to produce derivative works is not granted; or,
+right to produce derivative works is not granted
 </dd>
 <dt>none:</dt>
 <dd>indicating that the document is NOT offered in
 accordance with Section 10 of RFC 2026,
 and the author does not provide the IETF with any rights other than to
-publish as an Internet-Draft.
+publish as an Internet-Draft;
+</dd>
+<dt>full3667:</dt>
+<dd>indicating that the document conforms with
+Section 5.1 of RFC 3667;
+</dd>
+<dt>noModification3667:</dt>
+<dd>indicating that the document conforms with
+Sections 5.1 and 5.2(a) of RFC 3667;
+or,
+</dd>
+<dt>noDerivatives3667:</dt>
+<dd>indicating that the document conforms with
+Sections 5.1 and 5.2(b) of RFC 3667.
 </dd>
 </dl></blockquote><p>
-In the latter case,
+In the <span class="verb">none</span> case,
 a copyright notice will not be automatically inserted during
 processing by an XML application.
 </p>
-<p>Consult <a class="info" href="#RFC2026">[4]<span>Bradner, S., The Internet Standards Process -- Revision 3, October 1996.</span></a> for further details.
+<p>Consult <a class="info" href="#RFC2026">[4]<span> (</span><span class="info">Bradner, S., &ldquo;The Internet Standards Process -- Revision 3,&rdquo; October&nbsp;1996.</span><span>)</span></a> and <a class="info" href="#RFC3667">[5]<span> (</span><span class="info">Bradner, S., &ldquo;IETF Rights in Contributions,&rdquo; February&nbsp;2004.</span><span>)</span></a> for further
+details.
 </p>
 <a name="anchor21"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1974,6 +1993,7 @@ Brian Carpenter,
 Steve Deering,
 Patrik Faltstrom,
 Jim Gettys,
+Charles Levert,
 Henrik Levkowetz,
 Carl Malamud,
 Chris Newman,
@@ -1986,7 +2006,7 @@ Frank Strauss.
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4"></a><h3>4.&nbsp;Security Considerations</h3>
 
-<p>According to <a class="info" href="#RFC2223">[2]<span>Postel, J. and J. Reynolds, Instructions to RFC Authors, October 1997.</span></a>,
+<p>According to <a class="info" href="#RFC2223">[2]<span> (</span><span class="info">Postel, J. and J. Reynolds, &ldquo;Instructions to RFC Authors,&rdquo; October&nbsp;1997.</span><span>)</span></a>,
 your document should contain a section near the end that discusses the
 security considerations of the protocol or procedures that are the
 main topic of your document, e.g.,
@@ -2014,22 +2034,24 @@ systems.
 </p>
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>5&nbsp;References</h3>
+<h3>5.&nbsp;References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="W3C.REC-xml-20001006">[1]</a></td>
-<td class="author-text">Bray, T., Paoli, J., Sperberg-McQueen, C. and E. Maler, "<a href="http://www.w3.org/TR/2000/REC-xml-20001006">Extensible Markup Language (XML) 1.0 (Second Edition)</a>", W3C REC REC-xml-20001006, October 2000.</td></tr>
+<td class="author-text">Paoli, J., Sperberg-McQueen, C., Bray, T., and E. Maler, &ldquo;<a href="http://www.w3.org/TR/2000/REC-xml-20001006">Extensible Markup Language (XML) 1.0 (Second Edition)</a>,&rdquo; W3C FirstEdition&nbsp;REC-xml-20001006, October&nbsp;2000.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2223">[2]</a></td>
-<td class="author-text"><a href="mailto:Postel@ISI.EDU">Postel, J.</a> and <a href="mailto:jkrey@isi.edu">J. Reynolds</a>, "<a href="ftp://ftp.isi.edu/in-notes/rfc2223.txt">Instructions to RFC Authors</a>", RFC 2223, October 1997 (<a href="ftp://ftp.isi.edu/in-notes/rfc2223.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2223.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2223.xml">XML</a>).</td></tr>
-<tr><td class="author-text" valign="top"><a name="RFC3667">[3]</a></td>
-<td class="author-text">Bradner, S., "<a href="ftp://ftp.isi.edu/in-notes/rfc3667.txt">IETF Rights in Contributions</a>", BCP 78, RFC 3667, February 2004.</td></tr>
+<td class="author-text"><a href="mailto:Postel@ISI.EDU">Postel, J.</a> and <a href="mailto:jkrey@isi.edu">J. Reynolds</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc2223.txt">Instructions to RFC Authors</a>,&rdquo; RFC&nbsp;2223, October&nbsp;1997 (<a href="ftp://ftp.isi.edu/in-notes/rfc2223.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2223.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2223.xml">XML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3978">[3]</a></td>
+<td class="author-text">Bradner, S., &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc3978.txt">IETF Rights in Contributions</a>,&rdquo; BCP&nbsp;78, RFC&nbsp;3978, March&nbsp;2005.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2026">[4]</a></td>
-<td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, "<a href="ftp://ftp.isi.edu/in-notes/rfc2026.txt">The Internet Standards Process -- Revision 3</a>", BCP 9, RFC 2026, October 1996.</td></tr>
-<tr><td class="author-text" valign="top"><a name="RFC2396">[5]</a></td>
-<td class="author-text"><a href="mailto:timbl@w3.org">Berners-Lee, T.</a>, <a href="mailto:fielding@ics.uci.edu">Fielding, R.</a> and <a href="mailto:masinter@parc.xerox.com">L. Masinter</a>, "<a href="ftp://ftp.isi.edu/in-notes/rfc2396.txt">Uniform Resource Identifiers (URI): Generic Syntax</a>", RFC 2396, August 1998 (<a href="ftp://ftp.isi.edu/in-notes/rfc2396.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2396.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2396.xml">XML</a>).</td></tr>
-<tr><td class="author-text" valign="top"><a name="W3C.REC-xslt-19991116">[6]</a></td>
-<td class="author-text">Clark, J., "<a href="http://www.w3.org/TR/1999/REC-xslt-19991116">XSL Transformations (XSLT) Version 1.0</a>", W3C REC REC-xslt-19991116, November 1999.</td></tr>
-<tr><td class="author-text" valign="top"><a name="RFC2629">[7]</a></td>
-<td class="author-text"><a href="mailto:mrose@not.invisible.net">Rose, M.</a>, "<a href="ftp://ftp.isi.edu/in-notes/rfc2629.txt">Writing I-Ds and RFCs using XML</a>", RFC 2629, June 1999 (<a href="ftp://ftp.isi.edu/in-notes/rfc2629.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2629.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2629.xml">XML</a>).</td></tr>
+<td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc2026.txt">The Internet Standards Process -- Revision 3</a>,&rdquo; BCP&nbsp;9, RFC&nbsp;2026, October&nbsp;1996.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3667">[5]</a></td>
+<td class="author-text">Bradner, S., &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc3667.txt">IETF Rights in Contributions</a>,&rdquo; RFC&nbsp;3667, February&nbsp;2004.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2396">[6]</a></td>
+<td class="author-text"><a href="mailto:timbl@w3.org">Berners-Lee, T.</a>, <a href="mailto:fielding@ics.uci.edu">Fielding, R.</a>, and <a href="mailto:masinter@parc.xerox.com">L. Masinter</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc2396.txt">Uniform Resource Identifiers (URI): Generic Syntax</a>,&rdquo; RFC&nbsp;2396, August&nbsp;1998 (<a href="ftp://ftp.isi.edu/in-notes/rfc2396.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2396.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2396.xml">XML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="W3C.REC-xslt-19991116">[7]</a></td>
+<td class="author-text">Clark, J., &ldquo;<a href="http://www.w3.org/TR/1999/REC-xslt-19991116">XSL Transformations (XSLT) Version 1.0</a>,&rdquo; W3C REC&nbsp;REC-xslt-19991116, November&nbsp;1999.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2629">[8]</a></td>
+<td class="author-text"><a href="mailto:mrose@not.invisible.net">Rose, M.</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc2629.txt">Writing I-Ds and RFCs using XML</a>,&rdquo; RFC&nbsp;2629, June&nbsp;1999 (<a href="ftp://ftp.isi.edu/in-notes/rfc2629.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2629.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2629.xml">XML</a>).</td></tr>
 </table>
 
 <a name="rfc.authors"></a><br /><hr />
@@ -2048,7 +2070,7 @@ systems.
 <td class="author-text">US</td></tr>
 <tr><td class="author" align="right">Phone:&nbsp;</td>
 <td class="author-text">+1 916 483 8878</td></tr>
-<tr><td class="author" align="right">EMail:&nbsp;</td>
+<tr><td class="author" align="right">Email:&nbsp;</td>
 <td class="author-text"><a href="mailto:mrose@dbc.mtview.ca.us">mrose@dbc.mtview.ca.us</a></td></tr>
 </table>
 <a name="rfc.index"></a><br /><hr />

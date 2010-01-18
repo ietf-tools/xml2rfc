@@ -1,6 +1,6 @@
 #!/bin/sh
 # the next line restarts using the correct interpreter \
-LC_ALL=C exec tclsh "$0" "$0" "$@"
+exec tclsh "$0" "$0" "$@"
 
 
 #
@@ -11,7 +11,17 @@ LC_ALL=C exec tclsh "$0" "$0" "$@"
 
 global prog prog_version
 set prog "xml2rfc"
-set prog_version "v1.28"
+set prog_version "v1.29"
+
+# "encoding system" is already set at this point and we want that
+# because we print warnings and errors to the terminal.
+# Now we want the C collation, month names, etc.
+foreach v {LC_ALL LC_ADDRESS LC_COLLATE LC_CTYPE LC_IDENTIFICATION
+           LC_MESSAGES LC_MEASUREMENT LC_MONETARY LC_NAME LC_NUMERIC
+           LC_PAPER LC_TELEPHONE LC_TIME LANG LANGUAGE LINGUAS} {
+    set env($v) C
+}
+
 
 #
 # here begins TclXML 1.1.1
@@ -46,11 +56,11 @@ set prog_version "v1.28"
 #
 # Copyright (c) 1997 ANU and CSIRO on behalf of the
 # participants in the CRC for Advanced Computational Systems ('ACSys').
-# 
-# ACSys makes this software and all associated data and documentation 
-# ('Software') available free of charge for any purpose.  You may make copies 
+#
+# ACSys makes this software and all associated data and documentation
+# ('Software') available free of charge for any purpose.  You may make copies
 # of the Software but you must include all of this notice on any copy.
-# 
+#
 # The Software was developed for research purposes and ACSys does not warrant
 # that it is error free or fit for any purpose.  ACSys disclaims any
 # liability for all claims, expenses, losses, damages and costs any user may
@@ -133,9 +143,7 @@ proc sgml::tokenise {sgml elemExpr elemSub args} {
     catch {upvar #0 $options(-internaldtdvariable) dtd}
     if {[regexp {<!DOCTYPE[^[<]+\[([^]]+)\]} $sgml discard dtd]} {
         set text ""
-        for {set n [numlines $dtd]} {$n > 1} {incr n -1} {
-            append text "\n"
-        }
+        append text [string repeat "\n" [num_eols $dtd]]
         regsub {(<!DOCTYPE[^[<]+)(\[[^]]+\])} $sgml "\\1$text\\&xml:intdtd;" sgml
     }
 
@@ -262,13 +270,18 @@ proc sgml::parseEvent {sgml args} {
             context {}
             stack {}
             line 0
+            lineo 0
+            linet 0
         }
     }
 
     foreach {tag close empty param text} $sgml {
 
-        # Keep track of lines in the input
+        # Keep track of lines (open, text, current/next) in the input
+        set ::xdv::lineno $state(line)
+        set state(lineo) $state(line)
         incr state(line) [regsub -all \n $param {} discard]
+        set state(linet) $state(line)
         incr state(line) [regsub -all \n $text {} discard]
 
         # If the current mode is cdata or comment then we must undo what the
@@ -412,9 +425,9 @@ proc sgml::parseEvent {sgml args} {
                     {\?xml} {
                         # XML Declaration
                         if {$state(haveXMLDecl)} {
-                            uplevel #0 $options(-errorcommand) "unexpected characters \"<$tag\" around line $state(line)"
+                            uplevel #0 $options(-errorcommand) "unexpected characters \"<$tag\" around line $state(lineo)"
                         } elseif {![regexp {\?$} $param]} {
-                            uplevel #0 $options(-errorcommand) "XML Declaration missing characters \"?>\" around line $state(line)"
+                            uplevel #0 $options(-errorcommand) "XML Declaration missing characters \"?>\" around line $state(linet)"
                         } else {
 
                             # Get the version number
@@ -425,7 +438,7 @@ proc sgml::parseEvent {sgml args} {
                                     uplevel #0 $options(-errorcommand) "document XML version \"$version\" is incompatible with XML version 1.0"
                                 }
                             } else {
-                                uplevel #0 $options(-errorcommand) "XML Declaration missing version information around line $state(line)"
+                                uplevel #0 $options(-errorcommand) "XML Declaration missing version information around line $state(lineo)"
                             }
 
                             # Get the encoding declaration
@@ -447,10 +460,13 @@ proc sgml::parseEvent {sgml args} {
 
                     {\?*} {
                         # Processing instruction
-                        if {![regsub {\?$} $param {} param]} {
-                            uplevel #0 $options(-errorcommand) "PI: expected '?' character around line $state(line)"
+                        if {   ![regsub {\?$} $param {} param]
+                            && !(   ![string compare $param ""]
+                                 && [regsub {\?$} $tag {} tag]
+                                 && [string compare $tag ""])} {
+                            uplevel #0 $options(-errorcommand) "PI: expected '?' character around line $state(linet)"
                         } else {
-                            uplevel #0 $options(-processinginstructioncommand) [list [string range $tag 1 end] [string trimleft $param]]
+                            uplevel #0 $options(-processinginstructioncommand) [list [string range $tag 1 end] $param]
                         }
                     }
 
@@ -478,10 +494,10 @@ proc sgml::parseEvent {sgml args} {
                                         if {[regexp ^[cl $Wsp]+"([cl ^"]*)"(.*) $param x systemlit param] || [regexp ^[cl $Wsp]+'([cl ^']*)'(.*) $param x systemlit param]} {
                                             set externalID [list PUBLIC $pubidlit $systemlit]
                                         } else {
-                                            uplevel #0 $options(-errorcommand) "syntax error: PUBLIC identifier not followed by system literal around line $state(line)"
+                                            uplevel #0 $options(-errorcommand) "syntax error: PUBLIC identifier not followed by system literal around line $state(lineo)"
                                         }
                                     } else {
-                                        uplevel #0 $options(-errorcommand) "syntax error: PUBLIC identifier not followed by literal around line $state(line)"
+                                        uplevel #0 $options(-errorcommand) "syntax error: PUBLIC identifier not followed by literal around line $state(lineo)"
                                     }
                                 }
                             }
@@ -553,14 +569,14 @@ proc sgml::parseEvent {sgml args} {
                         uplevel #0 $options(-processinginstructioncommand) [list $tag $param]
                     }
                     default {
-                        uplevel #0 $options(-errorcommand) [list "unknown processing instruction \"<$tag>\" around line $state(line)"]
+                        uplevel #0 $options(-errorcommand) [list "unknown processing instruction \"<$tag>\" around line $state(lineo)"]
                     }
                 }
             }
             *,1,* -
             *,0,/,/ {
                 # Syntax error
-                uplevel #0 $options(-errorcommand) [list [list syntax error: closed/empty tag: tag $tag param $param empty $empty close $close around line $state(line)]]
+                uplevel #0 $options(-errorcommand) [list [list syntax error: closed/empty tag: tag $tag param $param empty $empty close $close around line $state(lineo)]]
             }
         }
 
@@ -585,11 +601,11 @@ proc sgml::parseEvent {sgml args} {
                 # Restore protected special characters
                 regsub -all {\\([{}\\])} $text {\1} text
 #                uplevel #0 $options(-characterdatacommand) [list $text]
-                sgml::callback $state(line) \
+                sgml::callback $state(lineo) \
                       $options(-characterdatacommand) [list $text]
             }
         } elseif {[string length [string trim $text]]} {
-            uplevel #0 $options(-errorcommand) [list "unexpected text \"$text\" in document prolog around line $state(line)"]
+            uplevel #0 $options(-errorcommand) [list "unexpected text \"$text\" in document prolog around line $state(linet)"]
         }
 
     }
@@ -598,6 +614,8 @@ proc sgml::parseEvent {sgml args} {
     if {$options(-final) && [llength $state(stack)]} {
         eval $options(-errorcommand) [list [list element [lindex $state(stack) end] remains unclosed around line $state(line)]]
     }
+
+    set ::xdv::lineno -1
 
     return {}
 }
@@ -646,7 +664,7 @@ proc sgml::ParseEvent:ElementOpen {tag attr opts args} {
     # Parse attribute list into a key-value representation
     if {[string compare $options(-parseattributelistcommand) {}]} {
         if {[catch {uplevel #0 $options(-parseattributelistcommand) [list $attr]} attr]} {
-            uplevel #0 $options(-errorcommand) [list $attr around line $state(line)]
+            uplevel #0 $options(-errorcommand) [list $attr around line $state(lineo)]
             set attr {}
         }
     }
@@ -658,7 +676,7 @@ proc sgml::ParseEvent:ElementOpen {tag attr opts args} {
 
     # Invoke callback
 #    uplevel #0 $options(-elementstartcommand) [list $tag $attr] $empty
-    sgml::callback $state(line) \
+    sgml::callback $state(lineo) \
           $options(-elementstartcommand) [list $tag $attr] $empty
 
     return {}
@@ -688,7 +706,7 @@ proc sgml::ParseEvent:ElementClose {tag opts args} {
 
     # WF check
     if {[string compare $tag [lindex $state(stack) end]]} {
-        uplevel #0 $options(-errorcommand) [list "end tag \"$tag\" does not match open element \"[lindex $state(stack) end]\" around line $state(line)"]
+        uplevel #0 $options(-errorcommand) [list "end tag \"$tag\" does not match open element \"[lindex $state(stack) end]\" around line $state(lineo)"]
         return
     }
 
@@ -702,7 +720,7 @@ proc sgml::ParseEvent:ElementClose {tag opts args} {
 
     # Invoke callback
 #    uplevel #0 $options(-elementendcommand) [list $tag] $empty
-    sgml::callback $state(line) \
+    sgml::callback $state(lineo) \
           $options(-elementendcommand) [list $tag] $empty
 
     return {}
@@ -889,8 +907,8 @@ proc sgml::parseDTD {dtd args} {
 #                       Content model is element-only.
 #               {MIXED {element1 element2 ...}}
 #                       Content model is mixed (PCDATA and elements).
-#                       The second element of the list contains the 
-#                       elements that may occur.  #PCDATA is assumed 
+#                       The second element of the list contains the
+#                       elements that may occur.  #PCDATA is assumed
 #                       (ie. the list is normalised).
 #
 # Arguments:
@@ -1073,7 +1091,7 @@ proc sgml::CModelSTcp {state cp rep cs} {
             return -code error "syntax error"
         }
     }
-    
+
 }
 
 # sgml::CModelSTcsSet --
@@ -1259,7 +1277,7 @@ proc sgml::CModelMakeTransitionTable {state st} {
             }
             set Dtran($T,$a) $U
         }
-        
+
     }
 
     return [list [array get Dtran] [array get sym2pos] $accepting]
@@ -1708,24 +1726,24 @@ proc sgml::dbgputs {where text} {
 #
 # Copyright (c) 1998,1999 Zveno Pty Ltd
 # http://www.zveno.com/
-# 
+#
 # Zveno makes this software and all associated data and documentation
 # ('Software') available free of charge for non-commercial purposes only. You
 # may make copies of the Software but you must include all of this notice on
 # any copy.
-# 
+#
 # The Software was developed for research purposes and Zveno does not warrant
 # that it is error free or fit for any purpose.  Zveno disclaims any
 # liability for all claims, expenses, losses, damages and costs any user may
 # incur as a result of using, copying or modifying the Software.
 #
 # Copyright (c) 1997 Australian National University (ANU).
-# 
+#
 # ANU makes this software and all associated data and documentation
 # ('Software') available free of charge for non-commercial purposes only. You
 # may make copies of the Software but you must include all of this notice on
 # any copy.
-# 
+#
 # The Software was developed for research purposes and ANU does not warrant
 # that it is error free or fit for any purpose.  ANU disclaims any
 # liability for all claims, expenses, losses, damages and costs any user may
@@ -1984,7 +2002,7 @@ proc xml::ParseEmpty {tag attr e} {
 #       attrs   attribute string given in a tag
 #
 # Results:
-#       Returns a Tcl list representing the name-value pairs in the 
+#       Returns a Tcl list representing the name-value pairs in the
 #       attribute string
 
 proc xml::ParseAttrs attrs {
@@ -2119,7 +2137,7 @@ proc xml::OLDParseAttrs {attrs} {
 
 # xml::ParseAttrs:Deprotect --
 #
-#       Reverse map Tcl special characters previously protected 
+#       Reverse map Tcl special characters previously protected
 #
 # Arguments:
 #       attrs   attribute list
@@ -2217,7 +2235,7 @@ proc xml::parseDTD {dtd args} {
 if {[catch { package require textutil }]} {
 namespace eval textutil {
     namespace export strRepeat
-    
+
     variable HaveStrRepeat [ expr {![ catch { string repeat a 1 } ]} ]
 
     if {0} {
@@ -2284,13 +2302,13 @@ namespace eval ::textutil {
         variable Length   72
         variable FullLine 0
         variable StrictLength 0
-        
+
         namespace export adjust
 
         # This will be redefined later. We need it just to let
         # a chance for the next import subcommand to work
         #
-        proc adjust { text args } { }   
+        proc adjust { text args } { }
 
     }
 
@@ -2302,14 +2320,14 @@ namespace eval ::textutil {
 #########################################################################
 
 proc ::textutil::adjust::adjust { text args } {
-            
-    if { [ string length [ string trim $text ] ] == 0 } then { 
+
+    if { [ string length [ string trim $text ] ] == 0 } then {
         return ""
     }
-    
+
     Configure $args
     Adjust text newtext
-    
+
     return $newtext
 }
 
@@ -2340,7 +2358,7 @@ proc ::textutil::adjust::Configure { args } {
                     default {
                         error "bad value \"$value\": should be center, left, plain or right"
                     }
-                }   
+                }
             }
             -length {
                 if { ![ StringIsInteger $value ] } then {
@@ -2405,33 +2423,33 @@ proc ::textutil::adjust::Adjust { varOrigName varNewName } {
         # Limit the length of a line to $Length. If any single
         # word is long than $Length, then split the word into multiple
         # words.
- 
+
         set i 0
         foreach tmpWord $ltext {
             if { [ string length $tmpWord ] > $Length } then {
- 
+
                 # Since the word is longer than the line length,
                 # remove the word from the list of words.  Then
                 # we will insert several words that are less than
                 # or equal to the line length in place of this word.
- 
+
                 set ltext [ lreplace $ltext $i $i ]
                 incr i -1
                 set j 0
- 
+
                 # Insert a series of shorter words in place of the
                 # one word that was too long.
- 
+
                 while { $j < [ string length $tmpWord ] } {
- 
+
                     # Calculate the end of the string range for this word.
- 
+
                     if { [ expr { [string length $tmpWord ] - $j } ] > $Length } then {
                         set end [ expr { $j + $Length - 1} ]
                     } else {
                         set end [ string length $tmpWord ]
                     }
- 
+
                     set ltext [ linsert $ltext [ expr {$i + 1} ] [ string range $tmpWord $j $end ] ]
                     incr i
                     incr j [ expr { $end - $j + 1 } ]
@@ -2475,7 +2493,7 @@ proc ::textutil::adjust::Adjust { varOrigName varNewName } {
         append text "\n"
     }
     append text [ Justification $line end words ]
-    
+
     return $text
 }
 
@@ -2510,7 +2528,7 @@ proc ::textutil::adjust::Justification { line index arrayName } {
     # For a left justification, nothing to do, but to
     # add some spaces at the end of the line if requested
     #
-        
+
     if { "$justify" == "left" } then {
         set jus ""
         if { $FullLine } then {
@@ -2630,14 +2648,15 @@ proc xml2rfc {input {output ""} {remote ""}} {
     global passmax
     global errorP
     global ifile mode ofile
-    global stdout
+    global out_fd
     global remoteP
 
     if {![string compare [file extension $input] ""]} {
         append input .xml
     }
 
-    set stdin [open $input { RDONLY }]
+    set in_fd [open $input { RDONLY }]
+    catch { fconfigure $in_fd -encoding binary }
     set inputD [file dirname [set ifile $input]]
 
     if {![string compare $output ""]} {
@@ -2666,18 +2685,19 @@ proc xml2rfc {input {output ""} {remote ""}} {
         txt  {}
 
         xml {
-            set stdout [open $output { WRONLY CREAT TRUNC }]
+            set out_fd [open $output { WRONLY CREAT TRUNC }]
+            catch { fconfigure $out_fd -encoding utf-8 }
 
-            puts -nonewline $stdout [prexml [read $stdin] $inputD]
+            puts -nonewline $out_fd [prexml [read $in_fd]]
 
-            catch { close $stdout }
-            catch { close $stdin }
+            catch { close $out_fd }
+            catch { close $in_fd }
 
             return
         }
 
         default {
-            catch { close $stdin }
+            catch { close $in_fd }
             error "unsupported output type: $mode"
         }
     }
@@ -2704,16 +2724,17 @@ proc xml2rfc {input {output ""} {remote ""}} {
                         -reportempty                  0
         }
 
-        set data [prexml [read $stdin] $inputD $input]
+        set data [prexml [read $in_fd]]
 
-        catch { close $stdin }
+        catch { close $in_fd }
 
         set errorP 0
         set passmax 2
-        set stdout ""
+        set out_fd ""
         for {set passno 1} {$passno <= $passmax} {incr passno} {
             if {$passno == 2} {
-                set stdout [open $output { WRONLY CREAT TRUNC }]
+                set out_fd [open $output { WRONLY CREAT TRUNC }]
+                catch { fconfigure $out_fd -encoding utf-8 }
             }
             pass start
             $parser parse $data
@@ -2726,7 +2747,7 @@ proc xml2rfc {input {output ""} {remote ""}} {
     set ecode $errorCode
     set einfo $errorInfo
 
-    catch { close $stdout }
+    catch { close $out_fd }
 
     if {$code == 1} {
         set result [around2fl $result]
@@ -2735,13 +2756,18 @@ proc xml2rfc {input {output ""} {remote ""}} {
             global stack
             global guiP
 
-            if {[llength $stack] > 0} {
-                set text "Context: "
-                foreach frame $stack {
+            if {[set i [llength $stack]] > 0} {
+                set text \
+  "Context (format:  \"file_basename:line_in_file:#elem_num:<elem ...>\"):"
+                while {$i > 0} {
+                    set frame [lindex $stack [incr i -1]]
                     catch { unset attrs }
                     array set attrs [list av ""]
-                    array set attrs [lrange $frame 1 end] 
-                    append text "\n    <[lindex $frame 0]"
+                    array set attrs [lrange $frame 1 end]
+                    append text "\n    "
+                    append text [linefile::get_file $attrs(fnum) 1]:
+                    append text $attrs(line):#$attrs(elemN):
+                    append text "<[lindex $frame 0]"
                     foreach {k v} $attrs(av) {
                         regsub -all {"} $v {\&quot;} v
                         append text " $k=\"$v\""
@@ -2810,30 +2836,32 @@ proc xml2ref {input output {formats {}} {item ""}} {
 
     array set ref $result
 
-    set stdout [open $output { WRONLY CREAT TRUNC }]
+    set out_fd [open $output { WRONLY CREAT TRUNC }]
+    catch { fconfigure $out_fd -encoding utf-8 }
 
     set code [catch {
-        puts -nonewline $stdout $ref(body)
-        flush $stdout
+        puts -nonewline $out_fd $ref(body)
+        flush $out_fd
     } result]
     set ecode $errorCode
     set einfo $errorInfo
 
-    catch { close $stdout }
+    catch { close $out_fd }
 
     if {($code == 0) \
             && ([string compare $item ""]) \
             && ([string compare $ref(info) ""])} {
-        set stdout [open $item { WRONLY CREAT TRUNC }]
+        set out_fd [open $item { WRONLY CREAT TRUNC }]
+        catch { fconfigure $out_fd -encoding utf-8 }
 
         set code [catch {
-            puts -nonewline $stdout $ref(info)
-            flush $stdout
+            puts -nonewline $out_fd $ref(info)
+            flush $out_fd
         } result]
         set ecode $errorCode
         set einfo $errorInfo
 
-        catch { close $stdout }
+        catch { close $out_fd }
 
 #       catch { file mtime $item $ref(mtime) }
     }
@@ -2841,13 +2869,21 @@ proc xml2ref {input output {formats {}} {item ""}} {
     return -code $code -errorinfo $einfo -errorcode $ecode $result
 }
 
-proc prexml {stream inputD {inputF ""}} {
-    global env tcl_platform
-    global extentities
-    global fldata
+global httpP
+set httpP 0
 
-    if {[catch { set path $env(XML_LIBRARY) }]} {
-        set path [list $inputD]
+global xml_library_path
+set xml_library_path {.}
+
+proc prexml {stream} {
+    global env tcl_platform
+    global extentities extfiles exturis
+    global httpP
+    global xml_library_path
+    global ifile
+
+    if {[catch { set xml_library_path $env(XML_LIBRARY) }]} {
+        set xml_library_path [list [file dirname $ifile]]
     }
     switch -- $tcl_platform(platform) {
         windows {
@@ -2858,11 +2894,15 @@ proc prexml {stream inputD {inputF ""}} {
             set c ":"
         }
     }
-    set path [split $path $c]
+    set xml_library_path [split $xml_library_path $c]
 
-    set fldata [list [list $inputF  1 [numlines $stream]]]
+    set stream [prexml_cdata $stream]
+    linefile::new_file $ifile
 
+    array set intentities {}
     array set extentities {}
+    array set extfiles {}
+    array set exturis {}
 
     if {[catch { package require http 2 }]} {
         set httpP 0
@@ -2870,9 +2910,43 @@ proc prexml {stream inputD {inputF ""}} {
         set httpP 1
     }
 
-    return [prexml_entity [prexml_include [prexml_cdata $stream] \
-                                          $inputD $inputF $path] \
-                          $path $httpP]
+    if {   [regexp -- {^<\?xml[ \t\r\n]} $stream]
+        && ([set plen [string first "?>" $stream]] >= 0)} {
+
+        set XMLDecl [string range $stream 0 [incr plen]]
+        set stream [string range $stream [incr plen] end]
+    } else {
+        error "input file \"$ifile\" does not begin with an XML declaration"
+    }
+
+    set stream [prexml_convert $XMLDecl $stream $ifile]
+    # Now that we are in UTF-8.
+    set stream [str_norm_eol $stream \
+                [expr   [regexp -- {[ \t\r\n]version="1\.[1-9][0-9]*"} $XMLDecl] \
+                     || [regexp -- {[ \t\r\n]version='1\.[1-9][0-9]*'} $XMLDecl]]]
+
+    linefile::init
+
+    set n [num_eols $XMLDecl]
+    set XMLDecl "<?xml version=\"1.0\" encoding=\"UTF-8\"[string repeat \n $n]?>"
+
+    return $XMLDecl[prexml_stream $stream $ifile [expr 1 + $n]]
+}
+
+proc prexml_convert {XMLDecl stream file} {
+    if {   [regexp -- {[ \t\r\n]encoding="([A-Za-z][A-Za-z0-9._-]*)"} $XMLDecl x charset]
+        || [regexp -- {[ \t\r\n]encoding='([A-Za-z][A-Za-z0-9._-]*)'} $XMLDecl x charset]} {
+            if {![string compare [set enc [cs2enc $charset]] ""]} {
+                set enc ascii
+                unexpected warning \
+  "unknown encoding/charset \"$charset\" in XML declaration of file \"$file\"; trying US-ASCII"
+            }
+    } else {
+        set enc utf-8
+    }
+
+    catch { set stream [encoding convertfrom $enc $stream] }
+    return $stream
 }
 
 proc prexml_cdata {stream} {
@@ -2898,298 +2972,569 @@ proc prexml_cdata {stream} {
     return $data
 }
 
-proc prexml_include {stream inputD inputF path} {
-    global fldata
+proc prexml_stream {stream myfile {myline 1} {no_initial_pi 0}} {
+    global extentities intentities
 
-    set litN [string length [set litS "<?rfc include="]]
-    set litO [string length [set litT "?>"]]
-
-    set data ""
-    set lineno 1
-    while {[set x [string first $litS $stream]] >= 0} {
-        incr lineno [numlines [set initial \
-                                   [string range $stream 0 [expr $x-1]]]]
-        append data $initial
-        set stream [string range $stream [expr $x+$litN] end]
-        if {[set x [string first $litT $stream]] < 0} {
-            error "missing close to <?rfc include="
-        }
-        set y [string trim [string range $stream 0 [expr $x-1]]]
-        if {[set quoteP [string first "'" $y]]} {
-            regsub -- {^"([^"]*)"$} $y {\1} y
-        } else {
-            regsub -- {^'([^']*)'$} $y {\1} y
-        }
-        if {(0) && (![regexp -nocase -- {^[a-z0-9.@-]+$} $y])} {
-            error "invalid include $y"
-        }
-        set foundP 0
-        foreach dir $path {
-            if {(![file exists [set file [file join $dir $y]]]) \
-                    && (![file exists [set file [file join $dir $y.xml]]])} {
-                continue
-            }
-            set fd [open $file { RDONLY }]
-            set include [prexml_cdata [read $fd]]
-            catch { close $fd }
-            set foundP 1
-            break
-        }
-        if {!$foundP} {
-            error "unable to find external file $y.xml"
-        }
-
-        set body [string trimleft $include]
-        if {([string first "<?XML " [string toupper $body]] == 0) 
-                && ([set len [string first "?>" $body]] >= 0)} {
-            set start [expr [string length $include]-[string length $body]]
-            incr len
-            set include [streplace $include $start [expr $start+$len] \
-                                   [format " %*.*s" $len $len ""]]
-
-            set body [string trimleft $include]
-        }
-        if {([string first "<!DOCTYPE " [string toupper $body]] == 0) 
-                && ([set len [string first ">" $body]] >= 0)} {
-            set start [expr [string length $include]-[string length $body]]
-            set include [streplace $include $start [expr $start+$len] \
-                                   [format " %*.*s" $len $len ""]]
-        }
-
-        set len [numlines $include]
-        set flnew {}
-        foreach fldatum $fldata {
-            set end [lindex $fldatum 2]
-            if {$end >= $lineno} {
-                set fldatum [lreplace $fldatum 2 2 [expr $end+$len]]
-            }
-            lappend flnew $fldatum
-        }
-        set fldata $flnew
-        lappend fldata [list $file $lineno $len]
-
-        set stream $include[string range $stream [expr $x+$litO] end]
+    if {[info level] > 32} {
+        error "recursion detected in XML preprocessing of included files and entities"
     }
-    append data $stream
 
-    return $data
-}
+    # Some useful regexp literals.
+    set wsp  {[ \t\r\n]}
+    set dqev \"(\[^\"\]*)\"
+    set sqev \'(\[^\'\]*)\'
+    set nme  {([A-Za-z_:][A-Za-z0-9._:-]*)}
+    set rem  (.*)
 
-proc prexml_entity {stream path httpP} {
-    global extentities
-    global fldata
+    if {$no_initial_pi} {
+        linefile::set_file $myfile
+        set data ""
+    } else {
+        set data [linefile::make_pi $myfile $myline 1]
+    }
 
-    set litN [string length [set litS "<!ENTITY "]]
-    set litO [string length [set litT ">"]]
+    # We don't modify stream but scan across it and build data.
 
-    set data ""
-    while {[set x [string first $litS $stream]] >= 0} {
-        append data [string range $stream 0 [expr $x-1]]
-        set rest [string range $stream $x end]
-        if {[set y [string first $litT $rest]] < 0} {
-            error "missing close to <!ENTITY"
+    for {
+        # Loop Initialization.
+        set pending_pi 0
+        set new_data ""
+        set new_lines 0
+        set blank_lines 0
+        set includes ""
+        set start 0
+
+        # Loop test.
+    } {[regexp -indices -start $start -- {<\?rfc|<!ENTITY|&} $stream x]} {
+
+        # Loop continuation.
+        prexml_flush_new
+        prexml_flush_includes
+    } {
+        # Loop body.
+        set a [lindex $x 0]
+        set b [lindex $x 1]
+        set m [string range $stream $a $b]
+        if {$a > $start} {
+            prexml_flush_blank
+            prexml_flush_pi
+            set initial [string range $stream $start [expr $a - 1]]
+            incr myline [num_eols $initial]
+            append data $initial
+            unset initial
         }
-        set rest [string range $rest 0 [expr $y+$litO-1]]
-        for {set n [numlines $rest]} {$n > 1} {incr n -1} {
-            append data "\n"
-        }
-        set stream [string trimleft [string range $stream [expr $x+$litN] end]]
-        if {[string first "%" $stream] == 0} {
-            set stream [string trimleft [string range $stream 1 end]]
-        }
-        if {[set x [string first $litT $stream]] < 0} {
-            error "missing close to <!ENTITY"
-        }
-        regexp ^[sgml::cl $sgml::Wsp]*($sgml::name)(.*) \
-               [string range $stream 0 [expr $x-1]] z entity y
-        set stream [string range $stream [expr $x+$litO] end]
-        if {![regexp -nocase ^[sgml::cl $sgml::Wsp]*(SYSTEM|PUBLIC)(.*) \
-                    $y z mode y]} {
-            error "expecting <!ENTITY $entity SYSTEM or PUBLIC"
-        }
-        if {(![regexp ^[sgml::cl $sgml::Wsp]+"([sgml::cl ^"]*)"(.*) \
-                      $y z arg1 y]) \
-                && (![regexp ^[sgml::cl $sgml::Wsp]+'([sgml::cl ^']*)'(.*) \
-                             $y z arg1 y])} {
-            error "expecting literal after <!ENTITY $entity $mode"
-        }
-        set mode [string toupper $mode]
-        if {(![string compare $mode SYSTEM])
-                && ([string first "http://" $arg1] == 0)} {
-            set y " \"$arg1\""
-        }
-        switch -- $mode {
-            SYSTEM {
-                set foundP 0
-                foreach dir $path {
-                    if {(![file exists [set file [file join $dir $arg1]]]) \
-                            && (![file exists [set file [file join $dir \
-                                                              $arg1.xml]]])} {
-                        continue
+        incr b
+        switch -- $m {
+            <?rfc {
+                if {![regexp -indices -start $b -- {\?>} $stream x]} {
+                    error \
+  "missing close to $m around input line $myline in \"$myfile\""
+                }
+                set c [lindex $x 0]
+                set pi [string range $stream $b [expr $c - 1]]
+                incr new_lines [num_eols $pi]
+                set start [incr c 2]
+                # We'll normally append new_data later,
+                # after $pi has been tweaked.
+                if {![regexp -- ^$wsp $pi]} {
+                    append new_data $m $pi ?>
+                    continue
+                }
+                prexml_flush_pi
+                set kept_pi_dirs 0
+                set pil [string length $pi]
+                set pi2 $pi
+                while {1} {
+                    set pi2s [expr $pil - [set pi2l [string length $pi2]]]
+                    set l [pi_rfc_next $pi2]
+                    set key [lindex $l 0]
+                    set val [lindex $l 1]
+                    set pi2 [lindex $l 2]
+                    if {![string compare $key ""]} {
+                        global mode
+
+                        # We may be able to provide a better message later.
+                        if {   [string compare $val ""]
+                            && ![string compare $mode xml]} {
+                            error \
+  "stopped preprocessing faulty rfc-PI at \"$val\" around input line $myline in \"$myfile\""
+                        }
+                        # This makes sure the faulty rfc-PI is kept for later stages.
+                        incr kept_pi_dirs
+                        break
                     }
-                    set fd [open $file { RDONLY }]
-                    set include [prexml_cdata [read $fd]]
-                    catch { close $fd }
-                    set foundP 1
-                    break
+                    switch -- $key {
+                        include {
+                            set pi [streplace $pi $pi2s [expr $pi2l - [string length $pi2] + 1] "" 3]
+                            set l [prexml_find_file $val]
+                            set file    [lindex $l 0]
+                            set include [lindex $l 1]
+
+                            set include [prexml_tweak_include $include $file]
+                            if {[string compare $include ""]} {
+                                append includes [prexml_stream $include $file 1]
+                            }
+                        }
+
+                        linefile {
+                            incr kept_pi_dirs
+                            if {![regexp -- {^([0-9]+)(:(.*))?$} \
+                                         $val a b c d]} {
+                                # Type of message must not attempt to
+                                # supply its own line information which
+                                # is not set up at this point.
+                                unexpected warning \
+  "ignoring invalid rfc-PI linefile-directive value \"$val\" around input line $myline in \"$myfile\""
+                                continue
+                            }
+                            prexml_flush_blank
+                            if {[string length $c]} {
+                                # May be empty.  User's choice!
+                                set new_myfile $d
+                            }
+                            set new_myline $b
+                        }
+
+                        default {
+                            incr kept_pi_dirs
+                        }
+                    }
                 }
-                if {!$foundP} {
-                    error "unable to find external file $arg1"
+
+                # Do this after processing the whole PI so that
+                # intermixed error or warning messages are not affected.
+                if {[info exists new_myline]} {
+                    if {[info exists new_myfile]} {
+                        set myfile $new_myfile
+                        unset new_myfile
+                    }
+                    set myline $new_myline
+                    unset new_myline
+                    set new_lines 0
+                }
+
+                if {$kept_pi_dirs} {
+                    prexml_flush_blank
+                    append new_data $m $pi ?>
+                } else {
+                    incr blank_lines $new_lines
+                    set new_lines 0
                 }
             }
 
-            PUBLIC {
-                if {(![regexp ^[sgml::cl $sgml::Wsp]+"([sgml::cl ^"]*)"(.*) \
-                              $y z arg2 y]) \
-                        && (![regexp ^[sgml::cl $sgml::Wsp]+'([sgml::cl ^']*)'(.*) \
-                                     $y z arg2 y])} {
-                    error "expecting literal after <!ENTITY $entity $mode"
+            <!ENTITY {
+                if {![regexp -indices -start $b -- {>} $stream x]} {
+                    error \
+  "missing close to $m around input line $myline in \"$myfile\""
                 }
-                if {!$httpP} {
-                    error "unable to find http package"
+                set c [lindex $x 0]
+                set entdecl [string range $stream $b [expr $c - 1]]
+                set n [num_eols $entdecl]
+                set start [incr c]
+                if {![regexp -- ^$wsp $entdecl]} {
+                    append new_data $m $entdecl >
+                    incr new_lines $n
+                    continue
                 }
-                set code [http::code [set httpT \
-                                          [http::geturl [set file $arg2]]]]
-                if {![string compare [lindex $code 1] 404]} {
-                    set code [http::code [set httpT \
-                                          [http::geturl [set file $file.xml]]]]
+                if {$n} {
+                    prexml_flush_pi
                 }
-                if {[string compare [lindex $code 1] 200]} {
-                    error "$file: $code"
-                }
-                set include [prexml_cdata [http::data $httpT]]
-                http::cleanup $httpT
-            }
-        }
-        set body [string trimleft $include]
-        if {([string first "<?XML " [string toupper $body]] == 0) 
-                && ([set len [string first "?>" $body]] >= 0)} {
-            set start [expr [string length $include]-[string length $body]]
-            incr len
-            set include [streplace $include $start [expr $start+$len] \
-                                   [format " %*.*s" $len $len ""]]
+                # These are _new_ blank lines.
+                incr blank_lines $n
+                set entdecl [string trimleft $entdecl]
 
-            set body [string trimleft $include]
-        }
-        if {([string first "<!DOCTYPE " [string toupper $body]] == 0) 
-                && ([set len [string first ">" $body]] >= 0)} {
-            if {([set len2 [string first {[} $body]] < $len) \
-                    && ([set len3 [string first {]} $body]] > $len)} {
-                set start [expr [string length $include]-[string length $body]]
-                set include [streplace $include $start \
-                                      [expr $start+$len2] \
-                                      [format " %*.*s" $len2 $len2 ""]]
-                set start [string first {]} $include]
-                set len [string first ">" \
-                                 [string range $include $start end]]
-                set include [streplace $include $start \
-                                      [expr $start+$len] \
-                                      [format " %*.*s" $len $len ""]]
-            } else {
-                set start [expr [string length $include]-[string length $body]]
-                set include [streplace $include $start \
-                                      [expr $start+$len] \
-                                      [format " %*.*s" $len $len ""]]
+                if {[string first "%" $entdecl] == 0} {
+                    set entdecl [string trimleft [string range $entdecl 1 end]]
+                }
+                if {![regexp -- ^$nme$rem $entdecl x entity entdef]} {
+                    error \
+  "expecting $m entity-name ... around input line $myline in \"$myfile\""
+                }
+
+                if {   [regexp -- ^$wsp+$dqev$rem $entdef x arg1 y]
+                    || [regexp -- ^$wsp+$sqev$rem $entdef x arg1 y]} {
+                    set file $myfile
+                    set include [prexml_cdata $arg1]
+                    set line [expr $myline + $new_lines + $blank_lines \
+                                   - [num_eols $include$y]]
+                    set intentities($entity) [prexml_prep_entity]
+                    continue
+                }
+
+                if {![regexp -nocase -- \
+                             ^$wsp*(SYSTEM|PUBLIC)$rem \
+                             $entdef x idtype entid]} {
+                    error \
+  "expecting $m $entity SYSTEM, PUBLIC, 'def', or \"def\" around input line $myline in \"$myfile\""
+                }
+                if {   ![regexp -- ^$wsp+$dqev$rem $entid x arg1 arg2]
+                    && ![regexp -- ^$wsp+$sqev$rem $entid x arg1 arg2]} {
+                    error \
+  "expecting literal after $m $entity $idtype around input line $myline in \"$myfile\""
+                }
+                set idtype [string toupper $idtype]
+                set convert_file ""
+                switch -- $idtype {
+                    SYSTEM {
+                        if {[string first "http://" $arg1] == 0} {
+                            set l [prexml_find_uri $arg1]
+                        } else {
+                            set l [prexml_find_file $arg1]
+                            set convert_file [lindex $l 0]
+                        }
+                    }
+
+                    PUBLIC {
+                        if {   ![regexp -- ^$wsp+$dqev $arg2 z arg2]
+                            && ![regexp -- ^$wsp+$sqev $arg2 z arg2]} {
+                            error \
+  "expecting literal after $m $entity $idtype around input line $myline in \"$myfile\""
+                        }
+                        set l [prexml_find_uri $arg2]
+                    }
+                }
+                set file    [lindex $l 0]
+                set include [lindex $l 1]
+                set include [prexml_tweak_include $include $convert_file]
+                set line 1
+                set extentities($entity) [prexml_prep_entity]
+            }
+
+            & {
+                set start $b
+                if {![regexp -indices -start $b -- {;} $stream x]} {
+                    append new_data &
+                    continue
+                }
+                set c [lindex $x 0]
+                set entity [string trim [string range $stream $b [expr $c - 1]]]
+                if {[info exists intentities($entity)]} {
+                    set l $intentities($entity)
+                } elseif {[info exists extentities($entity)]} {
+                    set l $extentities($entity)
+                } else {
+                    append new_data &
+                    continue
+                }
+                set include [lindex $l 2]
+                if {[string compare $include ""]} {
+                    append includes [linefile::make_pi [lindex $l 0] [lindex $l 1]]
+                    append includes $include
+                    linefile::set_file [lindex $l 3]
+                }
+                set start [incr c]
             }
         }
-        set extentities($entity) [list $file $include]
     }
-    append data $stream
 
-    set stream $data
-    
-    set litN [string length [set litS "&"]]
-    set litO [string length [set litT ";"]]
-
-    set data ""
-    set didP 0
-    set lineno 1
-    while {[set x [string first $litS $stream]] >= 0} {
-        incr lineno [numlines [set initial \
-                                   [string range $stream 0 [expr $x-1]]]]
-        append data $initial
-        set stream [string range $stream [expr $x+$litN] end]
-        if {[set x [string first $litT $stream]] < 0} {
-            append data $litS
-            continue
-        }
-        set y [string trim [string range $stream 0 [expr $x-1]]]
-        if {![info exists extentities($y)]} {
-            append data $litS
-            continue
-        }
-        set didP 1
-
-        set file [lindex $extentities($y) 0]
-        set include [lindex $extentities($y) 1]
-
-        set len [numlines $include]
-        set flnew {}
-        foreach fldatum $fldata {
-            set end [lindex $fldatum 2]
-            if {$end >= $lineno} {
-                set fldatum [lreplace $fldatum 2 2 [expr $end+$len]]
-            }
-            lappend flnew $fldatum
-        }
-        set fldata $flnew
-        lappend fldata [list $file $lineno $len]
-
-        set stream $include[string range $stream [expr $x+$litO] end]
-    }
-    append data $stream
-
-    if {$didP} {
-        set data [prexml_entity $data $path $httpP]
+    prexml_flush_blank
+    if {$start < [string length $stream]} {
+        prexml_flush_pi
+        append data [string range $stream $start end]
     }
 
     return $data
 }
 
-proc numlines {text} {
-    set n [llength [split $text "\n"]]
-    if {![string compare [string range $text end end] "\n"]} {
-        incr n -1
+# These uplevel procs are all meant for use by prexml_stream.
+
+proc prexml_flush_blank {} {
+    uplevel 1 {
+        if {$blank_lines} {
+            incr myline $blank_lines
+            append data <!-- [string repeat "\n" $blank_lines] -->
+            set blank_lines 0
+        }
+    }
+}
+
+proc prexml_flush_new {} {
+    uplevel 1 {
+        if {[string compare $new_data ""]} {
+            prexml_flush_blank
+            prexml_flush_pi
+            incr myline $new_lines
+            append data $new_data
+            set new_data ""
+            set new_lines 0
+        }
+    }
+}
+
+proc prexml_flush_pi {} {
+    uplevel 1 {
+        if {$pending_pi} {
+            prexml_flush_blank
+            append data [linefile::make_pi $myfile $myline]
+            set pending_pi 0
+        }
+    }
+}
+
+proc prexml_flush_includes {} {
+    uplevel 1 {
+        if {[string compare $includes ""]} {
+            prexml_flush_blank
+            append data $includes
+            set includes ""
+            set pending_pi 1
+        }
+    }
+}
+
+proc prexml_prep_entity {} {
+    uplevel 1 {
+        set saved_file [linefile::get_file]
+        if {[string compare $include ""]} {
+            set include [prexml_stream $include $file $line 1]
+            set end_file [linefile::get_file]
+        } else {
+            set end_file $myfile
+        }
+        linefile::set_file $saved_file
+        return [list $file $line $include $end_file]
+    }
+}
+
+# Back to regular, non-uplevel, support procs for prexml_stream.
+
+proc prexml_find_file {f} {
+    global extfiles
+    global xml_library_path
+
+    if {[info exists extfiles($f)]} {
+        return $extfiles($f)
     }
 
-    return $n
+    set foundP 0
+    foreach dir $xml_library_path {
+        if {   ![file exists [set file [file join $dir [set fx $f]]]]
+            && ![file exists [set file [file join $dir [set fx $f.xml]]]]} {
+            continue
+        }
+        set fd [open $file { RDONLY }]
+        catch { fconfigure $fd -encoding binary }
+        set content [prexml_cdata [read $fd]]
+        catch { close $fd }
+        set foundP 1
+        break
+    }
+    if {!$foundP} {
+        error "unable to find external file \"$f\" or \"$f.xml\""
+    }
+
+    linefile::new_file $fx
+
+    return [set extfiles($f) [list $fx $content]]
+}
+
+proc prexml_find_uri {u} {
+    global exturis
+    global httpP
+
+    if {[info exists exturis($u)]} {
+        return $exturis($u)
+    }
+
+    if {!$httpP} {
+        error "unable to find http package"
+    }
+    set code [http::code [set httpT [http::geturl [set file $u]]]]
+    if {![string compare [lindex $code 1] 404]} {
+        set code [http::code [set httpT [http::geturl [set file $file.xml]]]]
+    }
+    if {[string compare [lindex $code 1] 200]} {
+        error "$file: $code"
+    }
+    set content [prexml_cdata [http::data $httpT]]
+    http::cleanup $httpT
+
+    linefile::new_file $file
+
+    return [set exturis($u) [list $file $content]]
+}
+
+proc prexml_tweak_include {include {convert_file ""}} {
+    set XMLDecl ""
+    set body [string trimleft $include]
+    if {   [regexp -nocase -- {^<\?xml[ \t\r\n]} $body]
+        && [set len [string first "?>" $body]] >= 0} {
+
+        set start [expr [string length $include] - [string length $body]]
+        set end [expr $start + $len + 1]
+        set XMLDecl [string range $include $start $end]
+        set len [string length $include]
+        set include [streplace $include $start $end "" 2]
+
+        set start [expr $end + 1 + [string length $include] - $len]
+        set body [string trimleft [string range $include $start end]]
+    }
+    if {[string compare $convert_file ""]} {
+        set body [prexml_convert $XMLDecl $body $convert_file]
+    }
+    # Now that we are in UTF-8.
+    set body [str_norm_eol $body \
+                [expr   [regexp -- {[ \t\r\n]version="1\.[1-9][0-9]*"} $XMLDecl] \
+                     || [regexp -- {[ \t\r\n]version='1\.[1-9][0-9]*'} $XMLDecl]]]
+    if {   [regexp -nocase -- {^<!DOCTYPE[ \t\r\n]} $body]
+        && [set len [string first ">" $body]] >= 0} {
+
+        if {   [set len2 [string first {[} $body]] < $len
+            && [string first {]} $body] > $len} {
+
+            set start [expr [string length $include] - [string length $body]]
+            set include [streplace $include $start [expr $start + $len2] "" 2]
+
+            set start [string first {]} $include]
+            set len [string first ">" [string range $include $start end]]
+            set include [streplace $include $start [expr $start + $len] "" 2]
+        } else {
+            set start [expr [string length $include] - [string length $body]]
+            set end [expr $start + $len]
+            set include [streplace $include $start $end "" 2]
+        }
+    }
+
+    return $include
+}
+
+
+#
+# General stuff.
+#
+
+proc num_eols {text} {
+    # Number of "\n" in $text, even if last line unterminated.
+    return [regexp -all -- "\n" $text]
 }
 
 proc around2fl {result} {
-    global fldata
+    global pcdata_line_offset
+    global ifile
 
-    if {[regexp -nocase -- { around line ([1-9][0-9]*)} $result x lineno] \
-            != 1} {
+    set y [regexp -nocase -- { around line ([1-9][0-9]*)} \
+                  $result x lineno]
+    if {$y > 1} {
         return $result
+    } elseif {$y == 0} {
+        if {[set lineno $::xdv::lineno] < 0} {
+            return $result
+        }
+        append result [set x " around line $lineno"]
     }
 
-    set file ""
-    set offset 0
-    set max 0
-    foreach fldatum $fldata {
-        if {[set start [lindex $fldatum 1]] > $lineno} {
-            break
-        }
-        if {[set new [expr $start+[set len [lindex $fldatum 2]]]] < $max} {
-            continue
-        }
+    set file [linefile::get_file]
+    set line [linefile::get_line [expr $lineno + $pcdata_line_offset]]
 
-        if {$lineno <= $new} {
-            set file [lindex $fldatum 0]
-            set offset [expr $lineno-$start]
-        } else {
-            incr offset -$len
-            set max $new
-        }
+    set tail " around input line $line"
+    if {[string compare $file $ifile]} {
+        append tail " in \"$file\""
     }
-
-    set tail " around line $offset"
-    if {[string compare $file [lindex [lindex $fldata 0] 0]]} {
-        append tail " in $file"
-    }
-    regsub " around line $lineno" $result $tail result
+    regsub $x $result $tail result
 
     return $result
+}
+
+
+#
+# The linefile stuff in its own namespace.
+#
+
+namespace eval linefile {
+    variable offset 1 fnum 0 fncache {{}}
+}
+
+proc linefile::init {} {
+    variable offset
+    variable fnum
+
+    set offset 1
+    set fnum 0
+}
+
+proc linefile::get_line {{lineno -1}} {
+    variable offset
+
+    if {$lineno < 0} {
+        set lineno $::xdv::lineno
+    }
+
+    return [expr $lineno + $offset]
+}
+
+proc linefile::set_line {line} {
+    variable offset
+
+    set offset [expr $line - $::xdv::lineno]
+}
+
+proc linefile::new_file {file} {
+    variable fncache
+
+    if {[set num [lsearch -exact $fncache $file]] < 0} {
+        set num [llength $fncache]
+        lappend fncache $file
+    }
+
+    return $num
+}
+
+proc linefile::get_fnum {} {
+    variable fnum
+
+    return $fnum
+}
+
+proc linefile::get_file {{num -1} {basename 0}} {
+    variable fncache
+
+    if {$num < 0} {
+        variable fnum
+
+        set num $fnum
+    }
+    set file [lindex $fncache $num]
+
+    if {$basename} {
+        # Only keep base name of file.
+        regsub -- "^.*[file join \[/ \]]" $file {} file
+    }
+
+    return $file
+}
+
+proc linefile::set_fnum {num} {
+    variable fnum
+
+    set fnum $num
+}
+
+proc linefile::set_file {file} {
+    variable fnum
+
+    return [set fnum [new_file $file]]
+}
+
+proc linefile::make_pi {file line {force_file 0}} {
+    variable fnum
+
+    set num [new_file $file]
+    if {$force_file || $num != $fnum} {
+        set fnum $num
+        regsub -all -- & $file {\&amp;} file
+        if {[string first \" $file] < 0} {
+            set lcf \"$line:$file\"
+        } elseif {[string first \' $file] < 0} {
+            set lcf \'$line:$file\'
+        } else {
+            regsub -all -- \" $file {\&quot;} file
+            set lcf \"$line:$file\"
+        }
+    } else {
+        set lcf \"$line\"
+    }
+
+    return "<?rfc linefile=$lcf?>"
 }
 
 
@@ -3238,8 +3583,10 @@ proc pass {tag} {
             catch { unset counter(references) }
             set elemN 0
             catch { unset options }
+            # "subcompact" must not be on this list.
             array set options [list autobreaks  yes \
                                     background  ""  \
+                                    colonspace  no  \
                                     comments    no  \
                                     compact     no  \
                                     editing     no  \
@@ -3251,17 +3598,18 @@ proc pass {tag} {
                                     linkmailto  yes \
                                     private     ""  \
                                     slides      no  \
-                                    strict      no  \
                                     sortrefs    no  \
-                                    subcompact  yes \
+                                    strict      no  \
                                     symrefs     no  \
                                     toc         no  \
                                     tocdepth    3   \
-                                    tocompact   yes \
                                     tocindent   yes \
-                                    topblock    yes]
+                                    tocompact   yes \
+                                    topblock    yes \
+                                    useobject   no]
             normalize_options
             catch { unset stack }
+            linefile::init
         }
 
         end {
@@ -3282,28 +3630,30 @@ proc pass {tag} {
 
 global required ctexts categories
 
-set required { date       { year }
+# This must be kept in lexicographical order for string compare.
+set required {
+               appendix   { title  }
+               date       { year }
+               eref       { target }
+               format     { type }
+               iref       { item }
                note       { title  }
                section    { title  }
-               appendix   { title  }
-               xref       { target }
-               eref       { target }
-               iref       { item }
 # backwards-compatibility... (the attributes are actually mandatory)
 #              seriesInfo { name value }
-               format     { type }
+               xref       { target }
              }
-          
+
 set ctexts   { area artwork city code country cref email eref facsimile
                keyword organization phone postamble preamble region seriesInfo
-               spanx street t ttcol title uri workgroup xref }
+               spanx street t title ttcol uri workgroup xref }
 
 set categories \
              { {std  "Standards Track" STD
 "This document specifies an Internet standards track protocol for the Internet
 community, and requests discussion and suggestions for improvements.
-Please refer to the current edition of the &quot;Internet Official Protocol
-Standards&quot; (STD&nbsp;1) for the standardization state and status of this
+Please refer to the current edition of the &ldquo;Internet Official Protocol
+Standards&rdquo; (STD&nbsp;1) for the standardization state and status of this
 protocol.
 Distribution of this memo is unlimited."}
 
@@ -3382,6 +3732,33 @@ he or she is aware have been or will be disclosed,
 and any of which he or she become aware will be disclosed,
 in accordance with RFC&nbsp;3668.
 This document may not be modified,
+and derivative works of it may not be created%IPREXTRACT%."}
+
+               {full3978
+"By submitting this Internet-Draft,
+each author represents that any applicable patent or other IPR claims of which
+he or she is aware have been or will be disclosed,
+and any of which he or she becomes aware will be disclosed,
+in accordance with Section&nbsp;6 of BCP&nbsp;79."}
+
+               {noModification3978
+"By submitting this Internet-Draft,
+each author represents that any applicable patent or other IPR claims of which
+he or she is aware have been or will be disclosed,
+and any of which he or she becomes aware will be disclosed,
+in accordance with Section&nbsp;6 of BCP&nbsp;79.
+This document may not be modified,
+and derivative works of it may not be created,
+except to publish it as an RFC and to translate it into languages other
+than English%IPREXTRACT%."}
+
+               {noDerivatives3978
+"By submitting this Internet-Draft,
+each author represents that any applicable patent or other IPR claims of which
+he or she is aware have been or will be disclosed,
+and any of which he or she becomes aware will be disclosed,
+in accordance with Section&nbsp;6 of BCP&nbsp;79.
+This document may not be modified,
 and derivative works of it may not be created%IPREXTRACT%."} }
 
 proc begin {name {av {}}} {
@@ -3420,7 +3797,7 @@ proc begin {name {av {}}} {
                     foreach v $a {
                         if {[catch { set attrs($v) }]} {
                             unexpected error \
-                                "missing $v attribute in $name element"
+                                "missing $v attribute in #$elemN:<$name> element"
                         }
                     }
                     break
@@ -3437,18 +3814,18 @@ proc begin {name {av {}}} {
                 if {![catch { set attrs(category) }]} {
                     if {[lsearch0 $categories $attrs(category)] < 0} {
                         unexpected error \
-                            "category attribute unknown: $attrs(category)"
+                            "category=\"$attrs(category)\" attribute unknown in #$elemN:<rfc>"
                     }
                     if {(![string compare $attrs(category) historic]) \
                             && (![catch { set attrs(seriesNo) }])} {
                         unexpected error \
-                            "historic documents have no document series"
+                            "historic documents have no document series in #$elemN:<rfc>"
                     }
                 }
                 if {![catch { set attrs(ipr) }]} {
                     if {[lsearch0 $iprstatus $attrs(ipr)] < 0} {
                         unexpected error \
-                            "ipr attribute unknown: $attrs(ipr)"
+                            "ipr=\"$attrs(ipr)\" attribute unknown in #$elemN:<rfc>"
                     }
                 }
                 global entities oentities mode nbsp
@@ -3462,6 +3839,7 @@ proc begin {name {av {}}} {
                     txt {
                         set nbsp "\xa0"
                         set entities [linsert $entities 0 "&nbsp;" $nbsp]
+                        set entities [linsert $entities 0 "&#160;" $nbsp]
                     }
                 }
             }
@@ -3535,6 +3913,16 @@ proc begin {name {av {}}} {
                     set counter(list) [counting $counter(list) $depth(list)]
                     set attrs(.COUNTER) $counter(list)
                     set elem($elemN) [array get attrs]
+                    set value $attrs(.COUNTER)
+                } else {
+                    set frame [lindex $stack end]
+                    set value 1
+                    foreach child [lindex $frame 4] {
+                        array set c $elem($child)
+                        if {![string compare $c(.NAME) t]} {
+                            incr value
+                        }
+                    }
                 }
             }
 
@@ -3649,7 +4037,9 @@ proc begin {name {av {}}} {
 
         if {![catch { set anchor $attrs(anchor) }]} {
             if {![catch { set xref($anchor) }]} {
-                unexpected error "anchor attribute already in use: $anchor"
+                array set x $xref($anchor)
+                unexpected error \
+  "anchor=\"$anchor\" attribute currently points to #$x(elemN):<$x(type)> and cannot be redefined in new #$elemN:<$name>"
             }
             set xref($anchor) [list type $type elemN $elemN value $value]
         }
@@ -3693,6 +4083,8 @@ proc begin {name {av {}}} {
             list
                 -
             figure
+                -
+            artwork
                 -
             preamble
                 -
@@ -3738,7 +4130,8 @@ proc begin {name {av {}}} {
     } else {
         set ctext no
     }
-    lappend stack [list $name elemN $elemN children "" ctext $ctext av $av]
+    lappend stack [list $name elemN $elemN children "" ctext $ctext av $av \
+                        line [linefile::get_line] fnum [linefile::get_fnum]]
 }
 
 proc counting {tcount tdepth} {
@@ -3822,6 +4215,8 @@ proc end {name} {
             -
         figure
             -
+        artwork
+            -
         preamble
             -
         postamble
@@ -3848,15 +4243,77 @@ proc pcdata {text} {
     global mode
     global root
 
-    if {[string length [set chars [string trim $text]]] <= 0} {
+    if {[string length $text] <= 0} {
+        # Really empty.
         return
     }
 
-    regsub -all "\r" $text "\n" text
+    set chars [string trim $text]
+
+    set text [str_norm_eol $text]
 
     set frame [lindex $stack end]
 
+    if {([lsearch0 $stack references] >= 0) \
+            && ([lsearch0 $stack annotation] < 0)} {
+        set pre -1
+    } else {
+        switch -- [lindex $frame 0] {
+            artwork {
+                if {$passno == 1} {
+                    set pre 1
+                } else {
+                    # Will end up positive by incrementation.
+                    set pre 0
+                    set elemX [lindex $frame 2]
+                    # It won't work to get attrs from $frame.
+                    array set attrs $elem($elemX)
+                    if {[info exists attrs(.TEXTWIDTH)]} {
+                        set align [current_align]
+                        set tw $attrs(.TEXTWIDTH)
+                        switch -- $align {
+                            left - "" {}
+                            center { incr pre [expr (69 - $tw + 1)/2] }
+                            right  { incr pre [expr (69 - $tw)] }
+
+                            default {
+                                unexpected error \
+                                    "align=\"$align\" attribute is invalid"
+                            }
+                        }
+                        if {$pre < 0} {
+                            set pre 0
+                        }
+                    }
+                    incr pre 3
+                }
+            }
+
+            t
+                -
+            preamble
+                -
+            postamble
+                -
+            c
+                -
+            annotation {
+                set pre 0
+            }
+
+            default {
+                set pre -1
+            }
+        }
+    }
+
     if {$passno == 1} {
+        if {$pre < 0 && [string length $chars] <= 0} {
+            # Just white space.  Pass 1 doesn't want to see
+            # PCDATA in the wrong places, but further passes
+            # *need* some among it to generate correct output.
+            return
+        }
         array set attrs [lindex [set f2 [lindex $root end]] 1]
         set attrs(.pcdata) 1
         set root [lreplace $root end end \
@@ -3879,31 +4336,8 @@ proc pcdata {text} {
         return
     }
 
-    if {([lsearch0 $stack references] >= 0) \
-            && ([lsearch0 $stack annotation] < 0)} {
+    if {$pre < 0} {
         return
-    }
-
-    switch -- [lindex $frame 0] {
-        artwork {
-            set pre 1
-        }
-
-        t
-            -
-        preamble
-            -
-        postamble
-            -
-        c
-            -
-        annotation {
-            set pre 0
-        }
-
-        default {
-            return
-        }
     }
 
     pcdata_$mode $text $pre
@@ -3914,7 +4348,7 @@ proc pcdata {text} {
 
 proc pi {args} {
     global options
-    global counter depth elemN elem passno stack xref
+    global passno stack
     global mode
 
     switch -- [lindex $args 0]/[llength $args] {
@@ -3930,47 +4364,103 @@ proc pi {args} {
                 return
             }
 
-            if {![string match "-public -system rfc*.dtd" \
+            if {![regexp -- {^-public -system (|.*/)rfc.*\.dtd$} \
                          [lrange $args 1 end]]} {
                 unexpected error "unexpected DOCTYPE: [lrange $args 1 end]"
             }
         }
 
         rfc/2 {
-            set text [string trim [lindex $args 1]]
-            if {[catch { 
-                if {[llength [set params [split $text =]]] != 2} {
-                    error ""
+            set n 0
+            set text [lindex $args 1]
+            set lines [num_eols $text]
+            while {1} {
+                set l [pi_rfc_next $text]
+                set key  [lindex $l 0]
+                set val  [lindex $l 1]
+                set text [lindex $l 2]
+                if {![string compare $key ""]} {
+                    if {[string compare $val ""]} {
+                        unexpected error \
+                            "stopped processing faulty rfc-PI at \"$val\""
+                    }
+                    break
                 }
-                set key [lindex $params 0]
-                set value [lindex $params 1]
-                if {[string first "'" $value]} {
-                    regsub -- {^"([^"]*)"$} $value {\1} value
-                } else {
-                    regsub -- {^'([^']*)'$} $value {\1} value
+                switch -- $key {
+                    include { continue }
+
+                    linefile {
+                        if {![regexp -- {^([0-9]+)(:(.*))?$} \
+                                     $val a b c d]} {
+                            unexpected warning \
+  "ignoring invalid rfc-PI linefile-directive value \"$val\""
+                            continue
+                        }
+                        if {[string length $c]} {
+                            # May be empty.  User's choice!
+                            set new_file $d
+                        }
+                        set new_line $b
+                        continue
+                    }
                 }
-                if {![string compare $key include]} {
-                    return
-                }
-                if {[info exists options($key)]} {
-                    set options($key) $value
+                if {   [info exists options($key)]
+                    || (   [string is lower $key]
+                        && [info exists options(.[string toupper $key])])} {
+                    set options($key) $val
+                    incr n
                 } elseif {$passno > 1} {
-                    pi_$mode $key $value
+                    if {[catch { pi_$mode $key $val }]} {
+                        regsub -all -- \" $val {\"} val
+                        unexpected error \
+                            "invalid rfc-PI directive: $key=\"$val\""
+                    }
                 }
-            }]} {
-                unexpected error "invalid rfc instruction: $text"
             }
-            normalize_options
+            if {$n > 0} {
+                normalize_options
+            }
+            # Do this at the end so that intermixed
+            # error or warning messages are not affected.
+            if {[info exists new_line]} {
+                if {[info exists new_file]} {
+                    linefile::set_file $new_file
+                }
+                linefile::set_line [expr $new_line - $lines]
+            }
         }
 
         default {
             if {![string compare [lindex $args 0] xml-stylesheet]} {
                 return
             }
-            set text [join $args " "]
+            set text [string trim [join $args " "]]
             unexpected warning "unknown PI: $text"
         }
     }
+}
+
+proc pi_rfc_next {text} {
+    set text [string trimleft $text]
+    set key ""
+    set val $text
+
+    # Some useful regexp literals.
+    set wsp  {[ \t\r\n]}
+    set dqev \"(\[^\"\]*)\"
+    set sqev \'(\[^\'\]*)\'
+    set nme  {([A-Za-z_:][A-Za-z0-9._:-]*)}
+    set rem  (.*)
+
+    if {   [regexp -- ^$nme=$dqev$rem$ $text x k v rest]
+        || [regexp -- ^$nme=$sqev$rem$ $text x k v rest]
+        || [regexp -- ^$nme=${nme}($|$wsp)$rem$ $text x k v y rest]} {
+        set key $k
+        set val [chars_expand $v]
+        set text [string trimleft $rest]
+    }
+
+    return [list $key $val $text]
 }
 
 proc normalize_options {} {
@@ -3982,8 +4472,8 @@ proc normalize_options {} {
     if {$remoteP} {
         set options(slides) no
     }
-    set subcompactP 0
     foreach {o O} [list autobreaks  .AUTOBREAKS  \
+                        colonspace  .COLONSPACE  \
                         compact     .COMPACT     \
                         comments    .COMMENTS    \
                         editing     .EDITING     \
@@ -3999,9 +4489,10 @@ proc normalize_options {} {
                         toc         .TOC         \
                         tocompact   .TOCOMPACT   \
                         tocindent   .TOCINDENT   \
-                        topblock    .TOPBLOCK] {
-        if {![string compare $o subcompact]} {
-            set subcompactP 1
+                        topblock    .TOPBLOCK    \
+                        useobject   .USEOBJECT] {
+        if {![info exists options($o)]} {
+            continue
         }
         switch -- $options($o) {
             yes - true - 1 {
@@ -4048,7 +4539,7 @@ proc normalize_options {} {
     if {!$options(.COMMENTS)} {
         set options(.INLINE) 0
     }
-    if {!$subcompactP} {
+    if {![info exists options(subcompact)]} {
         set options(.SUBCOMPACT) $options(.COMPACT)
     }
     if {$options(.PRIVATE)} {
@@ -4068,7 +4559,7 @@ proc xmldecl {version encoding standalone} {
 
 
 proc doctype {element public system internal} {
-    global counter depth elemN elem passno stack xref
+    global stack
 
     if {[info exists stack]} {
         return
@@ -4076,13 +4567,16 @@ proc doctype {element public system internal} {
 
     if {[string compare $element rfc] \
             || [string compare $public ""] \
-            || (![string match "rfc*.dtd" $system])} {
+            || (![regexp -- {^(|.*/)rfc.*\.dtd$} $system])} {
         unexpected error "invalid DOCTYPE: $element+$public+$system+$internal"
     }
 }
 
 
 # the unexpected ...
+
+global already_warned
+array set already_warned {}
 
 proc unexpected {args} {
     global prog
@@ -4095,6 +4589,9 @@ proc unexpected {args} {
             global errorP
 
             set errorP 1
+            if {$guiP != 1} {
+                set text "$prog: error: $text"
+            }
             return -code error $text
         }
 
@@ -4105,9 +4602,26 @@ proc unexpected {args} {
         }
 
         default {
+            global already_warned
+
+            append text [around2fl ""]
+            if {[info exists already_warned($text)]} {
+                return
+            }
+            set already_warned($text) 1
+            #append text [around2fl ""]
             switch -- $guiP {
                 1 {
                     tk_dialog .unexpected "$prog: $type" $text $type 0 OK
+                }
+
+                0 {
+                    global env
+
+                    if {[llength [array names env REQUEST_METHOD]] <= 0} {
+                        # Not under CGI.
+                        puts stderr "$prog: $type: $text"
+                    }
                 }
 
                 -1 {
@@ -4115,6 +4629,16 @@ proc unexpected {args} {
                 }
             }
         }
+    }
+}
+
+proc unex_condtype {} {
+    global options
+
+    if {$options(.STRICT)} {
+        return error
+    } else {
+        return warning
     }
 }
 
@@ -4130,10 +4654,10 @@ global validity
 
 set validity {
 "This document and the information contained herein are provided
-on an &quot;AS IS&quot; basis and THE CONTRIBUTOR,
+on an &ldquo;AS IS&rdquo; basis and THE CONTRIBUTOR,
 THE ORGANIZATION HE/SHE REPRESENTS OR IS SPONSORED BY (IF ANY),
 THE INTERNET SOCIETY AND THE INTERNET ENGINEERING TASK FORCE DISCLAIM
-ALL WARRANTIES, 
+ALL WARRANTIES,
 EXPRESS OR IMPLIED,
 INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE
 INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED
@@ -4143,7 +4667,7 @@ WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE."
 global copylong1 copylong2
 
 set copylong1 {
-"Copyright (C) The Internet Society (%YEAR%). All Rights Reserved."
+"Copyright &copy; The Internet Society (%YEAR%). All Rights Reserved."
 
 "This document and translations of it may be copied and furnished to
 others, and derivative works that comment on or otherwise explain it
@@ -4163,7 +4687,7 @@ English."
 revoked by the Internet Society or its successors or assignees."
 
 "This document and the information contained herein is provided on an
-&quot;AS IS&quot; basis and THE INTERNET SOCIETY AND THE INTERNET ENGINEERING
+&ldquo;AS IS&rdquo; basis and THE INTERNET SOCIETY AND THE INTERNET ENGINEERING
 TASK FORCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
 BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
 HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF
@@ -4171,14 +4695,17 @@ MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE."
 }
 
 set copylong2 {
-"Copyright (C) The Internet Society (%YEAR%).
+"Copyright &copy; The Internet Society (%YEAR%).
 This document is subject to the rights,
 licenses and restrictions contained in BCP&nbsp;78,
 and except as set forth therein,
 the authors retain all their rights."
 }
 
-global iprlong1 iprlong2
+global iprlong1 iprlong2 iprurl ipremail
+
+set iprurl "http://www.ietf.org/ipr"
+set ipremail "ietf-ipr@ietf.org"
 
 set iprlong1 {
 "The IETF takes no position regarding the validity or scope of
@@ -4206,8 +4733,8 @@ information to the IETF Executive Director."
 set iprlong2 {
 "The IETF takes no position regarding the validity or scope of any
 Intellectual Property Rights or other rights that might be claimed
-to pertain to the implementation or use of the technology 
-described in this document or the extent to which any license 
+to pertain to the implementation or use of the technology
+described in this document or the extent to which any license
 under such rights might or might not be available; nor does it
 represent that it has made any independent effort to identify any
 such rights.
@@ -4219,7 +4746,7 @@ assurances of licenses to be made available,
 or the result of an attempt made to obtain a general license or
 permission for the use of such proprietary rights by implementers or
 users of this specification can be obtained from the IETF on-line IPR
-repository at http://www.ietf.org/ipr."
+repository at %IPRURL%."
 
 "The IETF invites any interested party to bring to its attention
 any copyrights,
@@ -4227,7 +4754,7 @@ patents or patent applications,
 or other
 proprietary rights that may cover technology that may be required
 to implement this standard.
-Please address the information to the IETF at ietf-ipr@ietf.org."
+Please address the information to the IETF at %IPREMAIL%."
 }
 
 global iprextra
@@ -4247,7 +4774,7 @@ Internet Society."
 
 
 proc pass2begin_rfc {elemX} {
-    global counter depth elemN elem passno stack xref
+    global counter elem passno xref
     global options copyrightP iprP
     global copyshort copyshort1 copyshort2
 
@@ -4281,7 +4808,8 @@ proc pass2begin_rfc {elemX} {
             set newP 0
         }
     } elseif {[string compare $attrs(ipr) ""]} {
-        if {[string first "3667" $attrs(ipr)] < 0} {
+        if {   [string first "3667" $attrs(ipr)] < 0
+            && [string first "3978" $attrs(ipr)] < 0} {
             set newP 0
         }
     }
@@ -4344,7 +4872,7 @@ proc pass2begin_rfc {elemX} {
 }
 
 proc pass2end_rfc {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global elemZ
     global mode
     global copylong1 copylong2 iprlong1 iprlong2 iprextra
@@ -4365,7 +4893,8 @@ proc pass2end_rfc {elemX} {
             set newP 0
         }
     } elseif {[string compare $attrs(ipr) ""]} {
-        if {[string first "3667" $attrs(ipr)] < 0} {
+        if {   [string first "3667" $attrs(ipr)] < 0
+            && [string first "3978" $attrs(ipr)] < 0} {
             set newP 0
         }
     }
@@ -4378,29 +4907,29 @@ proc pass2end_rfc {elemX} {
 
     if {![catch { set who $attrs(disclaimant) }]} {
         lappend copying \
-"%WHO% expressly disclaims any and all warranties regarding this 
-contribution including any warranty that (a) this contribution does 
-not violate the rights of others, (b) the owners, if any, of other 
-rights in this contribution have been informed of the rights and 
-permissions granted to IETF herein, and (c) any required 
+"%WHO% expressly disclaims any and all warranties regarding this
+contribution including any warranty that (a) this contribution does
+not violate the rights of others, (b) the owners, if any, of other
+rights in this contribution have been informed of the rights and
+permissions granted to IETF herein, and (c) any required
 authorizations from such owners have been obtained.
-This document and the information contained herein is provided on 
-an &quot;AS IS&quot; basis and %UWHO% DISCLAIMS ALL WARRANTIES, EXPRESS OR 
-IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE 
-OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY 
-IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR 
+This document and the information contained herein is provided on
+an &ldquo;AS IS&rdquo; basis and %UWHO% DISCLAIMS ALL WARRANTIES, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE
+OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY
+IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR
 PURPOSE." \
  \
-"IN NO EVENT WILL %UWHO% BE LIABLE TO ANY OTHER PARTY INCLUDING 
-THE IETF AND ITS MEMBERS FOR THE COST OF PROCURING SUBSTITUTE GOODS 
-OR SERVICES, LOST PROFITS, LOSS OF USE, LOSS OF DATA, OR ANY 
-INCIDENTAL, CONSEQUENTIAL, INDIRECT, OR SPECIAL DAMAGES WHETHER 
-UNDER CONTRACT, TORT, WARRANTY, OR OTHERWISE, ARISING IN ANY WAY 
-OUT OF THIS OR ANY OTHER AGREEMENT RELATING TO THIS DOCUMENT, 
-WHETHER OR NOT SUCH PARTY HAD ADVANCE NOTICE OF THE POSSIBILITY OF 
+"IN NO EVENT WILL %UWHO% BE LIABLE TO ANY OTHER PARTY INCLUDING
+THE IETF AND ITS MEMBERS FOR THE COST OF PROCURING SUBSTITUTE GOODS
+OR SERVICES, LOST PROFITS, LOSS OF USE, LOSS OF DATA, OR ANY
+INCIDENTAL, CONSEQUENTIAL, INDIRECT, OR SPECIAL DAMAGES WHETHER
+UNDER CONTRACT, TORT, WARRANTY, OR OTHERWISE, ARISING IN ANY WAY
+OUT OF THIS OR ANY OTHER AGREEMENT RELATING TO THIS DOCUMENT,
+WHETHER OR NOT SUCH PARTY HAD ADVANCE NOTICE OF THE POSSIBILITY OF
 SUCH DAMAGES."
 
-        regsub -all %WHO% $copying $who copying    
+        regsub -all %WHO% $copying $who copying
         regsub -all %UWHO% $copying [string toupper $who] copying
     }
 
@@ -4462,16 +4991,18 @@ SUCH DAMAGES."
 
 # the front (either for the rfc or a reference)
 
-global copyshort copyshort1 copyshort2 idinfo
+global copyshort copyshort1 copyshort2 idinfo idaburl idshurl
+
+set idaburl "http://www.ietf.org/ietf/1id-abstracts.txt"
+set idshurl "http://www.ietf.org/shadow.html"
 
 set copyshort1 \
-"Copyright (C) The Internet Society (%YEAR%). All Rights Reserved."
+"Copyright &copy; The Internet Society (%YEAR%). All Rights Reserved."
 
 set copyshort2 \
-"Copyright (C) The Internet Society (%YEAR%)."
+"Copyright &copy; The Internet Society (%YEAR%)."
 
 set idinfo {
-    {
 "%IPR%"
 
 "Internet-Drafts are working documents of the Internet Engineering
@@ -4482,59 +5013,34 @@ Internet-Drafts."
 "Internet-Drafts are draft documents valid for a maximum of six months
 and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
-them other than as \"work in progress.\""
+them other than as &ldquo;work in progress.&rdquo;"
 
 "The list of current Internet-Drafts can be accessed at
-http://www.ietf.org/ietf/1id-abstracts.txt."
+%IDABURL%."
 
 "The list of Internet-Draft Shadow Directories can be accessed at
-http://www.ietf.org/shadow.html."
+%IDSHURL%."
 
 "This Internet-Draft will expire on %EXPIRES%."
-    }
-
-    {
-"%IPR%"
-
-"Internet-Drafts are working documents of the Internet Engineering
-Task Force (IETF), its areas, and its working groups.
-Note that other groups may also distribute working documents as
-Internet-Drafts."
-
-"Internet-Drafts are draft documents valid for a maximum of six months
-and may be updated, replaced, or obsoleted by other documents at any time.
-It is inappropriate to use Internet-Drafts as reference material or to cite
-them other than as \"work in progress.\""
-
-"The list of current Internet-Drafts can be accessed at
-<a href='http://www.ietf.org/ietf/1id-abstracts.txt'>http://www.ietf.org/ietf/1id-abstracts.txt</a>."
-
-"The list of Internet-Draft Shadow Directories can be accessed at
-<a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>."
-
-"This Internet-Draft will expire on %EXPIRES%."
-    }
 }
 
 proc pass2begin_front {elemX} {
-    global counter depth elemN elem passno stack xref
-    global elemZ
+    global counter elem xref
     global options
-    global ifile mode ofile
-    global categories copyshort idinfo iprstatus
+    global mode ofile
+    global categories copyshort idinfo idaburl idshurl iprstatus
+
+    if {$options(.COLONSPACE)} {
+        set colonspace " "
+    } else {
+        set colonspace ""
+    }
 
     array set attrs $elem($elemX)
 
     set title [find_element title $attrs(.CHILDREN)]
     array set tv [list abbrev ""]
     array set tv $elem($title)
-    if {([string length $tv(.CTEXT)] > 46) \
-            && (![string compare $tv(abbrev) ""])} {
-        unexpected error "title element needs an abbrev attribute"
-    }
-    if {![string compare $tv(abbrev) ""]} {
-        set tv(abbrev) $tv(.CTEXT)
-    }
     set title [list $tv(.CTEXT)]
 
     set date [find_element date $attrs(.CHILDREN)]
@@ -4542,7 +5048,7 @@ proc pass2begin_front {elemX} {
     set three [clock format [clock seconds] -format "%B %Y %d"]
     if {(![info exists dv(month)]) || (![string compare $dv(month) ""])} {
         set dv(month) [lindex $three 0]
-        set dv(day) [string trimleft [lindex $three 2] 0]        
+        set dv(day) [string trimleft [lindex $three 2] 0]
     } elseif {[catch { set dv(day) }]} {
         if {(![string compare $dv(month) [lindex $three 0]]) \
                 && (![string compare $dv(year) [lindex $three 1]])} {
@@ -4573,23 +5079,23 @@ proc pass2begin_front {elemX} {
         lappend left $first
 
         if {[string compare $rv(number) ""]} {
-            lappend left "Request for Comments: $rv(number)"
+            lappend left "Request for Comments:$colonspace $rv(number)"
 
             set cindex [lsearch0 $categories $rv(category)]
             if {[string compare $rv(seriesNo) ""]} {
                 lappend left \
-                        "[lindex [lindex $categories $cindex] 2]: $rv(seriesNo)"
+                        "[lindex [lindex $categories $cindex] 2]:$colonspace $rv(seriesNo)"
             }
 
             if {[string compare $rv(updates) ""]} {
-                lappend left "Updates: $rv(updates)"
+                lappend left "Updates:$colonspace $rv(updates)"
             }
             if {[string compare $rv(obsoletes) ""]} {
-                lappend left "Obsoletes: $rv(obsoletes)"
+                lappend left "Obsoletes:$colonspace $rv(obsoletes)"
             }
 
             set category [lindex [lindex $categories $cindex] 1]
-            lappend left "Category: $category"
+            lappend left "Category:$colonspace $category"
             set status [list [lindex [lindex $categories $cindex] 3]]
         } else {
             if {$options(.STRICT)} {
@@ -4616,10 +5122,10 @@ proc pass2begin_front {elemX} {
             lappend left "Internet-Draft"
 
             if {[string compare $rv(updates) ""]} {
-                lappend left "Updates: $rv(updates) (if approved)"
+                lappend left "Updates:$colonspace $rv(updates) (if approved)"
             }
             if {[string compare $rv(obsoletes) ""]} {
-                lappend left "Obsoletes: $rv(obsoletes) (if approved)"
+                lappend left "Obsoletes:$colonspace $rv(obsoletes) (if approved)"
             }
 
             if {[catch { set day $dv(day) }]} {
@@ -4630,19 +5136,21 @@ proc pass2begin_front {elemX} {
             set day [string trimleft \
                             [clock format $secs -format "%d" -gmt true] 0]
             set expires [clock format $secs -format "%B $day, %Y" -gmt true]
-            lappend left "Expires: $expires"
+            lappend left "Expires:$colonspace $expires"
             set category "Expires $expires"
-            if {![string compare $mode html]} {
-                set iindex 1
-            } else {
-                set iindex 0
-            }
-            set status [lindex $idinfo $iindex]
+            set status $idinfo
             regsub -all "&" [lindex [lindex $iprstatus \
                                             [lsearch0 $iprstatus \
                                                       $rv(ipr)]] 1] \
-                        "\\\\&" ipr
+                        "\\\\\\&" ipr
             regsub -all %IPR% $status $ipr status
+            if {![string compare $mode html]} {
+                regsub -all %IDABURL% $status "<a href='$idaburl'>$idaburl</a>" status
+                regsub -all %IDSHURL% $status "<a href='$idshurl'>$idshurl</a>" status
+            } else {
+                regsub -all %IDABURL% $status $idaburl status
+                regsub -all %IDSHURL% $status $idshurl status
+            }
             if {[string compare [set anchor $rv(iprExtract)] ""]} {
                 set extract ", other than to extract "
                 append extract [xref_$mode "" $xref($anchor) $anchor "" 1]
@@ -4722,8 +5230,24 @@ proc pass2begin_front {elemX} {
         lappend top "Internet-Draft"
         lappend title $ofile
     }
-    lappend top $tv(abbrev)
+    set l [string length [lindex $top end]]
     lappend top "$dv(month) $dv(year)"
+    set l2 [string length [lindex $top end]]
+    if {$l < $l2} {
+        set l $l2
+    }
+    set l [expr 72 - 2 * ($l + 4)]
+    incr l [expr $l2 < $l]
+    if {[set l2 [string length $tv(abbrev)]] <= 0} {
+        if {[string length $tv(.CTEXT)] > $l} {
+            unexpected error "<title> element needs an abbrev attribute of at most $l characters"
+        } else {
+            set tv(abbrev) $tv(.CTEXT)
+        }
+    } elseif {$l2 > $l} {
+        unexpected error "abbrev attribute of <title> element is still too long ($l2 > $l)"
+    }
+    set top [linsert $top 1 $tv(abbrev)]
 
     switch -- [llength $names] {
         1 {
@@ -4757,11 +5281,11 @@ proc pass2begin_front {elemX} {
 }
 
 proc pass2end_front {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem passno
     global elemZ
-    global options copyrightP iprP noticeT
+    global options copyrightP noticeT
     global mode
-    global crefs erefs
+    global crefs
 
     set toc ""
     set refs 0
@@ -4805,7 +5329,7 @@ proc pass2end_front {elemX} {
                         default {
                             if {$x > $options(.TOCDEPTH)} {
                                 continue
-                            } 
+                            }
                         }
                     }
                     if {[string first . $label] < 0} {
@@ -4903,7 +5427,7 @@ proc pass2begin_abstract {elemX} {
 }
 
 proc pass2begin_note {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem stack
     global mode
 
     set d 0
@@ -4921,7 +5445,7 @@ proc pass2begin_note {elemX} {
 # the section element
 
 proc pass2begin_section {elemX {appendP 0}} {
-    global counter depth elemN elem passno stack xref
+    global elem stack
     global mode
 
     array set attrs [list anchor ""]
@@ -4952,7 +5476,11 @@ proc pass2begin_section {elemX {appendP 0}} {
             figure
                 -
             texttable {
-                set lines [pass2begin_$cv(.NAME) $elemY 1]
+                incr lines [pass2begin_$cv(.NAME) $elemY 1]
+            }
+
+            default {
+                incr lines 2
             }
         }
     }
@@ -4968,7 +5496,7 @@ proc pass2begin_appendix {elemX {appendP 0}} {
 }
 
 proc section_title {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
 
     array set attrs [list anchor "" title ""]
     array set attrs $elem($elemX)
@@ -4980,10 +5508,11 @@ proc section_title {elemX} {
 # the t element
 
 proc pass2begin_t {elemX} {
-    global counter depth elemN elem passno stack xref
+    global counter elem stack
     global mode
 
-    array set attrs [list .COUNTER "" style "" hangText "" hangIndent ""]
+    array set attrs [list .COUNTER "" style "" hangText "" \
+                          hangIndent "" anchor   ""]
     array set attrs $elem($elemX)
     set elem($elemX) [array get attrs]
 
@@ -4994,7 +5523,7 @@ proc pass2begin_t {elemX} {
         set elemY $av(elemN)
         array set av $elem($elemY)
 
-        set attrs(hangIndent) $av(hangIndent) 
+        set attrs(hangIndent) $av(hangIndent)
         if {![string compare [set attrs(style) $av(style)] format]} {
             set attrs(style) hanging
             set format $av(format)
@@ -5019,7 +5548,7 @@ proc pass2begin_t {elemX} {
 }
 
 proc pass2end_t {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
 
     array set attrs $elem($elemX)
@@ -5030,7 +5559,7 @@ proc pass2end_t {elemX} {
 # the list element
 
 proc pass2begin_list {elemX} {
-    global counter depth elemN elem passno stack xref
+    global counter elem stack
     global mode
 
     set style empty
@@ -5104,7 +5633,7 @@ proc pass2begin_list {elemX} {
 }
 
 proc pass2end_list {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem stack
     global mode
 
     array set attrs $elem($elemX)
@@ -5113,14 +5642,16 @@ proc pass2end_list {elemX} {
 }
 
 
-# the figure element
+# the figure and artwork elements
 
 proc pass2begin_figure {elemX {internal 0}} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
 
     array set attrs [list anchor "" title ""]
     array set attrs $elem($elemX)
+
+    catch { push_align $attrs(align) }
 
     set lines 0
     foreach p {preamble postamble} {
@@ -5135,34 +5666,83 @@ proc pass2begin_figure {elemX {internal 0}} {
     set artwork [find_element artwork $attrs(.CHILDREN)]
     array set av $elem($artwork)
 
-# if artwork is empty!
+    # <artwork> may be empty!
     catch { incr lines [llength [split $av(.CTEXT) "\n"]] }
 
     if {$internal} {
         return $lines
     }
 
-    foreach k [list xml:space name type] {
-        catch { unset av($k) }
-    }
-    figure_$mode begin $lines $attrs(anchor) $attrs(title) [array get av]
+    figure_$mode begin $lines $attrs(anchor) $attrs(title) [array get attrs]
 }
 
 proc pass2end_figure {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
 
     array set attrs [list anchor "" title ""]
     array set attrs $elem($elemX)
 
-    figure_$mode end "" $attrs(anchor) $attrs(title)
+    figure_$mode end "" $attrs(anchor) $attrs(title) [array get attrs]
+
+    if {[info exists attrs(align)]} {
+        pop_align
+    }
+}
+
+proc pass2begin_artwork {elemX} {
+    global elem
+    global mode
+
+    array set attrs $elem($elemX)
+
+    catch { push_align $attrs(align) }
+    set align [current_align]
+
+    catch {
+        set lines 0
+        # <artwork> may be empty!
+        set ctext [split $attrs(.CTEXT) "\n"]
+        set lines [llength $ctext]
+        if {   ![string compare $mode html]
+            || ![catch {set x $attrs(.TEXTWIDTH)}]
+            || ![string compare $align ""]
+            || ![string compare $align "left"]} {
+            # break from catch
+            error ""
+        }
+        set textwidth 0
+        foreach l $ctext {
+            set ll [string length [string trimright [chars_expand $l]]]
+            if {$ll > $textwidth} {
+                set textwidth $ll
+            }
+        }
+        set attrs(.TEXTWIDTH) $textwidth
+        set elem($elemX) [array get attrs]
+    }
+
+    artwork_$mode begin $lines [array get attrs]
+}
+
+proc pass2end_artwork {elemX} {
+    global elem
+    global mode
+
+    array set attrs $elem($elemX)
+
+    artwork_$mode end 0 [array get attrs]
+
+    if {[info exists attrs(align)]} {
+        pop_align
+    }
 }
 
 
 # the preamble/postamble elements
 
 proc pass2begin_preamble {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
 
     array set attrs $elem($elemX)
@@ -5177,7 +5757,7 @@ proc pass2end_preamble {elemX} {
 }
 
 proc pass2begin_postamble {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
 
     array set attrs $elem($elemX)
@@ -5195,8 +5775,9 @@ proc pass2end_postamble {elemX} {
 # the texttable element
 
 proc pass2begin_texttable {elemX {internal 0}} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
+    global options
 
     array set attrs [list anchor "" title ""]
     array set attrs $elem($elemX)
@@ -5216,7 +5797,8 @@ proc pass2begin_texttable {elemX {internal 0}} {
     set empty 0
     set width 0
     set didP 0
-    foreach ttcol [find_element ttcol $attrs(.CHILDREN)] {
+    set ttcols [find_element ttcol $attrs(.CHILDREN)]
+    foreach ttcol $ttcols {
         catch { unset cv }
         array set cv [list width "" align left]
         array set cv $elem($ttcol)
@@ -5228,9 +5810,9 @@ proc pass2begin_texttable {elemX {internal 0}} {
             }
 
             {[100]%}
-                - 
+                -
             {[1-9][0-9]%}
-                - 
+                -
             {[1-9]%} {
                 lappend cols [string range $cv(width) 0 \
                                      [expr [string length $cv(width)]-2]]
@@ -5264,19 +5846,21 @@ proc pass2begin_texttable {elemX {internal 0}} {
         unexpected error "combined width doesn't total 100%"
     }
 
-    incr lines \
-         [expr [llength [find_element c $attrs(.CHILDREN)]]/[llength $cols]+3]
+    set colmax [llength $cols]
+    set children [find_element c $attrs(.CHILDREN)]
+    set rowmax [expr [llength $children]/$colmax]
+    incr lines [expr 4 + $rowmax + ($options(.COMPACT) ? 0 : ($rowmax - 1))]
 
     if {$internal} {
         return $lines
     }
 
-    set colmax [llength [set attrs(.COLS) $cols]]
+    set attrs(.COLS) $cols
     set elem($elemX) [array get attrs]
 
     set colno 0
     set aligns {}
-    foreach ttcol [find_element ttcol $attrs(.CHILDREN)] {
+    foreach ttcol $ttcols {
         catch { unset cv }
         array set cv [list width "" align left]
         array set cv $elem($ttcol)
@@ -5289,8 +5873,6 @@ proc pass2begin_texttable {elemX {internal 0}} {
     }
 
     set colno 0
-    set children [find_element c $attrs(.CHILDREN)]
-    set rowmax [expr [llength $children]/$colmax]
     foreach c $children {
         catch { unset cv }
         array set cv $elem($c)
@@ -5309,7 +5891,7 @@ proc pass2begin_texttable {elemX {internal 0}} {
 }
 
 proc pass2end_texttable {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
 
     array set attrs [list anchor "" title ""]
@@ -5319,7 +5901,7 @@ proc pass2end_texttable {elemX} {
 }
 
 proc pass2begin_ttcol {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
 
     array set attrs [list width "" align left]
@@ -5342,7 +5924,7 @@ proc pass2begin_ttcol {elemX} {
 }
 
 proc pass2begin_c {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
 
     array set attrs $elem($elemX)
@@ -5350,7 +5932,7 @@ proc pass2begin_c {elemX} {
 }
 
 proc pass2end_c {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
 
     array set attrs $elem($elemX)
@@ -5361,7 +5943,7 @@ proc pass2end_c {elemX} {
 # the xref element
 
 proc pass2begin_xref {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem xref
     global mode
 
 # pageno is ignored for now...
@@ -5376,37 +5958,50 @@ proc pass2begin_xref {elemX} {
 # the eref element
 
 proc pass2begin_eref {elemX} {
-    global counter depth elemN elem passno stack xref
+    global counter elem passno
     global mode
 
     array set attrs $elem($elemX)
+    set t $attrs(target)
 
     if {$passno == 2} {
         if {![info exists counter(reference)]} {
             set counter(reference) 0
         }
 
-        if {([string first "#" $attrs(target)] < 0) \
-                && ([string compare $attrs(.CTEXT) $attrs(target)])} {
+        set c -1
+
+        if {([string first "#" $t] < 0) \
+                && ([string compare $attrs(.CTEXT) $t])} {
             switch -- $mode {
                 nr  -
                 txt {
-                    incr counter(reference)
+                    global erefs
+
+                    foreach {n tn} [array get erefs] {
+                        if {![string compare $t $tn]} {
+                            set c $n
+                            break
+                        }
+                    }
+                    if {$c < 0} {
+                        set c [incr counter(reference)]
+                    }
                 }
             }
         }
-        set attrs(.COUNTER) $counter(reference)
+        set attrs(.COUNTER) $c
         set elem($elemX) [array get attrs]
     }
 
-    eref_$mode $attrs(.CTEXT) $attrs(.COUNTER) $attrs(target)
+    eref_$mode $attrs(.CTEXT) $attrs(.COUNTER) $t
 }
 
 
 # the cref element
 
 proc pass2begin_cref {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
     global options
 
@@ -5435,7 +6030,7 @@ proc pass2begin_cref {elemX} {
 }
 
 proc cref_title {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
 
     array set attrs [list anchor "" source ""]
     array set attrs $elem($elemX)
@@ -5448,7 +6043,7 @@ proc cref_title {elemX} {
 # the iref element
 
 proc pass2begin_iref {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
 
     array set attrs [list subitem "" primary false]
@@ -5466,7 +6061,7 @@ proc pass2begin_iref {elemX} {
 # the vspace element
 
 proc pass2begin_vspace {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
 
     array set attrs [list blankLines 0]
@@ -5480,7 +6075,7 @@ proc pass2begin_vspace {elemX} {
 # the spanx element
 
 proc pass2begin_spanx {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
 
     array set attrs [list style emph]
@@ -5497,7 +6092,7 @@ proc pass2begin_spanx {elemX} {
 # after the References section (if any) and before any Appendices
 
 proc pass2begin_back {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
     global crefs erefs
     global options
@@ -5555,7 +6150,7 @@ proc pass2begin_back {elemX} {
 
                 foreach street [find_element street $pv(.CHILDREN)] {
                     array set sv $elem($street)
-    
+
                     if {[string compare $sv(.CTEXT) ""]} {
                         lappend block1 $sv(.CTEXT)
                     }
@@ -5567,7 +6162,7 @@ proc pass2begin_back {elemX} {
                     if {[llength $f] == 1} {
                         catch { unset fv }
                         array set fv $elem($f)
-    
+
                         if {[string compare $s ""]} {
                             append s $t
                         }
@@ -5581,7 +6176,7 @@ proc pass2begin_back {elemX} {
                 if {[llength $f] == 1} {
                     catch { unset fv }
                     array set fv $elem($f)
-    
+
                     lappend block1 $fv(.CTEXT)
                 }
             }
@@ -5611,7 +6206,7 @@ proc pass2begin_back {elemX} {
 }
 
 proc pass2begin_references {elemX erefP} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
     global options
 
@@ -5646,7 +6241,7 @@ proc pass2begin_references {elemX erefP} {
 }
 
 proc sort_references {elemX elemY} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global options
 
     array set attrX $elem($elemX)
@@ -5659,7 +6254,7 @@ proc sort_references {elemX elemY} {
 }
 
 proc pass2begin_reference {elemX width} {
-    global counter depth elemN elem passno stack xref
+    global elem
     global mode
 
     array set attrs [list anchor "" target "" target2 ""]
@@ -5700,7 +6295,7 @@ proc pass2begin_reference {elemX width} {
 }
 
 proc ref_names {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
 
     array set attrs [list anchor "" target "" target2 ""]
     array set attrs $elem($elemX)
@@ -5772,7 +6367,7 @@ proc ref_names {elemX} {
 
     set names {}
     foreach name $hack {
-        if {[string compare [lindex $name 0] ""]} {     
+        if {[string compare [lindex $name 0] ""]} {
             lappend names $name
         }
     }
@@ -5781,7 +6376,7 @@ proc ref_names {elemX} {
 }
 
 proc ref_title {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
 
     array set attrs [list anchor "" target "" target2 ""]
     array set attrs $elem($elemX)
@@ -5797,7 +6392,7 @@ proc ref_title {elemX} {
 }
 
 proc ref_date {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem
 
     array set attrs [list anchor "" target "" target2 ""]
     array set attrs $elem($elemX)
@@ -5810,7 +6405,7 @@ proc ref_date {elemX} {
         return ""
     }
     if {([info exists dv(month)]) && ([string compare $dv(month) ""])} {
-        set date "$dv(month) $dv(year)"
+        set date "$dv(month)&nbsp;$dv(year)"
     } else {
         set date $dv(year)
     }
@@ -5825,7 +6420,7 @@ proc pass2begin_annotation {elemX} {
 }
 
 proc pass2end_annotation {elemX} {
-    global counter depth elemN elem passno stack xref
+    global elem stack
     global mode
 
     set frame [lindex $stack end]
@@ -5839,7 +6434,7 @@ proc pass2end_annotation {elemX} {
 }
 
 proc find_element {name children} {
-    global counter depth elemN elem passno stack xref
+    global elem
 
     set result ""
     foreach child $children {
@@ -5870,6 +6465,41 @@ proc lsearch0 {list exact} {
 
 
 #
+# Here is the page model for both the txt and nr rendering engines.
+#
+# Each line has at most 72 columns from the left edge, including any
+# left margin, but excluding the line terminator.  Every output character
+# is from the ASCII repertoire and the only control character used is
+# the line-feed (LF); the character-tabulation (HT) character is never
+# used.
+#
+# Each page has the following lines (0-based lineno variable):
+#    0:  header line (blank line on first page)
+#    1:  blank line
+#    2:  blank line
+#    3:  1st line of content
+#   ...
+#   50:  48th line of content
+#   51:  blank line
+#   52:  blank line
+#   53:  blank line
+#   54:  footer line
+#   55:  form-feed character (followed by line terminator)
+# Once processed through nroff and the fix.sh script (from
+# 2-nroff.template), the nr output differs from this in two ways. It
+# has three extra blank lines (that could be numbered -3, -2, and -1,
+# for a total of six) at the very beginning of the document (so the first
+# page is that much longer). It also has no line terminator following the
+# very last form-feed character of the file. These differences originate
+# in the design of the fix.sh script.
+#
+# Header and footer lines each have three parts:  left, center, and right.
+#
+# Output line numbers, when reported to the user, should be 1-based.
+#
+
+
+#
 # text output
 #
 
@@ -5877,7 +6507,7 @@ proc lsearch0 {list exact} {
 proc rfc_txt {irefs iprstmt copying newP} {
     global options copyrightP iprP
     global funding validity
-    global header footer lineno pageno blankP
+    global pageno
     global indexpg
 
     end_page_txt
@@ -5887,32 +6517,38 @@ proc rfc_txt {irefs iprstmt copying newP} {
 
         write_line_txt "Index"
 
+        push_indent 9
         foreach iref $irefs {
             foreach {L item subitem flags pages} $iref { break }
 
             if {[string compare $L ""]} {
                 write_line_txt ""
-                write_line_txt $L           
+                push_indent -9
+                write_text_txt $L
+                flush_text
+                pop_indent
             }
 
             set subitem [chars_expand $subitem]
             if {[string compare $item ""]} {
+                push_indent -6
                 write_text_txt [chars_expand $item]
                 if {[string compare $subitem ""]} {
                     flush_text
-                    write_text_txt "   $subitem"
+                    pop_indent
+                    push_indent -3
+                    write_text_txt $subitem
                 }
             } else {
-                write_text_txt "   $subitem"
+                push_indent -3
+                write_text_txt $subitem
             }
+            pop_indent
 
-            set s "  "
-            foreach page $pages {
-                write_text_txt "$s$page"
-                set s ", "
-            }
-            flush_text  
+            write_text_txt "  [collapsed_num_list $pages]"
+            flush_text
         }
+        pop_indent
 
         end_page_txt
     }
@@ -5921,7 +6557,12 @@ proc rfc_txt {irefs iprstmt copying newP} {
         set result $pageno
 
         if {$iprP} {
+            global iprurl ipremail
+
             write_line_txt "Intellectual Property Statement"
+
+            regsub -all %IPRURL% $iprstmt $iprurl iprstmt
+            regsub -all %IPREMAIL% $iprstmt $ipremail iprstmt
 
             foreach para $iprstmt {
                 write_line_txt ""
@@ -5932,6 +6573,10 @@ proc rfc_txt {irefs iprstmt copying newP} {
         }
 
         if {$newP} {
+            if {![have_lines 4]} {
+                end_page_txt
+            }
+
             write_line_txt "Disclaimer of Validity"
 
             foreach para $validity {
@@ -5977,11 +6622,11 @@ proc rfc_txt {irefs iprstmt copying newP} {
 
 proc front_txt_begin {left right top bottom title status copying keywords
                       lang} {
-    global options copyrightP iprP
-    global ifile mode ofile
+    global options copyrightP
     global header footer lineno pageno blankP
     global eatP
     global passno indexpg
+    global indent
 
     set header [three_parts $top]
     set footer [string trimright [three_parts $bottom]]
@@ -5998,6 +6643,8 @@ proc front_txt_begin {left right top bottom title status copying keywords
     for {set i 0} {$i < 2} {incr i} {
         write_line_txt "" -1
     }
+
+    set indent 0
 
     if {$options(.TOPBLOCK)} {
         set left [munge_long $left]
@@ -6017,6 +6664,8 @@ proc front_txt_begin {left right top bottom title status copying keywords
     }
 
     write_line_txt "" -1
+
+    set indent 3
 
     if {!$options(.PRIVATE)} {
         write_line_txt "Status of this Memo"
@@ -6052,9 +6701,9 @@ proc three_parts {stuff} {
 }
 
 proc front_txt_end {toc irefP} {
-    global options copyrightP iprP noticeT
-    global header footer lineno pageno blankP
-    global passno indexpg
+    global options noticeT
+    global lineno
+    global indexpg
 
     if {$options(.TOC)} {
         set last [lindex $toc end]
@@ -6106,7 +6755,7 @@ proc front_txt_end {toc irefP} {
                 set len1 [expr [set y [string length [lindex $c 0]]]+1]
                 if {$y == 0} {
                     incr len1 2
-                } 
+                }
                 set mid [expr $midX+$lenX-$len1]
                 set oddP [expr $mid%2]
                 if {$oddP != $oddX} {
@@ -6173,9 +6822,9 @@ proc note_txt {title depth} {
 
 proc section_txt {prefix top title lines anchor} {
     global options
-    global header footer lineno pageno blankP
+    global pageno
 
-    if {($top && !$options(.COMPACT)) || (![have_lines [expr $lines+5]])} {
+    if {($top && !$options(.COMPACT)) || (![have_lines [expr $lines+2]])} {
         end_page_txt
     } else {
         write_line_txt "" -1
@@ -6183,7 +6832,7 @@ proc section_txt {prefix top title lines anchor} {
 
     push_indent -3
     write_text_txt "$prefix  "
-    push_indent [expr [string length $prefix]+1]
+    push_indent [expr [string length $prefix]+2]
     write_text_txt [chars_expand $title]
     flush_text
     pop_indent
@@ -6210,11 +6859,13 @@ proc t_txt {tag counter style hangText editNo} {
         switch -- $style {
             letters {
                 set counter [offset2letters [lindex $l end] [llength $l]]
-                append counter ". "
+                # prevent two_spaces from kicking in.
+                append counter ".\xA0"
             }
 
             numbers {
-                set counter "[lindex $l end]. "
+                # prevent two_spaces from kicking in.
+                set counter "[lindex $l end].\xA0"
             }
 
             symbols {
@@ -6222,7 +6873,8 @@ proc t_txt {tag counter style hangText editNo} {
             }
 
             hanging {
-                set counter "[chars_expand $hangText] "
+                # prevent two_spaces from kicking in.
+                set counter "[chars_expand $hangText]\xA0"
                 set lines 5
             }
 
@@ -6238,7 +6890,7 @@ proc t_txt {tag counter style hangText editNo} {
         } elseif {!$options(.SUBCOMPACT)} {
             write_line_txt ""
         }
-        write_text_txt [format "%0s%-[expr $pos-0]s" "" $counter]
+        write_text_txt [format "%-[expr $pos-0]s" $counter]
         push_indent $pos
     } else {
         if {$options(.EDITING)} {
@@ -6313,14 +6965,23 @@ proc list_txt {tag counters style hangIndent hangText suprT} {
     }
 }
 
-proc figure_txt {tag lines anchor title args} {
-    global counter depth elemN elem passno stack xref
+proc figure_txt {tag lines anchor title {av {}}} {
+    global xref
     global mode
 
     switch -- $tag {
         begin {
-            if {[string compare $title ""]} {
-                incr lines 8
+            if {[string compare $anchor ""]} {
+                array set av2 $xref($anchor)
+                set x [string length $av2(value)]
+                incr x 7
+                if {[string compare $title ""]} {
+                    incr x [string length [chars_expand $title]]
+                    incr x 2
+                }
+                # Approximation based on a line length of 69 with a
+                # weighted average of half-word lengths of 3.7 (4).
+                incr lines [expr 1 + ($x + 64) / 65]
             }
             if {![have_lines $lines]} {
                 end_page_$mode
@@ -6330,14 +6991,28 @@ proc figure_txt {tag lines anchor title args} {
 
         end {
             if {[string compare $anchor ""]} {
-                array set av $xref($anchor)
-                set prefix "Figure $av(value)"
+                array set av2 $xref($anchor)
+                set prefix "Figure\xA0$av2(value)"
                 if {[string compare $title ""]} {
                     append prefix ": [chars_expand $title]"
                 }
                 write_line_$mode ""
                 write_text_$mode $prefix c
                 write_line_$mode ""
+            }
+        }
+    }
+}
+
+proc artwork_txt {tag lines {av {}}} {
+    global mode
+
+    switch -- $tag {
+        begin {
+            # This was done for the whole figure, but let's
+            # try it for the artwork alone, just in case.
+            if {![have_lines $lines]} {
+                end_page_$mode
             }
         }
     }
@@ -6377,13 +7052,22 @@ proc postamble_txt {tag {editNo ""}} {
 }
 
 proc texttable_txt {tag lines anchor title {didP 0}} {
-    global counter depth elemN elem passno stack xref
+    global xref
     global mode
 
     switch -- $tag {
         begin {
-            if {[string compare $title ""]} {
-                incr lines 8
+            if {[string compare $anchor ""]} {
+                array set av $xref($anchor)
+                set x [string length $av(value)]
+                incr x 6
+                if {[string compare $title ""]} {
+                    incr x [string length [chars_expand $title]]
+                    incr x 2
+                }
+                # Approximation based on a line length of 69 with a
+                # weighted average of half-word lengths of 3.7 (4).
+                incr lines [expr 1 + ($x + 64) / 65]
             }
             if {![have_lines $lines]} {
                 end_page_$mode
@@ -6421,13 +7105,12 @@ proc c_txt {tag row col align} {
 }
 
 proc cellB {didP} {
-    global rowNo colNo cells cellW
+    global cellW
 
     set cellW $didP
 }
 
 proc cellE {} {
-    global counter depth elemN elem passno stack xref
     global options
     global mode
     global rowNo colNo cells cellW
@@ -6523,10 +7206,7 @@ proc cellE {} {
     }
 
     if {![string compare $mode nr]} {
-        global nofillP
-
-        write_it ".nf"
-        set nofillP 1
+        condwrite_nf_nr
     }
 
     set allP 0
@@ -6548,16 +7228,6 @@ proc cellE {} {
             set colC "|"
             set rowC "+"
         }
-    }
-
-    write_line_$mode ""
-    if {$allP} {
-        set image $prefix
-        foreach col $cols {
-            append image "+-[::textutil::strRepeat "-" $col]-"
-        }
-        append image "+"
-        write_line_$mode $image
     }
 
     foreach cell [array names cells *,*] {
@@ -6595,22 +7265,85 @@ proc cellE {} {
             set cells($cell) [string trimright $pre]
         }
     }
+    catch { unset pre post }
+    catch { unset line }
 
+    # Precompute number of lines in each row.
+    set row_lines {}
     for {set row 0} {$row <= $rowNo} {incr row} {
-        if {!$options(.COMPACT) && ($row > 1)} {
-            set image $prefix
-            for {set column 1} {$column <= $colNo} {incr column} {
-                set width [lindex $cols [expr $column-1]]
-                append image [format "$colC %-*.*s " $width $width ""]
-            }
-            append image $colC
-            write_line_$mode $image
-        }
-
         set lines 0
         foreach cell [array name cells $row,*] {
             if {[set x [llength [split $cells($cell) "\n"]]] > $lines} {
                 set lines $x
+            }
+        }
+        lappend row_lines $lines
+    }
+
+    write_line_$mode ""
+
+    # Attempt to fit header (row 0) and row 1 in same page.
+    if {$rowNo >= 1} {
+        set lines $allP
+        incr lines [lindex $row_lines 0]
+        incr lines [expr   (   !$options(.COMPACT) \
+                            ||  [string compare $cellR none]) \
+                         + (   ($rowNo == 1) \
+                            && ![string compare $cellR full])]
+        incr lines [lindex $row_lines 1]
+
+        if {![have_lines $lines]} {
+            end_page_$mode
+        }
+    }
+
+    # Write top line.
+    if {$allP} {
+        set image $prefix
+        foreach col $cols {
+            append image "+-[::textutil::strRepeat "-" $col]-"
+        }
+        append image "+"
+        write_line_$mode $image
+    }
+
+    # Precompute separator line.
+    set hit_image $prefix
+    foreach col $cols {
+        append hit_image \
+               "$rowC$dashC[::textutil::strRepeat $dashC $col]$dashC"
+    }
+    append hit_image $rowC
+
+    # Precompute blank line.
+    set blank_image $prefix
+    for {set column 1} {$column <= $colNo} {incr column} {
+        set width [lindex $cols [expr $column-1]]
+        append blank_image [format "$colC %-*.*s " $width $width ""]
+    }
+    append blank_image $colC
+
+    # Generate each cell row.
+    for {set row 0} {$row <= $rowNo} {incr row} {
+        set lines [lindex $row_lines $row]
+
+        set hitP 0
+        switch -- $cellR {
+            none    { if {$row == 0 && !$options(.COMPACT)} { set hitP 1 } }
+            headers { if {$row == 0}                        { set hitP 1 } }
+            full    { if {$row == 0 || $row == $rowNo}      { set hitP 1 } }
+        }
+
+        if {![is_at_page_start]} {
+            set blkP [expr ($row > 1) && !$options(.COMPACT)]
+            if {![have_lines [expr $blkP + $lines + $hitP]]} {
+                if {$blkP && [have_lines 1]} {
+                    # Totally optional.  Only if a line is available.
+                    write_line_$mode $blank_image
+                }
+                end_page_$mode
+            } elseif {$blkP} {
+                write_line_$mode $blank_image
             }
         }
 
@@ -6627,35 +7360,8 @@ proc cellE {} {
             write_line_$mode $image
         }
 
-        set hitP 0
-        switch -- $cellR {
-            none {
-                if {($row == 0) && !$options(.COMPACT)} {
-                    set hitP 1
-                }
-            }
-
-            headers {
-                if {$row == 0} {
-                    set hitP 1
-                }
-            }
-
-            full {
-                if {($row == 0) || ($row == $rowNo)} {
-                    set hitP 1
-                }
-            }
-        }
-
         if {$hitP} {
-            set image $prefix
-            foreach col $cols {
-                append image \
-                       "$rowC$dashC[::textutil::strRepeat $dashC $col]$dashC"
-            }
-            append image "$rowC"
-            write_line_$mode $image
+            write_line_$mode $hit_image
         }
     }
     write_line_$mode ""
@@ -6700,7 +7406,7 @@ proc xref_txt {text av target format {hackP 0}} {
     global eatP
     global mode
 
-    array set attrs $av    
+    array set attrs $av
 
     set elemY $attrs(elemN)
     array set tv [list title ""]
@@ -6725,6 +7431,10 @@ proc xref_txt {text av target format {hackP 0}} {
 
         cref {
             set line "Comment\xA0$attrs(value)"
+        }
+
+        t {
+            set line "Paragraph\xA0$attrs(value)"
         }
 
         default {
@@ -6755,7 +7465,7 @@ proc xref_txt {text av target format {hackP 0}} {
             default {
                 set line "[chars_expand $text] $line"
             }
-        }       
+        }
     } else {
         switch -- $format {
             counter {
@@ -6781,7 +7491,7 @@ proc xref_txt {text av target format {hackP 0}} {
 
 proc eref_txt {text counter target} {
     global eatP
-    global crefs erefs
+    global erefs
     global mode
 
     if {![string compare $text ""]} {
@@ -6789,13 +7499,13 @@ proc eref_txt {text counter target} {
     } elseif {([string first "#" $target] < 0) \
                   && ([string compare $text $target])} {
         set erefs($counter) $target
-        append line "$text \[$counter\]"
+        set line "$text\xA0\[$counter\]"
     } else {
         set line $text
     }
     if {![cellP $line]} {
         set eatP 0
-        write_text_$mode $line
+        write_text_$mode [chars_expand $line]
     }
 
     set eatP -1
@@ -6804,7 +7514,7 @@ proc eref_txt {text counter target} {
 proc cref_txt {text counter source anchor} {
     global options
     global eatP
-    global crefs erefs
+    global crefs
     global mode
 
     set comments ""
@@ -6832,25 +7542,39 @@ proc cref_txt {text counter source anchor} {
 }
 
 proc iref_txt {item subitem flags} {
-    global header footer lineno pageno blankP
+    global pageno
 
     return $pageno
 }
 
 proc vspace_txt {lines} {
-    global header footer lineno pageno blankP
+    global lineno
     global eatP
     global mode
 
-    flush_text
-    if {$lineno+$lines >= 51} {
+    if {[is_at_page_start]} {
+        return
+    }
+    if {$lineno + $lines >= 51} {
+        # l+l == 51 would fit, but leave nothing.
         end_page_$mode
     } else {
-        while {$lines > 0} {
-            incr lines -1
+        switch -- $mode {
+            txt {
+                while {[incr lines -1] >= 0} {
+                    write_it ""
+                    incr lineno
+                }
+            }
 
-            write_it ""
-            incr lineno
+            nr {
+                if {$lines > 0} {
+                    write_it ".sp $lines"
+                    incr lineno $lines
+                } else {
+                    write_it ".br"
+                }
+            }
         }
     }
 
@@ -6901,9 +7625,8 @@ proc spanx_txt {text style} {
 }
 
 proc references_txt {tag args} {
-    global counter depth elemN elem passno stack xref
-    global options
-    global header footer lineno pageno blankP
+    global counter depth
+    global pageno
 
     switch -- $tag {
         begin {
@@ -6943,7 +7666,7 @@ proc references_txt {tag args} {
 }
 
 proc erefs_txt {{title ""}} {
-    global crefs erefs
+    global erefs
     global options
 
     if {[string compare $title ""]} {
@@ -6978,7 +7701,7 @@ proc erefs_txt {{title ""}} {
 }
 
 proc crefs_txt {title} {
-    global crefs erefs
+    global crefs
     global options
 
     if {[string compare $title ""]} {
@@ -7043,21 +7766,17 @@ proc reference_txt {prefix names title series formats date anchor target
     foreach name $names {
         incr nameA
         write_text_txt $s[chars_expand [lindex $name 0]]
-        if {$nameA == $nameN} {
-            set s " and "
-        } else {
-            set s ", "
-        }
+        set s [list_sep_str $nameA $nameN]
     }
     write_text_txt "$s\"[chars_expand $title]\""
     foreach serial $series {
-        if {[regexp -nocase -- "internet-draft (draft-.*)" $serial x n] == 1} {
+        if {[regexp -nocase -- "internet-draft&nbsp;(draft-.*)" $serial x n] == 1} {
             set serial "$n (work in progress)"
         }
         write_text_txt ", [chars_expand $serial]"
     }
     if {[string compare $date ""]} {
-        write_text_txt ", $date"
+        write_text_txt ", [chars_expand $date]"
     }
     if {[string compare $target ""]} {
         write_text_txt ", "
@@ -7075,9 +7794,8 @@ proc reference_txt {prefix names title series formats date anchor target
 }
 
 proc annotation_txt {tag} {
-    global mode
     global annoP
-    global rowNo colNo cells cellW
+    global cells
 
     switch -- $tag {
         begin {
@@ -7097,7 +7815,7 @@ proc annotation_txt {tag} {
 
 proc back_txt {authors} {
     global options
-    global header footer lineno pageno blankP
+    global lineno pageno
     global contacts
 
     set lines 5
@@ -7160,6 +7878,9 @@ proc back_txt {authors} {
                 set value [lindex [lindex $contacts \
                                           [lsearch0 $contacts $key]] 1]
                 set value [format %-6s $value:]
+                if {$options(.COLONSPACE)} {
+                    append value " "
+                }
                 write_line_txt "   $value [chars_expand [lindex $contact 1]]"
             }
         }
@@ -7168,12 +7889,20 @@ proc back_txt {authors} {
     return $result
 }
 
+global pcdata_line_offset
+set pcdata_line_offset 0
+
 proc pcdata_txt {text {pre 0}} {
     global eatP
     global options
+    global pcdata_line_offset
 
     if {(!$pre) && ($eatP > 0)} {
         set text [string trimleft $text]
+    }
+    if {[string length $text] <= 0} {
+        # Was only white space, but got trimmed.
+        return
     }
     set eatP 0
 
@@ -7191,14 +7920,21 @@ proc pcdata_txt {text {pre 0}} {
         return
     }
 
+    set pcdata_line_offset 0
     foreach line [split $text "\n"] {
         set line [chars_expand $line]
         if {$pre} {
-            write_line_txt [string trimright $line] 1
+            write_line_txt [string trimright $line] $pre
         } else {
             write_pcdata_txt $prefix$line
             set prefix " "
         }
+        incr pcdata_line_offset
+    }
+    set pcdata_line_offset 0
+
+    if {[regexp -- {[ \t\n]$} $text]} {
+        set eatP 1
     }
 }
 
@@ -7240,7 +7976,7 @@ proc emoticonic_txt {text} {
 }
 
 proc start_page_txt {} {
-    global header footer lineno pageno blankP
+    global header lineno blankP
 
     write_it $header
     write_it ""
@@ -7250,7 +7986,7 @@ proc start_page_txt {} {
 }
 
 proc end_page_txt {} {
-    global header footer lineno pageno blankP
+    global footer lineno pageno
 
     flush_text
 
@@ -7276,12 +8012,13 @@ proc end_page_txt {} {
 }
 
 proc write_pcdata_txt {text} {
-    global buffer
-    global indents indent
+    global buffer buffer_align
+    global indent
     global mode
 
     if {![string compare $buffer ""]} {
-        set buffer [format %*.*s $indent $indent ""]    
+        set buffer [format %*.*s $indent $indent ""]
+        set buffer_align [current_align]
     }
     append buffer $text
     set buffer [two_spaces $buffer]
@@ -7291,7 +8028,6 @@ proc write_pcdata_txt {text} {
 
 proc write_editno_txt {editNo} {
     global buffer
-    global indents indent
 
     if {[string compare $buffer ""]} {
         flush_text
@@ -7300,111 +8036,199 @@ proc write_editno_txt {editNo} {
     flush_text
 }
 
+global buffer_rest buffer_align
+set buffer_rest ""
+set buffer_align ""
+
+proc fold_text_txt {} {
+    global buffer buffer_rest
+    global indent
+
+    set buflen [string length $buffer]
+    if {$buflen > 72} {
+        set x [string last " " [string range $buffer 0 72]]
+        if {   $x != 72
+            && [regexp -indices \
+                       -start [expr $x + 1] \
+                       -- { *([^ ]+)} $buffer y wi]
+            && [set w0 [lindex $wi 0]] < 72} {
+
+            # Get word across edge.
+            set w1 [lindex $wi 1]
+            set word [string range $buffer $w0 $w1]
+            set wlen [expr $w1 - $w0 + 1]
+            set ww [string range $word 0 [expr 71 - $w0]]
+
+            set must_break [expr (   ($w0 <= $indent) \
+                                  || ($indent + $wlen > 72))]
+
+            # Don't bother with short words that cannot possibly
+            # produce a good break.
+            # Don't break a URI (or other things that are nice to
+            # copy&paste in their entirety) if it would entirely
+            # fit in its own line (the next line).
+            # Don't bother wasting our time on frequent purely
+            # alphanumerical non-opportunities.
+            if {   $must_break
+                || (   ($w0 < 70)
+                    && ($wlen >= 6)
+                    && ![regexp -- {^[A-Za-z0-9_\xA0]+$} $ww]
+                    && ![regexp -expanded -- { ://
+                                              |\m(mailto|urn|news|tel):
+                                              |\mdraft-[a-z0-9]+-
+                                              |\m[A-Za-z0-9._-]+@[a-z0-9.-]+\M
+                                             } $word]
+                   )} {
+
+                set best_left -1
+                set best_middle -1
+                set best_right $wlen
+
+                # Bad:       a-zzzzzzz
+                # Ok:       aa-zzzzzzz
+                # Bad:  aaaaaa-zz
+                # Ok:   aaaaaa-zzz
+                foreach d {/ @ & | - + # % :} {
+                    set y [string last $d $ww]
+                    while {   $y >= 0
+                           && [regexp -start $y -- "\\A.\[\])>\}'\"/@+:&|#%-\]" $word]} {
+                        # Not a good break based on first character after it.
+                        set y [string last $d [string range $ww 0 [expr $y - 1]]]
+                    }
+
+                    if {$y < 0 || $w0 + $y < $indent} {
+                        # Not usable.
+                    } elseif {   $y < 2
+                              || [regexp -all -- {[A-Za-z0-9_]} \
+                                         [string range $word \
+                                                 0 [expr $y - 1]]] < 2} {
+                        # Keep best of the indesirable left cuts.
+                        if {$y > $best_left} {
+                            set best_left $y
+                        }
+                    } elseif {   $y > $wlen - 4
+                              || [regexp -all -- {[A-Za-z0-9_]} \
+                                         [string range $word \
+                                                 [expr $y + 1] end]] < 3} {
+                        # Keep best of the indesirable right cuts.
+                        if {$y < $best_right} {
+                            set best_right $y
+                        }
+                    } else {
+                        # The first good middle position gets it,
+                        # because it's a better character.
+                        if {$best_middle < 0} {
+                            set best_middle $y
+                            # Bonus early break.
+                            break
+                        }
+
+                        ## The best middle position gets it,
+                        ## even if it's a worst character.
+                        #if {$y > $best_middle} {
+                        #    set best_middle $y
+                        #}
+                    }
+                }
+
+                if {$best_middle >= 0} {
+                    set x [expr $w0 + $best_middle + 1]
+                } elseif {$must_break} {
+                    # All undesirable, so start at right.
+                    if {$best_right < $wlen} {
+                        set x [expr $w0 + $best_right + 1]
+                    } elseif {$best_left >= 0} {
+                        set x [expr $w0 + $best_left + 1]
+                    } else {
+                        set x 72
+                    }
+
+                    global lineno pageno
+                    regsub -all -- {"} [string range $buffer $w0 [expr $x - 1]] {\"} wa
+                    regsub -all -- {"} [string range $buffer $x $w1] {\"} wz
+                    unexpected warning \
+ "output line $lineno (on page $pageno) breaks badly between \"$wa\" and \"$wz\""
+                }
+                # Else, we keep the first x we found
+                # so we don't break the word.
+            }
+        }
+        set text [string range $buffer 0 [expr $x-1]]
+        set rest [string trimleft [string range $buffer $x end]]
+    } else {
+        set text $buffer
+        set rest ""
+    }
+    # This would be done anyway by flush_text,
+    # which is now (and must be) a no-op.
+    set buffer ""
+
+    # It is up to the caller to restore buffer with $buffer_rest,
+    # after having printed text with write_line_$mode.
+    if {[string compare $rest ""]} {
+        set buffer_rest [format %*.*s%s $indent $indent "" $rest]
+    } else {
+        set buffer_rest ""
+    }
+
+    return [string trimright $text]
+}
+
+proc justify_text_txt {text direction} {
+    global indent
+
+    set t [string trimleft $text]
+
+    switch -- $direction {
+        c - center {
+            set len [expr $indent + (72 - [string length $t] - $indent)/2]
+        }
+
+        r - right {
+            set len [expr 72 - [string length $t]]
+        }
+
+        default {
+            return $text
+        }
+    }
+
+    return [format %*.*s%s $len $len "" $t]
+}
+
 proc write_text_txt {text {direction l}} {
-    global buffer
-    global indents indent
+    global buffer buffer_rest buffer_align
+    global indent
     global eatP
 
     if {$eatP < 0} {
         set text " $text"
     }
     if {![string compare $buffer ""]} {
-        set buffer [format %*.*s $indent $indent ""]    
+        set buffer [format %*.*s $indent $indent ""]
+        set buffer_align [current_align]
     }
     append buffer $text
 
     set flush [string compare $direction l]
-    set urlP 0
-    while {([set i [string length $buffer]] > 72) || ($flush)} {
-        if {$i > 72} {
-            set x [string last " " [set line [string range $buffer 0 72]]]
-            if {0} {
-                set y [string last "/" [string range $line 0 71]]
-            } else {
-                set y -1
-            }
-            if {0} {
-                set z [string last "-" [string range $line 0 71]]
-                if {$y < $z} {
-                    set y $z
-                }
-            } else {
-                set z $y
-            }
-# CLIVE#7 added the next four lines:
-            if {($x > 7)
-                    && ([string last "://" [string range $line 0 71]] > $x)} {
-                set y 0
-            }
-            if {$x < $y} {
-                set x $y
-            }
-            if {$x < $indent} {
-                set x [string last " " $buffer]
-                set y [string last "/" $buffer]
-                if {0} {
-                    set z [string last "-" $buffer]
-                    if {$y > $z} {
-                        set y $z
-                    }
-                } else {
-                    set y -1
-                    set z $y
-                }
-                if {$x > $y} {
-                    set x $y
-                }
-            }
-            if {$x < $indent} {
-                if {$urlP} {
-                    set z 7
-                } else {
-                    set z [string last "://" [string range $line 0 71]]
-                }
-                if {$z > 0} {
-                    set urlP 1
-                    set x 71
-                    while {($x > $z) && ([string index $line $x] == "-")} {
-                        incr x -1
-                    }
-                    incr x
-                } else {
-                    set x $i
-                }
-            } elseif {($x == $y) || ($x == $z)} {
-                incr x
-                set urlP 0
-            } elseif {$x+1 == $indent} {
-                set x $i
-                set urlP 0
-            }
-            set text [string range $buffer 0 [expr $x-1]]
-            set rest [string trimleft [string range $buffer $x end]]
-        } else {
-            set text $buffer
-            set rest ""
-        }
-        set buffer ""
+    while {([string length $buffer] > 72) || ($flush)} {
+        set text [fold_text_txt]
 
-        if {![string compare $direction c]} {
-            set text [string trimleft $text]
-            set len [expr (72-[string length $text])/2]
-            set text [format %*.*s%s $len $len "" $text]
+        switch -- $direction {
+            c - r { set buffer_align $direction }
         }
+        set text [justify_text_txt $text $buffer_align]
         write_line_txt $text
 
-        if {[string compare $rest ""]} {
-            set buffer [format %*.*s%s $indent $indent "" $rest]
-        } else {
+        if {![string compare [set buffer $buffer_rest] ""]} {
+            set buffer_align ""
             break
         }
     }
 }
 
 proc write_line_txt {line {pre 0}} {
-    global header footer lineno pageno blankP
-    global buffer
-    global options
+    global lineno blankP
 
     flush_text
     if {$lineno == 0} {
@@ -7420,16 +8244,24 @@ proc write_line_txt {line {pre 0}} {
         set blankP 0
     }
     if {($pre) && ($x)} {
-        set pre "   "
+        if {$pre < 0} {
+            set pre "   "
+        } else {
+            set pre [format %*.*s $pre $pre ""]
+            set line [tabs_expand_pre $line]
+        }
     } else {
         set pre ""
     }
     set line [nbsp_expand_txt $line]
     write_it [set line [string trimright $pre$line]]
     incr lineno
-    if {($options(.STRICT)) && ([string length $line] > 72)} {
-        unexpected error \
-            "output line $lineno (on page $pageno) longer than 72 characters"
+    if {[set len [string length $line]] > 72} {
+        global pageno
+
+        regsub -all -- {"} [string range $line 72 end] {\"} excess
+        unexpected [unex_condtype] \
+            "output line $lineno (on page $pageno) has $len > 72 characters (excess string is \"$excess\")"
     }
     if {$lineno >= 51} {
         end_page_txt
@@ -7444,26 +8276,71 @@ proc nbsp_expand_txt {s} {
 }
 
 proc two_spaces {glop} {
+    global options
+
     set post ""
 
+    # Work around a bug in tcl-8.4.9 and possibly others.
+    # Don't ask, it's a mystery anyway.
+    set foo "x$glop"
+
+    if {$options(.COLONSPACE)} {
+        set re {([.?!][])'"]*|:) }
+    } else {
+        set re {[.?!][])'"]* }
+    }
+
     while {[string length $glop] > 0} {
-        if {[set x [string first ". " $glop]] < 0} {
+        # The double quotes will also match the end of a spanx-verb, which
+        # may not be the end of a sentence.  Impossible to tell apart.  :-(
+        if {![regexp -indices $re $glop x]} {
             append post $glop
             break
         }
 
-        set pre [string range $glop 0 [expr $x+1]]
-        set glop [string trimleft [string range $glop [expr $x+2] end]]
+        set pre [string range $glop 0 [lindex $x 1]]
+        set glop [string trimleft [string range $glop [expr [lindex $x 1] + 1] end]]
         append post $pre
+
+        # Get rid of the colon case quickly.
+        if {   $options(.COLONSPACE)
+            && [regexp -- {: $} $pre]} {
+            append post " "
+            continue
+        }
+
+        # A special case.  Author wouldn't normally put a period after that.
+        if {[regexp -- {[Aa](nne|ppendi)x[ \xA0][A-Z][])'"]*[.?!][])'"]* $} $pre]} {
+            append post " "
+            continue
+        }
 
         # Check for likely abbreviation.  Do not insert two spaces in
         # this case.
-        if {![set y [string match {*[A-Z][A-Z] .} $pre]]} {
-            set y [string match {*[A-Z][a-z][a-z] .} $pre]
+        # "e.g." and "i.e." are never directly followed by spaces.
+        # "etc. " and "et al. " will often be the end of the sentence anyway.
+        if {[regexp -expanded {(^|[^A-Za-z\xA0-])
+                               (  [A-Z]\.[])'"]*
+                                | (  [A-Z][a-z][a-z]
+                                   | Fig | Tbl | Eq
+                                   | [Cc]f | vs | resp
+                                   | [JS]r | M[rs] | Messrs | Mrs | Mmes
+                                   | Drs? | Profs?
+                                   | Rep | Sen | Gov
+                                   | St | Rev
+                                   | Gen | Col | Maj | Cap | Lt)
+                                  \.)
+                               \ $} $pre]} {
+            continue
         }
-        if {!$y} {
-            append post " "
+
+        # Check if what follows doesn't look like the beginning of a sentence.
+        if {[regexp -- {^["'([]*[^A-Z"'([]} $glop]} {
+            continue
         }
+
+        # Otherwise, we assume that we are in between two sentences.
+        append post " "
     }
 
     return $post
@@ -7475,8 +8352,14 @@ proc pi_txt {key value} {
 
     switch -- $key {
         needLines {
+            global buffer
+
+            set x [string compare $buffer ""]
             if {![have_lines $value]} {
                 end_page_$mode
+            } elseif {$x && ![string compare $mode nr]} {
+                # We might have flushed early, so now make it stick.
+                write_it ".br"
             }
         }
 
@@ -7519,7 +8402,7 @@ proc rfc_html {irefs iprstmt copying newP} {
             if {[string compare $L ""]} {
                 write_html "<tr><td><span class=\"strong\">$L</span></td><td>&nbsp;</td></tr>"
             }
-            
+
             if {[string compare $subitem ""]} {
                 if {[string compare $item ""]} {
                     write_html "<tr><td>&nbsp;</td><td>$item</td></tr>"
@@ -7555,7 +8438,16 @@ proc rfc_html {irefs iprstmt copying newP} {
     if {(!$options(.PRIVATE)) && $copyrightP} {
         toc_html rfc.copyright
         if {$iprP} {
+            global iprurl ipremail
+
             write_html "<h3>Intellectual Property Statement</h3>"
+
+            regsub -all %IPRURL% $iprstmt "<a href='$iprurl'>$iprurl</a>" iprstmt
+            if {$options(.LINKMAILTO)} {
+                regsub -all %IPREMAIL% $iprstmt "<a href='mailto:$ipremail'>$ipremail</a>" iprstmt
+            } else {
+                regsub -all %IPREMAIL% $iprstmt $ipremail iprstmt
+            }
 
             foreach para $iprstmt {
                 write_html "<p class='copyright'>"
@@ -7614,7 +8506,7 @@ set htmlstyle \
         font-weight: bold; text-align: right;
         font-family: helvetica, arial, sans-serif;
         background-color: transparent; }
-    td.rfcbug { background-color: #000000 ; width: 30px ; height: 30px ; 
+    td.rfcbug { background-color: #000000 ; width: 30px ; height: 30px ;
         text-align: justify; vertical-align: middle ; padding-top: 2px ; }
     td.rfcbug span.RFC { color: #666666; font-weight: bold; text-decoration: none;
         background-color: #000000 ;
@@ -7636,7 +8528,7 @@ set htmlstyle \
 
     a.info span{display: none}
 
-    a.info:hover span{ /*the span will display just on :hover state*/
+    a.info:hover span.info{ /*the span will display just on :hover state*/
         display:block;
         position:absolute;
         font-size: smaller ;
@@ -7669,6 +8561,7 @@ set htmlstyle \
 
     pre { margin-left: 3em; color: #333333;  background-color: transparent;
         font-family: \"Courier New\", Courier, monospace ; font-size: small ;
+        text-align: left;
         }
 
     h3 { color: #333333; font-size: medium ;
@@ -7709,7 +8602,7 @@ set htmlstyle \
 proc front_html_begin {left right top bottom title status copying keywords
                        lang} {
     global prog prog_version
-    global options copyrightP iprP
+    global options copyrightP
     global htmlstyle
     global doingP hangP needP
     global imgP
@@ -7755,7 +8648,7 @@ proc front_html_begin {left right top bottom title status copying keywords
             pcdata_html $s$kw
             set s ", "
         }
-        write_html "\">" 
+        write_html "\">"
     }
 
      write_html -nonewline "<meta name=\"generator\" content=\"$prog $prog_version "
@@ -7811,7 +8704,7 @@ proc front_html_begin {left right top bottom title status copying keywords
         }
     }
 
-    if {(!$options(.PRIVATE)) && $copyrightP} { 
+    if {(!$options(.PRIVATE)) && $copyrightP} {
         write_html ""
         write_html "<h3>Copyright Notice</h3>"
         write_html "<p>"
@@ -7821,8 +8714,7 @@ proc front_html_begin {left right top bottom title status copying keywords
 }
 
 proc front_html_end {toc irefP} {
-    global options copyrightP iprP noticeT
-    global passno indexpg
+    global options noticeT
 
     if {!$options(.TOC)} {
         return
@@ -7955,12 +8847,18 @@ proc t_html {tag counter style hangText editNo} {
 
         set hangP 0
     } else {
+        set sta ""
         if {[string compare $tag end]} {
             set doingP 1
+            switch -- [set a [current_align]] {
+                left - center - right {
+                   set sta " style='text-align: $a'"
+                }
+            }
         }
         if {$doingP} {
             set doingP [string compare $tag end]
-            write_html -nonewline "<${s}p>"
+            write_html -nonewline "<${s}p${sta}>"
         }
 
         set hangP 0
@@ -8018,11 +8916,8 @@ proc list_html {tag counters style hangIndent hangText suprT} {
 }
 
 proc figure_html {tag lines anchor title {av {}}} {
-    global counter depth elemN elem passno stack xref
-    global options
-    global imgP
+    global xref
 
-    set imgP 0
     switch -- $tag {
         begin {
             if {[string compare $title ""]} {
@@ -8031,24 +8926,14 @@ proc figure_html {tag lines anchor title {av {}}} {
             if {[string compare $anchor ""]} {
                 write_html "<a name=\"$anchor\"></a>"
             }
-            if {([set x [lsearch -exact $av src]] >= 0) && ([incr x]%2)} {
-                write_html -nonewline "<p><img"
-                foreach {k v} $av {
-                    if {[string first . $k] != 0} {
-                        write_html -nonewline ""
-                        regsub -all {"} $v {\&quot;} v
-                        write_html -nonewline " $k=\"$v\""
-                    }
-                }
-                write_html " /></p>"
-                set imgP 1
-            }
+            img_html begin 1 $av
         }
 
         end {
+            img_html end 1 $av
             if {[string compare $anchor ""]} {
                 array set av2 $xref($anchor)
-                set prefix "Figure $av2(value)"
+                set prefix "Figure&nbsp;$av2(value)"
                 if {[string compare $title ""]} {
                     set title "$prefix: $title"
                 } else {
@@ -8062,6 +8947,104 @@ proc figure_html {tag lines anchor title {av {}}} {
     }
 }
 
+proc artwork_html {tag lines {av {}}} {
+    img_html $tag 2 $av
+}
+
+proc img_html {tag bit {av {}}} {
+    global imgP
+    global options
+
+    if {[set x [lsearch -exact $av src]] < 0 || $x % 2} {
+        return
+    }
+
+    switch -- $tag {
+        begin {
+            if {$imgP} {
+                return
+            }
+            set line "<div"
+            set attrs ""
+            set seen_alt 0
+            foreach {k v} $av {
+                # "name": file name to use for storing the content.
+                # "type": not a MIME type; e.g., "abnf".
+                regsub -all "\"" $v {\&quot;} v
+                switch -- $k {
+                    width - height {
+                        append attrs " $k=\"$v\""
+                    }
+
+                    src {
+                        if {$options(.USEOBJECT)} {
+                            append attrs " data=\"$v\""
+                        } else {
+                            append attrs " src=\"$v\""
+                        }
+                    }
+
+                    alt {
+                        if {!$options(.USEOBJECT)} {
+                            append attrs " alt=\"$v\""
+                            set seen_alt 1
+                        }
+                    }
+
+                    align {
+                        switch -- $v {
+                            left - center - right {
+                                append line " style='text-align: $v'"
+                            }
+
+                            default {
+                                unexpected error \
+                                    "align=\"$align\" attribute is invalid"
+                            }
+                        }
+                    }
+                }
+            }
+            if {$options(.USEOBJECT)} {
+                append line "><object"
+            } else {
+                append line "><img"
+            }
+            append line $attrs
+            if {$options(.USEOBJECT)} {
+                append line ">"
+            } else {
+                if {!$seen_alt} {
+                    if {$options(.STRICT)} {
+                        unexpected error \
+                            "use of the \"src\" attribute in img graphics also requires \"alt\" attribute"
+                    } else {
+                        unexpected warning \
+                            "also showing text content for img graphics with \"src\" but not \"alt\" attribute"
+                        append line { alt="[graphic image equivalent to the textual content below]"}
+                    }
+                } else {
+                    set imgP [expr $imgP | $bit]
+                }
+                append line " /></div>"
+            }
+            write_html $line
+        }
+
+        end {
+            if {[set imgP [expr $imgP & ~$bit]]} {
+                return
+            }
+            set line ""
+            if {$options(.USEOBJECT)} {
+                append line "</object>"
+            }
+            append line "</div>"
+            write_html $line
+        }
+    }
+}
+
 proc preamble_html {tag {editNo ""}} {
     t_html $tag "" "" "" $editNo
 }
@@ -8071,7 +9054,7 @@ proc postamble_html {tag {editNo ""}} {
 }
 
 proc texttable_html {tag lines anchor title {didP 0}} {
-    global counter depth elemN elem passno stack xref
+    global xref
 
     switch -- $tag {
         begin {
@@ -8144,7 +9127,7 @@ proc xref_html {text av target format {hackP 0}} {
     global elem
     global options
 
-    array set attrs $av    
+    array set attrs $av
 
     set elemY $attrs(elemN)
     array set tv [list title ""]
@@ -8177,6 +9160,11 @@ proc xref_html {text av target format {hackP 0}} {
             set title [cref_title $elemY]
         }
 
+        t {
+            set line "Paragraph&nbsp;$attrs(value)"
+            set title ""
+        }
+
         reference {
             set line "\[$attrs(value)\]"
 
@@ -8187,13 +9175,9 @@ proc xref_html {text av target format {hackP 0}} {
                 incr nameA
                 set name [lindex $name 0]
                 append title $s$name
-                if {$nameA == $nameN} {
-                    set s " and "
-                } else {
-                    set s ", "
-                }
+                set s [list_sep_str $nameA $nameN]
             }
-            append title ", [ref_title $elemY], [ref_date $elemY]."
+            append title ", &ldquo;[ref_title $elemY],&rdquo; [ref_date $elemY]."
         }
 
         default {
@@ -8254,7 +9238,7 @@ if {0} {
 } else {
     set line "<a class=\"info\" href=\"#$target\">$text"
     if {[string compare $title ""]} {
-        append line "<span>$title</span>"
+        append line "<span> (</span><span class=\"info\">$title</span><span>)</span>"
     }
     append line "</a>$post"
 }
@@ -8273,7 +9257,7 @@ proc eref_html {text counter target} {
         set text $target
     } elseif {$options(.EMOTICONIC)} {
         set text [emoticonic_html $text]
-    } 
+    }
 
     set line "<a href=\"$target\">$text</a>"
     if {![cellP $line]} {
@@ -8282,7 +9266,7 @@ proc eref_html {text counter target} {
 }
 
 proc cref_html {text counter source anchor} {
-    global crefs erefs
+    global crefs
 
     set comments ""
     if {[string compare $source ""]} {
@@ -8298,7 +9282,7 @@ proc cref_html {text counter source anchor} {
 if {0} {
     set line "<a href=\"#comment.$counter\" title=\"$comments\">\[$counter\]</a>"
 } else {
-    set line "<a class=\"info\" href=\"#comment.$counter\">\[$counter\]<span>$comments</span></a>"
+    set line "<a class=\"info\" href=\"#comment.$counter\">\[$counter\]<span> (</span><span class=\"info\">$comments</span><span>)</span></a>"
 }
     append line "<a name=\"$anchor\"></a>"
 
@@ -8319,7 +9303,7 @@ proc iref_html {item subitem flags} {
 
 proc vspace_html {lines} {
     global options
-    global doingP hangP needP
+    global hangP
 
     if {$lines > 5} {
         if {$options(.SLIDES) && [end_page_slides]} {
@@ -8344,7 +9328,7 @@ proc spanx_html {text style} {
 # don't need to return anything even though txt/nr versions do...
 
 proc references_html {tag args} {
-    global counter depth elemN elem passno stack xref
+    global counter depth
     global options
 
     if {$options(.SLIDES) \
@@ -8410,11 +9394,7 @@ proc reference_html {prefix names title series formats date anchor target
             set name [lindex $name 0]
         }
         append text $s$name
-        if {$nameA == $nameN} {
-            set s " and "
-        } else {
-            set s ", "
-        }
+        set s [list_sep_str $nameA $nameN]
     }
 
     if {(![string compare $target ""]) && ([llength $formats] == 1)} {
@@ -8425,11 +9405,11 @@ proc reference_html {prefix names title series formats date anchor target
 
     if {![string compare $target ""]} {
         foreach serial $series {
-            if {[regexp -nocase -- "rfc (\[0-9\]*)" $serial x n] == 1} {
+            if {[regexp -nocase -- "rfc&nbsp;(\[0-9\]*)" $serial x n] == 1} {
                 set target $rfcTxtHome/rfc$n.txt
                 break
             }
-            if {[regexp -nocase -- "internet-draft (draft-.*)" $serial x n] \
+            if {[regexp -nocase -- "internet-draft&nbsp;(draft-.*)" $serial x n] \
                     == 1} {
                 set target $idTxtHome/$n.txt
                 break
@@ -8439,19 +9419,22 @@ proc reference_html {prefix names title series formats date anchor target
     if {[string compare $target ""]} {
         set title "<a href=\"$target\">$title</a>"
     }
-    append text "$s\"$title\""
+    append text "$s&ldquo;$title"
+    set r "&rdquo;"
     foreach serial $series {
-        if {[regexp -nocase -- "internet-draft (draft-.*)" $serial x n] == 1} {
+        if {[regexp -nocase -- "internet-draft&nbsp;(draft-.*)" $serial x n] == 1} {
             set serial "$n (work in progress)"
         }
-        append text ", $serial"
+        append text ",$r $serial"
+        set r ""
     }
     if {[string compare $date ""]} {
-        append text ", $date"
+        append text ",$r $date"
+        set r ""
     }
 
-    set s " ("
-    set t "."
+    set s "$r ("
+    set t ".$r"
     foreach format $formats {
         catch { unset fv }
         array set fv $format
@@ -8477,8 +9460,7 @@ proc reference_html {prefix names title series formats date anchor target
 }
 
 proc crefs_html {title} {
-    global crefs erefs
-    global options
+    global crefs
 
     write_html ""
     toc_html rfc.comments
@@ -8597,7 +9579,7 @@ proc xxxx_html {{anchor {}}} {
             toc_html $anchor
             return
         }
-    }                               
+    }
 
     if {[string compare $anchor ""]} {
         write_html "<a name=\"$anchor\"></a><hr />"
@@ -8636,7 +9618,7 @@ proc toc_html {anchor} {
 proc pcdata_html {text {pre 0}} {
     global entities
     global options
-    global doingP hangP needP
+    global doingP needP
     global imgP
     global emptyP
 
@@ -8655,7 +9637,9 @@ proc pcdata_html {text {pre 0}} {
             if {$doingP} {
                 append lines "</p>\n"
             }
-            append lines "<pre>$text</pre>"
+            append lines [pre_tag_html begin]
+            append lines $text
+            append lines [pre_tag_html end]
             if {$doingP} {
                 append lines "<p>\n"
             }
@@ -8733,8 +9717,8 @@ ACwAAAAAFAAWAAACI4yPqcvtD6OcTQgarJ1ax949IFiNpGKaSZoeLIvF8kzXdlAAADs="
 
 proc end_rfc_slides {} {
     global ifile
-    global passno indexpg
-    global slideno slidewd slidemx sildenm
+    global passno
+    global slideno slidewd slidemx
 
     if {$passno != 2} {
         end_page_slides
@@ -8748,7 +9732,7 @@ proc end_rfc_slides {} {
     }
 
     if {![string compare [info commands base64] base64]} {
-        set inputD [file dirname [set ifile $ifile]]
+        set inputD [file dirname $ifile]
 
         foreach gif {left right up} {
             global ${gif}Gif
@@ -8768,10 +9752,9 @@ proc end_rfc_slides {} {
 }
 
 proc front_slides_begin {left right top bottom title} {
-    global passno indexpg
-    global stdout
-
-    global slideno slidewd slidemx slidenm slideft
+    global passno
+    global out_fd
+    global slideno slideft
 
     set slideno 0
     start_page_slides [set slideft [lindex $title 0]]
@@ -8781,10 +9764,10 @@ proc front_slides_begin {left right top bottom title} {
     }
 
     set size 4
-    puts $stdout "<br /><br /><br /><br /><p align=\"right\">"
-    puts $stdout "<table width=\"75%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
-    puts $stdout "<tr><td>"
-    puts $stdout "<table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
+    puts $out_fd "<br /><br /><br /><br /><p align=\"right\">"
+    puts $out_fd "<table width=\"75%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
+    puts $out_fd "<tr><td>"
+    puts $out_fd "<table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
     set left [munge_long $left]
     set right [munge_long $right]
     set lc ""
@@ -8800,38 +9783,39 @@ proc front_slides_begin {left right top bottom title} {
         } else {
             set r "&nbsp;"
         }
-        puts $stdout "<tr valign=\"top\">"
-        puts $stdout "<td width=\"33%\"><font color=\"#006600\" size=\"+$size\">$l</font></td>"
-        puts $stdout "<td width=\"33%\"><font color=\"#006600\" size=\"+$size\">$r</font></td>"
-        puts $stdout "</tr>"
+        puts $out_fd "<tr valign=\"top\">"
+        puts $out_fd "<td width=\"33%\"><font color=\"#006600\" size=\"+$size\">$l</font></td>"
+        puts $out_fd "<td width=\"33%\"><font color=\"#006600\" size=\"+$size\">$r</font></td>"
+        puts $out_fd "</tr>"
 
         set size 3
     }
-    puts $stdout "</table>"
-    puts $stdout "</td></tr>"
-    puts $stdout "</table>"
-    puts $stdout "</p>"
+    puts $out_fd "</table>"
+    puts $out_fd "</td></tr>"
+    puts $out_fd "</table>"
+    puts $out_fd "</p>"
 
     return 1
 }
 
 proc start_page_slides {{title ""}} {
-    global passno indexpg
+    global passno
     global ifile
-    global stdout
-    global slideno slidewd slidemx slidenm slideft
+    global out_fd
+    global slideno slidenm
 
     if {$passno < 3} {
         return
     }
 
     if {$slideno == 0} {
-        catch { close $stdout }
+        catch { close $out_fd }
         catch { file delete -force [file rootname].html }
     }
 
-    set stdout [open [file rootname $ifile]-[set p [slide_foo $slideno]].html \
+    set out_fd [open [file rootname $ifile]-[set p [slide_foo $slideno]].html \
                      { WRONLY CREAT TRUNC }]
+    catch { fconfigure $out_fd -encoding utf-8 }
 
     if {[string compare $title ""]} {
         set slidenm $title
@@ -8844,27 +9828,27 @@ proc start_page_slides {{title ""}} {
         set p ""
     }
     write_html "<\!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">"
-    puts $stdout "<html><head><title>"
+    puts $out_fd "<html><head><title>"
     pcdata_html $p$title
-    puts $stdout "</title></head>"
-    puts $stdout "<body text=\"#000000\" vlink=\"#006600\" alink=\"#ccddcc\" link=\"#006600\"\n      bgcolor=\"#ffffff\">"
-    puts $stdout "<font face=\"arial, helvetica, sans-serif\">"
-    puts $stdout "<table height=\"100%\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" border=\"0\">"
-    puts $stdout "<tbody><tr><td valign=\"top\">"
+    puts $out_fd "</title></head>"
+    puts $out_fd "<body text=\"#000000\" vlink=\"#006600\" alink=\"#ccddcc\" link=\"#006600\"\n      bgcolor=\"#ffffff\">"
+    puts $out_fd "<font face=\"arial, helvetica, sans-serif\">"
+    puts $out_fd "<table height=\"100%\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" border=\"0\">"
+    puts $out_fd "<tbody><tr><td valign=\"top\">"
 
-    puts $stdout "<table height=\"100%\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" border=\"0\">"
-    puts $stdout "<tbody><tr><td valign=\"top\">"
-    puts $stdout "<p><font color=\"#006600\" size=\"+5\">$title</font></p>"
+    puts $out_fd "<table height=\"100%\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" border=\"0\">"
+    puts $out_fd "<tbody><tr><td valign=\"top\">"
+    puts $out_fd "<p><font color=\"#006600\" size=\"+5\">$title</font></p>"
 
-    puts $stdout "<br /><br />"
-    puts $stdout "<font size=\"+3\">"
+    puts $out_fd "<br /><br />"
+    puts $out_fd "<font size=\"+3\">"
 }
 
 proc end_page_slides {} {
-    global passno indexpg
+    global passno
     global ifile
-    global stdout
-    global slideno slidewd slidemx slidenm slideft
+    global out_fd
+    global slideno slidemx slideft
 
     if {$passno < 3} {
         incr slideno
@@ -8881,39 +9865,39 @@ proc end_page_slides {} {
     }
     set right [file rootname [file tail $ifile]]-[slide_foo $right].html
 
-    puts $stdout "</font>"
-    puts $stdout "</td></tr></tbody>"
-    puts $stdout "</table>"
-    puts $stdout "</td><td valign=\"bottom\" align=\"right\">"
+    puts $out_fd "</font>"
+    puts $out_fd "</td></tr></tbody>"
+    puts $out_fd "</table>"
+    puts $out_fd "</td><td valign=\"bottom\" align=\"right\">"
     puts -nonewline \
-         $stdout "<p align=\"right\"><nobr>"
+         $out_fd "<p align=\"right\"><nobr>"
     puts -nonewline \
-         $stdout "<a href=\"$left\"><img src=\"left.gif\" border=\"0\" width=\"20\" height=\"22\" /></a>"
+         $out_fd "<a href=\"$left\"><img src=\"left.gif\" border=\"0\" width=\"20\" height=\"22\" /></a>"
     puts -nonewline \
-         $stdout "<a href=\"$up\"><img src=\"up.gif\" border=\"0\" width=\"20\" height=\"22\" /></a>"
+         $out_fd "<a href=\"$up\"><img src=\"up.gif\" border=\"0\" width=\"20\" height=\"22\" /></a>"
     puts -nonewline \
-         $stdout "<a href=\"$right\"><img src=\"right.gif\" border=\"0\" /></a>"
-    puts $stdout "</nobr></p>"
-    puts $stdout "</td></tr>"
-    puts $stdout "<tr><td align=\"right\" colspan=\"2\">"
-    puts $stdout "<font color=\"#006600\" size=\"-3\">"
+         $out_fd "<a href=\"$right\"><img src=\"right.gif\" border=\"0\" /></a>"
+    puts $out_fd "</nobr></p>"
+    puts $out_fd "</td></tr>"
+    puts $out_fd "<tr><td align=\"right\" colspan=\"2\">"
+    puts $out_fd "<font color=\"#006600\" size=\"-3\">"
     pcdata_html $slideft
     pcdata_html "</font>"
-    puts $stdout "</td></tr></tbody>"
-    puts $stdout "</table>"
-    puts $stdout "</font></body></html>"
+    puts $out_fd "</td></tr></tbody>"
+    puts $out_fd "</table>"
+    puts $out_fd "</font></body></html>"
 
-    catch { close $stdout }
-    set stdout ""
+    catch { close $out_fd }
+    set out_fd ""
 
     incr slideno
     return 1
 }
 
 proc slide_pre {text} {
-    global passno indexpg
-    global stdout
-    global doingP hangP needP
+    global passno
+    global out_fd
+    global doingP needP
 
     if {$passno < 3} {
         return 0
@@ -8921,28 +9905,67 @@ proc slide_pre {text} {
 
     set needP 0
     if {$doingP} {
-        puts $stdout "</p>"
+        puts $out_fd "</p>"
     }
-    puts $stdout "<pre>$text</pre>"
+    set    t [pre_tag_html begin]
+    append t $text
+    append t [pre_tag_html end]
+    puts $out_fd $t
     if {$doingP} {
-        puts $stdout "<p>"
+        puts $out_fd "<p>"
     }
 
     return 1
 }
 
 proc slide_foo {n} {
-    global slideno slidewd slidemx slidenm slideft
+    global slidewd
 
     return [format %*.*d $slidewd $slidewd $n]
 }
 
 
+proc pre_tag_html {tag} {
+    set str ""
+
+    switch -- $tag {
+        begin {
+            #set table "<table border='0' cellspacing='0' cellpadding='0' width='100%'>"
+            set table "<div style='display: table; width: 0px; margin-left: auto; margin-right:"
+            #set st "<tbody><tr><td></td><td>"
+            switch -- [current_align] {
+                #center { append str "$table<col width='50%' /><col /><col width='50%'>$st" }
+                center { append str "$table auto'>" }
+                #right  { append str "$table<col width='100%' /><col />$st" }
+                right  { append str "$table 0px'>" }
+            }
+            append str "<pre>"
+        }
+
+        end {
+            append str "</pre>"
+            #set et "</td></tr></tbody></table>"
+            switch -- [current_align] {
+                #center { append str "</td><td>$et" }
+                #right  { append str $et }
+                center - right { append str "</div>" }
+            }
+        }
+    }
+
+    return $str
+}
+
 proc pi_html {key value} {
     switch -- $key {
-        needLines
-            -
+        needLines {}
+
         typeout {
+            global passno
+
+            if {$passno == 2} {
+                puts stdout $value
+            }
         }
 
         default {
@@ -8954,7 +9977,7 @@ proc pi_html {key value} {
 proc write_html {a1 {a2 ""}} {
     global options
     global passno
-    global stdout
+    global out_fd
 
     if {($options(.SLIDES)) || ($passno == 3)} {
         set command [list puts]
@@ -8962,7 +9985,7 @@ proc write_html {a1 {a2 ""}} {
             lappend command -nonewline
             set a1 $a2
         }
-        eval $command [list $stdout $a1]
+        eval $command [list $out_fd $a1]
     }
 }
 
@@ -8974,76 +9997,66 @@ proc write_html {a1 {a2 ""}} {
 proc rfc_nr {irefs iprstmt copying newP} {
     global options copyrightP iprP
     global funding validity
-    global header footer lineno pageno blankP
-    global indents indent lastin
-    global nofillP
+    global pageno
     global indexpg
 
-    end_page_nr
+    flush_text
 
     if {[llength $irefs] > 0} {
+        end_page_nr
+
         set indexpg $pageno
 
-        if {$lastin != 0} {
-            write_it ".in [set lastin [set indent 0]]"
-            set indents {}
-        }
+        condwrite_in_nr 0 1
         write_line_nr "Index"
 
+        condwrite_in_nr 12 1
         foreach iref $irefs {
             foreach {L item subitem flags pages} $iref { break }
 
             if {[string compare $L ""]} {
                 write_it ".br"
-                write_it ".in 0"
                 write_line_nr ""
-                write_line_nr $L           
+                write_it ".ti 3"
+                write_line_nr $L
             }
 
             set subitem [chars_expand $subitem]
             if {[string compare $item ""]} {
                 write_it ".br"
-                write_it ".in 3"
-                write_text_nr [chars_expand $item]
+                do_indent_text_nr [chars_expand $item] 6
                 if {[string compare $subitem ""]} {
                     flush_text
                     write_it ".br"
-                    write_it ".in 6"
-                    write_text_nr "   $subitem"
+                    do_indent_text_nr $subitem 9
                 }
             } else {
                 write_it ".br"
-                write_it ".in 6"
-                write_text_nr "   $subitem"
+                do_indent_text_nr $subitem 9
             }
 
-            set s "  "
-            foreach page $pages {
-                write_text_nr "$s$page"
-                set s ", "
-            }
-            flush_text  
+            write_text_nr "  [collapsed_num_list $pages]"
+            flush_text
         }
 
-        end_page_nr
-
-        if {$lastin != 0} {
-            write_it ".in [set lastin [set indent 0]]"
-            set indents {}
-        }
+        #condwrite_in_nr 0 1
     }
 
     if {(!$options(.PRIVATE)) && $copyrightP} {
+        end_page_nr
+
         set result $pageno
 
-        if {$lastin != 3} {
-            write_it ".in [set lastin [set indent 3]]"
-            set indents {}
-        }
+        condwrite_in_nr 3 1
 
         if {$iprP} {
+            global iprurl ipremail
+
             write_it ".ti 0"
             write_line_nr "Intellectual Property Statement"
+
+            regsub -all %IPRURL% $iprstmt $iprurl iprstmt
+            regsub -all %IPREMAIL% $iprstmt $ipremail iprstmt
 
             foreach para $iprstmt {
                 write_line_nr ""
@@ -9054,6 +10067,10 @@ proc rfc_nr {irefs iprstmt copying newP} {
         }
 
         if {$newP} {
+            if {![have_lines 4]} {
+                end_page_nr
+            }
+
             write_it ".ti 0"
             write_line_nr "Disclaimer of Validity"
 
@@ -9103,9 +10120,8 @@ proc rfc_nr {irefs iprstmt copying newP} {
 proc front_nr_begin {left right top bottom title status copying keywords
                      lang} {
     global prog prog_version
-    global options copyrightP iprP
-    global ifile mode ofile
-    global header footer lineno pageno blankP
+    global options copyrightP
+    global lineno pageno blankP
     global eatP nofillP indent lastin
     global passno indexpg
 
@@ -9134,14 +10150,16 @@ proc front_nr_begin {left right top bottom title status copying keywords
     write_it ".hy 0"
     write_it ".nh"
     write_it ".ad l"
-    write_it ".nf"
     set nofillP -1
+    condwrite_nf_nr
 
     if {$passno == 2} {
         set indexpg 0
     }
 
     incr lineno 2
+
+    condwrite_in_nr 0 1
 
     if {$options(.TOPBLOCK)} {
         set left [munge_long $left]
@@ -9162,9 +10180,7 @@ proc front_nr_begin {left right top bottom title status copying keywords
 
     write_line_nr "" -1
 
-    if {$lastin != $indent} {
-        write_it ".in [set lastin $indent]"
-    }
+    condwrite_in_nr 3 1
 
     if {!$options(.PRIVATE)} {
         write_it ".ti 0"
@@ -9185,11 +10201,10 @@ proc front_nr_begin {left right top bottom title status copying keywords
 }
 
 proc front_nr_end {toc irefP} {
-    global options copyrightP iprP noticeT
-    global header footer lineno pageno blankP
-    global indents indent lastin
-    global passno indexpg
-    global nofillP
+    global options noticeT
+    global lineno
+    global indents
+    global indexpg
 
     if {$options(.TOC)} {
         set last [lindex $toc end]
@@ -9210,13 +10225,12 @@ proc front_nr_end {toc irefP} {
         } else {
             write_line_nr "" -1
         }
-        write_it ".in [set lastin [set indent 0]]"
+        condwrite_in_nr 0 1
         set indents {}
         write_line_nr "Table of Contents"
         write_line_nr "" -1
 
-        write_it ".nf"
-        set nofillP 1
+        condwrite_nf_nr
 
         set len1 0
         set len2 0
@@ -9246,7 +10260,7 @@ proc front_nr_end {toc irefP} {
                 set len1 [expr [set y [string length [lindex $c 0]]]+1]
                 if {$y == 0} {
                     incr len1 2
-                } 
+                }
                 set mid [expr $midX+$lenX-$len1]
                 set oddP [expr $mid%2]
                 if {$oddP != $oddX} {
@@ -9301,10 +10315,9 @@ proc note_nr {title depth} {
 
 proc section_nr {prefix top title lines anchor} {
     global options
-    global header footer lineno pageno blankP
-    global indents indent lastin
+    global pageno
 
-    if {($top && !$options(.COMPACT)) || (![have_lines [expr $lines+5]])} {
+    if {($top && !$options(.COMPACT)) || (![have_lines [expr $lines+2]])} {
         end_page_nr
     } else {
         write_line_nr "" -1
@@ -9315,10 +10328,7 @@ proc section_nr {prefix top title lines anchor} {
     flush_text
     pop_indent
 
-    if {$lastin != 3} {
-        write_it ".in [set lastin [set indent 3]]"
-        set indents {}
-    }
+    condwrite_in_nr 3 1
 
     return $pageno
 }
@@ -9342,11 +10352,13 @@ proc t_nr {tag counter style hangText editNo} {
         switch -- $style {
             letters {
                 set counter [offset2letters [lindex $l end] [llength $l]]
-                append counter ". "
+                # prevent two_spaces from kicking in.
+                append counter ".\xA0"
             }
 
             numbers {
-                set counter "[lindex $l end]. "
+                # prevent two_spaces from kicking in.
+                set counter "[lindex $l end].\xA0"
             }
 
             symbols {
@@ -9354,7 +10366,8 @@ proc t_nr {tag counter style hangText editNo} {
             }
 
             hanging {
-                set counter "[chars_expand $hangText] "
+                # prevent two_spaces from kicking in.
+                set counter "[chars_expand $hangText]\xA0"
                 set left ""
                 set lines 5
             }
@@ -9372,7 +10385,7 @@ proc t_nr {tag counter style hangText editNo} {
         } elseif {!$options(.SUBCOMPACT)} {
             write_line_nr ""
         }
-        indent_text_nr [format "%0s%-[expr $pos-0]s" "" $counter] $left
+        indent_text_nr [format "%-[expr $pos-0]s" $counter] $left
         pop_indent
         push_indent $pos
     } else {
@@ -9389,7 +10402,7 @@ proc t_nr {tag counter style hangText editNo} {
 proc list_nr {tag counters style hangIndent hangText suprT} {
     global options
     global eatP
-    global indent lastin
+    global indent
 
     switch -- $tag {
         begin {
@@ -9434,28 +10447,33 @@ proc list_nr {tag counters style hangIndent hangText suprT} {
 
             set eatP 1
 
-            if {$lastin != $indent} {
-                write_it ".in [set lastin $indent]"
-            }
+            condwrite_in_nr $indent
         }
     }
 }
 
-proc figure_nr {tag lines anchor title args} {
-    figure_txt $tag $lines $anchor $title $args
+proc figure_nr {tag lines anchor title {av {}}} {
+    figure_txt $tag $lines $anchor $title $av
+}
+
+proc artwork_nr {tag lines {av {}}} {
+    artwork_txt $tag $lines $av
 }
 
 proc preamble_nr {tag {editNo ""}} {
     preamble_txt $tag $editNo
 }
 
+global tblindent
+set tblindent 0
+
 proc postamble_nr {tag {editNo ""}} {
     global tblindent
 
     postamble_txt $tag $editNo
 
-    if {![string compare $tag "end"] && ($tblindent > 0)} {
-        write_it ".in $tblindent"
+    if {![string compare $tag "begin"] && ($tblindent > 0)} {
+        condwrite_in_nr $tblindent
     }
     set tblindent 0
 }
@@ -9465,7 +10483,7 @@ proc texttable_nr {tag lines anchor title {didP 0}} {
 
     texttable_txt $tag $lines $anchor $title $didP
     if {![string compare $tag "end"] && ($tblindent > 0)} {
-        write_it ".in $tblindent"
+        condwrite_in_nr $tblindent
     }
     set tblindent 0
 }
@@ -9476,7 +10494,7 @@ proc ttcol_nr {text align col width} {
     if {$tblindent == 0} {
         flush_text
         set tblindent $indent
-        write_it ".in 0"
+        condwrite_in_nr 0
     }
     ttcol_txt $text $align $col $width
 }
@@ -9486,52 +10504,38 @@ proc c_nr {tag row col align} {
 }
 
 proc xref_nr {text av target format {hackP 0}} {
+    condwrite_fi_nr
     xref_txt $text $av $target $format $hackP
 }
 
 proc eref_nr {text counter target} {
+    condwrite_fi_nr
     eref_txt $text $counter $target
 }
 
 proc cref_nr {text counter source anchor} {
+    condwrite_fi_nr
     cref_txt $text $counter $source $anchor
 }
 
 proc iref_nr {item subitem flags} {
-    global header footer lineno pageno blankP
+    global pageno
 
     return $pageno
 }
 
 proc vspace_nr {lines} {
-    global header footer lineno pageno blankP
-    global eatP
-    global mode
-
-    flush_text
-    if {$lineno+$lines >= 51} {
-        end_page_$mode
-    } else {
-        if {$lines > 0} {
-            write_it ".sp $lines"
-        } else {
-            write_it ".br"
-        }
-        incr lineno $lines
-    }
-
-    set eatP 1
+    vspace_txt $lines
 }
 
 proc spanx_nr {text style} {
+    condwrite_fi_nr
     spanx_txt $text $style
 }
 
 proc references_nr {tag args} {
-    global counter depth elemN elem passno stack xref
-    global options
-    global header footer lineno pageno blankP
-    global nofillP lastin
+    global counter depth
+    global pageno
 
     switch -- $tag {
         begin {
@@ -9553,10 +10557,7 @@ proc references_nr {tag args} {
             flush_text
             pop_indent
 
-            if {$lastin != 3} {
-                write_it ".in [set lastin [set indent 3]]"
-                set indents {}
-            }
+            condwrite_in_nr 3 1
 
             return $pageno
         }
@@ -9573,9 +10574,8 @@ proc references_nr {tag args} {
 }
 
 proc erefs_nr {{title ""}} {
-    global crefs erefs
+    global erefs
     global options
-    global nofillP lastin
 
     if {[string compare $title ""]} {
         if {$options(.COMPACT)} {
@@ -9583,12 +10583,7 @@ proc erefs_nr {{title ""}} {
         } else {
             end_page_nr
         }
-        if {$nofillP} {
-            flush_text
-            write_it ".fi"
-            set nofillP 0
-            set lastin -1
-        }
+        condwrite_fi_nr
         write_it ".ti 0"
         write_line_nr $title
     }
@@ -9610,9 +10605,8 @@ proc erefs_nr {{title ""}} {
 }
 
 proc crefs_nr {title} {
-    global crefs erefs
+    global crefs
     global options
-    global nofillP lastin
 
     if {[string compare $title ""]} {
         if {$options(.COMPACT)} {
@@ -9620,12 +10614,7 @@ proc crefs_nr {title} {
         } else {
             end_page_nr
         }
-        if {$nofillP} {
-            flush_text
-            write_it ".fi"
-            set nofillP 0
-            set lastin -1
-        }
+        condwrite_fi_nr
         write_it ".ti 0"
         write_line_nr $title
     }
@@ -9665,18 +10654,14 @@ proc reference_nr {prefix names title series formats date anchor target
     if {$i > 11} {
 # the indent_text_nr abstraction isn't robust enough to figure this out...
 
-        global indent lastin
-        global nofillP
+        global indent
 
         flush_text
-        if {$nofillP} {
-            write_it ".fi"
-            set nofillP 0
-        }
+        condwrite_fi_nr
 
         push_indent 14
 
-        write_it ".in [set lastin [set indent 14]]"
+        condwrite_in_nr [set indent 14]
         write_it ".ti 3"
         write_line_nr $prefix
         write_it ".br"
@@ -9690,21 +10675,17 @@ proc reference_nr {prefix names title series formats date anchor target
     foreach name $names {
         incr nameA
         write_text_nr $s[chars_expand [lindex $name 0]]
-        if {$nameA == $nameN} {
-            set s " and "
-        } else {
-            set s ", "
-        }
+        set s [list_sep_str $nameA $nameN]
     }
     write_text_nr "$s\"[chars_expand $title]\""
     foreach serial $series {
-        if {[regexp -nocase -- "internet-draft (draft-.*)" $serial x n] == 1} {
+        if {[regexp -nocase -- "internet-draft&nbsp;(draft-.*)" $serial x n] == 1} {
             set serial "$n (work in progress)"
         }
         write_text_nr ", [chars_expand $serial]"
     }
     if {[string compare $date ""]} {
-        write_text_nr ", $date"
+        write_text_nr ", [chars_expand $date]"
     }
     if {[string compare $target ""]} {
         write_text_nr ", "
@@ -9727,9 +10708,7 @@ proc annotation_nr {tag} {
 
 proc back_nr {authors} {
     global options
-    global header footer lineno pageno blankP
-    global indents indent lastin
-    global nofillP
+    global lineno pageno
     global contacts
 
     set lines 5
@@ -9744,9 +10723,8 @@ proc back_nr {authors} {
     }
     set result $pageno
 
-    write_it ".in [set lastin $indent]"
-    write_it ".nf"
-    set nofillP 1
+    condwrite_in_nr 3 1
+    condwrite_nf_nr
 
     switch -- [llength $authors] {
         0 {
@@ -9797,6 +10775,9 @@ proc back_nr {authors} {
                 set value [lindex [lindex $contacts \
                                           [lsearch0 $contacts $key]] 1]
                 set value [format %-6s $value:]
+                if {$options(.COLONSPACE)} {
+                    append value " "
+                }
                 write_line_nr "$value [chars_expand [lindex $contact 1]]"
             }
         }
@@ -9807,11 +10788,15 @@ proc back_nr {authors} {
 
 proc pcdata_nr {text {pre 0}} {
     global eatP
-    global nofillP lastin
     global options
+    global pcdata_line_offset
 
     if {(!$pre) && ($eatP > 0)} {
         set text [string trimleft $text]
+    }
+    if {[string length $text] <= 0} {
+        # Was only white space, but got trimmed.
+        return
     }
     set eatP 0
 
@@ -9825,43 +10810,46 @@ proc pcdata_nr {text {pre 0}} {
         }
     }
 
-    if {$nofillP != $pre} {
-        flush_text
-        if {$pre} {
-            write_it ".nf"
-        } else {
-            write_it ".fi"
-            set lastin -1
-        }
-        set nofillP $pre
+    if {$pre} {
+        condwrite_nf_nr
+    } else {
+        condwrite_fi_nr
     }
     if {[cellP $text]} {
         return
     }
 
+    set pcdata_line_offset 0
     foreach line [split $text "\n"] {
         set line [chars_expand $line]
         if {$pre} {
-            write_line_nr [string trimright $line] 1
+            write_line_nr [string trimright $line] $pre
         } else {
             write_pcdata_nr $prefix$line
             set prefix " "
         }
+        incr pcdata_line_offset
+    }
+    if {$pre} {
+        condwrite_in_nr 3
+    }
+    set pcdata_line_offset 0
+
+    if {[regexp -- {[ \t\n]$} $text]} {
+        set eatP 1
     }
 }
 
 
 proc start_page_nr {} {
-    global stdout
-    global header footer lineno pageno blankP
+    global lineno blankP
 
     set lineno 3
     set blankP 1
 }
 
 proc end_page_nr {} {
-    global stdout
-    global header footer lineno pageno blankP
+    global lineno pageno
 
     flush_text
 
@@ -9876,16 +10864,10 @@ proc end_page_nr {} {
 }
 
 proc indent_text_nr {prefix {left ""}} {
-    global buffer
-    global indents indent lastin
-    global nofillP
+    global indent
 
     flush_text
-    if {$nofillP} {
-        write_it ".fi"
-        set nofillP 0
-        set lastin -1
-    }
+    condwrite_fi_nr
 
     if {![string compare $left ""]} {
         set left $indent
@@ -9901,25 +10883,44 @@ proc indent_text_nr {prefix {left ""}} {
         push_indent [string length $prefix]
         if {$left == -2} {
             set left $indent
+            set prefix ""
         }
     } else {
         push_indent [expr $left+[string length $prefix]-$indent]
     }
-    if {$lastin != $indent} {
-        write_it ".in [set lastin $indent]"
-    }
+    condwrite_in_nr $indent
+    do_indent_text_nr $prefix $left
+}
+
+proc do_indent_text_nr {text left} {
+    global buffer
+    global indent
+
     write_it ".ti $left"
-    set buffer [format %*.*s $left $left ""]
-    write_text_nr $prefix
+    # In case $left==0, we have to put $text in buffer ourselves now,
+    # otherwise the next write_text_nr will prepend an indent and screw
+    # the line-breaking algorithm (nroff can undo that) but more
+    # importantly the value of lineno.  The page could end up shorter
+    # as a result of an over-inflated lineno.
+    set buffer [format %*.*s%s $left $left "" $text]
+    if {$indent != 0 && [string length $buffer] == 0} {
+        unexpected error "internal bug triggered in do_indent_text_nr; report it!"
+    }
+    write_text_nr ""
 }
 
 proc write_pcdata_nr {text} {
+    global buffer
+
+    if {![string compare $buffer ""]} {
+        setup_align_nr begin [current_align]
+    }
+
     write_pcdata_txt $text
 }
 
 proc write_editno_nr {editNo} {
     global buffer
-    global indents indent
 
     if {[string compare $buffer ""]} {
         flush_text
@@ -9930,99 +10931,51 @@ proc write_editno_nr {editNo} {
 }
 
 proc write_text_nr {text {direction l} {magic 0}} {
-    global buffer
-    global eatP indents indent lastin
+    global buffer buffer_rest buffer_align
+    global indent
+    global eatP
 
     if {$eatP < 0} {
         set text " $text"
     }
-    if {![string compare $direction c]} {
-        flush_text
-    }
-    if {(![string compare $buffer$direction l]) \
-            && ($lastin != $indent)} {
-        write_it ".in [set lastin $indent]"
+    switch -- $direction {
+        c - r { flush_text }
     }
     if {![string compare $buffer ""]} {
-        set buffer [format %*.*s $indent $indent ""]    
+        condwrite_in_nr $indent
+        switch -- $direction {
+            c - r {}
+            default {
+                setup_align_nr begin [set buffer_align [current_align]]
+            }
+        }
+        set buffer [format %*.*s $indent $indent ""]
     }
     append buffer $text
 
     set flush [string compare $direction l]
-    while {([set i [string length $buffer]] > 72) || ($flush)} {
-        if {$i > 72} {
-            set x [string last " " [set line [string range $buffer 0 72]]]
-            set y [string last "/" [string range $line 0 71]]
-            if {0} {
-                set z [string last "-" [string range $line 0 71]]
-                if {$y < $z} {
-                    set y $z
-                }
-            } else {
-                set z $y
-            }
-# CLIVE#6 added the next three lines:
-            if {($x > 7)
-                    && ([string last "://" [string range $line 0 71]] > $x)} {
-                set y 0
-            }
-            if {$x < $y} {
-                set x $y
-            }
-            if {$x < 0} {
-                set x [string last " " $buffer]
-                set y [string last "/" $buffer]
-                if {0} {
-                    set z [string last "-" $buffer]
-                    if {$y > $z} {
-                        set y $z
-                    }
-                } else {
-                    set z $y
-                }
-                if {$x > $y} {
-                    set x $y
-                }
-            }
-            if {$x < 0} {
-                set x $i
-            } elseif {($x == $y) || ($x == $z)} {
-                incr x
-            } elseif {$x+1 == $indent} {
-                set x $i
-            }
-            set text [string range $buffer 0 [expr $x-1]]
-            set rest [string trimleft [string range $buffer $x end]]
-        } else {
-            set text $buffer
-            set rest ""
-        }
-        set buffer ""
+    while {([string length $buffer] > 72) || ($flush)} {
+        set text [fold_text_txt]
 
-        if {![string compare $direction c]} {
-            write_it ".ce"
-        }
+        setup_align_nr oneshot $direction
         write_line_nr [string trimleft $text] 0 $magic
 
-        if {[string compare $rest ""]} {
-            set buffer [format %*.*s%s $indent $indent "" $rest]
-        } else {
+        if {![string compare [set buffer $buffer_rest] ""]} {
+            setup_align_nr end $buffer_align
+            set buffer_align ""
             break
         }
     }
 }
 
 proc write_line_nr {line {pre 0} {magic 0}} {
-    global stdout
-    global header footer lineno pageno blankP
-    global buffer
-    global indents indent lastin
+    global lineno blankP
 
     flush_text
     if {$lineno == 0} {
         start_page_nr
     }
-    if {![set x [string compare $line ""]]} {
+    if {![set x [string length [set orig_line $line]]]} {
         set blankO $blankP
         set blankP 1
         if {($blankO) && (!$pre || $lineno == 3)} {
@@ -10031,10 +10984,14 @@ proc write_line_nr {line {pre 0} {magic 0}} {
     } else {
         set blankP 0
     }
-    if {($pre) && ($x) && ($lastin != 3)} {
-        write_it ".in [set lastin 3]"
+    if {($pre) && ($x)} {
+        condwrite_in_nr [expr $pre > 0 ? $pre : 3]
+        if {$pre > 0} {
+            set line [tabs_expand_pre $line]
+            set x [string length [set orig_line $line]]
+        }
     }
-    if {!$magic} { 
+    if {!$magic} {
         regsub -all "\\\\" $line "\\\\\\" line
     }
     regsub -all "'" $line "\\'" line
@@ -10047,6 +11004,13 @@ proc write_line_nr {line {pre 0} {magic 0}} {
     }
     write_it $line
     incr lineno
+    if {$pre > 0 && [set len [expr $pre + $x]] > 72} {
+        global pageno
+
+        regsub -all -- {"} [string range $orig_line [expr 72 - $pre] end] {\"} excess
+        unexpected [unex_condtype] \
+            "output line $lineno (on page $pageno) has $len > 72 characters (excess string is \"$excess\")"
+    }
     if {$lineno >= 51} {
         end_page_nr
     }
@@ -10061,6 +11025,62 @@ proc nbsp_expand_nr {s} {
 
 proc pi_nr {key value} {
     pi_txt $key $value
+}
+
+# Only proc allowed to write a ".fi" or set nofillP to zero.
+proc condwrite_fi_nr {} {
+    global nofillP
+    #global lastin
+
+    if {$nofillP != 0} {
+        flush_text
+        write_it ".fi"
+        set nofillP 0
+        # Is the next line necessary on some nroff's???
+        #set lastin -1
+    }
+}
+
+# Only proc allowed to write a ".nf" or set nofillP positive.
+proc condwrite_nf_nr {} {
+    global nofillP
+
+    if {$nofillP <= 0} {
+        flush_text
+        write_it ".nf"
+        set nofillP 1
+    }
+}
+
+# Only proc allowed to write a ".in" or update lastin.
+proc condwrite_in_nr {in {reset 0}} {
+    global lastin
+
+    if {$lastin != $in} {
+        flush_text
+        write_it ".in [set lastin $in]"
+        if {$reset} {
+            global indents indent
+
+            set indent $in
+            set indents {}
+        }
+    }
+}
+
+# Assumes flush has been done.  Must NOT be done again.
+proc setup_align_nr {tag dir} {
+    switch -- $dir {
+        c - center { set xx ce }
+        r - right  { set xx rj }
+        default    { return }
+    }
+    switch -- $tag {
+        begin    { set v " 8192" }
+        oneshot  { set v "" }
+        end      { set v " 0" }
+    }
+    write_it ".$xx$v"
 }
 
 
@@ -10086,51 +11106,242 @@ set rfcTxtHome ftp://ftp.isi.edu/in-notes
 set idTxtHome http://www.ietf.org/internet-drafts
 
 
-global oentities
+global oentities entities
 
-# &amp; must always be last...
+# Hex entities (&#x3F;) are first converted to dec entities (&#63;) elsewhere.
+# Only put dec entities or (case-sensitive) named entities here.
+# &amp; and &#38; must always be last and specified simultaneously.
+# &nbsp; and &#160; are handled elsewhere and must not be put here.
 set oentities { {&lt;}     {<} {&gt;}     {>}
+                {&lpar;}   {(} {&rpar;}   {)}
+                {&lsqb;}   {[} {&rsqb;}   {]}
+                {&lcub;}   "{" {&rcub;}   "}"
+                {&sol;}    {/} {&percnt;} {%}
+                {&num;}    {#} {&dollar;} {$}
+                {&ast;}    {*} {&hyphen;} {-}
+                {&plus;}   {+} {&equals;} {=}
+                {&comma;}  {,} {&period;} {.}
+                {&colon;}  {:} {&semi;}   {;}
+                {&excl;}   {!} {&quest;}  {?}
+                {&commat;} {@} {&lowbar;} {_}
+                {&circ;}   {^} {&grave;}  {`}
+                {&bsol;}  "\\" {&verbar;} {|}
                 {&apos;}   {'} {&quot;}   {"}
+                {&lsquo;}  {'} {&rsquo;}  {'}
+                {&#8216;}  {'} {&#8217;}  {'}
+                {&ldquo;}  {"} {&rdquo;}  {"}
+                {&#8220;}  {"} {&#8221;}  {"}
                 {&#8211;}  {-} {&#8212;}  {--}
-                {&#x2013;} {-} {&#x2014;} {--}
                 {&#151;}   {--}
                 {&ndash;}  {-} {&mdash;}  {--}
-                {&#160;}     { }
+                {&#161;}     {!}
+                {&#162;}     {[cents]}
+                {&#163;}     {[pounds]}
+                {&#164;}     {[currency units]}
+                {&#165;}     {[yens]}
+                {&#166;}     {|}
                 {&#167;}     {S.}
+                {&#168;}     {"}
+                {&#169;}     {(C)}
+                {&#170;}     {a}
+                {&#171;}     {<<}
+                {&#172;}     {[not]}
+                {&#173;}     {-}
+                {&#174;}     {(R)}
+                {&#175;}     {_}
+                {&#176;}     {o}
+                {&#177;}     {+/-}
+                {&#178;}     {^2}
+                {&#179;}     {^3}
+                {&#180;}     {'}
+                {&#181;}     {[micro]}
+                {&#182;}     {P.}
+                {&#183;}     {.}
+                {&#184;}     {,}
+                {&#185;}     {^1}
+                {&#186;}     {o}
+                {&#187;}     {>>}
+                {&#188;}     {1/4}
+                {&#189;}     {1/2}
+                {&#190;}     {3/4}
+                {&#191;}     {?}
                 {&#19[2-7];} {A}
                 {&#198;}     {AE}
                 {&#199;}     {C}
                 {&#20[0-3];} {E}
                 {&#20[4-7];} {I}
-                {&#208;}     {E}
+                {&#208;}     {[ETH]}
                 {&#209;}     {N}
                 {&#21[0-4];} {O}
+                {&#215;}     {x}
                 {&#216;}     {O}
                 {&#21[7-9];} {U}
                 {&#220;}     {U}
                 {&#221;}     {Y}
-                {&#223;}     {sz}
+                {&#222;}     {[THORN]}
+                {&#223;}     {ss}
                 {&#22[4-9];} {a}
                 {&#230;}     {ae}
                 {&#231;}     {c}
                 {&#23[2-5];} {e}
                 {&#23[6-9];} {i}
-                {&#240;}     {eth}
+                {&#240;}     {[eth]}
                 {&#241;}     {n}
                 {&#24[2-6];} {o}
+                {&#247;}     {/}
                 {&#248;}     {o}
                 {&#249;}     {u}
                 {&#25[0-2];} {u}
                 {&#253;}     {y}
+                {&#254;}     {[thorn]}
                 {&#255;}     {y}
-                {&#8482;}     {[TM]} }
+                {&OElig;}    {OE}
+                {&#338;}     {OE}
+                {&oelig;}    {oe}
+                {&#339;}     {oe}
+                {&Yuml;}     {Y}
+                {&#376;}     {Y}
+                {&dagger;}   {*}
+                {&#8224;}    {*}
+                {&Dagger;}   {*}
+                {&#8225;}    {*}
+                {&bull;}     {o}
+                {&#8226;}    {o}
+                {&hellip;}   {...}
+                {&#8230;}    {...}
+                {&euro;}     {[euros]}
+                {&#8364;}    {[euros]}
+                {&trade;}    {[TM]}
+                {&#8482;}    {[TM]} }
+
+set l1entities {}
+set c 161
+foreach e {       iexcl  cent   pound  curren yen    brvbar sect
+           uml    copy   ordf   laquo  not    shy    reg    macr
+           deg    plusmn sup2   sup3   acute  micro  para   middot
+           cedil  sup1   ordm   raquo  frac14 frac12 frac34 iquest
+           Agrave Aacute Acirc  Atilde Auml   Aring  AElig  Ccedil
+           Egrave Eacute Ecirc  Euml   Igrave Iacute Icirc  Iuml
+           ETH    Ntilde Ograve Oacute Ocirc  Otilde Ouml   times
+           Oslash Ugrave Uacute Ucirc  Uuml   Yacute THORN  szlig
+           agrave aacute acirc  atilde auml   aring  aelig  ccedil
+           egrave eacute ecirc  euml   igrave iacute icirc  iuml
+           eth    ntilde ograve oacute ocirc  otilde ouml   divide
+           oslash ugrave uacute ucirc  uuml   yacute thorn  yuml} {
+    # Rewrite named as dec.
+    lappend l1entities "&$e;" "\\&#$c;"
+    incr c
+}
+# ISO Latin 1 named entities must appear before corresponding dec entities.
+set oentities [concat $l1entities $oentities]
 
 for {set c 32} {$c < 127} {incr c} {
+    if {$c == 38} {
+        # Must skip ampersand.
+        continue
+    }
     lappend oentities "&#$c;" [format %c $c]
-    lappend oentities [format "&#x%x;" $c] [format %c $c]
 }
-lappend oentities     {&amp;} {\&}
+lappend oentities     {&(amp|#38);} {\&}
 set entities $oentities
+
+
+global charsets
+# We only list those that start with a 1-octet ASCII subset,
+# and prefer those registered with the IANA.
+# Format:  tcl-encoding {iana-charset...}
+set charsets {
+    utf-8       {UTF-8}
+    ascii       {US-ASCII ASCII ANSI_X3.4-1968 iso-ir-6 ANSI_X3.4-1986 ISO_646.irv:1991 ISO646-US us IBM367 cp367 csASCII}
+    iso8859-1   {ISO-8859-1 ISO_8859-1:1987 iso-ir-100 ISO_8859-1 latin1 l1 IBM819 CP819 csISOLatin1}
+    iso8859-2   {ISO-8859-2 ISO_8859-2:1987 iso-ir-101 ISO_8859-2 latin2 l2 csISOLatin2}
+    iso8859-3   {ISO-8859-3 ISO_8859-3:1988 iso-ir-109 ISO_8859-3 latin3 l3 csISOLatin3}
+    iso8859-4   {ISO-8859-4 ISO_8859-4:1988 iso-ir-110 ISO_8859-4 latin4 l4 csISOLatin4}
+    iso8859-5   {ISO-8859-5 ISO_8859-5:1988 iso-ir-144 ISO_8859-5 cyrillic csISOLatinCyrillic}
+    iso8859-6   {ISO-8859-6 ISO_8859-6:1987 iso-ir-127 ISO_8859-6 arabic ECMA-114 ASMO-708 csISOLatinArabic}
+    iso8859-7   {ISO-8859-7 ISO_8859-7:1987 iso-ir-126 ISO_8859-7 greek greek8 ELOT_928 ECMA-118 csISOLatinGreek}
+    iso8859-8   {ISO-8859-8 ISO_8859-8:1988 iso-ir-138 ISO_8859-8 hebrew csISOLatinHebrew}
+    iso8859-9   {ISO-8859-9 ISO_8859-9:1989 iso-ir-148 ISO_8859-9 latin5 l5 csISOLatin5}
+    iso8859-10  {ISO-8859-10 ISO_8859-10:1992 iso-ir-157 latin6 l6 csISOLatin6}
+    iso8859-13  {ISO-8859-13}
+    iso8859-14  {ISO-8859-14 ISO_8859-14:1998 iso-ir-199 ISO_8859-14 latin8 l8 iso-celtic}
+    iso8859-15  {ISO-8859-15 ISO_8859-15 Latin-9}
+    iso8859-16  {ISO-8859-16 ISO_8859-16:2001 iso-ir-226 ISO_8859-16 latin10 l10}
+    iso2022     {JIS_Encoding}
+    iso2022-jp  {ISO-2022-JP csISO2022JP}
+    iso2022-kr  {ISO-2022-KR csISO2022KR}
+    euc-cn      {}
+    euc-jp      {EUC-JP Extended_UNIX_Code_Packed_Format_for_Japanese csEUCPkdFmtJapanese}
+    euc-kr      {EUC-KR csEUCKR}
+    big5        {Big5 csBig5}
+    gb1988      {GB_1988-80 iso-ir-57 cn ISO646-CN csISO57GB1988}
+    gb2312      {GB2312 csGB2312}
+    jis0201     {JIS_X0201 X0201 csHalfWidthKatakana}
+    koi8-r      {KOI8-R csKOI8R}
+    koi8-u      {KOI8-U}
+    shiftjis    {Shift_JIS MS_Kanji csShiftJIS}
+    tis-620     {TIS-620}
+    macRoman    {macintosh mac csMacintosh}
+    macCentEuro {}
+    macCroatian {}
+    macCyrillic {}
+    macGreek    {}
+    macIceland  {}
+    macJapan    {}
+    macRomania  {}
+    macThai     {}
+    macTurkish  {}
+    macUkraine  {}
+    cp437       {IBM437 cp437 437 csPC8CodePage437}
+    cp737       {}
+    cp775       {IBM775 cp775 csPC775Baltic}
+    cp850       {IBM850 cp850 850 csPC850Multilingual}
+    cp852       {IBM852 cp852 852 csPCp852}
+    cp855       {IBM855 cp855 855 csIBM855}
+    cp857       {IBM857 cp857 857 csIBM857}
+    cp860       {IBM860 cp860 860 csIBM860}
+    cp861       {IBM861 cp861 861 cp-is csIBM861}
+    cp862       {IBM862 cp862 862 csPC862LatinHebrew}
+    cp863       {IBM863 cp863 863 csIBM863}
+    cp864       {IBM864 cp864 csIBM864}
+    cp865       {IBM865 cp865 865 csIBM865}
+    cp866       {IBM866 cp866 866 csIBM866}
+    cp869       {IBM869 cp869 869 cp-gr csIBM869}
+    cp874       {}
+    cp932       {}
+    cp936       {GBK CP936 MS936 windows-936}
+    cp949       {}
+    cp950       {}
+    cp1250      {windows-1250}
+    cp1251      {windows-1251}
+    cp1252      {windows-1252}
+    cp1253      {windows-1253}
+    cp1254      {windows-1254}
+    cp1255      {windows-1255}
+    cp1256      {windows-1256}
+    cp1257      {windows-1257}
+    cp1258      {windows-1258}
+}
+
+proc cs2enc {charset} {
+    global charsets
+
+    foreach {enc csl} $charsets {
+        foreach cs $csl {
+            if {![string compare -nocase $charset $cs]} {
+                return $enc
+            }
+        }
+        if {![string compare -nocase $charset $enc]} {
+            set encx $enc
+        }
+    }
+    if {[info exists encx]} {
+        return $encx
+    }
+
+    return ""
+}
 
 
 proc push_indent {pos} {
@@ -10150,18 +11361,59 @@ proc pop_indent {} {
     return $pos
 }
 
+global aligns
+set aligns {}
+
+proc push_align {a} {
+    global aligns
+
+    switch -- $a {
+        left - center - right {
+            lappend aligns $a
+        }
+
+        default {
+            unexpected error \
+                "align=\"$a\" attribute is invalid"
+        }
+    }
+}
+
+proc pop_align {} {
+    global aligns
+
+    set a [lindex $aligns end]
+    set aligns [lreplace $aligns end end]
+
+    return $a
+}
+
+proc current_align {} {
+    global aligns
+
+    if {[llength $aligns] > 0} {
+        return [lindex $aligns end]
+    }
+
+    return ""
+}
+
 proc flush_text {} {
-    global buffer
+    global buffer buffer_align
     global mode
-    global indents indent lastin
 
     if {[string compare $buffer ""]} {
         set rest $buffer
         set buffer ""
-        if {[string compare $mode txt]} {
-            set rest [string trim $rest]
+        switch -- $mode {
+            txt     { set rest [justify_text_txt $rest $buffer_align] }
+            default { set rest [string trim $rest] }
         }
         write_line_$mode $rest
+        switch -- $mode {
+            nr { setup_align_nr end $buffer_align }
+        }
+        set buffer_align ""
     }
 }
 
@@ -10234,15 +11486,26 @@ proc write_url {url} {
     write_text_$mode <[chars_expand $url]>
 }
 
-proc have_lines {cnt} {
-    global header footer lineno pageno blankP
-    global options
+proc is_at_page_start {} {
+    global lineno
+    global mode
 
     flush_text
-    if (!$options(.AUTOBREAKS)) {
+    if {$lineno == 0} {
+        start_page_$mode
+    }
+
+    return [expr $lineno <= 3]
+}
+
+proc have_lines {cnt} {
+    global lineno
+    global options
+
+    if {[is_at_page_start] || !$options(.AUTOBREAKS)} {
         return 1
     }
-    if {($cnt < 40) && ($lineno+$cnt > 52)} {
+    if {($cnt <= 48) && ($lineno + $cnt > 51)} {
         return 0
     }
     return 1
@@ -10250,26 +11513,136 @@ proc have_lines {cnt} {
 
 proc write_it {line} {
     global passno
-    global options
-    global stdout
-    global header footer lineno pageno blankP
+    global passmax
+    global out_fd
 
-    if {$passno == 3} {
-        puts $stdout $line
+    if {$passno == $passmax} {
+        puts $out_fd $line
+    }
+}
+
+proc collapsed_num_list {nums} {
+    set r ""
+    if {[llength $nums] == 0} {
+        return $r
+    }
+    set s ""
+
+    # Assume nums are non-negative and ordered.
+    set i -1
+
+    # Add sentinel.
+    lappend nums [expr [lindex $nums end] + 2]
+
+    foreach n $nums {
+        if {$i < 0} {
+            set j [set i $n]
+            continue
+        }
+        if {$n == $j} {
+            continue
+        }
+        if {$n == $j + 1} {
+            set j $n
+            continue
+        }
+        if {$i == $j} {
+            append r "$s$i"
+        } else {
+            append r "$s$i-$j"
+        }
+        set j [set i $n]
+        set s ", "
+    }
+
+    return $r
+}
+
+proc list_sep_str {i n} {
+    if {$i == $n} {
+        if {$n > 2} {
+            return ", and "
+        } else {
+            return " and "
+        }
+    } else {
+        return ", "
     }
 }
 
 proc chars_expand {text {flatten 1}} {
     global entities
 
+    if {[regsub -all -- {[\0-\010\013\014\016-\037\177]+} $text {*?*} text]} {
+        # DELETE and every C0 control char except \t, \n, and \r.
+        unexpected error \
+            "illegal use of hardcoded ASCII control character(s) in \"$text\""
+    }
+
+    if {[regsub -all -- {[\x80-\x9F]+} $text {*?*} text]} {
+        # Every C1 control char.
+        unexpected error \
+            "illegal use of hardcoded C1 control character(s) (U+0080..U+009F) possibly instead of standard entities (e.g., &mdash; or &rsquo;) in \"$text\""
+    }
+
+    # Convert other hardcoded non-ASCII characters
+    # (except no-break space) as dec entities.
+    while {[regexp -- {[^\0-\xA0]} $text x]} {
+        regsub -all -- $x $text "\\&#[scan $x %c];" text
+    }
+
+    # Process hex here to avoid cluttering $entities, to support
+    # leading zeros, and most importantly to have -nocase.
+    while {[regexp -nocase -- {&#x([0-9A-Z]+);} $text x y]} {
+        # Rewrite hex as dec.
+        regsub -all -nocase -- $x $text "\\&#[scan $y %x];" text
+    }
+
+    if {[regexp -- {&#1(2[89]|[345][0-9]);} $text]} {
+        # Possibly just a warning for backward compatibility.
+        unexpected [unex_condtype] \
+            "non-standard use of entities between &#128; and &#159; as printable characters (really C1 control characters) instead of standard entities (e.g., &mdash; or &rsquo;) in \"$text\""
+    }
+
+    if {[regexp -- {&#0+;} $text]} {
+        # All versions of XML prohibit this.
+        unexpected error \
+            "illegal use of &#0; entity in \"$text\""
+    }
+
+    # Remaining entities are case sensitive (or just dec).
     foreach {entity chars} $entities {
-        regsub -all -nocase $entity $text $chars text
+        regsub -all -- $entity $text $chars text
     }
     if {$flatten} {
         regsub -all "\n\[ \t\]*" $text " " text
     }
 
     return $text
+}
+
+proc tabs_expand_pre {line} {
+    global pageno lineno
+
+    set msg "pre-formatted output line [expr $lineno + 1] (on page $pageno)"
+
+    if {[regexp -- {[\t]} $line]} {
+        unexpected warning \
+            "$msg contained tab characters which were expanded"
+
+        while {[set x [string first "\t" $line]] >= 0} {
+            set new [string range $line 0 [expr $x - 1]]
+            append new [string repeat " " [expr 8 - ($x % 8)]]
+            set line $new[string range $line [expr $x + 1] end]
+        }
+    }
+    if {[regexp -- {[^ -~\xA0]} $line]} {
+        # No-break spaces will be expanded later and are OK.
+        unexpected error \
+            "$msg contains illegal characters (control or otherwise)"
+    }
+
+    return $line
 }
 
 
@@ -10338,6 +11711,7 @@ proc ref::fin {token} {
 
 proc ref::transform {token file {formats {}}} {
     global errorCode errorInfo
+    global ifile
 
     variable $token
     upvar 0 $token state
@@ -10356,7 +11730,9 @@ proc ref::transform {token file {formats {}}} {
             -reportempty            1
 
     set fd [open $file { RDONLY }]
-    set data [prexml [read $fd] [file dirname $file]]
+    catch { fconfigure $fd -encoding binary }
+    set ifile $file
+    set data [prexml [read $fd]]
 
     if {[catch { close $fd } result]} {
         log::entry $logT system $result
@@ -10388,9 +11764,10 @@ proc ref::transform {token file {formats {}}} {
         }
 
         1 {
-            if {[llength $state(stack)] > 0} {
-                set text "File:    $file\nContext: "
-                foreach frame $state(stack) {
+            if {[set i [llength $state(stack)]] > 0} {
+                set text "File:    $file\nContext:"
+                while {$i > 0} {
+                    set frame [lindex $state(stack) [incr i -1]]
                     catch { unset attrs }
                     append text "\n    <[lindex $frame 0]"
                     foreach {k v} [lindex $frame 1] {
@@ -10435,7 +11812,7 @@ proc ref::element_start {token name {av {}} args} {
     set depth [llength $state(stack)]
 
     if {[set idx [lsearch -glob $context $name/$depth*]] >= 0} {
-        set info [lindex $context $idx] 
+        set info [lindex $context $idx]
         if {[string compare [lindex $info 0] $name/$depth]} {
             set idx -1
         } elseif {![string compare [lindex $info 1] yes]} {
@@ -10752,7 +12129,7 @@ proc stindex {sindex len} {
     }
 }
 
-proc streplace {string first last {newstring ""}} {
+proc streplace {string first last {newstring ""} {magic 0}} {
     set first [stindex $first [set len [string length $string]]]
     set last [stindex $last $len]
     if {($first > $last) || ($first > $len) || ($last < 0)} {
@@ -10765,6 +12142,28 @@ proc streplace {string first last {newstring ""}} {
         set left ""
     }
 
+    if {$magic} {
+        set oldstring [string range $string \
+                              [expr (($first) >= 0) ? ($first) : 0] \
+                              [expr (($last) < $len) ? ($last) : $len-1]]
+        if {$magic == 1} {
+            regsub -all -- {[^\t\r\n]} $oldstring { } newstring
+        } elseif {$magic >= 2} {
+            # Remove, but preserve the line count.
+            set newstring ""
+            # EOL normalization is necessary with XML 1.1.
+            set n [num_eols [str_norm_eol $oldstring]]
+            if {$n > 0} {
+                if {$magic == 2} {
+                    append newstring {<!--} [string repeat "\n" $n] {-->}
+                } else {
+                    # $magic == 3
+                    set newstring [string repeat "\n" $n]
+                }
+            }
+        }
+    }
+
     if {$last < $len} {
         set right [string range $string [expr $last+1] end]
     } else {
@@ -10772,6 +12171,15 @@ proc streplace {string first last {newstring ""}} {
     }
 
     return $left$newstring$right
+}
+
+proc str_norm_eol {string {xml11 0}} {
+    if {$xml11} {
+        regsub -all -- "(\r\n|\r\x85|\x85|\x2028|\r)" $string "\n" string
+    } else {
+        regsub -all -- "\r\n?" $string "\n" string
+    }
+    return $string
 }
 
 
@@ -10783,6 +12191,8 @@ proc streplace {string first last {newstring ""}} {
 
 namespace eval xdv {
     variable dtd
+    # This ::xdv::lineno is 0-based.
+    variable lineno -1
 
     array set dtd {}
 }
@@ -10957,7 +12367,8 @@ set xdv::dtd(rfc2629.oattrs) \
                               toc]        \
           appendix      [list anchor      \
                               toc]        \
-          t             [list hangText]   \
+          t             [list anchor      \
+                              hangText]   \
           list          [list style       \
                               hangIndent  \
                               counter]    \
@@ -10971,11 +12382,18 @@ set xdv::dtd(rfc2629.oattrs) \
                               style]      \
           vspace        [list blankLines] \
           figure        [list anchor      \
-                              title]      \
+                              title       \
+                              align       \
+                              src         \
+                              alt         \
+                              width       \
+                              height]     \
           artwork       [list xml:space   \
                               name        \
                               type        \
+                              align       \
                               src         \
+                              alt         \
                               width       \
                               height]     \
           texttable     [list anchor      \
@@ -11035,7 +12453,7 @@ proc xdv::validate_tree_aux {parent CM RA OA AN PC stack} {
                 && ([lsearch -exact $expected $k] < 0) \
                 && ([lsearch -exact $possible $k] < 0)} {
             report "unexpected $k attribute in <$name> element" $stack
-        }       
+        }
     }
 
     foreach {k v} [array get attrs] {
@@ -11061,7 +12479,7 @@ proc xdv::validate_tree_aux {parent CM RA OA AN PC stack} {
     }
 }
 
-proc validate_cmodel {children cmodel} {
+proc xdv::validate_cmodel {children cmodel} {
     set elems [lindex $cmodel 0]
     set quant [lindex $cmodel 1]
     set cmodel [lrange $cmodel 2 end]
@@ -11123,15 +12541,21 @@ proc validate_cmodel {children cmodel} {
 }
 
 proc xdv::report {result stack} {
-    if {[llength $stack] > 0} {
+    if {[set i [llength $stack]] > 0} {
         array set attrs [lindex [lindex $stack end] 1]
         if {[info exists attrs(.lineno)]} {
             append result " around line $attrs(.lineno)"
         }
 
-        set text "Syntax: "
-        foreach frame $stack {
-            append text "\n    <[lindex $frame 0]"
+        set text "Syntax:"
+        while {$i > 0} {
+            set frame [lindex $stack [incr i -1]]
+            array set attrs [lindex $frame 1]
+            append text "\n    "
+            if {[info exists attrs(.lineno)]} {
+                append text [expr $attrs(.lineno) + 1]:
+            }
+            append text <[lindex $frame 0]
             foreach {k v} [lindex $frame 1] {
                 if {[string first . $k] < 0} {
                     regsub -all {"} $v {\&quot;} v
@@ -11160,7 +12584,7 @@ set guiP 0
 # load and initialize tk if possible
 catch {package require -exact Tk [info tclversion]}
 if {[llength $argv] > 1} {
-    if {[catch { 
+    if {[catch {
         switch -- [llength $argv] {
             2 {
                 set file [lindex $argv 1]
@@ -11170,19 +12594,19 @@ if {[llength $argv] > 1} {
                     foreach c [split $file ""] {
                         switch -- $c {
                             "\\" { append f "\\\\" }
-    
+
                             "\a" { append f "\\a" }
-    
+
                             "\b" { append f "\\b" }
-    
+
                             "\f" { append f "\\f" }
-    
+
                             "\n" { append f "\\n" }
-    
+
                             "\r" { append f "\\r" }
-    
+
                             "\v" { append f "\\v" }
-    
+
                             default {
                                 append f $c
                             }
@@ -11190,11 +12614,11 @@ if {[llength $argv] > 1} {
                     }
                     set file $f
                 }
-    
+
                 eval [file tail [file rootname [lindex $argv 0]]] \
                            $file
             }
-    
+
             3 {
                 xml2rfc [lindex $argv 1] [lindex $argv 2]
             }
@@ -11204,8 +12628,8 @@ if {[llength $argv] > 1} {
             bgerror $result
         } else {
             puts stderr $result
-            exit 1
         }
+        exit 1
     }
 
     exit 0
@@ -11281,7 +12705,7 @@ if {[llength $argv] > 1} {
         [button .buttons.code -text Convert -command "convert ."] \
         [button .buttons.dismiss -text Quit -command "destroy ."] \
         -side left -expand 1
-    
+
     foreach i {input output} {
         set f [frame .$i]
         label $f.lab -text "Select $i file: " -anchor e -width 20
@@ -11293,3 +12717,5 @@ if {[llength $argv] > 1} {
         pack $f -fill x -padx 1c -pady 3
     }
 }
+
+# vi: set sw=4 et si sta:

@@ -61,6 +61,9 @@ attlist.rfc &=
     | "full3667"
     | "noModification3667"
     | "noDerivatives3667"
+    | "full3978"
+    | "noModification3978"
+    | "noDerivatives3978"
   }?,
   attribute iprExtract { xsd:IDREF }?,
   attribute docName { ATEXT }?,
@@ -95,6 +98,7 @@ address =
     attlist.address, postal?, phone?, facsimile?, email?, uri?
   }
 attlist.address &= empty
+# this content model should be more strict:
 # at most one of each the city, region, code, and country
 # elements may be present
 postal =
@@ -171,7 +175,7 @@ t =
      | spanx
      | vspace)*
   }
-attlist.t &= attribute hangText { ATEXT }?
+attlist.t &= attribute anchor { xsd:ID }?, attribute hangText { ATEXT }?
 # the value of the style attribute is inherited from the closest 
 # parent
 \list = element list { attlist.list, t+ }
@@ -218,6 +222,8 @@ attlist.artwork &=
   [ a:defaultValue = "" ] attribute name { ATEXT }?,
   [ a:defaultValue = "" ] attribute type { ATEXT }?,
   attribute src { URI }?,
+  [ a:defaultValue = "left" ] attribute align { "left" | "center" | "right" }?,
+  [ a:defaultValue = "" ] attribute alt { ATEXT }?,
   [ a:defaultValue = "" ] attribute width { ATEXT }?,
   [ a:defaultValue = "" ] attribute height { ATEXT }?
 postamble =
