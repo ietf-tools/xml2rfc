@@ -1,5 +1,5 @@
 <!--
-  revised DTD for the RFC document series, draft of 2005-10-05
+  revised DTD for the RFC document series, draft of 2008-02-01
   -->
 
 
@@ -182,7 +182,7 @@
 <!-- later on, may be (section+,appendix*,section*) -->
 <!ELEMENT middle      (section+)>
 
-<!ELEMENT section     (t|figure|texttable|iref|section)*>
+<!ELEMENT section     ((t|figure|texttable|iref)*,section*)>
 <!ATTLIST section
           anchor      ID                 #IMPLIED
           title       %ATEXT;            #REQUIRED
@@ -190,7 +190,7 @@
                                          "default">
 
 <!--
-<!ELEMENT appendix    (t|figure|texttable|iref|appendix)*>
+<!ELEMENT appendix    ((t|figure|texttable|iref)*,appendix*)>
 <!ATTLIST appendix
           anchor      ID                 #IMPLIED
           title       %ATEXT;            #REQUIRED
@@ -236,16 +236,18 @@
 
 <!ELEMENT spanx       (%CTEXT;)>
 <!ATTLIST spanx
+          xml:space   (default|preserve) "preserve"
           style       %ATEXT;            "emph">
 
 <!ELEMENT vspace      EMPTY>
 <!ATTLIST vspace
           blankLines  %NUMBER;           "0">
 
-<!ELEMENT figure      (preamble?,artwork,postamble?)>
+<!ELEMENT figure      (iref*,preamble?,artwork,postamble?)>
 <!ATTLIST figure
           anchor      ID                 #IMPLIED
           title       %ATEXT;            ""
+          suppress-title (true|false)    "false"
           src         %URI;              #IMPLIED
           align       (left|center|right) "left"
           alt         %ATEXT;            ""
@@ -269,10 +271,13 @@
 <!ELEMENT texttable   (preamble?,ttcol+,c*,postamble?)>
 <!ATTLIST texttable
           anchor      ID                 #IMPLIED
-          title       %ATEXT;            "">
+          title       %ATEXT;            ""
+          suppress-title (true|false)    "false"
+          align       (left|center|right) "center"
+          style       (all|none|headers|full) "full">
 <!ELEMENT ttcol       (%CTEXT;)>
 <!ATTLIST ttcol
-          width       %ATEXT;           #IMPLIED
+          width       %ATEXT;            #IMPLIED
           align       (left|center|right) "left">
 <!ELEMENT c           (%TEXT;|xref|eref|iref|cref|spanx)*>
 

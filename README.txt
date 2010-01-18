@@ -6,10 +6,10 @@ The README file                                                  M. Rose
                                                                B. Fenner
                                                     AT&T Labs - Research
                                                                C. Levert
-                                                        January 15, 2007
+                                                       February 28, 2008
 
 
-                             xml2rfc v1.32
+                             xml2rfc v1.33
 
 
 Table of Contents
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose, et al.                                                    [Page 1]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 1.  Introduction
@@ -110,7 +110,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                    [Page 2]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 2.  Requirements
@@ -166,7 +166,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                    [Page 3]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 3.  Testing
@@ -222,7 +222,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                    [Page 4]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 4.  Next steps
@@ -249,11 +249,19 @@ README                        xml2rfc v1.32                 January 2007
 
 4.1.1.  Option Settings
 
-                      The list of valid keywords are:
+   The list of valid keywords are:
 
    +---------------------+--------------+------------------------------+
    |             keyword |    default   | meaning                      |
    +---------------------+--------------+------------------------------+
+   |    artworkdelimiter |      ""      | when producing txt or nroff  |
+   |                     |              | files, use this string to    |
+   |                     |              | delimit artwork              |
+   |                     |              |                              |
+   |        artworklines |       0      | when producing txt or nroff  |
+   |                     |              | files, add this many blank   |
+   |                     |              | lines around artwork         |
+   |                     |              |                              |
    |          authorship |      yes     | render author information    |
    |                     |              |                              |
    |          autobreaks |      yes     | automatically force page     |
@@ -263,14 +271,6 @@ README                        xml2rfc v1.32                 January 2007
    |          background |      ""      | when producing a html file,  |
    |                     |              | use this image               |
    |                     |              |                              |
-   |          colonspace |      no      | put two spaces instead of    |
-   |                     |              | one after each colon (":")   |
-   |                     |              | in txt or nroff files        |
-   |                     |              |                              |
-   |            comments |      no      | render <cref> information    |
-   |                     |              |                              |
-
-
 
 
 
@@ -278,9 +278,15 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                    [Page 5]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
+   |          colonspace |      no      | put two spaces instead of    |
+   |                     |              | one after each colon (":")   |
+   |                     |              | in txt or nroff files        |
+   |                     |              |                              |
+   |            comments |      no      | render <cref> information    |
+   |                     |              |                              |
    |             compact | (rfcedstyle) | when producing a txt/nroff   |
    |                     |              | file, try to conserve        |
    |                     |              | vertical whitespace (the     |
@@ -326,15 +332,9 @@ README                        xml2rfc v1.32                 January 2007
 
 
 
-
-
-
-
-
-
 Rose, et al.                                                    [Page 6]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
    |            linefile |      n/a     | a string like "35:file.xml"  |
@@ -390,7 +390,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                    [Page 7]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
    |          rfcedstyle |      no      | attempt to closely follow    |
@@ -446,7 +446,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                    [Page 8]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
    |            sortrefs |      no      | sort references              |
@@ -461,7 +461,7 @@ README                        xml2rfc v1.32                 January 2007
    |                     |              | is the current value of the  |
    |                     |              | compact PI)                  |
    |                     |              |                              |
-   |             symrefs |      no      | use anchors rather than      |
+   |             symrefs |      yes     | use anchors rather than      |
    |                     |              | numbers for references       |
    |                     |              |                              |
    |                 toc |      no      | generate a table-of-contents |
@@ -502,7 +502,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                    [Page 9]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
    |           useobject |      no      | when producing a html file,  |
@@ -514,8 +514,8 @@ README                        xml2rfc v1.32                 January 2007
    |                     |              | includes an "src" attribute  |
    +---------------------+--------------+------------------------------+
 
-    Remember that, as with everything else in XML, keywords and values
-                            are case-sensitive.
+   Remember that, as with everything else in XML, keywords and values
+   are case-sensitive.
 
    With the exception of the "needLines", "typeout", and "include"
    directives, you normally put all of these processing instructions at
@@ -558,7 +558,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                   [Page 10]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
    You can also have *xml2rfc* set the "XML_LIBRARY" environment
@@ -614,7 +614,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                   [Page 11]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 5.  The Page Model
@@ -670,7 +670,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                   [Page 12]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 6.  Additions to RFC 2629
@@ -726,7 +726,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                   [Page 13]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
    *xml2rfc* also recognizes an undocumented "align" attribute (with
@@ -782,7 +782,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                   [Page 14]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
    For example (to be viewed in HTML):
@@ -838,7 +838,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                   [Page 15]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 7.  Limitations of xml2rfc
@@ -894,7 +894,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                   [Page 16]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 8.  References
@@ -950,7 +950,7 @@ README                        xml2rfc v1.32                 January 2007
 
 Rose, et al.                                                   [Page 17]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
@@ -1006,7 +1006,7 @@ Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
 
 Rose, et al.                                                   [Page 18]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
@@ -1062,7 +1062,7 @@ Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
 
 Rose, et al.                                                   [Page 19]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 Appendix C.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
@@ -1118,7 +1118,7 @@ Appendix C.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
 
 Rose, et al.                                                   [Page 20]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 Appendix D.  A Special Thanks
@@ -1174,12 +1174,12 @@ Appendix D.  A Special Thanks
 
 Rose, et al.                                                   [Page 21]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 Appendix E.  Copyrights
 
-   Copyright (C) 2003-2006 Marshall T. Rose
+   Copyright (C) 2003-2008 Marshall T. Rose
 
    Hold harmless the author, and any lawful use is allowed.
 
@@ -1230,7 +1230,7 @@ Appendix E.  Copyrights
 
 Rose, et al.                                                   [Page 22]
 
-README                        xml2rfc v1.32                 January 2007
+README                        xml2rfc v1.33                February 2008
 
 
 Authors' Addresses

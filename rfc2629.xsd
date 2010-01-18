@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- revised DTD for the RFC document series, draft of 2005-10-05 -->
+<!-- revised DTD for the RFC document series, draft of 2008-02-01 -->
 <!--
   Contents
   
@@ -230,13 +230,18 @@
   </xs:element>
   <xs:element name="section">
     <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="t"/>
-        <xs:element ref="figure"/>
-        <xs:element ref="texttable"/>
-        <xs:element ref="iref"/>
-        <xs:element ref="section"/>
-      </xs:choice>
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="t"/>
+          <xs:element ref="figure"/>
+          <xs:element ref="texttable"/>
+          <xs:element ref="iref"/>
+          <xs:element ref="section"/>
+        </xs:choice>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="section"/>
+        </xs:choice>
+      </xs:sequence>
       <xs:attribute name="anchor" type="xs:ID"/>
       <xs:attribute name="title" use="required" type="ATEXT"/>
       <xs:attribute name="toc" default="default">
@@ -251,7 +256,7 @@
     </xs:complexType>
   </xs:element>
   <!--
-    <!ELEMENT appendix    (t|figure|texttable|iref|appendix)*>
+    <!ELEMENT appendix    ((t|figure|texttable|iref)*,appendix)*>
     <!ATTLIST appendix
               anchor      ID                 #IMPLIED
               title       %ATEXT;            #REQUIRED
@@ -339,6 +344,7 @@
   </xs:element>
   <xs:element name="spanx">
     <xs:complexType mixed="true">
+      <xs:attribute ref="xml:space" default="preserve"/>
       <xs:attribute name="style" default="emph" type="ATEXT"/>
     </xs:complexType>
   </xs:element>
@@ -350,12 +356,21 @@
   <xs:element name="figure">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="iref"/>
         <xs:element minOccurs="0" ref="preamble"/>
         <xs:element ref="artwork"/>
         <xs:element minOccurs="0" ref="postamble"/>
       </xs:sequence>
       <xs:attribute name="anchor" type="xs:ID"/>
       <xs:attribute name="title" default="" type="ATEXT"/>
+      <xs:attribute name="suppress-title" default="false">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="true"/>
+            <xs:enumeration value="false"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="src" type="URI"/>
       <xs:attribute name="align" default="left">
         <xs:simpleType>
@@ -423,6 +438,33 @@
       </xs:sequence>
       <xs:attribute name="anchor" type="xs:ID"/>
       <xs:attribute name="title" default="" type="ATEXT"/>
+      <xs:attribute name="suppress-title" default="false">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="true"/>
+            <xs:enumeration value="false"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="align" default="center">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="center"/>
+            <xs:enumeration value="right"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="style" default="full">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="all"/>
+            <xs:enumeration value="non"/>
+            <xs:enumeration value="headers"/>
+            <xs:enumeration value="full"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="ttcol">

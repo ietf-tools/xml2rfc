@@ -1,4 +1,4 @@
-# revised DTD for the RFC document series, draft of 2005-10-05
+# revised DTD for the RFC document series, draft of 2008-02-01
 
 # Contents
 # 
@@ -51,7 +51,7 @@ attlist.rfc &=
   attribute number { NUMBER }?,
   [ a:defaultValue = "" ] attribute obsoletes { NUMBERS }?,
   [ a:defaultValue = "" ] attribute updates { NUMBERS }?,
-  attribute category { "std" | "bcp" | "info" | "exp" | "historic" }?,
+  [ a:defaultValue = "info" ] attribute category { "std" | "bcp" | "info" | "exp" | "historic" }?,
   attribute seriesNo { NUMBER }?,
   attribute ipr {
     "full2026"
@@ -147,14 +147,13 @@ middle = element middle { attlist.middle, section+ }
 attlist.middle &= empty
 section =
   element section {
-    attlist.section, (t | figure | texttable | iref | section)*
+    attlist.section, ((t | figure | texttable | iref)* , section*)
   }
 attlist.section &=
   attribute anchor { xsd:ID }?,
   attribute title { ATEXT },
-  [ a:defaultValue = "default" ]
-  attribute toc { "include" | "exclude" | "default" }?
-# <!ELEMENT appendix    (t|figure|texttable|iref|appendix)*>
+  [ a:defaultValue = "default" ] attribute toc { "include" | "exclude" | "default" }?
+# <!ELEMENT appendix    ((t|figure|texttable|iref)*,appendix*)>
 # <!ATTLIST appendix
 #           anchor      ID                 #IMPLIED
 #           title       %ATEXT;            #REQUIRED
@@ -187,8 +186,7 @@ xref = element xref { attlist.xref, CTEXT }
 attlist.xref &=
   attribute target { xsd:IDREF },
   [ a:defaultValue = "false" ] attribute pageno { "true" | "false" }?,
-  [ a:defaultValue = "default" ]
-  attribute format { "counter" | "title" | "none" | "default" }?
+  [ a:defaultValue = "default" ] attribute format { "counter" | "title" | "none" | "default" }?
 eref = element eref { attlist.eref, CTEXT }
 attlist.eref &= attribute target { URI }
 iref = element iref { attlist.iref, empty }
@@ -201,15 +199,18 @@ attlist.cref &=
   attribute anchor { xsd:ID }?,
   attribute source { ATEXT }?
 spanx = element spanx { attlist.spanx, CTEXT }
-attlist.spanx &= [ a:defaultValue = "emph" ] attribute style { ATEXT }?
+attlist.spanx &=
+  [ a:defaultValue = "preserve" ] attribute xml:space { "default" | "preserve" }?,
+  [ a:defaultValue = "emph" ] attribute style { ATEXT }?
 vspace = element vspace { attlist.vspace, empty }
 attlist.vspace &=
   [ a:defaultValue = "0" ] attribute blankLines { NUMBER }?
 figure =
-  element figure { attlist.figure, preamble?, artwork, postamble? }
+  element figure { attlist.figure, iref*, preamble?, artwork, postamble? }
 attlist.figure &=
   attribute anchor { xsd:ID }?,
   [ a:defaultValue = "" ] attribute title { ATEXT }?,
+  [ a:defaultValue = "false" ] attribute suppress-title { "true" | "false" }?,
   [ a:defaultValue = "" ] attribute src { ATEXT }?,
   [ a:defaultValue = "left" ] attribute align { "left" | "center" | "right" }?,
   [ a:defaultValue = "" ] attribute alt { ATEXT }?,
@@ -222,8 +223,7 @@ preamble =
 attlist.preamble &= empty
 artwork = element artwork { attlist.artwork, TEXT* }
 attlist.artwork &=
-  [ a:defaultValue = "preserve" ]
-  attribute xml:space { "default" | "preserve" }?,
+  [ a:defaultValue = "preserve" ] attribute xml:space { "default" | "preserve" }?,
   [ a:defaultValue = "" ] attribute name { ATEXT }?,
   [ a:defaultValue = "" ] attribute type { ATEXT }?,
   attribute src { URI }?,
@@ -242,12 +242,14 @@ texttable =
   }
 attlist.texttable &=
   attribute anchor { xsd:ID }?,
-  [ a:defaultValue = "" ] attribute title { ATEXT }?
+  [ a:defaultValue = "" ] attribute title { ATEXT }?,
+  [ a:defaultValue = "false" ] attribute suppress-title { "true" | "false" }?,
+  [ a:defaultValue = "center" ] attribute align { "left" | "center" | "right" }?,
+  [ a:defaultValue = "full" ] attribute style { "all" | "none" | "headers" | "full" }?
 ttcol = element ttcol { attlist.ttcol, CTEXT }
 attlist.ttcol &=
   attribute width { ATEXT }?,
-  [ a:defaultValue = "left" ]
-  attribute align { "left" | "center" | "right" }?
+  [ a:defaultValue = "left" ] attribute align { "left" | "center" | "right" }?
 c = element c { attlist.c, (TEXT | xref | eref | iref | cref | spanx)* }
 attlist.c &= empty
 # Back matter
@@ -280,4 +282,3 @@ annotation =
   }
 attlist.annotation &= empty
 start = rfc
-
