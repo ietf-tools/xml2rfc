@@ -2872,7 +2872,7 @@ proc prexml_include {stream inputD inputF path} {
         } else {
             regsub -- {^'([^']*)'$} $y {\1} y
         }
-        if {![regexp -nocase -- {^[a-z0-9.@-]+$} $y]} {
+        if {(0) && (![regexp -nocase -- {^[a-z0-9.@-]+$} $y])} {
             error "invalid include $y"
         }
         set foundP 0
@@ -3202,7 +3202,7 @@ proc pass {tag} {
 
             if {($passno == 1) && ($options(.STRICT))} {
                 xdv::validate_tree [lindex [lindex $root 0] 0] \
-                     rfc2629.cmodel  rfc2629.rattrs \
+                     rfc2629.cmodel  rfc2629.rattrs rfc2629.oattrs \
                      rfc2629.anchors rfc2629.pcdata
 
             }
@@ -3530,7 +3530,9 @@ proc begin {name {av {}}} {
             set elem($elemN) [array get attrs]
         }
         switch -- $name {
-            rfc {
+            rfc
+                -
+            annotation {
                 pass2begin_$name $elemN
             }
 
@@ -3560,10 +3562,6 @@ proc begin {name {av {}}} {
                 -
             c
                 -
-            xref
-                -
-            eref
-                -
             iref
                 -
             vspace
@@ -3572,6 +3570,15 @@ proc begin {name {av {}}} {
                 -
             back {
                 if {[lsearch0 $stack references] < 0} {
+                    pass2begin_$name $elemN
+                }
+            }
+
+            xref
+                -
+            eref {
+                if {([lsearch0 $stack references] < 0) \
+                        || ([lsearch0 $stack annotation] >= 0)} {
                     pass2begin_$name $elemN
                 }
             }
@@ -3672,6 +3679,10 @@ proc end {name} {
                 pass2end_$name $elemX
             }
         }
+
+        annotation {
+            pass2end_$name $elemX
+        }
     }
 }
 
@@ -3716,7 +3727,8 @@ proc pcdata {text} {
         return
     }
 
-    if {[lsearch0 $stack references] >= 0} {
+    if {([lsearch0 $stack references] >= 0) \
+            && ([lsearch0 $stack annotation] < 0)} {
         return
     }
 
@@ -3731,7 +3743,9 @@ proc pcdata {text} {
             -
         postamble
             -
-        c {
+        c
+            -
+        annotation {
             set pre 0
         }
 
@@ -3864,7 +3878,7 @@ proc normalize_options {} {
         }
 
         html {
-            if {$options(.SLIDES)} {
+            if {1 || ($options(.SLIDES))} {
                 set passmax 3
             }
         }
@@ -4389,7 +4403,7 @@ proc pass2begin_front {elemX} {
             }
 
             default {
-            unexpected error "invalid role attribute: $av(role)"
+                unexpected error "invalid role attribute: $av(role)"
             }
         }
 
@@ -4486,10 +4500,12 @@ proc pass2end_front {elemX} {
             switch -- $cv(.NAME) {
                 rfc {
                     if {(!$options(.PRIVATE)) && $copyrightP} {
-                        if {[catch { set anchor $cv(.ANCHOR) }]} {
+                        set anchor ""
+                        if {($passno == 3) && (![string compare $mode html])} {
                             set anchor rfc.copyright
                             set label "&#167;"
                         } else {
+                            catch { set anchor $cv(.ANCHOR) }
                             set label ""
                         }
                         if {$iprP} {
@@ -4517,10 +4533,12 @@ proc pass2end_front {elemX} {
                 }
 
                 back {
-                    if {[catch { set anchor $cv(.ANCHOR) }]} {
+                    set anchor ""
+                    if {($passno == 3) && (![string compare $mode html])} {
                         set anchor rfc.authors
                         set label "&#167;"
                     } else {
+                        catch { set anchor $cv(.ANCHOR) }
                         set label ""
                     }
                     array set fv $elem(2)
@@ -4534,10 +4552,12 @@ proc pass2end_front {elemX} {
                 }
 
                 references {
-                    if {[catch { set anchor $cv(.ANCHOR) }]} {
+                    set anchor ""
+                    if {($passno == 3) && (![string compare $mode html])} {
                         set anchor rfc.references[incr refs]
                         set label "&#167;"
                     } else {
+                        catch { set anchor $cv(.ANCHOR) }
                         set label ""
                     }
                     if {[catch { set title $cv(title) }]} {
@@ -5016,11 +5036,11 @@ proc pass2begin_xref {elemX} {
     global mode
 
 # pageno is ignored for now...
-    array set attrs [list pageno false]
+    array set attrs [list pageno false format default]
     array set attrs $elem($elemX)
 
     set anchor $attrs(target)
-    xref_$mode $attrs(.CTEXT) $xref($anchor) $anchor
+    xref_$mode $attrs(.CTEXT) $xref($anchor) $anchor $attrs(format)
 }
 
 
@@ -5263,6 +5283,10 @@ proc pass2begin_reference {elemX width} {
 
     array set attrs [list anchor "" target "" target2 ""]
     array set attrs $elem($elemX)
+    if {![info exists attrs(.ANNOTATIONS)]} {
+        set attrs(.ANNOTATIONS) {}
+        set elem($elemX) [array get attrs]
+    }
 
     set front [find_element front $attrs(.CHILDREN)]
     array set fv $elem($front)
@@ -5290,7 +5314,8 @@ proc pass2begin_reference {elemX width} {
     set date [ref_date $elemX]
 
     reference_$mode $attrs(.COUNTER) $names $title $series $formats $date \
-                    $attrs(anchor) $attrs(target) $attrs(target2) $width
+                    $attrs(anchor) $attrs(target) $attrs(target2) $width \
+                    $attrs(.ANNOTATIONS)
 }
 
 proc ref_names {elemX} {
@@ -5412,6 +5437,26 @@ proc ref_date {elemX} {
     return $date
 }
 
+proc pass2begin_annotation {elemX} {
+    global mode
+
+    annotation_$mode begin
+}
+
+proc pass2end_annotation {elemX} {
+    global counter depth elemN elem passno stack xref
+    global mode
+
+    set frame [lindex $stack end]
+    array set av [lrange $frame 1 end]
+    set elemY $av(elemN)
+    array set av $elem($elemY)
+
+    lappend av(.ANNOTATIONS) [annotation_$mode end]
+
+    set elem($elemY) [array get av]
+}
+
 proc find_element {name children} {
     global counter depth elemN elem passno stack xref
 
@@ -5517,7 +5562,7 @@ proc rfc_txt {irefs iprstmt copying} {
         if {![have_lines 4]} {
             end_page_txt
         }
-        write_line_txt "Acknowledgement"
+        write_line_txt "Acknowledgment"
         write_line_txt ""
         pcdata_txt $funding
 
@@ -5680,6 +5725,8 @@ proc front_txt_end {toc irefP} {
 }
 
 proc write_toc_txt {s1 title s2 len dot} {
+    global mode
+
     set x [string length $title]
     if {($dot) && ($x < $len)} {
         if {$x%2} {
@@ -5692,7 +5739,7 @@ proc write_toc_txt {s1 title s2 len dot} {
         }
     }
 
-    write_line_txt [format "%s%-*.*s%s" $s1 $len $len $title $s2]
+    write_line_$mode [format "%s%-*.*s%s" $s1 $len $len $title $s2]
 }
 
 proc abstract_txt {} {
@@ -5852,6 +5899,7 @@ proc list_txt {tag counters style hangIndent hangText} {
 
 proc figure_txt {tag lines anchor title args} {
     global counter depth elemN elem passno stack xref
+    global mode
 
     switch -- $tag {
         begin {
@@ -5859,7 +5907,7 @@ proc figure_txt {tag lines anchor title args} {
                 incr lines 8
             }
             if {![have_lines $lines]} {
-                end_page_txt
+                end_page_$mode
             }
             flush_text
         }
@@ -5871,9 +5919,9 @@ proc figure_txt {tag lines anchor title args} {
                 if {[string compare $title ""]} {
                     append prefix ": [chars_expand $title]"
                 }
-                write_line_txt ""
-                write_text_txt $prefix c
-                write_line_txt ""
+                write_line_$mode ""
+                write_text_$mode $prefix c
+                write_line_$mode ""
             }
         }
     }
@@ -5881,13 +5929,14 @@ proc figure_txt {tag lines anchor title args} {
 
 proc preamble_txt {tag {editNo ""}} {
     global options
+    global mode
 
     switch -- $tag {
         begin {
             if {$options(.EDITING)} {
-                write_editno_txt $editNo
+                write_editno_$mode $editNo
             } else {
-                write_line_txt ""
+                write_line_$mode ""
             }
         }
     }
@@ -5896,13 +5945,14 @@ proc preamble_txt {tag {editNo ""}} {
 proc postamble_txt {tag {editNo ""}} {
     global options
     global eatP
+    global mode
 
     switch -- $tag {
         begin {
             cellE
             set eatP 1
             if {$options(.EDITING)} {
-                write_editno_txt $editNo
+                write_editno_$mode $editNo
             }
         }
     }
@@ -5910,6 +5960,7 @@ proc postamble_txt {tag {editNo ""}} {
 
 proc texttable_txt {tag lines anchor title {didP 0}} {
     global counter depth elemN elem passno stack xref
+    global mode
 
     switch -- $tag {
         begin {
@@ -5917,7 +5968,7 @@ proc texttable_txt {tag lines anchor title {didP 0}} {
                 incr lines 8
             }
             if {![have_lines $lines]} {
-                end_page_txt
+                end_page_$mode
             }
             flush_text
 
@@ -5933,9 +5984,9 @@ proc texttable_txt {tag lines anchor title {didP 0}} {
                 if {[string compare $title ""]} {
                     append prefix ": [chars_expand $title]"
                 }
-                write_line_txt ""
-                write_text_txt $prefix c
-                write_line_txt ""
+                write_line_$mode ""
+                write_text_$mode $prefix c
+                write_line_$mode ""
             }
         }
     }
@@ -6170,6 +6221,16 @@ proc cellE {} {
 
 proc cellP {data {row -1} {col -1} {width -1} {align ""}} {
     global rowNo colNo cells
+    global mode
+    global annoP
+
+    if {[info exists annoP]} {
+        if {[string compare $mode html]} {
+            set data [chars_expand $data 0]
+        }
+        append cells(0,0) $data
+        return 1
+    }
 
     if {$row == -1} {
         if {[llength [array names cells]] == 0} {
@@ -6190,10 +6251,16 @@ proc cellP {data {row -1} {col -1} {width -1} {align ""}} {
 }
 
 
-proc xref_txt {text av target} {
+proc xref_txt {text av target format} {
+    global elem
     global eatP
+    global mode
 
     array set attrs $av    
+
+    set elemY $attrs(elemN)
+    array set tv [list title ""]
+    array set tv $elem($elemY)
 
     switch -- $attrs(type) {
         section {
@@ -6216,6 +6283,7 @@ proc xref_txt {text av target} {
             set line "\[$attrs(value)\]"
         }
     }
+
     if {[string compare $text ""]} {
         switch -- $attrs(type) {
             section
@@ -6232,9 +6300,24 @@ proc xref_txt {text av target} {
                 set line "[chars_expand $text] $line"
             }
         }       
+    } else {
+        switch -- $format {
+            counter {
+                set line $attrs(value)
+            }
+
+            title {
+                set line $tv(title)
+            }
+
+            default {
+            }
+        }
     }
+
     if {![cellP $line]} {
-        write_text_txt $line
+        set eatP 0
+        write_text_$mode $line
     }
 
     set eatP -1
@@ -6243,17 +6326,23 @@ proc xref_txt {text av target} {
 proc eref_txt {text counter target} {
     global eatP
     global erefs
+    global mode
 
+    set line ""
     if {[string compare $text ""]} {
         set line "[chars_expand $text]"
     }
     if {([string first "#" $target] < 0) \
             && ([string compare $text $target])} {
         set erefs($counter) $target
-        append line " \[$counter\]"
+        if {[string compare $line ""]} {
+            append line " "
+        }
+        append line "\[$counter\]"
     }
     if {![cellP $line]} {
-        write_text_txt $line
+        set eatP 0
+        write_text_$mode $line
     }
 
     set eatP -1
@@ -6268,10 +6357,11 @@ proc iref_txt {item subitem flags} {
 proc vspace_txt {lines} {
     global header footer lineno pageno blankP
     global eatP
+    global mode
 
     flush_text
     if {$lineno+$lines >= 51} {
-        end_page_txt
+        end_page_$mode
     } else {
         while {$lines > 0} {
             incr lines -1
@@ -6373,7 +6463,7 @@ proc erefs_txt {{title ""}} {
 }
 
 proc reference_txt {prefix names title series formats date anchor target
-                    target2 width} {
+                    target2 width annotations} {
     write_line_txt ""
 
     incr width 2
@@ -6419,7 +6509,34 @@ proc reference_txt {prefix names title series formats date anchor target
     }
     write_text_txt .
 
+    while {[llength $annotations] > 0} {
+        write_line_txt ""
+        pcdata_txt [lindex $annotations 0]
+        set annotations [lrange $annotations 1 end]
+    }
+
     pop_indent
+}
+
+proc annotation_txt {tag} {
+    global mode
+    global annoP
+    global rowNo colNo cells cellW
+
+    switch -- $tag {
+        begin {
+            set annoP 1
+        }
+
+        end {
+            unset annoP
+
+            set text [string trim $cells(0,0)]
+            unset cells
+
+            return $text
+        }
+    }
 }
 
 proc back_txt {authors} {
@@ -6567,7 +6684,6 @@ proc emoticonic_txt {text} {
 }
 
 proc start_page_txt {} {
-    global stdout
     global header footer lineno pageno blankP
 
     write_it $header
@@ -6578,7 +6694,6 @@ proc start_page_txt {} {
 }
 
 proc end_page_txt {} {
-    global stdout
     global header footer lineno pageno blankP
 
     flush_text
@@ -6607,6 +6722,7 @@ proc end_page_txt {} {
 proc write_pcdata_txt {text} {
     global buffer
     global indents indent
+    global mode
 
     if {![string compare $buffer ""]} {
         set buffer [format %*.*s $indent $indent ""]    
@@ -6614,7 +6730,7 @@ proc write_pcdata_txt {text} {
     append buffer $text
     set buffer [two_spaces $buffer]
 
-    write_text_txt ""
+    write_text_$mode ""
 }
 
 proc write_editno_txt {editNo} {
@@ -6703,7 +6819,6 @@ proc write_text_txt {text {direction l}} {
 }
 
 proc write_line_txt {line {pre 0}} {
-    global stdout
     global header footer lineno pageno blankP
     global buffer
     global nbsp
@@ -6756,9 +6871,9 @@ proc two_spaces {glop} {
         # this case.
         if {[catch { regexp {(?:[A-Z][A-Z]|[A-Z][a-z][a-z]\.)$} $pre } y]} {
             if {![set y [string match {*[A-Z][A-Z].} $pre]]} {
-		set y [string match {*[A-Z][a-z][a-z].} $pre]
-	    }
-	}
+                set y [string match {*[A-Z][a-z][a-z].} $pre]
+            }
+        }
         if {$y} {
             if {[string first " " $glop] != 0} {
                 append post " "
@@ -6770,11 +6885,13 @@ proc two_spaces {glop} {
 }
 
 proc pi_txt {key value} {
+    global mode
+
     switch -- $key {
         needLines {
             flush_text
             if {![have_lines $value]} {
-                end_page_txt
+                end_page_$mode
             }
         }
 
@@ -6795,7 +6912,6 @@ proc pi_txt {key value} {
 proc rfc_html {irefs iprstmt copying} {
     global options copyrightP iprP
     global funding
-    global stdout
 
     if {$options(.SLIDES) && [end_rfc_slides]} {
         return
@@ -6803,19 +6919,19 @@ proc rfc_html {irefs iprstmt copying} {
 
     if {[llength $irefs] > 0} {
         toc_html rfc.index
-        puts $stdout "<h3>Index</h3>"
+        write_html "<h3>Index</h3>"
 
-        puts $stdout "<table>"
+        write_html "<table>"
         foreach iref $irefs {
             foreach {L item subitem flags pages} $iref { break }
 
             if {[string compare $L ""]} {
-                puts $stdout "<tr><td><b>$L</b></td><td>&nbsp;</td></tr>"
+                write_html "<tr><td><b>$L</b></td><td>&nbsp;</td></tr>"
             }
             
             if {[string compare $subitem ""]} {
                 if {[string compare $item ""]} {
-                    puts $stdout "<tr><td>&nbsp;</td><td>$item</td></tr>"
+                    write_html "<tr><td>&nbsp;</td><td>$item</td></tr>"
                 }
                 set key $subitem
                 set t "&nbsp;&nbsp;"
@@ -6840,38 +6956,38 @@ proc rfc_html {irefs iprstmt copying} {
                 }
             }
 
-            puts $stdout "<tr><td>&nbsp;</td><td>$t$key</td></tr>"
+            write_html "<tr><td>&nbsp;</td><td>$t$key</td></tr>"
         }
-        puts $stdout "</table>"
+        write_html "</table>"
     }
 
     if {(!$options(.PRIVATE)) && $copyrightP} {
         toc_html rfc.copyright
         if {$iprP} {
-            puts $stdout "<h3>Intellectual Property Statement</h3>"
+            write_html "<h3>Intellectual Property Statement</h3>"
 
             foreach para $iprstmt {
-                puts $stdout "<p class='copyright'>"
+                write_html "<p class='copyright'>"
                 pcdata_html $para
-                puts $stdout "</p>"
+                write_html "</p>"
             }
         }
 
-        puts $stdout "<h3>Full Copyright Statement</h3>"
+        write_html "<h3>Full Copyright Statement</h3>"
 
         foreach para $copying {
-            puts $stdout "<p class='copyright'>"
+            write_html "<p class='copyright'>"
             pcdata_html $para
-            puts $stdout "</p>"
+            write_html "</p>"
         }
 
-        puts $stdout "<h3>Acknowledgement</h3>"
-        puts $stdout "<p class='copyright'>"
+        write_html "<h3>Acknowledgment</h3>"
+        write_html "<p class='copyright'>"
         pcdata_html $funding
-        puts $stdout "</p>"
+        write_html "</p>"
     }
 
-    puts $stdout "</font></body></html>"
+    write_html "</font></body></html>"
 
     return ""
 }
@@ -6922,7 +7038,6 @@ set htmlstyle \
 
 proc front_html_begin {left right top bottom title status copying} {
     global options copyrightP iprP
-    global stdout
     global htmlstyle
     global doingP hangP
     global imgP
@@ -6936,31 +7051,31 @@ proc front_html_begin {left right top bottom title status copying} {
         return
     }
 
-    puts -nonewline $stdout "<html><head><title>"
+    write_html -nonewline "<html><head><title>"
     if {($options(.PRIVATE)) \
             && ([string compare [string trim $options(private)] ""])} {
         pcdata_html "$options(private): "
     }
     pcdata_html [lindex $title 0]
-    puts $stdout "</title>"
+    write_html "</title>"
     if {$options(.PRIVATE)} {
-        puts -nonewline $stdout "<meta http-equiv=\"Expires\" content=\""
-        puts -nonewline $stdout [clock format [clock seconds] \
-                                      -format "%a, %d %b %Y %T +0000" \
-                                      -gmt true]
-        puts $stdout "\">"
+        write_html -nonewline "<meta http-equiv=\"Expires\" content=\""
+        write_html -nonewline [clock format [clock seconds] \
+                                     -format "%a, %d %b %Y %T +0000" \
+                                     -gmt true]
+        write_html "\">"
     }
-    puts $stdout "$htmlstyle\n</head>"
-    puts -nonewline $stdout "<body bgcolor=\"#ffffff\""
+    write_html "$htmlstyle\n</head>"
+    write_html -nonewline "<body bgcolor=\"#ffffff\""
     if {[string compare $options(background) ""]} {
-        puts -nonewline $stdout " background=\"$options(background)\""
+        write_html -nonewline " background=\"$options(background)\""
     }
-    puts $stdout " text=\"#000000\" alink=\"#000000\" vlink=\"#666666\" link=\"#990000\">" 
+    write_html " text=\"#000000\" alink=\"#000000\" vlink=\"#666666\" link=\"#990000\">" 
 
     xxxx_html
 
     if {$options(.TOPBLOCK)} {
-        puts $stdout "<table width=\"66%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
+        write_html "<table width=\"66%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
         set left [munge_long $left]
         set right [munge_long $right]
         set lc ""
@@ -6976,9 +7091,9 @@ proc front_html_begin {left right top bottom title status copying} {
             } else {
                 set r "&nbsp;"
             }
-            puts $stdout "<tr valign=\"top\"><td width=\"33%\" bgcolor=\"#666666\" class=\"header\">$l</td><td width=\"33%\" bgcolor=\"#666666\" class=\"header\">$r</td></tr>"
+            write_html "<tr valign=\"top\"><td width=\"33%\" bgcolor=\"#666666\" class=\"header\">$l</td><td width=\"33%\" bgcolor=\"#666666\" class=\"header\">$r</td></tr>"
         }
-        puts $stdout "</table></td></tr></table>"
+        write_html "</table></td></tr></table>"
     }
 
     set color 990000
@@ -6986,48 +7101,47 @@ proc front_html_begin {left right top bottom title status copying} {
     set br <br>
     set class title
     foreach line $title {
-        puts -nonewline $stdout "<div align=\"right\"><font face=\"monaco, MS Sans Serif\" color=\"#$color\" size=\"+$size\"><b>$br<span class=\"$class\">"
+        write_html -nonewline "<div align=\"right\"><font face=\"monaco, MS Sans Serif\" color=\"#$color\" size=\"+$size\"><b>$br<span class=\"$class\">"
         pcdata_html $line
-        puts $stdout "</span></b></font></div>"
+        write_html "</span></b></font></div>"
         set color 666666
         set size 2
         set br ""
         set class filename
     }
-    puts $stdout "<font face=\"verdana, helvetica, arial, sans-serif\" size=\"2\">"
+    write_html "<font face=\"verdana, helvetica, arial, sans-serif\" size=\"2\">"
 
     if {!$options(.PRIVATE)} {
-        puts $stdout ""
-        puts $stdout "<h3>Status of this Memo</h3>"
+        write_html ""
+        write_html "<h3>Status of this Memo</h3>"
         foreach para $status {
-            puts $stdout "<p>"
+            write_html "<p>"
             pcdata_html $para
-            puts $stdout "</p>"
+            write_html "</p>"
         }
     }
 
     if {(!$options(.PRIVATE)) && $copyrightP} { 
-        puts $stdout ""
-        puts $stdout "<h3>Copyright Notice</h3>"
-        puts $stdout "<p>"
+        write_html ""
+        write_html "<h3>Copyright Notice</h3>"
+        write_html "<p>"
         pcdata_html $copying
-        puts $stdout "</p>"
+        write_html "</p>"
     }
 }
 
 proc front_html_end {toc irefP} {
     global options copyrightP iprP noticeT
-    global stdout
     global passno indexpg
 
-    if {(!$options(.TOC)) || ($passno > 2)} {
+    if {!$options(.TOC)} {
         return
     }
 
     xxxx_html toc
 
-    puts $stdout "<h3>Table of Contents</h3>"
-    puts $stdout "<ul compact class=\"toc\">"
+    write_html "<h3>Table of Contents</h3>"
+    write_html "<ul compact class=\"toc\">"
     set last [lindex $toc end]
     if {[string compare [lindex $last 1] $noticeT]} {
         set last ""
@@ -7041,47 +7155,44 @@ proc front_html_end {toc irefP} {
         lappend toc $last
     }
     foreach c $toc {
-        puts -nonewline $stdout "<b><a href=\"#[lindex $c 2]\">"
+        write_html -nonewline "<b><a href=\"#[lindex $c 2]\">"
         pcdata_html [lindex $c 0]
-        puts $stdout "</a>&nbsp;"
+        write_html "</a>&nbsp;"
         pcdata_html [lindex $c 1]
-        puts $stdout "<br></b>"
+        write_html "<br></b>"
     }
-    puts $stdout "</ul>"
-    puts $stdout "<br clear=\"all\">"
+    write_html "</ul>"
+    write_html "<br clear=\"all\">"
 }
 
 proc abstract_html {} {
     global options
-    global stdout
 
     if {$options(.SLIDES) && [end_page_slides]} {
         start_page_slides Abstract
     } else {
-        puts $stdout ""
-        puts $stdout "<h3>Abstract</h3>"
+        write_html ""
+        write_html "<h3>Abstract</h3>"
     }
 }
 
 proc note_html {title depth} {
     global options
-    global stdout
 
     if {$options(.SLIDES) && [end_page_slides]} {
         start_page_slides $title
     } else {
         incr depth 3
 
-        puts $stdout ""
-        puts -nonewline $stdout "<h$depth>"
+        write_html ""
+        write_html -nonewline "<h$depth>"
         pcdata_html $title
-        puts $stdout "</h$depth>"
+        write_html "</h$depth>"
     }
 }
 
 proc section_html {prefix top title {lines 0} anchor} {
     global options
-    global stdout
 
     if {$options(.SLIDES) && [end_page_slides]} {
         start_page_slides $title
@@ -7095,18 +7206,18 @@ proc section_html {prefix top title {lines 0} anchor} {
     }
     set anchor2 rfc.section.$anchor2
 
-    puts $stdout ""
+    write_html ""
     if {[string match *. $prefix]} {
         toc_html $anchor
-        puts -nonewline $stdout "<a name=\"$anchor2\"></a>"
-        puts -nonewline $stdout "<h3>$prefix&nbsp;"
+        write_html -nonewline "<a name=\"$anchor2\"></a>"
+        write_html -nonewline "<h3>$prefix&nbsp;"
         pcdata_html $title
-        puts $stdout "</h3>"
+        write_html "</h3>"
     } else {
-        puts -nonewline $stdout "<a name=\"$anchor2\"></a>"
-        puts -nonewline $stdout "<h4><a name=\"$anchor\">$prefix</a>&nbsp;"
+        write_html -nonewline "<a name=\"$anchor2\"></a>"
+        write_html -nonewline "<h4><a name=\"$anchor\">$prefix</a>&nbsp;"
         pcdata_html $title
-        puts $stdout "</h4>"
+        write_html "</h4>"
     }
 
     return $anchor
@@ -7114,7 +7225,6 @@ proc section_html {prefix top title {lines 0} anchor} {
 
 proc t_html {tag counter style hangText editNo} {
     global options
-    global stdout
     global doingP hangP
 
     if {[string compare $tag begin]} {
@@ -7122,42 +7232,41 @@ proc t_html {tag counter style hangText editNo} {
     } else {
         set s ""
     }
-    puts $stdout ""
+    write_html ""
     if {![string compare $style "hanging"]} {
         if {![string compare $tag begin]} {
-            puts $stdout "<dt>$hangText</dt>"
+            write_html "<dt>$hangText</dt>"
         }
-        puts -nonewline $stdout "<${s}dd>"
+        write_html -nonewline "<${s}dd>"
 
         set hangP 1
     } elseif {![string compare $style "letters"]} {
         if {![string compare $tag begin]} {
             set l [split $counter .]
-            puts $stdout "<dt>[offset2letters [lindex $l end] [llength $l]]</dt>"
+            write_html "<dt>[offset2letters [lindex $l end] [llength $l]]</dt>"
         }
-        puts -nonewline $stdout "<${s}dd>"
+        write_html -nonewline "<${s}dd>"
 
         set hangP 1
     } elseif {([string compare $counter ""]) \
                     && ([string compare $style empty])} {
-        puts -nonewline $stdout "<${s}li>"
+        write_html -nonewline "<${s}li>"
 
         set hangP 0
     } else {
         set doingP [string compare $tag end]
-        puts -nonewline $stdout "<${s}p>"
+        write_html -nonewline "<${s}p>"
 
         set hangP 0
     }
     if {$options(.EDITING) \
             && (![string compare $tag begin]) \
             && ([string compare $editNo ""])} {
-        puts -nonewline $stdout "<sup><small>$editNo</small></sup>"
+        write_html -nonewline "<sup><small>$editNo</small></sup>"
     }
 }
 
 proc list_html {tag counters style hangIndent hangText} {
-    global stdout
     global doingP hangP
 
     if {[string compare $tag begin]} {
@@ -7167,34 +7276,34 @@ proc list_html {tag counters style hangIndent hangText} {
         set s ""
         set c " class=\"text\""
     }
-    puts $stdout ""
+    write_html ""
     switch -- $style {
         numbers {
-            puts -nonewline $stdout "<${s}ol$c>"
+            write_html -nonewline "<${s}ol$c>"
         }
 
         symbols {
-            puts -nonewline $stdout "<${s}ul$c>"
+            write_html -nonewline "<${s}ul$c>"
         }
 
         letters
             -
         hanging {
             if {[string compare $tag begin]} {
-                puts -nonewline $stdout "</dl></blockquote>"
+                write_html -nonewline "</dl></blockquote>"
             } else {
-                puts -nonewline $stdout "<blockquote$c><dl>"
+                write_html -nonewline "<blockquote$c><dl>"
             }
         }
 
         default {
-            puts -nonewline $stdout "<${s}blockquote$c>"
+            write_html -nonewline "<${s}blockquote$c>"
         }
     }
 
     if {[string compare $tag begin]} {
         set doingP 1
-        puts -nonewline $stdout "<p>"
+        write_html -nonewline "<p>"
     }
 
     set hangP 0
@@ -7202,35 +7311,34 @@ proc list_html {tag counters style hangIndent hangText} {
 
 proc figure_html {tag lines anchor title {av {}}} {
     global options
-    global stdout
     global imgP
 
     set imgP 0
     switch -- $tag {
         begin {
             if {[string compare $title ""]} {
-                puts $stdout "<br><hr size=\"1\" shade=\"0\">"
+                write_html "<br><hr size=\"1\" shade=\"0\">"
             }
             if {[string compare $anchor ""]} {
-                puts $stdout "<a name=\"$anchor\"></a>"
+                write_html "<a name=\"$anchor\"></a>"
             }
             if {([set x [lsearch -exact $av src]] >= 0) && ([incr x]%2)} {
-                puts -nonewline $stdout "<p><img"
+                write_html -nonewline "<p><img"
                 foreach {k v} $av {
                     if {[string first . $k] != 0} {
-                        puts -nonewline $stdout ""
+                        write_html -nonewline ""
                         regsub -all {"} $v {&quot;} v
-                        puts -nonewline $stdout " $k=\"$v\""
+                        write_html -nonewline " $k=\"$v\""
                     }
                 }
-                puts $stdout "></img></p>"
+                write_html "></img></p>"
                 set imgP 1
             }
         }
 
         end {
             if {[string compare $title ""]} {
-                puts $stdout "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" align=\"center\"><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br></td></tr></table><hr size=\"1\" shade=\"0\">"
+                write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" align=\"center\"><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br></td></tr></table><hr size=\"1\" shade=\"0\">"
             }
         }
     }
@@ -7245,68 +7353,67 @@ proc postamble_html {tag {editNo ""}} {
 }
 
 proc texttable_html {tag lines anchor title {didP 0}} {
-    global stdout
-
     switch -- $tag {
         begin {
             if {[string compare $title ""]} {
-                puts $stdout "<br><hr size=\"1\" shade=\"0\">"
+                write_html "<br><hr size=\"1\" shade=\"0\">"
             }
             if {[string compare $anchor ""]} {
-                puts $stdout "<a name=\"$anchor\"></a>"
+                write_html "<a name=\"$anchor\"></a>"
             }
         }
 
         end {
             if {[string compare $title ""]} {
-                puts $stdout "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" align=\"center\"><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br></td></tr></table><hr size=\"1\" shade=\"0\">"
+                write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" align=\"center\"><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br></td></tr></table><hr size=\"1\" shade=\"0\">"
             }
         }
     }
 }
 
 proc ttcol_html {text align col width} {
-    global stdout
-
     if {[lindex $col 0] == 1} {
-        puts $stdout "<table border=\"1\" align=\"center\" valign=\"top\">"
-        puts $stdout "<tr>"
+        write_html "<table border=\"1\" align=\"center\" valign=\"top\">"
+        write_html "<tr>"
     }
-    puts -nonewline $stdout "<td align=\"$align\" width=\"$width%\">"
+    write_html -nonewline "<td align=\"$align\" width=\"$width%\">"
     pcdata_html $text
-    puts $stdout "</td>"
+    write_html "</td>"
     if {[lindex $col 0] == [lindex $col 1]} {
-        puts $stdout "</tr>"
+        write_html "</tr>"
     }
 }
 
 proc c_html {tag row col align} {
-    global stdout
+    global emptyP
 
     switch -- $tag {
         begin {
             if {[lindex $col 0] == 1} {
-                puts $stdout "<tr>"
+                write_html "<tr>"
             }
-            puts -nonewline $stdout "<td align=\"$align\">"
+            write_html -nonewline "<td align=\"$align\">"
+            set emptyP 1
         }
 
         end {
-            puts $stdout "</td>"
+            if {$emptyP} {
+                write_html -nonewline "&nbsp;"
+            }
+            write_html "</td>"
             if {[lindex $col 0] == [lindex $col 1]} {
-                puts $stdout "</tr>"
+                write_html "</tr>"
                 if {[lindex $row 0] == [lindex $row 1]} {
-                    puts $stdout "</table>"
+                    write_html "</table>"
                 }
             }
         }
     }
 }
 
-proc xref_html {text av target} {
+proc xref_html {text av target format} {
     global elem
     global options
-    global stdout
 
     array set attrs $av    
 
@@ -7358,7 +7465,18 @@ proc xref_html {text av target} {
     }
 
     if {![string compare $text ""]} {
-        set text $tv(title)
+        switch -- $format {
+            counter {
+                set text $attrs(value)
+            }
+
+            title {
+                set text $tv(title)
+            }
+
+            default {
+            }
+        }
     } elseif {$options(.EMOTICONIC)} {
         set text [emoticonic_html $text]
     }
@@ -7376,19 +7494,23 @@ proc xref_html {text av target} {
             }
 
             default {
-                set post $line
+                if {![string compare $format default]} {
+                    set post $line
+                }
             }
         }
     } else {
         set text $line
     }
 
-    puts -nonewline $stdout "<a href=\"#$target\"$title>$text</a>$post"
+    set line "<a href=\"#$target\"$title>$text</a>$post"
+    if {![cellP $line]} {
+        write_html -nonewline $line
+    }
 }
 
 proc eref_html {text counter target} {
     global options
-    global stdout
 
     if {![string compare $text ""]} {
         set text $target
@@ -7396,23 +7518,24 @@ proc eref_html {text counter target} {
         set text [emoticonic_html $text]
     } 
 
-    puts -nonewline $stdout "<a href=\"$target\">$text</a>"
+    set line "<a href=\"$target\">$text</a>"
+    if {![cellP $line]} {
+        write_html -nonewline $line
+    }
 }
 
 proc iref_html {item subitem flags} {
     global anchorN
-    global stdout
 
     set anchor anchor[incr anchorN]
 
-    puts -nonewline $stdout "<a name=\"$anchor\"></a>"
+    write_html -nonewline "<a name=\"$anchor\"></a>"
 
     return $anchor
 }
 
 proc vspace_html {lines} {
     global options
-    global stdout
     global doingP hangP
 
     if {$lines > 5} {
@@ -7425,16 +7548,14 @@ proc vspace_html {lines} {
     incr lines -$hangP
     while {$lines >= 0} {
         incr lines -1
-        puts $stdout "<br>"
+        write_html "<br>"
     }
 
     set hangP 0
 }
 
 proc spanx_html {text style} {
-    global stdout
-
-    puts -nonewline $stdout "<span class=\"$style\">$text</span>"
+    write_html -nonewline "<span class=\"$style\">$text</span>"
 }
 
 # don't need to return anything even though txt/nr versions do...
@@ -7442,7 +7563,6 @@ proc spanx_html {text style} {
 proc references_html {tag {title ""} {erefP 0}} {
     global counter depth elemN elem passno stack xref
     global options
-    global stdout
 
     if {$options(.SLIDES) \
             && (![string compare $tag begin]) \
@@ -7457,25 +7577,24 @@ proc references_html {tag {title ""} {erefP 0}} {
                 set counter(references) 0
             }
 
-            puts $stdout ""
+            write_html ""
             toc_html rfc.references[incr counter(references)]
-            puts -nonewline $stdout "<h3>"
+            write_html -nonewline "<h3>"
             pcdata_html $title
-            puts $stdout "</h3>"
+            write_html "</h3>"
 
-            puts $stdout "<table width=\"99%\" border=\"0\">"
+            write_html "<table width=\"99%\" border=\"0\">"
         }
 
         end {
-            puts $stdout "</table>"
+            write_html "</table>"
         }
     }
 }
 
 proc reference_html {prefix names title series formats date anchor target
-                     target2 width} {
+                     target2 width annotations} {
     global rfcTxtHome idTxtHome
-    global stdout
 
     if {[string compare $target2 ""]} {
         set prefix "<a href=\"$target2\">$prefix</a>"
@@ -7483,7 +7602,7 @@ proc reference_html {prefix names title series formats date anchor target
     if {[string compare $anchor ""]} {
         set prefix "<a name=\"$anchor\">\[$prefix\]</a>"
     }
-    puts $stdout "<tr><td class=\"author-text\" valign=\"top\"><b>$prefix</b></td>"
+    write_html "<tr><td class=\"author-text\" valign=\"top\"><b>$prefix</b></td>"
 
     set text ""
 
@@ -7551,15 +7670,26 @@ proc reference_html {prefix names title series formats date anchor target
     }
     append text $t
 
-    puts -nonewline $stdout "<td class=\"author-text\">"
+    write_html -nonewline "<td class=\"author-text\">"
     pcdata_html $text
-    puts $stdout "</td></tr>"
+
+    while {[llength $annotations] > 0} {
+        write_html "<p>"
+        write_html [lindex $annotations 0]
+        write_html "</p>"
+        set annotations [lrange $annotations 1 end]
+    }
+
+    write_html "</td></tr>"
+}
+
+proc annotation_html {tag} {
+    annotation_txt $tag
 }
 
 # don't need to return anything even though back_txt does...
 
 proc back_html {authors} {
-    global stdout
     global contacts
     global options
 
@@ -7578,12 +7708,12 @@ proc back_html {authors} {
             set s2 "es"
         }
     }
-    puts $stdout ""
+    write_html ""
 
     toc_html rfc.authors
-    puts $stdout "<h3>Author$s1 Address$s2</h3>"
+    write_html "<h3>Author$s1 Address$s2</h3>"
 
-    puts $stdout \
+    write_html \
          "<table width=\"99%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
     set s ""
     foreach author $authors {
@@ -7591,17 +7721,17 @@ proc back_html {authors} {
         set block2 [lindex $author 1]
 
         if {[string compare $s ""]} {
-            puts $stdout $s
+            write_html $s
         }
         foreach line $block1 {
-            puts $stdout "<tr><td class=\"author-text\">&nbsp;</td>"
-            puts $stdout "<td class=\"author-text\">$line</td></tr>"
+            write_html "<tr><td class=\"author-text\">&nbsp;</td>"
+            write_html "<td class=\"author-text\">$line</td></tr>"
         }
         foreach contact $block2 {
             set key [lindex $contact 0]
             set value [lindex [lindex $contacts \
                                       [lsearch0 $contacts $key]] 1]
-            puts $stdout "<tr><td class=\"author\" align=\"right\">$value:&nbsp;</td>"
+            write_html "<tr><td class=\"author\" align=\"right\">$value:&nbsp;</td>"
             set value [lindex $contact 1]
             switch -- $key {
                 email {
@@ -7614,11 +7744,11 @@ proc back_html {authors} {
                     set value "<a href=\"$value\">$value</a>"
                 }
             }
-            puts $stdout "<td class=\"author-text\">$value</td></tr>"
+            write_html "<td class=\"author-text\">$value</td></tr>"
         }
         set s "<tr cellpadding=\"3\"><td>&nbsp;</td><td>&nbsp;</td></tr>"
     }
-    puts $stdout "</table>"
+    write_html "</table>"
 
     return ""
 }
@@ -7626,7 +7756,6 @@ proc back_html {authors} {
 proc xxxx_html {{anchor {}}} {
     global elem
     global options
-    global stdout
 
     if {$options(.PRIVATE)} {
         toc_html $anchor
@@ -7640,10 +7769,10 @@ proc xxxx_html {{anchor {}}} {
     }                               
 
     if {[string compare $anchor ""]} {
-        puts $stdout "<a name=\"$anchor\"><hr size=\"1\" shade=\"0\"></a>"
+        write_html "<a name=\"$anchor\"><hr size=\"1\" shade=\"0\"></a>"
     }
 
-    puts $stdout "
+    write_html "
 <table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" width=\"30\" height=\"30\" align=\"right\">
     <tr>
         <td bgcolor=\"#000000\" align=\"center\" valign=\"center\" width=\"30\" height=\"30\">
@@ -7657,32 +7786,31 @@ proc xxxx_html {{anchor {}}} {
     </tr>"
 
     if {$options(.TOC)} {
-        puts $stdout "    <tr><td bgcolor=\"#990000\" align=\"center\" width=\"30\" height=\"15\"><a href=\"#toc\" CLASS=\"link2\"><font face=\"monaco, MS Sans Serif\" color=\"#ffffff\" size=\"1\"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr>"
+        write_html "    <tr><td bgcolor=\"#990000\" align=\"center\" width=\"30\" height=\"15\"><a href=\"#toc\" CLASS=\"link2\"><font face=\"monaco, MS Sans Serif\" color=\"#ffffff\" size=\"1\"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr>"
     }
-    puts $stdout "</table>"
+    write_html "</table>"
 }
 
 proc toc_html {anchor} {
     global options
-    global stdout
 
     if {[string compare $anchor ""]} {
-        puts $stdout "<a name=\"$anchor\"><br><hr size=\"1\" shade=\"0\"></a>"
+        write_html "<a name=\"$anchor\"><br><hr size=\"1\" shade=\"0\"></a>"
     }
 
     if {!$options(.TOC)} {
         return
     }
 
-    puts $stdout "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" width=\"30\" height=\"15\" align=\"right\"><tr><td bgcolor=\"#990000\" align=\"center\" width=\"30\" height=\"15\"><a href=\"#toc\" CLASS=\"link2\"><font face=\"monaco, MS Sans Serif\" color=\"#ffffff\" size=\"1\"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>"
+    write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" width=\"30\" height=\"15\" align=\"right\"><tr><td bgcolor=\"#990000\" align=\"center\" width=\"30\" height=\"15\"><a href=\"#toc\" CLASS=\"link2\"><font face=\"monaco, MS Sans Serif\" color=\"#ffffff\" size=\"1\"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>"
 }
 
 proc pcdata_html {text {pre 0}} {
     global entities
     global options
-    global stdout
     global doingP hangP
     global imgP
+    global emptyP
 
     if {$imgP} {
         return
@@ -7690,16 +7818,18 @@ proc pcdata_html {text {pre 0}} {
 
     set font "<font face=\"verdana, helvetica, arial, sans-serif\" size=\"2\">"
 
+    set lines ""
+
     regsub -all -nocase {&apos;} $text {\&#039;} text
     regsub -all "&rfc.number;" $text [lindex $entities 1] text
     if {$pre} {
         if {![slide_pre $text]} {
             if {$doingP} {
-                puts $stdout "</p>"
+                append lines "</p>\n"
             }
-            puts $stdout "</font><pre>$text</pre>$font"
+            append lines "</font><pre>$text</pre>$font"
             if {$doingP} {
-                puts $stdout "<p>"
+                append lines "<p>\n"
             }
         }
     } else {
@@ -7707,7 +7837,11 @@ proc pcdata_html {text {pre 0}} {
             set text [emoticonic_html $text]
         }
 
-        puts -nonewline $stdout $text
+        append lines $text
+    }
+    if {![cellP $lines]} {
+        write_html -nonewline $lines
+        set emptyP 0
     }
 }
 
@@ -7980,6 +8114,21 @@ proc pi_html {key value} {
     }
 }
 
+proc write_html {a1 {a2 ""}} {
+    global options
+    global passno
+    global stdout
+
+    if {($options(.SLIDES)) || ($passno == 3)} {
+        set command [list puts]
+        if {![string compare $a1 -nonewline]} {
+            lappend command -nonewline
+            set a1 $a2
+        }
+        eval $command [list $stdout $a1]
+    }
+}
+
 
 #
 # nroff output
@@ -8082,7 +8231,7 @@ proc rfc_nr {irefs iprstmt copying} {
         }
 
         write_it ".ti 0"
-        write_line_nr "Acknowledgement"
+        write_line_nr "Acknowledgment"
         write_line_nr ""
         pcdata_nr $funding
 
@@ -8108,7 +8257,7 @@ proc front_nr_begin {left right top bottom title status copying} {
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.19 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.20 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -8257,19 +8406,7 @@ proc front_nr_end {toc irefP} {
 }
 
 proc write_toc_nr {s1 title s2 len dot} {
-    set x [string length $title]
-    if {($dot) && ($x < $len)} {
-        if {$x%2} {
-            append title " "
-            incr x
-        }
-        while {$x < $len} {
-            append title " ."
-            incr x 2
-        }
-    }
-
-    write_line_nr [format "%s%-*.*s%s" $s1 $len $len $title $s2]
+    write_toc_txt $s1 $title $s2 $len $dot
 }
 
 proc abstract_nr {} {
@@ -8429,94 +8566,19 @@ proc list_nr {tag counters style hangIndent hangText} {
 }
 
 proc figure_nr {tag lines anchor title args} {
-    global counter depth elemN elem passno stack xref
-
-    switch -- $tag {
-        begin {
-            if {[string compare $title ""]} {
-                incr lines 8
-            }
-            if {![have_lines $lines]} {
-                end_page_nr
-            }
-            flush_text
-        }
-
-        end {
-            if {[string compare $anchor ""]} {
-                array set av $xref($anchor)
-                set prefix "Figure $av(value)"
-                if {[string compare $title ""]} {
-                    append prefix ": [chars_expand $title]"
-                }
-                write_line_nr ""
-                write_text_nr $prefix c
-                write_line_nr ""
-            }
-        }
-    }
+    figure_txt $tag $lines $anchor $title $args
 }
 
 proc preamble_nr {tag {editNo ""}} {
-    global options
-
-    switch -- $tag {
-        begin {
-            if {$options(.EDITING)} {
-                write_editno_nr $editNo
-            } else {
-                write_line_nr ""
-            }
-        }
-    }
+    preamble_txt $tag $editNo
 }
 
 proc postamble_nr {tag {editNo ""}} {
-    global options
-    global eatP
-
-    switch -- $tag {
-        begin {
-            cellE
-            set eatP 1
-            if {$options(.EDITING)} {
-                write_editno_nr $editNo
-            }
-        }
-    }
+    postamble_txt $tag $editNo
 }
 
 proc texttable_nr {tag lines anchor title {didP 0}} {
-    global counter depth elemN elem passno stack xref
-
-    switch -- $tag {
-        begin {
-            if {[string compare $title ""]} {
-                incr lines 8
-            }
-            if {![have_lines $lines]} {
-                end_page_nr
-            }
-            flush_text
-
-            cellB $didP
-        }
-
-        end {
-            cellE
-
-            if {[string compare $anchor ""]} {
-                array set av $xref($anchor)
-                set prefix "Table $av(value)"
-                if {[string compare $title ""]} {
-                    append prefix ": [chars_expand $title]"
-                }
-                write_line_nr ""
-                write_text_nr $prefix c
-                write_line_nr ""
-            }
-        }
-    }
+    texttable_txt $tag $lines $anchor $title $didP
 }
 
 proc ttcol_nr {text align col width} {
@@ -8527,73 +8589,12 @@ proc c_nr {tag row col align} {
     c_txt $tag $row $col $align
 }
 
-proc xref_nr {text av target} {
-    global eatP
-
-    array set attrs $av    
-
-    switch -- $attrs(type) {
-        section {
-            set line "Section $attrs(value)"
-        }
-
-        appendix {
-            set line "Appendix $attrs(value)"
-        }
-
-        figure {
-            set line "Figure $attrs(value)"
-        }
-
-        texttable {
-            set line "Table $attrs(value)"
-        }
-
-        default {
-            set line "\[$attrs(value)\]"
-        }
-    }
-    if {[string compare $text ""]} {
-        switch -- $attrs(type) {
-            section
-                -
-            appendix
-                -
-            figure
-                -
-            texttable {
-                set line "[chars_expand $text] ($line)"
-            }
-
-            default {
-                set line "[chars_expand $text]$line"
-            }
-        }       
-    }
-    if {![cellP $line]} {
-        write_text_nr $line
-    }
-
-    set eatP -1
+proc xref_nr {text av target format} {
+    xref_txt $text $av $target $format
 }
 
 proc eref_nr {text counter target} {
-    global eatP
-    global erefs
-
-    if {[string compare $text ""]} {
-        set line "[chars_expand $text]"
-    }
-    if {([string first "#" $target] < 0) \
-            && ([string compare $text $target])} {
-        set erefs($counter) $target
-        append line " \[$counter\]"
-    }
-    if {![cellP $line]} {
-        write_text_nr $line
-    }
-
-    set eatP -1
+    eref_txt $text $counter $target
 }
 
 proc iref_nr {item subitem flags} {
@@ -8603,22 +8604,7 @@ proc iref_nr {item subitem flags} {
 }
 
 proc vspace_nr {lines} {
-    global header footer lineno pageno blankP
-    global eatP
-
-    flush_text
-    if {$lineno+$lines >= 51} {
-        end_page_nr
-    } else {
-        while {$lines > 0} {
-            incr lines -1
-
-            write_it ""
-            incr lineno
-        }
-    }
-
-    set eatP 1
+    vspace_txt $lines
 }
 
 proc spanx_nr {text style} {
@@ -8697,7 +8683,7 @@ proc erefs_nr {{title ""}} {
 }
 
 proc reference_nr {prefix names title series formats date anchor target
-                   target2 width} {
+                   target2 width annotations} {
     write_line_nr ""
 
     incr width 2
@@ -8755,7 +8741,17 @@ proc reference_nr {prefix names title series formats date anchor target
     }
     write_text_nr .
 
+    while {[llength $annotations] > 0} {
+        write_line_nr ""
+        pcdata_nr [lindex $annotations 0]
+        set annotations [lrange $annotations 1 end]
+    }
+
     pop_indent
+}
+
+proc annotation_nr {tag} {
+    annotation_txt $tag
 }
 
 proc back_nr {authors} {
@@ -8946,16 +8942,7 @@ proc indent_text_nr {prefix {left ""}} {
 }
 
 proc write_pcdata_nr {text} {
-    global buffer
-    global indents indent
-
-    if {![string compare $buffer ""]} {
-        set buffer [format %*.*s $indent $indent ""]    
-    }
-    append buffer $text
-    set buffer [two_spaces $buffer]
-
-    write_text_nr ""
+    write_pcdata_txt $text
 }
 
 proc write_editno_nr {editNo} {
@@ -9086,18 +9073,7 @@ proc write_line_nr {line {pre 0} {magic 0}} {
 }
 
 proc pi_nr {key value} {
-    switch -- $key {
-        needLines {
-            flush_text
-            if {![have_lines $value]} {
-                end_page_nr
-            }
-        }
-
-        default {
-            error ""
-        }
-    }
+    pi_txt $key $value
 }
 
 
@@ -9211,6 +9187,13 @@ proc munge_line {line} {
         set start ""
     }
 
+    if {[set y [string first " (" $line]] >= 0} {
+        set tail [string range $line $y end]
+        set line [string range $line 0 [expr $y-1]]
+    } else {
+        set tail ""
+    }
+
     set s ""
     foreach n [split $line ,] {
         set n [string trim $n]
@@ -9218,7 +9201,7 @@ proc munge_line {line} {
         set s ", "
     }
 
-    return $start
+    return $start$tail
 }
 
 proc write_url {url} {
@@ -9604,7 +9587,8 @@ set xdv::dtd(rfc2629.cmodel) \
           middle        [list section           "+"  \
                               appendix          "*"  \
                               section           "*"] \
-          back          [list references        "*"] \
+          back          [list references        "*"  \
+                              section           "*"] \
           title         {}                           \
           author        [list organization      ""   \
                               address           "*"] \
@@ -9676,12 +9660,14 @@ set xdv::dtd(rfc2629.cmodel) \
           references    [list reference         "+"] \
           reference     [list front             ""   \
                               seriesInfo        "*"  \
-                              format            "*"] \
+                              format            "*"  \
+                              annotation        "*"] \
           seriesInfo    {}                           \
           format        {}]
 
 set xdv::dtd(rfc2629.pcdata) \
-    [list area         \
+    [list annotation   \
+          area         \
           artwork      \
           c            \
           city         \
@@ -9717,17 +9703,64 @@ set xdv::dtd(rfc2629.rattrs) \
                               value]  \
           format        [list type]]
 
+set xdv::dtd(rfc2629.oattrs) \
+    [list rfc           [list number      \
+                              obsoletes   \
+                              updates     \
+                              category    \
+                              seriesNo    \
+                              ipr         \
+                              docName]    \
+          title         [list abbrev]     \
+          author        [list initials    \
+                              surname     \
+                              fullname    \
+                              role]       \
+          organization  [list abbrev]     \
+          date          [list day         \
+                              month]      \
+          section       [list anchor]     \
+          appendix      [list anchor]     \
+          t             [list hangText]   \
+          list          [list style       \
+                              hangIndent  \
+                              counter]    \
+          xref          [list pageno      \
+                              format]     \
+          iref          [list subitem     \
+                              primary]    \
+          spanx         [list xml:space   \
+                              style]      \
+          vspace        [list blankLines] \
+          figure        [list anchor]     \
+          artwork       [list xml:space   \
+                              name        \
+                              type        \
+                              src         \
+                              width       \
+                              height]     \
+          texttable     [list anchor]     \
+          ttcol         [list width       \
+                              align]      \
+          references    [list title]      \
+          reference     [list anchor      \
+                              target]     \
+          seriesInfo    [list name        \
+                              value]      \
+          format        [list target      \
+                              octets]]  \
+
 set xdv::dtd(rfc2629.anchors) \
     [list anchor]
 
 
-proc xdv::validate_tree {root CM AT AN PC} {
+proc xdv::validate_tree {root CM RA OA AN PC} {
     variable anchorX {}
 
-    validate_tree_aux $root $CM $AT $AN $PC {}
+    validate_tree_aux $root $CM $RA $OA $AN $PC {}
 }
 
-proc xdv::validate_tree_aux {parent CM AT AN PC stack} {
+proc xdv::validate_tree_aux {parent CM RA OA AN PC stack} {
     variable anchorX
     variable dtd
 
@@ -9742,13 +9775,27 @@ proc xdv::validate_tree_aux {parent CM AT AN PC stack} {
         report "not expecting <$name> element" $stack
     }
 
-    array set required $dtd($AT)
+    array set required $dtd($RA)
     if {[info exists required($name)]} {
-        foreach k $required($name) {
+        foreach k [set expected $required($name)] {
             if {![info exists attrs($k)]} {
                 report "missing $k attribute in <$name> element" $stack
             }
         }
+    } else {
+        set expected {}
+    }
+
+    array set optional $dtd($OA)
+    if {[catch { set optional($name) } possible]} {
+        set possible {}
+    }
+    foreach k [array names attrs] {
+        if {([string first . $k] < 0) \
+                && ([lsearch -exact $expected $k] < 0) \
+                && ([lsearch -exact $possible $k] < 0)} {
+            report "unexpected $k attribute in <$name> element" $stack
+        }       
     }
 
     foreach {k v} [array get attrs] {
@@ -9770,7 +9817,7 @@ proc xdv::validate_tree_aux {parent CM AT AN PC stack} {
     }
 
     foreach child $children {
-        validate_tree_aux $child $CM $AT $AN $PC $stack
+        validate_tree_aux $child $CM $RA $OA $AN $PC $stack
     }
 }
 

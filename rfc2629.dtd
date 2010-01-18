@@ -172,7 +172,9 @@
 <!ELEMENT xref        (%CTEXT;)>
 <!ATTLIST xref
           target      IDREF              #REQUIRED
-          pageno      (true|false)       "false">
+          pageno      (true|false)       "false"
+          format      (counter|title|default)
+                                         "default">
 
 <!ELEMENT eref        (%CTEXT;)>
 <!ATTLIST eref
@@ -232,7 +234,7 @@
 <!ELEMENT references  (reference+)>
 <!ATTLIST references
           title       %ATEXT;            "References">
-<!ELEMENT reference   (front,seriesInfo*,format*)>
+<!ELEMENT reference   (front,seriesInfo*,format*,annotation*)>
 <!ATTLIST reference
           anchor      ID                 #IMPLIED
           target      %URI;              #IMPLIED>
@@ -245,3 +247,4 @@
           target      %URI;              #IMPLIED
           type        %ATEXT;            #REQUIRED
           octets      %NUMBER;           #IMPLIED>
+<!ELEMENT annotation  (%TEXT;|xref|eref|iref)*>

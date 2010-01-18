@@ -2496,7 +2496,7 @@ proc xml_begin {name {av {}}} {
     }
     set av $kv
 
-    if {$elemN > 1} {
+    if {($passno == 1) && ($elemN > 1)} {
         set parent [lindex [lindex $stack end] 1]
         array set pv $elem($parent)
         lappend pv(.CHILDREN) $elemN
@@ -2512,13 +2512,14 @@ proc xml_begin {name {av {}}} {
                                   street city region code country \
                                   phone facsimile email uri \
                                   area workgroup keyword \
+                                  ttcol spanx \
                                   xref eref seriesInfo] $name] >= 0} {
             set attrs(.PCDATA) ""
         }
         switch -- $name {
             list {
-		if {![info exists attrs(style)]} {
-		    set style empty
+                if {![info exists attrs(style)]} {
+                    set style empty
     
                     foreach frame [lrange $stack 0 end-1] {
                         if {[string compare [lindex $frame 0] list]} {
@@ -2527,29 +2528,29 @@ proc xml_begin {name {av {}}} {
                         set elemY [lindex $frame 1]
                         array set pv $elem($elemY)
         
-			set style $pv(style)
+                        set style $pv(style)
                     }
 
-		    set attrs(style) $style
+                    set attrs(style) $style
                 }
 
-		if {![string first "format " $attrs(style)]} {
-		    set format [string trimleft \
-				       [string range $attrs(style) 7 end]]
-		    set attrs(style) hanging
-		    if {([string compare [set attrs(format) $format] ""]) \
-			    && (![info exists counter($format)])} {
-			set counter($format) 0
-		    }
-		} else {
-		    set attrs(format) ""
-		}
+                if {![string first "format " $attrs(style)]} {
+                    set format [string trimleft \
+                                       [string range $attrs(style) 7 end]]
+                    set attrs(style) hanging
+                    if {([string compare [set attrs(format) $format] ""]) \
+                            && (![info exists counter($format)])} {
+                        set counter($format) 0
+                    }
+                } else {
+                    set attrs(format) ""
+                }
             }
 
             t {
                 if {![info exists attrs(hangText)]} {
-		    set style ""
-		    set format ""
+                    set style ""
+                    set format ""
     
                     foreach frame [lrange $stack 0 end-1] {
                         if {[string compare [lindex $frame 0] list]} {
@@ -2558,17 +2559,17 @@ proc xml_begin {name {av {}}} {
                         set elemY [lindex $frame 1]
                         array set pv $elem($elemY)
 
-			set style $pv(style)
-			set format $pv(format)
+                        set style $pv(style)
+                        set format $pv(format)
                     }
-		
-		    if {[string compare $format ""]} {
-			set attrs(hangText) \
-			    [format $format [incr counter($format)]]
-		    }
-		}
-	    }
-	}
+                
+                    if {[string compare $format ""]} {
+                        set attrs(hangText) \
+                            [format $format [incr counter($format)]]
+                    }
+                }
+            }
+        }
 
         set elem($elemN) [array get attrs]
 
@@ -2576,9 +2577,10 @@ proc xml_begin {name {av {}}} {
     }
 
     if {([lsearch -exact [list front area workgroup keyword \
-                               abstract note section \
+                               abstract note section appendix \
                                t list figure preamble postamble \
-                               xref eref iref vspace back] $name] >= 0) \
+                               texttable ttcol c \
+                               xref eref iref vspace spanx back] $name] >= 0) \
             && ([lsearch0 $stack references] >= 0)} {
         return  
     }
@@ -2887,6 +2889,92 @@ proc xml_begin {name {av {}}} {
             puts $stdout "<para>"
         }
 
+        texttable {
+# handled in first ttcol...
+        }
+
+        ttcol {
+            if {![info exists attrs(.COLNO)]} {
+                set texttable [lindex [lindex $stack end-1] 1]
+                array set tv $elem($texttable)
+
+                set children [find_element ttcol $tv(.CHILDREN)]
+                set colmax [llength $children]
+
+                set colno 0
+                foreach child $children {
+                    catch { unset cv }
+                    array set cv [list width "" align left]
+                    array set cv $elem($child)
+
+                    set cv(.COLNO) [list [incr colno] $colmax]
+
+                    set elem($child) [array get cv]
+                }
+
+                set children [find_element c $tv(.CHILDREN)]
+                set rowmax [expr [llength $children]/$colmax]
+
+                set colno 0
+                foreach child $children {
+                    catch { unset cv }
+                    array set cv $elem($child)
+
+                    set offset [expr $colno%$colmax]
+                    set cv(.ROWNO) [list [expr 1+($colno/$colmax)] $rowmax]
+                    set cv(.COLNO) [list [incr offset] $colmax]
+                    incr colno
+
+                    set elem($child) [array get cv]
+                }
+
+                puts -nonewline $stdout "<table"
+                if {[info exists attr(anchor)]} {
+                    av_sgml id $attr(anchor)
+                    av_sgml xreflabel $attr(title)
+                }
+                puts $stdout ">"
+                if {[info exists attr(title)]} {
+                    puts -nonewline $stdout "<title>"
+                    pcdata_sgml $attr(title)
+                    puts $stdout "</title>"
+                }
+                puts -nonewline $stdout "<tgroup"
+                av_sgml cols $colmax
+                puts $stdout ">"
+            
+                foreach child [find_element ttcol $tv(.CHILDREN)] {
+                    array set cv $elem($child)
+
+                    puts -nonewline $stdout "<colspec"
+                    av_sgml align $cv(align)
+                    if {[string compare $cv(width) ""]} {
+                        regsub -- "%" $cv(width) "*" width
+                        av_sgml colwidth $width
+                    }
+                    puts $stdout ">"
+                }
+
+                puts $stdout "<thead>"
+            }
+            puts -nonewline $stdout "<entry>"
+            pcdata_sgml $attrs(.PCDATA)
+        }
+
+        c {
+            set texttable [lindex [lindex $stack end-1] 1]
+            array set tv $elem($texttable)
+
+            if {[lindex $attrs(.COLNO) 0] == 1} {
+                if {[lindex $attrs(.ROWNO) 0] == 1} {
+                    puts $stdout "<tbody>"
+                }
+                puts $stdout "<row>"
+            }
+
+            puts -nonewline $stdout "<entry>"
+        }
+
         xref {
             if {[string compare $attrs(.PCDATA) ""]} {
                 pcdata_sgml "$attrs(.PCDATA) "
@@ -2912,6 +3000,36 @@ proc xml_begin {name {av {}}} {
 
         vspace {
         }
+
+        spanx {
+            array set attrs [list style emph]
+            switch -- $attrs(style) {
+                emph {
+                    set c emphasis
+                }
+
+                strong {
+                    set c literal
+                }
+
+                verb {
+                    set c computeroutput
+                }
+
+                default {
+                    set c ""
+                }
+            }
+
+            if {[string compare $c ""]} {
+                puts -nonewline $stdout <$c>
+            }
+            pcdata_sgml $attrs(.PCDATA)
+            if {[string compare $c ""]} {
+                puts -nonewline $stdout </$c>
+            }
+        }
+
 
         back {
         }
@@ -2970,9 +3088,11 @@ proc xml_end {name} {
         return
     }
 
-    if {([lsearch -exact [list front abstract note section \
+    if {([lsearch -exact [list front \
+                               abstract note section appendix \
                                t list figure preamble postamble \
-                               xref eref iref vspace back] $name] >= 0) \
+                               texttable ttcol c \
+                               xref eref iref vspace spanx back] $name] >= 0) \
             && ([lsearch0 $stack references] >= 0)} {
         return  
     }
@@ -3102,6 +3222,36 @@ proc xml_end {name} {
             puts $stdout "</para>"
         }
 
+        texttable {
+        }
+
+        ttcol {
+            set texttable [lindex [lindex $stack end] 1]
+            array set tv $elem($texttable)
+
+            puts $stdout "</entry>"
+
+            if {[lindex $attrs(.COLNO) 0] == [lindex $attrs(.COLNO) 1]} {
+                puts $stdout "</thead>"
+            }
+        }
+
+        c {
+            set texttable [lindex [lindex $stack end] 1]
+            array set tv $elem($texttable)
+
+            puts $stdout "</entry>"
+
+            if {[lindex $attrs(.COLNO) 0] == [lindex $attrs(.COLNO) 1]} {
+                puts $stdout "</row>"
+                if {[lindex $attrs(.ROWNO) 0] == [lindex $attrs(.ROWNO) 1]} {
+                    puts $stdout "</tbody>"
+                    puts $stdout "</tgroup>"
+                    puts $stdout "</table>"
+                }
+            }
+        }
+
         xref {
         }
 
@@ -3112,6 +3262,9 @@ proc xml_end {name} {
         }
 
         vspace {
+        }
+
+        spanx {
         }
 
         back {
@@ -3145,7 +3298,11 @@ proc xml_pcdata {text} {
         set elemX [lindex $frame 1]
         array set attrs $elem($elemX)
         if {[info exists attrs(.PCDATA)]} {
-            append attrs(.PCDATA) $chars
+            if {[string compare [lindex $frame 0] spanx]} {
+                append attrs(.PCDATA) $chars
+            } else {
+                append attrs(.PCDATA) $text
+            }
             set elem($elemX) [array get attrs]
         }
 
@@ -3165,7 +3322,9 @@ proc xml_pcdata {text} {
             -
         preamble
             -
-        postamble {
+        postamble
+            -
+        c {
             set pre 0
         }
 

@@ -1,5 +1,5 @@
 <html><head><title>Writing I-Ds and RFCs using XML (revised)</title>
-<meta http-equiv="Expires" content="Sat, 10 May 2003 17:01:26 +0000">
+<meta http-equiv="Expires" content="Thu, 24 Jul 2003 20:56:52 +0000">
 <STYLE type='text/css'>
     .title { color: #990000; font-size: 22px; line-height: 22px; font-weight: bold; text-align: right;
              font-family: helvetica, arial, sans-serif }
@@ -45,7 +45,7 @@
 <table width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header"> </td><td width="33%" bgcolor="#666666" class="header">M. Rose</td></tr>
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">Dover Beach Consulting, Inc.</td></tr>
-<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">May 10, 2003</td></tr>
+<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">July 24, 2003</td></tr>
 </table></td></tr></table>
 <div align="right"><font face="monaco, MS Sans Serif" color="#990000" size="+3"><b><br><span class="title">Writing I-Ds and RFCs using XML (revised)</span></b></font></div>
 <font face="verdana, helvetica, arial, sans-serif" size="2">
@@ -135,7 +135,7 @@ Index<br></b>
 <a name="rfc.section.1"></a><h3>1.&nbsp;Introduction</h3>
 
 <p>This memo describes how to write a document for the I-D and RFC series
-using <a href="#W3C.REC-xml" title="Bray, T., Paoli, J., Sperberg-McQueen, C. and E. Maler, Extensible Markup Language (XML) 1.0 (2nd ed), October 2000.">the Extensible Markup Language</a>[1] (XML).
+using <a href="#W3C.REC-xml-20001006" title="Bray, T., Paoli, J., Sperberg-McQueen, C. and E. Maler, Extensible Markup Language (XML) 1.0 (Second Edition), October 2000.">the Extensible Markup Language</a>[1] (XML).
 This memo has three goals:
 
 <ol class="text">
@@ -182,7 +182,7 @@ this section discusses just enough XML to use a Document Type
 Declaration (DTD) to write RFC-like documents.
 </p>
 <p>If you're already familiar with XML,
-skip to <a href="#rfc.dtd">The DTD</a> to look at the DTD.
+skip to <a href="#rfc.dtd">Appendix B</a> to look at the DTD.
 </p>
 <a name="rfc.section.2.1"></a><h4><a name="xml_basics">2.1</a>&nbsp;XML basics</h4>
 
@@ -226,18 +226,18 @@ underscore, or a period (<span class="verb">.</span>).
 start your source file with an XML declaration,
 a reference to the DTD,
 and the rfc element:
-</p></font><pre>
+</p><pre>
     &lt;?xml version='1.0' ?>
     &lt;!DOCTYPE rfc SYSTEM 'rfcXXXX.dtd'>
     &lt;rfc>
         ...
     &lt;/rfc>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>Ignore the first two lines
 &#151; the declaration and the reference &#151;
 and simply treat them as opaque strings.
-Nothing else should be present after the <span class="verb">&lt;/rfc&gt;</span> tag.
+Nothing else should be present after the &lt;/rfc&gt; tag.
 </p>
 <p>Second,
 make sure that all elements are properly matched and nested.
@@ -248,7 +248,7 @@ with <span class="verb">&lt;/example&gt;</span>.
 Elements are properly nested when they don't overlap.
 </p>
 <p>For example,
-</p></font><pre>
+</p><pre>
     &lt;outer>
         ...
         &lt;inner>
@@ -256,12 +256,12 @@ Elements are properly nested when they don't overlap.
         &lt;/inner>
         ...
     &lt;/outer>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>is properly nested.
 </p>
 <p>However,
-</p></font><pre>
+</p><pre>
     &lt;outer>
         ...
         &lt;inner>
@@ -269,7 +269,7 @@ Elements are properly nested when they don't overlap.
         &lt;/outer>
         ...
     &lt;/inner>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>overlaps, so the elements aren't properly nested.
 </p>
@@ -293,10 +293,10 @@ e.g., <span class="verb">&lt;example name='"&amp;apos;"'&gt;</span>.
 </p>
 <p>If you want to put a comment in your source file,
 here's the syntax:
-</p></font><pre>
+</p><pre>
         &lt;!-- comments can be multiline,
          if you wish -->
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>Finally,
 XML is case sensitive,
@@ -305,9 +305,9 @@ from <span class="verb">&lt;Foo&gt;</span>.
 </p>
 <a name="rfc.section.2.2"></a><h4><a name="front_matter">2.2</a>&nbsp;Front matter</h4>
 
-<p>Immediately following the <span class="verb">&lt;rfc&gt;</span> tag is the
+<p>Immediately following the &lt;rfc&gt; tag is the
 front element:
-</p></font><pre>
+</p><pre>
     &lt;?xml version='1.0'?>
     &lt;!DOCTYPE rfc SYSTEM 'rfcXXXX.dtd'>
     &lt;rfc>
@@ -325,7 +325,7 @@ front element:
         &lt;/front>
         ...
     &lt;/rfc>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>(Note that in all examples,
 indentation is used only for expository purposes.)
@@ -348,11 +348,11 @@ according to <a href="#RFC2223" title="Postel, J. and J. Reynolds, Instructions 
 if the title is more than 42 characters,
 then an abbreviation should also be provided,
 e.g.,
-</p></font><pre>
+</p><pre>
     &lt;title abbrev='Much Ado about Nothing'>
     The IETF's Discussion on "Source Format of RFC Documents"
     &lt;/title>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <a name="rfc.section.2.2.2"></a><h4><a name="author">2.2.2</a>&nbsp;The author Element</h4>
 
@@ -360,18 +360,18 @@ e.g.,
 Since a document may have more than one author,
 more than one author element may be present.
 If the author is a person,
-then three attributes must be present in the <span class="verb">&lt;author&gt;</span> tag,
+then three attributes must be present in the &lt;author&gt; tag,
 initials, surname, and fullname,
 e.g.,
-</p></font><pre>
+</p><pre>
     &lt;author initials='F.J.' surname='Flintstone'
             fullname='Frederick Flintstone'>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>There is also an optional role attribute,
 which,
 if present,
-must take the value <span class="verb">editor</span>.
+must take the value "editor".
 </p>
 <p>The author element itself consists of an organization element,
 and,
@@ -380,11 +380,11 @@ an optional address element.
 <p>The organization element is similar to the title element,
 in that an abbreviation may be paired with a long organization name
 using the abbrev attribute, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;organization abbrev='ISI'>
         USC/Information Sciences Institute
     &lt;/organization>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>The address element consists of an optional postal element,
 an optional phone element,
@@ -398,7 +398,7 @@ followed by any combination of city,
 region (state or province),
 code (zipcode or postal code),
 and country elements, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;postal>
         &lt;street>660 York Street&lt;/street>
         &lt;street>M/S 40&lt;/street>
@@ -406,7 +406,7 @@ and country elements, e.g.,
         &lt;code>94110&lt;/code>
         &lt;country>US&lt;/country>
     &lt;/postal>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>This flexibility is provided to allow for different national
 formats for postal addresses.
@@ -429,20 +429,20 @@ code from ISO 3166.
 facsimile,
 email,
 and uri elements are simple, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;phone>+1 916 555 1234&lt;/phone>
     &lt;email>fred@example.com&lt;/email>
     &lt;uri>http://example.com/&lt;/uri>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <a name="rfc.section.2.2.3"></a><h4><a name="date">2.2.3</a>&nbsp;The date Element</h4>
 
 <p>The date element identifies the publication date of the
 document.
 It consists of a month and a year, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;date month='February' year='1999' />
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>The date element also has an optional day attribute.
 (Due to popular demand,
@@ -457,7 +457,7 @@ the document.
 <p>A document has one or more optional area,
 workgroup,
 and keyword elements, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;area>General&lt;/area>
     &lt;workgroup>RFC Beautification Working Group&lt;/workgroup>
     &lt;keyword>RFC&lt;/keyword>
@@ -466,7 +466,7 @@ and keyword elements, e.g.,
     &lt;keyword>Internet-Draft&lt;/keyword>
     &lt;keyword>XML&lt;/keyword>
     &lt;keyword>Extensible Markup Language&lt;/keyword>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>The area elements identify a general category for the
 document
@@ -483,14 +483,14 @@ which contains one or more <a href="#t">t elements</a>.
 In general,
 only a single t element is present,
 e.g.,
-</p></font><pre>
+</p><pre>
     &lt;abstract>
         &lt;t>This memo presents a technique for using XML
         (Extensible Markup Language) as a source format
         for documents in the Internet-Drafts (I-Ds) and
         Request for Comments (RFC) series.&lt;/t>
     &lt;/abstract>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <a name="rfc.section.2.2.6"></a><h4><a name="anchor6">2.2.6</a>&nbsp;The note Element</h4>
 
@@ -500,11 +500,11 @@ There is a mandatory title attribute.
 In general,
 the note element contains text from the IESG, 
 e.g.,
-</p></font><pre>
+</p><pre>
     &lt;note title='IESG Note'>
         &lt;t>The IESG has something to say.&lt;/t>
     &lt;/note>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <a name="rfc.section.2.2.7"></a><h4><a name="anchor7">2.2.7</a>&nbsp;Status, Copyright Notice, Table of Contents</h4>
 
@@ -546,14 +546,14 @@ processing by an XML application.
 <p>Finally,
 if the Internet-Draft is being submitted to an automated process,
 then the docName attribute should be present in the
-<span class="verb">&lt;rfc&gt;</span> tag at the beginning of the file.
+&lt;rfc&gt; tag at the beginning of the file.
 The value of this attribute contains the document (not file) name
 associated with this Internet-Draft, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;rfc ipr='full2026' docName='draft-mrose-writing-rfcs-01'>
         ...
     &lt;/rfc>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>
 </p>
@@ -561,7 +561,7 @@ associated with this Internet-Draft, e.g.,
 
 <p>So,
 putting it all together, we have, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;front>
         &lt;title>Writing I-Ds and RFCs using XML&lt;/title>
     
@@ -601,7 +601,7 @@ putting it all together, we have, e.g.,
             Request for Comments (RFC) series.&lt;/t>
         &lt;/abstract>
     &lt;/front>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <a name="rfc.section.2.3"></a><h4><a name="anchor9">2.3</a>&nbsp;The Middle</h4>
 
@@ -617,7 +617,7 @@ the text referring to that element is entirely speculative
 </p>
 <p>The middle element contains all the sections
 of the document except for the bibliography and the boilerplate:
-</p></font><pre>
+</p><pre>
     ...
     &lt;/front>
     &lt;middle>
@@ -629,7 +629,7 @@ of the document except for the bibliography and the boilerplate:
     &lt;/middle>
     &lt;back>
     ...
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>The middle element consists of one or more
 section elements,
@@ -647,11 +647,11 @@ anchor,
 that is used for cross-referencing with
 <a href="#xref">the xref element</a>,
 e.g.,
-</p></font><pre>
+</p><pre>
     &lt;section anchor='intro' title='Introduction'>
         ...
     &lt;/section>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>The section element is recursive &#151;
 each contains any number and combination of t,
@@ -659,7 +659,7 @@ figure,
 texttable,
 iref,
 and section elements, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;section title='The Middle'>
         ...
         &lt;section title='The section Element'>
@@ -673,7 +673,7 @@ and section elements, e.g.,
             &lt;section title='The iref Element'>...&lt;/section>
         &lt;/section>
     &lt;/section>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <a name="rfc.section.2.3.1.1"></a><h4><a name="t">2.3.1.1</a>&nbsp;The t Element</h4>
 
@@ -704,7 +704,7 @@ subordinate of the section element.
 <p>The list element contains one or more items.
 Each item is a t element,
 allowing for recursion, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;list style='numbers'>
         &lt;t>The first item.&lt;/t>
         &lt;t>The second item, which contains two bulleted sub-items:
@@ -714,7 +714,7 @@ allowing for recursion, e.g.,
             &lt;/list>
         &lt;/t>
     &lt;/list>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>The list element has an optional attribute,
 style,
@@ -734,7 +734,7 @@ the default value is "empty".
 <p>When nested within a hanging list element,
 the t element has an optional attribute,
 hangText that specifies the text to be inserted, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;list style='hanging'>
         &lt;t hangText='full2026:'>indicating that the document is in
         full conformance with all the provisions of Section 10 of
@@ -750,7 +750,7 @@ hangText that specifies the text to be inserted, e.g.,
         the author does not provide the IETF with any rights other
         than to publish as an Internet-Draft.&lt;/t>
     &lt;/list>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>The style attribute value for an auto-formatted list
 starts with the seven letters "format ",
@@ -758,7 +758,7 @@ and is followed by a string which must contain exactly one instance of "%d"
 and "%c".
 Hanging text is automatically generated for each nested t element,
 e.g.,
-</p></font><pre>
+</p><pre>
     &lt;list style='format R%d:'>
         &lt;t>Text for R1.&lt;/t>
 
@@ -774,7 +774,7 @@ e.g.,
     &lt;list style='format R%d:'>
         &lt;t>Text for R3.&lt;/t>
     &lt;/list>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>If the list is auto-formatted,
 then 
@@ -783,7 +783,7 @@ which controls the numbering.
 By default,
 the value of this attribute is the same as the formatting string,
 e.g.,
-</p></font><pre>
+</p><pre>
     &lt;list style='format R%d:' counter='R%d:'>
         &lt;t>Text for R1.&lt;/t>
 
@@ -799,13 +799,13 @@ e.g.,
     &lt;list style='format R%d:' counter='R%d:'>
         &lt;t>Text for R3.&lt;/t>
     &lt;/list>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>If the style attribute has the value "hanging" or "format",
 then a second, optional, attribute called hangIndent is consulted.
 This overrides the default indentation used for the text of each t element,
 ensuring that each t element has the same indentation, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;list style='format R%d:' hangIndent='5'>
         &lt;t>Text for R1.&lt;/t>
 
@@ -815,7 +815,7 @@ ensuring that each t element has the same indentation, e.g.,
 
         &lt;t>Text for R12.&lt;/t>
     &lt;/list>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>The final item will read "R12:  Text for R12."
 </p>
@@ -852,7 +852,7 @@ artwork element.
 </p>
 <p>So,
 putting it all together, we have, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;figure anchor='figure_example'>
         &lt;preamble>So,
         putting it all together, we have, e.g.,&lt;/preamble>
@@ -864,13 +864,13 @@ putting it all together, we have, e.g.,
         &lt;/artwork>
         &lt;postamble>which is a very simple example.&lt;/postamble>
     &lt;/figure>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>which is a very simple example.
 </p>
 <p>If you have artwork with a lot of "&lt;" characters,
 then there's an XML trick you can use:
-</p></font><pre>
+</p><pre>
     &lt;figure>
         &lt;preamble>If you have artwork with a lot of "&amp;lt;"
         characters, then there's an XML trick you can
@@ -884,9 +884,9 @@ then there's an XML trick you can use:
         a CDATA block -- everything between the innermost brackets
         is left alone by the XML application.&lt;/postamble>
     &lt;/figure>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
-<p>The <span class="verb">&lt;![CDATA[ ... ]]&gt;</span> construct is called a CDATA
+<p>The &lt;![CDATA[ ... ]]&gt; construct is called a CDATA
 block &#151; everything between the innermost brackets is left alone by
 the XML application.
 </p>
@@ -919,7 +919,7 @@ There is also an optional title attribute that identifies the title
 of the table.
 </p>
 <p>The preamble and postamble elements have already been described in
-<a href="#figure">The figure Element</a>.
+<a href="#figure">Section 2.3.1.3</a>.
 </p>
 <p>The ttcol element,
 of which at least one must be present,
@@ -950,7 +950,7 @@ elements.
 </p>
 <p>So,
 putting it all together, we have, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;texttable anchor='table_example'>
         &lt;preamble>So,
         putting it all together, we have, e.g.,&lt;/preamble>
@@ -964,7 +964,7 @@ putting it all together, we have, e.g.,
         &lt;c>c #6&lt;/c>      
         &lt;postamble>which is a very simple example.&lt;/postamble>
     &lt;/texttable>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>which is a very simple example.
 </p>
@@ -1003,28 +1003,45 @@ tables, and references.
 The mandatory target attribute is used to link back to the anchor
 attribute of the section, figure, and reference elements.
 The value of the anchor and target attributes should be formatted
-according to the token syntax in <a href="#xml_basics">XML basics</a>.
+according to the token syntax in <a href="#xml_basics">Section 2.1</a>.
 </p>
 <p>If used as an empty element,
 e.g.,
-</p></font><pre>
+</p><pre>
     according to the token syntax in &lt;xref target='xml_basics' />.
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>then the XML application inserts an appropriate phrase
-during processing,
-such as <span class="verb">Section 2.1</span> or
-<span class="verb">&lt;a href='#xml_basics'>XML Basics&lt;/a></span>.
+during processing.
+</p>
+<p>What's "appropriate" depends on the value of the optional format attribute.
+There are three possible values:
+
+<blockquote class="text"><dl>
+<dt>counter:</dt>
+<dd>the "counting designation" is rendered
+(e.g., "2.1" or "A.2");
+</dd>
+<dt>title:</dt>
+<dd>the title attribute of the corresponding element
+is rendered (e.g., "XML Basics"); or,
+</dd>
+<dt>default:</dt>
+<dd>a suitable designation is rendered,
+e.g., "Section 2.1" or
+"&lt;a href='#xml_basics'>XML Basics&lt;/a>" (the default).
+</dd>
+</dl></blockquote><p>
 </p>
 <p>If used with content, e.g.,
-</p></font><pre>
+</p><pre>
     conforming to &lt;xref target='RFC2223'>RFC 2223&lt;/xref>.
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>then the XML application inserts an appropriate
 designation during processing,
-such as <span class="verb">RFC 2223[2]</span> or
-<span class="verb">&lt;a href='#refs.RFC2223'>RFC 2223&lt;/a></span>.
+such as "RFC 2223[2]" or
+"&lt;a href='#refs.RFC2223'>RFC 2223&lt;/a>".
 Although the XML application decides what "an appropriate designation"
 might be,
 its choice is consistent throughout the processing of the document.
@@ -1035,31 +1052,31 @@ its choice is consistent throughout the processing of the document.
 <p>The eref element is used to reference external documents.
 The mandatory target attribute is a
 <a href="#RFC2396" title="Berners-Lee, T., Fielding, R. and L. Masinter, Uniform Resource Identifiers (URI): Generic Syntax, August 1998.">URI</a>[4], e.g.,
-</p></font><pre>
+</p><pre>
     &lt;eref target='http://metalab.unc.edu/xml/'>Cafe con Leche&lt;/eref>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>Note that while the target attribute is always present,
 the eref element may be empty, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;eref target='http://example.com/' />
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>and the XML application inserts an appropriate designation during
-processing such as <span class="verb">[9]</span> or
-<span class="verb">&lt;a href='http://example.com/'>http://example.com/&lt;/a></span>.
+processing such as "[9]" or
+"&lt;a href='http://example.com/'>http://example.com/&lt;/a>".
 </p>
 <a name="rfc.section.2.3.1.7"></a><h4><a name="iref">2.3.1.7</a>&nbsp;The iref Element</h4>
 
-<p><a name="anchor22"></a>The iref element
+<p><a name="anchor23"></a>The iref element
 is used to add information to an index,
 typically rendered at the end of the document.
 The mandatory item attribute is the primary key the information is stored
 under,
 whilst the optional subitem attribute is the secondary key, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;iref item='indexing' subitem='how to' />
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>The optional primary attribute can be used to indicate
 that this particular indexing entry should be considered "primary".
@@ -1086,13 +1103,13 @@ at a minimum,
 support:
 
 <blockquote class="text"><dl>
-<dt>    emph:</dt>
+<dt>      emph:</dt>
 <dd>indicates emphasis;
 </dd>
 <dt>    strong:</dt>
 <dd>indicates stronger emphasis; and,
 </dd>
-<dt>    verb:</dt>
+<dt>      verb:</dt>
 <dd>indicates sample input for programs.
 </dd>
 </dl></blockquote><p>
@@ -1111,7 +1128,7 @@ A physical linebreak is specified by using the default value, "0".
 <p>In addition,
 the vspace element can be used to force a new physical paragraph
 within a list item, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;list style='numbers'>
         &lt;t>This is list item.
            &lt;vspace blankLines='1' />
@@ -1119,7 +1136,7 @@ within a list item, e.g.,
            although when displayed, it appears
            as a separate physical paragraph.&lt;/t>
     &lt;/list>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>An XML application producing a text version of the document should
 exercise care when encountering a value for blankLines that causes a
@@ -1154,7 +1171,7 @@ and appendix elements.
 
 <p>Finally,
 the back element is used for references:
-</p></font><pre>
+</p><pre>
         ...
         &lt;/middle>
         &lt;back>
@@ -1166,7 +1183,7 @@ the back element is used for references:
             &lt;section ...>
         &lt;/back>
     &lt;/rfc>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>The back element consists of zero or more references elements,
 and,
@@ -1184,10 +1201,11 @@ This element contains one or more reference elements.
 </p>
 <p>Each reference element contains a front element,
 one or more optional seriesInfo elements,
-and one or more optional format elements.
+one or more optional format elements,
+and one or more optional annotation elements.
 </p>
 <p>We've already discussed the front element back in
-<a href="#front_matter">Front matter</a>.
+<a href="#front_matter">Section 2.2</a>.
 </p>
 <p>The seriesInfo element has two attributes,
 name and value that identify the document series and series entry,
@@ -1196,7 +1214,7 @@ respectively.
 <p>The reference element has an optional anchor
 attribute that is used for cross-referencing with
 <a href="#xref">the xref element</a>, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;reference anchor='RFC2200'>
         &lt;front>
             &lt;title>Internet Official Protocol Standards&lt;/title>
@@ -1214,7 +1232,7 @@ attribute that is used for cross-referencing with
         &lt;format type='TXT' octets='94506' 
                 target='ftp://ftp.isi.edu/in-notes/rfc2200.txt' />
     &lt;/reference>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>The format element has a mandatory type attribute
 (typically having the value <span class="verb">TXT</span>),
@@ -1230,7 +1248,7 @@ and,
 </p>
 <p>The reference element also has an optional target
 attribute that is used for external references
-(c.f., <a href="#eref">The eref Element</a>).
+(c.f., <a href="#eref">Section 2.3.1.6</a>).
 The XML application,
 if producing an HTML version of the document will use the target
 attribute accordingly;
@@ -1239,6 +1257,12 @@ if the name attribute of the seriesInfo element has the value "RFC",
 then the XML application should automatically provide an appropriate
 default for the target attribute
 (e.g., <span class="verb">http://example.com/in-notes/rfc2200.txt</span>).
+</p>
+<p>Finally,
+the annotation element may be used to annotate a citation.
+Zero or more annotations may be present,
+and each contains text along with the usual cross-reference and
+indexing elements.
 </p>
 <a name="rfc.section.2.4.2"></a><h4><a name="anchor12">2.4.2</a>&nbsp;Appendices</h4>
 
@@ -1264,7 +1288,7 @@ e.g.,
 </p>
 <p>There are two kinds of XML tools: validating and non-validating.
 Both check that the source file conforms to the rules given in
-<a href="#xml_basics">XML basics</a>.
+<a href="#xml_basics">Section 2.1</a>.
 However,
 in addition to making sure that the source file is well-formed,
 a validating tool also reads the DTD referenced by the source file
@@ -1295,10 +1319,10 @@ If you visit the source file in Emacs and the major mode isn't
 "SGML" or "XML", 
 then usually all it takes is adding these lines to your ".emacs"
 file:
-</p></font><pre>
+</p><pre>
     (setq auto-mode-alist
           (cons (cons "\\.xml$" 'sgml-mode) auto-mode-alist))
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>and then restarting Emacs.
 If this doesn't work,
@@ -1335,7 +1359,7 @@ which runs a validator prior to invoking the tool.
 </p>
 <a name="rfc.section.3.3"></a><h4><a name="anchor17">3.3</a>&nbsp;Converting to HTML Format</h4>
 
-<p><a href="#W3C.REC-xslt" title="Clark, J., XSL Transformations (XSLT) Version 1.0, November 1999.">Extensible Style Language</a>[5] (XSLT) is
+<p><a href="#W3C.REC-xslt-19991116" title="Clark, J., XSL Transformations (XSLT) Version 1.0, November 1999.">Extensible Style Language</a>[5] (XSLT) is
 used to describe transformations from the source file into some other
 structured file.
 So,
@@ -1348,10 +1372,10 @@ for the format described in this memo.
 It requires one of the MSXML, Saxon, or Xalan extensions to XSLT.
 For example,
 by including the line:
-</p></font><pre>
+</p><pre>
 &lt;?xml-stylesheet type='text/xsl'
-                 href='http://xml.resource.org/authoring/rfc2629.xslt' ?>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+             href='http://xml.resource.org/authoring/rfc2629.xslt' ?>
+</pre>
 
 <p>
 after the XML declaration in your source file,
@@ -1369,10 +1393,10 @@ there are search tools available that understand structured source.
 version 1.9</a>
 for this purpose,
 e.g.
-</p></font><pre>
+</p><pre>
     sgrep -g xml 'ELEMENTS("title") not in ELEMENTS("back")' \
         writing-rfcs.xml
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>which extracts the title element from the source file.
 </p>
@@ -1380,18 +1404,18 @@ e.g.
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;The rfc Element</h3>
 
-<p>The <span class="verb">&lt;rfc&gt;</span> tag at the beginning of the file,
+<p>The &lt;rfc&gt; tag at the beginning of the file,
 with only <a href="#ipr">an ipr attribute</a>,
 produces an Internet-Draft.
 However,
 when other attributes are added to this tag by the RFC editor,
 an RFC is produced, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;rfc number='2200'
          obsoletes='2000, 1920, 1880, 1800, ...'
          category='std'
          seriesNo='1'>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>At a minimum,
 the number attribute should be present.
@@ -1441,7 +1465,7 @@ the appropriate substitution (or <span class="verb">XXXX</span>) will occur.
 <a name="rfc.dtd"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;The DTD</h3>
-</font><pre>
+<pre>
 &lt;!--
   revised DTD for the RFC document series, draft of 2002-01-20
   -->
@@ -1607,13 +1631,15 @@ the appropriate substitution (or <span class="verb">XXXX</span>) will occur.
 &lt;!ELEMENT list        (t+)>
 &lt;!ATTLIST list
           style       %ATEXT;            "empty"
-          hangIndent  %NUMBER;           "0"
+          hangIndent  %NUMBER;           #IMPLIED
           counter     %ATEXT;            #IMPLIED>
 
 &lt;!ELEMENT xref        (%CTEXT;)>
 &lt;!ATTLIST xref
           target      IDREF              #REQUIRED
-          pageno      (true|false)       "false">
+          pageno      (true|false)       "false"
+          format      (counter|title|default)
+                                         "default">
 
 &lt;!ELEMENT eref        (%CTEXT;)>
 &lt;!ATTLIST eref
@@ -1670,7 +1696,7 @@ the appropriate substitution (or <span class="verb">XXXX</span>) will occur.
 &lt;!ELEMENT references  (reference+)>
 &lt;!ATTLIST references
           title       %ATEXT;            "References">
-&lt;!ELEMENT reference   (front,seriesInfo*,format*)>
+&lt;!ELEMENT reference   (front,seriesInfo*,format*,annotation*)>
 &lt;!ATTLIST reference
           anchor      ID                 #IMPLIED
           target      %URI;              #IMPLIED>
@@ -1683,7 +1709,8 @@ the appropriate substitution (or <span class="verb">XXXX</span>) will occur.
           target      %URI;              #IMPLIED
           type        %ATEXT;            #REQUIRED
           octets      %NUMBER;           #IMPLIED>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+&lt;!ELEMENT annotation  (%TEXT;|xref|eref|iref)*>
+</pre>
 
 <a name="anchor19"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
@@ -1699,6 +1726,8 @@ in <a href="#RFC2629" title="Rose, M., Writing I-Ds and RFCs using XML, June 199
 <li>spanx
 </li>
 <li>texttable, ttcol, and c
+</li>
+<li>annotation
 </li>
 </ul><p>
 </li>
@@ -1742,6 +1771,9 @@ in <a href="#RFC2629" title="Rose, M., Writing I-Ds and RFCs using XML, June 199
 </dd>
 <dt>references: </dt>
 <dd>title
+</dd>
+<dt>      xref: </dt>
+<dd>format
 </dd>
 <dt>      iref: </dt>
 <dd>primary
@@ -1799,7 +1831,7 @@ Frank Strauss.
 your document should contain a section near the end that discusses the
 security considerations of the protocol or procedures that are the
 main topic of your document, e.g.,
-</p></font><pre>
+</p><pre>
     &lt;middle>
         ...
         &lt;section title='Security Considerations'>
@@ -1810,7 +1842,7 @@ main topic of your document, e.g.,
             document.&lt;/t>
         &lt;/section>
     &lt;/middle>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>The name attribute of the artwork element allows an author to
 suggest a filename to use when storing the element's content.
@@ -1821,20 +1853,20 @@ Accordingly,
 implementors must be aware to the potential hazards on their target
 systems.
 </p>
-<a name="rfc.references1"><br><hr size="1" shade="0"></a>
+<a name="rfc.references2"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
 <h3>References</h3>
 <table width="99%" border="0">
-<tr><td class="author-text" valign="top"><b><a name="W3C.REC-xml">[1]</a></b></td>
-<td class="author-text"><a href="mailto:tbray@textuality.com">Bray, T.</a>, <a href="mailto:jeanpa@microsoft.com">Paoli, J.</a>, <a href="mailto:cmsmcq@uic.edu">Sperberg-McQueen, C.</a> and <a href="mailto:eve.maler@east.sun.com">E. Maler</a>, "<a href="http://www.w3.org/TR/2000/REC-xml-20001006">Extensible Markup Language (XML) 1.0 (2nd ed)</a>", W3C REC-xml, October 2000.</td></tr>
+<tr><td class="author-text" valign="top"><b><a name="W3C.REC-xml-20001006">[1]</a></b></td>
+<td class="author-text">Bray, T., Paoli, J., Sperberg-McQueen, C. and E. Maler, "<a href="http://www.w3.org/TR/2000/REC-xml-20001006">Extensible Markup Language (XML) 1.0 (Second Edition)</a>", W3C REC REC-xml-20001006, October 2000.</td></tr>
 <tr><td class="author-text" valign="top"><b><a name="RFC2223">[2]</a></b></td>
 <td class="author-text"><a href="mailto:Postel@ISI.EDU">Postel, J.</a> and <a href="mailto:jkrey@isi.edu">J. Reynolds</a>, "<a href="ftp://ftp.isi.edu/in-notes/rfc2223.txt">Instructions to RFC Authors</a>", RFC 2223, October 1997 (<a href="ftp://ftp.isi.edu/in-notes/rfc2223.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2223.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2223.xml">XML</a>).</td></tr>
 <tr><td class="author-text" valign="top"><b><a name="RFC2026">[3]</a></b></td>
 <td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, "<a href="ftp://ftp.isi.edu/in-notes/rfc2026.txt">The Internet Standards Process -- Revision 3</a>", BCP 9, RFC 2026, October 1996.</td></tr>
 <tr><td class="author-text" valign="top"><b><a name="RFC2396">[4]</a></b></td>
 <td class="author-text"><a href="mailto:timbl@w3.org">Berners-Lee, T.</a>, <a href="mailto:fielding@ics.uci.edu">Fielding, R.</a> and <a href="mailto:masinter@parc.xerox.com">L. Masinter</a>, "<a href="ftp://ftp.isi.edu/in-notes/rfc2396.txt">Uniform Resource Identifiers (URI): Generic Syntax</a>", RFC 2396, August 1998 (<a href="ftp://ftp.isi.edu/in-notes/rfc2396.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2396.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2396.xml">XML</a>).</td></tr>
-<tr><td class="author-text" valign="top"><b><a name="W3C.REC-xslt">[5]</a></b></td>
-<td class="author-text"><a href="mailto:jjc@jclark.com">Clark, J.</a>, "<a href="http://www.w3.org/TR/2000/REC-xslt-19991116">XSL Transformations (XSLT) Version 1.0</a>", W3C REC-xslt, November 1999.</td></tr>
+<tr><td class="author-text" valign="top"><b><a name="W3C.REC-xslt-19991116">[5]</a></b></td>
+<td class="author-text">Clark, J., "<a href="http://www.w3.org/TR/1999/REC-xslt-19991116">XSL Transformations (XSLT) Version 1.0</a>", W3C REC REC-xslt-19991116, November 1999.</td></tr>
 <tr><td class="author-text" valign="top"><b><a name="RFC2629">[6]</a></b></td>
 <td class="author-text"><a href="mailto:mrose@not.invisible.net">Rose, M.</a>, "<a href="ftp://ftp.isi.edu/in-notes/rfc2629.txt">Writing I-Ds and RFCs using XML</a>", RFC 2629, June 1999 (<a href="ftp://ftp.isi.edu/in-notes/rfc2629.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2629.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2629.xml">XML</a>).</td></tr>
 </table>
@@ -1864,6 +1896,6 @@ systems.
 <table>
 <tr><td><b>I</b></td><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td>indexing</td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor22">how to</a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor23">how to</a></td></tr>
 </table>
 </font></body></html>

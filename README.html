@@ -1,5 +1,5 @@
-<html><head><title>The README file: xml2rfc v1.18</title>
-<meta http-equiv="Expires" content="Sat, 10 May 2003 17:00:19 +0000">
+<html><head><title>The README file: xml2rfc v1.20</title>
+<meta http-equiv="Expires" content="Thu, 24 Jul 2003 20:48:02 +0000">
 <STYLE type='text/css'>
     .title { color: #990000; font-size: 22px; line-height: 22px; font-weight: bold; text-align: right;
              font-family: helvetica, arial, sans-serif }
@@ -45,9 +45,9 @@
 <table width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header">The README file</td><td width="33%" bgcolor="#666666" class="header">M. Rose</td></tr>
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">Dover Beach Consulting, Inc.</td></tr>
-<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">April 2003</td></tr>
+<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">July 24, 2003</td></tr>
 </table></td></tr></table>
-<div align="right"><font face="monaco, MS Sans Serif" color="#990000" size="+3"><b><br><span class="title">xml2rfc v1.18</span></b></font></div>
+<div align="right"><font face="monaco, MS Sans Serif" color="#990000" size="+3"><b><br><span class="title">xml2rfc v1.20</span></b></font></div>
 <font face="verdana, helvetica, arial, sans-serif" size="2">
 <a name="toc"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
@@ -118,18 +118,18 @@ you may already have Tcl version 8.
 To find out,
 try typing this command from the shell
 (or the "MS-DOS Prompt"):
-</p></font><pre>
+</p><pre>
     % tclsh
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>If the program launches,
 you're good to go with Tcl version 8.
 </p>
 <p>If you are running under a windowing system (e.g., X or Windows),
 you can also try:
-</p></font><pre>
+</p><pre>
     % wish
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>If a new window comes up along with a "Console" window,
 then you're good to go with Tk version 8.
@@ -149,12 +149,12 @@ so, if you don't know what it is, don't worry about it...
 <a name="rfc.section.3.1"></a><h4><a name="anchor4">3.1</a>&nbsp;Testing under a windowing system</h4>
 
 <p>Type this command from the shell:
-</p></font><pre>
+</p><pre>
     % xml2rfc.tcl
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>A new window should come up that looks like this:
-</p></font><pre>
+</p><pre>
     +------------------------------------------------------------+
     |                     Convert XML to RFC                     |
     |                                                            |
@@ -165,29 +165,29 @@ so, if you don't know what it is, don't worry about it...
     |               [Convert]               [Quit]               |
     |                                                            |
     +------------------------------------------------------------+
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>Fill-in the blanks and click on [Convert].
 </p>
 <a name="rfc.section.3.2"></a><h4><a name="anchor5">3.2</a>&nbsp;Testing without a windowing system</h4>
 
 <p>Type this command from the shell:
-</p></font><pre>
+</p><pre>
     % tclsh
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>If the program launches, type this command to it:
-</p></font><pre>
+</p><pre>
     % source xml2rfc.tcl
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>and you should see these four lines:
-</p></font><pre>
+</p><pre>
     invoke as "xml2rfc   inputfile outputfile"
            or "xml2txt   inputfile"
            or "xml2html  inputfile"
            or "xml2nroff inputfile"
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <a name="anchor6"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
@@ -205,9 +205,9 @@ has some good information.
 directive to an XML application.
 If you want to give directives to <span class="strong">xml2rfc</span>,
 the processing instructions (PIs) look like this:
-</p></font><pre>
+</p><pre>
     &lt;?rfc keyword='value'?>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>Of course,
 if you like the default behavior,
@@ -327,9 +327,9 @@ of the document
 
 <p><span class="strong">xml2rfc</span> has an include-file facility,
 e.g.,
-</p></font><pre>
+</p><pre>
     &lt;?rfc include='file'?>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p><span class="strong">xml2rfc</span> will consult the
 $XML_LIBRARY environment variable for a search path of where to look
@@ -344,7 +344,7 @@ by creating a file called <span class="verb">.xml2rfc.rc</span> in
 the directory where your
 main file is,
 e.g.,
-</p></font><pre>
+</p><pre>
 global env tcl_platform
 
 if {![string compare $tcl_platform(platform) windows]} {
@@ -367,7 +367,7 @@ if {[lsearch [split $library $sep] $nativeD] &lt; 0} {
 }
 
 set env(XML_LIBRARY) $library
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 
 <p>There are links to various bibliographic databases (RFCs, I-Ds, and so on)
 on the <span class="strong">xml2rfc</span><a href="http://xml.resource.org/">homepage</a>.
@@ -389,9 +389,9 @@ of the 2629bis document enumerates the additions.
 but only if HTML is being generated,
 e.g.,
 </p>
-</font><pre>
+<pre>
        &lt;figure>&lt;artwork src='layers.gif' />&lt;/figure>
-</pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+</pre>
 <p>
 
 <p>In this case,
@@ -415,7 +415,7 @@ except when generating HTML.
 </li>
 </ul><p>
 </p>
-<a name="rfc.references1"><br><hr size="1" shade="0"></a>
+<a name="rfc.references2"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
 <h3>References</h3>
 <table width="99%" border="0">
