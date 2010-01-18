@@ -2,10 +2,10 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                       December 21, 2001
+                                                           December 2001
 
 
-                              xml2rfc v1.9
+                             xml2rfc v1.10
 
 
 Table of Contents
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose                                                            [Page 1]
 
-README                        xml2rfc v1.9                 December 2001
+README                        xml2rfc v1.10                December 2001
 
 
 1. Introduction
@@ -110,7 +110,7 @@ README                        xml2rfc v1.9                 December 2001
 
 Rose                                                            [Page 2]
 
-README                        xml2rfc v1.9                 December 2001
+README                        xml2rfc v1.10                December 2001
 
 
 2.2 TclXML version 1.1.1
@@ -123,13 +123,22 @@ README                        xml2rfc v1.9                 December 2001
 
    For example, on Unix, you'd probably put the files somewhere under
 
-       /usr/local/lib/tcl8.3/TclXML-1.0
+       /usr/local/lib/tcl8.4/TclXML-1.1
 
    or
 
-       C:\Program Files\Tcl\lib\tcl8.3\TclXML-1.0\
+       C:\Program Files\Tcl\lib\tcl8.4\TclXML-1.1\
 
    depending on whether you're on UNIX or Windows.
+
+   To find out where you should put the directory, type this command:
+
+       % tclsh
+       tclsh> set auto_path
+
+   This will print a list containing the directories where Tcl looks for
+   libraries.  You should put the "TclXML-1.1" directory in exactly one
+   of these directories.
 
 3. Testing
 
@@ -140,6 +149,25 @@ README                        xml2rfc v1.9                 December 2001
    Type this command from the shell:
 
        % xml2rfc.tcl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                            [Page 3]
+
+README                        xml2rfc v1.10                December 2001
+
 
    A new window should come up that looks like this:
 
@@ -155,19 +183,6 @@ README                        xml2rfc v1.9                 December 2001
        +------------------------------------------------------------+
 
    Fill-in the blanks and click on [Convert].
-
-
-
-
-
-
-
-
-
-Rose                                                            [Page 3]
-
-README                        xml2rfc v1.9                 December 2001
-
 
 3.2 Testing without a windowing system
 
@@ -205,24 +220,9 @@ README                        xml2rfc v1.9                 December 2001
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Rose                                                            [Page 4]
 
-README                        xml2rfc v1.9                 December 2001
+README                        xml2rfc v1.10                December 2001
 
 
 4.1.1 Option Settings
@@ -278,7 +278,7 @@ README                        xml2rfc v1.9                 December 2001
 
 Rose                                                            [Page 5]
 
-README                        xml2rfc v1.9                 December 2001
+README                        xml2rfc v1.10                December 2001
 
 
 4.1.2 Include Files
@@ -315,31 +315,31 @@ README                        xml2rfc v1.9                 December 2001
 
 5. Additions to RFC 2629
 
-      o  The 'artwork' element has an undocumented 'src' attribute that
-         is consulted only if slides are being generated, e.g.,
+   o  The 'artwork' element has an undocumented 'src' attribute that is
+      consulted only if slides are being generated, e.g.,
 
           <figure><artwork src='layers.gif' /></figure>
 
-      o  The 'artwork' element has optional 'name' and 'type'
-         attributes.
+   o  The 'artwork' element has optional 'name' and 'type' attributes.
 
-      o  The 'references' element may occur more than once in the 'back'
-         element (e.g., for normative and non-normative references).
-         Further, the element has an optional 'title' attribute.
+   o  The 'references' element may occur more than once in the 'back'
+      element (e.g., for normative and non-normative references).
+      Further, the element has an optional 'title' attribute.
 
-      o  The value of the 'list' element's 'style' attribute can start
-         with "format ".
+   o  The value of the 'list' element's 'style' attribute can start with
+      "format ".
+
 
 
 
 Rose                                                            [Page 6]
 
-README                        xml2rfc v1.9                 December 2001
+README                        xml2rfc v1.10                December 2001
 
 
-      o  If the 'style' attribute of the 'list' element has either of
-         the values "hanging" or "format", then a second, optional
-         attribute, called 'hangIndent' is consulted.
+   o  If the 'style' attribute of the 'list' element has either of the
+      values "hanging" or "format", then a second, optional attribute,
+      called 'hangIndent' is consulted.
 
    For more information on these last two additions, see Section 2.3.1.2
    of the html or text [6] versions of the 2629bis document for the
@@ -347,13 +347,13 @@ README                        xml2rfc v1.9                 December 2001
 
 6. Limitations
 
-      o  The 'figure' element's 'title' attribute is ignored, except
-         when generating HTML.
+   o  The 'figure' element's 'title' attribute is ignored, except when
+      generating HTML.
 
-      o  The 'artwork' element's 'name' and 'type' attributes are
-         ignored.
+   o  The 'artwork' element's 'name' and 'type' attributes are ignored.
 
-      o  The 'xref' element's 'pageno' attribute is ignored.
+   o  The 'xref' element's 'pageno' attribute is ignored.
+
 
 
 
@@ -390,7 +390,7 @@ README                        xml2rfc v1.9                 December 2001
 
 Rose                                                            [Page 7]
 
-README                        xml2rfc v1.9                 December 2001
+README                        xml2rfc v1.10                December 2001
 
 
 References
@@ -422,23 +422,23 @@ Author's Address
 
 Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
 
-      1.  Install Tcl/Tk 8.3.4
+   1.  Install Tcl/Tk 8.3.4
 
-      2.  When you performed Step 1, a folder in your "Extensions"
-          folder called "Tool Command Language" was created.  Create a
-          new folder under "Extensions", with any name you like.
+   2.  When you performed Step 1, a folder in your "Extensions" folder
+       called "Tool Command Language" was created.  Create a new folder
+       under "Extensions", with any name you like.
 
-      3.  From the TclXML 1.1.1 distribution, move the files
-          "pkgIndex.tcl", "sgml.tcl", and "xml.tcl" to this new folder.
+   3.  From the TclXML 1.1.1 distribution, move the files
+       "pkgIndex.tcl", "sgml.tcl", and "xml.tcl" to this new folder.
 
-      4.  Drag the file "xml2rfc.tcl" onto the "Drag & Drop Tclets"
-          application that was installed in Step 1.
+   4.  Drag the file "xml2rfc.tcl" onto the "Drag & Drop Tclets"
+       application that was installed in Step 1.
 
-      5.  When asked for an appropriate "wish" stub, select "Wish
-          8.3.4".
+   5.  When asked for an appropriate "wish" stub, select "Wish 8.3.4".
 
-      6.  The "Drap & Drop Tclets" application will write out an
-          executable version of 'xml2rfc'.
+   6.  The "Drap & Drop Tclets" application will write out an executable
+       version of 'xml2rfc'.
+
 
 
 
