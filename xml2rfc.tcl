@@ -11,7 +11,7 @@ LC_ALL=C exec tclsh "$0" "$0" "$@"
 
 global prog prog_version
 set prog "xml2rfc"
-set prog_version "v1.27"
+set prog_version "v1.28"
 
 #
 # here begins TclXML 1.1.1
@@ -4638,11 +4638,11 @@ proc pass2begin_front {elemX} {
                 set iindex 0
             }
             set status [lindex $idinfo $iindex]
-            regsub -all %IPR% $status \
-                   [string map {"&" "\\&"} \
-                           [lindex [lindex $iprstatus \
-                                           [lsearch0 $iprstatus \
-                                                     $rv(ipr)]] 1]] status
+            regsub -all "&" [lindex [lindex $iprstatus \
+                                            [lsearch0 $iprstatus \
+                                                      $rv(ipr)]] 1] \
+                        "\\\\&" ipr
+            regsub -all %IPR% $status $ipr status
             if {[string compare [set anchor $rv(iprExtract)] ""]} {
                 set extract ", other than to extract "
                 append extract [xref_$mode "" $xref($anchor) $anchor "" 1]
@@ -7404,7 +7404,6 @@ proc write_text_txt {text {direction l}} {
 proc write_line_txt {line {pre 0}} {
     global header footer lineno pageno blankP
     global buffer
-    global nbsp
     global options
 
     flush_text
@@ -7440,7 +7439,8 @@ proc write_line_txt {line {pre 0}} {
 proc nbsp_expand_txt {s} {
     global nbsp
 
-    string map [list "$nbsp" " "] "$s"
+    regsub -all "$nbsp" [string trimright $s] " " s
+    return $s
 }
 
 proc two_spaces {glop} {
@@ -10017,7 +10017,6 @@ proc write_line_nr {line {pre 0} {magic 0}} {
     global header footer lineno pageno blankP
     global buffer
     global indents indent lastin
-    global nbsp
 
     flush_text
     if {$lineno == 0} {
@@ -10056,7 +10055,8 @@ proc write_line_nr {line {pre 0} {magic 0}} {
 proc nbsp_expand_nr {s} {
     global nbsp
 
-    string map [list "$nbsp" "\\0"] "$s"
+    regsub -all "$nbsp" [string trimright $s] "\\\\0" s
+    return $s
 }
 
 proc pi_nr {key value} {

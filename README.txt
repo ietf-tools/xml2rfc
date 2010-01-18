@@ -3,10 +3,10 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                          September 2004
+                                                        January 16, 2005
 
 
-                             xml2rfc v1.27
+                             xml2rfc v1.28
 
 
 Table of Contents
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose                                                            [Page 1]
 
-README                        xml2rfc v1.27               September 2004
+README                        xml2rfc v1.28                 January 2005
 
 
 1.  Introduction
@@ -110,7 +110,7 @@ README                        xml2rfc v1.27               September 2004
 
 Rose                                                            [Page 2]
 
-README                        xml2rfc v1.27               September 2004
+README                        xml2rfc v1.28                 January 2005
 
 
 2.  Requirements
@@ -166,7 +166,7 @@ README                        xml2rfc v1.27               September 2004
 
 Rose                                                            [Page 3]
 
-README                        xml2rfc v1.27               September 2004
+README                        xml2rfc v1.28                 January 2005
 
 
 3.  Testing
@@ -222,7 +222,7 @@ README                        xml2rfc v1.27               September 2004
 
 Rose                                                            [Page 4]
 
-README                        xml2rfc v1.27               September 2004
+README                        xml2rfc v1.28                 January 2005
 
 
 4.  Next steps
@@ -278,7 +278,7 @@ README                        xml2rfc v1.27               September 2004
 
 Rose                                                            [Page 5]
 
-README                        xml2rfc v1.27               September 2004
+README                        xml2rfc v1.28                 January 2005
 
 
 4.1.1  Option Settings
@@ -334,7 +334,7 @@ README                        xml2rfc v1.27               September 2004
 
 Rose                                                            [Page 6]
 
-README                        xml2rfc v1.27               September 2004
+README                        xml2rfc v1.28                 January 2005
 
 
    |      editing |      no      | insert editing marks for ease of    |
@@ -390,7 +390,7 @@ README                        xml2rfc v1.27               September 2004
 
 Rose                                                            [Page 7]
 
-README                        xml2rfc v1.27               September 2004
+README                        xml2rfc v1.28                 January 2005
 
 
    You can also have *xml2rfc* set this envariable directly, by creating
@@ -446,7 +446,7 @@ README                        xml2rfc v1.27               September 2004
 
 Rose                                                            [Page 8]
 
-README                        xml2rfc v1.27               September 2004
+README                        xml2rfc v1.28                 January 2005
 
 
 5.  Additions to RFC 2629
@@ -502,7 +502,7 @@ README                        xml2rfc v1.27               September 2004
 
 Rose                                                            [Page 9]
 
-README                        xml2rfc v1.27               September 2004
+README                        xml2rfc v1.28                 January 2005
 
 
 6.  Limitations of xml2rfc
@@ -558,7 +558,7 @@ Author's Address
 
 Rose                                                           [Page 10]
 
-README                        xml2rfc v1.27               September 2004
+README                        xml2rfc v1.28                 January 2005
 
 
 Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
@@ -614,7 +614,7 @@ Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
 
 Rose                                                           [Page 11]
 
-README                        xml2rfc v1.27               September 2004
+README                        xml2rfc v1.28                 January 2005
 
 
 Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
@@ -670,7 +670,7 @@ Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
 
 Rose                                                           [Page 12]
 
-README                        xml2rfc v1.27               September 2004
+README                        xml2rfc v1.28                 January 2005
 
 
 Appendix C.  Windows XP/Cygwin Installation (courtesy of Joe Touch)
@@ -726,12 +726,12 @@ Appendix C.  Windows XP/Cygwin Installation (courtesy of Joe Touch)
 
 Rose                                                           [Page 13]
 
-README                        xml2rfc v1.27               September 2004
+README                        xml2rfc v1.28                 January 2005
 
 
 Appendix D.  Copyrights
 
-   (c) 2003 Marshall T.  Rose
+   (c) 2003-2005 Marshall T.  Rose
 
    Hold harmless the author, and any lawful use is allowed.
 
