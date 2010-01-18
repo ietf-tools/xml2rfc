@@ -1,5 +1,5 @@
 <!--
-  revised DTD for the RFC document series, draft of 2001-12-17
+  revised DTD for the RFC document series, draft of 2002-01-20
   -->
 
 
@@ -142,7 +142,7 @@
 
 <!ELEMENT middle      (section)+>
 
-<!ELEMENT section     (t|figure|section)*>
+<!ELEMENT section     (t|figure|iref|section)*>
 <!ATTLIST section
           anchor      ID                 #IMPLIED
           title       %ATEXT;            #REQUIRED>
@@ -169,7 +169,8 @@
 <!ELEMENT iref        EMPTY>
 <!ATTLIST iref
           item        %ATEXT;            #REQUIRED
-          subitem     %ATEXT;            "">
+          subitem     %ATEXT;            ""
+          primary    (true|false)       "false">
 
 <!ELEMENT vspace      EMPTY>
 <!ATTLIST vspace

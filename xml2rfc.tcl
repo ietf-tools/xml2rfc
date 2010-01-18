@@ -1267,7 +1267,7 @@ SUCH DAMAGES."
         if {[string compare $iv(.NAME) iref]} {
             continue
         }
-        lappend index($iv(item)+$iv(subitem)) $iv(.ANCHOR)
+        lappend index($iv(item)+$iv(subitem)+$iv(flags)) $iv(.ANCHOR)
     }
     set items [lsort -dictionary [array names index]]
 
@@ -1276,7 +1276,7 @@ SUCH DAMAGES."
     set K ""
     foreach item $items {
         set iref ""
-        foreach {key subkey} [split $item +] { break }
+        foreach {key subkey flags} [split $item +] { break }
         if {[string compare [set c [string toupper [string index $key 0]]] \
                     $L]} {
             lappend iref [set L $c]
@@ -1290,6 +1290,7 @@ SUCH DAMAGES."
             lappend iref ""
         }
         lappend iref $subkey
+        lappend iref $flags
         lappend iref $index($item)
         lappend irefs $iref
     }
@@ -1393,7 +1394,19 @@ proc pass2begin_front {elemX} {
 
         set status ""
     } else {
-        lappend left "Network Working Group"
+        set first ""
+        if {(![string compare $rv(number) ""]) \
+                && ([string compare \
+                             [set workgroup [find_element workgroup \
+                                 $attrs(.CHILDREN)]] ""])} {
+            array set wv $elem($workgroup)
+            set first [string trim $wv(.CTEXT)]
+        }
+        if {![string compare $first ""]} {
+            set first "Network Working Group"
+        }
+        lappend left $first
+
         if {[string compare $rv(number) ""]} {
             lappend left "Request for Comments: $rv(number)"
 
@@ -1907,10 +1920,13 @@ proc pass2begin_iref {elemX} {
     global counter depth elemN elem passno stack xref
     global mode
 
-    array set attrs [list subitem ""]
+    array set attrs [list subitem "" primary false]
     array set attrs $elem($elemX)
+    set flags [list primary $attrs(primary)]
+    unset attrs(primary)
+    set attrs(flags) $flags
 
-    set attrs(.ANCHOR) [iref_$mode $attrs(item) $attrs(subitem)]
+    set attrs(.ANCHOR) [iref_$mode $attrs(item) $attrs(subitem) $flags]
 
     set elem($elemX) [array get attrs]
 }
@@ -2125,11 +2141,13 @@ proc pass2begin_reference {elemX width} {
             set av(initials) [lindex [split $av(initials) .] 0].
         }
         if {($childA > 1) && ($childA == $childN)} {
-            set av(abbrev) "$av(initials) $av(surname)"
-        } else {
+            set av(abbrev) [string trimleft "$av(initials) $av(surname)"]
+        } elseif {[string compare $av(initials) ""]} {
             set av(abbrev) "$av(surname), $av(initials)"
+        } else {
+            set av(abbrev) $av(surname)
         }
-        if {[string length $av(abbrev)] == 2} {
+        if {[string length $av(abbrev)] == 0} {
             lappend names [list $ov(.CTEXT) $uref]
         } else {
             lappend names [list $av(abbrev) $mref]
@@ -2215,15 +2233,16 @@ proc rfc_txt {irefs copying} {
         write_line_txt "Index"
 
         foreach iref $irefs {
-            foreach {L item subitem pages} $iref { break }
+            foreach {L item subitem flags pages} $iref { break }
 
             if {[string compare $L ""]} {
                 write_line_txt ""
                 write_line_txt $L           
             }
 
+            set subitem [chars_expand $subitem]
             if {[string compare $item ""]} {
-                write_text_txt $item
+                write_text_txt [chars_expand $item]
                 if {[string compare $subitem ""]} {
                     flush_text
                     write_text_txt "   $subitem"
@@ -2481,7 +2500,7 @@ proc t_txt {tag counter style hangText editNo} {
             }
 
             hanging {
-                set counter "$hangText "
+                set counter "[chars_expand $hangText] "
             }
 
             default {
@@ -2527,7 +2546,7 @@ proc list_txt {tag counters style hangIndent hangText} {
                 }
 
                 format {
-                    set i [expr [string length $hangText]-1]
+                    set i [expr [string length [chars_expand $hangText]]-1]
                 }
 
                 default {
@@ -2581,7 +2600,7 @@ proc figure_txt {tag lines anchor src title} {
                     set prefix ""
                 }
                 write_line_txt ""
-                write_text_txt "$prefix$title" c
+                write_text_txt "$prefix[chars_expand $title]" c
                 write_line_txt ""
                 write_line_txt \
                     "   ---------------------------------------------------------------------"
@@ -2678,7 +2697,7 @@ proc eref_txt {text counter target} {
     set eatP 0
 }
 
-proc iref_txt {item subitem} {
+proc iref_txt {item subitem flags} {
     global header footer lineno pageno blankP
 
     return $pageno
@@ -2715,7 +2734,7 @@ proc references_txt {tag {title ""} {erefP 0}} {
             } else {
                 end_page_txt
             }
-            write_line_txt $title
+            write_line_txt [chars_expand $title]
 
             return $pageno
         }
@@ -3153,7 +3172,7 @@ proc rfc_html {irefs copying} {
 
         puts $stdout "<table>"
         foreach iref $irefs {
-            foreach {L item subitem pages} $iref { break }
+            foreach {L item subitem flags pages} $iref { break }
 
             if {[string compare $L ""]} {
                 puts $stdout "<tr><td><b>$L</b></td><td>&nbsp;</td></tr>"
@@ -3169,6 +3188,11 @@ proc rfc_html {irefs copying} {
                 set key $item
                 set t ""
             }
+
+	    array set iflags $flags
+	    if {![string compare $iflags(primary) true]} {
+		set key "<b>$key</b>"
+	    }
 
             if {[llength $pages] == 1} {
                 set key "<a href=\"#[lindex $pages 0]\">$key</a>"
@@ -3605,7 +3629,7 @@ proc eref_html {text counter target} {
     puts -nonewline $stdout "<a href=\"$target\">$text</a>"
 }
 
-proc iref_html {item subitem} {
+proc iref_html {item subitem flags} {
     global anchorN
     global stdout
 
@@ -4162,15 +4186,16 @@ proc rfc_nr {irefs copying} {
         write_line_nr "Index"
 
         foreach iref $irefs {
-            foreach {L item subitem pages} $iref { break }
+            foreach {L item subitem flags pages} $iref { break }
 
             if {[string compare $L ""]} {
                 write_line_nr ""
                 write_line_nr $L           
             }
 
+            set subitem [chars_expand $subitem]
             if {[string compare $item ""]} {
-                write_text_nr $item
+                write_text_nr [chars_expand $item]
                 if {[string compare $subitem ""]} {
                     flush_text
                     push_indent 3
@@ -4240,7 +4265,7 @@ proc front_nr_begin {left right top bottom title status copying} {
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.10 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.11 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -4353,7 +4378,7 @@ proc front_nr_end {toc irefP} {
             if {!$options(.SUBCOMPACT)} {
                 if {[string last . [lindex $c 0]] \
                         == [expr [string length [lindex $c 0]]-1]} {
-                    write_line_txt ""
+                    write_line_nr ""
                 }
             }
             set s1 [format "%-*.*s " $len1 $len1 [lindex $c 0]]
@@ -4456,7 +4481,7 @@ proc t_nr {tag counter style hangText editNo} {
             }
 
             hanging {
-                set counter "$hangText "
+                set counter "[chars_expand $hangText] "
                 set left ""
             }
 
@@ -4505,7 +4530,7 @@ proc list_nr {tag counters style hangIndent hangText} {
                 }
 
                 format {
-                    set i [expr [string length $hangText]-1]
+                    set i [expr [string length [chars_expand $hangText]]-1]
                 }
 
                 default {
@@ -4564,7 +4589,7 @@ proc figure_nr {tag lines anchor src title} {
                     set prefix ""
                 }
                 write_line_nr ""
-                write_text_nr "$prefix$title" c
+                write_text_nr "$prefix[chars_expand $title]" c
                 write_line_nr ""
                 write_line_nr \
                     "---------------------------------------------------------------------"
@@ -4661,7 +4686,7 @@ proc eref_nr {text counter target} {
     set eatP 0
 }
 
-proc iref_nr {item subitem} {
+proc iref_nr {item subitem flags} {
     global header footer lineno pageno blankP
 
     return $pageno
@@ -4705,7 +4730,7 @@ proc references_nr {tag {title ""} {erefP 0}} {
                 set lastin -1
             }
             write_it ".ti 0"
-            write_line_nr $title
+            write_line_nr [chars_expand $title]
 
             return $pageno
         }
@@ -5545,7 +5570,7 @@ if {[info exists guiP]} {
     return
 }
 set guiP 0
-if {![info exists tk_version]} {
+if {(![info exists tk_version]) & ([llength $argv] == 0)} {
     if {$tcl_interactive} {
         set guiP -1
         puts stdout ""
@@ -5554,41 +5579,51 @@ if {![info exists tk_version]} {
         puts stdout "       or \"xml2html  input-file\""
         puts stdout "       or \"xml2nroff input-file\""
     }
-} elseif {[llength $argv] > 0} {
-    switch -- [llength $argv] {
-        2 {
-            set file [lindex $argv 1]
-            if {![string compare $tcl_platform(platform) windows]} {
-                set f ""
-                foreach c [split $file ""] {
-                    switch -- $c {
-                        "\\" { append f "\\\\" }
-
-                        "\a" { append f "\\a" }
-
-                        "\b" { append f "\\b" }
-
-                        "\f" { append f "\\f" }
-
-                        "\n" { append f "\\n" }
-
-                        "\r" { append f "\\r" }
-
-                        "\v" { append f "\\v" }
-
-                        default {
-                            append f $c
+} elseif {[llength $argv] > 1} {
+    if {[catch { 
+        switch -- [llength $argv] {
+            2 {
+                set file [lindex $argv 1]
+                if {![string compare $tcl_platform(platform) \
+                             windows]} {
+                    set f ""
+                    foreach c [split $file ""] {
+                        switch -- $c {
+                            "\\" { append f "\\\\" }
+    
+                            "\a" { append f "\\a" }
+    
+                            "\b" { append f "\\b" }
+    
+                            "\f" { append f "\\f" }
+    
+                            "\n" { append f "\\n" }
+    
+                            "\r" { append f "\\r" }
+    
+                            "\v" { append f "\\v" }
+    
+                            default {
+                                append f $c
+                            }
                         }
                     }
+                    set file $f
                 }
-                set file $f
+    
+                eval [file tail [file rootname [lindex $argv 0]]] \
+                           $file
             }
-
-            eval [file tail [file rootname [lindex $argv 0]]] $file
+    
+            3 {
+                xml2rfc [lindex $argv 1] [lindex $argv 2]
+            }
         }
-
-        3 {
-            xml2rfc [lindex $argv 1] [lindex $argv 2]
+    } result]} {
+        if {[info exists tk_version]} {
+            bgerror $result
+        } else {
+            puts stderr $result
         }
     }
 

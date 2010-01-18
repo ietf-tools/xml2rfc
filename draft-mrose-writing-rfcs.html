@@ -1,5 +1,5 @@
 <html><head><title>Writing I-Ds and RFCs using XML (revised)</title>
-<meta http-equiv="Expires" content="Fri, 21 Dec 2001 23:28:26 +0000">
+<meta http-equiv="Expires" content="Fri, 15 Feb 2002 16:50:51 +0000">
 <STYLE type='text/css'>
     .title { color: #990000; font-size: 22px; line-height: 22px; font-weight: bold; text-align: right;
              font-family: helvetica, arial, sans-serif }
@@ -42,7 +42,7 @@
 <table width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header"> </td><td width="33%" bgcolor="#666666" class="header">M. Rose</td></tr>
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">Dover Beach Consulting, Inc.</td></tr>
-<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">December 21, 2001</td></tr>
+<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">February 15, 2002</td></tr>
 </table></td></tr></table>
 <div align="right"><font face="monaco, MS Sans Serif" color="#990000" size="+3"><b><br><span class="title">Writing I-Ds and RFCs using XML (revised)</span></b></font></div>
 <font face="verdana, helvetica, arial, sans-serif" size="2">
@@ -773,6 +773,7 @@ e.g.,
 The <b>section</b> element is recursive &#151;
 each contains any number and combination of <b>t</b>,
 <b>figure</b>,
+<b>iref</b>,
 and <b>section</b> elements, e.g.,
 </p>
 </font><pre>
@@ -1089,6 +1090,11 @@ whilst the optional <b>subitem</b> attribute is the secondary key, e.g.,
 </font><pre>
     &lt;iref item='indexing' subitem='how to' />
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
+
+<p>
+The optional <b>primary</b> attribute can be used to indicate
+that this particular indexing entry should be considered "primary".
+</p>
 
 <p>
 Finally, note that the <b>iref</b> element is always empty &#151; it never
@@ -1581,7 +1587,7 @@ the appropriate substitution (or <b>"XXXX"</b>) will occur.
 <h3>Appendix B.&nbsp;The DTD</h3>
 </font><pre>
 &lt;!--
-  revised DTD for the RFC document series, draft of 2001-12-17
+  revised DTD for the RFC document series, draft of 2002-01-20
   -->
 
 
@@ -1724,7 +1730,7 @@ the appropriate substitution (or <b>"XXXX"</b>) will occur.
 
 &lt;!ELEMENT middle      (section)+>
 
-&lt;!ELEMENT section     (t|figure|section)*>
+&lt;!ELEMENT section     (t|figure|iref|section)*>
 &lt;!ATTLIST section
           anchor      ID                 #IMPLIED
           title       %ATEXT;            #REQUIRED>
@@ -1751,7 +1757,8 @@ the appropriate substitution (or <b>"XXXX"</b>) will occur.
 &lt;!ELEMENT iref        EMPTY>
 &lt;!ATTLIST iref
           item        %ATEXT;            #REQUIRED
-          subitem     %ATEXT;            "">
+          subitem     %ATEXT;            ""
+          primary    (true|false)       "false">
 
 &lt;!ELEMENT vspace      EMPTY>
 &lt;!ATTLIST vspace
@@ -1825,6 +1832,13 @@ The <b>references</b> element may occur more than once in the <b>back</b> elemen
 (e.g., for normative and non-normative references).
 Further,
 the element has an optional <b>title</b> attribute.
+</li>
+
+<li>
+The <b>iref</b> element may appear directly within a <b>section</b>
+element;
+also,
+it now has an optional <b>primary</b> attribute.
 </li>
 
 </ul>

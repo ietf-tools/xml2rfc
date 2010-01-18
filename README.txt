@@ -2,10 +2,10 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                           December 2001
+                                                       February 10, 2002
 
 
-                             xml2rfc v1.10
+                             xml2rfc v1.11
 
 
 Table of Contents
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose                                                            [Page 1]
 
-README                        xml2rfc v1.10                December 2001
+README                        xml2rfc v1.11                February 2002
 
 
 1. Introduction
@@ -110,7 +110,7 @@ README                        xml2rfc v1.10                December 2001
 
 Rose                                                            [Page 2]
 
-README                        xml2rfc v1.10                December 2001
+README                        xml2rfc v1.11                February 2002
 
 
 2.2 TclXML version 1.1.1
@@ -166,7 +166,7 @@ README                        xml2rfc v1.10                December 2001
 
 Rose                                                            [Page 3]
 
-README                        xml2rfc v1.10                December 2001
+README                        xml2rfc v1.11                February 2002
 
 
    A new window should come up that looks like this:
@@ -222,7 +222,7 @@ README                        xml2rfc v1.10                December 2001
 
 Rose                                                            [Page 4]
 
-README                        xml2rfc v1.10                December 2001
+README                        xml2rfc v1.11                February 2002
 
 
 4.1.1 Option Settings
@@ -278,7 +278,7 @@ README                        xml2rfc v1.10                December 2001
 
 Rose                                                            [Page 5]
 
-README                        xml2rfc v1.10                December 2001
+README                        xml2rfc v1.11                February 2002
 
 
 4.1.2 Include Files
@@ -334,7 +334,7 @@ README                        xml2rfc v1.10                December 2001
 
 Rose                                                            [Page 6]
 
-README                        xml2rfc v1.10                December 2001
+README                        xml2rfc v1.11                February 2002
 
 
    o  If the 'style' attribute of the 'list' element has either of the
@@ -390,7 +390,7 @@ README                        xml2rfc v1.10                December 2001
 
 Rose                                                            [Page 7]
 
-README                        xml2rfc v1.10                December 2001
+README                        xml2rfc v1.11                February 2002
 
 
 References
