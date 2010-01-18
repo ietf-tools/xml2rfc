@@ -1,9 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en"><head><title>The README file: xml2rfc v1.29</title>
-<meta http-equiv="Expires" content="Wed, 06 Apr 2005 01:10:53 +0000">
+<html lang="en"><head><title>The README file: xml2rfc v1.30</title>
+<meta http-equiv="Expires" content="Thu, 11 Aug 2005 04:00:35 +0000">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="xml2rfc v1.29">
-<meta name="generator" content="xml2rfc v1.29 (http://xml.resource.org/)">
+<meta name="description" content="xml2rfc v1.30">
+<meta name="generator" content="xml2rfc v1.30 (http://xml.resource.org/)">
 <style type='text/css'>
 <!--
     body {
@@ -28,7 +28,7 @@
         text-align: center ;
         font-family: charcoal, monaco, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
         font-size: x-small ; background-color: #000000; }
-/* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+    /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
     div#counter{margin-top: 100px}
 
     a.info{
@@ -58,6 +58,8 @@
     p { margin-left: 2em; margin-right: 2em; }
     p.copyright { font-size: x-small ; }
     p.toc { font-size: small ; font-weight: bold ; margin-left: 3em ;}
+    table.toc { margin: 0 0 0 3em; padding: 0; border: 0; vertical-align: text-top; }
+    td.toc { font-size: small; font-weight: bold; vertical-align: text-top; }
 
     span.emph { font-style: italic; }
     span.strong { font-weight: bold; }
@@ -95,16 +97,25 @@
         background-color: #666666 ; width: 33% ; }
     td.author { font-weight: bold; margin-left: 4em; font-size: x-small ; }
     td.author-text { font-size: x-small; }
-    table.data { vertical-align: top ; border-collapse: collapse ;
+    table.full { vertical-align: top ; border-collapse: collapse ;
         border-style: solid solid solid solid ;
         border-color: black black black black ;
         font-size: small ; text-align: center ; }
-    table.data th { font-weight: bold ;
-        border-style: solid solid solid solid ;
+    table.headers, table.none { vertical-align: top ; border-collapse: collapse ;
+        border-style: none;
+        font-size: small ; text-align: center ; }
+    table.full th { font-weight: bold ;
+        border-style: solid ;
         border-color: black black black black ; }
-    table.data td {
+    table.headers th { font-weight: bold ;
+        border-style: none none solid none;
+        border-color: black black black black ; }
+    table.none th { font-weight: bold ;
+        border-style: none; }
+    table.full td {
         border-style: solid solid solid solid ;
         border-color: #333333 #333333 #333333 #333333 ; }
+    table.headers td, table.none td { border-style: none; }
 
     hr { height: 1px }
 -->
@@ -115,9 +126,10 @@
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">The README file</td><td class="header">M. Rose</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Dover Beach Consulting, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">April 5, 2005</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">C. Levert</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">August 11, 2005</td></tr>
 </table></td></tr></table>
-<div align="right"><span class="title"><br />xml2rfc v1.29</span></div>
+<div align="right"><span class="title"><br />xml2rfc v1.30</span></div>
 <a name="toc"></a><br /><hr />
 <h3>Table of Contents</h3>
 <p class="toc">
@@ -127,17 +139,17 @@ Introduction<br />
 Requirements<br />
 <a href="#anchor3">3.</a>&nbsp;
 Testing<br />
-<a href="#anchor4">3.1</a>&nbsp;
+<a href="#anchor4">3.1.</a>&nbsp;
 Testing under a windowing system<br />
-<a href="#anchor5">3.2</a>&nbsp;
+<a href="#anchor5">3.2.</a>&nbsp;
 Testing without a windowing system<br />
 <a href="#anchor6">4.</a>&nbsp;
 Next steps<br />
-<a href="#processing.instructions">4.1</a>&nbsp;
+<a href="#processing.instructions">4.1.</a>&nbsp;
 Processing Instructions<br />
-<a href="#anchor7">4.1.1</a>&nbsp;
+<a href="#anchor7">4.1.1.</a>&nbsp;
 Option Settings<br />
-<a href="#include.file.facility">4.1.2</a>&nbsp;
+<a href="#include.file.facility">4.1.2.</a>&nbsp;
 Include Files<br />
 <a href="#anchor8">5.</a>&nbsp;
 The Page Model<br />
@@ -147,8 +159,6 @@ Additions to RFC&nbsp;2629<br />
 Limitations of xml2rfc<br />
 <a href="#rfc.references1">8.</a>&nbsp;
 References<br />
-<a href="#rfc.authors">&#167;</a>&nbsp;
-Author's Address<br />
 <a href="#anchor12">A.</a>&nbsp;
 MacOS&nbsp;9 Installation (courtesy of Ned Freed)<br />
 <a href="#rfc2629.xslt">B.</a>&nbsp;
@@ -159,6 +169,8 @@ MS-Windows&nbsp;XP/Cygwin Installation (courtesy of Joe Touch)<br />
 A Special Thanks<br />
 <a href="#anchor15">E.</a>&nbsp;
 Copyrights<br />
+<a href="#rfc.authors">&#167;</a>&nbsp;
+Authors' Addresses<br />
 </p>
 <br clear="all" />
 
@@ -195,7 +207,6 @@ try typing this command from the shell
 </p><pre>
     % tclsh
 </pre>
-
 <p>If the program launches,
 you're good to go with Tcl version&nbsp;8.
 </p>
@@ -204,7 +215,6 @@ you can also try:
 </p><pre>
     % wish
 </pre>
-
 <p>If a new window comes up along with a &ldquo;Console&rdquo; window,
 then you're good to go with Tk version&nbsp;8.
 </p>
@@ -220,31 +230,32 @@ so, if you don't know what it is, don't worry about it...
 
 <p>Now test your installation.
 </p>
-<a name="rfc.section.3.1"></a><h4><a name="anchor4">3.1</a>&nbsp;Testing under a windowing system</h4>
+<a name="anchor4"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.1"></a><h3>3.1.&nbsp;Testing under a windowing system</h3>
 
 <p>Type this command from the shell:
 </p><pre>
     % xml2rfc.tcl
 </pre>
-
 <p>A new window should come up that looks like this:
 </p><div style='text-align: center'><img src="xml2rfc-win.png" width="486" alt="[&ldquo;Convert XML to RFC&rdquo; window]" height="174" /></div>
 </div>
 
 <p>Fill-in the blanks and click on [Convert].
 </p>
-<a name="rfc.section.3.2"></a><h4><a name="anchor5">3.2</a>&nbsp;Testing without a windowing system</h4>
+<a name="anchor5"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.2"></a><h3>3.2.&nbsp;Testing without a windowing system</h3>
 
 <p>Type this command from the shell:
 </p><pre>
     % tclsh
 </pre>
-
 <p>If the program launches, type this command to it:
 </p><pre>
     % source xml2rfc.tcl
 </pre>
-
 <p>and you should see these four lines:
 </p><pre>
     invoke as "xml2rfc   inputfile outputfile"
@@ -252,7 +263,6 @@ so, if you don't know what it is, don't worry about it...
            or "xml2html  inputfile"
            or "xml2nroff inputfile"
 </pre>
-
 <a name="anchor6"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4"></a><h3>4.&nbsp;Next steps</h3>
@@ -263,7 +273,9 @@ In particular,
 <a href="draft-mrose-writing-rfcs.html#anchor13">Section&nbsp;3</a>
 has some good information.
 </p>
-<a name="rfc.section.4.1"></a><h4><a name="processing.instructions">4.1</a>&nbsp;Processing Instructions</h4>
+<a name="processing.instructions"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.1"></a><h3>4.1.&nbsp;Processing Instructions</h3>
 
 <p>A <span class="emph">processing instruction</span> contains
 directives to an XML application.
@@ -272,7 +284,6 @@ the processing instructions (PIs) look like this:
 </p><pre>
     &lt;?rfc keyword='value'?&gt;
 </pre>
-
 <p>Of course,
 if you like the default behavior,
 you don't need any behavior-modifying directives in your input file!
@@ -286,15 +297,14 @@ doing this for a non-include-file directive following an
 It is good practice to always surround the value with either
 single or double quotes.
 </p>
-<a name="rfc.section.4.1.1"></a><h4><a name="anchor7">4.1.1</a>&nbsp;Option Settings</h4>
+<a name="anchor7"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.1.1"></a><h3>4.1.1.&nbsp;Option Settings</h3>
 
-<p>The list of valid keywords are:
-</p><table class="data" align="center" border="1" cellpadding="2" cellspacing="2">
-<tr>
-<th align="right" width="20%">keyword</th>
-<th align="center" width="20%">default</th>
-<th align="left" width="60%">meaning</th>
-</tr>
+<p style='text-align: center'>The list of valid keywords are:
+</p><table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="right"><col align="center"><col align="left">
+<tr><th align="right">keyword</th><th align="center">default</th><th align="left">meaning</th></tr>
 <tr>
 <td align="right">autobreaks</td>
 <td align="center">yes</td>
@@ -418,6 +428,11 @@ then you can make things a little less compact by setting this to "no"
 <td align="left">generate a table-of-contents</td>
 </tr>
 <tr>
+<td align="right">tocappendix</td>
+<td align="center">yes</td>
+<td align="left">control whether the word &ldquo;Appendix&rdquo; appears in the table-of-content</td>
+</tr>
+<tr>
 <td align="right">tocdepth</td>
 <td align="center">3</td>
 <td align="left">if toc is "yes", then this determines the depth of the table-of-contents</td>
@@ -432,6 +447,11 @@ in the table-of-contents</td>
 <td align="right">tocompact</td>
 <td align="center">yes</td>
 <td align="left">if toc is "yes", then setting this to "no" will make it a little less compact</td>
+</tr>
+<tr>
+<td align="right">tocnarrow</td>
+<td align="center">yes</td>
+<td align="left">affects horizontal spacing in the table-of-content</td>
 </tr>
 <tr>
 <td align="right">topblock</td>
@@ -454,7 +474,7 @@ when a source xml element includes an <span class="verb">src</span> attribute</t
 </tr>
 </table>
 
-<p>Remember that,
+<p style='text-align: center'>Remember that,
 as with everything else in XML,
 keywords and values are case-sensitive.
 </p>
@@ -465,14 +485,15 @@ you normally put all of these processing instructions at the beginning
 of the document
 (right after the XML declaration).
 </p>
-<a name="rfc.section.4.1.2"></a><h4><a name="include.file.facility">4.1.2</a>&nbsp;Include Files</h4>
+<a name="include.file.facility"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.1.2"></a><h3>4.1.2.&nbsp;Include Files</h3>
 
 <p><span class="strong">xml2rfc</span> has an include-file facility,
 e.g.,
 </p><pre>
     &lt;?rfc include='file'?&gt;
 </pre>
-
 <p><span class="strong">xml2rfc</span> will consult the
 <span class="verb">XML_LIBRARY</span> environment variable for a
 search path of where to look for files.
@@ -518,7 +539,6 @@ if {[lsearch [split $library $sep] $nativeD] &lt; 0} {
 
 set env(XML_LIBRARY) $library
 </pre>
-
 <p>There are links to various bibliographic databases (RFCs, I-Ds, and so on)
 on the <span class="strong">xml2rfc</span>
 <a href="http://xml.resource.org/">homepage</a>.
@@ -620,7 +640,6 @@ Here are two examples, one for each case.
     &lt;postamble&gt;This is the postamble.&lt;/postamble&gt;
 &lt;/figure&gt;
 </pre></div>
-
 <p>In this case, the 
 <span class="verb">preamble</span> and
 <span class="verb">postamble</span> elements are kept and
@@ -642,7 +661,6 @@ and its textual drawing, which are ignored.
     &lt;postamble&gt;This is the postamble.&lt;/postamble&gt;
 &lt;/figure&gt;
 </pre></div>
-
 <p>In this case,
 an <span class="verb">img</span> tag is placed in the HTML output
 to replace the whole contents of the
@@ -686,26 +704,6 @@ except when generating HTML.
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="RFC2026">[1]</a></td>
 <td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc2026.txt">The Internet Standards Process -- Revision&nbsp;3</a>,&rdquo; BCP&nbsp;9, RFC&nbsp;2026, October&nbsp;1996.</td></tr>
-</table>
-
-<a name="rfc.authors"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>Author's Address</h3>
-<table width="99%" border="0" cellpadding="0" cellspacing="0">
-<tr><td class="author-text">&nbsp;</td>
-<td class="author-text">Marshall T. Rose</td></tr>
-<tr><td class="author-text">&nbsp;</td>
-<td class="author-text">Dover Beach Consulting, Inc.</td></tr>
-<tr><td class="author-text">&nbsp;</td>
-<td class="author-text">POB 255268</td></tr>
-<tr><td class="author-text">&nbsp;</td>
-<td class="author-text">Sacramento, CA  95865-5268</td></tr>
-<tr><td class="author-text">&nbsp;</td>
-<td class="author-text">US</td></tr>
-<tr><td class="author" align="right">Phone:&nbsp;</td>
-<td class="author-text">+1 916 483 8878</td></tr>
-<tr><td class="author" align="right">Email:&nbsp;</td>
-<td class="author-text"><a href="mailto:mrose@dbc.mtview.ca.us">mrose@dbc.mtview.ca.us</a></td></tr>
 </table>
 
 <a name="anchor12"></a><br /><hr />
@@ -808,7 +806,6 @@ with MS-Windows' <span class="verb">\</span>.
      }
  }
 </pre>
-
 <a name="anchor14"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.D"></a><h3>Appendix D.&nbsp;A Special Thanks</h3>
@@ -823,4 +820,33 @@ which includes many internal improvements made to the rendering engines.
 <p>Copyright &copy; 2003&ndash;2005 Marshall T. Rose
 </p>
 <p>Hold harmless the author, and any lawful use is allowed.
-</p></body></html>
+</p>
+<a name="rfc.authors"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>Authors' Addresses</h3>
+<table width="99%" border="0" cellpadding="0" cellspacing="0">
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Marshall T. Rose</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Dover Beach Consulting, Inc.</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">POB 255268</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Sacramento, CA  95865-5268</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">US</td></tr>
+<tr><td class="author" align="right">Phone:&nbsp;</td>
+<td class="author-text">+1 916 483 8878</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:mrose@dbc.mtview.ca.us">mrose@dbc.mtview.ca.us</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Charles Levert</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Montr&eacute;al, Qc</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Canada</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:charles.levert@gmail.com">charles.levert@gmail.com</a></td></tr>
+</table>
+</body></html>
