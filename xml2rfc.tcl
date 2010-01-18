@@ -9,9 +9,14 @@ exec tclsh "$0" "$0" "$@"
 # (c) 1998-01 Invisible Worlds, Inc.
 #
 
-global prog prog_version
+global prog prog_version prog_url prog_ack
 set prog "xml2rfc"
-set prog_version "v1.30"
+set prog_version "v1.31"
+set prog_url "http://xml.resource.org/"
+set prog_ack \
+"This document was produced
+using $prog&nbsp;$prog_version (of %PROGURL%)
+from a source in RFC-2629 XML format."
 
 # "encoding system" is already set at this point and we want that
 # because we print warnings and errors to the terminal.
@@ -2649,9 +2654,8 @@ proc xml2rfc {input {output ""} {remote ""}} {
         append input .xml
     }
 
-    set in_fd [open $input { RDONLY }]
-    catch { fconfigure $in_fd -encoding binary -translation lf }
     set inputD [file dirname [set ifile $input]]
+    catch { cd $inputD }
 
     if {![string compare $output ""]} {
         set output [file rootname $input].txt
@@ -2670,7 +2674,7 @@ proc xml2rfc {input {output ""} {remote ""}} {
     }
 
     if {[file exists [set file [file join $inputD .$prog.rc]]]} {
-        source $file
+        catch { source $file }
     }
 
     unex_init
@@ -2683,25 +2687,33 @@ proc xml2rfc {input {output ""} {remote ""}} {
             set mode txt
         }
 
-        xml {
-            set out_fd [open $output { WRONLY CREAT TRUNC }]
-            catch { fconfigure $out_fd -encoding utf-8 -translation lf }
-
-            puts -nonewline $out_fd [prexml [read $in_fd]]
-
-            catch { close $out_fd }
-            catch { close $in_fd }
-
-            return
-        }
+        xml {}
 
         default {
-            catch { close $in_fd }
             error "unsupported output type: $mode"
         }
     }
 
     set code [catch {
+        set in_fd [open $input { RDONLY }]
+        catch { fconfigure $in_fd -encoding binary -translation lf }
+        set data [prexml [read $in_fd]]
+        catch { close $in_fd }
+        set in_fd ""
+
+        if {![string compare $mode xml]} {
+            set out_fd [open $output { WRONLY CREAT TRUNC }]
+            catch { fconfigure $out_fd -encoding utf-8 }
+
+            puts -nonewline $out_fd $data
+
+            catch { close $out_fd }
+            set out_fd ""
+
+            # break from catch
+            break
+        }
+
         if {![string compare $parser ""]} {
             global emptyA
 
@@ -2723,10 +2735,6 @@ proc xml2rfc {input {output ""} {remote ""}} {
                         -reportempty                  0
         }
 
-        set data [prexml [read $in_fd]]
-
-        catch { close $in_fd }
-
         set errorP 0
         set passmax 2
         set out_fd ""
@@ -2736,12 +2744,13 @@ proc xml2rfc {input {output ""} {remote ""}} {
             }
             if {$passno >= 2} {
                 set out_fd [open $output { WRONLY CREAT TRUNC }]
-                catch { fconfigure $out_fd -encoding utf-8 -translation lf }
+                catch { fconfigure $out_fd -encoding utf-8 }
             }
             pass start
             $parser parse $data
             pass end
             catch { close $out_fd }
+            set out_fd ""
             if {$errorP} {
                 break
             }
@@ -2750,9 +2759,15 @@ proc xml2rfc {input {output ""} {remote ""}} {
     set ecode $errorCode
     set einfo $errorInfo
 
+    catch { close $in_fd }
+    set in_fd ""
     catch { close $out_fd }
+    set out_fd ""
 
-    if {$code == 1} {
+    if {$code == 3} {
+        # break ($mode == xml)
+        set code 0
+    } elseif {$code == 1} {
         set result [around2fl $result]
 
         catch {
@@ -2764,11 +2779,11 @@ proc xml2rfc {input {output ""} {remote ""}} {
   "Context (format:  \"file_basename:line_in_file:#elem_num:<elem ...>\"):"
                 while {$i > 0} {
                     set frame [lindex $stack [incr i -1]]
-                    catch { unset attrs }
+                    set attrs 0; unset attrs
                     array set attrs [list av ""]
                     array set attrs [lrange $frame 1 end]
                     append text "\n    "
-                    append text [linefile::get_file $attrs(fnum) 1]:
+                    append text [linefile::get_fake_file $attrs(fnum) 1]:
                     append text $attrs(line):#$attrs(elemN):
                     append text "<[lindex $frame 0]"
                     foreach {k v} $attrs(av) {
@@ -2844,7 +2859,7 @@ proc xml2ref {input output {formats {}} {item ""}} {
     array set ref $result
 
     set out_fd [open $output { WRONLY CREAT TRUNC }]
-    catch { fconfigure $out_fd -encoding utf-8 -translation lf }
+    catch { fconfigure $out_fd -encoding utf-8 }
 
     set code [catch {
         puts -nonewline $out_fd $ref(body)
@@ -2854,12 +2869,13 @@ proc xml2ref {input output {formats {}} {item ""}} {
     set einfo $errorInfo
 
     catch { close $out_fd }
+    set out_fd ""
 
     if {($code == 0) \
             && ([string compare $item ""]) \
             && ([string compare $ref(info) ""])} {
         set out_fd [open $item { WRONLY CREAT TRUNC }]
-        catch { fconfigure $out_fd -encoding utf-8 -translation lf }
+        catch { fconfigure $out_fd -encoding utf-8 }
 
         set code [catch {
             puts -nonewline $out_fd $ref(info)
@@ -2869,6 +2885,7 @@ proc xml2ref {input output {formats {}} {item ""}} {
         set einfo $errorInfo
 
         catch { close $out_fd }
+        set out_fd ""
 
         #catch { file mtime $item $ref(mtime) }
     }
@@ -2883,7 +2900,18 @@ proc xml2ref {input output {formats {}} {item ""}} {
 #       {{{2 Some XML preprocessor globals
 
 global httpP
-set httpP 0
+if {[catch { package require http 2 }]} {
+    set httpP 0
+} else {
+    set httpP 1
+    catch {
+        package require autoproxy
+        autoproxy::init
+    }
+    # Make sure it's auto-loaded before attempting to modify its variable.
+    ::http::config
+    set ::http::defaultCharset unknown
+}
 
 global xml_library_path
 set xml_library_path {.}
@@ -2894,7 +2922,6 @@ set xml_library_path {.}
 proc prexml {stream} {
     global env tcl_platform
     global intentities extentities extfiles exturis
-    global httpP
     global xml_library_path
     global ifile
 
@@ -2908,21 +2935,12 @@ proc prexml {stream} {
     set xml_library_path [split $xml_library_path $c]
 
     set stream [prexml_cdata $stream]
-    linefile::new_file $ifile
+    set ifnum [linefile::new_file $ifile $ifile]
 
     catch { array unset intentities }
     catch { array unset extentities }
     catch { array unset extfiles }
     catch { array unset exturis }
-
-    if {[catch { package require http 2 }]} {
-        set httpP 0
-    } else {
-        set httpP 1
-        # Make sure it's auto-loaded before attempting to modify its variable.
-        ::http::config
-        set ::http::defaultCharset unknown
-    }
 
     if {   [regexp -- {^<\?xml[ \t\r\n]} $stream]
         && ([set plen [string first "?>" $stream]] >= 0)} {
@@ -2944,7 +2962,8 @@ proc prexml {stream} {
     set n [num_eols $XMLDecl]
     set XMLDecl "<?xml version=\"1.0\" encoding=\"UTF-8\"[string repeat \n $n]?>"
 
-    return $XMLDecl[prexml_stream $stream $ifile [expr 1 + $n]]
+    linefile::push_fnum $ifnum
+    return $XMLDecl[prexml_stream $stream [expr 1 + $n]]
 }
 
 #       }}}2 XML preprocessor entry function
@@ -2993,7 +3012,14 @@ proc prexml_cdata {stream} {
 #       }}}2 XML preprocessor initial conversions
 #       {{{2 XML preprocessor stream (file) handling
 
-proc prexml_stream {stream myfile {myline 1} {no_initial_pi 0}} {
+proc prexml_stream {stream {myline 1} {no_initial_pi 0}} {
+    # Uses uplevel proc prexml_error.
+    # Uses uplevel proc prexml_flush_blank.
+    # Uses uplevel proc prexml_flush_new.
+    # Uses uplevel proc prexml_flush_pi.
+    # Uses uplevel proc prexml_flush_includes.
+    # Uses uplevel proc prexml_prep_entity.
+
     global extentities intentities
 
     if {[info level] > 32} {
@@ -3007,11 +3033,11 @@ proc prexml_stream {stream myfile {myline 1} {no_initial_pi 0}} {
     set nme  {([A-Za-z_:][A-Za-z0-9._:-]*)}
     set rem  (.*)
 
+    set myfnum [linefile::get_real_fnum]
     if {$no_initial_pi} {
-        linefile::set_file $myfile
         set data ""
     } else {
-        set data [linefile::make_pi $myfile $myline 1]
+        set data [linefile::make_pi $myfnum $myline 1]
     }
 
     # We don't modify stream but scan across it and build data.
@@ -3048,8 +3074,7 @@ proc prexml_stream {stream myfile {myline 1} {no_initial_pi 0}} {
         switch -- $m {
             <?rfc {
                 if {![regexp -indices -start $b -- {\?>} $stream x]} {
-                    error \
-  "missing close to $m around input line $myline in \"$myfile\""
+                    prexml_error "missing close to $m"
                 }
                 set c [lindex $x 0]
                 set pi [string range $stream $b [expr $c - 1]]
@@ -3074,8 +3099,7 @@ proc prexml_stream {stream myfile {myline 1} {no_initial_pi 0}} {
                         # We may be able to provide a better message later.
                         if {   [string compare $val ""]
                             && ![string compare $mode xml]} {
-                            error \
-  "stopped preprocessing faulty rfc-PI at \"$val\" around input line $myline in \"$myfile\""
+                            prexml_error "stopped preprocessing faulty rfc-PI at \"$val\""
                         }
                         # This makes sure the faulty rfc-PI is kept for later stages.
                         incr kept_pi_dirs
@@ -3084,11 +3108,13 @@ proc prexml_stream {stream myfile {myline 1} {no_initial_pi 0}} {
                     switch -- $key {
                         include {
                             set pi [streplace $pi $pi2s [expr $pi2l - [string length $pi2] + 1] "" 3]
-                            foreach {file include charset} [prexml_find_file $val] {break}
+                            foreach {fnum include charset} [prexml_find $val] {break}
 
-                            set include [prexml_tweak_include $include $file $charset]
+                            set include [prexml_tweak_include $include $fnum $charset]
                             if {[string compare $include ""]} {
-                                append includes [prexml_stream $include $file 1]
+                                linefile::push_fnum $fnum
+                                append includes [prexml_stream $include 1]
+                                linefile::pop_fake_fnum
                             }
                         }
 
@@ -3100,7 +3126,7 @@ proc prexml_stream {stream myfile {myline 1} {no_initial_pi 0}} {
                                 # supply its own line information which
                                 # is not set up at this point.
                                 unexpected warning \
-  "ignoring invalid rfc-PI linefile-directive value \"$val\" around input line $myline in \"$myfile\""
+  "ignoring invalid rfc-PI linefile-directive value \"$val\" around input line $myline in \"[linefile::get_fake_file $myfnum]\""
                                 continue
                             }
                             prexml_flush_blank
@@ -3121,7 +3147,7 @@ proc prexml_stream {stream myfile {myline 1} {no_initial_pi 0}} {
                 # intermixed error or warning messages are not affected.
                 if {[info exists new_myline]} {
                     if {[info exists new_myfile]} {
-                        set myfile $new_myfile
+                        set myfnum [linefile::set_file $new_myfile]
                         unset new_myfile
                     }
                     set myline $new_myline
@@ -3140,8 +3166,7 @@ proc prexml_stream {stream myfile {myline 1} {no_initial_pi 0}} {
 
             <!ENTITY {
                 if {![regexp -indices -start $b -- {>} $stream x]} {
-                    error \
-  "missing close to $m around input line $myline in \"$myfile\""
+                    prexml_error "missing close to $m"
                 }
                 set c [lindex $x 0]
                 set entdecl [string range $stream $b [expr $c - 1]]
@@ -3163,13 +3188,12 @@ proc prexml_stream {stream myfile {myline 1} {no_initial_pi 0}} {
                     set entdecl [string trimleft [string range $entdecl 1 end]]
                 }
                 if {![regexp -- ^$nme$rem $entdecl x entity entdef]} {
-                    error \
-  "expecting $m entity-name ... around input line $myline in \"$myfile\""
+                    prexml_error "expecting $m entity-name ..."
                 }
 
                 if {   [regexp -- ^$wsp+$dqev$rem $entdef x arg1 y]
                     || [regexp -- ^$wsp+$sqev$rem $entdef x arg1 y]} {
-                    set file $myfile
+                    set fnum $myfnum
                     set include [prexml_cdata $arg1]
                     set line [expr $myline + $new_lines + $blank_lines \
                                    - [num_eols $include$y]]
@@ -3180,35 +3204,29 @@ proc prexml_stream {stream myfile {myline 1} {no_initial_pi 0}} {
                 if {![regexp -nocase -- \
                              ^$wsp*(SYSTEM|PUBLIC)$rem \
                              $entdef x idtype entid]} {
-                    error \
-  "expecting $m $entity SYSTEM, PUBLIC, 'def', or \"def\" around input line $myline in \"$myfile\""
+                    prexml_error \
+  "expecting $m $entity SYSTEM, PUBLIC, 'def', or \"def\""
                 }
                 if {   ![regexp -- ^$wsp+$dqev$rem $entid x arg1 arg2]
                     && ![regexp -- ^$wsp+$sqev$rem $entid x arg1 arg2]} {
-                    error \
-  "expecting literal after $m $entity $idtype around input line $myline in \"$myfile\""
+                    prexml_error "expecting literal after $m $entity $idtype"
                 }
                 set idtype [string toupper $idtype]
                 switch -- $idtype {
                     SYSTEM {
-                        if {[string first "http://" $arg1] == 0} {
-                            set l [prexml_find_uri $arg1]
-                        } else {
-                            set l [prexml_find_file $arg1]
-                        }
+                        set l [prexml_find $arg1]
                     }
 
                     PUBLIC {
                         if {   ![regexp -- ^$wsp+$dqev $arg2 z arg2]
                             && ![regexp -- ^$wsp+$sqev $arg2 z arg2]} {
-                            error \
-  "expecting literal after $m $entity $idtype around input line $myline in \"$myfile\""
+                            prexml_error "expecting literal after $m $entity $idtype"
                         }
-                        set l [prexml_find_uri $arg2]
+                        set l [prexml_find $arg2]
                     }
                 }
-                foreach {file include charset} $l {break}
-                set include [prexml_tweak_include $include $file $charset]
+                foreach {fnum include charset} $l {break}
+                set include [prexml_tweak_include $include $fnum $charset]
                 set line 1
                 set extentities($entity) [prexml_prep_entity]
             }
@@ -3229,11 +3247,11 @@ proc prexml_stream {stream myfile {myline 1} {no_initial_pi 0}} {
                     append new_data &
                     continue
                 }
-                foreach {inc_file inc_line include end_file} $l {break}
+                foreach {inc_fnum inc_line include end_fnum} $l {break}
                 if {[string compare $include ""]} {
-                    append includes [linefile::make_pi $inc_file $inc_line]
+                    append includes [linefile::make_pi $inc_fnum $inc_line]
                     append includes $include
-                    linefile::set_file $end_file
+                    linefile::set_fake_fnum $end_fnum
                 }
                 set start [incr c]
             }
@@ -3251,6 +3269,12 @@ proc prexml_stream {stream myfile {myline 1} {no_initial_pi 0}} {
 
 #       }}}2 XML preprocessor stream (file) handling
 #       {{{2 Uplevel procs meant for use by prexml_stream
+
+proc prexml_error {e} {
+    upvar myfnum myfnum myline myline
+
+    error "$e around input line $myline in \"[linefile::get_fake_file $myfnum]\""
+}
 
 proc prexml_flush_blank {} {
     uplevel 1 {
@@ -3279,7 +3303,7 @@ proc prexml_flush_pi {} {
     uplevel 1 {
         if {$pending_pi} {
             prexml_flush_blank
-            append data [linefile::make_pi $myfile $myline]
+            append data [linefile::make_pi $myfnum $myline]
             set pending_pi 0
         }
     }
@@ -3298,57 +3322,110 @@ proc prexml_flush_includes {} {
 
 proc prexml_prep_entity {} {
     uplevel 1 {
-        set saved_file [linefile::get_file]
         if {[string compare $include ""]} {
-            set include [prexml_stream $include $file $line 1]
-            set end_file [linefile::get_file]
+            linefile::push_fnum $fnum
+            set include [prexml_stream $include $line 1]
+            set end_fnum [linefile::pop_fake_fnum]
         } else {
-            set end_file $myfile
+            set end_fnum $myfnum
         }
-        linefile::set_file $saved_file
-        return [list $file $line $include $end_file]
+        return [list $fnum $line $include $end_fnum]
     }
 }
 
 #       }}}2 Uplevel procs meant for use by prexml_stream
 #       {{{2 Regular, non-uplevel, support procs for prexml_stream.
 
-proc prexml_find_file {f} {
-    global extfiles
-    global xml_library_path
+proc prexml_find {uf} {
+    # Remote absolute path.
+    if {[string first "http://" $uf] == 0} {
+        return [prexml_find_uri $uf $uf]
+    }
 
-    if {[info exists extfiles($f)]} {
-        return $extfiles($f)
+    # Local absolute path.
+    if {![string compare [file pathtype $uf] absolute]} {
+        set f [file normalize $uf]
+        return [prexml_find_file $uf $f]
+    }
+
+    set fulldir [linefile::get_real_fulldir]
+
+    # Local fulldir + relative path.
+    if {[string first "://" $fulldir] < 0} {
+        set f [file normalize [file join $fulldir $uf]]
+        if {![catch { set v [prexml_find_file $uf $f] }]} {
+            return $v
+        }
+    }
+
+    # Scan XML_LIBRARY directories.
+    global xml_library_path
+    foreach dir $xml_library_path {
+        set f [file normalize [file join $dir $uf]]
+        if {![catch { set v [prexml_find_file $uf $f] }]} {
+            return $v
+        }
+    }
+
+    # Remote fulldir + relative path.  (Go to network last.)
+    if {[string first "http://" $fulldir] == 0} {
+        set u $fulldir/$uf
+        while {[regsub -- {^([^?#]*[^/?#])/\./} $u {\1/} u]} {}
+        while {[regsub -expanded -- {^([^?#]*[^/?#])
+                                     /([^/?#]
+                                      |[^/?#][^/?#.]
+                                      |[^/?#.][^/?#]
+                                      |[^/?#]{3,})
+                                     /\.\./} $u {\1/} u]} {}
+        while {[regsub -- {^([^?#]*[^/?#])/\.\./} $u {\1/} u]} {}
+        return [prexml_find_uri $uf $u]
+    }
+
+    error "unable to find external file \"$uf\" or \"$uf.xml\""
+}
+
+proc prexml_find_file {s f} {
+    global extfiles
+
+    if {   [info exists extfiles([set fx $f])]
+        || [info exists extfiles([set fx $f.xml])]} {
+        set fnum [linefile::new_file $s $fx]
+        return [concat $fnum extfiles($fx)]
     }
 
     set foundP 0
-    foreach dir $xml_library_path {
-        if {   ![file exists [set file [file join $dir [set fx $f]]]]
-            && ![file exists [set file [file join $dir [set fx $f.xml]]]]} {
-            continue
+    catch {
+        if {   ![file exists [set file [set fx $f    ]]]
+            && ![file exists [set file [set fx $f.xml]]]} {
+            break
         }
-        set fd [open $file { RDONLY }]
-        catch { fconfigure $fd -encoding binary -translation lf }
-        set content [prexml_cdata [read $fd]]
+        set fd ""
+        catch {
+            set fd [open $file { RDONLY }]
+            catch { fconfigure $fd -encoding binary -translation lf }
+            set content [prexml_cdata [read $fd]]
+            set foundP 1
+        }
         catch { close $fd }
-        set foundP 1
-        break
     }
     if {!$foundP} {
-        error "unable to find external file \"$f\" or \"$f.xml\""
+        error "unable to find external file \"$s\" or \"$s.xml\""
     }
 
-    linefile::new_file $fx
+    set fnum [linefile::new_file $s $fx]
+    set extfiles($fx) [list $content UTF-8]
 
-    return [set extfiles($f) [list $fx $content UTF-8]]
+    return [list $fnum $content UTF-8]
 }
 
-proc prexml_find_uri {u} {
+proc prexml_find_uri {s u} {
     global exturis
     global httpP
 
-    if {[info exists exturis($u)]} {
-        return $exturis($u)
+    if {   [info exists exturis([set ux $u    ])]
+        || [info exists exturis([set ux $u.xml])]} {
+        set fnum [linefile::new_file $s $ux]
+        return [concat $fnum exturis($ux)]
     }
 
     if {!$httpP} {
@@ -3360,24 +3437,26 @@ proc prexml_find_uri {u} {
     # IANA charset name), so it cannot be trusted with these conversions.
     set httpV [package present http]
     regexp -- {^[0-9]+\.[0-9]+} $httpV httpV
-    set file $u
-    if {$httpV >= 2.4} {
-        set httpT [http::geturl $file -binary true]
-    } else {
-        set httpT [http::geturl $file]
-    }
-    set code [http::code $httpT]
-    if {![string compare [lindex $code 1] 404]} {
-        set file $file.xml
+    set code "http package failed"
+    catch {
         if {$httpV >= 2.4} {
-            set httpT [http::geturl $file -binary true]
+            set httpT [http::geturl $u -binary true]
         } else {
-            set httpT [http::geturl $file]
+            set httpT [http::geturl $u]
         }
         set code [http::code $httpT]
+        if {![string compare [lindex $code 1] 404]} {
+            set u $u.xml
+            if {$httpV >= 2.4} {
+                set httpT [http::geturl $u -binary true]
+            } else {
+                set httpT [http::geturl $u]
+            }
+            set code [http::code $httpT]
+        }
     }
     if {[string compare [lindex $code 1] 200]} {
-        error "$file: $code"
+        error "$u: $code"
     }
     upvar #0 $httpT httpS
     set content [http::data $httpT]
@@ -3399,12 +3478,13 @@ proc prexml_find_uri {u} {
     set content [prexml_cdata $content]
     http::cleanup $httpT
 
-    linefile::new_file $file
+    set fnum [linefile::new_file $s $u]
+    set exturis($u) [list $content $default_charset]
 
-    return [set exturis($u) [list $file $content $default_charset]]
+    return [list $fnum $content $default_charset]
 }
 
-proc prexml_tweak_include {include {convert_file ""} {default_charset UTF-8}} {
+proc prexml_tweak_include {include {convert_fnum -1} {default_charset UTF-8}} {
     set start 0
     set XMLDecl ""
     set body [string trimleft $include]
@@ -3423,8 +3503,10 @@ proc prexml_tweak_include {include {convert_file ""} {default_charset UTF-8}} {
 
         set start [expr $end + 1]
     }
-    if {[string compare $convert_file ""]} {
-        set include [prexml_convert $XMLDecl $include $convert_file $default_charset]
+    if {$convert_fnum >= 0} {
+        set include [prexml_convert $XMLDecl $include \
+                                    [linefile::get_fake_file $convert_fnum] \
+                                    $default_charset]
     }
     # Now that we are in UTF-8.
     set xml11 [expr   [regexp -- {[ \t\r\n]version="1\.[1-9][0-9]*"} $XMLDecl] \
@@ -3519,7 +3601,7 @@ proc around2fl {result} {
         append result [set x " around line $lineno"]
     }
 
-    set file [linefile::get_file]
+    set file [linefile::get_fake_file]
     set line [linefile::get_line [expr $lineno + $pcdata_line_offset]]
 
     set tail " around input line $line"
@@ -3535,17 +3617,18 @@ proc around2fl {result} {
 
 #   {{{1 The linefile stuff in its own namespace
 
-
 namespace eval linefile {
-    variable offset 1 fnum 0 fncache {{}}
+    variable  offset 1  fncache {{}}  real_stack {0}  fake_stack {0}
 }
 
 proc linefile::init {} {
     variable offset
-    variable fnum
+    variable real_stack
+    variable fake_stack
 
     set offset 1
-    set fnum 0
+    set real_stack {0}
+    set fake_stack {0}
 }
 
 proc linefile::get_line {{lineno -1}} {
@@ -3564,59 +3647,143 @@ proc linefile::set_line {line} {
     set offset [expr $line - $::xdv::lineno]
 }
 
-proc linefile::new_file {file} {
+proc linefile::new_file {file {fullpath ""}} {
     variable fncache
 
-    if {[set num [lsearch -exact $fncache $file]] < 0} {
-        set num [llength $fncache]
-        lappend fncache $file
+    set fn [list $file $fullpath]
+
+    if {[set fnum [lsearch -exact $fncache $fn]] < 0} {
+        set fnum [llength $fncache]
+        lappend fncache $fn
     }
-
-    return $num
-}
-
-proc linefile::get_fnum {} {
-    variable fnum
 
     return $fnum
 }
 
-proc linefile::get_file {{num -1} {basename 0}} {
+proc linefile::get_real_fnum {} {
+    variable real_stack
+
+    lindex $real_stack end
+}
+
+proc linefile::get_fake_fnum {} {
+    variable fake_stack
+
+    lindex $fake_stack end
+}
+
+proc linefile::get_real_key {{fnum -1}} {
     variable fncache
 
-    if {$num < 0} {
-        variable fnum
-
-        set num $fnum
+    if {$fnum < 0} {
+        set fnum [get_real_fnum]
     }
-    set file [lindex $fncache $num]
 
-    if {$basename} {
+    lindex $fncache $fnum
+}
+
+proc linefile::get_fake_key {{fnum -1}} {
+    variable fncache
+
+    if {$fnum < 0} {
+        set fnum [get_fake_fnum]
+    }
+
+    lindex $fncache $fnum
+}
+
+proc linefile::get_fake_file {{fnum -1} {basename 0}} {
+    set file [lindex [get_fake_key $fnum] 0]
+
+    set sep "[file join \[/ \]]"
+    if {$basename > 0} {
         # Only keep base name of file.
-        regsub -- "^.*[file join \[/ \]]" $file {} file
+        regsub -- "^.*$sep" $file {} file
     }
 
     return $file
 }
 
-proc linefile::set_fnum {num} {
-    variable fnum
-
-    set fnum $num
+proc linefile::get_real_fullpath {{fnum -1}} {
+    lindex [get_real_key $fnum] 1
 }
 
-proc linefile::set_file {file} {
-    variable fnum
+proc linefile::get_real_fulldir {{fnum -1}} {
+    set fullpath [lindex [get_real_key $fnum] 1]
 
-    return [set fnum [new_file $file]]
+    if {[string first :// $fullpath] >= 0} {
+        set sep {[/]}
+    } else {
+        set sep "[file join \[/ \]]"
+    }
+    set fulldir ""
+    regexp -- "^(.*)$sep" $fullpath x fulldir
+    if {   ![string compare $fulldir ""]
+        && ![regexp -- "^${sep}+" $fullpath fulldir]} {
+        global tcl_platform
+        switch -- $tcl_platform(platform) {
+            macintosh { set dir : }
+            default   { set dir . }
+        }
+    }
+
+    return $fulldir
 }
 
-proc linefile::make_pi {file line {force_file 0}} {
-    variable fnum
+proc linefile::set_real_fnum {fnum} {
+    variable real_stack
 
-    set num [new_file $file]
-    if {$force_file || $num != $fnum} {
-        set fnum $num
+    set real_stack [lreplace real_stack end end $fnum]
+
+    return $fnum
+}
+
+proc linefile::set_fake_fnum {fnum} {
+    variable fake_stack
+
+    set fake_stack [lreplace fake_stack end end $fnum]
+
+    return $fnum
+}
+
+proc linefile::set_file {file {fullpath ""}} {
+    set fnum [new_file $file $fullpath]
+    if {[string compare $fullpath ""]} {
+        set_real_fnum $fnum
+    } else {
+        set_fake_fnum $fnum
+    }
+}
+
+proc linefile::push_fnum {fnum} {
+    variable real_stack
+    variable fake_stack
+
+    lappend real_stack $fnum
+    lappend fake_stack $fnum
+
+    return $fnum
+}
+
+proc linefile::push_file {file {fullpath ""}} {
+    push_fnum [new_file $file $fullpath]
+}
+
+proc linefile::pop_fake_fnum {} {
+    variable real_stack
+    variable fake_stack
+
+    set fnum [lindex $fake_stack end]
+    set real_stack [lreplace $real_stack end end]
+    set fake_stack [lreplace $fake_stack end end]
+
+    return $fnum
+}
+
+proc linefile::make_pi {fnum line {force_file 0}} {
+    if {$force_file || $fnum != [get_fake_fnum]} {
+        set_fake_fnum $fnum
+        set file [get_fake_file $fnum]
         regsub -all -- & $file {\&amp;} file
         if {[string first \" $file] < 0} {
             set lcf \"$line:$file\"
@@ -3633,7 +3800,6 @@ proc linefile::make_pi {file line {force_file 0}} {
     return "<?rfc linefile=$lcf?>"
 }
 
-
 #   }}}1 The linefile stuff in its own namespace
 
 #   {{{1 XML linkage
@@ -3646,8 +3812,23 @@ proc linefile::make_pi {file line {force_file 0}} {
 #       elemN - index of current element
 #        elem - array, indexed by elemN, having:
 #               list of element attributes,
-#               plus ".CHILDREN", ".COUNTER", ".CTEXT", ".NAME",
-#                    ".ANCHOR", ".EDITNO"
+#               plus in pass 1
+#                   .ANCHOR
+#                   .CHILDREN
+#                   .COUNTER
+#                   .CTEXT
+#                   .EDITNO
+#                   .FMTCOUNTER
+#                   .LONGEST_ROMAN
+#                   .MAX
+#                   .MIN
+#                   .NAME
+#               plus in further passes
+#                   .ANNOTATIONS
+#                   .FMTTOKEN
+#                   .FORMAT
+#                   .STYLE
+#                   .WIDTH
 #      passno - 1 or 2 (or maybe 3, if generating a TOC)
 #       stack - the stack of elements, each frame having:
 #               { element-name "elemN" elemN "children" { elemN... }
@@ -3670,25 +3851,28 @@ proc pass {tag} {
             set pass_was_stable 1
             if {$passno == 1} {
                 set pass_was_stable 0
-                catch { unset counter }
+                catch { array unset counter }
                 set counter(firstxref) {}
-                catch { unset depth }
-                catch { unset elem }
-                catch { unset xref }
-                catch { unset crefs }
-                catch { unset erefs }
+                catch { array unset depth }
+                catch { array unset elem }
+                catch { array unset xref }
+                catch { array unset crefs }
+                catch { array unset erefs }
                 set anchorN 0
                 set root [list {}]
+            } else {
+                catch { unset counter(references) }
+                array unset counter list/*
             }
-            catch { unset counter(references) }
             set elemN 0
-            catch { unset options }
-            # "subcompact" must not be on this list.
+            catch { array unset options }
+
+            # "compact" and "subcompact" must not be on this list.
             array set options [list autobreaks  yes \
+                                    authorship  yes \
                                     background  ""  \
                                     colonspace  no  \
                                     comments    no  \
-                                    compact     no  \
                                     editing     no  \
                                     emoticonic  no  \
                                     footer      ""  \
@@ -3697,6 +3881,7 @@ proc pass {tag} {
                                     iprnotified no  \
                                     linkmailto  yes \
                                     private     ""  \
+                                    rfcedstyle  no  \
                                     slides      no  \
                                     sortrefs    no  \
                                     strict      no  \
@@ -3708,9 +3893,11 @@ proc pass {tag} {
                                     tocnarrow   yes \
                                     tocappendix yes \
                                     topblock    yes \
-                                    useobject   no]
+                                    useobject   no  \
+                                    rfcprocack  no]
             normalize_options
-            catch { unset stack }
+
+            set stack 0; unset stack
             linefile::init
         }
 
@@ -3718,6 +3905,10 @@ proc pass {tag} {
             set elemZ $elemN
 
             if {($passno == 1) && ($options(.STRICT))} {
+                # We can only see line numbers from the preprocessed XML.
+                # linefile::get_line won't work once we hit the first include.
+                linefile::init
+                linefile::set_file "internally-preprocessed XML"
                 xdv::validate_tree [lindex [lindex $root 0] 0] \
                      rfc2629.cmodel  rfc2629.rattrs rfc2629.oattrs \
                      rfc2629.anchors rfc2629.pcdata
@@ -3737,7 +3928,6 @@ global required ctexts categories
 # This must be kept in lexicographical order for string compare.
 set required {
                appendix   { title  }
-               date       { year }
                eref       { target }
                format     { type }
                iref       { item }
@@ -3755,6 +3945,10 @@ set ctexts   { area artwork city code country cref email eref facsimile
 #       }}}2 Some globals
 #       {{{2 Categories and IPR status texts
 
+# From the rfc-editor/instructions2authors.txt file, Appendix A, Subsection A.1.
+# Currently draft-rfc-editor-rfc2223bis-08, which is expired.
+# It says "This memo does not..." but the RFC Editor uses "It does not...".
+# Authoritative source of "Historic" text unknown.
 set categories \
              { {std  "Standards Track" STD
 "This document specifies an Internet standards track protocol for the Internet
@@ -3785,6 +3979,19 @@ Distribution of this memo is unlimited."}
 It does not specify an Internet standard of any kind.
 Distribution of this memo is unlimited."} }
 
+# From
+#     RFC 2026 (BCP 9)
+#         ?
+#     RFC 3667 (obsolete version of BCP 78)
+#         Section 5.1  IPR Disclosure Acknowledgement
+#         Section 5.2  Derivative Works Limitation
+#             Notices a and b
+#             Extracted Material appendage
+#     RFC 3978 (current version of BCP 78)
+#         Section 5.1  IPR Disclosure Acknowledgement
+#         Section 5.2  Derivative Works Limitation
+#             Notices a and b
+#             Extracted Material appendage
 set iprstatus \
              { {full2026
 "This document is an Internet-Draft and is
@@ -3946,16 +4153,27 @@ proc begin {name {av {}} } {
                     #    set elem($elemN) [array get attrs]
                     #}
                 }
-                global entities oentities xentities
+                if {![catch { set attrs(submissionType) }]} {
+                    switch -- $attrs(submissionType) {
+                        IETF - independent {}
+                        default {
+                            unexpected error \
+                                "submissionType=\"$attrs(submissionType)\" attribute unknown in #$elemN:<rfc>"
+                        }
+                    }
+                }
+                global entities oentities xentities uentities
+                global prog prog_version
                 if {[catch { set number $attrs(number) }]} {
                     set number XXXX
                 }
                 set entities  [linsert $oentities 0 {&rfc\.number;} $number]
                 set xentities [linsert $xentities 0 {&rfc\.number;} $number]
+                set uentities [linsert $uentities 0 {&rfc\.number;} $number]
             }
 
             back {
-                catch { unset depth(section) }
+                set depth(section) 0; unset depth(section)
             }
 
             abstract {
@@ -4007,6 +4225,21 @@ proc begin {name {av {}} } {
                     set depth(list) 1
                     set counter(list) 0
                 }
+
+                if {   [info exists attrs(counter)]
+                    && [string compare [set c $attrs(counter)] ""]} {
+                    if {![info exists counter(list/$c)]} {
+                        set counter(list/$c) 0
+                        set counter(list-max/$c) 0
+                        set counter(list-longest-roman/$c) 1
+                    }
+                    set attrs(.MIN) [expr $counter(list-max/$c) + 1]
+                } else {
+                    set attrs(.MIN) 1
+                }
+                set attrs(.MAX) 0
+                set attrs(.LONGEST_ROMAN) 1
+                set elem($elemN) [array get attrs]
             }
 
             t {
@@ -4014,12 +4247,51 @@ proc begin {name {av {}} } {
                     set counter(editno) 1
                 }
                 set attrs(.EDITNO) $counter(editno)
-                set elem($elemN) [array get attrs]
-                if {[lsearch0 $stack list] >= 0} {
+                if {[set l [llast0 $stack list]] >= 0} {
                     set counter(list) [counting $counter(list) $depth(list)]
                     set attrs(.COUNTER) $counter(list)
-                    set elem($elemN) [array get attrs]
                     set value $attrs(.COUNTER)
+
+                    set le [lindex [lindex $stack $l] 2]
+                    array set lv $elem($le)
+                    if {   [info exists lv(counter)]
+                        && [string compare [set c $lv(counter)] ""]} {
+                        set x [incr counter(list/$c)]
+                        set z 1
+                    } else {
+                        set x [lindex [split $attrs(.COUNTER) .] end]
+                        set z 0
+                    }
+                    set attrs(.FMTCOUNTER) $x
+
+                    # Also update counter(list*/$c) values now, not in end,
+                    # in case someone decides to reuse the $c counter
+                    # in an inner list (which would be weird, but hey).
+                    if {$x > $lv(.MAX)} {
+                        set lv(.MAX) $x
+                        if {$z} {
+                            if {$x > $counter(list-max/$c)} {
+                                set counter(list-max/$c) $x
+                            }
+                        }
+                    }
+
+                    set y $lv(.LONGEST_ROMAN)
+                    if {   $x != $y
+                        && [string length [offset2romans $x]] >
+                           [string length [offset2romans $y]]} {
+                        set lv(.LONGEST_ROMAN) $x
+                        if {$z} {
+                            set y $counter(list-longest-roman/$c)
+                            if {   $x != $y
+                                && [string length [offset2romans $x]] >
+                                   [string length [offset2romans $y]]} {
+                                set counter(list-longest-roman/$c) $x
+                            }
+                        }
+                    }
+
+                    set elem($le) [array get lv]
                 } else {
                     set frame [lindex $stack end]
                     set value 1
@@ -4030,6 +4302,7 @@ proc begin {name {av {}} } {
                         }
                     }
                 }
+                set elem($elemN) [array get attrs]
             }
 
             figure {
@@ -4194,7 +4467,8 @@ proc begin {name {av {}} } {
         set ctext no
     }
     lappend stack [list $name elemN $elemN children "" ctext $ctext av $av \
-                        line [linefile::get_line] fnum [linefile::get_fnum]]
+                        line [linefile::get_line] \
+                        fnum [linefile::get_fake_fnum]]
 }
 
 proc counting {tcount tdepth} {
@@ -4215,7 +4489,7 @@ proc counting {tcount tdepth} {
 # end element
 
 proc end {name} {
-    global counter depth elemN elem passno stack xref
+    global counter depth elem passno stack xref
     global root
 
     set frame [lindex $stack end]
@@ -4284,7 +4558,7 @@ proc end {name} {
 #       {{{2 Character data (PCDATA) callback
 
 proc pcdata {text} {
-    global counter depth elemN elem passno stack xref
+    global depth elem passno stack xref
     global mode
     global root
     global page_width page_basic_indent
@@ -4300,6 +4574,8 @@ proc pcdata {text} {
 
     set frame [lindex $stack end]
 
+    set spans {}
+    set divs  {}
     if {([lsearch0 $stack references] >= 0) \
             && ([lsearch0 $stack annotation] < 0)} {
         set pre -1
@@ -4309,8 +4585,8 @@ proc pcdata {text} {
                 if {$passno == 1} {
                     set pre 1
                 } else {
-                    # Will end up positive by incrementation.
-                    set pre 0
+                    # Will end up positive by incrementation and checks.
+                    set pre [current_align_bias]
                     set elemX [lindex $frame 2]
                     # It won't work to get attrs from $frame.
                     array set attrs $elem($elemX)
@@ -4328,11 +4604,45 @@ proc pcdata {text} {
                                     "align=\"$align\" attribute is invalid"
                             }
                         }
-                        if {$pre < 0} {
-                            set pre 0
+                        if {$pre > $rw} {
+                            set pre $rw
+                        }
+                        switch -- $align {
+                            center - right {
+                                if {$pre < 0} {
+                                    set pre 0
+                                }
+                            }
                         }
                     }
                     incr pre $page_basic_indent
+                    if {$pre < 0} {
+                        set pre 0
+                    }
+                    # pre = 1 + total indent
+                    incr pre
+
+                    # Typed-<artwork> validation.
+                    set type ""
+                    catch { set type $attrs(type) }
+                    if {[info exists attrs(.VALID)]} {
+                        set valid $attrs(.VALID)
+                        catch { set spans $attrs(.SPANS) }
+                        catch { set divs  $attrs(.DIVS)  }
+                        catch { set data  $attrs(.SDATA) }
+                    } else {
+                        set data [ent_expand $text]
+                        foreach {valid spans divs} [ \
+                            artwork::validate_highlight $type $data \
+                        ] {break}
+                        set attrs(.VALID) $valid
+                        if {[llength $spans] > 0 || [llength $divs] > 0} {
+                            set attrs(.SPANS) $spans
+                            set attrs(.DIVS)  $divs
+                            set attrs(.SDATA) $data
+                        }
+                        set elem($elemX) [array get attrs]
+                    }
                 }
             }
 
@@ -4379,7 +4689,36 @@ proc pcdata {text} {
         return
     }
 
-    pcdata_$mode $text $pre
+    if {[info exists data] && ([llength $spans] > 0 || [llength $divs] > 0)} {
+        set text $data
+    }
+
+    pcdata_$mode $text $pre 0 $spans $divs
+
+    # Complain after having generated the output in case of hard error.
+    if {[info exists valid] && !$valid} {
+        if {[info exists spans]} {
+            set x 0
+            set p 0
+            set l 0
+            while {[set x [lsearch0 $spans err $x]] >= 0} {
+                set i [lindex [lindex $spans $x] 1]
+                # This line number will be 0-based,
+                # but most people start their <artwork>
+                # with a blank line (this being XML, not SGML).
+                incr l [num_eols [string range $data $p [expr $i - 1]]]
+                set p $i
+                regexp -start $i -- {[^\n]*} $data token
+                regsub -all -- \" $token {\"} token
+                unexpected [unex_condtype] \
+  "content is not valid type=\"$type\" near \"$token\" at line-offset $l within <artwork>"
+                incr x
+            }
+        } else {
+            unexpected [unex_condtype] \
+                "<artwork> content is not valid type=\"$type\""
+        }
+    }
 }
 
 #       }}}2 Character data (PCDATA) callback
@@ -4395,17 +4734,6 @@ proc pi {args} {
             if {([string first "version=\"1.0\"" [lindex $args 1]] < 0) \
                     && ([string first "version='1.0'" [lindex $args 1]] < 0)} {
                 unexpected error "unexpected <?xml ...?>"
-            }
-        }
-
-        DOCTYPE/4 {
-            if {[info exists stack]} {
-                return
-            }
-
-            if {![regexp -- {^-public -system (|.*/)rfc.*\.dtd$} \
-                         [lrange $args 1 end]]} {
-                unexpected error "unexpected DOCTYPE: [lrange $args 1 end]"
             }
         }
 
@@ -4515,6 +4843,7 @@ proc normalize_options {} {
         set options(slides) no
     }
     foreach {o O} [list autobreaks  .AUTOBREAKS  \
+                        authorship  .AUTHORSHIP  \
                         colonspace  .COLONSPACE  \
                         compact     .COMPACT     \
                         comments    .COMMENTS    \
@@ -4523,6 +4852,7 @@ proc normalize_options {} {
                         inline      .INLINE      \
                         iprnotified .IPRNOTIFIED \
                         linkmailto  .LINKMAILTO  \
+                        rfcedstyle  .RFCEDSTYLE  \
                         slides      .SLIDES      \
                         sortrefs    .SORTREFS    \
                         strict      .STRICT      \
@@ -4534,7 +4864,8 @@ proc normalize_options {} {
                         tocnarrow   .TOCNARROW   \
                         tocappendix .TOCAPPENDIX \
                         topblock    .TOPBLOCK    \
-                        useobject   .USEOBJECT] {
+                        useobject   .USEOBJECT   \
+                        rfcprocack  .RFCPROCACK] {
         if {![info exists options($o)]} {
             continue
         }
@@ -4583,6 +4914,9 @@ proc normalize_options {} {
     if {!$options(.COMMENTS)} {
         set options(.INLINE) 0
     }
+    if {![info exists options(compact)]} {
+        set options(.COMPACT) $options(.RFCEDSTYLE)
+    }
     if {![info exists options(subcompact)]} {
         set options(.SUBCOMPACT) $options(.COMPACT)
     }
@@ -4609,9 +4943,10 @@ proc doctype {element public system internal} {
         return
     }
 
-    if {[string compare $element rfc] \
-            || [string compare $public ""] \
-            || (![regexp -- {^(|.*/)rfc.*\.dtd$} $system])} {
+    if {   [string compare $element rfc]
+        || (   [string compare $public ""]
+            && ![regexp -- {-//IETF//DTD RFC 2629.*//EN} $public])
+        || ![regexp -- {^(|.*/)rfc.*\.dtd$} $system]} {
         unexpected error "invalid DOCTYPE: $element+$public+$system+$internal"
     }
 }
@@ -4693,6 +5028,7 @@ proc unex_condtype {} {
 
 global validity
 
+# From RFC 3978 (BCP 78), Section 5.5.
 set validity {
 "This document and the information contained herein are provided
 on an &ldquo;AS IS&rdquo; basis and THE CONTRIBUTOR,
@@ -4705,8 +5041,10 @@ INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED
 WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE."
 }
 
-global copylong1 copylong2
+global copylong1 copylong2 copylong3 copyurl
 
+# From RFC 2026 (BCP 9), Section 10.4, Notice C;
+# Section 10 is now replaced by BCPs 78 and 79.
 set copylong1 {
 "Copyright &copy; The Internet Society (%YEAR%). All Rights Reserved."
 
@@ -4735,19 +5073,43 @@ HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF
 MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE."
 }
 
+# From RFC 3978 (BCP 78), Section 5.4.
+# For independent submissions, as opposed to IETF ones,
+# there is an additional " and at www.rfc-editor.org/copyright.html"
+# right after "BCP 78";
+# this additional text is at the RFC Editor's discretion.
+
+# <ftp://ftp.isi.edu/in-notes/rfc-editor/boilerplate.ietfsub.1Mar05.txt>
+# <ftp://ftp.isi.edu/in-notes/authors/lastpage.ietfsub.nroff>
 set copylong2 {
-"Copyright &copy; The Internet Society (%YEAR%).
-This document is subject to the rights,
+"Copyright &copy; The Internet Society (%YEAR%)."
+
+"This document is subject to the rights,
 licenses and restrictions contained in BCP&nbsp;78,
 and except as set forth therein,
 the authors retain all their rights."
 }
+
+# <ftp://ftp.isi.edu/in-notes/rfc-editor/boilerplate.indsub.1Mar05.txt>
+# <ftp://ftp.isi.edu/in-notes/authors/lastpage.indsub.nroff>
+set copylong3 {
+"Copyright &copy; The Internet Society (%YEAR%)."
+
+"This document is subject to the rights,
+licenses and restrictions contained in BCP&nbsp;78
+and at %COPYURL%, and except as set forth therein,
+the authors retain all their rights."
+}
+
+set copyurl "http://www.rfc-editor.org/copyright.html"
 
 global iprlong1 iprlong2 iprurl ipremail
 
 set iprurl "http://www.ietf.org/ipr"
 set ipremail "ietf-ipr@ietf.org"
 
+# From RFC 2026 (BCP 9), Section 10.4, Notices A and B;
+# Section 10 is now replaced by BCPs 78 and 79.
 set iprlong1 {
 "The IETF takes no position regarding the validity or scope of
 any intellectual property or other rights that might be claimed
@@ -4771,6 +5133,7 @@ required to practice this standard. Please address the
 information to the IETF Executive Director."
 }
 
+# From RFC 3979 (BCP 79), Section 5.
 set iprlong2 {
 "The IETF takes no position regarding the validity or scope of any
 Intellectual Property Rights or other rights that might be claimed
@@ -4800,6 +5163,9 @@ Please address the information to the IETF at %IPREMAIL%."
 
 global iprextra
 
+# From RFC 2026 (BCP 9), Section 10.4, Notice D;
+# Section 10 is now replaced by BCPs 78 and 79,
+# which don't feature such text.
 set iprextra {
 "The IETF has been notified of intellectual property rights
 claimed in regard to some or all of the specification contained
@@ -4809,9 +5175,21 @@ of claimed rights."
 
 global funding
 
+# Appears in all rfc-editor/boilerplate*.txt files.
+# Something the RFC Editor adds at his/her discretion.
+# (Authoritative) source:  this email
+#     From: Brian E Carpenter <brian@hursley.ibm.com>
+#     Organization: IBM Internet Division
+#     To: jkrey@ISI.EDU
+#     CC: iab@ISI.EDU, iesg@ISI.EDU, rfc-ed@ISI.EDU
+#     Subject: Re: RFC Editor Contract signed...
+#     ...
+#     Secondly, I don't think this is such a big deal, but let's
+#     deem that the conclusion of the discussion is to put this
+#     small acknowledgment at the end rather than at the beginning.
 set funding \
-"Funding for the RFC Editor function is currently provided by the
-Internet Society."
+"Funding for the RFC Editor function is provided by
+the IETF Administrative Support Activity (IASA)."
 
 #       }}}2 Other IPR texts
 #       {{{2 Pass 2 (and subsequent) stuff for the whole document
@@ -4824,9 +5202,9 @@ proc pass2begin_rfc {elemX} {
 
     set backP 0
 
-    array set attrs [list number     ""   obsoletes "" updates "" \
-                          category   info seriesNo  "" ipr     "" \
-                          iprExtract ""   xml:lang  en]
+    array set attrs [list number     ""   obsoletes      ""   updates   "" \
+                          category   info seriesNo       ""   ipr       "" \
+                          iprExtract ""   submissionType IETF xml:lang  en]
     array set attrs $elem($elemX)
     set elem($elemX) [array get attrs]
 
@@ -4840,12 +5218,7 @@ proc pass2begin_rfc {elemX} {
         set copyrightP 0
     } else {
         set copyrightP 1
-        if {(![string compare $attrs(number) ""]) \
-                || (![string compare $attrs(category) std])} {
-            set iprP 1
-        } else {
-            set iprP 0
-        }
+        set iprP 1
     }
 
     set newP 1
@@ -4871,7 +5244,7 @@ proc pass2begin_rfc {elemX} {
 
         set warnonly [expr !$options(.SORTREFS) || $options(.SYMREFS)]
 
-        catch { unset bv }
+        catch { array unset bv }
         array set bv $elem($back)
 
         set firstxref [list ""]
@@ -4884,11 +5257,11 @@ proc pass2begin_rfc {elemX} {
 
         set offset 0
         foreach refs [find_element references $bv(.CHILDREN)] {
-            catch { unset sv }
+            catch { array unset sv }
             array set sv $elem($refs)
 
             foreach ref [find_element reference $sv(.CHILDREN)] {
-                catch { unset rv }
+                catch { array unset rv }
                 array set rv $elem($ref)
                 if {[set x [lsearch $firstxref $rv(anchor)]] < 0} {
                     set x [llength $firstxref]
@@ -4907,13 +5280,13 @@ proc pass2begin_rfc {elemX} {
 
             foreach ref [lsort -command sort_references \
                                 [find_element reference $sv(.CHILDREN)]] {
-                catch { unset rv }
+                catch { array unset rv }
                 array set rv $elem($ref)
                 set rv(.COUNTER) [incr offset]
                 set elem($ref) [array get rv]
 
                 set target $rv(anchor)
-                catch { unset xv }
+                catch { array unset xv }
                 array set xv $xref($target)
                 set xv(value) $offset
                 set xref($target) [array get xv]
@@ -4928,6 +5301,7 @@ proc pass2end_rfc {elemX} {
     global mode
     global options
     global pageno
+    global copyurl
 
     array set attrs $elem($elemX)
 
@@ -4985,7 +5359,7 @@ proc pass2end_rfc {elemX} {
                 foreach e {city region code} t {"" ", " "  "} {
                     set f [find_element $e $pv(.CHILDREN)]
                     if {[llength $f] == 1} {
-                        catch { unset fv }
+                        catch { array unset fv }
                         array set fv $elem($f)
 
                         if {[string compare $s ""]} {
@@ -4999,7 +5373,7 @@ proc pass2end_rfc {elemX} {
                 }
                 set f [find_element country $pv(.CHILDREN)]
                 if {[llength $f] == 1} {
-                    catch { unset fv }
+                    catch { array unset fv }
                     array set fv $elem($f)
 
                     lappend block1 $fv(.CTEXT)
@@ -5010,7 +5384,7 @@ proc pass2end_rfc {elemX} {
             foreach e {phone facsimile email uri} {
                 set f [find_element $e $zv(.CHILDREN)]
                 if {[llength $f] == 1} {
-                    catch { unset fv }
+                    catch { array unset fv }
                     array set fv $elem($f)
 
                     lappend block2 [list $e $fv(.CTEXT)]
@@ -5042,17 +5416,30 @@ proc pass2end_rfc {elemX} {
         }
     }
     if {$newP} {
-        global copylong2
+        global copylong2 copylong3
 
-        set copylong $copylong2
+        switch -- $attrs(submissionType) {
+            IETF {
+                set copylong $copylong2
+            }
+            independent {
+                set copylong $copylong3
+            }
+        }
     } else {
         global copylong1
 
         set copylong $copylong1
     }
     regsub -all -- %YEAR% $copylong $dv(year) copying
+    if {![string compare $mode html]} {
+        regsub -all -- %COPYURL% $copying "<a href='$copyurl'>$copyurl</a>" copying
+    } else {
+        regsub -all -- %COPYURL% $copying $copyurl copying
+    }
 
     if {![catch { set who $attrs(disclaimant) }]} {
+        # This is an undocumented non-IETF extension.
         lappend copying \
 "%WHO% expressly disclaims any and all warranties regarding this
 contribution including any warranty that (a) this contribution does
@@ -5102,7 +5489,7 @@ SUCH DAMAGES."
 
     array set index ""
     for {set elemY 1} {$elemY <= $elemZ} {incr elemY} {
-        catch { unset iv }
+        catch { array unset iv }
         array set iv $elem($elemY)
 
         if {[string compare $iv(.NAME) iref]} {
@@ -5154,12 +5541,16 @@ global copyshort copyshort1 copyshort2 idinfo idaburl idshurl
 set idaburl "http://www.ietf.org/ietf/1id-abstracts.txt"
 set idshurl "http://www.ietf.org/shadow.html"
 
+# From RFC 2223, Section 6.
 set copyshort1 \
 "Copyright &copy; The Internet Society (%YEAR%). All Rights Reserved."
 
+# From the rfc-editor/instructions2authors.txt file, Section 4.3.
+# Currently draft-rfc-editor-rfc2223bis-08, which is expired.
 set copyshort2 \
 "Copyright &copy; The Internet Society (%YEAR%)."
 
+# From the ietf/1id-guidelines.txt file, Section 5.
 set idinfo {
 "%IPR%"
 
@@ -5192,6 +5583,7 @@ proc pass2begin_front {elemX} {
     global mode ofile
     global categories copyshort idinfo idaburl idshurl iprstatus
     global page_width center_fill_width
+    global depth
 
     if {$options(.COLONSPACE)} {
         set colonspace " "
@@ -5209,9 +5601,16 @@ proc pass2begin_front {elemX} {
     set date [find_element date $attrs(.CHILDREN)]
     array set dv $elem($date)
     set three [clock format [clock seconds] -format "%B %Y %d"]
-    if {(![info exists dv(month)]) || (![string compare $dv(month) ""])} {
-        set dv(month) [lindex $three 0]
-        set dv(day) [string trimleft [lindex $three 2] 0]
+    if {[catch { set dv(year) }]} {
+        set dv(year) [lindex $three 1]
+    }
+    if {[catch { set dv(month) }]} {
+        if {(![string compare $dv(year) [lindex $three 1]])} {
+            set dv(month) [lindex $three 0]
+            set dv(day) [string trimleft [lindex $three 2] 0]
+        } else {
+            unexpected error "I can't synthesize a date in $dv(year)"
+        }
     } elseif {[catch { set dv(day) }]} {
         if {(![string compare $dv(month) [lindex $three 0]]) \
                 && (![string compare $dv(year) [lindex $three 1]])} {
@@ -5241,20 +5640,20 @@ proc pass2begin_front {elemX} {
         }
         lappend left $first
 
+        set cindex [lsearch0 $categories $rv(category)]
         if {[string compare $rv(number) ""]} {
             lappend left "Request for Comments:$colonspace $rv(number)"
 
-            set cindex [lsearch0 $categories $rv(category)]
             if {[string compare $rv(seriesNo) ""]} {
                 lappend left \
                         "[lindex [lindex $categories $cindex] 2]:$colonspace $rv(seriesNo)"
             }
 
-            if {[string compare $rv(updates) ""]} {
-                lappend left "Updates:$colonspace $rv(updates)"
-            }
             if {[string compare $rv(obsoletes) ""]} {
                 lappend left "Obsoletes:$colonspace $rv(obsoletes)"
+            }
+            if {[string compare $rv(updates) ""]} {
+                lappend left "Updates:$colonspace $rv(updates)"
             }
 
             set category [lindex [lindex $categories $cindex] 1]
@@ -5267,8 +5666,8 @@ proc pass2begin_front {elemX} {
                         unexpected error "missing $t"
                     }
                 }
-                if {([info exists counter(reference)]) \
-                        && ($counter(reference))} {
+                if {([info exists depth(references)]) \
+                        && ($depth(references))} {
                     set hitP 0
                     foreach t [list normative informative] {
                         if {[info exists counter([string tolower $t])]} {
@@ -5284,12 +5683,14 @@ proc pass2begin_front {elemX} {
 
             lappend left "Internet-Draft"
 
-            if {[string compare $rv(updates) ""]} {
-                lappend left "Updates:$colonspace $rv(updates) (if approved)"
-            }
             if {[string compare $rv(obsoletes) ""]} {
                 lappend left "Obsoletes:$colonspace $rv(obsoletes) (if approved)"
             }
+            if {[string compare $rv(updates) ""]} {
+                lappend left "Updates:$colonspace $rv(updates) (if approved)"
+            }
+
+            lappend left "Intended status:$colonspace [lindex [lindex $categories $cindex] 1]"
 
             if {[catch { set day $dv(day) }]} {
                 set day 1
@@ -5317,11 +5718,13 @@ proc pass2begin_front {elemX} {
             if {[string compare [set anchor $rv(iprExtract)] ""]} {
                 set extract ", other than to extract "
                 append extract [xref_$mode "" $xref($anchor) $anchor "" 1]
+		regsub -all -- {&nbsp;} $extract {%NBSP%} extract
                 append extract " as-is for separate use"
             } else {
                 set extract ""
             }
             regsub -all -- %IPREXTRACT% $status $extract status
+            regsub -all -- %NBSP% $status {\&nbsp;} status
             regsub -all -- %EXPIRES% $status $expires status
         }
     }
@@ -5434,7 +5837,7 @@ proc pass2begin_front {elemX} {
 proc pass2end_front {elemX} {
     global elem
     global elemZ
-    global options copyrightP noticeT
+    global options copyrightP
     global mode
     global crefs
 
@@ -5447,12 +5850,13 @@ proc pass2end_front {elemX} {
         set back ""
         set ipr ""
         for {set elemY 1} {$elemY <= $elemZ} {incr elemY} {
-            catch { unset cv }
+            catch { array unset cv }
             array set cv $elem($elemY)
 
             switch -- $cv(.NAME) {
                 rfc {
-                    if {(!$options(.PRIVATE)) && $copyrightP} {
+                    if {!$options(.PRIVATE) && $copyrightP && !$options(.RFCEDSTYLE)} {
+                        set title "Intellectual Property and Copyright Statements"
                         set anchor ""
                         if {![string compare $mode html]} {
                             set anchor rfc.copyright
@@ -5461,15 +5865,12 @@ proc pass2end_front {elemX} {
                             catch { set anchor $cv(.ANCHOR) }
                             set label ""
                         }
-                        set noticeT "Intellectual Property and Copyright Statements"
-                        set ipr [list 0 $label $noticeT $anchor]
-                    } else {
-                        set noticeT ""
+                        set ipr [list 0 $label $title $anchor]
                     }
                 }
 
                 front {
-                    if {$elemY > 2} {
+                    if {$elemY > 2 || $options(.RFCEDSTYLE)} {
                         # <reference>s have a <front> too!
                         continue
                     }
@@ -5491,7 +5892,9 @@ proc pass2end_front {elemX} {
                         set anchor $authorspg
                         set label ""
                     }
-                    set author [list 0 $label $title $anchor]
+                    if {$options(.AUTHORSHIP)} {
+                        set author [list 0 $label $title $anchor]
+                    }
                 }
 
                 section - appendix {
@@ -5633,7 +6036,7 @@ proc pass2begin_section {elemX {appendP 0}} {
     }
     set title $attrs(title)
 
-    set lines 0
+    set lines 1
     if {[llength $attrs(.CHILDREN)] > 0} {
         set elemY [lindex $attrs(.CHILDREN) 0]
         array set cv $elem($elemY)
@@ -5679,6 +6082,7 @@ proc pass2begin_t {elemX} {
     set elem($elemX) [array get attrs]
 
     if {[string compare $attrs(.COUNTER) ""]} {
+        # Get <list>.
         set frame [lindex $stack end]
         array set av [lrange $frame 1 end]
 
@@ -5686,20 +6090,14 @@ proc pass2begin_t {elemX} {
         array set av $elem($elemY)
 
         set attrs(hangIndent) $av(hangIndent)
-        if {![string compare [set attrs(style) $av(style)] format]} {
+        if {![string compare [set attrs(style) $av(.STYLE)] format]} {
             set attrs(style) hanging
-            set format $av(format)
-            set c $av(counter)
 
             if {![string compare $attrs(hangText) ""]} {
-                if {[string first "%d" $format] >= 0} {
-                    set attrs(hangText) \
-                        [format $format [incr counter($c)]]
-                } else {
-                    set attrs(hangText) \
-                        [format $format \
-                                [offset2letters [incr counter($c)] 1]]
-                }
+                # $format has already been validated.
+                set format $av(.FORMAT)
+                set attrs(hangText) [apply_list_style_format \
+                                     $format $attrs(.FMTCOUNTER)]
             }
         }
         set elem($elemX) [array get attrs]
@@ -5718,79 +6116,131 @@ proc pass2end_t {elemX} {
     t_$mode end $attrs(.COUNTER) $attrs(style) $attrs(hangText) ""
 }
 
+proc validate_list_style_format {fmt {errstr "<list style='format ...'> spec"}} {
+    set p 0
+    set n 0
+    while {[regexp -start $p -indices -- % $fmt x]} {
+        set p [lindex $x 0]
+        incr p
+        switch -- [set c [string index $fmt $p]] {
+            % {}
+            d - C - c - I - i - o - X - x {
+                set fmttoken %$c
+                incr n
+            }
+            "" {
+                unexpected error "truncated % token at end of $errstr"
+            }
+            default {
+                unexpected error "invalid %$c token in $errstr"
+            }
+        }
+        incr p
+    }
+    set tokens "%d/%C/%c/%I/%i/%o/%X/%x"
+    if {$n == 0} {
+        unexpected error "missing one of $tokens in $errstr"
+    } elseif {$n > 1} {
+        unexpected error "more than one $tokens in $errstr"
+    }
+
+    return $fmttoken
+}
+
+proc apply_list_style_format {fmt c} {
+    # This assumes that $fmt has already been validated.  No errors are thrown.
+    set s ""
+    set p 0
+    while {[regexp -start $p -indices -- {%.} $fmt x]} {
+        append s [string range $fmt $p [expr [lindex $x 0] - 1]]
+        set p [lindex $x 1]
+        switch -- [string index $fmt $p] {
+            d { set v $c }
+            C { set v [offset2letters $c 0] }
+            c { set v [offset2letters $c 1] }
+            I { set v [offset2romans $c 0] }
+            i { set v [offset2romans $c 1] }
+            o { set v [format %o $c] }
+            X { set v [format %X $c] }
+            x { set v [format %x $c] }
+            % { set v % }
+            default { set v "" }
+        }
+        append s $v
+        incr p
+    }
+    append s [string range $fmt $p end]
+
+    return $s
+}
+
 # the list element
 
 proc pass2begin_list {elemX} {
-    global counter elem stack
+    global elem stack
     global mode
 
+    # Default values (to be inherited and overridden).
     set style empty
-    set format ""
-    set c ""
     set hangIndent 0
-    foreach frame $stack {
-        if {[string compare [lindex $frame 0] list]} {
-            continue
-        }
-        array set av [lrange $frame 1 end]
 
-        set elemY $av(elemN)
-        array set av $elem($elemY)
+    # Inherit defaults for innermost ancestor <list>, if any.
+    if {[set x [llast0 $stack list]] >= 0} {
+        array set fv [lrange [lindex $stack $x] 1 end]
+        array set av $elem($fv(elemN))
 
-        set style $av(style)
-        set format $av(format)
+        # Outer lists have been normalized, so no need for a catch {}.
+        set style      $av(style)
         set hangIndent $av(hangIndent)
     }
+
+    # Current element is not yet in stack nor normalized.
     array set attrs [list counter ""]
     array set attrs $elem($elemX)
+    array set attrs [list  FORMAT ""  FMTTOKEN ""]
+    catch { set style      $attrs(style)      }
     catch { set hangIndent $attrs(hangIndent) }
-    set attrs(hangIndent) $hangIndent
-    catch {
-        if {[string first "format " [set style $attrs(style)]]} {
-            set format $attrs(format)
+    set fmtcountername $attrs(counter)
+    set longestHangText ""
+
+    # Validate and process style attribute.
+    set errstr "style=\"$style\" attribute of <list> element"
+    if {[regexp -- {^format[ \t]+(.*)$} $style x format]} {
+        if {[string compare $format ""]} {
+            set attrs(.STYLE) format
+
+            set fmttoken [validate_list_style_format $format $errstr]
+            switch -glob -- $fmttoken {
+                *I - *i { set x $attrs(.LONGEST_ROMAN) }
+                default { set x $attrs(.MAX) }
+            }
+            set longestHangText [apply_list_style_format $format $x]
+
+            set attrs(.FORMAT) $format
+            set attrs(.FMTTOKEN) $fmttoken
         } else {
-            set style format
-            if {[string compare \
-                        [set format [string trimleft \
-                                            [string range $attrs(style) 7 \
-                                            end]]] ""]} {
-                if {[set x [string first [set c "%d"] $format]] >= 0} {
-                } elseif {[set x [string first [set c "%c"] $format]] >= 0} {
-                    set format [streplace $format $x [expr $x+1] %s]
-                } else {
-                    unexpected error "missing %d/%c in format style"
-                }
-                if {[string first $c [string range $format $x end]] > 0} {
-                    unexpected error "too many $c's in format style"
-                }
-                if {![string compare [set c $attrs(counter)] ""]} {
-                    set c $format
-                } elseif {[set x [string first "%d" $c]] >= 0} {
-                } elseif {[set x [string first "%c" $c]] >= 0} {
-                    set c  [streplace $c $x [expr $x+1] %s]
-                }
-                if {![info exists counter($c)]} {
-                    set counter($c) 0
-                }
-            } else {
-                set style hanging
-                set format ""
+            set attrs(.STYLE) hanging
+        }
+    } else {
+        switch -- $style {
+            empty - letters - numbers - symbols - hanging {}
+            letter - number - symbol {
+                unexpected error \
+  "did you mean style=\"${style}s\" (plural) instead of the invalid $errstr"
+            }
+            default {
+                unexpected error "invalid $errstr"
             }
         }
+        set attrs(.STYLE) $style
     }
-    array set attrs [list style $style format $format counter $c]
+
+    # Save systematically-defined and normalized values for this <list>.
+    array set attrs [list style $style  hangIndent $hangIndent]
     set elem($elemX) [array get attrs]
 
-    set counters ""
-    set hangText ""
-    foreach child [find_element t $attrs(.CHILDREN)] {
-        array set tv $elem($child)
-
-        lappend counters $tv(.COUNTER)
-        catch { set hangText $tv(hangText) }
-    }
-
-    list_$mode begin $counters $attrs(style) $attrs(hangIndent) $hangText \
+    list_$mode begin $attrs(.MIN) $attrs(.MAX) $attrs(.STYLE) \
+               $attrs(hangIndent) $longestHangText \
                [expr ([lsearch0 $stack list] >= 0) ? -1 : [lsearch0 $stack t]]
 }
 
@@ -5800,7 +6250,8 @@ proc pass2end_list {elemX} {
 
     array set attrs $elem($elemX)
 
-    list_$mode end "" $attrs(style) "" "" \
+    list_$mode end $attrs(.MIN) $attrs(.MAX) $attrs(.STYLE) \
+               "" "" \
                [expr ([lsearch0 $stack list] >= 0) ? -1 : [lsearch0 $stack t]]
 }
 
@@ -5868,9 +6319,7 @@ proc pass2begin_artwork {elemX} {
         set ctext [split $attrs(.CTEXT) "\n"]
         set lines [llength $ctext]
         if {   ![string compare $mode html]
-            || ![catch {set x $attrs(.TEXTWIDTH)}]
-            || ![string compare $align ""]
-            || ![string compare $align "left"]} {
+            || ![catch {set x $attrs(.TEXTWIDTH)}]} {
             # break from catch
             error ""
         }
@@ -5962,7 +6411,7 @@ proc pass2begin_texttable {elemX {internal 0}} {
     set cols {}
     set ttcols [find_element ttcol $attrs(.CHILDREN)]
     foreach ttcol $ttcols {
-        catch { unset cv }
+        catch { array unset cv }
         array set cv [list width ""]
         array set cv $elem($ttcol)
 
@@ -5995,7 +6444,7 @@ proc pass2begin_texttable {elemX {internal 0}} {
     set colno 0
     set aligns {}
     foreach ttcol $ttcols {
-        catch { unset cv }
+        catch { array unset cv }
         array set cv [list width "" align left .CWIDTH -1]
         array set cv $elem($ttcol)
 
@@ -6013,7 +6462,7 @@ proc pass2begin_texttable {elemX {internal 0}} {
     set colno 0
     set rowno 1
     foreach c $children {
-        catch { unset cv }
+        catch { array unset cv }
         array set cv $elem($c)
 
         set cv(.WIDTH) [lindex $cols   $colno]
@@ -6115,6 +6564,7 @@ proc pass2begin_eref {elemX} {
         set c -1
 
         if {([string first "#" $t] < 0) \
+                && ([string compare $attrs(.CTEXT) ""]) \
                 && ([string compare $attrs(.CTEXT) $t])} {
             switch -- $mode {
                 nr - txt {
@@ -6299,9 +6749,6 @@ proc pass2end_references {elemX} {
 
         unset x
     }
-    if {$width > 7} {
-        set width 7
-    }
     foreach child $children {
         array set x $elem($child)
         set x(.WIDTH) $width
@@ -6321,7 +6768,7 @@ proc sort_references {elemX elemY} {
     if {$options(.SYMREFS)} {
         return [string compare $attrX(anchor) $attrY(anchor)]
     } else {
-        return [expr $attrX(.COUNTER)-$attrY(.COUNTER)]
+        return [expr $attrX(.COUNTER) - $attrY(.COUNTER)]
     }
 }
 
@@ -6350,7 +6797,7 @@ proc pass2end_reference {elemX} {
     set series ""
     foreach child [find_element seriesInfo $attrs(.CHILDREN)] {
         # backwards-compatibility... (the attributes are actually mandatory)
-        catch { unset sv }
+        catch { array unset sv }
         array set sv $elem($child)
         if {([info exists sv(name)]) && ([info exists sv(value)])} {
             lappend series "$sv(name)&nbsp;$sv(value)"
@@ -6408,7 +6855,7 @@ proc ref_names {elemX} {
             foreach {k v p} {email mref mailto: uri uref ""} {
                 set u [find_element $k $bv(.CHILDREN)]
                 if {[llength $u] == 1} {
-                    catch { unset uv }
+                    catch { array unset uv }
                     array set uv $elem($u)
 
                     set $v $p$uv(.CTEXT)
@@ -6532,13 +6979,25 @@ proc find_element {name children} {
 # could use "lsearch -glob" followed by a "string compare", but there are
 # some amusing corner cases with that...
 
-proc lsearch0 {list exact} {
+proc lsearch0 {list exact {y 0}} {
     set x 0
     foreach elem $list {
-        if {![string compare [lindex $elem 0] $exact]} {
+        if {$x >= $y && ![string compare [lindex $elem 0] $exact]} {
             return $x
         }
         incr x
+    }
+
+    return -1
+}
+
+proc llast0 {list exact} {
+    set x [llength $list]
+    while {$x > 0} {
+        set elem [lindex $list [incr x -1]]
+        if {![string compare [lindex $elem 0] $exact]} {
+            return $x
+        }
     }
 
     return -1
@@ -6593,6 +7052,8 @@ global page_basic_indent
 set page_basic_indent 3
 global center_fill_width
 set center_fill_width 2
+global max_ref_width
+set max_ref_width 7
 
 #       }}}2 Page model for both the txt and nr rendering engines
 #       {{{2 txt rendering engine
@@ -6605,12 +7066,17 @@ proc rfc_txt {irefs authors iprstmt copying newP} {
     global indexpg
     global page_basic_indent
 
-    end_page_txt
-
     if {[llength $irefs] > 0} {
+        if {!$options(.COMPACT) || ![have_lines 4]} {
+            end_page_txt
+        } else {
+            write_line_txt ""
+        }
+        if {!$options(.RFCEDSTYLE)} {
+            write_line_txt "" -1
+        }
         set indexpg $pageno
 
-        write_line_txt "" -1
         write_line_txt "Index"
 
         push_indent 9
@@ -6632,11 +7098,11 @@ proc rfc_txt {irefs authors iprstmt copying newP} {
                 if {[string compare $subitem ""]} {
                     flush_text
                     pop_indent
-                    push_indent -$page_basic_indent
+                    push_indent [expr -($page_basic_indent)]
                     write_text_txt $subitem
                 }
             } else {
-                push_indent -$page_basic_indent
+                push_indent [expr -($page_basic_indent)]
                 write_text_txt $subitem
             }
             pop_indent
@@ -6645,52 +7111,23 @@ proc rfc_txt {irefs authors iprstmt copying newP} {
             flush_text
         }
         pop_indent
-
-        end_page_txt
     }
 
     authors_txt $authors
 
     if {(!$options(.PRIVATE)) && $copyrightP} {
+        end_page_txt
+        if {!$options(.RFCEDSTYLE)} {
+            write_line_txt "" -1
+        }
         set result $pageno
 
-        if {$iprP} {
-            global iprurl ipremail
+        # There isn't really an authoritative source for the order of
+        # the next few paragraphs or the names of the headings under
+        # which they are put.  But what's used here corresponds to what
+        # can be found in the in-notes/rfc-editor/boilerplate*.txt files.
 
-            write_line_txt "" -1
-            write_line_txt "Intellectual Property Statement"
-
-            regsub -all -- %IPRURL% $iprstmt $iprurl iprstmt
-            regsub -all -- %IPREMAIL% $iprstmt $ipremail iprstmt
-
-            foreach para $iprstmt {
-                write_line_txt ""
-                pcdata_txt $para
-            }
-            write_line_txt "" -1
-            write_line_txt "" -1
-        }
-
-        if {$newP} {
-            if {![have_lines 4]} {
-                end_page_txt
-            }
-
-            write_line_txt "Disclaimer of Validity"
-
-            foreach para $validity {
-                write_line_txt ""
-                pcdata_txt $para
-            }
-            write_line_txt "" -1
-            write_line_txt "" -1
-        }
-
-        if {![have_lines 4]} {
-            end_page_txt
-        }
-
-        if {$newP} {
+        if {0 && $newP} {
             write_line_txt "Copyright Statement"
         } else {
             write_line_txt "Full Copyright Statement"
@@ -6700,21 +7137,72 @@ proc rfc_txt {irefs authors iprstmt copying newP} {
             write_line_txt ""
             pcdata_txt $para
         }
+
+        if {$newP} {
+            #if {![have_lines 4]} {
+            #    end_page_txt
+            #}
+
+            #write_line_txt "Disclaimer of Validity"
+
+            foreach para $validity {
+                write_line_txt ""
+                pcdata_txt $para
+            }
+        }
         write_line_txt "" -1
-        write_line_txt "" -1
+        if {!$options(.RFCEDSTYLE)} {
+            write_line_txt "" -1
+        }
+
+        if {$iprP} {
+            global iprurl ipremail
+
+            if {![have_lines 4]} {
+                end_page_txt
+            }
+
+            write_line_txt "Intellectual Property"
+
+            regsub -all -- %IPRURL% $iprstmt $iprurl iprstmt
+            regsub -all -- %IPREMAIL% $iprstmt $ipremail iprstmt
+
+            foreach para $iprstmt {
+                write_line_txt ""
+                pcdata_txt $para
+            }
+            write_line_txt "" -1
+            if {!$options(.RFCEDSTYLE)} {
+                write_line_txt "" -1
+            }
+        }
 
         if {![have_lines 4]} {
             end_page_txt
         }
 
-        write_line_txt "Acknowledgment"
+        if {$options(.RFCEDSTYLE)} {
+            set ack "Acknowledgement"
+        } else {
+            set ack "Acknowledgment"
+        }
+        if {$options(.RFCPROCACK)} {
+            append ack s
+        }
+        write_line_txt $ack
         write_line_txt ""
         pcdata_txt $funding
+        if {$options(.RFCPROCACK)} {
+            global prog_ack prog_url
 
-        end_page_txt
+            regsub -all -- %PROGURL% $prog_ack $prog_url xml2rfc_ack
+            pcdata_txt "  $xml2rfc_ack"
+        }
     } else {
         set result ""
     }
+
+    end_page_txt
 
     return $result
 }
@@ -6769,7 +7257,11 @@ proc front_txt_begin {left right top bottom title status copying keywords
     set indent $page_basic_indent
 
     if {!$options(.PRIVATE)} {
-        write_line_txt "Status of this Memo"
+        if {$options(.RFCEDSTYLE)} {
+            write_line_txt "Status of This Memo"
+        } else {
+            write_line_txt "Status of this Memo"
+        }
         foreach para $status {
             write_line_txt ""
             pcdata_txt $para
@@ -6804,7 +7296,7 @@ proc three_parts {stuff} {
 }
 
 proc front_txt_end {toc} {
-    global options noticeT
+    global options
     global mode
     global unpaginated
     global lineno
@@ -6817,7 +7309,9 @@ proc front_txt_end {toc} {
         } else {
             write_line_$mode ""
         }
-        write_line_$mode "" -1
+        if {!$options(.RFCEDSTYLE)} {
+            write_line_$mode "" -1
+        }
         if {![string compare $mode nr]} {
             global indents
 
@@ -6952,13 +7446,25 @@ proc write_toc_txt {s1 title s2 len dot} {
 }
 
 proc abstract_txt {} {
-    write_line_txt "" -1
+    global options
+
+    if {!$options(.COMPACT) || ![have_lines 4]} {
+        end_page_txt
+    } else {
+        write_line_txt ""
+    }
     write_line_txt "Abstract"
     write_line_txt "" -1
 }
 
 proc note_txt {title depth} {
-    write_line_txt "" -1
+    global options
+
+    if {!$options(.COMPACT) || ![have_lines 4]} {
+        end_page_txt
+    } else {
+        write_line_txt ""
+    }
     write_line_txt [chars_expand $title]
     write_line_txt "" -1
 }
@@ -6973,11 +7479,11 @@ proc section_txt {prefix top title lines anchor} {
     } else {
         write_line_txt ""
     }
-    if {$top} {
+    if {$top && !$options(.RFCEDSTYLE)} {
         write_line_txt "" -1
     }
 
-    push_indent -$page_basic_indent
+    push_indent [expr -($page_basic_indent)]
     write_text_txt "$prefix  "
     push_indent [expr [string length $prefix] + 2]
     write_text_txt [chars_expand $title]
@@ -6991,6 +7497,7 @@ proc section_txt {prefix top title lines anchor} {
 proc t_txt {tag counter style hangText editNo} {
     global options
     global eatP
+    global mode
 
     if {$eatP < 0} {
         set eatP 1
@@ -7002,110 +7509,169 @@ proc t_txt {tag counter style hangText editNo} {
     if {[string compare $counter ""]} {
         set pos [pop_indent]
         set l [split $counter .]
+        set left -1
         set lines 3
         switch -- $style {
             letters {
                 set counter [offset2letters [lindex $l end] [llength $l]]
-                # prevent two_spaces from kicking in.
-                append counter ".\xA0"
+                append counter "."
             }
 
             numbers {
-                # prevent two_spaces from kicking in.
-                set counter "[lindex $l end].\xA0"
+                set counter "[lindex $l end]."
             }
 
             symbols {
-                set counter "[lindex { - o * + } [expr [llength $l]%4]] "
+                set counter "[lindex { - o * + } [expr [llength $l] & 3]] "
             }
 
             hanging {
-                # prevent two_spaces from kicking in.
-                set counter "[chars_expand $hangText]\xA0"
+                global page_basic_indent
+
+                set counter [chars_expand $hangText]
+                set x [string length $counter]
+                if {[set x [string length $counter]]} {
+                    if {$x >= $pos} {
+                        # Prevent two_spaces from kicking in.
+                        append counter "\xA0"
+                    }
+                    append counter " "
+                }
+                if {$pos <= $page_basic_indent} {
+                    set left ""
+                } else {
+                    set left -1
+                }
                 set lines 5
             }
 
             default {
                 set counter "  "
+                set left -2
             }
         }
         if {![have_lines $lines]} {
-            end_page_txt
+            end_page_$mode
         }
         if {$options(.EDITING)} {
-            write_editno_txt $editNo
+            write_editno_$mode $editNo
         } elseif {!$options(.SUBCOMPACT)} {
-            write_line_txt ""
+            write_line_$mode ""
         }
-        write_text_txt [format "%-[expr $pos-0]s" $counter]
+        set c [format "%-[expr $pos-0]s" $counter]
+        switch -- $mode {
+            txt {
+                write_text_txt $c
+            }
+            nr {
+                indent_text_nr $c $left
+                pop_indent
+            }
+        }
         push_indent $pos
     } else {
         if {$options(.EDITING)} {
-            write_editno_txt $editNo
+            write_editno_$mode $editNo
         } else {
-            write_line_txt ""
+            write_line_$mode ""
         }
     }
 
     set eatP 1
 }
 
-proc offset2letters {offset depth} {
-    set alpha [lindex [list "ABCDEFGHIJKLMNOPQRSTUVWXYZ" \
-                            "abcdefghijklmnopqrstuvwxyz"] [expr $depth % 2]]
+proc offset2letters {offset {depth 0}} {
+    set alpha "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
     set letters ""
     for {} {$offset > 0} {set offset [expr $offset / 26]} {
         incr offset -1
         set letters [string index $alpha [expr $offset % 26]]$letters
     }
 
+    if {$depth & 1} {
+        set letters [string tolower $letters]
+    }
+
     return $letters
 }
 
-proc list_txt {tag counters style hangIndent hangText suprT} {
+proc offset2romans {offset {depth 0}} {
+    if {$offset <= -5000 || $offset == 0 || $offset >= 5000} {
+        # You've been silently upgraded.
+        return [expr $offset]
+    } elseif {$offset < 0} {
+        set offset [expr -($offset)]
+        set sign -
+    } else {
+        set sign ""
+    }
+
+    set r {{"" I II III IV V VI VII VIII IX}
+           {"" X XX XXX XL L LX LXX LXXX XC}
+           {"" C CC CCC CD D DC DCC DCCC CM}}
+
+    set romans ""
+    for {set d 0} {$d < 3 && $offset} {incr d; set offset [expr $offset / 10]} {
+        set romans [lindex [lindex $r $d] [expr $offset % 10]]$romans
+    }
+
+    if {$offset} {
+        # This could be a really long string, were it not for the limit above.
+        set romans [string repeat M $offset]$romans
+    }
+
+    if {$depth & 1} {
+        set romans [string tolower $romans]
+    }
+
+    return $sign$romans
+}
+
+proc list_txt {tag min max style hangIndent longestHangText suprT} {
     global options
     global eatP
+    global mode
 
     switch -- $tag {
         begin {
             switch -- $style {
                 letters {
-                  set i [expr int(log([llength $counters])/log(26))+2]
+                    set i [expr [string length [offset2letters $max]] + 1]
                 }
 
                 numbers {
-                    set i 0
-                    foreach counter $counters {
-                        if {[set j [string length \
-                                           [lindex [split $counter .] end]]] \
-                                > $i} {
-                            set i $j
-                        }
-                    }
-                    incr i 1
+                    set i [expr [string length $max] + 1]
                 }
 
                 format {
-                    set i [expr [string length [chars_expand $hangText]]-1]
+                    set i [string length [chars_expand $longestHangText]]
                 }
 
                 default { set i 1 }
             }
             if {[incr i 2] > $hangIndent} {
-                push_indent [expr $i+0]
+                push_indent $i
             } else {
-                push_indent [expr $hangIndent+0]
+                push_indent [expr $hangIndent]
             }
         }
 
         end {
             flush_text
             if {!$options(.SUBCOMPACT)} {
-                write_line_txt ""
+                write_line_$mode ""
             }
             pop_indent
 
             set eatP 1
+
+            switch -- $mode {
+                nr {
+                    global indent
+                    condwrite_in_nr $indent
+                }
+            }
         }
     }
 }
@@ -7143,10 +7709,14 @@ proc figure_txt {tag lines anchor title {av {}} } {
                 array set av2 $xref($anchor)
                 set prefix "Figure\xA0$av2(value)"
                 if {[string compare $title ""]} {
-                    append prefix ": [chars_expand $title]"
+                    set title "$prefix: [chars_expand $title]"
+                } else {
+                    set title $prefix
                 }
+            }
+            if {[string compare $title ""]} {
                 write_line_$mode ""
-                write_text_$mode $prefix
+                write_text_$mode $title c
                 write_line_$mode ""
             }
         }
@@ -7235,12 +7805,16 @@ proc texttable_txt {tag lines anchor title} {
             set eatP 1
             if {[string compare $anchor ""]} {
                 array set av $xref($anchor)
-                set prefix "Table $av(value)"
+                set prefix "Table\xA0$av(value)"
                 if {[string compare $title ""]} {
-                    append prefix ": [chars_expand $title]"
+                    set title "$prefix: [chars_expand $title]"
+                } else {
+                    set title $prefix
                 }
+            }
+            if {[string compare $title ""]} {
                 write_line_$mode ""
-                write_text_$mode $prefix
+                write_text_$mode $title c
                 write_line_$mode ""
             }
         }
@@ -7284,10 +7858,22 @@ proc cellE {} {
     }
     incr overhead $page_basic_indent
     set avail [expr $page_width - $overhead]
+
+    set left_margin [current_align_bias]
+    switch -- [current_align] {
+        left {
+            if {$left_margin < 0} {
+                if {$left_margin < -($page_basic_indent)} {
+                    set left_margin [expr -($page_basic_indent)]
+                }
+                incr avail [expr -($left_margin)]
+            }
+        }
+    }
+
     if {$avail < 0} {
         unexpected error "too many <ttcol>s to even build <texttable> frame"
     }
-    set left_margin $page_basic_indent
 
     # Compute basic statistics on the data.
     set min {}
@@ -7350,7 +7936,7 @@ proc cellE {} {
                 switch -- $units {
                     em      { set x $num }
                     %       { set x [expr ($num * $avail + 99) / 100]}
-                    *       { incr rel_total [set x -$num] }
+                    *       { incr rel_total [set x [expr -($num)]] }
                     default { set x 0 }
                 }
             }
@@ -7552,7 +8138,7 @@ proc cellE {} {
                 }
                 if {$plus_width > 0} {
                     set cols $kols
-                    incr target -$plus_width
+                    incr target [expr -($plus_width)]
                 } elseif {$num_rel > 0} {
                     set dd $target
                     set kols {}
@@ -7583,15 +8169,29 @@ proc cellE {} {
     }
 
     # Adjust $left_margin from $width and current align (for whole table).
+    set x [expr $avail - $width]
     switch -- [current_align] {
-        left {}
+        left {
+            if {$left_margin < 0} {
+                set x -1
+            }
+        }
         center {
-            incr left_margin [expr ($avail - $width) / 2]
+            incr left_margin [expr $x / 2]
         }
         right {
-            incr left_margin [expr $avail - $width]
+            incr left_margin $x
         }
     }
+    if {$x >= 0} {
+        if {$left_margin > $x} {
+            set left_margin $x
+        }
+        if {$left_margin < 0} {
+            set left_margin 0
+        }
+    }
+    incr left_margin $page_basic_indent
 
     # At this point, we have the $cols list, $num_cols, and $left_margin.
     set prefix [format "%*s" $left_margin ""]
@@ -7729,7 +8329,7 @@ proc shave_cols_excess {cols excess give {give_width -1}} {
     } elseif {$excess >= $give_width} {
         # Take everything; it may still not be enough.
         set cols [subtract_lists $cols $give]
-        incr excess -$give_width
+        incr excess [expr -($give_width)]
     } else {
         # Take only what we need, in relative proportion.
         set dd 0
@@ -7737,12 +8337,12 @@ proc shave_cols_excess {cols excess give {give_width -1}} {
         foreach c $cols g $give {
             if {$g > 0} {
                 set d [expr ($g * $excess) / $give_width]
-                incr c -$d
+                incr c [expr -($d)]
                 incr dd $d
             }
             lappend kols $c
         }
-        incr excess -$dd
+        incr excess [expr -($dd)]
 
         # Do the ones we missed because of integer division.
         if {$excess > 0} {
@@ -7772,7 +8372,7 @@ proc expand_cols {cols target plus {plus_width -1}} {
     } elseif {$target >= $plus_width} {
         # Take everything; it may still not be enough.
         set cols [add_lists $cols $plus]
-        incr target -$plus_width
+        incr target [expr -($plus_width)]
     } else {
         # Take only what we need, in relative proportion.
         set dd 0
@@ -7787,7 +8387,7 @@ proc expand_cols {cols target plus {plus_width -1}} {
             }
             lappend kols $c
         }
-        incr target -$dd
+        incr target [expr -($dd)]
 
         # Do the ones we missed because of integer division.
         if {$target > 0} {
@@ -7840,7 +8440,16 @@ proc expand_cols_by_height {cols target bound} {
                 if {$x >= $y} {
                     # Nearly reduce height to average by augmenting width.
                     set p 1
-                    set k [expr $x / $fnum]
+                    # Round height up at this point to avoid overshoot.
+                    set k [expr $x / ($fnum + $fden - 1)]
+                    if {$k < $w} {
+                        # But do no smaller than before.
+                        set k $w
+                    }
+                    if {$k > [expr $w + $target]} {
+                        # overshot anyway
+                        set k [expr $w + $target]
+                    }
                     set q [expr $k - $w]
                     incr plus_num
                     incr plus_width $q
@@ -7851,7 +8460,7 @@ proc expand_cols_by_height {cols target bound} {
         }
         if {$plus_width > 0} {
             set cols $kols
-            incr target -$plus_width
+            incr target [expr -($plus_width)]
         } elseif {$plus_num > 0} {
             # No progress due to integer division.  Make some.
             set dd $target
@@ -7966,6 +8575,9 @@ proc xref_txt {text av target format {hackP 0}} {
     set elemY $attrs(elemN)
     array set tv [list title ""]
     array set tv $elem($elemY)
+
+    # Turn any hyphens in value into non-breaking hyphens.
+    regsub -all -- "-" $attrs(value) "\u2011" attrs(value)
 
     switch -- $attrs(type) {
         section   { set line   "Section\xA0$attrs(value)"   }
@@ -8156,6 +8768,7 @@ proc spanx_txt {text style} {
 }
 
 proc references_txt {tag args} {
+    global mode
     global counter depth
     global pageno
     global page_basic_indent
@@ -8163,33 +8776,20 @@ proc references_txt {tag args} {
     switch -- $tag {
         begin {
             set prefix [lindex $args 0]
-            set title [lindex $args 1]
-            if {($depth(references) > 1) \
-                    && (![info exists counter(references)])} {
+            set title  [lindex $args 1]
+            if {   $depth(references) > 1
+                && ![info exists counter(references)]} {
                 set counter(references) 0
-                section_txt [lindex [split $prefix .] 0]. 1 References 0 ""
-            }
-            if {![have_lines 5]} {
-                end_page_txt
-            } else {
-                write_line_txt "" -1
+                section_$mode [lindex [split $prefix .] 0]. 1 References 0 ""
             }
 
-            push_indent -$page_basic_indent
-            write_text_txt "$prefix  "
-            push_indent [expr [string length $prefix]+1]
-            write_text_txt [chars_expand $title]
-            flush_text
-            pop_indent
-            pop_indent
-
-            return $pageno
+            return [section_$mode $prefix [expr $depth(references) <= 1] $title 3 ""]
         }
 
         end {
             set erefP [lindex $args 0]
             if {$erefP} {
-                erefs_txt
+                erefs_$mode
             } else {
                 flush_text
             }
@@ -8275,23 +8875,26 @@ proc crefs_txt {title} {
 
 proc reference_txt {prefix names title series formats date anchor target
                     target2 width annotations} {
+    global options
+    global max_ref_width
+
     write_line_txt ""
 
-    incr width 2
-    set i [expr [string length \
-                        [set prefix \
-                             [format %-*s $width "\[$prefix\]"]]+2]]
+    if {$width > $max_ref_width && !$options(.RFCEDSTYLE)} {
+        set width $max_ref_width
+    }
+    set i [string length $prefix]
+    set prefix [format %-*s [expr $width + 2] "\[$prefix\]"]
     write_text_txt $prefix
 
-    if {$i > 11} {
-        set i 11
+    if {$i > $width} {
         set s ""
         flush_text
     } else {
         set s "  "
     }
 
-    push_indent $i
+    push_indent [expr $width + 4]
 
     set nameA 1
     set nameN [llength $names]
@@ -8357,6 +8960,9 @@ proc authors_txt {authors} {
     global authorspg
     global page_basic_indent
 
+    if {!$options(.AUTHORSHIP)} {
+        return
+    }
     switch -- [llength $authors] {
         0       { return }
         1       { set s1 "'s"; set s2 ""   }
@@ -8364,8 +8970,14 @@ proc authors_txt {authors} {
     }
     set s "Author$s1 Address$s2"
 
-    write_line_txt ""
-    write_line_txt "" -1
+    if {!$options(.COMPACT) || ![have_lines 4]} {
+        end_page_txt
+    } else {
+        write_line_txt ""
+    }
+    if {!$options(.RFCEDSTYLE)} {
+        write_line_txt "" -1
+    }
     set authorspg $pageno
 
     set bi [format "%*s" $page_basic_indent ""]
@@ -8399,6 +9011,9 @@ proc authors_txt {authors} {
                 set key [lindex $contact 0]
                 set value [lindex [lindex $contacts \
                                           [lsearch0 $contacts $key]] 1]
+                if {$options(.RFCEDSTYLE) && ![string compare $key email]} {
+                    regsub -- m $value M value
+                }
                 set value [format %-6s $value:]
                 if {$options(.COLONSPACE)} {
                     append value " "
@@ -8407,8 +9022,6 @@ proc authors_txt {authors} {
             }
         }
     }
-
-    end_page_txt
 }
 
 proc back_txt {} {
@@ -8417,10 +9030,14 @@ proc back_txt {} {
 global pcdata_line_offset
 set pcdata_line_offset 0
 
-proc pcdata_txt {text {pre 0}} {
+proc pcdata_txt {text {pre 0} {nowrite 0} {spans {}} {divs {}} } {
     global eatP
     global options
     global pcdata_line_offset
+
+    if {[llength $spans] > 0 || [llength $divs] > 0} {
+        set text [html_quote $text]
+    }
 
     if {(!$pre) && ($eatP > 0)} {
         set text [string trimleft $text]
@@ -8449,6 +9066,14 @@ proc pcdata_txt {text {pre 0}} {
     foreach line [split $text "\n"] {
         set line [chars_expand $line]
         if {$pre} {
+            set x 0
+            while {[set x [lsearch0 $divs $pcdata_line_offset $x]] >= 0} {
+                if {![have_lines [lindex [lindex $divs $x] 1]]} {
+                    end_page_txt
+                    break
+                }
+                incr x
+            }
             write_line_txt [string trimright $line] $pre
         } else {
             write_pcdata_txt $prefix$line
@@ -8828,16 +9453,17 @@ proc write_line_txt {line {pre 0}} {
     }
     if {($pre) && ($x)} {
         if {$pre < 0} {
-            set pre [format "%*s" $page_basic_indent ""]
+            set prefix [format "%*s" $page_basic_indent ""]
         } else {
-            set pre [format %*s $pre ""]
+            # pre = 1 + total indent
+            set prefix [format %*s [expr $pre - 1] ""]
             set line [tabs_expand_pre $line]
         }
     } else {
-        set pre ""
+        set prefix ""
     }
     set line [nbsp_expand_txt [break_unprotect $line]]
-    write_it [set line [string trimright $pre$line]]
+    write_it [set line [string trimright $prefix$line]]
     incr lineno
     if {[set len [string length $line]] > $page_width} {
         global pageno
@@ -8860,17 +9486,18 @@ proc two_spaces {glop {flatten 0}} {
     global options
     global indent
 
-    set post ""
-
     # Work around a bug in tcl-8.4.9 and possibly others.
     # Don't ask, it's a mystery anyway.
     set foo "x$glop"
 
     if {$flatten} {
+        set post ""
         set glop [string trim $glop]
         regsub -all -- {[\t\n ]+} $glop { } glop
     } else {
-        regsub -all -start $indent -- {([^ ])[\t ]+} $glop {\1 } glop
+        set post [string range $glop 0 [expr $indent -1]]
+        set glop [string range $glop $indent end]
+        regsub -all -- {([^ ])[\t ]+} $glop {\1 } glop
     }
 
     if {$options(.COLONSPACE)} {
@@ -8962,7 +9589,6 @@ proc pi_txt {key value} {
     }
 }
 
-
 #       }}}2 txt rendering engine
 #       {{{2 html rendering engine
 #           {{{3 Main html mode
@@ -8987,7 +9613,7 @@ proc rfc_html {irefs authors iprstmt copying newP} {
             foreach {L item subitem flags pages} $iref { break }
 
             if {[string compare $L ""]} {
-                write_html "<tr><td><span class=\"strong\">$L</span></td><td>&nbsp;</td></tr>"
+                write_html "<tr><td><strong>$L</strong></td><td>&nbsp;</td></tr>"
             }
 
             if {[string compare $subitem ""]} {
@@ -9026,10 +9652,35 @@ proc rfc_html {irefs authors iprstmt copying newP} {
 
     if {(!$options(.PRIVATE)) && $copyrightP} {
         toc_html rfc.copyright
+
+        # See comment in "proc rfc_txt" about this content.
+
+        if {0 && $newP} {
+            write_html "<h3>Copyright Statement</h3>"
+        } else {
+            write_html "<h3>Full Copyright Statement</h3>"
+        }
+
+        foreach para $copying {
+            write_html "<p class='copyright'>"
+            pcdata_html $para
+            write_html "</p>"
+        }
+
+        if {$newP} {
+            #write_html "<h3>Disclaimer of Validity</h3>"
+
+            foreach para $validity {
+                write_html "<p class='copyright'>"
+                pcdata_html $para
+                write_html "</p>"
+            }
+        }
+
         if {$iprP} {
             global iprurl ipremail
 
-            write_html "<h3>Intellectual Property Statement</h3>"
+            write_html "<h3>Intellectual Property</h3>"
 
             regsub -all -- %IPRURL% $iprstmt "<a href='$iprurl'>$iprurl</a>" iprstmt
             if {$options(.LINKMAILTO)} {
@@ -9045,31 +9696,24 @@ proc rfc_html {irefs authors iprstmt copying newP} {
             }
         }
 
-        if {$newP} {
-            write_html "<h3>Disclaimer of Validity</h3>"
-
-            foreach para $validity {
-                write_html "<p class='copyright'>"
-                pcdata_html $para
-                write_html "</p>"
-            }
-        }
-
-        if {$newP} {
-            write_html "<h3>Copyright Statement</h3>"
+        if {$options(.RFCEDSTYLE)} {
+            set ack "Acknowledgement"
         } else {
-            write_html "<h3>Full Copyright Statement</h3>"
+            set ack "Acknowledgment"
         }
-
-        foreach para $copying {
-            write_html "<p class='copyright'>"
-            pcdata_html $para
-            write_html "</p>"
+        if {$options(.RFCPROCACK)} {
+            append ack s
         }
-
-        write_html "<h3>Acknowledgment</h3>"
+        write_html "<h3>$ack</h3>"
         write_html "<p class='copyright'>"
         pcdata_html $funding
+        if {$options(.RFCPROCACK)} {
+            global prog_ack prog_url
+
+            regsub -all -- %PROGURL% $prog_ack \
+                   "<a href='$prog_url'>$prog_url</a>" xml2rfc_ack
+            pcdata_html "  $xml2rfc_ack"
+        }
         write_html "</p>"
     }
 
@@ -9078,130 +9722,149 @@ proc rfc_html {irefs authors iprstmt copying newP} {
     return ""
 }
 
+#               {{{4 CSS style-sheet
 global htmlstyle
 
 set htmlstyle \
-"<style type='text/css'>
-<!--
-    body {
-        font-family: verdana, charcoal, helvetica, arial, sans-serif;
-        margin: 2em;
-        font-size: small ; color: #000000 ; background-color: #ffffff ; }
-    .title { color: #990000; font-size: x-large ;
-        font-weight: bold; text-align: right;
-        font-family: helvetica, monaco, \"MS Sans Serif\", arial, sans-serif;
-        background-color: transparent; }
-    .filename { color: #666666; font-size: 18px; line-height: 28px;
-        font-weight: bold; text-align: right;
-        font-family: helvetica, arial, sans-serif;
-        background-color: transparent; }
-    td.rfcbug { background-color: #000000 ; width: 30px ; height: 30px ;
-        text-align: justify; vertical-align: middle ; padding-top: 2px ; }
-    td.rfcbug span.RFC { color: #666666; font-weight: bold; text-decoration: none;
-        background-color: #000000 ;
-        font-family: monaco, charcoal, geneva, \"MS Sans Serif\", helvetica, verdana, sans-serif;
-        font-size: x-small ; }
-    td.rfcbug span.hotText { color: #ffffff; font-weight: normal; text-decoration: none;
-        text-align: center ;
-        font-family: charcoal, monaco, geneva, \"MS Sans Serif\", helvetica, verdana, sans-serif;
-        font-size: x-small ; background-color: #000000; }
-    /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
-    div#counter{margin-top: 100px}
+"<style type='text/css'><!--
+	body {
+		font-family: verdana, charcoal, helvetica, arial, sans-serif;
+		font-size: small; color: #000; background-color: #FFF;
+		margin: 2em;
+	}
+        h1, h2, h3, h4, h5, h6 {
+		font-family: helvetica, monaco, \"MS Sans Serif\", arial, sans-serif;
+		font-weight: bold; font-style: normal;
+	}
+	h1 { color: #900; background-color: transparent; text-align: right; }
+	h3 { color: #333; background-color: transparent; }
 
-    a.info{
-        position:relative; /*this is the key*/
-        z-index:24;
-        text-decoration:none}
+	td.RFCbug {
+		font-size: x-small; text-decoration: none;
+		width: 30px; height: 30px; padding-top: 2px;
+		text-align: justify; vertical-align: middle;
+		background-color: #000;
+	}
+	td.RFCbug span.RFC {
+		font-family: monaco, charcoal, geneva, \"MS Sans Serif\", helvetica, verdana, sans-serif;
+		font-weight: bold; color: #666;
+	}
+	td.RFCbug span.hotText {
+		font-family: charcoal, monaco, geneva, \"MS Sans Serif\", helvetica, verdana, sans-serif;
+		font-weight: normal; text-align: center; color: #FFF;
+	}
 
-    a.info:hover{z-index:25; background-color:#990000 ; color: #ffffff ;}
+	table.TOCbug { width: 30px; height: 15px; }
+	td.TOCbug {
+		text-align: center; width: 30px; height: 15px;
+		color: #FFF; background-color: #900;
+	}
+	td.TOCbug a {
+		font-family: monaco, charcoal, geneva, \"MS Sans Serif\", helvetica, sans-serif;
+		font-weight: bold; font-size: x-small; text-decoration: none;
+		color: #FFF; background-color: transparent;
+	}
 
-    a.info span{display: none}
+	td.header {
+		font-family: arial, helvetica, sans-serif; font-size: x-small;
+		vertical-align: top; width: 33%;
+		color: #FFF; background-color: #666;
+	}
+	td.author { font-weight: bold; font-size: x-small; margin-left: 4em; }
+	td.author-text { font-size: x-small; }
 
-    a.info:hover span.info{ /*the span will display just on :hover state*/
-        display:block;
-        position:absolute;
-        font-size: smaller ;
-        top:2em; left:2em; width:15em;
-        padding: 2px ;
-        border:1px solid #333333;
-        background-color:#eeeeee; color:#990000;
-        text-align: left ;}
+	/* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+	a.info {
+		/* This is the key. */
+		position: relative;
+		z-index: 24;
+		text-decoration: none;
+	}
+	a.info:hover {
+		z-index: 25;
+		color: #FFF; background-color: #900;
+	}
+	a.info span { display: none; }
+	a.info:hover span.info {
+		/* The span will display just on :hover state. */
+		display: block;
+		position: absolute;
+		font-size: smaller;
+		top: 2em; left: -5em; width: 15em;
+		padding: 2px; border: 1px solid #333;
+		color: #900; background-color: #EEE;
+		text-align: left;
+	}
 
-     A { font-weight: bold; }
-     A:link { color: #990000; background-color: transparent ; }
-     A:visited { color: #333333; background-color: transparent ; }
-     A:active { color: #333333; background-color: transparent ; }
+	a { font-weight: bold; }
+	a:link    { color: #900; background-color: transparent; }
+	a:visited { color: #633; background-color: transparent; }
+	a:active  { color: #633; background-color: transparent; }
 
-    p { margin-left: 2em; margin-right: 2em; }
-    p.copyright { font-size: x-small ; }
-    p.toc { font-size: small ; font-weight: bold ; margin-left: 3em ;}
-    table.toc { margin: 0 0 0 3em; padding: 0; border: 0; vertical-align: text-top; }
-    td.toc { font-size: small; font-weight: bold; vertical-align: text-top; }
+	p { margin-left: 2em; margin-right: 2em; }
+	p.copyright { font-size: x-small; }
+	p.toc { font-size: small; font-weight: bold; margin-left: 3em; }
+	table.toc { margin: 0 0 0 3em; padding: 0; border: 0; vertical-align: text-top; }
+	td.toc { font-size: small; font-weight: bold; vertical-align: text-top; }
 
-    span.emph { font-style: italic; }
-    span.strong { font-weight: bold; }
-    span.verb, span.vbare { font-family: \"Courier New\", Courier, monospace ; }
+	ol.text { margin-left: 2em; margin-right: 2em; }
+	ul.text { margin-left: 2em; margin-right: 2em; }
+	li      { margin-left: 3em; }
 
-    span.vemph { font-style: italic; font-family: \"Courier New\", Courier, monospace ; }
-    span.vstrong { font-weight: bold; font-family: \"Courier New\", Courier, monospace ; }
-    span.vdeluxe { font-weight: bold; font-style: italic; font-family: \"Courier New\", Courier, monospace ; }
+	/* RFC-2629 <spanx>s and <artwork>s. */
+	em     { font-style: italic; }
+	strong { font-weight: bold; }
+	dfn    { font-weight: bold; font-style: normal; }
+	cite   { font-weight: normal; font-style: normal; }
+	tt     { color: #036; }
+        tt, pre, pre dfn, pre em, pre cite, pre span {
+		font-family: \"Courier New\", Courier, monospace; font-size: small;
+	}
+	pre {
+		text-align: left; padding: 4px;
+		color: #000; background-color: #CCC;
+	}
+	pre dfn  { color: #900; }
+	pre em   { color: #66F; background-color: #FFC; font-weight: normal; }
+	pre .key { color: #33C; font-weight: bold; }
+	pre .id  { color: #900; }
+	pre .str { color: #000; background-color: #CFF; }
+	pre .val { color: #066; }
+	pre .rep { color: #909; }
+	pre .oth { color: #000; background-color: #FCF; }
+	pre .err { background-color: #FCC; }
 
-    ol.text { margin-left: 2em; margin-right: 2em; }
-    ul.text { margin-left: 2em; margin-right: 2em; }
-    li { margin-left: 3em;  }
+	/* RFC-2629 <texttable>s. */
+	table.full, table.headers, table.none {
+		font-size: small; text-align: center; border-width: 2px;
+		vertical-align: top; border-collapse: collapse;
+	}
+	table.full { border-style: solid; border-color: black; }
+	table.headers, table.none { border-style: none; }
+	th {
+		font-weight: bold; border-color: black;
+		border-width: 2px 2px 3px 2px;
+	}
+	table.full th { border-style: solid; }
+	table.headers th { border-style: none none solid none; }
+	table.none th { border-style: none; }
+	table.full td {
+		border-style: solid; border-color: #333;
+		border-width: 1px 2px;
+	}
+	table.headers td, table.none td { border-style: none; }
 
-    pre { margin-left: 3em; color: #333333;  background-color: transparent;
-        font-family: \"Courier New\", Courier, monospace ; font-size: small ;
-        text-align: left;
-        }
-
-    h3 { color: #333333; font-size: medium ;
-        font-family: helvetica, arial, sans-serif ;
-        background-color: transparent; }
-    h4 { font-size: small; font-family: helvetica, arial, sans-serif ; }
-
-    table.bug { width: 30px ; height: 15px ; }
-    td.bug { color: #ffffff ; background-color: #990000 ;
-        text-align: center ; width: 30px ; height: 15px ;
-         }
-    td.bug A.link2 { color: #ffffff ; font-weight: bold;
-        text-decoration: none;
-        font-family: monaco, charcoal, geneva, \"MS Sans Serif\", helvetica, sans-serif;
-        font-size: x-small ; background-color: transparent }
-
-    td.header { color: #ffffff; font-size: x-small ;
-        font-family: arial, helvetica, sans-serif; vertical-align: top;
-        background-color: #666666 ; width: 33% ; }
-    td.author { font-weight: bold; margin-left: 4em; font-size: x-small ; }
-    td.author-text { font-size: x-small; }
-    table.full { vertical-align: top ; border-collapse: collapse ;
-        border-style: solid solid solid solid ;
-        border-color: black black black black ;
-        font-size: small ; text-align: center ; }
-    table.headers, table.none { vertical-align: top ; border-collapse: collapse ;
-        border-style: none;
-        font-size: small ; text-align: center ; }
-    table.full th { font-weight: bold ;
-        border-style: solid ;
-        border-color: black black black black ; }
-    table.headers th { font-weight: bold ;
-        border-style: none none solid none;
-        border-color: black black black black ; }
-    table.none th { font-weight: bold ;
-        border-style: none; }
-    table.full td {
-        border-style: solid solid solid solid ;
-        border-color: #333333 #333333 #333333 #333333 ; }
-    table.headers td, table.none td { border-style: none; }
-
-    hr { height: 1px }
--->
-</style>"
-
+	hr { height: 1px; }
+	hr.insert {
+		width: 80%; border-style: none; border-width: 0;
+		color: #CCC; background-color: #CCC;
+	}
+--></style>"
+#               }}}4 CSS style-sheet
 
 proc front_html_begin {left right top bottom title status copying keywords
                        lang} {
-    global prog prog_version
+    global prog prog_version prog_url
     global options copyrightP
     global htmlstyle
     global doingP hangP needP
@@ -9256,7 +9919,7 @@ proc front_html_begin {left right top bottom title status copying keywords
     }
 
      write_html -nonewline "<meta name=\"generator\" content=\"$prog $prog_version "
-     write_html "(http://xml.resource.org/)\">"
+     write_html "($prog_url)\">"
     # End new meta tags.
 
     write_html "$htmlstyle\n</head>"
@@ -9290,17 +9953,20 @@ proc front_html_begin {left right top bottom title status copying keywords
         write_html "</table></td></tr></table>"
     }
 
-    set class title
+    write_html -nonewline "<h1>"
     foreach line $title {
-        write_html -nonewline "<div align=\"right\"><span class=\"$class\"><br />"
+        write_html -nonewline "<br />"
         pcdata_html $line
-        write_html "</span></div>"
-        set size 2
     }
+    write_html "</h1>"
 
     if {!$options(.PRIVATE)} {
         write_html ""
-        write_html "<h3>Status of this Memo</h3>"
+        if {$options(.RFCEDSTYLE)} {
+            write_html "<h3>Status of This Memo</h3>"
+        } else {
+            write_html "<h3>Status of this Memo</h3>"
+        }
         foreach para $status {
             write_html "<p>"
             pcdata_html $para
@@ -9318,7 +9984,7 @@ proc front_html_begin {left right top bottom title status copying keywords
 }
 
 proc front_html_end {toc} {
-    global options noticeT
+    global options
 
     if {!$options(.TOC)} {
         return
@@ -9430,12 +10096,12 @@ proc section_html {prefix top title {lines 0} anchor} {
     if {[string match *. $prefix]} {
         toc_html $anchor
         write_html -nonewline "<a name=\"$anchor2\"></a>"
-        write_html -nonewline "<h3>$prefix&nbsp;"
+        write_html "<h3>$prefix&nbsp;"
         pcdata_html $title
         write_html "</h3>"
     } else {
         write_html -nonewline "<a name=\"$anchor2\"></a>"
-        write_html -nonewline "<h4><a name=\"$anchor\">$prefix</a>&nbsp;"
+        write_html "<h4><a name=\"$anchor\">$prefix</a>&nbsp;"
         pcdata_html $title
         write_html "</h4>"
     }
@@ -9464,7 +10130,7 @@ proc t_html {tag counter style hangText editNo} {
     } elseif {![string compare $style "letters"]} {
         if {![string compare $tag begin]} {
             set l [split $counter .]
-            write_html "<dt>[offset2letters [lindex $l end] [llength $l]]</dt>"
+            write_html "<dt>[offset2letters [lindex $l end] [llength $l]].</dt>"
         }
         write_html -nonewline "<${s}dd>"
 
@@ -9498,7 +10164,7 @@ proc t_html {tag counter style hangText editNo} {
     }
 }
 
-proc list_html {tag counters style hangIndent hangText suprT} {
+proc list_html {tag min max style hangIndent longestHangText suprT} {
     global doingP hangP needP
 
     if {[string compare $tag begin]} {
@@ -9514,7 +10180,7 @@ proc list_html {tag counters style hangIndent hangText suprT} {
     }
     write_html ""
     switch -- $style {
-        letters - hanging {
+        letters - hanging - format {
             if {[string compare $tag begin]} {
                 write_html -nonewline "</dl></blockquote>"
             } else {
@@ -9536,10 +10202,11 @@ proc list_html {tag counters style hangIndent hangText suprT} {
 proc figure_html {tag lines anchor title {av {}} } {
     global xref
 
+    set hr {<hr class="insert" />}
     switch -- $tag {
         begin {
-            if {[string compare $title ""]} {
-                write_html "<br /><hr />"
+            if {[string compare $title ""] || [string compare $anchor ""]} {
+                write_html "<br />$hr"
             }
             if {[string compare $anchor ""]} {
                 write_html "<a name=\"$anchor\"></a>"
@@ -9559,11 +10226,12 @@ proc figure_html {tag lines anchor title {av {}} } {
                 }
             }
             if {[string compare $title ""]} {
-                switch -- [set a [current_align]] {
-                    left - center - right { set al " align=\"$a\"" }
-                    default { set al "" }
-                }
-                write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\"$al><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br /></td></tr></table><hr size=\"1\" shade=\"0\">"
+                #switch -- [set a [current_align]] {
+                #    left - center - right { set al " align=\"$a\"" }
+                #    default { set al "" }
+                #}
+                set al " align=\"center\""
+                write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\"$al><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br /></td></tr></table>$hr"
             }
         }
     }
@@ -9577,7 +10245,7 @@ proc img_html {tag bit {av {}} } {
     global imgP
     global options
 
-    if {[set x [lsearch -exact $av src]] < 0 || $x % 2} {
+    if {[set x [lsearch -exact $av src]] < 0 || $x & 1} {
         return
     }
 
@@ -9614,14 +10282,15 @@ proc img_html {tag bit {av {}} } {
                     }
 
                     align {
-                        switch -- $v {
+                        regsub -- {[-+][0-9]+em$} $v "" vv
+                        switch -- $vv {
                             left - center - right {
-                                append line " style='text-align: $v'"
+                                append line " style='text-align: $vv'"
                             }
 
                             default {
                                 unexpected error \
-                                    "align=\"$align\" attribute is invalid"
+                                    "align=\"$v\" attribute is invalid"
                             }
                         }
                     }
@@ -9678,10 +10347,11 @@ proc postamble_html {tag {editNo ""}} {
 proc texttable_html {tag lines anchor title} {
     global xref
 
+    set hr {<hr class="insert" />}
     switch -- $tag {
         begin {
-            if {[string compare $title ""]} {
-                write_html "<br /><hr />"
+            if {[string compare $title ""] || [string compare $anchor ""]} {
+                write_html "<br />$hr"
             }
             if {[string compare $anchor ""]} {
                 write_html "<a name=\"$anchor\"></a>"
@@ -9699,11 +10369,12 @@ proc texttable_html {tag lines anchor title} {
                 }
             }
             if {[string compare $title ""]} {
-                switch -- [set a [current_align]] {
-                    left - center - right { set al " align=\"$a\"" }
-                    default { set al "" }
-                }
-                write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\"$al><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br /></td></tr></table><hr size=\"1\" shade=\"0\">"
+                #switch -- [set a [current_align]] {
+                #    left - center - right { set al " align=\"$a\"" }
+                #    default { set al "" }
+                #}
+                set al " align=\"center\""
+                write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\"$al><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br /></td></tr></table>$hr"
             }
         }
     }
@@ -9818,6 +10489,9 @@ proc xref_html {text av target format {hackP 0}} {
     array set tv [list title ""]
     array set tv $elem($elemY)
 
+    # Turn any hyphens in value into non-breaking hyphens.
+    regsub -all -- "-" $attrs(value) {\&#8209;} attrs(value)
+
     set title ""
     switch -- $attrs(type) {
         section {
@@ -9904,9 +10578,9 @@ proc xref_html {text av target format {hackP 0}} {
     }
 
     #set line "<a href=\"#$target\"$title>$text</a>$post"
-    set line "<a class=\"info\" href=\"#$target\">$text"
+    set line "<a class='info' href='#$target'>$text"
     if {[string compare $title ""]} {
-        append line "<span> (</span><span class=\"info\">$title</span><span>)</span>"
+        append line "<span> (</span><span class='info'>$title</span><span>)</span>"
     }
     append line "</a>$post"
 
@@ -9930,7 +10604,7 @@ proc eref_html {text counter target} {
         set text [emoticonic_html $text]
     }
 
-    set line "<a href=\"$target\">$text</a>"
+    set line "<a href='$target'>$text</a>"
     if {![cellP $line]} {
         global emptyP
 
@@ -9953,9 +10627,9 @@ proc cref_html {text counter source anchor} {
     regsub -all -- "\r" $comments { }       comments
     regsub -all -- "\n" $comments { }       comments
 
-    #set line "<a href=\"#comment.$counter\" title=\"$comments\">\[$counter\]</a>"
-    set line "<a class=\"info\" href=\"#comment.$counter\">\[$counter\]<span> (</span><span class=\"info\">$comments</span><span>)</span></a>"
-    append line "<a name=\"$anchor\"></a>"
+    #set line "<a href='#comment.$counter' title='$comments'>\[$counter\]</a>"
+    set line "<a class='info' href='#comment.$counter'>\[$counter\]<span> (</span><span class='info'>$comments</span><span>)</span></a>"
+    append line "<a name='$anchor'></a>"
 
     if {![cellP $line]} {
         global emptyP
@@ -9970,7 +10644,7 @@ proc iref_html {item subitem flags} {
 
     set anchor anchor[incr anchorN]
 
-    write_html -nonewline "<a name=\"$anchor\"></a>"
+    write_html -nonewline "<a name='$anchor'></a>"
 
     return $anchor
 }
@@ -9986,7 +10660,7 @@ proc vspace_html {lines} {
 
         return
     }
-    incr lines -$hangP
+    incr lines [expr -($hangP)]
     while {$lines >= 0} {
         incr lines -1
         write_html "<br />"
@@ -9996,7 +10670,29 @@ proc vspace_html {lines} {
 }
 
 proc spanx_html {text style} {
-    write_html -nonewline "<span class=\"$style\">$text</span>"
+    set p 1
+    switch -- $style {
+        verb
+        - vbare { set e tt              }
+        vemph   { set e {tt em}         }
+        vstrong { set e {tt strong}     }
+        vdeluxe { set e {tt strong em}  }
+        emph    { set e em;     set p 0 }
+        strong  { set e strong; set p 0 }
+        default { set e {};     set p 0 }
+    }
+    #if {$p} {
+    #    regsub -all -- { } $text {\&nbsp;} text
+    #}
+
+    set s ""
+    set t ""
+    foreach x $e {
+        append s "<$x>"
+        set    t "</$x>$t"
+    }
+
+    write_html -nonewline "$s$text$t"
 }
 
 # Don't need to return anything even though txt/nr versions do...
@@ -10015,7 +10711,7 @@ proc references_html {tag args} {
     switch -- $tag {
         begin {
             set prefix [lindex $args 0]
-            set title [lindex $args 1]
+            set title  [lindex $args 1]
             if {($depth(references) > 1) \
                     && (![info exists counter(references)])} {
                 set counter(references) 0
@@ -10073,8 +10769,10 @@ proc reference_html {prefix names title series formats date anchor target
 
     if {(![string compare $target ""]) && ([llength $formats] == 1)} {
         array set fv [lindex $formats 0]
-        set target $fv(target)
-        set formats {}
+        if {[info exists fv(target)]} {
+	    set target $fv(target)
+	    set formats {}
+	}
     }
 
     if {![string compare $target ""]} {
@@ -10110,7 +10808,7 @@ proc reference_html {prefix names title series formats date anchor target
     set s "$r ("
     set t ".$r"
     foreach format $formats {
-        catch { unset fv }
+        catch { array unset fv }
         array set fv $format
         if {[info exists fv(target)]} {
             append text "$s<a href=\"$fv(target)\">$fv(type)</a>"
@@ -10175,6 +10873,9 @@ proc authors_html {authors} {
 
     set authorspg rfc.authors
 
+    if {!$options(.AUTHORSHIP)} {
+        return
+    }
     switch -- [llength $authors] {
         0       { return }
         1       { set s1 "'s"; set s2 ""   }
@@ -10203,6 +10904,9 @@ proc authors_html {authors} {
             set key [lindex $contact 0]
             set value [lindex [lindex $contacts \
                                       [lsearch0 $contacts $key]] 1]
+            if {$options(.RFCEDSTYLE) && ![string compare $key email]} {
+                regsub -- m $value M value
+            }
             write_html "<tr><td class=\"author\" align=\"right\">$value:&nbsp;</td>"
             set value [lindex $contact 1]
             switch -- $key {
@@ -10248,13 +10952,13 @@ proc xxxx_html {{anchor {}} } {
     write_html "
 <table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" width=\"30\" align=\"right\">
     <tr>
-        <td class=\"rfcbug\">
+        <td class=\"RFCbug\">
                 <span class=\"RFC\">&nbsp;RFC&nbsp;</span><br /><span class=\"hotText\">&nbsp;$number&nbsp;</span>
         </td>
     </tr>"
 
     if {$options(.TOC)} {
-        write_html "    <tr><td class=\"bug\"><a href=\"#toc\" class=\"link2\">&nbsp;TOC&nbsp;</a><br /></td></tr>"
+        write_html "    <tr><td class=\"TOCbug\"><a href=\"#toc\">&nbsp;TOC&nbsp;</a><br /></td></tr>"
     }
     write_html "</table>"
 }
@@ -10271,17 +10975,57 @@ proc toc_html {anchor} {
     }
 
     if {[string compare $anchor toc]} {
-        write_html "<table summary=\"layout\" cellpadding=\"0\" cellspacing=\"2\" class=\"bug\" align=\"right\"><tr><td class=\"bug\"><a href=\"#toc\" class=\"link2\">&nbsp;TOC&nbsp;</a></td></tr></table>"
+        write_html "<table summary=\"layout\" cellpadding=\"0\" cellspacing=\"2\" class=\"TOCbug\" align=\"right\"><tr><td class=\"TOCbug\"><a href=\"#toc\">&nbsp;TOC&nbsp;</a></td></tr></table>"
     }
 }
 
-proc pcdata_html {text {pre 0} {nowrite 0}} {
+proc pcdata_html {text {pre 0} {nowrite 0} {spans {}} {divs {}} } {
     global options
     global doingP needP
     global imgP
 
     if {$imgP} {
         return
+    }
+
+    # Do colorization first because spans are indexed from the original text.
+    if {[llength $spans] > 0} {
+        set data $text
+        set text ""
+        set pos 0
+
+        foreach span $spans {
+            foreach {t p l} $span {break}
+            if {$pos < $p} {
+                append text [html_quote [string range $data $pos [expr $p - 1]]]
+            } elseif {$pos >= $p + $l} {
+                continue
+            } elseif {$pos > $p} {
+                incr l [expr $p - $pos]
+                set p $pos
+            }
+            set pos [expr $p + $l]
+            if {$l > 0} {
+                switch -- $t {
+                    def      { set e dfn }
+                    com      { set e em }
+                    key - id { set e cite; set c $t }
+                    default  { set e span; set c $t }
+                }
+                set spn "<$e"
+                if {[info exists c]} {
+                    append spn " class='$c'"
+                    unset c
+                }
+                append spn ">"
+                append spn [html_quote [string range $data $p [expr $pos - 1]]]
+                append spn "</$e>"
+                append text $spn
+            }
+        }
+        append text [html_quote [string range $data $pos end]]
+    } elseif {[llength $divs] > 0} {
+        set text [html_quote $text]
     }
 
     set lines ""
@@ -10404,7 +11148,7 @@ proc end_rfc_slides {} {
 
                 puts -nonewline $fd [base64 -mode decode -- [set ${gif}Gif]]
 
-                close $fd
+                catch { close $fd }
             }
         }
     }
@@ -10471,12 +11215,13 @@ proc start_page_slides {{title ""}} {
 
     if {$slideno == 0} {
         catch { close $out_fd }
+        set out_fd ""
         catch { file delete -force [file rootname].html }
     }
 
     set out_fd [open [file rootname $ifile]-[set p [slide_foo $slideno]].html \
                      { WRONLY CREAT TRUNC }]
-    catch { fconfigure $out_fd -encoding utf-8 -translation lf }
+    catch { fconfigure $out_fd -encoding utf-8 }
 
     if {[string compare $title ""]} {
         set slidenm $title
@@ -10595,26 +11340,34 @@ proc pre_tag_html {tag} {
 
     switch -- $tag {
         begin {
-            #set table "<table border='0' cellspacing='0' cellpadding='0' width='100%'>"
-            set table "<div style='display: table; width: 0px; margin-left: auto; margin-right:"
-            #set st "<tbody><tr><td></td><td>"
+            set ml auto
+            set mr auto
+            append str "<div style='display: table; width: 0; "
+            set b [current_align_bias]
             switch -- [current_align] {
-                #center { append str "$table<col width='50%' /><col /><col width='50%'>$st" }
-                center { append str "$table auto'>" }
-                #right  { append str "$table<col width='100%' /><col />$st" }
-                right  { append str "$table 0px'>" }
+                center  {}
+                right   {
+                    if {$b < 0} {
+                        set mr [expr -($b)]em
+                    } else {
+                        set mr 0
+                    }
+                }
+                default {
+                    incr b 3
+                    if {$b > 0} {
+                        set ml [expr $b]em
+                    } else {
+                        set ml 0
+                    }
+                }
             }
+            append str "margin-left: $ml; margin-right: $mr'>"
             append str "<pre>"
         }
 
         end {
-            append str "</pre>"
-            #set et "</td></tr></tbody></table>"
-            switch -- [current_align] {
-                #center { append str "</td><td>$et" }
-                #right  { append str $et }
-                center - right { append str "</div>" }
-            }
+            append str "</pre></div>"
         }
     }
 
@@ -10656,7 +11409,6 @@ proc write_html {a1 {a2 ""}} {
 #       }}}2 html rendering engine
 #       {{{2 nr(off) rendering engine
 
-
 proc rfc_nr {irefs authors iprstmt copying newP} {
     global options copyrightP iprP
     global funding validity
@@ -10664,11 +11416,15 @@ proc rfc_nr {irefs authors iprstmt copying newP} {
     global indexpg
     global page_basic_indent
 
-    flush_text
-
     if {[llength $irefs] > 0} {
-        end_page_nr
-
+        if {!$options(.COMPACT) || ![have_lines 4]} {
+            end_page_nr
+        } else {
+            write_line_nr ""
+        }
+        if {!$options(.RFCEDSTYLE)} {
+            write_line_nr "" -1
+        }
         set indexpg $pageno
 
         condwrite_in_nr 0 1
@@ -10710,50 +11466,17 @@ proc rfc_nr {irefs authors iprstmt copying newP} {
 
     if {(!$options(.PRIVATE)) && $copyrightP} {
         end_page_nr
-
+        if {!$options(.RFCEDSTYLE)} {
+            write_line_nr "" -1
+        }
         set result $pageno
 
         condwrite_in_nr $page_basic_indent 1
 
-        if {$iprP} {
-            global iprurl ipremail
-
-            write_it ".ti 0"
-            write_line_nr "Intellectual Property Statement"
-
-            regsub -all -- %IPRURL% $iprstmt $iprurl iprstmt
-            regsub -all -- %IPREMAIL% $iprstmt $ipremail iprstmt
-
-            foreach para $iprstmt {
-                write_line_nr ""
-                pcdata_nr $para
-            }
-            write_line_nr "" -1
-            write_line_nr "" -1
-        }
-
-        if {$newP} {
-            if {![have_lines 4]} {
-                end_page_nr
-            }
-
-            write_it ".ti 0"
-            write_line_nr "Disclaimer of Validity"
-
-            foreach para $validity {
-                write_line_nr ""
-                pcdata_nr $para
-            }
-            write_line_nr "" -1
-            write_line_nr "" -1
-        }
-
-        if {![have_lines 4]} {
-            end_page_nr
-        }
+        # See comment in "proc rfc_txt" about this content.
 
         write_it ".ti 0"
-        if {$newP} {
+        if {0 && $newP} {
             write_line_nr "Copyright Statement"
         } else {
             write_line_nr "Full Copyright Statement"
@@ -10763,22 +11486,75 @@ proc rfc_nr {irefs authors iprstmt copying newP} {
             write_line_nr ""
             pcdata_nr $para
         }
+
+        if {$newP} {
+            #if {![have_lines 4]} {
+            #    end_page_nr
+            #}
+
+            #write_it ".ti 0"
+            #write_line_nr "Disclaimer of Validity"
+
+            foreach para $validity {
+                write_line_nr ""
+                pcdata_nr $para
+            }
+        }
         write_line_nr "" -1
-        write_line_nr "" -1
+        if {!$options(.RFCEDSTYLE)} {
+            write_line_nr "" -1
+        }
+
+        if {$iprP} {
+            global iprurl ipremail
+
+            if {![have_lines 4]} {
+                end_page_nr
+            }
+
+            write_it ".ti 0"
+            write_line_nr "Intellectual Property"
+
+            regsub -all -- %IPRURL% $iprstmt $iprurl iprstmt
+            regsub -all -- %IPREMAIL% $iprstmt $ipremail iprstmt
+
+            foreach para $iprstmt {
+                write_line_nr ""
+                pcdata_nr $para
+            }
+            write_line_nr "" -1
+            if {!$options(.RFCEDSTYLE)} {
+                write_line_nr "" -1
+            }
+        }
 
         if {![have_lines 4]} {
             end_page_nr
         }
 
         write_it ".ti 0"
-        write_line_nr "Acknowledgment"
+        if {$options(.RFCEDSTYLE)} {
+            set ack "Acknowledgement"
+        } else {
+            set ack "Acknowledgment"
+        }
+        if {$options(.RFCPROCACK)} {
+            append ack s
+        }
+        write_line_nr $ack
         write_line_nr ""
         pcdata_nr $funding
+        if {$options(.RFCPROCACK)} {
+            global prog_ack prog_url
 
-        flush_text
+            regsub -all -- %PROGURL% $prog_ack $prog_url xml2rfc_ack
+            pcdata_nr "  $xml2rfc_ack"
+        }
     } else {
         set result ""
     }
+
+    flush_text
 
     return $result
 }
@@ -10853,7 +11629,11 @@ proc front_nr_begin {left right top bottom title status copying keywords
 
     if {!$options(.PRIVATE)} {
         write_it ".ti 0"
-        write_line_nr "Status of this Memo"
+        if {$options(.RFCEDSTYLE)} {
+            write_line_nr "Status of This Memo"
+        } else {
+            write_line_nr "Status of this Memo"
+        }
         foreach para $status {
             write_line_nr ""
             pcdata_nr $para
@@ -10878,14 +11658,26 @@ proc write_toc_nr {s1 title s2 len dot} {
 }
 
 proc abstract_nr {} {
-    write_line_nr "" -1
+    global options
+
+    if {!$options(.COMPACT) || ![have_lines 4]} {
+        end_page_nr
+    } else {
+        write_line_nr ""
+    }
     write_it ".ti 0"
     write_line_nr "Abstract"
     write_line_nr "" -1
 }
 
 proc note_nr {title depth} {
-    write_line_nr "" -1
+    global options
+
+    if {!$options(.COMPACT) || ![have_lines 4]} {
+        end_page_nr
+    } else {
+        write_line_nr ""
+    }
     write_it ".ti 0"
     write_line_nr [chars_expand $title]
     write_line_nr "" -1
@@ -10896,12 +11688,12 @@ proc section_nr {prefix top title lines anchor} {
     global pageno
     global page_basic_indent
 
-    if {($top && !$options(.COMPACT)) || (![have_lines [expr $lines+2]])} {
+    if {($top && !$options(.COMPACT)) || (![have_lines [expr $lines + 2]])} {
         end_page_nr
     } else {
         write_line_nr ""
     }
-    if {$top} {
+    if {$top && !$options(.RFCEDSTYLE)} {
         write_line_nr "" -1
     }
 
@@ -10916,127 +11708,11 @@ proc section_nr {prefix top title lines anchor} {
 }
 
 proc t_nr {tag counter style hangText editNo} {
-    global options
-    global eatP
-    global page_basic_indent
-
-    if {$eatP < 0} {
-        set eatP 1
-    }
-    if {![string compare $tag end]} {
-        return
-    }
-
-    if {[string compare $counter ""]} {
-        set pos [pop_indent]
-        set l [split $counter .]
-        set left -1
-        set lines 3
-        switch -- $style {
-            letters {
-                set counter [offset2letters [lindex $l end] [llength $l]]
-                # prevent two_spaces from kicking in.
-                append counter ".\xA0"
-            }
-
-            numbers {
-                # prevent two_spaces from kicking in.
-                set counter "[lindex $l end].\xA0"
-            }
-
-            symbols {
-                set counter "[lindex { - o * + } [expr [llength $l]%4]] "
-            }
-
-            hanging {
-                # prevent two_spaces from kicking in.
-                set counter "[chars_expand $hangText]\xA0"
-                if {$pos <= $page_basic_indent} {
-                    set left ""
-                } else {
-                    set left -1
-                }
-                set lines 5
-            }
-
-            default {
-                set counter "  "
-                set left -2
-            }
-        }
-        if {![have_lines $lines]} {
-            end_page_nr
-        }
-        if {$options(.EDITING)} {
-            write_editno_nr $editNo
-        } elseif {!$options(.SUBCOMPACT)} {
-            write_line_nr ""
-        }
-        indent_text_nr [format "%-[expr $pos-0]s" $counter] $left
-        pop_indent
-        push_indent $pos
-    } else {
-        if {$options(.EDITING)} {
-            write_editno_nr $editNo
-        } else {
-            write_line_nr ""
-        }
-    }
-
-    set eatP 1
+    t_txt $tag $counter $style $hangText $editNo
 }
 
-proc list_nr {tag counters style hangIndent hangText suprT} {
-    global options
-    global eatP
-    global indent
-
-    switch -- $tag {
-        begin {
-            switch -- $style {
-                letters {
-                  set i [expr int(log([llength $counters])/log(26))+2]
-                }
-
-                numbers {
-                    set i 0
-                    foreach counter $counters {
-                        if {[set j [string length \
-                                           [lindex [split $counter .] end]]] \
-                                > $i} {
-                            set i $j
-                        }
-                    }
-                    incr i 1
-                }
-
-                format {
-                    set i [expr [string length [chars_expand $hangText]]-1]
-                }
-
-                default {
-                    set i 1
-                }
-            }
-            if {[incr i 2] > $hangIndent} {
-                push_indent [expr $i+0]
-            } else {
-                push_indent [expr $hangIndent+0]
-            }
-        }
-
-        end {
-            flush_text
-            if {!$options(.SUBCOMPACT)} {
-                write_line_nr ""
-            }
-            pop_indent
-
-            set eatP 1
-
-            condwrite_in_nr $indent
-        }
-    }
+proc list_nr {tag min max style hangIndent longestHangText suprT} {
+    list_txt $tag $min $max $style $hangIndent $longestHangText $suprT
 }
 
 proc figure_nr {tag lines anchor title {av {}} } {
@@ -11121,45 +11797,8 @@ proc spanx_nr {text style} {
     spanx_txt $text $style
 }
 
-proc references_nr {tag args} {
-    global counter depth
-    global pageno
-    global page_basic_indent
-
-    switch -- $tag {
-        begin {
-            set prefix [lindex $args 0]
-            set title [lindex $args 1]
-            if {($depth(references) > 1) \
-                    && (![info exists counter(references)])} {
-                set counter(references) 0
-                section_nr [lindex [split $prefix .] 0]. 1 References 0 ""
-            }
-            if {![have_lines 5]} {
-                end_page_nr
-            } else {
-                write_line_nr "" -1
-            }
-
-            indent_text_nr "$prefix  " 0
-            write_text_nr [chars_expand $title]
-            flush_text
-            pop_indent
-
-            condwrite_in_nr $page_basic_indent 1
-
-            return $pageno
-        }
-
-        end {
-            set erefP [lindex $args 0]
-            if {$erefP} {
-                erefs_nr
-            } else {
-                flush_text
-            }
-        }
-    }
+proc references_nr {tag arg0 {arg1 ""}} {
+    references_txt $tag $arg0 $arg1
 }
 
 proc erefs_nr {{title ""}} {
@@ -11233,23 +11872,26 @@ proc crefs_nr {title} {
 
 proc reference_nr {prefix names title series formats date anchor target
                    target2 width annotations} {
+    global options
+    global max_ref_width
     global page_basic_indent
 
     write_line_nr ""
 
-    incr width 2
-    set i [expr [string length \
-                        [set prefix \
-                             [format %-*s $width "\[$prefix\]"]]+2]]
+    if {$width > $max_ref_width && !$options(.RFCEDSTYLE)} {
+        set width $max_ref_width
+    }
+    set i [string length $prefix]
+    set prefix [format %-*s [expr $width + 2] "\[$prefix\]"]
 
-    if {$i > 11} {
+    if {$i > $width} {
         # The indent_text_nr abstraction isn't robust enough to figure this out...
         global indent
 
         flush_text
         condwrite_fi_nr
 
-        push_indent [expr 14 - $indent]
+        push_indent [expr $page_basic_indent + $width + 4 - $indent]
 
         condwrite_in_nr $indent
         write_it ".ti $page_basic_indent"
@@ -11303,6 +11945,9 @@ proc authors_nr {authors} {
     global authorspg
     global page_basic_indent
 
+    if {!$options(.AUTHORSHIP)} {
+        return
+    }
     switch -- [llength $authors] {
         0       { return }
         1       { set s1 "'s"; set s2 ""   }
@@ -11310,7 +11955,14 @@ proc authors_nr {authors} {
     }
     set s "Author$s1 Address$s2"
 
-    end_page_nr
+    if {!$options(.COMPACT) || ![have_lines 4]} {
+        end_page_nr
+    } else {
+        write_line_nr ""
+    }
+    if {!$options(.RFCEDSTYLE)} {
+        write_line_nr "" -1
+    }
     set authorspg $pageno
 
     condwrite_in_nr $page_basic_indent 1
@@ -11347,6 +11999,9 @@ proc authors_nr {authors} {
                 set key [lindex $contact 0]
                 set value [lindex [lindex $contacts \
                                           [lsearch0 $contacts $key]] 1]
+                if {$options(.RFCEDSTYLE) && ![string compare $key email]} {
+                    regsub -- m $value M value
+                }
                 set value [format %-6s $value:]
                 if {$options(.COLONSPACE)} {
                     append value " "
@@ -11360,11 +12015,15 @@ proc authors_nr {authors} {
 proc back_nr {} {
 }
 
-proc pcdata_nr {text {pre 0}} {
+proc pcdata_nr {text {pre 0} {nowrite 0} {spans {}} {divs {}} } {
     global eatP
     global options
     global pcdata_line_offset
     global page_basic_indent
+
+    if {[llength $spans] > 0 || [llength $divs] > 0} {
+        set text [html_quote $text]
+    }
 
     if {(!$pre) && ($eatP > 0)} {
         set text [string trimleft $text]
@@ -11398,6 +12057,14 @@ proc pcdata_nr {text {pre 0}} {
     foreach line [split $text "\n"] {
         set line [chars_expand $line]
         if {$pre} {
+            set x 0
+            while {[set x [lsearch0 $divs $pcdata_line_offset $x]] >= 0} {
+                if {![have_lines [lindex [lindex $divs $x] 1]]} {
+                    end_page_nr
+                    break
+                }
+                incr x
+            }
             write_line_nr [string trimright $line] $pre
         } else {
             write_pcdata_nr $prefix$line
@@ -11565,7 +12232,7 @@ proc write_line_nr {line {pre 0} {magic 0}} {
         set blankP 0
     }
     if {($pre) && ($x)} {
-        condwrite_in_nr [expr $pre > 0 ? $pre : $page_basic_indent]
+        condwrite_in_nr [expr $pre > 0 ? ($pre - 1) : $page_basic_indent]
         if {$pre > 0} {
             set line [tabs_expand_pre $line]
             set x [string length [set orig_line $line]]
@@ -11584,10 +12251,10 @@ proc write_line_nr {line {pre 0} {magic 0}} {
     }
     write_it $line
     incr lineno
-    if {$pre > 0 && [set len [expr $pre + $x]] > $page_width} {
+    if {$pre > 0 && [set len [expr ($pre - 1) + $x]] > $page_width} {
         global pageno
 
-        regsub -all -- \" [string range $orig_line [expr $page_width - $pre] end] {\"} excess
+        regsub -all -- \" [string range $orig_line [expr $page_width - ($pre - 1)] end] {\"} excess
         unexpected [unex_condtype] \
             "output line $lineno (on page $pageno) has $len > $page_width characters (excess string is \"$excess\")"
     }
@@ -11661,7 +12328,6 @@ proc setup_align_nr {tag dir} {
     write_it ".$xx$v"
 }
 
-
 #       }}}2 nr(off) rendering engine
 #   }}}1 Rendering engines
 
@@ -11688,7 +12354,7 @@ set idTxtHome http://www.ietf.org/internet-drafts
 #       }}}2 Some globals
 #       {{{2 Characters entities
 
-global xentities oentities entities
+global xentities oentities entities uentities
 
 # Hex entities (&#x3F;) are first converted to dec entities (&#63;) elsewhere.
 # Only put dec entities or (case-sensitive) named entities here.
@@ -11696,8 +12362,9 @@ global xentities oentities entities
 # &nbsp;, &nbhy;, and &wj; are first converted to actual characters here
 #   then handled elsewhere by the txt and nr rendering engines.
 
-# For compatibility with previous versions (really invalid).
-set xentities [list "&#(0*151|x0*97);" "\\&mdash;"]
+set uentities [list {&rfc2629\.processor;} "$prog\\&nbsp;$prog_version"]
+# For compatibility with previous versions (really invalid form of mdash).
+set xentities [concat $uentities [list "&#(0*151|x0*97);" "\\&mdash;"]]
 set oentities $xentities
 
 # Entity names unknown to HTML and XHTML.
@@ -11722,6 +12389,7 @@ foreach {e c t} {
     set c [expr $c]
     lappend xentities "&$e;"         "\\&#$c;"
     lappend oentities "&($e|#0*$c);" $t
+    lappend uentities "&$e;" [format %c $c]
 }
 
 # Some entities known to HTML and XHTML.
@@ -11760,6 +12428,7 @@ foreach {e c t} {
  } {
     set c [expr $c]
     lappend oentities "&($e|#0*$c);" $t
+    lappend uentities "&$e;" [format %c $c]
 }
 
 # ISO Latin 1 (named and dec) entities (all known to HTML and XHTML).
@@ -11792,6 +12461,7 @@ foreach {e t} {
     uuml   ue                  yacute y          thorn  {[thorn]}  yuml   y
  } {
     lappend oentities "&($e|#0*$c);" $t
+    lappend uentities "&$e;" [format %c $c]
     incr c
 }
 
@@ -11935,6 +12605,10 @@ set aligns {}
 proc push_align {a} {
     global aligns
 
+    if {[regexp -- {^(left[-+]|center[-+]|right-)[0-9]+em$} $a]} {
+        lappend aligns $a
+        return
+    }
     switch -- $a {
         left - center - right { lappend aligns $a }
 
@@ -11957,11 +12631,29 @@ proc pop_align {} {
 proc current_align {} {
     global aligns
 
+    set a ""
     if {[llength $aligns] > 0} {
-        return [lindex $aligns end]
+        set a [lindex $aligns end]
+    }
+    regsub -- {[-+][0-9]+em$} $a "" a
+
+    return $a
+}
+
+proc current_align_bias {} {
+    global aligns
+
+    set a ""
+    if {[llength $aligns] > 0} {
+        set a [lindex $aligns end]
+    }
+    if {[regexp -- {([-+][0-9]+)em$} $a x b]} {
+        set b [expr $b]
+    } else {
+        set b 0
     }
 
-    return ""
+    return $b
 }
 
 #       }}}2 Align utility functions
@@ -12150,6 +12842,8 @@ proc list_sep_str {i n} {
 #       }}}2 Textual lists utility functions
 #       {{{2 Character expansion
 
+# This expands entities and non-ASCII characters
+# into ASCII characters and ASCII-art glyphs.
 proc chars_expand {text {flatten 1}} {
     global entities
 
@@ -12205,11 +12899,79 @@ proc chars_expand {text {flatten 1}} {
     return $text
 }
 
+# This expands all entities into Unicode characters.
+# Unknown entities are silently replaced
+# by a REPLACEMENT CHARACTER (U+FFFD).
+proc ent_expand {text} {
+    global uentities
+
+    # Process hex; support leading zeros and -nocase.
+    while {[regexp -nocase -- {&#x([0-9A-Z]+);} $text x y]} {
+        set y [expr 0x$y]
+        if {$y == 38} {
+            # Skip ampersand.
+            continue
+        }
+        regsub -all -nocase -- $x $text [format %c $y] text
+    }
+
+    # Process dec; support leading zeros.
+    while {[regexp -- {&#([0-9]+);} $text x y]} {
+        if {$y == 38} {
+            # Skip ampersand.
+            continue
+        }
+        regsub -all -- $x $text [format %c $y] text
+    }
+
+    # Known named entities are case sensitive.
+    foreach {entity uchar} $uentities {
+        regsub -all -- $entity $text $uchar text
+    }
+
+    # Replace unknown named entities.
+    set p 0
+    while {[regexp -start $p -indices -- {&[A-Za-z0-9._:-]*;} $text x]} {
+        set p [lindex $x 0]
+        set q [lindex $x 1]
+        set ent [string range $text $p $q]
+        if {![string compare $ent "&amp;"]} {
+            # Skip ampersand.
+            set p [expr $q + 1]
+            continue
+        }
+        regsub -all -- {\.} $ent {\\.} ent
+        regsub -all -start $p -- $ent $text "\uFFFD" text
+    }
+
+    # Ampersand.
+    regsub -all -- {&(amp|#0*38|#[xX]0*26);} $text {\&} text
+
+    # Replace DELETE and every C0 control char except \t, \n, and \r.
+    regsub -all -- {[\0-\010\013\014\016-\037\177]+} $text "\uFFFD" text
+
+    # Replace every C1 control char (including if entities between &#128; and
+    # &#159; were mistakenly thought to be windows-1252 or something similar).
+    regsub -all -- {[\x80-\x9F]+} $text "\uFFFD" text
+
+    return $text
+}
+
+# This only replaces named entities that we know about, but that (x)html
+# wouldn't, by numerical entities.
 proc html_expand {text} {
     global xentities
 
     foreach {entity chars} $xentities {
         regsub -all -- $entity $text $chars text
+    }
+
+    return $text
+}
+
+proc html_quote {text} {
+    foreach {e c} {amp & lt < gt >} {
+        regsub -all -- "\[$c\]" $text "\\&$e;" text
     }
 
     return $text
@@ -12327,14 +13089,20 @@ proc ref::transform {token file {formats {}} } {
             -final                  1                           \
             -reportempty            1
 
-    set fd [open $file { RDONLY }]
-    catch { fconfigure $fd -encoding binary -translation lf }
-    set ifile $file
-    set data [prexml [read $fd]]
+    set fd ""
+    set data ""
+    catch {
+        set fd [open $file { RDONLY }]
+        catch { fconfigure $fd -encoding binary -translation lf }
+        set ifile $file
+        set data [read $fd]
+    }
 
     if {[catch { close $fd } result]} {
         log::entry $logT system $result
     }
+
+    set data [prexml $data]
 
     set state(stack)    ""
     set state(body)     ""
@@ -12366,7 +13134,6 @@ proc ref::transform {token file {formats {}} } {
                 set text "File:    $file\nContext:"
                 while {$i > 0} {
                     set frame [lindex $state(stack) [incr i -1]]
-                    catch { unset attrs }
                     append text "\n    <[lindex $frame 0]"
                     foreach {k v} [lindex $frame 1] {
                         regsub -all -- \" $v {\&quot;} v
@@ -12630,7 +13397,7 @@ proc ref::start_rfc {token av} {
     set state(body) "<?xml version='1.0' encoding='UTF-8'?>\n\n"
     append state(body) "<reference anchor='RFC[format %04d $rfc(number)]'>\n"
 
-    set state(tprefix) "RFC&nbsp;$rfc(number): "
+    set state(tprefix) "RFC $rfc(number): "
 }
 
 proc ref::end_rfc {token frame} {
@@ -12666,7 +13433,7 @@ proc ref::end_rfc {token frame} {
 
     set url ""
     foreach format $state(formats) {
-        catch { unset fv }
+        catch { array unset fv }
         array set fv $format
         set url $fv(target)
         if {![string compare $fv(type) TXT]} {
@@ -12765,16 +13532,2864 @@ proc str_norm_eol {string {xml11 0}} {
     return $string
 }
 
+proc str_pad_cmp {s1 s2} {
+    set l1 [string length $s1]
+    set l2 [string length $s2]
+    if {$l1 < $l2} {
+        set s1 [string repeat "0" [expr $l2 - $l1]]$s1
+    } elseif {$l1 > $l2} {
+        set s2 [string repeat "0" [expr $l1 - $l2]]$s2
+    }
+    set s1 [string toupper $s1]
+    set s2 [string toupper $s2]
+
+    return [string compare $s1 $s2]
+}
 
 #   }}}1 Some string manipulations
 
+#   {{{1 artwork content processing
+#       {{{2 namespace
+namespace eval artwork {
+    variable grammar
+    variable grammar_program
+
+    catch { array unset grammar }
+    catch { array unset grammar_program }
+
+    namespace eval tokenize {}
+}
+#       }}}2 namespace
+#       {{{2 procs
+
+proc artwork::validate_highlight {type text} {
+    variable grammar
+    variable grammar_program
+
+    if {![string compare $type pib]} {
+        # For now.
+        set type mib
+    }
+
+    if {   !(   [info exists grammar_program($type)]
+             || [compile_grammar $type]
+             || [info exists grammar($type)])
+        || [catch { info body tokenize::$type }]} {
+        return {-1 {} [generic_divs]}
+    }
+
+    # Through upvar, this read $text and sets $tokens and $spans.
+    tokenize::$type
+
+    set max_idx 0
+    if {[info exists grammar_program($type)]} {
+        foreach {cnt spans1 divs1} [grammar_program_parse $type] {break}
+    } else {
+        array set rule $grammar($type)
+
+        set rn [lindex $grammar($type) 0]
+        foreach {cnt spans1 divs1} [check_rule $rn 0] {break}
+    }
+    set spans [lsort -index 1 -integer [concat $spans $spans1]]
+
+    # Convert divs from character-oriented to line-oriented.
+    set divs {}
+    set p0 0
+    set d0 0
+    foreach div [lsort -index 0 -integer $divs1] {
+        incr d0 [num_eols [string range $text $p0 [expr [lindex $div 0] - 1]]]
+        set p0 [lindex $div 0]
+        set d1 [expr $p0 + [lindex $div 1] - 2]
+        set d1 [expr [num_eols [string range $text $p0 $d1]] + 1]
+        lappend divs [list $d0 $d1]
+    }
+
+    set textlen [string length $text]
+    set tokcnt [llength $tokens]
+    if {![set valid [expr $cnt >= $tokcnt]]} {
+        if {$max_idx >= 0 && $max_idx < $tokcnt} {
+            set pos [lindex [lindex $tokens $max_idx] 1]
+        } else {
+            set pos 0
+        }
+        while {[llength $spans] > 0 && $pos <= [lindex [lindex $spans end] 1]} {
+            set spans [lrange $spans 0 end-1]
+        }
+        lappend spans [list err $pos [expr $textlen - $pos]]
+    } elseif {[lsearch0 $spans err] >= 0} {
+        # In case of temporarily ignored kludges.
+        set valid 0
+    }
+
+    return [list $valid $spans $divs]
+}
+
+proc artwork::generic_divs {} {
+    # We do not modify $text.
+    upvar text text
+
+    # Blank lines delimit each generic div.
+    set divs {}
+    set pos 0
+    set d0 -1
+    set l 0
+    set z [string length $text]
+
+    while {$pos < $z} {
+        if {[regexp -indices -start $pos -- "\n" $text x]} {
+            set a [lindex $x 0]
+            set x [string range $text $pos $a]
+        } else {
+            set a $z
+            set x [string range $text $pos end]
+        }
+
+        if {[string compare [string trim $x] ""]} {
+            if {$d0 < 0} {
+                set d0 $l
+                set d1 1
+            } else {
+                incr d1
+            }
+        } elseif {$d0 >= 0} {
+            lappend divs [list $d0 $d1]
+            set d0 -1
+        }
+        incr l
+        set pos [expr $a + 1]
+    }
+
+    if {$d0 >= 0} {
+        lappend divs [list $d0 $d1]
+    }
+
+    return $divs
+}
+
+proc artwork::compile_grammar {type} {
+    return 0
+}
+
+proc artwork::grammar_program_parse {type} {
+    variable grammar_program
+    # We use these upvars read-only.
+    upvar tokens tokens
+    # We use this upvar read-write.
+    upvar max_idx max_idx
+
+    array set table $grammar_program($type)
+    set spans {}
+    set divs {}
+    set stack {}
+    set state 0
+    set i 0
+
+    while {1} {
+        set nexti [expr $i + 1]
+        set tok [lindex $tokens $i]
+        set x [list [lindex $tok 0] $state]
+        if {[info exists table($x)]} {
+            set do $table($x)
+        } else {
+            set x [list * $state]
+            if {[catch { set do $table($x) }]} {
+                set do {{err}}
+            }
+        }
+        foreach d $do {
+            set d0 [lindex $d 0]
+            switch -- $d0 {
+                push {
+                    lappend stack [concat $i [lrange $d 1 end]]
+                    continue
+                }
+                pop - span-top - div-top - check - goto-top {
+                    if {[llength $stack]} {
+                        set top [lindex $stack end]
+                        set tok0 [lindex $tokens [lindex $top 0]]
+                        set i0 [lindex $tok0 1]
+                        set i1 [expr [lindex $tok 1] - $i0 + [lindex $tok 2]]
+                    } else {
+                        set ret -1
+                        break
+                    }
+                }
+                span {
+                    lappend spans [concat [lindex $d 1] [lrange $tok 1 2]]
+                    continue
+                }
+                div {
+                    set i0 [lindex $tok 1]
+                    set i1 [lindex $tok 2]
+                    lappend divs [lrange $tok 1 2]
+                    continue
+                }
+                redo {
+                    set state [lindex $d 1]
+                    set nexti [expr $i - 0[lindex $d 2]]
+                    continue
+                }
+                goto {
+                    set state [lindex $d 1]
+                    continue
+                }
+                skip-next {
+                    if {[llength $d] > 1} {
+                        incr nexti [lindex $d 1]
+                    } else {
+                        incr nexti
+                    }
+                    continue
+                }
+                done    { set ret $i; break }
+                default { set ret -1; break }
+            }
+            switch -- $d0 {
+                pop  { set stack [lreplace $stack end end] }
+                span-top {
+                    lappend spans [list [lindex $d 1] $i0 $i1]
+                }
+                div-top {
+                    lappend divs [list $i0 $i1]
+                }
+                check {
+                    set c [concat [lrange $top 1 end] [lindex $tok0 0]]
+                    set k [llength $d]
+                    for {set j 1} {$j < $k} {incr j} {
+                        if {[lsearch -exact $c [lindex $d $j]] >= 0} {
+                            break
+                        }
+                    }
+                    if {$j >= $k} {
+                        set ret -1
+                        break
+                    }
+                }
+                goto-top { set state [lindex $top 1] }
+            }
+        }
+        if {[info exists ret]} {
+            set max_idx $i
+            break
+        }
+        set i $nexti
+    }
+
+    return [list $ret $spans $divs]
+}
+
+proc artwork::check_rule {rulename idx} {
+    # We use these upvars read-only.
+    upvar tokens tokens rule rule
+    # We use this upvar read-write.
+    upvar max_idx max_idx
+
+    set tok [lindex $tokens $idx]
+    if {![info exists rule($rulename)]} {
+        # Assume it's an implicit terminal with no span.
+        if {[string compare $rulename [lindex $tok 0]]} {
+            set cnt -1
+        } else {
+            set cnt  1
+            if {$max_idx <= $idx} {
+                set max_idx [expr $idx + 1]
+            }
+        }
+        return [list $cnt {} {}]
+    }
+
+    foreach {ruletok ruletype ruledef} $rule($rulename) {break}
+    switch -- $ruletype {
+        * {
+            if {$idx < [llength $tokens]} {
+                set rulename [lindex $tok 0]
+            } else {
+                set rulename "{no-such-rule}"
+            }
+            set ruletype .
+        }
+    }
+    switch -- $ruletype {
+        . {
+            if {[string compare $rulename [lindex $tok 0]]} {
+                return {-1 {} {}}
+            }
+            if {$max_idx <= $idx} {
+                set max_idx [expr $idx + 1]
+            }
+            set i0 [lindex $tok 1]
+            set i1 [lindex $tok 2]
+            switch -- $ruletok {
+                "" {
+                    return {1 {} {}}
+                }
+                div {
+                    # This matches an explicit terminal rule with a div.
+                    return [list 1 {} [list [list $i0 $i1]]]
+                }
+                default {
+                    # This matches an explicit terminal rule with a span.
+                    return [list 1 [list [list $ruletok $i0 $i1]] {}]
+                }
+            }
+        }
+        = { set n  0 }
+        | { set n -1 }
+    }
+
+    set spans {}
+    set divs {}
+    set i $idx
+    foreach {rn rep} $ruledef {
+        while {1} {
+            foreach {n s d} [check_rule $rn $i] {break}
+            if {$n >= 0} {
+                switch -- $rep {
+                    ! { return [list -1 {} {}] }
+                }
+                incr i $n
+                set spans [concat $spans $s]
+                set divs  [concat $divs  $d]
+                switch -- $rep {
+                    +     { set rep * }
+                    1 - ? { break }
+                }
+            } else {
+                switch -- $rep {
+                    ! {
+                        switch -- $ruletype {
+                            = { set n 0 }
+                        }
+                    }
+                    * - ? { set n 0 }
+                }
+                break
+            }
+        }
+        switch -- $ruletype {
+            = {
+                if {$n < 0} {
+                    set spans {}
+                    set divs  {}
+                    break
+                }
+            }
+            | {
+                if {$n >= 0} {
+                    break
+                }
+            }
+        }
+    }
+    if {$n >= 0} {
+        set cnt [expr $i - $idx]
+        if {$max_idx < $i} {
+            set max_idx $i
+        }
+    } else {
+        set cnt -1
+    }
+    if {$cnt > 0 && [string compare $ruletok ""]} {
+        set i0 [lindex $tok 1]
+        set tok1 [lindex $tokens [expr $idx + $cnt - 1]]
+        set i1 [expr [lindex $tok1 1] - $i0 + [lindex $tok1 2]]
+        switch -- $ruletok {
+            div     { lappend divs        [list          $i0 $i1]  }
+            default { set     spans [list [list $ruletok $i0 $i1]] }
+        }
+    }
+
+    return [list $cnt $spans $divs]
+}
+
+#       }}}2 procs
+#       {{{2 grammars
+#           {{{3 abnf
+#               {{{4 proc artwork::tokenize::abnf
+
+# We introduce a tokenizer, because doing everything off of the original
+# grammar with a generic parser in Tcl proves to be way too slow.
+proc artwork::tokenize::abnf {} {
+    # We do not modify $text.
+    upvar text text tokens tokens spans spans
+
+    foreach x {
+        ALPHA BIT CHAR CR CRLF CTL DIGIT DQUOTE
+        HEXDIG HTAB LF LWSP OCTET SP VCHAR WSP
+    } {
+        # ABNF core rule names.
+        set Chash($x) core
+    }
+
+    set pos 0
+    set tokens {}
+    set spans {}
+    set z [string length $text]
+
+    # According to RFC 4234, Section 2.2:
+    #   For visual ease, rule definitions are left aligned.
+    #   When a rule requires multiple lines,
+    #   the continuation lines are indented.
+    #   The left alignment and indentation are relative to the first lines
+    #   of the ABNF rules and need not match the left margin of the document.
+
+    # For some reason, this behavior wasn't itself encoded in ABNF!
+    # We will try to maintain a notion of per-rule left margin.
+    # Negative means were currently outside of a rule.
+    # The nl token mean the end of a rule.
+    set margin -1
+
+    while {$pos < $z} {
+        if {[regexp -indices -start $pos -- "\[\"<;\]" $text x]} {
+            set a [lindex $x 0]
+            switch -- [string range $text $a [lindex $x 1]] {
+                \" { set cc " !#-~";  set d "\""; set tt char-val  }
+                <  { set cc " -=?-~"; set d ">";  set tt prose-val }
+                ;  { set cc "\t -~";  set d "\n"; set tt comment   }
+            }
+        } else {
+            set a $z
+        }
+        while {1} {
+            set p0 $pos
+            set m [expr ($margin >= 0) ? -1 : 0]
+            while {1} {
+                if {[regexp -indices -start $pos -- {\A[ \t]+} $text x]} {
+                    set pos [expr [lindex $x 1] + 1]
+                    if {$m < 0} {
+                        # A non-empty line continues with wsp (so far).
+                        set nt wsp
+                    } else {
+                        set s [string range $text [lindex $x 0] [lindex $x 1]]
+                        # Accounts for tabs.
+                        while {[set x [string first "\t" $s]] >= 0} {
+                            incr m $x
+                            incr m [expr 8 - ($m % 8)]
+                            set s [string range $s [expr $x + 1] end]
+                        }
+                        incr m [string length $s]
+                    }
+                }
+                if {$margin >= 0} {
+                    if {$m > $margin} {
+                        # The wsp token is a form of rule continuation.
+                        set nt wsp
+                    } elseif {$m >= 0} {
+                        # Keep nt as nl, if so, but never again wsp.
+                        set margin -1
+                    }
+                }
+                if {![regexp -start $pos -- {\A\n} $text]} {
+                    break
+                }
+                # The nl token would mean the end of a rule.
+                set nt nl
+                incr pos
+                set m 0
+            }
+            if {[info exists nt]} {
+                if {![string compare [lindex [lindex $tokens end] 0] wsp]} {
+                    # Speed up parsing ("wsp *" can become "wsp ?", "wsp +" can
+                    # become "wsp 1", and "wsp *  nl 1" can become "nl 1").
+                    set tokens [lreplace $tokens end end]
+                }
+                # Pretend it's one character long to minimize any current div.
+                lappend tokens [list $nt $p0 1]
+                unset nt
+            }
+            if {$margin < 0} {
+                set margin $m
+            }
+
+            if {$pos >= $a} {
+                break
+            }
+            if {[regexp -start $pos -- {\A[A-Za-z][A-Za-z0-9-]*} $text x]} {
+                # RFC 4234, Section 2.1:  Rule names are case-insensitive.
+                if {[info exists Chash([string toupper $x])]} {
+                    set tok core
+                } else {
+                    set tok name
+                }
+            } elseif {[regexp -start $pos -expanded -- \
+                              {\A%([bB][01]+((\.[01]+)+|-[01]+)?
+                                  |[dD][0-9]+((\.[0-9]+)+|-[0-9]+)?
+                                  |[xX][0-9A-Fa-f]+((\.[0-9A-Fa-f]+)+
+                                                   |-[0-9A-Fa-f]+)?)} \
+                              $text x]} {
+                if {   [regexp -- {^%.([^-]+)-([^-]+)$} $x xx yy zz]
+                    && [str_pad_cmp $yy $zz] != -1} {
+                    set tok err
+                } else {
+                    set tok num-val
+                }
+            } elseif {[regexp -start $pos -- {\A=/?} $text x]} {
+                set tok eq
+            } elseif {[regexp -start $pos -- \
+                              {\A([0-9]+|[0-9]*\*[0-9]*)} $text x]} {
+                set tok repeat
+            } elseif {[regexp -start $pos -- {\A[](/)[]} $text x]} {
+                switch -- $x {
+                    [ { set tok lsqb  }
+                    ] { set tok rsqb  }
+                    default { set tok $x }
+                }
+            } else {
+                set tok err
+            }
+            switch -- $tok {
+                err {
+                    lappend spans [list err $pos [expr $z - $pos]]
+                    set pos $z
+                    break
+                }
+            }
+            set len [string length $x]
+            lappend tokens [list $tok $pos $len]
+            incr pos $len
+        }
+        if {$pos >= $z} {
+            break
+        }
+        incr pos
+        regexp -start $pos -indices -- "\\A\[$cc\]*" $text x
+        set len [expr [lindex $x 1] - $pos + 1]
+        switch -- $tt {
+            comment { lappend spans [list com [expr $pos - 1] [expr $len + 1]] }
+            default { lappend tokens [list $tt $pos $len] }
+        }
+        incr pos $len
+        if {$pos >= $z} {
+            break
+        }
+        if {![regexp -start $pos -- "\\A$d" $text]} {
+            lappend spans [list err $pos [expr $z - $pos]]
+            set pos $z
+            break
+        }
+        switch -- $tt {
+            comment {
+                # We rely on the next iteration to produces the wsp or nl token.
+            }
+            default { incr pos }
+        }
+    }
+}
+
+#               }}}4 proc artwork::tokenize::abnf
+#               {{{4 artwork::grammar(abnf)
+
+set artwork::grammar(abnf) {
+    rulelist {"" = {rule-nl +}}
+    rule-nl {
+        ""  | {
+            rule 1
+            nl   1}}
+    rule {
+        div = {
+            ruledef       1
+            wsp           ?
+            eq            1
+            alternation   1
+            nl            1}}
+    ruledef {
+        def | {
+            name 1
+            core 1}}
+    nameuse {id  = {name 1}}
+    coreuse {key = {core 1}}
+    alternation {
+        ""  = {
+            concatenation  1
+            /concatenation *}}
+    /concatenation {
+        ""  = {
+            /             1
+            concatenation 1}}
+    concatenation {
+        ""  = {
+            wsp        ?
+            repetition 1
+            wsp-rep    *
+            wsp        ?}}
+    wsp-rep {
+        ""  = {
+            wsp        1
+            repetition 1}}
+    repetition {
+        ""  = {
+            repeat  ?
+            element 1}}
+    repeat {rep . {}}
+    element {
+        ""  | {
+            char-val  1
+            num-val   1
+            nameuse   1
+            group     1
+            option    1
+            coreuse   1
+            prose-val 1}}
+    group {
+        ""  = {
+            (           1
+            alternation 1
+            )           1}}
+    option {
+        ""  = {
+            lsqb        1
+            alternation 1
+            rsqb        1}}
+    char-val  {str . {}}
+    num-val   {val . {}}
+    prose-val {str . {}}
+}
+
+# First {token state} pair-items are hash keys and must be in the
+# same canonical form as would be produced by [list token state].
+set artwork::grammar_program(abnf) {
+    {{} 1}  {done}
+
+    {nl 0}  {{goto 1}}
+    {nl 1}  {}
+    {nl 7}  {{check rule} div-top pop {goto 1}}
+    {nl 8}  {{redo 7}}
+
+    {name 0}  {{push rule} {span def} {goto 2}}
+    {name 1}  {{redo 0}}
+    {name 4}  {{span id} {goto 7}}
+    {name 5}  {{redo 4}}
+    {name 6}  {{redo 4}}
+    {name 8}  {{redo 4}}
+    {name 9}  {{redo 4}}
+
+    {core 0}  {{push rule} {span def} {goto 2}}
+    {core 1}  {{redo 0}}
+    {core 4}  {{span key} {goto 7}}
+    {core 5}  {{redo 4}}
+    {core 6}  {{redo 4}}
+    {core 8}  {{redo 4}}
+    {core 9}  {{redo 4}}
+
+    {wsp 2}  {{goto 3}}
+    {wsp 4}  {{goto 5}}
+    {wsp 7}  {{goto 8}}
+
+    {eq 2}  {{goto 4}}
+    {eq 3}  {{goto 4}}
+
+    {repeat 4}  {{span rep} {goto 6}}
+    {repeat 5}  {{redo 4}}
+    {repeat 8}  {{span rep} {goto 9}}
+
+    {char-val 4}  {{span str} {goto 7}}
+    {char-val 5}  {{redo 4}}
+    {char-val 6}  {{redo 4}}
+    {char-val 8}  {{redo 4}}
+    {char-val 9}  {{redo 4}}
+
+    {num-val 4}  {{span val} {goto 7}}
+    {num-val 5}  {{redo 4}}
+    {num-val 6}  {{redo 4}}
+    {num-val 8}  {{redo 4}}
+    {num-val 9}  {{redo 4}}
+
+    {prose-val 4}  {{span str} {goto 7}}
+    {prose-val 5}  {{redo 4}}
+    {prose-val 6}  {{redo 4}}
+    {prose-val 8}  {{redo 4}}
+    {prose-val 9}  {{redo 4}}
+
+    {( 4}  {push}
+    {( 5}  {{redo 4}}
+    {( 6}  {{redo 4}}
+    {( 8}  {{redo 4}}
+    {( 9}  {{redo 4}}
+
+    {lsqb 4}  {push}
+    {lsqb 5}  {{redo 4}}
+    {lsqb 6}  {{redo 4}}
+    {lsqb 8}  {{redo 4}}
+    {lsqb 9}  {{redo 4}}
+
+    {/ 7}  {{goto 4}}
+    {/ 8}  {{goto 4}}
+
+    {) 7}  {{check (} pop}
+    {) 8}  {{redo 7}}
+
+    {rsqb 7}  {{check lsqb} pop}
+    {rsqb 8}  {{redo 7}}
+}
+
+#               }}}4 artwork::grammar(abnf)
+#           }}}3 abnf
+#           {{{3 mib
+#               {{{4 proc artwork::tokenize::mib
+
+proc artwork::tokenize::mib {} {
+    # We do not modify $text.
+    upvar text text tokens tokens spans spans
+
+    # Switch statements are not implemented with hashes, so fake it.
+    foreach x {
+        ALL APPLICATION
+        BEGIN
+        CHOICE
+        DEFINITIONS
+        END EXPORTS
+        FROM
+        IA5String IDENTIFIER IMPLICIT IMPLIED IMPORTS INCLUDES INTEGER
+        LAST-UPDATED
+        MAX
+        NULL
+        OBJECT OCTET OF
+        SEQUENCE SIZE STRING SYNTAX
+        UNIVERSAL
+
+        MACRO
+        NOTATION
+        TYPE
+        Update
+        VALUE
+
+        ACCESS AUGMENTS
+        CONTACT-INFO CREATION-REQUIRES
+        BITS
+        DEFVAL DESCRIPTION DISPLAY-HINT
+        ENTERPRISE EXTENDS
+        GROUP
+        INDEX INSTALL-ERRORS
+        MANDATORY-GROUPS MAX-ACCESS MIN-ACCESS MODULE
+        NOTIFICATIONS
+        OBJECTS ORGANIZATION
+        PIB-ACCESS PIB-DEFINITIONS PIB-INDEX PIB-MIN-ACCESS
+        PIB-REFERENCES PIB-TAG POLICY-ACCESS PRODUCT-RELEASE
+        REFERENCE REVISION
+        STATUS SUBJECT-CATEGORIES SUPPORTS SYNTAX
+        UNIQUENESS UNITS
+        VARIABLES VARIATION
+        WRITE-SYNTAX
+    } {
+        # ASN.1 reserved words (current and deprecated)
+        # and IETF reserved words.
+        set Uhash($x) self
+    }
+
+    foreach x {
+        Counter32 Counter64
+        Gauge32
+        Integer32 Integer64 IpAddress
+        Opaque
+        TimeTicks
+        Unsigned32 Unsigned64
+    } {
+        # IETF application-defined types names.
+        set Uhash($x) Itn
+    }
+
+    foreach x {
+        AGENT-CAPABILITIES
+        MODULE-COMPLIANCE MODULE-IDENTITY
+        NOTIFICATION-GROUP NOTIFICATION-TYPE
+        OBJECT-GROUP OBJECT-IDENTITY OBJECT-TYPE
+        TEXTUAL-CONVENTION TRAP-TYPE
+    } {
+        # IETF macro names.
+        set Uhash($x) Imn
+    }
+
+    foreach x {
+        ABSENT ABSTRACT-SYNTAX ANY AUTOMATIC
+        BIT BMPString BOOLEAN BY
+        CHARACTER CLASS COMPONENT COMPONENTS CONSTRAINED
+        CONTAINING
+        DEFAULT DEFINED
+        EMBEDDED ENCODED ENCODING-CONTROL ENUMERATED
+        EXCEPT EXPLICIT EXTENSIBILITY EXTERNAL
+        FALSE
+        GeneralizedTime GeneralString GraphicString
+        INSTRUCTIONS INTERSECTION ISO646String
+        MIN MINUS-INFINITY
+        NOT-A-NUMBER NumericString
+        ObjectDescriptor OPTIONAL
+        PDV PLUS-INFINITY PRESENT PrintableString PRIVATE
+        REAL RELATIVE-OID
+        SET
+        T61String TAGS TeletexString TRUE TYPE-IDENTIFIER
+        UNION UNIQUE UniversalString UTCTime UTF8String
+        VideotexString VisibleString
+        WITH
+    } {
+        # ASN.1 reserved words (forbidden).
+        set Uhash($x) err
+    }
+
+    foreach x {
+        type
+        value
+
+        accessible-for-notify all
+        current
+        deprecated
+        install install-notify
+        mandatory
+        not-accessible notify not-implemented
+        obsolete optional
+        read-create read-only read-write report-only
+        write-only
+    } {
+        # ASN.1 type and value (deprecated) and IETF ids.
+        set Lhash($x) self
+    }
+
+    set pos 0
+    set tokens {}
+    set spans {}
+    set z [string length $text]
+    set in_macro 0
+
+    while {$pos < $z} {
+        if {[regexp -indices -start $pos -- "--|\"" $text x]} {
+            set a [lindex $x 0]
+            switch -- [string range $text $a [lindex $x 1]] {
+                \" { set tt quoted-string }
+                -- { set tt comment       }
+            }
+        } else {
+            set a $z
+        }
+        while {1} {
+            if {[regexp -indices -start $pos -- {\A[ \t\n]+} $text x]} {
+                set pos [expr [lindex $x 1] + 1]
+            }
+            if {$pos >= $a} {
+                break
+            }
+            set p2 -1
+            set len -1
+            if {[regexp -start $pos -- {\A[A-Z](-?[A-Za-z0-9]+)*} $text x]} {
+                set len [string length $x]
+                if {[info exists Uhash($x)]} {
+                    switch -- $Uhash($x) {
+                        self {
+                            # ASN.1 reserved words (current and deprecated)
+                            # and IETF reserved words.
+                            set tok $x
+                            # Cheat.
+                            lappend spans [list key $pos $len]
+
+                            # XXX
+                            switch -- $x {
+                                MACRO { incr in_macro }
+                                END { if {$in_macro > 0} {incr in_macro -1} }
+                            }
+                        }
+                        Itn { set prefix_tok /Itn; set tok $x }
+                        Imn { set prefix_tok /Imn; set tok $x }
+                        err { set tok err }
+                    }
+                } else {
+                    set tok type-ref
+                }
+            } elseif {[regexp -start $pos -- {\A[a-z](-?[A-Za-z0-9]+)*} $text x]} {
+                # Hyphens are allowed for backward compatibility with SMIv1.
+
+                # Extra token to avoid considering them all.
+                set prefix_tok /id
+
+                set len [string length $x]
+                if {[info exists Lhash($x)]} {
+                    set tok $x
+                } else {
+                    set tok id
+                }
+            } elseif {   [regexp -start $pos -indices -- \
+                                 {\A'([01]{8})*'[Bb]} $text x]
+                      || [regexp -start $pos -indices -- \
+                                 {\A'([0-9A-Fa-f]{2})*'[Hh]} $text x]} {
+                set tok radix-string
+                incr pos
+                set p2 [expr [lindex $x 1] + 1]
+                set len [expr $p2 - $pos - 2]
+            } elseif {[regexp -start $pos -- {\A::=} $text x]} {
+                set tok ::=
+
+                # XXX
+                if {$in_macro > 0} {
+                    set tx [lindex $tokens end]
+                    switch -- [lindex $tx 0] {
+                        type-ref {
+                            set tokens [lreplace $tokens end end \
+                                        [lreplace $tx 0 0 type-ref-macsyn]]
+                        }
+                    }
+                }
+            } elseif {[regexp -start $pos -- {\A\.\.} $text x]} {
+                set tok ..
+            } elseif {[regexp -start $pos -- {\A[0-9]+} $text x]} {
+                set len [string length $x]
+                if {![string compare [string index $x 0] "0"]} {
+                    if {$len == 1} {
+                        set tok zero
+                    } else {
+                        set tok err
+                    }
+                } elseif {$len < 10} {
+                    set tok positive31
+                } elseif {$len == 10} {
+                    if {[string compare $x "2147483648"] < 0} {
+                        set tok positive31
+                    } elseif {[string compare $x "4294967296"] < 0} {
+                        set tok positive32
+                    } else {
+                        set tok positive63
+                    }
+                } elseif {$len < 19} {
+                    set tok positive63
+                } elseif {$len == 19} {
+                    if {[string compare $x "9223372036854775808"] < 0} {
+                        set tok positive63
+                    } else {
+                        set tok positive64
+                    }
+                } elseif {$len == 20} {
+                    if {[string compare $x "18446744073709551616"] < 0} {
+                        set tok positive64
+                    } else {
+                        set tok positive-big
+                    }
+                } else {
+                    set tok positive-big
+                }
+            } elseif {[regexp -start $pos -- {\A-[0-9]+} $text x]} {
+                set len [string length $x]
+                if {![string compare [string index $x 1] "0"]} {
+                    set tok err
+                } elseif {$len < 11} {
+                    set tok negative31
+                } elseif {$len == 11} {
+                    if {[string compare $x "-2147483648"] <= 0} {
+                        set tok negative31
+                    } else {
+                        set tok negative63
+                    }
+                } elseif {$len < 20} {
+                    set tok negative63
+                } elseif {$len == 20} {
+                    if {[string compare $x "-9223372036854775808"] <= 0} {
+                        set tok negative63
+                    } else {
+                        set tok negative-big
+                    }
+                } else {
+                    set tok negative-big
+                }
+            } elseif {[regexp -start $pos -- {\A[]{(|,--.;:)}[]} $text x]} {
+                switch -- $x {
+                    ;  { set tok semi }
+                    [  { set tok lsqb }
+                    ]  { set tok rsqb }
+                    \{ { set tok lcub }
+                    \} { set tok rcub }
+                    default { set tok $x }
+                }
+            } else {
+                set tok err
+            }
+            switch -glob -- $tok {
+                zero - positive* - negative* {
+                    # Cheat.
+                    lappend spans [list val $pos $len]
+                }
+                err {
+                    lappend spans [list err $pos [expr $z - $pos]]
+                    set pos $z
+                    break
+                }
+            }
+            if {$len < 0} {
+                set len [string length $x]
+            }
+            if {[info exists prefix_tok]} {
+                lappend tokens [list $prefix_tok $pos $len]
+                unset prefix_tok
+            }
+            lappend tokens [list $tok $pos $len]
+            if {$p2 >= 0} {
+                set pos $p2
+            } else {
+                incr pos $len
+            }
+        }
+        if {$pos >= $z} {
+            break
+        }
+        switch -- $tt {
+            quoted-string {
+                lappend tokens [list quot $pos 1]
+                incr pos
+
+                while {1} {
+                    regexp -start $pos -indices -- {\A[\t !#-~]*} $text x
+                    set p2 [expr [lindex $x 1] + 1]
+                    if {$p2 > $pos} {
+                        lappend tokens [list qstr $pos [expr $p2 - $pos]]
+                        set pos $p2
+                    }
+                    set x [string index $text $pos]
+                    if {![string compare $x \"]} {
+                        lappend tokens [list quot $pos 1]
+                        incr pos
+                        break
+                    }
+                    if {[string compare $x "\n"]} {
+                        lappend spans [list err $pos [expr $z - $pos]]
+                        set pos $z
+                        break
+                    }
+                    incr pos
+                    if {[regexp -start $pos -indices -- {\A[\t ]+} $text x]} {
+                        # Eliminate indentation white-space on subsequent lines.
+                        set pos [expr [lindex $x 1] + 1]
+                    }
+                }
+            }
+            comment {
+                regexp -start $pos -indices -- \
+                       {\A--([^-\n]|----|-[^-\n])*} $text x
+                set p2 [expr [lindex $x 1] + 1]
+                if {   $p2 < $z
+                    && ![string compare [string index $text $p2] "-"]} {
+                    incr p2
+                    if {![string compare [string index $text $p2] "-"]} {
+                        incr p2
+                    }
+                }
+                lappend spans [list com $pos [expr $p2 - $pos]]
+                set pos $p2
+            }
+        }
+    }
+}
+
+#               }}}4 proc artwork::tokenize::mib
+#               {{{4 artwork::grammar(mib)
+
+set artwork::grammar(mib) {
+    mib-file {"" = {module *}}
+    module {
+        div = {
+            type-ref-def   1
+            lcub-oid-rcub  ?
+            definitions-kw 1
+            ::=            1
+            BEGIN          1
+            exports-stmt   ?
+            imports-stmt   ?
+            definition     *
+            END            1}}
+    definitions-kw {
+        ""  | {
+            DEFINITIONS     1
+            PIB-DEFINITIONS 1}}
+
+    exports-stmt {
+        div = {
+            EXPORTS  1
+            exported ?
+            semi     1}}
+    exported {
+        ""  | {
+            ALL            1
+            export-id-list 1}}
+    export-id-list {
+        ""  = {
+            export-id  1
+            ,export-id *}}
+    ,export-id {
+        ""  = {
+            ,         1
+            export-id 1}}
+    export-id {
+        ""  | {
+            id-use              1
+            type-ref-use        1
+            IpAddress-use       1
+            Opaque-use          1
+            TimeTicks-use       1
+            IETF-macro-name-use 1}}
+
+    imports-stmt {
+        div = {
+            IMPORTS  1
+            imported *
+            semi     1}}
+    imported {
+        ""  = {
+            import-id-list 1
+            FROM           1
+            type-ref-use   1}}
+    import-id-list {
+        ""  = {
+            import-id  1
+            ,import-id *}}
+    ,import-id {
+        ""  = {
+            ,         1
+            import-id 1}}
+    import-id {
+        ""  | {
+            semi                !
+            id-use              1
+            type-ref-use        1
+            BITS                1
+            MANDATORY-GROUPS    1
+            IETF-macro-name-use 1
+            IETF-type-name-use  1}}
+
+    definition {
+        div | {
+            END        !
+            id-defn1   1
+            tr-defn1   1
+            macro-defn 1}}
+
+    id-defn1 {
+        ""  = {
+            id-def   1
+            id-defn2 1}}
+
+    id-defn2 {
+        ""  | {
+            value-defn       1
+            obj-type-defn    1
+            obj-group-defn   1
+            mod-compl-defn   1
+            mod-id-defn      1
+            obj-id-defn      1
+            notif-type-defn  1
+            notif-group-defn 1
+            trap-type-defn   1
+            agent-caps-defn  1}}
+
+    tr-defn1 {
+        ""  | {
+            type-defn 1
+            tr-defn2  1}}
+
+    tr-defn2 {
+        ""  = {
+            type-ref-err 1
+            value-defn   1}}
+
+    mod-id-defn {
+        ""  = {
+            MODULE-IDENTITY-use 1
+            subj-cats-clause    ?
+            LAST-UPDATED        1
+            quoted-string       1
+            ORGANIZATION        1
+            quoted-string       1
+            CONTACT-INFO        1
+            quoted-string       1
+            description-clause  1
+            revision-clause     *
+            ::=                 1
+            lcub-oid-rcub       1}}
+    subj-cats-clause {
+        ""  = {
+            SUBJECT-CATEGORIES 1
+            lcub               1
+            cat-ids            1
+            rcub               1}}
+    cat-ids {
+        ""  | {
+            IETF-pib-all-kw   1
+            id(positive)-list 1}}
+    description-clause {
+        div = {
+            DESCRIPTION   1
+            quoted-string 1}}
+    revision-clause {
+        div = {
+            REVISION           1
+            quoted-string      1
+            description-clause 1}}
+
+    obj-id-defn {
+        ""  = {
+            OBJECT-IDENTITY-use 1
+            status-clause       1
+            description-clause  1
+            ref-clause          ?
+            ::=                 1
+            lcub-oid-rcub       1}}
+    status-clause {
+        ""  = {
+            STATUS            1
+            IETF-status-id-kw 1}}
+    ref-clause {
+        ""  = {
+            REFERENCE     1
+            quoted-string 1}}
+
+    obj-type-defn {
+        ""  = {
+            OBJECT-TYPE-use    1
+            syntax-clause      1
+            units-clause       ?
+            access-clause      ?
+            sppi-refs-clause   ?
+            sppi-tag-clause    ?
+            status-clause      1
+            description-clause ?
+            sppi-errors-clause ?
+            ref-clause         ?
+            index-clause       ?
+            mib-index-clause   ?
+            sppi-unique-clause ?
+            defval-clause      ?
+            ::=                1
+            lcub-oid-rcub      1}}
+    syntax-clause {
+        ""  = {
+            SYNTAX 1
+            syntax 1}}
+    units-clause {
+        ""  = {
+            UNITS         1
+            quoted-string 1}}
+    access-clause {
+        ""  | {
+            max-access-clause 1
+            pib-access-clause 1}}
+    max-access-clause {
+        ""  = {
+            max-access-kw     1
+            IETF-access-id-kw 1}}
+    max-access-kw {
+        ""  | {
+            MAX-ACCESS 1
+            ACCESS     1}}
+    pib-access-clause {
+        ""  = {
+            pib-access-kw         1
+            IETF-pib-access-id-kw 1}}
+    pib-access-kw {
+        ""  | {
+            POLICY-ACCESS 1
+            PIB-ACCESS    1}}
+    sppi-refs-clause {
+        ""  = {
+            PIB-REFERENCES 1
+            lcub-oid-rcub  1}}
+    sppi-tag-clause {
+        ""  = {
+            PIB-TAG       1
+            lcub-oid-rcub 1}}
+    sppi-errors-clause {
+        ""  = {
+            INSTALL-ERRORS        1
+            lcub                  1
+            id(positive)-list     1
+            rcub                  1}}
+    index-clause {
+        ""  | {
+            pib-index-clause 1
+            augments-clause  1
+            extends-clause   1}}
+    pib-index-clause {
+        ""  = {
+            PIB-INDEX     1
+            lcub-oid-rcub 1}}
+    augments-clause {
+        ""  = {
+            AUGMENTS      1
+            lcub-oid-rcub 1}}
+    extends-clause {
+        ""  = {
+            EXTENDS       1
+            lcub-oid-rcub 1}}
+    mib-index-clause {
+        ""  = {
+            INDEX           1
+            lcub            1
+            index-type-list 1
+            rcub            1}}
+    index-type-list {
+        ""  = {
+            index-type  1
+            ,index-type *}}
+    ,index-type {
+        ""  = {
+            ,          1
+            index-type 1}}
+    index-type {
+        ""  = {
+            IMPLIED ?
+            oid     1}}
+    sppi-unique-clause {
+        ""  = {
+            UNIQUENESS 1
+            lcub       1
+            oid-list   ?
+            rcub       1}}
+    defval-clause {
+        ""  = {
+            DEFVAL 1
+            lcub   1
+            defval 1
+            rcub   1}}
+    defval {
+        ""  | {
+            int                  1
+            radix-string         1
+            quoted-string        1
+            id-use               1
+            lcub-oid-defval-rcub 1
+            lcub-id-list-rcub    1}}
+    lcub-oid-defval-rcub {
+        ""  = {
+            lcub          1
+            sub-id-defval +
+            rcub          1}}
+    lcub-id-list-rcub {
+        ""  = {
+            lcub    1
+            id-list ?
+            rcub    1}}
+
+    notif-type-defn {
+        ""  = {
+            NOTIFICATION-TYPE-use 1
+            objs-clause           ?
+            status-clause         1
+            description-clause    1
+            ref-clause            ?
+            ::=                   1
+            lcub-oid-rcub         1}}
+    objs-clause {
+        ""  = {
+            OBJECTS            1
+            lcub-oid-list-rcub 1}}
+
+    trap-type-defn {
+        ""  = {
+            TRAP-TYPE-use      1
+            ENTERPRISE         1
+            oid                1
+            vars-clause        ?
+            description-clause ?
+            ref-clause         ?
+            ::=                1
+            int                1}}
+    vars-clause {
+        ""  = {
+            VARIABLES          1
+            lcub-oid-list-rcub 1}}
+
+    value-defn {
+        ""  = {
+            OBJECT-IDENTIFIER 1
+            ::=               1
+            lcub-oid-rcub     1}}
+
+    type-defn {
+        ""  = {
+            type-name-def 1
+            ::=           1
+            type-decl     1}}
+    type-name-def {
+        ""  | {
+            type-ref-def       1
+            IETF-type-name-def 1}}
+    type-decl {
+        ""  | {
+            syntax      1
+            tc-stmt     1
+            choice-stmt 1}}
+    tc-stmt {
+        ""  = {
+            TEXTUAL-CONVENTION-use 1
+            display-hint-clause    ?
+            status-clause          1
+            description-clause     1
+            ref-clause             ?
+            syntax-clause          1}}
+    display-hint-clause {
+        ""  = {
+            DISPLAY-HINT  1
+            quoted-string 1}}
+    choice-stmt {
+        ""  = {
+            CHOICE          1
+            lcub            1
+            named-type-list 1
+            rcub            1}}
+    named-type-list {
+        ""  = {
+            named-type  1
+            ,named-type *}}
+    ,named-type {
+        ""  = {
+            ,          1
+            named-type 1}}
+    named-type {
+        ""  = {
+            id-def   1
+            n-t-type 1}}
+    n-t-type {
+        ""  | {
+            type-ref-use       1
+            IETF-type-name-use 1
+            NULL               1
+            octet-str          1
+            OBJECT-IDENTIFIER  1
+            INTEGER(0..MAX)    1
+            INTEGER(9)         1
+            Integer32(ranges)  1}}
+    INTEGER(0..MAX) {
+        ""  = {
+            INTEGER 1
+            (       1
+            zero    1
+            ..      1
+            MAX     1
+            )       1}}
+
+    mod-compl-defn {
+        ""  = {
+            MODULE-COMPLIANCE-use 1
+            status-clause         1
+            description-clause    1
+            ref-clause            ?
+            compl-module-clause   +
+            ::=                   1
+            lcub-oid-rcub         1}}
+    compl-module-clause {
+        ""  = {
+            MODULE           1
+            compl-mod-name   ?
+            mand-grps-clause ?
+            compl            *}}
+    compl-mod-name {
+        ""  = {
+            type-ref-use 1
+            oid          ?}}
+    mand-grps-clause {
+        ""  = {
+            MANDATORY-GROUPS   1
+            lcub-oid-list-rcub 1}}
+    compl {
+        ""  | {
+            compl-group 1
+            compl-obj   1}}
+    compl-group {
+        ""  = {
+            GROUP              1
+            oid                1
+            description-clause 1}}
+    compl-obj {
+        ""  = {
+            OBJECT              1
+            oid                 1
+            syntax-clause       ?
+            write-syntax-clause ?
+            *min-access-clause  ?
+            description-clause  1}}
+    write-syntax-clause {
+        ""  = {
+            WRITE-SYNTAX 1
+            syntax       1}}
+    *min-access-clause {
+        ""  | {
+            min-access-clause     1
+            pib-min-access-clause 1}}
+    min-access-clause {
+        ""  = {
+            MIN-ACCESS        1
+            IETF-access-id-kw 1}}
+    pib-min-access-clause {
+        ""  = {
+            PIB-MIN-ACCESS        1
+            IETF-pib-access-id-kw 1}}
+
+    obj-group-defn {
+        ""  = {
+            OBJECT-GROUP-use   1
+            objs-clause        1
+            status-clause      1
+            description-clause 1
+            ref-clause         ?
+            ::=                1
+            lcub-oid-rcub      1}}
+
+    notif-group-defn {
+        ""  = {
+            NOTIFICATION-GROUP-use 1
+            notifs-clause          1
+            status-clause          1
+            description-clause     1
+            ref-clause             ?
+            ::=                    1
+            lcub-oid-rcub          1}}
+    notifs-clause {
+        ""  = {
+            NOTIFICATIONS      1
+            lcub-oid-list-rcub 1}}
+
+    agent-caps-defn {
+        ""  = {
+            AGENT-CAPABILITIES-use 1
+            PRODUCT-RELEASE        1
+            quoted-string          1
+            status-clause          1
+            description-clause     1
+            ref-clause             ?
+            agent-caps-mod-part    *
+            ::=                    1
+            lcub-oid-rcub          1}}
+    agent-caps-mod-part {
+        ""  = {
+            SUPPORTS           1
+            type-ref-use       1
+            oid                ?
+            INCLUDES           1
+            lcub-oid-list-rcub 1
+            variation          *}}
+    variation {
+        ""  = {
+            VARIATION           1
+            oid                 1
+            syntax-clause       ?
+            write-syntax-clause ?
+            access-part         ?
+            creation-part       ?
+            defval-clause       ?
+            description-clause  1}}
+    access-part {
+        ""  = {
+            ACCESS            1
+            IETF-access-id-kw 1}}
+    creation-part {
+        ""  = {
+            CREATION-REQUIRES  1
+            lcub-oid-list-rcub 1}}
+
+    lcub-oid-rcub {
+        ""  = {
+            lcub 1
+            oid  1
+            rcub 1}}
+    lcub-oid-list-rcub {
+        ""  = {
+            lcub     1
+            oid-list 1
+            rcub     1}}
+    oid-list {
+        ""  = {
+            oid  1
+            ,oid *}}
+    ,oid {
+        ""  = {
+            ,   1
+            oid 1}}
+    oid {"" = {sub-id +}}
+    sub-id {
+        ""  | {
+            ,              !
+            rcub           !
+            uint32         1
+            id(uint32)     1
+            id-use         1
+            mod-id(uint32) 1
+            mod-id         1
+            type-ref-err   1}}
+    mod-id {
+        ""  = {
+            type-ref-use 1
+            .            1
+            id-use       1}}
+    mod-id(uint32) {
+        ""  = {
+            type-ref-use 1
+            .            1
+            id(uint32)   1}}
+    sub-id-defval {
+        ""  | {
+            rcub       !
+            id(uint32) 1
+            uint32     1}}
+
+    syntax {
+        ""  | {
+            bits-construct        1
+            basic-syntax          1
+            type-tag-basic-syntax 1
+            type-ref-use          1
+            SEQUENCE-OF-syntax    1
+            SEQUENCE-syntax       1
+            appl-syntax           1}}
+    bits-construct {
+        ""  = {
+            BITS              1
+            lcub              1
+            id-def(uint)-list 1
+            rcub              1}}
+    type-tag-basic-syntax {
+        ""  = {
+            type-tag     1
+            basic-syntax 1}}
+    type-tag {
+        ""  = {
+            lsqb     1
+            class    1
+            uint     1
+            rsqb     1
+            IMPLICIT 1}}
+    class {
+        ""  | {
+            APPLICATION 1
+            UNIVERSAL   1}}
+    basic-syntax {
+        ""  | {
+            INTEGER(9)        1
+            Integer32(ranges) 1
+            type*(*)          1
+            octet-str         1
+            obj-id(*)         1}}
+    INTEGER(9) {
+        ""  = {
+            INTEGER 1
+            (9)     ?}}
+    Integer32(ranges) {
+        ""  = {
+            Integer32-use 1
+            (ranges)      ?}}
+    type*(*) {
+        ""  = {
+            type-ref-use 1
+            .IntType     ?
+            (*)          1}}
+    .IntType {
+        ""  = {
+            .            1
+            type-ref-use 1}}
+    octet-str {
+        ""  = {
+            OCTET-STRING 1
+            (SIZE)       ?}}
+    obj-id(*) {
+        ""  = {
+            OBJECT-IDENTIFIER 1
+            (*)               ?}}
+    SEQUENCE-OF-syntax {
+        ""  = {
+            SEQUENCE     1
+            OF           1
+            type-ref-use 1}}
+    SEQUENCE-syntax {
+        ""  = {
+            SEQUENCE      1
+            lcub          1
+            seq-item-list 1
+            rcub          1}}
+    seq-item-list {
+        ""  = {
+            seq-item  1
+            ,seq-item *}}
+    ,seq-item {
+        ""  = {
+            ,        1
+            seq-item 1}}
+    seq-item {
+        ""  = {
+            id-use     1
+            seq-syntax 1
+            kludge-(*) ?}}
+    seq-syntax {
+        ""  | {
+            INTEGER            1
+            BITS               1
+            OCTET-STRING       1
+            OBJECT-IDENTIFIER  1
+            type-ref-use       1
+            IETF-type-name-use 1}}
+    kludge-(*) {err = {(*) 1}}
+    appl-syntax {
+        ""  | {
+            IpAddress(*)       1
+            Counter32(*)       1
+            Gauge32(ranges)    1
+            Unsigned32(ranges) 1
+            TimeTicks-use      1
+            Opaque(SIZE)       1
+            Counter64(*)       1
+            Integer64(ranges)  1
+            Unsigned64(ranges) 1}}
+    IpAddress(*) {
+        ""  = {
+            IpAddress-use 1
+            (*)           ?}}
+    Counter32(*) {
+        ""  = {
+            Counter32-use 1
+            (*)           ?}}
+    Gauge32(ranges) {
+        ""  = {
+            Gauge32-use 1
+            (ranges)    ?}}
+    Unsigned32(ranges) {
+        ""  = {
+            Unsigned32-use 1
+            (ranges)       ?}}
+    Opaque(SIZE) {
+        ""  = {
+            Opaque-use 1
+            (SIZE)     ?}}
+    Counter64(*) {
+        ""  = {
+            Counter64-use 1
+            (*)           ?}}
+    Integer64(ranges) {
+        ""  = {
+            Integer64-use 1
+            (ranges)      ?}}
+    Unsigned64(ranges) {
+        ""  = {
+            Unsigned64-use 1
+            (ranges)       ?}}
+
+    (*) {
+        ""  | {
+            (ranges) 1
+            (SIZE)   1
+            enum     1}}
+    (9) {
+        ""  | {
+            (ranges) 1
+            enum     1}}
+    (SIZE) {
+        ""  = {
+            (        1
+            SIZE     1
+            (ranges) 1
+            )        1}}
+    (ranges) {
+        ""  = {
+            (      1
+            range  1
+            |range *
+            )      1}}
+    |range {
+        ""  = {
+            |     1
+            range 1}}
+    range {
+        ""  = {
+            bound   1
+            ..bound ?}}
+    ..bound {
+        ""  = {
+            ..    1
+            bound 1}}
+    bound {
+        ""  | {
+            int          1
+            radix-string 1}}
+    enum {
+        ""  = {
+            lcub             1
+            id-def(int)-list 1
+            rcub             1}}
+
+    macro-defn {
+        ""  = {
+            IETF-macro-name-def 1
+            MACRO               1
+            ::=                 1
+            BEGIN               1
+            TYPE                1
+            NOTATION            1
+            ::=                 1
+            type-notation       +
+            VALUE               1
+            NOTATION            1
+            ::=                 1
+            value-notation      1
+            macro-syntax        *
+            END                 1}}
+    type-notation {
+        ""  | {
+            type-ref-use  1
+            VALUE         !
+            quoted-string 1
+            t-n-type      1
+            t-n-value     1}}
+    t-n-type {
+        ""  = {
+            type-kw      1
+            (            1
+            TYPE         ?
+            type-ref-use 1
+            )            1}}
+    t-n-value {
+        ""  = {
+            value-kw  1
+            (         1
+            t-n-v-arg 1
+            )         1}}
+    t-n-v-arg {
+        ""  | {
+            value-arg1 1
+            value-arg2 1}}
+    value-notation {
+        ""  = {
+            value-kw 1
+            (        1
+            VALUE    1
+            v-n-arg  1
+            )        1}}
+    v-n-arg {
+        ""  | {
+            OBJECT-IDENTIFIER 1
+            INTEGER           1
+            type-ref-use      1}}
+    macro-syntax {
+        ""  = {
+            type-ref-macsyn   1
+            ::=               1
+            macro-syntax-alt  1
+            |macro-syntax-alt *}}
+    |macro-syntax-alt {
+        ""  = {
+            |                1
+            macro-syntax-alt 1}}
+    macro-syntax-alt {
+        ""  = {
+            macro-syntax-item +}}
+    macro-syntax-item {
+        ""  | {
+            type-ref-use    1
+            END             !
+            type-ref-macsyn !
+            quoted-string   1
+            m-s-a-type      1
+            m-s-a-value     1
+            id-use          1}}
+    m-s-a-type {
+        ""  = {
+            type-kw       1
+            (m-s-a-t-arg) ?}}
+    (m-s-a-t-arg) {
+        ""  = {
+            (      1
+            id-use 1
+            )      1}}
+    m-s-a-value {
+        ""  = {
+            value-kw    1
+            (           1
+            m-s-a-v-arg 1
+            )           1}}
+    m-s-a-v-arg {
+        ""  | {
+            OBJECT-IDENTIFIER 1
+            IA5String         1
+            type-ref-use      1
+            value-arg1        1
+            value-arg3        1}}
+    value-arg1 {
+        ""  = {
+            Update       1
+            type-ref-use 1}}
+    value-arg2 {
+        ""  = {
+            id-use            1
+            OBJECT-IDENTIFIER 1}}
+    value-arg3 {
+        ""  = {
+            id-use       1
+            type-ref-use 1}}
+
+
+    OBJECT-IDENTIFIER {
+        ""  = {
+            OBJECT     1
+            IDENTIFIER 1}}
+    OCTET-STRING {
+        ""  = {
+            OCTET  1
+            STRING 1}}
+
+    type-ref-def {def = {type-ref 1}}
+    type-ref-use {id  = {type-ref 1}}
+    type-ref-err {err = {type-ref 1}}
+    type-ref-macsyn {def . {}}
+
+    id-def {def = {/id 1  * 1}}
+    id-use {id  = {/id 1  * 1}}
+    id-kw  {key = {/id 1  * 1}}
+
+    id-list {
+        ""  = {
+            id-use  1
+            ,id-use *}}
+    ,id-use {
+        ""  = {
+            ,      1
+            id-use 1}}
+
+    quoted-string {
+        ""  = {
+            quot 1
+            qstr *
+            quot 1}}
+    qstr {str . {}}
+
+    positive {
+        ""  | {
+            positive31   1
+            positive32   1
+            positive63   1
+            positive64   1
+            positive-big 1}}
+    negative {
+        ""  | {
+            negative31   1
+            negative63   1
+            negative-big 1}}
+    uint {
+        ""  | {
+            zero     1
+            positive 1}}
+    uint32 {
+        ""  | {
+            positive31   1
+            zero     1
+            positive32   1}}
+    int {
+        ""  | {
+            positive31   1
+            zero         1
+            positive32   1
+            negative31   1
+            positive63   1
+            positive64   1
+            negative63   1
+            positive-big 1
+            negative-big 1}}
+
+    id(positive)-list {
+        ""  = {
+            id(positive)  1
+            ,id(positive) *}}
+    ,id(positive) {
+        ""  = {
+            ,            1
+            id(positive) 1}}
+    id(positive) {
+        ""  = {
+            id-use   1
+            (        1
+            positive 1
+            )        1}}
+    id-def(uint)-list {
+        ""  = {
+            id-def(uint)  1
+            ,id-def(uint) *}}
+    ,id-def(uint) {
+        ""  = {
+            ,        1
+            id-def(uint) 1}}
+    id-def(uint) {
+        ""  = {
+            id-def 1
+            (      1
+            uint   1
+            )      1}}
+    id(uint32) {
+        ""  = {
+            id-use 1
+            (      1
+            uint32 1
+            )      1}}
+    id-def(int)-list {
+        ""  = {
+            id-def(int)  1
+            ,id-def(int) *}}
+    ,id-def(int) {
+        ""  = {
+            ,       1
+            id-def(int) 1}}
+    id-def(int) {
+        ""  = {
+            id-def 1
+            (      1
+            int    1
+            )      1}}
+
+    radix-string {val . {}}
+
+    IETF-macro-name-def {def = {/Imn 1  * 1}}
+    IETF-macro-name-use {id  = {/Imn 1  * 1}}
+    AGENT-CAPABILITIES-use {rep = {/Imn 1  AGENT-CAPABILITIES 1}}
+    MODULE-COMPLIANCE-use  {rep = {/Imn 1  MODULE-COMPLIANCE  1}}
+    MODULE-IDENTITY-use    {rep = {/Imn 1  MODULE-IDENTITY    1}}
+    NOTIFICATION-GROUP-use {rep = {/Imn 1  NOTIFICATION-GROUP 1}}
+    NOTIFICATION-TYPE-use  {rep = {/Imn 1  NOTIFICATION-TYPE  1}}
+    OBJECT-GROUP-use       {rep = {/Imn 1  OBJECT-GROUP       1}}
+    OBJECT-IDENTITY-use    {rep = {/Imn 1  OBJECT-IDENTITY    1}}
+    OBJECT-TYPE-use        {rep = {/Imn 1  OBJECT-TYPE        1}}
+    TEXTUAL-CONVENTION-use {rep = {/Imn 1  TEXTUAL-CONVENTION 1}}
+    TRAP-TYPE-use          {rep = {/Imn 1  TRAP-TYPE          1}}
+
+    IETF-type-name-def {def = {/Itn 1  * 1}}
+    IETF-type-name-use {id  = {/Itn 1  * 1}}
+    Counter32-use  {id = {/Itn 1  Counter32  1}}
+    Counter64-use  {id = {/Itn 1  Counter64  1}}
+    Gauge32-use    {id = {/Itn 1  Gauge32    1}}
+    Integer32-use  {id = {/Itn 1  Integer32  1}}
+    Integer64-use  {id = {/Itn 1  Integer64  1}}
+    IpAddress-use  {id = {/Itn 1  IpAddress  1}}
+    Opaque-use     {id = {/Itn 1  Opaque     1}}
+    TimeTicks-use  {id = {/Itn 1  TimeTicks  1}}
+    Unsigned32-use {id = {/Itn 1  Unsigned32 1}}
+    Unsigned64-use {id = {/Itn 1  Unsigned64 1}}
+
+    type-kw  {key = {/id 1  type  1}}
+    value-kw {key = {/id 1  value 1}}
+    IETF-status-id-kw {key = {/id 1  IETF-status-id 1}}
+    IETF-status-id {
+        ""  | {
+            current    1
+            mandatory  1
+            deprecated 1
+            obsolete   1
+            optional   1}}
+    IETF-access-id-kw {key = {/id 1  IETF-access-id 1}}
+    IETF-access-id {
+        ""  | {
+            read-only             1
+            not-accessible        1
+            read-create           1
+            read-write            1
+            not-implemented       1
+            accessible-for-notify 1
+            write-only            1}}
+    IETF-pib-access-id-kw {key = {/id 1  IETF-pib-access-id 1}}
+    IETF-pib-access-id {
+        ""  | {
+            not-accessible 1
+            install        1
+            notify         1
+            install-notify 1
+            report-only    1}}
+    IETF-pib-all-kw {key = {/id 1  IETF-pib-all 1}}
+    IETF-pib-all {"" = {all 1}}
+
+    * {"" *}
+}
+
+# First {token state} pair-items are hash keys and must be in the
+# same canonical form as would be produced by [list token state].
+set artwork::grammar_program(mib) {
+    {{} 0}  {done}
+
+    {type-ref 0}  {{push module} {span def} {goto m1}}
+    {lcub m1}  {{push m1} {redo lor1d}}
+    {DEFINITIONS m1}  {{span key} {goto m3}}
+    {DEFINITIONS m2}  {{redo m1}}
+    {PIB-DEFINITIONS m1}  {{span key} {goto m3}}
+    {PIB-DEFINITIONS m2}  {{redo m1}}
+    {::= m3}  {{goto m4}}
+    {BEGIN m4}  {{goto m5}}
+    {END m5}  {{redo m7}}
+    {END m6}  {{redo m7}}
+    {END m7}  {{check module} div-top pop {goto 0}}
+    {EXPORTS m5}  {{push exports} {goto ex1}}
+    {IMPORTS m5}  {{push imports} {goto im1}}
+    {IMPORTS m6}  {{redo m5}}
+    {/id m5}  {{redo m7}}
+    {/id m6}  {{redo m7}}
+    {/id m7}  {{push defn} {span def} skip-next {goto m9}}
+    {type-ref m5}  {{redo m7}}
+    {type-ref m6}  {{redo m7}}
+    {type-ref m7}  {{push defn} {goto m11}}
+    {/Imn m5}  {{redo m7}}
+    {/Imn m6}  {{redo m7}}
+    {/Imn m7}  {{push defn} {span def} skip-next {goto mac0}}
+    {/Itn m5}  {{redo m7}}
+    {/Itn m6}  {{redo m7}}
+    {/Itn m7}  {{push defn} {span def} skip-next {goto td0}}
+    {/Imn m9}  {{goto m10}}
+    {OBJECT m9}  {{goto m14}}
+    {MODULE-IDENTITY m10}     {{span rep} {goto my1}}
+    {OBJECT-IDENTITY m10}     {{span rep} {goto oy1}}
+    {OBJECT-TYPE m10}         {{span rep} {goto ot1}}
+    {NOTIFICATION-TYPE m10}   {{span rep} {goto nt0}}
+    {TRAP-TYPE m10}           {{span rep} {goto tt0}}
+    {MODULE-COMPLIANCE m10}   {{span rep} {goto mc0}}
+    {OBJECT-GROUP m10}        {{span rep} {goto og0}}
+    {NOTIFICATION-GROUP m10}  {{span rep} {goto ng0}}
+    {AGENT-CAPABILITIES m10}  {{span rep} {goto ac0}}
+    {::= m11}  {{redo m12 1}}
+    {OBJECT m11}  {{redo m13 1}}
+    {type-ref m12}  {{span def} skip-next {goto td1}}
+    {type-ref m13}  {{span err} skip-next {goto m14}}
+    {IDENTIFIER m14}  {{goto oi0}}
+    {* m99}  {{check defn} div-top pop {goto m7}}
+
+    {semi ex1}  {{redo ex3}}
+    {semi ex3}  {{check exports} div-top pop {goto m6}}
+    {semi ex4}  {{redo ex3}}
+    {ALL ex1}  {{goto ex4}}
+    {/id ex1}  {{redo ex2}}
+    {/id ex2}  {{span id} skip-next {goto ex3}}
+    {type-ref ex1}  {{redo ex2}}
+    {type-ref ex2}  {{span id} {goto ex3}}
+    {/Itn ex1}  {{redo ex2}}
+    {/Itn ex2}  {{span id} skip-next {goto ex3}}
+    {/Imn ex1}  {{redo ex2}}
+    {/Imn ex2}  {{span id} skip-next {goto ex3}}
+    {, ex3}  {{goto ex2}}
+
+    {semi im1}  {{check imports} div-top pop {goto m7}}
+    {/id im1}  {{span id} skip-next {goto im3}}
+    {/id im2}  {{redo im1}}
+    {type-ref im1}  {{span id} {goto im3}}
+    {type-ref im2}  {{redo im1}}
+    {BITS im1}  {{goto im3}}
+    {BITS im2}  {{goto im3}}
+    {MANDATORY-GROUPS im1}  {{goto im3}}
+    {MANDATORY-GROUPS im2}  {{goto im3}}
+    {/Imn im1}  {{span id} skip-next {goto im3}}
+    {/Imn im2}  {{redo im1}}
+    {/Itn im1}  {{span id} skip-next {goto im3}}
+    {/Itn im2}  {{redo im1}}
+    {, im3}  {{goto im2}}
+    {FROM im3}  {{goto im4}}
+    {type-ref im4}  {{span id} {goto im1}}
+
+    {SUBJECT-CATEGORIES my1}  {{goto my2}}
+    {lcub my2}  {{goto my3}}
+    {/id my3}  {{goto my4}}
+    {all my4}  {{span key} {goto my11}}
+    {id my4}   {{span id} {goto my5}}
+    {* my4}    {{span id} {goto my5}}
+    {( my5}  {{goto my6}}
+    {positive31 my6}    {{goto my7}}
+    {positive32 my6}    {{goto my7}}
+    {positive63 my6}    {{goto my7}}
+    {positive64 my6}    {{goto my7}}
+    {positive-big my6}  {{goto my7}}
+    {) my7}  {{goto my8}}
+    {rcub my8}  {{goto my20}}
+    {, my8}     {{goto my9}}
+    {/id my9}  {{goto my10}}
+    {all my10}  {{span err} {goto my11}}
+    {id my10}   {{span id} {goto my5}}
+    {* my10}    {{span id} {goto my5}}
+    {rcub my11}  {{goto my20}}
+    {LAST-UPDATED my1}   {{redo my20}}
+    {LAST-UPDATED my20}   {{push my21} {goto qs1}}
+    {ORGANIZATION my21}  {{push my22} {goto qs1}}
+    {CONTACT-INFO my22}  {{push my23} {goto qs1}}
+    {DESCRIPTION my23}   {{push my24} {goto qs1d}}
+    {::= my24}           {{goto lor1d}}
+    {REVISION my24}      {{push my25} {goto qs1x}}
+    {DESCRIPTION my25}   {{push my24} {goto qs1dd}}
+
+    {STATUS oy1}  {{goto oy2}}
+    {/id oy2}  {{goto oy3}}
+    {current oy3}     {{span key} {goto oy4}}
+    {deprecated oy3}  {{span key} {goto oy4}}
+    {obsolete oy3}    {{span key} {goto oy4}}
+    {* oy3}           {{span err} {goto oy4}}
+    {DESCRIPTION oy4}  {{push oy5} {goto qs1d}}
+    {REFERENCE oy5}    {{push oy6} {goto qs1}}
+    {::= oy5}  {{goto lor1d}}
+    {::= oy6}  {{goto lor1d}}
+
+    {SYNTAX ot1}  {{push ot2} {goto sx0}}
+    {UNITS ot2}  {{push ot3} {goto qs1}}
+    {MAX-ACCESS ot2}  {{goto ot4}}
+    {MAX-ACCESS ot3}  {{goto ot4}}
+    {/id ot4}  {{goto ot5}}
+    {not-accessible ot5}         {{span key} {goto ot12}}
+    {accessible-for-notify ot5}  {{span key} {goto ot12}}
+    {read-only ot5}              {{span key} {goto ot12}}
+    {read-write ot5}             {{span key} {goto ot12}}
+    {read-create ot5}            {{span key} {goto ot12}}
+    {* ot5}                      {{span err} {goto ot12}}
+    {ACCESS ot2}  {{goto ot6}}
+    {ACCESS ot3}  {{goto ot6}}
+    {/id ot6}  {{goto ot7}}
+    {read-only ot7}       {{span key} {goto ot15}}
+    {read-write ot7}      {{span key} {goto ot15}}
+    {write-only ot7}      {{span key} {goto ot15}}
+    {not-accessible ot7}  {{span key} {goto ot15}}
+    {* ot7}               {{span err} {goto ot15}}
+    {PIB-ACCESS ot2}  {{goto ot8}}
+    {PIB-ACCESS ot3}  {{goto ot8}}
+    {/id ot8}  {{goto ot9}}
+    {install ot9}         {{span key} {goto ot10}}
+    {notify ot9}          {{span key} {goto ot10}}
+    {install-notify ot9}  {{span key} {goto ot10}}
+    {report-only ot9}     {{span key} {goto ot10}}
+    {* ot9}               {{span err} {goto ot10}}
+    {PIB-REFERENCES ot2}  {{redo ot10}}
+    {PIB-REFERENCES ot3}  {{redo ot10}}
+    {PIB-REFERENCES ot10}  {{push ot11} {goto lor1}}
+    {PIB-TAG ot2}  {{redo ot11}}
+    {PIB-TAG ot3}  {{redo ot11}}
+    {PIB-TAG ot10}  {{redo ot11}}
+    {PIB-TAG ot11}  {{push ot12} {goto lor1}}
+    {STATUS ot2}  {{goto ot13}}
+    {STATUS ot3}  {{goto ot13}}
+    {STATUS ot10}  {{goto ot13}}
+    {STATUS ot11}  {{goto ot13}}
+    {STATUS ot12}  {{goto ot13}}
+    {/id ot13}  {{goto ot14}}
+    {current ot14}     {{span key} {goto ot20}}
+    {obsolete ot14}    {{span key} {goto ot20}}
+    {deprecated ot14}  {{span key} {goto ot20}}
+    {* ot14}           {{span err} {goto ot20}}
+    {STATUS ot15}  {{goto ot16}}
+    {/id ot16}  {{goto ot17}}
+    {mandatory ot17}   {{span key} {goto ot20}}
+    {optional ot17}    {{span key} {goto ot20}}
+    {obsolete ot17}    {{span key} {goto ot20}}
+    {deprecated ot17}  {{span key} {goto ot20}}
+    {* ot17}           {{span err} {goto ot20}}
+    {DESCRIPTION ot20}  {{push ot21} {goto qs1d}}
+    {INSTALL-ERRORS ot20}  {{goto ot22}}
+    {INSTALL-ERRORS ot21}  {{goto ot22}}
+    {lcub ot22}  {{goto ot23}}
+    {/id ot23}  {{goto ot24}}
+    {id ot24}   {{span id} {goto ot25}}
+    {* ot24}    {{span id} {goto ot25}}
+    {( ot25}  {{goto ot26}}
+    {positive31 ot26}    {{goto ot27}}
+    {positive32 ot26}    {{goto ot27}}
+    {positive63 ot26}    {{goto ot27}}
+    {positive64 ot26}    {{goto ot27}}
+    {positive-big ot26}  {{goto ot27}}
+    {) ot27}  {{goto ot28}}
+    {rcub ot28}  {{goto ot40}}
+    {, ot28}     {{goto ot29}}
+    {/id ot29}  {{goto ot30}}
+    {id ot30}   {{span id} {goto ot25}}
+    {* ot30}    {{span id} {goto ot25}}
+    {rcub ot31}  {{goto ot40}}
+    {REFERENCE ot20}  {{redo ot40}}
+    {REFERENCE ot21}  {{redo ot40}}
+    {REFERENCE ot40}  {{push ot41} {goto qs1}}
+    {PIB-INDEX ot20}  {{redo ot41}}
+    {PIB-INDEX ot21}  {{redo ot41}}
+    {PIB-INDEX ot40}  {{redo ot41}}
+    {PIB-INDEX ot41}  {{push ot44} {goto lor1}}
+    {AUGMENTS ot20}   {{redo ot41}}
+    {AUGMENTS ot21}   {{redo ot41}}
+    {AUGMENTS ot40}   {{redo ot41}}
+    {AUGMENTS ot41}   {{push ot44} {goto lor1}}
+    {EXTENDS ot20}    {{redo ot41}}
+    {EXTENDS ot21}    {{redo ot41}}
+    {EXTENDS ot40}    {{redo ot41}}
+    {EXTENDS ot41}    {{push ot44} {goto lor1}}
+    {INDEX ot20}  {{goto ot45}}
+    {INDEX ot21}  {{goto ot45}}
+    {INDEX ot40}  {{goto ot45}}
+    {INDEX ot41}  {{goto ot45}}
+    {INDEX ot44}  {{goto ot45}}
+    {lcub ot45}  {{goto ot46}}
+    {IMPLIED ot46}  {{goto ot47}}
+    {* ot46} {{push ot48} {redo oid1}}
+    {* ot47} {{push ot48} {redo oid1}}
+    {rcub ot48}  {{goto ot50}}
+    {, ot48}     {{goto ot46}}
+    {UNIQUENESS ot20}  {{goto ot51}}
+    {UNIQUENESS ot21}  {{goto ot51}}
+    {UNIQUENESS ot40}  {{goto ot51}}
+    {UNIQUENESS ot41}  {{goto ot51}}
+    {UNIQUENESS ot44}  {{goto ot51}}
+    {UNIQUENESS ot50}  {{goto ot51}}
+    {lcub ot51}  {{goto ot52}}
+    {rcub ot52}  {{goto ot60}}
+    {* ot52} {{push ot53} {redo oid1}}
+    {, ot53} {{goto ot54}}
+    {rcub ot53}  {{goto ot60}}
+    {* ot54} {{push ot53} {redo oid1}}
+    {DEFVAL ot20}  {{redo ot60}}
+    {DEFVAL ot21}  {{redo ot60}}
+    {DEFVAL ot40}  {{redo ot60}}
+    {DEFVAL ot41}  {{redo ot60}}
+    {DEFVAL ot44}  {{redo ot60}}
+    {DEFVAL ot50}  {{redo ot60}}
+    {DEFVAL ot60}  {{push ot70} {goto dv1}}
+    {::= ot20}  {{goto lor1d}}
+    {::= ot21}  {{goto lor1d}}
+    {::= ot40}  {{goto lor1d}}
+    {::= ot41}  {{goto lor1d}}
+    {::= ot44}  {{goto lor1d}}
+    {::= ot50}  {{goto lor1d}}
+    {::= ot60}  {{goto lor1d}}
+    {::= ot70}  {{goto lor1d}}
+
+    {OBJECTS nt0}  {{goto nt1}}
+    {lcub nt1}  {{push nt2} {goto oid1}}
+    {rcub nt2}  {{goto nt10}}
+    {, nt2}     {{push nt2} {goto oid1}}
+    {STATUS nt0}   {{goto nt11}}
+    {STATUS nt10}  {{goto nt11}}
+    {/id nt11}  {{goto nt12}}
+    {current nt12}     {{span key} {goto nt20}}
+    {deprecated nt12}  {{span key} {goto nt20}}
+    {obsolete nt12}    {{span key} {goto nt20}}
+    {* nt12}           {{span err} {goto nt20}}
+    {DESCRIPTION nt20}  {{push nt30} {goto qs1d}}
+    {REFERENCE nt30}  {{push nt40} {goto qs1}}
+    {::= nt30}  {{goto lor1d}}
+    {::= nt40}  {{goto lor1d}}
+
+    {ENTERPRISE tt0} {{push tt10} {goto oid1}}
+    {VARIABLES tt10} {{goto tt11}}
+    {lcub tt11}  {{push tt12} {goto oid1}}
+    {rcub tt12}  {{goto tt20}}
+    {, tt12}     {{push tt12} {goto oid1}}
+    {DESCRIPTION tt10}  {{redo tt20}}
+    {DESCRIPTION tt20}  {{push tt30} {goto qs1d}}
+    {REFERENCE tt10}  {{redo tt30}}
+    {REFERENCE tt20}  {{redo tt30}}
+    {REFERENCE tt30}  {{push tt40} {goto qs1}}
+    {::= tt10}  {{goto tt41}}
+    {::= tt20}  {{goto tt41}}
+    {::= tt30}  {{goto tt41}}
+    {::= tt40}  {{goto tt41}}
+    {zero tt41}         {{redo m99}}
+    {positive31 tt41}   {{redo m99}}
+    {positive32 tt41}   {{redo m99}}
+    {positive63 tt41}   {{redo m99}}
+    {positive64 tt41}   {{redo m99}}
+    {positive-big tt41} {{redo m99}}
+    {negative31 tt41}   {{redo m99}}
+    {negative63 tt41}   {{redo m99}}
+    {negative-big tt41} {{redo m99}}
+
+    {::= oi0}  {{goto lor1d}}
+
+    {::= td0}  {{goto td1}}
+    {* td1}  {{push td3} {redo sx0}}
+    {/Imn td1}  {{goto td2}}
+    {TEXTUAL-CONVENTION td2}  {{span rep} {goto tc0}}
+    {CHOICE td1}  {{goto ch0}}
+    {* td3}  {{redo m99 1}}
+
+    {DISPLAY-HINT tc0}  {{push tc10} {goto qs1}}
+    {STATUS tc0} {{goto tc11}}
+    {STATUS tc10} {{goto tc11}}
+    {/id tc11}  {{goto tc12}}
+    {current tc12}     {{span key} {goto tc20}}
+    {deprecated tc12}  {{span key} {goto tc20}}
+    {obsolete tc12}    {{span key} {goto tc20}}
+    {* tc12}           {{span err} {goto tc20}}
+    {DESCRIPTION tc20}  {{push tc30} {goto qs1d}}
+    {REFERENCE tc30}    {{push tc40} {goto qs1}}
+    {SYNTAX tc30}  {{redo tc40}}
+    {SYNTAX tc40}  {{push td3} {goto sx0}}
+
+    {lcub ch0}  {{goto ch1}}
+    {/id ch1}  {{span def} skip-next {goto ch2}}
+    {type-ref ch2}  {{span id} {goto ch20}}
+    {NULL ch2}  {{goto ch20}}
+    {OBJECT ch2}  {{goto ch3}}
+    {IDENTIFIER ch3} {{goto ch20}}
+    {OCTET ch2}  {{goto ch4}}
+    {STRING ch4}  {{push ch20} {goto sxs0}}
+    {INTEGER ch2}  {{goto ch5}}
+    {* ch5}  {{redo ch20}}
+    {lcub ch5}  {{push ch20} {goto sxe0}}
+    {( ch5}  {{goto ch6}}
+    {zero ch6}  {{goto ch7}}
+    {* ch6}  {{push ch20} {redo sxr1}}
+    {.. ch7}  {{goto ch8}}
+    {* ch7}  {{push ch20} {redo sxr1 1}}
+    {MAX ch8}  {{goto ch9}}
+    {* ch8}  {{push ch20} {redo sxr1 2}}
+    {) ch9}  {{goto ch20}}
+    {/Itn ch2}  {{span id} {goto ch10}}
+    {Integer32 ch10}  {{push ch20} {goto sxr0}}
+    {* ch10}  {{goto ch20}}
+    {, ch20}  {{goto ch1}}
+    {rcub ch20}  {{redo m99}}
+
+    {STATUS mc0} {{goto mc1}}
+    {/id mc1}  {{goto mc2}}
+    {current mc2}     {{span key} {goto mc10}}
+    {deprecated mc2}  {{span key} {goto mc10}}
+    {obsolete mc2}    {{span key} {goto mc10}}
+    {* mc2}           {{span err} {goto mc10}}
+    {DESCRIPTION mc10}  {{push mc20} {goto qs1d}}
+    {REFERENCE mc20}  {{push mc30} {goto qs1}}
+    {MODULE mc20}  {{goto mc31}}
+    {MODULE mc30}  {{goto mc31}}
+    {type-ref mc31}  {{span id} {goto mc32}}
+    {* mc32}  {{push mc33} {redo oid1}}
+    {MANDATORY-GROUPS mc31}  {{goto mc34}}
+    {MANDATORY-GROUPS mc32}  {{goto mc34}}
+    {MANDATORY-GROUPS mc33}  {{goto mc34}}
+    {lcub mc34}  {{push mc35} {goto oid1}}
+    {rcub mc35}  {{goto mc36}}
+    {, mc35}     {{push mc35} {goto oid1}}
+    {GROUP mc31}  {{redo mc36}}
+    {GROUP mc32}  {{redo mc36}}
+    {GROUP mc33}  {{redo mc36}}
+    {GROUP mc36}  {{push mc37} {goto oid1}}
+    {DESCRIPTION mc37}  {{push mc36} {goto qs1d}}
+    {OBJECT mc31}  {{redo mc36}}
+    {OBJECT mc32}  {{redo mc36}}
+    {OBJECT mc33}  {{redo mc36}}
+    {OBJECT mc36}  {{push mc38} {goto oid1}}
+    {SYNTAX mc38}  {{push mc39} {goto sx0}}
+    {WRITE-SYNTAX mc38}  {{redo mc39}}
+    {WRITE-SYNTAX mc39}  {{push mc40} {goto sx0}}
+    {MIN-ACCESS mc38}  {{goto mc41}}
+    {MIN-ACCESS mc39}  {{goto mc41}}
+    {MIN-ACCESS mc40}  {{goto mc41}}
+    {/id mc41}  {{goto mc42}}
+    {not-accessible mc42}         {{span key} {goto mc45}}
+    {accessible-for-notify mc42}  {{span key} {goto mc45}}
+    {read-only mc42}              {{span key} {goto mc45}}
+    {read-write mc42}             {{span key} {goto mc45}}
+    {read-create mc42}            {{span key} {goto mc45}}
+    {* mc42}                      {{span err} {goto mc45}}
+    {PIB-MIN-ACCESS mc38}  {{goto mc43}}
+    {PIB-MIN-ACCESS mc39}  {{goto mc43}}
+    {PIB-MIN-ACCESS mc40}  {{goto mc43}}
+    {/id mc43}  {{goto mc44}}
+    {not-accessible mc44}  {{span key} {goto mc45}}
+    {install mc44}         {{span key} {goto mc45}}
+    {notify mc44}          {{span key} {goto mc45}}
+    {install-notify mc44}  {{span key} {goto mc45}}
+    {report-only mc44}     {{span key} {goto mc45}}
+    {* mc44}               {{span err} {goto mc45}}
+    {DESCRIPTION mc38}  {{redo mc45}}
+    {DESCRIPTION mc39}  {{redo mc45}}
+    {DESCRIPTION mc40}  {{redo mc45}}
+    {DESCRIPTION mc45}  {{push mc36} {goto qs1d}}
+    {MODULE mc31}  {{goto mc31}}
+    {MODULE mc32}  {{goto mc31}}
+    {MODULE mc33}  {{goto mc31}}
+    {MODULE mc36}  {{goto mc31}}
+    {::= mc31}  {{goto lor1d}}
+    {::= mc32}  {{goto lor1d}}
+    {::= mc33}  {{goto lor1d}}
+    {::= mc36}  {{goto lor1d}}
+
+    {OBJECTS og0}  {{goto og1}}
+    {lcub og1}  {{push og2} {goto oid1}}
+    {rcub og2}  {{goto og10}}
+    {, og2}     {{push og2} {goto oid1}}
+    {STATUS og10}  {{goto og11}}
+    {/id og11}  {{goto og12}}
+    {current og12}     {{span key} {goto og20}}
+    {deprecated og12}  {{span key} {goto og20}}
+    {obsolete og12}    {{span key} {goto og20}}
+    {* og12}           {{span err} {goto og20}}
+    {DESCRIPTION og20}  {{push og30} {goto qs1d}}
+    {REFERENCE og30}  {{push og40} {goto qs1}}
+    {::= og30}  {{goto lor1d}}
+    {::= og40}  {{goto lor1d}}
+
+    {NOTIFICATIONS ng0}  {{goto ng1}}
+    {lcub ng1}  {{push ng2} {goto oid1}}
+    {rcub ng2}  {{goto ng10}}
+    {, ng2}     {{push ng2} {goto oid1}}
+    {STATUS ng10}  {{goto ng11}}
+    {/id ng11}  {{goto ng12}}
+    {current ng12}     {{span key} {goto ng20}}
+    {deprecated ng12}  {{span key} {goto ng20}}
+    {obsolete ng12}    {{span key} {goto ng20}}
+    {* ng12}           {{span err} {goto ng20}}
+    {DESCRIPTION ng20}  {{push ng30} {goto qs1d}}
+    {REFERENCE ng30}  {{push ng40} {goto qs1}}
+    {::= ng30}  {{goto lor1d}}
+    {::= ng40}  {{goto lor1d}}
+
+    {PRODUCT-RELEASE ac0}  {{push ac10} {goto qs1}}
+    {STATUS ac10}  {{goto ac11}}
+    {/id ac11}  {{goto ac12}}
+    {current ac12}   {{span key} {goto ac20}}
+    {obsolete ac12}  {{span key} {goto ac20}}
+    {* ac12}         {{span err} {goto ac20}}
+    {DESCRIPTION ac20}  {{push ac30} {goto qs1d}}
+    {REFERENCE ac30}  {{push ac40} {goto qs1}}
+    {SUPPORTS ac30} {{goto ac41}}
+    {SUPPORTS ac40} {{goto ac41}}
+    {type-ref ac41} {{span id} {goto ac42}}
+    {* ac42}  {{push ac43} {redo oid1}}
+    {INCLUDES ac42} {{goto ac44}}
+    {INCLUDES ac43} {{goto ac44}}
+    {lcub ac44}  {{push ac45} {goto oid1}}
+    {rcub ac45}  {{goto ac50}}
+    {, ac45}     {{push ac45} {goto oid1}}
+    {SUPPORTS ac50} {{goto ac41}}
+    {VARIATION ac50} {{push ac51} {goto oid1}}
+    {SYNTAX ac51} {{push ac52} {goto sx0}}
+    {WRITE-SYNTAX ac51} {{redo ac52}}
+    {WRITE-SYNTAX ac52} {{push ac53} {goto sx0}}
+    {ACCESS ac51}  {{goto ac54}}
+    {ACCESS ac52}  {{goto ac54}}
+    {ACCESS ac53}  {{goto ac54}}
+    {/id ac54}  {{goto ac55}}
+    {not-implemented ac55}  {{span key} {goto ac56}}
+    {accessible-for-notify ac55}  {{span key} {goto ac56}}
+    {read-only ac55}    {{span key} {goto ac56}}
+    {read-write ac55}   {{span key} {goto ac56}}
+    {read-create ac55}  {{span key} {goto ac56}}
+    {write-only ac55}   {{span key} {goto ac56}}
+    {* ac55}            {{span err} {goto ac56}}
+    {CREATION-REQUIRES ac51}  {{goto ac57}}
+    {CREATION-REQUIRES ac52}  {{goto ac57}}
+    {CREATION-REQUIRES ac53}  {{goto ac57}}
+    {CREATION-REQUIRES ac56}  {{goto ac57}}
+    {lcub ac57}  {{push ac58} {goto oid1}}
+    {rcub ac58}  {{goto ac59}}
+    {, ac58}     {{push ac58} {goto oid1}}
+    {DEFVAL ac51}  {{redo ac59}}
+    {DEFVAL ac52}  {{redo ac59}}
+    {DEFVAL ac53}  {{redo ac59}}
+    {DEFVAL ac56}  {{redo ac59}}
+    {DEFVAL ac59}  {{push ac60} {goto dv1}}
+    {DESCRIPTION ac51}  {{redo ac60}}
+    {DESCRIPTION ac52}  {{redo ac60}}
+    {DESCRIPTION ac53}  {{redo ac60}}
+    {DESCRIPTION ac56}  {{redo ac60}}
+    {DESCRIPTION ac59}  {{redo ac60}}
+    {DESCRIPTION ac60}  {{push ac50} {goto qs1d}}
+    {::= ac50}  {{goto lor1d}}
+
+    {lcub dv1}  {{goto dv2}}
+    {lcub dv1}  {{goto dv2}}
+    {radix-string dv2}  {{goto dv19}}
+    {zero dv2}          {{goto dv19}}
+    {positive31 dv2}    {{goto dv19}}
+    {positive32 dv2}    {{goto dv19}}
+    {positive63 dv2}    {{goto dv19}}
+    {positive64 dv2}    {{goto dv19}}
+    {positive-big dv2}  {{goto dv19}}
+    {negative31 dv2}    {{goto dv19}}
+    {negative63 dv2}    {{goto dv19}}
+    {negative-big dv2}  {{goto dv19}}
+    {quot dv2}  {{push dv19} {goto qs2}}
+    {/id dv2}   {{span id} skip-next {goto dv19}}
+    {lcub dv2}  {{goto dv3}}
+    {rcub dv3}  {{goto dv19}}
+    {/id dv3}  {{span id} skip-next {goto dv4}}
+    {rcub dv4}  {{goto dv19}}
+    {, dv4}  {{goto dv5}}
+    {/id dv5}  {{span id} skip-next {goto dv6}}
+    {rcub dv6}  {{goto dv19}}
+    {, dv6}  {{goto dv5}}
+    {( dv4}  {{goto dv7}}
+    {zero dv7}        {{goto dv8}}
+    {positive31 dv7}  {{goto dv8}}
+    {positive32 dv7}  {{goto dv8}}
+    {) dv8}  {{goto dv9}}
+    {zero dv3}        {{goto dv9}}
+    {positive31 dv3}  {{goto dv9}}
+    {positive32 dv3}  {{goto dv9}}
+    {rcub dv9}  {{goto dv19}}
+    {/id dv9}  {{span id} skip-next {goto dv10}}
+    {( dv10}  {{goto dv11}}
+    {zero dv11}        {{goto dv12}}
+    {positive31 dv11}  {{goto dv12}}
+    {positive32 dv11}  {{goto dv12}}
+    {) dv12}  {{goto dv9}}
+    {zero dv9}        {{goto dv9}}
+    {positive31 dv9}  {{goto dv9}}
+    {positive32 dv9}  {{goto dv9}}
+    {rcub dv19}  {goto-top pop}
+
+    {BITS sx0}  {{goto sx1}}
+    {lcub sx1}  {{goto sx2}}
+    {/id sx2}  {{span def} skip-next {goto sx3}}
+    {( sx3}  {{goto sx4}}
+    {zero sx4}          {{goto sx5}}
+    {positive31 sx4}    {{goto sx5}}
+    {positive32 sx4}    {{goto sx5}}
+    {positive63 sx4}    {{goto sx5}}
+    {positive64 sx4}    {{goto sx5}}
+    {positive-big sx4}  {{goto sx5}}
+    {) sx5}  {{goto sx6}}
+    {, sx6}  {{goto sx2}}
+    {rcub sx6}  {goto-top pop}
+    {type-ref sx0}  {{span id} {goto sx7}}
+    {. sx7}  {{redo sx32}}
+    {( sx7}  {{redo sx32}}
+    {lcub sx7}  {{redo sx32}}
+    {* sx7}  {redo goto-top pop}
+    {SEQUENCE sx0}  {{goto sx10}}
+    {OF sx10}  {{goto sx11}}
+    {type-ref sx11}  {{span id} goto-top pop}
+    {lcub sx10}  {{goto sx12}}
+    {/id sx12}  {{span id} skip-next {goto sx13}}
+    {INTEGER sx13}  {{goto sx16}}
+    {BITS sx13}  {{goto sx16}}
+    {OCTET sx13}  {{goto sx14}}
+    {STRING sx14}  {{goto sx16}}
+    {OBJECT sx13}  {{goto sx15}}
+    {IDENTIFIER sx15}  {{goto sx16}}
+    {type-ref sx13}  {{span id} {goto sx16}}
+    {/Itn sx13}  {{span id} skip-next {goto sx16}}
+    {, sx16}  {{goto sx12}}
+    {rcub sx16}  {goto-top pop}
+    {* sx16}  {{push sx18} {redo sxn0}}
+    {* sx17}  {{span-top err} pop {goto sx18}}
+    {, sx18}  {{goto sx12}}
+    {rcub sx18}  {goto-top pop}
+    {lsqb sx0}  {{goto sx20}}
+    {APPLICATION sx20}  {{goto sx21}}
+    {zero sx21}          {{goto sx22}}
+    {positive31 sx21}    {{goto sx22}}
+    {positive32 sx21}    {{goto sx22}}
+    {positive63 sx21}    {{goto sx22}}
+    {positive64 sx21}    {{goto sx22}}
+    {positive-big sx21}  {{goto sx22}}
+    {rsqb sx22}  {{goto sx23}}
+    {IMPLICIT sx23}  {{goto sx30}}
+    {/Itn sx0}  {{goto sx25}}
+    {Integer32 sx25}  {{span id} {push sx38} {goto sxr0}}
+    {TimeTicks sx25}   {{span id} goto-top pop}
+    {IpAddress sx25}   {{span id} {push sx26} {goto sxa0}}
+    {Counter32 sx25}   {{span id} {push sx26} {goto sxa0}}
+    {Counter64 sx25}   {{span id} {push sx26} {goto sxa0}}
+    {Gauge32 sx25}     {{span id} {push sx26} {goto sxr0}}
+    {Integer64 sx25}   {{span id} {push sx26} {goto sxr0}}
+    {Unsigned32 sx25}  {{span id} {push sx26} {goto sxr0}}
+    {Unsigned64 sx25}  {{span id} {push sx26} {goto sxr0}}
+    {Opaque sx25}      {{span id} {push sx26} {goto sxs0}}
+    {* sx26}  {redo goto-top pop}
+    {* sx0}  {{redo sx30}}
+    {INTEGER sx30}  {{push sx38} {goto sxre0}}
+    {/Itn sx30}  {{goto sx31}}
+    {Integer32 sx31}  {{span id} {push sx38} {goto sxr0}}
+    {OCTET sx30}  {{goto sx35}}
+    {OBJECT sx30}  {{goto sx36}}
+    {type-ref sx30}  {{span id} {goto sx32}}
+    {. sx32}  {{goto sx33}}
+    {( sx32}  {{push sx38} {goto sxa1}}
+    {lcub sx32}  {{push sx38} {redo sxe0}}
+    {type-ref sx33}  {{span id} {goto sx34}}
+    {( sx34}  {{push sx38} {goto sxa1}}
+    {lcub sx34}  {{push sx38} {redo sxe0}}
+    {STRING sx35}  {{push sx38} {goto sxs0}}
+    {IDENTIFIER sx36}  {{push sx38} {goto sxa0}}
+    {* sx38}  {redo goto-top pop}
+    {( sxr0}  {{goto sxr1}}
+    {SIZE sxr1}  {{push sxx9} {redo sx81}}
+    {* sxr1}  {{push sxr2} {redo sx71}}
+    {) sxr2}  {pop goto-top pop}
+    {lcub sxr0}  {{push sxx9} {goto sx91}}
+    {* sxr0}  {redo goto-top pop}
+    {( sxs0}  {{goto sxs1}}
+    {SIZE sxs1}  {{push sxs2} {redo sx81}}
+    {* sxs1}  {{push sxx9} {redo sx71}}
+    {) sxs2}  {pop goto-top pop}
+    {lcub sxs0}  {{push sxx9} {goto sx91}}
+    {* sxs0}  {redo goto-top pop}
+    {( sxe0}  {{goto sxe1}}
+    {SIZE sxe1}  {{push sxx9} {redo sx81}}
+    {* sxe1}  {{push sxx9} {redo sx71}}
+    {lcub sxe0}  {{push sxe2} {goto sx91}}
+    {rcub sxe2}  {pop goto-top pop}
+    {* sxe0}  {redo goto-top pop}
+    {( sxa0}  {{goto sxa1}}
+    {SIZE sxa1}  {{push sxs2} {redo sx81}}
+    {* sxa1}  {{push sxr2} {redo sx71}}
+    {lcub sxa0}  {{push sxe2} {goto sx91}}
+    {* sxa0}  {redo goto-top pop}
+    {( sxn0}  {{goto sxn1}}
+    {SIZE sxn1}  {{push sxx9} {redo sx81}}
+    {* sxn1}  {{push sxx9} {redo sx71}}
+    {lcub sxn0}  {{push sxx9} {goto sx91}}
+    {* sxn0}  {redo goto-top pop}
+    {( sxre0}  {{goto sxre1}}
+    {SIZE sxre1}  {{push sxx9} {redo sx81}}
+    {* sxre1}  {{push sxr2} {redo sx71}}
+    {lcub sxre0}  {{push sxe2} {goto sx91}}
+    {* sxre0}  {redo goto-top pop}
+    {* sxx9}  {pop {span-top err} goto-top pop}
+    {( sx70}  {{goto sx71}}
+    {radix-string sx71}  {{goto sx72}}
+    {zero sx71}          {{goto sx72}}
+    {positive31 sx71}    {{goto sx72}}
+    {positive32 sx71}    {{goto sx72}}
+    {positive63 sx71}    {{goto sx72}}
+    {positive64 sx71}    {{goto sx72}}
+    {positive-big sx71}  {{goto sx72}}
+    {negative31 sx71}    {{goto sx72}}
+    {negative63 sx71}    {{goto sx72}}
+    {negative-big sx71}  {{goto sx72}}
+    {| sx72}  {{goto sx71}}
+    {) sx72}  {redo goto-top}
+    {.. sx72}  {{goto sx73}}
+    {radix-string sx73}  {{goto sx74}}
+    {zero sx73}          {{goto sx74}}
+    {positive31 sx73}    {{goto sx74}}
+    {positive32 sx73}    {{goto sx74}}
+    {positive63 sx73}    {{goto sx74}}
+    {positive64 sx73}    {{goto sx74}}
+    {positive-big sx73}  {{goto sx74}}
+    {negative31 sx73}    {{goto sx74}}
+    {negative63 sx73}    {{goto sx74}}
+    {negative-big sx73}  {{goto sx74}}
+    {| sx74}  {{goto sx71}}
+    {) sx74}  {redo goto-top}
+    {( sx80}  {{goto sx81}}
+    {SIZE sx81}  {{push sx82} {goto sx70}}
+    {) sx82}  {pop {goto sx83}}
+    {) sx83}  {redo goto-top}
+    {lcub sx90}  {{goto sx91}}
+    {/id sx91}  {{span def} skip-next {goto sx92}}
+    {( sx92}  {{goto sx93}}
+    {zero sx93}          {{goto sx94}}
+    {positive31 sx93}    {{goto sx94}}
+    {positive32 sx93}    {{goto sx94}}
+    {positive63 sx93}    {{goto sx94}}
+    {positive64 sx93}    {{goto sx94}}
+    {positive-big sx93}  {{goto sx94}}
+    {negative31 sx93}    {{goto sx94}}
+    {negative63 sx93}    {{goto sx94}}
+    {negative-big sx93}  {{goto sx94}}
+    {) sx94}  {{goto sx95}}
+    {, sx95}  {{goto sx91}}
+    {rcub sx95}  {redo goto-top}
+
+    {MACRO mac0}  {{goto mac1}}
+    {::= mac1}  {{goto mac2}}
+    {BEGIN mac2}  {{goto mac3}}
+    {TYPE mac3}  {{goto mac4}}
+    {NOTATION mac4}  {{goto mac5}}
+    {::= mac5}  {{goto mac10}}
+    {type-ref mac10}  {{span id} {goto mac30}}
+    {quot mac10}  {{push mac30} {goto qs2}}
+    {/id mac10}  {{goto mac11}}
+    {type mac11}  {{span key} {goto mac12}}
+    {( mac12}  {{goto mac13}}
+    {TYPE mac13}  {{goto mac14}}
+    {type-ref mac13}  {{span id} {goto mac15}}
+    {type-ref mac14}  {{span id} {goto mac15}}
+    {) mac15}  {{goto mac30}}
+    {value mac11}  {{span key} {goto mac20}}
+    {( mac20}  {{goto mac22}}
+    {Update mac22}  {{goto mac23}}
+    {type-ref mac23}  {{span id} {goto mac29}}
+    {/id mac22}  {{span id} skip-next {goto mac24}}
+    {OBJECT mac24}  {{goto mac25}}
+    {IDENTIFIER mac25}  {{goto mac29}}
+    {) mac29}  {{goto mac30}}
+    {type-ref mac30}  {{span id} {goto mac30}}
+    {quot mac30}  {{push mac30} {goto qs2}}
+    {/id mac30}  {{goto mac11}}
+    {VALUE mac30}  {{goto mac31}}
+    {NOTATION mac31} {{goto mac32}}
+    {::= mac32}  {{goto mac33}}
+    {/id mac33}  {{goto mac34}}
+    {value mac34}  {{span key} {goto mac35}}
+    {( mac35}  {{goto mac36}}
+    {VALUE mac36}  {{goto mac37}}
+    {OBJECT mac37}  {{goto mac38}}
+    {IDENTIFIER mac38} {{goto mac39}}
+    {INTEGER mac37}  {{goto mac39}}
+    {type-ref mac37}  {{span id} {goto mac39}}
+    {) mac39}  {{goto mac40}}
+    {END mac40}  {{redo mac60}}
+    {type-ref-macsyn mac40}  {{span def} {goto mac41}}
+    {::= mac41}  {{goto mac50}}
+    {type-ref mac50}  {{span id} {goto mac60}}
+    {quot mac50}  {{push mac60} {goto qs2}}
+    {/id mac50}  {{goto mac51}}
+    {* mac51}  {{span id} {goto mac60}}
+    {type mac51}  {{span key} {goto mac52}}
+    {* mac52}  {{redo mac60}}
+    {( mac52}  {{goto mac53}}
+    {/id mac53}  {{span id} skip-next {goto mac59}}
+    {value mac51}  {{span key} {goto mac55}}
+    {( mac55}  {{goto mac56}}
+    {OBJECT mac56}  {{goto mac57}}
+    {IDENTIFIER mac57}  {{goto mac59}}
+    {IA5String mac56}  {{goto mac59}}
+    {type-ref mac56}  {{span id} {goto mac59}}
+    {Update mac56}  {{goto mac58}}
+    {type-ref mac58}  {{span id} {goto mac59}}
+    {/id mac56}  {{span id} skip-next {goto mac58}}
+    {) mac59}  {{goto mac60}}
+    {* mac60}  {{redo mac50}}
+    {| mac60}  {{goto mac50}}
+    {type-ref-macsyn mac60}  {{redo mac40}}
+    {END mac60}  {{redo m99}}
+
+    {lcub lor1}  {{push lor2} {goto oid1}}
+    {rcub lor2}  {goto-top pop}
+    {lcub lor1d}  {{push lor2d} {goto oid1}}
+    {rcub lor2d}  {{redo m99}}
+
+    {zero oid1}        {{goto oid2}}
+    {positive31 oid1}  {{goto oid2}}
+    {positive32 oid1}  {{goto oid2}}
+    {/id oid1}  {{span id} skip-next {goto oid3}}
+    {type-ref oid1}  {{goto oid6}}
+    {, oid2}  {redo goto-top pop}
+    {rcub oid2}  {redo goto-top pop}
+    {* oid2}  {redo goto-top pop}
+    {zero oid2}        {}
+    {positive31 oid2}  {}
+    {positive32 oid2}  {}
+    {/id oid2}  {{span id} skip-next {goto oid3}}
+    {type-ref oid2}  {{goto oid6}}
+    {, oid3}  {redo goto-top pop}
+    {rcub oid3}  {redo goto-top pop}
+    {zero oid3}        {{goto oid2}}
+    {positive31 oid3}  {{goto oid2}}
+    {positive32 oid3}  {{goto oid2}}
+    {* oid3}  {{redo oid2}}
+    {( oid3}  {{goto oid4}}
+    {zero oid4}        {{goto oid5}}
+    {positive31 oid4}  {{goto oid5}}
+    {positive32 oid4}  {{goto oid5}}
+    {) oid5}  {{goto oid2}}
+    {. oid6}  {{redo oid7 1}}
+    {* oid6}  {{redo oid9 1}}
+    {type-ref oid7}  {{span id} skip-next {goto oid8}}
+    {/id oid8}  {{span id} skip-next {goto oid3}}
+    {type-ref oid9}  {{span err} {goto oid2}}
+
+    {quot qs1}  {{goto qs2}}
+    {qstr qs2}  {{span str}}
+    {quot qs2}  {goto-top pop}
+    {quot qs1x}  {{goto qs2x}}
+    {qstr qs2x}  {{span str}}
+    {quot qs2x}  {goto-top}
+    {quot qs1d}  {{goto qs2d}}
+    {qstr qs2d}  {{span str}}
+    {quot qs2d}  {div-top goto-top pop}
+    {quot qs1dd}  {{goto qs2dd}}
+    {qstr qs2dd}  {{span str}}
+    {quot qs2dd}  {div-top goto-top pop div-top pop}
+}
+
+#               }}}4 artwork::grammar(mib)
+#           }}}3 mib
+#       }}}2 grammars
+#   }}}1 artwork content processing
+
 #   {{{1 xdv validator
-
-
 # pity i didn't build this into xml2rfc initially,
 # because integrating properly would be a lot of work...
-#
 
+#       {{{2 namespace
 namespace eval xdv {
     variable dtd
     # This ::xdv::lineno is 0-based.
@@ -12782,7 +16397,8 @@ namespace eval xdv {
 
     catch { array unset dtd }
 }
-
+#       }}}2 namespace
+#       {{{2 rfc2629 DTD
 # Strict content model does not allow section in back...
 set xdv::dtd(rfc2629.cmodel) \
     [list rfc           [list front             ""   \
@@ -12920,8 +16536,7 @@ set xdv::dtd(rfc2629.pcdata) \
           xref]
 
 set xdv::dtd(rfc2629.rattrs) \
-    [list date          [list year]   \
-          note          [list title]  \
+    [list note          [list title]  \
           section       [list title]  \
           appendix      [list title]  \
           xref          [list target] \
@@ -12939,6 +16554,7 @@ set xdv::dtd(rfc2629.oattrs) \
                               seriesNo    \
                               ipr         \
                               iprExtract  \
+                              submissionType \
                               docName     \
                               xml:lang]   \
           title         [list abbrev]     \
@@ -12948,7 +16564,8 @@ set xdv::dtd(rfc2629.oattrs) \
                               role]       \
           organization  [list abbrev]     \
           date          [list day         \
-                              month]      \
+                              month       \
+                              year]       \
           section       [list anchor      \
                               toc]        \
           appendix      [list anchor      \
@@ -12998,8 +16615,8 @@ set xdv::dtd(rfc2629.oattrs) \
 
 set xdv::dtd(rfc2629.anchors) \
     [list anchor]
-
-
+#       }}}2 rfc2629 DTD
+#       {{{2 procs
 proc xdv::validate_tree {root CM RA OA AN PC} {
     variable anchorX {}
 
@@ -13059,6 +16676,7 @@ proc xdv::validate_tree_aux {parent CM RA OA AN PC stack} {
     }
 
     if {[catch { validate_cmodel $children $cmodel($name) } result]} {
+        # The $stack list will have been upvar-appended on error.
         report $result $stack
     }
 
@@ -13068,49 +16686,101 @@ proc xdv::validate_tree_aux {parent CM RA OA AN PC stack} {
 }
 
 proc xdv::validate_cmodel {children cmodel} {
-    set elems [lindex $cmodel 0]
-    set quant [lindex $cmodel 1]
-    set cmodel [lrange $cmodel 2 end]
+    # Uses uplevel proc xdv::shift_cmodel.
+    # Uses uplevel proc xdv::xmerge.
 
-    set i 0
+    upvar name n
+
+    set err "with content model {$cmodel} for <$n>"
+    shift_cmodel
+
+    set seen {}
+    set expected {}
     foreach child $children {
         set e [lindex $child 0]
-        if {[lsearch -exact $elems $e] >= 0} {
-            switch -- $quant {
-                + { set quant "*" }
-                ? - "" {
-                    set elems [lindex $cmodel 0]
-                    set quant [lindex $cmodel 1]
-                    set cmodel [lrange $cmodel 2 end]
+        while {1} {
+            if {[lsearch -exact $elems $e] >= 0} {
+                set expected {}
+                switch -- $quant {
+                    +      { set quant "*" }
+                    ? - "" { shift_cmodel }
                 }
-            }
-        } else {
-            switch -- $quant {
-                ? - * {
-                    return [validate_cmodel [lrange $children $i end] \
-                                            $cmodel]
-                }
+            } else {
+                switch -- $quant {
+                    ? - * {
+                        xmerge
+                        shift_cmodel
+                        continue
+                    }
 
-                default {
-                    switch -- [llength $elems] {
-                        0       { error "not expecting <$e>" }
-                        1       { error "expecting <$elems> element, not <$e>" }
-                        default { error "expecting any of $elems, not <$e>" }
+                    default {
+                        upvar stack s
+                        lappend s [list $e [lindex $child 1]]
+                        append err ", seen {$seen} so far, now expecting "
+                        switch -- [llength $elems] {
+                            0       { lappend expected "</$n>" }
+                            default { xmerge }
+                        }
+                        append err [or_list $expected]
+                        error "$err, but not <$e>"
                     }
                 }
             }
+            break
         }
-        incr i
+        lappend seen "$e"
     }
-    if {([llength $elems] == 0) \
-            || ([lsearch -exact {? *} $quant] >= 0)} {
-        return
-    } else {
-        switch -- [llength $elems] {
-            1       { error "expecting <$elems> element" }
-            default { error "expecting any of $elems"    }
+    switch -- $quant {
+        ? - *   {}
+        default {
+            if {[llength $elems] > 0} {
+                set err0 "seen {$seen} so far, first expecting "
+                xmerge
+                append err0 [or_list $expected]
+                error "$err0 but got </$n>, $err"
+            }
         }
     }
+}
+
+proc xdv::shift_cmodel {} {
+    uplevel 1 {
+        set elems  [lindex $cmodel 0]
+        set quant  [lindex $cmodel 1]
+        set cmodel [lrange $cmodel 2 end]
+    }
+}
+
+proc xdv::xmerge {} {
+    uplevel 1 {
+        foreach x $elems {
+            set y "<$x>"
+            if {[lsearch -exact $expected $y] < 0} {
+                lappend expected $y
+            }
+        }
+    }
+}
+
+proc xdv::or_list {items} {
+    set t ""
+    set s ""
+    set i 1
+    set n [llength $items]
+    foreach e $items {
+        append t $s$e
+        if {[incr i] == $n} {
+            if {$n > 2} {
+                set s ", or "
+            } else {
+                set s " or "
+            }
+        } else {
+            set s ", "
+        }
+    }
+
+    return $t
 }
 
 proc xdv::report {result stack} {
@@ -13142,20 +16812,16 @@ proc xdv::report {result stack} {
 
     error $result
 }
-
-
+#       }}}2 procs
 #   }}}1 xdv validator
 
 #   {{{1 tclsh/wish linkage
-
 
 global guiP
 if {[info exists guiP]} {
     return
 }
 set guiP 0
-# Load and initialize tk if possible.
-catch {package require -exact Tk [info tclversion]}
 if {[llength $argv] > 1} {
     if {[catch {
         switch -- [llength $argv] {
@@ -13186,18 +16852,22 @@ if {[llength $argv] > 1} {
             3 { xml2rfc [lindex $argv 1] [lindex $argv 2] }
         }
     } result]} {
-        if {[info exists tk_version]} {
+        if {   ![catch {package require -exact Tk [info tclversion]}]
+            && [info exists tk_version]} {
+            catch { wm geometry . 10x10+-100+-100 }
+            catch { wm withdraw . }
             bgerror $result
         } else {
-            puts stderr $result
+            puts stderr "$prog: error: $result"
         }
         exit 1
     }
 
     exit 0
-} elseif {![info exists tk_version]} {
+} elseif {   [catch {package require -exact Tk [info tclversion]}]
+          || ![info exists tk_version]} {
     set guiP -1
-    puts stdout ""
+    #puts stdout ""
     puts stdout "invoke as \"xml2rfc   input-file output-file\""
     puts stdout "       or \"xml2txt   input-file\""
     puts stdout "       or \"xml2html  input-file\""
@@ -13211,7 +16881,7 @@ if {[llength $argv] > 1} {
         global tcl_platform
 
         if {![string compare [set input [.input.ent get]] ""]} {
-            tk_dialog .error "$prog: oops!" "no input filename specified" \
+            tk_dialog .error "$prog: oops!" "no input file-name specified" \
                       error 0 OK
             return
         }
@@ -13225,11 +16895,39 @@ if {[llength $argv] > 1} {
     }
 
     proc fileDialog {w ent operation} {
-        set input {
+        global tcl_platform
+
+        # tcl_platform(platform) tcl_platform(os) windowingsystem tk_getSaveFile
+        # ---------------------- ---------------- --------------- --------------
+        # dos                    ""               ?               ?
+        # macintosh              MacOS            classic         native
+        # unix                   Darwin           aqua            native
+        # unix                   Darwin           x11             proc
+        # unix                   `uname -s`       x11             proc
+        # windows                Win32s           win32           native
+        # windows                Windows 95       win32           native
+        # windows                Windows NT       win32           native
+        # windows                Windows CE       win32           native
+
+        # However [tk windowingsystem] did not exist before 8.4.
+        if {![catch {set winsys [tk windowingsystem]}]} {
+            set ext [expr    ![string compare $winsys classic] \
+                          || ![string compare $winsys aqua]    ]
+        } else {
+            set ext [expr    [catch {info body tk_getSaveFile}              ] \
+                          && [string compare $tcl_platform(platform) windows] ]
+        }
+
+        switch -- $tcl_platform(platform) {
+            windows { set dx .txt }
+            default { set dx ""   }
+        }
+
+        set in_types {
             {"XML files"               .xml  }
             {"All files"               *     }
         }
-        set output {
+        set out_types {
             {"TeXT files"              .txt  }
             {"HTML files"              .html }
             {"NRoff files"             .nr   }
@@ -13237,27 +16935,41 @@ if {[llength $argv] > 1} {
             {"XML files"               .xml  }
         }
         if {![string compare $operation "input"]} {
-            set file [tk_getOpenFile -filetypes $input -parent $w]
+            set file [tk_getOpenFile -filetypes $in_types -parent $w]
         } else {
-            if {[catch { set browse [.output.ent get] }] ||
-                [string length $browse] == 0} {
-                if {[catch { set browse [.input.ent get] }] ||
-                    [string length $browse] == 0} {
-                    set browse Untitled
-                } else {
+            if {   ![catch { set browse [.output.ent get] }]
+                &&  [string compare $browse ""]} {
+                if {!$ext} {
                     set browse [file rootname $browse]
                 }
-                append browse ".txt"
+            } else {
+                if {   ![catch { set browse [.input.ent get] }]
+                    &&  [string compare $browse ""]} {
+                    set browse [file rootname $browse]
+                } else {
+                    set browse Untitled
+                }
+                if {$ext} {
+                    append browse ".txt"
+                }
             }
-            set file [tk_getSaveFile -filetypes $output -parent $w \
-                            -initialdir [file dirname $browse] \
-                            -initialfile [file tail $browse] \
-                            -defaultextension .txt]
+            set file [tk_getSaveFile -filetypes $out_types -parent $w    \
+                                     -initialdir  [file dirname $browse] \
+                                     -initialfile [file tail    $browse] \
+                                     -defaultextension $dx               ]
         }
         if [string compare $file ""] {
             $ent delete 0 end
             $ent insert 0 $file
             $ent xview end
+            if {   ![string compare $operation "input"]
+                && (    [catch { set browse [.output.ent get] }]
+                    || ![string compare $browse ""])} {
+                catch {
+                    .output.ent insert 0 [file rootname $file].txt
+                    .output.ent xview end
+                }
+            }
         }
     }
 
@@ -13289,7 +17001,6 @@ if {[llength $argv] > 1} {
         pack $f -fill x -padx 1c -pady 3
     }
 }
-
 
 #   }}}1 tclsh/wish linkage
 

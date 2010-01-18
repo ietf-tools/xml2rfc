@@ -14,7 +14,7 @@
 
 <rfc>
 <front>
-<title>xml2rfc v1.30</title>
+<title>xml2rfc v1.31</title>
 
 <author initials='M.T.' surname='Rose' fullname='Marshall T. Rose'>
 <organization>Dover Beach Consulting, Inc.</organization>
@@ -35,6 +35,7 @@
 <organization/>
 <address>
 <postal>
+<street/>
 <city>Montr&eacute;al</city>
 <region>Qc</region>
 <country>Canada</country>
@@ -43,7 +44,7 @@
 </address>
 </author>
 
-<date month='August' year='2005' />
+<date month='July' year='2006' />
 </front>
 
 <middle>
@@ -144,12 +145,13 @@ so, if you don't know what it is, don't worry about it...</t>
 </figure>
 
 <figure>
-<preamble>and you should see these four lines:</preamble>
+<preamble>and you should see these five lines:</preamble>
 <artwork>
-    invoke as "xml2rfc   inputfile outputfile"
-           or "xml2txt   inputfile"
-           or "xml2html  inputfile"
-           or "xml2nroff inputfile"
+    invoke as "xml2rfc   input-file output-file"
+           or "xml2txt   input-file"
+           or "xml2html  input-file"
+           or "xml2nroff input-file"
+           or "xml2unpg  input-file"
 </artwork>
 </figure>
 </section>
@@ -210,8 +212,9 @@ single or double quotes.</postamble>
 <c>render &lt;cref&gt; information</c>
 
 <c>compact</c>
-<c>no</c>
-<c>when producing a txt/nroff file, try to conserve vertical whitespace</c>
+<c>(rfcedstyle)</c>
+<c>when producing a txt/nroff file, try to conserve vertical whitespace
+(the default value is the current value of the rfcedstyle PI)</c>
 
 <c>editing</c>
 <c>no</c>
@@ -221,7 +224,7 @@ single or double quotes.</postamble>
 <c>no</c>
 <c>automatically replaces input sequences such as
 <spanx style='verb'>|*text|</spanx> by, e.g.,
-<spanx style='verb'>&lt;strong&gt;text&lt;/strong;&gt;</spanx>
+<spanx style='verb'>&lt;strong&gt;text&lt;/strong&gt;</spanx>
 in html output</c>
 
 <c>footer</c>
@@ -266,6 +269,36 @@ for warning and error reporting purposes (line numbers are 1-based)</c>
 <c>private</c>
 <c>""</c>
 <c>produce a private memo rather than an RFC or Internet-Draft</c>
+
+<c>rfcedstyle</c>
+<c>no</c>
+<c>attempt to closely follow finer details
+from the latest observable RFC-Editor style
+so as to minimize the probability of
+being sent back corrections after submission;
+this directive is a kludge whose exact behavior
+is likely to change on a regular basis
+to match the current flavor of the month;
+presently,
+it will capitalize the adjective &ldquo;This&rdquo;
+in automatically generated headings,
+use the variant &ldquo;acknowledgement&rdquo; spelling instead of
+Merriam Webster's main &ldquo;acknowledgment&rdquo; dictionary entry,
+use the &ldquo;eMail&rdquo; spelling instead of
+Knuth's more modern &ldquo;email&rdquo; spelling,
+only put one blank line instead of two before top sections,
+omit &ldquo;Intellectual Property and Copyright Statements&rdquo;
+and &ldquo;Author's Address&rdquo; from the table of content,
+and not limit the indentation to a maximum tag length
+in &lt;references&gt; sections.
+</c>
+
+<c>rfcprocack</c>
+<c>no</c>
+<c>if there already is an automatically generated Acknowledg(e)ment section,
+pluralize its title and add a short sentence acknowledging that
+<spanx style='strong'>xml2rfc</spanx> was used in the document's production
+to process an input XML source file in RFC-2629 format</c>
 
 <c>slides</c>
 <c>no</c>
@@ -462,6 +495,7 @@ In particular,
 <eref target='draft-mrose-writing-rfcs.html#anchor19'>Appendix&nbsp;C</eref>
 of the 2629bis document enumerates the additions.</t>
 
+<section title='Extra Attributes'>
 <t>In addition,
 <spanx style='strong'>xml2rfc</spanx> recognizes the undocumented
 <spanx style='verb'>src</spanx>,
@@ -534,6 +568,80 @@ for all types of generated output.
 Its default is inherited from the parent of its element.</t>
 </section>
 
+<section title='Typed-Artwork Interpretation'>
+<t>The <spanx style='verb'>artwork</spanx> element from RFC&nbsp;2629
+supports an optional <spanx style='verb'>type</spanx> attribute.
+While most possible values are just ignored,
+including the special case
+where the attribute is unspecified or just empty,
+some values are recognized.
+In particular, <spanx style='verb'>type='abnf'</spanx>
+can be used if the <spanx style='verb'>artwork</spanx>
+contains an Augmented Backus-Naur Form (ABNF)
+syntax specification&nbsp;<xref target='RFC4234' />.
+As a special extension in its <spanx style='emph'>behavior</spanx>,
+<spanx style='strong'>xml2rfc</spanx> will attempt
+to validate the syntax and colorize the HTML output of ABNF,
+since it is so widely used in RFCs.
+It does this colorizing by relying
+on the full parsing it does right before,
+not on a quick and partial (e.g., line-by-line) pattern-based hack.
+ABNF is the only artwork type to benefit
+from this kind of internal support at this time.
+If the <spanx style='verb'>strict</spanx> rfc-PI directive is activated,
+invalid ABNF content will cause <spanx style='strong'>xml2rfc</spanx>
+to abort with an error message.
+Omitting the <spanx style='verb'>type</spanx> attribute altogether
+is the obvious way to avoid having
+this validation and colorizing performed.</t>
+<figure align='left'>
+<preamble>For example (to be viewed in HTML):</preamble>
+<artwork align='center' type='abnf'><![CDATA[
+char-val       =  DQUOTE *(%x20-21 / %x23-7E) DQUOTE
+                       ; quoted string of SP and VCHAR
+                          without DQUOTE
+
+num-val        =  "%" (bin-val / dec-val / hex-val)
+
+bin-val        =  "b" 1*BIT
+                  [ 1*("." 1*BIT) / ("-" 1*BIT) ]
+                       ; series of concatenated bit values
+                       ; or single ONEOF range
+
+dec-val        =  "d" 1*DIGIT
+                  [ 1*("." 1*DIGIT) / ("-" 1*DIGIT) ]
+
+hex-val        =  "x" 1*HEXDIG
+                  [ 1*("." 1*HEXDIG) / ("-" 1*HEXDIG) ]
+
+prose-val      =  "<" *(%x20-3D / %x3F-7E) ">"
+                       ; bracketed string of SP and VCHAR
+                          without angles
+                       ; prose description, to be used as
+                          last resort
+]]></artwork>
+<postamble>This is from the
+original RFC on ABNF&nbsp;<xref target='RFC2234' />,
+with its minor mistakes in manually folded comment lines
+purposely left intact, for illustration.
+Since the result is still valid ABNF
+(but incorrect with respect to what was intended),
+this showcases how colorizing might give a human author
+(or editor or reader)
+a better chance to spot the three mistakes
+(and correct them, e.g., with extra semicolons,
+as has been done in
+a more recent version&nbsp;<xref target='RFC4234' />
+of the ABNF specification).
+Note that it is the white space characters
+at the beginning of the subsequent lines
+(including the commented ones)
+that conspire to extend the reach of those rules
+across several lines.</postamble>
+</figure>
+</section>
+</section>
+
 <section title='Limitations of xml2rfc'>
 <t><list style='symbols'>
 <t>The <spanx style='verb'>figure</spanx> element's <spanx style='verb'>title</spanx> attribute is ignored,
@@ -569,6 +677,61 @@ except when generating HTML.</t>
 <seriesInfo name='BCP' value='9' />
 <seriesInfo name='RFC' value='2026' />
 <format type='TXT' octets='86731' target='ftp://ftp.isi.edu/in-notes/rfc2026.txt' />
+</reference>
+
+<reference anchor='RFC2234'>
+
+<front>
+<title abbrev='ABNF for Syntax Specifications'>Augmented BNF for Syntax Specifications: ABNF</title>
+<author initials='D.' surname='Crocker' fullname='David H. Crocker' role='editor'>
+<organization>Internet Mail Consortium</organization>
+<address>
+<postal>
+<street>675 Spruce Dr.</street>
+<city>Sunnyvale</city>
+<region>CA</region>
+<code>94086</code>
+<country>US</country></postal>
+<phone>+1 408 246 8253</phone>
+<facsimile>+1 408 249 6205</facsimile>
+<email>dcrocker@imc.org</email></address></author>
+<author initials='P.' surname='Overell' fullname='Paul Overell'>
+<organization>Demon Internet Ltd.</organization>
+<address>
+<postal>
+<street>Dorking Business Park</street>
+<street>Dorking</street>
+<city>Surrey</city>
+<region>England</region>
+<code>RH4 1HN</code>
+<country>UK</country></postal>
+<email>paulo@turnpike.com</email></address></author>
+<date year='1997' month='November' />
+<keyword>ABNF</keyword>
+<keyword>Augmented</keyword>
+<keyword>Backus-Naur</keyword>
+<keyword>Form</keyword>
+<keyword>electronic</keyword>
+<keyword>mail</keyword></front>
+
+<seriesInfo name='RFC' value='2234' />
+<format type='TXT' octets='24265' target='ftp://ftp.isi.edu/in-notes/rfc2234.txt' />
+<format type='HTML' octets='36695' target='http://xml.resource.org/public/rfc/html/rfc2234.html' />
+<format type='XML' octets='24067' target='http://xml.resource.org/public/rfc/xml/rfc2234.xml' />
+</reference>
+
+<reference anchor='RFC4234'>
+
+<front>
+<title>Augmented BNF for Syntax Specifications: ABNF</title>
+<author initials='D.' surname='Crocker' fullname='D. Crocker'>
+<organization /></author>
+<author initials='P.' surname='Overell' fullname='P. Overell'>
+<organization /></author>
+<date year='2005' month='October' /></front>
+
+<seriesInfo name='RFC' value='4234' />
+<format type='TXT' octets='26351' target='ftp://ftp.isi.edu/in-notes/rfc4234.txt' />
 </reference>
 
 </references>
@@ -607,8 +770,11 @@ the processing instruction directives discussed
 <xref target='processing.instructions'>earlier</xref>
 and each attribute-like directive must be in its own PI
 (i.e., <spanx style='verb'>&lt;?rfc keyword='value'?&gt;</spanx>).
-The latest version can be downloaded from the
-<eref target='http://greenbytes.de/tech/webdav/'>original site</eref>
+The
+<eref target='http://greenbytes.de/tech/webdav/rfc2629.xslt'>latest version</eref>
+(and <eref target='http://greenbytes.de/tech/webdav/rfc2629xslt.zip'>full distribution ZIP file</eref>)
+can be downloaded from the
+<eref target='http://greenbytes.de/tech/webdav/#rfc2629.xslt'>original site</eref>
 which also hosts its
 <eref target='http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html'>documentation</eref>.</t>
 </section>
@@ -674,7 +840,7 @@ which includes many internal improvements made to the rendering engines.</t>
 </section>
 
 <section title='Copyrights'>
-<t>Copyright &copy; 2003&ndash;2005 Marshall T. Rose</t>
+<t>Copyright &copy; 2003&ndash;2006 Marshall T. Rose</t>
 
 <t>Hold harmless the author, and any lawful use is allowed.</t>
 </section>

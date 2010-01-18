@@ -1,4 +1,4 @@
-# revised DTD for the RFC document series, draft of 2004-04-04
+# revised DTD for the RFC document series, draft of 2005-10-05
 
 # Contents
 # 
@@ -128,7 +128,7 @@ date = element date { attlist.date, empty }
 attlist.date &=
   attribute day { DAY }?,
   attribute month { MONTH }?,
-  attribute year { YEAR }
+  attribute year { YEAR }?
 # meta-data...
 area = element area { attlist.area, CTEXT }
 attlist.area &= empty
@@ -180,7 +180,7 @@ attlist.t &= attribute anchor { xsd:ID }?, attribute hangText { ATEXT }?
 # parent
 \list = element list { attlist.list, t+ }
 attlist.list &=
-  [ a:defaultValue = "empty" ] attribute style { ATEXT }?,
+  attribute style { ATEXT }?,
   attribute hangIndent { NUMBER }?,
   attribute counter { ATEXT }?
 xref = element xref { attlist.xref, CTEXT }
@@ -209,7 +209,12 @@ figure =
   element figure { attlist.figure, preamble?, artwork, postamble? }
 attlist.figure &=
   attribute anchor { xsd:ID }?,
-  [ a:defaultValue = "" ] attribute title { ATEXT }?
+  [ a:defaultValue = "" ] attribute title { ATEXT }?,
+  [ a:defaultValue = "" ] attribute src { ATEXT }?,
+  [ a:defaultValue = "left" ] attribute align { "left" | "center" | "right" }?,
+  [ a:defaultValue = "" ] attribute alt { ATEXT }?,
+  [ a:defaultValue = "" ] attribute width { NUMBER }?,
+  [ a:defaultValue = "" ] attribute height { NUMBER }?
 preamble =
   element preamble {
     attlist.preamble, (TEXT | xref | eref | iref | cref | spanx)*

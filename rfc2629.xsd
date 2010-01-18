@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- revised DTD for the RFC document series, draft of 2004-04-04 -->
+<!-- revised DTD for the RFC document series, draft of 2005-10-05 -->
 <!--
   Contents
   
@@ -189,7 +189,7 @@
     <xs:complexType>
       <xs:attribute name="day" type="DAY"/>
       <xs:attribute name="month" type="MONTH"/>
-      <xs:attribute name="year" use="required" type="YEAR"/>
+      <xs:attribute name="year" type="YEAR"/>
     </xs:complexType>
   </xs:element>
   <!-- meta-data... -->
@@ -276,7 +276,7 @@
       <xs:sequence>
         <xs:element maxOccurs="unbounded" ref="t"/>
       </xs:sequence>
-      <xs:attribute name="style" default="empty" type="ATEXT"/>
+      <xs:attribute name="style" type="ATEXT"/>
       <xs:attribute name="hangIndent" type="NUMBER"/>
       <xs:attribute name="counter" type="ATEXT"/>
     </xs:complexType>
@@ -348,6 +348,19 @@
       </xs:sequence>
       <xs:attribute name="anchor" type="xs:ID"/>
       <xs:attribute name="title" default="" type="ATEXT"/>
+      <xs:attribute name="src" type="URI"/>
+      <xs:attribute name="align" default="left">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="center"/>
+            <xs:enumeration value="right"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="alt" type="ATEXT"/>
+      <xs:attribute name="width" type="ATEXT"/>
+      <xs:attribute name="height" type="ATEXT"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="preamble">
