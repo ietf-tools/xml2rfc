@@ -141,7 +141,7 @@
   -->
 
 
-<!-- later on, may be (section+,appendix*,section*)>
+<!-- later on, may be (section+,appendix*,section*) -->
 <!ELEMENT middle      (section+)>
 
 <!ELEMENT section     (t|figure|texttable|iref|section)*>
@@ -166,7 +166,7 @@
 <!ELEMENT list        (t+)>
 <!ATTLIST list
           style       %ATEXT;            "empty"
-          hangIndent  %NUMBER;           "0"
+          hangIndent  %NUMBER;           #IMPLIED
           counter     %ATEXT;            #IMPLIED>
 
 <!ELEMENT xref        (%CTEXT;)>
@@ -210,7 +210,7 @@
 
 <!ELEMENT postamble   (%TEXT;|xref|eref|iref)*>
     
-<!ELEMENT texttable   (preamble?,ttcol+,c*,postamble?>
+<!ELEMENT texttable   (preamble?,ttcol+,c*,postamble?)>
 <!ATTLIST texttable
           anchor      ID                 #IMPLIED
           title       %ATEXT;            "">
