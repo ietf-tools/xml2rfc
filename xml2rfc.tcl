@@ -3215,6 +3215,7 @@ proc pass {tag} {
                                     toc         no  \
                                     tocdepth    3   \
                                     tocompact   yes \
+                                    tocindent   no  \
                                     topblock    yes]
             normalize_options
             catch { unset stack }
@@ -3286,22 +3287,53 @@ Distribution of this memo is unlimited."} }
 
 set iprstatus \
              { {full2026
-"in full conformance with all provisions of Section 10 of RFC2026."}
+"This document is an Internet-Draft and is
+in full conformance with all provisions of Section 10 of RFC2026."}
 
                {noDerivativeWorks2026
-"in full conformance with all provisions of Section 10 of RFC2026
+"This document is an Internet-Draft and is
+in full conformance with all provisions of Section 10 of RFC2026
 except that the right to produce derivative works is not granted."}
 
                {noDerivativeWorksNow
-"in full conformance with all provisions of Section 10 of RFC2026
+"This document is an Internet-Draft and is
+in full conformance with all provisions of Section 10 of RFC2026
 except that the right to produce derivative works is not granted.
 (If this document becomes part of an IETF working group activity,
 then it will be brought into full compliance with Section 10 of RFC2026.)"}
 
                {none
-"NOT offered in accordance with Section 10 of RFC2026,
+"This document is an Internet-Draft and is
+NOT offered in accordance with Section 10 of RFC2026,
 and the author does not provide the IETF with any rights other
-than to publish as an Internet-Draft."} }
+than to publish as an Internet-Draft."}
+
+               {full3667
+"By submitting this Internet-Draft,
+I certify that any applicable patent or other IPR claims of which
+I am aware have been disclosed,
+and any of which I become aware will be disclosed,
+in accordance with RFC 3667."}
+
+               {noModification3667
+"By submitting this Internet-Draft,
+I certify that any applicable patent or other IPR claims of which
+I am aware have been disclosed,
+and any of which I become aware will be disclosed,
+in accordance with RFC 3667.
+This document may not be modified,
+and derivative works of it may not be created,
+except to publish it as an RFC and to translate it into languages other
+than English%IPREXTRACT%."}
+
+               {noDerivatives3667
+"By submitting this Internet-Draft,
+I certify that any applicable patent or other IPR claims of which
+I am aware have been disclosed,
+and any of which I become aware will be disclosed,
+in accordance with RFC 3667.
+This document may not be modified,
+and derivative works of it may not be created%IPREXTRACT%."} }
 
 proc begin {name {av {}}} {
     global counter depth elemN elem passno stack xref
@@ -3863,6 +3895,7 @@ proc normalize_options {} {
                         symrefs     .SYMREFS     \
                         toc         .TOC         \
                         tocompact   .TOCOMPACT   \
+                        tocindent   .TOCINDENT   \
                         topblock    .TOPBLOCK] {
         switch -- $options($o) {
             yes - true - 1 {
@@ -3984,9 +4017,23 @@ proc unexpected {args} {
 
 # the whole document
 
-global copylong
+global validity
 
-set copylong {
+set validity {
+"This document and the information contained herein are provided
+on an &quot;AS IS&quot; basis and THE CONTRIBUTOR,
+THE ORGANIZATION HE/SHE REPRESENTS OR IS SPONSORED BY (IF ANY),
+THE INTERNET SOCIETY AND THE INTERNET ENGINEERING TASK FORCE DISCLAIM
+ALL WARRANTIES, 
+EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE
+INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED
+WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE."
+}
+
+global copylong1 copylong2
+
+set copylong1 {
 "Copyright (C) The Internet Society (%YEAR%). All Rights Reserved."
 
 "This document and translations of it may be copied and furnished to
@@ -4014,9 +4061,17 @@ HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF
 MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE."
 }
 
-global iprlong
+set copylong2 {
+"Copyright (C) The Internet Society (%YEAR%).
+This document is subject to the rights,
+licenses and restrictions contained in BCP 78,
+and except as set forth therein,
+the authors retain all their rights."
+}
 
-set iprlong {
+global iprlong1 iprlong2
+
+set iprlong1 {
 "The IETF takes no position regarding the validity or scope of
 any intellectual property or other rights that might be claimed
 to  pertain to the implementation or use of the technology
@@ -4039,6 +4094,33 @@ required to practice this standard. Please address the
 information to the IETF Executive Director."
 }
 
+set iprlong2 {
+"The IETF takes no position regarding the validity or scope of any
+Intellectual Property Rights or other rights that might be claimed
+to pertain to the implementation or use of the technology 
+described in this document or the extent to which any license 
+under such rights might or might not be available; nor does it
+represent that it has made any independent effort to identify any
+such rights.
+Information on the IETF's procedures with respect to
+rights in IETF Documents can be found in BCP 78 and BCP 79."
+
+"Copies of IPR disclosures made to the IETF Secretariat and any
+assurances of licenses to be made available,
+or the result of an attempt made to obtain a general license or
+permission for the use of such proprietary rights by implementers or
+users of this specification can be obtained from the IETF on-line IPR
+repository at http://www.ietf.org/ipr."
+
+"The IETF invites any interested party to bring to its attention
+any copyrights,
+patents or patent applications,
+or other
+proprietary rights that may cover technology that may be required
+to implement this standard.
+Please address the information to the IETF at ietf-ipr@ietf.org."
+}
+
 global iprextra
 
 set iprextra {
@@ -4059,9 +4141,9 @@ proc pass2begin_rfc {elemX} {
     global counter depth elemN elem passno stack xref
     global options copyrightP iprP
 
-    array set attrs [list number ""     obsoletes "" updates "" \
-                          category info seriesNo  "" ipr     "" \
-                          xml:lang en]
+    array set attrs [list number     ""   obsoletes "" updates "" \
+                          category   info seriesNo  "" ipr     "" \
+                          iprExtract ""   xml:lang  en]
     array set attrs $elem($elemX)
     set elem($elemX) [array get attrs]
 
@@ -4139,7 +4221,7 @@ proc pass2end_rfc {elemX} {
     global counter depth elemN elem passno stack xref
     global elemZ
     global mode
-    global copylong iprlong iprextra
+    global copylong1 copylong2 iprlong1 iprlong2 iprextra
     global options
     global pageno
 
@@ -4151,6 +4233,21 @@ proc pass2end_rfc {elemX} {
     set date [find_element date $fv(.CHILDREN)]
     array set dv $elem($date)
 
+    set newP 1
+    if {[string compare $attrs(number) ""]} {
+        if {$attrs(number) <= 3707} {
+            set newP 0
+        }
+    } elseif {[string compare $attrs(ipr) ""]} {
+        if {[string first "3667" $attrs(ipr)] < 0} {
+            set newP 0
+        }
+    }
+    if {$newP} {
+        set copylong $copylong2
+    } else {
+        set copylong $copylong1
+    }
     regsub -all %YEAR% $copylong $dv(year) copying
 
     if {![catch { set who $attrs(disclaimant) }]} {
@@ -4181,7 +4278,11 @@ SUCH DAMAGES."
         regsub -all %UWHO% $copying [string toupper $who] copying
     }
 
-    set iprstmt $iprlong
+    if {$newP} {
+        set iprstmt $iprlong2
+    } else {
+        set iprstmt $iprlong1
+    }
     if {$options(.IPRNOTIFIED)} {
         set iprstmt [concat $iprstmt $iprextra]
     }
@@ -4222,7 +4323,7 @@ SUCH DAMAGES."
         lappend irefs $iref
     }
 
-    set attrs(.ANCHOR) [rfc_$mode $irefs $iprstmt $copying]
+    set attrs(.ANCHOR) [rfc_$mode $irefs $iprstmt $copying $newP]
     set elem($elemX) [array get attrs]
 
     if {([string compare $mode html]) \
@@ -4242,7 +4343,7 @@ set copyshort \
 
 set idinfo {
     {
-"This document is an Internet-Draft and is %IPR%"
+"%IPR%"
 
 "Internet-Drafts are working documents of the Internet Engineering
 Task Force (IETF), its areas, and its working groups.
@@ -4264,7 +4365,7 @@ http://www.ietf.org/shadow.html."
     }
 
     {
-"This document is an Internet-Draft and is %IPR%"
+"%IPR%"
 
 "Internet-Drafts are working documents of the Internet Engineering
 Task Force (IETF), its areas, and its working groups.
@@ -4411,6 +4512,14 @@ proc pass2begin_front {elemX} {
             regsub -all %IPR% $status \
                    [lindex [lindex $iprstatus \
                                    [lsearch0 $iprstatus $rv(ipr)]] 1] status
+            if {[string compare [set anchor $rv(iprExtract)] ""]} {
+                set extract ", other than to extract "
+                append extract [xref_$mode "" $xref($anchor) $anchor "" 1]
+                append extract " as-is for separate use"
+            } else {
+                set extract ""
+            }
+            regsub -all %IPREXTRACT% $status $extract status
             regsub -all %EXPIRES% $status $expires status
         }
     }
@@ -4434,7 +4543,9 @@ proc pass2begin_front {elemX} {
 
         set organization [find_element organization $av(.CHILDREN)]
         array set ov [list abbrev ""]
-        array set ov $elem($organization)
+        if {[string compare $organization ""]} {
+            array set ov $elem($organization)
+        }
         if {![string compare $ov(abbrev) ""]} {
             set ov(abbrev) $ov(.CTEXT)
         }
@@ -4540,11 +4651,7 @@ proc pass2end_front {elemX} {
                             catch { set anchor $cv(.ANCHOR) }
                             set label ""
                         }
-                        if {$iprP} {
-                            set noticeT "Intellectual Property and Copyright Statements"
-                        } else {
-                            set noticeT "Full Copyright Statement"
-                        }
+                        set noticeT "Intellectual Property and Copyright Statements"
                         set last [list $label $noticeT $anchor]
                     } else {
                         set noticeT ""
@@ -4554,12 +4661,16 @@ proc pass2end_front {elemX} {
                 section
                     -
                 appendix {
-                    if {[llength [split [set label $cv(.COUNTER)] .]] \
+                    if {[set x [llength [split [set label $cv(.COUNTER)] .]]] \
                             > $options(.TOCDEPTH)} {
                         continue
                     } 
                     if {[string first . $label] < 0} {
                         append label .
+                    }
+                    if {($options(.TOCINDENT)) && ($x > 1)} {
+                        set x [expr ($x-1)*2]
+                        set label [format "%*.*s" $x $x ""]$label
                     }
                     lappend toc [list $label $cv(title) $cv(.ANCHOR)]
                 }
@@ -5191,7 +5302,9 @@ proc pass2begin_back {elemX} {
 
         set organization [find_element organization $av(.CHILDREN)]
         array set ov [list abbrev ""]
-        array set ov $elem($organization)
+        if {[string compare $organization ""]} {
+            array set ov $elem($organization)
+        }
 
         set block1 ""
         if {[string compare $av(fullname) ""]} {
@@ -5529,9 +5642,9 @@ proc lsearch0 {list exact} {
 #
 
 
-proc rfc_txt {irefs iprstmt copying} {
+proc rfc_txt {irefs iprstmt copying newP} {
     global options copyrightP iprP
-    global funding
+    global funding validity
     global header footer lineno pageno blankP
     global indexpg
 
@@ -5586,7 +5699,26 @@ proc rfc_txt {irefs iprstmt copying} {
             write_line_txt "" -1
         }
 
-        write_line_txt "Full Copyright Statement"
+        if {$newP} {
+            write_line_txt "Disclaimer of Validity"
+
+            foreach para $validity {
+                write_line_txt ""
+                pcdata_txt $para
+            }
+            write_line_txt "" -1
+            write_line_txt "" -1
+        }
+
+        if {![have_lines 4]} {
+            end_page_txt
+        }
+
+        if {$newP} {
+            write_line_txt "Copyright Statement"
+        } else {
+            write_line_txt "Full Copyright Statement"
+        }
 
         foreach para $copying {
             write_line_txt ""
@@ -5598,6 +5730,7 @@ proc rfc_txt {irefs iprstmt copying} {
         if {![have_lines 4]} {
             end_page_txt
         }
+
         write_line_txt "Acknowledgment"
         write_line_txt ""
         pcdata_txt $funding
@@ -5727,11 +5860,26 @@ proc front_txt_end {toc irefP} {
         set len2 5
         set mid [expr 72-($len1+$len2+5)]
 
+        set lenX $len1
+        set midX $mid
+        set oddX [expr $mid%2]
         foreach c $toc {
             if {!$options(.TOCOMPACT)} {
                 if {[string last . [lindex $c 0]] \
                         == [expr [string length [lindex $c 0]]-1]} {
                     write_line_txt ""
+                }
+            }
+            if {$options(.TOCINDENT)} {
+                set len1 [expr [set y [string length [lindex $c 0]]]+1]
+                if {$y == 0} {
+                    incr len1 2
+                } 
+                set mid [expr $midX+$lenX-$len1]
+                set oddP [expr $mid%2]
+                if {$oddP != $oddX} {
+                    incr len1 1
+                    incr mid -1
                 }
             }
             set s1 [format "   %-*.*s " $len1 $len1 [lindex $c 0]]
@@ -6289,7 +6437,7 @@ proc cellP {data {row -1} {col -1} {width -1} {align ""}} {
 }
 
 
-proc xref_txt {text av target format} {
+proc xref_txt {text av target format {hackP 0}} {
     global elem
     global eatP
     global mode
@@ -6321,8 +6469,16 @@ proc xref_txt {text av target format} {
             set line "\[$attrs(value)\]"
         }
     }
+    if {$hackP} {
+        return $line
+    }
 
-    if {[string compare $text ""]} {
+    if {![string compare $format none]} {
+        if {![string compare [set line $text] ""]} {
+            set eatP -1
+            return
+        }
+    } elseif {[string compare $text ""]} {
         switch -- $attrs(type) {
             section
                 -
@@ -6368,10 +6524,9 @@ proc eref_txt {text counter target} {
 
     set line ""
     if {[string compare $text ""]} {
-        set line "[chars_expand $text]"
-    }
-    if {([string first "#" $target] < 0) \
-            && ([string compare $text $target])} {
+        set line "<$target>"
+    } elseif {([string first "#" $target] < 0) \
+                  && ([string compare $text $target])} {
         set erefs($counter) $target
         if {[string compare $line ""]} {
             append line " "
@@ -6933,11 +7088,11 @@ proc pi_txt {key value} {
             }
         }
 
-	typeout {
-	    if {$passno == 2} {
-		puts stdout $value
-	    }
-	}
+        typeout {
+            if {$passno == 2} {
+                puts stdout $value
+            }
+        }
 
         default {
             error ""
@@ -6953,9 +7108,9 @@ proc pi_txt {key value} {
 
 # don't need to return anything even though rfc_txt does...
 
-proc rfc_html {irefs iprstmt copying} {
+proc rfc_html {irefs iprstmt copying newP} {
     global options copyrightP iprP
-    global funding
+    global funding validity
 
     if {$options(.SLIDES) && [end_rfc_slides]} {
         return
@@ -7017,7 +7172,21 @@ proc rfc_html {irefs iprstmt copying} {
             }
         }
 
-        write_html "<h3>Full Copyright Statement</h3>"
+        if {$newP} {
+            write_html "<h3>Disclaimer of Validity</h3>"
+
+            foreach para $validity {
+                write_html "<p class='copyright'>"
+                pcdata_html $para
+                write_html "</p>"
+            }
+        }
+
+        if {$newP} {
+            write_html "<h3>Copyright Statement</h3>"
+        } else {
+            write_html "<h3>Full Copyright Statement</h3>"
+        }
 
         foreach para $copying {
             write_html "<p class='copyright'>"
@@ -7154,8 +7323,8 @@ proc front_html_begin {left right top bottom title status copying keywords
 # begin new meta tags
 
     write_html -nonewline "<meta name=\"description\" content=\""
-# need to look for " in title and escape ?
-    pcdata_html [lindex $title 0]
+    regsub -all {"} [lindex $title 0] {&quot;} t0
+    pcdata_html $t0
     write_html "\">"
 
 #   write out meta tag with keywords if they exist
@@ -7169,7 +7338,7 @@ proc front_html_begin {left right top bottom title status copying keywords
         write_html "\">" 
     }
 
-     write_html -nonewline "<meta name=\"generator\" content=\"xml2rfc v1.21 "
+     write_html -nonewline "<meta name=\"generator\" content=\"xml2rfc v1.22 "
      write_html "(http://xml.resource.org/)\">"
 #end new meta tags
 
@@ -7256,8 +7425,18 @@ proc front_html_end {toc irefP} {
         lappend toc $last
     }
     foreach c $toc {
+        set text [lindex $c 0]
+        if {$options(.TOCINDENT)} {
+            set len [string length $text]
+            set text [string trimleft $text]
+            for {set x [expr $len-[string length $text]]} \
+                    {$x > 0} \
+                    {incr x -1} {
+                write_html -nonewline "&nbsp;&nbsp;"
+            }
+        }
         write_html -nonewline "<a href=\"#[lindex $c 2]\">"
-        pcdata_html [lindex $c 0]
+        pcdata_html $text
         write_html "</a>&nbsp;"
         pcdata_html [lindex $c 1]
         write_html "<br />"
@@ -7520,7 +7699,7 @@ proc c_html {tag row col align} {
     }
 }
 
-proc xref_html {text av target format} {
+proc xref_html {text av target format {hackP 0}} {
     global elem
     global options
 
@@ -7550,7 +7729,7 @@ proc xref_html {text av target format} {
 
         reference {
             set line "\[$attrs(value)\]"
-            set title " title=\""
+            set title ""
 
             set s ""
             set nameA 1
@@ -7566,6 +7745,10 @@ proc xref_html {text av target format} {
                 }
             }
             append title ", [ref_title $elemY], [ref_date $elemY].\""
+            regsub -all {"} $title {&quot;} title
+            regsub -all "\r" $title { } title
+            regsub -all "\n" $title { } title
+            set title " title=\"$title\""
         }
 
         default {
@@ -7573,7 +7756,11 @@ proc xref_html {text av target format} {
         }
     }
 
-    if {![string compare $text ""]} {
+    if {![string compare $format none]} {
+        if {![string compare $text ""]} {
+            return
+        }
+    } elseif {![string compare $text ""]} {
         switch -- $format {
             counter {
                 set text $attrs(value)
@@ -7613,6 +7800,9 @@ proc xref_html {text av target format} {
     }
 
     set line "<a href=\"#$target\"$title>$text</a>$post"
+    if {$hackP} {
+        return $line
+    }
     if {![cellP $line]} {
         write_html -nonewline $line
     }
@@ -8218,8 +8408,8 @@ proc slide_foo {n} {
 proc pi_html {key value} {
     switch -- $key {
         needLines
-	    -
-	typeout {
+            -
+        typeout {
         }
 
         default {
@@ -8248,9 +8438,9 @@ proc write_html {a1 {a2 ""}} {
 # nroff output
 #
 
-proc rfc_nr {irefs iprstmt copying} {
+proc rfc_nr {irefs iprstmt copying newP} {
     global options copyrightP iprP
-    global funding
+    global funding validity
     global header footer lineno pageno blankP
     global indents indent lastin
     global nofillP
@@ -8330,8 +8520,28 @@ proc rfc_nr {irefs iprstmt copying} {
             write_line_nr "" -1
         }
 
+        if {$newP} {
+            write_it ".ti 0"
+            write_line_nr "Disclaimer of Validity"
+
+            foreach para $validity {
+                write_line_nr ""
+                pcdata_nr $para
+            }
+            write_line_nr "" -1
+            write_line_nr "" -1
+        }
+
+        if {![have_lines 4]} {
+            end_page_nr
+        }
+
         write_it ".ti 0"
-        write_line_nr "Full Copyright Statement"
+        if {$newP} {
+            write_line_nr "Copyright Statement"
+        } else {
+            write_line_nr "Full Copyright Statement"
+        }
 
         foreach para $copying {
             write_line_nr ""
@@ -8372,7 +8582,7 @@ proc front_nr_begin {left right top bottom title status copying keywords
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.21 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.22 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -8486,11 +8696,26 @@ proc front_nr_end {toc irefP} {
         set len2 5
         set mid [expr 72-($len1+$len2+5)]
 
+        set lenX $len1
+        set midX $mid
+        set oddX [expr $mid%2]
         foreach c $toc {
             if {!$options(.TOCOMPACT)} {
                 if {[string last . [lindex $c 0]] \
                         == [expr [string length [lindex $c 0]]-1]} {
                     write_line_nr ""
+                }
+            }
+            if {$options(.TOCINDENT)} {
+                set len1 [expr [set y [string length [lindex $c 0]]]+1]
+                if {$y == 0} {
+                    incr len1 2
+                } 
+                set mid [expr $midX+$lenX-$len1]
+                set oddP [expr $mid%2]
+                if {$oddP != $oddX} {
+                    incr len1 1
+                    incr mid -1
                 }
             }
             set s1 [format "   %-*.*s " $len1 $len1 [lindex $c 0]]
@@ -8703,8 +8928,8 @@ proc c_nr {tag row col align} {
     c_txt $tag $row $col $align
 }
 
-proc xref_nr {text av target format} {
-    xref_txt $text $av $target $format
+proc xref_nr {text av target format {hackP 0}} {
+    xref_txt $text $av $target $format $hackP
 }
 
 proc eref_nr {text counter target} {
@@ -9221,7 +9446,34 @@ set oentities { {&lt;}     {<} {&gt;}     {>}
                 {&#8211;}  {-} {&#8212;}  {--}
                 {&#x2013;} {-} {&#x2014;} {--}
                 {&#151;}   {--}
-                {&endash;} {-} {&emdash;} {--} }
+                {&endash;} {-} {&emdash;} {--}
+                {&#19[2-7];} {A}
+                {&#198;}     {AE}
+                {&#199;}     {C}
+                {&#20[0-3];} {E}
+                {&#20[4-7];} {I}
+                {&#208;}     {E}
+                {&#209;}     {N}
+                {&#21[0-4];} {O}
+                {&#216;}     {O}
+                {&#21[7-9];} {U}
+                {&#220;}     {U}
+                {&#221;}     {Y}
+                {&223;}      {sz}
+                {&#22[4-9];} {a}
+                {&#230;}     {ae}
+                {&#231;}     {c}
+                {&#23[2-5];} {e}
+                {&#23[6-9];} {i}
+                {&#240;}     {eth}
+                {&#241;}     {n}
+                {&#24[2-6];} {o}
+                {&#248;}     {o}
+                {&#249;}     {u}
+                {&#25[0-2];} {u}
+                {&#253;}     {y}
+                {&#255;}     {y} }
+
 for {set c 32} {$c < 127} {incr c} {
     lappend oentities "&#$c;" [format %c $c]
     lappend oentities [format "&#x%x;" $c] [format %c $c]
@@ -9767,17 +10019,22 @@ set xdv::dtd(rfc2629.cmodel) \
                               postamble         "?"] \
           preamble      [list [list xref             \
                                     eref             \
-                                    iref]       "*"] \
+                                    iref             \
+                                    spanx]      "*"] \
           artwork       {}                           \
           postamble     [list [list xref             \
                                     eref             \
-                                    iref]       "*"] \
+                                    iref             \
+                                    spanx]      "*"] \
           texttable     [list preamble          "?"  \
                               ttcol             "+"  \
                               c                 "*"  \
                               postamble         "?"] \
           ttcol         {}                           \
-          c             {}                           \
+          c             [list [list xref             \
+                                    eref             \
+                                    iref             \
+                                    spanx]      "*"] \
           references    [list reference         "+"] \
           reference     [list front             ""   \
                               seriesInfo        "*"  \
@@ -9835,6 +10092,7 @@ set xdv::dtd(rfc2629.oattrs) \
                               category    \
                               seriesNo    \
                               ipr         \
+                              iprExtract  \
                               docName     \
                               xml:lang]   \
           title         [list abbrev]     \

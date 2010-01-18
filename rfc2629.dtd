@@ -74,8 +74,10 @@
           category    (std|bcp|info|exp|historic)
                                          "info"
           seriesNo    %NUMBER;           #IMPLIED
-          ipr         (full2026|noDerivativeWorks2026|none)
+          ipr         (full2026|noDerivativeWorks2026|none
+                      |full3667|noModification3667|noDerivatives3667)
                                          #IMPLIED
+          iprExtract  IDREF              #IMPLIED
           docName     %ATEXT;            #IMPLIED
           xml:lang    %ATEXT;            "en">
 
@@ -174,7 +176,7 @@
 <!ATTLIST xref
           target      IDREF              #REQUIRED
           pageno      (true|false)       "false"
-          format      (counter|title|default)
+          format      (counter|title|none|default)
                                          "default">
 
 <!ELEMENT eref        (%CTEXT;)>
@@ -189,7 +191,6 @@
 
 <!ELEMENT spanx       (%CTEXT;)>
 <!ATTLIST spanx
-          xml:space   (default|preserve) "preserve"
           style       %ATEXT;            "emph">
 
 <!ELEMENT vspace      EMPTY>
