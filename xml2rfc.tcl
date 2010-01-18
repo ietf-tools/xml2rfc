@@ -2737,7 +2737,7 @@ proc xml2rfc {input {output ""} {remote ""}} {
                     array set attrs [lrange $frame 1 end] 
                     append text "\n    <[lindex $frame 0]"
                     foreach {k v} $attrs(av) {
-                        regsub -all {"} $v {&quot;} v
+                        regsub -all {"} $v {\&quot;} v
                         append text " $k=\"$v\""
                     }
                     append text ">"
@@ -3180,7 +3180,7 @@ proc pass {tag} {
     global counter depth elemN elem passno stack xref
     global anchorN
     global elemZ
-    global erefs
+    global crefs erefs
     global root
 
     switch -- $tag {
@@ -3191,6 +3191,7 @@ proc pass {tag} {
                 catch { unset depth }
                 catch { unset elem }
                 catch { unset xref }
+                catch { unset crefs }
                 catch { unset erefs }
                 set anchorN 0
                 set root [list {}]
@@ -3199,6 +3200,7 @@ proc pass {tag} {
             set elemN 0
             catch { unset options }
             array set options [list background  ""  \
+                                    comments    no  \
                                     compact     no  \
                                     editing     no  \
                                     emoticonic  no  \
@@ -3215,7 +3217,7 @@ proc pass {tag} {
                                     toc         no  \
                                     tocdepth    3   \
                                     tocompact   yes \
-                                    tocindent   no  \
+                                    tocindent   yes \
                                     topblock    yes]
             normalize_options
             catch { unset stack }
@@ -3251,9 +3253,9 @@ set required { date       { year }
                format     { type }
              }
           
-set ctexts   { area artwork city code country email eref facsimile keyword 
-               organization phone postamble preamble region seriesInfo spanx
-               street t ttcol title uri workgroup xref }
+set ctexts   { area artwork city code country cref email eref facsimile
+               keyword organization phone postamble preamble region seriesInfo
+               spanx street t ttcol title uri workgroup xref }
 
 set categories \
              { {std  "Standards Track" STD
@@ -3313,14 +3315,14 @@ than to publish as an Internet-Draft."}
 I certify that any applicable patent or other IPR claims of which
 I am aware have been disclosed,
 and any of which I become aware will be disclosed,
-in accordance with RFC 3667."}
+in accordance with RFC 3668."}
 
                {noModification3667
 "By submitting this Internet-Draft,
 I certify that any applicable patent or other IPR claims of which
 I am aware have been disclosed,
 and any of which I become aware will be disclosed,
-in accordance with RFC 3667.
+in accordance with RFC 3668.
 This document may not be modified,
 and derivative works of it may not be created,
 except to publish it as an RFC and to translate it into languages other
@@ -3331,7 +3333,7 @@ than English%IPREXTRACT%."}
 I certify that any applicable patent or other IPR claims of which
 I am aware have been disclosed,
 and any of which I become aware will be disclosed,
-in accordance with RFC 3667.
+in accordance with RFC 3668.
 This document may not be modified,
 and derivative works of it may not be created%IPREXTRACT%."} }
 
@@ -3347,7 +3349,7 @@ proc begin {name {av {}}} {
     foreach {k v} $av {
         lappend kv $k
         regsub -all {\\\[} $v {[} v
-        lappend kv $v
+        lappend kv [chars_expand $v 0]
     }
     set av $kv
 
@@ -3456,6 +3458,9 @@ proc begin {name {av {}}} {
                     set attrs(anchor) anchor[incr anchorN]
                 }
                 set attrs(.ANCHOR) $attrs(anchor)
+                if {[catch { set attrs(toc) }]} {
+                    set attrs(toc) default
+                }
                 set elem($elemN) [array get attrs]
                 switch -- [set t [string tolower $attrs(title)]] {
                     "iana considerations"
@@ -3513,6 +3518,21 @@ proc begin {name {av {}}} {
             }
 
             references {
+                if {[catch { incr depth(references) }]} {
+                    set depth(references) 1
+                    set counter(section) [counting $counter(section) 1]
+                }
+                set counter(section) [counting $counter(section) 2]
+                set l [split $counter(section) .]
+                set attrs(.COUNTER) [set value [join $l .]]
+                if {[catch { set attrs(anchor) }]} {
+                    set attrs(anchor) anchor[incr anchorN]
+                }
+                set attrs(.ANCHOR) $attrs(anchor)
+                if {[catch { set attrs(toc) }]} {
+                    set attrs(toc) default
+                }
+                set elem($elemN) [array get attrs]
                 if {[info exists attrs(title)]} {
                     switch -- [set t [string tolower $attrs(title)]] {
                         "normative reference"
@@ -3631,7 +3651,9 @@ proc begin {name {av {}}} {
 
             xref
                 -
-            eref {
+            eref
+                -
+            cref {
                 if {([lsearch0 $stack references] < 0) \
                         || ([lsearch0 $stack annotation] >= 0)} {
                     pass2begin_$name $elemN
@@ -3707,6 +3729,16 @@ proc end {name} {
                     set counter(list) 0
                 }
             }
+
+	    back {
+		if {[llength [set c [find_element references \
+						     $attrs(.CHILDREN)]]] \
+		        == 1} {
+		    array set cv $elem($c)
+		    set cv(.COUNTER) [lindex [split $cv(.COUNTER) .] 0]
+		    set elem($c) [array get cv]
+		}
+	    }
         }
 
         return
@@ -3883,7 +3915,9 @@ proc normalize_options {} {
     if {$remoteP} {
         set options(slides) no
     }
+    set subcompactP 0
     foreach {o O} [list compact     .COMPACT     \
+                        comments    .COMMENTS    \
                         editing     .EDITING     \
                         emoticonic  .EMOTICONIC  \
                         iprnotified .IPRNOTIFIED \
@@ -3897,6 +3931,9 @@ proc normalize_options {} {
                         tocompact   .TOCOMPACT   \
                         tocindent   .TOCINDENT   \
                         topblock    .TOPBLOCK] {
+        if {![string compare $o subcompact]} {
+            set subcompactP 1
+	}
         switch -- $options($o) {
             yes - true - 1 {
                 set options($O) 1
@@ -3940,8 +3977,8 @@ proc normalize_options {} {
             }
         }
     }
-    if {!$options(.COMPACT)} {
-        set options(.SUBCOMPACT) 0
+    if {!$subcompactP} {
+        set options(.SUBCOMPACT) $options(.COMPACT)
     }
     if {$options(.PRIVATE)} {
         set options(.HEADER) 1
@@ -4630,6 +4667,7 @@ proc pass2end_front {elemX} {
     global elemZ
     global options copyrightP iprP noticeT
     global mode
+    global crefs erefs
 
     set toc ""
     set refs 0
@@ -4661,10 +4699,21 @@ proc pass2end_front {elemX} {
                 section
                     -
                 appendix {
-                    if {[set x [llength [split [set label $cv(.COUNTER)] .]]] \
-                            > $options(.TOCDEPTH)} {
-                        continue
-                    } 
+                    set x [llength [split [set label $cv(.COUNTER)] .]]
+                    switch -- $cv(toc) {
+                        include {
+                        }
+
+                        exclude {
+                            continue
+                        }
+
+                        default {
+                            if {$x > $options(.TOCDEPTH)} {
+                                continue
+                            } 
+                        }
+                    }
                     if {[string first . $label] < 0} {
                         append label .
                     }
@@ -4676,6 +4725,18 @@ proc pass2end_front {elemX} {
                 }
 
                 back {
+                    if {($options(.COMMENTS)) && ([array size crefs] > 0)} {
+                        set anchor ""
+                        if {($passno == 3) && (![string compare $mode html])} {
+                            set anchor rfc.comments
+                            set label "&#167;"
+                        } else {
+                            catch { set anchor $cv(.ANCHOR) }
+                            set label ""
+                        }
+                        lappend toc [list $label "Editorial Comments" $anchor]
+                    }
+
                     set anchor ""
                     if {($passno == 3) && (![string compare $mode html])} {
                         set anchor rfc.authors
@@ -4701,12 +4762,27 @@ proc pass2end_front {elemX} {
                         set label "&#167;"
                     } else {
                         catch { set anchor $cv(.ANCHOR) }
-                        set label ""
+                        set label $cv(.COUNTER)
                     }
                     if {[catch { set title $cv(title) }]} {
                         set title References
                     }
-                    set toc [linsert $toc [expr [llength $toc]-1] \
+                    if {($options(.COMMENTS)) && ([array size crefs] > 0)} {
+                        set offset 2
+                    } else {
+                        set offset 1
+                    }
+		    set l [split $label .]
+		    if {([llength $l] == 2) \
+		            && (![string compare [lindex $l 1] 1])} {
+                        set toc [linsert $toc [expr [llength $toc]-$offset] \
+                                         [list [lindex $l 0]. \
+                                               References $anchor]]
+		    }
+                    if {[string first . $label] < 0} {
+                        append label .
+                    }
+                    set toc [linsert $toc [expr [llength $toc]-$offset] \
                                      [list $label $title $anchor]]
                 }
 
@@ -5221,6 +5297,38 @@ proc pass2begin_eref {elemX} {
 }
 
 
+# the cref element
+
+proc pass2begin_cref {elemX} {
+    global counter depth elemN elem passno stack xref
+    global mode
+    global options
+
+    array set attrs $elem($elemX)
+
+    if {!$options(.COMMENTS)} {
+        return
+    }
+
+    if {$passno == 2} {
+        if {![info exists counter(reference)]} {
+            set counter(reference) 0
+        }
+
+        switch -- $mode {
+            nr  -
+            txt {
+                incr counter(reference)
+            }
+        }
+        set attrs(.COUNTER) $counter(reference)
+        set elem($elemX) [array get attrs]
+    }
+
+    cref_$mode $attrs(.CTEXT) $attrs(.COUNTER) $attrs(source)
+}
+
+
 # the iref element
 
 proc pass2begin_iref {elemX} {
@@ -5275,7 +5383,7 @@ proc pass2begin_spanx {elemX} {
 proc pass2begin_back {elemX} {
     global counter depth elemN elem passno stack xref
     global mode
-    global erefs
+    global crefs erefs
     global options
 
     array set attrs $elem($elemX)
@@ -5291,6 +5399,9 @@ proc pass2begin_back {elemX} {
     }
     if {(!$erefP) && ([array size erefs] > 0)} {
         erefs_$mode URIs
+    }
+    if {($options(.COMMENTS)) && ([array size crefs] > 0)} {
+        crefs_$mode "Editorial Comments"
     }
 
     array set fv $elem(2)
@@ -5389,7 +5500,10 @@ proc pass2begin_references {elemX erefP} {
     array set attrs [list title References]
     array set attrs $elem($elemX)
 
-    set attrs(.ANCHOR) [references_$mode begin $attrs(title)]
+    if {[llength [split [set prefix $attrs(.COUNTER)] .]] == 1} {
+	append prefix .
+    }
+    set attrs(.ANCHOR) [references_$mode begin $attrs(.COUNTER) $attrs(title)]
     set elem($elemX) [array get attrs]
     set children [find_element reference $attrs(.CHILDREN)]
     if {$options(.SORTREFS)} {
@@ -5410,7 +5524,7 @@ proc pass2begin_references {elemX erefP} {
     foreach child $children {
         pass2begin_reference $child $width
     }
-    references_$mode end "" $erefP
+    references_$mode end $erefP
 }
 
 proc sort_references {elemX elemY} {
@@ -5950,7 +6064,7 @@ proc section_txt {prefix top title lines anchor} {
     }
 
     push_indent -3
-    write_text_txt "$prefix "
+    write_text_txt "$prefix  "
     push_indent [expr [string length $prefix]+1]
     write_text_txt [chars_expand $title]
     flush_text
@@ -6474,7 +6588,7 @@ proc xref_txt {text av target format {hackP 0}} {
     }
 
     if {![string compare $format none]} {
-        if {![string compare [set line $text] ""]} {
+        if {![string compare [set line [chars_expand $text]] ""]} {
             set eatP -1
             return
         }
@@ -6519,7 +6633,7 @@ proc xref_txt {text av target format {hackP 0}} {
 
 proc eref_txt {text counter target} {
     global eatP
-    global erefs
+    global crefs erefs
     global mode
 
     set line ""
@@ -6533,6 +6647,27 @@ proc eref_txt {text counter target} {
         }
         append line "\[$counter\]"
     }
+    if {![cellP $line]} {
+        set eatP 0
+        write_text_$mode $line
+    }
+
+    set eatP -1
+}
+
+proc cref_txt {text counter source} {
+    global eatP
+    global crefs erefs
+    global mode
+
+    set comments ""
+    if {[string compare $source ""]} {
+        set comments "${source}: "
+    }
+    append comments $text
+    set crefs($counter) [list $source $text $comments]
+
+    set line "\[$counter\]"
     if {![cellP $line]} {
         set eatP 0
         write_text_$mode $line
@@ -6593,24 +6728,39 @@ proc spanx_txt {text style} {
     set eatP -1
 }
 
-proc references_txt {tag {title ""} {erefP 0}} {
+proc references_txt {tag args} {
     global counter depth elemN elem passno stack xref
     global options
     global header footer lineno pageno blankP
 
     switch -- $tag {
         begin {
-            if {$options(.COMPACT)} {
-                write_line_txt ""
-            } else {
-                end_page_txt
+            set prefix [lindex $args 0]
+            set title [lindex $args 1]
+            if {($depth(references) > 1) \
+		    && (![info exists counter(references)])} {
+                set counter(references) 0
+                section_txt [lindex [split $prefix .] 0]. 1 References 0 ""
             }
-            write_line_txt [chars_expand $title]
+            if {![have_lines 5]} {
+                end_page_txt
+            } else {
+                write_line_txt "" -1
+            }
+
+            push_indent -3
+            write_text_txt "$prefix  "
+            push_indent [expr [string length $prefix]+1]
+            write_text_txt [chars_expand $title]
+            flush_text
+            pop_indent
+            pop_indent
 
             return $pageno
         }
 
         end {
+            set erefP [lindex $args 0]
             if {$erefP} {
                 erefs_txt
             } else {
@@ -6621,7 +6771,7 @@ proc references_txt {tag {title ""} {erefP 0}} {
 }
 
 proc erefs_txt {{title ""}} {
-    global erefs
+    global crefs erefs
     global options
 
     if {[string compare $title ""]} {
@@ -6649,6 +6799,40 @@ proc erefs_txt {{title ""}} {
         write_text_txt "  "
         write_url $erefs($eref)
 
+        pop_indent
+    }
+
+    flush_text
+}
+
+proc crefs_txt {title} {
+    global crefs erefs
+    global options
+
+    if {[string compare $title ""]} {
+        if {$options(.COMPACT)} {
+            write_line_txt ""
+        } else {
+            end_page_txt
+        }
+        write_line_txt $title
+    }
+
+    set names  [lsort -integer [array names crefs]]
+    set width [expr [string length [lindex $names end]]+2]
+    foreach cref $names {
+        write_line_txt ""
+
+        set i [expr [string length \
+                            [set prefix \
+                                 [format %-*.*s $width $width \
+                                         "\[$cref\]"]]+2]]
+        write_text_txt $prefix
+
+        push_indent $i
+
+        write_text_txt "  "
+        write_text_txt [lindex $crefs($cref) 2]
         pop_indent
     }
 
@@ -7231,6 +7415,27 @@ set htmlstyle \
         text-align: center ;
         font-family: charcoal, monaco, geneva, \"MS Sans Serif\", helvetica, verdana, sans-serif;
         font-size: x-small ; background-color: #000000; }
+/* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+    div#counter{margin-top: 100px}
+
+    a.info{
+        position:relative; /*this is the key*/
+        z-index:24;
+        text-decoration:none}
+
+    a.info:hover{z-index:25; background-color:#990000 ; color: #ffffff ;}
+
+    a.info span{display: none}
+
+    a.info:hover span{ /*the span will display just on :hover state*/
+        display:block;
+        position:absolute;
+        font-size: smaller ;
+        top:2em; left:2em; width:15em;
+        padding: 2px ;
+        border:1px solid #333333;
+        background-color:#eeeeee; color:#990000;
+        text-align: left ;}
 
      A { font-weight: bold; }
      A:link { color: #990000; background-color: transparent ; }
@@ -7322,8 +7527,9 @@ proc front_html_begin {left right top bottom title status copying keywords
     }
 # begin new meta tags
 
+    write_html "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"
     write_html -nonewline "<meta name=\"description\" content=\""
-    regsub -all {"} [lindex $title 0] {&quot;} t0
+    regsub -all {"} [lindex $title 0] {\&quot;} t0
     pcdata_html $t0
     write_html "\">"
 
@@ -7338,7 +7544,7 @@ proc front_html_begin {left right top bottom title status copying keywords
         write_html "\">" 
     }
 
-     write_html -nonewline "<meta name=\"generator\" content=\"xml2rfc v1.22 "
+     write_html -nonewline "<meta name=\"generator\" content=\"xml2rfc v1.23 "
      write_html "(http://xml.resource.org/)\">"
 #end new meta tags
 
@@ -7615,7 +7821,7 @@ proc figure_html {tag lines anchor title {av {}}} {
                 foreach {k v} $av {
                     if {[string first . $k] != 0} {
                         write_html -nonewline ""
-                        regsub -all {"} $v {&quot;} v
+                        regsub -all {"} $v {\&quot;} v
                         write_html -nonewline " $k=\"$v\""
                     }
                 }
@@ -7744,11 +7950,13 @@ proc xref_html {text av target format {hackP 0}} {
                     set s ", "
                 }
             }
-            append title ", [ref_title $elemY], [ref_date $elemY].\""
-            regsub -all {"} $title {&quot;} title
+            append title ", [ref_title $elemY], [ref_date $elemY]."
+            regsub -all {"} $title {\&quot;} title
             regsub -all "\r" $title { } title
             regsub -all "\n" $title { } title
+if {0} {
             set title " title=\"$title\""
+}
         }
 
         default {
@@ -7798,8 +8006,11 @@ proc xref_html {text av target format {hackP 0}} {
     } else {
         set text $line
     }
-
+if {0} {
     set line "<a href=\"#$target\"$title>$text</a>$post"
+} else {
+    set line "<a class=\"info\" href=\"#$target\">$text<span>$title</span></a>$post"
+}
     if {$hackP} {
         return $line
     }
@@ -7818,6 +8029,32 @@ proc eref_html {text counter target} {
     } 
 
     set line "<a href=\"$target\">$text</a>"
+    if {![cellP $line]} {
+        write_html -nonewline $line
+    }
+}
+
+proc cref_html {text counter source} {
+    global crefs erefs
+
+    set comments ""
+    if {[string compare $source ""]} {
+        set comments "${source}: "
+    }
+    append comments $text
+    set crefs($counter) [list $source $text $comments]
+
+    regsub -all {"} $comments {\&quot;} comments
+    regsub -all "\r" $comments { } comments
+    regsub -all "\n" $comments { } comments
+
+if {0} {
+    set line "<a href=\"#comment.$counter\" title=\"$comments\">\[Comment $counter\]</a>"
+} else {
+    set line "<a class=\"info\" href=\"#comment.$counter\">\[Comment $counter\]<span>$comments</span></a>"
+}
+    append line "<a name=\"tnemmoc.$counter\"></a>"
+
     if {![cellP $line]} {
         write_html -nonewline $line
     }
@@ -7859,7 +8096,7 @@ proc spanx_html {text style} {
 
 # don't need to return anything even though txt/nr versions do...
 
-proc references_html {tag {title ""} {erefP 0}} {
+proc references_html {tag args} {
     global counter depth elemN elem passno stack xref
     global options
 
@@ -7872,13 +8109,23 @@ proc references_html {tag {title ""} {erefP 0}} {
 
     switch -- $tag {
         begin {
-            if {![info exists counter(references)]} {
+            set prefix [lindex $args 0]
+            set title [lindex $args 1]
+            if {($depth(references) > 1) \
+		    && (![info exists counter(references)])} {
                 set counter(references) 0
+                section_html [lindex [split $prefix .] 0]. 1 References 0 \
+                             rfc.references
             }
 
             write_html ""
-            toc_html rfc.references[incr counter(references)]
-            write_html -nonewline "<h3>"
+	    if {![info exists counter(references)]} {
+		set suffix 1
+	    } else {
+		set suffix [incr counter(references)]
+	    }
+	    toc_html rfc.references$suffix
+            write_html -nonewline "<h3>$prefix&nbsp;"
             pcdata_html $title
             write_html "</h3>"
 
@@ -7980,6 +8227,43 @@ proc reference_html {prefix names title series formats date anchor target
     }
 
     write_html "</td></tr>"
+}
+
+proc crefs_html {title} {
+    global crefs erefs
+    global options
+
+    write_html ""
+    toc_html rfc.comments
+    write_html -nonewline "<h3>"
+    pcdata_html $title
+    write_html "</h3>"
+
+    write_html "<table width=\"99%\" border=\"0\">"
+
+    set names  [lsort -integer [array names crefs]]
+    foreach cref $names {
+if {0} {
+        write_html "<tr><td class=\"author-text\" valign=\"top\">"
+        write_html "<a href=\"#tnemmoc.$cref\" title=\"Comment $cref\">"
+        pcdata_html [lindex $crefs($cref) 0]
+        write_html "</a><a name=\"comment.$cref\"></a>:"
+        write_html "</td><td class=\"author-text\">"
+        pcdata_html [lindex $crefs($cref) 1]
+        write_html "</td></tr>"
+} else {
+        write_html "<tr><td class=\"author-text\" valign=\"top\">"
+        write_html "<a class=\"info\" href=\"#tnemmoc.$cref\">"
+        pcdata_html [lindex $crefs($cref) 0]
+        write_html "<span>Comment $cref</span>"
+        write_html "</a><a name=\"comment.$cref\"></a>:"
+        write_html "</td><td class=\"author-text\">"
+        pcdata_html [lindex $crefs($cref) 1]
+        write_html "</td></tr>"
+}
+    }
+
+    write_html "</table>"
 }
 
 proc annotation_html {tag} {
@@ -8582,7 +8866,7 @@ proc front_nr_begin {left right top bottom title status copying keywords
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.22 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.23 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -8774,7 +9058,7 @@ proc section_nr {prefix top title lines anchor} {
         write_line_nr "" -1
     }
 
-    indent_text_nr "$prefix " 0
+    indent_text_nr "$prefix  " 0
     write_text_nr [chars_expand $title]
     flush_text
     pop_indent
@@ -8936,6 +9220,10 @@ proc eref_nr {text counter target} {
     eref_txt $text $counter $target
 }
 
+proc cref_nr {text counter source} {
+    cref_txt $text $counter $source
+}
+
 proc iref_nr {item subitem flags} {
     global header footer lineno pageno blankP
 
@@ -8950,31 +9238,42 @@ proc spanx_nr {text style} {
     spanx_txt $text $style
 }
 
-proc references_nr {tag {title ""} {erefP 0}} {
+proc references_nr {tag args} {
+    global counter depth elemN elem passno stack xref
     global options
     global header footer lineno pageno blankP
     global nofillP lastin
 
     switch -- $tag {
         begin {
-            if {$options(.COMPACT)} {
-                write_line_nr ""
-            } else {
+            set prefix [lindex $args 0]
+            set title [lindex $args 1]
+            if {($depth(references) > 1) \
+		    && (![info exists counter(references)])} {
+                set counter(references) 0
+                section_nr [lindex [split $prefix .] 0]. 1 References 0 ""
+            }
+            if {![have_lines 5]} {
                 end_page_nr
+            } else {
+                write_line_nr "" -1
             }
-            if {$nofillP} {
-                flush_text
-                write_it ".fi"
-                set nofillP 0
-                set lastin -1
+
+            indent_text_nr "$prefix  " 0
+            write_text_nr [chars_expand $title]
+            flush_text
+            pop_indent
+
+            if {$lastin != 3} {
+                write_it ".in [set lastin [set indent 3]]"
+                set indents {}
             }
-            write_it ".ti 0"
-            write_line_nr [chars_expand $title]
 
             return $pageno
         }
 
         end {
+            set erefP [lindex $args 0]
             if {$erefP} {
                 erefs_nr
             } else {
@@ -8985,7 +9284,7 @@ proc references_nr {tag {title ""} {erefP 0}} {
 }
 
 proc erefs_nr {{title ""}} {
-    global erefs
+    global crefs erefs
     global options
     global nofillP lastin
 
@@ -9013,6 +9312,43 @@ proc erefs_nr {{title ""}} {
         indent_text_nr "[format %-*.*s $width $width "\[$eref\]"]  " -1
 
         write_url $erefs($eref)
+        flush_text
+
+        pop_indent
+    }
+
+    flush_text
+}
+
+proc crefs_nr {title} {
+    global crefs erefs
+    global options
+    global nofillP lastin
+
+    if {[string compare $title ""]} {
+        if {$options(.COMPACT)} {
+            write_line_nr ""
+        } else {
+            end_page_nr
+        }
+        if {$nofillP} {
+            flush_text
+            write_it ".fi"
+            set nofillP 0
+            set lastin -1
+        }
+        write_it ".ti 0"
+        write_line_nr $title
+    }
+
+    set names  [lsort -integer [array names crefs]]
+    set width [expr [string length [lindex $names end]]+2]
+    foreach cref $names {
+        write_line_nr ""
+
+        indent_text_nr "[format %-*.*s $width $width "\[$cref\]"]  " -1
+
+        write_text_nr [lindex $crefs($cref) 2]
         flush_text
 
         pop_indent
@@ -9400,6 +9736,7 @@ proc write_line_nr {line {pre 0} {magic 0}} {
     if {!$magic} { 
         regsub -all "\\\\" $line "\\\\\\" line
     }
+    regsub -all "'" $line "\\'" line
     regsub -all "$nbsp" $line "\\\\0" line
     if {[string first "." $line] == 0} {
         set line "\\&$line"
@@ -9447,6 +9784,7 @@ set oentities { {&lt;}     {<} {&gt;}     {>}
                 {&#x2013;} {-} {&#x2014;} {--}
                 {&#151;}   {--}
                 {&endash;} {-} {&emdash;} {--}
+                {&#167;}     {S.}
                 {&#19[2-7];} {A}
                 {&#198;}     {AE}
                 {&#199;}     {C}
@@ -9472,13 +9810,15 @@ set oentities { {&lt;}     {<} {&gt;}     {>}
                 {&#249;}     {u}
                 {&#25[0-2];} {u}
                 {&#253;}     {y}
-                {&#255;}     {y} }
+                {&#255;}     {y}
+                {&#8482;}     {[TM]} }
 
 for {set c 32} {$c < 127} {incr c} {
     lappend oentities "&#$c;" [format %c $c]
     lappend oentities [format "&#x%x;" $c] [format %c $c]
 }
 lappend oentities     {&amp;} {\&}
+set entities $oentities
 
 
 proc push_indent {pos} {
@@ -9708,6 +10048,9 @@ proc ref::transform {token file {formats {}}} {
 
     set state(stack)    ""
     set state(body)     ""
+    set state(number)   0
+    set state(authors)  0
+    set state(keywords) 0
     set state(verbatim) 0
     set state(silent)   0
     set state(formats)  $formats
@@ -9728,7 +10071,7 @@ proc ref::transform {token file {formats {}}} {
                     catch { unset attrs }
                     append text "\n    <[lindex $frame 0]"
                     foreach {k v} [lindex $frame 1] {
-                        regsub -all {"} $v {&quot;} v
+                        regsub -all {"} $v {\&quot;} v
                         append text " $k=\"$v\""
                     }
                     append text ">"
@@ -9740,6 +10083,9 @@ proc ref::transform {token file {formats {}}} {
 
     unset state(stack)    \
           state(body)     \
+          state(number)   \
+          state(authors)  \
+          state(keywords) \
           state(verbatim) \
           state(silent)   \
           state(formats)
@@ -9748,6 +10094,8 @@ proc ref::transform {token file {formats {}}} {
 }
 
 proc ref::element_start {token name {av {}} args} {
+    global rfcitems
+
     variable $token
     upvar 0 $token state
 
@@ -9771,15 +10119,41 @@ proc ref::element_start {token name {av {}} args} {
     if {($idx < 0) && ($state(verbatim))} {
         set idx 0
         set info ""
-        if {[lsearch -exact {xref eref iref vspace} $name] >= 0} {
+        if {[lsearch -exact {xref eref cref iref vspace} $name] >= 0} {
             set state(silent) 1
         }
     }
 
+# format*
+# is-also: BCP70
     if {$idx >= 0} {
         if {![string compare [lindex $info 2] yes]} {
             ref::start_$name $token $av
         } elseif {!$state(silent)} {
+            switch -- $name {
+                author {
+                    incr state(authors)
+                    set k $state(number),author$state(authors)
+                    if {[info exists rfcitems($k)]} {
+                        array set kv $rfcitems($k)
+                        if {[info exists $kv(name)]} {
+                            set name $kv(name)
+# update initials/surname when rfc-index.xml is more robust...
+                        }
+                    }
+                }
+
+                date {
+                    set k $state(number)
+                    array set nv $av
+                    foreach n [list day year month] {
+                        if {[info exists rfcitems($k,$n)]} {
+                            set nv($n) $rfcitems($k,$n)
+                        }
+                    }
+                    set av [array get nv]
+                }
+            }
             append state(body) "\n<$name"
             foreach {n v} $av {
                 regsub -all {'} $v {\&apos;} v
@@ -9789,6 +10163,15 @@ proc ref::element_start {token name {av {}} args} {
                 append state(body) " /"
             }
             append state(body) >
+
+            switch -- $name {
+                title {
+                    set k $state(number)
+                    if {[info exists rfcitems($k,doc-title)]} {
+                        append state(body) $rfcitems($k,doc-title)
+                    }
+                }
+            }
         }
     }
 
@@ -9823,6 +10206,8 @@ proc ref::element_end {token name args} {
 }
 
 proc ref::cdata {token text} {
+    global rfcitems
+
     variable $token
     upvar 0 $token state
 
@@ -9833,6 +10218,15 @@ proc ref::cdata {token text} {
     set frame [lindex $state(stack) end]
     if {[set idx [lindex $frame 2]] < 0} {
         return
+    }
+
+    switch -- [lindex $frame 0] {
+        title {
+            set k $state(number)
+            if {[info exists rfcitems($k,doc-title)]} {
+                return
+            }
+        }
     }
 
     regsub -all "\r" $text "\n" text
@@ -9853,6 +10247,7 @@ proc ref::start_rfc {token av} {
     if {[catch { set rfc(number) }]} {
         ref::oops "missing number attribute in rfc element"
     }
+    set state(number) $rfc(number)
 
     set state(body) "<?xml version='1.0'?>
 
@@ -9861,11 +10256,19 @@ proc ref::start_rfc {token av} {
 }
 
 proc ref::end_rfc {token frame} {
+    global rfcitems
+
     variable $token
     upvar 0 $token state
 
     array set rfc [list obsoletes "" updates "" category info seriesNo ""]
     array set rfc [lindex $frame 1]
+
+    set k $state(number)
+    if {[info exists rfcitems($k,is-also)]} {
+        array set rfc [list category [string range $rfcitems($k,is-also) 0 2] \
+                            seriesNo [string range $rfcitems($k,is-also) 3 end]]
+    }
 
     append state(body) "
 
@@ -10006,6 +10409,7 @@ set xdv::dtd(rfc2629.cmodel) \
                                     xref             \
                                     eref             \
                                     iref             \
+                                    cref             \
                                     vspace           \
                                     spanx]      "*"] \
           list          [list t                 "+"] \
@@ -10020,11 +10424,13 @@ set xdv::dtd(rfc2629.cmodel) \
           preamble      [list [list xref             \
                                     eref             \
                                     iref             \
+                                    cref             \
                                     spanx]      "*"] \
           artwork       {}                           \
           postamble     [list [list xref             \
                                     eref             \
                                     iref             \
+                                    cref             \
                                     spanx]      "*"] \
           texttable     [list preamble          "?"  \
                               ttcol             "+"  \
@@ -10034,6 +10440,7 @@ set xdv::dtd(rfc2629.cmodel) \
           c             [list [list xref             \
                                     eref             \
                                     iref             \
+                                    cref             \
                                     spanx]      "*"] \
           references    [list reference         "+"] \
           reference     [list front             ""   \
@@ -10045,6 +10452,7 @@ set xdv::dtd(rfc2629.cmodel) \
           annotation    [list [list xref             \
                                     eref             \
                                     iref             \
+                                    cref             \
                                     spanx]      "*"]]
 
 set xdv::dtd(rfc2629.pcdata) \
@@ -10055,6 +10463,7 @@ set xdv::dtd(rfc2629.pcdata) \
           city         \
           code         \
           country      \
+          cref         \
           email        \
           eref         \
           facsimile    \
@@ -10103,8 +10512,10 @@ set xdv::dtd(rfc2629.oattrs) \
           organization  [list abbrev]     \
           date          [list day         \
                               month]      \
-          section       [list anchor]     \
-          appendix      [list anchor]     \
+          section       [list anchor      \
+                              toc]        \
+          appendix      [list anchor      \
+                              toc]        \
           t             [list hangText]   \
           list          [list style       \
                               hangIndent  \
@@ -10113,6 +10524,7 @@ set xdv::dtd(rfc2629.oattrs) \
                               format]     \
           iref          [list subitem     \
                               primary]    \
+          cref          [list source]     \
           spanx         [list xml:space   \
                               style]      \
           vspace        [list blankLines] \
@@ -10280,7 +10692,7 @@ proc xdv::report {result stack} {
             append text "\n    <[lindex $frame 0]"
             foreach {k v} [lindex $frame 1] {
                 if {[string first . $k] < 0} {
-                    regsub -all {"} $v {&quot;} v
+                    regsub -all {"} $v {\&quot;} v
                     append text " $k=\"$v\""
                 }
             }
@@ -10348,6 +10760,7 @@ if {[llength $argv] > 1} {
             bgerror $result
         } else {
             puts stderr $result
+            exit 1
         }
     }
 
@@ -10437,4 +10850,3 @@ if {[llength $argv] > 1} {
         pack $f -fill x -padx 1c -pady 3
     }
 }
-

@@ -227,13 +227,24 @@
       </xs:choice>
       <xs:attribute name="anchor" type="xs:ID"/>
       <xs:attribute name="title" use="required" type="ATEXT"/>
+      <xs:attribute name="toc" default="default">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="include"/>
+            <xs:enumeration value="exclude"/>
+            <xs:enumeration value="default"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <!--
     <!ELEMENT appendix    (t|figure|texttable|iref|appendix)*>
     <!ATTLIST appendix
               anchor      ID                 #IMPLIED
-              title       %ATEXT;            #REQUIRED>
+              title       %ATEXT;            #REQUIRED
+              toc         (include|exclude|default)
+                                             "default">
   -->
   <!-- use of <figure/> is deprecated... -->
   <xs:element name="t">
@@ -244,6 +255,7 @@
         <xs:element ref="xref"/>
         <xs:element ref="eref"/>
         <xs:element ref="iref"/>
+        <xs:element ref="cref"/>
         <xs:element ref="spanx"/>
         <xs:element ref="vspace"/>
       </xs:choice>
@@ -306,6 +318,11 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
+  <xs:element name="cref">
+    <xs:complexType mixed="true">
+      <xs:attribute name="source" default="" type="ATEXT"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="spanx">
     <xs:complexType mixed="true">
       <xs:attribute name="style" default="emph" type="ATEXT"/>
@@ -333,6 +350,7 @@
         <xs:element ref="xref"/>
         <xs:element ref="eref"/>
         <xs:element ref="iref"/>
+        <xs:element ref="cref"/>
         <xs:element ref="spanx"/>
       </xs:choice>
     </xs:complexType>
@@ -353,6 +371,7 @@
         <xs:element ref="xref"/>
         <xs:element ref="eref"/>
         <xs:element ref="iref"/>
+        <xs:element ref="cref"/>
         <xs:element ref="spanx"/>
       </xs:choice>
     </xs:complexType>
@@ -389,6 +408,7 @@
         <xs:element ref="xref"/>
         <xs:element ref="eref"/>
         <xs:element ref="iref"/>
+        <xs:element ref="cref"/>
         <xs:element ref="spanx"/>
       </xs:choice>
     </xs:complexType>
@@ -442,6 +462,7 @@
         <xs:element ref="xref"/>
         <xs:element ref="eref"/>
         <xs:element ref="iref"/>
+        <xs:element ref="cref"/>
         <xs:element ref="spanx"/>
       </xs:choice>
     </xs:complexType>

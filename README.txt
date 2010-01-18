@@ -2,10 +2,10 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                       February 20, 2004
+                                                           April 2, 2004
 
 
-                             xml2rfc v1.22
+                             xml2rfc v1.23
 
 
 Table of Contents
@@ -21,11 +21,11 @@ Table of Contents
    4.1.2 Include Files  . . . . . . . . . . . . . . . . . . . . . . .  7
    5.    Additions to RFC 2629  . . . . . . . . . . . . . . . . . . .  8
    6.    Limitations of xml2rfc . . . . . . . . . . . . . . . . . . .  9
-         References . . . . . . . . . . . . . . . . . . . . . . . . . 10
-         Author's Address . . . . . . . . . . . . . . . . . . . . . . 10
-   A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . . 11
-   B.    rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . . 12
-   C.    Copyrights . . . . . . . . . . . . . . . . . . . . . . . . . 13
+   7.    References . . . . . . . . . . . . . . . . . . . . . . . . .  9
+         Author's Address . . . . . . . . . . . . . . . . . . . . . .  9
+   A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . . 10
+   B.    rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . . 11
+   C.    Copyrights . . . . . . . . . . . . . . . . . . . . . . . . . 12
 
 
 
@@ -54,10 +54,10 @@ Table of Contents
 
 Rose                                                            [Page 1]
 
-README                       xml2rfc v1.22                 February 2004
+README                       xml2rfc v1.23                    April 2004
 
 
-1. Introduction
+1.  Introduction
 
    This is a package to convert memos written in XML to the RFC format.
 
@@ -110,10 +110,10 @@ README                       xml2rfc v1.22                 February 2004
 
 Rose                                                            [Page 2]
 
-README                       xml2rfc v1.22                 February 2004
+README                       xml2rfc v1.23                    April 2004
 
 
-2. Requirements
+2.  Requirements
 
    You need to have Tcl/Tk version 8 running on your system. Tcl is a
    scripting language, Tk is Tcl with support for your windowing system.
@@ -166,14 +166,14 @@ README                       xml2rfc v1.22                 February 2004
 
 Rose                                                            [Page 3]
 
-README                       xml2rfc v1.22                 February 2004
+README                       xml2rfc v1.23                    April 2004
 
 
-3. Testing
+3.  Testing
 
    Now test your installation.
 
-3.1 Testing under a windowing system
+3.1  Testing under a windowing system
 
    Type this command from the shell:
 
@@ -194,7 +194,7 @@ README                       xml2rfc v1.22                 February 2004
 
    Fill-in the blanks and click on [Convert].
 
-3.2 Testing without a windowing system
+3.2  Testing without a windowing system
 
    Type this command from the shell:
 
@@ -222,15 +222,15 @@ README                       xml2rfc v1.22                 February 2004
 
 Rose                                                            [Page 4]
 
-README                       xml2rfc v1.22                 February 2004
+README                       xml2rfc v1.23                    April 2004
 
 
-4. Next steps
+4.  Next steps
 
    Read the <draft-mrose-writing-rfcs.html> document. In particular,
    <draft-mrose-writing-rfcs.html#anchor13> has some good information.
 
-4.1 Processing Instructions
+4.1  Processing Instructions
 
    A *processing instruction* is a directive to an XML application. If
    you want to give directives to 'xml2rfc', the processing instructions
@@ -241,7 +241,7 @@ README                       xml2rfc v1.22                 February 2004
    Of course, if you like the default behavior, you don't need any PIs
    in your input file!
 
-4.1.1 Option Settings
+4.1.1  Option Settings
 
    The list of valid keywords are:
 
@@ -278,7 +278,7 @@ README                       xml2rfc v1.22                 February 2004
 
 Rose                                                            [Page 5]
 
-README                       xml2rfc v1.22                 February 2004
+README                       xml2rfc v1.23                    April 2004
 
 
    |              |              |                                     |
@@ -334,10 +334,10 @@ README                       xml2rfc v1.22                 February 2004
 
 Rose                                                            [Page 6]
 
-README                       xml2rfc v1.22                 February 2004
+README                       xml2rfc v1.23                    April 2004
 
 
-4.1.2 Include Files
+4.1.2  Include Files
 
    'xml2rfc' has an include-file facility, e.g.,
 
@@ -390,10 +390,10 @@ README                       xml2rfc v1.22                 February 2004
 
 Rose                                                            [Page 7]
 
-README                       xml2rfc v1.22                 February 2004
+README                       xml2rfc v1.23                    April 2004
 
 
-5. Additions to RFC 2629
+5.  Additions to RFC 2629
 
    A few additions have been made to the format originally defined in
    RFC 2629. In particular, <draft-mrose-writing-rfcs.html#anchor19> of
@@ -446,10 +446,10 @@ README                       xml2rfc v1.22                 February 2004
 
 Rose                                                            [Page 8]
 
-README                       xml2rfc v1.22                 February 2004
+README                       xml2rfc v1.23                    April 2004
 
 
-6. Limitations of xml2rfc
+6.  Limitations of xml2rfc
 
    o  The 'figure' element's 'title' attribute is ignored, except when
       generating HTML.
@@ -457,55 +457,7 @@ README                       xml2rfc v1.22                 February 2004
    o  The 'xref' element's 'pageno' attribute is ignored.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Rose                                                            [Page 9]
-
-README                       xml2rfc v1.22                 February 2004
-
-
-References
+7  References
 
    [1]  Bradner, S., "The Internet Standards Process -- Revision 3", BCP
         9, RFC 2026, October 1996.
@@ -548,20 +500,12 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-Rose                                                           [Page 10]
+Rose                                                            [Page 9]
 
-README                       xml2rfc v1.22                 February 2004
+README                       xml2rfc v1.23                    April 2004
 
 
-Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
+Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
 
    1.  Install Tcl/Tk 8.3.4
 
@@ -612,12 +556,12 @@ Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
 
 
 
-Rose                                                           [Page 11]
+Rose                                                           [Page 10]
 
-README                       xml2rfc v1.22                 February 2004
+README                       xml2rfc v1.23                    April 2004
 
 
-Appendix B. rfc2629.xslt (courtesy of Julian Reschke)
+Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
 
    The file "rfc2629.xslt" can be used with an XSLT-capable formatter
    (i.e., IE6) to produce HTML. A word of warning though: the XSLT
@@ -668,12 +612,12 @@ Appendix B. rfc2629.xslt (courtesy of Julian Reschke)
 
 
 
-Rose                                                           [Page 12]
+Rose                                                           [Page 11]
 
-README                       xml2rfc v1.22                 February 2004
+README                       xml2rfc v1.23                    April 2004
 
 
-Appendix C. Copyrights
+Appendix C.  Copyrights
 
    (c) 2003 Marshall T. Rose
 
@@ -724,5 +668,5 @@ Appendix C. Copyrights
 
 
 
-Rose                                                           [Page 13]
+Rose                                                           [Page 12]
 

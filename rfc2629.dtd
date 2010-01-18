@@ -150,17 +150,21 @@
 <!ELEMENT section     (t|figure|texttable|iref|section)*>
 <!ATTLIST section
           anchor      ID                 #IMPLIED
-          title       %ATEXT;            #REQUIRED>
+          title       %ATEXT;            #REQUIRED
+          toc         (include|exclude|default)
+                                         "default">
 
 <!--
 <!ELEMENT appendix    (t|figure|texttable|iref|appendix)*>
 <!ATTLIST appendix
           anchor      ID                 #IMPLIED
-          title       %ATEXT;            #REQUIRED>
+          title       %ATEXT;            #REQUIRED
+          toc         (include|exclude|default)
+                                         "default">
   -->
 
 <!-- use of <figure/> is deprecated... -->
-<!ELEMENT t           (%TEXT;|list|figure|xref|eref|iref|spanx|vspace)*>
+<!ELEMENT t           (%TEXT;|list|figure|xref|eref|iref|cref|spanx|vspace)*>
 <!ATTLIST t
           hangText    %ATEXT;            #IMPLIED>
 
@@ -189,6 +193,10 @@
           subitem     %ATEXT;            ""
           primary    (true|false)       "false">
 
+<!ELEMENT cref        (%CTEXT;)>
+<!ATTLIST cref
+          source      %ATEXT;            #IMPLIED>
+
 <!ELEMENT spanx       (%CTEXT;)>
 <!ATTLIST spanx
           style       %ATEXT;            "emph">
@@ -202,7 +210,7 @@
           anchor      ID                 #IMPLIED
           title       %ATEXT;            "">
 
-<!ELEMENT preamble    (%TEXT;|xref|eref|iref|spanx)*>
+<!ELEMENT preamble    (%TEXT;|xref|eref|iref|cref|spanx)*>
 <!ELEMENT artwork     (%TEXT;)*>
 <!ATTLIST artwork
           xml:space   (default|preserve) "preserve"
@@ -212,7 +220,7 @@
           width       %ATEXT;            ""
           height      %ATEXT;            "">
 
-<!ELEMENT postamble   (%TEXT;|xref|eref|iref|spanx)*>
+<!ELEMENT postamble   (%TEXT;|xref|eref|iref|cref|spanx)*>
     
 <!ELEMENT texttable   (preamble?,ttcol+,c*,postamble?)>
 <!ATTLIST texttable
@@ -222,7 +230,7 @@
 <!ATTLIST ttcol
           width       %ATEXT;           #IMPLIED
           align       (left|center|right) "left">
-<!ELEMENT c           (%TEXT;|xref|eref|iref|spanx)*>
+<!ELEMENT c           (%TEXT;|xref|eref|iref|cref|spanx)*>
 
 
 <!--
@@ -249,4 +257,4 @@
           target      %URI;              #IMPLIED
           type        %ATEXT;            #REQUIRED
           octets      %NUMBER;           #IMPLIED>
-<!ELEMENT annotation  (%TEXT;|xref|eref|iref|spanx)*>
+<!ELEMENT annotation  (%TEXT;|xref|eref|iref|cref|spanx)*>
