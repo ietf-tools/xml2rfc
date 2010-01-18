@@ -2,10 +2,10 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                       February 10, 2003
+                                                       February 13, 2003
 
 
-                             xml2rfc v1.16
+                             xml2rfc v1.17
 
 
 Table of Contents
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose                                                            [Page 1]
 
-README                       xml2rfc v1.16                 February 2003
+README                       xml2rfc v1.17                 February 2003
 
 
 1. Introduction
@@ -110,7 +110,7 @@ README                       xml2rfc v1.16                 February 2003
 
 Rose                                                            [Page 2]
 
-README                       xml2rfc v1.16                 February 2003
+README                       xml2rfc v1.17                 February 2003
 
 
 2. Requirements
@@ -166,7 +166,7 @@ README                       xml2rfc v1.16                 February 2003
 
 Rose                                                            [Page 3]
 
-README                       xml2rfc v1.16                 February 2003
+README                       xml2rfc v1.17                 February 2003
 
 
 3. Testing
@@ -222,7 +222,7 @@ README                       xml2rfc v1.16                 February 2003
 
 Rose                                                            [Page 4]
 
-README                       xml2rfc v1.16                 February 2003
+README                       xml2rfc v1.17                 February 2003
 
 
 4. Next steps
@@ -278,7 +278,7 @@ README                       xml2rfc v1.16                 February 2003
 
 Rose                                                            [Page 5]
 
-README                       xml2rfc v1.16                 February 2003
+README                       xml2rfc v1.17                 February 2003
 
 
        footer      ""          override the center footer string
@@ -334,7 +334,7 @@ README                       xml2rfc v1.16                 February 2003
 
 Rose                                                            [Page 6]
 
-README                       xml2rfc v1.16                 February 2003
+README                       xml2rfc v1.17                 February 2003
 
 
    You can also have 'xml2rfc' set this envariable directly, by creating
@@ -390,7 +390,7 @@ README                       xml2rfc v1.16                 February 2003
 
 Rose                                                            [Page 7]
 
-README                       xml2rfc v1.16                 February 2003
+README                       xml2rfc v1.17                 February 2003
 
 
 5. Additions to RFC 2629
@@ -446,7 +446,7 @@ README                       xml2rfc v1.16                 February 2003
 
 Rose                                                            [Page 8]
 
-README                       xml2rfc v1.16                 February 2003
+README                       xml2rfc v1.17                 February 2003
 
 
 6. Limitations of xml2rfc
@@ -502,7 +502,7 @@ README                       xml2rfc v1.16                 February 2003
 
 Rose                                                            [Page 9]
 
-README                       xml2rfc v1.16                 February 2003
+README                       xml2rfc v1.17                 February 2003
 
 
 URIs
@@ -558,7 +558,7 @@ Author's Address
 
 Rose                                                           [Page 10]
 
-README                       xml2rfc v1.16                 February 2003
+README                       xml2rfc v1.17                 February 2003
 
 
 Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
@@ -614,7 +614,7 @@ Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
 
 Rose                                                           [Page 11]
 
-README                       xml2rfc v1.16                 February 2003
+README                       xml2rfc v1.17                 February 2003
 
 
 Appendix B. rfc2629.xslt (courtesy of Julian Reschke)
@@ -670,7 +670,7 @@ Appendix B. rfc2629.xslt (courtesy of Julian Reschke)
 
 Rose                                                           [Page 12]
 
-README                       xml2rfc v1.16                 February 2003
+README                       xml2rfc v1.17                 February 2003
 
 
 Appendix C. Copyrights
