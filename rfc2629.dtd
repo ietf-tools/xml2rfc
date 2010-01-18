@@ -96,7 +96,8 @@
 <!ATTLIST author
           initials    %ATEXT;            #IMPLIED
           surname     %ATEXT;            #IMPLIED
-          fullname    %ATEXT;            #IMPLIED>
+          fullname    %ATEXT;            #IMPLIED
+          role        (editor)           #IMPLIED>
 
 <!ELEMENT organization
                       (%CTEXT;)>
@@ -140,14 +141,23 @@
   -->
 
 
-<!ELEMENT middle      (section)+>
+<!-- later on, may be (section+,appendix*,section*)>
+<!ELEMENT middle      (section+)>
 
-<!ELEMENT section     (t|figure|iref|section)*>
+<!ELEMENT section     (t|figure|texttable|iref|section)*>
 <!ATTLIST section
           anchor      ID                 #IMPLIED
           title       %ATEXT;            #REQUIRED>
 
-<!ELEMENT t           (%TEXT;|list|figure|xref|eref|iref|vspace)*>
+<!--
+<!ELEMENT appendix    (t|figure|texttable|iref|appendix)*>
+<!ATTLIST appendix
+          anchor      ID                 #IMPLIED
+          title       %ATEXT;            #REQUIRED>
+  -->
+
+<!-- use of <figure/> is deprecated... -->
+<!ELEMENT t           (%TEXT;|list|figure|xref|eref|iref|spanx|vspace)*>
 <!ATTLIST t
           hangText    %ATEXT;            #IMPLIED>
 
@@ -157,7 +167,7 @@
 <!ATTLIST list
           style       %ATEXT;            "empty"
           hangIndent  %NUMBER;           "0"
-          startAt     %NUMBER;           "1">
+          counter     %ATEXT;            #IMPLIED>
 
 <!ELEMENT xref        (%CTEXT;)>
 <!ATTLIST xref
@@ -173,6 +183,11 @@
           item        %ATEXT;            #REQUIRED
           subitem     %ATEXT;            ""
           primary    (true|false)       "false">
+
+<!ELEMENT spanx       (%CTEXT;)>
+<!ATTLIST spanx
+          xml:space   (default|preserve) "preserve"
+          style       %ATEXT;            "emph">
 
 <!ELEMENT vspace      EMPTY>
 <!ATTLIST vspace
@@ -194,6 +209,16 @@
           height      %ATEXT;            "">
 
 <!ELEMENT postamble   (%TEXT;|xref|eref|iref)*>
+    
+<!ELEMENT texttable   (preamble?,ttcol+,c*,postamble?>
+<!ATTLIST texttable
+          anchor      ID                 #IMPLIED
+          title       %ATEXT;            "">
+<!ELEMENT ttcol       (%CTEXT;)>
+<!ATTLIST ttcol
+          width       %ATEXT;           #IMPLIED
+          align       (left|center|right) "left">
+<!ELEMENT c           (%TEXT;|xref|eref|iref)*>
 
 
 <!--

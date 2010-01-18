@@ -584,7 +584,7 @@ proc sgml::parseEvent {sgml args} {
                       $options(-characterdatacommand) [list $text]
             }
         } elseif {[string length [string trim $text]]} {
-            uplevel #0 $options(-errorcommand) "unexpected text \"$text\" in document prolog around line $state(line)"
+            uplevel #0 $options(-errorcommand) [list "unexpected text \"$text\" in document prolog around line $state(line)"]
         }
 
     }
@@ -600,6 +600,7 @@ proc sgml::parseEvent {sgml args} {
 proc sgml::callback {lineno args} {
     global errorCode errorInfo
 
+    set ::xdv::lineno $lineno
     if {[set code [catch { eval uplevel #0 $args } result]]} {
         append result " around line $lineno"
     }
@@ -2205,6 +2206,387 @@ proc xml::parseDTD {dtd args} {
 
 
 #
+# here begins textutil fragment
+#
+
+if {[catch { package require textutil }]} {
+namespace eval textutil {
+    namespace export strRepeat
+    
+    variable HaveStrRepeat [ expr {![ catch { string repeat a 1 } ]} ]
+
+    if {0} {
+        # Problems with the deactivated code:
+        # - Linear in 'num'.
+        # - Tests for 'string repeat' in every call!
+        #   (Ok, just the variable, still a test every call)
+        # - Fails for 'num == 0' because of undefined 'str'.
+
+        proc StrRepeat { char num } {
+            variable HaveStrRepeat
+            if { $HaveStrRepeat == 0 } then {
+                for { set i 0 } { $i < $num } { incr i } {
+                    append str $char
+                }
+            } else {
+                set str [ string repeat $char $num ]
+            }
+            return $str
+        }
+    }
+
+}
+
+if {$::textutil::HaveStrRepeat} {
+    proc ::textutil::strRepeat {char num} {
+        return [string repeat $char $num]
+    }
+} else {
+    proc ::textutil::strRepeat {char num} {
+        if {$num <= 0} {
+            # No replication required
+            return ""
+        } elseif {$num == 1} {
+            # Quick exit for recursion
+            return $char
+        } elseif {$num == 2} {
+            # Another quick exit for recursion
+            return $char$char
+        } elseif {0 == ($num % 2)} {
+            # Halving the problem results in O (log n) complexity.
+            set result [strRepeat $char [expr {$num / 2}]]
+            return "$result$result"
+        } else {
+            # Uneven length, reduce problem by one
+            return "$char[strRepeat $char [incr num -1]]"
+        }
+    }
+}
+
+
+if {0} {
+source [ file join [ file dirname [ info script ] ] adjust.tcl ]
+source [ file join [ file dirname [ info script ] ] split.tcl ]
+source [ file join [ file dirname [ info script ] ] tabify.tcl ]
+source [ file join [ file dirname [ info script ] ] trim.tcl ]
+}
+namespace eval ::textutil {
+
+    namespace eval adjust {
+
+        variable StrRepeat [ namespace parent ]::strRepeat
+        variable Justify  left
+        variable Length   72
+        variable FullLine 0
+        variable StrictLength 0
+        
+        namespace export adjust
+
+        # This will be redefined later. We need it just to let
+        # a chance for the next import subcommand to work
+        #
+        proc adjust { text args } { }   
+
+    }
+
+    namespace import -force adjust::adjust
+    namespace export adjust
+
+}
+
+#########################################################################
+
+proc ::textutil::adjust::adjust { text args } {
+            
+    if { [ string length [ string trim $text ] ] == 0 } then { 
+        return ""
+    }
+    
+    Configure $args
+    Adjust text newtext
+    
+    return $newtext
+}
+
+proc ::textutil::adjust::Configure { args } {
+    variable Justify   left
+    variable Length    72
+    variable FullLine  0
+    variable StrictLength 0
+
+    set args [ lindex $args 0 ]
+    foreach { option value } $args {
+        switch -exact -- $option {
+            -full {
+                if { ![ string is boolean -strict $value ] } then {
+                    error "expected boolean but got \"$value\""
+                }
+                set FullLine [ string is true $value ]
+            }
+            -justify {
+                set lovalue [ string tolower $value ]
+                switch -exact -- $lovalue {
+                    left -
+                    right -
+                    center -
+                    plain {
+                        set Justify $lovalue
+                    }
+                    default {
+                        error "bad value \"$value\": should be center, left, plain or right"
+                    }
+                }   
+            }
+            -length {
+                if { ![ string is integer $value ] } then {
+                    error "expected positive integer but got \"$value\""
+                }
+                if { $value < 1 } then {
+                    error "expected positive integer but got \"$value\""
+                }
+                set Length $value
+            }
+            -strictlength {
+                if { ![ string is boolean -strict $value ] } then {
+                    error "expected boolean but got \"$value\""
+                }
+                set StrictLength [ string is true $value ]
+            }
+            default {
+                error "bad option \"$option\": must be -full, -justify, -length, or -strictlength"
+            }
+        }
+    }
+
+    return ""
+}
+
+proc ::textutil::adjust::Adjust { varOrigName varNewName } {
+    variable Length
+    variable StrictLength
+
+    upvar $varOrigName orig
+    upvar $varNewName  text
+
+    regsub -all -- "(\n)|(\t)"     $orig  " "  text
+    regsub -all -- " +"            $text  " "  text
+    regsub -all -- "(^ *)|( *\$)"  $text  ""   text
+
+    set ltext [ split $text ]
+
+    if { $StrictLength } then {
+
+        # Limit the length of a line to $Length. If any single
+        # word is long than $Length, then split the word into multiple
+        # words.
+ 
+        set i 0
+        foreach tmpWord $ltext {
+            if { [ string length $tmpWord ] > $Length } then {
+ 
+                # Since the word is longer than the line length,
+                # remove the word from the list of words.  Then
+                # we will insert several words that are less than
+                # or equal to the line length in place of this word.
+ 
+                set ltext [ lreplace $ltext $i $i ]
+                incr i -1
+                set j 0
+ 
+                # Insert a series of shorter words in place of the
+                # one word that was too long.
+ 
+                while { $j < [ string length $tmpWord ] } {
+ 
+                    # Calculate the end of the string range for this word.
+ 
+                    if { [ expr { [string length $tmpWord ] - $j } ] > $Length } then {
+                        set end [ expr { $j + $Length - 1} ]
+                    } else {
+                        set end [ string length $tmpWord ]
+                    }
+ 
+                    set ltext [ linsert $ltext [ expr {$i + 1} ] [ string range $tmpWord $j $end ] ]
+                    incr i
+                    incr j [ expr { $end - $j + 1 } ]
+                }
+            }
+            incr i
+        }
+    }
+
+    set line [ lindex $ltext 0 ]
+    set pos [ string length $line ]
+    set text ""
+    set numline 0
+    set numword 1
+    set words(0) 1
+    set words(1) [ list $pos $line ]
+
+    foreach word [ lrange $ltext 1 end ] {
+        set size [ string length $word ]
+        if { ( $pos + $size ) < $Length } then {
+            append line " $word"
+            incr numword
+            incr words(0)
+            set words($numword) [ list $size $word ]
+            incr pos
+            incr pos $size
+        } else {
+            if { [ string length $text ] != 0 } then {
+                append text "\n"
+            }
+            append text [ Justification $line [ incr numline ] words ]
+            set line "$word"
+            set pos $size
+            catch { unset words }
+            set numword 1
+            set words(0) 1
+            set words(1) [ list $size $word ]
+        }
+    }
+    if { [ string length $text ] != 0 } then {
+        append text "\n"
+    }
+    append text [ Justification $line end words ]
+    
+    return $text
+}
+
+proc ::textutil::adjust::Justification { line index arrayName } {
+    variable Justify
+    variable Length
+    variable FullLine
+    variable StrRepeat
+
+    upvar $arrayName words
+
+    set len [ string length $line ]
+    if { $Length == $len } then {
+        return $line
+    }
+
+    # Special case:
+    # for the last line, and if the justification is set to 'plain'
+    # the real justification is 'left' if the length of the line
+    # is less than 90% (rounded) of the max length allowed. This is
+    # to avoid expansion of this line when it is too small: without
+    # it, the added spaces will 'unbeautify' the result.
+    #
+
+    set justify $Justify
+    if { ( "$index" == "end" ) && \
+             ( "$Justify" == "plain" ) && \
+             ( $len < round($Length * 0.90) ) } then {
+        set justify left
+    }
+
+    # For a left justification, nothing to do, but to
+    # add some spaces at the end of the line if requested
+    #
+        
+    if { "$justify" == "left" } then {
+        set jus ""
+        if { $FullLine } then {
+            set jus [ $StrRepeat " " [ expr { $Length - $len } ] ]
+        }
+        return "${line}${jus}"
+    }
+
+    # For a right justification, just add enough spaces
+    # at the beginning of the line
+    #
+
+    if { "$justify" == "right" } then {
+        set jus [ $StrRepeat " " [ expr { $Length - $len } ] ]
+        return "${jus}${line}"
+    }
+
+    # For a center justification, add half of the needed spaces
+    # at the beginning of the line, and the rest at the end
+    # only if needed.
+
+    if { "$justify" == "center" } then {
+        set mr [ expr { ( $Length - $len ) / 2 } ]
+        set ml [ expr { $Length - $len - $mr } ]
+        set jusl [ $StrRepeat " " $ml ]
+        set jusr [ $StrRepeat " " $mr ]
+        if { $FullLine } then {
+            return "${jusl}${line}${jusr}"
+        } else {
+            return "${jusl}${line}"
+        }
+    }
+
+    # For a plain justiciation, it's a little bit complex:
+    # if some spaces are missing, then
+    # sort the list of words in the current line by
+    # decreasing size
+    # foreach word, add one space before it, except if
+    # it's the first word, until enough spaces are added
+    # then rebuild the line
+    #
+
+    if { "$justify" == "plain" } then {
+        set miss [ expr { $Length - [ string length $line ] } ]
+        if { $miss == 0 } then {
+            return "${line}"
+        }
+
+        for { set i 1 } { $i < $words(0) } { incr i } {
+            lappend list [ eval list $i $words($i) 1 ]
+        }
+        lappend list [ eval list $i $words($words(0)) 0 ]
+        set list [ SortList $list decreasing 1 ]
+
+        set i 0
+        while { $miss > 0 } {
+            set elem [ lindex $list $i ]
+            set nb [ lindex $elem 3 ]
+            incr nb
+            set elem [ lreplace $elem 3 3 $nb ]
+            set list [ lreplace $list $i $i $elem ]
+            incr miss -1
+            incr i
+            if { $i == $words(0) } then {
+                set i 0
+            }
+        }
+        set list [ SortList $list increasing 0 ]
+        set line ""
+        foreach elem $list {
+            set jus [ $StrRepeat " " [ lindex $elem 3 ] ]
+            set word [ lindex $elem 2 ]
+            if { [ lindex $elem 0 ] == $words(0) } then {
+                append line "${jus}${word}"
+            } else {
+                append line "${word}${jus}"
+            }
+        }
+
+        return "${line}"
+    }
+
+    error "Illegal justification key \"$justify\""
+}
+
+proc ::textutil::adjust::SortList { list dir index } {
+
+    if { [ catch { lsort -integer -$dir -index $index $list } sl ] != 0 } then {
+        error "$sl"
+    }
+
+    return $sl
+}
+}
+
+#
+# here ends textutil fragment
+#
+
+
+
+#
 # top-level parsing
 #
 
@@ -2324,6 +2706,7 @@ proc xml2rfc {input {output ""} {remote ""}} {
 
         catch {
             global stack
+            global guiP
 
             if {[llength $stack] > 0} {
                 set text "Context: "
@@ -2339,6 +2722,9 @@ proc xml2rfc {input {output ""} {remote ""}} {
                     append text ">"
                 }
                 append result "\n\n$text"
+                if {$guiP < 0} {
+                    append result "\n$einfo"
+                }
             }
         }
     }
@@ -2553,8 +2939,8 @@ proc prexml_entity {stream path httpP} {
         append data [string range $stream 0 [expr $x-1]]
         set stream [string trimleft [string range $stream [expr $x+$litN] end]]
         if {[string first "%" $stream] == 0} {
-	    set stream [string trimleft [string range $stream 1 end]]
-	}
+            set stream [string trimleft [string range $stream 1 end]]
+        }
         if {[set x [string first $litT $stream]] < 0} {
             error "missing close to <!ENTITY"
         }
@@ -2773,6 +3159,7 @@ proc pass {tag} {
     global anchorN
     global elemZ
     global erefs
+    global root
 
     switch -- $tag {
         start {
@@ -2784,6 +3171,7 @@ proc pass {tag} {
                 catch { unset xref }
                 catch { unset erefs }
                 set anchorN 0
+                set root [list {}]
             }
             set elemN 0
             catch { unset options }
@@ -2794,6 +3182,7 @@ proc pass {tag} {
                                     footer      ""  \
                                     header      ""  \
                                     iprnotified no  \
+                                    linkmailto  yes \
                                     private     ""  \
                                     slides      no  \
                                     strict      no  \
@@ -2810,6 +3199,13 @@ proc pass {tag} {
 
         end {
             set elemZ $elemN
+
+            if {($passno == 1) && ($options(.STRICT))} {
+                xdv::validate_tree [lindex [lindex $root 0] 0] \
+                     rfc2629.cmodel  rfc2629.rattrs \
+                     rfc2629.anchors rfc2629.pcdata
+
+            }
         }
     }
 }
@@ -2822,6 +3218,7 @@ global required ctexts categories
 set required { date       { year }
                note       { title  }
                section    { title  }
+               appendix   { title  }
                xref       { target }
                eref       { target }
                iref       { item }
@@ -2830,9 +3227,9 @@ set required { date       { year }
                format     { type }
              }
           
-set ctexts   { title organization street city region code country phone
-               facsimile email uri area workgroup keyword xref eref
-               seriesInfo }
+set ctexts   { area artwork city code country email eref facsimile keyword 
+               organization phone postamble preamble region seriesInfo spanx
+               street t ttcol title uri workgroup xref }
 
 set categories \
              { {std  "Standards Track" STD
@@ -2888,6 +3285,7 @@ proc begin {name {av {}}} {
     global anchorN
     global options
     global required ctexts categories iprstatus
+    global root
 
 # because TclXML... quotes attribute values containing "]"
     set kv ""
@@ -2903,6 +3301,10 @@ proc begin {name {av {}}} {
     if {$passno == 1} {
         set elem($elemN) $av
         array set attrs $av
+
+        set attrs(.lineno) $::xdv::lineno
+        lappend root [list $name [array get attrs]]
+        unset attrs(.lineno)
 
         foreach { n a } $required {
             switch -- [string compare $n $name] {
@@ -2970,15 +3372,25 @@ proc begin {name {av {}}} {
                 }
             }
 
-            section {
-                if {[catch { incr depth(section) }]} {
-                    set depth(section) 1
-                    set counter(section) 0
-                }
-                set counter(section) \
-                         [counting $counter(section) $depth(section)]
-                set l [split $counter(section) .]
+            section
+                -
+            appendix {
                 if {[lsearch0 $stack back] >= 0} {
+                    set type appendix
+                }
+                if {![string compare $type section]} {
+                    if {[catch { incr depth(section) }]} {
+                        set depth(section) 1
+                        set counter(section) 0
+                    }
+                } elseif {[catch { incr depth(appendix) }]} {
+                    set depth(appendix) 1
+                    set counter(appendix) 0
+                }
+                set counter($type) \
+                         [counting $counter($type) $depth($type)]
+                set l [split $counter($type) .]
+                if {![string compare $type appendix]} {
                     set type appendix
                     set l [lreplace $l 0 0 \
                                 [string index " ABCDEFGHIJKLMNOPQRSTUVWXYZ" \
@@ -3034,6 +3446,14 @@ proc begin {name {av {}}} {
                     set counter(editno) 1
                 }
                 set attrs(.EDITNO) $counter(editno)
+                set elem($elemN) [array get attrs]
+            }
+
+            texttable {
+                if {[catch { incr counter(table) }]} {
+                    set counter(table) 1
+                }
+                set attrs(.COUNTER) [set value $counter(table)]
                 set elem($elemN) [array get attrs]
             }
 
@@ -3122,6 +3542,8 @@ proc begin {name {av {}}} {
                 -
             section
                 -
+            appendix
+                -
             t
                 -
             list
@@ -3132,6 +3554,12 @@ proc begin {name {av {}}} {
                 -
             postamble
                 -
+            texttable
+                -
+            ttcol
+                -
+            c
+                -
             xref
                 -
             eref
@@ -3139,6 +3567,8 @@ proc begin {name {av {}}} {
             iref
                 -
             vspace
+                -
+            spanx
                 -
             back {
                 if {[lsearch0 $stack references] < 0} {
@@ -3179,6 +3609,7 @@ proc counting {tcount tdepth} {
 
 proc end {name} {
     global counter depth elemN elem passno stack xref
+    global root
 
     set frame [lindex $stack end]
     set stack [lreplace $stack end end]
@@ -3187,6 +3618,12 @@ proc end {name} {
     set elemX $av(elemN)
 
     if {$passno == 1} {
+        set f2 [lindex $root end]
+        set root [lreplace $root end end]
+        set parent [lindex $root end]
+        lappend parent $f2
+        set root [lreplace $root end end $parent]
+
         array set attrs $elem($elemX)
 
         set attrs(.CHILDREN) $av(children)
@@ -3194,8 +3631,13 @@ proc end {name} {
         set elem($elemX) [array get attrs]
 
         switch -- $name {
-            section {
-                incr depth(section) -1
+            section
+                -
+            appendix {
+                if {[lsearch0 $stack back] >= 0} {
+                    set name appendix
+                }
+                incr depth($name) -1
             }
 
             list {
@@ -3221,7 +3663,11 @@ proc end {name} {
             -
         preamble
             -
-        postamble {
+        postamble
+            -
+        texttable
+            -
+        c {
             if {[lsearch0 $stack references] < 0} {
                 pass2end_$name $elemX
             }
@@ -3235,6 +3681,7 @@ proc end {name} {
 proc pcdata {text} {
     global counter depth elemN elem passno stack xref
     global mode
+    global root
 
     if {[string length [set chars [string trim $text]]] <= 0} {
         return
@@ -3245,12 +3692,22 @@ proc pcdata {text} {
     set frame [lindex $stack end]
 
     if {$passno == 1} {
+        array set attrs [lindex [set f2 [lindex $root end]] 1]
+        set attrs(.pcdata) 1
+        set root [lreplace $root end end \
+                           [lreplace $f2 1 1 [array get attrs]]]
+        catch { array unset attrs }
+
         array set av [lrange $frame 1 end]
 
         set elemX $av(elemN)
         array set attrs $elem($elemX)
         if {![string compare $av(ctext) yes]} {
-            append attrs(.CTEXT) $chars
+            if {[lsearch0 $stack spanx] < 0} {
+                append attrs(.CTEXT) $chars
+            } else {
+                append attrs(.CTEXT) $text
+            }
         } else {
             set attrs(.CLINES) [llength [split $text "\n"]]
         }
@@ -3272,7 +3729,9 @@ proc pcdata {text} {
             -
         preamble
             -
-        postamble {
+        postamble
+            -
+        c {
             set pre 0
         }
 
@@ -3339,9 +3798,9 @@ proc pi {args} {
         }
 
         default {
-	    if {![string compare [lindex $args 0] xml-stylesheet]} {
-		return
-	    }
+            if {![string compare [lindex $args 0] xml-stylesheet]} {
+                return
+            }
             set text [join $args " "]
             unexpected warning "unknown PI: $text"
         }
@@ -3361,6 +3820,7 @@ proc normalize_options {} {
                         editing     .EDITING     \
                         emoticonic  .EMOTICONIC  \
                         iprnotified .IPRNOTIFIED \
+                        linkmailto  .LINKMAILTO  \
                         slides      .SLIDES      \
                         sortrefs    .SORTREFS    \
                         strict      .STRICT      \
@@ -3727,8 +4187,8 @@ SUCH DAMAGES."
     set elem($elemX) [array get attrs]
 
     if {([string compare $mode html]) \
-	    && ($options(.STRICT)) && (!$options(.TOC)) \
-	    && ($pageno > 15)} {
+            && ($options(.STRICT)) && (!$options(.TOC)) \
+            && ($pageno > 15)} {
         unexpected error "no table of contents, but $pageno pages"
     }
 }
@@ -3919,8 +4379,19 @@ proc pass2begin_front {elemX} {
     set authors ""
     set names ""
     foreach child [find_element author $attrs(.CHILDREN)] {
-        array set av [list initials "" surname "" fullname ""]
+        array set av [list initials "" surname "" fullname "" role ""]
         array set av $elem($child)
+
+        switch -- $av(role) {
+            editor
+                -
+            "" {
+            }
+
+            default {
+            unexpected error "invalid role attribute: $av(role)"
+            }
+        }
 
         set organization [find_element organization $av(.CHILDREN)]
         array set ov [list abbrev ""]
@@ -3938,6 +4409,9 @@ proc pass2begin_front {elemX} {
             lappend names $ov(abbrev)
         } else {
             lappend names $av(surname)
+            if {![string compare $av(role) editor]} {
+                append av(abbrev) ", Ed."
+            }
         }
         set authors [linsert $authors 0 [list $av(abbrev) $ov(abbrev)]]
     }
@@ -4029,7 +4503,9 @@ proc pass2end_front {elemX} {
                     }
                 }
 
-                section {
+                section
+                    -
+                appendix {
                     if {[llength [split [set label $cv(.COUNTER)] .]] \
                             > $options(.TOCDEPTH)} {
                         continue
@@ -4109,14 +4585,14 @@ proc pass2begin_note {elemX} {
 
 # the section element
 
-proc pass2begin_section {elemX} {
+proc pass2begin_section {elemX {appendP 0}} {
     global counter depth elemN elem passno stack xref
     global mode
 
     array set attrs [list anchor ""]
     array set attrs $elem($elemX)
 
-    if {[lsearch0 $stack section] < 0} {
+    if {([lsearch0 $stack appendix] < 0) && ([lsearch0 $stack section] < 0)} {
         set top 1
     } else {
         set top 0
@@ -4127,7 +4603,7 @@ proc pass2begin_section {elemX} {
     if {$top} {
         append s .
     }
-    if {([lsearch0 $stack back] >= 0) && ($top)} {
+    if {($appendP) || (([lsearch0 $stack back] >= 0) && ($top))} {
         set prefix "Appendix "
     }
     set title $attrs(title)
@@ -4137,8 +4613,12 @@ proc pass2begin_section {elemX} {
         set elemY [lindex $attrs(.CHILDREN) 0]
         array set cv $elem($elemY)
 
-        if {![string compare $cv(.NAME) figure]} {
-            set lines [pass2begin_figure $elemY 1]
+        switch -- $cv(.NAME) {
+            figure
+                -
+            texttable {
+                set lines [pass2begin_$cv(.NAME) $elemY 1]
+            }
         }
     }
 
@@ -4148,6 +4628,9 @@ proc pass2begin_section {elemX} {
     set elem($elemX) [array get attrs]
 }
 
+proc pass2begin_appendix {elemX {appendP 0}} {
+    pass2begin_section $elemX 1
+}
 
 # the t element
 
@@ -4170,15 +4653,16 @@ proc pass2begin_t {elemX} {
         if {![string compare [set attrs(style) $av(style)] format]} {
             set attrs(style) hanging
             set format $av(format)
+            set c $av(counter)
 
             if {![string compare $attrs(hangText) ""]} {
                 if {[string first "%d" $format] >= 0} {
                     set attrs(hangText) \
-                        [format $format [incr counter($format)]]
+                        [format $format [incr counter($c)]]
                 } else {
                     set attrs(hangText) \
                         [format $format \
-                                [offset2letters [incr counter($format)] 1]]
+                                [offset2letters [incr counter($c)] 1]]
                 }
             }
         }
@@ -4206,6 +4690,7 @@ proc pass2begin_list {elemX} {
 
     set style empty
     set format ""
+    set c ""
     set hangIndent 0
     foreach frame $stack {
         if {[string compare [lindex $frame 0] list]} {
@@ -4220,6 +4705,7 @@ proc pass2begin_list {elemX} {
         set format $av(format)
         set hangIndent $av(hangIndent)
     }
+    array set attrs [list counter ""]
     array set attrs $elem($elemX)
     catch { set hangIndent $attrs(hangIndent) }
     set attrs(hangIndent) $hangIndent
@@ -4241,10 +4727,11 @@ proc pass2begin_list {elemX} {
                 if {[string first $c [string range $format $x end]] > 0} {
                     unexpected error "too many $c's in format style"
                 }
-		if {[info exists attrs(startAt)]} {
-                    set counter($format) [expr $attrs(startAt)-1]
-		} elseif {![info exists counter($format)]} {
-                    set counter($format) 0
+                if {![string compare [set c $attrs(counter)] ""]} {
+                    set c $format
+                }
+                if {![info exists counter($c)]} {
+                    set counter($c) 0
                 }
             } else {
                 set style hanging
@@ -4252,7 +4739,7 @@ proc pass2begin_list {elemX} {
             }
         }
     }
-    array set attrs [list style $style format $format]
+    array set attrs [list style $style format $format counter $c]
     set elem($elemX) [array get attrs]
 
     set counters ""
@@ -4356,6 +4843,172 @@ proc pass2end_postamble {elemX} {
 }
 
 
+# the texttable element
+
+proc pass2begin_texttable {elemX {internal 0}} {
+    global counter depth elemN elem passno stack xref
+    global mode
+
+    array set attrs [list anchor "" title ""]
+    array set attrs $elem($elemX)
+
+    set lines 0
+    foreach p {preamble postamble} {
+        if {[llength [find_element $p $attrs(.CHILDREN)]] == 1} {
+            incr lines 3
+        }
+    }
+    if {$lines > 5} {
+        set lines 5
+    }
+
+    set cols {}
+    set aligns {}
+    set empty 0
+    set width 0
+    set didP 0
+    foreach ttcol [find_element ttcol $attrs(.CHILDREN)] {
+        catch { unset cv }
+        array set cv [list width "" align left]
+        array set cv $elem($ttcol)
+
+        switch -glob -- $cv(width) {
+            "" {
+                lappend cols ""
+                incr empty
+            }
+
+            {[100]%}
+                - 
+            {[1-9][0-9]%}
+                - 
+            {[1-9]%} {
+                lappend cols [string range $cv(width) 0 \
+                                     [expr [string length $cv(width)]-2]]
+                incr width [lindex $cols end]
+                set didP 1
+            }
+
+            default {
+                unexpected error "invalid width attribute: $cv(width)"
+            }
+        }
+
+        lappend aligns $cv(align)
+    }
+    if {($width+$empty) > 100} {
+        unexpected error "combined width greater than 100%"
+    } elseif {$empty > 0} {
+        set pct [expr (100-$width)/$empty]
+        set pct1 [expr 100-($width+$pct*($empty-1))]
+
+        set ncols {}
+        foreach col $cols {
+            if {![string compare $col ""]} {
+                set col $pct1
+                set pct1 $pct
+            }
+            lappend ncols $col
+        }
+        set cols $ncols
+    } elseif {$width != 100} {
+        unexpected error "combined width doesn't total 100%"
+    }
+
+    incr lines \
+         [expr [llength [find_element c $attrs(.CHILDREN)]]/[llength $cols]+3]
+
+    if {$internal} {
+        return $lines
+    }
+
+    set colmax [llength [set attrs(.COLS) $cols]]
+    set elem($elemX) [array get attrs]
+
+    set colno 0
+    set aligns {}
+    foreach ttcol [find_element ttcol $attrs(.CHILDREN)] {
+        catch { unset cv }
+        array set cv [list width "" align left]
+        array set cv $elem($ttcol)
+
+        set cv(.WIDTH) [lindex $cols $colno]
+        lappend aligns $cv(align)
+        set cv(.COLNO) [list [incr colno] $colmax]
+
+        set elem($ttcol) [array get cv]
+    }
+
+    set colno 0
+    set children [find_element c $attrs(.CHILDREN)]
+    set rowmax [expr [llength $children]/$colmax]
+    foreach c $children {
+        catch { unset cv }
+        array set cv $elem($c)
+
+        set offset [expr $colno%$colmax]
+        set cv(.ROWNO) [list [expr 1+($colno/$colmax)] $rowmax]
+        set cv(.WIDTH) [lindex $cols $offset]
+        set cv(.ALIGN) [lindex $aligns $offset]
+        set cv(.COLNO) [list [incr offset] $colmax]
+        incr colno
+
+        set elem($c) [array get cv]
+    }
+
+    texttable_$mode begin $lines $attrs(anchor) $attrs(title) $didP
+}
+
+proc pass2end_texttable {elemX} {
+    global counter depth elemN elem passno stack xref
+    global mode
+
+    array set attrs [list anchor "" title ""]
+    array set attrs $elem($elemX)
+
+    texttable_$mode end "" $attrs(anchor) $attrs(title)
+}
+
+proc pass2begin_ttcol {elemX} {
+    global counter depth elemN elem passno stack xref
+    global mode
+
+    array set attrs [list width "" align left]
+    array set attrs $elem($elemX)
+    switch -- $attrs(align) {
+        left
+            -
+        center
+            -
+        right {
+        }
+
+        default {
+            unexpected error \
+                "invalid value for align attribute: $attrs(align)"
+        }
+    }
+
+    ttcol_$mode $attrs(.CTEXT) $attrs(align) $attrs(.COLNO) $attrs(.WIDTH)
+}
+
+proc pass2begin_c {elemX} {
+    global counter depth elemN elem passno stack xref
+    global mode
+
+    array set attrs $elem($elemX)
+    c_$mode begin $attrs(.ROWNO) $attrs(.COLNO) $attrs(.ALIGN)
+}
+
+proc pass2end_c {elemX} {
+    global counter depth elemN elem passno stack xref
+    global mode
+
+    array set attrs $elem($elemX)
+    c_$mode end $attrs(.ROWNO) $attrs(.COLNO) $attrs(.ALIGN)
+}
+
+
 # the xref element
 
 proc pass2begin_xref {elemX} {
@@ -4433,6 +5086,20 @@ proc pass2begin_vspace {elemX} {
 }
 
 
+# the spanx element
+
+proc pass2begin_spanx {elemX} {
+    global counter depth elemN elem passno stack xref
+    global mode
+
+    array set attrs [list style emph]
+    array set attrs $elem($elemX)
+    set elem($elemX) [array get attrs]
+
+    spanx_$mode $attrs(.CTEXT) $attrs(style)
+}
+
+
 # the references/reference elements
 
 # we intercept the back element so we can put the Author's addresses
@@ -4463,7 +5130,7 @@ proc pass2begin_back {elemX} {
 
     set authors ""
     foreach child [find_element author $fv(.CHILDREN)] {
-        array set av [list initials "" surname "" fullname ""]
+        array set av [list initials "" surname "" fullname "" role ""]
         array set av $elem($child)
 
         set organization [find_element organization $av(.CHILDREN)]
@@ -4472,6 +5139,9 @@ proc pass2begin_back {elemX} {
 
         set block1 ""
         if {[string compare $av(fullname) ""]} {
+            if {![string compare $av(role) editor]} {
+                append av(fullname) " (editor)"
+            }
             lappend block1 $av(fullname)
         }
         if {[string compare $ov(.CTEXT) ""]} {
@@ -4635,10 +5305,11 @@ proc ref_names {elemX} {
     set childN [llength [set children [find_element author $fv(.CHILDREN)]]]
 
     set childA 0
+    set names {}
     foreach child [find_element author $fv(.CHILDREN)] {
         incr childA
 
-        array set av [list initials "" surname "" fullname ""]
+        array set av [list initials "" surname "" fullname "" role ""]
         array set av $elem($child)
 
         set organization [find_element organization $av(.CHILDREN)]
@@ -4685,6 +5356,9 @@ proc ref_names {elemX} {
         if {[string length $av(abbrev)] == 0} {
             lappend names [list $ov(.CTEXT) $uref]
         } else {
+            if {![string compare $av(role) editor]} {
+                append av(abbrev) ", Ed."
+            }
             lappend names [list $av(abbrev) $mref]
         }
     }
@@ -4726,7 +5400,9 @@ proc ref_date {elemX} {
     array set fv $elem($front)
 
     set date [find_element date $fv(.CHILDREN)]
-    array set dv $elem($date)
+    if {[catch { array set dv $elem($date) }]} {
+        return ""
+    }
     if {([info exists dv(month)]) && ([string compare $dv(month) ""])} {
         set date "$dv(month) $dv(year)"
     } else {
@@ -5056,6 +5732,9 @@ proc t_txt {tag counter style hangText editNo} {
     global options
     global eatP
 
+    if {$eatP < 0} {
+        set eatP 1
+    }
     if {![string compare $tag end]} {
         return
     }
@@ -5220,6 +5899,7 @@ proc postamble_txt {tag {editNo ""}} {
 
     switch -- $tag {
         begin {
+            cellE
             set eatP 1
             if {$options(.EDITING)} {
                 write_editno_txt $editNo
@@ -5227,6 +5907,288 @@ proc postamble_txt {tag {editNo ""}} {
         }
     }
 }
+
+proc texttable_txt {tag lines anchor title {didP 0}} {
+    global counter depth elemN elem passno stack xref
+
+    switch -- $tag {
+        begin {
+            if {[string compare $title ""]} {
+                incr lines 8
+            }
+            if {![have_lines $lines]} {
+                end_page_txt
+            }
+            flush_text
+
+            cellB $didP
+        }
+
+        end {
+            cellE
+
+            if {[string compare $anchor ""]} {
+                array set av $xref($anchor)
+                set prefix "Table $av(value)"
+                if {[string compare $title ""]} {
+                    append prefix ": [chars_expand $title]"
+                }
+                write_line_txt ""
+                write_text_txt $prefix c
+                write_line_txt ""
+            }
+        }
+    }
+}
+
+proc ttcol_txt {text align col width} {
+    cellP $text 0 [lindex $col 0] $width $align
+}
+
+proc c_txt {tag row col align} {
+    if {![string compare $tag begin]} {
+        cellP "" [lindex $row 0] [lindex $col 0]
+    }
+}
+
+proc cellB {didP} {
+    global rowNo colNo cells cellW
+
+    set cellW $didP
+}
+
+proc cellE {} {
+    global counter depth elemN elem passno stack xref
+    global options
+    global mode
+    global rowNo colNo cells cellW
+
+    if {[llength [array names cells]] == 0} {
+        return
+    }
+
+    set overhead [expr [llength [set cols $cells(width)]]*3+1]
+    set colNo $cells(maxcol)
+
+    set max {}
+    foreach col $cols {
+        lappend max 0
+    }
+    for {set row 0} {$row <= $rowNo} {incr row} {
+        for {set column 1} {$column <= $colNo} {incr column} {
+            if {![info exists cells($row,$column)]} {
+                set cells($row,$column) ""
+            }
+            set x [string length $cells($row,$column)]
+            if {$x > [lindex $max [set y [expr $column-1]]]} {
+                set max [lreplace $max $y $y $x]
+            }
+        }
+    }
+
+    set width 0
+    foreach x $max {
+        incr width $x
+    }
+    if {($cellW) || ($width+$overhead > 72)} {
+        set width 0
+        foreach col $cols {
+            incr width $col
+        }
+        set prefix "   "
+	incr overhead 3
+    } else {
+        set cols $max
+        set x [expr (72-($width+$overhead))/2]
+        set prefix [format "%*.*s" $x $x ""]
+    }
+
+    if {$width+$overhead > 72} {
+        set actual [expr 72-$overhead]
+        set ncols {}
+        set width 0
+        set lo 101
+        set hi 0
+        foreach col $cols {
+            if {[set ncol [expr round($col*($actual/100.0))]] < 3} {
+                set ncol 3
+            }
+            if {$ncol > 3} {
+                if {$ncol > $hi} { set hi $ncol }
+                if {$ncol < $lo} { set lo $ncol }
+            } else {
+                set ncol $col
+            }
+            lappend ncols $ncol
+            incr width $ncol
+        }
+        set cols $ncols
+
+        while {$width != $actual} {
+            set ncols {}
+            if {$width < $actual} {
+                set didP 1
+                set didC $lo
+            } else {
+                set didP -1
+                set didC $hi
+            }
+            set width 0
+            set lo 101
+            set hi 0
+            foreach ncol $cols {
+                if {($didP != 0) && ($ncol == $didC)} {
+                    set ncol [expr $ncol+($didP)]
+                    set didP 0
+                }
+                if {$ncol > $hi} { set hi $ncol }
+                if {$ncol < $lo} { set lo $ncol }
+                lappend ncols $ncol
+                incr width $ncol
+            }
+            set cols $ncols
+             if {$didP != 0} {
+                unexpected error "unable to normalize column widths"
+            }
+        }
+    }
+
+    if {![string compare $mode nr]} {
+        global nofillP
+
+        write_it ".nf"
+        set nofillP 1
+    }
+
+    set allP 0
+    set halfP 0
+    set colC " "
+    set dashC "-"
+    set rowC " "
+    switch -- [set cellR full] {
+        none {
+            set dashC " "
+        }
+
+        headers {
+            set halfP 1
+        }
+
+        full {
+            set allP 1
+            set colC "|"
+            set rowC "+"
+        }
+    }
+
+    write_line_$mode ""
+    if {$allP} {
+        set image $prefix
+        foreach col $cols {
+            append image "+-[textutil::strRepeat "-" $col]-"
+        }
+        append image "+"
+        write_line_$mode $image
+    }
+
+    foreach cell [array names cells *,*] {
+        set column [expr [lindex [split $cell ,] 1]-1]
+        
+        set cells($cell) [textutil::adjust $cells($cell) \
+                              -justify      [lindex $cells(align) $column] \
+                              -length       [lindex $cols $column] \
+                              -full         true \
+                              -strictlength true]
+    }
+
+    for {set row 0} {$row <= $rowNo} {incr row} {
+        if {!$options(.COMPACT) && ($row > 1)} {
+            set image $prefix
+            for {set column 1} {$column <= $colNo} {incr column} {
+                set width [lindex $cols [expr $column-1]]
+                append image [format "$colC %-*.*s " $width $width ""]
+            }
+            append image $colC
+            write_line_$mode $image
+        }
+
+        set lines 0
+        foreach cell [array name cells $row,*] {
+            if {[set x [llength [split $cells($cell) "\n"]]] > $lines} {
+                set lines $x
+            }
+        }
+
+        for {set line 0} {$line < $lines} {incr line} {
+            set image $prefix
+            for {set column 1} {$column <= $colNo} {incr column} {
+                set width [lindex $cols [expr $column-1]]
+                set data [format "%-*.*s" $width $width \
+                                 [lindex [split $cells($row,$column) "\n"] \
+                                         $line]]
+                append image "$colC $data "
+            }
+            append image $colC
+            write_line_$mode $image
+        }
+
+        set hitP 0
+        switch -- $cellR {
+            none {
+                if {($row == 0) && !$options(.COMPACT)} {
+                    set hitP 1
+                }
+            }
+
+            headers {
+                if {$row == 0} {
+                    set hitP 1
+                }
+            }
+
+            full {
+                if {($row == 0) || ($row == $rowNo)} {
+                    set hitP 1
+                }
+            }
+        }
+
+        if {$hitP} {
+            set image $prefix
+            foreach col $cols {
+                append image \
+                       "$rowC$dashC[textutil::strRepeat $dashC $col]$dashC"
+            }
+            append image "$rowC"
+            write_line_$mode $image
+        }
+    }
+    write_line_$mode ""
+
+    unset cells
+}
+
+proc cellP {data {row -1} {col -1} {width -1} {align ""}} {
+    global rowNo colNo cells
+
+    if {$row == -1} {
+        if {[llength [array names cells]] == 0} {
+            return 0
+        }
+    } else {
+        set rowNo $row
+        set colNo $col
+        if {$width > 0} {
+            lappend cells(width) $width
+            lappend cells(align) $align
+            set cells(maxcol) $col
+        }
+    }
+
+    append cells($rowNo,$colNo) [chars_expand $data 0]
+    return 1
+}
+
 
 proc xref_txt {text av target} {
     global eatP
@@ -5246,6 +6208,10 @@ proc xref_txt {text av target} {
             set line "Figure $attrs(value)"
         }
 
+        texttable {
+            set line "Table $attrs(value)"
+        }
+
         default {
             set line "\[$attrs(value)\]"
         }
@@ -5256,7 +6222,9 @@ proc xref_txt {text av target} {
                 -
             appendix
                 -
-            figure {
+            figure
+                -
+            texttable {
                 set line "[chars_expand $text] ($line)"
             }
 
@@ -5265,9 +6233,11 @@ proc xref_txt {text av target} {
             }
         }       
     }
-    write_text_txt $line
+    if {![cellP $line]} {
+        write_text_txt $line
+    }
 
-    set eatP 0
+    set eatP -1
 }
 
 proc eref_txt {text counter target} {
@@ -5282,9 +6252,11 @@ proc eref_txt {text counter target} {
         set erefs($counter) $target
         append line " \[$counter\]"
     }
-    write_text_txt $line
+    if {![cellP $line]} {
+        write_text_txt $line
+    }
 
-    set eatP 0
+    set eatP -1
 }
 
 proc iref_txt {item subitem flags} {
@@ -5310,6 +6282,32 @@ proc vspace_txt {lines} {
     }
 
     set eatP 1
+}
+
+proc spanx_txt {text style} {
+    global mode
+    global eatP
+
+    switch -- $style {
+        emph {
+            set c "*"
+        }
+
+        strong {
+            set c "'"
+        }
+
+        verb {
+            set c "\""
+        }
+
+        default {
+            set c ""
+        }
+    }
+    write_text_$mode $c[chars_expand $text]$c
+
+    set eatP -1
 }
 
 proc references_txt {tag {title ""} {erefP 0}} {
@@ -5501,7 +6499,7 @@ proc pcdata_txt {text {pre 0}} {
     global eatP
     global options
 
-    if {(!$pre) && ($eatP)} {
+    if {(!$pre) && ($eatP > 0)} {
         set text [string trimleft $text]
     }
     set eatP 0
@@ -5514,6 +6512,10 @@ proc pcdata_txt {text {pre 0}} {
         if {$options(.EMOTICONIC)} {
             set text [emoticonic_txt $text]
         }
+    }
+
+    if {[cellP $text]} {
+        return
     }
 
     foreach line [split $text "\n"] {
@@ -5629,7 +6631,11 @@ proc write_editno_txt {editNo} {
 proc write_text_txt {text {direction l}} {
     global buffer
     global indents indent
+    global eatP
 
+    if {$eatP < 0} {
+        set text " $text"
+    }
     if {![string compare $buffer ""]} {
         set buffer [format %*.*s $indent $indent ""]    
     }
@@ -5876,6 +6882,9 @@ set htmlstyle \
     p.copyright { color: #000000; font-size: 10px;
                   font-family: verdana, charcoal, helvetica, arial, sans-serif }
     p { margin-left: 2em; margin-right: 2em; }
+    span.emph { font-style: italic; }
+    span.strong { font-weight: bold; }
+    span.verb { font-style: oblique; }
     li { margin-left: 3em;  }
     ol { margin-left: 2em; margin-right: 2em; }
     ul.text { margin-left: 2em; margin-right: 2em; }
@@ -6230,6 +7239,65 @@ proc postamble_html {tag {editNo ""}} {
     t_html $tag "" "" "" $editNo
 }
 
+proc texttable_html {tag lines anchor title {didP 0}} {
+    global counter depth elemN elem passno stack xref
+
+    switch -- $tag {
+        begin {
+            if {[string compare $title ""]} {
+                puts $stdout "<br><hr size=\"1\" shade=\"0\">"
+            }
+            if {[string compare $anchor ""]} {
+                puts $stdout "<a name=\"$anchor\"></a>"
+            }
+        }
+
+        end {
+            if {[string compare $title ""]} {
+                puts $stdout "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" align=\"center\"><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br></td></tr></table><hr size=\"1\" shade=\"0\">"
+            }
+        }
+    }
+}
+
+proc ttcol_html {text align col width} {
+    global stdout
+
+    if {[lindex $col 0] == 1} {
+        puts $stdout "<table border=\"1\" align=\"center\" valign=\"top\">"
+        puts $stdout "<tr>"
+    }
+    puts -nonewline $stdout "<td align=\"$align\" width=\"$width%\">"
+    pcdata_html $text
+    puts $stdout "</td>"
+    if {[lindex $col 0] == [lindex $col 1]} {
+        puts $stdout "</tr>"
+    }
+}
+
+proc c_html {tag row col align} {
+    global stdout
+
+    switch -- $tag {
+        begin {
+            if {[lindex $col 0] == 1} {
+                puts $stdout "<tr>"
+            }
+            puts -nonewline $stdout "<td align=\"$align\">"
+        }
+
+        end {
+            puts $stdout "</td>"
+            if {[lindex $col 0] == [lindex $col 1]} {
+                puts $stdout "</tr>"
+                if {[lindex $row 0] == [lindex $row 1]} {
+                    puts $stdout "</table>"
+                }
+            }
+        }
+    }
+}
+
 proc xref_html {text av target} {
     global elem
     global options
@@ -6253,6 +7321,10 @@ proc xref_html {text av target} {
 
         figure {
             set line "Figure $attrs(value)"
+        }
+
+        texttable {
+            set line "Table $attrs(value)"
         }
 
         reference {
@@ -6293,7 +7365,9 @@ proc xref_html {text av target} {
                 -
             appendix
                 -
-            figure {
+            figure
+                -
+            texttable {
             }
 
             default {
@@ -6350,6 +7424,12 @@ proc vspace_html {lines} {
     }
 
     set hangP 0
+}
+
+proc spanx_html {text style} {
+    global stdout
+
+    puts -nonewline $stdout "<span class=\"$style\">$text</span>"
 }
 
 # don't need to return anything even though txt/nr versions do...
@@ -6476,6 +7556,7 @@ proc reference_html {prefix names title series formats date anchor target
 proc back_html {authors} {
     global stdout
     global contacts
+    global options
 
     switch -- [llength $authors] {
         0 {
@@ -6519,7 +7600,9 @@ proc back_html {authors} {
             set value [lindex $contact 1]
             switch -- $key {
                 email {
-                    set value "<a href=\"mailto:$value\">$value</a>"
+                    if {$options(.LINKMAILTO)} {
+                        set value "<a href=\"mailto:$value\">$value</a>"
+                    }
                 }
 
                 uri {
@@ -7010,7 +8093,7 @@ proc front_nr_begin {left right top bottom title status copying} {
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.17 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.18 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -7216,6 +8299,9 @@ proc t_nr {tag counter style hangText editNo} {
     global options
     global eatP
 
+    if {$eatP < 0} {
+        set eatP 1
+    }
     if {![string compare $tag end]} {
         return
     }
@@ -7376,12 +8462,54 @@ proc postamble_nr {tag {editNo ""}} {
 
     switch -- $tag {
         begin {
+            cellE
             set eatP 1
             if {$options(.EDITING)} {
                 write_editno_nr $editNo
             }
         }
     }
+}
+
+proc texttable_nr {tag lines anchor title {didP 0}} {
+    global counter depth elemN elem passno stack xref
+
+    switch -- $tag {
+        begin {
+            if {[string compare $title ""]} {
+                incr lines 8
+            }
+            if {![have_lines $lines]} {
+                end_page_nr
+            }
+            flush_text
+
+            cellB $didP
+        }
+
+        end {
+            cellE
+
+            if {[string compare $anchor ""]} {
+                array set av $xref($anchor)
+                set prefix "Table $av(value)"
+                if {[string compare $title ""]} {
+                    append prefix ": [chars_expand $title]"
+                }
+                write_line_nr ""
+                write_text_nr $prefix c
+                write_line_nr ""
+            }
+        }
+    }
+}
+
+proc ttcol_nr {text align col width} {
+    ttcol_txt $text $align $col $width
+}
+
+proc c_nr {tag row col align} {
+    c_txt $tag $row $col $align
 }
 
 proc xref_nr {text av target} {
@@ -7402,6 +8530,10 @@ proc xref_nr {text av target} {
             set line "Figure $attrs(value)"
         }
 
+        texttable {
+            set line "Table $attrs(value)"
+        }
+
         default {
             set line "\[$attrs(value)\]"
         }
@@ -7412,7 +8544,9 @@ proc xref_nr {text av target} {
                 -
             appendix
                 -
-            figure {
+            figure
+                -
+            texttable {
                 set line "[chars_expand $text] ($line)"
             }
 
@@ -7421,9 +8555,11 @@ proc xref_nr {text av target} {
             }
         }       
     }
-    write_text_nr $line
+    if {![cellP $line]} {
+        write_text_nr $line
+    }
 
-    set eatP 0
+    set eatP -1
 }
 
 proc eref_nr {text counter target} {
@@ -7438,9 +8574,11 @@ proc eref_nr {text counter target} {
         set erefs($counter) $target
         append line " \[$counter\]"
     }
-    write_text_nr $line
+    if {![cellP $line]} {
+        write_text_nr $line
+    }
 
-    set eatP 0
+    set eatP -1
 }
 
 proc iref_nr {item subitem flags} {
@@ -7466,6 +8604,10 @@ proc vspace_nr {lines} {
     }
 
     set eatP 1
+}
+
+proc spanx_nr {text style} {
+    spanx_txt $text $style
 }
 
 proc references_nr {tag {title ""} {erefP 0}} {
@@ -7688,7 +8830,7 @@ proc pcdata_nr {text {pre 0}} {
     global nofillP lastin
     global options
 
-    if {(!$pre) && ($eatP)} {
+    if {(!$pre) && ($eatP > 0)} {
         set text [string trimleft $text]
     }
     set eatP 0
@@ -7713,6 +8855,10 @@ proc pcdata_nr {text {pre 0}} {
         }
         set nofillP $pre
     }
+    if {[cellP $text]} {
+        return
+    }
+
     foreach line [split $text "\n"] {
         set line [chars_expand $line]
         if {$pre} {
@@ -7809,10 +8955,13 @@ proc write_editno_nr {editNo} {
     write_it ".br"
 }
 
-proc write_text_nr {text {direction l}} {
+proc write_text_nr {text {direction l} {magic 0}} {
     global buffer
-    global indents indent lastin
+    global eatP indents indent lastin
 
+    if {$eatP < 0} {
+        set text " $text"
+    }
     if {![string compare $direction c]} {
         flush_text
     }
@@ -7874,7 +9023,7 @@ proc write_text_nr {text {direction l}} {
         if {![string compare $direction c]} {
             write_it ".ce"
         }
-        write_line_nr [string trimleft $text]
+        write_line_nr [string trimleft $text] 0 $magic
 
         if {[string compare $rest ""]} {
             set buffer [format %*.*s%s $indent $indent "" $rest]
@@ -7884,7 +9033,7 @@ proc write_text_nr {text {direction l}} {
     }
 }
 
-proc write_line_nr {line {pre 0}} {
+proc write_line_nr {line {pre 0} {magic 0}} {
     global stdout
     global header footer lineno pageno blankP
     global buffer
@@ -7907,7 +9056,9 @@ proc write_line_nr {line {pre 0}} {
     if {($pre) && ($x) && ($lastin != 3)} {
         write_it ".in [set lastin 3]"
     }
-    regsub -all "\\\\" $line "\\\\\\" line
+    if {!$magic} { 
+        regsub -all "\\\\" $line "\\\\\\" line
+    }
     regsub -all "$nbsp" $line "\\\\0" line
     if {[string first "." $line] == 0} {
         set line "\\&$line"
@@ -7978,7 +9129,7 @@ proc pop_indent {} {
     global indent indents
 
     set pos [lindex $indents end]
-    incr indent -$pos
+    set indent [expr $indent - $pos]
     set indents [lreplace $indents end end]
 
     return $pos
@@ -8333,7 +9484,6 @@ proc ref::start_rfc {token av} {
     }
 
     set state(body) "<?xml version='1.0'?>
-<!DOCTYPE reference SYSTEM 'rfc2629.dtd'>
 
 <reference anchor='RFC[format %04d $rfc(number)]'>
 "
@@ -8410,6 +9560,289 @@ proc streplace {string first last {newstring ""}} {
     return $left$newstring$right
 }
 
+
+
+#
+# pity i didn't build this into xml2rfc initially,
+# because integrating properly would be a lot of work...
+#
+
+namespace eval xdv {
+    variable dtd
+
+    array set dtd {}
+}
+
+# strict content model does not allow section in back...
+set xdv::dtd(rfc2629.cmodel) \
+    [list rfc           [list front             ""   \
+                              middle            ""   \
+                              back              "?"] \
+          front         [list title             ""   \
+                              author            "+"  \
+                              date              ""   \
+                              area              "*"  \
+                              workgroup         "*"  \
+                              keyword           "*"  \
+                              abstract          "*"  \
+                              note              "*"] \
+          middle        [list section           "+"  \
+                              appendix          "*"  \
+                              section           "*"] \
+          back          [list references        "*"] \
+          title         {}                           \
+          author        [list organization      ""   \
+                              address           "*"] \
+          organization  {}                           \
+          address       [list postal            "?"  \
+                              phone             "?"  \
+                              facsimile         "?"  \
+                              email             "?"  \
+                              uri               "?"] \
+          postal        [list street            "+"  \
+                              [list city             \
+                                    region           \
+                                    code             \
+                                    country]    *]   \
+          street        {}                           \
+          city          {}                           \
+          region        {}                           \
+          code          {}                           \
+          country       {}                           \
+          phone         {}                           \
+          facsimile     {}                           \
+          email         {}                           \
+          uri           {}                           \
+          date          {}                           \
+          area          {}                           \
+          workgroup     {}                           \
+          keyword       {}                           \
+          abstract      [list t                 "+"] \
+          note          [list t                 "+"] \
+          section       [list [list t                \
+                                    figure           \
+                                    texttable        \
+                                    iref             \
+                                    section]    "*"] \
+          appendix      [list [list t                \
+                                    figure           \
+                                    texttable        \
+                                    iref             \
+                                    appendix]   "*"] \
+          t             [list [list list             \
+                                    figure           \
+                                    xref             \
+                                    eref             \
+                                    iref             \
+                                    vspace           \
+                                    spanx]      "*"] \
+          list          [list t                 "+"] \
+          xref          {}                           \
+          eref          {}                           \
+          iref          {}                           \
+          vspace        {}                           \
+          spanx         {}                           \
+          figure        [list preamble          "?"  \
+                              artwork           ""   \
+                              postamble         "?"] \
+          preamble      [list [list xref             \
+                                    eref             \
+                                    iref]       "*"] \
+          artwork       {}                           \
+          postamble     [list [list xref             \
+                                    eref             \
+                                    iref]       "*"] \
+          texttable     [list preamble          "?"  \
+                              ttcol             "+"  \
+                              c                 "*"  \
+                              postamble         "?"] \
+          ttcol         {}                           \
+          c             {}                           \
+          references    [list reference         "+"] \
+          reference     [list front             ""   \
+                              seriesInfo        "*"  \
+                              format            "*"] \
+          seriesInfo    {}                           \
+          format        {}]
+
+set xdv::dtd(rfc2629.pcdata) \
+    [list area         \
+          artwork      \
+          c            \
+          city         \
+          code         \
+          country      \
+          email        \
+          eref         \
+          facsimile    \
+          keyword      \
+          organization \
+          phone        \
+          postamble    \
+          preamble     \
+          region       \
+          spanx        \
+          street       \
+          t            \
+          ttcol        \
+          title        \
+          uri          \
+          workgroup    \
+          xref]
+
+set xdv::dtd(rfc2629.rattrs) \
+    [list date          [list year]   \
+          note          [list title]  \
+          section       [list title]  \
+          appendix      [list title]  \
+          xref          [list target] \
+          eref          [list target] \
+          iref          [list item]   \
+          seriesInfo    [list name    \
+                              value]  \
+          format        [list type]]
+
+set xdv::dtd(rfc2629.anchors) \
+    [list anchor]
+
+
+proc xdv::validate_tree {root CM AT AN PC} {
+    variable anchorX {}
+
+    validate_tree_aux $root $CM $AT $AN $PC {}
+}
+
+proc xdv::validate_tree_aux {parent CM AT AN PC stack} {
+    variable anchorX
+    variable dtd
+
+    set name [lindex $parent 0]
+    array set attrs [lindex $parent 1]
+    set children [lrange $parent 2 end]
+
+    lappend stack [list $name [array get attrs]]
+
+    array set cmodel $dtd($CM)
+    if {![info exists cmodel($name)]} {
+        report "not expecting <$name> element" $stack
+    }
+
+    array set required $dtd($AT)
+    if {[info exists required($name)]} {
+        foreach k $required($name) {
+            if {![info exists attrs($k)]} {
+                report "missing $k attribute in <$name> element" $stack
+            }
+        }
+    }
+
+    foreach {k v} [array get attrs] {
+        if {[lsearch -exact $dtd($AN) $name/$k] >= 0} {
+            if {[lsearch -exact $anchorX $v] >= 0} {
+                report "duplicate anchor '$v'" $stack
+            }
+            lappend anchorX $v
+        }
+    }
+
+    if {([info exists attrs(.pcdata)]) \
+            && ([lsearch $dtd($PC) $name] < 0)} {
+        report "not expecting pcdata in <$name> element" $stack
+    }
+
+    if {[catch { validate_cmodel $children $cmodel($name) } result]} {
+        report $result $stack
+    }
+
+    foreach child $children {
+        validate_tree_aux $child $CM $AT $AN $PC $stack
+    }
+}
+
+proc validate_cmodel {children cmodel} {
+    set elems [lindex $cmodel 0]
+    set quant [lindex $cmodel 1]
+    set cmodel [lrange $cmodel 2 end]
+
+    set i 0
+    foreach child $children {
+        set e [lindex $child 0]
+        if {[lsearch -exact $elems $e] >= 0} {
+            switch -- $quant {
+                + {
+                    set quant "*"
+                }
+                ? - "" {
+                    set elems [lindex $cmodel 0]
+                    set quant [lindex $cmodel 1]
+                    set cmodel [lrange $cmodel 2 end]
+                }
+            }
+        } else {
+            switch -- $quant {
+                ? - * {
+                    return [validate_cmodel [lrange $children $i end] \
+                                            $cmodel]
+                }
+
+                default {
+                    switch -- [llength $elems] {
+                        0 {
+                            error "not expecting <$e>"
+                        }
+
+                        1 {
+                            error "expecting <$elems> element, not <$e>"
+                        }
+
+                        default {
+                            error "expecting any of $elems, not <$e>"
+                        }
+                    }
+                }
+            }
+        }
+        incr i
+    }
+    if {([llength $elems] == 0) \
+            || ([lsearch -exact {? *} $quant] >= 0)} {
+        return
+    } else {
+        switch -- [llength $elems] {
+            1 {
+                error "expecting <$elems> element"
+            }
+
+            default {
+                error "expecting any of $elems"
+            }
+        }
+    }
+}
+
+proc xdv::report {result stack} {
+    if {[llength $stack] > 0} {
+        array set attrs [lindex [lindex $stack end] 1]
+        if {[info exists attrs(.lineno)]} {
+            append result " around line $attrs(.lineno)"
+        }
+
+        set text "Syntax: "
+        foreach frame $stack {
+            append text "\n    <[lindex $frame 0]"
+            foreach {k v} [lindex $frame 1] {
+                if {[string first . $k] < 0} {
+                    regsub -all {"} $v {&quot;} v
+                    append text " $k=\"$v\""
+                }
+            }
+            append text ">"
+        }
+        append result "\n\n$text"
+    }
+
+    error $result
+}
 
 
 #

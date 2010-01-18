@@ -3,7 +3,6 @@
 
 <?rfc compact='no'?>
 <?rfc editing='no'?>
-<?rfc emoticonic='yes'?>
 <?rfc header='README'?>
 <?rfc private='The README file'?>
 <?rfc subcompact='no'?>
@@ -11,7 +10,7 @@
 
 <rfc>
 <front>
-<title>xml2rfc v1.17</title>
+<title>xml2rfc v1.18</title>
 
 <author initials='M.T.' surname='Rose' fullname='Marshall T. Rose'>
 <organization>Dover Beach Consulting, Inc.</organization>
@@ -28,7 +27,7 @@
 </address>
 </author>
 
-<date month='February' year='2003'/>
+<date month='April' year='2003'/>
 </front>
 
 <middle>
@@ -76,7 +75,8 @@ then you're good to go with Tk version 8.</postamble>
 </figure>
 
 <t>Finally,
-you may notice a file called |"xml2sgml.tcl| in the distribution.
+you may notice a file called <spanx style='verb'>xml2sgml.tcl</spanx>
+in the distribution.
 It contains some extra functionality for a few special users &#151;
 so, if you don't know what it is, don't worry about it...</t>
 </section>
@@ -146,9 +146,9 @@ has some good information.</t>
 
 <section anchor='processing.instructions' title='Processing Instructions'>
 <figure>
-<preamble>A |*processing instruction| is a directive to an XML
-application.
-If you want to give directives to |'xml2rfc|,
+<preamble>A <spanx style='emph'>processing instruction</spanx> is a
+directive to an XML application.
+If you want to give directives to <spanx style='strong'>xml2rfc</spanx>,
 the processing instructions (PIs) look like this:</preamble>
 <artwork>
     &lt;?rfc keyword='value'?>
@@ -159,64 +159,89 @@ you don't need any PIs in your input file!</postamble>
 </figure>
 
 <section title='Option Settings'>
-<figure>
+<texttable>
 <preamble>The list of valid keywords are:</preamble>
-<artwork>
-    keyword     default     meaning
-    =======     =======     =======
-    strict      no          try to enforce the ID-nits conventions
+<ttcol width='20%' align='right'>keyword</ttcol>
+<ttcol width='20%' align='center'>default</ttcol>
+<ttcol             align='left'>meaning</ttcol>
 
-    iprnotified no          included 2026 10.4(d) boilerplate
+<c>strict</c>
+<c>no</c>
+<c>try to enforce the ID-nits conventions and DTD validity</c>
 
-    compact     no          when producing a txt/nroff file, try
-                            to conserve vertical whitespace
+<c>iprnotified</c>
+<c>no</c>
+<c>include boilerplate from Section 10.4(d) of <xref target='RFC2026' /></c>
+
+<c>linkmailto</c>
+<c>yes</c>
+<c>generate mailto: URL, as appropriate</c>
+
+<c>compact</c>
+<c>no</c>
+<c>when producing a txt/nroff file, try to conserve vertical whitespace</c>
     
-    subcompact  compact     if compact is "yes", then setting
-                            this to "no" will make things a 
-                            little less compact
+<c>subcompact</c>
+<c>compact</c>
+<c>if compact is "yes", then setting this to "no" will make things a little less compact</c>
 
-    toc         no          generate a table-of-contents
+<c>toc</c>
+<c>no</c>
+<c>generate a table-of-contents</c>
 
-    tocompact   yes         if toc is "yes", then setting this to
-                            "no" will make it a little less compact
+<c>tocompact</c>
+<c>yes</c>
+<c>if toc is "yes", then setting this to "no" will make it a little less compact</c>
 
-    tocdepth    3           if toc is "yes", then this determines the
-                            depth of the table-of-contents
+<c>tocdepth</c>
+<c>3</c>
+<c>if toc is "yes", then this determines the depth of the table-of-contents</c>
 
-    editing     no          insert editing marks for ease of
-                            discussing draft versions
+<c>editing</c>
+<c>no</c>
+<c>insert editing marks for ease of discussing draft versions</c>
 
-    private     ""          produce a private memo rather than
-                            an RFC or Internet-Draft.
+<c>private</c>
+<c>""</c>
+<c>produce a private memo rather than an RFC or Internet-Draft.</c>
 
-    header      ""          override the leftmost header string
+<c>header</c>
+<c>""</c>
+<c>override the leftmost header string</c>
 
-    footer      ""          override the center footer string
+<c>footer</c>
+<c>""</c>
+<c>override the center footer string</c>
 
-    slides      no          when producing an html file, produce
-                            multiple files for a slide show
+<c>slides</c>
+<c>no</c>
+<c>when producing an html file, produce multiple files for a slide show</c>
 
-    sortrefs    no          sort references
+<c>sortrefs</c>
+<c>no</c>
+<c>sort references</c>
 
-    symrefs     no          use anchors rather than numbers for
-                            references
+<c>symrefs</c>
+<c>no</c>
+<c>use anchors rather than numbers for references</c>
 
-    topblock    yes         put the famous header block on the first
-                            page
+<c>topblock</c>
+<c>yes</c>
+<c>put the famous header block on the first page</c>
 
-    background  ""          when producing an html file, use this
-                            image
+<c>background</c>
+<c>""</c>
+<c>when producing an html file, use this image</c>
 
-    needLines   n/a         an integer hint indicating how many
-                            contiguous lines are needed at this
-			    point in the output
-</artwork>
+<c>needLines</c>
+<c>n/a</c>
+<c>an integer hint indicating how many contiguous lines are needed at this point in the output</c>
 <postamble>Remember,
 that as with everything else in XML,
 keywords and values are case-sensitive.</postamble>
-</figure>
+</texttable>
 
-<t>With the exception of the |'needLines| PI,
+<t>With the exception of the <spanx style='strong'>needLines</spanx> PI,
 you normally put all of these processing instructions at the beginning
 of the document
 (right after the XML declartion).</t>
@@ -224,21 +249,24 @@ of the document
 
 <section title='Include Files'>
 <figure>
-<preamble>|'xml2rfc| has an include-file facility,
+<preamble><spanx style='strong'>xml2rfc</spanx> has an include-file facility,
 e.g.,</preamble>
 <artwork>
     &lt;?rfc include='file'?>
 </artwork>
-<postamble>|'xml2rfc| will consult the $XML_LIBRARY environment variable
-for a search path of where to look for files.
+<postamble><spanx style='strong'>xml2rfc</spanx> will consult the
+$XML_LIBRARY environment variable for a search path of where to look
+for files.
 (If this envariable isn't set,
 the directory containing the file that contains the include-file
 directive is used.)</postamble>
 </figure>
 
 <figure>
-<preamble>You can also have |'xml2rfc| set this envariable directly,
-by creating a file called |".xml2rfc.rc| in the directory where your
+<preamble>You can also have <spanx style='strong'>xml2rfc</spanx> set
+this envariable directly,
+by creating a file called <spanx style='verb'>.xml2rfc.rc</spanx> in
+the directory where your
 main file is,
 e.g.,</preamble>
 <artwork><![CDATA[
@@ -268,7 +296,8 @@ set env(XML_LIBRARY) $library
 </figure>
 
 <t>There are links to various bibliographic databases (RFCs, I-Ds, and so on)
-on the |'xml2rfc| <eref target='http://xml.resource.org/'>homepage</eref>.</t>
+on the <spanx style='strong'>xml2rfc</spanx>
+<eref target='http://xml.resource.org/'>homepage</eref>.</t>
 </section>
 </section>
 </section>
@@ -281,8 +310,9 @@ In particular,
 of the 2629bis document enumerates the additions.</t>
 
 <t>In addition,
-|'xml2rfc| recognizes an undocumented |'src| attribute in the
-|'artwork| element,
+<spanx style='strong'>xml2rfc</spanx> recognizes an undocumented
+<spanx style='strong'>src</spanx> attribute in the
+<spanx style='strong'>artwork</spanx> element,
 but only if HTML is being generated,
 e.g.,
 <figure>
@@ -290,46 +320,79 @@ e.g.,
        <figure><artwork src='layers.gif' /></figure>
 ]]></artwork>
 <postamble>In this case,
-an |'img| tag is placed in the HTML output,
-and the textual contents of the |'artwork|, |'preamble|, and
-|'postamble| elements are ignored.</postamble>
+an <spanx style='strong'>img</spanx> tag is placed in the HTML output,
+and the textual contents of the <spanx style='strong'>artwork</spanx>,
+       <spanx style='strong'>preamble</spanx>, and
+<spanx style='strong'>postamble</spanx> elements are ignored.</postamble>
 </figure></t>
 </section>
 
 <section title='Limitations of xml2rfc'>
 <t><list style='symbols'>
-<t>The |'figure| element's |'title| attribute is ignored,
+<t>The <spanx style='strong'>figure</spanx> element's <spanx style='strong'>title</spanx> attribute is ignored,
 except when generating HTML.</t>
 
-<t>The |'xref| element's |'pageno| attribute is ignored.</t>
+<t>The <spanx style='strong'>xref</spanx> element's
+<spanx style='strong'>pageno</spanx> attribute is ignored.</t>
 </list></t>
 </section>
 </middle>
 
 <back>
+<references>
+<reference anchor='RFC2026'>
+
+<front>
+<title abbrev='Internet Standards Process'>The Internet Standards Process -- Revision 3</title>
+<author initials='S.' surname='Bradner' fullname='Scott O. Bradner'>
+<organization>Harvard University</organization>
+<address>
+<postal>
+<street>1350 Mass. Ave.</street>
+<city>Cambridge</city>
+<region>MA</region>
+<code>02138</code>
+<country>US</country></postal>
+<phone>+1 617 495 3864</phone>
+<email>sob@harvard.edu</email></address></author>
+<date month='October' year='1996' />
+<abstract>
+<t>This memo documents the process used by the Internet community for the standardization of protocols and procedures.  It defines the stages in the standardization process, the requirements for moving a document between stages and the types of documents used during this process.  It also addresses the intellectual property rights and copyright issues associated with the standards process.</t></abstract></front>
+
+<seriesInfo name='BCP' value='9' />
+<seriesInfo name='RFC' value='2026' />
+<format type='TXT' octets='86731' target='ftp://ftp.isi.edu/in-notes/rfc2026.txt' />
+</reference>
+
+</references>
+
 <section title="MacOS 9 Installation (courtesy of Ned Freed)">
 <t><list style='numbers'>
 <t>Install Tcl/Tk 8.3.4</t>
 
 <t>When you performed Step 1,
-a folder in your |""Extensions"| folder called |""Tool Command Language"| was 
+a folder in your <spanx style='verb'>Extensions</spanx> folder
+called <spanx style='verb'>Tool Command Language</spanx> was 
 created.
-Create a new folder under |""Extensions"|,
+Create a new folder under <spanx style='verb'>Extensions</spanx>,
 with any name you like.</t>
 
-<t>Drag the file |"xml2rfc.tcl| onto the |""Drag &amp; Drop Tclets"|
+<t>Drag the file <spanx style='verb'>xml2rfc.tcl</spanx> onto the
+<spanx style='verb'>Drag &amp; Drop Tclets</spanx>
 application that was installed in Step 1.</t>
 
-<t>When asked for an appropriate |"wish| stub,
-select |""Wish 8.3.4"|.</t>
+<t>When asked for an appropriate <spanx style='verb'>wish</spanx> stub,
+select <spanx style='verb'>Wish 8.3.4</spanx>.</t>
 
-<t>The |""Drap &amp; Drop Tclets"| application will write out an
-executable version of |'xml2rfc|.</t>
+<t>The <spanx style='verb'>Drap &amp; Drop Tclets</spanx>
+application will write out an executable version of
+<spanx style='strong'>xml2rfc</spanx>.</t>
 </list></t>
 </section>
 
 <section title='rfc2629.xslt (courtesy of Julian Reschke)'>
-<t>The file |"rfc2629.xslt| can be used with an XSLT-capable formatter
+<t>The file <spanx style='verb'>rfc2629.xslt</spanx> can be used with
+an XSLT-capable formatter
 (i.e., IE6) to produce HTML.
 A word of warning though:
 the XSLT script doesn't support the processing instructions discussed
@@ -337,7 +400,7 @@ the XSLT script doesn't support the processing instructions discussed
 </section>
 
 <section title='Copyrights'>
-<t>(c) 2002 Marshall T. Rose</t>
+<t>(c) 2003 Marshall T. Rose</t>
 
 <t>Hold harmless the author, and any lawful use is allowed.</t>
 </section>

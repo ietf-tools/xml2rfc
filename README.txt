@@ -2,10 +2,10 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                       February 13, 2003
+                                                              April 2003
 
 
-                             xml2rfc v1.17
+                             xml2rfc v1.18
 
 
 Table of Contents
@@ -21,6 +21,7 @@ Table of Contents
    4.1.2 Include Files  . . . . . . . . . . . . . . . . . . . . . . .  6
    5.    Additions to RFC 2629  . . . . . . . . . . . . . . . . . . .  8
    6.    Limitations of xml2rfc . . . . . . . . . . . . . . . . . . .  9
+         References . . . . . . . . . . . . . . . . . . . . . . . . . 10
          Author's Address . . . . . . . . . . . . . . . . . . . . . . 10
    A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . . 11
    B.    rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . . 12
@@ -51,10 +52,9 @@ Table of Contents
 
 
 
-
 Rose                                                            [Page 1]
 
-README                       xml2rfc v1.17                 February 2003
+README                       xml2rfc v1.18                    April 2003
 
 
 1. Introduction
@@ -62,7 +62,7 @@ README                       xml2rfc v1.17                 February 2003
    This is a package to convert memos written in XML to the RFC format.
 
    If you don't want to install any software, you can use the web-based
-   service [1].
+   service [2].
 
 
 
@@ -110,7 +110,7 @@ README                       xml2rfc v1.17                 February 2003
 
 Rose                                                            [Page 2]
 
-README                       xml2rfc v1.17                 February 2003
+README                       xml2rfc v1.18                    April 2003
 
 
 2. Requirements
@@ -119,7 +119,7 @@ README                       xml2rfc v1.17                 February 2003
    scripting language, Tk is Tcl with support for your windowing system.
 
    To get a source or binary distribution for your system, go to the
-   Scriptics website [2] and install it. If you get the binary
+   Scriptics website [3] and install it. If you get the binary
    distribution, this is pretty simple.
 
    Of course, you may already have Tcl version 8. To find out, try
@@ -166,7 +166,7 @@ README                       xml2rfc v1.17                 February 2003
 
 Rose                                                            [Page 3]
 
-README                       xml2rfc v1.17                 February 2003
+README                       xml2rfc v1.18                    April 2003
 
 
 3. Testing
@@ -222,12 +222,12 @@ README                       xml2rfc v1.17                 February 2003
 
 Rose                                                            [Page 4]
 
-README                       xml2rfc v1.17                 February 2003
+README                       xml2rfc v1.18                    April 2003
 
 
 4. Next steps
 
-   Read the 2629bis [3] document. In particular, Section 3 has some good
+   Read the 2629bis [4] document. In particular, Section 3 has some good
    information.
 
 4.1 Processing Instructions
@@ -245,61 +245,72 @@ README                       xml2rfc v1.17                 February 2003
 
    The list of valid keywords are:
 
-       keyword     default     meaning
-       =======     =======     =======
-       strict      no          try to enforce the ID-nits conventions
-
-       iprnotified no          included 2026 10.4(d) boilerplate
-
-       compact     no          when producing a txt/nroff file, try
-                               to conserve vertical whitespace
-
-       subcompact  compact     if compact is "yes", then setting
-                               this to "no" will make things a
-                               little less compact
-
-       toc         no          generate a table-of-contents
-
-       tocompact   yes         if toc is "yes", then setting this to
-                               "no" will make it a little less compact
-
-       tocdepth    3           if toc is "yes", then this determines the
-                               depth of the table-of-contents
-
-       editing     no          insert editing marks for ease of
-                               discussing draft versions
-
-       private     ""          produce a private memo rather than
-                               an RFC or Internet-Draft.
-
-       header      ""          override the leftmost header string
+   +--------------+--------------+-------------------------------------+
+   |      keyword |    default   | meaning                             |
+   +--------------+--------------+-------------------------------------+
+   |       strict |      no      | try to enforce the ID-nits          |
+   |              |              | conventions and DTD validity        |
+   |              |              |                                     |
+   |  iprnotified |      no      | include boilerplate from Section    |
+   |              |              | 10.4(d) of [1]                      |
+   |              |              |                                     |
+   |   linkmailto |      yes     | generate mailto: URL, as            |
+   |              |              | appropriate                         |
+   |              |              |                                     |
+   |      compact |      no      | when producing a txt/nroff file,    |
+   |              |              | try to conserve vertical whitespace |
+   |              |              |                                     |
+   |   subcompact |    compact   | if compact is "yes", then setting   |
+   |              |              | this to "no" will make things a     |
+   |              |              | little less compact                 |
+   |              |              |                                     |
+   |          toc |      no      | generate a table-of-contents        |
+   |              |              |                                     |
+   |    tocompact |      yes     | if toc is "yes", then setting this  |
+   |              |              | to "no" will make it a little less  |
+   |              |              | compact                             |
+   |              |              |                                     |
+   |     tocdepth |       3      | if toc is "yes", then this          |
+   |              |              | determines the depth of the         |
+   |              |              | table-of-contents                   |
 
 
 
 Rose                                                            [Page 5]
 
-README                       xml2rfc v1.17                 February 2003
+README                       xml2rfc v1.18                    April 2003
 
 
-       footer      ""          override the center footer string
-
-       slides      no          when producing an html file, produce
-                               multiple files for a slide show
-
-       sortrefs    no          sort references
-
-       symrefs     no          use anchors rather than numbers for
-                               references
-
-       topblock    yes         put the famous header block on the first
-                               page
-
-       background  ""          when producing an html file, use this
-                               image
-
-       needLines   n/a         an integer hint indicating how many
-                               contiguous lines are needed at this
-   			    point in the output
+   |              |              |                                     |
+   |      editing |      no      | insert editing marks for ease of    |
+   |              |              | discussing draft versions           |
+   |              |              |                                     |
+   |      private |      ""      | produce a private memo rather than  |
+   |              |              | an RFC or Internet-Draft.           |
+   |              |              |                                     |
+   |       header |      ""      | override the leftmost header string |
+   |              |              |                                     |
+   |       footer |      ""      | override the center footer string   |
+   |              |              |                                     |
+   |       slides |      no      | when producing an html file,        |
+   |              |              | produce multiple files for a slide  |
+   |              |              | show                                |
+   |              |              |                                     |
+   |     sortrefs |      no      | sort references                     |
+   |              |              |                                     |
+   |      symrefs |      no      | use anchors rather than numbers for |
+   |              |              | references                          |
+   |              |              |                                     |
+   |     topblock |      yes     | put the famous header block on the  |
+   |              |              | first page                          |
+   |              |              |                                     |
+   |   background |      ""      | when producing an html file, use    |
+   |              |              | this image                          |
+   |              |              |                                     |
+   |    needLines |      n/a     | an integer hint indicating how many |
+   |              |              | contiguous lines are needed at this |
+   |              |              | point in the output                 |
+   +--------------+--------------+-------------------------------------+
 
    Remember, that as with everything else in XML, keywords and values
    are case-sensitive.
@@ -321,20 +332,9 @@ README                       xml2rfc v1.17                 February 2003
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 Rose                                                            [Page 6]
 
-README                       xml2rfc v1.17                 February 2003
+README                       xml2rfc v1.18                    April 2003
 
 
    You can also have 'xml2rfc' set this envariable directly, by creating
@@ -365,7 +365,7 @@ README                       xml2rfc v1.17                 February 2003
    set env(XML_LIBRARY) $library
 
    There are links to various bibliographic databases (RFCs, I-Ds, and
-   so on) on the 'xml2rfc' homepage [4].
+   so on) on the 'xml2rfc' homepage [5].
 
 
 
@@ -390,7 +390,7 @@ README                       xml2rfc v1.17                 February 2003
 
 Rose                                                            [Page 7]
 
-README                       xml2rfc v1.17                 February 2003
+README                       xml2rfc v1.18                    April 2003
 
 
 5. Additions to RFC 2629
@@ -446,7 +446,7 @@ README                       xml2rfc v1.17                 February 2003
 
 Rose                                                            [Page 8]
 
-README                       xml2rfc v1.17                 February 2003
+README                       xml2rfc v1.18                    April 2003
 
 
 6. Limitations of xml2rfc
@@ -502,18 +502,21 @@ README                       xml2rfc v1.17                 February 2003
 
 Rose                                                            [Page 9]
 
-README                       xml2rfc v1.17                 February 2003
+README                       xml2rfc v1.18                    April 2003
 
 
-URIs
+References
 
-   [1]  <http://xml.resource.org/>
+   [1]  Bradner, S., "The Internet Standards Process -- Revision 3", BCP
+        9, RFC 2026, October 1996.
 
-   [2]  <http://www.scriptics.com/software/tcltk/8.4.html>
+   [2]  <http://xml.resource.org/>
 
-   [3]  <draft-mrose-writing-rfcs.html>
+   [3]  <http://www.scriptics.com/software/tcltk/8.4.html>
 
-   [4]  <http://xml.resource.org/>
+   [4]  <draft-mrose-writing-rfcs.html>
+
+   [5]  <http://xml.resource.org/>
 
 
 Author's Address
@@ -553,12 +556,9 @@ Author's Address
 
 
 
-
-
-
 Rose                                                           [Page 10]
 
-README                       xml2rfc v1.17                 February 2003
+README                       xml2rfc v1.18                    April 2003
 
 
 Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
@@ -614,7 +614,7 @@ Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
 
 Rose                                                           [Page 11]
 
-README                       xml2rfc v1.17                 February 2003
+README                       xml2rfc v1.18                    April 2003
 
 
 Appendix B. rfc2629.xslt (courtesy of Julian Reschke)
@@ -670,12 +670,12 @@ Appendix B. rfc2629.xslt (courtesy of Julian Reschke)
 
 Rose                                                           [Page 12]
 
-README                       xml2rfc v1.17                 February 2003
+README                       xml2rfc v1.18                    April 2003
 
 
 Appendix C. Copyrights
 
-   (c) 2002 Marshall T. Rose
+   (c) 2003 Marshall T. Rose
 
    Hold harmless the author, and any lawful use is allowed.
 
