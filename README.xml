@@ -11,7 +11,7 @@
 
 <rfc>
 <front>
-<title>xml2rfc v1.13</title>
+<title>xml2rfc v1.14</title>
 
 <author initials='M.T.' surname='Rose' fullname='Marshall T. Rose'>
 <organization>Dover Beach Consulting, Inc.</organization>
@@ -28,7 +28,7 @@
 </address>
 </author>
 
-<date month='June' year='2002'/>
+<date month='August' year='2002'/>
 </front>
 
 <middle>
@@ -57,7 +57,7 @@ this is pretty simple.</t>
 you may already have Tcl version 8.
 To find out,
 try typing this command from the shell
-(including the "MS-DOS Prompt"):</preamble>
+(or the "MS-DOS Prompt"):</preamble>
 <artwork>
     % tclsh
 </artwork>
@@ -149,10 +149,13 @@ has some good information.</t>
 <preamble>A |*processing instruction| is a directive to an XML
 application.
 If you want to give directives to |'xml2rfc|,
-the PIs look like this:</preamble>
+the processing instructions (PIs) look like this:</preamble>
 <artwork>
     &lt;?rfc keyword='value'?>
 </artwork>
+<postamble>Of course,
+if you like the default behavior,
+you don't need any PIs in your input file!</postamble>
 </figure>
 
 <section title='Option Settings'>
@@ -161,8 +164,8 @@ the PIs look like this:</preamble>
 <artwork>
     keyword     default     meaning
     =======     =======     =======
-    compact     no          when producing a .txt file, try to
-                            conserve vertical whitespace
+    compact     no          when producing a txt/nroff file, try
+                            to conserve vertical whitespace
     
     subcompact  compact     if compact is "yes", then setting
                             this to "no" will make things a 
@@ -186,7 +189,7 @@ the PIs look like this:</preamble>
 
     footer      ""          override the center footer string
 
-    slides      no          when producing an .html file, produce
+    slides      no          when producing an html file, produce
                             multiple files for a slide show
 
     sortrefs    no          sort references
@@ -194,7 +197,10 @@ the PIs look like this:</preamble>
     symrefs     no          use anchors rather than numbers for
                             references
 
-    background  ""          when producing an .html file, use this
+    topblock    yes         put the famous header block on the first
+                            page
+
+    background  ""          when producing an html file, use this
                             image
 </artwork>
 <postamble>Remember,
@@ -219,26 +225,33 @@ directive is used.)</postamble>
 
 <figure>
 <preamble>You can also have |'xml2rfc| set this envariable directly,
-by including a file called |".xml2rfc.rc| in the directory where your
+by creating a file called |".xml2rfc.rc| in the directory where your
 main file is,
 e.g.,</preamble>
 <artwork><![CDATA[
-global env
+global env tcl_platform
 
-if {![info exists env(XML_LIBRARY)]} {
-    set env(XML_LIBRARY) \
-        ";\\home\\rfcs\\include;\\home\\rfcs\\bibxml"
+if {![string compare $tcl_platform(platform) windows]} {
+    set sep ";"
+} else {
+    set sep ":"
 }
+
+if {[catch { set env(XML_LIBRARY) } library]} {
+    set library ""
+    foreach bibxmlD [lsort -dictionary \
+                           [glob -nocomplain $HOME/rfcs/bibxml/*]] {
+        append library $sep$bibxmlD
+    }
+}
+
 set nativeD [file nativename $inputD]
-if {[lsearch [split $env(XML_LIBRARY) ";"] $nativeD] < 0} {
-    set env(XML_LIBRARY) "$nativeD;$env(XML_LIBRARY)"
+if {[lsearch [split $library $sep] $nativeD] < 0} {
+    set library "$nativeD$sep$library"
 }
+
+set env(XML_LIBRARY) $library
 ]]></artwork>
-<postamble>which,
-on Windows,
-sets the envariable to a default value,
-and then inserts, at the front,
-the directory where your main file is.</postamble>
 </figure>
 
 <t>There are links to various bibliographic databases (RFCs, I-Ds, and so on)
@@ -248,39 +261,25 @@ on the |'xml2rfc| <eref target='http://xml.resource.org/'>homepage</eref>.</t>
 </section>
 
 <section title='Additions to RFC 2629'>
-<t><list style='symbols'>
-<t>The |'artwork| element has an undocumented |'src| attribute that is
-consulted only if slides are being generated,
+<t>A few additions have been made to the format originally defined in
+RFC 2629.
+In particular,
+<eref target='draft-mrose-writing-rfcs.html#anchor19'>Appendix C</eref>
+of the 2629bis document enumerates the additions.</t>
+
+<t>In addition,
+|'xml2rfc| recognizes an undocumented |'src| attribute in the
+|'artwork| element,
+that is consulted only if slides are being generated,
 e.g.,
 <figure>
 <artwork><![CDATA[
        <figure><artwork src='layers.gif' /></figure>
 ]]></artwork>
 </figure></t>
-
-<t>The |'artwork| element has optional |'name| and |'type| attributes.</t>
-
-<t>The |'references| element may occur more than once in the |'back| element
-(e.g., for normative and non-normative references).
-Further,
-the element has an optional |'title| attribute.</t>
-
-<t>The value of the |'list| element's |'style| attribute can start with
-|""format "|.</t>
-
-<t>If the |'style| attribute of the |'list| element has either of the
-values |""hanging"| or |""format"|,
-then a second,
-optional attribute,
-called |'hangIndent| is consulted.</t>
-</list>
-For more information on these last two additions,
-see Section 2.3.1.2 of the
-<eref target='draft-mrose-writing-rfcs.html#list'>2629bis</eref>
-document for the details.</t>
 </section>
 
-<section title='Limitations'>
+<section title='Limitations of xml2rfc'>
 <t><list style='symbols'>
 <t>The |'figure| element's |'title| attribute is ignored,
 except when generating HTML.</t>

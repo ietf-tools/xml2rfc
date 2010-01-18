@@ -2,10 +2,10 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                            June 9, 2002
+                                                         August 16, 2002
 
 
-                             xml2rfc v1.13
+                             xml2rfc v1.14
 
 
 Table of Contents
@@ -19,11 +19,11 @@ Table of Contents
    4.1   Processing Instructions  . . . . . . . . . . . . . . . . . .  5
    4.1.1 Option Settings  . . . . . . . . . . . . . . . . . . . . . .  5
    4.1.2 Include Files  . . . . . . . . . . . . . . . . . . . . . . .  6
-   5.    Additions to RFC 2629  . . . . . . . . . . . . . . . . . . .  7
-   6.    Limitations  . . . . . . . . . . . . . . . . . . . . . . . .  8
-         Author's Address . . . . . . . . . . . . . . . . . . . . . .  9
-   A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . . 10
-   B.    rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . . 11
+   5.    Additions to RFC 2629  . . . . . . . . . . . . . . . . . . .  8
+   6.    Limitations of xml2rfc . . . . . . . . . . . . . . . . . . .  9
+         Author's Address . . . . . . . . . . . . . . . . . . . . . . 10
+   A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . . 11
+   B.    rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . . 12
 
 
 
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose                                                            [Page 1]
 
-README                        xml2rfc v1.13                    June 2002
+README                       xml2rfc v1.14                   August 2002
 
 
 1. Introduction
@@ -110,7 +110,7 @@ README                        xml2rfc v1.13                    June 2002
 
 Rose                                                            [Page 2]
 
-README                        xml2rfc v1.13                    June 2002
+README                       xml2rfc v1.14                   August 2002
 
 
 2. Requirements
@@ -123,7 +123,7 @@ README                        xml2rfc v1.13                    June 2002
    distribution, this is pretty simple.
 
    Of course, you may already have Tcl version 8.  To find out, try
-   typing this command from the shell (including the "MS-DOS Prompt"):
+   typing this command from the shell (or the "MS-DOS Prompt"):
 
        % tclsh
 
@@ -166,7 +166,7 @@ README                        xml2rfc v1.13                    June 2002
 
 Rose                                                            [Page 3]
 
-README                        xml2rfc v1.13                    June 2002
+README                       xml2rfc v1.14                   August 2002
 
 
 3. Testing
@@ -222,7 +222,7 @@ README                        xml2rfc v1.13                    June 2002
 
 Rose                                                            [Page 4]
 
-README                        xml2rfc v1.13                    June 2002
+README                       xml2rfc v1.14                   August 2002
 
 
 4. Next steps
@@ -233,10 +233,13 @@ README                        xml2rfc v1.13                    June 2002
 4.1 Processing Instructions
 
    A *processing instruction* is a directive to an XML application.  If
-   you want to give directives to 'xml2rfc', the PIs look like this:
+   you want to give directives to 'xml2rfc', the processing instructions
+   (PIs) look like this:
 
        <?rfc keyword='value'?>
 
+   Of course, if you like the default behavior, you don't need any PIs
+   in your input file!
 
 4.1.1 Option Settings
 
@@ -244,8 +247,8 @@ README                        xml2rfc v1.13                    June 2002
 
        keyword     default     meaning
        =======     =======     =======
-       compact     no          when producing a .txt file, try to
-                               conserve vertical whitespace
+       compact     no          when producing a txt/nroff file, try
+                               to conserve vertical whitespace
 
        subcompact  compact     if compact is "yes", then setting
                                this to "no" will make things a
@@ -269,22 +272,26 @@ README                        xml2rfc v1.13                    June 2002
 
        footer      ""          override the center footer string
 
-       slides      no          when producing an .html file, produce
-                               multiple files for a slide show
-
-       sortrefs    no          sort references
+       slides      no          when producing an html file, produce
 
 
 
 Rose                                                            [Page 5]
 
-README                        xml2rfc v1.13                    June 2002
+README                       xml2rfc v1.14                   August 2002
 
+
+                               multiple files for a slide show
+
+       sortrefs    no          sort references
 
        symrefs     no          use anchors rather than numbers for
                                references
 
-       background  ""          when producing an .html file, use this
+       topblock    yes         put the famous header block on the first
+                               page
+
+       background  ""          when producing an html file, use this
                                image
 
    Remember, that as with everything else in XML, keywords and values
@@ -301,26 +308,19 @@ README                        xml2rfc v1.13                    June 2002
    set, the directory containing the file that contains the include-file
    directive is used.)
 
-   You can also have 'xml2rfc' set this envariable directly, by
-   including a file called ".xml2rfc.rc" in the directory where your
-   main file is, e.g.,
 
-   global env
 
-   if {![info exists env(XML_LIBRARY)]} {
-       set env(XML_LIBRARY) \
-           ";\\home\\rfcs\\include;\\home\\rfcs\\bibxml"
-   }
-   set nativeD [file nativename $inputD]
-   if {[lsearch [split $env(XML_LIBRARY) ";"] $nativeD] < 0} {
-       set env(XML_LIBRARY) "$nativeD;$env(XML_LIBRARY)"
-   }
 
-   which, on Windows, sets the envariable to a default value, and then
-   inserts, at the front, the directory where your main file is.
 
-   There are links to various bibliographic databases (RFCs, I-Ds, and
-   so on) on the 'xml2rfc' homepage [4].
+
+
+
+
+
+
+
+
+
 
 
 
@@ -334,38 +334,38 @@ README                        xml2rfc v1.13                    June 2002
 
 Rose                                                            [Page 6]
 
-README                        xml2rfc v1.13                    June 2002
+README                       xml2rfc v1.14                   August 2002
 
 
-5. Additions to RFC 2629
+   You can also have 'xml2rfc' set this envariable directly, by creating
+   a file called ".xml2rfc.rc" in the directory where your main file is,
+   e.g.,
 
-   o  The 'artwork' element has an undocumented 'src' attribute that is
-      consulted only if slides are being generated, e.g.,
+   global env tcl_platform
 
-          <figure><artwork src='layers.gif' /></figure>
+   if {![string compare $tcl_platform(platform) windows]} {
+       set sep ";"
+   } else {
+       set sep ":"
+   }
 
-   o  The 'artwork' element has optional 'name' and 'type' attributes.
+   if {[catch { set env(XML_LIBRARY) } library]} {
+       set library ""
+       foreach bibxmlD [lsort -dictionary \
+                              [glob -nocomplain $HOME/rfcs/bibxml/*]] {
+           append library $sep$bibxmlD
+       }
+   }
 
-   o  The 'references' element may occur more than once in the 'back'
-      element (e.g., for normative and non-normative references).
-      Further, the element has an optional 'title' attribute.
+   set nativeD [file nativename $inputD]
+   if {[lsearch [split $library $sep] $nativeD] < 0} {
+       set library "$nativeD$sep$library"
+   }
 
-   o  The value of the 'list' element's 'style' attribute can start with
-      "format ".
+   set env(XML_LIBRARY) $library
 
-   o  If the 'style' attribute of the 'list' element has either of the
-      values "hanging" or "format", then a second, optional attribute,
-      called 'hangIndent' is consulted.
-
-   For more information on these last two additions, see Section 2.3.1.2
-   of the 2629bis document for the details.
-
-
-
-
-
-
-
+   There are links to various bibliographic databases (RFCs, I-Ds, and
+   so on) on the 'xml2rfc' homepage [4].
 
 
 
@@ -390,10 +390,66 @@ README                        xml2rfc v1.13                    June 2002
 
 Rose                                                            [Page 7]
 
-README                        xml2rfc v1.13                    June 2002
+README                       xml2rfc v1.14                   August 2002
 
 
-6. Limitations
+5. Additions to RFC 2629
+
+   A few additions have been made to the format originally defined in
+   RFC 2629.  In particular, Appendix C of the 2629bis document
+   enumerates the additions.
+
+   In addition, 'xml2rfc' recognizes an undocumented 'src' attribute in
+   the 'artwork' element, that is consulted only if slides are being
+   generated, e.g.,
+
+          <figure><artwork src='layers.gif' /></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                            [Page 8]
+
+README                       xml2rfc v1.14                   August 2002
+
+
+6. Limitations of xml2rfc
 
    o  The 'figure' element's 'title' attribute is ignored, except when
       generating HTML.
@@ -444,9 +500,9 @@ README                        xml2rfc v1.13                    June 2002
 
 
 
-Rose                                                            [Page 8]
+Rose                                                            [Page 9]
 
-README                        xml2rfc v1.13                    June 2002
+README                       xml2rfc v1.14                   August 2002
 
 
 URIs
@@ -500,9 +556,9 @@ Author's Address
 
 
 
-Rose                                                            [Page 9]
+Rose                                                           [Page 10]
 
-README                        xml2rfc v1.13                    June 2002
+README                       xml2rfc v1.14                   August 2002
 
 
 Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
@@ -556,9 +612,9 @@ Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
 
 
 
-Rose                                                           [Page 10]
+Rose                                                           [Page 11]
 
-README                        xml2rfc v1.13                    June 2002
+README                       xml2rfc v1.14                   August 2002
 
 
 Appendix B. rfc2629.xslt (courtesy of Julian Reschke)
@@ -612,5 +668,5 @@ Appendix B. rfc2629.xslt (courtesy of Julian Reschke)
 
 
 
-Rose                                                           [Page 11]
+Rose                                                           [Page 12]
 

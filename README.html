@@ -1,5 +1,5 @@
-<html><head><title>The README file: xml2rfc v1.13</title>
-<meta http-equiv="Expires" content="Mon, 10 Jun 2002 02:33:15 +0000">
+<html><head><title>The README file: xml2rfc v1.14</title>
+<meta http-equiv="Expires" content="Fri, 16 Aug 2002 21:29:57 +0000">
 <STYLE type='text/css'>
     .title { color: #990000; font-size: 22px; line-height: 22px; font-weight: bold; text-align: right;
              font-family: helvetica, arial, sans-serif }
@@ -42,9 +42,9 @@
 <table width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header">The README file</td><td width="33%" bgcolor="#666666" class="header">M. Rose</td></tr>
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">Dover Beach Consulting, Inc.</td></tr>
-<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">June 9, 2002</td></tr>
+<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">August 16, 2002</td></tr>
 </table></td></tr></table>
-<div align="right"><font face="monaco, MS Sans Serif" color="#990000" size="+3"><b><br><span class="title">xml2rfc v1.13</span></b></font></div>
+<div align="right"><font face="monaco, MS Sans Serif" color="#990000" size="+3"><b><br><span class="title">xml2rfc v1.14</span></b></font></div>
 <font face="verdana, helvetica, arial, sans-serif" size="2">
 <a name="toc"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
@@ -71,7 +71,7 @@ Include Files<br></b>
 <b><a href="#anchor9">5.</a>&nbsp;
 Additions to RFC 2629<br></b>
 <b><a href="#anchor10">6.</a>&nbsp;
-Limitations<br></b>
+Limitations of xml2rfc<br></b>
 <b><a href="#rfc.authors">&#167;</a>&nbsp;
 Author's Address<br></b>
 <b><a href="#anchor11">A.</a>&nbsp;
@@ -110,7 +110,7 @@ this is pretty simple.
 you may already have Tcl version 8.
 To find out,
 try typing this command from the shell
-(including the "MS-DOS Prompt"):
+(or the "MS-DOS Prompt"):
 </p></font><pre>
     % tclsh
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
@@ -196,19 +196,23 @@ has some good information.
 <p>A <strong>processing instruction</strong> is a directive to an XML
 application.
 If you want to give directives to <b>xml2rfc</b>,
-the PIs look like this:
+the processing instructions (PIs) look like this:
 </p></font><pre>
     &lt;?rfc keyword='value'?>
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
+<p>Of course,
+if you like the default behavior,
+you don't need any PIs in your input file!
+</p>
 <a name="rfc.section.4.1.1"></a><h4><a name="anchor7">4.1.1</a>&nbsp;Option Settings</h4>
 
 <p>The list of valid keywords are:
 </p></font><pre>
     keyword     default     meaning
     =======     =======     =======
-    compact     no          when producing a .txt file, try to
-                            conserve vertical whitespace
+    compact     no          when producing a txt/nroff file, try
+                            to conserve vertical whitespace
     
     subcompact  compact     if compact is "yes", then setting
                             this to "no" will make things a 
@@ -232,7 +236,7 @@ the PIs look like this:
 
     footer      ""          override the center footer string
 
-    slides      no          when producing an .html file, produce
+    slides      no          when producing an html file, produce
                             multiple files for a slide show
 
     sortrefs    no          sort references
@@ -240,7 +244,10 @@ the PIs look like this:
     symrefs     no          use anchors rather than numbers for
                             references
 
-    background  ""          when producing an .html file, use this
+    topblock    yes         put the famous header block on the first
+                            page
+
+    background  ""          when producing an html file, use this
                             image
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
@@ -263,28 +270,34 @@ the directory containing the file that contains the include-file
 directive is used.)
 </p>
 <p>You can also have <b>xml2rfc</b> set this envariable directly,
-by including a file called <b>.xml2rfc.rc</b> in the directory where your
+by creating a file called <b>.xml2rfc.rc</b> in the directory where your
 main file is,
 e.g.,
 </p></font><pre>
-global env
+global env tcl_platform
 
-if {![info exists env(XML_LIBRARY)]} {
-    set env(XML_LIBRARY) \
-        ";\\home\\rfcs\\include;\\home\\rfcs\\bibxml"
+if {![string compare $tcl_platform(platform) windows]} {
+    set sep ";"
+} else {
+    set sep ":"
 }
+
+if {[catch { set env(XML_LIBRARY) } library]} {
+    set library ""
+    foreach bibxmlD [lsort -dictionary \
+                           [glob -nocomplain $HOME/rfcs/bibxml/*]] {
+        append library $sep$bibxmlD
+    }
+}
+
 set nativeD [file nativename $inputD]
-if {[lsearch [split $env(XML_LIBRARY) ";"] $nativeD] &lt; 0} {
-    set env(XML_LIBRARY) "$nativeD;$env(XML_LIBRARY)"
+if {[lsearch [split $library $sep] $nativeD] &lt; 0} {
+    set library "$nativeD$sep$library"
 }
+
+set env(XML_LIBRARY) $library
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
-<p>which,
-on Windows,
-sets the envariable to a default value,
-and then inserts, at the front,
-the directory where your main file is.
-</p>
 <p>There are links to various bibliographic databases (RFCs, I-Ds, and so on)
 on the <b>xml2rfc</b> <a href="http://xml.resource.org/">homepage</a>.
 </p>
@@ -292,10 +305,16 @@ on the <b>xml2rfc</b> <a href="http://xml.resource.org/">homepage</a>.
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
 <a name="rfc.section.5"></a><h3>5.&nbsp;Additions to RFC 2629</h3>
 
-<p>
-<ul class="text">
-<li>The <b>artwork</b> element has an undocumented <b>src</b> attribute that is
-consulted only if slides are being generated,
+<p>A few additions have been made to the format originally defined in
+RFC 2629.
+In particular,
+<a href="draft-mrose-writing-rfcs.html#anchor19">Appendix C</a>
+of the 2629bis document enumerates the additions.
+</p>
+<p>In addition,
+<b>xml2rfc</b> recognizes an undocumented <b>src</b> attribute in the
+<b>artwork</b> element,
+that is consulted only if slides are being generated,
 e.g.,
 </p>
 </font><pre>
@@ -303,32 +322,10 @@ e.g.,
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 <p>
 
-</li>
-<li>The <b>artwork</b> element has optional <b>name</b> and <b>type</b> attributes.
-</li>
-<li>The <b>references</b> element may occur more than once in the <b>back</b> element
-(e.g., for normative and non-normative references).
-Further,
-the element has an optional <b>title</b> attribute.
-</li>
-<li>The value of the <b>list</b> element's <b>style</b> attribute can start with
-<b>"format "</b>.
-</li>
-<li>If the <b>style</b> attribute of the <b>list</b> element has either of the
-values <b>"hanging"</b> or <b>"format"</b>,
-then a second,
-optional attribute,
-called <b>hangIndent</b> is consulted.
-</li>
-</ul><p>
-For more information on these last two additions,
-see Section 2.3.1.2 of the
-<a href="draft-mrose-writing-rfcs.html#list">2629bis</a>
-document for the details.
 </p>
 <a name="anchor10"><br><hr size="1" shade="0"></a>
 <table border="0" cellpadding="0" cellspacing="2" width="30" height="15" align="right"><tr><td bgcolor="#990000" align="center" width="30" height="15"><a href="#toc" CLASS="link2"><font face="monaco, MS Sans Serif" color="#ffffff" size="1"><b>&nbsp;TOC&nbsp;</b></font></a><br></td></tr></table>
-<a name="rfc.section.6"></a><h3>6.&nbsp;Limitations</h3>
+<a name="rfc.section.6"></a><h3>6.&nbsp;Limitations of xml2rfc</h3>
 
 <p>
 <ul class="text">

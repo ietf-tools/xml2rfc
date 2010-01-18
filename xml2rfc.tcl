@@ -2355,7 +2355,7 @@ proc xml2nroff {input} {
        > [file rootname $input].txt
 }
 
-proc xml2ref {input output} {
+proc xml2ref {input output {formats {}}} {
     global errorCode errorInfo
 
     if {![string compare $input $output]} {
@@ -2368,7 +2368,7 @@ proc xml2ref {input output} {
     }
 
     set refT [ref::init]
-    if {[set code [catch { ref::transform $refT $input } result]]} {
+    if {[set code [catch { ref::transform $refT $input $formats } result]]} {
         set ecode $errorCode
         set einfo $errorInfo
 
@@ -2768,20 +2768,21 @@ proc pass {tag} {
             }
             set elemN 0
             catch { unset options }
-            array set options [list compact    no  \
-                                    subcompact no  \
-                                    toc        no  \
-                                    tocompact  yes \
-                                    tocdepth   3   \
+            array set options [list background ""  \
+                                    compact    no  \
                                     editing    no  \
                                     emoticonic no  \
-                                    private    ""  \
-                                    header     ""  \
                                     footer     ""  \
+                                    header     ""  \
+                                    private    ""  \
                                     slides     no  \
                                     sortrefs   no  \
+                                    subcompact no  \
                                     symrefs    no  \
-                                    background ""]
+                                    toc        no  \
+                                    tocdepth   3   \
+                                    tocompact  yes \
+                                    topblock   yes]
             normalize_options
             catch { unset stack }
         }
@@ -2797,14 +2798,15 @@ proc pass {tag} {
 
 global required ctexts categories
 
-set required { date       { month year }
+set required { date       { year }
                note       { title  }
                section    { title  }
                xref       { target }
                eref       { target }
                iref       { item }
-# backwards compatibility...
-#               seriesInfo { name value }
+# backwards-compatibility... (the attributes are actually mandatory)
+#              seriesInfo { name value }
+               format     { type }
              }
           
 set ctexts   { title organization street city region code country phone
@@ -2821,7 +2823,7 @@ protocol.
 Distribution of this memo is unlimited."}
 
                {bcp      "Best Current Practice" BCP
-"This document specifies an Internet Best Current Practice for the Internet
+"This document specifies an Internet Best Current Practices for the Internet
 Community, and requests discussion and suggestions for improvements.
 Distribution of this memo is unlimited."}
 
@@ -3294,14 +3296,15 @@ proc normalize_options {} {
         set options(slides) no
     }
     foreach {o O} [list compact    .COMPACT    \
-                        subcompact .SUBCOMPACT \
-                        toc        .TOC        \
-                        tocompact  .TOCOMPACT  \
                         editing    .EDITING    \
                         emoticonic .EMOTICONIC \
-                        symrefs    .SYMREFS    \
+                        slides     .SLIDES     \
                         sortrefs   .SORTREFS   \
-                        slides     .SLIDES] {
+                        subcompact .SUBCOMPACT \
+                        symrefs    .SYMREFS    \
+                        toc        .TOC        \
+                        tocompact  .TOCOMPACT  \
+                        topblock   .TOPBLOCK] {
         switch -- $options($o) {
             yes - true - 1 {
                 set options($O) 1
@@ -3320,9 +3323,9 @@ proc normalize_options {} {
         set options($O) $options($o)
     }
 
-    foreach {o O} [list private .PRIVATE \
+    foreach {o O} [list footer  .FOOTER \
                         header  .HEADER  \
-                        footer  .FOOTER] {
+                        private .PRIVATE] {
         set options($O) 0
         if {[string compare $options($o) ""]} {
             set options($O) 1
@@ -3478,10 +3481,12 @@ proc pass2begin_rfc {elemX} {
     }
 
     set firstxref [list ""]
-    foreach target $counter(firstxref) {
-        if {(![catch { array set av $xref($target) }]) \
-                && (![string compare $av(type) reference])} {
-            lappend firstxref $target
+    if {[info exists counter(firstxref)]} {
+        foreach target $counter(firstxref) {
+            if {(![catch { array set av $xref($target) }]) \
+                    && (![string compare $av(type) reference])} {
+                lappend firstxref $target
+            }
         }
     }
 
@@ -3516,6 +3521,12 @@ proc pass2begin_rfc {elemX} {
                 array set rv $elem($ref)
                 set rv(.COUNTER) [incr offset]
                 set elem($ref) [array get rv]
+
+                set target $rv(anchor)
+                catch { unset xv }
+                array set xv $xref($target)
+                set xv(value) $offset
+                set xref($target) [array get xv]
             }
         }
     }
@@ -3672,7 +3683,7 @@ proc pass2begin_front {elemX} {
     set title [find_element title $attrs(.CHILDREN)]
     array set tv [list abbrev ""]
     array set tv $elem($title)
-    if {([string length $tv(.CTEXT)] > 42) \
+    if {([string length $tv(.CTEXT)] > 46) \
             && (![string compare $tv(abbrev) ""])} {
         unexpected error "title element needs an abbrev attribute"
     }
@@ -3683,14 +3694,17 @@ proc pass2begin_front {elemX} {
 
     set date [find_element date $attrs(.CHILDREN)]
     array set dv $elem($date)
-    if {[catch { set dv(day) }]} {
-        set now [clock seconds]
-        set three [clock format $now -format "%B %Y %d"]
+    set three [clock format [clock seconds] -format "%B %Y %d"]
+    if {(![info exists dv(month)]) || (![string compare $dv(month) ""])} {
+        set dv(month) [lindex $three 0]
+        set dv(day) [string trimleft [lindex $three 2] 0]        
+    } elseif {[catch { set dv(day) }]} {
         if {(![string compare $dv(month) [lindex $three 0]]) \
                 && (![string compare $dv(year) [lindex $three 1]])} {
             set dv(day) [string trimleft [lindex $three 2] 0]
         }
     }
+    set elem($date) [array get dv]
 
     array set rv $elem(1)
     catch { set ofile $rv(docName) }
@@ -4411,6 +4425,41 @@ proc pass2begin_reference {elemX width} {
     set front [find_element front $attrs(.CHILDREN)]
     array set fv $elem($front)
 
+    set names [ref_names $elemX]
+    set title [ref_title $elemX]
+
+    set series ""
+    foreach child [find_element seriesInfo $attrs(.CHILDREN)] {
+# backwards-compatibility... (the attributes are actually mandatory)
+        catch { unset sv }
+        array set sv $elem($child)
+        if {([info exists sv(name)]) && ([info exists sv(value)])} {
+            lappend series "$sv(name) $sv(value)"
+        } else {
+            lappend series $sv(.CTEXT)
+        }
+    }
+
+    set formats {}
+    foreach child [find_element format $attrs(.CHILDREN)] {
+        lappend formats $elem($child)
+    }
+
+    set date [ref_date $elemX]
+
+    reference_$mode $attrs(.COUNTER) $names $title $series $formats $date \
+                    $attrs(anchor) $attrs(target) $attrs(target2) $width
+}
+
+proc ref_names {elemX} {
+    global counter depth elemN elem passno stack xref
+
+    array set attrs [list anchor "" target "" target2 ""]
+    array set attrs $elem($elemX)
+
+    set front [find_element front $attrs(.CHILDREN)]
+    array set fv $elem($front)
+
     set childN [llength [set children [find_element author $fv(.CHILDREN)]]]
 
     set childA 0
@@ -4467,34 +4516,52 @@ proc pass2begin_reference {elemX width} {
             lappend names [list $av(abbrev) $mref]
         }
     }
-    
-    set title [find_element title $fv(.CHILDREN)]
+    set hack $names
 
-    array set tv [list abbrev ""]
-    array set tv $elem($title)
-    set title $tv(.CTEXT)
-
-    set series ""
-    foreach child [find_element seriesInfo $attrs(.CHILDREN)] {
-# backwards compatibility...
-        array set sv $elem($child)
-        if {([info exists sv(name)]) && ([info exists sv(value)])} {
-            lappend series "$sv(name) $sv(value)"
-        } else {
-            lappend series $sv(.CTEXT)
+    set names {}
+    foreach name $hack {
+        if {[string compare [lindex $name 0] ""]} {     
+            lappend names $name
         }
     }
 
+    return $names
+}
+
+proc ref_title {elemX} {
+    global counter depth elemN elem passno stack xref
+
+    array set attrs [list anchor "" target "" target2 ""]
+    array set attrs $elem($elemX)
+
+    set front [find_element front $attrs(.CHILDREN)]
+    array set fv $elem($front)
+
+    set title [find_element title $fv(.CHILDREN)]
+    array set tv [list abbrev ""]
+    array set tv $elem($title)
+
+    return $tv(.CTEXT)
+}
+
+proc ref_date {elemX} {
+    global counter depth elemN elem passno stack xref
+
+    array set attrs [list anchor "" target "" target2 ""]
+    array set attrs $elem($elemX)
+
+    set front [find_element front $attrs(.CHILDREN)]
+    array set fv $elem($front)
+
     set date [find_element date $fv(.CHILDREN)]
     array set dv $elem($date)
-    if {[string compare $dv(month) ""]} {
+    if {([info exists dv(month)]) && ([string compare $dv(month) ""])} {
         set date "$dv(month) $dv(year)"
     } else {
         set date $dv(year)
     }
 
-    reference_$mode $attrs(.COUNTER) $names $title $series $date \
-                    $attrs(anchor) $attrs(target) $attrs(target2) $width
+    return $date
 }
 
 proc find_element {name children} {
@@ -4623,16 +4690,19 @@ proc front_txt_begin {left right top bottom title status copying} {
     for {set i 0} {$i < 4} {incr i} {
         write_line_txt "" -1
     }
-    set left [munge_long $left]
-    set right [munge_long $right]
-    foreach l $left r $right {
-        set l [chars_expand $l]
-        set r [chars_expand $r]
-        set len [expr 72-[string length $l]]
-        write_line_txt [format %s%*.*s $l $len $len $r]
+
+    if {$options(.TOPBLOCK)} {
+        set left [munge_long $left]
+        set right [munge_long $right]
+        foreach l $left r $right {
+            set l [chars_expand $l]
+            set r [chars_expand $r]
+            set len [expr 72-[string length $l]]
+            write_line_txt [format %s%*.*s $l $len $len $r]
+        }
+        write_line_txt "" -1
+        write_line_txt "" -1
     }
-    write_line_txt "" -1
-    write_line_txt "" -1
 
     foreach line $title {
         write_text_txt [chars_expand $line] c
@@ -4662,7 +4732,7 @@ proc three_parts {stuff} {
     set len [string length $result]
 
     set text [chars_expand [lindex $stuff 1]]
-    set len [expr (73-[string length $text])/2-$len]
+    set len [expr (72-[string length $text])/2-$len]
     if {$len < 4} {
         set len 4
     }
@@ -4677,7 +4747,7 @@ proc three_parts {stuff} {
 proc front_txt_end {toc irefP} {
     global options
     global header footer lineno pageno blankP
-    global indexpg
+    global passno indexpg
 
     if {$options(.TOC)} {
         set last [lindex $toc end]
@@ -4711,6 +4781,8 @@ proc front_txt_end {toc irefP} {
                 set len2 $x
             }
         }
+        set len3 [expr 5-$len2]
+        set len2 5
         set mid [expr 72-($len1+$len2+5)]
 
         foreach c $toc {
@@ -4735,7 +4807,10 @@ proc front_txt_end {toc irefP} {
                 set s1 [format "   %-*.*s " $len1 $len1 ""]
                 set title [string trimleft [string range $title $x end]]
             }
-            write_toc_txt $s1 $title $s2 $mid 1
+            if {$len3 > 0} {
+                set s2 [string range $s2 $len3 end]
+            }
+            write_toc_txt $s1 $title $s2 [expr $mid+$len3] 1
         }
     }
 
@@ -4805,6 +4880,11 @@ proc t_txt {tag counter style hangText editNo} {
         set pos [pop_indent]
         set l [split $counter .]
         switch -- $style {
+            letters {
+                set counter [offset2letters [lindex $l end] [llength $l]]
+                append counter ". "
+            }
+
             numbers {
                 set counter "[lindex $l end]. "
             }
@@ -4840,6 +4920,18 @@ proc t_txt {tag counter style hangText editNo} {
     set eatP 1
 }
 
+proc offset2letters {offset depth} {
+    set alpha [lindex [list "ABCDEFGHIJKLMNOPQRSTUVWXYZ" \
+                            "abcdefghijklmnopqrstuvwxyz"] [expr $depth%2]]
+    set letters ""
+    for {} {$offset > 0} {set offset [expr $offset/26]} {
+        incr offset -1
+        set letters [string index $alpha [expr $offset%26]]$letters
+    }
+
+    return $letters
+}
+
 proc list_txt {tag counters style hangIndent hangText} {
     global options
     global eatP
@@ -4847,6 +4939,10 @@ proc list_txt {tag counters style hangIndent hangText} {
     switch -- $tag {
         begin {
             switch -- $style {
+                letters {
+                  set i [expr int(log([llength $counters])/log(26))+2]
+                }
+
                 numbers {
                     set i 0
                     foreach counter $counters {
@@ -5098,8 +5194,8 @@ proc erefs_txt {{title ""}} {
     flush_text
 }
 
-proc reference_txt {prefix names title series date anchor target target2
-                    width} {
+proc reference_txt {prefix names title series formats date anchor target
+                    target2 width} {
     write_line_txt ""
 
     incr width 2
@@ -5110,17 +5206,9 @@ proc reference_txt {prefix names title series date anchor target target2
 
     push_indent $i
 
-    set hack $names
-    set names ""
-    foreach name $hack {
-        if {[string compare [lindex $name 0] ""]} {     
-            lappend names $name
-        }
-    }
-    set nameN [llength $names]
-
     set s "  "
     set nameA 1
+    set nameN [llength $names]
     foreach name $names {
         incr nameA
         write_text_txt $s[chars_expand [lindex $name 0]]
@@ -5623,25 +5711,27 @@ proc front_html_begin {left right top bottom title status copying} {
 
     xxxx_html
 
-    puts $stdout "<table width=\"66%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
-    set left [munge_long $left]
-    set right [munge_long $right]
-    set lc ""
-    set rc ""
-    foreach l $left r $right {
-        if {[string compare $l ""]} {
-            set l $l
-        } else {
-            set l "&nbsp;"
+    if {$options(.TOPBLOCK)} {
+        puts $stdout "<table width=\"66%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
+        set left [munge_long $left]
+        set right [munge_long $right]
+        set lc ""
+        set rc ""
+        foreach l $left r $right {
+            if {[string compare $l ""]} {
+                set l $l
+            } else {
+                set l "&nbsp;"
+            }
+            if {[string compare $r ""]} {
+                set r $r
+            } else {
+                set r "&nbsp;"
+            }
+            puts $stdout "<tr valign=\"top\"><td width=\"33%\" bgcolor=\"#666666\" class=\"header\">$l</td><td width=\"33%\" bgcolor=\"#666666\" class=\"header\">$r</td></tr>"
         }
-        if {[string compare $r ""]} {
-            set r $r
-        } else {
-            set r "&nbsp;"
-        }
-        puts $stdout "<tr valign=\"top\"><td width=\"33%\" bgcolor=\"#666666\" class=\"header\">$l</td><td width=\"33%\" bgcolor=\"#666666\" class=\"header\">$r</td></tr>"
+        puts $stdout "</table></td></tr></table>"
     }
-    puts $stdout "</table></td></tr></table>"
 
     set color 990000
     set size 3
@@ -5792,6 +5882,14 @@ proc t_html {tag counter style hangText editNo} {
         puts -nonewline $stdout "<${s}dd>"
 
         set hangP 1
+    } elseif {![string compare $style "letters"]} {
+        if {![string compare $tag begin]} {
+            set l [split $counter .]
+            puts $stdout "<dt>[offset2letters [lindex $l end] [llength $l]]</dt>"
+        }
+        puts -nonewline $stdout "<${s}dd>"
+
+        set hangP 1
     } elseif {([string compare $counter ""]) \
                     && ([string compare $style empty])} {
         puts -nonewline $stdout "<${s}li>"
@@ -5831,6 +5929,8 @@ proc list_html {tag counters style hangIndent hangText} {
             puts -nonewline $stdout "<${s}ul$c>"
         }
 
+        letters
+            -
         hanging {
             if {[string compare $tag begin]} {
                 puts -nonewline $stdout "</dl></blockquote>"
@@ -5896,6 +5996,7 @@ proc xref_html {text av target} {
     array set tv [list title ""]
     array set tv $elem($elemY)
 
+    set title ""
     switch -- $attrs(type) {
         section {
             set line "Section $attrs(value)"
@@ -5907,6 +6008,26 @@ proc xref_html {text av target} {
 
         figure {
             set line "Figure $attrs(value)"
+        }
+
+        reference {
+            set line "\[$attrs(value)\]"
+            set title " title=\""
+
+            set s ""
+            set nameA 1
+            set nameN [llength [set names [ref_names $elemY]]]
+            foreach name $names {
+                incr nameA
+                set name [lindex $name 0]
+                append title $s$name
+                if {$nameA == $nameN} {
+                    set s " and "
+                } else {
+                    set s ", "
+                }
+            }
+            append title ", [ref_title $elemY], [ref_date $elemY].\""
         }
 
         default {
@@ -5938,7 +6059,7 @@ proc xref_html {text av target} {
         set text $line
     }
 
-    puts -nonewline $stdout "<a href=\"#$target\">$text</a>$post"
+    puts -nonewline $stdout "<a href=\"#$target\"$title>$text</a>$post"
 }
 
 proc eref_html {text counter target} {
@@ -6021,10 +6142,9 @@ proc references_html {tag {title ""} {erefP 0}} {
     }
 }
 
-proc reference_html {prefix names title series date anchor target target2
-                     width} {
+proc reference_html {prefix names title series formats date anchor target
+                     target2 width} {
     global rfcTxtHome idTxtHome
-    global rfcHtmlHome
     global stdout
 
     if {[string compare $target2 ""]} {
@@ -6035,18 +6155,11 @@ proc reference_html {prefix names title series date anchor target target2
     }
     puts $stdout "<tr><td class=\"author-text\" valign=\"top\"><b>$prefix</b></td>"
 
-    set hack $names
-    set names ""
-    foreach name $hack {
-        if {[string compare [lindex $name 0] ""]} {     
-            lappend names $name
-        }
-    }
-    set nameN [llength $names]
+    set text ""
 
     set s ""
-    set text ""
     set nameA 1
+    set nameN [llength $names]
     foreach name $names {
         incr nameA
         if {[string compare [set eref [lindex $name 1]] ""]} {
@@ -6062,14 +6175,16 @@ proc reference_html {prefix names title series date anchor target target2
         }
     }
 
+    if {(![string compare $target ""]) && ([llength $formats] == 1)} {
+        array set fv [lindex $formats 0]
+        set target $fv(target)
+        set formats {}
+    }
+
     if {![string compare $target ""]} {
         foreach serial $series {
             if {[regexp -nocase -- "rfc (\[0-9\]*)" $serial x n] == 1} {
-                if {[catch { set rfcHtmlHome }]} {
-                    set target $rfcTxtHome/rfc$n.txt
-                } else {
-                    set target $rfcHtmlHome/rfc$n.html
-                }
+                set target $rfcTxtHome/rfc$n.txt
                 break
             }
             if {[regexp -nocase -- "internet-draft (draft-.*)" $serial x n] \
@@ -6092,7 +6207,20 @@ proc reference_html {prefix names title series date anchor target target2
     if {[string compare $date ""]} {
         append text ", $date"
     }
-    append text .
+
+    set s " ("
+    set t "."
+    foreach format $formats {
+        catch { unset fv }
+        array set fv $format
+        if {[info exists fv(target)]} {
+            append text "$s<a href=\"$fv(target)\">$fv(type)</a>"
+            set s ", "
+            set t ")."
+        }
+    }
+    append text $t
+
     puts -nonewline $stdout "<td class=\"author-text\">"
     pcdata_html $text
     puts $stdout "</td></tr>"
@@ -6606,7 +6734,7 @@ proc front_nr_begin {left right top bottom title status copying} {
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.13 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.14 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -6631,16 +6759,19 @@ proc front_nr_begin {left right top bottom title status copying} {
     }
 
     incr lineno 4
-    set left [munge_long $left]
-    set right [munge_long $right]
-    foreach l $left r $right {
-        set l [chars_expand $l]
-        set r [chars_expand $r]
-        set len [expr 72-[string length $l]]
-        write_line_nr [format %s%*.*s $l $len $len $r]
+
+    if {$options(.TOPBLOCK)} {
+        set left [munge_long $left]
+        set right [munge_long $right]
+        foreach l $left r $right {
+            set l [chars_expand $l]
+            set r [chars_expand $r]
+            set len [expr 72-[string length $l]]
+            write_line_nr [format %s%*.*s $l $len $len $r]
+        }
+        write_line_nr "" -1
+        write_line_nr "" -1
     }
-    write_line_nr "" -1
-    write_line_nr "" -1
 
     foreach line $title {
         write_text_nr [chars_expand $line] c
@@ -6674,7 +6805,7 @@ proc front_nr_begin {left right top bottom title status copying} {
 proc front_nr_end {toc irefP} {
     global options
     global header footer lineno pageno blankP
-    global indexpg
+    global passno indexpg
     global nofillP
 
     if {$options(.TOC)} {
@@ -6713,6 +6844,8 @@ proc front_nr_end {toc irefP} {
                 set len2 $x
             }
         }
+        set len3 [expr 5-$len2]
+        set len2 5
         set mid [expr 72-($len1+$len2+5)]
 
         foreach c $toc {
@@ -6737,7 +6870,10 @@ proc front_nr_end {toc irefP} {
                 set s1 [format "   %-*.*s " $len1 $len1 ""]
                 set title [string trimleft [string range $title $x end]]
             }
-            write_toc_nr $s1 $title $s2 $mid 1
+            if {$len3 > 0} {
+                set s2 [string range $s2 $len3 end]
+            }
+            write_toc_nr $s1 $title $s2 [expr $mid+$len3] 1
         }
     }
 
@@ -6813,6 +6949,11 @@ proc t_nr {tag counter style hangText editNo} {
         set l [split $counter .]
         set left -1
         switch -- $style {
+            letters {
+                set counter [offset2letters [lindex $l end] [llength $l]]
+                append counter ". "
+            }
+
             numbers {
                 set counter "[lindex $l end]. "
             }
@@ -6858,6 +6999,10 @@ proc list_nr {tag counters style hangIndent hangText} {
     switch -- $tag {
         begin {
             switch -- $style {
+                letters {
+                  set i [expr int(log([llength $counters])/log(26))+2]
+                }
+
                 numbers {
                     set i 0
                     foreach counter $counters {
@@ -7123,24 +7268,16 @@ proc erefs_nr {{title ""}} {
     flush_text
 }
 
-proc reference_nr {prefix names title series date anchor target target2 
-                   width} {
+proc reference_nr {prefix names title series formats date anchor target
+                   target2 width} {
     write_line_nr ""
 
     incr width 2
     indent_text_nr "[format %-*.*s $width $width "\[$prefix\]"]  " -1
 
-    set hack $names
-    set names ""
-    foreach name $hack {
-        if {[string compare [lindex $name 0] ""]} {     
-            lappend names $name
-        }
-    }
-    set nameN [llength $names]
-
     set s ""
     set nameA 1
+    set nameN [llength $names]
     foreach name $names {
         incr nameA
         write_text_nr $s[chars_expand [lindex $name 0]]
@@ -7582,7 +7719,6 @@ proc munge_long {lines} {
 
 proc munge_line {line} {
     global rfcTxtHome
-    global rfcHtmlHome
 
     if {[set y [string first : $line]] >= 0} {
         set start [string range $line 0 $y]
@@ -7594,11 +7730,7 @@ proc munge_line {line} {
     set s ""
     foreach n [split $line ,] {
         set n [string trim $n]
-        if {[catch { set rfcHtmlHome }]} {
-            append start $s "<a href='$rfcTxtHome/rfc$n.txt'>$n</a>"
-        } else {
-            append start $s "<a href='$rfcHtmlHome/rfc$n.html'>$n</a>"
-        }
+        append start $s "<a href='$rfcTxtHome/rfc$n.txt'>$n</a>"
         set s ", "
     }
 
@@ -7708,7 +7840,7 @@ proc ref::fin {token} {
     unset $token
 }
 
-proc ref::transform {token file} {
+proc ref::transform {token file {formats {}}} {
     global errorCode errorInfo
 
     variable $token
@@ -7725,7 +7857,7 @@ proc ref::transform {token file} {
             -errorcommand           ref::oops                   \
             -entityvariable         emptyA                      \
             -final                  yes                         \
-            -reportempty            no
+            -reportempty            yes
 
     set fd [open $file { RDONLY }]
     set data [prexml [read $fd] [file dirname $file]]
@@ -7737,7 +7869,8 @@ proc ref::transform {token file} {
     set state(stack)    ""
     set state(body)     ""
     set state(verbatim) 0
-    set state(silent) 0
+    set state(silent)   0
+    set state(formats)  $formats
 
     set code [catch { $parser parse $data } result]
     set ecode $errorCode
@@ -7768,16 +7901,20 @@ proc ref::transform {token file} {
     unset state(stack)    \
           state(body)     \
           state(verbatim) \
-          state(silent)
+          state(silent)   \
+          state(formats)
 
     return -code $code -errorinfo $einfo -errorcode $ecode $result
 }
 
-proc ref::element_start {token name {av {}}} {
+proc ref::element_start {token name {av {}} args} {
     variable $token
     upvar 0 $token state
 
     variable context
+
+    array set options [list -empty 0]
+    array set options $args
 
     set depth [llength $state(stack)]
 
@@ -7806,8 +7943,10 @@ proc ref::element_start {token name {av {}}} {
             append state(body) "\n<$name"
             foreach {n v} $av {
                 regsub -all {'} $v {\&apos;} v
-                regsub -all {"} $v {\&quot;} v
                 append state(body) " $n='$v'"
+            }
+            if {$options(-empty)} {
+                append state(body) " /"
             }
             append state(body) >
         }
@@ -7816,11 +7955,14 @@ proc ref::element_start {token name {av {}}} {
     lappend state(stack) [list $name $av $idx ""]
 }
 
-proc ref::element_end {token name} {
+proc ref::element_end {token name args} {
     variable $token
     upvar 0 $token state
 
     variable context
+
+    array set options [list -empty 0]
+    array set options $args
 
     set frame [lindex $state(stack) end]
     set state(stack) [lreplace $state(stack) end end]
@@ -7829,7 +7971,7 @@ proc ref::element_end {token name} {
         set info [lindex $context $idx]
         if {![string compare [lindex $info 3] yes]} {
             ref::end_$name $token $frame
-        } elseif {!$state(silent)} {
+        } elseif {!$state(silent) && !$options(-empty)} {
             append state(body) </$name>
         }
 
@@ -7896,7 +8038,16 @@ proc ref::end_rfc {token frame} {
 "
     }
     append state(body) "<seriesInfo name='RFC' value='$rfc(number)' />
-</reference>
+"
+    foreach format $state(formats) {
+        append state(body) "<format"
+        foreach {k v} $format {
+            append state(body) " $k='$v'"
+        }
+        append state(body) " />
+"
+    }
+    append state(body) "</reference>
 "
 }
 

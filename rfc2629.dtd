@@ -1,5 +1,5 @@
 <!--
-  revised DTD for the RFC document series, draft of 2002-02-14
+  revised DTD for the RFC document series, draft of 2002-07-13
   -->
 
 
@@ -121,7 +121,7 @@
 <!ELEMENT date        EMPTY>
 <!ATTLIST date
           day         %DAY;              #IMPLIED
-          month       %MONTH;            #REQUIRED
+          month       %MONTH;            #IMPLIED
           year        %YEAR;             #REQUIRED>
 
 <!-- meta-data... -->
@@ -202,7 +202,7 @@
 <!ELEMENT references  (reference+)>
 <!ATTLIST references
           title       %ATEXT;            "References">
-<!ELEMENT reference   (front,seriesInfo*)>
+<!ELEMENT reference   (front,seriesInfo*,format*)>
 <!ATTLIST reference
           anchor      ID                 #IMPLIED
           target      %URI;              #IMPLIED>
@@ -210,3 +210,8 @@
 <!ATTLIST seriesInfo
           name        %ATEXT;            #REQUIRED
           value       %ATEXT;            #REQUIRED>
+<!ELEMENT format      EMPTY>
+<!ATTLIST format
+          target      %URI;              #IMPLIED
+          type        %ATEXT;            #REQUIRED
+          octets      %NUMBER;           #IMPLIED>
