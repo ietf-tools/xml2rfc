@@ -1,8 +1,6 @@
 #!/bin/sh
 # the next line restarts using the correct interpreter \
-if   test ! -z "$DISPLAY"; then exec wish "$0" "$0" "$@"; \
-elif test ! -z "$1";       then exec tclsh "$0" "$0" "$@"; \
-else                            echo "usage: $0 filename" >&2; exit 1; fi
+exec tclsh "$0" "$0" "$@"
 
 
 # NOTE FROM CLIVE
@@ -152,7 +150,11 @@ proc sgml::tokenise {sgml elemExpr elemSub args} {
 
     catch {upvar #0 $options(-internaldtdvariable) dtd}
     if {[regexp {<!DOCTYPE[^[<]+\[([^]]+)\]} $sgml discard dtd]} {
-        regsub {(<!DOCTYPE[^[<]+)(\[[^]]+\])} $sgml {\1\&xml:intdtd;} sgml
+        set text ""
+        for {set n [numlines $dtd]} {$n > 1} {incr n -1} {
+            append text "\n"
+        }
+        regsub {(<!DOCTYPE[^[<]+)(\[[^]]+\])} $sgml "\\1$text\\&xml:intdtd;" sgml
     }
 
     # Protect Tcl special characters
@@ -2980,6 +2982,14 @@ proc prexml_entity {stream path httpP} {
     set data ""
     while {[set x [string first $litS $stream]] >= 0} {
         append data [string range $stream 0 [expr $x-1]]
+        set rest [string range $stream $x end]
+        if {[set y [string first $litT $rest]] < 0} {
+            error "missing close to <!ENTITY"
+        }
+        set rest [string range $rest 0 [expr $y+$litO-1]]
+        for {set n [numlines $rest]} {$n > 1} {incr n -1} {
+            append data "\n"
+        }
         set stream [string trimleft [string range $stream [expr $x+$litN] end]]
         if {[string first "%" $stream] == 0} {
             set stream [string trimleft [string range $stream 1 end]]
@@ -3334,17 +3344,21 @@ and the author does not provide the IETF with any rights other
 than to publish as an Internet-Draft."}
 
                {full3667
-"By submitting this Internet-Draft,
-I certify that any applicable patent or other IPR claims of which
-I am aware have been disclosed,
-and any of which I become aware will be disclosed,
+"This document is an Internet-Draft and is subject to all provisions
+of section 3 of RFC 3667.
+By submitting this Internet-Draft,
+each author represents that any applicable patent or other IPR claims of which
+he or she is aware have been or will be disclosed,
+and any of which he or she become aware will be disclosed,
 in accordance with RFC 3668."}
 
                {noModification3667
-"By submitting this Internet-Draft,
-I certify that any applicable patent or other IPR claims of which
-I am aware have been disclosed,
-and any of which I become aware will be disclosed,
+"This document is an Internet-Draft and is subject to all provisions
+of section 3 of RFC 3667.
+By submitting this Internet-Draft,
+each author represents that any applicable patent or other IPR claims of which
+he or she is aware have been or will be disclosed,
+and any of which he or she become aware will be disclosed,
 in accordance with RFC 3668.
 This document may not be modified,
 and derivative works of it may not be created,
@@ -3352,10 +3366,12 @@ except to publish it as an RFC and to translate it into languages other
 than English%IPREXTRACT%."}
 
                {noDerivatives3667
-"By submitting this Internet-Draft,
-I certify that any applicable patent or other IPR claims of which
-I am aware have been disclosed,
-and any of which I become aware will be disclosed,
+"This document is an Internet-Draft and is subject to all provisions
+of section 3 of RFC 3667 except for the right to produce derivative works.
+By submitting this Internet-Draft,
+each author represents that any applicable patent or other IPR claims of which
+he or she is aware have been or will be disclosed,
+and any of which he or she become aware will be disclosed,
 in accordance with RFC 3668.
 This document may not be modified,
 and derivative works of it may not be created%IPREXTRACT%."} }
@@ -4221,6 +4237,7 @@ Internet Society."
 proc pass2begin_rfc {elemX} {
     global counter depth elemN elem passno stack xref
     global options copyrightP iprP
+    global copyshort copyshort1 copyshort2
 
     array set attrs [list number     ""   obsoletes "" updates "" \
                           category   info seriesNo  "" ipr     "" \
@@ -4244,6 +4261,22 @@ proc pass2begin_rfc {elemX} {
         } else {
             set iprP 0
         }
+    }
+
+    set newP 1
+    if {[string compare $attrs(number) ""]} {
+        if {$attrs(number) <= 3707} {
+            set newP 0
+        }
+    } elseif {[string compare $attrs(ipr) ""]} {
+        if {[string first "3667" $attrs(ipr)] < 0} {
+            set newP 0
+        }
+    }
+    if {$newP} {
+        set copyshort $copyshort2
+    } else {
+        set copyshort $copyshort1
     }
 
     set firstxref [list ""]
@@ -4417,10 +4450,13 @@ SUCH DAMAGES."
 
 # the front (either for the rfc or a reference)
 
-global copyshort idinfo
+global copyshort copyshort1 copyshort2 idinfo
 
-set copyshort \
+set copyshort1 \
 "Copyright (C) The Internet Society (%YEAR%). All Rights Reserved."
+
+set copyshort2 \
+"Copyright (C) The Internet Society (%YEAR%)."
 
 set idinfo {
     {
@@ -4803,11 +4839,10 @@ proc pass2end_front {elemX} {
                     set anchor ""
                     if {($passno == 3) && (![string compare $mode html])} {
                         set anchor rfc.references[incr refs]
-                        set label "&#167;"
                     } else {
                         catch { set anchor $cv(.ANCHOR) }
-                        set label $cv(.COUNTER)
                     }
+                    set label $cv(.COUNTER)
                     if {[catch { set title $cv(title) }]} {
                         set title References
                     }
@@ -5490,7 +5525,9 @@ proc pass2begin_back {elemX} {
                 foreach street [find_element street $pv(.CHILDREN)] {
                     array set sv $elem($street)
     
-                    lappend block1 $sv(.CTEXT)
+                    if {[string compare $sv(.CTEXT) ""]} {
+                        lappend block1 $sv(.CTEXT)
+                    }
                 }
 
                 set s ""
@@ -6691,15 +6728,12 @@ proc eref_txt {text counter target} {
     global mode
 
     set line ""
-    if {[string compare $text ""]} {
+    if {![string compare $text ""]} {
         set line "<$target>"
     } elseif {([string first "#" $target] < 0) \
                   && ([string compare $text $target])} {
         set erefs($counter) $target
-        if {[string compare $line ""]} {
-            append line " "
-        }
-        append line "\[$counter\]"
+        append line "$text \[$counter\]"
     }
     if {![cellP $line]} {
         set eatP 0
@@ -6733,7 +6767,7 @@ proc cref_txt {text counter source anchor} {
     }
     if {![cellP $line]} {
         set eatP 0
-        write_text_$mode $line
+        pcdata_$mode $line
     }
 
     set eatP -1
@@ -7217,8 +7251,9 @@ proc write_text_txt {text {direction l}} {
             } else {
                 set z $y
             }
-# CLIVE#7 added the next three lines:
-            if {[string last "://" [string range $line 0 70]] > $x} {
+# CLIVE#7 added the next four lines:
+            if {($x > 7)
+                    && ([string last "://" [string range $line 0 71]] > $x)} {
                 set y 0
             }
             if {$x < $y} {
@@ -7466,6 +7501,7 @@ set htmlstyle \
 <!--
     body {
         font-family: verdana, charcoal, helvetica, arial, sans-serif;
+        margin: 2em;
         font-size: small ; color: #000000 ; background-color: #ffffff ; }
     .title { color: #990000; font-size: x-large ;
         font-weight: bold; text-align: right;
@@ -7614,7 +7650,7 @@ proc front_html_begin {left right top bottom title status copying keywords
         write_html "\">" 
     }
 
-     write_html -nonewline "<meta name=\"generator\" content=\"xml2rfc v1.24 "
+     write_html -nonewline "<meta name=\"generator\" content=\"xml2rfc v1.25 "
      write_html "(http://xml.resource.org/)\">"
 #end new meta tags
 
@@ -7874,6 +7910,7 @@ proc list_html {tag counters style hangIndent hangText suprT} {
 }
 
 proc figure_html {tag lines anchor title {av {}}} {
+    global counter depth elemN elem passno stack xref
     global options
     global imgP
 
@@ -7901,6 +7938,15 @@ proc figure_html {tag lines anchor title {av {}}} {
         }
 
         end {
+            if {[string compare $anchor ""]} {
+                array set av2 $xref($anchor)
+                set prefix "Figure $av2(value)"
+                if {[string compare $title ""]} {
+                    set title "$prefix: $title"
+                } else {
+                    set title $prefix
+                }
+            }
             if {[string compare $title ""]} {
                 write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" align=\"center\"><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br /></td></tr></table><hr size=\"1\" shade=\"0\">"
             }
@@ -7917,6 +7963,8 @@ proc postamble_html {tag {editNo ""}} {
 }
 
 proc texttable_html {tag lines anchor title {didP 0}} {
+    global counter depth elemN elem passno stack xref
+
     switch -- $tag {
         begin {
             if {[string compare $title ""]} {
@@ -7928,6 +7976,15 @@ proc texttable_html {tag lines anchor title {didP 0}} {
         }
 
         end {
+            if {[string compare $anchor ""]} {
+                array set av $xref($anchor)
+                set prefix "Table $av(value)"
+                if {[string compare $title ""]} {
+                    set title "$prefix: $title"
+                } else {
+                    set title $prefix
+                }
+            }
             if {[string compare $title ""]} {
                 write_html "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" align=\"center\"><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br /></td></tr></table><hr size=\"1\" shade=\"0\">"
             }
@@ -8946,7 +9003,7 @@ proc front_nr_begin {left right top bottom title status copying keywords
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.24 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.25 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -9290,10 +9347,10 @@ proc postamble_nr {tag {editNo ""}} {
 # CLIVE#5 added the next six lines:
     # It may seem odd to do this after postamble_txt, but it ensures
     # that the last cell has been flushed.
-    if {![string compare $tag "begin"] && ($tblindent > 0)} {
+    if {![string compare $tag "end"] && ($tblindent > 0)} {
         write_it ".in $tblindent"
-        set tblindent 0
     }
+    set tblindent 0
 }
 
 proc texttable_nr {tag lines anchor title {didP 0}} {
@@ -9311,6 +9368,7 @@ proc texttable_nr {tag lines anchor title {didP 0}} {
 proc ttcol_nr {text align col width} {
 # CLIVE#5 added the next 6 lines:
     global tblindent indent
+
     if {$tblindent == 0} {
         flush_text
         set tblindent $indent
@@ -9935,6 +9993,7 @@ set oentities { {&lt;}     {<} {&gt;}     {>}
                 {&#x2013;} {-} {&#x2014;} {--}
                 {&#151;}   {--}
                 {&endash;} {-} {&emdash;} {--}
+                {&#160;}     { }
                 {&#167;}     {S.}
                 {&#19[2-7];} {A}
                 {&#198;}     {AE}
@@ -9948,7 +10007,7 @@ set oentities { {&lt;}     {<} {&gt;}     {>}
                 {&#21[7-9];} {U}
                 {&#220;}     {U}
                 {&#221;}     {Y}
-                {&223;}      {sz}
+                {&#223;}     {sz}
                 {&#22[4-9];} {a}
                 {&#230;}     {ae}
                 {&#231;}     {c}
@@ -10404,7 +10463,7 @@ proc ref::start_rfc {token av} {
     }
     set state(number) $rfc(number)
 
-    set state(body) "<?xml version='1.0'?>
+    set state(body) "<?xml version='1.0' encoding='UTF-8'?>
 
 <reference anchor='RFC[format %04d $rfc(number)]'>
 "
@@ -10571,6 +10630,7 @@ set xdv::dtd(rfc2629.cmodel) \
           xref          {}                           \
           eref          {}                           \
           iref          {}                           \
+          cref          {}                           \
           vspace        {}                           \
           spanx         {}                           \
           figure        [list preamble          "?"  \
@@ -10871,6 +10931,8 @@ if {[info exists guiP]} {
     return
 }
 set guiP 0
+# load and initialize tk if possible
+catch {package require -exact Tk [info tclversion]}
 if {[llength $argv] > 1} {
     if {[catch { 
         switch -- [llength $argv] {
@@ -10922,14 +10984,12 @@ if {[llength $argv] > 1} {
 
     exit 0
 } elseif {![info exists tk_version]} {
-    if {$tcl_interactive} {
-        set guiP -1
-        puts stdout ""
-        puts stdout "invoke as \"xml2rfc   input-file output-file\""
-        puts stdout "       or \"xml2txt   input-file\""
-        puts stdout "       or \"xml2html  input-file\""
-        puts stdout "       or \"xml2nroff input-file\""
-    }
+    set guiP -1
+    puts stdout ""
+    puts stdout "invoke as \"xml2rfc   input-file output-file\""
+    puts stdout "       or \"xml2txt   input-file\""
+    puts stdout "       or \"xml2html  input-file\""
+    puts stdout "       or \"xml2nroff input-file\""
 } else {
     set guiP 1
 
