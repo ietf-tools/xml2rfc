@@ -38,7 +38,10 @@ dl {
   margin-left: 2em;
 }
 
-dl.empty dd {
+ul.empty {
+  list-style-type: none;
+}
+ul.empty li {
   margin-top: .5em;
 }
 dl p {
@@ -119,6 +122,7 @@ table {
   margin-left: 2em;
 }
 table.header {
+  border-spacing: 1px;
   width: 95%;
   font-size: 10pt;
   color: white;
@@ -130,7 +134,7 @@ td.topnowrap {
   vertical-align: top;
   white-space: nowrap; 
 }
-td.header {
+table.header td {
   background-color: gray;
   width: 50%;
 }
@@ -302,29 +306,31 @@ ul p {
       <meta name="description" content="Dummy Abstract."/>
    </head>
    <body>
-      <table class="header" border="0" cellpadding="1" cellspacing="1">
-         <tr>
-            <td class="header left">Network Working Group</td>
-            <td class="header right">J. Doe</td>
-         </tr>
-         <tr>
-            <td class="header left">Internet Draft</td>
-            <td class="header right">December 1, 2009</td>
-         </tr>
-         <tr>
-            <td class="header left">
+      <table class="header">
+         <tbody>
+            <tr>
+               <td class="left">Network Working Group</td>
+               <td class="right">J. Doe</td>
+            </tr>
+            <tr>
+               <td class="left">Internet Draft</td>
+               <td class="right">December 1, 2009</td>
+            </tr>
+            <tr>
+               <td class="left">
         &lt;foo&gt;
       </td>
-            <td class="header right"/>
-         </tr>
-         <tr>
-            <td class="header left">Intended status: Informational</td>
-            <td class="header right"/>
-         </tr>
-         <tr>
-            <td class="header left">Expires: June 4, 2010</td>
-            <td class="header right"/>
-         </tr>
+               <td class="right"/>
+            </tr>
+            <tr>
+               <td class="left">Intended status: Informational</td>
+               <td class="right"/>
+            </tr>
+            <tr>
+               <td class="left">Expires: June 4, 2010</td>
+               <td class="right"/>
+            </tr>
+         </tbody>
       </table>
       <p class="title">Example for @ipr="pre5378Trust200902" as of December 2009<br/>
          <span class="filename">foo</span>

@@ -6,10 +6,10 @@ The README file                                                  M. Rose
                                                                B. Fenner
                                                    Arista Networks, Inc.
                                                                C. Levert
-                                                        October 27, 2009
+                                                            October 2009
 
 
-                             xml2rfc v1.34
+                           xml2rfc v1.35pre1
 
 
 Table of Contents
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose, et al.                                                    [Page 1]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 1.  Introduction
@@ -110,7 +110,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                    [Page 2]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 2.  Requirements
@@ -166,7 +166,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                    [Page 3]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 3.  Testing
@@ -222,7 +222,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                    [Page 4]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 4.  Next steps
@@ -278,7 +278,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                    [Page 5]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
    |            comments |      no      | render <cref> information    |
@@ -334,7 +334,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                    [Page 6]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
    |            linefile |      n/a     | a string like "35:file.xml"  |
@@ -390,7 +390,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                    [Page 7]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
    |          rfcedstyle |      no      | attempt to closely follow    |
@@ -446,7 +446,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                    [Page 8]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
    |            sortrefs |      no      | sort references              |
@@ -502,7 +502,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                    [Page 9]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
    |           useobject |      no      | when producing a html file,  |
@@ -558,7 +558,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                   [Page 10]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
    You can also have *xml2rfc* set the "XML_LIBRARY" environment
@@ -614,7 +614,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                   [Page 11]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 5.  The Page Model
@@ -670,7 +670,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                   [Page 12]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 6.  Additions to RFC 2629
@@ -726,7 +726,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                   [Page 13]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
    *xml2rfc* also recognizes an undocumented "align" attribute (with
@@ -782,7 +782,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                   [Page 14]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
    For example (to be viewed in HTML):
@@ -838,7 +838,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                   [Page 15]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 7.  Limitations of xml2rfc
@@ -894,7 +894,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                   [Page 16]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 8.  References
@@ -950,7 +950,7 @@ README                        xml2rfc v1.34                 October 2009
 
 Rose, et al.                                                   [Page 17]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
@@ -1006,7 +1006,7 @@ Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
 
 Rose, et al.                                                   [Page 18]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
@@ -1062,7 +1062,7 @@ Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
 
 Rose, et al.                                                   [Page 19]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 Appendix C.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
@@ -1118,7 +1118,7 @@ Appendix C.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
 
 Rose, et al.                                                   [Page 20]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 Appendix D.  A Special Thanks
@@ -1174,7 +1174,7 @@ Appendix D.  A Special Thanks
 
 Rose, et al.                                                   [Page 21]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 Appendix E.  Copyrights
@@ -1230,7 +1230,7 @@ Appendix E.  Copyrights
 
 Rose, et al.                                                   [Page 22]
 
-README                        xml2rfc v1.34                 October 2009
+README                      xml2rfc v1.35pre1               October 2009
 
 
 Authors' Addresses

@@ -11,7 +11,7 @@ exec tclsh "$0" "$0" "$@"
 
 global prog prog_version prog_url prog_ack
 set prog "xml2rfc"
-set prog_version "v1.34"
+set prog_version "v1.35pre1"
 set prog_url "http://xml.resource.org/"
 set prog_ack \
 "This document was produced
@@ -5527,6 +5527,37 @@ proc pass2begin_rfc {elemX} {
     }
 
     set newP 8
+    if {![info exists fv(.PARSEDDATE)]} {
+        set date [find_element date $fv(.CHILDREN)]
+        array set dv $elem($date)
+        set three [clock format [clock seconds] -format "%B %Y %d"]
+        if {[catch { set dv(year) }]} {
+            set dv(year) [lindex $three 1]
+        }
+        if {[catch { set dv(month) }]} {
+            if {(![string compare $dv(year) [lindex $three 1]])} {
+                set dv(month) [lindex $three 0]
+                set dv(day) [string trimleft [lindex $three 2] 0]
+            } else {
+                unexpected error "I can't synthesize a date in $dv(year)"
+            }
+        } elseif {[catch { set dv(day) }]} {
+            if {(![string compare $dv(month) [lindex $three 0]]) \
+                    && (![string compare $dv(year) [lindex $three 1]])} {
+                set dv(day) [string trimleft [lindex $three 2] 0]
+            }
+        }
+        set elem($date) [array get dv]
+
+        if {[catch { set day $dv(day) }]} {
+            set day 1
+        }
+        if {[catch {set secs [clock scan "$dv(month) $day, $dv(year)" -gmt true]}]} {
+            set secs 0
+        }
+        set fv(.PARSEDDATE) $secs
+        set elem($front) [array get fv]
+    }
     if {[catch { clock format $fv(.PARSEDDATE) -format "%Y%m%d" -gmt true } \
                ymd]} {
         # Should differentiate between PARSEDATE not set (e.g., early pass)
@@ -6155,24 +6186,6 @@ proc pass2begin_front {elemX} {
 
     set date [find_element date $attrs(.CHILDREN)]
     array set dv $elem($date)
-    set three [clock format [clock seconds] -format "%B %Y %d"]
-    if {[catch { set dv(year) }]} {
-        set dv(year) [lindex $three 1]
-    }
-    if {[catch { set dv(month) }]} {
-        if {(![string compare $dv(year) [lindex $three 1]])} {
-            set dv(month) [lindex $three 0]
-            set dv(day) [string trimleft [lindex $three 2] 0]
-        } else {
-            unexpected error "I can't synthesize a date in $dv(year)"
-        }
-    } elseif {[catch { set dv(day) }]} {
-        if {(![string compare $dv(month) [lindex $three 0]]) \
-                && (![string compare $dv(year) [lindex $three 1]])} {
-            set dv(day) [string trimleft [lindex $three 2] 0]
-        }
-    }
-    set elem($date) [array get dv]
 
     array set rv $elem(1)
     catch { set ofile $rv(docName) }
@@ -6198,11 +6211,7 @@ proc pass2begin_front {elemX} {
         if {[catch { set day $dv(day) }]} {
             set day 1
         }
-        if {[catch {set secs [clock scan "$dv(month) $day, $dv(year)" -gmt true]}]} {
-            set secs 0
-        }
-        set attrs(.PARSEDDATE) $secs
-        set elem($elemX) [array get attrs]
+        set secs $attrs(.PARSEDDATE)
 
         if {[info exists rv(category)]} {
             set cindex [lsearch0 $categories $rv(category)]
@@ -17678,7 +17687,7 @@ if {[llength $argv] > 1} {
 
         check_vrsn_idle
     } result]} {
-        if {[catch {package require Tk}]} {
+        if {![catch {package require Tk}]} {
             catch { wm geometry . 10x10+-100+-100 }
             catch { wm withdraw . }
             bgerror $result
