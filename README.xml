@@ -1,7 +1,8 @@
 <?xml version='1.0'?>
 <!DOCTYPE rfc SYSTEM 'rfc2629.dtd'>
 
-<?rfc compact='yes'?>
+<?rfc editing='no'?>
+<?rfc compact='no'?>
 <?rfc subcompact='no'?>
 <?rfc emoticonic='yes'?>
 <?rfc private='The README file'?>
@@ -27,11 +28,10 @@
 </address>
 </author>
 
-<date month='February' year='2002'/>
+<date month='March' year='2002'/>
 </front>
 
 <middle>
-
 <section title='Introduction'>
 <t>This is a package to convert memos written in XML to the RFC format.</t>
 
@@ -41,8 +41,6 @@ you can use the
 </section>
 
 <section title='Requirements'>
-
-<section title='Tcl/Tk version 8'>
 <t>You need to have Tcl/Tk version 8 running on your system.
 Tcl is a scripting language,
 Tk is Tcl with support for your windowing system.</t>
@@ -76,45 +74,11 @@ you can also try:</preamble>
 <postamble>If a new window comes up along with a "Console" window,
 then you're good to go with Tk version 8.</postamble>
 </figure>
-</section>
 
-<t><vspace blankLines='1000' /></t>
-
-<section title='TclXML version 1.1.1'>
-<t>You need to also have TclXML version 1.1.1 running on your system.
-TclXML is a Tcl package that parses XML.</t>
-    
-<t>We've included a copy of TclXML in this release,
-you can also look in
-<eref target='http://www.zveno.com/zm.cgi/in-tclxml/'>the TclXML site</eref>.</t>
-    
-<figure>
-<preamble>For example,
-on Unix,
-you'd probably put the files somewhere under</preamble>
-<artwork>
-    /usr/local/lib/tcl8.4/TclXML-1.1
-
-or 
-
-    C:\Program Files\Tcl\lib\tcl8.4\TclXML-1.1\
-</artwork>
-<postamble>depending on whether you're on UNIX or Windows.</postamble>
-</figure>
-
-<figure>
-<preamble>To find out where you should put the directory,
-type this command:</preamble>
-<artwork>
-    % tclsh
-    tclsh> set auto_path
-</artwork>
-<postamble>This will print a list containing the directories where Tcl
-looks for libraries.
-You should put the |"TclXML-1.1| directory in exactly one of these
-directories.</postamble>
-</figure>
-</section>
+<t>Finally,
+you may notice a file called |"xml2sgml.tcl| in the distribution.
+It contains some extra functionality for a few special users &#151;
+so, if you don't know what it is, don't worry about it...</t>
 </section>
 
 <section title='Testing'>
@@ -174,10 +138,10 @@ directories.</postamble>
 </section>
 
 <section title='Next steps'>
-<t>Read either <xref target='RFC2629'>rfc2629.txt</xref> or 
-<eref target='rfc2629.html'>rfc2629.html</eref>.
+<t>Read the <eref target='draft-mrose-writing-rfcs.html'>2629bis</eref>
+document.
 In particular,
-<eref target='rfc2629.html#anchor14'>Section 3</eref>
+<eref target='draft-mrose-writing-rfcs.html#anchor13'>Section 3</eref>
 has some good information.</t>
 
 <section title='Processing Instructions'>
@@ -190,8 +154,6 @@ the PIs look like this:</preamble>
     &lt;?rfc keyword='value'?>
 </artwork>
 </figure>
-
-<t><vspace blankLines='1000' /></t>
 
 <section title='Option Settings'>
 <figure>
@@ -311,58 +273,21 @@ called |'hangIndent| is consulted.</t>
 </list>
 For more information on these last two additions,
 see Section 2.3.1.2 of the
-<eref target='draft-mrose-writing-rfcs.html#list'>html</eref>
-or <eref target='draft-mrose-writing-rfcs.txt'>text</eref> versions of
-the 2629bis document for the details.</t>
+<eref target='draft-mrose-writing-rfcs.html#list'>2629bis</eref>
+document for the details.</t>
 </section>
 
 <section title='Limitations'>
 <t><list style='symbols'>
 <t>The |'figure| element's |'title| attribute is ignored,
 except when generating HTML.</t>
-    
-<t>The |'artwork| element's |'name| and |'type| attributes are ignored.</t>
 
 <t>The |'xref| element's |'pageno| attribute is ignored.</t>
 </list></t>
-
-<t><vspace blankLines='1000' /></t>
 </section>
-
 </middle>
 
 <back>
-<references>
-
-<reference anchor='RFC2629'>
-<front>
-<title>Writing I-Ds and RFCs using XML</title>
-
-<author initials='M.T.' surname='Rose' fullname='Marshall T. Rose'>
-<organization>Invisible Worlds, Inc.</organization>
-
-<address>
-<postal>
-<street>131 Stony Circle</street>
-<street>Suite 500</street>
-<city>Santa Rosa</city> <region>CA</region> <code>95401</code>
-<country>US</country>
-</postal>
-
-<phone>+1 707 578 2350</phone>
-<email>mrose@invisible.net</email>
-<uri>http://invisible.net/</uri>
-</address>
-</author>
-    
-<date month='June' year='1999'/>
-</front>
-
-<seriesInfo name='RFC' value='2629' />
-</reference>
-
-</references>
-
 <section title="MacOS 9 Installation (courtesy of Ned Freed)">
 <t><list style='numbers'>
 <t>Install Tcl/Tk 8.3.4</t>
@@ -372,11 +297,6 @@ a folder in your |""Extensions"| folder called |""Tool Command Language"| was
 created.
 Create a new folder under |""Extensions"|,
 with any name you like.</t>
-
-<t>From the TclXML 1.1.1 distribution,
-move the files |"pkgIndex.tcl|,
-|"sgml.tcl|,
-and |"xml.tcl| to this new folder.</t>
 
 <t>Drag the file |"xml2rfc.tcl| onto the |""Drag & Drop Tclets"|
 application that was installed in Step 1.</t>

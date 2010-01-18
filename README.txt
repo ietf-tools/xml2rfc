@@ -2,7 +2,7 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                       February 10, 2002
+                                                           March 2, 2002
 
 
                              xml2rfc v1.11
@@ -11,21 +11,21 @@ The README file                                                  M. Rose
 Table of Contents
 
    1.    Introduction . . . . . . . . . . . . . . . . . . . . . . . .  2
-   2.    Requirements . . . . . . . . . . . . . . . . . . . . . . . .  2
-   2.1   Tcl/Tk version 8 . . . . . . . . . . . . . . . . . . . . . .  2
-   2.2   TclXML version 1.1.1 . . . . . . . . . . . . . . . . . . . .  3
-   3.    Testing  . . . . . . . . . . . . . . . . . . . . . . . . . .  3
-   3.1   Testing under a windowing system . . . . . . . . . . . . . .  3
+   2.    Requirements . . . . . . . . . . . . . . . . . . . . . . . .  3
+   3.    Testing  . . . . . . . . . . . . . . . . . . . . . . . . . .  4
+   3.1   Testing under a windowing system . . . . . . . . . . . . . .  4
    3.2   Testing without a windowing system . . . . . . . . . . . . .  4
-   4.    Next steps . . . . . . . . . . . . . . . . . . . . . . . . .  4
-   4.1   Processing Instructions  . . . . . . . . . . . . . . . . . .  4
+   4.    Next steps . . . . . . . . . . . . . . . . . . . . . . . . .  5
+   4.1   Processing Instructions  . . . . . . . . . . . . . . . . . .  5
    4.1.1 Option Settings  . . . . . . . . . . . . . . . . . . . . . .  5
    4.1.2 Include Files  . . . . . . . . . . . . . . . . . . . . . . .  6
-   5.    Additions to RFC 2629  . . . . . . . . . . . . . . . . . . .  6
-   6.    Limitations  . . . . . . . . . . . . . . . . . . . . . . . .  7
-         References . . . . . . . . . . . . . . . . . . . . . . . . .  8
-         Author's Address . . . . . . . . . . . . . . . . . . . . . .  8
-   A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . .  8
+   5.    Additions to RFC 2629  . . . . . . . . . . . . . . . . . . .  7
+   6.    Limitations  . . . . . . . . . . . . . . . . . . . . . . . .  8
+         Author's Address . . . . . . . . . . . . . . . . . . . . . .  9
+   A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . . 10
+
+
+
 
 
 
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose                                                            [Page 1]
 
-README                        xml2rfc v1.11                February 2002
+README                        xml2rfc v1.11                   March 2002
 
 
 1. Introduction
@@ -62,33 +62,33 @@ README                        xml2rfc v1.11                February 2002
    This is a package to convert memos written in XML to the RFC format.
 
    If you don't want to install any software, you can use the web-based
-   service [2].
+   service [1].
 
-2. Requirements
 
-2.1 Tcl/Tk version 8
 
-   You need to have Tcl/Tk version 8 running on your system.  Tcl is a
-   scripting language, Tk is Tcl with support for your windowing system.
 
-   To get a source or binary distribution for your system, go to the
-   Scriptics website [3] and install it.  If you get the binary
-   distribution, this is pretty simple.
 
-   Of course, you may already have Tcl version 8.  To find out, try
-   typing this command from the shell (including the "MS-DOS Prompt"):
 
-       % tclsh
 
-   If the program launches, you're good to go with Tcl version 8.
 
-   If you are running under a windowing system (e.g., X or Windows), you
-   can also try:
 
-       % wish
 
-   If a new window comes up along with a "Console" window, then you're
-   good to go with Tk version 8.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -110,45 +110,45 @@ README                        xml2rfc v1.11                February 2002
 
 Rose                                                            [Page 2]
 
-README                        xml2rfc v1.11                February 2002
+README                        xml2rfc v1.11                   March 2002
 
 
-2.2 TclXML version 1.1.1
+2. Requirements
 
-   You need to also have TclXML version 1.1.1 running on your system.
-   TclXML is a Tcl package that parses XML.
+   You need to have Tcl/Tk version 8 running on your system.  Tcl is a
+   scripting language, Tk is Tcl with support for your windowing system.
 
-   We've included a copy of TclXML in this release, you can also look in
-   the TclXML site [4].
+   To get a source or binary distribution for your system, go to the
+   Scriptics website [2] and install it.  If you get the binary
+   distribution, this is pretty simple.
 
-   For example, on Unix, you'd probably put the files somewhere under
-
-       /usr/local/lib/tcl8.4/TclXML-1.1
-
-   or
-
-       C:\Program Files\Tcl\lib\tcl8.4\TclXML-1.1\
-
-   depending on whether you're on UNIX or Windows.
-
-   To find out where you should put the directory, type this command:
+   Of course, you may already have Tcl version 8.  To find out, try
+   typing this command from the shell (including the "MS-DOS Prompt"):
 
        % tclsh
-       tclsh> set auto_path
 
-   This will print a list containing the directories where Tcl looks for
-   libraries.  You should put the "TclXML-1.1" directory in exactly one
-   of these directories.
+   If the program launches, you're good to go with Tcl version 8.
 
-3. Testing
+   If you are running under a windowing system (e.g., X or Windows), you
+   can also try:
 
-   Now test your installation.
+       % wish
 
-3.1 Testing under a windowing system
+   If a new window comes up along with a "Console" window, then you're
+   good to go with Tk version 8.
 
-   Type this command from the shell:
+   Finally, you may notice a file called "xml2sgml.tcl" in the
+   distribution.  It contains some extra functionality for a few special
+   users -- so, if you don't know what it is, don't worry about it...
 
-       % xml2rfc.tcl
+
+
+
+
+
+
+
+
 
 
 
@@ -166,8 +166,18 @@ README                        xml2rfc v1.11                February 2002
 
 Rose                                                            [Page 3]
 
-README                        xml2rfc v1.11                February 2002
+README                        xml2rfc v1.11                   March 2002
 
+
+3. Testing
+
+   Now test your installation.
+
+3.1 Testing under a windowing system
+
+   Type this command from the shell:
+
+       % xml2rfc.tcl
 
    A new window should come up that looks like this:
 
@@ -202,17 +212,7 @@ README                        xml2rfc v1.11                February 2002
               or "xml2nroff inputfile"
 
 
-4. Next steps
 
-   Read either rfc2629.txt [1] or rfc2629.html.  In particular, Section
-   3 has some good information.
-
-4.1 Processing Instructions
-
-   A *processing instruction* is a directive to an XML application.  If
-   you want to give directives to 'xml2rfc', the PIs look like this:
-
-       <?rfc keyword='value'?>
 
 
 
@@ -222,7 +222,20 @@ README                        xml2rfc v1.11                February 2002
 
 Rose                                                            [Page 4]
 
-README                        xml2rfc v1.11                February 2002
+README                        xml2rfc v1.11                   March 2002
+
+
+4. Next steps
+
+   Read the 2629bis [3] document.  In particular, Section 3 has some
+   good information.
+
+4.1 Processing Instructions
+
+   A *processing instruction* is a directive to an XML application.  If
+   you want to give directives to 'xml2rfc', the PIs look like this:
+
+       <?rfc keyword='value'?>
 
 
 4.1.1 Option Settings
@@ -261,25 +274,18 @@ README                        xml2rfc v1.11                February 2002
        symrefs     no          use anchors rather than numbers for
                                references
 
+
+
+Rose                                                            [Page 5]
+
+README                        xml2rfc v1.11                   March 2002
+
+
        background  ""          when producing an .html file, use this
                                image
 
    Remember, that as with everything else in XML, keywords and values
    are case-sensitive.
-
-
-
-
-
-
-
-
-
-
-Rose                                                            [Page 5]
-
-README                        xml2rfc v1.11                February 2002
-
 
 4.1.2 Include Files
 
@@ -311,7 +317,25 @@ README                        xml2rfc v1.11                February 2002
    inserts, at the front, the directory where your main file is.
 
    There are links to various bibliographic databases (RFCs, I-Ds, and
-   so on) on the 'xml2rfc' homepage [5].
+   so on) on the 'xml2rfc' homepage [4].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                            [Page 6]
+
+README                        xml2rfc v1.11                   March 2002
+
 
 5. Additions to RFC 2629
 
@@ -329,28 +353,50 @@ README                        xml2rfc v1.11                February 2002
    o  The value of the 'list' element's 'style' attribute can start with
       "format ".
 
-
-
-
-Rose                                                            [Page 6]
-
-README                        xml2rfc v1.11                February 2002
-
-
    o  If the 'style' attribute of the 'list' element has either of the
       values "hanging" or "format", then a second, optional attribute,
       called 'hangIndent' is consulted.
 
    For more information on these last two additions, see Section 2.3.1.2
-   of the html or text [6] versions of the 2629bis document for the
-   details.
+   of the 2629bis document for the details.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                            [Page 7]
+
+README                        xml2rfc v1.11                   March 2002
+
 
 6. Limitations
 
    o  The 'figure' element's 'title' attribute is ignored, except when
       generating HTML.
-
-   o  The 'artwork' element's 'name' and 'type' attributes are ignored.
 
    o  The 'xref' element's 'pageno' attribute is ignored.
 
@@ -388,25 +434,30 @@ README                        xml2rfc v1.11                February 2002
 
 
 
-Rose                                                            [Page 7]
+
+
+
+
+
+
+
+
+
+
+Rose                                                            [Page 8]
 
-README                        xml2rfc v1.11                February 2002
+README                        xml2rfc v1.11                   March 2002
 
 
-References
+URIs
 
-   [1]  Rose, M., "Writing I-Ds and RFCs using XML", RFC 2629, June
-        1999.
+   [1]  <http://xml.resource.org/>
 
-   [2]  <http://xml.resource.org/>
+   [2]  <http://www.scriptics.com/software/tcltk/8.4.html>
 
-   [3]  <http://www.scriptics.com/software/tcltk/8.4.html>
+   [3]  <draft-mrose-writing-rfcs.html>
 
-   [4]  <http://www.zveno.com/zm.cgi/in-tclxml/>
-
-   [5]  <http://xml.resource.org/>
-
-   [6]  <draft-mrose-writing-rfcs.txt>
+   [4]  <http://xml.resource.org/>
 
 
 Author's Address
@@ -420,6 +471,40 @@ Author's Address
    Phone: +1 916 483 8878
    EMail: mrose@dbc.mtview.ca.us
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                            [Page 9]
+
+README                        xml2rfc v1.11                   March 2002
+
+
 Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
 
    1.  Install Tcl/Tk 8.3.4
@@ -428,15 +513,12 @@ Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
        called "Tool Command Language" was created.  Create a new folder
        under "Extensions", with any name you like.
 
-   3.  From the TclXML 1.1.1 distribution, move the files
-       "pkgIndex.tcl", "sgml.tcl", and "xml.tcl" to this new folder.
-
-   4.  Drag the file "xml2rfc.tcl" onto the "Drag & Drop Tclets"
+   3.  Drag the file "xml2rfc.tcl" onto the "Drag & Drop Tclets"
        application that was installed in Step 1.
 
-   5.  When asked for an appropriate "wish" stub, select "Wish 8.3.4".
+   4.  When asked for an appropriate "wish" stub, select "Wish 8.3.4".
 
-   6.  The "Drap & Drop Tclets" application will write out an executable
+   5.  The "Drap & Drop Tclets" application will write out an executable
        version of 'xml2rfc'.
 
 
@@ -444,5 +526,35 @@ Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
 
 
 
-Rose                                                            [Page 8]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                           [Page 10]
 
