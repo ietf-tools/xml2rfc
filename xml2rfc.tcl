@@ -3,27 +3,6 @@
 exec tclsh "$0" "$0" "$@"
 
 
-# NOTE FROM CLIVE
-# Problems with nroff output
-# - an empty hangText in a hanging list seems to not generate a .ti
-#   fixed by change CLIVE#1
-# - blocks of text <t> within <list> within <t> generate a wrong .ti
-#   fixed by change CLIVE#2
-# - references and author indented wrongly
-#   fixed by change CLIVE#3
-# - words with dashes in them need \% at the front
-#   fixed by change CLIVE#4
-# - tables are indented wrongly
-#   fixed by change CLIVE#5
-# - URLs can be split across a line
-#   fixed by change CLIVE#6
-
-# Problems with text output
-# - URLs can be split across a line
-#   fixed by change CLIVE#7
-# - indentation is wrong after <figure>
-#   unsolved
-
 #
 # xml2rfc.tcl - convert technical memos written using XML to TXT/HTML/NROFF
 #
@@ -2801,7 +2780,7 @@ proc xml2nroff {input} {
        > [file rootname $input].txt
 }
 
-proc xml2ref {input output {formats {}}} {
+proc xml2ref {input output {formats {}} {item ""}} {
     global errorCode errorInfo
 
     if {![string compare $input $output]} {
@@ -2824,16 +2803,35 @@ proc xml2ref {input output {formats {}}} {
     }
     ref::fin $refT
 
+    array set ref $result
+
     set stdout [open $output { WRONLY CREAT TRUNC }]
 
     set code [catch {
-        puts -nonewline $stdout $result
+        puts -nonewline $stdout $ref(body)
         flush $stdout
     } result]
     set ecode $errorCode
     set einfo $errorInfo
 
     catch { close $stdout }
+
+    if {($code == 0) \
+            && ([string compare $item ""]) \
+            && ([string compare $ref(info) ""])} {
+        set stdout [open $item { WRONLY CREAT TRUNC }]
+
+        set code [catch {
+            puts -nonewline $stdout $ref(info)
+            flush $stdout
+        } result]
+        set ecode $errorCode
+        set einfo $errorInfo
+
+        catch { close $stdout }
+
+#       catch { file mtime $item $ref(mtime) }
+    }
 
     return -code $code -errorinfo $einfo -errorcode $ecode $result
 }
@@ -5400,7 +5398,21 @@ proc pass2begin_cref {elemX} {
         return
     }
 
-    cref_$mode $attrs(.CTEXT) $attrs(.COUNTER) $attrs(source) $attrs(anchor)
+    set text ""
+    set attrs(.CTEXT) [string trim $attrs(.CTEXT)]
+    while {[set x [string first "\n" $attrs(.CTEXT)]] >= 0} {
+        if {$x > 0} {
+            append text [string range $attrs(.CTEXT) 0 [expr $x-1]]
+        }
+        set attrs(.CTEXT) [string trimleft \
+                                  [string range $attrs(.CTEXT) $x end]]
+        if {[string length $attrs(.CTEXT)] > 0} {
+            append text " "
+        }
+    }
+    append text $attrs(.CTEXT)
+
+    cref_$mode $text $attrs(.COUNTER) $attrs(source) $attrs(anchor)
 }
 
 proc cref_title {elemX} {
@@ -6531,12 +6543,15 @@ proc cellE {} {
 
     foreach cell [array names cells *,*] {
         set column [expr [lindex [split $cell ,] 1]-1]
-        
         set cells($cell) [::textutil::adjust::adjust $cells($cell) \
                               -justify      [lindex $cells(align) $column] \
-                              -length       [lindex $cols $column] \
+                              -length       [set w [lindex $cols $column]] \
                               -full         true \
                               -strictlength true]
+        set pad [format %*.*s $w $w ""]
+        if {[string first "$pad\n" $cells($cell)] == 0} {
+            set cells($cell) [string range $cells($cell) [expr $w+1] end]
+        }
     }
 
     for {set row 0} {$row <= $rowNo} {incr row} {
@@ -6727,13 +6742,14 @@ proc eref_txt {text counter target} {
     global crefs erefs
     global mode
 
-    set line ""
     if {![string compare $text ""]} {
         set line "<$target>"
     } elseif {([string first "#" $target] < 0) \
                   && ([string compare $text $target])} {
         set erefs($counter) $target
         append line "$text \[$counter\]"
+    } else {
+        set line $text
     }
     if {![cellP $line]} {
         set eatP 0
@@ -7239,10 +7255,15 @@ proc write_text_txt {text {direction l}} {
     append buffer $text
 
     set flush [string compare $direction l]
+    set urlP 0
     while {([set i [string length $buffer]] > 72) || ($flush)} {
         if {$i > 72} {
             set x [string last " " [set line [string range $buffer 0 72]]]
-            set y [string last "/" [string range $line 0 71]]
+            if {0} {
+                set y [string last "/" [string range $line 0 71]]
+            } else {
+                set y -1
+            }
             if {0} {
                 set z [string last "-" [string range $line 0 71]]
                 if {$y < $z} {
@@ -7259,7 +7280,7 @@ proc write_text_txt {text {direction l}} {
             if {$x < $y} {
                 set x $y
             }
-            if {$x < 0} {
+            if {$x < $indent} {
                 set x [string last " " $buffer]
                 set y [string last "/" $buffer]
                 if {0} {
@@ -7268,18 +7289,35 @@ proc write_text_txt {text {direction l}} {
                         set y $z
                     }
                 } else {
+                    set y -1
                     set z $y
                 }
                 if {$x > $y} {
                     set x $y
                 }
             }
-            if {$x < 0} {
-                set x $i
+            if {$x < $indent} {
+                if {$urlP} {
+                    set z 7
+                } else {
+                    set z [string last "://" [string range $line 0 71]]
+                }
+                if {$z > 0} {
+                    set urlP 1
+                    set x 71
+                    while {($x > $z) && ([string index $line $x] == "-")} {
+                        incr x -1
+                    }
+                    incr x
+                } else {
+                    set x $i
+                }
             } elseif {($x == $y) || ($x == $z)} {
                 incr x
+                set urlP 0
             } elseif {$x+1 == $indent} {
                 set x $i
+                set urlP 0
             }
             set text [string range $buffer 0 [expr $x-1]]
             set rest [string trimleft [string range $buffer $x end]]
@@ -7650,7 +7688,7 @@ proc front_html_begin {left right top bottom title status copying keywords
         write_html "\">" 
     }
 
-     write_html -nonewline "<meta name=\"generator\" content=\"xml2rfc v1.25 "
+     write_html -nonewline "<meta name=\"generator\" content=\"xml2rfc v1.26 "
      write_html "(http://xml.resource.org/)\">"
 #end new meta tags
 
@@ -8378,7 +8416,7 @@ proc crefs_html {title} {
     pcdata_html $title
     write_html "</h3>"
 
-    write_html "<table width=\"99%\" border=\"0\">"
+    write_html "<table border=\"0\">"
 
     set names [lsort -dictionary [array names crefs]]
     foreach cref $names {
@@ -8395,6 +8433,9 @@ if {0} {
         write_html "<a class=\"info\" href=\"#[lindex $crefs($cref) 0]\">"
         write_html "$cref</a><a name=\"comment.$cref\"></a>:"
         write_html "</td><td class=\"author-text\">"
+        if {[string compare [set source [lindex $crefs($cref) 1]] ""]} {
+            write_html -nonewline "${source}: "
+        }
         pcdata_html [lindex $crefs($cref) 2]
         write_html "</td></tr>"
 }
@@ -9003,7 +9044,7 @@ proc front_nr_begin {left right top bottom title status copying keywords
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.25 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.26 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -9249,7 +9290,6 @@ proc t_nr {tag counter style hangText editNo} {
 
             default {
                 set counter "  "
-# CLIVE#2 added next line
                 set left -2
             }
         }
@@ -9339,14 +9379,10 @@ proc preamble_nr {tag {editNo ""}} {
 }
 
 proc postamble_nr {tag {editNo ""}} {
-# CLIVE#5 added the next line:
     global tblindent
 
     postamble_txt $tag $editNo
 
-# CLIVE#5 added the next six lines:
-    # It may seem odd to do this after postamble_txt, but it ensures
-    # that the last cell has been flushed.
     if {![string compare $tag "end"] && ($tblindent > 0)} {
         write_it ".in $tblindent"
     }
@@ -9354,11 +9390,9 @@ proc postamble_nr {tag {editNo ""}} {
 }
 
 proc texttable_nr {tag lines anchor title {didP 0}} {
-# CLIVE#5 added the next line:
     global tblindent
 
     texttable_txt $tag $lines $anchor $title $didP
-# CLIVE#5 added the next four lines:
     if {![string compare $tag "end"] && ($tblindent > 0)} {
         write_it ".in $tblindent"
     }
@@ -9366,7 +9400,6 @@ proc texttable_nr {tag lines anchor title {didP 0}} {
 }
 
 proc ttcol_nr {text align col width} {
-# CLIVE#5 added the next 6 lines:
     global tblindent indent
 
     if {$tblindent == 0} {
@@ -9577,7 +9610,6 @@ proc reference_nr {prefix names title series formats date anchor target
         write_line_nr $prefix
         write_it ".br"
     } else {
-# CLIVE#3 changed -1 to 3 in next line
         indent_text_nr "$prefix  " 3
     }
 
@@ -9641,11 +9673,8 @@ proc back_nr {authors} {
     }
     set result $pageno
 
-# CLIVE#3 conditional removed, push_indent added
-#   if {$lastin != $indent} {
-        push_indent 3
-        write_it ".in [set lastin $indent]"
-#   }
+    push_indent 3
+    write_it ".in [set lastin $indent]"
     write_it ".nf"
     set nofillP 1
 
@@ -9703,8 +9732,8 @@ proc back_nr {authors} {
         }
     }
 
-# CLIVE#3 added the next line
     pop_indent
+
     return $result
 }
 
@@ -9798,21 +9827,20 @@ proc indent_text_nr {prefix {left ""}} {
         }
         push_indent 3
     } elseif {$left < 0} {
-# CLIVE#2 added conditional on next line
-        if {$left == -1} { set left $indent }
-# WAS   set left $indent
+        if {$left == -1} {
+            set left $indent
+        }
         push_indent [string length $prefix]
-# CLIVE#2 added next line
-        if {$left == -2} { set left $indent }
+        if {$left == -2} {
+            set left $indent
+        }
     } else {
         push_indent [expr $left+[string length $prefix]-$indent]
     }
     if {$lastin != $indent} {
         write_it ".in [set lastin $indent]"
     }
-# CLIVE#1 commented-out   if {$indent != $left} {
-        write_it ".ti $left"
-# CLIVE#1 commented-out   }
+    write_it ".ti $left"
     set buffer [format %*.*s $left $left ""]
     write_text_nr $prefix
 }
@@ -9866,7 +9894,8 @@ proc write_text_nr {text {direction l} {magic 0}} {
                 set z $y
             }
 # CLIVE#6 added the next three lines:
-            if {[string last "://" [string range $line 0 70]] > $x} {
+            if {($x > 7)
+                    && ([string last "://" [string range $line 0 71]] > $x)} {
                 set y 0
             }
             if {$x < $y} {
@@ -9946,7 +9975,6 @@ proc write_line_nr {line {pre 0} {magic 0}} {
     if {[string first "." $line] == 0} {
         set line "\\&$line"
     }
-# CLIVE#4 added the next three lines:
     if {!($pre)} {
         regsub -all "\[^ \t\n\]*-" $line "\\%\&" line
     }
@@ -10268,6 +10296,11 @@ proc ref::transform {token file {formats {}}} {
     set state(verbatim) 0
     set state(silent)   0
     set state(formats)  $formats
+    set state(info)     ""
+    set state(mtime)    0
+    set state(tprefix)  ""
+    set state(tsuffix)  ""
+    set state(descr)    ""
 
     set code [catch { $parser parse $data } result]
     set ecode $errorCode
@@ -10275,7 +10308,9 @@ proc ref::transform {token file {formats {}}} {
 
     switch -- $code {
         0 {
-            set result $state(body)
+            set result [list body  $state(body) \
+                             info  $state(info) \
+                             mtime $state(mtime)]
         }
 
         1 {
@@ -10302,7 +10337,12 @@ proc ref::transform {token file {formats {}}} {
           state(keywords) \
           state(verbatim) \
           state(silent)   \
-          state(formats)
+          state(formats)  \
+          state(info)     \
+          state(mtime)    \
+          state(tprefix)  \
+          state(tsuffix)  \
+          state(descr)
 
     return -code $code -errorinfo $einfo -errorcode $ecode $result
 }
@@ -10355,6 +10395,11 @@ proc ref::element_start {token name {av {}} args} {
 # update initials/surname when rfc-index.xml is more robust...
                         }
                     }
+
+                    array set nv $av
+                    if {[info exists nv(fullname)]} {
+                        append state(tsuffix) ", " $nv(fullname)
+                    }
                 }
 
                 date {
@@ -10366,6 +10411,29 @@ proc ref::element_start {token name {av {}} args} {
                         }
                     }
                     set av [array get nv]
+
+                    array set dv [list day 1 year "" month ""]
+                    array set dv $av
+                    if {[string first "<dc:date>" $state(info)] < 0} {
+                        catch {
+                            set state(mtime) \
+                                [clock scan "$dv(month) $dv(day), $dv(year)"]
+                            append state(info) \
+                                   "    <dc:date>" \
+                                   [clock format $state(mtime) \
+                                        -format "%Y-%m-%dT%T-00:00" \
+                                        -gmt true] \
+                                   "</dc:date>
+"
+                        }
+                    }
+                }
+
+                note {
+                    if {[string first "</description>" $state(info)] < 0} {
+                        append state(info) "    <description></description>
+"
+                    }
                 }
             }
             append state(body) "\n<$name"
@@ -10383,6 +10451,14 @@ proc ref::element_start {token name {av {}} args} {
                     set k $state(number)
                     if {[info exists rfcitems($k,doc-title)]} {
                         append state(body) $rfcitems($k,doc-title)
+
+                        if {[string first "<title>" $state(info)] < 0} {
+                            append state(info) "    <title>" \
+                                   $state(tprefix) \
+                                   $rfcitems($k,doc-title) \
+                                   "</title>
+"
+                        }
                     }
                 }
             }
@@ -10417,6 +10493,33 @@ proc ref::element_end {token name args} {
         }
     }
     set state(silent) 0
+
+    switch -- $name {
+        title {
+            if {([string first "<title>" $state(info)] >= 0)
+                    && ([string first "</title>" $state(info)] < 0)} {
+                append state(info) "</title>
+"
+            }
+        }
+
+        t {
+        }
+
+        front
+            -
+        abstract {
+            if {[string first "</description>" $state(info)] < 0} {
+                if {[string first "<description>" $state(info)] >= 0} {
+                    append state(info) "</description>
+"
+                } else {
+                    append state(info) "    <description></description>
+"
+                }
+            }
+        }
+    }
 }
 
 proc ref::cdata {token text} {
@@ -10446,6 +10549,26 @@ proc ref::cdata {token text} {
     regsub -all "\r" $text "\n" text
 
     append state(body) $text
+
+    switch -- [lindex $frame 0] {
+        title {
+            if {![info exists rfcitems($k,doc-title)]} {
+                if {[string first "<title>" $state(info)] < 0} {
+                    append state(info) "    <title>" $state(tprefix) $text
+                } elseif {[string first "</title>" $state(info)] < 0} {
+                    append state(info) $text
+                }
+            }
+        }
+
+        t {
+            if {[string first "<description>" $state(info)] < 0} {
+                append state(info) "    <description>" $text
+            } elseif {[string first "</description>" $state(info)] < 0} {
+                append state(info) $text
+            }
+        }
+    }
 }
 
 proc ref::oops {args} {
@@ -10467,6 +10590,8 @@ proc ref::start_rfc {token av} {
 
 <reference anchor='RFC[format %04d $rfc(number)]'>
 "
+
+    set state(tprefix) "RFC $rfc(number): "
 }
 
 proc ref::end_rfc {token frame} {
@@ -10505,6 +10630,33 @@ proc ref::end_rfc {token frame} {
     }
     append state(body) "</reference>
 "
+
+    set url ""
+    foreach format $state(formats) {
+        catch { unset fv }
+        array set fv $format
+        set url $fv(target)
+        if {![string compare $fv(type) TXT]} {
+            break
+        }
+    }
+    if {[string compare $url ""]} {
+        regsub -all {&} $url {\&amp;} url
+        regsub -all {'} $url {\&apos;} url
+        if {([string compare $state(tsuffix) ""]) \
+                && ([set x [string first "</title>" $state(info)]] > 0)} {
+            set info [string range $state(info) 0 [expr $x-1]]
+            append info $state(tsuffix) [string range $state(info) $x end]
+            set state(info) $info
+        }
+        set state(info) "
+<item rdf:about='$url'>
+    <link>$url</link>
+$state(info)</item>
+"
+    } else {
+        set state(info) ""
+    }
 }
 
 

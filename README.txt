@@ -2,10 +2,10 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                         August 15, 2004
+                                                      September 28, 2004
 
 
-                             xml2rfc v1.25
+                             xml2rfc v1.26
 
 
 Table of Contents
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose                                                            [Page 1]
 
-README                       xml2rfc v1.25                   August 2004
+README                       xml2rfc v1.26                September 2004
 
 
 1.  Introduction
@@ -110,7 +110,7 @@ README                       xml2rfc v1.25                   August 2004
 
 Rose                                                            [Page 2]
 
-README                       xml2rfc v1.25                   August 2004
+README                       xml2rfc v1.26                September 2004
 
 
 2.  Requirements
@@ -166,7 +166,7 @@ README                       xml2rfc v1.25                   August 2004
 
 Rose                                                            [Page 3]
 
-README                       xml2rfc v1.25                   August 2004
+README                       xml2rfc v1.26                September 2004
 
 
 3.  Testing
@@ -222,13 +222,13 @@ README                       xml2rfc v1.25                   August 2004
 
 Rose                                                            [Page 4]
 
-README                       xml2rfc v1.25                   August 2004
+README                       xml2rfc v1.26                September 2004
 
 
 4.  Next steps
 
-   Read the 2629bis [4] document.  In particular,  has some good
-   information.
+   Read the 2629bis [4] document.  In particular, Section 3 has some
+   good information.
 
 4.1  Processing Instructions
 
@@ -278,7 +278,7 @@ README                       xml2rfc v1.25                   August 2004
 
 Rose                                                            [Page 5]
 
-README                       xml2rfc v1.25                   August 2004
+README                       xml2rfc v1.26                September 2004
 
 
 4.1.1  Option Settings
@@ -334,7 +334,7 @@ README                       xml2rfc v1.25                   August 2004
 
 Rose                                                            [Page 6]
 
-README                       xml2rfc v1.25                   August 2004
+README                       xml2rfc v1.26                September 2004
 
 
    |      editing |      no      | insert editing marks for ease of    |
@@ -390,7 +390,7 @@ README                       xml2rfc v1.25                   August 2004
 
 Rose                                                            [Page 7]
 
-README                       xml2rfc v1.25                   August 2004
+README                       xml2rfc v1.26                September 2004
 
 
    You can also have 'xml2rfc' set this envariable directly, by creating
@@ -446,14 +446,14 @@ README                       xml2rfc v1.25                   August 2004
 
 Rose                                                            [Page 8]
 
-README                       xml2rfc v1.25                   August 2004
+README                       xml2rfc v1.26                September 2004
 
 
 5.  Additions to RFC 2629
 
    A few additions have been made to the format originally defined in
-   RFC 2629.  In particular,  of the 2629bis document enumerates the
-   additions.
+   RFC 2629.  In particular, Appendix C of the 2629bis document
+   enumerates the additions.
 
    In addition, 'xml2rfc' recognizes an undocumented 'src' attribute in
    the 'artwork' element, but only if HTML is being generated, e.g.,
@@ -502,7 +502,7 @@ README                       xml2rfc v1.25                   August 2004
 
 Rose                                                            [Page 9]
 
-README                       xml2rfc v1.25                   August 2004
+README                       xml2rfc v1.26                September 2004
 
 
 6.  Limitations of xml2rfc
@@ -558,7 +558,7 @@ Author's Address
 
 Rose                                                           [Page 10]
 
-README                       xml2rfc v1.25                   August 2004
+README                       xml2rfc v1.26                September 2004
 
 
 Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
@@ -614,7 +614,7 @@ Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
 
 Rose                                                           [Page 11]
 
-README                       xml2rfc v1.25                   August 2004
+README                       xml2rfc v1.26                September 2004
 
 
 Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
@@ -670,7 +670,7 @@ Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
 
 Rose                                                           [Page 12]
 
-README                       xml2rfc v1.25                   August 2004
+README                       xml2rfc v1.26                September 2004
 
 
 Appendix C.  Copyrights
