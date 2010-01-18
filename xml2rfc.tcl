@@ -11,7 +11,7 @@ exec tclsh "$0" "$0" "$@"
 
 global prog prog_version prog_url prog_ack
 set prog "xml2rfc"
-set prog_version "v1.33"
+set prog_version "v1.34"
 set prog_url "http://xml.resource.org/"
 set prog_ack \
 "This document was produced
@@ -2925,7 +2925,7 @@ if {[catch { package require http 2 }]} {
 proc check_vrsn {} {
     global env
     global guiP
-    global prog_url
+    global prog_version prog_url
 
     if {[info exists env(DOCUMENT_ROOT)]} {
         return
@@ -2934,8 +2934,14 @@ proc check_vrsn {} {
         update
     }
 
+    if {[string first "pre" $prog_version] > 0} {
+        set file beta
+    } else {
+        set file version
+    }
+
     catch {
-        ::http::geturl ${prog_url}authoring/version \
+        ::http::geturl ${prog_url}authoring/$file \
                        -command check_vrsn_command -timeout 3000
     }
 }
@@ -4111,11 +4117,20 @@ Distribution of this memo is unlimited."} }
 #         Section 5.2  Derivative Works Limitation
 #             Notices a and b
 #             Extracted Material appendage
-#     RFC 3978 (current version of BCP 78)
+#     RFC 3978 (obsolete version of BCP 78)
 #         Section 5.1  IPR Disclosure Acknowledgement
 #         Section 5.2  Derivative Works Limitation
 #             Notices a and b
 #             Extracted Material appendage
+#     IETF Trust's Legal Provisions Relating to IETF Documents
+#             (referred to from current version of BCP 78)
+#         Section 6.a Submission Compliance
+#         Section 6.c Derivative Works and Publication Limitations
+#     February, 2009 update to Trust's Legal Provisions
+#         trust200902 and noDerivativesTrust200902 have the same text
+#         as the respective 200811 values.  noModificationTrust200902
+#         is slightly modified from the 200811 wording, and
+#         pre5378Trust200902 is new in this revision.
 set iprstatus \
              { {full2026
 "This document is an Internet-Draft and is
@@ -4197,7 +4212,58 @@ he or she is aware have been or will be disclosed,
 and any of which he or she becomes aware will be disclosed,
 in accordance with Section&nbsp;6 of BCP&nbsp;79.
 This document may not be modified,
-and derivative works of it may not be created%IPREXTRACT%."} }
+and derivative works of it may not be created%IPREXTRACT%."}
+
+               {trust200811
+"This Internet-Draft is submitted to IETF in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79."}
+
+               {noModificationTrust200811
+"This Internet-Draft is submitted to IETF in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.
+This document may not be modified, and derivative works of it may
+not be created, except to format it for publication as an RFC and
+to translate it into languages other than English."}
+
+               {noDerivativesTrust200811
+"This Internet-Draft is submitted to IETF in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.
+This document may not be modified, and derivative works of it may
+not be created, and it may not be published except as an Internet-Draft."}
+
+               {trust200902
+"This Internet-Draft is submitted to IETF in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79."}
+
+               {noModificationTrust200902
+"This Internet-Draft is submitted to IETF in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.
+This document may not be modified, and derivative works of it may
+not be created, except to format it for publication as an RFC or
+to translate it into languages other than English."}
+
+               {noDerivativesTrust200902
+"This Internet-Draft is submitted to IETF in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.
+This document may not be modified, and derivative works of it may
+not be created, and it may not be published except as an Internet-Draft."}
+
+               {pre5378Trust200902
+"This Internet-Draft is submitted to IETF in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.
+This document may contain material from IETF Documents or IETF
+Contributions published or made publicly available before November
+10, 2008. The person(s) controlling the copyright in some of this
+material may not have granted the IETF Trust the right to allow
+modifications of such material outside the IETF Standards Process.
+Without obtaining an adequate license from the person(s) controlling
+the copyright in such materials, this document may not be modified
+outside the IETF Standards Process, and derivative works of it may
+not be created outside the IETF Standards Process, except to format
+it for publication as an RFC or to translate it into languages other
+than English."}
+
+ }
 
 #       }}}2 Categories and IPR status texts
 #       {{{2 Start and end tag callbacks
@@ -4266,11 +4332,11 @@ proc begin {name {av {}} } {
                     if {[lsearch0 $iprstatus $attrs(ipr)] < 0} {
                         unexpected error \
                             "ipr=\"$attrs(ipr)\" attribute unknown in #$elemN:<rfc>"
-                    }
+                   }
                     if {   [regexp -- {[0-9]$} $attrs(ipr)]
-                        && ![regexp -- {3978$} $attrs(ipr)]} {
+                        && ![regexp -- {trust200902$} [string tolower $attrs(ipr)]]} {
                         unexpected warning \
-                            "ipr=\"$attrs(ipr)\" attribute value is outdated compared to RFC 3978"
+                            "ipr=\"$attrs(ipr)\" attribute value is outdated compared to Trust Legal Provisions of 2/2009"
                     }
                     #if {[string compare $attrs(ipr) $ipr]} {
                     #    set attrs(ipr) $ipr
@@ -5430,7 +5496,9 @@ the IETF Administrative Support Activity (IASA)."
 proc pass2begin_rfc {elemX} {
     global counter elem passno xref
     global options copyrightP iprP
-    global copyshort copyshort1 copyshort2 copyshort3
+    global copyshort copyshort1 copyshort2 copyshort3 copyshortTrust200811 \
+           copyshortTrust200909 copyshortTrust200902 \
+           copyshortTrust200902esc copyshortTrust200909esc
     global funding funding1 funding2
     global backP
 
@@ -5441,6 +5509,9 @@ proc pass2begin_rfc {elemX} {
                           iprExtract ""   submissionType IETF xml:lang  en]
     array set attrs $elem($elemX)
     set elem($elemX) [array get attrs]
+
+    set front [find_element front $attrs(.CHILDREN)]
+    array set fv $elem($front)
 
     if {(!$options(.PRIVATE)) \
             && (![string compare $attrs(number) ""]) \
@@ -5455,8 +5526,14 @@ proc pass2begin_rfc {elemX} {
         set iprP 1
     }
 
-    # XXX why is newP set two different places
-    set newP 5
+    set newP 8
+    if {[catch { clock format $fv(.PARSEDDATE) -format "%Y%m%d" -gmt true } \
+               ymd]} {
+        # Should differentiate between PARSEDATE not set (e.g., early pass)
+        # vs. PARSEDATE set to 0 (i.e., couldn't parse date)
+        set ymd ""
+    }
+
     if {[string compare $attrs(number) ""]} {
         if {$attrs(number) <= 2499} {
             set newP 0
@@ -5470,31 +5547,76 @@ proc pass2begin_rfc {elemX} {
         } elseif {($attrs(number) < 5000) ||
             ([lsearch {5020 5021 5034 5052 5065 5094} $attrs(number)] > -1)} {
             set newP 4
+        } elseif {$ymd < "20081101"} {
+            set newP 5
+        } elseif {$ymd < "20090201"} {
+            set newP 6
+        } elseif {$ymd < "20090901" ||
+            ([lsearch {5582 5621 5632 5645 5646 5681} $attrs(number)] > -1)} {
+            # TLP 2009 09 copyright notice beginning with Sep 2009, except
+            # for the RFCs listed above
+            set newP 7
         }
     } elseif {[string compare $attrs(ipr) ""]} {
-        if {   [string first "3667" $attrs(ipr)] < 0
-            && [string first "3978" $attrs(ipr)] < 0} {
+        if {   [string first "3667" $attrs(ipr)] >= 0
+            || [string first "3978" $attrs(ipr)] >= 0} {
+            set newP 5
+        } elseif {[string first "trust" [string tolower $attrs(ipr)]] < 0} {
             set newP 1
+        } elseif {$ymd < "20091101"} {
+            # TLP 2009 09 copyright notice beginning with Nov 2009
+            set newP 7
         }
+        # note: no support for 2008 11 TLP text in IDs
     }
-    if {$newP == 5} {
+
+    if {$newP == 8} {
+        # RFCs: include escape clause in Copyright Notice
+        # IDs: include in Status Of This Memo (produced elsewhere), for date before Nov 2009
+        if {![string compare $attrs(ipr) "pre5378Trust200902"] && \
+            ([string compare $attrs(number) ""] || $ymd >= "20091101")} {
+            set copyshort $copyshortTrust200909esc
+        } else {
+            set copyshort $copyshortTrust200909
+        }
+        set funding ""
+        set copyrightP -1
+        set iprP 0
+    } elseif {$newP == 7} {
+        # RFCs: include escape clause in Copyright Notice
+        # IDs: include in Status Of This Memo (produced elsewhere)
+        if {![string compare $attrs(ipr) "pre5378Trust200902"] && \
+            [string compare $attrs(number) ""]} {
+            set copyshort $copyshortTrust200902esc
+        } else {
+            set copyshort $copyshortTrust200902
+        }
+        set funding ""
+        set copyrightP -1
+        set iprP 0
+    } elseif {$newP == 6} {
+        set copyshort $copyshortTrust200811
+        set funding ""
+        set copyrightP -1
+        set iprP 0
+    } elseif {$newP == 5} {
         set copyshort ""
-	set funding ""
+        set funding ""
     } elseif {$newP == 4} {
         set copyshort $copyshort3
-	set funding $funding2
+        set funding $funding2
     } elseif {$newP == 3} {
         set copyshort $copyshort2
-	set funding $funding2
+        set funding $funding2
     } elseif {$newP == 2} {
         set copyshort $copyshort2
-	set funding $funding1
+        set funding $funding1
     } elseif {$newP == 1} {
         set copyshort $copyshort1
-	set funding $funding1
+        set funding $funding1
     } else {
         set copyshort $copyshort1
-	set funding ""
+        set funding ""
     }
 
     if {   $passno == 2
@@ -5598,6 +5720,12 @@ proc pass2end_rfc {elemX} {
 
     set front [find_element front $attrs(.CHILDREN)]
     array set fv $elem($front)
+    if {[catch { clock format $fv(.PARSEDDATE) -format "%Y%m%d" -gmt true } \
+               ymd]} {
+        # Should differentiate between PARSEDATE not set (e.g., early pass)
+        # vs. PARSEDATE set to 0 (i.e., couldn't parse date)
+        set ymd ""
+    }
 
     set date [find_element date $fv(.CHILDREN)]
     array set dv $elem($date)
@@ -5617,9 +5745,11 @@ proc pass2end_rfc {elemX} {
         array set av $elem($child)
 
         set organization [find_element organization $av(.CHILDREN)]
-        array set ov [list abbrev ""]
-        if {[string compare $organization ""]} {
-            array set ov $elem($organization)
+        if {[llength $organization] == 1} {
+          array set ov [list abbrev ""]
+          if {[string compare $organization ""]} {
+              array set ov $elem($organization)
+          }
         }
 
         set block1 ""
@@ -5629,7 +5759,7 @@ proc pass2end_rfc {elemX} {
             }
             lappend block1 $av(fullname)
         }
-        if {[string compare $ov(.CTEXT) ""]} {
+        if {[llength $organization] == 1 && [string compare $ov(.CTEXT) ""]} {
             lappend block1 $ov(.CTEXT)
         }
 
@@ -5699,17 +5829,22 @@ proc pass2end_rfc {elemX} {
     # IPR #
     #######
 
-    set newP 2
+    set newP 3
     if {[string compare $attrs(number) ""]} {
-        if {$attrs(number) <= 4671} {
+        # TODO: set newP using PARSEDDATE for all the options
+        if {$attrs(number) <= 3707} {
+            set newP 0
+        } elseif {$attrs(number) <= 4671} {
             # 4671 is a guess
             set newP 1
-        } elseif {$attrs(number) <= 3707} {
-            set newP 0
+        } elseif {$ymd < "20081101"} {
+            set newP 2
         }
     } elseif {[string compare $attrs(ipr) ""]} {
-        if {   [string first "3667" $attrs(ipr)] < 0
-            && [string first "3978" $attrs(ipr)] < 0} {
+        if {   [string first "3667" $attrs(ipr)] >=0
+            || [string first "3978" $attrs(ipr)] >=0} {
+            set newP 2
+        } elseif {[string first "trust" [string tolower $attrs(ipr)]] < 0} {
             set newP 0
         }
     }
@@ -5726,7 +5861,7 @@ proc pass2end_rfc {elemX} {
                     }
                 }
                 set validity $validity1
-        } else {
+        } elseif {$newP == 2} {
                 switch -- $attrs(submissionType) {
                     IETF {
                         set copylong $copylong4
@@ -5736,6 +5871,10 @@ proc pass2end_rfc {elemX} {
                     }
                 }
                 set validity $validity2
+        } else {
+                # IETF Trust removed these statements at the back
+                set copylong ""
+                set validity ""
         }
     } else {
         global copylong1
@@ -5869,16 +6008,102 @@ set idshurl "http://www.ietf.org/shadow.html"
 
 # From RFC 2223, Section 6.
 set copyshort1 \
-"Copyright &copy; The Internet Society (%YEAR%). All Rights Reserved."
+{"Copyright &copy; The Internet Society (%YEAR%). All Rights Reserved."}
 
 # From the rfc-editor/instructions2authors.txt file, Section 4.3.
 # Currently draft-rfc-editor-rfc2223bis-08, which is expired.
 set copyshort2 \
-"Copyright &copy; The Internet Society (%YEAR%)."
+{"Copyright &copy; The Internet Society (%YEAR%)."}
 
 # RFC 4748 modification to copyshort2
 set copyshort3 \
-"Copyright &copy; The IETF Trust (%YEAR%)."
+{"Copyright &copy; The IETF Trust (%YEAR%)."}
+
+# Trust Copyright and License
+# various dates, some incl pre5378 escape clause
+
+set copyshortTrust200811 \
+{"Copyright (c) %YEAR% IETF Trust and the persons identified as the
+document authors.  All rights reserved."
+
+"This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents
+(http://trustee.ietf.org/license-info) in effect on the date of
+publication of this document.  Please review these documents
+carefully, as they describe your rights and restrictions with respect
+to this document."}
+
+set copyshortTrust200902 \
+{"Copyright (c) %YEAR% IETF Trust and the persons identified as the
+document authors.  All rights reserved."
+
+"This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents in effect on the date of
+publication of this document (http://trustee.ietf.org/license-info).
+Please review these documents carefully, as they describe your
+rights and restrictions with respect to this document."}
+
+set copyshortTrust200902esc \
+{"Copyright (c) %YEAR% IETF Trust and the persons identified as the
+document authors.  All rights reserved."
+
+"This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents in effect on the date of
+publication of this document (http://trustee.ietf.org/license-info).
+Please review these documents carefully, as they describe your
+rights and restrictions with respect to this document."
+
+"This document may contain material from IETF Documents or IETF
+Contributions published or made publicly available before November
+10, 2008.  The person(s) controlling the copyright in some of this
+material may not have granted the IETF Trust the right to allow
+modifications of such material outside the IETF Standards Process.
+Without obtaining an adequate license from the person(s) controlling
+the copyright in such materials, this document may not be modified
+outside the IETF Standards Process, and derivative works of it may
+not be created outside the IETF Standards Process, except to format
+it for publication as an RFC or to translate it into languages other
+than English."}
+
+set copyshortTrust200909 \
+{"Copyright (c) %YEAR% IETF Trust and the persons identified as the
+document authors.  All rights reserved."
+
+"This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents
+(http://trustee.ietf.org/license-info) in effect on the date of
+publication of this document.  Please review these documents
+carefully, as they describe your rights and restrictions with respect
+to this document. Code Components extracted from this document must
+include Simplified BSD License text as described in Section 4.e of
+the Trust Legal Provisions and are provided without warranty as
+described in the BSD License."}
+
+set copyshortTrust200909esc \
+{"Copyright (c) %YEAR% IETF Trust and the persons identified as the
+document authors.  All rights reserved."
+
+"This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents
+(http://trustee.ietf.org/license-info) in effect on the date of
+publication of this document.  Please review these documents
+carefully, as they describe your rights and restrictions with respect
+to this document. Code Components extracted from this document must
+include Simplified BSD License text as described in Section 4.e of
+the Trust Legal Provisions and are provided without warranty as
+described in the BSD License."
+
+"This document may contain material from IETF Documents or IETF
+Contributions published or made publicly available before November
+10, 2008.  The person(s) controlling the copyright in some of this
+material may not have granted the IETF Trust the right to allow
+modifications of such material outside the IETF Standards Process.
+Without obtaining an adequate license from the person(s) controlling
+the copyright in such materials, this document may not be modified
+outside the IETF Standards Process, and derivative works of it may
+not be created outside the IETF Standards Process, except to format
+it for publication as an RFC or to translate it into languages other
+than English."}
 
 # From the ietf/1id-guidelines.txt file, Section 5.
 set idinfo {
@@ -5970,6 +6195,15 @@ proc pass2begin_front {elemX} {
         }
         lappend left $first
 
+        if {[catch { set day $dv(day) }]} {
+            set day 1
+        }
+        if {[catch {set secs [clock scan "$dv(month) $day, $dv(year)" -gmt true]}]} {
+            set secs 0
+        }
+        set attrs(.PARSEDDATE) $secs
+        set elem($elemX) [array get attrs]
+
         if {[info exists rv(category)]} {
             set cindex [lsearch0 $categories $rv(category)]
         } else {
@@ -6043,10 +6277,9 @@ proc pass2begin_front {elemX} {
                 lappend left "Intended status:$colonspace [lindex [lindex $categories $cindex] $tindex]"
             }
 
-            if {[catch { set day $dv(day) }]} {
-                set day 1
+            if {$secs == 0} {
+                unexpected error "Can't parse date to generate expires"
             }
-            set secs [clock scan "$dv(month) $day, $dv(year)" -gmt true]
             incr secs [expr (185*86400)]
             set day [string trimleft \
                             [clock format $secs -format "%d" -gmt true] 0]
@@ -6054,9 +6287,16 @@ proc pass2begin_front {elemX} {
             lappend left "Expires:$colonspace $expires"
             set category "Expires $expires"
             set status $idinfo
+            set ipreal $rv(ipr)
+            set ymd [clock format $attrs(.PARSEDDATE) -format "%Y%m%d" \
+                           -gmt true]
+            if {($ymd >= "20091101") \
+                    && ![string compare $ipreal pre5378Trust200902]} {
+                set ipreal trust200902
+            }
             regsub -all -- "&" [lindex [lindex $iprstatus \
                                               [lsearch0 $iprstatus \
-                                                        $rv(ipr)]] 1] \
+                                                        $ipreal]] 1] \
                         "\\\\\\&" ipr
             regsub -all -- %IPR% $status $ipr status
             if {![string compare $mode html]} {
@@ -6071,6 +6311,9 @@ proc pass2begin_front {elemX} {
                 append extract [xref_$mode "" $xref($anchor) $anchor "" 1]
                 regsub -all -- {&nbsp;} $extract {%NBSP%} extract
                 append extract " as-is for separate use"
+                if {[string first "%IPREXTRACT%" $status] < 0} {
+                    unexpected error "iprExtract attribute not compatible with ipr $rv(ipr)"
+                }
             } else {
                 set extract ""
             }
@@ -6096,11 +6339,13 @@ proc pass2begin_front {elemX} {
 
         set organization [find_element organization $av(.CHILDREN)]
         array set ov [list abbrev ""]
-        if {[string compare $organization ""]} {
-            array set ov $elem($organization)
-        }
-        if {![string compare $ov(abbrev) ""]} {
-            set ov(abbrev) $ov(.CTEXT)
+        if {[llength $organization] == 1} {
+          if {[string compare $organization ""]} {
+              array set ov $elem($organization)
+          }
+          if {![string compare $ov(abbrev) ""]} {
+              set ov(abbrev) $ov(.CTEXT)
+          }
         }
 
         if {[string compare $av(initials) ""]} {
@@ -6181,8 +6426,25 @@ proc pass2begin_front {elemX} {
         lappend keywords $kv(.CTEXT)
     }
 
-    front_${mode}_begin $left $right $top $bottom $title $status $copying \
-                        $keywords $rv(xml:lang)
+    front_${mode}_begin $left $right $top $bottom $title $keywords $rv(xml:lang)
+
+    if {[string compare $rv(number) ""]} {
+      set cutoff 20090701
+    } else {
+      set cutoff 20091101
+    }
+
+    if {([catch { clock format $attrs(.PARSEDDATE) -format %Y%m%d \
+                               -gmt true } ymd]) \
+            || ($ymd < "$cutoff")} {
+        set options(.ABSTRACT1ST) 0
+        write_status_${mode} $status $copying 0
+    } else {
+        set options(.ABSTRACT1ST) 1
+        set attrs(.STATUS) $status
+        set attrs(.COPYING) $copying
+        set elem($elemX) [array get attrs]
+    }
 }
 
 proc pass2end_front {elemX} {
@@ -6191,6 +6453,11 @@ proc pass2end_front {elemX} {
     global options copyrightP
     global mode
     global crefs
+
+    array set attrs $elem($elemX)
+    if {[info exists attrs(.STATUS)]} {
+        write_status_${mode} $attrs(.STATUS) $attrs(.COPYING) 1
+    }
 
     set toc ""
     if {$options(.TOC)} {
@@ -6206,7 +6473,7 @@ proc pass2end_front {elemX} {
 
             switch -- $cv(.NAME) {
                 rfc {
-                    if {!$options(.PRIVATE) && $copyrightP && !$options(.RFCEDSTYLE)} {
+                    if {!$options(.PRIVATE) && ($copyrightP > 0) && !$options(.RFCEDSTYLE)} {
                         set title "Intellectual Property and Copyright Statements"
                         set anchor ""
                         if {![string compare $mode html]} {
@@ -6409,6 +6676,13 @@ proc pass2begin_section {elemX {appendP 0}} {
 }
 
 proc pass2begin_appendix {elemX {appendP 0}} {
+    global appendixW
+
+    if {[catch { set appendixW }]} {
+        set appendixW 1
+        unexpected warning \
+                   "<appendix/> element is deprecated, use <section/> instead"
+    }
     pass2begin_section $elemX 1
 }
 
@@ -7526,7 +7800,7 @@ proc rfc_txt {irefs authors iprstmt copying newP validity} {
 
     authors_txt $authors
 
-    if {(!$options(.PRIVATE)) && $copyrightP} {
+    if {(!$options(.PRIVATE)) && $copyrightP > 0} {
         end_page_txt
         if {!$options(.RFCEDSTYLE)} {
             write_line_txt "" -1
@@ -7541,7 +7815,9 @@ proc rfc_txt {irefs authors iprstmt copying newP validity} {
         if {0 && $newP} {
             write_line_txt "Copyright Statement"
         } else {
-            write_line_txt "Full Copyright Statement"
+            if {$newP < 3} {
+                write_line_txt "Full Copyright Statement"
+            }
         }
 
         foreach para $copying {
@@ -7549,7 +7825,7 @@ proc rfc_txt {irefs authors iprstmt copying newP validity} {
             pcdata_txt $para
         }
 
-        if {$newP} {
+        if {$newP && $newP < 3} {
             #if {![have_lines 4]} {
             #    end_page_txt
             #}
@@ -7632,8 +7908,7 @@ proc rfc_txt {irefs authors iprstmt copying newP validity} {
     return $result
 }
 
-proc front_txt_begin {left right top bottom title status copying keywords
-                      lang} {
+proc front_txt_begin {left right top bottom title keywords lang} {
     global options copyrightP
     global header footer lineno pageno blankP
     global eatP
@@ -7680,6 +7955,14 @@ proc front_txt_begin {left right top bottom title status copying keywords
     write_line_txt "" -1
 
     set indent $page_basic_indent
+}
+
+proc write_status_txt {status copying afterP} {
+    global options copyrightP iprP
+
+    if {$afterP} {
+        write_line_txt "" -1
+    }
 
     if {!$options(.PRIVATE)} {
         if {$options(.RFCEDSTYLE)} {
@@ -7696,8 +7979,10 @@ proc front_txt_begin {left right top bottom title status copying keywords
     if {(!$options(.PRIVATE)) && $copyrightP && [string length $copying]} {
         write_line_txt "" -1
         write_line_txt "Copyright Notice"
-        write_line_txt "" -1
-        pcdata_txt $copying
+        foreach para $copying {
+            write_line_txt "" -1
+            pcdata_txt $para
+        }
     }
 }
 
@@ -7873,7 +8158,7 @@ proc write_toc_txt {s1 title s2 len dot} {
 proc abstract_txt {} {
     global options
 
-    if {!$options(.COMPACT) || ![have_lines 4]} {
+    if {(!$options(.COMPACT) && !$options(.ABSTRACT1ST)) || ![have_lines 4]} {
         end_page_txt
     } else {
         write_line_txt ""
@@ -9318,7 +9603,7 @@ proc crefs_txt {title} {
         push_indent $i
 
         write_text_txt "  "
-        write_text_txt [lindex $crefs($cref) 3]
+        write_text_txt [chars_expand [lindex $crefs($cref) 3]]
         pop_indent
     }
 
@@ -10104,7 +10389,8 @@ proc rfc_html {irefs authors iprstmt copying newP validity} {
 
     authors_html $authors
 
-    if {(!$options(.PRIVATE)) && $copyrightP} {
+#!# puts "html copyrightP $copyrightP"
+    if {(!$options(.PRIVATE)) && $copyrightP > 0} {
         toc_html rfc.copyright
 
         # See comment in "proc rfc_txt" about this content.
@@ -10332,8 +10618,7 @@ set htmlstyle \
 --></style>"
 #               }}}4 CSS style-sheet
 
-proc front_html_begin {left right top bottom title status copying keywords
-                       lang} {
+proc front_html_begin {left right top bottom title keywords lang} {
     global prog prog_version prog_url
     global options copyrightP
     global htmlstyle
@@ -10429,6 +10714,10 @@ proc front_html_begin {left right top bottom title status copying keywords
         pcdata_html $line
     }
     write_html "</h1>"
+}
+
+proc write_status_html {status copying afterP} {
+    global options copyrightP iprP
 
     if {!$options(.PRIVATE)} {
         write_html ""
@@ -10447,9 +10736,11 @@ proc front_html_begin {left right top bottom title status copying keywords
     if {(!$options(.PRIVATE)) && $copyrightP && [string length $copying]} {
         write_html ""
         write_html "<$options(.TOPTAG)>Copyright Notice</$options(.TOPTAG)>"
-        write_html "<p>"
-        pcdata_html $copying
-        write_html "</p>"
+        foreach para $copying {
+            write_html "<p>"
+            pcdata_html $para
+            write_html "</p>"
+        }
     }
 }
 
@@ -11951,7 +12242,7 @@ proc rfc_nr {irefs authors iprstmt copying newP validity} {
 
     authors_nr $authors
 
-    if {(!$options(.PRIVATE)) && $copyrightP} {
+    if {(!$options(.PRIVATE)) && $copyrightP > 0} {
         end_page_nr
         if {!$options(.RFCEDSTYLE)} {
             write_line_nr "" -1
@@ -12060,8 +12351,7 @@ proc rfc_nr {irefs authors iprstmt copying newP validity} {
     return $result
 }
 
-proc front_nr_begin {left right top bottom title status copying keywords
-                     lang} {
+proc front_nr_begin {left right top bottom title keywords lang} {
     global prog prog_version
     global options copyrightP
     global lineno pageno blankP
@@ -12127,6 +12417,17 @@ proc front_nr_begin {left right top bottom title status copying keywords
     write_line_nr "" -1
 
     condwrite_in_nr $page_basic_indent 1
+}
+
+proc write_status_nr {status copying afterP} {
+    global options copyrightP iprP
+    global page_basic_indent
+
+    if {$afterP} {
+        write_line_nr "" -1
+
+        condwrite_in_nr $page_basic_indent 1
+    }
 
     if {!$options(.PRIVATE)} {
         write_it ".ti 0"
@@ -12145,8 +12446,10 @@ proc front_nr_begin {left right top bottom title status copying keywords
         write_line_nr "" -1
         write_it ".ti 0"
         write_line_nr "Copyright Notice"
-        write_line_nr "" -1
-        pcdata_nr $copying
+        foreach para $copying {
+            write_line_nr "" -1
+            pcdata_nr $para
+        }
     }
 }
 
@@ -12161,7 +12464,7 @@ proc write_toc_nr {s1 title s2 len dot} {
 proc abstract_nr {} {
     global options
 
-    if {!$options(.COMPACT) || ![have_lines 4]} {
+    if {(!$options(.COMPACT) && !$options(.ABSTRACT1ST)) || ![have_lines 4]} {
         end_page_nr
     } else {
         write_line_nr ""
@@ -12362,7 +12665,7 @@ proc crefs_nr {title} {
 
         indent_text_nr "[format %-*.*s $width $width "\[$cref\]"]  " -1
 
-        write_text_nr [lindex $crefs($cref) 3]
+        write_text_nr [chars_expand [lindex $crefs($cref) 3]]
         flush_text
 
         pop_indent
@@ -16929,7 +17232,7 @@ set xdv::dtd(rfc2629.cmodel) \
           back          [list references        "*"  \
                               section           "*"] \
           title         {}                           \
-          author        [list organization      ""   \
+          author        [list organization      "?"   \
                               address           "*"] \
           organization  {}                           \
           address       [list postal            "?"  \
@@ -17375,8 +17678,7 @@ if {[llength $argv] > 1} {
 
         check_vrsn_idle
     } result]} {
-        if {   ![catch {package require -exact Tk [info tclversion]}]
-            && [info exists tk_version]} {
+        if {[catch {package require Tk}]} {
             catch { wm geometry . 10x10+-100+-100 }
             catch { wm withdraw . }
             bgerror $result
@@ -17387,8 +17689,7 @@ if {[llength $argv] > 1} {
     }
 
     exit 0
-} elseif {   [catch {package require -exact Tk [info tclversion]}]
-          || ![info exists tk_version]} {
+} elseif {[catch {package require Tk}]} {
     set guiP -1
     #puts stdout ""
     puts stdout "invoke as \"xml2rfc   input-file output-file\""

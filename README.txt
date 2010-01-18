@@ -4,12 +4,12 @@
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
                                                                B. Fenner
-                                                    AT&T Labs - Research
+                                                   Arista Networks, Inc.
                                                                C. Levert
-                                                       February 28, 2008
+                                                        October 27, 2009
 
 
-                             xml2rfc v1.33
+                             xml2rfc v1.34
 
 
 Table of Contents
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose, et al.                                                    [Page 1]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 1.  Introduction
@@ -110,7 +110,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                    [Page 2]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 2.  Requirements
@@ -166,7 +166,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                    [Page 3]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 3.  Testing
@@ -222,7 +222,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                    [Page 4]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 4.  Next steps
@@ -241,11 +241,10 @@ README                        xml2rfc v1.33                February 2008
    Of course, if you like the default behavior, you don't need any
    behavior-modifying directives in your input file!  Although *xml2rfc*
    supports putting several attribute-like directives in one PI, be
-   warned that rfc2629.xslt (Appendix B) does not support it and that
-   there are issues in doing this for a non-include-file directive
-   following an include-file directive (Section 4.1.2).  It is good
-   practice to always surround the value with either single or double
-   quotes.
+   warned that there are issues in doing this for a non-include-file
+   directive following an include-file directive (Section 4.1.2).  It is
+   good practice to always surround the value with either single or
+   double quotes.
 
 4.1.1.  Option Settings
 
@@ -271,20 +270,17 @@ README                        xml2rfc v1.33                February 2008
    |          background |      ""      | when producing a html file,  |
    |                     |              | use this image               |
    |                     |              |                              |
-
-
+   |          colonspace |      no      | put two spaces instead of    |
+   |                     |              | one after each colon (":")   |
+   |                     |              | in txt or nroff files        |
 
 
 
 Rose, et al.                                                    [Page 5]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
-   |          colonspace |      no      | put two spaces instead of    |
-   |                     |              | one after each colon (":")   |
-   |                     |              | in txt or nroff files        |
-   |                     |              |                              |
    |            comments |      no      | render <cref> information    |
    |                     |              |                              |
    |             compact | (rfcedstyle) | when producing a txt/nroff   |
@@ -332,9 +328,13 @@ README                        xml2rfc v1.33                February 2008
 
 
 
+
+
+
+
 Rose, et al.                                                    [Page 6]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
    |            linefile |      n/a     | a string like "35:file.xml"  |
@@ -390,7 +390,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                    [Page 7]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
    |          rfcedstyle |      no      | attempt to closely follow    |
@@ -446,7 +446,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                    [Page 8]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
    |            sortrefs |      no      | sort references              |
@@ -502,7 +502,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                    [Page 9]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
    |           useobject |      no      | when producing a html file,  |
@@ -558,7 +558,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                   [Page 10]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
    You can also have *xml2rfc* set the "XML_LIBRARY" environment
@@ -614,7 +614,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                   [Page 11]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 5.  The Page Model
@@ -670,7 +670,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                   [Page 12]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 6.  Additions to RFC 2629
@@ -726,7 +726,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                   [Page 13]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
    *xml2rfc* also recognizes an undocumented "align" attribute (with
@@ -782,7 +782,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                   [Page 14]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
    For example (to be viewed in HTML):
@@ -838,7 +838,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                   [Page 15]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 7.  Limitations of xml2rfc
@@ -894,7 +894,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                   [Page 16]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 8.  References
@@ -950,7 +950,7 @@ README                        xml2rfc v1.33                February 2008
 
 Rose, et al.                                                   [Page 17]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
@@ -1006,19 +1006,19 @@ Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
 
 Rose, et al.                                                   [Page 18]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
 
    The file "rfc2629.xslt" can be used with an XSLT-capable formatter
-   (e.g., Saxon, Xalan, xsltproc, or MSIE6) to produce HTML.  A word of
-   warning though: the XSLT script only supports a limited subset of the
-   processing instruction directives discussed earlier (Section 4.1) and
-   each attribute-like directive must be in its own PI (i.e., "<?rfc
-   keyword='value'?>").  The latest version [8] (and full distribution
-   ZIP file [9]) can be downloaded from the original site which also
-   hosts its documentation [10].
+   (e.g., Saxon, Xalan, xsltproc, and most browsers) to produce HTML.  A
+   word of warning though: the XSLT script only supports a limited
+   subset of the processing instruction directives discussed earlier
+   (Section 4.1).  The latest version [8] (and full distribution ZIP
+   file [9]) can be downloaded from the original site which also hosts
+   its documentation [10].
+
 
 
 
@@ -1062,7 +1062,7 @@ Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
 
 Rose, et al.                                                   [Page 19]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 Appendix C.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
@@ -1118,7 +1118,7 @@ Appendix C.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
 
 Rose, et al.                                                   [Page 20]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 Appendix D.  A Special Thanks
@@ -1174,7 +1174,7 @@ Appendix D.  A Special Thanks
 
 Rose, et al.                                                   [Page 21]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 Appendix E.  Copyrights
@@ -1230,7 +1230,7 @@ Appendix E.  Copyrights
 
 Rose, et al.                                                   [Page 22]
 
-README                        xml2rfc v1.33                February 2008
+README                        xml2rfc v1.34                 October 2009
 
 
 Authors' Addresses
@@ -1246,13 +1246,13 @@ Authors' Addresses
 
 
    Bill Fenner
-   AT&T Labs - Research
-   1 River Oaks Place
-   San Jose, CA  95134-1918
+   Arista Networks, Inc.
+   275 Middlefield Rd, Suite 50
+   Menlo Park, CA  94025
    US
 
-   Phone: +1 408 493-8505
-   Email: fenner@research.att.com
+   Phone: +1 650 924-2455
+   Email: fenner@gmail.com
 
 
    Charles Levert

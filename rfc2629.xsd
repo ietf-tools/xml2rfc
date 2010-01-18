@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- revised DTD for the RFC document series, draft of 2008-02-01 -->
+<!-- revised DTD for the RFC document series, draft of 2009-10-06 -->
+<!--
+  Typical invocation:
+      <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
+                           "http://xml.resource.org/authoring/rfc2629.dtd" [
+        ... dtd subset ...
+      ]>
+    or
+      <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+        ... dtd subset ...
+      ]>
+-->
 <!--
   Contents
+  
+    Character entities
   
     DTD data types
   
@@ -13,6 +26,7 @@
   
     Back matter
 -->
+<!-- Character entities -->
 <!--
   DTD data types:
   
@@ -95,6 +109,13 @@
             <xs:enumeration value="full3978"/>
             <xs:enumeration value="noModification3978"/>
             <xs:enumeration value="noDerivatives3978"/>
+            <xs:enumeration value="trust200811"/>
+            <xs:enumeration value="noModificationTrust200811"/>
+            <xs:enumeration value="noDerivativesTrust200811"/>
+            <xs:enumeration value="trust200902"/>
+            <xs:enumeration value="noModificationTrust200902"/>
+            <xs:enumeration value="noDerivativesTrust200902"/>
+            <xs:enumeration value="pre5378Trust200902"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -135,7 +156,7 @@
   <xs:element name="author">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="organization"/>
+        <xs:element minOccurs="0" ref="organization"/>
         <xs:element minOccurs="0" ref="address"/>
       </xs:sequence>
       <xs:attribute name="initials" type="ATEXT"/>
@@ -167,7 +188,7 @@
     </xs:complexType>
   </xs:element>
   <!--
-    this content model should be more strict: 
+    this content model should be more strict:
     at most one of each the city, region, code, and country
     elements may be present
   -->
@@ -220,7 +241,6 @@
     </xs:complexType>
   </xs:element>
   <!-- The body -->
-  <!-- later on, may be (section+,appendix*,section*) -->
   <xs:element name="middle">
     <xs:complexType>
       <xs:sequence>
@@ -236,11 +256,8 @@
           <xs:element ref="figure"/>
           <xs:element ref="texttable"/>
           <xs:element ref="iref"/>
-          <xs:element ref="section"/>
         </xs:choice>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="section"/>
-        </xs:choice>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="section"/>
       </xs:sequence>
       <xs:attribute name="anchor" type="xs:ID"/>
       <xs:attribute name="title" use="required" type="ATEXT"/>
@@ -256,7 +273,8 @@
     </xs:complexType>
   </xs:element>
   <!--
-    <!ELEMENT appendix    ((t|figure|texttable|iref)*,appendix)*>
+    use of <appendix/> is deprecated...
+    <!ELEMENT appendix    ((t|figure|texttable|iref)*,appendix*)>
     <!ATTLIST appendix
               anchor      ID                 #IMPLIED
               title       %ATEXT;            #REQUIRED
@@ -339,7 +357,7 @@
   <xs:element name="cref">
     <xs:complexType mixed="true">
       <xs:attribute name="anchor" type="xs:ID"/>
-      <xs:attribute name="source" default="" type="ATEXT"/>
+      <xs:attribute name="source" type="ATEXT"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="spanx">
@@ -381,9 +399,9 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="alt" type="ATEXT"/>
-      <xs:attribute name="width" type="ATEXT"/>
-      <xs:attribute name="height" type="ATEXT"/>
+      <xs:attribute name="alt" default="" type="ATEXT"/>
+      <xs:attribute name="width" default="" type="ATEXT"/>
+      <xs:attribute name="height" default="" type="ATEXT"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="preamble">
@@ -401,7 +419,7 @@
     <xs:complexType mixed="true">
       <xs:attribute ref="xml:space" default="preserve"/>
       <xs:attribute name="name" default="" type="ATEXT"/>
-      <xs:attribute name="type" type="ATEXT"/>
+      <xs:attribute name="type" default="" type="ATEXT"/>
       <xs:attribute name="src" type="URI"/>
       <xs:attribute name="align" default="left">
         <xs:simpleType>
@@ -412,9 +430,9 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="alt" type="ATEXT"/>
-      <xs:attribute name="width" type="ATEXT"/>
-      <xs:attribute name="height" type="ATEXT"/>
+      <xs:attribute name="alt" default="" type="ATEXT"/>
+      <xs:attribute name="width" default="" type="ATEXT"/>
+      <xs:attribute name="height" default="" type="ATEXT"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="postamble">
@@ -459,7 +477,7 @@
         <xs:simpleType>
           <xs:restriction base="xs:token">
             <xs:enumeration value="all"/>
-            <xs:enumeration value="non"/>
+            <xs:enumeration value="none"/>
             <xs:enumeration value="headers"/>
             <xs:enumeration value="full"/>
           </xs:restriction>
@@ -547,4 +565,3 @@
     </xs:complexType>
   </xs:element>
 </xs:schema>
-

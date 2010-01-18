@@ -1,5 +1,5 @@
 <!--
-  revised DTD for the RFC document series, draft of 2008-02-01
+  revised DTD for the RFC document series, draft of 2009-10-06
   -->
 
 
@@ -107,7 +107,10 @@
           seriesNo    %NUMBER;           #IMPLIED
           ipr         (full2026|noDerivativeWorks2026|none
                       |full3667|noModification3667|noDerivatives3667
-                      |full3978|noModification3978|noDerivatives3978)
+                      |full3978|noModification3978|noDerivatives3978
+                      |trust200811|noModificationTrust200811|noDerivativesTrust200811
+                      |trust200902|noModificationTrust200902|noDerivativesTrust200902
+                      |pre5378Trust200902)
                                          #IMPLIED
           iprExtract  IDREF              #IMPLIED
           submissionType
@@ -129,7 +132,7 @@
 <!ATTLIST title
           abbrev      %ATEXT;            #IMPLIED> 
 
-<!ELEMENT author      (organization,address?)>
+<!ELEMENT author      (organization?,address?)>
 <!ATTLIST author
           initials    %ATEXT;            #IMPLIED
           surname     %ATEXT;            #IMPLIED
@@ -179,7 +182,6 @@
   -->
 
 
-<!-- later on, may be (section+,appendix*,section*) -->
 <!ELEMENT middle      (section+)>
 
 <!ELEMENT section     ((t|figure|texttable|iref)*,section*)>
@@ -189,7 +191,7 @@
           toc         (include|exclude|default)
                                          "default">
 
-<!--
+<!-- use of <appendix/> is deprecated...
 <!ELEMENT appendix    ((t|figure|texttable|iref)*,appendix*)>
 <!ATTLIST appendix
           anchor      ID                 #IMPLIED

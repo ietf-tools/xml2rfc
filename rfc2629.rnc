@@ -1,6 +1,18 @@
-# revised DTD for the RFC document series, draft of 2008-02-01
+# revised DTD for the RFC document series, draft of 2009-10-06
+
+# Typical invocation:
+#     <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
+#                          "http://xml.resource.org/authoring/rfc2629.dtd" [
+#       ... dtd subset ...
+#     ]>
+#   or
+#     <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+#       ... dtd subset ...
+#     ]>
 
 # Contents
+# 
+#   Character entities
 # 
 #   DTD data types
 # 
@@ -11,6 +23,8 @@
 #   The Body
 # 
 #   Back matter
+
+# Character entities
 
 # DTD data types:
 # 
@@ -51,7 +65,7 @@ attlist.rfc &=
   attribute number { NUMBER }?,
   [ a:defaultValue = "" ] attribute obsoletes { NUMBERS }?,
   [ a:defaultValue = "" ] attribute updates { NUMBERS }?,
-  [ a:defaultValue = "info" ] attribute category { "std" | "bcp" | "info" | "exp" | "historic" }?,
+  attribute category { "std" | "bcp" | "info" | "exp" | "historic" }?,
   attribute seriesNo { NUMBER }?,
   attribute ipr {
     "full2026"
@@ -63,8 +77,16 @@ attlist.rfc &=
     | "full3978"
     | "noModification3978"
     | "noDerivatives3978"
+    | "trust200811"
+    | "noModificationTrust200811"
+    | "noDerivativesTrust200811"
+    | "trust200902"
+    | "noModificationTrust200902"
+    | "noDerivativesTrust200902"
+    | "pre5378Trust200902"
   }?,
   attribute iprExtract { xsd:IDREF }?,
+  [ a:defaultValue = "IETF" ]
   attribute submissionType { "IETF" | "independent" }?,
   attribute docName { ATEXT }?,
   [ a:defaultValue = "en" ] attribute xml:lang { ATEXT }?
@@ -85,7 +107,7 @@ attlist.front &= empty
 # the "abbrev" attribute is used for headers, etc.
 title = element title { attlist.title, CTEXT }
 attlist.title &= attribute abbrev { ATEXT }?
-author = element author { attlist.author, organization, address? }
+author = element author { attlist.author, organization?, address? }
 attlist.author &=
   attribute initials { ATEXT }?,
   attribute surname { ATEXT }?,
@@ -141,18 +163,18 @@ attlist.abstract &= empty
 note = element note { attlist.note, t+ }
 attlist.note &= attribute title { ATEXT }
 # The body
-
-# later on, may be (section+,appendix*,section*)
 middle = element middle { attlist.middle, section+ }
 attlist.middle &= empty
 section =
   element section {
-    attlist.section, ((t | figure | texttable | iref)* , section*)
+    attlist.section, (t | figure | texttable | iref)*, section*
   }
 attlist.section &=
   attribute anchor { xsd:ID }?,
   attribute title { ATEXT },
-  [ a:defaultValue = "default" ] attribute toc { "include" | "exclude" | "default" }?
+  [ a:defaultValue = "default" ]
+  attribute toc { "include" | "exclude" | "default" }?
+# use of <appendix/> is deprecated...
 # <!ELEMENT appendix    ((t|figure|texttable|iref)*,appendix*)>
 # <!ATTLIST appendix
 #           anchor      ID                 #IMPLIED
@@ -174,7 +196,9 @@ t =
      | spanx
      | vspace)*
   }
-attlist.t &= attribute anchor { xsd:ID }?, attribute hangText { ATEXT }?
+attlist.t &=
+  attribute anchor { xsd:ID }?,
+  attribute hangText { ATEXT }?
 # the value of the style attribute is inherited from the closest 
 # parent
 \list = element list { attlist.list, t+ }
@@ -186,7 +210,8 @@ xref = element xref { attlist.xref, CTEXT }
 attlist.xref &=
   attribute target { xsd:IDREF },
   [ a:defaultValue = "false" ] attribute pageno { "true" | "false" }?,
-  [ a:defaultValue = "default" ] attribute format { "counter" | "title" | "none" | "default" }?
+  [ a:defaultValue = "default" ]
+  attribute format { "counter" | "title" | "none" | "default" }?
 eref = element eref { attlist.eref, CTEXT }
 attlist.eref &= attribute target { URI }
 iref = element iref { attlist.iref, empty }
@@ -200,22 +225,27 @@ attlist.cref &=
   attribute source { ATEXT }?
 spanx = element spanx { attlist.spanx, CTEXT }
 attlist.spanx &=
-  [ a:defaultValue = "preserve" ] attribute xml:space { "default" | "preserve" }?,
+  [ a:defaultValue = "preserve" ]
+  attribute xml:space { "default" | "preserve" }?,
   [ a:defaultValue = "emph" ] attribute style { ATEXT }?
 vspace = element vspace { attlist.vspace, empty }
 attlist.vspace &=
   [ a:defaultValue = "0" ] attribute blankLines { NUMBER }?
 figure =
-  element figure { attlist.figure, iref*, preamble?, artwork, postamble? }
+  element figure {
+    attlist.figure, iref*, preamble?, artwork, postamble?
+  }
 attlist.figure &=
   attribute anchor { xsd:ID }?,
   [ a:defaultValue = "" ] attribute title { ATEXT }?,
-  [ a:defaultValue = "false" ] attribute suppress-title { "true" | "false" }?,
-  [ a:defaultValue = "" ] attribute src { ATEXT }?,
-  [ a:defaultValue = "left" ] attribute align { "left" | "center" | "right" }?,
+  [ a:defaultValue = "false" ]
+  attribute suppress-title { "true" | "false" }?,
+  attribute src { URI }?,
+  [ a:defaultValue = "left" ]
+  attribute align { "left" | "center" | "right" }?,
   [ a:defaultValue = "" ] attribute alt { ATEXT }?,
-  [ a:defaultValue = "" ] attribute width { NUMBER }?,
-  [ a:defaultValue = "" ] attribute height { NUMBER }?
+  [ a:defaultValue = "" ] attribute width { ATEXT }?,
+  [ a:defaultValue = "" ] attribute height { ATEXT }?
 preamble =
   element preamble {
     attlist.preamble, (TEXT | xref | eref | iref | cref | spanx)*
@@ -223,11 +253,13 @@ preamble =
 attlist.preamble &= empty
 artwork = element artwork { attlist.artwork, TEXT* }
 attlist.artwork &=
-  [ a:defaultValue = "preserve" ] attribute xml:space { "default" | "preserve" }?,
+  [ a:defaultValue = "preserve" ]
+  attribute xml:space { "default" | "preserve" }?,
   [ a:defaultValue = "" ] attribute name { ATEXT }?,
   [ a:defaultValue = "" ] attribute type { ATEXT }?,
   attribute src { URI }?,
-  [ a:defaultValue = "left" ] attribute align { "left" | "center" | "right" }?,
+  [ a:defaultValue = "left" ]
+  attribute align { "left" | "center" | "right" }?,
   [ a:defaultValue = "" ] attribute alt { ATEXT }?,
   [ a:defaultValue = "" ] attribute width { ATEXT }?,
   [ a:defaultValue = "" ] attribute height { ATEXT }?
@@ -243,13 +275,17 @@ texttable =
 attlist.texttable &=
   attribute anchor { xsd:ID }?,
   [ a:defaultValue = "" ] attribute title { ATEXT }?,
-  [ a:defaultValue = "false" ] attribute suppress-title { "true" | "false" }?,
-  [ a:defaultValue = "center" ] attribute align { "left" | "center" | "right" }?,
-  [ a:defaultValue = "full" ] attribute style { "all" | "none" | "headers" | "full" }?
+  [ a:defaultValue = "false" ]
+  attribute suppress-title { "true" | "false" }?,
+  [ a:defaultValue = "center" ]
+  attribute align { "left" | "center" | "right" }?,
+  [ a:defaultValue = "full" ]
+  attribute style { "all" | "none" | "headers" | "full" }?
 ttcol = element ttcol { attlist.ttcol, CTEXT }
 attlist.ttcol &=
   attribute width { ATEXT }?,
-  [ a:defaultValue = "left" ] attribute align { "left" | "center" | "right" }?
+  [ a:defaultValue = "left" ]
+  attribute align { "left" | "center" | "right" }?
 c = element c { attlist.c, (TEXT | xref | eref | iref | cref | spanx)* }
 attlist.c &= empty
 # Back matter
