@@ -1,11 +1,60 @@
 
 
 The README file                                                  M. Rose
-                                                  Invisible Worlds, Inc.
-                                                             August 2001
+                                            Dover Beach Consulting, Inc.
+                                                       December 21, 2001
 
 
-                              xml2rfc v1.8
+                              xml2rfc v1.9
+
+
+Table of Contents
+
+   1.    Introduction . . . . . . . . . . . . . . . . . . . . . . . .  2
+   2.    Requirements . . . . . . . . . . . . . . . . . . . . . . . .  2
+   2.1   Tcl/Tk version 8 . . . . . . . . . . . . . . . . . . . . . .  2
+   2.2   TclXML version 1.1.1 . . . . . . . . . . . . . . . . . . . .  3
+   3.    Testing  . . . . . . . . . . . . . . . . . . . . . . . . . .  3
+   3.1   Testing under a windowing system . . . . . . . . . . . . . .  3
+   3.2   Testing without a windowing system . . . . . . . . . . . . .  4
+   4.    Next steps . . . . . . . . . . . . . . . . . . . . . . . . .  4
+   4.1   Processing Instructions  . . . . . . . . . . . . . . . . . .  4
+   4.1.1 Option Settings  . . . . . . . . . . . . . . . . . . . . . .  5
+   4.1.2 Include Files  . . . . . . . . . . . . . . . . . . . . . . .  6
+   5.    Additions to RFC 2629  . . . . . . . . . . . . . . . . . . .  6
+   6.    Limitations  . . . . . . . . . . . . . . . . . . . . . . . .  7
+         References . . . . . . . . . . . . . . . . . . . . . . . . .  8
+         Author's Address . . . . . . . . . . . . . . . . . . . . . .  8
+   A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . .  8
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                            [Page 1]
+
+README                        xml2rfc v1.9                 December 2001
 
 
 1. Introduction
@@ -13,7 +62,7 @@ The README file                                                  M. Rose
    This is a package to convert memos written in XML to the RFC format.
 
    If you don't want to install any software, you can use the web-based
-   service[2].
+   service [2].
 
 2. Requirements
 
@@ -23,7 +72,7 @@ The README file                                                  M. Rose
    scripting language, Tk is Tcl with support for your windowing system.
 
    To get a source or binary distribution for your system, go to the
-   Scriptics website[3] and install it.  If you get the binary
+   Scriptics website [3] and install it.  If you get the binary
    distribution, this is pretty simple.
 
    Of course, you may already have Tcl version 8.  To find out, try
@@ -52,9 +101,16 @@ The README file                                                  M. Rose
 
 
 
-Rose                                                            [Page 1]
+
+
+
+
+
+
+
+Rose                                                            [Page 2]
 
-README                        xml2rfc v1.8                   August 2001
+README                        xml2rfc v1.9                 December 2001
 
 
 2.2 TclXML version 1.1.1
@@ -63,15 +119,15 @@ README                        xml2rfc v1.8                   August 2001
    TclXML is a Tcl package that parses XML.
 
    We've included a copy of TclXML in this release, you can also look in
-   the TclXML site[4].
+   the TclXML site [4].
 
    For example, on Unix, you'd probably put the files somewhere under
 
-       /usr/local/lib/tcl/
+       /usr/local/lib/tcl8.3/TclXML-1.0
 
    or
 
-       C:\Program Files\Tcl\lib\tcl8.0\TclXML-1.0\
+       C:\Program Files\Tcl\lib\tcl8.3\TclXML-1.0\
 
    depending on whether you're on UNIX or Windows.
 
@@ -108,9 +164,9 @@ README                        xml2rfc v1.8                   August 2001
 
 
 
-Rose                                                            [Page 2]
+Rose                                                            [Page 3]
 
-README                        xml2rfc v1.8                   August 2001
+README                        xml2rfc v1.9                 December 2001
 
 
 3.2 Testing without a windowing system
@@ -131,73 +187,17 @@ README                        xml2rfc v1.8                   August 2001
               or "xml2nroff inputfile"
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Rose                                                            [Page 3]
-
-README                        xml2rfc v1.8                   August 2001
-
-
 4. Next steps
 
-   Read either rfc2629.txt [1] or rfc2629.html[5].  In particular,
-   Section 3 has some good information.
+   Read either rfc2629.txt [1] or rfc2629.html.  In particular, Section
+   3 has some good information.
 
 4.1 Processing Instructions
 
-   A "processing instruction" is a directive to an XML application.  If
-   you want to give directives to xml2rfc, the PIs look like this:
+   A *processing instruction* is a directive to an XML application.  If
+   you want to give directives to 'xml2rfc', the PIs look like this:
 
-       <?rfc keyword="value" ?>
-
-
-4.1.1 Option Settings
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+       <?rfc keyword='value'?>
 
 
 
@@ -222,8 +222,10 @@ README                        xml2rfc v1.8                   August 2001
 
 Rose                                                            [Page 4]
 
-README                        xml2rfc v1.8                   August 2001
+README                        xml2rfc v1.9                 December 2001
 
+
+4.1.1 Option Settings
 
    The list of valid keywords are:
 
@@ -237,6 +239,9 @@ README                        xml2rfc v1.8                   August 2001
                                little less compact
 
        toc         no          generate a table-of-contents
+
+       tocompact   yes         if toc is "yes", then setting this to
+                               "no" will make it a little less compact
 
        editing     no          insert editing marks for ease of
                                discussing draft versions
@@ -262,28 +267,34 @@ README                        xml2rfc v1.8                   August 2001
    Remember, that as with everything else in XML, keywords and values
    are case-sensitive.
 
-4.1.2 Include Files
 
-   xml2rfc has an include-file facility, e.g.,
 
-       <?rfc include="file" ?>
 
-   xml2rfc will consult the $XML_LIBRARY environment variable for a
-   search path of where to look for files.  (If this envariable isn't
-   set, the directory containing the file that contains the include-file
-   directive is used.)
+
+
 
 
 
 
 Rose                                                            [Page 5]
 
-README                        xml2rfc v1.8                   August 2001
+README                        xml2rfc v1.9                 December 2001
 
 
-   You can also have xml2rfc set this envariable directly, by including
-   a file called ".xml2rfc.rc" in the directory where your main file is,
-   e.g.,
+4.1.2 Include Files
+
+   'xml2rfc' has an include-file facility, e.g.,
+
+       <?rfc include='file'?>
+
+   'xml2rfc' will consult the $XML_LIBRARY environment variable for a
+   search path of where to look for files.  (If this envariable isn't
+   set, the directory containing the file that contains the include-file
+   directive is used.)
+
+   You can also have 'xml2rfc' set this envariable directly, by
+   including a file called ".xml2rfc.rc" in the directory where your
+   main file is, e.g.,
 
    global env
 
@@ -299,61 +310,50 @@ README                        xml2rfc v1.8                   August 2001
    which, on Windows, sets the envariable to a default value, and then
    inserts, at the front, the directory where your main file is.
 
-5. Limitations
+   There are links to various bibliographic databases (RFCs, I-Ds, and
+   so on) on the 'xml2rfc' homepage [5].
 
-   o  The "figure" element's "title" attribute is ignored.
+5. Additions to RFC 2629
 
-   o  The "artwork" element's "name" and "type" attributes are ignored.
+      o  The 'artwork' element has an undocumented 'src' attribute that
+         is consulted only if slides are being generated, e.g.,
 
-   o  The "artwork" element has a non-standard "src" attribute that is
-      consulted only if slides are being generated, e.g.,
+          <figure><artwork src='layers.gif' /></figure>
 
-          <figure><artwork src="layers.gif" /></figure>
+      o  The 'artwork' element has optional 'name' and 'type'
+         attributes.
 
-   o  The "xref" element's "pageno" attribute is ignored.
+      o  The 'references' element may occur more than once in the 'back'
+         element (e.g., for normative and non-normative references).
+         Further, the element has an optional 'title' attribute.
 
-   o  The "references" elemeht has a non-standard "title" attribute,
-      which can be used as an override.
-
-References
-
-   [1]  Rose, M., "Writing I-Ds and RFCs using XML", RFC 2629, June
-        1999.
-
-   [2]  <http://xml.resource.org/>
-
-   [3]  <http://www.scriptics.com/software/tcltk/8.4.html>
-
-   [4]  <http://www.zveno.com/zm.cgi/in-tclxml/>
-
-   [5]  <rfc2629-author.html>
-
-
+      o  The value of the 'list' element's 'style' attribute can start
+         with "format ".
 
 
 
 Rose                                                            [Page 6]
 
-README                        xml2rfc v1.8                   August 2001
+README                        xml2rfc v1.9                 December 2001
 
 
-Author's Address
+      o  If the 'style' attribute of the 'list' element has either of
+         the values "hanging" or "format", then a second, optional
+         attribute, called 'hangIndent' is consulted.
 
-   Marshall T. Rose
-   Invisible Worlds, Inc.
-   131 Stony Circle
-   Suite 500
-   Santa Rosa, CA  95401
-   US
+   For more information on these last two additions, see Section 2.3.1.2
+   of the html or text [6] versions of the 2629bis document for the
+   details.
 
-   Phone: +1 707 578 2350
-   EMail: mrose@invisible.net
-   URI:   http://invisible.net/
+6. Limitations
 
+      o  The 'figure' element's 'title' attribute is ignored, except
+         when generating HTML.
 
+      o  The 'artwork' element's 'name' and 'type' attributes are
+         ignored.
 
-
-
+      o  The 'xref' element's 'pageno' attribute is ignored.
 
 
 
@@ -389,4 +389,60 @@ Author's Address
 
 
 Rose                                                            [Page 7]
+
+README                        xml2rfc v1.9                 December 2001
+
+
+References
+
+   [1]  Rose, M., "Writing I-Ds and RFCs using XML", RFC 2629, June
+        1999.
+
+   [2]  <http://xml.resource.org/>
+
+   [3]  <http://www.scriptics.com/software/tcltk/8.4.html>
+
+   [4]  <http://www.zveno.com/zm.cgi/in-tclxml/>
+
+   [5]  <http://xml.resource.org/>
+
+   [6]  <draft-mrose-writing-rfcs.txt>
+
+
+Author's Address
+
+   Marshall T. Rose
+   Dover Beach Consulting, Inc.
+   POB 255268
+   Sacramento, CA  95865-5268
+   US
+
+   Phone: +1 916 483 8878
+   EMail: mrose@dbc.mtview.ca.us
+
+Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
+
+      1.  Install Tcl/Tk 8.3.4
+
+      2.  When you performed Step 1, a folder in your "Extensions"
+          folder called "Tool Command Language" was created.  Create a
+          new folder under "Extensions", with any name you like.
+
+      3.  From the TclXML 1.1.1 distribution, move the files
+          "pkgIndex.tcl", "sgml.tcl", and "xml.tcl" to this new folder.
+
+      4.  Drag the file "xml2rfc.tcl" onto the "Drag & Drop Tclets"
+          application that was installed in Step 1.
+
+      5.  When asked for an appropriate "wish" stub, select "Wish
+          8.3.4".
+
+      6.  The "Drap & Drop Tclets" application will write out an
+          executable version of 'xml2rfc'.
+
+
+
+
+
+Rose                                                            [Page 8]
 

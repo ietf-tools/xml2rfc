@@ -106,6 +106,8 @@ proc xml2rfc {input {output ""} {remote ""}} {
 
         set data [prexml [read $stdin] $inputD $input]
 
+        catch { close $stdin }
+
         set errorP 0
         set passmax 2
         set stdout ""
@@ -125,7 +127,6 @@ proc xml2rfc {input {output ""} {remote ""}} {
     set einfo $errorInfo
 
     catch { close $stdout }
-    catch { close $stdin }
 
     if {$code == 1} {
         set result [around2fl $result]
@@ -233,8 +234,12 @@ proc prexml {stream inputD {inputF ""}} {
     }
     set path [split $path $c]
 
-    set stream [prexmlaux 1 [prexmlaux 0 $stream $inputD $inputF $path] \
-                          $inputD $inputF $path]
+    if {[string first "%include." $stream] < 0} {
+        set newP 1
+    } else {
+        set newP 0
+    }
+    set stream [prexmlaux $newP $stream $inputD $inputF $path]
 
 # because <![CDATA[ ... ]]> isn't supported in TclXML...
     set data ""
@@ -312,7 +317,7 @@ proc prexmlaux {newP stream inputD inputF path} {
         if {![regexp -nocase -- {^[a-z0-9.-]+$} $y]} {
             error "invalid include $y"
         }
-        set include ""
+        set foundP 0
         foreach dir $path {
             if {(![file exists [set file [file join $dir $y]]]) \
                     && (![file exists [set file [file join $dir $y.xml]]])} {
@@ -321,10 +326,28 @@ proc prexmlaux {newP stream inputD inputF path} {
             set fd [open $file { RDONLY }]
             set include [read $fd]
             catch { close $fd }
+            set foundP 1
             break
         }
-        if {![string compare $include ""]} {
+        if {!$foundP} {
             error "unable to find external file $y.xml"
+        }
+
+        set body [string trimleft $include]
+        if {([string first "<?XML " [string toupper $body]] == 0) 
+                && ([set len [string first "?>" $body]] >= 0)} {
+            set start [expr [string length $include]-[string length $body]]
+            incr len
+            set include [string replace $include $start [expr $start+$len] \
+                                [format " %*.*s" $len $len ""]]
+
+            set body [string trimleft $include]
+        }
+        if {([string first "<!DOCTYPE " [string toupper $body]] == 0) 
+                && ([set len [string first ">" $body]] >= 0)} {
+            set start [expr [string length $include]-[string length $body]]
+            set include [string replace $include $start [expr $start+$len] \
+                                [format " %*.*s" $len $len ""]]
         }
 
         set len [numlines $include]
@@ -435,17 +458,18 @@ proc pass {tag} {
             }
             set elemN 0
             catch { unset options }
-            array set options [list compact    no \
-                                    subcompact no \
-                                    toc        no \
-                                    editing    no \
-                                    emoticonic no \
-                                    private    "" \
-                                    header     "" \
-                                    footer     "" \
-                                    slides     no \
-                                    sortrefs   no \
-                                    symrefs    no \
+            array set options [list compact    no  \
+                                    subcompact no  \
+                                    toc        no  \
+                                    tocompact  yes \
+                                    editing    no  \
+                                    emoticonic no  \
+                                    private    ""  \
+                                    header     ""  \
+                                    footer     ""  \
+                                    slides     no  \
+                                    sortrefs   no  \
+                                    symrefs    no  \
                                     background ""]
             normalize_options
             catch { unset stack }
@@ -604,6 +628,12 @@ proc begin {name {av {}}} {
 
             back {
                 catch { unset depth(section) }
+            }
+
+            abstract {
+                if {[lsearch0 $stack back] < 0} {
+                    set counter(abstract) 1
+                }
             }
 
             section {
@@ -812,6 +842,8 @@ proc end {name} {
             -
         list
             -
+        figure
+            -
         preamble
             -
         postamble {
@@ -945,6 +977,7 @@ proc normalize_options {} {
     foreach {o O} [list compact    .COMPACT    \
                         subcompact .SUBCOMPACT \
                         toc        .TOC        \
+                        tocompact  .TOCOMPACT  \
                         editing    .EDITING    \
                         emoticonic .EMOTICONIC \
                         symrefs    .SYMREFS    \
@@ -1315,6 +1348,10 @@ proc pass2begin_front {elemX} {
             lappend left "Category: $category"
             set status [list [lindex [lindex $categories $cindex] 3]]
         } else {
+            if {![info exists counter(abstract)]} {
+                unexpected error "I-D missing abstract"
+            }
+
             lappend left "Internet-Draft"
             if {[catch { set day $dv(day) }]} {
                 set day 1
@@ -1424,6 +1461,7 @@ proc pass2end_front {elemX} {
     global mode
 
     set toc ""
+    set refs 0
     set irefP 0
     if {$options(.TOC)} {
         set last ""
@@ -1471,13 +1509,16 @@ proc pass2end_front {elemX} {
 
                 references {
                     if {[catch { set anchor $cv(.ANCHOR) }]} {
-                        set anchor rfc.references
+                        set anchor rfc.references[incr refs]
                         set label "&#167;"
                     } else {
                         set label ""
                     }
+                    if {[catch { set title $cv(title) }]} {
+                        set title References
+                    }
                     set toc [linsert $toc [expr [llength $toc]-1] \
-                                     [list $label References $anchor]]
+                                     [list $label $title $anchor]]
                 }
 
                 iref {
@@ -1564,7 +1605,7 @@ proc pass2begin_t {elemX} {
     global counter depth elemN elem passno stack xref
     global mode
 
-    array set attrs [list .COUNTER "" style "" hangText ""]
+    array set attrs [list .COUNTER "" style "" hangText "" hangIndent ""]
     array set attrs $elem($elemX)
     set elem($elemX) [array get attrs]
 
@@ -1575,6 +1616,7 @@ proc pass2begin_t {elemX} {
         set elemY $av(elemN)
         array set av $elem($elemY)
 
+        set attrs(hangIndent) $av(hangIndent) 
         if {![string compare [set attrs(style) $av(style)] format]} {
             set attrs(style) hanging
             set format $av(format)
@@ -1607,6 +1649,7 @@ proc pass2begin_list {elemX} {
 
     set style empty
     set format ""
+    set hangIndent 3
     foreach frame $stack {
         if {[string compare [lindex $frame 0] list]} {
             continue
@@ -1618,8 +1661,11 @@ proc pass2begin_list {elemX} {
 
         set style $av(style)
         set format $av(format)
+        set hangIndent $av(hangIndent)
     }
     array set attrs $elem($elemX)
+    catch { set hangIndent $attrs(hangIndent) }
+    set attrs(hangIndent) $hangIndent
     catch {
         if {[string first "format " [set style $attrs(style)]]} {
             set format $attrs(format)
@@ -1629,8 +1675,11 @@ proc pass2begin_list {elemX} {
                         [set format [string trimleft \
                                             [string range $attrs(style) 7 \
                                             end]]] ""]} {
-                if {[string first "%d" $format] < 0} {
+                if {[set x [string first "%d" $format]] < 0} {
                     unexpected error "missing %d in format style"
+                }
+                if {[string first "%d" [string range $format $x end]] > 0} {
+                    unexpected error "too many %d's in format style"
                 }
                 if {![info exists counter($format)]} {
                     set counter($format) 0
@@ -1653,7 +1702,7 @@ proc pass2begin_list {elemX} {
         catch { set hangText $tv(hangText) }
     }
 
-    list_$mode begin $counters $attrs(style) $hangText
+    list_$mode begin $counters $attrs(style) $attrs(hangIndent) $hangText
 }
 
 proc pass2end_list {elemX} {
@@ -1662,7 +1711,7 @@ proc pass2end_list {elemX} {
 
     array set attrs $elem($elemX)
 
-    list_$mode end "" $attrs(style) ""
+    list_$mode end "" $attrs(style) "" ""
 }
 
 
@@ -1672,7 +1721,7 @@ proc pass2begin_figure {elemX {internal 0}} {
     global counter depth elemN elem passno stack xref
     global mode
 
-    array set attrs [list anchor ""]
+    array set attrs [list anchor "" title ""]
     array set attrs $elem($elemX)
 
     set lines 0
@@ -1696,7 +1745,17 @@ proc pass2begin_figure {elemX {internal 0}} {
         return $lines
     }
 
-    figure_$mode $lines $attrs(anchor) $av(src)
+    figure_$mode begin $lines $attrs(anchor) $av(src) $attrs(title)
+}
+
+proc pass2end_figure {elemX} {
+    global counter depth elemN elem passno stack xref
+    global mode
+
+    array set attrs [list anchor "" title ""]
+    array set attrs $elem($elemX)
+
+    figure_$mode end "" $attrs(anchor) "" $attrs(title)
 }
 
 
@@ -1815,11 +1874,21 @@ proc pass2begin_vspace {elemX} {
 proc pass2begin_back {elemX} {
     global counter depth elemN elem passno stack xref
     global mode
+    global erefs
 
     array set attrs $elem($elemX)
 
-    foreach child [find_element references $attrs(.CHILDREN)] {
-        pass2begin_references $child
+    if {[llength [set children [find_element references $attrs(.CHILDREN)]]] \
+            == 1} {
+        set erefP 1
+    } else {
+        set erefP 0
+    }
+    foreach child $children {
+        pass2begin_references $child $erefP
+    }
+    if {(!$erefP) && ([array size erefs] > 0)} {
+        erefs_$mode URIs
     }
 
     array set fv $elem(2)
@@ -1900,7 +1969,7 @@ proc pass2begin_back {elemX} {
     set elem($elemX) [array get attrs]
 }
 
-proc pass2begin_references {elemX} {
+proc pass2begin_references {elemX erefP} {
     global counter depth elemN elem passno stack xref
     global mode
     global options
@@ -1927,7 +1996,7 @@ proc pass2begin_references {elemX} {
     foreach child $children {
         pass2begin_reference $child $width
     }
-    references_$mode end
+    references_$mode end "" $erefP
 }
 
 proc sort_references {elemX elemY} {
@@ -2248,6 +2317,12 @@ proc front_txt_end {toc irefP} {
         set mid [expr 72-($len1+$len2+5)]
 
         foreach c $toc {
+            if {!$options(.TOCOMPACT)} {
+                if {[string last . [lindex $c 0]] \
+                        == [expr [string length [lindex $c 0]]-1]} {
+                    write_line_txt ""
+                }
+            }
             set s1 [format "   %-*.*s " $len1 $len1 [lindex $c 0]]
             set s2 [format " %*.*s" $len2 $len2 [lindex $c 2]]
             set title [chars_expand [string trim [lindex $c 1]]]
@@ -2342,7 +2417,7 @@ proc t_txt {tag counter style hangText editNo} {
             }
 
             hanging {
-                set counter $hangText
+                set counter "$hangText "
             }
 
             default {
@@ -2355,7 +2430,7 @@ proc t_txt {tag counter style hangText editNo} {
         } elseif {!$options(.SUBCOMPACT)} {
             write_line_txt ""
         }
-        write_text_txt "$counter "
+        write_text_txt [format "%3s%-[expr $pos-3]s" "" $counter]
         push_indent $pos
     } else {
         if {$options(.EDITING)} {
@@ -2368,7 +2443,7 @@ proc t_txt {tag counter style hangText editNo} {
     set eatP 1
 }
 
-proc list_txt {tag counters style hangText} {
+proc list_txt {tag counters style hangIndent hangText} {
     global options
     global eatP
 
@@ -2395,7 +2470,11 @@ proc list_txt {tag counters style hangText} {
                     set i 1
                 }
             }
-            push_indent [expr $i+2]
+            if {[incr i 2] > $hangIndent} {
+                push_indent [expr $i+3]
+            } else {
+                push_indent [expr $hangIndent+3]
+            }
         }
 
         end {
@@ -2410,9 +2489,41 @@ proc list_txt {tag counters style hangText} {
     }
 }
 
-proc figure_txt {lines anchor src} {
-    if {![have_lines $lines]} {
-        end_page_txt
+proc figure_txt {tag lines anchor src title} {
+    global counter depth elemN elem passno stack xref
+
+    switch -- $tag {
+        begin {
+            if {[string compare $title ""]} {
+                incr lines 8
+            }
+            if {![have_lines $lines]} {
+                end_page_txt
+            }
+            if {[string compare $title ""]} {
+                write_line_txt ""
+                write_line_txt \
+                    "   ---------------------------------------------------------------------"
+                write_line_txt ""
+            }
+        }
+
+        end {
+            if {[string compare $title ""]} {
+                if {[string compare $anchor ""]} {
+                    array set av $xref($anchor)
+                    set prefix "Figure $av(value): "
+                } else {
+                    set prefix ""
+                }
+                write_line_txt ""
+                write_text_txt "$prefix$title" c
+                write_line_txt ""
+                write_line_txt \
+                    "   ---------------------------------------------------------------------"
+                write_line_txt ""
+            }
+        }
     }
 }
 
@@ -2496,7 +2607,7 @@ proc eref_txt {text counter target} {
     if {([string first "#" $target] < 0) \
             && ([string compare $text $target])} {
         set erefs($counter) $target
-        append line "\[$counter\]"
+        append line " \[$counter\]"
     }
     write_text_txt $line
 
@@ -2528,7 +2639,8 @@ proc vspace_txt {lines} {
     set eatP 1
 }
 
-proc references_txt {tag {title ""}} {
+proc references_txt {tag {title ""} {erefP 0}} {
+    global counter depth elemN elem passno stack xref
     global options
     global header footer lineno pageno blankP
 
@@ -2545,28 +2657,48 @@ proc references_txt {tag {title ""}} {
         }
 
         end {
-            global erefs
-
-            set names  [lsort -integer [array names erefs]]
-            set width [expr [string length [lindex $names end]]+2]
-            foreach eref $names {
-                write_line_txt ""
-
-                set i [expr [string length \
-                                    [set prefix \
-                                         [format %-*.*s $width $width \
-                                                 "\[$eref\]"]]+2]]
-                write_text_txt $prefix
-
-                push_indent $i
-
-                write_text_txt "  "
-                write_url $erefs($eref)
-
-                pop_indent
+            if {$erefP} {
+                erefs_txt
+            } else {
+                flush_text
             }
         }
     }
+}
+
+proc erefs_txt {{title ""}} {
+    global erefs
+    global options
+
+    if {[string compare $title ""]} {
+        if {$options(.COMPACT)} {
+            write_line_txt ""
+        } else {
+            end_page_txt
+        }
+        write_line_txt $title
+    }
+
+    set names  [lsort -integer [array names erefs]]
+    set width [expr [string length [lindex $names end]]+2]
+    foreach eref $names {
+        write_line_txt ""
+
+        set i [expr [string length \
+                            [set prefix \
+                                 [format %-*.*s $width $width \
+                                         "\[$eref\]"]]+2]]
+        write_text_txt $prefix
+
+        push_indent $i
+
+        write_text_txt "  "
+        write_url $erefs($eref)
+
+        pop_indent
+    }
+
+    flush_text
 }
 
 proc reference_txt {prefix names title series date anchor target target2
@@ -2724,8 +2856,9 @@ proc pcdata_txt {text {pre 0}} {
 }
 
 proc emoticonic_txt {text} {
-    foreach {ei begin end} [list * * * \
-                                 ' ' '] {
+    foreach {ei begin end} [list  *   *   * \
+                                  '   '   ' \
+                                 {"} {"} {"}] {
         set body ""
         while {[set x [string first "|$ei" $text]] >= 0} {
             if {$x > 0} {
@@ -2737,7 +2870,17 @@ proc emoticonic_txt {text} {
                 error "missing close for |$ei"
             }
             if {$x > 0} {
-                append body [string range $text 0 [expr $x-1]]
+                set inline [string range $text 0 [expr $x-1]]
+                if {[string first $begin $inline] == 0} {
+                    set inline [string range $inline [string length $begin] \
+                                       end]
+                }
+                set tail [expr [string length $inline]-[string length $end]]
+                if {[string last $end $inline] == $tail} {
+                    set inline [string range $inline 0 [expr $tail-1]]
+                }
+
+                append body $inline
             }
             append body "$end"
             set text [string range $text [expr $x+1] end]
@@ -2825,19 +2968,27 @@ proc write_text_txt {text {direction l}} {
         if {$i > 72} {
             set x [string last " " [set line [string range $buffer 0 72]]]
             set y [string last "-" [string range $line 0 71]]
+            set z [string last "/" [string range $line 0 71]]
+            if {$y < $z} {
+                set y $z
+            }
             if {$x < $y} {
                 set x $y
             }
             if {$x < 0} {
                 set x [string last " " $buffer]
                 set y [string last "-" $buffer]
+                set z [string last "/" $buffer]
+                if {$y > $z} {
+                    set y $z
+                }
                 if {$x > $y} {
                     set x $y
                 }
             }
             if {$x < 0} {
                 set x $i
-            } elseif {$x == $y} {
+            } elseif {($x == $y) || ($x == $z)} {
                 incr x
             } elseif {$x+1 == $indent} {
                 set x $i
@@ -3247,7 +3398,7 @@ proc t_html {tag counter style hangText editNo} {
     }
 }
 
-proc list_html {tag counters style hangText} {
+proc list_html {tag counters style hangIndent hangText} {
     global stdout
     global hangP
 
@@ -3288,15 +3439,28 @@ proc list_html {tag counters style hangText} {
     set hangP 0
 }
 
-proc figure_html {lines anchor src} {
+proc figure_html {tag lines anchor src title} {
     global options
     global stdout
 
-    if {[string compare $anchor ""]} {
-        puts $stdout "<a name=\"$anchor\"></a>"
-    }
-    if {$options(.SLIDES) && ([string compare $src ""])} {
-        puts $stdout "<img src=\"$src\"></img>"
+    switch -- $tag {
+        begin {
+            if {[string compare $title ""]} {
+                puts $stdout "<br><hr size=\"1\" shade=\"0\">"
+            }
+            if {[string compare $anchor ""]} {
+                puts $stdout "<a name=\"$anchor\"></a>"
+            }
+            if {$options(.SLIDES) && ([string compare $src ""])} {
+                puts $stdout "<img src=\"$src\"></img>"
+            }
+        }
+
+        end {
+            if {[string compare $title ""]} {
+                puts $stdout "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" align=\"center\"><tr><td align=\"center\"><font face=\"monaco, MS Sans Serif\" size=\"1\"><b>&nbsp;$title&nbsp;</b></font><br></td></tr></table><hr size=\"1\" shade=\"0\">"
+            }
+        }
     }
 }
 
@@ -3310,6 +3474,7 @@ proc postamble_html {tag {editNo ""}} {
 
 proc xref_html {text av target} {
     global elem
+    global options
     global stdout
 
     array set attrs $av    
@@ -3338,7 +3503,10 @@ proc xref_html {text av target} {
 
     if {![string compare $text ""]} {
         set text $tv(title)
+    } elseif {$options(.EMOTICONIC)} {
+        set text [emoticonic_html $text]
     }
+
     set post ""
     if {[string compare $text ""]} {
         switch -- $attrs(type) {
@@ -3361,11 +3529,14 @@ proc xref_html {text av target} {
 }
 
 proc eref_html {text counter target} {
+    global options
     global stdout
 
     if {![string compare $text ""]} {
         set text $target
-    }
+    } elseif {$options(.EMOTICONIC)} {
+        set text [emoticonic_html $text]
+    } 
 
     puts -nonewline $stdout "<a href=\"$target\">$text</a>"
 }
@@ -3402,9 +3573,10 @@ proc vspace_html {lines} {
     set hangP 0
 }
 
-# don't need to return anything even though back_txt does...
+# don't need to return anything even though txt/nr versions do...
 
-proc references_html {tag {title ""}} {
+proc references_html {tag {title ""} {erefP 0}} {
+    global counter depth elemN elem passno stack xref
     global options
     global stdout
 
@@ -3417,9 +3589,13 @@ proc references_html {tag {title ""}} {
 
     switch -- $tag {
         begin {
+            if {![info exists counter(references)]} {
+                set counter(references) 0
+            }
+
             puts $stdout ""
-            toc_html rfc.references
-            puts $stdout "<h3>"
+            toc_html rfc.references[incr counter(references)]
+            puts -nonewline $stdout "<h3>"
             pcdata_html $title
             puts $stdout "</h3>"
 
@@ -3640,32 +3816,40 @@ proc pcdata_html {text {pre 0}} {
         if {![slide_pre $text]} {
             puts $stdout "</font><pre>$text</pre>$font"
         }
-    } elseif {$options(.EMOTICONIC)} {
-        foreach {ei begin end} [list * <strong> </strong> \
-                                     ' <b>      </b>] {
-            set body ""
-            while {[set x [string first "|$ei" $text]] >= 0} {
-                if {$x > 0} {
-                    append body [string range $text 0 [expr $x-1]]
-                }
-                append body "$begin"
-                set text [string range $text [expr $x+2] end]
-                if {[set x [string first "|" $text]] < 0} {
-                    error "missing close for |$ei"
-                }
-                if {$x > 0} {
-                    append body [string range $text 0 [expr $x-1]]
-                }
-                append body "$end"
-                set text [string range $text [expr $x+1] end]
-            }
-            append body $text
-            set text $body
-        }
-        puts -nonewline $stdout $text
     } else {
+        if {$options(.EMOTICONIC)} {
+            set text [emoticonic_html $text]
+        }
+
         puts -nonewline $stdout $text
     }
+}
+
+proc emoticonic_html {text} {
+    foreach {ei begin end} [list *  <strong> </strong> \
+                                 '  <b>      </b>      \
+                                {"} <b>      </b>] {
+        set body ""
+        while {[set x [string first "|$ei" $text]] >= 0} {
+            if {$x > 0} {
+                append body [string range $text 0 [expr $x-1]]
+            }
+            append body "$begin"
+            set text [string range $text [expr $x+2] end]
+            if {[set x [string first "|" $text]] < 0} {
+                error "missing close for |$ei"
+            }
+            if {$x > 0} {
+                append body [string range $text 0 [expr $x-1]]
+            }
+            append body "$end"
+            set text [string range $text [expr $x+1] end]
+        }
+        append body $text
+        set text $body
+    }
+
+    return $text
 }
 
 
@@ -3908,8 +4092,8 @@ proc rfc_nr {irefs copying} {
         set indexpg $pageno
 
         if {$lastin != 0} {
-	    write_it ".in [set lastin [set indent 0]]"
-	    set indents {}
+            write_it ".in [set lastin [set indent 0]]"
+            set indents {}
         }
         write_line_nr "Index"
 
@@ -3948,9 +4132,9 @@ proc rfc_nr {irefs copying} {
     if {(!$options(.PRIVATE)) && $copyrightP} {
         set result $pageno
 
-	if {$lastin != 3} {
-	    write_it ".in [set lastin [set indent 3]]"
-	    set indents {}
+        if {$lastin != 3} {
+            write_it ".in [set lastin [set indent 3]]"
+            set indents {}
         }
         write_it ".ti 0"
         write_line_nr "Full Copyright Statement"
@@ -3992,7 +4176,7 @@ proc front_nr_begin {left right top bottom title status copying} {
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.8 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.9 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -4102,6 +4286,12 @@ proc front_nr_end {toc irefP} {
         set mid [expr 72-($len1+$len2+5)]
 
         foreach c $toc {
+            if {!$options(.SUBCOMPACT)} {
+                if {[string last . [lindex $c 0]] \
+                        == [expr [string length [lindex $c 0]]-1]} {
+                    write_line_txt ""
+                }
+            }
             set s1 [format "%-*.*s " $len1 $len1 [lindex $c 0]]
             set s2 [format " %*.*s" $len2 $len2 [lindex $c 2]]
             set title [chars_expand [string trim [lindex $c 1]]]
@@ -4173,8 +4363,8 @@ proc section_nr {prefix top title lines anchor} {
     pop_indent
 
     if {$lastin != 3} {
-	write_it ".in [set lastin [set indent 3]]"
-	set indents {}
+        write_it ".in [set lastin [set indent 3]]"
+        set indents {}
     }
 
     return $pageno
@@ -4202,7 +4392,7 @@ proc t_nr {tag counter style hangText editNo} {
             }
 
             hanging {
-                set counter $hangText
+                set counter "$hangText "
                 set left ""
             }
 
@@ -4216,7 +4406,7 @@ proc t_nr {tag counter style hangText editNo} {
         } elseif {!$options(.SUBCOMPACT)} {
             write_line_nr ""
         }
-        indent_text_nr "$counter " $left
+        indent_text_nr [format "%3s%-[expr $pos-3]s" "" $counter] $left
         pop_indent
         push_indent $pos
     } else {
@@ -4230,7 +4420,7 @@ proc t_nr {tag counter style hangText editNo} {
     set eatP 1
 }
 
-proc list_nr {tag counters style hangText} {
+proc list_nr {tag counters style hangIndent hangText} {
     global options
     global eatP
     global indent lastin
@@ -4258,7 +4448,11 @@ proc list_nr {tag counters style hangText} {
                     set i 1
                 }
             }
-            push_indent [expr $i+2]
+            if {[incr i 2] > $hangIndent} {
+                push_indent [expr $i+3]
+            } else {
+                push_indent [expr $hangIndent+3]
+            }
         }
 
         end {
@@ -4270,18 +4464,50 @@ proc list_nr {tag counters style hangText} {
 
             set eatP 1
 
-	    if {$lastin != $indent} {
-	        write_it ".in [set lastin $indent]"
-	    }
+            if {$lastin != $indent} {
+                write_it ".in [set lastin $indent]"
+            }
         }
     }
 }
 
-proc figure_nr {lines anchor src} {
-    if {![have_lines $lines]} {
-        end_page_nr
+proc figure_nr {tag lines anchor src title} {
+    global counter depth elemN elem passno stack xref
+
+    switch -- $tag {
+        begin {
+            if {[string compare $title ""]} {
+                incr lines 8
+            }
+            if {![have_lines $lines]} {
+                end_page_nr
+            }
+            flush_text
+            if {[string compare $title ""]} {
+                write_line_nr ""
+                write_line_nr \
+                    "---------------------------------------------------------------------"
+                write_line_nr ""
+            }
+        }
+
+        end {
+            if {[string compare $title ""]} {
+                if {[string compare $anchor ""]} {
+                    array set av $xref($anchor)
+                    set prefix "Figure $av(value): "
+                } else {
+                    set prefix ""
+                }
+                write_line_nr ""
+                write_text_nr "$prefix$title" c
+                write_line_nr ""
+                write_line_nr \
+                    "---------------------------------------------------------------------"
+                write_line_nr ""
+            }
+        }
     }
-    flush_text
 }
 
 proc preamble_nr {tag {editNo ""}} {
@@ -4364,7 +4590,7 @@ proc eref_nr {text counter target} {
     if {([string first "#" $target] < 0) \
             && ([string compare $text $target])} {
         set erefs($counter) $target
-        append line "\[$counter\]"
+        append line " \[$counter\]"
     }
     write_text_nr $line
 
@@ -4396,7 +4622,7 @@ proc vspace_nr {lines} {
     set eatP 1
 }
 
-proc references_nr {tag {title ""}} {
+proc references_nr {tag {title ""} {erefP 0}} {
     global options
     global header footer lineno pageno blankP
     global nofillP lastin
@@ -4412,7 +4638,7 @@ proc references_nr {tag {title ""}} {
                 flush_text
                 write_it ".fi"
                 set nofillP 0
-		set lastin -1
+                set lastin -1
             }
             write_it ".ti 0"
             write_line_nr $title
@@ -4421,20 +4647,50 @@ proc references_nr {tag {title ""}} {
         }
 
         end {
-            global erefs
-
-            set names  [lsort -integer [array names erefs]]
-            set width [expr [string length [lindex $names end]]+2]
-            foreach eref $names {
-                write_line_nr ""
-
-                indent_text_nr "[format %-*.*s $width $width "\[$eref\]"]  " -1
-                write_url $erefs($eref)
+            if {$erefP} {
+                erefs_nr
+            } else {
                 flush_text
-                pop_indent
             }
         }
     }
+}
+
+proc erefs_nr {{title ""}} {
+    global erefs
+    global options
+    global nofillP lastin
+
+    if {[string compare $title ""]} {
+        if {$options(.COMPACT)} {
+            write_line_nr ""
+        } else {
+            end_page_nr
+        }
+        if {$nofillP} {
+            flush_text
+            write_it ".fi"
+            set nofillP 0
+            set lastin -1
+        }
+        write_it ".ti 0"
+        write_line_nr $title
+    }
+
+    set names  [lsort -integer [array names erefs]]
+    set width [expr [string length [lindex $names end]]+2]
+    foreach eref $names {
+        write_line_nr ""
+
+        indent_text_nr "[format %-*.*s $width $width "\[$eref\]"]  " -1
+
+        write_url $erefs($eref)
+        flush_text
+
+        pop_indent
+    }
+
+    flush_text
 }
 
 proc reference_nr {prefix names title series date anchor target target2 
@@ -4591,7 +4847,7 @@ proc pcdata_nr {text {pre 0}} {
             write_it ".nf"
         } else {
             write_it ".fi"
-	    set lastin -1
+            set lastin -1
         }
         set nofillP $pre
     }
@@ -4640,7 +4896,7 @@ proc indent_text_nr {prefix {left ""}} {
     if {$nofillP} {
         write_it ".fi"
         set nofillP 0
-	set lastin -1
+        set lastin -1
     }
 
     if {![string compare $left ""]} {
@@ -4712,19 +4968,27 @@ proc write_text_nr {text {direction l}} {
         if {$i > 72} {
             set x [string last " " [set line [string range $buffer 0 72]]]
             set y [string last "-" [string range $line 0 71]]
+            set z [string last "/" [string range $line 0 71]]
+            if {$y < $z} {
+                set y $z
+            }
             if {$x < $y} {
                 set x $y
             }
             if {$x < 0} {
                 set x [string last " " $buffer]
                 set y [string last "-" $buffer]
+                set z [string last "/" $buffer]
+                if {$y > $z} {
+                    set y $z
+                }
                 if {$x > $y} {
                     set x $y
                 }
             }
             if {$x < 0} {
                 set x $i
-            } elseif {$x == $y} {
+            } elseif {($x == $y) || ($x == $z)} {
                 incr x
             } elseif {$x+1 == $indent} {
                 set x $i
@@ -5256,7 +5520,7 @@ if {![info exists tk_version]} {
                 set file $f
             }
 
-            eval [file tail [lindex $argv 0]] $file
+            eval [file tail [file rootname [lindex $argv 0]]] $file
         }
 
         3 {
