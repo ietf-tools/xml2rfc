@@ -1,11 +1,12 @@
 
 
+
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                      September 28, 2004
+                                                          September 2004
 
 
-                             xml2rfc v1.26
+                             xml2rfc v1.27
 
 
 Table of Contents
@@ -25,9 +26,8 @@ Table of Contents
          Author's Address . . . . . . . . . . . . . . . . . . . . . . 10
    A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . . 11
    B.    rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . . 12
-   C.    Copyrights . . . . . . . . . . . . . . . . . . . . . . . . . 13
-
-
+   C.    Windows XP/Cygwin Installation (courtesy of Joe Touch) . . . 13
+   D.    Copyrights . . . . . . . . . . . . . . . . . . . . . . . . . 14
 
 
 
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose                                                            [Page 1]
 
-README                       xml2rfc v1.26                September 2004
+README                        xml2rfc v1.27               September 2004
 
 
 1.  Introduction
@@ -110,7 +110,7 @@ README                       xml2rfc v1.26                September 2004
 
 Rose                                                            [Page 2]
 
-README                       xml2rfc v1.26                September 2004
+README                        xml2rfc v1.27               September 2004
 
 
 2.  Requirements
@@ -166,7 +166,7 @@ README                       xml2rfc v1.26                September 2004
 
 Rose                                                            [Page 3]
 
-README                       xml2rfc v1.26                September 2004
+README                        xml2rfc v1.27               September 2004
 
 
 3.  Testing
@@ -222,7 +222,7 @@ README                       xml2rfc v1.26                September 2004
 
 Rose                                                            [Page 4]
 
-README                       xml2rfc v1.26                September 2004
+README                        xml2rfc v1.27               September 2004
 
 
 4.  Next steps
@@ -232,8 +232,8 @@ README                       xml2rfc v1.26                September 2004
 
 4.1  Processing Instructions
 
-   A *processing instruction* is a directive to an XML application.  If
-   you want to give directives to 'xml2rfc', the processing instructions
+   A _processing instruction_ is a directive to an XML application.  If
+   you want to give directives to *xml2rfc*, the processing instructions
    (PIs) look like this:
 
        <?rfc keyword='value'?>
@@ -278,7 +278,7 @@ README                       xml2rfc v1.26                September 2004
 
 Rose                                                            [Page 5]
 
-README                       xml2rfc v1.26                September 2004
+README                        xml2rfc v1.27               September 2004
 
 
 4.1.1  Option Settings
@@ -334,7 +334,7 @@ README                       xml2rfc v1.26                September 2004
 
 Rose                                                            [Page 6]
 
-README                       xml2rfc v1.26                September 2004
+README                        xml2rfc v1.27               September 2004
 
 
    |      editing |      no      | insert editing marks for ease of    |
@@ -370,17 +370,17 @@ README                       xml2rfc v1.26                September 2004
    Remember, that as with everything else in XML, keywords and values
    are case-sensitive.
 
-   With the exception of the 'needLines' PI, you normally put all of
+   With the exception of the *needLines* PI, you normally put all of
    these processing instructions at the beginning of the document (right
    after the XML declartion).
 
 4.1.2  Include Files
 
-   'xml2rfc' has an include-file facility, e.g.,
+   *xml2rfc* has an include-file facility, e.g.,
 
        <?rfc include='file'?>
 
-   'xml2rfc' will consult the $XML_LIBRARY environment variable for a
+   *xml2rfc* will consult the $XML_LIBRARY environment variable for a
    search path of where to look for files.  (If this envariable isn't
    set, the directory containing the file that contains the include-file
    directive is used.)
@@ -390,10 +390,10 @@ README                       xml2rfc v1.26                September 2004
 
 Rose                                                            [Page 7]
 
-README                       xml2rfc v1.26                September 2004
+README                        xml2rfc v1.27               September 2004
 
 
-   You can also have 'xml2rfc' set this envariable directly, by creating
+   You can also have *xml2rfc* set this envariable directly, by creating
    a file called ".xml2rfc.rc" in the directory where your main file is,
    e.g.,
 
@@ -421,7 +421,7 @@ README                       xml2rfc v1.26                September 2004
    set env(XML_LIBRARY) $library
 
    There are links to various bibliographic databases (RFCs, I-Ds, and
-   so on) on the 'xml2rfc'homepage [5].
+   so on) on the *xml2rfc*homepage [5].
 
 
 
@@ -446,7 +446,7 @@ README                       xml2rfc v1.26                September 2004
 
 Rose                                                            [Page 8]
 
-README                       xml2rfc v1.26                September 2004
+README                        xml2rfc v1.27               September 2004
 
 
 5.  Additions to RFC 2629
@@ -455,13 +455,13 @@ README                       xml2rfc v1.26                September 2004
    RFC 2629.  In particular, Appendix C of the 2629bis document
    enumerates the additions.
 
-   In addition, 'xml2rfc' recognizes an undocumented 'src' attribute in
-   the 'artwork' element, but only if HTML is being generated, e.g.,
+   In addition, *xml2rfc* recognizes an undocumented *src* attribute in
+   the *artwork* element, but only if HTML is being generated, e.g.,
 
           <figure><artwork src='layers.gif' /></figure>
 
-   In this case, an 'img' tag is placed in the HTML output, and the
-   textual contents of the 'artwork', 'preamble', and 'postamble'
+   In this case, an *img* tag is placed in the HTML output, and the
+   textual contents of the *artwork*, *preamble*, and *postamble*
    elements are ignored.
 
 
@@ -502,21 +502,21 @@ README                       xml2rfc v1.26                September 2004
 
 Rose                                                            [Page 9]
 
-README                       xml2rfc v1.26                September 2004
+README                        xml2rfc v1.27               September 2004
 
 
 6.  Limitations of xml2rfc
 
-   o  The 'figure' element's 'title' attribute is ignored, except when
+   o  The *figure* element's *title* attribute is ignored, except when
       generating HTML.
 
-   o  The 'xref' element's 'pageno' attribute is ignored.
+   o  The *xref* element's *pageno* attribute is ignored.
 
 
-7  References
+7.  References
 
-   [1]  Bradner, S., "The Internet Standards Process -- Revision 3", BCP
-        9, RFC 2026, October 1996.
+   [1]  Bradner, S., "The Internet Standards Process -- Revision 3",
+        BCP 9, RFC 2026, October 1996.
 
    [2]  <http://xml.resource.org/>
 
@@ -536,7 +536,7 @@ Author's Address
    US
 
    Phone: +1 916 483 8878
-   EMail: mrose@dbc.mtview.ca.us
+   Email: mrose@dbc.mtview.ca.us
 
 
 
@@ -558,7 +558,7 @@ Author's Address
 
 Rose                                                           [Page 10]
 
-README                       xml2rfc v1.26                September 2004
+README                        xml2rfc v1.27               September 2004
 
 
 Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
@@ -575,7 +575,7 @@ Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
    4.  When asked for an appropriate "wish" stub, select "Wish 8.3.4".
 
    5.  The "Drap & Drop Tclets" application will write out an executable
-       version of 'xml2rfc'.
+       version of *xml2rfc*.
 
 
 
@@ -614,7 +614,7 @@ Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
 
 Rose                                                           [Page 11]
 
-README                       xml2rfc v1.26                September 2004
+README                        xml2rfc v1.27               September 2004
 
 
 Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
@@ -670,10 +670,66 @@ Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
 
 Rose                                                           [Page 12]
 
-README                       xml2rfc v1.26                September 2004
+README                        xml2rfc v1.27               September 2004
 
 
-Appendix C.  Copyrights
+Appendix C.  Windows XP/Cygwin Installation (courtesy of Joe Touch)
+
+   1.  install Cygwin: follow instructions at cygwin.org,  make sure to
+       select "tcltk" in "Libs"
+
+   2.  place a copy of xml2rfc files on a local drive,  e.g., in
+       "C:\xml2rfc" NOTE: for xml2rfc-1.26 and earlier, see NOTE below.
+
+   3.  place a copy of bibxml* files on a local drive, e.g., in
+       "C:\xmlbib\"
+
+   4.  edit ".xml2rfc.rc" to indicate the "bibxml*" library path, e.g.,
+       as per step #3, change "~/rfca/bibxml/*" to
+       "/cygdrive/c/xmlbib/*"
+
+   5.  run xml2rfc as follows: "tclsh /cygdrive/c/xml2rfc/xml2rfc.tcl"
+
+   NOTE: for xml2rfc-1.26 and earlier ONLY, add an additional
+   modification in step #3:
+
+      Patch .xml2rfc.rc (xml2rfc-1.26 and earlier).  The purpose of the
+      patch is to append library names in a format compatible with the
+      OS; on Windows XP, this replaces the Cygwin's "/" with Windows'
+      "\".
+
+
+   --- .xml2rfc.rc.orig    Thu Jul 24 13:58:00 2003
+   +++ .xml2rfc.rc    Wed Oct 20 10:59:02 2004
+   @@ -9,7 +9,8 @@
+    if {[catch { set env(XML_LIBRARY) } library]} {
+        set library ""
+        foreach bibxmlD [lsort -dictionary [glob -nocomplain ~/rfcs/bibxml/*]] {
+   -        append library $sep$bibxmlD
+   +        set natbibD [file nativename $bibxmlD]
+   +        append library $sep$natbibD
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                           [Page 13]
+
+README                        xml2rfc v1.27               September 2004
+
+
+Appendix D.  Copyrights
 
    (c) 2003 Marshall T.  Rose
 
@@ -724,5 +780,5 @@ Appendix C.  Copyrights
 
 
 
-Rose                                                           [Page 13]
+Rose                                                           [Page 14]
 

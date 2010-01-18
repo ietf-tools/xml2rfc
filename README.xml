@@ -13,7 +13,7 @@
 
 <rfc>
 <front>
-<title>xml2rfc v1.26</title>
+<title>xml2rfc v1.27</title>
 
 <author initials='M.T.' surname='Rose' fullname='Marshall T. Rose'>
 <organization>Dover Beach Consulting, Inc.</organization>
@@ -420,6 +420,57 @@ an XSLT-capable formatter
 A word of warning though:
 the XSLT script doesn't support the processing instructions discussed
 <xref target='processing.instructions'>earlier</xref>.</t>
+</section>
+
+<section title="Windows XP/Cygwin Installation (courtesy of Joe Touch)">
+<t><list style='numbers'>
+
+<t>install Cygwin: follow instructions at cygwin.org,  make sure to
+select <spanx style='verb'>tcltk</spanx> in <spanx style='verb'>Libs</spanx></t>
+
+<t>place a copy of xml2rfc files on a local drive,  e.g., in
+<spanx style='verb'>C:\xml2rfc</spanx> NOTE: for xml2rfc-1.26 and
+earlier, see NOTE below.</t> 
+
+<t>place a copy of bibxml* files on a local drive, e.g., in
+<spanx style='verb'>C:\xmlbib\</spanx> </t>
+
+<t>edit <spanx style='verb'>.xml2rfc.rc</spanx> to indicate the <spanx
+style='verb'>bibxml*</spanx> library path, e.g., as per step #3,
+change <spanx style='verb'>~/rfca/bibxml/*</spanx> to <spanx
+style='verb'>/cygdrive/c/xmlbib/*</spanx></t>
+
+<t>run xml2rfc as follows: <spanx style='verb'>tclsh
+/cygdrive/c/xml2rfc/xml2rfc.tcl</spanx></t>
+</list>
+</t>
+
+<t>NOTE: for xml2rfc-1.26 and earlier ONLY, add an additional modification in step #3:
+<list>
+<t>
+Patch .xml2rfc.rc (xml2rfc-1.26 and earlier). The purpose of the patch
+is to append library names in a format compatible with the OS; on
+Windows XP, this replaces the Cygwin's <spanx style='verb'>/</spanx>
+with Windows' <spanx style='verb'>\</spanx>.  
+</t>
+</list>
+</t>
+
+<figure>
+<artwork>
+--- .xml2rfc.rc.orig    Thu Jul 24 13:58:00 2003
++++ .xml2rfc.rc    Wed Oct 20 10:59:02 2004
+@@ -9,7 +9,8 @@
+ if {[catch { set env(XML_LIBRARY) } library]} {
+     set library ""
+     foreach bibxmlD [lsort -dictionary [glob -nocomplain ~/rfcs/bibxml/*]] {
+-        append library $sep$bibxmlD
++        set natbibD [file nativename $bibxmlD]
++        append library $sep$natbibD
+     }
+ }
+</artwork>
+</figure>
 </section>
 
 <section title='Copyrights'>

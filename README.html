@@ -1,9 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en"><head><title>The README file: xml2rfc v1.26</title>
-<meta http-equiv="Expires" content="Tue, 28 Sep 2004 17:09:50 +0000">
+<html lang="en"><head><title>The README file: xml2rfc v1.27</title>
+<meta http-equiv="Expires" content="Sat, 15 Jan 2005 05:45:01 +0000">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="xml2rfc v1.26">
-<meta name="generator" content="xml2rfc v1.26 (http://xml.resource.org/)">
+<meta name="description" content="xml2rfc v1.27">
+<meta name="generator" content="xml2rfc v1.27 (http://xml.resource.org/)">
 <style type='text/css'>
 <!--
     body {
@@ -61,7 +61,11 @@
 
     span.emph { font-style: italic; }
     span.strong { font-weight: bold; }
-    span.verb { font-family: "Courier New", Courier, monospace ; }
+    span.verb, span.vbare { font-family: "Courier New", Courier, monospace ; }
+
+    span.vemph { font-style: italic; font-family: "Courier New", Courier, monospace ; }
+    span.vstrong { font-weight: bold; font-family: "Courier New", Courier, monospace ; }
+    span.vdeluxe { font-weight: bold; font-style: italic; font-family: "Courier New", Courier, monospace ; }
 
     ol.text { margin-left: 2em; margin-right: 2em; }
     ul.text { margin-left: 2em; margin-right: 2em; }
@@ -110,9 +114,9 @@
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">The README file</td><td class="header">M. Rose</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Dover Beach Consulting, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">September 28, 2004</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">September 2004</td></tr>
 </table></td></tr></table>
-<div align="right"><span class="title"><br />xml2rfc v1.26</span></div>
+<div align="right"><span class="title"><br />xml2rfc v1.27</span></div>
 <a name="toc"></a><br /><hr />
 <h3>Table of Contents</h3>
 <p class="toc">
@@ -147,6 +151,8 @@ MacOS 9 Installation (courtesy of Ned Freed)<br />
 <a href="#anchor13">B.</a>&nbsp;
 rfc2629.xslt (courtesy of Julian Reschke)<br />
 <a href="#anchor14">C.</a>&nbsp;
+Windows XP/Cygwin Installation (courtesy of Joe Touch)<br />
+<a href="#anchor15">D.</a>&nbsp;
 Copyrights<br />
 </p>
 <br clear="all" />
@@ -224,7 +230,7 @@ so, if you don't know what it is, don't worry about it...
     |  Select input file: ____________________________  [Browse] |
     |                                                            |
     | Select output file: ____________________________  [Browse] |
-    |                                                            |    
+    |                                                            |
     |               [Convert]               [Quit]               |
     |                                                            |
     +------------------------------------------------------------+
@@ -504,10 +510,10 @@ except when generating HTML.
 
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>7&nbsp;References</h3>
+<h3>7.&nbsp;References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="RFC2026">[1]</a></td>
-<td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, "<a href="ftp://ftp.isi.edu/in-notes/rfc2026.txt">The Internet Standards Process -- Revision 3</a>", BCP 9, RFC 2026, October 1996.</td></tr>
+<td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, "<a href="ftp://ftp.isi.edu/in-notes/rfc2026.txt">The Internet Standards Process -- Revision 3</a>", BCP&nbsp;9, RFC&nbsp;2026, October 1996.</td></tr>
 </table>
 
 <a name="rfc.authors"></a><br /><hr />
@@ -526,7 +532,7 @@ except when generating HTML.
 <td class="author-text">US</td></tr>
 <tr><td class="author" align="right">Phone:&nbsp;</td>
 <td class="author-text">+1 916 483 8878</td></tr>
-<tr><td class="author" align="right">EMail:&nbsp;</td>
+<tr><td class="author" align="right">Email:&nbsp;</td>
 <td class="author-text"><a href="mailto:mrose@dbc.mtview.ca.us">mrose@dbc.mtview.ca.us</a></td></tr>
 </table>
 
@@ -571,7 +577,56 @@ the XSLT script doesn't support the processing instructions discussed
 </p>
 <a name="anchor14"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.C"></a><h3>Appendix C.&nbsp;Copyrights</h3>
+<a name="rfc.section.C"></a><h3>Appendix C.&nbsp;Windows XP/Cygwin Installation (courtesy of Joe Touch)</h3>
+
+<p></p>
+<ol class="text">
+<li>install Cygwin: follow instructions at cygwin.org,  make sure to
+select <span class="verb">tcltk</span> in <span class="verb">Libs</span>
+</li>
+<li>place a copy of xml2rfc files on a local drive,  e.g., in
+<span class="verb">C:\xml2rfc</span> NOTE: for xml2rfc-1.26 and
+earlier, see NOTE below.
+</li>
+<li>place a copy of bibxml* files on a local drive, e.g., in
+<span class="verb">C:\xmlbib\</span>
+</li>
+<li>edit <span class="verb">.xml2rfc.rc</span> to indicate the <span class="verb">bibxml*</span> library path, e.g., as per step #3,
+change <span class="verb">~/rfca/bibxml/*</span> to <span class="verb">/cygdrive/c/xmlbib/*</span>
+</li>
+<li>run xml2rfc as follows: <span class="verb">tclsh
+/cygdrive/c/xml2rfc/xml2rfc.tcl</span>
+</li>
+</ol>
+
+<p>NOTE: for xml2rfc-1.26 and earlier ONLY, add an additional modification in step #3:
+</p>
+<blockquote class="text">
+<p>
+Patch .xml2rfc.rc (xml2rfc-1.26 and earlier). The purpose of the patch
+is to append library names in a format compatible with the OS; on
+Windows XP, this replaces the Cygwin's <span class="verb">/</span>
+with Windows' <span class="verb">\</span>.  
+
+</p>
+</blockquote>
+<pre>
+--- .xml2rfc.rc.orig    Thu Jul 24 13:58:00 2003
++++ .xml2rfc.rc    Wed Oct 20 10:59:02 2004
+@@ -9,7 +9,8 @@
+ if {[catch { set env(XML_LIBRARY) } library]} {
+     set library ""
+     foreach bibxmlD [lsort -dictionary [glob -nocomplain ~/rfcs/bibxml/*]] {
+-        append library $sep$bibxmlD
++        set natbibD [file nativename $bibxmlD]
++        append library $sep$natbibD
+     }
+ }
+</pre>
+
+<a name="anchor15"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.D"></a><h3>Appendix D.&nbsp;Copyrights</h3>
 
 <p>(c) 2003 Marshall T. Rose
 </p>
