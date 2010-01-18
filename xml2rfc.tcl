@@ -579,7 +579,9 @@ proc sgml::parseEvent {sgml args} {
             } else {
                 # Restore protected special characters
                 regsub -all {\\([{}\\])} $text {\1} text
-                uplevel #0 $options(-characterdatacommand) [list $text]
+#                uplevel #0 $options(-characterdatacommand) [list $text]
+                sgml::callback $state(line) \
+                      $options(-characterdatacommand) [list $text]
             }
         } elseif {[string length [string trim $text]]} {
             uplevel #0 $options(-errorcommand) "unexpected text \"$text\" in document prolog around line $state(line)"
@@ -593,6 +595,16 @@ proc sgml::parseEvent {sgml args} {
     }
 
     return {}
+}
+
+proc sgml::callback {lineno args} {
+    global errorCode errorInfo
+
+    if {[set code [catch { eval uplevel #0 $args } result]]} {
+        append result " around line $lineno"
+    }
+
+    return -code $code -errorinfo $errorInfo -errorcode $errorCode $result
 }
 
 # sgml::ParseEvent:ElementOpen --
@@ -639,7 +651,9 @@ proc sgml::ParseEvent:ElementOpen {tag attr opts args} {
     }
 
     # Invoke callback
-    uplevel #0 $options(-elementstartcommand) [list $tag $attr] $empty
+#    uplevel #0 $options(-elementstartcommand) [list $tag $attr] $empty
+    sgml::callback $state(line) \
+          $options(-elementstartcommand) [list $tag $attr] $empty
 
     return {}
 }
@@ -681,7 +695,9 @@ proc sgml::ParseEvent:ElementClose {tag opts args} {
     }
 
     # Invoke callback
-    uplevel #0 $options(-elementendcommand) [list $tag] $empty
+#    uplevel #0 $options(-elementendcommand) [list $tag] $empty
+    sgml::callback $state(line) \
+          $options(-elementendcommand) [list $tag] $empty
 
     return {}
 }
@@ -2495,7 +2511,7 @@ proc prexml_include {stream inputD inputF path} {
             set start [expr [string length $include]-[string length $body]]
             incr len
             set include [streplace $include $start [expr $start+$len] \
-                                  [format " %*.*s" $len $len ""]]
+                                   [format " %*.*s" $len $len ""]]
 
             set body [string trimleft $include]
         }
@@ -2503,7 +2519,7 @@ proc prexml_include {stream inputD inputF path} {
                 && ([set len [string first ">" $body]] >= 0)} {
             set start [expr [string length $include]-[string length $body]]
             set include [streplace $include $start [expr $start+$len] \
-                                  [format " %*.*s" $len $len ""]]
+                                   [format " %*.*s" $len $len ""]]
         }
 
         set len [numlines $include]
@@ -2529,13 +2545,16 @@ proc prexml_entity {stream path httpP} {
     global extentities
     global fldata
 
-    set litN [string length [set litS "<!ENTITY % "]]
+    set litN [string length [set litS "<!ENTITY "]]
     set litO [string length [set litT ">"]]
 
     set data ""
     while {[set x [string first $litS $stream]] >= 0} {
         append data [string range $stream 0 [expr $x-1]]
-        set stream [string range $stream [expr $x+$litN] end]
+        set stream [string trimleft [string range $stream [expr $x+$litN] end]]
+        if {[string first "%" $stream] == 0} {
+	    set stream [string trimleft [string range $stream 1 end]]
+	}
         if {[set x [string first $litT $stream]] < 0} {
             error "missing close to <!ENTITY"
         }
@@ -2601,7 +2620,7 @@ proc prexml_entity {stream path httpP} {
             set start [expr [string length $include]-[string length $body]]
             incr len
             set include [streplace $include $start [expr $start+$len] \
-                                  [format " %*.*s" $len $len ""]]
+                                   [format " %*.*s" $len $len ""]]
 
             set body [string trimleft $include]
         }
@@ -3021,10 +3040,16 @@ proc begin {name {av {}}} {
             references {
                 if {[info exists attrs(title)]} {
                     switch -- [set t [string tolower $attrs(title)]] {
-                        "normative references"
+                        "normative reference"
+                            -
+                        "normative references" {
+                            set counter(normative) 1
+                        }
+
+                        "informative reference"
                             -
                         "informative references" {
-                            set counter($t) 1
+                            set counter(informative) 1
                     }   }
                 }
             }
@@ -3302,11 +3327,11 @@ proc pi {args} {
                 if {![string compare $key include]} {
                     return
                 }
-		if {[info exists options($key)]} {
-		    set options($key) $value
-		} elseif {$passno > 1} {
-		    pi_$mode $key $value
-		}
+                if {[info exists options($key)]} {
+                    set options($key) $value
+                } elseif {$passno > 1} {
+                    pi_$mode $key $value
+                }
             }]} {
                 unexpected error "invalid rfc instruction: $text"
             }
@@ -3314,6 +3339,9 @@ proc pi {args} {
         }
 
         default {
+	    if {![string compare [lindex $args 0] xml-stylesheet]} {
+		return
+	    }
             set text [join $args " "]
             unexpected warning "unknown PI: $text"
         }
@@ -3839,10 +3867,10 @@ proc pass2begin_front {elemX} {
                         unexpected error "missing $t"
                     }
                 }
-                if {$counter(reference)} {
+                if {([info exists counter(reference)]) \
+                        && ($counter(reference))} {
                     set hitP 0
-                    foreach t [list "Normative References" \
-                                    "Informative References"] {
+                    foreach t [list normative informative] {
                         if {[info exists counter([string tolower $t])]} {
                             set hitP 1
                         }
@@ -4142,7 +4170,14 @@ proc pass2begin_t {elemX} {
             set format $av(format)
 
             if {![string compare $attrs(hangText) ""]} {
-                set attrs(hangText) [format $format [incr counter($format)]]
+                if {[string first "%d" $format] >= 0} {
+                    set attrs(hangText) \
+                        [format $format [incr counter($format)]]
+                } else {
+                    set attrs(hangText) \
+                        [format $format \
+                                [offset2letters [incr counter($format)] 1]]
+                }
             }
         }
         set elem($elemX) [array get attrs]
@@ -4195,13 +4230,18 @@ proc pass2begin_list {elemX} {
                         [set format [string trimleft \
                                             [string range $attrs(style) 7 \
                                             end]]] ""]} {
-                if {[set x [string first "%d" $format]] < 0} {
-                    unexpected error "missing %d in format style"
+                if {[set x [string first [set c "%d"] $format]] >= 0} {
+                } elseif {[set x [string first [set c "%c"] $format]] >= 0} {
+                    set format [streplace $format $x [expr $x+1] %s]
+                } else {
+                    unexpected error "missing %d/%c in format style"
                 }
-                if {[string first "%d" [string range $format $x end]] > 0} {
-                    unexpected error "too many %d's in format style"
+                if {[string first $c [string range $format $x end]] > 0} {
+                    unexpected error "too many $c's in format style"
                 }
-                if {![info exists counter($format)]} {
+		if {[info exists attrs(startAt)]} {
+                    set counter($format) [expr $attrs(startAt)-1]
+		} elseif {![info exists counter($format)]} {
                     set counter($format) 0
                 }
             } else {
@@ -5140,16 +5180,16 @@ proc figure_txt {tag lines anchor title args} {
             if {![have_lines $lines]} {
                 end_page_txt
             }
-	    flush_text
+            flush_text
         }
 
         end {
             if {[string compare $anchor ""]} {
-		array set av $xref($anchor)
-		set prefix "Figure $av(value)"
-		if {[string compare $title ""]} {
-		    append prefix ": [chars_expand $title]"
-		}
+                array set av $xref($anchor)
+                set prefix "Figure $av(value)"
+                if {[string compare $title ""]} {
+                    append prefix ": [chars_expand $title]"
+                }
                 write_line_txt ""
                 write_text_txt $prefix c
                 write_line_txt ""
@@ -5421,7 +5461,7 @@ proc back_txt {authors} {
         set block1 [lindex $author 0]
         set block2 [lindex $author 1]
 
-        set lines 3
+        set lines 4
         incr lines [llength $block1]
         incr lines [llength $block2]
         if {![have_lines $lines]} {
@@ -5684,7 +5724,7 @@ proc write_line_txt {line {pre 0}} {
     incr lineno
     if {($options(.STRICT)) && ([string length $line] > 72)} {
         unexpected error \
-            "page $pageno, line $lineno length greater than 72 characters"
+            "output line $lineno (on page $pageno) longer than 72 characters"
     }
     if {$lineno >= 51} {
         end_page_txt
@@ -5700,10 +5740,16 @@ proc two_spaces {glop} {
             break
         }
 
-        append post [string range $glop 0 [expr $x+1]]
+        set pre [string range $glop 0 [expr $x+1]]
         set glop [string range $glop [expr $x+2] end]
-        if {[string first " " $glop] != 0} {
-            append post " "
+        append post $pre
+
+        # Check for likely abbreviation.  Do not insert two spaces in
+        # this case.
+        if {[regexp {(?:[A-Z][A-Z]|[A-Z][a-z][a-z]\.)$} $pre]} {
+            if {[string first " " $glop] != 0} {
+                append post " "
+            }
         }
     }
 
@@ -5712,16 +5758,16 @@ proc two_spaces {glop} {
 
 proc pi_txt {key value} {
     switch -- $key {
-	needLines {
-	    flush_text
-	    if {![have_lines $value]} {
-		end_page_txt
-	    }
-	}
+        needLines {
+            flush_text
+            if {![have_lines $value]} {
+                end_page_txt
+            }
+        }
 
-	default {
-	    error ""
-	}
+        default {
+            error ""
+        }
     }
 }
 
@@ -6835,12 +6881,12 @@ proc slide_foo {n} {
 
 proc pi_html {key value} {
     switch -- $key {
-	needLines {
-	}
+        needLines {
+        }
 
-	default {
-	    error ""
-	}
+        default {
+            error ""
+        }
     }
 }
 
@@ -6962,7 +7008,7 @@ proc front_nr_begin {left right top bottom title status copying} {
     set lastin -1
 
     write_it [clock format [clock seconds] \
-                    -format ".\\\" automatically generated by xml2rfc v1.15 on %d %b %Y %T +0000" \
+                    -format ".\\\" automatically generated by xml2rfc v1.16 on %d %b %Y %T +0000" \
                     -gmt true]
     write_it ".\\\" "
     write_it ".pl 10.0i"
@@ -7294,12 +7340,12 @@ proc figure_nr {tag lines anchor title args} {
         }
 
         end {
-	    if {[string compare $anchor ""]} {
-		array set av $xref($anchor)
-		set prefix "Figure $av(value)"
-		if {[string compare $title ""]} {
-		    append prefix ": [chars_expand $title]"
-		}
+            if {[string compare $anchor ""]} {
+                array set av $xref($anchor)
+                set prefix "Figure $av(value)"
+                if {[string compare $title ""]} {
+                    append prefix ": [chars_expand $title]"
+                }
                 write_line_nr ""
                 write_text_nr $prefix c
                 write_line_nr ""
@@ -7600,7 +7646,7 @@ proc back_nr {authors} {
         set block1 [lindex $author 0]
         set block2 [lindex $author 1]
 
-        set lines 3
+        set lines 4
         incr lines [llength $block1]
         incr lines [llength $block2]
         if {![have_lines $lines]} {
@@ -7873,16 +7919,16 @@ proc write_line_nr {line {pre 0}} {
 
 proc pi_nr {key value} {
     switch -- $key {
-	needLines {
-	    flush_text
-	    if {![have_lines $value]} {
-		end_page_nr
-	    }
-	}
+        needLines {
+            flush_text
+            if {![have_lines $value]} {
+                end_page_nr
+            }
+        }
 
-	default {
-	    error ""
-	}
+        default {
+            error ""
+        }
     }
 }
 
@@ -8354,7 +8400,7 @@ proc streplace {string first last {newstring ""}} {
     }
 
     if {$last < $len} {
-        set right [string range $string $last end]
+        set right [string range $string [expr $last+1] end]
     } else {
         set right ""
     }

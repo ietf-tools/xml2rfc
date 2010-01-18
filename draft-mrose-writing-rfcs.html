@@ -1,5 +1,5 @@
 <html><head><title>Writing I-Ds and RFCs using XML (revised)</title>
-<meta http-equiv="Expires" content="Fri, 19 Jul 2002 10:50:16 +0000">
+<meta http-equiv="Expires" content="Mon, 10 Feb 2003 17:04:57 +0000">
 <STYLE type='text/css'>
     .title { color: #990000; font-size: 22px; line-height: 22px; font-weight: bold; text-align: right;
              font-family: helvetica, arial, sans-serif }
@@ -42,7 +42,7 @@
 <table width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header"> </td><td width="33%" bgcolor="#666666" class="header">M. Rose</td></tr>
 <tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">Dover Beach Consulting, Inc.</td></tr>
-<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">July 19, 2002</td></tr>
+<tr valign="top"><td width="33%" bgcolor="#666666" class="header">&nbsp;</td><td width="33%" bgcolor="#666666" class="header">February 10, 2003</td></tr>
 </table></td></tr></table>
 <div align="right"><font face="monaco, MS Sans Serif" color="#990000" size="+3"><b><br><span class="title">Writing I-Ds and RFCs using XML (revised)</span></b></font></div>
 <font face="verdana, helvetica, arial, sans-serif" size="2">
@@ -721,7 +721,8 @@ the <b>t</b> element has an optional attribute,
 
 <p>The <b>style</b> attribute value for an auto-formatted list
 starts with the seven letters "format ",
-and is followed by a string which must contain exactly one instance of "%d".
+and is followed by a string which must contain exactly one instance of "%d"
+and "%c".
 Hanging text is automatically generated for each nested <b>t</b> element,
 e.g.,
 </p></font><pre>
@@ -731,11 +732,19 @@ e.g.,
         &lt;t>Text for R2.&lt;/t>
     &lt;/list>
     ...
+    &lt;list style='format Directive %c:'>
+        &lt;t>Text for Directive A.&lt;/t>
+
+        &lt;t>Text for Directive B.&lt;/t>
+    &lt;/list>
+    ...
     &lt;list style='format R%d:'>
         &lt;t>Text for R3.&lt;/t>
     &lt;/list>
 </pre><font face="verdana, helvetica, arial, sans-serif" size="2">
 
+<p>
+</p>
 <p>If the <b>style</b> attribute has the value "hanging" or "format",
 then a second, optional, attribute called <b>hangIndent</b> is consulted.
 This overrides the default indentation used for the text of each <b>t</b> element,
@@ -1467,7 +1476,9 @@ the appropriate substitution (or <b>"XXXX"</b>) will occur.
      parent -->
 &lt;!ELEMENT list        (t+)>
 &lt;!ATTLIST list
-          style       %ATEXT;            "empty">
+          style       %ATEXT;            "empty"
+          hangIndent  %NUMBER;           "0"
+          startAt     %NUMBER;           "1">
 
 &lt;!ELEMENT xref        (%CTEXT;)>
 &lt;!ATTLIST xref
@@ -1547,9 +1558,13 @@ in <a href="#RFC2629" title="Rose, M., Writing I-Ds and RFCs using XML, June 199
 </li>
 <li>If the <b>style</b> attribute of the <b>list</b> element is either hanging
 or formatted,
-then a second,
-optional attribute,
+then an optional attribute,
 <b>hangIndent</b>,
+is consulted.
+</li>
+<li>If the <b>style</b> attribute of the <b>list</b> element is formatted,
+then an optional attribute,
+<b>startAt</b>,
 is consulted.
 </li>
 <li>The <b>artwork</b> element has optional <b>name</b> and <b>type</b> attributes.

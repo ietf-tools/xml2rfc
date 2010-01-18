@@ -155,7 +155,9 @@
      parent -->
 <!ELEMENT list        (t+)>
 <!ATTLIST list
-          style       %ATEXT;            "empty">
+          style       %ATEXT;            "empty"
+          hangIndent  %NUMBER;           "0"
+          startAt     %NUMBER;           "1">
 
 <!ELEMENT xref        (%CTEXT;)>
 <!ATTLIST xref
@@ -186,7 +188,10 @@
 <!ATTLIST artwork
           xml:space   (default|preserve) "preserve"
           name        %ATEXT;            ""
-          type        %ATEXT;            "">
+          type        %ATEXT;            ""
+          src         %URI;              ""
+          width       %ATEXT;            ""
+          height      %ATEXT;            "">
 
 <!ELEMENT postamble   (%TEXT;|xref|eref|iref)*>
 

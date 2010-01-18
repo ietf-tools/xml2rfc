@@ -2,10 +2,10 @@
 
 The README file                                                  M. Rose
                                             Dover Beach Consulting, Inc.
-                                                           November 2002
+                                                       February 10, 2003
 
 
-                             xml2rfc v1.15
+                             xml2rfc v1.16
 
 
 Table of Contents
@@ -24,7 +24,7 @@ Table of Contents
          Author's Address . . . . . . . . . . . . . . . . . . . . . . 10
    A.    MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . . 11
    B.    rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . . 12
-
+   C.    Copyrights . . . . . . . . . . . . . . . . . . . . . . . . . 13
 
 
 
@@ -54,7 +54,7 @@ Table of Contents
 
 Rose                                                            [Page 1]
 
-README                       xml2rfc v1.15                 November 2002
+README                       xml2rfc v1.16                 February 2003
 
 
 1. Introduction
@@ -110,19 +110,19 @@ README                       xml2rfc v1.15                 November 2002
 
 Rose                                                            [Page 2]
 
-README                       xml2rfc v1.15                 November 2002
+README                       xml2rfc v1.16                 February 2003
 
 
 2. Requirements
 
-   You need to have Tcl/Tk version 8 running on your system.  Tcl is a
+   You need to have Tcl/Tk version 8 running on your system. Tcl is a
    scripting language, Tk is Tcl with support for your windowing system.
 
    To get a source or binary distribution for your system, go to the
-   Scriptics website [2] and install it.  If you get the binary
+   Scriptics website [2] and install it. If you get the binary
    distribution, this is pretty simple.
 
-   Of course, you may already have Tcl version 8.  To find out, try
+   Of course, you may already have Tcl version 8. To find out, try
    typing this command from the shell (or the "MS-DOS Prompt"):
 
        % tclsh
@@ -138,7 +138,7 @@ README                       xml2rfc v1.15                 November 2002
    good to go with Tk version 8.
 
    Finally, you may notice a file called "xml2sgml.tcl" in the
-   distribution.  It contains some extra functionality for a few special
+   distribution. It contains some extra functionality for a few special
    users -- so, if you don't know what it is, don't worry about it...
 
 
@@ -166,7 +166,7 @@ README                       xml2rfc v1.15                 November 2002
 
 Rose                                                            [Page 3]
 
-README                       xml2rfc v1.15                 November 2002
+README                       xml2rfc v1.16                 February 2003
 
 
 3. Testing
@@ -222,17 +222,17 @@ README                       xml2rfc v1.15                 November 2002
 
 Rose                                                            [Page 4]
 
-README                       xml2rfc v1.15                 November 2002
+README                       xml2rfc v1.16                 February 2003
 
 
 4. Next steps
 
-   Read the 2629bis [3] document.  In particular, Section 3 has some
-   good information.
+   Read the 2629bis [3] document. In particular, Section 3 has some good
+   information.
 
 4.1 Processing Instructions
 
-   A *processing instruction* is a directive to an XML application.  If
+   A *processing instruction* is a directive to an XML application. If
    you want to give directives to 'xml2rfc', the processing instructions
    (PIs) look like this:
 
@@ -278,7 +278,7 @@ README                       xml2rfc v1.15                 November 2002
 
 Rose                                                            [Page 5]
 
-README                       xml2rfc v1.15                 November 2002
+README                       xml2rfc v1.16                 February 2003
 
 
        footer      ""          override the center footer string
@@ -315,7 +315,7 @@ README                       xml2rfc v1.15                 November 2002
        <?rfc include='file'?>
 
    'xml2rfc' will consult the $XML_LIBRARY environment variable for a
-   search path of where to look for files.  (If this envariable isn't
+   search path of where to look for files. (If this envariable isn't
    set, the directory containing the file that contains the include-file
    directive is used.)
 
@@ -334,7 +334,7 @@ README                       xml2rfc v1.15                 November 2002
 
 Rose                                                            [Page 6]
 
-README                       xml2rfc v1.15                 November 2002
+README                       xml2rfc v1.16                 February 2003
 
 
    You can also have 'xml2rfc' set this envariable directly, by creating
@@ -390,13 +390,13 @@ README                       xml2rfc v1.15                 November 2002
 
 Rose                                                            [Page 7]
 
-README                       xml2rfc v1.15                 November 2002
+README                       xml2rfc v1.16                 February 2003
 
 
 5. Additions to RFC 2629
 
    A few additions have been made to the format originally defined in
-   RFC 2629.  In particular, Appendix C of the 2629bis document
+   RFC 2629. In particular, Appendix C of the 2629bis document
    enumerates the additions.
 
    In addition, 'xml2rfc' recognizes an undocumented 'src' attribute in
@@ -446,7 +446,7 @@ README                       xml2rfc v1.15                 November 2002
 
 Rose                                                            [Page 8]
 
-README                       xml2rfc v1.15                 November 2002
+README                       xml2rfc v1.16                 February 2003
 
 
 6. Limitations of xml2rfc
@@ -502,7 +502,7 @@ README                       xml2rfc v1.15                 November 2002
 
 Rose                                                            [Page 9]
 
-README                       xml2rfc v1.15                 November 2002
+README                       xml2rfc v1.16                 February 2003
 
 
 URIs
@@ -558,7 +558,7 @@ Author's Address
 
 Rose                                                           [Page 10]
 
-README                       xml2rfc v1.15                 November 2002
+README                       xml2rfc v1.16                 February 2003
 
 
 Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
@@ -566,7 +566,7 @@ Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
    1.  Install Tcl/Tk 8.3.4
 
    2.  When you performed Step 1, a folder in your "Extensions" folder
-       called "Tool Command Language" was created.  Create a new folder
+       called "Tool Command Language" was created. Create a new folder
        under "Extensions", with any name you like.
 
    3.  Drag the file "xml2rfc.tcl" onto the "Drag & Drop Tclets"
@@ -614,13 +614,13 @@ Appendix A. MacOS 9 Installation (courtesy of Ned Freed)
 
 Rose                                                           [Page 11]
 
-README                       xml2rfc v1.15                 November 2002
+README                       xml2rfc v1.16                 February 2003
 
 
 Appendix B. rfc2629.xslt (courtesy of Julian Reschke)
 
    The file "rfc2629.xslt" can be used with an XSLT-capable formatter
-   (i.e., IE6) to produce HTML.  A word of warning though: the XSLT
+   (i.e., IE6) to produce HTML. A word of warning though: the XSLT
    script doesn't support the processing instructions discussed earlier
    (Section 4.1).
 
@@ -669,4 +669,60 @@ Appendix B. rfc2629.xslt (courtesy of Julian Reschke)
 
 
 Rose                                                           [Page 12]
+
+README                       xml2rfc v1.16                 February 2003
+
+
+Appendix C. Copyrights
+
+   (c) 2002 Marshall T. Rose
+
+   Hold harmless the author, and any lawful use is allowed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose                                                           [Page 13]
 
