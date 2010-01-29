@@ -11,7 +11,7 @@ exec tclsh "$0" "$0" "$@"
 
 global prog prog_version prog_url prog_ack
 set prog "xml2rfc"
-set prog_version "v1.35pre1"
+set prog_version "v1.35pre2"
 set prog_url "http://xml.resource.org/"
 set prog_ack \
 "This document was produced
@@ -6032,7 +6032,7 @@ SUCH DAMAGES."
 #       }}}2 Pass 2 (and subsequent) stuff for the whole document
 #       {{{2 Front texts (either for the rfc or a reference)
 
-global copyshort copyshort1 copyshort2 idinfo idaburl idshurl
+global copyshort copyshort1 copyshort2 idinfo idinfo2 idaburl idshurl
 
 set idaburl "http://www.ietf.org/ietf/1id-abstracts.txt"
 set idshurl "http://www.ietf.org/shadow.html"
@@ -6159,6 +6159,23 @@ them other than as &ldquo;work in progress.&rdquo;"
 "This Internet-Draft will expire on %EXPIRES%."
 }
 
+# Shorter idinfo approved as an alternative by the IESG on 2010-1-5.
+set idinfo2 {
+"%IPR%"
+
+"Internet-Drafts are working documents of the Internet Engineering
+Task Force (IETF).  Note that other groups may also distribute
+working documents as Internet-Drafts.  The list of current
+Internet-Drafts is at http://datatracker.ietf.org/drafts/current/."
+
+"Internet-Drafts are draft documents valid for a maximum of six months
+and may be updated, replaced, or obsoleted by other documents at any time.
+It is inappropriate to use Internet-Drafts as reference material or to cite
+them other than as &ldquo;work in progress.&rdquo;"
+
+"This Internet-Draft will expire on %EXPIRES%."
+}
+
 #       }}}2 Front texts (either for the rfc or a reference)
 #       {{{2 Remaining pass 2 (and subsequent) stuff
 
@@ -6167,7 +6184,7 @@ proc pass2begin_front {elemX} {
     global counter elem xref
     global options
     global mode ofile
-    global categories copyshort idinfo idaburl idshurl iprstatus
+    global categories copyshort idinfo idinfo2 idaburl idshurl iprstatus
     global page_width center_fill_width
     global depth
 
@@ -6295,13 +6312,18 @@ proc pass2begin_front {elemX} {
             set expires [clock format $secs -format "%B $day, %Y" -gmt true]
             lappend left "Expires:$colonspace $expires"
             set category "Expires $expires"
-            set status $idinfo
             set ipreal $rv(ipr)
             set ymd [clock format $attrs(.PARSEDDATE) -format "%Y%m%d" \
                            -gmt true]
             if {($ymd >= "20091101") \
                     && ![string compare $ipreal pre5378Trust200902]} {
                 set ipreal trust200902
+            }
+            # Use the shorter alternative for the ID info for new IDs.
+            if {$ymd > 20100105} {
+                    set status $idinfo2
+            } else {
+                    set status $idinfo
             }
             regsub -all -- "&" [lindex [lindex $iprstatus \
                                               [lsearch0 $iprstatus \
