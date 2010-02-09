@@ -6159,7 +6159,9 @@ them other than as &ldquo;work in progress.&rdquo;"
 "This Internet-Draft will expire on %EXPIRES%."
 }
 
-# Shorter idinfo approved as an alternative by the IESG on 2010-1-5.
+# Shorter idinfo approved as an alternative by the IESG on 2010-1-5 and
+# announced on 2010-2-8:
+# http://www.ietf.org/mail-archive/web/ietf-announce/current/msg07008.html
 set idinfo2 {
 "%IPR%"
 
@@ -6319,8 +6321,9 @@ proc pass2begin_front {elemX} {
                     && ![string compare $ipreal pre5378Trust200902]} {
                 set ipreal trust200902
             }
-            # Use the shorter alternative for the ID info for new IDs.
-            if {$ymd > 20100105} {
+            # Use the shorter alternative for the ID info for new IDs
+            # starting April 1, 2010 as suggested by julian.reschke@gmx.de.
+            if {$ymd > 20100401} {
                     set status $idinfo2
             } else {
                     set status $idinfo
