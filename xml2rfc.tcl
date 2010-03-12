@@ -10656,13 +10656,6 @@ proc front_html_begin {left right top bottom title keywords lang} {
     }
     pcdata_html [lindex $title 0]
     write_html "</title>"
-    if {$options(.PRIVATE)} {
-        write_html -nonewline "<meta http-equiv=\"Expires\" content=\""
-        write_html -nonewline [clock format [clock seconds] \
-                                     -format "%a, %d %b %Y %T +0000" \
-                                     -gmt true]
-        write_html "\">"
-    }
 
     # Begin new meta tags.
     write_html "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"
