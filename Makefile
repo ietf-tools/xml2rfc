@@ -1,4 +1,4 @@
-all:	format samples
+all:	format samples dtd
 
 release=dev
 
@@ -21,3 +21,14 @@ samples:
 
 dist:
 	mdist.sh $(release)
+
+dtd:	rfc2629.rnc rfc2629.rng rfc2629.xsd
+
+%.rng:	%.dtd
+	java -jar $(TRANG)/trang.jar -I dtd -O rng $< $@
+
+%.rnc:	%.dtd
+	java -jar $(TRANG)/trang.jar -I dtd -O rnc $< $@
+
+%.xsd:	%.dtd
+	java -jar $(TRANG)/trang.jar -I dtd -O xsd $< $@
