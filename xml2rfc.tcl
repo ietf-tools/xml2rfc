@@ -4232,24 +4232,24 @@ This document may not be modified, and derivative works of it may
 not be created, and it may not be published except as an Internet-Draft."}
 
                {trust200902
-"This Internet-Draft is submitted to IETF in full
+"This Internet-Draft is submitted %TOIETF% in full
 conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79."}
 
                {noModificationTrust200902
-"This Internet-Draft is submitted to IETF in full
+"This Internet-Draft is submitted %TOIETF% in full
 conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.
 This document may not be modified, and derivative works of it may
 not be created, except to format it for publication as an RFC or
 to translate it into languages other than English."}
 
                {noDerivativesTrust200902
-"This Internet-Draft is submitted to IETF in full
+"This Internet-Draft is submitted %TOIETF% in full
 conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.
 This document may not be modified, and derivative works of it may
 not be created, and it may not be published except as an Internet-Draft."}
 
                {pre5378Trust200902
-"This Internet-Draft is submitted to IETF in full
+"This Internet-Draft is submitted %TOIETF% in full
 conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.
 This document may contain material from IETF Documents or IETF
 Contributions published or made publicly available before November
@@ -4345,7 +4345,7 @@ proc begin {name {av {}} } {
                 }
                 if {![catch { set attrs(submissionType) }]} {
                     switch -- $attrs(submissionType) {
-                        IETF - independent {}
+                        IETF - IRTF - IAB - independent {}
                         default {
                             unexpected error \
                                 "submissionType=\"$attrs(submissionType)\" attribute unknown in #$elemN:<rfc>"
@@ -5490,6 +5490,45 @@ set funding2 \
 "Funding for the RFC Editor function is provided by
 the IETF Administrative Support Activity (IASA)."
 
+
+# get the publication date in seconds; returns 0 when not available
+
+proc get_publication_date_seconds {date} {
+    global elem
+
+    array set dv $elem($date)
+
+    set three [clock format [clock seconds] -format "%B %Y %d"]
+
+    if {[catch { set dv(year) }]} {
+        set dv(year) [lindex $three 1]
+    }
+    if {[catch { set dv(month) }]} {
+        if {(![string compare $dv(year) [lindex $three 1]])} {
+            set dv(month) [lindex $three 0]
+            set dv(day) [string trimleft [lindex $three 2] 0]
+        } else {
+            unexpected error "I can't synthesize a date in $dv(year)"
+        }
+    } elseif {[catch { set dv(day) }]} {
+        if {(![string compare $dv(month) [lindex $three 0]]) \
+                && (![string compare $dv(year) [lindex $three 1]])} {
+            set dv(day) [string trimleft [lindex $three 2] 0]
+        }
+    }
+    set elem($date) [array get dv]
+    
+    if {[catch { set day $dv(day) }]} {
+        set day 1
+    }
+    if {[catch {set secs [clock scan "$dv(month) $day, $dv(year)" -gmt true]}]} {
+        set secs 0
+    }
+    
+    return $secs
+}
+
+
 #       }}}2 Other IPR texts
 #       {{{2 Pass 2 (and subsequent) stuff for the whole document
 
@@ -5498,7 +5537,7 @@ proc pass2begin_rfc {elemX} {
     global options copyrightP iprP
     global copyshort copyshort1 copyshort2 copyshort3 copyshortTrust200811 \
            copyshortTrust200909 copyshortTrust200902 \
-           copyshortTrust200902esc copyshortTrust200909esc
+           codeComponents200909 pre5378escapeClause
     global funding funding1 funding2
     global backP
 
@@ -5526,35 +5565,10 @@ proc pass2begin_rfc {elemX} {
         set iprP 1
     }
 
-    set newP 8
+    set newP 9
     if {![info exists fv(.PARSEDDATE)]} {
         set date [find_element date $fv(.CHILDREN)]
-        array set dv $elem($date)
-        set three [clock format [clock seconds] -format "%B %Y %d"]
-        if {[catch { set dv(year) }]} {
-            set dv(year) [lindex $three 1]
-        }
-        if {[catch { set dv(month) }]} {
-            if {(![string compare $dv(year) [lindex $three 1]])} {
-                set dv(month) [lindex $three 0]
-                set dv(day) [string trimleft [lindex $three 2] 0]
-            } else {
-                unexpected error "I can't synthesize a date in $dv(year)"
-            }
-        } elseif {[catch { set dv(day) }]} {
-            if {(![string compare $dv(month) [lindex $three 0]]) \
-                    && (![string compare $dv(year) [lindex $three 1]])} {
-                set dv(day) [string trimleft [lindex $three 2] 0]
-            }
-        }
-        set elem($date) [array get dv]
-
-        if {[catch { set day $dv(day) }]} {
-            set day 1
-        }
-        if {[catch {set secs [clock scan "$dv(month) $day, $dv(year)" -gmt true]}]} {
-            set secs 0
-        }
+        set secs [get_publication_date_seconds $date]
         set fv(.PARSEDDATE) $secs
         set elem($front) [array get fv]
     }
@@ -5564,7 +5578,7 @@ proc pass2begin_rfc {elemX} {
         # vs. PARSEDATE set to 0 (i.e., couldn't parse date)
         set ymd ""
     }
-
+    
     if {[string compare $attrs(number) ""]} {
         if {$attrs(number) <= 2499} {
             set newP 0
@@ -5587,6 +5601,8 @@ proc pass2begin_rfc {elemX} {
             # TLP 2009 09 copyright notice beginning with Sep 2009, except
             # for the RFCs listed above
             set newP 7
+        } elseif {$ymd < "20100101"} {
+            set newP 8
         }
     } elseif {[string compare $attrs(ipr) ""]} {
         if {   [string first "3667" $attrs(ipr)] >= 0
@@ -5597,30 +5613,61 @@ proc pass2begin_rfc {elemX} {
         } elseif {$ymd < "20091101"} {
             # TLP 2009 09 copyright notice beginning with Nov 2009
             set newP 7
+        } elseif {$ymd < "20100601"} {
+            # TLP 2010 01 copyright notice beginning with Jun 2010
+            set newP 8
         }
         # note: no support for 2008 11 TLP text in IDs
     }
 
-    if {$newP == 8} {
+    if {$newP == 9} {
+        set copyshort $copyshortTrust200909
+
+        if {![catch { set attrs(submissionType) }]} {
+          switch -- $attrs(submissionType) {
+            IETF {
+              regsub -all -- %CODECOMPONENTS% $copyshort $codeComponents200909 copyshort
+              # in the code components statement, say "Simplied BSD License"
+              regsub -all -- %SIMPLIFIED% $copyshort "Simplified " copyshort
+            }
+            default {
+              regsub -all -- %CODECOMPONENTS% $copyshort "" copyshort
+            }
+          }
+        }
+          
         # RFCs: include escape clause in Copyright Notice
         # IDs: include in Status Of This Memo (produced elsewhere), for date before Nov 2009
         if {![string compare $attrs(ipr) "pre5378Trust200902"] && \
             ([string compare $attrs(number) ""] || $ymd >= "20091101")} {
-            set copyshort $copyshortTrust200909esc
-        } else {
-            set copyshort $copyshortTrust200909
+            lappend copyshort $pre5378escapeClause
+        }
+        set funding ""
+        set copyrightP -1
+        set iprP 0
+    } elseif {$newP == 8} {
+        set copyshort $copyshortTrust200909
+        # pre-201006: append code component clause unconditionally
+        regsub -all -- %CODECOMPONENTS% $copyshort $codeComponents200909 copyshort
+        # in the code components statement, say "BSD License"
+        regsub -all -- %SIMPLIFIED% $copyshort "" copyshort
+          
+        # RFCs: include escape clause in Copyright Notice
+        # IDs: include in Status Of This Memo (produced elsewhere), for date before Nov 2009
+        if {![string compare $attrs(ipr) "pre5378Trust200902"] && \
+            ([string compare $attrs(number) ""] || $ymd >= "20091101")} {
+            lappend copyshort $pre5378escapeClause
         }
         set funding ""
         set copyrightP -1
         set iprP 0
     } elseif {$newP == 7} {
+        set copyshort $copyshortTrust200902
         # RFCs: include escape clause in Copyright Notice
         # IDs: include in Status Of This Memo (produced elsewhere)
         if {![string compare $attrs(ipr) "pre5378Trust200902"] && \
             [string compare $attrs(number) ""]} {
-            set copyshort $copyshortTrust200902esc
-        } else {
-            set copyshort $copyshortTrust200902
+            lappend copyshort $pre5378escapeClause
         }
         set funding ""
         set copyrightP -1
@@ -5890,6 +5937,10 @@ proc pass2end_rfc {elemX} {
                     independent {
                         set copylong $copylong3
                     }
+                    default {
+                        unexpected error \
+                            "submissionType=\"$attrs(submissionType)\" unexpected for this boilerplate"
+                    }
                 }
                 set validity $validity1
         } elseif {$newP == 2} {
@@ -5899,6 +5950,10 @@ proc pass2end_rfc {elemX} {
                     }
                     independent {
                         set copylong $copylong5
+                    }
+                    default {
+                        unexpected error \
+                            "submissionType=\"$attrs(submissionType)\" unexpected for this boilerplate"
                     }
                 }
                 set validity $validity2
@@ -6074,16 +6129,7 @@ publication of this document (http://trustee.ietf.org/license-info).
 Please review these documents carefully, as they describe your
 rights and restrictions with respect to this document."}
 
-set copyshortTrust200902esc \
-{"Copyright (c) %YEAR% IETF Trust and the persons identified as the
-document authors.  All rights reserved."
-
-"This document is subject to BCP 78 and the IETF Trust's Legal
-Provisions Relating to IETF Documents in effect on the date of
-publication of this document (http://trustee.ietf.org/license-info).
-Please review these documents carefully, as they describe your
-rights and restrictions with respect to this document."
-
+set pre5378escapeClause \
 "This document may contain material from IETF Documents or IETF
 Contributions published or made publicly available before November
 10, 2008.  The person(s) controlling the copyright in some of this
@@ -6094,7 +6140,7 @@ the copyright in such materials, this document may not be modified
 outside the IETF Standards Process, and derivative works of it may
 not be created outside the IETF Standards Process, except to format
 it for publication as an RFC or to translate it into languages other
-than English."}
+than English."
 
 set copyshortTrust200909 \
 {"Copyright (c) %YEAR% IETF Trust and the persons identified as the
@@ -6105,36 +6151,13 @@ Provisions Relating to IETF Documents
 (http://trustee.ietf.org/license-info) in effect on the date of
 publication of this document.  Please review these documents
 carefully, as they describe your rights and restrictions with respect
-to this document. Code Components extracted from this document must
+to this document.%CODECOMPONENTS%"}
+
+set codeComponents200909 \
+" Code Components extracted from this document must
 include Simplified BSD License text as described in Section 4.e of
 the Trust Legal Provisions and are provided without warranty as
-described in the BSD License."}
-
-set copyshortTrust200909esc \
-{"Copyright (c) %YEAR% IETF Trust and the persons identified as the
-document authors.  All rights reserved."
-
-"This document is subject to BCP 78 and the IETF Trust's Legal
-Provisions Relating to IETF Documents
-(http://trustee.ietf.org/license-info) in effect on the date of
-publication of this document.  Please review these documents
-carefully, as they describe your rights and restrictions with respect
-to this document. Code Components extracted from this document must
-include Simplified BSD License text as described in Section 4.e of
-the Trust Legal Provisions and are provided without warranty as
-described in the BSD License."
-
-"This document may contain material from IETF Documents or IETF
-Contributions published or made publicly available before November
-10, 2008.  The person(s) controlling the copyright in some of this
-material may not have granted the IETF Trust the right to allow
-modifications of such material outside the IETF Standards Process.
-Without obtaining an adequate license from the person(s) controlling
-the copyright in such materials, this document may not be modified
-outside the IETF Standards Process, and derivative works of it may
-not be created outside the IETF Standards Process, except to format
-it for publication as an RFC or to translate it into languages other
-than English."}
+described in the %SIMPLIFIED%BSD License."
 
 # From the ietf/1id-guidelines.txt file, Section 5.
 set idinfo {
@@ -6307,6 +6330,14 @@ proc pass2begin_front {elemX} {
                                               [lsearch0 $iprstatus \
                                                         $ipreal]] 1] \
                         "\\\\\\&" ipr
+            
+            if {($ymd <= "20100531")} {
+              # insert "to IETF" for documents before Feb 01 2010
+              regsub -all -- %TOIETF% $ipr "to IETF" ipr
+            } else {
+              regsub -all -- %TOIETF% $ipr "" ipr
+            }
+
             regsub -all -- %IPR% $status $ipr status
             if {![string compare $mode html]} {
                 regsub -all -- %IDABURL% $status "<a href='$idaburl'>$idaburl</a>" status
