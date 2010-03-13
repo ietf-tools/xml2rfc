@@ -16,6 +16,7 @@ format:	sample.ipr.id.noDerivativesTrust200902.200909.txt sample.ipr.id.noDeriva
 	sample.ipr.rfc.200907.txt sample.ipr.rfc.200907.xml2rfc.html \
 	sample.ipr.rfc.200909.txt sample.ipr.rfc.200909.xml2rfc.html \
 	sample.ipr.rfc.200912.txt sample.ipr.rfc.200912.xml2rfc.html \
+	sample.ipr.rfc.201001.txt sample.ipr.rfc.201001.xml2rfc.html \
 	sample.ipr.id.trust200902.201006.txt sample.ipr.id.trust200902.201006.xml2rfc.html \
 	sample.ipr.id.trust200902.201006.ietf.txt sample.ipr.id.trust200902.201006.ietf.xml2rfc.html \
 	sample.ipr.id.trust200902.201006.ind.txt sample.ipr.id.trust200902.201006.ind.xml2rfc.html \
