@@ -20,15 +20,18 @@ samples:
 	tclsh xml2rfc.tcl xml2rfc $< $@
 
 dist:
-	mdist.sh $(release)
+	tools/mdist.sh $(release)
 
 dtd:	rfc2629.rnc rfc2629.rng rfc2629.xsd
 
 %.rng:	%.dtd
-	java -jar $(TRANG)/trang.jar -I dtd -O rng $< $@
+	$(MAKE) -C tools
+	java -jar tools/trang.jar -I dtd -O rng $< $@
 
 %.rnc:	%.dtd
-	java -jar $(TRANG)/trang.jar -I dtd -O rnc $< $@
+	$(MAKE) -C tools
+	java -jar tools/trang.jar -I dtd -O rnc $< $@
 
 %.xsd:	%.dtd
-	java -jar $(TRANG)/trang.jar -I dtd -O xsd $< $@
+	$(MAKE) -C tools
+	java -jar tools/trang.jar -I dtd -O xsd $< $@
