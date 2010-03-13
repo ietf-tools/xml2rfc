@@ -43,7 +43,8 @@ format:	sample.ipr.id.noDerivativesTrust200902.200909.txt sample.ipr.id.noDeriva
 	sample.ipr.id.trust200902.201006.ind.txt sample.ipr.id.trust200902.201006.ind.xml2rfc.html \
 	sample.ipr.id.trust200902.201006.iab.txt sample.ipr.id.trust200902.201006.iab.xml2rfc.html \
 	sample.ipr.id.trust200902.201006.irtf.txt sample.ipr.id.trust200902.201006.irtf.xml2rfc.html \
-	sample.ipr.rfc.pre5378Trust200902.200912.txt sample.ipr.rfc.pre5378Trust200902.200912.xml2rfc.html
+	sample.ipr.rfc.pre5378Trust200902.200912.txt sample.ipr.rfc.pre5378Trust200902.200912.xml2rfc.html \
+	sample.ref.annotation.txt sample.ref.annotation.xml2rfc.html
 
 %.txt:	%.xml ../xml2rfc.tcl
 	tclsh ../xml2rfc.tcl xml2rfc $< $@
