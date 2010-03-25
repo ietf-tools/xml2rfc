@@ -85,11 +85,11 @@ This is a test case for
 
 .in 11
 .ti 3
-[CMIS]    Brown, A. , \%Gur-Esh, E. , McVeigh, R. , and F. Muller ,
+[CMIS]    Brown, A., \%Gur-Esh, E., McVeigh, R., and F. Muller,
 "Content Management Interoperability Services (CMIS) Version
-1.0" , OASIS\0CMIS v1.0 Committee Draft 04 , September\02009 ,
-\%<http://docs.oasis-open.org/cmis/CMIS/v1.0/cd04/
-\%cmis-spec-v1.0.html> .
+1.0", OASIS\0CMIS v1.0 Committee Draft 04, September\02009,  <h
+\%ttp://docs.oasis-open.org/cmis/CMIS/v1.0/cd04/
+\%cmis-spec-v1.0.html>.
 
 Latest version available at \%<http://docs.oasis-open.org/cmis/
 \%CMIS/v1.0/cmis-spec-v1.0.html>

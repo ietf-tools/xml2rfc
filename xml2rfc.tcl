@@ -10210,13 +10210,15 @@ proc write_text_txt {text {direction l}} {
     global page_width
     global eatP
 
-    if {$eatP < 0} {
+    if {($eatP < 0) && ![regexp -- {^[.,?!]} $text]} {
         set text " $text"
     }
+
     if {![string compare $buffer ""]} {
         set buffer [format %*s $indent ""]
         set buffer_align [current_align]
     }
+# print_stack_trace
     append buffer $text
 
     set flush [string compare $direction l]
@@ -10234,6 +10236,22 @@ proc write_text_txt {text {direction l}} {
             break
         }
     }
+}
+
+# grab the current function name. Useful in debugging like this:
+# puts stderr "[get_current_function_name] your message goes here"
+proc get_current_function_name {} {
+    return [info level -1];
+}
+
+# print the current stack trace
+proc print_stack_trace {} {
+    set stack ""
+    set level -1
+    for { set x [expr {[info level] + $level}] } { $x > 0 } { incr x -1 } {
+	append stack "    called from [info level $x]\n"
+    }
+    puts stderr $stack
 }
 
 proc write_line_txt {line {pre 0}} {
@@ -13045,7 +13063,7 @@ proc write_text_nr {text {direction l} {magic 0}} {
     global page_width
     global eatP
 
-    if {$eatP < 0} {
+    if {($eatP < 0) && ![regexp -- {^[.,?!]} $text]} {
         set text " $text"
     }
     switch -- $direction {
