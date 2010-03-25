@@ -1,6 +1,7 @@
 all:	format
 
-XML= sample.ipr.id.noDerivativesTrust200902.200909.xml \
+XML= rfc2616.xml rfc3470.xml rfc3986.xml rfc5234.xml rfc5322.xml \
+	sample.ipr.id.noDerivativesTrust200902.200909.xml \
 	sample.ipr.id.noModification3978.200606.xml \
 	sample.ipr.id.noModificationTrust200902.200909.xml \
 	sample.ipr.id.pre5378Trust200902.200909.xml \
