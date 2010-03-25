@@ -1,0 +1,379 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <title>xml2rfc</title>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+</head>
+<body style="background-color: rgb(255, 255, 255);">
+<h1 align="center"><font face="Verdana, Arial, Helvetica, sans-serif">xml2rfc</font></h1>
+<p><font face="verdana, helvetica, arial"><br clear="all">
+A handy little tool,
+<b>xml2rfc</b>,
+will allow you to take your XML source
+(using the format defined in
+<a href="public/rfc/html/rfc2629.html" target="_new">RFC 2629</a>
+and its
+<a href="authoring/draft-mrose-writing-rfcs.html" target="_new">unofficial
+successor</a>)
+and see how the results look like in the original ASCII look-and-feel
+or the
+new modern HTML rendition of that look-and-feel.</font></p>
+<table border="0" cellpadding="5" cellspacing="5">
+  <tbody>
+    <tr>
+      <td valign="top">
+      <h3><font face="Verdana, Arial, Helvetica, sans-serif">
+Oct '09
+release</font></h3>
+      </td>
+      <td>
+      <p><font face="verdana, helvetica, arial">
+Version <b>1.34</b> is available.
+(This version is equivalent to pre-release 5 of <b>1.34</b>.)
+Here's the <a href="authoring/README.html">README</a> file. </font></p>
+      <div style="background-color: #FDD; font-style: italic; border: solid gray 2px; padding: 0.5em; width: 90%">
+	 Please note that the current version of xml2rfc has not been updated to produce
+	 boilerplate text which is fully compliant with
+	 <a href="http://trustee.ietf.org/docs/IETF-Trust-License-Policy.pdf">the latest IETF Trust Legal Provisions
+	 Document</a>.  It can however produce boilerplate which will be accepted for draft
+         submissions even if the <a href="http://tools.ietf.org/tools/idnits">idnits</a> check
+	 produces a warning.<br /><br />
+	 To generate acceptable boilerplate, please use these settings in your .xml source file:
+	 <blockquote style="background-color: #EEE; font-style: normal; padding: 0.5em;">
+	       in the <tt>&lt;rfc /&gt;</tt> element: use one of these attributes:
+	       <ul>
+		  <li><tt>ipr='trust200902'</tt></li>
+		  <li><tt>ipr='noModificationTrust200902'</tt></li>
+		  <li><tt>ipr='noDerivativesTrust200902'</tt></li>
+		  <li><tt>ipr='pre5378Trust200902)'</tt></li>
+	       </ul>
+	       <br />
+	       and in the <tt>&lt;date /&gt;</tt> element (which controls the date in the document
+	       header):<br />
+	       use <tt>year=</tt> and <tt>month=</tt> to indicate a date of 2009-11-01 or later,
+	       or simply <tt>year="2010"</tt> (or later).
+	 </blockquote>
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+      <h3><font face="Verdana, Arial, Helvetica, sans-serif">Living on
+the edge?</font></h3>
+      </td>
+      <td> <font face="verdana, helvetica, arial">
+Here is the current
+ <a href="experimental.html">development</a> release.
+</font></td>
+    </tr>
+    <tr>
+      <td valign="top">
+      <h3><font face="Verdana, Arial, Helvetica, sans-serif">Conversion</font></h3>
+      </td>
+      <td>
+      <ol>
+        <li><font face="verdana, helvetica, arial">Download <b>xml2rfc</b>
+as a <a href="authoring/xml2rfc.zip"><b>zip</b></a>
+or <a href="authoring/xml2rfc.tgz"><b>tgz</b></a> file,
+or </font></li>
+        <li><font face="verdana, helvetica, arial">Try your results in
+this handy converter form: </font></li>
+      </ol>
+      <font face="verdana, helvetica, arial">
+      <center>
+      <form action="cgi-bin/xml2rfc.cgi" method="post"
+ enctype="multipart/form-data">
+        <table bgcolor="#333333" border="0" cellpadding="1"
+ cellspacing="0">
+          <tbody>
+            <tr>
+              <td>
+              <table border="0" cellpadding="2" cellspacing="0">
+                <tbody>
+                  <tr>
+                    <td colspan="2" bgcolor="#cccccc">
+                    <div align="center"><font color="#333333"
+ face="verdana, charcoal, helvetica, arial, sans" size="3"><b>Convert
+Your XML Source</b></font> </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td bgcolor="#6699cc" height="24" nowrap="nowrap"><font
+ color="#333333" face="verdana, charcoal, helvetica, arial, sans"
+ size="1"><b>&nbsp;Input file</b></font> </td>
+                    <td align="right" bgcolor="#6699cc"> <input
+ size="30" name="input" type="file"> </td>
+                  </tr>
+                  <tr>
+                    <td bgcolor="#6699cc" height="24" nowrap="nowrap"><font
+ color="#333333" face="verdana, charcoal, helvetica, arial, sans"
+ size="1"><b>&nbsp;Output mode</b></font> </td>
+                    <td align="left" bgcolor="#6699cc"><font
+ face="verdana, charcoal, helvetica, arial, sans" size="1"> <input
+ checked="checked" value="txt" name="mode" type="radio"> Text <input
+ value="html" name="mode" type="radio"> HTML <input value="nr"
+ name="mode" type="radio"> nroff <input value="unpg" name="mode"
+ type="radio"> unpaginated <input value="xml" name="mode" type="radio">
+XML </font></td>
+                  </tr>
+                  <tr>
+                    <td bgcolor="#6699cc" height="24" nowrap="nowrap"><font
+ color="#333333" face="verdana, charcoal, helvetica, arial, sans"
+ size="1"><b>&nbsp;Output result</b></font> </td>
+                    <td align="left" bgcolor="#6699cc"><font
+ face="verdana, charcoal, helvetica, arial, sans" size="1"> <input
+ checked="checked" value="ascii" name="type" type="radio"> Window <input
+ value="binary" name="type" type="radio"> File </font></td>
+                  </tr>
+                  <tr>
+                    <td bgcolor="#6699cc" height="24"><br>
+                    </td>
+                    <td align="right" bgcolor="#6699cc"> <input
+ value="Submit" name="Submit" type="submit"> <input value="Reset"
+ name="Reset" type="reset"> </td>
+                  </tr>
+                </tbody>
+              </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+      </center>
+      </font> </td>
+    </tr>
+    <tr>
+      <td valign="top">
+      <h3><font face="Verdana, Arial, Helvetica, sans-serif">Citation
+Libraries</font></h3>
+      </td>
+      <td>
+      <div align="center"><font
+ face="Verdana, Arial, Helvetica, sans-serif" size="2">
+      <table border="1" cellpadding="2" cellspacing="0">
+        <tbody>
+          <tr>
+            <td align="center">
+            <table cellspacing="0">
+              <tbody>
+                <tr>
+                  <th>citation</th>
+                </tr>
+                <tr>
+                  <th>library</th>
+                </tr>
+              </tbody>
+            </table>
+            </td>
+            <td align="center">
+            <table cellspacing="0">
+              <tbody>
+                <tr>
+                  <th>retrieve entire directory</th>
+                </tr>
+                <tr>
+                  <th>as a file</th>
+                </tr>
+              </tbody>
+            </table>
+            </td>
+            <td align="center">
+            <table cellspacing="0">
+              <tbody>
+                <tr>
+                  <th>retrieve entire directory using</th>
+                </tr>
+                <tr>
+                  <th><a
+ href="http://www.gnu.org/software/wget/wget.html">wget</a>
+-r -l 1 -A .xml -nd -nc ...</th>
+                </tr>
+              </tbody>
+            </table>
+            </td>
+            <td align="center">
+            <table cellspacing="0">
+              <tbody>
+                <tr>
+                  <th>rss</th>
+                </tr>
+                <tr>
+                  <th>feed</th>
+                </tr>
+              </tbody>
+            </table>
+            </td>
+            <td style="vertical-align: top;">
+            <table cellspacing="0">
+              <tbody>
+                <tr>
+                  <th><br>
+                  </th>
+                  <th>rsync</th>
+                </tr>
+              </tbody>
+            </table>
+            </td>
+          </tr>
+          <tr>
+            <td>RFC</td>
+            <td align="center"> <a href="public/rfc/bibxml.zip"><b>zip</b></a>
+or <a href="public/rfc/bibxml.tgz"><b>tgz</b></a> </td>
+            <td> <a href="public/rfc/bibxml/">http://xml.resource.org/public/rfc/bibxml/</a></td>
+            <td align="center"> <a href="public/rfc/bibxml/index.rdf">rss
+1.0</a></td>
+            <td style="vertical-align: top; text-align: center;">yes<br>
+            </td>
+          </tr>
+          <tr>
+            <td>Internet-Draft</td>
+            <td align="center"> <a href="public/rfc/bibxml3.zip"><b>zip</b></a>
+or <a href="public/rfc/bibxml3.tgz"><b>tgz</b></a> </td>
+            <td> <a href="public/rfc/bibxml3/">http://xml.resource.org/public/rfc/bibxml3/</a></td>
+            <td align="center"> <a href="public/rfc/bibxml3/index.rdf">rss
+1.0</a></td>
+            <td style="vertical-align: top; text-align: center;">yes<br>
+            </td>
+          </tr>
+          <tr>
+            <td>W3C</td>
+            <td align="center"> <a href="public/rfc/bibxml4.zip"><b>zip</b></a>
+or <a href="public/rfc/bibxml4.tgz"><b>tgz</b></a> </td>
+            <td> <a href="public/rfc/bibxml4/">http://xml.resource.org/public/rfc/bibxml4/</a></td>
+            <td align="center"> <a href="public/rfc/bibxml4/index.rdf">rss
+1.0</a></td>
+            <td style="vertical-align: top; text-align: center;">yes<br>
+            </td>
+          </tr>
+          <tr>
+            <td>JSF</td>
+            <td align="center"> <a
+ href="http://www.xmpp.org/extensions/refs/jsf-xeps.zip"><b>zip</b></a>
+or <a href="http://www.xmpp.org/extensions/refs/jsf-xeps.tgz"><b>tgz</b></a>
+            </td>
+            <td> <a href="http://www.xmpp.org/extensions/refs/">http://www.xmpp.org/extensions/refs/</a></td>
+            <td align="center"> <a
+ href="http://www.xmpp.org/extensions/rss.xml">rss 0.92</a></td>
+            <td style="vertical-align: top; text-align: center;">no<br>
+            </td>
+          </tr>
+          <tr>
+            <td>3GPP</td>
+            <td align="center"> <a href="public/rfc/bibxml5.zip"><b>zip</b></a>
+or <a href="public/rfc/bibxml5.tgz"><b>tgz</b></a> </td>
+            <td> <a href="public/rfc/bibxml5/">http://xml.resource.org/public/rfc/bibxml5/</a></td>
+            <td align="center"> <a href="public/rfc/bibxml5/index.rdf">rss
+1.0</a></td>
+            <td style="vertical-align: top; text-align: center;">yes<br>
+            </td>
+          </tr>
+          <tr>
+            <td>Miscellaneous</td>
+            <td align="center"> <a href="public/rfc/bibxml2.zip"><b>zip</b></a>
+or <a href="public/rfc/bibxml2.tgz"><b>tgz</b></a> </td>
+            <td align="center"> <a href="public/rfc/bibxml2/">http://xml.resource.org/public/rfc/bibxml2/</a></td>
+            <td align="center">no</td>
+            <td style="vertical-align: top; text-align: center;">yes<br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </font>
+      <div style="text-align: left;"><br>
+      <font face="verdana, helvetica, arial">rsync access is available
+at two independent servers 
+(rsync1.xml.resource.org::xml2rfc.bibxml,
+and
+rsync3.xml.resource.org::xml2rfc.bibxml)
+&mdash; after you pick one, you shouldn't switch.</font>&nbsp;<font
+ face="Verdana, Arial, Helvetica, sans-serif" size="2"> </font></div>
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+      <h3><font face="Verdana, Arial, Helvetica, sans-serif">Helpful
+Hints</font></h3>
+      </td>
+      <td>
+<font face="verdana, helvetica,
+	    arial">See the <a href="xml2rfcFAQ.html">xml2rfc FAQ</a> for
+	    answers to common questions.</font>
+      <h4>Normative References</h4>
+      <p><font face="verdana, helvetica, arial">If you need to have
+multiple
+references sections, try something like this: </font></p>
+      <pre>    &lt;back&gt;<br>    &lt;references title='Normative References'&gt;<br>    ...<br>    &lt;/references&gt;<br>    &lt;references title='Informative References'&gt;<br>    ...<br>    &lt;/references&gt;<br>    &lt;/back&gt;<br></pre>
+      <p><font face="verdana, helvetica, arial">That's right: the
+&lt;references/&gt; element may occur more than once in the back
+section,
+and has an optional 'title' attribute.</font></p>
+      <h4>Including files</h4>
+      <p><font face="verdana, helvetica, arial">Use
+the XML external entity mechanism, e.g., </font></p>
+      <pre>    &lt;?xml version='1.0'?&gt;<br>    &lt;!DOCTYPE rfc SYSTEM 'rfc2629.dtd' [<br><br>      &lt;!ENTITY rfc2629 PUBLIC '' 'http://xml.resource.org/public/rfc/bibxml/reference.RFC.2629.xml'&gt;<br><br>    ]&gt;<br><br>    ...<br><br>    &lt;t&gt;This document was constructed using the &lt;xref target="RFC2629" /&gt; DTD.&lt;/t&gt;<br><br>    ...<br><br>    &lt;references&gt;<br>    ...<br>    &amp;rfc2629;<br>    ...<br>    &lt;/references&gt;<br></pre>
+      <p><font face="verdana, helvetica, arial">Note that this syntax
+is rather
+pedantic, i.e.,
+you declare the entity toward the top of your file and then you invoke
+it
+exactly once (using an "&amp;") in the &lt;references/&gt; element to
+include
+it. </font></p>
+      <p><font face="verdana, helvetica, arial">Take a look at this <a
+ href="authoring/sample.xml">file</a>,
+provided by Dan Kohn.
+In addition to showing a complete example,
+it also works with the XSL <a href="authoring/rfc2629xslt.zip">transformation</a>
+written by Julian Reschke
+and the <a href="authoring/rfc2629.dtd">DTD</a>.
+(Depending on the capabilities of your browser,
+instead of clicking on these links directly,
+you may want to download these three files using "Save Target As...") </font></p>
+      <p><font face="verdana, helvetica, arial">To try out this sample,
+you'll need to put all three files in the same directory.
+Also,
+note that some XSLT processors disable the use of external entities,
+you may need to check "Preferences" to see if there's an option to
+enable
+their use. </font></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+      <h3><font face="Verdana, Arial, Helvetica, sans-serif">Notes for
+      Authors</font></h3>
+      </td>
+      <td>
+      <h4>Templates<br>
+      </h4>
+      <p><font face="verdana, helvetica, arial">The IETF Tools Team
+maintains a </font><font face="verdana, helvetica, arial"><a
+ target="_new" href="http://tools.ietf.org/tools/templates">library
+of templates</a> you can use for different kinds of drafts. </font></p>
+      <h4>Using your source file</h4>
+      <p><font face="verdana, helvetica, arial">When submitting an
+	  Internet-Draft using the <a target="_new"
+			 href="https://datatracker.ietf.org/idst/upload.cgi">IETF
+	    Internet-Draft Submission Tool</a>,
+you can upload the 
+XML source file in addition to the text file.  If your draft
+	  is approved for publication as an RFC, the RFC Editor will
+	  retrieve the XML file from the I-D repository, or you can
+	  submit it directly to the <a
+ href="mailto:rfc-editor@rfc-editor.org">RFC Editor</a>.</font></p>
+      <h4>When published</h4>
+      <p><font face="verdana, helvetica, arial">
+To improve the quality of the citation library, send a
+copy of the updated XML file <a
+ href="mailto:webmaster@xml.resource.org">here</a>. Thanks! </font></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><font face="verdana, helvetica, arial">Questions? Try the <a
+ href="http://lists.xml.resource.org/mailman/listinfo/xml2rfc"><b>mailing
+list</b></a>. </font></p>
+</body>
+</html>
