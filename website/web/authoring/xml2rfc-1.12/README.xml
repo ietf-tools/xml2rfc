@@ -1,0 +1,312 @@
+<?xml version='1.0'?>
+<!DOCTYPE rfc SYSTEM 'rfc2629.dtd'>
+
+<?rfc editing='no'?>
+<?rfc compact='no'?>
+<?rfc subcompact='no'?>
+<?rfc emoticonic='yes'?>
+<?rfc private='The README file'?>
+<?rfc toc='yes'?>
+<?rfc header='README'?>
+
+<rfc>
+<front>
+<title>xml2rfc v1.11</title>
+
+<author initials='M.T.' surname='Rose' fullname='Marshall T. Rose'>
+<organization>Dover Beach Consulting, Inc.</organization>
+
+<address>
+<postal>
+<street>POB 255268</street>
+<city>Sacramento</city> <region>CA</region> <code>95865-5268</code>
+<country>US</country>
+</postal>
+
+<phone>+1 916 483 8878</phone>
+<email>mrose@dbc.mtview.ca.us</email>
+</address>
+</author>
+
+<date month='March' year='2002'/>
+</front>
+
+<middle>
+<section title='Introduction'>
+<t>This is a package to convert memos written in XML to the RFC format.</t>
+
+<t>If you don't want to install any software,
+you can use the
+<eref target='http://xml.resource.org/'>web-based service</eref>.</t>
+</section>
+
+<section title='Requirements'>
+<t>You need to have Tcl/Tk version 8 running on your system.
+Tcl is a scripting language,
+Tk is Tcl with support for your windowing system.</t>
+    
+<t>To get a source or binary distribution for your system,
+go to the
+<eref target='http://www.scriptics.com/software/tcltk/8.4.html'>Scriptics website</eref>
+and install it.
+If you get the binary distribution,
+this is pretty simple.</t>
+    
+<figure>
+<preamble>Of course,
+you may already have Tcl version 8.
+To find out,
+try typing this command from the shell
+(including the "MS-DOS Prompt"):</preamble>
+<artwork>
+    % tclsh
+</artwork>
+<postamble>If the program launches,
+you're good to go with Tcl version 8.</postamble>
+</figure>
+
+<figure>
+<preamble>If you are running under a windowing system (e.g., X or Windows),
+you can also try:</preamble>
+<artwork>
+    % wish
+</artwork>
+<postamble>If a new window comes up along with a "Console" window,
+then you're good to go with Tk version 8.</postamble>
+</figure>
+
+<t>Finally,
+you may notice a file called |"xml2sgml.tcl| in the distribution.
+It contains some extra functionality for a few special users &#151;
+so, if you don't know what it is, don't worry about it...</t>
+</section>
+
+<section title='Testing'>
+<t>Now test your installation.</t>
+    
+<section title='Testing under a windowing system'>
+<figure>
+<preamble>Type this command from the shell:</preamble>
+<artwork>
+    % xml2rfc.tcl
+</artwork>
+</figure>
+
+<figure>
+<preamble>A new window should come up that looks like this:</preamble>
+<artwork>
+    +------------------------------------------------------------+
+    |                     Convert XML to RFC                     |
+    |                                                            |
+    |  Select input file: ____________________________  [Browse] |
+    |                                                            |
+    | Select output file: ____________________________  [Browse] |
+    |                                                            |    
+    |               [Convert]               [Quit]               |
+    |                                                            |
+    +------------------------------------------------------------+
+</artwork>
+<postamble>Fill-in the blanks and click on [Convert].</postamble>
+</figure>
+</section>
+    
+<section title='Testing without a windowing system'>
+<figure>
+<preamble>Type this command from the shell:</preamble>
+<artwork>
+    % tclsh
+</artwork>
+</figure>
+
+<figure>
+<preamble>If the program launches, type this command to it:</preamble>
+<artwork>
+    % source xml2rfc.tcl
+</artwork>
+</figure>
+
+<figure>
+<preamble>and you should see these four lines:</preamble>
+<artwork>
+    invoke as "xml2rfc   inputfile outputfile"
+           or "xml2txt   inputfile"
+           or "xml2html  inputfile"
+           or "xml2nroff inputfile"
+</artwork>
+</figure>
+</section>
+</section>
+
+<section title='Next steps'>
+<t>Read the <eref target='draft-mrose-writing-rfcs.html'>2629bis</eref>
+document.
+In particular,
+<eref target='draft-mrose-writing-rfcs.html#anchor13'>Section 3</eref>
+has some good information.</t>
+
+<section title='Processing Instructions'>
+<figure>
+<preamble>A |*processing instruction| is a directive to an XML
+application.
+If you want to give directives to |'xml2rfc|,
+the PIs look like this:</preamble>
+<artwork>
+    &lt;?rfc keyword='value'?>
+</artwork>
+</figure>
+
+<section title='Option Settings'>
+<figure>
+<preamble>The list of valid keywords are:</preamble>
+<artwork>
+    keyword     default     meaning
+    =======     =======     =======
+    compact     no          when producing a .txt file, try to
+                            conserve vertical whitespace
+    
+    subcompact  compact     if compact is "yes", then setting
+                            this to "no" will make things a 
+                            little less compact
+
+    toc         no          generate a table-of-contents
+
+    tocompact   yes         if toc is "yes", then setting this to
+                            "no" will make it a little less compact
+
+    editing     no          insert editing marks for ease of
+                            discussing draft versions
+
+    private     ""          produce a private memo rather than
+                            an RFC or Internet-Draft.
+
+    header      ""          override the leftmost header string
+
+    footer      ""          override the center footer string
+
+    slides      no          when producing an .html file, produce
+                            multiple files for a slide show
+
+    sortrefs    no          sort references
+
+    symrefs     no          use anchors rather than numbers for
+                            references
+
+    background  ""          when producing an .html file, use this
+                            image
+</artwork>
+<postamble>Remember,
+that as with everything else in XML,
+keywords and values are case-sensitive.</postamble>
+</figure>
+</section>
+
+<section title='Include Files'>
+<figure>
+<preamble>|'xml2rfc| has an include-file facility,
+e.g.,</preamble>
+<artwork>
+    &lt;?rfc include='file'?>
+</artwork>
+<postamble>|'xml2rfc| will consult the $XML_LIBRARY environment variable
+for a search path of where to look for files.
+(If this envariable isn't set,
+the directory containing the file that contains the include-file
+directive is used.)</postamble>
+</figure>
+
+<figure>
+<preamble>You can also have |'xml2rfc| set this envariable directly,
+by including a file called |".xml2rfc.rc| in the directory where your
+main file is,
+e.g.,</preamble>
+<artwork><![CDATA[
+global env
+
+if {![info exists env(XML_LIBRARY)]} {
+    set env(XML_LIBRARY) \
+        ";\\home\\rfcs\\include;\\home\\rfcs\\bibxml"
+}
+set nativeD [file nativename $inputD]
+if {[lsearch [split $env(XML_LIBRARY) ";"] $nativeD] < 0} {
+    set env(XML_LIBRARY) "$nativeD;$env(XML_LIBRARY)"
+}
+]]></artwork>
+<postamble>which,
+on Windows,
+sets the envariable to a default value,
+and then inserts, at the front,
+the directory where your main file is.</postamble>
+</figure>
+
+<t>There are links to various bibliographic databases (RFCs, I-Ds, and so on)
+on the |'xml2rfc| <eref target='http://xml.resource.org/'>homepage</eref>.</t>
+</section>
+</section>
+</section>
+
+<section title='Additions to RFC 2629'>
+<t><list style='symbols'>
+<t>The |'artwork| element has an undocumented |'src| attribute that is
+consulted only if slides are being generated,
+e.g.,
+<figure>
+<artwork><![CDATA[
+       <figure><artwork src='layers.gif' /></figure>
+]]></artwork>
+</figure></t>
+
+<t>The |'artwork| element has optional |'name| and |'type| attributes.</t>
+
+<t>The |'references| element may occur more than once in the |'back| element
+(e.g., for normative and non-normative references).
+Further,
+the element has an optional |'title| attribute.</t>
+
+<t>The value of the |'list| element's |'style| attribute can start with
+|""format "|.</t>
+
+<t>If the |'style| attribute of the |'list| element has either of the
+values |""hanging"| or |""format"|,
+then a second,
+optional attribute,
+called |'hangIndent| is consulted.</t>
+</list>
+For more information on these last two additions,
+see Section 2.3.1.2 of the
+<eref target='draft-mrose-writing-rfcs.html#list'>2629bis</eref>
+document for the details.</t>
+</section>
+
+<section title='Limitations'>
+<t><list style='symbols'>
+<t>The |'figure| element's |'title| attribute is ignored,
+except when generating HTML.</t>
+
+<t>The |'xref| element's |'pageno| attribute is ignored.</t>
+</list></t>
+</section>
+</middle>
+
+<back>
+<section title="MacOS 9 Installation (courtesy of Ned Freed)">
+<t><list style='numbers'>
+<t>Install Tcl/Tk 8.3.4</t>
+
+<t>When you performed Step 1,
+a folder in your |""Extensions"| folder called |""Tool Command Language"| was 
+created.
+Create a new folder under |""Extensions"|,
+with any name you like.</t>
+
+<t>Drag the file |"xml2rfc.tcl| onto the |""Drag & Drop Tclets"|
+application that was installed in Step 1.</t>
+
+<t>When asked for an appropriate |"wish| stub,
+select |""Wish 8.3.4"|.</t>
+
+<t>The |""Drap & Drop Tclets"| application will write out an
+executable version of |'xml2rfc|.</t>
+</list></t>
+</section>
+</back>
+</rfc>
