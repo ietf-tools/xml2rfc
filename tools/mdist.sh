@@ -23,11 +23,11 @@ case $release in
     *dev ) 
 	;;
     * )
-	# copy just created .tgz version of release into an website/htdocs/authoring .tgz version
-	cp ../releases/xml2rfc-$release.tgz ../website/htdocs/authoring/xml2rfc-$release.tgz
+	# copy just created .tgz version of release into an website/web/authoring .tgz version
+	cp ../releases/xml2rfc-$release.tgz ../website/web/authoring/xml2rfc-$release.tgz
 
-	# rest of the work is done in website/htdocs/authoring
-	cd ../website/htdocs/authoring
+	# rest of the work is done in website/web/authoring
+	cd ../website/web/authoring
 
 	# unpack .tgz file
 	tar xzf xml2rfc-$release.tgz
@@ -43,9 +43,9 @@ case $release in
 	cp -f xml2rfc-$release.zip xml2rfc.zip
 
 	# add the new files and directories to svn
-	svn add website/htdocs/authoring/xml2rfc-$release.tgz
-	svn add website/htdocs/authoring/xml2rfc-$release.zip
-	svn add website/htdocs/authoring/xml2rfc-$release
+	svn add xml2rfc-$release.tgz
+	svn add xml2rfc-$release.zip
+	svn add xml2rfc-$release
 
 	# commit everything into svn
 	echo Now you need to run
