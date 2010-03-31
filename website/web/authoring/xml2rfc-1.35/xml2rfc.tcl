@@ -5613,8 +5613,8 @@ proc pass2begin_rfc {elemX} {
         } elseif {$ymd < "20091101"} {
             # TLP 2009 09 copyright notice beginning with Nov 2009
             set newP 7
-        } elseif {$ymd < "20100601"} {
-            # TLP 2010 01 copyright notice beginning with Jun 2010
+        } elseif {$ymd < "20100401"} {
+            # TLP 2010 01 copyright notice beginning with Apr 2010
             set newP 8
         }
         # note: no support for 2008 11 TLP text in IDs
@@ -5647,7 +5647,7 @@ proc pass2begin_rfc {elemX} {
         set iprP 0
     } elseif {$newP == 8} {
         set copyshort $copyshortTrust200909
-        # pre-201006: append code component clause unconditionally
+        # pre-201004: append code component clause unconditionally
         regsub -all -- %CODECOMPONENTS% $copyshort $codeComponents200909 copyshort
         # in the code components statement, say "BSD License"
         regsub -all -- %SIMPLIFIED% $copyshort "" copyshort
@@ -6345,8 +6345,8 @@ proc pass2begin_front {elemX} {
                 set ipreal trust200902
             }
             # Use the shorter alternative for the ID info for new IDs
-            # starting June 1, 2010.
-            if {$ymd >= 20100601} {
+            # starting April 1, 2010.
+            if {$ymd >= 20100401} {
                     set status $idinfo2
             } else {
                     set status $idinfo
@@ -6356,7 +6356,7 @@ proc pass2begin_front {elemX} {
                                                         $ipreal]] 1] \
                         "\\\\\\&" ipr
             
-            if {($ymd <= "20100531")} {
+            if {($ymd < "20100401")} {
               # insert "to IETF" for documents before Feb 01 2010
               regsub -all -- %TOIETF% $ipr "to IETF" ipr
             } else {
