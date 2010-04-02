@@ -1,0 +1,12 @@
+global env
+
+if {![info exists env(XML_LIBRARY)]} {
+    set env(XML_LIBRARY) ""
+    foreach dir [glob -nocomplain "/home/rfcs/bibxml/*/"] {
+	append env(XML_LIBRARY) ";$dir"
+    }
+}
+set nativeD [file nativename $inputD]
+if {[lsearch [split $env(XML_LIBRARY) ";"] $nativeD] < 0} {
+    set env(XML_LIBRARY) "$nativeD;$env(XML_LIBRARY)"
+}
