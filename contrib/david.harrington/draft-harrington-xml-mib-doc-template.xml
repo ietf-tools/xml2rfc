@@ -1,0 +1,709 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!--
+  XML2RFC offers an include feature described in the XML2RFC README
+  file.  That syntax, however, contradicts the DTD requirements to
+  have <reference> elements within the <references> element, so an 
+  XML parser is likely to find your XML file invalid.  It may be
+  possible that XML2RFC will change their DTD so that the XML file
+  remains valid when their style of include is used.
+
+  In the meantime therefore, we use an alternative valid-XML approach
+  to includes, which unfortunately require that define your includes
+  at the beginning of the file. Since the biggest benefit of includes
+  is for references, this requires that your references be defined in
+  ENTITY clauses here before being "included" and cited elsewhere in
+  the file.
+-->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY rfc2629 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2629.xml">
+<!ENTITY rfc2863 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2863.xml">
+<!ENTITY rfc3418 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3418.xml">
+<!ENTITY rfc4181 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4181.xml">
+<!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY rfc2578 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2578.xml">
+<!ENTITY rfc2579 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2579.xml">
+<!ENTITY rfc2580 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2580.xml">
+<!ENTITY rfc3410 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3410.xml">
+]>
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<?rfc strict="no"?>
+<?rfc rfcedstyle="yes"?>
+<!--
+  This template is for authors of IETF specifications containing MIB
+  modules.  This template can be used as a starting point to produce
+  specifications that comply with the Operations &amp; Management Area
+  guidelines for MIB module documents.
+-->
+<!--
+  Throughout this template, the marker "[TODO]" is used to indicate an
+  element or text that requires replacement or removal.
+-->
+<!-- Intellectual Property section -->
+<!--
+  The Intellectual Property section will be generated automatically by
+  XML2RFC, based on the ipr attribute in the rfc element.
+-->
+<!-- 
+  [TODO] specify the name of the output document. This is optional;
+the default is to use the base portion of the XML filename. 
+[TODO]For Internet-drafts, indicate which intellectual property notice 
+to use per the rules of RFC3978.
+Specify this in the ipr attribute.  The value can be:
+    full3978 -
+    noModification3978 -
+    noDerivatives3978 -
+[TODO] Specify the category attribute per RFC2026 
+options are info, std, bcp, or exp.
+[TODO] if this document updates an RFC, specify the RFC in the 
+"updates" attribute
+-->
+<rfc category="bcp" docName="draft-harrington-text-mib-doc-template-02"
+     ipr="full3978">
+  <front>
+    <!--
+  Throughout this template, the marker "[TODO]" is used to indicate an
+  element or text that requires replacement or removal.
+-->
+
+    <!--
+[TODO] Enter the full document title and an abbreviated version
+  to use in the page header.
+-->
+
+    <title abbrev="MIB Module Document Text Template">A Template for Documents
+    Containing a MIB Module</title>
+
+    <!-- [TODO] copy the author block as many times as needed, one for each author.-->
+
+    <!-- If the author is acting as editor, use the <role=editor> attribute-->
+
+    <!-- see RFC2223 for guidelines regarding author names -->
+
+    <author fullname="David Harrington" initials="D" role="editor"
+            surname="Harrington">
+      <organization>Huawei Technologies (USA)</organization>
+
+      <address>
+        <postal>
+          <street>1700 Alma Drive, Suite 100</street>
+
+          <city>Plano, TX 75075</city>
+
+          <country>USA</country>
+        </postal>
+
+        <phone>+1 603 436 8634</phone>
+
+        <email>dharrington@huawei.com</email>
+      </address>
+    </author>
+
+    <!-- [TODO]: month and day will be generated automatically by XML2RFC; 
+be sure the year is current.-->
+
+    <date year="2007" />
+
+    <!--[TODO] IETF area is optional -->
+
+    <area>Operations &amp; Management Area</area>
+
+    <!--[TODO] WG name at the upperleft corner of the doc, 
+IETF is fine for non-WG submissions -->
+
+    <workgroup>Internet Engineering Task Force</workgroup>
+
+    <keyword>Network Management</keyword>
+
+    <keyword>Management Information base</keyword>
+
+    <keyword>MIB</keyword>
+
+    <keyword>SMIv2</keyword>
+
+    <!--[TODO] add additional keywords here for IETF website search engine -->
+
+    <abstract>
+      <t>This memo defines a portion of the Management Information Base (MIB)
+      for use with network management protocols. In particular it defines
+      objects for managing [TODO].</t>
+
+      <t>[TODO]: describe what functionality will be managed using this MIB
+      module. It can be good to mention the protocol being managed, and
+      whether there is a particular aspect of the protocol to be managed, or a
+      particular goal of the module. But keep it brief.</t>
+
+      <!--Remember, don't put any citations in the abstract, and expand your acronyms. -->
+    </abstract>
+
+    <note title="Note: Forward to RFC Editor">
+      <t>Note to RFC Editor - throughout this template, there are numerouse
+      sample "Note to RFC Editor" that should NOT be removed from this
+      template before publication of the template. These need to retain the
+      "Note to RFC Editor" format to match the boilerplate included in the
+      template.</t>
+
+      <t>For simplicity, there are NO notes to the RFC Editor in this document
+      that should be removed, except THIS section - the complete section
+      entitled "Note: Foreward to RFC Editor".</t>
+    </note>
+
+    <note title="Note: Foreword to template users">
+      <t>This template helps authors write the surrounding text needed in a
+      MIB module document, but does not provide a template for writing the MIB
+      module itself.</t>
+
+      <t>Throughout this template, the marker "[TODO]" is used as a reminder
+      to the template user to indicate an element or text that requires
+      replacement or removal by the template user before submission to the
+      internet draft editor. All [TODO] markers should be resolved and removed
+      before you submit your document to the internet-draft editor.</t>
+
+      <t>[TODO] THIS section, the complete section entitled "Note: Foreward to
+      template users" should be removed by the template user from their
+      document before submission.</t>
+
+      <t>[TODO] Remove all page headings from the template document, and
+      replace them with the appropriate headings for your document.</t>
+
+      <t>For updated information on MIB module guidelines and templates, see
+      <xref target="RFC4181"></xref> and http://www.ops.ietf.org/.</t>
+
+      <t>For information on writing internet drafts or RFCs, see
+      http://www.ietf.org/ietf/1id-guidelines.txt and RFC2223(bis), and look
+      at http://www.ietf.org/ID-Checklist.html for issues to note when writing
+      drafts.</t>
+
+      <t>This template is not meant to be a conclusive list of everything
+      needed to write MIB module documents, but to summarize the often-needed
+      basic features to get a document containing a MIB module started. An
+      important purpose of the template is to aid authors in developing a
+      document that is laid out in a manner consistent with other documents
+      containing MIB modules. Documents submitted for advancement to the
+      standards track typically require review by a MIB Doctor. This template
+      standardizes the layout and naming of sections, includes the appropriate
+      boilerplate text, and facilitates the development of tools to automate
+      the checking of MIB module documents, to speed the WG and IESG review
+      processes.</t>
+
+      <t>An XML template is also available. For information on XML2RFC, see
+      RFC2629 <xref target="RFC2629"></xref>,
+      http://xml.resource.org/public/rfc/html/rfc2629.html and "bis":
+      http://xml.resource.org/authoring/draft-mrose-writing-rfcs.html. Also
+      see http://xml.resource.org/authoring/README.html for 'rfc' option
+      strings. The benefit of using the XML version of the template is that
+      comments in the XML describe how to fill in each section of the
+      template, and then XML2RFC will generate the actual internet-draft with
+      your information. XML2RFC automatically handles much of the boilerplate,
+      references, and idnits issues for you.</t>
+
+      <t>[TODO]: please remove this Note prior to publication.</t>
+    </note>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <!-- It is good practice to echo the abstract in the Introduction, 
+providing citations here. -->
+
+      <t>This memo defines a portion of the Management Information Base (MIB)
+      for use with network management protocols. In particular it defines
+      objects for managing the [TODO]</t>
+    </section>
+
+    <section title="The Internet-Standard Management Framework">
+      <t><!-- The title and text for this section has been copied from the 
+official boilerplate, and should not be modified unless the boilerplate text at http;//ops.ietf.org/mib-boilerplate.html has changed. See RFC4818 
+section 3.1 for a discussion of the boilerplate section.-->For a detailed
+      overview of the documents that describe the current Internet-Standard
+      Management Framework, please refer to section 7 of RFC 3410 <xref
+      target="RFC3410"></xref>.</t>
+
+      <t>Managed objects are accessed via a virtual information store, termed
+      the Management Information Base or MIB. MIB objects are generally
+      accessed through the Simple Network Management Protocol (SNMP). Objects
+      in the MIB are defined using the mechanisms defined in the Structure of
+      Management Information (SMI). This memo specifies a MIB module that is
+      compliant to the SMIv2, which is described in STD 58, RFC 2578 <xref
+      target="RFC2578"></xref>, STD 58, RFC 2579 <xref
+      target="RFC2579"></xref> and STD 58, RFC 2580 <xref
+      target="RFC2580"></xref>.</t>
+    </section>
+
+    <section title="Conventions">
+      <!--[TODO] This boilerplate should be used if the RFC2119 key words 
+               are used in the document. -->
+
+      <t><!-- The text in this section has been copied from the official boilerplate, 
+                  and should not be modified.-->The key words "MUST", "MUST
+      NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT",
+      "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+      interpreted as described in RFC 2119 <xref target="RFC2119"></xref>.</t>
+    </section>
+
+    <!-- ********************************************* -->
+
+    <section title="Overview">
+      <t>[TODO] The narrative part MUST include an overview section that
+      describes the scope and field of application of the MIB modules defined
+      by the specification. See RFC4181 section 3.2 for a discussion of the
+      Narrative section</t>
+
+      <t></t>
+    </section>
+
+    <!-- Design Principles  -->
+
+    <!--
+        <t>This section is here to remind authors of the Design Principles
+         for MIB modules.</t>
+
+        <t>To be consistent with IAB directives and good engineering
+        practice, an explicit attempt should be made to keep this MIB module
+        as simple as possible.  This can be accomplished by applying the
+        following criteria to objects proposed for inclusion:</t>
+      </t>
+      <t>
+        <list style="symbols">
+          <t>
+            Start with a small set of essential objects and add only
+            as objects are needed.
+          </t>
+          <t>
+            Require objects be essential for either fault or
+            performance or configuration management.
+          </t>
+          <t>
+            Consider evidence of current use and/or utility.
+          </t>
+          <t>
+            Limit the total number of objects.
+          </t>
+          <t>
+            Exclude objects which are simply derivable from others in
+            this or other MIB modules. The complexity of deriving values
+            should be done by the managament station, not the agent.
+          </t>
+          <t>
+            Avoid causing critical sections to be heavily
+            instrumented.  The guideline that has been followed in previous
+            MIB modules is one counter per critical section per layer.
+          </t>
+          <t>
+            Consider the requirements of a small footprint system, such 
+            as a set-top box as well as the expanded functionality beneficial 
+            to a large foootprint system. To the degree possible, costs 
+            associated with advanced functionality should be borne only 
+            by the systems implementing such functionality, and the overhead 
+            of advanced functionality should minimally impact systems which 
+            do not implement the advanced functionality.</t>
+        </list>
+      </t>
+      </section>
+-->
+
+    <section title="Structure of the MIB Module">
+      <t>[TODO] The narrative part SHOULD include one or more sections to
+      briefly describe the structure of the MIB modules defined in the
+      specification.</t>
+
+      <section title="Textual Conventions">
+        <!--Generic and Common Textual Conventions can be found summarized at 
+http://www.ops.ietf.org/mib-common-tcs.html-->
+
+        <t></t>
+      </section>
+
+      <section title="The [TODO] Subtree">
+        <t>[TODO] copy this section for each subtree in the MIB module, and
+        describe the purpose of the subtree. For example, the fooStats subtree
+        provides information for identifying fault conditions and performance
+        degradation of the foo functionality.</t>
+      </section>
+
+      <section title="The Notifications Subtree">
+        <t>[TODO] describe the notifications defined in the MIB module, and
+        their purpose.</t>
+      </section>
+    </section>
+
+    <section title="Relationship to Other MIB Modules">
+      <t>[TODO]: The narrative part MUST include a section that specifies the
+      relationship (if any) of the MIB modules contained in this document to
+      other standards, particularly to standards containing other MIB
+      modules.</t>
+
+      <t>[TODO] If the MIB modules defined by the specification import
+      definitions from other MIB modules or are always implemented in
+      conjunction with other MIB modules, then those facts must be noted in
+      the narrataive section, as must any special interpretations of objects
+      in other MIB modules. Note that citations may NOT be put into the MIB
+      module portions of the document, but documents used for Imported items
+      are Normative references, so the citations must exist in the narrative
+      section of the document. For example, some modules are always
+      implemented in conjunction with the IF-MIB [RFC2863] and are REQUIRED to
+      document how certain objects in the IF-MIB are used. In addition,
+      media-specific MIB modules that rely on the ifStackTable [RFC2863] and
+      the ifInvStackTable [RFC2864] to maintain information regarding
+      configuration and multiplexing of interface sublayers MUST contain a
+      description of the layering model.</t>
+
+      <t>Some management objects defined in other MIB modules are applicable
+      to an entity implementing this MIB. In particular, it is assumed that an
+      entity implementing the SAMPLE-MIB module will also implement the
+      'system' group of the SNMPv2-MIB <xref target="RFC3418"></xref> and the
+      'interfaces' group of the IF-MIB <xref target="RFC2863"></xref>.</t>
+
+      <section title="Relationship to the SNMPv2-MIB">
+        <t>The 'system' group in the SNMPv2-MIB <xref target="RFC3418"></xref>
+        is defined as being mandatory for all systems, and the objects apply
+        to the entity as a whole. The 'system' group provides identification
+        of the management entity and certain other system-wide data. The
+        SAMPLE-MIB does not duplicate those objects.</t>
+      </section>
+
+      <section title="Relationship to the IF-MIB">
+        <t>[TODO] This section is included as an example; If the MIB module is
+        not an adjunct of the Interface MIB, then this section should be
+        removed.</t>
+
+        <t>The Interface MIB <xref target="RFC2863"></xref> requires that any
+        MIB module which is an adjunct of the Interface MIB clarify specific
+        areas within the Interface MIB. These areas were intentionally left
+        vague in the Interface MIB to avoid over constraining the MIB, thereby
+        precluding management of certain media-types.</t>
+
+        <t>Section 4 of <xref target="RFC2863"></xref> enumerates several
+        areas which a media-specific MIB must clarify. The implementor is
+        referred to <xref target="RFC2863"></xref> in order to understand the
+        general intent of these areas.</t>
+      </section>
+
+      <section title="MIB modules required for IMPORTS">
+        <t>[TODO]: Citations are not permitted within a MIB module, but any
+        module mentioned in an IMPORTS clause or document mentioned in a
+        REFERENCE clause is a Normative reference, and must be cited someplace
+        within the narrative sections. If there are imported items in the MIB
+        module, such as Textual Conventions, that are not already cited, they
+        can be cited in text here. Since relationships to other MIB modules
+        should be described in the narrative text, this section is typically
+        used to cite modules from which Textual Conventions are imported.</t>
+
+        <t>The following MIB module IMPORTS objects from SNMPv2-SMI <xref
+        target="RFC2578"></xref>, SNMPv2-TC <xref target="RFC2579"></xref>,
+        SNMPv2-CONF <xref target="RFC2580"></xref>, and IF-MIB <xref
+        target="RFC2863"></xref></t>
+      </section>
+    </section>
+
+    <!-- Definitions section -->
+
+    <!-- This section contains the MIB module(s) defined by the specification.
+   These MIB modules MUST be written in SMIv2 [RFC2578] [RFC2579]
+   [RFC2580].
+
+   See Section 4 of RFC 4181 for guidelines on SMIv2 usage.
+
+	See Appendix C of RFC 4181 for suggested naming conventions
+
+A list of tools that can help automate the process of checking mib definitions can 
+be found at http://www.ops.ietf.org/mib-review-tools.html
+ -->
+
+    <section title="Definitions">
+      <t>[TODO]: put your valid MIB module here. A list of MIB verification
+      tools is available at http://tools.ietf.org/</t>
+
+      <figure>
+        <artwork>
+				<!-- [TODO]: put your valid MIB module here. A list of MIB verification 
+tools is available at http://tools.ietf.org/ -->	
+				</artwork>
+      </figure>
+    </section>
+
+    <section title="Security Considerations">
+      <!--[TODO] Remember to consider security from the start. -->
+
+      <t>[TODO] Each specification that defines one or more MIB modules MUST
+      contain a section that discusses security considerations relevant to
+      those modules. This section MUST be patterned after the latest approved
+      template (available at http://www.ops.ietf.org/mib-security.html).
+      Remember that the objective is not to blindly copy text from the
+      template, but rather to think and evaluate the risks/vulnerabilities and
+      then state/document the result of this evaluation.</t>
+
+      <t></t>
+
+      <t>[TODO] if you have any read-write and/or read-create objects, please
+      include the following boilerplate paragraph.</t>
+
+      <t>There are a number of management objects defined in this MIB module
+      with a MAX-ACCESS clause of read-write and/or read-create. Such objects
+      may be considered sensitive or vulnerable in some network environments.
+      The support for SET operations in a non-secure environment without
+      proper protection can have a negative effect on network operations.
+      These are the tables and objects and their
+      sensitivity/vulnerability:</t>
+
+      <t><list style="symbols">
+          <t>[TODO] writeable MIB objects that could be especially disruptive
+          if abused MUST be explicitly listed by name and the associated
+          security risks MUST be spelled out; RFC 2669 has a very good
+          example.</t>
+
+          <t>[TODO] list the writable tables and objects and state why they
+          are sensitive.</t>
+        </list></t>
+
+      <t>[TODO] else if there are no read-write objects in your MIB module,
+      use the following boilerplate paragraph.</t>
+
+      <t>There are no management objects defined in this MIB module that have
+      a MAX-ACCESS clause of read-write and/or read-create. So, if this MIB
+      module is implemented correctly, then there is no risk that an intruder
+      can alter or create any management objects of this MIB module via direct
+      SNMP SET operations.</t>
+
+      <t>[TODO] if you have any sensitive readable objects, please include the
+      following boilerplate paragraph.</t>
+
+      <t>Some of the readable objects in this MIB module (i.e., objects with a
+      MAX-ACCESS other than not-accessible) may be considered sensitive or
+      vulnerable in some network environments. It is thus important to control
+      even GET and/or NOTIFY access to these objects and possibly to even
+      encrypt the values of these objects when sending them over the network
+      via SNMP. These are the tables and objects and their
+      sensitivity/vulnerability: <list style="symbols">
+          <t>[TODO] you must explicitly list by name any readable objects that
+          are sensitive or vulnerable and the associated security risks MUST
+          be spelled out (for instance, if they might reveal customer
+          information or violate personal privacy laws such as those of the
+          European Union if exposed to unathorized parties)</t>
+
+          <t>[TODO] list the tables and objects and state why they are
+          sensitive.</t>
+        </list></t>
+
+      <t>[TODO] discuss what security the protocol used to carry the
+      information should have. The following three boilerplate paragraphs
+      should not be changed without very good reason. Changes will almost
+      certainly require justification during IESG review.</t>
+
+      <t>SNMP versions prior to SNMPv3 did not include adequate security. Even
+      if the network itself is secure (for example by using IPSec), even then,
+      there is no control as to who on the secure network is allowed to access
+      and GET/SET (read/change/create/delete) the objects in this MIB
+      module.</t>
+
+      <t>It is RECOMMENDED that implementers consider the security features as
+      provided by the SNMPv3 framework (see <xref target="RFC3410"></xref>,
+      section 8), including full support for the SNMPv3 cryptographic
+      mechanisms (for authentication and privacy).</t>
+
+      <t>Further, deployment of SNMP versions prior to SNMPv3 is NOT
+      RECOMMENDED. Instead, it is RECOMMENDED to deploy SNMPv3 and to enable
+      cryptographic security. It is then a customer/operator responsibility to
+      ensure that the SNMP entity giving access to an instance of this MIB
+      module is properly configured to give access to the objects only to
+      those principals (users) that have legitimate rights to indeed GET or
+      SET (change/create/delete) them.</t>
+    </section>
+
+    <section title="IANA Considerations">
+      <t>[TODO] In order to comply with IESG policy as set forth in
+      http://www.ietf.org/ID-Checklist.html, every Internet-Draft that is
+      submitted to the IESG for publication MUST contain an IANA
+      Considerations section. The requirements for this section vary depending
+      what actions are required of the IANA. see RFC4181 section 3.5 for more
+      information on writing an IANA clause for a MIB module document.</t>
+
+      <t>[TODO} select an option and provide the necessary details.</t>
+
+      <t>Option #1:</t>
+
+      <figure>
+        <preamble></preamble>
+
+        <artwork><![CDATA[
+     The MIB module in this document uses the following IANA-assigned
+     OBJECT IDENTIFIER values recorded in the SMI Numbers registry: 
+      
+     Descriptor        OBJECT IDENTIFIER value
+     ----------        -----------------------
+
+     sampleMIB  { mib-2 XXX }
+      	]]></artwork>
+
+        <postamble></postamble>
+      </figure>
+
+      <t></t>
+
+      <t>Option #2:</t>
+
+      <t>Editor's Note (to be removed prior to publication): the IANA is
+      requested to assign a value for "XXX" under the 'mib-2' subtree and to
+      record the assignment in the SMI Numbers registry. When the assignment
+      has been made, the RFC Editor is asked to replace "XXX" (here and in the
+      MIB module) with the assigned value and to remove this note.</t>
+
+      <t>Note well: prior to official assignment by the IANA, a draft document
+      MUST use placeholders (such as "XXX" above) rather than actual numbers.
+      See RFC4181 Section 4.5 for an example of how this is done in a draft
+      MIB module.</t>
+
+      <t>Option #3:</t>
+
+      <!-- If no IANA work is required, an explicit note must be included.-->
+
+      <t>This memo includes no request to IANA.</t>
+    </section>
+
+    <!-- The Author's Addresses section will be generated automatically by XML2RFC from the front information -->
+
+    <section title="Contributors">
+      <t>This template is based on contributions from the MIb Doctors,
+      especially Juergen Schoenwaelder, Dave Perkins, C.M.Heard and Randy
+      Presuhn.</t>
+
+      <t><!--[TODO] Change this section to mention contributors to your MIB module document.--></t>
+    </section>
+
+    <section title="Acknowledgements">
+      <t>Thanks to Marshall Rose for developing the XML2RFC format.</t>
+
+      <t>[TODO]This acknowledgement can be removed from your MIB module
+      document.</t>
+    </section>
+  </middle>
+
+  <back>
+    <!-- References Section -->
+
+    <!-- Section 4.7f of [RFC2223bis] specifies the requirements for the
+   references sections.  In particular, there MUST be separate lists of
+   normative and informative references, each in a separate section.
+   The style SHOULD follow that of recently published RFCs.
+
+   The standard MIB boilerplate available at
+   http://www.ops.ietf.org/mib-boilerplate.html includes lists of
+   normative and informative references that MUST appear in all IETF
+   specifications that contain MIB modules.  If items from other MIB
+   modules appear in an IMPORTS statement in the Definitions section,
+   then the specifications containing those MIB modules MUST be included
+   in the list of normative references.  When items are imported from an
+   IANA-maintained MIB module the corresponding normative reference
+   SHALL point to the on-line version of that MIB module.  It is the
+   policy of the RFC Editor that all references must be cited in the
+   text;  such citations MUST appear in the overview section where
+   documents containing imported definitions (other those already
+   mentioned in the MIB boilerplate) are required to be mentioned (cf.
+   Section 3.2).
+
+In general, each normative reference SHOULD point to the most recent
+version of the specification in question.
+-->
+
+    <references title="Normative References">
+      <!-- <t>[TODO] rfc2629, 2863, 3418, and 4181 are normative references that
+      are required only to support this template, and which can be removed
+      from your final document, if not used for other purposes.</t>-->
+
+      &rfc2629;
+
+      &rfc2863;
+
+      &rfc3418;
+
+      &rfc4181;
+
+      <!--  <t>[TODO] rfc2119, 2578, 2579, and 2580 are required to support MIB
+      module boilerplate text.</t> -->
+
+      &rfc2119;
+
+      &rfc2578;
+
+      &rfc2579;
+
+      &rfc2580;
+
+      <!--  <t>[TODO]: Add your own normative references.</t>-->
+    </references>
+
+    <references title="Informative References">
+      <!-- <t>[TODO] RFC3410 is required to support the boilerplate text.</t>-->
+
+      &rfc3410;
+
+      <!-- <t>[TODO] Add your own informative references</t>-->
+    </references>
+
+    <!--
+<section anchor="appendix" title="Appendix A">
+	<t>You can add appendices just as regular sections, the only
+difference is that they go under "back" element, and get letters 
+instead of numbers</t>
+</section>
+-->
+
+    <section title="Change Log ">
+      <t>The following changes have been made from draft-xxx-xxx-xxx-12 .</t>
+
+      <t>[TODO] replace this list with your own list</t>
+
+      <t><list style="numbers">
+          <t>Updated the introductry boilerplate text, the security
+          considerations section and the references to comply with the current
+          IETF standards and guidelines.</t>
+
+          <t>Additions and clarifications in various description clauses.</t>
+        </list></t>
+    </section>
+
+    <section title="Open Issues">
+      <t>[TODO] This list of open issues should be cleared and removed before
+      this document hits the IESG.</t>
+
+      <t><list style="numbers">
+          <t>Contributor addresses need to be updated</t>
+        </list></t>
+    </section>
+
+    <!--
+$Log: draft-harrington-text-mib-doc-template.xml,v $
+Revision 1.2  2007/03/16 02:46:57  H73653
+*** empty log message ***
+
+Revision 1.1  2006/10/31 14:13:50  H73653
+*** empty log message ***
+
+Revision 1.10  2006/06/15 13:11:34  H73653
+-00- internet-draft
+made it a mib-doc-template rather than a mib-template
+
+Revision 1.9  2006/06/14 17:32:11  H73653
+saved from XXE, and reflects XXE automatic changes to formatting.
+
+Revision 1.8  2006/04/24 23:37:55  H73653
+changed from cvs header to cvs id to eliminate directory differences
+
+Revision 1.7  2006/04/24 15:52:16  H73653
+started -02- revision
+
+Revision 1.6  2006/04/01 04:14:49  dbh
+misc fixes
+
+Revision 1.5  2005/12/24 05:35:21  dbh
+pretty printed the XML
+
+Revision 1.4  2005/12/20 00:09:39  dbh
+submitted to mreview for Last Call. Runs cleanly through Bill's validator, and the production and dev versions of xml2rfc. Also aubmitted the output file produced by the web service from this source file. Note that the rfcedstyle is disabled because the directive is only available in the "bleeding edge" version.
+
+	place for source control log here
+  -->
+  </back>
+</rfc>
