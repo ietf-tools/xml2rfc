@@ -67,3 +67,6 @@ format:	$(TXT) $(HTML) $(NR)
 
 %.xml2rfc.html:	%.xml ../xml2rfc.tcl
 	tclsh ../xml2rfc.tcl xml2rfc $< $@
+	tr -d "\015" < $@ | fgrep -v '<meta name="generator" content="xml2rfc' > $@.tmp
+	mv $@.tmp $@
+
