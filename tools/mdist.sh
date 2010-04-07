@@ -19,10 +19,16 @@ EOF
 files=$(find . -name .svn -prune -o -name tools -prune -o -type f -print)
 tar cvfz ../releases/xml2rfc-$release.tgz --transform="s,^\./,xml2rfc-$release/," $files
 
+# copy tcl to proper place, always overwriting dev version
+cp xml2rfc.tcl ../website/web/etc/xml2rfc-dev.tcl
+
 case $release in
     *dev ) 
 	;;
     * )
+        # copy tcl to proper place, overwriting production version
+	cp xml2rfc.tcl ../website/web/etc/xml2rfc.tcl
+
 	# copy just created .tgz version of release into an website/web/authoring .tgz version
 	cp ../releases/xml2rfc-$release.tgz ../website/web/authoring/xml2rfc-$release.tgz
 
