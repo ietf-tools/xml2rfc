@@ -11,7 +11,7 @@ exec tclsh "$0" "$0" "$@"
 
 global prog prog_version prog_url prog_ack
 set prog "xml2rfc"
-set prog_version "v1.35"
+set prog_version "v1.36dev"
 set prog_url "http://xml.resource.org/"
 set prog_ack \
 "This document was produced
@@ -6232,11 +6232,31 @@ proc pass2begin_front {elemX} {
     array set rv $elem(1)
     catch { set ofile $rv(docName) }
 
+    if {![info exists attrs(.PARSEDDATE)]} {
+        set secs [get_publication_date_seconds $date]
+        set attrs(.PARSEDDATE) $secs
+    }
+    
+    if {[catch { clock format $attrs(.PARSEDDATE) -format "%Y%m%d" -gmt true } \
+               ymd]} {
+        # Should differentiate between PARSEDATE not set (e.g., early pass)
+        # vs. PARSEDATE set to 0 (i.e., couldn't parse date)
+        set ymd ""
+    }
+    
     if {$options(.PRIVATE)} {
         lappend left $options(private)
 
         set status ""
     } else {
+
+        # do we need the 2010 header format?
+        set headerformat ""
+        if {$ymd >= "20100101" ||
+            ([lsearch {5741 5742 5743} $rv(number)] >= 0)} {
+            set headerformat "2010"
+        }
+        
         set first ""
         if {(![string compare $rv(number) ""]) \
                 && ([string compare \
@@ -6244,6 +6264,31 @@ proc pass2begin_front {elemX} {
                                  $attrs(.CHILDREN)] 0]] ""])} {
             array set wv $elem($workgroup)
             set first [string trim $wv(.CTEXT)]
+        }
+        if {([string compare $rv(number) ""]) && 
+             ![string compare $first ""] &&
+             ![string compare $headerformat "2010"]} {
+            # starting in 2010, put the submission type into the top left corner
+            if {![catch { set rv(submissionType) }]} {
+                switch -- $rv(submissionType) {
+                    independent {
+                        set first "Independent Submission"
+                    }
+                    IETF {
+                        set first "Internet Engineering Task Force (IETF)"
+                    }
+                    IRTF {
+                        set first "Internet Research Task Force (IRTF)"
+                    }
+                    IAB {
+                        set first "Internet Architecture Board (IAB)"
+                    }
+                    default {
+                        unexpected error \
+                            "submissionType=\"$rv(submissionType)\" unexpected for this boilerplate"
+                    }
+                }
+            }
         }
         if {![string compare $first ""]} {
             set first "Network Working Group"
@@ -6281,6 +6326,11 @@ proc pass2begin_front {elemX} {
             set category [lindex [lindex $categories $cindex] 1]
             lappend left "Category:$colonspace $category"
             set status [list [lindex [lindex $categories $cindex] 3]]
+            
+            if {![string compare $headerformat "2010"]} {
+              # starting in 2010, add the ISSN
+              lappend left "ISSN:$colonspace 2070-1721"
+            }
         } else {
             if {$options(.STRICT)} {
                 if {$cindex == -1} {
@@ -8001,8 +8051,8 @@ proc front_txt_begin {left right top bottom title keywords lang} {
     set indent 0
 
     if {$options(.TOPBLOCK)} {
-        set left [munge_long $left]
-        set right [munge_long $right]
+        set left [munge_long $left 1]
+        set right [munge_long $right 0]
         foreach l $left r $right {
             set l [chars_expand $l]
             set r [chars_expand $r]
@@ -10764,8 +10814,8 @@ proc front_html_begin {left right top bottom title keywords lang} {
 
     if {$options(.TOPBLOCK)} {
         write_html "<table summary=\"layout\" width=\"66%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td><table summary=\"layout\" width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
-        set left [munge_long $left]
-        set right [munge_long $right]
+        set left [munge_long $left 1]
+        set right [munge_long $right 0]
         set lc ""
         set rc ""
         foreach l $left r $right {
@@ -12027,8 +12077,8 @@ proc front_slides_begin {left right top bottom title} {
     puts $out_fd "<table width=\"75%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">"
     puts $out_fd "<tr><td>"
     puts $out_fd "<table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
-    set left [munge_long $left]
-    set right [munge_long $right]
+    set left [munge_long $left 1]
+    set right [munge_long $right 0]
     set lc ""
     set rc ""
     foreach l $left r $right {
@@ -12474,8 +12524,8 @@ proc front_nr_begin {left right top bottom title keywords lang} {
     condwrite_in_nr 0 1
 
     if {$options(.TOPBLOCK)} {
-        set left [munge_long $left]
-        set right [munge_long $right]
+        set left [munge_long $left 1]
+        set right [munge_long $right 0]
         foreach l $left r $right {
             set l [chars_expand $l]
             set r [chars_expand $r]
@@ -13561,12 +13611,21 @@ proc flush_text {} {
     }
 }
 
-proc munge_long {lines} {
+proc munge_long {lines isleft} {
     global page_width
     global mode
 
     set result ""
-    set max [expr $page_width / 2 - 2]
+    
+    # as of 2010, need 39 characters in the left column
+    # maybe this should be done in a smarter way, taking the width
+    # of the text in both columns into account
+    
+    if {$isleft} {
+        set max 39
+    } else {
+        set max [expr $page_width - 39 - 1]
+    }
 
     foreach buffer $lines {
         set linkP 0

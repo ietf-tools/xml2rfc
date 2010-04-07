@@ -16,9 +16,10 @@
 .ad l
 .nf
 .in 0
-Network Working Group                                             J. Doe
+Independent Submission                                            J. Doe
 Request for Comments: 9999                                  January 2010
 Category: Experimental
+ISSN: \%2070-1721
 
 
 .ce

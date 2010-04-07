@@ -16,9 +16,10 @@
 .ad l
 .nf
 .in 0
-Network Working Group                                             J. Doe
+Internet Research Task Force (IRTF)                               J. Doe
 Request for Comments: 9999                                  January 2010
 Category: Informational
+ISSN: \%2070-1721
 
 
 .ce

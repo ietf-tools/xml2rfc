@@ -16,9 +16,10 @@
 .ad l
 .nf
 .in 0
-Network Working Group                                             J. Doe
+Internet Engineering Task Force (IETF)                            J. Doe
 Request for Comments: 9999                                  January 2010
 Category: Best Current Practice
+ISSN: \%2070-1721
 
 
 .ce
