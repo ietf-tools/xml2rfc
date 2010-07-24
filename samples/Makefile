@@ -45,6 +45,7 @@ XML= rfc2616.xml rfc3470.xml rfc3986.xml rfc5234.xml rfc5322.xml \
 	sample.ipr.rfc.201001.irtf.inf.norg.xml \
 	sample.ipr.rfc.pre5378Trust200902.200912.xml \
 	sample.ref.annotation.xml \
+	sample.nested.xml \
 	sample.basic.xml
 
 # test files for which NROFF generation currently fails

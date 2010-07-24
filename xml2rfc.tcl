@@ -4017,6 +4017,7 @@ proc pass {tag} {
                                     slides              no            \
                                     sortrefs            no            \
                                     strict              no            \
+				    text-list-symbols	"o*+-"	      \
                                     toc                 no            \
                                     tocappendix         yes           \
                                     tocdepth            3             \
@@ -8347,7 +8348,7 @@ proc t_txt {tag counter style hangText editNo} {
             }
 
             symbols {
-                set counter "[lindex { - o * + } [expr [llength $l] & 3]] "
+		set counter "[string index $options(text-list-symbols) [expr [expr [llength $l] - 1] % [string length $options(text-list-symbols)]]]"
             }
 
             hanging {
