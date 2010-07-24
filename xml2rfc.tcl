@@ -5900,7 +5900,7 @@ proc pass2end_rfc {elemX} {
     }
 
     if {($options(.STRICT)) && ([set l [llength $authors]] > 5)} {
-        unexpected error "$l authors, maximum of 5 allowed"
+        unexpected error "$l authors, maximum of 5 allowed. Remove strict='yes' to proceed."
     }
 
 
