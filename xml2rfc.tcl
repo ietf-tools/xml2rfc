@@ -6464,9 +6464,6 @@ proc pass2begin_front {elemX} {
           }
         }
 
-        if {[string compare $av(initials) ""]} {
-            set av(initials) [lindex [split $av(initials) .] 0].
-        }
         set av(abbrev) "$av(initials) $av(surname)"
         if {[string length $av(abbrev)] == 1} {
             set av(abbrev) ""
