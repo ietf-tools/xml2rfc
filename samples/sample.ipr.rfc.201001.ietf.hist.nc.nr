@@ -35,14 +35,24 @@ Dummy Abstract.
 .ti 0
 Status of This Memo
 
-This memo describes a historic protocol for the Internet community.
-It does not specify an Internet standard of any kind.  Distribution
-of this memo is unlimited.
+This document is not an Internet Standards Track specification; it is
+published for the historical record.
+
+This document defines a Historic Document for the Internet community.
+This document is a product of the Internet Engineering Task Force
+(IETF).  It has been approved for publication by the Internet
+Engineering Steering Group (IESG).  Not all documents approved by the
+IESG are a candidate for any level of Internet Standard; see Section
+2 of RFC 5741.
+
+Information about the current status of this document, any errata,
+and how to provide feedback on it may be obtained at
+\%http://www.rfc-editor.org/info/rfc9999.
 
 .ti 0
 Copyright Notice
 
-Copyright (c) 2010 IETF Trust and the persons identified as the
+Copyright (C) 2010 IETF Trust and the persons identified as the
 document authors.  All rights reserved.
 
 This document is subject to BCP 78 and the IETF Trust\'s Legal
@@ -61,7 +71,7 @@ described in the Simplified BSD License.
 .in 3
 
 Dummy Section.
-
+.bp
 .nf
 .ti 0
 Author\'s Address

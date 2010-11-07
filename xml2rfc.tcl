@@ -4266,6 +4266,146 @@ than English."}
 
  }
 
+set rfc5741StatusOfMemo_ietf_std {
+"This is an Internet Standards Track document."
+}
+set rfc5741StatusOfMemo_ietf_bcp {
+"This memo documents an Internet Best Current Practice."
+}
+set rfc5741StatusOfMemo_ietf_exp_consensus {
+"This document is not an Internet Standards Track specification; it is published for examination, experimental implementation, and evaluation."
+}
+set rfc5741StatusOfMemo_ietf_exp_noconsensus {
+"This document is not an Internet Standards Track specification; it is published for examination, experimental implementation, and evaluation."
+}
+set rfc5741StatusOfMemo_ietf_historic_consensus {
+"This document is not an Internet Standards Track specification; it is published for the historical record."
+}
+set rfc5741StatusOfMemo_ietf_historic_noconsensus {
+"This document is not an Internet Standards Track specification; it is published for the historical record."
+}
+set rfc5741StatusOfMemo_ietf_info_consensus {
+"This document is not an Internet Standards Track specification; it is published for informational purposes."
+}
+set rfc5741StatusOfMemo_ietf_info_noconsensus {
+"This document is not an Internet Standards Track specification; it is published for informational purposes."
+}
+set rfc5741StatusOfMemo_iab_exp {
+"This document is not an Internet Standards Track specification; it is published for examination, experimental implementation, and evaluation."
+}
+set rfc5741StatusOfMemo_iab_historic {
+"This document is not an Internet Standards Track specification; it is published for the historical record."
+}
+set rfc5741StatusOfMemo_iab_info {
+"This document is not an Internet Standards Track specification; it is published for informational purposes."
+}
+set rfc5741StatusOfMemo_irtf_exp {
+"This document is not an Internet Standards Track specification; it is published for examination, experimental implementation, and evaluation."
+}
+set rfc5741StatusOfMemo_irtf_historic {
+"This document is not an Internet Standards Track specification; it is published for the historical record."
+}
+set rfc5741StatusOfMemo_irtf_info {
+"This document is not an Internet Standards Track specification; it is published for informational purposes."
+}
+set rfc5741StatusOfMemo_ind_exp {
+"This document is not an Internet Standards Track specification; it is published for examination, experimental implementation, and evaluation."
+}
+set rfc5741StatusOfMemo_ind_historic {
+"This document is not an Internet Standards Track specification; it is published for the historical record."
+}
+set rfc5741StatusOfMemo_ind_info {
+"This document is not an Internet Standards Track specification; it is published for informational purposes."
+}
+set rfc5741StatusOfMemo2_ietf_std {
+"This document is a product of the Internet Engineering Task Force (IETF). It represents the consensus of the IETF community. It has received public review and has been approved for publication by the Internet Engineering Steering Group (IESG). Further information on Internet Standards is available in Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_ietf_bcp {
+"This document is a product of the Internet Engineering Task Force (IETF). It represents the consensus of the IETF community. It has received public review and has been approved for publication by the Internet Engineering Steering Group (IESG). Further information on BCPs is available in Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_ietf_exp_consensus {
+"This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Engineering Task Force (IETF). It represents the consensus of the IETF community. It has received public review and has been approved for publication by the Internet Engineering Steering Group (IESG). Not all documents approved by the IESG are a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_ietf_exp_noconsensus {
+"This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Engineering Task Force (IETF). It has been approved for publication by the Internet Engineering Steering Group (IESG). Not all documents approved by the IESG are a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_ietf_historic_consensus {
+"This document defines a Historic Document for the Internet community. This document is a product of the Internet Engineering Task Force (IETF). It represents the consensus of the IETF community. It has received public review and has been approved for publication by the Internet Engineering Steering Group (IESG). Not all documents approved by the IESG are a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_ietf_historic_noconsensus {
+"This document defines a Historic Document for the Internet community. This document is a product of the Internet Engineering Task Force (IETF). It has been approved for publication by the Internet Engineering Steering Group (IESG). Not all documents approved by the IESG are a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_ietf_info_consensus {
+"This document is a product of the Internet Engineering Task Force (IETF). It represents the consensus of the IETF community. It has received public review and has been approved for publication by the Internet Engineering Steering Group (IESG). Not all documents approved by the IESG are a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_ietf_info_noconsensus {
+"This document is a product of the Internet Engineering Task Force (IETF). It has been approved for publication by the Internet Engineering Steering Group (IESG). Not all documents approved by the IESG are a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_iab_exp {
+"This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_iab_historic {
+"This document defines a Historic Document for the Internet community. This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_iab_info {
+"This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_irtf_exp_consensus {
+"This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the consensus of the <insert_name> Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_irtf_exp_noconsensus {
+"This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the individual opinion(s) of one or more members of the <insert_name> Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_irtf_exp_nogroup {
+"This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_irtf_historic_consensus {
+"This document defines a Historic Document for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the consensus of the <insert_name> Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_irtf_historic_noconsensus {
+"This document defines a Historic Document for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the individual opinion(s) of one or more members of the <insert_name> Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_irtf_historic_nogroup {
+"This document defines a Historic Document for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_irtf_info_consensus {
+"This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the consensus of the <insert_name> Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_irtf_info_noconsensus {
+"This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the individual opinion(s) of one or more members of the <insert_name> Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_irtf_info_nogroup {
+"This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_ind_exp {
+"This document defines an Experimental Protocol for the Internet community. This is a contribution to the RFC Series, independently of any other RFC stream. The RFC Editor has chosen to publish this document at its discretion and makes no statement about its value for implementation or deployment. Documents approved for publication by the RFC Editor are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_ind_historic {
+"This document defines a Historic Document for the Internet community. This is a contribution to the RFC Series, independently of any other RFC stream. The RFC Editor has chosen to publish this document at its discretion and makes no statement about its value for implementation or deployment. Documents approved for publication by the RFC Editor are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_ind_info {
+"This is a contribution to the RFC Series, independently of any other RFC stream. The RFC Editor has chosen to publish this document at its discretion and makes no statement about its value for implementation or deployment. Documents approved for publication by the RFC Editor are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo3 {
+"Information about the current status of this document, any errata, and how to provide feedback on it may be obtained at http://www.rfc-editor.org/info/rfc%RFC%."
+}
+set rfc5741CopyrightNotice1 {
+"Copyright &copy; %YEAR% IETF Trust and the persons identified as the document authors. All rights reserved."
+}
+set rfc5741CopyrightNotice2_ietf {
+"This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document. Please review these documents carefully, as they describe your rights and restrictions with respect to this document. Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License."
+}
+set rfc5741CopyrightNotice2_iab {
+"This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document. Please review these documents carefully, as they describe your rights and restrictions with respect to this document."
+}
+set rfc5741CopyrightNotice2_irtf {
+"This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document. Please review these documents carefully, as they describe your rights and restrictions with respect to this document."
+}
+set rfc5741CopyrightNotice2_ind {
+"This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document. Please review these documents carefully, as they describe your rights and restrictions with respect to this document."
+}
+
+
 #       }}}2 Categories and IPR status texts
 #       {{{2 Start and end tag callbacks
 
@@ -4350,6 +4490,15 @@ proc begin {name {av {}} } {
                         default {
                             unexpected error \
                                 "submissionType=\"$attrs(submissionType)\" attribute unknown in #$elemN:<rfc>"
+                        }
+                    }
+                }
+                if {![catch { set attrs(consensus) }]} {
+                    switch -- $attrs(consensus) {
+                        yes - no - nogroup {}
+                        default {
+                            unexpected error \
+                                "consensus=\"$attrs(consensus)\" attribute unknown in #$elemN:<rfc>"
                         }
                     }
                 }
@@ -5546,7 +5695,8 @@ proc pass2begin_rfc {elemX} {
 
     array set attrs [list number     ""   obsoletes      ""   updates   "" \
                           seriesNo   ""   ipr            "" \
-                          iprExtract ""   submissionType IETF xml:lang  en]
+                          iprExtract ""   submissionType IETF xml:lang  en \
+			  consensus  yes]
     array set attrs $elem($elemX)
     set elem($elemX) [array get attrs]
 
@@ -5566,7 +5716,7 @@ proc pass2begin_rfc {elemX} {
         set iprP 1
     }
 
-    set newP 9
+    set newP 10
     if {![info exists fv(.PARSEDDATE)]} {
         set date [find_element date $fv(.CHILDREN)]
         set secs [get_publication_date_seconds $date]
@@ -5580,6 +5730,8 @@ proc pass2begin_rfc {elemX} {
         set ymd ""
     }
     
+    # newP=9 is the latest.
+    # See if it needs to be dropped back to an earlier version.
     if {[string compare $attrs(number) ""]} {
         if {$attrs(number) <= 2499} {
             set newP 0
@@ -5621,7 +5773,34 @@ proc pass2begin_rfc {elemX} {
         # note: no support for 2008 11 TLP text in IDs
     }
 
-    if {$newP == 9} {
+    # set copyshort, funding, copyrightP, iprP values
+    # 
+    if {$newP == 10} {
+	global rfc5741CopyrightNotice1
+        if {![catch { set attrs(submissionType) }]} {
+          switch -- $attrs(submissionType) {
+            IETF {
+	      global rfc5741CopyrightNotice2_ietf
+	      set copyshort "$rfc5741CopyrightNotice1 $rfc5741CopyrightNotice2_ietf"
+            }
+            IAB {
+	      global rfc5741CopyrightNotice2_iab
+	      set copyshort "$rfc5741CopyrightNotice1 $rfc5741CopyrightNotice2_iab"
+            }
+            IRTF {
+	      global rfc5741CopyrightNotice2_irtf
+	      set copyshort "$rfc5741CopyrightNotice1 $rfc5741CopyrightNotice2_irtf"
+            }
+            independent {
+	      global rfc5741CopyrightNotice2_ind
+	      set copyshort "$rfc5741CopyrightNotice1 $rfc5741CopyrightNotice2_ind"
+            }
+          }
+        }
+        set funding ""
+        set copyrightP -1
+        set iprP 0
+    } elseif {$newP == 9} {
         set copyshort $copyshortTrust200909
 
         if {![catch { set attrs(submissionType) }]} {
@@ -5908,7 +6087,7 @@ proc pass2end_rfc {elemX} {
     # IPR #
     #######
 
-    set newP 3
+    set newP 4
     if {[string compare $attrs(number) ""]} {
         # TODO: set newP using PARSEDDATE for all the options
         if {$attrs(number) <= 3707} {
@@ -5927,6 +6106,7 @@ proc pass2end_rfc {elemX} {
             set newP 0
         }
     }
+    # set copylong to the proper value
     if {$newP} {
         global copylong2 copylong3 copylong4 copylong5 validity1 validity2
 
@@ -5940,7 +6120,7 @@ proc pass2end_rfc {elemX} {
                     }
                     default {
                         unexpected error \
-                            "submissionType=\"$attrs(submissionType)\" unexpected for this boilerplate"
+                            "submissionType=\"$attrs(submissionType)\" unexpected for this boilerplate (1)"
                     }
                 }
                 set validity $validity1
@@ -5954,11 +6134,15 @@ proc pass2end_rfc {elemX} {
                     }
                     default {
                         unexpected error \
-                            "submissionType=\"$attrs(submissionType)\" unexpected for this boilerplate"
+                            "submissionType=\"$attrs(submissionType)\" unexpected for this boilerplate (2)"
                     }
                 }
                 set validity $validity2
-        } else {
+        } elseif {$newP == 3} {
+                # IETF Trust removed these statements at the back
+                set copylong ""
+                set validity ""
+        } elseif {$newP == 4} {
                 # IETF Trust removed these statements at the back
                 set copylong ""
                 set validity ""
@@ -6005,6 +6189,7 @@ SUCH DAMAGES."
         regsub -all -- %UWHO% $copying [string toupper $who] copying
     }
 
+    # determine the value of iprstmt
     if {$newP} {
         global iprlong2
 
@@ -6286,7 +6471,7 @@ proc pass2begin_front {elemX} {
                     }
                     default {
                         unexpected error \
-                            "submissionType=\"$rv(submissionType)\" unexpected for this boilerplate"
+                            "submissionType=\"$rv(submissionType)\" unexpected for this boilerplate (3)"
                     }
                 }
             }
@@ -6326,8 +6511,198 @@ proc pass2begin_front {elemX} {
 
             set category [lindex [lindex $categories $cindex] 1]
             lappend left "Category:$colonspace $category"
-            set status [list [lindex [lindex $categories $cindex] 3]]
-            
+	    global rfc5741StatusOfMemo3
+	    set status "FIND ME"
+	    set statusOfMemo3 $rfc5741StatusOfMemo3
+	    regsub -all -- %RFC% $statusOfMemo3 $rv(number) statusOfMemo3
+	    
+            if {![catch { set rv(submissionType) }]} {
+                switch -- $rv(submissionType) {
+                    IAB {
+                        if {![catch { set rv(category) }]} {
+                            switch -- $rv(category) {
+		                exp {
+                                    global rfc5741StatusOfMemo_iab_exp rfc5741StatusOfMemo2_iab_exp 
+                                    set status "$rfc5741StatusOfMemo_iab_exp $rfc5741StatusOfMemo2_iab_exp $statusOfMemo3"
+                                }
+			        historic {
+                                    global rfc5741StatusOfMemo_iab_historic rfc5741StatusOfMemo2_iab_historic
+			            set status "$rfc5741StatusOfMemo_iab_historic $rfc5741StatusOfMemo2_iab_historic $statusOfMemo3"
+			        }
+				info {
+                                    global rfc5741StatusOfMemo_iab_info rfc5741StatusOfMemo2_iab_info
+			            set status "$rfc5741StatusOfMemo_iab_info $rfc5741StatusOfMemo2_iab_info $statusOfMemo3"
+			        }
+			        default {
+			            unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
+			        }
+		            }
+			}
+		    }
+		    IETF {
+                        if {![catch { set rv(category) }]} {
+                            switch -- $rv(category) {
+			        bcp {
+				    global rfc5741StatusOfMemo_ietf_bcp rfc5741StatusOfMemo2_ietf_bcp
+				    set status "$rfc5741StatusOfMemo_ietf_bcp $rfc5741StatusOfMemo2_ietf_bcp $statusOfMemo3"
+				}
+		                exp {
+                                    if {![catch { set rv(consensus) }]} {
+                                        switch -- $rv(consensus) {
+					    yes {
+                                                global rfc5741StatusOfMemo_ietf_exp_consensus rfc5741StatusOfMemo2_ietf_exp_consensus
+						set status "$rfc5741StatusOfMemo_ietf_exp_consensus $rfc5741StatusOfMemo2_ietf_exp_consensus $statusOfMemo3"
+					    }
+					    no {
+                                                global rfc5741StatusOfMemo_ietf_exp_noconsensus rfc5741StatusOfMemo2_ietf_exp_noconsensus
+						set status "$rfc5741StatusOfMemo_ietf_exp_noconsensus $rfc5741StatusOfMemo2_ietf_exp_noconsensus $statusOfMemo3"
+					    }
+                                            default {
+			                        unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+			                    }
+					}
+				    }
+                                }
+			        historic {
+                                    if {![catch { set rv(consensus) }]} {
+                                        switch -- $rv(consensus) {
+					    yes {
+                                                global rfc5741StatusOfMemo_ietf_historic_consensus rfc5741StatusOfMemo2_ietf_historic_consensus
+						set status "$rfc5741StatusOfMemo_ietf_historic_consensus $rfc5741StatusOfMemo2_ietf_historic_consensus $statusOfMemo3"
+					    }
+					    no {
+                                                global rfc5741StatusOfMemo_ietf_historic_noconsensus rfc5741StatusOfMemo2_ietf_historic_noconsensus
+						set status "$rfc5741StatusOfMemo_ietf_historic_noconsensus $rfc5741StatusOfMemo2_ietf_historic_noconsensus $statusOfMemo3"
+					    }
+                                            default {
+			                        unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+			                    }
+					}
+				    }
+			        }
+				info {
+                                    if {![catch { set rv(consensus) }]} {
+                                        switch -- $rv(consensus) {
+					    yes {
+                                                global rfc5741StatusOfMemo_ietf_info_consensus rfc5741StatusOfMemo2_ietf_info_consensus
+						set status "$rfc5741StatusOfMemo_ietf_info_consensus $rfc5741StatusOfMemo2_ietf_info_consensus $statusOfMemo3"
+					    }
+					    no {
+                                                global rfc5741StatusOfMemo_ietf_info_noconsensus rfc5741StatusOfMemo2_ietf_info_noconsensus
+						set status "$rfc5741StatusOfMemo_ietf_info_noconsensus $rfc5741StatusOfMemo2_ietf_info_noconsensus $statusOfMemo3"
+					    }
+                                            default {
+			                        unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+			                    }
+					}
+				    }
+			        }
+			        std {
+				    global rfc5741StatusOfMemo_ietf_std rfc5741StatusOfMemo2_ietf_std
+				    set status "$rfc5741StatusOfMemo_ietf_std $rfc5741StatusOfMemo2_ietf_std $statusOfMemo3"
+				}
+			        default {
+			            unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
+			        }
+		            }
+			}
+		    }
+                    independent {
+                        if {![catch { set rv(category) }]} {
+                            switch -- $rv(category) {
+		                exp {
+                                    global rfc5741StatusOfMemo_ind_exp rfc5741StatusOfMemo2_ind_exp 
+                                    set status "$rfc5741StatusOfMemo_ind_exp $rfc5741StatusOfMemo2_ind_exp $statusOfMemo3"
+                                }
+			        historic {
+                                    global rfc5741StatusOfMemo_ind_historic rfc5741StatusOfMemo2_ind_historic
+			            set status "$rfc5741StatusOfMemo_ind_historic $rfc5741StatusOfMemo2_ind_historic $statusOfMemo3"
+			        }
+				info {
+                                    global rfc5741StatusOfMemo_ind_info rfc5741StatusOfMemo2_ind_info
+			            set status "$rfc5741StatusOfMemo_ind_info $rfc5741StatusOfMemo2_ind_info $statusOfMemo3"
+			        }
+			        default {
+			            unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
+			        }
+		            }
+			}
+		    }
+		    IRTF {
+                        if {![catch { set rv(category) }]} {
+                            switch -- $rv(category) {
+		                exp {
+                                    if {![catch { set rv(consensus) }]} {
+                                        switch -- $rv(consensus) {
+					    yes {
+                                                global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_consensus
+						set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_consensus $statusOfMemo3"
+					    }
+					    no {
+                                                global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_noconsensus
+						set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_noconsensus $statusOfMemo3"
+					    }
+					    nogroup {
+                                                global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_nogroup
+						set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_nogroup $statusOfMemo3"
+					    }
+                                            default {
+			                        unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+			                    }
+					}
+				    }
+                                }
+			        historic {
+                                    if {![catch { set rv(consensus) }]} {
+                                        switch -- $rv(consensus) {
+					    yes {
+                                                global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_consensus
+						set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_consensus $statusOfMemo3"
+					    }
+					    no {
+                                                global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_noconsensus
+						set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_noconsensus $statusOfMemo3"
+					    }
+					    nogroup {
+                                                global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_nogroup
+						set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_nogroup $statusOfMemo3"
+					    }
+                                            default {
+			                        unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+			                    }
+					}
+				    }
+			        }
+				info {
+                                    if {![catch { set rv(consensus) }]} {
+                                        switch -- $rv(consensus) {
+					    yes {
+                                                global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_consensus
+						set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_consensus $statusOfMemo3"
+					    }
+					    no {
+                                                global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_noconsensus
+						set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_noconsensus $statusOfMemo3"
+					    }
+					    nogroup {
+                                                global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_nogroup
+						set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_nogroup $statusOfMemo3"
+					    }
+                                            default {
+			                        unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+			                    }
+					}
+				    }
+			        }
+			        default {
+			            unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
+			        }
+			    }
+		        }
+		    }
+		}
+	    }
+
             if {![string compare $headerformat "2010"]} {
               # starting in 2010, add the ISSN
               lappend left "ISSN:$colonspace 2070-1721"
@@ -17503,6 +17878,7 @@ set xdv::dtd(rfc2629.oattrs) \
                               ipr         \
                               iprExtract  \
                               submissionType \
+			      consensus   \
                               docName     \
                               xml:lang]   \
           title         [list abbrev]     \

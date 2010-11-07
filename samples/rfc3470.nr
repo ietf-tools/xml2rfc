@@ -35,9 +35,17 @@ within\0IETF\0Protocols
 Status of this Memo
 
 .fi
-This document specifies an Internet Best Current Practices for the
-Internet Community, and requests discussion and suggestions for
-improvements.  Distribution of this memo is unlimited.
+This memo documents an Internet Best Current Practice.
+
+This document is a product of the Internet Engineering Task Force
+(IETF).  It represents the consensus of the IETF community.  It has
+received public review and has been approved for publication by the
+Internet Engineering Steering Group (IESG).  Further information on
+BCPs is available in Section 2 of RFC 5741.
+
+Information about the current status of this document, any errata,
+and how to provide feedback on it may be obtained at
+\%http://www.rfc-editor.org/info/rfc3470.
 
 .ti 0
 Copyright Notice
@@ -64,12 +72,14 @@ guidelines for the use of XML within IETF \%standards-track protocols.
 Conventions Used In This Document
 
 This document recommends, as policy, what specifications for Internet
+.bp
 protocols \%-- and, in particular, IETF standards track protocol
 documents \%-- should include as normative language within them.  The
 capitalized keywords "SHOULD", "MUST", "REQUIRED", etc. are used in
 the sense of how they would be used within other documents with the
 meanings as specified in BCP 14, RFC 2119 [1].
-.bp
+
+
 .in 0
 Table of Contents
 

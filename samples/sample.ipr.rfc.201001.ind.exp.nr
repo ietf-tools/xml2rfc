@@ -35,15 +35,26 @@ Dummy Abstract.
 .ti 0
 Status of This Memo
 
-This memo defines an Experimental Protocol for the Internet
-community.  It does not specify an Internet standard of any kind.
-Discussion and suggestions for improvement are requested.
-Distribution of this memo is unlimited.
+This document is not an Internet Standards Track specification; it is
+published for examination, experimental implementation, and
+evaluation.
+
+This document defines an Experimental Protocol for the Internet
+community.  This is a contribution to the RFC Series, independently
+of any other RFC stream.  The RFC Editor has chosen to publish this
+document at its discretion and makes no statement about its value for
+implementation or deployment.  Documents approved for publication by
+the RFC Editor are not a candidate for any level of Internet
+Standard; see Section 2 of RFC 5741.
+
+Information about the current status of this document, any errata,
+and how to provide feedback on it may be obtained at
+\%http://www.rfc-editor.org/info/rfc9999.
 
 .ti 0
 Copyright Notice
 
-Copyright (c) 2010 IETF Trust and the persons identified as the
+Copyright (C) 2010 IETF Trust and the persons identified as the
 document authors.  All rights reserved.
 
 This document is subject to BCP 78 and the IETF Trust\'s Legal
@@ -59,7 +70,7 @@ to this document.
 .in 3
 
 Dummy Section.
-
+.bp
 .nf
 .ti 0
 Author\'s Address

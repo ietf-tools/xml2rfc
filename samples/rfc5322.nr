@@ -31,11 +31,17 @@ Internet Message Format
 Status of This Memo
 
 .fi
-This document specifies an Internet standards track protocol for the
-Internet community, and requests discussion and suggestions for
-improvements.  Please refer to the current edition of the "Internet
-Official Protocol Standards" (STD\01) for the standardization state
-and status of this protocol.  Distribution of this memo is unlimited.
+This is an Internet Standards Track document.
+
+This document is a product of the Internet Engineering Task Force
+(IETF).  It represents the consensus of the IETF community.  It has
+received public review and has been approved for publication by the
+Internet Engineering Steering Group (IESG).  Further information on
+Internet Standards is available in Section 2 of RFC 5741.
+
+Information about the current status of this document, any errata,
+and how to provide feedback on it may be obtained at
+\%http://www.rfc-editor.org/info/rfc5322.
 
 .ti 0
 Abstract
@@ -65,13 +71,13 @@ Table of Contents
        2.2.1.  Unstructured Header Field Bodies . . . . . . . . . . .  8
        2.2.2.  Structured Header Field Bodies . . . . . . . . . . . .  8
        2.2.3.  Long Header Fields . . . . . . . . . . . . . . . . . .  8
+.bp
      2.3.  Body . . . . . . . . . . . . . . . . . . . . . . . . . . .  9
    3.  Syntax . . . . . . . . . . . . . . . . . . . . . . . . . . . .  9
      3.1.  Introduction . . . . . . . . . . . . . . . . . . . . . . .  9
      3.2.  Lexical Tokens . . . . . . . . . . . . . . . . . . . . . . 10
        3.2.1.  Quoted characters  . . . . . . . . . . . . . . . . . . 10
        3.2.2.  Folding White Space and Comments . . . . . . . . . . . 11
-.bp
        3.2.3.  Atom . . . . . . . . . . . . . . . . . . . . . . . . . 12
        3.2.4.  Quoted Strings . . . . . . . . . . . . . . . . . . . . 13
        3.2.5.  Miscellaneous Tokens . . . . . . . . . . . . . . . . . 14
@@ -114,13 +120,13 @@ Table of Contents
        A.1.2.  Different Types of Mailboxes . . . . . . . . . . . . . 45
        A.1.3.  Group Addresses  . . . . . . . . . . . . . . . . . . . 46
      A.2.  Reply Messages . . . . . . . . . . . . . . . . . . . . . . 46
+.bp
      A.3.  Resent Messages  . . . . . . . . . . . . . . . . . . . . . 47
      A.4.  Messages with Trace Fields . . . . . . . . . . . . . . . . 48
      A.5.  White Space, Comments, and Other Oddities  . . . . . . . . 48
      A.6.  Obsoleted Forms  . . . . . . . . . . . . . . . . . . . . . 49
        A.6.1.  Obsolete Addressing  . . . . . . . . . . . . . . . . . 49
        A.6.2.  Obsolete Dates . . . . . . . . . . . . . . . . . . . . 49
-.bp
        A.6.3.  Obsolete White Space and Comments  . . . . . . . . . . 50
    Appendix B.  Differences from Earlier Specifications . . . . . . . 50
    Appendix C.  Acknowledgements  . . . . . . . . . . . . . . . . . . 52
