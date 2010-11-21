@@ -16,7 +16,7 @@
 .ad l
 .nf
 .in 0
-RFC2629 basis sample                                       J. F. Reschke
+RFC2629 basis sample                                          J. Reschke
                                                               greenbytes
                                                           March 31, 2010
 

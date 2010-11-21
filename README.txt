@@ -322,9 +322,9 @@ README                        xml2rfc v1.35                   March 2010
    |          linkmailto |      yes     | generate mailto: URL, as     |
    |                     |              | appropriate                  |
    |                     |              |                              |
-   | notedraftinprogress |      yes     | generates "(work in          |
-   |                     |              | progress)", as appropriate   |
-   |                     |              |                              |
+
+
+
 
 
 
@@ -356,6 +356,9 @@ README                        xml2rfc v1.35                   March 2010
    |                     |              | are needed at this point in  |
    |                     |              | the output                   |
    |                     |              |                              |
+   | notedraftinprogress |      yes     | generates "(work in          |
+   |                     |              | progress)", as appropriate   |
+   |                     |              |                              |
    |             private |      ""      | produce a private memo       |
    |                     |              | rather than an RFC or        |
    |                     |              | Internet-Draft               |
@@ -364,9 +367,6 @@ README                        xml2rfc v1.35                   March 2010
    |                     |              | section containing all       |
    |                     |              | references                   |
    |                     |              |                              |
-
-
-
 
 
 
@@ -464,6 +464,20 @@ README                        xml2rfc v1.35                   March 2010
    |             symrefs |      yes     | use anchors rather than      |
    |                     |              | numbers for references       |
    |                     |              |                              |
+   |    text-list-sybols |     o*+-     | modify the list of symbols   |
+   |                     |              | used (when generated text)   |
+   |                     |              | for list type="symbols". For |
+   |                     |              | example, specifying "abcde"  |
+   |                     |              | will cause "a" to be used    |
+   |                     |              | for 1st level, "b" for the   |
+   |                     |              | 2nd level, etc, cycling back |
+   |                     |              | to the first character "a"   |
+   |                     |              | at the 6th level. Specifying |
+   |                     |              | "o*" will cause the          |
+   |                     |              | characters "o" and "*" to be |
+   |                     |              | alternated for each          |
+   |                     |              | successive level.            |
+   |                     |              |                              |
    |                 toc |      no      | generate a table-of-contents |
    |                     |              |                              |
    |         tocappendix |      yes     | control whether the word     |
@@ -482,6 +496,15 @@ README                        xml2rfc v1.35                   March 2010
    |           tocnarrow |      yes     | affects horizontal spacing   |
    |                     |              | in the table-of-content      |
    |                     |              |                              |
+
+
+
+
+Rose, et al.                                                    [Page 9]
+
+README                        xml2rfc v1.35                   March 2010
+
+
    |           tocompact |      yes     | if toc is "yes", then        |
    |                     |              | setting this to "no" will    |
    |                     |              | make it a little less        |
@@ -495,16 +518,6 @@ README                        xml2rfc v1.35                   March 2010
    |                     |              | output at that point in      |
    |                     |              | processing                   |
    |                     |              |                              |
-
-
-
-
-
-Rose, et al.                                                    [Page 9]
-
-README                        xml2rfc v1.35                   March 2010
-
-
    |           useobject |      no      | when producing a html file,  |
    |                     |              | use the "<object>" html      |
    |                     |              | element with inner           |
@@ -537,19 +550,6 @@ README                        xml2rfc v1.35                   March 2010
    are generally case-sensitive and that an input file that is
    distributed to the outside world may be processed on a different
    operating system than that used by its author.
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
