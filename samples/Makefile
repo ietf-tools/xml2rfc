@@ -24,12 +24,6 @@ BP= \
 	bp-IRTF-yes-exp.xml \
 	bp-IRTF-yes-historic.xml \
 	bp-IRTF-yes-info.xml \
-	bp-independent-no-exp.xml \
-	bp-independent-no-historic.xml \
-	bp-independent-no-info.xml \
-	bp-independent-yes-exp.xml \
-	bp-independent-yes-historic.xml \
-	bp-independent-yes-info.xml \
 
 XML= rfc2616.xml rfc3470.xml rfc3986.xml rfc5234.xml rfc5322.xml \
 	sample.ipr.id.noDerivativesTrust200902.200909.xml \
