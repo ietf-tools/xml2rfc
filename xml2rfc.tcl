@@ -6783,7 +6783,7 @@ proc pass2begin_front {elemX} {
                         "\\\\\\&" ipr
             
             if {($ymd < "20100401")} {
-              # insert "to IETF" for documents before Feb 01 2010
+              # insert "to IETF" for documents before Apr 01 2010
               regsub -all -- %TOIETF% $ipr "to IETF" ipr
             } else {
               regsub -all -- %TOIETF% $ipr "" ipr
