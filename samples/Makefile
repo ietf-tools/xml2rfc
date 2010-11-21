@@ -3,14 +3,6 @@ all:	format
 BP= \
 	bp-IAB-no-exp.xml \
 	bp-IAB-yes-exp.xml \
-	bp-IETF-no-exp.xml \
-	bp-IETF-no-historic.xml \
-	bp-IETF-no-info.xml \
-	bp-IETF-yes-bcp.xml \
-	bp-IETF-yes-exp.xml \
-	bp-IETF-yes-historic.xml \
-	bp-IETF-yes-info.xml \
-	bp-IETF-yes-std.xml \
 	bp-IRTF-no-exp.xml \
 	bp-IRTF-no-historic.xml \
 	bp-IRTF-no-info.xml \
