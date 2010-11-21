@@ -6437,10 +6437,10 @@ proc pass2begin_front {elemX} {
     } else {
 
         # do we need the 2010 header format?
-        set headerformat ""
+        set boilerplateformat ""
         if {$ymd >= "20100101" ||
             ([lsearch {5741 5742 5743} $rv(number)] >= 0)} {
-            set headerformat "2010"
+            set boilerplateformat "2010"
         }
         
         set first ""
@@ -6453,7 +6453,7 @@ proc pass2begin_front {elemX} {
         }
         if {([string compare $rv(number) ""]) && 
              ![string compare $first ""] &&
-             ![string compare $headerformat "2010"]} {
+             ![string compare $boilerplateformat "2010"]} {
             # starting in 2010, put the submission type into the top left corner
             if {![catch { set rv(submissionType) }]} {
                 switch -- $rv(submissionType) {
@@ -6511,203 +6511,207 @@ proc pass2begin_front {elemX} {
 
             set category [lindex [lindex $categories $cindex] 1]
             lappend left "Category:$colonspace $category"
-      	    global rfc5741StatusOfMemo3
-      	    
-            # below used for debugging unhandled case
-            set status "FIND ME"
-      	    set statusOfMemo3 $rfc5741StatusOfMemo3
-      	    regsub -all -- %RFC% $statusOfMemo3 $rv(number) statusOfMemo3
-	    
-            if {![catch { set rv(submissionType) }]} {
-                switch -- $rv(submissionType) {
-                    IAB {
-                        if {![catch { set rv(category) }]} {
-                            switch -- $rv(category) {
-                                exp {
-                                    global rfc5741StatusOfMemo_iab_exp rfc5741StatusOfMemo2_iab_exp 
-                                    set status "$rfc5741StatusOfMemo_iab_exp $rfc5741StatusOfMemo2_iab_exp $statusOfMemo3"
-                                }
-                                historic {
-                                    global rfc5741StatusOfMemo_iab_historic rfc5741StatusOfMemo2_iab_historic
-                                    set status "$rfc5741StatusOfMemo_iab_historic $rfc5741StatusOfMemo2_iab_historic $statusOfMemo3"
-                                }
-                                info {
-                                    global rfc5741StatusOfMemo_iab_info rfc5741StatusOfMemo2_iab_info
-                                    set status "$rfc5741StatusOfMemo_iab_info $rfc5741StatusOfMemo2_iab_info $statusOfMemo3"
-                                }
-                                default {
-                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
-                                }
-                            }
-                        }
-                    }
-                    IETF {
-                        if {![catch { set rv(category) }]} {
-                            switch -- $rv(category) {
-                                bcp {
-                                    global rfc5741StatusOfMemo_ietf_bcp rfc5741StatusOfMemo2_ietf_bcp
-                                    set status "$rfc5741StatusOfMemo_ietf_bcp $rfc5741StatusOfMemo2_ietf_bcp $statusOfMemo3"
-                                }
-                                exp {
-                                    if {![catch { set rv(consensus) }]} {
-                                        switch -- $rv(consensus) {
-                                            yes {
-                                                global rfc5741StatusOfMemo_ietf_exp_consensus rfc5741StatusOfMemo2_ietf_exp_consensus
-                                                set status "$rfc5741StatusOfMemo_ietf_exp_consensus $rfc5741StatusOfMemo2_ietf_exp_consensus $statusOfMemo3"
-                                            }
-                                            no {
-                                                global rfc5741StatusOfMemo_ietf_exp_noconsensus rfc5741StatusOfMemo2_ietf_exp_noconsensus
-                                                set status "$rfc5741StatusOfMemo_ietf_exp_noconsensus $rfc5741StatusOfMemo2_ietf_exp_noconsensus $statusOfMemo3"
-                                            }
-                                            default {
-                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
-                                            }
-                                        }
-                                    }
-                                }
-                                historic {
-                                    if {![catch { set rv(consensus) }]} {
-                                        switch -- $rv(consensus) {
-                                            yes {
-                                                global rfc5741StatusOfMemo_ietf_historic_consensus rfc5741StatusOfMemo2_ietf_historic_consensus
-                                                set status "$rfc5741StatusOfMemo_ietf_historic_consensus $rfc5741StatusOfMemo2_ietf_historic_consensus $statusOfMemo3"
-                                            }
-                                            no {
-                                                global rfc5741StatusOfMemo_ietf_historic_noconsensus rfc5741StatusOfMemo2_ietf_historic_noconsensus
-                                                set status "$rfc5741StatusOfMemo_ietf_historic_noconsensus $rfc5741StatusOfMemo2_ietf_historic_noconsensus $statusOfMemo3"
-                                            }
-                                            default {
-                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
-                                            }
-                                        }
-                                    }
-                                }
-                                info {
-                                    if {![catch { set rv(consensus) }]} {
-                                        switch -- $rv(consensus) {
-                                            yes {
-                                                global rfc5741StatusOfMemo_ietf_info_consensus rfc5741StatusOfMemo2_ietf_info_consensus
-                                                set status "$rfc5741StatusOfMemo_ietf_info_consensus $rfc5741StatusOfMemo2_ietf_info_consensus $statusOfMemo3"
-                                            }
-                                            no {
-                                                global rfc5741StatusOfMemo_ietf_info_noconsensus rfc5741StatusOfMemo2_ietf_info_noconsensus
-                                                set status "$rfc5741StatusOfMemo_ietf_info_noconsensus $rfc5741StatusOfMemo2_ietf_info_noconsensus $statusOfMemo3"
-                                            }
-                                            default {
-                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
-                                            }
-                                        }
-                                    }
-                                }
-                                std {
-                                    global rfc5741StatusOfMemo_ietf_std rfc5741StatusOfMemo2_ietf_std
-                                    set status "$rfc5741StatusOfMemo_ietf_std $rfc5741StatusOfMemo2_ietf_std $statusOfMemo3"
-                                }
-                                default {
-                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
-                                }
-                            }
-                        }
-                    }
-                    independent {
-                        if {![catch { set rv(category) }]} {
-                            switch -- $rv(category) {
-                                exp {
-                                    global rfc5741StatusOfMemo_ind_exp rfc5741StatusOfMemo2_ind_exp 
-                                    set status "$rfc5741StatusOfMemo_ind_exp $rfc5741StatusOfMemo2_ind_exp $statusOfMemo3"
-                                }
-                                historic {
-                                    global rfc5741StatusOfMemo_ind_historic rfc5741StatusOfMemo2_ind_historic
-                                    set status "$rfc5741StatusOfMemo_ind_historic $rfc5741StatusOfMemo2_ind_historic $statusOfMemo3"
-                                }
-                                info {
-                                    global rfc5741StatusOfMemo_ind_info rfc5741StatusOfMemo2_ind_info
-                                    set status "$rfc5741StatusOfMemo_ind_info $rfc5741StatusOfMemo2_ind_info $statusOfMemo3"
-                                }
-                                default {
-                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
-                                }
-                            }
-                        }
-                    }
-                    IRTF {
-                        if {![catch { set rv(category) }]} {
-                            switch -- $rv(category) {
-                                exp {
-                                    if {![catch { set rv(consensus) }]} {
-                                        switch -- $rv(consensus) {
-                                            yes {
-                                                global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_consensus
-                                                set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_consensus $statusOfMemo3"
-                                            }
-                                            no {
-                                                global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_noconsensus
-                                                set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_noconsensus $statusOfMemo3"
-                                            }
-                                            nogroup {
-                                                global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_nogroup
-                                                set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_nogroup $statusOfMemo3"
-                                            }
-                                            default {
-                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
-                                            }
-                                        }
-                                    }
-                                }
-                                historic {
-                                    if {![catch { set rv(consensus) }]} {
-                                        switch -- $rv(consensus) {
-                                            yes {
-                                                global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_consensus
-                                                set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_consensus $statusOfMemo3"
-                                            }
-                                            no {
-                                                global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_noconsensus
-                                                set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_noconsensus $statusOfMemo3"
-                                            }
-                                            nogroup {
-                                                global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_nogroup
-                                                set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_nogroup $statusOfMemo3"
-                                            }
-                                            default {
-                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
-                                            }
-                                        }
-                                    }
-                                }
-                                info {
-                                    if {![catch { set rv(consensus) }]} {
-                                        switch -- $rv(consensus) {
-                                            yes {
-                                                global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_consensus
-                                                set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_consensus $statusOfMemo3"
-                                            }
-                                            no {
-                                                global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_noconsensus
-                                                set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_noconsensus $statusOfMemo3"
-                                            }
-                                            nogroup {
-                                                global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_nogroup
-                                                set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_nogroup $statusOfMemo3"
-                                            }
-                                            default {
-                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
-                                            }
-                                        } 
-                                    }
-                                }
-                                default {
-                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
-                                }
-                            }
-            		        }
-		                }
-		            }
-	          }
+            set status [list [lindex [lindex $categories $cindex] 3]]
 
-            if {![string compare $headerformat "2010"]} {
-              # starting in 2010, add the ISSN
-              lappend left "ISSN:$colonspace 2070-1721"
+            if {![string compare $boilerplateformat "2010"]} {
+                # starting in 2010, add the ISSN
+                lappend left "ISSN:$colonspace 2070-1721"
+                
+                # and use a new variant of "Status of this Memo"
+          	    global rfc5741StatusOfMemo3
+          	    
+          	    set statusOfMemo3 $rfc5741StatusOfMemo3
+          	    regsub -all -- %RFC% $statusOfMemo3 $rv(number) statusOfMemo3
+  	    
+                # below used for debugging unhandled case
+                set status "FIND ME"
+              
+                if {![catch { set rv(submissionType) }]} {
+                    switch -- $rv(submissionType) {
+                        IAB {
+                            if {![catch { set rv(category) }]} {
+                                switch -- $rv(category) {
+                                    exp {
+                                        global rfc5741StatusOfMemo_iab_exp rfc5741StatusOfMemo2_iab_exp 
+                                        set status "$rfc5741StatusOfMemo_iab_exp $rfc5741StatusOfMemo2_iab_exp $statusOfMemo3"
+                                    }
+                                    historic {
+                                        global rfc5741StatusOfMemo_iab_historic rfc5741StatusOfMemo2_iab_historic
+                                        set status "$rfc5741StatusOfMemo_iab_historic $rfc5741StatusOfMemo2_iab_historic $statusOfMemo3"
+                                    }
+                                    info {
+                                        global rfc5741StatusOfMemo_iab_info rfc5741StatusOfMemo2_iab_info
+                                        set status "$rfc5741StatusOfMemo_iab_info $rfc5741StatusOfMemo2_iab_info $statusOfMemo3"
+                                    }
+                                    default {
+                                        unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
+                                    }
+                                }
+                            }
+                        }
+                        IETF {
+                            if {![catch { set rv(category) }]} {
+                                switch -- $rv(category) {
+                                    bcp {
+                                        global rfc5741StatusOfMemo_ietf_bcp rfc5741StatusOfMemo2_ietf_bcp
+                                        set status "$rfc5741StatusOfMemo_ietf_bcp $rfc5741StatusOfMemo2_ietf_bcp $statusOfMemo3"
+                                    }
+                                    exp {
+                                        if {![catch { set rv(consensus) }]} {
+                                            switch -- $rv(consensus) {
+                                                yes {
+                                                    global rfc5741StatusOfMemo_ietf_exp_consensus rfc5741StatusOfMemo2_ietf_exp_consensus
+                                                    set status "$rfc5741StatusOfMemo_ietf_exp_consensus $rfc5741StatusOfMemo2_ietf_exp_consensus $statusOfMemo3"
+                                                }
+                                                no {
+                                                    global rfc5741StatusOfMemo_ietf_exp_noconsensus rfc5741StatusOfMemo2_ietf_exp_noconsensus
+                                                    set status "$rfc5741StatusOfMemo_ietf_exp_noconsensus $rfc5741StatusOfMemo2_ietf_exp_noconsensus $statusOfMemo3"
+                                                }
+                                                default {
+                                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                                }
+                                            }
+                                        }
+                                    }
+                                    historic {
+                                        if {![catch { set rv(consensus) }]} {
+                                            switch -- $rv(consensus) {
+                                                yes {
+                                                    global rfc5741StatusOfMemo_ietf_historic_consensus rfc5741StatusOfMemo2_ietf_historic_consensus
+                                                    set status "$rfc5741StatusOfMemo_ietf_historic_consensus $rfc5741StatusOfMemo2_ietf_historic_consensus $statusOfMemo3"
+                                                }
+                                                no {
+                                                    global rfc5741StatusOfMemo_ietf_historic_noconsensus rfc5741StatusOfMemo2_ietf_historic_noconsensus
+                                                    set status "$rfc5741StatusOfMemo_ietf_historic_noconsensus $rfc5741StatusOfMemo2_ietf_historic_noconsensus $statusOfMemo3"
+                                                }
+                                                default {
+                                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                                }
+                                            }
+                                        }
+                                    }
+                                    info {
+                                        if {![catch { set rv(consensus) }]} {
+                                            switch -- $rv(consensus) {
+                                                yes {
+                                                    global rfc5741StatusOfMemo_ietf_info_consensus rfc5741StatusOfMemo2_ietf_info_consensus
+                                                    set status "$rfc5741StatusOfMemo_ietf_info_consensus $rfc5741StatusOfMemo2_ietf_info_consensus $statusOfMemo3"
+                                                }
+                                                no {
+                                                    global rfc5741StatusOfMemo_ietf_info_noconsensus rfc5741StatusOfMemo2_ietf_info_noconsensus
+                                                    set status "$rfc5741StatusOfMemo_ietf_info_noconsensus $rfc5741StatusOfMemo2_ietf_info_noconsensus $statusOfMemo3"
+                                                }
+                                                default {
+                                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                                }
+                                            }
+                                        }
+                                    }
+                                    std {
+                                        global rfc5741StatusOfMemo_ietf_std rfc5741StatusOfMemo2_ietf_std
+                                        set status "$rfc5741StatusOfMemo_ietf_std $rfc5741StatusOfMemo2_ietf_std $statusOfMemo3"
+                                    }
+                                    default {
+                                        unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
+                                    }
+                                }
+                            }
+                        }
+                        independent {
+                            if {![catch { set rv(category) }]} {
+                                switch -- $rv(category) {
+                                    exp {
+                                        global rfc5741StatusOfMemo_ind_exp rfc5741StatusOfMemo2_ind_exp 
+                                        set status "$rfc5741StatusOfMemo_ind_exp $rfc5741StatusOfMemo2_ind_exp $statusOfMemo3"
+                                    }
+                                    historic {
+                                        global rfc5741StatusOfMemo_ind_historic rfc5741StatusOfMemo2_ind_historic
+                                        set status "$rfc5741StatusOfMemo_ind_historic $rfc5741StatusOfMemo2_ind_historic $statusOfMemo3"
+                                    }
+                                    info {
+                                        global rfc5741StatusOfMemo_ind_info rfc5741StatusOfMemo2_ind_info
+                                        set status "$rfc5741StatusOfMemo_ind_info $rfc5741StatusOfMemo2_ind_info $statusOfMemo3"
+                                    }
+                                    default {
+                                        unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
+                                    }
+                                }
+                            }
+                        }
+                        IRTF {
+                            if {![catch { set rv(category) }]} {
+                                switch -- $rv(category) {
+                                    exp {
+                                        if {![catch { set rv(consensus) }]} {
+                                            switch -- $rv(consensus) {
+                                                yes {
+                                                    global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_consensus
+                                                    set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_consensus $statusOfMemo3"
+                                                }
+                                                no {
+                                                    global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_noconsensus
+                                                    set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_noconsensus $statusOfMemo3"
+                                                }
+                                                nogroup {
+                                                    global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_nogroup
+                                                    set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_nogroup $statusOfMemo3"
+                                                }
+                                                default {
+                                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                                }
+                                            }
+                                        }
+                                    }
+                                    historic {
+                                        if {![catch { set rv(consensus) }]} {
+                                            switch -- $rv(consensus) {
+                                                yes {
+                                                    global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_consensus
+                                                    set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_consensus $statusOfMemo3"
+                                                }
+                                                no {
+                                                    global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_noconsensus
+                                                    set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_noconsensus $statusOfMemo3"
+                                                }
+                                                nogroup {
+                                                    global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_nogroup
+                                                    set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_nogroup $statusOfMemo3"
+                                                }
+                                                default {
+                                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                                }
+                                            }
+                                        }
+                                    }
+                                    info {
+                                        if {![catch { set rv(consensus) }]} {
+                                            switch -- $rv(consensus) {
+                                                yes {
+                                                    global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_consensus
+                                                    set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_consensus $statusOfMemo3"
+                                                }
+                                                no {
+                                                    global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_noconsensus
+                                                    set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_noconsensus $statusOfMemo3"
+                                                }
+                                                nogroup {
+                                                    global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_nogroup
+                                                    set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_nogroup $statusOfMemo3"
+                                                }
+                                                default {
+                                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                                }
+                                            } 
+                                        }
+                                    }
+                                    default {
+                                        unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
+                                    }
+                                }
+                		        }
+    		                }
+    		            }
+    	          }
             }
         } else {
             if {$options(.STRICT)} {

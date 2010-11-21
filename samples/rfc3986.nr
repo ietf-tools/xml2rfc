@@ -33,17 +33,11 @@ Uniform Resource Identifier (URI): Generic Syntax
 Status of this Memo
 
 .fi
-This is an Internet Standards Track document.
-
-This document is a product of the Internet Engineering Task Force
-(IETF).  It represents the consensus of the IETF community.  It has
-received public review and has been approved for publication by the
-Internet Engineering Steering Group (IESG).  Further information on
-Internet Standards is available in Section 2 of RFC 5741.
-
-Information about the current status of this document, any errata,
-and how to provide feedback on it may be obtained at
-\%http://www.rfc-editor.org/info/rfc3986.
+This document specifies an Internet standards track protocol for the
+Internet community, and requests discussion and suggestions for
+improvements.  Please refer to the current edition of the "Internet
+Official Protocol Standards" (STD\01) for the standardization state
+and status of this protocol.  Distribution of this memo is unlimited.
 
 .ti 0
 Copyright Notice

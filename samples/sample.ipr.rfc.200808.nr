@@ -29,19 +29,9 @@ Default RFC IPR as of August 2008
 Status of this Memo
 
 .fi
-This document is not an Internet Standards Track specification; it is
-published for informational purposes.
-
-This document is a product of the Internet Engineering Task Force
-(IETF).  It represents the consensus of the IETF community.  It has
-received public review and has been approved for publication by the
-Internet Engineering Steering Group (IESG).  Not all documents
-approved by the IESG are a candidate for any level of Internet
-Standard; see Section 2 of RFC 5741.
-
-Information about the current status of this document, any errata,
-and how to provide feedback on it may be obtained at
-\%http://www.rfc-editor.org/info/rfc5299.
+This memo provides information for the Internet community.  It does
+not specify an Internet standard of any kind.  Distribution of this
+memo is unlimited.
 
 .ti 0
 Abstract

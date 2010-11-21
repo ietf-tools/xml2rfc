@@ -34,19 +34,9 @@ Dummy Abstract.
 .ti 0
 Status of this Memo
 
-This document is not an Internet Standards Track specification; it is
-published for informational purposes.
-
-This document is a product of the Internet Engineering Task Force
-(IETF).  It represents the consensus of the IETF community.  It has
-received public review and has been approved for publication by the
-Internet Engineering Steering Group (IESG).  Not all documents
-approved by the IESG are a candidate for any level of Internet
-Standard; see Section 2 of RFC 5741.
-
-Information about the current status of this document, any errata,
-and how to provide feedback on it may be obtained at
-\%http://www.rfc-editor.org/info/rfc9999.
+This memo provides information for the Internet community.  It does
+not specify an Internet standard of any kind.  Distribution of this
+memo is unlimited.
 
 .ti 0
 Copyright Notice
@@ -70,7 +60,6 @@ Contributions published or made publicly available before November
 material may not have granted the IETF Trust the right to allow
 modifications of such material outside the IETF Standards Process.
 Without obtaining an adequate license from the person(s) controlling
-.bp
 the copyright in such materials, this document may not be modified
 outside the IETF Standards Process, and derivative works of it may
 not be created outside the IETF Standards Process, except to format
@@ -84,8 +73,7 @@ than English.
 .in 3
 
 Dummy Section.
-
-
+.bp
 .nf
 .ti 0
 Author\'s Address
