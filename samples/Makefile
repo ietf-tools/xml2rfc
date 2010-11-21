@@ -2,11 +2,7 @@ all:	format
 
 BP= \
 	bp-IAB-no-exp.xml \
-	bp-IAB-no-historic.xml \
-	bp-IAB-no-info.xml \
 	bp-IAB-yes-exp.xml \
-	bp-IAB-yes-historic.xml \
-	bp-IAB-yes-info.xml \
 	bp-IETF-no-exp.xml \
 	bp-IETF-no-historic.xml \
 	bp-IETF-no-info.xml \
