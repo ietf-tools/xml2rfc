@@ -3,15 +3,9 @@ all:	format
 BP= \
 	bp-IAB-no-exp.xml \
 	bp-IAB-yes-exp.xml \
-	bp-IRTF-no-exp.xml \
-	bp-IRTF-no-historic.xml \
-	bp-IRTF-no-info.xml \
 	bp-IRTF-nogroup-exp.xml \
 	bp-IRTF-nogroup-historic.xml \
 	bp-IRTF-nogroup-info.xml \
-	bp-IRTF-yes-exp.xml \
-	bp-IRTF-yes-historic.xml \
-	bp-IRTF-yes-info.xml \
 
 XML= rfc2616.xml rfc3470.xml rfc3986.xml rfc5234.xml rfc5322.xml \
 	sample.ipr.id.noDerivativesTrust200902.200909.xml \
