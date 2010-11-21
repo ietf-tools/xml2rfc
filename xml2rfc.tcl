@@ -6919,15 +6919,14 @@ proc pass2begin_front {elemX} {
 
     front_${mode}_begin $left $right $top $bottom $title $keywords $rv(xml:lang)
 
+    # make boilerplate ordering change on 20090701 for RFCs and 
+    # on 20091101 otherwise
     if {[string compare $rv(number) ""]} {
       set cutoff 20090701
     } else {
       set cutoff 20091101
     }
-
-    if {([catch { clock format $attrs(.PARSEDDATE) -format %Y%m%d \
-                               -gmt true } ymd]) \
-            || ($ymd < "$cutoff")} {
+    if {($ymd < "$cutoff")} {
         set options(.ABSTRACT1ST) 0
         write_status_${mode} $status $copying 0
     } else {
