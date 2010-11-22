@@ -1,8 +1,6 @@
 all:	format
 
 BP= \
-	bp-IAB-no-exp.xml \
-	bp-IAB-yes-exp.xml \
 	bp-IRTF-nogroup-exp.xml \
 	bp-IRTF-nogroup-historic.xml \
 	bp-IRTF-nogroup-info.xml \
@@ -28,6 +26,7 @@ XML= rfc2616.xml rfc3470.xml rfc3986.xml rfc5234.xml rfc5322.xml \
 	sample.ipr.rfc.200907.xml \
 	sample.ipr.rfc.200909.xml \
 	sample.ipr.rfc.200912.xml \
+	sample.ipr.rfc.201001.iab.exp.xml \
 	sample.ipr.rfc.201001.iab.hist.xml \
 	sample.ipr.rfc.201001.iab.inf.xml \
 	sample.ipr.rfc.201001.ietf.bcp.c.xml \
