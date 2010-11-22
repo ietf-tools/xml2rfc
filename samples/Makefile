@@ -10,6 +10,7 @@ XML= rfc2616.xml rfc3470.xml rfc3986.xml rfc5234.xml rfc5322.xml \
 	sample.ipr.id.noModificationTrust200902.200909.xml \
 	sample.ipr.id.pre5378Trust200902.200909.xml \
 	sample.ipr.id.pre5378Trust200902.200912.xml \
+	sample.ipr.id.pre5378Trust200902.201011.xml \
 	sample.ipr.id.trust200902.200909.xml \
 	sample.ipr.id.trust200902.200911.xml \
 	sample.ipr.id.trust200902.200912.xml \
