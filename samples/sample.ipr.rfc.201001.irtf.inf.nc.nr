@@ -42,7 +42,7 @@ This document is a product of the Internet Research Task Force
 (IRTF).  The IRTF publishes the results of \%Internet-related research
 and development activities.  These results might not be suitable for
 deployment.  This RFC represents the individual opinion(s) of one or
-more members of the <insert_name> Research Group of the Internet
+more members of the {insert_name} Research Group of the Internet
 Research Task Force (IRTF).  Documents approved for publication by
 the IRSG are not a candidate for any level of Internet Standard; see
 Section 2 of RFC 5741.

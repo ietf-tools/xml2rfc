@@ -4351,28 +4351,28 @@ set rfc5741StatusOfMemo2_iab_info {
 "This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
 set rfc5741StatusOfMemo2_irtf_exp_consensus {
-"This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the consensus of the <insert_name> Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+"This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the consensus of the %WORKGROUPNAME% Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
 set rfc5741StatusOfMemo2_irtf_exp_noconsensus {
-"This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the individual opinion(s) of one or more members of the <insert_name> Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+"This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the individual opinion(s) of one or more members of the %WORKGROUPNAME% Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
 set rfc5741StatusOfMemo2_irtf_exp_nogroup {
 "This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
 set rfc5741StatusOfMemo2_irtf_historic_consensus {
-"This document defines a Historic Document for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the consensus of the <insert_name> Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+"This document defines a Historic Document for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the consensus of the %WORKGROUPNAME% Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
 set rfc5741StatusOfMemo2_irtf_historic_noconsensus {
-"This document defines a Historic Document for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the individual opinion(s) of one or more members of the <insert_name> Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+"This document defines a Historic Document for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the individual opinion(s) of one or more members of the %WORKGROUPNAME% Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
 set rfc5741StatusOfMemo2_irtf_historic_nogroup {
 "This document defines a Historic Document for the Internet community. This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
 set rfc5741StatusOfMemo2_irtf_info_consensus {
-"This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the consensus of the <insert_name> Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+"This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the consensus of the %WORKGROUPNAME% Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
 set rfc5741StatusOfMemo2_irtf_info_noconsensus {
-"This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the individual opinion(s) of one or more members of the <insert_name> Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+"This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. This RFC represents the individual opinion(s) of one or more members of the %WORKGROUPNAME% Research Group of the Internet Research Task Force (IRTF). Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
 set rfc5741StatusOfMemo2_irtf_info_nogroup {
 "This document is a product of the Internet Research Task Force (IRTF). The IRTF publishes the results of Internet-related research and development activities. These results might not be suitable for deployment. Documents approved for publication by the IRSG are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
@@ -5713,7 +5713,7 @@ proc pass2begin_rfc {elemX} {
         # vs. PARSEDATE set to 0 (i.e., couldn't parse date)
         set ymd ""
     }
-    
+
     # newP=9 is the latest.
     # See if it needs to be dropped back to an earlier version.
     if {[string compare $attrs(number) ""]} {
@@ -6472,6 +6472,7 @@ proc pass2begin_front {elemX} {
                 
                 # and use a new variant of "Status of this Memo"
                 global rfc5741StatusOfMemo3
+
                 set statusOfMemo3 $rfc5741StatusOfMemo3
                 regsub -all -- %RFC% $statusOfMemo3 $rv(number) statusOfMemo3
 
@@ -6591,22 +6592,39 @@ proc pass2begin_front {elemX} {
                             }
                         }
                         IRTF {
+                            set workgroupname ""
+                            if {([string compare \
+                                           [set workgroup [lindex [find_element workgroup \
+                                                     $attrs(.CHILDREN)] 0]] ""])} {
+                                array set wv $elem($workgroup)
+                                # jre: this escapes angle brackets; why?
+                                set workgroupname [string trim $wv(.CTEXT)]
+                            }
+
                             if {![catch { set rv(category) }]} {
                                 switch -- $rv(category) {
                                     exp {
                                         if {![catch { set rv(consensus) }]} {
                                             switch -- $rv(consensus) {
                                                 yes {
-                                                    global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_consensus
-                                                    set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_consensus $statusOfMemo3"
+                                                    if {[string compare $workgroupname ""]} {
+                                                        global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_consensus
+                                                        set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_consensus $statusOfMemo3"
+                                                        regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
+                                                    } else {
+                                                        global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_nogroup
+                                                        set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_nogroup $statusOfMemo3"
+                                                    }
                                                 }
                                                 no {
-                                                    global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_noconsensus
-                                                    set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_noconsensus $statusOfMemo3"
-                                                }
-                                                nogroup {
-                                                    global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_nogroup
-                                                    set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_nogroup $statusOfMemo3"
+                                                    if {[string compare $workgroupname ""]} {
+                                                        global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_noconsensus
+                                                        set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_noconsensus $statusOfMemo3"
+                                                        regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
+                                                    } else {
+                                                        global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_nogroup
+                                                        set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_nogroup $statusOfMemo3"
+                                                    }
                                                 }
                                                 default {
                                                     unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
@@ -6618,16 +6636,24 @@ proc pass2begin_front {elemX} {
                                         if {![catch { set rv(consensus) }]} {
                                             switch -- $rv(consensus) {
                                                 yes {
-                                                    global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_consensus
-                                                    set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_consensus $statusOfMemo3"
+                                                    if {[string compare $workgroupname ""]} {
+                                                        global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_consensus
+                                                        set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_consensus $statusOfMemo3"
+                                                        regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
+                                                    } else {
+                                                        global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_nogroup
+                                                        set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_nogroup $statusOfMemo3"
+                                                    }
                                                 }
                                                 no {
-                                                    global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_noconsensus
-                                                    set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_noconsensus $statusOfMemo3"
-                                                }
-                                                nogroup {
-                                                    global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_nogroup
-                                                    set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_nogroup $statusOfMemo3"
+                                                    if {[string compare $workgroupname ""]} {
+                                                        global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_noconsensus
+                                                        set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_noconsensus $statusOfMemo3"
+                                                        regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
+                                                    } else {
+                                                        global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_nogroup
+                                                        set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_nogroup $statusOfMemo3"
+                                                    }
                                                 }
                                                 default {
                                                     unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
@@ -6639,16 +6665,24 @@ proc pass2begin_front {elemX} {
                                         if {![catch { set rv(consensus) }]} {
                                             switch -- $rv(consensus) {
                                                 yes {
-                                                    global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_consensus
-                                                    set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_consensus $statusOfMemo3"
+                                                    if {[string compare $workgroupname ""]} {
+                                                        global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_consensus
+                                                        set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_consensus $statusOfMemo3"
+                                                        regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
+                                                    } else {
+                                                        global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_nogroup
+                                                        set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_nogroup $statusOfMemo3"
+                                                    }
                                                 }
                                                 no {
-                                                    global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_noconsensus
-                                                    set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_noconsensus $statusOfMemo3"
-                                                }
-                                                nogroup {
-                                                    global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_nogroup
-                                                    set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_nogroup $statusOfMemo3"
+                                                    if {[string compare $workgroupname ""]} {
+                                                        global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_noconsensus
+                                                        set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_noconsensus $statusOfMemo3"
+                                                        regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
+                                                    } else {
+                                                        global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_nogroup
+                                                        set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_nogroup $statusOfMemo3"
+                                                    }
                                                 }
                                                 default {
                                                     unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""

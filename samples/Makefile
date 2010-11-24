@@ -1,10 +1,5 @@
 all:	format
 
-BP= \
-	bp-IRTF-nogroup-exp.xml \
-	bp-IRTF-nogroup-historic.xml \
-	bp-IRTF-nogroup-info.xml \
-
 XML= rfc2616.xml rfc3470.xml rfc3986.xml rfc5234.xml rfc5322.xml \
 	sample.ipr.id.noDerivativesTrust200902.200909.xml \
 	sample.ipr.id.noModificationTrust200902.200909.xml \
@@ -53,8 +48,7 @@ XML= rfc2616.xml rfc3470.xml rfc3986.xml rfc5234.xml rfc5322.xml \
 	sample.ipr.rfc.pre5378Trust200902.200912.xml \
 	sample.ref.annotation.xml \
 	sample.nested.xml \
-	sample.basic.xml \
-	$(BP)
+	sample.basic.xml
 
 # test files for which NROFF generation currently fails
 XMLNONROFF= sample.ipr.id.noModification3978.200606.xml
