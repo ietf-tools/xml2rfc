@@ -4017,7 +4017,7 @@ proc pass {tag} {
                                     slides              no            \
                                     sortrefs            no            \
                                     strict              no            \
-				    text-list-symbols	"o*+-"	      \
+                                    text-list-symbols   "o*+-"        \
                                     toc                 no            \
                                     tocappendix         yes           \
                                     tocdepth            3             \
@@ -5680,7 +5680,7 @@ proc pass2begin_rfc {elemX} {
     array set attrs [list number     ""   obsoletes      ""   updates   "" \
                           seriesNo   ""   ipr            "" \
                           iprExtract ""   submissionType IETF xml:lang  en \
-			  consensus  yes]
+                          consensus  yes]
     array set attrs $elem($elemX)
     set elem($elemX) [array get attrs]
 
@@ -6471,11 +6471,10 @@ proc pass2begin_front {elemX} {
                 lappend left "ISSN:$colonspace 2070-1721"
                 
                 # and use a new variant of "Status of this Memo"
-          	    global rfc5741StatusOfMemo3
-          	    
-          	    set statusOfMemo3 $rfc5741StatusOfMemo3
-          	    regsub -all -- %RFC% $statusOfMemo3 $rv(number) statusOfMemo3
-  	    
+                global rfc5741StatusOfMemo3
+                set statusOfMemo3 $rfc5741StatusOfMemo3
+                regsub -all -- %RFC% $statusOfMemo3 $rv(number) statusOfMemo3
+
                 # below used for debugging unhandled case
                 set status "FIND ME"
               
@@ -6661,10 +6660,10 @@ proc pass2begin_front {elemX} {
                                         unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
                                     }
                                 }
-                		        }
-    		                }
-    		            }
-    	          }
+                            }
+                        }
+                    }
+                }
             }
         } else {
             if {$options(.STRICT)} {
@@ -8681,7 +8680,7 @@ proc t_txt {tag counter style hangText editNo} {
             }
 
             symbols {
-		set counter "[string index $options(text-list-symbols) [expr [expr [llength $l] - 1] % [string length $options(text-list-symbols)]]]"
+                set counter "[string index $options(text-list-symbols) [expr [expr [llength $l] - 1] % [string length $options(text-list-symbols)]]]"
             }
 
             hanging {
@@ -10633,7 +10632,7 @@ proc print_stack_trace {} {
     set stack ""
     set level -1
     for { set x [expr {[info level] + $level}] } { $x > 0 } { incr x -1 } {
-	append stack "    called from [info level $x]\n"
+        append stack "    called from [info level $x]\n"
     }
     puts stderr $stack
 }
@@ -17839,7 +17838,7 @@ set xdv::dtd(rfc2629.oattrs) \
                               ipr         \
                               iprExtract  \
                               submissionType \
-			      consensus   \
+                              consensus   \
                               docName     \
                               xml:lang]   \
           title         [list abbrev]     \
