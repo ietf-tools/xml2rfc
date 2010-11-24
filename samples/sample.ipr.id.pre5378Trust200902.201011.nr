@@ -54,7 +54,7 @@ This \%Internet-Draft will expire on May 5, 2011.
 .ti 0
 Copyright Notice
 
-Copyright (C) 2010 IETF Trust and the persons identified as the
+Copyright (c) 2010 IETF Trust and the persons identified as the
 document authors.  All rights reserved.
 
 This document is subject to BCP 78 and the IETF Trust\'s Legal
@@ -67,6 +67,19 @@ include Simplified BSD License text as described in Section 4.e of
 the Trust Legal Provisions and are provided without warranty as
 described in the Simplified BSD License.
 
+This document may contain material from IETF Documents or IETF
+Contributions published or made publicly available before November
+10, 2008.  The person(s) controlling the copyright in some of this
+material may not have granted the IETF Trust the right to allow
+.bp
+modifications of such material outside the IETF Standards Process.
+Without obtaining an adequate license from the person(s) controlling
+the copyright in such materials, this document may not be modified
+outside the IETF Standards Process, and derivative works of it may
+not be created outside the IETF Standards Process, except to format
+it for publication as an RFC or to translate it into languages other
+than English.
+
 
 .in 4
 .ti 0
@@ -74,7 +87,8 @@ described in the Simplified BSD License.
 .in 3
 
 Dummy Section.
-.bp
+
+
 .nf
 .ti 0
 Author\'s Address

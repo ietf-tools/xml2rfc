@@ -56,7 +56,7 @@ and how to provide feedback on it may be obtained at
 .ti 0
 Copyright Notice
 
-Copyright (C) 2010 IETF Trust and the persons identified as the
+Copyright (c) 2010 IETF Trust and the persons identified as the
 document authors.  All rights reserved.
 
 This document is subject to BCP 78 and the IETF Trust\'s Legal

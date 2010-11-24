@@ -4389,22 +4389,6 @@ set rfc5741StatusOfMemo2_ind_info {
 set rfc5741StatusOfMemo3 {
 "Information about the current status of this document, any errata, and how to provide feedback on it may be obtained at http://www.rfc-editor.org/info/rfc%RFC%."
 }
-set rfc5741CopyrightNotice1 {
-"Copyright &copy; %YEAR% IETF Trust and the persons identified as the document authors. All rights reserved."
-}
-set rfc5741CopyrightNotice2_ietf {
-"This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document. Please review these documents carefully, as they describe your rights and restrictions with respect to this document. Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License."
-}
-set rfc5741CopyrightNotice2_iab {
-"This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document. Please review these documents carefully, as they describe your rights and restrictions with respect to this document."
-}
-set rfc5741CopyrightNotice2_irtf {
-"This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document. Please review these documents carefully, as they describe your rights and restrictions with respect to this document."
-}
-set rfc5741CopyrightNotice2_ind {
-"This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document. Please review these documents carefully, as they describe your rights and restrictions with respect to this document."
-}
-
 
 #       }}}2 Categories and IPR status texts
 #       {{{2 Start and end tag callbacks
@@ -5716,7 +5700,7 @@ proc pass2begin_rfc {elemX} {
         set iprP 1
     }
 
-    set newP 10
+    set newP 9
     if {![info exists fv(.PARSEDDATE)]} {
         set date [find_element date $fv(.CHILDREN)]
         set secs [get_publication_date_seconds $date]
@@ -5773,34 +5757,7 @@ proc pass2begin_rfc {elemX} {
         # note: no support for 2008 11 TLP text in IDs
     }
 
-    # set copyshort, funding, copyrightP, iprP values
-    # 
-    if {$newP == 10} {
-	global rfc5741CopyrightNotice1
-        if {![catch { set attrs(submissionType) }]} {
-          switch -- $attrs(submissionType) {
-            IETF {
-	      global rfc5741CopyrightNotice2_ietf
-	      set copyshort "$rfc5741CopyrightNotice1 $rfc5741CopyrightNotice2_ietf"
-            }
-            IAB {
-	      global rfc5741CopyrightNotice2_iab
-	      set copyshort "$rfc5741CopyrightNotice1 $rfc5741CopyrightNotice2_iab"
-            }
-            IRTF {
-	      global rfc5741CopyrightNotice2_irtf
-	      set copyshort "$rfc5741CopyrightNotice1 $rfc5741CopyrightNotice2_irtf"
-            }
-            independent {
-	      global rfc5741CopyrightNotice2_ind
-	      set copyshort "$rfc5741CopyrightNotice1 $rfc5741CopyrightNotice2_ind"
-            }
-          }
-        }
-        set funding ""
-        set copyrightP -1
-        set iprP 0
-    } elseif {$newP == 9} {
+    if {$newP == 9} {
         set copyshort $copyshortTrust200909
 
         if {![catch { set attrs(submissionType) }]} {
@@ -6087,7 +6044,7 @@ proc pass2end_rfc {elemX} {
     # IPR #
     #######
 
-    set newP 4
+    set newP 3
     if {[string compare $attrs(number) ""]} {
         # TODO: set newP using PARSEDDATE for all the options
         if {$attrs(number) <= 3707} {
@@ -6138,11 +6095,7 @@ proc pass2end_rfc {elemX} {
                     }
                 }
                 set validity $validity2
-        } elseif {$newP == 3} {
-                # IETF Trust removed these statements at the back
-                set copylong ""
-                set validity ""
-        } elseif {$newP == 4} {
+        } else {
                 # IETF Trust removed these statements at the back
                 set copylong ""
                 set validity ""
