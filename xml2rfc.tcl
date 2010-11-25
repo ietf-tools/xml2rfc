@@ -4272,22 +4272,13 @@ set rfc5741StatusOfMemo_ietf_std {
 set rfc5741StatusOfMemo_ietf_bcp {
 "This memo documents an Internet Best Current Practice."
 }
-set rfc5741StatusOfMemo_ietf_exp_consensus {
+set rfc5741StatusOfMemo_ietf_exp {
 "This document is not an Internet Standards Track specification; it is published for examination, experimental implementation, and evaluation."
 }
-set rfc5741StatusOfMemo_ietf_exp_noconsensus {
-"This document is not an Internet Standards Track specification; it is published for examination, experimental implementation, and evaluation."
-}
-set rfc5741StatusOfMemo_ietf_historic_consensus {
+set rfc5741StatusOfMemo_ietf_historic {
 "This document is not an Internet Standards Track specification; it is published for the historical record."
 }
-set rfc5741StatusOfMemo_ietf_historic_noconsensus {
-"This document is not an Internet Standards Track specification; it is published for the historical record."
-}
-set rfc5741StatusOfMemo_ietf_info_consensus {
-"This document is not an Internet Standards Track specification; it is published for informational purposes."
-}
-set rfc5741StatusOfMemo_ietf_info_noconsensus {
+set rfc5741StatusOfMemo_ietf_info {
 "This document is not an Internet Standards Track specification; it is published for informational purposes."
 }
 set rfc5741StatusOfMemo_iab_exp {
@@ -6513,12 +6504,12 @@ proc pass2begin_front {elemX} {
                                         if {![catch { set rv(consensus) }]} {
                                             switch -- $rv(consensus) {
                                                 yes {
-                                                    global rfc5741StatusOfMemo_ietf_exp_consensus rfc5741StatusOfMemo2_ietf_exp_consensus
-                                                    set status "$rfc5741StatusOfMemo_ietf_exp_consensus $rfc5741StatusOfMemo2_ietf_exp_consensus $statusOfMemo3"
+                                                    global rfc5741StatusOfMemo_ietf_exp rfc5741StatusOfMemo2_ietf_exp_consensus
+                                                    set status "$rfc5741StatusOfMemo_ietf_exp $rfc5741StatusOfMemo2_ietf_exp_consensus $statusOfMemo3"
                                                 }
                                                 no {
-                                                    global rfc5741StatusOfMemo_ietf_exp_noconsensus rfc5741StatusOfMemo2_ietf_exp_noconsensus
-                                                    set status "$rfc5741StatusOfMemo_ietf_exp_noconsensus $rfc5741StatusOfMemo2_ietf_exp_noconsensus $statusOfMemo3"
+                                                    global rfc5741StatusOfMemo_ietf_exp rfc5741StatusOfMemo2_ietf_exp_noconsensus
+                                                    set status "$rfc5741StatusOfMemo_ietf_exp $rfc5741StatusOfMemo2_ietf_exp_noconsensus $statusOfMemo3"
                                                 }
                                                 default {
                                                     unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
@@ -6530,12 +6521,12 @@ proc pass2begin_front {elemX} {
                                         if {![catch { set rv(consensus) }]} {
                                             switch -- $rv(consensus) {
                                                 yes {
-                                                    global rfc5741StatusOfMemo_ietf_historic_consensus rfc5741StatusOfMemo2_ietf_historic_consensus
-                                                    set status "$rfc5741StatusOfMemo_ietf_historic_consensus $rfc5741StatusOfMemo2_ietf_historic_consensus $statusOfMemo3"
+                                                    global rfc5741StatusOfMemo_ietf_historic rfc5741StatusOfMemo2_ietf_historic_consensus
+                                                    set status "$rfc5741StatusOfMemo_ietf_historic $rfc5741StatusOfMemo2_ietf_historic_consensus $statusOfMemo3"
                                                 }
                                                 no {
-                                                    global rfc5741StatusOfMemo_ietf_historic_noconsensus rfc5741StatusOfMemo2_ietf_historic_noconsensus
-                                                    set status "$rfc5741StatusOfMemo_ietf_historic_noconsensus $rfc5741StatusOfMemo2_ietf_historic_noconsensus $statusOfMemo3"
+                                                    global rfc5741StatusOfMemo_ietf_historic rfc5741StatusOfMemo2_ietf_historic_noconsensus
+                                                    set status "$rfc5741StatusOfMemo_ietf_historic $rfc5741StatusOfMemo2_ietf_historic_noconsensus $statusOfMemo3"
                                                 }
                                                 default {
                                                     unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
@@ -6547,12 +6538,12 @@ proc pass2begin_front {elemX} {
                                         if {![catch { set rv(consensus) }]} {
                                             switch -- $rv(consensus) {
                                                 yes {
-                                                    global rfc5741StatusOfMemo_ietf_info_consensus rfc5741StatusOfMemo2_ietf_info_consensus
-                                                    set status "$rfc5741StatusOfMemo_ietf_info_consensus $rfc5741StatusOfMemo2_ietf_info_consensus $statusOfMemo3"
+                                                    global rfc5741StatusOfMemo_ietf_info rfc5741StatusOfMemo2_ietf_info_consensus
+                                                    set status "$rfc5741StatusOfMemo_ietf_info $rfc5741StatusOfMemo2_ietf_info_consensus $statusOfMemo3"
                                                 }
                                                 no {
-                                                    global rfc5741StatusOfMemo_ietf_info_noconsensus rfc5741StatusOfMemo2_ietf_info_noconsensus
-                                                    set status "$rfc5741StatusOfMemo_ietf_info_noconsensus $rfc5741StatusOfMemo2_ietf_info_noconsensus $statusOfMemo3"
+                                                    global rfc5741StatusOfMemo_ietf_info rfc5741StatusOfMemo2_ietf_info_noconsensus
+                                                    set status "$rfc5741StatusOfMemo_ietf_info $rfc5741StatusOfMemo2_ietf_info_noconsensus $statusOfMemo3"
                                                 }
                                                 default {
                                                     unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
