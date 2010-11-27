@@ -4470,7 +4470,7 @@ proc begin {name {av {}} } {
                 }
                 if {![catch { set attrs(consensus) }]} {
                     switch -- $attrs(consensus) {
-                        yes - no - nogroup {}
+                        yes - no {}
                         default {
                             unexpected error \
                                 "consensus=\"$attrs(consensus)\" attribute unknown in #$elemN:<rfc>"
