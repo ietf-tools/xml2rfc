@@ -5671,7 +5671,7 @@ proc pass2begin_rfc {elemX} {
     array set attrs [list number     ""   obsoletes      ""   updates   "" \
                           seriesNo   ""   ipr            "" \
                           iprExtract ""   submissionType IETF xml:lang  en \
-                          consensus  yes]
+                          consensus  ""]
     array set attrs $elem($elemX)
     set elem($elemX) [array get attrs]
 
@@ -6374,6 +6374,20 @@ proc pass2begin_front {elemX} {
         set ymd ""
     }
     
+    # determine the value of consensus (default yes), and
+    # remember whether it was specified
+    set consensus "yes"
+    set consensusConsumed "no"
+    set consensusSpecified "no"
+    if {![catch { set rv(consensus) }]} {
+        set consensus $rv(consensus)
+        set consensusSpecified "yes"
+        if {![string compare $consensus ""]} {
+            set consensus "yes"
+            set consensusSpecified "no"
+        }
+    }
+    
     if {$options(.PRIVATE)} {
         lappend left $options(private)
 
@@ -6497,63 +6511,77 @@ proc pass2begin_front {elemX} {
                             if {![catch { set rv(category) }]} {
                                 switch -- $rv(category) {
                                     bcp {
-                                        global rfc5741StatusOfMemo_ietf_bcp rfc5741StatusOfMemo2_ietf_bcp
-                                        set status "$rfc5741StatusOfMemo_ietf_bcp $rfc5741StatusOfMemo2_ietf_bcp $statusOfMemo3"
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                global rfc5741StatusOfMemo_ietf_bcp rfc5741StatusOfMemo2_ietf_bcp
+                                                set status "$rfc5741StatusOfMemo_ietf_bcp $rfc5741StatusOfMemo2_ietf_bcp $statusOfMemo3"
+                                            }
+                                            default {
+                                                # "no" not allowed here
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                            }
+                                        }
                                     }
                                     exp {
-                                        if {![catch { set rv(consensus) }]} {
-                                            switch -- $rv(consensus) {
-                                                yes {
-                                                    global rfc5741StatusOfMemo_ietf_exp rfc5741StatusOfMemo2_ietf_exp_consensus
-                                                    set status "$rfc5741StatusOfMemo_ietf_exp $rfc5741StatusOfMemo2_ietf_exp_consensus $statusOfMemo3"
-                                                }
-                                                no {
-                                                    global rfc5741StatusOfMemo_ietf_exp rfc5741StatusOfMemo2_ietf_exp_noconsensus
-                                                    set status "$rfc5741StatusOfMemo_ietf_exp $rfc5741StatusOfMemo2_ietf_exp_noconsensus $statusOfMemo3"
-                                                }
-                                                default {
-                                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
-                                                }
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                global rfc5741StatusOfMemo_ietf_exp rfc5741StatusOfMemo2_ietf_exp_consensus
+                                                set status "$rfc5741StatusOfMemo_ietf_exp $rfc5741StatusOfMemo2_ietf_exp_consensus $statusOfMemo3"
+                                            }
+                                            no {
+                                                global rfc5741StatusOfMemo_ietf_exp rfc5741StatusOfMemo2_ietf_exp_noconsensus
+                                                set status "$rfc5741StatusOfMemo_ietf_exp $rfc5741StatusOfMemo2_ietf_exp_noconsensus $statusOfMemo3"
+                                            }
+                                            default {
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
                                             }
                                         }
                                     }
                                     historic {
-                                        if {![catch { set rv(consensus) }]} {
-                                            switch -- $rv(consensus) {
-                                                yes {
-                                                    global rfc5741StatusOfMemo_ietf_historic rfc5741StatusOfMemo2_ietf_historic_consensus
-                                                    set status "$rfc5741StatusOfMemo_ietf_historic $rfc5741StatusOfMemo2_ietf_historic_consensus $statusOfMemo3"
-                                                }
-                                                no {
-                                                    global rfc5741StatusOfMemo_ietf_historic rfc5741StatusOfMemo2_ietf_historic_noconsensus
-                                                    set status "$rfc5741StatusOfMemo_ietf_historic $rfc5741StatusOfMemo2_ietf_historic_noconsensus $statusOfMemo3"
-                                                }
-                                                default {
-                                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
-                                                }
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                global rfc5741StatusOfMemo_ietf_historic rfc5741StatusOfMemo2_ietf_historic_consensus
+                                                set status "$rfc5741StatusOfMemo_ietf_historic $rfc5741StatusOfMemo2_ietf_historic_consensus $statusOfMemo3"
+                                            }
+                                            no {
+                                                global rfc5741StatusOfMemo_ietf_historic rfc5741StatusOfMemo2_ietf_historic_noconsensus
+                                                set status "$rfc5741StatusOfMemo_ietf_historic $rfc5741StatusOfMemo2_ietf_historic_noconsensus $statusOfMemo3"
+                                            }
+                                            default {
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
                                             }
                                         }
                                     }
                                     info {
-                                        if {![catch { set rv(consensus) }]} {
-                                            switch -- $rv(consensus) {
-                                                yes {
-                                                    global rfc5741StatusOfMemo_ietf_info rfc5741StatusOfMemo2_ietf_info_consensus
-                                                    set status "$rfc5741StatusOfMemo_ietf_info $rfc5741StatusOfMemo2_ietf_info_consensus $statusOfMemo3"
-                                                }
-                                                no {
-                                                    global rfc5741StatusOfMemo_ietf_info rfc5741StatusOfMemo2_ietf_info_noconsensus
-                                                    set status "$rfc5741StatusOfMemo_ietf_info $rfc5741StatusOfMemo2_ietf_info_noconsensus $statusOfMemo3"
-                                                }
-                                                default {
-                                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
-                                                }
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                global rfc5741StatusOfMemo_ietf_info rfc5741StatusOfMemo2_ietf_info_consensus
+                                                set status "$rfc5741StatusOfMemo_ietf_info $rfc5741StatusOfMemo2_ietf_info_consensus $statusOfMemo3"
+                                            }
+                                            no {
+                                                global rfc5741StatusOfMemo_ietf_info rfc5741StatusOfMemo2_ietf_info_noconsensus
+                                                set status "$rfc5741StatusOfMemo_ietf_info $rfc5741StatusOfMemo2_ietf_info_noconsensus $statusOfMemo3"
+                                            }
+                                            default {
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
                                             }
                                         }
                                     }
                                     std {
-                                        global rfc5741StatusOfMemo_ietf_std rfc5741StatusOfMemo2_ietf_std
-                                        set status "$rfc5741StatusOfMemo_ietf_std $rfc5741StatusOfMemo2_ietf_std $statusOfMemo3"
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                global rfc5741StatusOfMemo_ietf_std rfc5741StatusOfMemo2_ietf_std
+                                                set status "$rfc5741StatusOfMemo_ietf_std $rfc5741StatusOfMemo2_ietf_std $statusOfMemo3"
+                                            }
+                                            default {
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                            }
+                                        }
                                     }
                                     default {
                                         unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
@@ -6595,91 +6623,88 @@ proc pass2begin_front {elemX} {
                             if {![catch { set rv(category) }]} {
                                 switch -- $rv(category) {
                                     exp {
-                                        if {![catch { set rv(consensus) }]} {
-                                            switch -- $rv(consensus) {
-                                                yes {
-                                                    if {[string compare $workgroupname ""]} {
-                                                        global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_consensus
-                                                        set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_consensus $statusOfMemo3"
-                                                        regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
-                                                    } else {
-                                                        global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_nogroup
-                                                        set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_nogroup $statusOfMemo3"
-                                                    }
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                if {[string compare $workgroupname ""]} {
+                                                    global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_consensus
+                                                    set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_consensus $statusOfMemo3"
+                                                    regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
+                                                } else {
+                                                    global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_nogroup
+                                                    set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_nogroup $statusOfMemo3"
                                                 }
-                                                no {
-                                                    if {[string compare $workgroupname ""]} {
-                                                        global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_noconsensus
-                                                        set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_noconsensus $statusOfMemo3"
-                                                        regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
-                                                    } else {
-                                                        global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_nogroup
-                                                        set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_nogroup $statusOfMemo3"
-                                                    }
+                                            }
+                                            no {
+                                                if {[string compare $workgroupname ""]} {
+                                                    global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_noconsensus
+                                                    set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_noconsensus $statusOfMemo3"
+                                                    regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
+                                                } else {
+                                                    global rfc5741StatusOfMemo_irtf_exp rfc5741StatusOfMemo2_irtf_exp_nogroup
+                                                    set status "$rfc5741StatusOfMemo_irtf_exp $rfc5741StatusOfMemo2_irtf_exp_nogroup $statusOfMemo3"
                                                 }
-                                                default {
-                                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
-                                                }
+                                            }
+                                            default {
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
                                             }
                                         }
                                     }
                                     historic {
-                                        if {![catch { set rv(consensus) }]} {
-                                            switch -- $rv(consensus) {
-                                                yes {
-                                                    if {[string compare $workgroupname ""]} {
-                                                        global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_consensus
-                                                        set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_consensus $statusOfMemo3"
-                                                        regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
-                                                    } else {
-                                                        global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_nogroup
-                                                        set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_nogroup $statusOfMemo3"
-                                                    }
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                if {[string compare $workgroupname ""]} {
+                                                    global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_consensus
+                                                    set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_consensus $statusOfMemo3"
+                                                    regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
+                                                } else {
+                                                    global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_nogroup
+                                                    set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_nogroup $statusOfMemo3"
                                                 }
-                                                no {
-                                                    if {[string compare $workgroupname ""]} {
-                                                        global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_noconsensus
-                                                        set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_noconsensus $statusOfMemo3"
-                                                        regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
-                                                    } else {
-                                                        global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_nogroup
-                                                        set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_nogroup $statusOfMemo3"
-                                                    }
+                                            }
+                                            no {
+                                                if {[string compare $workgroupname ""]} {
+                                                    global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_noconsensus
+                                                    set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_noconsensus $statusOfMemo3"
+                                                    regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
+                                                } else {
+                                                    global rfc5741StatusOfMemo_irtf_historic rfc5741StatusOfMemo2_irtf_historic_nogroup
+                                                    set status "$rfc5741StatusOfMemo_irtf_historic $rfc5741StatusOfMemo2_irtf_historic_nogroup $statusOfMemo3"
                                                 }
-                                                default {
-                                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
-                                                }
+                                            }
+                                            default {
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
                                             }
                                         }
                                     }
                                     info {
-                                        if {![catch { set rv(consensus) }]} {
-                                            switch -- $rv(consensus) {
-                                                yes {
-                                                    if {[string compare $workgroupname ""]} {
-                                                        global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_consensus
-                                                        set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_consensus $statusOfMemo3"
-                                                        regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
-                                                    } else {
-                                                        global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_nogroup
-                                                        set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_nogroup $statusOfMemo3"
-                                                    }
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                if {[string compare $workgroupname ""]} {
+                                                    global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_consensus
+                                                    set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_consensus $statusOfMemo3"
+                                                    regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
+                                                } else {
+                                                    global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_nogroup
+                                                    set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_nogroup $statusOfMemo3"
                                                 }
-                                                no {
-                                                    if {[string compare $workgroupname ""]} {
-                                                        global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_noconsensus
-                                                        set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_noconsensus $statusOfMemo3"
-                                                        regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
-                                                    } else {
-                                                        global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_nogroup
-                                                        set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_nogroup $statusOfMemo3"
-                                                    }
+                                            }
+                                            no {
+                                                if {[string compare $workgroupname ""]} {
+                                                    global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_noconsensus
+                                                    set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_noconsensus $statusOfMemo3"
+                                                    regsub -all -- %WORKGROUPNAME% $status "$workgroupname" status
+                                                } else {
+                                                    global rfc5741StatusOfMemo_irtf_info rfc5741StatusOfMemo2_irtf_info_nogroup
+                                                    set status "$rfc5741StatusOfMemo_irtf_info $rfc5741StatusOfMemo2_irtf_info_nogroup $statusOfMemo3"
                                                 }
-                                                default {
-                                                    unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
-                                                }
-                                            } 
-                                        }
+                                            }
+                                            default {
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                            }
+                                        } 
                                     }
                                     default {
                                         unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
@@ -6797,6 +6822,13 @@ proc pass2begin_front {elemX} {
         }
     }
 
+    # check consensus usage
+    if {![string compare $consensusSpecified "yes"]} {
+        if {![string compare $consensusConsumed "no"]} {
+            unexpected warning "a consensus attribute was specified, but not applicable for the generated boilerplate"
+        }
+    }
+        
     set authors ""
     set names ""
     foreach child [find_element author $attrs(.CHILDREN)] {
