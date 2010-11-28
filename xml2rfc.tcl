@@ -6469,8 +6469,7 @@ proc pass2begin_front {elemX} {
 
             set category [lindex [lindex $categories $cindex] 1]
             lappend left "Category:$colonspace $category"
-            set status [list [lindex [lindex $categories $cindex] 3]]
-
+            
             if {![string compare $boilerplateformat "2010"]} {
                 # starting in 2010, add the ISSN
                 lappend left "ISSN:$colonspace 2070-1721"
@@ -6714,6 +6713,9 @@ proc pass2begin_front {elemX} {
                         }
                     }
                 }
+            } else {
+                # pre-2010 (RFC 5741) "Status Of This Memo"
+                set status [list [lindex [lindex $categories $cindex] 3]]
             }
         } else {
             if {$options(.STRICT)} {
