@@ -16,7 +16,7 @@
 
 <rfc>
 <front>
-<title>xml2rfc v1.35</title>
+<title>xml2rfc v1.36pre1</title>
 
 <author initials='M.T.' surname='Rose' fullname='Marshall T. Rose'>
 <organization>Dover Beach Consulting, Inc.</organization>
@@ -61,7 +61,7 @@
 </address>
 </author>
 
-<date month='March' year='2010' />
+<date month='December' year='2010' />
 </front>
 
 <middle>
@@ -781,7 +781,343 @@ except when generating HTML.</t>
 <format type='TXT' octets='26351' target='ftp://ftp.isi.edu/in-notes/rfc4234.txt' />
 </reference>
 
+<reference anchor="RFC5741">
+  <front>
+    <title>RFC Streams, Headers, and Boilerplates</title>
+    <author initials="L." surname="Daigle" fullname="Leslie Daigle"/>
+    <author initials="O." surname="Kolkman" fullname="Olaf Kolkman"/>
+    <date month="December" year="2009"/>
+  </front>
+  <seriesInfo name="RFC" value="5741"/>
+</reference>
+
 </references>
+
+<section title="Producing the IETF 'Boilerplate'" anchor="boilerplate">
+<t>
+  This section was borrowed from <eref target="http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html#boilerplate"/>.
+  <!-- So please notify Julian Reschke when making edits. -->
+</t>
+<t>
+  Various attributes of the <spanx style="verb">&lt;rfc&gt;</spanx>
+  element plus some child elements of <spanx style="verb">&lt;front&gt;</spanx>
+  affect the automatically generated parts of the front page, such as the
+  tabular information at the beginning, the "Status Of This Memo", and the
+  "Copyright Notice".
+</t>
+<t>
+  When submitting an Internet Draft, this "boilerplate" is checked
+  by "Idnits" (<eref target="http://tools.ietf.org/tools/idnits/"/>) for
+  compliance with the current Intellectual Property rules, and thus
+  it is important to set the correct values.
+</t>
+<t>
+  Furthermore, the RFC Production Center uses RFC2629-based tools to 
+  generate the final RFC text, so the more accurate the supplied information
+  is, the less additional work is left, and the risk for errors in producing
+  the final (and immutable!) document is reduced.
+</t>
+<t><list>
+  <t>
+    Note: this only applies to the case when IETF documents are
+    produced. The "private" processing instruction <iref item="private PI pseudo-attribute"/><iref item="Processing Instruction pseudo attributes" subitem="private"/>
+    allows to switch off most of the autogeneration logic.
+  </t>
+</list></t>
+
+<section title="The /rfc/@ipr Attribute" anchor="attribute-ipr">
+<t>
+  As of the time of this writing, this attribute value can take a long list of values. As
+  frequently, this is not the result of a grand plan, but simply for historic
+  reasons. Of these values, only a few are currently in use; all others are
+  supported by the various tools for backwards compatibility with old source
+  files.
+</t>
+<t><list>
+  <t>
+    Note: some variations of the boilerplate are selected based
+    on the document's date; therefore it is important to specify the "year",
+    "month" and "day" attributes of the <spanx style="verb">&lt;date&gt;</spanx> element
+    when archiving the XML source of an Internet Draft on the day of submission.
+  </t>
+</list></t>
+<t>
+  <spanx>Disclaimer: THIS ONLY PROVIDES IMPLEMENTATION INFORMATION. IF YOU NEED
+  LEGAL ADVICE, PLEASE CONTACT A LAWYER.</spanx>
+  For further information, refer to <eref target="http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf"/>.
+</t>
+<t>
+  Finally, for the current "Status Of This Memo" text, the <spanx style="verb">submissionType</spanx> attribute
+  determines whether a statement about "Code Components" is inserted (this is the
+  case for the value "IETF", which also happens to be the default). Other values,
+  such as "independent", suppress this part of the text. 
+</t>
+
+
+<section title="Current Values: '*trust200902'" anchor="attribute-ipr-current">
+<t>
+  The name for these values refers to the "TLP" ("IETF TRUST Legal Provisions Relating 
+  to IETF Documents"), on effect February 15, 2009 (see <eref target="http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20090215.pdf"/>).
+  Updates to this document were published on September 12, 2009 (TLP 3.0, <eref target="http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20090912.pdf"/>)
+  and on December 28, 2009 (TLP 4.0, <eref target="http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20091228.pdf"/>),
+  modifying the license for code components.
+  The actual text is located in Section 6 ("Text To Be Included in IETF Documents")
+  of these documents.
+</t>
+<t>  
+  The tools will automatically produce the "right" text depending on the
+  document's date information (see above):
+</t>
+<texttable align="left">
+  <ttcol width="10%">TLP</ttcol><ttcol>URI</ttcol><ttcol width="20%">starting with publication date</ttcol>
+
+  <c>3.0</c>
+  <c><eref target="http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20090912.pdf"/></c>
+  <c>2009-11-01</c>
+
+  <c>4.0</c>
+  <c><eref target="http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20091228.pdf"/></c>
+  <c>2010-04-01</c>
+
+</texttable> 
+
+
+<section title="trust200902" anchor="attribute-ipr-trust200902">
+<t>
+  This should be the default, unless one of the more specific '*trust200902'
+  values is a better fit. It produces the text in Sections 6.a and 6.b of
+  the TLP.
+</t>
+</section>
+
+<section title="noModificationTrust200902" anchor="attribute-ipr-noModificationTrust200902">
+<t>
+  This produces the additional text from Section 6.c.i of the TLP:
+</t>
+<t><list>
+  <t>
+    This document may not be modified, and derivative works of it may
+    not be created, except to format it for publication as an RFC or
+    to translate it into languages other than English.
+  </t>
+</list></t>
+</section>
+
+<section title="noDerivativesTrust200902" anchor="attribute-ipr-noDerivativesTrust200902">
+<t>
+  This produces the additional text from Section 6.c.ii of the TLP:
+</t>
+<t><list>
+  <t>
+    This document may not be modified, and derivative works of it may
+    not be created, and it may not be published except as an Internet-Draft.
+  </t>
+</list></t>
+</section>
+
+<section title="pre5378Trust200902" anchor="attribute-ipr-pre5378Trust200902">
+<t>
+  This produces the additional text from Section 6.c.iii of the TLP, frequently
+  called the "pre-5378 escape clause":
+</t>
+<t><list>
+  <t>
+    This document may contain material from IETF Documents or IETF Contributions published or
+    made publicly available before November 10, 2008. The person(s) controlling the copyright in
+    some of this material may not have granted the IETF Trust the right to allow modifications of such
+    material outside the IETF Standards Process. Without obtaining an adequate license from the
+    person(s) controlling the copyright in such materials, this document may not be modified outside
+    the IETF Standards Process, and derivative works of it may not be created outside the IETF
+    Standards Process, except to format it for publication as an RFC or to translate it into languages
+    other than English.
+  </t>
+</list></t>
+<t>
+  See Section 4 of <eref target="http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf"/>
+  for further information about when to use this value.
+</t>
+<t><list>
+  <t>
+    Note: this text appears under "Copyright Notice", unless the 
+    document was published before November 2009, in which case it appears
+    under "Status Of This Memo".
+  </t>
+</list></t>
+</section>
+</section> 
+
+<section title="Historic Values" anchor="attribute-ipr-historic">
+
+<section title="Historic Values: '*trust200811'" anchor="attribute-ipr-200811">
+<t>
+  The attribute values "trust200811",
+  "noModificationTrust200811" and
+  "noDerivativesTrust200811"
+  are similar to their "trust200902" counterparts, except that they use text
+  specified in <eref target="http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy_11-10-08.pdf"/>.
+</t>
+</section>
+
+<section title="Historic Values: '*3978'" anchor="attribute-ipr-3978">
+<t>
+  The attribute values "full3978",
+  "noModification3978" and
+  "noDerivatives3978"
+  are similar to their counterparts above, except that they use text
+  specified in RFC 3978 (March 2005).
+</t>
+</section>
+
+<section title="Historic Values: '*3667'" anchor="attribute-ipr-3667">
+<t>
+  The attribute values "full3667",
+  "noModification3667" and
+  "noDerivatives3667"
+  are similar to their counterparts above, except that they use text
+  specified in RFC 3667 (February 2004).
+</t>
+</section>
+
+<section title="Historic Values: '*2026'" anchor="attribute-ipr-2026">
+<t>
+  The attribute values "full2026" and
+  "noDerivativeWorks2026"
+  are similar to their counterparts above, except that they use text
+  specified in RFC 2026 (October 1996).
+</t>
+<t>
+  The special value "none"
+  was also used back then, and denied the IETF any rights beyond publication
+  as Internet Draft.
+</t>
+</section>
+
+</section>
+</section>
+
+<section title="The /rfc/@category Attribute" anchor="attribute-category">
+<t>
+  For RFCs, the <spanx style="verb">category</spanx> determines the "maturity level"
+  (see Section 4 of <xref target="RFC2026"/>). The allowed values
+  are "std" for "Standards Track", "bcp" for "BCP", "info" for "Informational",
+  "exp" for "Experimental", and "historic" for - surprise - "Historic".
+</t>
+<t>
+  For Internet Drafts, the category attribute is not needed, but <spanx>will</spanx>
+  appear on the front page ("Intended Status"). Supplying this information can 
+  be useful, because reviewers may want to know.
+</t>
+<t><list>
+  <t>
+    Note: the Standards Track consists of "Proposed Standard",
+    "Draft Standards", and "Internet Standard". These do not appear in the
+    boilerplate, thus the category attribute doesn't handle them.
+    However, this information can be useful for validity checkers, and thus
+    <spanx style="verb">rfc2629.xslt</spanx> supports an extension attribute
+    for that purpose (see <eref target="http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html#ext-rfc2629.rfc"/> for details).
+  </t>
+</list></t>
+</section>
+
+<section title="The /rfc/@submissionType Attribute" anchor="attribute-submissiontype">
+<t>
+  The RFC Editor publishes documents from different "document streams", of which
+  the "IETF stream" of course is the most prominent one. Other streams are the "independent stream"
+  (used for things like administrative information or April 1st RFCs),
+  the "IAB stream" (Internet Architecture Board) and the "IRTF stream" (Internet Research Task Force).
+</t>
+<t>
+  Not surprisingly, the values for the attribute are "IETF" (the default value),
+  "independent", "IAB", and "IRTF".
+</t>
+<t>
+  Historically, this did not affect the final appearance of RFCs, except for
+  subtle differences in Copyright notices.
+  Nowadays (as of <xref target="RFC5741"/>), the stream name appears in the first
+  line of the front page, and it also affects the text in the "Status Of This Memo"
+  section.
+</t>
+<t>
+  For current documents, setting <spanx style="verb">submissionType</spanx> attribute will
+  have the following effect:
+  <list style="symbols">
+    <t>
+      For RFCs, the stream name appears in the upper left corner of the 
+      first page (in Internet Drafts, this is either "Network Working Group",
+      or the value of the <spanx style="verb">&lt;workgroup&gt;</spanx> element).
+    </t>
+    <t>
+      For RFCs, if affects the whole "Status Of This Memo" section (see
+      Section 3.2.2 of <xref target="RFC5741"/>).
+    </t>
+    <t>
+      For all RFCs and Internet Drafts, it determines whether the "Copyright
+      Notice" mentions the Copyright on Code Components (see TLP, Section "Text To Be Included in IETF Documents"). 
+    </t>
+  </list>
+</t>
+</section>
+
+<section title="The /rfc/@consensus Attribute" anchor="attribute-consensus">
+<t>
+  For some of the publication streams (see <xref target="attribute-submissiontype"/>),
+  the "Status Of This Memo" section depends on whether there was a consensus
+  to publish (again, see Section 3.2.2 of <xref target="RFC5741"/>).
+</t>
+<t>
+  The <spanx style="verb">consensus</spanx> attribute ("yes"/"no", defaulting to "yes")
+  can be used to supply this information. The effect for the various streams is:
+  <list style="symbols">
+    <t>"independent" and "IAB": none.</t>
+    <t>"IETF": mention that there was an IETF consensus.</t>
+    <t>"IRTF": mention that there was a research group consensus (where the name of the research
+    group is extracted from the <spanx style="verb">&lt;workgroup&gt;</spanx> element).</t>
+  </list>
+</t>
+</section>
+
+<section title="The /rfc/@number Attribute" anchor="attribute-number">
+<t>
+  For RFCs, this attribute supplies the RFC number.
+</t>
+</section>
+
+<section title="The /rfc/@docName Attribute" anchor="attribute-docname">
+<t>
+  For Internet Drafts, this specifies the draft name (which appears
+  below the title). The file extension is <spanx>not</spanx> part
+  of the draft, so in general it should end with the current draft number
+  ("-", plus two digits).
+</t>
+<t><list>
+  <t>
+  Note: "Idnits" (<eref target="http://tools.ietf.org/tools/idnits/"/>)
+  checks the in-document draft name for consistency with the filename of
+  the submitted document.
+  </t>
+</list></t>
+</section>
+
+<section title="The /rfc/@obsoletes Attribute" anchor="attribute-obsoletes">
+<t> 
+  The RFC Editor maintains a database (<eref target="http://www.rfc-editor.org/rfc.html"/>)
+  of all RFCs, including information about which one obsoletes which. Upon publication of an RFC, this
+  database is updated from the data on the front page.
+</t>
+<t>
+  This attribute takes a list of comma-separated RFC <spanx>numbers</spanx>.
+  Do <spanx>not</spanx> put the string "RFC" here.
+</t>
+</section>
+  
+<section title="The /rfc/@updates Attribute" anchor="attribute-updates">
+<t>
+  This is like <spanx style="verb">obsoletes</spanx>, but for the "updates"
+  relation.
+</t>
+</section>
+</section>
+
 
 <section title="MacOS&nbsp;9 Installation (courtesy of Ned Freed)">
 <t><list style='numbers'>

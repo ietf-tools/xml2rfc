@@ -6,10 +6,10 @@ The README file                                                  M. Rose
                                                                B. Fenner
                                                    Arista Networks, Inc.
                                                                C. Levert
-                                                              March 2010
+                                                       December 19, 2010
 
 
-                             xml2rfc v1.35
+                           xml2rfc v1.36pre1
 
 
 
@@ -30,31 +30,31 @@ Table of Contents
    6.2.    Typed-Artwork Interpretation . . . . . . . . . . . . . . . 14
    7.      Limitations of xml2rfc . . . . . . . . . . . . . . . . . . 16
    8.      References . . . . . . . . . . . . . . . . . . . . . . . . 17
-   A.      MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . 18
-   B.      rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . 19
-   C.      MS-Windows XP/Cygwin Installation (courtesy of Joe
-           Touch) . . . . . . . . . . . . . . . . . . . . . . . . . . 20
-   D.      A Special Thanks . . . . . . . . . . . . . . . . . . . . . 21
-   E.      Copyrights . . . . . . . . . . . . . . . . . . . . . . . . 22
-           Authors' Addresses . . . . . . . . . . . . . . . . . . . . 23
-
-
-
-
-
-
-
-
-
-
-
-
+   A.      Producing the IETF 'Boilerplate' . . . . . . . . . . . . . 18
+   A.1.    The /rfc/@ipr Attribute  . . . . . . . . . . . . . . . . . 18
+   A.1.1.  Current Values: '*trust200902' . . . . . . . . . . . . . . 19
+   A.1.2.  Historic Values  . . . . . . . . . . . . . . . . . . . . . 20
+   A.2.    The /rfc/@category Attribute . . . . . . . . . . . . . . . 21
+   A.3.    The /rfc/@submissionType Attribute . . . . . . . . . . . . 21
+   A.4.    The /rfc/@consensus Attribute  . . . . . . . . . . . . . . 22
+   A.5.    The /rfc/@number Attribute . . . . . . . . . . . . . . . . 22
+   A.6.    The /rfc/@docName Attribute  . . . . . . . . . . . . . . . 22
+   A.7.    The /rfc/@obsoletes Attribute  . . . . . . . . . . . . . . 23
+   A.8.    The /rfc/@updates Attribute  . . . . . . . . . . . . . . . 23
+   B.      MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . 24
+   C.      rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . 25
+   D.      MS-Windows XP/Cygwin Installation (courtesy of Joe
+           Touch) . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+   E.      A Special Thanks . . . . . . . . . . . . . . . . . . . . . 27
+   F.      Copyrights . . . . . . . . . . . . . . . . . . . . . . . . 28
+           Index  . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+           Authors' Addresses . . . . . . . . . . . . . . . . . . . . 30
 
 
 
 Rose, et al.                                                    [Page 1]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
 1.  Introduction
@@ -62,7 +62,7 @@ README                        xml2rfc v1.35                   March 2010
    This is a package to convert memos written in XML to the RFC format.
 
    If you don't want to install any software, you can use the web-based
-   service [4].
+   service [5].
 
 
 
@@ -110,7 +110,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                    [Page 2]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
 2.  Requirements
@@ -119,7 +119,7 @@ README                        xml2rfc v1.35                   March 2010
    scripting language, Tk is Tcl with support for your windowing system.
 
    To get a source or binary distribution for your system, go to the Tcl
-   Developer Xchange website [5] and install it.  If you get the binary
+   Developer Xchange website [6] and install it.  If you get the binary
    distribution, this is pretty simple.
 
    Of course, you may already have Tcl version 8.  To find out, try
@@ -166,7 +166,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                    [Page 3]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
 3.  Testing
@@ -222,12 +222,12 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                    [Page 4]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
 4.  Next steps
 
-   Read the 2629bis [6] document.  In particular, Section 3 has some
+   Read the 2629bis [7] document.  In particular, Section 3 has some
    good information.
 
 4.1.  Processing Instructions
@@ -278,7 +278,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                    [Page 5]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
    |            comments |      no      | render <cref> information    |
@@ -334,7 +334,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                    [Page 6]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
    |            linefile |      n/a     | a string like "35:file.xml"  |
@@ -390,7 +390,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                    [Page 7]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
    |          rfcedstyle |      no      | attempt to closely follow    |
@@ -446,7 +446,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                    [Page 8]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
    |            sortrefs |      no      | sort references              |
@@ -502,7 +502,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                    [Page 9]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
    |           tocompact |      yes     | if toc is "yes", then        |
@@ -558,7 +558,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                   [Page 10]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
    You can also have *xml2rfc* set the "XML_LIBRARY" environment
@@ -589,7 +589,7 @@ README                        xml2rfc v1.35                   March 2010
    set env(XML_LIBRARY) $library
 
    There are links to various bibliographic databases (RFCs, I-Ds, and
-   so on) on the *xml2rfc* homepage [4].
+   so on) on the *xml2rfc* homepage [5].
 
 
 
@@ -614,7 +614,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                   [Page 11]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
 5.  The Page Model
@@ -656,7 +656,7 @@ README                        xml2rfc v1.35                   March 2010
       56: form-feed character (followed by line terminator)
 
    Once processed through *nroff* and the "fix.sh" script (from
-   2-nroff.template [7]), the *nr* output differs from this in two ways.
+   2-nroff.template [8]), the *nr* output differs from this in two ways.
    It has three extra blank lines (that could be numbered -2, -1, and 0,
    for a total of six) at the very beginning of the document (so the
    first page is that much longer).  It also has no line terminator
@@ -670,7 +670,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                   [Page 12]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
 6.  Additions to RFC 2629
@@ -726,7 +726,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                   [Page 13]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
    *xml2rfc* also recognizes an undocumented "align" attribute (with
@@ -782,7 +782,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                   [Page 14]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
    For example (to be viewed in HTML):
@@ -838,7 +838,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                   [Page 15]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
 7.  Limitations of xml2rfc
@@ -894,7 +894,7 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                   [Page 16]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
 8.  References
@@ -908,26 +908,26 @@ README                        xml2rfc v1.35                   March 2010
    [3]  Crocker, D. and P. Overell, "Augmented BNF for Syntax
         Specifications: ABNF", RFC 4234, October 2005.
 
-   [4]   <http://xml.resource.org/>
+   [4]  Daigle, L. and O. Kolkman, "RFC Streams, Headers, and
+        Boilerplates", RFC 5741, December 2009.
 
-   [5]   <http://www.tcl.tk/software/tcltk/8.4.html>
+   [5]   <http://xml.resource.org/>
 
-   [6]   <draft-mrose-writing-rfcs.html>
+   [6]   <http://www.tcl.tk/software/tcltk/8.4.html>
 
-   [7]   <ftp://ftp.rfc-editor.org/in-notes/rfc-editor/2-nroff.template>
+   [7]   <draft-mrose-writing-rfcs.html>
 
-   [8]   <http://greenbytes.de/tech/webdav/rfc2629.xslt>
+   [8]   <ftp://ftp.rfc-editor.org/in-notes/rfc-editor/2-nroff.template>
 
-   [9]   <http://greenbytes.de/tech/webdav/rfc2629xslt.zip>
+   [9]   <http://greenbytes.de/tech/webdav/rfc2629.xslt>
 
-   [10]  <http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html>
+   [10]  <http://greenbytes.de/tech/webdav/rfc2629xslt.zip>
 
-   [11]  <http://www.cygwin.com/>
+   [11]  <http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html>
 
-   [12]  <http://wiki.tcl.tk/2?cygwin>
+   [12]  <http://www.cygwin.com/>
 
-
-
+   [13]  <http://wiki.tcl.tk/2?cygwin>
 
 
 
@@ -950,10 +950,346 @@ README                        xml2rfc v1.35                   March 2010
 
 Rose, et al.                                                   [Page 17]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
-Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
+Appendix A.  Producing the IETF 'Boilerplate'
+
+   This section was borrowed from <http://greenbytes.de/tech/webdav/
+   rfc2629xslt/rfc2629xslt.html#boilerplate>.
+
+   Various attributes of the "<rfc>" element plus some child elements of
+   "<front>" affect the automatically generated parts of the front page,
+   such as the tabular information at the beginning, the "Status Of This
+   Memo", and the "Copyright Notice".
+
+   When submitting an Internet Draft, this "boilerplate" is checked by
+   "Idnits" (<http://tools.ietf.org/tools/idnits/>) for compliance with
+   the current Intellectual Property rules, and thus it is important to
+   set the correct values.
+
+   Furthermore, the RFC Production Center uses RFC2629-based tools to
+   generate the final RFC text, so the more accurate the supplied
+   information is, the less additional work is left, and the risk for
+   errors in producing the final (and immutable!) document is reduced.
+
+      Note: this only applies to the case when IETF documents are
+      produced.  The "private" processing instruction allows to switch
+      off most of the autogeneration logic.
+
+A.1.  The /rfc/@ipr Attribute
+
+   As of the time of this writing, this attribute value can take a long
+   list of values.  As frequently, this is not the result of a grand
+   plan, but simply for historic reasons.  Of these values, only a few
+   are currently in use; all others are supported by the various tools
+   for backwards compatibility with old source files.
+
+      Note: some variations of the boilerplate are selected based on the
+      document's date; therefore it is important to specify the "year",
+      "month" and "day" attributes of the "<date>" element when
+      archiving the XML source of an Internet Draft on the day of
+      submission.
+
+   _Disclaimer: THIS ONLY PROVIDES IMPLEMENTATION INFORMATION.  IF YOU
+   NEED LEGAL ADVICE, PLEASE CONTACT A LAWYER._ For further information,
+   refer to <http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf>.
+
+   Finally, for the current "Status Of This Memo" text, the
+   "submissionType" attribute determines whether a statement about "Code
+   Components" is inserted (this is the case for the value "IETF", which
+   also happens to be the default).  Other values, such as
+   "independent", suppress this part of the text.
+
+
+
+
+Rose, et al.                                                   [Page 18]
+
+README                      xml2rfc v1.36pre1              December 2010
+
+
+A.1.1.  Current Values: '*trust200902'
+
+   The name for these values refers to the "TLP" ("IETF TRUST Legal
+   Provisions Relating to IETF Documents"), on effect February 15, 2009
+   (see <http://trustee.ietf.org/license-info/archive/
+   IETF-Trust-License-Policy-20090215.pdf>).  Updates to this document
+   were published on September 12, 2009 (TLP 3.0, <http://
+   trustee.ietf.org/license-info/archive/
+   IETF-Trust-License-Policy-20090912.pdf>) and on December 28, 2009
+   (TLP 4.0, <http://trustee.ietf.org/license-info/archive/
+   IETF-Trust-License-Policy-20091228.pdf>), modifying the license for
+   code components.  The actual text is located in Section 6 ("Text To
+   Be Included in IETF Documents") of these documents.
+
+   The tools will automatically produce the "right" text depending on
+   the document's date information (see above):
+
+   +-----+-----------------------------------------------+-------------+
+   | TLP | URI                                           | starting    |
+   |     |                                               | with        |
+   |     |                                               | publication |
+   |     |                                               | date        |
+   +-----+-----------------------------------------------+-------------+
+   | 3.0 | <http://trustee.ietf.org/license-info/archive | 2009-11-01  |
+   |     | /IETF-Trust-License-Policy-20090912.pdf>      |             |
+   |     |                                               |             |
+   | 4.0 | <http://trustee.ietf.org/license-info/archive | 2010-04-01  |
+   |     | /IETF-Trust-License-Policy-20091228.pdf>      |             |
+   +-----+-----------------------------------------------+-------------+
+
+A.1.1.1.  trust200902
+
+   This should be the default, unless one of the more specific
+   '*trust200902' values is a better fit.  It produces the text in
+   Sections 6.a and 6.b of the TLP.
+
+A.1.1.2.  noModificationTrust200902
+
+   This produces the additional text from Section 6.c.i of the TLP:
+
+      This document may not be modified, and derivative works of it may
+      not be created, except to format it for publication as an RFC or
+      to translate it into languages other than English.
+
+
+
+
+
+
+
+
+Rose, et al.                                                   [Page 19]
+
+README                      xml2rfc v1.36pre1              December 2010
+
+
+A.1.1.3.  noDerivativesTrust200902
+
+   This produces the additional text from Section 6.c.ii of the TLP:
+
+      This document may not be modified, and derivative works of it may
+      not be created, and it may not be published except as an Internet-
+      Draft.
+
+A.1.1.4.  pre5378Trust200902
+
+   This produces the additional text from Section 6.c.iii of the TLP,
+   frequently called the "pre-5378 escape clause":
+
+      This document may contain material from IETF Documents or IETF
+      Contributions published or made publicly available before November
+      10, 2008.  The person(s) controlling the copyright in some of this
+      material may not have granted the IETF Trust the right to allow
+      modifications of such material outside the IETF Standards Process.
+      Without obtaining an adequate license from the person(s)
+      controlling the copyright in such materials, this document may not
+      be modified outside the IETF Standards Process, and derivative
+      works of it may not be created outside the IETF Standards Process,
+      except to format it for publication as an RFC or to translate it
+      into languages other than English.
+
+   See Section 4 of
+   <http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf> for further
+   information about when to use this value.
+
+      Note: this text appears under "Copyright Notice", unless the
+      document was published before November 2009, in which case it
+      appears under "Status Of This Memo".
+
+A.1.2.  Historic Values
+
+A.1.2.1.  Historic Values: '*trust200811'
+
+   The attribute values "trust200811", "noModificationTrust200811" and
+   "noDerivativesTrust200811" are similar to their "trust200902"
+   counterparts, except that they use text specified in <http://
+   trustee.ietf.org/license-info/archive/
+   IETF-Trust-License-Policy_11-10-08.pdf>.
+
+A.1.2.2.  Historic Values: '*3978'
+
+   The attribute values "full3978", "noModification3978" and
+   "noDerivatives3978" are similar to their counterparts above, except
+   that they use text specified in RFC 3978 (March 2005).
+
+
+
+Rose, et al.                                                   [Page 20]
+
+README                      xml2rfc v1.36pre1              December 2010
+
+
+A.1.2.3.  Historic Values: '*3667'
+
+   The attribute values "full3667", "noModification3667" and
+   "noDerivatives3667" are similar to their counterparts above, except
+   that they use text specified in RFC 3667 (February 2004).
+
+A.1.2.4.  Historic Values: '*2026'
+
+   The attribute values "full2026" and "noDerivativeWorks2026" are
+   similar to their counterparts above, except that they use text
+   specified in RFC 2026 (October 1996).
+
+   The special value "none" was also used back then, and denied the IETF
+   any rights beyond publication as Internet Draft.
+
+A.2.  The /rfc/@category Attribute
+
+   For RFCs, the "category" determines the "maturity level" (see Section
+   4 of [1]).  The allowed values are "std" for "Standards Track", "bcp"
+   for "BCP", "info" for "Informational", "exp" for "Experimental", and
+   "historic" for - surprise - "Historic".
+
+   For Internet Drafts, the category attribute is not needed, but _will_
+   appear on the front page ("Intended Status").  Supplying this
+   information can be useful, because reviewers may want to know.
+
+      Note: the Standards Track consists of "Proposed Standard", "Draft
+      Standards", and "Internet Standard".  These do not appear in the
+      boilerplate, thus the category attribute doesn't handle them.
+      However, this information can be useful for validity checkers, and
+      thus "rfc2629.xslt" supports an extension attribute for that
+      purpose (see <http://greenbytes.de/tech/webdav/rfc2629xslt/
+      rfc2629xslt.html#ext-rfc2629.rfc> for details).
+
+A.3.  The /rfc/@submissionType Attribute
+
+   The RFC Editor publishes documents from different "document streams",
+   of which the "IETF stream" of course is the most prominent one.
+   Other streams are the "independent stream" (used for things like
+   administrative information or April 1st RFCs), the "IAB stream"
+   (Internet Architecture Board) and the "IRTF stream" (Internet
+   Research Task Force).
+
+   Not surprisingly, the values for the attribute are "IETF" (the
+   default value), "independent", "IAB", and "IRTF".
+
+   Historically, this did not affect the final appearance of RFCs,
+   except for subtle differences in Copyright notices.  Nowadays (as of
+
+
+
+Rose, et al.                                                   [Page 21]
+
+README                      xml2rfc v1.36pre1              December 2010
+
+
+   [4]), the stream name appears in the first line of the front page,
+   and it also affects the text in the "Status Of This Memo" section.
+
+   For current documents, setting "submissionType" attribute will have
+   the following effect:
+
+   o  For RFCs, the stream name appears in the upper left corner of the
+      first page (in Internet Drafts, this is either "Network Working
+      Group", or the value of the "<workgroup>" element).
+
+   o  For RFCs, if affects the whole "Status Of This Memo" section (see
+      Section 3.2.2 of [4]).
+
+   o  For all RFCs and Internet Drafts, it determines whether the
+      "Copyright Notice" mentions the Copyright on Code Components (see
+      TLP, Section "Text To Be Included in IETF Documents").
+
+A.4.  The /rfc/@consensus Attribute
+
+   For some of the publication streams (see Appendix A.3), the "Status
+   Of This Memo" section depends on whether there was a consensus to
+   publish (again, see Section 3.2.2 of [4]).
+
+   The "consensus" attribute ("yes"/"no", defaulting to "yes") can be
+   used to supply this information.  The effect for the various streams
+   is:
+
+   o  "independent" and "IAB": none.
+
+   o  "IETF": mention that there was an IETF consensus.
+
+   o  "IRTF": mention that there was a research group consensus (where
+      the name of the research group is extracted from the "<workgroup>"
+      element).
+
+A.5.  The /rfc/@number Attribute
+
+   For RFCs, this attribute supplies the RFC number.
+
+A.6.  The /rfc/@docName Attribute
+
+   For Internet Drafts, this specifies the draft name (which appears
+   below the title).  The file extension is _not_ part of the draft, so
+   in general it should end with the current draft number ("-", plus two
+   digits).
+
+
+
+
+
+
+Rose, et al.                                                   [Page 22]
+
+README                      xml2rfc v1.36pre1              December 2010
+
+
+      Note: "Idnits" (<http://tools.ietf.org/tools/idnits/>) checks the
+      in-document draft name for consistency with the filename of the
+      submitted document.
+
+A.7.  The /rfc/@obsoletes Attribute
+
+   The RFC Editor maintains a database
+   (<http://www.rfc-editor.org/rfc.html>) of all RFCs, including
+   information about which one obsoletes which.  Upon publication of an
+   RFC, this database is updated from the data on the front page.
+
+   This attribute takes a list of comma-separated RFC _numbers_.  Do
+   _not_ put the string "RFC" here.
+
+A.8.  The /rfc/@updates Attribute
+
+   This is like "obsoletes", but for the "updates" relation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose, et al.                                                   [Page 23]
+
+README                      xml2rfc v1.36pre1              December 2010
+
+
+Appendix B.  MacOS 9 Installation (courtesy of Ned Freed)
 
    1.  Install Tcl/Tk 8.3.4
 
@@ -1004,20 +1340,20 @@ Appendix A.  MacOS 9 Installation (courtesy of Ned Freed)
 
 
 
-Rose, et al.                                                   [Page 18]
+Rose, et al.                                                   [Page 24]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
-Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
+Appendix C.  rfc2629.xslt (courtesy of Julian Reschke)
 
    The file "rfc2629.xslt" can be used with an XSLT-capable formatter
    (e.g., Saxon, Xalan, xsltproc, and most browsers) to produce HTML.  A
    word of warning though: the XSLT script only supports a limited
    subset of the processing instruction directives discussed earlier
-   (Section 4.1).  The latest version [8] (and full distribution ZIP
-   file [9]) can be downloaded from the original site which also hosts
-   its documentation [10].
+   (Section 4.1).  The latest version [9] (and full distribution ZIP
+   file [10]) can be downloaded from the original site which also hosts
+   its documentation [11].
 
 
 
@@ -1060,15 +1396,15 @@ Appendix B.  rfc2629.xslt (courtesy of Julian Reschke)
 
 
 
-Rose, et al.                                                   [Page 19]
+Rose, et al.                                                   [Page 25]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
-Appendix C.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
+Appendix D.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
 
-   1.  install Cygwin: follow instructions at the Cygwin website [11]
-       (also visit the Cygwin pages on the Tcl Wiki [12]), make sure to
+   1.  install Cygwin: follow instructions at the Cygwin website [12]
+       (also visit the Cygwin pages on the Tcl Wiki [13]), make sure to
        select "tcltk" in "Libs"
 
    2.  place a copy of xml2rfc files on a local drive, e.g., in
@@ -1116,12 +1452,12 @@ Appendix C.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
 
 
 
-Rose, et al.                                                   [Page 20]
+Rose, et al.                                                   [Page 26]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
-Appendix D.  A Special Thanks
+Appendix E.  A Special Thanks
 
    A special thanks to Charles Levert for the v1.29 release, which
    includes many internal improvements made to the rendering engines.
@@ -1172,12 +1508,12 @@ Appendix D.  A Special Thanks
 
 
 
-Rose, et al.                                                   [Page 21]
+Rose, et al.                                                   [Page 27]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
 
 
-Appendix E.  Copyrights
+Appendix F.  Copyrights
 
    Copyright (C) 2003-2008 Marshall T. Rose
 
@@ -1228,9 +1564,65 @@ Appendix E.  Copyrights
 
 
 
-Rose, et al.                                                   [Page 22]
+Rose, et al.                                                   [Page 28]
 
-README                        xml2rfc v1.35                   March 2010
+README                      xml2rfc v1.36pre1              December 2010
+
+
+Index
+
+   P
+      private PI pseudo-attribute  18
+      Processing Instruction pseudo attributes
+         private  18
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose, et al.                                                   [Page 29]
+
+README                      xml2rfc v1.36pre1              December 2010
 
 
 Authors' Addresses
@@ -1284,5 +1676,5 @@ Authors' Addresses
 
 
 
-Rose, et al.                                                   [Page 23]
+Rose, et al.                                                   [Page 30]
 
