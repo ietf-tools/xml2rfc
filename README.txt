@@ -6,7 +6,7 @@ The README file                                                  M. Rose
                                                                B. Fenner
                                                    Arista Networks, Inc.
                                                                C. Levert
-                                                       December 19, 2010
+                                                         January 6, 2011
 
 
                            xml2rfc v1.36pre1
@@ -43,8 +43,7 @@ Table of Contents
    A.8.    The /rfc/@updates Attribute  . . . . . . . . . . . . . . . 23
    B.      MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . 24
    C.      rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . 25
-   D.      MS-Windows XP/Cygwin Installation (courtesy of Joe
-           Touch) . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+   D.      MS-Windows/Cygwin Installation (courtesy of Joe Touch) . . 26
    E.      A Special Thanks . . . . . . . . . . . . . . . . . . . . . 27
    F.      Copyrights . . . . . . . . . . . . . . . . . . . . . . . . 28
            Index  . . . . . . . . . . . . . . . . . . . . . . . . . . 29
@@ -52,9 +51,10 @@ Table of Contents
 
 
 
+
 Rose, et al.                                                    [Page 1]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 1.  Introduction
@@ -110,7 +110,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                    [Page 2]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 2.  Requirements
@@ -166,7 +166,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                    [Page 3]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 3.  Testing
@@ -222,7 +222,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                    [Page 4]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 4.  Next steps
@@ -278,7 +278,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                    [Page 5]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
    |            comments |      no      | render <cref> information    |
@@ -334,7 +334,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                    [Page 6]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
    |            linefile |      n/a     | a string like "35:file.xml"  |
@@ -390,7 +390,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                    [Page 7]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
    |          rfcedstyle |      no      | attempt to closely follow    |
@@ -446,7 +446,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                    [Page 8]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
    |            sortrefs |      no      | sort references              |
@@ -502,7 +502,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                    [Page 9]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
    |           tocompact |      yes     | if toc is "yes", then        |
@@ -558,7 +558,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                   [Page 10]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
    You can also have *xml2rfc* set the "XML_LIBRARY" environment
@@ -614,7 +614,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                   [Page 11]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 5.  The Page Model
@@ -670,7 +670,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                   [Page 12]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 6.  Additions to RFC 2629
@@ -726,7 +726,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                   [Page 13]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
    *xml2rfc* also recognizes an undocumented "align" attribute (with
@@ -782,7 +782,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                   [Page 14]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
    For example (to be viewed in HTML):
@@ -838,7 +838,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                   [Page 15]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 7.  Limitations of xml2rfc
@@ -894,7 +894,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                   [Page 16]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 8.  References
@@ -950,7 +950,7 @@ README                      xml2rfc v1.36pre1              December 2010
 
 Rose, et al.                                                   [Page 17]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 Appendix A.  Producing the IETF 'Boilerplate'
@@ -1006,7 +1006,7 @@ A.1.  The /rfc/@ipr Attribute
 
 Rose, et al.                                                   [Page 18]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 A.1.1.  Current Values: '*trust200902'
@@ -1062,7 +1062,7 @@ A.1.1.2.  noModificationTrust200902
 
 Rose, et al.                                                   [Page 19]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 A.1.1.3.  noDerivativesTrust200902
@@ -1118,7 +1118,7 @@ A.1.2.2.  Historic Values: '*3978'
 
 Rose, et al.                                                   [Page 20]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 A.1.2.3.  Historic Values: '*3667'
@@ -1174,7 +1174,7 @@ A.3.  The /rfc/@submissionType Attribute
 
 Rose, et al.                                                   [Page 21]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
    [4]), the stream name appears in the first line of the front page,
@@ -1230,7 +1230,7 @@ A.6.  The /rfc/@docName Attribute
 
 Rose, et al.                                                   [Page 22]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
       Note: "Idnits" (<http://tools.ietf.org/tools/idnits/>) checks the
@@ -1286,7 +1286,7 @@ A.8.  The /rfc/@updates Attribute
 
 Rose, et al.                                                   [Page 23]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 Appendix B.  MacOS 9 Installation (courtesy of Ned Freed)
@@ -1342,7 +1342,7 @@ Appendix B.  MacOS 9 Installation (courtesy of Ned Freed)
 
 Rose, et al.                                                   [Page 24]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 Appendix C.  rfc2629.xslt (courtesy of Julian Reschke)
@@ -1398,17 +1398,17 @@ Appendix C.  rfc2629.xslt (courtesy of Julian Reschke)
 
 Rose, et al.                                                   [Page 25]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
-Appendix D.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
+Appendix D.  MS-Windows/Cygwin Installation (courtesy of Joe Touch)
 
    1.  install Cygwin: follow instructions at the Cygwin website [12]
        (also visit the Cygwin pages on the Tcl Wiki [13]), make sure to
        select "tcltk" in "Libs"
 
    2.  place a copy of xml2rfc files on a local drive, e.g., in
-       "C:\xml2rfc" NOTE: for xml2rfc-1.26 and earlier, see NOTE below.
+       "C:\xml2rfc"
 
    3.  place a copy of bibxml* files on a local drive, e.g., in
        "C:\xmlbib\"
@@ -1418,26 +1418,26 @@ Appendix D.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
 
    5.  run xml2rfc as follows: "tclsh /cygdrive/c/xml2rfc/xml2rfc.tcl"
 
-   NOTE: for xml2rfc-1.26 and earlier ONLY, add an additional
-   modification in Step 3:
-
-      Patch ".xml2rfc.rc" (xml2rfc-1.26 and earlier).  The purpose of
-      the patch is to append library names in a format compatible with
-      the OS; on MS-Windows XP, this replaces the Cygwin's "/" with MS-
-      Windows' "\".
 
 
---- .xml2rfc.rc.orig    Thu Jul 24 13:58:00 2003
-+++ .xml2rfc.rc    Wed Oct 20 10:59:02 2004
-@@ -9,7 +9,8 @@
- if {[catch { set env(XML_LIBRARY) } library]} {
-     set library ""
-     foreach bibxmlD [lsort -dictionary [glob -nocomplain ~/rfcs/bibxml/*]] {
--        append library $sep$bibxmlD
-+        set natbibD [file nativename $bibxmlD]
-+        append library $sep$natbibD
-     }
- }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1454,7 +1454,7 @@ Appendix D.  MS-Windows XP/Cygwin Installation (courtesy of Joe Touch)
 
 Rose, et al.                                                   [Page 26]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 Appendix E.  A Special Thanks
@@ -1510,12 +1510,12 @@ Appendix E.  A Special Thanks
 
 Rose, et al.                                                   [Page 27]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 Appendix F.  Copyrights
 
-   Copyright (C) 2003-2008 Marshall T. Rose
+   Copyright (C) 2003-2011 Marshall T. Rose
 
    Hold harmless the author, and any lawful use is allowed.
 
@@ -1566,7 +1566,7 @@ Appendix F.  Copyrights
 
 Rose, et al.                                                   [Page 28]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 Index
@@ -1622,7 +1622,7 @@ Index
 
 Rose, et al.                                                   [Page 29]
 
-README                      xml2rfc v1.36pre1              December 2010
+README                      xml2rfc v1.36pre1               January 2011
 
 
 Authors' Addresses

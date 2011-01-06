@@ -145,7 +145,7 @@
 <tr><td class="header">&nbsp;</td><td class="header">B. Fenner</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Arista Networks, Inc.</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">C. Levert</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">December 19, 2010</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">January 6, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />xml2rfc v1.36pre1</h1>
 <a name="toc"></a><br /><hr />
@@ -207,11 +207,11 @@ The /rfc/@updates Attribute<br />
 MacOS&nbsp;9 Installation (courtesy of Ned Freed)<br />
 <a href="#rfc2629.xslt">C.</a>&nbsp;
 rfc2629.xslt (courtesy of Julian Reschke)<br />
-<a href="#anchor15">D.</a>&nbsp;
-MS-Windows&nbsp;XP/Cygwin Installation (courtesy of Joe Touch)<br />
-<a href="#anchor16">E.</a>&nbsp;
+<a href="#cygwin">D.</a>&nbsp;
+MS-Windows/Cygwin Installation (courtesy of Joe Touch)<br />
+<a href="#anchor15">E.</a>&nbsp;
 A Special Thanks<br />
-<a href="#anchor17">F.</a>&nbsp;
+<a href="#anchor16">F.</a>&nbsp;
 Copyrights<br />
 <a href="#rfc.index">&#167;</a>&nbsp;
 Index<br />
@@ -958,7 +958,7 @@ Producing the IETF 'Boilerplate'</h1>
 <blockquote class="text">
 <p>
     Note: this only applies to the case when IETF documents are
-    produced. The "private" processing instruction <a name='anchor18'></a><a name='anchor19'></a>
+    produced. The "private" processing instruction <a name='anchor17'></a><a name='anchor18'></a>
     allows to switch off most of the autogeneration logic.
   
 </p>
@@ -1398,10 +1398,10 @@ can be downloaded from the
 which also hosts its
 <a href='http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html'>documentation</a>.
 </p>
-<a name="anchor15"></a><br /><hr />
+<a name="cygwin"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.D"></a><h1>Appendix D.&nbsp;
-MS-Windows&nbsp;XP/Cygwin Installation (courtesy of Joe Touch)</h1>
+MS-Windows/Cygwin Installation (courtesy of Joe Touch)</h1>
 
 <p></p>
 <ol class="text">
@@ -1412,8 +1412,7 @@ make sure to
 select <tt>tcltk</tt> in <tt>Libs</tt>
 </li>
 <li>place a copy of xml2rfc files on a local drive,  e.g., in
-<tt>C:\xml2rfc</tt> NOTE: for xml2rfc-1.26 and
-earlier, see NOTE below.
+<tt>C:\xml2rfc</tt>
 </li>
 <li>place a copy of bibxml* files on a local drive, e.g., in
 <tt>C:\xmlbib\</tt> 
@@ -1427,33 +1426,7 @@ change <tt>~/rfca/bibxml/*</tt> to <tt>/cygdrive/c/xmlbib/*</tt>
 </ol><p>
 
 </p>
-<p>NOTE: for xml2rfc-1.26 and earlier ONLY, add an additional modification in Step&nbsp;3:
-</p>
-<blockquote class="text">
-<p>
-Patch <tt>.xml2rfc.rc</tt> (xml2rfc-1.26 and earlier).
-The purpose of the patch
-is to append library names in a format compatible with the OS; on
-MS-Windows&nbsp;XP, this replaces the Cygwin's <tt>/</tt>
-with MS-Windows' <tt>\</tt>.
-
-</p>
-</blockquote><p>
-
-</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
---- .xml2rfc.rc.orig    Thu Jul 24 13:58:00 2003
-+++ .xml2rfc.rc    Wed Oct 20 10:59:02 2004
-@@ -9,7 +9,8 @@
- if {[catch { set env(XML_LIBRARY) } library]} {
-     set library ""
-     foreach bibxmlD [lsort -dictionary [glob -nocomplain ~/rfcs/bibxml/*]] {
--        append library $sep$bibxmlD
-+        set natbibD [file nativename $bibxmlD]
-+        append library $sep$natbibD
-     }
- }
-</pre></div>
-<a name="anchor16"></a><br /><hr />
+<a name="anchor15"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.E"></a><h1>Appendix E.&nbsp;
 A Special Thanks</h1>
@@ -1461,12 +1434,12 @@ A Special Thanks</h1>
 <p>A special thanks to Charles Levert for the v1.29 release,
 which includes many internal improvements made to the rendering engines.
 </p>
-<a name="anchor17"></a><br /><hr />
+<a name="anchor16"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.F"></a><h1>Appendix F.&nbsp;
 Copyrights</h1>
 
-<p>Copyright &copy; 2003&ndash;2008 Marshall T. Rose
+<p>Copyright &copy; 2003&ndash;2011 Marshall T. Rose
 </p>
 <p>Hold harmless the author, and any lawful use is allowed.
 </p><a name="rfc.index"></a><br /><hr />
@@ -1474,9 +1447,9 @@ Copyrights</h1>
 <h1>Index</h1>
 <table>
 <tr><td><strong>P</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor18">private PI pseudo-attribute</a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor17">private PI pseudo-attribute</a></td></tr>
 <tr><td>&nbsp;</td><td>Processing Instruction pseudo attributes</td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor19">private</a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor18">private</a></td></tr>
 </table>
 
 <a name="rfc.authors"></a><br /><hr />
