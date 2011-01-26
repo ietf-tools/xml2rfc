@@ -1,9 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en"><head><title>The README file: xml2rfc v1.35pre1</title>
-<meta http-equiv="Expires" content="Mon, 30 Nov 2009 18:35:22 +0000">
+<html lang="en"><head><title>The README file: xml2rfc v1.36pre1</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="xml2rfc v1.35pre1">
-<meta name="generator" content="xml2rfc v1.35pre1 (http://xml.resource.org/)">
+<meta name="description" content="xml2rfc v1.36pre1">
 <style type='text/css'><!--
         body {
                 font-family: verdana, charcoal, helvetica, arial, sans-serif;
@@ -147,9 +145,14 @@
 <tr><td class="header">&nbsp;</td><td class="header">B. Fenner</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Arista Networks, Inc.</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">C. Levert</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">October 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">T. Hansen</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">AT&amp;T Labs</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">J. Reschke</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">greenbytes</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">January 26, 2011</td></tr>
 </table></td></tr></table>
-<h1><br />xml2rfc v1.35pre1</h1>
+<h1><br />xml2rfc v1.36pre1</h1>
 <a name="toc"></a><br /><hr />
 <h1>Table of Contents</h1>
 <p class="toc">
@@ -183,16 +186,40 @@ Typed-Artwork Interpretation<br />
 Limitations of xml2rfc<br />
 <a href="#rfc.references1">8.</a>&nbsp;
 References<br />
-<a href="#anchor14">A.</a>&nbsp;
+<a href="#boilerplate">A.</a>&nbsp;
+Producing the IETF 'Boilerplate'<br />
+<a href="#attribute-ipr">A.1.</a>&nbsp;
+The /rfc/@ipr Attribute<br />
+<a href="#attribute-ipr-current">A.1.1.</a>&nbsp;
+Current Values: '*trust200902'<br />
+<a href="#attribute-ipr-historic">A.1.2.</a>&nbsp;
+Historic Values<br />
+<a href="#attribute-category">A.2.</a>&nbsp;
+The /rfc/@category Attribute<br />
+<a href="#attribute-submissiontype">A.3.</a>&nbsp;
+The /rfc/@submissionType Attribute<br />
+<a href="#attribute-consensus">A.4.</a>&nbsp;
+The /rfc/@consensus Attribute<br />
+<a href="#attribute-number">A.5.</a>&nbsp;
+The /rfc/@number Attribute<br />
+<a href="#attribute-docname">A.6.</a>&nbsp;
+The /rfc/@docName Attribute<br />
+<a href="#attribute-obsoletes">A.7.</a>&nbsp;
+The /rfc/@obsoletes Attribute<br />
+<a href="#attribute-updates">A.8.</a>&nbsp;
+The /rfc/@updates Attribute<br />
+<a href="#anchor14">B.</a>&nbsp;
 MacOS&nbsp;9 Installation (courtesy of Ned Freed)<br />
-<a href="#rfc2629.xslt">B.</a>&nbsp;
+<a href="#rfc2629.xslt">C.</a>&nbsp;
 rfc2629.xslt (courtesy of Julian Reschke)<br />
-<a href="#anchor15">C.</a>&nbsp;
-MS-Windows&nbsp;XP/Cygwin Installation (courtesy of Joe Touch)<br />
-<a href="#anchor16">D.</a>&nbsp;
+<a href="#cygwin">D.</a>&nbsp;
+MS-Windows/Cygwin Installation (courtesy of Joe Touch)<br />
+<a href="#anchor15">E.</a>&nbsp;
 A Special Thanks<br />
-<a href="#anchor17">E.</a>&nbsp;
+<a href="#anchor16">F.</a>&nbsp;
 Copyrights<br />
+<a href="#rfc.index">&#167;</a>&nbsp;
+Index<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Authors' Addresses<br />
 </p>
@@ -429,11 +456,6 @@ otherwise render them in an &ldquo;Editorial Comments&rdquo; section</td>
 <td align="left">generate mailto: URL, as appropriate</td>
 </tr>
 <tr>
-<td align="right">notedraftinprogress</td>
-<td align="center">yes</td>
-<td align="left">generates "(work in progress)", as appropriate</td>
-</tr>
-<tr>
 <td align="right">linefile</td>
 <td align="center">n/a</td>
 <td align="left">a string like "35:file.xml" or just "35"
@@ -447,6 +469,11 @@ for warning and error reporting purposes (line numbers are 1-based)</td>
 <td align="right">needLines</td>
 <td align="center">n/a</td>
 <td align="left">an integer hint indicating how many contiguous lines are needed at this point in the output</td>
+</tr>
+<tr>
+<td align="right">notedraftinprogress</td>
+<td align="center">yes</td>
+<td align="left">generates "(work in progress)", as appropriate</td>
 </tr>
 <tr>
 <td align="right">private</td>
@@ -516,6 +543,14 @@ then you can make things a little less compact by setting this to "no"
 <td align="right">symrefs</td>
 <td align="center">yes</td>
 <td align="left">use anchors rather than numbers for references</td>
+</tr>
+<tr>
+<td align="right">text-list-sybols</td>
+<td align="center">o*+-</td>
+<td align="left">modify the list of symbols used (when generated text) for list type="symbols".
+For example, specifying "abcde" will cause "a" to be used for 1st level, "b" for the 2nd level, etc, cycling back to the first character "a" at the 6th level.
+Specifying "o*" will cause the characters "o" and "*" to be alternated for each successive level.
+</td>
 </tr>
 <tr>
 <td align="right">toc</td>
@@ -888,11 +923,440 @@ except when generating HTML.
 <td class="author-text"><a href="mailto:dcrocker@imc.org">Crocker, D., Ed.</a> and <a href="mailto:paulo@turnpike.com">P. Overell</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2234">Augmented BNF for Syntax Specifications: ABNF</a>,&rdquo; RFC&nbsp;2234, November&nbsp;1997 (<a href="ftp://ftp.isi.edu/in-notes/rfc2234.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2234.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2234.xml">XML</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC4234">[3]</a></td>
 <td class="author-text">Crocker, D. and P. Overell, &ldquo;<a href="http://tools.ietf.org/html/rfc4234">Augmented BNF for Syntax Specifications: ABNF</a>,&rdquo; RFC&nbsp;4234, October&nbsp;2005 (<a href="ftp://ftp.isi.edu/in-notes/rfc4234.txt">TXT</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5741">[4]</a></td>
+<td class="author-text">Daigle, L. and O. Kolkman, &ldquo;<a href="http://tools.ietf.org/html/rfc5741">RFC Streams, Headers, and Boilerplates</a>,&rdquo; RFC&nbsp;5741, December&nbsp;2009.</td></tr>
 </table>
 
-<a name="anchor14"></a><br /><hr />
+<a name="boilerplate"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h1>Appendix A.&nbsp;
+Producing the IETF 'Boilerplate'</h1>
+
+<p>
+  This section was borrowed from <a href='http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html#boilerplate'>http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html#boilerplate</a>.
+  
+
+</p>
+<p>
+  Various attributes of the <tt>&lt;rfc&gt;</tt>
+  element plus some child elements of <tt>&lt;front&gt;</tt>
+  affect the automatically generated parts of the front page, such as the
+  tabular information at the beginning, the "Status Of This Memo", and the
+  "Copyright Notice".
+
+</p>
+<p>
+  When submitting an Internet Draft, this "boilerplate" is checked
+  by "Idnits" (<a href='http://tools.ietf.org/tools/idnits/'>http://tools.ietf.org/tools/idnits/</a>) for
+  compliance with the current Intellectual Property rules, and thus
+  it is important to set the correct values.
+
+</p>
+<p>
+  Furthermore, the RFC Production Center uses RFC2629-based tools to 
+  generate the final RFC text, so the more accurate the supplied information
+  is, the less additional work is left, and the risk for errors in producing
+  the final (and immutable!) document is reduced.
+
+</p>
+<p></p>
+<blockquote class="text">
+<p>
+    Note: this only applies to the case when IETF documents are
+    produced. The "private" processing instruction <a name='anchor17'></a><a name='anchor18'></a>
+    allows to switch off most of the autogeneration logic.
+  
+</p>
+</blockquote>
+
+<a name="attribute-ipr"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.1"></a><h2>A.1.&nbsp;
+The /rfc/@ipr Attribute</h2>
+
+<p>
+  As of the time of this writing, this attribute value can take a long list of values. As
+  frequently, this is not the result of a grand plan, but simply for historic
+  reasons. Of these values, only a few are currently in use; all others are
+  supported by the various tools for backwards compatibility with old source
+  files.
+
+</p>
+<p></p>
+<blockquote class="text">
+<p>
+    Note: some variations of the boilerplate are selected based
+    on the document's date; therefore it is important to specify the "year",
+    "month" and "day" attributes of the <tt>&lt;date&gt;</tt> element
+    when archiving the XML source of an Internet Draft on the day of submission.
+  
+</p>
+</blockquote>
+
+<p>
+  <em>Disclaimer: THIS ONLY PROVIDES IMPLEMENTATION INFORMATION. IF YOU NEED
+  LEGAL ADVICE, PLEASE CONTACT A LAWYER.</em>
+  For further information, refer to <a href='http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf'>http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf</a>.
+
+</p>
+<p>
+  Finally, for the current "Status Of This Memo" text, the <tt>submissionType</tt> attribute
+  determines whether a statement about "Code Components" is inserted (this is the
+  case for the value "IETF", which also happens to be the default). Other values,
+  such as "independent", suppress this part of the text. 
+
+</p>
+<a name="attribute-ipr-current"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.1.1"></a><h3>A.1.1.&nbsp;
+Current Values: '*trust200902'</h3>
+
+<p>
+  The name for these values refers to the "TLP" ("IETF TRUST Legal Provisions Relating 
+  to IETF Documents"), on effect February 15, 2009 (see <a href='http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20090215.pdf'>http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20090215.pdf</a>).
+  Updates to this document were published on September 12, 2009 (TLP 3.0, <a href='http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20090912.pdf'>http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20090912.pdf</a>)
+  and on December 28, 2009 (TLP 4.0, <a href='http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20091228.pdf'>http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20091228.pdf</a>),
+  modifying the license for code components.
+  The actual text is located in Section 6 ("Text To Be Included in IETF Documents")
+  of these documents.
+
+</p>
+<p>  
+  The tools will automatically produce the "right" text depending on the
+  document's date information (see above):
+
+</p><table class="full" align="left" border="0" cellpadding="2" cellspacing="2">
+<col align="left" width="10%"><col align="left"><col align="left" width="20%">
+<tr><th align="left">TLP</th><th align="left">URI</th><th align="left">starting with publication date</th></tr>
+<tr>
+<td align="left">3.0</td>
+<td align="left"><a href='http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20090912.pdf'>http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20090912.pdf</a></td>
+<td align="left">2009-11-01</td>
+</tr>
+<tr>
+<td align="left">4.0</td>
+<td align="left"><a href='http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20091228.pdf'>http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20091228.pdf</a></td>
+<td align="left">2010-04-01</td>
+</tr>
+</table>
+<br clear="all" />
+
+<a name="attribute-ipr-trust200902"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.1.1.1"></a><h3>A.1.1.1.&nbsp;
+trust200902</h3>
+
+<p>
+  This should be the default, unless one of the more specific '*trust200902'
+  values is a better fit. It produces the text in Sections 6.a and 6.b of
+  the TLP.
+
+</p>
+<a name="attribute-ipr-noModificationTrust200902"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.1.1.2"></a><h3>A.1.1.2.&nbsp;
+noModificationTrust200902</h3>
+
+<p>
+  This produces the additional text from Section 6.c.i of the TLP:
+
+</p>
+<p></p>
+<blockquote class="text">
+<p>
+    This document may not be modified, and derivative works of it may
+    not be created, except to format it for publication as an RFC or
+    to translate it into languages other than English.
+  
+</p>
+</blockquote>
+
+<a name="attribute-ipr-noDerivativesTrust200902"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.1.1.3"></a><h3>A.1.1.3.&nbsp;
+noDerivativesTrust200902</h3>
+
+<p>
+  This produces the additional text from Section 6.c.ii of the TLP:
+
+</p>
+<p></p>
+<blockquote class="text">
+<p>
+    This document may not be modified, and derivative works of it may
+    not be created, and it may not be published except as an Internet-Draft.
+  
+</p>
+</blockquote>
+
+<a name="attribute-ipr-pre5378Trust200902"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.1.1.4"></a><h3>A.1.1.4.&nbsp;
+pre5378Trust200902</h3>
+
+<p>
+  This produces the additional text from Section 6.c.iii of the TLP, frequently
+  called the "pre-5378 escape clause":
+
+</p>
+<p></p>
+<blockquote class="text">
+<p>
+    This document may contain material from IETF Documents or IETF Contributions published or
+    made publicly available before November 10, 2008. The person(s) controlling the copyright in
+    some of this material may not have granted the IETF Trust the right to allow modifications of such
+    material outside the IETF Standards Process. Without obtaining an adequate license from the
+    person(s) controlling the copyright in such materials, this document may not be modified outside
+    the IETF Standards Process, and derivative works of it may not be created outside the IETF
+    Standards Process, except to format it for publication as an RFC or to translate it into languages
+    other than English.
+  
+</p>
+</blockquote>
+
+<p>
+  See Section 4 of <a href='http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf'>http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf</a>
+  for further information about when to use this value.
+
+</p>
+<p></p>
+<blockquote class="text">
+<p>
+    Note: this text appears under "Copyright Notice", unless the 
+    document was published before November 2009, in which case it appears
+    under "Status Of This Memo".
+  
+</p>
+</blockquote>
+
+<a name="attribute-ipr-historic"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.1.2"></a><h3>A.1.2.&nbsp;
+Historic Values</h3>
+
+<a name="attribute-ipr-200811"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.1.2.1"></a><h3>A.1.2.1.&nbsp;
+Historic Values: '*trust200811'</h3>
+
+<p>
+  The attribute values "trust200811",
+  "noModificationTrust200811" and
+  "noDerivativesTrust200811"
+  are similar to their "trust200902" counterparts, except that they use text
+  specified in <a href='http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy_11-10-08.pdf'>http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy_11-10-08.pdf</a>.
+
+</p>
+<a name="attribute-ipr-3978"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.1.2.2"></a><h3>A.1.2.2.&nbsp;
+Historic Values: '*3978'</h3>
+
+<p>
+  The attribute values "full3978",
+  "noModification3978" and
+  "noDerivatives3978"
+  are similar to their counterparts above, except that they use text
+  specified in RFC 3978 (March 2005).
+
+</p>
+<a name="attribute-ipr-3667"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.1.2.3"></a><h3>A.1.2.3.&nbsp;
+Historic Values: '*3667'</h3>
+
+<p>
+  The attribute values "full3667",
+  "noModification3667" and
+  "noDerivatives3667"
+  are similar to their counterparts above, except that they use text
+  specified in RFC 3667 (February 2004).
+
+</p>
+<a name="attribute-ipr-2026"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.1.2.4"></a><h3>A.1.2.4.&nbsp;
+Historic Values: '*2026'</h3>
+
+<p>
+  The attribute values "full2026" and
+  "noDerivativeWorks2026"
+  are similar to their counterparts above, except that they use text
+  specified in RFC 2026 (October 1996).
+
+</p>
+<p>
+  The special value "none"
+  was also used back then, and denied the IETF any rights beyond publication
+  as Internet Draft.
+
+</p>
+<a name="attribute-category"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.2"></a><h2>A.2.&nbsp;
+The /rfc/@category Attribute</h2>
+
+<p>
+  For RFCs, the <tt>category</tt> determines the "maturity level"
+  (see Section 4 of <a class='info' href='#RFC2026'>[1]<span> (</span><span class='info'>Bradner, S., &ldquo;The Internet Standards Process -- Revision&nbsp;3,&rdquo; October&nbsp;1996.</span><span>)</span></a>). The allowed values
+  are "std" for "Standards Track", "bcp" for "BCP", "info" for "Informational",
+  "exp" for "Experimental", and "historic" for - surprise - "Historic".
+
+</p>
+<p>
+  For Internet Drafts, the category attribute is not needed, but <em>will</em>
+  appear on the front page ("Intended Status"). Supplying this information can 
+  be useful, because reviewers may want to know.
+
+</p>
+<p></p>
+<blockquote class="text">
+<p>
+    Note: the Standards Track consists of "Proposed Standard",
+    "Draft Standards", and "Internet Standard". These do not appear in the
+    boilerplate, thus the category attribute doesn't handle them.
+    However, this information can be useful for validity checkers, and thus
+    <tt>rfc2629.xslt</tt> supports an extension attribute
+    for that purpose (see <a href='http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html#ext-rfc2629.rfc'>http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html#ext-rfc2629.rfc</a> for details).
+  
+</p>
+</blockquote>
+
+<a name="attribute-submissiontype"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.3"></a><h2>A.3.&nbsp;
+The /rfc/@submissionType Attribute</h2>
+
+<p>
+  The RFC Editor publishes documents from different "document streams", of which
+  the "IETF stream" of course is the most prominent one. Other streams are the "independent stream"
+  (used for things like administrative information or April 1st RFCs),
+  the "IAB stream" (Internet Architecture Board) and the "IRTF stream" (Internet Research Task Force).
+
+</p>
+<p>
+  Not surprisingly, the values for the attribute are "IETF" (the default value),
+  "independent", "IAB", and "IRTF".
+
+</p>
+<p>
+  Historically, this did not affect the final appearance of RFCs, except for
+  subtle differences in Copyright notices.
+  Nowadays (as of <a class='info' href='#RFC5741'>[4]<span> (</span><span class='info'>Daigle, L. and O. Kolkman, &ldquo;RFC Streams, Headers, and Boilerplates,&rdquo; December&nbsp;2009.</span><span>)</span></a>), the stream name appears in the first
+  line of the front page, and it also affects the text in the "Status Of This Memo"
+  section.
+
+</p>
+<p>
+  For current documents, setting <tt>submissionType</tt> attribute will
+  have the following effect:
+  </p>
+<ul class="text">
+<li>
+      For RFCs, the stream name appears in the upper left corner of the 
+      first page (in Internet Drafts, this is either "Network Working Group",
+      or the value of the <tt>&lt;workgroup&gt;</tt> element).
+    
+</li>
+<li>
+      For RFCs, if affects the whole "Status Of This Memo" section (see
+      Section 3.2.2 of <a class='info' href='#RFC5741'>[4]<span> (</span><span class='info'>Daigle, L. and O. Kolkman, &ldquo;RFC Streams, Headers, and Boilerplates,&rdquo; December&nbsp;2009.</span><span>)</span></a>).
+    
+</li>
+<li>
+      For all RFCs and Internet Drafts, it determines whether the "Copyright
+      Notice" mentions the Copyright on Code Components (see TLP, Section "Text To Be Included in IETF Documents"). 
+    
+</li>
+</ul><p>
+
+</p>
+<a name="attribute-consensus"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.4"></a><h2>A.4.&nbsp;
+The /rfc/@consensus Attribute</h2>
+
+<p>
+  For some of the publication streams (see <a class='info' href='#attribute-submissiontype'>Appendix&nbsp;A.3<span> (</span><span class='info'>The /rfc/@submissionType Attribute</span><span>)</span></a>),
+  the "Status Of This Memo" section depends on whether there was a consensus
+  to publish (again, see Section 3.2.2 of <a class='info' href='#RFC5741'>[4]<span> (</span><span class='info'>Daigle, L. and O. Kolkman, &ldquo;RFC Streams, Headers, and Boilerplates,&rdquo; December&nbsp;2009.</span><span>)</span></a>).
+
+</p>
+<p>
+  The <tt>consensus</tt> attribute ("yes"/"no", defaulting to "yes")
+  can be used to supply this information. The effect for the various streams is:
+  </p>
+<ul class="text">
+<li>"independent" and "IAB": none.
+</li>
+<li>"IETF": mention that there was an IETF consensus.
+</li>
+<li>"IRTF": mention that there was a research group consensus (where the name of the research
+    group is extracted from the <tt>&lt;workgroup&gt;</tt> element).
+</li>
+</ul><p>
+
+</p>
+<a name="attribute-number"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.5"></a><h2>A.5.&nbsp;
+The /rfc/@number Attribute</h2>
+
+<p>
+  For RFCs, this attribute supplies the RFC number.
+
+</p>
+<a name="attribute-docname"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.6"></a><h2>A.6.&nbsp;
+The /rfc/@docName Attribute</h2>
+
+<p>
+  For Internet Drafts, this specifies the draft name (which appears
+  below the title). The file extension is <em>not</em> part
+  of the draft, so in general it should end with the current draft number
+  ("-", plus two digits).
+
+</p>
+<p></p>
+<blockquote class="text">
+<p>
+  Note: "Idnits" (<a href='http://tools.ietf.org/tools/idnits/'>http://tools.ietf.org/tools/idnits/</a>)
+  checks the in-document draft name for consistency with the filename of
+  the submitted document.
+  
+</p>
+</blockquote>
+
+<a name="attribute-obsoletes"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.7"></a><h2>A.7.&nbsp;
+The /rfc/@obsoletes Attribute</h2>
+
+<p> 
+  The RFC Editor maintains a database (<a href='http://www.rfc-editor.org/rfc.html'>http://www.rfc-editor.org/rfc.html</a>)
+  of all RFCs, including information about which one obsoletes which. Upon publication of an RFC, this
+  database is updated from the data on the front page.
+
+</p>
+<p>
+  This attribute takes a list of comma-separated RFC <em>numbers</em>.
+  Do <em>not</em> put the string "RFC" here.
+
+</p>
+<a name="attribute-updates"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A.8"></a><h2>A.8.&nbsp;
+The /rfc/@updates Attribute</h2>
+
+<p>
+  This is like <tt>obsoletes</tt>, but for the "updates"
+  relation.
+
+</p>
+<a name="anchor14"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.B"></a><h1>Appendix B.&nbsp;
 MacOS&nbsp;9 Installation (courtesy of Ned Freed)</h1>
 
 <p></p>
@@ -921,7 +1385,7 @@ application will write out an executable version of
 
 <a name="rfc2629.xslt"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.B"></a><h1>Appendix B.&nbsp;
+<a name="rfc.section.C"></a><h1>Appendix C.&nbsp;
 rfc2629.xslt (courtesy of Julian Reschke)</h1>
 
 <p>The file <tt>rfc2629.xslt</tt>
@@ -939,10 +1403,10 @@ can be downloaded from the
 which also hosts its
 <a href='http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html'>documentation</a>.
 </p>
-<a name="anchor15"></a><br /><hr />
+<a name="cygwin"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.C"></a><h1>Appendix C.&nbsp;
-MS-Windows&nbsp;XP/Cygwin Installation (courtesy of Joe Touch)</h1>
+<a name="rfc.section.D"></a><h1>Appendix D.&nbsp;
+MS-Windows/Cygwin Installation (courtesy of Joe Touch)</h1>
 
 <p></p>
 <ol class="text">
@@ -953,8 +1417,7 @@ make sure to
 select <tt>tcltk</tt> in <tt>Libs</tt>
 </li>
 <li>place a copy of xml2rfc files on a local drive,  e.g., in
-<tt>C:\xml2rfc</tt> NOTE: for xml2rfc-1.26 and
-earlier, see NOTE below.
+<tt>C:\xml2rfc</tt>
 </li>
 <li>place a copy of bibxml* files on a local drive, e.g., in
 <tt>C:\xmlbib\</tt> 
@@ -968,49 +1431,32 @@ change <tt>~/rfca/bibxml/*</tt> to <tt>/cygdrive/c/xmlbib/*</tt>
 </ol><p>
 
 </p>
-<p>NOTE: for xml2rfc-1.26 and earlier ONLY, add an additional modification in Step&nbsp;3:
-</p>
-<blockquote class="text">
-<p>
-Patch <tt>.xml2rfc.rc</tt> (xml2rfc-1.26 and earlier).
-The purpose of the patch
-is to append library names in a format compatible with the OS; on
-MS-Windows&nbsp;XP, this replaces the Cygwin's <tt>/</tt>
-with MS-Windows' <tt>\</tt>.
-
-</p>
-</blockquote><p>
-
-</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
---- .xml2rfc.rc.orig    Thu Jul 24 13:58:00 2003
-+++ .xml2rfc.rc    Wed Oct 20 10:59:02 2004
-@@ -9,7 +9,8 @@
- if {[catch { set env(XML_LIBRARY) } library]} {
-     set library ""
-     foreach bibxmlD [lsort -dictionary [glob -nocomplain ~/rfcs/bibxml/*]] {
--        append library $sep$bibxmlD
-+        set natbibD [file nativename $bibxmlD]
-+        append library $sep$natbibD
-     }
- }
-</pre></div>
-<a name="anchor16"></a><br /><hr />
+<a name="anchor15"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.D"></a><h1>Appendix D.&nbsp;
+<a name="rfc.section.E"></a><h1>Appendix E.&nbsp;
 A Special Thanks</h1>
 
 <p>A special thanks to Charles Levert for the v1.29 release,
 which includes many internal improvements made to the rendering engines.
 </p>
-<a name="anchor17"></a><br /><hr />
+<a name="anchor16"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.E"></a><h1>Appendix E.&nbsp;
+<a name="rfc.section.F"></a><h1>Appendix F.&nbsp;
 Copyrights</h1>
 
-<p>Copyright &copy; 2003&ndash;2008 Marshall T. Rose
+<p>Copyright &copy; 2003&ndash;2011 Marshall T. Rose
 </p>
 <p>Hold harmless the author, and any lawful use is allowed.
-</p>
+</p><a name="rfc.index"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h1>Index</h1>
+<table>
+<tr><td><strong>P</strong></td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor17">private PI pseudo-attribute</a></td></tr>
+<tr><td>&nbsp;</td><td>Processing Instruction pseudo attributes</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor18">private</a></td></tr>
+</table>
+
 <a name="rfc.authors"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <h1>Authors' Addresses</h1>
@@ -1053,5 +1499,31 @@ Copyrights</h1>
 <td class="author-text">Canada</td></tr>
 <tr><td class="author" align="right">Email:&nbsp;</td>
 <td class="author-text"><a href="mailto:charles.levert@gmail.com">charles.levert@gmail.com</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Tony Hansen</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">AT&amp;T Labs</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Middletown, NJ</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">USA</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:tony+xml2rfc@maillennium.att.com">tony+xml2rfc@maillennium.att.com</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Julian F. Reschke</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">greenbytes GmbH</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Hafenweg 16</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Muenster, NW  48155</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Germany</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:julian.reschke@greenbytes.de">julian.reschke@greenbytes.de</a></td></tr>
+<tr><td class="author" align="right">URI:&nbsp;</td>
+<td class="author-text"><a href="http://greenbytes.de/tech/webdav/">http://greenbytes.de/tech/webdav/</a></td></tr>
 </table>
 </body></html>
