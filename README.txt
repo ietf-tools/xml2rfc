@@ -6,53 +6,109 @@ The README file                                                  M. Rose
                                                                B. Fenner
                                                    Arista Networks, Inc.
                                                                C. Levert
-                                                         January 6, 2011
+
+                                                               T. Hansen
+                                                               AT&T Labs
+                                                              J. Reschke
+                                                              greenbytes
+                                                        January 26, 2011
 
 
                            xml2rfc v1.36pre1
 
 
 
-Table of Contents
 
-   1.      Introduction . . . . . . . . . . . . . . . . . . . . . . .  2
-   2.      Requirements . . . . . . . . . . . . . . . . . . . . . . .  3
-   3.      Testing  . . . . . . . . . . . . . . . . . . . . . . . . .  4
-   3.1.    Testing under a windowing system . . . . . . . . . . . . .  4
-   3.2.    Testing without a windowing system . . . . . . . . . . . .  4
-   4.      Next steps . . . . . . . . . . . . . . . . . . . . . . . .  5
-   4.1.    Processing Instructions  . . . . . . . . . . . . . . . . .  5
-   4.1.1.  Option Settings  . . . . . . . . . . . . . . . . . . . . .  5
-   4.1.2.  Include Files  . . . . . . . . . . . . . . . . . . . . . . 10
-   5.      The Page Model . . . . . . . . . . . . . . . . . . . . . . 12
-   6.      Additions to RFC 2629  . . . . . . . . . . . . . . . . . . 13
-   6.1.    Extra Attributes . . . . . . . . . . . . . . . . . . . . . 13
-   6.2.    Typed-Artwork Interpretation . . . . . . . . . . . . . . . 14
-   7.      Limitations of xml2rfc . . . . . . . . . . . . . . . . . . 16
-   8.      References . . . . . . . . . . . . . . . . . . . . . . . . 17
-   A.      Producing the IETF 'Boilerplate' . . . . . . . . . . . . . 18
-   A.1.    The /rfc/@ipr Attribute  . . . . . . . . . . . . . . . . . 18
-   A.1.1.  Current Values: '*trust200902' . . . . . . . . . . . . . . 19
-   A.1.2.  Historic Values  . . . . . . . . . . . . . . . . . . . . . 20
-   A.2.    The /rfc/@category Attribute . . . . . . . . . . . . . . . 21
-   A.3.    The /rfc/@submissionType Attribute . . . . . . . . . . . . 21
-   A.4.    The /rfc/@consensus Attribute  . . . . . . . . . . . . . . 22
-   A.5.    The /rfc/@number Attribute . . . . . . . . . . . . . . . . 22
-   A.6.    The /rfc/@docName Attribute  . . . . . . . . . . . . . . . 22
-   A.7.    The /rfc/@obsoletes Attribute  . . . . . . . . . . . . . . 23
-   A.8.    The /rfc/@updates Attribute  . . . . . . . . . . . . . . . 23
-   B.      MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . 24
-   C.      rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . 25
-   D.      MS-Windows/Cygwin Installation (courtesy of Joe Touch) . . 26
-   E.      A Special Thanks . . . . . . . . . . . . . . . . . . . . . 27
-   F.      Copyrights . . . . . . . . . . . . . . . . . . . . . . . . 28
-           Index  . . . . . . . . . . . . . . . . . . . . . . . . . . 29
-           Authors' Addresses . . . . . . . . . . . . . . . . . . . . 30
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 Rose, et al.                                                    [Page 1]
+
+README                      xml2rfc v1.36pre1               January 2011
+
+
+Table of Contents
+
+   1.      Introduction . . . . . . . . . . . . . . . . . . . . . . .  3
+   2.      Requirements . . . . . . . . . . . . . . . . . . . . . . .  4
+   3.      Testing  . . . . . . . . . . . . . . . . . . . . . . . . .  5
+   3.1.    Testing under a windowing system . . . . . . . . . . . . .  5
+   3.2.    Testing without a windowing system . . . . . . . . . . . .  5
+   4.      Next steps . . . . . . . . . . . . . . . . . . . . . . . .  6
+   4.1.    Processing Instructions  . . . . . . . . . . . . . . . . .  6
+   4.1.1.  Option Settings  . . . . . . . . . . . . . . . . . . . . .  6
+   4.1.2.  Include Files  . . . . . . . . . . . . . . . . . . . . . . 11
+   5.      The Page Model . . . . . . . . . . . . . . . . . . . . . . 13
+   6.      Additions to RFC 2629  . . . . . . . . . . . . . . . . . . 14
+   6.1.    Extra Attributes . . . . . . . . . . . . . . . . . . . . . 14
+   6.2.    Typed-Artwork Interpretation . . . . . . . . . . . . . . . 15
+   7.      Limitations of xml2rfc . . . . . . . . . . . . . . . . . . 17
+   8.      References . . . . . . . . . . . . . . . . . . . . . . . . 18
+   A.      Producing the IETF 'Boilerplate' . . . . . . . . . . . . . 19
+   A.1.    The /rfc/@ipr Attribute  . . . . . . . . . . . . . . . . . 19
+   A.1.1.  Current Values: '*trust200902' . . . . . . . . . . . . . . 20
+   A.1.2.  Historic Values  . . . . . . . . . . . . . . . . . . . . . 21
+   A.2.    The /rfc/@category Attribute . . . . . . . . . . . . . . . 22
+   A.3.    The /rfc/@submissionType Attribute . . . . . . . . . . . . 22
+   A.4.    The /rfc/@consensus Attribute  . . . . . . . . . . . . . . 23
+   A.5.    The /rfc/@number Attribute . . . . . . . . . . . . . . . . 23
+   A.6.    The /rfc/@docName Attribute  . . . . . . . . . . . . . . . 23
+   A.7.    The /rfc/@obsoletes Attribute  . . . . . . . . . . . . . . 24
+   A.8.    The /rfc/@updates Attribute  . . . . . . . . . . . . . . . 24
+   B.      MacOS 9 Installation (courtesy of Ned Freed) . . . . . . . 25
+   C.      rfc2629.xslt (courtesy of Julian Reschke)  . . . . . . . . 26
+   D.      MS-Windows/Cygwin Installation (courtesy of Joe Touch) . . 27
+   E.      A Special Thanks . . . . . . . . . . . . . . . . . . . . . 28
+   F.      Copyrights . . . . . . . . . . . . . . . . . . . . . . . . 29
+           Index  . . . . . . . . . . . . . . . . . . . . . . . . . . 30
+           Authors' Addresses . . . . . . . . . . . . . . . . . . . . 31
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rose, et al.                                                    [Page 2]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -108,7 +164,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                    [Page 2]
+Rose, et al.                                                    [Page 3]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -164,7 +220,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                    [Page 3]
+Rose, et al.                                                    [Page 4]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -220,7 +276,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                    [Page 4]
+Rose, et al.                                                    [Page 5]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -276,7 +332,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                    [Page 5]
+Rose, et al.                                                    [Page 6]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -332,7 +388,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                    [Page 6]
+Rose, et al.                                                    [Page 7]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -388,7 +444,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                    [Page 7]
+Rose, et al.                                                    [Page 8]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -444,7 +500,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                    [Page 8]
+Rose, et al.                                                    [Page 9]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -466,16 +522,16 @@ README                      xml2rfc v1.36pre1               January 2011
    |                     |              |                              |
    |    text-list-sybols |     o*+-     | modify the list of symbols   |
    |                     |              | used (when generated text)   |
-   |                     |              | for list type="symbols". For |
-   |                     |              | example, specifying "abcde"  |
-   |                     |              | will cause "a" to be used    |
-   |                     |              | for 1st level, "b" for the   |
-   |                     |              | 2nd level, etc, cycling back |
-   |                     |              | to the first character "a"   |
-   |                     |              | at the 6th level. Specifying |
-   |                     |              | "o*" will cause the          |
-   |                     |              | characters "o" and "*" to be |
-   |                     |              | alternated for each          |
+   |                     |              | for list type="symbols".     |
+   |                     |              | For example, specifying      |
+   |                     |              | "abcde" will cause "a" to be |
+   |                     |              | used for 1st level, "b" for  |
+   |                     |              | the 2nd level, etc, cycling  |
+   |                     |              | back to the first character  |
+   |                     |              | "a" at the 6th level.        |
+   |                     |              | Specifying "o*" will cause   |
+   |                     |              | the characters "o" and "*"   |
+   |                     |              | to be alternated for each    |
    |                     |              | successive level.            |
    |                     |              |                              |
    |                 toc |      no      | generate a table-of-contents |
@@ -500,7 +556,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                    [Page 9]
+Rose, et al.                                                   [Page 10]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -556,7 +612,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                   [Page 10]
+Rose, et al.                                                   [Page 11]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -612,7 +668,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                   [Page 11]
+Rose, et al.                                                   [Page 12]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -668,7 +724,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                   [Page 12]
+Rose, et al.                                                   [Page 13]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -724,7 +780,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                   [Page 13]
+Rose, et al.                                                   [Page 14]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -780,7 +836,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                   [Page 14]
+Rose, et al.                                                   [Page 15]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -836,7 +892,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                   [Page 15]
+Rose, et al.                                                   [Page 16]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -892,7 +948,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                   [Page 16]
+Rose, et al.                                                   [Page 17]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -948,7 +1004,7 @@ README                      xml2rfc v1.36pre1               January 2011
 
 
 
-Rose, et al.                                                   [Page 17]
+Rose, et al.                                                   [Page 18]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -1004,7 +1060,7 @@ A.1.  The /rfc/@ipr Attribute
 
 
 
-Rose, et al.                                                   [Page 18]
+Rose, et al.                                                   [Page 19]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -1060,7 +1116,7 @@ A.1.1.2.  noModificationTrust200902
 
 
 
-Rose, et al.                                                   [Page 19]
+Rose, et al.                                                   [Page 20]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -1116,7 +1172,7 @@ A.1.2.2.  Historic Values: '*3978'
 
 
 
-Rose, et al.                                                   [Page 20]
+Rose, et al.                                                   [Page 21]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -1172,7 +1228,7 @@ A.3.  The /rfc/@submissionType Attribute
 
 
 
-Rose, et al.                                                   [Page 21]
+Rose, et al.                                                   [Page 22]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -1228,7 +1284,7 @@ A.6.  The /rfc/@docName Attribute
 
 
 
-Rose, et al.                                                   [Page 22]
+Rose, et al.                                                   [Page 23]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -1284,7 +1340,7 @@ A.8.  The /rfc/@updates Attribute
 
 
 
-Rose, et al.                                                   [Page 23]
+Rose, et al.                                                   [Page 24]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -1340,7 +1396,7 @@ Appendix B.  MacOS 9 Installation (courtesy of Ned Freed)
 
 
 
-Rose, et al.                                                   [Page 24]
+Rose, et al.                                                   [Page 25]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -1396,7 +1452,7 @@ Appendix C.  rfc2629.xslt (courtesy of Julian Reschke)
 
 
 
-Rose, et al.                                                   [Page 25]
+Rose, et al.                                                   [Page 26]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -1452,7 +1508,7 @@ Appendix D.  MS-Windows/Cygwin Installation (courtesy of Joe Touch)
 
 
 
-Rose, et al.                                                   [Page 26]
+Rose, et al.                                                   [Page 27]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -1508,7 +1564,7 @@ Appendix E.  A Special Thanks
 
 
 
-Rose, et al.                                                   [Page 27]
+Rose, et al.                                                   [Page 28]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -1564,7 +1620,7 @@ Appendix F.  Copyrights
 
 
 
-Rose, et al.                                                   [Page 28]
+Rose, et al.                                                   [Page 29]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -1572,9 +1628,9 @@ README                      xml2rfc v1.36pre1               January 2011
 Index
 
    P
-      private PI pseudo-attribute  18
+      private PI pseudo-attribute  19
       Processing Instruction pseudo attributes
-         private  18
+         private  19
 
 
 
@@ -1620,7 +1676,7 @@ Index
 
 
 
-Rose, et al.                                                   [Page 29]
+Rose, et al.                                                   [Page 30]
 
 README                      xml2rfc v1.36pre1               January 2011
 
@@ -1654,27 +1710,27 @@ Authors' Addresses
    Email: charles.levert@gmail.com
 
 
+   Tony Hansen
+   AT&T Labs
+   Middletown, NJ
+   USA
+
+   Email: tony+xml2rfc@maillennium.att.com
+
+
+   Julian F. Reschke
+   greenbytes GmbH
+   Hafenweg 16
+   Muenster, NW  48155
+   Germany
+
+   Email: julian.reschke@greenbytes.de
+   URI:   http://greenbytes.de/tech/webdav/
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Rose, et al.                                                   [Page 30]
+Rose, et al.                                                   [Page 31]
 

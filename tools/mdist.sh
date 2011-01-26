@@ -19,8 +19,9 @@ EOF
 files=$(find . -name .svn -prune -o -name tools -prune -o -type f -print)
 tar cvfz ../releases/xml2rfc-$release.tgz --transform="s,^\./,xml2rfc-$release/," $files
 
-# copy tcl to proper place, always overwriting dev version
-cp xml2rfc.tcl ../website/web/etc/xml2rfc-dev.tcl
+# copy tcl and README to proper place, always overwriting dev version
+cp xml2rfc.tcl ../website/etc/xml2rfc-dev.tcl
+cp README.html ../website/web/authoring/README-dev.html
 
 case $release in
     *dev ) 
@@ -52,10 +53,10 @@ case $release in
 	svn add xml2rfc-$release.tgz
 	svn add xml2rfc-$release.zip
 	svn add xml2rfc-$release
-
-	# commit everything into svn
-	echo Now you need to run
-	echo cd ..
-	echo svn commit -m "'release $release'"
 	;;
 esac
+
+# commit everything into svn
+echo Now you need to run
+echo cd ..
+echo svn commit -m "'release $release'"
