@@ -97,7 +97,8 @@ sub getContentType {
     if ($format eq 'epub') { return "application/epub+zip"; }
     if ($format eq 'rtf') { return "application/rtf"; }
     if ($format eq 'ps') { return "application/postscript"; }
-    if ($format eq 'nr') { return "application/nroff"; }
+    if ($format eq 'nr') { return "text/plain"; }
+    if ($format eq 'unpg') { return "text/plain"; }
     return "application/octet-stream";
 }
 

@@ -141,7 +141,7 @@ my $TMP1 = $needExpansionToXml ?  setTempFile("$inputfn-1.xml") : setTempFile("$
 print "TMP1=$TMP1\n" if $debug;
 my $TMPERR = setTempFile("$inputfn.err");
 
-my ($ret, $out, $err) = runCommand("tclsh etc/xml2rfc.tcl xml2rfc $inputfn $TMP1", $inputfn, $TMP1, 
+my ($ret, $out, $err) = runCommand("tclsh etc/xml2rfc-dev.tcl xml2rfc $inputfn $TMP1", $inputfn, $TMP1, 
     $needExpansionToXml ?  "Expanding internal references" : "Expanding internal references and generating $mode"
     );
 print "xml2rfc ret=$ret\n" if $debug;
@@ -188,7 +188,7 @@ if ($mode eq 'xml') {
     } elsif (!$needExpansionToXml) {
 	$TMP2 = $TMP1;
     } else {
-	my ($ret, $out, $err) = runCommand("tclsh etc/xml2rfc.tcl xml2rfc $TMP1 $TMP2", $TMP1, $TMP2, "Generating $mode");
+	my ($ret, $out, $err) = runCommand("tclsh etc/xml2rfc-dev.tcl xml2rfc $TMP1 $TMP2", $TMP1, $TMP2, "Generating $mode");
 	print "xml2rfc ret=$ret\n" if $debug;
 	print "out='$out'\n" if $debug;
 	print "err='$err'\n" if $debug;
@@ -393,7 +393,7 @@ sub saveTracePass {
 ####### remove any temporary files we created
 sub cleanup {
     for my $file (@filesToRemove) {
-	# unlink($file) unless $debug;
+	unlink($file) unless $debug;
     }
 }
 
@@ -502,6 +502,7 @@ sub getContentType {
     if ($format eq 'ascii') {
 	if ($mode eq 'txt') { return "text/plain"; }
 	if ($mode eq 'html') { return "text/html"; }
+	if ($mode eq 'htmlxslt') { return "text/html"; }
 	if ($mode eq 'xml') { return "text/xml"; }
 	return "text/plain";	# nr, unpg
     } elsif ($format eq 'pdf') {
