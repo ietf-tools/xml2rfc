@@ -135,7 +135,8 @@ print "rename ret='$ret'\n" if $debug;
 # If not doing strict checking, this will generate the final version as well.
 my $needExpansionToXml =
 	($checking eq 'strict') ||
-	($format eq 'epub')
+	($format eq 'epub') ||
+	($mode eq 'htmlxslt')
 	;
 my $TMP1 = $needExpansionToXml ?  setTempFile("$inputfn-1.xml") : setTempFile("$inputfn-1." . $extensions{$mode});
 print "TMP1=$TMP1\n" if $debug;
