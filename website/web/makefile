@@ -32,4 +32,4 @@ test-install:
 	done
 
 clean:
-      rm -f $(DERIVATIVES)
+	rm -f $(DERIVATIVES)
