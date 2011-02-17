@@ -82,12 +82,20 @@ look-and-feel or the new modern HTML rendition of that look-and-feel.</p>
 
 	  <p><b>Major new xml2rfc features include:</b></p>
 	  <ul>
-	    <li>Support for the new &lt;rfc&gt; consensus= attribute.
+	    <li>Generate proper boilerplate for RFC generation (<a href='http://tools.ietf.org/html/rfc5741'>RFC 5741</a>).
+	       (Also see the RFC Editor's <a href='http://www.rfc-editor.org/rfc-style-guide/status-memos.txt'>status-memos</a> page.)
 	    </li>
-	    <li>Generate proper boilerplate for RFC generation (RFC 5741).
+	    <li>Support for the new &lt;rfc&gt; 
+	       <a href='http://xml.resource.org/authoring/README-dev.html#attribute-consensus'>consensus=</a>
+	       attribute to help support <a href='http://tools.ietf.org/html/rfc5741'>RFC 5741</a>.
 	    </li>
-	    <li>Support for new &lt;?rfc text-list-symbols="o*+-"?&gt; processing instruction.
+	    <li>Support for the new &lt;?rfc text-list-symbols="o*+-"?&gt; processing instruction.
+		Modify the list of symbols used for 
+		<a href='http://xml.resource.org/xml2rfcFAQ.html#anchor21'>list type="symbols"</a>. 
 		The default is "o*+-", but can be set to any list of characters.
+		For example, specifying "abcde" will cause "a" to be used for 1st level, 
+		"b" for the 2nd level, etc, cycling back to the first character "a" at the 6th level.
+		Specifying "o*" will cause the characters "o" and "*" to be alternated for each successive level. 
 	    </li>
 	  </ul>
 
@@ -95,7 +103,7 @@ look-and-feel or the new modern HTML rendition of that look-and-feel.</p>
 	  <ul>
 	    <li>New options in web form to generate ePub, Postscript, PDF and RTF.
 	    </li>
-	    <li>New option in web form to show trace and warning messages.
+	    <li>New option in web form to show trace and warning messages along with the output, using frames. This is the default.
 	    </li>
 	    <li>New option in web form to do strict DTD checking.
 	    </li>
@@ -128,6 +136,122 @@ look-and-feel or the new modern HTML rendition of that look-and-feel.</p>
                   <tr>
                     <td colspan="2" bgcolor="#cccccc" align="center">
 		      <font color="#333333" size="3"><b>Convert Your XML Source</b></font>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="converter small" height="24" >
+		      <font color="#333333" size="1"><b>&nbsp;Input file</b></font> 
+		    </td>
+                    <td class="converter" align="right" >
+		      <input size="30" name="input" type="file"> 
+		    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="converter " height="24" align="center">
+		      <font color="#333333" size="1"><b>Output format</b></font> 
+		    </td>
+                  </tr>
+                  <tr>
+		    <td class="converter small" height="24"><b> Text (paginated) as: </b> </td>
+                    <td class="converter"> 
+		      <input type="radio" checked="checked" value="txt/ascii" name="modeAsFormat"> text/plain 
+		      <input type="radio" value="txt/pdf" name="modeAsFormat"> application/PDF 
+		    </td>
+                  </tr>
+                  <tr>
+		    <td class="converter small" height="24"><b> Text (unpaginated) as: </b> </td>
+                    <td class="converter"> 
+		      <input type="radio" value="unpg/ascii" name="modeAsFormat"> text/plain 
+		      <input type="radio" value="unpg/pdf" name="modeAsFormat"> application/PDF 
+		    </td>
+                  </tr>
+                  <tr>
+		    <td class="converter small" height="24"><b> Web page as: </b> </td>
+                    <td class="converter"> 
+		      <input type="radio" value="html/ascii" name="modeAsFormat"> text/html 
+		      <input type="radio" value="html/pdf" name="modeAsFormat"> application/PDF 
+		      <input type="radio" value="html/epub" name="modeAsFormat"> application/ePub
+		    </td>
+                  </tr>
+                  <tr>
+		    <td class="converter small" height="24"><b> Web page (via xslt) as: </b> </td>
+                    <td class="converter"> 
+		      <input type="radio" value="htmlxslt/ascii" name="modeAsFormat"> text/html 
+		      <input type="radio" value="htmlxslt/pdf" name="modeAsFormat"> application/PDF 
+		      <input type="radio" value="htmlxslt/epub" name="modeAsFormat"> application/ePub
+		    </td>
+                  </tr>
+                  <tr>
+		    <td class="converter small" height="24"><b> Nroff as: </b> </td>
+                    <td class="converter"> 
+		      <input type="radio" value="nr/ascii" name="modeAsFormat"> text/plain
+		    </td>
+                  </tr>
+                  <tr>
+		    <td class="converter small" height="24"><b> Expanded XML: </b> </td>
+                    <td class="converter"> 
+		      <input type="radio" value="xml/ascii" name="modeAsFormat"> text/XML
+		    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="converter " height="24" align="center">
+		      <font color="#333333" size="1"><b>Options</b></font> 
+		    </td>
+                  </tr>
+                  <tr>
+                    <td class="converter small" height="24">
+		      <b>&nbsp;Checking</b>
+		    </td>
+                    <td class="converter small">
+		      <input checked="checked" value="strict" name="checking" type="radio"> Strict
+		      <input                   value="fast" name="checking" type="radio"> Fast 
+		    </td>
+                  </tr>
+                  <tr>
+                    <td class="converter small" height="24" >
+		      <b>&nbsp;Output result</b>
+		    </td>
+                    <td class="converter small">
+		      <input checked="checked" value="toframe" name="type" type="radio"> Use frames to show Warnings/Errors
+		      <input value="ascii" name="type" type="radio"> Window 
+		      <input value="binary" name="type" type="radio"> File 
+		    </td>
+                  </tr>
+                  <!-- start debug section --><!-- tr>
+                    <td class="converter small" height="24" >
+		      <b>&nbsp;Debugging</b>
+		    </td>
+                    <td class="converter small">
+		      <input checked="checked" value="0" name="debug" type="radio"> Off
+		      <input value="1" name="debug" type="radio"> On
+		    </td>
+                  </tr --><!-- end debug section -->
+                  <tr>
+                    <td class="converter small"><br>
+                    </td>
+                    <td class="converter small" align="right"> 
+		      <input value="Submit" name="Submit" type="submit"> 
+		      <input value="Reset" name="Reset" type="reset"> 
+		    </td>
+                  </tr>
+                </tbody>
+              </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+      <br/><br/>
+      <form action="../cgi-bin/xml2rfc-dev.cgi" method="post" enctype="multipart/form-data">
+        <table bgcolor="#333333" border="0" cellpadding="1" cellspacing="0">
+          <tbody>
+            <tr>
+              <td>
+              <table border="0" cellpadding="2" cellspacing="0">
+                <tbody>
+                  <tr>
+                    <td colspan="2" bgcolor="#cccccc" align="center">
+		      <font color="#333333" size="3"><b>Convert Your XML Source (all combinations, for test only)</b></font>
                     </td>
                   </tr>
                   <tr>
@@ -177,12 +301,12 @@ look-and-feel or the new modern HTML rendition of that look-and-feel.</p>
 		      <b>&nbsp;Output result</b>
 		    </td>
                     <td class="converter small">
-		      <input checked="checked" value="toframe" name="type" type="radio"> Show Warnings/Errors
+		      <input checked="checked" value="toframe" name="type" type="radio"> Use frames to show Warnings/Errors
 		      <input value="ascii" name="type" type="radio"> Window 
 		      <input value="binary" name="type" type="radio"> File 
 		    </td>
                   </tr>
-                  <!-- tr>
+                  <!-- start debug section --><!-- tr>
                     <td class="converter small" height="24" >
 		      <b>&nbsp;Debugging</b>
 		    </td>
@@ -190,7 +314,7 @@ look-and-feel or the new modern HTML rendition of that look-and-feel.</p>
 		      <input checked="checked" value="0" name="debug" type="radio"> Off
 		      <input value="1" name="debug" type="radio"> On
 		    </td>
-                  </tr -->
+                  </tr --><!-- end debug section -->
                   <tr>
                     <td class="converter small"><br>
                     </td>

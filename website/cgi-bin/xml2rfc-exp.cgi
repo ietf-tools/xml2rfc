@@ -218,6 +218,7 @@ if ($format eq 'ascii') {
 	print "truncate ret=$ret\n" if $debug;
     }
     my ($ret, $out, $err);
+    my $enscriptArguments = "--font=Courier12 --language=PostScript --no-header --quiet";
     if ($format eq 'pdf') {
 	if (($mode eq 'html') || ($mode eq 'htmlxslt')) {
 	    ($ret, $out, $err) = runCommand("etc/wkhtmltopdf-i386 --quiet $TMP2 $TMP3", $TMP2, $TMP3, "Converting to $format");
@@ -229,7 +230,7 @@ if ($format eq 'ascii') {
 	    my $TMP4 = setTempFile("$inputfn-4.ps");
 	    print "TMP3=$TMP3\n" if $debug;
 	    print "TMP4=$TMP4\n" if $debug;
-	    ($ret, $out, $err) = runCommand("enscript --font=Courier12 --language=PostScript --no-header --quiet --output=$TMP4 < $TMP2", $TMP2, $TMP4, "Converting to $format");
+	    ($ret, $out, $err) = runCommand("enscript $encriptArguments --output=$TMP4 < $TMP2", $TMP2, $TMP4, "Converting to $format");
 	    print "enscript ret=$ret\n" if $debug;
 	    print "out='$out'\n" if $debug;
 	    print "err='$err'\n" if $debug;
@@ -250,10 +251,10 @@ if ($format eq 'ascii') {
 	    print "wkhtmltopdf ret=$ret\n" if $debug;
 	    print "out='$out'\n" if $debug;
 	    print "err='$err'\n" if $debug;
-	    userError("Conversion error to intermediate postscript", $err) if ($err ne '');
+	    userError("Conversion error to intermediate pdf", $err) if ($err ne '');
 	    ($ret, $out, $err) = runCommand("pdf2ps $TMP4 $TMP3", $TMP4, $TMP3, "Converting to $format");
 	} else {
-	    ($ret, $out, $err) = runCommand("enscript --font=Courier12 --language=PostScript --no-header --quiet --output=$TMP3 < $TMP2", $TMP2, $TMP3, "Converting to $format");
+	    ($ret, $out, $err) = runCommand("enscript $encriptArguments --output=$TMP3 < $TMP2", $TMP2, $TMP3, "Converting to $format");
 	}
     } elsif ($format eq 'epub') {
 	if ($mode eq 'htmlxslt') {
