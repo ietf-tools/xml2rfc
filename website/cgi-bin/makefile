@@ -6,7 +6,7 @@ DERIVATIVES=
 
 all: $(DERIVATIVES)
 
-install:
+install: all
 	@for i in $(INS); do \
 	    if [ $$i -nt $(WEB)/$$i ];then \
 	        echo cp $$i $(WEB)/$$i; \
@@ -14,13 +14,13 @@ install:
 	    fi; \
 	done
 
-diff-install:
+diff-install: all
 	@for i in $(INS); do \
 	        echo diff $$i $(WEB)/$$i; \
 	        diff $$i $(WEB)/$$i; \
 	done
 
-test-install:
+test-install: all
 	@for i in $(INS); do \
 	    if [ $$i -nt $(PUB)/$$i ];then \
 	        echo cp $$i $(PUB)/$$i; \
