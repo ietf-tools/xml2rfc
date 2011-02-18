@@ -32,6 +32,11 @@ Abstract
 Dummy Abstract.
 
 .ti 0
+IESG Note
+
+This should appear after "Status of this Memo".
+
+.ti 0
 Status of this Memo
 
 This memo provides information for the Internet community.  It does

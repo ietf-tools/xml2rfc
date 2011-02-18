@@ -44,6 +44,11 @@ Abstract
 This is a test case document, it is not RFC 4637 (which was never
 issued by the \%RFC-Editor).
 
+.ti 0
+IESG Note
+
+This should appear after "Status of this Memo".
+
 
 .in 4
 .ti 0
