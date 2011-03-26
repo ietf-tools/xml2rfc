@@ -46,7 +46,7 @@ case $release in
 
     * )
         # copy tcl to proper place, overwriting production version
-	cp xml2rfc.tcl ../website/web/etc/xml2rfc.tcl
+	cp xml2rfc.tcl ../website/etc/xml2rfc.tcl
 
 	# create the .tgz file
 	tar cvfz ../releases/xml2rfc-$release.tgz --transform="s,^\./,xml2rfc-$release/," $files
@@ -64,7 +64,7 @@ case $release in
 	zip -r xml2rfc-$release.zip xml2rfc-$release
 
 	# copy all top level files here
-	cp xml2rfc-$release/* .
+	cp -r xml2rfc-$release/* .
 
 	# update xml2rfc.tgz and xml2rfc.zip
 	cp -f xml2rfc-$release.tgz xml2rfc.tgz
