@@ -24,7 +24,7 @@ my %fileValues;
 ####### #
 ####### # invoking form has these fields:
 ####### #       file "input" - contains the XML file
-####### #       radiobutton "mode" - either txt, html, htmlxslt, nr, unpg, or xml
+####### #       radiobutton "mode" - either txt, unpg, html, htmlxslt, nr, or xml
 ####### #       radiobutton "type" - either ascii (output to window), toframe (separate warnings/output windows) 
 ####### #		or binary (output to file)
 ####### #       radiobutton "format" - either ascii, pdf, epub, rtf, ps
@@ -33,10 +33,18 @@ my %fileValues;
 ####### #
 ####### ########################### #######
 
+my @modes = ('txt', 'unpg', 'html', 'htmlxslt', 'nr', 'xml');
+my @formats = ('ascii',  'pdf',  'epub',  'rtf',  'ps');
+
 my $input    = $q->param('input');
 my $inputfn  = untaint($q->tmpFileName($input));
-my $mode     = checkValue('mode', 'txt', 'html', 'htmlxslt', 'nr', 'unpg', 'xml');
-my $format   = checkValue('format', 'ascii',  'pdf',  'epub',  'rtf',  'ps');
+my $modeAsFormat = $q->param('modeAsFormat');
+if ($modeAsFormat =~ m((.*)/(.*))) {
+   $q->param('mode', $1);
+   $q->param('format', $2);
+}
+my $mode = checkValue('mode', @modes);
+my $format = checkValue('format', @formats);
 my $type     = checkValue('type', 'ascii', 'binary', 'toframe', 'towindow', 'tofile');
 my $checking = checkValue('checking', 'strict', 'fast');
 $type = 'towindow' if $type eq 'ascii';
@@ -87,8 +95,11 @@ userError("No input file") if ($input eq '') || ($inputfn eq '');
 
 # if in cgi-bin, cd one level up
 if ($dir =~ /\/cgi-bin$/) {
+    print "in '$dir', cd ..\n" if $debug;
     chdir("..");
     $dir = dirname($dir);
+} else {
+    print "in '$dir'\n" if $debug;
 }
 my $tmpdir = dirname($inputfn);
 
@@ -203,7 +214,7 @@ if ($mode eq 'xml') {
 ####### #	if format == ascii
 ####### #		TMP3.$mode = TMP2.$mode
 ####### #	else
-####### #		convert $TMP2.$mode $TMP3.$format
+####### #		convert $TMP2.$mode $TMP3.$mode.$format
 ####### ########################### #######
 
 
@@ -218,7 +229,7 @@ if ($format eq 'ascii') {
 	print "truncate ret=$ret\n" if $debug;
     }
     my ($ret, $out, $err);
-    my $enscriptArguments = "--font=Courier12 --language=PostScript --no-header --quiet";
+    my $enscriptPsArguments = "--font=Courier12 --language=PostScript --no-header --quiet";
     if ($format eq 'pdf') {
 	if (($mode eq 'html') || ($mode eq 'htmlxslt')) {
 	    ($ret, $out, $err) = runCommand("etc/wkhtmltopdf-i386 --quiet $TMP2 $TMP3", $TMP2, $TMP3, "Converting to $format");
@@ -230,7 +241,7 @@ if ($format eq 'ascii') {
 	    my $TMP4 = setTempFile("$inputfn-4.ps");
 	    print "TMP3=$TMP3\n" if $debug;
 	    print "TMP4=$TMP4\n" if $debug;
-	    ($ret, $out, $err) = runCommand("enscript $encriptArguments --output=$TMP4 < $TMP2", $TMP2, $TMP4, "Converting to $format");
+	    ($ret, $out, $err) = runCommand("enscript $enscriptPsArguments --output=$TMP4 < $TMP2", $TMP2, $TMP4, "Converting to $format");
 	    print "enscript ret=$ret\n" if $debug;
 	    print "out='$out'\n" if $debug;
 	    print "err='$err'\n" if $debug;
@@ -254,7 +265,7 @@ if ($format eq 'ascii') {
 	    userError("Conversion error to intermediate pdf", $err) if ($err ne '');
 	    ($ret, $out, $err) = runCommand("pdf2ps $TMP4 $TMP3", $TMP4, $TMP3, "Converting to $format");
 	} else {
-	    ($ret, $out, $err) = runCommand("enscript $encriptArguments --output=$TMP3 < $TMP2", $TMP2, $TMP3, "Converting to $format");
+	    ($ret, $out, $err) = runCommand("enscript $enscriptPsArguments --output=$TMP3 < $TMP2", $TMP2, $TMP3, "Converting to $format");
 	}
     } elsif ($format eq 'epub') {
 	if ($mode eq 'htmlxslt') {
@@ -320,7 +331,7 @@ if ($type eq 'towindow') {
     keepTempFile($TMP3);
     printHeaders("text/html");
     print "<html><head><title>XML2RFC Processor with Warnings &amp; Errors</title></head>\n";
-    my $rows = (($format eq 'ascii') && ($mode ne 'xml')) ? '25%,*' : '90%,$';
+    my $rows = (($format eq 'ascii') && ($mode ne 'xml')) ? '25%,*' : '50%,$';
     print "<frameset rows='$rows'>\n";
     print "<frame src='cat.cgi?input=" . encryptFileName($TMPTRACE) . "'/>\n";
     print "<frame src='cat.cgi/$outputfn?input=" . encryptFileName($TMP3) . "'/>\n";
@@ -529,9 +540,9 @@ sub getOutputName {
     $outputfn = untaint($outputfn, '([^<>\s;&]*)');
     $outputfn .= ".";		# add in a new extension
     if ($format eq 'ascii') {
-	$outputfn .= $mode;
+	$outputfn .= $extensions{$mode};
     } else {
-	$outputfn .= $format;
+	$outputfn .= "$extensions{$mode}.$extensions{$format}";
     }
     return $outputfn;
 }
