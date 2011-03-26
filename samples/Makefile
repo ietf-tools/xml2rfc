@@ -78,7 +78,7 @@ bps: $(BP:.xml=.txt)
 	@tr -d "\015" < tmp.$@ | fgrep -v '<meta name="generator" content="xml2rfc' > $@
 	@rm -f tmp.$@
 
-regression:	all
+regression:	format
 	svn diff > tmp.$$$$ ; \
 	[ -s tmp.$$$$ ] && ( echo ; echo ; echo "There are regressions in the generated sample files, please check:" ; echo ; cat tmp.$$$$ ) ; \
 	rm -f tmp.$$$$
