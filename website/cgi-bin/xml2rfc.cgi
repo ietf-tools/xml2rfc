@@ -168,10 +168,14 @@ if ($checking eq 'strict') {
     print "out='$out'\n" if $debug;
     print "err='$err'\n" if $debug;
 
-    $out .= $err;
     if ($err =~ /no grammar found/) {
-      $out .= "\nAre you missing the statement <!DOCTYPE rfc SYSTEM \"rfc2629.dtd\"> in your source file?";
+       $out .= "\nAre you missing the statement <!DOCTYPE rfc SYSTEM \"rfc2629.dtd\"> in your source file?\n\n";
+       $out .= $err;
+    } else {
+       $out .= $err;
     }
+    $out .= "\n\nTo proceed, you should fix your input file.\n" .
+      "You may also try doing the conversion with Strict Checking turned off.\n";
     userError("Unable to Validate File", $out) if (($out =~ /\[Error\]/) || ($out =~ /\[Fatal Error\]/));
 }
 
