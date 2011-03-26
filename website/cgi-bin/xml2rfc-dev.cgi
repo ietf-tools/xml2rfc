@@ -169,6 +169,9 @@ if ($checking eq 'strict') {
     print "err='$err'\n" if $debug;
 
     $out .= $err;
+    if ($err =~ /no grammar found/) {
+      $out .= "\nAre you missing the statement <!DOCTYPE rfc SYSTEM \"rfc2629.dtd\"> in your source file?";
+    }
     userError("Unable to Validate File", $out) if (($out =~ /\[Error\]/) || ($out =~ /\[Fatal Error\]/));
 }
 
