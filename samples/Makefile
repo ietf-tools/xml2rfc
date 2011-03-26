@@ -1,4 +1,4 @@
-all:	format
+all:	format regression
 
 XML= rfc2616.xml rfc3470.xml rfc3986.xml rfc5234.xml rfc5322.xml \
 	sample.ipr.id.noDerivativesTrust200902.200909.xml \
@@ -77,3 +77,8 @@ bps: $(BP:.xml=.txt)
 	tclsh ../xml2rfc.tcl xml2rfc $< tmp.$@
 	@tr -d "\015" < tmp.$@ | fgrep -v '<meta name="generator" content="xml2rfc' > $@
 	@rm -f tmp.$@
+
+regression:	all
+	svn diff > tmp.$$$$ ; \
+	[ -s tmp.$$$$ ] && ( echo ; echo ; echo "There are regressions in the generated sample files, please check:" ; echo ; cat tmp.$$$$ ) ; \
+	rm -f tmp.$$$$
