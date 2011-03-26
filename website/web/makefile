@@ -2,12 +2,15 @@ DIR=web
 PUB= $$HOME/public_html/$(DIR)
 INS= experimental-debug.html experimental.html index.html stripe.png xml2rfcFAQ.html
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
-DERIVATIVES= experimental-debug.html
+DERIVATIVES= experimental-debug.html index-debug.html
 
 all: $(DERIVATIVES)
 
 experimental-debug.html: experimental.html
 	sed < experimental.html -e '/start debug section/s/!-- tr/tr/' -e '/end debug section/s/ --//' > experimental-debug.html
+
+index-debug.html: index.html
+	sed < index.html -e '/start debug section/s/!-- tr/tr/' -e '/end debug section/s/ --//' > index-debug.html
 
 install: all
 	@for i in $(INS); do \
