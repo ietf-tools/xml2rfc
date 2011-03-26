@@ -1,11 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head>
+<html><head>
 
 
   <title>xml2rfc</title>
-  <meta http-equiv="Content-Type" content="text/html; 
-charset=ISO-8859-1">
-  <style><!-- 
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <style type='text/css'><!-- 
       * {
 		font-family: Verdana, Arial, Helvetica, sans-serif;
 	  }
@@ -23,31 +22,29 @@ charset=ISO-8859-1">
 		background-color: #FCC;
 		overflow: auto;
 	}
+
+    th.converter, td.converter {
+	background-color: #c03; 	/* red */
+	background-color: #6699cc;	/* light blue */
+	wrap: nowrap;
+	color: #333333;
+    }
   --></style>
 </head><body style="background-color: rgb(255, 255, 255);">
 <h1 align="center">xml2rfc</h1>
 <p><br clear="all">
 A handy little tool,
-<b>xml2rfc</b>, will allow you to take your XML source (using the format
- defined 
-in
-<a href="http://xml.resource.org/public/rfc/html/rfc2629.html" 
-target="_new">RFC 2629</a>
-
-and its
-<a 
-href="http://xml.resource.org/authoring/draft-mrose-writing-rfcs.html" 
-target="_new">unofficial 
+<b>xml2rfc</b>, will allow you to take your XML source (using the format defined in
+<a href="http://xml.resource.org/public/rfc/html/rfc2629.html" target="_blank">RFC 2629</a>
+and its <a href="http://xml.resource.org/authoring/draft-mrose-writing-rfcs.html" target="_blank">unofficial 
 successor</a>) and see how the results look like in the original ASCII 
 look-and-feel or the new modern HTML rendition of that look-and-feel.</p>
+
 <table border="0" cellpadding="5" cellspacing="5">
   <tbody>
     <tr>
-      <td valign="top">
-      <h3>Conversion</h3>
-      </td>
+      <td width="10%" valign="top"><h3>Conversion</h3></td>
       <td>
-
       <ol>
         <li>Download <b>xml2rfc</b>
 		as a <a href="http://xml.resource.org/authoring/xml2rfc.zip"><b>zip</b></a>
@@ -57,64 +54,95 @@ look-and-feel or the new modern HTML rendition of that look-and-feel.</p>
 
       </ol>
       <center>
-      <form action="cgi-bin/xml2rfc.cgi" method="post" 
-enctype="multipart/form-data">
-        <table bgcolor="#333333" border="0" cellpadding="1" 
-cellspacing="0">
-          <tbody>
-            <tr>
-              <td>
-              <table border="0" cellpadding="2" cellspacing="0">
-
+	 <form action="cgi-bin/xml2rfc.cgi" method="post" enctype="multipart/form-data">
+              <table style='border: 1px solid black' cellpadding="2" cellspacing="0">
                 <tbody>
                   <tr>
-                    <td colspan="2" bgcolor="#cccccc">
-                    <div align="center"><font color="#333333" size="3"><b>
-						Convert Your XML Source</b></font> </div>
+                    <td colspan="2" bgcolor="#cccccc" align="center">
+		      <font color="#333333" size="3"><b>Convert Your XML Source</b></font>
                     </td>
                   </tr>
                   <tr>
-                    <td bgcolor="#6699cc" height="24" nowrap="nowrap"><font
- color="#333333" size="1"><b>&nbsp;Input file</b></font> </td>
-
-                    <td align="right" bgcolor="#6699cc"> <input 
-size="30" name="input" type="file"> </td>
+                    <td class="converter small" height="24" >
+		      <font color="#333333" size="1"><b>&nbsp;Input file</b></font> 
+		    </td>
+                    <td class="converter" align="right" >
+		      <input size="30" name="input" type="file"> 
+		    </td>
                   </tr>
                   <tr>
-                    <td bgcolor="#6699cc" height="24" nowrap="nowrap"><font
- color="#333333" size="1"><b>&nbsp;Output mode</b></font> </td>
-                    <td align="left" bgcolor="#6699cc"> <input 
-checked="checked" value="txt" name="mode" type="radio"> Text <input 
-value="html" name="mode" type="radio"> HTML <input value="nr" 
-name="mode" type="radio"> nroff <input value="unpg" name="mode" 
-type="radio"> unpaginated <input value="xml" name="mode" type="radio">
-
-					XML </td>
+                    <td colspan="2" class="converter " height="24" align="center">
+		      <font color="#333333" size="1"><b>Output format</b></font> 
+		    </td>
                   </tr>
                   <tr>
-                    <td bgcolor="#6699cc" height="24" nowrap="nowrap"><font
- color="#333333" size="1"><b>&nbsp;Output result</b></font> </td>
-                    <td align="left" bgcolor="#6699cc"><font size="1"> <input
- checked="checked" value="ascii" name="type" type="radio"> Window <input
- value="binary" name="type" type="radio"> File </font></td>
-
+		    <td class="converter small" height="24"><b> Text: </b> </td>
+                    <td class="converter"> 
+		      <input type="radio" checked="checked" value="txt/ascii" name="modeAsFormat"> plaintext 
+		      <input type="radio" value="unpg/ascii" name="modeAsFormat"> ... unpaginated
+		      <input type="radio" value="txt/pdf" name="modeAsFormat"> PDF 
+		    </td>
                   </tr>
                   <tr>
-                    <td bgcolor="#6699cc" height="24"><br>
+		    <td class="converter small" height="24"><b> Web page: </b> </td>
+                    <td class="converter"> 
+		      <input type="radio" value="html/ascii" name="modeAsFormat"> HTML 
+		      <input type="radio" value="html/pdf" name="modeAsFormat"> PDF 
+		      <input type="radio" value="html/epub" name="modeAsFormat"> ePub
+		    </td>
+                  </tr>
+                  <tr>
+		    <td class="converter small" height="24"><b> Other: </b> </td>
+                    <td class="converter"> 
+		      <input type="radio" value="nr/ascii" name="modeAsFormat"> nroff
+		      <input type="radio" value="xml/ascii" name="modeAsFormat"> expanded XML
+		    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="converter " height="24" align="center">
+		      <font color="#333333" size="1"><b>Options</b></font> 
+		    </td>
+                  </tr>
+                  <tr>
+                    <td class="converter small" height="24">
+		      <b>&nbsp;Checking</b>
+		    </td>
+                    <td class="converter small">
+		      <input checked="checked" value="strict" name="checking" type="radio"> Strict
+		      <input                   value="fast" name="checking" type="radio"> Fast 
+		    </td>
+                  </tr>
+                  <tr>
+                    <td class="converter small" height="24" >
+		      <b>&nbsp;Output result</b>
+		    </td>
+                    <td class="converter small">
+		      <input checked="checked" value="toframe" name="type" type="radio"> Use frames to show Warnings &amp; Errors
+		      <input value="ascii" name="type" type="radio"> Window 
+		      <input value="binary" name="type" type="radio"> File 
+		    </td>
+                  </tr>
+                  <!-- start debug section --><!-- tr>
+                    <td class="converter small" height="24" >
+		      <b>&nbsp;Debugging</b>
+		    </td>
+                    <td class="converter small">
+		      <input checked="checked" value="0" name="debug" type="radio"> Off
+		      <input value="1" name="debug" type="radio"> On
+		    </td>
+                  </tr --><!-- end debug section -->
+                  <tr>
+                    <td class="converter small"><br>
                     </td>
-                    <td align="right" bgcolor="#6699cc"> <input 
-value="Submit" name="Submit" type="submit"> <input value="Reset" 
-name="Reset" type="reset"> </td>
+                    <td class="converter small" align="right"> 
+		      <input value="Submit" name="Submit" type="submit"> 
+		      <input value="Reset" name="Reset" type="reset"> 
+		    </td>
                   </tr>
                 </tbody>
-
               </table>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
-      </center>
+	      </form>
+	      </center>
        </td>
     </tr>
 
@@ -124,17 +152,53 @@ name="Reset" type="reset"> </td>
     </tr>
 
     <tr>
+      <td valign="top"> <h3>March 2011 release</h3> </td>
+      <td>
+	 <p> Version <b>1.36</b> is available. Here's the <a href="http://xml.resource.org/authoring/README.html">README</a> file. </p>
+
+	  <p><b>Major new xml2rfc features include:</b></p>
+	  <ul>
+	    <li>Generate proper boilerplate for RFC generation (<a href='http://tools.ietf.org/html/rfc5741'>RFC 5741</a>).
+	       (Also see the RFC Editor's <a href='http://www.rfc-editor.org/rfc-style-guide/status-memos.txt'>status-memos</a> page.)
+	    </li>
+	    <li>Support for the new &lt;rfc&gt; 
+	       <a href='http://xml.resource.org/authoring/README-dev.html#attribute-consensus'>consensus=</a>
+	       attribute to help support <a href='http://tools.ietf.org/html/rfc5741'>RFC 5741</a>.
+	    </li>
+	    <li>Support for the new &lt;?rfc text-list-symbols="o*+-"?&gt; processing instruction.
+		Modify the list of symbols used for 
+		<a href='http://xml.resource.org/xml2rfcFAQ.html#anchor21'>list type="symbols"</a>. 
+		The default is "o*+-", but can be set to any list of characters.
+		For example, specifying "abcde" will cause "a" to be used for 1st level, 
+		"b" for the 2nd level, etc, cycling back to the first character "a" at the 6th level.
+		Specifying "o*" will cause the characters "o" and "*" to be alternated for each successive level. 
+	    </li>
+	  </ul>
+
+	  <p><b>Major new web features include:</b></p>
+	  <ul>
+	    <li>New options in web form to generate ePub and PDF.
+	    </li>
+	    <li>New option in web form to show trace and warning messages along with the output, using frames. This is the default.
+	    </li>
+	    <li>New option in web form to do strict DTD checking.
+	    </li>
+	    <li>New advanced web form (see bottom of this page) to:
+	       generate HTML using Julian Reschke's XSLT,
+	       generate Postscript, and generate RTF.
+	    </li>
+	  </ul>
+
+      </td>
+    </tr>
+    <tr>
       <td valign="top">
-      <h3>
-March 2010 release</h3>
       </td>
 
       <td>
-      <p>Version <b>1.35</b> is available. Here's the <a 
-href="http://xml.resource.org/authoring/README.html">README</a> file. </p>
       <div style="background-color: rgb(221, 255, 221); font-style: 
 italic; border: 2px solid gray; padding: 0.5em; width: 90%;">
-	 Please note that the current version of xml2rfc now produces boilerplate 
+	 Please note that the current version of xml2rfc produces boilerplate 
 		text which is fully compliant with
 	 <a href="http://trustee.ietf.org/docs/IETF-Trust-License-Policy.pdf">the 
 		latest IETF Trust Legal Provisions Document</a>.<br><br>
@@ -191,9 +255,8 @@ normal; padding: 0.5em;">
       <h3>Citation Libraries</h3>
       </td>
       <td>
-      <div align="center"><font size="2">
+      <div align="center">
       <table border="1" cellpadding="2" cellspacing="0">
-
         <tbody>
           <tr>
             <td align="center">
@@ -351,7 +414,6 @@ href="http://xml.resource.org/public/rfc/bibxml2/">
 
         </tbody>
       </table>
-      </font>
       <div style="text-align: left;"><br>
       	rsync access is available at two independent servers 
 		(rsync1.xml.resource.org::xml2rfc.bibxml, and 
@@ -418,11 +480,11 @@ there's
 
       <h4>Templates<br>
       </h4>
-      <p>The IETF Tools Team maintains a <a target="_new" 
+      <p>The IETF Tools Team maintains a <a target="_blank" 
 href="http://tools.ietf.org/tools/templates">library of templates</a> 
 		you can use for different kinds of drafts. </p>
       <h4>Using your source file</h4>
-      <p>When submitting an Internet-Draft using the <a target="_new" 
+      <p>When submitting an Internet-Draft using the <a target="_blank" 
 href="https://datatracker.ietf.org/idst/upload.cgi">IETF 
 		Internet-Draft Submission Tool</a>, you can upload the XML source file
  
@@ -439,6 +501,101 @@ the
  Thanks! </p>
       </td>
     </tr>
+    <tr><td valign='top'>
+      <h4>Advanced Conversions</h4>
+    </td><td>
+      This version of the conversion form supports
+      all combinations and output formats that are currently available.
+      <br/>
+
+	 <form action="cgi-bin/xml2rfc.cgi" method="post" 
+enctype="multipart/form-data">
+              <table style='border: 1px solid black' cellpadding="2" cellspacing="0">
+                <tbody>
+                  <tr>
+                    <td colspan="2" bgcolor="#cccccc" align="center">
+		      <font color="#333333" size="3"><b>Convert Your XML Source </b><br/>
+		      </font>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="converter small" height="24" >
+		      <font color="#333333" size="1"><b>&nbsp;Input file</b></font> 
+		    </td>
+                    <td class="converter" align="right" >
+		      <input size="30" name="input" type="file"> 
+		    </td>
+                  </tr>
+                  <tr>
+                    <td class="converter small" height="24" >
+		      <b>&nbsp;Output mode</b>
+		    </td>
+                    <td class="converter"> 
+		      <input checked="checked" value="txt" name="mode" type="radio"> Text 
+		      <input value="html" name="mode" type="radio"> HTML 
+		      <input value="htmlxslt" name="mode" type="radio"> <font size='-1'>(via xslt)</font>
+		      <input value="nr" name="mode" type="radio"> nroff 
+		      <input value="unpg" name="mode" type="radio"> unpaginated 
+		      <input value="xml" name="mode" type="radio"> XML 
+		    </td>
+                  </tr>
+                  <tr>
+                    <td class="converter small" height="24" >
+		      <b>&nbsp;Output format</b>
+		    </td>
+                    <td class="converter small">
+		      <input checked="checked" value="ascii" name="format" type="radio"> ASCII
+		      <input value="pdf" name="format" type="radio"> PDF
+		      <input value="epub" name="format" type="radio"> ePub
+		      <input value="rtf" name="format" type="radio"> RTF 
+		      <input value="ps" name="format" type="radio"> PostScript
+		    </td>
+                  </tr>
+                  <tr>
+                    <td class="converter small" height="24">
+		      <b>&nbsp;Checking</b>
+		    </td>
+                    <td class="converter small">
+		      <input checked="checked" value="strict" name="checking" type="radio"> Strict
+		      <input                   value="fast" name="checking" type="radio"> Fast 
+		    </td>
+                  </tr>
+                  <tr>
+                    <td class="converter small" height="24" >
+		      <b>&nbsp;Output result</b>
+		    </td>
+                    <td class="converter small">
+		      <input checked="checked" value="toframe" name="type" type="radio"> Use frames to show Warnings &amp; Errors
+		      <input value="ascii" name="type" type="radio"> Window 
+		      <input value="binary" name="type" type="radio"> File 
+		    </td>
+                  </tr>
+                  <!-- start debug section --><!-- tr>
+                    <td class="converter small" height="24" >
+		      <b>&nbsp;Debugging</b>
+		    </td>
+                    <td class="converter small">
+		      <input checked="checked" value="0" name="debug" type="radio"> Off
+		      <input value="1" name="debug" type="radio"> On
+		    </td>
+                  </tr --><!-- end debug section -->
+                  <tr>
+                    <td class="converter small"><br>
+                    </td>
+                    <td class="converter small" align="right"> 
+		      <input value="Submit" name="Submit" type="submit"> 
+		      <input value="Reset" name="Reset" type="reset"> 
+		    </td>
+                  </tr>
+                </tbody>
+              </table>
+	 </form>
+
+
+
+
+
+    </td></tr>
   </tbody>
 </table>
 <p>Questions? Try the <a 

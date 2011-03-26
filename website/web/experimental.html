@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head>
-
+<meta http-equiv="Refresh" CONTENT="0; URL=index.html">
 
   <title>xml2rfc</title>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -29,9 +29,12 @@
 	background-color: #FCC;
 	overflow: auto;
     }
+    table.converter {
+        border: solid black 1px;
+    }
     th.converter, td.converter {
-	background-color: #6699cc;
-	background-color: #c03;
+	background-color: #6699cc;	/* light blue */
+	background-color: #c03; 	/* red */
 	wrap: nowrap;
 	color: #333333;
     }
@@ -131,7 +134,7 @@ look-and-feel or the new modern HTML rendition of that look-and-feel.</p>
           <tbody>
             <tr>
               <td>
-              <table border="0" cellpadding="2" cellspacing="0">
+              <table style='border: 1px solid black;' border="0" cellpadding="2" cellspacing="0">
                 <tbody>
                   <tr>
                     <td colspan="2" bgcolor="#cccccc" align="center">
@@ -152,45 +155,26 @@ look-and-feel or the new modern HTML rendition of that look-and-feel.</p>
 		    </td>
                   </tr>
                   <tr>
-		    <td class="converter small" height="24"><b> Text (paginated) as: </b> </td>
+		    <td class="converter small" height="24"><b> Text: </b> </td>
                     <td class="converter"> 
-		      <input type="radio" checked="checked" value="txt/ascii" name="modeAsFormat"> text/plain 
-		      <input type="radio" value="txt/pdf" name="modeAsFormat"> application/PDF 
+		      <input type="radio" checked="checked" value="txt/ascii" name="modeAsFormat"> plaintext 
+		      <input type="radio" value="unpg/ascii" name="modeAsFormat"> ... unpaginated
+		      <input type="radio" value="txt/pdf" name="modeAsFormat"> PDF 
 		    </td>
                   </tr>
                   <tr>
-		    <td class="converter small" height="24"><b> Text (unpaginated) as: </b> </td>
+		    <td class="converter small" height="24"><b> Web page: </b> </td>
                     <td class="converter"> 
-		      <input type="radio" value="unpg/ascii" name="modeAsFormat"> text/plain 
-		      <input type="radio" value="unpg/pdf" name="modeAsFormat"> application/PDF 
+		      <input type="radio" value="html/ascii" name="modeAsFormat"> HTML 
+		      <input type="radio" value="html/pdf" name="modeAsFormat"> PDF 
+		      <input type="radio" value="html/epub" name="modeAsFormat"> ePub
 		    </td>
                   </tr>
                   <tr>
-		    <td class="converter small" height="24"><b> Web page as: </b> </td>
+		    <td class="converter small" height="24"><b> Other: </b> </td>
                     <td class="converter"> 
-		      <input type="radio" value="html/ascii" name="modeAsFormat"> text/html 
-		      <input type="radio" value="html/pdf" name="modeAsFormat"> application/PDF 
-		      <input type="radio" value="html/epub" name="modeAsFormat"> application/ePub
-		    </td>
-                  </tr>
-                  <tr>
-		    <td class="converter small" height="24"><b> Web page (via xslt) as: </b> </td>
-                    <td class="converter"> 
-		      <input type="radio" value="htmlxslt/ascii" name="modeAsFormat"> text/html 
-		      <input type="radio" value="htmlxslt/pdf" name="modeAsFormat"> application/PDF 
-		      <input type="radio" value="htmlxslt/epub" name="modeAsFormat"> application/ePub
-		    </td>
-                  </tr>
-                  <tr>
-		    <td class="converter small" height="24"><b> Nroff as: </b> </td>
-                    <td class="converter"> 
-		      <input type="radio" value="nr/ascii" name="modeAsFormat"> text/plain
-		    </td>
-                  </tr>
-                  <tr>
-		    <td class="converter small" height="24"><b> Expanded XML: </b> </td>
-                    <td class="converter"> 
-		      <input type="radio" value="xml/ascii" name="modeAsFormat"> text/XML
+		      <input type="radio" value="nr/ascii" name="modeAsFormat"> nroff
+		      <input type="radio" value="xml/ascii" name="modeAsFormat"> expanded XML
 		    </td>
                   </tr>
                   <tr>
@@ -212,7 +196,7 @@ look-and-feel or the new modern HTML rendition of that look-and-feel.</p>
 		      <b>&nbsp;Output result</b>
 		    </td>
                     <td class="converter small">
-		      <input checked="checked" value="toframe" name="type" type="radio"> Use frames to show Warnings/Errors
+		      <input checked="checked" value="toframe" name="type" type="radio"> Use frames to show Warnings &amp; Errors
 		      <input value="ascii" name="type" type="radio"> Window 
 		      <input value="binary" name="type" type="radio"> File 
 		    </td>
@@ -618,7 +602,7 @@ the
 		      <b>&nbsp;Output result</b>
 		    </td>
                     <td class="converter small">
-		      <input checked="checked" value="toframe" name="type" type="radio"> Use frames to show Warnings/Errors
+		      <input checked="checked" value="toframe" name="type" type="radio"> Use frames to show Warnings &amp; Errors
 		      <input value="ascii" name="type" type="radio"> Window 
 		      <input value="binary" name="type" type="radio"> File 
 		    </td>
