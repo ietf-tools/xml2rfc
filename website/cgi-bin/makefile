@@ -1,6 +1,6 @@
 DIR=cgi-bin
 PUB= $$HOME/public_html/$(DIR)
-INS= cat.cgi xml2rfc-dev.cgi xml2rfc-exp.cgi xml2rfc.cgi
+INS= cat.cgi xml2rfc-exp.cgi xml2rfc.cgi
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
 DERIVATIVES= 
 
