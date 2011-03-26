@@ -20,6 +20,14 @@ install: all
 	    fi; \
 	done
 
+authoring-install:
+	TMP1=/var/tmp/m1.$$$$ ; \
+	TMP2=/var/tmp/m2.$$$$ ; \
+	( cd $(WEB)/authoring && find . -print | fgrep -v '/.svn' | sort > $$TMP1 ) ; \
+	cd authoring && find . -print | fgrep -v '/.svn' | sort > $$TMP2 ; \
+	comm -13 $$TMP1 $$TMP2 | \
+	cpio -pdmv $(WEB)/authoring
+
 diff-install: all
 	@for i in $(INS); do \
 	        echo diff $$i $(WEB)/$$i; \
