@@ -10385,6 +10385,7 @@ proc start_page_txt {} {
 proc end_page_txt {} {
     global footer lineno pageno unpaginated
     global page_width page_head_height page_body_height page_foot_height
+    global guiP
 
     flush_text
 
@@ -10402,6 +10403,9 @@ proc end_page_txt {} {
     }
 
     set text [format "\[Page %d\]" $pageno]
+    if {$guiP == 1} {
+        wm title . $text ; update 
+    }
     incr pageno
     set len [string length $text]
     set len [expr ($page_width - [string length $footer]) - $len]
