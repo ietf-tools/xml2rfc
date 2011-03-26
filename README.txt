@@ -11,7 +11,7 @@ The README file                                                  M. Rose
                                                                AT&T Labs
                                                               J. Reschke
                                                               greenbytes
-                                                        January 26, 2011
+                                                            January 2011
 
 
                            xml2rfc v1.36pre1
@@ -522,16 +522,16 @@ README                      xml2rfc v1.36pre1               January 2011
    |                     |              |                              |
    |    text-list-sybols |     o*+-     | modify the list of symbols   |
    |                     |              | used (when generated text)   |
-   |                     |              | for list type="symbols".     |
-   |                     |              | For example, specifying      |
-   |                     |              | "abcde" will cause "a" to be |
-   |                     |              | used for 1st level, "b" for  |
-   |                     |              | the 2nd level, etc, cycling  |
-   |                     |              | back to the first character  |
-   |                     |              | "a" at the 6th level.        |
-   |                     |              | Specifying "o*" will cause   |
-   |                     |              | the characters "o" and "*"   |
-   |                     |              | to be alternated for each    |
+   |                     |              | for list type="symbols". For |
+   |                     |              | example, specifying "abcde"  |
+   |                     |              | will cause "a" to be used    |
+   |                     |              | for 1st level, "b" for the   |
+   |                     |              | 2nd level, etc, cycling back |
+   |                     |              | to the first character "a"   |
+   |                     |              | at the 6th level. Specifying |
+   |                     |              | "o*" will cause the          |
+   |                     |              | characters "o" and "*" to be |
+   |                     |              | alternated for each          |
    |                     |              | successive level.            |
    |                     |              |                              |
    |                 toc |      no      | generate a table-of-contents |

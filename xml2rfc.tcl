@@ -12037,7 +12037,7 @@ proc references_html {tag args} {
 proc reference_html {prefix names title series formats date anchor target
                      target2 width annotations} {
     global options
-    global rfcTxtHome rfcHtmlHome idTxtHome
+    global rfcTxtHome rfcHtmlHome idTxtHome idHtmlHome
 
     if {[string compare $target2 ""]} {
         set prefix "<a href=\"$target2\">$prefix</a>"
@@ -12072,7 +12072,8 @@ proc reference_html {prefix names title series formats date anchor target
             }
             if {[regexp -nocase -- "internet-draft&nbsp;(draft-.*)" $serial x n] \
                     == 1} {
-                set target $idTxtHome/$n.txt
+#                set target $idTxtHome/$n.txt
+                set target $idHtmlHome/$n
                 break
             }
         }
@@ -13674,11 +13675,12 @@ set buffer ""
 set indent $page_basic_indent
 set indents {}
 
-global rfcTxtHome rfcHtmlHome idTxtHome
+global rfcTxtHome rfcHtmlHome idTxtHome idHtmlHome
 
 set rfcTxtHome ftp://ftp.isi.edu/in-notes
 set rfcHtmlHome http://tools.ietf.org/html
 set idTxtHome http://www.ietf.org/internet-drafts
+set idHtmlHome http://tools.ietf.org/html
 
 #       }}}2 Some globals
 #       {{{2 Characters entities
