@@ -61,6 +61,7 @@ case $release in
 	tar xzf xml2rfc-$release.tgz
 
 	# create .zip file
+	rm -f xml2rfc-$release.zip
 	zip -r xml2rfc-$release.zip xml2rfc-$release
 
 	# copy all top level files here

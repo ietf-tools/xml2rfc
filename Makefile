@@ -1,6 +1,6 @@
 all:	format samples dtd
 
-release=1.36pre1-dev
+release=1.36
 
 format:	README.txt README.html \
 	draft-mrose-writing-rfcs.txt draft-mrose-writing-rfcs.html \
