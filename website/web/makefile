@@ -20,6 +20,10 @@ install: all
 	    fi; \
 	done
 
+install-dev: all
+	cp experimental.html $(WEB)/experimental-dev.html
+	cp experimental-debug.html $(WEB)/experimental-dev-debug.html
+
 authoring-install:
 	cd authoring && find . -print | fgrep -v '/.svn' | cpio -pdmv $(WEB)/authoring
 

@@ -79,7 +79,8 @@ my %extensions = (
     );
 
 printHeaders("text/plain") if $debug;
-print "input='$input', inputfn='$inputfn'\n" if $debug;
+my $outputfn = getOutputName($input, $mode, $format);
+print "input='$input', inputfn='$inputfn', outputfn='$outputfn'\n" if $debug;
 print "mode=$mode, format=$format, checking=$checking, type=$type\n" if $debug;
 saveTracePass("Generating $expandedModes{$mode} output in $expandedFormats{$format} format", "h1");
 
@@ -153,7 +154,7 @@ my $TMP1 = $needExpansionToXml ?  setTempFile("$inputfn-1.xml") : setTempFile("$
 print "TMP1=$TMP1\n" if $debug;
 my $TMPERR = setTempFile("$inputfn.err");
 
-my ($ret, $out, $err) = runCommand("tclsh etc/xml2rfc-dev.tcl xml2rfc $inputfn $TMP1", $inputfn, $TMP1, 
+my ($ret, $out, $err) = runCommand("tclsh etc/xml2rfc-dev.tcl xml2rfc $inputfn $TMP1 $outputfn", $inputfn, $TMP1, 
     $needExpansionToXml ?  "Expanding internal references" : "Expanding internal references and generating $mode"
     );
 print "xml2rfc ret=$ret\n" if $debug;
@@ -207,7 +208,7 @@ if ($mode eq 'xml') {
     } elsif (!$needExpansionToXml) {
 	$TMP2 = $TMP1;
     } else {
-	my ($ret, $out, $err) = runCommand("tclsh etc/xml2rfc-dev.tcl xml2rfc $TMP1 $TMP2", $TMP1, $TMP2, "Generating $mode");
+	my ($ret, $out, $err) = runCommand("tclsh etc/xml2rfc-dev.tcl xml2rfc $TMP1 $TMP2 $outputfn", $TMP1, $TMP2, "Generating $mode");
 	print "xml2rfc ret=$ret\n" if $debug;
 	print "out='$out'\n" if $debug;
 	print "err='$err'\n" if $debug;
@@ -334,7 +335,6 @@ if ($type eq 'towindow') {
     print TMPTRACE "<hr/>\n";
     close TMPTRACE;
 
-    my $outputfn = getOutputName($input, $mode, $format);
     keepTempFile($TMP3);
     printHeaders("text/html");
     print "<html><head><title>XML2RFC Processor with Warnings &amp; Errors</title></head>\n";
@@ -346,7 +346,6 @@ if ($type eq 'towindow') {
     print "</html>";
 
 } elsif ($type eq 'tofile') {
-    my $outputfn = getOutputName($input, $mode, $format);
     # cgi_content_type "unknown/exe"
     printHeaders("application/octet-stream", "Content-Disposition: attachment; filename=\"$outputfn\"");
     catFile($TMP3);
@@ -373,6 +372,7 @@ sub runCommand {
     my $infn = shift;
     my $outfn = shift;
     my $pass = shift;
+    print "\nrunCommand('$cmd', '$infn', '$outfn', '$pass')\n" if $debug;
     saveTracePass($pass);
     print "\n--- $pass ---\n" if $debug;
     $cmd .= " 2>$TMPERR";
