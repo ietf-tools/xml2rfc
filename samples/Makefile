@@ -18,6 +18,7 @@ XML= rfc2616.xml rfc3470.xml rfc3986.xml rfc5234.xml rfc5322.xml \
 	sample.ipr.rfc.200609.xml \
 	sample.ipr.rfc.200808.xml \
 	sample.ipr.rfc.200812.xml \
+	sample.ipr.rfc.200812.nomod.xml \
 	sample.ipr.rfc.200906.xml \
 	sample.ipr.rfc.200907.xml \
 	sample.ipr.rfc.200909.xml \
@@ -27,6 +28,7 @@ XML= rfc2616.xml rfc3470.xml rfc3986.xml rfc5234.xml rfc5322.xml \
 	sample.ipr.rfc.201001.iab.inf.xml \
 	sample.ipr.rfc.201001.ietf.bcp.c.xml \
 	sample.ipr.rfc.201001.ietf.exp.c.xml \
+	sample.ipr.rfc.201001.ietf.exp.c.nomod.xml \
 	sample.ipr.rfc.201001.ietf.exp.nc.xml \
 	sample.ipr.rfc.201001.ietf.hist.c.xml \
 	sample.ipr.rfc.201001.ietf.hist.nc.xml \
