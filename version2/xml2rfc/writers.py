@@ -11,7 +11,7 @@ def justify_inline(left_str, center_str, right_str, width=72):
         Throws an exception if the combined length of the three strings is
         greater than the width.
     """
-    
+
     if (len(left_str) + len(center_str) + len(right_str)) > width:
         raise Exception("The given strings are greater than a width of: "\
                                                             + str(width))
@@ -95,7 +95,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         for sec in section['section']:
             if appendix == True:
                 self.write_section_rec(sec, 'Appendix ' + \
-                                       string.uppercase[index-1] + '.')
+                                       string.uppercase[index - 1] + '.')
             else:
                 self.write_section_rec(sec, indexstring + str(index) + '.')
             index += 1
@@ -138,7 +138,7 @@ class RawTextRfcWriter(XmlRfcWriter):
                 self.write_par(figure['artwork'].text, indent=3)
             if 'postamble' in figure:
                 self.write_par(figure['postamble'].text, indent=3)
-    
+
     def write_reference_list(self, references):
         """ Writes a formatted list of <reference> elements """
         # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
@@ -159,19 +159,20 @@ class RawTextRfcWriter(XmlRfcWriter):
                 refstring.append(date.attribs['month'])
             refstring.append(date.attribs['year'] + '.')
             # TODO: Should reference list have [anchor] or [1] for bullets?
-            bullet = '[' + str(i+1) + ']  '
+            bullet = '[' + str(i + 1) + ']  '
             self.write_par(''.join(refstring), indent=3, bullet=bullet)
 
     def write_buffer(self):
-        """ Internal method that writes the entire RFC tree to a buffer 
-            
+        """ Internal method that writes the entire RFC tree to a buffer
+
             Actual writing to a file, plus some post formatting is handled
             in self.write(), which is the public method to be called.
         """
         # Prepare front page left heading
         fp_left = [self.rfc.attribs['trad_header']]
         if 'number' in self.rfc.attribs:
-            fp_left.append('Request for Comments: ' + self.rfc.attribs['number'])
+            fp_left.append('Request for Comments: ' + \
+                           self.rfc.attribs['number'])
         else:
             # No RFC number -- assume internet draft
             fp_left.append('Internet-Draft')
@@ -241,10 +242,10 @@ class RawTextRfcWriter(XmlRfcWriter):
                 self.write_reference_list(references)
         else:
             self.write_reference_list(self.rfc['back']['references'][0])
-        
+
         # Appendix sections
         self.write_section_rec(self.rfc['back'], None, appendix=True)
-        
+
         # Authors address section
         if len(self.rfc['front']['author']) > 1:
             self.write_line("Authors' Addresses")
@@ -285,14 +286,14 @@ class RawTextRfcWriter(XmlRfcWriter):
                 if 'uri' in author['address']:
                     self.write_line('URI:   ' + author['address']['uri'].text, indent=3, lb=False)
 
-        # EOF 
+        # EOF
 
     def write(self, filename):
         """ Public method to write rfc tree to a file """
-        
+
         # Write RFC to buffer
         self.write_buffer()
-        
+
         # Write buffer to file
         file = open(filename, 'w')
         for line in self.buf:
@@ -300,20 +301,21 @@ class RawTextRfcWriter(XmlRfcWriter):
             # Separate lines by both carriages returns and line breaks.
             file.write('\r\n')
 
+
 class PaginatedTextRfcWriter(RawTextRfcWriter):
     """ Writes to a text file, paginated with headers and footers """
     left_footer = None
     center_footer = None
-    
+
     def __init__(self, rfc):
         RawTextRfcWriter.__init__(self, rfc)
         self.left_footer = ''
         self.center_footer = ''
-        
+
     def make_footer(self, page):
         return justify_inline(self.left_footer, self.center_footer, \
                               '[Page ' + str(page) + ']')
-        
+
     def write(self, filename):
         """ Public method to write rfc tree to a file """
         # Construct a header
@@ -332,7 +334,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             right_header = self.rfc['front']['date'].attribs['month'] + ' '
         right_header += self.rfc['front']['date'].attribs['year']
         header = justify_inline(left_header, center_header, right_header)
-        
+
         # Construct a footer
         self.left_footer = ''
         for i, author in enumerate(self.rfc['front']['author']):
@@ -344,17 +346,17 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             else:
                 self.left_footer += author.attribs['surname']
         self.center_footer = self.rfc.attribs['category']
-        
+
         # Write RFC to buffer
         self.write_buffer()
-        
+
         # Write buffer to file, inserting breaks every 58 lines
         file = open(filename, 'w')
         page = 0
         for i, line in enumerate(self.buf):
             file.write(line)
             file.write('\r\n')
-            if i != 0 and i%54 == 0:
+            if i != 0 and i % 54 == 0:
                 page += 1
                 file.write('\r\n')
                 file.write(self.make_footer(page))
@@ -364,4 +366,3 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 file.write(header)
                 file.write('\r\n')
                 file.write('\r\n')
-        
