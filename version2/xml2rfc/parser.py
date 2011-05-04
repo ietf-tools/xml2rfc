@@ -146,10 +146,6 @@ class XmlRfc(Node):
 
         self.attribs['copyright'] = 'Copyright (C) The Internet Society (%s).'\
         ' All Rights Reserved.' % self['front']['date'].attribs['year']
-        
-
-class ParserTarget:
-    """ Callback interface for lxml.etree.XMLParser parse events """
 
 
 class XmlRfcParser:
