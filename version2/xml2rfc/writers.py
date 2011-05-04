@@ -120,8 +120,10 @@ class RawTextRfcWriter(XmlRfcWriter):
             # Write elements in XML document order
             if element.tag == 't':
                 self.write_t_rec(element)
-            if element.tag == 'figure':
+            elif element.tag == 'figure':
                 self.write_figure(element)
+            elif element.tag == 'texttable':
+                self.write_figure(element, table=True)
         
         index = 1
         for child_sec in section.findall('section'):
@@ -137,13 +139,49 @@ class RawTextRfcWriter(XmlRfcWriter):
         if indexstring == '' and appendix == False:
             self.ref_index = index
 
-    def write_figure(self, figure):
+    def write_figure(self, figure, table=False):
+        """ Function that writes <figure> or <texttable> elements """
         figure_align = figure.attrib['align']
         preamble = figure.find('preamble')
         if preamble is not None:
             self.write_par(self.resolve_refs(preamble), indent=3, \
                            align=figure_align)
-        print figure.find('artwork').text
+        if table:
+            # <texttable> element
+            lines = []
+            headers = []
+            for column in figure.findall('ttcol'):
+                headers.append(column.text)
+            # Draw header
+            borderstring = ['+']
+            for header in headers:
+                borderstring.append('-' * (len(header)+2))
+                borderstring.append('+')
+            self.write_line(''.join(borderstring), indent=3, lb=True)
+            headerstring = ['|']
+            for header in headers:
+                headerstring.append(' ' + header + ' |')
+            self.write_line(''.join(headerstring), indent=3, lb=False)
+            self.write_line(''.join(borderstring), indent=3, lb=False)
+            # Draw Cells
+            cellstring = ['|']
+            for i, cell in enumerate(figure.findall('c')):
+                column = i % len(headers)
+                cellstring.append(cell.text.center(len(headers[column])+2))
+                cellstring.append('|')
+                if column == len(headers) - 1:
+                    # End of line
+                    self.write_line(''.join(cellstring), indent=3, lb=False)
+                    cellstring = ['|']
+                
+            # Draw Bottom
+            self.write_line(''.join(borderstring), indent=3, lb=False)
+        else:
+            # <artwork> element
+            # Insert artwork text directly into the buffer
+            # TODO: Needs to be aligned properly
+            self.buf.append(figure.find('artwork').text)
+        
         postamble = figure.find('postamble')
         if postamble is not None:
             self.write_par(self.resolve_refs(postamble), indent=3, \
@@ -187,8 +225,16 @@ class RawTextRfcWriter(XmlRfcWriter):
                     elif element.attrib['style'] == 'letters':
                         bullet = string.ascii_lowercase[i % 26] + '.  '
                     self.write_t_rec(t, indent=indent, bullet=bullet)
-            if element.tag == 'figure':
+                if element.tail:
+                    self.write_par(element.tail, indent=3)
+            elif element.tag == 'figure':
                 self.write_figure(element)
+                if element.tail:
+                    self.write_par(element.tail, indent=3)
+            elif element.tag == 'texttable':
+                self.write_figure(element, table=True)
+                if element.tail:
+                    self.write_par(element.tail, indent=3)
 
         if len(line) > 0:
             self.write_par(''.join(line), indent=indent, bullet=bullet)
