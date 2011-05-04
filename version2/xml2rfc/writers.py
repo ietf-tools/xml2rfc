@@ -41,7 +41,7 @@ class RawTextRfcWriter(XmlRfcWriter):
     ref_index = None
 
     def __init__(self, rfc):
-        self.rfc = rfc
+        XmlRfcWriter.__init__(self, rfc)
         self.width = 72
         self.buf = []
         self.ref_index = 1
@@ -283,3 +283,8 @@ class RawTextRfcWriter(XmlRfcWriter):
         for line in self.buf:
             file.write(line)
             file.write('\n')
+
+class PaginatedTextRfcWriter(RawTextRfcWriter):
+    
+    def __init__(self, rfc):
+        RawTextRfcWriter.__init__(self, rfc)
