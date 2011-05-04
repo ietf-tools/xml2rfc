@@ -1,4 +1,5 @@
 import lxml.etree
+import re
 
 # Defines names for all RFC elements that may appear more than once, so that
 # we may store them as lists.
@@ -194,6 +195,8 @@ class XmlRfcParser:
             self.curr_node = self.stack.pop()
     
     def data(self, data):
+        # Strip newlines+whitespace
+        data = re.sub('\n\s*', ' ', data.strip())
         # Set data depending on if we're in the head or tail section
         if self.tail_switch:
             self.curr_node.tail = data
