@@ -1,4 +1,4 @@
-import xml.etree.ElementTree
+import lxml.etree
 
 # Defines names for all RFC elements that may appear more than once, so that
 # we may store them as lists.
@@ -177,13 +177,16 @@ class XmlRfcParser:
 
     def parse(self, source):
         # Construct an iterator
-        context = iter(xml.etree.ElementTree.iterparse(source, \
-                                                    events=['start', 'end']))
+        # context = iter(xml.etree.ElementTree.iterparse(source, \
+        #                                           events=['start', 'end']))
+        context = iter(lxml.etree.iterparse(source, events=['start', 'end']))
 
         # Get root from xml and set any attributes from <rfc> node
         event, root = context.next()
         if root.attrib:
-            self.xmlrfc.attribs = root.attrib.copy()
+            # Make shallow copy since we will delete this node.
+            for key,val in root.attrib.items():
+                self.xmlrfc.attribs[key] = val
 
         # Step through xml file
         for event, element in context:
