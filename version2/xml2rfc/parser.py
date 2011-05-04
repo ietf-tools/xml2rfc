@@ -58,8 +58,8 @@ class XmlRfc:
             if element.tag != 'artwork':
                 if element.text is not None:
                     element.text = re.sub('\n\s*', ' ', element.text)
-                if element.tail is not None: pass
-                    #element.tail = re.sub('\n\s*', ' ', element.tail)
+                if element.tail is not None:
+                    element.tail = re.sub('\n\s*', ' ', element.tail)
 
         root.attrib['trad_header'] = 'Network Working Group'
         if 'updates' in root.attrib:

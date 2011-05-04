@@ -65,12 +65,16 @@ class RawTextRfcWriter(XmlRfcWriter):
         elif align == 'right':
             self.buf.append(str.rjust(self.width))
 
-    def write_par(self, str, indent=0, bullet='', align='left'):
+    def write_par(self, str, indent=0, sub_indent=None,bullet='', align='left'):
         """ Writes an indented and wrapped paragraph, preceded by a lb. """
         # We can take advantage of textwraps initial_indent by using a bullet
         # parameter and treating it separately.  We still need to indent it.
         initial = ' ' * indent + bullet
-        subsequent = ' ' * len(initial)
+        if not sub_indent:
+            # No sub_indent specified, use bullet length for indent amount
+            subsequent = ' ' * len(initial)
+        else:
+            subsequent = ' ' * (sub_indent + indent)
         par = textwrap.wrap(str, self.width, \
                             initial_indent=initial, \
                             subsequent_indent=subsequent)
@@ -187,7 +191,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             self.write_par(self.resolve_refs(postamble), indent=3, \
                            align=figure_align)
 
-    def write_t_rec(self, t, indent=3, bullet=''):
+    def write_t_rec(self, t, indent=3, sub_indent=None, bullet=''):
         """ Recursively writes <t> elements """
         line = []
         if t.text:
@@ -207,15 +211,22 @@ class RawTextRfcWriter(XmlRfcWriter):
                 if element.tail:
                     line.append(element.tail)
             elif element.tag == 'iref': pass
+            elif element.tag == 'vspace':
+                for i in range(int(element.attrib['blankLines'])):
+                    self.lb()
+                if element.tail:
+                    line.append(element.tail)
             else:
                 # Not an inline element.  Output what we have so far
                 if len(line) > 0:
-                    self.write_par(''.join(line), indent=indent, bullet=bullet)
+                    self.write_par(''.join(line), indent=indent, \
+                                   sub_indent=sub_indent, bullet=bullet)
                     line = []
             
             if element.tag == 'list':
                 # Default to the 'empty' list style -- 3 spaces
                 bullet = '   '
+                hangIndent = None
                 if 'style' in element.attrib:
                     if element.attrib['style'] == 'symbols':
                         bullet = 'o  '
@@ -224,7 +235,14 @@ class RawTextRfcWriter(XmlRfcWriter):
                         bullet = str(i + 1) + '.  '
                     elif element.attrib['style'] == 'letters':
                         bullet = string.ascii_lowercase[i % 26] + '.  '
-                    self.write_t_rec(t, indent=indent, bullet=bullet)
+                    elif element.attrib['style'] == 'hanging':
+                        bullet = t.attrib['hangText'] + ' '
+                        hangIndent = element.attrib['hangIndent']
+                    if hangIndent:
+                        self.write_t_rec(t, indent=indent, bullet=bullet, \
+                                         sub_indent=int(hangIndent))
+                    else:
+                        self.write_t_rec(t, indent=indent, bullet=bullet)
                 if element.tail:
                     self.write_par(element.tail, indent=3)
             elif element.tag == 'figure':
@@ -237,7 +255,8 @@ class RawTextRfcWriter(XmlRfcWriter):
                     self.write_par(element.tail, indent=3)
 
         if len(line) > 0:
-            self.write_par(''.join(line), indent=indent, bullet=bullet)
+            self.write_par(''.join(line), indent=indent, bullet=bullet, \
+                           sub_indent=sub_indent)
 
     def write_reference_list(self, references):
         """ Writes a formatted list of <reference> elements """
