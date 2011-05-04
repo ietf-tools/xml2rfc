@@ -18,9 +18,10 @@ multi_elements = ['author',
                  'reference',
                  ]
 
+
 class Node:
     """ Single node that optionally contains text, attributes, or child nodes.
-    
+
         Children can be single nodes, or lists of nodes.
 
         To access child nodes, use like a dictionary, e.g. node[child] instead
@@ -49,10 +50,10 @@ class Node:
             else:
                 raise KeyError("Key doesn't exist: " + str(key))
         return self._children[key]
-    
+
     def __contains__(self, key):
         return key in self._children
-    
+
     def __setitem__(self, key, val):
         self._children[key] = val
 
@@ -86,13 +87,13 @@ class XmlRfc(Node):
     """ Internal representation of an RFC document constructed from XML """
     def prepare(self):
         """ Prepare the RFC document for output.
-        
+
             This method is automatically invoked after the xml file is
             finished being read.  It may do any of the following things:
-        
+
             -- Set any necessary default values.
             -- Pre-format some elements to the proper text output.
-        
+
             We can perform any operations here that will be common to all
             ouput formats.  Any further formatting is handled in the
             xml2rfc.writer modules.
@@ -108,44 +109,43 @@ class XmlRfc(Node):
             self.attribs['obsoletes'] = 'Obsoletes: ' + \
                                             self.attribs['obsoletes']
         if 'category' in self.attribs:
-            c = self.attribs['category']
-            if c == 'std':
+            if self.attribs['category'] == 'std':
                 self.attribs['category'] = 'Category: Standards-Track'
                 self.attribs['status'] = \
-            'This document specifies an Internet standards track protocol for ' \
-            'the Internet community, and requests discussion and suggestions ' \
-            'for improvements.  Please refer to the current edition of the ' \
-            '"Internet Official Protocol Standards" (STD 1) for the ' \
-            'standardization state and status of this protocol.  Distribution ' \
-            'of this memo is unlimited.'
+        'This document specifies an Internet standards track protocol for ' \
+        'the Internet community, and requests discussion and suggestions ' \
+        'for improvements.  Please refer to the current edition of the ' \
+        '"Internet Official Protocol Standards" (STD 1) for the ' \
+        'standardization state and status of this protocol.  Distribution ' \
+        'of this memo is unlimited.'
 
-            elif c == 'bcp':
+            elif self.attribs['category'] == 'bcp':
                 self.attribs['category'] = 'Category: Best Current Practices'
                 self.attribs['status'] = \
-            'This document specifies an Internet Best Current Practices for ' \
-            'the Internet Community, and requests discussion and suggestions ' \
-            'for improvements. Distribution of this memo is unlimited.'
+        'This document specifies an Internet Best Current Practices for ' \
+        'the Internet Community, and requests discussion and suggestions ' \
+        'for improvements. Distribution of this memo is unlimited.'
 
-            elif c == 'exp':
+            elif self.attribs['category'] == 'exp':
                 self.attribs['category'] = 'Category: Experimental Protocol'
                 self.attribs['status'] = \
-            'This memo defines an Experimental Protocol for the Internet ' \
-            'community.  This memo does not specify an Internet standard of ' \
-            'any kind.  Discussion and suggestions for improvement are ' \
-            'requested. Distribution of this memo is unlimited.'
+        'This memo defines an Experimental Protocol for the Internet ' \
+        'community.  This memo does not specify an Internet standard of ' \
+        'any kind.  Discussion and suggestions for improvement are ' \
+        'requested. Distribution of this memo is unlimited.'
 
-            elif c == 'historic':
+            elif self.attribs['category'] == 'historic':
                 self.attribs['category'] = 'Category: Historic'
                 self.attribs['status'] = 'NONE'
-                
-            elif c == 'info':
+
+            elif self.attribs['category'] == 'info':
                 self.attribs['category'] = 'Category: Informational'
                 self.attribs['status'] = \
-            'This memo provides information for the Internet community. This ' \
-            'memo does not specify an Internet standard of any kind. ' \
-            'Distribution of this memo is unlimited.'
+        'This memo provides information for the Internet community. This ' \
+        'memo does not specify an Internet standard of any kind. ' \
+        'Distribution of this memo is unlimited.'
 
-        self.attribs['copyright'] = 'Copyright (C) The Internet Society (%s).' \
+        self.attribs['copyright'] = 'Copyright (C) The Internet Society (%s).'\
         ' All Rights Reserved.' % self['front']['date'].attribs['year']
 
 
@@ -181,7 +181,7 @@ class XmlRfcParser:
         # Construct an iterator
         context = iter(xml.etree.ElementTree.iterparse(source, \
                                                     events=['start', 'end']))
-        
+
         # Get root from xml and set any attributes from <rfc> node
         event, root = context.next()
         if root.attrib:
@@ -194,6 +194,6 @@ class XmlRfcParser:
             if event == "end":
                 self.end()
                 root.clear()  # Free memory
-        
+
         # Finally, do any extra formatting on the RFC rfc
         self.xmlrfc.prepare()
