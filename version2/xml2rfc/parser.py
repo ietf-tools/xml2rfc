@@ -1,5 +1,4 @@
 import xml.etree.ElementTree
-import textwrap
 
 # Defines names for all RFC elements that may appear more than once, so that
 # we may store them as lists.
@@ -32,11 +31,13 @@ class Node:
         overwriting.
     """
     text = None
+    tail = None
     attribs = None
     _children = None
 
-    def __init__(self, text=None):
+    def __init__(self, text=None, tail=None):
         self.text = text
+        self.tail = tail
         self.attribs = {}
         self._children = {}
 
@@ -166,6 +167,8 @@ class XmlRfcParser:
         # Add text/attrib if available
         if element.text:
             self.curr_node.text = element.text.strip().replace('\n', '')
+        if element.tail:
+            self.curr_node.tail = element.tail.strip().replace('\n', '')
         if element.attrib:
             self.curr_node.attribs = element.attrib
 
