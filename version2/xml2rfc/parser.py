@@ -1,4 +1,5 @@
 import xml.etree.ElementTree
+import textwrap
 
 # Defines names for all RFC elements that may appear more than once, so that
 # we may store them as lists.
@@ -10,8 +11,11 @@ multi_elements = ['author',
                  'note',
                  'section',
                  't',
+                 'ttcol',
+                 'c',
                  'figure',
                  'list',
+                 'references',
                  'reference',
                  ]
 
@@ -98,16 +102,44 @@ class XmlRfc(Node):
                                             self.attribs['obsoletes']
         if 'category' in self.attribs:
             c = self.attribs['category']
-            if   c == 'std':
-                self.attribs['category'] = 'Standards-Track'
+            if c == 'std':
+                self.attribs['category'] = 'Category: Standards-Track'
+                self.attribs['status'] = \
+            'This document specifies an Internet standards track protocol for ' \
+            'the Internet community, and requests discussion and suggestions ' \
+            'for improvements.  Please refer to the current edition of the ' \
+            '"Internet Official Protocol Standards" (STD 1) for the ' \
+            'standardization state and status of this protocol.  Distribution ' \
+            'of this memo is unlimited.'
+
             elif c == 'bcp':
-                self.attribs['category'] = 'Best Current Practices'
+                self.attribs['category'] = 'Category: Best Current Practices'
+                self.attribs['status'] = \
+            'This document specifies an Internet Best Current Practices for ' \
+            'the Internet Community, and requests discussion and suggestions ' \
+            'for improvements. Distribution of this memo is unlimited.'
+
             elif c == 'exp':
-                self.attribs['category'] = 'Experimental Protocol'
+                self.attribs['category'] = 'Category: Experimental Protocol'
+                self.attribs['status'] = \
+            'This memo defines an Experimental Protocol for the Internet ' \
+            'community.  This memo does not specify an Internet standard of ' \
+            'any kind.  Discussion and suggestions for improvement are ' \
+            'requested. Distribution of this memo is unlimited.'
+
             elif c == 'historic':
-                self.attribs['category'] = 'Historic'
+                self.attribs['category'] = 'Category: Historic'
+                self.attribs['status'] = 'NONE'
+                
             elif c == 'info':
-                self.attribs['category'] = 'Informational'
+                self.attribs['category'] = 'Category: Informational'
+                self.attribs['status'] = \
+            'This memo provides information for the Internet community. This ' \
+            'memo does not specify an Internet standard of any kind. ' \
+            'Distribution of this memo is unlimited.'
+
+        self.attribs['copyright'] = 'Copyright (C) The Internet Society (%s).' \
+        ' All Rights Reserved.' % self['front']['date'].attribs['year']
 
 
 class XmlRfcParser:
@@ -127,7 +159,7 @@ class XmlRfcParser:
         self.curr_node = self.curr_node.insert(element.tag, Node())
         # Add text/attrib if available
         if element.text:
-            self.curr_node.text = element.text.strip()
+            self.curr_node.text = element.text.strip().replace('\n', '')
         if element.attrib:
             self.curr_node.attribs = element.attrib
 
@@ -144,7 +176,7 @@ class XmlRfcParser:
         # Get root from xml and set any attributes from <rfc> node
         event, root = context.next()
         if root.attrib:
-            self.xmlrfc.attribs = root.attrib
+            self.xmlrfc.attribs = root.attrib.copy()
 
         # Step through xml file
         for event, element in context:
