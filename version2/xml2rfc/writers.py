@@ -242,22 +242,23 @@ class RawTextRfcWriter(XmlRfcWriter):
     def write_reference_list(self, references):
         """ Writes a formatted list of <reference> elements """
         # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
-        for i, ref in enumerate(references['reference']):
+        for i, ref in enumerate(references.findall('reference')):
             refstring = []
-            for j, author in enumerate(ref['front']['author']):
-                refstring.append(author.attribs['surname'] + ', ' + \
-                                 author.attribs['initials'] + '., ')
-                if j == len(ref['front']['author']) - 2:
+            authors = ref.findall('front/author')
+            for j, author in enumerate(authors):
+                refstring.append(author.attrib['surname'] + ', ' + \
+                                 author.attrib['initials'] + '., ')
+                if j == len(authors) - 2:
                     # Second-to-last, add an "and"
                     refstring.append('and ')
-                    refstring.append(author.attribs['surname'] + ', ' + \
-                                     author.attribs['initials'] + '., ')
-            refstring.append('"' + ref['front']['title'].text + '", ')
+                    refstring.append(author.attrib['surname'] + ', ' + \
+                                     author.attrib['initials'] + '., ')
+            refstring.append('"' + ref.find('front/title').text + '", ')
             # TODO: Handle seriesInfo
-            date = ref['front']['date']
-            if 'month' in date.attribs:
-                refstring.append(date.attribs['month'])
-            refstring.append(date.attribs['year'] + '.')
+            date = ref.find('front/date')
+            if 'month' in date.attrib:
+                refstring.append(date.attrib['month'])
+            refstring.append(date.attrib['year'] + '.')
             # TODO: Should reference list have [anchor] or [1] for bullets?
             bullet = '[' + str(i + 1) + ']  '
             self.write_par(''.join(refstring), indent=3, bullet=bullet)
@@ -334,22 +335,23 @@ class RawTextRfcWriter(XmlRfcWriter):
         # Middle sections
         self.write_section_rec(self.r.find('middle'), None)
         
-        """
+
         # References section
         ref_indexstring = str(self.ref_index) + '.'
         self.write_line(ref_indexstring + ' References')
         # Treat references as nested only if there is more than one <references>
-        if len(self.rfc['back']['references']) > 1:
-            for index, references in enumerate(self.rfc['back']['references']):
-                title = references.attribs['title']
+        references = self.r.findall('back/references')
+        if len(references) > 1:
+            for index, reference_list in enumerate(references):
+                title = reference_list.attrib['title']
                 self.write_line(ref_indexstring + str(index + 1) + '. ' + title)
-                self.write_reference_list(references)
+                self.write_reference_list(reference_list)
         else:
-            self.write_reference_list(self.rfc['back']['references'][0])
-
+            self.write_reference_list(references[0])
+        
         # Appendix sections
-        self.write_section_rec(self.rfc['back'], None, appendix=True)
-
+        self.write_section_rec(self.r.find('back'), None, appendix=True)
+        """
         # Authors address section
         if len(self.rfc['front']['author']) > 1:
             self.write_line("Authors' Addresses")
