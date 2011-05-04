@@ -76,69 +76,78 @@ class RawTextRfcWriter(XmlRfcWriter):
         """ Recursively writes <section> elements """
         if indexstring:
             # Prepend a neat index string to the title
-            self.write_line(indexstring + ' ' + section.attribs['title'])
+            self.write_line(indexstring + ' ' + section.attrib['title'])
         else:
             # Must be <middle> or <back> element -- no title or index.
             indexstring = ''
-
-        for t in section['t']:
-            self.write_t_rec(t)
-
-        for figure in section['figure']:
-            if 'preamble' in figure:
-                self.write_par(figure['preamble'].text, indent=3)
-            if 'artwork' in figure:
-                self.write_par(figure['artwork'].text, indent=3)
-            if 'postamble' in figure:
-                self.write_par(figure['postamble'].text, indent=3)
-
+        
+        for element in section:
+            # Write elements in XML document order
+            if element.tag == 't':
+                self.write_t_rec(element)
+            if element.tag == 'figure':
+                self.write_figure(element)
+        
         index = 1
-        for sec in section['section']:
+        for child_sec in section.findall('section'):
             if appendix == True:
-                self.write_section_rec(sec, 'Appendix ' + \
-                                       string.uppercase[index - 1] + '.')
+                self.write_section_rec(child_sec, 'Appendix ' + \
+                                       string.uppercase[index-1] + '.')
             else:
-                self.write_section_rec(sec, indexstring + str(index) + '.')
+                self.write_section_rec(child_sec, indexstring + \
+                                       str(index) + '.')
             index += 1
 
         # Set the ending index number so we know where to begin references
         if indexstring == '' and appendix == False:
             self.ref_index = index
 
+    def write_figure(self, figure):
+        self.write_line('figure', indent=10)
+
     def write_t_rec(self, t, indent=3, bullet=''):
         """ Recursively writes <t> elements """
-        text = []
+        line = []
         if t.text:
-            text.append(t.text)
-        if 'xref' in t:
-            if t['xref'].text:
-                text.append(t['xref'].text + ' ')
-            text.append('[' + t['xref'].attribs['target'] + ']')
-        if t.tail:
-            text.append(t.tail)
-        if len(text) > 0:
-            self.write_par(''.join(text), indent=indent, bullet=bullet)
+            line.append(t.text)
 
-        for list in t['list']:
-            # Default to the 'empty' list style -- 3 spaces
-            bullet = '   '
-            if 'style' in list.attribs:
-                if list.attribs['style'] == 'symbols':
-                    bullet = 'o  '
-            for i, t in enumerate(list['t']):
-                if list.attribs['style'] == 'numbers':
-                    bullet = str(i + 1) + '.  '
-                elif list.attribs['style'] == 'letters':
-                    bullet = string.ascii_lowercase[i % 26] + '.  '
-                self.write_t_rec(t, indent=indent, bullet=bullet)
+        for element in t:
+            if element.tag == 'xref':
+                if element.text:
+                    line.append(element.text + ' ')
+                line.append('[' + element.attrib['target'] + ']')
+                if element.tail:
+                    line.append(element.tail)
+            elif element.tag == 'eref':
+                if element.text:
+                    line.append(element.text + ' ')
+                line.append('[' + element.attrib['target'] + ']')
+                if element.tail:
+                    line.append(element.tail)
+            elif element.tag == 'iref': pass
+            else:
+                # Not an inline element.  Output what we have so far
+                if len(line) > 0:
+                    self.write_par(''.join(line), indent=indent, bullet=bullet)
+                    line = []
+            
+            if element.tag == 'list':
+                # Default to the 'empty' list style -- 3 spaces
+                bullet = '   '
+                if 'style' in element.attrib:
+                    if element.attrib['style'] == 'symbols':
+                        bullet = 'o  '
+                for i, t in enumerate(element.findall('t')):
+                    if element.attrib['style'] == 'numbers':
+                        bullet = str(i + 1) + '.  '
+                    elif element.attrib['style'] == 'letters':
+                        bullet = string.ascii_lowercase[i % 26] + '.  '
+                    self.write_t_rec(t, indent=indent, bullet=bullet)
+            if element.tag == 'figure':
+                self.write_figure(element)
 
-        for figure in t['figure']:
-            if 'preamble' in figure:
-                self.write_par(figure['preamble'].text, indent=3)
-            if 'artwork' in figure:
-                self.write_par(figure['artwork'].text, indent=3)
-            if 'postamble' in figure:
-                self.write_par(figure['postamble'].text, indent=3)
+        if len(line) > 0:
+            self.write_par(''.join(line), indent=indent, bullet=bullet)
 
     def write_reference_list(self, references):
         """ Writes a formatted list of <reference> elements """
@@ -177,9 +186,11 @@ class RawTextRfcWriter(XmlRfcWriter):
             # No RFC number -- assume internet draft
             fp_left.append('Internet-Draft')
         if 'updates' in self.r.attrib:
-            fp_left.append(self.r.attrib['updates'])
+            if self.r.attrib['updates'] != '':
+                fp_left.append(self.r.attrib['updates'])
         if 'obsoletes' in self.r.attrib:
-            fp_left.append(self.r.attrib['obsoletes'])
+            if self.r.attrib['obsoletes'] != '':
+                fp_left.append(self.r.attrib['obsoletes'])
         if 'category' in self.r.attrib:
             fp_left.append('Category: ' + self.r.attrib['category'])
 
@@ -205,33 +216,35 @@ class RawTextRfcWriter(XmlRfcWriter):
             else:
                 right = ''
             self.buf.append(justify_inline(left, '', right))
-        """
+
         # Title & Optional docname
-        self.write_line(self.rfc['front']['title'].text.center(self.width))
-        if 'docName' in self.rfc.attribs:
-            self.write_line(self.rfc.attribs['docName'].center(self.width), \
+        self.write_line(self.r.find('front/title').text.center(self.width))
+        if 'docName' in self.r.attrib:
+            self.write_line(self.r.attrib['docName'].center(self.width), \
                             lb=False)
 
         # Abstract
-        if 'abstract' in self.rfc['front']:
+        abstract = self.r.find('front/abstract')
+        if abstract is not None:
             self.write_line('Abstract')
-            for t in self.rfc['front']['abstract']['t']:
+            for t in abstract.findall('t'):
                 self.write_t_rec(t)
 
         # Status
         self.write_line('Status of this Memo')
-        self.write_par(self.rfc.attribs['status'], indent=3)
+        self.write_par(self.r.attrib['status'], indent=3)
 
         # Copyright
         self.write_line('Copyright Notice')
-        self.write_par(self.rfc.attribs['copyright'], indent=3)
+        self.write_par(self.r.attrib['copyright'], indent=3)
         
         # Table of contents
         # TODO: Look-ahead TOC or modify the buffer afterwards?
-
+        
         # Middle sections
-        self.write_section_rec(self.rfc['middle'], None)
-
+        self.write_section_rec(self.r.find('middle'), None)
+        
+        """
         # References section
         ref_indexstring = str(self.ref_index) + '.'
         self.write_line(ref_indexstring + ' References')

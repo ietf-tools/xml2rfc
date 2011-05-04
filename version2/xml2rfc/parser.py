@@ -7,8 +7,10 @@ class XmlRfcParser:
     
     def parse(self, source):
         # Get a parser object
-        parser = lxml.etree.XMLParser(dtd_validation=True, no_network=False, \
-                                      remove_comments=True)
+        parser = lxml.etree.XMLParser(dtd_validation=True, \
+                                      no_network=False, \
+                                      remove_comments=True, \
+                                      remove_blank_text=True)
         
         # Parse the XML file into a tree and create an rfc instance
         tree = lxml.etree.parse(source, parser)
@@ -50,14 +52,23 @@ class XmlRfc:
             xml2rfc.writer modules.
         """
         root = self.getroot()
-        
+
+        # Traverse the tree and strip any newlines contained in element data
+        for element in root.iter():
+            if element.text is not None:
+                element.text = re.sub('\n\s*', ' ', element.text)
+            if element.tail is not None: pass
+                #element.tail = re.sub('\n\s*', ' ', element.tail)
+
         root.attrib['trad_header'] = 'Network Working Group'
         if 'updates' in root.attrib:
-            root.attrib['updates'] = 'Updates: ' + \
-                                            root.attrib['updates']
+            if root.attrib['updates'] != '':
+                root.attrib['updates'] = 'Updates: ' + \
+                                                root.attrib['updates']
         if 'obsoletes' in root.attrib:
-            root.attrib['obsoletes'] = 'Obsoletes: ' + \
-                                            root.attrib['obsoletes']
+            if root.attrib['obsoletes'] != '':
+                root.attrib['obsoletes'] = 'Obsoletes: ' + \
+                                                root.attrib['obsoletes']
         if 'category' in root.attrib:
             if root.attrib['category'] == 'std':
                 root.attrib['category'] = 'Standards-Track'
