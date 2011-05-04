@@ -340,6 +340,19 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.write_buffer()
         
         # Write buffer to file, inserting breaks every 58 lines
-        
-        
+        file = open(filename, 'w')
+        page = 0
+        for i, line in enumerate(self.buf):
+            file.write(line)
+            file.write('\r\n')
+            if i != 0 and i%54 == 0:
+                page += 1
+                file.write('\r\n')
+                file.write(self.make_footer(page))
+                file.write('\r\n')
+                file.write('\f')
+                file.write('\r\n')
+                file.write(header)
+                file.write('\r\n')
+                file.write('\r\n')
         
