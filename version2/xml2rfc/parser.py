@@ -179,7 +179,8 @@ class XmlRfcParser:
         # Construct an iterator
         # context = iter(xml.etree.ElementTree.iterparse(source, \
         #                                           events=['start', 'end']))
-        context = iter(lxml.etree.iterparse(source, events=['start', 'end']))
+        context = iter(lxml.etree.iterparse(source, events=['start', 'end'], \
+                                            dtd_validation=True))
 
         # Get root from xml and set any attributes from <rfc> node
         event, root = context.next()
