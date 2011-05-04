@@ -41,6 +41,9 @@ class Node:
     
     def __setitem__(self, key, val):
         self._children[key] = val
+        
+    def __contains__(self, key):
+        return key in self._children
 
     def __repr__(self):
         str = " "
@@ -87,12 +90,12 @@ class XmlRfc(Node):
         if 'number' in self.attribs:
             self.attribs['number'] = 'Request for Comments: ' + \
                                             self.attribs['number']
-        if 'obsoletes' in self.attribs:
-            self.attribs['obsoletes'] = 'Obsoletes: ' + \
-                                            self.attribs['obsoletes']
         if 'updates' in self.attribs:
             self.attribs['updates'] = 'Updates: ' + \
                                             self.attribs['updates']
+        if 'obsoletes' in self.attribs:
+            self.attribs['obsoletes'] = 'Obsoletes: ' + \
+                                            self.attribs['obsoletes']
         if 'category' in self.attribs:
             c = self.attribs['category']
             if   c == 'std':
