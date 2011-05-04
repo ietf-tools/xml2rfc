@@ -12,17 +12,20 @@ class XmlRfcParser:
         
         # Parse the XML file into a tree and create an rfc instance
         tree = lxml.etree.parse(source, parser)
-        rfc = XmlRfc(tree)
+        xmlrfc = XmlRfc(tree)
 
         # Finally, do any extra formatting on the RFC before returning
-        rfc.prepare()
-        return rfc
+        xmlrfc.prepare()
+        return xmlrfc
+
 
 class XmlRfc:
     """ Internal representation of an RFC document
         
         Contains an lxml.etree.ElementTree, with some additional helper
-        methods to prepare the tree for output
+        methods to prepare the tree for output.
+        
+        Accessing the rfc tree is done by getting the root node from getroot()
     """
     tree = None
     
@@ -50,15 +53,15 @@ class XmlRfc:
         
         root.attrib['trad_header'] = 'Network Working Group'
         if 'updates' in root.attrib:
-            self.attribs['updates'] = 'Updates: ' + \
+            root.attrib['updates'] = 'Updates: ' + \
                                             root.attrib['updates']
-        if 'obsoletes' in self.attribs:
-            self.attribs['obsoletes'] = 'Obsoletes: ' + \
-                                            self.attribs['obsoletes']
-        if 'category' in self.attribs:
-            if self.attribs['category'] == 'std':
-                self.attribs['category'] = 'Standards-Track'
-                self.attribs['status'] = \
+        if 'obsoletes' in root.attrib:
+            root.attrib['obsoletes'] = 'Obsoletes: ' + \
+                                            root.attrib['obsoletes']
+        if 'category' in root.attrib:
+            if root.attrib['category'] == 'std':
+                root.attrib['category'] = 'Standards-Track'
+                root.attrib['status'] = \
         'This document specifies an Internet standards track protocol for ' \
         'the Internet community, and requests discussion and suggestions ' \
         'for improvements.  Please refer to the current edition of the ' \
@@ -66,31 +69,31 @@ class XmlRfc:
         'standardization state and status of this protocol.  Distribution ' \
         'of this memo is unlimited.'
 
-            elif self.attribs['category'] == 'bcp':
-                self.attribs['category'] = 'Best Current Practices'
-                self.attribs['status'] = \
+            elif root.attrib['category'] == 'bcp':
+                root.attrib['category'] = 'Best Current Practices'
+                root.attrib['status'] = \
         'This document specifies an Internet Best Current Practices for ' \
         'the Internet Community, and requests discussion and suggestions ' \
         'for improvements. Distribution of this memo is unlimited.'
 
-            elif self.attribs['category'] == 'exp':
-                self.attribs['category'] = 'Experimental Protocol'
-                self.attribs['status'] = \
+            elif root.attrib['category'] == 'exp':
+                root.attrib['category'] = 'Experimental Protocol'
+                root.attrib['status'] = \
         'This memo defines an Experimental Protocol for the Internet ' \
         'community.  This memo does not specify an Internet standard of ' \
         'any kind.  Discussion and suggestions for improvement are ' \
         'requested. Distribution of this memo is unlimited.'
 
-            elif self.attribs['category'] == 'historic':
-                self.attribs['category'] = 'Historic'
-                self.attribs['status'] = 'NONE'
+            elif root.attrib['category'] == 'historic':
+                root.attrib['category'] = 'Historic'
+                root.attrib['status'] = 'NONE'
 
-            elif self.attribs['category'] == 'info':
-                self.attribs['category'] = 'Informational'
-                self.attribs['status'] = \
+            elif root.attrib['category'] == 'info':
+                root.attrib['category'] = 'Informational'
+                root.attrib['status'] = \
         'This memo provides information for the Internet community. This ' \
         'memo does not specify an Internet standard of any kind. ' \
         'Distribution of this memo is unlimited.'
 
-        self.attribs['copyright'] = 'Copyright (C) The Internet Society (%s).'\
-        ' All Rights Reserved.' % self['front']['date'].attribs['year']
+        root.attrib['copyright'] = 'Copyright (C) The Internet Society (%s).'\
+        ' All Rights Reserved.' % root.find('front/date').attrib['year']

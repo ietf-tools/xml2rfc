@@ -25,10 +25,11 @@ def justify_inline(left_str, center_str, right_str, width=72):
 
 class XmlRfcWriter:
     """ Base class for all writers """
-    rfc = None
+    r = None
 
-    def __init__(self, rfc):
-        self.rfc = rfc
+    def __init__(self, xmlrfc):
+        # We will refer to the XmlRfc document root as 'r'
+        self.r = xmlrfc.getroot()
 
     def write(self, filename):
         raise NotImplementedError('write() must be overridden')
@@ -40,8 +41,8 @@ class RawTextRfcWriter(XmlRfcWriter):
     buf = None
     ref_index = None
 
-    def __init__(self, rfc):
-        XmlRfcWriter.__init__(self, rfc)
+    def __init__(self, xmlrfc):
+        XmlRfcWriter.__init__(self, xmlrfc)
         self.width = 72
         self.buf = []
         self.ref_index = 1
@@ -169,29 +170,29 @@ class RawTextRfcWriter(XmlRfcWriter):
             in self.write(), which is the public method to be called.
         """
         # Prepare front page left heading
-        fp_left = [self.rfc.attribs['trad_header']]
-        if 'number' in self.rfc.attribs:
-            fp_left.append('Request for Comments: ' + \
-                           self.rfc.attribs['number'])
+        fp_left = [self.r.attrib['trad_header']]
+        if 'number' in self.r.attrib:
+            fp_left.append('Request for Comments: ' + self.r.attrib['number'])
         else:
             # No RFC number -- assume internet draft
             fp_left.append('Internet-Draft')
-        if 'updates' in self.rfc.attribs:
-            fp_left.append(self.rfc.attribs['updates'])
-        if 'obsoletes' in self.rfc.attribs:
-            fp_left.append(self.rfc.attribs['obsoletes'])
-        if 'category' in self.rfc.attribs:
-            fp_left.append('Category: ' + self.rfc.attribs['category'])
+        if 'updates' in self.r.attrib:
+            fp_left.append(self.r.attrib['updates'])
+        if 'obsoletes' in self.r.attrib:
+            fp_left.append(self.r.attrib['obsoletes'])
+        if 'category' in self.r.attrib:
+            fp_left.append('Category: ' + self.r.attrib['category'])
 
         # Prepare front page right heading
         fp_right = []
-        for author in self.rfc['front']['author']:
-            fp_right.append(author.attribs['initials'] + ' ' + \
-                            author.attribs['surname'])
-            if 'organization' in author:
-                fp_right.append(author['organization'].text)
-        date = self.rfc['front']['date']
-        fp_right.append(date.attribs['month'] + ' ' + date.attribs['year'])
+        for author in self.r.findall('front/author'):
+            fp_right.append(author.attrib['initials'] + ' ' + \
+                            author.attrib['surname'])
+            organization = author.find('organization')
+            if organization is not None:
+                fp_right.append(organization.text)
+        date = self.r.find('front/date')
+        fp_right.append(date.attrib['month'] + ' ' + date.attrib['year'])
 
         # Front page heading
         for i in range(max(len(fp_left), len(fp_right))):
@@ -204,7 +205,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             else:
                 right = ''
             self.buf.append(justify_inline(left, '', right))
-
+        """
         # Title & Optional docname
         self.write_line(self.rfc['front']['title'].text.center(self.width))
         if 'docName' in self.rfc.attribs:
@@ -224,7 +225,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         # Copyright
         self.write_line('Copyright Notice')
         self.write_par(self.rfc.attribs['copyright'], indent=3)
-
+        
         # Table of contents
         # TODO: Look-ahead TOC or modify the buffer afterwards?
 
@@ -286,7 +287,8 @@ class RawTextRfcWriter(XmlRfcWriter):
                 if 'uri' in author['address']:
                     self.write_line('URI:   ' + author['address']['uri'].text, indent=3, lb=False)
 
-        # EOF
+        # EOF 
+        """
 
     def write(self, filename):
         """ Public method to write rfc tree to a file """
