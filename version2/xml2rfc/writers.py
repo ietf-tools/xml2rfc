@@ -2,6 +2,7 @@
 
 import textwrap
 import string
+import re
 
 
 def justify_inline(left_str, center_str, right_str, width=72):
@@ -89,6 +90,12 @@ class RawTextRfcWriter(XmlRfcWriter):
             self.buf.append(str.center(self.width))
         elif align == 'right':
             self.buf.append(str.rjust(self.width))
+    
+    def write_raw(self, data, indent=0):
+        """ Writes a raw stream of characters, preserving space and breaks """
+        # Append an indent to every newline of the data
+        indent_str = ' ' * indent
+        self.buf.append(re.sub('\n', '\n' + indent_str, data))
     
     def resolve_refs(self, element):
         """ Returns a string containing element text plus any inline refs """
@@ -184,7 +191,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             # <artwork> element
             # Insert artwork text directly into the buffer
             # TODO: Needs to be aligned properly
-            self.buf.append(figure.find('artwork').text)
+            self.write_raw(figure.find('artwork').text, indent=3)
         
         postamble = figure.find('postamble')
         if postamble is not None:
@@ -213,7 +220,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             elif element.tag == 'iref': pass
             elif element.tag == 'vspace':
                 for i in range(int(element.attrib['blankLines'])):
-                    self.lb()
+                    line.append('\n')
                 if element.tail:
                     line.append(element.tail)
             else:
