@@ -1,107 +1,38 @@
 import lxml.etree
 import re
 
-# Defines names for all RFC elements that may appear more than once, so that
-# we may store them as lists.
-multi_elements = ['author',
-                 'street',
-                 'area',
-                 'workgroup',
-                 'keyword',
-                 'note',
-                 'section',
-                 't',
-                 'ttcol',
-                 'c',
-                 'figure',
-                 'list',
-                 'references',
-                 'reference',
-                 'seriesInfo',
-                 'format',
-                 'annotation'
-                 ]
 
-
-class Node:
-    """ Single node that optionally contains text, attributes, or child nodes.
-
-        Children are either single nodes or lists of nodes depending on whether
-        or not their tag exists in multi_elements as defined above.
-        
-        To access child nodes, use like a dictionary, e.g. node[child] instead
-        of node._children[child].
-
-        Add child nodes by using .insert instead of [] or __setitem__, this way
-        it will insert a multi element into a list instead of overwriting.
-        
-        The dictionary structure is unordered but Nodes will remember what order
-        they are entered by their _pos variable.  If needed, such as for
-        <section> elements, you can get an ordered list of a nodes children
-        by calling node.order_children()
-    """
-    text = None
-    tail = None
-    attribs = None
-    _children = None
-    _pos = None
-
-    def __init__(self, text=None, tail=None, pos=0):
-        self.text = text
-        self.tail = tail
-        self.attribs = {}
-        self._children = {}
-        self._pos = pos
-
-    def __getitem__(self, key):
-        if key not in self._children:
-            if key in multi_elements:
-                # Return an empty list instead of error
-                self._children[key] = []
-            else:
-                raise KeyError("Key doesn't exist: " + str(key))
-        return self._children[key]
-
-    def __contains__(self, key):
-        return key in self._children
-
-    def __setitem__(self, key, val):
-        self._children[key] = val
-
-    def __repr__(self):
-        str = " "
-        if self.text:
-            str += "text=" + self.text + ", "
-        if self.attribs:
-            str += "attribs=" + repr(self.attribs) + ", "
-        if self._children:
-            str += "_children=" + repr(self._children)
-        return str
+class XmlRfcParser:
+    """ XML parser with callbacks to construct an RFC tree """
     
-    def order_children(self):
-        """ Return a list of child nodes as they appear in the XML document """
-        return sorted(self._children, key=lambda node: node.pos)
+    def parse(self, source):
+        # Get a parser object
+        parser = lxml.etree.XMLParser(dtd_validation=True, no_network=False, \
+                                      remove_comments=True)
+        
+        # Parse the XML file into a tree and create an rfc instance
+        tree = lxml.etree.parse(source, parser)
+        rfc = XmlRfc(tree)
 
-    def insert(self, key):
-        """ Insert a new child node into the dictionary """
-        # Remember the position in which the node was inserted
-        node = Node(pos=len(self._children))
-        # Check if the element is a single or multiple type
-        if key in multi_elements:
-            if key in self._children:
-                self._children[key].append(node)
-            else:
-                self._children[key] = [node]
-        else:
-            if key in self._children:
-                raise Exception("Element " + key + " is already defined!")
-            else:
-                self._children[key] = node
-        return node
+        # Finally, do any extra formatting on the RFC before returning
+        rfc.prepare()
+        return rfc
 
-
-class XmlRfc(Node):
-    """ Internal representation of an RFC document constructed from XML """
+class XmlRfc:
+    """ Internal representation of an RFC document
+        
+        Contains an lxml.etree.ElementTree, with some additional helper
+        methods to prepare the tree for output
+    """
+    tree = None
+    
+    def __init__(self, tree):
+        self.tree = tree
+    
+    def getroot(self):
+        """ Wrapper method """
+        return self.tree.getroot()
+    
     def prepare(self):
         """ Prepare the RFC document for output.
 
@@ -115,10 +46,12 @@ class XmlRfc(Node):
             ouput formats.  Any further formatting is handled in the
             xml2rfc.writer modules.
         """
-        self.attribs['trad_header'] = 'Network Working Group'
-        if 'updates' in self.attribs:
+        root = self.getroot()
+        
+        root.attrib['trad_header'] = 'Network Working Group'
+        if 'updates' in root.attrib:
             self.attribs['updates'] = 'Updates: ' + \
-                                            self.attribs['updates']
+                                            root.attrib['updates']
         if 'obsoletes' in self.attribs:
             self.attribs['obsoletes'] = 'Obsoletes: ' + \
                                             self.attribs['obsoletes']
@@ -161,64 +94,3 @@ class XmlRfc(Node):
 
         self.attribs['copyright'] = 'Copyright (C) The Internet Society (%s).'\
         ' All Rights Reserved.' % self['front']['date'].attribs['year']
-
-
-class XmlRfcParser:
-    """ XML parser with callbacks to construct an RFC tree """
-    xmlrfc = None
-    curr_node = None
-    stack = None
-    tail_switch = None
-
-    def __init__(self, xmlrfc):
-        self.xmlrfc = xmlrfc
-        self.curr_node = self.xmlrfc
-        self.stack = []
-        self.tail_switch = False
-
-    def parse(self, source):
-        # Get a parser object
-        parser = lxml.etree.XMLParser(dtd_validation=True, no_network=False, \
-                                      target=self)
-        
-        # Parse the XML file -- RFC tree is constructed through callbacks
-        lxml.etree.parse(source, parser)
-
-        # Finally, do any extra formatting on the RFC tree
-        self.xmlrfc.prepare()
-
-    def start(self, tag, attrib):
-        # Start of an element -- flip switch so any data goes in node.text
-        self.tail_switch = False
-        if tag == 'rfc':
-            # Root node -- don't push to stack, this way we avoid using ['rfc']
-            self.curr_node = self.xmlrfc
-        else:
-            # Make a new node and push previous to stack
-            self.stack.append(self.curr_node)
-            self.curr_node = self.curr_node.insert(tag)
-        # Add attribs, if any
-        if attrib:
-            self.curr_node.attribs = attrib
-    
-    def end(self, tag):
-        # End of an element -- flip switch so any data goes in node.tail
-        self.tail_switch = True
-        # Pop node stack
-        if len(self.stack) > 0:
-            self.curr_node = self.stack.pop()
-    
-    def data(self, data):
-        # Strip newlines+whitespace
-        data = re.sub('\n\s*', ' ', data)
-        # Set data depending on if we're in the head or tail section
-        if self.tail_switch:
-            self.curr_node.tail = data
-        else:
-            self.curr_node.text = data
-    
-    def comment(self, comment):
-        pass # No need to handle comments
-    
-    def close(self):
-        return "XML file closed"
