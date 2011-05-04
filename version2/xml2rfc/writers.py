@@ -50,12 +50,13 @@ class RawTextRfcWriter(XmlRfcWriter):
         """ Write a blank line to the file """
         self.buf.append('')
 
-    def write_line(self, str, indent=0):
+    def write_line(self, str, indent=0, lb=True):
         """ Writes an (optionally) indented line preceded by a line break. """
         if len(str) > (self.width):
             raise Exception("The supplied line exceeds the page width!\n \
                                                                     " + str)
-        self.lb()
+        if lb:
+            self.lb()
         self.buf.append(' ' * indent + str)
 
     def write_par(self, str, indent=0, bullet=''):
@@ -217,7 +218,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         if len(self.rfc['back']['references']) > 1:
             for index, references in enumerate(self.rfc['back']['references']):
                 title = references.attribs['title']
-                self.write_line(ref_indexstring + str(index) + '. ' + title)
+                self.write_line(ref_indexstring + str(index + 1) + '. ' + title)
                 self.write_reference_list(references)
         else:
             self.write_reference_list(self.rfc['back']['references'][0])
@@ -230,7 +231,40 @@ class RawTextRfcWriter(XmlRfcWriter):
             self.write_line("Authors' Addresses")
         else:
             self.write_line("Authors Address")
-        
+        for author in self.rfc['front']['author']:
+            if 'role' in author.attribs:
+                self.write_line(author.attribs['fullname'] + ', ' + \
+                                author.attribs['role'], indent=3)
+            else:
+                self.write_line(author.attribs['fullname'], indent=3)
+            if 'organization' in author:
+                self.write_line(author['organization'].text, indent=3, lb=False)
+            if 'address' in author:
+                if 'postal' in author['address']:
+                    for street in author['address']['postal']['street']:
+                        if street.text:
+                            self.write_line(street.text, indent=3, lb=False)
+                    cityline = []
+                    if 'city' in author['address']['postal']:
+                        cityline.append(author['address']['postal']['city'].text)
+                        cityline.append(', ')
+                    if 'region' in author['address']['postal']:
+                        cityline.append(author['address']['postal']['region'].text)
+                        cityline.append(' ')
+                    if 'code' in author['address']['postal']:
+                        cityline.append(author['address']['postal']['code'])
+                    self.write_line(''.join(cityline), indent=3, lb=False)
+                    if 'country' in author['address']['postal']:
+                        self.write_line(author['address']['postal']['country'].text, indent=3, lb=False)
+                self.lb()
+                if 'phone' in author['address']:
+                    self.write_line('Phone: ' + author['address']['phone'].text, indent=3, lb=False)
+                if 'fascimile' in author['address']:
+                    self.write_line('Fax:   ' + author['address']['fascimile'].text, indent=3, lb=False)
+                if 'email' in author['address']:
+                    self.write_line('Email: ' + author['address']['email'].text, indent=3, lb=False)
+                if 'uri' in author['address']:
+                    self.write_line('URI:   ' + author['address']['uri'].text, indent=3, lb=False)
 
         # Done!  Write buffer to file
         file = open(filename, 'w')
