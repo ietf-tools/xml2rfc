@@ -55,10 +55,11 @@ class XmlRfc:
 
         # Traverse the tree and strip any newlines contained in element data
         for element in root.iter():
-            if element.text is not None:
-                element.text = re.sub('\n\s*', ' ', element.text)
-            if element.tail is not None: pass
-                #element.tail = re.sub('\n\s*', ' ', element.tail)
+            if element.tag != 'artwork':
+                if element.text is not None:
+                    element.text = re.sub('\n\s*', ' ', element.text)
+                if element.tail is not None: pass
+                    #element.tail = re.sub('\n\s*', ' ', element.tail)
 
         root.attrib['trad_header'] = 'Network Working Group'
         if 'updates' in root.attrib:

@@ -51,16 +51,21 @@ class RawTextRfcWriter(XmlRfcWriter):
         """ Write a blank line to the file """
         self.buf.append('')
 
-    def write_line(self, str, indent=0, lb=True):
+    def write_line(self, str, indent=0, lb=True, align='left'):
         """ Writes an (optionally) indented line preceded by a line break. """
         if len(str) > (self.width):
             raise Exception("The supplied line exceeds the page width!\n \
                                                                     " + str)
         if lb:
             self.lb()
-        self.buf.append(' ' * indent + str)
+        if align == 'left':
+            self.buf.append(' ' * indent + str)
+        elif align == 'center':
+            self.buf.append(str.center(self.width))
+        elif align == 'right':
+            self.buf.append(str.rjust(self.width))
 
-    def write_par(self, str, indent=0, bullet=''):
+    def write_par(self, str, indent=0, bullet='', align='left'):
         """ Writes an indented and wrapped paragraph, preceded by a lb. """
         # We can take advantage of textwraps initial_indent by using a bullet
         # parameter and treating it separately.  We still need to indent it.
@@ -70,7 +75,37 @@ class RawTextRfcWriter(XmlRfcWriter):
                             initial_indent=initial, \
                             subsequent_indent=subsequent)
         self.lb()
-        self.buf.extend(par)
+        if align == 'left':
+            self.buf.extend(par)
+        else:
+            if len(str) > (self.width):
+                raise Exception("The supplied line exceeds the page width!\n \
+                                                                        " + str)
+        if align == 'center':
+            self.buf.append(str.center(self.width))
+        elif align == 'right':
+            self.buf.append(str.rjust(self.width))
+    
+    def resolve_refs(self, element):
+        """ Returns a string containing element text plus any inline refs """
+        line = []
+        if element.text:
+            line.append(element.text)
+        for child in element:
+            if child.tag == 'xref':
+                if child.text:
+                    line.append(child.text + ' ')
+                line.append('[' + child.attrib['target'] + ']')
+                if child.tail:
+                    line.append(child.tail)
+            elif child.tag == 'eref':
+                if child.text:
+                    line.append(child.text + ' ')
+                line.append('[' + child.attrib['target'] + ']')
+                if child.tail:
+                    line.append(child.tail)
+            elif child.tag == 'iref': pass
+        return ''.join(line)
 
     def write_section_rec(self, section, indexstring, appendix=False):
         """ Recursively writes <section> elements """
@@ -103,7 +138,16 @@ class RawTextRfcWriter(XmlRfcWriter):
             self.ref_index = index
 
     def write_figure(self, figure):
-        self.write_line('figure', indent=10)
+        figure_align = figure.attrib['align']
+        preamble = figure.find('preamble')
+        if preamble is not None:
+            self.write_par(self.resolve_refs(preamble), indent=3, \
+                           align=figure_align)
+        print figure.find('artwork').text
+        postamble = figure.find('postamble')
+        if postamble is not None:
+            self.write_par(self.resolve_refs(postamble), indent=3, \
+                           align=figure_align)
 
     def write_t_rec(self, t, indent=3, bullet=''):
         """ Recursively writes <t> elements """
