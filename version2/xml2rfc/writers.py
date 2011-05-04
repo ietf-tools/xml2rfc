@@ -113,7 +113,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             # Default to the 'empty' list style -- 3 spaces
             bullet = '   '
             if 'style' in list.attribs:
-                if list.attribs['style'] == 'symbol':
+                if list.attribs['style'] == 'symbols':
                     bullet = 'o  '
             for i, t in enumerate(list['t']):
                 if list.attribs['style'] == 'numbers':
