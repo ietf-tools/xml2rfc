@@ -38,6 +38,9 @@ class Node:
 
     def __getitem__(self, key):
         return self._children[key]
+    
+    def __setitem__(self, key, val):
+        self.children[key] = val
 
     def __repr__(self):
         str = " "
