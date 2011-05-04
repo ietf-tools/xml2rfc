@@ -67,7 +67,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.lb()
         self.buf.extend(par)
 
-    def write_section_rec(self, section, indexstring, index=1):
+    def write_section_rec(self, section, indexstring, appendix=False):
         """ Recursively writes <section> elements """
         if indexstring:
             # Prepend a neat index string to the title
@@ -87,9 +87,14 @@ class RawTextRfcWriter(XmlRfcWriter):
             if 'postamble' in figure:
                 self.write_par(figure['postamble'].text, indent=3)
 
+        i = 1
         for sec in section['section']:
-            self.write_section_rec(sec, indexstring + str(index) + '.')
-            index += 1
+            if appendix == True:
+                self.write_section_rec(sec, 'Appendix ' + string.uppercase[i-1]\
+                                                                        + '.')
+            else:
+                self.write_section_rec(sec, indexstring + str(i) + '.')
+            i += 1
 
     def write_t_rec(self, t, indent=3, bullet=''):
         """ Recursively writes <t> elements """
@@ -174,7 +179,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.write_section_rec(self.rfc['middle'], None)
 
         # Back sections
-        self.write_section_rec(self.rfc['back'], None, index=10)
+        self.write_section_rec(self.rfc['back'], None, appendix=True)
 
         # Done!  Write buffer to file
         file = open(filename, 'w')
