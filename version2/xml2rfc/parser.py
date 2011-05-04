@@ -17,6 +17,8 @@ multi_elements = ['author',
                  'references',
                  'reference',
                  'seriesInfo',
+                 'format',
+                 'annotation'
                  ]
 
 
@@ -75,7 +77,6 @@ class Node:
                 self._children[key].append(node)
             else:
                 self._children[key] = [node]
-            # Unique element.
         else:
             if key in self._children:
                 raise Exception("Element " + key + " is already defined!")
@@ -149,21 +150,6 @@ class XmlRfc(Node):
 
 class ParserTarget:
     """ Callback interface for lxml.etree.XMLParser parse events """
-    def start(self, tag, attrib):
-        print "start: " + tag
-    
-    def end(self, tag):
-        print "end: " + tag
-    
-    def data(self, data):
-        print "data: " + data
-    
-    def comment(self, comment):
-        pass # No need to handle comments
-    
-    def close(self):
-        print "close"
-        return "XML file closed"
 
 
 class XmlRfcParser:
@@ -177,44 +163,41 @@ class XmlRfcParser:
         self.curr_node = self.xmlrfc
         self.stack = []
 
-    def start(self, element):
-        # Make a new node and push on top
-        self.stack.append(self.curr_node)
-        self.curr_node = self.curr_node.insert(element.tag, Node())
-        # Add text/attrib if available
-        if element.text:
-            self.curr_node.text = element.text.strip().replace('\n', '')
-        if element.tail:
-            self.curr_node.tail = element.tail.strip().replace('\n', '')
-        if element.attrib:
-            self.curr_node.attribs = element.attrib
-
-    def end(self):
-        # Pop node stack
-        if len(self.stack) > 0:
-            self.curr_node = self.stack.pop()
-
     def parse(self, source):
         # Get a parser object
         parser = lxml.etree.XMLParser(dtd_validation=True, no_network=False, \
-                                      target=ParserTarget())
-        tree = lxml.etree.parse(source, parser)
-        """
-        # Get root from xml and set any attributes from <rfc> node
-        event, root = context.next()
-        if root.attrib:
-            # Make shallow copy since we will delete this node.
-            for key,val in root.attrib.items():
-                self.xmlrfc.attribs[key] = val
+                                      target=self)
+        
+        # Parse the XML file -- RFC tree is constructed through callbacks
+        lxml.etree.parse(source, parser)
 
-        # Step through xml file
-        for event, element in context:
-            if event == "start":
-                self.start(element)
-            if event == "end":
-                self.end()
-                root.clear()  # Free memory
-
-        # Finally, do any extra formatting on the RFC rfc
+        # Finally, do any extra formatting on the RFC tree
         self.xmlrfc.prepare()
-        """
+
+    def start(self, tag, attrib):
+        # self.stack.append(self.curr_node)
+        if tag == 'rfc':
+            # Root node -- don't push to stack, this way we avoid using ['rfc']
+            self.curr_node = self.xmlrfc
+        else:
+            # Make a new node and push previous to stack
+            self.stack.append(self.curr_node)
+            self.curr_node = self.curr_node.insert(tag, Node())
+        # Add attribs, if any
+        if attrib:
+            self.curr_node.attribs = attrib
+    
+    def end(self, tag):
+        # Pop node stack
+        if len(self.stack) > 0:
+            self.curr_node = self.stack.pop()
+    
+    def data(self, data):
+        # Insert data into current node
+        self.curr_node.text = data
+    
+    def comment(self, comment):
+        pass # No need to handle comments
+    
+    def close(self):
+        return "XML file closed"

@@ -10,7 +10,7 @@ def main():
         parser = xml2rfc.parser.XmlRfcParser(tree)
         writer = xml2rfc.writers.RawTextRfcWriter(tree)
         parser.parse(str(sys.argv[1]))
-        # writer.write('output.txt')
+        writer.write('output.txt')
     else:
         print ("Needs xml file argument")
 
