@@ -152,9 +152,13 @@ class RawTextRfcWriter(XmlRfcWriter):
             # TODO: Should reference list have [anchor] or [1] for bullets?
             bullet = '[' + str(i+1) + ']  '
             self.write_par(''.join(refstring), indent=3, bullet=bullet)
-            
 
-    def write(self, filename):
+    def write_buffer(self):
+        """ Internal method that writes the entire RFC tree to a buffer 
+            
+            Actual writing to a file, plus some post formatting is handled
+            in self.write(), which is the public method to be called.
+        """
         # Prepare front page left heading
         fp_left = [self.rfc.attribs['trad_header']]
         if 'number' in self.rfc.attribs:
@@ -195,7 +199,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         if 'abstract' in self.rfc['front']:
             self.write_line('Abstract')
             for t in self.rfc['front']['abstract']['t']:
-                self.write_par(t.text, indent=3)
+                self.write_t_rec(t)
 
         # Status
         self.write_line('Status of this Memo')
@@ -266,7 +270,15 @@ class RawTextRfcWriter(XmlRfcWriter):
                 if 'uri' in author['address']:
                     self.write_line('URI:   ' + author['address']['uri'].text, indent=3, lb=False)
 
-        # Done!  Write buffer to file
+        # EOF 
+
+    def write(self, filename):
+        """ Public method to write rfc tree to a file """
+        
+        # Write RFC to buffer
+        self.write_buffer()
+        
+        # Write buffer to file
         file = open(filename, 'w')
         for line in self.buf:
             file.write(line)
