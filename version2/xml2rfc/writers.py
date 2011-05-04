@@ -37,11 +37,14 @@ class XmlRfcWriter:
 class RawTextRfcWriter(XmlRfcWriter):
     """ Writes to a text file, unpaginated, no headers or footers. """
     width = None
+    buf = None
+    ref_index = None
 
     def __init__(self, rfc):
         self.rfc = rfc
         self.width = 72
         self.buf = []
+        self.ref_index = 1
 
     def lb(self):
         """ Write a blank line to the file """
@@ -87,14 +90,18 @@ class RawTextRfcWriter(XmlRfcWriter):
             if 'postamble' in figure:
                 self.write_par(figure['postamble'].text, indent=3)
 
-        i = 1
+        index = 1
         for sec in section['section']:
             if appendix == True:
-                self.write_section_rec(sec, 'Appendix ' + string.uppercase[i-1]\
-                                                                        + '.')
+                self.write_section_rec(sec, 'Appendix ' + \
+                                       string.uppercase[index-1] + '.')
             else:
-                self.write_section_rec(sec, indexstring + str(i) + '.')
-            i += 1
+                self.write_section_rec(sec, indexstring + str(index) + '.')
+            index += 1
+
+        # Set the ending index number so we know where to begin references
+        if indexstring == '' and appendix == False:
+            self.ref_index = index
 
     def write_t_rec(self, t, indent=3, bullet=''):
         """ Recursively writes <t> elements """
@@ -121,6 +128,30 @@ class RawTextRfcWriter(XmlRfcWriter):
                 self.write_par(figure['artwork'].text, indent=3)
             if 'postamble' in figure:
                 self.write_par(figure['postamble'].text, indent=3)
+    
+    def write_reference_list(self, references):
+        """ Writes a formatted list of <reference> elements """
+        # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
+        for i, ref in enumerate(references['reference']):
+            refstring = []
+            for j, author in enumerate(ref['front']['author']):
+                refstring.append(author.attribs['surname'] + ', ' + \
+                                 author.attribs['initials'] + '., ')
+                if j == len(ref['front']['author']) - 2:
+                    # Second-to-last, add an "and"
+                    refstring.append('and ')
+                    refstring.append(author.attribs['surname'] + ', ' + \
+                                     author.attribs['initials'] + '., ')
+            refstring.append('"' + ref['front']['title'].text + '", ')
+            # TODO: Handle seriesInfo
+            date = ref['front']['date']
+            if 'month' in date.attribs:
+                refstring.append(date.attribs['month'])
+            refstring.append(date.attribs['year'] + '.')
+            # TODO: Should reference list have [anchor] or [1] for bullets?
+            bullet = '[' + str(i+1) + ']  '
+            self.write_par(''.join(refstring), indent=3, bullet=bullet)
+            
 
     def write(self, filename):
         # Prepare front page left heading
@@ -174,12 +205,32 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.write_par(self.rfc.attribs['copyright'], indent=3)
 
         # Table of contents
+        # TODO: Look-ahead TOC or modify the buffer afterwards?
 
         # Middle sections
         self.write_section_rec(self.rfc['middle'], None)
 
-        # Back sections
+        # References section
+        ref_indexstring = str(self.ref_index) + '.'
+        self.write_line(ref_indexstring + ' References')
+        # Treat references as nested only if there is more than one <references>
+        if len(self.rfc['back']['references']) > 1:
+            for index, references in enumerate(self.rfc['back']['references']):
+                title = references.attribs['title']
+                self.write_line(ref_indexstring + str(index) + '. ' + title)
+                self.write_reference_list(references)
+        else:
+            self.write_reference_list(self.rfc['back']['references'][0])
+        
+        # Appendix sections
         self.write_section_rec(self.rfc['back'], None, appendix=True)
+        
+        # Authors address section
+        if len(self.rfc['front']['author']) > 1:
+            self.write_line("Authors' Addresses")
+        else:
+            self.write_line("Authors Address")
+        
 
         # Done!  Write buffer to file
         file = open(filename, 'w')

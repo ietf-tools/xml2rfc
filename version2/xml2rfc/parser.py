@@ -16,6 +16,7 @@ multi_elements = ['author',
                  'list',
                  'references',
                  'reference',
+                 'seriesInfo',
                  ]
 
 
