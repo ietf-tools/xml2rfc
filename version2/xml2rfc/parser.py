@@ -1,28 +1,43 @@
 import xml.etree.ElementTree
 
+# Defines names for all RFC elements that may appear more than once, so that
+# we may store them as lists.
+multi_elements = ['author',
+                 'street',
+                 'area',
+                 'workgroup',
+                 'keyword',
+                 'note',
+                 'section',
+                 't',
+                 'figure',
+                 'list',
+                 'reference',
+                 ]
 
 class Node:
     """ Single node that optionally contains text, attributes, or child nodes.
+    
+        Children can be single nodes, or lists of nodes.
 
         To access child nodes, use like a dictionary, e.g. node[child] instead
-        of node.children[child].
+        of node._children[child].
 
         Add child nodes by using .insert instead of [] or __setitem__,
         if a child element already exists it will convert to a list instead of
         overwriting.
-
     """
     text = None
     attribs = None
-    children = None
+    _children = None
 
     def __init__(self):
         self.text = None
         self.attribs = {}
-        self.children = {}
+        self._children = {}
 
     def __getitem__(self, key):
-        return self.children[key]
+        return self._children[key]
 
     def __repr__(self):
         str = " "
@@ -30,22 +45,24 @@ class Node:
             str += "text=" + self.text + ", "
         if self.attribs:
             str += "attribs=" + repr(self.attribs) + ", "
-        if self.children:
-            str += "children=" + repr(self.children)
+        if self._children:
+            str += "_children=" + repr(self._children)
         return str
 
     def insert(self, key, node):
-        if key in self.children:
-            # Recurring element.  Convert to list or append to existing list.
-            if isinstance(self.children[key], list):
-                self.children[key].append(node)
+        # Check if the element is a single or multiple type
+        if key in multi_elements:
+            if key in self._children:
+                self._children[key].append(node)
             else:
-                self.children[key] = [self.children[key], node]
-            return node
-        else:
+                self._children[key] = [node]
             # Unique element.
-            self.children[key] = node
-            return node
+        else:
+            if key in self._children:
+                raise Exception("Element " + key + " is already defined!")
+            else:
+                self._children[key] = node
+        return node
 
 
 class XmlRfcTree(Node):
@@ -82,7 +99,11 @@ class XmlRfcParser:
         # Construct an iterator
         context = iter(xml.etree.ElementTree.iterparse(source, \
                                                     events=['start', 'end']))
+        
+        # Get root from xml and set any attributes from <rfc> node
         event, root = context.next()
+        if root.attrib:
+            self.tree.attribs = root.attrib
 
         # Step through xml file
         for event, element in context:
