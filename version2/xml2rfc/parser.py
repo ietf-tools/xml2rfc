@@ -100,9 +100,6 @@ class XmlRfc(Node):
             xml2rfc.writer modules.
         """
         self.attribs['trad_header'] = 'Network Working Group'
-        if 'number' in self.attribs:
-            self.attribs['number'] = 'Request for Comments: ' + \
-                                            self.attribs['number']
         if 'updates' in self.attribs:
             self.attribs['updates'] = 'Updates: ' + \
                                             self.attribs['updates']
@@ -111,7 +108,7 @@ class XmlRfc(Node):
                                             self.attribs['obsoletes']
         if 'category' in self.attribs:
             if self.attribs['category'] == 'std':
-                self.attribs['category'] = 'Category: Standards-Track'
+                self.attribs['category'] = 'Standards-Track'
                 self.attribs['status'] = \
         'This document specifies an Internet standards track protocol for ' \
         'the Internet community, and requests discussion and suggestions ' \
@@ -121,14 +118,14 @@ class XmlRfc(Node):
         'of this memo is unlimited.'
 
             elif self.attribs['category'] == 'bcp':
-                self.attribs['category'] = 'Category: Best Current Practices'
+                self.attribs['category'] = 'Best Current Practices'
                 self.attribs['status'] = \
         'This document specifies an Internet Best Current Practices for ' \
         'the Internet Community, and requests discussion and suggestions ' \
         'for improvements. Distribution of this memo is unlimited.'
 
             elif self.attribs['category'] == 'exp':
-                self.attribs['category'] = 'Category: Experimental Protocol'
+                self.attribs['category'] = 'Experimental Protocol'
                 self.attribs['status'] = \
         'This memo defines an Experimental Protocol for the Internet ' \
         'community.  This memo does not specify an Internet standard of ' \
@@ -136,11 +133,11 @@ class XmlRfc(Node):
         'requested. Distribution of this memo is unlimited.'
 
             elif self.attribs['category'] == 'historic':
-                self.attribs['category'] = 'Category: Historic'
+                self.attribs['category'] = 'Historic'
                 self.attribs['status'] = 'NONE'
 
             elif self.attribs['category'] == 'info':
-                self.attribs['category'] = 'Category: Informational'
+                self.attribs['category'] = 'Informational'
                 self.attribs['status'] = \
         'This memo provides information for the Internet community. This ' \
         'memo does not specify an Internet standard of any kind. ' \
