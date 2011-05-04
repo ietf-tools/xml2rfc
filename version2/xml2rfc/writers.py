@@ -111,8 +111,8 @@ class RawTextRfcWriter(XmlRfcWriter):
             text.append(t.text)
         if 'xref' in t:
             if t['xref'].text:
-                text.append(' ' + t['xref'].text)
-            text.append(' [' + t['xref'].attribs['target'] + ']')
+                text.append(t['xref'].text + ' ')
+            text.append('[' + t['xref'].attribs['target'] + ']')
         if t.tail:
             text.append(t.tail)
         if len(text) > 0:

@@ -26,25 +26,32 @@ multi_elements = ['author',
 class Node:
     """ Single node that optionally contains text, attributes, or child nodes.
 
-        Children can be single nodes, or lists of nodes.
-
+        Children are either single nodes or lists of nodes depending on whether
+        or not their tag exists in multi_elements as defined above.
+        
         To access child nodes, use like a dictionary, e.g. node[child] instead
         of node._children[child].
 
-        Add child nodes by using .insert instead of [] or __setitem__,
-        if a child element already exists it will convert to a list instead of
-        overwriting.
+        Add child nodes by using .insert instead of [] or __setitem__, this way
+        it will insert a multi element into a list instead of overwriting.
+        
+        The dictionary structure is unordered but Nodes will remember what order
+        they are entered by their _pos variable.  If needed, such as for
+        <section> elements, you can get an ordered list of a nodes children
+        by calling node.order_children()
     """
     text = None
     tail = None
     attribs = None
     _children = None
+    _pos = None
 
-    def __init__(self, text=None, tail=None):
+    def __init__(self, text=None, tail=None, pos=0):
         self.text = text
         self.tail = tail
         self.attribs = {}
         self._children = {}
+        self._pos = pos
 
     def __getitem__(self, key):
         if key not in self._children:
@@ -70,8 +77,15 @@ class Node:
         if self._children:
             str += "_children=" + repr(self._children)
         return str
+    
+    def order_children(self):
+        """ Return a list of child nodes as they appear in the XML document """
+        return sorted(self._children, key=lambda node: node.pos)
 
-    def insert(self, key, node):
+    def insert(self, key):
+        """ Insert a new child node into the dictionary """
+        # Remember the position in which the node was inserted
+        node = Node(pos=len(self._children))
         # Check if the element is a single or multiple type
         if key in multi_elements:
             if key in self._children:
@@ -182,7 +196,7 @@ class XmlRfcParser:
         else:
             # Make a new node and push previous to stack
             self.stack.append(self.curr_node)
-            self.curr_node = self.curr_node.insert(tag, Node())
+            self.curr_node = self.curr_node.insert(tag)
         # Add attribs, if any
         if attrib:
             self.curr_node.attribs = attrib
@@ -196,7 +210,7 @@ class XmlRfcParser:
     
     def data(self, data):
         # Strip newlines+whitespace
-        data = re.sub('\n\s*', ' ', data.strip())
+        data = re.sub('\n\s*', ' ', data)
         # Set data depending on if we're in the head or tail section
         if self.tail_switch:
             self.curr_node.tail = data
