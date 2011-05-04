@@ -176,12 +176,10 @@ class XmlRfcParser:
             self.curr_node = self.stack.pop()
 
     def parse(self, source):
-        # Construct an iterator
-        # context = iter(xml.etree.ElementTree.iterparse(source, \
-        #                                           events=['start', 'end']))
-        context = iter(lxml.etree.iterparse(source, events=['start', 'end'], \
-                                            dtd_validation=True))
-
+        # Get a parser object
+        parser = lxml.etree.XMLParser(dtd_validation=True, no_network=False)
+        tree = lxml.etree.parse(source, parser)
+        """
         # Get root from xml and set any attributes from <rfc> node
         event, root = context.next()
         if root.attrib:
@@ -199,3 +197,4 @@ class XmlRfcParser:
 
         # Finally, do any extra formatting on the RFC rfc
         self.xmlrfc.prepare()
+        """
