@@ -41,13 +41,19 @@ class Node:
         self._children = {}
 
     def __getitem__(self, key):
+        if key not in self._children:
+            if key in multi_elements:
+                # Return an empty list instead of error
+                self._children[key] = []
+            else:
+                raise KeyError("Key doesn't exist: " + str(key))
         return self._children[key]
+    
+    def __contains__(self, key):
+        return key in self._children
     
     def __setitem__(self, key, val):
         self._children[key] = val
-        
-    def __contains__(self, key):
-        return key in self._children
 
     def __repr__(self):
         str = " "
