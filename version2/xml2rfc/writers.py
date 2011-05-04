@@ -106,8 +106,17 @@ class RawTextRfcWriter(XmlRfcWriter):
 
     def write_t_rec(self, t, indent=3, bullet=''):
         """ Recursively writes <t> elements """
+        text = []
         if t.text:
-            self.write_par(t.text, indent=indent, bullet=bullet)
+            text.append(t.text)
+        if 'xref' in t:
+            if t['xref'].text:
+                text.append(' ' + t['xref'].text)
+            text.append(' [' + t['xref'].attribs['target'] + ']')
+        if t.tail:
+            text.append(t.tail)
+        if len(text) > 0:
+            self.write_par(''.join(text), indent=indent, bullet=bullet)
 
         for list in t['list']:
             # Default to the 'empty' list style -- 3 spaces
