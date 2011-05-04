@@ -351,49 +351,60 @@ class RawTextRfcWriter(XmlRfcWriter):
         
         # Appendix sections
         self.write_section_rec(self.r.find('back'), None, appendix=True)
-        """
+
         # Authors address section
-        if len(self.rfc['front']['author']) > 1:
+        authors = self.r.findall('front/author')
+        if len(authors) > 1:
             self.write_line("Authors' Addresses")
         else:
             self.write_line("Authors Address")
-        for author in self.rfc['front']['author']:
-            if 'role' in author.attribs:
-                self.write_line(author.attribs['fullname'] + ', ' + \
-                                author.attribs['role'], indent=3)
+        for author in authors:
+            if 'role' in author.attrib:
+                self.write_line(author.attrib['fullname'] + ', ' + \
+                                author.attrib['role'], indent=3)
             else:
                 self.write_line(author.attribs['fullname'], indent=3)
-            if 'organization' in author:
-                self.write_line(author['organization'].text, indent=3, lb=False)
-            if 'address' in author:
-                if 'postal' in author['address']:
-                    for street in author['address']['postal']['street']:
+            organization = author.find('organization')
+            if organization is not None:
+                self.write_line(organization.text, indent=3, lb=False)
+            address = author.find('address')
+            if address is not None:
+                postal = address.find('postal')
+                if postal is not None:
+                    for street in postal.findall('street'):
                         if street.text:
                             self.write_line(street.text, indent=3, lb=False)
                     cityline = []
-                    if 'city' in author['address']['postal']:
-                        cityline.append(author['address']['postal']['city'].text)
+                    city = postal.find('city')
+                    if city is not None:
+                        cityline.append(city.text)
                         cityline.append(', ')
-                    if 'region' in author['address']['postal']:
-                        cityline.append(author['address']['postal']['region'].text)
+                    region = postal.find('region')
+                    if region is not None:
+                        cityline.append(region.text)
                         cityline.append(' ')
-                    if 'code' in author['address']['postal']:
-                        cityline.append(author['address']['postal']['code'])
+                    code = postal.find('code')
+                    if code is not None:
+                        cityline.append(code.text)
                     self.write_line(''.join(cityline), indent=3, lb=False)
-                    if 'country' in author['address']['postal']:
-                        self.write_line(author['address']['postal']['country'].text, indent=3, lb=False)
+                    country = postal.find('country')
+                    if country is not None:
+                        self.write_line(country.text, indent=3, lb=False)
                 self.lb()
-                if 'phone' in author['address']:
-                    self.write_line('Phone: ' + author['address']['phone'].text, indent=3, lb=False)
-                if 'fascimile' in author['address']:
-                    self.write_line('Fax:   ' + author['address']['fascimile'].text, indent=3, lb=False)
-                if 'email' in author['address']:
-                    self.write_line('Email: ' + author['address']['email'].text, indent=3, lb=False)
-                if 'uri' in author['address']:
-                    self.write_line('URI:   ' + author['address']['uri'].text, indent=3, lb=False)
+                phone = address.find('phone')
+                if phone is not None:
+                    self.write_line('Phone: ' + phone.text, indent=3, lb=False)
+                fascimile = address.find('fascimile')
+                if fascimile is not None:
+                    self.write_line('Fax:   ' + fascimile.text, indent=3, lb=False)
+                email = address.find('email')
+                if email is not None:
+                    self.write_line('Email: ' + email.text, indent=3, lb=False)
+                uri = address.find('uri')
+                if uri is not None:
+                    self.write_line('URI:   ' + uri.text, indent=3, lb=False)
 
         # EOF 
-        """
 
     def write(self, filename):
         """ Public method to write rfc tree to a file """
