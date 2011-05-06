@@ -104,7 +104,9 @@ class RawTextRfcWriter(XmlRfcWriter):
         """ Writes a raw stream of characters, preserving space and breaks """
         # Append an indent to every newline of the data
         indent_str = ' ' * indent
-        self.buf.append(re.sub('\n', '\n' + indent_str, data))
+        lines = data.split('\n')
+        for line in lines:
+            self.buf.append(indent_str + line)
     
     def resolve_refs(self, element):
         """ Returns a string containing element text plus any inline refs """
@@ -563,13 +565,10 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         for i, line in enumerate(self.buf):
             file.write(line)
             file.write('\r\n')
-            if i != 0 and i % 54 == 0:
+            if i != 0 and i % 55 == 0:
                 page += 1
                 file.write('\r\n')
                 file.write(self.make_footer(page))
-                file.write('\r\n')
-                file.write('\f')
-                file.write('\r\n')
+                file.write('\r\n\f\r\n')
                 file.write(header)
-                file.write('\r\n')
-                file.write('\r\n')
+                file.write('\r\n\r\n')
