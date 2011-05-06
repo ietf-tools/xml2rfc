@@ -13,7 +13,7 @@ def main():
 =======
         tree = xml2rfc.parser.XmlRfc()
         parser = xml2rfc.parser.XmlRfcParser(tree)
-        writer = xml2rfc.writers.PaginatedTextRfcWriter(tree)
+        writer = xml2rfc.writers.RawTextRfcWriter(tree)
         parser.parse(str(sys.argv[1]))
 >>>>>>> PEP-8 Fixes
         writer.write('output.txt')

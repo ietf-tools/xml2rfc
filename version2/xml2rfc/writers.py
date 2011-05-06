@@ -12,7 +12,7 @@ def justify_inline(left_str, center_str, right_str, width=72):
         Throws an exception if the combined length of the three strings is
         greater than the width.
     """
-
+    
     if (len(left_str) + len(center_str) + len(right_str)) > width:
         raise Exception("The given strings are greater than a width of: "\
                                                             + str(width))
