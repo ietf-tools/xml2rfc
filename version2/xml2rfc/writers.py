@@ -26,8 +26,7 @@ def justify_inline(left_str, center_str, right_str, width=72):
 
 class XmlRfcWriter:
     """ Base class for all writers """
-    r = None
-
+    
     def __init__(self, xmlrfc):
         # We will refer to the XmlRfc document root as 'r'
         self.r = xmlrfc.getroot()
@@ -38,36 +37,48 @@ class XmlRfcWriter:
 
 class RawTextRfcWriter(XmlRfcWriter):
     """ Writes to a text file, unpaginated, no headers or footers. """
-    width = None
-    buf = None
-    ref_index = None
 
-    def __init__(self, xmlrfc):
+    def __init__(self, xmlrfc, width=72):
         XmlRfcWriter.__init__(self, xmlrfc)
-        self.width = 72
-        self.buf = []
-        self.ref_index = 1
+        self.width = width      # Page width
+        self.buf = []           # Main buffer
+        self.toc = []           # Table of contents buffer
+        self.ref_index = 1      # Index number for the references section
+        self.toc_marker = 0     # Line number in buffer to write toc too
+        self.figure_count = 0
+        self.table_count = 0
 
-    def lb(self):
+    def mark(self):
+        """ Returns the current position in the buffer for post-processing """
+        return len(self.buf)
+        
+    def lb(self, buf=None):
         """ Write a blank line to the file """
-        self.buf.append('')
+        if not buf:
+            buf = self.buf
+        buf.append('')
 
-    def write_line(self, str, indent=0, lb=True, align='left'):
+    def write_line(self, str, indent=0, lb=True, align='left', buf=None):
         """ Writes an (optionally) indented line preceded by a line break. """
+        if not buf:
+            buf = self.buf
         if len(str) > (self.width):
             raise Exception("The supplied line exceeds the page width!\n \
                                                                     " + str)
         if lb:
-            self.lb()
+            self.lb(buf=buf)
         if align == 'left':
-            self.buf.append(' ' * indent + str)
+            buf.append(' ' * indent + str)
         elif align == 'center':
-            self.buf.append(str.center(self.width))
+            buf.append(str.center(self.width))
         elif align == 'right':
-            self.buf.append(str.rjust(self.width))
+            buf.append(str.rjust(self.width))
 
-    def write_par(self, str, indent=0, sub_indent=None,bullet='', align='left'):
+    def write_par(self, str, indent=0, sub_indent=None,bullet='', \
+                  align='left', buf=None):
         """ Writes an indented and wrapped paragraph, preceded by a lb. """
+        if not buf:
+            buf = self.buf
         # We can take advantage of textwraps initial_indent by using a bullet
         # parameter and treating it separately.  We still need to indent it.
         initial = ' ' * indent + bullet
@@ -81,21 +92,21 @@ class RawTextRfcWriter(XmlRfcWriter):
                             subsequent_indent=subsequent)
         self.lb()
         if align == 'left':
-            self.buf.extend(par)
-        else:
-            if len(str) > (self.width):
-                raise Exception("The supplied line exceeds the page width!\n \
-                                                                        " + str)
+            buf.extend(par)
         if align == 'center':
-            self.buf.append(str.center(self.width))
+            for line in par:
+                buf.append(line.center(self.width))
         elif align == 'right':
-            self.buf.append(str.rjust(self.width))
+            for line in par:
+                buf.append(line.rjust(self.width))
     
     def write_raw(self, data, indent=0):
         """ Writes a raw stream of characters, preserving space and breaks """
         # Append an indent to every newline of the data
         indent_str = ' ' * indent
-        self.buf.append(re.sub('\n', '\n' + indent_str, data))
+        lines = data.split('\n')
+        for line in lines:
+            self.buf.append(indent_str + line)
     
     def resolve_refs(self, element):
         """ Returns a string containing element text plus any inline refs """
@@ -123,6 +134,11 @@ class RawTextRfcWriter(XmlRfcWriter):
         if indexstring:
             # Prepend a neat index string to the title
             self.write_line(indexstring + ' ' + section.attrib['title'])
+            # Write to TOC as well
+            if section.attrib['toc'] != 'exclude':
+                toc_indent = ' ' * ((indexstring.count('.') - 1) * 2)
+                self.toc.append(toc_indent + indexstring + ' ' + \
+                                section.attrib['title'])
         else:
             # Must be <middle> or <back> element -- no title or index.
             indexstring = ''
@@ -159,8 +175,10 @@ class RawTextRfcWriter(XmlRfcWriter):
                            align=figure_align)
         if table:
             # <texttable> element
+            self.table_count += 1
             lines = []
             headers = []
+            align = figure.attrib['align']
             for column in figure.findall('ttcol'):
                 headers.append(column.text)
             # Draw header
@@ -168,12 +186,15 @@ class RawTextRfcWriter(XmlRfcWriter):
             for header in headers:
                 borderstring.append('-' * (len(header)+2))
                 borderstring.append('+')
-            self.write_line(''.join(borderstring), indent=3, lb=True)
+            self.write_line(''.join(borderstring), indent=3, lb=True, \
+                            align=align)
             headerstring = ['|']
             for header in headers:
                 headerstring.append(' ' + header + ' |')
-            self.write_line(''.join(headerstring), indent=3, lb=False)
-            self.write_line(''.join(borderstring), indent=3, lb=False)
+            self.write_line(''.join(headerstring), indent=3, lb=False, \
+                            align=align)
+            self.write_line(''.join(borderstring), indent=3, lb=False, \
+                            align=align)
             # Draw Cells
             cellstring = ['|']
             for i, cell in enumerate(figure.findall('c')):
@@ -182,21 +203,36 @@ class RawTextRfcWriter(XmlRfcWriter):
                 cellstring.append('|')
                 if column == len(headers) - 1:
                     # End of line
-                    self.write_line(''.join(cellstring), indent=3, lb=False)
+                    self.write_line(''.join(cellstring), indent=3, lb=False, \
+                                    align=align)
                     cellstring = ['|']
                 
             # Draw Bottom
-            self.write_line(''.join(borderstring), indent=3, lb=False)
+            self.write_line(''.join(borderstring), indent=3, lb=False, \
+                            align=align)
         else:
             # <artwork> element
-            # Insert artwork text directly into the buffer
+            self.figure_count += 1
             # TODO: Needs to be aligned properly
+            # Insert artwork text directly into the buffer
             self.write_raw(figure.find('artwork').text, indent=3)
         
         postamble = figure.find('postamble')
         if postamble is not None:
             self.write_par(self.resolve_refs(postamble), indent=3, \
                            align=figure_align)
+        
+        # Write label
+        if figure.attrib['title'] != '':
+            title = ': ' + figure.attrib['title']
+        else:
+            title = ''
+        if table:
+            self.write_line('Table ' + str(self.table_count) + title, \
+                            align='center')
+        else:
+            self.write_line('Figure ' + str(self.figure_count) + title, \
+                            align='center')
 
     def write_t_rec(self, t, indent=3, sub_indent=None, bullet=''):
         """ Recursively writes <t> elements """
@@ -267,13 +303,15 @@ class RawTextRfcWriter(XmlRfcWriter):
 
     def write_reference_list(self, references):
         """ Writes a formatted list of <reference> elements """
+        # Use very first reference's [bullet] length for indent amount
+        sub_indent = len(references.find('reference').attrib['anchor']) + 4
         # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
         for i, ref in enumerate(references.findall('reference')):
             refstring = []
             authors = ref.findall('front/author')
             for j, author in enumerate(authors):
                 refstring.append(author.attrib['surname'] + ', ' + \
-                                 author.attrib['initials'] + '., ')
+                                 author.attrib['initials'] + ', ')
                 if j == len(authors) - 2:
                     # Second-to-last, add an "and"
                     refstring.append('and ')
@@ -286,8 +324,21 @@ class RawTextRfcWriter(XmlRfcWriter):
                 refstring.append(date.attrib['month'])
             refstring.append(date.attrib['year'] + '.')
             # TODO: Should reference list have [anchor] or [1] for bullets?
-            bullet = '[' + str(i + 1) + ']  '
-            self.write_par(''.join(refstring), indent=3, bullet=bullet)
+            bullet = '[' + ref.attrib['anchor'] + ']  '
+            self.write_par(''.join(refstring), indent=3, bullet=bullet, \
+                           sub_indent=sub_indent)
+    
+    def post_write_toc(self):
+        """ Writes the table of contents to temporary buffer and returns
+            
+            This should only be called after the initial buffer is written.
+        """
+        tmpbuf = ['']
+        self.write_line("Table of Contents", buf=tmpbuf)
+        self.lb(buf=tmpbuf)
+        for line in self.toc:
+            self.write_line(line, indent=3, lb=False, buf=tmpbuf)
+        return tmpbuf
 
     def write_buffer(self):
         """ Internal method that writes the entire RFC tree to a buffer
@@ -355,22 +406,26 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.write_line('Copyright Notice')
         self.write_par(self.r.attrib['copyright'], indent=3)
         
-        # Table of contents
-        # TODO: Look-ahead TOC or modify the buffer afterwards?
+        # Mark table of contents to be post-written
+        self.toc_marker = self.mark()
         
         # Middle sections
         self.write_section_rec(self.r.find('middle'), None)
-        
 
         # References section
         ref_indexstring = str(self.ref_index) + '.'
-        self.write_line(ref_indexstring + ' References')
+        ref_title = ref_indexstring + ' References'
+        self.write_line(ref_title)
+        self.toc.append(ref_title)
         # Treat references as nested only if there is more than one <references>
         references = self.r.findall('back/references')
         if len(references) > 1:
             for index, reference_list in enumerate(references):
-                title = reference_list.attrib['title']
-                self.write_line(ref_indexstring + str(index + 1) + '. ' + title)
+                ref_title = ref_indexstring + str(index + 1) + '. ' + \
+                            reference_list.attrib['title']
+                self.write_line(ref_title)
+                toc_indent = ' ' * ((ref_title.count('.') - 1) * 2)
+                self.toc.append(toc_indent + ref_title)
                 self.write_reference_list(reference_list)
         else:
             self.write_reference_list(references[0])
@@ -382,8 +437,10 @@ class RawTextRfcWriter(XmlRfcWriter):
         authors = self.r.findall('front/author')
         if len(authors) > 1:
             self.write_line("Authors' Addresses")
+            self.toc.append("Authors' Addresses")
         else:
             self.write_line("Authors Address")
+            self.toc.append("Authors Address")
         for author in authors:
             if 'role' in author.attrib:
                 self.write_line(author.attrib['fullname'] + ', ' + \
@@ -430,83 +487,117 @@ class RawTextRfcWriter(XmlRfcWriter):
                 if uri is not None:
                     self.write_line('URI:   ' + uri.text, indent=3, lb=False)
 
-        # EOF 
+        # EOF
 
     def write(self, filename):
-        """ Public method to write rfc tree to a file """
+        """ Public method to write rfc document to a file """
 
         # Write RFC to buffer
         self.write_buffer()
 
         # Write buffer to file
         file = open(filename, 'w')
-        for line in self.buf:
+        for line_num, line in enumerate(self.buf):
+            # Check for marks
+            if line_num == self.toc_marker:
+                # Write TOC
+                tmpbuf = self.post_write_toc()
+                for tmpline in tmpbuf:
+                    file.write(tmpline)
+                    file.write('\r\n')
             file.write(line)
-            # Separate lines by both carriages returns and line breaks.
             file.write('\r\n')
+        file.close()
 
 
 class PaginatedTextRfcWriter(RawTextRfcWriter):
     """ Writes to a text file, paginated with headers and footers """
-    left_footer = None
-    center_footer = None
-
-    def __init__(self, rfc):
-        RawTextRfcWriter.__init__(self, rfc)
+    
+    def __init__(self, xmlrfc):
+        RawTextRfcWriter.__init__(self, xmlrfc)
+        self.header = ''
         self.left_footer = ''
         self.center_footer = ''
+        self.section_marks = {}
 
     def make_footer(self, page):
         return justify_inline(self.left_footer, self.center_footer, \
                               '[Page ' + str(page) + ']')
+        
+    # Here we override some methods to mark line numbers for large sections.
+    # We'll store each marking as a hash of line_num: section_length.  This way 
+    # we can step through these markings during writing to preemptively 
+    # construct appropriate page breaks.
+    def write_figure(self, figure, table=False):
+        begin = self.mark()
+        RawTextRfcWriter.write_figure(self, figure, table)
+        end = self.mark()
+        self.section_marks[begin] = end-begin
 
     def write(self, filename):
         """ Public method to write rfc tree to a file """
         # Construct a header
-        if 'number' in self.rfc.attribs:
-            left_header = self.rfc.attribs['number']
+        if 'number' in self.r.attrib:
+            left_header = self.r.attrib['number']
         else:
             # No RFC number -- assume internet draft
             left_header = 'Internet-Draft'
-        if 'abbrev' in self.rfc['front']['title'].attribs:
-            center_header = self.rfc['front']['title'].attribs['abbrev']
+        title = self.r.find('front/title')
+        if 'abbrev' in title.attrib:
+            center_header = title.attrib['abbrev']
         else:
             # No abbreviated title -- assume original title fits
-            center_header = self.rfc['front']['title'].text
+            center_header = title.text
         right_header = ''
-        if 'month' in self.rfc['front']['date'].attribs:
-            right_header = self.rfc['front']['date'].attribs['month'] + ' '
-        right_header += self.rfc['front']['date'].attribs['year']
-        header = justify_inline(left_header, center_header, right_header)
+        date = self.r.find('front/date')
+        if 'month' in date.attrib:
+            right_header = date.attrib['month'] + ' '
+        right_header += date.attrib['year']
+        self.header = justify_inline(left_header, center_header, right_header)
 
         # Construct a footer
         self.left_footer = ''
-        for i, author in enumerate(self.rfc['front']['author']):
+        authors = self.r.findall('front/author')
+        for i, author in enumerate(authors):
             # Format: author1, author2 & author3 OR author1 & author2 OR author1
-            if i < len(self.rfc['front']['author']) - 2:
-                self.left_footer += author.attribs['surname'] + ', '
-            elif i == len(self.rfc['front']['author']) - 2:
-                self.left_footer += author.attribs['surname'] + ' & '
+            if i < len(authors) - 2:
+                self.left_footer += author.attrib['surname'] + ', '
+            elif i == len(authors) - 2:
+                self.left_footer += author.attrib['surname'] + ' & '
             else:
-                self.left_footer += author.attribs['surname']
-        self.center_footer = self.rfc.attribs['category']
+                self.left_footer += author.attrib['surname']
+        self.center_footer = self.r.attrib['category']
 
         # Write RFC to buffer
         self.write_buffer()
 
-        # Write buffer to file, inserting breaks every 58 lines
+        # Write buffer to secondary buffer, inserting breaks every 58 lines
+        newbuf = []
+        page_len = 0
+        page_maxlen = 55
+        page_num = 0
+        for line_num, line in enumerate(self.buf):
+            if line_num in self.section_marks:
+                # If this section will exceed a page, insert blank lines
+                # until the end of the page
+                if page_len + self.section_marks[line_num] > page_maxlen:
+                    for i in range(page_maxlen - page_len):
+                        newbuf.append('')
+                        page_len += 1
+            if page_len + 1 > 55:
+                page_len = 0
+                page_num += 1
+                newbuf.append('')
+                newbuf.append(self.make_footer(page_num))
+                newbuf.append('\f')
+                newbuf.append(self.header)
+                newbuf.append('')
+            newbuf.append(line)
+            page_len += 1
+                
+        # Write buffer to file
         file = open(filename, 'w')
-        page = 0
-        for i, line in enumerate(self.buf):
+        for line in newbuf:
             file.write(line)
             file.write('\r\n')
-            if i != 0 and i % 54 == 0:
-                page += 1
-                file.write('\r\n')
-                file.write(self.make_footer(page))
-                file.write('\r\n')
-                file.write('\f')
-                file.write('\r\n')
-                file.write(header)
-                file.write('\r\n')
-                file.write('\r\n')
+        file.close()
