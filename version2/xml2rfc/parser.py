@@ -127,7 +127,7 @@ class XmlRfcParser:
         # Get a parser object
         parser = lxml.etree.XMLParser(dtd_validation=True, no_network=False, \
                                       target=self)
-        
+
         # Parse the XML file -- RFC tree is constructed through callbacks
         lxml.etree.parse(source, parser)
 
@@ -147,14 +147,14 @@ class XmlRfcParser:
         # Add attribs, if any
         if attrib:
             self.curr_node.attribs = attrib
-    
+
     def end(self, tag):
         # End of an element -- flip switch so any data goes in node.tail
         self.tail_switch = True
         # Pop node stack
         if len(self.stack) > 0:
             self.curr_node = self.stack.pop()
-    
+
     def data(self, data):
         # Strip newlines+whitespace
         data = re.sub('\n\s*', ' ', data)
@@ -163,9 +163,9 @@ class XmlRfcParser:
             self.curr_node.tail = data
         else:
             self.curr_node.text = data
-    
+
     def comment(self, comment):
-        pass # No need to handle comments
-    
+        pass  # No need to handle comments
+
     def close(self):
         return "XML file closed"

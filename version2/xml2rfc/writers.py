@@ -12,7 +12,7 @@ def justify_inline(left_str, center_str, right_str, width=72):
         Throws an exception if the combined length of the three strings is
         greater than the width.
     """
-    
+
     if (len(left_str) + len(center_str) + len(right_str)) > width:
         raise Exception("The given strings are greater than a width of: "\
                                                             + str(width))
@@ -430,7 +430,7 @@ class RawTextRfcWriter(XmlRfcWriter):
                 if uri is not None:
                     self.write_line('URI:   ' + uri.text, indent=3, lb=False)
 
-        # EOF 
+        # EOF
 
     def write(self, filename):
         """ Public method to write rfc tree to a file """
