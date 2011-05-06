@@ -59,6 +59,21 @@ class RawTextRfcWriter(XmlRfcWriter):
                             subsequent_indent=' '*indent)
         self.lb()
         self.buf.extend(par)
+    
+    def write_section(self, section, indexstring):
+        """ Recursively writes <section> elements """
+        if indexstring:
+            # Prepend a neat index string to the title
+            self.write_line(indexstring + ' ' + section.attribs['title'])
+        else:
+            # Must be <middle> element -- no title or index.
+            indexstring = ''
+     
+        if 'section' in section:
+            index = 1
+            for sec in section['section']:
+                self.write_section(sec, indexstring + str(index) + '.')
+                index += 1
 
     def write(self, filename):
         # Prepare front page left heading
@@ -106,6 +121,11 @@ class RawTextRfcWriter(XmlRfcWriter):
         # Copyright
         self.write_line('Copyright Notice')
         self.write_par(self.rfc.attribs['copyright'], indent=3)
+        
+        # Table of contents
+        
+        # Middle sections
+        self.write_section(self.rfc['middle'], None)
             
         # Done!  Write buffer to file
         file = open(filename, 'w')
