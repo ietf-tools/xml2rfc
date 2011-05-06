@@ -61,7 +61,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.buf.extend(par)
 
     def write(self, filename):
-        # Front page, left heading
+        # Prepare front page left heading
         fp_left = [self.rfc.attribs['trad_header']]
         if 'number' in self.rfc.attribs:
             fp_left.append(self.rfc.attribs['number'])
@@ -72,7 +72,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         if 'category' in self.rfc.attribs:
             fp_left.append(self.rfc.attribs['category'])
         
-        # Front page, right heading
+        # Prepare front page right heading
         fp_right = []
         for author in self.rfc['front']['author']:
             fp_right.append(author.attribs['initials'] + ' ' + \
@@ -82,22 +82,32 @@ class RawTextRfcWriter(XmlRfcWriter):
         date = self.rfc['front']['date']
         fp_right.append(date.attribs['month'] + ' ' + date.attribs['year'])
         
-        # Construct full heading
+        # Front page heading
         for i in range(max(len(fp_left), len(fp_right))):
             if i < len(fp_left): left = fp_left[i]; 
             else: left = '';
             if i < len(fp_right): right = fp_right[i]; 
             else: right = '';
             self.buf.append(justify_inline(left, '', right))
-        
-        # Title, Status, Copyright, and Table of Contents
+            
+        # Title
         self.write_line(self.rfc['front']['title'].text.center(self.width))
+        
+        # Abstract
+        if 'abstract' in self.rfc['front']:
+            self.write_line('Abstract')
+            for t in self.rfc['front']['abstract']['t']:
+                self.write_par(t.text)
+        
+        # Status
         self.write_line('Status of this Memo')
         self.write_par(self.rfc.attribs['status'], indent=3)
+        
+        # Copyright
         self.write_line('Copyright Notice')
         self.write_par(self.rfc.attribs['copyright'], indent=3)
             
-        # Write everything to file
+        # Done!  Write buffer to file
         file = open(filename, 'w')
         for line in self.buf:
             file.write(line)
