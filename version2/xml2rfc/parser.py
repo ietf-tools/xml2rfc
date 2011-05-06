@@ -143,7 +143,7 @@ class XmlRfcParser:
         else:
             # Make a new node and push previous to stack
             self.stack.append(self.curr_node)
-            self.curr_node = self.curr_node.insert(tag, Node())
+            self.curr_node = self.curr_node.insert(tag)
         # Add attribs, if any
         if attrib:
             self.curr_node.attribs = attrib
@@ -157,7 +157,7 @@ class XmlRfcParser:
     
     def data(self, data):
         # Strip newlines+whitespace
-        data = re.sub('\n\s*', ' ', data.strip())
+        data = re.sub('\n\s*', ' ', data)
         # Set data depending on if we're in the head or tail section
         if self.tail_switch:
             self.curr_node.tail = data
