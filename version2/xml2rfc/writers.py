@@ -93,14 +93,12 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.lb()
         if align == 'left':
             buf.extend(par)
-        else:
-            if len(str) > (self.width):
-                raise Exception("The supplied line exceeds the page width!\n \
-                                                                        " + str)
         if align == 'center':
-            buf.append(str.center(self.width))
+            for line in par:
+                buf.append(line.center(self.width))
         elif align == 'right':
-            buf.append(str.rjust(self.width))
+            for line in par:
+                buf.append(line.rjust(self.width))
     
     def write_raw(self, data, indent=0):
         """ Writes a raw stream of characters, preserving space and breaks """
@@ -135,9 +133,10 @@ class RawTextRfcWriter(XmlRfcWriter):
             # Prepend a neat index string to the title
             self.write_line(indexstring + ' ' + section.attrib['title'])
             # Write to TOC as well
-            toc_indent = ' ' * ((indexstring.count('.') - 1) * 2)
-            self.toc.append(toc_indent + indexstring + ' ' + \
-                            section.attrib['title'])
+            if section.attrib['toc'] != 'exclude':
+                toc_indent = ' ' * ((indexstring.count('.') - 1) * 2)
+                self.toc.append(toc_indent + indexstring + ' ' + \
+                                section.attrib['title'])
         else:
             # Must be <middle> or <back> element -- no title or index.
             indexstring = ''
@@ -177,6 +176,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             self.table_count += 1
             lines = []
             headers = []
+            align = figure.attrib['align']
             for column in figure.findall('ttcol'):
                 headers.append(column.text)
             # Draw header
@@ -184,12 +184,15 @@ class RawTextRfcWriter(XmlRfcWriter):
             for header in headers:
                 borderstring.append('-' * (len(header)+2))
                 borderstring.append('+')
-            self.write_line(''.join(borderstring), indent=3, lb=True)
+            self.write_line(''.join(borderstring), indent=3, lb=True, \
+                            align=align)
             headerstring = ['|']
             for header in headers:
                 headerstring.append(' ' + header + ' |')
-            self.write_line(''.join(headerstring), indent=3, lb=False)
-            self.write_line(''.join(borderstring), indent=3, lb=False)
+            self.write_line(''.join(headerstring), indent=3, lb=False, \
+                            align=align)
+            self.write_line(''.join(borderstring), indent=3, lb=False, \
+                            align=align)
             # Draw Cells
             cellstring = ['|']
             for i, cell in enumerate(figure.findall('c')):
@@ -198,11 +201,13 @@ class RawTextRfcWriter(XmlRfcWriter):
                 cellstring.append('|')
                 if column == len(headers) - 1:
                     # End of line
-                    self.write_line(''.join(cellstring), indent=3, lb=False)
+                    self.write_line(''.join(cellstring), indent=3, lb=False, \
+                                    align=align)
                     cellstring = ['|']
                 
             # Draw Bottom
-            self.write_line(''.join(borderstring), indent=3, lb=False)
+            self.write_line(''.join(borderstring), indent=3, lb=False, \
+                            align=align)
         else:
             # <artwork> element
             self.figure_count += 1
