@@ -108,3 +108,57 @@ class XmlRfc:
 
         root.attrib['copyright'] = 'Copyright (C) The Internet Society (%s).'\
         ' All Rights Reserved.' % root.find('front/date').attrib['year']
+
+
+class XmlRfcParser:
+    """ XML parser with callbacks to construct an RFC tree """
+    xmlrfc = None
+    curr_node = None
+    stack = None
+
+    def __init__(self, xmlrfc):
+        self.xmlrfc = xmlrfc
+        self.curr_node = self.xmlrfc
+        self.stack = []
+
+    def start(self, element):
+        # Make a new node and push on top
+        self.stack.append(self.curr_node)
+        self.curr_node = self.curr_node.insert(element.tag, Node())
+        # Add text/attrib if available
+        if element.text:
+            self.curr_node.text = element.text.strip().replace('\n', '')
+        if element.tail:
+            self.curr_node.tail = element.tail.strip().replace('\n', '')
+        if element.attrib:
+            self.curr_node.attribs = element.attrib
+
+    def end(self):
+        # Pop node stack
+        if len(self.stack) > 0:
+            self.curr_node = self.stack.pop()
+
+    def parse(self, source):
+        # Construct an iterator
+        # context = iter(xml.etree.ElementTree.iterparse(source, \
+        #                                           events=['start', 'end']))
+        context = iter(lxml.etree.iterparse(source, events=['start', 'end']))
+
+        # Get root from xml and set any attributes from <rfc> node
+        event, root = context.next()
+        if root.attrib:
+            # Make shallow copy since we will delete this node.
+            for key,val in root.attrib.items():
+                self.xmlrfc.attribs[key] = val
+
+        # Step through xml file
+        for event, element in context:
+            if event == "start":
+                self.start(element)
+            if event == "end":
+                self.end()
+                root.clear()  # Free memory
+
+        # Finally, do any extra formatting on the RFC rfc
+        self.xmlrfc.prepare()
+>>>>>>> migrated to lxml parser (libxml2) instead of expat.  modified root.attrib.copy to be a manual shallow copy
