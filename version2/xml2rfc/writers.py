@@ -45,6 +45,8 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.toc = []           # Table of contents buffer
         self.ref_index = 1      # Index number for the references section
         self.toc_marker = 0     # Line number in buffer to write toc too
+        self.figure_count = 0
+        self.table_count = 0
 
     def mark(self):
         """ Returns the current position in the buffer for post-processing """
@@ -172,6 +174,7 @@ class RawTextRfcWriter(XmlRfcWriter):
                            align=figure_align)
         if table:
             # <texttable> element
+            self.table_count += 1
             lines = []
             headers = []
             for column in figure.findall('ttcol'):
@@ -202,14 +205,27 @@ class RawTextRfcWriter(XmlRfcWriter):
             self.write_line(''.join(borderstring), indent=3, lb=False)
         else:
             # <artwork> element
-            # Insert artwork text directly into the buffer
+            self.figure_count += 1
             # TODO: Needs to be aligned properly
+            # Insert artwork text directly into the buffer
             self.write_raw(figure.find('artwork').text, indent=3)
         
         postamble = figure.find('postamble')
         if postamble is not None:
             self.write_par(self.resolve_refs(postamble), indent=3, \
                            align=figure_align)
+        
+        # Write label
+        if figure.attrib['title'] != '':
+            title = ': ' + figure.attrib['title']
+        else:
+            title = ''
+        if table:
+            self.write_line('Table ' + str(self.table_count) + title, \
+                            align='center')
+        else:
+            self.write_line('Figure ' + str(self.figure_count) + title, \
+                            align='center')
 
     def write_t_rec(self, t, indent=3, sub_indent=None, bullet=''):
         """ Recursively writes <t> elements """
