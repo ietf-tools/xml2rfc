@@ -296,13 +296,15 @@ class RawTextRfcWriter(XmlRfcWriter):
 
     def write_reference_list(self, references):
         """ Writes a formatted list of <reference> elements """
+        # Use very first reference's [bullet] length for indent amount
+        sub_indent = len(references.find('reference').attrib['anchor']) + 4
         # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
         for i, ref in enumerate(references.findall('reference')):
             refstring = []
             authors = ref.findall('front/author')
             for j, author in enumerate(authors):
                 refstring.append(author.attrib['surname'] + ', ' + \
-                                 author.attrib['initials'] + '., ')
+                                 author.attrib['initials'] + ', ')
                 if j == len(authors) - 2:
                     # Second-to-last, add an "and"
                     refstring.append('and ')
@@ -315,8 +317,9 @@ class RawTextRfcWriter(XmlRfcWriter):
                 refstring.append(date.attrib['month'])
             refstring.append(date.attrib['year'] + '.')
             # TODO: Should reference list have [anchor] or [1] for bullets?
-            bullet = '[' + str(i + 1) + ']  '
-            self.write_par(''.join(refstring), indent=3, bullet=bullet)
+            bullet = '[' + ref.attrib['anchor'] + ']  '
+            self.write_par(''.join(refstring), indent=3, bullet=bullet, \
+                           sub_indent=sub_indent)
     
     def post_write_toc(self):
         """ Writes the table of contents to temporary buffer and returns
