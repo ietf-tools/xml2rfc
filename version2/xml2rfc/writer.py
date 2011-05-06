@@ -52,15 +52,18 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.lb()
         self.buf.append(' '*indent + str)
     
-    def write_par(self, str, indent=0):
+    def write_par(self, str, indent=0, bullet=''):
         """ Writes an indented and wrapped paragraph, preceded by a lb. """
+        # We can take advantage of textwraps initial_indent by using a bullet
+        # parameter and treating it separately.  We still need to indent it.
+        bullet = ' '*indent + bullet
         par = textwrap.wrap(str, self.width, \
-                            initial_indent=' '*indent, \
+                            initial_indent=bullet, \
                             subsequent_indent=' '*indent)
         self.lb()
         self.buf.extend(par)
     
-    def write_section(self, section, indexstring):
+    def write_section_rec(self, section, indexstring):
         """ Recursively writes <section> elements """
         if indexstring:
             # Prepend a neat index string to the title
@@ -69,16 +72,38 @@ class RawTextRfcWriter(XmlRfcWriter):
             # Must be <middle> element -- no title or index.
             indexstring = ''
      
-        if 't' in section:
-            for t in section['t']:
-                if t.text:
-                    self.write_par(t.text, indent=3)
-                
-        if 'section' in section:
-            index = 1
-            for sec in section['section']:
-                self.write_section(sec, indexstring + str(index) + '.')
-                index += 1
+        for t in section['t']:
+            self.write_t_rec(t)
+            
+        for figure in section['figure']:
+            if 'preamble' in figure:
+                self.write_par(figure['preamble'].text, indent=3)
+            if 'artwork' in figure:
+                self.write_par(figure['artwork'].text, indent=3)
+            if 'postamble' in figure:
+                self.write_par(figure['postamble'].text, indent=3)
+        
+        index = 1
+        for sec in section['section']:
+            self.write_section_rec(sec, indexstring + str(index) + '.')
+            index += 1
+    
+    def write_t_rec(self, t, indent=3, bullet=''):
+        """ Recursively writes <t> elements """
+        if t.text:
+            self.write_par(t.text, indent=indent, bullet=bullet)
+    
+        for list in t['list']:
+            for t in list['t']:
+                self.write_t_rec(t, indent=indent, bullet='o  ')
+        
+        for figure in t['figure']:
+            if 'preamble' in figure:
+                self.write_par(figure['preamble'].text, indent=3)
+            if 'artwork' in figure:
+                self.write_par(figure['artwork'].text, indent=3)
+            if 'postamble' in figure:
+                self.write_par(figure['postamble'].text, indent=3)
 
     def write(self, filename):
         # Prepare front page left heading
@@ -117,7 +142,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         if 'abstract' in self.rfc['front']:
             self.write_line('Abstract')
             for t in self.rfc['front']['abstract']['t']:
-                self.write_par(t.text)
+                self.write_par(t.text, indent=3)
         
         # Status
         self.write_line('Status of this Memo')
@@ -130,7 +155,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         # Table of contents
         
         # Middle sections
-        self.write_section(self.rfc['middle'], None)
+        self.write_section_rec(self.rfc['middle'], None)
             
         # Done!  Write buffer to file
         file = open(filename, 'w')
