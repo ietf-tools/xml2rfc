@@ -333,7 +333,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             else:
                 right = ''
             self.buf.append(justify_inline(left, '', right))
-
+        """
         # Title & Optional docname
         self.write_line(self.r.find('front/title').text.center(self.width))
         if 'docName' in self.r.attrib:
