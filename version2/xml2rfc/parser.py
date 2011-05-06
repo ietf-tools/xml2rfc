@@ -156,6 +156,8 @@ class XmlRfcParser:
             self.curr_node = self.stack.pop()
     
     def data(self, data):
+        # Strip newlines+whitespace
+        data = re.sub('\n\s*', ' ', data.strip())
         # Set data depending on if we're in the head or tail section
         if self.tail_switch:
             self.curr_node.tail = data
