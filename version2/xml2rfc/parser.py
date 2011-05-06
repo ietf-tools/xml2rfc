@@ -115,11 +115,13 @@ class XmlRfcParser:
     xmlrfc = None
     curr_node = None
     stack = None
+    tail_switch = None
 
     def __init__(self, xmlrfc):
         self.xmlrfc = xmlrfc
         self.curr_node = self.xmlrfc
         self.stack = []
+        self.tail_switch = False
 
     def parse(self, source):
         # Get a parser object
@@ -133,7 +135,8 @@ class XmlRfcParser:
         self.xmlrfc.prepare()
 
     def start(self, tag, attrib):
-        # self.stack.append(self.curr_node)
+        # Start of an element -- flip switch so any data goes in node.text
+        self.tail_switch = False
         if tag == 'rfc':
             # Root node -- don't push to stack, this way we avoid using ['rfc']
             self.curr_node = self.xmlrfc
@@ -146,13 +149,18 @@ class XmlRfcParser:
             self.curr_node.attribs = attrib
     
     def end(self, tag):
+        # End of an element -- flip switch so any data goes in node.tail
+        self.tail_switch = True
         # Pop node stack
         if len(self.stack) > 0:
             self.curr_node = self.stack.pop()
     
     def data(self, data):
-        # Insert data into current node
-        self.curr_node.text = data
+        # Set data depending on if we're in the head or tail section
+        if self.tail_switch:
+            self.curr_node.tail = data
+        else:
+            self.curr_node.text = data
     
     def comment(self, comment):
         pass # No need to handle comments
