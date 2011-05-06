@@ -46,26 +46,37 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.ref_index = 1      # Index number for the references section
         self.toc_marker = 0     # Line number in buffer to write toc too
 
-    def lb(self):
+    def mark(self):
+        """ Returns the current position in the buffer for post-processing """
+        return len(self.buf)
+        
+    def lb(self, buf=None):
         """ Write a blank line to the file """
-        self.buf.append('')
+        if not buf:
+            buf = self.buf
+        buf.append('')
 
-    def write_line(self, str, indent=0, lb=True, align='left'):
+    def write_line(self, str, indent=0, lb=True, align='left', buf=None):
         """ Writes an (optionally) indented line preceded by a line break. """
+        if not buf:
+            buf = self.buf
         if len(str) > (self.width):
             raise Exception("The supplied line exceeds the page width!\n \
                                                                     " + str)
         if lb:
-            self.lb()
+            self.lb(buf=buf)
         if align == 'left':
-            self.buf.append(' ' * indent + str)
+            buf.append(' ' * indent + str)
         elif align == 'center':
-            self.buf.append(str.center(self.width))
+            buf.append(str.center(self.width))
         elif align == 'right':
-            self.buf.append(str.rjust(self.width))
+            buf.append(str.rjust(self.width))
 
-    def write_par(self, str, indent=0, sub_indent=None,bullet='', align='left'):
+    def write_par(self, str, indent=0, sub_indent=None,bullet='', \
+                  align='left', buf=None):
         """ Writes an indented and wrapped paragraph, preceded by a lb. """
+        if not buf:
+            buf = self.buf
         # We can take advantage of textwraps initial_indent by using a bullet
         # parameter and treating it separately.  We still need to indent it.
         initial = ' ' * indent + bullet
@@ -79,15 +90,15 @@ class RawTextRfcWriter(XmlRfcWriter):
                             subsequent_indent=subsequent)
         self.lb()
         if align == 'left':
-            self.buf.extend(par)
+            buf.extend(par)
         else:
             if len(str) > (self.width):
                 raise Exception("The supplied line exceeds the page width!\n \
                                                                         " + str)
         if align == 'center':
-            self.buf.append(str.center(self.width))
+            buf.append(str.center(self.width))
         elif align == 'right':
-            self.buf.append(str.rjust(self.width))
+            buf.append(str.rjust(self.width))
     
     def write_raw(self, data, indent=0):
         """ Writes a raw stream of characters, preserving space and breaks """
@@ -121,6 +132,10 @@ class RawTextRfcWriter(XmlRfcWriter):
         if indexstring:
             # Prepend a neat index string to the title
             self.write_line(indexstring + ' ' + section.attrib['title'])
+            # Write to TOC as well
+            toc_indent = ' ' * ((indexstring.count('.') - 1) * 2)
+            self.toc.append(toc_indent + indexstring + ' ' + \
+                            section.attrib['title'])
         else:
             # Must be <middle> or <back> element -- no title or index.
             indexstring = ''
@@ -286,6 +301,18 @@ class RawTextRfcWriter(XmlRfcWriter):
             # TODO: Should reference list have [anchor] or [1] for bullets?
             bullet = '[' + str(i + 1) + ']  '
             self.write_par(''.join(refstring), indent=3, bullet=bullet)
+    
+    def post_write_toc(self):
+        """ Writes the table of contents to temporary buffer and returns
+            
+            This should only be called after the initial buffer is written.
+        """
+        tmpbuf = ['']
+        self.write_line("Table of Contents", buf=tmpbuf)
+        self.lb(buf=tmpbuf)
+        for line in self.toc:
+            self.write_line(line, indent=3, lb=False, buf=tmpbuf)
+        return tmpbuf
 
     def write_buffer(self):
         """ Internal method that writes the entire RFC tree to a buffer
@@ -353,12 +380,11 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.write_line('Copyright Notice')
         self.write_par(self.r.attrib['copyright'], indent=3)
         
-        # Table of contents
-        # TODO: Look-ahead TOC or modify the buffer afterwards?
+        # Mark table of contents to be post-written
+        self.toc_marker = self.mark()
         
         # Middle sections
         self.write_section_rec(self.r.find('middle'), None)
-        
 
         # References section
         ref_indexstring = str(self.ref_index) + '.'
@@ -431,17 +457,24 @@ class RawTextRfcWriter(XmlRfcWriter):
         # EOF
 
     def write(self, filename):
-        """ Public method to write rfc tree to a file """
+        """ Public method to write rfc document to a file """
 
         # Write RFC to buffer
         self.write_buffer()
 
         # Write buffer to file
         file = open(filename, 'w')
-        for line in self.buf:
+        for line_num, line in enumerate(self.buf):
+            # Check for marks
+            if line_num == self.toc_marker:
+                # Write TOC
+                tmpbuf = self.post_write_toc()
+                for tmpline in tmpbuf:
+                    file.write(tmpline)
+                    file.write('\r\n')
             file.write(line)
-            # Separate lines by both carriages returns and line breaks.
             file.write('\r\n')
+        file.close()
 
 
 class PaginatedTextRfcWriter(RawTextRfcWriter):
