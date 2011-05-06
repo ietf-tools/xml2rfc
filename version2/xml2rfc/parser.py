@@ -140,7 +140,8 @@ class XmlRfcParser:
 
     def parse(self, source):
         # Get a parser object
-        parser = lxml.etree.XMLParser(dtd_validation=True, no_network=False)
+        parser = lxml.etree.XMLParser(dtd_validation=True, no_network=False, \
+                                      target=ParserTarget())
         tree = lxml.etree.parse(source, parser)
         """
         # Get root from xml and set any attributes from <rfc> node
