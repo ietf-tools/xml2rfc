@@ -1,7 +1,6 @@
 import lxml.etree
 import re
 
-
 class XmlRfcParser:
     """ XML parser with callbacks to construct an RFC tree """
     
