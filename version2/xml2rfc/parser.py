@@ -4,7 +4,8 @@ import re
 class XmlRfcParser:
     """ XML parser with callbacks to construct an RFC tree """
     
-    def parse(self, source):
+    def parse(self, source, prepare=True):
+        """ Parses the XML file <source> and returns an XmlRfc instance """
         # Get a parser object
         parser = lxml.etree.XMLParser(dtd_validation=True, \
                                       no_network=False, \
@@ -16,7 +17,8 @@ class XmlRfcParser:
         xmlrfc = XmlRfc(tree)
 
         # Finally, do any extra formatting on the RFC before returning
-        xmlrfc.prepare()
+        if prepare:
+            xmlrfc.prepare()
         return xmlrfc
 
 
@@ -28,8 +30,6 @@ class XmlRfc:
         
         Accessing the rfc tree is done by getting the root node from getroot()
     """
-    tree = None
-    
     def __init__(self, tree):
         self.tree = tree
     
@@ -60,6 +60,7 @@ class XmlRfc:
                 if element.tail is not None:
                     element.tail = re.sub('\n\s*', ' ', element.tail)
 
+        # Set some document-independent defaults
         root.attrib['trad_header'] = 'Network Working Group'
         if 'updates' in root.attrib:
             if root.attrib['updates'] != '':

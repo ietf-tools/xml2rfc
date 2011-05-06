@@ -26,8 +26,7 @@ def justify_inline(left_str, center_str, right_str, width=72):
 
 class XmlRfcWriter:
     """ Base class for all writers """
-    r = None
-
+    
     def __init__(self, xmlrfc):
         # We will refer to the XmlRfc document root as 'r'
         self.r = xmlrfc.getroot()
@@ -38,15 +37,14 @@ class XmlRfcWriter:
 
 class RawTextRfcWriter(XmlRfcWriter):
     """ Writes to a text file, unpaginated, no headers or footers. """
-    width = None
-    buf = None
-    ref_index = None
 
-    def __init__(self, xmlrfc):
+    def __init__(self, xmlrfc, width=72):
         XmlRfcWriter.__init__(self, xmlrfc)
-        self.width = 72
-        self.buf = []
-        self.ref_index = 1
+        self.width = width      # Page width
+        self.buf = []           # Main buffer
+        self.toc = []           # Table of contents buffer
+        self.ref_index = 1      # Index number for the references section
+        self.toc_marker = 0     # Line number in buffer to write toc too
 
     def lb(self):
         """ Write a blank line to the file """
@@ -448,11 +446,9 @@ class RawTextRfcWriter(XmlRfcWriter):
 
 class PaginatedTextRfcWriter(RawTextRfcWriter):
     """ Writes to a text file, paginated with headers and footers """
-    left_footer = None
-    center_footer = None
-
-    def __init__(self, rfc):
-        RawTextRfcWriter.__init__(self, rfc)
+    
+    def __init__(self, xmlrfc):
+        RawTextRfcWriter.__init__(self, xmlrfc)
         self.left_footer = ''
         self.center_footer = ''
 
@@ -463,33 +459,36 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     def write(self, filename):
         """ Public method to write rfc tree to a file """
         # Construct a header
-        if 'number' in self.rfc.attribs:
-            left_header = self.rfc.attribs['number']
+        if 'number' in self.r.attrib:
+            left_header = self.r.attrib['number']
         else:
             # No RFC number -- assume internet draft
             left_header = 'Internet-Draft'
-        if 'abbrev' in self.rfc['front']['title'].attribs:
-            center_header = self.rfc['front']['title'].attribs['abbrev']
+        title = self.r.find('front/title')
+        if 'abbrev' in title.attrib:
+            center_header = title.attrib['abbrev']
         else:
             # No abbreviated title -- assume original title fits
-            center_header = self.rfc['front']['title'].text
+            center_header = title.text
         right_header = ''
-        if 'month' in self.rfc['front']['date'].attribs:
-            right_header = self.rfc['front']['date'].attribs['month'] + ' '
-        right_header += self.rfc['front']['date'].attribs['year']
+        date = self.r.find('front/date')
+        if 'month' in date.attrib:
+            right_header = date.attrib['month'] + ' '
+        right_header += date.attrib['year']
         header = justify_inline(left_header, center_header, right_header)
 
         # Construct a footer
         self.left_footer = ''
-        for i, author in enumerate(self.rfc['front']['author']):
+        authors = self.r.findall('front/author')
+        for i, author in enumerate(authors):
             # Format: author1, author2 & author3 OR author1 & author2 OR author1
-            if i < len(self.rfc['front']['author']) - 2:
-                self.left_footer += author.attribs['surname'] + ', '
-            elif i == len(self.rfc['front']['author']) - 2:
-                self.left_footer += author.attribs['surname'] + ' & '
+            if i < len(authors) - 2:
+                self.left_footer += author.attrib['surname'] + ', '
+            elif i == len(authors) - 2:
+                self.left_footer += author.attrib['surname'] + ' & '
             else:
-                self.left_footer += author.attribs['surname']
-        self.center_footer = self.rfc.attribs['category']
+                self.left_footer += author.attrib['surname']
+        self.center_footer = self.r.attrib['category']
 
         # Write RFC to buffer
         self.write_buffer()
