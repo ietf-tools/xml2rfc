@@ -515,12 +515,24 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     
     def __init__(self, xmlrfc):
         RawTextRfcWriter.__init__(self, xmlrfc)
+        self.header = ''
         self.left_footer = ''
         self.center_footer = ''
+        self.section_marks = {}
 
     def make_footer(self, page):
         return justify_inline(self.left_footer, self.center_footer, \
                               '[Page ' + str(page) + ']')
+        
+    # Here we override some methods to mark line numbers for large sections.
+    # We'll store each marking as a hash of line_num: section_length.  This way 
+    # we can step through these markings during writing to preemptively 
+    # construct appropriate page breaks.
+    def write_figure(self, figure, table=False):
+        begin = self.mark()
+        RawTextRfcWriter.write_figure(self, figure, table)
+        end = self.mark()
+        self.section_marks[begin] = end-begin
 
     def write(self, filename):
         """ Public method to write rfc tree to a file """
@@ -541,7 +553,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         if 'month' in date.attrib:
             right_header = date.attrib['month'] + ' '
         right_header += date.attrib['year']
-        header = justify_inline(left_header, center_header, right_header)
+        self.header = justify_inline(left_header, center_header, right_header)
 
         # Construct a footer
         self.left_footer = ''
@@ -559,16 +571,33 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         # Write RFC to buffer
         self.write_buffer()
 
-        # Write buffer to file, inserting breaks every 58 lines
+        # Write buffer to secondary buffer, inserting breaks every 58 lines
+        newbuf = []
+        page_len = 0
+        page_maxlen = 55
+        page_num = 0
+        for line_num, line in enumerate(self.buf):
+            if line_num in self.section_marks:
+                # If this section will exceed a page, insert blank lines
+                # until the end of the page
+                if page_len + self.section_marks[line_num] > page_maxlen:
+                    for i in range(page_maxlen - page_len):
+                        newbuf.append('')
+                        page_len += 1
+            if page_len + 1 > 55:
+                page_len = 0
+                page_num += 1
+                newbuf.append('')
+                newbuf.append(self.make_footer(page_num))
+                newbuf.append('\f')
+                newbuf.append(self.header)
+                newbuf.append('')
+            newbuf.append(line)
+            page_len += 1
+                
+        # Write buffer to file
         file = open(filename, 'w')
-        page = 0
-        for i, line in enumerate(self.buf):
+        for line in newbuf:
             file.write(line)
             file.write('\r\n')
-            if i != 0 and i % 55 == 0:
-                page += 1
-                file.write('\r\n')
-                file.write(self.make_footer(page))
-                file.write('\r\n\f\r\n')
-                file.write(header)
-                file.write('\r\n\r\n')
+        file.close()
