@@ -388,13 +388,18 @@ class RawTextRfcWriter(XmlRfcWriter):
 
         # References section
         ref_indexstring = str(self.ref_index) + '.'
-        self.write_line(ref_indexstring + ' References')
+        ref_title = ref_indexstring + ' References'
+        self.write_line(ref_title)
+        self.toc.append(ref_title)
         # Treat references as nested only if there is more than one <references>
         references = self.r.findall('back/references')
         if len(references) > 1:
             for index, reference_list in enumerate(references):
-                title = reference_list.attrib['title']
-                self.write_line(ref_indexstring + str(index + 1) + '. ' + title)
+                ref_title = ref_indexstring + str(index + 1) + '. ' + \
+                            reference_list.attrib['title']
+                self.write_line(ref_title)
+                toc_indent = ' ' * ((ref_title.count('.') - 1) * 2)
+                self.toc.append(toc_indent + ref_title)
                 self.write_reference_list(reference_list)
         else:
             self.write_reference_list(references[0])
@@ -406,8 +411,10 @@ class RawTextRfcWriter(XmlRfcWriter):
         authors = self.r.findall('front/author')
         if len(authors) > 1:
             self.write_line("Authors' Addresses")
+            self.toc.append("Authors' Addresses")
         else:
             self.write_line("Authors Address")
+            self.toc.append("Authors Address")
         for author in authors:
             if 'role' in author.attrib:
                 self.write_line(author.attrib['fullname'] + ', ' + \
