@@ -69,6 +69,11 @@ class RawTextRfcWriter(XmlRfcWriter):
             # Must be <middle> element -- no title or index.
             indexstring = ''
      
+        if 't' in section:
+            for t in section['t']:
+                if t.text:
+                    self.write_par(t.text, indent=3)
+                
         if 'section' in section:
             index = 1
             for sec in section['section']:
