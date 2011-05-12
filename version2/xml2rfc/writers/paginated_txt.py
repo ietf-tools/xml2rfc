@@ -9,7 +9,9 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
 
     def __init__(self, xmlrfc):
         RawTextRfcWriter.__init__(self, xmlrfc)
-        self.header = ''
+        self.left_header = ''
+        self.center_header = ''
+        self.right_header = ''
         self.left_footer = ''
         self.center_footer = ''
         self.section_marks = {}
@@ -29,31 +31,25 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         XmlRfcWriter._write_figure(self, figure)
         end = len(self.buf)
         self.section_marks[begin] = end - begin
+        
+    def pre_processing(self):
+        """ Prepares the header and footer information """
 
-    def post_processing(self):
-        """ Add paging information to a secondary buffer """
-        # Construct a header
         if 'number' in self.r.attrib:
-            left_header = self.r.attrib['number']
+            self.left_header = self.r.attrib['number']
         else:
             # No RFC number -- assume internet draft
-            left_header = 'Internet-Draft'
+            self.left_header = 'Internet-Draft'
         title = self.r.find('front/title')
         if 'abbrev' in title.attrib:
-            center_header = title.attrib['abbrev']
+            self.center_header = title.attrib['abbrev']
         else:
             # No abbreviated title -- assume original title fits
-            center_header = title.text
-        right_header = ''
+            self.center_header = title.text
         date = self.r.find('front/date')
         if 'month' in date.attrib:
-            right_header = date.attrib['month'] + ' '
-        right_header += date.attrib['year']
-        self.header = tools.justify_inline(left_header, center_header, \
-                                           right_header)
-
-        # Construct a footer
-        self.left_footer = ''
+            self.right_header = date.attrib['month'] + ' '
+        self.right_header += date.attrib['year']
         authors = self.r.findall('front/author')
         for i, author in enumerate(authors):
             # Author1, author2 & author3 OR author1 & author2 OR author1
@@ -64,6 +60,13 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             else:
                 self.left_footer += author.attrib['surname']
         self.center_footer = self.r.attrib['category']
+
+    def post_processing(self):
+        """ Add paging information to a secondary buffer """
+
+        # Construct header
+        header = tools.justify_inline(self.left_header, self.center_header, \
+                                      self.right_header)
 
         # Write buffer to secondary buffer, inserting breaks every 58 lines
         page_len = 0
@@ -83,7 +86,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 self.paged_buf.append('')
                 self.paged_buf.append(self.make_footer(page_num))
                 self.paged_buf.append('\f')
-                self.paged_buf.append(self.header)
+                self.paged_buf.append(header)
                 self.paged_buf.append('')
             self.paged_buf.append(line)
             page_len += 1
