@@ -87,15 +87,37 @@ class RawTextRfcWriter(XmlRfcWriter):
         else: # align == left
             indent_str = ' ' * indent
             for line in lines:
-                self.buf.append(indent_str + line) 
-
-    def _write_t_rec(self, t, indent=3, sub_indent=None, bullet=''):
-        """ Recursively writes <t> elements """
+                self.buf.append(indent_str + line)
+    
+    def _resolve_refs(self, element):
+        """ Returns a string containing element text plus any inline refs """
+        line = []
+        if element.text:
+            line.append(element.text)
+        for child in element:
+            if child.tag == 'xref':
+                if child.text:
+                    line.append(child.text + ' ')
+                line.append('[' + child.attrib['target'] + ']')
+                if child.tail:
+                    line.append(child.tail)
+            elif child.tag == 'eref':
+                if child.text:
+                    line.append(child.text + ' ')
+                line.append('[' + child.attrib['target'] + ']')
+                if child.tail:
+                    line.append(child.tail)
+            elif child.tag == 'iref': pass
+        return ''.join(line)  
+    
+    def _write_t_rec(self, t, indent=3, sub_indent=0, bullet=''):
+        """ Writes a <t> element """
         line = []
         if t.text:
             line.append(t.text)
-
         for element in t:
+            
+            # Check for any inline elements
             if element.tag == 'xref':
                 if element.text:
                     line.append(element.text + ' ')
@@ -115,12 +137,13 @@ class RawTextRfcWriter(XmlRfcWriter):
                 if element.tail:
                     line.append(element.tail)
             else:
-                # Not an inline element.  Output what we have so far
+                # Not an inline element, write a paragraph of what we have.
                 if len(line) > 0:
                     self._write_par(''.join(line), indent=indent, \
-                                   sub_indent=sub_indent, bullet=bullet)
+                                    bullet=bullet, sub_indent=sub_indent)
                     line = []
-            
+                    
+            # Separate line elements
             if element.tag == 'list':
                 # Default to the 'empty' list style -- 3 spaces
                 bullet = '   '
@@ -146,7 +169,6 @@ class RawTextRfcWriter(XmlRfcWriter):
                         self._write_t_rec(t, indent=indent, bullet=bullet)
                 if element.tail:
                     self._write_par(element.tail, indent=3)
-
             elif element.tag == 'figure':
                 self.write_figure(element)
                 if element.tail:
@@ -157,68 +179,96 @@ class RawTextRfcWriter(XmlRfcWriter):
                     self.write_par(element.tail, indent=3)
 
         if len(line) > 0:
-            self._write_par(''.join(line), indent=indent, bullet=bullet, \
+            # If we never wrote the paragraph, write now.
+            self._write_par(''.join(line), indent=indent, \
+                            bullet=bullet, sub_indent=sub_indent)
+
+    def write_reference_list(self, references):
+        """ Writes a formatted list of <reference> elements """
+        # Use very first reference's [bullet] length for indent amount
+        sub_indent = len(references.find('reference').attrib['anchor']) + 4
+        # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
+        for i, ref in enumerate(references.findall('reference')):
+            refstring = []
+            authors = ref.findall('front/author')
+            for j, author in enumerate(authors):
+                organization = author.find('organization')
+                if 'surname' in author.attrib:
+                    refstring.append(author.attrib['surname'] + ', ' + \
+                                     author.attrib['initials'] + ', ')
+                    if j == len(authors) - 2:
+                        # Second-to-last, add an "and"
+                        refstring.append('and ')
+                        refstring.append(author.attrib['surname'] + ', ' + \
+                                         author.attrib['initials'] + '., ')
+                elif organization is not None and organization.text is not None:
+                    # Use organization instead of name
+                    refstring.append(organization.text + ', ')
+            refstring.append('"' + ref.find('front/title').text + '", ')
+            for seriesInfo in ref.findall('seriesInfo'):
+                refstring.append(seriesInfo.attrib['name'] + ' ' + \
+                                 seriesInfo.attrib['value'] + ', ')
+            date = ref.find('front/date')
+            if 'month' in date.attrib:
+                refstring.append(date.attrib['month'] + ', ')
+            refstring.append(date.attrib['year'])
+            refstring.append('.')
+            bullet = '[' + ref.attrib['anchor'] + ']  '
+            self.write_par(''.join(refstring), indent=3, bullet=bullet, \
                            sub_indent=sub_indent)
     
-    def _resolve_refs(self, element):
-        """ Returns a string containing element text plus any inline refs """
-        line = []
-        if element.text:
-            line.append(element.text)
-        for child in element:
-            if child.tag == 'xref':
-                if child.text:
-                    line.append(child.text + ' ')
-                line.append('[' + child.attrib['target'] + ']')
-                if child.tail:
-                    line.append(child.tail)
-            elif child.tag == 'eref':
-                if child.text:
-                    line.append(child.text + ' ')
-                line.append('[' + child.attrib['target'] + ']')
-                if child.tail:
-                    line.append(child.tail)
-            elif child.tag == 'iref': pass
-        return ''.join(line)
-
-    def _write_section_rec(self, section, indexstring, appendix=False):
-        """ Recursively writes <section> elements """
-        if indexstring:
-            # Prepend a neat index string to the title
-            self._write_line(indexstring + ' ' + section.attrib['title'])
-            # Write to TOC as well
-            if section.attrib['toc'] != 'exclude':
-                toc_indent = ' ' * ((indexstring.count('.') - 1) * 2)
-                self.toc.append(toc_indent + indexstring + ' ' + \
-                                section.attrib['title'])
-        else:
-            # Must be <middle> or <back> element -- no title or index.
-            indexstring = ''
-        
-        for element in section:
-            # Write elements in XML document order
-            if element.tag == 't':
-                self._write_t_rec(element)
-            elif element.tag == 'figure':
-                self._write_figure(element)
-            elif element.tag == 'texttable':
-                self._write_table(element)
-        
-        index = 1
-        for child_sec in section.findall('section'):
-            if appendix == True:
-                self._write_section_rec(child_sec, 'Appendix ' + \
-                                       string.uppercase[index-1] + '.')
-            else:
-                self._write_section_rec(child_sec, indexstring + \
-                                       str(index) + '.')
-            index += 1
-
-        # Set the ending index number so we know where to begin references
-        if indexstring == '' and appendix == False:
-            self.ref_index = index
+    def post_write_toc(self):
+        """ Writes the table of contents to temporary buffer and returns
             
-    def _write_table(self, table):
+            This should only be called after the initial buffer is written.
+        """
+        tmpbuf = ['']
+        self.write_line("Table of Contents", buf=tmpbuf)
+        self.lb(buf=tmpbuf)
+        for line in self.toc:
+            self.write_line(line, indent=3, lb=False, buf=tmpbuf)
+        return tmpbuf
+    
+#===============================================================================
+# Abstract writer rewrite
+#===============================================================================
+
+    def write_t(self, t):
+        """ Writes a <t> element """
+        self._write_t_rec(t)
+        
+    def mark_toc(self):
+        """ Marks buffer position for post-writing table of contents """
+        self.toc_marker = len(self.buf)
+
+    def write_top(self, left_header, right_header):
+        """ Combines left and right lists to write a document heading """
+        for i in range(max(len(left_header), len(right_header))):
+            if i < len(left_header):
+                left = left_header[i]
+            else:
+                left = ''
+            if i < len(right_header):
+                right = right_header[i]
+            else:
+                right = ''
+            self.buf.append(tools.justify_inline(left, '', right))
+    
+    def write_title(self, title, docName=None):
+        """ Write the document title and (optional) name """
+        self._write_line(title.center(self.width))
+        if docName is not None:
+            self._write_line(docName.center(self.width), lb=False)
+    
+    def write_heading(self, text):
+        """ Write a generic header """
+        self._write_line(text, indent=0)
+        
+    def write_paragraph(self, text):
+        """ Write a generic paragraph """
+        self._write_par(text, indent=3)
+            
+    def write_table(self, table):
         """ Writes <texttable> elements """
         align = table.attrib['align']
         
@@ -289,7 +339,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         self._write_line('Table ' + str(self.figure_count) + title, \
                          align='center')
 
-    def _write_figure(self, figure):
+    def write_figure(self, figure):
         """ Writes <figure> elements """
         align = figure.attrib['align']
         
@@ -322,96 +372,10 @@ class RawTextRfcWriter(XmlRfcWriter):
             title = ': ' + figure.attrib['title']
         self._write_line('Figure ' + str(self.figure_count) + title, \
                          align='center')
-
-
-    def write_reference_list(self, references):
-        """ Writes a formatted list of <reference> elements """
-        # Use very first reference's [bullet] length for indent amount
-        sub_indent = len(references.find('reference').attrib['anchor']) + 4
-        # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
-        for i, ref in enumerate(references.findall('reference')):
-            refstring = []
-            authors = ref.findall('front/author')
-            for j, author in enumerate(authors):
-                organization = author.find('organization')
-                if 'surname' in author.attrib:
-                    refstring.append(author.attrib['surname'] + ', ' + \
-                                     author.attrib['initials'] + ', ')
-                    if j == len(authors) - 2:
-                        # Second-to-last, add an "and"
-                        refstring.append('and ')
-                        refstring.append(author.attrib['surname'] + ', ' + \
-                                         author.attrib['initials'] + '., ')
-                elif organization is not None and organization.text is not None:
-                    # Use organization instead of name
-                    refstring.append(organization.text + ', ')
-            refstring.append('"' + ref.find('front/title').text + '", ')
-            for seriesInfo in ref.findall('seriesInfo'):
-                refstring.append(seriesInfo.attrib['name'] + ' ' + \
-                                 seriesInfo.attrib['value'] + ', ')
-            date = ref.find('front/date')
-            if 'month' in date.attrib:
-                refstring.append(date.attrib['month'] + ', ')
-            refstring.append(date.attrib['year'])
-            refstring.append('.')
-            bullet = '[' + ref.attrib['anchor'] + ']  '
-            self.write_par(''.join(refstring), indent=3, bullet=bullet, \
-                           sub_indent=sub_indent)
-    
-    def post_write_toc(self):
-        """ Writes the table of contents to temporary buffer and returns
-            
-            This should only be called after the initial buffer is written.
-        """
-        tmpbuf = ['']
-        self.write_line("Table of Contents", buf=tmpbuf)
-        self.lb(buf=tmpbuf)
-        for line in self.toc:
-            self.write_line(line, indent=3, lb=False, buf=tmpbuf)
-        return tmpbuf
-    
-#===============================================================================
-# Abstract writer rewrite
-#===============================================================================
-
-    def mark_toc(self):
-        """ Marks buffer position for post-writing table of contents """
-        self.toc_marker = len(self.buf)
-
-    def write_t(self, t):
-        """ Writes a <t> element """
-        self._write_t_rec(t)
-
-    def write_top(self, left_header, right_header):
-        """ Combines left and right lists to write a document heading """
-        for i in range(max(len(left_header), len(right_header))):
-            if i < len(left_header):
-                left = left_header[i]
-            else:
-                left = ''
-            if i < len(right_header):
-                right = right_header[i]
-            else:
-                right = ''
-            self.buf.append(tools.justify_inline(left, '', right))
-    
-    def write_title(self, title, docName=None):
-        """ Write the document title and (optional) name """
-        self._write_line(title.center(self.width))
-        if docName is not None:
-            self._write_line(docName.center(self.width), lb=False)
-    
-    def write_heading(self, text):
-        """ Write a generic header """
-        self._write_line(text, indent=0)
         
-    def write_paragraph(self, text):
-        """ Write a generic paragraph """
-        self._write_par(text, indent=3)
-        
-    def write_middle(self, middle):
-        """ Writes the <middle> section """
-        self._write_section_rec(middle, None)
+    def add_to_toc(self, bullet, title, anchor):
+            toc_indent = ' ' * ((bullet.count('.') - 1) * 2)
+            self.toc.append(toc_indent + bullet + ' ' + title)
 
     def write_buffer(self):
         """ Internal method that writes the entire RFC tree to a buffer

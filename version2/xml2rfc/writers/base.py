@@ -1,3 +1,6 @@
+# Python libs
+import string
+
 class XmlRfcWriter:
     """ Base class for all writers """
     
@@ -41,6 +44,45 @@ class XmlRfcWriter:
             month = date.attrib['month']
         list.append(month + ' ' + date.attrib['year'])
         return list
+            
+    def write_section_rec(self, section, indexstring, appendix=False):
+        """ Recursively writes <section> elements """
+        if indexstring:
+            # Prepend a neat index string to the title
+            self.write_heading(indexstring + ' ' + section.attrib['title'])
+            # Write to TOC as well
+            if section.attrib['toc'] != 'exclude':
+                anchor = None
+                if 'anchor' in section.attrib:
+                    anchor = section.attrib['anchor']
+                self.add_to_toc(indexstring, section.attrib['title'], \
+                                anchor=anchor)
+        else:
+            # Must be <middle> or <back> element -- no title or index.
+            indexstring = ''
+        
+        for element in section:
+            # Write elements in XML document order
+            if element.tag == 't':
+                self.write_t(element)
+            elif element.tag == 'figure':
+                self.write_figure(element)
+            elif element.tag == 'texttable':
+                self.write_table(element)
+    
+        index = 1
+        for child_sec in section.findall('section'):
+            if appendix == True:
+                self.write_section_rec(child_sec, 'Appendix ' + \
+                                       string.uppercase[index-1] + '.')
+            else:
+                self.write_section_rec(child_sec, indexstring + \
+                                       str(index) + '.')
+            index += 1
+
+        # Set the ending index number so we know where to begin references
+        if indexstring == '' and appendix == False:
+            self.ref_index = index
 
     def write(self, filename):
         """ Public method to write an RFC document to a file.
@@ -75,7 +117,7 @@ class XmlRfcWriter:
         self.mark_toc()
         
         # Middle section
-        self.write_middle(self.r.find('middle'))
+        self.write_section_rec(self.r.find('middle'), None)
         
         # Finished buffering, write to file
         self.write_to_file(filename)
@@ -84,6 +126,12 @@ class XmlRfcWriter:
     # The following are the write interface methods to override
     
     def write_t(self, t):
+        raise NotImplementedError('Must override!')
+    
+    def write_figure(self, figure):
+        raise NotImplementedError('Must override!')
+        
+    def write_table(self, table):
         raise NotImplementedError('Must override!')
 
     def write_top(self, left_header, right_header):
@@ -98,8 +146,8 @@ class XmlRfcWriter:
     def write_paragraph(self, text):
         raise NotImplementedError('Must override!')
     
-    def write_middle(self, middle):
+    def write_to_file(self, filename):
         raise NotImplementedError('Must override!')
     
-    def write_to_file(self, filename):
+    def add_to_toc(self, title, anchor):
         raise NotImplementedError('Must override!')
