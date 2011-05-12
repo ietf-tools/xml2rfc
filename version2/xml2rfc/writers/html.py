@@ -64,6 +64,11 @@ class HtmlRfcWriter(RawTextRfcWriter):
             tbody.append(E.tr(td_left, td_right))
         table.append(tbody)
         return table
+
+    def build_t_tree(self, t):
+        """ Returns an HTML element tree from an XML <t> node """
+        p = E.p(t.text)
+        return p
     
     def build_body(self):
         """ Returns the constructed <body> element """
@@ -82,9 +87,27 @@ class HtmlRfcWriter(RawTextRfcWriter):
             title.append(filename)
         body.append(title)
         
+        # Abstract
+        abstract = self.r.find('front/abstract')
+        if abstract is not None:
+            body.append(E.h1(E.a('Abstract', href='#rfc.abstract'), \
+                             id='rfc.abstract'))
+            for t in abstract.findall('t'):
+                body.append(self.build_t_tree(t))
+
+        # Status
+        body.append(E.h1(E.a('Status of this Memo', href='#rfc.status'), \
+                         id='rfc.status'))
+        body.append(E.p(self.r.attrib['status']))
+
+        # Copyright
+        body.append(E.h1(E.a('Copyright Notice', href='#rfc.copyrightnotice'), \
+                         id='rfc.copyrightnotice'))
+        body.append(E.p(self.r.attrib['copyright']))
         
+        # Finished
         return body
-        
+
     def build_tree(self):
         """ Builds an lxml HTML Element Tree from the RFC tree instance """
         self.html.append(self.build_head())
