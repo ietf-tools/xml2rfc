@@ -131,8 +131,11 @@ class XmlRfcWriter:
         # Store a marker for table of contents
         self.mark_toc()
         
-        # Middle section
+        # Middle sections
         self._write_section_rec(self.r.find('middle'), None)
+        
+        # Appendix sections
+        self._write_section_rec(self.r.find('back'), None, appendix=True)
         
         # Authors addresses section
         self._write_authors_addresses(self.r.findall('front/author'))

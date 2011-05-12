@@ -452,9 +452,6 @@ class RawTextRfcWriter(XmlRfcWriter):
             self.write_line(ref_title)
             self.toc.append(ref_title)
             self.write_reference_list(references[0])
-        
-        # Appendix sections
-        self.write_section_rec(self.r.find('back'), None, appendix=True)
 
     def write_to_file(self, filename):
         """ Public method to write rfc document to a file """
