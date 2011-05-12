@@ -181,11 +181,11 @@ class RawTextRfcWriter(XmlRfcWriter):
             elif child.tag == 'iref': pass
         return ''.join(line)
 
-    def write_section_rec(self, section, indexstring, appendix=False):
+    def _write_section_rec(self, section, indexstring, appendix=False):
         """ Recursively writes <section> elements """
         if indexstring:
             # Prepend a neat index string to the title
-            self.write_line(indexstring + ' ' + section.attrib['title'])
+            self._write_line(indexstring + ' ' + section.attrib['title'])
             # Write to TOC as well
             if section.attrib['toc'] != 'exclude':
                 toc_indent = ' ' * ((indexstring.count('.') - 1) * 2)
@@ -198,19 +198,19 @@ class RawTextRfcWriter(XmlRfcWriter):
         for element in section:
             # Write elements in XML document order
             if element.tag == 't':
-                self.write_t_rec(element)
+                self._write_t_rec(element)
             elif element.tag == 'figure':
-                self.write_figure(element)
+                self._write_figure(element)
             elif element.tag == 'texttable':
-                self.write_table(element)
+                self._write_table(element)
         
         index = 1
         for child_sec in section.findall('section'):
             if appendix == True:
-                self.write_section_rec(child_sec, 'Appendix ' + \
+                self._write_section_rec(child_sec, 'Appendix ' + \
                                        string.uppercase[index-1] + '.')
             else:
-                self.write_section_rec(child_sec, indexstring + \
+                self._write_section_rec(child_sec, indexstring + \
                                        str(index) + '.')
             index += 1
 
@@ -218,15 +218,15 @@ class RawTextRfcWriter(XmlRfcWriter):
         if indexstring == '' and appendix == False:
             self.ref_index = index
             
-    def write_table(self, table):
+    def _write_table(self, table):
         """ Writes <texttable> elements """
         align = table.attrib['align']
         
         # Write preamble
         preamble = table.find('preamble')
         if preamble is not None:
-            self.write_par(self.resolve_refs(preamble), indent=3, \
-                           align=align)
+            self._write_par(self._resolve_refs(preamble), indent=3, \
+                            align=align)
         
         self.table_count += 1
         headers = []
@@ -272,32 +272,32 @@ class RawTextRfcWriter(XmlRfcWriter):
         lines.append(''.join(borderstring))
         
         # Finally, write the table to the buffer with proper alignment
-        self.lb()
-        self.write_raw('\n'.join(lines), align=align)
+        self._lb()
+        self._write_raw('\n'.join(lines), align=align)
         
         
         # Write postamble
         postamble = table.find('postamble')
         if postamble is not None:
-            self.write_par(self.resolve_refs(postamble), indent=3, \
-                           align=align)
+            self._write_par(self._resolve_refs(postamble), indent=3, \
+                            align=align)
         
         # Write label
         title = ''
         if table.attrib['title'] != '':
             title = ': ' + table.attrib['title']
-        self.write_line('Table ' + str(self.figure_count) + title, \
-                        align='center')
+        self._write_line('Table ' + str(self.figure_count) + title, \
+                         align='center')
 
-    def write_figure(self, figure):
+    def _write_figure(self, figure):
         """ Writes <figure> elements """
         align = figure.attrib['align']
         
         # Write preamble
         preamble = figure.find('preamble')
         if preamble is not None:
-            self.write_par(self.resolve_refs(preamble), indent=3, \
-                           align=align)
+            self._write_par(self._resolve_refs(preamble), indent=3, \
+                            align=align)
         
         # Write figure
         self.figure_count += 1
@@ -307,21 +307,21 @@ class RawTextRfcWriter(XmlRfcWriter):
         artwork_align = align
         if 'align' in artwork.attrib:
             artwork_align = artwork.attrib['align']
-        self.write_raw(figure.find('artwork').text, indent=3, \
-                       align=artwork_align)
+        self._write_raw(figure.find('artwork').text, indent=3, \
+                        align=artwork_align)
         
         # Write postamble
         postamble = figure.find('postamble')
         if postamble is not None:
-            self.write_par(self.resolve_refs(postamble), indent=3, \
-                           align=align)
+            self._write_par(self._resolve_refs(postamble), indent=3, \
+                            align=align)
         
         # Write label
         title = ''
         if figure.attrib['title'] != '':
             title = ': ' + figure.attrib['title']
-        self.write_line('Figure ' + str(self.figure_count) + title, \
-                        align='center')
+        self._write_line('Figure ' + str(self.figure_count) + title, \
+                         align='center')
 
 
     def write_reference_list(self, references):
@@ -408,6 +408,10 @@ class RawTextRfcWriter(XmlRfcWriter):
     def write_paragraph(self, text):
         """ Write a generic paragraph """
         self._write_par(text, indent=3)
+        
+    def write_middle(self, middle):
+        """ Writes the <middle> section """
+        self._write_section_rec(middle, None)
 
     def write_buffer(self):
         """ Internal method that writes the entire RFC tree to a buffer
@@ -415,9 +419,6 @@ class RawTextRfcWriter(XmlRfcWriter):
             Actual writing to a file, plus some post formatting is handled
             in self.write(), which is the public method to be called.
         """
-        
-        # Middle sections
-        self.write_section_rec(self.r.find('middle'), None)
 
         # References section
         ref_indexstring = str(self.ref_index) + '.'

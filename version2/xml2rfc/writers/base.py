@@ -74,6 +74,9 @@ class XmlRfcWriter:
         # Store a marker for table of contents
         self.mark_toc()
         
+        # Middle section
+        self.write_middle(self.r.find('middle'))
+        
         # Finished buffering, write to file
         self.write_to_file(filename)
         
@@ -81,19 +84,22 @@ class XmlRfcWriter:
     # The following are the write interface methods to override
     
     def write_t(self, t):
-        raise NotImplementedError('Must override function: ' + __name__)
+        raise NotImplementedError('Must override!')
 
     def write_top(self, left_header, right_header):
-        raise NotImplementedError('Must override function: ' + __name__)
+        raise NotImplementedError('Must override!')
     
     def write_title(self, title, docName=None):
-        raise NotImplementedError('Must override function: ' + __name__)
+        raise NotImplementedError('Must override!')
     
     def write_heading(self, text):
-        raise NotImplementedError('Must override function: ' + __name__)
+        raise NotImplementedError('Must override!')
     
     def write_paragraph(self, text):
-        raise NotImplementedError('Must override function: ' + __name__)
+        raise NotImplementedError('Must override!')
+    
+    def write_middle(self, middle):
+        raise NotImplementedError('Must override!')
     
     def write_to_file(self, filename):
-        raise NotImplementedError('Must override function: ' + __name__)
+        raise NotImplementedError('Must override!')
