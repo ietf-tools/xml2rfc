@@ -177,12 +177,13 @@ class HtmlRfcWriter(RawTextRfcWriter):
             col_num = i % num_columns
             if col_num == 0 and i != 0:
                 # New row
-                body.append(th)
+                body.append(tr)
                 tr = E.tr()
             td = E.td(cell.text)
             # Get alignment from header
             td.attrib['class'] = col_aligns[col_num]
             tr.append(td)
+        body.append(tr)  # Add final row
         htmltable.append(body)
         
         self.body.append(htmltable)
