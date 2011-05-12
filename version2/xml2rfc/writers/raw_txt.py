@@ -308,9 +308,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             authors = ref.findall('front/author')
             for j, author in enumerate(authors):
                 organization = author.find('organization')
-                if organization is not None and organization.text is not None:
-                    refstring.append(organization.text + ', ')
-                else:
+                if 'surname' in author.attrib:
                     refstring.append(author.attrib['surname'] + ', ' + \
                                      author.attrib['initials'] + ', ')
                     if j == len(authors) - 2:
@@ -318,6 +316,9 @@ class RawTextRfcWriter(XmlRfcWriter):
                         refstring.append('and ')
                         refstring.append(author.attrib['surname'] + ', ' + \
                                          author.attrib['initials'] + '., ')
+                elif organization is not None and organization.text is not None:
+                    # Use organization instead of name
+                    refstring.append(organization.text + ', ')
             refstring.append('"' + ref.find('front/title').text + '", ')
             # TODO: Handle seriesInfo
             date = ref.find('front/date')
