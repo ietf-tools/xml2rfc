@@ -86,27 +86,6 @@ class RawTextRfcWriter(XmlRfcWriter):
             for line in lines:
                 self.buf.append(indent_str + line)
     
-    def _resolve_refs(self, element):
-        """ Returns a string containing element text plus any inline refs """
-        line = []
-        if element.text:
-            line.append(element.text)
-        for child in element:
-            if child.tag == 'xref':
-                if child.text:
-                    line.append(child.text + ' ')
-                line.append('[' + child.attrib['target'] + ']')
-                if child.tail:
-                    line.append(child.tail)
-            elif child.tag == 'eref':
-                if child.text:
-                    line.append(child.text + ' ')
-                line.append('[' + child.attrib['target'] + ']')
-                if child.tail:
-                    line.append(child.tail)
-            elif child.tag == 'iref': pass
-        return ''.join(line)  
-    
     def _write_t_rec(self, t, indent=3, sub_indent=0, bullet=''):
         """ Writes a <t> element """
         line = []
@@ -199,6 +178,42 @@ class RawTextRfcWriter(XmlRfcWriter):
     def mark_toc(self):
         """ Marks buffer position for post-writing table of contents """
         self.toc_marker = len(self.buf)
+            
+    def write_raw(self, text, align='left'):
+        """ Writes a raw stream of characters, preserving space and breaks """
+        # Append an indent to every newline of the data
+        lines = text.split('\n')
+        if align == 'center':
+            # Find the longest line, and use that as a fixed center.
+            longest_line = len(max(lines, key=len))
+            indent_str = ' ' * ((self.width - longest_line) / 2)
+            for line in lines:
+                self.buf.append(indent_str + line)
+        elif align == 'right':
+            for line in lines:
+                self.buf.append(line.rjust(self.width))
+        else: # align == left
+            indent_str = ' ' * 3
+            for line in lines:
+                self.buf.append(indent_str + line)
+        
+    def write_label(self, text, align='center'):
+        """ Writes a label for a table or figure """
+        self._write_line(text, align=align)
+    
+    def write_title(self, title, docName=None):
+        """ Write the document title and (optional) name """
+        self._write_line(title.center(self.width))
+        if docName is not None:
+            self._write_line(docName.center(self.width), lb=False)
+    
+    def write_heading(self, text):
+        """ Write a generic header """
+        self._write_line(text, indent=0)
+        
+    def write_paragraph(self, text, align='left'):
+        """ Write a generic paragraph """
+        self._write_par(text, indent=3, align=align)
 
     def write_t(self, t):
         """ Writes a <t> element """
@@ -216,20 +231,6 @@ class RawTextRfcWriter(XmlRfcWriter):
             else:
                 right = ''
             self.buf.append(tools.justify_inline(left, '', right))
-    
-    def write_title(self, title, docName=None):
-        """ Write the document title and (optional) name """
-        self._write_line(title.center(self.width))
-        if docName is not None:
-            self._write_line(docName.center(self.width), lb=False)
-    
-    def write_heading(self, text):
-        """ Write a generic header """
-        self._write_line(text, indent=0)
-        
-    def write_paragraph(self, text):
-        """ Write a generic paragraph """
-        self._write_par(text, indent=3)
             
     def write_table(self, table):
         """ Writes <texttable> elements """
@@ -238,7 +239,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         # Write preamble
         preamble = table.find('preamble')
         if preamble is not None:
-            self._write_par(self._resolve_refs(preamble), indent=3, \
+            self._write_par(self.expand_refs(preamble), indent=3, \
                             align=align)
         
         self.table_count += 1
@@ -292,7 +293,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         # Write postamble
         postamble = table.find('postamble')
         if postamble is not None:
-            self._write_par(self._resolve_refs(postamble), indent=3, \
+            self._write_par(self.expand_refs(postamble), indent=3, \
                             align=align)
         
         # Write label
@@ -300,40 +301,6 @@ class RawTextRfcWriter(XmlRfcWriter):
         if table.attrib['title'] != '':
             title = ': ' + table.attrib['title']
         self._write_line('Table ' + str(self.figure_count) + title, \
-                         align='center')
-
-    def write_figure(self, figure):
-        """ Writes <figure> elements """
-        align = figure.attrib['align']
-        
-        # Write preamble
-        preamble = figure.find('preamble')
-        if preamble is not None:
-            self._write_par(self._resolve_refs(preamble), indent=3, \
-                            align=align)
-        
-        # Write figure
-        self.figure_count += 1
-        # TODO: Needs to be aligned properly
-        # Insert artwork text directly into the buffer
-        artwork = figure.find('artwork')
-        artwork_align = align
-        if 'align' in artwork.attrib:
-            artwork_align = artwork.attrib['align']
-        self._write_raw(figure.find('artwork').text, indent=3, \
-                        align=artwork_align)
-        
-        # Write postamble
-        postamble = figure.find('postamble')
-        if postamble is not None:
-            self._write_par(self._resolve_refs(postamble), indent=3, \
-                            align=align)
-        
-        # Write label
-        title = ''
-        if figure.attrib['title'] != '':
-            title = ': ' + figure.attrib['title']
-        self._write_line('Figure ' + str(self.figure_count) + title, \
                          align='center')
     
     def write_address_card(self, author):
@@ -418,6 +385,28 @@ class RawTextRfcWriter(XmlRfcWriter):
             bullet = '[' + ref.attrib['anchor'] + ']  '
             self._write_par(''.join(refstring), indent=3, bullet=bullet, \
                            sub_indent=sub_indent)
+
+    def expand_refs(self, element):
+        """ Returns a string with inline references expanded properly """
+        line = []
+        if element.text:
+            line.append(element.text)
+        for child in element:
+            if child.tag == 'xref':
+                if child.text:
+                    line.append(child.text + ' ')
+                line.append('[' + child.attrib['target'] + ']')
+                if child.tail:
+                    line.append(child.tail)
+            elif child.tag == 'eref':
+                if child.text:
+                    line.append(child.text + ' ')
+                line.append('[' + child.attrib['target'] + ']')
+                if child.tail:
+                    line.append(child.tail)
+            # TODO: Handle iref
+            elif child.tag == 'iref': pass
+        return ''.join(line)  
 
     def add_to_toc(self, bullet, title, anchor=None):
         if bullet:

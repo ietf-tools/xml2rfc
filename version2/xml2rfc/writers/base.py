@@ -49,6 +49,37 @@ class XmlRfcWriter:
             month = date.attrib['month']
         list.append(month + ' ' + date.attrib['year'])
         return list
+    
+    def _write_figure(self, figure):
+        """ Writes <figure> elements """
+        align = figure.attrib['align']
+
+        # Write preamble
+        preamble = figure.find('preamble')
+        if preamble is not None:
+            self.write_paragraph(self.expand_refs(preamble), align=align)
+
+        # Write figure
+        self.figure_count += 1
+        # TODO: Needs to be aligned properly
+        # Insert artwork text directly into the buffer
+        artwork = figure.find('artwork')
+        artwork_align = align
+        if 'align' in artwork.attrib:
+            artwork_align = artwork.attrib['align']
+        self.write_raw(figure.find('artwork').text, align=artwork_align)
+        
+        # Write postamble
+        postamble = figure.find('postamble')
+        if postamble is not None:
+            self.write_paragraph(self.expand_refs(postamble), align=align)
+        
+        # Write label
+        title = ''
+        if figure.attrib['title'] != '':
+            title = ': ' + figure.attrib['title']
+        self.write_label('Figure ' + str(self.figure_count) + title, \
+                         align='center')
             
     def _write_section_rec(self, section, indexstring, appendix=False):
         """ Recursively writes <section> elements """
@@ -71,7 +102,7 @@ class XmlRfcWriter:
             if element.tag == 't':
                 self.write_t(element)
             elif element.tag == 'figure':
-                self.write_figure(element)
+                self._write_figure(element)
             elif element.tag == 'texttable':
                 self.write_table(element)
     
@@ -164,10 +195,16 @@ class XmlRfcWriter:
     # ---------------------------------------------------------
     # The following are the write interface methods to override
     
+    def write_raw(self, text, align='left'):
+        raise NotImplementedError('Must override!')
+        
+    def write_label(self, text, align='center'):
+        raise NotImplementedError('Must override!')
+        
     def write_heading(self, text):
         raise NotImplementedError('Must override!')
 
-    def write_paragraph(self, text):
+    def write_paragraph(self, text, align='left'):
         raise NotImplementedError('Must override!')
 
     def write_t(self, t):
@@ -192,6 +229,9 @@ class XmlRfcWriter:
         raise NotImplementedError('Must override!')
     
     def write_to_file(self, filename):
+        raise NotImplementedError('Must override!')
+    
+    def expand_refs(self, element):
         raise NotImplementedError('Must override!')
     
     def add_to_toc(self, bullet, title, anchor=None):
