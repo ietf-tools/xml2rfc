@@ -61,8 +61,6 @@ class XmlRfcWriter:
 
         # Write figure
         self.figure_count += 1
-        # TODO: Needs to be aligned properly
-        # Insert artwork text directly into the buffer
         artwork = figure.find('artwork')
         artwork_align = align
         if 'align' in artwork.attrib:

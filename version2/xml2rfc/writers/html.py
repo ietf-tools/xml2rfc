@@ -52,26 +52,33 @@ class HtmlRfcWriter(RawTextRfcWriter):
     # -----------------------------------------
     
     def mark_toc(self):
-        raise NotImplementedError('Must override!')
+        pass
     
     def write_raw(self, text, align='left'):
-        raise NotImplementedError('Must override!')
+        pass
         
     def write_label(self, text, align='center'):
-        raise NotImplementedError('Must override!')
+        pass
     
     def write_title(self, title, docName=None):
-        raise NotImplementedError('Must override!')
+        p = E.p(title)
+        p.attrib['class'] = 'title'
+        if docName:
+            p.append(E.br())
+            span = E.span(docName)
+            span.attrib['class'] = 'filename'
+            p.append(span)
+        self.body.append(p)
         
     def write_heading(self, text):
-        raise NotImplementedError('Must override!')
+        pass
 
     def write_paragraph(self, text, align='left'):
-        raise NotImplementedError('Must override!')
+        pass
 
     def write_list(self, list):
-        raise NotImplementedError('Must override!')
-
+        pass
+    
     def write_top(self, left_header, right_header):
         """ Adds the header table """
         table = E.table()
@@ -95,19 +102,19 @@ class HtmlRfcWriter(RawTextRfcWriter):
         self.body.append(table)
     
     def write_address_card(self, author):
-        raise NotImplementedError('Must override!')
+        pass
     
     def write_reference_list(self, list):
-        raise NotImplementedError('Must override!')
+        pass
     
     def draw_table(self, table):
-        raise NotImplementedError('Must override!')
+        pass
     
     def expand_refs(self, element):
-        raise NotImplementedError('Must override!')
+        pass
     
     def add_to_toc(self, bullet, title, anchor=None):
-        raise NotImplementedError('Must override!')
+        pass
     
     def write_to_file(self, filename):
         # Write the tree to the file
