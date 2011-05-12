@@ -8,7 +8,10 @@ import tools
 
 
 class RawTextRfcWriter(XmlRfcWriter):
-    """ Writes to a text file, unpaginated, no headers or footers. """
+    """ Writes to a text file, unpaginated, no headers or footers. 
+    
+        Callback methods from base class will all write to a buffer list, buf
+    """
 
     def __init__(self, xmlrfc, width=72):
         XmlRfcWriter.__init__(self, xmlrfc)
@@ -19,18 +22,14 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.toc_marker = 0     # Line number in buffer to write toc too
         self.figure_count = 0
         self.table_count = 0
-
-    def mark(self):
-        """ Returns the current position in the buffer for post-processing """
-        return len(self.buf)
         
-    def lb(self, buf=None):
+    def _lb(self, buf=None):
         """ Write a blank line to the file """
         if not buf:
             buf = self.buf
         buf.append('')
 
-    def write_line(self, str, indent=0, lb=True, align='left', buf=None):
+    def _write_line(self, str, indent=0, lb=True, align='left', buf=None):
         """ Writes an (optionally) indented line preceded by a line break. """
         if not buf:
             buf = self.buf
@@ -38,7 +37,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             raise Exception("The supplied line exceeds the page width!\n \
                                                                     " + str)
         if lb:
-            self.lb(buf=buf)
+            self._lb(buf=buf)
         if align == 'left':
             buf.append(' ' * indent + str)
         elif align == 'center':
@@ -46,7 +45,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         elif align == 'right':
             buf.append(str.rjust(self.width))
 
-    def write_par(self, str, indent=0, sub_indent=None,bullet='', \
+    def _write_par(self, str, indent=0, sub_indent=None,bullet='', \
                   align='left', buf=None):
         """ Writes an indented and wrapped paragraph, preceded by a lb. """
         if not buf:
@@ -62,7 +61,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         par = textwrap.wrap(str, self.width, \
                             initial_indent=initial, \
                             subsequent_indent=subsequent)
-        self.lb()
+        self._lb()
         if align == 'left':
             buf.extend(par)
         if align == 'center':
@@ -72,7 +71,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             for line in par:
                 buf.append(line.rjust(self.width))
     
-    def write_raw(self, data, indent=0, align='left'):
+    def _write_raw(self, data, indent=0, align='left'):
         """ Writes a raw stream of characters, preserving space and breaks """
         # Append an indent to every newline of the data
         lines = data.split('\n')
@@ -88,9 +87,80 @@ class RawTextRfcWriter(XmlRfcWriter):
         else: # align == left
             indent_str = ' ' * indent
             for line in lines:
-                self.buf.append(indent_str + line)
+                self.buf.append(indent_str + line) 
+
+    def _write_t_rec(self, t, indent=3, sub_indent=None, bullet=''):
+        """ Recursively writes <t> elements """
+        line = []
+        if t.text:
+            line.append(t.text)
+
+        for element in t:
+            if element.tag == 'xref':
+                if element.text:
+                    line.append(element.text + ' ')
+                line.append('[' + element.attrib['target'] + ']')
+                if element.tail:
+                    line.append(element.tail)
+            elif element.tag == 'eref':
+                if element.text:
+                    line.append(element.text + ' ')
+                line.append('[' + element.attrib['target'] + ']')
+                if element.tail:
+                    line.append(element.tail)
+            elif element.tag == 'iref': pass
+            elif element.tag == 'vspace':
+                for i in range(int(element.attrib['blankLines'])):
+                    line.append('\n')
+                if element.tail:
+                    line.append(element.tail)
+            else:
+                # Not an inline element.  Output what we have so far
+                if len(line) > 0:
+                    self._write_par(''.join(line), indent=indent, \
+                                   sub_indent=sub_indent, bullet=bullet)
+                    line = []
+            
+            if element.tag == 'list':
+                # Default to the 'empty' list style -- 3 spaces
+                bullet = '   '
+                style = 'empty'
+                hangIndent = None
+                if 'style' in element.attrib:
+                    style = element.attrib['style']
+                if style == 'symbols':
+                    bullet = 'o  '
+                for i, t in enumerate(element.findall('t')):
+                    if style == 'numbers':
+                        bullet = str(i + 1) + '.  '
+                    elif style == 'letters':
+                        bullet = string.ascii_lowercase[i % 26] + '.  '
+                    elif style == 'hanging':
+                        bullet = t.attrib['hangText'] + ' '
+                        hangIndent = element.attrib['hangIndent']
+                    if hangIndent:
+                        self._write_t_rec(t, indent=indent, bullet=bullet, \
+                                         sub_indent=int(hangIndent))
+                    else:
+                        # Empty
+                        self._write_t_rec(t, indent=indent, bullet=bullet)
+                if element.tail:
+                    self._write_par(element.tail, indent=3)
+
+            elif element.tag == 'figure':
+                self.write_figure(element)
+                if element.tail:
+                    self._write_par(element.tail, indent=3)
+            elif element.tag == 'texttable':
+                self.write_table(element)
+                if element.tail:
+                    self.write_par(element.tail, indent=3)
+
+        if len(line) > 0:
+            self._write_par(''.join(line), indent=indent, bullet=bullet, \
+                           sub_indent=sub_indent)
     
-    def resolve_refs(self, element):
+    def _resolve_refs(self, element):
         """ Returns a string containing element text plus any inline refs """
         line = []
         if element.text:
@@ -253,76 +323,6 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.write_line('Figure ' + str(self.figure_count) + title, \
                         align='center')
 
-    def write_t_rec(self, t, indent=3, sub_indent=None, bullet=''):
-        """ Recursively writes <t> elements """
-        line = []
-        if t.text:
-            line.append(t.text)
-
-        for element in t:
-            if element.tag == 'xref':
-                if element.text:
-                    line.append(element.text + ' ')
-                line.append('[' + element.attrib['target'] + ']')
-                if element.tail:
-                    line.append(element.tail)
-            elif element.tag == 'eref':
-                if element.text:
-                    line.append(element.text + ' ')
-                line.append('[' + element.attrib['target'] + ']')
-                if element.tail:
-                    line.append(element.tail)
-            elif element.tag == 'iref': pass
-            elif element.tag == 'vspace':
-                for i in range(int(element.attrib['blankLines'])):
-                    line.append('\n')
-                if element.tail:
-                    line.append(element.tail)
-            else:
-                # Not an inline element.  Output what we have so far
-                if len(line) > 0:
-                    self.write_par(''.join(line), indent=indent, \
-                                   sub_indent=sub_indent, bullet=bullet)
-                    line = []
-            
-            if element.tag == 'list':
-                # Default to the 'empty' list style -- 3 spaces
-                bullet = '   '
-                style = 'empty'
-                hangIndent = None
-                if 'style' in element.attrib:
-                    style = element.attrib['style']
-                if style == 'symbols':
-                    bullet = 'o  '
-                for i, t in enumerate(element.findall('t')):
-                    if style == 'numbers':
-                        bullet = str(i + 1) + '.  '
-                    elif style == 'letters':
-                        bullet = string.ascii_lowercase[i % 26] + '.  '
-                    elif style == 'hanging':
-                        bullet = t.attrib['hangText'] + ' '
-                        hangIndent = element.attrib['hangIndent']
-                    if hangIndent:
-                        self.write_t_rec(t, indent=indent, bullet=bullet, \
-                                         sub_indent=int(hangIndent))
-                    else:
-                        # Empty
-                        self.write_t_rec(t, indent=indent, bullet=bullet)
-                if element.tail:
-                    self.write_par(element.tail, indent=3)
-
-            elif element.tag == 'figure':
-                self.write_figure(element)
-                if element.tail:
-                    self.write_par(element.tail, indent=3)
-            elif element.tag == 'texttable':
-                self.write_table(element)
-                if element.tail:
-                    self.write_par(element.tail, indent=3)
-
-        if len(line) > 0:
-            self.write_par(''.join(line), indent=indent, bullet=bullet, \
-                           sub_indent=sub_indent)
 
     def write_reference_list(self, references):
         """ Writes a formatted list of <reference> elements """
@@ -369,43 +369,45 @@ class RawTextRfcWriter(XmlRfcWriter):
         for line in self.toc:
             self.write_line(line, indent=3, lb=False, buf=tmpbuf)
         return tmpbuf
+    
+#===============================================================================
+# Abstract writer rewrite
+#===============================================================================
 
-    def prepare_top_left(self):
-        """ Returns a list of lines for the top left header """
-        list = [self.r.attrib['trad_header']]
-        if 'number' in self.r.attrib:
-            list.append('Request for Comments: ' + self.r.attrib['number'])
-        else:
-            # No RFC number -- assume internet draft
-            list.append('Internet-Draft')
-        if 'updates' in self.r.attrib:
-            if self.r.attrib['updates'] != '':
-                list.append(self.r.attrib['updates'])
-        if 'obsoletes' in self.r.attrib:
-            if self.r.attrib['obsoletes'] != '':
-                list.append(self.r.attrib['obsoletes'])
-        if 'category' in self.r.attrib:
-            list.append('Category: ' + self.r.attrib['category'])
-        return list
-            
-    def prepare_top_right(self):
-        """ Returns a list of lines for the top right header """
-        list = []
-        for author in self.r.findall('front/author'):
-            list.append(author.attrib['initials'] + ' ' + \
-                            author.attrib['surname'])
-            organization = author.find('organization')
-            if organization is not None:
-                if 'abbrev' in organization.attrib:
-                    list.append(organization.attrib['abbrev'])
-                else:  
-                    list.append(organization.text)
-        date = self.r.find('front/date')
-        month = ''
-        if 'month' in date.attrib:
-            month = date.attrib['month']
-        list.append(month + ' ' + date.attrib['year'])
-        return list
+    def mark_toc(self):
+        """ Marks buffer position for post-writing table of contents """
+        self.toc_marker = len(self.buf)
+
+    def write_t(self, t):
+        """ Writes a <t> element """
+        self._write_t_rec(t)
+
+    def write_top(self, left_header, right_header):
+        """ Combines left and right lists to write a document heading """
+        for i in range(max(len(left_header), len(right_header))):
+            if i < len(left_header):
+                left = left_header[i]
+            else:
+                left = ''
+            if i < len(right_header):
+                right = right_header[i]
+            else:
+                right = ''
+            self.buf.append(tools.justify_inline(left, '', right))
+    
+    def write_title(self, title, docName=None):
+        """ Write the document title and (optional) name """
+        self._write_line(title.center(self.width))
+        if docName is not None:
+            self._write_line(docName.center(self.width), lb=False)
+    
+    def write_heading(self, text):
+        """ Write a generic header """
+        self._write_line(text, indent=0)
+        
+    def write_paragraph(self, text):
+        """ Write a generic paragraph """
+        self._write_par(text, indent=3)
 
     def write_buffer(self):
         """ Internal method that writes the entire RFC tree to a buffer
@@ -413,43 +415,6 @@ class RawTextRfcWriter(XmlRfcWriter):
             Actual writing to a file, plus some post formatting is handled
             in self.write(), which is the public method to be called.
         """
-        # Front page heading
-        fp_left = self.prepare_top_left()
-        fp_right = self.prepare_top_right()
-        for i in range(max(len(fp_left), len(fp_right))):
-            if i < len(fp_left):
-                left = fp_left[i]
-            else:
-                left = ''
-            if i < len(fp_right):
-                right = fp_right[i]
-            else:
-                right = ''
-            self.buf.append(tools.justify_inline(left, '', right))
-
-        # Title & Optional docname
-        self.write_line(self.r.find('front/title').text.center(self.width))
-        if 'docName' in self.r.attrib:
-            self.write_line(self.r.attrib['docName'].center(self.width), \
-                            lb=False)
-
-        # Abstract
-        abstract = self.r.find('front/abstract')
-        if abstract is not None:
-            self.write_line('Abstract')
-            for t in abstract.findall('t'):
-                self.write_t_rec(t)
-
-        # Status
-        self.write_line('Status of this Memo')
-        self.write_par(self.r.attrib['status'], indent=3)
-
-        # Copyright
-        self.write_line('Copyright Notice')
-        self.write_par(self.r.attrib['copyright'], indent=3)
-        
-        # Mark table of contents to be post-written
-        self.toc_marker = self.mark()
         
         # Middle sections
         self.write_section_rec(self.r.find('middle'), None)
@@ -536,11 +501,11 @@ class RawTextRfcWriter(XmlRfcWriter):
 
         # EOF
 
-    def write(self, filename):
+    def write_to_file(self, filename):
         """ Public method to write rfc document to a file """
 
         # Write RFC to buffer
-        self.write_buffer()
+        # self.write_buffer()
 
         # Write buffer to file
         file = open(filename, 'w')
@@ -548,7 +513,8 @@ class RawTextRfcWriter(XmlRfcWriter):
             # Check for marks
             if line_num == self.toc_marker:
                 # Write TOC
-                tmpbuf = self.post_write_toc()
+                # tmpbuf = self.post_write_toc()
+                tmpbuf = []
                 for tmpline in tmpbuf:
                     file.write(tmpline)
                     file.write('\r\n')
