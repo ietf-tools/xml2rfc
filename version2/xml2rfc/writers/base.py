@@ -221,21 +221,25 @@ class XmlRfcWriter:
 
         # References sections
         # Treat references as nested only if there is more than one
-        ref_indexstring = str(self.ref_index) + '.'
+        ref_indexstring = str(self.ref_index)
         references = self.r.findall('back/references')
         if len(references) > 1:
             ref_title = 'References'
-            self.write_heading(ref_indexstring + ' ' + ref_title)
+            self.write_heading(ref_title, bullet=ref_indexstring + '.', \
+                               idstring = 'rfc.section.' + ref_indexstring)
             self.add_to_toc(ref_indexstring, ref_title)
             for index, reference_list in enumerate(references):
-                ref_newindexstring = ref_indexstring + str(index + 1) + '.'
+                ref_newindexstring = ref_indexstring + '.' + str(index + 1)
                 ref_title = reference_list.attrib['title']
-                self.write_heading(ref_newindexstring + ' ' + ref_title)
+                self.write_heading(ref_title, bullet=ref_newindexstring + '.', \
+                                   idstring = 'rfc.section.' + ref_newindexstring, \
+                                   level=2)
                 self.add_to_toc(ref_newindexstring, ref_title)
                 self.write_reference_list(reference_list)
         else:
             ref_title = references[0].attrib['title']
-            self.write_heading(ref_indexstring + ' ' + ref_title)
+            self.write_heading(ref_title, bullet=ref_indexstring + '.', \
+                               idstring = 'rfc.section.' + ref_indexstring)
             self.add_to_toc(ref_indexstring, ref_title)
             self.write_reference_list(references[0])
 
