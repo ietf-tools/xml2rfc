@@ -23,7 +23,19 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     # PaginatedTextRfcWriter overrides
     # ---------------------------------------------------------
     
+    def write_title(self, text, docName=None):
+        """ Writes the document title """
+        self._lb()
+        if docName:
+            self._write_line('.ce 2')
+            self._write_line(text)
+            self._write_line(docName)
+        else:
+            self._write_line('.ce 1')
+            self._write_line(text)
+
     def write_top(self, left_header, right_header):
+        """ Writes the document header """
         # No fill for top section
         self._write_line('.nf')
         self._write_line('.in 0')
