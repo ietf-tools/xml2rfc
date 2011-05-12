@@ -60,9 +60,11 @@ class HtmlRfcWriter(RawTextRfcWriter):
         self.body.append(pre)
 
     def write_label(self, text, type='figure', align='center'):
-        p = E.p(text)
-        p.attrib['class'] = type
-        self.body.append(p)
+        # Ignore labels for table, they are handled in draw_table
+        if type == 'figure':
+            p = E.p(text)
+            p.attrib['class'] = 'figure'
+            self.body.append(p)
 
     def write_title(self, title, docName=None):
         p = E.p(title)
@@ -141,9 +143,50 @@ class HtmlRfcWriter(RawTextRfcWriter):
     def write_reference_list(self, list):
         pass
 
-    def draw_table(self, table):
-        pass
-    
+    def draw_table(self, table, table_num=None):
+        # TODO: Can 'full' be controlled from XML, as well as padding?
+        style = 'tt full ' + table.attrib['align']
+        cellpadding = '3'
+        cellspacing = '0'
+        htmltable = E.table(cellpadding=cellpadding, cellspacing=cellspacing)
+        htmltable.attrib['class'] = style
+        
+        # Add caption, if it exists
+        if 'title' in table.attrib and table.attrib['title']:
+            caption = ''
+            if table_num:
+                caption = 'Table ' + str(table_num) + ': '
+            htmltable.append(E.caption(caption + table.attrib['title']))
+            
+        # Draw headers
+        header_row = E.tr()
+        col_aligns = []
+        for header in table.findall('ttcol'):
+            th = E.th(header.text)
+            th.attrib['class'] = header.attrib['align']
+            # Store alignment information
+            col_aligns.append(header.attrib['align'])
+            header_row.append(th)
+        htmltable.append(E.thead(header_row))
+        
+        # Draw body
+        body = E.tbody()
+        tr = E.tr()
+        num_columns = len(col_aligns)
+        for i, cell in enumerate(table.findall('c')):
+            col_num = i % num_columns
+            if col_num == 0 and i != 0:
+                # New row
+                body.append(th)
+                tr = E.tr()
+            td = E.td(cell.text)
+            # Get alignment from header
+            td.attrib['class'] = col_aligns[col_num]
+            tr.append(td)
+        htmltable.append(body)
+        
+        self.body.append(htmltable)
+
     def insert_anchor(self, text):
         div = E.div(id=text)
         self.body.append(div)

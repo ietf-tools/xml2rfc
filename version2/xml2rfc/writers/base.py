@@ -101,7 +101,7 @@ class XmlRfcWriter:
             self.write_paragraph(self.expand_refs(preamble), align=align)
 
         # Write table
-        self.draw_table(table)
+        self.draw_table(table, table_num=self.table_count)
 
         # Write postamble
         postamble = table.find('postamble')
@@ -298,7 +298,7 @@ class XmlRfcWriter:
     def insert_anchor(self, text):
         raise NotImplementedError('Must override!')
         
-    def draw_table(self, table):
+    def draw_table(self, table, table_num=None):
         raise NotImplementedError('Must override!')
 
     def expand_refs(self, element):

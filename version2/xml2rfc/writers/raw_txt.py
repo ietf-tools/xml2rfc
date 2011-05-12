@@ -269,7 +269,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             self._write_par(''.join(refstring), indent=3, bullet=bullet, \
                            sub_indent=sub_indent)
 
-    def draw_table(self, table):
+    def draw_table(self, table, table_num=None):
         headers = []
         lines = []
         align = table.attrib['align']
