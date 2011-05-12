@@ -234,12 +234,13 @@ class XmlRfcWriter:
 
         # Authors addresses section
         authors = self.r.findall('front/author')
+        idstring = 'rfc.authors'
         if len(authors) > 1:
-            self.write_heading("Authors' Addresses")
-            self.add_to_toc('', "Authors' Addresses")
+            title = "Authors' Addresses"
         else:
-            self.write_heading("Author's Address")
-            self.add_to_toc('', "Author's Address")
+            title = "Author's Address"
+        self.write_heading(title, idstring=idstring)
+        self.add_to_toc('', title)
         for author in authors:
             self.write_address_card(author)
 
