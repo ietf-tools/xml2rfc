@@ -22,13 +22,13 @@ class HtmlRfcWriter(RawTextRfcWriter):
         self.expanded_css = expanded_css
         
         # Create head element, add style/metadata/etc information
-        self.html.append(self.build_head())
+        self.html.append(self._build_head())
         
         # Create body element -- everything will be added to this
         self.body = E.body()
         self.html.append(self.body)
         
-    def build_stylesheet(self):
+    def _build_stylesheet(self):
         """ Returns either a <link> or <style> element for css data.
         
             The element returned is dependent on the value of expanded_css
@@ -41,10 +41,10 @@ class HtmlRfcWriter(RawTextRfcWriter):
         element.attrib['type'] = 'text/css'
         return element
     
-    def build_head(self):
+    def _build_head(self):
         """ Returns the constructed <head> element """
         head = E.head()
-        head.append(self.build_stylesheet())
+        head.append(self._build_stylesheet())
         return head
 
     # -----------------------------------------
@@ -70,11 +70,22 @@ class HtmlRfcWriter(RawTextRfcWriter):
             p.append(span)
         self.body.append(p)
         
-    def write_heading(self, text):
-        pass
+    def write_heading(self, text, idstring=None, anchor=None):
+        h1 = E.h1()
+        if idstring:
+            h1.attrib['id'] = idstring
+        if text.count('.') == 0:
+            # Only use one <a>
+            id_link = E.a(text)
+            if idstring:
+                id_link.attrib['href'] = '#' + idstring
+            h1.append(id_link)
+        self.body.append(h1)
 
-    def write_paragraph(self, text, align='left'):
-        pass
+    def write_paragraph(self, text, align='left', idstring=None):
+        if text:
+            p = E.p(text)
+            self.body.append(p)
 
     def write_list(self, list):
         pass
@@ -111,8 +122,9 @@ class HtmlRfcWriter(RawTextRfcWriter):
         pass
     
     def expand_refs(self, element):
-        pass
-    
+        """ Returns a <p> element with inline references expanded properly """
+        return element.text
+
     def add_to_toc(self, bullet, title, anchor=None):
         pass
     

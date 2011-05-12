@@ -104,11 +104,11 @@ class XmlRfcWriter:
         self.write_label('Table ' + str(self.table_count) + title, \
                          align='center') 
     
-    def _write_t_rec(self, t, indent=3, sub_indent=0, bullet=''):
+    def _write_t_rec(self, t, indent=3, sub_indent=0, bullet='', idstring=None):
         """ Writes a <t> element """
         
         # Write the actual text
-        self.write_paragraph(self.expand_refs(t))
+        self.write_paragraph(self.expand_refs(t), idstring=idstring)
         
         # Check for child elements
         for element in t:
@@ -123,24 +123,29 @@ class XmlRfcWriter:
             
     def _write_section_rec(self, section, indexstring, appendix=False):
         """ Recursively writes <section> elements """
+        anchor = None
+        if 'anchor' in section.attrib:
+            anchor = section.attrib['anchor']
         if indexstring:
             # Prepend a neat index string to the title
-            self.write_heading(indexstring + ' ' + section.attrib['title'])
+            self.write_heading(indexstring + ' ' + section.attrib['title'], \
+                               idstring='rfc.section.' + indexstring, \
+                               anchor=anchor)
             # Write to TOC as well
             if section.attrib['toc'] != 'exclude':
-                anchor = None
-                if 'anchor' in section.attrib:
-                    anchor = section.attrib['anchor']
                 self.add_to_toc(indexstring, section.attrib['title'], \
                                 anchor=anchor)
         else:
             # Must be <middle> or <back> element -- no title or index.
             indexstring = ''
         
+        paragraph_id = 0
         for element in section:
             # Write elements in XML document order
             if element.tag == 't':
-                self._write_t_rec(element)
+                paragraph_id += 1
+                idstring = indexstring + 'p.' + str(paragraph_id)
+                self._write_t_rec(element, idstring=idstring)
             elif element.tag == 'figure':
                 self._write_figure(element)
             elif element.tag == 'texttable':
@@ -177,16 +182,16 @@ class XmlRfcWriter:
         # Abstract
         abstract = self.r.find('front/abstract')
         if abstract is not None:
-            self.write_heading('Abstract')
+            self.write_heading('Abstract', idstring='rfc.abstract')
             for t in abstract.findall('t'):
                 self._write_t_rec(t)
 
         # Status
-        self.write_heading('Status of this Memo')
+        self.write_heading('Status of this Memo', idstring='rfc.status')
         self.write_paragraph(self.r.attrib['status'])
 
         # Copyright
-        self.write_heading('Copyright Notice')
+        self.write_heading('Copyright Notice', idstring='rfc.copyrightnotice')
         self.write_paragraph(self.r.attrib['copyright'])
         
         # Store a marker for table of contents
@@ -251,10 +256,10 @@ class XmlRfcWriter:
     def write_title(self, title, docName=None):
         raise NotImplementedError('Must override!')
         
-    def write_heading(self, text):
+    def write_heading(self, text, idstring=None, anchor=None):
         raise NotImplementedError('Must override!')
 
-    def write_paragraph(self, text, align='left'):
+    def write_paragraph(self, text, align='left', idstring=None):
         raise NotImplementedError('Must override!')
 
     def write_list(self, list):
