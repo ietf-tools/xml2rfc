@@ -143,6 +143,10 @@ class HtmlRfcWriter(RawTextRfcWriter):
 
     def draw_table(self, table):
         pass
+    
+    def insert_anchor(self, text):
+        div = E.div(id=text)
+        self.body.append(div)
 
     def expand_refs(self, element):
         """ Returns a <p> element with inline references expanded properly """

@@ -350,6 +350,10 @@ class RawTextRfcWriter(XmlRfcWriter):
         else:
             self.toc.append(title)
 
+    def insert_anchor(self, text):
+        # No anchors for text
+        pass
+
     def post_processing(self):
         # Raw text, no post processing done here
         pass

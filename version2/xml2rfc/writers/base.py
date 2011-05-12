@@ -54,6 +54,12 @@ class XmlRfcWriter:
     def _write_figure(self, figure):
         """ Writes <figure> elements """
         align = figure.attrib['align']
+        self.figure_count += 1
+        
+        # Insert anchor(s) into document
+        self.insert_anchor('rfc.figure.' + str(self.figure_count))
+        if 'anchor' in figure.attrib:
+            self.insert_anchor(figure.attrib['anchor'])
 
         # Write preamble
         preamble = figure.find('preamble')
@@ -61,7 +67,6 @@ class XmlRfcWriter:
             self.write_paragraph(self.expand_refs(preamble), align=align)
 
         # Write figure
-        self.figure_count += 1
         artwork = figure.find('artwork')
         artwork_align = align
         if 'align' in artwork.attrib:
@@ -83,6 +88,12 @@ class XmlRfcWriter:
     def _write_table(self, table):
         """ Writes <texttable> elements """
         align = table.attrib['align']
+        self.table_count += 1
+        
+        # Insert anchor(s) into document
+        self.insert_anchor('rfc.table.' + str(self.table_count))
+        if 'anchor' in table.attrib:
+            self.insert_anchor(table.attrib['anchor'])
 
         # Write preamble
         preamble = table.find('preamble')
@@ -90,7 +101,6 @@ class XmlRfcWriter:
             self.write_paragraph(self.expand_refs(preamble), align=align)
 
         # Write table
-        self.table_count += 1
         self.draw_table(table)
 
         # Write postamble
@@ -159,7 +169,7 @@ class XmlRfcWriter:
         for child_sec in section.findall('section'):
             if appendix == True:
                 self._write_section_rec(child_sec, 'Appendix ' + \
-                                        string.uppercase[index - 1] + '.',
+                                        string.uppercase[index - 1] + '',
                                         level=level+1)
             else:
                 if indexstring:
@@ -284,7 +294,10 @@ class XmlRfcWriter:
 
     def write_reference_list(self, list):
         raise NotImplementedError('Must override!')
-
+    
+    def insert_anchor(self, text):
+        raise NotImplementedError('Must override!')
+        
     def draw_table(self, table):
         raise NotImplementedError('Must override!')
 
