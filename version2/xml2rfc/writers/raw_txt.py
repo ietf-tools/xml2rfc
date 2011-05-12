@@ -183,7 +183,7 @@ class RawTextRfcWriter(XmlRfcWriter):
                 right = right_header[i]
             else:
                 right = ''
-            self.buf.append(tools.justify_inline(left, '', right))
+            self._write_line(tools.justify_inline(left, '', right))
 
     def write_address_card(self, author):
         """ Writes a simple address card with no line breaks """

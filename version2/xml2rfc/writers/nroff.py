@@ -22,6 +22,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     # ---------------------------------------------------------
     # PaginatedTextRfcWriter overrides
     # ---------------------------------------------------------
+    
+    def write_top(self, left_header, right_header):
+        # No fill for top section
+        self._write_line('.nf')
+        self._write_line('.in 0')
+        PaginatedTextRfcWriter.write_top(self, left_header, right_header)
 
     def pre_processing(self):
         """ Inserts an nroff header into the buffer """
