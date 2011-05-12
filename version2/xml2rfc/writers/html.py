@@ -21,6 +21,13 @@ class HtmlRfcWriter(RawTextRfcWriter):
         self.css_document = css_document
         self.expanded_css = expanded_css
         
+        # Create head element, add style/metadata/etc information
+        self.html.append(self.build_head())
+        
+        # Create body element -- everything will be added to this
+        self.body = E.body()
+        self.html.append(self.body)
+        
     def build_stylesheet(self):
         """ Returns either a <link> or <style> element for css data.
         
@@ -39,89 +46,7 @@ class HtmlRfcWriter(RawTextRfcWriter):
         head = E.head()
         head.append(self.build_stylesheet())
         return head
-    
-    def build_header(self):
-        """ Returns the header table """
-        table = E.table()
-        table.attrib['class'] = 'header'
-        tbody = E.tbody()
-        # Use RawTextWriter methods to construct header
-        header_left = self.prepare_top_left()
-        header_right = self.prepare_top_right()
-        for i in range(max(len(header_left), len(header_right))):
-            if i < len(header_left):
-                left_string = header_left[i]
-            else:
-                left_string = ''
-            if i < len(header_right):
-                right_string = header_right[i]
-            else:
-                right_string = ''
-            td_left = E.td(left_string)
-            td_left.attrib['class'] = 'left'
-            td_right = E.td(right_string)
-            td_right.attrib['class'] = 'right'
-            tbody.append(E.tr(td_left, td_right))
-        table.append(tbody)
-        return table
 
-    def build_t_tree(self, t):
-        """ Returns an HTML element tree from an XML <t> node """
-        p = E.p(t.text)
-        return p
-    
-    def build_body(self):
-        """ Returns the constructed <body> element """
-        body = E.body()
-        
-        # Header
-        body.append(self.build_header())
-        
-        # Title
-        title = E.p(self.r.find('front/title').text)
-        title.attrib['class'] = 'title'
-        title.append(E.br())
-        if 'docName' in self.r.attrib:
-            filename = E.span(self.r.attrib['docName'])
-            filename.attrib['class'] = 'filename'
-            title.append(filename)
-        body.append(title)
-        
-        # Abstract
-        abstract = self.r.find('front/abstract')
-        if abstract is not None:
-            body.append(E.h1(E.a('Abstract', href='#rfc.abstract'), \
-                             id='rfc.abstract'))
-            for t in abstract.findall('t'):
-                body.append(self.build_t_tree(t))
-
-        # Status
-        body.append(E.h1(E.a('Status of this Memo', href='#rfc.status'), \
-                         id='rfc.status'))
-        body.append(E.p(self.r.attrib['status']))
-
-        # Copyright
-        body.append(E.h1(E.a('Copyright Notice', href='#rfc.copyrightnotice'), \
-                         id='rfc.copyrightnotice'))
-        body.append(E.p(self.r.attrib['copyright']))
-        
-        # Finished
-        return body
-
-    def build_tree(self):
-        """ Builds an lxml HTML Element Tree from the RFC tree instance """
-        self.html.append(self.build_head())
-        self.html.append(self.build_body())
-    
-    def write(self, filename):
-        # Consruct the HTML tree with lxml
-        self.build_tree()
-        
-        # Write the tree to the file
-        file = open(filename, 'w')
-        file.write(defaults['doctype'] + '\n')
-        file.write(lxml.etree.tostring(self.html, pretty_print=True))
-        
     # -----------------------------------------
     # Base writer interface methods to override
     # -----------------------------------------
@@ -148,7 +73,26 @@ class HtmlRfcWriter(RawTextRfcWriter):
         raise NotImplementedError('Must override!')
 
     def write_top(self, left_header, right_header):
-        raise NotImplementedError('Must override!')
+        """ Adds the header table """
+        table = E.table()
+        table.attrib['class'] = 'header'
+        tbody = E.tbody()
+        for i in range(max(len(left_header), len(right_header))):
+            if i < len(left_header):
+                left_string = left_header[i]
+            else:
+                left_string = ''
+            if i < len(right_header):
+                right_string = right_header[i]
+            else:
+                right_string = ''
+            td_left = E.td(left_string)
+            td_left.attrib['class'] = 'left'
+            td_right = E.td(right_string)
+            td_right.attrib['class'] = 'right'
+            tbody.append(E.tr(td_left, td_right))
+        table.append(tbody)
+        self.body.append(table)
     
     def write_address_card(self, author):
         raise NotImplementedError('Must override!')
@@ -166,4 +110,7 @@ class HtmlRfcWriter(RawTextRfcWriter):
         raise NotImplementedError('Must override!')
     
     def write_to_file(self, filename):
-        raise NotImplementedError('Must override!')
+        # Write the tree to the file
+        file = open(filename, 'w')
+        file.write(defaults['doctype'] + '\n')
+        file.write(lxml.etree.tostring(self.html, pretty_print=True))
