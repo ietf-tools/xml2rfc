@@ -100,13 +100,23 @@ class RawTextRfcWriter(XmlRfcWriter):
             for line in par:
                 buf.append(line.rjust(self.width))
     
-    def write_raw(self, data, indent=0):
+    def write_raw(self, data, indent=0, align='left'):
         """ Writes a raw stream of characters, preserving space and breaks """
         # Append an indent to every newline of the data
-        indent_str = ' ' * indent
         lines = data.split('\n')
-        for line in lines:
-            self.buf.append(indent_str + line)
+        if align == 'center':
+            # Find the longest line, and use that as a fixed center.
+            longest_line = len(max(lines, key=len))
+            indent_str = ' ' * ((self.width - longest_line) / 2)
+            for line in lines:
+                self.buf.append(indent_str + line)
+        elif align == 'right':
+            for line in lines:
+                self.buf.append(line.rjust(self.width))
+        else: # align == left
+            indent_str = ' ' * indent
+            for line in lines:
+                self.buf.append(indent_str + line)
     
     def resolve_refs(self, element):
         """ Returns a string containing element text plus any inline refs """
@@ -199,7 +209,10 @@ class RawTextRfcWriter(XmlRfcWriter):
             cellstring = ['|']
             for i, cell in enumerate(figure.findall('c')):
                 column = i % len(headers)
-                cellstring.append(cell.text.center(len(headers[column])+2))
+                celltext = ''
+                if cell.text:
+                    celltext = cell.text
+                cellstring.append(celltext.center(len(headers[column])+2))
                 cellstring.append('|')
                 if column == len(headers) - 1:
                     # End of line
@@ -215,7 +228,12 @@ class RawTextRfcWriter(XmlRfcWriter):
             self.figure_count += 1
             # TODO: Needs to be aligned properly
             # Insert artwork text directly into the buffer
-            self.write_raw(figure.find('artwork').text, indent=3)
+            artwork = figure.find('artwork')
+            artwork_align = figure_align
+            if 'align' in artwork.attrib:
+                artwork_align = artwork.attrib['align']
+            self.write_raw(figure.find('artwork').text, indent=3, \
+                           align=artwork_align)
         
         postamble = figure.find('postamble')
         if postamble is not None:
@@ -269,25 +287,29 @@ class RawTextRfcWriter(XmlRfcWriter):
             if element.tag == 'list':
                 # Default to the 'empty' list style -- 3 spaces
                 bullet = '   '
+                style = 'empty'
                 hangIndent = None
                 if 'style' in element.attrib:
-                    if element.attrib['style'] == 'symbols':
-                        bullet = 'o  '
+                    style = element.attrib['style']
+                if style == 'symbols':
+                    bullet = 'o  '
                 for i, t in enumerate(element.findall('t')):
-                    if element.attrib['style'] == 'numbers':
+                    if style == 'numbers':
                         bullet = str(i + 1) + '.  '
-                    elif element.attrib['style'] == 'letters':
+                    elif style == 'letters':
                         bullet = string.ascii_lowercase[i % 26] + '.  '
-                    elif element.attrib['style'] == 'hanging':
+                    elif style == 'hanging':
                         bullet = t.attrib['hangText'] + ' '
                         hangIndent = element.attrib['hangIndent']
                     if hangIndent:
                         self.write_t_rec(t, indent=indent, bullet=bullet, \
                                          sub_indent=int(hangIndent))
                     else:
+                        # Empty
                         self.write_t_rec(t, indent=indent, bullet=bullet)
                 if element.tail:
                     self.write_par(element.tail, indent=3)
+
             elif element.tag == 'figure':
                 self.write_figure(element)
                 if element.tail:
@@ -310,13 +332,17 @@ class RawTextRfcWriter(XmlRfcWriter):
             refstring = []
             authors = ref.findall('front/author')
             for j, author in enumerate(authors):
-                refstring.append(author.attrib['surname'] + ', ' + \
-                                 author.attrib['initials'] + ', ')
-                if j == len(authors) - 2:
-                    # Second-to-last, add an "and"
-                    refstring.append('and ')
+                organization = author.find('organization')
+                if organization is not None:
+                    refstring.append(organization.text + ', ')
+                else:
                     refstring.append(author.attrib['surname'] + ', ' + \
-                                     author.attrib['initials'] + '., ')
+                                     author.attrib['initials'] + ', ')
+                    if j == len(authors) - 2:
+                        # Second-to-last, add an "and"
+                        refstring.append('and ')
+                        refstring.append(author.attrib['surname'] + ', ' + \
+                                         author.attrib['initials'] + '., ')
             refstring.append('"' + ref.find('front/title').text + '", ')
             # TODO: Handle seriesInfo
             date = ref.find('front/date')
@@ -369,9 +395,15 @@ class RawTextRfcWriter(XmlRfcWriter):
                             author.attrib['surname'])
             organization = author.find('organization')
             if organization is not None:
-                fp_right.append(organization.text)
+                if 'abbrev' in organization.attrib:
+                    fp_right.append(organization.attrib['abbrev'])
+                else:  
+                    fp_right.append(organization.text)
         date = self.r.find('front/date')
-        fp_right.append(date.attrib['month'] + ' ' + date.attrib['year'])
+        month = ''
+        if 'month' in date.attrib:
+            month = date.attrib['month']
+        fp_right.append(month + ' ' + date.attrib['year'])
 
         # Front page heading
         for i in range(max(len(fp_left), len(fp_right))):
@@ -446,7 +478,7 @@ class RawTextRfcWriter(XmlRfcWriter):
                 self.write_line(author.attrib['fullname'] + ', ' + \
                                 author.attrib['role'], indent=3)
             else:
-                self.write_line(author.attribs['fullname'], indent=3)
+                self.write_line(author.attrib['fullname'], indent=3)
             organization = author.find('organization')
             if organization is not None:
                 self.write_line(organization.text, indent=3, lb=False)
@@ -595,7 +627,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             newbuf.append(line)
             page_len += 1
                 
-        # Write buffer to file
+        # Finally, write secondary buffer to file
         file = open(filename, 'w')
         for line in newbuf:
             file.write(line)
