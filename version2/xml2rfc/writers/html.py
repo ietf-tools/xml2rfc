@@ -13,7 +13,7 @@ defaults = {'doctype': '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">',
 
 
 class HtmlRfcWriter(XmlRfcWriter):
-    """ Writes to an HTML with embedded CSS """
+    """ Writes to an HTML file with embedded CSS """
 
     def __init__(self, xmlrfc, css_document='templates/rfc.css',
                  expanded_css=True, lang='en'):
