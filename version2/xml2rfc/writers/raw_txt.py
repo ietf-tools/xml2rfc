@@ -18,7 +18,6 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.width = width      # Page width
         self.buf = []           # Main buffer
         self.toc = []           # Table of contents buffer
-        self.ref_index = 1      # Index number for the references section
         self.toc_marker = 0     # Line number in buffer to write toc too
         
     def _lb(self, buf=None):
@@ -180,40 +179,6 @@ class RawTextRfcWriter(XmlRfcWriter):
             # If we never wrote the paragraph, write now.
             self._write_par(''.join(line), indent=indent, \
                             bullet=bullet, sub_indent=sub_indent)
-
-    def write_reference_list(self, references):
-        """ Writes a formatted list of <reference> elements """
-        # Use very first reference's [bullet] length for indent amount
-        sub_indent = len(references.find('reference').attrib['anchor']) + 4
-        # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
-        for i, ref in enumerate(references.findall('reference')):
-            refstring = []
-            authors = ref.findall('front/author')
-            for j, author in enumerate(authors):
-                organization = author.find('organization')
-                if 'surname' in author.attrib:
-                    refstring.append(author.attrib['surname'] + ', ' + \
-                                     author.attrib['initials'] + ', ')
-                    if j == len(authors) - 2:
-                        # Second-to-last, add an "and"
-                        refstring.append('and ')
-                        refstring.append(author.attrib['surname'] + ', ' + \
-                                         author.attrib['initials'] + '., ')
-                elif organization is not None and organization.text is not None:
-                    # Use organization instead of name
-                    refstring.append(organization.text + ', ')
-            refstring.append('"' + ref.find('front/title').text + '", ')
-            for seriesInfo in ref.findall('seriesInfo'):
-                refstring.append(seriesInfo.attrib['name'] + ' ' + \
-                                 seriesInfo.attrib['value'] + ', ')
-            date = ref.find('front/date')
-            if 'month' in date.attrib:
-                refstring.append(date.attrib['month'] + ', ')
-            refstring.append(date.attrib['year'])
-            refstring.append('.')
-            bullet = '[' + ref.attrib['anchor'] + ']  '
-            self.write_par(''.join(refstring), indent=3, bullet=bullet, \
-                           sub_indent=sub_indent)
     
     def post_write_toc(self):
         """ Writes the table of contents to temporary buffer and returns
@@ -419,8 +384,41 @@ class RawTextRfcWriter(XmlRfcWriter):
             if uri is not None and uri.text:
                 self._write_line('URI:   ' + uri.text, indent=3, lb=False)
         self._lb()
+    
+    def write_reference_list(self, list):
+        """ Writes a formatted list of <reference> elements """
+        # Use very first reference's [bullet] length for indent amount
+        sub_indent = len(list.find('reference').attrib['anchor']) + 4
+        # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
+        for i, ref in enumerate(list.findall('reference')):
+            refstring = []
+            authors = ref.findall('front/author')
+            for j, author in enumerate(authors):
+                organization = author.find('organization')
+                if 'surname' in author.attrib:
+                    refstring.append(author.attrib['surname'] + ', ' + \
+                                     author.attrib['initials'] + ', ')
+                    if j == len(authors) - 2:
+                        # Second-to-last, add an "and"
+                        refstring.append('and ')
+                        refstring.append(author.attrib['surname'] + ', ' + \
+                                         author.attrib['initials'] + '., ')
+                elif organization is not None and organization.text is not None:
+                    # Use organization instead of name
+                    refstring.append(organization.text + ', ')
+            refstring.append('"' + ref.find('front/title').text + '", ')
+            for seriesInfo in ref.findall('seriesInfo'):
+                refstring.append(seriesInfo.attrib['name'] + ' ' + \
+                                 seriesInfo.attrib['value'] + ', ')
+            date = ref.find('front/date')
+            if 'month' in date.attrib:
+                refstring.append(date.attrib['month'] + ', ')
+            refstring.append(date.attrib['year'])
+            refstring.append('.')
+            bullet = '[' + ref.attrib['anchor'] + ']  '
+            self._write_par(''.join(refstring), indent=3, bullet=bullet, \
+                           sub_indent=sub_indent)
 
-        
     def add_to_toc(self, bullet, title, anchor=None):
             toc_indent = ' ' * ((bullet.count('.') - 1) * 2)
             self.toc.append(toc_indent + bullet + ' ' + title)
