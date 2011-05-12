@@ -162,7 +162,10 @@ class RawTextRfcWriter(XmlRfcWriter):
             headers = []
             align = figure.attrib['align']
             for column in figure.findall('ttcol'):
-                headers.append(column.text)
+                if column.text:
+                    headers.append(column.text)
+                else:
+                    headers.append('')
             # Draw header
             borderstring = ['+']
             for header in headers:
@@ -463,32 +466,33 @@ class RawTextRfcWriter(XmlRfcWriter):
                             self.write_line(street.text, indent=3, lb=False)
                     cityline = []
                     city = postal.find('city')
-                    if city is not None:
-                        cityline.append(city.text)
-                        cityline.append(', ')
+                    if city is not None and city.text:
+                            cityline.append(city.text)
+                            cityline.append(', ')
                     region = postal.find('region')
-                    if region is not None:
-                        cityline.append(region.text)
-                        cityline.append(' ')
+                    if region is not None and region.text:
+                            cityline.append(region.text)
+                            cityline.append(' ')
                     code = postal.find('code')
-                    if code is not None:
-                        cityline.append(code.text)
-                    self.write_line(''.join(cityline), indent=3, lb=False)
+                    if code is not None and code.text:
+                            cityline.append(code.text)
+                    if cityline is not None:
+                        self.write_line(''.join(cityline), indent=3, lb=False)
                     country = postal.find('country')
                     if country is not None:
                         self.write_line(country.text, indent=3, lb=False)
                 self.lb()
                 phone = address.find('phone')
-                if phone is not None:
+                if phone is not None and phone.text:
                     self.write_line('Phone: ' + phone.text, indent=3, lb=False)
                 fascimile = address.find('fascimile')
-                if fascimile is not None:
+                if fascimile is not None and fascimile.text:
                     self.write_line('Fax:   ' + fascimile.text, indent=3, lb=False)
                 email = address.find('email')
-                if email is not None:
+                if email is not None and email.text:
                     self.write_line('EMail: ' + email.text, indent=3, lb=False)
                 uri = address.find('uri')
-                if uri is not None:
+                if uri is not None and uri.text:
                     self.write_line('URI:   ' + uri.text, indent=3, lb=False)
             self.lb()
 
