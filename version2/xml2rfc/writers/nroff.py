@@ -8,6 +8,7 @@ default_header = ['.pl 10.0i',      # Page length
                   '.nr LL 7.2i',    # Printer line length
                   '.nr LT 7.2i',    # Printer title length
                   '.hy 0',          # Disable hyphenation
+                  '.ad l',          # Left margin adjustment only
                   ]
 
 class NroffRfcWriter(PaginatedTextRfcWriter):
