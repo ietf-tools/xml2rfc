@@ -320,12 +320,14 @@ class RawTextRfcWriter(XmlRfcWriter):
                     # Use organization instead of name
                     refstring.append(organization.text + ', ')
             refstring.append('"' + ref.find('front/title').text + '", ')
-            # TODO: Handle seriesInfo
+            for seriesInfo in ref.findall('seriesInfo'):
+                refstring.append(seriesInfo.attrib['name'] + ' ' + \
+                                 seriesInfo.attrib['value'] + ', ')
             date = ref.find('front/date')
             if 'month' in date.attrib:
-                refstring.append(date.attrib['month'])
-            refstring.append(date.attrib['year'] + '.')
-            # TODO: Should reference list have [anchor] or [1] for bullets?
+                refstring.append(date.attrib['month'] + ', ')
+            refstring.append(date.attrib['year'])
+            refstring.append('.')
             bullet = '[' + ref.attrib['anchor'] + ']  '
             self.write_par(''.join(refstring), indent=3, bullet=bullet, \
                            sub_indent=sub_indent)
