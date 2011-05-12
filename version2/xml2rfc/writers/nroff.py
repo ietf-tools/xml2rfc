@@ -23,6 +23,11 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     # PaginatedTextRfcWriter overrides
     # ---------------------------------------------------------
     
+    def write_label(self, text, type='figure'):
+        """ Writes a label for a table or figure """
+        self._write_line('.ce', lb=True)
+        self._write_line(text)
+
     def write_title(self, text, docName=None):
         """ Writes the document title """
         self._lb()
