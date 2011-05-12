@@ -132,7 +132,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             elif element.tag == 'figure':
                 self.write_figure(element)
             elif element.tag == 'texttable':
-                self.write_figure(element, table=True)
+                self.write_table(element)
         
         index = 1
         for child_sec in section.findall('section'):
@@ -147,85 +147,86 @@ class RawTextRfcWriter(XmlRfcWriter):
         # Set the ending index number so we know where to begin references
         if indexstring == '' and appendix == False:
             self.ref_index = index
+            
+    def write_table(self, table):
+        """ Writes <texttable> elements """
+        align = table.attrib['align']
+        preamble = table.find('preamble')
+        if preamble is not None:
+            self.write_par(self.resolve_refs(preamble), indent=3, \
+                           align=align)
+        self.table_count += 1
+        lines = []
+        headers = []
+        align = table.attrib['align']
+        for column in table.findall('ttcol'):
+            if column.text:
+                headers.append(column.text)
+            else:
+                headers.append('')
+        
+        # Draw header
+        borderstring = ['+']
+        for header in headers:
+            borderstring.append('-' * (len(header)+2))
+            borderstring.append('+')
+        self.write_line(''.join(borderstring), indent=3, lb=True, \
+                        align=align)
+        headerstring = ['|']
+        for header in headers:
+            headerstring.append(' ' + header + ' |')
+        self.write_line(''.join(headerstring), indent=3, lb=False, \
+                        align=align)
+        self.write_line(''.join(borderstring), indent=3, lb=False, \
+                        align=align)
+        
+        # Draw Cells
+        cellstring = ['|']
+        for i, cell in enumerate(table.findall('c')):
+            column = i % len(headers)
+            celltext = ''
+            if cell.text:
+                celltext = cell.text
+            cellstring.append(celltext.center(len(headers[column])+2))
+            cellstring.append('|')
+            if column == len(headers) - 1:
+                # End of line
+                self.write_line(''.join(cellstring), indent=3, lb=False, \
+                                align=align)
+                cellstring = ['|']
+            
+        # Draw Bottom
+        self.write_line(''.join(borderstring), indent=3, lb=False, \
+                        align=align)
 
-    def write_figure(self, figure, table=False):
-        """ Function that writes <figure> or <texttable> elements """
-        figure_align = figure.attrib['align']
+    def write_figure(self, figure):
+        """ Writes <figure> elements """
+        align = figure.attrib['align']
         preamble = figure.find('preamble')
         if preamble is not None:
             self.write_par(self.resolve_refs(preamble), indent=3, \
-                           align=figure_align)
-        if table:
-            # <texttable> element
-            self.table_count += 1
-            lines = []
-            headers = []
-            align = figure.attrib['align']
-            for column in figure.findall('ttcol'):
-                if column.text:
-                    headers.append(column.text)
-                else:
-                    headers.append('')
-            # Draw header
-            borderstring = ['+']
-            for header in headers:
-                borderstring.append('-' * (len(header)+2))
-                borderstring.append('+')
-            self.write_line(''.join(borderstring), indent=3, lb=True, \
-                            align=align)
-            headerstring = ['|']
-            for header in headers:
-                headerstring.append(' ' + header + ' |')
-            self.write_line(''.join(headerstring), indent=3, lb=False, \
-                            align=align)
-            self.write_line(''.join(borderstring), indent=3, lb=False, \
-                            align=align)
-            # Draw Cells
-            cellstring = ['|']
-            for i, cell in enumerate(figure.findall('c')):
-                column = i % len(headers)
-                celltext = ''
-                if cell.text:
-                    celltext = cell.text
-                cellstring.append(celltext.center(len(headers[column])+2))
-                cellstring.append('|')
-                if column == len(headers) - 1:
-                    # End of line
-                    self.write_line(''.join(cellstring), indent=3, lb=False, \
-                                    align=align)
-                    cellstring = ['|']
-                
-            # Draw Bottom
-            self.write_line(''.join(borderstring), indent=3, lb=False, \
-                            align=align)
-        else:
-            # <artwork> element
-            self.figure_count += 1
-            # TODO: Needs to be aligned properly
-            # Insert artwork text directly into the buffer
-            artwork = figure.find('artwork')
-            artwork_align = figure_align
-            if 'align' in artwork.attrib:
-                artwork_align = artwork.attrib['align']
-            self.write_raw(figure.find('artwork').text, indent=3, \
-                           align=artwork_align)
+                           align=align)
+        self.figure_count += 1
+        # TODO: Needs to be aligned properly
+        # Insert artwork text directly into the buffer
+        artwork = figure.find('artwork')
+        artwork_align = align
+        if 'align' in artwork.attrib:
+            artwork_align = artwork.attrib['align']
+        self.write_raw(figure.find('artwork').text, indent=3, \
+                       align=artwork_align)
         
         postamble = figure.find('postamble')
         if postamble is not None:
             self.write_par(self.resolve_refs(postamble), indent=3, \
-                           align=figure_align)
+                           align=align)
         
         # Write label
+        title = ''
         if figure.attrib['title'] != '':
             title = ': ' + figure.attrib['title']
-        else:
-            title = ''
-        if table:
-            self.write_line('Table ' + str(self.table_count) + title, \
-                            align='center')
-        else:
-            self.write_line('Figure ' + str(self.figure_count) + title, \
-                            align='center')
+        self.write_line('Figure ' + str(self.figure_count) + title, \
+                        align='center')
 
     def write_t_rec(self, t, indent=3, sub_indent=None, bullet=''):
         """ Recursively writes <t> elements """
@@ -290,7 +291,7 @@ class RawTextRfcWriter(XmlRfcWriter):
                 if element.tail:
                     self.write_par(element.tail, indent=3)
             elif element.tag == 'texttable':
-                self.write_figure(element, table=True)
+                self.write_table(element)
                 if element.tail:
                     self.write_par(element.tail, indent=3)
 
