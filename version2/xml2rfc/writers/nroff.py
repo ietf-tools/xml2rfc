@@ -1,5 +1,6 @@
 # Local libs
 from paginated_txt import PaginatedTextRfcWriter
+from raw_txt import RawTextRfcWriter
 
 default_header = ['.pl 10.0i',      # Page length
                   '.po 0',          # Page offset
@@ -37,3 +38,8 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self._write_line('.ds LF ' + self.left_footer)
         self._write_line('.ds CF ' + self.center_footer)
         self._write_line('.ds RF FORMFEED[Page] % ')
+        
+    def write_to_file(self, filename):
+        # Use RawText's method instead of PaginatedText, so we dont get breaks.
+        # Breaks are already handled by nroff commands
+        RawTextRfcWriter.write_to_file(self, filename)
