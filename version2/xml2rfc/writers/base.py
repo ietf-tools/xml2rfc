@@ -7,8 +7,12 @@ class XmlRfcWriter:
     def __init__(self, xmlrfc):
         # We will refer to the XmlRfc document root as 'r'
         self.r = xmlrfc.getroot()
+        
+        # Document counters
+        self.figure_count = 0
+        self.table_count = 0
 
-    def prepare_top_left(self):
+    def _prepare_top_left(self):
         """ Returns a list of lines for the top left header """
         list = [self.r.attrib['trad_header']]
         if 'number' in self.r.attrib:
@@ -26,7 +30,7 @@ class XmlRfcWriter:
             list.append('Category: ' + self.r.attrib['category'])
         return list
             
-    def prepare_top_right(self):
+    def _prepare_top_right(self):
         """ Returns a list of lines for the top right header """
         list = []
         for author in self.r.findall('front/author'):
@@ -45,7 +49,7 @@ class XmlRfcWriter:
         list.append(month + ' ' + date.attrib['year'])
         return list
             
-    def write_section_rec(self, section, indexstring, appendix=False):
+    def _write_section_rec(self, section, indexstring, appendix=False):
         """ Recursively writes <section> elements """
         if indexstring:
             # Prepend a neat index string to the title
@@ -73,16 +77,27 @@ class XmlRfcWriter:
         index = 1
         for child_sec in section.findall('section'):
             if appendix == True:
-                self.write_section_rec(child_sec, 'Appendix ' + \
+                self._write_section_rec(child_sec, 'Appendix ' + \
                                        string.uppercase[index-1] + '.')
             else:
-                self.write_section_rec(child_sec, indexstring + \
+                self._write_section_rec(child_sec, indexstring + \
                                        str(index) + '.')
             index += 1
 
         # Set the ending index number so we know where to begin references
         if indexstring == '' and appendix == False:
             self.ref_index = index
+            
+    def _write_authors_addresses(self, authors):
+        """ Writes a list of authors addresses """
+        if len(authors) > 1:
+            self.write_heading("Authors' Addresses")
+            self.add_to_toc('', "Authors' Addresses")
+        else:
+            self.write_heading('Authors Address')
+            self.add_to_toc('', 'Authors Address')
+        for author in authors:
+            self.write_address_card(author)
 
     def write(self, filename):
         """ Public method to write an RFC document to a file.
@@ -90,7 +105,7 @@ class XmlRfcWriter:
             Step through the rfc tree and call writer specific methods.
         """
         # Header
-        self.write_top(self.prepare_top_left(), self.prepare_top_right())
+        self.write_top(self._prepare_top_left(), self._prepare_top_right())
 
         # Title & Optional docname
         title = self.r.find('front/title').text
@@ -117,7 +132,10 @@ class XmlRfcWriter:
         self.mark_toc()
         
         # Middle section
-        self.write_section_rec(self.r.find('middle'), None)
+        self._write_section_rec(self.r.find('middle'), None)
+        
+        # Authors addresses section
+        self._write_authors_addresses(self.r.findall('front/author'))
         
         # Finished buffering, write to file
         self.write_to_file(filename)
@@ -132,6 +150,9 @@ class XmlRfcWriter:
         raise NotImplementedError('Must override!')
         
     def write_table(self, table):
+        raise NotImplementedError('Must override!')
+    
+    def write_address_card(self, author):
         raise NotImplementedError('Must override!')
 
     def write_top(self, left_header, right_header):
@@ -149,5 +170,5 @@ class XmlRfcWriter:
     def write_to_file(self, filename):
         raise NotImplementedError('Must override!')
     
-    def add_to_toc(self, title, anchor):
+    def add_to_toc(self, bullet, title, anchor=None):
         raise NotImplementedError('Must override!')
