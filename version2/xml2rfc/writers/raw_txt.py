@@ -151,13 +151,16 @@ class RawTextRfcWriter(XmlRfcWriter):
     def write_table(self, table):
         """ Writes <texttable> elements """
         align = table.attrib['align']
+        
+        # Write preamble
         preamble = table.find('preamble')
         if preamble is not None:
             self.write_par(self.resolve_refs(preamble), indent=3, \
                            align=align)
+        
         self.table_count += 1
-        lines = []
         headers = []
+        lines = []
         align = table.attrib['align']
         for column in table.findall('ttcol'):
             if column.text:
@@ -165,20 +168,21 @@ class RawTextRfcWriter(XmlRfcWriter):
             else:
                 headers.append('')
         
+        # Format headers to not exceed line width.  If it does exceed, the
+        # algorithm takes the longest column header and splits it into another
+        # line, breaking at the median space character.
+        
         # Draw header
         borderstring = ['+']
         for header in headers:
             borderstring.append('-' * (len(header)+2))
             borderstring.append('+')
-        self.write_line(''.join(borderstring), indent=3, lb=True, \
-                        align=align)
+        lines.append(''.join(borderstring))
         headerstring = ['|']
         for header in headers:
             headerstring.append(' ' + header + ' |')
-        self.write_line(''.join(headerstring), indent=3, lb=False, \
-                        align=align)
-        self.write_line(''.join(borderstring), indent=3, lb=False, \
-                        align=align)
+        lines.append(''.join(headerstring))
+        lines.append(''.join(borderstring))
         
         # Draw Cells
         cellstring = ['|']
@@ -191,21 +195,41 @@ class RawTextRfcWriter(XmlRfcWriter):
             cellstring.append('|')
             if column == len(headers) - 1:
                 # End of line
-                self.write_line(''.join(cellstring), indent=3, lb=False, \
-                                align=align)
+                lines.append(''.join(cellstring))
                 cellstring = ['|']
             
         # Draw Bottom
-        self.write_line(''.join(borderstring), indent=3, lb=False, \
-                        align=align)
+        lines.append(''.join(borderstring))
+        
+        # Finally, write the table to the buffer with proper alignment
+        self.lb()
+        self.write_raw('\n'.join(lines), align=align)
+        
+        
+        # Write postamble
+        postamble = table.find('postamble')
+        if postamble is not None:
+            self.write_par(self.resolve_refs(postamble), indent=3, \
+                           align=align)
+        
+        # Write label
+        title = ''
+        if table.attrib['title'] != '':
+            title = ': ' + table.attrib['title']
+        self.write_line('Table ' + str(self.figure_count) + title, \
+                        align='center')
 
     def write_figure(self, figure):
         """ Writes <figure> elements """
         align = figure.attrib['align']
+        
+        # Write preamble
         preamble = figure.find('preamble')
         if preamble is not None:
             self.write_par(self.resolve_refs(preamble), indent=3, \
                            align=align)
+        
+        # Write figure
         self.figure_count += 1
         # TODO: Needs to be aligned properly
         # Insert artwork text directly into the buffer
@@ -216,6 +240,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.write_raw(figure.find('artwork').text, indent=3, \
                        align=artwork_align)
         
+        # Write postamble
         postamble = figure.find('postamble')
         if postamble is not None:
             self.write_par(self.resolve_refs(postamble), indent=3, \
