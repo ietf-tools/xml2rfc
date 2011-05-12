@@ -421,12 +421,12 @@ class RawTextRfcWriter(XmlRfcWriter):
 
         # References section
         ref_indexstring = str(self.ref_index) + '.'
-        ref_title = ref_indexstring + ' References'
-        self.write_line(ref_title)
-        self.toc.append(ref_title)
         # Treat references as nested only if there is more than one <references>
         references = self.r.findall('back/references')
         if len(references) > 1:
+            ref_title = ref_indexstring + ' References'
+            self.write_line(ref_title)
+            self.toc.append(ref_title)
             for index, reference_list in enumerate(references):
                 ref_title = ref_indexstring + str(index + 1) + '. ' + \
                             reference_list.attrib['title']
@@ -435,6 +435,9 @@ class RawTextRfcWriter(XmlRfcWriter):
                 self.toc.append(toc_indent + ref_title)
                 self.write_reference_list(reference_list)
         else:
+            ref_title = ref_indexstring + ' ' + references[0].attrib['title']
+            self.write_line(ref_title)
+            self.toc.append(ref_title)
             self.write_reference_list(references[0])
         
         # Appendix sections
