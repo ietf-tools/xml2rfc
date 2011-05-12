@@ -98,9 +98,9 @@ class RawTextRfcWriter(XmlRfcWriter):
             self._write_line(line, indent=3, lb=False, buf=tmpbuf)
         return tmpbuf
     
-#===============================================================================
-# Abstract writer rewrite
-#===============================================================================
+    # ---------------------------------------------------------
+    # Base writer overrides
+    # ---------------------------------------------------------
         
     def mark_toc(self):
         """ Marks buffer position for post-writing table of contents """

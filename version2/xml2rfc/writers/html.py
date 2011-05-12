@@ -121,3 +121,49 @@ class HtmlRfcWriter(RawTextRfcWriter):
         file = open(filename, 'w')
         file.write(defaults['doctype'] + '\n')
         file.write(lxml.etree.tostring(self.html, pretty_print=True))
+        
+    # -----------------------------------------
+    # Base writer interface methods to override
+    # -----------------------------------------
+    
+    def mark_toc(self):
+        raise NotImplementedError('Must override!')
+    
+    def write_raw(self, text, align='left'):
+        raise NotImplementedError('Must override!')
+        
+    def write_label(self, text, align='center'):
+        raise NotImplementedError('Must override!')
+    
+    def write_title(self, title, docName=None):
+        raise NotImplementedError('Must override!')
+        
+    def write_heading(self, text):
+        raise NotImplementedError('Must override!')
+
+    def write_paragraph(self, text, align='left'):
+        raise NotImplementedError('Must override!')
+
+    def write_list(self, list):
+        raise NotImplementedError('Must override!')
+
+    def write_top(self, left_header, right_header):
+        raise NotImplementedError('Must override!')
+    
+    def write_address_card(self, author):
+        raise NotImplementedError('Must override!')
+    
+    def write_reference_list(self, list):
+        raise NotImplementedError('Must override!')
+    
+    def draw_table(self, table):
+        raise NotImplementedError('Must override!')
+    
+    def expand_refs(self, element):
+        raise NotImplementedError('Must override!')
+    
+    def add_to_toc(self, bullet, title, anchor=None):
+        raise NotImplementedError('Must override!')
+    
+    def write_to_file(self, filename):
+        raise NotImplementedError('Must override!')

@@ -234,8 +234,9 @@ class XmlRfcWriter:
         # Finished buffering, write to file
         self.write_to_file(filename)
         
-    # ---------------------------------------------------------
-    # The following are the write interface methods to override
+    # -----------------------------------------
+    # Base writer interface methods to override
+    # -----------------------------------------
     
     def mark_toc(self):
         raise NotImplementedError('Must override!')
