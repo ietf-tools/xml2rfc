@@ -1,38 +1,10 @@
-""" Writer classes to output rfc data to various formats """
-
+# Python libs
 import textwrap
 import string
-import re
 
-
-def justify_inline(left_str, center_str, right_str, width=72):
-    """ Takes three string arguments and outputs a single string with the
-        arguments left-justified, centered, and right-justified respectively.
-
-        Throws an exception if the combined length of the three strings is
-        greater than the width.
-    """
-
-    if (len(left_str) + len(center_str) + len(right_str)) > width:
-        raise Exception("The given strings are greater than a width of: "\
-                                                            + str(width))
-    else:
-        center_str_pos = width / 2 - len(center_str) / 2
-        str = left_str + ' ' * (center_str_pos - len(left_str)) \
-            + center_str + ' ' * (center_str_pos - len(right_str)) \
-            + right_str
-        return str
-
-
-class XmlRfcWriter:
-    """ Base class for all writers """
-    
-    def __init__(self, xmlrfc):
-        # We will refer to the XmlRfc document root as 'r'
-        self.r = xmlrfc.getroot()
-
-    def write(self, filename):
-        raise NotImplementedError('write() must be overridden')
+# Local lib
+from base import XmlRfcWriter
+import tools
 
 
 class RawTextRfcWriter(XmlRfcWriter):
@@ -333,7 +305,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             authors = ref.findall('front/author')
             for j, author in enumerate(authors):
                 organization = author.find('organization')
-                if organization is not None:
+                if organization is not None and organization.text is not None:
                     refstring.append(organization.text + ', ')
                 else:
                     refstring.append(author.attrib['surname'] + ', ' + \
@@ -415,7 +387,7 @@ class RawTextRfcWriter(XmlRfcWriter):
                 right = fp_right[i]
             else:
                 right = ''
-            self.buf.append(justify_inline(left, '', right))
+            self.buf.append(tools.justify_inline(left, '', right))
 
         # Title & Optional docname
         self.write_line(self.r.find('front/title').text.center(self.width))
@@ -514,10 +486,11 @@ class RawTextRfcWriter(XmlRfcWriter):
                     self.write_line('Fax:   ' + fascimile.text, indent=3, lb=False)
                 email = address.find('email')
                 if email is not None:
-                    self.write_line('Email: ' + email.text, indent=3, lb=False)
+                    self.write_line('EMail: ' + email.text, indent=3, lb=False)
                 uri = address.find('uri')
                 if uri is not None:
                     self.write_line('URI:   ' + uri.text, indent=3, lb=False)
+            self.lb()
 
         # EOF
 
@@ -537,99 +510,6 @@ class RawTextRfcWriter(XmlRfcWriter):
                 for tmpline in tmpbuf:
                     file.write(tmpline)
                     file.write('\r\n')
-            file.write(line)
-            file.write('\r\n')
-        file.close()
-
-
-class PaginatedTextRfcWriter(RawTextRfcWriter):
-    """ Writes to a text file, paginated with headers and footers """
-    
-    def __init__(self, xmlrfc):
-        RawTextRfcWriter.__init__(self, xmlrfc)
-        self.header = ''
-        self.left_footer = ''
-        self.center_footer = ''
-        self.section_marks = {}
-
-    def make_footer(self, page):
-        return justify_inline(self.left_footer, self.center_footer, \
-                              '[Page ' + str(page) + ']')
-        
-    # Here we override some methods to mark line numbers for large sections.
-    # We'll store each marking as a hash of line_num: section_length.  This way 
-    # we can step through these markings during writing to preemptively 
-    # construct appropriate page breaks.
-    def write_figure(self, figure, table=False):
-        begin = self.mark()
-        RawTextRfcWriter.write_figure(self, figure, table)
-        end = self.mark()
-        self.section_marks[begin] = end-begin
-
-    def write(self, filename):
-        """ Public method to write rfc tree to a file """
-        # Construct a header
-        if 'number' in self.r.attrib:
-            left_header = self.r.attrib['number']
-        else:
-            # No RFC number -- assume internet draft
-            left_header = 'Internet-Draft'
-        title = self.r.find('front/title')
-        if 'abbrev' in title.attrib:
-            center_header = title.attrib['abbrev']
-        else:
-            # No abbreviated title -- assume original title fits
-            center_header = title.text
-        right_header = ''
-        date = self.r.find('front/date')
-        if 'month' in date.attrib:
-            right_header = date.attrib['month'] + ' '
-        right_header += date.attrib['year']
-        self.header = justify_inline(left_header, center_header, right_header)
-
-        # Construct a footer
-        self.left_footer = ''
-        authors = self.r.findall('front/author')
-        for i, author in enumerate(authors):
-            # Format: author1, author2 & author3 OR author1 & author2 OR author1
-            if i < len(authors) - 2:
-                self.left_footer += author.attrib['surname'] + ', '
-            elif i == len(authors) - 2:
-                self.left_footer += author.attrib['surname'] + ' & '
-            else:
-                self.left_footer += author.attrib['surname']
-        self.center_footer = self.r.attrib['category']
-
-        # Write RFC to buffer
-        self.write_buffer()
-
-        # Write buffer to secondary buffer, inserting breaks every 58 lines
-        newbuf = []
-        page_len = 0
-        page_maxlen = 55
-        page_num = 0
-        for line_num, line in enumerate(self.buf):
-            if line_num in self.section_marks:
-                # If this section will exceed a page, insert blank lines
-                # until the end of the page
-                if page_len + self.section_marks[line_num] > page_maxlen:
-                    for i in range(page_maxlen - page_len):
-                        newbuf.append('')
-                        page_len += 1
-            if page_len + 1 > 55:
-                page_len = 0
-                page_num += 1
-                newbuf.append('')
-                newbuf.append(self.make_footer(page_num))
-                newbuf.append('\f')
-                newbuf.append(self.header)
-                newbuf.append('')
-            newbuf.append(line)
-            page_len += 1
-                
-        # Finally, write secondary buffer to file
-        file = open(filename, 'w')
-        for line in newbuf:
             file.write(line)
             file.write('\r\n')
         file.close()
