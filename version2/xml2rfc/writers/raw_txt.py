@@ -231,77 +231,6 @@ class RawTextRfcWriter(XmlRfcWriter):
             else:
                 right = ''
             self.buf.append(tools.justify_inline(left, '', right))
-            
-    def write_table(self, table):
-        """ Writes <texttable> elements """
-        align = table.attrib['align']
-        
-        # Write preamble
-        preamble = table.find('preamble')
-        if preamble is not None:
-            self._write_par(self.expand_refs(preamble), indent=3, \
-                            align=align)
-        
-        self.table_count += 1
-        headers = []
-        lines = []
-        align = table.attrib['align']
-        for column in table.findall('ttcol'):
-            if column.text:
-                headers.append(column.text)
-            else:
-                headers.append('')
-        
-        # Format headers to not exceed line width.  If it does exceed, the
-        # algorithm takes the longest column header and splits it into another
-        # line, breaking at the median space character.
-        
-        # Draw header
-        borderstring = ['+']
-        for header in headers:
-            borderstring.append('-' * (len(header)+2))
-            borderstring.append('+')
-        lines.append(''.join(borderstring))
-        headerstring = ['|']
-        for header in headers:
-            headerstring.append(' ' + header + ' |')
-        lines.append(''.join(headerstring))
-        lines.append(''.join(borderstring))
-        
-        # Draw Cells
-        cellstring = ['|']
-        for i, cell in enumerate(table.findall('c')):
-            column = i % len(headers)
-            celltext = ''
-            if cell.text:
-                celltext = cell.text
-            cellstring.append(celltext.center(len(headers[column])+2))
-            cellstring.append('|')
-            if column == len(headers) - 1:
-                # End of line
-                lines.append(''.join(cellstring))
-                cellstring = ['|']
-            
-        # Draw Bottom
-        lines.append(''.join(borderstring))
-        
-        # Finally, write the table to the buffer with proper alignment
-        self._lb()
-        self._write_raw('\n'.join(lines), align=align)
-        
-        
-        # Write postamble
-        postamble = table.find('postamble')
-        if postamble is not None:
-            self._write_par(self.expand_refs(postamble), indent=3, \
-                            align=align)
-        
-        # Write label
-        title = ''
-        if table.attrib['title'] != '':
-            title = ': ' + table.attrib['title']
-        self._write_line('Table ' + str(self.figure_count) + title, \
-                         align='center')
     
     def write_address_card(self, author):
         """ Writes a simple address card with no line breaks """
@@ -385,6 +314,53 @@ class RawTextRfcWriter(XmlRfcWriter):
             bullet = '[' + ref.attrib['anchor'] + ']  '
             self._write_par(''.join(refstring), indent=3, bullet=bullet, \
                            sub_indent=sub_indent)
+            
+    def draw_table(self, table):
+        headers = []
+        lines = []
+        align = table.attrib['align']
+        for column in table.findall('ttcol'):
+            if column.text:
+                headers.append(column.text)
+            else:
+                headers.append('')
+        
+        # Format headers to not exceed line width.  If it does exceed, the
+        # algorithm takes the longest column header and splits it into another
+        # line, breaking at the median space character.
+        
+        # Draw header
+        borderstring = ['+']
+        for header in headers:
+            borderstring.append('-' * (len(header)+2))
+            borderstring.append('+')
+        lines.append(''.join(borderstring))
+        headerstring = ['|']
+        for header in headers:
+            headerstring.append(' ' + header + ' |')
+        lines.append(''.join(headerstring))
+        lines.append(''.join(borderstring))
+        
+        # Draw Cells
+        cellstring = ['|']
+        for i, cell in enumerate(table.findall('c')):
+            column = i % len(headers)
+            celltext = ''
+            if cell.text:
+                celltext = cell.text
+            cellstring.append(celltext.center(len(headers[column])+2))
+            cellstring.append('|')
+            if column == len(headers) - 1:
+                # End of line
+                lines.append(''.join(cellstring))
+                cellstring = ['|']
+            
+        # Draw Bottom
+        lines.append(''.join(borderstring))
+        
+        # Finally, write the table to the buffer with proper alignment
+        self._lb()
+        self._write_raw('\n'.join(lines), align=align)
 
     def expand_refs(self, element):
         """ Returns a string with inline references expanded properly """

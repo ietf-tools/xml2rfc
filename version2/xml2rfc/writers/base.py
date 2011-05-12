@@ -79,6 +79,31 @@ class XmlRfcWriter:
         if figure.attrib['title'] != '':
             title = ': ' + figure.attrib['title']
         self.write_label('Figure ' + str(self.figure_count) + title, \
+                         align='center') 
+    
+    def _write_table(self, table):
+        """ Writes <texttable> elements """
+        align = table.attrib['align']
+        
+        # Write preamble
+        preamble = table.find('preamble')
+        if preamble is not None:
+            self.write_paragraph(self.expand_refs(preamble), align=align)
+        
+        # Write table
+        self.table_count += 1
+        self.draw_table(table)
+        
+        # Write postamble
+        postamble = table.find('postamble')
+        if postamble is not None:
+            self.write_paragraph(self.expand_refs(postamble), align=align)
+        
+        # Write label
+        title = ''
+        if table.attrib['title'] != '':
+            title = ': ' + table.attrib['title']
+        self.write_label('Table ' + str(self.table_count) + title, \
                          align='center')
             
     def _write_section_rec(self, section, indexstring, appendix=False):
@@ -104,7 +129,7 @@ class XmlRfcWriter:
             elif element.tag == 'figure':
                 self._write_figure(element)
             elif element.tag == 'texttable':
-                self.write_table(element)
+                self._write_table(element)
     
         index = 1
         for child_sec in section.findall('section'):
@@ -195,10 +220,16 @@ class XmlRfcWriter:
     # ---------------------------------------------------------
     # The following are the write interface methods to override
     
+    def mark_toc(self):
+        raise NotImplementedError('Must override!')
+    
     def write_raw(self, text, align='left'):
         raise NotImplementedError('Must override!')
         
     def write_label(self, text, align='center'):
+        raise NotImplementedError('Must override!')
+    
+    def write_title(self, title, docName=None):
         raise NotImplementedError('Must override!')
         
     def write_heading(self, text):
@@ -209,11 +240,8 @@ class XmlRfcWriter:
 
     def write_t(self, t):
         raise NotImplementedError('Must override!')
-    
-    def write_figure(self, figure):
-        raise NotImplementedError('Must override!')
-        
-    def write_table(self, table):
+
+    def write_top(self, left_header, right_header):
         raise NotImplementedError('Must override!')
     
     def write_address_card(self, author):
@@ -221,18 +249,15 @@ class XmlRfcWriter:
     
     def write_reference_list(self, list):
         raise NotImplementedError('Must override!')
-
-    def write_top(self, left_header, right_header):
-        raise NotImplementedError('Must override!')
     
-    def write_title(self, title, docName=None):
-        raise NotImplementedError('Must override!')
-    
-    def write_to_file(self, filename):
+    def draw_table(self, table):
         raise NotImplementedError('Must override!')
     
     def expand_refs(self, element):
         raise NotImplementedError('Must override!')
     
     def add_to_toc(self, bullet, title, anchor=None):
+        raise NotImplementedError('Must override!')
+    
+    def write_to_file(self, filename):
         raise NotImplementedError('Must override!')
