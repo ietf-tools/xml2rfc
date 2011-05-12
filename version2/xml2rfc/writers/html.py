@@ -150,14 +150,14 @@ class HtmlRfcWriter(XmlRfcWriter):
         cellspacing = '0'
         htmltable = E.table(cellpadding=cellpadding, cellspacing=cellspacing)
         htmltable.attrib['class'] = style
-        
+
         # Add caption, if it exists
         if 'title' in table.attrib and table.attrib['title']:
             caption = ''
             if table_num:
                 caption = 'Table ' + str(table_num) + ': '
             htmltable.append(E.caption(caption + table.attrib['title']))
-            
+
         # Draw headers
         header_row = E.tr()
         col_aligns = []
@@ -168,7 +168,7 @@ class HtmlRfcWriter(XmlRfcWriter):
             col_aligns.append(header.attrib['align'])
             header_row.append(th)
         htmltable.append(E.thead(header_row))
-        
+
         # Draw body
         body = E.tbody()
         tr = E.tr()
@@ -185,7 +185,7 @@ class HtmlRfcWriter(XmlRfcWriter):
             tr.append(td)
         body.append(tr)  # Add final row
         htmltable.append(body)
-        
+
         self.body.append(htmltable)
 
     def insert_anchor(self, text):
@@ -198,11 +198,11 @@ class HtmlRfcWriter(XmlRfcWriter):
 
     def add_to_toc(self, bullet, title, anchor=None):
         pass
-    
+
     def pre_processing(self):
         """ Handle any metadata """
         pass
-    
+
     def post_processing(self):
         # Nothing to do here
         pass

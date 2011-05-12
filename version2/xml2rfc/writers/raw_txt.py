@@ -352,7 +352,7 @@ class RawTextRfcWriter(XmlRfcWriter):
     def insert_anchor(self, text):
         # No anchors for text
         pass
-    
+
     def pre_processing(self):
         # Raw text, no pre processing necessary
         pass

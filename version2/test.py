@@ -4,6 +4,7 @@ import xml2rfc.parser
 import xml2rfc.writers
 import sys
 
+
 def main():
     if len(sys.argv) > 1:
         parser = xml2rfc.parser.XmlRfcParser()

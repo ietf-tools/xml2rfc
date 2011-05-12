@@ -31,7 +31,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         XmlRfcWriter._write_figure(self, figure)
         end = len(self.buf)
         self.section_marks[begin] = end - begin
-        
+
     def pre_processing(self):
         """ Prepares the header and footer information """
 

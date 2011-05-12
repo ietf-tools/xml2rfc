@@ -55,7 +55,7 @@ class XmlRfcWriter:
         """ Writes <figure> elements """
         align = figure.attrib['align']
         self.figure_count += 1
-        
+
         # Insert anchor(s) into document
         self.insert_anchor('rfc.figure.' + str(self.figure_count))
         if 'anchor' in figure.attrib:
@@ -89,7 +89,7 @@ class XmlRfcWriter:
         """ Writes <texttable> elements """
         align = table.attrib['align']
         self.table_count += 1
-        
+
         # Insert anchor(s) into document
         self.insert_anchor('rfc.table.' + str(self.table_count))
         if 'anchor' in table.attrib:
@@ -170,14 +170,14 @@ class XmlRfcWriter:
             if appendix == True:
                 self._write_section_rec(child_sec, 'Appendix ' + \
                                         string.uppercase[index - 1] + '',
-                                        level=level+1)
+                                        level=level + 1)
             else:
                 if indexstring:
                     self._write_section_rec(child_sec, indexstring + '.' \
-                                            + str(index), level=level+1)
+                                            + str(index), level=level + 1)
                 else:
                     self._write_section_rec(child_sec, str(index), \
-                                            level=level+1)
+                                            level=level + 1)
             index += 1
 
         # Set the ending index number so we know where to begin references
@@ -191,7 +191,7 @@ class XmlRfcWriter:
         """
         # Do any pre processing necessary, such as inserting metadata
         self.pre_processing()
-        
+
         # Header
         self.write_top(self._prepare_top_left(), self._prepare_top_right())
 
@@ -229,20 +229,20 @@ class XmlRfcWriter:
         if len(references) > 1:
             ref_title = 'References'
             self.write_heading(ref_title, bullet=ref_indexstring + '.', \
-                               idstring = 'rfc.section.' + ref_indexstring)
+                               idstring='rfc.section.' + ref_indexstring)
             self.add_to_toc(ref_indexstring, ref_title)
             for index, reference_list in enumerate(references):
                 ref_newindexstring = ref_indexstring + '.' + str(index + 1)
                 ref_title = reference_list.attrib['title']
                 self.write_heading(ref_title, bullet=ref_newindexstring + '.', \
-                                   idstring = 'rfc.section.' + ref_newindexstring, \
+                                   idstring='rfc.section.' + ref_newindexstring, \
                                    level=2)
                 self.add_to_toc(ref_newindexstring, ref_title)
                 self.write_reference_list(reference_list)
         else:
             ref_title = references[0].attrib['title']
             self.write_heading(ref_title, bullet=ref_indexstring + '.', \
-                               idstring = 'rfc.section.' + ref_indexstring)
+                               idstring='rfc.section.' + ref_indexstring)
             self.add_to_toc(ref_indexstring, ref_title)
             self.write_reference_list(references[0])
 
@@ -301,10 +301,10 @@ class XmlRfcWriter:
 
     def write_reference_list(self, list):
         raise NotImplementedError('Must override!')
-    
+
     def insert_anchor(self, text):
         raise NotImplementedError('Must override!')
-        
+
     def draw_table(self, table, table_num=None):
         raise NotImplementedError('Must override!')
 
@@ -313,7 +313,7 @@ class XmlRfcWriter:
 
     def add_to_toc(self, bullet, title, anchor=None):
         raise NotImplementedError('Must override!')
-    
+
     def pre_processing(self):
         raise NotImplementedError('Must override!')
 

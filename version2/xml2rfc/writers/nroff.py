@@ -12,12 +12,13 @@ default_header = ['.pl 10.0i',      # Page length
                   '.ad l',          # Left margin adjustment only
                   ]
 
+
 class NroffRfcWriter(PaginatedTextRfcWriter):
     """ Writes to an nroff file """
-    
+
     def __init__(self, xmlrfc):
         PaginatedTextRfcWriter.__init__(self, xmlrfc)
-        
+
     # ---------------------------------------------------------
     # PaginatedTextRfcWriter overrides
     # ---------------------------------------------------------
@@ -27,10 +28,10 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
         # Construct the RFC header and footer
         PaginatedTextRfcWriter.pre_processing(self)
-        
+
         # Insert the standard nroff settings
         self.buf.extend(default_header)
-        
+
         # Insert the RFC header and footer information
         self._write_line('.ds LH ' + self.left_header)
         self._write_line('.ds CH ' + self.center_header)
@@ -38,7 +39,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self._write_line('.ds LF ' + self.left_footer)
         self._write_line('.ds CF ' + self.center_footer)
         self._write_line('.ds RF FORMFEED[Page] % ')
-        
+
     def write_to_file(self, filename):
         # Use RawText's method instead of PaginatedText, so we dont get breaks.
         # Breaks are already handled by nroff commands
