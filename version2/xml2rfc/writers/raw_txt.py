@@ -26,8 +26,8 @@ class RawTextRfcWriter(XmlRfcWriter):
             buf = self.buf
         buf.append('')
 
-    def _write_line(self, str, indent=0, lb=True, align='left', buf=None):
-        """ Writes an (optionally) indented line preceded by a line break. """
+    def _write_line(self, str, indent=0, lb=False, align='left', buf=None):
+        """ Writes a line preceded by an (optional) line break. """
         if not buf:
             buf = self.buf
         if len(str) > (self.width):
@@ -44,7 +44,7 @@ class RawTextRfcWriter(XmlRfcWriter):
 
     def _write_par(self, str, indent=0, sub_indent=None, bullet='', \
                   align='left', buf=None):
-        """ Writes an indented and wrapped paragraph, preceded by a lb. """
+        """ Writes an indented and wrapped paragraph, preceded by a lb """
         if not buf:
             buf = self.buf
         # We can take advantage of textwraps initial_indent by using a bullet
@@ -92,10 +92,10 @@ class RawTextRfcWriter(XmlRfcWriter):
             This should only be called after the initial buffer is written.
         """
         tmpbuf = ['']
-        self._write_line("Table of Contents", buf=tmpbuf)
+        self._write_line("Table of Contents", lb=True, buf=tmpbuf)
         self._lb(buf=tmpbuf)
         for line in self.toc:
-            self._write_line(line, indent=3, lb=False, buf=tmpbuf)
+            self._write_line(line, indent=3, buf=tmpbuf)
         return tmpbuf
 
     # ---------------------------------------------------------
@@ -126,21 +126,21 @@ class RawTextRfcWriter(XmlRfcWriter):
 
     def write_label(self, text, type='figure', align='center'):
         """ Writes a label for a table or figure """
-        self._write_line(text, align=align)
+        self._write_line(text, align=align, lb=True)
 
     def write_title(self, title, docName=None):
         """ Write the document title and (optional) name """
-        self._write_line(title.center(self.width))
+        self._write_line(title.center(self.width), lb=True)
         if docName is not None:
-            self._write_line(docName.center(self.width), lb=False)
+            self._write_line(docName.center(self.width))
 
     def write_heading(self, text, bullet=None, idstring=None, anchor=None, \
                       level=1):
         """ Write a generic header """
         if bullet:
-            self._write_line(bullet + ' ' + text, indent=0)
+            self._write_line(bullet + ' ' + text, indent=0, lb=True)
         else:
-            self._write_line(text, indent=0)
+            self._write_line(text, indent=0, lb=True)
 
     def write_paragraph(self, text, align='left', idstring=None):
         """ Write a generic paragraph """
@@ -189,19 +189,19 @@ class RawTextRfcWriter(XmlRfcWriter):
         """ Writes a simple address card with no line breaks """
         if 'role' in author.attrib:
                 self._write_line(author.attrib['fullname'] + ', ' + \
-                                author.attrib['role'], indent=3)
+                                author.attrib['role'], indent=3, lb=True)
         else:
-            self._write_line(author.attrib['fullname'], indent=3)
+            self._write_line(author.attrib['fullname'], indent=3, lb=True)
         organization = author.find('organization')
         if organization is not None:
-            self._write_line(organization.text, indent=3, lb=False)
+            self._write_line(organization.text, indent=3)
         address = author.find('address')
         if address is not None:
             postal = address.find('postal')
             if postal is not None:
                 for street in postal.findall('street'):
                     if street.text:
-                        self._write_line(street.text, indent=3, lb=False)
+                        self._write_line(street.text, indent=3)
                 cityline = []
                 city = postal.find('city')
                 if city is not None and city.text:
@@ -215,24 +215,23 @@ class RawTextRfcWriter(XmlRfcWriter):
                 if code is not None and code.text:
                         cityline.append(code.text)
                 if cityline is not None:
-                    self._write_line(''.join(cityline), indent=3, lb=False)
+                    self._write_line(''.join(cityline), indent=3)
                 country = postal.find('country')
                 if country is not None:
-                    self._write_line(country.text, indent=3, lb=False)
+                    self._write_line(country.text, indent=3)
             self._lb()
             phone = address.find('phone')
             if phone is not None and phone.text:
-                self._write_line('Phone: ' + phone.text, indent=3, lb=False)
+                self._write_line('Phone: ' + phone.text, indent=3)
             fascimile = address.find('fascimile')
             if fascimile is not None and fascimile.text:
-                self._write_line('Fax:   ' + fascimile.text, indent=3, \
-                                 lb=False)
+                self._write_line('Fax:   ' + fascimile.text, indent=3)
             email = address.find('email')
             if email is not None and email.text:
-                self._write_line('EMail: ' + email.text, indent=3, lb=False)
+                self._write_line('EMail: ' + email.text, indent=3)
             uri = address.find('uri')
             if uri is not None and uri.text:
-                self._write_line('URI:   ' + uri.text, indent=3, lb=False)
+                self._write_line('URI:   ' + uri.text, indent=3)
         self._lb()
 
     def write_reference_list(self, list):

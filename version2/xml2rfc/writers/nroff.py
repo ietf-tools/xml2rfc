@@ -31,12 +31,9 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self.buf.extend(default_header)
         
         # Insert the RFC header and footer information
-        self._write_line('.ds LH ' + self.left_header, lb=False)
-        self._write_line('.ds CH ' + self.center_header, lb=False)
-        self._write_line('.ds RH ' + self.right_header, lb=False)
-        self._write_line('.ds LF ' + self.left_footer, lb=False)
-        self._write_line('.ds CF ' + self.center_footer, lb=False)
-        self._write_line('.ds RF FORMFEED[Page] % ', lb=False)
-        
-        
-        
+        self._write_line('.ds LH ' + self.left_header)
+        self._write_line('.ds CH ' + self.center_header)
+        self._write_line('.ds RH ' + self.right_header)
+        self._write_line('.ds LF ' + self.left_footer)
+        self._write_line('.ds CF ' + self.center_footer)
+        self._write_line('.ds RF FORMFEED[Page] % ')
