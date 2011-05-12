@@ -180,29 +180,29 @@ class RawTextRfcWriter(XmlRfcWriter):
             self._write_par(''.join(line), indent=indent, \
                             bullet=bullet, sub_indent=sub_indent)
     
-    def post_write_toc(self):
+    def _post_write_toc(self):
         """ Writes the table of contents to temporary buffer and returns
             
             This should only be called after the initial buffer is written.
         """
         tmpbuf = ['']
-        self.write_line("Table of Contents", buf=tmpbuf)
-        self.lb(buf=tmpbuf)
+        self._write_line("Table of Contents", buf=tmpbuf)
+        self._lb(buf=tmpbuf)
         for line in self.toc:
-            self.write_line(line, indent=3, lb=False, buf=tmpbuf)
+            self._write_line(line, indent=3, lb=False, buf=tmpbuf)
         return tmpbuf
     
 #===============================================================================
 # Abstract writer rewrite
 #===============================================================================
-
-    def write_t(self, t):
-        """ Writes a <t> element """
-        self._write_t_rec(t)
         
     def mark_toc(self):
         """ Marks buffer position for post-writing table of contents """
         self.toc_marker = len(self.buf)
+
+    def write_t(self, t):
+        """ Writes a <t> element """
+        self._write_t_rec(t)
 
     def write_top(self, left_header, right_header):
         """ Combines left and right lists to write a document heading """
@@ -420,51 +420,22 @@ class RawTextRfcWriter(XmlRfcWriter):
                            sub_indent=sub_indent)
 
     def add_to_toc(self, bullet, title, anchor=None):
+        if bullet:
             toc_indent = ' ' * ((bullet.count('.') - 1) * 2)
             self.toc.append(toc_indent + bullet + ' ' + title)
-
-    def write_buffer(self):
-        """ Internal method that writes the entire RFC tree to a buffer
-
-            Actual writing to a file, plus some post formatting is handled
-            in self.write(), which is the public method to be called.
-        """
-
-        # References section
-        ref_indexstring = str(self.ref_index) + '.'
-        # Treat references as nested only if there is more than one <references>
-        references = self.r.findall('back/references')
-        if len(references) > 1:
-            ref_title = ref_indexstring + ' References'
-            self.write_line(ref_title)
-            self.toc.append(ref_title)
-            for index, reference_list in enumerate(references):
-                ref_title = ref_indexstring + str(index + 1) + '. ' + \
-                            reference_list.attrib['title']
-                self.write_line(ref_title)
-                toc_indent = ' ' * ((ref_title.count('.') - 1) * 2)
-                self.toc.append(toc_indent + ref_title)
-                self.write_reference_list(reference_list)
         else:
-            ref_title = ref_indexstring + ' ' + references[0].attrib['title']
-            self.write_line(ref_title)
-            self.toc.append(ref_title)
-            self.write_reference_list(references[0])
+            self.toc.append(title)
 
     def write_to_file(self, filename):
-        """ Public method to write rfc document to a file """
-
-        # Write RFC to buffer
-        # self.write_buffer()
-
+        """ Writes the buffer to the specified file """
+        
         # Write buffer to file
         file = open(filename, 'w')
         for line_num, line in enumerate(self.buf):
             # Check for marks
             if line_num == self.toc_marker:
                 # Write TOC
-                # tmpbuf = self.post_write_toc()
-                tmpbuf = []
+                tmpbuf = self._post_write_toc()
                 for tmpline in tmpbuf:
                     file.write(tmpline)
                     file.write('\r\n')

@@ -133,7 +133,7 @@ class XmlRfcWriter:
             self.write_heading(ref_indexstring + ' ' + ref_title)
             self.add_to_toc(ref_indexstring, ref_title)
             for index, reference_list in enumerate(references):
-                ref_newindexstring = ref_indexstring + str(index + 1)
+                ref_newindexstring = ref_indexstring + str(index + 1) + '.'
                 ref_title = reference_list.attrib['title']
                 self.write_heading(ref_newindexstring + ' ' + ref_title)
                 self.add_to_toc(ref_newindexstring, ref_title)
@@ -153,8 +153,8 @@ class XmlRfcWriter:
             self.write_heading("Authors' Addresses")
             self.add_to_toc('', "Authors' Addresses")
         else:
-            self.write_heading('Authors Address')
-            self.add_to_toc('', 'Authors Address')
+            self.write_heading("Author's Address")
+            self.add_to_toc('', "Author's Address")
         for author in authors:
             self.write_address_card(author)
         
