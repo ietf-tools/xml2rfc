@@ -9,7 +9,7 @@ def main():
         parser = xml2rfc.parser.XmlRfcParser()
         xmlrfc = parser.parse(str(sys.argv[1]))
         writer = xml2rfc.writers.HtmlRfcWriter(xmlrfc)
-        writer.write('output.txt')
+        writer.write('output.html')
     else:
         print ("Needs xml file argument")
 

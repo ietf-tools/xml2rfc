@@ -405,6 +405,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         if 'month' in date.attrib:
             month = date.attrib['month']
         list.append(month + ' ' + date.attrib['year'])
+        return list
 
     def write_buffer(self):
         """ Internal method that writes the entire RFC tree to a buffer
