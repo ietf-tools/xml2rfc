@@ -412,14 +412,9 @@ class RawTextRfcWriter(XmlRfcWriter):
             Actual writing to a file, plus some post formatting is handled
             in self.write(), which is the public method to be called.
         """
-        # Prepare front page left heading
-        fp_left = self.prepare_top_left
-
-        # Prepare front page right heading
-        fp_right = self.prepare_top_right()
-        
-
         # Front page heading
+        fp_left = self.prepare_top_left()
+        fp_right = self.prepare_top_right()
         for i in range(max(len(fp_left), len(fp_right))):
             if i < len(fp_left):
                 left = fp_left[i]
