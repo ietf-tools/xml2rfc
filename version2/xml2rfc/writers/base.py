@@ -104,7 +104,24 @@ class XmlRfcWriter:
         if table.attrib['title'] != '':
             title = ': ' + table.attrib['title']
         self.write_label('Table ' + str(self.table_count) + title, \
-                         align='center')
+                         align='center') 
+    
+    def _write_t_rec(self, t, indent=3, sub_indent=0, bullet=''):
+        """ Writes a <t> element """
+        
+        # Write the actual text
+        self.write_paragraph(self.expand_refs(t))
+        
+        # Check for child elements
+        for element in t:
+            if element.tag == 'list':
+                self.write_list(element)
+                if element.tail:
+                    self.write_paragraph(element.tail)
+            elif element.tag == 'figure':
+                self._write_figure(element)
+            elif element.tag == 'texttable':
+                self._write_table(element)
             
     def _write_section_rec(self, section, indexstring, appendix=False):
         """ Recursively writes <section> elements """
@@ -125,7 +142,7 @@ class XmlRfcWriter:
         for element in section:
             # Write elements in XML document order
             if element.tag == 't':
-                self.write_t(element)
+                self._write_t_rec(element)
             elif element.tag == 'figure':
                 self._write_figure(element)
             elif element.tag == 'texttable':
@@ -164,7 +181,7 @@ class XmlRfcWriter:
         if abstract is not None:
             self.write_heading('Abstract')
             for t in abstract.findall('t'):
-                self.write_t(t)
+                self._write_t_rec(t)
 
         # Status
         self.write_heading('Status of this Memo')
@@ -238,7 +255,7 @@ class XmlRfcWriter:
     def write_paragraph(self, text, align='left'):
         raise NotImplementedError('Must override!')
 
-    def write_t(self, t):
+    def write_list(self, list):
         raise NotImplementedError('Must override!')
 
     def write_top(self, left_header, right_header):
