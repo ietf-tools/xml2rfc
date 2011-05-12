@@ -124,7 +124,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             for line in lines:
                 self.buf.append(indent_str + line)
 
-    def write_label(self, text, align='center'):
+    def write_label(self, text, type='figure', align='center'):
         """ Writes a label for a table or figure """
         self._write_line(text, align=align)
 

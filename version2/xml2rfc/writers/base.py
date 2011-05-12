@@ -78,7 +78,7 @@ class XmlRfcWriter:
         if figure.attrib['title'] != '':
             title = ': ' + figure.attrib['title']
         self.write_label('Figure ' + str(self.figure_count) + title, \
-                         align='center')
+                         type='figure', align='center')
 
     def _write_table(self, table):
         """ Writes <texttable> elements """
@@ -103,7 +103,7 @@ class XmlRfcWriter:
         if table.attrib['title'] != '':
             title = ': ' + table.attrib['title']
         self.write_label('Table ' + str(self.table_count) + title, \
-                         align='center')
+                         type='table', align='center')
 
     def _write_t_rec(self, t, indent=3, sub_indent=0, bullet='', \
                      idstring=None):
@@ -146,7 +146,8 @@ class XmlRfcWriter:
         for element in section:
             # Write elements in XML document order
             if element.tag == 't':
-                idstring = indexstring + 'p.' + str(paragraph_id)
+                idstring = 'rfc.section.' + indexstring + '.p.' + \
+                            str(paragraph_id)
                 self._write_t_rec(element, idstring=idstring)
                 paragraph_id += 1
             elif element.tag == 'figure':
@@ -256,7 +257,7 @@ class XmlRfcWriter:
     def write_raw(self, text, align='left'):
         raise NotImplementedError('Must override!')
 
-    def write_label(self, text, align='center'):
+    def write_label(self, text, type='figure', align='center'):
         raise NotImplementedError('Must override!')
 
     def write_title(self, title, docName=None):

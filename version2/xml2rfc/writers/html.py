@@ -56,10 +56,13 @@ class HtmlRfcWriter(RawTextRfcWriter):
         pass
 
     def write_raw(self, text, align='left'):
-        pass
+        pre = E.pre(text)
+        self.body.append(pre)
 
-    def write_label(self, text, align='center'):
-        pass
+    def write_label(self, text, type='figure', align='center'):
+        p = E.p(text)
+        p.attrib['class'] = type
+        self.body.append(p)
 
     def write_title(self, title, docName=None):
         p = E.p(title)
@@ -83,8 +86,7 @@ class HtmlRfcWriter(RawTextRfcWriter):
             h1.append(a_bullet)
             if anchor:
                 # Use an anchor link for heading
-                a_text = E.a(text)
-                a_text.attrib['href'] = '#' + anchor
+                a_text = E.a(text, href='#' + anchor)
                 h1.append(a_text)
             else:
                 # Plain text
@@ -100,6 +102,8 @@ class HtmlRfcWriter(RawTextRfcWriter):
     def write_paragraph(self, text, align='left', idstring=None):
         if text:
             p = E.p(text)
+            if idstring:
+                p.attrib['id'] = idstring
             self.body.append(p)
 
     def write_list(self, list):
