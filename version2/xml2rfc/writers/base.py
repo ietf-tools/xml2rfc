@@ -189,6 +189,9 @@ class XmlRfcWriter:
 
             Step through the rfc tree and call writer specific methods.
         """
+        # Do any pre processing necessary, such as inserting metadata
+        self.pre_processing()
+        
         # Header
         self.write_top(self._prepare_top_left(), self._prepare_top_right())
 
@@ -309,6 +312,9 @@ class XmlRfcWriter:
         raise NotImplementedError('Must override!')
 
     def add_to_toc(self, bullet, title, anchor=None):
+        raise NotImplementedError('Must override!')
+    
+    def pre_processing(self):
         raise NotImplementedError('Must override!')
 
     def post_processing(self):
