@@ -128,7 +128,8 @@ class XmlRfcWriter:
             anchor = section.attrib['anchor']
         if indexstring:
             # Prepend a neat index string to the title
-            self.write_heading(indexstring + ' ' + section.attrib['title'], \
+            self.write_heading(section.attrib['title'], \
+                               bullet=indexstring + '.', \
                                idstring='rfc.section.' + indexstring, \
                                anchor=anchor)
             # Write to TOC as well
@@ -139,13 +140,13 @@ class XmlRfcWriter:
             # Must be <middle> or <back> element -- no title or index.
             indexstring = ''
         
-        paragraph_id = 0
+        paragraph_id = 1
         for element in section:
             # Write elements in XML document order
             if element.tag == 't':
-                paragraph_id += 1
                 idstring = indexstring + 'p.' + str(paragraph_id)
                 self._write_t_rec(element, idstring=idstring)
+                paragraph_id += 1
             elif element.tag == 'figure':
                 self._write_figure(element)
             elif element.tag == 'texttable':
@@ -157,8 +158,11 @@ class XmlRfcWriter:
                 self._write_section_rec(child_sec, 'Appendix ' + \
                                        string.uppercase[index-1] + '.')
             else:
-                self._write_section_rec(child_sec, indexstring + \
-                                       str(index) + '.')
+                if indexstring:
+                    self._write_section_rec(child_sec, indexstring + '.' \
+                                            + str(index))
+                else:
+                    self._write_section_rec(child_sec, str(index))
             index += 1
 
         # Set the ending index number so we know where to begin references
@@ -256,7 +260,7 @@ class XmlRfcWriter:
     def write_title(self, title, docName=None):
         raise NotImplementedError('Must override!')
         
-    def write_heading(self, text, idstring=None, anchor=None):
+    def write_heading(self, text, bullet=None, idstring=None, anchor=None):
         raise NotImplementedError('Must override!')
 
     def write_paragraph(self, text, align='left', idstring=None):

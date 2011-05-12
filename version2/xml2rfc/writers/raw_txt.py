@@ -134,9 +134,12 @@ class RawTextRfcWriter(XmlRfcWriter):
         if docName is not None:
             self._write_line(docName.center(self.width), lb=False)
     
-    def write_heading(self, text, idstring=None, anchor=None):
+    def write_heading(self, text, bullet=None, idstring=None, anchor=None):
         """ Write a generic header """
-        self._write_line(text, indent=0)
+        if bullet:
+            self._write_line(bullet + ' ' + text, indent=0)
+        else:
+            self._write_line(text, indent=0)
         
     def write_paragraph(self, text, align='left', idstring=None):
         """ Write a generic paragraph """

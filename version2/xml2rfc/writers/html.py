@@ -70,16 +70,30 @@ class HtmlRfcWriter(RawTextRfcWriter):
             p.append(span)
         self.body.append(p)
         
-    def write_heading(self, text, idstring=None, anchor=None):
+    def write_heading(self, text, bullet=None, idstring=None, anchor=None):
         h1 = E.h1()
         if idstring:
             h1.attrib['id'] = idstring
-        if text.count('.') == 0:
-            # Only use one <a>
-            id_link = E.a(text)
+        if bullet:
+            # Use separate elements for bullet and text
+            a_bullet = E.a(bullet)
             if idstring:
-                id_link.attrib['href'] = '#' + idstring
-            h1.append(id_link)
+                a_bullet.attrib['href'] = '#' + idstring
+            h1.append(a_bullet)
+            if anchor:
+                # Use an anchor link for heading
+                a_text = E.a(text)
+                a_text.attrib['href'] = '#' + anchor
+                h1.append(a_text)
+            else:
+                # Plain text
+                a_bullet.tail = ' ' + text
+        else:
+            # Only use one <a> pointing to idstring
+            a = E.a(text)
+            if idstring:
+                a.attrib['href'] = '#' + idstring
+            h1.append(a)
         self.body.append(h1)
 
     def write_paragraph(self, text, align='left', idstring=None):
