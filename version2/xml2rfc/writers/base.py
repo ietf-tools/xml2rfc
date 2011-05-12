@@ -230,6 +230,9 @@ class XmlRfcWriter:
             self.add_to_toc('', "Author's Address")
         for author in authors:
             self.write_address_card(author)
+            
+        # Primary buffer is finished -- apply any post processing
+        self.post_processing()
         
         # Finished buffering, write to file
         self.write_to_file(filename)
@@ -275,6 +278,9 @@ class XmlRfcWriter:
         raise NotImplementedError('Must override!')
     
     def add_to_toc(self, bullet, title, anchor=None):
+        raise NotImplementedError('Must override!')
+    
+    def post_processing(self):
         raise NotImplementedError('Must override!')
     
     def write_to_file(self, filename):

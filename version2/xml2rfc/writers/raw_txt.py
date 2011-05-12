@@ -343,6 +343,10 @@ class RawTextRfcWriter(XmlRfcWriter):
             self.toc.append(toc_indent + bullet + ' ' + title)
         else:
             self.toc.append(title)
+    
+    def post_processing(self):
+        # Raw text, no post processing done here
+        pass
 
     def write_to_file(self, filename):
         """ Writes the buffer to the specified file """

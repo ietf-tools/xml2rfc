@@ -1,5 +1,6 @@
 # Local libs
 from raw_txt import RawTextRfcWriter
+from base import XmlRfcWriter
 import tools
 
 
@@ -12,6 +13,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.left_footer = ''
         self.center_footer = ''
         self.section_marks = {}
+        self.paged_buf = []
 
     def make_footer(self, page):
         return tools.justify_inline(self.left_footer, self.center_footer, \
@@ -21,14 +23,15 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     # We'll store each marking as a hash of line_num: section_length.  This way 
     # we can step through these markings during writing to preemptively 
     # construct appropriate page breaks.
-    def write_figure(self, figure, table=False):
-        begin = self.mark()
-        RawTextRfcWriter.write_figure(self, figure, table)
-        end = self.mark()
+    def _write_figure(self, figure):
+        """ Override base writer to add a marking """
+        begin = len(self.buf)
+        XmlRfcWriter._write_figure(self, figure)
+        end = len(self.buf)
         self.section_marks[begin] = end-begin
-
-    def write(self, filename):
-        """ Public method to write rfc tree to a file """
+        
+    def post_processing(self):
+        """ Add paging information to a secondary buffer """
         # Construct a header
         if 'number' in self.r.attrib:
             left_header = self.r.attrib['number']
@@ -62,11 +65,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 self.left_footer += author.attrib['surname']
         self.center_footer = self.r.attrib['category']
 
-        # Write RFC to buffer
-        self.write_buffer()
-
         # Write buffer to secondary buffer, inserting breaks every 58 lines
-        newbuf = []
         page_len = 0
         page_maxlen = 55
         page_num = 0
@@ -76,22 +75,23 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 # until the end of the page
                 if page_len + self.section_marks[line_num] > page_maxlen:
                     for i in range(page_maxlen - page_len):
-                        newbuf.append('')
+                        self.paged_buf.append('')
                         page_len += 1
             if page_len + 1 > 55:
                 page_len = 0
                 page_num += 1
-                newbuf.append('')
-                newbuf.append(self.make_footer(page_num))
-                newbuf.append('\f')
-                newbuf.append(self.header)
-                newbuf.append('')
-            newbuf.append(line)
+                self.paged_buf.append('')
+                self.paged_buf.append(self.make_footer(page_num))
+                self.paged_buf.append('\f')
+                self.paged_buf.append(self.header)
+                self.paged_buf.append('')
+            self.paged_buf.append(line)
             page_len += 1
-                
-        # Finally, write secondary buffer to file
+
+    def write_to_file(self, filename):
+        """ Override RawTextRfcWriter to use the paged buffer """
         file = open(filename, 'w')
-        for line in newbuf:
+        for line in self.paged_buf:
             file.write(line)
             file.write('\r\n')
         file.close()
