@@ -33,13 +33,22 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         else:
             self._write_line('.ce 1')
             self._write_line(text)
+            
+    def write_heading(self, text, bullet=None, idstring=None, anchor=None, \
+                      level=1):
+        self._write_line('.ti 0', lb=True)
+        if bullet:
+            self._write_line(bullet + ' ' + text)
+        else:
+            self._write_line(text)
 
     def write_top(self, left_header, right_header):
         """ Writes the document header """
         # No fill for top section
-        self._write_line('.nf')
+        self._write_line('.nf')  # Disable fill
         self._write_line('.in 0')
         PaginatedTextRfcWriter.write_top(self, left_header, right_header)
+        self._write_line('.fi')  # Enable fill
 
     def pre_processing(self):
         """ Inserts an nroff header into the buffer """
