@@ -3,7 +3,7 @@ import re
 
 class XmlRfcParser:
     """ XML parser with callbacks to construct an RFC tree """
-    
+
     def parse(self, source, prepare=True):
         """ Parses the XML file <source> and returns an XmlRfc instance """
         # Get a parser object
@@ -11,7 +11,7 @@ class XmlRfcParser:
                                       no_network=False, \
                                       remove_comments=True, \
                                       remove_blank_text=True)
-        
+
         # Parse the XML file into a tree and create an rfc instance
         tree = lxml.etree.parse(source, parser)
         xmlrfc = XmlRfc(tree)
@@ -24,15 +24,15 @@ class XmlRfcParser:
 
 class XmlRfc:
     """ Internal representation of an RFC document
-        
+
         Contains an lxml.etree.ElementTree, with some additional helper
         methods to prepare the tree for output.
-        
+
         Accessing the rfc tree is done by getting the root node from getroot()
     """
     def __init__(self, tree):
         self.tree = tree
-    
+
     def getroot(self):
         """ Wrapper method """
         return self.tree.getroot()

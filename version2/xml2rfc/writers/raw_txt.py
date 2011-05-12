@@ -8,8 +8,8 @@ import tools
 
 
 class RawTextRfcWriter(XmlRfcWriter):
-    """ Writes to a text file, unpaginated, no headers or footers. 
-    
+    """ Writes to a text file, unpaginated, no headers or footers.
+
         Callback methods from base class will all write to a buffer list, buf
     """
 
@@ -19,7 +19,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         self.buf = []           # Main buffer
         self.toc = []           # Table of contents buffer
         self.toc_marker = 0     # Line number in buffer to write toc too
-        
+
     def _lb(self, buf=None):
         """ Write a blank line to the file """
         if not buf:
@@ -67,7 +67,7 @@ class RawTextRfcWriter(XmlRfcWriter):
         elif align == 'right':
             for line in par:
                 buf.append(line.rjust(self.width))
-    
+
     def _write_raw(self, data, indent=0, align='left'):
         """ Writes a raw stream of characters, preserving space and breaks """
         # Append an indent to every newline of the data
@@ -81,14 +81,14 @@ class RawTextRfcWriter(XmlRfcWriter):
         elif align == 'right':
             for line in lines:
                 self.buf.append(line.rjust(self.width))
-        else: # align == left
+        else:  # align == left
             indent_str = ' ' * indent
             for line in lines:
                 self.buf.append(indent_str + line)
-    
+
     def _post_write_toc(self):
         """ Writes the table of contents to temporary buffer and returns
-            
+
             This should only be called after the initial buffer is written.
         """
         tmpbuf = ['']
@@ -97,15 +97,15 @@ class RawTextRfcWriter(XmlRfcWriter):
         for line in self.toc:
             self._write_line(line, indent=3, lb=False, buf=tmpbuf)
         return tmpbuf
-    
+
     # ---------------------------------------------------------
     # Base writer overrides
     # ---------------------------------------------------------
-        
+
     def mark_toc(self):
         """ Marks buffer position for post-writing table of contents """
         self.toc_marker = len(self.buf)
-            
+
     def write_raw(self, text, align='left'):
         """ Writes a raw stream of characters, preserving space and breaks """
         # Append an indent to every newline of the data
@@ -119,35 +119,35 @@ class RawTextRfcWriter(XmlRfcWriter):
         elif align == 'right':
             for line in lines:
                 self.buf.append(line.rjust(self.width))
-        else: # align == left
+        else:  # align == left
             indent_str = ' ' * 3
             for line in lines:
                 self.buf.append(indent_str + line)
-        
+
     def write_label(self, text, align='center'):
         """ Writes a label for a table or figure """
         self._write_line(text, align=align)
-    
+
     def write_title(self, title, docName=None):
         """ Write the document title and (optional) name """
         self._write_line(title.center(self.width))
         if docName is not None:
             self._write_line(docName.center(self.width), lb=False)
-    
+
     def write_heading(self, text, bullet=None, idstring=None, anchor=None):
         """ Write a generic header """
         if bullet:
             self._write_line(bullet + ' ' + text, indent=0)
         else:
             self._write_line(text, indent=0)
-        
+
     def write_paragraph(self, text, align='left', idstring=None):
         """ Write a generic paragraph """
         self._write_par(text, indent=3, align=align)
 
     def write_list(self, list):
         """ Writes a <list> element """
-        # TODO: Does this need to be recursive/nested?# Default to the 'empty' list style -- 3 spaces
+        # TODO: Does this need to be recursive?
         bullet = '   '
         style = 'empty'
         hangIndent = None
@@ -183,7 +183,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             else:
                 right = ''
             self.buf.append(tools.justify_inline(left, '', right))
-    
+
     def write_address_card(self, author):
         """ Writes a simple address card with no line breaks """
         if 'role' in author.attrib:
@@ -224,7 +224,8 @@ class RawTextRfcWriter(XmlRfcWriter):
                 self._write_line('Phone: ' + phone.text, indent=3, lb=False)
             fascimile = address.find('fascimile')
             if fascimile is not None and fascimile.text:
-                self._write_line('Fax:   ' + fascimile.text, indent=3, lb=False)
+                self._write_line('Fax:   ' + fascimile.text, indent=3, \
+                                 lb=False)
             email = address.find('email')
             if email is not None and email.text:
                 self._write_line('EMail: ' + email.text, indent=3, lb=False)
@@ -232,7 +233,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             if uri is not None and uri.text:
                 self._write_line('URI:   ' + uri.text, indent=3, lb=False)
         self._lb()
-    
+
     def write_reference_list(self, list):
         """ Writes a formatted list of <reference> elements """
         # Use very first reference's [bullet] length for indent amount
@@ -251,7 +252,7 @@ class RawTextRfcWriter(XmlRfcWriter):
                         refstring.append('and ')
                         refstring.append(author.attrib['surname'] + ', ' + \
                                          author.attrib['initials'] + '., ')
-                elif organization is not None and organization.text is not None:
+                elif organization is not None and organization.text:
                     # Use organization instead of name
                     refstring.append(organization.text + ', ')
             refstring.append('"' + ref.find('front/title').text + '", ')
@@ -266,7 +267,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             bullet = '[' + ref.attrib['anchor'] + ']  '
             self._write_par(''.join(refstring), indent=3, bullet=bullet, \
                            sub_indent=sub_indent)
-            
+
     def draw_table(self, table):
         headers = []
         lines = []
@@ -276,15 +277,15 @@ class RawTextRfcWriter(XmlRfcWriter):
                 headers.append(column.text)
             else:
                 headers.append('')
-        
+
         # Format headers to not exceed line width.  If it does exceed, the
         # algorithm takes the longest column header and splits it into another
         # line, breaking at the median space character.
-        
+
         # Draw header
         borderstring = ['+']
         for header in headers:
-            borderstring.append('-' * (len(header)+2))
+            borderstring.append('-' * (len(header) + 2))
             borderstring.append('+')
         lines.append(''.join(borderstring))
         headerstring = ['|']
@@ -292,7 +293,7 @@ class RawTextRfcWriter(XmlRfcWriter):
             headerstring.append(' ' + header + ' |')
         lines.append(''.join(headerstring))
         lines.append(''.join(borderstring))
-        
+
         # Draw Cells
         cellstring = ['|']
         for i, cell in enumerate(table.findall('c')):
@@ -300,16 +301,16 @@ class RawTextRfcWriter(XmlRfcWriter):
             celltext = ''
             if cell.text:
                 celltext = cell.text
-            cellstring.append(celltext.center(len(headers[column])+2))
+            cellstring.append(celltext.center(len(headers[column]) + 2))
             cellstring.append('|')
             if column == len(headers) - 1:
                 # End of line
                 lines.append(''.join(cellstring))
                 cellstring = ['|']
-            
+
         # Draw Bottom
         lines.append(''.join(borderstring))
-        
+
         # Finally, write the table to the buffer with proper alignment
         self._lb()
         self._write_raw('\n'.join(lines), align=align)
@@ -333,12 +334,13 @@ class RawTextRfcWriter(XmlRfcWriter):
                 if child.tail:
                     line.append(child.tail)
             # TODO: Handle iref
-            elif child.tag == 'iref': pass
+            elif child.tag == 'iref':
+                pass
             # TODO: Handle vspace
             elif child.tag == 'vspace':
                 if child.tail:
                     line.append(child.tail)
-        return ''.join(line)  
+        return ''.join(line)
 
     def add_to_toc(self, bullet, title, anchor=None):
         if bullet:
@@ -346,14 +348,14 @@ class RawTextRfcWriter(XmlRfcWriter):
             self.toc.append(toc_indent + bullet + ' ' + title)
         else:
             self.toc.append(title)
-    
+
     def post_processing(self):
         # Raw text, no post processing done here
         pass
 
     def write_to_file(self, filename):
         """ Writes the buffer to the specified file """
-        
+
         # Write buffer to file
         file = open(filename, 'w')
         for line_num, line in enumerate(self.buf):

@@ -6,7 +6,7 @@ import tools
 
 class PaginatedTextRfcWriter(RawTextRfcWriter):
     """ Writes to a text file, paginated with headers and footers """
-    
+
     def __init__(self, xmlrfc):
         RawTextRfcWriter.__init__(self, xmlrfc)
         self.header = ''
@@ -18,18 +18,18 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     def make_footer(self, page):
         return tools.justify_inline(self.left_footer, self.center_footer, \
                                     '[Page ' + str(page) + ']')
-        
+
     # Here we override some methods to mark line numbers for large sections.
-    # We'll store each marking as a hash of line_num: section_length.  This way 
-    # we can step through these markings during writing to preemptively 
+    # We'll store each marking as a hash of line_num: section_length.  This way
+    # we can step through these markings during writing to preemptively
     # construct appropriate page breaks.
     def _write_figure(self, figure):
         """ Override base writer to add a marking """
         begin = len(self.buf)
         XmlRfcWriter._write_figure(self, figure)
         end = len(self.buf)
-        self.section_marks[begin] = end-begin
-        
+        self.section_marks[begin] = end - begin
+
     def post_processing(self):
         """ Add paging information to a secondary buffer """
         # Construct a header
@@ -56,7 +56,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.left_footer = ''
         authors = self.r.findall('front/author')
         for i, author in enumerate(authors):
-            # Format: author1, author2 & author3 OR author1 & author2 OR author1
+            # Author1, author2 & author3 OR author1 & author2 OR author1
             if i < len(authors) - 2:
                 self.left_footer += author.attrib['surname'] + ', '
             elif i == len(authors) - 2:

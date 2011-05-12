@@ -7,9 +7,10 @@ from raw_txt import RawTextRfcWriter
 
 # HTML Specific Defaults that are not provided in XML document
 # TODO: This could possibly go in parser.py, as a few defaults already do.
-defaults =  {'doctype': '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">',
-             'style_title':  'Xml2Rfc (sans serif)',
+defaults = {'doctype': '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">',
+            'style_title': 'Xml2Rfc (sans serif)',
             }
+
 
 class HtmlRfcWriter(RawTextRfcWriter):
     """ Writes to an HTML with embedded CSS """
@@ -20,17 +21,17 @@ class HtmlRfcWriter(RawTextRfcWriter):
         self.html = E.html(lang=lang)
         self.css_document = css_document
         self.expanded_css = expanded_css
-        
+
         # Create head element, add style/metadata/etc information
         self.html.append(self._build_head())
-        
+
         # Create body element -- everything will be added to this
         self.body = E.body()
         self.html.append(self.body)
-        
+
     def _build_stylesheet(self):
         """ Returns either a <link> or <style> element for css data.
-        
+
             The element returned is dependent on the value of expanded_css
         """
         if self.expanded_css:
@@ -40,7 +41,7 @@ class HtmlRfcWriter(RawTextRfcWriter):
             element = E.link(rel='stylesheet', href=self.css_document)
         element.attrib['type'] = 'text/css'
         return element
-    
+
     def _build_head(self):
         """ Returns the constructed <head> element """
         head = E.head()
@@ -50,16 +51,16 @@ class HtmlRfcWriter(RawTextRfcWriter):
     # -----------------------------------------
     # Base writer interface methods to override
     # -----------------------------------------
-    
+
     def mark_toc(self):
         pass
-    
+
     def write_raw(self, text, align='left'):
         pass
-        
+
     def write_label(self, text, align='center'):
         pass
-    
+
     def write_title(self, title, docName=None):
         p = E.p(title)
         p.attrib['class'] = 'title'
@@ -69,7 +70,7 @@ class HtmlRfcWriter(RawTextRfcWriter):
             span.attrib['class'] = 'filename'
             p.append(span)
         self.body.append(p)
-        
+
     def write_heading(self, text, bullet=None, idstring=None, anchor=None):
         h1 = E.h1()
         if idstring:
@@ -103,7 +104,7 @@ class HtmlRfcWriter(RawTextRfcWriter):
 
     def write_list(self, list):
         pass
-    
+
     def write_top(self, left_header, right_header):
         """ Adds the header table """
         table = E.table()
@@ -125,23 +126,23 @@ class HtmlRfcWriter(RawTextRfcWriter):
             tbody.append(E.tr(td_left, td_right))
         table.append(tbody)
         self.body.append(table)
-    
+
     def write_address_card(self, author):
         pass
-    
+
     def write_reference_list(self, list):
         pass
-    
+
     def draw_table(self, table):
         pass
-    
+
     def expand_refs(self, element):
         """ Returns a <p> element with inline references expanded properly """
         return element.text
 
     def add_to_toc(self, bullet, title, anchor=None):
         pass
-    
+
     def write_to_file(self, filename):
         # Write the tree to the file
         file = open(filename, 'w')
