@@ -3,7 +3,7 @@ from lxml.builder import E
 import lxml.etree
 
 # Local libs
-from raw_txt import RawTextRfcWriter
+from base import XmlRfcWriter
 
 # HTML Specific Defaults that are not provided in XML document
 # TODO: This could possibly go in parser.py, as a few defaults already do.
@@ -12,12 +12,12 @@ defaults = {'doctype': '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">',
             }
 
 
-class HtmlRfcWriter(RawTextRfcWriter):
+class HtmlRfcWriter(XmlRfcWriter):
     """ Writes to an HTML with embedded CSS """
 
     def __init__(self, xmlrfc, css_document='templates/rfc.css',
                  expanded_css=True, lang='en'):
-        RawTextRfcWriter.__init__(self, xmlrfc)
+        XmlRfcWriter.__init__(self, xmlrfc)
         self.html = E.html(lang=lang)
         self.css_document = css_document
         self.expanded_css = expanded_css
@@ -197,6 +197,14 @@ class HtmlRfcWriter(RawTextRfcWriter):
         return element.text
 
     def add_to_toc(self, bullet, title, anchor=None):
+        pass
+    
+    def pre_processing(self):
+        """ Handle any metadata """
+        pass
+    
+    def post_processing(self):
+        # Nothing to do here
         pass
 
     def write_to_file(self, filename):
