@@ -370,6 +370,42 @@ class RawTextRfcWriter(XmlRfcWriter):
             self.write_line(line, indent=3, lb=False, buf=tmpbuf)
         return tmpbuf
 
+    def prepare_top_left(self):
+        """ Returns a list of lines for the top left header """
+        list = [self.r.attrib['trad_header']]
+        if 'number' in self.r.attrib:
+            list.append('Request for Comments: ' + self.r.attrib['number'])
+        else:
+            # No RFC number -- assume internet draft
+            list.append('Internet-Draft')
+        if 'updates' in self.r.attrib:
+            if self.r.attrib['updates'] != '':
+                list.append(self.r.attrib['updates'])
+        if 'obsoletes' in self.r.attrib:
+            if self.r.attrib['obsoletes'] != '':
+                list.append(self.r.attrib['obsoletes'])
+        if 'category' in self.r.attrib:
+            list.append('Category: ' + self.r.attrib['category'])
+        return list
+            
+    def prepare_top_right(self):
+        """ Returns a list of lines for the top right header """
+        list = []
+        for author in self.r.findall('front/author'):
+            list.append(author.attrib['initials'] + ' ' + \
+                            author.attrib['surname'])
+            organization = author.find('organization')
+            if organization is not None:
+                if 'abbrev' in organization.attrib:
+                    list.append(organization.attrib['abbrev'])
+                else:  
+                    list.append(organization.text)
+        date = self.r.find('front/date')
+        month = ''
+        if 'month' in date.attrib:
+            month = date.attrib['month']
+        list.append(month + ' ' + date.attrib['year'])
+
     def write_buffer(self):
         """ Internal method that writes the entire RFC tree to a buffer
 
@@ -377,37 +413,11 @@ class RawTextRfcWriter(XmlRfcWriter):
             in self.write(), which is the public method to be called.
         """
         # Prepare front page left heading
-        fp_left = [self.r.attrib['trad_header']]
-        if 'number' in self.r.attrib:
-            fp_left.append('Request for Comments: ' + self.r.attrib['number'])
-        else:
-            # No RFC number -- assume internet draft
-            fp_left.append('Internet-Draft')
-        if 'updates' in self.r.attrib:
-            if self.r.attrib['updates'] != '':
-                fp_left.append(self.r.attrib['updates'])
-        if 'obsoletes' in self.r.attrib:
-            if self.r.attrib['obsoletes'] != '':
-                fp_left.append(self.r.attrib['obsoletes'])
-        if 'category' in self.r.attrib:
-            fp_left.append('Category: ' + self.r.attrib['category'])
+        fp_left = self.prepare_top_left
 
         # Prepare front page right heading
-        fp_right = []
-        for author in self.r.findall('front/author'):
-            fp_right.append(author.attrib['initials'] + ' ' + \
-                            author.attrib['surname'])
-            organization = author.find('organization')
-            if organization is not None:
-                if 'abbrev' in organization.attrib:
-                    fp_right.append(organization.attrib['abbrev'])
-                else:  
-                    fp_right.append(organization.text)
-        date = self.r.find('front/date')
-        month = ''
-        if 'month' in date.attrib:
-            month = date.attrib['month']
-        fp_right.append(month + ' ' + date.attrib['year'])
+        fp_right = self.prepare_top_right()
+        
 
         # Front page heading
         for i in range(max(len(fp_left), len(fp_right))):
