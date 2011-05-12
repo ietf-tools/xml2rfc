@@ -83,7 +83,7 @@ class XmlRfcWriter:
         if figure.attrib['title'] != '':
             title = ': ' + figure.attrib['title']
         self.write_label('Figure ' + str(self.figure_count) + title, \
-                         type='figure', align='center')
+                         type='figure')
 
     def _write_table(self, table):
         """ Writes <texttable> elements """
@@ -113,7 +113,7 @@ class XmlRfcWriter:
         if table.attrib['title'] != '':
             title = ': ' + table.attrib['title']
         self.write_label('Table ' + str(self.table_count) + title, \
-                         type='table', align='center')
+                         type='table')
 
     def _write_t_rec(self, t, indent=3, sub_indent=0, bullet='', \
                      idstring=None):
@@ -277,7 +277,7 @@ class XmlRfcWriter:
     def write_raw(self, text, align='left'):
         raise NotImplementedError('Must override!')
 
-    def write_label(self, text, type='figure', align='center'):
+    def write_label(self, text, type='figure'):
         raise NotImplementedError('Must override!')
 
     def write_title(self, title, docName=None):
