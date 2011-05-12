@@ -47,13 +47,19 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         else:
             self._write_line(text)
 
+    def write_paragraph(self, text, align='left', idstring=None):
+        """ Write a generic paragraph """
+        # TODO: Handle alignment
+        self._write_par(text, indent=0, align='left')
+
     def write_top(self, left_header, right_header):
         """ Writes the document header """
         # No fill for top section
-        self._write_line('.nf')  # Disable fill
+        self._write_line('.nf')
         self._write_line('.in 0')
         PaginatedTextRfcWriter.write_top(self, left_header, right_header)
-        self._write_line('.fi')  # Enable fill
+        self._write_line('.fi')
+        self._write_line('.in 3')
 
     def pre_processing(self):
         """ Inserts an nroff header into the buffer """
