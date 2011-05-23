@@ -1,19 +1,96 @@
 import lxml.etree
 import re
+import urlparse
+import urllib
+import os
+import sys
+import xml2rfc
+
+
+__all__ = ['XmlRfcParser', 'XmlRfc']
+
+
+class CachingResolver(lxml.etree.Resolver):
+    def __init__(self, verbose=False, quiet=False, write_out=sys.stdout, \
+                 write_err=sys.stderr):
+        self.verbose = verbose
+        self.quiet = quiet
+        self.write_out = write_out
+        self.write_err = write_err
+        if not verbose and not self.quiet:
+            self.write_out.write('Loading resources...')
+            self.write_out.flush()
+
+    def resolve(self, request_url, public_id, context):
+        cache_dir = os.path.expanduser('~/.cache/xml2rfc')
+        if not os.path.exists(cache_dir):
+            if self.verbose:
+                self.write_out.write('Creating cache directory at ' + \
+                                     cache_dir + '\r\n')
+            os.makedirs(cache_dir)
+        template_dir = os.path.join(os.path.dirname(xml2rfc.__file__), \
+                                    'templates')
+        url = urlparse.urlparse(request_url)
+        filename = os.path.basename(url.path)
+        if filename.endswith('.dtd'):
+            # Found a dtd request, load from templates directory
+            resource_path = os.path.join(template_dir, filename)
+        elif url.netloc:
+            # Network entity, load from cache, or create if necessary
+            resource_path = os.path.join(cache_dir, filename)
+            if not os.path.exists(resource_path):
+                if self.verbose:
+                    self.write_out.write('Creating cache for ' + request_url \
+                                         + '\r\n')
+                urllib.urlretrieve(request_url, resource_path)
+        else:
+            # Not dtd or network entity, use the absolute path was given
+            resource_path = url.path
+        if self.verbose:
+            self.write_out.write('Loading resource... ' + resource_path +
+                                 '\r\n')
+        elif not self.quiet:
+            self.write_out.write('.')
+            self.write_out.flush()
+        return self.resolve_filename(resource_path, context)
 
 class XmlRfcParser:
     """ XML parser with callbacks to construct an RFC tree """
+    def __init__(self, filename, verbose=False, quiet=False, \
+                 write_out=sys.stdout, write_err=sys.stderr):
+        self.verbose = verbose
+        self.quiet = quiet
+        self.source = filename
+        self.write_out = write_out
+        self.write_err = write_err
 
-    def parse(self, source, prepare=True):
-        """ Parses the XML file <source> and returns an XmlRfc instance """
+    def parse(self, prepare=True):
+        """ Parses the source XML file and returns an XmlRfc instance """
+
         # Get a parser object
         parser = lxml.etree.XMLParser(dtd_validation=True, \
                                       no_network=False, \
                                       remove_comments=True, \
                                       remove_blank_text=True)
 
+        # Add our custom resolver
+        parser.resolvers.add(CachingResolver(verbose=self.verbose, \
+                                             quiet=self.quiet, \
+                                             write_out=self.write_out, \
+                                             write_err=self.write_err))
+
         # Parse the XML file into a tree and create an rfc instance
-        tree = lxml.etree.parse(source, parser)
+        # Bubble up any validation or syntax errors. They will need to be
+        # handled in the CLI script or GUI.
+        try:
+            tree = lxml.etree.parse(self.source, parser)
+        except lxml.etree.XMLSyntaxError, error:
+            raise error
+
+        if not self.verbose and not self.quiet:
+            # Add a newline since the resolver never added one
+            self.write_out.write('\r\n')
+
         xmlrfc = XmlRfc(tree)
 
         # Finally, do any extra formatting on the RFC before returning
@@ -30,13 +107,14 @@ class XmlRfc:
 
         Accessing the rfc tree is done by getting the root node from getroot()
     """
+
     def __init__(self, tree):
         self.tree = tree
 
     def getroot(self):
         """ Wrapper method """
         return self.tree.getroot()
-    
+
     def prepare(self):
         """ Prepare the RFC document for output.
 
@@ -62,14 +140,10 @@ class XmlRfc:
 
         # Set some document-independent defaults
         root.attrib['trad_header'] = 'Network Working Group'
-        if 'updates' in root.attrib:
-            if root.attrib['updates'] != '':
-                root.attrib['updates'] = 'Updates: ' + \
-                                                root.attrib['updates']
-        if 'obsoletes' in root.attrib:
-            if root.attrib['obsoletes'] != '':
-                root.attrib['obsoletes'] = 'Obsoletes: ' + \
-                                                root.attrib['obsoletes']
+        if 'updates' in root.attrib and root.attrib['updates']:
+            root.attrib['updates'] = 'Updates: ' + root.attrib['updates']
+        if 'obsoletes' in root.attrib and root.attrib['obsoletes']:
+            root.attrib['obsoletes'] = 'Obsoletes: ' + root.attrib['obsoletes']
         if 'category' in root.attrib:
             if root.attrib['category'] == 'std':
                 root.attrib['category'] = 'Standards-Track'
@@ -107,66 +181,25 @@ class XmlRfc:
         'memo does not specify an Internet standard of any kind. ' \
         'Distribution of this memo is unlimited.'
 
+        year = root.find('front/date').attrib.get('year', '')
         root.attrib['copyright'] = 'Copyright (C) The Internet Society (%s).'\
-        ' All Rights Reserved.' % root.find('front/date').attrib['year']
+        ' All Rights Reserved.' % year
 
-
-class XmlRfcParser:
-    """ XML parser with callbacks to construct an RFC tree """
-    xmlrfc = None
-    curr_node = None
-    stack = None
-    tail_switch = None
-
-    def __init__(self, xmlrfc):
-        self.xmlrfc = xmlrfc
-        self.curr_node = self.xmlrfc
-        self.stack = []
-        self.tail_switch = False
-
-    def parse(self, source):
-        # Get a parser object
-        parser = lxml.etree.XMLParser(dtd_validation=True, no_network=False, \
-                                      target=self)
-
-        # Parse the XML file -- RFC tree is constructed through callbacks
-        lxml.etree.parse(source, parser)
-
-        # Finally, do any extra formatting on the RFC tree
-        self.xmlrfc.prepare()
-
-    def start(self, tag, attrib):
-        # Start of an element -- flip switch so any data goes in node.text
-        self.tail_switch = False
-        if tag == 'rfc':
-            # Root node -- don't push to stack, this way we avoid using ['rfc']
-            self.curr_node = self.xmlrfc
-        else:
-            # Make a new node and push previous to stack
-            self.stack.append(self.curr_node)
-            self.curr_node = self.curr_node.insert(tag)
-        # Add attribs, if any
-        if attrib:
-            self.curr_node.attribs = attrib
-
-    def end(self, tag):
-        # End of an element -- flip switch so any data goes in node.tail
-        self.tail_switch = True
-        # Pop node stack
-        if len(self.stack) > 0:
-            self.curr_node = self.stack.pop()
-
-    def data(self, data):
-        # Strip newlines+whitespace
-        data = re.sub('\n\s*', ' ', data)
-        # Set data depending on if we're in the head or tail section
-        if self.tail_switch:
-            self.curr_node.tail = data
-        else:
-            self.curr_node.text = data
-
-    def comment(self, comment):
-        pass  # No need to handle comments
-
-    def close(self):
-        return "XML file closed"
+    def replaceUnicode(self):
+        """ Traverses the RFC tree and replaces unicode characters with the
+            proper equivalents specified in rfc2629-xhtml.ent.  Writers should
+            call this method if the entire RFC document needs to be ascii
+            formattable
+        """
+        root = self.getroot()
+        for element in root.iter():
+            if element.text:
+                try:
+                    element.text = str(element.text)
+                except UnicodeEncodeError:
+                    element.text = xml2rfc.utils.replace_unicode(element.text)
+            if element.tail:
+                try:
+                    element.tail = str(element.tail)
+                except UnicodeEncodeError:
+                    element.tail = xml2rfc.utils.replace_unicode(element.tail)
