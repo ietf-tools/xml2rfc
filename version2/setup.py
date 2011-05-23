@@ -1,18 +1,15 @@
 #!/usr/bin/env python
 
-from setuptools import setup
+from distutils.core import setup
+import xml2rfc
 
 setup(name='xml2rfc',
-    version='0.2',
-    description='Validate and convert XML RFC documents to various output ' \
-                  'formats',
-    author='Concentric Sky',
+    version='0.0.1',
+    description='',
+    author='',
     author_email='',
     url='',
     scripts=['scripts/xml2rfc'],
-    packages=['xml2rfc', 'xml2rfc/writers'],
-    package_data={'xml2rfc': [
-                                'templates/*'
-                                ]},
-    install_requires=['lxml>=2.3'],
+    packages=['xml2rfc'],
+    package_data={}
 )

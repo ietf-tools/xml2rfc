@@ -1,21 +1,12 @@
 # Python libs
 import string
-import datetime
-import sys
 
 
-class BaseRfcWriter:
+class XmlRfcWriter:
     """ Base class for all writers """
 
-    def __init__(self, xmlrfc, quiet=False, verbose=False, \
-                 write_out=sys.stdout, write_err=sys.stderr):
-        self.quiet = quiet
-        self.verbose = verbose
-        self.write_out = write_out
-        self.write_err = write_err
-
+    def __init__(self, xmlrfc):
         # We will refer to the XmlRfc document root as 'r'
-        self.xmlrfc = xmlrfc
         self.r = xmlrfc.getroot()
 
         # Document counters
@@ -24,90 +15,73 @@ class BaseRfcWriter:
         self.table_count = 0
 
     def _prepare_top_left(self):
-        """ Returns a lines of lines for the top left header """
-        lines = [self.r.attrib['trad_header']]
-        rfcnumber = self.r.attrib.get('number')
-        expire_string = None
-        if rfcnumber:
-            lines.append('Request for Comments: ' + rfcnumber)
+        """ Returns a list of lines for the top left header """
+        list = [self.r.attrib['trad_header']]
+        if 'number' in self.r.attrib:
+            list.append('Request for Comments: ' + self.r.attrib['number'])
         else:
             # No RFC number -- assume internet draft
-            lines.append('Internet-Draft')
-            # Create the expiration date as published date + six months
-            date = self.r.find('front/date')
-            month = date.attrib.get('month', '')
-            year = date.attrib.get('year', '')
-            if month and year:
-                try:
-                    start_date = datetime.datetime.strptime(month + year, \
-                                                            '%B%Y')
-                    expire_date = start_date + datetime.timedelta(6 * 30 + 15)
-                    expire_string = 'Expires: ' + expire_date.strftime('%B %Y')
-                except ValueError:
-                    pass
-
-        updates = self.r.attrib.get('updates')
-        if updates:
-            lines.append(updates)
-        obsoletes = self.r.attrib.get('obsoletes')
-        if obsoletes:
-            lines.append(obsoletes)
-        category = self.r.attrib.get('category')
-        if category:
-            lines.append('Category: ' + category)
-        if expire_string:
-            lines.append(expire_string)
-        return lines
+            list.append('Internet-Draft')
+        if 'updates' in self.r.attrib:
+            if self.r.attrib['updates'] != '':
+                list.append(self.r.attrib['updates'])
+        if 'obsoletes' in self.r.attrib:
+            if self.r.attrib['obsoletes'] != '':
+                list.append(self.r.attrib['obsoletes'])
+        if 'category' in self.r.attrib:
+            list.append('Category: ' + self.r.attrib['category'])
+        return list
 
     def _prepare_top_right(self):
         """ Returns a list of lines for the top right header """
-        lines = []
+        list = []
         for author in self.r.findall('front/author'):
-            lines.append(author.attrib['initials'] + ' ' + \
+            list.append(author.attrib['initials'] + ' ' + \
                             author.attrib['surname'])
             organization = author.find('organization')
             if organization is not None:
-                abbrev = organization.attrib.get('abbrev')
-                if abbrev:
-                    lines.append(abbrev)
-                elif organization.text:
-                    lines.append(organization.text)
+                if 'abbrev' in organization.attrib:
+                    list.append(organization.attrib['abbrev'])
+                else:
+                    list.append(organization.text)
         date = self.r.find('front/date')
-        month = date.attrib.get('month', '')
-        year = date.attrib.get('year', '')
-        lines.append(month + ' ' + year)
-        return lines
+        month = ''
+        if 'month' in date.attrib:
+            month = date.attrib['month']
+        list.append(month + ' ' + date.attrib['year'])
+        return list
 
     def _write_figure(self, figure):
         """ Writes <figure> elements """
-        align = figure.attrib.get('align', 'left')
+        align = figure.attrib['align']
         self.figure_count += 1
 
         # Insert anchor(s) into document
         self.insert_anchor('rfc.figure.' + str(self.figure_count))
-        anchor = figure.attrib.get('anchor')
-        if anchor:
-            self.insert_anchor(anchor)
+        if 'anchor' in figure.attrib:
+            self.insert_anchor(figure.attrib['anchor'])
 
         # Write preamble
         preamble = figure.find('preamble')
         if preamble is not None:
-            self.write_t_rec(preamble, align=align)
+            self.write_paragraph(self.expand_refs(preamble), align=align)
 
         # Write figure
         artwork = figure.find('artwork')
-        artwork_align = artwork.attrib.get('align', align)  # Default to figure
+        artwork_align = align
+        if 'align' in artwork.attrib:
+            artwork_align = artwork.attrib['align']
         self.write_raw(figure.find('artwork').text, align=artwork_align)
 
         # Write postamble
         postamble = figure.find('postamble')
         if postamble is not None:
-            self.write_t_rec(postamble, align=align)
+            self.write_paragraph(self.expand_refs(postamble), align=align)
 
         # Write label
-        title = figure.attrib.get('title', '')
-        if title:
-            title = ': ' + title
+        title = ''
+        if figure.attrib['title'] != '':
+            title = ': ' + figure.attrib['title']
         self.write_label('Figure ' + str(self.figure_count) + title, \
                          type='figure')
 
@@ -118,14 +92,13 @@ class BaseRfcWriter:
 
         # Insert anchor(s) into document
         self.insert_anchor('rfc.table.' + str(self.table_count))
-        anchor = table.attrib.get('anchor')
-        if anchor:
-            self.insert_anchor(anchor)
+        if 'anchor' in table.attrib:
+            self.insert_anchor(table.attrib['anchor'])
 
         # Write preamble
         preamble = table.find('preamble')
         if preamble is not None:
-            self.write_t_rec(preamble, align=align)
+            self.write_paragraph(self.expand_refs(preamble), align=align)
 
         # Write table
         self.draw_table(table, table_num=self.table_count)
@@ -133,30 +106,48 @@ class BaseRfcWriter:
         # Write postamble
         postamble = table.find('postamble')
         if postamble is not None:
-            self.write_t_rec(postamble, align=align)
+            self.write_paragraph(self.expand_refs(postamble), align=align)
 
         # Write label
-        title = table.attrib.get('title', '')
-        if title:
-            title = ': ' + title
+        title = ''
+        if table.attrib['title'] != '':
+            title = ': ' + table.attrib['title']
         self.write_label('Table ' + str(self.table_count) + title, \
                          type='table')
 
-    def _write_section_rec(self, section, indexstring, appendix=False, \
-                           level=0):
+    def _write_t_rec(self, t, indent=3, sub_indent=0, bullet='', \
+                     idstring=None):
+        """ Writes a <t> element """
+
+        # Write the actual text
+        self.write_paragraph(self.expand_refs(t), idstring=idstring)
+
+        # Check for child elements
+        for element in t:
+            if element.tag == 'list':
+                self.write_list(element)
+                if element.tail:
+                    self.write_paragraph(element.tail)
+            elif element.tag == 'figure':
+                self._write_figure(element)
+            elif element.tag == 'texttable':
+                self._write_table(element)
+
+    def _write_section_rec(self, section, indexstring, appendix=False, level=0):
         """ Recursively writes <section> elements """
-        anchor = section.attrib.get('anchor', None)
+        anchor = None
+        if 'anchor' in section.attrib:
+            anchor = section.attrib['anchor']
         if indexstring:
-            idstring = 'rfc.section.' + indexstring
             # Prepend a neat index string to the title
             self.write_heading(section.attrib['title'], \
-                               bullet=indexstring + '.', idstring=idstring, \
+                               bullet=indexstring + '.', \
+                               idstring='rfc.section.' + indexstring, \
                                anchor=anchor, level=level)
             # Write to TOC as well
-            include_toc = section.attrib.get('toc', 'include')
-            if include_toc != 'exclude':
+            if section.attrib['toc'] != 'exclude':
                 self.add_to_toc(indexstring, section.attrib['title'], \
-                                idstring=idstring, anchor=anchor)
+                                anchor=anchor)
         else:
             # Must be <middle> or <back> element -- no title or index.
             indexstring = ''
@@ -167,7 +158,7 @@ class BaseRfcWriter:
             if element.tag == 't':
                 idstring = 'rfc.section.' + indexstring + '.p.' + \
                             str(paragraph_id)
-                self.write_t_rec(element, idstring=idstring)
+                self._write_t_rec(element, idstring=idstring)
                 paragraph_id += 1
             elif element.tag == 'figure':
                 self._write_figure(element)
@@ -206,7 +197,8 @@ class BaseRfcWriter:
 
         # Title & Optional docname
         title = self.r.find('front/title').text
-        docName = self.r.attrib.get('docName', None)
+        if 'docName' in self.r.attrib:
+            docName = self.r.attrib['docName']
         self.write_title(title, docName)
 
         # Abstract
@@ -214,24 +206,18 @@ class BaseRfcWriter:
         if abstract is not None:
             self.write_heading('Abstract', idstring='rfc.abstract')
             for t in abstract.findall('t'):
-                self.write_t_rec(t)
-
-        # Any notes
-        for note in self.r.findall('front/note'):
-            self.write_heading(note.attrib.get('title', 'Note'))
-            for t in note.findall('t'):
-                self.write_t_rec(t)
+                self._write_t_rec(t)
 
         # Status
         self.write_heading('Status of this Memo', idstring='rfc.status')
-        self.write_paragraph(self.r.attrib.get('status', ''))
+        self.write_paragraph(self.r.attrib['status'])
 
         # Copyright
         self.write_heading('Copyright Notice', idstring='rfc.copyrightnotice')
-        self.write_paragraph(self.r.attrib.get('copyright', ''))
+        self.write_paragraph(self.r.attrib['copyright'])
 
-        # Insert the table of contents marker at this position
-        self.insert_toc()
+        # Store a marker for table of contents
+        self.mark_toc()
 
         # Middle sections
         self._write_section_rec(self.r.find('middle'), None)
@@ -248,12 +234,12 @@ class BaseRfcWriter:
             for index, reference_list in enumerate(references):
                 ref_newindexstring = ref_indexstring + '.' + str(index + 1)
                 ref_title = reference_list.attrib['title']
-                self.write_heading(ref_title, bullet=ref_newindexstring + '.',\
-                                   idstring='rfc.section.' + \
-                                   ref_newindexstring, level=2)
+                self.write_heading(ref_title, bullet=ref_newindexstring + '.', \
+                                   idstring='rfc.section.' + ref_newindexstring, \
+                                   level=2)
                 self.add_to_toc(ref_newindexstring, ref_title)
                 self.write_reference_list(reference_list)
-        elif len(references) == 1:
+        else:
             ref_title = references[0].attrib['title']
             self.write_heading(ref_title, bullet=ref_indexstring + '.', \
                                idstring='rfc.section.' + ref_indexstring)
@@ -281,84 +267,58 @@ class BaseRfcWriter:
         # Finished buffering, write to file
         self.write_to_file(filename)
 
-        if not self.quiet:
-            self.write_out.write('Created file ' + filename + '\r\n')
-
     # -----------------------------------------
     # Base writer interface methods to override
     # -----------------------------------------
 
-    def insert_toc(self):
-        """ Marks the current buffer position to insert ToC at """
-        raise NotImplementedError('insert_toc() needs to be overridden')
+    def mark_toc(self):
+        raise NotImplementedError('Must override!')
 
     def write_raw(self, text, align='left'):
-        """ Writes a block of text that preserves all whitespace """
-        raise NotImplementedError('write_raw() needs to be overridden')
+        raise NotImplementedError('Must override!')
 
     def write_label(self, text, type='figure'):
-        """ Writes a table or figure label """
-        raise NotImplementedError('write_label() needs to be overridden')
+        raise NotImplementedError('Must override!')
 
     def write_title(self, title, docName=None):
-        """ Writes the document title """
-        raise NotImplementedError('write_title() needs to be overridden')
+        raise NotImplementedError('Must override!')
 
     def write_heading(self, text, bullet=None, idstring=None, anchor=None, \
                       level=1):
-        """ Writes a section heading """
-        raise NotImplementedError('write_heading() needs to be overridden')
+        raise NotImplementedError('Must override!')
 
     def write_paragraph(self, text, align='left', idstring=None):
-        """ Writes a paragraph of text """
-        raise NotImplementedError('write_paragraph() needs to be'\
-                                  ' overridden')
+        raise NotImplementedError('Must override!')
 
-    def write_t_rec(self, t, align='left', idstring=None):
-        """ Recursively writes <t> elements """
-        raise NotImplementedError('write_t_rec() needs to be overridden')
+    def write_list(self, list):
+        raise NotImplementedError('Must override!')
 
     def write_top(self, left_header, right_header):
-        """ Writes the main document header
-
-            Takes two list arguments, one for each margin, and combines them
-            so that they exist on the same lines of text
-        """
-        raise NotImplementedError('write_top() needs to be overridden')
+        raise NotImplementedError('Must override!')
 
     def write_address_card(self, author):
-        """ Writes the address information for an <author> element """
-        raise NotImplementedError('write_address_card() needs to be ' \
-                                  'overridden')
+        raise NotImplementedError('Must override!')
 
     def write_reference_list(self, list):
-        """ Writes a <references> element """
-        raise NotImplementedError('write_reference_list() needs to be ' \
-                                  'overridden')
+        raise NotImplementedError('Must override!')
 
     def insert_anchor(self, text):
-        """ Inserts a document anchor for internal links """
-        raise NotImplementedError('insert_anchor() needs to be overridden')
+        raise NotImplementedError('Must override!')
 
     def draw_table(self, table, table_num=None):
-        """ Draws a formatted table from a <texttable> element
+        raise NotImplementedError('Must override!')
 
-            For HTML nothing is really 'drawn' since we can use <table>
-        """
-        raise NotImplementedError('draw_table() needs to be overridden')
+    def expand_refs(self, element):
+        raise NotImplementedError('Must override!')
 
-    def add_to_toc(self, bullet, title, idstring=None, anchor=None):
-        """ Adds a section to the table of contents """
-        raise NotImplementedError('add_to_toc() needs to be overridden')
+    def add_to_toc(self, bullet, title, anchor=None):
+        raise NotImplementedError('Must override!')
 
     def pre_processing(self):
-        """ First method that is called before traversing the XML RFC tree """
-        raise NotImplementedError('pre_processing() needs to be overridden')
+        raise NotImplementedError('Must override!')
 
     def post_processing(self):
-        """ Last method that is called after traversing the XML RFC tree """
-        raise NotImplementedError('post_processing() needs to be overridden')
+        raise NotImplementedError('Must override!')
 
     def write_to_file(self, filename):
-        """ Writes the finished buffer to a file """
-        raise NotImplementedError('write_to_file() needs to be overridden')
+        raise NotImplementedError('Must override!')
