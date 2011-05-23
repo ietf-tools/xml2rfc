@@ -1,5 +1,9 @@
-from base import XmlRfcWriter
-from raw_txt import RawTextRfcWriter
-from paginated_txt import PaginatedTextRfcWriter
-from html import HtmlRfcWriter
-from nroff import NroffRfcWriter
+
+from xml2rfc.writers.base import BaseRfcWriter
+from xml2rfc.writers.raw_txt import RawTextRfcWriter
+from xml2rfc.writers.paginated_txt import PaginatedTextRfcWriter
+from xml2rfc.writers.html import HtmlRfcWriter
+from xml2rfc.writers.nroff import NroffRfcWriter
+
+__all__ = ['BaseRfcWriter', 'RawTextRfcWriter', 'PaginatedTextRfcWriter', 
+           'HtmlRfcWriter', 'NroffRfcWriter']

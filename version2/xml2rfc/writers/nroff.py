@@ -1,28 +1,28 @@
 # Local libs
-from paginated_txt import PaginatedTextRfcWriter
-from raw_txt import RawTextRfcWriter
-
-default_header = ['.pl 10.0i',      # Page length
-                  '.po 0',          # Page offset
-                  '.ll 7.2i',       # Line length
-                  '.lt 7.2i',       # Title length
-                  '.nr LL 7.2i',    # Printer line length
-                  '.nr LT 7.2i',    # Printer title length
-                  '.hy 0',          # Disable hyphenation
-                  '.ad l',          # Left margin adjustment only
-                  ]
+from xml2rfc.writers.paginated_txt import PaginatedTextRfcWriter
+from xml2rfc.writers.raw_txt import RawTextRfcWriter
 
 
 class NroffRfcWriter(PaginatedTextRfcWriter):
     """ Writes to an nroff file """
 
-    def __init__(self, xmlrfc):
-        PaginatedTextRfcWriter.__init__(self, xmlrfc)
+    default_header = ['.pl 10.0i',      # Page length
+                      '.po 0',          # Page offset
+                      '.ll 7.2i',       # Line length
+                      '.lt 7.2i',       # Title length
+                      '.nr LL 7.2i',    # Printer line length
+                      '.nr LT 7.2i',    # Printer title length
+                      '.hy 0',          # Disable hyphenation
+                      '.ad l',          # Left margin adjustment only
+                      ]
+
+    def __init__(self, xmlrfc, **kwargs):
+        PaginatedTextRfcWriter.__init__(self, xmlrfc, **kwargs)
 
     # ---------------------------------------------------------
     # PaginatedTextRfcWriter overrides
     # ---------------------------------------------------------
-    
+
     def write_label(self, text, type='figure'):
         """ Writes a label for a table or figure """
         self._write_line('.ce', lb=True)
@@ -38,7 +38,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         else:
             self._write_line('.ce 1')
             self._write_line(text)
-            
+
     def write_heading(self, text, bullet=None, idstring=None, anchor=None, \
                       level=1):
         self._write_line('.ti 0', lb=True)
@@ -47,10 +47,18 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         else:
             self._write_line(text)
 
+    def write_t_rec(self, t, indent=3, sub_indent=0, bullet='', \
+                    align='left', idstring=None):
+        # Write with no indentation -- nroff commands are used instead
+        self._write_line('.in ' + str(indent))
+        PaginatedTextRfcWriter.write_t_rec(self, t, indent=0, sub_indent=0, \
+                                           bullet=bullet, align=align, \
+                                           idstring=idstring)
+
     def write_paragraph(self, text, align='left', idstring=None):
-        """ Write a generic paragraph """
-        # TODO: Handle alignment
-        self._write_par(text, indent=0, align='left')
+        # Write with no indentation -- nroff commands are used instead
+        self._write_line('.in 3')
+        self._write_par(text, indent=0, align='left', lb=True)
 
     def write_top(self, left_header, right_header):
         """ Writes the document header """
@@ -59,7 +67,16 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self._write_line('.in 0')
         PaginatedTextRfcWriter.write_top(self, left_header, right_header)
         self._write_line('.fi')
-        self._write_line('.in 3')
+
+    def write_raw(self, text, align='left'):
+        self._write_line('.nf')
+        PaginatedTextRfcWriter.write_raw(self, text, align=align)
+        self._write_line('.fi')
+
+    def draw_table(self, table, table_num=None):
+        self._write_line('.nf')
+        PaginatedTextRfcWriter.draw_table(self, table, table_num=table_num)
+        self._write_line('.fi')
 
     def pre_processing(self):
         """ Inserts an nroff header into the buffer """
@@ -68,7 +85,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         PaginatedTextRfcWriter.pre_processing(self)
 
         # Insert the standard nroff settings
-        self.buf.extend(default_header)
+        self.buf.extend(NroffRfcWriter.default_header)
 
         # Insert the RFC header and footer information
         self._write_line('.ds LH ' + self.left_header)

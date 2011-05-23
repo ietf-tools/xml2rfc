@@ -1,14 +1,14 @@
 # Local libs
-from raw_txt import RawTextRfcWriter
-from base import XmlRfcWriter
-import tools
+from xml2rfc.writers.raw_txt import RawTextRfcWriter
+from xml2rfc.writers.base import BaseRfcWriter
+import xml2rfc.utils
 
 
 class PaginatedTextRfcWriter(RawTextRfcWriter):
     """ Writes to a text file, paginated with headers and footers """
 
-    def __init__(self, xmlrfc):
-        RawTextRfcWriter.__init__(self, xmlrfc)
+    def __init__(self, xmlrfc, **kwargs):
+        RawTextRfcWriter.__init__(self, xmlrfc, **kwargs)
         self.left_header = ''
         self.center_header = ''
         self.right_header = ''
@@ -18,8 +18,9 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.paged_buf = []
 
     def make_footer(self, page):
-        return tools.justify_inline(self.left_footer, self.center_footer, \
-                                    '[Page ' + str(page) + ']')
+        return xml2rfc.utils.justify_inline(self.left_footer, \
+                                            self.center_footer, \
+                                            '[Page ' + str(page) + ']')
 
     # Here we override some methods to mark line numbers for large sections.
     # We'll store each marking as a hash of line_num: section_length.  This way
@@ -28,12 +29,13 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     def _write_figure(self, figure):
         """ Override base writer to add a marking """
         begin = len(self.buf)
-        XmlRfcWriter._write_figure(self, figure)
+        BaseRfcWriter._write_figure(self, figure)
         end = len(self.buf)
         self.section_marks[begin] = end - begin
 
     def pre_processing(self):
         """ Prepares the header and footer information """
+        RawTextRfcWriter.pre_processing(self)
 
         if 'number' in self.r.attrib:
             self.left_header = self.r.attrib['number']
@@ -41,32 +43,30 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             # No RFC number -- assume internet draft
             self.left_header = 'Internet-Draft'
         title = self.r.find('front/title')
-        if 'abbrev' in title.attrib:
-            self.center_header = title.attrib['abbrev']
-        else:
-            # No abbreviated title -- assume original title fits
-            self.center_header = title.text
+        self.center_header = title.attrib.get('abbrev', title.text)
         date = self.r.find('front/date')
-        if 'month' in date.attrib:
-            self.right_header = date.attrib['month'] + ' '
-        self.right_header += date.attrib['year']
+        month = date.attrib.get('month', '')
+        year = date.attrib.get('year', '')
+        self.right_header = month + ' ' + year
         authors = self.r.findall('front/author')
         for i, author in enumerate(authors):
             # Author1, author2 & author3 OR author1 & author2 OR author1
+            surname = author.attrib.get('surname', '(surname)')
             if i < len(authors) - 2:
-                self.left_footer += author.attrib['surname'] + ', '
+                self.left_footer += surname + ', '
             elif i == len(authors) - 2:
-                self.left_footer += author.attrib['surname'] + ' & '
+                self.left_footer += surname + ' & '
             else:
-                self.left_footer += author.attrib['surname']
-        self.center_footer = self.r.attrib['category']
+                self.left_footer += surname
+        self.center_footer = self.r.attrib.get('category', '(Category)')
 
     def post_processing(self):
         """ Add paging information to a secondary buffer """
 
         # Construct header
-        header = tools.justify_inline(self.left_header, self.center_header, \
-                                      self.right_header)
+        header = xml2rfc.utils.justify_inline(self.left_header, \
+                                              self.center_header, \
+                                              self.right_header)
 
         # Write buffer to secondary buffer, inserting breaks every 58 lines
         page_len = 0
