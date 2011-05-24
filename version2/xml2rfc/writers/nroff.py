@@ -1,6 +1,8 @@
 # Local libs
 from xml2rfc.writers.paginated_txt import PaginatedTextRfcWriter
 from xml2rfc.writers.raw_txt import RawTextRfcWriter
+from compiler.pyassem import RAW
+import textwrap
 
 
 class NroffRfcWriter(PaginatedTextRfcWriter):
@@ -18,18 +20,67 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
     def __init__(self, xmlrfc, **kwargs):
         PaginatedTextRfcWriter.__init__(self, xmlrfc, **kwargs)
+        
+    def _write_line(self, string):
+        # Used by nroff to write a line with no nroff commands
+        self.buf.append(string)
+
+    def _write_text(self, string, indent=0, sub_indent=None, bullet='', \
+                  align='left', lb=False, buf=None, strip=True):
+        #-------------------------------------------------------------
+        # RawTextRfcWriter override
+        #
+        # We should be able to handle mostly all of the nroff commands by
+        # intercepting the alignment and indentation arguments
+        #-------------------------------------------------------------
+        if not buf:
+            buf = self.buf
+        if lb:
+            self._lb(buf=buf)
+        if string:
+            if strip:
+                # Strip initial whitespace
+                string = string.lstrip()
+            if bullet:
+                string = bullet + string
+            par = textwrap.wrap(string, self.width)
+            # TODO: Nroff alignment
+            # Create nroff commands based on bullet & alignment
+            if len(bullet) > 0:
+                if sub_indent:
+                    full_indent = indent + sub_indent
+                else:
+                    full_indent = indent + len(bullet)
+                self._write_line('.in ' + str(full_indent))
+                self._write_line('.ti ' + str(indent))
+            else:
+                self._write_line('.in ' + str(indent))
+            buf.extend(par)
+
+        """
+        elif bullet:
+            # If the string is empty but a bullet was declared, just
+            # print the bullet
+            buf.append(initial)
+        """
+        
+    def _post_write_toc(self, tmpbuf):
+        # Wrap a nofill/fill block around TOC
+        tmpbuf.append('.ti 0')
+        tmpbuf.append('Table of Contents')
+        tmpbuf.append('')
+        tmpbuf.append('.in 3')
+        tmpbuf.append('.nf')
+        tmpbuf.extend(self.toc)
+        tmpbuf.append('.fi')
+        return tmpbuf
 
     # ---------------------------------------------------------
     # PaginatedTextRfcWriter overrides
     # ---------------------------------------------------------
 
-    def write_label(self, text, type='figure'):
-        """ Writes a label for a table or figure """
-        self._write_line('.ce', lb=True)
-        self._write_line(text)
-
     def write_title(self, text, docName=None):
-        """ Writes the document title """
+        # Override to use .ti commands
         self._lb()
         if docName:
             self._write_line('.ce 2')
@@ -39,44 +90,21 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             self._write_line('.ce 1')
             self._write_line(text)
 
-    def write_heading(self, text, bullet=None, idstring=None, anchor=None, \
-                      level=1):
-        self._write_line('.ti 0', lb=True)
-        if bullet:
-            self._write_line(bullet + ' ' + text)
-        else:
-            self._write_line(text)
-
-    def write_t_rec(self, t, indent=3, sub_indent=0, bullet='', \
-                    align='left', idstring=None):
-        # Write with no indentation -- nroff commands are used instead
+    def write_raw(self, text, indent=3, align='left'):
+        # Wrap in a no fill block
         self._write_line('.in ' + str(indent))
-        PaginatedTextRfcWriter.write_t_rec(self, t, indent=0, sub_indent=0, \
-                                           bullet=bullet, align=align, \
-                                           idstring=idstring)
-
-    def write_paragraph(self, text, align='left', idstring=None):
-        # Write with no indentation -- nroff commands are used instead
-        self._write_line('.in 3')
-        self._write_par(text, indent=0, align='left', lb=True)
-
-    def write_top(self, left_header, right_header):
-        """ Writes the document header """
-        # No fill for top section
         self._write_line('.nf')
-        self._write_line('.in 0')
-        PaginatedTextRfcWriter.write_top(self, left_header, right_header)
+        PaginatedTextRfcWriter.write_raw(self, text, indent=0, align=align)
         self._write_line('.fi')
 
-    def write_raw(self, text, align='left'):
-        self._write_line('.nf')
-        PaginatedTextRfcWriter.write_raw(self, text, align=align)
-        self._write_line('.fi')
-
-    def draw_table(self, table, table_num=None):
-        self._write_line('.nf')
-        PaginatedTextRfcWriter.draw_table(self, table, table_num=table_num)
-        self._write_line('.fi')
+    def write_heading(self, text, bullet='', idstring=None, anchor=None, \
+                      level=1):
+        # Override to use a .ti command
+        self._lb()
+        if bullet:
+            bullet += '  '
+        self._write_line('.ti 0')
+        self._write_line(bullet + text)
 
     def pre_processing(self):
         """ Inserts an nroff header into the buffer """

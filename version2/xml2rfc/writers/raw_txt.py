@@ -27,29 +27,17 @@ class RawTextRfcWriter(BaseRfcWriter):
             buf = self.buf
         buf.append('')
 
-    def _write_line(self, string, indent=0, lb=False, align='left', buf=None, \
-                    strip=True):
-        """ Writes a line preceded by an (optional) line break. """
-        if not buf:
-            buf = self.buf
-        if len(string) > (self.width):
-            raise Exception("The supplied line exceeds the page width!\n \
-                                                                " + string)
-        if lb:
-            self._lb(buf=buf)
-        if string:
-            # Strip initial whitespace
-            if strip:
-                string = string.lstrip()
-            if align == 'left':
-                buf.append(' ' * indent + string)
-            elif align == 'center':
-                buf.append(string.center(self.width))
-            elif align == 'right':
-                buf.append(string.rjust(self.width))
-
-    def _write_par(self, string, indent=0, sub_indent=None, bullet='', \
+    def _write_text(self, string, indent=0, sub_indent=None, bullet='', \
                   align='left', lb=False, buf=None, strip=True):
+        """ Writes a line or multiple lines of text to the buffer.
+        
+            Several parameters are included here.  All of the API calls
+            for text writers use this as the underlying method to write data 
+            to the buffer, with the exception of write_raw() that handles
+            #-------------------------------------------------------------------
+            # preserving of whitespace.
+            #-------------------------------------------------------------------
+        """
         if not buf:
             buf = self.buf
         # We can take advantage of textwraps initial_indent by using a bullet
@@ -73,7 +61,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                                 subsequent_indent=subsequent)
             if align == 'left':
                 buf.extend(par)
-            if align == 'center':
+            elif align == 'center':
                 for line in par:
                     buf.append(line.center(self.width))
             elif align == 'right':
@@ -83,6 +71,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             # If the string is empty but a bullet was declared, just
             # print the bullet
             buf.append(initial)
+        buf = ['hi']
 
     def _write_list(self, list, indent=3):
         """ Writes a <list> element """
@@ -110,16 +99,15 @@ class RawTextRfcWriter(BaseRfcWriter):
             else:
                 self.write_t_rec(t, bullet=bullet, indent=indent)
 
-    def _post_write_toc(self):
+    def _post_write_toc(self, tmpbuf):
         """ Writes the table of contents to temporary buffer and returns
 
             This should only be called after the initial buffer is written.
         """
-        tmpbuf = ['']
-        self._write_line("Table of Contents", lb=True, buf=tmpbuf)
+        self._write_text('Table of Contents', buf=tmpbuf)
         self._lb(buf=tmpbuf)
         for line in self.toc:
-            self._write_par(line, indent=3, buf=tmpbuf, strip=False)
+            self._write_text(line, indent=3, buf=tmpbuf, strip=False)
         return tmpbuf
 
     def _expand_refs(self, element):
@@ -137,7 +125,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         """ Marks buffer position for post-writing table of contents """
         self.toc_marker = len(self.buf)
 
-    def write_raw(self, text, align='left'):
+    def write_raw(self, text, indent=3, align='left'):
         """ Writes a raw stream of characters, preserving space and breaks """
         # Convert tabs into spaces
         text = text.expandtabs(4)
@@ -153,32 +141,30 @@ class RawTextRfcWriter(BaseRfcWriter):
             for line in lines:
                 self.buf.append(line.rjust(self.width))
         else:  # align == left
-            indent_str = ' ' * 3
+            indent_str = ' ' * indent
             for line in lines:
                 self.buf.append(indent_str + line)
 
     def write_label(self, text, type='figure'):
         """ Writes a centered label """
-        self._write_par(text, align='center', lb=True)
+        self._write_text(text, align='center', lb=True)
 
     def write_title(self, title, docName=None):
         """ Write the document title and (optional) name """
-        self._write_par(title, lb=True, align='center')
+        self._write_text(title, lb=True, align='center')
         if docName is not None:
-            self._write_par(docName, align='center')
+            self._write_text(docName, align='center')
 
-    def write_heading(self, text, bullet=None, idstring=None, anchor=None, \
+    def write_heading(self, text, bullet='', idstring=None, anchor=None, \
                       level=1):
         """ Write a generic header """
         if bullet:
             bullet += '  '
-        else:
-            bullet = ''
-        self._write_par(text, bullet=bullet, indent=0, lb=True)
+        self._write_text(text, bullet=bullet, indent=0, lb=True)
 
     def write_paragraph(self, text, align='left', idstring=None):
         """ Write a generic paragraph of text """
-        self._write_par(text, indent=3, align=align, lb=True)
+        self._write_text(text, indent=3, align=align, lb=True)
 
     def write_t_rec(self, t, indent=3, sub_indent=0, bullet='', \
                      idstring=None, align='left'):
@@ -200,7 +186,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             else:
                 # Submit initial buffer with a linebreak, then continue
                 if len(line) > 0:
-                    self._write_par(''.join(line), indent=indent, lb=True, \
+                    self._write_text(''.join(line), indent=indent, lb=True, \
                                     sub_indent=sub_indent, bullet=bullet)
                     line = []
 
@@ -216,11 +202,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                 for i in range(blankLines):
                     self._lb()
                 if child.tail:
-                    self._write_par(child.tail, indent=new_indent)
+                    self._write_text(child.tail, indent=new_indent)
             elif child.tag == 'list':
                 self._write_list(child, indent=new_indent)
                 if child.tail:
-                    self._write_par(child.tail, indent=new_indent, lb=True)
+                    self._write_text(child.tail, indent=new_indent, lb=True)
             elif child.tag == 'figure':
                 # Callback to base writer method
                 self._write_figure(child)
@@ -230,11 +216,12 @@ class RawTextRfcWriter(BaseRfcWriter):
 
         # Submit anything leftover in the buffer
         if len(line) > 0:
-            self._write_par(''.join(line), indent=indent, lb=True, \
+            self._write_text(''.join(line), indent=indent, lb=True, \
                             sub_indent=sub_indent, bullet=bullet)
 
     def write_top(self, left_header, right_header):
         """ Combines left and right lists to write a document heading """
+        heading = []
         for i in range(max(len(left_header), len(right_header))):
             if i < len(left_header):
                 left = left_header[i]
@@ -244,26 +231,29 @@ class RawTextRfcWriter(BaseRfcWriter):
                 right = right_header[i]
             else:
                 right = ''
-            self._write_line(xml2rfc.utils.justify_inline(left, '', right), \
-                             strip=False)
+            heading.append(xml2rfc.utils.justify_inline(left, '', right, \
+                                                        self.width))
+        self.write_raw('\n'.join(heading), align='left', indent=0)
 
     def write_address_card(self, author):
         """ Writes a simple address card with no line breaks """
+        self._lb()
+        lines = []
         if 'role' in author.attrib:
-                self._write_line(author.attrib['fullname'] + ', ' + \
-                                author.attrib['role'], indent=3, lb=True)
+                lines.append(author.attrib['fullname'] + ', ' + \
+                             author.attrib['role'])
         else:
-            self._write_line(author.attrib['fullname'], indent=3, lb=True)
+            lines.append(author.attrib['fullname'])
         organization = author.find('organization')
         if organization is not None and organization.text:
-            self._write_line(organization.text, indent=3)
+            lines.append(organization.text)
         address = author.find('address')
         if address is not None:
             postal = address.find('postal')
             if postal is not None:
                 for street in postal.findall('street'):
                     if street.text:
-                        self._write_line(street.text, indent=3)
+                        lines.append(street.text)
                 cityline = []
                 city = postal.find('city')
                 if city is not None and city.text:
@@ -277,23 +267,24 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if code is not None and code.text:
                         cityline.append(code.text)
                 if cityline is not None:
-                    self._write_line(''.join(cityline), indent=3)
+                    lines.append(''.join(cityline))
                 country = postal.find('country')
                 if country is not None:
-                    self._write_line(country.text, indent=3)
-            self._lb()
+                    lines.append(country.text)
+            lines.append('')
             phone = address.find('phone')
             if phone is not None and phone.text:
-                self._write_line('Phone: ' + phone.text, indent=3)
+                lines.append('Phone: ' + phone.text)
             fascimile = address.find('fascimile')
             if fascimile is not None and fascimile.text:
-                self._write_line('Fax:   ' + fascimile.text, indent=3)
+                lines.append('Fax:   ' + fascimile.text)
             email = address.find('email')
             if email is not None and email.text:
-                self._write_line('EMail: ' + email.text, indent=3)
+                lines.append('EMail: ' + email.text)
             uri = address.find('uri')
             if uri is not None and uri.text:
-                self._write_line('URI:   ' + uri.text, indent=3)
+                lines.append('URI:   ' + uri.text)
+        self.write_raw('\n'.join(lines))
         self._lb()
 
     def write_reference_list(self, list):
@@ -331,7 +322,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             year = date.attrib.get('year', '')
             refstring.append(month + year + '.')
             bullet = '[' + ref.attrib['anchor'] + ']  '
-            self._write_par(''.join(refstring), indent=3, bullet=bullet, \
+            self._write_text(''.join(refstring), indent=3, bullet=bullet, \
                            sub_indent=sub_indent, lb=True)
 
     def draw_table(self, table, table_num=None):
@@ -410,7 +401,7 @@ class RawTextRfcWriter(BaseRfcWriter):
     def add_to_toc(self, bullet, title, idstring=None, anchor=None):
         if bullet:
             toc_indent = ' ' * ((bullet.count('.')) * 2)
-            self.toc.append(toc_indent + bullet + ' ' + title)
+            self.toc.append(toc_indent + bullet + '. ' + title)
         else:
             self.toc.append(title)
 
@@ -436,7 +427,8 @@ class RawTextRfcWriter(BaseRfcWriter):
             # Check for marks
             if line_num == self.toc_marker:
                 # Write TOC
-                tmpbuf = self._post_write_toc()
+                tmpbuf = ['']
+                tmpbuf = self._post_write_toc(tmpbuf)
                 for tmpline in tmpbuf:
                     file.write(tmpline)
                     file.write('\r\n')

@@ -292,7 +292,7 @@ class BaseRfcWriter:
         """ Marks the current buffer position to insert ToC at """
         raise NotImplementedError('insert_toc() needs to be overridden')
 
-    def write_raw(self, text, align='left'):
+    def write_raw(self, text, indent=3, align='left'):
         """ Writes a block of text that preserves all whitespace """
         raise NotImplementedError('write_raw() needs to be overridden')
 
@@ -304,7 +304,7 @@ class BaseRfcWriter:
         """ Writes the document title """
         raise NotImplementedError('write_title() needs to be overridden')
 
-    def write_heading(self, text, bullet=None, idstring=None, anchor=None, \
+    def write_heading(self, text, bullet='', idstring=None, anchor=None, \
                       level=1):
         """ Writes a section heading """
         raise NotImplementedError('write_heading() needs to be overridden')
