@@ -161,6 +161,22 @@ class HtmlRfcWriter(BaseRfcWriter):
             elif child.tag == 'iref':
                 # TODO: Handle iref
                 pass
+            elif child.tag == 'spanx':
+                style = child.attrib.get('style', 'emph')
+                text = ''
+                if child.text: 
+                    text = child.text
+                elem = None
+                if style == 'strong':
+                    elem = E.strong(text)
+                elif style == 'verb':
+                    elem = E.samp(text)
+                else:
+                    # Default to style=emph
+                    elem = E.em(text)
+                current.append(elem)
+                if child.tail:
+                    elem.tail = child.tail
             elif child.tag == 'vspace':
                 br = E.br()
                 current.append(br)

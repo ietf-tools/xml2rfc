@@ -1,31 +1,47 @@
 # Internal utitlity functions.  Not meant for public usage.
 
 import re
+import warnings
 
 
 def justify_inline(left_str, center_str, right_str, width=72):
     """ Takes three string arguments and outputs a single string with the
         arguments left-justified, centered, and right-justified respectively.
 
-        Throws an exception if the combined length of the three strings is
-        greater than the width.
+        Raises a warning if the combined length of the three strings is
+        greater than the width, and trims the longest string
     """
-
-    if (len(left_str) + len(center_str) + len(right_str)) > width:
-        raise Exception("The given strings are greater than a width of: "\
-                                                            + str(width))
-    else:
-        center_str_pos = width / 2 - len(center_str) / 2
-        string = left_str + ' ' * (center_str_pos - len(left_str)) \
-                 + center_str + ' ' * (center_str_pos - len(right_str)) \
-                 + right_str
-        return string
+    strings = [left_str, center_str, right_str]
+    sumwidth = sum(map(len, strings))
+    if sumwidth > width:
+        # Trim longest string
+        longest_index = strings.index(max(strings, key=len))
+        warnings.warn('The inline string was truncated because it was ' \
+                      'too long:\n  ' + strings[longest_index])
+        strings[longest_index] = strings[longest_index][:-(sumwidth - width)]
+    
+    center = strings[1].center(width)
+    right = strings[2].rjust(width)
+    output = list(strings[0].ljust(width))
+    for i, char in enumerate(output):
+        if center[i] != ' ':
+            output[i] = center[i]
+        elif right[i] != ' ':
+            output[i] = right[i]
+    return ''.join(output)
 
 
 def replace_unicode(str):
     for key, val in unicode_replacements.items():
         str = re.sub(re.escape(key), val, str)
+    try:
+        str = str.encode('ascii')
+    except UnicodeEncodeError:
+        str = str.encode('ascii', 'xmlcharrefreplace')
+        warnings.warn('Unicode character(s) not replaced in string:\n  ' + str,\
+                      UnicodeWarning)
     return str
+
 
 # Ascii representations of unicode chars from rfc2629-xhtml.ent
 # Auto-generated from comments in rfc2629-xhtml.ent

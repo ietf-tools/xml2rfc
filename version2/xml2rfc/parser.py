@@ -83,6 +83,8 @@ class XmlRfcParser:
         # Parse the XML file into a tree and create an rfc instance
         # Bubble up any validation or syntax errors. They will need to be
         # handled in the CLI script or GUI.
+        if not self.quiet:
+            self.write_out.write('Parsing file ' + self.source)
         try:
             tree = lxml.etree.parse(self.source, parser)
         except lxml.etree.XMLSyntaxError, error:
@@ -137,7 +139,7 @@ class XmlRfc:
                 if element.text is not None:
                     element.text = re.sub('\n\s*', ' ', element.text.lstrip())
                 if element.tail is not None:
-                    element.tail = re.sub('\n\s*', ' ', element.tail.rstrip())
+                    element.tail = re.sub('\n\s*', ' ', element.tail)
 
         # Set some document-independent defaults
         root.attrib['trad_header'] = 'Network Working Group'
@@ -196,11 +198,11 @@ class XmlRfc:
         for element in root.iter():
             if element.text:
                 try:
-                    element.text = str(element.text)
+                    element.text = element.text.encode('ascii')
                 except UnicodeEncodeError:
                     element.text = xml2rfc.utils.replace_unicode(element.text)
             if element.tail:
                 try:
-                    element.tail = str(element.tail)
+                    element.tail = element.tail.encode('ascii')
                 except UnicodeEncodeError:
                     element.tail = xml2rfc.utils.replace_unicode(element.tail)

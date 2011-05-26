@@ -2,6 +2,7 @@
 import textwrap
 import string
 import math
+import warnings
 
 # Local lib
 from xml2rfc.writers.base import BaseRfcWriter
@@ -110,13 +111,6 @@ class RawTextRfcWriter(BaseRfcWriter):
             self._write_text(line, indent=3, buf=tmpbuf, strip=False)
         return tmpbuf
 
-    def _expand_refs(self, element):
-        """ Returns a block of text with inline references expanded
-
-            If <vspace> is encountered, the method halts returning that element
-        """
-        return 'DEBUG'
-
     # ---------------------------------------------------------
     # Base writer overrides
     # ---------------------------------------------------------
@@ -183,6 +177,21 @@ class RawTextRfcWriter(BaseRfcWriter):
             elif child.tag == 'iref':
                 # TODO: Handle iref
                 pass
+            elif child.tag == 'spanx':
+                style = child.attrib.get('style', 'emph')
+                edgechar = '?'
+                if style == 'emph':
+                    edgechar = '-'
+                elif style == 'strong':
+                    edgechar = '*'
+                elif style == 'verb':
+                    edgechar = '"'
+                text = ''
+                if child.text: 
+                    text = child.text
+                line.append(edgechar + text + edgechar)
+                if child.tail:
+                    line.append(child.tail)
             else:
                 # Submit initial buffer with a linebreak, then continue
                 if len(line) > 0:
@@ -299,18 +308,18 @@ class RawTextRfcWriter(BaseRfcWriter):
             authors = ref.findall('front/author')
             for j, author in enumerate(authors):
                 organization = author.find('organization')
-                if 'surname' in author.attrib:
+                surname = author.attrib.get('surname', '')
+                if surname:
                     initials = author.attrib.get('initials', '')
-                    refstring.append(author.attrib['surname'] + ', ' + \
-                                     initials + ', ')
+                    refstring.append(surname + ', ' + initials + ', ')
                     if j == len(authors) - 2:
                         # Second-to-last, add an "and"
                         refstring.append('and ')
                 elif organization is not None and organization.text:
                     # Use organization instead of name
                     refstring.append(organization.text + ', ')
-            title = ref.find('front.title')
-            if title and title.text:
+            title = ref.find('front/title')
+            if title is not None and title.text:
                 refstring.append('"' + title.text + '", ')
             for seriesInfo in ref.findall('seriesInfo'):
                 refstring.append(seriesInfo.attrib['name'] + ' ' + \
@@ -340,8 +349,23 @@ class RawTextRfcWriter(BaseRfcWriter):
             if i % num_columns == 0:
                 row += 1
                 matrix.append([])
+            # Add cell text + any inline elements
+            line = ['']
             if cell.text:
-                matrix[row].append(cell.text)
+                line.append(cell.text)
+            for child in cell:
+                # Check inline elements first
+                if child.tag == 'xref' or child.tag == 'eref':
+                    if child.text:
+                        line.append(child.text + ' ')
+                    line.append('[' + child.attrib['target'] + ']')
+                    if child.tail:
+                        line.append(child.tail)
+                elif child.tag == 'iref':
+                    # TODO: Handle iref
+                    pass
+            if len(line) > 0:
+                matrix[row].append(''.join(line))
             else:
                 matrix[row].append('')
 
@@ -359,7 +383,14 @@ class RawTextRfcWriter(BaseRfcWriter):
             column_widths = [int(length * scale) for length in longest_lines]
         else:
             column_widths = longest_lines
-
+            
+        # Force any column widths that got set to 0 to 1, raise warning
+        for n in column_widths:
+            if n < 1:
+                n = 1
+                warnings.warn('Table column width was forced to 1 from 0, ' \
+                              'it may exceed the page width.')
+        
         # Now construct the cells using textwrap against column_widths
         cell_lines = [
             [
@@ -367,6 +398,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 for j, cell in enumerate(matrix[i])
             ] for i in range(1, len(matrix))
         ]
+        
 
         output = []
         # Create the border
