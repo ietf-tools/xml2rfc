@@ -6,6 +6,7 @@ import os
 import shutil
 import xml2rfc
 import lxml.etree
+import warnings
 
 
 def display_version(self, opt, value, parser):
@@ -29,6 +30,9 @@ def main():
                             dest='verbose', help='print extra information')
     optionparser.add_option('-q', '--quiet', action='store_true', dest='quiet',\
                             help='dont print anything')
+    optionparser.add_option('-w', '--warn-error', action='store_true', \
+                            dest='warn_error', help='treat warnings as ' \
+                            'python exceptions.')
     optionparser.add_option('-e', '--extcss', dest='extcss',\
                             action='store_true', help='write an external '\
                             'link to the stylesheet instead of expanding it.')
@@ -55,7 +59,7 @@ def main():
                                        ', it will create the file(s) '\
                                        '"output.format"')
     formatgroup.add_option('', '--raw', dest='raw', action='store_true', \
-                           help='outputs to a raw, unpaginated text file')
+                           help='outputs to a text file, unpaginated')
     formatgroup.add_option('', '--text', dest='text', action='store_true', \
                            help='outputs to a text file with proper page ' \
                            'breaks')
@@ -81,6 +85,12 @@ def main():
     if not (options.raw or options.text or options.nroff or options.html):
         # Default to text output
         options.text = True
+        
+    # Setup warnings module
+    if options.warn_error:
+        warnings.simplefilter('error')
+    else:
+        warnings.simplefilter('always')
 
     # Run the parser
     parser = xml2rfc.XmlRfcParser(source, verbose=options.verbose,\
