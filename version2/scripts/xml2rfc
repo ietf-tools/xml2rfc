@@ -6,7 +6,6 @@ import os
 import shutil
 import xml2rfc
 import lxml.etree
-import warnings
 
 
 def display_version(self, opt, value, parser):
@@ -88,14 +87,13 @@ def main():
         
     # Setup warnings module
     if options.warn_error:
-        warnings.simplefilter('error')
+        xml2rfc.log.warn_error = True
     else:
-        warnings.simplefilter('always')
+        xml2rfc.log.warn_error = False
 
     # Run the parser
     parser = xml2rfc.XmlRfcParser(source, verbose=options.verbose,\
-                                  quiet=options.quiet, \
-                                  write_out=sys.stdout, write_err=sys.stderr)
+                                  quiet=options.quiet)
 
     try:
         xmlrfc = parser.parse()
@@ -103,8 +101,8 @@ def main():
         if not options.verbose:
             # Parser must have been printing on a single line. Fix this
             print ''
-        sys.stderr.write('Error parsing XML document: \r\n')
-        sys.stderr.write('  ' + args[0] + ': ' + error.msg + '\r\n')
+        xml2rfc.log.error('unable to parse the XML document: \r\n')
+        xml2rfc.log.error('  ' + args[0] + ': ' + error.msg + '\r\n')
         sys.exit(1)
 
     # Execute any writers specified
@@ -116,30 +114,22 @@ def main():
     if options.raw:
         rawwriter = xml2rfc.RawTextRfcWriter(xmlrfc, \
                                              quiet=options.quiet, \
-                                             verbose=options.verbose, \
-                                             write_out=sys.stdout, \
-                                             write_err=sys.stderr)
+                                             verbose=options.verbose)
         rawwriter.write(filename + '-raw.txt')
     if options.text:
         pagedwriter = xml2rfc.PaginatedTextRfcWriter(xmlrfc, \
                                                      quiet=options.quiet, \
-                                                     verbose=options.verbose, \
-                                                     write_out=sys.stdout, \
-                                                     write_err=sys.stderr)
+                                                     verbose=options.verbose)
         pagedwriter.write(filename + '.txt')
     if options.nroff:
         nroffwriter = xml2rfc.NroffRfcWriter(xmlrfc, \
                                              quiet=options.quiet, \
-                                             verbose=options.verbose, \
-                                             write_out=sys.stdout, \
-                                             write_err=sys.stderr)
+                                             verbose=options.verbose)
         nroffwriter.write(filename + '.nroff')
     if options.html:
         htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc, \
                                            quiet=options.quiet, \
                                            verbose=options.verbose, \
-                                           write_out=sys.stdout, \
-                                           write_err=sys.stderr, \
                                            external_css=options.extcss)
         htmlwriter.write(filename + '.html')
 

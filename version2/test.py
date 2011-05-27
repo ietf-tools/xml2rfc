@@ -20,7 +20,6 @@ class WriterTests(unittest.TestCase):
         xml2rfc.HtmlRfcWriter(self.xmlrfc).write('output.html')
 
 
-
 def main():
     if len(sys.argv) < 2:
         print 'Needs xml file argument'

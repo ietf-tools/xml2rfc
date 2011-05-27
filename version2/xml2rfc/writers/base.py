@@ -1,18 +1,14 @@
 # Python libs
 import string
 import datetime
-import sys
-
+import xml2rfc.log
 
 class BaseRfcWriter:
     """ Base class for all writers """
 
-    def __init__(self, xmlrfc, quiet=False, verbose=False, \
-                 write_out=sys.stdout, write_err=sys.stderr):
+    def __init__(self, xmlrfc, quiet=False, verbose=False):
         self.quiet = quiet
         self.verbose = verbose
-        self.write_out = write_out
-        self.write_err = write_err
 
         # We will refer to the XmlRfc document root as 'r'
         self.xmlrfc = xmlrfc
@@ -45,6 +41,9 @@ class BaseRfcWriter:
                     expire_string = 'Expires: ' + expire_date.strftime('%B %Y')
                 except ValueError:
                     pass
+            elif not year:
+                # Warn about no date
+                xml2rfc.log.warn('No date specified for document.')
 
         updates = self.r.attrib.get('updates')
         if updates:
@@ -282,7 +281,7 @@ class BaseRfcWriter:
         self.write_to_file(filename)
 
         if not self.quiet:
-            self.write_out.write('Created file ' + filename + '\r\n')
+            xml2rfc.log.write('Created file', filename)
 
     # -----------------------------------------
     # Base writer interface methods to override

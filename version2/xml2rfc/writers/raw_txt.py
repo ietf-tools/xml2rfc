@@ -2,7 +2,6 @@
 import textwrap
 import string
 import math
-import warnings
 
 # Local lib
 from xml2rfc.writers.base import BaseRfcWriter
@@ -35,9 +34,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             Several parameters are included here.  All of the API calls
             for text writers use this as the underlying method to write data 
             to the buffer, with the exception of write_raw() that handles
-            #-------------------------------------------------------------------
-            # preserving of whitespace.
-            #-------------------------------------------------------------------
+            preserving of whitespace.
         """
         if not buf:
             buf = self.buf
@@ -72,7 +69,6 @@ class RawTextRfcWriter(BaseRfcWriter):
             # If the string is empty but a bullet was declared, just
             # print the bullet
             buf.append(initial)
-        buf = ['hi']
 
     def _write_list(self, list, indent=3):
         """ Writes a <list> element """
@@ -388,8 +384,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         for n in column_widths:
             if n < 1:
                 n = 1
-                warnings.warn('Table column width was forced to 1 from 0, ' \
-                              'it may exceed the page width.')
+                xml2rfc.log.warn('Table column width was forced to 1 from 0,' \
+                                 ' it may exceed the page width.')
         
         # Now construct the cells using textwrap against column_widths
         cell_lines = [
@@ -399,7 +395,6 @@ class RawTextRfcWriter(BaseRfcWriter):
             ] for i in range(1, len(matrix))
         ]
         
-
         output = []
         # Create the border
         borderstring = ['+']

@@ -1,8 +1,7 @@
 # Internal utitlity functions.  Not meant for public usage.
 
 import re
-import warnings
-
+import xml2rfc.log
 
 def justify_inline(left_str, center_str, right_str, width=72):
     """ Takes three string arguments and outputs a single string with the
@@ -16,8 +15,8 @@ def justify_inline(left_str, center_str, right_str, width=72):
     if sumwidth > width:
         # Trim longest string
         longest_index = strings.index(max(strings, key=len))
-        warnings.warn('The inline string was truncated because it was ' \
-                      'too long:\n  ' + strings[longest_index])
+        xml2rfc.log.warn('The inline string was truncated because it was ' \
+                         'too long:\n  ' + strings[longest_index])
         strings[longest_index] = strings[longest_index][:-(sumwidth - width)]
     
     center = strings[1].center(width)
@@ -38,8 +37,8 @@ def replace_unicode(str):
         str = str.encode('ascii')
     except UnicodeEncodeError:
         str = str.encode('ascii', 'xmlcharrefreplace')
-        warnings.warn('Unicode character(s) not replaced in string:\n  ' + str,\
-                      UnicodeWarning)
+        xml2rfc.log.warn('Unicode character(s) not replaced in string:\n  ' + \
+                         str)
     return str
 
 
