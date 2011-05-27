@@ -1,0 +1,32 @@
+Command Line Application
+========================
+
+Usage: ``xml2rfc SOURCE [options] FORMATS...``
+Example: ``xml2rfc draft.xml -f Draft-1.0 --text --html``
+
+Options:
+  -h, --help            show this help message and exit
+  -v, --verbose         print extra information
+  -q, --quiet           dont print anything
+  -w, --warn-error      treat warnings as python exceptions.
+  -e, --extcss          write an external link to the stylesheet instead of
+                        expanding it.
+  -c CSS, --css=CSS     specify an alternate css file (ignored if html format
+                        is not enabled)
+  -d DTD, --dtd=DTD     specify an alternate dtd file
+  -f FILENAME, --filename=FILENAME
+                        specify an output filename
+  --clear-cache         purge the cache and exit
+  --version             display the version number and exit
+
+  Formats:
+    At least one but as many as all of the following output formats must
+    be specified. The destination file will be created according to the
+    argument given to --filename.  If no argument was given, it will
+    create the file(s) "output.format"
+
+    --raw               outputs to a text file, unpaginated
+    --text              outputs to a text file with proper page breaks
+    --nroff             outputs to an nroff file
+    --html              outputs to an html file
+    --exp               outputs to an XML file with all references expanded.

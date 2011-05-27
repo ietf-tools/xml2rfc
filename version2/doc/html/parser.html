@@ -1,0 +1,165 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Parser Module &mdash; xml2rfc v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="xml2rfc v0.2 documentation" href="index.html" />
+    <link rel="next" title="Writer Modules" href="writers.html" />
+    <link rel="prev" title="Xml2rfc Documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="writers.html" title="Writer Modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Xml2rfc Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">xml2rfc v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-xml2rfc.parser">
+<span id="parser-module"></span><h1>Parser Module<a class="headerlink" href="#module-xml2rfc.parser" title="Permalink to this headline">¶</a></h1>
+<p>Public parser module</p>
+<dl class="class">
+<dt id="xml2rfc.parser.XmlRfcParser">
+<em class="property">class </em><tt class="descclassname">xml2rfc.parser.</tt><tt class="descname">XmlRfcParser</tt><big>(</big><em>filename</em>, <em>verbose=False</em>, <em>quiet=False</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfcParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>XML parser with callbacks to construct an RFC tree</p>
+<dl class="method">
+<dt id="xml2rfc.parser.XmlRfcParser.parse">
+<tt class="descname">parse</tt><big>(</big><em>prepare=True</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfcParser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the source XML file and returns an XmlRfc instance</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="xml2rfc.parser.XmlRfc">
+<em class="property">class </em><tt class="descclassname">xml2rfc.parser.</tt><tt class="descname">XmlRfc</tt><big>(</big><em>tree</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal representation of an RFC document</p>
+<p>Contains an lxml.etree.ElementTree, with some additional helper
+methods to prepare the tree for output.</p>
+<p>Accessing the rfc tree is done by getting the root node from getroot()</p>
+<dl class="method">
+<dt id="xml2rfc.parser.XmlRfc.getroot">
+<tt class="descname">getroot</tt><big>(</big><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.getroot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper method</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml2rfc.parser.XmlRfc.prepare">
+<tt class="descname">prepare</tt><big>(</big><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.prepare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare the RFC document for output.</p>
+<p>This method is automatically invoked after the xml file is
+finished being read.  It may do any of the following things:</p>
+<p>&#8211; Set any necessary default values.
+&#8211; Pre-format some elements to the proper text output.</p>
+<p>We can perform any operations here that will be common to all
+ouput formats.  Any further formatting is handled in the
+xml2rfc.writer modules.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml2rfc.parser.XmlRfc.replaceUnicode">
+<tt class="descname">replaceUnicode</tt><big>(</big><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.replaceUnicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Traverses the RFC tree and replaces unicode characters with the
+proper equivalents specified in rfc2629-xhtml.ent.</p>
+<p>Writers should call this method if the entire RFC document needs to 
+be ascii formatted</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Xml2rfc Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="writers.html"
+                        title="next chapter">Writer Modules</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/parser.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="writers.html" title="Writer Modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Xml2rfc Documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">xml2rfc v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Concentric Sky.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

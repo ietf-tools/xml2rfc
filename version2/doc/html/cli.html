@@ -1,0 +1,192 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Command Line Application &mdash; xml2rfc v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="xml2rfc v0.2 documentation" href="index.html" />
+    <link rel="next" title="Graphical Application" href="gui.html" />
+    <link rel="prev" title="Writer Modules" href="writers.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gui.html" title="Graphical Application"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="writers.html" title="Writer Modules"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">xml2rfc v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="command-line-application">
+<h1>Command Line Application<a class="headerlink" href="#command-line-application" title="Permalink to this headline">¶</a></h1>
+<p>Usage: <tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">SOURCE</span> <span class="pre">[options]</span> <span class="pre">FORMATS...</span></tt>
+Example: <tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">draft.xml</span> <span class="pre">-f</span> <span class="pre">Draft-1.0</span> <span class="pre">--text</span> <span class="pre">--html</span></tt></p>
+<dl class="docutils">
+<dt>Options:</dt>
+<dd><table class="first docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></td>
+<td>show this help message and exit</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-v</span>, <span class="option">--verbose</span></kbd></td>
+<td>print extra information</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-q</span>, <span class="option">--quiet</span></kbd></td>
+<td>dont print anything</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-w</span>, <span class="option">--warn-error</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>treat warnings as python exceptions.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-e</span>, <span class="option">--extcss</span></kbd></td>
+<td>write an external link to the stylesheet instead of
+expanding it.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-c <var>CSS</var></span>, <span class="option">--css=<var>CSS</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>specify an alternate css file (ignored if html format
+is not enabled)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-d <var>DTD</var></span>, <span class="option">--dtd=<var>DTD</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>specify an alternate dtd file</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-f <var>FILENAME</var></span>, <span class="option">--filename=<var>FILENAME</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>specify an output filename</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--clear-cache</span></kbd></td>
+<td>purge the cache and exit</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--version</span></kbd></td>
+<td>display the version number and exit</td></tr>
+</tbody>
+</table>
+<dl class="last docutils">
+<dt>Formats:</dt>
+<dd><p class="first">At least one but as many as all of the following output formats must
+be specified. The destination file will be created according to the
+argument given to &#8211;filename.  If no argument was given, it will
+create the file(s) &#8220;output.format&#8221;</p>
+<table class="last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--raw</span></kbd></td>
+<td>outputs to a text file, unpaginated</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--text</span></kbd></td>
+<td>outputs to a text file with proper page breaks</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--nroff</span></kbd></td>
+<td>outputs to an nroff file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--html</span></kbd></td>
+<td>outputs to an html file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--exp</span></kbd></td>
+<td>outputs to an XML file with all references expanded.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="writers.html"
+                        title="previous chapter">Writer Modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gui.html"
+                        title="next chapter">Graphical Application</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/cli.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gui.html" title="Graphical Application"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="writers.html" title="Writer Modules"
+             >previous</a> |</li>
+        <li><a href="index.html">xml2rfc v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Concentric Sky.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
