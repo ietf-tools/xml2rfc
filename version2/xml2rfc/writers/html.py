@@ -23,7 +23,12 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.css_document = os.path.join(os.path.dirname(xml2rfc.__file__), \
                                          'templates/rfc.css')
         if css_document:
-            self.css_document = css_document
+            if os.path.exists(css_document):
+                self.css_document = css_document
+            else:
+                xml2rfc.log.warn('The default css document was used because ' \
+                                 'the supplied file does not exist:', \
+                                 css_document)
         self.external_css = external_css
 
         # Create head element, add style/metadata/etc information
@@ -148,7 +153,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                 current.attrib['id'] = idstring
         for child in t:
             if child.tag == 'xref' or child.tag == 'eref':
-                target = child.attrib.get('target', 'NONE')
+                target = child.attrib.get('target', '')
                 if child.text:
                     a = E.a(child.text, href='#' + target)
                     a.tail = ' '
@@ -303,7 +308,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                     city_span.append(span)
                 adr_span.append(city_span)
                 country = postal.find('country')
-                if country is not None:
+                if country is not None and country.text:
                     span = E.span(country.text)
                     span.attrib['class'] = 'country-name vcardline'
                     adr_span.append(span)
@@ -378,8 +383,9 @@ class HtmlRfcWriter(BaseRfcWriter):
             if title is not None and title.text:
                 title_string = title.text
             else:
-                # TODO -- better option here
-                title_string = '(TITLE)'
+                xml2rfc.log.warn('No title specifide in reference:', \
+                                 reference.get.attrib('anchor', ''))
+                title_string = ''
             title_a = E.a(title_string)
             title_a.tail = '", '
             ref_td.append(title_a)
@@ -425,7 +431,9 @@ class HtmlRfcWriter(BaseRfcWriter):
         header_row = E.tr()
         col_aligns = []
         for header in table.findall('ttcol'):
-            th = E.th(header.text)
+            th = E.th()
+            if header.text:
+                th.text = header.text
             th.attrib['class'] = header.attrib['align']
             # Store alignment information
             col_aligns.append(header.attrib['align'])

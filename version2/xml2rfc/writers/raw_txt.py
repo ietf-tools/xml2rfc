@@ -167,7 +167,8 @@ class RawTextRfcWriter(BaseRfcWriter):
             if child.tag == 'xref' or child.tag == 'eref':
                 if child.text:
                     line.append(child.text + ' ')
-                line.append('[' + child.attrib['target'] + ']')
+                target = child.attrib.get('target', '')
+                line.append('[' + target + ']')
                 if child.tail:
                     line.append(child.tail)
             elif child.tag == 'iref':
@@ -274,7 +275,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if cityline is not None:
                     lines.append(''.join(cityline))
                 country = postal.find('country')
-                if country is not None:
+                if country is not None and country.text:
                     lines.append(country.text)
             lines.append('')
             phone = address.find('phone')
@@ -317,6 +318,9 @@ class RawTextRfcWriter(BaseRfcWriter):
             title = ref.find('front/title')
             if title is not None and title.text:
                 refstring.append('"' + title.text + '", ')
+            else:
+                xml2rfc.log.warn('No title specified in reference', \
+                                 ref.attrib.get('anchor', ''))
             for seriesInfo in ref.findall('seriesInfo'):
                 refstring.append(seriesInfo.attrib['name'] + ' ' + \
                                  seriesInfo.attrib['value'] + ', ')
@@ -381,9 +385,9 @@ class RawTextRfcWriter(BaseRfcWriter):
             column_widths = longest_lines
             
         # Force any column widths that got set to 0 to 1, raise warning
-        for n in column_widths:
-            if n < 1:
-                n = 1
+        for i, width in enumerate(column_widths):
+            if width < 1:
+                column_widths[i] = 1
                 xml2rfc.log.warn('Table column width was forced to 1 from 0,' \
                                  ' it may exceed the page width.')
         
@@ -392,33 +396,51 @@ class RawTextRfcWriter(BaseRfcWriter):
             [
                 textwrap.wrap(cell, column_widths[j]) \
                 for j, cell in enumerate(matrix[i])
-            ] for i in range(1, len(matrix))
+            ] for i in range(0, len(matrix))
         ]
         
         output = []
+        style = table.attrib.get('style', 'full')
         # Create the border
-        borderstring = ['+']
-        for i in range(num_columns):
-            borderstring.append('-' * (column_widths[i] + 2))
-            borderstring.append('+')
-        output.append(''.join(borderstring))
-
+        if style == 'headers':
+            borderstring = []
+            for i in range(num_columns):
+                borderstring.append('-' * column_widths[i])
+                borderstring.append(' ')
+        else:
+            borderstring = ['+']
+            for i in range(num_columns):
+                borderstring.append('-' * (column_widths[i] + 2))
+                borderstring.append('+')
+            output.append(''.join(borderstring))
         # Draw the table
         for i, cell_line in enumerate(cell_lines):
             for row in range(max(map(len, cell_line))):
-                line = ['|']
+                if style == 'headers':
+                    line = ['']
+                else:
+                    line = ['|']
                 for col, cell in enumerate(cell_line):
                     if row < len(cell):
-                        line.append(' ')
-                        line.append(cell[row].ljust(column_widths[col]))
-                        line.append(' |')
+                        if style == 'headers':
+                            line.append(cell[row].ljust(column_widths[col]))
+                            line.append(' ')
+                        else:
+                            line.append(' ')
+                            line.append(cell[row].ljust(column_widths[col]))
+                            line.append(' |')
                     else:
-                        line.append(' ' * (column_widths[col] + 2) + '|')
+                        if style == 'headers':
+                            line.append(' ' * (column_widths[col] + 1))
+                        else:
+                            line.append(' ' * (column_widths[col] + 2) + '|')
                 output.append(''.join(line))
             if i == 0:
-                # Header, so output an additional border
+                # This is the header row, append the header decoration
                 output.append(''.join(borderstring))
-        output.append(''.join(borderstring))
+        
+        if style != 'headers':
+            output.append(''.join(borderstring))
 
         # Finally, write the table to the buffer with proper alignment
         align = table.attrib.get('align', 'center')

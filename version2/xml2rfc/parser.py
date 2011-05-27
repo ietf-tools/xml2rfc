@@ -175,8 +175,11 @@ class XmlRfc:
             xml2rfc.log.warn('No category specified for document.')
 
         year = root.find('front/date').attrib.get('year', '')
-        root.attrib['copyright'] = 'Copyright (C) The Internet Society (%s).'\
-        ' All Rights Reserved.' % year
+        yearstring = ''
+        if year:
+            yearstring = ' (' + year + ')'
+        root.attrib['copyright'] = 'Copyright (C) The Internet Society%s.'\
+        ' All Rights Reserved.' % yearstring
 
     def replaceUnicode(self):
         """ Traverses the RFC tree and replaces unicode characters with the
@@ -196,3 +199,9 @@ class XmlRfc:
                     element.tail = element.tail.encode('ascii')
                 except UnicodeEncodeError:
                     element.tail = xml2rfc.utils.replace_unicode(element.tail)
+            for key in element.attrib.keys():
+                try:
+                    element.attrib[key] = element.attrib[key].encode('ascii')
+                except UnicodeEncodeError:
+                    element.attrib[key] = \
+                    xml2rfc.utils.replace_unicode(element.attrib[key])

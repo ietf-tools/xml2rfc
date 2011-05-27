@@ -101,8 +101,8 @@ def main():
         if not options.verbose:
             # Parser must have been printing on a single line. Fix this
             print ''
-        xml2rfc.log.error('unable to parse the XML document: \r\n')
-        xml2rfc.log.error('  ' + args[0] + ': ' + error.msg + '\r\n')
+        xml2rfc.log.error('unable to parse the XML document:\n', \
+                          '  ' + args[0] + ': ' + error.msg)
         sys.exit(1)
 
     # Execute any writers specified
@@ -130,7 +130,8 @@ def main():
         htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc, \
                                            quiet=options.quiet, \
                                            verbose=options.verbose, \
-                                           external_css=options.extcss)
+                                           external_css=options.extcss, \
+                                           css_document=options.css)
         htmlwriter.write(filename + '.html')
 
 if __name__ == '__main__':
