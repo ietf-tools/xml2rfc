@@ -4,7 +4,10 @@ import datetime
 import xml2rfc.log
 
 class BaseRfcWriter:
-    """ Base class for all writers """
+    """ Base class for all writers 
+    
+        All public methods need to be overridden for a writer implementation.
+    """
 
     def __init__(self, xmlrfc, quiet=False, verbose=False):
         self.quiet = quiet

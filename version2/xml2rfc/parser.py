@@ -1,3 +1,5 @@
+""" Public parser module """
+
 import lxml.etree
 import re
 import urlparse
@@ -183,9 +185,10 @@ class XmlRfc:
 
     def replaceUnicode(self):
         """ Traverses the RFC tree and replaces unicode characters with the
-            proper equivalents specified in rfc2629-xhtml.ent.  Writers should
-            call this method if the entire RFC document needs to be ascii
-            formattable
+            proper equivalents specified in rfc2629-xhtml.ent.  
+            
+            Writers should call this method if the entire RFC document needs to 
+            be ascii formatted
         """
         root = self.getroot()
         for element in root.iter():

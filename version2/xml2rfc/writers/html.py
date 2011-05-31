@@ -2,6 +2,7 @@
 from lxml.builder import E
 import lxml.etree
 import os.path
+import string
 
 # Local libs
 import xml2rfc
@@ -19,6 +20,7 @@ class HtmlRfcWriter(BaseRfcWriter):
     def __init__(self, xmlrfc, css_document=None, external_css=False, \
                  lang='en', **kwargs):
         BaseRfcWriter.__init__(self, xmlrfc, **kwargs)
+        self.list_counters = {}
         self.html = E.html(lang=lang)
         self.css_document = os.path.join(os.path.dirname(xml2rfc.__file__), \
                                          'templates/rfc.css')
@@ -64,8 +66,66 @@ class HtmlRfcWriter(BaseRfcWriter):
         head.append(self._build_stylesheet())
         return head
 
+    def _write_list(self, list, parent):
+        style = list.attrib.get('style', 'empty')
+        if style == 'hanging':
+            list_elem = E.dl()
+            hangIndent = list.attrib.get('hangIndent', '8')
+            style = 'margin-left: ' + hangIndent
+            for t in list.findall('t'):
+                hangText = t.attrib.get('hangText', '')
+                dt = E.dt(hangText)
+                dd = E.dd(style=style)
+                list_elem.append(dt)
+                list_elem.append(dd)
+                self.write_t_rec(t, parent=dd)
+        elif style.startswith('format'):
+            format_str = style.partition('format ')[2]
+            if not ('%c' in format_str or '%d' in format_str):
+                xml2rfc.log.warn('No %c or %d found in list format '\
+                                 'string: ' + style)
+            counter_index = list.attrib.get('counter', None)
+            if not counter_index:
+                counter_index = 'temp'
+                self.list_counters[counter_index] = 0
+            elif counter_index not in self.list_counters:
+                # Initialize if we need to
+                self.list_counters[counter_index] = 0
+            list_elem = E.dl()
+            for t in list.findall('t'):
+                self.list_counters[counter_index] += 1
+                count = self.list_counters[counter_index]
+                if '%d' in format_str:
+                    bullet = format_str.replace(r'%d', str(count) + ' ')
+                elif '%c' in format_str:
+                    bullet = format_str.replace(r'%c', \
+                                                str(string.ascii_lowercase\
+                                                    [count % 26]) + ' ')
+                else: 
+                    bullet = format_str
+                dt = E.dt(bullet)
+                dd = E.dd()
+                list_elem.append(dt)
+                list_elem.append(dd)
+                self.write_t_rec(t, parent=dd)
+        else:
+            if style == 'symbols':
+                list_elem = E.ul()
+            elif style == 'numbers':
+                list_elem = E.ol()
+            elif style == 'letters':
+                list_elem = E.ol(style="list-style-type: lower-alpha")
+            else:  # style == empty
+                list_elem = E.ul()
+                list_elem.attrib['class'] = 'empty'
+            for t in list.findall('t'):
+                li = E.li()
+                list_elem.append(li)
+                self.write_t_rec(t, parent=li)
+        parent.append(list_elem)
+
     # -----------------------------------------
-    # Base writer interface methods to override
+    # Base writer overrides
     # -----------------------------------------
 
     def insert_toc(self):
@@ -201,35 +261,6 @@ class HtmlRfcWriter(BaseRfcWriter):
             elif child.tag == 'texttable':
                 # Callback to base writer method
                 self._write_table(child)
-
-    def _write_list(self, list, parent):
-        style = list.attrib.get('style', 'empty')
-        if style == 'hanging':
-            list_elem = E.dl()
-            hangIndent = list.attrib.get('hangIndent', '8')
-            style = 'margin-left: ' + hangIndent
-            for t in list.findall('t'):
-                hangText = t.attrib.get('hangText', '')
-                dt = E.dt(hangText)
-                dd = E.dd(style=style)
-                list_elem.append(dt)
-                list_elem.append(dd)
-                self.write_t_rec(t, parent=dd)
-        else:
-            if style == 'symbols':
-                list_elem = E.ul()
-            elif style == 'numbers':
-                list_elem = E.ol()
-            elif style == 'letters':
-                list_elem = E.ol(style="list-style-type: lower-alpha")
-            else:  # style == empty
-                list_elem = E.ul()
-                list_elem.attrib['class'] = 'empty'
-            for t in list.findall('t'):
-                li = E.li()
-                list_elem.append(li)
-                self.write_t_rec(t, parent=li)
-        parent.append(list_elem)
 
     def write_top(self, left_header, right_header):
         """ Adds the header table """

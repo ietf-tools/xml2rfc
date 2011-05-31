@@ -1,7 +1,6 @@
 # Python libs
 import textwrap
 import string
-import math
 
 # Local lib
 from xml2rfc.writers.base import BaseRfcWriter
@@ -20,6 +19,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.buf = []           # Main buffer
         self.toc = []           # Table of contents buffer
         self.toc_marker = 0     # Line number in buffer to write toc too
+        self.list_counters = {} # Maintain counters for 'format' type lists
 
     def _lb(self, buf=None):
         """ Write a blank line to the file """
@@ -75,21 +75,47 @@ class RawTextRfcWriter(BaseRfcWriter):
         bullet = '   '
         hangIndent = None
         style = list.attrib.get('style', 'empty')
-        if style == 'symbols':
-            bullet = 'o  '
-        elif style == 'hanging':
+        # Check for optional hangIndent
+        if style == 'hanging' or style.startswith('format'):
             hangIndent = list.attrib.get('hangIndent', None)
-            if not hangIndent:
+            if not hangIndent and style == 'hanging':
                 # Set from length of first bullet.
                 hangIndent = len(list.find('t').attrib.get('hangText', '')) + 1
+        format_str = None
+        counter_index = None
+        if style.startswith('format'):
+            format_str = style.partition('format ')[2]
+            if not ('%c' in format_str or '%d' in format_str):
+                xml2rfc.log.warn('No %c or %d found in list format '\
+                                 'string: ' + style)
+            counter_index = list.attrib.get('counter', None)
+            if not counter_index:
+                counter_index = 'temp'
+                self.list_counters[counter_index] = 0
+            elif counter_index not in self.list_counters:
+                # Initialize if we need to
+                self.list_counters[counter_index] = 0
         for i, t in enumerate(list.findall('t')):
-            if style == 'numbers':
+            if style == 'symbols':
+                bullet = 'o  '
+            elif style == 'numbers':
                 bullet = str(i + 1) + '.  '
             elif style == 'letters':
                 bullet = string.ascii_lowercase[i % 26] + '.  '
             elif style == 'hanging':
                 bullet = t.attrib.get('hangText', '')
                 bullet += ' '
+            elif style.startswith('format'):
+                self.list_counters[counter_index] += 1
+                count = self.list_counters[counter_index]
+                if '%d' in format_str:
+                    bullet = format_str.replace(r'%d', str(count) + ' ')
+                elif '%c' in format_str:
+                    bullet = format_str.replace(r'%c', \
+                                                str(string.ascii_lowercase\
+                                                    [count % 26]) + ' ')
+                else:
+                    bullet = format_str
             if hangIndent:
                 self.write_t_rec(t, bullet=bullet, indent=indent, \
                                  sub_indent=int(hangIndent))
@@ -171,9 +197,6 @@ class RawTextRfcWriter(BaseRfcWriter):
                 line.append('[' + target + ']')
                 if child.tail:
                     line.append(child.tail)
-            elif child.tag == 'iref':
-                # TODO: Handle iref
-                pass
             elif child.tag == 'spanx':
                 style = child.attrib.get('style', 'emph')
                 edgechar = '?'
@@ -361,9 +384,6 @@ class RawTextRfcWriter(BaseRfcWriter):
                     line.append('[' + child.attrib['target'] + ']')
                     if child.tail:
                         line.append(child.tail)
-                elif child.tag == 'iref':
-                    # TODO: Handle iref
-                    pass
             if len(line) > 0:
                 matrix[row].append(''.join(line))
             else:
