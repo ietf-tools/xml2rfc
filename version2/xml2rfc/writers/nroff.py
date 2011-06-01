@@ -24,6 +24,14 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
     def __init__(self, xmlrfc, **kwargs):
         PaginatedTextRfcWriter.__init__(self, xmlrfc, **kwargs)
+        self.curr_indent = 0    # Used like a state machine to control
+                                # whether or not we print a .in command
+    
+    def _indent(self, amount):
+        # Writes an indent command if it differs from the last
+        if amount != self.curr_indent:
+            self._write_line('.in ' + str(amount))
+            self.curr_indent = amount
         
     def _write_line(self, string):
         # Used by nroff to write a line with no nroff commands
@@ -55,10 +63,10 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                     full_indent = indent + sub_indent
                 else:
                     full_indent = indent + len(bullet)
-                self._write_line('.in ' + str(full_indent))
+                self._indent(full_indent)
                 self._write_line('.ti ' + str(indent))
             else:
-                self._write_line('.in ' + str(indent))
+                self._indent(indent)
             buf.extend(par)
 
         """
@@ -96,7 +104,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
     def write_raw(self, text, indent=3, align='left'):
         # Wrap in a no fill block
-        self._write_line('.in ' + str(indent))
+        self._indent(indent)
         self._write_line('.nf')
         PaginatedTextRfcWriter.write_raw(self, text, indent=0, align=align)
         self._write_line('.fi')

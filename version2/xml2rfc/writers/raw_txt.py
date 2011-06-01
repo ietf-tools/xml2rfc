@@ -270,7 +270,6 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_address_card(self, author):
         """ Writes a simple address card with no line breaks """
-        self._lb()
         lines = []
         if 'role' in author.attrib:
                 lines.append(author.attrib['fullname'] + ', ' + \
