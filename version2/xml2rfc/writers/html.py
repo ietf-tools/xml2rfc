@@ -37,8 +37,9 @@ class HtmlRfcWriter(BaseRfcWriter):
                                  css_document)
         self.external_css = external_css
 
-        # Create head element, add style/metadata/etc information
-        self.html.append(self._build_head())
+        # Create head element -- only pre_processing() will insert here
+        self.head = E.head()
+        self.html.append(self.head)
 
         # Create body element -- everything will be added to this
         self.body = E.body()
@@ -63,12 +64,6 @@ class HtmlRfcWriter(BaseRfcWriter):
                               title=HtmlRfcWriter.defaults['style_title'])
         element.attrib['type'] = 'text/css'
         return element
-
-    def _build_head(self):
-        """ Returns the constructed <head> element """
-        head = E.head()
-        head.append(self._build_stylesheet())
-        return head
 
     def _write_list(self, list, parent):
         style = list.attrib.get('style', 'empty')
@@ -511,8 +506,32 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.toc_list.append(li)
 
     def pre_processing(self):
-        """ Handle any metadata """
-        pass
+        """ Insert all metadata into head """
+        # Document title
+        title = self.r.find('front/title')
+        if title is not None and title.text:
+            self.head.append(E.title(title.text))
+        
+        # Stylesheet
+        self.head.append(self._build_stylesheet())
+        
+        # Description (from abstract first t element)
+        abs_t = self.r.find('front/abstract/t')
+        if abs_t is not None and abs_t.text:
+            self.head.append(E.meta(name='description', content=abs_t.text))
+        
+        # Keywords
+        keywords = self.r.findall('front/keyword')
+        keyword_strings = []
+        for keyword in keywords:
+            if keyword.text:
+                keyword_strings.append(keyword.text)
+            else:
+                xml2rfc.log.warn('<keyword> element was ignored because it '\
+                                'had empty text.')
+        if len(keyword_strings) > 0:
+            self.head.append(E.meta(name='keywords', \
+                                    content=', '.join(keyword_strings)))
 
     def post_processing(self):
         # Nothing to do here
