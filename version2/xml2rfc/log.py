@@ -1,3 +1,7 @@
+# --------------------------------------------------
+# Copyright The IETF Trust 2011, All Rights Reserved
+# --------------------------------------------------
+
 """ Module Singleton which handles output of warnings and errors to
     stdout/stderr, or alternatively to specified file paths.
     

@@ -1,3 +1,7 @@
+# --------------------------------------------------
+# Copyright The IETF Trust 2011, All Rights Reserved
+# --------------------------------------------------
+
 # Local libs
 from xml2rfc.writers.paginated_txt import PaginatedTextRfcWriter
 from xml2rfc.writers.raw_txt import RawTextRfcWriter

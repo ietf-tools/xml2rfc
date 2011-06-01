@@ -1,3 +1,7 @@
+# --------------------------------------------------
+# Copyright The IETF Trust 2011, All Rights Reserved
+# --------------------------------------------------
+
 # Local libs
 from xml2rfc.writers.raw_txt import RawTextRfcWriter
 from xml2rfc.writers.base import BaseRfcWriter

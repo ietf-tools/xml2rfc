@@ -1,3 +1,7 @@
+# --------------------------------------------------
+# Copyright The IETF Trust 2011, All Rights Reserved
+# --------------------------------------------------
+
 # Python libs
 import textwrap
 import string

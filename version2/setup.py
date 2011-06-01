@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+# --------------------------------------------------
+# Copyright The IETF Trust 2011, All Rights Reserved
+# --------------------------------------------------
 
 from setuptools import setup
 

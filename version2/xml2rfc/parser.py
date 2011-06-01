@@ -1,4 +1,8 @@
-""" Public parser module """
+# --------------------------------------------------
+# Copyright The IETF Trust 2011, All Rights Reserved
+# --------------------------------------------------
+
+""" Public XML parser module """
 
 import lxml.etree
 import re

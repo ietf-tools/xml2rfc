@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# --------------------------------------------------
+# Copyright The IETF Trust 2011, All Rights Reserved
+# --------------------------------------------------
+
 """ Tests all output writers with a given input file """
 
 import xml2rfc

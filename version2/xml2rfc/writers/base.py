@@ -1,4 +1,7 @@
-# Python libs
+# --------------------------------------------------
+# Copyright The IETF Trust 2011, All Rights Reserved
+# --------------------------------------------------
+
 import string
 import datetime
 import xml2rfc.log
