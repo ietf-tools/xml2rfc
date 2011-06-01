@@ -465,10 +465,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         
         if style != 'headers':
             output.append(''.join(borderstring))
-
+        
         # Finally, write the table to the buffer with proper alignment
         align = table.attrib.get('align', 'center')
-        self._lb()
         self.write_raw('\n'.join(output), align=align)
 
     def add_to_toc(self, bullet, title, idstring=None, anchor=None):
