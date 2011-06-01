@@ -19,7 +19,8 @@ class BaseRfcWriter:
         # We will refer to the XmlRfc document root as 'r'
         self.xmlrfc = xmlrfc
         self.r = xmlrfc.getroot()
-
+        self.pis = xmlrfc.getpis()
+        
         # Document counters
         self.ref_index = 1
         self.figure_count = 0

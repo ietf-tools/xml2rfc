@@ -68,6 +68,7 @@ class XmlRfcParser:
         parser = lxml.etree.XMLParser(dtd_validation=True, \
                                       no_network=False, \
                                       remove_comments=True, \
+                                      remove_pis=False, \
                                       remove_blank_text=True)
 
         # Add our custom resolver
@@ -105,10 +106,22 @@ class XmlRfc:
 
     def __init__(self, tree):
         self.tree = tree
+        
+        # Grab processing instructions from xml tree
+        element = tree.getroot().getprevious()
+        self.pis = []
+        while element is not None:
+            if element.tag is lxml.etree.PI:
+                self.pis.append(element.text)
+            element = element.getprevious()
 
     def getroot(self):
         """ Wrapper method """
         return self.tree.getroot()
+    
+    def getpis(self):
+        """ Returns a list of the XML processing instructions """
+        return self.pis
 
     def prepare(self):
         """ Prepare the RFC document for output.
