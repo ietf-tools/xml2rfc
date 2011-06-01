@@ -30,12 +30,20 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     # We'll store each marking as a hash of line_num: section_length.  This way
     # we can step through these markings during writing to preemptively
     # construct appropriate page breaks.
-    def _write_figure(self, figure):
-        """ Override base writer to add a marking """
+    def write_raw(self, *args, **kwargs):
+        """ Override text writer to add a marking """
         begin = len(self.buf)
-        BaseRfcWriter._write_figure(self, figure)
+        RawTextRfcWriter.write_raw(self, *args, **kwargs)
         end = len(self.buf)
         self.section_marks[begin] = end - begin
+        
+    def _write_text(self, *args, **kwargs):
+        """ Override text writer to add a marking """
+        begin = len(self.buf)
+        RawTextRfcWriter._write_text(self, *args, **kwargs)
+        end = len(self.buf)
+        self.section_marks[begin] = end - begin
+    # ------------------------------------------------------------------------
 
     def pre_processing(self):
         """ Prepares the header and footer information """
@@ -78,8 +86,8 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         page_num = 0
         for line_num, line in enumerate(self.buf):
             if line_num in self.section_marks:
-                # If this section will exceed a page, insert blank lines
-                # until the end of the page
+                # If this section will exceed a page, force a page break by
+                # inserting blank lines until the end of the page
                 if page_len + self.section_marks[line_num] > page_maxlen:
                     for i in range(page_maxlen - page_len):
                         self.paged_buf.append('')

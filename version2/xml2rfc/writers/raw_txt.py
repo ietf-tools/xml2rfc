@@ -147,10 +147,10 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_raw(self, text, indent=3, align='left'):
         """ Writes a raw stream of characters, preserving space and breaks """
-        # Convert tabs into spaces
-        text = text.expandtabs(4)
+        # Start with a newline
+        self._lb()
         # Append an indent to every newline of the data
-        lines = text.split('\n')
+        lines = text.strip().expandtabs(4).split('\n')
         if align == 'center':
             # Find the longest line, and use that as a fixed center.
             longest_line = len(max(lines, key=len))
