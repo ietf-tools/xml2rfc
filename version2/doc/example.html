@@ -1,0 +1,214 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Example usage &mdash; xml2rfc v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="xml2rfc v0.2 documentation" href="index.html" />
+    <link rel="next" title="Parser Module" href="parser.html" />
+    <link rel="prev" title="Xml2rfc Documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parser.html" title="Parser Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Xml2rfc Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">xml2rfc v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="example-usage">
+<h1>Example usage<a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h1>
+<p>This section provides a guide for using the command line application xml2rfc, as well as the graphical version.</p>
+<div class="section" id="command-line-application">
+<h2>Command line application<a class="headerlink" href="#command-line-application" title="Permalink to this headline">¶</a></h2>
+<p>Official Usage: <tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">SOURCE</span> <span class="pre">[options]</span> <span class="pre">FORMATS...</span></tt></p>
+<dl class="docutils">
+<dt><strong>Options</strong></dt>
+<dd><p class="first">The following parameters affect how xml2rfc behaves, however none are required.</p>
+<table class="last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></td>
+<td>show the help message and exit</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-v</span>, <span class="option">--verbose</span></kbd></td>
+<td>print extra information</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-q</span>, <span class="option">--quiet</span></kbd></td>
+<td>dont print anything</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-w</span>, <span class="option">--warn-error</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>treat warnings as python exceptions.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-e</span>, <span class="option">--extcss</span></kbd></td>
+<td>write an external link to the stylesheet instead of
+expanding it.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-c <var>CSS</var></span>, <span class="option">--css=<var>CSS</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>specify an alternate css file (ignored if html format
+is not enabled)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-d <var>DTD</var></span>, <span class="option">--dtd=<var>DTD</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>specify an alternate dtd file</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-f <var>FILENAME</var></span>, <span class="option">--filename=<var>FILENAME</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>specify an output filename</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--clear-cache</span></kbd></td>
+<td>purge the cache and exit</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--version</span></kbd></td>
+<td>display the version number and exit</td></tr>
+</tbody>
+</table>
+</dd>
+<dt><strong>Formats</strong></dt>
+<dd><p class="first">At least one but as many as all of the following output formats must
+be specified. The destination file will be created according to the
+argument given to &#8211;filename.  If no argument was given, it will
+create the file(s) &#8220;output.format&#8221;.  If no format is specified, xml2rfc
+will default to paginated text (<tt class="docutils literal"><span class="pre">--text</span></tt>).</p>
+<table class="last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--raw</span></kbd></td>
+<td>outputs to a text file, unpaginated</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--text</span></kbd></td>
+<td>outputs to a text file with proper page breaks</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--nroff</span></kbd></td>
+<td>outputs to an nroff file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--html</span></kbd></td>
+<td>outputs to an html file</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--exp</span></kbd></td>
+<td>outputs to an XML file with all references expanded.</td></tr>
+</tbody>
+</table>
+</dd>
+<dt><strong>Examples</strong></dt>
+<dd><div class="first last line-block">
+<div class="line"><tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">rfc.xml</span> <span class="pre">--text</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">draft.xml</span> <span class="pre">-c</span> <span class="pre">alt.css</span> <span class="pre">-d</span> <span class="pre">alt.dtd</span> <span class="pre">-f</span> <span class="pre">&quot;Draft-1.0&quot;</span> <span class="pre">--text</span> <span class="pre">--nroff</span> <span class="pre">--html</span></tt></div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="graphical-application">
+<h2>Graphical application<a class="headerlink" href="#graphical-application" title="Permalink to this headline">¶</a></h2>
+<p><em>Not included in this version</em></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Example usage</a><ul>
+<li><a class="reference internal" href="#command-line-application">Command line application</a></li>
+<li><a class="reference internal" href="#graphical-application">Graphical application</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Xml2rfc Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parser.html"
+                        title="next chapter">Parser Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/example.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parser.html" title="Parser Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Xml2rfc Documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">xml2rfc v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Concentric Sky.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
