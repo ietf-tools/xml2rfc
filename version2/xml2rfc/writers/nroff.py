@@ -10,7 +10,10 @@ import textwrap
 
 
 class NroffRfcWriter(PaginatedTextRfcWriter):
-    """ Writes to an nroff file """
+    """ Writes to an nroff formatted file 
+        
+        The page width is controlled by the *width* parameter.
+    """
 
     default_header = ['.pl 10.0i',      # Page length
                       '.po 0',          # Page offset
@@ -22,8 +25,9 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                       '.ad l',          # Left margin adjustment only
                       ]
 
-    def __init__(self, xmlrfc, **kwargs):
-        PaginatedTextRfcWriter.__init__(self, xmlrfc, **kwargs)
+    def __init__(self, xmlrfc, width=72, quiet=False, verbose=False):
+        PaginatedTextRfcWriter.__init__(self, xmlrfc, width=width, \
+                                        quiet=quiet, verbose=verbose)
         self.curr_indent = 0    # Used like a state machine to control
                                 # whether or not we print a .in command
     

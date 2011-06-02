@@ -116,7 +116,7 @@ class XmlRfc:
             element = element.getprevious()
 
     def getroot(self):
-        """ Wrapper method """
+        """ Wrapper method to get the root of the XML tree"""
         return self.tree.getroot()
     
     def getpis(self):

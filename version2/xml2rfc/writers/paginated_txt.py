@@ -9,10 +9,14 @@ import xml2rfc.utils
 
 
 class PaginatedTextRfcWriter(RawTextRfcWriter):
-    """ Writes to a text file, paginated with headers and footers """
+    """ Writes to a text file, paginated with headers and footers 
+        
+        The page width is controlled by the *width* parameter.
+    """
 
-    def __init__(self, xmlrfc, **kwargs):
-        RawTextRfcWriter.__init__(self, xmlrfc, **kwargs)
+    def __init__(self, xmlrfc, width=72, quiet=False, verbose=False):
+        RawTextRfcWriter.__init__(self, xmlrfc, width=width, quiet=quiet, \
+                                  verbose=verbose)
         self.left_header = ''
         self.center_header = ''
         self.right_header = ''

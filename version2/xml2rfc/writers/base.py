@@ -200,10 +200,8 @@ class BaseRfcWriter:
             self.ref_index = index
 
     def write(self, filename):
-        """ Public method to write an RFC document to a file.
+        """ Public method to write the RFC document to a file. """
 
-            Step through the rfc tree and call writer specific methods.
-        """
         # Do any pre processing necessary, such as inserting metadata
         self.pre_processing()
 

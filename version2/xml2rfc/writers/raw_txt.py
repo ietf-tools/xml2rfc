@@ -12,13 +12,13 @@ import xml2rfc.utils
 
 
 class RawTextRfcWriter(BaseRfcWriter):
-    """ Writes to a text file, unpaginated, no headers or footers.
-
-        Callback methods from base class will all write to a buffer list, buf
+    """ Writes to a text file, unpaginated, no headers or footers. 
+        
+        The page width is controlled by the *width* parameter.
     """
 
-    def __init__(self, xmlrfc, width=72, **kwargs):
-        BaseRfcWriter.__init__(self, xmlrfc, **kwargs)
+    def __init__(self, xmlrfc, width=72, quiet=False, verbose=False):
+        BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)
         self.width = width      # Page width
         self.buf = []           # Main buffer
         self.toc = []           # Table of contents buffer
