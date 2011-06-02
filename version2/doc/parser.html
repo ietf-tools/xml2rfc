@@ -23,8 +23,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="xml2rfc v0.2 documentation" href="index.html" />
-    <link rel="next" title="Writer Modules" href="writers.html" />
-    <link rel="prev" title="Xml2rfc Documentation" href="index.html" /> 
+    <link rel="next" title="Writer Module" href="writers.html" />
+    <link rel="prev" title="Example usage" href="example.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,10 +37,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="writers.html" title="Writer Modules"
+          <a href="writers.html" title="Writer Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Xml2rfc Documentation"
+          <a href="example.html" title="Example usage"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">xml2rfc v0.2 documentation</a> &raquo;</li> 
       </ul>
@@ -51,9 +51,27 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-xml2rfc.parser">
-<span id="parser-module"></span><h1>Parser Module<a class="headerlink" href="#module-xml2rfc.parser" title="Permalink to this headline">¶</a></h1>
-<p>Public parser module</p>
+  <div class="section" id="parser-module">
+<h1>Parser Module<a class="headerlink" href="#parser-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="abstract">
+<h2>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">¶</a></h2>
+<p>The xml2rfc parser module contains two classes for public use: <tt class="docutils literal"><span class="pre">XmlRfcParser</span></tt>
+and <tt class="docutils literal"><span class="pre">XmlRfc</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">XmlRfcParser</span></tt> is a basic XML parser which uses
+the <a class="reference external" href="http://lxml.de/">lxml library</a> to parse an xml file into a tree
+structure.  An instance of <tt class="docutils literal"><span class="pre">XmlRfc</span></tt> contains a reference to this parsed
+tree, along with some helper methods to provide useful additional formatting
+to the tree.</p>
+<p>Accessing nodes in the tree is done through the standard lxml.etree interface.
+You can read more about that at <a class="reference external" href="http://lxml.de/tutorial.html">their official documentation</a></p>
+<p><em>Example &#8211; getting the title of an rfc document</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">root</span> <span class="o">=</span> <span class="n">xmlrfc</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+<span class="n">title</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;front/title&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="xml2rfc.parser.XmlRfcParser">
 <em class="property">class </em><tt class="descclassname">xml2rfc.parser.</tt><tt class="descname">XmlRfcParser</tt><big>(</big><em>filename</em>, <em>verbose=False</em>, <em>quiet=False</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfcParser" title="Permalink to this definition">¶</a></dt>
@@ -74,9 +92,15 @@
 methods to prepare the tree for output.</p>
 <p>Accessing the rfc tree is done by getting the root node from getroot()</p>
 <dl class="method">
+<dt id="xml2rfc.parser.XmlRfc.getpis">
+<tt class="descname">getpis</tt><big>(</big><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.getpis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of the XML processing instructions</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="xml2rfc.parser.XmlRfc.getroot">
 <tt class="descname">getroot</tt><big>(</big><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.getroot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper method</p>
+<dd><p>Wrapper method to get the root of the XML tree</p>
 </dd></dl>
 
 <dl class="method">
@@ -104,6 +128,7 @@ be ascii formatted</p>
 </dd></dl>
 
 </div>
+</div>
 
 
           </div>
@@ -111,12 +136,21 @@ be ascii formatted</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Parser Module</a><ul>
+<li><a class="reference internal" href="#abstract">Abstract</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Xml2rfc Documentation</a></p>
+  <p class="topless"><a href="example.html"
+                        title="previous chapter">Example usage</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="writers.html"
-                        title="next chapter">Writer Modules</a></p>
+                        title="next chapter">Writer Module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/parser.txt"
@@ -149,10 +183,10 @@ be ascii formatted</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="writers.html" title="Writer Modules"
+          <a href="writers.html" title="Writer Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Xml2rfc Documentation"
+          <a href="example.html" title="Example usage"
              >previous</a> |</li>
         <li><a href="index.html">xml2rfc v0.2 documentation</a> &raquo;</li> 
       </ul>

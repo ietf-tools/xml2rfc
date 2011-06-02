@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Writer Modules &mdash; xml2rfc v0.2 documentation</title>
+    <title>Writer Module &mdash; xml2rfc v0.2 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,7 +23,6 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="xml2rfc v0.2 documentation" href="index.html" />
-    <link rel="next" title="Command-Line Application" href="cli.html" />
     <link rel="prev" title="Parser Module" href="parser.html" /> 
   </head>
   <body>
@@ -37,9 +36,6 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="cli.html" title="Command-Line Application"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
           <a href="parser.html" title="Parser Module"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">xml2rfc v0.2 documentation</a> &raquo;</li> 
@@ -51,8 +47,81 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-xml2rfc.writers.base">
-<span id="writer-modules"></span><h1>Writer Modules<a class="headerlink" href="#module-xml2rfc.writers.base" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="writer-module">
+<h1>Writer Module<a class="headerlink" href="#writer-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="abstract">
+<h2>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">¶</a></h2>
+<p>The xml2rfc writer package contains a <a class="reference internal" href="#base-writer"><em>Base Writer Interface</em></a> interface (an
+abstract python class) with callback methods to write specific elements of an RFC
+document.  Adding a new output format to xml2rfc would be done by extending
+this class.</p>
+<p>Additionally, there is a collection of <a class="reference internal" href="#formatted-writers"><em>Formatted Writers</em></a> which provide
+implementations for various formats.  Each writer takes an xmlrfc instance as
+a constructor argument, and has a single public <tt class="docutils literal"><span class="pre">write()</span></tt> method which
+converts and writes the rfc document to a specified filename.</p>
+</div>
+<div class="section" id="formatted-writers">
+<span id="id1"></span><h2>Formatted Writers<a class="headerlink" href="#formatted-writers" title="Permalink to this headline">¶</a></h2>
+<p>The following writer implementations are provided in xml2rfc.</p>
+<dl class="class">
+<dt id="xml2rfc.writers.RawTextRfcWriter">
+<em class="property">class </em><tt class="descclassname">xml2rfc.writers.</tt><tt class="descname">RawTextRfcWriter</tt><big>(</big><em>xmlrfc</em>, <em>width=72</em>, <em>quiet=False</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.RawTextRfcWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes to a text file, unpaginated, no headers or footers.</p>
+<p>The page width is controlled by the <em>width</em> parameter.</p>
+<dl class="method">
+<dt id="xml2rfc.writers.RawTextRfcWriter.write">
+<tt class="descname">write</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.RawTextRfcWriter.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Public method to write the RFC document to a file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="xml2rfc.writers.PaginatedTextRfcWriter">
+<em class="property">class </em><tt class="descclassname">xml2rfc.writers.</tt><tt class="descname">PaginatedTextRfcWriter</tt><big>(</big><em>xmlrfc</em>, <em>width=72</em>, <em>quiet=False</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.PaginatedTextRfcWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes to a text file, paginated with headers and footers</p>
+<p>The page width is controlled by the <em>width</em> parameter.</p>
+<dl class="method">
+<dt id="xml2rfc.writers.PaginatedTextRfcWriter.write">
+<tt class="descname">write</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.PaginatedTextRfcWriter.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Public method to write the RFC document to a file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="xml2rfc.writers.NroffRfcWriter">
+<em class="property">class </em><tt class="descclassname">xml2rfc.writers.</tt><tt class="descname">NroffRfcWriter</tt><big>(</big><em>xmlrfc</em>, <em>width=72</em>, <em>quiet=False</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.NroffRfcWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes to an nroff formatted file</p>
+<p>The page width is controlled by the <em>width</em> parameter.</p>
+<dl class="method">
+<dt id="xml2rfc.writers.NroffRfcWriter.write">
+<tt class="descname">write</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.NroffRfcWriter.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Public method to write the RFC document to a file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="xml2rfc.writers.HtmlRfcWriter">
+<em class="property">class </em><tt class="descclassname">xml2rfc.writers.</tt><tt class="descname">HtmlRfcWriter</tt><big>(</big><em>xmlrfc</em>, <em>css_document=None</em>, <em>external_css=False</em>, <em>lang='en'</em>, <em>quiet=False</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.HtmlRfcWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes to an HTML file.</p>
+<p>If <em>css_document</em> is specified, an alternate css file is used.</p>
+<p>If <em>external_css</em> is set, the html file will contain a link to
+the css file, instead of inlining the file, which is the default
+behavior.</p>
+<p><em>lang</em> controls the lang attribute of the html document</p>
+<dl class="method">
+<dt id="xml2rfc.writers.HtmlRfcWriter.write">
+<tt class="descname">write</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.HtmlRfcWriter.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Public method to write the RFC document to a file.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-xml2rfc.writers.base">
+<span id="base-writer-interface"></span><span id="base-writer"></span><h2>Base Writer Interface<a class="headerlink" href="#module-xml2rfc.writers.base" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="xml2rfc.writers.base.BaseRfcWriter">
 <em class="property">class </em><tt class="descclassname">xml2rfc.writers.base.</tt><tt class="descname">BaseRfcWriter</tt><big>(</big><em>xmlrfc</em>, <em>quiet=False</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter" title="Permalink to this definition">¶</a></dt>
@@ -60,7 +129,7 @@
 <p>All public methods need to be overridden for a writer implementation.</p>
 <dl class="method">
 <dt id="xml2rfc.writers.base.BaseRfcWriter.add_to_toc">
-<tt class="descname">add_to_toc</tt><big>(</big><em>bullet</em>, <em>title</em>, <em>idstring=None</em>, <em>anchor=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.add_to_toc" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add_to_toc</tt><big>(</big><em>bullet</em>, <em>title</em>, <em>link=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.add_to_toc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a section to the table of contents</p>
 </dd></dl>
 
@@ -98,8 +167,7 @@
 <dl class="method">
 <dt id="xml2rfc.writers.base.BaseRfcWriter.write">
 <tt class="descname">write</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Public method to write an RFC document to a file.</p>
-<p>Step through the rfc tree and call writer specific methods.</p>
+<dd><p>Public method to write the RFC document to a file.</p>
 </dd></dl>
 
 <dl class="method">
@@ -112,6 +180,12 @@
 <dt id="xml2rfc.writers.base.BaseRfcWriter.write_heading">
 <tt class="descname">write_heading</tt><big>(</big><em>text</em>, <em>bullet=''</em>, <em>idstring=None</em>, <em>anchor=None</em>, <em>level=1</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write_heading" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes a section heading</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml2rfc.writers.base.BaseRfcWriter.write_iref_index">
+<tt class="descname">write_iref_index</tt><big>(</big><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write_iref_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes an additional index if there were iref elements</p>
 </dd></dl>
 
 <dl class="method">
@@ -167,6 +241,7 @@ so that they exist on the same lines of text</p>
 </dd></dl>
 
 </div>
+</div>
 
 
           </div>
@@ -174,12 +249,19 @@ so that they exist on the same lines of text</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Writer Module</a><ul>
+<li><a class="reference internal" href="#abstract">Abstract</a></li>
+<li><a class="reference internal" href="#formatted-writers">Formatted Writers</a></li>
+<li><a class="reference internal" href="#module-xml2rfc.writers.base">Base Writer Interface</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="parser.html"
                         title="previous chapter">Parser Module</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="cli.html"
-                        title="next chapter">Command-Line Application</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/writers.txt"
@@ -211,9 +293,6 @@ so that they exist on the same lines of text</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="cli.html" title="Command-Line Application"
-             >next</a> |</li>
         <li class="right" >
           <a href="parser.html" title="Parser Module"
              >previous</a> |</li>

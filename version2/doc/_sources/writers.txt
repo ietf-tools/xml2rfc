@@ -1,5 +1,40 @@
-Writer Modules
-==============
+Writer Module
+=============
+
+Abstract
+--------
+The xml2rfc writer package contains a :ref:`base-writer` interface (an
+abstract python class) with callback methods to write specific elements of an RFC 
+document.  Adding a new output format to xml2rfc would be done by extending
+this class.
+
+Additionally, there is a collection of :ref:`formatted-writers` which provide
+implementations for various formats.  Each writer takes an xmlrfc instance as
+a constructor argument, and has a single public ``write()`` method which
+converts and writes the rfc document to a specified filename.
+
+.. _formatted-writers:
+
+Formatted Writers
+-----------------
+
+The following writer implementations are provided in xml2rfc.
+
+.. autoclass:: xml2rfc.writers.RawTextRfcWriter
+	:members: write
+.. autoclass:: xml2rfc.writers.PaginatedTextRfcWriter
+	:members: write
+.. autoclass:: xml2rfc.writers.NroffRfcWriter
+	:members: write
+.. autoclass:: xml2rfc.writers.HtmlRfcWriter
+	:members: write
+
+.. _base-writer:
+
+Base Writer Interface
+---------------------
+
+
 
 .. automodule:: xml2rfc.writers.base
  :members:
