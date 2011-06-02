@@ -480,6 +480,10 @@ class RawTextRfcWriter(BaseRfcWriter):
         # No anchors for text
         pass
 
+    def write_iref_index(self):
+        # No iref for text
+        pass
+
     def pre_processing(self):
         # Replace unicode characters in RFC with proper ascii equivalents
         self.xmlrfc.replaceUnicode()

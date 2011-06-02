@@ -265,6 +265,10 @@ class BaseRfcWriter:
                                idstring='rfc.section.' + ref_indexstring)
             self.add_to_toc(ref_indexstring, ref_title)
             self.write_reference_list(references[0])
+            
+        # Additional index -- The writer is responsible for tracking irefs, 
+        # so we have nothing to pass here
+        self.write_iref_index()
 
         # Appendix sections
         self._write_section_rec(self.r.find('back'), None, appendix=True)
@@ -340,6 +344,11 @@ class BaseRfcWriter:
     def write_reference_list(self, list):
         """ Writes a <references> element """
         raise NotImplementedError('write_reference_list() needs to be ' \
+                                  'overridden')
+        
+    def write_iref_index(self):
+        """ Writes an additional index if there were iref elements """
+        raise NotImplementedError('write_iref_index() needs to be ' \
                                   'overridden')
 
     def insert_anchor(self, text):
