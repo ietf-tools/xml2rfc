@@ -512,7 +512,8 @@ class HtmlRfcWriter(BaseRfcWriter):
     def write_iref_index(self):
         # Omit this element if the index is empty
         if len(self.iref_index) > 0:
-            self.write_heading('Index')
+            self.write_heading('Index', idstring='index')
+            self.add_to_toc('', 'Index', link='index')
             dl = E.DL()
             for iref in self.iref_index:
                 if iref[1]:
@@ -522,12 +523,12 @@ class HtmlRfcWriter(BaseRfcWriter):
                     dl.append(E.DD(E.A(iref[0], href='#' + iref[0])))
             self.body.append(dl)
 
-    def add_to_toc(self, bullet, title, idstring=None, anchor=None):
+    def add_to_toc(self, bullet, title, link=None):
         li = E.LI('')
         if bullet:
             li.text += bullet + '.   '
-        if idstring:
-            li.append(E.A(title, href='#' + idstring))
+        if link:
+            li.append(E.A(title, href='#' + link))
         else:
             li.text += title
         self.toc_list.append(li)

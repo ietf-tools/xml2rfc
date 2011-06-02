@@ -469,7 +469,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         align = table.attrib.get('align', 'center')
         self.write_raw('\n'.join(output), align=align)
 
-    def add_to_toc(self, bullet, title, idstring=None, anchor=None):
+    def add_to_toc(self, bullet, title, link=None):
         if bullet:
             toc_indent = ' ' * ((bullet.count('.')) * 2)
             self.toc.append(toc_indent + bullet + '. ' + title)

@@ -162,7 +162,7 @@ class BaseRfcWriter:
             include_toc = section.attrib.get('toc', 'include')
             if include_toc != 'exclude':
                 self.add_to_toc(indexstring, section.attrib['title'], \
-                                idstring=idstring, anchor=anchor)
+                                link=idstring)
         else:
             # Must be <middle> or <back> element -- no title or index.
             indexstring = ''
@@ -245,25 +245,28 @@ class BaseRfcWriter:
         # References sections
         # Treat references as nested only if there is more than one
         ref_indexstring = str(self.ref_index)
+        ref_idstring = 'rfc.section.' + ref_indexstring
         references = self.r.findall('back/references')
         if len(references) > 1:
             ref_title = 'References'
             self.write_heading(ref_title, bullet=ref_indexstring + '.', \
-                               idstring='rfc.section.' + ref_indexstring)
-            self.add_to_toc(ref_indexstring, ref_title)
+                               idstring=ref_idstring)
+            self.add_to_toc(ref_indexstring, ref_title, link=ref_idstring)
             for index, reference_list in enumerate(references):
                 ref_newindexstring = ref_indexstring + '.' + str(index + 1)
+                ref_newidstring = ref_idstring + '.' + str(index + 1)
                 ref_title = reference_list.attrib['title']
                 self.write_heading(ref_title, bullet=ref_newindexstring + '.',\
-                                   idstring='rfc.section.' + \
-                                   ref_newindexstring, level=2)
-                self.add_to_toc(ref_newindexstring, ref_title)
+                                   idstring=ref_newidstring, level=2)
+                self.add_to_toc(ref_newindexstring, ref_title, \
+                                link=ref_newidstring)
                 self.write_reference_list(reference_list)
         elif len(references) == 1:
             ref_title = references[0].attrib['title']
             self.write_heading(ref_title, bullet=ref_indexstring + '.', \
-                               idstring='rfc.section.' + ref_indexstring)
-            self.add_to_toc(ref_indexstring, ref_title)
+                               idstring=ref_idstring)
+            self.add_to_toc(ref_indexstring, ref_title, \
+                            link=ref_idstring)
             self.write_reference_list(references[0])
             
         # Additional index -- The writer is responsible for tracking irefs, 
@@ -362,7 +365,7 @@ class BaseRfcWriter:
         """
         raise NotImplementedError('draw_table() needs to be overridden')
 
-    def add_to_toc(self, bullet, title, idstring=None, anchor=None):
+    def add_to_toc(self, bullet, title, link=None):
         """ Adds a section to the table of contents """
         raise NotImplementedError('add_to_toc() needs to be overridden')
 
