@@ -168,6 +168,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         if bullet:
             # Use separate elements for bullet and text
             a_bullet = E.A(bullet)
+            a_bullet.tail = ' '
             if idstring:
                 a_bullet.attrib['href'] = '#' + idstring
             h.append(a_bullet)
@@ -177,7 +178,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                 h.append(a_text)
             else:
                 # Plain text
-                a_bullet.tail = ' ' + text
+                a_bullet.tail += text
         else:
             # Only use one <a> pointing to idstring
             a = E.A(text)
