@@ -18,6 +18,7 @@ class ExpandedXmlWriter:
         self.verbose = verbose
     
     def write(self, filename):
+        """ Public method to write the XML document to a file """
         # Use lxml's built-in serialization
         file = open(filename, 'w')
         file.write(lxml.etree.tostring(self.root, pretty_print=True))
