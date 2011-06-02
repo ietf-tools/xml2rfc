@@ -127,10 +127,11 @@ class XmlRfc:
         """ Prepare the RFC document for output.
 
             This method is automatically invoked after the xml file is
-            finished being read.  It may do any of the following things:
+            finished being read, unless ``prepare=False`` was set.  It 
+            may do any of the following things:
 
-            -- Set any necessary default values.
-            -- Pre-format some elements to the proper text output.
+            * Set any necessary default values.
+            * Pre-format some elements to the proper text output.
 
             We can perform any operations here that will be common to all
             ouput formats.  Any further formatting is handled in the

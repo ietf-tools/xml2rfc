@@ -81,7 +81,8 @@ def main():
     if not os.path.exists(source):
         print 'No such file:', source
         sys.exit(1)
-    if not (options.raw or options.text or options.nroff or options.html):
+    if not (options.raw or options.text or options.nroff or options.html \
+            or options.exp):
         # Default to text output
         options.text = True
         
@@ -96,7 +97,7 @@ def main():
                                   quiet=options.quiet)
 
     try:
-        xmlrfc = parser.parse()
+        xmlrfc = parser.parse(prepare=False)
     except lxml.etree.XMLSyntaxError, error:
         if not options.verbose:
             # Parser must have been printing on a single line. Fix this
@@ -111,6 +112,16 @@ def main():
     else:
         # Create filename based on input
         filename = os.path.basename(source).rsplit('.', 1)[0]
+    
+    # Only expanded XML writer uses an unprepared tree
+    if options.exp:
+        expwriter = xml2rfc.ExpandedXmlWriter(xmlrfc, \
+                                              quiet=options.quiet, \
+                                              verbose=options.verbose)
+        expwriter.write(filename + '-expanded.xml')
+        
+    # For all further writers, run the preparation method before output
+    xmlrfc.prepare()
     if options.raw:
         rawwriter = xml2rfc.RawTextRfcWriter(xmlrfc, \
                                              quiet=options.quiet, \
