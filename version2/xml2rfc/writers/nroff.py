@@ -51,6 +51,10 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         #-------------------------------------------------------------
         if not buf:
             buf = self.buf
+            
+        # Store buffer position for paging information
+        begin = len(self.buf)
+
         if lb:
             self._lb(buf=buf)
         if string:
@@ -72,6 +76,10 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             else:
                 self._indent(indent)
             buf.extend(par)
+        
+        # Page break information   
+        end = len(self.buf)
+        self.section_marks[begin] = end - begin
 
         """
         elif bullet:
@@ -138,8 +146,24 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self._write_line('.ds LF ' + self.left_footer)
         self._write_line('.ds CF ' + self.center_footer)
         self._write_line('.ds RF FORMFEED[Page] % ')
+    
+    def post_processing(self):
+        """ Insert page break commands """
+
+        # Write buffer to secondary buffer, inserting breaks every 58 lines
+        page_len = 0
+        page_maxlen = 55
+        for line_num, line in enumerate(self.buf):
+            if line_num in self.section_marks:
+                # If this section will exceed a page, insert a break command
+                if page_len + self.section_marks[line_num] > page_maxlen:
+                    self.paged_buf.append('.bp')
+                    page_len = 0
+            if page_len + 1 > 55:
+                self.paged_buf.append('.bp')
+                page_len = 0
+            self.paged_buf.append(line)
+            page_len += 1
 
     def write_to_file(self, filename):
-        # Use RawText's method instead of PaginatedText, so we dont get breaks.
-        # Breaks are already handled by nroff commands
-        RawTextRfcWriter.write_to_file(self, filename)
+        PaginatedTextRfcWriter.write_to_file(self, filename)
