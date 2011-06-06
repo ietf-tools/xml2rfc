@@ -162,7 +162,8 @@ class BaseRfcWriter:
                                anchor=anchor, level=level)
             # Write to TOC as well
             include_toc = section.attrib.get('toc', 'include')
-            if include_toc != 'exclude':
+            if include_toc != 'exclude' and \
+            (appendix == False or self.pis.get('tocappendix', 'yes') == 'yes'):
                 self.add_to_toc(indexstring, section.attrib['title'], \
                                 link=idstring)
         else:
@@ -187,7 +188,7 @@ class BaseRfcWriter:
             if appendix == True:
                 self._write_section_rec(child_sec, 'Appendix ' + \
                                         string.uppercase[index - 1] + '',
-                                        level=level + 1)
+                                        level=level + 1, appendix=True)
             else:
                 if indexstring:
                     self._write_section_rec(child_sec, indexstring + '.' \
