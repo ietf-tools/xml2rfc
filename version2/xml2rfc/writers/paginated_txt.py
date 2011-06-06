@@ -75,6 +75,10 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             else:
                 self.left_footer += surname
         self.center_footer = self.r.attrib.get('category', '(Category)')
+        
+        # Check for PI override
+        self.center_footer = self.pis.get('footer', self.center_footer)
+        self.left_header = self.pis.get('header', self.left_header)
 
     def post_processing(self):
         """ Add paging information to a secondary buffer """

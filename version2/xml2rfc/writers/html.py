@@ -145,8 +145,12 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.body.append(self.toc_header)
         self.body.append(self.toc_list)
 
-    def write_raw(self, text, align='left'):
-        pre = E.PRE(text)
+    def write_raw(self, text, align='left', blanklines=0):
+        pre = E.PRE()
+        # Add additional blanklines if specified
+        pre.text = '\n' * blanklines
+        pre.text += text
+        pre.text += '\n' * blanklines
         self.body.append(pre)
 
     def write_label(self, text, type='figure', align='center'):

@@ -103,7 +103,9 @@ class BaseRfcWriter:
         # Write figure
         artwork = figure.find('artwork')
         artwork_align = artwork.attrib.get('align', align)  # Default to figure
-        self.write_raw(figure.find('artwork').text, align=artwork_align)
+        blanklines = int(self.pis.get('artworklines', 0))
+        self.write_raw(figure.find('artwork').text, align=artwork_align, \
+                       blanklines=blanklines)
 
         # Write postamble
         postamble = figure.find('postamble')
@@ -205,7 +207,7 @@ class BaseRfcWriter:
         # Do any pre processing necessary, such as inserting metadata
         self.pre_processing()
 
-        # Header
+        # Block header
         self.write_top(self._prepare_top_left(), self._prepare_top_right())
 
         # Title & Optional docname
@@ -235,7 +237,9 @@ class BaseRfcWriter:
         self.write_paragraph(self.r.attrib.get('copyright', ''))
 
         # Insert the table of contents marker at this position
-        self.insert_toc()
+        toc_enabled = self.pis.get('toc', 'no')
+        if toc_enabled == 'yes':
+            self.insert_toc()
 
         # Middle sections
         self._write_section_rec(self.r.find('middle'), None)
@@ -303,7 +307,7 @@ class BaseRfcWriter:
         """ Marks the current buffer position to insert ToC at """
         raise NotImplementedError('insert_toc() needs to be overridden')
 
-    def write_raw(self, text, indent=3, align='left'):
+    def write_raw(self, text, indent=3, align='left', blanklines=0):
         """ Writes a block of text that preserves all whitespace """
         raise NotImplementedError('write_raw() needs to be overridden')
 

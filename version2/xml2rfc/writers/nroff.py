@@ -114,11 +114,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             self._write_line('.ce 1')
             self._write_line(text)
 
-    def write_raw(self, text, indent=3, align='left'):
+    def write_raw(self, text, indent=3, align='left', blanklines=0):
         # Wrap in a no fill block
         self._indent(indent)
         self._write_line('.nf')
-        PaginatedTextRfcWriter.write_raw(self, text, indent=0, align=align)
+        PaginatedTextRfcWriter.write_raw(self, text, indent=0, align=align, \
+                                         blanklines=blanklines)
         self._write_line('.fi')
 
     def write_heading(self, text, bullet='', idstring=None, anchor=None, \
