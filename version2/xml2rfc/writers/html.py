@@ -573,6 +573,13 @@ class HtmlRfcWriter(BaseRfcWriter):
         if len(keyword_strings) > 0:
             self.head.append(E.META(name='keywords', \
                                     content=', '.join(keyword_strings)))
+            
+        # Background image?
+        bg = self.pis.get('background', '')
+        if bg:
+            style = E.STYLE(type='text/css')
+            style.text = 'body { background-image: url("' + bg + '"); }'
+            self.head.append(style)
 
     def post_processing(self):
         # Nothing to do here
