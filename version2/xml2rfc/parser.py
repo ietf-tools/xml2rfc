@@ -109,10 +109,11 @@ class XmlRfc:
         
         # Grab processing instructions from xml tree
         element = tree.getroot().getprevious()
-        self.pis = []
+        self.pis = {}
         while element is not None:
             if element.tag is lxml.etree.PI:
-                self.pis.append(element.text)
+                key, sep, val = str(element.text).partition('=')
+                self.pis[key] = val.strip('" ')
             element = element.getprevious()
 
     def getroot(self):
