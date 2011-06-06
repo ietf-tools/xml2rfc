@@ -68,16 +68,19 @@ class BaseRfcWriter:
     def _prepare_top_right(self):
         """ Returns a list of lines for the top right header """
         lines = []
-        for author in self.r.findall('front/author'):
-            lines.append(author.attrib['initials'] + ' ' + \
-                            author.attrib['surname'])
-            organization = author.find('organization')
-            if organization is not None:
-                abbrev = organization.attrib.get('abbrev')
-                if abbrev:
-                    lines.append(abbrev)
-                elif organization.text:
-                    lines.append(organization.text)
+        # Render author instruction
+        authorship = self.pis.get('authorship', 'yes')
+        if authorship == 'yes':
+            for author in self.r.findall('front/author'):
+                lines.append(author.attrib['initials'] + ' ' + \
+                                author.attrib['surname'])
+                organization = author.find('organization')
+                if organization is not None:
+                    abbrev = organization.attrib.get('abbrev')
+                    if abbrev:
+                        lines.append(abbrev)
+                    elif organization.text:
+                        lines.append(organization.text)
         date = self.r.find('front/date')
         month = date.attrib.get('month', '')
         year = date.attrib.get('year', '')
@@ -209,7 +212,9 @@ class BaseRfcWriter:
         self.pre_processing()
 
         # Block header
-        self.write_top(self._prepare_top_left(), self._prepare_top_right())
+        topblock = self.pis.get('topblock', 'yes')
+        if topblock == 'yes':
+            self.write_top(self._prepare_top_left(), self._prepare_top_right())
 
         # Title & Optional docname
         title = self.r.find('front/title').text
