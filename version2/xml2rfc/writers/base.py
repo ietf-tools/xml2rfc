@@ -266,7 +266,8 @@ class BaseRfcWriter:
         ref_idstring = 'rfc.section.' + ref_indexstring
         references = self.r.findall('back/references')
         if len(references) > 1:
-            ref_title = 'References'
+            # Get reference title from PI
+            ref_title = self.pis.get('refparent', 'References')
             self.write_heading(ref_title, bullet=ref_indexstring + '.', \
                                idstring=ref_idstring)
             self.add_to_toc(ref_indexstring, ref_title, link=ref_idstring)

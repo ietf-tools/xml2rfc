@@ -332,10 +332,13 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_reference_list(self, list):
         """ Writes a formatted list of <reference> elements """
-        # Use very first reference's [bullet] length for indent amount
-        # sub_indent = len(list.find('reference').attrib['anchor']) + 4
-        # Use a hard coded indent amount
+        # For the indent amount, we could use the very first reference's 
+        # [bullet] length for indent amount, as in:
+        #    sub_indent = len(list.find('reference').attrib['anchor']) + 4
+        # Right now, it uses a hard coded indent amount.
+        # TODO: how should this be handled?
         sub_indent = 11
+        
         # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
         for i, ref in enumerate(list.findall('reference')):
             refstring = []
@@ -367,7 +370,12 @@ class RawTextRfcWriter(BaseRfcWriter):
                 month += ' '
             year = date.attrib.get('year', '')
             refstring.append(month + year + '.')
-            bullet = '[' + ref.attrib['anchor'] + ']  '
+            # Use anchor or num depending on PI
+            if self.pis.get('symrefs', 'yes') == 'yes':
+                bullet = '[' + ref.attrib.get('anchor', str(i+1)) + ']'
+            else:
+                bullet = '[' + str(i+1) + ']'
+            bullet += '  '
             self._write_text(''.join(refstring), indent=3, bullet=bullet, \
                            sub_indent=sub_indent, lb=True)
 

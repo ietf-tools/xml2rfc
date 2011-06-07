@@ -409,8 +409,11 @@ class HtmlRfcWriter(BaseRfcWriter):
         tbody = E.TBODY()
         for i, reference in enumerate(list.findall('reference')):
             tr = E.TR()
-            # Use anchor attribute for bullet, otherwise i
-            bullet = reference.attrib.get('anchor', str(i))
+            # Use anchor or num depending on PI
+            if self.pis.get('symrefs', 'yes') == 'yes':
+                bullet = reference.attrib.get('anchor', str(i+1))
+            else:
+                bullet = str(i+1)
             bullet_td = E.TD(E.B('[' + bullet + ']', id=bullet))
             bullet_td.attrib['class'] = 'reference'
             ref_td = E.TD()
