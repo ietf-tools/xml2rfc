@@ -24,6 +24,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.toc = []           # Table of contents buffer
         self.toc_marker = 0     # Line number in buffer to write toc too
         self.list_counters = {} # Maintain counters for 'format' type lists
+        
+        self.list_symbols = self.pis.get('text-list-symbols', 'o*+-')
 
     def _lb(self, buf=None):
         """ Write a blank line to the file """
@@ -74,7 +76,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             # print the bullet
             buf.append(initial)
 
-    def _write_list(self, list, indent=3):
+    def _write_list(self, list, level=0, indent=3):
         """ Writes a <list> element """
         bullet = '   '
         hangIndent = None
@@ -101,7 +103,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                 self.list_counters[counter_index] = 0
         for i, t in enumerate(list.findall('t')):
             if style == 'symbols':
-                bullet = 'o  '
+                bullet = self.list_symbols[level % len(self.list_symbols)]
+                bullet += '  '
             elif style == 'numbers':
                 bullet = str(i + 1) + '.  '
             elif style == 'letters':
@@ -122,9 +125,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                     bullet = format_str
             if hangIndent:
                 self.write_t_rec(t, bullet=bullet, indent=indent, \
-                                 sub_indent=int(hangIndent))
+                                 level=level+1, \
+                                 sub_indent=int(hangIndent),)
             else:
-                self.write_t_rec(t, bullet=bullet, indent=indent)
+                self.write_t_rec(t, bullet=bullet, indent=indent, \
+                                 level=level+1)
 
     def _post_write_toc(self, tmpbuf):
         """ Writes the table of contents to temporary buffer and returns
@@ -198,7 +203,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self._write_text(text, indent=3, align=align, lb=True)
 
     def write_t_rec(self, t, indent=3, sub_indent=0, bullet='', \
-                     idstring=None, align='left'):
+                     idstring=None, align='left', level=0):
         """ Recursively writes a <t> element """
         line = ['']
         if t.text:
@@ -248,7 +253,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if child.tail:
                     self._write_text(child.tail, indent=new_indent)
             elif child.tag == 'list':
-                self._write_list(child, indent=new_indent)
+                self._write_list(child, indent=new_indent, level=level)
                 if child.tail:
                     self._write_text(child.tail, indent=new_indent, lb=True)
             elif child.tag == 'figure':
