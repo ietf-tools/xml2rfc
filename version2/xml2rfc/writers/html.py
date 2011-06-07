@@ -15,17 +15,18 @@ from xml2rfc.writers.base import BaseRfcWriter
 
 class HtmlRfcWriter(BaseRfcWriter):
     """ Writes to an HTML file.
-    
+
         If *css_document* is specified, an alternate css file is used.
-        
+
         If *external_css* is set, the html file will contain a link to
         the css file, instead of inlining the file, which is the default
         behavior.
-        
+
         *lang* controls the lang attribute of the html document
     """
     # HTML Specific Defaults that are not provided in XML document
-    defaults = {'doctype': '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">',
+    defaults = {'doctype': '<!DOCTYPE html PUBLIC ' \
+                           '"-//W3C//DTD HTML 4.01//EN">',
                 'style_title': 'Xml2Rfc (sans serif)',
                 'references_url': 'http://tools.ietf.org/html/'
                 }
@@ -108,9 +109,8 @@ class HtmlRfcWriter(BaseRfcWriter):
                     bullet = format_str.replace(r'%d', str(count) + ' ')
                 elif '%c' in format_str:
                     bullet = format_str.replace(r'%c', \
-                                                str(string.ascii_lowercase\
-                                                    [count % 26]) + ' ')
-                else: 
+                                str(string.ascii_lowercase[count % 26]) + ' ')
+                else:
                     bullet = format_str
                 dt = E.DT(bullet)
                 dd = E.DD()
@@ -179,7 +179,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                       level=1):
         # Use a hierarchy of header tags if docmapping set
         h = E.H1()
-        if self.pis.get('docmapping', 'no') == 'yes':     
+        if self.pis.get('docmapping', 'no') == 'yes':
             if level > 1:
                 h = E.H2()
             elif level > 2:
@@ -255,7 +255,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                 a = E.A()
                 current.append(a)
                 if subitem:
-                    a.attrib['name'] ='.'.join(index_elem)
+                    a.attrib['name'] = '.'.join(index_elem)
                 else:
                     a.attrib['name'] = item
                 if child.tail:
@@ -263,7 +263,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             elif child.tag == 'spanx':
                 style = child.attrib.get('style', 'emph')
                 text = ''
-                if child.text: 
+                if child.text:
                     text = child.text
                 elem = None
                 if style == 'strong':
@@ -411,9 +411,9 @@ class HtmlRfcWriter(BaseRfcWriter):
             tr = E.TR()
             # Use anchor or num depending on PI
             if self.pis.get('symrefs', 'yes') == 'yes':
-                bullet = reference.attrib.get('anchor', str(i+1))
+                bullet = reference.attrib.get('anchor', str(i + 1))
             else:
-                bullet = str(i+1)
+                bullet = str(i + 1)
             bullet_td = E.TD(E.B('[' + bullet + ']', id=bullet))
             bullet_td.attrib['class'] = 'reference'
             ref_td = E.TD()
@@ -451,8 +451,8 @@ class HtmlRfcWriter(BaseRfcWriter):
             if title is not None and title.text:
                 title_string = title.text
             else:
-                xml2rfc.log.warn('No title specifide in reference:', \
-                                 reference.get.attrib('anchor', ''))
+                xml2rfc.log.warn('No title specified in reference', \
+                                 reference.attrib.get('anchor', ''))
                 title_string = ''
             title_a = E.A(title_string)
             title_a.tail = '", '
@@ -532,7 +532,7 @@ class HtmlRfcWriter(BaseRfcWriter):
     def insert_anchor(self, text):
         div = E.DIV(id=text)
         self.body.append(div)
-        
+
     def write_iref_index(self):
         # Omit this element if the index is empty
         if len(self.iref_index) > 0:
@@ -563,15 +563,15 @@ class HtmlRfcWriter(BaseRfcWriter):
         title = self.r.find('front/title')
         if title is not None and title.text:
             self.head.append(E.TITLE(title.text))
-        
+
         # Stylesheet
         self.head.append(self._build_stylesheet())
-        
+
         # Description (from abstract first t element)
         abs_t = self.r.find('front/abstract/t')
         if abs_t is not None and abs_t.text:
             self.head.append(E.META(name='description', content=abs_t.text))
-        
+
         # Keywords
         keywords = self.r.findall('front/keyword')
         keyword_strings = []
@@ -584,7 +584,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         if len(keyword_strings) > 0:
             self.head.append(E.META(name='keywords', \
                                     content=', '.join(keyword_strings)))
-            
+
         # Background image?
         bg = self.pis.get('background', '')
         if bg:

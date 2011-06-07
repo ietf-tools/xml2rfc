@@ -9,8 +9,8 @@ import xml2rfc.utils
 
 
 class PaginatedTextRfcWriter(RawTextRfcWriter):
-    """ Writes to a text file, paginated with headers and footers 
-        
+    """ Writes to a text file, paginated with headers and footers
+
         The page width is controlled by the *width* parameter.
     """
 
@@ -40,7 +40,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         RawTextRfcWriter.write_raw(self, *args, **kwargs)
         end = len(self.buf)
         self.section_marks[begin] = end - begin
-        
+
     def _write_text(self, *args, **kwargs):
         """ Override text writer to add a marking """
         begin = len(self.buf)
@@ -75,7 +75,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             else:
                 self.left_footer += surname
         self.center_footer = self.r.attrib.get('category', '(Category)')
-        
+
         # Check for PI override
         self.center_footer = self.pis.get('footer', self.center_footer)
         self.left_header = self.pis.get('header', self.left_header)

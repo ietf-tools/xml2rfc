@@ -23,12 +23,12 @@ def clear_cache(self, opt, value, parser):
 def main():
     # Populate options
     optionparser = optparse.OptionParser(usage='%prog SOURCE [options] ' \
-                                         'FORMATS...\nExample: %prog ' \
-                                         'draft.xml -f Draft-1.0 --text --html')
+                                        'FORMATS...\nExample: %prog ' \
+                                        'draft.xml -f Draft-1.0 --text --html')
     optionparser.add_option('-v', '--verbose', action='store_true', \
                             dest='verbose', help='print extra information')
-    optionparser.add_option('-q', '--quiet', action='store_true', dest='quiet',\
-                            help='dont print anything')
+    optionparser.add_option('-q', '--quiet', action='store_true', \
+                            dest='quiet', help='dont print anything')
     optionparser.add_option('-w', '--warn-error', action='store_true', \
                             dest='warn_error', help='treat warnings as ' \
                             'python exceptions.')
@@ -54,8 +54,8 @@ def main():
                                        ' output formats must be specified.'\
                                        ' The destination file will be created'\
                                        ' according to the argument given to'\
-                                       ' --filename.  If no argument was given'\
-                                       ', it will create the file(s) '\
+                                       ' --filename.  If no argument was'\
+                                       ' given, it will create the file(s) '\
                                        '"output.format"')
     formatgroup.add_option('', '--raw', dest='raw', action='store_true', \
                            help='outputs to a text file, unpaginated')
@@ -85,7 +85,7 @@ def main():
             or options.exp):
         # Default to text output
         options.text = True
-        
+
     # Setup warnings module
     if options.warn_error:
         xml2rfc.log.warn_error = True
@@ -112,14 +112,14 @@ def main():
     else:
         # Create filename based on input
         filename = os.path.basename(source).rsplit('.', 1)[0]
-    
+
     # Only expanded XML writer uses an unprepared tree
     if options.exp:
         expwriter = xml2rfc.ExpandedXmlWriter(xmlrfc, \
                                               quiet=options.quiet, \
                                               verbose=options.verbose)
         expwriter.write(filename + '-expanded.xml')
-        
+
     # For all further writers, run the preparation method before output
     xmlrfc.prepare()
     if options.raw:

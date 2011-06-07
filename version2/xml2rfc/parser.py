@@ -106,7 +106,7 @@ class XmlRfc:
 
     def __init__(self, tree):
         self.tree = tree
-        
+
         # Grab processing instructions from xml tree
         element = tree.getroot().getprevious()
         self.pis = {}
@@ -119,7 +119,7 @@ class XmlRfc:
     def getroot(self):
         """ Wrapper method to get the root of the XML tree"""
         return self.tree.getroot()
-    
+
     def getpis(self):
         """ Returns a list of the XML processing instructions """
         return self.pis
@@ -128,7 +128,7 @@ class XmlRfc:
         """ Prepare the RFC document for output.
 
             This method is automatically invoked after the xml file is
-            finished being read, unless ``prepare=False`` was set.  It 
+            finished being read, unless ``prepare=False`` was set.  It
             may do any of the following things:
 
             * Set any necessary default values.
@@ -204,9 +204,9 @@ class XmlRfc:
 
     def replaceUnicode(self):
         """ Traverses the RFC tree and replaces unicode characters with the
-            proper equivalents specified in rfc2629-xhtml.ent.  
-            
-            Writers should call this method if the entire RFC document needs to 
+            proper equivalents specified in rfc2629-xhtml.ent.
+
+            Writers should call this method if the entire RFC document needs to
             be ascii formatted
         """
         root = self.getroot()

@@ -12,8 +12,8 @@ import xml2rfc.utils
 
 
 class RawTextRfcWriter(BaseRfcWriter):
-    """ Writes to a text file, unpaginated, no headers or footers. 
-        
+    """ Writes to a text file, unpaginated, no headers or footers.
+
         The page width is controlled by the *width* parameter.
     """
 
@@ -23,8 +23,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.buf = []           # Main buffer
         self.toc = []           # Table of contents buffer
         self.toc_marker = 0     # Line number in buffer to write toc too
-        self.list_counters = {} # Maintain counters for 'format' type lists
-        
+        self.list_counters = {}  # Maintain counters for 'format' type lists
+
         self.list_symbols = self.pis.get('text-list-symbols', 'o*+-')
 
     def _lb(self, buf=None):
@@ -36,9 +36,9 @@ class RawTextRfcWriter(BaseRfcWriter):
     def _write_text(self, string, indent=0, sub_indent=None, bullet='', \
                   align='left', lb=False, buf=None, strip=True):
         """ Writes a line or multiple lines of text to the buffer.
-        
+
             Several parameters are included here.  All of the API calls
-            for text writers use this as the underlying method to write data 
+            for text writers use this as the underlying method to write data
             to the buffer, with the exception of write_raw() that handles
             preserving of whitespace.
         """
@@ -119,17 +119,16 @@ class RawTextRfcWriter(BaseRfcWriter):
                     bullet = format_str.replace(r'%d', str(count) + ' ')
                 elif '%c' in format_str:
                     bullet = format_str.replace(r'%c', \
-                                                str(string.ascii_lowercase\
-                                                    [count % 26]) + ' ')
+                            str(string.ascii_lowercase[count % 26]) + ' ')
                 else:
                     bullet = format_str
             if hangIndent:
                 self.write_t_rec(t, bullet=bullet, indent=indent, \
-                                 level=level+1, \
+                                 level=level + 1, \
                                  sub_indent=int(hangIndent),)
             else:
                 self.write_t_rec(t, bullet=bullet, indent=indent, \
-                                 level=level+1)
+                                 level=level + 1)
 
     def _post_write_toc(self, tmpbuf):
         """ Writes the table of contents to temporary buffer and returns
@@ -227,7 +226,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 elif style == 'verb':
                     edgechar = '"'
                 text = ''
-                if child.text: 
+                if child.text:
                     text = child.text
                 line.append(edgechar + text + edgechar)
                 if child.tail:
@@ -337,13 +336,13 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_reference_list(self, list):
         """ Writes a formatted list of <reference> elements """
-        # For the indent amount, we could use the very first reference's 
+        # For the indent amount, we could use the very first reference's
         # [bullet] length for indent amount, as in:
         #    sub_indent = len(list.find('reference').attrib['anchor']) + 4
         # Right now, it uses a hard coded indent amount.
         # TODO: how should this be handled?
         sub_indent = 11
-        
+
         # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
         for i, ref in enumerate(list.findall('reference')):
             refstring = []
@@ -377,9 +376,9 @@ class RawTextRfcWriter(BaseRfcWriter):
             refstring.append(month + year + '.')
             # Use anchor or num depending on PI
             if self.pis.get('symrefs', 'yes') == 'yes':
-                bullet = '[' + ref.attrib.get('anchor', str(i+1)) + ']'
+                bullet = '[' + ref.attrib.get('anchor', str(i + 1)) + ']'
             else:
-                bullet = '[' + str(i+1) + ']'
+                bullet = '[' + str(i + 1) + ']'
             bullet += '  '
             self._write_text(''.join(refstring), indent=3, bullet=bullet, \
                            sub_indent=sub_indent, lb=True)
@@ -430,14 +429,14 @@ class RawTextRfcWriter(BaseRfcWriter):
             column_widths = [int(length * scale) for length in longest_lines]
         else:
             column_widths = longest_lines
-            
+
         # Force any column widths that got set to 0 to 1, raise warning
         for i, width in enumerate(column_widths):
             if width < 1:
                 column_widths[i] = 1
                 xml2rfc.log.warn('Table column width was forced to 1 from 0,' \
                                  ' it may exceed the page width.')
-        
+
         # Now construct the cells using textwrap against column_widths
         cell_lines = [
             [
@@ -445,7 +444,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 for j, cell in enumerate(matrix[i])
             ] for i in range(0, len(matrix))
         ]
-        
+
         output = []
         style = table.attrib.get('style', 'full')
         # Create the border
@@ -485,10 +484,10 @@ class RawTextRfcWriter(BaseRfcWriter):
             if i == 0:
                 # This is the header row, append the header decoration
                 output.append(''.join(borderstring))
-        
+
         if style != 'headers':
             output.append(''.join(borderstring))
-        
+
         # Finally, write the table to the buffer with proper alignment
         align = table.attrib.get('align', 'center')
         self.write_raw('\n'.join(output), align=align)

@@ -7,6 +7,7 @@
 import re
 import xml2rfc.log
 
+
 def justify_inline(left_str, center_str, right_str, width=72):
     """ Takes three string arguments and outputs a single string with the
         arguments left-justified, centered, and right-justified respectively.
@@ -22,7 +23,7 @@ def justify_inline(left_str, center_str, right_str, width=72):
         xml2rfc.log.warn('The inline string was truncated because it was ' \
                          'too long:\n  ' + strings[longest_index])
         strings[longest_index] = strings[longest_index][:-(sumwidth - width)]
-    
+
     center = strings[1].center(width)
     right = strings[2].rjust(width)
     output = list(strings[0].ljust(width))

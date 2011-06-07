@@ -6,9 +6,10 @@ import string
 import datetime
 import xml2rfc.log
 
+
 class BaseRfcWriter:
-    """ Base class for all writers 
-    
+    """ Base class for all writers
+
         All public methods need to be overridden for a writer implementation.
     """
 
@@ -228,7 +229,7 @@ class BaseRfcWriter:
             self.write_heading('Abstract', idstring='rfc.abstract')
             for t in abstract.findall('t'):
                 self.write_t_rec(t)
-        
+
         # TODO: Relocate this text?
         if self.pis.get('iprnotified', 'no') == 'yes':
             notified_text = \
@@ -287,8 +288,8 @@ class BaseRfcWriter:
             self.add_to_toc(ref_indexstring, ref_title, \
                             link=ref_idstring)
             self.write_reference_list(references[0])
-            
-        # Additional index -- The writer is responsible for tracking irefs, 
+
+        # Additional index -- The writer is responsible for tracking irefs,
         # so we have nothing to pass here
         self.write_iref_index()
 
@@ -368,7 +369,7 @@ class BaseRfcWriter:
         """ Writes a <references> element """
         raise NotImplementedError('write_reference_list() needs to be ' \
                                   'overridden')
-        
+
     def write_iref_index(self):
         """ Writes an additional index if there were iref elements """
         raise NotImplementedError('write_iref_index() needs to be ' \

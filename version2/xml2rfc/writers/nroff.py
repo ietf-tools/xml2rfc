@@ -10,8 +10,8 @@ import textwrap
 
 
 class NroffRfcWriter(PaginatedTextRfcWriter):
-    """ Writes to an nroff formatted file 
-        
+    """ Writes to an nroff formatted file
+
         The page width is controlled by the *width* parameter.
     """
 
@@ -30,13 +30,13 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                                         quiet=quiet, verbose=verbose)
         self.curr_indent = 0    # Used like a state machine to control
                                 # whether or not we print a .in command
-    
+
     def _indent(self, amount):
         # Writes an indent command if it differs from the last
         if amount != self.curr_indent:
             self._write_line('.in ' + str(amount))
             self.curr_indent = amount
-        
+
     def _write_line(self, string):
         # Used by nroff to write a line with no nroff commands
         self.buf.append(string)
@@ -51,7 +51,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         #-------------------------------------------------------------
         if not buf:
             buf = self.buf
-            
+
         # Store buffer position for paging information
         begin = len(self.buf)
 
@@ -76,8 +76,8 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             else:
                 self._indent(indent)
             buf.extend(par)
-        
-        # Page break information   
+
+        # Page break information
         end = len(self.buf)
         self.section_marks[begin] = end - begin
 
@@ -87,7 +87,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             # print the bullet
             buf.append(initial)
         """
-        
+
     def _post_write_toc(self, tmpbuf):
         # Wrap a nofill/fill block around TOC
         tmpbuf.append('.ti 0')
@@ -149,7 +149,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self._write_line('.ds LF ' + self.left_footer)
         self._write_line('.ds CF ' + self.center_footer)
         self._write_line('.ds RF FORMFEED[Page] % ')
-    
+
     def post_processing(self):
         """ Insert page break commands """
 
