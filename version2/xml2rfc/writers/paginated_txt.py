@@ -96,7 +96,8 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             if line_num in self.section_marks:
                 # If this section will exceed a page, force a page break by
                 # inserting blank lines until the end of the page
-                if page_len + self.section_marks[line_num] > page_maxlen:
+                if page_len + self.section_marks[line_num] > page_maxlen and \
+                    self.pis.get('autobreaks', 'yes') == 'yes':
                     for i in range(page_maxlen - page_len):
                         self.paged_buf.append('')
                         page_len += 1

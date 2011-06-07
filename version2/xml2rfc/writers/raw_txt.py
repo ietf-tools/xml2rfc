@@ -145,10 +145,15 @@ class RawTextRfcWriter(BaseRfcWriter):
         """ Marks buffer position for post-writing table of contents """
         self.toc_marker = len(self.buf)
 
-    def write_raw(self, text, indent=3, align='left', blanklines=0):
+    def write_raw(self, text, indent=3, align='left', blanklines=0, \
+                  delimiter=None):
         """ Writes a raw stream of characters, preserving space and breaks """
-        # Start with a newline, add any additional blanklines
+        # Start with a newline
         self._lb()
+        # Delimiter?
+        if delimiter:
+            self.buf.append(delimiter)
+        # Additional blank lines?
         self.buf.extend([''] * blanklines)
         # Append an indent to every newline of the data
         lines = text.strip().expandtabs(4).split('\n')
@@ -165,8 +170,11 @@ class RawTextRfcWriter(BaseRfcWriter):
             indent_str = ' ' * indent
             for line in lines:
                 self.buf.append(indent_str + line)
-        # Add any additional blanklines
+        # Additional blank lines?
         self.buf.extend([''] * blanklines)
+        # Delimiter?
+        if delimiter:
+            self.buf.append(delimiter)
 
     def write_label(self, text, type='figure'):
         """ Writes a centered label """

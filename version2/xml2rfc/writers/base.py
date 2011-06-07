@@ -103,12 +103,13 @@ class BaseRfcWriter:
         if preamble is not None:
             self.write_t_rec(preamble, align=align)
 
-        # Write figure
+        # Write figure with optional delimiter
+        delimiter = self.pis.get('artworkdelimiter', '')
         artwork = figure.find('artwork')
         artwork_align = artwork.attrib.get('align', align)  # Default to figure
         blanklines = int(self.pis.get('artworklines', 0))
         self.write_raw(figure.find('artwork').text, align=artwork_align, \
-                       blanklines=blanklines)
+                       blanklines=blanklines, delimiter=delimiter)
 
         # Write postamble
         postamble = figure.find('postamble')
@@ -227,6 +228,15 @@ class BaseRfcWriter:
             self.write_heading('Abstract', idstring='rfc.abstract')
             for t in abstract.findall('t'):
                 self.write_t_rec(t)
+        
+        # TODO: Relocate this text?
+        if self.pis.get('iprnotified', 'no') == 'yes':
+            notified_text = \
+            'The IETF has been notified of intellectual property rights '\
+            'claimed in regard to some or all of the specification contained '\
+            'in this document.  For more information consult the online list '\
+            'of claimed rights.'
+            self.write_paragraph(notified_text)
 
         # Any notes
         for note in self.r.findall('front/note'):
@@ -313,7 +323,8 @@ class BaseRfcWriter:
         """ Marks the current buffer position to insert ToC at """
         raise NotImplementedError('insert_toc() needs to be overridden')
 
-    def write_raw(self, text, indent=3, align='left', blanklines=0):
+    def write_raw(self, text, indent=3, align='left', blanklines=0, \
+                  delimiter=None):
         """ Writes a block of text that preserves all whitespace """
         raise NotImplementedError('write_raw() needs to be overridden')
 

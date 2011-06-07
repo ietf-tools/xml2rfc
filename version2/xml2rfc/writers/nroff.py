@@ -114,12 +114,14 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             self._write_line('.ce 1')
             self._write_line(text)
 
-    def write_raw(self, text, indent=3, align='left', blanklines=0):
+    def write_raw(self, text, indent=3, align='left', blanklines=0, \
+                  delimiter=None):
         # Wrap in a no fill block
         self._indent(indent)
         self._write_line('.nf')
         PaginatedTextRfcWriter.write_raw(self, text, indent=0, align=align, \
-                                         blanklines=blanklines)
+                                         blanklines=blanklines, \
+                                         delimiter=delimiter)
         self._write_line('.fi')
 
     def write_heading(self, text, bullet='', idstring=None, anchor=None, \
@@ -157,7 +159,8 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         for line_num, line in enumerate(self.buf):
             if line_num in self.section_marks:
                 # If this section will exceed a page, insert a break command
-                if page_len + self.section_marks[line_num] > page_maxlen:
+                if page_len + self.section_marks[line_num] > page_maxlen and \
+                    self.pis.get('autobreaks', 'yes') == 'yes':
                     self.paged_buf.append('.bp')
                     page_len = 0
             if page_len + 1 > 55:

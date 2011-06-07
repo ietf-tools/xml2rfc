@@ -145,12 +145,17 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.body.append(self.toc_header)
         self.body.append(self.toc_list)
 
-    def write_raw(self, text, align='left', blanklines=0):
+    def write_raw(self, text, align='left', blanklines=0, delimiter=None):
         pre = E.PRE()
-        # Add additional blanklines if specified
+        # Add additional blanklines or delimiter if specified
+        pre.text = ''
+        if delimiter:
+            pre.text = delimiter + '\n'
         pre.text = '\n' * blanklines
         pre.text += text
         pre.text += '\n' * blanklines
+        if delimiter:
+            pre.text += delimiter + '\n'
         self.body.append(pre)
 
     def write_label(self, text, type='figure', align='center'):
@@ -172,10 +177,13 @@ class HtmlRfcWriter(BaseRfcWriter):
 
     def write_heading(self, text, bullet=None, idstring=None, anchor=None, \
                       level=1):
-        if level > 1:
-            h = E.H2()
-        else:
-            h = E.H1()
+        # Use a hierarchy of header tags if docmapping set
+        h = E.H1()
+        if self.pis.get('docmapping', 'no') == 'yes':     
+            if level > 1:
+                h = E.H2()
+            elif level > 2:
+                h = E.H3()
         if idstring:
             h.attrib['id'] = idstring
         if bullet:
