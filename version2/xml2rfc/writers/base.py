@@ -126,12 +126,13 @@ class BaseRfcWriter:
         if postamble is not None:
             self.write_t_rec(postamble, align=align)
 
-        # Write label
-        title = figure.attrib.get('title', '')
-        if title:
-            title = ': ' + title
-        self.write_label('Figure ' + str(self.figure_count) + title, \
-                         type='figure')
+        # Write label if PI figurecount = yes
+        if self.pis.get('figurecount', 'no') == 'yes':
+            title = figure.attrib.get('title', '')
+            if title:
+                title = ': ' + title
+            self.write_label('Figure ' + str(self.figure_count) + title, \
+                            type='figure')
 
     def _write_table(self, table):
         """ Writes <texttable> elements """
@@ -157,12 +158,13 @@ class BaseRfcWriter:
         if postamble is not None:
             self.write_t_rec(postamble, align=align)
 
-        # Write label
-        title = table.attrib.get('title', '')
-        if title:
-            title = ': ' + title
-        self.write_label('Table ' + str(self.table_count) + title, \
-                         type='table')
+        # Write label if PI tablecount = yes
+        if self.pis.get('tablecount', 'no') == 'yes':
+            title = table.attrib.get('title', '')
+            if title:
+                title = ': ' + title
+            self.write_label('Table ' + str(self.table_count) + title, \
+                             type='table')
 
     def _write_section_rec(self, section, indexstring, appendix=False, \
                            level=0):
