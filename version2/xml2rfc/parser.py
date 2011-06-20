@@ -146,9 +146,9 @@ class XmlRfc:
         for element in root.iter():
             if element.tag != 'artwork':
                 if element.text is not None:
-                    element.text = re.sub('\n\s*', ' ', element.text.lstrip())
+                    element.text = re.sub('\s*\n\s*', ' ', element.text.lstrip())
                 if element.tail is not None:
-                    element.tail = re.sub('\n\s*', ' ', element.tail)
+                    element.tail = re.sub('\s*\n\s*', ' ', element.tail)
 
         # Set some document-independent defaults
         workgroup = root.find('front/workgroup')
