@@ -97,10 +97,16 @@ class BaseRfcWriter:
                             lines.remove(last_org)
                         last_org = org_result
                         lines.append(org_result)
+        # If year is this year, and month not specified, use current date
         date = self.r.find('front/date')
-        month = date.attrib.get('month', '')
         year = date.attrib.get('year', '')
-        lines.append(month + ' ' + year)
+        month = date.attrib.get('month', '')
+        day = date.attrib.get('day', '')
+        if month:
+            month = month + ' '
+        if day:
+            day = day + ', '
+        lines.append(month + day + year)
         # Strip any whitespace from XML to make header as neat as possible
         lines = map(string.strip, lines)
         return lines

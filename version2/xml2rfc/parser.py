@@ -6,6 +6,7 @@
 
 import lxml.etree
 import re
+import datetime
 import urlparse
 import urllib
 import os
@@ -199,10 +200,18 @@ class XmlRfc:
             # Warn about no category
             xml2rfc.log.warn('No category specified for document.')
 
-        year = root.find('front/date').attrib.get('year', '')
-        yearstring = ''
-        if year:
-            yearstring = ' (' + year + ')'
+        # Fix date
+        today = datetime.date.today()
+        date = root.find('front/date')
+        year = date.attrib.get('year', '')
+        month = date.attrib.get('month', '')
+        day = date.attrib.get('day', '')
+        if not year or (year == str(today.year) and not month) or \
+                       (year == str(today.year) and month == str(today.month)):
+            date.attrib['year'] = today.strftime('%Y')
+            date.attrib['month'] = today.strftime('%B')
+            date.attrib['day'] = today.strftime('%d')
+        yearstring = '(' + date.attrib['year'] + ')'
         root.attrib['copyright'] = 'Copyright (C) The Internet Society%s.'\
         ' All Rights Reserved.' % yearstring
 
