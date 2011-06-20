@@ -406,7 +406,10 @@ class HtmlRfcWriter(BaseRfcWriter):
             if email is not None and email.text:
                 span = E.SPAN('EMail: ')
                 span.attrib['class'] = 'vcardline'
-                span.append(E.A(email.text, href='mailto:' + email.text))
+                if self.pis.get('linkmailto', 'yes') == 'yes':
+                    span.append(E.A(email.text, href='mailto:' + email.text))
+                else:
+                    span.text += email.text
                 address_elem.append(span)
             uri = address.find('uri')
             if uri is not None and uri.text:
@@ -445,7 +448,8 @@ class HtmlRfcWriter(BaseRfcWriter):
                         name_string += ', ' + initials
                     a = E.A(name_string)
                     if email is not None and email.text:
-                        a.attrib['href'] = 'mailto:' + email.text
+                        if self.pis.get('linkmailto', 'yes') == 'yes':
+                            a.attrib['href'] = 'mailto:' + email.text
                     if organization is not None and organization.text:
                         a.attrib['title'] = organization.text
                     ref_td.append(a)
