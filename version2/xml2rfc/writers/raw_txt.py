@@ -364,7 +364,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         # Right now, it uses a hard coded indent amount.
         # TODO: how should this be handled?
         sub_indent = 11
-
+        refdict = {}
+        refkeys = []
         # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
         for i, ref in enumerate(list.findall('reference')):
             refstring = []
@@ -402,8 +403,13 @@ class RawTextRfcWriter(BaseRfcWriter):
             else:
                 bullet = '[' + str(i + 1) + ']'
             bullet += '  '
-            self._write_text(''.join(refstring), indent=3, bullet=bullet, \
-                           sub_indent=sub_indent, lb=True)
+            refdict[bullet] = ''.join(refstring)
+            refkeys.append(bullet)
+        if self.pis.get('sortrefs', 'no') == 'yes':
+            refkeys = sorted(refkeys)
+        for key in refkeys:
+            self._write_text(refdict[key], indent=3, bullet=key, \
+                             sub_indent=sub_indent, lb=True)
 
     def draw_table(self, table, table_num=None):
         # First construct a 2d matrix from the table
