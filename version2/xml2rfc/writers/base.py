@@ -76,9 +76,11 @@ class BaseRfcWriter:
     def _prepare_top_right(self):
         """ Returns a list of lines for the top right header """
         lines = []
-        # Render author instruction
+        # Render author?
         authorship = self.pis.get('authorship', 'yes')
         if authorship == 'yes':
+            # Keep track of previous organization and remove if redundant.
+            last_org = None
             for author in self.r.findall('front/author'):
                 lines.append(author.attrib['initials'] + ' ' + \
                                 author.attrib['surname'])
@@ -86,9 +88,15 @@ class BaseRfcWriter:
                 if organization is not None:
                     abbrev = organization.attrib.get('abbrev')
                     if abbrev:
-                        lines.append(abbrev)
+                        org_result = abbrev
                     elif organization.text:
-                        lines.append(organization.text)
+                        org_result = organization.text
+                    if org_result:
+                        if org_result == last_org:
+                            # Remove redundant organization
+                            lines.remove(last_org)
+                        last_org = org_result
+                        lines.append(org_result)
         date = self.r.find('front/date')
         month = date.attrib.get('month', '')
         year = date.attrib.get('year', '')
