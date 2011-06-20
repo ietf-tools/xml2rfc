@@ -234,7 +234,21 @@ class HtmlRfcWriter(BaseRfcWriter):
             if idstring:
                 current.attrib['id'] = idstring
         for child in t:
-            if child.tag == 'xref' or child.tag == 'eref':
+            if child.tag == 'xref':
+                target = child.attrib.get('target', '')
+                cite = E.CITE('[' + target + ']', title='NONE')
+                if child.text:
+                    a = E.A(child.text, href='#' + target)
+                    a.tail = ' '
+                    current.append(a)
+                    # TODO: Grab proper title from reference
+                else:
+                    # TODO: auto title from reference as link
+                    pass
+                if child.tail:
+                    cite.tail = child.tail
+                current.append(cite)
+            if child.tag == 'eref':
                 target = child.attrib.get('target', '')
                 if child.text:
                     a = E.A(child.text, href='#' + target)

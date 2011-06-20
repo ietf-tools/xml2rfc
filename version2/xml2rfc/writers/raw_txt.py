@@ -111,6 +111,10 @@ class RawTextRfcWriter(BaseRfcWriter):
                 bullet = string.ascii_lowercase[i % 26] + '.  '
             elif style == 'hanging':
                 bullet = t.attrib.get('hangText', '')
+                # Add an extra space if there is a colon, and colonspace is on
+                if bullet.endswith(':') and \
+                self.pis.get('colonspace', 'no') == 'yes':
+                    bullet+= ' '
                 bullet += ' '
             elif style.startswith('format'):
                 self.list_counters[counter_index] += 1
@@ -209,7 +213,25 @@ class RawTextRfcWriter(BaseRfcWriter):
             line.append(t.text)
         for child in t:
             # Check inline elements first
-            if child.tag == 'xref' or child.tag == 'eref':
+            if child.tag == 'xref':
+                target = child.attrib.get('target', '')
+                if child.text:
+                    line.append(child.text + ' [' + target + ']')
+                else:
+                    # Insert appropriate label via format
+                    label = ''
+                    format = child.attrib.get('format', 'default')
+                    # TODO: proper label via format
+                    if format == 'default':
+                        label = '[' + target + ']'
+                    if format == 'counter':
+                        label = '[' + target + ']'
+                    if format == 'title':
+                        label = '[' + target + ']'
+                    line.append(label)
+                if child.tail:
+                    line.append(child.tail)
+            elif child.tag == 'eref':
                 if child.text:
                     line.append(child.text + ' ')
                 target = child.attrib.get('target', '')
