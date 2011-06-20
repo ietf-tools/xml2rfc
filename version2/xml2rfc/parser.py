@@ -150,7 +150,11 @@ class XmlRfc:
                     element.tail = re.sub('\n\s*', ' ', element.tail)
 
         # Set some document-independent defaults
-        root.attrib['trad_header'] = 'Network Working Group'
+        workgroup = root.find('front/workgroup')
+        if workgroup is None or not workgroup.text:
+           root.attrib['workgroup'] = 'Network Working Group'
+        else:
+            root.attrib['workgroup'] = workgroup.text
         if 'updates' in root.attrib and root.attrib['updates']:
             root.attrib['updates'] = 'Updates: ' + root.attrib['updates']
         if 'obsoletes' in root.attrib and root.attrib['obsoletes']:

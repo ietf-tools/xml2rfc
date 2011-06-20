@@ -29,7 +29,7 @@ class BaseRfcWriter:
 
     def _prepare_top_left(self):
         """ Returns a lines of lines for the top left header """
-        lines = [self.r.attrib['trad_header']]
+        lines = [self.r.attrib['workgroup']]
         rfcnumber = self.r.attrib.get('number')
         expire_string = None
         if rfcnumber:
