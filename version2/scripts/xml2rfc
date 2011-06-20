@@ -40,8 +40,11 @@ def main():
                             ' html format is not enabled)')
     optionparser.add_option('-d', '--dtd', dest='dtd', \
                             help='specify an alternate dtd file')
+    optionparser.add_option('-b', '--basename', dest='basename', \
+                            help='specify the base name for output files')
     optionparser.add_option('-f', '--filename', dest='filename', \
-                            help='specify an output filename')
+                            help='specify an explicit output filename (only '\
+                            'valid with a single format enabled)')
     optionparser.add_option('', '--clear-cache', action='callback', \
                             help='purge the cache and exit', \
                             callback=clear_cache)
@@ -54,7 +57,7 @@ def main():
                                        ' output formats must be specified.'\
                                        ' The destination file will be created'\
                                        ' according to the argument given to'\
-                                       ' --filename.  If no argument was'\
+                                       ' --basename.  If no argument was'\
                                        ' given, it will create the file(s) '\
                                        '"output.format"')
     formatgroup.add_option('', '--raw', dest='raw', action='store_true', \
@@ -81,9 +84,14 @@ def main():
     if not os.path.exists(source):
         print 'No such file:', source
         sys.exit(1)
-    if not (options.raw or options.text or options.nroff or options.html \
-            or options.exp):
-        # Default to text output
+    num_formats = len(filter(bool, [options.raw, options.text, options.nroff, \
+                                    options.html, options.exp]))
+    if num_formats > 1 and options.filename:
+        print 'Cannot give an explicit filename with more than one format, '\
+                'use --basename instead.'
+        sys.exit(1)
+    if num_formats < 1:
+        # Default to paginated text output
         options.text = True
 
     # Setup warnings module
@@ -107,18 +115,21 @@ def main():
         sys.exit(1)
 
     # Execute any writers specified
-    if options.filename:
-        filename = options.filename
+    if options.basename:
+        basename = options.basename
     else:
-        # Create filename based on input
-        filename = os.path.basename(source).rsplit('.', 1)[0]
+        # Create basename based on input
+        basename = os.path.basename(source).rsplit('.', 1)[0]
 
     # Only expanded XML writer uses an unprepared tree
     if options.exp:
         expwriter = xml2rfc.ExpandedXmlWriter(xmlrfc, \
                                               quiet=options.quiet, \
                                               verbose=options.verbose)
-        expwriter.write(filename + '-expanded.xml')
+        filename = options.filename
+        if not filename:
+            filename = basename + '-expanded.xml'
+        expwriter.write(filename)
 
     # For all further writers, run the preparation method before output
     xmlrfc.prepare()
@@ -126,24 +137,36 @@ def main():
         rawwriter = xml2rfc.RawTextRfcWriter(xmlrfc, \
                                              quiet=options.quiet, \
                                              verbose=options.verbose)
-        rawwriter.write(filename + '-raw.txt')
+        filename = options.filename
+        if not filename:
+            filename = basename + '-raw.txt'
+        rawwriter.write(filename)
     if options.text:
         pagedwriter = xml2rfc.PaginatedTextRfcWriter(xmlrfc, \
                                                      quiet=options.quiet, \
                                                      verbose=options.verbose)
-        pagedwriter.write(filename + '.txt')
+        filename = options.filename
+        if not filename:
+            filename = basename + '.txt'
+        pagedwriter.write(filename)
     if options.nroff:
         nroffwriter = xml2rfc.NroffRfcWriter(xmlrfc, \
                                              quiet=options.quiet, \
                                              verbose=options.verbose)
-        nroffwriter.write(filename + '.nroff')
+        filename = options.filename
+        if not filename:
+            filename = basename + '.nroff'
+        nroffwriter.write(filename)
     if options.html:
         htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc, \
                                            quiet=options.quiet, \
                                            verbose=options.verbose, \
                                            external_css=options.extcss, \
                                            css_document=options.css)
-        htmlwriter.write(filename + '.html')
+        filename = options.filename
+        if not filename:
+            filename = basename + '.html'
+        htmlwriter.write(filename)
 
 if __name__ == '__main__':
     main()
