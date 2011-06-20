@@ -64,6 +64,8 @@ class BaseRfcWriter:
             lines.append('Category: ' + category)
         if expire_string:
             lines.append(expire_string)
+        # Strip any whitespace from XML to make header as neat as possible
+        lines = map(string.strip, lines)
         return lines
 
     def _prepare_top_right(self):
@@ -86,6 +88,8 @@ class BaseRfcWriter:
         month = date.attrib.get('month', '')
         year = date.attrib.get('year', '')
         lines.append(month + ' ' + year)
+        # Strip any whitespace from XML to make header as neat as possible
+        lines = map(string.strip, lines)
         return lines
 
     def _write_figure(self, figure):
