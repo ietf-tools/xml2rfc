@@ -67,7 +67,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 buf.extend(par)
             elif align == 'center':
                 for line in par:
-                    buf.append(line.center(self.width))
+                    buf.append(line.center(self.width).rstrip())
             elif align == 'right':
                 for line in par:
                     buf.append(line.rjust(self.width))
