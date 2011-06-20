@@ -2,6 +2,7 @@
 # Copyright The IETF Trust 2011, All Rights Reserved
 # --------------------------------------------------
 
+import copy
 import string
 import datetime
 import xml2rfc.log
@@ -12,6 +13,83 @@ class BaseRfcWriter:
 
         All public methods need to be overridden for a writer implementation.
     """
+    
+    # Boilerplate default text sections
+    boilerplate = {}
+    boilerplate['std'] = 'Standards-Track'
+    boilerplate['bcp'] = 'Best Current Practices'
+    boilerplate['exp'] = 'Experimental Protocol'
+    boilerplate['info'] = 'Informational'
+    boilerplate['historic'] = 'Historic'
+    boilerplate['status_std'] = \
+        'This document specifies an Internet standards track protocol for ' \
+        'the Internet community, and requests discussion and suggestions ' \
+        'for improvements.  Please refer to the current edition of the ' \
+        '"Internet Official Protocol Standards" (STD 1) for the ' \
+        'standardization state and status of this protocol.  Distribution ' \
+        'of this memo is unlimited.'
+    boilerplate['status_bcp'] = \
+        'This document specifies an Internet Best Current Practices for ' \
+        'the Internet Community, and requests discussion and suggestions ' \
+        'for improvements. Distribution of this memo is unlimited.'
+    boilerplate['status_exp'] = \
+        'This memo defines an Experimental Protocol for the Internet ' \
+        'community.  This memo does not specify an Internet standard of ' \
+        'any kind.  Discussion and suggestions for improvement are ' \
+        'requested. Distribution of this memo is unlimited.'
+    boilerplate['status_info'] = \
+        'This memo provides information for the Internet community. This ' \
+        'memo does not specify an Internet standard of any kind. ' \
+        'Distribution of this memo is unlimited.'
+    boilerplate['ipr_trust200902'] = \
+       ['This Internet-Draft is submitted in full conformance with the ' \
+       'provisions of BCP 78 and BCP 79.', \
+
+       'Internet-Drafts are working documents of the Internet Engineering ' \
+       'Task Force (IETF).  Note that other groups may also distribute ' \
+       'working documents as Internet-Drafts.  The list of current Internet- ' \
+       'Drafts is at http://datatracker.ietf.org/drafts/current/.', \
+
+       'Internet-Drafts are draft documents valid for a maximum of six months ' \
+       'and may be updated, replaced, or obsoleted by other documents at any ' \
+       'time.  It is inappropriate to use Internet-Drafts as reference ' \
+       'material or to cite them other than as "work in progress."']
+    boilerplate['ipr_noModificationTrust200902'] = \
+        copy.copy(boilerplate['ipr_trust200902'])
+    boilerplate['ipr_noModificationTrust200902'].append( \
+        'This document may not be modified, and derivative works of it may ' \
+        'not be created, except to format it for publication as an RFC or ' \
+        'to translate it into languages other than English.')
+    boilerplate['ipr_noDerivativesTrust200902'] = \
+        copy.copy(boilerplate['ipr_trust200902'])
+    boilerplate['ipr_noDerivativesTrust200902'].append( \
+        'This document may not be modified, and derivative works of it may ' \
+        'not be created, and it may not be published except as an ' \
+        'Internet-Draft.')
+    boilerplate['ipr_pre5378Trust200902'] = \
+        copy.copy(boilerplate['ipr_trust200902'])
+    boilerplate['ipr_pre5378Trust200902'].append( \
+        'This document may contain material from IETF Documents or IETF ' \
+        'Contributions published or made publicly available before ' \
+        'November 10, 2008. The person(s) controlling the copyright in some ' \
+        'of this material may not have granted the IETF Trust the right to ' \
+        'allow modifications of such material outside the IETF Standards ' \
+        'Process. Without obtaining an adequate license from the person(s) ' \
+        'controlling the copyright in such materials, this document may not ' \
+        'be modified outside the IETF Standards Process, and derivative ' \
+        'works of it may not be created outside the IETF Standards Process, ' \
+        'except to format it for publication as an RFC or to translate it ' \
+        'into languages other than English.')
+    boilerplate['draft_copyright'] = \
+        'This document is subject to BCP 78 and the IETF Trust\'s Legal ' \
+        'Provisions Relating to IETF Documents ' \
+        '(http://trustee.ietf.org/license-info) in effect on the date of ' \
+        'publication of this document.  Please review these documents ' \
+        'carefully, as they describe your rights and restrictions with respect ' \
+        'to this document.  Code Components extracted from this document must ' \
+        'include Simplified BSD License text as described in Section 4.e of ' \
+        'the Trust Legal Provisions and are provided without warranty as ' \
+        'described in the Simplified BSD License.'
 
     def __init__(self, xmlrfc, quiet=False, verbose=False):
         self.quiet = quiet
@@ -63,10 +141,11 @@ class BaseRfcWriter:
             lines.append(obsoletes)
         category = self.r.attrib.get('category')
         if category:
+            cat_text = BaseRfcWriter.boilerplate[category]
             if self.draft:
-                lines.append('Intended status: ' + category)
+                lines.append('Intended status: ' + cat_text)
             else:
-                lines.append('Category: ' + category)
+                lines.append('Category: ' + cat_text)
         if expire_string:
             lines.append(expire_string)
         # Strip any whitespace from XML to make header as neat as possible
@@ -271,12 +350,27 @@ class BaseRfcWriter:
                 self.write_t_rec(t)
 
         # Status
+        category = self.r.attrib.get('category', 'none')
         self.write_heading('Status of this Memo', idstring='rfc.status')
-        self.write_paragraph(self.r.attrib.get('status', ''))
+        if not self.draft:
+            self.write_paragraph(BaseRfcWriter.boilerplate.get \
+                                 ('status_' + category, ''))
+        else:
+            # Use value of ipr to determine text
+            ipr = self.r.attrib.get('ipr', 'trust200902')
+            ipr_boiler = BaseRfcWriter.boilerplate.get('ipr_'+ipr, None)
+            if not ipr_boiler:
+                xml2rfc.log.warn('unable to find a status boilerplate for ' \
+                                 'ipr: ' + ipr)
+            else:
+                for par in ipr_boiler:
+                    self.write_paragraph(par)
 
         # Copyright
         self.write_heading('Copyright Notice', idstring='rfc.copyrightnotice')
         self.write_paragraph(self.r.attrib.get('copyright', ''))
+        if self.draft:
+            self.write_paragraph(BaseRfcWriter.boilerplate['draft_copyright'])
 
         # Insert the table of contents marker at this position
         toc_enabled = self.pis.get('toc', 'no')
