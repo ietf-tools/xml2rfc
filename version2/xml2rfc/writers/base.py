@@ -8,6 +8,45 @@ import datetime
 import xml2rfc.log
 
 
+class RfcItem:
+    """ A unique ID descriptor for an anchored RFC element.
+    
+        Anchored elements are the following: Automatic sections, user (middle)
+        sections, paragraphs, references, appendices, figures, and tables.
+        
+        RfcItems are collected into an RfcIndex.
+    """
+    def __init__(self, counter, autoName, autoAnchor, title=None, anchor=None):
+        self.counter = counter
+        self.autoName = autoName
+        self.autoAnchor = autoAnchor
+        self.title = title
+        self.anchor = anchor
+
+
+class RfcIndex:
+    """ Indexing class that keeps track of all anchors in a document.
+    
+        This is mainly read by the table of contents, and xref elements.
+    """
+    def __init__(self):
+        self._index = []
+    
+    def addSection(self, counter, title=None, anchor=None):
+        autoName = 'Section ' + counter
+        autoAnchor = 'rfc.section.' + counter
+        item = RfcItem(counter, autoName, autoAnchor, title=title, \
+                       anchor=anchor)
+        self._index.append(item)
+        return item
+        
+    def getByAnchor(self, anchor):
+        for item in self._index:
+            if item.anchor == anchor:
+                return item
+        return None
+
+
 class BaseRfcWriter:
     """ Base class for all writers
 
