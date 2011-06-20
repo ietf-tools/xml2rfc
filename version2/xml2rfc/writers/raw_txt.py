@@ -523,7 +523,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         file = open(filename, 'w')
         for line_num, line in enumerate(self.buf):
             # Check for marks
-            if line_num == self.toc_marker:
+            if line_num == self.toc_marker and self.toc_marker != 0:
                 # Write TOC
                 tmpbuf = ['']
                 tmpbuf = self._post_write_toc(tmpbuf)
