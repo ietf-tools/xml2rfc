@@ -26,16 +26,18 @@ class BaseRfcWriter:
         self.ref_index = 1
         self.figure_count = 0
         self.table_count = 0
+        
+        # Set flag for draft
+        self.draft = bool(not self.r.attrib.get('number'))
 
     def _prepare_top_left(self):
         """ Returns a lines of lines for the top left header """
         lines = [self.r.attrib['workgroup']]
-        rfcnumber = self.r.attrib.get('number')
         expire_string = None
-        if rfcnumber:
+        if not self.draft:
+            rfcnumber = self.r.attrib.get('number', '')
             lines.append('Request for Comments: ' + rfcnumber)
         else:
-            # No RFC number -- assume internet draft
             lines.append('Internet-Draft')
             # Create the expiration date as published date + six months
             date = self.r.find('front/date')
@@ -61,7 +63,10 @@ class BaseRfcWriter:
             lines.append(obsoletes)
         category = self.r.attrib.get('category')
         if category:
-            lines.append('Category: ' + category)
+            if self.draft:
+                lines.append('Intended status: ' + category)
+            else:
+                lines.append('Category: ' + category)
         if expire_string:
             lines.append(expire_string)
         # Strip any whitespace from XML to make header as neat as possible
