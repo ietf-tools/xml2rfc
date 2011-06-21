@@ -14,37 +14,16 @@ class RfcItem:
         Anchored elements are the following: Automatic sections, user (middle)
         sections, paragraphs, references, appendices, figures, and tables.
         
-        RfcItems are collected into an RfcIndex.
+        RfcItems are collected into an index list
     """
-    def __init__(self, counter, autoName, autoAnchor, title=None, anchor=None):
+    def __init__(self, counter, autoName, autoAnchor, title=None, anchor=None,
+                 toc=True):
         self.counter = counter
         self.autoName = autoName
         self.autoAnchor = autoAnchor
         self.title = title
         self.anchor = anchor
-
-
-class RfcIndex:
-    """ Indexing class that keeps track of all anchors in a document.
-    
-        This is mainly read by the table of contents, and xref elements.
-    """
-    def __init__(self):
-        self._index = []
-    
-    def addSection(self, counter, title=None, anchor=None):
-        autoName = 'Section ' + counter
-        autoAnchor = 'rfc.section.' + counter
-        item = RfcItem(counter, autoName, autoAnchor, title=title, \
-                       anchor=anchor)
-        self._index.append(item)
-        return item
-        
-    def getByAnchor(self, anchor):
-        for item in self._index:
-            if item.anchor == anchor:
-                return item
-        return None
+        self.toc = toc
 
 
 class BaseRfcWriter:
@@ -146,6 +125,50 @@ class BaseRfcWriter:
         
         # Set flag for draft
         self.draft = bool(not self.r.attrib.get('number'))
+        
+        # Item Index
+        self._index = []
+
+    def _indexSection(self, counter, title=None, anchor=None, toc=True):
+        autoName = 'Section ' + counter
+        autoAnchor = 'rfc.section.' + counter
+        item = RfcItem(counter, autoName, autoAnchor, title=title, \
+                       anchor=anchor, toc=toc)
+        self._index.append(item)
+        return item
+    
+    def _indexFigure(self, counter, title=None, anchor=None, toc=False):
+        autoName = 'Figure ' + counter
+        autoAnchor = 'rfc.figure.' + counter
+        item = RfcItem(counter, autoName, autoAnchor, title=title, \
+                       anchor=anchor, toc=toc)
+        self._index.append(item)
+        # Insert anchor(s) into document
+        self.insert_anchor(autoAnchor)
+        if anchor:
+            self.insert_anchor(anchor)
+        return item
+        
+    def _indexTable(self, counter, title=None, anchor=None, toc=False):
+        autoName = 'Table ' + counter
+        autoAnchor = 'rfc.table.' + counter
+        item = RfcItem(counter, autoName, autoAnchor, title=title, \
+                       anchor=anchor, toc=toc)
+        self._index.append(item)
+        # Insert anchor(s) into document
+        self.insert_anchor(autoAnchor)
+        if anchor:
+            self.insert_anchor(anchor)
+        return item
+    
+    def _getTocIndex(self):
+        return [item for item in self._index if item.toc]
+        
+    def _getItemByAnchor(self, anchor):
+        for item in self._index:
+            if item.anchor == anchor:
+                return item
+        return None
 
     def _prepare_top_left(self):
         """ Returns a lines of lines for the top left header """
@@ -233,12 +256,11 @@ class BaseRfcWriter:
         """ Writes <figure> elements """
         align = figure.attrib.get('align', 'left')
         self.figure_count += 1
-
-        # Insert anchor(s) into document
-        self.insert_anchor('rfc.figure.' + str(self.figure_count))
         anchor = figure.attrib.get('anchor')
-        if anchor:
-            self.insert_anchor(anchor)
+        title = figure.attrib.get('title')
+
+        # Add figure to the index, inserting any anchors necessary
+        self._indexFigure(self.figure_count, anchor=anchor, title=title)
 
         # Write preamble
         preamble = figure.find('preamble')
@@ -270,12 +292,11 @@ class BaseRfcWriter:
         """ Writes <texttable> elements """
         align = table.attrib['align']
         self.table_count += 1
-
-        # Insert anchor(s) into document
-        self.insert_anchor('rfc.table.' + str(self.table_count))
         anchor = table.attrib.get('anchor')
-        if anchor:
-            self.insert_anchor(anchor)
+        title = table.attrib.get('title')
+
+        # Add table to the index, inserting any anchors necessary
+        self._indexTable(self.figure_count, anchor=anchor, title=title)
 
         # Write preamble
         preamble = table.find('preamble')
