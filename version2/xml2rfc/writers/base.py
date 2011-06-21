@@ -130,6 +130,7 @@ class BaseRfcWriter:
         self._index = []
 
     def _indexSection(self, counter, title=None, anchor=None, toc=True):
+        counter = str(counter)
         autoName = 'Section ' + counter
         autoAnchor = 'rfc.section.' + counter
         item = RfcItem(counter, autoName, autoAnchor, title=title, \
@@ -138,6 +139,7 @@ class BaseRfcWriter:
         return item
     
     def _indexFigure(self, counter, title=None, anchor=None, toc=False):
+        counter = str(counter)
         autoName = 'Figure ' + counter
         autoAnchor = 'rfc.figure.' + counter
         item = RfcItem(counter, autoName, autoAnchor, title=title, \
@@ -150,6 +152,7 @@ class BaseRfcWriter:
         return item
         
     def _indexTable(self, counter, title=None, anchor=None, toc=False):
+        counter = str(counter)
         autoName = 'Table ' + counter
         autoAnchor = 'rfc.table.' + counter
         item = RfcItem(counter, autoName, autoAnchor, title=title, \
