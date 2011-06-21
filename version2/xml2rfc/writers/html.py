@@ -509,7 +509,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         # Add caption, if it exists
         if 'title' in table.attrib and table.attrib['title']:
             caption = ''
-            if table_num:
+            if table_num and self.pis.get('tablecount', 'no') == 'yes':
                 caption = 'Table ' + str(table_num) + ': '
             htmltable.append(E.CAPTION(caption + table.attrib['title']))
 
