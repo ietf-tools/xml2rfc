@@ -16,9 +16,9 @@ class RfcItem:
         
         RfcItems are collected into an index list
     """
-    def __init__(self, counter, autoName, autoAnchor, title=None, anchor=None,
+    def __init__(self, autoName, autoAnchor, counter='', title='', anchor='',
                  toc=True):
-        self.counter = counter
+        self.counter = str(counter)
         self.autoName = autoName
         self.autoAnchor = autoAnchor
         self.title = title
@@ -122,18 +122,41 @@ class BaseRfcWriter:
         self.ref_index = 1
         self.figure_count = 0
         self.table_count = 0
-        
+
         # Set flag for draft
         self.draft = bool(not self.r.attrib.get('number'))
-        
+
         # Item Index
         self._index = []
+
+    def _indexParagraph(self, counter, p_counter, anchor=None, toc=False):
+        counter = str(counter)  # This is the section counter
+        p_counter = str(p_counter)  # This is the paragraph counter
+        autoName = 'Section ' + counter + ', Paragraph ' + p_counter
+        autoAnchor = 'rfc.section.' + counter + '.p.' + p_counter
+        item = RfcItem(autoName, autoAnchor, anchor=anchor, toc=toc)
+        self._index.append(item)
+        return item
 
     def _indexSection(self, counter, title=None, anchor=None, toc=True):
         counter = str(counter)
         autoName = 'Section ' + counter
         autoAnchor = 'rfc.section.' + counter
-        item = RfcItem(counter, autoName, autoAnchor, title=title, \
+        item = RfcItem(autoName, autoAnchor, counter=counter, title=title, \
+                       anchor=anchor, toc=toc)
+        self._index.append(item)
+        return item
+
+    def _indexReferences(self, counter, title=None, anchor=None, toc=True, \
+                         subCounter=0):
+        if subCounter < 1:
+            autoName = 'References'
+            autoAnchor = 'rfc.references'
+        else:
+            subCounter = str(subCounter)
+            autoName = 'References ' + subCounter
+            autoAnchor = 'rfc.references.' + subCounter
+        item = RfcItem(autoName, autoAnchor, counter=counter, title=title, \
                        anchor=anchor, toc=toc)
         self._index.append(item)
         return item
@@ -142,8 +165,8 @@ class BaseRfcWriter:
         counter = str(counter)
         autoName = 'Figure ' + counter
         autoAnchor = 'rfc.figure.' + counter
-        item = RfcItem(counter, autoName, autoAnchor, title=title, \
-                       anchor=anchor, toc=toc)
+        item = RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
+                       toc=toc)
         self._index.append(item)
         # Insert anchor(s) into document
         self.insert_anchor(autoAnchor)
@@ -155,8 +178,8 @@ class BaseRfcWriter:
         counter = str(counter)
         autoName = 'Table ' + counter
         autoAnchor = 'rfc.table.' + counter
-        item = RfcItem(counter, autoName, autoAnchor, title=title, \
-                       anchor=anchor, toc=toc)
+        item = RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
+                       toc=toc)
         self._index.append(item)
         # Insert anchor(s) into document
         self.insert_anchor(autoAnchor)
@@ -322,57 +345,58 @@ class BaseRfcWriter:
             self.write_label('Table ' + str(self.table_count) + title, \
                              type='table')
 
-    def _write_section_rec(self, section, indexstring, appendix=False, \
+    def _write_section_rec(self, section, count_str, appendix=False, \
                            level=0):
         """ Recursively writes <section> elements """
-        anchor = section.attrib.get('anchor', None)
-        if indexstring:
-            idstring = 'rfc.section.' + indexstring
-            # Prepend a neat index string to the title
-            self.write_heading(section.attrib['title'], \
-                               bullet=indexstring + '.', idstring=idstring, \
+        if count_str:
+            anchor = section.attrib.get('anchor')
+            title = section.attrib.get('title')
+            include_toc = section.attrib.get('toc', 'include') != 'exclude' \
+                          and (not appendix or self.pis.get('tocappendix', \
+                                                            'yes') == 'yes')
+            # Add section to the index
+            indexeditem = self._indexSection(count_str, title=title, \
+                                             anchor=anchor, toc=include_toc)
+            # Write the section heading
+            self.write_heading(title, bullet=count_str + '.', \
+                               autoAnchor=indexeditem.autoAnchor, \
                                anchor=anchor, level=level)
-            # Write to TOC as well
-            include_toc = section.attrib.get('toc', 'include')
-            if include_toc != 'exclude' and \
-            (appendix == False or self.pis.get('tocappendix', 'yes') == 'yes'):
-                self.add_to_toc(indexstring, section.attrib['title'], \
-                                link=idstring)
         else:
             # Must be <middle> or <back> element -- no title or index.
-            indexstring = ''
+            count_str = ''
 
-        paragraph_id = 1
+        p_count = 1  # Paragraph counter
         for element in section:
             # Write elements in XML document order
             if element.tag == 't':
-                idstring = 'rfc.section.' + indexstring + '.p.' + \
-                            str(paragraph_id)
-                self.write_t_rec(element, idstring=idstring)
-                paragraph_id += 1
+                anchor = element.attrib.get('anchor')
+                indexeditem = self._indexParagraph(count_str, p_count, \
+                                                   anchor=anchor)
+                self.write_t_rec(element, autoAnchor=indexeditem.autoAnchor)
+                p_count += 1
             elif element.tag == 'figure':
                 self._write_figure(element)
             elif element.tag == 'texttable':
                 self._write_table(element)
 
-        index = 1
+        s_count = 1  # Section counter
         for child_sec in section.findall('section'):
             if appendix == True:
                 self._write_section_rec(child_sec, 'Appendix ' + \
-                                        string.uppercase[index - 1] + '',
+                                        string.uppercase[s_count - 1] + '',
                                         level=level + 1, appendix=True)
             else:
-                if indexstring:
-                    self._write_section_rec(child_sec, indexstring + '.' \
-                                            + str(index), level=level + 1)
+                if count_str:
+                    self._write_section_rec(child_sec, count_str + '.' \
+                                            + str(s_count), level=level + 1)
                 else:
-                    self._write_section_rec(child_sec, str(index), \
+                    self._write_section_rec(child_sec, str(s_count), \
                                             level=level + 1)
-            index += 1
+            s_count += 1
 
         # Set the ending index number so we know where to begin references
-        if indexstring == '' and appendix == False:
-            self.ref_index = index
+        if count_str == '' and appendix == False:
+            self.ref_index = s_count
 
     def write(self, filename):
         """ Public method to write the RFC document to a file. """
@@ -393,7 +417,7 @@ class BaseRfcWriter:
         # Abstract
         abstract = self.r.find('front/abstract')
         if abstract is not None:
-            self.write_heading('Abstract', idstring='rfc.abstract')
+            self.write_heading('Abstract', autoAnchor='rfc.abstract')
             for t in abstract.findall('t'):
                 self.write_t_rec(t)
 
@@ -414,7 +438,7 @@ class BaseRfcWriter:
 
         # Status
         category = self.r.attrib.get('category', 'none')
-        self.write_heading('Status of this Memo', idstring='rfc.status')
+        self.write_heading('Status of this Memo', autoAnchor='rfc.status')
         if not self.draft:
             self.write_paragraph(BaseRfcWriter.boilerplate.get \
                                  ('status_' + category, ''))
@@ -430,7 +454,7 @@ class BaseRfcWriter:
                     self.write_paragraph(par)
 
         # Copyright
-        self.write_heading('Copyright Notice', idstring='rfc.copyrightnotice')
+        self.write_heading('Copyright Notice', autoAnchor='rfc.copyrightnotice')
         self.write_paragraph(self.r.attrib.get('copyright', ''))
         if self.draft:
             self.write_paragraph(BaseRfcWriter.boilerplate['draft_copyright'])
@@ -445,33 +469,29 @@ class BaseRfcWriter:
 
         # References sections
         # Treat references as nested only if there is more than one
-        ref_indexstring = str(self.ref_index)
-        ref_idstring = 'rfc.section.' + ref_indexstring
+        ref_counter = str(self.ref_index)
         references = self.r.findall('back/references')
+        # Write root level references header
+        ref_title = self.pis.get('refparent', 'References')
+        if len(references) == 1:
+            # Use only reference list as base title
+            ref_title = references[0].attrib['title']
+        ref_index = self._indexReferences(ref_counter, title=ref_title)
+        self.write_heading(ref_title, bullet=ref_counter + '.', \
+                           autoAnchor=ref_index.autoAnchor)
         if len(references) > 1:
-            # Get reference title from PI
-            ref_title = self.pis.get('refparent', 'References')
-            self.write_heading(ref_title, bullet=ref_indexstring + '.', \
-                               idstring=ref_idstring)
-            self.add_to_toc(ref_indexstring, ref_title, link=ref_idstring)
-            for index, reference_list in enumerate(references):
-                ref_newindexstring = ref_indexstring + '.' + str(index + 1)
-                ref_newidstring = ref_idstring + '.' + str(index + 1)
+            for i, reference_list in enumerate(references):
+                ref_newcounter = ref_counter + '.' + str(i + 1)
                 ref_title = reference_list.attrib['title']
-                self.write_heading(ref_title, bullet=ref_newindexstring + '.',\
-                                   idstring=ref_newidstring, level=2)
-                self.add_to_toc(ref_newindexstring, ref_title, \
-                                link=ref_newidstring)
+                ref_index = self._indexReferences(ref_newcounter, 
+                            title=ref_title, subCounter=i+1)
+                self.write_heading(ref_title, bullet=ref_newcounter + '.',\
+                                   autoAnchor=ref_index.autoAnchor, level=2)
                 self.write_reference_list(reference_list)
         elif len(references) == 1:
-            ref_title = references[0].attrib['title']
-            self.write_heading(ref_title, bullet=ref_indexstring + '.', \
-                               idstring=ref_idstring)
-            self.add_to_toc(ref_indexstring, ref_title, \
-                            link=ref_idstring)
             self.write_reference_list(references[0])
 
-        # Additional index -- The writer is responsible for tracking irefs,
+        # The writer is responsible for tracking irefs,
         # so we have nothing to pass here
         self.write_iref_index()
 
@@ -480,13 +500,15 @@ class BaseRfcWriter:
 
         # Authors addresses section
         authors = self.r.findall('front/author')
-        idstring = 'rfc.authors'
+        autoAnchor = 'rfc.authors'
         if len(authors) > 1:
             title = "Authors' Addresses"
         else:
             title = "Author's Address"
-        self.write_heading(title, idstring=idstring)
-        self.add_to_toc('', title)
+        self.write_heading(title, autoAnchor=autoAnchor)
+        # Add explicitly to index
+        item = RfcItem(title, autoAnchor, title=title)
+        self._index.append(item)
         for author in authors:
             self.write_address_card(author)
 
@@ -520,17 +542,17 @@ class BaseRfcWriter:
         """ Writes the document title """
         raise NotImplementedError('write_title() needs to be overridden')
 
-    def write_heading(self, text, bullet='', idstring=None, anchor=None, \
+    def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, \
                       level=1):
         """ Writes a section heading """
         raise NotImplementedError('write_heading() needs to be overridden')
 
-    def write_paragraph(self, text, align='left', idstring=None):
+    def write_paragraph(self, text, align='left', autoAnchor=None):
         """ Writes a paragraph of text """
         raise NotImplementedError('write_paragraph() needs to be'\
                                   ' overridden')
 
-    def write_t_rec(self, t, align='left', idstring=None):
+    def write_t_rec(self, t, align='left', autoAnchor=None):
         """ Recursively writes <t> elements """
         raise NotImplementedError('write_t_rec() needs to be overridden')
 
@@ -567,10 +589,6 @@ class BaseRfcWriter:
             For HTML nothing is really 'drawn' since we can use <table>
         """
         raise NotImplementedError('draw_table() needs to be overridden')
-
-    def add_to_toc(self, bullet, title, link=None):
-        """ Adds a section to the table of contents """
-        raise NotImplementedError('add_to_toc() needs to be overridden')
 
     def pre_processing(self):
         """ First method that is called before traversing the XML RFC tree """

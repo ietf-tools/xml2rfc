@@ -124,7 +124,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                                          delimiter=delimiter)
         self._write_line('.fi')
 
-    def write_heading(self, text, bullet='', idstring=None, anchor=None, \
+    def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, \
                       level=1):
         # Override to use a .ti command
         self._lb()

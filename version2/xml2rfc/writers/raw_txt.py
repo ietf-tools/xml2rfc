@@ -21,7 +21,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)
         self.width = width      # Page width
         self.buf = []           # Main buffer
-        self.toc = []           # Table of contents buffer
+        self.tocbuf = []           # Table of contents buffer
         self.toc_marker = 0     # Line number in buffer to write toc too
         self.list_counters = {}  # Maintain counters for 'format' type lists
 
@@ -134,17 +134,6 @@ class RawTextRfcWriter(BaseRfcWriter):
                 self.write_t_rec(t, bullet=bullet, indent=indent, \
                                  level=level + 1)
 
-    def _post_write_toc(self, tmpbuf):
-        """ Writes the table of contents to temporary buffer and returns
-
-            This should only be called after the initial buffer is written.
-        """
-        self._write_text('Table of Contents', buf=tmpbuf)
-        self._lb(buf=tmpbuf)
-        for line in self.toc:
-            self._write_text(line, indent=3, buf=tmpbuf, strip=False)
-        return tmpbuf
-
     # ---------------------------------------------------------
     # Base writer overrides
     # ---------------------------------------------------------
@@ -194,19 +183,19 @@ class RawTextRfcWriter(BaseRfcWriter):
         if docName is not None:
             self._write_text(docName, align='center')
 
-    def write_heading(self, text, bullet='', idstring=None, anchor=None, \
+    def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, \
                       level=1):
         """ Write a generic header """
         if bullet:
             bullet += '  '
         self._write_text(text, bullet=bullet, indent=0, lb=True)
 
-    def write_paragraph(self, text, align='left', idstring=None):
+    def write_paragraph(self, text, align='left', autoAnchor=None):
         """ Write a generic paragraph of text """
         self._write_text(text, indent=3, align=align, lb=True)
 
     def write_t_rec(self, t, indent=3, sub_indent=0, bullet='', \
-                     idstring=None, align='left', level=0):
+                     autoAnchor=None, align='left', level=0):
         """ Recursively writes a <t> element """
         line = ['']
         if t.text:
@@ -520,13 +509,6 @@ class RawTextRfcWriter(BaseRfcWriter):
         align = table.attrib.get('align', 'center')
         self.write_raw('\n'.join(output), align=align)
 
-    def add_to_toc(self, bullet, title, link=None):
-        if bullet:
-            toc_indent = ' ' * ((bullet.count('.')) * 2)
-            self.toc.append(toc_indent + bullet + '. ' + title)
-        else:
-            self.toc.append(title)
-
     def insert_anchor(self, text):
         # No anchors for text
         pass
@@ -541,8 +523,17 @@ class RawTextRfcWriter(BaseRfcWriter):
         pass
 
     def post_processing(self):
-        # Raw text, no post processing necessary
-        pass
+        # Write table of contents to a temporary buffer
+        self.tocbuf.extend(['', 'Table of Contents', ''])
+        # Retrieve toc from the index
+        tocindex = self._getTocIndex()
+        for item in tocindex:
+            # Hide counter for zeroes
+            if not item.counter:
+                self.tocbuf.append('   ' + item.title)
+            else:
+                self.tocbuf.append('   ' + item.counter + '. ' + \
+                                   item.title)
 
     def write_to_file(self, filename):
         """ Writes the buffer to the specified file """
@@ -552,10 +543,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         for line_num, line in enumerate(self.buf):
             # Check for marks
             if line_num == self.toc_marker and self.toc_marker != 0:
-                # Write TOC
-                tmpbuf = ['']
-                tmpbuf = self._post_write_toc(tmpbuf)
-                for tmpline in tmpbuf:
+                for tmpline in self.tocbuf:
                     file.write(tmpline)
                     file.write('\r\n')
             file.write(line)

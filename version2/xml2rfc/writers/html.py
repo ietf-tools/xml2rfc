@@ -57,8 +57,10 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.html.append(self.body)
 
         # Create table of contents element
-        self.toc_header = E.H1('Table of Contents', id='rfc.toc')
+        self.toc_header = E.H1(id='rfc.toc')
         self.toc_header.attrib['class'] = 'np'
+        a = E.A('Table of Contents', href='#rfc.toc')
+        self.toc_header.append(a)
         self.toc_list = E.UL()
         self.toc_list.attrib['class'] = 'toc'
 
@@ -175,7 +177,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             p.append(span)
         self.body.append(p)
 
-    def write_heading(self, text, bullet=None, idstring=None, anchor=None, \
+    def write_heading(self, text, bullet=None, autoAnchor=None, anchor=None, \
                       level=1):
         # Use a hierarchy of header tags if docmapping set
         h = E.H1()
@@ -184,14 +186,14 @@ class HtmlRfcWriter(BaseRfcWriter):
                 h = E.H2()
             elif level > 2:
                 h = E.H3()
-        if idstring:
-            h.attrib['id'] = idstring
+        if autoAnchor:
+            h.attrib['id'] = autoAnchor
         if bullet:
             # Use separate elements for bullet and text
             a_bullet = E.A(bullet)
             a_bullet.tail = ' '
-            if idstring:
-                a_bullet.attrib['href'] = '#' + idstring
+            if autoAnchor:
+                a_bullet.attrib['href'] = '#' + autoAnchor
             h.append(a_bullet)
             if anchor:
                 # Use an anchor link for heading
@@ -201,21 +203,21 @@ class HtmlRfcWriter(BaseRfcWriter):
                 # Plain text
                 a_bullet.tail += text
         else:
-            # Only use one <a> pointing to idstring
+            # Only use one <a> pointing to autoAnchor
             a = E.A(text)
-            if idstring:
-                a.attrib['href'] = '#' + idstring
+            if autoAnchor:
+                a.attrib['href'] = '#' + autoAnchor
             h.append(a)
         self.body.append(h)
 
-    def write_paragraph(self, text, align='left', idstring=None):
+    def write_paragraph(self, text, align='left', autoAnchor=None):
         if text:
             p = E.P(text)
-            if idstring:
-                p.attrib['id'] = idstring
+            if autoAnchor:
+                p.attrib['id'] = autoAnchor
             self.body.append(p)
 
-    def write_t_rec(self, t, idstring=None, align='left', parent=None):
+    def write_t_rec(self, t, autoAnchor=None, align='left', parent=None):
         """ Recursively writes a <t> element
 
             If no parent is specified, <body> will be treated as the parent,
@@ -231,8 +233,8 @@ class HtmlRfcWriter(BaseRfcWriter):
             current = parent
         if t.text:
             current.text = t.text
-            if idstring:
-                current.attrib['id'] = idstring
+            if autoAnchor:
+                current.attrib['id'] = autoAnchor
         for child in t:
             if child.tag == 'xref':
                 target = child.attrib.get('target', '')
@@ -554,7 +556,7 @@ class HtmlRfcWriter(BaseRfcWriter):
     def write_iref_index(self):
         # Omit this element if the index is empty
         if len(self.iref_index) > 0:
-            self.write_heading('Index', idstring='index')
+            self.write_heading('Index', autoAnchor='index')
             self.add_to_toc('', 'Index', link='index')
             dl = E.DL()
             for iref in self.iref_index:
@@ -564,16 +566,6 @@ class HtmlRfcWriter(BaseRfcWriter):
                 else:
                     dl.append(E.DD(E.A(iref[0], href='#' + iref[0])))
             self.body.append(dl)
-
-    def add_to_toc(self, bullet, title, link=None):
-        li = E.LI('')
-        if bullet:
-            li.text += bullet + '.   '
-        if link:
-            li.append(E.A(title, href='#' + link))
-        else:
-            li.text += title
-        self.toc_list.append(li)
 
     def pre_processing(self):
         """ Insert all metadata into head """
@@ -611,8 +603,16 @@ class HtmlRfcWriter(BaseRfcWriter):
             self.head.append(style)
 
     def post_processing(self):
-        # Nothing to do here
-        pass
+        # Create toc from index
+        tocindex = self._getTocIndex()
+        for item in tocindex:
+            a = E.A(item.title, href='#' + item.autoAnchor)
+            if not item.counter:
+                li = E.LI(a)
+            else:
+                li = E.LI(item.counter + '.   ')
+                li.append(a)
+            self.toc_list.append(li)
 
     def write_to_file(self, filename):
         # Write the tree to the file
