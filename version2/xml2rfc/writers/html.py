@@ -36,7 +36,6 @@ class HtmlRfcWriter(BaseRfcWriter):
         BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)
         self.list_counters = {}
         self.iref_index = []
-        self.pending_xrefs = []
         self.html = E.HTML(lang=lang)
         self.css_document = os.path.join(os.path.dirname(xml2rfc.__file__), \
                                          'templates/rfc.css')
@@ -248,15 +247,23 @@ class HtmlRfcWriter(BaseRfcWriter):
                     if child.tail:
                         cite.tail = child.tail
                 else:
-                    # We will need to wait until post processing to complete
-                    # this xref.  Save an empty A element to pending xrefs,
-                    # along with the xref format and target.
+                    # Create xref from index lookup
                     format = child.attrib.get('format', 'default')
-                    a = E.A('LINK', href='#' + target)
+                    a = E.A(href='#' + target)
+                    item = self._getItemByAnchor(target)
+                    if not item or format == 'none':
+                        text = '[' + target + ']'
+                    elif format == 'counter':
+                        text = item.counter
+                    elif format == 'title':
+                        text = item.title
+                    else:
+                        # Default
+                        text = item.autoName
+                    a.text = text
                     current.append(a)
                     if child.tail:
                         a.tail = child.tail
-                    self.pending_xrefs.append((target, format, a))
             if child.tag == 'eref':
                 target = child.attrib.get('target', '')
                 if child.text:
@@ -620,22 +627,6 @@ class HtmlRfcWriter(BaseRfcWriter):
                 li = E.LI(item.counter + '.   ')
                 li.append(a)
             self.toc_list.append(li)
-        # Finish any pending xref elements
-        for xref in self.pending_xrefs:
-            # Lookup item
-            target = xref[0]
-            format = xref[1]
-            item = self._getItemByAnchor(target)
-            if not item or format == 'none':
-                text = '[' + target + ']'
-            elif format == 'counter':
-                text = item.counter
-            elif format == 'title':
-                text = item.title
-            else:
-                # Default
-                text = item.autoName
-            xref[2].text = text
 
     def write_to_file(self, filename):
         # Write the tree to the file

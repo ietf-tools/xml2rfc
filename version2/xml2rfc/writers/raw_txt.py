@@ -207,17 +207,18 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if child.text:
                     line.append(child.text + ' [' + target + ']')
                 else:
-                    # Insert appropriate label via format
-                    label = ''
                     format = child.attrib.get('format', 'default')
-                    # TODO: proper label via format
-                    if format == 'default':
-                        label = '[' + target + ']'
-                    if format == 'counter':
-                        label = '[' + target + ']'
-                    if format == 'title':
-                        label = '[' + target + ']'
-                    line.append(label)
+                    item = self._getItemByAnchor(target)
+                    if not item or format == 'none':
+                        text = '[' + target + ']'
+                    elif format == 'counter':
+                        text = item.counter
+                    elif format == 'title':
+                        text = item.title
+                    else:
+                        # Default
+                        text = item.autoName
+                    line.append(' ' + text)
                 if child.tail:
                     line.append(child.tail)
             elif child.tag == 'eref':

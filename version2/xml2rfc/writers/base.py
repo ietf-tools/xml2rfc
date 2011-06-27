@@ -108,6 +108,11 @@ class BaseRfcWriter:
         'include Simplified BSD License text as described in Section 4.e of ' \
         'the Trust Legal Provisions and are provided without warranty as ' \
         'described in the Simplified BSD License.'
+    boilerplate['notified'] = \
+        'The IETF has been notified of intellectual property rights ' \
+        'claimed in regard to some or all of the specification contained ' \
+        'in this document.  For more information consult the online list ' \
+        'of claimed rights.'
 
     def __init__(self, xmlrfc, quiet=False, verbose=False):
         self.quiet = quiet
@@ -125,6 +130,9 @@ class BaseRfcWriter:
 
         # Set flag for draft
         self.draft = bool(not self.r.attrib.get('number'))
+        
+        # Used for two-pass indexing
+        self.indexmode = False
 
         # Item Index
         self._index = []
@@ -168,10 +176,6 @@ class BaseRfcWriter:
         item = RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
                        toc=toc)
         self._index.append(item)
-        # Insert anchor(s) into document
-        self.insert_anchor(autoAnchor)
-        if anchor:
-            self.insert_anchor(anchor)
         return item
         
     def _indexTable(self, counter, title=None, anchor=None, toc=False):
@@ -181,10 +185,6 @@ class BaseRfcWriter:
         item = RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
                        toc=toc)
         self._index.append(item)
-        # Insert anchor(s) into document
-        self.insert_anchor(autoAnchor)
-        if anchor:
-            self.insert_anchor(anchor)
         return item
     
     def _getTocIndex(self):
@@ -284,9 +284,11 @@ class BaseRfcWriter:
         self.figure_count += 1
         anchor = figure.attrib.get('anchor')
         title = figure.attrib.get('title')
-
-        # Add figure to the index, inserting any anchors necessary
-        self._indexFigure(self.figure_count, anchor=anchor, title=title)
+        
+        # Insert anchor(s) for the figure
+        self.insert_anchor('#rfc.figure.' + str(self.figure_count))
+        if (anchor):
+            self.insert_anchor('#' + anchor)
 
         # Write preamble
         preamble = figure.find('preamble')
@@ -321,8 +323,10 @@ class BaseRfcWriter:
         anchor = table.attrib.get('anchor')
         title = table.attrib.get('title')
 
-        # Add table to the index, inserting any anchors necessary
-        self._indexTable(self.figure_count, anchor=anchor, title=title)
+        # Insert anchor(s) for the table
+        self.insert_anchor('#rfc.table.' + str(self.table_count))
+        if (anchor):
+            self.insert_anchor('#' + anchor)
 
         # Write preamble
         preamble = table.find('preamble')
@@ -347,20 +351,27 @@ class BaseRfcWriter:
 
     def _write_section_rec(self, section, count_str, appendix=False, \
                            level=0):
-        """ Recursively writes <section> elements """
+        """ Recursively writes <section> elements 
+        
+            We use the self.indexmode flag to determine whether or not we
+            render actual text at this point or just lookup header information
+            to construct the index
+        """
         if count_str:
             anchor = section.attrib.get('anchor')
             title = section.attrib.get('title')
             include_toc = section.attrib.get('toc', 'include') != 'exclude' \
                           and (not appendix or self.pis.get('tocappendix', \
                                                             'yes') == 'yes')
-            # Add section to the index
-            indexeditem = self._indexSection(count_str, title=title, \
-                                             anchor=anchor, toc=include_toc)
-            # Write the section heading
-            self.write_heading(title, bullet=count_str + '.', \
-                               autoAnchor=indexeditem.autoAnchor, \
-                               anchor=anchor, level=level)
+            if self.indexmode:
+                # Add section to the index
+                self._indexSection(count_str, title=title, anchor=anchor, \
+                                   toc=include_toc)
+            else:
+                # Write the section heading
+                self.write_heading(title, bullet=count_str + '.', \
+                                   autoAnchor='rfc.section.' + count_str, \
+                                   anchor=anchor, level=level)
         else:
             # Must be <middle> or <back> element -- no title or index.
             count_str = ''
@@ -370,14 +381,30 @@ class BaseRfcWriter:
             # Write elements in XML document order
             if element.tag == 't':
                 anchor = element.attrib.get('anchor')
-                indexeditem = self._indexParagraph(count_str, p_count, \
-                                                   anchor=anchor)
-                self.write_t_rec(element, autoAnchor=indexeditem.autoAnchor)
+                if self.indexmode:
+                    self._indexParagraph(count_str, p_count, anchor=anchor)
+                else:
+                    autoAnchor = 'rfc.section.' + count_str + '.p.' + str(p_count)
+                    self.write_t_rec(element, autoAnchor=autoAnchor)
                 p_count += 1
             elif element.tag == 'figure':
-                self._write_figure(element)
+                if self.indexmode:
+                    self.figure_count += 1
+                    anchor = element.attrib.get('anchor')
+                    title = element.attrib.get('title')
+                    # Add table to the index, inserting any anchors necessary
+                    self._indexFigure(self.figure_count, anchor=anchor, title=title)
+                else:
+                    self._write_figure(element)
             elif element.tag == 'texttable':
-                self._write_table(element)
+                if self.indexmode:
+                    self.table_count += 1
+                    anchor = element.attrib.get('anchor')
+                    title = element.attrib.get('title')
+                    # Add table to the index, inserting any anchors necessary
+                    self._indexTable(self.table_count, anchor=anchor, title=title)
+                else:
+                    self._write_table(element)
 
         s_count = 1  # Section counter
         for child_sec in section.findall('section'):
@@ -398,72 +425,74 @@ class BaseRfcWriter:
         if count_str == '' and appendix == False:
             self.ref_index = s_count
 
-    def write(self, filename):
-        """ Public method to write the RFC document to a file. """
+    def _run(self, indexmode=False):
+        self.indexmode = indexmode
+        # Reset document counters
+        self.ref_index = 1
+        self.figure_count = 0
+        self.table_count = 0
 
-        # Do any pre processing necessary, such as inserting metadata
-        self.pre_processing()
+        if not self.indexmode:
+            # Do any pre processing necessary, such as inserting metadata
+            self.pre_processing()
 
-        # Block header
-        topblock = self.pis.get('topblock', 'yes')
-        if topblock == 'yes':
-            self.write_top(self._prepare_top_left(), self._prepare_top_right())
+            # Block header
+            topblock = self.pis.get('topblock', 'yes')
+            if topblock == 'yes':
+                self.write_top(self._prepare_top_left(), \
+                               self._prepare_top_right())
 
-        # Title & Optional docname
-        title = self.r.find('front/title').text
-        docName = self.r.attrib.get('docName', None)
-        self.write_title(title, docName)
+            # Title & Optional docname
+            title = self.r.find('front/title').text
+            docName = self.r.attrib.get('docName', None)
+            self.write_title(title, docName)
+    
+            # Abstract
+            abstract = self.r.find('front/abstract')
+            if abstract is not None:
+                self.write_heading('Abstract', autoAnchor='rfc.abstract')
+                for t in abstract.findall('t'):
+                    self.write_t_rec(t)
 
-        # Abstract
-        abstract = self.r.find('front/abstract')
-        if abstract is not None:
-            self.write_heading('Abstract', autoAnchor='rfc.abstract')
-            for t in abstract.findall('t'):
-                self.write_t_rec(t)
+            # Optional notified boilerplate
+            if self.pis.get('iprnotified', 'no') == 'yes':
+                self.write_paragraph(BaseRfcWriter.boilerplate['notified'])
 
-        # TODO: Relocate this text?
-        if self.pis.get('iprnotified', 'no') == 'yes':
-            notified_text = \
-            'The IETF has been notified of intellectual property rights '\
-            'claimed in regard to some or all of the specification contained '\
-            'in this document.  For more information consult the online list '\
-            'of claimed rights.'
-            self.write_paragraph(notified_text)
+            # Optional notes
+            for note in self.r.findall('front/note'):
+                self.write_heading(note.attrib.get('title', 'Note'))
+                for t in note.findall('t'):
+                    self.write_t_rec(t)
 
-        # Any notes
-        for note in self.r.findall('front/note'):
-            self.write_heading(note.attrib.get('title', 'Note'))
-            for t in note.findall('t'):
-                self.write_t_rec(t)
-
-        # Status
-        category = self.r.attrib.get('category', 'none')
-        self.write_heading('Status of this Memo', autoAnchor='rfc.status')
-        if not self.draft:
-            self.write_paragraph(BaseRfcWriter.boilerplate.get \
-                                 ('status_' + category, ''))
-        else:
-            # Use value of ipr to determine text
-            ipr = self.r.attrib.get('ipr', 'trust200902')
-            ipr_boiler = BaseRfcWriter.boilerplate.get('ipr_'+ipr, None)
-            if not ipr_boiler:
-                xml2rfc.log.warn('unable to find a status boilerplate for ' \
-                                 'ipr: ' + ipr)
+            # Status
+            category = self.r.attrib.get('category', 'none')
+            self.write_heading('Status of this Memo', autoAnchor='rfc.status')
+            if not self.draft:
+                self.write_paragraph(BaseRfcWriter.boilerplate.get \
+                                     ('status_' + category, ''))
             else:
-                for par in ipr_boiler:
-                    self.write_paragraph(par)
+                # Use value of ipr to determine text
+                ipr = self.r.attrib.get('ipr', 'trust200902')
+                ipr_boiler = BaseRfcWriter.boilerplate.get('ipr_'+ipr, None)
+                if not ipr_boiler:
+                    xml2rfc.log.warn('unable to find a status boilerplate for ' \
+                                     'ipr: ' + ipr)
+                else:
+                    for par in ipr_boiler:
+                        self.write_paragraph(par)
 
-        # Copyright
-        self.write_heading('Copyright Notice', autoAnchor='rfc.copyrightnotice')
-        self.write_paragraph(self.r.attrib.get('copyright', ''))
-        if self.draft:
-            self.write_paragraph(BaseRfcWriter.boilerplate['draft_copyright'])
-
-        # Insert the table of contents marker at this position
-        toc_enabled = self.pis.get('toc', 'no')
-        if toc_enabled == 'yes':
-            self.insert_toc()
-
+            # Copyright
+            self.write_heading('Copyright Notice', autoAnchor='rfc.copyrightnotice')
+            self.write_paragraph(self.r.attrib.get('copyright', ''))
+            if self.draft:
+                self.write_paragraph(BaseRfcWriter.boilerplate['draft_copyright'])
+    
+            # Insert the table of contents marker at this position
+            toc_enabled = self.pis.get('toc', 'no')
+            if toc_enabled == 'yes':
+                self.insert_toc()
+        
+        # ENDIF indexmode
         # Middle sections
         self._write_section_rec(self.r.find('middle'), None)
 
@@ -476,19 +505,24 @@ class BaseRfcWriter:
         if len(references) == 1:
             # Use only reference list as base title
             ref_title = references[0].attrib['title']
-        ref_index = self._indexReferences(ref_counter, title=ref_title)
-        self.write_heading(ref_title, bullet=ref_counter + '.', \
-                           autoAnchor=ref_index.autoAnchor)
+        if self.indexmode:
+            self._indexReferences(ref_counter, title=ref_title)
+        else:
+            self.write_heading(ref_title, bullet=ref_counter + '.', \
+                               autoAnchor='rfc.references')
         if len(references) > 1:
             for i, reference_list in enumerate(references):
                 ref_newcounter = ref_counter + '.' + str(i + 1)
                 ref_title = reference_list.attrib['title']
-                ref_index = self._indexReferences(ref_newcounter, 
-                            title=ref_title, subCounter=i+1)
-                self.write_heading(ref_title, bullet=ref_newcounter + '.',\
-                                   autoAnchor=ref_index.autoAnchor, level=2)
-                self.write_reference_list(reference_list)
-        elif len(references) == 1:
+                if self.indexmode:
+                    self._indexReferences(ref_newcounter, title=ref_title, \
+                                          subCounter=i+1)
+                else:
+                    autoAnchor = 'rfc.references.' + ref_newcounter
+                    self.write_heading(ref_title, bullet=ref_newcounter + '.',\
+                                       autoAnchor=autoAnchor, level=2)
+                    self.write_reference_list(reference_list)
+        elif len(references) == 1 and not self.indexmode:
             self.write_reference_list(references[0])
 
         # The writer is responsible for tracking irefs,
@@ -505,17 +539,28 @@ class BaseRfcWriter:
             title = "Authors' Addresses"
         else:
             title = "Author's Address"
-        self.write_heading(title, autoAnchor=autoAnchor)
-        # Add explicitly to index
-        item = RfcItem(title, autoAnchor, title=title)
-        self._index.append(item)
-        for author in authors:
-            self.write_address_card(author)
+        if self.indexmode:
+            # Add explicitly to index
+            item = RfcItem(title, autoAnchor, title=title)
+            self._index.append(item)
+        else:
+            self.write_heading(title, autoAnchor=autoAnchor)
+            for author in authors:
+                self.write_address_card(author)
 
         # Primary buffer is finished -- apply any post processing
-        self.post_processing()
-
-        # Finished buffering, write to file
+        if not self.indexmode:
+            self.post_processing()
+        
+    def write(self, filename):
+        """ Public method to write the RFC document to a file. """
+        # Make two passes over the document, the first pass we run in
+        # 'index mode' to construct just the index, the second pass will
+        # render the actual text
+        self._run(indexmode=True)
+        self._run(indexmode=False)
+            
+        # Finished processing, write to file
         self.write_to_file(filename)
 
         if not self.quiet:
