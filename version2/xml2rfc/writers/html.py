@@ -36,6 +36,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)
         self.list_counters = {}
         self.iref_index = []
+        self.pending_xrefs = []
         self.html = E.HTML(lang=lang)
         self.css_document = os.path.join(os.path.dirname(xml2rfc.__file__), \
                                          'templates/rfc.css')
@@ -197,7 +198,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             h.append(a_bullet)
             if anchor:
                 # Use an anchor link for heading
-                a_text = E.A(text, href='#' + anchor)
+                a_text = E.A(text, href='#' + anchor, id=anchor)
                 h.append(a_text)
             else:
                 # Plain text
@@ -238,18 +239,24 @@ class HtmlRfcWriter(BaseRfcWriter):
         for child in t:
             if child.tag == 'xref':
                 target = child.attrib.get('target', '')
-                cite = E.CITE('[' + target + ']', title='NONE')
                 if child.text:
+                    cite = E.CITE('[' + target + ']', title='NONE')
                     a = E.A(child.text, href='#' + target)
                     a.tail = ' '
                     current.append(a)
-                    # TODO: Grab proper title from reference
+                    current.append(cite)
+                    if child.tail:
+                        cite.tail = child.tail
                 else:
-                    # TODO: auto title from reference as link
-                    pass
-                if child.tail:
-                    cite.tail = child.tail
-                current.append(cite)
+                    # We will need to wait until post processing to complete
+                    # this xref.  Save an empty A element to pending xrefs,
+                    # along with the xref format and target.
+                    format = child.attrib.get('format', 'default')
+                    a = E.A('LINK', href='#' + target)
+                    current.append(a)
+                    if child.tail:
+                        a.tail = child.tail
+                    self.pending_xrefs.append((target, format, a))
             if child.tag == 'eref':
                 target = child.attrib.get('target', '')
                 if child.text:
@@ -613,6 +620,22 @@ class HtmlRfcWriter(BaseRfcWriter):
                 li = E.LI(item.counter + '.   ')
                 li.append(a)
             self.toc_list.append(li)
+        # Finish any pending xref elements
+        for xref in self.pending_xrefs:
+            # Lookup item
+            target = xref[0]
+            format = xref[1]
+            item = self._getItemByAnchor(target)
+            if not item or format == 'none':
+                text = '[' + target + ']'
+            elif format == 'counter':
+                text = item.counter
+            elif format == 'title':
+                text = item.title
+            else:
+                # Default
+                text = item.autoName
+            xref[2].text = text
 
     def write_to_file(self, filename):
         # Write the tree to the file
