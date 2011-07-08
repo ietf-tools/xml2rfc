@@ -575,7 +575,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         # Omit this element if the index is empty
         if len(self.iref_index) > 0:
             self.write_heading('Index', autoAnchor='index')
-            self.add_to_toc('', 'Index', link='index')
+            # self.add_to_toc('', 'Index', link='index')
             dl = E.DL()
             for iref in self.iref_index:
                 if iref[1]:
