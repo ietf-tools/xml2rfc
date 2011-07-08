@@ -259,6 +259,7 @@ class BaseRfcWriter:
                 organization = author.find('organization')
                 if organization is not None:
                     abbrev = organization.attrib.get('abbrev')
+                    org_result = None
                     if abbrev:
                         org_result = abbrev
                     elif organization.text:
