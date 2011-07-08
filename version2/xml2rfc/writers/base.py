@@ -14,16 +14,17 @@ class RfcItem:
         Anchored elements are the following: Automatic sections, user (middle)
         sections, paragraphs, references, appendices, figures, and tables.
         
-        RfcItems are collected into an index list
+        RfcItems are collected into an index list in the base writer
     """
     def __init__(self, autoName, autoAnchor, counter='', title='', anchor='',
-                 toc=True):
+                 toc=True, level=1):
         self.counter = str(counter)
         self.autoName = autoName
         self.autoAnchor = autoAnchor
         self.title = title
         self.anchor = anchor
         self.toc = toc
+        self.level = level
 
 
 class BaseRfcWriter:
@@ -32,6 +33,7 @@ class BaseRfcWriter:
         All public methods need to be overridden for a writer implementation.
     """
     
+    # ---------------------------------
     # Boilerplate default text sections
     boilerplate = {}
     boilerplate['std'] = 'Standards-Track'
@@ -113,6 +115,7 @@ class BaseRfcWriter:
         'claimed in regard to some or all of the specification contained ' \
         'in this document.  For more information consult the online list ' \
         'of claimed rights.'
+    # ----------------------------
 
     def __init__(self, xmlrfc, quiet=False, verbose=False):
         self.quiet = quiet
@@ -152,7 +155,7 @@ class BaseRfcWriter:
         autoName = 'Section ' + counter
         autoAnchor = 'rfc.section.' + counter
         item = RfcItem(autoName, autoAnchor, counter=counter, title=title, \
-                       anchor=anchor, toc=toc)
+                       anchor=anchor, toc=toc, level=level)
         self._index.append(item)
         return item
 

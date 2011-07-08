@@ -565,8 +565,8 @@ class RawTextRfcWriter(BaseRfcWriter):
             if not item.counter:
                 self.tocbuf.append(' ' * base_indent + item.title)
             else:
-                # Get item depth based on number of '.' chars
-                depth = item.counter.count('.')
+                # Get item depth based on its section 'level' attribute
+                depth = item.level - 1
                 if depth < 0 or self.pis.get('tocindent', 'yes') == 'no':
                     depth = 0
                 self.tocbuf.append(' ' * (base_indent + depth * sub_indent) + \
