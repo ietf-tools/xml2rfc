@@ -42,7 +42,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self.buf.append(string)
 
     def _write_text(self, string, indent=0, sub_indent=None, bullet='', \
-                  align='left', lb=False, buf=None, strip=True):
+                  align='left', lb=False, buf=None, strip=True, edit=False):
         #-------------------------------------------------------------
         # RawTextRfcWriter override
         #
@@ -56,7 +56,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         begin = len(self.buf)
 
         if lb:
-            self._lb(buf=buf)
+            if edit and self.pis.get('editing', 'no') == 'yes':
+                # Render an editing mark
+                self.edit_counter += 1
+                self._lb(buf=buf, text=str('<' + str(self.edit_counter) + '>'))
+            else:
+                self._lb(buf=buf)
         if string:
             if strip:
                 # Strip initial whitespace

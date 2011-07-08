@@ -146,7 +146,8 @@ class BaseRfcWriter:
         self._index.append(item)
         return item
 
-    def _indexSection(self, counter, title=None, anchor=None, toc=True):
+    def _indexSection(self, counter, title=None, anchor=None, toc=True, \
+                      level=1):
         counter = str(counter)
         autoName = 'Section ' + counter
         autoAnchor = 'rfc.section.' + counter
@@ -357,7 +358,7 @@ class BaseRfcWriter:
             render actual text at this point or just lookup header information
             to construct the index
         """
-        if count_str:
+        if level > 0:
             anchor = section.attrib.get('anchor')
             title = section.attrib.get('title')
             include_toc = section.attrib.get('toc', 'include') != 'exclude' \
@@ -366,7 +367,7 @@ class BaseRfcWriter:
             if self.indexmode:
                 # Add section to the index
                 self._indexSection(count_str, title=title, anchor=anchor, \
-                                   toc=include_toc)
+                                   toc=include_toc, level=level)
             else:
                 # Write the section heading
                 self.write_heading(title, bullet=count_str + '.', \

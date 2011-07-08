@@ -21,20 +21,24 @@ class RawTextRfcWriter(BaseRfcWriter):
         BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)
         self.width = width      # Page width
         self.buf = []           # Main buffer
-        self.tocbuf = []           # Table of contents buffer
+        self.tocbuf = []        # Table of contents buffer
         self.toc_marker = 0     # Line number in buffer to write toc too
-        self.list_counters = {}  # Maintain counters for 'format' type lists
+        self.list_counters = {} # Maintain counters for 'format' type lists
+        self.edit_counter = 0   # Counter for edit marks
 
         self.list_symbols = self.pis.get('text-list-symbols', 'o*+-')
 
-    def _lb(self, buf=None):
-        """ Write a blank line to the file """
+    def _lb(self, buf=None, text=''):
+        """ Write a blank line to the file, with optional filler text 
+        
+            Filler text is usually used by editing marks
+        """
         if not buf:
             buf = self.buf
-        buf.append('')
+        buf.append(text)
 
     def _write_text(self, string, indent=0, sub_indent=None, bullet='', \
-                  align='left', lb=False, buf=None, strip=True):
+                  align='left', lb=False, buf=None, strip=True, edit=False):
         """ Writes a line or multiple lines of text to the buffer.
 
             Several parameters are included here.  All of the API calls
@@ -55,7 +59,12 @@ class RawTextRfcWriter(BaseRfcWriter):
         else:
             subsequent = ' ' * (sub_indent + indent)
         if lb:
-            self._lb(buf=buf)
+            if edit and self.pis.get('editing', 'no') == 'yes':
+                # Render an editing mark
+                self.edit_counter += 1
+                self._lb(buf=buf, text=str('<' + str(self.edit_counter) + '>'))
+            else:
+                self._lb(buf=buf)
         if string:
             if strip:
                 # Strip initial whitespace
@@ -228,6 +237,17 @@ class RawTextRfcWriter(BaseRfcWriter):
                 line.append('[' + target + ']')
                 if child.tail:
                     line.append(child.tail)
+            elif child.tag == 'cref' and \
+                 self.pis.get('comments', 'no') == 'yes':
+                # Render if processing instruction is enabled
+                anchor = child.attrib.get('anchor', '')
+                if anchor:
+                    # TODO: Add anchor to index
+                    anchor = ': ' + anchor
+                if child.text:
+                    line.append('[[' + anchor + child.text + ']]')
+                if child.tail:
+                    line.append(child.tail)
             elif child.tag == 'spanx':
                 style = child.attrib.get('style', 'emph')
                 edgechar = '?'
@@ -247,7 +267,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                 # Submit initial buffer with a linebreak, then continue
                 if len(line) > 0:
                     self._write_text(''.join(line), indent=indent, lb=True, \
-                                    sub_indent=sub_indent, bullet=bullet)
+                                    sub_indent=sub_indent, bullet=bullet, \
+                                    edit=True)
                     line = []
 
             # Elements that require a separate buffer
@@ -277,7 +298,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         # Submit anything leftover in the buffer
         if len(line) > 0:
             self._write_text(''.join(line), indent=indent, lb=True, \
-                            sub_indent=sub_indent, bullet=bullet)
+                            sub_indent=sub_indent, bullet=bullet, \
+                            edit=True)
 
     def write_top(self, left_header, right_header):
         """ Combines left and right lists to write a document heading """
@@ -528,13 +550,27 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.tocbuf.extend(['', 'Table of Contents', ''])
         # Retrieve toc from the index
         tocindex = self._getTocIndex()
+        base_indent = self.pis.get('tocdepth', '3')
+        try:
+            base_indent = int(base_indent)
+        except ValueError:
+            xml2rfc.log.warn('Invalid toc base_indent specified, must be integer:', \
+                             base_indent)
+            base_indent = 3
+        sub_indent = 1
+        if self.pis.get('tocnarrow', 'yes') == 'no':
+            sub_indent = 2
         for item in tocindex:
             # Hide counter for zeroes
             if not item.counter:
-                self.tocbuf.append('   ' + item.title)
+                self.tocbuf.append(' ' * base_indent + item.title)
             else:
-                self.tocbuf.append('   ' + item.counter + '. ' + \
-                                   item.title)
+                # Get item depth based on number of '.' chars
+                depth = item.counter.count('.')
+                if depth < 0 or self.pis.get('tocindent', 'yes') == 'no':
+                    depth = 0
+                self.tocbuf.append(' ' * (base_indent + depth * sub_indent) + \
+                                   item.counter + '. ' + item.title)
 
     def write_to_file(self, filename):
         """ Writes the buffer to the specified file """
