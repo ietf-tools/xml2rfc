@@ -174,9 +174,10 @@ class XmlRfc:
             date.attrib['year'] = today.strftime('%Y')
             date.attrib['month'] = today.strftime('%B')
             date.attrib['day'] = today.strftime('%d')
-        yearstring = '(' + date.attrib['year'] + ')'
-        root.attrib['copyright'] = 'Copyright (C) The Internet Society %s.'\
-        ' All Rights Reserved.' % yearstring
+        yearstring = date.attrib['year']
+        root.attrib['copyright'] = 'Copyright (c) %s IETF Trust and the ' \
+        'persons identified as the document authors.  All rights reserved.' % \
+        yearstring
 
     def replaceUnicode(self):
         """ Traverses the RFC tree and replaces unicode characters with the
