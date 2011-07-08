@@ -25,6 +25,7 @@ class RfcItem:
         self.anchor = anchor
         self.toc = toc
         self.level = level
+        self.page = 0    # This will be set after buffers are complete!
 
 
 class BaseRfcWriter:
@@ -196,7 +197,7 @@ class BaseRfcWriter:
         
     def _getItemByAnchor(self, anchor):
         for item in self._index:
-            if item.anchor == anchor:
+            if item.anchor == anchor or item.autoAnchor == anchor:
                 return item
         return None
 

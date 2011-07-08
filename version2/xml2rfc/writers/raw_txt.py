@@ -5,6 +5,7 @@
 # Python libs
 import textwrap
 import string
+import math
 
 # Local lib
 from xml2rfc.writers.base import BaseRfcWriter
@@ -142,6 +143,40 @@ class RawTextRfcWriter(BaseRfcWriter):
             else:
                 self.write_t_rec(t, bullet=bullet, indent=indent, \
                                  level=level + 1)
+        
+    def _write_toc(self, paging=False):
+        # Write table of contents to a temporary buffer
+        self.tocbuf.extend(['', 'Table of Contents', ''])
+        # Retrieve toc from the index
+        tocindex = self._getTocIndex()
+        base_indent = self.pis.get('tocdepth', '3')
+        try:
+            base_indent = int(base_indent)
+        except ValueError:
+            xml2rfc.log.warn('Invalid tocdepth specified, must be integer:', \
+                             base_indent)
+            base_indent = 3
+        sub_indent = 1
+        if self.pis.get('tocnarrow', 'yes') == 'no':
+            sub_indent = 2
+        for item in tocindex:
+            # Add decoration to counter if it exists, otherwise leave empty
+            counter = ''
+            if item.counter:
+                counter = item.counter + '. '
+            # Get item depth based on its section 'level' attribute
+            depth = item.level - 1
+            if depth < 0 or self.pis.get('tocindent', 'yes') == 'no':
+                depth = 0
+            line = ' ' * (base_indent + depth * sub_indent) + \
+                          counter + item.title
+            if paging:
+                page = str(item.page)
+                dots = ' .' * int((self.width - len(line) - len(page)) / 2)
+                if len(line) % 2:
+                    dots = dots[1:]
+                line += dots + ' ' + page
+            self.tocbuf.append(line)
 
     # ---------------------------------------------------------
     # Base writer overrides
@@ -558,31 +593,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         pass
 
     def post_processing(self):
-        # Write table of contents to a temporary buffer
-        self.tocbuf.extend(['', 'Table of Contents', ''])
-        # Retrieve toc from the index
-        tocindex = self._getTocIndex()
-        base_indent = self.pis.get('tocdepth', '3')
-        try:
-            base_indent = int(base_indent)
-        except ValueError:
-            xml2rfc.log.warn('Invalid tocdepth specified, must be integer:', \
-                             base_indent)
-            base_indent = 3
-        sub_indent = 1
-        if self.pis.get('tocnarrow', 'yes') == 'no':
-            sub_indent = 2
-        for item in tocindex:
-            # Hide counter for zeroes
-            if not item.counter:
-                self.tocbuf.append(' ' * base_indent + item.title)
-            else:
-                # Get item depth based on its section 'level' attribute
-                depth = item.level - 1
-                if depth < 0 or self.pis.get('tocindent', 'yes') == 'no':
-                    depth = 0
-                self.tocbuf.append(' ' * (base_indent + depth * sub_indent) + \
-                                   item.counter + '. ' + item.title)
+        self._write_toc()
 
     def write_to_file(self, filename):
         """ Writes the buffer to the specified file """
@@ -591,7 +602,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         file = open(filename, 'w')
         for line_num, line in enumerate(self.buf):
             # Check for marks
-            if line_num == self.toc_marker and self.toc_marker != 0:
+            if line_num == self.toc_marker and self.toc_marker > 0:
                 for tmpline in self.tocbuf:
                     file.write(tmpline)
                     file.write('\r\n')
