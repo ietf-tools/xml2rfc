@@ -377,6 +377,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         # TODO: how should this be handled?
         sub_indent = 11
         refdict = {}
+        annotationdict = {}
         refkeys = []
         # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
         for i, ref in enumerate(list.findall('reference')):
@@ -388,6 +389,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if surname:
                     initials = author.attrib.get('initials', '')
                     refstring.append(surname + ', ' + initials + ', ')
+                    if author.attrib.get('role', '') == 'editor':
+                        refstring.append('Ed., ')
                     if j == len(authors) - 2:
                         # Second-to-last, add an "and"
                         refstring.append('and ')
@@ -409,6 +412,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 month += ' '
             year = date.attrib.get('year', '')
             refstring.append(month + year + '.')
+            annotation = ref.find('annotation')
             # Use anchor or num depending on PI
             if self.pis.get('symrefs', 'yes') == 'yes':
                 bullet = '[' + ref.attrib.get('anchor', str(i + 1)) + ']'
@@ -417,11 +421,19 @@ class RawTextRfcWriter(BaseRfcWriter):
             bullet += '  '
             refdict[bullet] = ''.join(refstring)
             refkeys.append(bullet)
+            # Add annotation if it exists to a separate dict
+            if annotation is not None and annotation.text:
+                # Render annotation as a separate paragraph
+                annotationdict[bullet] = annotation.text
         if self.pis.get('sortrefs', 'no') == 'yes':
             refkeys = sorted(refkeys)
         for key in refkeys:
             self._write_text(refdict[key], indent=3, bullet=key, \
                              sub_indent=sub_indent, lb=True)
+            # Render annotation as a separate paragraph
+            if key in annotationdict:
+                self._write_text(annotationdict[key], indent=sub_indent + 3, \
+                                 lb=True)
 
     def draw_table(self, table, table_num=None):
         # First construct a 2d matrix from the table
