@@ -114,7 +114,7 @@ class XmlRfc:
         while element is not None:
             if element.tag is lxml.etree.PI:
                 key, sep, val = str(element.text).partition('=')
-                self.pis[key] = val.strip('" ')
+                self.pis[key] = val.strip('"\' ')
             element = element.getprevious()
 
     def getroot(self):

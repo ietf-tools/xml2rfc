@@ -554,7 +554,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         try:
             base_indent = int(base_indent)
         except ValueError:
-            xml2rfc.log.warn('Invalid toc base_indent specified, must be integer:', \
+            xml2rfc.log.warn('Invalid tocdepth specified, must be integer:', \
                              base_indent)
             base_indent = 3
         sub_indent = 1

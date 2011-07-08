@@ -160,7 +160,7 @@ class BaseRfcWriter:
         return item
 
     def _indexReferences(self, counter, title=None, anchor=None, toc=True, \
-                         subCounter=0):
+                         subCounter=0, level=1):
         if subCounter < 1:
             autoName = 'References'
             autoAnchor = 'rfc.references'
@@ -169,7 +169,7 @@ class BaseRfcWriter:
             autoName = 'References ' + subCounter
             autoAnchor = 'rfc.references.' + subCounter
         item = RfcItem(autoName, autoAnchor, counter=counter, title=title, \
-                       anchor=anchor, toc=toc)
+                       anchor=anchor, toc=toc, level=level)
         self._index.append(item)
         return item
     
@@ -520,7 +520,7 @@ class BaseRfcWriter:
                 ref_title = reference_list.attrib['title']
                 if self.indexmode:
                     self._indexReferences(ref_newcounter, title=ref_title, \
-                                          subCounter=i+1)
+                                          subCounter=i+1, level=2)
                 else:
                     autoAnchor = 'rfc.references.' + ref_newcounter
                     self.write_heading(ref_title, bullet=ref_newcounter + '.',\
