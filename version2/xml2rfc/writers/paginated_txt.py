@@ -146,6 +146,11 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 if item:
                     item.page = page_num
         
+        # Write final footer
+        remainder = page_maxlen - page_len
+        self.paged_buf.extend([''] * remainder)
+        self.paged_buf.extend(['', self.make_footer(page_num)])
+        
         # Write real table of contents to tocbuf and replace dummy
         self.tocbuf = []
         RawTextRfcWriter._write_toc(self, paging=True)
