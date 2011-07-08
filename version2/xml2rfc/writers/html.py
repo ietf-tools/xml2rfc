@@ -512,6 +512,10 @@ class HtmlRfcWriter(BaseRfcWriter):
             tr.append(bullet_td)
             tr.append(ref_td)
             tbody.append(tr)
+            # Render annotation as a separate paragraph
+            annotation = reference.find('annotation')
+            if annotation is not None and annotation.text:
+                ref_td.append(E.P(annotation.text))
         self.body.append(E.TABLE(tbody))
 
     def draw_table(self, table, table_num=None):
