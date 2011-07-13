@@ -174,5 +174,5 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             self.paged_buf.append(line)
             page_len += 1
 
-    def write_to_file(self, filename):
-        PaginatedTextRfcWriter.write_to_file(self, filename)
+    def write_to_file(self, file):
+        PaginatedTextRfcWriter.write_to_file(self, file)

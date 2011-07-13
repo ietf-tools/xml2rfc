@@ -595,11 +595,10 @@ class RawTextRfcWriter(BaseRfcWriter):
     def post_processing(self):
         self._write_toc()
 
-    def write_to_file(self, filename):
+    def write_to_file(self, file):
         """ Writes the buffer to the specified file """
 
         # Write buffer to file
-        file = open(filename, 'w')
         for line_num, line in enumerate(self.buf):
             # Check for marks
             if line_num == self.toc_marker and self.toc_marker > 0:
@@ -608,4 +607,3 @@ class RawTextRfcWriter(BaseRfcWriter):
                     file.write('\r\n')
             file.write(line)
             file.write('\r\n')
-        file.close()

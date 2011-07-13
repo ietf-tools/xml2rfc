@@ -632,8 +632,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                 li.append(a)
             self.toc_list.append(li)
 
-    def write_to_file(self, filename):
+    def write_to_file(self, file):
         # Write the tree to the file
-        file = open(filename, 'w')
         file.write(HtmlRfcWriter.defaults['doctype'] + '\n')
         file.write(lxml.html.tostring(self.html, pretty_print=True))

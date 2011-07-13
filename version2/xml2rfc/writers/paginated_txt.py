@@ -158,10 +158,8 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         j = i + len(self.tocbuf)
         self.paged_buf[i:j] = self.tocbuf
                 
-    def write_to_file(self, filename):
+    def write_to_file(self, file):
         """ Override RawTextRfcWriter to use the paged buffer """
-        file = open(filename, 'w')
         for line in self.paged_buf:
             file.write(line)
             file.write('\r\n')
-        file.close()

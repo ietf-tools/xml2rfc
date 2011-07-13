@@ -558,16 +558,23 @@ class BaseRfcWriter:
         if not self.indexmode:
             self.post_processing()
         
-    def write(self, filename):
+    def write(self, filename, tmpfile=None):
         """ Public method to write the RFC document to a file. """
         # Make two passes over the document, the first pass we run in
         # 'index mode' to construct just the index, the second pass will
         # render the actual text
         self._run(indexmode=True)
         self._run(indexmode=False)
-            
+
         # Finished processing, write to file
-        self.write_to_file(filename)
+        # Override file with keyword argument if passed in, ignoring filename.
+        # Warning -- make sure file is open and ready for writing!
+        if not tmpfile:
+            file = open(filename, 'w')
+            self.write_to_file(file)
+            file.close()
+        else:
+            self.write_to_file(tmpfile)
 
         if not self.quiet:
             xml2rfc.log.write('Created file', filename)
@@ -649,6 +656,6 @@ class BaseRfcWriter:
         """ Last method that is called after traversing the XML RFC tree """
         raise NotImplementedError('post_processing() needs to be overridden')
 
-    def write_to_file(self, filename):
+    def write_to_file(self, file):
         """ Writes the finished buffer to a file """
         raise NotImplementedError('write_to_file() needs to be overridden')
