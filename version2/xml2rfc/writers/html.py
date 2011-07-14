@@ -34,9 +34,9 @@ class HtmlRfcWriter(BaseRfcWriter):
     def __init__(self, xmlrfc, css_document=None, external_css=False, \
                  lang='en', quiet=False, verbose=False):
         BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)
+        self.lang = lang
         self.list_counters = {}
         self.iref_index = []
-        self.html = E.HTML(lang=lang)
         self.css_document = os.path.join(os.path.dirname(xml2rfc.__file__), \
                                          'templates/rfc.css')
         if css_document:
@@ -48,13 +48,8 @@ class HtmlRfcWriter(BaseRfcWriter):
                                  css_document)
         self.external_css = external_css
 
-        # Create head element -- only pre_processing() will insert here
-        self.head = E.HEAD()
-        self.html.append(self.head)
-
-        # Create body element -- everything will be added to this
-        self.body = E.BODY()
-        self.html.append(self.body)
+        # Create main elements
+        self._createDocument()
 
         # Create table of contents element
         self.toc_header = E.H1(id='rfc.toc')
@@ -63,6 +58,14 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.toc_header.append(a)
         self.toc_list = E.UL()
         self.toc_list.attrib['class'] = 'toc'
+    
+    def _createDocument(self):
+        """ Creates a new html document and stores necessary pointers """
+        self.html = E.HTML(lang=self.lang)
+        self.head = E.HEAD()
+        self.html.append(self.head)
+        self.body = E.BODY()
+        self.html.append(self.body)
 
     def _build_stylesheet(self):
         """ Returns either a <link> or <style> element for css data.
@@ -586,6 +589,9 @@ class HtmlRfcWriter(BaseRfcWriter):
 
     def pre_processing(self):
         """ Insert all metadata into head """
+        # Discard document from indexing pass
+        self._createDocument()
+        
         # Document title
         title = self.r.find('front/title')
         if title is not None and title.text:

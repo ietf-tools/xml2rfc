@@ -595,6 +595,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         pass
 
     def pre_processing(self):
+        # Discard buffer from indexing pass
+        self.buf = []
+        
         # Replace unicode characters in RFC with proper ascii equivalents
         self.xmlrfc.replaceUnicode()
         pass

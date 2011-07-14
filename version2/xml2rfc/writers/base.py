@@ -181,7 +181,6 @@ class BaseRfcWriter:
         item = RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
                        toc=toc)
         self._index.append(item)
-        print item.anchor, item.autoName
         return item
         
     def _indexTable(self, counter, title=None, anchor=None, toc=False):
@@ -363,6 +362,10 @@ class BaseRfcWriter:
                     title = ': ' + title
                 self.write_label('Table ' + str(self.table_count) + title, \
                                  type='table')
+    
+    def _index_t_rec(self, element):
+        """ Traverse a <t> element only performing indexing operations """
+        
 
     def _write_section_rec(self, section, count_str, appendix=False, \
                            level=0):
@@ -398,9 +401,8 @@ class BaseRfcWriter:
                 anchor = element.attrib.get('anchor')
                 if self.indexmode:
                     self._indexParagraph(count_str, p_count, anchor=anchor)
-                else:
-                    autoAnchor = 'rfc.section.' + count_str + '.p.' + str(p_count)
-                    self.write_t_rec(element, autoAnchor=autoAnchor)
+                autoAnchor = 'rfc.section.' + count_str + '.p.' + str(p_count)
+                self.write_t_rec(element, autoAnchor=autoAnchor)
                 p_count += 1
             elif element.tag == 'figure':
                 self._write_figure(element)
