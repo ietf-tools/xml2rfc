@@ -524,7 +524,7 @@ class BaseRfcWriter:
                     self._indexReferences(ref_newcounter, title=ref_title, \
                                           subCounter=i+1, level=2)
                 else:
-                    autoAnchor = 'rfc.references.' + ref_newcounter
+                    autoAnchor = 'rfc.references.' + str(i + 1)
                     self.write_heading(ref_title, bullet=ref_newcounter + '.',\
                                        autoAnchor=autoAnchor, level=2)
                     self.write_reference_list(reference_list)
