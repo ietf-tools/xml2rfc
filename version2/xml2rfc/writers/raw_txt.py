@@ -204,7 +204,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         if align == 'center':
             # Find the longest line, and use that as a fixed center.
             longest_line = len(max(lines, key=len))
-            indent_str = ' ' * ((self.width - longest_line) / 2)
+            center_indent = ((self.width - longest_line) / 2)
+            indent_str = center_indent > indent and ' ' * center_indent or \
+                                                    ' ' * indent
             for line in lines:
                 self.buf.append(indent_str + line)
         elif align == 'right':
