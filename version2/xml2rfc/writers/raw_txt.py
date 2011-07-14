@@ -171,11 +171,13 @@ class RawTextRfcWriter(BaseRfcWriter):
             line = ' ' * (base_indent + depth * sub_indent) + \
                           counter + item.title
             if paging:
-                page = str(item.page)
-                dots = ' .' * int((self.width - len(line) - len(page)) / 2)
-                if len(line) % 2:
-                    dots = dots[1:]
-                line += dots + ' ' + page
+                # Construct dots
+                dots = len(line) % 2 and ' ' or '  '
+                dots += '. ' * int((self.width - len(line) - len(dots))/2)
+                line += dots
+                # Insert page
+                pagestr = ' ' + str(item.page)
+                line = line[:0 - len(pagestr)] + pagestr
             self.tocbuf.append(line)
 
     # ---------------------------------------------------------

@@ -135,7 +135,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                     page_len += remainder
             if page_len + 1 > 55:
                 insertFooterAndHeader()
-                page_len = 0
+                page_len = 1    # Start new length at 1, blank line after header
                 page_num += 1
             self.paged_buf.append(line)
             page_len += 1
