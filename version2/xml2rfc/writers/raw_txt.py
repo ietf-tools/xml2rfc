@@ -265,7 +265,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     else:
                         # Default
                         text = item.autoName
-                    line.append(' ' + text)
+                    line.append(text)
                 if child.tail:
                     line.append(child.tail)
             elif child.tag == 'eref':
