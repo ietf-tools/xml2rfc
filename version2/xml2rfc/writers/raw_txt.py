@@ -401,7 +401,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 lines.append('Fax:   ' + fascimile.text)
             email = address.find('email')
             if email is not None and email.text:
-                lines.append('EMail: ' + email.text)
+                lines.append('Email: ' + email.text)
             uri = address.find('uri')
             if uri is not None and uri.text:
                 lines.append('URI:   ' + uri.text)
