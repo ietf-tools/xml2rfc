@@ -200,7 +200,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         # Additional blank lines?
         self.buf.extend([''] * blanklines)
         # Append an indent to every newline of the data
-        lines = text.strip().expandtabs(4).split('\n')
+        lines = text.expandtabs(4).split('\n')
         if align == 'center':
             # Find the longest line, and use that as a fixed center.
             longest_line = len(max(lines, key=len))
