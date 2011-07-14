@@ -306,7 +306,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if len(line) > 0:
                     self._write_text(''.join(line), indent=indent, lb=True, \
                                     sub_indent=sub_indent, bullet=bullet, \
-                                    edit=True)
+                                    edit=True, align=align)
                     line = []
 
             # Elements that require a separate buffer
@@ -337,7 +337,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         if len(line) > 0:
             self._write_text(''.join(line), indent=indent, lb=True, \
                             sub_indent=sub_indent, bullet=bullet, \
-                            edit=True)
+                            edit=True, align=align)
 
     def write_top(self, left_header, right_header):
         """ Combines left and right lists to write a document heading """
