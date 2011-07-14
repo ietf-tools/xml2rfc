@@ -181,6 +181,7 @@ class BaseRfcWriter:
         item = RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
                        toc=toc)
         self._index.append(item)
+        print item.anchor, item.autoName
         return item
         
     def _indexTable(self, counter, title=None, anchor=None, toc=False):
@@ -290,37 +291,41 @@ class BaseRfcWriter:
         self.figure_count += 1
         anchor = figure.attrib.get('anchor')
         title = figure.attrib.get('title')
-        
-        # Insert anchor(s) for the figure
-        self.insert_anchor('#rfc.figure.' + str(self.figure_count))
-        if (anchor):
-            self.insert_anchor('#' + anchor)
-
-        # Write preamble
-        preamble = figure.find('preamble')
-        if preamble is not None:
-            self.write_t_rec(preamble, align=align)
-
-        # Write figure with optional delimiter
-        delimiter = self.pis.get('artworkdelimiter', '')
-        artwork = figure.find('artwork')
-        artwork_align = artwork.attrib.get('align', align)  # Default to figure
-        blanklines = int(self.pis.get('artworklines', 0))
-        self.write_raw(figure.find('artwork').text, align=artwork_align, \
-                       blanklines=blanklines, delimiter=delimiter)
-
-        # Write postamble
-        postamble = figure.find('postamble')
-        if postamble is not None:
-            self.write_t_rec(postamble, align=align)
-
-        # Write label if PI figurecount = yes
-        if self.pis.get('figurecount', 'no') == 'yes':
-            title = figure.attrib.get('title', '')
-            if title:
-                title = ': ' + title
-            self.write_label('Figure ' + str(self.figure_count) + title, \
-                            type='figure')
+    
+        if self.indexmode:
+            # Add figure to the index, inserting any anchors necessary
+            self._indexFigure(self.figure_count, anchor=anchor, title=title)
+        else:
+            # Insert anchor(s) for the figure
+            self.insert_anchor('#rfc.figure.' + str(self.figure_count))
+            if (anchor):
+                self.insert_anchor('#' + anchor)
+    
+            # Write preamble
+            preamble = figure.find('preamble')
+            if preamble is not None:
+                self.write_t_rec(preamble, align=align)
+    
+            # Write figure with optional delimiter
+            delimiter = self.pis.get('artworkdelimiter', '')
+            artwork = figure.find('artwork')
+            artwork_align = artwork.attrib.get('align', align)  # Default to figure
+            blanklines = int(self.pis.get('artworklines', 0))
+            self.write_raw(figure.find('artwork').text, align=artwork_align, \
+                           blanklines=blanklines, delimiter=delimiter)
+    
+            # Write postamble
+            postamble = figure.find('postamble')
+            if postamble is not None:
+                self.write_t_rec(postamble, align=align)
+    
+            # Write label if PI figurecount = yes
+            if self.pis.get('figurecount', 'no') == 'yes':
+                title = figure.attrib.get('title', '')
+                if title:
+                    title = ': ' + title
+                self.write_label('Figure ' + str(self.figure_count) + title, \
+                                type='figure')
 
     def _write_table(self, table):
         """ Writes <texttable> elements """
@@ -328,32 +333,36 @@ class BaseRfcWriter:
         self.table_count += 1
         anchor = table.attrib.get('anchor')
         title = table.attrib.get('title')
-
-        # Insert anchor(s) for the table
-        self.insert_anchor('#rfc.table.' + str(self.table_count))
-        if (anchor):
-            self.insert_anchor('#' + anchor)
-
-        # Write preamble
-        preamble = table.find('preamble')
-        if preamble is not None:
-            self.write_t_rec(preamble, align=align)
-
-        # Write table
-        self.draw_table(table, table_num=self.table_count)
-
-        # Write postamble
-        postamble = table.find('postamble')
-        if postamble is not None:
-            self.write_t_rec(postamble, align=align)
-
-        # Write label if PI tablecount = yes
-        if self.pis.get('tablecount', 'no') == 'yes':
-            title = table.attrib.get('title', '')
-            if title:
-                title = ': ' + title
-            self.write_label('Table ' + str(self.table_count) + title, \
-                             type='table')
+        
+        if self.indexmode:
+            # Add table to the index, inserting any anchors necessary
+            self._indexTable(self.table_count, anchor=anchor, title=title)
+        else:
+            # Insert anchor(s) for the table
+            self.insert_anchor('#rfc.table.' + str(self.table_count))
+            if (anchor):
+                self.insert_anchor('#' + anchor)
+    
+            # Write preamble
+            preamble = table.find('preamble')
+            if preamble is not None:
+                self.write_t_rec(preamble, align=align)
+    
+            # Write table
+            self.draw_table(table, table_num=self.table_count)
+    
+            # Write postamble
+            postamble = table.find('postamble')
+            if postamble is not None:
+                self.write_t_rec(postamble, align=align)
+    
+            # Write label if PI tablecount = yes
+            if self.pis.get('tablecount', 'no') == 'yes':
+                title = table.attrib.get('title', '')
+                if title:
+                    title = ': ' + title
+                self.write_label('Table ' + str(self.table_count) + title, \
+                                 type='table')
 
     def _write_section_rec(self, section, count_str, appendix=False, \
                            level=0):
@@ -394,23 +403,9 @@ class BaseRfcWriter:
                     self.write_t_rec(element, autoAnchor=autoAnchor)
                 p_count += 1
             elif element.tag == 'figure':
-                if self.indexmode:
-                    self.figure_count += 1
-                    anchor = element.attrib.get('anchor')
-                    title = element.attrib.get('title')
-                    # Add table to the index, inserting any anchors necessary
-                    self._indexFigure(self.figure_count, anchor=anchor, title=title)
-                else:
-                    self._write_figure(element)
+                self._write_figure(element)
             elif element.tag == 'texttable':
-                if self.indexmode:
-                    self.table_count += 1
-                    anchor = element.attrib.get('anchor')
-                    title = element.attrib.get('title')
-                    # Add table to the index, inserting any anchors necessary
-                    self._indexTable(self.table_count, anchor=anchor, title=title)
-                else:
-                    self._write_table(element)
+                self._write_table(element)
 
         s_count = 1  # Section counter
         for child_sec in section.findall('section'):
