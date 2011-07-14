@@ -29,14 +29,14 @@ class RawTextRfcWriter(BaseRfcWriter):
 
         self.list_symbols = self.pis.get('text-list-symbols', 'o*+-')
 
-    def _lb(self, buf=None, text=''):
+    def _lb(self, buf=None, text='', num=1):
         """ Write a blank line to the file, with optional filler text 
         
             Filler text is usually used by editing marks
         """
         if not buf:
             buf = self.buf
-        buf.append(text)
+        buf.extend([text] * num)
 
     def _write_text(self, string, indent=0, sub_indent=None, bullet='', \
                   align='left', lb=False, buf=None, strip=True, edit=False):
@@ -187,10 +187,11 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.toc_marker = len(self.buf)
 
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
-                  delimiter=None):
+                  delimiter=None, lb=True):
         """ Writes a raw stream of characters, preserving space and breaks """
-        # Start with a newline
-        self._lb()
+        if lb:
+            # Start with a newline
+            self._lb()
         # Delimiter?
         if delimiter:
             self.buf.append(delimiter)
@@ -338,6 +339,8 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_top(self, left_header, right_header):
         """ Combines left and right lists to write a document heading """
+        # Begin with three blank lines
+        self._lb(num=3)
         heading = []
         for i in range(max(len(left_header), len(right_header))):
             if i < len(left_header):
@@ -350,7 +353,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 right = ''
             heading.append(xml2rfc.utils.justify_inline(left, '', right, \
                                                         self.width))
-        self.write_raw('\n'.join(heading), align='left', indent=0)
+        self.write_raw('\n'.join(heading), align='left', indent=0, lb=False)
 
     def write_address_card(self, author):
         """ Writes a simple address card with no line breaks """

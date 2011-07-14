@@ -452,7 +452,7 @@ class BaseRfcWriter:
             title = self.r.find('front/title').text
             docName = self.r.attrib.get('docName', None)
             self.write_title(title, docName)
-    
+
             # Abstract
             abstract = self.r.find('front/abstract')
             if abstract is not None:
