@@ -428,12 +428,14 @@ class RawTextRfcWriter(BaseRfcWriter):
                 surname = author.attrib.get('surname', '')
                 if surname:
                     initials = author.attrib.get('initials', '')
-                    refstring.append(surname + ', ' + initials + ', ')
+                    if j == len(authors) - 1 and len(authors) > 1:
+                        # Last author is rendered in reverse
+                        refstring.append('and ' + initials + ' ' + \
+                                         surname + ', ')
+                    else:
+                        refstring.append(surname + ', ' + initials + ', ')
                     if author.attrib.get('role', '') == 'editor':
                         refstring.append('Ed., ')
-                    if j == len(authors) - 2:
-                        # Second-to-last, add an "and"
-                        refstring.append('and ')
                 elif organization is not None and organization.text:
                     # Use organization instead of name
                     refstring.append(organization.text + ', ')
