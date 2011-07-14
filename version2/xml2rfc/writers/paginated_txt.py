@@ -120,7 +120,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                     remainder = page_maxlen - page_len
                     self.paged_buf.extend([''] * remainder)
                     insertFooterAndHeader()
-                    page_len = 0
+                    page_len = 1
                     page_num += 1
                 self.paged_toc_marker = len(self.paged_buf) + 1
                 self.paged_buf.extend(self.tocbuf)
@@ -152,11 +152,12 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.paged_buf.extend(['', self.make_footer(page_num)])
         
         # Write real table of contents to tocbuf and replace dummy
-        self.tocbuf = []
-        RawTextRfcWriter._write_toc(self, paging=True)
-        i = self.paged_toc_marker - 1
-        j = i + len(self.tocbuf)
-        self.paged_buf[i:j] = self.tocbuf
+        if self.toc_marker > 0:
+            self.tocbuf = []
+            RawTextRfcWriter._write_toc(self, paging=True)
+            i = self.paged_toc_marker - 1
+            j = i + len(self.tocbuf)
+            self.paged_buf[i:j] = self.tocbuf
                 
     def write_to_file(self, file):
         """ Override RawTextRfcWriter to use the paged buffer """
