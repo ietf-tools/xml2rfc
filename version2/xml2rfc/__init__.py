@@ -1,4 +1,5 @@
 
+NAME    = 'xml2rfc'
 VERSION = (0, 4, 1)
 
 from xml2rfc.parser import *
