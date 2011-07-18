@@ -204,6 +204,18 @@ class RawTextRfcWriter(BaseRfcWriter):
             return xref.text + ' (' + target_text + ')'
         else:
             return target_text
+        
+    def _write_ref_element(self, key, text, sub_indent):
+        """ Render a single reference element """
+        # Use an empty first line if key is too long
+        min_spacing = 2
+        if len(key) + min_spacing > sub_indent:
+            self._write_text(key, indent=3, lb=True)
+            self._write_text(text, indent=3 + sub_indent)
+        else:
+            # Fill space to sub_indent in the bullet
+            self._write_text(text, indent=3, bullet=key.ljust(sub_indent), \
+                     sub_indent=sub_indent, lb=True)
 
     # ---------------------------------------------------------
     # Base writer overrides
@@ -426,12 +438,6 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_reference_list(self, list):
         """ Writes a formatted list of <reference> elements """
-        # For the indent amount, we could use the very first reference's
-        # [bullet] length for indent amount, as in:
-        #    sub_indent = len(list.find('reference').attrib['anchor']) + 4
-        # Right now, it uses a hard coded indent amount.
-        # TODO: how should this be handled?
-        sub_indent = 11
         refdict = {}
         annotationdict = {}
         refkeys = []
@@ -472,14 +478,18 @@ class RawTextRfcWriter(BaseRfcWriter):
             if month:
                 month += ' '
             year = date.attrib.get('year', '')
-            refstring.append(month + year + '.')
+            refstring.append(month + year)
+            # Target?
+            target = ref.attrib.get('target')
+            if target:
+                refstring.append(', <' + target + '>')
+            refstring.append('.')
             annotation = ref.find('annotation')
             # Use anchor or num depending on PI
             if self.pis.get('symrefs', 'yes') == 'yes':
                 bullet = '[' + ref.attrib.get('anchor', str(i + 1)) + ']'
             else:
                 bullet = '[' + str(i + 1) + ']'
-            bullet += '  '
             refdict[bullet] = ''.join(refstring)
             refkeys.append(bullet)
             # Add annotation if it exists to a separate dict
@@ -488,12 +498,13 @@ class RawTextRfcWriter(BaseRfcWriter):
                 annotationdict[bullet] = annotation.text
         if self.pis.get('sortrefs', 'no') == 'yes':
             refkeys = sorted(refkeys)
+        # Hard coded indentation amount
+        refindent = 11
         for key in refkeys:
-            self._write_text(refdict[key], indent=3, bullet=key, \
-                             sub_indent=sub_indent, lb=True)
+            self._write_ref_element(key, refdict[key], refindent)
             # Render annotation as a separate paragraph
             if key in annotationdict:
-                self._write_text(annotationdict[key], indent=sub_indent + 3, \
+                self._write_text(annotationdict[key], indent=refindent + 3, \
                                  lb=True)
 
     def draw_table(self, table, table_num=None):
