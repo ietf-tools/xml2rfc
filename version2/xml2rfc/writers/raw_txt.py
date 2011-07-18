@@ -109,6 +109,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                 # Initialize if we need to
                 self.list_counters[counter_index] = 0
         for i, t in enumerate(list.findall('t')):
+            # Disable linebreak if compact=yes AND not first list element
+            lb = True
+            if i > 0 and self.pis.get('compact', \
+                self.pis.get('rfcedstyle', 'no')) == 'yes':
+                lb = False
             if style == 'symbols':
                 bullet = self.list_symbols[level % len(self.list_symbols)]
                 bullet += '  '
@@ -137,10 +142,10 @@ class RawTextRfcWriter(BaseRfcWriter):
             if hangIndent:
                 self.write_t_rec(t, bullet=bullet, indent=indent, \
                                  level=level + 1, \
-                                 sub_indent=int(hangIndent),)
+                                 sub_indent=int(hangIndent), lb=lb)
             else:
                 self.write_t_rec(t, bullet=bullet, indent=indent, \
-                                 level=level + 1)
+                                 level=level + 1, lb=lb)
         
     def _write_toc(self, paging=False):
         # Write table of contents to a temporary buffer
@@ -264,14 +269,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         self._write_text(text, indent=3, align=align, lb=True)
 
     def write_t_rec(self, t, indent=3, sub_indent=0, bullet='', \
-                     autoAnchor=None, align='left', level=0):
+                     autoAnchor=None, align='left', level=0, lb=True):
         """ Recursively writes a <t> element """
-        # Use a linebreak unless we're in a list and compact is set to 'no'
-        lb = True
-        if level > 0 and \
-            self.pis.get('compact', self.pis.get('rfcedstyle', 'no')) == 'yes':
-            lb = False
-        
         line = ['']
         if t.text:
             line.append(t.text)
@@ -337,6 +336,9 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if child.tail:
                     self._write_text(child.tail, indent=new_indent)
             elif child.tag == 'list':
+                # Ensure we have a single linebreak before the first
+                # list element if compact=yes
+                
                 self._write_list(child, indent=new_indent, level=level)
                 if child.tail:
                     self._write_text(child.tail, indent=new_indent, lb=True)
