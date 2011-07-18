@@ -166,7 +166,10 @@ class RawTextRfcWriter(BaseRfcWriter):
             # Add decoration to counter if it exists, otherwise leave empty
             counter = ''
             if item.counter:
-                counter = item.counter + '.  '
+                counter = item.counter + '. '
+                # Extra space on single digit counters
+                if len(item.counter.rsplit('.')[-1]) == 1:
+                    counter += ' '
             # Get item depth based on its section 'level' attribute
             depth = item.level - 1
             if depth < 0 or self.pis.get('tocindent', 'yes') == 'no':
