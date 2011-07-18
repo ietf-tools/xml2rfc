@@ -159,9 +159,9 @@ class RawTextRfcWriter(BaseRfcWriter):
             xml2rfc.log.warn('Invalid tocdepth specified, must be integer:', \
                              tocdepth)
             tocdepth = 3
-        indent_scale = 1
+        indent_scale = 2
         if self.pis.get('tocnarrow', 'yes') == 'no':
-            indent_scale = 2
+            indent_scale = 3
         for item in tocindex:
             # Add decoration to counter if it exists, otherwise leave empty
             counter = ''
