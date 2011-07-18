@@ -96,7 +96,9 @@ class RawTextRfcWriter(BaseRfcWriter):
             hangIndent = list.attrib.get('hangIndent', None)
             if not hangIndent and style == 'hanging':
                 # Set from length of first bullet.
-                hangIndent = len(list.find('t').attrib.get('hangText', '')) + 1
+                #hangIndent = len(list.find('t').attrib.get('hangText', '')) + 1
+                # Set indent to 3 if not specified
+                hangIndent = 3
         format_str = None
         counter_index = None
         if style.startswith('format'):
