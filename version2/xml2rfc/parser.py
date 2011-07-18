@@ -143,12 +143,19 @@ class XmlRfc:
 
         # Traverse the tree and strip any newlines contained in element data,
         # Except for artwork, which needs to preserve whitespace.
+        # If we strip a newline after a period, ensure that there are 
+        # two spaces after the period.
         for element in root.iter():
             if element.tag != 'artwork':
                 if element.text is not None:
-                    element.text = re.sub('\s*\n\s*', ' ', element.text.lstrip())
+                    element.text = re.sub('\s*\n\s*', ' ', \
+                                   re.sub('\.\s*\n\s*', '.  ', \
+                                   element.text.lstrip()))
+                    
                 if element.tail is not None:
-                    element.tail = re.sub('\s*\n\s*', ' ', element.tail)
+                    element.tail = re.sub('\s*\n\s*', ' ', \
+                                   re.sub('\.\s*\n\s*', '.  ', \
+                                   element.tail))
 
         # Set some document-independent defaults
         workgroup = root.find('front/workgroup')
