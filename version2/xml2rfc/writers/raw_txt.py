@@ -182,6 +182,24 @@ class RawTextRfcWriter(BaseRfcWriter):
                 lines[-1] = lines[-1][:0 - len(pagestr)] + pagestr
             self.tocbuf.extend(lines)
 
+    def _expand_xref(self, xref):
+        """ Returns the proper text representation of an xref element """
+        target = xref.attrib.get('target', '')
+        format = xref.attrib.get('format', 'default')
+        item = self._getItemByAnchor(target)
+        if not item or format == 'none':
+            target_text = '[' + target + ']'
+        elif format == 'counter':
+            target_text = item.counter
+        elif format == 'title':
+            target_text = item.title
+        else: #Default
+            target_text = item.autoName
+        if xref.text:
+            return xref.text + ' (' + target_text + ')'
+        else:
+            return target_text
+
     # ---------------------------------------------------------
     # Base writer overrides
     # ---------------------------------------------------------
@@ -248,30 +266,22 @@ class RawTextRfcWriter(BaseRfcWriter):
     def write_t_rec(self, t, indent=3, sub_indent=0, bullet='', \
                      autoAnchor=None, align='left', level=0):
         """ Recursively writes a <t> element """
+        # Use a linebreak unless we're in a list and compact is set to 'no'
+        lb = True
+        if level > 0 and \
+            self.pis.get('compact', self.pis.get('rfcedstyle', 'no')) == 'yes':
+            lb = False
+        
         line = ['']
         if t.text:
             line.append(t.text)
         for child in t:
             # Check inline elements first
             if child.tag == 'xref':
-                target = child.attrib.get('target', '')
-                if child.text:
-                    line.append(child.text + ' [' + target + ']')
-                else:
-                    format = child.attrib.get('format', 'default')
-                    item = self._getItemByAnchor(target)
-                    if not item or format == 'none':
-                        text = '[' + target + ']'
-                    elif format == 'counter':
-                        text = item.counter
-                    elif format == 'title':
-                        text = item.title
-                    else:
-                        # Default
-                        text = item.autoName
-                    line.append(text)
+                tmp = self._expand_xref(child)
                 if child.tail:
-                    line.append(child.tail)
+                    tmp += child.tail
+                line.append(tmp)
             elif child.tag == 'eref':
                 if child.text:
                     line.append(child.text + ' ')
@@ -308,7 +318,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             else:
                 # Submit initial buffer with a linebreak, then continue
                 if len(line) > 0:
-                    self._write_text(''.join(line), indent=indent, lb=True, \
+                    self._write_text(''.join(line), indent=indent, lb=lb, \
                                     sub_indent=sub_indent, bullet=bullet, \
                                     edit=True, align=align)
                     line = []
@@ -339,7 +349,7 @@ class RawTextRfcWriter(BaseRfcWriter):
 
         # Submit anything leftover in the buffer
         if len(line) > 0:
-            self._write_text(''.join(line), indent=indent, lb=True, \
+            self._write_text(''.join(line), indent=indent, lb=lb, \
                             sub_indent=sub_indent, bullet=bullet, \
                             edit=True, align=align)
 
