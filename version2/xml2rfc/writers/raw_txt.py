@@ -147,36 +147,40 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.tocbuf.extend(['', 'Table of Contents', ''])
         # Retrieve toc from the index
         tocindex = self._getTocIndex()
-        base_indent = self.pis.get('tocdepth', '3')
+        tocdepth = self.pis.get('tocdepth', '3')
         try:
-            base_indent = int(base_indent)
+            tocdepth = int(tocdepth)
         except ValueError:
             xml2rfc.log.warn('Invalid tocdepth specified, must be integer:', \
-                             base_indent)
-            base_indent = 3
-        sub_indent = 1
+                             tocdepth)
+            tocdepth = 3
+        indent_scale = 1
         if self.pis.get('tocnarrow', 'yes') == 'no':
-            sub_indent = 2
+            indent_scale = 2
         for item in tocindex:
             # Add decoration to counter if it exists, otherwise leave empty
             counter = ''
             if item.counter:
-                counter = item.counter + '. '
+                counter = item.counter + '.  '
             # Get item depth based on its section 'level' attribute
             depth = item.level - 1
             if depth < 0 or self.pis.get('tocindent', 'yes') == 'no':
                 depth = 0
-            line = ' ' * (base_indent + depth * sub_indent) + \
-                          counter + item.title
+            bullet = ' ' * (depth * indent_scale) + counter
+            indent = 3
+            sub_indent = indent + len(bullet)
+            lines = textwrap.wrap(bullet + item.title, self.width, \
+                                 initial_indent=' ' * indent, \
+                                 subsequent_indent=' ' * sub_indent)
             if paging:
                 # Construct dots
-                dots = len(line) % 2 and ' ' or '  '
-                dots += '. ' * int((self.width - len(line) - len(dots))/2)
-                line += dots
+                dots = len(lines[-1]) % 2 and ' ' or '  '
+                dots += '. ' * int((self.width - len(lines[-1]) - len(dots))/2)
+                lines[-1] += dots
                 # Insert page
                 pagestr = ' ' + str(item.page)
-                line = line[:0 - len(pagestr)] + pagestr
-            self.tocbuf.append(line)
+                lines[-1] = lines[-1][:0 - len(pagestr)] + pagestr
+            self.tocbuf.extend(lines)
 
     # ---------------------------------------------------------
     # Base writer overrides
