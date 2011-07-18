@@ -146,7 +146,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             else:
                 self.write_t_rec(t, bullet=bullet, indent=indent, \
                                  level=level + 1, lb=lb)
-        
+
     def _write_toc(self, paging=False):
         # Write table of contents to a temporary buffer
         self.tocbuf.extend(['', 'Table of Contents', ''])
@@ -204,7 +204,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             return xref.text + ' (' + target_text + ')'
         else:
             return target_text
-        
+
     def _write_ref_element(self, key, text, sub_indent):
         """ Render a single reference element """
         # Use an empty first line if key is too long

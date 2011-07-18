@@ -38,7 +38,7 @@ class BaseRfcWriter:
     # Boilerplate default text sections
     boilerplate = {}
     boilerplate['std'] = 'Standards Track'
-    boilerplate['bcp'] = 'Best Current Practices'
+    boilerplate['bcp'] = 'Best Current Practice'
     boilerplate['exp'] = 'Experimental Protocol'
     boilerplate['info'] = 'Informational'
     boilerplate['historic'] = 'Historic'
