@@ -123,9 +123,10 @@ class RawTextRfcWriter(BaseRfcWriter):
                 bullet = t.attrib.get('hangText', '')
                 # Add an extra space if there is a colon, and colonspace is on
                 if bullet.endswith(':') and \
-                self.pis.get('colonspace', 'no') == 'yes':
+                self.pis.get('colonspace', 'no') == 'no':
                     bullet+= ' '
-                bullet += ' '
+                else:
+                    bullet += '  '
             elif style.startswith('format'):
                 self.list_counters[counter_index] += 1
                 count = self.list_counters[counter_index]
