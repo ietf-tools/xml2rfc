@@ -204,7 +204,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         else: #Default
             target_text = item.autoName
         if xref.text:
-            return xref.text + ' (' + target_text + ')'
+            if not target_text.startswith('['):
+                target_text = '(' + target_text + ')'
+            return xref.text + ' ' + target_text
         else:
             return target_text
 
