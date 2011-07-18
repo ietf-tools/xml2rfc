@@ -17,6 +17,7 @@ my $trace;
 my $sharedsecret = 'zzxoiuakjwefya%^&@#*(*(&@dflaskiouioiuklasfq';
 my $salt = time();
 my @filesToRemove;
+my @dirsToRemove;
 my %fileValues;
 
 ####### ########################### #######
@@ -36,8 +37,10 @@ my %fileValues;
 my @modes = ('txt', 'unpg', 'html', 'htmlxslt', 'nr', 'xml');
 my @formats = ('ascii',  'pdf',  'epub',  'rtf',  'ps');
 
+umask(0);
 my $input    = $q->param('input');
 my $inputfn  = untaint($q->tmpFileName($input));
+my $inputfndir = "$inputfn.dir";
 my $modeAsFormat = $q->param('modeAsFormat');
 if ($modeAsFormat =~ m((.*)/(.*))) {
    $q->param('mode', $1);
@@ -79,7 +82,10 @@ my %extensions = (
     );
 
 printHeaders("text/plain") if $debug;
-print "input='$input', inputfn='$inputfn'\n" if $debug;
+my $outputfn = getOutputName($input, $mode, $format);
+my $outputfnnoext = $outputfn;
+$outputfnnoext =~ s/.[^.]*$//;
+print "input='$input', inputfn='$inputfn', outputfn='$outputfn', outputfnnoext='$outputfnnoext'\n" if $debug;
 print "mode=$mode, format=$format, checking=$checking, type=$type\n" if $debug;
 saveTracePass("Generating $expandedModes{$mode} output in $expandedFormats{$format} format", "h1");
 
@@ -149,7 +155,23 @@ my $needExpansionToXml =
 	($format eq 'epub') ||
 	($mode eq 'htmlxslt')
 	;
-my $TMP1 = $needExpansionToXml ?  setTempFile("$inputfn-1.xml") : setTempFile("$inputfn-1." . $extensions{$mode});
+my $finalTclPassHere;
+if ($mode eq 'xml') {
+    $finalTclPassHere = 1;
+} else {
+    if ($mode eq 'htmlxslt') {
+	if ($format eq 'epub') {
+	    $finalTclPassHere = 1;
+	}
+    } elsif (!$needExpansionToXml) {
+	$finalTclPassHere = 1;
+    }
+}
+
+my $TMP1 = $finalTclPassHere ?
+    ($needExpansionToXml ?  setSubTempFile("$outputfnnoext.xml") : setSubTempFile("$outputfnnoext." . $extensions{$mode})) :
+    ($needExpansionToXml ?  setTempFile("$inputfn-1.xml") : setTempFile("$inputfn-1." . $extensions{$mode}));
+
 print "TMP1=$TMP1\n" if $debug;
 my $TMPERR = setTempFile("$inputfn.err");
 
@@ -192,12 +214,16 @@ if ($checking eq 'strict') {
 my $TMP2;
 if ($mode eq 'xml') {
     $TMP2 = $TMP1;
+    print "TMP2=$TMP2\n" if $debug;
 } else {
-    $TMP2 = setTempFile("$inputfn-2." . $extensions{$mode});
+    # $TMP2 = setTempFile("$inputfn-2." . $extensions{$mode});
     if ($mode eq 'htmlxslt') {
 	if ($format eq 'epub') {
 	    $TMP2 = $TMP1;
+	    print "TMP2=$TMP2\n" if $debug;
 	} else {
+	    $TMP2 = setTempFile("$inputfn-2." . $extensions{$mode});
+	    print "TMP2=$TMP2\n" if $debug;
 	    my ($ret, $out, $err) = runCommand("xsltproc $dir/etc/xslt/rfc2629.xslt $TMP1 > $TMP2", $TMP1, $TMP2, "Generating $mode");
 	    print "xsltproc ret=$ret\n" if $debug;
 	    print "out='$out'\n" if $debug;
@@ -206,7 +232,10 @@ if ($mode eq 'xml') {
 	}
     } elsif (!$needExpansionToXml) {
 	$TMP2 = $TMP1;
+	print "TMP2=$TMP2\n" if $debug;
     } else {
+	$TMP2 = setSubTempFile("$outputfnnoext." . $extensions{$mode});
+	print "TMP2=$TMP2\n" if $debug;
 	my ($ret, $out, $err) = runCommand("tclsh etc/xml2rfc-dev.tcl xml2rfc $TMP1 $TMP2", $TMP1, $TMP2, "Generating $mode");
 	print "xml2rfc ret=$ret\n" if $debug;
 	print "out='$out'\n" if $debug;
@@ -334,19 +363,19 @@ if ($type eq 'towindow') {
     print TMPTRACE "<hr/>\n";
     close TMPTRACE;
 
-    my $outputfn = getOutputName($input, $mode, $format);
-    keepTempFile($TMP3);
+    # my $outputfn = getOutputName($input, $mode, $format);
+    my $KEEP = keepTempFile($TMP3, "$inputfn-6." . getExtension($TMP3));
     printHeaders("text/html");
     print "<html><head><title>XML2RFC Processor with Warnings &amp; Errors</title></head>\n";
-    my $rows = (($format eq 'ascii') && ($mode ne 'xml')) ? '25%,*' : '50%,$';
+    my $rows = (($format eq 'ascii') && ($mode ne 'xml')) ? '25%,*' : '50%,*';
     print "<frameset rows='$rows'>\n";
     print "<frame src='cat.cgi?input=" . encryptFileName($TMPTRACE) . "'/>\n";
-    print "<frame src='cat.cgi/$outputfn?input=" . encryptFileName($TMP3) . "'/>\n";
+    print "<frame src='cat.cgi/$outputfn?input=" . encryptFileName($KEEP) . "'/>\n";
     print "</frameset>";
     print "</html>";
 
 } elsif ($type eq 'tofile') {
-    my $outputfn = getOutputName($input, $mode, $format);
+    # my $outputfn = getOutputName($input, $mode, $format);
     # cgi_content_type "unknown/exe"
     printHeaders("application/octet-stream", "Content-Disposition: attachment; filename=\"$outputfn\"");
     catFile($TMP3);
@@ -376,6 +405,7 @@ sub runCommand {
     saveTracePass($pass);
     print "\n--- $pass ---\n" if $debug;
     $cmd .= " 2>$TMPERR";
+    print "runCommand($cmd)\n" if $debug;
     my $out = `$cmd`;
     my $ret = $?;
     my $err = getFile($TMPERR);
@@ -414,6 +444,9 @@ sub saveTracePass {
 sub cleanup {
     for my $file (@filesToRemove) {
 	unlink($file) unless $debug;
+    }
+    for my $dir (@dirsToRemove) {
+	rmdir($dir) if -d $dir;
     }
 }
 
@@ -454,14 +487,38 @@ sub setTempFile {
     return $ret;
 }
 
+####### add a temporary file in a temporary subdirectory to the removal list
+sub setSubTempFile {
+    my $ret = shift;
+    $ret =~ s(^.*/)();
+    $ret = "$inputfndir/$ret";
+    if (! -d "$inputfndir") {
+	mkdir($inputfndir);
+	push @dirsToRemove, $inputfndir;
+    }
+    push @filesToRemove, $ret;
+    return $ret;
+}
+
 ####### remove a temporary file from the removal list
 sub keepTempFile {
     my $lookFor = shift;
+    my $renameTo = shift;
+    rename($lookFor, $renameTo);
+    print "'$lookFor' renamed to '$renameTo'\n" if $debug;
     my @tmp;
     for my $file (@filesToRemove) {
 	push @tmp, $file if $file ne $lookFor;
     }
     @filesToRemove = @tmp;
+    return $renameTo;
+}
+
+# for a given filename, return its extension
+sub getExtension {
+    my $fn = shift;
+    $fn =~ s/^.*[.]//;
+    return $fn;
 }
 
 ####### use a given pattern to untaint a value
