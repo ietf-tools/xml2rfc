@@ -109,10 +109,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                 # Initialize if we need to
                 self.list_counters[counter_index] = 0
         for i, t in enumerate(list.findall('t')):
-            # Disable linebreak if compact=yes AND not first list element
+            # Disable linebreak if subcompact=yes AND not first list element
             lb = True
-            if i > 0 and self.pis.get('compact', \
-                self.pis.get('rfcedstyle', 'no')) == 'yes':
+            if i > 0 and self.pis.get('subcompact', \
+                self.pis.get('compact', \
+                self.pis.get('rfcedstyle', 'no'))) == 'yes':
                 lb = False
             if style == 'symbols':
                 bullet = self.list_symbols[level % len(self.list_symbols)]
