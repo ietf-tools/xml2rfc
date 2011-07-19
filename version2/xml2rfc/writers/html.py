@@ -269,15 +269,13 @@ class HtmlRfcWriter(BaseRfcWriter):
                         a.tail = child.tail
             if child.tag == 'eref':
                 target = child.attrib.get('target', '')
-                if child.text:
-                    a = E.A(child.text, href='#' + target)
-                    a.tail = ' '
+                text = child.text or target
+                if text:
+                    a = E.A(text, href=target)
+                    a.tail = child.tail
                     current.append(a)
-                # TODO: Grab proper title from reference
-                cite = E.CITE('[' + target + ']', title='NONE')
-                if child.tail:
-                    cite.tail = child.tail
-                current.append(cite)
+#                cite = E.CITE('[' + target + ']', title='NONE')
+#                current.append(cite)
             elif child.tag == 'iref':
                 # Add anchor to index
                 item = child.attrib.get('item', '')
