@@ -219,7 +219,8 @@ class BaseRfcWriter:
                     start_date = datetime.datetime.strptime(month + year, \
                                                             '%B%Y')
                     expire_date = start_date + datetime.timedelta(6 * 30 + 15)
-                    expire_string = 'Expires: ' + expire_date.strftime('%B %Y')
+                    expire_string = 'Expires: ' + \
+                        expire_date.strftime('%B %d, %Y')
                 except ValueError:
                     pass
             elif not year:
