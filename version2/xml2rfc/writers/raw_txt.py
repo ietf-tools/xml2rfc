@@ -29,17 +29,19 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.eref_counter = 0   # Counter for <eref> elements
 
         self.list_symbols = self.pis.get('text-list-symbols', 'o*+-')
+        self.inline_tags = ['xref', 'eref', 'iref', 'cref', 'spanx']
 
     def _lb(self, buf=None, text='', num=1):
         """ Write a blank line to the file, with optional filler text 
         
             Filler text is usually used by editing marks
         """
-        if not buf:
-            buf = self.buf
-        buf.extend([text] * num)
+        if num > 0:
+            if not buf:
+                buf = self.buf
+            buf.extend([text] * num)
 
-    def _write_text(self, string, indent=0, sub_indent=None, bullet='', \
+    def _write_text(self, string, indent=0, sub_indent=0, bullet='', \
                   align='left', lb=False, buf=None, strip=True, edit=False):
         """ Writes a line or multiple lines of text to the buffer.
 
@@ -52,14 +54,16 @@ class RawTextRfcWriter(BaseRfcWriter):
             buf = self.buf
         # We can take advantage of textwraps initial_indent by using a bullet
         # parameter and treating it separately.  We still need to indent it.
-        initial = ' ' * indent
+        subsequent = ' ' * (indent + sub_indent)
         if bullet:
-            initial += bullet
-        if not sub_indent:
-            # No sub_indent specified, use bullet length for indent amount
-            subsequent = ' ' * len(initial)
+            initial = ' ' * indent + bullet
+            if not sub_indent:
+                # Use bullet length for subsequent indents
+                subsequent = ' ' * len(initial)
         else:
-            subsequent = ' ' * (sub_indent + indent)
+            # No bullet, so combine indent and sub_indent
+            initial = subsequent
+
         if lb:
             if edit and self.pis.get('editing', 'no') == 'yes':
                 # Render an editing mark
@@ -224,7 +228,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             self._write_text(text, indent=3, bullet=key.ljust(sub_indent), \
                      sub_indent=sub_indent, lb=True)
     
-    def _combine_inline_elements(self, element):
+    def _combine_inline_elements(self, elements):
         """ Shared function for <t> and <c> elements
         
             Aggregates all the rendered text of the following elements:
@@ -236,14 +240,20 @@ class RawTextRfcWriter(BaseRfcWriter):
             
             Plus their tails.  If an element is encountered that isn't one
             of these (such as a list, figure, etc) then the function
-            returns what it has so far.
+            returns.
             
-            This function should not be called on <t> or <c> directory, but
-            the first child element to start aggregating from.
+            This function takes a list of elements as its argument.
+            
+            This function returns TWO arguments, the aggregated text, and 
+            a list containing the rest of the elements that were not processed,
+            so that the calling function can deal with them.
         """
-        inline_elements = ['xref', 'eref', 'iref', 'cref', 'spanx']
         line = ['']
-        while element is not None and element.tag in inline_elements:
+        for i, element in enumerate(elements):
+            if element.tag not in self.inline_tags:
+                # Not an inline element, exit
+                return ''.join(line), elements[i:]
+
             if element.tag == 'xref':
                 line.append(self._expand_xref(element))
             elif element.tag == 'eref':
@@ -284,7 +294,8 @@ class RawTextRfcWriter(BaseRfcWriter):
             # Go to next sibling
             element = element.getnext()
 
-        return ''.join(line)
+        # Went through all elements, return text with an empty list
+        return ''.join(line), []
             
         
 
@@ -354,89 +365,84 @@ class RawTextRfcWriter(BaseRfcWriter):
     def write_t_rec(self, t, indent=3, sub_indent=0, bullet='', \
                      autoAnchor=None, align='left', level=0, lb=True):
         """ Recursively writes a <t> element """
-        line = ['']
-        if t.text:
-            line.append(t.text)
-        for child in t:
-            # Check inline elements first
-            if child.tag == 'xref':
-                tmp = self._expand_xref(child)
-                if child.tail:
-                    tmp += child.tail
-                line.append(tmp)
-            elif child.tag == 'eref':
-                if child.text:
-                    line.append(child.text + ' ')
-                self.eref_counter += 1
-                line.append('[' + str(self.eref_counter) + ']')
-                if child.tail:
-                    line.append(child.tail)
-            elif child.tag == 'cref' and \
-                 self.pis.get('comments', 'no') == 'yes':
-                # Render if processing instruction is enabled
-                anchor = child.attrib.get('anchor', '')
-                if anchor:
-                    # TODO: Add anchor to index
-                    anchor = ': ' + anchor
-                if child.text:
-                    line.append('[[' + anchor + child.text + ']]')
-                if child.tail:
-                    line.append(child.tail)
-            elif child.tag == 'spanx':
-                style = child.attrib.get('style', 'emph')
-                edgechar = '?'
-                if style == 'emph':
-                    edgechar = '-'
-                elif style == 'strong':
-                    edgechar = '*'
-                elif style == 'verb':
-                    edgechar = '"'
-                text = ''
-                if child.text:
-                    text = child.text
-                line.append(edgechar + text + edgechar)
-                if child.tail:
-                    line.append(child.tail)
-            else:
-                # Submit initial buffer with a linebreak, then continue
-                if len(line) > 0:
-                    self._write_text(''.join(line), indent=indent, lb=lb, \
-                                    sub_indent=sub_indent, bullet=bullet, \
-                                    edit=True, align=align)
-                    line = []
-
-            # Elements that require a separate buffer
-            # Allow for nested lists by appending the length of the bullet,
-            # But without including the bullet itself.
-            if sub_indent > 0:
-                new_indent = sub_indent + indent
-            else:
-                new_indent = len(bullet) + indent
-            if child.tag == 'vspace':
-                blankLines = int(child.attrib.get('blankLines', 0))
-                for i in range(blankLines):
-                    self._lb()
-                if child.tail:
-                    self._write_text(child.tail, indent=new_indent)
-            elif child.tag == 'list':
-                # Ensure we have a single linebreak before the first
-                # list element if compact=yes
+        # Grab any initial text in <t>
+        current_text = t.text or ''
+        
+        # Render child elements
+        remainder = t.getchildren()
+        while len(remainder) > 0 or current_text:
+            # Process any inline elements
+            inline_text, remainder = self._combine_inline_elements(remainder)
+            current_text += inline_text
+            if current_text or bullet:
+                # Attempt to write a paragraph of inline text
+                self._write_text(current_text, indent=indent, lb=lb, \
+                                sub_indent=sub_indent, bullet=bullet, \
+                                edit=True, align=align)
                 
-                self._write_list(child, indent=new_indent, level=level)
-                if child.tail:
-                    self._write_text(child.tail, indent=new_indent, lb=True)
-            elif child.tag == 'figure':
-                # Callback to base writer method
-                self._write_figure(child)
-            elif child.tag == 'texttable':
-                # Callback to base writer method
-                self._write_table(child)
+            # Reset settings after initial paragraph
+            current_text = ''
+            bullet = ''
 
-        # Submit anything leftover in the buffer
-        if len(line) > 0:
-            self._write_text(''.join(line), indent=indent, lb=lb, \
-                            sub_indent=sub_indent, bullet=bullet, \
-                            edit=True, align=align)
+            # Handle paragraph-based elements (list, figure, vspace)
+            if len(remainder) > 0:
+                # Get front element
+                element = remainder.pop(0)
+
+                if element.tag == 'list': 
+                    # Calculate new indentation for list
+                    if sub_indent > 0:
+                        new_indent = sub_indent + indent
+                    else:
+                        new_indent = len(bullet) + indent
+                    # Call sibling function to construct list
+                    self._write_list(element, indent=new_indent, level=level)
+                    # Auto-break for tail paragraph
+                    lb = True
+
+                elif element.tag == 'figure':
+                    self._write_figure(element)
+                    # Auto-break for tail paragraph
+                    lb = True
+
+                elif element.tag == 'vspace':
+                    # Insert `blankLines` blank lines into document
+                    self._lb(num=int(element.attrib.get('blankLines', 0)))
+                    # Don't auto-break for tail paragraph
+                    lb = False
+
+                # Set tail of element as input text of next paragraph
+                if element.tail:
+                    current_text = element.tail
+
+        # Allow for nested lists by appending the length of the bullet,
+        # But without including the bullet itself.
+#            if sub_indent > 0:
+#                new_indent = sub_indent + indent
+#            else:
+#                new_indent = len(bullet) + indent
+#            if child.tag == 'vspace':
+#                blankLines = int(child.attrib.get('blankLines', 0))
+#                for i in range(blankLines):
+#                    self._lb()
+#                if child.tail:
+#                    self._write_text(child.tail, indent=new_indent)
+#            elif child.tag == 'list':
+#                # Ensure we have a single linebreak before the first
+#                # list element if compact=yes
+#                
+#                self._write_list(child, indent=new_indent, level=level)
+#                if child.tail:
+#                    self._write_text(child.tail, indent=new_indent, lb=True)
+#            elif child.tag == 'figure':
+#                # Callback to base writer method
+#                self._write_figure(child)
+#
+#        # Submit anything leftover in the buffer
+#        if len(line) > 0:
+#            self._write_text(''.join(line), indent=indent, lb=lb, \
+#                            sub_indent=sub_indent, bullet=bullet, \
+#                            edit=True, align=align)
 
     def write_top(self, left_header, right_header):
         """ Combines left and right lists to write a document heading """
@@ -598,7 +604,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             text = cell.text or ''
             if len(cell) > 0:
                 # <c> has children, render their text and add to line
-                text += self._combine_inline_elements(cell[0])
+                text += self._combine_inline_elements(cell.getchildren())
             matrix[row].append(text)
 
         # Find the longest line in each column, and define column widths
