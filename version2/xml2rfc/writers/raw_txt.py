@@ -374,7 +374,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             # Process any inline elements
             inline_text, remainder = self._combine_inline_elements(remainder)
             current_text += inline_text
-            if current_text or bullet:
+            if (current_text and not current_text.isspace()) or bullet:
                 # Attempt to write a paragraph of inline text
                 self._write_text(current_text, indent=indent, lb=lb, \
                                 sub_indent=sub_indent, bullet=bullet, \
@@ -414,35 +414,6 @@ class RawTextRfcWriter(BaseRfcWriter):
                 # Set tail of element as input text of next paragraph
                 if element.tail:
                     current_text = element.tail
-
-        # Allow for nested lists by appending the length of the bullet,
-        # But without including the bullet itself.
-#            if sub_indent > 0:
-#                new_indent = sub_indent + indent
-#            else:
-#                new_indent = len(bullet) + indent
-#            if child.tag == 'vspace':
-#                blankLines = int(child.attrib.get('blankLines', 0))
-#                for i in range(blankLines):
-#                    self._lb()
-#                if child.tail:
-#                    self._write_text(child.tail, indent=new_indent)
-#            elif child.tag == 'list':
-#                # Ensure we have a single linebreak before the first
-#                # list element if compact=yes
-#                
-#                self._write_list(child, indent=new_indent, level=level)
-#                if child.tail:
-#                    self._write_text(child.tail, indent=new_indent, lb=True)
-#            elif child.tag == 'figure':
-#                # Callback to base writer method
-#                self._write_figure(child)
-#
-#        # Submit anything leftover in the buffer
-#        if len(line) > 0:
-#            self._write_text(''.join(line), indent=indent, lb=lb, \
-#                            sub_indent=sub_indent, bullet=bullet, \
-#                            edit=True, align=align)
 
     def write_top(self, left_header, right_header):
         """ Combines left and right lists to write a document heading """
