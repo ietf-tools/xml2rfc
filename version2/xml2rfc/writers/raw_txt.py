@@ -604,7 +604,9 @@ class RawTextRfcWriter(BaseRfcWriter):
             text = cell.text or ''
             if len(cell) > 0:
                 # <c> has children, render their text and add to line
-                text += self._combine_inline_elements(cell.getchildren())
+                inline_text, null = \
+                    self._combine_inline_elements(cell.getchildren())
+                text += inline_text
             matrix[row].append(text)
 
         # Find the longest line in each column, and define column widths
