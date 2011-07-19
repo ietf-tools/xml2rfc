@@ -519,7 +519,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         matrix = []
         matrix.append([])
         row = 0
+        column_aligns = []
         for ttcol in table.findall('ttcol'):
+            column_aligns.append(ttcol.attrib.get('align', 'left'))
             if ttcol.text:
                 matrix[row].append(ttcol.text)
             else:
@@ -598,13 +600,21 @@ class RawTextRfcWriter(BaseRfcWriter):
                 else:
                     line = ['|']
                 for col, cell in enumerate(cell_line):
+                    align = column_aligns[col]
+                    width = column_widths[col]
                     if row < len(cell):
+                        if align == 'center':
+                            text = cell[row].center(width)
+                        elif align == 'right':
+                            text = cell[row].rjust(width)
+                        else:  # align == left
+                            text = cell[row].ljust(width)
                         if style == 'headers':
-                            line.append(cell[row].ljust(column_widths[col]))
+                            line.append(text)
                             line.append(' ')
                         else:
                             line.append(' ')
-                            line.append(cell[row].ljust(column_widths[col]))
+                            line.append(text)
                             line.append(' |')
                     else:
                         if style == 'headers':
