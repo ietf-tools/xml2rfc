@@ -223,6 +223,70 @@ class RawTextRfcWriter(BaseRfcWriter):
             # Fill space to sub_indent in the bullet
             self._write_text(text, indent=3, bullet=key.ljust(sub_indent), \
                      sub_indent=sub_indent, lb=True)
+    
+    def _combine_inline_elements(self, element):
+        """ Shared function for <t> and <c> elements
+        
+            Aggregates all the rendered text of the following elements:
+                - xref
+                - eref
+                - iref
+                - cref
+                - spanx
+            
+            Plus their tails.  If an element is encountered that isn't one
+            of these (such as a list, figure, etc) then the function
+            returns what it has so far.
+            
+            This function should not be called on <t> or <c> directory, but
+            the first child element to start aggregating from.
+        """
+        inline_elements = ['xref', 'eref', 'iref', 'cref', 'spanx']
+        line = ['']
+        while element is not None and element.tag in inline_elements:
+            if element.tag == 'xref':
+                line.append(self._expand_xref(element))
+            elif element.tag == 'eref':
+                if element.text:
+                    line.append(element.text + ' ')
+                self.eref_counter += 1
+                line.append('[' + str(self.eref_counter) + ']')
+            elif element.tag == 'iref':
+                # TODO iref
+                pass
+            elif element.tag == 'cref' and \
+                self.pis.get('comments', 'no') == 'yes':                
+                # Render if processing instruction is enabled
+                anchor = element.attrib.get('anchor', '')
+                if anchor:
+                    # TODO: Add anchor to index
+                    anchor = ': ' + anchor
+                if element.text:
+                    line.append('[[' + anchor + element.text + ']]')
+            elif element.tag == 'spanx':
+                style = element.attrib.get('style', 'emph')
+                edgechar = '?'
+                if style == 'emph':
+                    edgechar = '-'
+                elif style == 'strong':
+                    edgechar = '*'
+                elif style == 'verb':
+                    edgechar = '"'
+                text = ''
+                if element.text:
+                    text = element.text
+                line.append(edgechar + text + edgechar)
+            
+            # Add tail text before next element
+            if element.tail:
+                line.append(element.tail)
+
+            # Go to next sibling
+            element = element.getnext()
+
+        return ''.join(line)
+            
+        
 
     # ---------------------------------------------------------
     # Base writer overrides
@@ -531,22 +595,11 @@ class RawTextRfcWriter(BaseRfcWriter):
             if i % num_columns == 0:
                 row += 1
                 matrix.append([])
-            # Add cell text + any inline elements
-            line = ['']
-            if cell.text:
-                line.append(cell.text)
-            for child in cell:
-                # Check inline elements first
-                if child.tag == 'xref' or child.tag == 'eref':
-                    if child.text:
-                        line.append(child.text + ' ')
-                    line.append('[' + child.attrib['target'] + ']')
-                    if child.tail:
-                        line.append(child.tail)
-            if len(line) > 0:
-                matrix[row].append(''.join(line))
-            else:
-                matrix[row].append('')
+            text = cell.text or ''
+            if len(cell) > 0:
+                # <c> has children, render their text and add to line
+                text += self._combine_inline_elements(cell[0])
+            matrix[row].append(text)
 
         # Find the longest line in each column, and define column widths
         longest_lines = [0] * num_columns
