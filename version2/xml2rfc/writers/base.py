@@ -26,6 +26,7 @@ class RfcItem:
         self.toc = toc
         self.level = level
         self.page = 0    # This will be set after buffers are complete!
+        self.expire_string = None
 
 
 class BaseRfcWriter:
@@ -62,6 +63,8 @@ class BaseRfcWriter:
         'This memo provides information for the Internet community. This ' \
         'memo does not specify an Internet standard of any kind. ' \
         'Distribution of this memo is unlimited.'
+    boilerplate['expiration_text'] = \
+        'This Internet-Draft will expire on %s.'
     boilerplate['ipr_trust200902'] = \
        ['This Internet-Draft is submitted in full conformance with the ' \
        'provisions of BCP 78 and BCP 79.', \
@@ -204,7 +207,6 @@ class BaseRfcWriter:
     def _prepare_top_left(self):
         """ Returns a lines of lines for the top left header """
         lines = [self.r.attrib['workgroup']]
-        expire_string = None
         if not self.draft:
             rfcnumber = self.r.attrib.get('number', '')
             lines.append('Request for Comments: ' + rfcnumber)
@@ -219,8 +221,7 @@ class BaseRfcWriter:
                     start_date = datetime.datetime.strptime(month + year, \
                                                             '%B%Y')
                     expire_date = start_date + datetime.timedelta(6 * 30 + 15)
-                    expire_string = 'Expires: ' + \
-                        expire_date.strftime('%B %d, %Y')
+                    self.expire_string = expire_date.strftime('%B %d, %Y')
                 except ValueError:
                     pass
             elif not year:
@@ -240,8 +241,8 @@ class BaseRfcWriter:
                 lines.append('Intended status: ' + cat_text)
             else:
                 lines.append('Category: ' + cat_text)
-        if expire_string:
-            lines.append(expire_string)
+        if self.expire_string:
+            lines.append('Expires: ' + self.expire_string)
         # Strip any whitespace from XML to make header as neat as possible
         lines = map(string.strip, lines)
         return lines
@@ -486,6 +487,11 @@ class BaseRfcWriter:
                 else:
                     for par in ipr_boiler:
                         self.write_paragraph(par)
+            
+            # Write expiration string, if it was generated
+            if self.expire_string:
+                self.write_paragraph( \
+                    self.boilerplate['expiration_text'] % self.expire_string)
 
             # Copyright
             self.write_heading('Copyright Notice', autoAnchor='rfc.copyrightnotice')
