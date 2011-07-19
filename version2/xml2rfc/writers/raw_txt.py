@@ -332,7 +332,10 @@ class RawTextRfcWriter(BaseRfcWriter):
             for line in lines:
                 self.buf.append(line.rjust(self.width))
         else:  # align == left
-            indent_str = ' ' * indent
+            # Enforce a minimum indentation if any of the lines are < indent
+            extra = min([len(line) - len(line.lstrip()) for line in lines]) \
+                    - indent
+            indent_str = extra > 0 and ' ' * extra or ''
             for line in lines:
                 self.buf.append(indent_str + line)
         # Additional blank lines?
