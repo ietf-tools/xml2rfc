@@ -308,7 +308,9 @@ class BaseRfcWriter:
             # Write figure with optional delimiter
             delimiter = self.pis.get('artworkdelimiter', '')
             artwork = figure.find('artwork')
-            artwork_align = artwork.attrib.get('align', align)  # Default to figure
+            # artwork_align = artwork.attrib.get('align', align)
+            # Explicitly use figure alignment
+            artwork_align = align
             blanklines = int(self.pis.get('artworklines', 0))
             self.write_raw(figure.find('artwork').text, align=artwork_align, \
                            blanklines=blanklines, delimiter=delimiter)
