@@ -26,6 +26,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.toc_marker = 0     # Line number in buffer to write toc too
         self.list_counters = {} # Maintain counters for 'format' type lists
         self.edit_counter = 0   # Counter for edit marks
+        self.eref_counter = 0   # Counter for <eref> elements
 
         self.list_symbols = self.pis.get('text-list-symbols', 'o*+-')
 
@@ -302,8 +303,8 @@ class RawTextRfcWriter(BaseRfcWriter):
             elif child.tag == 'eref':
                 if child.text:
                     line.append(child.text + ' ')
-                target = child.attrib.get('target', '')
-                line.append('[' + target + ']')
+                self.eref_counter += 1
+                line.append('[' + str(self.eref_counter) + ']')
                 if child.tail:
                     line.append(child.tail)
             elif child.tag == 'cref' and \
@@ -633,6 +634,10 @@ class RawTextRfcWriter(BaseRfcWriter):
     def pre_processing(self):
         # Discard buffer from indexing pass
         self.buf = []
+        
+        # Reset document counters from indexing pass
+        self.edit_counter = 0   # Counter for edit marks
+        self.eref_counter = 0   # Counter for <eref> elements
         
         # Replace unicode characters in RFC with proper ascii equivalents
         self.xmlrfc.replaceUnicode()
