@@ -308,7 +308,7 @@ class BaseRfcWriter:
                 self.write_t_rec(preamble, align=align)
     
             # Write figure with optional delimiter
-            delimiter = self.pis.get('artworkdelimiter', '')
+            delimiter = self.pis.get('artworkdelimiter', None)
             artwork = figure.find('artwork')
             # artwork_align = artwork.attrib.get('align', align)
             # Explicitly use figure alignment

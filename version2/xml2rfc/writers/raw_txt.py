@@ -321,6 +321,13 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.buf.extend([''] * blanklines)
         # Format the input
         lines = [line.rstrip() for line in text.expandtabs(4).split('\n')]
+        # Trim first and last lines if they are blank, whitespace is handled
+        # by the `blanklines` and `delimiter` arguments
+        if len(lines) > 1:
+            if lines[0] == '':
+                lines.pop(0)
+            if lines[-1] == '':
+                lines.pop(-1)
         if align == 'center':
             # Find the longest line, and use that as a fixed center.
             longest_line = len(max(lines, key=len))
