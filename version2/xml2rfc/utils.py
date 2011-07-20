@@ -10,7 +10,7 @@ import textwrap
 
 
 class MyTextWrapper(textwrap.TextWrapper):
-    """ Subclass that overrides a few things in the standad implementation """
+    """ Subclass that overrides a few things in the standard implementation """
     def __init__(self, **kwargs):
         textwrap.TextWrapper.__init__(self, **kwargs)
         
