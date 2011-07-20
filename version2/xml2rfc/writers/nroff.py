@@ -68,7 +68,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                 string = string.lstrip()
             if bullet:
                 string = bullet + string
-            par = textwrap.wrap(string, self.width)
+            par = textwrap.wrap(string, self.width, fix_sentence_endings=True)
             # TODO: Nroff alignment
             # Create nroff commands based on bullet & alignment
             if len(bullet) > 0:

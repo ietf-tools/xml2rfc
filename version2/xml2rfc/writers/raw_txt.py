@@ -77,7 +77,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                 string = string.lstrip()
             par = textwrap.wrap(string, self.width, \
                                 initial_indent=initial, \
-                                subsequent_indent=subsequent)
+                                subsequent_indent=subsequent, \
+                                fix_sentence_endings=True)
             if align == 'left':
                 buf.extend(par)
             elif align == 'center':
