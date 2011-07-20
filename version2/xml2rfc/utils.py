@@ -6,6 +6,25 @@
 
 import re
 import xml2rfc.log
+import textwrap
+
+
+class MyTextWrapper(textwrap.TextWrapper):
+    """ Subclass that overrides a few things in the standad implementation """
+    def __init__(self, **kwargs):
+        textwrap.TextWrapper.__init__(self, **kwargs)
+        
+    def wrap(self, text, initial_indent='', subsequent_indent=''):
+        """ Wrapper method to dynamically change indentation strings """
+        self.initial_indent = initial_indent
+        self.subsequent_indent = subsequent_indent
+        return textwrap.TextWrapper.wrap(self, text)      
+  
+    def fill(self, text, initial_indent='', subsequent_indent=''):
+        """ Wrapper method to dynamically change indentation strings """
+        self.initial_indent = initial_indent
+        self.subsequent_indent = subsequent_indent
+        return textwrap.TextWrapper.fill(self, text)
 
 
 def justify_inline(left_str, center_str, right_str, width=72):

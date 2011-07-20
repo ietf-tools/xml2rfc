@@ -20,6 +20,7 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def __init__(self, xmlrfc, width=72, quiet=False, verbose=False):
         BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)
+        # Document processing data
         self.width = width      # Page width
         self.buf = []           # Main buffer
         self.tocbuf = []        # Table of contents buffer
@@ -28,8 +29,13 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.edit_counter = 0   # Counter for edit marks
         self.eref_counter = 0   # Counter for <eref> elements
 
+        # Text lookups
         self.list_symbols = self.pis.get('text-list-symbols', 'o*+-')
         self.inline_tags = ['xref', 'eref', 'iref', 'cref', 'spanx']
+        
+        # Custom textwrapper object
+        self.wrapper = xml2rfc.utils.MyTextWrapper(width=self.width,
+                                                   fix_sentence_endings=True)
 
     def _lb(self, buf=None, text='', num=1):
         """ Write a blank line to the file, with optional filler text 
@@ -75,10 +81,9 @@ class RawTextRfcWriter(BaseRfcWriter):
             if strip:
                 # Strip initial whitespace
                 string = string.lstrip()
-            par = textwrap.wrap(string, self.width, \
-                                initial_indent=initial, \
-                                subsequent_indent=subsequent, \
-                                fix_sentence_endings=True)
+            par = self.wrapper.wrap(string,
+                                    initial_indent=initial,
+                                    subsequent_indent=subsequent)
             if align == 'left':
                 buf.extend(par)
             elif align == 'center':
