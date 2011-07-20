@@ -14,6 +14,17 @@ class MyTextWrapper(textwrap.TextWrapper):
     def __init__(self, **kwargs):
         textwrap.TextWrapper.__init__(self, **kwargs)
         
+        # Override wrapping regex 
+        self.wordsep_re = re.compile(
+            r'(/|'                                    # a forwardslash  
+            r'\s+|'                                   # any whitespace
+            r'[^\s\w]*\w+[^0-9\W]-(?=\w+[^0-9\W])|'   # hyphenated words
+            r'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))')   # em-dash
+        
+        self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
+        self.wordsep_simple_re_uni = re.compile(
+            self.wordsep_simple_re.pattern, re.U)
+
     def wrap(self, text, initial_indent='', subsequent_indent=''):
         """ Wrapper method to dynamically change indentation strings """
         self.initial_indent = initial_indent

@@ -154,10 +154,14 @@ class BaseRfcWriter:
         return item
 
     def _indexSection(self, counter, title=None, anchor=None, toc=True, \
-                      level=1):
+                      level=1, appendix=False):
         counter = str(counter)
-        autoName = 'Section ' + counter
-        autoAnchor = 'rfc.section.' + counter
+        if appendix:
+            autoName = 'Appendix ' + counter
+            autoAnchor = 'rfc.appendix.' + counter
+        else:
+            autoName = 'Section ' + counter
+            autoAnchor = 'rfc.section.' + counter
         item = RfcItem(autoName, autoAnchor, counter=counter, title=title, \
                        anchor=anchor, toc=toc, level=level)
         self._index.append(item)
@@ -387,12 +391,14 @@ class BaseRfcWriter:
                                                             'yes') == 'yes')
             if self.indexmode:
                 # Add section to the index
-                self._indexSection(count_str, title=title, anchor=anchor, \
-                                   toc=include_toc, level=level)
+                self._indexSection(count_str, title=title, anchor=anchor,
+                                   toc=include_toc, level=level,
+                                   appendix=appendix)
             else:
                 # Write the section heading
-                self.write_heading(title, bullet=count_str + '.', \
-                                   autoAnchor='rfc.section.' + count_str, \
+                aa_prefix = appendix and 'rfc.appendix.' or 'rfc.section.'
+                self.write_heading(title, bullet=count_str + '.',
+                                   autoAnchor=aa_prefix + count_str,
                                    anchor=anchor, level=level)
         else:
             # Must be <middle> or <back> element -- no title or index.
@@ -416,7 +422,7 @@ class BaseRfcWriter:
         s_count = 1  # Section counter
         for child_sec in section.findall('section'):
             if appendix == True:
-                self._write_section_rec(child_sec, 'Appendix ' + \
+                self._write_section_rec(child_sec,
                                         string.uppercase[s_count - 1] + '',
                                         level=level + 1, appendix=True)
             else:
