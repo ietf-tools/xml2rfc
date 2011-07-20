@@ -5,8 +5,10 @@
 # Internal utitlity functions.  Not meant for public usage.
 
 import re
-import xml2rfc.log
 import textwrap
+import string
+
+import xml2rfc.log
 
 
 class MyTextWrapper(textwrap.TextWrapper):
@@ -14,16 +16,21 @@ class MyTextWrapper(textwrap.TextWrapper):
     def __init__(self, **kwargs):
         textwrap.TextWrapper.__init__(self, **kwargs)
         
-        # Override wrapping regex 
+        # Override wrapping regex, preserve '/' before linebreak
         self.wordsep_re = re.compile(
-            r'(/|'                                    # a forwardslash  
+            r'(/|'                                    # a forward slash  
             r'\s+|'                                   # any whitespace
             r'[^\s\w]*\w+[^0-9\W]-(?=\w+[^0-9\W])|'   # hyphenated words
             r'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))')   # em-dash
         
         self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
-        self.wordsep_simple_re_uni = re.compile(
-            self.wordsep_simple_re.pattern, re.U)
+        
+        # Override end of line regex, double space after '].'
+        self.sentence_end_re = re.compile(r'[%s|\]]'    # lowercase or bracket
+                             r'[\.\!\?]'                # sentence-ending punct.
+                             r'[\"\']?'                 # optional end-of-quote
+                             r'\Z'                      # end of chunk
+                             % string.lowercase)
 
     def wrap(self, text, initial_indent='', subsequent_indent=''):
         """ Wrapper method to dynamically change indentation strings """
