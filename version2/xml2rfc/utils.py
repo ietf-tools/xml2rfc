@@ -15,16 +15,16 @@ class MyTextWrapper(textwrap.TextWrapper):
     """ Subclass that overrides a few things in the standard implementation """
     def __init__(self, **kwargs):
         textwrap.TextWrapper.__init__(self, **kwargs)
-        
+
         # Override wrapping regex, preserve '/' before linebreak
         self.wordsep_re = re.compile(
             r'(/|'                                    # a forward slash  
             r'\s+|'                                   # any whitespace
             r'[^\s\w]*\w+[^0-9\W]-(?=\w+[^0-9\W])|'   # hyphenated words
             r'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))')   # em-dash
-        
+
         self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
-        
+
         # Override end of line regex, double space after '].'
         self.sentence_end_re = \
                   re.compile(r'[%s|\]|"]'      # lowercase, bracket, or quote
@@ -38,7 +38,7 @@ class MyTextWrapper(textwrap.TextWrapper):
         self.initial_indent = initial_indent
         self.subsequent_indent = subsequent_indent
         return textwrap.TextWrapper.wrap(self, text)      
-  
+
     def fill(self, text, initial_indent='', subsequent_indent=''):
         """ Wrapper method to dynamically change indentation strings """
         self.initial_indent = initial_indent
