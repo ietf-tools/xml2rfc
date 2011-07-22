@@ -20,8 +20,6 @@ class CachingResolver(lxml.etree.Resolver):
     def __init__(self, verbose=False, quiet=False):
         self.verbose = verbose
         self.quiet = quiet
-        if not verbose and not self.quiet:
-            xml2rfc.log.write_on_line('Loading resources...')
 
     def resolve(self, request_url, public_id, context):
         cache_dir = os.path.expanduser('~/.cache/xml2rfc')
@@ -48,8 +46,6 @@ class CachingResolver(lxml.etree.Resolver):
             resource_path = url.path
         if self.verbose:
             xml2rfc.log.write('Loading resource... ', resource_path)
-        elif not self.quiet:
-            xml2rfc.log.write_on_line('.')
         return self.resolve_filename(resource_path, context)
 
 
@@ -83,10 +79,6 @@ class XmlRfcParser:
             tree = lxml.etree.parse(self.source, parser)
         except lxml.etree.XMLSyntaxError, error:
             raise error
-
-        if not self.verbose and not self.quiet:
-            # Add a newline since the resolver never added one
-            xml2rfc.log.write_on_line('\n')
 
         xmlrfc = XmlRfc(tree)
 
