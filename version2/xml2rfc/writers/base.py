@@ -588,7 +588,7 @@ class BaseRfcWriter:
         else:
             self.write_to_file(tmpfile)
 
-        if not self.quiet:
+        if not self.quiet and filename:
             xml2rfc.log.write('Created file', filename)
 
     # -----------------------------------------
