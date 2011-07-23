@@ -83,9 +83,9 @@ my %extensions = (
 
 printHeaders("text/plain") if $debug;
 my $outputfn = getOutputName($input, $mode, $format);
-my $outputfnnoext = $outputfn;
-$outputfnnoext =~ s/.[^.]*$//;
-print "input='$input', inputfn='$inputfn', outputfn='$outputfn', outputfnnoext='$outputfnnoext'\n" if $debug;
+my $basename = $outputfn;
+$basename =~ s/.[^.]*$//;
+print "input='$input', inputfn='$inputfn', outputfn='$outputfn', basename='$basename'\n" if $debug;
 print "mode=$mode, format=$format, checking=$checking, type=$type\n" if $debug;
 saveTracePass("Generating $expandedModes{$mode} output in $expandedFormats{$format} format", "h1");
 
@@ -135,7 +135,7 @@ foreach my $dtdFile ('rfc2629-other.ent', 'rfc2629-xhtml.ent', 'rfc2629.dtd', 'r
 $type = 'tofile' if (($type eq 'towindow') && ($mode eq 'xml'));
 
 my $ret = rename($inputfn, setTempFile("$inputfn.xml"));
-print "rename ret='$ret'\n" if $debug;
+print "rename($inputfn,$inputfn.xml) ret='$ret'\n" if $debug;
 # userError("Unable to rename temp file", $!) if $ret;
 
 
@@ -169,7 +169,7 @@ if ($mode eq 'xml') {
 }
 
 my $TMP1 = $finalTclPassHere ?
-    ($needExpansionToXml ?  setSubTempFile("$outputfnnoext.xml") : setSubTempFile("$outputfnnoext." . $extensions{$mode})) :
+    ($needExpansionToXml ?  setSubTempFile("$basename.xml") : setSubTempFile("$basename." . $extensions{$mode})) :
     ($needExpansionToXml ?  setTempFile("$inputfn-1.xml") : setTempFile("$inputfn-1." . $extensions{$mode}));
 
 print "TMP1=$TMP1\n" if $debug;
@@ -234,7 +234,7 @@ if ($mode eq 'xml') {
 	$TMP2 = $TMP1;
 	print "TMP2=$TMP2\n" if $debug;
     } else {
-	$TMP2 = setSubTempFile("$outputfnnoext." . $extensions{$mode});
+	$TMP2 = setSubTempFile("$basename." . $extensions{$mode});
 	print "TMP2=$TMP2\n" if $debug;
 	my ($ret, $out, $err) = runCommand("tclsh etc/xml2rfc-dev.tcl xml2rfc $TMP1 $TMP2", $TMP1, $TMP2, "Generating $mode");
 	print "xml2rfc ret=$ret\n" if $debug;
@@ -364,7 +364,7 @@ if ($type eq 'towindow') {
     close TMPTRACE;
 
     # my $outputfn = getOutputName($input, $mode, $format);
-    my $KEEP = keepTempFile($TMP3, "$inputfn-6." . getExtension($TMP3));
+    my $KEEP = keepTempFile($TMP3, "$inputfn-6." . getExtension($TMP3), $debug);
     printHeaders("text/html");
     print "<html><head><title>XML2RFC Processor with Warnings &amp; Errors</title></head>\n";
     my $rows = (($format eq 'ascii') && ($mode ne 'xml')) ? '25%,*' : '50%,*';
@@ -373,6 +373,12 @@ if ($type eq 'towindow') {
     print "<frame src='cat.cgi/$outputfn?input=" . encryptFileName($KEEP) . "'/>\n";
     print "</frameset>";
     print "</html>";
+    if ($debug) {
+	print "\n================================================================n";
+	catFile($TMPTRACE);
+	print "================================================================n";
+	catFile($KEEP);
+    }
 
 } elsif ($type eq 'tofile') {
     # my $outputfn = getOutputName($input, $mode, $format);
@@ -504,7 +510,9 @@ sub setSubTempFile {
 sub keepTempFile {
     my $lookFor = shift;
     my $renameTo = shift;
+    my $debug = shift;
     rename($lookFor, $renameTo);
+    return $renameTo if $debug;
     print "'$lookFor' renamed to '$renameTo'\n" if $debug;
     my @tmp;
     for my $file (@filesToRemove) {
