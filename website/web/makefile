@@ -2,12 +2,26 @@ DIR=web
 PUB= $$HOME/public_html/$(DIR)
 INS= experimental.html index.html stripe.png xml2rfcFAQ.html
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
-DERIVATIVES= experimental-debug.html index-debug.html
+DERIVATIVES= experimental-debug.html index-debug.html \
+	experimental-new.html experimental-new-debug.html \
+	experimental-tee.html experimental-tee-debug.html \
 
 all: $(DERIVATIVES)
 
 experimental-debug.html: experimental.html
 	sed < experimental.html -e '/start debug section/s/!-- tr/tr/' -e '/end debug section/s/ --//' > experimental-debug.html
+
+experimental-new.html: experimental.html
+	sed 's/xml2rfc-dev.cgi/xml2rfc-new.cgi/' < experimental.html > experimental-new.html
+
+experimental-new-debug.html: experimental-debug.html
+	sed 's/xml2rfc-dev.cgi/xml2rfc-new.cgi/' < experimental-debug.html > experimental-new-debug.html
+
+experimental-tee.html: experimental.html
+	sed 's/xml2rfc-dev.cgi/xml2rfc-tee.cgi/' < experimental.html > experimental-tee.html
+
+experimental-tee-debug.html: experimental-debug.html
+	sed 's/xml2rfc-dev.cgi/xml2rfc-tee.cgi/' < experimental-debug.html > experimental-tee-debug.html
 
 index-debug.html: index.html
 	sed < index.html -e '/start debug section/s/!-- tr/tr/' -e '/end debug section/s/ --//' > index-debug.html
