@@ -16,37 +16,49 @@ import xml2rfc.log
 __all__ = ['XmlRfcParser', 'XmlRfc']
 
 
+# Static paths
+cache_dir = os.path.expanduser('~/.cache/xml2rfc')
+template_dir = os.path.join(os.path.dirname(xml2rfc.__file__), 'templates')
+
+
+def getCacheRequest(request_url, verbose=False):
+    """ Returns the local path to a cached citation from URL
+    
+        If the path doesnt exist yet, uses urllib to cache the file.
+    """
+    if not os.path.exists(cache_dir):
+        if verbose:
+            xml2rfc.log.write('Creating cache directory at', cache_dir)
+        os.makedirs(cache_dir)
+    urlobj = urlparse.urlparse(request_url)
+    filename = os.path.basename(urlobj.path)
+    if filename.endswith('.dtd'):
+        # Found a dtd request, load from templates directory
+        cached_path = os.path.join(template_dir, filename)
+    elif urlobj.netloc:
+        # Network entity, load from cache, or create if necessary
+        cached_path = os.path.join(cache_dir, filename)
+        if not os.path.exists(cached_path):
+            if verbose:
+                xml2rfc.log.write('Creating cache for', request_url)
+            urllib.urlretrieve(request_url, cached_path)
+    else:
+        # Not dtd or network entity, use the absolute path that was given
+        cached_path = urlobj.path
+    return cached_path
+        
+
 class CachingResolver(lxml.etree.Resolver):
     def __init__(self, verbose=False, quiet=False):
         self.verbose = verbose
         self.quiet = quiet
 
     def resolve(self, request_url, public_id, context):
-        cache_dir = os.path.expanduser('~/.cache/xml2rfc')
-        if not os.path.exists(cache_dir):
-            if self.verbose:
-                xml2rfc.log.write('Creating cache directory at', cache_dir)
-            os.makedirs(cache_dir)
-        template_dir = os.path.join(os.path.dirname(xml2rfc.__file__), \
-                                    'templates')
-        url = urlparse.urlparse(request_url)
-        filename = os.path.basename(url.path)
-        if filename.endswith('.dtd'):
-            # Found a dtd request, load from templates directory
-            resource_path = os.path.join(template_dir, filename)
-        elif url.netloc:
-            # Network entity, load from cache, or create if necessary
-            resource_path = os.path.join(cache_dir, filename)
-            if not os.path.exists(resource_path):
-                if self.verbose:
-                    xml2rfc.log.write('Creating cache for', request_url)
-                urllib.urlretrieve(request_url, resource_path)
-        else:
-            # Not dtd or network entity, use the absolute path was given
-            resource_path = url.path
+        # Get or create the cached URL request
+        path = getCacheRequest(request_url, verbose=self.verbose)
         if self.verbose:
-            xml2rfc.log.write('Loading resource... ', resource_path)
-        return self.resolve_filename(resource_path, context)
+            xml2rfc.log.write('Loading resource... ', path)
+        return self.resolve_filename(path, context)
 
 
 class XmlRfcParser:
@@ -58,14 +70,16 @@ class XmlRfcParser:
         if not self.quiet:
             xml2rfc.log.write('Parsing file', self.source)
 
-    def parse(self, prepare=True):
+    def parse(self):
         """ Parses the source XML file and returns an XmlRfc instance """
 
         # Get a parser object
-        parser = lxml.etree.XMLParser(dtd_validation=True, \
-                                      no_network=False, \
-                                      remove_comments=True, \
-                                      remove_pis=False, \
+        parser = lxml.etree.XMLParser(dtd_validation=False,
+                                      load_dtd=True,
+                                      attribute_defaults=True,
+                                      no_network=False,
+                                      remove_comments=True,
+                                      remove_pis=False,
                                       remove_blank_text=True)
 
         # Add our custom resolver
@@ -73,18 +87,27 @@ class XmlRfcParser:
                                              quiet=self.quiet))
 
         # Parse the XML file into a tree and create an rfc instance
-        # Bubble up any validation or syntax errors. They will need to be
-        # handled in the CLI script or GUI.
+        # Bubble up any syntax errors. They will need to be handled at the
+        # application level.
         try:
             tree = lxml.etree.parse(self.source, parser)
         except lxml.etree.XMLSyntaxError, error:
             raise error
 
         xmlrfc = XmlRfc(tree)
+        
+        # Evaluate processing instructions behind root element
+        xmlrfc._eval_pre_pi()
+        
+        # Expand 'include' instructions
+        # Try XML_LIBRARY variable, default to input source directory
+        include_dir = \
+            os.environ.get('XML_LIBRARY', os.path.dirname(self.source))
+        xmlrfc._expand_includes(include_dir, verbose=self.verbose)
 
         # Finally, do any extra formatting on the RFC before returning
-        if prepare:
-            xmlrfc.prepare()
+        xmlrfc._format_whitespace()
+
         return xmlrfc
 
 
@@ -100,15 +123,6 @@ class XmlRfc:
     def __init__(self, tree):
         self.tree = tree
 
-        # Grab processing instructions from xml tree
-        element = tree.getroot().getprevious()
-        self.pis = {}
-        while element is not None:
-            if element.tag is lxml.etree.PI:
-                key, sep, val = str(element.text).partition('=')
-                self.pis[key] = val.strip('"\' ')
-            element = element.getprevious()
-
     def getroot(self):
         """ Wrapper method to get the root of the XML tree"""
         return self.tree.getroot()
@@ -116,28 +130,93 @@ class XmlRfc:
     def getpis(self):
         """ Returns a list of the XML processing instructions """
         return self.pis
-
-    def prepare(self):
-        """ Prepare the RFC document for output.
-
-            This method is automatically invoked after the xml file is
-            finished being read, unless ``prepare=False`` was set.  It
-            may do any of the following things:
-
-            * Set any necessary default values.
-            * Pre-format some elements to the proper text output.
-
-            We can perform any operations here that will be common to all
-            ouput formats.  Any further formatting is handled in the
-            xml2rfc.writer modules.
+    
+    def validate(self, dtd_path=''):
+        """ Validate the document with its default dtd, or an optional one 
+        
+            Return a success bool along with a list of any errors
         """
-        root = self.getroot()
+        # Load dtd from alternate path, if it was specified
+        if dtd_path:
+            if os.path.exists(dtd_path):
+                try:
+                    dtd = lxml.etree.DTD(dtd_path)
+                except lxml.etree.DTDParseError, error:
+                    # The DTD itself has errors
+                    xml2rfc.log.error('Could not parse the dtd file:',
+                                      dtd_path + '\n  ', error.message)
+                    return False, []
+            else:
+                # Invalid path given
+                xml2rfc.log.error('DTD file does not exist:', dtd_path)
+                return False, []
+            
+        # Otherwise, use documents DTD declaration
+        else:
+            dtd = self.tree.docinfo.externalDTD
 
-        # Traverse the tree and strip any newlines contained in element data,
-        # Except for artwork, which needs to preserve whitespace.
-        # If we strip a newline after a period, ensure that there are 
-        # two spaces after the period.
-        for element in root.iter():
+        if dtd is not None:
+            if dtd.validate(self.getroot()):
+                # The document was valid
+                return True, []
+            else:
+                # The document was not valid
+                return False, dtd.error_log
+        else:
+            # No explicit DTD filename OR declaration in document!
+            xml2rfc.log.error('Cannot validate document, no DTD specified')
+            return False, []
+
+    def _eval_pre_pi(self):
+        """ Evaluate pre-document processing instructions
+        
+            This will look at all processing instructions before the root node
+            for initial document settings.
+        """
+        # Grab processing instructions from xml tree
+        element = self.tree.getroot().getprevious()
+        pairs = []
+        while element is not None:
+            if element.tag is lxml.etree.PI and element.text:
+                pairs.extend(xml2rfc.utils.parse_pi(element.text))
+            element = element.getprevious()
+        # Initialize the PI dictionary with these values
+        self.pis = dict(pairs)
+
+    def _expand_includes(self, dir, verbose=False):
+        """ Traverse the document tree and expand any 'include' instructions """
+        for element in self.getroot().iter():
+            if element.tag is lxml.etree.PI and element.text:
+                pidict = dict(xml2rfc.utils.parse_pi(element.text))
+                if 'include' in pidict and pidict['include']:
+                    request = pidict['include']
+                    if request.startswith('http://'):
+                        # Get or create the cached URL request
+                        path = getCacheRequest(request, verbose=verbose)
+                    else:
+                        # Get the file from the given directory
+                        path = os.path.join(dir, request)
+                    if os.path.exists(path):
+                        if verbose:
+                            xml2rfc.log.write('Parsing include file', path)
+                        try:
+                            root = lxml.etree.parse(path).getroot()
+                            element.addnext(root)
+                        except lxml.etree.XMLSyntaxError, error:
+                            xml2rfc.log.warn('The include file at', path,
+                                             'contained an XML error and was '\
+                                             'not expanded:', error.msg)
+                    else:
+                        xml2rfc.log.warn('Include file not found:', path)
+
+    def _format_whitespace(self):
+        """ Traverse the document tree and properly format whitespace
+        
+            We replace newlines with single spaces, unless it ends with a
+            period then we replace the newline with two spaces.
+        """
+        for element in self.getroot().iter():
+            # Preserve formatting on artwork
             if element.tag != 'artwork':
                 if element.text is not None:
                     element.text = re.sub('\s*\n\s*', ' ', \
@@ -148,35 +227,6 @@ class XmlRfc:
                     element.tail = re.sub('\s*\n\s*', ' ', \
                                    re.sub('\.\s*\n\s*', '.  ', \
                                    element.tail))
-
-        # Set some document-independent defaults
-        workgroup = root.find('front/workgroup')
-        if workgroup is None or not workgroup.text:
-           root.attrib['workgroup'] = 'Network Working Group'
-        else:
-            root.attrib['workgroup'] = workgroup.text
-        if 'updates' in root.attrib and root.attrib['updates']:
-            root.attrib['updates'] = 'Updates: ' + root.attrib['updates']
-        if 'obsoletes' in root.attrib and root.attrib['obsoletes']:
-            root.attrib['obsoletes'] = 'Obsoletes: ' + root.attrib['obsoletes']
-        if 'category' not in root.attrib:
-            xml2rfc.log.warn('No category specified for document.')
-
-        # Fix date
-        today = datetime.date.today()
-        date = root.find('front/date')
-        year = date.attrib.get('year', '')
-        month = date.attrib.get('month', '')
-        day = date.attrib.get('day', '')
-        if not year or (year == str(today.year) and not month) or \
-                       (year == str(today.year) and month == str(today.month)):
-            date.attrib['year'] = today.strftime('%Y')
-            date.attrib['month'] = today.strftime('%B')
-            date.attrib['day'] = today.strftime('%d')
-        yearstring = date.attrib['year']
-        root.attrib['copyright'] = 'Copyright (c) %s IETF Trust and the ' \
-        'persons identified as the document authors.  All rights reserved.' % \
-        yearstring
 
     def replaceUnicode(self):
         """ Traverses the RFC tree and replaces unicode characters with the

@@ -46,6 +46,14 @@ class MyTextWrapper(textwrap.TextWrapper):
         return textwrap.TextWrapper.fill(self, text)
 
 
+def parse_pi(text):
+    """ Parse the text from a processing instruction into key-value pairs """
+    # Split text in the format 'key="val"'
+    chunks = re.split(r'="([^"]+)"', text)
+    # Create pairs from this flat list, discard last element if odd
+    return zip(chunks[::2], chunks[1::2])
+
+
 def justify_inline(left_str, center_str, right_str, width=72):
     """ Takes three string arguments and outputs a single string with the
         arguments left-justified, centered, and right-justified respectively.

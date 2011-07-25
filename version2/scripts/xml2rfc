@@ -100,18 +100,23 @@ def main():
     else:
         xml2rfc.log.warn_error = False
 
-    # Run the parser
+    # Parse the document into an xmlrfc tree instance
     parser = xml2rfc.XmlRfcParser(source, verbose=options.verbose,\
                                   quiet=options.quiet)
-
     try:
-        xmlrfc = parser.parse(prepare=False)
-    except lxml.etree.XMLSyntaxError, error:
-        if not options.verbose:
-            # Parser must have been printing on a single line. Fix this
-            print ''
-        xml2rfc.log.error('unable to parse the XML document:\n', \
-                          '  ' + args[0] + ': ' + error.msg)
+        xmlrfc = parser.parse()
+    except lxml.etree.XMLSyntaxError, error:  # Catch XML errors
+        xml2rfc.log.error('Unable to parse the XML document:', args[0],
+                          '\n  ' + error.msg)
+        sys.exit(1)
+        
+    # Validate the document
+    ok, errors = xmlrfc.validate(options.dtd)
+    if not ok:
+        error_str = 'Unable to validate the XML document: ' + args[0]
+        for error in errors:
+            error_str += '\n  Line ' + str(error.line) + ': ' + error.message
+        xml2rfc.log.error(error_str)
         sys.exit(1)
 
     # Execute any writers specified
@@ -130,9 +135,6 @@ def main():
         if not filename:
             filename = basename + '-expanded.xml'
         expwriter.write(filename)
-
-    # For all further writers, run the preparation method before output
-    xmlrfc.prepare()
     if options.raw:
         rawwriter = xml2rfc.RawTextRfcWriter(xmlrfc, \
                                              quiet=options.quiet, \

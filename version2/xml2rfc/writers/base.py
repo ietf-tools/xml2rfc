@@ -26,7 +26,6 @@ class RfcItem:
         self.toc = toc
         self.level = level
         self.page = 0    # This will be set after buffers are complete!
-        self.expire_string = None
 
 
 class BaseRfcWriter:
@@ -35,9 +34,10 @@ class BaseRfcWriter:
         All public methods need to be overridden for a writer implementation.
     """
     
-    # ---------------------------------
+    # -------------------------------------------------------------------------
     # Boilerplate default text sections
     boilerplate = {}
+    boilerplate['workgroup'] = 'Network Working Group'
     boilerplate['std'] = 'Standards Track'
     boilerplate['bcp'] = 'Best Current Practice'
     boilerplate['exp'] = 'Experimental Protocol'
@@ -104,6 +104,9 @@ class BaseRfcWriter:
         'works of it may not be created outside the IETF Standards Process, ' \
         'except to format it for publication as an RFC or to translate it ' \
         'into languages other than English.')
+    boilerplate['base_copyright'] = \
+        'Copyright (c) %s IETF Trust and the persons identified as the ' \
+        'document authors.  All rights reserved.'
     boilerplate['draft_copyright'] = \
         'This document is subject to BCP 78 and the IETF Trust\'s Legal ' \
         'Provisions Relating to IETF Documents ' \
@@ -119,11 +122,12 @@ class BaseRfcWriter:
         'claimed in regard to some or all of the specification contained ' \
         'in this document.  For more information consult the online list ' \
         'of claimed rights.'
-    # ----------------------------
+    # -------------------------------------------------------------------------
 
     def __init__(self, xmlrfc, quiet=False, verbose=False):
         self.quiet = quiet
         self.verbose = verbose
+        self.expire_string = ''
 
         # We will refer to the XmlRfc document root as 'r'
         self.xmlrfc = xmlrfc
@@ -207,10 +211,30 @@ class BaseRfcWriter:
             if item.anchor == anchor or item.autoAnchor == anchor:
                 return item
         return None
+    
+    def _format_date(self):
+        """ Fix the date data """
+        today = datetime.date.today()
+        date = self.r.find('front/date')
+        year = date.attrib.get('year', '')
+        month = date.attrib.get('month', '')
+        # If year is this year, and month not specified, use current date
+        if not year or (year == str(today.year) and not month) or \
+                       (year == str(today.year) and month == str(today.month)):
+            # Set everything to today
+            date.attrib['year'] = today.strftime('%Y')
+            date.attrib['month'] = today.strftime('%B')
+            date.attrib['day'] = today.strftime('%d')
 
     def _prepare_top_left(self):
         """ Returns a lines of lines for the top left header """
-        lines = [self.r.attrib['workgroup']]
+        lines = []
+        # Begin with workgroup
+        workgroup = self.r.find('front/workgroup')
+        if workgroup is not None and workgroup.text:
+            lines.append(workgroup.text)
+        else:
+            lines.append(self.boilerplate['workgroup'])
         if not self.draft:
             rfcnumber = self.r.attrib.get('number', '')
             lines.append('Request for Comments: ' + rfcnumber)
@@ -234,10 +258,10 @@ class BaseRfcWriter:
 
         updates = self.r.attrib.get('updates')
         if updates:
-            lines.append(updates)
+            lines.append('Updates: ' + updates)
         obsoletes = self.r.attrib.get('obsoletes')
         if obsoletes:
-            lines.append(obsoletes)
+            lines.append('Obsoletes: ' + obsoletes)
         category = self.r.attrib.get('category')
         if category:
             cat_text = BaseRfcWriter.boilerplate[category]
@@ -245,6 +269,8 @@ class BaseRfcWriter:
                 lines.append('Intended status: ' + cat_text)
             else:
                 lines.append('Category: ' + cat_text)
+        else:
+            xml2rfc.log.warn('No category specified for document.')
         if self.expire_string:
             lines.append('Expires: ' + self.expire_string)
         # Strip any whitespace from XML to make header as neat as possible
@@ -276,7 +302,8 @@ class BaseRfcWriter:
                             lines.remove(last_org)
                         last_org = org_result
                         lines.append(org_result)
-        # If year is this year, and month not specified, use current date
+        
+
         date = self.r.find('front/date')
         year = date.attrib.get('year', '')
         month = date.attrib.get('month', '')
@@ -446,6 +473,9 @@ class BaseRfcWriter:
         self.table_count = 0
 
         if not self.indexmode:
+            # Format the date properly
+            self._format_date()
+            
             # Do any pre processing necessary, such as inserting metadata
             self.pre_processing()
 
@@ -502,8 +532,10 @@ class BaseRfcWriter:
             # Copyright
             self.write_heading('Copyright Notice', autoAnchor='rfc.copyrightnotice')
             self.write_paragraph(self.r.attrib.get('copyright', ''))
+            year = self.r.find('front/date').attrib.get('year', '')
+            self.write_paragraph(self.boilerplate['base_copyright'] % year)
             if self.draft:
-                self.write_paragraph(BaseRfcWriter.boilerplate['draft_copyright'])
+                self.write_paragraph(self.boilerplate['draft_copyright'])
     
             # Insert the table of contents marker at this position
             toc_enabled = self.pis.get('toc', 'no')
