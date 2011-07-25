@@ -396,11 +396,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                                 sub_indent=sub_indent, bullet=bullet, \
                                 edit=True, align=align)
 
-            # Calculate new indentation
-            if sub_indent > 0:
-                indent = sub_indent + indent
-            else:
-                indent = len(bullet) + indent
+#            # Calculate new indentation
+#            if sub_indent > 0:
+#                indent = sub_indent + indent
+#            else:
+#                indent = len(bullet) + indent
 
             # Reset settings after initial paragraph
             current_text = ''
@@ -412,8 +412,12 @@ class RawTextRfcWriter(BaseRfcWriter):
                 element = remainder.pop(0)
 
                 if element.tag == 'list': 
+                    if sub_indent > 0:
+                        new_indent = sub_indent + indent
+                    else:
+                        new_indent = len(bullet) + indent
                     # Call sibling function to construct list
-                    self._write_list(element, indent=indent, level=level)
+                    self._write_list(element, indent=new_indent, level=level)
                     # Auto-break for tail paragraph
                     lb = True
 
