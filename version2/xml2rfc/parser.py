@@ -101,8 +101,8 @@ class XmlRfcParser:
         
         # Expand 'include' instructions
         # Try XML_LIBRARY variable, default to input source directory
-        include_dir = \
-            os.environ.get('XML_LIBRARY', os.path.dirname(self.source))
+        include_dir = os.path.expanduser(os.environ.get('XML_LIBRARY', 
+                                         os.path.dirname(self.source)))
         xmlrfc._expand_includes(include_dir, verbose=self.verbose)
 
         # Finally, do any extra formatting on the RFC before returning
