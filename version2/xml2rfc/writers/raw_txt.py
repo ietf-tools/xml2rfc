@@ -395,8 +395,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                 self._write_text(current_text, indent=indent, lb=lb, \
                                 sub_indent=sub_indent, bullet=bullet, \
                                 edit=True, align=align)
-                # Clear text
-                current_text = ''
+            # Clear text
+            current_text = ''
 
             # Handle paragraph-based elements (list, figure, vspace)
             if len(remainder) > 0:
