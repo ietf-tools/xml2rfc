@@ -395,16 +395,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                 self._write_text(current_text, indent=indent, lb=lb, \
                                 sub_indent=sub_indent, bullet=bullet, \
                                 edit=True, align=align)
-
-#            # Calculate new indentation
-#            if sub_indent > 0:
-#                indent = sub_indent + indent
-#            else:
-#                indent = len(bullet) + indent
-
-            # Reset settings after initial paragraph
-            current_text = ''
-            bullet = ''
+                # Clear text
+                current_text = ''
 
             # Handle paragraph-based elements (list, figure, vspace)
             if len(remainder) > 0:
@@ -432,9 +424,13 @@ class RawTextRfcWriter(BaseRfcWriter):
                     # Don't auto-break for tail paragraph
                     lb = False
 
+                # Dont use a bullet for any other paragraphs at this level
+                bullet = ''
+
                 # Set tail of element as input text of next paragraph
                 if element.tail:
                     current_text = element.tail
+                    
 
     def write_top(self, left_header, right_header):
         """ Combines left and right lists to write a document heading """
