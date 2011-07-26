@@ -194,6 +194,9 @@ class XmlRfc:
                         # Get or create the cached URL request
                         path = getCacheRequest(request, verbose=verbose)
                     else:
+                        # Try to append .xml if not in the filename
+                        if not request.endswith('.xml'):
+                            request += '.xml'
                         # Get the file from the given directory
                         path = os.path.join(dir, request)
                     if os.path.exists(path):

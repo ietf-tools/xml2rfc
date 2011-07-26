@@ -49,7 +49,7 @@ class MyTextWrapper(textwrap.TextWrapper):
 def parse_pi(text):
     """ Parse the text from a processing instruction into key-value pairs """
     # Split text in the format 'key="val"'
-    chunks = re.split(r'="([^"]+)"', text)
+    chunks = re.split(r'=[\'"]([^\'"]*)[\'"]', text)
     # Create pairs from this flat list, discard last element if odd
     return zip(chunks[::2], chunks[1::2])
 
