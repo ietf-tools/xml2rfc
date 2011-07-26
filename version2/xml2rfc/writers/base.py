@@ -287,8 +287,8 @@ class BaseRfcWriter:
             # Keep track of previous organization and remove if redundant.
             last_org = None
             for author in self.r.findall('front/author'):
-                lines.append(author.attrib['initials'] + ' ' + \
-                                author.attrib['surname'])
+                lines.append(author.attrib.get('initials', '') + ' ' + \
+                                author.attrib.get('surname', ''))
                 organization = author.find('organization')
                 if organization is not None:
                     abbrev = organization.attrib.get('abbrev')
