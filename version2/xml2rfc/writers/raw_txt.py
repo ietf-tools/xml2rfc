@@ -28,6 +28,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.list_counters = {} # Maintain counters for 'format' type lists
         self.edit_counter = 0   # Counter for edit marks
         self.eref_counter = 0   # Counter for <eref> elements
+        self.ascii = True       # Enable ascii flag
 
         # Text lookups
         self.list_symbols = self.pis.get('text-list-symbols', 'o*+-')
@@ -697,10 +698,6 @@ class RawTextRfcWriter(BaseRfcWriter):
         # Reset document counters from indexing pass
         self.edit_counter = 0   # Counter for edit marks
         self.eref_counter = 0   # Counter for <eref> elements
-        
-        # Replace unicode characters in RFC with proper ascii equivalents
-        self.xmlrfc.replaceUnicode()
-        pass
 
     def post_processing(self):
         self._write_toc()

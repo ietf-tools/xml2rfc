@@ -128,6 +128,7 @@ class BaseRfcWriter:
         self.quiet = quiet
         self.verbose = verbose
         self.expire_string = ''
+        self.ascii = False
 
         # We will refer to the XmlRfc document root as 'r'
         self.xmlrfc = xmlrfc
@@ -543,6 +544,7 @@ class BaseRfcWriter:
                 self.insert_toc()
         
         # ENDIF indexmode
+
         # Middle sections
         self._write_section_rec(self.r.find('middle'), None)
 
@@ -604,6 +606,10 @@ class BaseRfcWriter:
         
     def write(self, filename, tmpfile=None):
         """ Public method to write the RFC document to a file. """
+        # If the ascii flag is enabled, replace unicode with ascii in the tree
+        if self.ascii:
+            self.xmlrfc.replaceUnicode()
+        
         # Make two passes over the document, the first pass we run in
         # 'index mode' to construct just the index, the second pass will
         # render the actual text

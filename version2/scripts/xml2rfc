@@ -126,7 +126,6 @@ def main():
         # Create basename based on input
         basename = os.path.basename(source).rsplit('.', 1)[0]
 
-    # Only expanded XML writer uses an unprepared tree
     if options.exp:
         expwriter = xml2rfc.ExpandedXmlWriter(xmlrfc, \
                                               quiet=options.quiet, \
@@ -135,6 +134,16 @@ def main():
         if not filename:
             filename = basename + '-expanded.xml'
         expwriter.write(filename)
+    if options.html:
+        htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc, \
+                                           quiet=options.quiet, \
+                                           verbose=options.verbose, \
+                                           external_css=options.extcss, \
+                                           css_document=options.css)
+        filename = options.filename
+        if not filename:
+            filename = basename + '.html'
+        htmlwriter.write(filename)
     if options.raw:
         rawwriter = xml2rfc.RawTextRfcWriter(xmlrfc, \
                                              quiet=options.quiet, \
@@ -159,16 +168,6 @@ def main():
         if not filename:
             filename = basename + '.nroff'
         nroffwriter.write(filename)
-    if options.html:
-        htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc, \
-                                           quiet=options.quiet, \
-                                           verbose=options.verbose, \
-                                           external_css=options.extcss, \
-                                           css_document=options.css)
-        filename = options.filename
-        if not filename:
-            filename = basename + '.html'
-        htmlwriter.write(filename)
 
 if __name__ == '__main__':
     main()
