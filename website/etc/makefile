@@ -1,6 +1,8 @@
 DIR=etc
 PUB= $$HOME/public_html/$(DIR)
-INS= xml2rfc.tcl xml2rfc-dev.tcl xml2rfc-html2epub-viaxslt wkhtmltopdf-i386 xercesImpl.jar xercesSamples.jar
+INS= xml2rfc.tcl xml2rfc-dev.tcl xml2rfc-html2epub-viaxslt \
+	wkhtmltopdf-i386 xercesImpl.jar xercesSamples.jar \
+	xml2rfc2
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
 DERIVATIVES= 
 

@@ -50,6 +50,7 @@ my $mode = checkValue('mode', @modes);
 my $format = checkValue('format', @formats);
 my $type     = checkValue('type', 'ascii', 'binary', 'toframe', 'towindow', 'tofile');
 my $checking = checkValue('checking', 'strict', 'fast');
+$checking = 'fast';
 $type = 'towindow' if $type eq 'ascii';
 $type = 'tofile' if $type eq 'binary';
 
@@ -69,16 +70,16 @@ my %expandedFormats = (
     ps => "PostScript"
     );
 my %extensions = (
-    txt => txt,
-    html => html,
-    htmlxslt => html,
-    nr => nr,
-    unpg => unpg,
-    xml => xml,
-    pdf => pdf,
-    epub => epub,
-    rtf => rtf,
-    ps => ps
+    txt => 'txt',
+    html => 'html',
+    htmlxslt => 'html',
+    nr => 'nr',
+    unpg => 'unpg',
+    xml => 'xml',
+    pdf => 'pdf',
+    epub => 'epub',
+    rtf => 'rtf',
+    ps => 'ps'
     );
 
 printHeaders("text/plain") if $debug;
@@ -134,8 +135,9 @@ foreach my $dtdFile ('rfc2629-other.ent', 'rfc2629-xhtml.ent', 'rfc2629.dtd', 'r
 # force xml to go to a file instead of the window
 $type = 'tofile' if (($type eq 'towindow') && ($mode eq 'xml'));
 
-my $ret = rename($inputfn, setTempFile("$inputfn.xml"));
-print "rename($inputfn,$inputfn.xml) ret='$ret'\n" if $debug;
+my $newinputfn = setSubTempFile("$basename.xml");
+my $ret = rename($inputfn, $newinputfn);
+print "rename($inputfn,$newinputfn) ret='$ret'\n" if $debug;
 # userError("Unable to rename temp file", $!) if $ret;
 
 
@@ -169,13 +171,31 @@ if ($mode eq 'xml') {
 }
 
 my $TMP1 = $finalTclPassHere ?
-    ($needExpansionToXml ?  setSubTempFile("$basename.xml") : setSubTempFile("$basename." . $extensions{$mode})) :
+    ($needExpansionToXml ?  setSubTempFile("$basename-2.xml") : setSubTempFile("$basename-2." . $extensions{$mode})) :
     ($needExpansionToXml ?  setTempFile("$inputfn-1.xml") : setTempFile("$inputfn-1." . $extensions{$mode}));
 
+my %xml2rfc2modes = (
+    epub => 'text',
+    html => 'html',
+    htmlxslt => 'exp',
+    nr => 'nroff',
+    pdf => 'text',
+    ps => 'text',
+    rtf => 'text',
+    txt => 'text',
+    unpg => 'raw',
+    xml => 'exp',
+    );
+# for my $key (keys %xml2rfc2modes) {
+#     print "key=$key, mode='$xml2rfc2modes{$key}'\n";
+# }
+my $xml2rfc2mode = $xml2rfc2modes{$mode};
+
+print "mode='$mode', xml2rfc2mode='$xml2rfc2mode'\n" if $debug;
 print "TMP1=$TMP1\n" if $debug;
 my $TMPERR = setTempFile("$inputfn.err");
 
-my ($ret, $out, $err) = runCommand("tclsh etc/xml2rfc-dev.tcl xml2rfc $inputfn $TMP1", $inputfn, $TMP1, 
+my ($ret, $out, $err) = runCommand("etc/xml2rfc2 --$xml2rfc2mode --file=$TMP1 $newinputfn", $newinputfn, $TMP1, 
     $needExpansionToXml ?  "Expanding internal references" : "Expanding internal references and generating $mode"
     );
 print "xml2rfc ret=$ret\n" if $debug;
@@ -374,9 +394,9 @@ if ($type eq 'towindow') {
     print "</frameset>";
     print "</html>";
     if ($debug) {
-	print "\n================================================================n";
+	print "\n================================================================\n";
 	catFile($TMPTRACE);
-	print "================================================================n";
+	print "================================================================\n";
 	catFile($KEEP);
     }
 
