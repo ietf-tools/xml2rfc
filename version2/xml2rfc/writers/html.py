@@ -505,8 +505,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.active_buffer.append(self._serialize(E.TABLE(tbody)))
 
     def draw_table(self, table, table_num=None):
-        # TODO: Can 'full' be controlled from XML, as well as padding?
-        style = 'tt full ' + table.attrib['align']
+        style = 'tt full ' + table.attrib.get('align', 'center')
         cellpadding = '3'
         cellspacing = '0'
         htmltable = E.TABLE(cellpadding=cellpadding, cellspacing=cellspacing)
@@ -526,9 +525,10 @@ class HtmlRfcWriter(BaseRfcWriter):
             th = E.TH()
             if header.text:
                 th.text = header.text
-            th.attrib['class'] = header.attrib['align']
+            header_align = header.attrib.get('align', 'left')
+            th.attrib['class'] = header_align
             # Store alignment information
-            col_aligns.append(header.attrib['align'])
+            col_aligns.append(header_align)
             header_row.append(th)
         htmltable.append(E.THEAD(header_row))
 
