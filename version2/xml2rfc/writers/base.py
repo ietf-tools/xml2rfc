@@ -3,6 +3,7 @@
 # --------------------------------------------------
 
 import copy
+import codecs
 import string
 import datetime
 import xml2rfc.log
@@ -629,7 +630,11 @@ class BaseRfcWriter:
         # Override file with keyword argument if passed in, ignoring filename.
         # Warning -- make sure file is open and ready for writing!
         if not tmpfile:
-            file = open(filename, 'w')
+            if self.ascii:
+                file = open(filename, 'w')
+            else:
+                # Open as unicode
+                file = codecs.open(filename, 'w', encoding='utf-8')
             self.write_to_file(file)
             file.close()
         else:
