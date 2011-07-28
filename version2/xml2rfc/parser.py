@@ -19,6 +19,7 @@ __all__ = ['XmlRfcParser', 'XmlRfc']
 # Static paths
 cache_dir = os.path.expanduser('~/.cache/xml2rfc')
 template_dir = os.path.join(os.path.dirname(xml2rfc.__file__), 'templates')
+default_dtd_path = os.path.join(template_dir, 'rfc2629.dtd')
 
 
 def getCacheRequest(request_url, verbose=False):
@@ -154,18 +155,18 @@ class XmlRfc:
         # Otherwise, use documents DTD declaration
         else:
             dtd = self.tree.docinfo.externalDTD
-
-        if dtd is not None:
-            if dtd.validate(self.getroot()):
-                # The document was valid
-                return True, []
-            else:
-                # The document was not valid
-                return False, dtd.error_log
-        else:
+            
+        if not dtd:
             # No explicit DTD filename OR declaration in document!
-            xml2rfc.log.error('Cannot validate document, no DTD specified')
-            return False, []
+            xml2rfc.log.warn('No DTD given, defaulting to', default_dtd_path)
+            return self.validate(dtd_path=default_dtd_path)
+
+        if dtd.validate(self.getroot()):
+            # The document was valid
+            return True, []
+        else:
+            # The document was not valid
+            return False, dtd.error_log
 
     def _eval_pre_pi(self):
         """ Evaluate pre-document processing instructions
