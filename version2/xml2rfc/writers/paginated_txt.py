@@ -3,8 +3,8 @@
 # --------------------------------------------------
 
 # Local libs
-from xml2rfc.writers.raw_txt import RawTextRfcWriter
 from xml2rfc.writers.base import BaseRfcWriter
+from xml2rfc.writers.raw_txt import RawTextRfcWriter
 import xml2rfc.utils
 
 
@@ -49,6 +49,11 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         RawTextRfcWriter._write_text(self, *args, **kwargs)
         end = len(self.buf)
         self.break_marks[begin] = end - begin
+        
+    def _force_break(self):
+        """ Force a pagebreak at the current buffer position """
+        self.break_marks[len(self.buf)] = -1
+    
     # ------------------------------------------------------------------------
     
     def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, \
@@ -128,8 +133,11 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             if line_num in self.break_marks:
                 # If this section will exceed a page, force a page break by
                 # inserting blank lines until the end of the page
-                if page_len + self.break_marks[line_num] > page_maxlen and \
-                    self.pis.get('autobreaks', 'yes') == 'yes':
+                # Note that a negative value for a break indicates break
+                # No matter what (a forced break)
+                if (page_len + self.break_marks[line_num] > page_maxlen and \
+                    self.pis.get('autobreaks', 'yes') == 'yes') or \
+                    self.break_marks[line_num] < 0:
                     remainder = page_maxlen - page_len
                     self.paged_buf.extend([''] * remainder)
                     page_len += remainder
