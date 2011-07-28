@@ -27,10 +27,12 @@ index-debug.html: index.html
 	sed < index.html -e '/start debug section/s/!-- tr/tr/' -e '/end debug section/s/ --//' > index-debug.html
 
 install: all
-	@for i in $(INS) $(DERIVATIVES); do \
+	@XML2RFC2VERSION=`xml2rfc2 --version`; \
+	for i in $(INS) $(DERIVATIVES); do \
 	    if [ $$i -nt $(WEB)/$$i ];then \
-	        echo cp $$i $(WEB)/$$i; \
-	        cp $$i $(WEB)/$$i; \
+	        : echo cp $$i $(WEB)/$$i; \
+	        echo sed "s/XML2RFC2VERSION/$$XML2RFC2VERSION/g" '<' $$i '>' $(WEB)/$$i; \
+	        sed "s/XML2RFC2VERSION/$$XML2RFC2VERSION/g" < $$i > $(WEB)/$$i; \
 	    fi; \
 	done
 
