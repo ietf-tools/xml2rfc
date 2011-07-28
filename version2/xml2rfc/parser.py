@@ -50,6 +50,8 @@ def getCacheRequest(request_url, verbose=False):
         include_dir = os.path.expanduser(os.environ.get('XML_LIBRARY', 
                                          os.path.dirname(urlobj.path)))
         cached_path = os.path.join(include_dir, basename)
+        if not os.path.exists(cached_path):
+            cached_path = urlobj.path
     return cached_path
         
 
