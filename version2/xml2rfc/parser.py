@@ -44,8 +44,12 @@ def getCacheRequest(request_url, verbose=False):
                 xml2rfc.log.write('Creating cache for', request_url)
             urllib.urlretrieve(request_url, cached_path)
     else:
-        # Not dtd or network entity, use the absolute path that was given
-        cached_path = urlobj.path
+        # Not dtd or network entity, try `basename` in XML_LIBRARY variable, 
+        # default to absolute path requested
+        basename = os.path.basename(urlobj.path)
+        include_dir = os.path.expanduser(os.environ.get('XML_LIBRARY', 
+                                         os.path.dirname(urlobj.path)))
+        cached_path = os.path.join(include_dir, basename)
     return cached_path
         
 
