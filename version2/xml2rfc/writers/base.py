@@ -459,15 +459,15 @@ class BaseRfcWriter:
 
         # Recurse on sections
         for child_sec in section.findall('section'):
-            if appendix == True:
-                # Use an alphabetic counter
-                self._write_section_rec(child_sec, count_str + \
+            if appendix == True and not count_str:
+                # Use an alphabetic counter for first-level appendix
+                self._write_section_rec(child_sec, 'Appendix ' + \
                                         string.uppercase[s_count - 1] + '',
                                         level=level + 1, appendix=True)
             else:
                 # Use a numeric counter
                 self._write_section_rec(child_sec, count_str + str(s_count), 
-                                        level=level + 1)
+                                        level=level + 1, appendix=appendix)
 
             s_count += 1
 
