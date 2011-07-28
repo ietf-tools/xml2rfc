@@ -597,6 +597,8 @@ class HtmlRfcWriter(BaseRfcWriter):
         self._create_toc()
         
         # Grab values that haven't been inserted yet
+        background_image = self.pis.get('background', '') and \
+            "background-image:url('%s');" % self.pis.get('background') or ''
         title = self.r.find('front/title').text
         docName = self.r.attrib.get('docName', '')
         description = ''
@@ -609,6 +611,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         # Run through base template, store in main output string
         subs = { 
                  # Replace flat values 
+                 'background':      background_image,
                  'title':           title,
                  'docName':         docName,
                  'description':     description,
