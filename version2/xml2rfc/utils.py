@@ -7,8 +7,18 @@
 import re
 import textwrap
 import string
+import urllib
 
 import xml2rfc.log
+
+
+class StrictUrlOpener(urllib.FancyURLopener):
+    """ Override urllib opener to throw exceptions on 404s """
+    def __init__(self, *args, **kwargs):
+        urllib.FancyURLopener.__init__(self, *args, **kwargs)
+      
+    def http_error_default(self, url, fp, errcode, errmsg, headers):
+        raise Exception('Document not found')
 
 
 class MyTextWrapper(textwrap.TextWrapper):

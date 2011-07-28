@@ -40,9 +40,10 @@ def getCacheRequest(request_url, verbose=False):
         # Network entity, load from cache, or create if necessary
         cached_path = os.path.join(cache_dir, filename)
         if not os.path.exists(cached_path):
+            xml2rfc.utils.StrictUrlOpener().retrieve(request_url, 
+                                                     cached_path)
             if verbose:
-                xml2rfc.log.write('Creating cache for', request_url)
-            urllib.urlretrieve(request_url, cached_path)
+                xml2rfc.log.write('Created cache for', request_url)
     else:
         # Not dtd or network entity, try `basename` in XML_LIBRARY variable, 
         # default to absolute path requested
@@ -62,11 +63,15 @@ class CachingResolver(lxml.etree.Resolver):
 
     def resolve(self, request_url, public_id, context):
         # Get or create the cached URL request
-        path = getCacheRequest(request_url, verbose=self.verbose)
+        try:
+            path = getCacheRequest(request_url, verbose=self.verbose)
+        except Exception, e:
+            xml2rfc.log.error(str(e) + ':', request_url)
+            return
         if self.verbose:
             xml2rfc.log.write('Loading resource... ', path)
         return self.resolve_filename(path, context)
-
+            
 
 class XmlRfcParser:
     """ XML parser with callbacks to construct an RFC tree """
