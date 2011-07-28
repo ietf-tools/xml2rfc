@@ -65,8 +65,9 @@ class CachingResolver(lxml.etree.Resolver):
         # Get or create the cached URL request
         try:
             path = getCacheRequest(request_url, verbose=self.verbose)
-        except Exception, e:
-            xml2rfc.log.error(str(e) + ':', request_url)
+        except IOError, e:
+            xml2rfc.log.error('Failed to load resource (' + str(e) + '):', 
+                              request_url)
             return
         if self.verbose:
             xml2rfc.log.write('Loading resource... ', path)
@@ -196,7 +197,13 @@ class XmlRfc:
         self.pis = dict(pairs)
 
     def _expand_includes(self, dir, verbose=False):
-        """ Traverse the document tree and expand any 'include' instructions """
+        """ Traverse the document tree and expand any 'include' instructions 
+        
+            Note that this is slightly different from resolving entities.  If
+            an include file is not found, the log will show a warning instead
+            of an error message, and parsing will continue, because the XML
+            may still parse.  Entities do not have this option.
+        """
         for element in self.getroot().iter():
             if element.tag is lxml.etree.PI and element.text:
                 pidict = dict(xml2rfc.utils.parse_pi(element.text))
@@ -207,7 +214,13 @@ class XmlRfc:
                         request += '.xml'
                     if request.startswith('http://'):
                         # Get or create the cached URL request
-                        path = getCacheRequest(request, verbose=verbose)
+                        try:
+                            path = getCacheRequest(request, 
+                                                   verbose=verbose)
+                        except IOError, e:
+                            xml2rfc.log.warn('Failed to load include file '
+                                             '(' + str(e) + '):', request)
+                            break
                     else:
                         # Get the file from the given directory
                         path = os.path.join(dir, request)
