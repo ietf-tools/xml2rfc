@@ -24,62 +24,39 @@ class HtmlRfcWriter(BaseRfcWriter):
 
         *lang* controls the lang attribute of the html document
     """
-    # HTML Specific Defaults that are not provided in XML document
-    defaults = {'doctype': '<!DOCTYPE html PUBLIC ' \
-                           '"-//W3C//DTD HTML 4.01//EN">',
-                'style_title': 'Xml2Rfc (sans serif)',
-                'references_url': 'http://tools.ietf.org/html/'
-                }
+    # HTML Specific Defaults that are not provided in templates or XML
+    defaults = {'references_url': 'http://tools.ietf.org/html/',
+               }
+    template_dir = 'templates'
 
-    def __init__(self, xmlrfc, css_document=None, external_css=False, \
-                 lang='en', quiet=False, verbose=False):
+    def __init__(self, xmlrfc, quiet=False, verbose=False):
         BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)
-        self.lang = lang
         self.list_counters = {}
         self.iref_index = []
-        self.css_document = os.path.join(os.path.dirname(xml2rfc.__file__), \
-                                         'templates/rfc.css')
-        if css_document:
-            if os.path.exists(css_document):
-                self.css_document = css_document
-            else:
-                xml2rfc.log.warn('The default css document was used because ' \
-                                 'the supplied file does not exist:', \
-                                 css_document)
-        self.external_css = external_css
+        
+        # Open template files and read into string.template objects
+        self.templates = {}
+        for filename in ['base.html',
+                         'address_card.html']:
+            file = open(os.path.join(os.path.dirname(xml2rfc.__file__), 
+                                     self.template_dir, filename), 'r')
+            self.templates[filename] = string.Template(file.read())
 
-        # Create main elements
-        self._createDocument()
-
-        # Create table of contents element
-        self.toc_header = E.H1(id='rfc.toc')
-        self.toc_header.attrib['class'] = 'np'
-        a = E.A('Table of Contents', href='#rfc.toc')
-        self.toc_header.append(a)
-        self.toc_list = E.UL()
-        self.toc_list.attrib['class'] = 'toc'
-    
-    def _createDocument(self):
-        """ Creates a new html document and stores necessary pointers """
-        self.html = E.HTML(lang=self.lang)
-        self.head = E.HEAD()
-        self.html.append(self.head)
-        self.body = E.BODY()
-        self.html.append(self.body)
-
-    def _build_stylesheet(self):
-        """ Returns either a <link> or <style> element for css data.
-
-            The element returned is dependent on the value of expanded_css
-        """
-        if self.external_css:
-            element = E.LINK(rel='stylesheet', href=self.css_document)
-        else:
-            file = open(self.css_document, 'r')
-            element = E.STYLE(file.read(), \
-                              title=HtmlRfcWriter.defaults['style_title'])
-        element.attrib['type'] = 'text/css'
-        return element
+        # Buffers to aggregate various elements before processing template
+        self.buffers = {'front': [],
+                        'body': [],
+                        'header_rows': [],
+                        'toc_head_links': [],
+                        'toc_rows': []}
+        
+        # Use an active buffer pointer
+        self.active_buffer = self.buffers['front']
+        
+        # String holding the final document to write
+        self.output = ''
+        
+        # Temporary div for recursive functions
+        self.temp_div = E.DIV()
 
     def _write_list(self, list, parent):
         style = list.attrib.get('style', 'empty')
@@ -138,49 +115,66 @@ class HtmlRfcWriter(BaseRfcWriter):
                 self.write_t_rec(t, parent=li)
         parent.append(list_elem)
 
+    def _create_toc(self):
+        # Add link for toc itself
+        link = E.LINK(rel='Contents', href='#rfc.toc')
+        self.buffers['toc_head_links'].append(self._serialize(link))
+        for item in self._getTocIndex():
+            # Create link for head
+            link = E.LINK(href='#' + item.autoAnchor)
+            link.attrib['rel'] = 'copyright' in item.autoAnchor and \
+                                 'Copyright' or 'Chapter'
+            if item.title and item.counter:
+                link.attrib['title'] = item.counter + ' ' + item.title
+            self.buffers['toc_head_links'].append(self._serialize(link))
+            # Create actual toc list item
+            a = E.A(item.title, href='#' + item.autoAnchor)
+            counter_text = item.counter and item.counter + '.   ' or ''
+            li = E.LI(counter_text)
+            li.append(a)
+            self.buffers['toc_rows'].append(self._serialize(li))
+
+    def _serialize(self, element):
+        return lxml.html.tostring(element, pretty_print=True)
+    
+    def _flush_temp_div(self):
+        lines = []
+        for child in self.temp_div:
+            lines.append(self._serialize(child))
+            child.drop_tree()
+        return '\n'.join(lines)
+
     # -----------------------------------------
     # Base writer overrides
     # -----------------------------------------
 
     def insert_toc(self):
-        # Insert the table of contents element whereever we are in the body
-        hr = E.HR()
-        hr.attrib['class'] = 'noprint'
-        self.body.append(hr)
-        self.body.append(self.toc_header)
-        self.body.append(self.toc_list)
+        # We don't actually insert the toc here, but we swap the active buffer
+        # So that the template replacement is correct
+        self.active_buffer = self.buffers['body']
 
     def write_raw(self, text, align='left', blanklines=0, delimiter=None):
-        pre = E.PRE()
-        # Add additional blanklines or delimiter if specified
-        pre.text = ''
-        if delimiter:
-            pre.text = delimiter + '\n'
-        pre.text = '\n' * blanklines
-        pre.text += text
-        pre.text += '\n' * blanklines
-        if delimiter:
-            pre.text += delimiter + '\n'
-        self.body.append(pre)
+        # Add padding with delimiter/blanklines, if specified
+        edge = delimiter and [delimiter] or ['']
+        edge.extend([''] * blanklines)
+        fill = '\n'.join(edge)
+        fill += text
+        edge.reverse()
+        fill += '\n'.join(edge)
+
+        # Run through template, add to body buffer
+        pre = E.PRE(fill)
+        self.active_buffer.append(self._serialize(pre))
 
     def write_label(self, text, type='figure', align='center'):
         # Ignore labels for table, they are handled in draw_table
         if type == 'figure':
             p = E.P(text)
             p.attrib['class'] = 'figure'
-            self.body.append(p)
+            # Add to body buffer
+            self.active_buffer.append(self._serialize(p))
 
-    def write_title(self, title, docName=None):
-        p = E.P(title)
-        p.attrib['class'] = 'title'
-        if docName:
-            p.append(E.BR())
-            span = E.SPAN(docName)
-            span.attrib['class'] = 'filename'
-            p.append(span)
-        self.body.append(p)
-
-    def write_heading(self, text, bullet=None, autoAnchor=None, anchor=None, \
+    def write_heading(self, text, bullet=None, autoAnchor=None, anchor=None,
                       level=1):
         # Use a hierarchy of header tags if docmapping set
         h = E.H1()
@@ -211,25 +205,28 @@ class HtmlRfcWriter(BaseRfcWriter):
             if autoAnchor:
                 a.attrib['href'] = '#' + autoAnchor
             h.append(a)
-        self.body.append(h)
+        
+        # Add to body buffer
+        self.active_buffer.append(self._serialize(h))
 
     def write_paragraph(self, text, align='left', autoAnchor=None):
         if text:
             p = E.P(text)
             if autoAnchor:
-                p.attrib['id'] = autoAnchor
-            self.body.append(p)
+                p.attrib['id'] = autoAnchor        
+            # Add to body buffer
+            self.active_buffer.append(self._serialize(p))
 
     def write_t_rec(self, t, autoAnchor=None, align='left', parent=None):
         """ Recursively writes a <t> element
 
-            If no parent is specified, <body> will be treated as the parent,
+            If no parent is specified, a dummy div will be treated as the parent
             and any text will go in a <p> element.  Otherwise text and
             child elements will be insert directly into the parent -- meaning
             we are in a list
         """
         if parent is None:
-            parent = self.body
+            parent = self.temp_div # Dummy div
             current = E.P()
             parent.append(current)
         else:
@@ -326,99 +323,83 @@ class HtmlRfcWriter(BaseRfcWriter):
             elif child.tag == 'texttable':
                 # Callback to base writer method
                 self._write_table(child)
+        # If we are back at top level, serialize the whole temporary structure
+        # Add to body buffer
+        if parent == self.temp_div:
+            self.active_buffer.append(self._flush_temp_div())
 
     def write_top(self, left_header, right_header):
-        """ Adds the header table """
-        table = E.TABLE()
-        table.attrib['class'] = 'header'
-        tbody = E.TBODY()
+        """ Buffers the header table """
         for i in range(max(len(left_header), len(right_header))):
             if i < len(left_header):
-                left_string = left_header[i]
+                left = left_header[i]
             else:
-                left_string = ''
+                left = ''
             if i < len(right_header):
-                right_string = right_header[i]
+                right = right_header[i]
             else:
-                right_string = ''
-            td_left = E.TD(left_string)
-            td_left.attrib['class'] = 'left'
-            td_right = E.TD(right_string)
-            td_right.attrib['class'] = 'right'
-            tbody.append(E.TR(td_left, td_right))
-        table.append(tbody)
-        self.body.append(table)
+                right = ''
+                
+            # Add row to header_rows buffer
+            left_td = E.TD(left)
+            left_td.attrib['class'] = 'left'
+            right_td = E.TD(right)
+            right_td.attrib['class'] = 'right'
+            tr = E.TR(left_td, right_td)
+            self.buffers['header_rows'].append(self._serialize(tr))
 
     def write_address_card(self, author):
-        div = E.DIV()
-        div.attrib['class'] = 'avoidbreak'
-        address_elem = E.ADDRESS()
-        address_elem.attrib['class'] = 'vcard'
-
-        # Name section
-        vcardline = E.SPAN()
-        vcardline.attrib['class'] = 'vcardline'
-        fullname = author.attrib.get('fullname')
-        role = author.attrib.get('role')
-        fn = E.SPAN(fullname)
-        fn.attrib['class'] = 'fn'
-        if role:
-            fn.tail = ' (' + role + ')'
-        vcardline.append(fn)
-        address_elem.append(vcardline)
-
-        # Organization section
-        organization = author.find('organization')
-        if organization is not None and organization.text:
-            org_vcardline = E.SPAN(organization.text)
-            org_vcardline.attrib['class'] = 'org vcardline'
-            address_elem.append(org_vcardline)
-
-        # Address section
+        # Create substitution dictionary with empty string values
+        vars = ['fullname', 'surname', 'role', 'organization',
+                'street_spans', 'locality', 'region', 'code', 
+                'locality_sep', 'region_sep', 'country', 'contact_spans']
+        subs = dict(zip(vars, [''] * len(vars)))
+        
+        # Get values with safe defaults
+        subs['fullname'] = author.attrib.get('fullname', '')
+        subs['surname'] = author.attrib.get('surname', '')
+        subs['role'] = author.attrib.get('role', '')
+        subs['organization'] = author.find('organization') is not None and \
+                               author.find('organization').text or ''
         address = author.find('address')
+        
+        # Crawl through optional elements
         if address is not None:
-            adr_span = E.SPAN()
-            adr_span.attrib['class'] = 'adr'
             postal = address.find('postal')
             if postal is not None:
+                street_spans = []
                 for street in postal.findall('street'):
                     if street.text:
-                        # TODO -- Does street need a css class?
-                        adr_span.append(E.SPAN(street.text))
-                city_span = E.SPAN()
-                city_span.attrib['class'] = 'vcardline'
+                        span = self._serialize(E.SPAN(street.text))
+                        street_spans.append(span)
+                subs['street_spans'] = ''.join(street_spans)
                 city = postal.find('city')
                 if city is not None and city.text:
-                    span = E.SPAN(city.text)
-                    span.attrib['class'] = 'locality'
-                    city_span.append(span)
+                    subs['locality'] = city.text
+                    subs['locality_sep'] = ', '
                 region = postal.find('region')
                 if region is not None and region.text:
-                    span = E.SPAN(region.text)
-                    span.attrib['class'] = 'region'
-                    city_span.append(span)
+                    subs['region'] = region.text
+                    subs['region_sep'] = ' '
                 code = postal.find('code')
                 if code is not None and code.text:
-                    span = E.SPAN(code.text)
-                    span.attrib['class'] = 'code'
-                    city_span.append(span)
-                adr_span.append(city_span)
+                    subs['code'] = code.text
                 country = postal.find('country')
                 if country is not None and country.text:
-                    span = E.SPAN(country.text)
-                    span.attrib['class'] = 'country-name vcardline'
-                    adr_span.append(span)
-            address_elem.append(adr_span)
+                    subs['country'] = country.text
+
+            # Use temp div for contact spans
+            contact_div = self.temp_div
             phone = address.find('phone')
             if phone is not None and phone.text:
                 span = E.SPAN('Phone: ' + phone.text)
                 span.attrib['class'] = 'vcardline'
-                address_elem.append(span)
+                contact_div.append(span)
             fascimile = address.find('fascimile')
             if fascimile is not None and fascimile.text:
                 span = E.SPAN('Fax: ' + fascimile.text)
                 span.attrib['class'] = 'vcardline'
-                address_elem.append(span)
+                contact_div.append(span)
             email = address.find('email')
             if email is not None and email.text:
                 span = E.SPAN('EMail: ')
@@ -427,17 +408,20 @@ class HtmlRfcWriter(BaseRfcWriter):
                     span.append(E.A(email.text, href='mailto:' + email.text))
                 else:
                     span.text += email.text
-                address_elem.append(span)
+                contact_div.append(span)
             uri = address.find('uri')
             if uri is not None and uri.text:
                 span = E.SPAN('URI: ')
                 span.attrib['class'] = 'vcardline'
                 span.append(E.A(uri.text, href=uri.text))
-                address_elem.append(span)
+                contact_div.append(span)
 
-        # Done, add to body
-        div.append(address_elem)
-        self.body.append(div)
+            # Serialize the temp div
+            subs['contact_spans'] = self._flush_temp_div() 
+
+        # Run through template and add to body buffer
+        html = self.templates['address_card.html'].substitute(subs)
+        self.active_buffer.append(html)
 
     def write_reference_list(self, list):
         tbody = E.TBODY()
@@ -516,7 +500,9 @@ class HtmlRfcWriter(BaseRfcWriter):
             annotation = reference.find('annotation')
             if annotation is not None and annotation.text:
                 ref_td.append(E.P(annotation.text))
-        self.body.append(E.TABLE(tbody))
+                
+        # Add to body buffer
+        self.active_buffer.append(self._serialize(E.TABLE(tbody)))
 
     def draw_table(self, table, table_num=None):
         # TODO: Can 'full' be controlled from XML, as well as padding?
@@ -565,77 +551,74 @@ class HtmlRfcWriter(BaseRfcWriter):
         body.append(tr)  # Add final row
         htmltable.append(body)
 
-        self.body.append(htmltable)
+        # Add to body buffer
+        self.active_buffer.append(self._serialize(htmltable))
 
     def insert_anchor(self, text):
-        div = E.DIV(id=text)
-        self.body.append(div)
+        # Add to body buffer
+        self.active_buffer.append(self._serialize(E.DIV(id=text)))
 
     def write_iref_index(self):
-        # Omit this element if the index is empty
-        if len(self.iref_index) > 0:
-            self.write_heading('Index', autoAnchor='index')
-            # self.add_to_toc('', 'Index', link='index')
-            dl = E.DL()
-            for iref in self.iref_index:
-                if iref[1]:
-                    dl.append(E.DT(iref[0]))
-                    dl.append(E.DD(E.A(iref[1], href='#' + '.'.join(iref))))
-                else:
-                    dl.append(E.DD(E.A(iref[0], href='#' + iref[0])))
-            self.body.append(dl)
-
+#        # Omit this element if the index is empty
+#        if len(self.iref_index) > 0:
+#            self.write_heading('Index', autoAnchor='index')
+#            # self.add_to_toc('', 'Index', link='index')
+#            dl = E.DL()
+#            for iref in self.iref_index:
+#                if iref[1]:
+#                    dl.append(E.DT(iref[0]))
+#                    dl.append(E.DD(E.A(iref[1], href='#' + '.'.join(iref))))
+#                else:
+#                    dl.append(E.DD(E.A(iref[0], href='#' + iref[0])))
+#            self.body.append(dl)
+        pass
+    
     def pre_processing(self):
-        """ Insert all metadata into head """
-        # Discard document from indexing pass
-        self._createDocument()
-        
-        # Document title
-        title = self.r.find('front/title')
-        if title is not None and title.text:
-            self.head.append(E.TITLE(title.text))
-
-        # Stylesheet
-        self.head.append(self._build_stylesheet())
-
-        # Description (from abstract first t element)
-        abs_t = self.r.find('front/abstract/t')
-        if abs_t is not None and abs_t.text:
-            self.head.append(E.META(name='description', content=abs_t.text))
-
-        # Keywords
-        keywords = self.r.findall('front/keyword')
-        keyword_strings = []
-        for keyword in keywords:
-            if keyword.text:
-                keyword_strings.append(keyword.text)
-            else:
-                xml2rfc.log.warn('<keyword> element was ignored because it '\
-                                'had empty text.')
-        if len(keyword_strings) > 0:
-            self.head.append(E.META(name='keywords', \
-                                    content=', '.join(keyword_strings)))
-
-        # Background image?
-        bg = self.pis.get('background', '')
-        if bg:
-            style = E.STYLE(type='text/css')
-            style.text = 'body { background-image: url("' + bg + '"); }'
-            self.head.append(style)
+        # Reset buffers
+        self.buffers = {'front': [],
+                        'body': [],
+                        'header_rows': [],
+                        'toc_head_links': [],
+                        'toc_rows': []}
+        self.active_buffer = self.buffers['front']
 
     def post_processing(self):
-        # Create toc from index
-        tocindex = self._getTocIndex()
-        for item in tocindex:
-            a = E.A(item.title, href='#' + item.autoAnchor)
-            if not item.counter:
-                li = E.LI(a)
-            else:
-                li = E.LI(item.counter + '.   ')
-                li.append(a)
-            self.toc_list.append(li)
+        # Create table of contents buffers
+        self._create_toc()
+        
+        # Grab values that haven't been inserted yet
+        title = self.r.find('front/title').text
+        docName = self.r.attrib.get('docName', '')
+        description = ''
+        abs_t = self.r.find('front/abstract/t')
+        if abs_t is not None and abs_t.text:
+            description = abs_t.text
+        keywords = self.r.findall('front/keyword')
+        keyword_list = [keyword.text for keyword in keywords if keyword.text]
+        
+        # Run through base template, store in main output string
+        subs = { 
+                 # Replace flat values 
+                 'title':           title,
+                 'docName':         docName,
+                 'description':     description,
+                 'keywords':        ', '.join(keyword_list),
+                 
+                 # Replace buffers
+                 'front':           ''.join(self.buffers['front']),
+                 'body':            ''.join(self.buffers['body']),
+                 'header_rows':     ''.join(self.buffers['header_rows']),
+                 'toc_head_links':  ''.join(self.buffers['toc_head_links']),
+                 'toc_rows':        ''.join(self.buffers['toc_rows'])
+                }
+        self.output = self.templates['base.html'].substitute(subs)
 
     def write_to_file(self, file):
-        # Write the tree to the file
-        file.write(HtmlRfcWriter.defaults['doctype'] + '\n')
-        file.write(lxml.html.tostring(self.html, pretty_print=True))
+        file.write(self.output)
+
+#-------------------------------------------------------------------------------
+# Unused methods
+#-------------------------------------------------------------------------------
+
+    def write_title(self, title, docName=None):
+        pass

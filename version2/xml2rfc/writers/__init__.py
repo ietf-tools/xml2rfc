@@ -7,4 +7,4 @@ from xml2rfc.writers.nroff import NroffRfcWriter
 from xml2rfc.writers.expanded_xml import ExpandedXmlWriter
 
 __all__ = ['BaseRfcWriter', 'RawTextRfcWriter', 'PaginatedTextRfcWriter',
-           'HtmlRfcWriter', 'NroffRfcWriter', 'ExpandedXmlWriter']
+           'HtmlRfcWriter', 'NroffRfcWriter', 'ExpandedXmlWriter',]

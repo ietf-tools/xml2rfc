@@ -22,55 +22,55 @@ def clear_cache(self, opt, value, parser):
 
 def main():
     # Populate options
-    optionparser = optparse.OptionParser(usage='%prog SOURCE [options] ' \
-                                        'FORMATS...\nExample: %prog ' \
+    optionparser = optparse.OptionParser(usage='%prog SOURCE [options] '
+                                        'FORMATS...\nExample: %prog '
                                         'draft.xml -f Draft-1.0 --text --html')
-    optionparser.add_option('-v', '--verbose', action='store_true', \
+    optionparser.add_option('-v', '--verbose', action='store_true',
                             dest='verbose', help='print extra information')
-    optionparser.add_option('-q', '--quiet', action='store_true', \
+    optionparser.add_option('-q', '--quiet', action='store_true',
                             dest='quiet', help='dont print anything')
-    optionparser.add_option('-w', '--warn-error', action='store_true', \
-                            dest='warn_error', help='treat warnings as ' \
+    optionparser.add_option('-w', '--warn-error', action='store_true',
+                            dest='warn_error', help='treat warnings as '
                             'python exceptions.')
-    optionparser.add_option('-e', '--extcss', dest='extcss',\
-                            action='store_true', help='write an external '\
-                            'link to the stylesheet instead of expanding it.')
-    optionparser.add_option('-c', '--css', dest='css', \
-                            help='specify an alternate css file (ignored if'\
-                            ' html format is not enabled)')
-    optionparser.add_option('-d', '--dtd', dest='dtd', \
+#    optionparser.add_option('-e', '--extcss', dest='extcss',
+#                            action='store_true', help='write an external '
+#                            'link to the stylesheet instead of expanding it.')
+#    optionparser.add_option('-c', '--css', dest='css',
+#                            help='specify an alternate css file (ignored if'
+#                            ' html format is not enabled)')
+    optionparser.add_option('-d', '--dtd', dest='dtd',
                             help='specify an alternate dtd file')
-    optionparser.add_option('-b', '--basename', dest='basename', \
+    optionparser.add_option('-b', '--basename', dest='basename',
                             help='specify the base name for output files')
-    optionparser.add_option('-f', '--filename', dest='filename', \
-                            help='specify an explicit output filename (only '\
+    optionparser.add_option('-f', '--filename', dest='filename',
+                            help='specify an explicit output filename (only '
                             'valid with a single format enabled)')
-    optionparser.add_option('', '--clear-cache', action='callback', \
-                            help='purge the cache and exit', \
+    optionparser.add_option('', '--clear-cache', action='callback',
+                            help='purge the cache and exit',
                             callback=clear_cache)
-    optionparser.add_option('', '--version', action='callback', \
-                            help='display the version number and exit', \
+    optionparser.add_option('', '--version', action='callback',
+                            help='display the version number and exit',
                             callback=display_version)
 
-    formatgroup = optparse.OptionGroup(optionparser, 'Formats', 'At least one'\
-                                       ' but as many as all of the following'\
-                                       ' output formats must be specified.'\
-                                       ' The destination file will be created'\
-                                       ' according to the argument given to'\
-                                       ' --basename.  If no argument was'\
-                                       ' given, it will create the file(s) '\
+    formatgroup = optparse.OptionGroup(optionparser, 'Formats', 'At least one'
+                                       ' but as many as all of the following'
+                                       ' output formats must be specified.'
+                                       ' The destination file will be created'
+                                       ' according to the argument given to'
+                                       ' --basename.  If no argument was'
+                                       ' given, it will create the file(s) '
                                        '"output.format"')
-    formatgroup.add_option('', '--raw', dest='raw', action='store_true', \
+    formatgroup.add_option('', '--raw', dest='raw', action='store_true',
                            help='outputs to a text file, unpaginated')
-    formatgroup.add_option('', '--text', dest='text', action='store_true', \
-                           help='outputs to a text file with proper page ' \
+    formatgroup.add_option('', '--text', dest='text', action='store_true',
+                           help='outputs to a text file with proper page '
                            'breaks')
-    formatgroup.add_option('', '--nroff', dest='nroff', action='store_true', \
+    formatgroup.add_option('', '--nroff', dest='nroff', action='store_true',
                            help='outputs to an nroff file')
-    formatgroup.add_option('', '--html', dest='html', action='store_true', \
+    formatgroup.add_option('', '--html', dest='html', action='store_true',
                            help='outputs to an html file')
-    formatgroup.add_option('', '--exp', dest='exp', action='store_true', \
-                           help='outputs to an XML file with all references'\
+    formatgroup.add_option('', '--exp', dest='exp', action='store_true',
+                           help='outputs to an XML file with all references'
                            ' expanded.')
 
     optionparser.add_option_group(formatgroup)
@@ -84,10 +84,10 @@ def main():
     if not os.path.exists(source):
         print 'No such file:', source
         sys.exit(1)
-    num_formats = len(filter(bool, [options.raw, options.text, options.nroff, \
+    num_formats = len(filter(bool, [options.raw, options.text, options.nroff,
                                     options.html, options.exp]))
     if num_formats > 1 and options.filename:
-        print 'Cannot give an explicit filename with more than one format, '\
+        print 'Cannot give an explicit filename with more than one format, ' \
                 'use --basename instead.'
         sys.exit(1)
     if num_formats < 1:
@@ -101,7 +101,7 @@ def main():
         xml2rfc.log.warn_error = False
 
     # Parse the document into an xmlrfc tree instance
-    parser = xml2rfc.XmlRfcParser(source, verbose=options.verbose,\
+    parser = xml2rfc.XmlRfcParser(source, verbose=options.verbose,
                                   quiet=options.quiet)
     try:
         xmlrfc = parser.parse()
@@ -127,42 +127,40 @@ def main():
         basename = os.path.basename(source).rsplit('.', 1)[0]
 
     if options.exp:
-        expwriter = xml2rfc.ExpandedXmlWriter(xmlrfc, \
-                                              quiet=options.quiet, \
+        expwriter = xml2rfc.ExpandedXmlWriter(xmlrfc,
+                                              quiet=options.quiet,
                                               verbose=options.verbose)
         filename = options.filename
         if not filename:
             filename = basename + '-expanded.xml'
         expwriter.write(filename)
     if options.html:
-        htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc, \
-                                           quiet=options.quiet, \
-                                           verbose=options.verbose, \
-                                           external_css=options.extcss, \
-                                           css_document=options.css)
+        htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc,
+                                           quiet=options.quiet,
+                                           verbose=options.verbose)
         filename = options.filename
         if not filename:
             filename = basename + '.html'
         htmlwriter.write(filename)
     if options.raw:
-        rawwriter = xml2rfc.RawTextRfcWriter(xmlrfc, \
-                                             quiet=options.quiet, \
+        rawwriter = xml2rfc.RawTextRfcWriter(xmlrfc,
+                                             quiet=options.quiet,
                                              verbose=options.verbose)
         filename = options.filename
         if not filename:
             filename = basename + '-raw.txt'
         rawwriter.write(filename)
     if options.text:
-        pagedwriter = xml2rfc.PaginatedTextRfcWriter(xmlrfc, \
-                                                     quiet=options.quiet, \
+        pagedwriter = xml2rfc.PaginatedTextRfcWriter(xmlrfc,
+                                                     quiet=options.quiet,
                                                      verbose=options.verbose)
         filename = options.filename
         if not filename:
             filename = basename + '.txt'
         pagedwriter.write(filename)
     if options.nroff:
-        nroffwriter = xml2rfc.NroffRfcWriter(xmlrfc, \
-                                             quiet=options.quiet, \
+        nroffwriter = xml2rfc.NroffRfcWriter(xmlrfc,
+                                             quiet=options.quiet,
                                              verbose=options.verbose)
         filename = options.filename
         if not filename:

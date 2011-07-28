@@ -203,7 +203,7 @@ class BaseRfcWriter:
                        toc=toc)
         self._index.append(item)
         return item
-    
+
     def _getTocIndex(self):
         return [item for item in self._index if item.toc]
         
@@ -287,8 +287,11 @@ class BaseRfcWriter:
             # Keep track of previous organization and remove if redundant.
             last_org = None
             for author in self.r.findall('front/author'):
+                role = author.attrib.get('role', '')
+                if role == 'editor':
+                    role = ', Editor'
                 lines.append(author.attrib.get('initials', '') + ' ' + \
-                                author.attrib.get('surname', ''))
+                                author.attrib.get('surname', '') + role)
                 organization = author.find('organization')
                 if organization is not None:
                     abbrev = organization.attrib.get('abbrev')
@@ -448,18 +451,23 @@ class BaseRfcWriter:
                 self._write_table(element)
 
         s_count = 1  # Section counter
+        
+        # Append a dot to separate sub counters
+        if count_str:
+            count_str += '.'
+
+        # Recurse on sections
         for child_sec in section.findall('section'):
             if appendix == True:
-                self._write_section_rec(child_sec,
+                # Use an alphabetic counter
+                self._write_section_rec(child_sec, count_str + \
                                         string.uppercase[s_count - 1] + '',
                                         level=level + 1, appendix=True)
             else:
-                if count_str:
-                    self._write_section_rec(child_sec, count_str + '.' \
-                                            + str(s_count), level=level + 1)
-                else:
-                    self._write_section_rec(child_sec, str(s_count), \
-                                            level=level + 1)
+                # Use a numeric counter
+                self._write_section_rec(child_sec, count_str + str(s_count), 
+                                        level=level + 1)
+
             s_count += 1
 
         # Set the ending index number so we know where to begin references
@@ -579,7 +587,8 @@ class BaseRfcWriter:
 
         # The writer is responsible for tracking irefs,
         # so we have nothing to pass here
-        self.write_iref_index()
+        if not self.indexmode:
+            self.write_iref_index()
 
         # Appendix sections
         self._write_section_rec(self.r.find('back'), None, appendix=True)
