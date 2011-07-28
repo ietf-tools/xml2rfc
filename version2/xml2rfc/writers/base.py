@@ -367,7 +367,7 @@ class BaseRfcWriter:
 
     def _write_table(self, table):
         """ Writes <texttable> elements """
-        align = table.attrib['align']
+        align = table.attrib.get('align', 'left')
         self.table_count += 1
         anchor = table.attrib.get('anchor')
         title = table.attrib.get('title')
