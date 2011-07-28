@@ -312,7 +312,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             elif child.tag == 'vspace':
                 br = E.BR()
                 current.append(br)
-                blankLines = int(child.attrib.get('blankLines'), 0)
+                blankLines = int(child.attrib.get('blankLines', 0))
                 for i in range(blankLines):
                     br = E.BR()
                     current.append(br)
