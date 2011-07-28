@@ -143,6 +143,76 @@ class HtmlRfcWriter(BaseRfcWriter):
             lines.append(self._serialize(child))
             child.drop_tree()
         return '\n'.join(lines)
+    
+    def _expand_ref(self, element):
+        """ Return a list of HTML elements that represent the reference """   
+        if element.tag == 'xref':
+            target = element.attrib.get('target', '')
+            if element.text:
+                cite = E.CITE('[' + target + ']', title='NONE')
+                a = E.A(element.text, href='#' + target)
+                a.tail = ' '
+                if element.tail:
+                    cite.tail = element.tail
+                return [a, cite]
+            else:
+                # Create xref from index lookup
+                format = element.attrib.get('format', 'default')
+                a = E.A(href='#' + target)
+                item = self._getItemByAnchor(target)
+                if not item or format == 'none':
+                    text = '[' + target + ']'
+                elif format == 'counter':
+                    text = item.counter
+                elif format == 'title':
+                    text = item.title
+                else:
+                    # Default
+                    text = item.autoName
+                a.text = text
+                if element.tail:
+                    a.tail = element.tail
+                return [a]
+        elif element.tag == 'eref':
+            target = element.attrib.get('target', '')
+            text = element.text or target
+            if text:
+                a = E.A(text, href=target)
+                a.tail = element.tail
+#                cite = E.CITE('[' + target + ']', title='NONE')
+#                current.append(cite)
+                return [a]
+        elif element.tag == 'iref':
+            # Add anchor to index
+            item = element.attrib.get('item', '')
+            subitem = element.attrib.get('subitem', '')
+            index_elem = (item, subitem)
+            self.iref_index.append(index_elem)
+            # Create anchor element
+            a = E.A()
+            if subitem:
+                a.attrib['name'] = '.'.join(index_elem)
+            else:
+                a.attrib['name'] = item
+            if element.tail:
+                a.tail = element.tail
+            return [a]
+        elif element.tag == 'spanx':
+            style = element.attrib.get('style', 'emph')
+            text = ''
+            if element.text:
+                text = element.text
+            elem = None
+            if style == 'strong':
+                elem = E.STRONG(text)
+            elif style == 'verb':
+                elem = E.SAMP(text)
+            else:
+                # Default to style=emph
+                elem = E.EM(text)
+            if element.tail:
+                elem.tail = element.tail
+            return [elem]
 
     # -----------------------------------------
     # Base writer overrides
@@ -236,74 +306,9 @@ class HtmlRfcWriter(BaseRfcWriter):
             if autoAnchor:
                 current.attrib['id'] = autoAnchor
         for child in t:
-            if child.tag == 'xref':
-                target = child.attrib.get('target', '')
-                if child.text:
-                    cite = E.CITE('[' + target + ']', title='NONE')
-                    a = E.A(child.text, href='#' + target)
-                    a.tail = ' '
-                    current.append(a)
-                    current.append(cite)
-                    if child.tail:
-                        cite.tail = child.tail
-                else:
-                    # Create xref from index lookup
-                    format = child.attrib.get('format', 'default')
-                    a = E.A(href='#' + target)
-                    item = self._getItemByAnchor(target)
-                    if not item or format == 'none':
-                        text = '[' + target + ']'
-                    elif format == 'counter':
-                        text = item.counter
-                    elif format == 'title':
-                        text = item.title
-                    else:
-                        # Default
-                        text = item.autoName
-                    a.text = text
-                    current.append(a)
-                    if child.tail:
-                        a.tail = child.tail
-            if child.tag == 'eref':
-                target = child.attrib.get('target', '')
-                text = child.text or target
-                if text:
-                    a = E.A(text, href=target)
-                    a.tail = child.tail
-                    current.append(a)
-#                cite = E.CITE('[' + target + ']', title='NONE')
-#                current.append(cite)
-            elif child.tag == 'iref':
-                # Add anchor to index
-                item = child.attrib.get('item', '')
-                subitem = child.attrib.get('subitem', '')
-                index_elem = (item, subitem)
-                self.iref_index.append(index_elem)
-                # Create anchor element
-                a = E.A()
-                current.append(a)
-                if subitem:
-                    a.attrib['name'] = '.'.join(index_elem)
-                else:
-                    a.attrib['name'] = item
-                if child.tail:
-                    a.tail = child.tail
-            elif child.tag == 'spanx':
-                style = child.attrib.get('style', 'emph')
-                text = ''
-                if child.text:
-                    text = child.text
-                elem = None
-                if style == 'strong':
-                    elem = E.STRONG(text)
-                elif style == 'verb':
-                    elem = E.SAMP(text)
-                else:
-                    # Default to style=emph
-                    elem = E.EM(text)
-                current.append(elem)
-                if child.tail:
-                    elem.tail = child.tail
+            if child.tag in ['xref', 'eref', 'iref', 'spanx']:
+                for element in self._expand_ref(child):
+                    current.append(element)
             elif child.tag == 'vspace':
                 br = E.BR()
                 current.append(br)
@@ -544,7 +549,12 @@ class HtmlRfcWriter(BaseRfcWriter):
                 tr = E.TR()
             td = E.TD()
             if cell.text:
+                # Add text
                 td.text = cell.text
+            for child in cell:
+                # Add any inline elements (references)
+                for element in self._expand_ref(child):
+                    td.append(element)
             # Get alignment from header
             td.attrib['class'] = col_aligns[col_num]
             tr.append(td)
