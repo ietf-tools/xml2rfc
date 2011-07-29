@@ -32,8 +32,8 @@ class _RfcItem:
 class _IrefItem:
     """ A unique ID object for an iref element """
     def __init__(self):
-        # List to hold lines in the buffer this element appears on
-        self.lines = []
+        # Pages this element appears on
+        self.pages = []
 
 
 class BaseRfcWriter:
@@ -158,12 +158,13 @@ class BaseRfcWriter:
         self._index = []
         self._iref_index = {}
         
-    def _get_or_make_iref(self, item, subitem=None):
+    def _make_iref(self, item, subitem):
         """ Get or create an iref ID object """
-        # Use item as its own subitem if not specified otherwise
-        subitem = subitem or item
-        if 'item' in self._iref_index and 'subitem' in self._iref_index['item']:
-            return self._iref_index['item']['subitem']
+        if item in self._iref_index:
+            if subitem in self._iref_index[item]:
+                return self._iref_index[item][subitem]
+            else:
+                self._iref_index[item][subitem] = _IrefItem()
         else:
             self._iref_index[item] = {subitem: _IrefItem()}
 

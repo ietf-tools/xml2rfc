@@ -112,8 +112,12 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             # Print letter
             self._write_text(letter, indent=3, lb=True)
             for item in iref_items:
+                # Pages for an item without a subelement
+                pages = item in self._iref_index[item] and \
+                        self._iref_index[item][item].pages or []
                 # Print item
-                self._write_text(item, indent=6)
+                self._write_text(item + ' ' + ', '.join(map(str, pages))
+                                                        , indent=6)
                 for subitem in self._iref_index[item]:
                     if subitem != item:
                         # Print subitem
@@ -170,11 +174,14 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             self.paged_buf.append(line)
             page_len += 1
 
-            # If we're writing a header, store its final page number
+            # Store page numbers for any marked elements
             if line_num in self.heading_marks:
                 item = self._getItemByAnchor(self.heading_marks[line_num])
                 if item:
                     item.page = page_num
+            if line_num in self.iref_marks:
+                for item, subitem in self.iref_marks[line_num]:
+                    self._iref_index[item][subitem].pages.append(page_num)
         
         # Write final footer
         remainder = page_maxlen - page_len

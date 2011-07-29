@@ -29,6 +29,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.edit_counter = 0   # Counter for edit marks
         self.eref_counter = 0   # Counter for <eref> elements
         self.ascii = True       # Enable ascii flag
+        
+        # Marks position of iref elements
+        self.iref_marks = {}
 
         # Text lookups
         self.list_symbols = self.pis.get('text-list-symbols', 'o*+-')
@@ -269,9 +272,18 @@ class RawTextRfcWriter(BaseRfcWriter):
                 self.eref_counter += 1
                 line.append('[' + str(self.eref_counter) + ']')
             elif element.tag == 'iref':
-                self._get_or_make_iref(element.attrib.get('item', ''), 
-                                       subitem=element.attrib.get('subitem', 
-                                                                   None))
+                item = element.attrib.get('item', None)
+                if item:
+                    subitem = element.attrib.get('subitem')
+                    if not subitem:
+                        # We'll simply duplicate item's key if there is no sub
+                        subitem = item
+                    self._make_iref(item, subitem)
+                    # Store the buffer position for pagination data later
+                    pos = len(self.buf)
+                    if pos not in self.iref_marks:
+                        self.iref_marks[pos] = []
+                    self.iref_marks[pos].append((item, subitem))
             elif element.tag == 'cref' and \
                 self.pis.get('comments', 'no') == 'yes':                
                 # Render if processing instruction is enabled
