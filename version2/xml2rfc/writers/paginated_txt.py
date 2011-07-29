@@ -97,6 +97,28 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         # Check for PI override
         self.center_footer = self.pis.get('footer', self.center_footer)
         self.left_header = self.pis.get('header', self.left_header)
+        
+    def write_iref_index(self):
+        self.write_heading('Index')
+        # Sort iref items alphabetically, store by first letter 
+        alpha_bucket = {}
+        for key in sorted(self._iref_index.keys()):
+            letter = key[0].upper()
+            if letter in alpha_bucket:
+                alpha_bucket[letter].append(key)
+            else:
+                alpha_bucket[letter] = [key]
+        for letter, iref_items in alpha_bucket.items():
+            # Print letter
+            self._write_text(letter, indent=3, lb=True)
+            for item in iref_items:
+                # Print item
+                self._write_text(item, indent=6)
+                for subitem in self._iref_index[item]:
+                    if subitem != item:
+                        # Print subitem
+                        self._write_text(subitem, indent=9)
+                
 
     def post_processing(self):
         """ Add paging information to a secondary buffer """

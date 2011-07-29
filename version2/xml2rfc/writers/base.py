@@ -9,8 +9,8 @@ import datetime
 import xml2rfc.log
 
 
-class RfcItem:
-    """ A unique ID descriptor for an anchored RFC element.
+class _RfcItem:
+    """ A unique ID object for an anchored RFC element.
     
         Anchored elements are the following: Automatic sections, user (middle)
         sections, paragraphs, references, appendices, figures, and tables.
@@ -27,6 +27,13 @@ class RfcItem:
         self.toc = toc
         self.level = level
         self.page = 0    # This will be set after buffers are complete!
+        
+
+class _IrefItem:
+    """ A unique ID object for an iref element """
+    def __init__(self):
+        # List to hold lines in the buffer this element appears on
+        self.lines = []
 
 
 class BaseRfcWriter:
@@ -137,7 +144,7 @@ class BaseRfcWriter:
         self.pis = xmlrfc.getpis()
 
         # Document counters
-        self.ref_index = 1
+        self.ref_start = 1
         self.figure_count = 0
         self.table_count = 0
 
@@ -147,15 +154,25 @@ class BaseRfcWriter:
         # Used for two-pass indexing
         self.indexmode = False
 
-        # Item Index
+        # Item Indicies
         self._index = []
+        self._iref_index = {}
+        
+    def _get_or_make_iref(self, item, subitem=None):
+        """ Get or create an iref ID object """
+        # Use item as its own subitem if not specified otherwise
+        subitem = subitem or item
+        if 'item' in self._iref_index and 'subitem' in self._iref_index['item']:
+            return self._iref_index['item']['subitem']
+        else:
+            self._iref_index[item] = {subitem: _IrefItem()}
 
     def _indexParagraph(self, counter, p_counter, anchor=None, toc=False):
         counter = str(counter)  # This is the section counter
         p_counter = str(p_counter)  # This is the paragraph counter
         autoName = 'Section ' + counter + ', Paragraph ' + p_counter
         autoAnchor = 'rfc.section.' + counter + '.p.' + p_counter
-        item = RfcItem(autoName, autoAnchor, anchor=anchor, toc=toc)
+        item = _RfcItem(autoName, autoAnchor, anchor=anchor, toc=toc)
         self._index.append(item)
         return item
 
@@ -168,7 +185,7 @@ class BaseRfcWriter:
         else:
             autoName = 'Section ' + counter
             autoAnchor = 'rfc.section.' + counter
-        item = RfcItem(autoName, autoAnchor, counter=counter, title=title, \
+        item = _RfcItem(autoName, autoAnchor, counter=counter, title=title, \
                        anchor=anchor, toc=toc, level=level)
         self._index.append(item)
         return item
@@ -182,7 +199,7 @@ class BaseRfcWriter:
             subCounter = str(subCounter)
             autoName = 'References ' + subCounter
             autoAnchor = 'rfc.references.' + subCounter
-        item = RfcItem(autoName, autoAnchor, counter=counter, title=title, \
+        item = _RfcItem(autoName, autoAnchor, counter=counter, title=title, \
                        anchor=anchor, toc=toc, level=level)
         self._index.append(item)
         return item
@@ -191,7 +208,7 @@ class BaseRfcWriter:
         counter = str(counter)
         autoName = 'Figure ' + counter
         autoAnchor = 'rfc.figure.' + counter
-        item = RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
+        item = _RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
                        toc=toc)
         self._index.append(item)
         return item
@@ -200,7 +217,7 @@ class BaseRfcWriter:
         counter = str(counter)
         autoName = 'Table ' + counter
         autoAnchor = 'rfc.table.' + counter
-        item = RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
+        item = _RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
                        toc=toc)
         self._index.append(item)
         return item
@@ -473,12 +490,12 @@ class BaseRfcWriter:
 
         # Set the ending index number so we know where to begin references
         if count_str == '' and appendix == False:
-            self.ref_index = s_count
+            self.ref_start = s_count
 
     def _run(self, indexmode=False):
         self.indexmode = indexmode
         # Reset document counters
-        self.ref_index = 1
+        self.ref_start = 1
         self.figure_count = 0
         self.table_count = 0
 
@@ -559,7 +576,7 @@ class BaseRfcWriter:
 
         # References sections
         # Treat references as nested only if there is more than one
-        ref_counter = str(self.ref_index)
+        ref_counter = str(self.ref_start)
         references = self.r.findall('back/references')
         # Write root level references header
         ref_title = self.pis.get('refparent', 'References')
@@ -586,13 +603,13 @@ class BaseRfcWriter:
         elif len(references) == 1 and not self.indexmode:
             self.write_reference_list(references[0])
 
+        # Appendix sections
+        self._write_section_rec(self.r.find('back'), None, appendix=True)
+
         # The writer is responsible for tracking irefs,
         # so we have nothing to pass here
         if not self.indexmode:
             self.write_iref_index()
-
-        # Appendix sections
-        self._write_section_rec(self.r.find('back'), None, appendix=True)
 
         # Authors addresses section
         authors = self.r.findall('front/author')
@@ -603,7 +620,7 @@ class BaseRfcWriter:
             title = "Author's Address"
         if self.indexmode:
             # Add explicitly to index
-            item = RfcItem(title, autoAnchor, title=title)
+            item = _RfcItem(title, autoAnchor, title=title)
             self._index.append(item)
         else:
             self.write_heading(title, autoAnchor=autoAnchor)

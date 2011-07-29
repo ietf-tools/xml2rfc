@@ -269,8 +269,9 @@ class RawTextRfcWriter(BaseRfcWriter):
                 self.eref_counter += 1
                 line.append('[' + str(self.eref_counter) + ']')
             elif element.tag == 'iref':
-                # TODO iref
-                pass
+                self._get_or_make_iref(element.attrib.get('item', ''), 
+                                       subitem=element.attrib.get('subitem', 
+                                                                   None))
             elif element.tag == 'cref' and \
                 self.pis.get('comments', 'no') == 'yes':                
                 # Render if processing instruction is enabled
@@ -688,7 +689,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         pass
 
     def write_iref_index(self):
-        # No iref for text
+        # No iref for raw text
         pass
 
     def pre_processing(self):
