@@ -12,6 +12,7 @@
 import sys
 
 warn_error = False
+quiet = False
 write_out = sys.stdout
 write_err = sys.stderr
 
@@ -33,7 +34,7 @@ def warn(*args):
     msg = 'WARNING: ' + ' '.join(args)
     if warn_error:
         raise Exception('Execution halted at a warning:\n' + msg)
-    else:
+    elif not quiet:
         write_err.write(msg)
         write_err.write('\n')
 

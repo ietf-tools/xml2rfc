@@ -95,10 +95,8 @@ def main():
         options.text = True
 
     # Setup warnings module
-    if options.warn_error:
-        xml2rfc.log.warn_error = True
-    else:
-        xml2rfc.log.warn_error = False
+    xml2rfc.log.warn_error = options.warn_error and True or False
+    xml2rfc.log.quiet = options.quiet and True or False
 
     # Parse the document into an xmlrfc tree instance
     parser = xml2rfc.XmlRfcParser(source, verbose=options.verbose,
