@@ -21,7 +21,8 @@ template_dir = os.path.join(os.path.dirname(xml2rfc.__file__), 'templates')
 default_dtd_path = os.path.join(template_dir, 'rfc2629.dtd')
 
 
-def getCacheRequest(read_caches, write_cache, request_url, verbose=False):
+def getCacheRequest(read_caches, write_cache, request_url, verbose=False,
+                    source_dir='.'):
     """ Returns the local path to a cached citation from URL
     
         Unless URL is a local path, in which case it will consult $XML_LIBRARY
@@ -51,21 +52,23 @@ def getCacheRequest(read_caches, write_cache, request_url, verbose=False):
                 xml2rfc.log.write('Created cache for', request_url)
     else:
         # Not dtd or network entity, try `basename` in XML_LIBRARY variable, 
-        # default to absolute path requested
+        # default to path of the source file
         basename = os.path.basename(urlobj.path)
         include_dir = os.path.expanduser(os.environ.get('XML_LIBRARY', 
                                          os.path.dirname(urlobj.path)))
         cached_path = os.path.join(include_dir, basename)
         if not os.path.exists(cached_path):
-            cached_path = urlobj.path
+            cached_path = os.path.join(source_dir, filename)
     return cached_path
         
 
 class CachingResolver(lxml.etree.Resolver):
     """ Custom ENTITY request handler that uses a local cache """
-    def __init__(self, read_caches, write_cache, verbose=False, quiet=False):
+    def __init__(self, read_caches, write_cache, verbose=False, quiet=False,
+                 source_dir='.'):
         self.verbose = verbose
         self.quiet = quiet
+        self.source_dir = source_dir
         self.read_caches = read_caches
         self.write_cache = write_cache
 
@@ -144,9 +147,10 @@ class XmlRfcParser:
 
         # Add our custom resolver
         parser.resolvers.add(CachingResolver(self.read_caches,
-                                             self.write_cache,
-                                             verbose=self.verbose,
-                                             quiet=self.quiet))
+                                        self.write_cache,
+                                        source_dir=os.path.dirname(self.source),
+                                        verbose=self.verbose,
+                                        quiet=self.quiet))
 
         # Parse the XML file into a tree and create an rfc instance
         tree = lxml.etree.parse(self.source, parser)
@@ -167,9 +171,9 @@ class XmlRfcParser:
                     # Get or create the cached file request
                     try:
                         path = getCacheRequest(self.read_caches,
-                                               self.write_cache,
-                                               request, 
-                                               verbose=self.verbose)
+                                        self.write_cache, request, 
+                                        verbose=self.verbose,
+                                        source_dir=os.path.dirname(self.source))
                     except IOError, e:
                         xml2rfc.log.warn('Failed to load include file '
                                          '(' + str(e) + '):', request)
