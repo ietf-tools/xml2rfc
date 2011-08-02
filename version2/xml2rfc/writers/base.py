@@ -581,9 +581,6 @@ class BaseRfcWriter:
         references = self.r.findall('back/references')
         # Write root level references header
         ref_title = self.pis.get('refparent', 'References')
-        if len(references) == 1:
-            # Use only reference list as base title
-            ref_title = references[0].attrib['title']
         if self.indexmode:
             self._indexReferences(ref_counter, title=ref_title)
         else:
@@ -592,7 +589,7 @@ class BaseRfcWriter:
         if len(references) > 1:
             for i, reference_list in enumerate(references):
                 ref_newcounter = ref_counter + '.' + str(i + 1)
-                ref_title = reference_list.attrib['title']
+                ref_title = reference_list.attrib.get('title', 'References')
                 if self.indexmode:
                     self._indexReferences(ref_newcounter, title=ref_title, \
                                           subCounter=i+1, level=2)
