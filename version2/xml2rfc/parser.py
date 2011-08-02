@@ -191,14 +191,6 @@ class XmlRfcParser:
         xmlrfc._format_whitespace()
 
         return xmlrfc
-    
-    def validate(self, xmlrfc, dtd_path=''):
-        """ Validates an XmlRfc instance with its default dtd
-            
-            Returns a pair: success flag along with a list of any errors.
-            Can also specify an alternate dtd path.
-        """
-
 
 class XmlRfc:
     """ Internal representation of an RFC document
@@ -220,7 +212,7 @@ class XmlRfc:
         """ Returns a list of the XML processing instructions """
         return self.pis
     
-    def validate(self, dtd_path=''):
+    def validate(self, dtd_path=None):
         """ Validate the document with its default dtd, or an optional one 
         
             Return a success bool along with a list of any errors

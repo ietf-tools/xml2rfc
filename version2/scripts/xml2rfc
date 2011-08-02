@@ -125,7 +125,7 @@ def main():
         sys.exit(1)
         
     # Validate the document
-    ok, errors = xmlrfc.validate(options.dtd)
+    ok, errors = xmlrfc.validate(dtd_path=options.dtd)
     if not ok:
         error_str = 'Unable to validate the XML document: ' + args[0]
         for error in errors:
