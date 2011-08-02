@@ -38,6 +38,9 @@ def main():
 #    optionparser.add_option('-c', '--css', dest='css',
 #                            help='specify an alternate css file (ignored if'
 #                            ' html format is not enabled)')
+    optionparser.add_option('-c', '--cache', dest='cache', 
+                            help='specify an alternate cache directory to write'
+                            ' to')
     optionparser.add_option('-d', '--dtd', dest='dtd',
                             help='specify an alternate dtd file')
     optionparser.add_option('-b', '--basename', dest='basename',
@@ -55,11 +58,9 @@ def main():
     formatgroup = optparse.OptionGroup(optionparser, 'Formats', 'At least one'
                                        ' but as many as all of the following'
                                        ' output formats must be specified.'
-                                       ' The destination file will be created'
-                                       ' according to the argument given to'
-                                       ' --basename.  If no argument was'
-                                       ' given, it will create the file(s) '
-                                       '"output.format"')
+                                       ' The destination filename will be based'
+                                       ' on the input filename, unless an'
+                                       ' argument was given to --basename.')
     formatgroup.add_option('', '--raw', dest='raw', action='store_true',
                            help='outputs to a text file, unpaginated')
     formatgroup.add_option('', '--text', dest='text', action='store_true',
@@ -93,6 +94,21 @@ def main():
     if num_formats < 1:
         # Default to paginated text output
         options.text = True
+    if options.cache:
+        if not os.path.exists(options.cache):
+            try:
+                os.makedirs(options.cache)
+                if options.verbose:
+                    xml2rfc.log.write('Created cache directory at', 
+                                      options.cache)
+            except OSError, e:
+                print 'Unable to make cache directory:', options.cache
+                print e
+                sys.exit(1)
+        else:
+            if not os.access(options.cache, os.W_OK):
+                print 'Cache directory is not writable:', options.cache
+                sys.exit(1)
 
     # Setup warnings module
     xml2rfc.log.warn_error = options.warn_error and True or False

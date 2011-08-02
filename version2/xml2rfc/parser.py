@@ -17,29 +17,34 @@ __all__ = ['XmlRfcParser', 'XmlRfc']
 
 
 # Static paths
-cache_dir = os.path.expanduser('~/.cache/xml2rfc')
 template_dir = os.path.join(os.path.dirname(xml2rfc.__file__), 'templates')
 default_dtd_path = os.path.join(template_dir, 'rfc2629.dtd')
 
 
-def getCacheRequest(request_url, verbose=False):
+def getCacheRequest(read_caches, write_cache, request_url, verbose=False):
     """ Returns the local path to a cached citation from URL
     
-        If the path doesnt exist yet, uses urllib to cache the file.
+        Unless URL is a local path, in which case it will consult $XML_LIBRARY
+    
+        The caches in read_dirs are consulted in sequence order to find the
+        request.  If not found, the request will be cached at write_dir.
     """
-    if not os.path.exists(cache_dir):
-        if verbose:
-            xml2rfc.log.write('Creating cache directory at', cache_dir)
-        os.makedirs(cache_dir)
     urlobj = urlparse.urlparse(request_url)
     filename = os.path.basename(urlobj.path)
     if filename.endswith('.dtd'):
         # Found a dtd request, load from templates directory
         cached_path = os.path.join(template_dir, filename)
     elif urlobj.netloc:
-        # Network entity, load from cache, or create if necessary
-        cached_path = os.path.join(cache_dir, filename)
-        if not os.path.exists(cached_path):
+        # Network entity, try to load from each cache, finally downloading
+        # and caching to `write_cache` if its not found.
+        found = False
+        for dir in read_caches:
+            cached_path = os.path.join(dir, filename)
+            if os.path.exists(cached_path):
+                found = True
+                break
+        if not found:
+            cached_path = os.path.join(write_cache, filename)
             xml2rfc.utils.StrictUrlOpener().retrieve(request_url, 
                                                      cached_path)
             if verbose:
@@ -57,17 +62,24 @@ def getCacheRequest(request_url, verbose=False):
         
 
 class CachingResolver(lxml.etree.Resolver):
-    def __init__(self, verbose=False, quiet=False):
+    """ Custom ENTITY request handler that uses a local cache """
+    def __init__(self, read_caches, write_cache, verbose=False, quiet=False):
         self.verbose = verbose
         self.quiet = quiet
+        self.read_caches = read_caches
+        self.write_cache = write_cache
 
-    def resolve(self, request_url, public_id, context):
+    def resolve(self, request, public_id, context):
         # Get or create the cached URL request
         try:
-            path = getCacheRequest(request_url, verbose=self.verbose)
+#            # Try to append .xml if not in the filename
+#            if not request.endswith('.xml'):
+#                request += '.xml'
+            path = getCacheRequest(self.read_caches, self.write_cache,
+                                   request, verbose=self.verbose)
         except IOError, e:
             xml2rfc.log.error('Failed to load resource (' + str(e) + '):', 
-                              request_url)
+                              request)
             return
         if self.verbose:
             xml2rfc.log.write('Loading resource... ', path)
@@ -76,12 +88,43 @@ class CachingResolver(lxml.etree.Resolver):
 
 class XmlRfcParser:
     """ XML parser with callbacks to construct an RFC tree """
-    def __init__(self, filename, verbose=False, quiet=False):
+    def __init__(self, filename, verbose=False, quiet=False, cache_dir=None):
         self.verbose = verbose
         self.quiet = quiet
         self.source = filename
         if not self.quiet:
             xml2rfc.log.write('Parsing file', self.source)
+
+        # Determine cache directories to read/write to
+        self.read_caches = map(os.path.expanduser, xml2rfc.CACHES)
+        self.write_cache = None
+        if cache_dir:
+            # Explicit directory given, set it as the write directory, as well
+            # as the first directory to check for reading
+            self.read_caches.insert(0, cache_dir)
+            self.write_cache = cache_dir
+        else:
+            # Try to find a valid directory to write to
+            found = False
+            for dir in self.read_caches:
+                if os.path.exists(dir) and os.access(dir, os.W_OK):
+                    self.write_cache = dir
+                    break
+                else:
+                    try:
+                        os.makedirs(dir)
+                        if self.verbose:
+                            xml2rfc.log.write('Created cache directory at', dir)
+                        self.write_cache = dir
+                    except OSError:
+                        # Can't write to this directory, try the next one
+                        pass
+            if not self.write_cache:
+                xml2rfc.log.error('Unable to find a suitible cache directory to'
+                                ' write to.  Try giving a specific directory.')
+                
+            
+                 
 
     def parse(self):
         """ Parses the source XML file and returns an XmlRfc instance """
@@ -96,32 +139,61 @@ class XmlRfcParser:
                                       remove_blank_text=True)
 
         # Add our custom resolver
-        parser.resolvers.add(CachingResolver(verbose=self.verbose, \
+        parser.resolvers.add(CachingResolver(self.read_caches,
+                                             self.write_cache,
+                                             verbose=self.verbose,
                                              quiet=self.quiet))
 
         # Parse the XML file into a tree and create an rfc instance
-        # Bubble up any syntax errors. They will need to be handled at the
-        # application level.
-        try:
-            tree = lxml.etree.parse(self.source, parser)
-        except lxml.etree.XMLSyntaxError, error:
-            raise error
-
+        tree = lxml.etree.parse(self.source, parser)
         xmlrfc = XmlRfc(tree)
         
         # Evaluate processing instructions behind root element
         xmlrfc._eval_pre_pi()
         
         # Expand 'include' instructions
-        # Try XML_LIBRARY variable, default to input source directory
-        include_dir = os.path.expanduser(os.environ.get('XML_LIBRARY', 
-                                         os.path.dirname(self.source)))
-        xmlrfc._expand_includes(include_dir, verbose=self.verbose)
+        for element in xmlrfc.getroot().iter():
+            if element.tag is lxml.etree.PI and element.text:
+                pidict = dict(xml2rfc.utils.parse_pi(element.text))
+                if 'include' in pidict and pidict['include']:
+                    request = pidict['include']
+                    # Try to append .xml if not in the filename
+                    if not request.endswith('.xml'):
+                        request += '.xml'
+                    # Get or create the cached file request
+                    try:
+                        path = getCacheRequest(self.read_caches,
+                                               self.write_cache,
+                                               request, 
+                                               verbose=self.verbose)
+                    except IOError, e:
+                        xml2rfc.log.warn('Failed to load include file '
+                                         '(' + str(e) + '):', request)
+                        break
+                    if os.path.exists(path):
+                        if self.verbose:
+                            xml2rfc.log.write('Parsing include file', path)
+                        try:
+                            root = lxml.etree.parse(path).getroot()
+                            element.addnext(root)
+                        except lxml.etree.XMLSyntaxError, error:
+                            xml2rfc.log.warn('The include file at', path,
+                                             'contained an XML error and was '\
+                                             'not expanded:', error.msg)
+                    else:
+                        xml2rfc.log.warn('Include file not found:', path)
 
         # Finally, do any extra formatting on the RFC before returning
         xmlrfc._format_whitespace()
 
         return xmlrfc
+    
+    def validate(self, xmlrfc, dtd_path=''):
+        """ Validates an XmlRfc instance with its default dtd
+            
+            Returns a pair: success flag along with a list of any errors.
+            Can also specify an alternate dtd path.
+        """
 
 
 class XmlRfc:
@@ -195,47 +267,6 @@ class XmlRfc:
             element = element.getprevious()
         # Initialize the PI dictionary with these values
         self.pis = dict(pairs)
-
-    def _expand_includes(self, dir, verbose=False):
-        """ Traverse the document tree and expand any 'include' instructions 
-        
-            Note that this is slightly different from resolving entities.  If
-            an include file is not found, the log will show a warning instead
-            of an error message, and parsing will continue, because the XML
-            may still parse.  Entities do not have this option.
-        """
-        for element in self.getroot().iter():
-            if element.tag is lxml.etree.PI and element.text:
-                pidict = dict(xml2rfc.utils.parse_pi(element.text))
-                if 'include' in pidict and pidict['include']:
-                    request = pidict['include']
-                    # Try to append .xml if not in the filename
-                    if not request.endswith('.xml'):
-                        request += '.xml'
-                    if request.startswith('http://'):
-                        # Get or create the cached URL request
-                        try:
-                            path = getCacheRequest(request, 
-                                                   verbose=verbose)
-                        except IOError, e:
-                            xml2rfc.log.warn('Failed to load include file '
-                                             '(' + str(e) + '):', request)
-                            break
-                    else:
-                        # Get the file from the given directory
-                        path = os.path.join(dir, request)
-                    if os.path.exists(path):
-                        if verbose:
-                            xml2rfc.log.write('Parsing include file', path)
-                        try:
-                            root = lxml.etree.parse(path).getroot()
-                            element.addnext(root)
-                        except lxml.etree.XMLSyntaxError, error:
-                            xml2rfc.log.warn('The include file at', path,
-                                             'contained an XML error and was '\
-                                             'not expanded:', error.msg)
-                    else:
-                        xml2rfc.log.warn('Include file not found:', path)
 
     def _format_whitespace(self):
         """ Traverse the document tree and properly format whitespace
