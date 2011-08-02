@@ -70,6 +70,10 @@ class CachingResolver(lxml.etree.Resolver):
         self.write_cache = write_cache
 
     def resolve(self, request, public_id, context):
+        if not request:
+            # Not sure why but sometimes LXML will ask for an empty request,
+            # So lets give it an empty response.
+            return None
         # Get or create the cached URL request
         try:
 #            # Try to append .xml if not in the filename
