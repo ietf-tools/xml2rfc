@@ -83,7 +83,8 @@ class CachingResolver(lxml.etree.Resolver):
 #            if not request.endswith('.xml'):
 #                request += '.xml'
             path = getCacheRequest(self.read_caches, self.write_cache,
-                                   request, verbose=self.verbose)
+                                   request, verbose=self.verbose,
+                                   source_dir=self.source_dir)
         except IOError, e:
             xml2rfc.log.error('Failed to load resource (' + str(e) + '):', 
                               request)
