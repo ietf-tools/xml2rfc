@@ -4,11 +4,10 @@
 # --------------------------------------------------
 
 from setuptools import setup
-import xml2rfc
 
 setup(
     name='xml2rfc',
-    version='.'.join(map(str, xml2rfc.VERSION)),
+    version='2.0.2',
     description='Validate and convert XML RFC documents to various output ' \
                   'formats',
     author='Concentric Sky',
