@@ -22,8 +22,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)
         # Document processing data
         self.width = width      # Page width
-        self.buf = []           # Main buffer
-        self.tocbuf = []        # Table of contents buffer
+        self.buf = []           # Main buffer during processing
+        self.output = []        # Final buffer that gets written to disk
         self.toc_marker = 0     # Line number in buffer to write toc too
         self.list_counters = {} # Maintain counters for 'format' type lists
         self.edit_counter = 0   # Counter for edit marks
@@ -162,10 +162,10 @@ class RawTextRfcWriter(BaseRfcWriter):
             else:
                 self.write_t_rec(t, bullet=bullet, indent=indent, \
                                  level=level + 1, lb=lb)
-
+        
     def _write_toc(self, paging=False):
-        # Write table of contents to a temporary buffer
-        self.tocbuf.extend(['', 'Table of Contents', ''])
+        """ Write table of contents to a temporary buffer and return """
+        tmpbuf = ['', 'Table of Contents', '']
         # Retrieve toc from the index
         tocindex = self._getTocIndex()
         tocdepth = self.pis.get('tocdepth', '3')
@@ -193,9 +193,9 @@ class RawTextRfcWriter(BaseRfcWriter):
             bullet = ' ' * (depth * indent_scale) + counter
             indent = 3
             sub_indent = indent + len(bullet)
-            lines = textwrap.wrap(bullet + item.title, self.width, \
-                                 initial_indent=' ' * indent, \
-                                 subsequent_indent=' ' * sub_indent)
+            lines = textwrap.wrap(bullet + item.title, self.width,
+                                  initial_indent=' ' * indent,
+                                  subsequent_indent=' ' * sub_indent)
             if paging:
                 # Construct dots
                 dots = len(lines[-1]) % 2 and ' ' or '  '
@@ -204,7 +204,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                 # Insert page
                 pagestr = ' ' + str(item.page)
                 lines[-1] = lines[-1][:0 - len(pagestr)] + pagestr
-            self.tocbuf.extend(lines)
+            tmpbuf.extend(lines)
+        return tmpbuf
 
     def _expand_xref(self, xref):
         """ Returns the proper text representation of an xref element """
@@ -713,17 +714,16 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.eref_counter = 0   # Counter for <eref> elements
 
     def post_processing(self):
-        self._write_toc()
+        if self.toc_marker > 0:
+            # Insert the table of contents into the output buffer
+            self.output = self.buf[:self.toc_marker]
+            self.output.extend(self._write_toc())
+            self.output.extend(self.buf[self.toc_marker:])
+        else:
+            self.output = self.buf
 
     def write_to_file(self, file):
         """ Writes the buffer to the specified file """
-
-        # Write buffer to file
-        for line_num, line in enumerate(self.buf):
-            # Check for marks
-            if line_num == self.toc_marker and self.toc_marker > 0:
-                for tmpline in self.tocbuf:
-                    file.write(tmpline)
-                    file.write('\r\n')
+        for line in self.output:
             file.write(line)
             file.write('\r\n')

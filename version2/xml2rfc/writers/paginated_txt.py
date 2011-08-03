@@ -22,12 +22,11 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.right_header = ''
         self.left_footer = ''
         self.center_footer = ''
-        self.break_marks = {}
+        self.break_hints = {}
         self.heading_marks = {}
-        self.paged_buf = []
         self.paged_toc_marker = 0
 
-    def make_footer(self, page):
+    def _make_footer(self, page):
         return xml2rfc.utils.justify_inline(self.left_footer, \
                                             self.center_footer, \
                                             '[Page ' + str(page) + ']')
@@ -41,18 +40,22 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         begin = len(self.buf)
         RawTextRfcWriter.write_raw(self, *args, **kwargs)
         end = len(self.buf)
-        self.break_marks[begin] = end - begin
+        self.break_hints[begin] = end - begin
 
     def _write_text(self, *args, **kwargs):
         """ Override text writer to add a marking """
         begin = len(self.buf)
         RawTextRfcWriter._write_text(self, *args, **kwargs)
         end = len(self.buf)
-        self.break_marks[begin] = end - begin
+        self.break_hints[begin] = end - begin
         
     def _force_break(self):
         """ Force a pagebreak at the current buffer position """
-        self.break_marks[len(self.buf)] = -1
+        self.break_hints[len(self.buf)] = -1
+        
+    def _toc_size_hint(self):
+        """ Return the number of lines in the table of contents """
+        return len(self._write_toc(paging=True))
     
     # ------------------------------------------------------------------------
     
@@ -122,82 +125,100 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                     if subitem != item:
                         # Print subitem
                         self._write_text(subitem, indent=9)
-                
 
     def post_processing(self):
         """ Add paging information to a secondary buffer """
-        
-        def insertFooterAndHeader():
-            self.paged_buf.append('')
-            self.paged_buf.append(self.make_footer(page_num))
-            self.paged_buf.append('\f')
-            self.paged_buf.append(header)
-            self.paged_buf.append('')
 
         # Construct header
-        header = xml2rfc.utils.justify_inline(self.left_header, \
-                                              self.center_header, \
+        header = xml2rfc.utils.justify_inline(self.left_header,
+                                              self.center_header,
                                               self.right_header)
-        
-        # Write buffer to secondary buffer, inserting breaks every 58 lines
-        page_len = 0
-        page_maxlen = 55
-        page_num = 1
+
+        # Counters    
+        current_page_length = 0
+        current_page_number = 1
+        max_page_length = 55
+
+        def insertFooterAndHeader():
+            self.output.append('')
+            self.output.append(self._make_footer(current_page_number))
+            self.output.append('\f')
+            self.output.append(header)
+            self.output.append('')
+
+        # Maintain a list of (start, end) tuples for where to re-insert the TOC
+        toc_pointers = []
+        toc_prev_start = 0     
+
         for line_num, line in enumerate(self.buf):
             if line_num == self.toc_marker and self.toc_marker > 0:
-                # Insert 'blank' table of contents to allocate space
-                RawTextRfcWriter._write_toc(self, paging=False)
-                if page_len + len(self.tocbuf) > page_maxlen:
-                    remainder = page_maxlen - page_len
-                    self.paged_buf.extend([''] * remainder)
-                    insertFooterAndHeader()
-                    page_len = 1
-                    page_num += 1
-                self.paged_toc_marker = len(self.paged_buf) + 1
-                self.paged_buf.extend(self.tocbuf)
-                page_len += len(self.tocbuf)    
-            if line_num in self.break_marks:
-                # If this section will exceed a page, force a page break by
-                # inserting blank lines until the end of the page
-                # Note that a negative value for a break indicates break
-                # No matter what (a forced break)
-                if (page_len + self.break_marks[line_num] > page_maxlen and \
+                # Insert a dummy table of contents here
+                toc_prev_start = len(self.output)
+                for n in range(self._toc_size_hint()):
+                    if current_page_length + 1 > max_page_length:
+                        # Store a pair of TOC pointers
+                        toc_pointers.append((toc_prev_start, len(self.output)))
+                        # New page
+                        insertFooterAndHeader()
+                        toc_prev_start = len(self.output)
+                        # Update counters
+                        current_page_length -= current_page_length + 1
+                        current_page_number += 1
+                    # Write dummy line
+                    self.output.append('')
+                    current_page_length += 1
+                # Store last pair of toc pointers
+                toc_pointers.append((toc_prev_start, len(self.output)))
+
+            if line_num in self.break_hints:
+                # If this size hint exceeds the rest of the page, or is set
+                # to -1 (a forced break), insert a break.
+                if (current_page_length + \
+                    self.break_hints[line_num] > max_page_length and \
                     self.pis.get('autobreaks', 'yes') == 'yes') or \
-                    self.break_marks[line_num] < 0:
-                    remainder = page_maxlen - page_len
-                    self.paged_buf.extend([''] * remainder)
-                    page_len += remainder
-            if page_len + 1 > 55:
+                    self.break_hints[line_num] < 0:
+                    
+                    # Insert break
+                    remainder = max_page_length - current_page_length
+                    self.output.extend([''] * remainder)
+                    current_page_length += remainder
+
+            if current_page_length + 1 > max_page_length:
+                # New page
                 insertFooterAndHeader()
-                page_len = 1    # Start new length at 1, blank line after header
-                page_num += 1
-            self.paged_buf.append(line)
-            page_len += 1
+                # Update counters
+                current_page_length -= current_page_length + 1
+                current_page_number += 1
+  
+            # Write the lines
+            self.output.append(line)
+            current_page_length += 1
 
             # Store page numbers for any marked elements
             if line_num in self.heading_marks:
                 item = self._getItemByAnchor(self.heading_marks[line_num])
                 if item:
-                    item.page = page_num
+                    item.page = current_page_number
             if line_num in self.iref_marks:
                 for item, subitem in self.iref_marks[line_num]:
-                    self._iref_index[item][subitem].pages.append(page_num)
+                    self._iref_index[item][subitem].\
+                    pages.append(current_page_number)
         
         # Write final footer
-        remainder = page_maxlen - page_len
-        self.paged_buf.extend([''] * remainder)
-        self.paged_buf.extend(['', self.make_footer(page_num)])
+        remainder = max_page_length - current_page_length
+        self.output.extend([''] * remainder)
+        self.output.extend(['', self._make_footer(current_page_number)])
         
-        # Write real table of contents to tocbuf and replace dummy
-        if self.toc_marker > 0:
-            self.tocbuf = []
-            RawTextRfcWriter._write_toc(self, paging=True)
-            i = self.paged_toc_marker - 1
-            j = i + len(self.tocbuf)
-            self.paged_buf[i:j] = self.tocbuf
-                
-    def write_to_file(self, file):
-        """ Override RawTextRfcWriter to use the paged buffer """
-        for line in self.paged_buf:
-            file.write(line)
-            file.write('\r\n')
+        # Now we need to go back into the buffer and insert the real table 
+        # of contents based on the pointers we created
+        if len(toc_pointers) > 0:
+            tocbuf = self._write_toc(paging=True)
+            ptr, end = toc_pointers.pop(0)
+            for line in tocbuf:
+                self.output[ptr] = line
+                ptr += 1
+                if ptr >= end:
+                    if len(toc_pointers) > 0:
+                        ptr, end = toc_pointers.pop(0)
+                    else:
+                        break
