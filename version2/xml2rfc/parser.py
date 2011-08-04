@@ -19,98 +19,25 @@ __all__ = ['XmlRfcParser', 'XmlRfc']
 # Static paths
 template_dir = os.path.join(os.path.dirname(xml2rfc.__file__), 'templates')
 default_dtd_path = os.path.join(template_dir, 'rfc2629.dtd')
-
-
-def getCacheRequest(read_caches, write_cache, request_url, verbose=False,
-                    source_dir='.'):
-    """ Returns the local path to a cached citation from URL
-    
-        Unless URL is a local path, in which case it will consult $XML_LIBRARY
-    
-        The caches in read_dirs are consulted in sequence order to find the
-        request.  If not found, the request will be cached at write_dir.
-    """
-    urlobj = urlparse.urlparse(request_url)
-    filename = os.path.basename(urlobj.path)
-    if filename.endswith('.dtd'):
-        # Found a dtd request, load from templates directory
-        cached_path = os.path.join(template_dir, filename)
-    elif urlobj.netloc:
-        # Network entity, try to load from each cache, finally downloading
-        # and caching to `write_cache` if its not found.
-        found = False
-        for dir in read_caches:
-            cached_path = os.path.join(dir, filename)
-            if os.path.exists(cached_path):
-                found = True
-                break
-        if not found:
-            cached_path = os.path.join(write_cache, filename)
-            xml2rfc.utils.StrictUrlOpener().retrieve(request_url, 
-                                                     cached_path)
-            if verbose:
-                xml2rfc.log.write('Created cache for', request_url)
-    else:
-        # Not dtd or network entity, try `basename` in XML_LIBRARY variable, 
-        # default to path of the source file
-        basename = os.path.basename(urlobj.path)
-        include_dir = os.path.expanduser(os.environ.get('XML_LIBRARY', 
-                                         os.path.dirname(urlobj.path)))
-        cached_path = os.path.join(include_dir, basename)
-        if not os.path.exists(cached_path):
-            cached_path = os.path.join(source_dir, filename)
-    return cached_path
         
 
 class CachingResolver(lxml.etree.Resolver):
     """ Custom ENTITY request handler that uses a local cache """
-    def __init__(self, read_caches, write_cache, verbose=False, quiet=False,
-                 source_dir='.'):
+    def __init__(self, cache_path=None, library_path=None, source_path='.',
+                 verbose=False, quiet=False):
         self.verbose = verbose
         self.quiet = quiet
-        self.source_dir = source_dir
-        self.read_caches = read_caches
-        self.write_cache = write_cache
-
-    def resolve(self, request, public_id, context):
-        if not request:
-            # Not sure why but sometimes LXML will ask for an empty request,
-            # So lets give it an empty response.
-            return None
-        # Get or create the cached URL request
-        try:
-#            # Try to append .xml if not in the filename
-#            if not request.endswith('.xml'):
-#                request += '.xml'
-            path = getCacheRequest(self.read_caches, self.write_cache,
-                                   request, verbose=self.verbose,
-                                   source_dir=self.source_dir)
-        except IOError, e:
-            xml2rfc.log.error('Failed to load resource (' + str(e) + '):', 
-                              request)
-            return
-        if self.verbose:
-            xml2rfc.log.write('Loading resource... ', path)
-        return self.resolve_filename(path, context)
-            
-
-class XmlRfcParser:
-    """ XML parser with callbacks to construct an RFC tree """
-    def __init__(self, filename, verbose=False, quiet=False, cache_dir=None):
-        self.verbose = verbose
-        self.quiet = quiet
-        self.source = filename
-        if not self.quiet:
-            xml2rfc.log.write('Parsing file', self.source)
+        self.source_path = source_path
+        self.library_path = library_path
 
         # Determine cache directories to read/write to
         self.read_caches = map(os.path.expanduser, xml2rfc.CACHES)
         self.write_cache = None
-        if cache_dir:
+        if cache_path:
             # Explicit directory given, set it as the write directory, as well
             # as the first directory to check for reading
-            self.read_caches.insert(0, cache_dir)
-            self.write_cache = cache_dir
+            self.read_caches.insert(0, cache_path)
+            self.write_cache = cache_path
         else:
             # Try to find a valid directory to write to
             found = False
@@ -130,9 +57,85 @@ class XmlRfcParser:
             if not self.write_cache:
                 xml2rfc.log.error('Unable to find a suitible cache directory to'
                                 ' write to.  Try giving a specific directory.')
-                
+
+    def resolve(self, request, public_id, context):
+        if not request:
+            # Not sure why but sometimes LXML will ask for an empty request,
+            # So lets give it an empty response.
+            return None
+        # Get or create the cached URL request
+        try:
+#            # Try to append .xml if not in the filename
+#            if not request.endswith('.xml'):
+#                request += '.xml'
+            path = self.getCacheRequest(request)
+        except IOError, e:
+            xml2rfc.log.error('Failed to load resource (' + str(e) + '):', 
+                              request)
+            return
+        if self.verbose:
+            xml2rfc.log.write('Loading resource... ', path)
+        return self.resolve_filename(path, context)
+    
+    def getCacheRequest(self, request):
+        """ Returns the local path to a cached citation from URL
+        
+            Unless URL is a local path, in which case it will consult 
+            $XML_LIBRARY
+        
+            The caches in read_dirs are consulted in sequence order to find the
+            request.  If not found, the request will be cached at write_dir.
+        """
+        urlobj = urlparse.urlparse(request)
+        filename = os.path.basename(urlobj.path)
+        if filename.endswith('.dtd'):
+            # Found a dtd request, load from templates directory
+            cached_path = os.path.join(template_dir, filename)
+        elif urlobj.netloc:
+            # Network entity, try to load from each cache, finally downloading
+            # and caching to `write_cache` if its not found.
+            found = False
+            for dir in self.read_caches:
+                cached_path = os.path.join(dir, filename)
+                if os.path.exists(cached_path):
+                    found = True
+                    break
+            if not found:
+                cached_path = os.path.join(self.write_cache, filename)
+                xml2rfc.utils.StrictUrlOpener().retrieve(request, cached_path)
+                if self.verbose:
+                    xml2rfc.log.write('Created cache for', request)
+        else:
+            # Not dtd or network entity, try paths in the following order
+            #    1. `library_path` given
+            #    2. XML_LIBRARY environment variable
+            #    3. Directory of source file
+            basename = os.path.basename(urlobj.path)
+            include_dir = self.library_path or \
+                          os.path.expanduser(os.environ.get('XML_LIBRARY', '.'))
+            cached_path = os.path.join(include_dir, basename)
+            if not os.path.exists(cached_path):
+                # Default to directory of input source file
+                cached_path = os.path.join(self.source_path, filename)
+        return cached_path
             
-                 
+
+class XmlRfcParser:
+    """ XML parser with callbacks to construct an RFC tree """
+    def __init__(self, filename, verbose=False, quiet=False,
+                 cache_path=None, library_path=None):
+        self.verbose = verbose
+        self.quiet = quiet
+        self.source = filename
+        if not self.quiet:
+            xml2rfc.log.write('Parsing file', self.source)
+        
+        # Initialize the caching system
+        self.cachingResolver = CachingResolver(cache_path=cache_path,
+                                               library_path=library_path,
+                                        source_path=os.path.dirname(filename),
+                                                verbose=verbose,
+                                                quiet=quiet)
 
     def parse(self):
         """ Parses the source XML file and returns an XmlRfc instance """
@@ -147,11 +150,7 @@ class XmlRfcParser:
                                       remove_blank_text=True)
 
         # Add our custom resolver
-        parser.resolvers.add(CachingResolver(self.read_caches,
-                                        self.write_cache,
-                                        source_dir=os.path.dirname(self.source),
-                                        verbose=self.verbose,
-                                        quiet=self.quiet))
+        parser.resolvers.add(self.cachingResolver)
 
         # Parse the XML file into a tree and create an rfc instance
         tree = lxml.etree.parse(self.source, parser)
@@ -171,10 +170,7 @@ class XmlRfcParser:
                         request += '.xml'
                     # Get or create the cached file request
                     try:
-                        path = getCacheRequest(self.read_caches,
-                                        self.write_cache, request, 
-                                        verbose=self.verbose,
-                                        source_dir=os.path.dirname(self.source))
+                        path = self.cachingResolver.getCacheRequest(request)
                     except IOError, e:
                         xml2rfc.log.warn('Failed to load include file '
                                          '(' + str(e) + '):', request)
@@ -282,7 +278,7 @@ class XmlRfc:
                     element.text = re.sub('\s*\n\s*', ' ', \
                                    re.sub('\.\s*\n\s*', '.  ', \
                                    element.text.lstrip()))
-                    
+
                 if element.tail is not None:
                     element.tail = re.sub('\s*\n\s*', ' ', \
                                    re.sub('\.\s*\n\s*', '.  ', \

@@ -116,7 +116,8 @@ def main():
 
     # Parse the document into an xmlrfc tree instance
     parser = xml2rfc.XmlRfcParser(source, verbose=options.verbose,
-                                  quiet=options.quiet)
+                                  quiet=options.quiet,
+                                  cache_path=options.cache)
     try:
         xmlrfc = parser.parse()
     except lxml.etree.XMLSyntaxError, error:  # Catch XML errors
