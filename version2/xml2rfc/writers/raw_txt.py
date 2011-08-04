@@ -24,7 +24,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.width = width      # Page width
         self.buf = []           # Main buffer during processing
         self.output = []        # Final buffer that gets written to disk
-        self.toc_marker = 0     # Line number in buffer to write toc too
+        self.toc_marker = 0     # Line number in buffer to write toc to
+        self.iref_marker = 0    # Line number in buffer to write index to
         self.list_counters = {} # Maintain counters for 'format' type lists
         self.edit_counter = 0   # Counter for edit marks
         self.eref_counter = 0   # Counter for <eref> elements
@@ -206,6 +207,32 @@ class RawTextRfcWriter(BaseRfcWriter):
                 lines[-1] = lines[-1][:0 - len(pagestr)] + pagestr
             tmpbuf.extend(lines)
         return tmpbuf
+            
+    def _write_iref_index(self):
+        """ Write iref index to a temporary buffer and return """
+        tmpbuf = ['', 'Index']
+        # Sort iref items alphabetically, store by first letter 
+        alpha_bucket = {}
+        for key in sorted(self._iref_index.keys()):
+            letter = key[0].upper()
+            if letter in alpha_bucket:
+                alpha_bucket[letter].append(key)
+            else:
+                alpha_bucket[letter] = [key]
+        for letter in sorted(alpha_bucket.keys()):
+            # Write letter
+            self._write_text(letter, indent=3, lb=True, buf=tmpbuf)
+            for item in alpha_bucket[letter]:
+                pages = self._iref_index[item].pages
+                # Write item
+                self._write_text(item + '  ' + ', '.join(map(str, pages))
+                                                        , indent=6, buf=tmpbuf)
+                for subitem in self._iref_index[item].subitems:
+                    pages = self._iref_index[item].subitems[subitem].pages
+                    # Write subitem
+                    self._write_text(subitem + '  ' + ', '.join(map(str,pages))
+                                                        , indent=9, buf=tmpbuf)
+        return tmpbuf
 
     def _expand_xref(self, xref):
         """ Returns the proper text representation of an xref element """
@@ -275,10 +302,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             elif element.tag == 'iref':
                 item = element.attrib.get('item', None)
                 if item:
-                    subitem = element.attrib.get('subitem')
-                    if not subitem:
-                        # We'll simply duplicate item's key if there is no sub
-                        subitem = item
+                    subitem = element.attrib.get('subitem', None)
                     self._make_iref(item, subitem)
                     # Store the buffer position for pagination data later
                     pos = len(self.buf)
@@ -327,6 +351,10 @@ class RawTextRfcWriter(BaseRfcWriter):
     def insert_toc(self):
         """ Marks buffer position for post-writing table of contents """
         self.toc_marker = len(self.buf)
+        
+    def insert_iref_index(self):
+        """ Marks buffer position for post-writing index """
+        self.iref_marker = len(self.buf)
 
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
                   delimiter=None, lb=True):

@@ -32,8 +32,8 @@ class _RfcItem:
 class _IrefItem:
     """ A unique ID object for an iref element """
     def __init__(self):
-        # Pages this element appears on
         self.pages = []
+        self.subitems = {}
 
 
 class BaseRfcWriter:
@@ -158,15 +158,12 @@ class BaseRfcWriter:
         self._index = []
         self._iref_index = {}
         
-    def _make_iref(self, item, subitem):
-        """ Get or create an iref ID object """
-        if item in self._iref_index:
-            if subitem in self._iref_index[item]:
-                return self._iref_index[item][subitem]
-            else:
-                self._iref_index[item][subitem] = _IrefItem()
-        else:
-            self._iref_index[item] = {subitem: _IrefItem()}
+    def _make_iref(self, item, subitem=None):
+        """ Create an iref ID object if it doesnt exist yet """
+        if item not in self._iref_index:
+            self._iref_index[item] = _IrefItem()
+        if subitem and subitem not in self._iref_index[item].subitems:
+            self._iref_index[item].subitems[subitem] = _IrefItem()
 
     def _indexParagraph(self, counter, p_counter, anchor=None, toc=False):
         counter = str(counter)  # This is the section counter
@@ -607,7 +604,7 @@ class BaseRfcWriter:
         # The writer is responsible for tracking irefs,
         # so we have nothing to pass here
         if not self.indexmode:
-            self.write_iref_index()
+            self.insert_iref_index()
 
         # Authors addresses section
         authors = self.r.findall('front/author')
@@ -665,6 +662,11 @@ class BaseRfcWriter:
     def insert_toc(self):
         """ Marks the current buffer position to insert ToC at """
         raise NotImplementedError('insert_toc() needs to be overridden')
+    
+    def insert_iref_index(self):
+        """ Marks the current buffer position to insert the index at """
+        raise NotImplementedError('insert_iref_index() needs to be ' \
+                                  'overridden')
 
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
                   delimiter=None):
@@ -709,11 +711,6 @@ class BaseRfcWriter:
     def write_reference_list(self, list):
         """ Writes a <references> element """
         raise NotImplementedError('write_reference_list() needs to be ' \
-                                  'overridden')
-
-    def write_iref_index(self):
-        """ Writes an additional index if there were iref elements """
-        raise NotImplementedError('write_iref_index() needs to be ' \
                                   'overridden')
 
     def insert_anchor(self, text):

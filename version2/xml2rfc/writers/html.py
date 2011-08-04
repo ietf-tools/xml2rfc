@@ -568,7 +568,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         # Add to body buffer
         self.active_buffer.append(self._serialize(E.DIV(id=text)))
 
-    def write_iref_index(self):
+    def insert_iref_index(self):
 #        # Omit this element if the index is empty
 #        if len(self.iref_index) > 0:
 #            self.write_heading('Index', autoAnchor='index')

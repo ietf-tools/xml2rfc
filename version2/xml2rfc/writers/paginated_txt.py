@@ -54,8 +54,10 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.break_hints[len(self.buf)] = -1
         
     def _toc_size_hint(self):
-        """ Return the number of lines in the table of contents """
         return len(self._write_toc(paging=True))
+    
+    def _iref_size_hint(self):
+        return len(self._write_iref_index())
     
     # ------------------------------------------------------------------------
     
@@ -100,31 +102,6 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         # Check for PI override
         self.center_footer = self.pis.get('footer', self.center_footer)
         self.left_header = self.pis.get('header', self.left_header)
-        
-    def write_iref_index(self):
-        self.write_heading('Index')
-        # Sort iref items alphabetically, store by first letter 
-        alpha_bucket = {}
-        for key in sorted(self._iref_index.keys()):
-            letter = key[0].upper()
-            if letter in alpha_bucket:
-                alpha_bucket[letter].append(key)
-            else:
-                alpha_bucket[letter] = [key]
-        for letter, iref_items in alpha_bucket.items():
-            # Print letter
-            self._write_text(letter, indent=3, lb=True)
-            for item in iref_items:
-                # Pages for an item without a subelement
-                pages = item in self._iref_index[item] and \
-                        self._iref_index[item][item].pages or []
-                # Print item
-                self._write_text(item + ' ' + ', '.join(map(str, pages))
-                                                        , indent=6)
-                for subitem in self._iref_index[item]:
-                    if subitem != item:
-                        # Print subitem
-                        self._write_text(subitem, indent=9)
 
     def post_processing(self):
         """ Add paging information to a secondary buffer """
@@ -146,9 +123,11 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             self.output.append(header)
             self.output.append('')
 
-        # Maintain a list of (start, end) tuples for where to re-insert the TOC
+        # Maintain a list of (start, end) pointers for elements to re-insert
         toc_pointers = []
         toc_prev_start = 0     
+        iref_pointers = []
+        iref_prev_start = 0
 
         for line_num, line in enumerate(self.buf):
             if line_num == self.toc_marker and self.toc_marker > 0:
@@ -169,6 +148,25 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                     current_page_length += 1
                 # Store last pair of toc pointers
                 toc_pointers.append((toc_prev_start, len(self.output)))
+                
+            if line_num == self.iref_marker and self.iref_marker > 0:
+                # Insert a dummy table of contents here
+                iref_prev_start = len(self.output)
+                for n in range(self._iref_size_hint()):
+                    if current_page_length + 1 > max_page_length:
+                        # Store a pair of pointers
+                        iref_pointers.append((iref_prev_start, len(self.output)))
+                        # New page
+                        insertFooterAndHeader()
+                        iref_prev_start = len(self.output)
+                        # Update counters
+                        current_page_length -= current_page_length + 1
+                        current_page_number += 1
+                    # Write dummy line
+                    self.output.append('')
+                    current_page_length += 1
+                # Store last pair of pointers
+                iref_pointers.append((iref_prev_start, len(self.output)))
 
             if line_num in self.break_hints:
                 # If this size hint exceeds the rest of the page, or is set
@@ -190,7 +188,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 current_page_length -= current_page_length + 1
                 current_page_number += 1
   
-            # Write the lines
+            # Write the line
             self.output.append(line)
             current_page_length += 1
 
@@ -201,16 +199,21 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                     item.page = current_page_number
             if line_num in self.iref_marks:
                 for item, subitem in self.iref_marks[line_num]:
-                    self._iref_index[item][subitem].\
-                    pages.append(current_page_number)
-        
+                    # Store pages in item unless there are subitems
+                    if subitem:
+                        self._iref_index[item].subitems[subitem].\
+                        pages.append(current_page_number)
+                    else:
+                        self._iref_index[item].\
+                        pages.append(current_page_number)
+
         # Write final footer
         remainder = max_page_length - current_page_length
         self.output.extend([''] * remainder)
         self.output.extend(['', self._make_footer(current_page_number)])
         
         # Now we need to go back into the buffer and insert the real table 
-        # of contents based on the pointers we created
+        # of contents and iref based on the pointers we created
         if len(toc_pointers) > 0:
             tocbuf = self._write_toc(paging=True)
             ptr, end = toc_pointers.pop(0)
@@ -220,5 +223,17 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 if ptr >= end:
                     if len(toc_pointers) > 0:
                         ptr, end = toc_pointers.pop(0)
+                    else:
+                        break
+
+        if len(iref_pointers) > 0:
+            irefbuf = self._write_iref_index()
+            ptr, end = iref_pointers.pop(0)
+            for line in irefbuf:
+                self.output[ptr] = line
+                ptr += 1
+                if ptr >= end:
+                    if len(iref_pointers) > 0:
+                        ptr, end = iref_pointers.pop(0)
                     else:
                         break
