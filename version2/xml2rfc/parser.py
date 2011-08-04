@@ -88,7 +88,7 @@ class CachingResolver(lxml.etree.Resolver):
         """
         urlobj = urlparse.urlparse(request)
         filename = os.path.basename(urlobj.path)
-        if filename.endswith('.dtd'):
+        if filename.endswith('.dtd') or filename.endswith('.ent'):
             # Found a dtd request, load from templates directory
             cached_path = os.path.join(template_dir, filename)
         elif urlobj.netloc:
