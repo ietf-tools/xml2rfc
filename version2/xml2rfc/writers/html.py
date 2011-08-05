@@ -7,6 +7,7 @@ from lxml.html import builder as E
 import lxml
 import os.path
 import string
+import sys
 
 # Local libs
 import xml2rfc
@@ -27,7 +28,13 @@ class HtmlRfcWriter(BaseRfcWriter):
     # HTML Specific Defaults that are not provided in templates or XML
     defaults = {'references_url': 'http://tools.ietf.org/html/',
                }
+    # Find appropriate template directory
     template_dir = 'templates'
+    for dir in [os.path.join(os.path.dirname(xml2rfc.__file__), 'templates'),
+                os.path.join(sys.executable, 'templates')]:
+        if os.path.exists(dir):
+            template_dir = dir
+            break
 
     def __init__(self, xmlrfc, quiet=False, verbose=False):
         BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)

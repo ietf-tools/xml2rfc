@@ -16,8 +16,13 @@ import xml2rfc.log
 __all__ = ['XmlRfcParser', 'XmlRfc']
 
 
-# Static paths
-template_dir = os.path.join(os.path.dirname(xml2rfc.__file__), 'templates')
+# Find appropriate template directory
+template_dir = 'templates'
+for dir in [os.path.join(os.path.dirname(xml2rfc.__file__), 'templates'),
+            os.path.join(sys.executable, 'templates')]:
+    if os.path.exists(dir):
+        template_dir = dir
+        break
 default_dtd_path = os.path.join(template_dir, 'rfc2629.dtd')
         
 
