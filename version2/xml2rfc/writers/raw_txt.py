@@ -6,6 +6,7 @@
 import textwrap
 import string
 import math
+import lxml
 
 # Local lib
 from xml2rfc.writers.base import BaseRfcWriter
@@ -124,45 +125,52 @@ class RawTextRfcWriter(BaseRfcWriter):
             elif counter_index not in self.list_counters:
                 # Initialize if we need to
                 self.list_counters[counter_index] = 0
-        for i, t in enumerate(list.findall('t')):
-            # Disable linebreak if subcompact=yes AND not first list element
-            lb = True
-            if i > 0 and self.pis.get('subcompact', \
-                self.pis.get('compact', \
-                self.pis.get('rfcedstyle', 'no'))) == 'yes':
-                lb = False
-            if style == 'symbols':
-                bullet = self.list_symbols[level % len(self.list_symbols)]
-                bullet += '  '
-            elif style == 'numbers':
-                bullet = str(i + 1) + '.  '
-            elif style == 'letters':
-                bullet = string.ascii_lowercase[i % 26] + '.  '
-            elif style == 'hanging':
-                bullet = t.attrib.get('hangText', '')
-                # Add an extra space if there is a colon, and colonspace is on
-                if bullet.endswith(':') and \
-                self.pis.get('colonspace', 'no') == 'no':
-                    bullet+= ' '
-                else:
+        t_count = 0
+        for element in list:
+            # Check for PI
+            if element.tag is lxml.etree.PI:
+                self.xmlrfc.parse_pi(element)
+            elif element.tag == 't':
+                # Disable linebreak if subcompact=yes AND not first list element
+                lb = True
+                if t_count > 0 and self.pis.get('subcompact', \
+                    self.pis.get('compact', \
+                    self.pis.get('rfcedstyle', 'no'))) == 'yes':
+                    lb = False
+                if style == 'symbols':
+                    bullet = self.list_symbols[level % len(self.list_symbols)]
                     bullet += '  '
-            elif style.startswith('format'):
-                self.list_counters[counter_index] += 1
-                count = self.list_counters[counter_index]
-                if '%d' in format_str:
-                    bullet = format_str.replace(r'%d', str(count) + ' ')
-                elif '%c' in format_str:
-                    bullet = format_str.replace(r'%c', \
-                            str(string.ascii_lowercase[count % 26]) + ' ')
+                elif style == 'numbers':
+                    bullet = str(t_count + 1) + '.  '
+                elif style == 'letters':
+                    bullet = string.ascii_lowercase[t_count % 26] + '.  '
+                elif style == 'hanging':
+                    bullet = element.attrib.get('hangText', '')
+                    # Add an extra space in front of colon if colonspace enabled
+                    if bullet.endswith(':') and \
+                    self.pis.get('colonspace', 'no') == 'no':
+                        bullet+= ' '
+                    else:
+                        bullet += '  '
+                elif style.startswith('format'):
+                    self.list_counters[counter_index] += 1
+                    count = self.list_counters[counter_index]
+                    if '%d' in format_str:
+                        bullet = format_str.replace(r'%d', str(count) + ' ')
+                    elif '%c' in format_str:
+                        bullet = format_str.replace(r'%c', \
+                                str(string.ascii_lowercase[count % 26]) + ' ')
+                    else:
+                        bullet = format_str
+                if hangIndent:
+                    self.write_t_rec(element, bullet=bullet, indent=indent, \
+                                     level=level + 1, \
+                                     sub_indent=int(hangIndent), lb=lb)
                 else:
-                    bullet = format_str
-            if hangIndent:
-                self.write_t_rec(t, bullet=bullet, indent=indent, \
-                                 level=level + 1, \
-                                 sub_indent=int(hangIndent), lb=lb)
-            else:
-                self.write_t_rec(t, bullet=bullet, indent=indent, \
-                                 level=level + 1, lb=lb)
+                    self.write_t_rec(element, bullet=bullet, indent=indent, \
+                                     level=level + 1, lb=lb)
+                t_count += 1
+
         
     def _write_toc(self, paging=False):
         """ Write table of contents to a temporary buffer and return """
@@ -288,6 +296,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         """
         line = ['']
         for i, element in enumerate(elements):
+            # Check for a PI first
+            if element.tag is lxml.etree.PI:
+                self.xmlrfc.parse_pi(element)
             if element.tag not in self.inline_tags:
                 # Not an inline element, exit
                 return ''.join(line), elements[i:]

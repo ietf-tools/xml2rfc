@@ -161,8 +161,8 @@ class XmlRfcParser:
         
         # Expand 'include' instructions
         for element in xmlrfc.getroot().iter():
-            if element.tag is lxml.etree.PI and element.text:
-                pidict = dict(xml2rfc.utils.parse_pi(element.text))
+            if element.tag is lxml.etree.PI:
+                pidict = xmlrfc.parse_pi(element)
                 if 'include' in pidict and pidict['include']:
                     request = pidict['include']
                     # Try to append .xml if not in the filename
@@ -204,6 +204,7 @@ class XmlRfc:
 
     def __init__(self, tree):
         self.tree = tree
+        self.pis = {}
 
     def getroot(self):
         """ Wrapper method to get the root of the XML tree"""
@@ -248,6 +249,24 @@ class XmlRfc:
         else:
             # The document was not valid
             return False, dtd.error_log
+    
+    def parse_pi(self, pi):
+        """ Add a processing instruction to the current state 
+            
+            Will also return the dictionary containing the added instructions
+            for use in things like ?include instructions
+        """
+        if pi.text:
+            # Split text in the format 'key="val"'
+            chunks = re.split(r'=[\'"]([^\'"]*)[\'"]', pi.text)
+            # Create pairs from this flat list, discard last element if odd
+            tmp_dict = dict(zip(chunks[::2], chunks[1::2]))
+            for key, val in tmp_dict.items():
+                # Update main PI state
+                self.pis[key] = val
+            # Return the new values added
+            return tmp_dict
+        return {}
 
     def _eval_pre_pi(self):
         """ Evaluate pre-document processing instructions
@@ -259,12 +278,10 @@ class XmlRfc:
         element = self.tree.getroot().getprevious()
         pairs = []
         while element is not None:
-            if element.tag is lxml.etree.PI and element.text:
-                pairs.extend(xml2rfc.utils.parse_pi(element.text))
+            if element.tag is lxml.etree.PI:
+                self.parse_pi(element)
             element = element.getprevious()
-        # Initialize the PI dictionary with these values
-        self.pis = dict(pairs)
-
+    
     def _format_whitespace(self):
         """ Traverse the document tree and properly format whitespace
         

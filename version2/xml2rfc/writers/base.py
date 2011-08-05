@@ -6,6 +6,7 @@ import copy
 import codecs
 import string
 import datetime
+import lxml
 import xml2rfc.log
 
 
@@ -453,6 +454,9 @@ class BaseRfcWriter:
 
         p_count = 1  # Paragraph counter
         for element in section:
+            # Check for a PI
+            if element.tag is lxml.etree.PI:
+                self.xmlrfc.parse_pi(element)
             # Write elements in XML document order
             if element.tag == 't':
                 anchor = element.attrib.get('anchor')
