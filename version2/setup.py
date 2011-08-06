@@ -7,7 +7,7 @@ from setuptools import setup
 
 setup(
     name='xml2rfc',
-    version='2.0.5',
+    version='2.0.6',
     description='Validate and convert XML RFC documents to various output ' \
                   'formats',
     author='Concentric Sky',

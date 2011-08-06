@@ -39,29 +39,25 @@ class CachingResolver(lxml.etree.Resolver):
         self.read_caches = map(os.path.expanduser, xml2rfc.CACHES)
         self.write_cache = None
         if cache_path:
-            # Explicit directory given, set it as the write directory, as well
-            # as the first directory to check for reading
+            # Explicit directory given, set as first directory in read_caches
             self.read_caches.insert(0, cache_path)
-            self.write_cache = cache_path
-        else:
-            # Try to find a valid directory to write to
-            found = False
-            for dir in self.read_caches:
-                if os.path.exists(dir) and os.access(dir, os.W_OK):
+        # Try to find a valid directory to write to
+        for dir in self.read_caches:
+            if os.path.exists(dir) and os.access(dir, os.W_OK):
+                self.write_cache = dir
+                break
+            else:
+                try:
+                    os.makedirs(dir)
+                    if self.verbose:
+                        xml2rfc.log.write('Created cache directory at', dir)
                     self.write_cache = dir
-                    break
-                else:
-                    try:
-                        os.makedirs(dir)
-                        if self.verbose:
-                            xml2rfc.log.write('Created cache directory at', dir)
-                        self.write_cache = dir
-                    except OSError:
-                        # Can't write to this directory, try the next one
-                        pass
-            if not self.write_cache:
-                xml2rfc.log.error('Unable to find a suitible cache directory to'
-                                ' write to.  Try giving a specific directory.')
+                except OSError:
+                    # Can't write to this directory, try the next one
+                    pass
+        if not self.write_cache:
+            xml2rfc.log.warn('Unable to find a suitible cache directory to '
+                            'write to.  Try giving a specific directory.')
 
     def resolve(self, request, public_id, context):
         if not request:
