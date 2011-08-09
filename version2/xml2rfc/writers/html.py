@@ -28,25 +28,23 @@ class HtmlRfcWriter(BaseRfcWriter):
     # HTML Specific Defaults that are not provided in templates or XML
     defaults = {'references_url': 'http://tools.ietf.org/html/',
                }
-    # Find appropriate template directory
-    template_dir = 'templates'
-    for dir in [os.path.join(os.path.dirname(xml2rfc.__file__), 'templates'),
-                os.path.join(sys.executable, 'templates')]:
-        if os.path.exists(dir):
-            template_dir = dir
-            break
 
-    def __init__(self, xmlrfc, quiet=False, verbose=False):
+    def __init__(self, xmlrfc, quiet=False, verbose=False, templates_dir=None):
         BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)
         self.list_counters = {}
         self.iref_index = []
         
+        # Initialize templates directory
+        self.templates_dir = templates_dir or \
+                             os.path.join(os.path.dirname(xml2rfc.__file__),
+                                          'templates')
+
         # Open template files and read into string.template objects
         self.templates = {}
         for filename in ['base.html',
                          'address_card.html']:
             file = open(os.path.join(os.path.dirname(xml2rfc.__file__), 
-                                     self.template_dir, filename), 'r')
+                                     self.templates_dir, filename), 'r')
             self.templates[filename] = string.Template(file.read())
 
         # Buffers to aggregate various elements before processing template

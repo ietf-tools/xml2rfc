@@ -16,24 +16,15 @@ import xml2rfc.log
 __all__ = ['XmlRfcParser', 'XmlRfc']
 
 
-# Find appropriate template directory
-template_dir = 'templates'
-for dir in [os.path.join(os.path.dirname(xml2rfc.__file__), 'templates'),
-            os.path.join(sys.executable, 'templates')]:
-    if os.path.exists(dir):
-        template_dir = dir
-        break
-default_dtd_path = os.path.join(template_dir, 'rfc2629.dtd')
-        
-
 class CachingResolver(lxml.etree.Resolver):
     """ Custom ENTITY request handler that uses a local cache """
     def __init__(self, cache_path=None, library_path=None, source_path='.',
-                 verbose=False, quiet=False):
+                 templates_path='templates', verbose=False, quiet=False):
         self.verbose = verbose
         self.quiet = quiet
         self.source_path = source_path
         self.library_path = library_path
+        self.templates_path = templates_path
 
         # Determine cache directories to read/write to
         self.read_caches = map(os.path.expanduser, xml2rfc.CACHES)
@@ -91,7 +82,7 @@ class CachingResolver(lxml.etree.Resolver):
         filename = os.path.basename(urlobj.path)
         if filename.endswith('.dtd') or filename.endswith('.ent'):
             # Found a dtd request, load from templates directory
-            cached_path = os.path.join(template_dir, filename)
+            cached_path = os.path.join(self.templates_path, filename)
         elif urlobj.netloc:
             # Network entity, try to load from each cache, finally downloading
             # and caching to `write_cache` if its not found.
@@ -124,16 +115,23 @@ class CachingResolver(lxml.etree.Resolver):
 class XmlRfcParser:
     """ XML parser with callbacks to construct an RFC tree """
     def __init__(self, filename, verbose=False, quiet=False,
-                 cache_path=None, library_path=None):
+                 cache_path=None, library_path=None, templates_path=None):
         self.verbose = verbose
         self.quiet = quiet
         self.source = filename
         if not self.quiet:
             xml2rfc.log.write('Parsing file', self.source)
+            
+        # Initialize templates directory
+        self.templates_path = templates_path or \
+                             os.path.join(os.path.dirname(xml2rfc.__file__),
+                                          'templates')
+        self.default_dtd_path = os.path.join(self.templates_path, 'rfc2629.dtd')
         
         # Initialize the caching system
         self.cachingResolver = CachingResolver(cache_path=cache_path,
                                                library_path=library_path,
+                                        templates_path=self.templates_path,
                                         source_path=os.path.dirname(filename),
                                                 verbose=verbose,
                                                 quiet=quiet)
@@ -155,7 +153,7 @@ class XmlRfcParser:
 
         # Parse the XML file into a tree and create an rfc instance
         tree = lxml.etree.parse(self.source, parser)
-        xmlrfc = XmlRfc(tree)
+        xmlrfc = XmlRfc(tree, self.default_dtd_path)
         
         # Evaluate processing instructions behind root element
         xmlrfc._eval_pre_pi()
@@ -203,7 +201,8 @@ class XmlRfc:
         Accessing the rfc tree is done by getting the root node from getroot()
     """
 
-    def __init__(self, tree):
+    def __init__(self, tree, default_dtd_path):
+        self.default_dtd_path = default_dtd_path
         self.tree = tree
         self.pis = {}
 
@@ -241,8 +240,8 @@ class XmlRfc:
             
         if not dtd:
             # No explicit DTD filename OR declaration in document!
-            xml2rfc.log.warn('No DTD given, defaulting to', default_dtd_path)
-            return self.validate(dtd_path=default_dtd_path)
+            xml2rfc.log.warn('No DTD given, defaulting to', self.default_dtd_path)
+            return self.validate(dtd_path=self.default_dtd_path)
 
         if dtd.validate(self.getroot()):
             # The document was valid
