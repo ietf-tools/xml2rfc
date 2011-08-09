@@ -23,7 +23,7 @@ class CachingResolver(lxml.etree.Resolver):
         self.source_path = source_path
         self.library_path = library_path
         self.templates_path = templates_path
-        self.prefix = '_HTTP_CACHE'
+        self.prefix = xml2rfc.CACHE_PREFIX
 
         # Determine cache directories to read/write to
         self.read_caches = map(os.path.expanduser, xml2rfc.CACHES)
