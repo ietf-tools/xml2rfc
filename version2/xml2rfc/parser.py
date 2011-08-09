@@ -54,14 +54,17 @@ class CachingResolver(lxml.etree.Resolver):
             if not os.path.exists(pdir):
                 os.makedirs(pdir)
                 
-    def delete_cache(self):
-        for dir in self.read_caches:
+    def delete_cache(self, path=None):
+        # Explicit path given?
+        caches = path and [path] or self.read_caches
+        for dir in caches:
             path = os.path.join(dir, self.prefix)
             if os.access(path, os.W_OK):
                 shutil.rmtree(path)
                 xml2rfc.log.write('Deleted cache directory at', path)
 
     def resolve(self, request, public_id, context):
+        """ Called internally by lxml """
         if not request:
             # Not sure why but sometimes LXML will ask for an empty request,
             # So lets give it an empty response.
@@ -145,8 +148,8 @@ class XmlRfcParser:
                                                 verbose=verbose,
                                                 quiet=quiet)
         
-    def delete_cache(self):
-        self.cachingResolver.delete_cache()
+    def delete_cache(self, path=None):
+        self.cachingResolver.delete_cache(path=path)
 
     def parse(self):
         """ Parses the source XML file and returns an XmlRfc instance """
