@@ -14,9 +14,7 @@ def display_version(self, opt, value, parser):
 
 
 def clear_cache(self, opt, value, parser):
-    cache_dir = os.path.expanduser('~/.cache/xml2rfc')
-    shutil.rmtree(cache_dir, ignore_errors=True)
-    print 'Deleted cache at', cache_dir
+    xml2rfc.parser.XmlRfcParser('').delete_cache()
     sys.exit(1)
 
 
@@ -32,12 +30,6 @@ def main():
     optionparser.add_option('-w', '--warn-error', action='store_true',
                             dest='warn_error', help='treat warnings as '
                             'python exceptions.')
-#    optionparser.add_option('-e', '--extcss', dest='extcss',
-#                            action='store_true', help='write an external '
-#                            'link to the stylesheet instead of expanding it.')
-#    optionparser.add_option('-c', '--css', dest='css',
-#                            help='specify an alternate css file (ignored if'
-#                            ' html format is not enabled)')
     optionparser.add_option('-c', '--cache', dest='cache', 
                             help='specify an alternate cache directory to write'
                             ' to')

@@ -6,11 +6,9 @@
 
 import lxml.etree
 import re
-import datetime
 import urlparse
-import urllib
 import os
-import sys
+import shutil
 import xml2rfc.log
 
 __all__ = ['XmlRfcParser', 'XmlRfc']
@@ -25,6 +23,7 @@ class CachingResolver(lxml.etree.Resolver):
         self.source_path = source_path
         self.library_path = library_path
         self.templates_path = templates_path
+        self.prefix = '_HTTP_CACHE'
 
         # Determine cache directories to read/write to
         self.read_caches = map(os.path.expanduser, xml2rfc.CACHES)
@@ -49,6 +48,18 @@ class CachingResolver(lxml.etree.Resolver):
         if not self.write_cache:
             xml2rfc.log.warn('Unable to find a suitible cache directory to '
                             'write to.  Try giving a specific directory.')
+        else:
+            # Create the prefix directory if it doesnt exist
+            pdir = os.path.join(self.write_cache, self.prefix)
+            if not os.path.exists(pdir):
+                os.makedirs(pdir)
+                
+    def delete_cache(self):
+        for dir in self.read_caches:
+            path = os.path.join(dir, self.prefix)
+            if os.access(path, os.W_OK):
+                shutil.rmtree(path)
+                xml2rfc.log.write('Deleted cache directory at', path)
 
     def resolve(self, request, public_id, context):
         if not request:
@@ -88,12 +99,12 @@ class CachingResolver(lxml.etree.Resolver):
             # and caching to `write_cache` if its not found.
             found = False
             for dir in self.read_caches:
-                cached_path = os.path.join(dir, filename)
+                cached_path = os.path.join(dir, self.prefix, filename)
                 if os.path.exists(cached_path):
                     found = True
                     break
             if not found:
-                cached_path = os.path.join(self.write_cache, filename)
+                cached_path = os.path.join(self.write_cache, self.prefix, filename)
                 xml2rfc.utils.StrictUrlOpener().retrieve(request, cached_path)
                 if self.verbose:
                     xml2rfc.log.write('Created cache for', request)
@@ -119,8 +130,6 @@ class XmlRfcParser:
         self.verbose = verbose
         self.quiet = quiet
         self.source = filename
-        if not self.quiet:
-            xml2rfc.log.write('Parsing file', self.source)
             
         # Initialize templates directory
         self.templates_path = templates_path or \
@@ -135,9 +144,14 @@ class XmlRfcParser:
                                         source_path=os.path.dirname(filename),
                                                 verbose=verbose,
                                                 quiet=quiet)
+        
+    def delete_cache(self):
+        self.cachingResolver.delete_cache()
 
     def parse(self):
         """ Parses the source XML file and returns an XmlRfc instance """
+        if not self.quiet:
+            xml2rfc.log.write('Parsing file', self.source)
 
         # Get a parser object
         parser = lxml.etree.XMLParser(dtd_validation=False,
