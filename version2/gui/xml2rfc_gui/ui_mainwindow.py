@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/mainwindow.ui'
 #
-# Created: Thu Aug 11 19:02:02 2011
+# Created: Fri Aug 12 10:09:58 2011
 #      by: PyQt4 UI code generator 4.8.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -328,7 +328,6 @@ class Ui_mainWindow(object):
     def retranslateUi(self, mainWindow):
         mainWindow.setWindowTitle(QtGui.QApplication.translate("mainWindow", "xml2rfc GUI", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("mainWindow", "Output directory", None, QtGui.QApplication.UnicodeUTF8))
-        self.outputDirText.setPlaceholderText(QtGui.QApplication.translate("mainWindow", "Output directory", None, QtGui.QApplication.UnicodeUTF8))
         self.outputDirButton.setText(QtGui.QApplication.translate("mainWindow", "Browse", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_3.setTitle(QtGui.QApplication.translate("mainWindow", "Settings", None, QtGui.QApplication.UnicodeUTF8))
         self.settingWarningError.setText(QtGui.QApplication.translate("mainWindow", "Treat Warnings as Errors", None, QtGui.QApplication.UnicodeUTF8))
