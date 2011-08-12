@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/mainwindow.ui'
 #
-# Created: Fri Aug 12 10:09:58 2011
+# Created: Fri Aug 12 11:33:10 2011
 #      by: PyQt4 UI code generator 4.8.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -319,7 +319,7 @@ class Ui_mainWindow(object):
         self.menubar.addAction(self.menuOptions.menuAction())
 
         self.retranslateUi(mainWindow)
-        self.previewTabWidget.setCurrentIndex(1)
+        self.previewTabWidget.setCurrentIndex(0)
         self.outputTabWidget.setCurrentIndex(1)
         QtCore.QObject.connect(self.buttonAdd, QtCore.SIGNAL(_fromUtf8("clicked()")), self.actionAdd.trigger)
         QtCore.QObject.connect(self.buttonClear, QtCore.SIGNAL(_fromUtf8("clicked()")), self.actionClear.trigger)
@@ -360,4 +360,4 @@ class Ui_mainWindow(object):
         self.actionClear.setText(QtGui.QApplication.translate("mainWindow", "Clear Queue", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
-from xml2rfc_gui.editor import LinedEditor
+from editor import LinedEditor

@@ -2,6 +2,9 @@
 
 VERSION = (0, 5, 4)
 
+# xml2rfc module
+import xml2rfc
+
 # PyQt
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
@@ -16,7 +19,6 @@ import ui_report
 from settings import Settings
 from backend import XmlRfcHandler
 from utils import Status
-import xml2rfc
 
 # Python
 import os
@@ -27,8 +29,6 @@ ICON_DEFAULT    = QStyle.SP_FileIcon
 ICON_GOOD       = QStyle.SP_DialogApplyButton
 ICON_BAD        = QStyle.SP_MessageBoxCritical
 ICON_WORKING    = QStyle.SP_MessageBoxQuestion
-
-
 
 
 def stdIcon(val):
@@ -429,6 +429,3 @@ def main():
     window.show()
     window.raise_()
     sys.exit(app.exec_())
-
-if __name__ == '__main__':
-    main()
