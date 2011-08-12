@@ -6,7 +6,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
 # UI modules
-import ui.preferences
+import ui_preferences
 
 # My modules
 import utils
@@ -45,7 +45,7 @@ class Settings(QSettings):
         
         # Setup preference window
         self.dialog = QDialog(self.mainWindow)
-        self.dialog.ui = ui.preferences.Ui_Dialog()
+        self.dialog.ui = ui_preferences.Ui_Dialog()
         self.dialog.ui.setupUi(self.dialog)
         
         # Hash that stores temporary settings as python str -> QVariant
@@ -159,7 +159,7 @@ class Settings(QSettings):
     def showPreferences(self):
         """ Open the preferences dialog window """       
         self.dialog = QDialog(self.mainWindow)
-        self.dialog.ui = ui.preferences.Ui_Dialog()
+        self.dialog.ui = ui_preferences.Ui_Dialog()
         self.dialog.ui.setupUi(self.dialog)
 
         # Populate temporary settings with current and update labels

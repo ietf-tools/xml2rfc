@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/report.ui'
 #
-# Created: Tue Aug  9 16:15:37 2011
+# Created: Thu Aug 11 18:49:29 2011
 #      by: PyQt4 UI code generator 4.8.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -58,7 +58,7 @@ class Ui_Report(object):
     def retranslateUi(self, Report):
         Report.setWindowTitle(QtGui.QApplication.translate("Report", "Form", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setTitle(QtGui.QApplication.translate("Report", "Document Summary", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("Report", "Documents successfully converted", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("Report", "Documents successfully converted:", None, QtGui.QApplication.UnicodeUTF8))
         self.pass_label.setText(QtGui.QApplication.translate("Report", "0", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setText(QtGui.QApplication.translate("Report", "Documents with XML syntax errors:", None, QtGui.QApplication.UnicodeUTF8))
         self.syntax_label.setText(QtGui.QApplication.translate("Report", "0", None, QtGui.QApplication.UnicodeUTF8))

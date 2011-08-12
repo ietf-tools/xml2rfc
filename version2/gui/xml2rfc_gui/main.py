@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+# Main module for xml2rfc-gui
+
 VERSION = (0, 5, 4)
 
 # PyQt
@@ -7,9 +8,9 @@ from PyQt4.QtGui import *
 import PyQt4.QtNetwork  # Required for py2exe for some reason
 
 # UI modules    
-import ui.mainwindow
-import ui.about
-import ui.report
+import ui_mainwindow
+import ui_about
+import ui_report
 
 # My modules    
 from settings import Settings
@@ -26,6 +27,8 @@ ICON_DEFAULT    = QStyle.SP_FileIcon
 ICON_GOOD       = QStyle.SP_DialogApplyButton
 ICON_BAD        = QStyle.SP_MessageBoxCritical
 ICON_WORKING    = QStyle.SP_MessageBoxQuestion
+
+
 
 
 def stdIcon(val):
@@ -65,7 +68,7 @@ class MainWindow(QMainWindow):
         self.report = {}
 
         # Initialize UI class
-        self.ui = ui.mainwindow.Ui_mainWindow()
+        self.ui = ui_mainwindow.Ui_mainWindow()
         self.ui.setupUi(self)
         
         # Initialize status
@@ -226,7 +229,7 @@ class MainWindow(QMainWindow):
     def showAbout(self):
         """ Show the about window """
         about = QDialog(self)
-        about.ui = ui.about.Ui_Dialog()
+        about.ui = ui_about.Ui_Dialog()
         about.ui.setupUi(about)
         # Replace proper version numbers
         about.ui.xml2rfc_gui_version.setText('xml2rfc-gui version: ' + \
@@ -264,7 +267,7 @@ class MainWindow(QMainWindow):
         
     def showReport(self):
         report = QDialog(self)
-        report.ui = ui.report.Ui_Report()
+        report.ui = ui_report.Ui_Report()
         report.ui.setupUi(report)
         # Fill in values
         repmap = {'pass': report.ui.pass_label,
