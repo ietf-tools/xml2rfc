@@ -178,27 +178,18 @@ class MainWindow(QMainWindow):
         for widget in self.lockableWidgets:
             widget.setEnabled(True)
             
-    def stdOutCallback(self, text):
+    def stdOutCallback(self, text, color='black'):
         """ Redirect text to QTextWidget """
-        self.ui.textOutput.appendPlainText(text)
+        self.ui.textOutput.insertHtml(\
+            QString('<br><span style="color:%2">%1</span>').arg(text).arg(color))
         # Scroll to bottom  
         cursor = self.ui.textOutput.textCursor()
         cursor.movePosition(QTextCursor.End)
         self.ui.textOutput.setTextCursor(cursor)
         self.ui.textOutput.update()
-        # Open tab
-        self.ui.outputTabWidget.setCurrentIndex(0)
 
     def stdErrCallback(self, text):
-        """ Redirect text to QTextWidget """
-        self.ui.textErrors.appendPlainText(text)
-        # Scroll to bottom  
-        cursor = self.ui.textErrors.textCursor()
-        cursor.movePosition(QTextCursor.End)
-        self.ui.textErrors.setTextCursor(cursor)
-        self.ui.textErrors.update()
-        # Open tab
-        self.ui.outputTabWidget.setCurrentIndex(1)
+        self.stdOutCallback(text, color='red')
         
     def recievePreview(self, text, format, docname):
         """ Recieved a prepared preview request, display it in editor """

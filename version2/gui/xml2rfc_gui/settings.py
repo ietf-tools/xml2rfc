@@ -87,7 +87,6 @@ class Settings(QSettings):
         consoleFont = QFont(self.value('consoleFontFamily').toString(), \
                             self.value('consoleFontSize').toInt()[0])
         self.mainWindow.ui.textOutput.setFont(consoleFont)
-        self.mainWindow.ui.textErrors.setFont(consoleFont)
 
         self.endGroup()  # End appearance settings
         

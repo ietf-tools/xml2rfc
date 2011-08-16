@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/mainwindow.ui'
 #
-# Created: Fri Aug 12 11:33:10 2011
+# Created: Tue Aug 16 10:46:01 2011
 #      by: PyQt4 UI code generator 4.8.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -234,48 +234,25 @@ class Ui_mainWindow(object):
         self.verticalLayout_11.addWidget(self.textNroff)
         self.previewTabWidget.addTab(self.nroffTab, _fromUtf8(""))
         self.verticalLayout_6.addWidget(self.previewTabWidget)
-        self.outputTabWidget = QtGui.QTabWidget(self.infoSplitter)
+        self.outputGroupBox = QtGui.QGroupBox(self.infoSplitter)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
-        sizePolicy.setHeightForWidth(self.outputTabWidget.sizePolicy().hasHeightForWidth())
-        self.outputTabWidget.setSizePolicy(sizePolicy)
-        self.outputTabWidget.setTabShape(QtGui.QTabWidget.Rounded)
-        self.outputTabWidget.setObjectName(_fromUtf8("outputTabWidget"))
-        self.tabOutput = QtGui.QWidget()
-        self.tabOutput.setObjectName(_fromUtf8("tabOutput"))
-        self.verticalLayout_5 = QtGui.QVBoxLayout(self.tabOutput)
+        sizePolicy.setHeightForWidth(self.outputGroupBox.sizePolicy().hasHeightForWidth())
+        self.outputGroupBox.setSizePolicy(sizePolicy)
+        self.outputGroupBox.setFlat(True)
+        self.outputGroupBox.setObjectName(_fromUtf8("outputGroupBox"))
+        self.verticalLayout_5 = QtGui.QVBoxLayout(self.outputGroupBox)
         self.verticalLayout_5.setSpacing(0)
         self.verticalLayout_5.setMargin(0)
         self.verticalLayout_5.setObjectName(_fromUtf8("verticalLayout_5"))
-        self.textOutput = QtGui.QPlainTextEdit(self.tabOutput)
+        self.textOutput = QtGui.QTextEdit(self.outputGroupBox)
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Courier New"))
         font.setPointSize(12)
         self.textOutput.setFont(font)
-        self.textOutput.setReadOnly(True)
         self.textOutput.setObjectName(_fromUtf8("textOutput"))
         self.verticalLayout_5.addWidget(self.textOutput)
-        self.outputTabWidget.addTab(self.tabOutput, _fromUtf8(""))
-        self.tabErrors = QtGui.QWidget()
-        self.tabErrors.setObjectName(_fromUtf8("tabErrors"))
-        self.verticalLayout_4 = QtGui.QVBoxLayout(self.tabErrors)
-        self.verticalLayout_4.setSpacing(0)
-        self.verticalLayout_4.setMargin(0)
-        self.verticalLayout_4.setObjectName(_fromUtf8("verticalLayout_4"))
-        self.textErrors = QtGui.QPlainTextEdit(self.tabErrors)
-        font = QtGui.QFont()
-        font.setFamily(_fromUtf8("Courier New"))
-        font.setPointSize(12)
-        self.textErrors.setFont(font)
-        self.textErrors.setStyleSheet(_fromUtf8("QPlainTextEdit\n"
-"{\n"
-"    color: red;\n"
-"}"))
-        self.textErrors.setReadOnly(True)
-        self.textErrors.setObjectName(_fromUtf8("textErrors"))
-        self.verticalLayout_4.addWidget(self.textErrors)
-        self.outputTabWidget.addTab(self.tabErrors, _fromUtf8(""))
         self.verticalLayout_2.addWidget(self.infoSplitter)
         self.verticalLayout_3.addWidget(self.splitter)
         mainWindow.setCentralWidget(self.mainFrame)
@@ -320,7 +297,6 @@ class Ui_mainWindow(object):
 
         self.retranslateUi(mainWindow)
         self.previewTabWidget.setCurrentIndex(0)
-        self.outputTabWidget.setCurrentIndex(1)
         QtCore.QObject.connect(self.buttonAdd, QtCore.SIGNAL(_fromUtf8("clicked()")), self.actionAdd.trigger)
         QtCore.QObject.connect(self.buttonClear, QtCore.SIGNAL(_fromUtf8("clicked()")), self.actionClear.trigger)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
@@ -347,8 +323,7 @@ class Ui_mainWindow(object):
         self.previewTabWidget.setTabText(self.previewTabWidget.indexOf(self.rawTab), QtGui.QApplication.translate("mainWindow", "Raw Text", None, QtGui.QApplication.UnicodeUTF8))
         self.previewTabWidget.setTabText(self.previewTabWidget.indexOf(self.htmlTab), QtGui.QApplication.translate("mainWindow", "HTML", None, QtGui.QApplication.UnicodeUTF8))
         self.previewTabWidget.setTabText(self.previewTabWidget.indexOf(self.nroffTab), QtGui.QApplication.translate("mainWindow", "Nroff", None, QtGui.QApplication.UnicodeUTF8))
-        self.outputTabWidget.setTabText(self.outputTabWidget.indexOf(self.tabOutput), QtGui.QApplication.translate("mainWindow", "Output", None, QtGui.QApplication.UnicodeUTF8))
-        self.outputTabWidget.setTabText(self.outputTabWidget.indexOf(self.tabErrors), QtGui.QApplication.translate("mainWindow", "Errors", None, QtGui.QApplication.UnicodeUTF8))
+        self.outputGroupBox.setTitle(QtGui.QApplication.translate("mainWindow", "Output", None, QtGui.QApplication.UnicodeUTF8))
         self.menuFile.setTitle(QtGui.QApplication.translate("mainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
         self.menuHelp.setTitle(QtGui.QApplication.translate("mainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
         self.menuOptions.setTitle(QtGui.QApplication.translate("mainWindow", "Options", None, QtGui.QApplication.UnicodeUTF8))
