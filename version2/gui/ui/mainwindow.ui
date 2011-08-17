@@ -20,15 +20,12 @@
    <string>xml2rfc GUI</string>
   </property>
   <widget class="QWidget" name="mainFrame">
-   <layout class="QVBoxLayout" name="verticalLayout_3">
-    <property name="spacing">
-     <number>0</number>
-    </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
     <property name="margin">
-     <number>5</number>
+     <number>8</number>
     </property>
     <item>
-     <widget class="QFrame" name="outputFrame">
+     <widget class="QFrame" name="settingsFrame">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
         <horstretch>0</horstretch>
@@ -37,7 +34,7 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <property name="spacing">
-        <number>10</number>
+        <number>-1</number>
        </property>
        <property name="margin">
         <number>0</number>
@@ -45,25 +42,30 @@
        <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
-          <string>Output directory</string>
+          <string>Input file</string>
          </property>
          <property name="flat">
           <bool>true</bool>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <property name="spacing">
-           <number>-1</number>
-          </property>
           <property name="margin">
-           <number>2</number>
+           <number>8</number>
           </property>
           <item>
-           <widget class="QLineEdit" name="outputDirText"/>
-          </item>
-          <item>
-           <widget class="QPushButton" name="outputDirButton">
+           <widget class="QLabel" name="sourceLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <italic>false</italic>
+             </font>
+            </property>
             <property name="text">
-             <string>Browse</string>
+             <string>None</string>
             </property>
            </widget>
           </item>
@@ -71,57 +73,18 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_3">
+        <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Settings</string>
+          <string>Output</string>
          </property>
          <property name="flat">
           <bool>true</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout_2">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
           <property name="margin">
-           <number>2</number>
+           <number>8</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="settingWarningError">
-            <property name="text">
-             <string>Treat Warnings as Errors</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="settingVerbose">
-            <property name="text">
-             <string>Verbose output</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_4">
-         <property name="title">
-          <string>Formats</string>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <property name="margin">
-           <number>2</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="formatRaw">
-            <property name="text">
-             <string>Raw Text</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
+          <item>
            <widget class="QCheckBox" name="formatPaged">
             <property name="text">
              <string>Paginated Text</string>
@@ -131,326 +94,104 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item>
+           <widget class="QCheckBox" name="formatRaw">
+            <property name="text">
+             <string>Raw Text</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QCheckBox" name="formatHtml">
             <property name="text">
              <string>HTML</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item>
            <widget class="QCheckBox" name="formatNroff">
             <property name="text">
              <string>Nroff</string>
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="convertButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Convert</string>
+            </property>
+           </widget>
+          </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="Line" name="line_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="convertButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Convert</string>
-         </property>
         </widget>
        </item>
       </layout>
      </widget>
     </item>
     <item>
-     <widget class="QSplitter" name="splitter">
+     <widget class="QFrame" name="documentFrame">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>2</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+      <property name="styleSheet">
+       <string notr="true">/* Disable tabwidget in-set bg's */
+QTabWidget::pane {background: none;}</string>
       </property>
-      <widget class="QGroupBox" name="fileGroupBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>1</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>0</number>
        </property>
-       <property name="title">
-        <string>Documents</string>
+       <property name="margin">
+        <number>0</number>
        </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <property name="spacing">
-         <number>2</number>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QFrame" name="fileButtonFrame">
-          <property name="lineWidth">
-           <number>0</number>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <property name="spacing">
-            <number>10</number>
-           </property>
-           <property name="margin">
-            <number>0</number>
-           </property>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="buttonClear">
-             <property name="text">
-              <string>Clear Queue</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="buttonAdd">
-             <property name="text">
-              <string>Add File(s)</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QListWidget" name="fileList">
+       <item>
+        <widget class="QSplitter" name="splitter">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <widget class="QTabWidget" name="tabWidget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
+            <verstretch>2</verstretch>
            </sizepolicy>
           </property>
-          <property name="lineWidth">
-           <number>1</number>
+          <property name="currentIndex">
+           <number>0</number>
           </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QFrame" name="infoFrame">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>2</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">/* Disable tabwidget in-set bg's */
-QTabWidget::pane
-{
-	background: none;
-}</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QSplitter" name="infoSplitter">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <widget class="QGroupBox" name="groupBox">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>2</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="title">
-            <string>Preview</string>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_6">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>19</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QTabWidget" name="previewTabWidget">
-              <property name="currentIndex">
-               <number>0</number>
-              </property>
-              <widget class="QWidget" name="xmlTab">
-               <attribute name="title">
-                <string>XML</string>
-               </attribute>
-               <layout class="QVBoxLayout" name="verticalLayout_7">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <property name="margin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="LinedEditor" name="textXml">
-                  <property name="readOnly">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-              <widget class="QWidget" name="pagedTab">
-               <attribute name="title">
-                <string>Paginated Text</string>
-               </attribute>
-               <layout class="QVBoxLayout" name="verticalLayout_8">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <property name="margin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="LinedEditor" name="textPaged">
-                  <property name="readOnly">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-              <widget class="QWidget" name="rawTab">
-               <attribute name="title">
-                <string>Raw Text</string>
-               </attribute>
-               <layout class="QVBoxLayout" name="verticalLayout_9">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <property name="margin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="LinedEditor" name="textRaw">
-                  <property name="readOnly">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-              <widget class="QWidget" name="htmlTab">
-               <attribute name="title">
-                <string>HTML</string>
-               </attribute>
-               <layout class="QVBoxLayout" name="verticalLayout_10">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <property name="margin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QWebView" name="htmlView">
-                  <property name="url">
-                   <url>
-                    <string>about:blank</string>
-                   </url>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-              <widget class="QWidget" name="nroffTab">
-               <attribute name="title">
-                <string>Nroff</string>
-               </attribute>
-               <layout class="QVBoxLayout" name="verticalLayout_11">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <property name="margin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="LinedEditor" name="textNroff">
-                  <property name="readOnly">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QGroupBox" name="outputGroupBox">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>1</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="title">
-            <string>Output</string>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_5">
+          <widget class="QWidget" name="xmlTab">
+           <attribute name="title">
+            <string>XML</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
             <property name="spacing">
              <number>0</number>
             </property>
@@ -458,21 +199,53 @@ QTabWidget::pane
              <number>0</number>
             </property>
             <item>
-             <widget class="QTextEdit" name="textOutput">
-              <property name="font">
-               <font>
-                <family>Courier New</family>
-                <pointsize>12</pointsize>
-               </font>
+             <widget class="LinedEditor" name="textXml">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>2</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="readOnly">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
            </layout>
           </widget>
          </widget>
-        </item>
-       </layout>
-      </widget>
+         <widget class="QGroupBox" name="consoleGroupBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="title">
+           <string>Console</string>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="margin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QTextBrowser" name="textConsole">
+             <property name="openLinks">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>
@@ -490,8 +263,7 @@ QTabWidget::pane
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionAdd"/>
-    <addaction name="actionClear"/>
+    <addaction name="actionOpen"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -506,11 +278,23 @@ QTabWidget::pane
     <property name="title">
      <string>Options</string>
     </property>
+    <widget class="QMenu" name="menuFormats">
+     <property name="title">
+      <string>Output formats</string>
+     </property>
+     <addaction name="actionFormatPaged"/>
+     <addaction name="actionFormatRaw"/>
+     <addaction name="actionFormatHtml"/>
+     <addaction name="actionFormatNroff"/>
+    </widget>
+    <addaction name="menuFormats"/>
+    <addaction name="actionOptionVerbose"/>
+    <addaction name="separator"/>
     <addaction name="actionPreferences"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuHelp"/>
    <addaction name="menuOptions"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
    <property name="font">
@@ -539,9 +323,12 @@ QTabWidget::pane
     <string>Preferences</string>
    </property>
   </action>
-  <action name="actionAdd">
+  <action name="actionOpen">
    <property name="text">
-    <string>Add File(s)</string>
+    <string>&amp;Open Source</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionClear">
@@ -549,13 +336,56 @@ QTabWidget::pane
     <string>Clear Queue</string>
    </property>
   </action>
+  <action name="actionD">
+   <property name="text">
+    <string>&gt; df</string>
+   </property>
+  </action>
+  <action name="actionFormatPaged">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Paginated Text</string>
+   </property>
+  </action>
+  <action name="actionFormatRaw">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Raw Text</string>
+   </property>
+  </action>
+  <action name="actionFormatHtml">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>HTML</string>
+   </property>
+  </action>
+  <action name="actionFormatNroff">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Nroff</string>
+   </property>
+  </action>
+  <action name="actionOptionVerbose">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Verbose console output</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>QWebView</class>
-   <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
-  </customwidget>
   <customwidget>
    <class>LinedEditor</class>
    <extends>QPlainTextEdit</extends>
@@ -565,14 +395,78 @@ QTabWidget::pane
  <resources/>
  <connections>
   <connection>
-   <sender>buttonAdd</sender>
-   <signal>clicked()</signal>
-   <receiver>actionAdd</receiver>
-   <slot>trigger()</slot>
+   <sender>actionFormatPaged</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>formatPaged</receiver>
+   <slot>setChecked(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>206</x>
-     <y>138</y>
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>43</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFormatRaw</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>formatRaw</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>743</x>
+     <y>43</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFormatHtml</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>formatHtml</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>816</x>
+     <y>43</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFormatNroff</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>formatNroff</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>876</x>
+     <y>43</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>formatPaged</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>actionFormatPaged</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>640</x>
+     <y>43</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
@@ -581,14 +475,46 @@ QTabWidget::pane
    </hints>
   </connection>
   <connection>
-   <sender>buttonClear</sender>
-   <signal>clicked()</signal>
-   <receiver>actionClear</receiver>
-   <slot>trigger()</slot>
+   <sender>formatRaw</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>actionFormatRaw</receiver>
+   <slot>setChecked(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>138</y>
+     <x>743</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>formatHtml</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>actionFormatHtml</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>816</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>formatNroff</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>actionFormatNroff</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>876</x>
+     <y>43</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>

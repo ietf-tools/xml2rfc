@@ -77,9 +77,9 @@ class LinedEditor(QPlainTextEdit):
     
     def highlightCurrentLine(self):
         # Draw a background on the line of the cursor
-        extraSelections = []
+        extraSelections = self.extraSelections()
         selection = QTextEdit.ExtraSelection()
-        lineColor = QColor(Qt.yellow).lighter(160)
+        lineColor = QColor(Qt.red).lighter(160)
         selection.format.setBackground(lineColor)
         selection.format.setProperty(QTextFormat.FullWidthSelection, True)
         selection.cursor = self.textCursor()

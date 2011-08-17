@@ -1,6 +1,6 @@
 # Main module for xml2rfc-gui
 
-VERSION = (0, 5, 4)
+VERSION = (0, 6, 0)
 
 # xml2rfc module
 import xml2rfc
@@ -8,6 +8,7 @@ import xml2rfc
 # PyQt
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+import PyQt4.QtWebKit
 import PyQt4.QtNetwork  # Required for py2exe for some reason
 
 # UI modules    
@@ -19,6 +20,7 @@ import ui_report
 from settings import Settings
 from backend import XmlRfcHandler
 from utils import Status
+from editor import LinedEditor
 
 # Python
 import os
@@ -65,11 +67,15 @@ class MainWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.locked = False
         self.last_path = None
-        self.report = {}
+        self.input_file = None
 
         # Initialize UI class
         self.ui = ui_mainwindow.Ui_mainWindow()
         self.ui.setupUi(self)
+
+        # Handles to text editors
+        self.textEditors = []
+        self.xmlEditor = None
         
         # Initialize status
         self.status = Status(self.statusBar())
@@ -85,19 +91,14 @@ class MainWindow(QMainWindow):
                      self.stdOutCallback)
         self.connect(self.handler, SIGNAL('stderr(QString)'), 
                      self.stdErrCallback)
-        self.connect(self.handler, SIGNAL('preview(QString, int, QString)'), 
-                     self.recievePreview)
-        self.connect(self.handler, SIGNAL('xmlError(QString, int)'), 
+        self.connect(self.handler, SIGNAL('viewDocument(int, QString)'), 
+                     self.viewDocument)
+        self.connect(self.handler, SIGNAL('finished(int)'),
+                     self.convertFinished)
+        self.connect(self.handler, SIGNAL('error(QString, int)'), 
                      self.recieveError)
         self.connect(self.handler, SIGNAL('status(QString)'), 
                      self.status.__call__)
-        self.connect(self.handler, SIGNAL('itemStarted(int)'),
-                     self.itemStarted)
-        self.connect(self.handler, SIGNAL('itemFinished(int, bool, QString)'),
-                     self.itemFinished)
-        self.connect(self.handler, SIGNAL('batchFinished()'),
-                     self.showReport)
-
         
         # Create Settings instance
         self.status('Loading settings...')
@@ -108,114 +109,149 @@ class MainWindow(QMainWindow):
         self.connect(self.ui.actionQuit,    SIGNAL('triggered()'),  self.close)
         self.connect(self.ui.actionAbout,   SIGNAL('triggered()'),  self.showAbout)
         self.connect(self.ui.actionAboutQt, SIGNAL('triggered()'),  self.showAboutQt)
-        self.connect(self.ui.actionAdd,     SIGNAL('triggered()'),  self.addFiles)
-        self.connect(self.ui.actionClear,   SIGNAL('triggered()'),  self.clearQueue)
+        self.connect(self.ui.actionOpen,    SIGNAL('triggered()'),  self.openFile)
         self.connect(self.ui.actionPreferences, SIGNAL('triggered()'),
                      self.settings.showPreferences)
-        self.connect(self.ui.outputDirButton, SIGNAL('clicked()'),
-                     self.changeOutputDir)
+
+        # Connect persistent UI settings
+        self.connect(self.ui.actionOptionVerbose, SIGNAL('toggled(bool)'),
+                     self.settings.setVerbose)
+
+        # Connect any other widgets
         self.connect(self.ui.convertButton, SIGNAL('clicked()'),
-                     self.batchConvert)
+                     self.convert)
+        self.connect(self.ui.textConsole, SIGNAL('anchorClicked(const QUrl&)'),
+                     self.consoleLinkClicked)
+        self.connect(self.ui.tabWidget, SIGNAL('currentChanged(int)'),
+                     self.tabChanged)
 
-        # Connect widget events
-        self.connect(self.ui.fileList,
-                     SIGNAL('itemDoubleClicked(QListWidgetItem*)'), 
-                     self.fileClicked)
-        self.connect(self.ui.previewTabWidget,
-                     SIGNAL('currentChanged(int)'),
-                     self.previewTabChanged)
+        # Label data
+        self.formatLabels = {
+            self.handler.XML: 'XML',
+            self.handler.PAGED: 'Paginated Text',
+            self.handler.RAW: 'Raw Text',
+            self.handler.HTML: 'HTML',
+            self.handler.NROFF: 'Nroff',
+        }
 
-        # Create mapping of format types to UI tab indicies
-        self.fmt2Tab = { self.handler.XML: 0,
-                         self.handler.PAGED: 1,
-                         self.handler.RAW: 2,
-                         self.handler.HTML: 3,
-                         self.handler.NROFF: 4 }
-        
-        # And the inverse, since python doesnt have a bijection structure
-        self.tab2Fmt = {}
-        for key, val in self.fmt2Tab.items():
-            self.tab2Fmt[val] = key
-
-        # Create mapping of format types to UI Editors
-        self.editors = { self.handler.XML: self.ui.textXml,
-                         self.handler.PAGED: self.ui.textPaged,
-                         self.handler.RAW: self.ui.textRaw,
-                         self.handler.NROFF: self.ui.textNroff }
-
-        # Flags to track whether or not we've ran a writer for temp document
-        self.ranWriterFlags = { self.handler.PAGED: False,
-                           self.handler.RAW: False,
-                           self.handler.NROFF: False, 
-                           self.handler.HTML: False }
-        
         # Maintain a list of widgets to lock during batch processing
         self.lockableWidgets = [
-                                    self.ui.previewTabWidget,
-                                    self.ui.outputDirButton,
-                                    self.ui.outputDirText,
-                                    self.ui.settingWarningError,
-                                    self.ui.settingVerbose,
-                                    self.ui.formatRaw,
-                                    self.ui.formatPaged,
-                                    self.ui.formatHtml,
-                                    self.ui.formatNroff,
-                                    self.ui.buttonAdd,
-                                    self.ui.buttonClear,
-                                    self.ui.fileList,
-                                ]
+            self.ui.formatRaw,
+            self.ui.formatPaged,
+            self.ui.formatHtml,
+            self.ui.formatNroff,
+            self.ui.convertButton
+        ]
+
+        # Was input file passed on commandline?
+        if len(sys.argv) > 1:
+            path = sys.argv[1]
+            if os.access(path, os.R_OK):
+                self.input_file = path
+                self.ui.sourceLabel.setText(path)
+                self.deleteTabs()
+                self.viewDocument(self.handler.XML, path)
+
     def lockWidgets(self):
         """ Disables interaction with all widgets in lockable list """
         self.locked = True
-        self.ui.convertButton.setText('Halt')
         for widget in self.lockableWidgets:
             widget.setEnabled(False)
         
     def unlockWidgets(self):
         """ Enables interaction with all widgets in lockable list """
         self.locked = False
-        self.ui.convertButton.setText('Convert')
         for widget in self.lockableWidgets:
             widget.setEnabled(True)
             
     def stdOutCallback(self, text, color='black'):
         """ Redirect text to QTextWidget """
-        self.ui.textOutput.insertHtml(\
+        # Replace newlines with <br>
+        text = text.replace('\n', '<br>')
+        self.ui.textConsole.insertHtml(\
             QString('<br><span style="color:%2">%1</span>').arg(text).arg(color))
         # Scroll to bottom  
-        cursor = self.ui.textOutput.textCursor()
+        cursor = self.ui.textConsole.textCursor()
         cursor.movePosition(QTextCursor.End)
-        self.ui.textOutput.setTextCursor(cursor)
-        self.ui.textOutput.update()
+        self.ui.textConsole.setTextCursor(cursor)
+        self.ui.textConsole.update()
 
     def stdErrCallback(self, text):
         self.stdOutCallback(text, color='red')
+
+    def consoleLinkClicked(self, url):
+        try:
+            line = int(str(url.toString()).partition('line_')[2])
+            self.gotoXmlLine(line)
+        except ValueError:
+            pass  # Invalid format
         
-    def recievePreview(self, text, format, docname):
-        """ Recieved a prepared preview request, display it in editor """
-        self.status('Viewing document ' + docname)
+    def viewDocument(self, format, path):
+        """ Open a finished document in a new editor tab """
+        self.ui.tabWidget.setStyleSheet('QTabWidget::pane {background: none;}')
+
+        # Read document
+        fh = open(path, 'r')
+        data = fh.read()
+        fh.close()
+
+        # Create a new editor and configure with current settings
+        frame = QWidget(self.ui.tabWidget)
         if format == self.handler.HTML:
-            self.ui.htmlView.setHtml(text)
-            self.openPreviewTab(format)
-        elif format <= self.handler.NROFF:
-            self.editors[format].setPlainText(text)
-            self.openPreviewTab(format)
-        
-    def recieveError(self, message, line):
-        """ Recieved an XML error, highlight the line and jump to it """
-        self.status('Error: ' + message)
-        if self.settings.value('preview/openXmlOnErrors').toBool():
-            cursor = self.ui.textXml.textCursor()
+            editor = PyQt4.QtWebKit.QWebView(frame)
+            editor.setHtml(data)
+        else:
+            editor = LinedEditor(parent=frame)
+            font = QFont(self.settings.value('appearance/previewFontFamily').toString(),
+                         self.settings.value('appearance/previewFontSize').toInt()[0])
+            editor.setFont(font)
+            if format == self.handler.XML:
+                lineNumbers = self.settings.value('appearance/previewLineNumbersXml').toBool()
+                self.xmlEditor = editor
+            else:
+                lineNumbers = self.settings.value('appearance/previewLineNumbersText').toBool()
+                editor.setReadOnly(True)
+            editor.enableLineNumbers = lineNumbers
+            editor.setPlainText(data)
+            self.textEditors.append(editor)
+
+        # Add editor to the tab
+        layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(editor)
+        frame.setLayout(layout)       
+        self.ui.tabWidget.addTab(frame, self.formatLabels[format])
+
+    def convertFinished(self, lastFormat):
+        # Open tab
+        self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.count() - 1)
+        # Update status
+        if self.input_file:
+            self.status('Viewing document ' + self.input_file)
+
+    def tabChanged(self, index):
+        pass
+
+    def gotoXmlLine(self, line):
+        """ Jump to a line in the current XML document """
+        if self.xmlEditor:
+            cursor = self.xmlEditor.textCursor()
             cursor.setPosition(0)
             cursor.movePosition(QTextCursor.Down, \
                                 QTextCursor.MoveAnchor, \
                                 line - 1)
-            self.ui.textXml.setTextCursor(cursor)
-            self.ui.textXml.highlightCurrentLine()
-            self.openPreviewTab(self.handler.XML)
-            
-    def openPreviewTab(self, format):
-        self.ui.previewTabWidget.setCurrentIndex(self.fmt2Tab[format])
+            self.xmlEditor.setTextCursor(cursor)
+            self.xmlEditor.centerCursor()
+        
+    def recieveError(self, message, line):
+        """ Recieved an XML error, highlight the line and jump to it """
+        # Print error in console with link
+        self.stdErrCallback(QString('&nbsp;&nbsp;<a href="line_%1">%2</a>').arg(line).arg(message))
+        if self.xmlEditor:
+            self.status('Error: ' + message)
+            self.gotoXmlLine(line)
+            self.xmlEditor.highlightCurrentLine()
+            self.ui.tabWidget.setCurrentIndex(0)
 
     def showAbout(self):
         """ Show the about window """
@@ -228,99 +264,57 @@ class MainWindow(QMainWindow):
         about.ui.xml2rfc_version.setText('xml2rfc version: ' + \
                                          '.'.join(map(str, xml2rfc.VERSION)))
         about.exec_()
-        
+
     def showAboutQt(self):
         """ Show the about qt window """
         QMessageBox.aboutQt(self, 'About Qt')
     
-    def addFiles(self):
+    def deleteTabs(self):
+        self.textEditors = []
+        self.ui.tabWidget.clear()
+
+    def clearConsole(self):
+        self.ui.textConsole.clear()
+    
+    def openFile(self):
         """ Add one or more files to the queue """
         # Request file names with dialog
         self.status.push('Adding a new file')
-        homePath = QDesktopServices.storageLocation(QDesktopServices.HomeLocation)
-        filenames = QFileDialog.getOpenFileNames(self, 'Select one or more documents to convert', \
-                                                 homePath, 'XML Files (*.xml)')
+        last = self.input_file or QDesktopServices.storageLocation(QDesktopServices.HomeLocation)
+        filename = QFileDialog.getOpenFileName(self, 'Select an XML document to convert', \
+                                               last, 'XML Files (*.xml)')
         self.status.pop()
+        if filename:
+            self.deleteTabs()
+            self.clearConsole()
+            self.viewDocument(self.handler.XML, filename)
+            self.input_file = str(filename)
+            self.ui.sourceLabel.setText(filename)
 
-        # Add files to list view
-        for filename in filenames:
-            self.ui.fileList.addItem(FileItem(str(filename)))
+    def convert(self):
+        if not self.input_file or not os.path.exists(self.input_file):
+            QMessageBox.critical(self, 'Could not convert',
+                                 'You must first select a source document.')
+        elif self.settings.verify():
+            # Clear tabs, create XML editor first
+            self.deleteTabs()
+            self.clearConsole()
+            self.viewDocument(self.handler.XML, self.input_file)
+            self.status('Converting document ' + self.input_file)
 
-    def changeOutputDir(self):
-        self.status.push('Setting output directory')
-        dir = QFileDialog.getExistingDirectory(caption='Select output directory')
-        self.status.pop()
-        if dir:
-            self.ui.outputDirText.setText(dir)
-            return True
-        else:
-            return False
-        
-    def showReport(self):
-        report = QDialog(self)
-        report.ui = ui_report.Ui_Report()
-        report.ui.setupUi(report)
-        # Fill in values
-        repmap = {'pass': report.ui.pass_label,
-                  'syntax': report.ui.syntax_label,
-                  'validation': report.ui.validation_label,}
-        for key, val in repmap.items():
-            count = self.report.get(key, 0)
-            val.setText(str(count))
-            if count < 1:
-                # Disable coloring
-                val.setStyleSheet('')
-        report.exec_()
-
-    def batchConvert(self):
-        if self.locked:
-            # Already processing, halt execution
-            self.handler.signalHalt()
-            self.showReport()
-
-        else:
-            self.settings.verify()
-            dir = self.ui.outputDirText.text()
-            outpath = os.path.normpath(os.path.expanduser(str(dir)))
-            if not dir:
-                # Try to set a directory
-                if not self.changeOutputDir():
-                    return
-            elif not os.path.exists(outpath):
-                if QMessageBox.question(self, 'New Directory', 'The specified '
-                                        'output directory does not exist.  Should '
-                                        'I create it now?', 'No', 'Yes'):
-                    try:
-                        os.makedirs(outpath)
-                    except OSError:
-                        # Directory is not writable, try to set a new one
-                        if QMessageBox.question(self, 'Invalid Directory',
-                                                'You don\'t have permission to write '
-                                                'to the specified outupt directory.  '
-                                                'Do you want to choose a new one?',
-                                                'No', 'Yes') and self.changeOutputDir():
-                            outpath = str(self.ui.outputDirText.text())
-                        else:
-                            return
-            elif not os.access(outpath, os.W_OK):
-                if QMessageBox.question(self, 'Invalid Directory',
-                        'You don\'t have permission to write '
-                        'to the specified outupt directory.  '
-                        'Do you want to choose a new one?',
-                        'No', 'Yes') and self.changeOutputDir():
-                    outpath = str(self.ui.outputDirText.text())
-                else:
-                    return
-        
-            # If we're here, the directory is valid
-            # Assemble formats to write
+            # Prepare parameters for conversion
+            output_dir = str(self.settings.value('conversion/outputDir').toString())
+            if output_dir:
+                output_dir = os.path.normpath(os.path.expanduser(output_dir))  
+            
             formats = [key for key, val in \
               { self.handler.PAGED: self.ui.formatPaged.checkState(),
                 self.handler.RAW:   self.ui.formatRaw.checkState(),
                 self.handler.HTML:  self.ui.formatHtml.checkState(),
                 self.handler.NROFF: self.ui.formatNroff.checkState() }.items() \
               if val]
-            verbose = bool(self.ui.settingVerbose.checkState())
+            
+            verbose = bool(self.ui.actionOptionVerbose.isChecked())
             abs_cache = os.path.expanduser(str(self.settings.value('cache/location').toString()))
             abs_library = os.path.expanduser(str(self.settings.value('library/location').toString()))
             self.handler.setCache(abs_cache)
@@ -328,78 +322,11 @@ class MainWindow(QMainWindow):
             self.handler.setVerbose(verbose)
     
             if len(formats) > 0:
-                items = [self.ui.fileList.item(index) for 
-                         index in range(self.ui.fileList.count())]
-                paths = [item.path for item in items]
-                outdir = outpath
                 self.lockWidgets()
-                self.newReport()
-                self.handler.requestBatch(paths, formats, outdir)
+                self.handler.convert(self.input_file, formats, output_dir)
             else:
-                QMessageBox.warning(self, 'Warning',
+                QMessageBox.critical(self, 'Could not convert',
                                     'You must select at least one output format.')
-
-    def itemStarted(self, row):
-        """ Intermediate callback during batch processing """
-        # Set the icon as working and center the list view
-        item = self.ui.fileList.item(row)                  
-        item.setData(Qt.DecorationRole, stdIcon(ICON_WORKING))
-        self.ui.fileList.setItemSelected(item, True)
-        self.ui.fileList.scrollToItem(item, QAbstractItemView.PositionAtCenter)
-
-    def itemFinished(self, row, passed, type):
-        """ Intermediate callback during batch processing """
-        # Flag the item as good or bad
-        self.ui.fileList.item(row).flag(passed)
-        # Update the report
-        type = str(type)
-        if type in self.report:
-            self.report[type] += 1
-            
-    def newReport(self):
-        self.report = {'syntax': 0, 'validation': 0, 'pass': 0}
-
-    def clearQueue(self):
-        """ Clear the list """
-        self.ui.fileList.clear()
-    
-    def clearPreview(self):
-        # Empty editor text
-        for editor in self.editors.values():
-            editor.setPlainText('')
-        # Reset format flags
-        for key in self.ranWriterFlags.keys():
-            self.ranWriterFlags[key] = False
-    
-    def fileClicked(self, item):
-        """ Callback to list item clicked """
-        self.settings.verify()
-        self.clearPreview()
-        # Load XML document in XML viewer
-        xmlfile = open(item.path, 'r')
-        self.ui.textXml.setPlainText(xmlfile.read())
-        defaultFormat, _ = self.settings.value('preview/defaultFormat').toInt()   
-        self.last_path = item.path
-        self.requestPreviewForFormat(item.path, defaultFormat)
-
-    def previewTabChanged(self, tabIndex):
-        format = self.tab2Fmt[tabIndex]
-        if format != self.handler.XML and self.last_path:
-            # Check if we already ran the writer for this document
-            if not self.ranWriterFlags[format]:
-                self.requestPreviewForFormat(self.last_path, format)
-                self.ranWriterFlags[format] = True
-                
-    def requestPreviewForFormat(self, path, format):
-        # Call xml2rfc library with current settings
-        abs_cache = os.path.expanduser(str(self.settings.value('cache/location').toString()))
-        abs_library = os.path.expanduser(str(self.settings.value('library/location').toString()))
-        verbose = bool(self.ui.settingVerbose.checkState())
-        self.lockWidgets()
-        self.handler.setCache(abs_cache)
-        self.handler.setLibrary(abs_library)
-        self.handler.setVerbose(verbose)
-        self.handler.requestPreview(path, format)
 
     def closeEvent(self, *args, **kwargs):
         # Cleanup settings

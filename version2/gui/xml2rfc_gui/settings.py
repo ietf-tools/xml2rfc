@@ -26,14 +26,14 @@ class Settings(QSettings):
     """ Settings class which encapsulates QSettings with QDialogs """
     # Default settings
     defaults = {}
+    defaults['conversion/outputDir']                = ''
+    defaults['conversion/verbose']                  = False
     defaults['appearance/previewFontFamily']        = 'Courier'
     defaults['appearance/previewFontSize']          = 12
     defaults['appearance/previewLineNumbersXml']    = True
     defaults['appearance/previewLineNumbersText']   = False
     defaults['appearance/consoleFontFamily']        = 'Courier'
     defaults['appearance/consoleFontSize']          = 12
-    defaults['preview/defaultFormat']               = 1
-    defaults['preview/openXmlOnErrors']             = True
     defaults['cache/location']                      = safe_cache_path
     defaults['library/location']                    = safe_lib_path
 
@@ -51,8 +51,8 @@ class Settings(QSettings):
         # Hash that stores temporary settings as python str -> QVariant
         # This is used during the dialog interaction
         self.temp = {}  
-        
-        # Guarentee that we are in a safe namespace -- needed for OSX
+            
+        # Guarentee that we are in a safe namespace
         self.beginGroup('com/xml2rfc')
         
         # Fill in any defaults
@@ -66,29 +66,29 @@ class Settings(QSettings):
         # Appearance settings
         self.beginGroup('appearance')
         
-        # Text previews
-        previewFont = QFont(self.value('previewFontFamily').toString(), \
-                            self.value('previewFontSize').toInt()[0])
-        textLineNumbers = self.value('previewLineNumbersText').toBool()
-        for editor in [self.mainWindow.ui.textPaged,
-                       self.mainWindow.ui.textRaw,
-                       self.mainWindow.ui.textNroff,]:
-            editor.setFont(previewFont)
-            editor.enableLineNumbers = textLineNumbers
-            editor.update()
-        
-        # XML preview
+        # Text views
+        previewFont    = QFont(self.value('previewFontFamily').toString(),
+                               self.value('previewFontSize').toInt()[0])
         xmlLineNumbers = self.value('previewLineNumbersXml').toBool()
-        self.mainWindow.ui.textXml.enableLineNumbers = xmlLineNumbers
-        self.mainWindow.ui.textXml.setFont(previewFont)
-        self.mainWindow.ui.textXml.update()
+        textLineNumbers = self.value('previewLineNumbersXml').toBool()
+        for editor in self.mainWindow.textEditors:
+            editor.enableLineNumbers = textLineNumbers
+            editor.setFont(previewFont)
+            editor.update()
+        if self.mainWindow.xmlEditor:
+            self.mainWindow.xmlEditor.enableLineNumbers = xmlLineNumbers
+            self.mainWindow.xmlEditor.update()
 
         # Console outputs
-        consoleFont = QFont(self.value('consoleFontFamily').toString(), \
+        consoleFont = QFont(self.value('consoleFontFamily').toString(),
                             self.value('consoleFontSize').toInt()[0])
-        self.mainWindow.ui.textOutput.setFont(consoleFont)
+        self.mainWindow.ui.textConsole.setFont(consoleFont)
 
         self.endGroup()  # End appearance settings
+
+        # Menus
+        verbose = self.value('conversion/verbose').toBool()
+        self.mainWindow.ui.actionOptionVerbose.setChecked(verbose)
         
     def populateDefaults(self, force=False):
         # Iterate through settings and insert any missing values with defaults
@@ -121,6 +121,10 @@ class Settings(QSettings):
     
     def updateLabels(self):
         """ Updates the labels on the dialog to reflect temp settings """
+        # Conversion Tab
+        outputDir = self.tempValue('conversion/outputDir').toString()
+        self.dialog.ui.outputDir.setText(outputDir)
+
         # Appearance Tab
         pFontFamily = self.tempValue('appearance/previewFontFamily').toString()
         pFontSize   = self.tempValue('appearance/previewFontSize').toString()
@@ -136,12 +140,6 @@ class Settings(QSettings):
             self.tempValue('appearance/previewLineNumbersXml').toBool())
         self.dialog.ui.previewLineNumbersText.setChecked( \
             self.tempValue('appearance/previewLineNumbersText').toBool())
-        
-        # Preview Tab
-        index, ok = self.tempValue('preview/defaultFormat').toInt()
-        self.dialog.ui.defaultFormat.setCurrentIndex(index)
-        self.dialog.ui.openXmlOnErrors.setChecked( \
-            self.tempValue('preview/openXmlOnErrors').toBool())
         
         # Cache tab
         loc = self.tempValue('cache/location').toString()
@@ -167,6 +165,8 @@ class Settings(QSettings):
         
         # Connect dialogue button callbacks
         for button, function in {
+         self.dialog.ui.outputBrowse:           self.browseOutputDir,
+         self.dialog.ui.outputClear:            self.clearOutputDir,
          self.dialog.ui.previewFontButton:      self.changePreviewFont,
          self.dialog.ui.consoleFontButton:      self.changeConsoleFont,
          self.dialog.ui.cacheBrowseButton:      self.browseCacheLocation,
@@ -181,16 +181,15 @@ class Settings(QSettings):
              SIGNAL('clicked(QAbstractButton*)'), self.dialogButton)
 
         # Connect other dialog signals
+        # Conversion tab
+        self.connect(self.dialog.ui.outputDir, 
+                     SIGNAL('textChanged(QString)'), self.outputDirChanged)
+
         # Appearance tab
-        self.connect(self.dialog.ui.previewLineNumbersXml, \
+        self.connect(self.dialog.ui.previewLineNumbersXml,
                      SIGNAL('stateChanged(int)'), self.enableLineNumbersXml)
-        self.connect(self.dialog.ui.previewLineNumbersText, \
+        self.connect(self.dialog.ui.previewLineNumbersText,
                      SIGNAL('stateChanged(int)'), self.enableLineNumbersText)
-        # Preview tab
-        self.connect(self.dialog.ui.defaultFormat, \
-                SIGNAL('currentIndexChanged(int)'), self.changePreviewFormat)
-        self.connect(self.dialog.ui.openXmlOnErrors, \
-                     SIGNAL('stateChanged(int)'), self.enableOpenXmlOnErrors)
 
         # Open the dialog
         if self.dialog.exec_():
@@ -201,16 +200,55 @@ class Settings(QSettings):
 
     def verify(self):
         """ Ensure safety on settings before invoking xml2rfc """
-        lib = str(self.value('library/location').toString())
+        self.loadTemp()
+
+        # Check library directory
+        lib = str(self.tempValue('library/location').toString())
         if not os.access(lib, os.R_OK) or len(os.listdir(lib)) == 0:
             if QMessageBox.question(self.dialog, 'Library location', \
                      'Your citation library location is either inaccessible or '
                      'does not exist.  This may affect xml2rfc\'s ability to '
                      'evaluate document references when parsing.  Would you '
                      'like to set the location now?', 'No', 'Yes'):
-                self.loadTemp()
                 self.browseLibraryLocation()
                 self.saveTemp()
+
+        # Check output directory
+        output_dir = str(self.tempValue('conversion/outputDir').toString())
+        if output_dir:
+            path = os.path.normpath(os.path.expanduser(output_dir))
+            if not os.path.exists(path):
+                if QMessageBox.question(self.dialog, 'New Directory', 'The specified '
+                                        'output directory does not exist.  Should '
+                                        'I create it now?', 'No', 'Yes'):
+                    try:
+                        os.makedirs(output_dir)
+                    except OSError:
+                        # Directory is not writable, try to set a new one
+                        if QMessageBox.question(self.dialog, 'Invalid Directory',
+                                                'You don\'t have permission to write '
+                                                'to the specified outupt directory.  '
+                                                'Do you want to choose a new one?',
+                                                'No', 'Yes'):
+                            self.browseOutputDir()
+                            self.saveTemp()
+                            return self.verify()
+                        else:
+                            return False
+                else:
+                    return False
+            elif not os.access(path, os.W_OK):
+                if QMessageBox.question(self.dialog, 'Invalid Directory',
+                        'You don\'t have permission to write '
+                        'to the specified outupt directory.  '
+                        'Do you want to choose a new one?',
+                        'No', 'Yes'):
+                    self.browseOutputDir()
+                    self.saveTemp()
+                    return self.verify()
+                else:
+                    return False
+        return True
     
 # ------ UI CALLBACKS ------------------------------
 
@@ -224,15 +262,30 @@ class Settings(QSettings):
                 self.populateDefaults(force=True)
                 self.loadTemp()
                 self.updateLabels()
+    
+    def outputDirChanged(self, text):
+        self.setTempValue('conversion/outputDir', text)
+
+    def clearOutputDir(self):
+        self.setTempValue('conversion/outputDir', '')
+        self.updateLabels()
+
+    def browseOutputDir(self):
+        dir = QFileDialog.getExistingDirectory(caption='Select output directory')
+        if dir:
+            if os.access(dir, os.W_OK):
+                self.setTempValue('conversion/outputDir', dir)
+                self.updateLabels()
+            else:
+                QMessageBox.critical(self.dialog, 'Error',
+                                     'You don\'t have permission to write to '
+                                     'this directory.')
 
     def enableLineNumbersXml(self, checked):
         self.setTempValue('appearance/previewLineNumbersXml', checked)
             
     def enableLineNumbersText(self, checked):
         self.setTempValue('appearance/previewLineNumbersText', checked)
-    
-    def enableOpenXmlOnErrors(self, checked):
-        self.setTempValue('preview/openXmlOnErrors', checked)
 
     def changePreviewFont(self):
         current = QFont(self.temp.get('appearance/previewFontFamily', \
@@ -251,15 +304,6 @@ class Settings(QSettings):
             self.setTempValue('appearance/consoleFontFamily', newFont.family())
             self.setTempValue('appearance/consoleFontSize', newFont.pointSize())
             self.updateLabels()
-            
-    def changePreviewFormat(self, index):
-        # Map list index to format
-        format = { 0: self.handler.XML, 
-                   1: self.handler.PAGED,
-                   2: self.handler.RAW, 
-                   3: self.handler.HTML,
-                   4: self.handler.NROFF}[index]
-        self.setTempValue('preview/defaultFormat', format)    
             
     def resetLibraryLocation(self):
         self.setTempValue('library/location', self.defaults['library/location'])
@@ -305,3 +349,7 @@ class Settings(QSettings):
             self.handler.deleteCache(path)
             self.updateLabels()
 
+# ------- Persistent Settings from MainWindow ----------
+
+    def setVerbose(self, yes):
+        self.setValue('conversion/verbose', yes)

@@ -31,19 +31,16 @@ class XmlRfcHandler(QThread):
 
     def __init__(self):
         QThread.__init__(self)
-        self.halt = False
+        # self.halt = False
         self.destroyed = False
         self.verbose = True
         self.cache_path = None
         self.library_path = None
-        self.output_dir = None
-        self.current_docpath = None
 
         # Thread data to consume
-        # Requests are in the format: (docpath, [fmt1, fmt2, ...])
-        self.preview_request = None
-        self.batch_request = None
-        self.batch_formats = None
+        self.request_input = None
+        self.request_output_dir = None
+        self.request_formats = None
 
         # Temporary xmlrfc instance for requesting fast previews
         self.xmlrfc = None
@@ -78,68 +75,43 @@ class XmlRfcHandler(QThread):
     def signalStatus(self, text):
         self.emit(SIGNAL('status(QString)'), text)
         
-    def requestPreview(self, docpath, format):
-        self.preview_request = (docpath, format)
-        self.start()
-        
-    def requestBatch(self, paths, formats, outdir):
-        self.output_dir = outdir
-        self.batch_request = paths
-        self.batch_formats = formats
-        self.halt = False
+    def convert(self, input_file, formats, output_dir):
+        self.request_output_dir = output_dir or os.path.dirname(input_file)
+        self.request_formats = formats
+        self.request_input = input_file
+        # self.halt = False
         self.start()
     
     def signalHalt(self):
         self.halt = True
         
     def run(self):
-        while not self.destroyed and self.preview_request or \
-        self.batch_request:
-            if self.preview_request:
-                # Consume the preview request
-                docpath, format = self.preview_request
-                self.preview_request = None
-                if docpath != self.current_docpath:
-                    # Need to parse this docpath
-                    ok, error, type = self.T_parseDocument(docpath)
-                    if ok:
-                        self.current_docpath = docpath
-                        self.T_previewOutput(format)
+        while not self.destroyed and self.request_input:
+            # Consume the request
+            path = self.request_input
+            formats = self.request_formats
+            output_dir = self.request_output_dir
+            self.request_input = None
+            # Parse the document
+            ok = self.T_parseDocument(path)
+            if ok:
+                basename = os.path.splitext(os.path.basename(path))[0]
+                for format in formats:
+                    # Create proper file extension
+                    ext  = { self.RAW: '-raw.txt',
+                             self.PAGED: '.txt',
+                             self.HTML: '.html',
+                             self.NROFF: '.nroff' }[format]
+                    outpath = os.path.join(output_dir, basename + ext)
+                    # Run the writer
+                    if format == self.HTML:
+                        writer = xml2rfc.HtmlRfcWriter(self.xmlrfc, templates_dir=self.templates_dir)
                     else:
-                        # Signal the line number of the top-level error
-                        self.emit(SIGNAL('xmlError(QString, int)'), 
-                                  error.message, error.line)
-                else:
-                    # Assume the xmlrfc is already valid
-                    self.T_previewOutput(format)
-            if self.batch_request:
-                for row, path in enumerate(self.batch_request):
-                    if self.halt:
-                        # Stop processing
-                        return
-                    self.emit(SIGNAL('itemStarted(int)'), row)
-                    # Parse the document
-                    ok, error, type = self.T_parseDocument(path)
-                    if ok:
-                        basename = os.path.splitext(os.path.basename(path))[0]
-                        for format in self.batch_formats:
-                            # Create proper file extension
-                            ext  = { self.RAW: '-raw.txt',
-                                     self.PAGED: '.txt',
-                                     self.HTML: '.html',
-                                     self.NROFF: '.nroff' }[format]
-                            outpath = os.path.join(self.output_dir, basename + ext)
-                            # Run the writer
-                            if format == self.HTML:
-                                writer = xml2rfc.HtmlRfcWriter(self.xmlrfc, templates_dir=self.templates_dir)
-                            else:
-                                writer = self.writerClasses[format](self.xmlrfc)
-                            writer.write(outpath)
-                    self.emit(SIGNAL('itemFinished(int, bool, QString)'), row, ok, type)
-                # Consume request
-                self.batch_request = None
-                self.emit(SIGNAL('batchFinished()'))
-                
+                        writer = self.writerClasses[format](self.xmlrfc)
+                    writer.write(outpath)
+                    # Signal UI to load the output
+                    self.emit(SIGNAL('viewDocument(int, QString)'), format, outpath)
+                self.emit(SIGNAL('finished(int)'), format)
 
     def deleteCache(self, path):
         xml2rfc.XmlRfcParser('').delete_cache(path=path)
@@ -147,22 +119,6 @@ class XmlRfcHandler(QThread):
 # ----------------------------------------------------
 # Thread-only functions, do not call directly
 # ----------------------------------------------------
-
-    def T_previewOutput(self, format):
-        """ Emit the output for a format as a QString """
-        if format <= self.NROFF and format != self.XML and self.xmlrfc:
-            # Write xmlrfc to new temp file
-            self.signalStatus('Converting XML document ' + \
-                              self.current_docpath + '...')
-            if format == self.HTML:
-                writer = xml2rfc.HtmlRfcWriter(self.xmlrfc, templates_dir=self.templates_dir)
-            else:
-                writer = self.writerClasses[format](self.xmlrfc)
-            file = tempfile.TemporaryFile()
-            writer.write('', tmpfile=file)
-            file.seek(0)
-            self.emit(SIGNAL('preview(QString, int, QString)'),
-                      file.read(), format, self.current_docpath)
 
     def T_parseDocument(self, path):
         """ Parse an XML document and store the generated tree """
@@ -179,25 +135,22 @@ class XmlRfcHandler(QThread):
         try:        
             self.xmlrfc = parser.parse()
         except lxml.etree.XMLSyntaxError, error:
-            xml2rfc.log.error('Unable to parse the XML document:', path,
-                              '\n  ' + error.msg)
-            # return the line number(s) of the error(s)
-            # hack in attributes to keep consistent with validation errors
-            error.line = error.position[0]
-            error.message = error.msg
-            return False, error, 'syntax'
+            xml2rfc.log.error('Unable to parse the XML document: ' + path + '\n')
+            # Signal UI with error
+            msg = 'Line ' + str(error.position[0]) + ': ' + error.msg
+            self.emit(SIGNAL('error(QString, int)'), msg, error.position[0])
+            return False
         
         # Try to validate the document, catching any errors
         ok, errors = self.xmlrfc.validate()
         self.signalStatus('Validating XML document ' + path + '...')
         if not ok:
-            error_str = 'Unable to validate the XML document: ' + path
+            xml2rfc.log.error('Unable to validate the XML document: ' + path + '\n')
             for error in errors:
-                error_str += '\n  Line ' + str(error.line) + ': '
-                error_str += error.message
-            xml2rfc.log.error(error_str)
-            return False, errors[0], 'validation'
+                msg = 'Line ' + str(error.line) + ': ' + error.message
+                self.emit(SIGNAL('error(QString, int)'), msg, error.line)
+            return False
 
         # Return success, no error object attached
-        return True, None, 'pass'
+        return True
 
