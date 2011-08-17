@@ -206,10 +206,11 @@ class Settings(QSettings):
         lib = str(self.tempValue('library/location').toString())
         if not os.access(lib, os.R_OK) or len(os.listdir(lib)) == 0:
             if QMessageBox.question(self.dialog, 'Library location', \
-                     'Your citation library location is either inaccessible or '
-                     'does not exist.  This may affect xml2rfc\'s ability to '
+                     'Your citation library location \'%s\' is either inaccessible '
+                     'or does not exist.  This may affect xml2rfc\'s ability to '
                      'evaluate document references when parsing.  Would you '
-                     'like to set the location now?', 'No', 'Yes'):
+                     'like to set the location now?' % lib, 
+                     'No', 'Yes'):
                 self.browseLibraryLocation()
                 self.saveTemp()
 
@@ -219,16 +220,17 @@ class Settings(QSettings):
             path = os.path.normpath(os.path.expanduser(output_dir))
             if not os.path.exists(path):
                 if QMessageBox.question(self.dialog, 'New Directory', 'The specified '
-                                        'output directory does not exist.  Should '
-                                        'I create it now?', 'No', 'Yes'):
+                                        'output directory \'%s\' does not exist.  Should '
+                                        'I create it now?' % path, 
+                                        'No', 'Yes'):
                     try:
-                        os.makedirs(output_dir)
+                        os.makedirs(path)
                     except OSError:
                         # Directory is not writable, try to set a new one
                         if QMessageBox.question(self.dialog, 'Invalid Directory',
                                                 'You don\'t have permission to write '
-                                                'to the specified outupt directory.  '
-                                                'Do you want to choose a new one?',
+                                                'to the specified outupt directory \'%s\'. '
+                                                'Do you want to choose a new one?' % path,
                                                 'No', 'Yes'):
                             self.browseOutputDir()
                             self.saveTemp()
@@ -240,8 +242,8 @@ class Settings(QSettings):
             elif not os.access(path, os.W_OK):
                 if QMessageBox.question(self.dialog, 'Invalid Directory',
                         'You don\'t have permission to write '
-                        'to the specified outupt directory.  '
-                        'Do you want to choose a new one?',
+                        'to the specified outupt directory \'%s\'. '
+                        'Do you want to choose a new one?' % path,
                         'No', 'Yes'):
                     self.browseOutputDir()
                     self.saveTemp()
