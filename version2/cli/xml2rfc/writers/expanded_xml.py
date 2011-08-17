@@ -21,6 +21,17 @@ class ExpandedXmlWriter:
         """ Public method to write the XML document to a file """
         # Use lxml's built-in serialization
         file = open(filename, 'w')
+        # Assemble elements before root node
+        pre = []
+        element = self.root.getprevious()
+        while element is not None:
+            pre.append(element)
+            element = element.getprevious()
+        # Serialize pre-elements in reverse order
+        for i in range(len(pre)):
+            j = len(pre) - i - 1
+            file.write(lxml.etree.tostring(pre[j], pretty_print=True))
+        # Serialize main tree
         file.write(lxml.etree.tostring(self.root, pretty_print=True))
 
         if not self.quiet:

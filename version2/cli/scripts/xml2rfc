@@ -134,7 +134,12 @@ def main():
         basename = os.path.basename(source).rsplit('.', 1)[0]
 
     if options.exp:
-        expwriter = xml2rfc.ExpandedXmlWriter(xmlrfc,
+        # Expanded XML writer needs a separate tree instance with
+        # all comments and PI's preserved.  We can assume there are no
+        # parse errors at this point since we didnt call sys.exit() during
+        # parsing.
+        new_xmlrfc = parser.parse(remove_comments=False)
+        expwriter = xml2rfc.ExpandedXmlWriter(new_xmlrfc,
                                               quiet=options.quiet,
                                               verbose=options.verbose)
         filename = options.filename

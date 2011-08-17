@@ -151,7 +151,7 @@ class XmlRfcParser:
     def delete_cache(self, path=None):
         self.cachingResolver.delete_cache(path=path)
 
-    def parse(self):
+    def parse(self, remove_comments=True, remove_pis=False):
         """ Parses the source XML file and returns an XmlRfc instance """
         if not self.quiet:
             xml2rfc.log.write('Parsing file', self.source)
@@ -161,9 +161,10 @@ class XmlRfcParser:
                                       load_dtd=True,
                                       attribute_defaults=True,
                                       no_network=False,
-                                      remove_comments=True,
-                                      remove_pis=False,
-                                      remove_blank_text=True)
+                                      remove_comments=remove_comments,
+                                      remove_pis=remove_pis,
+                                      remove_blank_text=True,
+                                      resolve_entities=True)
 
         # Add our custom resolver
         parser.resolvers.add(self.cachingResolver)
