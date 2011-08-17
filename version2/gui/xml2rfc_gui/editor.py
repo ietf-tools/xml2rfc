@@ -31,6 +31,7 @@ class LinedEditor(QPlainTextEdit):
         # Default settings
         self.enableLineNumbers = True
         self.setLineWrapMode(QPlainTextEdit.NoWrap)
+        self.setFrameShape(QFrame.NoFrame)
         
         # Create line number widget
         self.lineArea = LineArea(self)

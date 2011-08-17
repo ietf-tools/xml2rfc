@@ -217,7 +217,7 @@ class MainWindow(QMainWindow):
 
         # Add editor to the tab
         layout = QVBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setContentsMargins(1, 1, 1, 1)
         layout.addWidget(editor)
         frame.setLayout(layout)       
         self.ui.tabWidget.addTab(frame, self.formatLabels[format])

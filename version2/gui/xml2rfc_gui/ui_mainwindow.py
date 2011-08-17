@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/mainwindow.ui'
 #
-# Created: Tue Aug 16 18:33:22 2011
+# Created: Wed Aug 17 10:46:34 2011
 #      by: PyQt4 UI code generator 4.8.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -116,7 +116,7 @@ class Ui_mainWindow(object):
         self.xmlTab.setObjectName(_fromUtf8("xmlTab"))
         self.verticalLayout_8 = QtGui.QVBoxLayout(self.xmlTab)
         self.verticalLayout_8.setSpacing(0)
-        self.verticalLayout_8.setMargin(0)
+        self.verticalLayout_8.setMargin(1)
         self.verticalLayout_8.setObjectName(_fromUtf8("verticalLayout_8"))
         self.textXml = LinedEditor(self.xmlTab)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
@@ -124,6 +124,7 @@ class Ui_mainWindow(object):
         sizePolicy.setVerticalStretch(2)
         sizePolicy.setHeightForWidth(self.textXml.sizePolicy().hasHeightForWidth())
         self.textXml.setSizePolicy(sizePolicy)
+        self.textXml.setFrameShape(QtGui.QFrame.NoFrame)
         self.textXml.setReadOnly(False)
         self.textXml.setObjectName(_fromUtf8("textXml"))
         self.verticalLayout_8.addWidget(self.textXml)
