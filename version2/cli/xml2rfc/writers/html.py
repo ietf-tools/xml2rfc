@@ -63,6 +63,9 @@ class HtmlRfcWriter(BaseRfcWriter):
         # Temporary div for recursive functions
         self.temp_div = E.DIV()
 
+        # Table to insert the iref into
+        self.iref_table = None
+
     def _write_list(self, list, parent):
         style = list.attrib.get('style', 'empty')
         if style == 'hanging':
@@ -189,19 +192,19 @@ class HtmlRfcWriter(BaseRfcWriter):
                 return [a]
         elif element.tag == 'iref':
             # Add anchor to index
-            item = element.attrib.get('item', '')
-            subitem = element.attrib.get('subitem', '')
-            index_elem = (item, subitem)
-            self.iref_index.append(index_elem)
-            # Create anchor element
-            a = E.A()
-            if subitem:
-                a.attrib['name'] = '.'.join(index_elem)
-            else:
-                a.attrib['name'] = item
-            if element.tail:
-                a.tail = element.tail
-            return [a]
+            item = element.attrib.get('item', None)
+            if item:
+                subitem = element.attrib.get('subitem', None)
+                anchor = '.'.join(('index', item))
+                if subitem:
+                    anchor += '.' + subitem
+                # Create internal iref
+                self._make_iref(item, subitem=subitem, anchor=anchor)
+                # Create anchor element
+                a = E.A(name=anchor)
+                if element.tail:
+                    a.tail = element.tail
+                return [a]
         elif element.tag == 'spanx':
             style = element.attrib.get('style', 'emph')
             text = ''
@@ -574,19 +577,39 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.active_buffer.append(self._serialize(E.DIV(id=text)))
 
     def insert_iref_index(self):
-#        # Omit this element if the index is empty
-#        if len(self.iref_index) > 0:
-#            self.write_heading('Index', autoAnchor='index')
-#            # self.add_to_toc('', 'Index', link='index')
-#            dl = E.DL()
-#            for iref in self.iref_index:
-#                if iref[1]:
-#                    dl.append(E.DT(iref[0]))
-#                    dl.append(E.DD(E.A(iref[1], href='#' + '.'.join(iref))))
-#                else:
-#                    dl.append(E.DD(E.A(iref[0], href='#' + iref[0])))
-#            self.body.append(dl)
-        pass
+        # Write the heading
+        self.write_heading('Index', autoAnchor='rfc.index')
+        table = E.TABLE()
+        # Sort iref items alphabetically, store by first letter 
+        alpha_bucket = {}
+        for key in sorted(self._iref_index.keys()):
+            letter = key[0].upper()
+            if letter in alpha_bucket:
+                alpha_bucket[letter].append(key)
+            else:
+                alpha_bucket[letter] = [key]
+        for letter in sorted(alpha_bucket.keys()):
+            # Add letter element
+            table.append(E.TR(E.TD(E.STRONG(letter))))
+            for item in alpha_bucket[letter]:
+                # Add item element
+                anchor = self._iref_index[item].anchor or ''
+                if anchor:
+                    anchor = '#' + anchor
+                    td = E.TD(E.A(item, href=anchor))
+                else:
+                    td = E.TD(item)
+                table.append(E.TR(E.TD(' '), td))
+                for name, subitem in self._iref_index[item].subitems.items():
+                    # Add subitem element
+                    td = E.TD()
+                    td.text = (u'\u00a0\u00a0')  # Spaces
+                    anchor = subitem.anchor or ''
+                    anchor = '#' + anchor
+                    td.append(E.A(name, href=anchor))
+                    table.append(E.TR(E.TD(' '), td))
+
+        self.active_buffer.append(self._serialize(table))
     
     def pre_processing(self):
         # Reset buffers

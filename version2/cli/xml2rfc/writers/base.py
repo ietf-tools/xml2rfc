@@ -32,9 +32,10 @@ class _RfcItem:
 
 class _IrefItem:
     """ A unique ID object for an iref element """
-    def __init__(self):
+    def __init__(self, anchor=None):
         self.pages = []
         self.subitems = {}
+        self.anchor = anchor
 
 
 class BaseRfcWriter:
@@ -159,12 +160,17 @@ class BaseRfcWriter:
         self._index = []
         self._iref_index = {}
         
-    def _make_iref(self, item, subitem=None):
+    def _make_iref(self, item, subitem=None, anchor=None):
         """ Create an iref ID object if it doesnt exist yet """
+        last = None
         if item not in self._iref_index:
             self._iref_index[item] = _IrefItem()
+            last = self._iref_index[item]
         if subitem and subitem not in self._iref_index[item].subitems:
             self._iref_index[item].subitems[subitem] = _IrefItem()
+            last = self._iref_index[item].subitems[subitem]
+        if last and anchor:
+            last.anchor = anchor
 
     def _indexParagraph(self, counter, p_counter, anchor=None, toc=False):
         counter = str(counter)  # This is the section counter
@@ -605,9 +611,14 @@ class BaseRfcWriter:
         # Appendix sections
         self._write_section_rec(self.r.find('back'), None, appendix=True)
 
-        # The writer is responsible for tracking irefs,
-        # so we have nothing to pass here
-        if not self.indexmode:
+        # IREF index
+        if self.indexmode:
+            # Add explicitly to index
+            title = 'Index'
+            autoAnchor = 'rfc.index'
+            item = _RfcItem(title, autoAnchor, title=title)
+            self._index.append(item)
+        else:
             self.insert_iref_index()
 
         # Authors addresses section
@@ -637,8 +648,8 @@ class BaseRfcWriter:
             self.xmlrfc.replaceUnicode()
         
         # Make two passes over the document, the first pass we run in
-        # 'index mode' to construct just the index, the second pass will
-        # render the actual text
+        # 'index mode' to construct the internal index and other things, 
+        # the second pass will assemble a buffer and render the actual text
         self._run(indexmode=True)
         self._run(indexmode=False)
 

@@ -174,6 +174,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         
     def _write_toc(self, paging=False):
         """ Write table of contents to a temporary buffer and return """
+        if self.toc_marker < 1:
+            # Toc is either disabled, or the pointer was messed up
+            return ['']
         tmpbuf = ['', 'Table of Contents', '']
         # Retrieve toc from the index
         tocindex = self._getTocIndex()
@@ -218,6 +221,9 @@ class RawTextRfcWriter(BaseRfcWriter):
             
     def _write_iref_index(self):
         """ Write iref index to a temporary buffer and return """
+        if self.iref_marker < 1:
+            # iref is either disabled, or the pointer was messed up
+            return ['']
         tmpbuf = ['', 'Index']
         # Sort iref items alphabetically, store by first letter 
         alpha_bucket = {}
@@ -740,10 +746,6 @@ class RawTextRfcWriter(BaseRfcWriter):
         # No anchors for text
         pass
 
-    def write_iref_index(self):
-        # No iref for raw text
-        pass
-
     def pre_processing(self):
         # Discard buffer from indexing pass
         self.buf = []
@@ -753,13 +755,12 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.eref_counter = 0   # Counter for <eref> elements
 
     def post_processing(self):
-        if self.toc_marker > 0:
-            # Insert the table of contents into the output buffer
-            self.output = self.buf[:self.toc_marker]
-            self.output.extend(self._write_toc())
-            self.output.extend(self.buf[self.toc_marker:])
-        else:
-            self.output = self.buf
+        # Insert the TOC and IREF into the main buffer
+        self.output = self.buf[:self.toc_marker] + \
+                      self._write_toc() + \
+                      self.buf[self.toc_marker:self.iref_marker] + \
+                      self._write_iref_index() + \
+                      self.buf[self.iref_marker:]
 
     def write_to_file(self, file):
         """ Writes the buffer to the specified file """

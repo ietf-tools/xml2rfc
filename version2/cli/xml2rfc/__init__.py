@@ -1,6 +1,6 @@
 
 NAME    = 'xml2rfc'
-VERSION = (2, 0, 8)
+VERSION = (2, 1, 0)
 CACHES  = ['/var/cache/xml2rfc', '~/.cache/xml2rfc']  # Ordered by priority
 CACHE_PREFIX = '_HTTP_CACHE'
 
