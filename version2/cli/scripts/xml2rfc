@@ -112,9 +112,11 @@ def main():
                                   cache_path=options.cache)
     try:
         xmlrfc = parser.parse()
-    except lxml.etree.XMLSyntaxError, error:  # Catch XML errors
+    except (lxml.etree.XMLSyntaxError, xml2rfc.parser.XmlReferenceError), error:
+        linestr = error.position[0] > 0 and 'Line ' + str(error.position[0]) + ': ' \
+                  or ''
         xml2rfc.log.error('Unable to parse the XML document:', args[0],
-                          '\n  ' + error.msg)
+                          '\n  ' + linestr + error.msg)
         sys.exit(1)
         
     # Validate the document
