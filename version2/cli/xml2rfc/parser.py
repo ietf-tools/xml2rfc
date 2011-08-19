@@ -273,8 +273,8 @@ class XmlRfcParser:
         if not library_dirs:
             raw_dirs = re.split(':|;',
                             os.environ.get('XML_LIBRARY', '/usr/share/xml2rfc'))
-            library_dirs = [os.path.normpath(os.path.expanduser(dir))
-                                 for dir in raw_dirs]
+            library_dirs = [os.path.normpath(os.path.expanduser(raw_dir))
+                            for raw_dir in raw_dirs if raw_dir]
         self.library_dirs = library_dirs
 
         # Initialize the caching system
