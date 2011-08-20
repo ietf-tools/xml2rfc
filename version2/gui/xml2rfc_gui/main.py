@@ -110,6 +110,7 @@ class MainWindow(QMainWindow):
         self.connect(self.ui.actionAbout,   SIGNAL('triggered()'),  self.showAbout)
         self.connect(self.ui.actionAboutQt, SIGNAL('triggered()'),  self.showAboutQt)
         self.connect(self.ui.actionOpen,    SIGNAL('triggered()'),  self.openFile)
+        self.connect(self.ui.actionSave,    SIGNAL('triggered()'),  self.saveFile)
         self.connect(self.ui.actionPreferences, SIGNAL('triggered()'),
                      self.settings.showPreferences)
 
@@ -197,6 +198,7 @@ class MainWindow(QMainWindow):
 
         # Create a new editor and configure with current settings
         frame = QWidget(self.ui.tabWidget)
+        label = self.formatLabels[format]
         if format == self.handler.HTML:
             editor = PyQt4.QtWebKit.QWebView(frame)
             editor.setHtml(data)
@@ -206,8 +208,14 @@ class MainWindow(QMainWindow):
                          self.settings.value('appearance/previewFontSize').toInt()[0])
             editor.setFont(font)
             if format == self.handler.XML:
+                if not os.access(path, os.W_OK):
+                    # Read only!
+                    editor.setReadOnly(True)
+                    label += ' (Read-only)'
                 lineNumbers = self.settings.value('appearance/previewLineNumbersXml').toBool()
                 self.xmlEditor = editor
+                # Create callback
+                self.connect(editor, SIGNAL('textChanged()'), self.xmlChanged)
             else:
                 lineNumbers = self.settings.value('appearance/previewLineNumbersText').toBool()
                 editor.setReadOnly(True)
@@ -220,7 +228,7 @@ class MainWindow(QMainWindow):
         layout.setContentsMargins(1, 1, 1, 1)
         layout.addWidget(editor)
         frame.setLayout(layout)       
-        self.ui.tabWidget.addTab(frame, self.formatLabels[format])
+        self.ui.tabWidget.addTab(frame, label)
 
     def convertFinished(self, lastFormat):
         # Open tab
@@ -294,6 +302,29 @@ class MainWindow(QMainWindow):
             self.viewDocument(self.handler.XML, filename)
             self.input_file = str(filename)
             self.ui.sourceLabel.setText(filename)
+
+    def xmlChanged(self):
+        if self.xmlEditor and not self.xmlEditor.isReadOnly():
+            self.ui.tabWidget.setTabText(0, 'XML *')
+            # Enable the action
+            self.ui.actionSave.setEnabled(True)
+
+    def saveFile(self):
+        """ Saves the current source document back to its original path """
+        if self.xmlEditor:
+            if os.access(self.input_file, os.W_OK):
+                self.ui.tabWidget.setTabText(0, 'XML')
+                # Disable the action
+                self.ui.actionSave.setEnabled(False)
+                # Write the file
+                file = open(self.input_file, 'w')
+                file.write(self.xmlEditor.toPlainText())
+                file.close()
+                self.status('Wrote file ' + self.input_file)
+            else:
+                QMessageBox.critical(self, 'Unable to save', 'You don\'t have '
+                                     'permission to write to the file "%s"' \
+                                     % self.input_file)
 
     def convert(self):
         if not self.input_file or not os.path.exists(self.input_file):

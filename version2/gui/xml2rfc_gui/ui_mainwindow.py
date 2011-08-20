@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/mainwindow.ui'
 #
-# Created: Fri Aug 19 18:02:07 2011
+# Created: Fri Aug 19 18:16:06 2011
 #      by: PyQt4 UI code generator 4.8.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -125,7 +125,7 @@ class Ui_mainWindow(object):
         sizePolicy.setHeightForWidth(self.textXml.sizePolicy().hasHeightForWidth())
         self.textXml.setSizePolicy(sizePolicy)
         self.textXml.setFrameShape(QtGui.QFrame.NoFrame)
-        self.textXml.setReadOnly(False)
+        self.textXml.setReadOnly(True)
         self.textXml.setObjectName(_fromUtf8("textXml"))
         self.verticalLayout_8.addWidget(self.textXml)
         self.tabWidget.addTab(self.xmlTab, _fromUtf8(""))
@@ -196,7 +196,10 @@ class Ui_mainWindow(object):
         self.actionOptionVerbose = QtGui.QAction(mainWindow)
         self.actionOptionVerbose.setCheckable(True)
         self.actionOptionVerbose.setObjectName(_fromUtf8("actionOptionVerbose"))
+        self.actionSave = QtGui.QAction(mainWindow)
+        self.actionSave.setObjectName(_fromUtf8("actionSave"))
         self.menuFile.addAction(self.actionOpen)
+        self.menuFile.addAction(self.actionSave)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionQuit)
         self.menuHelp.addAction(self.actionAbout)
@@ -254,5 +257,7 @@ class Ui_mainWindow(object):
         self.actionFormatHtml.setText(QtGui.QApplication.translate("mainWindow", "HTML", None, QtGui.QApplication.UnicodeUTF8))
         self.actionFormatNroff.setText(QtGui.QApplication.translate("mainWindow", "Nroff", None, QtGui.QApplication.UnicodeUTF8))
         self.actionOptionVerbose.setText(QtGui.QApplication.translate("mainWindow", "Verbose console output", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionSave.setText(QtGui.QApplication.translate("mainWindow", "Save Source", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionSave.setShortcut(QtGui.QApplication.translate("mainWindow", "Ctrl+S", None, QtGui.QApplication.UnicodeUTF8))
 
 from editor import LinedEditor
