@@ -84,7 +84,7 @@ class CachingResolver(lxml.etree.Resolver):
         # If the source itself is requested, return as-is
         if request == self.source:
             return self.resolve_filename(request, context)
-        if not urlparse(request).netloc and not os.path.isabs(request):
+        if not urlparse(request).netloc:
             # Format the request from the relative path of the source so that 
             # We get the exact same path as in the XML document
             request = os.path.relpath(request, self.source_dir)
@@ -271,11 +271,9 @@ class XmlRfcParser:
         #   2. Default to /usr/share/xml2rfc
         # Split on colon or semi-colon delimiters
         if not library_dirs:
-            raw_dirs = re.split(':|;',
-                            os.environ.get('XML_LIBRARY', '/usr/share/xml2rfc'))
-            library_dirs = [os.path.normpath(os.path.expanduser(raw_dir))
-                            for raw_dir in raw_dirs if raw_dir]
-        self.library_dirs = library_dirs
+            library_dirs = os.environ.get('XML_LIBRARY', '/usr/share/xml2rfc')
+        self.library_dirs = [os.path.normpath(os.path.expanduser(raw_dir))
+                            for raw_dir in re.split(':|;', library_dirs) if raw_dir]
 
         # Initialize the caching system
         self.cachingResolver = CachingResolver(cache_path=cache_path,
