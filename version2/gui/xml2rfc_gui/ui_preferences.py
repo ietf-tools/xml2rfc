@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/preferences.ui'
 #
-# Created: Fri Aug 19 17:57:55 2011
+# Created: Fri Aug 19 18:02:08 2011
 #      by: PyQt4 UI code generator 4.8.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -172,9 +172,9 @@ class Ui_Dialog(object):
         self.verticalLayout_9 = QtGui.QVBoxLayout(self.groupBox_6)
         self.verticalLayout_9.setSpacing(10)
         self.verticalLayout_9.setObjectName(_fromUtf8("verticalLayout_9"))
-        self.label_2 = QtGui.QLabel(self.groupBox_6)
-        self.label_2.setObjectName(_fromUtf8("label_2"))
-        self.verticalLayout_9.addWidget(self.label_2)
+        self.localLibraryLabel = QtGui.QLabel(self.groupBox_6)
+        self.localLibraryLabel.setObjectName(_fromUtf8("localLibraryLabel"))
+        self.verticalLayout_9.addWidget(self.localLibraryLabel)
         self.localLibraries = QtGui.QLineEdit(self.groupBox_6)
         self.localLibraries.setObjectName(_fromUtf8("localLibraries"))
         self.verticalLayout_9.addWidget(self.localLibraries)
@@ -246,7 +246,7 @@ class Ui_Dialog(object):
         self.cacheDeleteButton.setText(QtGui.QApplication.translate("Dialog", "Delete cache", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.cacheTab), QtGui.QApplication.translate("Dialog", "Cache", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_6.setTitle(QtGui.QApplication.translate("Dialog", "Local citation libraries", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("Dialog", "Locations (separated by colons)", None, QtGui.QApplication.UnicodeUTF8))
+        self.localLibraryLabel.setText(QtGui.QApplication.translate("Dialog", "Locations (separated by colons)", None, QtGui.QApplication.UnicodeUTF8))
         self.libraryBrowseButton.setText(QtGui.QApplication.translate("Dialog", "Browse", None, QtGui.QApplication.UnicodeUTF8))
         self.libraryResetButton.setText(QtGui.QApplication.translate("Dialog", "Reset locations", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_7.setTitle(QtGui.QApplication.translate("Dialog", "Network citation library", None, QtGui.QApplication.UnicodeUTF8))

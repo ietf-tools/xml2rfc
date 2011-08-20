@@ -1,5 +1,6 @@
 # Python libs
 import os.path
+import sys
 
 # PyQT modules
 from PyQt4.QtCore import *
@@ -15,7 +16,7 @@ import xml2rfc
 # Determine safe path defaults
 default_network_lib = 'http://xml.resource.org/public/rfc/'
 default_local_libs = os.environ.get('XML_LIBRARY', '/usr/share/xml2rfc')
-default_cache_path = os.path.normpath('/var/cache/xml2rfc:')
+default_cache_path = os.path.normpath('/var/cache/xml2rfc')
 if not os.access(default_cache_path, os.W_OK):
     try:
         os.makedirs(default_cache_path)
@@ -156,6 +157,11 @@ class Settings(QSettings):
         netloc = self.tempValue('references/network_lib').toString()
         self.dialog.ui.localLibraries.setText(locallibs)
         self.dialog.ui.networkLibrary.setText(netloc)
+
+        # Platform-specific
+        if sys.platform.startswith('win'):
+            self.dialog.ui.localLibraryLabel.setText('Locations (separated '
+                                                     'by semicolons)')
 
     def showPreferences(self):
         """ Open the preferences dialog window """       
