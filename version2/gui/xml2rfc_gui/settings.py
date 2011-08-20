@@ -219,17 +219,17 @@ class Settings(QSettings):
         """ Ensure safety on settings before invoking xml2rfc """
         self.loadTemp()
 
-        # Check library directory
-        lib = str(self.tempValue('library/location').toString())
-        if not os.access(lib, os.R_OK) or len(os.listdir(lib)) == 0:
-            if QMessageBox.question(self.dialog, 'Library location', \
-                     'Your citation library location \'%s\' is either inaccessible '
-                     'or does not exist.  This may affect xml2rfc\'s ability to '
-                     'evaluate document references when parsing.  Would you '
-                     'like to set the location now?' % lib, 
-                     'No', 'Yes'):
-                self.browseLibraryLocation()
-                self.saveTemp()
+        # # Check library directory
+        # lib = str(self.tempValue('library/location').toString())
+        # if not os.access(lib, os.R_OK) or len(os.listdir(lib)) == 0:
+        #     if QMessageBox.question(self.dialog, 'Library location', \
+        #              'Your citation library location \'%s\' is either inaccessible '
+        #              'or does not exist.  This may affect xml2rfc\'s ability to '
+        #              'evaluate document references when parsing.  Would you '
+        #              'like to set the location now?' % lib, 
+        #              'No', 'Yes'):
+        #         self.browseLibraryLocation()
+        #         self.saveTemp()
 
         # Check output directory
         output_dir = str(self.tempValue('conversion/outputDir').toString())

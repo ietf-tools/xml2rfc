@@ -9,7 +9,7 @@ import re
 import os
 import shutil
 import xml2rfc.log
-from urlparse import urlparse
+from urlparse import urlparse, urljoin
 
 __all__ = ['XmlRfcParser', 'XmlRfc', 'XmlReferenceError']
 
@@ -181,7 +181,7 @@ class CachingResolver(lxml.etree.Resolver):
                             break
                     if not result:
                         # Try network location
-                        url = os.path.join(self.network_loc, request)
+                        url = urljoin(self.network_loc, request)
                         attempts.append(url)
                         result = self.cache(request)
                         if not result:
@@ -201,7 +201,7 @@ class CachingResolver(lxml.etree.Resolver):
                     if not result:
                         # Try network subdirs
                         for subdir in xml2rfc.NET_SUBDIRS:
-                            url = os.path.join(self.network_loc, subdir, request)
+                            url = urljoin(self.network_loc, subdir + '/' + request)
                             attempts.append(url)
                             result = self.cache(url)
                             if result:
