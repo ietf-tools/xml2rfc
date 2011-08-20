@@ -35,7 +35,8 @@ class XmlRfcHandler(QThread):
         self.destroyed = False
         self.verbose = True
         self.cache_path = None
-        self.library_path = None
+        self.library_dirs = None
+        self.network_loc = None
 
         # Thread data to consume
         self.request_input = None
@@ -66,8 +67,11 @@ class XmlRfcHandler(QThread):
     def setCache(self, path):
         self.cache_path = path
 
-    def setLibrary(self, path):
-        self.library_path = path
+    def setLocalLibraries(self, dirstring):
+        self.library_dirs = dirstring
+
+    def setNetworkLibrary(self, url):
+        self.network_loc = url
     
     def setVerbose(self, verbose):
         self.verbose = verbose
@@ -79,7 +83,6 @@ class XmlRfcHandler(QThread):
         self.request_output_dir = output_dir or os.path.dirname(input_file)
         self.request_formats = formats
         self.request_input = input_file
-        # self.halt = False
         self.start()
     
     def signalHalt(self):
@@ -126,18 +129,21 @@ class XmlRfcHandler(QThread):
         parser = xml2rfc.XmlRfcParser(path, 
                                       verbose=self.verbose, 
                                       cache_path=self.cache_path,
-                                      library_path=self.library_path,
-                                      templates_path=self.templates_dir)
+                                      templates_path=self.templates_dir,
+                                      library_dirs=self.library_dirs,
+                                      network_loc=self.network_loc)
 
         # Try to parse the document, catching any errors
         self.xmlrfc = None
         self.signalStatus('Parsing XML document ' + path + '...')
         try:        
             self.xmlrfc = parser.parse()
-        except lxml.etree.XMLSyntaxError, error:
+        except (lxml.etree.XMLSyntaxError, xml2rfc.parser.XmlReferenceError), error:
             xml2rfc.log.error('Unable to parse the XML document: ' + path + '\n')
             # Signal UI with error
-            msg = 'Line ' + str(error.position[0]) + ': ' + error.msg
+            linestr = error.position[0] > 0 and 'Line ' + str(error.position[0]) + ': ' \
+                      or ''
+            msg = linestr + error.msg
             self.emit(SIGNAL('error(QString, int)'), msg, error.position[0])
             return False
         

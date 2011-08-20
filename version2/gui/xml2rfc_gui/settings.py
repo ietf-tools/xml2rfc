@@ -12,15 +12,16 @@ import ui_preferences
 import utils
 import xml2rfc
 
-# Determine safe directory defaults
-safe_lib_path = os.path.normpath(os.path.expanduser(os.environ.get('XML_LIBRARY', '/var/lib/xml2rfc')))
-safe_cache_path = os.path.normpath('/var/cache/xml2rfc')
-if not os.access(safe_cache_path, os.W_OK):
+# Determine safe path defaults
+default_network_lib = 'http://xml.resource.org/public/rfc/'
+default_local_libs = os.environ.get('XML_LIBRARY', '/usr/share/xml2rfc')
+default_cache_path = os.path.normpath('/var/cache/xml2rfc:')
+if not os.access(default_cache_path, os.W_OK):
     try:
-        os.makedirs(safe_cache_path)
+        os.makedirs(default_cache_path)
     except OSError:
         # Default to homedir
-        safe_cache_path = os.path.normpath(os.path.expanduser('~/.cache/xml2rfc'))
+        default_cache_path = os.path.normpath(os.path.expanduser('~/.cache/xml2rfc'))
 
 class Settings(QSettings):
     """ Settings class which encapsulates QSettings with QDialogs """
@@ -34,8 +35,9 @@ class Settings(QSettings):
     defaults['appearance/previewLineNumbersText']   = False
     defaults['appearance/consoleFontFamily']        = 'Courier'
     defaults['appearance/consoleFontSize']          = 12
-    defaults['cache/location']                      = safe_cache_path
-    defaults['library/location']                    = safe_lib_path
+    defaults['cache/location']                      = default_cache_path
+    defaults['references/local_libs']               = default_local_libs
+    defaults['references/network_lib']              = default_network_lib
 
     def __init__(self, mainWindow, backendHandler):
         # Super
@@ -149,9 +151,11 @@ class Settings(QSettings):
         kb = utils.getDirectorySize(fullpath) / 2 ** 10
         self.dialog.ui.cacheSizeLabel.setText(str(kb) + ' KB')
         
-        # Library tab
-        loc = self.tempValue('library/location').toString()
-        self.dialog.ui.libraryLocationText.setText(loc)
+        # References tab
+        locallibs = self.tempValue('references/local_libs').toString()
+        netloc = self.tempValue('references/network_lib').toString()
+        self.dialog.ui.localLibraries.setText(locallibs)
+        self.dialog.ui.networkLibrary.setText(netloc)
 
     def showPreferences(self):
         """ Open the preferences dialog window """       
@@ -174,6 +178,7 @@ class Settings(QSettings):
          self.dialog.ui.cacheResetButton:       self.resetCacheLocation,
          self.dialog.ui.libraryBrowseButton:    self.browseLibraryLocation,
          self.dialog.ui.libraryResetButton:     self.resetLibraryLocation,
+         self.dialog.ui.networkLibraryResetButton: self.resetNetworkLibraryLocation,
         }.items():
             self.connect(button, SIGNAL('clicked()'), function)
 
@@ -190,6 +195,12 @@ class Settings(QSettings):
                      SIGNAL('stateChanged(int)'), self.enableLineNumbersXml)
         self.connect(self.dialog.ui.previewLineNumbersText,
                      SIGNAL('stateChanged(int)'), self.enableLineNumbersText)
+
+        # References tab
+        self.connect(self.dialog.ui.localLibraries, 
+                     SIGNAL('textChanged(QString)'), self.libraryChanged)
+        self.connect(self.dialog.ui.networkLibrary,
+                     SIGNAL('textChanged(QString)'), self.networkLibraryChanged)
 
         # Open the dialog
         if self.dialog.exec_():
@@ -268,6 +279,12 @@ class Settings(QSettings):
     def outputDirChanged(self, text):
         self.setTempValue('conversion/outputDir', text)
 
+    def libraryChanged(self, text):
+        self.setTempValue('references/local_libs', text)
+
+    def networkLibraryChanged(self, text):
+        self.setTempValue('references/network_lib', text)
+
     def clearOutputDir(self):
         self.setTempValue('conversion/outputDir', '')
         self.updateLabels()
@@ -306,9 +323,15 @@ class Settings(QSettings):
             self.setTempValue('appearance/consoleFontFamily', newFont.family())
             self.setTempValue('appearance/consoleFontSize', newFont.pointSize())
             self.updateLabels()
+        
+    def resetNetworkLibraryLocation(self):
+        self.setTempValue('references/network_lib', 
+                          self.defaults['references/network_lib'])
+        self.updateLabels()
             
     def resetLibraryLocation(self):
-        self.setTempValue('library/location', self.defaults['library/location'])
+        self.setTempValue('references/local_libs', 
+                          self.defaults['references/local_libs'])
         self.updateLabels()
     
     def browseLibraryLocation(self):

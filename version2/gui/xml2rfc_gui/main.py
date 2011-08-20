@@ -1,6 +1,6 @@
 # Main module for xml2rfc-gui
 
-VERSION = (0, 6, 1)
+VERSION = (0, 7, 0)
 
 # xml2rfc module
 import xml2rfc
@@ -246,12 +246,16 @@ class MainWindow(QMainWindow):
     def recieveError(self, message, line):
         """ Recieved an XML error, highlight the line and jump to it """
         # Print error in console with link
-        self.stdErrCallback(QString('&nbsp;&nbsp;<a href="line_%1">%2</a>').arg(line).arg(message))
-        if self.xmlEditor:
-            self.status('Error: ' + message)
-            self.gotoXmlLine(line)
-            self.xmlEditor.highlightCurrentLine()
-            self.ui.tabWidget.setCurrentIndex(0)
+        if line > 0:
+            self.stdErrCallback(QString('&nbsp;&nbsp;<a href="line_%1">%2</a>').arg(line).arg(message))
+            if self.xmlEditor:
+                # Highlight error
+                self.status('Error: ' + message)
+                self.gotoXmlLine(line)
+                self.xmlEditor.highlightCurrentLine()
+                self.ui.tabWidget.setCurrentIndex(0)
+        else:
+            self.stdErrCallback(message)
 
     def showAbout(self):
         """ Show the about window """
@@ -314,13 +318,16 @@ class MainWindow(QMainWindow):
                 self.handler.NROFF: self.ui.formatNroff.checkState() }.items() \
               if val]
             
+            # Setup backend thread with current state of settings
             verbose = bool(self.ui.actionOptionVerbose.isChecked())
             abs_cache = os.path.expanduser(str(self.settings.value('cache/location').toString()))
-            abs_library = os.path.expanduser(str(self.settings.value('library/location').toString()))
+            local_libs = str(self.settings.value('references/local_libs').toString())
+            network_lib = str(self.settings.value('references/network_lib').toString())
             self.handler.setCache(abs_cache)
-            self.handler.setLibrary(abs_library)
+            self.handler.setLocalLibraries(local_libs)
+            self.handler.setNetworkLibrary(network_lib)
             self.handler.setVerbose(verbose)
-    
+
             if len(formats) > 0:
                 self.lockWidgets()
                 self.handler.convert(self.input_file, formats, output_dir)
