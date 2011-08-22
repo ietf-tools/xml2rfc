@@ -111,12 +111,10 @@ class CachingResolver(lxml.etree.Resolver):
               Else
                 If REQUEST contains intermediate directories then
                   Try each directory in LOCAL_LIB_DIRS + REQUEST, otherwise
-                  Try NETWORK + REQUEST, otherwise
-                  Return SOURCE_DIR + REQUEST
+                  Try NETWORK + REQUEST
                 Else (REQUEST is simply a filename)
                   [Recursively] Try each directory in LOCAL_LIB_DIRS + REQUEST, otherise
-                  Try each explicit (bibxml, bibxml2...) subdirectory in NETWORK + REQUEST, otherwise
-                  Return SOURCE_DIR + REQUEST
+                  Try each explicit (bibxml, bibxml2...) subdirectory in NETWORK + REQUEST
 
             Finally if the path returned is a network URL, use the cached
             version or create a new cache.
@@ -184,10 +182,10 @@ class CachingResolver(lxml.etree.Resolver):
                         url = urljoin(self.network_loc, request)
                         attempts.append(url)
                         result = self.cache(request)
-                        if not result:
-                            # Document didn't exist, default to source dir
-                            result = os.path.join(self.source_dir, request)
-                            attempts.append(result)
+                        # if not result:
+                        #     # Document didn't exist, default to source dir
+                        #     result = os.path.join(self.source_dir, request)
+                        #     attempts.append(result)
                 else:
                     # Hanging filename
                     for dir in self.library_dirs:
@@ -206,10 +204,10 @@ class CachingResolver(lxml.etree.Resolver):
                             result = self.cache(url)
                             if result:
                                 break
-                    if not result:
-                        # Default to source dir
-                        result = os.path.join(self.source_dir, request)
-                        attempts.append(result)
+                    # if not result:
+                    #     # Default to source dir
+                    #     result = os.path.join(self.source_dir, request)
+                    #     attempts.append(result)
 
         # Verify the result -- either raise exception or return it
         if not os.path.exists(result) and not urlparse(result).netloc:
@@ -271,9 +269,18 @@ class XmlRfcParser:
         #   2. Default to /usr/share/xml2rfc
         # Split on colon or semi-colon delimiters
         if not library_dirs:
-            library_dirs = os.environ.get('XML_LIBRARY', '/usr/share/xml2rfc')
-        self.library_dirs = [os.path.normpath(os.path.expanduser(raw_dir))
-                            for raw_dir in re.split(':|;', library_dirs) if raw_dir]
+            library_dirs = os.environ.get('XML_LIBRARY', '/usr/share/xml2rfc:')
+        self.library_dirs = []
+        for raw_dir in re.split(':|;', library_dirs):
+            # Convert empty directory to source dir
+            if raw_dir == '': 
+                raw_dir = os.path.abspath(os.path.dirname(self.source))
+            else:
+                raw_dir = os.path.normpath(os.path.expanduser(raw_dir))
+            # Add dir if its unique
+            if raw_dir not in self.library_dirs:
+                self.library_dirs.append(raw_dir)
+
 
         # Initialize the caching system
         self.cachingResolver = CachingResolver(cache_path=cache_path,

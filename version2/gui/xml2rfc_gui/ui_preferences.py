@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/preferences.ui'
 #
-# Created: Fri Aug 19 18:16:06 2011
+# Created: Mon Aug 22 13:20:33 2011
 #      by: PyQt4 UI code generator 4.8.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -197,16 +197,16 @@ class Ui_Dialog(object):
         self.groupBox_7.setObjectName(_fromUtf8("groupBox_7"))
         self.gridLayout_2 = QtGui.QGridLayout(self.groupBox_7)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        self.label_3 = QtGui.QLabel(self.groupBox_7)
-        self.label_3.setObjectName(_fromUtf8("label_3"))
-        self.gridLayout_2.addWidget(self.label_3, 0, 0, 1, 1)
         self.networkLibrary = QtGui.QLineEdit(self.groupBox_7)
         self.networkLibrary.setText(_fromUtf8(""))
         self.networkLibrary.setObjectName(_fromUtf8("networkLibrary"))
-        self.gridLayout_2.addWidget(self.networkLibrary, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.networkLibrary, 1, 1, 1, 1)
         self.networkLibraryResetButton = QtGui.QPushButton(self.groupBox_7)
         self.networkLibraryResetButton.setObjectName(_fromUtf8("networkLibraryResetButton"))
-        self.gridLayout_2.addWidget(self.networkLibraryResetButton, 0, 2, 1, 1)
+        self.gridLayout_2.addWidget(self.networkLibraryResetButton, 1, 2, 1, 1)
+        self.label_3 = QtGui.QLabel(self.groupBox_7)
+        self.label_3.setObjectName(_fromUtf8("label_3"))
+        self.gridLayout_2.addWidget(self.label_3, 0, 1, 1, 1)
         self.verticalLayout_10.addWidget(self.groupBox_7)
         self.tabWidget.addTab(self.libraryTab, _fromUtf8(""))
         self.verticalLayout.addWidget(self.tabWidget)
@@ -250,7 +250,7 @@ class Ui_Dialog(object):
         self.libraryBrowseButton.setText(QtGui.QApplication.translate("Dialog", "Browse", None, QtGui.QApplication.UnicodeUTF8))
         self.libraryResetButton.setText(QtGui.QApplication.translate("Dialog", "Reset locations", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_7.setTitle(QtGui.QApplication.translate("Dialog", "Network citation library", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("Dialog", "URL:", None, QtGui.QApplication.UnicodeUTF8))
         self.networkLibraryResetButton.setText(QtGui.QApplication.translate("Dialog", "Reset", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_3.setText(QtGui.QApplication.translate("Dialog", "URL (trailing slash required)", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.libraryTab), QtGui.QApplication.translate("Dialog", "References", None, QtGui.QApplication.UnicodeUTF8))
 
