@@ -566,7 +566,6 @@ class BaseRfcWriter:
 
             # Copyright
             self.write_heading('Copyright Notice', autoAnchor='rfc.copyrightnotice')
-            self.write_paragraph(self.r.attrib.get('copyright', ''))
             year = self.r.find('front/date').attrib.get('year', '')
             self.write_paragraph(self.boilerplate['base_copyright'] % year)
             if self.draft:
@@ -611,15 +610,16 @@ class BaseRfcWriter:
         # Appendix sections
         self._write_section_rec(self.r.find('back'), None, appendix=True)
 
-        # IREF index
-        if self.indexmode:
-            # Add explicitly to index
-            title = 'Index'
-            autoAnchor = 'rfc.index'
-            item = _RfcItem(title, autoAnchor, title=title)
-            self._index.append(item)
-        else:
-            self.insert_iref_index()
+        # Index section, disable if there are no irefs
+        if len(self._iref_index) > 0:
+            if self.indexmode:
+                # Add explicitly to index
+                title = 'Index'
+                autoAnchor = 'rfc.index'
+                item = _RfcItem(title, autoAnchor, title=title)
+                self._index.append(item)
+            else:
+                self.insert_iref_index()
 
         # Authors addresses section
         authors = self.r.findall('front/author')

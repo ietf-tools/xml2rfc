@@ -32,6 +32,7 @@ class CachingResolver(lxml.etree.Resolver):
         self.library_dirs = library_dirs
         self.templates_path = templates_path
         self.network_loc = network_loc
+        self.include = False
 
         # Get directory of source
         self.source_dir = os.path.abspath(os.path.dirname(self.source))
@@ -89,11 +90,9 @@ class CachingResolver(lxml.etree.Resolver):
             # We get the exact same path as in the XML document
             request = os.path.relpath(request, self.source_dir)
         path = self.getReferenceRequest(request)
-        if self.verbose:
-            xml2rfc.log.write('Resolving entity...', path)
         return self.resolve_filename(path, context)
     
-    def getReferenceRequest(self, request):
+    def getReferenceRequest(self, request, include=False):
         """ Returns the correct and most efficient path for an external request
 
             To determine the path, the following algorithm is consulted:
@@ -136,6 +135,8 @@ class CachingResolver(lxml.etree.Resolver):
             This method will throw an lxml.etree.XMLSyntaxError to be handled
             by the application if the reference cannot be properly resolved
         """
+        self.include = include # include state
+        cached = False
         attempts = []  # Store the attempts
         original = request  # Used for the error message only
         result = None  # Our proper path
@@ -167,6 +168,7 @@ class CachingResolver(lxml.etree.Resolver):
                 # URL requested, cache it
                 attempts.append(request)
                 result = self.cache(request)
+                cached = True
             else:
                 if os.path.dirname(request):
                     # Intermediate directories, only do flat searches
@@ -182,6 +184,7 @@ class CachingResolver(lxml.etree.Resolver):
                         url = urljoin(self.network_loc, request)
                         attempts.append(url)
                         result = self.cache(request)
+                        cached = True
                         # if not result:
                         #     # Document didn't exist, default to source dir
                         #     result = os.path.join(self.source_dir, request)
@@ -202,6 +205,7 @@ class CachingResolver(lxml.etree.Resolver):
                             url = urljoin(self.network_loc, subdir + '/' + request)
                             attempts.append(url)
                             result = self.cache(url)
+                            cached = True
                             if result:
                                 break
                     # if not result:
@@ -225,6 +229,10 @@ class CachingResolver(lxml.etree.Resolver):
                              '\n    '.join(attempts)
             raise error
         else:
+            if not cached and self.verbose:
+                # Haven't printed a verbose messsage yet
+                typename = self.include and 'include' or 'entity'
+                xml2rfc.log.write('Resolving ' + typename + '...', result)
             return result
 
     def cache(self, url):
@@ -237,13 +245,19 @@ class CachingResolver(lxml.etree.Resolver):
         for dir in self.read_caches:
             cached_path = os.path.join(dir, xml2rfc.CACHE_PREFIX, basename)
             if os.path.exists(cached_path):
+                if self.verbose:
+                    typename = self.include and 'include' or 'entity'
+                    xml2rfc.log.write('Resolving ' + typename + '...', url)
+                    xml2rfc.log.write('Loaded from cache', cached_path)
                 return cached_path
         # Not found, save to `write_cache`
         write_path = os.path.join(self.write_cache, xml2rfc.CACHE_PREFIX, basename)
         try:
             xml2rfc.utils.StrictUrlOpener().retrieve(url, write_path)
             if self.verbose:
-                xml2rfc.log.write('Created cache for', url)
+                typename = self.include and 'include' or 'entity'
+                xml2rfc.log.write('Resolving ' + typename + '...', url)
+                xml2rfc.log.write('Created cache at', write_path)
             return write_path
         except IOError:
             # Invalid URL -- Error will be displayed in getReferenceRequest
@@ -324,10 +338,8 @@ class XmlRfcParser:
                 pidict = xmlrfc.parse_pi(element)
                 if 'include' in pidict and pidict['include']:
                     request = pidict['include']
-                    path = self.cachingResolver.getReferenceRequest(request)
-                    # if os.path.exists(path):
-                    if self.verbose:
-                        xml2rfc.log.write('Resolving include...', path)
+                    path = self.cachingResolver.getReferenceRequest(request,
+                                                                    include=True)
                     try:
                         # Parse the xml and attach it to the tree here
                         root = lxml.etree.parse(path).getroot()
