@@ -634,7 +634,6 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def draw_table(self, table, table_num=None):
         # First construct a 2d matrix from the table
-        print table.attrib.get('anchor', 'none')
         matrix = []
         matrix.append([])
         row = 0
