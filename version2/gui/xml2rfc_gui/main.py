@@ -68,6 +68,7 @@ class MainWindow(QMainWindow):
         self.locked = False
         self.last_path = None
         self.input_file = None
+        self.xml_modified = False
 
         # Initialize UI class
         self.ui = ui_mainwindow.Ui_mainWindow()
@@ -302,12 +303,14 @@ class MainWindow(QMainWindow):
             self.viewDocument(self.handler.XML, filename)
             self.input_file = str(filename)
             self.ui.sourceLabel.setText(filename)
+            self.xml_modified = False
 
     def xmlChanged(self):
         if self.xmlEditor and not self.xmlEditor.isReadOnly():
             self.ui.tabWidget.setTabText(0, 'XML *')
             # Enable the action
             self.ui.actionSave.setEnabled(True)
+            self.xml_modified = True
 
     def saveFile(self):
         """ Saves the current source document back to its original path """
@@ -316,6 +319,7 @@ class MainWindow(QMainWindow):
                 self.ui.tabWidget.setTabText(0, 'XML')
                 # Disable the action
                 self.ui.actionSave.setEnabled(False)
+                self.xml_modified = False
                 # Write the file
                 file = open(self.input_file, 'w')
                 file.write(self.xmlEditor.toPlainText())
@@ -330,7 +334,19 @@ class MainWindow(QMainWindow):
         if not self.input_file or not os.path.exists(self.input_file):
             QMessageBox.critical(self, 'Could not convert',
                                  'You must first select a source document.')
-        elif self.settings.verify():
+            return
+        if self.xml_modified:
+            q =  QMessageBox.question(self, 'XML modified', 'You have modified the '
+                                 'source document since it was last saved.  Do '
+                                 'you want to save or discard your changes?',
+                                 'Save', 'Discard', 'Cancel')
+            if q == 0:
+                self.saveFile()
+            elif q == 2:
+                return
+            # Else proceed
+
+        if self.settings.verify():
             # Clear tabs, create XML editor first
             self.deleteTabs()
             self.clearConsole()
