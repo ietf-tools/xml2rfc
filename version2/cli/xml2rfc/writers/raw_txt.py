@@ -634,6 +634,7 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def draw_table(self, table, table_num=None):
         # First construct a 2d matrix from the table
+        print table.attrib.get('anchor', 'none')
         matrix = []
         matrix.append([])
         row = 0
@@ -661,7 +662,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         longest_lines = [0] * num_columns
         for col in range(num_columns):
             for row in matrix:
-                if len(row[col]) > longest_lines[col]:
+                if col < len(row) and len(row[col]) > longest_lines[col]:
                     longest_lines[col] = len(row[col])
         max_width = self.width - 3 - 3 * num_columns - 1  # indent+border
         total_length = reduce(lambda x, y: x + y, longest_lines)
