@@ -10,12 +10,12 @@ import lxml.etree
 
 def display_version(self, opt, value, parser):
     print('.'.join(map(str, xml2rfc.VERSION)))
-    sys.exit(1)
+    sys.exit()
 
 
 def clear_cache(self, opt, value, parser):
     xml2rfc.parser.XmlRfcParser('').delete_cache()
-    sys.exit(1)
+    sys.exit()
 
 
 def main():
@@ -72,17 +72,15 @@ def main():
     (options, args) = optionparser.parse_args()
     if len(args) < 1:
         optionparser.print_help()
-        sys.exit(1)
+        sys.exit(2)
     source = args[0]
     if not os.path.exists(source):
-        print 'No such file:', source
-        sys.exit(1)
+        sys.exit('No such file: ' + source)
     num_formats = len(filter(bool, [options.raw, options.text, options.nroff,
                                     options.html, options.exp]))
     if num_formats > 1 and options.filename:
-        print 'Cannot give an explicit filename with more than one format, ' \
-                'use --basename instead.'
-        sys.exit(1)
+        sys.exit('Cannot give an explicit filename with more than one format, '
+                 'use --basename instead.')
     if num_formats < 1:
         # Default to paginated text output
         options.text = True

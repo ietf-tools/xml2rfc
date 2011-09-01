@@ -60,7 +60,9 @@ class CachingResolver(lxml.etree.Resolver):
                     pass
         if not self.write_cache:
             xml2rfc.log.warn('Unable to find a suitible cache directory to '
-                            'write to.  Try giving a specific directory.')
+                            'write to, trying the following directories:\n ',
+                            '\n  '.join(self.read_caches),
+                            '\nTry giving a specific directory with --cache.')
         else:
             # Create the prefix directory if it doesnt exist
             pdir = os.path.join(self.write_cache, xml2rfc.CACHE_PREFIX)
@@ -241,27 +243,37 @@ class CachingResolver(lxml.etree.Resolver):
             Checks for the existence of the cache and creates it if necessary.
         """
         basename = os.path.basename(urlparse(url).path)
+        typename = self.include and 'include' or 'entity'
         # Try to load the URL from each cache in `read_cache`
         for dir in self.read_caches:
             cached_path = os.path.join(dir, xml2rfc.CACHE_PREFIX, basename)
             if os.path.exists(cached_path):
                 if self.verbose:
-                    typename = self.include and 'include' or 'entity'
                     xml2rfc.log.write('Resolving ' + typename + '...', url)
                     xml2rfc.log.write('Loaded from cache', cached_path)
                 return cached_path
         # Not found, save to `write_cache`
-        write_path = os.path.join(self.write_cache, xml2rfc.CACHE_PREFIX, basename)
-        try:
-            xml2rfc.utils.StrictUrlOpener().retrieve(url, write_path)
-            if self.verbose:
-                typename = self.include and 'include' or 'entity'
+        if self.write_cache:
+            write_path = os.path.join(self.write_cache, 
+                                      xml2rfc.CACHE_PREFIX, basename)
+            try:
+                xml2rfc.utils.StrictUrlOpener().retrieve(url, write_path)
+                if self.verbose:
+                    xml2rfc.log.write('Resolving ' + typename + '...', url)
+                    xml2rfc.log.write('Created cache at', write_path)
+                return write_path
+            except IOError:
+                # Invalid URL -- Error will be displayed in getReferenceRequest
+                return ''
+        # No write cache available, test existance of URL and return
+        else:
+            try:
+                xml2rfc.utils.StrictUrlOpener().open(url)
                 xml2rfc.log.write('Resolving ' + typename + '...', url)
-                xml2rfc.log.write('Created cache at', write_path)
-            return write_path
-        except IOError:
-            # Invalid URL -- Error will be displayed in getReferenceRequest
-            return ''
+                return url
+            except IOError:
+                # Invalid URL
+                return ''
 
 class XmlRfcParser:
     """ XML parser with callbacks to construct an RFC tree """
@@ -344,12 +356,14 @@ class XmlRfcParser:
                         # Parse the xml and attach it to the tree here
                         root = lxml.etree.parse(path).getroot()
                         element.addnext(root)
-                    except lxml.etree.XMLSyntaxError, error:
-                        xml2rfc.log.warn('The include file at', path,
-                                         'contained an XML error and was '\
-                                         'not expanded:', error.msg)
-                    # else:
-                    #     xml2rfc.log.warn('Include file not found:', path)
+                    except (lxml.etree.XMLSyntaxError, IOError), error:
+                        if error is lxml.etree.XMLSyntaxError:
+                            xml2rfc.log.warn('The include file at', path,
+                                             'contained an XML error and was '\
+                                             'not expanded:', error.msg)
+                        else:
+                            xml2rfc.log.warn('Unable to load the include file at',
+                                              path)
 
         # Finally, do any extra formatting on the RFC before returning
         xmlrfc._format_whitespace()
