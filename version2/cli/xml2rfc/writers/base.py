@@ -232,7 +232,7 @@ class BaseRfcWriter:
         
     def _getItemByAnchor(self, anchor):
         for item in self._index:
-            if item.autoAnchor == anchor:
+            if item.autoAnchor == anchor or item.anchor == anchor:
                 return item
         return None
     
