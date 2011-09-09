@@ -188,8 +188,8 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             if current_page_length + 1 > max_page_length:
                 # New page
                 insertFooterAndHeader()
-                # Update counters
-                current_page_length -= current_page_length + 1
+                # Update counters -- done this way to preserve scope without reassigning
+                current_page_length -= current_page_length - 1
                 current_page_number += 1
   
             # Write the line
