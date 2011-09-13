@@ -15,12 +15,14 @@ import PyQt4.QtNetwork  # Required for py2exe for some reason
 import ui_mainwindow
 import ui_about
 import ui_report
+import ui_help
 
 # My modules    
 from settings import Settings
 from backend import XmlRfcHandler
 from utils import Status
 from editor import LinedEditor
+import doc
 
 # Python
 import os
@@ -108,6 +110,7 @@ class MainWindow(QMainWindow):
         
         # Connect main actions
         self.connect(self.ui.actionQuit,    SIGNAL('triggered()'),  self.close)
+        self.connect(self.ui.actionHelp,    SIGNAL('triggered()'),  self.showHelp)
         self.connect(self.ui.actionAbout,   SIGNAL('triggered()'),  self.showAbout)
         self.connect(self.ui.actionAboutQt, SIGNAL('triggered()'),  self.showAboutQt)
         self.connect(self.ui.actionOpen,    SIGNAL('triggered()'),  self.openFile)
@@ -265,6 +268,13 @@ class MainWindow(QMainWindow):
                 self.ui.tabWidget.setCurrentIndex(0)
         else:
             self.stdErrCallback(message)
+
+    def showHelp(self):
+        """ Show the help documentation in a webview popup """
+        help = QDialog(self)
+        help.ui = ui_help.Ui_Help()
+        help.ui.setupUi(help)
+        help.exec_()
 
     def showAbout(self):
         """ Show the about window """

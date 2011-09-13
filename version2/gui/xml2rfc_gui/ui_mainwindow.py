@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/mainwindow.ui'
 #
-# Created: Mon Aug 22 13:20:33 2011
+# Created: Tue Sep 13 16:44:22 2011
 #      by: PyQt4 UI code generator 4.8.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -198,10 +198,14 @@ class Ui_mainWindow(object):
         self.actionOptionVerbose.setObjectName(_fromUtf8("actionOptionVerbose"))
         self.actionSave = QtGui.QAction(mainWindow)
         self.actionSave.setObjectName(_fromUtf8("actionSave"))
+        self.actionHelp = QtGui.QAction(mainWindow)
+        self.actionHelp.setObjectName(_fromUtf8("actionHelp"))
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionQuit)
+        self.menuHelp.addAction(self.actionHelp)
+        self.menuHelp.addSeparator()
         self.menuHelp.addAction(self.actionAbout)
         self.menuHelp.addAction(self.actionAboutQt)
         self.menuFormats.addAction(self.actionFormatPaged)
@@ -229,7 +233,7 @@ class Ui_mainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
     def retranslateUi(self, mainWindow):
-        mainWindow.setWindowTitle(QtGui.QApplication.translate("mainWindow", "xml2rfc GUI", None, QtGui.QApplication.UnicodeUTF8))
+        mainWindow.setWindowTitle(QtGui.QApplication.translate("mainWindow", "xml2rfc", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("mainWindow", "Input file", None, QtGui.QApplication.UnicodeUTF8))
         self.sourceLabel.setText(QtGui.QApplication.translate("mainWindow", "None", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setTitle(QtGui.QApplication.translate("mainWindow", "Output", None, QtGui.QApplication.UnicodeUTF8))
@@ -259,5 +263,6 @@ class Ui_mainWindow(object):
         self.actionOptionVerbose.setText(QtGui.QApplication.translate("mainWindow", "Verbose console output", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave.setText(QtGui.QApplication.translate("mainWindow", "Save Source", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave.setShortcut(QtGui.QApplication.translate("mainWindow", "Ctrl+S", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionHelp.setText(QtGui.QApplication.translate("mainWindow", "Documentation", None, QtGui.QApplication.UnicodeUTF8))
 
 from editor import LinedEditor
