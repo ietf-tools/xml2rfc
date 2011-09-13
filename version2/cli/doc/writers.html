@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Writer Module &mdash; xml2rfc v0.3 documentation</title>
+    <title>Writer Module &mdash; xml2rfc v2.2.5 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3',
+        VERSION:     '2.2.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="xml2rfc v0.3 documentation" href="index.html" />
+    <link rel="top" title="xml2rfc v2.2.5 documentation" href="index.html" />
     <link rel="prev" title="Parser Module" href="parser.html" /> 
   </head>
   <body>
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="parser.html" title="Parser Module"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">xml2rfc v0.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">xml2rfc v2.2.5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,17 +51,17 @@
 <h1>Writer Module<a class="headerlink" href="#writer-module" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="abstract">
 <h2>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">¶</a></h2>
-<p>The xml2rfc writer package contains a <a class="reference internal" href="#base-writer"><em>Base Writer Interface</em></a> interface (an
+<p>The xml2rfc writer package contains a <a class="reference internal" href="#base-writer"><em>Base Writer Class</em></a> interface (an
 abstract python class) with callback methods to write specific elements of an RFC
 document.  Adding a new output format to xml2rfc would be done by extending
 this class.</p>
-<p>Additionally, there is a collection of <a class="reference internal" href="#formatted-writers"><em>Formatted Writers</em></a> which provide
+<p>Additionally, there is a collection of <a class="reference internal" href="#formatted-writers"><em>Formatted Writer Classes</em></a> which provide
 implementations for various formats.  Each writer takes an xmlrfc instance as
 a constructor argument, and has a single public <tt class="docutils literal"><span class="pre">write()</span></tt> method which
 converts and writes the rfc document to a specified filename.</p>
 </div>
-<div class="section" id="formatted-writers">
-<span id="id1"></span><h2>Formatted Writers<a class="headerlink" href="#formatted-writers" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="formatted-writer-classes">
+<span id="formatted-writers"></span><h2>Formatted Writer Classes<a class="headerlink" href="#formatted-writer-classes" title="Permalink to this headline">¶</a></h2>
 <p>The following writer implementations are provided in xml2rfc.</p>
 <dl class="class">
 <dt id="xml2rfc.writers.RawTextRfcWriter">
@@ -70,7 +70,7 @@ converts and writes the rfc document to a specified filename.</p>
 <p>The page width is controlled by the <em>width</em> parameter.</p>
 <dl class="method">
 <dt id="xml2rfc.writers.RawTextRfcWriter.write">
-<tt class="descname">write</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.RawTextRfcWriter.write" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write</tt><big>(</big><em>filename</em>, <em>tmpfile=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.RawTextRfcWriter.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Public method to write the RFC document to a file.</p>
 </dd></dl>
 
@@ -83,7 +83,7 @@ converts and writes the rfc document to a specified filename.</p>
 <p>The page width is controlled by the <em>width</em> parameter.</p>
 <dl class="method">
 <dt id="xml2rfc.writers.PaginatedTextRfcWriter.write">
-<tt class="descname">write</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.PaginatedTextRfcWriter.write" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write</tt><big>(</big><em>filename</em>, <em>tmpfile=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.PaginatedTextRfcWriter.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Public method to write the RFC document to a file.</p>
 </dd></dl>
 
@@ -96,7 +96,7 @@ converts and writes the rfc document to a specified filename.</p>
 <p>The page width is controlled by the <em>width</em> parameter.</p>
 <dl class="method">
 <dt id="xml2rfc.writers.NroffRfcWriter.write">
-<tt class="descname">write</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.NroffRfcWriter.write" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write</tt><big>(</big><em>filename</em>, <em>tmpfile=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.NroffRfcWriter.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Public method to write the RFC document to a file.</p>
 </dd></dl>
 
@@ -104,16 +104,12 @@ converts and writes the rfc document to a specified filename.</p>
 
 <dl class="class">
 <dt id="xml2rfc.writers.HtmlRfcWriter">
-<em class="property">class </em><tt class="descclassname">xml2rfc.writers.</tt><tt class="descname">HtmlRfcWriter</tt><big>(</big><em>xmlrfc</em>, <em>css_document=None</em>, <em>external_css=False</em>, <em>lang='en'</em>, <em>quiet=False</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.HtmlRfcWriter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xml2rfc.writers.</tt><tt class="descname">HtmlRfcWriter</tt><big>(</big><em>xmlrfc</em>, <em>quiet=False</em>, <em>verbose=False</em>, <em>templates_dir=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.HtmlRfcWriter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes to an HTML file.</p>
-<p>If <em>css_document</em> is specified, an alternate css file is used.</p>
-<p>If <em>external_css</em> is set, the html file will contain a link to
-the css file, instead of inlining the file, which is the default
-behavior.</p>
-<p><em>lang</em> controls the lang attribute of the html document</p>
+<p>Uses HTML templates located in the templates directory.</p>
 <dl class="method">
 <dt id="xml2rfc.writers.HtmlRfcWriter.write">
-<tt class="descname">write</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.HtmlRfcWriter.write" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write</tt><big>(</big><em>filename</em>, <em>tmpfile=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.HtmlRfcWriter.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Public method to write the RFC document to a file.</p>
 </dd></dl>
 
@@ -132,8 +128,8 @@ behavior.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="base-writer-interface">
-<span id="base-writer"></span><h2>Base Writer Interface<a class="headerlink" href="#base-writer-interface" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="base-writer-class">
+<span id="base-writer"></span><h2>Base Writer Class<a class="headerlink" href="#base-writer-class" title="Permalink to this headline">¶</a></h2>
 <p>The following interface provides all methods necessary for creation of an
 RFC document.  To support a new format, the writer class must subclass
 <cite>BaseRfcWriter</cite> and override all methods&#8211;with the exception of <tt class="docutils literal"><span class="pre">write()</span></tt>,
@@ -143,12 +139,6 @@ which contains the callback logic and should be left alone.</p>
 <em class="property">class </em><tt class="descclassname">xml2rfc.writers.base.</tt><tt class="descname">BaseRfcWriter</tt><big>(</big><em>xmlrfc</em>, <em>quiet=False</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for all writers</p>
 <p>All public methods need to be overridden for a writer implementation.</p>
-<dl class="method">
-<dt id="xml2rfc.writers.base.BaseRfcWriter.add_to_toc">
-<tt class="descname">add_to_toc</tt><big>(</big><em>bullet</em>, <em>title</em>, <em>link=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.add_to_toc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds a section to the table of contents</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="xml2rfc.writers.base.BaseRfcWriter.draw_table">
 <tt class="descname">draw_table</tt><big>(</big><em>table</em>, <em>table_num=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.draw_table" title="Permalink to this definition">¶</a></dt>
@@ -160,6 +150,12 @@ which contains the callback logic and should be left alone.</p>
 <dt id="xml2rfc.writers.base.BaseRfcWriter.insert_anchor">
 <tt class="descname">insert_anchor</tt><big>(</big><em>text</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.insert_anchor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inserts a document anchor for internal links</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml2rfc.writers.base.BaseRfcWriter.insert_iref_index">
+<tt class="descname">insert_iref_index</tt><big>(</big><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.insert_iref_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks the current buffer position to insert the index at</p>
 </dd></dl>
 
 <dl class="method">
@@ -182,7 +178,7 @@ which contains the callback logic and should be left alone.</p>
 
 <dl class="method">
 <dt id="xml2rfc.writers.base.BaseRfcWriter.write">
-<tt class="descname">write</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write</tt><big>(</big><em>filename</em>, <em>tmpfile=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Public method to write the RFC document to a file.</p>
 </dd></dl>
 
@@ -194,14 +190,8 @@ which contains the callback logic and should be left alone.</p>
 
 <dl class="method">
 <dt id="xml2rfc.writers.base.BaseRfcWriter.write_heading">
-<tt class="descname">write_heading</tt><big>(</big><em>text</em>, <em>bullet=''</em>, <em>idstring=None</em>, <em>anchor=None</em>, <em>level=1</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write_heading" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write_heading</tt><big>(</big><em>text</em>, <em>bullet=''</em>, <em>autoAnchor=None</em>, <em>anchor=None</em>, <em>level=1</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write_heading" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes a section heading</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="xml2rfc.writers.base.BaseRfcWriter.write_iref_index">
-<tt class="descname">write_iref_index</tt><big>(</big><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write_iref_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes an additional index if there were iref elements</p>
 </dd></dl>
 
 <dl class="method">
@@ -212,13 +202,13 @@ which contains the callback logic and should be left alone.</p>
 
 <dl class="method">
 <dt id="xml2rfc.writers.base.BaseRfcWriter.write_paragraph">
-<tt class="descname">write_paragraph</tt><big>(</big><em>text</em>, <em>align='left'</em>, <em>idstring=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write_paragraph" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write_paragraph</tt><big>(</big><em>text</em>, <em>align='left'</em>, <em>autoAnchor=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write_paragraph" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes a paragraph of text</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="xml2rfc.writers.base.BaseRfcWriter.write_raw">
-<tt class="descname">write_raw</tt><big>(</big><em>text</em>, <em>indent=3</em>, <em>align='left'</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write_raw" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write_raw</tt><big>(</big><em>text</em>, <em>indent=3</em>, <em>align='left'</em>, <em>blanklines=0</em>, <em>delimiter=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write_raw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes a block of text that preserves all whitespace</p>
 </dd></dl>
 
@@ -230,7 +220,7 @@ which contains the callback logic and should be left alone.</p>
 
 <dl class="method">
 <dt id="xml2rfc.writers.base.BaseRfcWriter.write_t_rec">
-<tt class="descname">write_t_rec</tt><big>(</big><em>t</em>, <em>align='left'</em>, <em>idstring=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write_t_rec" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write_t_rec</tt><big>(</big><em>t</em>, <em>align='left'</em>, <em>autoAnchor=None</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write_t_rec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recursively writes &lt;t&gt; elements</p>
 </dd></dl>
 
@@ -242,7 +232,7 @@ which contains the callback logic and should be left alone.</p>
 
 <dl class="method">
 <dt id="xml2rfc.writers.base.BaseRfcWriter.write_to_file">
-<tt class="descname">write_to_file</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write_to_file" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write_to_file</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#xml2rfc.writers.base.BaseRfcWriter.write_to_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes the finished buffer to a file</p>
 </dd></dl>
 
@@ -269,8 +259,8 @@ so that they exist on the same lines of text</p>
   <ul>
 <li><a class="reference internal" href="#">Writer Module</a><ul>
 <li><a class="reference internal" href="#abstract">Abstract</a></li>
-<li><a class="reference internal" href="#formatted-writers">Formatted Writers</a></li>
-<li><a class="reference internal" href="#base-writer-interface">Base Writer Interface</a></li>
+<li><a class="reference internal" href="#formatted-writer-classes">Formatted Writer Classes</a></li>
+<li><a class="reference internal" href="#base-writer-class">Base Writer Class</a></li>
 </ul>
 </li>
 </ul>
@@ -312,7 +302,7 @@ so that they exist on the same lines of text</p>
         <li class="right" >
           <a href="parser.html" title="Parser Module"
              >previous</a> |</li>
-        <li><a href="index.html">xml2rfc v0.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">xml2rfc v2.2.5 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

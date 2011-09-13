@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Command line application usage &mdash; xml2rfc v0.2 documentation</title>
+    <title>Command Line Application &mdash; xml2rfc v2.2.5 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.2',
+        VERSION:     '2.2.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,8 +22,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="xml2rfc v0.2 documentation" href="index.html" />
-    <link rel="next" title="Graphical Application" href="gui.html" />
+    <link rel="top" title="xml2rfc v2.2.5 documentation" href="index.html" />
+    <link rel="next" title="Graphical Appplication" href="gui.html" />
     <link rel="prev" title="Xml2rfc Documentation" href="index.html" /> 
   </head>
   <body>
@@ -37,12 +37,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="gui.html" title="Graphical Application"
+          <a href="gui.html" title="Graphical Appplication"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Xml2rfc Documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">xml2rfc v0.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">xml2rfc v2.2.5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,85 +51,152 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="command-line-application-usage">
-<h1>Command line application usage<a class="headerlink" href="#command-line-application-usage" title="Permalink to this headline">¶</a></h1>
-<p>Usage: <tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">SOURCE</span> <span class="pre">[options]</span> <span class="pre">FORMATS...</span></tt>
-Example: <tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">draft.xml</span> <span class="pre">-f</span> <span class="pre">Draft-1.0</span> <span class="pre">--text</span> <span class="pre">--html</span></tt></p>
+  <div class="section" id="command-line-application">
+<h1>Command Line Application<a class="headerlink" href="#command-line-application" title="Permalink to this headline">¶</a></h1>
+<p>This section provides a guide for using the command line application <strong>xml2rfc</strong>.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Thanks to python, the installation process for xml2rfc is identical for all platforms that support python.</p>
+<p>To install a <em>system-wide</em> version of xml2rfc, simply run:</p>
+<blockquote>
+<div><tt class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></tt></div></blockquote>
+<p>If you want to perform a local installation for a specific user,
+you have a couple of options.  You may use python&#8217;s default location
+of user site-packages by specifying the flag <tt class="docutils literal"><span class="pre">--user</span></tt>.  These locations are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>UNIX</strong>: $HOME/.local/lib/python&lt;ver&gt;/site-packages</li>
+<li><strong>OSX</strong>: $HOME/Library/Python/&lt;ver&gt;/lib/python/site-packages</li>
+<li><strong>Windows</strong>: %APPDATA%/Python/Python&lt;ver&gt;/site-packages</li>
+</ul>
+</div></blockquote>
+<p>You can additionally combine the flag <tt class="docutils literal"><span class="pre">--install-scripts</span></tt> with <tt class="docutils literal"><span class="pre">--user</span></tt> to
+specify a directory on your PATH to install the xml2rfc executable to.  For
+example, the following command:</p>
+<blockquote>
+<div><tt class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span> <span class="pre">--user</span> <span class="pre">--install-scripts=$HOME/</span></tt></div></blockquote>
+<p>will install the xml2rfc library and data to your local site-packages
+directory, and an executable python script <tt class="docutils literal"><span class="pre">xml2rfc</span></tt> to $HOME/bin.</p>
+<p>The option <tt class="docutils literal"><span class="pre">--prefix</span></tt> allows you to specify the base path for all
+installation files.  The setup.py script will exit with an error if your
+PYTHONPATH is not correctly configured to contain the library path
+the script tries to install to.</p>
+<p>The command is used as follows:</p>
+<blockquote>
+<div><tt class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span> <span class="pre">--prefix=&lt;path&gt;</span></tt></div></blockquote>
+<p>For further fine-tuning of the installation behavior, you can get a list
+of all available options by running:</p>
+<blockquote>
+<div><tt class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span> <span class="pre">--help</span></tt></div></blockquote>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Xml2rfc accepts a single XML document as input and outputs to one or more conversion formats.</p>
+<p>Official Usage: <tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">SOURCE</span> <span class="pre">[options]</span> <span class="pre">FORMATS...</span></tt></p>
 <dl class="docutils">
-<dt>Options:</dt>
-<dd><table class="first docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
+<dt><strong>Options</strong></dt>
+<dd><p class="first">The following parameters affect how xml2rfc behaves, however none are required.</p>
+<table border="1" class="last docutils">
+<colgroup>
+<col width="17%" />
+<col width="26%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Short</th>
+<th class="head">Long</th>
+<th class="head">Description</th>
+</tr>
+</thead>
 <tbody valign="top">
-<tr><td class="option-group">
-<kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></td>
-<td>show this help message and exit</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">-v</span>, <span class="option">--verbose</span></kbd></td>
-<td>print extra information</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">-q</span>, <span class="option">--quiet</span></kbd></td>
-<td>dont print anything</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-w</span>, <span class="option">--warn-error</span></kbd></td>
+<tr><td><tt class="docutils literal"><span class="pre">-h</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--help</span></tt></td>
+<td>show the help message and exit</td>
 </tr>
-<tr><td>&nbsp;</td><td>treat warnings as python exceptions.</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">-e</span>, <span class="option">--extcss</span></kbd></td>
-<td>write an external link to the stylesheet instead of
-expanding it.</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-c <var>CSS</var></span>, <span class="option">--css=<var>CSS</var></span></kbd></td>
+<tr><td><tt class="docutils literal"><span class="pre">-v</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--verbose</span></tt></td>
+<td>print extra information</td>
 </tr>
-<tr><td>&nbsp;</td><td>specify an alternate css file (ignored if html format
-is not enabled)</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-d <var>DTD</var></span>, <span class="option">--dtd=<var>DTD</var></span></kbd></td>
+<tr><td><tt class="docutils literal"><span class="pre">-q</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--quiet</span></tt></td>
+<td>dont print anything`</td>
 </tr>
-<tr><td>&nbsp;</td><td>specify an alternate dtd file</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">-f <var>FILENAME</var></span>, <span class="option">--filename=<var>FILENAME</var></span></kbd></td>
+<tr><td><tt class="docutils literal"><span class="pre">-w</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--warn-error</span></tt></td>
+<td>treat warnings as python exceptions.</td>
 </tr>
-<tr><td>&nbsp;</td><td>specify an output filename</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--clear-cache</span></kbd></td>
-<td>purge the cache and exit</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--version</span></kbd></td>
-<td>display the version number and exit</td></tr>
+<tr><td><tt class="docutils literal"><span class="pre">-e</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--extcss</span></tt></td>
+<td>write an external link to the stylesheet instead
+of expanding it.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">-c</span> <span class="pre">CSS</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--css=CSS</span></tt></td>
+<td>specify an alternate css file (ignored if
+html format is not enabled)</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">-d</span> <span class="pre">DTD</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--dtd=DTD</span></tt></td>
+<td>specify an alternate dtd file</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">-f</span> <span class="pre">FILENAME</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--filename=FILENAME</span></tt></td>
+<td>specify an output filename</td>
+</tr>
+<tr><td>(none)</td>
+<td><tt class="docutils literal"><span class="pre">--clear-cache</span></tt></td>
+<td>purge the cache and exit</td>
+</tr>
+<tr><td>(none)</td>
+<td><tt class="docutils literal"><span class="pre">--version</span></tt></td>
+<td>display the version number and exit</td>
+</tr>
 </tbody>
 </table>
-<dl class="last docutils">
-<dt>Formats:</dt>
+</dd>
+<dt><strong>Formats</strong></dt>
 <dd><p class="first">At least one but as many as all of the following output formats must
 be specified. The destination file will be created according to the
 argument given to &#8211;filename.  If no argument was given, it will
-create the file(s) &#8220;output.format&#8221;</p>
-<table class="last docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
+create the file(s) &#8220;output.format&#8221;.  If no format is specified, xml2rfc
+will default to paginated text (<tt class="docutils literal"><span class="pre">--text</span></tt>).</p>
+<table border="1" class="last docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Command</th>
+<th class="head">Description</th>
+</tr>
+</thead>
 <tbody valign="top">
-<tr><td class="option-group">
-<kbd><span class="option">--raw</span></kbd></td>
-<td>outputs to a text file, unpaginated</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--text</span></kbd></td>
-<td>outputs to a text file with proper page breaks</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--nroff</span></kbd></td>
-<td>outputs to an nroff file</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--html</span></kbd></td>
-<td>outputs to an html file</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--exp</span></kbd></td>
-<td>outputs to an XML file with all references expanded.</td></tr>
+<tr><td><tt class="docutils literal"><span class="pre">--raw</span></tt></td>
+<td>outputs to a text file, unpaginated</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">--text</span></tt></td>
+<td>outputs to a text file with proper page breaks</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">--nroff</span></tt></td>
+<td>outputs to an nroff file</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">--html</span></tt></td>
+<td>outputs to an html file</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">--exp</span></tt></td>
+<td>outputs to an XML file with all references expanded.</td>
+</tr>
 </tbody>
 </table>
 </dd>
-</dl>
+<dt><strong>Examples</strong></dt>
+<dd><div class="first last line-block">
+<div class="line"><tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">rfc.xml</span> <span class="pre">--text</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">draft.xml</span> <span class="pre">-c</span> <span class="pre">alt.css</span> <span class="pre">-d</span> <span class="pre">alt.dtd</span> <span class="pre">-f</span> <span class="pre">&quot;Draft-1.0&quot;</span> <span class="pre">--text</span> <span class="pre">--nroff</span> <span class="pre">--html</span></tt></div>
+</div>
 </dd>
 </dl>
+</div>
 </div>
 
 
@@ -138,12 +205,21 @@ create the file(s) &#8220;output.format&#8221;</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Command Line Application</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
                         title="previous chapter">Xml2rfc Documentation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="gui.html"
-                        title="next chapter">Graphical Application</a></p>
+                        title="next chapter">Graphical Appplication</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/cli.txt"
@@ -176,12 +252,12 @@ create the file(s) &#8220;output.format&#8221;</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="gui.html" title="Graphical Application"
+          <a href="gui.html" title="Graphical Appplication"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Xml2rfc Documentation"
              >previous</a> |</li>
-        <li><a href="index.html">xml2rfc v0.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">xml2rfc v2.2.5 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

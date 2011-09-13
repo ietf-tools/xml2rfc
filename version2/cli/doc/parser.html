@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Parser Module &mdash; xml2rfc v0.3 documentation</title>
+    <title>Parser Module &mdash; xml2rfc v2.2.5 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3',
+        VERSION:     '2.2.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +22,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="xml2rfc v0.3 documentation" href="index.html" />
+    <link rel="top" title="xml2rfc v2.2.5 documentation" href="index.html" />
     <link rel="next" title="Writer Module" href="writers.html" />
-    <link rel="prev" title="Example usage" href="example.html" /> 
+    <link rel="prev" title="&lt;no title&gt;" href="gui.html" /> 
   </head>
   <body>
     <div class="related">
@@ -40,9 +40,9 @@
           <a href="writers.html" title="Writer Module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="example.html" title="Example usage"
+          <a href="gui.html" title="&lt;no title&gt;"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">xml2rfc v0.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">xml2rfc v2.2.5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -74,11 +74,11 @@ You can read more about that at <a class="reference external" href="http://lxml.
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="xml2rfc.parser.XmlRfcParser">
-<em class="property">class </em><tt class="descclassname">xml2rfc.parser.</tt><tt class="descname">XmlRfcParser</tt><big>(</big><em>filename</em>, <em>verbose=False</em>, <em>quiet=False</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfcParser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xml2rfc.parser.</tt><tt class="descname">XmlRfcParser</tt><big>(</big><em>source</em>, <em>verbose=False</em>, <em>quiet=False</em>, <em>cache_path=None</em>, <em>templates_path=None</em>, <em>library_dirs=None</em>, <em>network_loc='http://xml.resource.org/public/rfc/'</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfcParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>XML parser with callbacks to construct an RFC tree</p>
 <dl class="method">
 <dt id="xml2rfc.parser.XmlRfcParser.parse">
-<tt class="descname">parse</tt><big>(</big><em>prepare=True</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfcParser.parse" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">parse</tt><big>(</big><em>remove_comments=True</em>, <em>remove_pis=False</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfcParser.parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses the source XML file and returns an XmlRfc instance</p>
 </dd></dl>
 
@@ -86,7 +86,7 @@ You can read more about that at <a class="reference external" href="http://lxml.
 
 <dl class="class">
 <dt id="xml2rfc.parser.XmlRfc">
-<em class="property">class </em><tt class="descclassname">xml2rfc.parser.</tt><tt class="descname">XmlRfc</tt><big>(</big><em>tree</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">xml2rfc.parser.</tt><tt class="descname">XmlRfc</tt><big>(</big><em>tree</em>, <em>default_dtd_path</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Internal representation of an RFC document</p>
 <p>Contains an lxml.etree.ElementTree, with some additional helper
 methods to prepare the tree for output.</p>
@@ -104,19 +104,11 @@ methods to prepare the tree for output.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="xml2rfc.parser.XmlRfc.prepare">
-<tt class="descname">prepare</tt><big>(</big><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.prepare" title="Permalink to this definition">¶</a></dt>
-<dd><p>Prepare the RFC document for output.</p>
-<p>This method is automatically invoked after the xml file is
-finished being read, unless <tt class="docutils literal"><span class="pre">prepare=False</span></tt> was set.  It 
-may do any of the following things:</p>
-<ul class="simple">
-<li>Set any necessary default values.</li>
-<li>Pre-format some elements to the proper text output.</li>
-</ul>
-<p>We can perform any operations here that will be common to all
-ouput formats.  Any further formatting is handled in the
-xml2rfc.writer modules.</p>
+<dt id="xml2rfc.parser.XmlRfc.parse_pi">
+<tt class="descname">parse_pi</tt><big>(</big><em>pi</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.parse_pi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a processing instruction to the current state</p>
+<p>Will also return the dictionary containing the added instructions
+for use in things like ?include instructions</p>
 </dd></dl>
 
 <dl class="method">
@@ -124,8 +116,15 @@ xml2rfc.writer modules.</p>
 <tt class="descname">replaceUnicode</tt><big>(</big><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.replaceUnicode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Traverses the RFC tree and replaces unicode characters with the
 proper equivalents specified in rfc2629-xhtml.ent.</p>
-<p>Writers should call this method if the entire RFC document needs to 
+<p>Writers should call this method if the entire RFC document needs to
 be ascii formatted</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml2rfc.parser.XmlRfc.validate">
+<tt class="descname">validate</tt><big>(</big><em>dtd_path=None</em><big>)</big><a class="headerlink" href="#xml2rfc.parser.XmlRfc.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate the document with its default dtd, or an optional one</p>
+<p>Return a success bool along with a list of any errors</p>
 </dd></dl>
 
 </dd></dl>
@@ -149,8 +148,8 @@ be ascii formatted</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="example.html"
-                        title="previous chapter">Example usage</a></p>
+  <p class="topless"><a href="gui.html"
+                        title="previous chapter">&lt;no title&gt;</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="writers.html"
                         title="next chapter">Writer Module</a></p>
@@ -189,9 +188,9 @@ be ascii formatted</p>
           <a href="writers.html" title="Writer Module"
              >next</a> |</li>
         <li class="right" >
-          <a href="example.html" title="Example usage"
+          <a href="gui.html" title="&lt;no title&gt;"
              >previous</a> |</li>
-        <li><a href="index.html">xml2rfc v0.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">xml2rfc v2.2.5 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
