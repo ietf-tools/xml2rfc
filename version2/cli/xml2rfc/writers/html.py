@@ -17,13 +17,7 @@ from xml2rfc.writers.base import BaseRfcWriter
 class HtmlRfcWriter(BaseRfcWriter):
     """ Writes to an HTML file.
 
-        If *css_document* is specified, an alternate css file is used.
-
-        If *external_css* is set, the html file will contain a link to
-        the css file, instead of inlining the file, which is the default
-        behavior.
-
-        *lang* controls the lang attribute of the html document
+        Uses HTML templates located in the templates directory.
     """
     # HTML Specific Defaults that are not provided in templates or XML
     defaults = {'references_url': 'http://tools.ietf.org/html/',
