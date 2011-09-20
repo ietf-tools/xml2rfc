@@ -12,7 +12,7 @@ setup(
                   'formats',
     author='Concentric Sky',
     author_email='tools-discuss@ietf.org',
-    url='',
+    url='http://tools.ietf.org/',
     scripts=['scripts/xml2rfc'],
     packages=['xml2rfc', 'xml2rfc/writers'],
     package_data={'xml2rfc': ['templates/*',
