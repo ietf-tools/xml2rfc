@@ -6,6 +6,7 @@
 from setuptools import setup
 
 setup(
+    # Package metadata
     name='xml2rfc',
     version='2.2.5',
     description='Validate and convert XML RFC documents to various output ' \
@@ -13,6 +14,17 @@ setup(
     author='Concentric Sky',
     author_email='tools-discuss@ietf.org',
     url='http://tools.ietf.org/',
+    classifiers= [
+        'Environment :: Console',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python',
+        'Topic :: Text Processing',
+        'Topic :: Text Processing :: Markup :: XML',
+    ],
+
+    # Program data
     scripts=['scripts/xml2rfc'],
     packages=['xml2rfc', 'xml2rfc/writers'],
     package_data={'xml2rfc': ['templates/*',
