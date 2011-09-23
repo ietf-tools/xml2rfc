@@ -106,11 +106,14 @@ class RawTextRfcWriter(BaseRfcWriter):
     def _write_list(self, list, level=0, indent=3):
         """ Writes a <list> element """
         bullet = '   '
-        hangIndent = None
+        hangIndent = 0
         style = list.attrib.get('style', 'empty')
-        # Check for optional hangIndent
         if style == 'hanging' or style.startswith('format'):
-            hangIndent = list.attrib.get('hangIndent', 3)
+            # Check for optional hangIndent
+            try:
+                hangIndent = int(list.attrib.get('hangIndent', 3))
+            except (ValueError, TypeError):
+                hangIndent = 3
         format_str = None
         counter_index = None
         if style.startswith('format'):
@@ -146,12 +149,12 @@ class RawTextRfcWriter(BaseRfcWriter):
                     bullet = string.ascii_lowercase[t_count % 26] + '.  '
                 elif style == 'hanging':
                     bullet = element.attrib.get('hangText', '')
+                    # Insert whitespace up to hangIndent
+                    bullet = bullet.ljust(hangIndent)
                     # Add an extra space in front of colon if colonspace enabled
                     if bullet.endswith(':') and \
-                    self.pis.get('colonspace', 'no') == 'no':
+                    self.pis.get('colonspace', 'no') == 'yes':
                         bullet+= ' '
-                    else:
-                        bullet += '  '
                 elif style.startswith('format'):
                     self.list_counters[counter_index] += 1
                     count = self.list_counters[counter_index]
@@ -162,13 +165,9 @@ class RawTextRfcWriter(BaseRfcWriter):
                                 str(string.ascii_lowercase[count % 26]) + ' ')
                     else:
                         bullet = format_str
-                if hangIndent:
-                    self.write_t_rec(element, bullet=bullet, indent=indent, \
-                                     level=level + 1, \
-                                     sub_indent=int(hangIndent), lb=lb)
-                else:
-                    self.write_t_rec(element, bullet=bullet, indent=indent, \
-                                     level=level + 1, lb=lb)
+                self.write_t_rec(element, bullet=bullet, indent=indent, \
+                                 level=level + 1, \
+                                 sub_indent=hangIndent, lb=lb)
                 t_count += 1
 
         
