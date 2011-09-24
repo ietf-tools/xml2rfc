@@ -53,6 +53,10 @@ class RawTextRfcWriter(BaseRfcWriter):
                 buf = self.buf
             buf.extend([text] * num)
 
+    def _vspace(self, num=0):
+        """ <vspace> line break wrapper to allow for overrides """
+        return self._lb(num=num)
+
     def _write_text(self, string, indent=0, sub_indent=0, bullet='', \
                   align='left', lb=False, buf=None, strip=True, edit=False):
         """ Writes a line or multiple lines of text to the buffer.
@@ -149,8 +153,12 @@ class RawTextRfcWriter(BaseRfcWriter):
                     bullet = string.ascii_lowercase[t_count % 26] + '.  '
                 elif style == 'hanging':
                     bullet = element.attrib.get('hangText', '')
-                    # Insert whitespace up to hangIndent
-                    bullet = bullet.ljust(hangIndent)
+                    if len(bullet) < hangIndent:
+                        # Insert whitespace up to hangIndent
+                        bullet = bullet.ljust(hangIndent)
+                    else:
+                        # Insert a single space
+                        bullet += ' '
                     # Add an extra space in front of colon if colonspace enabled
                     if bullet.endswith(':') and \
                     self.pis.get('colonspace', 'no') == 'yes':
@@ -437,7 +445,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         """ Write a generic paragraph of text """
         self._write_text(text, indent=3, align=align, lb=True)
 
-    def write_t_rec(self, t, indent=3, sub_indent=0, bullet='', \
+    def write_t_rec(self, t, indent=3, sub_indent=0, bullet='',
                      autoAnchor=None, align='left', level=0, lb=True):
         """ Recursively writes a <t> element """
         # Grab any initial text in <t>
@@ -479,7 +487,7 @@ class RawTextRfcWriter(BaseRfcWriter):
 
                 elif element.tag == 'vspace':
                     # Insert `blankLines` blank lines into document
-                    self._lb(num=int(element.attrib.get('blankLines', 0)))
+                    self._vspace(num=int(element.attrib.get('blankLines', 0)))
                     # Don't auto-break for tail paragraph
                     lb = False
 

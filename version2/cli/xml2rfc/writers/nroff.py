@@ -37,12 +37,19 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             self._write_line('.in ' + str(amount))
             self.curr_indent = amount
 
+    # Override
+    def _vspace(self, num=0):
+        """ nroff uses a .sp command in addition to a literal blank line """
+        self._write_line('.sp %s' % num)
+        return self._lb(num=num)
+
     def _write_line(self, string):
         # Used by nroff to write a line with no nroff commands
         self.buf.append(string)
 
-    def _write_text(self, string, indent=0, sub_indent=None, bullet='', \
-                  align='left', lb=False, buf=None, strip=True, edit=False):
+    # Override
+    def _write_text(self, string, indent=0, sub_indent=0, bullet='',
+                    align='left', lb=False, buf=None, strip=True, edit=False):
         #-------------------------------------------------------------
         # RawTextRfcWriter override
         #
@@ -70,16 +77,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                 string = bullet + string
             par = self.wrapper.wrap(string)
             # TODO: Nroff alignment
-            # Create nroff commands based on bullet & alignment
+            # Use bullet for indentation if sub not specified
+            full_indent = sub_indent and indent + sub_indent or indent + len(bullet)
+            self._indent(full_indent)
             if len(bullet) > 0:
-                if sub_indent:
-                    full_indent = indent + sub_indent
-                else:
-                    full_indent = indent + len(bullet)
-                self._indent(full_indent)
+                # Bullet line: title just uses base indent
                 self._write_line('.ti ' + str(indent))
-            else:
-                self._indent(indent)
             buf.extend(par)
 
         # Page break information
