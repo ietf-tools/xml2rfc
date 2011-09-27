@@ -16,9 +16,10 @@ __all__ = ['XmlRfcParser', 'XmlRfc', 'XmlReferenceError']
 
 class XmlReferenceError(Exception):
     """ Exception class for the custom entity resolution algorithm """
-    def __init__(self, msg):
+    def __init__(self, msg, line_no=0):
         self.msg = msg
-        self.position = (0, 0)
+        # This mirrors lxml error behavior, but we can't capture column
+        self.position = (line_no, 0)
 
 
 class CachingResolver(lxml.etree.Resolver):
@@ -94,7 +95,7 @@ class CachingResolver(lxml.etree.Resolver):
         path = self.getReferenceRequest(request)
         return self.resolve_filename(path, context)
     
-    def getReferenceRequest(self, request, include=False):
+    def getReferenceRequest(self, request, include=False, line_no=0):
         """ Returns the correct and most efficient path for an external request
 
             To determine the path, the following algorithm is consulted:
@@ -224,7 +225,7 @@ class CachingResolver(lxml.etree.Resolver):
                                  'automatically in standard locations.')
             # Couldn't resolve.  Throw an exception
             error = XmlReferenceError('Unable to resolve external request: '
-                                      + '"' + original + '"')
+                                      + '"' + original + '"', line_no=line_no)
             if self.verbose and len(attempts) > 1:
                 # Reveal attemps
                 error.msg += ', trying the following location(s):\n    ' + \
@@ -351,7 +352,8 @@ class XmlRfcParser:
                 if 'include' in pidict and pidict['include']:
                     request = pidict['include']
                     path = self.cachingResolver.getReferenceRequest(request,
-                                                                    include=True)
+                           # Pass the line number in XML for error bubbling
+                           include=True, line_no=getattr(element, 'sourceline', 0))
                     try:
                         # Parse the xml and attach it to the tree here
                         root = lxml.etree.parse(path).getroot()
