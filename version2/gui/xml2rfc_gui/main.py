@@ -1,6 +1,6 @@
 # Main module for xml2rfc-gui
 
-VERSION = (0, 7, 2)
+VERSION = (0, 7, 3)
 
 # xml2rfc module
 import xml2rfc
@@ -211,6 +211,7 @@ class MainWindow(QMainWindow):
             font = QFont(self.settings.value('appearance/previewFontFamily').toString(),
                          self.settings.value('appearance/previewFontSize').toInt()[0])
             editor.setFont(font)
+            editor.setPlainText(data)
             if format == self.handler.XML:
                 if not os.access(path, os.W_OK):
                     # Read only!
@@ -220,11 +221,11 @@ class MainWindow(QMainWindow):
                 self.xmlEditor = editor
                 # Create callback
                 self.connect(editor, SIGNAL('textChanged()'), self.xmlChanged)
+                self.xml_modified = False
             else:
                 lineNumbers = self.settings.value('appearance/previewLineNumbersText').toBool()
                 editor.setReadOnly(True)
             editor.enableLineNumbers = lineNumbers
-            editor.setPlainText(data)
             self.textEditors.append(editor)
 
         # Add editor to the tab
@@ -313,7 +314,6 @@ class MainWindow(QMainWindow):
             self.viewDocument(self.handler.XML, filename)
             self.input_file = str(filename)
             self.ui.sourceLabel.setText(filename)
-            self.xml_modified = False
 
     def xmlChanged(self):
         if self.xmlEditor and not self.xmlEditor.isReadOnly():
@@ -354,10 +354,12 @@ class MainWindow(QMainWindow):
                 self.saveFile()
             elif q == 2:
                 return
-            # Else proceed
+            else:
+                # Discard XML changes -- Occurs automatically through recreating the editor after deleting tabs
+                self.xmlModified = False
 
         if self.settings.verify():
-            # Clear tabs, create XML editor first
+            # Clear preview tabs and console
             self.deleteTabs()
             self.clearConsole()
             self.viewDocument(self.handler.XML, self.input_file)
