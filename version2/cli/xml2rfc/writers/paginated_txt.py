@@ -82,11 +82,13 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             # No RFC number -- assume internet draft
             self.left_header = 'Internet-Draft'
         title = self.r.find('front/title')
-        self.center_header = title.attrib.get('abbrev', title.text)
+        if title is not None:
+            self.center_header = title.attrib.get('abbrev', title.text)
         date = self.r.find('front/date')
-        month = date.attrib.get('month', '')
-        year = date.attrib.get('year', '')
-        self.right_header = month + ' ' + year
+        if date is not None:
+            month = date.attrib.get('month', '')
+            year = date.attrib.get('year', '')
+            self.right_header = month + ' ' + year
         authors = self.r.findall('front/author')
         for i, author in enumerate(authors):
             # Author1, author2 & author3 OR author1 & author2 OR author1

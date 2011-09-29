@@ -258,7 +258,7 @@ class RawTextRfcWriter(BaseRfcWriter):
     def _expand_xref(self, xref):
         """ Returns the proper text representation of an xref element """
         target = xref.attrib.get('target', '')
-        format = xref.attrib.get('format', 'default')
+        format = xref.attrib.get('format', self.defaults['xref_format'])
         item = self._getItemByAnchor(target)
         if not item or format == 'none':
             target_text = '[' + target + ']'
@@ -383,46 +383,47 @@ class RawTextRfcWriter(BaseRfcWriter):
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
                   delimiter=None, lb=True):
         """ Writes a raw stream of characters, preserving space and breaks """
-        if lb:
-            # Start with a newline
-            self._lb()
-        # Delimiter?
-        if delimiter:
-            self.buf.append(delimiter)
-        # Additional blank lines?
-        self.buf.extend([''] * blanklines)
-        # Format the input
-        lines = [line.rstrip() for line in text.expandtabs(4).split('\n')]
-        # Trim first and last lines if they are blank, whitespace is handled
-        # by the `blanklines` and `delimiter` arguments
-        if len(lines) > 1:
-            if lines[0] == '':
-                lines.pop(0)
-            if lines[-1] == '':
-                lines.pop(-1)
-        if align == 'center':
-            # Find the longest line, and use that as a fixed center.
-            longest_line = len(max(lines, key=len))
-            center_indent = ((self.width - longest_line) / 2)
-            indent_str = center_indent > indent and ' ' * center_indent or \
-                                                    ' ' * indent
-            for line in lines:
-                self.buf.append(indent_str + line)
-        elif align == 'right':
-            for line in lines:
-                self.buf.append(line.rjust(self.width))
-        else:  # align == left
-            # Enforce a minimum indentation if any of the lines are < indent
-            extra = indent - \
-                    min([len(line) - len(line.lstrip()) for line in lines])
-            indent_str = extra > 0 and ' ' * extra or ''
-            for line in lines:
-                self.buf.append(indent_str + line)
-        # Additional blank lines?
-        self.buf.extend([''] * blanklines)
-        # Delimiter?
-        if delimiter:
-            self.buf.append(delimiter)
+        if text:
+            if lb:
+                # Start with a newline
+                self._lb()
+            # Delimiter?
+            if delimiter:
+                self.buf.append(delimiter)
+            # Additional blank lines?
+            self.buf.extend([''] * blanklines)
+            # Format the input
+            lines = [line.rstrip() for line in text.expandtabs(4).split('\n')]
+            # Trim first and last lines if they are blank, whitespace is handled
+            # by the `blanklines` and `delimiter` arguments
+            if len(lines) > 1:
+                if lines[0] == '':
+                    lines.pop(0)
+                if lines[-1] == '':
+                    lines.pop(-1)
+            if align == 'center':
+                # Find the longest line, and use that as a fixed center.
+                longest_line = len(max(lines, key=len))
+                center_indent = ((self.width - longest_line) / 2)
+                indent_str = center_indent > indent and ' ' * center_indent or \
+                                                        ' ' * indent
+                for line in lines:
+                    self.buf.append(indent_str + line)
+            elif align == 'right':
+                for line in lines:
+                    self.buf.append(line.rjust(self.width))
+            else:  # align == left
+                # Enforce a minimum indentation if any of the lines are < indent
+                extra = indent - \
+                        min([len(line) - len(line.lstrip()) for line in lines])
+                indent_str = extra > 0 and ' ' * extra or ''
+                for line in lines:
+                    self.buf.append(indent_str + line)
+            # Additional blank lines?
+            self.buf.extend([''] * blanklines)
+            # Delimiter?
+            if delimiter:
+                self.buf.append(delimiter)
 
     def write_label(self, text, type='figure'):
         """ Writes a centered label """
@@ -487,7 +488,8 @@ class RawTextRfcWriter(BaseRfcWriter):
 
                 elif element.tag == 'vspace':
                     # Insert `blankLines` blank lines into document
-                    self._vspace(num=int(element.attrib.get('blankLines', 0)))
+                    self._vspace(num=int(element.attrib.get('blankLines',
+                                         self.defaults['vspace_blanklines'])))
                     # Don't auto-break for tail paragraph
                     lb = False
 
@@ -606,11 +608,12 @@ class RawTextRfcWriter(BaseRfcWriter):
                 refstring.append(seriesInfo.attrib['name'] + ' ' + \
                                  seriesInfo.attrib['value'] + ', ')
             date = ref.find('front/date')
-            month = date.attrib.get('month', '')
-            if month:
-                month += ' '
-            year = date.attrib.get('year', '')
-            refstring.append(month + year)
+            if date is not None:
+                month = date.attrib.get('month', '')
+                if month:
+                    month += ' '
+                year = date.attrib.get('year', '')
+                refstring.append(month + year)
             # Target?
             target = ref.attrib.get('target')
             if target:
@@ -646,7 +649,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         row = 0
         column_aligns = []
         for ttcol in table.findall('ttcol'):
-            column_aligns.append(ttcol.attrib.get('align', 'left'))
+            column_aligns.append(ttcol.attrib.get('align',
+                                                  self.defaults['ttcol_align']))
             if ttcol.text:
                 matrix[row].append(ttcol.text)
             else:
@@ -695,7 +699,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         ]
 
         output = []
-        style = table.attrib.get('style', 'full')
+        style = table.attrib.get('style', self.defaults['table_style'])
         # Create the border
         if style == 'headers':
             borderstring = []

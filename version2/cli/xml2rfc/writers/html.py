@@ -159,7 +159,8 @@ class HtmlRfcWriter(BaseRfcWriter):
                 return [a, cite]
             else:
                 # Create xref from index lookup
-                format = element.attrib.get('format', 'default')
+                format = element.attrib.get('format', 
+                                            self.defaults['xref_format'])
                 a = E.A(href='#' + target)
                 item = self._getItemByAnchor(target)
                 if not item or format == 'none':
@@ -200,7 +201,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                     a.tail = element.tail
                 return [a]
         elif element.tag == 'spanx':
-            style = element.attrib.get('style', 'emph')
+            style = element.attrib.get('style', self.defaults['spanx_style'])
             text = ''
             if element.text:
                 text = element.text
@@ -226,17 +227,18 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.active_buffer = self.buffers['body']
 
     def write_raw(self, text, align='left', blanklines=0, delimiter=None):
-        # Add padding with delimiter/blanklines, if specified
-        edge = delimiter and [delimiter] or ['']
-        edge.extend([''] * blanklines)
-        fill = '\n'.join(edge)
-        fill += text
-        edge.reverse()
-        fill += '\n'.join(edge)
+        if text:
+            # Add padding with delimiter/blanklines, if specified
+            edge = delimiter and [delimiter] or ['']
+            edge.extend([''] * blanklines)
+            fill = '\n'.join(edge)
+            fill += text
+            edge.reverse()
+            fill += '\n'.join(edge)
 
-        # Run through template, add to body buffer
-        pre = E.PRE(fill)
-        self.active_buffer.append(self._serialize(pre))
+            # Run through template, add to body buffer
+            pre = E.PRE(fill)
+            self.active_buffer.append(self._serialize(pre))
 
     def write_label(self, text, type='figure', align='center'):
         # Ignore labels for table, they are handled in draw_table
@@ -314,7 +316,8 @@ class HtmlRfcWriter(BaseRfcWriter):
             elif child.tag == 'vspace':
                 br = E.BR()
                 current.append(br)
-                blankLines = int(child.attrib.get('blankLines', 0))
+                blankLines = int(child.attrib.get('blankLines',
+                                 self.defaults['vspace_blanklines']))
                 for i in range(blankLines):
                     br = E.BR()
                     current.append(br)
@@ -512,7 +515,8 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.active_buffer.append(self._serialize(E.TABLE(tbody)))
 
     def draw_table(self, table, table_num=None):
-        style = 'tt full ' + table.attrib.get('align', 'center')
+        style = 'tt full ' + table.attrib.get('align', 
+                                              self.defaults['table_align'])
         cellpadding = '3'
         cellspacing = '0'
         htmltable = E.TABLE(cellpadding=cellpadding, cellspacing=cellspacing)
@@ -532,7 +536,8 @@ class HtmlRfcWriter(BaseRfcWriter):
             th = E.TH()
             if header.text:
                 th.text = header.text
-            header_align = header.attrib.get('align', 'left')
+            header_align = header.attrib.get('align',
+                                             self.defaults['ttcol_align'])
             th.attrib['class'] = header_align
             # Store alignment information
             col_aligns.append(header_align)

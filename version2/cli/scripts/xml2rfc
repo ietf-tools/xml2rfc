@@ -33,6 +33,8 @@ def main():
     optionparser.add_option('-c', '--cache', dest='cache', 
                             help='specify an alternate cache directory to write'
                             ' to')
+    optionparser.add_option('-n', '--no-dtd', dest='no_dtd', action='store_true',
+                            help='disabled DTD validation step')
     optionparser.add_option('-d', '--dtd', dest='dtd',
                             help='specify an alternate dtd file')
     optionparser.add_option('-b', '--basename', dest='basename',
@@ -117,14 +119,15 @@ def main():
                           '\n  ' + linestr + error.msg)
         sys.exit(1)
         
-    # Validate the document
-    ok, errors = xmlrfc.validate(dtd_path=options.dtd)
-    if not ok:
-        error_str = 'Unable to validate the XML document: ' + args[0]
-        for error in errors:
-            error_str += '\n  Line ' + str(error.line) + ': ' + error.message
-        xml2rfc.log.error(error_str)
-        sys.exit(1)
+    # Validate the document unless disabled
+    if not options.no_dtd:
+        ok, errors = xmlrfc.validate(dtd_path=options.dtd)
+        if not ok:
+            error_str = 'Unable to validate the XML document: ' + args[0]
+            for error in errors:
+                error_str += '\n  Line ' + str(error.line) + ': ' + error.message
+            xml2rfc.log.error(error_str)
+            sys.exit(1)
 
     # Execute any writers specified
     if options.basename:

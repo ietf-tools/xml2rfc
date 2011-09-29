@@ -45,6 +45,33 @@ class BaseRfcWriter:
     """
     
     # -------------------------------------------------------------------------
+    # Attribute default values
+    #
+    # These will mainly come into play if DTD validation was disabled, and
+    # processing that happens to rely on DTD populated attributes require a lookup
+    defaults = {
+        'obsoletes':                '',
+        'updates':                  '',
+        'section_toc':              'default',
+        'xref_pageno':              'false',
+        'xref_format':              'default',
+        'iref_primary':             'false',
+        'spanx_style':              'emph',
+        'figure_suppress-title':    'false',
+        'figure_title':             '',
+        'figure_align':             'left',
+        'vspace_blanklines':        0,
+        'table_suppress-title':     'false',
+        'table_title':              '',
+        'table_align':              'center',
+        'table_style':              'full',
+        'ttcol_align':              'left',
+        'references_title':         'References'
+    }
+    
+
+
+    # -------------------------------------------------------------------------
     # Boilerplate default text sections
     boilerplate = {}
     boilerplate['workgroup'] = 'Network Working Group'
@@ -240,15 +267,16 @@ class BaseRfcWriter:
         """ Fix the date data """
         today = datetime.date.today()
         date = self.r.find('front/date')
-        year = date.attrib.get('year', '')
-        month = date.attrib.get('month', '')
-        # If year is this year, and month not specified, use current date
-        if not year or (year == str(today.year) and not month) or \
-                       (year == str(today.year) and month == str(today.month)):
-            # Set everything to today
-            date.attrib['year'] = today.strftime('%Y')
-            date.attrib['month'] = today.strftime('%B')
-            date.attrib['day'] = today.strftime('%d')
+        if date is not None:
+            year = date.attrib.get('year', '')
+            month = date.attrib.get('month', '')
+            # If year is this year, and month not specified, use current date
+            if not year or (year == str(today.year) and not month) or \
+                           (year == str(today.year) and month == str(today.month)):
+                # Set everything to today
+                date.attrib['year'] = today.strftime('%Y')
+                date.attrib['month'] = today.strftime('%B')
+                date.attrib['day'] = today.strftime('%d')
 
     def _prepare_top_left(self):
         """ Returns a lines of lines for the top left header """
@@ -266,24 +294,25 @@ class BaseRfcWriter:
             lines.append('Internet-Draft')
             # Create the expiration date as published date + six months
             date = self.r.find('front/date')
-            month = date.attrib.get('month', '')
-            year = date.attrib.get('year', '')
-            if month and year:
-                try:
-                    start_date = datetime.datetime.strptime(month + year, \
-                                                            '%B%Y')
-                    expire_date = start_date + datetime.timedelta(6 * 30 + 15)
-                    self.expire_string = expire_date.strftime('%B %d, %Y')
-                except ValueError:
-                    pass
-            elif not year:
-                # Warn about no date
-                xml2rfc.log.warn('No date specified for document.')
+            if date is not None:
+                month = date.attrib.get('month', '')
+                year = date.attrib.get('year', '')
+                if month and year:
+                    try:
+                        start_date = datetime.datetime.strptime(month + year, \
+                                                                '%B%Y')
+                        expire_date = start_date + datetime.timedelta(6 * 30 + 15)
+                        self.expire_string = expire_date.strftime('%B %d, %Y')
+                    except ValueError:
+                        pass
+                elif not year:
+                    # Warn about no date
+                    xml2rfc.log.warn('No date specified for document.')
 
-        updates = self.r.attrib.get('updates')
+        updates = self.r.attrib.get('updates', self.defaults['updates'])
         if updates:
             lines.append('Updates: ' + updates)
-        obsoletes = self.r.attrib.get('obsoletes')
+        obsoletes = self.r.attrib.get('obsoletes', self.defaults['obsoletes'])
         if obsoletes:
             lines.append('Obsoletes: ' + obsoletes)
         category = self.r.attrib.get('category')
@@ -329,27 +358,27 @@ class BaseRfcWriter:
                             lines.remove(last_org)
                         last_org = org_result
                         lines.append(org_result)
-        
 
         date = self.r.find('front/date')
-        year = date.attrib.get('year', '')
-        month = date.attrib.get('month', '')
-        day = date.attrib.get('day', '')
-        if month:
-            month = month + ' '
-        if day:
-            day = day + ', '
-        lines.append(month + day + year)
-        # Strip any whitespace from XML to make header as neat as possible
-        lines = map(string.strip, lines)
+        if date is not None:
+            year = date.attrib.get('year', '')
+            month = date.attrib.get('month', '')
+            day = date.attrib.get('day', '')
+            if month:
+                month = month + ' '
+            if day:
+                day = day + ', '
+            lines.append(month + day + year)
+            # Strip any whitespace from XML to make header as neat as possible
+            lines = map(string.strip, lines)
         return lines
 
     def _write_figure(self, figure):
         """ Writes <figure> elements """
-        align = figure.attrib.get('align', 'left')
+        align = figure.attrib.get('align', self.defaults['figure_align'])
         self.figure_count += 1
         anchor = figure.attrib.get('anchor')
-        title = figure.attrib.get('title')
+        title = figure.attrib.get('title', self.defaults['figure_title'])
     
         if self.indexmode:
             # Add figure to the index, inserting any anchors necessary
@@ -390,10 +419,10 @@ class BaseRfcWriter:
 
     def _write_table(self, table):
         """ Writes <texttable> elements """
-        align = table.attrib.get('align', 'center')
+        align = table.attrib.get('align', self.defaults['table_align'])
         self.table_count += 1
         anchor = table.attrib.get('anchor')
-        title = table.attrib.get('title')
+        title = table.attrib.get('title', self.defaults['table_title'])
         
         if self.indexmode:
             # Add table to the index, inserting any anchors necessary
@@ -440,7 +469,7 @@ class BaseRfcWriter:
         if level > 0:
             anchor = section.attrib.get('anchor')
             title = section.attrib.get('title')
-            include_toc = section.attrib.get('toc', 'include') != 'exclude' \
+            include_toc = section.attrib.get('toc', self.defaults['section_toc']) != 'exclude' \
                           and (not appendix or self.pis.get('tocappendix', \
                                                             'yes') == 'yes')
             if self.indexmode:
@@ -518,12 +547,13 @@ class BaseRfcWriter:
             topblock = self.pis.get('topblock', 'yes')
             if topblock == 'yes':
                 self.write_top(self._prepare_top_left(), \
-                               self._prepare_top_right())
+                                   self._prepare_top_right())
 
             # Title & Optional docname
-            title = self.r.find('front/title').text
-            docName = self.r.attrib.get('docName', None)
-            self.write_title(title, docName)
+            title = self.r.find('front/title')
+            if title is not None:
+                docName = self.r.attrib.get('docName', None)
+                self.write_title(title.text, docName)
 
             # Abstract
             abstract = self.r.find('front/abstract')
@@ -566,8 +596,10 @@ class BaseRfcWriter:
 
             # Copyright
             self.write_heading('Copyright Notice', autoAnchor='rfc.copyrightnotice')
-            year = self.r.find('front/date').attrib.get('year', '')
-            self.write_paragraph(self.boilerplate['base_copyright'] % year)
+            date = self.r.find('front/date')
+            if date is not None:
+                year = self.r.find('front/date').attrib.get('year', '')
+                self.write_paragraph(self.boilerplate['base_copyright'] % year)
             if self.draft:
                 self.write_paragraph(self.boilerplate['draft_copyright'])
     
@@ -579,14 +611,16 @@ class BaseRfcWriter:
         # ENDIF indexmode
 
         # Middle sections
-        self._write_section_rec(self.r.find('middle'), None)
+        middle = self.r.find('middle')
+        if middle is not None:
+            self._write_section_rec(middle, None)
 
         # References sections
         # Treat references as nested only if there is more than one
         ref_counter = str(self.ref_start)
         references = self.r.findall('back/references')
         # Write root level references header
-        ref_title = self.pis.get('refparent', 'References')
+        ref_title = self.pis.get('refparent', self.defaults['references_title'])
         if self.indexmode:
             self._indexReferences(ref_counter, title=ref_title)
         else:
@@ -595,7 +629,8 @@ class BaseRfcWriter:
         if len(references) > 1:
             for i, reference_list in enumerate(references):
                 ref_newcounter = ref_counter + '.' + str(i + 1)
-                ref_title = reference_list.attrib.get('title', 'References')
+                ref_title = reference_list.attrib.get('title',
+                                        self.defaults['references_title'])
                 if self.indexmode:
                     self._indexReferences(ref_newcounter, title=ref_title, \
                                           subCounter=i+1, level=2)
@@ -608,7 +643,9 @@ class BaseRfcWriter:
             self.write_reference_list(references[0])
 
         # Appendix sections
-        self._write_section_rec(self.r.find('back'), None, appendix=True)
+        back = self.r.find('back')
+        if back is not None:
+            self._write_section_rec(back, None, appendix=True)
 
         # Index section, disable if there are no irefs
         if len(self._iref_index) > 0:
