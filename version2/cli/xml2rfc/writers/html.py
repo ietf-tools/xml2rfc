@@ -20,8 +20,9 @@ class HtmlRfcWriter(BaseRfcWriter):
         Uses HTML templates located in the templates directory.
     """
     # HTML Specific Defaults that are not provided in templates or XML
-    defaults = {'references_url': 'http://tools.ietf.org/html/',
-               }
+    html_defaults = { 
+        'references_url': 'http://tools.ietf.org/html/',
+    }
 
     def __init__(self, xmlrfc, quiet=False, verbose=False, templates_dir=None):
         BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)
@@ -489,11 +490,11 @@ class HtmlRfcWriter(BaseRfcWriter):
                 # Create title's link to document from seriesInfo
                 if seriesInfo.attrib.get('name', '') == 'RFC':
                     title_a.attrib['href'] = \
-                        HtmlRfcWriter.defaults['references_url'] + \
+                        self.html_defaults['references_url'] + \
                         'rfc' + seriesInfo.attrib.get('value', '')
                 elif seriesInfo.attrib.get('name', '') == 'Internet-Draft':
                     title_a.attrib['href'] = \
-                        HtmlRfcWriter.defaults['references_url'] + \
+                        self.html_defaults['references_url'] + \
                         seriesInfo.attrib.get('value', '')
                 title_a.tail += seriesInfo.attrib.get('name', '') + ' ' + \
                              seriesInfo.attrib.get('value', '') + ', '
