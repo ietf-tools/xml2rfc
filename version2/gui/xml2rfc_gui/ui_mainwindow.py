@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/mainwindow.ui'
 #
-# Created: Tue Sep 13 16:44:22 2011
+# Created: Mon Oct  3 13:42:16 2011
 #      by: PyQt4 UI code generator 4.8.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -200,6 +200,10 @@ class Ui_mainWindow(object):
         self.actionSave.setObjectName(_fromUtf8("actionSave"))
         self.actionHelp = QtGui.QAction(mainWindow)
         self.actionHelp.setObjectName(_fromUtf8("actionHelp"))
+        self.actionValidation = QtGui.QAction(mainWindow)
+        self.actionValidation.setCheckable(True)
+        self.actionValidation.setChecked(True)
+        self.actionValidation.setObjectName(_fromUtf8("actionValidation"))
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addSeparator()
@@ -213,6 +217,7 @@ class Ui_mainWindow(object):
         self.menuFormats.addAction(self.actionFormatHtml)
         self.menuFormats.addAction(self.actionFormatNroff)
         self.menuOptions.addAction(self.menuFormats.menuAction())
+        self.menuOptions.addAction(self.actionValidation)
         self.menuOptions.addAction(self.actionOptionVerbose)
         self.menuOptions.addSeparator()
         self.menuOptions.addAction(self.actionPreferences)
@@ -264,5 +269,6 @@ class Ui_mainWindow(object):
         self.actionSave.setText(QtGui.QApplication.translate("mainWindow", "Save Source", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave.setShortcut(QtGui.QApplication.translate("mainWindow", "Ctrl+S", None, QtGui.QApplication.UnicodeUTF8))
         self.actionHelp.setText(QtGui.QApplication.translate("mainWindow", "Documentation", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionValidation.setText(QtGui.QApplication.translate("mainWindow", "DTD Validation", None, QtGui.QApplication.UnicodeUTF8))
 
 from editor import LinedEditor

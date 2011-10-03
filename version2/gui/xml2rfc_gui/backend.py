@@ -42,6 +42,7 @@ class XmlRfcHandler(QThread):
         self.request_input = None
         self.request_output_dir = None
         self.request_formats = None
+        self.request_validation = True
 
         # Temporary xmlrfc instance for requesting fast previews
         self.xmlrfc = None
@@ -79,10 +80,11 @@ class XmlRfcHandler(QThread):
     def signalStatus(self, text):
         self.emit(SIGNAL('status(QString)'), text)
         
-    def convert(self, input_file, formats, output_dir):
+    def convert(self, input_file, formats, output_dir, validate=True):
         self.request_output_dir = output_dir or os.path.dirname(input_file)
         self.request_formats = formats
         self.request_input = input_file
+        self.request_validation = validate
         self.start()
     
     def signalHalt(self):
@@ -148,14 +150,15 @@ class XmlRfcHandler(QThread):
             return False
         
         # Try to validate the document, catching any errors
-        ok, errors = self.xmlrfc.validate()
-        self.signalStatus('Validating XML document ' + path + '...')
-        if not ok:
-            xml2rfc.log.error('Unable to validate the XML document: ' + path + '\n')
-            for error in errors:
-                msg = 'Line ' + str(error.line) + ': ' + error.message
-                self.emit(SIGNAL('error(QString, int)'), msg, error.line)
-            return False
+        if self.request_validation:
+            ok, errors = self.xmlrfc.validate()
+            self.signalStatus('Validating XML document ' + path + '...')
+            if not ok:
+                xml2rfc.log.error('Unable to validate the XML document: ' + path + '\n')
+                for error in errors:
+                    msg = 'Line ' + str(error.line) + ': ' + error.message
+                    self.emit(SIGNAL('error(QString, int)'), msg, error.line)
+                return False
 
         # Return success, no error object attached
         return True

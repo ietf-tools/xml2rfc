@@ -1,6 +1,6 @@
 # Main module for xml2rfc-gui
 
-VERSION = (0, 7, 3)
+VERSION = (0, 7, 4)
 
 # xml2rfc module
 import xml2rfc
@@ -33,7 +33,6 @@ ICON_DEFAULT    = QStyle.SP_FileIcon
 ICON_GOOD       = QStyle.SP_DialogApplyButton
 ICON_BAD        = QStyle.SP_MessageBoxCritical
 ICON_WORKING    = QStyle.SP_MessageBoxQuestion
-
 
 def stdIcon(val):
     """ Return the standard icon for the value given """
@@ -379,6 +378,7 @@ class MainWindow(QMainWindow):
             
             # Setup backend thread with current state of settings
             verbose = bool(self.ui.actionOptionVerbose.isChecked())
+            validate = bool(self.ui.actionValidation.isChecked())
             abs_cache = os.path.expanduser(str(self.settings.value('cache/location').toString()))
             local_libs = str(self.settings.value('references/local_libs').toString())
             network_lib = str(self.settings.value('references/network_lib').toString())
@@ -389,7 +389,7 @@ class MainWindow(QMainWindow):
 
             if len(formats) > 0:
                 self.lockWidgets()
-                self.handler.convert(self.input_file, formats, output_dir)
+                self.handler.convert(self.input_file, formats, output_dir, validate=validate)
             else:
                 QMessageBox.critical(self, 'Could not convert',
                                     'You must select at least one output format.')
