@@ -1,6 +1,6 @@
 # Main module for xml2rfc-gui
 
-VERSION = (0, 7, 4)
+VERSION = (0, 7, 5)
 
 # xml2rfc module
 import xml2rfc
@@ -282,9 +282,9 @@ class MainWindow(QMainWindow):
         about.ui = ui_about.Ui_Dialog()
         about.ui.setupUi(about)
         # Replace proper version numbers
-        about.ui.xml2rfc_gui_version.setText('xml2rfc-gui version: ' + \
+        about.ui.xml2rfc_gui_version.setText('GUI version ' + \
                                              '.'.join(map(str, VERSION)))
-        about.ui.xml2rfc_version.setText('xml2rfc version: ' + \
+        about.ui.xml2rfc_version.setText('Core version ' + \
                                          '.'.join(map(str, xml2rfc.VERSION)))
         about.exec_()
 

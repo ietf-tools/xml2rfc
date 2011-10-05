@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/mainwindow.ui'
 #
-# Created: Mon Oct  3 13:42:16 2011
+# Created: Wed Oct  5 14:17:42 2011
 #      by: PyQt4 UI code generator 4.8.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -19,6 +19,9 @@ class Ui_mainWindow(object):
         mainWindow.setObjectName(_fromUtf8("mainWindow"))
         mainWindow.resize(1024, 768)
         mainWindow.setMinimumSize(QtCore.QSize(800, 600))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/assets/xml2rfc.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        mainWindow.setWindowIcon(icon)
         self.mainFrame = QtGui.QWidget(mainWindow)
         self.mainFrame.setObjectName(_fromUtf8("mainFrame"))
         self.verticalLayout = QtGui.QVBoxLayout(self.mainFrame)
@@ -272,3 +275,4 @@ class Ui_mainWindow(object):
         self.actionValidation.setText(QtGui.QApplication.translate("mainWindow", "DTD Validation", None, QtGui.QApplication.UnicodeUTF8))
 
 from editor import LinedEditor
+import assets_rc
