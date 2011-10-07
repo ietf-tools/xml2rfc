@@ -29,7 +29,7 @@ class XmlRfcHandler(QThread):
     def _stderr(self, data):
         self.emit(SIGNAL('stderr(QString)'), QString(data))
 
-    def __init__(self):
+    def __init__(self, debug=False):
         QThread.__init__(self)
         # self.halt = False
         self.destroyed = False
@@ -47,13 +47,23 @@ class XmlRfcHandler(QThread):
         # Temporary xmlrfc instance for requesting fast previews
         self.xmlrfc = None
         
-        # Determine a usable templates directory in pyqt
-        self.templates_dir = 'templates'
-        for dir in [os.path.dirname(sys.executable),
-                    os.path.dirname(xml2rfc.__file__),]:
-            dir = os.path.normpath(os.path.join(dir, 'templates'))
-            if os.path.exists(dir):
-                self.templates_dir = dir
+        # Determine templates directory
+        if debug:
+            # Only use package directory for testing
+            root = os.path.dirname(xml2rfc.__file__)
+        else:
+            # Determine templates directory based on platform
+            if sys.platform.startswith('win'):  # Windows
+                # Use application directory
+                root = os.path.dirname(sys.executable)
+            elif sys.platform.startswith('darwin'):  # OSX
+                # OSX conveniently uses Resources/ as the cwd
+                root = ''
+            else:
+                # For nix platforms, use package directory
+                root = os.path.dirname(xml2rfc.__file__)
+        
+        self.templates_dir = os.path.join(root, 'templates')
         
             
         # Override log streams to use QThread callbacks

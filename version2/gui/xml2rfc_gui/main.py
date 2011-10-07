@@ -1,6 +1,6 @@
 # Main module for xml2rfc-gui
 
-VERSION = (0, 7, 5)
+VERSION = (0, 7, 6)
 
 # xml2rfc module
 import xml2rfc
@@ -63,7 +63,7 @@ class FileItem(QListWidgetItem):
 class MainWindow(QMainWindow):
     """ Main window class """
 
-    def __init__(self):
+    def __init__(self, debug=False):
         # Super
         QMainWindow.__init__(self)
         self.locked = False
@@ -84,7 +84,7 @@ class MainWindow(QMainWindow):
         
         # Setup backend thread to connect with xml2rfc library
         self.status('Loading backend...')
-        self.handler = XmlRfcHandler()
+        self.handler = XmlRfcHandler(debug=debug)
         
         # Connect backend thread signals
         self.connect(self.handler, SIGNAL('finished()'), self.unlockWidgets)
@@ -399,12 +399,12 @@ class MainWindow(QMainWindow):
         self.settings.destroy()
         return QMainWindow.closeEvent(self, *args, **kwargs)
 
-def main():
+def main(debug=False):
     # Create Qt Application
     app = QApplication(sys.argv)
     
     # Create main window
-    window = MainWindow()
+    window = MainWindow(debug=debug)
 
     # Ensure applications exits when all windows are closed
     QObject.connect(app, SIGNAL('lastWindowClosed()'), app, SLOT('quit()'))
