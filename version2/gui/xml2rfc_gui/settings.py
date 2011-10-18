@@ -40,7 +40,7 @@ class Settings(QSettings):
     defaults['references/local_libs']               = default_local_libs
     defaults['references/network_lib']              = default_network_lib
 
-    def __init__(self, mainWindow, backendHandler):
+    def __init__(self, mainWindow, backendHandler, versionstring='0'):
         # Super
         QSettings.__init__(self, 'Concentric Sky', 'xml2rfc')
         self.mainWindow = mainWindow    # Reference to parent
@@ -56,7 +56,7 @@ class Settings(QSettings):
         self.temp = {}  
             
         # Guarentee that we are in a safe namespace
-        self.beginGroup('com/xml2rfc')
+        self.beginGroup('com/xml2rfc/v%s' % versionstring)
         
         # Fill in any defaults
         self.populateDefaults()

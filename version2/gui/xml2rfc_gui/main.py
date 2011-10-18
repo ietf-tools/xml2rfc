@@ -1,6 +1,6 @@
 # Main module for xml2rfc-gui
 
-VERSION = (0, 7, 7)
+VERSION = (0, 7, 8)
 
 # xml2rfc module
 import xml2rfc
@@ -107,7 +107,7 @@ class MainWindow(QMainWindow):
         
         # Create Settings instance
         self.status('Loading settings...')
-        self.settings = Settings(self, self.handler)
+        self.settings = Settings(self, self.handler, versionstring='.'.join(map(str, VERSION)))
         self.status('Ready')
         
         # Connect main actions
@@ -160,14 +160,28 @@ class MainWindow(QMainWindow):
                 self.deleteTabs()
                 self.viewDocument(self.handler.XML, path)
         
-        # Hide any actions based on platform
+        # CLI install script behavior
         if debug or not 'darwin' in sys.platform:
             self.ui.actionInstallCLI.setEnabled(False)
+        else:
+            self.checkCLIOnFirstLaunch()
+
+    
+    def checkCLIOnFirstLaunch(self):
+        """ If this is the first time running xml2rfc, prompt about the CLI script """
+        key = '_firstlaunch'  # Arbitrary key for storing first launch bool
+        if not self.settings.value(key).toBool():
+            self.settings.setValue(key, True)
+            if QMessageBox.question(self, 'Install command-line utility', "This is your "
+            "first time running xml2rfc.  You have the option of installing a shortcut to "
+            "the command-line script to your PATH.  Would you like to do that now?", 'No', 'Yes'):
+                return self.installCLI()
+
 
     def installCLI(self):
         """ Install a local system symlink to the xml2rfc-cli.py script """
         if 'darwin' in sys.platform: 
-            self.installCLI_OSX()
+            return self.installCLI_OSX()
 
     def installCLI_OSX(self):
         # First, we check to see if xml2rfc already exists on path
