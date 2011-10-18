@@ -109,7 +109,8 @@ def main():
     # Parse the document into an xmlrfc tree instance
     parser = xml2rfc.XmlRfcParser(source, verbose=options.verbose,
                                   quiet=options.quiet,
-                                  cache_path=options.cache)
+                                  cache_path=options.cache,
+                                  templates_path=globals().get('_TEMPLATESPATH', None))
     try:
         xmlrfc = parser.parse()
     except (lxml.etree.XMLSyntaxError, xml2rfc.parser.XmlReferenceError), error:
@@ -152,7 +153,8 @@ def main():
     if options.html:
         htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc,
                                            quiet=options.quiet,
-                                           verbose=options.verbose)
+                                           verbose=options.verbose,
+                                           templates_dir=globals().get('_TEMPLATESPATH', None))
         filename = options.filename
         if not filename:
             filename = basename + '.html'
