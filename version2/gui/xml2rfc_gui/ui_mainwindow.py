@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/mainwindow.ui'
 #
-# Created: Wed Oct  5 15:18:56 2011
+# Created: Mon Oct 17 19:13:28 2011
 #      by: PyQt4 UI code generator 4.8.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -207,6 +207,8 @@ class Ui_mainWindow(object):
         self.actionValidation.setCheckable(True)
         self.actionValidation.setChecked(True)
         self.actionValidation.setObjectName(_fromUtf8("actionValidation"))
+        self.actionInstallCLI = QtGui.QAction(mainWindow)
+        self.actionInstallCLI.setObjectName(_fromUtf8("actionInstallCLI"))
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addSeparator()
@@ -224,6 +226,8 @@ class Ui_mainWindow(object):
         self.menuOptions.addAction(self.actionOptionVerbose)
         self.menuOptions.addSeparator()
         self.menuOptions.addAction(self.actionPreferences)
+        self.menuOptions.addSeparator()
+        self.menuOptions.addAction(self.actionInstallCLI)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuOptions.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
@@ -273,6 +277,7 @@ class Ui_mainWindow(object):
         self.actionSave.setShortcut(QtGui.QApplication.translate("mainWindow", "Ctrl+S", None, QtGui.QApplication.UnicodeUTF8))
         self.actionHelp.setText(QtGui.QApplication.translate("mainWindow", "Documentation", None, QtGui.QApplication.UnicodeUTF8))
         self.actionValidation.setText(QtGui.QApplication.translate("mainWindow", "DTD Validation", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionInstallCLI.setText(QtGui.QApplication.translate("mainWindow", "Install command-line utility", None, QtGui.QApplication.UnicodeUTF8))
 
 from editor import LinedEditor
 import assets_rc

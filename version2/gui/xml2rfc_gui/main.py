@@ -16,8 +16,10 @@ import ui_mainwindow
 import ui_about
 import ui_report
 import ui_help
+import ui_install_cli
 
-# My modules    
+# My modules
+import utils    
 from settings import Settings
 from backend import XmlRfcHandler
 from utils import Status
@@ -27,6 +29,7 @@ import doc
 # Python
 import os
 import sys
+import subprocess
 import lxml
 
 ICON_DEFAULT    = QStyle.SP_FileIcon
@@ -114,6 +117,7 @@ class MainWindow(QMainWindow):
         self.connect(self.ui.actionAboutQt, SIGNAL('triggered()'),  self.showAboutQt)
         self.connect(self.ui.actionOpen,    SIGNAL('triggered()'),  self.openFile)
         self.connect(self.ui.actionSave,    SIGNAL('triggered()'),  self.saveFile)
+        self.connect(self.ui.actionInstallCLI, SIGNAL('triggered()'), self.installCLI)
         self.connect(self.ui.actionPreferences, SIGNAL('triggered()'),
                      self.settings.showPreferences)
 
@@ -155,6 +159,80 @@ class MainWindow(QMainWindow):
                 self.ui.sourceLabel.setText(path)
                 self.deleteTabs()
                 self.viewDocument(self.handler.XML, path)
+        
+        # Hide any actions based on platform
+        if debug or not 'darwin' in sys.platform:
+            self.ui.actionInstallCLI.setEnabled(False)
+
+    def installCLI(self):
+        """ Install a local system symlink to the xml2rfc-cli.py script """
+        if 'darwin' in sys.platform: 
+            self.installCLI_OSX()
+
+    def installCLI_OSX(self):
+        # First, we check to see if xml2rfc already exists on path
+        for path in os.environ.get('PATH', '').split(os.pathsep):
+            bin = os.path.join(path, 'xml2rfc')
+            if os.path.exists(bin) and os.access(bin, os.X_OK):
+                if not QMessageBox.question(self, "Install command-line utility", 
+                "The program 'xml2rfc' was already found on your PATH at "
+                "'%s'.  Would you like to continue installing the new script "
+                "anyway?" % bin, "No", "Yes"):
+                    return
+                break
+        
+        # Prompt the location selection dialog
+        dlg = QDialog(self)
+        dlg.ui = ui_install_cli.Ui_Dialog()
+        dlg.ui.setupUi(dlg)
+        def set_other_dir():
+            dlg.ui.other.setChecked(True)
+            dir = QFileDialog.getExistingDirectory(caption='Select install location')
+            if dir:
+                dlg.ui.otherButton.setText(dir)
+        self.connect(dlg.ui.otherButton, SIGNAL('clicked()'), set_other_dir)
+        self.connect(dlg.ui.other, SIGNAL('clicked()'), set_other_dir)
+        dlg.exec_()
+        if dlg.ui.user.isChecked():
+            install_path = os.path.expanduser('~/bin')
+        elif dlg.ui.system.isChecked():
+            install_path = os.path.expanduser('/usr/local/bin')
+        elif dlg.ui.other.isChecked():
+            install_path = os.path.expanduser(str(dlg.ui.otherButton.text()))
+        
+        if not os.path.isabs(install_path):
+            QMessageBox.critical(self, 'Error', 'You must enter an absolute path.')
+            return
+        
+        # Check existence of directory
+        if not os.path.exists(install_path):
+            try:
+                os.makedirs(install_path)
+            except OSError:
+                QMessageBox.critical(self, 'Error', "Unable to create directory: '%s'" % install_path)
+
+        # Check write permissions and install script
+        src = os.path.join(os.path.dirname(sys.executable), 'xml2rfc-cli')
+        dst = os.path.join(install_path, 'xml2rfc')
+        if os.path.exists(dst) and os.path.isdir(dst):
+            QMessageBox.critical(self, 'Error', "Destination is a directory: '%s'" % dst)
+            return False
+        try:
+            os.symlink(src, dst)
+        except OSError:
+            try:
+                os.remove(dst)
+                os.symlink(src, dst)
+            except OSError:
+                # Must rm -rf as root, and then install as root
+                if utils.osxSudo('rm -rf %s && ln -s %s %s' % (dst, src, dst)) > 0:
+                    dst = None  # Failure
+
+        # Print success message
+        if dst:
+            QMessageBox.information(self, 'Success!', "The command-line script xml2rfc was installed to "
+            "'%s'" % dst)
+        
 
     def lockWidgets(self):
         """ Disables interaction with all widgets in lockable list """

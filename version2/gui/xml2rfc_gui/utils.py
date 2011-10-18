@@ -1,5 +1,6 @@
 """ Utility classes and functions """
 import os
+import subprocess
 
 # PyQT modules
 from PyQt4.QtCore import *
@@ -14,6 +15,10 @@ def getDirectorySize(dir):
                 size += os.path.getsize(os.path.join(path, file))
     return size
 
+
+def osxSudo(cmd):
+    """ Run arbitrary unix as an apple shellscript that prompts for sudo """
+    return subprocess.call(['osascript', '-e', 'do shell script "%s" with administrator privileges' % cmd])
 
 class Status:
     """ Simple message stack for a QStatusBar """
