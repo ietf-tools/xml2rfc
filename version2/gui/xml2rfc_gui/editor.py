@@ -41,8 +41,8 @@ class LinedEditor(QPlainTextEdit):
                      self.updateLineAreaWidth)
         self.connect(self, SIGNAL('updateRequest(QRect, int)'), \
                      self.updateLineArea)
-#        self.connect(self, SIGNAL('cursorPositionChanged()'), \
-#                     self.highlightCurrentLine)
+        # self.connect(self, SIGNAL('cursorPositionChanged()'), \
+                     # self.highlightCurrentLine)
         
         # Initialize
         self.updateLineAreaWidth(0)

@@ -1,6 +1,6 @@
 # Main module for xml2rfc-gui
 
-VERSION = (0, 7, 6)
+VERSION = (0, 7, 7)
 
 # xml2rfc module
 import xml2rfc
