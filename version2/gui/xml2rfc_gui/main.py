@@ -223,7 +223,9 @@ class MainWindow(QMainWindow):
             try:
                 os.makedirs(install_path)
             except OSError:
-                QMessageBox.critical(self, 'Error', "Unable to create directory: '%s'" % install_path)
+                if utils.osxSudo('mkdir -p %s' % install_path) > 0:
+                    QMessageBox.critical(self, 'Error', "Unable to create directory: '%s'" % install_path)
+                    return
 
         # Check write permissions and install script
         src = os.path.join(os.path.dirname(sys.executable), 'xml2rfc-cli')
