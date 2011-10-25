@@ -119,13 +119,17 @@ class XmlRfcHandler(QThread):
                              self.NROFF: '.nroff' }[format]
                     outpath = os.path.join(output_dir, basename + ext)
                     # Run the writer
-                    if format == self.HTML:
-                        writer = xml2rfc.HtmlRfcWriter(self.xmlrfc, templates_dir=self.templates_dir)
-                    else:
-                        writer = self.writerClasses[format](self.xmlrfc)
-                    writer.write(outpath)
-                    # Signal UI to load the output
-                    self.emit(SIGNAL('viewDocument(int, QString)'), format, outpath)
+                    try:
+                        if format == self.HTML:
+                            writer = xml2rfc.HtmlRfcWriter(self.xmlrfc, templates_dir=self.templates_dir)
+                        else:
+                            writer = self.writerClasses[format](self.xmlrfc)
+                        writer.write(outpath)
+                        # Signal UI to load the output
+                        self.emit(SIGNAL('viewDocument(int, QString)'), format, outpath)
+                    except xml2rfc.RfcWriterError, error:
+                        xml2rfc.log.error('Unable to convert the document: ' + path,  
+                                          '\n  ' + error.msg)
                 self.emit(SIGNAL('finished(int)'), format)
 
     def deleteCache(self, path):
@@ -150,7 +154,7 @@ class XmlRfcHandler(QThread):
         self.signalStatus('Parsing XML document ' + path + '...')
         try:        
             self.xmlrfc = parser.parse()
-        except (lxml.etree.XMLSyntaxError, xml2rfc.parser.XmlReferenceError), error:
+        except (lxml.etree.XMLSyntaxError, xml2rfc.parser.XmlRfcError), error:
             xml2rfc.log.error('Unable to parse the XML document: ' + path + '\n')
             # Signal UI with error
             linestr = error.position[0] > 0 and 'Line ' + str(error.position[0]) + ': ' \
