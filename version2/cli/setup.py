@@ -8,7 +8,7 @@ from setuptools import setup
 setup(
     # Package metadata
     name='xml2rfc',
-    version='2.3.2',
+    version='2.3.3',
     description='Validate and convert XML RFC documents to various output ' \
                   'formats',
     author='Concentric Sky',
@@ -30,5 +30,5 @@ setup(
     package_data={'xml2rfc': ['templates/*',
                               ]},
                  
-    install_requires=['lxml>=2.3'],
+    install_requires=['lxml>=2.2.8'],
 )

@@ -10,8 +10,8 @@
 """
 
 import sys
+import parser
 
-warn_error = False
 quiet = False
 write_out = sys.stdout
 write_err = sys.stderr
@@ -30,12 +30,9 @@ def write(*args):
 
 
 def warn(*args):
-    """ Prints a warning message, throw exception if warn_error is set """
-    msg = 'WARNING: ' + ' '.join(args)
-    if warn_error:
-        raise Exception('Execution halted at a warning:\n' + msg)
-    elif not quiet:
-        write_err.write(msg)
+    """ Prints a warning message nuless quiet """
+    if not quiet:
+        write_err.write('WARNING: ' + ' '.join(args))
         write_err.write('\n')
 
 

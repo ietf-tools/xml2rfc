@@ -11,11 +11,14 @@ import shutil
 import xml2rfc.log
 from urlparse import urlparse, urljoin
 
-__all__ = ['XmlRfcParser', 'XmlRfc', 'XmlReferenceError']
+__all__ = ['XmlRfcParser', 'XmlRfc', 'XmlRfcError']
 
 
-class XmlReferenceError(Exception):
-    """ Exception class for the custom entity resolution algorithm """
+class XmlRfcError(Exception):
+    """ Application XML errors with positional information
+    
+        This class attempts to mirror the API of lxml's error class
+    """
     def __init__(self, msg, line_no=0):
         self.msg = msg
         # This mirrors lxml error behavior, but we can't capture column
@@ -224,7 +227,7 @@ class CachingResolver(lxml.etree.Resolver):
                                  'will cause xml2rfc to look for the file '
                                  'automatically in standard locations.')
             # Couldn't resolve.  Throw an exception
-            error = XmlReferenceError('Unable to resolve external request: '
+            error = XmlRfcError('Unable to resolve external request: '
                                       + '"' + original + '"', line_no=line_no)
             if self.verbose and len(attempts) > 1:
                 # Reveal attemps

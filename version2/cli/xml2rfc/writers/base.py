@@ -38,6 +38,12 @@ class _IrefItem:
         self.anchor = anchor
 
 
+class RfcWriterError(Exception):
+    """ Exception class for errors during document writing """
+    def __init__(self, msg):
+        self.msg = msg
+
+
 class BaseRfcWriter:
     """ Base class for all writers
 
@@ -102,7 +108,8 @@ class BaseRfcWriter:
         'Distribution of this memo is unlimited.'
     boilerplate['expiration_text'] = \
         'This Internet-Draft will expire on %s.'
-    boilerplate['ipr_trust200902'] = \
+    boilerplate['ipr'] = {}
+    boilerplate['ipr']['trust200902'] = \
        ['This Internet-Draft is submitted in full conformance with the ' \
        'provisions of BCP 78 and BCP 79.', \
 
@@ -115,21 +122,18 @@ class BaseRfcWriter:
        'and may be updated, replaced, or obsoleted by other documents at any ' \
        'time.  It is inappropriate to use Internet-Drafts as reference ' \
        'material or to cite them other than as "work in progress."']
-    boilerplate['ipr_noModificationTrust200902'] = \
-        copy.copy(boilerplate['ipr_trust200902'])
-    boilerplate['ipr_noModificationTrust200902'].append( \
+    boilerplate['ipr']['noModificationTrust200902'] = copy.copy(boilerplate['ipr']['trust200902'])
+    boilerplate['ipr']['noModificationTrust200902'].append( \
         'This document may not be modified, and derivative works of it may ' \
         'not be created, except to format it for publication as an RFC or ' \
         'to translate it into languages other than English.')
-    boilerplate['ipr_noDerivativesTrust200902'] = \
-        copy.copy(boilerplate['ipr_trust200902'])
-    boilerplate['ipr_noDerivativesTrust200902'].append( \
+    boilerplate['ipr']['noDerivativesTrust200902'] = copy.copy(boilerplate['ipr']['trust200902'])
+    boilerplate['ipr']['noDerivativesTrust200902'].append( \
         'This document may not be modified, and derivative works of it may ' \
         'not be created, and it may not be published except as an ' \
         'Internet-Draft.')
-    boilerplate['ipr_pre5378Trust200902'] = \
-        copy.copy(boilerplate['ipr_trust200902'])
-    boilerplate['ipr_pre5378Trust200902'].append( \
+    boilerplate['ipr']['pre5378Trust200902'] = copy.copy(boilerplate['ipr']['trust200902'])
+    boilerplate['ipr']['pre5378Trust200902'].append( \
         'This document may contain material from IETF Documents or IETF ' \
         'Contributions published or made publicly available before ' \
         'November 10, 2008. The person(s) controlling the copyright in some ' \
@@ -576,15 +580,16 @@ class BaseRfcWriter:
             category = self.r.attrib.get('category', 'none')
             self.write_heading('Status of this Memo', autoAnchor='rfc.status')
             if not self.draft:
-                self.write_paragraph(BaseRfcWriter.boilerplate.get \
+                self.write_paragraph(self.boilerplate.get \
                                      ('status_' + category, ''))
             else:
                 # Use value of ipr to determine text
                 ipr = self.r.attrib.get('ipr', 'trust200902')
-                ipr_boiler = BaseRfcWriter.boilerplate.get('ipr_'+ipr, None)
+                ipr_boiler = self.boilerplate['ipr'].get(ipr, None)
                 if not ipr_boiler:
-                    xml2rfc.log.warn('unable to find a status boilerplate for ' \
-                                     'ipr: ' + ipr)
+                    raise RfcWriterError('No boilerplate text available for '
+                    'ipr: \'%s\'.  Acceptable values are: ' % ipr + \
+                    ', '.join(self.boilerplate['ipr'].keys()))
                 else:
                     for par in ipr_boiler:
                         self.write_paragraph(par)
