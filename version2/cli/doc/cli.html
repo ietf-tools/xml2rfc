@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Command Line Application &mdash; xml2rfc v2.2.5 documentation</title>
+    <title>Command Line Application &mdash; xml2rfc v2.3.3 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.2.5',
+        VERSION:     '2.3.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="xml2rfc v2.2.5 documentation" href="index.html" />
+    <link rel="top" title="xml2rfc v2.3.3 documentation" href="index.html" />
     <link rel="next" title="Graphical Appplication" href="gui.html" />
     <link rel="prev" title="Xml2rfc Documentation" href="index.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="index.html" title="Xml2rfc Documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">xml2rfc v2.2.5 documentation</a> &raquo;</li> 
+        <li><a href="index.html">xml2rfc v2.3.3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -74,7 +74,7 @@ of user site-packages by specifying the flag <tt class="docutils literal"><span 
 specify a directory on your PATH to install the xml2rfc executable to.  For
 example, the following command:</p>
 <blockquote>
-<div><tt class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span> <span class="pre">--user</span> <span class="pre">--install-scripts=$HOME/</span></tt></div></blockquote>
+<div><tt class="docutils literal"><span class="pre">$</span> <span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span> <span class="pre">--user</span> <span class="pre">--install-scripts=$HOME/bin</span></tt></div></blockquote>
 <p>will install the xml2rfc library and data to your local site-packages
 directory, and an executable python script <tt class="docutils literal"><span class="pre">xml2rfc</span></tt> to $HOME/bin.</p>
 <p>The option <tt class="docutils literal"><span class="pre">--prefix</span></tt> allows you to specify the base path for all
@@ -119,25 +119,23 @@ of all available options by running:</p>
 </tr>
 <tr><td><tt class="docutils literal"><span class="pre">-q</span></tt></td>
 <td><tt class="docutils literal"><span class="pre">--quiet</span></tt></td>
-<td>dont print anything`</td>
+<td>dont print anything</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">-w</span></tt></td>
-<td><tt class="docutils literal"><span class="pre">--warn-error</span></tt></td>
-<td>treat warnings as python exceptions.</td>
+<tr><td><tt class="docutils literal"><span class="pre">-c</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--cache</span></tt></td>
+<td>specify an alternate cache directory to write to</td>
 </tr>
-<tr><td><tt class="docutils literal"><span class="pre">-e</span></tt></td>
-<td><tt class="docutils literal"><span class="pre">--extcss</span></tt></td>
-<td>write an external link to the stylesheet instead
-of expanding it.</td>
-</tr>
-<tr><td><tt class="docutils literal"><span class="pre">-c</span> <span class="pre">CSS</span></tt></td>
-<td><tt class="docutils literal"><span class="pre">--css=CSS</span></tt></td>
-<td>specify an alternate css file (ignored if
-html format is not enabled)</td>
+<tr><td><tt class="docutils literal"><span class="pre">-n</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--no-dtd</span></tt></td>
+<td>disable DTD validation step</td>
 </tr>
 <tr><td><tt class="docutils literal"><span class="pre">-d</span> <span class="pre">DTD</span></tt></td>
 <td><tt class="docutils literal"><span class="pre">--dtd=DTD</span></tt></td>
 <td>specify an alternate dtd file</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">-b</span> <span class="pre">BASENAME</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--basename=BASENAME</span></tt></td>
+<td>specify the base name for output files</td>
 </tr>
 <tr><td><tt class="docutils literal"><span class="pre">-f</span> <span class="pre">FILENAME</span></tt></td>
 <td><tt class="docutils literal"><span class="pre">--filename=FILENAME</span></tt></td>
@@ -184,15 +182,15 @@ will default to paginated text (<tt class="docutils literal"><span class="pre">-
 <td>outputs to an html file</td>
 </tr>
 <tr><td><tt class="docutils literal"><span class="pre">--exp</span></tt></td>
-<td>outputs to an XML file with all references expanded.</td>
+<td>outputs to an XML file with all references expanded</td>
 </tr>
 </tbody>
 </table>
 </dd>
 <dt><strong>Examples</strong></dt>
 <dd><div class="first last line-block">
-<div class="line"><tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">rfc.xml</span> <span class="pre">--text</span></tt></div>
-<div class="line"><tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">draft.xml</span> <span class="pre">-c</span> <span class="pre">alt.css</span> <span class="pre">-d</span> <span class="pre">alt.dtd</span> <span class="pre">-f</span> <span class="pre">&quot;Draft-1.0&quot;</span> <span class="pre">--text</span> <span class="pre">--nroff</span> <span class="pre">--html</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">draft.xml</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">draft.xml</span> <span class="pre">--dtd=alt.dtd</span> <span class="pre">--basename=draft-1.0</span> <span class="pre">--text</span> <span class="pre">--nroff</span> <span class="pre">--html</span></tt></div>
 </div>
 </dd>
 </dl>
@@ -257,7 +255,7 @@ will default to paginated text (<tt class="docutils literal"><span class="pre">-
         <li class="right" >
           <a href="index.html" title="Xml2rfc Documentation"
              >previous</a> |</li>
-        <li><a href="index.html">xml2rfc v2.2.5 documentation</a> &raquo;</li> 
+        <li><a href="index.html">xml2rfc v2.3.3 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

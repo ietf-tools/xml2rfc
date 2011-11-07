@@ -25,7 +25,7 @@ You can additionally combine the flag ``--install-scripts`` with ``--user`` to
 specify a directory on your PATH to install the xml2rfc executable to.  For
 example, the following command:
 
-    ``$ python setup.py install --user --install-scripts=$HOME/``
+    ``$ python setup.py install --user --install-scripts=$HOME/bin``
 
 will install the xml2rfc library and data to your local site-packages
 directory, and an executable python script ``xml2rfc`` to $HOME/bin.
@@ -61,13 +61,11 @@ Official Usage: ``xml2rfc SOURCE [options] FORMATS...``
     ===============  ======================= ==================================================
     ``-h``           ``--help``              show the help message and exit
     ``-v``           ``--verbose``           print extra information
-    ``-q``           ``--quiet``             dont print anything`
-    ``-w``           ``--warn-error``        treat warnings as python exceptions.
-    ``-e``           ``--extcss``            write an external link to the stylesheet instead 
-                                             of expanding it.
-    ``-c CSS``       ``--css=CSS``           specify an alternate css file (ignored if 
-                                             html format is not enabled)
+    ``-q``           ``--quiet``             dont print anything
+    ``-c``           ``--cache``             specify an alternate cache directory to write to
+    ``-n``           ``--no-dtd``            disable DTD validation step
     ``-d DTD``       ``--dtd=DTD``           specify an alternate dtd file
+    ``-b BASENAME``  ``--basename=BASENAME`` specify the base name for output files
     ``-f FILENAME``  ``--filename=FILENAME`` specify an output filename
     (none)           ``--clear-cache``       purge the cache and exit
     (none)           ``--version``           display the version number and exit
@@ -87,10 +85,10 @@ Official Usage: ``xml2rfc SOURCE [options] FORMATS...``
     ``--text``      outputs to a text file with proper page breaks
     ``--nroff``     outputs to an nroff file
     ``--html``      outputs to an html file
-    ``--exp``       outputs to an XML file with all references expanded.
+    ``--exp``       outputs to an XML file with all references expanded
     ===========     ============================================================
 
 
 **Examples**
-    | ``xml2rfc rfc.xml --text``
-    | ``xml2rfc draft.xml -c alt.css -d alt.dtd -f "Draft-1.0" --text --nroff --html``
+    | ``xml2rfc draft.xml``
+    | ``xml2rfc draft.xml --dtd=alt.dtd --basename=draft-1.0 --text --nroff --html``
