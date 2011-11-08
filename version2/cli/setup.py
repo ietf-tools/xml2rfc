@@ -11,6 +11,7 @@ setup(
     version='2.3.3',
     description='Validate and convert XML RFC documents to various output ' \
                   'formats',
+    long_description=open('README.rst').read(),
     author='Concentric Sky',
     author_email='tools-discuss@ietf.org',
     url='http://tools.ietf.org/',
