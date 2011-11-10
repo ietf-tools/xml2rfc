@@ -8,7 +8,7 @@ from setuptools import setup
 setup(
     # Package metadata
     name='xml2rfc',
-    version='2.3.3',
+    version='2.3.4',
     description='Validate and convert XML RFC documents to various output ' \
                   'formats',
     long_description=open('README.rst').read(),

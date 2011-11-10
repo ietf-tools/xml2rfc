@@ -648,9 +648,11 @@ class RawTextRfcWriter(BaseRfcWriter):
         matrix.append([])
         row = 0
         column_aligns = []
+        ttcol_width_attrs = []
         for ttcol in table.findall('ttcol'):
             column_aligns.append(ttcol.attrib.get('align',
                                                   self.defaults['ttcol_align']))
+            ttcol_width_attrs.append(ttcol.attrib.get('width', ''))
             if ttcol.text:
                 matrix[row].append(ttcol.text)
             else:
@@ -668,18 +670,77 @@ class RawTextRfcWriter(BaseRfcWriter):
                 text += inline_text
             matrix[row].append(text)
 
-        # Find the longest line in each column, and define column widths
+        # Get table style and determine maximum width of table
+        style = table.attrib.get('style', self.defaults['table_style'])
+        if style == 'none':
+            table_max_chars = self.width - 3
+        elif style == 'headers':
+            table_max_chars = self.width - 3 - num_columns + 1
+        else:
+            table_max_chars = self.width - 3 - 3 * num_columns - 1  # indent+border
+
+        # Find the longest line and longest word in each column
         longest_lines = [0] * num_columns
+        longest_words = [0] * num_columns
         for col in range(num_columns):
             for row in matrix:
-                if col < len(row) and len(row[col]) > longest_lines[col]:
-                    longest_lines[col] = len(row[col])
-        max_width = self.width - 3 - 3 * num_columns - 1  # indent+border
-        total_length = reduce(lambda x, y: x + y, longest_lines)
+                if col < len(row) and len(row[col]) > 0:  # Column exists
+                    # Longest line
+                    if len(row[col]) > longest_lines[col]:
+                        longest_lines[col] = len(row[col])
+                    # Longest word
+                    word = max(row[col].split(), key=len)
+                    if len(word) > longest_words[col]:
+                        longest_words[col] = len(word)
+        
+        # If longest_lines sum exceeds max width, apply weighted algorithm
+        if sum(longest_lines) > table_max_chars:
+            # Determine weights for each column.  If any ttcol has a width attribute
+            # then we can determine all weights based on that.  Otherwise, apply
+            # a custom algorithm
+            column_weights = [None] * num_columns
+            for i, width in enumerate(ttcol_width_attrs):
+                try:
+                    int_width = int(width)
+                    if 0 < int_width < 100:
+                        column_weights[i] = int_width / 100.0
+                except ValueError:
+                    pass
+            spec_weights = filter(bool, column_weights)
+            if 0 < len(spec_weights) < num_columns:
+                # Use explicit weights and divvy remaining equally
+                avg = (1 - sum(spec_weights)) /  num_columns - len(spec_weights)
+                for i, weight in enumerate(column_weights):
+                    if not weight:
+                        column_weights[i] = avg
+            elif len(spec_weights) == 0:
+                # Determine weights programatically.  First, use the longest word of
+                # each column as its minimum width.  If this sum exceeds max, cut
+                # each column from high to low until they all fit, and use those as
+                # weights.  Else, use longest_lines to fill in weights.
+                if sum(longest_words) > table_max_chars:
+                    column_weights = map(lambda x: float(x) / sum(longest_words), longest_words)
+                else:
+                    column_weights = map(lambda x: float(x) / table_max_chars, longest_words)
+                    remainder = 1 - sum(column_weights)
+                    for i, weight in enumerate(column_weights):
+                        column_weights[i] += remainder * \
+                                             (float(longest_lines[i]) / sum(longest_lines))
+            else:
+                # Weights given for all TTCOLs, nothing to do
+                pass
 
-        if total_length > max_width:
-            scale = float(max_width) / float(total_length)
-            column_widths = [int(length * scale) for length in longest_lines]
+            # Compile column widths and correct floating point error
+            column_widths = map(lambda x: int(x * table_max_chars), column_weights)
+            while(sum(column_widths) < table_max_chars):
+                broken = False
+                for i, wordlen in enumerate(longest_words):
+                    if (column_widths[i] - wordlen) % 2 == 1:
+                        column_widths[i] += 1
+                        broken = True
+                        break
+                if not broken:
+                    column_widths[column_widths.index(min(column_widths))] += 1
         else:
             column_widths = longest_lines
 
@@ -689,7 +750,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 column_widths[i] = 1
                 xml2rfc.log.warn('Table column width was forced to 1 from 0,' \
                                  ' it may exceed the page width.')
-
+        
         # Now construct the cells using textwrap against column_widths
         cell_lines = [
             [
@@ -699,9 +760,10 @@ class RawTextRfcWriter(BaseRfcWriter):
         ]
 
         output = []
-        style = table.attrib.get('style', self.defaults['table_style'])
         # Create the border
-        if style == 'headers':
+        if style == 'none':
+            pass
+        elif style == 'headers':
             borderstring = []
             for i in range(num_columns):
                 borderstring.append('-' * column_widths[i])
@@ -712,10 +774,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                 borderstring.append('-' * (column_widths[i] + 2))
                 borderstring.append('+')
             output.append(''.join(borderstring))
+
         # Draw the table
         for i, cell_line in enumerate(cell_lines):
             for row in range(max(map(len, cell_line))):
-                if style == 'headers':
+                if style == 'headers' or style == 'none':
                     line = ['']
                 else:
                     line = ['|']
@@ -729,7 +792,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                             text = cell[row].rjust(width)
                         else:  # align == left
                             text = cell[row].ljust(width)
-                        if style == 'headers':
+                        if style == 'headers' or style == 'none':
                             line.append(text)
                             line.append(' ')
                         else:
@@ -737,16 +800,16 @@ class RawTextRfcWriter(BaseRfcWriter):
                             line.append(text)
                             line.append(' |')
                     else:
-                        if style == 'headers':
+                        if style == 'headers' or style == 'none':
                             line.append(' ' * (column_widths[col] + 1))
                         else:
                             line.append(' ' * (column_widths[col] + 2) + '|')
                 output.append(''.join(line))
-            if i == 0:
+            if i == 0 and style != 'none':
                 # This is the header row, append the header decoration
                 output.append(''.join(borderstring))
 
-        if style != 'headers':
+        if not (style == 'headers' or style == 'none'):
             output.append(''.join(borderstring))
 
         # Finally, write the table to the buffer with proper alignment
