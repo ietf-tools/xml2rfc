@@ -26,10 +26,17 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.heading_marks = {}
         self.paged_toc_marker = 0
 
-    def _make_footer(self, page):
-        return xml2rfc.utils.justify_inline(self.left_footer, \
-                                            self.center_footer, \
-                                            '[Page ' + str(page) + ']')
+    def _make_footer_and_header(self, page, final=False):
+        tmp = []
+        tmp.append(xml2rfc.utils.justify_inline(self.left_footer,
+                                                self.center_footer,
+                                                '[Page ' + str(page) + ']'))
+        if not final:
+            tmp.append('\f')
+            tmp.append(xml2rfc.utils.justify_inline(self.left_header,
+                                                    self.center_header,
+                                                    self.right_header))
+        return '\n'.join(tmp)
 
     # Here we override some methods to mark line numbers for large sections.
     # We'll store each marking as a hash of line_num: section_length.  This way
@@ -99,7 +106,11 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 self.left_footer += surname + ' & '
             else:
                 self.left_footer += surname
-        self.center_footer = self.r.attrib.get('category', '(Category)')
+        if self.draft:
+            self.center_footer = 'Expires %s' % self.expire_string
+        else:
+            self.center_footer = self.boilerplate.get(
+                                 self.r.attrib.get('category', ''), '(Category')
 
         # Check for PI override
         self.center_footer = self.pis.get('footer', self.center_footer)
@@ -107,12 +118,6 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
 
     def post_processing(self):
         """ Add paging information to a secondary buffer """
-
-        # Construct header
-        header = xml2rfc.utils.justify_inline(self.left_header,
-                                              self.center_header,
-                                              self.right_header)
-
         # Counters    
         current_page_length = 0
         current_page_number = 1
@@ -120,9 +125,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
 
         def insertFooterAndHeader():
             self.output.append('')
-            self.output.append(self._make_footer(current_page_number))
-            self.output.append('\f')
-            self.output.append(header)
+            self.output.append(self._make_footer_and_header(current_page_number))
             self.output.append('')
 
         # Maintain a list of (start, end) pointers for elements to re-insert
@@ -216,7 +219,8 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         # Write final footer
         remainder = max_page_length - current_page_length
         self.output.extend([''] * remainder)
-        self.output.extend(['', self._make_footer(current_page_number)])
+        self.output.extend(['', self._make_footer_and_header(current_page_number,
+                                                             final=True)])
         
         # Now we need to go back into the buffer and insert the real table 
         # of contents and iref based on the pointers we created

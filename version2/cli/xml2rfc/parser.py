@@ -464,48 +464,6 @@ class XmlRfc:
             if element.tag is lxml.etree.PI:
                 self.parse_pi(element)
             element = element.getprevious()
-    
+
     def _format_whitespace(self):
-        """ Traverse the document tree and properly format whitespace
-        
-            We replace newlines with single spaces, unless it ends with a
-            period then we replace the newline with two spaces.
-        """
-        for element in self.getroot().iter():
-            # Preserve formatting on artwork
-            if element.tag != 'artwork':
-                if element.text is not None:
-                    element.text = re.sub('\s*\n\s*', ' ', \
-                                   re.sub('\.\s*\n\s*', '.  ', \
-                                   element.text.lstrip()))
-
-                if element.tail is not None:
-                    element.tail = re.sub('\s*\n\s*', ' ', \
-                                   re.sub('\.\s*\n\s*', '.  ', \
-                                   element.tail))
-
-    def replaceUnicode(self):
-        """ Traverses the RFC tree and replaces unicode characters with the
-            proper equivalents specified in rfc2629-xhtml.ent.
-
-            Writers should call this method if the entire RFC document needs to
-            be ascii formatted
-        """
-        root = self.getroot()
-        for element in root.iter():
-            if element.text:
-                try:
-                    element.text = element.text.encode('ascii')
-                except UnicodeEncodeError:
-                    element.text = xml2rfc.utils.replace_unicode(element.text)
-            if element.tail:
-                try:
-                    element.tail = element.tail.encode('ascii')
-                except UnicodeEncodeError:
-                    element.tail = xml2rfc.utils.replace_unicode(element.tail)
-            for key in element.attrib.keys():
-                try:
-                    element.attrib[key] = element.attrib[key].encode('ascii')
-                except UnicodeEncodeError:
-                    element.attrib[key] = \
-                    xml2rfc.utils.replace_unicode(element.attrib[key])
+        xml2rfc.utils.formatXmlWhitespace(self.getroot())

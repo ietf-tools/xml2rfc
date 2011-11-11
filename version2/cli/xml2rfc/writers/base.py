@@ -8,7 +8,7 @@ import string
 import datetime
 import lxml
 import xml2rfc.log
-
+import xml2rfc.utils
 
 class _RfcItem:
     """ A unique ID object for an anchored RFC element.
@@ -183,6 +183,25 @@ class BaseRfcWriter:
 
         # Set flag for draft
         self.draft = bool(not self.r.attrib.get('number'))
+
+        # Grab any useful global data from document
+        if self.draft:
+            # Create the expiration date as published date + six months
+            date = self.r.find('front/date')
+            if date is not None:
+                month = date.attrib.get('month', '')
+                year = date.attrib.get('year', '')
+                if month and year:
+                    try:
+                        start_date = datetime.datetime.strptime(month + year, \
+                                                                '%B%Y')
+                        expire_date = start_date + datetime.timedelta(6 * 30 + 15)
+                        self.expire_string = expire_date.strftime('%B %d, %Y')
+                    except ValueError:
+                        pass
+                elif not year:
+                    # Warn about no date
+                    xml2rfc.log.warn('No date specified for document.')
         
         # Used for two-pass indexing
         self.indexmode = False
@@ -296,23 +315,6 @@ class BaseRfcWriter:
             lines.append('Request for Comments: ' + rfcnumber)
         else:
             lines.append('Internet-Draft')
-            # Create the expiration date as published date + six months
-            date = self.r.find('front/date')
-            if date is not None:
-                month = date.attrib.get('month', '')
-                year = date.attrib.get('year', '')
-                if month and year:
-                    try:
-                        start_date = datetime.datetime.strptime(month + year, \
-                                                                '%B%Y')
-                        expire_date = start_date + datetime.timedelta(6 * 30 + 15)
-                        self.expire_string = expire_date.strftime('%B %d, %Y')
-                    except ValueError:
-                        pass
-                elif not year:
-                    # Warn about no date
-                    xml2rfc.log.warn('No date specified for document.')
-
         updates = self.r.attrib.get('updates', self.defaults['updates'])
         if updates:
             lines.append('Updates: ' + updates)
@@ -533,6 +535,43 @@ class BaseRfcWriter:
         if count_str == '' and appendix == False:
             self.ref_start = s_count
 
+    def _write_status_section(self):
+        """ Writes the 'Status of this Memo' section """
+
+        category = self.r.attrib.get('category', 'none')
+        self.write_heading('Status of this Memo', autoAnchor='rfc.status')
+        if not self.draft:
+            self.write_paragraph(self.boilerplate.get \
+                                 ('status_' + category, ''))
+        else:
+            # Use value of ipr to determine text
+            ipr = self.r.attrib.get('ipr', 'trust200902')
+            ipr_boiler = self.boilerplate['ipr'].get(ipr, None)
+            if not ipr_boiler:
+                raise RfcWriterError('No boilerplate text available for '
+                'ipr: \'%s\'.  Acceptable values are: ' % ipr + \
+                ', '.join(self.boilerplate['ipr'].keys()))
+            else:
+                for par in ipr_boiler:
+                    self.write_paragraph(par)
+        
+        # Write expiration string, if it was generated
+        if self.expire_string:
+            self.write_paragraph( \
+                self.boilerplate['expiration_text'] % self.expire_string)
+    
+    def _write_copyright(self):
+        """ Writes the 'Copyright' section """
+
+        self.write_heading('Copyright Notice', autoAnchor='rfc.copyrightnotice')
+        date = self.r.find('front/date')
+        if date is not None:
+            year = self.r.find('front/date').attrib.get('year', '')
+            self.write_paragraph(self.boilerplate['base_copyright'] % year)
+        if self.draft:
+            self.write_paragraph(self.boilerplate['draft_copyright'])
+
+
     def _run(self, indexmode=False):
         self.indexmode = indexmode
         # Reset document counters
@@ -575,39 +614,13 @@ class BaseRfcWriter:
                 self.write_heading(note.attrib.get('title', 'Note'))
                 for t in note.findall('t'):
                     self.write_t_rec(t)
-
-            # Status
-            category = self.r.attrib.get('category', 'none')
-            self.write_heading('Status of this Memo', autoAnchor='rfc.status')
-            if not self.draft:
-                self.write_paragraph(self.boilerplate.get \
-                                     ('status_' + category, ''))
-            else:
-                # Use value of ipr to determine text
-                ipr = self.r.attrib.get('ipr', 'trust200902')
-                ipr_boiler = self.boilerplate['ipr'].get(ipr, None)
-                if not ipr_boiler:
-                    raise RfcWriterError('No boilerplate text available for '
-                    'ipr: \'%s\'.  Acceptable values are: ' % ipr + \
-                    ', '.join(self.boilerplate['ipr'].keys()))
-                else:
-                    for par in ipr_boiler:
-                        self.write_paragraph(par)
             
-            # Write expiration string, if it was generated
-            if self.expire_string:
-                self.write_paragraph( \
-                    self.boilerplate['expiration_text'] % self.expire_string)
+            # "Status of this Memo" section
+            self._write_status_section()
 
-            # Copyright
-            self.write_heading('Copyright Notice', autoAnchor='rfc.copyrightnotice')
-            date = self.r.find('front/date')
-            if date is not None:
-                year = self.r.find('front/date').attrib.get('year', '')
-                self.write_paragraph(self.boilerplate['base_copyright'] % year)
-            if self.draft:
-                self.write_paragraph(self.boilerplate['draft_copyright'])
-    
+            # Copyright section
+            self._write_copyright()
+
             # Insert the table of contents marker at this position
             toc_enabled = self.pis.get('toc', 'no')
             if toc_enabled == 'yes':
@@ -687,8 +700,8 @@ class BaseRfcWriter:
         """ Public method to write the RFC document to a file. """
         # If the ascii flag is enabled, replace unicode with ascii in the tree
         if self.ascii:
-            self.xmlrfc.replaceUnicode()
-        
+            xml2rfc.utils.safeReplaceUnicode(self.r)
+
         # Make two passes over the document, the first pass we run in
         # 'index mode' to construct the internal index and other things, 
         # the second pass will assemble a buffer and render the actual text
