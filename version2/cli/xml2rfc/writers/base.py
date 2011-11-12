@@ -10,6 +10,7 @@ import lxml
 import xml2rfc.log
 import xml2rfc.utils
 
+
 class _RfcItem:
     """ A unique ID object for an anchored RFC element.
     
@@ -28,7 +29,7 @@ class _RfcItem:
         self.toc = toc
         self.level = level
         self.page = 0    # This will be set after buffers are complete!
-        
+
 
 class _IrefItem:
     """ A unique ID object for an iref element """
@@ -49,15 +50,13 @@ class BaseRfcWriter:
 
         All public methods need to be overridden for a writer implementation.
     """
-    
+
     # -------------------------------------------------------------------------
     # Attribute default values
     #
     # These will mainly come into play if DTD validation was disabled, and
     # processing that happens to rely on DTD populated attributes require a lookup
     defaults = {
-        'obsoletes':                '',
-        'updates':                  '',
         'section_toc':              'default',
         'xref_pageno':              'false',
         'xref_format':              'default',
@@ -72,20 +71,42 @@ class BaseRfcWriter:
         'table_align':              'center',
         'table_style':              'full',
         'ttcol_align':              'left',
-        'references_title':         'References'
+        'references_title':         'References',
+        'submissionType':           'IETF',
     }
-    
-
 
     # -------------------------------------------------------------------------
-    # Boilerplate default text sections
+    # Boilerplate text
     boilerplate = {}
-    boilerplate['workgroup'] = 'Network Working Group'
+
+    # Document stream names
+    boilerplate['document_stream'] = {}
+    boilerplate['document_stream']['IETF'] = \
+        'Internet Engineering Task Force (IETF)'
+    boilerplate['document_stream']['IAB'] = \
+        'Internet Architecture Board (IAB)'
+    boilerplate['document_stream']['IRTF'] = \
+        'Internet Research Task Force (IRTF)'
+    boilerplate['document_stream']['independent'] = \
+        'Independent Submission'
+
+    # Categories
     boilerplate['std'] = 'Standards Track'
     boilerplate['bcp'] = 'Best Current Practice'
     boilerplate['exp'] = 'Experimental Protocol'
     boilerplate['info'] = 'Informational'
     boilerplate['historic'] = 'Historic'
+
+    # Series type
+    boilerplate['series_name'] = {}
+    boilerplate['series_name']['std'] = 'STD'
+    boilerplate['series_name']['bcp'] = 'BCP'
+    boilerplate['series_name']['info'] = 'FYI'
+
+    # ISSN
+    boilerplate['issn'] = '2070-1721'
+
+    # 'Status of this Memo' boilerplate
     boilerplate['status_std'] = \
         'This document specifies an Internet standards track protocol for ' \
         'the Internet community, and requests discussion and suggestions ' \
@@ -108,6 +129,8 @@ class BaseRfcWriter:
         'Distribution of this memo is unlimited.'
     boilerplate['expiration_text'] = \
         'This Internet-Draft will expire on %s.'
+
+    # Copyright boilerplate
     boilerplate['ipr'] = {}
     boilerplate['ipr']['trust200902'] = \
        ['This Internet-Draft is submitted in full conformance with the ' \
@@ -304,34 +327,58 @@ class BaseRfcWriter:
     def _prepare_top_left(self):
         """ Returns a lines of lines for the top left header """
         lines = []
-        # Begin with workgroup
+        # Document stream / workgroup
         workgroup = self.r.find('front/workgroup')
         if workgroup is not None and workgroup.text:
             lines.append(workgroup.text)
         else:
-            lines.append(self.boilerplate['workgroup'])
+            # Determine 'workgroup' from submissionType, which is document stream
+            subtype = self.r.attrib.get('submissionType', 
+                                         self.defaults['submissionType'])
+            docstream = self.boilerplate['document_stream'].get(subtype)
+            lines.append(docstream)
+
+        # RFC number
         if not self.draft:
             rfcnumber = self.r.attrib.get('number', '')
             lines.append('Request for Comments: ' + rfcnumber)
         else:
             lines.append('Internet-Draft')
-        updates = self.r.attrib.get('updates', self.defaults['updates'])
+
+        # Series number
+        category = self.r.attrib.get('category', '')
+        seriesNo = self.r.attrib.get('seriesNo')
+        if seriesNo is not None and category in self.boilerplate['series_name']:
+            lines.append('%s: %s' % (self.boilerplate['series_name'][category], 
+                                     seriesNo))
+
+        # RFC relation notice
+        approved_text = self.draft and '(if approved)' or ''
+        updates = self.r.attrib.get('updates')
         if updates:
-            lines.append('Updates: ' + updates)
-        obsoletes = self.r.attrib.get('obsoletes', self.defaults['obsoletes'])
+            lines.append('Updates: %s %s' % (updates, approved_text))
+        obsoletes = self.r.attrib.get('obsoletes')
         if obsoletes:
-            lines.append('Obsoletes: ' + obsoletes)
-        category = self.r.attrib.get('category')
+            lines.append('Obsoletes: %s %s' % (obsoletes, approved_text))
+
+        # Cateogory
         if category:
-            cat_text = BaseRfcWriter.boilerplate[category]
+            cat_text = self.boilerplate[category]
             if self.draft:
                 lines.append('Intended status: ' + cat_text)
             else:
                 lines.append('Category: ' + cat_text)
         else:
             xml2rfc.log.warn('No category specified for document.')
+
+        # Expiration notice for drafts
         if self.expire_string:
             lines.append('Expires: ' + self.expire_string)
+
+        # ISSN identifier
+        if not self.draft:
+            lines.append('ISSN: %s' % self.boilerplate['issn'])
+
         # Strip any whitespace from XML to make header as neat as possible
         lines = map(string.strip, lines)
         return lines
