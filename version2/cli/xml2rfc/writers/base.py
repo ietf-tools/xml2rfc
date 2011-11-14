@@ -72,7 +72,9 @@ class BaseRfcWriter:
         'table_style':              'full',
         'ttcol_align':              'left',
         'references_title':         'References',
+        'ipr':                      'trust200902',
         'submissionType':           'IETF',
+        'consensus':                'no',
     }
 
     # -------------------------------------------------------------------------
@@ -90,7 +92,7 @@ class BaseRfcWriter:
     boilerplate['document_stream']['independent'] = \
         'Independent Submission'
 
-    # Categories
+    # Category names
     boilerplate['std'] = 'Standards Track'
     boilerplate['bcp'] = 'Best Current Practice'
     boilerplate['exp'] = 'Experimental Protocol'
@@ -106,57 +108,141 @@ class BaseRfcWriter:
     # ISSN
     boilerplate['issn'] = '2070-1721'
 
-    # 'Status of this Memo' boilerplate
-    boilerplate['status_std'] = \
-        'This document specifies an Internet standards track protocol for ' \
-        'the Internet community, and requests discussion and suggestions ' \
-        'for improvements.  Please refer to the current edition of the ' \
-        '"Internet Official Protocol Standards" (STD 1) for the ' \
-        'standardization state and status of this protocol.  Distribution ' \
-        'of this memo is unlimited.'
-    boilerplate['status_bcp'] = \
-        'This document specifies an Internet Best Current Practices for ' \
-        'the Internet Community, and requests discussion and suggestions ' \
-        'for improvements. Distribution of this memo is unlimited.'
-    boilerplate['status_exp'] = \
-        'This memo defines an Experimental Protocol for the Internet ' \
-        'community.  This memo does not specify an Internet standard of ' \
-        'any kind.  Discussion and suggestions for improvement are ' \
-        'requested. Distribution of this memo is unlimited.'
-    boilerplate['status_info'] = \
-        'This memo provides information for the Internet community. This ' \
-        'memo does not specify an Internet standard of any kind. ' \
-        'Distribution of this memo is unlimited.'
-    boilerplate['expiration_text'] = \
-        'This Internet-Draft will expire on %s.'
+    # 'Status of this Memo' boilerplate for RFCs
+    boilerplate['status'] = {
+        'std': {},
+        'bcp': {},
+        'exp': {},
+        'info': {},
+        'historic': {},
+    }
 
-    # Copyright boilerplate
-    boilerplate['ipr'] = {}
-    boilerplate['ipr']['trust200902'] = \
-       ['This Internet-Draft is submitted in full conformance with the ' \
-       'provisions of BCP 78 and BCP 79.', \
+    # Paragraph 1
+    boilerplate['status']['std']['p1'] = \
+        'This is an Internet Standards Track document.'
+    boilerplate['status']['bcp']['p1'] = \
+        'This memo documents an Internet Best Current Practice.'
+    boilerplate['status']['exp']['p1'] = \
+        'This document is not an Internet Standards Track specification; ' \
+        'it is published for examination, experimental implementation, and ' \
+        'evaluation.'
+    boilerplate['status']['info']['p1'] = \
+        'This document is not an Internet Standards Track specification; ' \
+        'it is published for informational purposes.'
+    boilerplate['status']['historic']['p1'] = \
+        'This document is not an Internet Standards Track specification; ' \
+        'it is published for the historical record.'
 
-       'Internet-Drafts are working documents of the Internet Engineering ' \
+    # Paragraph 2 header
+    boilerplate['status']['exp']['p2'] = \
+        'This document defines an Experimental Protocol for the Internet ' \
+        'community.'
+    boilerplate['status']['historic']['p2'] = \
+        'This document defines a Historic Document for the Internet ' \
+        'community.'
+
+    # Paragraph 2 body
+    boilerplate['status']['IETF'] = \
+        'This document is a product of the Internet Engineering Task Force ' \
+        '(IETF). It has been approved for publication by the Internet ' \
+        'Engineering Steering Group (IESG).'
+    boilerplate['status']['IETF_consensus'] = \
+        'This document is a product of the Internet Engineering Task Force ' \
+        '(IETF). It represents the consensus of the IETF community.  It has ' \
+        'received public review and has been approved for publication by ' \
+        'the Internet Engineering Steering Group (IESG).'
+    boilerplate['status']['IRTF'] = \
+        'This document is a product of the Internet Research Task Force ' \
+        '(IRTF).  The IRTF publishes the results of Internet-related ' \
+        'research and development activities.  These results might not be ' \
+        'suitable for deployment. This RFC represents the individual opinion(s) ' \
+        'of one or more members of the %s Research Group of the Internet ' \
+        'Research Task Force (IRTF).'
+    boilerplate['status']['IRTF_consensus'] = \
+        'This document is a product of the Internet Research Task Force ' \
+        '(IRTF).  The IRTF publishes the results of Internet-related ' \
+        'research and development activities.  These results might not be ' \
+        'suitable for deployment. This RFC represents the consensus of the ' \
+        '%s Research Group of the Internet Research Task Force (IRTF).'
+    boilerplate['status']['IAB'] = \
+        'This document is a product of the Internet Architecture Board ' \
+        '(IAB) and represents information that the IAB has deemed valuable ' \
+        'to provide for permanent record.'
+    boilerplate['status']['independent'] = \
+        'This is a contribution to the RFC Series, independently of any ' \
+        'other RFC stream.  The RFC Editor has chosen to publish this ' \
+        'document at its discretion and makes no statement about its value ' \
+        'for implementation or deployment.'
+
+    # Paragraph 2 last sentence
+    boilerplate['status']['p2end_ietf_std'] = \
+        'Further information on Internet Standards is available' \
+        'in Section 2 of RFC 5741.'
+    boilerplate['status']['p2end_ietf_bcp'] = \
+        'Further information on BCPs is available in Section 2 of RFC 5741.'
+    boilerplate['status']['p2end_ietf_other'] = \
+        'Not all documents approved by the IESG are a candidate for any ' \
+        'level of Internet Standard; see Section 2 of RFC 5741.'
+    boilerplate['status']['p2end_other'] = \
+        'Documents approved for publication by the %s are not a ' \
+        'candidate for any level of Internet Standard; see Section 2 of RFC ' \
+        '5741.'
+
+    # Paragraph 3
+    boilerplate['status']['p3'] = \
+        'Information about the current status of this document, any errata, ' \
+        'and how to provide feedback on it may be obtained at ' \
+        'http://www.rfc-editor.org/info/rfc%s'
+
+    # 'Status of this Memo' boilerplate for drafts
+    boilerplate['status']['draft'] = \
+       ['Internet-Drafts are working documents of the Internet Engineering ' \
        'Task Force (IETF).  Note that other groups may also distribute ' \
        'working documents as Internet-Drafts.  The list of current Internet- ' \
-       'Drafts is at http://datatracker.ietf.org/drafts/current/.', \
+       'Drafts is at http://datatracker.ietf.org/drafts/current/.',
 
        'Internet-Drafts are draft documents valid for a maximum of six months ' \
        'and may be updated, replaced, or obsoleted by other documents at any ' \
        'time.  It is inappropriate to use Internet-Drafts as reference ' \
        'material or to cite them other than as "work in progress."']
-    boilerplate['ipr']['noModificationTrust200902'] = copy.copy(boilerplate['ipr']['trust200902'])
-    boilerplate['ipr']['noModificationTrust200902'].append( \
+    boilerplate['draft_expire'] = \
+       'This Internet-Draft will expire on %s.'
+
+    # IPR status boilerplate
+    boilerplate['ipr_200902_status'] = \
+        'This Internet-Draft is submitted in full conformance ' \
+        'with the provisions of BCP 78 and BCP 79'
+    boilerplate['ipr_200811_status'] = \
+        'This Internet-Draft is submitted to IETF in full conformance ' \
+        'with the provisions of BCP 78 and BCP 79'
+    
+    # Copyright boilerplate
+    boilerplate['base_copyright_header'] = \
+        'Copyright (c) %s IETF Trust and the persons identified as the ' \
+        'document authors.  All rights reserved.'
+    boilerplate['base_copyright_body'] = \
+        'This document is subject to BCP 78 and the IETF Trust\'s Legal ' \
+        'Provisions Relating to IETF Documents ' \
+        '(http://trustee.ietf.org/license-info) in effect on the date of ' \
+        'publication of this document.  Please review these documents ' \
+        'carefully, as they describe your rights and restrictions with respect ' \
+        'to this document.'
+
+    # IPR values which append things to copyright
+    boilerplate['ipr_200902_copyright_ietfbody'] = \
+        'Code Components extracted from this document must ' \
+        'include Simplified BSD License text as described in Section 4.e of ' \
+        'the Trust Legal Provisions and are provided without warranty as ' \
+        'described in the Simplified BSD License.'
+    boilerplate['ipr_noModification_copyright'] = \
         'This document may not be modified, and derivative works of it may ' \
         'not be created, except to format it for publication as an RFC or ' \
-        'to translate it into languages other than English.')
-    boilerplate['ipr']['noDerivativesTrust200902'] = copy.copy(boilerplate['ipr']['trust200902'])
-    boilerplate['ipr']['noDerivativesTrust200902'].append( \
+        'to translate it into languages other than English.'
+    boilerplate['ipr_noDerivatives_copyright'] = \
         'This document may not be modified, and derivative works of it may ' \
         'not be created, and it may not be published except as an ' \
-        'Internet-Draft.')
-    boilerplate['ipr']['pre5378Trust200902'] = copy.copy(boilerplate['ipr']['trust200902'])
-    boilerplate['ipr']['pre5378Trust200902'].append( \
+        'Internet-Draft.'
+    boilerplate['ipr_pre5378Trust200902_copyright'] = \
         'This document may contain material from IETF Documents or IETF ' \
         'Contributions published or made publicly available before ' \
         'November 10, 2008. The person(s) controlling the copyright in some ' \
@@ -167,25 +253,34 @@ class BaseRfcWriter:
         'be modified outside the IETF Standards Process, and derivative ' \
         'works of it may not be created outside the IETF Standards Process, ' \
         'except to format it for publication as an RFC or to translate it ' \
-        'into languages other than English.')
-    boilerplate['base_copyright'] = \
-        'Copyright (c) %s IETF Trust and the persons identified as the ' \
-        'document authors.  All rights reserved.'
-    boilerplate['draft_copyright'] = \
-        'This document is subject to BCP 78 and the IETF Trust\'s Legal ' \
-        'Provisions Relating to IETF Documents ' \
-        '(http://trustee.ietf.org/license-info) in effect on the date of ' \
-        'publication of this document.  Please review these documents ' \
-        'carefully, as they describe your rights and restrictions with respect ' \
-        'to this document.  Code Components extracted from this document must ' \
-        'include Simplified BSD License text as described in Section 4.e of ' \
-        'the Trust Legal Provisions and are provided without warranty as ' \
-        'described in the Simplified BSD License.'
-    boilerplate['notified'] = \
+        'into languages other than English.'
+
+    # Any extra boilerplate
+    boilerplate['iprnotified'] = \
         'The IETF has been notified of intellectual property rights ' \
         'claimed in regard to some or all of the specification contained ' \
         'in this document.  For more information consult the online list ' \
         'of claimed rights.'
+    
+    # Stream approvers
+    approvers = {
+        'IAB': 'IAB',
+        'IRTF': 'IRSG',
+        'independent': 'RFC Editor',
+    }
+
+
+    # Valid IPR attributes
+    supported_ipr = [
+        'trust200902',
+        'noModificationTrust200902',
+        'noDerivativesTrust200902',
+        'pre5378Trust200902',
+        'trust200811',
+        'noModificationTrust200811',
+        'noDerivativesTrust200811',
+    ]
+
     # -------------------------------------------------------------------------
 
     def __init__(self, xmlrfc, quiet=False, verbose=False):
@@ -204,8 +299,9 @@ class BaseRfcWriter:
         self.figure_count = 0
         self.table_count = 0
 
-        # Set flag for draft
-        self.draft = bool(not self.r.attrib.get('number'))
+        # Set RFC number and draft flag
+        self.rfcnumber = self.r.attrib.get('number', '')
+        self.draft = bool(not self.rfcnumber)
 
         # Grab any useful global data from document
         if self.draft:
@@ -309,6 +405,14 @@ class BaseRfcWriter:
                 return item
         return None
     
+    def _validate_ipr(self):
+        """ Ensure the application has boilerplate for the ipr attribute given """
+        ipr = self.r.attrib.get('ipr', self.defaults['ipr'])
+        if not ipr in self.supported_ipr:
+            raise RfcWriterError('No boilerplate text available for '
+            'ipr: \'%s\'.  Acceptable values are: ' % ipr + \
+            ', '.join(self.supported_ipr))
+    
     def _format_date(self):
         """ Fix the date data """
         today = datetime.date.today()
@@ -340,8 +444,7 @@ class BaseRfcWriter:
 
         # RFC number
         if not self.draft:
-            rfcnumber = self.r.attrib.get('number', '')
-            lines.append('Request for Comments: ' + rfcnumber)
+            lines.append('Request for Comments: ' + self.rfcnumber)
         else:
             lines.append('Internet-Draft')
 
@@ -585,39 +688,96 @@ class BaseRfcWriter:
     def _write_status_section(self):
         """ Writes the 'Status of this Memo' section """
 
-        category = self.r.attrib.get('category', 'none')
         self.write_heading('Status of this Memo', autoAnchor='rfc.status')
-        if not self.draft:
-            self.write_paragraph(self.boilerplate.get \
-                                 ('status_' + category, ''))
-        else:
-            # Use value of ipr to determine text
-            ipr = self.r.attrib.get('ipr', 'trust200902')
-            ipr_boiler = self.boilerplate['ipr'].get(ipr, None)
-            if not ipr_boiler:
-                raise RfcWriterError('No boilerplate text available for '
-                'ipr: \'%s\'.  Acceptable values are: ' % ipr + \
-                ', '.join(self.boilerplate['ipr'].keys()))
+        if not self.draft:  #RFC
+            # Status boilerplate is determined by category/submissionType/consensus
+            category = self.r.attrib.get('category', 'none')
+            stream = self.r.attrib.get('submissionType', 
+                                       self.defaults['submissionType'])
+            consensus = self.r.attrib.get('consensus',
+                                          self.defaults['consensus'])
+            workgroup = ''
+            wg_element = self.r.find('front/workgroup')
+            if wg_element is not None and wg_element.text:
+                workgroup = wg_element.text
+
+            # Write first paragraph
+            if category in self.boilerplate['status']:
+                self.write_paragraph(self.boilerplate['status'][category]\
+                                     .get('p1', ''))
+            
+            # Buile second paragraph
+            p2 = []
+            if category in self.boilerplate['status']:
+                p2.append(self.boilerplate['status'][category].get('p2', ''))
+            p2key = stream
+            if (stream == 'IETF' or stream == 'IRTF') and consensus == 'yes':
+                p2key += '_consensus'
+            if stream == 'IRTF':
+                p2.append(self.boilerplate['status'][p2key] % workgroup)
             else:
-                for par in ipr_boiler:
-                    self.write_paragraph(par)
-        
-        # Write expiration string, if it was generated
-        if self.expire_string:
-            self.write_paragraph( \
-                self.boilerplate['expiration_text'] % self.expire_string)
+                p2.append(self.boilerplate['status'].get(p2key, ''))
+
+            # Last sentence of p2
+            if stream == 'IETF' and category == 'std':
+                p2.append(self.boilerplate['status']['p2end_ietf_std'])
+            elif stream == 'IETF' and category == 'bcp':
+                p2.append(self.boilerplate['status']['p2end_ietf_bcp'])
+            elif stream == 'IETF':
+                p2.append(self.boilerplate['status']['p2end_ietf_other'])
+            else:
+                p2.append(self.boilerplate['status']['p2end_other'] \
+                          % self.approvers.get(stream, ''))
+
+            # Write second paragraph
+            self.write_paragraph(' '.join(p2))
+            
+            # Write third paragraph
+            self.write_paragraph(self.boilerplate['status']['p3'] % self.rfcnumber)
+
+        else:  # Draft
+            # Start by checking for an ipr header
+            ipr = self.r.attrib.get('ipr', self.defaults['ipr'])
+            if '200902' in ipr:
+                self.write_paragraph(self.boilerplate['ipr_200902_status'])
+            elif '200811' in ipr:
+                self.write_paragraph(self.boilerplate['ipr_200811_status'])
+
+            # Write the standard draft status
+            for par in self.boilerplate['status']['draft']:
+                self.write_paragraph(par)
+
+            # Write expiration string, if it was generated
+            if self.expire_string:
+                self.write_paragraph( \
+                    self.boilerplate['draft_expire'] % self.expire_string)
     
     def _write_copyright(self):
         """ Writes the 'Copyright' section """
-
         self.write_heading('Copyright Notice', autoAnchor='rfc.copyrightnotice')
-        date = self.r.find('front/date')
-        if date is not None:
-            year = self.r.find('front/date').attrib.get('year', '')
-            self.write_paragraph(self.boilerplate['base_copyright'] % year)
-        if self.draft:
-            self.write_paragraph(self.boilerplate['draft_copyright'])
 
+        # Write header line with year
+        date = self.r.find('front/date')
+        year = ''
+        if date is not None:
+            year = date.attrib.get('year', '')
+        self.write_paragraph(self.boilerplate['base_copyright_header'] % year)
+
+        # Write next paragraph which may be modified by ipr
+        ipr = self.r.attrib.get('ipr', self.defaults['ipr'])
+        body = self.boilerplate['base_copyright_body']
+        if '200902' in ipr and self.r.attrib.get('submissionType', 
+                                   self.defaults['submissionType']) == 'IETF':
+            body += self.boilerplate['ipr_200902_copyright_ietfbody']
+        self.write_paragraph(body)
+        
+        # Write any additional paragraphs
+        if 'noModification' in ipr:
+            self.write_paragraph(self.boilerplate['ipr_noModification_copyright'])
+        elif 'noDerivatives' in ipr:
+            self.write_paragraph(self.boilerplate['ipr_noDerivatives_copyright'])
+        elif ipr == 'pre5378Trust200902':
+            self.write_paragraph(self.boilerplate['ipr_pre5378Trust200902_copyright'])
 
     def _run(self, indexmode=False):
         self.indexmode = indexmode
@@ -654,13 +814,16 @@ class BaseRfcWriter:
 
             # Optional notified boilerplate
             if self.pis.get('iprnotified', 'no') == 'yes':
-                self.write_paragraph(BaseRfcWriter.boilerplate['notified'])
+                self.write_paragraph(BaseRfcWriter.boilerplate['iprnotified'])
 
             # Optional notes
             for note in self.r.findall('front/note'):
                 self.write_heading(note.attrib.get('title', 'Note'))
                 for t in note.findall('t'):
                     self.write_t_rec(t)
+            
+            # Verify that 'ipr' attribute is valid before continuing
+            self._validate_ipr()
             
             # "Status of this Memo" section
             self._write_status_section()
