@@ -6,6 +6,7 @@ import copy
 import codecs
 import string
 import datetime
+import dateutil
 import lxml
 import xml2rfc.log
 import xml2rfc.utils
@@ -91,6 +92,9 @@ class BaseRfcWriter:
         'Internet Research Task Force (IRTF)'
     boilerplate['document_stream']['independent'] = \
         'Independent Submission'
+
+    # Draft workgroup name
+    boilerplate['draft_workgroup'] = 'Network Working Group'
 
     # Category names
     boilerplate['std'] = 'Standards Track'
@@ -301,25 +305,6 @@ class BaseRfcWriter:
         # Set RFC number and draft flag
         self.rfcnumber = self.r.attrib.get('number', '')
         self.draft = bool(not self.rfcnumber)
-
-        # Grab any useful global data from document
-        if self.draft:
-            # Create the expiration date as published date + six months
-            date = self.r.find('front/date')
-            if date is not None:
-                month = date.attrib.get('month', '')
-                year = date.attrib.get('year', '')
-                if month and year:
-                    try:
-                        start_date = datetime.datetime.strptime(month + year, \
-                                                                '%B%Y')
-                        expire_date = start_date + datetime.timedelta(6 * 30 + 15)
-                        self.expire_string = expire_date.strftime('%B %d, %Y')
-                    except ValueError:
-                        pass
-                elif not year:
-                    # Warn about no date
-                    xml2rfc.log.warn('No date specified for document.')
         
         # Used for two-pass indexing
         self.indexmode = False
@@ -426,6 +411,25 @@ class BaseRfcWriter:
                 date.attrib['year'] = today.strftime('%Y')
                 date.attrib['month'] = today.strftime('%B')
                 date.attrib['day'] = today.strftime('%d')
+        
+        # Setup the expiration string for drafts as published date + six months
+        if self.draft:
+            date = self.r.find('front/date')
+            if date is not None:
+                month = date.attrib.get('month', '')
+                year = date.attrib.get('year', '')
+                day = date.attrib.get('day', '1')  # Default to first of month
+                if month and year:
+                    try:
+                        start_date = datetime.datetime.strptime(year + month + day, \
+                                                                '%Y%B%d')
+                        expire_date = start_date + datetime.timedelta(183)
+                        self.expire_string = expire_date.strftime('%B %d, %Y')
+                    except ValueError:
+                        pass
+                elif not year:
+                    # Warn about no date
+                    xml2rfc.log.warn('No date specified for document.')
 
     def _prepare_top_left(self):
         """ Returns a lines of lines for the top left header """
@@ -435,11 +439,14 @@ class BaseRfcWriter:
         if workgroup is not None and workgroup.text:
             lines.append(workgroup.text)
         else:
-            # Determine 'workgroup' from submissionType, which is document stream
-            subtype = self.r.attrib.get('submissionType', 
-                                         self.defaults['submissionType'])
-            docstream = self.boilerplate['document_stream'].get(subtype)
-            lines.append(docstream)
+            if self.draft:
+                lines.append(self.boilerplate['draft_workgroup'])
+            else:
+                # Determine 'workgroup' from submissionType
+                subtype = self.r.attrib.get('submissionType', 
+                                             self.defaults['submissionType'])
+                docstream = self.boilerplate['document_stream'].get(subtype)
+                lines.append(docstream)
 
         # RFC number
         if not self.draft:
@@ -496,7 +503,7 @@ class BaseRfcWriter:
             for author in self.r.findall('front/author'):
                 role = author.attrib.get('role', '')
                 if role == 'editor':
-                    role = ', Editor'
+                    role = ', Ed.'
                 lines.append(author.attrib.get('initials', '') + ' ' + \
                                 author.attrib.get('surname', '') + role)
                 organization = author.find('organization')

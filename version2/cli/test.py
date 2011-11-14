@@ -116,7 +116,7 @@ class TextWriterRootTest(unittest.TestCase):
 
 
 class TextWriterDraftTest(TextWriterRootTest):
-    """ Test Internet-Draft boilerlpate"""
+    """ Test Internet-Draft boilerplate"""
 
     def setUp(self):
         self.init_test('tests/input/draft_root.xml')
