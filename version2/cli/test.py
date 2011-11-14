@@ -8,10 +8,6 @@ import lxml
 import tempfile
 
 
-TEST_NUM = '9999'
-TEST_SERIESNO = '999'
-
-
 def diff_test(case, valid, test, failpath):
     """ Compare two strings.  If not equal, fail with a useful diff and save
         second string to a file.
@@ -97,6 +93,7 @@ class TextWriterRootTest(unittest.TestCase):
         self.parser = xml2rfc.XmlRfcParser(path, quiet=True)
         self.xmlrfc = self.parser.parse()
         self.writer = xml2rfc.PaginatedTextRfcWriter(self.xmlrfc, quiet=True)
+        self.writer._format_date()
         self.writer.pre_processing()
 
     def header_footer_test(self, validpath):
@@ -105,6 +102,16 @@ class TextWriterRootTest(unittest.TestCase):
         valid = fh.read()
         fh.close()
         output = self.writer._make_footer_and_header(1)
+        diff_test(self, valid, output, validpath.replace('valid', 'failed'))
+
+    def top_test(self, validpath):
+        assert('valid' in validpath)
+        fh = open(validpath)
+        valid = fh.read()
+        fh.close()
+        self.writer.write_top(self.writer._prepare_top_left(), 
+                              self.writer._prepare_top_right())
+        output = '\n'.join(self.writer.buf)
         diff_test(self, valid, output, validpath.replace('valid', 'failed'))
 
 
@@ -117,6 +124,9 @@ class TextWriterDraftTest(TextWriterRootTest):
     def test_header_footer(self):
         return self.header_footer_test('tests/valid/header_footer_draft.txt')
 
+    def test_top(self):
+        return self.top_test('tests/valid/top_draft.txt')
+
 
 class TextWriterRfcTest(TextWriterRootTest):
     """ Test RFC boilerplate """
@@ -126,6 +136,10 @@ class TextWriterRfcTest(TextWriterRootTest):
 
     def test_header_footer(self):
         return self.header_footer_test('tests/valid/header_footer_rfc.txt')
+
+    def test_top(self):
+        return self.top_test('tests/valid/top_rfc.txt')
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
