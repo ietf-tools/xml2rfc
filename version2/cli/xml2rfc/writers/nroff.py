@@ -156,7 +156,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self._write_line('.ds RH ' + self.right_header)
         self._write_line('.ds LF ' + self.left_footer)
         self._write_line('.ds CF ' + self.center_footer)
-        self._write_line('.ds RF FORMFEED[Page] % ')
+        self._write_line('.ds RF FORMFEED[Page %]')
 
     def post_processing(self):
         """ Insert page break commands """
