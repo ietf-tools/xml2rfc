@@ -269,7 +269,6 @@ class BaseRfcWriter:
         'independent': 'RFC Editor',
     }
 
-
     # Valid IPR attributes
     supported_ipr = [
         'trust200902',

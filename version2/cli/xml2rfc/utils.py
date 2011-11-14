@@ -63,7 +63,7 @@ def justify_inline(left_str, center_str, right_str, width=72):
         Raises a warning if the combined length of the three strings is
         greater than the width, and trims the longest string
     """
-    strings = [left_str, center_str, right_str]
+    strings = [left_str.strip(), center_str.strip(), right_str.strip()]
     sumwidth = sum(map(len, strings))
     if sumwidth > width:
         # Trim longest string

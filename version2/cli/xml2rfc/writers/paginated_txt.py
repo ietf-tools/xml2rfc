@@ -83,11 +83,10 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         # Raw textwriters preprocessing will replace unicode with safe ascii
         RawTextRfcWriter.pre_processing(self)
 
-        if 'number' in self.r.attrib:
-            self.left_header = self.r.attrib['number']
-        else:
-            # No RFC number -- assume internet draft
+        if self.draft:
             self.left_header = 'Internet-Draft'
+        else:
+            self.left_header = 'RFC %s' % self.r.attrib.get('number', '')
         title = self.r.find('front/title')
         if title is not None:
             self.center_header = title.attrib.get('abbrev', title.text)
