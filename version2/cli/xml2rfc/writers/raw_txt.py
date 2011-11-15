@@ -584,6 +584,9 @@ class RawTextRfcWriter(BaseRfcWriter):
                 surname = author.attrib.get('surname', '')
                 if surname:
                     initials = author.attrib.get('initials', '')
+                    # Append a dot if it doesnt already exist
+                    if not initials.endswith('.'):
+                        initials = initials + '.'
                     if j == len(authors) - 1 and len(authors) > 1:
                         # Last author is rendered in reverse
                         refstring.append(' and ' + initials + ' ' + \

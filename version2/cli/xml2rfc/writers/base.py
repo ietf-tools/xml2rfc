@@ -148,11 +148,11 @@ class BaseRfcWriter:
     # Paragraph 2 body
     boilerplate['status']['IETF'] = \
         'This document is a product of the Internet Engineering Task Force ' \
-        '(IETF). It has been approved for publication by the Internet ' \
+        '(IETF).  It has been approved for publication by the Internet ' \
         'Engineering Steering Group (IESG).'
     boilerplate['status']['IETF_consensus'] = \
         'This document is a product of the Internet Engineering Task Force ' \
-        '(IETF). It represents the consensus of the IETF community.  It has ' \
+        '(IETF).  It represents the consensus of the IETF community.  It has ' \
         'received public review and has been approved for publication by ' \
         'the Internet Engineering Steering Group (IESG).'
     boilerplate['status']['IRTF'] = \
@@ -179,7 +179,7 @@ class BaseRfcWriter:
 
     # Paragraph 2 last sentence
     boilerplate['status']['p2end_ietf_std'] = \
-        'Further information on Internet Standards is available' \
+        'Further information on Internet Standards is available ' \
         'in Section 2 of RFC 5741.'
     boilerplate['status']['p2end_ietf_bcp'] = \
         'Further information on BCPs is available in Section 2 of RFC 5741.'
@@ -214,10 +214,10 @@ class BaseRfcWriter:
     # IPR status boilerplate
     boilerplate['ipr_200902_status'] = \
         'This Internet-Draft is submitted in full conformance ' \
-        'with the provisions of BCP 78 and BCP 79'
+        'with the provisions of BCP 78 and BCP 79.'
     boilerplate['ipr_200811_status'] = \
         'This Internet-Draft is submitted to IETF in full conformance ' \
-        'with the provisions of BCP 78 and BCP 79'
+        'with the provisions of BCP 78 and BCP 79.'
     
     # Copyright boilerplate
     boilerplate['base_copyright_header'] = \
@@ -248,7 +248,7 @@ class BaseRfcWriter:
     boilerplate['ipr_pre5378Trust200902_copyright'] = \
         'This document may contain material from IETF Documents or IETF ' \
         'Contributions published or made publicly available before ' \
-        'November 10, 2008. The person(s) controlling the copyright in some ' \
+        'November 10, 2008.  The person(s) controlling the copyright in some ' \
         'of this material may not have granted the IETF Trust the right to ' \
         'allow modifications of such material outside the IETF Standards ' \
         'Process. Without obtaining an adequate license from the person(s) ' \
@@ -434,18 +434,18 @@ class BaseRfcWriter:
         """ Returns a lines of lines for the top left header """
         lines = []
         # Document stream / workgroup
-        workgroup = self.r.find('front/workgroup')
-        if workgroup is not None and workgroup.text:
-            lines.append(workgroup.text)
-        else:
-            if self.draft:
-                lines.append(self.boilerplate['draft_workgroup'])
+        if self.draft:
+            workgroup = self.r.find('front/workgroup')
+            if workgroup is not None and workgroup.text:
+                lines.append(workgroup.text)
             else:
-                # Determine 'workgroup' from submissionType
-                subtype = self.r.attrib.get('submissionType', 
-                                             self.defaults['submissionType'])
-                docstream = self.boilerplate['document_stream'].get(subtype)
-                lines.append(docstream)
+                lines.append(self.boilerplate['draft_workgroup'])
+        else:
+            # Determine 'workgroup' from submissionType
+            subtype = self.r.attrib.get('submissionType', 
+                                         self.defaults['submissionType'])
+            docstream = self.boilerplate['document_stream'].get(subtype)
+            lines.append(docstream)
 
         # RFC number
         if not self.draft:
@@ -744,7 +744,7 @@ class BaseRfcWriter:
                           % self.approvers.get(stream, ''))
 
             # Write second paragraph
-            self.write_paragraph(' '.join(p2))
+            self.write_paragraph('  '.join(p2))
             
             # Write third paragraph
             self.write_paragraph(self.boilerplate['status']['p3'] % self.rfcnumber)
