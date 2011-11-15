@@ -782,7 +782,7 @@ class BaseRfcWriter:
         body = self.boilerplate['base_copyright_body']
         if '200902' in ipr and self.r.attrib.get('submissionType', 
                                    self.defaults['submissionType']) == 'IETF':
-            body += self.boilerplate['ipr_200902_copyright_ietfbody']
+            body += '  ' + self.boilerplate['ipr_200902_copyright_ietfbody']
         self.write_paragraph(body)
         
         # Write any additional paragraphs
