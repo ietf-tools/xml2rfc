@@ -503,8 +503,12 @@ class BaseRfcWriter:
                 role = author.attrib.get('role', '')
                 if role == 'editor':
                     role = ', Ed.'
-                lines.append(author.attrib.get('initials', '') + ' ' + \
-                                author.attrib.get('surname', '') + role)
+                initials = author.attrib.get('initials', '')
+                # Append a dot if it doesnt already exist
+                if initials and not initials.endswith('.'):
+                    initials = initials + '.'
+                lines.append(initials + ' ' + author.attrib.\
+                             get('surname', '') + role)
                 organization = author.find('organization')
                 if organization is not None:
                     abbrev = organization.attrib.get('abbrev')
