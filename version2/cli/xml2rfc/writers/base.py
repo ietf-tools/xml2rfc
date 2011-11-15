@@ -159,14 +159,13 @@ class BaseRfcWriter:
         'This document is a product of the Internet Research Task Force ' \
         '(IRTF).  The IRTF publishes the results of Internet-related ' \
         'research and development activities.  These results might not be ' \
-        'suitable for deployment. This RFC represents the individual opinion(s) ' \
+        'suitable for deployment.'
+    boilerplate['status']['IRTF_workgroup'] = \
+        'This RFC represents the individual opinion(s) ' \
         'of one or more members of the %s Research Group of the Internet ' \
         'Research Task Force (IRTF).'
-    boilerplate['status']['IRTF_consensus'] = \
-        'This document is a product of the Internet Research Task Force ' \
-        '(IRTF).  The IRTF publishes the results of Internet-related ' \
-        'research and development activities.  These results might not be ' \
-        'suitable for deployment. This RFC represents the consensus of the ' \
+    boilerplate['status']['IRTF_workgroup_consensus'] = \
+        'This RFC represents the consensus of the ' \
         '%s Research Group of the Internet Research Task Force (IRTF).'
     boilerplate['status']['IAB'] = \
         'This document is a product of the Internet Architecture Board ' \
@@ -196,7 +195,7 @@ class BaseRfcWriter:
     boilerplate['status']['p3'] = \
         'Information about the current status of this document, any errata, ' \
         'and how to provide feedback on it may be obtained at ' \
-        'http://www.rfc-editor.org/info/rfc%s'
+        'http://www.rfc-editor.org/info/rfc%s.'
 
     # 'Status of this Memo' boilerplate for drafts
     boilerplate['status']['draft'] = \
@@ -712,17 +711,26 @@ class BaseRfcWriter:
                 self.write_paragraph(self.boilerplate['status'][category]\
                                      .get('p1', ''))
             
-            # Buile second paragraph
+            # Build second paragraph
             p2 = []
             if category in self.boilerplate['status']:
                 p2.append(self.boilerplate['status'][category].get('p2', ''))
-            p2key = stream
-            if (stream == 'IETF' or stream == 'IRTF') and consensus == 'yes':
-                p2key += '_consensus'
-            if stream == 'IRTF':
-                p2.append(self.boilerplate['status'][p2key] % workgroup)
+            if stream == 'IETF':
+                if consensus == 'yes':
+                    p2.append(self.boilerplate['status']['IETF_consensus'])
+                else:
+                    p2.append(self.boilerplate['status']['IETF'])
+            elif stream == 'IRTF':
+                p2.append(self.boilerplate['status']['IRTF'])
+                if workgroup:
+                    if consensus == 'yes':
+                        p2.append(self.boilerplate['status']['IRTF_workgroup_consensus'] \
+                                  % workgroup)
+                    else:
+                        p2.append(self.boilerplate['status']['IRTF_workgroup'] \
+                                  % workgroup)
             else:
-                p2.append(self.boilerplate['status'].get(p2key, ''))
+                p2.append(self.boilerplate['status'].get(stream, ''))
 
             # Last sentence of p2
             if stream == 'IETF' and category == 'std':
