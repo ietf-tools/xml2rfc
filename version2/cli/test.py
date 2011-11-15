@@ -116,7 +116,7 @@ class TextWriterRootTest(unittest.TestCase):
         fh.close()
 
     def header_footer_test(self):
-        output = self.writer._make_footer_and_header(1)
+        output = '\n'.join(self.writer._make_footer_and_header(1))
         diff_test(self, self.valid, output, self.failpath)
 
     def top_test(self):
