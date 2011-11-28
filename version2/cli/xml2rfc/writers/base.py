@@ -6,7 +6,6 @@ import copy
 import codecs
 import string
 import datetime
-import dateutil
 import lxml
 import xml2rfc.log
 import xml2rfc.utils
