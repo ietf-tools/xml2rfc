@@ -542,15 +542,15 @@ class RawTextRfcWriter(BaseRfcWriter):
                 cityline = []
                 city = postal.find('city')
                 if city is not None and city.text:
-                        cityline.append(city.text)
-                        cityline.append(', ')
+                    cityline.append(city.text)
                 region = postal.find('region')
                 if region is not None and region.text:
-                        cityline.append(region.text)
-                        cityline.append(' ')
+                    if len(cityline) > 0: cityline.append(', ');
+                    cityline.append(region.text)
                 code = postal.find('code')
                 if code is not None and code.text:
-                        cityline.append(code.text)
+                    if len(cityline) > 0: cityline.append(' ');
+                    cityline.append(code.text)
                 if len(cityline) > 0:
                     lines.append(''.join(cityline))
                 country = postal.find('country')
