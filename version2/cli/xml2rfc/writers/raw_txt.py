@@ -518,6 +518,8 @@ class RawTextRfcWriter(BaseRfcWriter):
             heading.append(xml2rfc.utils.justify_inline(left, '', right, \
                                                         self.width))
         self.write_raw('\n'.join(heading), align='left', indent=0, lb=False)
+        # Extra blank line underneath top block
+        self._lb()
 
     def write_address_card(self, author):
         """ Writes a simple address card with no line breaks """
@@ -563,7 +565,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                 lines.append('Fax:   ' + fascimile.text)
             email = address.find('email')
             if email is not None and email.text:
-                lines.append('Email: ' + email.text)
+                label = self.pis.get('rfcedstyle', 'no') == 'yes' and 'EMail' or 'Email'
+                lines.append('%s: %s' % (label, email.text))
             uri = address.find('uri')
             if uri is not None and uri.text:
                 lines.append('URI:   ' + uri.text)
