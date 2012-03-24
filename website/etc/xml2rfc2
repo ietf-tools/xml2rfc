@@ -1,6 +1,20 @@
 #!/bin/bash
 
-export PYTHONPATH=/home/tonyh/lib/python:/usr/lib/site-python/
-export HOME=/tmp
+# export PYTHONPATH=/home/tonyh/.local/lib/python2.6:/usr/lib/site-python/
+# export HOME=/home/tonyh
 ulimit -t 120
-/home/tonyh/bin/xml2rfc "$@"
+umask 0
+
+XMLRESOURCE=/home/www/tools.ietf.org/tools/xml2rfc
+
+
+export XML_LIBRARY="$XMLRESOURCE/web/public/rfc/bibxml"
+for bibxml in $XMLRESOURCE/web/public/rfc/bibxml?
+do
+    XML_LIBRARY="$XML_LIBRARY:$bibxml"
+done
+
+exec 2>&1
+
+echo Using XML_LIBRARY=$XML_LIBRARY
+/usr/local/bin/xml2rfc --verbose --cache=/tmp "$@"

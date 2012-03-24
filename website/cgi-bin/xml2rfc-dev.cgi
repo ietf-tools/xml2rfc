@@ -8,6 +8,8 @@ use Net::SMTP;
 use Digest::MD5 qw(md5 md5_hex);
 use Crypt::RC4;
 use XML::Parser;
+use HTTP::Request;
+use LWP::UserAgent;
 
 umask(02);
 my $dir = untaint(getcwd());
@@ -40,6 +42,15 @@ my @formats = ('ascii',  'pdf',  'epub',  'rtf',  'ps');
 umask(0);
 my $input    = $q->param('input');
 my $inputfn  = untaint($q->tmpFileName($input));
+my $url = $q->param('url');
+if (($input eq '') || ($inputfn eq '')) {
+    userError("No input file") if ($url eq '');
+    my ($content, $err) = wget($url);
+    userError($err) if ($err ne '');
+    $inputfn = "/tmp/CGItemp$$.txt";
+    createFile($inputfn, $content);
+}
+
 my $inputfndir = "$inputfn.dir";
 my $modeAsFormat = $q->param('modeAsFormat');
 if ($modeAsFormat =~ m((.*)/(.*))) {
@@ -98,7 +109,6 @@ saveTracePass("Generating $expandedModes{$mode} output in $expandedFormats{$form
 ####### #		type = tofile
 ####### ########################### #######
 
-userError("No input file") if ($input eq '') || ($inputfn eq '');
 
 # if in cgi-bin, cd one level up
 if ($dir =~ /\/cgi-bin$/) {
@@ -115,6 +125,7 @@ $ENV{PATH} = "/usr/bin:/bin";
 $ENV{DOCUMENT_ROOT} = 'web' if !defined($ENV{DOCUMENT_ROOT});
 $ENV{SERVER_ADMIN} = 'tony@att.com';
 # $ENV{HOME} = "/var/tmp";
+# $ENV{HOME} = "/home/tonyh";
 $ENV{LANG} = "en_US";
 
 $ENV{XML_LIBRARY} = "$dir/web/public/rfc/bibxml";
@@ -378,10 +389,7 @@ if ($type eq 'towindow') {
     catFile($TMP3);
 } elsif ($type eq 'toframe') {
     my $TMPTRACE = "$inputfn-5.html";
-    open (TMPTRACE, ">", $TMPTRACE) or userError("Error writing temp files", $!);
-    print TMPTRACE $trace;
-    print TMPTRACE "<hr/>\n";
-    close TMPTRACE;
+    createFile($TMPTRACE, $trace, "<hr/>\n");
 
     # my $outputfn = getOutputName($input, $mode, $format);
     my $KEEP = keepTempFile($TMP3, "$inputfn-6." . getExtension($TMP3), $debug);
@@ -584,6 +592,16 @@ sub getFile {
     return "";
 }
 
+# create a file and write the passed strings to it
+sub createFile {
+    my $fn = shift;
+    open (TMPTRACE, ">", $fn) or userError("Error writing temp files", $!);
+    for my $str (@_) {
+	print TMPTRACE $str;
+    }
+    close TMPTRACE;
+}
+
 ####### if not already generated, make sure there is a content 
 ####### type header, along with any other headers we will need
 my $printedHeader;
@@ -765,4 +783,17 @@ sub getFileValues {
 	}
     }               # Die if errors
     return "";
+}
+
+sub wget {
+    my $href = shift;
+    my $ua = new LWP::UserAgent;
+    $ua->timeout(60);
+    my $req = new HTTP::Request(GET => $href);
+    my $res = $ua->request($req);
+    if ($res->is_error) {
+	return (undef, "An error has occurred accessing $href: " . $res->status_line);
+    }
+    my $ret = $res->content;
+    return ($ret, undef);
 }
