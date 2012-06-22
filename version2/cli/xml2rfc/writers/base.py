@@ -550,7 +550,7 @@ class BaseRfcWriter:
         else:
             # Insert anchor(s) for the figure
             self.insert_anchor('#rfc.figure.' + str(self.figure_count))
-            if (anchor):
+            if anchor:
                 self.insert_anchor('#' + anchor)
     
             # Write preamble
@@ -573,8 +573,8 @@ class BaseRfcWriter:
             if postamble is not None:
                 self.write_t_rec(postamble, align=align)
     
-            # Write label if PI figurecount = yes
-            if self.pis.get('figurecount', 'no') == 'yes':
+            # Write label if anchor is set or PI figurecount = yes
+            if anchor or self.pis.get('figurecount', 'no') == 'yes':
                 title = figure.attrib.get('title', '')
                 if title:
                     title = ': ' + title
@@ -594,7 +594,7 @@ class BaseRfcWriter:
         else:
             # Insert anchor(s) for the table
             self.insert_anchor('#rfc.table.' + str(self.table_count))
-            if (anchor):
+            if anchor:
                 self.insert_anchor('#' + anchor)
     
             # Write preamble
@@ -610,8 +610,8 @@ class BaseRfcWriter:
             if postamble is not None:
                 self.write_t_rec(postamble, align=align)
     
-            # Write label if PI tablecount = yes
-            if self.pis.get('tablecount', 'no') == 'yes':
+            # Write label if anchor is set or PI figurecount = yes
+            if anchor or self.pis.get('tablecount', 'no') == 'yes':
                 title = table.attrib.get('title', '')
                 if title:
                     title = ': ' + title
