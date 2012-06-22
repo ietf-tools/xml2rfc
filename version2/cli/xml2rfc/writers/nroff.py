@@ -81,14 +81,14 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             if strip:
                 # Strip initial whitespace
                 string = string.lstrip()
-            if bullet:
+            if bullet and len(bullet.strip()) > 0:
                 string = bullet + string
             par = self.wrapper.wrap(string)
             # TODO: Nroff alignment
             # Use bullet for indentation if sub not specified
             full_indent = sub_indent and indent + sub_indent or indent + len(bullet)
             self._indent(full_indent)
-            if len(bullet) > 0:
+            if bullet and len(bullet.strip()) > 0:
                 # Bullet line: title just uses base indent
                 self._write_line('.ti ' + str(indent))
             buf.extend(par)
