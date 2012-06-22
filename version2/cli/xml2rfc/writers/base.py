@@ -702,8 +702,9 @@ class BaseRfcWriter:
             category = self.r.attrib.get('category', 'none')
             stream = self.r.attrib.get('submissionType', 
                                        self.defaults['submissionType'])
-            consensus = self.r.attrib.get('consensus',
-                                          self.defaults['consensus'])
+            # Consensus is assumed 'yes' for Standards Track documents
+            consensus = category == 'std' and 'yes' or \
+                        self.r.attrib.get('consensus', self.defaults['consensus'])
             workgroup = ''
             wg_element = self.r.find('front/workgroup')
             if wg_element is not None and wg_element.text:
