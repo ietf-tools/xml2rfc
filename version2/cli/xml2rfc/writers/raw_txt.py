@@ -167,12 +167,14 @@ class RawTextRfcWriter(BaseRfcWriter):
                     self.list_counters[counter_index] += 1
                     count = self.list_counters[counter_index]
                     if '%d' in format_str:
-                        bullet = format_str.replace(r'%d', str(count) + ' ')
+                        bullet = format_str.replace(r'%d', str(count))
                     elif '%c' in format_str:
                         bullet = format_str.replace(r'%c', \
-                                str(string.ascii_lowercase[count % 26]) + ' ')
+                                str(string.ascii_lowercase[count % 26]))
                     else:
                         bullet = format_str
+                    # Insert a single space
+                    bullet += ' '
                 self.write_t_rec(element, bullet=bullet, indent=indent, \
                                  level=level + 1, \
                                  sub_indent=hangIndent, lb=lb)
