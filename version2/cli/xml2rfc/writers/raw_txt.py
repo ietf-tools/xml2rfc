@@ -560,9 +560,9 @@ class RawTextRfcWriter(BaseRfcWriter):
             phone = address.find('phone')
             if phone is not None and phone.text:
                 lines.append('Phone: ' + phone.text)
-            fascimile = address.find('fascimile')
-            if fascimile is not None and fascimile.text:
-                lines.append('Fax:   ' + fascimile.text)
+            facsimile = address.find('facsimile')
+            if facsimile is not None and facsimile.text:
+                lines.append('Fax:   ' + facsimile.text)
             email = address.find('email')
             if email is not None and email.text:
                 label = self.pis.get('rfcedstyle', 'no') == 'yes' and 'EMail' or 'Email'

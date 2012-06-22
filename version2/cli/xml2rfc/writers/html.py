@@ -405,9 +405,9 @@ class HtmlRfcWriter(BaseRfcWriter):
                 span = E.SPAN('Phone: ' + phone.text)
                 span.attrib['class'] = 'vcardline'
                 contact_div.append(span)
-            fascimile = address.find('fascimile')
-            if fascimile is not None and fascimile.text:
-                span = E.SPAN('Fax: ' + fascimile.text)
+            facsimile = address.find('facsimile')
+            if facsimile is not None and facsimile.text:
+                span = E.SPAN('Fax: ' + facsimile.text)
                 span.attrib['class'] = 'vcardline'
                 contact_div.append(span)
             email = address.find('email')
