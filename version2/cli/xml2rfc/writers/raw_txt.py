@@ -122,9 +122,11 @@ class RawTextRfcWriter(BaseRfcWriter):
         counter_index = None
         if style.startswith('format'):
             format_str = style.partition('format ')[2]
-            if not ('%c' in format_str or '%d' in format_str):
-                xml2rfc.log.warn('No %c or %d found in list format '\
-                                 'string: ' + style)
+            allowed_formats = ('%c', '%C', '%d', '%i', '%I')
+            if not any(map(lambda format: format in format_str, allowed_formats)):
+                xml2rfc.log.warn('Invalid format specified: %s ' 
+                                 '(Must be one of %s)' % (style,
+                                    ', '.join(allowed_formats)))
             counter_index = list.attrib.get('counter', None)
             if not counter_index:
                 counter_index = 'temp'
@@ -166,15 +168,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 elif style.startswith('format'):
                     self.list_counters[counter_index] += 1
                     count = self.list_counters[counter_index]
-                    if '%d' in format_str:
-                        bullet = format_str.replace(r'%d', str(count))
-                    elif '%c' in format_str:
-                        bullet = format_str.replace(r'%c', \
-                                str(string.ascii_lowercase[count % 26]))
-                    else:
-                        bullet = format_str
-                    # Insert a single space
-                    bullet += ' '
+                    bullet = self._format_counter(format_str, count) + ' '
                 self.write_t_rec(element, bullet=bullet, indent=indent, \
                                  level=level + 1, \
                                  sub_indent=hangIndent, lb=lb)
@@ -833,6 +827,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.buf = []
         
         # Reset document counters from indexing pass
+        self.list_counters = {}
         self.edit_counter = 0   # Counter for edit marks
         self.eref_counter = 0   # Counter for <eref> elements
 

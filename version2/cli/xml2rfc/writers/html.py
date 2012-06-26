@@ -75,9 +75,11 @@ class HtmlRfcWriter(BaseRfcWriter):
                 self.write_t_rec(t, parent=dd)
         elif style.startswith('format'):
             format_str = style.partition('format ')[2]
-            if not ('%c' in format_str or '%d' in format_str):
-                xml2rfc.log.warn('No %c or %d found in list format '\
-                                 'string: ' + style)
+            allowed_formats = ('%c', '%C', '%d', '%i', '%I')
+            if not any(map(lambda format: format in format_str, allowed_formats)):
+                xml2rfc.log.warn('Invalid format specified: %s ' 
+                                 '(Must be one of %s)' % (style,
+                                    ', '.join(allowed_formats)))
             counter_index = list.attrib.get('counter', None)
             if not counter_index:
                 counter_index = 'temp'
@@ -89,13 +91,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             for t in list.findall('t'):
                 self.list_counters[counter_index] += 1
                 count = self.list_counters[counter_index]
-                if '%d' in format_str:
-                    bullet = format_str.replace(r'%d', str(count) + ' ')
-                elif '%c' in format_str:
-                    bullet = format_str.replace(r'%c', \
-                                str(string.ascii_lowercase[count % 26]) + ' ')
-                else:
-                    bullet = format_str
+                bullet = self._format_counter(format_str, count) + ' '
                 dt = E.DT(bullet)
                 dd = E.DD()
                 list_elem.append(dt)
@@ -617,6 +613,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                         'header_rows': [],
                         'toc_head_links': [],
                         'toc_rows': []}
+        self.list_counters = {}
         self.active_buffer = self.buffers['front']
 
     def post_processing(self):

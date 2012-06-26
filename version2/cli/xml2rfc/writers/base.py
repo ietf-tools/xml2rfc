@@ -429,6 +429,21 @@ class BaseRfcWriter:
                     # Warn about no date
                     xml2rfc.log.warn('No date specified for document.')
 
+    def _format_counter(self, text, count):
+        """ Return a proper string for a formatted list bullet.  Allowed types:
+                %c: Lowercase chars
+                %C: Uppercase chars
+                %d: Digits
+                %i: Lowercase roman numerals
+                %I: Uppercase roman numerals
+        """
+        return text \
+            .replace(r'%d', str(count)) \
+            .replace(r'%c', str(string.ascii_lowercase[(count - 1) % 26])) \
+            .replace(r'%C', str(string.ascii_uppercase[(count - 1) % 26])) \
+            .replace(r'%i', xml2rfc.utils.int2roman(count)) \
+            .replace(r'%I', xml2rfc.utils.int2roman(count, uppercase=True))
+
     def _prepare_top_left(self):
         """ Returns a lines of lines for the top left header """
         lines = []
