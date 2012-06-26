@@ -98,7 +98,7 @@ class BaseRfcWriter:
     # Category names
     boilerplate['std'] = 'Standards Track'
     boilerplate['bcp'] = 'Best Current Practice'
-    boilerplate['exp'] = 'Experimental Protocol'
+    boilerplate['exp'] = 'Experimental'
     boilerplate['info'] = 'Informational'
     boilerplate['historic'] = 'Historic'
 
