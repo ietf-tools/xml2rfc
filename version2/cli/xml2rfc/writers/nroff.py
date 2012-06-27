@@ -77,6 +77,8 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                 self._lb(buf=buf, text=str('<' + str(self.edit_counter) + '>'))
             else:
                 self._lb(buf=buf)
+
+        par = []
         if string:
             if strip:
                 # Strip initial whitespace
@@ -93,10 +95,15 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             else:
                 self._indent(full_indent)
 
-            if bullet and len(bullet.strip()) > 0:
-                # Bullet line: title just uses base indent
-                self._write_line('.ti ' + str(indent))
-            buf.extend(par)
+        if bullet and len(bullet.strip()) > 0:
+            # Bullet line: title just uses base indent
+            self._write_line('.ti ' + str(indent))
+            if not string:
+                # Just write the bullet
+                par.append(bullet)
+
+        # Write to buffer
+        buf.extend(par)
 
         # Page break information
         end = len(self.buf)
