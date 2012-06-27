@@ -711,7 +711,7 @@ class BaseRfcWriter:
     def _write_status_section(self):
         """ Writes the 'Status of this Memo' section """
 
-        self.write_heading('Status of this Memo', autoAnchor='rfc.status')
+        self.write_heading('Status of This Memo', autoAnchor='rfc.status')
         if not self.draft:  #RFC
             # Status boilerplate is determined by category/submissionType/consensus
             category = self.r.attrib.get('category', 'none')
