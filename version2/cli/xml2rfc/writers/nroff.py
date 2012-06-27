@@ -84,10 +84,15 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             if bullet and len(bullet.strip()) > 0:
                 string = bullet + string
             par = self.wrapper.wrap(string)
-            # TODO: Nroff alignment
             # Use bullet for indentation if sub not specified
             full_indent = sub_indent and indent + sub_indent or indent + len(bullet)
-            self._indent(full_indent)
+
+            # Handle alignment/indentation
+            if align == 'center':
+                self._write_line('.ce %s' % len(par))
+            else:
+                self._indent(full_indent)
+
             if bullet and len(bullet.strip()) > 0:
                 # Bullet line: title just uses base indent
                 self._write_line('.ti ' + str(indent))
@@ -122,13 +127,9 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     def write_title(self, text, docName=None):
         # Override to use .ti commands
         self._lb()
+        self._write_text(text, align='center')
         if docName:
-            self._write_line('.ce 2')
-            self._write_line(text)
-            self._write_line(docName)
-        else:
-            self._write_line('.ce 1')
-            self._write_line(text)
+            self._write_text(docName, align='center')
 
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
                   delimiter=None, lb=True):
