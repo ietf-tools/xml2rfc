@@ -521,8 +521,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         """ Writes a simple address card with no line breaks """
         lines = []
         if 'role' in author.attrib:
-                lines.append(author.attrib.get('fullname', '') + ', ' + \
-                             author.attrib['role'])
+            lines.append("%s (%s)" % (author.attrib.get('fullname', ''),
+                                      author.attrib.get('role', '')))
         else:
             lines.append(author.attrib.get('fullname', ''))
         organization = author.find('organization')

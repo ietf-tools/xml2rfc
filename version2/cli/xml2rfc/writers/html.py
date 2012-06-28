@@ -365,6 +365,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         subs['fullname'] = author.attrib.get('fullname', '')
         subs['surname'] = author.attrib.get('surname', '')
         subs['role'] = author.attrib.get('role', '')
+        subs['role'] = subs['role'] and "(%s)" % subs['role'] or ''
         subs['organization'] = author.find('organization') is not None and \
                                author.find('organization').text or ''
         address = author.find('address')
