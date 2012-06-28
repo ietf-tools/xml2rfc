@@ -180,8 +180,13 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self._write_line('.ds RF FORMFEED[Page %]')
 
     def post_processing(self):
-        """ Insert page break commands """
+        # Process any characters that need to be escaped
+        for i, line in enumerate(self.buf):
+            self.buf[i] = line.replace('\\', '\\\\')
+            if line.strip().startswith("'"):
+                self.buf[i] = '\\' + line
 
+        # Insert page break commands
         # Write buffer to secondary buffer, inserting breaks every 58 lines
         page_len = 0
         page_maxlen = 55
