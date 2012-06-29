@@ -31,7 +31,8 @@ class MyTextWrapper(textwrap.TextWrapper):
             r'(/|'                                    # a forward slash  
             r'\s+|'                                   # any whitespace
             r'[^\s\w]*\w+[^0-9\W]-(?=\w+[^0-9\W])|'   # hyphenated words
-            r'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))')   # em-dash
+            r'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))'    # em-dash
+            r'(?!&#8288;)')                           # UNLESS &wj; 
 
         self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
 
@@ -177,8 +178,8 @@ def _replace_unicode_characters(str):
         str = str.encode('ascii')
     except UnicodeEncodeError:
         str = str.encode('ascii', 'xmlcharrefreplace')
-        xml2rfc.log.warn('Unicode character(s) not replaced in string:\n  ' + \
-                         str)
+        # xml2rfc.log.warn('Unicode character(s) not replaced in string:\n  ' + \
+                         # str)
     return str
 
 
