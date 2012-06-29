@@ -476,11 +476,13 @@ class RawTextRfcWriter(BaseRfcWriter):
                     self._write_list(element, indent=new_indent, level=level)
                     # Auto-break for tail paragraph
                     lb = True
+                    bullet = ''
 
                 elif element.tag == 'figure':
                     self._write_figure(element)
                     # Auto-break for tail paragraph
                     lb = True
+                    bullet = ''
 
                 elif element.tag == 'vspace':
                     # Insert `blankLines` blank lines into document
@@ -488,9 +490,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                                          self.defaults['vspace_blanklines'])))
                     # Don't auto-break for tail paragraph
                     lb = False
-
-                # Dont use a bullet for any other paragraphs at this level
-                bullet = ''
+                    # Keep indentation
+                    bullet = ' ' * len(bullet)
 
                 # Set tail of element as input text of next paragraph
                 if element.tail:
