@@ -43,17 +43,35 @@ class MyTextWrapper(textwrap.TextWrapper):
                              r'\Z'             # end of chunk
                              % string.lowercase)
 
-    def wrap(self, text, initial_indent='', subsequent_indent=''):
-        """ Wrapper method to dynamically change indentation strings """
-        self.initial_indent = initial_indent
-        self.subsequent_indent = subsequent_indent
-        return textwrap.TextWrapper.wrap(self, text)      
+    def replace(self, text):
+        """ Replace control entities with the proper character 
+            after breaking has occured.
+        """
+        for key, val in _post_break_replacements.items():
+            text = re.sub(re.escape(key), val, text)
+        return text
 
-    def fill(self, text, initial_indent='', subsequent_indent=''):
-        """ Wrapper method to dynamically change indentation strings """
+    def wrap(self, text, initial_indent='', subsequent_indent=''):
+        """ Mirrored implementation of wrap which replaces characters properly
+            also lets you easily specify indentation on the fly
+        """
+        # Set indentation
         self.initial_indent = initial_indent
         self.subsequent_indent = subsequent_indent
-        return textwrap.TextWrapper.fill(self, text)
+
+        # Original implementation
+        text = self._munge_whitespace(text)
+
+        # Replace some characters after splitting has occured
+        chunks = map(self.replace, self._split(text))
+
+        # Original implementation
+        if self.fix_sentence_endings:
+            self._fix_sentence_endings(chunks)
+        return self._wrap_chunks(chunks)
+
+    def fill(self, *args, **kwargs):
+        return "\n".join(self.wrap(*args, **kwargs))
 
 
 def justify_inline(left_str, center_str, right_str, width=72):
@@ -167,7 +185,6 @@ def _replace_unicode_characters(str):
 # Ascii representations of unicode chars from rfc2629-xhtml.ent
 # Auto-generated from comments in rfc2629-xhtml.ent
 _unicode_replacements = {
-    '\xa0': ' ',
     '\xa1': '!',
     '\xa2': '[cents]',
     '\xa3': 'GBP',
@@ -333,6 +350,11 @@ _unicode_replacements = {
     u'\u017d': 'Z',
     u'\u017e': 'z',
     u'\u2010': '-',
-    u'\u2011': '-',
-    u'\u2060': '',
+}
+
+# XmlCharRef replacements that occur AFTER line breaking logic
+_post_break_replacements = {
+    '&#160;': ' ',   # nbsp
+    '&#8209;': '-',  # nbhy
+    '&#8288;': '',  # wj
 }
