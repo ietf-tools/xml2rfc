@@ -9,6 +9,7 @@ import datetime
 import lxml
 import xml2rfc.log
 import xml2rfc.utils
+from xml2rfc.utils import urlkeep
 
 
 class _RfcItem:
@@ -191,22 +192,22 @@ class BaseRfcWriter:
         '5741.'
 
     # Paragraph 3
-    boilerplate['status']['p3'] = \
-        'Information about the current status of this document, any errata, ' \
-        'and how to provide feedback on it may be obtained at ' \
-        'http://www.rfc-editor.org/info/rfc%s.'
+    boilerplate['status']['p3'] = urlkeep(''
+        'Information about the current status of this document, any errata, '
+        'and how to provide feedback on it may be obtained at '
+        'http://www.rfc-editor.org/info/rfc%s.')
 
     # 'Status of this Memo' boilerplate for drafts
-    boilerplate['status']['draft'] = \
-       ['Internet-Drafts are working documents of the Internet Engineering ' \
-       'Task Force (IETF).  Note that other groups may also distribute ' \
-       'working documents as Internet-Drafts.  The list of current Internet- ' \
+    boilerplate['status']['draft'] = map(urlkeep,
+       ['Internet-Drafts are working documents of the Internet Engineering '
+       'Task Force (IETF).  Note that other groups may also distribute '
+       'working documents as Internet-Drafts.  The list of current Internet- '
        'Drafts is at http://datatracker.ietf.org/drafts/current/.',
 
-       'Internet-Drafts are draft documents valid for a maximum of six months ' \
-       'and may be updated, replaced, or obsoleted by other documents at any ' \
-       'time.  It is inappropriate to use Internet-Drafts as reference ' \
-       'material or to cite them other than as "work in progress."']
+       'Internet-Drafts are draft documents valid for a maximum of six months '
+       'and may be updated, replaced, or obsoleted by other documents at any '
+       'time.  It is inappropriate to use Internet-Drafts as reference '
+       'material or to cite them other than as "work in progress."'])
     boilerplate['draft_expire'] = \
        'This Internet-Draft will expire on %s.'
 
@@ -222,13 +223,13 @@ class BaseRfcWriter:
     boilerplate['base_copyright_header'] = \
         'Copyright (c) %s IETF Trust and the persons identified as the ' \
         'document authors.  All rights reserved.'
-    boilerplate['base_copyright_body'] = \
-        'This document is subject to BCP 78 and the IETF Trust\'s Legal ' \
-        'Provisions Relating to IETF Documents ' \
-        '(http://trustee.ietf.org/license-info) in effect on the date of ' \
-        'publication of this document.  Please review these documents ' \
-        'carefully, as they describe your rights and restrictions with respect ' \
-        'to this document.'
+    boilerplate['base_copyright_body'] = urlkeep(''
+        'This document is subject to BCP 78 and the IETF Trust\'s Legal '
+        'Provisions Relating to IETF Documents '
+        '(http://trustee.ietf.org/license-info) in effect on the date of '
+        'publication of this document.  Please review these documents '
+        'carefully, as they describe your rights and restrictions with respect '
+        'to this document.')
 
     # IPR values which append things to copyright
     boilerplate['ipr_200902_copyright_ietfbody'] = \

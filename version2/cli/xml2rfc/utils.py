@@ -32,7 +32,7 @@ class MyTextWrapper(textwrap.TextWrapper):
             r'\s+|'                                   # any whitespace
             r'[^\s\w]*\w+[^0-9\W]-(?=\w+[^0-9\W])|'   # hyphenated words
             r'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))'    # em-dash
-            r'(?!&#8288;)')                           # UNLESS &wj; 
+            r'(?!&#8288;)')                           # UNLESS &wj;
 
         self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
 
@@ -52,13 +52,14 @@ class MyTextWrapper(textwrap.TextWrapper):
             text = re.sub(re.escape(key), val, text)
         return text
 
-    def wrap(self, text, initial_indent='', subsequent_indent=''):
+    def wrap(self, text, break_on_hyphens=True, initial_indent='', subsequent_indent=''):
         """ Mirrored implementation of wrap which replaces characters properly
             also lets you easily specify indentation on the fly
         """
         # Set indentation
         self.initial_indent = initial_indent
         self.subsequent_indent = subsequent_indent
+        self.break_on_hyphens = break_on_hyphens
 
         # Original implementation
         text = self._munge_whitespace(text)
@@ -143,6 +144,17 @@ def int2roman(number, uppercase=False):
             result += numeral
             number -= value
     return uppercase and result.upper() or result
+
+
+def urlkeep(text):
+    """ Insert word join XML entities on forward slashes and hyphens
+        in a URL so that it stays on one line
+    """
+    wj_char = '&#8288;'
+    def replacer(match):
+        return match.group(0).replace('/', '/' + wj_char) \
+                             .replace('-', '-' + wj_char)
+    return re.sub('(?<=http:)\S*', replacer, text)
 
 
 def safeReplaceUnicode(tree):
@@ -357,5 +369,5 @@ _unicode_replacements = {
 _post_break_replacements = {
     '&#160;': ' ',   # nbsp
     '&#8209;': '-',  # nbhy
-    '&#8288;': '',  # wj
+    '&#8288;': '',   # wj
 }
