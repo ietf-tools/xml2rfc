@@ -478,12 +478,12 @@ class BaseRfcWriter:
 
         # RFC relation notice
         approved_text = self.draft and '(if approved)' or ''
-        updates = self.r.attrib.get('updates')
-        if updates:
-            lines.append('Updates: %s %s' % (updates, approved_text))
         obsoletes = self.r.attrib.get('obsoletes')
         if obsoletes:
             lines.append('Obsoletes: %s %s' % (obsoletes, approved_text))
+        updates = self.r.attrib.get('updates')
+        if updates:
+            lines.append('Updates: %s %s' % (updates, approved_text))
 
         # Cateogory
         if category:
