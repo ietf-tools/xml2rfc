@@ -211,7 +211,8 @@ class RawTextRfcWriter(BaseRfcWriter):
             bullet = ' ' * (depth * indent_scale) + counter
             indent = 3
             sub_indent = indent + len(bullet)
-            lines = textwrap.wrap(bullet + item.title, self.width,
+            lines = textwrap.wrap(bullet + item.title, 
+                                  self.width - len(str(item.page)) + 1,
                                   initial_indent=' ' * indent,
                                   subsequent_indent=' ' * sub_indent)
             if paging:
