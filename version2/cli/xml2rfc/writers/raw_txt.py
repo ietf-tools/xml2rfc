@@ -593,13 +593,13 @@ class RawTextRfcWriter(BaseRfcWriter):
                         initials = initials + '.'
                     if j == len(authors) - 1 and len(authors) > 1:
                         # Last author is rendered in reverse
-                        refstring.append(' and ' + initials + ' ' + \
+                        refstring.append('and ' + initials + ' ' + \
                                          surname + ', ')
                     else:
-                        refstring.append(surname + ', ' + initials)
-                        if j != len(authors) - 2:
-                            # No comma before 'and'
-                            refstring.append(', ')
+                        refstring.append(surname + ', ' + initials + ', ')
+                        #if j != len(authors) - 2:
+                        #    # No comma before 'and'
+                        #    refstring.append(', ')
                     if author.attrib.get('role', '') == 'editor':
                         refstring.append('Ed., ')
                 elif organization is not None and organization.text:
