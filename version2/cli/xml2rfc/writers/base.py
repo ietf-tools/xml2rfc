@@ -21,7 +21,7 @@ class _RfcItem:
         RfcItems are collected into an index list in the base writer
     """
     def __init__(self, autoName, autoAnchor, counter='', title='', anchor='',
-                 toc=True, level=1):
+                 toc=True, level=1, appendix=False):
         self.counter = str(counter)
         self.autoName = autoName
         self.autoAnchor = autoAnchor
@@ -29,6 +29,7 @@ class _RfcItem:
         self.anchor = anchor
         self.toc = toc
         self.level = level
+        self.appendix = appendix
         self.page = 0    # This will be set after buffers are complete!
 
 
@@ -343,7 +344,7 @@ class BaseRfcWriter:
             autoName = 'Section ' + counter
             autoAnchor = 'rfc.section.' + counter
         item = _RfcItem(autoName, autoAnchor, counter=counter, title=title, \
-                       anchor=anchor, toc=toc, level=level)
+                       anchor=anchor, toc=toc, level=level, appendix=appendix)
         self._index.append(item)
         return item
 
@@ -664,7 +665,8 @@ class BaseRfcWriter:
             else:
                 # Write the section heading
                 aa_prefix = appendix and 'rfc.appendix.' or 'rfc.section.'
-                self.write_heading(title, bullet=count_str + '.',
+                bullet = appendix and level == 1 and 'Appendix %s' % count_str or count_str
+                self.write_heading(title, bullet=bullet + '.',
                                    autoAnchor=aa_prefix + count_str,
                                    anchor=anchor, level=level)
         else:
@@ -699,8 +701,7 @@ class BaseRfcWriter:
         for child_sec in section.findall('section'):
             if appendix == True and not count_str:
                 # Use an alphabetic counter for first-level appendix
-                self._write_section_rec(child_sec, 'Appendix ' + \
-                                        string.uppercase[s_count - 1] + '',
+                self._write_section_rec(child_sec, string.uppercase[s_count - 1],
                                         level=level + 1, appendix=True)
             else:
                 # Use a numeric counter

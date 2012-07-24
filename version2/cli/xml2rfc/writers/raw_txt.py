@@ -205,6 +205,9 @@ class RawTextRfcWriter(BaseRfcWriter):
             depth = item.level - 1
             if depth < 0 or self.pis.get('tocindent', 'yes') == 'no':
                 depth = 0
+            # Prepend appendix at first level
+            if item.level == 1 and item.appendix:
+                counter = "Appendix " + counter
             bullet = ' ' * (depth * indent_scale) + counter
             indent = 3
             sub_indent = indent + len(bullet)
