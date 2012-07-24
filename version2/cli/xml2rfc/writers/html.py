@@ -128,6 +128,9 @@ class HtmlRfcWriter(BaseRfcWriter):
             # Create actual toc list item
             a = E.A(item.title, href='#' + item.autoAnchor)
             counter_text = item.counter and item.counter + '.   ' or ''
+            # Prepend appendix at first level
+            if item.level == 1 and item.appendix:
+                counter_text = "Appendix " + counter_text
             li = E.LI(counter_text)
             li.append(a)
             self.buffers['toc_rows'].append(self._serialize(li))
