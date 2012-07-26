@@ -18,7 +18,7 @@ except Exception:
 setup(
     # Package metadata
     name='xml2rfc',
-    version='2.3.7',
+    version='2.3.8',
     description=description,
     long_description=long_description,
     author='Concentric Sky',
