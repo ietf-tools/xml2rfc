@@ -888,6 +888,9 @@ class BaseRfcWriter:
         references = self.r.findall('back/references')
         # Write root level references header
         ref_title = self.pis.get('refparent', self.defaults['references_title'])
+        if len(references) == 1:
+            ref_title = references[0].attrib.get('title', ref_title)
+
         if self.indexmode:
             self._indexReferences(ref_counter, title=ref_title)
         else:
