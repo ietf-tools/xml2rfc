@@ -38,11 +38,11 @@ class MyTextWrapper(textwrap.TextWrapper):
 
         # Override end of line regex, double space after '].'
         self.sentence_end_re = \
-                  re.compile(r'[%s|\]|"]'      # lowercase, bracket, or quote
+                  re.compile(r'([a-z0-9\]")]'  # lowercase, digit, bracket, parens, quote
+                             r'|^[A-Z]{2,})'   # acronyms         
                              r'[\.\!\?]'       # sentence-ending punct.
                              r'[\"\']?'        # optional end-of-quote
-                             r'\Z'             # end of chunk
-                             % string.lowercase)
+                             r'\Z')            # end of chunk
 
     def replace(self, text):
         """ Replace control entities with the proper character 
