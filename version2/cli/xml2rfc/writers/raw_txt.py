@@ -3,6 +3,7 @@
 # --------------------------------------------------
 
 # Python libs
+import os
 import textwrap
 import string
 import math
@@ -849,4 +850,4 @@ class RawTextRfcWriter(BaseRfcWriter):
         """ Writes the buffer to the specified file """
         for line in self.output:
             file.write(line)
-            file.write('\r\n')
+            file.write(os.linesep)
