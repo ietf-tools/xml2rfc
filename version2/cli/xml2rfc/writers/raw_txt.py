@@ -551,7 +551,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     cityline.append(region.text)
                 code = postal.find('code')
                 if code is not None and code.text:
-                    if len(cityline) > 0: cityline.append(' ');
+                    if len(cityline) > 0: cityline.append('  ');
                     cityline.append(code.text)
                 if len(cityline) > 0:
                     lines.append(''.join(cityline))
