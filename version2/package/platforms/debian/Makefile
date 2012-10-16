@@ -17,7 +17,7 @@ BUILD_FILES = $(patsubst $(TEMPLATE_ROOT)/%, $(BUILD_ROOT)/%, $(TEMPLATE_FILES))
 
 
 # Final debian package 
-$(DIST_ROOT)/$(PKG_FILE): requirements $(DEB_DIST)/$(PKG_FILE) 
+$(DIST_ROOT)/$(PKG_FILE): verifydep $(DEB_DIST)/$(PKG_FILE) 
 	@echo "Copying final package..."
 	mkdir -p $(DIST_ROOT)
 	cp $(DEB_DIST)/$(PKG_FILE) $@
@@ -49,9 +49,13 @@ $(BUILD_ROOT)/%: $(TEMPLATE_ROOT)/%
 	@mkdir -p `dirname $@`
 	cp $< $@
 
-requirements:
+verifydep:
 	@echo "Verifying build requirements..."
-	pip freeze | grep -i stdeb== || pip install stdeb
+	@pip freeze | grep -i stdeb== || (echo "ERROR: Missing python package 'stdeb', try running 'make depend'" && exit 2)
+
+depend:
+	pip install stdeb==0.6.0
+	@echo "Requirements up to date."
 
 clean:
 	@echo "Cleaning for Debian..."
