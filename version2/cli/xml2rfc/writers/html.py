@@ -635,6 +635,8 @@ class HtmlRfcWriter(BaseRfcWriter):
             description = abs_t.text
         keywords = self.r.findall('front/keyword')
         keyword_list = [keyword.text for keyword in keywords if keyword.text]
+        generator_tag = "xml2rfc version %s - http://tools.ietf.org/tools/xml2rfc" % \
+                        '.'.join(map(str, xml2rfc.VERSION))
         
         # Run through base template, store in main output string
         subs = { 
@@ -644,6 +646,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                  'docName':         docName,
                  'description':     description,
                  'keywords':        ', '.join(keyword_list),
+                 'generator':       generator_tag,
                  
                  # Replace buffers
                  'front':           ''.join(self.buffers['front']),
