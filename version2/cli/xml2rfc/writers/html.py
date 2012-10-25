@@ -136,7 +136,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             self.buffers['toc_rows'].append(self._serialize(li))
 
     def _serialize(self, element):
-        return lxml.html.tostring(element, pretty_print=True)
+        return lxml.html.tostring(element, pretty_print=True, method='xml')
     
     def _flush_temp_div(self):
         lines = []
