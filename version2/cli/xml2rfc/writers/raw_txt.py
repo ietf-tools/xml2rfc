@@ -584,29 +584,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         for i, ref in enumerate(list.findall('reference')):
             refstring = []
             authors = ref.findall('front/author')
-            for j, author in enumerate(authors):
-                organization = author.find('organization')
-                surname = author.attrib.get('surname', '')
-                if surname:
-                    initials = author.attrib.get('initials', '')
-                    # Append a dot if it doesnt already exist
-                    if initials and not initials.endswith('.'):
-                        initials = initials + '.'
-                    if j == len(authors) - 1 and len(authors) > 1:
-                        # Last author is rendered in reverse
-                        refstring.append('and ' + initials + ' ' + \
-                                         surname)
-                    else:
-                        refstring.append(surname + ', ' + initials)
-                    if author.attrib.get('role', '') == 'editor':
-                        refstring.append(', Ed.')
-                    if len(authors) == 2 and j == 0:
-                        refstring.append(' ')
-                    else:
-                        refstring.append(', ')
-                elif organization is not None and organization.text:
-                    # Use organization instead of name
-                    refstring.append(organization.text + ', ')
+            refstring.append(self._format_author_string(authors))
+            refstring.append(', ')
             title = ref.find('front/title')
             if title is not None and title.text:
                 refstring.append('"' + title.text + '", ')

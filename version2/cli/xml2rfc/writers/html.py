@@ -8,6 +8,7 @@ import lxml
 import os.path
 import string
 import sys
+import datetime
 
 # Local libs
 import xml2rfc
@@ -498,11 +499,12 @@ class HtmlRfcWriter(BaseRfcWriter):
                 title_a.tail += seriesInfo.attrib.get('name', '') + ' ' + \
                              seriesInfo.attrib.get('value', '') + ', '
             date = reference.find('front/date')
-            month = date.attrib.get('month', '')
-            if month:
-                month += ' '
-            year = date.attrib.get('year', '')
-            title_a.tail += month + year + '.'
+            if date is not None:
+                month = date.attrib.get('month', '')
+                if month:
+                    month += ' '
+                year = date.attrib.get('year', '')
+                title_a.tail += month + year + '.'
             tr.append(bullet_td)
             tr.append(ref_td)
             tbody.append(tr)
@@ -637,16 +639,35 @@ class HtmlRfcWriter(BaseRfcWriter):
         keyword_list = [keyword.text for keyword in keywords if keyword.text]
         generator_tag = "xml2rfc version %s - http://tools.ietf.org/tools/xml2rfc" % \
                         '.'.join(map(str, xml2rfc.VERSION))
-        
+
+        # Build ISO8601 date string
+        docDate = ''
+        date = self.r.find('front/date')
+        if date is not None:
+            # We can assume AT LEAST year was defined in base.py from _format_date()
+            docDate = date.attrib.get('year', '')
+            try:
+                month = datetime.datetime.strptime(date.attrib.get('month', ''), '%B').month
+                docDate += "-%s" % month
+            except ValueError:
+                pass
+            if date.attrib.get('day'):
+                docDate += "-%s" % date.attrib.get('day')
+
+        # Build author string
+        authors = self._format_author_string(self.r.findall('front/author'))
+
         # Run through base template, store in main output string
         subs = { 
                  # Replace flat values 
                  'background':      background_image,
                  'title':           title,
                  'docName':         docName,
+                 'docDate':         docDate,
                  'description':     description,
                  'keywords':        ', '.join(keyword_list),
                  'generator':       generator_tag,
+                 'authors':         authors,
                  
                  # Replace buffers
                  'front':           ''.join(self.buffers['front']),

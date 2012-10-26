@@ -446,6 +446,34 @@ class BaseRfcWriter:
             .replace(r'%i', xml2rfc.utils.int2roman(count)) \
             .replace(r'%I', xml2rfc.utils.int2roman(count, uppercase=True))
 
+    def _format_author_string(self, authors):
+        """ Given a list of <author> elements, return a readable string of names """
+        buf = []
+        for i, author in enumerate(authors):
+            organization = author.find('organization')
+            surname = author.attrib.get('surname', '')
+            if surname:
+                initials = author.attrib.get('initials', '')
+                # Append a dot if it doesnt already exist
+                if initials and not initials.endswith('.'):
+                    initials = initials + '.'
+                if i == len(authors) - 1 and len(authors) > 1:
+                    # Last author is rendered in reverse
+                    buf.append('and ' + initials + ' ' + \
+                                     surname)
+                else:
+                    buf.append(surname + ', ' + initials)
+                if author.attrib.get('role', '') == 'editor':
+                    buf.append(', Ed.')
+            elif organization is not None and organization.text:
+                # Use organization instead of name
+                buf.append(organization.text)
+            if len(authors) == 2 and i == 0:
+                buf.append(' ')
+            elif i < len(authors) - 1:
+                buf.append(', ')
+        return ''.join(buf)
+
     def _prepare_top_left(self):
         """ Returns a lines of lines for the top left header """
         lines = []
@@ -641,6 +669,7 @@ class BaseRfcWriter:
     
     def _index_t_rec(self, element):
         """ Traverse a <t> element only performing indexing operations """
+        pass
         
 
     def _write_section_rec(self, section, count_str, appendix=False, \
