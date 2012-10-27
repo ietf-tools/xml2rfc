@@ -9,6 +9,7 @@ import os.path
 import string
 import sys
 import datetime
+import cgi
 
 # Local libs
 import xml2rfc
@@ -637,8 +638,8 @@ class HtmlRfcWriter(BaseRfcWriter):
             description = abs_t.text
         keywords = self.r.findall('front/keyword')
         keyword_list = [keyword.text for keyword in keywords if keyword.text]
-        generator_tag = "xml2rfc version %s - http://tools.ietf.org/tools/xml2rfc" % \
-                        '.'.join(map(str, xml2rfc.VERSION))
+        generator = "xml2rfc version %s - http://tools.ietf.org/tools/xml2rfc" % \
+                    '.'.join(map(str, xml2rfc.VERSION))
 
         # Build ISO8601 date string
         docDate = ''
@@ -661,13 +662,15 @@ class HtmlRfcWriter(BaseRfcWriter):
         subs = { 
                  # Replace flat values 
                  'background':      background_image,
-                 'title':           title,
-                 'docName':         docName,
-                 'docDate':         docDate,
-                 'description':     description,
-                 'keywords':        ', '.join(keyword_list),
-                 'generator':       generator_tag,
-                 'authors':         authors,
+
+                 # HTML-escaped values
+                 'docName':         cgi.escape(docName, quote=True),
+                 'docDate':         cgi.escape(docDate, quote=True),
+                 'description':     cgi.escape(description, quote=True),
+                 'generator':       cgi.escape(generator, quote=True),
+                 'authors':         cgi.escape(authors, quote=True),
+                 'keywords':        cgi.escape(', '.join(keyword_list), quote=True),
+                 'title':           cgi.escape(title),
                  
                  # Replace buffers
                  'front':           ''.join(self.buffers['front']),
