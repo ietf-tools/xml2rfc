@@ -594,8 +594,8 @@ class BaseRfcWriter:
         
         if anchor:
             # Insert anchor(s) for the figure
-            self.insert_anchor('#rfc.figure.' + str(self.figure_count))
-            self.insert_anchor('#' + anchor)
+            self.insert_anchor('rfc.figure.' + str(self.figure_count))
+            self.insert_anchor(anchor)
             if self.indexmode:
                 # Add figure to the index, inserting any anchors necessary
                 self._indexFigure(self.figure_count, anchor=anchor, title=title)
@@ -640,8 +640,8 @@ class BaseRfcWriter:
 
         if anchor:
             # Insert anchor(s) for the table
-            self.insert_anchor('#rfc.table.' + str(self.table_count))
-            self.insert_anchor('#' + anchor)
+            self.insert_anchor('rfc.table.' + str(self.table_count))
+            self.insert_anchor(anchor)
             if self.indexmode:
                 # Add table to the index, inserting any anchors necessary
                 self._indexTable(self.table_count, anchor=anchor, title=title)
