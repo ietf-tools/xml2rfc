@@ -358,9 +358,9 @@ if ($format eq 'ascii') {
 	    ($ret, $out, $err) = runCommand("ebook-convert $TMP4 $TMP3 " .
 		# "--no-svg-cover " .
 		"--no-default-epub-cover " .
-		"--authors '" . untaint($fileValues{authors}) . "' " .
-		"--title '" .  untaint($fileValues{"rfc/front/title"}) . "'" . 
-		"--tags '" .  untaint($fileValues{"rfc/front/keyword"}) . "'", 
+		"--authors='" . untaint($fileValues{authors}) . "' " .
+		"--title='" .  untaint($fileValues{"rfc/front/title"}) . "'" . 
+		"--tags='" .  untaint($fileValues{"rfc/front/keyword"}) . "'", 
 		$TMP4, $TMP3, "Converting to $format");
 	}
     }
