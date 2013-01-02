@@ -40,3 +40,11 @@ def error(*args):
     """ This is typically called after an exception was already raised. """
     write_err.write('ERROR: ' + ' '.join(args))
     write_err.write('\n')
+
+def exception(message, list):
+    error(message)
+    if isinstance(list, Exception):
+        list = [ list ]
+    for e in list:
+        attr = dict( [ (n,str(getattr(e, n)).replace("\n"," ")) for n in dir(e) if not n.startswith("_") ] )
+        write_err.write(" %(filename)s: Line %(line)s: %(message)s\n" % attr )
