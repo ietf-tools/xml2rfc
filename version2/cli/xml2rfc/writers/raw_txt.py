@@ -594,8 +594,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                 xml2rfc.log.warn('No title specified in reference', \
                                  ref.attrib.get('anchor', ''))
             for seriesInfo in ref.findall('seriesInfo'):
-                refstring.append(seriesInfo.attrib['name'] + ' ' + \
-                                 seriesInfo.attrib['value'] + ', ')
+                if seriesInfo.attrib['name'] == "Internet-Draft":
+                    refstring.append(seriesInfo.attrib['value'] + ' (work in progress), ')
+                else:
+                    refstring.append(seriesInfo.attrib['name'] + ' ' + \
+                                     seriesInfo.attrib['value'] + ', ')
             date = ref.find('front/date')
             if date is not None:
                 month = date.attrib.get('month', '')
