@@ -19,11 +19,14 @@ class XmlRfcError(Exception):
     
         This class attempts to mirror the API of lxml's error class
     """
-    def __init__(self, msg, line_no=0):
+    def __init__(self, msg, filename=None, line_no=0):
         self.msg = msg
         # This mirrors lxml error behavior, but we can't capture column
         self.position = (line_no, 0)
-
+        # Also match lxml.etree._LogEntry attributes:
+        self.message = msg
+        self.filename = filename
+        self.line = line_no
 
 class CachingResolver(lxml.etree.Resolver):
     """ Custom ENTITY request handler that uses a local cache """
@@ -228,7 +231,7 @@ class CachingResolver(lxml.etree.Resolver):
                                  'automatically in standard locations.')
             # Couldn't resolve.  Throw an exception
             error = XmlRfcError('Unable to resolve external request: '
-                                      + '"' + original + '"', line_no=line_no)
+                                      + '"' + original + '"', line_no=line_no, filename=self.source)
             if self.verbose and len(attempts) > 1:
                 # Reveal attemps
                 error.msg += ', trying the following location(s):\n    ' + \
