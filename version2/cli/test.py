@@ -22,7 +22,7 @@ def diff_test(case, valid, test, failpath):
     validarr = [line.rstrip() for line in valid.splitlines()]
     testarr = [line.rstrip() for line in test.splitlines()]
     if testarr != validarr:
-        diff = difflib.ndiff(testarr, validarr)
+        diff = difflib.ndiff(validarr, testarr)
         fh = open(failpath, 'w')
         fh.write(test)
         fh.close()
