@@ -4,7 +4,7 @@
 
 # Python libs
 import time
-from datetime import datetime
+import datetime
 
 # Local libs
 from xml2rfc import VERSION
@@ -33,9 +33,9 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         '.ad l',          # Left margin adjustment only
     ]
 
-    def __init__(self, xmlrfc, width=72, quiet=False, verbose=False):
+    def __init__(self, xmlrfc, width=72, quiet=False, verbose=False, date=datetime.date.today()):
         PaginatedTextRfcWriter.__init__(self, xmlrfc, width=width, \
-                                        quiet=quiet, verbose=verbose)
+                                        quiet=quiet, verbose=verbose, date=date)
         self.curr_indent = 0    # Used like a state machine to control
                                 # whether or not we print a .in command
 
@@ -165,7 +165,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
         # Insert a timestamp+version comment
         self._write_line(self.comment_header % ('.'.join(map(str, VERSION)),
-            time.strftime('%Y-%m-%dT%H:%M:%SZ', datetime.utcnow().utctimetuple())))
+            time.strftime('%Y-%m-%dT%H:%M:%SZ', datetime.datetime.utcnow().utctimetuple())))
         self._lb()
 
         # Insert the standard nroff settings

@@ -8,6 +8,7 @@ import textwrap
 import string
 import math
 import lxml
+import datetime
 
 # Local lib
 from xml2rfc.writers.base import BaseRfcWriter
@@ -20,8 +21,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         The page width is controlled by the *width* parameter.
     """
 
-    def __init__(self, xmlrfc, width=72, quiet=False, verbose=False):
-        BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)
+    def __init__(self, xmlrfc, width=72, quiet=False, verbose=False, date=datetime.date.today()):
+        BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose, date=date)
         # Document processing data
         self.width = width      # Page width
         self.buf = []           # Main buffer during processing

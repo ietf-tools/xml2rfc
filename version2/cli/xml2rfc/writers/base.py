@@ -286,9 +286,10 @@ class BaseRfcWriter:
 
     # -------------------------------------------------------------------------
 
-    def __init__(self, xmlrfc, quiet=False, verbose=False):
+    def __init__(self, xmlrfc, quiet=False, verbose=False, date=datetime.date.today()):
         self.quiet = quiet
         self.verbose = verbose
+        self.date = date
         self.expire_string = ''
         self.ascii = False
 
@@ -399,14 +400,14 @@ class BaseRfcWriter:
     
     def _format_date(self):
         """ Fix the date data """
-        today = datetime.date.today()
+        today = self.date
         date = self.r.find('front/date')
         if date is not None:
             year = date.attrib.get('year', '')
             month = date.attrib.get('month', '')
             # If year is this year, and month not specified, use current date
             if not year or (year == str(today.year) and not month) or \
-                           (year == str(today.year) and month == str(today.month)):
+                           (year == str(today.year) and month == today.strftime("%B")):
                 # Set everything to today
                 date.attrib['year'] = today.strftime('%Y')
                 date.attrib['month'] = today.strftime('%B')
@@ -423,7 +424,7 @@ class BaseRfcWriter:
                     try:
                         start_date = datetime.datetime.strptime(year + month + day, \
                                                                 '%Y%B%d')
-                        expire_date = start_date + datetime.timedelta(183)
+                        expire_date = start_date + datetime.timedelta(185)
                         self.expire_string = expire_date.strftime('%B %d, %Y')
                     except ValueError:
                         pass

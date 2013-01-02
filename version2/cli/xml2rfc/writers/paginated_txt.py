@@ -2,6 +2,9 @@
 # Copyright The IETF Trust 2011, All Rights Reserved
 # --------------------------------------------------
 
+# Python libs
+import datetime
+
 # Local libs
 from xml2rfc.writers.base import BaseRfcWriter
 from xml2rfc.writers.raw_txt import RawTextRfcWriter
@@ -14,9 +17,9 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         The page width is controlled by the *width* parameter.
     """
 
-    def __init__(self, xmlrfc, width=72, quiet=False, verbose=False):
+    def __init__(self, xmlrfc, width=72, quiet=False, verbose=False, date=datetime.date.today()):
         RawTextRfcWriter.__init__(self, xmlrfc, width=width, quiet=quiet, \
-                                  verbose=verbose)
+                                  verbose=verbose, date=date)
         self.left_header = ''
         self.center_header = ''
         self.right_header = ''

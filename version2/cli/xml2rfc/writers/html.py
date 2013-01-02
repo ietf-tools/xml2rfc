@@ -26,8 +26,8 @@ class HtmlRfcWriter(BaseRfcWriter):
         'references_url': 'http://tools.ietf.org/html/',
     }
 
-    def __init__(self, xmlrfc, quiet=False, verbose=False, templates_dir=None):
-        BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose)
+    def __init__(self, xmlrfc, quiet=False, verbose=False, date=datetime.date.today(), templates_dir=None):
+        BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, date=date, verbose=verbose)
         self.list_counters = {}
         self.iref_index = []
         
