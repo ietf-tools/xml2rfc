@@ -6,7 +6,7 @@ import os
 import shutil
 import xml2rfc
 import lxml.etree
-
+import datetime
 
 def display_version(self, opt, value, parser):
     print('.'.join(map(str, xml2rfc.VERSION)))
@@ -20,9 +20,11 @@ def clear_cache(self, opt, value, parser):
 
 def main():
     # Populate options
+    formatter = optparse.IndentedHelpFormatter(max_help_position=40)
     optionparser = optparse.OptionParser(usage='xml2rfc SOURCE [options] '
                                         'FORMATS...\nExample: xml2rfc '
-                                        'draft.xml -f Draft-1.0 --text --html')
+                                        'draft.xml -f Draft-1.0 --text --html',
+                                        formatter=formatter)
     optionparser.add_option('-v', '--verbose', action='store_true',
                             dest='verbose', help='print extra information')
     optionparser.add_option('-q', '--quiet', action='store_true',
@@ -30,18 +32,21 @@ def main():
     # optionparser.add_option('-w', '--warn-error', action='store_true',
     #                         dest='warn_error', help='treat warnings as '
     #                        'errors and halt execution')
+    optionparser.add_option('-n', '--no-dtd', dest='no_dtd', action='store_true',
+                            help='disable DTD validation step')
     optionparser.add_option('-c', '--cache', dest='cache', 
                             help='specify an alternate cache directory to write'
                             ' to')
-    optionparser.add_option('-n', '--no-dtd', dest='no_dtd', action='store_true',
-                            help='disable DTD validation step')
     optionparser.add_option('-d', '--dtd', dest='dtd',
                             help='specify an alternate dtd file')
-    optionparser.add_option('-b', '--basename', dest='basename',
+    optionparser.add_option('-b', '--basename', dest='basename', metavar='NAME',
                             help='specify the base name for output files')
-    optionparser.add_option('-f', '--filename', dest='filename',
+    optionparser.add_option('-f', '--filename', dest='filename', metavar='FILE',
                             help='specify an explicit output filename (only '
                             'valid with a single format enabled)')
+    optionparser.add_option('', '--date', dest='datestring', metavar='DATE',
+                            default=datetime.datetime.today().strftime("%Y-%m-%d"),
+                            help='run as if todays date is DATE (format: yyyy-mm-dd)')
     optionparser.add_option('', '--clear-cache', action='callback',
                             help='purge the cache and exit',
                             callback=clear_cache)
@@ -101,6 +106,8 @@ def main():
             if not os.access(options.cache, os.W_OK):
                 print 'Cache directory is not writable:', options.cache
                 sys.exit(1)
+    options.date = datetime.datetime.strptime(options.datestring, "%Y-%m-%d").date()
+
 
     # Setup warnings module
     # xml2rfc.log.warn_error = options.warn_error and True or False
@@ -113,21 +120,20 @@ def main():
                                   templates_path=globals().get('_TEMPLATESPATH', None))
     try:
         xmlrfc = parser.parse()
-    except (lxml.etree.XMLSyntaxError, xml2rfc.parser.XmlRfcError), error:
-        linestr = error.position[0] > 0 and 'Line ' + str(error.position[0]) + ': ' \
-                  or ''
-        xml2rfc.log.error('Unable to parse the XML document:', args[0],
-                          '\n  ' + linestr + error.msg)
+    except xml2rfc.parser.XmlRfcError, error:
+        xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], error)
+        sys.exit(1)
+    except lxml.etree.XMLSyntaxError, error:
+        # Give the lxml.etree.XmlSyntaxError exception a line attribute which
+        # matches lxml.etree._LogEntry, so we can use the same logging function
+        xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], error.error_log)
         sys.exit(1)
         
     # Validate the document unless disabled
     if not options.no_dtd:
         ok, errors = xmlrfc.validate(dtd_path=options.dtd)
         if not ok:
-            error_str = 'Unable to validate the XML document: ' + args[0]
-            for error in errors:
-                error_str += '\n  Line ' + str(error.line) + ': ' + error.message
-            xml2rfc.log.error(error_str)
+            xml2rfc.log.exception('Unable to validate the XML document: ' + args[0], errors)
             sys.exit(1)
 
     # Execute any writers specified
@@ -146,7 +152,8 @@ def main():
             new_xmlrfc = parser.parse(remove_comments=False)
             expwriter = xml2rfc.ExpandedXmlWriter(new_xmlrfc,
                                                   quiet=options.quiet,
-                                                  verbose=options.verbose)
+                                                  verbose=options.verbose,
+                                                  date=options.date)
             filename = options.filename
             if not filename:
                 filename = basename + '-expanded.xml'
@@ -155,6 +162,7 @@ def main():
             htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc,
                                                quiet=options.quiet,
                                                verbose=options.verbose,
+                                               date=options.date,
                                                templates_dir=globals().get('_TEMPLATESPATH', None))
             filename = options.filename
             if not filename:
@@ -163,7 +171,8 @@ def main():
         if options.raw:
             rawwriter = xml2rfc.RawTextRfcWriter(xmlrfc,
                                                  quiet=options.quiet,
-                                                 verbose=options.verbose)
+                                                 verbose=options.verbose,
+                                                 date=options.date)
             filename = options.filename
             if not filename:
                 filename = basename + '-raw.txt'
@@ -171,7 +180,8 @@ def main():
         if options.text:
             pagedwriter = xml2rfc.PaginatedTextRfcWriter(xmlrfc,
                                                          quiet=options.quiet,
-                                                         verbose=options.verbose)
+                                                         verbose=options.verbose,
+                                                         date=options.date)
             filename = options.filename
             if not filename:
                 filename = basename + '.txt'
@@ -179,7 +189,8 @@ def main():
         if options.nroff:
             nroffwriter = xml2rfc.NroffRfcWriter(xmlrfc,
                                                  quiet=options.quiet,
-                                                 verbose=options.verbose)
+                                                 verbose=options.verbose,
+                                                 date=options.date)
             filename = options.filename
             if not filename:
                 filename = basename + '.nroff'
