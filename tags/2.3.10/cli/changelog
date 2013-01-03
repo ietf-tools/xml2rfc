@@ -1,0 +1,39 @@
+xml2rfc (2.3.10) ietf; urgency=low
+
+  * Changed the output text for Internet-Draft references to omit the 
+    series name, but add (work in progress).  Updated the test case to match 
+    draft revision number.
+
+  * Updated all the rfc editor boilerplate in valid test facits to match the 
+    correct outcome (which is also what the code actually produces).
+
+  * Changed the diff test error message so that the valid text is output as 
+    the original, not as the changed text of a diff.
+
+  * Corrected test cases to match correct expiry using 185 days instead of 
+    183 days from document date.
+
+  * Added missing attributes to the XmlRfcError Exception subclass, 
+    necessary in order to make it resemble lxml's error class and provide 
+    consistent error messages to the user whether they come from lxml or our 
+    own code.
+
+  * Added a licence file, indicating the licencing used by the IETF for the 
+    xml2rfc code.
+
+  * Fixed up the xml2rfc cli script to provide better help texts by telling 
+    the option parser the appropriate option variable names.
+
+  * Fixed up the help text formatting by explicitly providing an appropriate
+    help text formatter to the option parser.  
+
+  * Added an option (--date=DATE)to provide the document date on the command
+    line.
+
+  * Added an option (--no-dtd) to disable the DTD validation step.  
+
+  * Added code to catch additional exceptions and provide appropriate user
+    information, instead of an exception traceback.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  03 Jan 2013 16:59:50 +0100
+

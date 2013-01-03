@@ -1,0 +1,30 @@
+Parser Module
+=============
+
+Abstract
+--------
+The xml2rfc parser module contains two classes for public use: ``XmlRfcParser`` 
+and ``XmlRfc``.  
+
+``XmlRfcParser`` is a basic XML parser which uses
+the `lxml library <http://lxml.de/>`_ to parse an xml file into a tree
+structure.  An instance of ``XmlRfc`` contains a reference to this parsed
+tree, along with some helper methods to provide useful additional formatting
+to the tree.
+
+Accessing nodes in the tree is done through the standard lxml.etree interface.
+You can read more about that at `the lxml documentation <http://lxml.de/tutorial.html>`_
+
+*Example -- getting the title of an rfc document*::
+
+	root = xmlrfc.getroot()
+	title = root.find('front/title').text
+
+Classes
+--------------
+.. autoclass:: xml2rfc.parser.XmlRfcParser
+ :members:
+.. autoclass:: xml2rfc.parser.XmlRfc
+ :members:
+.. autoclass:: xml2rfc.parser.XmlRfcError
+ :members:
