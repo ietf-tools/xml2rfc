@@ -19,11 +19,14 @@ setup(
     # Package metadata
     name='xml2rfc',
     version='2.3.10',
+    author='Josh Bothun (Concentric Sky)',
+    author_email='tools-discuss@ietf.org',
+    maintainer = "Henrik Levkowetz",
+    maintainer_email = "henrik@levkowetz.com",
+    url='http://tools.ietf.org/tools/xml2rfc/trac/',
     description=description,
     long_description=long_description,
-    author='Concentric Sky',
-    author_email='tools-discuss@ietf.org',
-    url='http://tools.ietf.org/',
+    download_url = "http://pypi.python.org/pypi/xml2rfc",
     classifiers= [
         'Environment :: Console',
         'Operating System :: MacOS :: MacOS X',
@@ -32,13 +35,15 @@ setup(
         'Programming Language :: Python',
         'Topic :: Text Processing',
         'Topic :: Text Processing :: Markup :: XML',
+        'License :: OSI Approved :: BSD License',
     ],
+    license="Simplified BSD Licence",
 
     # Program data
     scripts=['scripts/xml2rfc'],
     packages=['xml2rfc', 'xml2rfc/writers'],
     package_data={'xml2rfc': ['templates/*',
                               ]},
-                 
+
     install_requires=['lxml>=2.2.8'],
 )
