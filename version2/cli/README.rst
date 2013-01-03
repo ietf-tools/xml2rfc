@@ -61,11 +61,12 @@ xml2rfc accepts a single XML document as input and outputs to one or more conver
     ``-h``           ``--help``              show the help message and exit
     ``-v``           ``--verbose``           print extra information
     ``-q``           ``--quiet``             dont print anything
-    ``-c``           ``--cache``             specify an alternate cache directory to write to
     ``-n``           ``--no-dtd``            disable DTD validation step
+    ``-c CACHE``     ``--cache=CACHE``       specify an alternate cache directory to write to
     ``-d DTD``       ``--dtd=DTD``           specify an alternate dtd file
     ``-b BASENAME``  ``--basename=BASENAME`` specify the base name for output files
     ``-f FILENAME``  ``--filename=FILENAME`` specify an output filename
+    (none)           ``--date=DATE``         run as if todays date is DATE (format: yyyy-mm-dd)
     (none)           ``--clear-cache``       purge the cache and exit
     (none)           ``--version``           display the version number and exit
     ===============  ======================= ==================================================
