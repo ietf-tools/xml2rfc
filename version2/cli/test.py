@@ -43,54 +43,81 @@ class XmlRfcDummy():
         pass
 
 
-class TextWriterElementTest(unittest.TestCase):
+output_format = {
+    "paginated text": {
+        "ext": "txt",
+        "spacefix": xml2rfc.utils.formatXmlWhitespace,
+        "unicodefix": xml2rfc.utils.safeReplaceUnicode,
+        "writer": xml2rfc.PaginatedTextRfcWriter,
+    },
+    "raw text": {
+        "ext": "raw",
+        "spacefix": xml2rfc.utils.formatXmlWhitespace,
+        "unicodefix": xml2rfc.utils.safeReplaceUnicode,
+        "writer": xml2rfc.RawTextRfcWriter,
+    },
+    "nroff": {
+        "ext": "nroff",
+        "spacefix": xml2rfc.utils.formatXmlWhitespace,
+        "unicodefix": xml2rfc.utils.safeReplaceUnicode,
+        "writer": xml2rfc.NroffRfcWriter,
+    },
+    "html": {
+        "ext": "html",
+        "spacefix": lambda x: x,
+        "unicodefix": lambda x: x,
+        "writer": xml2rfc.HtmlRfcWriter,
+    },
+}
+
+class WriterElementTest(unittest.TestCase):
     """ Performs tests of isolated XML elements against text writer functions """
 
     def setUp(self):
-        """ Instantiate a writer with a mock object """
-        self.writer = xml2rfc.PaginatedTextRfcWriter(XmlRfcDummy(), quiet=True)
         xml2rfc.log.quiet = True
 
-    def function_test(self, xmlpath, validpath, function):
+    def function_test(self, name, func_name):
         """ Skeleton method for testing an XML element with a writer function """
-        assert('valid' in validpath)
-        fh = open(validpath)
-        valid = fh.read()
-        fh.close()
+        xmlpath = "tests/input/%s.xml" % name
         element = lxml.etree.parse(xmlpath).getroot()
-        xml2rfc.utils.formatXmlWhitespace(element)
-        xml2rfc.utils.safeReplaceUnicode(element)
-        function(element)
-        output = '\n'.join(arrstrip(self.writer.buf))  # Don't care about initial blank
-        diff_test(self, valid, output, validpath.replace('valid', 'failed'))
+        for key, format in output_format.items():
+            ext = format["ext"]
+            spacefix = format["spacefix"]
+            unicodefix = format["unicodefix"]
+            writer = format["writer"](XmlRfcDummy(), quiet=True)
+            testfunc = getattr(writer, func_name)
+            #
+            validpath = "tests/valid/%s.%s" % (name, ext)
+            try:
+                fh = open(validpath)
+            except IOError:
+                fh = open(validpath, "w+")
+            valid = fh.read()
+            fh.close()
+            #
+            spacefix(element)
+            unicodefix(element)
+            testfunc(element)
+            output = '\n'.join(arrstrip(writer.buf))  # Don't care about initial blank
+            diff_test(self, valid, output, validpath.replace('valid', 'failed'))
 
     def test_references(self):
-        return self.function_test('tests/input/references.xml',
-                                  'tests/valid/references.txt',
-                                  self.writer.write_reference_list)
+        return self.function_test('references', 'write_reference_list')
 
     def test_list_format(self):
-        return self.function_test('tests/input/list_format.xml',
-                                  'tests/valid/list_format.txt',
-                                  self.writer.write_t_rec)
+        return self.function_test("list_format", "write_t_rec")
 
     def test_list_hanging(self):
-        return self.function_test('tests/input/list_hanging.xml',
-                                  'tests/valid/list_hanging.txt',
-                                  self.writer.write_t_rec)
+        return self.function_test("list_hanging", "write_t_rec")
 
     def test_list_letters(self):
-        return self.function_test('tests/input/list_letters.xml',
-                                  'tests/valid/list_letters.txt',
-                                  self.writer.write_t_rec)
+        return self.function_test("list_letters", "write_t_rec")
     
     def test_texttable_small(self):
-        return self.function_test('tests/input/texttable_small.xml',
-                                  'tests/valid/texttable_small.txt',
-                                  self.writer.draw_table)
+        return self.function_test("texttable_small", "draw_table")
 
 
-class TextWriterRootTest(unittest.TestCase):
+class WriterRootTest(unittest.TestCase):
     """ Performs tests of full <rfc> + <front> trees against text writer functions """
 
     def parse(self, path):
@@ -131,7 +158,7 @@ class TextWriterRootTest(unittest.TestCase):
         diff_test(self, self.valid, output, self.failpath)
 
 
-class TextWriterDraftTest(TextWriterRootTest):
+class WriterDraftTest(WriterRootTest):
     """ Test Internet-Draft boilerplate"""
 
     def setUp(self):
@@ -146,7 +173,7 @@ class TextWriterDraftTest(TextWriterRootTest):
         return self.top_test()
 
 
-class TextWriterRfcTest(TextWriterRootTest):
+class WriterRfcTest(WriterRootTest):
     """ Test RFC boilerplate """
 
     def setUp(self):
@@ -277,7 +304,6 @@ class TextWriterRfcTest(TextWriterRootTest):
         self.set_root_attrs('independent', 'exp', 'no')
         self.set_valid('tests/valid/status_independent_exp.txt')
         return self.status_test()
-
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
