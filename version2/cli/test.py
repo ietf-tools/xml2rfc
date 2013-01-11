@@ -116,6 +116,8 @@ class WriterElementTest(unittest.TestCase):
     def test_texttable_small(self):
         return self.function_test("texttable_small", "draw_table")
 
+    def test_figure_title(self):
+        return self.function_test("figure_title", "write_t_rec")
 
 class WriterRootTest(unittest.TestCase):
     """ Performs tests of full <rfc> + <front> trees against text writer functions """
