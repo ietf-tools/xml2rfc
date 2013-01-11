@@ -669,13 +669,15 @@ class BaseRfcWriter:
                 title = ': ' + title
             self.write_label('Table ' + str(self.table_count) + title, \
                              type='table')
-    
+        else:
+            self.write_label(title, type='table')
+
     def _index_t_rec(self, element):
         """ Traverse a <t> element only performing indexing operations """
         pass
         
 
-    def _write_section_rec(self, section, count_str, appendix=False, \
+    def _write_section_rec(self, section, count_str="1.", appendix=False, \
                            level=0):
         """ Recursively writes <section> elements 
         
