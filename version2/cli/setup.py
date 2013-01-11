@@ -18,7 +18,7 @@ except Exception:
 setup(
     # Package metadata
     name='xml2rfc',
-    version='2.3.10',
+    version='2.3.11',
     author='Josh Bothun (Concentric Sky)',
     author_email='tools-discuss@ietf.org',
     maintainer = "Henrik Levkowetz",
@@ -45,5 +45,5 @@ setup(
     package_data={'xml2rfc': ['templates/*',
                               ]},
 
-    install_requires=['lxml>=2.2.8'],
+    install_requires=['lxml>2.2.7'],
 )
