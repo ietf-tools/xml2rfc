@@ -197,35 +197,36 @@ class RawTextRfcWriter(BaseRfcWriter):
             indent_scale = 3
         for item in tocindex:
             # Add decoration to counter if it exists, otherwise leave empty
-            counter = ''
-            if item.counter:
-                counter = item.counter + '. '
-                # Extra space on single digit counters
-                if len(item.counter.rsplit('.')[-1]) == 1:
-                    counter += ' '
-            # Get item depth based on its section 'level' attribute
-            depth = item.level - 1
-            if depth < 0 or self.pis.get('tocindent', 'yes') == 'no':
-                depth = 0
-            # Prepend appendix at first level
-            if item.level == 1 and item.appendix:
-                counter = "Appendix " + counter
-            bullet = ' ' * (depth * indent_scale) + counter
-            indent = 3
-            sub_indent = indent + len(bullet)
-            lines = textwrap.wrap(bullet + item.title, 
-                                  self.width - len(str(item.page)) + 1,
-                                  initial_indent=' ' * indent,
-                                  subsequent_indent=' ' * sub_indent)
-            if paging:
-                # Construct dots
-                dots = len(lines[-1]) % 2 and ' ' or '  '
-                dots += '. ' * int((self.width - len(lines[-1]) - len(dots))/2)
-                lines[-1] += dots
-                # Insert page
-                pagestr = ' ' + str(item.page)
-                lines[-1] = lines[-1][:0 - len(pagestr)] + pagestr
-            tmpbuf.extend(lines)
+            if item.level <= tocdepth:
+                counter = ''
+                if item.counter:
+                    counter = item.counter + '. '
+                    # Extra space on single digit counters
+                    if len(item.counter.rsplit('.')[-1]) == 1:
+                        counter += ' '
+                # Get item depth based on its section 'level' attribute
+                depth = item.level - 1
+                if depth < 0 or self.pis.get('tocindent', 'yes') == 'no':
+                    depth = 0
+                # Prepend appendix at first level
+                if item.level == 1 and item.appendix:
+                    counter = "Appendix " + counter
+                bullet = ' ' * (depth * indent_scale) + counter
+                indent = 3
+                sub_indent = indent + len(bullet)
+                lines = textwrap.wrap(bullet + item.title, 
+                                      self.width - len(str(item.page)) + 1,
+                                      initial_indent=' ' * indent,
+                                      subsequent_indent=' ' * sub_indent)
+                if paging:
+                    # Construct dots
+                    dots = len(lines[-1]) % 2 and ' ' or '  '
+                    dots += '. ' * int((self.width - len(lines[-1]) - len(dots))/2)
+                    lines[-1] += dots
+                    # Insert page
+                    pagestr = ' ' + str(item.page)
+                    lines[-1] = lines[-1][:0 - len(pagestr)] + pagestr
+                tmpbuf.extend(lines)
         return tmpbuf
             
     def _write_iref_index(self):
