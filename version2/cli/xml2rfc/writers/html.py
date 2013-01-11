@@ -51,7 +51,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                         'toc_rows': []}
         
         # Use an active buffer pointer
-        self.active_buffer = self.buffers['front']
+        self.buf = self.buffers['front']
         
         # String holding the final document to write
         self.output = ''
@@ -225,7 +225,7 @@ class HtmlRfcWriter(BaseRfcWriter):
     def insert_toc(self):
         # We don't actually insert the toc here, but we swap the active buffer
         # So that the template replacement is correct
-        self.active_buffer = self.buffers['body']
+        self.buf = self.buffers['body']
 
     def write_raw(self, text, align='left', blanklines=0, delimiter=None):
         if text:
@@ -239,7 +239,7 @@ class HtmlRfcWriter(BaseRfcWriter):
 
             # Run through template, add to body buffer
             pre = E.PRE(fill)
-            self.active_buffer.append(self._serialize(pre))
+            self.buf.append(self._serialize(pre))
 
     def write_label(self, text, type='figure', align='center'):
         # Ignore labels for table, they are handled in draw_table
@@ -247,7 +247,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             p = E.P(text)
             p.attrib['class'] = 'figure'
             # Add to body buffer
-            self.active_buffer.append(self._serialize(p))
+            self.buf.append(self._serialize(p))
 
     def write_heading(self, text, bullet=None, autoAnchor=None, anchor=None,
                       level=1):
@@ -282,7 +282,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             h.append(a)
         
         # Add to body buffer
-        self.active_buffer.append(self._serialize(h))
+        self.buf.append(self._serialize(h))
 
     def write_paragraph(self, text, align='left', autoAnchor=None):
         if text:
@@ -290,7 +290,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             if autoAnchor:
                 p.attrib['id'] = autoAnchor        
             # Add to body buffer
-            self.active_buffer.append(self._serialize(p))
+            self.buf.append(self._serialize(p))
 
     def write_t_rec(self, t, autoAnchor=None, align='left', parent=None):
         """ Recursively writes a <t> element
@@ -337,7 +337,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         # If we are back at top level, serialize the whole temporary structure
         # Add to body buffer
         if parent == self.temp_div:
-            self.active_buffer.append(self._flush_temp_div())
+            self.buf.append(self._flush_temp_div())
 
     def write_top(self, left_header, right_header):
         """ Buffers the header table """
@@ -433,7 +433,7 @@ class HtmlRfcWriter(BaseRfcWriter):
 
         # Run through template and add to body buffer
         html = self.templates['address_card.html'].substitute(subs)
-        self.active_buffer.append(html)
+        self.buf.append(html)
 
     def write_reference_list(self, list):
         tbody = E.TBODY()
@@ -515,7 +515,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                 ref_td.append(E.P(annotation.text))
                 
         # Add to body buffer
-        self.active_buffer.append(self._serialize(E.TABLE(tbody)))
+        self.buf.append(self._serialize(E.TABLE(tbody)))
 
     def draw_table(self, table, table_num=None):
         style = 'tt full ' + table.attrib.get('align', 
@@ -572,11 +572,11 @@ class HtmlRfcWriter(BaseRfcWriter):
         htmltable.append(body)
 
         # Add to body buffer
-        self.active_buffer.append(self._serialize(htmltable))
+        self.buf.append(self._serialize(htmltable))
 
     def insert_anchor(self, text):
         # Add to body buffer
-        self.active_buffer.append(self._serialize(E.DIV(id=text)))
+        self.buf.append(self._serialize(E.DIV(id=text)))
 
     def insert_iref_index(self):
         # Write the heading
@@ -611,7 +611,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                     td.append(E.A(name, href=anchor))
                     table.append(E.TR(E.TD(' '), td))
 
-        self.active_buffer.append(self._serialize(table))
+        self.buf.append(self._serialize(table))
     
     def pre_processing(self):
         # Reset buffers
@@ -621,7 +621,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                         'toc_head_links': [],
                         'toc_rows': []}
         self.list_counters = {}
-        self.active_buffer = self.buffers['front']
+        self.buf = self.buffers['front']
 
     def post_processing(self):
         # Create table of contents buffers
