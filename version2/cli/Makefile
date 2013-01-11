@@ -3,8 +3,8 @@
 
 #svnrev	:= $(shell svn info | grep ^Revision | awk '{print $$2}' )
 
-
 test:
+	[ -d tests/failed/ ] && rm -f tests/failed/*
 	python test.py
 
 upload:
