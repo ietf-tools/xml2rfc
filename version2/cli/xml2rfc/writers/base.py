@@ -621,13 +621,15 @@ class BaseRfcWriter:
         if postamble is not None:
             self.write_t_rec(postamble, align=align)
 
-        # Write label if anchor is set or PI figurecount = yes
+        # Write label
+        title = figure.attrib.get('title', '')
         if anchor or self.pis.get('figurecount', 'no') == 'yes':
-            title = figure.attrib.get('title', '')
             if title:
                 title = ': ' + title
             self.write_label('Figure ' + str(self.figure_count) + title, \
                             type='figure')
+        else:
+            self.write_label(title, type='figure')
 
     def _write_table(self, table):
         """ Writes <texttable> elements """
