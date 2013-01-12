@@ -43,32 +43,32 @@ class XmlRfcDummy():
         pass
 
 
-output_format = {
-    "paginated text": {
+output_format = [
+    {
         "ext": "txt",
         "spacefix": xml2rfc.utils.formatXmlWhitespace,
         "unicodefix": xml2rfc.utils.safeReplaceUnicode,
         "writer": xml2rfc.PaginatedTextRfcWriter,
     },
-    "raw text": {
+    {
         "ext": "raw",
         "spacefix": xml2rfc.utils.formatXmlWhitespace,
         "unicodefix": xml2rfc.utils.safeReplaceUnicode,
         "writer": xml2rfc.RawTextRfcWriter,
     },
-    "nroff": {
+    {
         "ext": "nroff",
         "spacefix": xml2rfc.utils.formatXmlWhitespace,
         "unicodefix": xml2rfc.utils.safeReplaceUnicode,
         "writer": xml2rfc.NroffRfcWriter,
     },
-    "html": {
+    {
         "ext": "html",
         "spacefix": lambda x: x,
         "unicodefix": lambda x: x,
         "writer": xml2rfc.HtmlRfcWriter,
     },
-}
+]
 
 class WriterElementTest(unittest.TestCase):
     """ Performs tests of isolated XML elements against text writer functions """
@@ -80,7 +80,7 @@ class WriterElementTest(unittest.TestCase):
         """ Skeleton method for testing an XML element with a writer function """
         xmlpath = "tests/input/%s.xml" % name
         element = lxml.etree.parse(xmlpath).getroot()
-        for key, format in output_format.items():
+        for format in output_format:
             ext = format["ext"]
             spacefix = format["spacefix"]
             unicodefix = format["unicodefix"]
