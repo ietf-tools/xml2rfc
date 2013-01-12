@@ -122,11 +122,14 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         # Counters    
         current_page_length = 0
         current_page_number = 1
-        max_page_length = 55
+        max_page_length = 51
 
         def insertFooterAndHeader():
             self.output.append('')
+            self.output.append('')
+            self.output.append('')
             self.output.extend(self._make_footer_and_header(current_page_number))
+            self.output.append('')
             self.output.append('')
 
         # Maintain a list of (start, end) pointers for elements to re-insert
@@ -140,14 +143,14 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 # Insert a dummy table of contents here
                 toc_prev_start = len(self.output)
                 for n in range(self._toc_size_hint()):
-                    if current_page_length + 1 > max_page_length:
+                    if current_page_length + 2 >= max_page_length:
                         # Store a pair of TOC pointers
                         toc_pointers.append((toc_prev_start, len(self.output)))
                         # New page
                         insertFooterAndHeader()
                         toc_prev_start = len(self.output)
                         # Update counters
-                        current_page_length -= current_page_length + 1
+                        current_page_length = 1
                         current_page_number += 1
                     # Write dummy line
                     self.output.append('')
@@ -163,14 +166,14 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 # Insert a dummy iref here
                 iref_prev_start = len(self.output)
                 for n in range(self._iref_size_hint()):
-                    if current_page_length + 1 > max_page_length:
+                    if current_page_length + 2 >= max_page_length:
                         # Store a pair of pointers
                         iref_pointers.append((iref_prev_start, len(self.output)))
                         # New page
                         insertFooterAndHeader()
                         iref_prev_start = len(self.output)
                         # Update counters
-                        current_page_length -= current_page_length + 1
+                        current_page_length = 1
                         current_page_number += 1
                     # Write dummy line
                     self.output.append('')
@@ -181,26 +184,44 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             if line_num in self.break_hints:
                 # If this size hint exceeds the rest of the page, or is set
                 # to -1 (a forced break), insert a break.
-                if (current_page_length + \
-                    self.break_hints[line_num] > max_page_length and \
-                    self.pis.get('autobreaks', 'yes') == 'yes') or \
-                    self.break_hints[line_num] < 0:
+                lines_open = max_page_length - (current_page_length + 2)
+                line_need = self.break_hints[line_num]
+                if line.strip() == "":
+                    # discount initial blank line in what we're about to
+                    # write when considering whether we're about to create
+                    # orphans or widows
+                    lines_open -= 1
+                    line_need -= 1
+                if line_need > lines_open and current_page_number < 40 and False:
+                    import sys
+                    sys.stderr.write("\n")
+                    sys.stderr.write("page_num  : %s\n" % current_page_number)
+                    sys.stderr.write("lines_open: %s\n" % lines_open)
+                    sys.stderr.write("line_need : %s\n" % line_need)
+                    sys.stderr.write("line_text : '%s'\n" % line)
+                    sys.stderr.write("abs diff  : %s\n" % abs(lines_open - line_need))
+
+                if ( (self.pis.get('autobreaks', 'yes') == 'yes'
+                      and line_need > lines_open
+                      and (line_need-lines_open < 2 or lines_open < 2))
+                    or self.break_hints[line_num] < 0 ):
                     
                     # Insert break
-                    remainder = max_page_length - current_page_length
+                    remainder = max_page_length - current_page_length - 2
                     self.output.extend([''] * remainder)
                     current_page_length += remainder
 
-            if current_page_length + 1 > max_page_length:
+            if current_page_length + 2 >= max_page_length:
                 # New page
                 insertFooterAndHeader()
                 # Update counters -- done this way to preserve scope without reassigning
-                current_page_length -= current_page_length - 1
+                current_page_length = 1
                 current_page_number += 1
   
-            # Write the line
-            self.output.append(line)
-            current_page_length += 1
+            # Write the line if it's not a blank line at the top of the page
+            if not (line.strip() == "" and current_page_length == 1):
+                self.output.append(line)
+                current_page_length += 1
 
             # Store page numbers for any marked elements
             if line_num in self.heading_marks:
