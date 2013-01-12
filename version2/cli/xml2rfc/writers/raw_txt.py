@@ -214,17 +214,17 @@ class RawTextRfcWriter(BaseRfcWriter):
                 bullet = ' ' * (depth * indent_scale) + counter
                 indent = 3
                 sub_indent = indent + len(bullet)
+                pagestr = '%4s' % item.page
                 lines = textwrap.wrap(bullet + item.title, 
-                                      self.width - len(str(item.page)) + 1,
+                                      self.width - len(pagestr),
                                       initial_indent=' ' * indent,
                                       subsequent_indent=' ' * sub_indent)
                 if paging:
                     # Construct dots
-                    dots = len(lines[-1]) % 2 and ' ' or '  '
-                    dots += '. ' * int((self.width - len(lines[-1]) - len(dots))/2)
+                    dots = len(lines[-1]) % 2 and ' ' or ''
+                    dots += ' .' * int((self.width - len(lines[-1]) - len(dots) + 1)/2)
                     lines[-1] += dots
                     # Insert page
-                    pagestr = ' ' + str(item.page)
                     lines[-1] = lines[-1][:0 - len(pagestr)] + pagestr
                 tmpbuf.extend(lines)
         return tmpbuf
@@ -274,7 +274,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         if xref.text:
             if not target_text.startswith('['):
                 target_text = '(' + target_text + ')'
-            return xref.text + ' ' + target_text
+            return xref.text.rstrip() + ' ' + target_text
         else:
             return target_text
 
@@ -507,8 +507,11 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_top(self, left_header, right_header):
         """ Combines left and right lists to write a document heading """
-        # Begin with three blank lines
-        self._lb(num=3)
+        # Begin with a blank line on the first page.  We'll add additional
+        # blank lines at the top later, but those won't be counted as part
+        # of the page linecount.
+        #self._lb(num=3)
+        self._lb()
         heading = []
         for i in range(max(len(left_header), len(right_header))):
             if i < len(left_header):
@@ -832,6 +835,11 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_to_file(self, file):
         """ Writes the buffer to the specified file """
+        # write initial blank lines, not counted against page size...
+        if self.draft:
+            file.write(os.linesep*3)
+        else:
+            file.write(os.linesep*6)
         for line in self.output:
-            file.write(line)
+            file.write(line.rstrip(" \t"))
             file.write(os.linesep)
