@@ -241,7 +241,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             pre = E.PRE(fill)
             self.buf.append(self._serialize(pre))
 
-    def write_label(self, text, type='figure', align='center'):
+    def write_label(self, text, type='figure', align='center', source_line=None):
         # Ignore labels for table, they are handled in draw_table
         if type == 'figure':
             p = E.P(text)

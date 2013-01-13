@@ -1029,7 +1029,7 @@ class BaseRfcWriter:
         """ Writes a block of text that preserves all whitespace """
         raise NotImplementedError('write_raw() needs to be overridden')
 
-    def write_label(self, text, type='figure'):
+    def write_label(self, text, type='figure', source_line=None):
         """ Writes a table or figure label """
         raise NotImplementedError('write_label() needs to be overridden')
 
