@@ -439,9 +439,9 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_title(self, title, docName=None):
         """ Write the document title and (optional) name """
-        self._write_text(title, indent=3, lb=True, align='center')
+        self._write_text(title, lb=True, align='center')
         if docName is not None:
-            self._write_text(docName, indent=3, align='center')
+            self._write_text(docName, align='center')
 
     def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, \
                       level=1):
