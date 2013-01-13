@@ -359,7 +359,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 style = element.attrib.get('style', 'emph')
                 edgechar = '?'
                 if style == 'emph':
-                    edgechar = '-'
+                    edgechar = '_'
                 elif style == 'strong':
                     edgechar = '*'
                 elif style == 'verb':
