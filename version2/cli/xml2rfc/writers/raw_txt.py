@@ -60,8 +60,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         """ <vspace> line break wrapper to allow for overrides """
         return self._lb(num=num)
 
-    def _write_text(self, string, indent=0, sub_indent=0, bullet='', \
-                  align='left', leading_blankline=False, buf=None, strip=True, edit=False):
+    def _write_text(self, string, indent=0, sub_indent=0, bullet='',
+                  align='left', leading_blankline=False, buf=None,
+                  strip=True, edit=False, source_line=None):
         """ Writes a line or multiple lines of text to the buffer.
 
             Several parameters are included here.  All of the API calls
@@ -100,7 +101,6 @@ class RawTextRfcWriter(BaseRfcWriter):
             if align == 'left':
                 buf.extend(par)
             elif align == 'center':
-                import debug
                 for line in par:
                     margin = ' ' * (indent//2*2)
                     if line.startswith(margin):
@@ -289,17 +289,17 @@ class RawTextRfcWriter(BaseRfcWriter):
         else:
             return target_text
 
-    def _write_ref_element(self, key, text, sub_indent):
+    def _write_ref_element(self, key, text, sub_indent, source_line=None):
         """ Render a single reference element """
         # Use an empty first line if key is too long
         min_spacing = 2
         if len(key) + min_spacing > sub_indent:
-            self._write_text(key, indent=3, leading_blankline=True)
-            self._write_text(text, indent=3 + sub_indent)
+            self._write_text(key, indent=3, leading_blankline=True, source_line=source_line)
+            self._write_text(text, indent=3 + sub_indent, source_line=source_line)
         else:
             # Fill space to sub_indent in the bullet
             self._write_text(text, indent=3, bullet=key.ljust(sub_indent), \
-                     sub_indent=sub_indent, leading_blankline=True)
+                     sub_indent=sub_indent, leading_blankline=True, source_line=source_line)
     
     def _combine_inline_elements(self, elements):
         """ Shared function for <t> and <c> elements
@@ -395,7 +395,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.iref_marker = len(self.buf)
 
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
-                  delimiter=None, leading_blankline=True):
+                  delimiter=None, leading_blankline=True, source_line=None):
         """ Writes a raw stream of characters, preserving space and breaks """
         if text:
             if leading_blankline:
@@ -439,13 +439,13 @@ class RawTextRfcWriter(BaseRfcWriter):
             if delimiter:
                 self.buf.append(delimiter)
 
-    def write_label(self, text, type='figure'):
+    def write_label(self, text, type='figure', source_line=None):
         """ Writes a centered label """
-        self._write_text(text, indent=3, align='center', leading_blankline=True)
+        self._write_text(text, indent=3, align='center', leading_blankline=True, source_line=source_line)
 
-    def write_title(self, title, docName=None):
+    def write_title(self, title, docName=None, source_line=None):
         """ Write the document title and (optional) name """
-        self._write_text(title, leading_blankline=True, align='center')
+        self._write_text(title, leading_blankline=True, align='center', source_line=source_line)
         if docName is not None:
             self._write_text(docName, align='center')
 
@@ -457,7 +457,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self._write_text(text, bullet=bullet, indent=0, leading_blankline=True)
 
     def write_paragraph(self, text, align='left', autoAnchor=None):
-        """ Write a generic paragraph of text """
+        """ Write a generic paragraph of text.  Used for boilerplate. """
         self._write_text(text, indent=3, align=align, leading_blankline=True)
 
     def write_t_rec(self, t, indent=3, sub_indent=0, bullet='',
@@ -474,9 +474,10 @@ class RawTextRfcWriter(BaseRfcWriter):
             current_text += inline_text
             if (current_text and not current_text.isspace()) or bullet:
                 # Attempt to write a paragraph of inline text
-                self._write_text(current_text, indent=indent, leading_blankline=leading_blankline, \
-                                sub_indent=sub_indent, bullet=bullet, \
-                                edit=True, align=align)
+                self._write_text(current_text, indent=indent,
+                                leading_blankline=leading_blankline,
+                                sub_indent=sub_indent, bullet=bullet,
+                                edit=True, align=align, source_line=t.sourceline)
             # Clear text
             current_text = ''
 
@@ -535,7 +536,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                 right = ''
             heading.append(xml2rfc.utils.justify_inline(left, '', right, \
                                                         self.width))
-        self.write_raw('\n'.join(heading), align='left', indent=0, leading_blankline=False)
+        self.write_raw('\n'.join(heading), align='left', indent=0,
+                        leading_blankline=False, source_line=None)
         # Extra blank line underneath top block
         self._lb()
 
@@ -596,6 +598,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         refdict = {}
         annotationdict = {}
         refkeys = []
+        refsource = {}
         # [surname, initial.,] "title", (STD), (BCP), (RFC), (Month) Year.
         for i, ref in enumerate(list.findall('reference')):
             refstring = []
@@ -606,13 +609,13 @@ class RawTextRfcWriter(BaseRfcWriter):
             if title is not None and title.text:
                 refstring.append('"' + title.text + '", ')
             else:
-                xml2rfc.log.warn('No title specified in reference', \
+                xml2rfc.log.warn('No title specified in reference',
                                  ref.attrib.get('anchor', ''))
             for seriesInfo in ref.findall('seriesInfo'):
                 if seriesInfo.attrib['name'] == "Internet-Draft":
                     refstring.append(seriesInfo.attrib['value'] + ' (work in progress), ')
                 else:
-                    refstring.append(seriesInfo.attrib['name'] + ' ' + \
+                    refstring.append(seriesInfo.attrib['name'] + ' ' +
                                      seriesInfo.attrib['value'] + ', ')
             date = ref.find('front/date')
             if date is not None:
@@ -633,6 +636,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             else:
                 bullet = '[' + str(i + 1) + ']'
             refdict[bullet] = ''.join(refstring)
+            refsource[bullet] = ref.sourceline
             refkeys.append(bullet)
             # Add annotation if it exists to a separate dict
             if annotation is not None and annotation.text:
@@ -643,11 +647,11 @@ class RawTextRfcWriter(BaseRfcWriter):
         # Hard coded indentation amount
         refindent = 11
         for key in refkeys:
-            self._write_ref_element(key, refdict[key], refindent)
+            self._write_ref_element(key, refdict[key], refindent, source_line=refsource[key])
             # Render annotation as a separate paragraph
             if key in annotationdict:
-                self._write_text(annotationdict[key], indent=refindent + 3, \
-                                 leading_blankline=True)
+                self._write_text(annotationdict[key], indent=refindent + 3,
+                                 leading_blankline=True, source_line=refsource[key])
 
     def draw_table(self, table, table_num=None):
         # First construct a 2d matrix from the table
@@ -821,7 +825,8 @@ class RawTextRfcWriter(BaseRfcWriter):
 
         # Finally, write the table to the buffer with proper alignment
         align = table.attrib.get('align', 'center')
-        self.write_raw('\n'.join(output), align=align, indent=self.margin)
+        self.write_raw('\n'.join(output), align=align, indent=self.margin,
+                        source_line=table.sourceline)
 
     def insert_anchor(self, text):
         # No anchors for text

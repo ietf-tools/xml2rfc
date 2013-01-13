@@ -227,7 +227,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         # So that the template replacement is correct
         self.buf = self.buffers['body']
 
-    def write_raw(self, text, align='left', blanklines=0, delimiter=None):
+    def write_raw(self, text, align='left', blanklines=0, delimiter=None, source_line=None):
         if text:
             # Add padding with delimiter/blanklines, if specified
             edge = delimiter and [delimiter] or ['']
@@ -688,5 +688,5 @@ class HtmlRfcWriter(BaseRfcWriter):
 # Unused methods
 #-------------------------------------------------------------------------------
 
-    def write_title(self, title, docName=None):
+    def write_title(self, title, docName=None, source_line=None):
         pass

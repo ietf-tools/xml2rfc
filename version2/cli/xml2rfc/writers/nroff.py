@@ -57,7 +57,8 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
     # Override
     def _write_text(self, string, indent=0, sub_indent=0, bullet='',
-                    align='left', leading_blankline=False, buf=None, strip=True, edit=False):
+                    align='left', leading_blankline=False, buf=None,
+                    strip=True, edit=False, source_line=None):
         #-------------------------------------------------------------
         # RawTextRfcWriter override
         #
@@ -131,21 +132,23 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     # PaginatedTextRfcWriter overrides
     # ---------------------------------------------------------
 
-    def write_title(self, text, docName=None):
+    def write_title(self, text, docName=None, source_line=None):
         # Override to use .ti commands
         self._lb()
-        self._write_text(text, align='center')
+        self._write_text(text, align='center', source_line=source_line)
         if docName:
             self._write_text(docName, align='center')
 
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
-                  delimiter=None, leading_blankline=True):
+                  delimiter=None, leading_blankline=True, source_line=None):
         # Wrap in a no fill block
         self._indent(indent)
         self._write_line('.nf')
-        PaginatedTextRfcWriter.write_raw(self, text, indent=0, align=align, \
-                                         blanklines=blanklines, \
-                                         delimiter=delimiter, leading_blankline=leading_blankline)
+        PaginatedTextRfcWriter.write_raw(self, text, indent=0, align=align,
+                                         blanklines=blanklines,
+                                         delimiter=delimiter,
+                                         leading_blankline=leading_blankline,
+                                         source_line=source_line)
         self._write_line('.fi')
 
     def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, \

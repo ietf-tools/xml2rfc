@@ -613,8 +613,9 @@ class BaseRfcWriter:
         # Explicitly use figure alignment
         artwork_align = align
         blanklines = int(self.pis.get('artworklines', 0))
-        self.write_raw(figure.find('artwork').text, align=artwork_align, \
-                       blanklines=blanklines, delimiter=delimiter)
+        self.write_raw(figure.find('artwork').text, align=artwork_align,
+                       blanklines=blanklines, delimiter=delimiter,
+                       source_line=figure.sourceline)
 
         # Write postamble
         postamble = figure.find('postamble')
@@ -626,10 +627,10 @@ class BaseRfcWriter:
         if anchor or self.pis.get('figurecount', 'no') == 'yes':
             if title:
                 title = ': ' + title
-            self.write_label('Figure ' + str(self.figure_count) + title, \
-                            type='figure')
+            self.write_label('Figure ' + str(self.figure_count) + title,
+                            type='figure', source_line=figure.sourceline)
         else:
-            self.write_label(title, type='figure')
+            self.write_label(title, type='figure', source_line=figure.sourceline)
 
     def _write_table(self, table):
         """ Writes <texttable> elements """
@@ -668,9 +669,9 @@ class BaseRfcWriter:
             if title:
                 title = ': ' + title
             self.write_label('Table ' + str(self.table_count) + title, \
-                             type='table')
+                             type='table', source_line=table.sourceline)
         else:
-            self.write_label(title, type='table')
+            self.write_label(title, type='table', source_line=table.sourceline)
 
     def _index_t_rec(self, element):
         """ Traverse a <t> element only performing indexing operations """
@@ -767,8 +768,7 @@ class BaseRfcWriter:
 
             # Write first paragraph
             if category in self.boilerplate['status']:
-                self.write_paragraph(self.boilerplate['status'][category]\
-                                     .get('p1', ''))
+                self.write_paragraph(self.boilerplate['status'][category].get('p1', ''))
             
             # Build second paragraph
             p2 = []
@@ -876,7 +876,7 @@ class BaseRfcWriter:
             title = self.r.find('front/title')
             if title is not None:
                 docName = self.r.attrib.get('docName', None)
-                self.write_title(title.text, docName)
+                self.write_title(title.text, docName, title.sourceline)
 
             # Abstract
             abstract = self.r.find('front/abstract')
@@ -1021,11 +1021,11 @@ class BaseRfcWriter:
     
     def insert_iref_index(self):
         """ Marks the current buffer position to insert the index at """
-        raise NotImplementedError('insert_iref_index() needs to be ' \
+        raise NotImplementedError('insert_iref_index() needs to be '
                                   'overridden')
 
-    def write_raw(self, text, indent=3, align='left', blanklines=0, \
-                  delimiter=None):
+    def write_raw(self, text, indent=3, align='left', blanklines=0,
+                  delimiter=None, source_line=None):
         """ Writes a block of text that preserves all whitespace """
         raise NotImplementedError('write_raw() needs to be overridden')
 
@@ -1033,19 +1033,18 @@ class BaseRfcWriter:
         """ Writes a table or figure label """
         raise NotImplementedError('write_label() needs to be overridden')
 
-    def write_title(self, title, docName=None):
+    def write_title(self, title, docName=None, source_line=None):
         """ Writes the document title """
         raise NotImplementedError('write_title() needs to be overridden')
 
-    def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, \
+    def write_heading(self, text, bullet='', autoAnchor=None, anchor=None,
                       level=1):
         """ Writes a section heading """
         raise NotImplementedError('write_heading() needs to be overridden')
 
     def write_paragraph(self, text, align='left', autoAnchor=None):
         """ Writes a paragraph of text """
-        raise NotImplementedError('write_paragraph() needs to be'\
-                                  ' overridden')
+        raise NotImplementedError('write_paragraph() needs to be overridden')
 
     def write_t_rec(self, t, align='left', autoAnchor=None):
         """ Recursively writes <t> elements """
