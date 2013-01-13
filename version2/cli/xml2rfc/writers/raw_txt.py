@@ -100,7 +100,12 @@ class RawTextRfcWriter(BaseRfcWriter):
                 buf.extend(par)
             elif align == 'center':
                 for line in par:
-                    buf.append(line.center(self.width).rstrip())
+                    margin = ' ' * indent
+                    if line.startswith(margin):
+                        centered = margin + line[len(margin):].center(self.width-indent).rstrip()
+                        buf.append(centered)
+                    else:
+                        buf.append(line.center(self.width).rstrip())
             elif align == 'right':
                 for line in par:
                     buf.append(line.rjust(self.width))
@@ -430,13 +435,13 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_label(self, text, type='figure'):
         """ Writes a centered label """
-        self._write_text(text, align='center', lb=True)
+        self._write_text(text, indent=3, align='center', lb=True)
 
     def write_title(self, title, docName=None):
         """ Write the document title and (optional) name """
-        self._write_text(title, lb=True, align='center')
+        self._write_text(title, indent=3, lb=True, align='center')
         if docName is not None:
-            self._write_text(docName, align='center')
+            self._write_text(docName, indent=3, align='center')
 
     def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, \
                       level=1):
