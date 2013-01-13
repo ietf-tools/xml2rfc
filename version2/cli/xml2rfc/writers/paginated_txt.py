@@ -42,26 +42,26 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         return tmp
 
     # Here we override some methods to mark line numbers for large sections.
-    # We'll store each marking as a hash of line_num: section_length.  This way
-    # we can step through these markings during writing to preemptively
-    # construct appropriate page breaks.
+    # We'll store each marking as a dictionary of line_num: section_length.
+    # This way we can step through these markings during writing to
+    # preemptively construct appropriate page breaks.
     def write_raw(self, *args, **kwargs):
         """ Override text writer to add a marking """
         begin = len(self.buf)
         RawTextRfcWriter.write_raw(self, *args, **kwargs)
         end = len(self.buf)
-        self.break_hints[begin] = end - begin
+        self.break_hints[begin] = (end - begin, "raw")
 
     def _write_text(self, *args, **kwargs):
         """ Override text writer to add a marking """
         begin = len(self.buf)
         RawTextRfcWriter._write_text(self, *args, **kwargs)
         end = len(self.buf)
-        self.break_hints[begin] = end - begin
+        self.break_hints[begin] = (end - begin, "txt")
         
     def _force_break(self):
         """ Force a pagebreak at the current buffer position """
-        self.break_hints[len(self.buf)] = -1
+        self.break_hints[len(self.buf)] = (0, "break")
         
     def _toc_size_hint(self):
         return len(self._write_toc(paging=True))
@@ -85,6 +85,10 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         """ Prepares the header and footer information """
         # Raw textwriters preprocessing will replace unicode with safe ascii
         RawTextRfcWriter.pre_processing(self)
+
+        # Discard hints and marks from indexing pass
+        self.break_hints = {}
+        self.heading_marks = {}
 
         if self.draft:
             self.left_header = 'Internet-Draft'
@@ -184,28 +188,23 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             if line_num in self.break_hints:
                 # If this size hint exceeds the rest of the page, or is set
                 # to -1 (a forced break), insert a break.
-                lines_open = max_page_length - (current_page_length + 2)
-                line_need = self.break_hints[line_num]
+
+                available = max_page_length - (current_page_length + 2)
+                needed, text_type = self.break_hints[line_num]
+
                 if line.strip() == "":
                     # discount initial blank line in what we're about to
                     # write when considering whether we're about to create
                     # orphans or widows
-                    lines_open -= 1
-                    line_need -= 1
-                if line_need > lines_open and current_page_number < 40 and False:
-                    import sys
-                    sys.stderr.write("\n")
-                    sys.stderr.write("page_num  : %s\n" % current_page_number)
-                    sys.stderr.write("lines_open: %s\n" % lines_open)
-                    sys.stderr.write("line_need : %s\n" % line_need)
-                    sys.stderr.write("line_text : '%s'\n" % line)
-                    sys.stderr.write("abs diff  : %s\n" % abs(lines_open - line_need))
+                    available -= 1
+                    needed -= 1
 
-                if ( (self.pis.get('autobreaks', 'yes') == 'yes'
-                      and line_need > lines_open
-                      and (line_need-lines_open < 2 or lines_open < 2))
-                    or self.break_hints[line_num] < 0 ):
-                    
+                if (text_type == "break"
+                    or (text_type == "raw" and needed > available)
+                    or (self.pis.get('autobreaks', 'yes') == 'yes'
+                        and needed > available
+                        and (needed-available < 2 or available < 2) ) ):
+
                     # Insert break
                     remainder = max_page_length - current_page_length - 2
                     self.output.extend([''] * remainder)

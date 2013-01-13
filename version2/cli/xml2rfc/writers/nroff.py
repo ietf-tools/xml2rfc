@@ -107,7 +107,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
         # Page break information
         end = len(self.buf)
-        self.break_hints[begin] = end - begin
+        self.break_hints[begin] = (end - begin, "txt")
 
         """
         elif bullet:
@@ -193,8 +193,16 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         for line_num, line in enumerate(self.buf):
             if line_num in self.break_hints:
                 # If this section will exceed a page, insert a break command
-                if page_len + self.break_hints[line_num] > page_maxlen and \
-                    self.pis.get('autobreaks', 'yes') == 'yes':
+                available = page_maxlen - page_len
+                need, text_type = self.break_hints[line_num]
+                if line.strip() == "":
+                    available -= 1
+                    needed -= 1
+                if (text_type == "break"
+                    or (text_type == "raw" and needed > available)
+                    or (self.pis.get('autobreaks', 'yes') == 'yes'
+                        and needed > available
+                        and (needed-available < 2 or available < 2) ) ):
                     self.output.append('.bp')
                     page_len = 0
             if page_len + 1 > 55:
