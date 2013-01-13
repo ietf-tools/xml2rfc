@@ -380,7 +380,15 @@ class RawTextRfcWriter(BaseRfcWriter):
         # Went through all elements, return text with an empty list
         return ''.join(line), []
             
-        
+    def _check_long_lines(self, buf_line, source_line):
+        long_lines = [ (num, line) for num, line in enumerate(self.buf[buf_line:]) if (len(line) > self.width) ]
+        for num, line in long_lines:
+            if source_line:
+                xml2rfc.log.warn("Output line (from source around line %s) is %s characters; longer than %s.  Excess characters: '%s':\n  '%s'\n"
+                    % (source_line+num, len(line), self.width, line[self.width:], line))
+            else:
+                xml2rfc.log.warn("Output line is %s characters; longer than %s.  Excess characters: '%s':\n  '%s'\n"
+                    % (buf_line+num, len(line), self.width, line[self.width:], line))
 
     # ---------------------------------------------------------
     # Base writer overrides
@@ -406,6 +414,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 self.buf.append(delimiter)
             # Additional blank lines?
             self.buf.extend([''] * blanklines)
+            start_line = len(self.buf)
             # Format the input
             lines = [line.rstrip() for line in text.expandtabs(4).split('\n')]
             # Trim first and last lines if they are blank, whitespace is handled
@@ -438,6 +447,8 @@ class RawTextRfcWriter(BaseRfcWriter):
             # Delimiter?
             if delimiter:
                 self.buf.append(delimiter)
+            if not self.indexmode:
+                self._check_long_lines(start_line, source_line)
 
     def write_label(self, text, type='figure', source_line=None):
         """ Writes a centered label """
