@@ -9,7 +9,6 @@ import string
 import math
 import lxml
 import datetime
-import debug
 
 # Local lib
 from xml2rfc.writers.base import BaseRfcWriter
@@ -504,7 +503,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     # Don't auto-break for tail paragraph
                     lb = False
                     # Keep indentation
-                    bullet = ' ' * sub_indent
+                    bullet = ' ' * len(bullet)
 
                 # Set tail of element as input text of next paragraph
                 if element.tail:
