@@ -21,10 +21,11 @@ class RawTextRfcWriter(BaseRfcWriter):
         The page width is controlled by the *width* parameter.
     """
 
-    def __init__(self, xmlrfc, width=72, quiet=False, verbose=False, date=datetime.date.today()):
+    def __init__(self, xmlrfc, width=72, margin=3, quiet=False, verbose=False, date=datetime.date.today()):
         BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose, date=date)
         # Document processing data
         self.width = width      # Page width
+        self.margin = margin    # Page margin
         self.buf = []           # Main buffer during processing
         self.output = []        # Final buffer that gets written to disk
         self.toc_marker = 0     # Line number in buffer to write toc to
@@ -33,7 +34,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.edit_counter = 0   # Counter for edit marks
         self.eref_counter = 0   # Counter for <eref> elements
         self.ascii = True       # Enable ascii flag
-        
+
         # Marks position of iref elements
         self.iref_marks = {}
 
@@ -587,7 +588,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             uri = address.find('uri')
             if uri is not None and uri.text:
                 lines.append('URI:   ' + uri.text)
-        self.write_raw('\n'.join(lines))
+        self.write_raw('\n'.join(lines), indent=self.margin)
         self._lb()
 
     def write_reference_list(self, list):
@@ -820,7 +821,7 @@ class RawTextRfcWriter(BaseRfcWriter):
 
         # Finally, write the table to the buffer with proper alignment
         align = table.attrib.get('align', 'center')
-        self.write_raw('\n'.join(output), align=align)
+        self.write_raw('\n'.join(output), align=align, indent=self.margin)
 
     def insert_anchor(self, text):
         # No anchors for text
