@@ -99,10 +99,11 @@ class RawTextRfcWriter(BaseRfcWriter):
             if align == 'left':
                 buf.extend(par)
             elif align == 'center':
+                import debug
                 for line in par:
-                    margin = ' ' * indent
+                    margin = ' ' * (indent//2*2)
                     if line.startswith(margin):
-                        centered = margin + line[len(margin):].center(self.width-indent).rstrip()
+                        centered = margin + line[len(margin):].center(self.width-(indent//2*2)).rstrip()
                         buf.append(centered)
                     else:
                         buf.append(line.center(self.width).rstrip())
@@ -117,7 +118,7 @@ class RawTextRfcWriter(BaseRfcWriter):
     def _write_list(self, list, level=0, indent=3):
         """ Writes a <list> element """
         bullet = '   '
-        hangIndent = 0
+        hangIndent = None
         style = list.attrib.get('style', 'empty')
         if style == 'hanging' or style.startswith('format'):
             # Check for optional hangIndent
@@ -176,9 +177,13 @@ class RawTextRfcWriter(BaseRfcWriter):
                     self.list_counters[counter_index] += 1
                     count = self.list_counters[counter_index]
                     bullet = self._format_counter(format_str, count) + ' '
+                if hangIndent:
+                    sub_indent = hangIndent
+                else:
+                    sub_indent = len(bullet)
                 self.write_t_rec(element, bullet=bullet, indent=indent, \
                                  level=level + 1, \
-                                 sub_indent=hangIndent, lb=lb)
+                                 sub_indent=sub_indent, lb=lb)
                 t_count += 1
 
         
