@@ -57,7 +57,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
     # Override
     def _write_text(self, string, indent=0, sub_indent=0, bullet='',
-                    align='left', lb=False, buf=None, strip=True, edit=False):
+                    align='left', leading_blankline=False, buf=None, strip=True, edit=False):
         #-------------------------------------------------------------
         # RawTextRfcWriter override
         #
@@ -70,7 +70,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         # Store buffer position for paging information
         begin = len(self.buf)
 
-        if lb:
+        if leading_blankline:
             if edit and self.pis.get('editing', 'no') == 'yes':
                 # Render an editing mark
                 self.edit_counter += 1
@@ -139,13 +139,13 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             self._write_text(docName, align='center')
 
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
-                  delimiter=None, lb=True):
+                  delimiter=None, leading_blankline=True):
         # Wrap in a no fill block
         self._indent(indent)
         self._write_line('.nf')
         PaginatedTextRfcWriter.write_raw(self, text, indent=0, align=align, \
                                          blanklines=blanklines, \
-                                         delimiter=delimiter, lb=lb)
+                                         delimiter=delimiter, leading_blankline=leading_blankline)
         self._write_line('.fi')
 
     def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, \

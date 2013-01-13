@@ -61,7 +61,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         return self._lb(num=num)
 
     def _write_text(self, string, indent=0, sub_indent=0, bullet='', \
-                  align='left', lb=False, buf=None, strip=True, edit=False):
+                  align='left', leading_blankline=False, buf=None, strip=True, edit=False):
         """ Writes a line or multiple lines of text to the buffer.
 
             Several parameters are included here.  All of the API calls
@@ -83,7 +83,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             # No bullet, so combine indent and sub_indent
             initial = subsequent
 
-        if lb:
+        if leading_blankline:
             if edit and self.pis.get('editing', 'no') == 'yes':
                 # Render an editing mark
                 self.edit_counter += 1
@@ -150,11 +150,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                 self.xmlrfc.parse_pi(element)
             elif element.tag == 't':
                 # Disable linebreak if subcompact=yes AND not first list element
-                lb = True
+                leading_blankline = True
                 if t_count > 0 and self.pis.get('subcompact', \
                     self.pis.get('compact', \
                     self.pis.get('rfcedstyle', 'no'))) == 'yes':
-                    lb = False
+                    leading_blankline = False
                 if style == 'symbols':
                     bullet = self.list_symbols[level % len(self.list_symbols)]
                     bullet += '  '
@@ -184,7 +184,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     sub_indent = len(bullet)
                 self.write_t_rec(element, bullet=bullet, indent=indent, \
                                  level=level + 1, \
-                                 sub_indent=sub_indent, lb=lb)
+                                 sub_indent=sub_indent, leading_blankline=leading_blankline)
                 t_count += 1
 
         
@@ -256,7 +256,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 alpha_bucket[letter] = [key]
         for letter in sorted(alpha_bucket.keys()):
             # Write letter
-            self._write_text(letter, indent=3, lb=True, buf=tmpbuf)
+            self._write_text(letter, indent=3, leading_blankline=True, buf=tmpbuf)
             for item in alpha_bucket[letter]:
                 pages = self._iref_index[item].pages
                 # Write item
@@ -294,12 +294,12 @@ class RawTextRfcWriter(BaseRfcWriter):
         # Use an empty first line if key is too long
         min_spacing = 2
         if len(key) + min_spacing > sub_indent:
-            self._write_text(key, indent=3, lb=True)
+            self._write_text(key, indent=3, leading_blankline=True)
             self._write_text(text, indent=3 + sub_indent)
         else:
             # Fill space to sub_indent in the bullet
             self._write_text(text, indent=3, bullet=key.ljust(sub_indent), \
-                     sub_indent=sub_indent, lb=True)
+                     sub_indent=sub_indent, leading_blankline=True)
     
     def _combine_inline_elements(self, elements):
         """ Shared function for <t> and <c> elements
@@ -395,10 +395,10 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.iref_marker = len(self.buf)
 
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
-                  delimiter=None, lb=True):
+                  delimiter=None, leading_blankline=True):
         """ Writes a raw stream of characters, preserving space and breaks """
         if text:
-            if lb:
+            if leading_blankline:
                 # Start with a newline
                 self._lb()
             # Delimiter?
@@ -441,11 +441,11 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_label(self, text, type='figure'):
         """ Writes a centered label """
-        self._write_text(text, indent=3, align='center', lb=True)
+        self._write_text(text, indent=3, align='center', leading_blankline=True)
 
     def write_title(self, title, docName=None):
         """ Write the document title and (optional) name """
-        self._write_text(title, lb=True, align='center')
+        self._write_text(title, leading_blankline=True, align='center')
         if docName is not None:
             self._write_text(docName, align='center')
 
@@ -454,14 +454,14 @@ class RawTextRfcWriter(BaseRfcWriter):
         """ Write a generic header """
         if bullet:
             bullet += '  '
-        self._write_text(text, bullet=bullet, indent=0, lb=True)
+        self._write_text(text, bullet=bullet, indent=0, leading_blankline=True)
 
     def write_paragraph(self, text, align='left', autoAnchor=None):
         """ Write a generic paragraph of text """
-        self._write_text(text, indent=3, align=align, lb=True)
+        self._write_text(text, indent=3, align=align, leading_blankline=True)
 
     def write_t_rec(self, t, indent=3, sub_indent=0, bullet='',
-                     autoAnchor=None, align='left', level=0, lb=True):
+                     autoAnchor=None, align='left', level=0, leading_blankline=True):
         """ Recursively writes a <t> element """
         # Grab any initial text in <t>
         current_text = t.text or ''
@@ -474,7 +474,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             current_text += inline_text
             if (current_text and not current_text.isspace()) or bullet:
                 # Attempt to write a paragraph of inline text
-                self._write_text(current_text, indent=indent, lb=lb, \
+                self._write_text(current_text, indent=indent, leading_blankline=leading_blankline, \
                                 sub_indent=sub_indent, bullet=bullet, \
                                 edit=True, align=align)
             # Clear text
@@ -493,13 +493,13 @@ class RawTextRfcWriter(BaseRfcWriter):
                     # Call sibling function to construct list
                     self._write_list(element, indent=new_indent, level=level)
                     # Auto-break for tail paragraph
-                    lb = True
+                    leading_blankline = True
                     bullet = ''
 
                 elif element.tag == 'figure':
                     self._write_figure(element)
                     # Auto-break for tail paragraph
-                    lb = True
+                    leading_blankline = True
                     bullet = ''
 
                 elif element.tag == 'vspace':
@@ -507,7 +507,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     self._vspace(num=int(element.attrib.get('blankLines',
                                          self.defaults['vspace_blanklines'])))
                     # Don't auto-break for tail paragraph
-                    lb = False
+                    leading_blankline = False
                     # Keep indentation
                     bullet = ' ' * sub_indent
 
@@ -535,7 +535,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 right = ''
             heading.append(xml2rfc.utils.justify_inline(left, '', right, \
                                                         self.width))
-        self.write_raw('\n'.join(heading), align='left', indent=0, lb=False)
+        self.write_raw('\n'.join(heading), align='left', indent=0, leading_blankline=False)
         # Extra blank line underneath top block
         self._lb()
 
@@ -647,7 +647,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             # Render annotation as a separate paragraph
             if key in annotationdict:
                 self._write_text(annotationdict[key], indent=refindent + 3, \
-                                 lb=True)
+                                 leading_blankline=True)
 
     def draw_table(self, table, table_num=None):
         # First construct a 2d matrix from the table
