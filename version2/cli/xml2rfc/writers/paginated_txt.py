@@ -10,7 +10,6 @@ from xml2rfc.writers.base import BaseRfcWriter
 from xml2rfc.writers.raw_txt import RawTextRfcWriter
 import xml2rfc.utils
 
-
 class PaginatedTextRfcWriter(RawTextRfcWriter):
     """ Writes to a text file, paginated with headers and footers
 
@@ -200,9 +199,10 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                     needed -= 1
 
                 if (text_type == "break"
-                    or (text_type == "raw" and needed > available)
+                    or (text_type == "raw" and needed > available and needed < max_page_length-2 )
                     or (self.pis.get('autobreaks', 'yes') == 'yes'
                         and needed > available
+                        and needed < max_page_length-2
                         and (needed-available < 2 or available < 2) ) ):
 
                     # Insert break
