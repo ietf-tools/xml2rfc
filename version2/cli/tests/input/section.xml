@@ -1,0 +1,82 @@
+  <section title="First Section">
+    <section title="Document Conventions">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref target="RFC2119">
+      RFC 2119</xref>.</t>
+
+      <t>Since many of the definitions and syntax are identical to those for
+      the <xref target="RFC2616">Hypertext Transfer Protocol -- HTTP/1.1</xref>, this specification refers to the section where they
+      are defined rather than copying it. For brevity, [HX.Y] is to be taken
+      to refer to Section X.Y of RFC 2616.</t>
+
+      <t>All the mechanisms specified in this document are described in both
+      prose and an augmented Backus-Naur form (<xref
+      target="RFC5234">ABNF</xref>).</t>
+
+      <t>The complete message format in ABNF form is provided in <xref
+      target="S.abnf"></xref> and is the normative format definition. Note
+      that productions may be duplicated within the main body of the document
+      for reading convenience. If a production in the body of the text
+      conflicts with one in the normative definition, the latter rules.</t>
+
+      <section title="Definitions">
+        <t><list hangIndent="15" style="hanging">
+            <t hangText="Media Resource"><vspace blankLines="0" />An entity on
+            the speech processing server that can be controlled through 
+            MRCPv2.</t>
+
+            <t hangText="MRCP Server"><vspace blankLines="0" />
+Aggregate of one or more "Media Resource" entities on
+                a server, exposed through MRCPv2.  Often, 'server' in 
+                this document refers to an MRCP server.</t>
+
+            <t hangText="MRCP Client"><vspace blankLines="0" />An entity
+            controlling one or more Media Resources through MRCPv2
+            ("Client" for short).</t>
+
+            <t hangText="DTMF"><vspace blankLines="0" />Dual-Tone
+            Multi-Frequency; a method of transmitting key presses in-band,
+            either as actual tones (<xref target="Q.23">Q.23</xref>) or as
+            named tone events (<xref target="RFC4733">RFC 4733</xref>).</t>
+
+            <t hangText="Endpointing"><vspace blankLines="0" />The process of
+            automatically detecting the beginning and end of speech in an
+            audio stream. This is critical both for speech recognition and for
+            automated recording as one would find in voice mail systems.</t>
+
+            <t hangText="Hotword Mode"><vspace blankLines="0" />A mode of
+            speech recognition where a stream of utterances is evaluated for
+            match against a small set of command words. This is generally
+            employed either to trigger some action or to control the
+            subsequent grammar to be used for further recognition.</t>
+          </list></t>
+      </section>
+
+      <section title="State-Machine Diagrams">
+        <t>The state-machine diagrams in this document do not show every
+        possible method call. Rather, they reflect the state of the resource
+        based on the methods that have moved to IN-PROGRESS or COMPLETE states
+        (see <xref target="sec.response"></xref>). Note that since PENDING
+        requests essentially have not affected the resource yet and are in the
+        queue to be processed, they are not reflected in the state-machine
+        diagrams.</t>
+      </section>
+
+      <section title="URI Schemes">
+        <t>This document defines many protocol headers that contain URIs
+        (<xref target="RFC3986">Uniform Resource Identifiers</xref>) or
+        lists of URIs for referencing media. The entire document, including
+        the Security Considerations section (Section 12), assumes that HTTP or
+        <xref target="RFC2818">HTTP over TLS (HTTPS)</xref> will be used as
+        the URI addressing scheme unless otherwise stated. However,
+        implementations MAY support other schemes (such as 'file'), provided
+        they have addressed any security considerations described in this
+        document and any others particular to the specific scheme. For
+        example, implementations where the client and server both reside on
+        the same physical hardware and the file system is secured by
+        traditional file access controls on user-level could be reasonable
+        candidates for supporting the 'file' scheme.</t>
+      </section>
+    </section>
+  </section>
