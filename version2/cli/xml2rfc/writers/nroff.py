@@ -38,6 +38,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                                         quiet=quiet, verbose=verbose, date=date)
         self.curr_indent = 0    # Used like a state machine to control
                                 # whether or not we print a .in command
+        self.wrapper.width = self.width-3
 
     def _indent(self, amount):
         # Writes an indent command if it differs from the last
@@ -86,7 +87,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                 string = string.lstrip()
             if bullet and len(bullet.strip()) > 0:
                 string = bullet + string
-            par = self.wrapper.wrap(string)
+            par = self.wrapper.wrap(string, break_on_hyphens=False)
             # Use bullet for indentation if sub not specified
             full_indent = sub_indent and indent + sub_indent or indent + len(bullet)
 
@@ -197,7 +198,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             if line_num in self.break_hints:
                 # If this section will exceed a page, insert a break command
                 available = page_maxlen - page_len
-                need, text_type = self.break_hints[line_num]
+                needed, text_type = self.break_hints[line_num]
                 if line.strip() == "":
                     available -= 1
                     needed -= 1
