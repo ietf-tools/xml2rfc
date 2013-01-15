@@ -197,3 +197,46 @@
    the control stream MUST conform to Connection-Oriented Media
    (COMEDIA) over TLS [RFC4572], which specifies the usage of SDP for
    establishing a secure connection-oriented transport over TLS.
+
+3.  Section Three
+
+3.1.  Synthesizer Message Body
+
+   A synthesizer message can contain additional information associated
+   with the Request, Response, or Event in its message body.
+
+3.1.1.  Synthesizer Speech Data
+
+   Marked-up text for the synthesizer to speak is specified as a typed
+   media entity in the message body.  The speech data to be spoken by
+   the synthesizer can be specified inline by embedding the data in the
+   message body or by reference by providing a URI for accessing the
+   data.  In either case, the data and the format used to markup the
+   speech needs to be of a content type supported by the server.
+
+   All MRCPv2 servers containing synthesizer resources MUST support both
+   plain text speech data and W3C's Speech Synthesis Markup Language
+   [W3C.REC-speech-synthesis-20040907] and hence MUST support the media
+   types 'text/plain' and 'application/ssml+xml'. Other formats MAY be
+   supported.
+
+   If the speech data is to be fetched by URI reference, the media type
+   'text/uri-list' (see RFC 2483 [RFC2483]) is used to indicate one or
+   more URIs that, when dereferenced, will contain the content to be
+   spoken.  If a list of speech URIs is specified, the resource MUST
+   speak the speech data provided by each URI in the order in which the
+   URIs are specified in the content.
+
+   MRCPv2 clients and servers MUST support the 'multipart/mixed' media
+   type.  This is the appropriate media type to use when providing a mix
+   of URI and inline speech data.  Embedded within the multipart content
+   block, there MAY be content for the 'text/uri-list', 'application/
+   ssml+xml', and/or 'text/plain' media types.  The character set and
+   encoding used in the speech data is specified according to standard
+   media type definitions.  The multipart content MAY also contain
+   actual audio data.  Clients may have recorded audio clips stored in
+   memory or on a local device and wish to play it as part of the SPEAK
+   request.  The audio portions MAY be sent by the client as part of the
+   multipart content block.  This audio is referenced in the speech
+   markup data that is another part in the multipart content block
+   according to the 'multipart/mixed' media type specification.

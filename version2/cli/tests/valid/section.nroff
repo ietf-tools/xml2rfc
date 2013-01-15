@@ -15,8 +15,8 @@ Section X.Y of RFC 2616.
 All the mechanisms specified in this document are described in both
 prose and an augmented Backus-Naur form (ABNF [RFC5234]).
 
-The complete message format in ABNF form is provided in [S.abnf] and
-is the normative format definition.  Note that productions may be
+The complete message format in ABNF form is provided in \%[S.abnf]
+and is the normative format definition.  Note that productions may be
 duplicated within the main body of the document for reading
 convenience.  If a production in the body of the text conflicts with
 one in the normative definition, the latter rules.
@@ -48,8 +48,8 @@ An entity controlling one or more Media Resources through MRCPv2
 DTMF           
 .sp 0
 Dual-Tone Multi-Frequency; a method of transmitting key presses
-in-band, either as actual tones (Q.23 [Q.23]) or as named tone events
-(RFC 4733 [RFC4733]).
+in-band, either as actual tones (Q.23 \%[Q.23]) or as named tone
+events (RFC 4733 [RFC4733]).
 
 .ti 3
 Endpointing    
@@ -74,7 +74,7 @@ subsequent grammar to be used for further recognition.
 The state-machine diagrams in this document do not show every
 possible method call.  Rather, they reflect the state of the resource
 based on the methods that have moved to IN-PROGRESS or COMPLETE
-states (see [sec.response]).  Note that since PENDING requests
+states (see \%[sec.response]).  Note that since PENDING requests
 essentially have not affected the resource yet and are in the queue
 to be processed, they are not reflected in the state-machine
 diagrams.
@@ -110,19 +110,24 @@ of any other MRCP channel currently allocated by that server.  MRCPv2
 defines the following IANA-registered types of media processing
 resources.  Additional resource types and their associated
 methods/events and state machines may be added as described below in
-[sec.iana].
+\%[sec.iana].
 .nf
 
-  +---------------+----------------------+---------------------------+
-  | Resource Type | Resource Description | Described in              |
-  +---------------+----------------------+---------------------------+
-  | speechrecog   | Speech Recognizer    | [sec.recognizerResource]  |
-  | dtmfrecog     | DTMF Recognizer      | [sec.recognizerResource]  |
-  | speechsynth   | Speech Synthesizer   | [sec.synthesizerResource] |
-  | basicsynth    | Basic Synthesizer    | [sec.synthesizerResource] |
-  | speakverify   | Speaker Verification | [sec.verifierResource]    |
-  | recorder      | Speech Recorder      | [sec.recorderResource]    |
-  +---------------+----------------------+---------------------------+
+ +---------------+-----------------+---------------------------------+
+ | Resource Type | Resource        | Described in                    |
+ |               | Description     |                                 |
+ +---------------+-----------------+---------------------------------+
+ | speechrecog   | Speech          | \%[sec.recognizerResource]      |
+ |               | Recognizer      |                                 |
+ | dtmfrecog     | DTMF Recognizer | \%[sec.recognizerResource]      |
+ | speechsynth   | Speech          | \%[sec.synthesizerResource]     |
+ |               | Synthesizer     |                                 |
+ | basicsynth    | Basic           | \%[sec.synthesizerResource]     |
+ |               | Synthesizer     |                                 |
+ | speakverify   | Speaker         | \%[sec.verifierResource]        |
+ |               | Verification    |                                 |
+ | recorder      | Speech Recorder | \%[sec.recorderResource]        |
+ +---------------+-----------------+---------------------------------+
 .fi
 
 .ce 1
@@ -219,3 +224,50 @@ connection-oriented transport.  When using TLS, the SDP "m=" line for
 the control stream MUST conform to Connection-Oriented Media
 (COMEDIA) over TLS [RFC4572], which specifies the usage of SDP for
 establishing a secure connection-oriented transport over TLS.
+
+.ti 0
+3.  Section Three
+
+.ti 0
+3.1.  Synthesizer Message Body 
+
+A synthesizer message can contain additional information associated
+with the Request, Response, or Event in its message body.
+
+.ti 0
+3.1.1.  Synthesizer Speech Data
+
+Marked-up text for the synthesizer to speak is specified as a typed
+media entity in the message body.  The speech data to be spoken by
+the synthesizer can be specified inline by embedding the data in the
+message body or by reference by providing a URI for accessing the
+data.  In either case, the data and the format used to markup the
+speech needs to be of a content type supported by the server.
+
+All MRCPv2 servers containing synthesizer resources MUST support both
+plain text speech data and W3C's Speech Synthesis Markup Language
+\%[W3C.REC-speech-synthesis-20040907] and hence MUST support the
+media types 'text/plain' and 'application/ssml+xml'. Other formats
+MAY be supported.
+
+If the speech data is to be fetched by URI reference, the media type
+'text/uri-list' (see RFC 2483 [RFC2483]) is used to indicate one or
+more URIs that, when dereferenced, will contain the content to be
+spoken.  If a list of speech URIs is specified, the resource MUST
+speak the speech data provided by each URI in the order in which the
+URIs are specified in the content.
+
+MRCPv2 clients and servers MUST support the 'multipart/mixed' media
+type.  This is the appropriate media type to use when providing a mix
+of URI and inline speech data.  Embedded within the multipart content
+block, there MAY be content for the 'text/uri-list',
+'application/ssml+xml', and/or 'text/plain' media types.  The
+character set and encoding used in the speech data is specified
+according to standard media type definitions.  The multipart content
+MAY also contain actual audio data.  Clients may have recorded audio
+clips stored in memory or on a local device and wish to play it as
+part of the SPEAK request.  The audio portions MAY be sent by the
+client as part of the multipart content block.  This audio is
+referenced in the speech markup data that is another part in the
+multipart content block according to the 'multipart/mixed' media type
+specification.
