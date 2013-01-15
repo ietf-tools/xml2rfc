@@ -129,6 +129,31 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         tmpbuf.append('.fi')
         return tmpbuf
 
+    def _expand_xref(self, xref):
+        """ Returns the proper text representation of an xref element """
+        target = xref.attrib.get('target', '')
+        format = xref.attrib.get('format', self.defaults['xref_format'])
+        item = self._getItemByAnchor(target)
+        if not item or format == 'none':
+            target_text = '[' + target + ']'
+        elif format == 'counter':
+            target_text = item.counter
+        elif format == 'title':
+            target_text = item.title
+        else: #Default
+            target_text = item.autoName
+        if xref.text:
+            if not target_text.startswith('['):
+                target_text = '(' + target_text + ')'
+            else:
+                if "." in target_text or "-" in target_text:
+                    target_text = "\%" + target_text
+            return xref.text.rstrip() + ' ' + target_text
+        else:
+            if "." in target_text or "-" in target_text:
+                target_text = "\%" + target_text
+            return target_text
+
     # ---------------------------------------------------------
     # PaginatedTextRfcWriter overrides
     # ---------------------------------------------------------
