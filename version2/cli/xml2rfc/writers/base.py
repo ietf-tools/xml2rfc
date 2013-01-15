@@ -440,12 +440,12 @@ class BaseRfcWriter:
                 %i: Lowercase roman numerals
                 %I: Uppercase roman numerals
         """
-        return text \
-            .replace(r'%d', str(count)) \
-            .replace(r'%c', str(string.ascii_lowercase[(count - 1) % 26])) \
-            .replace(r'%C', str(string.ascii_uppercase[(count - 1) % 26])) \
-            .replace(r'%i', xml2rfc.utils.int2roman(count)) \
-            .replace(r'%I', xml2rfc.utils.int2roman(count, uppercase=True))
+        return (text
+            .replace(r'%d', str(count))
+            .replace(r'%c', str(string.ascii_lowercase[(count - 1) % 26]))
+            .replace(r'%C', str(string.ascii_uppercase[(count - 1) % 26]))
+            .replace(r'%i', xml2rfc.utils.int2roman(count).ljust(5)) 
+            .replace(r'%I', xml2rfc.utils.int2roman(count, uppercase=True).ljust(5)))
 
     def _format_author_string(self, authors):
         """ Given a list of <author> elements, return a readable string of names """
