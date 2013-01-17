@@ -188,7 +188,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self._write_line(bullet + text)
 
     def pre_indexing(self):
-        pass
+        # escape backslashes in the text
+        for element in self.r.iter():
+            if element.text:
+                element.text = element.text.replace('\\', '\\\\')
+            if element.tail:
+                element.tail = element.tail.replace('\\', '\\\\')
 
     def pre_rendering(self):
         """ Inserts an nroff header into the buffer """
@@ -215,7 +220,6 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     def post_rendering(self):
         # Process any characters that need to be escaped
         for i, line in enumerate(self.buf):
-            self.buf[i] = line.replace('\\', '\\\\')
             if line.strip().startswith("'"):
                 self.buf[i] = '\\' + line
 
