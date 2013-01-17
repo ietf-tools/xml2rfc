@@ -134,7 +134,7 @@ class WriterRootTest(unittest.TestCase):
         self.xmlrfc = self.parser.parse()
         self.writer = xml2rfc.PaginatedTextRfcWriter(self.xmlrfc, quiet=True)
         self.writer._format_date()
-        self.writer.pre_processing()
+        self.writer.pre_rendering()
 
     def set_root_attrs(self, submissionType, category, consensus):
         """ Modify basic attributes on root element for testing """
