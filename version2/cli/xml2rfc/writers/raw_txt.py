@@ -843,7 +843,10 @@ class RawTextRfcWriter(BaseRfcWriter):
         # No anchors for text
         pass
 
-    def pre_processing(self):
+    def pre_indexing(self):
+        pass
+
+    def pre_rendering(self):
         # Discard buffer from indexing pass
         self.buf = []
         
@@ -852,7 +855,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.edit_counter = 0   # Counter for edit marks
         self.eref_counter = 0   # Counter for <eref> elements
 
-    def post_processing(self):
+    def post_rendering(self):
         # Insert the TOC and IREF into the main buffer
         self.output = self.buf[:self.toc_marker] + \
                       self._write_toc() + \

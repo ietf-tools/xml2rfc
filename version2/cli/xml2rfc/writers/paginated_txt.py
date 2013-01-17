@@ -80,10 +80,13 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                                        autoAnchor=autoAnchor, anchor=anchor, \
                                        level=level)
 
-    def pre_processing(self):
+    def pre_indexing(self):
+        pass
+
+    def pre_rendering(self):
         """ Prepares the header and footer information """
         # Raw textwriters preprocessing will replace unicode with safe ascii
-        RawTextRfcWriter.pre_processing(self)
+        RawTextRfcWriter.pre_rendering(self)
 
         # Discard hints and marks from indexing pass
         self.break_hints = {}
@@ -120,7 +123,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.center_footer = self.pis.get('footer', self.center_footer)
         self.left_header = self.pis.get('header', self.left_header)
 
-    def post_processing(self):
+    def post_rendering(self):
         """ Add paging information to a secondary buffer """
         # Counters    
         current_page_length = 0

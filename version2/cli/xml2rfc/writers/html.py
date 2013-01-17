@@ -613,7 +613,10 @@ class HtmlRfcWriter(BaseRfcWriter):
 
         self.buf.append(self._serialize(table))
     
-    def pre_processing(self):
+    def pre_indexing(self):
+        pass
+
+    def pre_rendering(self):
         # Reset buffers
         self.buffers = {'front': [],
                         'body': [],
@@ -623,7 +626,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.list_counters = {}
         self.buf = self.buffers['front']
 
-    def post_processing(self):
+    def post_rendering(self):
         # Create table of contents buffers
         self._create_toc()
         

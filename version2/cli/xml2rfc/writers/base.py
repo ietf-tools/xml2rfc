@@ -852,64 +852,12 @@ class BaseRfcWriter:
         elif ipr == 'pre5378Trust200902':
             self.write_paragraph(self.boilerplate['ipr_pre5378Trust200902_copyright'])
 
-    def _run(self, indexmode=False):
-        self.indexmode = indexmode
+    def _build_index(self):
+        self.indexmode = True
         # Reset document counters
         self.ref_start = 1
         self.figure_count = 0
         self.table_count = 0
-
-        if not self.indexmode:
-            # Format the date properly
-            self._format_date()
-            
-            # Do any pre processing necessary, such as inserting metadata
-            self.pre_processing()
-
-            # Block header
-            topblock = self.pis.get('topblock', 'yes')
-            if topblock == 'yes':
-                self.write_top(self._prepare_top_left(), \
-                                   self._prepare_top_right())
-
-            # Title & Optional docname
-            title = self.r.find('front/title')
-            if title is not None:
-                docName = self.r.attrib.get('docName', None)
-                self.write_title(title.text, docName, title.sourceline)
-
-            # Abstract
-            abstract = self.r.find('front/abstract')
-            if abstract is not None:
-                self.write_heading('Abstract', autoAnchor='rfc.abstract')
-                for t in abstract.findall('t'):
-                    self.write_t_rec(t)
-
-            # Optional notified boilerplate
-            if self.pis.get('iprnotified', 'no') == 'yes':
-                self.write_paragraph(BaseRfcWriter.boilerplate['iprnotified'])
-
-            # Optional notes
-            for note in self.r.findall('front/note'):
-                self.write_heading(note.attrib.get('title', 'Note'))
-                for t in note.findall('t'):
-                    self.write_t_rec(t)
-            
-            # Verify that 'ipr' attribute is valid before continuing
-            self._validate_ipr()
-            
-            # "Status of this Memo" section
-            self._write_status_section()
-
-            # Copyright section
-            self._write_copyright()
-
-            # Insert the table of contents marker at this position
-            toc_enabled = self.pis.get('toc', 'no')
-            if toc_enabled == 'yes':
-                self.insert_toc()
-        
-        # ENDIF indexmode
 
         # Middle sections
         middle = self.r.find('middle')
@@ -925,25 +873,116 @@ class BaseRfcWriter:
         if len(references) == 1:
             ref_title = references[0].attrib.get('title', ref_title)
 
-        if self.indexmode:
-            self._indexReferences(ref_counter, title=ref_title)
+        self._indexReferences(ref_counter, title=ref_title)
+
+        if len(references) > 1:
+            for i, reference_list in enumerate(references):
+                ref_newcounter = ref_counter + '.' + str(i + 1)
+                ref_title = reference_list.attrib.get('title',
+                                        self.defaults['references_title'])
+                self._indexReferences(ref_newcounter, title=ref_title, \
+                                      subCounter=i+1, level=2)
+
+        # Appendix sections
+        back = self.r.find('back')
+        if back is not None:
+            self._write_section_rec(back, None, appendix=True)
+
+        # Index section, disable if there are no irefs
+        if len(self._iref_index) > 0:
+            # Add explicitly to index
+            title = 'Index'
+            autoAnchor = 'rfc.index'
+            item = _RfcItem(title, autoAnchor, title=title)
+            self._index.append(item)
+
+        # Authors addresses section
+        authors = self.r.findall('front/author')
+        autoAnchor = 'rfc.authors'
+        if len(authors) > 1:
+            title = "Authors' Addresses"
         else:
-            self.write_heading(ref_title, bullet=ref_counter + '.', \
+            title = "Author's Address"
+        # Add explicitly to index
+        item = _RfcItem(title, autoAnchor, title=title)
+        self._index.append(item)
+
+    def _build_document(self):
+        self.indexmode = False
+        # Reset document counters
+        self.ref_start = 1
+        self.figure_count = 0
+        self.table_count = 0
+
+        # Block header
+        topblock = self.pis.get('topblock', 'yes')
+        if topblock == 'yes':
+            self.write_top(self._prepare_top_left(), \
+                               self._prepare_top_right())
+
+        # Title & Optional docname
+        title = self.r.find('front/title')
+        if title is not None:
+            docName = self.r.attrib.get('docName', None)
+            self.write_title(title.text, docName, title.sourceline)
+
+        # Abstract
+        abstract = self.r.find('front/abstract')
+        if abstract is not None:
+            self.write_heading('Abstract', autoAnchor='rfc.abstract')
+            for t in abstract.findall('t'):
+                self.write_t_rec(t)
+
+        # Optional notified boilerplate
+        if self.pis.get('iprnotified', 'no') == 'yes':
+            self.write_paragraph(BaseRfcWriter.boilerplate['iprnotified'])
+
+        # Optional notes
+        for note in self.r.findall('front/note'):
+            self.write_heading(note.attrib.get('title', 'Note'))
+            for t in note.findall('t'):
+                self.write_t_rec(t)
+
+        # Verify that 'ipr' attribute is valid before continuing
+        self._validate_ipr()
+
+        # "Status of this Memo" section
+        self._write_status_section()
+
+        # Copyright section
+        self._write_copyright()
+
+        # Insert the table of contents marker at this position
+        toc_enabled = self.pis.get('toc', 'no')
+        if toc_enabled == 'yes':
+            self.insert_toc()
+
+        # Middle sections
+        middle = self.r.find('middle')
+        if middle is not None:
+            self._write_section_rec(middle, None)
+
+        # References sections
+        # Treat references as nested only if there is more than one
+        ref_counter = str(self.ref_start)
+        references = self.r.findall('back/references')
+        # Write root level references header
+        ref_title = self.pis.get('refparent', self.defaults['references_title'])
+        if len(references) == 1:
+            ref_title = references[0].attrib.get('title', ref_title)
+
+        self.write_heading(ref_title, bullet=ref_counter + '.', \
                                autoAnchor='rfc.references')
         if len(references) > 1:
             for i, reference_list in enumerate(references):
                 ref_newcounter = ref_counter + '.' + str(i + 1)
                 ref_title = reference_list.attrib.get('title',
                                         self.defaults['references_title'])
-                if self.indexmode:
-                    self._indexReferences(ref_newcounter, title=ref_title, \
-                                          subCounter=i+1, level=2)
-                else:
-                    autoAnchor = 'rfc.references.' + str(i + 1)
-                    self.write_heading(ref_title, bullet=ref_newcounter + '.',\
-                                       autoAnchor=autoAnchor, level=2)
-                    self.write_reference_list(reference_list)
-        elif len(references) == 1 and not self.indexmode:
+                autoAnchor = 'rfc.references.' + str(i + 1)
+                self.write_heading(ref_title, bullet=ref_newcounter + '.',\
+                                   autoAnchor=autoAnchor, level=2)
+                self.write_reference_list(reference_list)
+        elif len(references) == 1:
             self.write_reference_list(references[0])
 
         # Appendix sections
@@ -953,14 +992,7 @@ class BaseRfcWriter:
 
         # Index section, disable if there are no irefs
         if len(self._iref_index) > 0:
-            if self.indexmode:
-                # Add explicitly to index
-                title = 'Index'
-                autoAnchor = 'rfc.index'
-                item = _RfcItem(title, autoAnchor, title=title)
-                self._index.append(item)
-            else:
-                self.insert_iref_index()
+            self.insert_iref_index()
 
         # Authors addresses section
         authors = self.r.findall('front/author')
@@ -969,18 +1001,10 @@ class BaseRfcWriter:
             title = "Authors' Addresses"
         else:
             title = "Author's Address"
-        if self.indexmode:
-            # Add explicitly to index
-            item = _RfcItem(title, autoAnchor, title=title)
-            self._index.append(item)
-        else:
-            self.write_heading(title, autoAnchor=autoAnchor)
-            for author in authors:
-                self.write_address_card(author)
+        self.write_heading(title, autoAnchor=autoAnchor)
+        for author in authors:
+            self.write_address_card(author)
 
-        # Primary buffer is finished -- apply any post processing
-        if not self.indexmode:
-            self.post_processing()
         
     def write(self, filename, tmpfile=None):
         """ Public method to write the RFC document to a file. """
@@ -988,11 +1012,20 @@ class BaseRfcWriter:
         if self.ascii:
             xml2rfc.utils.safeReplaceUnicode(self.r)
 
+        # Do any pre processing necessary, such as inserting metadata
+        self.pre_indexing()
         # Make two passes over the document, the first pass we run in
         # 'index mode' to construct the internal index and other things, 
         # the second pass will assemble a buffer and render the actual text
-        self._run(indexmode=True)
-        self._run(indexmode=False)
+        self._build_index()
+        # Format the date properly
+        self._format_date()
+        # Do any pre-build processing necessary, such as inserting metadata
+        self.pre_rendering()
+        # Build the document
+        self._build_document()
+        # Primary buffer is finished -- apply any post processing
+        self.post_rendering()
 
         # Finished processing, write to file
         # Override file with keyword argument if passed in, ignoring filename.
@@ -1079,13 +1112,17 @@ class BaseRfcWriter:
         """
         raise NotImplementedError('draw_table() needs to be overridden')
 
-    def pre_processing(self):
-        """ First method that is called before traversing the XML RFC tree """
-        raise NotImplementedError('pre_processing() needs to be overridden')
+    def pre_indexing(self):
+        """ First method that is called before traversing the XML RFC tree for indexing"""
+        raise NotImplementedError('pre_indexing() needs to be overridden')
 
-    def post_processing(self):
+    def pre_rendering(self):
+        """ First method that is called before traversing the XML RFC tree for rendering"""
+        raise NotImplementedError('pre_rendering() needs to be overridden')
+
+    def post_rendering(self):
         """ Last method that is called after traversing the XML RFC tree """
-        raise NotImplementedError('post_processing() needs to be overridden')
+        raise NotImplementedError('post_rendering() needs to be overridden')
 
     def write_to_file(self, file):
         """ Writes the finished buffer to a file """

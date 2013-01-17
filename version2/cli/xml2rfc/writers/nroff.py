@@ -3,6 +3,7 @@
 # --------------------------------------------------
 
 # Python libs
+import os
 import time
 import datetime
 
@@ -186,11 +187,14 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self._write_line('.ti 0')
         self._write_line(bullet + text)
 
-    def pre_processing(self):
+    def pre_indexing(self):
+        pass
+
+    def pre_rendering(self):
         """ Inserts an nroff header into the buffer """
 
         # Construct the RFC header and footer
-        PaginatedTextRfcWriter.pre_processing(self)
+        PaginatedTextRfcWriter.pre_rendering(self)
 
         # Insert a timestamp+version comment
         self._write_line(self.comment_header % ('.'.join(map(str, VERSION)),
@@ -208,7 +212,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self._write_line('.ds CF ' + self.center_footer)
         self._write_line('.ds RF FORMFEED[Page %]')
 
-    def post_processing(self):
+    def post_rendering(self):
         # Process any characters that need to be escaped
         for i, line in enumerate(self.buf):
             self.buf[i] = line.replace('\\', '\\\\')
@@ -239,3 +243,10 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                 page_len = 0
             self.output.append(line)
             page_len += 1
+
+    def write_to_file(self, file):
+        """ Writes the buffer to the specified file """
+        for line in self.output:
+            file.write(line.rstrip(" \t"))
+            file.write(os.linesep)
+            
