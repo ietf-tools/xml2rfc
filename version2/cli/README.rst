@@ -1,12 +1,46 @@
+Introduction
+============
+
+The IETF_ uses a specific format for the standards and other documents it
+publishes as RFCs_, and for the draft documents which are produced when
+developing documents for publications.  There exists a number of different
+tools to facilitate the formatting of drafts and RFCs according to the
+existing rules, and this tool, **xml2rfc**, is one of them.  It takes as input
+an xml file which contains the text and meta-information about author names
+etc., and transforms it into suitably formatted output.  The input xml file
+should follow the DTD given in RFC2629_ (or it's `inofficial successor`_).
+
+The current incarnation of **xml2rfc** provides output in the following
+formats: Paginated and unpaginated ascii text, html, nroff, and expanded xml.
+Only the paginated text format is currently (January 2013) accepable as draft
+submissions to the IETF.
+
+.. _IETF: http://www.ietf.org/
+.. _RFCs: http://www.rfc-editor.org/
+.. _RFC2629: http://tools.ietf.org/html/rfc2629
+.. _inofficial successor: http://tools.ietf.org/html/draft-mrose-writing-rfcs
+
 Installation
 ============
 
 System Install
 --------------
 
-To install a system-wide version of xml2rfc, simply run::
+To install a system-wide version of xml2rfc, download and unpack the `xml2rfc 
+distribution package`_, then cd into the resulting package directory and run::
 
     $ python setup.py install
+
+Alternatively, if you have the 'pip_' command ('Pip Installs Packages') installed,
+you can run pip to download and install the package::
+
+    $ pip install xml2rfc
+
+.. _lxml:				http://lxml.de/
+.. _pip:				http://pypi.python.org/pypi/pip
+.. _xml2rfc distribution package:	http://pypi.python.org/pypi/pip
+
+
 
 User Install
 ------------
@@ -97,11 +131,7 @@ Dependencies
 ============
 xml2rfc depends on the following packages:
 
-* lxml_ *(>= 2.2.8)*
+* lxml_ *(> 2.2.7)*
 
-
-
-
-.. _lxml: http://lxml.de/
 
 
