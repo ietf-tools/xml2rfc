@@ -4,16 +4,52 @@
 # --------------------------------------------------
 
 import os
+import re
 from setuptools import setup
 
-description = 'Validate and convert XML RFC documents to various output ' \
-              'formats'
+description = "Xml2rfc generates RFCs and IETF drafts from document source in XML according to the dtd in RFC2629."
 
-try:
-    long_description = open(os.path.join(os.path.dirname(__file__), 
-                                         'README.rst')).read()
-except Exception:
-    long_description = description
+def parse(changelog):
+    ver_line = "^([a-z0-9+-]+) \(([^)]+)\)(.*?) *$"
+    sig_line = "^ -- ([^<]+) <([^>]+)>  (.*?) *$"
+
+    entries = []
+    if type(changelog) == type(''):
+        changelog = open(changelog)
+    for line in changelog:
+        if re.match(ver_line, line):
+            package, version, rest = re.match(ver_line, line).groups()
+            entry = {}
+            entry["package"] = package
+            entry["version"] = version
+            entry["logentry"] = ""
+        elif re.match(sig_line, line):
+            author, email, date = re.match(sig_line, line).groups()
+            entry["author"] = author
+            entry["email"] = email
+            entry["datetime"] = date
+            entry["date"] = " ".join(date.split()[:3])
+
+            entries += [ entry ]
+        else:
+            entry["logentry"] += line
+    changelog.close()
+    return entries
+
+changelog_entry_template = """
+Version %(version)s (%(date)s)
+------------------------------------------------
+
+%(logentry)s
+
+"""
+
+long_description = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
+long_description += """
+Changelog
+=========
+
+""" + "\n".join([ changelog_entry_template % entry for entry in parse("changelog") ])
 
 setup(
     # Package metadata
