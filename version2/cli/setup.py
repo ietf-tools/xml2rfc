@@ -44,7 +44,7 @@ Version %(version)s (%(date)s)
 
 """
 
-long_description = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
+long_description = open(os.path.join(os.path.dirname(__file__), 'README')).read()
 long_description += """
 Changelog
 =========
