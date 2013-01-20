@@ -54,7 +54,7 @@ Changelog
 setup(
     # Package metadata
     name='xml2rfc',
-    version='2.3.11.2',
+    version='2.3.11.3',
     author='Josh Bothun (Concentric Sky)',
     author_email='tools-discuss@ietf.org',
     maintainer = "Henrik Levkowetz",
@@ -81,5 +81,5 @@ setup(
     package_data={'xml2rfc': ['templates/*',
                               ]},
 
-    install_requires = ['lxml >= 2.2.8, < 3.0 '],
+    install_requires = ['lxml >= 2.2.8, < 2.9 '],
 )
