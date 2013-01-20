@@ -81,5 +81,5 @@ setup(
     package_data={'xml2rfc': ['templates/*',
                               ]},
 
-    install_requires=['lxml>2.2.7'],
+    install_requires = ['lxml >= 2.2.7 ', 'lxml < 3.0 '],
 )
