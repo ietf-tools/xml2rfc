@@ -170,6 +170,11 @@ class BaseRfcWriter:
         'This document is a product of the Internet Architecture Board ' \
         '(IAB) and represents information that the IAB has deemed valuable ' \
         'to provide for permanent record.'
+    boilerplate['status']['IAB_consensus'] = (
+        'This document is a product of the Internet Architecture Board ' 
+        '(IAB) and represents information that the IAB has deemed valuable '
+        'to provide for permanent record.  It represents the consensus of '
+        'the Internet Architecture Board (IAB).')
     boilerplate['status']['independent'] = \
         'This is a contribution to the RFC Series, independently of any ' \
         'other RFC stream.  The RFC Editor has chosen to publish this ' \
@@ -202,7 +207,7 @@ class BaseRfcWriter:
        'Task Force (IETF).  Note that other groups may also distribute '
        'working documents as Internet-Drafts.  The list of current Internet-'
        'Drafts is at http://datatracker.ietf.org/drafts/current/.',
-
+       #
        'Internet-Drafts are draft documents valid for a maximum of six months '
        'and may be updated, replaced, or obsoleted by other documents at any '
        'time.  It is inappropriate to use Internet-Drafts as reference '
@@ -786,6 +791,11 @@ class BaseRfcWriter:
                     else:
                         p2.append(self.boilerplate['status']['IRTF_workgroup'] \
                                   % workgroup)
+            elif stream == 'IAB':
+                if consensus == 'yes':
+                    p2.append(self.boilerplate['status']['IAB_consensus'])
+                else:
+                    p2.append(self.boilerplate['status']['IAB'])
             else:
                 p2.append(self.boilerplate['status'].get(stream, ''))
 
