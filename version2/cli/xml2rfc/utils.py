@@ -122,7 +122,7 @@ def formatXmlWhitespace(tree):
                                element.tail))
 
 
-def int2roman(number, uppercase=False):
+def int2roman(number):
     numerals = { 
         1 : "i", 
         4 : "iv", 
@@ -143,7 +143,7 @@ def int2roman(number, uppercase=False):
         while number >= value:
             result += numeral
             number -= value
-    return uppercase and result.upper() or result
+    return result
 
 
 def urlkeep(text):
