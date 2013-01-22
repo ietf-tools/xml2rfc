@@ -469,6 +469,7 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_paragraph(self, text, align='left', autoAnchor=None):
         """ Write a generic paragraph of text.  Used for boilerplate. """
+        text = xml2rfc.utils.urlkeep(text)
         self._write_text(text, indent=3, align=align, leading_blankline=True)
 
     def write_t_rec(self, t, indent=3, sub_indent=0, bullet='',
