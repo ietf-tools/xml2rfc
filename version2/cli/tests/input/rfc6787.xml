@@ -326,26 +326,26 @@ Aggregate of one or more "Media Resource" entities on
       <figure anchor="F.arch" title="Architectural Diagram">
         <artwork><![CDATA[
      MRCPv2 client                   MRCPv2 Media Resource Server
-|--------------------|            |------------------------------------|
-||------------------||            ||----------------------------------||
-|| Application Layer||            ||Synthesis|Recognition|Verification||
-||------------------||            || Engine  |  Engine   |   Engine   ||
-||Media Resource API||            ||    ||   |    ||     |    ||      ||
-||------------------||            ||Synthesis|Recognizer |  Verifier  ||
-|| SIP  |  MRCPv2   ||            ||Resource | Resource  |  Resource  ||
-||Stack |           ||            ||     Media Resource Management    ||
-||      |           ||            ||----------------------------------||
-||------------------||            ||   SIP  |        MRCPv2           ||
-||   TCP/IP Stack   ||---MRCPv2---||  Stack |                         ||
-||                  ||            ||----------------------------------||
-||------------------||----SIP-----||           TCP/IP Stack           ||
-|--------------------|            ||                                  ||
-         |                        ||----------------------------------||
-        SIP                       |------------------------------------|
-         |                          /           
-|-------------------|             RTP
-|                   |             /
-| Media Source/Sink |------------/
+|--------------------|         |------------------------------------|
+||------------------||         ||----------------------------------||
+|| Application Layer||         ||Synthesis|Recognition|Verification||
+||------------------||         || Engine  |  Engine   |   Engine   ||
+||Media Resource API||         ||    ||   |    ||     |    ||      ||
+||------------------||         ||Synthesis|Recognizer |  Verifier  ||
+|| SIP  |  MRCPv2   ||         ||Resource | Resource  |  Resource  ||
+||Stack |           ||         ||     Media Resource Management    ||
+||      |           ||         ||----------------------------------||
+||------------------||         ||   SIP  |        MRCPv2           ||
+||   TCP/IP Stack   ||--MRCPv2-||  Stack |                         ||
+||                  ||         ||----------------------------------||
+||------------------||---SIP---||           TCP/IP Stack           ||
+|--------------------|         ||                                  ||
+         |                     ||----------------------------------||
+        SIP                    |------------------------------------|
+         |                       /           
+|-------------------|          RTP
+|                   |          /
+| Media Source/Sink |---------/
 |                   |
 |-------------------|
 ]]></artwork>
@@ -1004,21 +1004,22 @@ identification-tag = token]]></artwork>
 
         <figure>
           <artwork type="abnf"><![CDATA[
-generic-message  =    start-line
-                      message-header
-                      CRLF
-                      [ message-body ]
+generic-message =   start-line
+                    message-header
+                    CRLF
+                    [ message-body ]
 
-message-body     =    *OCTET
+message-body    =   *OCTET
 
-start-line       =    request-line / response-line / event-line
+start-line      =   request-line / response-line / event-line
 
-message-header   =  1*(generic-header / resource-header / generic-field)
+message-header  =   1*(generic-header / resource-header /
+		       generic-field)
 
-resource-header  =    synthesizer-header
-                 /    recognizer-header
-                 /    recorder-header
-                 /    verifier-header
+resource-header =   synthesizer-header
+                /   recognizer-header
+                /   recorder-header
+                /   verifier-header
 ]]></artwork>
         </figure>
 
@@ -2019,7 +2020,7 @@ cookie-av         = expires-av / max-age-av / domain-av /
                      path-av / secure-av / httponly-av /
                      extension-av / age-av
 expires-av        = "Expires=" sane-cookie-date
-sane-cookie-date  = <rfc1123-date, defined in [RFC2616], Section 3.3.1>
+sane-cookie-date  = <rfc1123-date, from [RFC2616], Section 3.3.1>
 max-age-av        = "Max-Age=" non-zero-digit *DIGIT
 non-zero-digit    = %x31-39
 domain-av         = "Domain=" domain-value
@@ -2703,7 +2704,8 @@ speech-language     =   "Speech-Language" ":" 1*VCHAR CRLF
 
           <figure>
             <artwork><![CDATA[
-fetch-hint          =   "Fetch-Hint" ":" ("prefetch" / "safe") CRLF
+fetch-hint          =   "Fetch-Hint" ":"
+			 ("prefetch" / "safe") CRLF
             ]]></artwork>
           </figure>
         </section>
@@ -4246,7 +4248,8 @@ start-input-timers  =  "Start-Input-Timers" ":" BOOLEAN CRLF
 
           <figure>
             <artwork><![CDATA[
-speech-complete-timeout = "Speech-Complete-Timeout" ":" 1*19DIGIT CRLF
+speech-complete-timeout = "Speech-Complete-Timeout" ":"
+			  1*19DIGIT CRLF
             ]]></artwork>
           </figure>
 
@@ -4305,7 +4308,8 @@ speech-incomplete-timeout = "Speech-Incomplete-Timeout" ":" 1*19DIGIT
 
           <figure>
             <artwork><![CDATA[
-dtmf-interdigit-timeout = "DTMF-Interdigit-Timeout" ":" 1*19DIGIT CRLF
+dtmf-interdigit-timeout = "DTMF-Interdigit-Timeout" ":"
+			   1*19DIGIT CRLF
             ]]></artwork>
           </figure>
         </section>
@@ -6409,8 +6413,8 @@ C->S:   MRCP/2.0 ... END-PHRASE-ENROLLMENT 543262
 
 S->C:   MRCP/2.0 ... 543262 200 COMPLETE
         Channel-Identifier:32AECB23433801@speechrecog
-        Waveform-URI:<http://mediaserver.com/recordings/file1324.wav>;
-                     size=242453;duration=25432
+        Waveform-URI:<http://mediaserver.com/recordings/file1324.wav>
+		     ;size=242453;duration=25432
 ]]></artwork>
         </figure>
       </section>
@@ -10165,7 +10169,8 @@ User:   What toppings do you have?
 
 User:   slow down.
 
-<interpretation grammar="http://www.example.com/generalCommandsGrammar">
+<interpretation
+   grammar="http://www.example.com/generalCommandsGrammar">
    <instance>
     <command>
        <action>reduce speech rate</action>
@@ -10435,7 +10440,8 @@ event-name       =    synthesizer-event
                  /    recorder-event
                  /    verifier-event
       
-message-header   =  1*(generic-header / resource-header / generic-field)
+message-header   =  1*(generic-header / resource-header /
+		       generic-field)
 
 generic-field    =    field-name ":" [ field-value ]
 field-name       =    token
@@ -10552,7 +10558,7 @@ cookie-av         = expires-av / max-age-av / domain-av /
                      path-av / secure-av / httponly-av /
                      extension-av / age-av
 expires-av        = "Expires=" sane-cookie-date
-sane-cookie-date  = <rfc1123-date, defined in [RFC2616], Section 3.3.1>
+sane-cookie-date  = <rfc1123-date, from [RFC2616], Section 3.3.1>
 max-age-av        = "Max-Age=" non-zero-digit *DIGIT
 non-zero-digit    = %x31-39
 domain-av         = "Domain=" domain-value
@@ -10658,9 +10664,11 @@ speech-marker         =    "Speech-Marker" ":"
                            timestamp
                            [";" 1*(UTFCHAR / %x20)] CRLF
 
-speech-language       =    "Speech-Language" ":" 1*VCHAR CRLF 
+speech-language       =    "Speech-Language" ":"
+			   1*VCHAR CRLF 
 
-fetch-hint            =    "Fetch-Hint" ":" ("prefetch" / "safe") CRLF 
+fetch-hint            =    "Fetch-Hint" ":"
+			   ("prefetch" / "safe") CRLF 
 
 audio-fetch-hint      =    "Audio-Fetch-Hint" ":" 
                           ("prefetch" / "safe" / "stream") CRLF 
@@ -11014,7 +11022,8 @@ identification-tag =    token
               <xs:element name="instance">
                 <xs:complexType mixed="true">
                   <xs:sequence minOccurs="0">
-                    <xs:any namespace="##other" processContents="lax"/>
+                    <xs:any namespace="##other"
+		            processContents="lax"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>

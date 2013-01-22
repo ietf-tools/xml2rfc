@@ -98,7 +98,7 @@ Table of Contents
      4.6.  MRCPv2 Session Termination  . . . . . . . . . . . . . . .  24
    5.  MRCPv2 Specification  . . . . . . . . . . . . . . . . . . . .  24
      5.1.  Common Protocol Elements  . . . . . . . . . . . . . . . .  25
-     5.2.  Request . . . . . . . . . . . . . . . . . . . . . . . . .  28
+     5.2.  Request . . . . . . . . . . . . . . . . . . . . . . . . .  27
      5.3.  Response  . . . . . . . . . . . . . . . . . . . . . . . .  29
      5.4.  Status Codes  . . . . . . . . . . . . . . . . . . . . . .  30
      5.5.  Events  . . . . . . . . . . . . . . . . . . . . . . . . .  31
@@ -152,7 +152,7 @@ RFC 6787                         MRCPv2                    November 2012
        8.4.11. Audio-Fetch-Hint  . . . . . . . . . . . . . . . . . .  56
        8.4.12. Failed-URI  . . . . . . . . . . . . . . . . . . . . .  56
        8.4.13. Failed-URI-Cause  . . . . . . . . . . . . . . . . . .  56
-       8.4.14. Speak-Restart . . . . . . . . . . . . . . . . . . . .  56
+       8.4.14. Speak-Restart . . . . . . . . . . . . . . . . . . . .  57
        8.4.15. Speak-Length  . . . . . . . . . . . . . . . . . . . .  57
        8.4.16. Load-Lexicon  . . . . . . . . . . . . . . . . . . . .  57
        8.4.17. Lexicon-Search-Order  . . . . . . . . . . . . . . . .  58
@@ -630,26 +630,26 @@ RFC 6787                         MRCPv2                    November 2012
    shown.
 
         MRCPv2 client                   MRCPv2 Media Resource Server
-   |--------------------|            |------------------------------------|
-   ||------------------||            ||----------------------------------||
-   || Application Layer||            ||Synthesis|Recognition|Verification||
-   ||------------------||            || Engine  |  Engine   |   Engine   ||
-   ||Media Resource API||            ||    ||   |    ||     |    ||      ||
-   ||------------------||            ||Synthesis|Recognizer |  Verifier  ||
-   || SIP  |  MRCPv2   ||            ||Resource | Resource  |  Resource  ||
-   ||Stack |           ||            ||     Media Resource Management    ||
-   ||      |           ||            ||----------------------------------||
-   ||------------------||            ||   SIP  |        MRCPv2           ||
-   ||   TCP/IP Stack   ||---MRCPv2---||  Stack |                         ||
-   ||                  ||            ||----------------------------------||
-   ||------------------||----SIP-----||           TCP/IP Stack           ||
-   |--------------------|            ||                                  ||
-            |                        ||----------------------------------||
-           SIP                       |------------------------------------|
-            |                          /
-   |-------------------|             RTP
-   |                   |             /
-   | Media Source/Sink |------------/
+   |--------------------|         |------------------------------------|
+   ||------------------||         ||----------------------------------||
+   || Application Layer||         ||Synthesis|Recognition|Verification||
+   ||------------------||         || Engine  |  Engine   |   Engine   ||
+   ||Media Resource API||         ||    ||   |    ||     |    ||      ||
+   ||------------------||         ||Synthesis|Recognizer |  Verifier  ||
+   || SIP  |  MRCPv2   ||         ||Resource | Resource  |  Resource  ||
+   ||Stack |           ||         ||     Media Resource Management    ||
+   ||      |           ||         ||----------------------------------||
+   ||------------------||         ||   SIP  |        MRCPv2           ||
+   ||   TCP/IP Stack   ||--MRCPv2-||  Stack |                         ||
+   ||                  ||         ||----------------------------------||
+   ||------------------||---SIP---||           TCP/IP Stack           ||
+   |--------------------|         ||                                  ||
+            |                     ||----------------------------------||
+           SIP                    |------------------------------------|
+            |                       /
+   |-------------------|          RTP
+   |                   |          /
+   | Media Source/Sink |---------/
    |                   |
    |-------------------|
 
@@ -1362,21 +1362,22 @@ RFC 6787                         MRCPv2                    November 2012
    with nothing preceding the CRLF) indicating the end of the header
    fields, and an optional message body.
 
-   generic-message  =    start-line
-                         message-header
-                         CRLF
-                         [ message-body ]
+   generic-message =   start-line
+                       message-header
+                       CRLF
+                       [ message-body ]
 
-   message-body     =    *OCTET
+   message-body    =   *OCTET
 
-   start-line       =    request-line / response-line / event-line
+   start-line      =   request-line / response-line / event-line
 
-   message-header   =  1*(generic-header / resource-header / generic-field)
+   message-header  =   1*(generic-header / resource-header /
+                  generic-field)
 
-   resource-header  =    synthesizer-header
-                    /    recognizer-header
-                    /    recorder-header
-                    /    verifier-header
+   resource-header =   synthesizer-header
+                   /   recognizer-header
+                   /   recorder-header
+                   /   verifier-header
 
 
    The message-body contains resource-specific and message-specific
@@ -1388,23 +1389,6 @@ RFC 6787                         MRCPv2                    November 2012
    content-headers indicating the media type and encoding of the data in
    the message body.
 
-
-
-
-
-
-
-
-
-
-
-
-
-Burnett & Shanmugham        Standards Track                    [Page 25]
-
-RFC 6787                         MRCPv2                    November 2012
-
-
    Request, response and event messages (described in following
    sections) include the version of MRCP that the message conforms to.
    Version compatibility rules follow [H3.1] regarding version ordering,
@@ -1413,6 +1397,14 @@ RFC 6787                         MRCPv2                    November 2012
    [H3.1]) or "MRCP/2.0" (as opposed to "HTTP/1.1" in [H3.1]).  To be
    compliant with this specification, clients and servers sending MRCPv2
    messages MUST indicate an mrcp-version of "MRCP/2.0".  ABNF
+
+
+
+Burnett & Shanmugham        Standards Track                    [Page 25]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    productions using mrcp-version can be found in Sections 5.2, 5.3, and
    5.5.
 
@@ -1453,14 +1445,6 @@ RFC 6787                         MRCPv2                    November 2012
            <grammar xmlns="http://www.w3.org/2001/06/grammar"
                     xml:lang="en-US" version="1.0" root="request">
            <!-- single language attachment to tokens -->
-
-
-
-Burnett & Shanmugham        Standards Track                    [Page 26]
-
-RFC 6787                         MRCPv2                    November 2012
-
-
                <rule id="yes">
                    <one-of>
                        <item xml:lang="fr-CA">oui</item>
@@ -1469,6 +1453,14 @@ RFC 6787                         MRCPv2                    November 2012
                </rule>
 
            <!-- single language attachment to a rule expansion -->
+
+
+
+Burnett & Shanmugham        Standards Track                    [Page 26]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
                <rule id="request">
                    may I speak to
                    <one-of xml:lang="fr-CA">
@@ -1509,6 +1501,14 @@ RFC 6787                         MRCPv2                    November 2012
 
    In the resource-specific header field descriptions in Sections 8-11,
    a header field is disallowed on a method (request, response, or
+   event) for that resource unless specifically listed as being allowed.
+   Also, the phrasing "This header field MAY occur on method X"
+   indicates that the header field is allowed on that method but is not
+   required to be used in every instance of that method.
+
+5.2.  Request
+
+
 
 
 
@@ -1516,13 +1516,6 @@ Burnett & Shanmugham        Standards Track                    [Page 27]
 
 RFC 6787                         MRCPv2                    November 2012
 
-
-   event) for that resource unless specifically listed as being allowed.
-   Also, the phrasing "This header field MAY occur on method X"
-   indicates that the header field is allowed on that method but is not
-   required to be used in every instance of that method.
-
-5.2.  Request
 
    An MRCPv2 request consists of a Request line followed by the message
    header section and an optional message body containing data specific
@@ -1565,6 +1558,13 @@ RFC 6787                         MRCPv2                    November 2012
    can be checked with a simple unsigned comparison operation.  The
    client may choose any initial value for its first request, but a
    small integer is RECOMMENDED to avoid exhausting the space in long
+   sessions.  If the server receives duplicate or out-of-order requests,
+   the server MUST reject the request with a response code of 410.
+   Since request-ids are scoped to the MRCP session, they are unique
+   across all TCP connections and all resource channels in the session.
+
+   The server resource MUST use the client-assigned identifier in its
+   response to the request.  If the request does not complete
 
 
 
@@ -1573,13 +1573,6 @@ Burnett & Shanmugham        Standards Track                    [Page 28]
 RFC 6787                         MRCPv2                    November 2012
 
 
-   sessions.  If the server receives duplicate or out-of-order requests,
-   the server MUST reject the request with a response code of 410.
-   Since request-ids are scoped to the MRCP session, they are unique
-   across all TCP connections and all resource channels in the session.
-
-   The server resource MUST use the client-assigned identifier in its
-   response to the request.  If the request does not complete
    synchronously, future asynchronous events associated with this
    request MUST carry the client-assigned request-id.
 
@@ -1621,6 +1614,13 @@ RFC 6787                         MRCPv2                    November 2012
    Request is PENDING, IN-PROGRESS, or COMPLETE.  The COMPLETE status
    means that the request was processed to completion and that there
    will be no more events or other messages from that resource to the
+   client with that request-id.  The PENDING status means that the
+   request has been placed in a queue and will be processed in first-in-
+   first-out order.  The IN-PROGRESS status means that the request is
+   being processed and is not yet complete.  A PENDING or IN-PROGRESS
+   status indicates that further Event messages may be delivered with
+   that request-id.
+
 
 
 
@@ -1628,13 +1628,6 @@ Burnett & Shanmugham        Standards Track                    [Page 29]
 
 RFC 6787                         MRCPv2                    November 2012
 
-
-   client with that request-id.  The PENDING status means that the
-   request has been placed in a queue and will be processed in first-in-
-   first-out order.  The IN-PROGRESS status means that the request is
-   being processed and is not yet complete.  A PENDING or IN-PROGRESS
-   status indicates that further Event messages may be delivered with
-   that request-id.
 
    request-state    =  "COMPLETE"
                     /  "IN-PROGRESS"
@@ -1678,14 +1671,19 @@ RFC 6787                         MRCPv2                    November 2012
    | 411-420   | Reserved for future assignment                        |
    +-----------+-------------------------------------------------------+
 
+                           Client Failure (4xx)
+
+
+
+
+
+
 
 
 Burnett & Shanmugham        Standards Track                    [Page 30]
 
 RFC 6787                         MRCPv2                    November 2012
 
-
-                           Client Failure (4xx)
 
                +------+--------------------------------+
                | Code | Meaning                        |
@@ -1731,20 +1729,16 @@ RFC 6787                         MRCPv2                    November 2012
    generating it.  See the corresponding resource-specific section of
    the document.
 
-
-
+   event-name       =  synthesizer-event
+                    /  recognizer-event
+                    /  recorder-event
+                    /  verifier-event
 
 
 
 Burnett & Shanmugham        Standards Track                    [Page 31]
 
 RFC 6787                         MRCPv2                    November 2012
-
-
-   event-name       =  synthesizer-event
-                    /  recognizer-event
-                    /  recorder-event
-                    /  verifier-event
 
 
    The request-id used in the event MUST match the one sent in the
@@ -1790,17 +1784,18 @@ RFC 6787                         MRCPv2                    November 2012
       value, the server MUST reject the request with a 404 Illegal Value
       for Header Field.
 
+   o  If one or more of the header fields being set is unsupported for
+      the resource, the server MUST reject the request with a 403
+      Unsupported Header Field, except as described in the next
+      paragraph.
+
+
 
 
 Burnett & Shanmugham        Standards Track                    [Page 32]
 
 RFC 6787                         MRCPv2                    November 2012
 
-
-   o  If one or more of the header fields being set is unsupported for
-      the resource, the server MUST reject the request with a 403
-      Unsupported Header Field, except as described in the next
-      paragraph.
 
    o  If one or more of the header fields being set has an unsupported
       value, the server MUST reject the request with a 409 Unsupported
@@ -1844,6 +1839,11 @@ RFC 6787                         MRCPv2                    November 2012
    values that have a request-level scope.  For example, Input-Waveform-
    URI is a request-level header field and thus would not be returned by
    GET-PARAMS.
+
+
+
+
+
 
 
 
@@ -2380,7 +2380,7 @@ RFC 6787                         MRCPv2                    November 2012
                         path-av / secure-av / httponly-av /
                         extension-av / age-av
    expires-av        = "Expires=" sane-cookie-date
-   sane-cookie-date  = <rfc1123-date, defined in [RFC2616], Section 3.3.1>
+   sane-cookie-date  = <rfc1123-date, from [RFC2616], Section 3.3.1>
    max-age-av        = "Max-Age=" non-zero-digit *DIGIT
    non-zero-digit    = %x31-39
    domain-av         = "Domain=" domain-value
@@ -3088,7 +3088,8 @@ RFC 6787                         MRCPv2                    November 2012
    "prefetch".  This header field MAY occur in SPEAK, SET-PARAMS, or
    GET-PARAMS requests.
 
-   fetch-hint          =   "Fetch-Hint" ":" ("prefetch" / "safe") CRLF
+   fetch-hint          =   "Fetch-Hint" ":"
+                ("prefetch" / "safe") CRLF
 
 
 8.4.11.  Audio-Fetch-Hint
@@ -3132,7 +3133,6 @@ RFC 6787                         MRCPv2                    November 2012
    failed-uri-cause    =   "Failed-URI-Cause" ":" 1*UTFCHAR CRLF
 
 
-8.4.14.  Speak-Restart
 
 
 
@@ -3140,6 +3140,8 @@ Burnett & Shanmugham        Standards Track                    [Page 56]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+8.4.14.  Speak-Restart
 
    When a client issues a CONTROL request to a currently speaking
    synthesizer resource to jump backward, and the target jump point is
@@ -3187,8 +3189,6 @@ RFC 6787                         MRCPv2                    November 2012
    This header field is used to indicate whether a lexicon has to be
    loaded or unloaded.  The value "true" means to load the lexicon if
    not already loaded, and the value "false" means to unload the lexicon
-   if it is loaded.  The default value for this header field is "true".
-   This header field MAY be specified in a DEFINE-LEXICON method.
 
 
 
@@ -3196,6 +3196,9 @@ Burnett & Shanmugham        Standards Track                    [Page 57]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   if it is loaded.  The default value for this header field is "true".
+   This header field MAY be specified in a DEFINE-LEXICON method.
 
    load-lexicon       =   "Load-Lexicon" ":" BOOLEAN CRLF
 
@@ -3242,9 +3245,6 @@ RFC 6787                         MRCPv2                    November 2012
    MRCPv2 clients and servers MUST support the 'multipart/mixed' media
    type.  This is the appropriate media type to use when providing a mix
    of URI and inline speech data.  Embedded within the multipart content
-   block, there MAY be content for the 'text/uri-list', 'application/
-   ssml+xml', and/or 'text/plain' media types.  The character set and
-   encoding used in the speech data is specified according to standard
 
 
 
@@ -3253,6 +3253,9 @@ Burnett & Shanmugham        Standards Track                    [Page 58]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   block, there MAY be content for the 'text/uri-list', 'application/
+   ssml+xml', and/or 'text/plain' media types.  The character set and
+   encoding used in the speech data is specified according to standard
    media type definitions.  The multipart content MAY also contain
    actual audio data.  Clients may have recorded audio clips stored in
    memory or on a local device and wish to play it as part of the SPEAK
@@ -3294,9 +3297,6 @@ RFC 6787                         MRCPv2                    November 2012
         </speak>
 
                                SSML Example
-
-
-
 
 
 
@@ -4840,7 +4840,8 @@ RFC 6787                         MRCPv2                    November 2012
    contrast, the Speech-Incomplete-Timeout is used when the speech is an
    incomplete match to an active grammar.  The value is in milliseconds.
 
-   speech-complete-timeout = "Speech-Complete-Timeout" ":" 1*19DIGIT CRLF
+   speech-complete-timeout = "Speech-Complete-Timeout" ":"
+                 1*19DIGIT CRLF
 
 
    A long Speech-Complete-Timeout value delays the result to the client
@@ -4867,7 +4868,6 @@ RFC 6787                         MRCPv2                    November 2012
 
    speech-incomplete-timeout = "Speech-Incomplete-Timeout" ":" 1*19DIGIT
                                 CRLF
-
 
 
 
@@ -4902,7 +4902,8 @@ RFC 6787                         MRCPv2                    November 2012
    value.  The default value is 5 seconds.  This header field MAY occur
    in RECOGNIZE, SET-PARAMS, or GET-PARAMS.
 
-   dtmf-interdigit-timeout = "DTMF-Interdigit-Timeout" ":" 1*19DIGIT CRLF
+   dtmf-interdigit-timeout = "DTMF-Interdigit-Timeout" ":"
+                  1*19DIGIT CRLF
 
 
 9.4.18.  DTMF-Term-Timeout
@@ -4924,7 +4925,6 @@ RFC 6787                         MRCPv2                    November 2012
    input recognition.  The default value is NULL, which is indicated by
    an empty header field value.  This header field MAY occur in
    RECOGNIZE, SET-PARAMS, or GET-PARAMS.
-
 
 
 
@@ -7152,8 +7152,8 @@ RFC 6787                         MRCPv2                    November 2012
 
    S->C:   MRCP/2.0 ... 543262 200 COMPLETE
            Channel-Identifier:32AECB23433801@speechrecog
-           Waveform-URI:<http://mediaserver.com/recordings/file1324.wav>;
-                        size=242453;duration=25432
+           Waveform-URI:<http://mediaserver.com/recordings/file1324.wav>
+                ;size=242453;duration=25432
 
 
 9.18.  MODIFY-PHRASE
@@ -11169,7 +11169,8 @@ RFC 6787                         MRCPv2                    November 2012
 
    User:   slow down.
 
-   <interpretation grammar="http://www.example.com/generalCommandsGrammar">
+   <interpretation
+      grammar="http://www.example.com/generalCommandsGrammar">
       <instance>
        <command>
           <action>reduce speech rate</action>
@@ -11196,7 +11197,6 @@ RFC 6787                         MRCPv2                    November 2012
    leaves the specific details of the interpretation of the reference
    open.  (This assumes that a later component is responsible for
    actually resolving the reference).
-
 
 
 
@@ -11464,7 +11464,8 @@ RFC 6787                         MRCPv2                    November 2012
                     /    recorder-event
                     /    verifier-event
 
-   message-header   =  1*(generic-header / resource-header / generic-field)
+   message-header   =  1*(generic-header / resource-header /
+                  generic-field)
 
    generic-field    =    field-name ":" [ field-value ]
    field-name       =    token
@@ -11476,7 +11477,6 @@ RFC 6787                         MRCPv2                    November 2012
    resource-header  =    synthesizer-header
                     /    recognizer-header
                     /    recorder-header
-                    /    verifier-header
 
 
 
@@ -11484,6 +11484,8 @@ Burnett & Shanmugham        Standards Track                   [Page 205]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+                    /    verifier-header
 
    generic-header   =    channel-identifier
                     /    accept
@@ -11531,8 +11533,6 @@ RFC 6787                         MRCPv2                    November 2012
 
    media-type-value =    type "/" subtype *( ";" parameter )
 
-   type             =    token
-
 
 
 
@@ -11540,6 +11540,8 @@ Burnett & Shanmugham        Standards Track                   [Page 206]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   type             =    token
 
    subtype          =    token
 
@@ -11587,8 +11589,6 @@ RFC 6787                         MRCPv2                    November 2012
    set-cookie        = "Set-Cookie:" SP set-cookie-string
    set-cookie-string = cookie-pair *( ";" SP cookie-av )
    cookie-pair       = cookie-name "=" cookie-value
-   cookie-name       = token
-   cookie-value      = *cookie-octet / ( DQUOTE *cookie-octet DQUOTE )
 
 
 
@@ -11597,6 +11597,8 @@ Burnett & Shanmugham        Standards Track                   [Page 207]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   cookie-name       = token
+   cookie-value      = *cookie-octet / ( DQUOTE *cookie-octet DQUOTE )
    cookie-octet      = %x21 / %x23-2B / %x2D-3A / %x3C-5B / %x5D-7E
    token             = <token, defined in [RFC2616], Section 2.2>
 
@@ -11604,7 +11606,7 @@ RFC 6787                         MRCPv2                    November 2012
                         path-av / secure-av / httponly-av /
                         extension-av / age-av
    expires-av        = "Expires=" sane-cookie-date
-   sane-cookie-date  = <rfc1123-date, defined in [RFC2616], Section 3.3.1>
+   sane-cookie-date  = <rfc1123-date, from [RFC2616], Section 3.3.1>
    max-age-av        = "Max-Age=" non-zero-digit *DIGIT
    non-zero-digit    = %x31-39
    domain-av         = "Domain=" domain-value
@@ -11643,8 +11645,6 @@ RFC 6787                         MRCPv2                    November 2012
                          /    failed-uri
                          /    failed-uri-cause
                          /    speak-restart
-                         /    speak-length
-                         /    load-lexicon
 
 
 
@@ -11653,6 +11653,8 @@ Burnett & Shanmugham        Standards Track                   [Page 208]
 RFC 6787                         MRCPv2                    November 2012
 
 
+                         /    speak-length
+                         /    load-lexicon
                          /    lexicon-search-order
 
 
@@ -11700,8 +11702,6 @@ RFC 6787                         MRCPv2                    November 2012
 
    voice-variant         =    "Voice-Variant:" 1*19DIGIT CRLF
 
-   voice-name            =    "Voice-Name:"
-
 
 
 Burnett & Shanmugham        Standards Track                   [Page 209]
@@ -11709,6 +11709,7 @@ Burnett & Shanmugham        Standards Track                   [Page 209]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   voice-name            =    "Voice-Name:"
                               1*UTFCHAR *(1*WSP 1*UTFCHAR) CRLF
 
    prosody-parameter     =    "Prosody-" prosody-param-name ":"
@@ -11726,9 +11727,11 @@ RFC 6787                         MRCPv2                    November 2012
                               timestamp
                               [";" 1*(UTFCHAR / %x20)] CRLF
 
-   speech-language       =    "Speech-Language" ":" 1*VCHAR CRLF
+   speech-language       =    "Speech-Language" ":"
+                  1*VCHAR CRLF
 
-   fetch-hint            =    "Fetch-Hint" ":" ("prefetch" / "safe") CRLF
+   fetch-hint            =    "Fetch-Hint" ":"
+                  ("prefetch" / "safe") CRLF
 
    audio-fetch-hint      =    "Audio-Fetch-Hint" ":"
                              ("prefetch" / "safe" / "stream") CRLF
@@ -11755,9 +11758,6 @@ RFC 6787                         MRCPv2                    November 2012
    recognizer-method     =    recog-only-method
                          /    enrollment-method
 
-   recog-only-method     =    "DEFINE-GRAMMAR"
-                         /    "RECOGNIZE"
-
 
 
 Burnett & Shanmugham        Standards Track                   [Page 210]
@@ -11765,6 +11765,8 @@ Burnett & Shanmugham        Standards Track                   [Page 210]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   recog-only-method     =    "DEFINE-GRAMMAR"
+                         /    "RECOGNIZE"
                          /    "INTERPRET"
                          /    "GET-RESULT"
                          /    "START-INPUT-TIMERS"
@@ -11811,8 +11813,6 @@ RFC 6787                         MRCPv2                    November 2012
                          /    ver-buffer-utterance
                          /    recognition-mode
                          /    cancel-if-queue
-                         /    hotword-max-duration
-                         /    hotword-min-duration
 
 
 
@@ -11821,6 +11821,8 @@ Burnett & Shanmugham        Standards Track                   [Page 211]
 RFC 6787                         MRCPv2                    November 2012
 
 
+                         /    hotword-max-duration
+                         /    hotword-min-duration
                          /    interpret-text
                          /    dtmf-buffer-time
                          /    clear-dtmf-buffer
@@ -11868,8 +11870,6 @@ RFC 6787                         MRCPv2                    November 2012
    recognizer-context-block = "Recognizer-Context-Block" ":"
                               [1*VCHAR] CRLF
 
-   start-input-timers    =    "Start-Input-Timers" ":"
-
 
 
 Burnett & Shanmugham        Standards Track                   [Page 212]
@@ -11877,6 +11877,7 @@ Burnett & Shanmugham        Standards Track                   [Page 212]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   start-input-timers    =    "Start-Input-Timers" ":"
                               BOOLEAN CRLF
 
    speech-complete-timeout =  "Speech-Complete-Timeout" ":"
@@ -11924,7 +11925,6 @@ RFC 6787                         MRCPv2                    November 2012
    consistency-threshold =    "Consistency-Threshold" ":" FLOAT
                               CRLF
 
-   clash-threshold       =    "Clash-Threshold" ":" FLOAT CRLF
 
 
 
@@ -11932,6 +11932,8 @@ Burnett & Shanmugham        Standards Track                   [Page 213]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   clash-threshold       =    "Clash-Threshold" ":" FLOAT CRLF
 
    personal-grammar-uri  =    "Personal-Grammar-URI" ":" uri CRLF
 
@@ -11980,8 +11982,6 @@ RFC 6787                         MRCPv2                    November 2012
                          /    start-input-timers
                          /    new-audio-channel
 
-   record-uri            =    "Record-URI" ":" [ "<" uri ">"
-
 
 
 Burnett & Shanmugham        Standards Track                   [Page 214]
@@ -11989,6 +11989,7 @@ Burnett & Shanmugham        Standards Track                   [Page 214]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   record-uri            =    "Record-URI" ":" [ "<" uri ">"
                               ";" "size" "=" 1*19DIGIT
                               ";" "duration" "=" 1*19DIGIT] CRLF
 
@@ -12036,7 +12037,6 @@ RFC 6787                         MRCPv2                    November 2012
                          /    media-type
                          /    waveform-uri
                          /    voiceprint-exists
-                         /    ver-buffer-utterance
 
 
 
@@ -12045,6 +12045,7 @@ Burnett & Shanmugham        Standards Track                   [Page 215]
 RFC 6787                         MRCPv2                    November 2012
 
 
+                         /    ver-buffer-utterance
                          /    input-waveform-uri
                          /    completion-cause
                          /    completion-reason
@@ -12095,7 +12096,6 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-
 Burnett & Shanmugham        Standards Track                   [Page 216]
 
 RFC 6787                         MRCPv2                    November 2012
@@ -12134,7 +12134,8 @@ RFC 6787                         MRCPv2                    November 2012
                  <xs:element name="instance">
                    <xs:complexType mixed="true">
                      <xs:sequence minOccurs="0">
-                       <xs:any namespace="##other" processContents="lax"/>
+                       <xs:any namespace="##other"
+                       processContents="lax"/>
                      </xs:sequence>
                    </xs:complexType>
                  </xs:element>
@@ -12148,7 +12149,6 @@ RFC 6787                         MRCPv2                    November 2012
                      <xs:attribute name="mode"
                                    type="xs:string"
                                    default="speech"/>
-                     <xs:attribute name="confidence"
 
 
 
@@ -12157,6 +12157,7 @@ Burnett & Shanmugham        Standards Track                   [Page 217]
 RFC 6787                         MRCPv2                    November 2012
 
 
+                     <xs:attribute name="confidence"
                                    type="confidenceinfo"
                                    default="1.0"/>
                      <xs:attribute name="timestamp-start"
@@ -12204,7 +12205,6 @@ RFC 6787                         MRCPv2                    November 2012
             xmlns="http://relaxng.org/ns/structure/1.0">
 
      <start>
-       <element name="enrollment-result">
 
 
 
@@ -12213,6 +12213,7 @@ Burnett & Shanmugham        Standards Track                   [Page 218]
 RFC 6787                         MRCPv2                    November 2012
 
 
+       <element name="enrollment-result">
          <ref name="enrollment-content"/>
        </element>
      </start>
@@ -12260,7 +12261,6 @@ RFC 6787                         MRCPv2                    November 2012
                  <text/>
                </element>
              </oneOrMore>
-           </element>
 
 
 
@@ -12269,6 +12269,7 @@ Burnett & Shanmugham        Standards Track                   [Page 219]
 RFC 6787                         MRCPv2                    November 2012
 
 
+           </element>
          </optional>
        </interleave>
      </define>
@@ -12316,7 +12317,6 @@ RFC 6787                         MRCPv2                    November 2012
            </element>
          </optional>
          <optional>
-           <element name="needmoredata">
 
 
 
@@ -12325,6 +12325,7 @@ Burnett & Shanmugham        Standards Track                   [Page 220]
 RFC 6787                         MRCPv2                    November 2012
 
 
+           <element name="needmoredata">
              <ref name="needmoredataContent"/>
            </element>
          </optional>
@@ -12372,7 +12373,6 @@ RFC 6787                         MRCPv2                    November 2012
            <element name="verification-score">
              <ref name="verification-scoreContent"/>
            </element>
-         </zeroOrMore>
 
 
 
@@ -12381,6 +12381,7 @@ Burnett & Shanmugham        Standards Track                   [Page 221]
 RFC 6787                         MRCPv2                    November 2012
 
 
+         </zeroOrMore>
        </interleave>
      </define>
 
@@ -12428,7 +12429,6 @@ RFC 6787                         MRCPv2                    November 2012
      <define name="deviceContent">
        <choice>
          <value>cellular-phone</value>
-         <value>electret-phone</value>
 
 
 
@@ -12437,6 +12437,7 @@ Burnett & Shanmugham        Standards Track                   [Page 222]
 RFC 6787                         MRCPv2                    November 2012
 
 
+         <value>electret-phone</value>
          <value>carbon-button-phone</value>
          <value>unknown</value>
        </choice>
@@ -12484,7 +12485,6 @@ RFC 6787                         MRCPv2                    November 2012
 
    [RFC2392]  Levinson, E., "Content-ID and Message-ID Uniform Resource
               Locators", RFC 2392, August 1998.
-
 
 
 

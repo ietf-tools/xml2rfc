@@ -649,7 +649,7 @@
 <link href="#rfc.authors" rel="Chapter"/>
 
 
-  <meta name="generator" content="xml2rfc version 2.3.11 - http://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.3.12.dev - http://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Burnett, D. and S. Shanmugham" />
@@ -1058,26 +1058,26 @@
 <div id="F.arch"/>
 <pre>
      MRCPv2 client                   MRCPv2 Media Resource Server
-|--------------------|            |------------------------------------|
-||------------------||            ||----------------------------------||
-|| Application Layer||            ||Synthesis|Recognition|Verification||
-||------------------||            || Engine  |  Engine   |   Engine   ||
-||Media Resource API||            ||    ||   |    ||     |    ||      ||
-||------------------||            ||Synthesis|Recognizer |  Verifier  ||
-|| SIP  |  MRCPv2   ||            ||Resource | Resource  |  Resource  ||
-||Stack |           ||            ||     Media Resource Management    ||
-||      |           ||            ||----------------------------------||
-||------------------||            ||   SIP  |        MRCPv2           ||
-||   TCP/IP Stack   ||---MRCPv2---||  Stack |                         ||
-||                  ||            ||----------------------------------||
-||------------------||----SIP-----||           TCP/IP Stack           ||
-|--------------------|            ||                                  ||
-         |                        ||----------------------------------||
-        SIP                       |------------------------------------|
-         |                          /           
-|-------------------|             RTP
-|                   |             /
-| Media Source/Sink |------------/
+|--------------------|         |------------------------------------|
+||------------------||         ||----------------------------------||
+|| Application Layer||         ||Synthesis|Recognition|Verification||
+||------------------||         || Engine  |  Engine   |   Engine   ||
+||Media Resource API||         ||    ||   |    ||     |    ||      ||
+||------------------||         ||Synthesis|Recognizer |  Verifier  ||
+|| SIP  |  MRCPv2   ||         ||Resource | Resource  |  Resource  ||
+||Stack |           ||         ||     Media Resource Management    ||
+||      |           ||         ||----------------------------------||
+||------------------||         ||   SIP  |        MRCPv2           ||
+||   TCP/IP Stack   ||--MRCPv2-||  Stack |                         ||
+||                  ||         ||----------------------------------||
+||------------------||---SIP---||           TCP/IP Stack           ||
+|--------------------|         ||                                  ||
+         |                     ||----------------------------------||
+        SIP                    |------------------------------------|
+         |                       /           
+|-------------------|          RTP
+|                   |          /
+| Media Source/Sink |---------/
 |                   |
 |-------------------|
 </pre>
@@ -1419,21 +1419,22 @@ identification-tag = token</pre>
 <h1 id="rfc.section.5.1"><a href="#rfc.section.5.1">5.1.</a> <a href="#sec.common" id="sec.common">Common Protocol Elements</a></h1>
 <p id="rfc.section.5.1.p.1">The MRCPv2 message set consists of requests from the client to the server, responses from the server to the client, and asynchronous events from the server to the client. All these messages consist of a start-line, one or more header fields, an empty line (i.e., a line with nothing preceding the CRLF) indicating the end of the header fields, and an optional message body.</p>
 <pre>
-generic-message  =    start-line
-                      message-header
-                      CRLF
-                      [ message-body ]
+generic-message =   start-line
+                    message-header
+                    CRLF
+                    [ message-body ]
 
-message-body     =    *OCTET
+message-body    =   *OCTET
 
-start-line       =    request-line / response-line / event-line
+start-line      =   request-line / response-line / event-line
 
-message-header   =  1*(generic-header / resource-header / generic-field)
+message-header  =   1*(generic-header / resource-header /
+		       generic-field)
 
-resource-header  =    synthesizer-header
-                 /    recognizer-header
-                 /    recorder-header
-                 /    verifier-header
+resource-header =   synthesizer-header
+                /   recognizer-header
+                /   recorder-header
+                /   verifier-header
 </pre>
 <p class="figure"></p>
 <p id="rfc.section.5.1.p.2">The message-body contains resource-specific and message-specific data. The actual media types used to carry the data are specified in the sections defining the individual messages. Generic header fields are described in <a href="#sec.genericHeaders">Section 6.2</a>.</p>
@@ -1911,7 +1912,7 @@ cookie-av         = expires-av / max-age-av / domain-av /
                      path-av / secure-av / httponly-av /
                      extension-av / age-av
 expires-av        = "Expires=" sane-cookie-date
-sane-cookie-date  = &lt;rfc1123-date, defined in [RFC2616], Section 3.3.1&gt;
+sane-cookie-date  = &lt;rfc1123-date, from [RFC2616], Section 3.3.1&gt;
 max-age-av        = "Max-Age=" non-zero-digit *DIGIT
 non-zero-digit    = %x31-39
 domain-av         = "Domain=" domain-value
@@ -2270,7 +2271,8 @@ speech-language     =   "Speech-Language" ":" 1*VCHAR CRLF
 <h1 id="rfc.section.8.4.10"><a href="#rfc.section.8.4.10">8.4.10.</a> Fetch-Hint</h1>
 <p id="rfc.section.8.4.10.p.1">When the synthesizer needs to fetch documents or other resources like speech markup or audio files, this header field controls the corresponding URI access properties. This provides client policy on when the synthesizer should retrieve content from the server. A value of "prefetch" indicates the content MAY be downloaded when the request is received, whereas "safe" indicates that content MUST NOT be downloaded until actually referenced. The default value is "prefetch". This header field MAY occur in SPEAK, SET-PARAMS, or GET-PARAMS requests.</p>
 <pre>
-fetch-hint          =   "Fetch-Hint" ":" ("prefetch" / "safe") CRLF
+fetch-hint          =   "Fetch-Hint" ":"
+			 ("prefetch" / "safe") CRLF
             </pre>
 <p class="figure"></p>
 <h1 id="rfc.section.8.4.11"><a href="#rfc.section.8.4.11">8.4.11.</a> Audio-Fetch-Hint</h1>
@@ -3125,7 +3127,8 @@ start-input-timers  =  "Start-Input-Timers" ":" BOOLEAN CRLF
 <h1 id="rfc.section.9.4.15"><a href="#rfc.section.9.4.15">9.4.15.</a> <a href="#sec.speechCompleteTimeout" id="sec.speechCompleteTimeout">Speech-Complete-Timeout</a></h1>
 <p id="rfc.section.9.4.15.p.1">This header field specifies the length of silence required following user speech before the speech recognizer finalizes a result (either accepting it or generating a no-match result). The Speech-Complete-Timeout value applies when the recognizer currently has a complete match against an active grammar, and specifies how long the recognizer MUST wait for more input before declaring a match. By contrast, the Speech-Incomplete-Timeout is used when the speech is an incomplete match to an active grammar. The value is in milliseconds.</p>
 <pre>
-speech-complete-timeout = "Speech-Complete-Timeout" ":" 1*19DIGIT CRLF
+speech-complete-timeout = "Speech-Complete-Timeout" ":"
+			  1*19DIGIT CRLF
             </pre>
 <p class="figure"></p>
 <p id="rfc.section.9.4.15.p.2">A long Speech-Complete-Timeout value delays the result to the client and therefore makes the application's response to a user slow. A short Speech-Complete-Timeout may lead to an utterance being broken up inappropriately. Reasonable speech complete timeout values are typically in the range of 0.3 seconds to 1.0 seconds. The value for this header field ranges from 0 to an implementation-specific maximum value. The default value for this header field is implementation specific. This header field MAY occur in RECOGNIZE, SET-PARAMS, or GET-PARAMS.</p>
@@ -3142,7 +3145,8 @@ speech-incomplete-timeout = "Speech-Incomplete-Timeout" ":" 1*19DIGIT
 <h1 id="rfc.section.9.4.17"><a href="#rfc.section.9.4.17">9.4.17.</a> DTMF-Interdigit-Timeout</h1>
 <p id="rfc.section.9.4.17.p.1">This header field specifies the inter-digit timeout value to use when recognizing DTMF input. The value is in milliseconds. The value for this header field ranges from 0 to an implementation-specific maximum value. The default value is 5 seconds. This header field MAY occur in RECOGNIZE, SET-PARAMS, or GET-PARAMS.</p>
 <pre>
-dtmf-interdigit-timeout = "DTMF-Interdigit-Timeout" ":" 1*19DIGIT CRLF
+dtmf-interdigit-timeout = "DTMF-Interdigit-Timeout" ":"
+			   1*19DIGIT CRLF
             </pre>
 <p class="figure"></p>
 <h1 id="rfc.section.9.4.18"><a href="#rfc.section.9.4.18">9.4.18.</a> DTMF-Term-Timeout</h1>
@@ -4202,8 +4206,8 @@ C-&gt;S:   MRCP/2.0 ... END-PHRASE-ENROLLMENT 543262
 
 S-&gt;C:   MRCP/2.0 ... 543262 200 COMPLETE
         Channel-Identifier:32AECB23433801@speechrecog
-        Waveform-URI:&lt;http://mediaserver.com/recordings/file1324.wav&gt;;
-                     size=242453;duration=25432
+        Waveform-URI:&lt;http://mediaserver.com/recordings/file1324.wav&gt;
+		     ;size=242453;duration=25432
 </pre>
 <p class="figure"></p>
 <h1 id="rfc.section.9.18"><a href="#rfc.section.9.18">9.18.</a> MODIFY-PHRASE</h1>
@@ -6431,7 +6435,8 @@ User:   What toppings do you have?
 
 User:   slow down.
 
-&lt;interpretation grammar="http://www.example.com/generalCommandsGrammar"&gt;
+&lt;interpretation
+   grammar="http://www.example.com/generalCommandsGrammar"&gt;
    &lt;instance&gt;
     &lt;command&gt;
        &lt;action&gt;reduce speech rate&lt;/action&gt;
@@ -6649,7 +6654,8 @@ event-name       =    synthesizer-event
                  /    recorder-event
                  /    verifier-event
       
-message-header   =  1*(generic-header / resource-header / generic-field)
+message-header   =  1*(generic-header / resource-header /
+		       generic-field)
 
 generic-field    =    field-name ":" [ field-value ]
 field-name       =    token
@@ -6766,7 +6772,7 @@ cookie-av         = expires-av / max-age-av / domain-av /
                      path-av / secure-av / httponly-av /
                      extension-av / age-av
 expires-av        = "Expires=" sane-cookie-date
-sane-cookie-date  = &lt;rfc1123-date, defined in [RFC2616], Section 3.3.1&gt;
+sane-cookie-date  = &lt;rfc1123-date, from [RFC2616], Section 3.3.1&gt;
 max-age-av        = "Max-Age=" non-zero-digit *DIGIT
 non-zero-digit    = %x31-39
 domain-av         = "Domain=" domain-value
@@ -6872,9 +6878,11 @@ speech-marker         =    "Speech-Marker" ":"
                            timestamp
                            [";" 1*(UTFCHAR / %x20)] CRLF
 
-speech-language       =    "Speech-Language" ":" 1*VCHAR CRLF 
+speech-language       =    "Speech-Language" ":"
+			   1*VCHAR CRLF 
 
-fetch-hint            =    "Fetch-Hint" ":" ("prefetch" / "safe") CRLF 
+fetch-hint            =    "Fetch-Hint" ":"
+			   ("prefetch" / "safe") CRLF 
 
 audio-fetch-hint      =    "Audio-Fetch-Hint" ":" 
                           ("prefetch" / "safe" / "stream") CRLF 
@@ -7221,7 +7229,8 @@ identification-tag =    token
               &lt;xs:element name="instance"&gt;
                 &lt;xs:complexType mixed="true"&gt;
                   &lt;xs:sequence minOccurs="0"&gt;
-                    &lt;xs:any namespace="##other" processContents="lax"/&gt;
+                    &lt;xs:any namespace="##other"
+		            processContents="lax"/&gt;
                   &lt;/xs:sequence&gt;
                 &lt;/xs:complexType&gt;
               &lt;/xs:element&gt;

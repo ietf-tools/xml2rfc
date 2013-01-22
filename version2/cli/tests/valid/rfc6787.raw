@@ -608,26 +608,26 @@ Copyright Notice
    shown.
 
         MRCPv2 client                   MRCPv2 Media Resource Server
-   |--------------------|            |------------------------------------|
-   ||------------------||            ||----------------------------------||
-   || Application Layer||            ||Synthesis|Recognition|Verification||
-   ||------------------||            || Engine  |  Engine   |   Engine   ||
-   ||Media Resource API||            ||    ||   |    ||     |    ||      ||
-   ||------------------||            ||Synthesis|Recognizer |  Verifier  ||
-   || SIP  |  MRCPv2   ||            ||Resource | Resource  |  Resource  ||
-   ||Stack |           ||            ||     Media Resource Management    ||
-   ||      |           ||            ||----------------------------------||
-   ||------------------||            ||   SIP  |        MRCPv2           ||
-   ||   TCP/IP Stack   ||---MRCPv2---||  Stack |                         ||
-   ||                  ||            ||----------------------------------||
-   ||------------------||----SIP-----||           TCP/IP Stack           ||
-   |--------------------|            ||                                  ||
-            |                        ||----------------------------------||
-           SIP                       |------------------------------------|
-            |                          /
-   |-------------------|             RTP
-   |                   |             /
-   | Media Source/Sink |------------/
+   |--------------------|         |------------------------------------|
+   ||------------------||         ||----------------------------------||
+   || Application Layer||         ||Synthesis|Recognition|Verification||
+   ||------------------||         || Engine  |  Engine   |   Engine   ||
+   ||Media Resource API||         ||    ||   |    ||     |    ||      ||
+   ||------------------||         ||Synthesis|Recognizer |  Verifier  ||
+   || SIP  |  MRCPv2   ||         ||Resource | Resource  |  Resource  ||
+   ||Stack |           ||         ||     Media Resource Management    ||
+   ||      |           ||         ||----------------------------------||
+   ||------------------||         ||   SIP  |        MRCPv2           ||
+   ||   TCP/IP Stack   ||--MRCPv2-||  Stack |                         ||
+   ||                  ||         ||----------------------------------||
+   ||------------------||---SIP---||           TCP/IP Stack           ||
+   |--------------------|         ||                                  ||
+            |                     ||----------------------------------||
+           SIP                    |------------------------------------|
+            |                       /
+   |-------------------|          RTP
+   |                   |          /
+   | Media Source/Sink |---------/
    |                   |
    |-------------------|
 
@@ -1231,21 +1231,22 @@ Copyright Notice
    with nothing preceding the CRLF) indicating the end of the header
    fields, and an optional message body.
 
-   generic-message  =    start-line
-                         message-header
-                         CRLF
-                         [ message-body ]
+   generic-message =   start-line
+                       message-header
+                       CRLF
+                       [ message-body ]
 
-   message-body     =    *OCTET
+   message-body    =   *OCTET
 
-   start-line       =    request-line / response-line / event-line
+   start-line      =   request-line / response-line / event-line
 
-   message-header   =  1*(generic-header / resource-header / generic-field)
+   message-header  =   1*(generic-header / resource-header /
+                  generic-field)
 
-   resource-header  =    synthesizer-header
-                    /    recognizer-header
-                    /    recorder-header
-                    /    verifier-header
+   resource-header =   synthesizer-header
+                   /   recognizer-header
+                   /   recorder-header
+                   /   verifier-header
 
 
    The message-body contains resource-specific and message-specific
@@ -2098,7 +2099,7 @@ Copyright Notice
                         path-av / secure-av / httponly-av /
                         extension-av / age-av
    expires-av        = "Expires=" sane-cookie-date
-   sane-cookie-date  = <rfc1123-date, defined in [RFC2616], Section 3.3.1>
+   sane-cookie-date  = <rfc1123-date, from [RFC2616], Section 3.3.1>
    max-age-av        = "Max-Age=" non-zero-digit *DIGIT
    non-zero-digit    = %x31-39
    domain-av         = "Domain=" domain-value
@@ -2677,7 +2678,8 @@ Copyright Notice
    "prefetch".  This header field MAY occur in SPEAK, SET-PARAMS, or
    GET-PARAMS requests.
 
-   fetch-hint          =   "Fetch-Hint" ":" ("prefetch" / "safe") CRLF
+   fetch-hint          =   "Fetch-Hint" ":"
+                ("prefetch" / "safe") CRLF
 
 
 8.4.11.  Audio-Fetch-Hint
@@ -4027,7 +4029,8 @@ Copyright Notice
    contrast, the Speech-Incomplete-Timeout is used when the speech is an
    incomplete match to an active grammar.  The value is in milliseconds.
 
-   speech-complete-timeout = "Speech-Complete-Timeout" ":" 1*19DIGIT CRLF
+   speech-complete-timeout = "Speech-Complete-Timeout" ":"
+                 1*19DIGIT CRLF
 
 
    A long Speech-Complete-Timeout value delays the result to the client
@@ -4081,7 +4084,8 @@ Copyright Notice
    value.  The default value is 5 seconds.  This header field MAY occur
    in RECOGNIZE, SET-PARAMS, or GET-PARAMS.
 
-   dtmf-interdigit-timeout = "DTMF-Interdigit-Timeout" ":" 1*19DIGIT CRLF
+   dtmf-interdigit-timeout = "DTMF-Interdigit-Timeout" ":"
+                  1*19DIGIT CRLF
 
 
 9.4.18.  DTMF-Term-Timeout
@@ -5961,8 +5965,8 @@ Copyright Notice
 
    S->C:   MRCP/2.0 ... 543262 200 COMPLETE
            Channel-Identifier:32AECB23433801@speechrecog
-           Waveform-URI:<http://mediaserver.com/recordings/file1324.wav>;
-                        size=242453;duration=25432
+           Waveform-URI:<http://mediaserver.com/recordings/file1324.wav>
+                ;size=242453;duration=25432
 
 
 9.18.  MODIFY-PHRASE
@@ -9298,7 +9302,8 @@ Copyright Notice
 
    User:   slow down.
 
-   <interpretation grammar="http://www.example.com/generalCommandsGrammar">
+   <interpretation
+      grammar="http://www.example.com/generalCommandsGrammar">
       <instance>
        <command>
           <action>reduce speech rate</action>
@@ -9555,7 +9560,8 @@ Copyright Notice
                     /    recorder-event
                     /    verifier-event
 
-   message-header   =  1*(generic-header / resource-header / generic-field)
+   message-header   =  1*(generic-header / resource-header /
+                  generic-field)
 
    generic-field    =    field-name ":" [ field-value ]
    field-name       =    token
@@ -9672,7 +9678,7 @@ Copyright Notice
                         path-av / secure-av / httponly-av /
                         extension-av / age-av
    expires-av        = "Expires=" sane-cookie-date
-   sane-cookie-date  = <rfc1123-date, defined in [RFC2616], Section 3.3.1>
+   sane-cookie-date  = <rfc1123-date, from [RFC2616], Section 3.3.1>
    max-age-av        = "Max-Age=" non-zero-digit *DIGIT
    non-zero-digit    = %x31-39
    domain-av         = "Domain=" domain-value
@@ -9778,9 +9784,11 @@ Copyright Notice
                               timestamp
                               [";" 1*(UTFCHAR / %x20)] CRLF
 
-   speech-language       =    "Speech-Language" ":" 1*VCHAR CRLF
+   speech-language       =    "Speech-Language" ":"
+                  1*VCHAR CRLF
 
-   fetch-hint            =    "Fetch-Hint" ":" ("prefetch" / "safe") CRLF
+   fetch-hint            =    "Fetch-Hint" ":"
+                  ("prefetch" / "safe") CRLF
 
    audio-fetch-hint      =    "Audio-Fetch-Hint" ":"
                              ("prefetch" / "safe" / "stream") CRLF
@@ -10130,7 +10138,8 @@ Copyright Notice
                  <xs:element name="instance">
                    <xs:complexType mixed="true">
                      <xs:sequence minOccurs="0">
-                       <xs:any namespace="##other" processContents="lax"/>
+                       <xs:any namespace="##other"
+                       processContents="lax"/>
                      </xs:sequence>
                    </xs:complexType>
                  </xs:element>
