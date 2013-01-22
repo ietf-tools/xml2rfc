@@ -13,11 +13,19 @@ test:	bin/python
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tests/failed/ ] && rm -f tests/failed/*
 	bin/python test.py
-	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc tests/input/rfc6787.xml --raw --out tmp/rfc6787.raw		&& diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.raw tmp/rfc6787.raw
+	#
+	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc tests/input/rfc6787.xml --raw --out tmp/rfc6787.raw	&& diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.raw tmp/rfc6787.raw
 	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc tests/input/rfc6787.xml --text --out tmp/rfc6787.txt	&& diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.txt tmp/rfc6787.txt 
 	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc tests/input/rfc6787.xml --nroff --out tmp/rfc6787.nroff	&& diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.nroff tmp/rfc6787.nroff 
 	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc tests/input/rfc6787.xml --html --out tmp/rfc6787.html	&& diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.html tmp/rfc6787.html 
-	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc tests/input/rfc6787.xml --exp --out tmp/rfc6787.xml		&& diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.xml tmp/rfc6787.xml 
+	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc tests/input/rfc6787.xml --exp --out tmp/rfc6787.xml	&& diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.xml tmp/rfc6787.xml 
+	#
+	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc tests/input/draft-template.xml --raw --out tmp/draft-template.raw		&& diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.raw tmp/draft-template.raw
+	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc tests/input/draft-template.xml --text --out tmp/draft-template.txt	&& diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.txt tmp/draft-template.txt 
+	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc tests/input/draft-template.xml --nroff --out tmp/draft-template.nroff	&& diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.nroff tmp/draft-template.nroff 
+	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc tests/input/draft-template.xml --html --out tmp/draft-template.html	&& diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.html tmp/draft-template.html 
+	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc tests/input/draft-template.xml --exp --out tmp/draft-template.xml		&& diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.xml tmp/draft-template.xml 
+
 
 upload:
 	python setup.py sdist upload --sign
