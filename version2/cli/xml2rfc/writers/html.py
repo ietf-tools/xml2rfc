@@ -307,7 +307,12 @@ class HtmlRfcWriter(BaseRfcWriter):
         else:
             current = parent
         if t.text:
-            current.text = t.text
+            if "anchor" in t.attrib:
+                a = E.A(name=t.attrib["anchor"])
+                a.tail = t.text
+                current.append(a)
+            else:
+                current.text = t.text
             if autoAnchor:
                 current.attrib['id'] = autoAnchor
         for child in t:
