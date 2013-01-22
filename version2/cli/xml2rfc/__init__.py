@@ -9,4 +9,4 @@ NET_SUBDIRS  = ['bibxml', 'bibxml2', 'bibxml3', 'bibxml4', 'bibxml5']
 from xml2rfc.parser import *
 from xml2rfc.writers import *
 
-__version__  = '.'.join(map(str, VERSION)))
+__version__  = '.'.join(map(str, VERSION))
