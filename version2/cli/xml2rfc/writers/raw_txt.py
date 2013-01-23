@@ -298,8 +298,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         # Use an empty first line if key is too long
         min_spacing = 2
         if len(key) + min_spacing > sub_indent:
-            self._write_text(key, indent=3, leading_blankline=True, wrap_urls=False, source_line=source_line)
-            self._write_text(text, indent=3 + sub_indent, wrap_urls=False, source_line=source_line)
+            self._write_text(key, indent=3, leading_blankline=True, wrap_urls=False, fix_sentence_endings=False, source_line=source_line)
+            self._write_text(text, indent=3 + sub_indent, wrap_urls=False, fix_sentence_endings=False, source_line=source_line)
         else:
             # Fill space to sub_indent in the bullet
             self._write_text(text, indent=3, bullet=key.ljust(sub_indent), \
@@ -689,7 +689,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             if i % num_columns == 0:
                 row += 1
                 matrix.append([])
-            text = self.wrapper.replace(cell.text) or ''
+            text = self.wrapper.replace(cell.text or '')
             if len(cell) > 0:
                 # <c> has children, render their text and add to line
                 inline_text, null = \
