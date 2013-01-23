@@ -435,7 +435,7 @@ class BaseRfcWriter:
                     # Warn about no date
                     xml2rfc.log.warn('No date specified for document.')
 
-    def _format_counter(self, text, count):
+    def _format_counter(self, text, count, list_length=1):
         """ Return a proper string for a formatted list bullet.  Allowed types:
                 %c: Lowercase chars
                 %C: Uppercase chars
@@ -443,17 +443,25 @@ class BaseRfcWriter:
                 %i: Lowercase roman numerals
                 %I: Uppercase roman numerals
         """
-        width = len(text)
+        import math
+        roman_widths = {        1:1,  2:2,  3:3,  4:2,  5:1,  6:2,  7:3,  8:4,  9:2,
+                        10:1, 11:2, 12:3, 13:4, 14:3, 15:2, 16:3, 17:4, 18:5, 19:3,
+                        20:2, 21:3, 22:4, 23:5, 24:4, 25:3, 26:4, 27:5, 28:6, 29:4, }
+        #
+        decimal_width = int(math.log(list_length, 10))
+        roman_width = roman_widths.get(list_length, 6)
+        letter_width = int(math.log(list_length, 26))
+        extra_width = len(text)+1
         if '%d' in text:
-            text = text.replace(r'%d', str(count))
+            text = text.replace(r'%d', str(count)).ljust(decimal_width+extra_width)
         elif '%c' in text:
-            text = text.replace(r'%c', str(string.ascii_lowercase[(count - 1) % 26]))
+            text = text.replace(r'%c', xml2rfc.utils.int2letter(count-1)).ljust(letter_width+extra_width)
         elif '%C' in text:
-            text = text.replace(r'%C', str(string.ascii_uppercase[(count - 1) % 26]))
+            text = text.replace(r'%C', xml2rfc.utils.int2letter(count-1).upper()).ljust(letter_width+extra_width)
         elif '%i' in text:
-            text = text.replace(r'%i', xml2rfc.utils.int2roman(count)).ljust(width+3)
+            text = text.replace(r'%i', xml2rfc.utils.int2roman(count)).ljust(roman_width+extra_width)
         elif '%I' in text:
-            text = text.replace(r'%I', xml2rfc.utils.int2roman(count).upper()).ljust(width+3)
+            text = text.replace(r'%I', xml2rfc.utils.int2roman(count).upper()).ljust(roman_width+extra_width)
         return text
 
     def _format_author_string(self, authors):
