@@ -60,7 +60,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     # Override
     def _write_text(self, string, indent=0, sub_indent=0, bullet='',
                     align='left', leading_blankline=False, buf=None,
-                    strip=True, edit=False, source_line=None):
+                    strip=True, edit=False, wrap_urls=False, source_line=None):
         #-------------------------------------------------------------
         # RawTextRfcWriter override
         #

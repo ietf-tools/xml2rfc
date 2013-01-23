@@ -9,6 +9,7 @@ import string
 import math
 import lxml
 import datetime
+import re
 
 # Local lib
 from xml2rfc.writers.base import BaseRfcWriter
@@ -62,7 +63,7 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def _write_text(self, string, indent=0, sub_indent=0, bullet='',
                   align='left', leading_blankline=False, buf=None,
-                  strip=True, edit=False, source_line=None):
+                  strip=True, edit=False, wrap_urls=True, source_line=None):
         """ Writes a line or multiple lines of text to the buffer.
 
             Several parameters are included here.  All of the API calls
@@ -95,9 +96,10 @@ class RawTextRfcWriter(BaseRfcWriter):
             if strip:
                 # Strip initial whitespace
                 string = string.lstrip()
-            par = self.wrapper.wrap(string,
-                                    initial_indent=initial,
-                                    subsequent_indent=subsequent)
+            if wrap_urls:
+                par = self.wrapper.wrap(string, initial_indent=initial, subsequent_indent=subsequent)
+            else:
+                par = self.wrapper.wrap(xml2rfc.utils.urlkeep(string), initial_indent=initial, subsequent_indent=subsequent)
             if align == 'left':
                 buf.extend(par)
             elif align == 'center':
@@ -125,9 +127,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         if style == 'hanging' or style.startswith('format'):
             # Check for optional hangIndent
             try:
-                hangIndent = int(list.attrib.get('hangIndent', 3))
+                hangIndent = int(list.attrib.get('hangIndent', 3+level*3))
             except (ValueError, TypeError):
-                hangIndent = 3
+                hangIndent = 3 + level*3
         format_str = None
         counter_index = None
         if style.startswith('format'):
@@ -170,7 +172,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                         bullet = bullet.ljust(hangIndent)
                     else:
                         # Insert a single space
-                        bullet += ' '
+                        bullet += '  '
                     # Add an extra space in front of colon if colonspace enabled
                     if bullet.endswith(':') and \
                     self.pis.get('colonspace', 'no') == 'yes':
@@ -283,6 +285,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             target_text = item.title
         else: #Default
             target_text = item.autoName
+        target_text = re.sub("([./-])", r"\1&#8288;", target_text)   # word joiner, to prevent line breaks
         if xref.text:
             if not target_text.startswith('['):
                 target_text = '(' + target_text + ')'
@@ -295,12 +298,12 @@ class RawTextRfcWriter(BaseRfcWriter):
         # Use an empty first line if key is too long
         min_spacing = 2
         if len(key) + min_spacing > sub_indent:
-            self._write_text(key, indent=3, leading_blankline=True, source_line=source_line)
-            self._write_text(text, indent=3 + sub_indent, source_line=source_line)
+            self._write_text(key, indent=3, leading_blankline=True, wrap_urls=False, source_line=source_line)
+            self._write_text(text, indent=3 + sub_indent, wrap_urls=False, source_line=source_line)
         else:
             # Fill space to sub_indent in the bullet
             self._write_text(text, indent=3, bullet=key.ljust(sub_indent), \
-                     sub_indent=sub_indent, leading_blankline=True, source_line=source_line)
+                     sub_indent=sub_indent, leading_blankline=True, wrap_urls=False, source_line=source_line)
     
     def _combine_inline_elements(self, elements):
         """ Shared function for <t> and <c> elements
@@ -616,6 +619,13 @@ class RawTextRfcWriter(BaseRfcWriter):
         for i, ref in enumerate(list.findall('reference')):
             refstring = []
             authors = ref.findall('front/author')
+#             import debug
+#             debug.show('ref.attrib["anchor"]')
+#             for author in authors:
+#                 debug.show('author.attrib.get("fullname", "??")')
+#             for element in ref.find('front').getchildren():
+#                 if element.tag == 'author':
+#                     debug.show('element.attrib.get("fullname", "??")')
             refstring.append(self._format_author_string(authors))
             refstring.append(', ')
             title = ref.find('front/title')
