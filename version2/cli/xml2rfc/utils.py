@@ -37,7 +37,7 @@ class MyTextWrapper(textwrap.TextWrapper):
         self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
 
         # Override end of line regex, double space after '].'
-        self.sentence_end_re = re.compile(r'[%s%s0-9\>\]\)\"\']'  # lowercase letter, end parentheses
+        self.sentence_end_re = re.compile(r'[%s%s0-9\>\]\)\"\']{2,}'  # lowercase letter, end parentheses
                             r'[\.\!\?]'     # sentence-ending punct.
                             r'[\"\'\)\]]?'  # optional end-of-quote, end parentheses
                             r'\Z'           # end of chunk
