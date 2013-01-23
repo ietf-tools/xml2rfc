@@ -122,6 +122,37 @@ def formatXmlWhitespace(tree):
                                element.tail))
 
 
+# ----------------------------------------------------------------------
+# Base conversions.
+# From http://tech.vaultize.com/2011/08/python-patterns-number-to-base-x-and-the-other-way/
+
+DEFAULT_DIGITS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+ 
+def num_to_baseX(num, digits=DEFAULT_DIGITS):
+   if num < 0: return '-' + num_to_baseX(-num)
+   if num == 0: return digits[0]
+   X = len(digits)
+   s = ''
+   while num > 0:
+        s = digits[num % X] + s
+        num //= X
+ 
+   return s
+ 
+def baseX_to_num(s, digits=DEFAULT_DIGITS):
+   if s[0] == '-': return -1 * baseX_to_num(s[1:])
+   ctopos = {(c, pos) for pos, c in enumerate(digits)}
+   X = len(digits)
+   num = 0
+   for c in s: num = num * X + ctopos[c]
+   return num
+
+# ----------------------------------------------------------------------
+# Use the generic base conversion to create list letters
+
+def int2letter(num):
+    return num_to_baseX(num, "abcdefghijklmnopqrstuvwxyz")
+
 def int2roman(number):
     numerals = { 
         1 : "i", 
@@ -371,3 +402,4 @@ _post_break_replacements = {
     '&#8209;': '-',  # nbhy
     '&#8288;': '',   # wj
 }
+
