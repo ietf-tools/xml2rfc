@@ -52,7 +52,8 @@ class MyTextWrapper(textwrap.TextWrapper):
             text = re.sub(re.escape(key), val, text)
         return text
 
-    def wrap(self, text, break_on_hyphens=True, initial_indent='', subsequent_indent=''):
+    def wrap(self, text, break_on_hyphens=True, initial_indent='', subsequent_indent='',
+        fix_doublespace=True):
         """ Mirrored implementation of wrap which replaces characters properly
             also lets you easily specify indentation on the fly
         """
@@ -63,6 +64,11 @@ class MyTextWrapper(textwrap.TextWrapper):
 
         # Original implementation
         text = self._munge_whitespace(text)
+
+        # Maybe remove double (and more) spaces, except when they might be between sentences
+        if fix_doublespace:
+            text = re.sub("([^].!?])  +", r"\1 ", text)
+            text = re.sub("([.!?])   +", r"\1  ", text)
 
         # Replace some characters after splitting has occured
         chunks = map(self.replace, self._split(text))
