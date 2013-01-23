@@ -121,6 +121,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         bullet = '   '
         hangIndent = None
         style = list.attrib.get('style', 'empty')
+        listlength = len(list.findall('t'))        
         if style == 'hanging' or style.startswith('format'):
             # Check for optional hangIndent
             try:
@@ -159,9 +160,9 @@ class RawTextRfcWriter(BaseRfcWriter):
                     bullet = self.list_symbols[level % len(self.list_symbols)]
                     bullet += '  '
                 elif style == 'numbers':
-                    bullet = str(t_count + 1) + '.  '
+                    bullet = self._format_counter("%d.", t_count+1, listlength)
                 elif style == 'letters':
-                    bullet = string.ascii_lowercase[t_count % 26] + '.  '
+                    bullet = self._format_counter("%c.", t_count+1, listlength)
                 elif style == 'hanging':
                     bullet = element.attrib.get('hangText', '')
                     if len(bullet) < hangIndent:
@@ -177,7 +178,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 elif style.startswith('format'):
                     self.list_counters[counter_index] += 1
                     count = self.list_counters[counter_index]
-                    bullet = self._format_counter(format_str, count) + ' '
+                    bullet = self._format_counter(format_str, count, listlength)
                 if hangIndent:
                     sub_indent = hangIndent
                 else:
