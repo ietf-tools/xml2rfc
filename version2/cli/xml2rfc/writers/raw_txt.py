@@ -619,13 +619,6 @@ class RawTextRfcWriter(BaseRfcWriter):
         for i, ref in enumerate(list.findall('reference')):
             refstring = []
             authors = ref.findall('front/author')
-#             import debug
-#             debug.show('ref.attrib["anchor"]')
-#             for author in authors:
-#                 debug.show('author.attrib.get("fullname", "??")')
-#             for element in ref.find('front').getchildren():
-#                 if element.tag == 'author':
-#                     debug.show('element.attrib.get("fullname", "??")')
             refstring.append(self._format_author_string(authors))
             refstring.append(', ')
             title = ref.find('front/title')
@@ -696,7 +689,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             if i % num_columns == 0:
                 row += 1
                 matrix.append([])
-            text = cell.text or ''
+            text = self.wrapper.replace(cell.text) or ''
             if len(cell) > 0:
                 # <c> has children, render their text and add to line
                 inline_text, null = \
