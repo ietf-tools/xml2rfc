@@ -376,7 +376,7 @@ RFC 6787                         MRCPv2                    November 2012
        13.5.1.  text/grammar-ref-list  . . . . . . . . . . . . . . . 183
      13.6.  'session' URI Scheme Registration  . . . . . . . . . . . 184
      13.7.  SDP Parameter Registrations  . . . . . . . . . . . . . . 185
-       13.7.1.  Sub-Registry "proto" . . . . . . . . . . . . . . . . 185
+       13.7.1.  Sub-Registry "proto" . . . . . . . . . . . . . . . . 186
        13.7.2.  Sub-Registry "att-field (media-level)" . . . . . . . 186
    14. Examples  . . . . . . . . . . . . . . . . . . . . . . . . . . 187
      14.1.  Message Flow . . . . . . . . . . . . . . . . . . . . . . 188
@@ -440,9 +440,9 @@ RFC 6787                         MRCPv2                    November 2012
    The proprietary version of MRCP ran over the Real Time Streaming
    Protocol (RTSP) [RFC2326].  At the time work on MRCPv2 was begun, the
    consensus was that this use of RTSP would break the RTSP protocol or
-   cause backward-compatibility problems, something forbidden by Section
-   3.2 of [RFC4313].  This is the reason why MRCPv2 does not run over
-   RTSP.
+   cause backward-compatibility problems, something forbidden by
+   Section 3.2 of [RFC4313].  This is the reason why MRCPv2 does not run
+   over RTSP.
 
 
 
@@ -665,10 +665,10 @@ RFC 6787                         MRCPv2                    November 2012
                   capabilities and can generate its media stream
                   exclusively from concatenated audio clips.  The speech
                   data is described using a limited subset of the Speech
-                  Synthesis Markup Language (SSML) [W3C.REC-speech-
-                  synthesis-20040907] elements.  A basic synthesizer
-                  MUST support the SSML tags <speak>, <audio>, <say-as>,
-                  and <mark>.
+                  Synthesis Markup Language (SSML)
+                  [W3C.REC-speech-synthesis-20040907] elements.  A basic
+                  synthesizer MUST support the SSML tags <speak>,
+                  <audio>, <say-as>, and <mark>.
 
 
 
@@ -776,8 +776,8 @@ RFC 6787                         MRCPv2                    November 2012
    of any other MRCP channel currently allocated by that server.  MRCPv2
    defines the following IANA-registered types of media processing
    resources.  Additional resource types and their associated methods/
-   events and state machines may be added as described below in Section
-   13.
+   events and state machines may be added as described below in
+   Section 13.
 
 
 
@@ -2486,7 +2486,7 @@ RFC 6787                         MRCPv2                    November 2012
    (NLSML), an XML markup based on an early draft from the W3C, is the
    default standard for returning results back to the client.  Hence,
    all servers implementing these resource types MUST support the media
-   type 'application/nlsml+xml'. The Extensible MultiModal Annotation
+   type 'application/nlsml+xml'.  The Extensible MultiModal Annotation
    (EMMA) [W3C.REC-emma-20090210] format can be used to return results
    as well.  This can be done by negotiating the format at session
    establishment time with SDP (a=resultformat:application/emma+xml) or
@@ -2538,11 +2538,11 @@ RFC 6787                         MRCPv2                    November 2012
    they must either be prefixed by a namespace prefix declared within
    the result or must be children of an element identified as belonging
    to the respective namespace.  For details on how to use XML
-   Namespaces, see [W3C.REC-xml-names11-20040204].  Section 2 of [W3C
-   .REC-xml-names11-20040204] provides details on how to declare
+   Namespaces, see [W3C.REC-xml-names11-20040204].  Section 2 of
+   [W3C.REC-xml-names11-20040204] provides details on how to declare
    namespaces and namespace prefixes.
 
-   The root element of NLSML is <result>. Optional child elements are
+   The root element of NLSML is <result>.  Optional child elements are
    <interpretation>, <enrollment-result>, and <verification-result>, at
    least one of which must be present.  A single <result> MAY contain
    any or all of the optional child elements.  Details of the <result>
@@ -2956,9 +2956,9 @@ RFC 6787                         MRCPv2                    November 2012
 
    The "Voice-" parameters are derived from the similarly named
    attributes of the voice element specified in W3C's Speech Synthesis
-   Markup Language Specification (SSML) [W3C.REC-speech-
-   synthesis-20040907].  Legal values for these parameters are as
-   defined in that specification.
+   Markup Language Specification (SSML)
+   [W3C.REC-speech-synthesis-20040907].  Legal values for these
+   parameters are as defined in that specification.
 
    These header fields MAY be sent in SET-PARAMS or GET-PARAMS requests
    to define or get default values for the entire session or MAY be sent
@@ -3232,7 +3232,7 @@ RFC 6787                         MRCPv2                    November 2012
    All MRCPv2 servers containing synthesizer resources MUST support both
    plain text speech data and W3C's Speech Synthesis Markup Language
    [W3C.REC-speech-synthesis-20040907] and hence MUST support the media
-   types 'text/plain' and 'application/ssml+xml'. Other formats MAY be
+   types 'text/plain' and 'application/ssml+xml'.  Other formats MAY be
    supported.
 
    If the speech data is to be fetched by URI reference, the media type
@@ -4217,27 +4217,27 @@ RFC 6787                         MRCPv2                    November 2012
 
    The capabilities of the recognizer resource are enumerated below:
 
-   Normal Mode Recognition Normal mode recognition tries to match all of
-      the speech or DTMF against the grammar and returns a no-match
+   Normal Mode Recognition  Normal mode recognition tries to match all
+      of the speech or DTMF against the grammar and returns a no-match
       status if the input fails to match or the method times out.
 
-   Hotword Mode Recognition Hotword mode is where the recognizer looks
+   Hotword Mode Recognition  Hotword mode is where the recognizer looks
       for a match against specific speech grammar or DTMF sequence and
       ignores speech or DTMF that does not match.  The recognition
       completes only if there is a successful match of grammar, if the
       client cancels the request, or if there is a non-input or
       recognition timeout.
 
-   Voice Enrolled Grammars A recognizer resource MAY optionally support
+   Voice Enrolled Grammars  A recognizer resource MAY optionally support
       Voice Enrolled Grammars.  With this functionality, enrollment is
       performed using a person's voice.  For example, a list of contacts
       can be created and maintained by recording the person's names
       using the caller's voice.  This technique is sometimes also called
       speaker-dependent recognition.
 
-   Interpretation A recognizer resource MAY be employed strictly for its
-      natural language interpretation capabilities by supplying it with
-      a text string as input instead of speech.  In this mode, the
+   Interpretation  A recognizer resource MAY be employed strictly for
+      its natural language interpretation capabilities by supplying it
+      with a text string as input instead of speech.  In this mode, the
       resource takes text as input and produces an "interpretation" of
       the input according to the supplied grammar.
 
@@ -4266,8 +4266,8 @@ RFC 6787                         MRCPv2                    November 2012
    done by setting a header field (see Section 9.4.39) in the Recognize
    request.
 
-   Interpretation is accomplished through the INTERPRET method (Section
-   9.20) and the Interpret-Text header field (Section 9.4.30).
+   Interpretation is accomplished through the INTERPRET method
+   (Section 9.20) and the Interpret-Text header field (Section 9.4.30).
 
 9.1.  Recognizer State Machine
 
@@ -5410,8 +5410,8 @@ RFC 6787                         MRCPv2                    November 2012
       [refs.javaSpeechGrammarFormat]
 
    Additionally, MRCPv2 servers MAY support the Semantic Interpretation
-   for Speech Recognition (SISR) [W3C.REC-semantic-
-   interpretation-20070405] specification.
+   for Speech Recognition (SISR)
+   [W3C.REC-semantic-interpretation-20070405] specification.
 
    When a grammar is specified inline in the request, the client MUST
    provide a Content-ID for that grammar as part of the content header
@@ -5741,11 +5741,11 @@ RFC 6787                         MRCPv2                    November 2012
        select a preferred interpretation from among the possible
        interpretations returned from the semantic interpreter.
 
-   2.  A client-based dialog manager (e.g., VoiceXML [W3C.REC-
-       voicexml20-20040316]) that was unable to select between several
-       competing interpretations could use this information to go back
-       to the user and find out what was intended.  For example, it
-       could issue a SPEAK request to a synthesizer resource to emit
+   2.  A client-based dialog manager (e.g., VoiceXML
+       [W3C.REC-voicexml20-20040316]) that was unable to select between
+       several competing interpretations could use this information to
+       go back to the user and find out what was intended.  For example,
+       it could issue a SPEAK request to a synthesizer resource to emit
        "Did you say 'Boston' or 'Austin'?"
 
 9.6.1.2.  Side Information
@@ -5829,7 +5829,7 @@ Burnett & Shanmugham        Standards Track                   [Page 104]
 RFC 6787                         MRCPv2                    November 2012
 
 
-   The root element of the markup is <result>. The <result> element
+   The root element of the markup is <result>.  The <result> element
    includes one or more <interpretation> elements.  Multiple
    interpretations can result from ambiguities in the input or in the
    semantic interpretation.  If the "grammar" attribute does not apply
@@ -5885,7 +5885,7 @@ Burnett & Shanmugham        Standards Track                   [Page 105]
 RFC 6787                         MRCPv2                    November 2012
 
 
-       at the <interpretation> level.) This attribute is only needed
+       at the <interpretation> level.)  This attribute is only needed
        under <interpretation> if it is necessary to override a grammar
        that was defined at the <result> level.  Note that the grammar
        attribute for the interpretation element is optional if and only
@@ -6090,9 +6090,9 @@ RFC 6787                         MRCPv2                    November 2012
    If there are multiple levels of inputs, the most natural place for
    <nomatch> and <noinput> elements to appear is under the highest level
    of <input> for <noinput>, and under the appropriate level of
-   <interpretation> for <nomatch>. So, <noinput> means "no input at all"
-   and <nomatch> means "no match in speech modality" or "no match in
-   DTMF modality".  For example, to represent garbled speech combined
+   <interpretation> for <nomatch>.  So, <noinput> means "no input at
+   all" and <nomatch> means "no match in speech modality" or "no match
+   in DTMF modality".  For example, to represent garbled speech combined
    with DTMF "1 2 3 4", the markup would be:
 
    <input>
@@ -6116,7 +6116,7 @@ RFC 6787                         MRCPv2                    November 2012
 9.7.  Enrollment Results
 
    All enrollment elements are contained within a single
-   <enrollment-result> element under <result>. The elements are
+   <enrollment-result> element under <result>.  The elements are
    described below and have the schema defined in Section 16.2.  The
    following elements are defined:
 
@@ -6461,7 +6461,7 @@ RFC 6787                         MRCPv2                    November 2012
        each URI thereafter.
 
    3.  The body MAY contain a list of grammar URIs specified in content
-       of media type 'text/grammar-ref-list'. This type defines a list
+       of media type 'text/grammar-ref-list'.  This type defines a list
        of grammar URIs and allows each grammar URI to be assigned a
        weight in the list.  This weight has the same meaning as the
        weights described in Section 2.4.1 of the Speech Grammar Markup
@@ -6478,7 +6478,7 @@ RFC 6787                         MRCPv2                    November 2012
 
    If the resource was able to successfully start the recognition, the
    server MUST return a success status-code and a request-state of
-   IN-PROGRESS. This means that the recognizer is active and that the
+   IN-PROGRESS.  This means that the recognizer is active and that the
    client MUST be prepared to receive further events with this request-
    id.
 
@@ -6589,21 +6589,21 @@ RFC 6787                         MRCPv2                    November 2012
    5.  When the Recognition-Timeout expires, one of the following MUST
        happen:
 
-       5.1. If there was a partial-match, the recognizer SHOULD complete
-          with a Completion-Cause code of "partial-match-maxtime",
-          unless the recognizer cannot differentiate a partial-match, in
-          which case it MUST complete with a Completion-Cause code of
-          "no-match-maxtime".  The recognizer MAY return results for the
-          partially matched grammar.
+       5.1.  If there was a partial-match, the recognizer SHOULD
+             complete with a Completion-Cause code of "partial-match-
+             maxtime", unless the recognizer cannot differentiate a
+             partial-match, in which case it MUST complete with a
+             Completion-Cause code of "no-match-maxtime".  The
+             recognizer MAY return results for the partially matched
+             grammar.
 
-       5.2. If there was a full-match, the recognizer MUST complete with
-          a Completion-Cause code of "success-maxtime".
+       5.2.  If there was a full-match, the recognizer MUST complete
+             with a Completion-Cause code of "success-maxtime".
 
-       5.3. If there was a no match, the recognizer MUST complete with a
-          Completion-Cause code of "no-match-maxtime".
+       5.3.  If there was a no match, the recognizer MUST complete with
+             a Completion-Cause code of "no-match-maxtime".
 
    For recognition in hotword mode:
-
 
 
 
@@ -7397,8 +7397,8 @@ Burnett & Shanmugham        Standards Track                   [Page 132]
 RFC 6787                         MRCPv2                    November 2012
 
 
-   See the discussion on the sensitivity of saved waveforms in Section
-   12.
+   See the discussion on the sensitivity of saved waveforms in
+   Section 12.
 
 10.1.  Recorder State Machine
 
@@ -7476,7 +7476,7 @@ RFC 6787                         MRCPv2                    November 2012
    recorder can support a variable level of sound sensitivity.  The
    Sensitivity-Level header field is a float value between 0.0 and 1.0
    and allows the client to set the sensitivity level for the recorder.
-   This header field MAY occur in RECORD, SET-PARAMS, or GET-PARAMS. A
+   This header field MAY occur in RECORD, SET-PARAMS, or GET-PARAMS.  A
    higher value for this header field means higher sensitivity.  The
    default value for this header field is implementation specific.
 
@@ -7712,10 +7712,10 @@ RFC 6787                         MRCPv2                    November 2012
    scenario when the recorder and synthesizer resources are not part of
    the same session.  When a kill-on-barge-in prompt is being played,
    the client may want the RECORD request to be simultaneously active so
-   that it can detect and implement kill-on-barge-in (see Section
-   8.4.2).  But at the same time, the client doesn't want the recorder
-   resource to start the no-input timers until the prompt is finished.
-   The default value is "true".
+   that it can detect and implement kill-on-barge-in (see
+   Section 8.4.2).  But at the same time, the client doesn't want the
+   recorder resource to start the no-input timers until the prompt is
+   finished.  The default value is "true".
 
    start-input-timers       =  "Start-Input-Timers" ":"
                                BOOLEAN CRLF
@@ -7987,7 +7987,7 @@ RFC 6787                         MRCPv2                    November 2012
    of the owners of a joint bank account) a group authentication is
    performed.  This is generally implemented as a kind of verification
    involving comparison with more than one voice model.  It is sometimes
-   called 'multi-verification'. If the individual speaker can be
+   called 'multi-verification'.  If the individual speaker can be
    identified from the group, this may be useful for applications where
    multiple users share the same access privileges to some data or
    application.  Speaker identification and group authentication are
@@ -8741,10 +8741,10 @@ Burnett & Shanmugham        Standards Track                   [Page 156]
 RFC 6787                         MRCPv2                    November 2012
 
 
-   that it can detect and implement kill-on-barge-in (see Section
-   8.4.2).  But at the same time, the client doesn't want the verifier
-   resource to start the no-input timers until the prompt is finished.
-   The default value is "true".
+   that it can detect and implement kill-on-barge-in (see
+   Section 8.4.2).  But at the same time, the client doesn't want the
+   verifier resource to start the no-input timers until the prompt is
+   finished.  The default value is "true".
 
    start-input-timers       =  "Start-Input-Timers" ":"
                                BOOLEAN CRLF
@@ -8767,7 +8767,7 @@ RFC 6787                         MRCPv2                    November 2012
 11.5.2.  Verification Result Elements
 
    All verification elements are contained within a single
-   <verification-result> element under <result>. The elements are
+   <verification-result> element under <result>.  The elements are
    described below and have the schema defined in Section 16.2.  The
    following elements are defined:
 
@@ -9923,8 +9923,8 @@ RFC 6787                         MRCPv2                    November 2012
    initial contents of the registry, defined by the "message-header" BNF
    in Section 15 and explained in Section 5.1, are given below.  Note
    that the values permitted for the "Vendor-Specific-Parameters"
-   parameter are managed according to a different policy.  See Section
-   13.1.6.
+   parameter are managed according to a different policy.  See
+   Section 13.1.6.
 
    Name                               Resource type    Reference
    ----                               -------------    ---------
@@ -10122,15 +10122,15 @@ RFC 6787                         MRCPv2                    November 2012
    IANA has registered the following media type according to the process
    defined in RFC 4288 [RFC4288].
 
-   To: ietf-types@iana.org
+   To:  ietf-types@iana.org
 
-   Subject: Registration of media type application/nlsml+xml
+   Subject:  Registration of media type application/nlsml+xml
 
-   MIME media type name: application
+   MIME media type name:  application
 
-   MIME subtype name: nlsml+xml
+   MIME subtype name:  nlsml+xml
 
-   Required parameters: none
+   Required parameters:  none
 
    Optional parameters:
 
@@ -10141,13 +10141,14 @@ Burnett & Shanmugham        Standards Track                   [Page 181]
 RFC 6787                         MRCPv2                    November 2012
 
 
-      charset: All of the considerations described in RFC 3023 [RFC3023]
-         also apply to the application/nlsml+xml media type.
+      charset:  All of the considerations described in RFC 3023
+            [RFC3023] also apply to the application/nlsml+xml media
+            type.
 
-   Encoding considerations: All of the considerations described in RFC
+   Encoding considerations:  All of the considerations described in RFC
       3023 also apply to the 'application/nlsml+xml' media type.
 
-   Security considerations: As with HTML, NLSML documents contain links
+   Security considerations:  As with HTML, NLSML documents contain links
       to other data stores (grammars, verifier resources, etc.).  Unlike
       HTML, however, the data stores are not treated as media to be
       rendered.  Nevertheless, linked files may themselves have security
@@ -10155,26 +10156,26 @@ RFC 6787                         MRCPv2                    November 2012
       types.  Additionally, this media type has all of the security
       considerations described in RFC 3023.
 
-   Interoperability considerations: Although an NLSML document is itself
-      a complete XML document, for a fuller interpretation of the
+   Interoperability considerations:  Although an NLSML document is
+      itself a complete XML document, for a fuller interpretation of the
       content a receiver of an NLSML document may wish to access
       resources linked to by the document.  The inability of an NLSML
       processor to access or process such linked resources could result
       in different behavior by the ultimate consumer of the data.
 
-   Published specification: RFC XXXX
+   Published specification:  RFC XXXX
 
-   Applications that use this media type: MRCPv2 clients and servers
+   Applications that use this media type:  MRCPv2 clients and servers
 
-   Additional information: none
+   Additional information:  none
 
-   Magic number(s): There is no single initial octet sequence that is
+   Magic number(s):  There is no single initial octet sequence that is
       always present for NLSML files.
 
-   Person & email address to contact for further information: Sarvi Shan
-      mugham, sarvi@cisco.com
+   Person & email address to contact for further information:  Sarvi Sha
+      nmugham, sarvi@cisco.com
 
-   Intended usage: This media type is expected to be used only in
+   Intended usage:  This media type is expected to be used only in
       conjunction with MRCPv2.
 
 13.3.  NLSML XML Schema Registration
@@ -10182,13 +10183,12 @@ RFC 6787                         MRCPv2                    November 2012
    IANA has registered and now maintains the following XML Schema.
    Information provided follows the template in RFC 3688 [RFC3688].
 
-   XML element type: schema
+   XML element type:  schema
 
-   URI: urn:ietf:params:xml:schema:nlsml
+   URI:  urn:ietf:params:xml:schema:nlsml
 
-   Registrant Contact: IESG
+   Registrant Contact:  IESG
 
-   XML: See Section 16.1.
 
 
 
@@ -10197,18 +10197,20 @@ Burnett & Shanmugham        Standards Track                   [Page 182]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   XML:  See Section 16.1.
+
 13.4.  MRCPv2 XML Namespace Registration
 
    IANA has registered and now maintains the following XML Name space.
    Information provided follows the template in RFC 3688 [RFC3688].
 
-   XML element type: ns
+   XML element type:  ns
 
-   URI: urn:ietf:params:xml:ns:mrcpv2
+   URI:  urn:ietf:params:xml:ns:mrcpv2
 
-   Registrant Contact: IESG
+   Registrant Contact:  IESG
 
-   XML: RFC XXXX
+   XML:  RFC XXXX
 
 13.5.  Text Media Type Registrations
 
@@ -10217,34 +10219,32 @@ RFC 6787                         MRCPv2                    November 2012
 
 13.5.1.  text/grammar-ref-list
 
-   To: ietf-types@iana.org
+   To:  ietf-types@iana.org
 
-   Subject: Registration of media type text/grammar-ref-list
+   Subject:  Registration of media type text/grammar-ref-list
 
-   MIME media type name: text
+   MIME media type name:  text
 
-   MIME subtype name: text/grammar-ref-list
+   MIME subtype name:  text/grammar-ref-list
 
-   Required parameters: none
+   Required parameters:  none
 
-   Optional parameters: none
+   Optional parameters:  none
 
-   Encoding considerations: Depending on the transfer protocol, a
+   Encoding considerations:  Depending on the transfer protocol, a
       transfer encoding may be necessary to deal with very long lines.
 
-   Security considerations: This media type contains URIs that may
+   Security considerations:  This media type contains URIs that may
       represent references to external resources.  As these resources
       are assumed to be speech recognition grammars, similar
       considerations as for the media types 'application/srgs' and
       'application/srgs+xml' apply.
 
-   Interoperability considerations: '>' must be percent encoded in URIs
+   Interoperability considerations:  '>' must be percent encoded in URIs
       according to RFC 3986 [RFC3986].
 
-   Published specification: The RECOGNIZE method of the MRCP protocol
+   Published specification:  The RECOGNIZE method of the MRCP protocol
       performs a recognition operation that matches input against a set
-      of grammars.  When matching against more than one grammar, it is
-      sometimes necessary to use different weights for the individual
 
 
 
@@ -10253,6 +10253,8 @@ Burnett & Shanmugham        Standards Track                   [Page 183]
 RFC 6787                         MRCPv2                    November 2012
 
 
+      of grammars.  When matching against more than one grammar, it is
+      sometimes necessary to use different weights for the individual
       grammars.  These weights are not a property of the grammar
       resource itself but qualify the reference to that grammar for the
       particular recognition operation initiated by the RECOGNIZE
@@ -10276,16 +10278,16 @@ RFC 6787                         MRCPv2                    November 2012
          <http://example.com/grammars/universals.gram>;weight="0.75"
 
 
-   Applications that use this media type: MRCPv2 clients and servers
+   Applications that use this media type:  MRCPv2 clients and servers
 
-   Additional information: none
+   Additional information:  none
 
-   Magic number(s): none
+   Magic number(s):  none
 
-   Person & email address to contact for further information: Sarvi Shan
-      mugham, sarvi@cisco.com
+   Person & email address to contact for further information:  Sarvi Sha
+      nmugham, sarvi@cisco.com
 
-   Intended usage: This media type is expected to be used only in
+   Intended usage:  This media type is expected to be used only in
       conjunction with MRCPv2.
 
 13.6.  'session' URI Scheme Registration
@@ -10293,14 +10295,12 @@ RFC 6787                         MRCPv2                    November 2012
    IANA has registered the following new URI scheme.  The information
    below follows the template given in RFC 4395 [RFC4395].
 
-   URI scheme name: session
+   URI scheme name:  session
 
-   Status: Permanent
+   Status:  Permanent
 
-   URI scheme syntax: The syntax of this scheme is identical to that
+   URI scheme syntax:  The syntax of this scheme is identical to that
       defined for the "cid" scheme in Section 2 of RFC 2392 [RFC2392].
-
-
 
 
 
@@ -10309,24 +10309,25 @@ Burnett & Shanmugham        Standards Track                   [Page 184]
 RFC 6787                         MRCPv2                    November 2012
 
 
-   URI scheme semantics: The URI is intended to identify a data resource
-      previously given to the network computing resource.  The purpose
-      of this scheme is to permit access to the specific resource for
-      the lifetime of the session with the entity storing the resource.
-      The media type of the resource CAN vary.  There is no explicit
-      mechanism for communication of the media type.  This scheme is
-      currently widely used internally by existing implementations, and
-      the registration is intended to provide information in the rare
-      (and unfortunate) case that the scheme is used elsewhere.  The
-      scheme SHOULD NOT be used for open Internet protocols.
+   URI scheme semantics:  The URI is intended to identify a data
+      resource previously given to the network computing resource.  The
+      purpose of this scheme is to permit access to the specific
+      resource for the lifetime of the session with the entity storing
+      the resource.  The media type of the resource CAN vary.  There is
+      no explicit mechanism for communication of the media type.  This
+      scheme is currently widely used internally by existing
+      implementations, and the registration is intended to provide
+      information in the rare (and unfortunate) case that the scheme is
+      used elsewhere.  The scheme SHOULD NOT be used for open Internet
+      protocols.
 
-   Encoding considerations: There are no other encoding considerations
+   Encoding considerations:  There are no other encoding considerations
       for the 'session' URIs not described in RFC 3986 [RFC3986]
 
-   Applications/protocols that use this URI scheme name: This scheme
+   Applications/protocols that use this URI scheme name:  This scheme
       name is used by MRCPv2 clients and servers.
 
-   Interoperability considerations: Note that none of the resources are
+   Interoperability considerations:  Note that none of the resources are
       accessible after the MCRPv2 session ends, hence the name of the
       scheme.  For clients who establish one MRCPv2 session only for the
       entire speech application being implemented, this is sufficient,
@@ -10334,7 +10335,7 @@ RFC 6787                         MRCPv2                    November 2012
       performance or scalability reasons will lose access to resources
       established in the earlier session(s).
 
-   Security considerations: Generic security considerations for URIs
+   Security considerations:  Generic security considerations for URIs
       described in RFC 3986 [RFC3986] apply to this scheme as well.  The
       URIs defined here provide an identification mechanism only.  Given
       that the communication channel between client and server is
@@ -10343,11 +10344,11 @@ RFC 6787                         MRCPv2                    November 2012
       and access for each URI, the only additional security issues are
       those of the types of media referred to by the URI.
 
-   Contact: Sarvi Shanmugham, sarvi@cisco.com
+   Contact:  Sarvi Shanmugham, sarvi@cisco.com
 
-   Author/Change controller: IESG, iesg@ietf.org
+   Author/Change controller:  IESG, iesg@ietf.org
 
-   References: This specification, particularly Sections 6.2.7, 8.5.2,
+   References:  This specification, particularly Sections 6.2.7, 8.5.2,
       9.5.1, and 9.9.
 
 13.7.  SDP Parameter Registrations
@@ -10356,7 +10357,6 @@ RFC 6787                         MRCPv2                    November 2012
    information for each follows the template given in RFC 4566
    [RFC4566], Appendix B.
 
-13.7.1.  Sub-Registry "proto"
 
 
 
@@ -10365,54 +10365,54 @@ Burnett & Shanmugham        Standards Track                   [Page 185]
 RFC 6787                         MRCPv2                    November 2012
 
 
+13.7.1.  Sub-Registry "proto"
+
    "TCP/MRCPv2" value of the "proto" parameter
 
-   Contact name, email address, and telephone number: Sarvi Shanmugham,
+   Contact name, email address, and telephone number:  Sarvi Shanmugham,
       sarvi@cisco.com, +1.408.902.3875
 
-   Name being registered (as it will appear in SDP): TCP/MRCPv2
+   Name being registered (as it will appear in SDP):  TCP/MRCPv2
 
-   Long-form name in English: MCRPv2 over TCP
+   Long-form name in English:  MCRPv2 over TCP
 
-   Type of name: proto
+   Type of name:  proto
 
-   Explanation of name: This name represents the MCRPv2 protocol carried
-      over TCP.
+   Explanation of name:  This name represents the MCRPv2 protocol
+      carried over TCP.
 
-   Reference to specification of name: RFC XXXX
+   Reference to specification of name:  RFC XXXX
 
    "TCP/TLS/MRCPv2" value of the "proto" parameter
 
-   Contact name, email address, and telephone number: Sarvi Shanmugham,
+   Contact name, email address, and telephone number:  Sarvi Shanmugham,
       sarvi@cisco.com, +1.408.902.3875
 
-   Name being registered (as it will appear in SDP): TCP/TLS/MRCPv2
+   Name being registered (as it will appear in SDP):  TCP/TLS/MRCPv2
 
-   Long-form name in English: MCRPv2 over TLS over TCP
+   Long-form name in English:  MCRPv2 over TLS over TCP
 
-   Type of name: proto
+   Type of name:  proto
 
-   Explanation of name: This name represents the MCRPv2 protocol carried
-      over TLS over TCP.
+   Explanation of name:  This name represents the MCRPv2 protocol
+      carried over TLS over TCP.
 
-   Reference to specification of name: RFC XXXX
+   Reference to specification of name:  RFC XXXX
 
 13.7.2.  Sub-Registry "att-field (media-level)"
 
    "resource" value of the "att-field" parameter
 
-   Contact name, email address, and telephone number: Sarvi Shanmugham,
+   Contact name, email address, and telephone number:  Sarvi Shanmugham,
       sarvi@cisco.com, +1.408.902.3875
 
-   Attribute name (as it will appear in SDP): resource
+   Attribute name (as it will appear in SDP):  resource
 
-   Long-form attribute name in English: MRCPv2 resource type
+   Long-form attribute name in English:  MRCPv2 resource type
 
-   Type of attribute: media-level
+   Type of attribute:  media-level
 
-   Subject to charset attribute? no
-
-
+   Subject to charset attribute?  no
 
 
 
@@ -10421,50 +10421,50 @@ Burnett & Shanmugham        Standards Track                   [Page 186]
 RFC 6787                         MRCPv2                    November 2012
 
 
-   Explanation of attribute: See Section 4.2 of RFC XXXX for description
-      and examples.
+   Explanation of attribute:  See Section 4.2 of RFC XXXX for
+      description and examples.
 
-   Specification of appropriate attribute values: See section Section
-      13.1.1 of RFC XXXX.
+   Specification of appropriate attribute values:  See section
+      Section 13.1.1 of RFC XXXX.
 
    "channel" value of the "att-field" parameter
 
-   Contact name, email address, and telephone number: Sarvi Shanmugham,
+   Contact name, email address, and telephone number:  Sarvi Shanmugham,
       sarvi@cisco.com, +1.408.902.3875
 
-   Attribute name (as it will appear in SDP): channel
+   Attribute name (as it will appear in SDP):  channel
 
-   Long-form attribute name in English: MRCPv2 resource channel
+   Long-form attribute name in English:  MRCPv2 resource channel
       identifier
 
-   Type of attribute: media-level
+   Type of attribute:  media-level
 
-   Subject to charset attribute? no
+   Subject to charset attribute?  no
 
-   Explanation of attribute: See Section 4.2 of RFC XXXX for description
-      and examples.
+   Explanation of attribute:  See Section 4.2 of RFC XXXX for
+      description and examples.
 
-   Specification of appropriate attribute values: See Section 4.2 and
+   Specification of appropriate attribute values:  See Section 4.2 and
       the "channel-id" ABNF production rules of RFC XXXX.
 
    "cmid" value of the "att-field" parameter
 
-   Contact name, email address, and telephone number: Sarvi Shanmugham,
+   Contact name, email address, and telephone number:  Sarvi Shanmugham,
       sarvi@cisco.com, +1.408.902.3875
 
-   Attribute name (as it will appear in SDP): cmid
+   Attribute name (as it will appear in SDP):  cmid
 
-   Long-form attribute name in English: MRCPv2 resource channel media
+   Long-form attribute name in English:  MRCPv2 resource channel media
       identifier
 
-   Type of attribute: media-level
+   Type of attribute:  media-level
 
-   Subject to charset attribute? no
+   Subject to charset attribute?  no
 
-   Explanation of attribute: See Section 4.4 of RFC XXXX for description
-      and examples.
+   Explanation of attribute:  See Section 4.4 of RFC XXXX for
+      description and examples.
 
-   Specification of appropriate attribute values: See Section 4.4 and
+   Specification of appropriate attribute values:  See Section 4.4 and
       the "cmid-attribute" ABNF production rules of RFC XXXX.
 
 14.  Examples
@@ -12468,7 +12468,7 @@ RFC 6787                         MRCPv2                    November 2012
    [ISO.8859-1.1987]
               International Organization for Standardization,
               "Information technology - 8-bit single byte coded graphic
-              - character sets - Part 1: Latin alphabet No.  1, JTC1/
+              - character sets - Part 1: Latin alphabet No. 1, JTC1/
               SC2", ISO Standard 8859-1, 1987.
 
    [RFC0793]  Postel, J., "Transmission Control Protocol", STD 7, RFC
@@ -12500,7 +12500,7 @@ RFC 6787                         MRCPv2                    November 2012
               Masinter, L., Leach, P., and T. Berners-Lee, "Hypertext
               Transfer Protocol -- HTTP/1.1", RFC 2616, June 1999.
 
-   [RFC3023]  Murata, M., St.  Laurent, S., and D. Kohn, "XML Media
+   [RFC3023]  Murata, M., St. Laurent, S., and D. Kohn, "XML Media
               Types", RFC 3023, January 2001.
 
    [RFC3261]  Rosenberg, J., Schulzrinne, H., Camarillo, G., Johnston,
