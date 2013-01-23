@@ -9,7 +9,10 @@ version_regex =  "[Vv]ersion.2\.[0-9]"
 bin/python:
 	echo "Install virtualenv here ($$PWD) in order to run tests locally."
 	
-test:	bin/python
+install:
+	bin/python setup.py --quiet install
+
+test:	bin/python install
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tests/failed/ ] && rm -f tests/failed/*
 	bin/python test.py
