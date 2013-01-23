@@ -88,7 +88,10 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                 string = string.lstrip()
             if bullet and len(bullet.strip()) > 0:
                 string = bullet + string
-            par = self.wrapper.wrap(string, break_on_hyphens=False)
+                fix_doublespace = False
+            else:
+                fix_doublespace = True
+            par = self.wrapper.wrap(string, break_on_hyphens=False, fix_doublespace=fix_doublespace)
             # Use bullet for indentation if sub not specified
             full_indent = sub_indent and indent + sub_indent or indent + len(bullet)
 
