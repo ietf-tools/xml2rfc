@@ -37,12 +37,11 @@ class MyTextWrapper(textwrap.TextWrapper):
         self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
 
         # Override end of line regex, double space after '].'
-        self.sentence_end_re = \
-                  re.compile(r'([a-z0-9\]")]'  # lowercase, digit, bracket, parens, quote
-                             r'|^[A-Z]{2,})'   # acronyms         
-                             r'[\.\!\?]'       # sentence-ending punct.
-                             r'[\"\']?'        # optional end-of-quote
-                             r'\Z')            # end of chunk
+        self.sentence_end_re = re.compile(r'[%s%s0-9\>\]\)\"\']'  # lowercase letter, end parentheses
+                            r'[\.\!\?]'     # sentence-ending punct.
+                            r'[\"\'\)\]]?'  # optional end-of-quote, end parentheses
+                            r'\Z'           # end of chunk
+                            % (string.lowercase, string.uppercase))
 
     def replace(self, text):
         """ Replace control entities with the proper character 
@@ -70,12 +69,30 @@ class MyTextWrapper(textwrap.TextWrapper):
             text = re.sub("([^].!?])  +", r"\1 ", text)
             text = re.sub("([.!?])   +", r"\1  ", text)
 
-        # Replace some characters after splitting has occured
-        chunks = map(self.replace, self._split(text))
+        # prevent breaking "Section N.N" and "Appendix X.X"
+        text = re.sub("(Section|Appendix) ", r"\1&#160;", text)
 
+        # Replace some characters after splitting has occured
+        parts = map(self.replace, self._split(text))
+        chunks = []
+        max_word_len = self.width - len(subsequent_indent)
+        for chunk in parts:
+            if len(chunk) > max_word_len:
+                import debug
+                debug.show('chunk')
+                bits = self._split(chunk)
+                chunks += bits
+            else:
+                chunks += [ chunk ]
+        
         # Original implementation
         if self.fix_sentence_endings:
+            import debug
+            pre = chunks
             self._fix_sentence_endings(chunks)
+            if pre != chunks:
+                debug.pprint('pre')
+                debug.pprint('chunks')
         return self._wrap_chunks(chunks)
 
     def fill(self, *args, **kwargs):
