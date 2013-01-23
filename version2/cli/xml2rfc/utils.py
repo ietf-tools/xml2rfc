@@ -52,7 +52,7 @@ class MyTextWrapper(textwrap.TextWrapper):
         return text
 
     def wrap(self, text, break_on_hyphens=True, initial_indent='', subsequent_indent='',
-        fix_doublespace=True):
+        fix_doublespace=True, fix_sentence_endings=True):
         """ Mirrored implementation of wrap which replaces characters properly
             also lets you easily specify indentation on the fly
         """
@@ -60,6 +60,7 @@ class MyTextWrapper(textwrap.TextWrapper):
         self.initial_indent = initial_indent
         self.subsequent_indent = subsequent_indent
         self.break_on_hyphens = break_on_hyphens
+        self.fix_sentence_endings = fix_sentence_endings
 
         # Original implementation
         text = self._munge_whitespace(text)
@@ -78,8 +79,6 @@ class MyTextWrapper(textwrap.TextWrapper):
         max_word_len = self.width - len(subsequent_indent)
         for chunk in parts:
             if len(chunk) > max_word_len:
-                import debug
-                debug.show('chunk')
                 bits = self._split(chunk)
                 chunks += bits
             else:
@@ -87,12 +86,8 @@ class MyTextWrapper(textwrap.TextWrapper):
         
         # Original implementation
         if self.fix_sentence_endings:
-            import debug
             pre = chunks
             self._fix_sentence_endings(chunks)
-            if pre != chunks:
-                debug.pprint('pre')
-                debug.pprint('chunks')
         return self._wrap_chunks(chunks)
 
     def fill(self, *args, **kwargs):

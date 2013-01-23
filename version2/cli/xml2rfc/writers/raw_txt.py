@@ -63,7 +63,8 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def _write_text(self, string, indent=0, sub_indent=0, bullet='',
                   align='left', leading_blankline=False, buf=None,
-                  strip=True, edit=False, wrap_urls=True, source_line=None):
+                  strip=True, edit=False, wrap_urls=True,
+                  fix_sentence_endings=True, source_line=None):
         """ Writes a line or multiple lines of text to the buffer.
 
             Several parameters are included here.  All of the API calls
@@ -97,9 +98,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                 # Strip initial whitespace
                 string = string.lstrip()
             if wrap_urls:
-                par = self.wrapper.wrap(string, initial_indent=initial, subsequent_indent=subsequent)
+                par = self.wrapper.wrap(string, initial_indent=initial, subsequent_indent=subsequent,
+                                        fix_sentence_endings=fix_sentence_endings)
             else:
-                par = self.wrapper.wrap(xml2rfc.utils.urlkeep(string), initial_indent=initial, subsequent_indent=subsequent)
+                par = self.wrapper.wrap(xml2rfc.utils.urlkeep(string), initial_indent=initial,
+                                        subsequent_indent=subsequent, fix_sentence_endings=fix_sentence_endings)                    
             if align == 'left':
                 buf.extend(par)
             elif align == 'center':
@@ -303,7 +306,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         else:
             # Fill space to sub_indent in the bullet
             self._write_text(text, indent=3, bullet=key.ljust(sub_indent), \
-                     sub_indent=sub_indent, leading_blankline=True, wrap_urls=False, source_line=source_line)
+                     sub_indent=sub_indent, leading_blankline=True, wrap_urls=False, fix_sentence_endings=False, source_line=source_line)
     
     def _combine_inline_elements(self, elements):
         """ Shared function for <t> and <c> elements
@@ -689,12 +692,13 @@ class RawTextRfcWriter(BaseRfcWriter):
             if i % num_columns == 0:
                 row += 1
                 matrix.append([])
-            text = self.wrapper.replace(cell.text or '')
+            text = cell.text or ''
             if len(cell) > 0:
                 # <c> has children, render their text and add to line
                 inline_text, null = \
                     self._combine_inline_elements(cell.getchildren())
                 text += inline_text
+            text = self.wrapper.replace(text)
             matrix[row].append(text)
 
         # Get table style and determine maximum width of table

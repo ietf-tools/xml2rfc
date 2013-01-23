@@ -12,7 +12,6 @@ from xml2rfc import VERSION
 from xml2rfc.writers.paginated_txt import PaginatedTextRfcWriter
 from xml2rfc.writers.raw_txt import RawTextRfcWriter
 from compiler.pyassem import RAW
-import textwrap
 
 
 class NroffRfcWriter(PaginatedTextRfcWriter):
@@ -60,7 +59,8 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     # Override
     def _write_text(self, string, indent=0, sub_indent=0, bullet='',
                     align='left', leading_blankline=False, buf=None,
-                    strip=True, edit=False, wrap_urls=False, source_line=None):
+                    strip=True, edit=False, wrap_urls=False,
+                    fix_sentence_endings=True, source_line=None):
         #-------------------------------------------------------------
         # RawTextRfcWriter override
         #
@@ -91,7 +91,8 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                 fix_doublespace = False
             else:
                 fix_doublespace = True
-            par = self.wrapper.wrap(string, break_on_hyphens=False, fix_doublespace=fix_doublespace)
+            par = self.wrapper.wrap(string, break_on_hyphens=False, fix_doublespace=fix_doublespace,
+                                    fix_sentence_endings=fix_sentence_endings)
             # Use bullet for indentation if sub not specified
             full_indent = sub_indent and indent + sub_indent or indent + len(bullet)
 
