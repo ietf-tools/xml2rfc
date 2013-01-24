@@ -32,7 +32,8 @@ class CachingResolver(lxml.etree.Resolver):
     """ Custom ENTITY request handler that uses a local cache """
     def __init__(self, cache_path=None, library_dirs=None, source=None,
                  templates_path='templates', verbose=False, quiet=False,
-                 network_loc='http://xml.resource.org/public/rfc/'):
+                 network_loc='http://xml.resource.org/public/rfc/',
+                 rfc_number=None):
         self.verbose = verbose
         self.quiet = quiet
         self.source = source
@@ -40,6 +41,7 @@ class CachingResolver(lxml.etree.Resolver):
         self.templates_path = templates_path
         self.network_loc = network_loc
         self.include = False
+        self.rfc_number = rfc_number
 
         # Get directory of source
         self.source_dir = os.path.abspath(os.path.dirname(self.source))
@@ -94,6 +96,9 @@ class CachingResolver(lxml.etree.Resolver):
         # If the source itself is requested, return as-is
         if request == self.source:
             return self.resolve_filename(request, context)
+        if request == u"internal:/rfc.number":
+            if self.rfc_number:
+                return self.resolve_string(self.rfc_number, context)
         if not urlparse(request).netloc:
             # Format the request from the relative path of the source so that 
             # We get the exact same path as in the XML document
@@ -283,14 +288,17 @@ class CachingResolver(lxml.etree.Resolver):
                 return ''
 
 class XmlRfcParser:
-    """ XML parser with callbacks to construct an RFC tree """
+
+    """ XML parser container with callbacks to construct an RFC tree """
     def __init__(self, source, verbose=False, quiet=False,
                  cache_path=None, templates_path=None, library_dirs=None,
                  network_loc='http://xml.resource.org/public/rfc/'):
         self.verbose = verbose
         self.quiet = quiet
         self.source = source
-            
+        self.cache_path = cache_path
+        self.network_loc = network_loc
+
         # Initialize templates directory
         self.templates_path = templates_path or \
                               os.path.join(os.path.dirname(xml2rfc.__file__),
@@ -314,15 +322,6 @@ class XmlRfcParser:
             if raw_dir not in self.library_dirs:
                 self.library_dirs.append(raw_dir)
 
-
-        # Initialize the caching system
-        self.cachingResolver = CachingResolver(cache_path=cache_path,
-                                        library_dirs=self.library_dirs,
-                                        templates_path=self.templates_path,
-                                        source=source,
-                                        network_loc=network_loc,
-                                        verbose=verbose, quiet=quiet)
-        
     def delete_cache(self, path=None):
         self.cachingResolver.delete_cache(path=path)
 
@@ -331,7 +330,28 @@ class XmlRfcParser:
         if not self.quiet:
             xml2rfc.log.write('Parsing file', self.source)
 
-        # Get a parser object
+        # Get an iterating parser object
+        context = lxml.etree.iterparse(self.source,
+                                      dtd_validation=False,
+                                      load_dtd=False,
+                                      attribute_defaults=True,
+                                      no_network=False,
+                                      remove_comments=remove_comments,
+                                      remove_pis=remove_pis,
+                                      remove_blank_text=True,
+                                      resolve_entities=False,
+                                      events=("start",),
+                                      tag="rfc",
+                                  )
+        # Get hold of the rfc number (if any) in the rfc element, so we can
+        # later resolve the "&rfc.number;" entity.
+
+        for action, element in context:
+            if element.tag == "rfc":
+                self.rfc_number = element.attrib.get("number", None)
+                break
+
+        # now get a regular parser, and parse again, this time resolving entities
         parser = lxml.etree.XMLParser(dtd_validation=False,
                                       load_dtd=True,
                                       attribute_defaults=True,
@@ -340,6 +360,17 @@ class XmlRfcParser:
                                       remove_pis=remove_pis,
                                       remove_blank_text=True,
                                       resolve_entities=True)
+
+        # Initialize the caching system
+        self.cachingResolver = CachingResolver(cache_path=self.cache_path,
+                                        library_dirs=self.library_dirs,
+                                        templates_path=self.templates_path,
+                                        source=self.source,
+                                        network_loc=self.network_loc,
+                                        verbose=self.verbose,
+                                        quiet=self.quiet,
+                                        rfc_number = self.rfc_number,
+                                    )
 
         # Add our custom resolver
         parser.resolvers.add(self.cachingResolver)
