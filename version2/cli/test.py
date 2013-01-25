@@ -126,10 +126,10 @@ class WriterElementTest(unittest.TestCase):
         return self.function_test("figure_title", "write_t_rec")
 
     def test_texttable_title(self):
-        return self.function_test("texttable_title", "_write_section_rec")
+        return self.function_test("texttable_title", "write_section_rec")
 
     def test_section(self):
-        return self.function_test("section", "_write_section_rec")
+        return self.function_test("section", "write_section_rec")
 
 class WriterRootTest(unittest.TestCase):
     """ Performs tests of full <rfc> + <front> trees against text writer functions """
@@ -167,7 +167,7 @@ class WriterRootTest(unittest.TestCase):
         diff_test(self, self.valid, output, self.failpath)
 
     def status_test(self):
-        self.writer._write_status_section()
+        self.writer.write_status_section()
         output = '\n'.join(arrstrip(self.writer.buf))  # Don't care about initial blank
         diff_test(self, self.valid, output, self.failpath)
 

@@ -61,7 +61,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         """ <vspace> line break wrapper to allow for overrides """
         return self._lb(num=num)
 
-    def _write_text(self, string, indent=0, sub_indent=0, bullet='',
+    def write_text(self, string, indent=0, sub_indent=0, bullet='',
                   align='left', leading_blankline=False, buf=None,
                   strip=True, edit=False, wrap_urls=True,
                   fix_sentence_endings=True, source_line=None):
@@ -121,7 +121,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             # print the bullet
             buf.append(initial)
 
-    def _write_list(self, list, level=0, indent=3):
+    def write_list(self, list, level=0, indent=3):
         """ Writes a <list> element """
         bullet = '   '
         hangIndent = None
@@ -194,7 +194,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 t_count += 1
 
         
-    def _write_toc(self, paging=False):
+    def write_toc(self, paging=False):
         """ Write table of contents to a temporary buffer and return """
         if self.toc_marker < 1:
             # Toc is either disabled, or the pointer was messed up
@@ -246,7 +246,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 tmpbuf.extend(lines)
         return tmpbuf
             
-    def _write_iref_index(self):
+    def write_iref_index(self):
         """ Write iref index to a temporary buffer and return """
         if self.iref_marker < 1:
             # iref is either disabled, or the pointer was messed up
@@ -262,16 +262,16 @@ class RawTextRfcWriter(BaseRfcWriter):
                 alpha_bucket[letter] = [key]
         for letter in sorted(alpha_bucket.keys()):
             # Write letter
-            self._write_text(letter, indent=3, leading_blankline=True, buf=tmpbuf)
+            self.write_text(letter, indent=3, leading_blankline=True, buf=tmpbuf)
             for item in alpha_bucket[letter]:
                 pages = self._iref_index[item].pages
                 # Write item
-                self._write_text(item + '  ' + ', '.join(map(str, pages))
+                self.write_text(item + '  ' + ', '.join(map(str, pages))
                                                         , indent=6, buf=tmpbuf)
                 for subitem in self._iref_index[item].subitems:
                     pages = self._iref_index[item].subitems[subitem].pages
                     # Write subitem
-                    self._write_text(subitem + '  ' + ', '.join(map(str,pages))
+                    self.write_text(subitem + '  ' + ', '.join(map(str,pages))
                                                         , indent=9, buf=tmpbuf)
         return tmpbuf
 
@@ -296,16 +296,16 @@ class RawTextRfcWriter(BaseRfcWriter):
         else:
             return target_text
 
-    def _write_ref_element(self, key, text, sub_indent, source_line=None):
+    def write_ref_element(self, key, text, sub_indent, source_line=None):
         """ Render a single reference element """
         # Use an empty first line if key is too long
         min_spacing = 2
         if len(key) + min_spacing > sub_indent:
-            self._write_text(key, indent=3, leading_blankline=True, wrap_urls=False, fix_sentence_endings=False, source_line=source_line)
-            self._write_text(text, indent=3 + sub_indent, wrap_urls=False, fix_sentence_endings=False, source_line=source_line)
+            self.write_text(key, indent=3, leading_blankline=True, wrap_urls=False, fix_sentence_endings=False, source_line=source_line)
+            self.write_text(text, indent=3 + sub_indent, wrap_urls=False, fix_sentence_endings=False, source_line=source_line)
         else:
             # Fill space to sub_indent in the bullet
-            self._write_text(text, indent=3, bullet=key.ljust(sub_indent), \
+            self.write_text(text, indent=3, bullet=key.ljust(sub_indent), \
                      sub_indent=sub_indent, leading_blankline=True, wrap_urls=False, fix_sentence_endings=False, source_line=source_line)
     
     def _combine_inline_elements(self, elements):
@@ -459,25 +459,25 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_label(self, text, type='figure', source_line=None):
         """ Writes a centered label """
-        self._write_text(text, indent=3, align='center', leading_blankline=True, source_line=source_line)
+        self.write_text(text, indent=3, align='center', leading_blankline=True, source_line=source_line)
 
     def write_title(self, title, docName=None, source_line=None):
         """ Write the document title and (optional) name """
-        self._write_text(title, leading_blankline=True, align='center', source_line=source_line)
+        self.write_text(title, leading_blankline=True, align='center', source_line=source_line)
         if docName is not None:
-            self._write_text(docName, align='center')
+            self.write_text(docName, align='center')
 
     def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, \
                       level=1):
         """ Write a generic header """
         if bullet:
             bullet += '  '
-        self._write_text(text, bullet=bullet, indent=0, leading_blankline=True)
+        self.write_text(text, bullet=bullet, indent=0, leading_blankline=True)
 
     def write_paragraph(self, text, align='left', autoAnchor=None):
         """ Write a generic paragraph of text.  Used for boilerplate. """
         text = xml2rfc.utils.urlkeep(text)
-        self._write_text(text, indent=3, align=align, leading_blankline=True)
+        self.write_text(text, indent=3, align=align, leading_blankline=True)
 
     def write_t_rec(self, t, indent=3, sub_indent=0, bullet='',
                      autoAnchor=None, align='left', level=0, leading_blankline=True):
@@ -493,7 +493,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             current_text += inline_text
             if (current_text and not current_text.isspace()) or bullet:
                 # Attempt to write a paragraph of inline text
-                self._write_text(current_text, indent=indent,
+                self.write_text(current_text, indent=indent,
                                 leading_blankline=leading_blankline,
                                 sub_indent=sub_indent, bullet=bullet,
                                 edit=True, align=align, source_line=t.sourceline)
@@ -511,13 +511,13 @@ class RawTextRfcWriter(BaseRfcWriter):
                     else:
                         new_indent = len(bullet) + indent
                     # Call sibling function to construct list
-                    self._write_list(element, indent=new_indent, level=level)
+                    self.write_list(element, indent=new_indent, level=level)
                     # Auto-break for tail paragraph
                     leading_blankline = True
                     bullet = ''
 
                 elif element.tag == 'figure':
-                    self._write_figure(element)
+                    self.write_figure(element)
                     # Auto-break for tail paragraph
                     leading_blankline = True
                     bullet = ''
@@ -666,10 +666,10 @@ class RawTextRfcWriter(BaseRfcWriter):
         # Hard coded indentation amount
         refindent = 11
         for key in refkeys:
-            self._write_ref_element(key, refdict[key], refindent, source_line=refsource[key])
+            self.write_ref_element(key, refdict[key], refindent, source_line=refsource[key])
             # Render annotation as a separate paragraph
             if key in annotationdict:
-                self._write_text(annotationdict[key], indent=refindent + 3,
+                self.write_text(annotationdict[key], indent=refindent + 3,
                                  leading_blankline=True, source_line=refsource[key])
 
     def draw_table(self, table, table_num=None):
@@ -867,9 +867,9 @@ class RawTextRfcWriter(BaseRfcWriter):
     def post_rendering(self):
         # Insert the TOC and IREF into the main buffer
         self.output = self.buf[:self.toc_marker] + \
-                      self._write_toc() + \
+                      self.write_toc() + \
                       self.buf[self.toc_marker:self.iref_marker] + \
-                      self._write_iref_index() + \
+                      self.write_iref_index() + \
                       self.buf[self.iref_marker:]
 
     def write_to_file(self, file):

@@ -44,17 +44,17 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     # We'll store each marking as a dictionary of line_num: section_length.
     # This way we can step through these markings during writing to
     # preemptively construct appropriate page breaks.
-    def _write_figure(self, *args, **kwargs):
+    def write_figure(self, *args, **kwargs):
         """ Override base writer to add a marking """
         begin = len(self.buf)
-        BaseRfcWriter._write_figure(self, *args, **kwargs)
+        BaseRfcWriter.write_figure(self, *args, **kwargs)
         end = len(self.buf)
         self.break_hints[begin] = (end - begin, "txt")
 
-    def _write_table(self, *args, **kwargs):
+    def write_table(self, *args, **kwargs):
         """ Override base writer to add a marking """
         begin = len(self.buf)
-        BaseRfcWriter._write_table(self, *args, **kwargs)
+        BaseRfcWriter.write_table(self, *args, **kwargs)
         end = len(self.buf)
         self.break_hints[begin] = (end - begin, "txt")
 
@@ -65,10 +65,10 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         end = len(self.buf)
         self.break_hints[begin] = (end - begin, "raw")
 
-    def _write_text(self, *args, **kwargs):
+    def write_text(self, *args, **kwargs):
         """ Override text writer to add a marking """
         begin = len(self.buf)
-        RawTextRfcWriter._write_text(self, *args, **kwargs)
+        RawTextRfcWriter.write_text(self, *args, **kwargs)
         end = len(self.buf)
         self.break_hints[begin] = (end - begin, "txt")
         
@@ -77,10 +77,10 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.break_hints[len(self.buf)] = (0, "break")
         
     def _toc_size_hint(self):
-        return len(self._write_toc(paging=True))
+        return len(self.write_toc(paging=True))
     
     def _iref_size_hint(self):
-        return len(self._write_iref_index())
+        return len(self.write_iref_index())
     
     # ------------------------------------------------------------------------
     
@@ -267,7 +267,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         # Now we need to go back into the buffer and insert the real table 
         # of contents and iref based on the pointers we created
         if len(toc_pointers) > 0:
-            tocbuf = self._write_toc(paging=True)
+            tocbuf = self.write_toc(paging=True)
             ptr, end = toc_pointers.pop(0)
             for line in tocbuf:
                 self.output[ptr] = line
@@ -279,7 +279,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                         break
 
         if len(iref_pointers) > 0:
-            irefbuf = self._write_iref_index()
+            irefbuf = self.write_iref_index()
             ptr, end = iref_pointers.pop(0)
             for line in irefbuf:
                 self.output[ptr] = line

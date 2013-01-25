@@ -62,7 +62,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         # Table to insert the iref into
         self.iref_table = None
 
-    def _write_list(self, list, parent):
+    def write_list(self, list, parent):
         style = list.attrib.get('style', 'empty')
         if style == 'hanging':
             list_elem = E.DL()
@@ -337,15 +337,15 @@ class HtmlRfcWriter(BaseRfcWriter):
                 if child.tail:
                     br.tail = child.tail
             elif child.tag == 'list':
-                self._write_list(child, parent)
+                self.write_list(child, parent)
                 if child.tail:
                     parent.append(E.P(child.tail))
             elif child.tag == 'figure':
                 # Callback to base writer method
-                self._write_figure(child)
+                self.write_figure(child)
             elif child.tag == 'texttable':
                 # Callback to base writer method
-                self._write_table(child)
+                self.write_table(child)
         # If we are back at top level, serialize the whole temporary structure
         # Add to body buffer
         if parent == self.temp_div:

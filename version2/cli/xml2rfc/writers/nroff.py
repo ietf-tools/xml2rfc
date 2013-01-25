@@ -43,21 +43,21 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     def _indent(self, amount):
         # Writes an indent command if it differs from the last
         if amount != self.curr_indent:
-            self._write_line('.in ' + str(amount))
+            self.write_line('.in ' + str(amount))
             self.curr_indent = amount
 
     # Override
     def _vspace(self, num=0):
         """ nroff uses a .sp command in addition to a literal blank line """
-        self._write_line('.sp %s' % num)
+        self.write_line('.sp %s' % num)
         return self._lb(num=num)
 
-    def _write_line(self, string):
+    def write_line(self, string):
         # Used by nroff to write a line with no nroff commands
         self.buf.append(string)
 
     # Override
-    def _write_text(self, string, indent=0, sub_indent=0, bullet='',
+    def write_text(self, string, indent=0, sub_indent=0, bullet='',
                     align='left', leading_blankline=False, buf=None,
                     strip=True, edit=False, wrap_urls=False,
                     fix_sentence_endings=True, source_line=None):
@@ -98,13 +98,13 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
             # Handle alignment/indentation
             if align == 'center':
-                self._write_line('.ce %s' % len(par))
+                self.write_line('.ce %s' % len(par))
             else:
                 self._indent(full_indent)
 
         if bullet and len(bullet.strip()) > 0:
             # Bullet line: title just uses base indent
-            self._write_line('.ti ' + str(indent))
+            self.write_line('.ti ' + str(indent))
             if not string:
                 # Just write the bullet
                 par.append(bullet)
@@ -166,21 +166,21 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     def write_title(self, text, docName=None, source_line=None):
         # Override to use .ti commands
         self._lb()
-        self._write_text(text, align='center', source_line=source_line)
+        self.write_text(text, align='center', source_line=source_line)
         if docName:
-            self._write_text(docName, align='center')
+            self.write_text(docName, align='center')
 
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
                   delimiter=None, leading_blankline=True, source_line=None):
         # Wrap in a no fill block
         self._indent(indent)
-        self._write_line('.nf')
+        self.write_line('.nf')
         PaginatedTextRfcWriter.write_raw(self, text, indent=0, align=align,
                                          blanklines=blanklines,
                                          delimiter=delimiter,
                                          leading_blankline=leading_blankline,
                                          source_line=source_line)
-        self._write_line('.fi')
+        self.write_line('.fi')
 
     def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, \
                       level=1):
@@ -188,8 +188,8 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self._lb()
         if bullet:
             bullet += '  '
-        self._write_line('.ti 0')
-        self._write_line(bullet + text)
+        self.write_line('.ti 0')
+        self.write_line(bullet + text)
 
     def pre_indexing(self):
         # escape backslashes in the text
@@ -206,7 +206,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         PaginatedTextRfcWriter.pre_rendering(self)
 
         # Insert a timestamp+version comment
-        self._write_line(self.comment_header % ('.'.join(map(str, VERSION)),
+        self.write_line(self.comment_header % ('.'.join(map(str, VERSION)),
             time.strftime('%Y-%m-%dT%H:%M:%SZ', datetime.datetime.utcnow().utctimetuple())))
         self._lb()
 
@@ -214,12 +214,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self.buf.extend(NroffRfcWriter.settings_header)
 
         # Insert the RFC header and footer information
-        self._write_line('.ds LH ' + self.left_header)
-        self._write_line('.ds CH ' + self.center_header)
-        self._write_line('.ds RH ' + self.right_header)
-        self._write_line('.ds LF ' + self.left_footer)
-        self._write_line('.ds CF ' + self.center_footer)
-        self._write_line('.ds RF FORMFEED[Page %]')
+        self.write_line('.ds LH ' + self.left_header)
+        self.write_line('.ds CH ' + self.center_header)
+        self.write_line('.ds RH ' + self.right_header)
+        self.write_line('.ds LF ' + self.left_footer)
+        self.write_line('.ds CF ' + self.center_footer)
+        self.write_line('.ds RF FORMFEED[Page %]')
 
     def post_rendering(self):
         # Process any characters that need to be escaped

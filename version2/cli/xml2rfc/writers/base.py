@@ -600,7 +600,7 @@ class BaseRfcWriter:
             lines = map(string.strip, lines)
         return lines
 
-    def _write_figure(self, figure):
+    def write_figure(self, figure):
         """ Writes <figure> elements """
         align = figure.attrib.get('align', self.defaults['figure_align'])
         anchor = figure.attrib.get('anchor')
@@ -649,7 +649,7 @@ class BaseRfcWriter:
         else:
             self.write_label(title, type='figure', source_line=figure.sourceline)
 
-    def _write_table(self, table):
+    def write_table(self, table):
         """ Writes <texttable> elements """
         align = table.attrib.get('align', self.defaults['table_align'])
         anchor = table.attrib.get('anchor')
@@ -695,7 +695,7 @@ class BaseRfcWriter:
         pass
         
 
-    def _write_section_rec(self, section, count_str="1.", appendix=False, \
+    def write_section_rec(self, section, count_str="1.", appendix=False, \
                            level=0):
         """ Recursively writes <section> elements 
         
@@ -739,9 +739,9 @@ class BaseRfcWriter:
                 self.write_t_rec(element, autoAnchor=autoAnchor)
                 p_count += 1
             elif element.tag == 'figure':
-                self._write_figure(element)
+                self.write_figure(element)
             elif element.tag == 'texttable':
-                self._write_table(element)
+                self.write_table(element)
 
         s_count = 1  # Section counter
         
@@ -753,11 +753,11 @@ class BaseRfcWriter:
         for child_sec in section.findall('section'):
             if appendix == True and not count_str:
                 # Use an alphabetic counter for first-level appendix
-                self._write_section_rec(child_sec, string.uppercase[s_count - 1],
+                self.write_section_rec(child_sec, string.uppercase[s_count - 1],
                                         level=level + 1, appendix=True)
             else:
                 # Use a numeric counter
-                self._write_section_rec(child_sec, count_str + str(s_count), 
+                self.write_section_rec(child_sec, count_str + str(s_count), 
                                         level=level + 1, appendix=appendix)
 
             s_count += 1
@@ -766,7 +766,7 @@ class BaseRfcWriter:
         if count_str == '' and appendix == False:
             self.ref_start = s_count
 
-    def _write_status_section(self):
+    def write_status_section(self):
         """ Writes the 'Status of this Memo' section """
 
         self.write_heading('Status of This Memo', autoAnchor='rfc.status')
@@ -847,7 +847,7 @@ class BaseRfcWriter:
                 self.write_paragraph( \
                     self.boilerplate['draft_expire'] % self.expire_string)
     
-    def _write_copyright(self):
+    def write_copyright(self):
         """ Writes the 'Copyright' section """
         self.write_heading('Copyright Notice', autoAnchor='rfc.copyrightnotice')
 
@@ -884,7 +884,7 @@ class BaseRfcWriter:
         # Middle sections
         middle = self.r.find('middle')
         if middle is not None:
-            self._write_section_rec(middle, None)
+            self.write_section_rec(middle, None)
 
         # References sections
         # Treat references as nested only if there is more than one
@@ -908,7 +908,7 @@ class BaseRfcWriter:
         # Appendix sections
         back = self.r.find('back')
         if back is not None:
-            self._write_section_rec(back, None, appendix=True)
+            self.write_section_rec(back, None, appendix=True)
 
         # Index section, disable if there are no irefs
         if len(self._iref_index) > 0:
@@ -969,10 +969,10 @@ class BaseRfcWriter:
         self._validate_ipr()
 
         # "Status of this Memo" section
-        self._write_status_section()
+        self.write_status_section()
 
         # Copyright section
-        self._write_copyright()
+        self.write_copyright()
 
         # Insert the table of contents marker at this position
         toc_enabled = self.pis.get('toc', 'no')
@@ -982,7 +982,7 @@ class BaseRfcWriter:
         # Middle sections
         middle = self.r.find('middle')
         if middle is not None:
-            self._write_section_rec(middle, None)
+            self.write_section_rec(middle, None)
 
         # References sections
         # Treat references as nested only if there is more than one
@@ -1010,7 +1010,7 @@ class BaseRfcWriter:
         # Appendix sections
         back = self.r.find('back')
         if back is not None:
-            self._write_section_rec(back, None, appendix=True)
+            self.write_section_rec(back, None, appendix=True)
 
         # Index section, disable if there are no irefs
         if len(self._iref_index) > 0:
