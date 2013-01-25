@@ -119,24 +119,31 @@ class HtmlRfcWriter(BaseRfcWriter):
         # Add link for toc itself
         link = E.LINK(rel='Contents', href='#rfc.toc')
         self.buffers['toc_head_links'].append(self._serialize(link))
+        tocdepth = self.pis.get('tocdepth', '3')
+        try:
+            tocdepth = int(tocdepth)
+        except ValueError:
+            xml2rfc.log.warn('Invalid tocdepth specified, must be integer:', \
+                             tocdepth)
+            tocdepth = 3
         for item in self._getTocIndex():
-            # Create link for head
-            link = E.LINK(href='#' + item.autoAnchor)
-            link.attrib['rel'] = 'copyright' in item.autoAnchor and \
-                                 'Copyright' or 'Chapter'
-            if item.title and item.counter:
-                link.attrib['title'] = item.counter + ' ' + item.title
-            self.buffers['toc_head_links'].append(self._serialize(link))
-            # Create actual toc list item
-            a = E.A(item.title, href='#' + item.autoAnchor)
-            counter_text = item.counter and item.counter + '.   ' or ''
-            # Prepend appendix at first level
-            if item.level == 1 and item.appendix:
-                counter_text = "Appendix " + counter_text
-            li = E.LI(counter_text)
-            li.append(a)
-            self.buffers['toc_rows'].append(self._serialize(li))
-
+            if item.level <= tocdepth:
+                # Create link for head
+                link = E.LINK(href='#' + item.autoAnchor)
+                link.attrib['rel'] = 'copyright' in item.autoAnchor and \
+                                     'Copyright' or 'Chapter'
+                if item.title and item.counter:
+                    link.attrib['title'] = item.counter + ' ' + item.title
+                self.buffers['toc_head_links'].append(self._serialize(link))
+                # Create actual toc list item
+                a = E.A(item.title, href='#' + item.autoAnchor)
+                counter_text = item.counter and item.counter + '.   ' or ''
+                # Prepend appendix at first level
+                if item.level == 1 and item.appendix:
+                    counter_text = "Appendix " + counter_text
+                li = E.LI(counter_text)
+                li.append(a)
+                self.buffers['toc_rows'].append(self._serialize(li))
     def _serialize(self, element):
         return lxml.html.tostring(element, pretty_print=True, method='xml')
     
