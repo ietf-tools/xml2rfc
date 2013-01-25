@@ -44,6 +44,20 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     # We'll store each marking as a dictionary of line_num: section_length.
     # This way we can step through these markings during writing to
     # preemptively construct appropriate page breaks.
+    def _write_figure(self, *args, **kwargs):
+        """ Override base writer to add a marking """
+        begin = len(self.buf)
+        BaseRfcWriter._write_figure(self, *args, **kwargs)
+        end = len(self.buf)
+        self.break_hints[begin] = (end - begin, "txt")
+
+    def _write_table(self, *args, **kwargs):
+        """ Override base writer to add a marking """
+        begin = len(self.buf)
+        BaseRfcWriter._write_table(self, *args, **kwargs)
+        end = len(self.buf)
+        self.break_hints[begin] = (end - begin, "txt")
+
     def write_raw(self, *args, **kwargs):
         """ Override text writer to add a marking """
         begin = len(self.buf)
@@ -74,11 +88,15 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                       level=1):
         # Store the line number of this heading with its unique anchor, 
         # to later create paging info
-        line_num = len(self.buf)
-        self.heading_marks[line_num] = autoAnchor
+        begin = len(self.buf)
+        self.heading_marks[begin] = autoAnchor
         RawTextRfcWriter.write_heading(self, text, bullet=bullet, \
                                        autoAnchor=autoAnchor, anchor=anchor, \
                                        level=level)
+        end = len(self.buf) +2          # Reserve room for a blankline and one line of paragraph
+                                        # text, in order to prevent orphan headings
+        self.break_hints[begin] = (end - begin, "txt")
+                                        
 
     def pre_indexing(self):
         pass
