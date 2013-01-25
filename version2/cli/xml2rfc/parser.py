@@ -329,9 +329,9 @@ class XmlRfcParser:
     def delete_cache(self, path=None):
         self.cachingResolver.delete_cache(path=path)
 
-    def parse(self, remove_comments=True, remove_pis=False):
+    def parse(self, remove_comments=True, remove_pis=False, quiet=False):
         """ Parses the source XML file and returns an XmlRfc instance """
-        if not self.quiet:
+        if not (self.quiet or quiet):
             xml2rfc.log.write('Parsing file', self.source)
 
         # Get an iterating parser object
