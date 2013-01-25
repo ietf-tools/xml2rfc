@@ -74,7 +74,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         """
         if not buf:
             buf = self.buf
-        # We can take advantage of textwraps initial_indent by using a bullet
+        # We can take advantage of textwrap's initial_indent by using a bullet
         # parameter and treating it separately.  We still need to indent it.
         subsequent = ' ' * (indent + sub_indent)
         if bullet:
@@ -180,6 +180,17 @@ class RawTextRfcWriter(BaseRfcWriter):
                     if bullet.endswith(':') and \
                     self.pis.get('colonspace', 'no') == 'yes':
                         bullet+= ' '
+                    if len(bullet) > self.width/2:
+                        # extra check of remaining space if the bullet is
+                        # very long
+                        first_word = self.wrapper._split(element.text)[0]
+                        if len(first_word) > (self.width - len(bullet) - indent):
+                            self.write_text('', bullet=bullet, indent=indent,
+                                leading_blankline=leading_blankline)
+                            self._vspace()
+                            leading_blankline=False
+                            indent = hangIndent
+                            bullet = ''
                 elif style.startswith('format'):
                     self.list_counters[counter_index] += 1
                     count = self.list_counters[counter_index]
