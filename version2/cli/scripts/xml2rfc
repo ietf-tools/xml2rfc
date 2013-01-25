@@ -138,25 +138,30 @@ def main():
 
     # Execute any writers specified
     try:
+        source_path, source_base = os.path.split(source)
+        source_name, source_ext  = os.path.splitext(source_base)
         if options.basename:
-            basename = options.basename
+            if os.path.isdir(options.basename):
+                basename = os.path.join(options.basename, source_name)
+            else:
+                basename = options.basename
         else:
             # Create basename based on input
-            basename = os.path.basename(source).rsplit('.', 1)[0]
+            basename = os.path.join(source_path, source_name)
 
         if options.exp:
             # Expanded XML writer needs a separate tree instance with
             # all comments and PI's preserved.  We can assume there are no
             # parse errors at this point since we didnt call sys.exit() during
             # parsing.
-            new_xmlrfc = parser.parse(remove_comments=False)
+            new_xmlrfc = parser.parse(remove_comments=False, quiet=True)
             expwriter = xml2rfc.ExpandedXmlWriter(new_xmlrfc,
                                                   quiet=options.quiet,
                                                   verbose=options.verbose,
                                                   date=options.date)
             filename = options.filename
             if not filename:
-                filename = basename + '-expanded.xml'
+                filename = basename + '.exp.xml'
             expwriter.write(filename)
         if options.html:
             htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc,
@@ -175,7 +180,7 @@ def main():
                                                  date=options.date)
             filename = options.filename
             if not filename:
-                filename = basename + '-raw.txt'
+                filename = basename + '.raw.txt'
             rawwriter.write(filename)
         if options.text:
             pagedwriter = xml2rfc.PaginatedTextRfcWriter(xmlrfc,
