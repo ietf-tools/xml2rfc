@@ -82,4 +82,5 @@ setup(
                               ]},
 
     install_requires = ['lxml >=2.2.8'],
+    zip_safe = False,                   # We're reading templates from a package directory.
 )
