@@ -10,6 +10,10 @@ import os
 import shutil
 import xml2rfc.log
 from urlparse import urlparse, urljoin
+try:
+    import debug
+except ImportError:
+    pass
 
 __all__ = ['XmlRfcParser', 'XmlRfc', 'XmlRfcError']
 
@@ -333,7 +337,7 @@ class XmlRfcParser:
         # Get an iterating parser object
         context = lxml.etree.iterparse(self.source,
                                       dtd_validation=False,
-                                      load_dtd=False,
+                                      load_dtd=True,
                                       attribute_defaults=True,
                                       no_network=False,
                                       remove_comments=remove_comments,
@@ -343,9 +347,19 @@ class XmlRfcParser:
                                       events=("start",),
                                       tag="rfc",
                                   )
+        # resolver without knowledge of rfc_number:
+        caching_resolver = CachingResolver(cache_path=self.cache_path,
+                                        library_dirs=self.library_dirs,
+                                        templates_path=self.templates_path,
+                                        source=self.source,
+                                        network_loc=self.network_loc,
+                                        verbose=self.verbose,
+                                        quiet=self.quiet,
+                                    )
+        context.resolvers.add(caching_resolver)
+
         # Get hold of the rfc number (if any) in the rfc element, so we can
         # later resolve the "&rfc.number;" entity.
-
         for action, element in context:
             if element.tag == "rfc":
                 self.rfc_number = element.attrib.get("number", None)
