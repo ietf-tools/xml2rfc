@@ -51,7 +51,7 @@ output_format = [
         "writer": xml2rfc.PaginatedTextRfcWriter,
     },
     {
-        "ext": "raw",
+        "ext": "raw.txt",
         "spacefix": xml2rfc.utils.formatXmlWhitespace,
         "unicodefix": xml2rfc.utils.safeReplaceUnicode,
         "writer": xml2rfc.RawTextRfcWriter,
@@ -64,6 +64,12 @@ output_format = [
     },
     {
         "ext": "html",
+        "spacefix": lambda x: x,
+        "unicodefix": lambda x: x,
+        "writer": xml2rfc.HtmlRfcWriter,
+    },
+    {
+        "ext": "exp.xml",
         "spacefix": lambda x: x,
         "unicodefix": lambda x: x,
         "writer": xml2rfc.HtmlRfcWriter,
