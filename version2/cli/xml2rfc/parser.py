@@ -435,7 +435,49 @@ class XmlRfc:
     def __init__(self, tree, default_dtd_path):
         self.default_dtd_path = default_dtd_path
         self.tree = tree
-        self.pis = {}
+        # Pi default values
+        self.pis = {
+            "artworkdelimiter":	None,
+            "artworklines":	0 ,
+            "authorship":	"yes",
+            "autobreaks":	"yes",
+            "background":	"" ,
+            "colonspace":	"no" ,
+            "comments":		"no" ,
+            "docmapping":	"no",
+            "editing":		"no",
+            "emoticonic":	"no",
+            #"footer":		Unset
+            #"header":		Unset
+            "inline":		"no",
+            "iprnotified":	"no",
+            "linkmailto":	"yes",
+            #"linefile":	Unset
+            #"needLines":       Unset
+            "notedraftinprogress": "yes",
+            "private":		"",
+            "refparent":	"References",
+            "rfcedstyle":	"no",
+            "rfcprocack":	"no",
+            "sectionorphan":    5,
+            "slides":		"no",
+            "sortrefs":		"no",
+            "strict":		"no",
+            "symrefs":		"yes",
+            "text-list-symbols": "o*+-",
+            "toc":		"no",
+            "tocappendix":	"yes",
+            "tocdepth":		3,
+            "tocindent":	"yes",
+            "tocnarrow":	"yes",
+            "tocompact":	"yes",
+            "topblock":		"yes",
+            #"typeout":		Unset
+            "useobject":	"no" ,
+        }
+        # Special cases:
+        self.pis["compact"] = self.pis["rfcedstyle"]
+        self.pis["subcompact"] = self.pis["compact"]
 
     def getroot(self):
         """ Wrapper method to get the root of the XML tree"""
@@ -495,6 +537,12 @@ class XmlRfc:
             for key, val in tmp_dict.items():
                 # Update main PI state
                 self.pis[key] = val
+                # Special cases
+                if key == "rfcedstyle":
+                    self.pis["compact"] = val
+                    self.pis["subcompact"] = val
+                if key == "compact":
+                    self.pis["subcompact"] = val
             # Return the new values added
             return tmp_dict
         return {}

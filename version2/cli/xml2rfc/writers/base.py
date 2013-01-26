@@ -9,6 +9,10 @@ import datetime
 import lxml
 import xml2rfc.log
 import xml2rfc.utils
+try:
+    import debug
+except ImportError:
+    pass
 
 class _RfcItem:
     """ A unique ID object for an anchored RFC element.
@@ -71,7 +75,6 @@ class BaseRfcWriter:
         'table_align':              'center',
         'table_style':              'full',
         'ttcol_align':              'left',
-        'references_title':         'References',
         'ipr':                      'trust200902',
         'submissionType':           'IETF',
         'consensus':                'no',
@@ -557,7 +560,7 @@ class BaseRfcWriter:
         """ Returns a list of lines for the top right header """
         lines = []
         # Render author?
-        authorship = self.pis.get('authorship', 'yes')
+        authorship = self.pis['authorship']
         if authorship == 'yes':
             # Keep track of previous organization and remove if redundant.
             last_org = None
@@ -607,7 +610,7 @@ class BaseRfcWriter:
         title = figure.attrib.get('title', self.defaults['figure_title'])
 
         # Keep track of count if there is an anchor, or PI was enabled
-        if anchor or self.pis.get('figurecount', 'no') == 'yes':
+        if anchor or self.pis['figurecount'] == 'yes':
             self.figure_count += 1
         
         if anchor:
@@ -624,12 +627,12 @@ class BaseRfcWriter:
             self.write_t_rec(preamble, align=align)
 
         # Write figure with optional delimiter
-        delimiter = self.pis.get('artworkdelimiter', None)
+        delimiter = self.pis['artworkdelimiter']
         artwork = figure.find('artwork')
         # artwork_align = artwork.attrib.get('align', align)
         # Explicitly use figure alignment
         artwork_align = align
-        blanklines = int(self.pis.get('artworklines', 0))
+        blanklines = int(self.pis['artworklines'])
         self.write_raw(figure.find('artwork').text, align=artwork_align,
                        blanklines=blanklines, delimiter=delimiter,
                        source_line=figure.sourceline)
@@ -641,7 +644,7 @@ class BaseRfcWriter:
 
         # Write label
         title = figure.attrib.get('title', '')
-        if anchor or self.pis.get('figurecount', 'no') == 'yes':
+        if anchor or self.pis['figurecount'] == 'yes':
             if title:
                 title = ': ' + title
             self.write_label('Figure ' + str(self.figure_count) + title,
@@ -656,7 +659,7 @@ class BaseRfcWriter:
         title = table.attrib.get('title', self.defaults['table_title'])
 
         # Keep track of count if there is an anchor, or PI was enabled
-        if anchor or self.pis.get('tablecount', 'no') == 'yes':
+        if anchor or self.pis['tablecount'] == 'yes':
             self.table_count += 1
 
         if anchor:
@@ -681,7 +684,7 @@ class BaseRfcWriter:
             self.write_t_rec(postamble, align=align)
 
         # Write label if anchor is set or PI figurecount = yes
-        if anchor or self.pis.get('tablecount', 'no') == 'yes':
+        if anchor or self.pis['tablecount'] == 'yes':
             title = table.attrib.get('title', '')
             if title:
                 title = ': ' + title
@@ -707,8 +710,7 @@ class BaseRfcWriter:
             anchor = section.attrib.get('anchor')
             title = section.attrib.get('title')
             include_toc = section.attrib.get('toc', self.defaults['section_toc']) != 'exclude' \
-                          and (not appendix or self.pis.get('tocappendix', \
-                                                            'yes') == 'yes')
+                          and (not appendix or self.pis['tocappendix'] == 'yes')
             if self.indexmode:
                 # Add section to the index
                 self._indexSection(count_str, title=title, anchor=anchor,
@@ -891,7 +893,7 @@ class BaseRfcWriter:
         ref_counter = str(self.ref_start)
         references = self.r.findall('back/references')
         # Write root level references header
-        ref_title = self.pis.get('refparent', self.defaults['references_title'])
+        ref_title = self.pis['refparent']
         if len(references) == 1:
             ref_title = references[0].attrib.get('title', ref_title)
 
@@ -900,8 +902,7 @@ class BaseRfcWriter:
         if len(references) > 1:
             for i, reference_list in enumerate(references):
                 ref_newcounter = ref_counter + '.' + str(i + 1)
-                ref_title = reference_list.attrib.get('title',
-                                        self.defaults['references_title'])
+                ref_title = reference_list.attrib.get('title', self.pis["refparent"])
                 self._indexReferences(ref_newcounter, title=ref_title, \
                                       subCounter=i+1, level=2)
 
@@ -937,7 +938,7 @@ class BaseRfcWriter:
         self.table_count = 0
 
         # Block header
-        topblock = self.pis.get('topblock', 'yes')
+        topblock = self.pis['topblock']
         if topblock == 'yes':
             self.write_top(self._prepare_top_left(), \
                                self._prepare_top_right())
@@ -956,7 +957,7 @@ class BaseRfcWriter:
                 self.write_t_rec(t)
 
         # Optional notified boilerplate
-        if self.pis.get('iprnotified', 'no') == 'yes':
+        if self.pis['iprnotified'] == 'yes':
             self.write_paragraph(BaseRfcWriter.boilerplate['iprnotified'])
 
         # Optional notes
@@ -975,7 +976,7 @@ class BaseRfcWriter:
         self.write_copyright()
 
         # Insert the table of contents marker at this position
-        toc_enabled = self.pis.get('toc', 'no')
+        toc_enabled = self.pis['toc']
         if toc_enabled == 'yes':
             self.insert_toc()
 
@@ -989,7 +990,7 @@ class BaseRfcWriter:
         ref_counter = str(self.ref_start)
         references = self.r.findall('back/references')
         # Write root level references header
-        ref_title = self.pis.get('refparent', self.defaults['references_title'])
+        ref_title = self.pis['refparent']
         if len(references) == 1:
             ref_title = references[0].attrib.get('title', ref_title)
 
@@ -998,8 +999,7 @@ class BaseRfcWriter:
         if len(references) > 1:
             for i, reference_list in enumerate(references):
                 ref_newcounter = ref_counter + '.' + str(i + 1)
-                ref_title = reference_list.attrib.get('title',
-                                        self.defaults['references_title'])
+                ref_title = reference_list.attrib.get('title', self.pis['refparent'])
                 autoAnchor = 'rfc.references.' + str(i + 1)
                 self.write_heading(ref_title, bullet=ref_newcounter + '.',\
                                    autoAnchor=autoAnchor, level=2)

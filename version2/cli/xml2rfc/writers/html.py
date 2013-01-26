@@ -10,6 +10,10 @@ import string
 import sys
 import datetime
 import cgi
+try:
+    import debug
+except ImportError:
+    pass
 
 # Local libs
 import xml2rfc
@@ -119,7 +123,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         # Add link for toc itself
         link = E.LINK(rel='Contents', href='#rfc.toc')
         self.buffers['toc_head_links'].append(self._serialize(link))
-        tocdepth = self.pis.get('tocdepth', '3')
+        tocdepth = self.pis['tocdepth']
         try:
             tocdepth = int(tocdepth)
         except ValueError:
@@ -260,7 +264,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                       level=1):
         # Use a hierarchy of header tags if docmapping set
         h = E.H1()
-        if self.pis.get('docmapping', 'no') == 'yes':
+        if self.pis['docmapping'] == 'yes':
             if level == 2:
                 h = E.H2()
             elif level == 3:
@@ -430,7 +434,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             if email is not None and email.text:
                 span = E.SPAN('EMail: ')
                 span.attrib['class'] = 'vcardline'
-                if self.pis.get('linkmailto', 'yes') == 'yes':
+                if self.pis['linkmailto'] == 'yes':
                     span.append(E.A(email.text, href='mailto:' + email.text))
                 else:
                     span.text += email.text
@@ -454,7 +458,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         for i, reference in enumerate(list.findall('reference')):
             tr = E.TR()
             # Use anchor or num depending on PI
-            if self.pis.get('symrefs', 'yes') == 'yes':
+            if self.pis['symrefs'] == 'yes':
                 bullet = reference.attrib.get('anchor', str(i + 1))
             else:
                 bullet = str(i + 1)
@@ -478,7 +482,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                         name_string = surname + ', ' + initials
                     a = E.A(name_string)
                     if email is not None and email.text:
-                        if self.pis.get('linkmailto', 'yes') == 'yes':
+                        if self.pis['linkmailto'] == 'yes':
                             a.attrib['href'] = 'mailto:' + email.text
                     if organization is not None and organization.text:
                         a.attrib['title'] = organization.text
@@ -542,7 +546,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         # Add caption, if it exists
         if 'title' in table.attrib and table.attrib['title']:
             caption = ''
-            if table_num and self.pis.get('tablecount', 'no') == 'yes':
+            if table_num and self.pis['tablecount'] == 'yes':
                 caption = 'Table ' + str(table_num) + ': '
             htmltable.append(E.CAPTION(caption + table.attrib['title']))
 
@@ -645,8 +649,8 @@ class HtmlRfcWriter(BaseRfcWriter):
         self._create_toc()
         
         # Grab values that haven't been inserted yet
-        background_image = self.pis.get('background', '') and \
-            "background-image:url('%s');" % self.pis.get('background') or ''
+        background_image = (self.pis['background'] and 
+            "background-image:url('%s');" % self.pis['background'] or '')
         title = self.r.find('front/title').text
         docName = self.r.attrib.get('docName', '')
         description = ''

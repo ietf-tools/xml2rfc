@@ -10,6 +10,10 @@ import math
 import lxml
 import datetime
 import re
+try:
+    import debug
+except ImportError:
+    pass
 
 # Local lib
 from xml2rfc.writers.base import BaseRfcWriter
@@ -40,7 +44,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.iref_marks = {}
 
         # Text lookups
-        self.list_symbols = self.pis.get('text-list-symbols', 'o*+-')
+        self.list_symbols = self.pis['text-list-symbols']
         self.inline_tags = ['xref', 'eref', 'iref', 'cref', 'spanx']
         
         # Custom textwrapper object
@@ -87,7 +91,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             initial = subsequent
 
         if leading_blankline:
-            if edit and self.pis.get('editing', 'no') == 'yes':
+            if edit and self.pis['editing'] == 'yes':
                 # Render an editing mark
                 self.edit_counter += 1
                 self._lb(buf=buf, text=str('<' + str(self.edit_counter) + '>'))
@@ -157,9 +161,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             elif element.tag == 't':
                 # Disable linebreak if subcompact=yes AND not first list element
                 leading_blankline = True
-                if t_count > 0 and self.pis.get('subcompact', \
-                    self.pis.get('compact', \
-                    self.pis.get('rfcedstyle', 'no'))) == 'yes':
+                if t_count > 0 and self.pis['subcompact'] == 'yes':
                     leading_blankline = False
                 if style == 'symbols':
                     bullet = self.list_symbols[level % len(self.list_symbols)]
@@ -178,7 +180,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                         bullet += '  '
                     # Add an extra space in front of colon if colonspace enabled
                     if bullet.endswith(':') and \
-                    self.pis.get('colonspace', 'no') == 'yes':
+                    self.pis['colonspace'] == 'yes':
                         bullet+= ' '
                     if len(bullet) > self.width/2:
                         # extra check of remaining space if the bullet is
@@ -213,7 +215,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         tmpbuf = ['', 'Table of Contents', '']
         # Retrieve toc from the index
         tocindex = self._getTocIndex()
-        tocdepth = self.pis.get('tocdepth', '3')
+        tocdepth = self.pis['tocdepth']
         try:
             tocdepth = int(tocdepth)
         except ValueError:
@@ -221,7 +223,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                              tocdepth)
             tocdepth = 3
         indent_scale = 2
-        if self.pis.get('tocnarrow', 'yes') == 'no':
+        if self.pis['tocnarrow'] == 'no':
             indent_scale = 3
         for item in tocindex:
             # Add decoration to counter if it exists, otherwise leave empty
@@ -234,7 +236,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                         counter += ' '
                 # Get item depth based on its section 'level' attribute
                 depth = item.level - 1
-                if depth < 0 or self.pis.get('tocindent', 'yes') == 'no':
+                if depth < 0 or self.pis['tocindent'] == 'no':
                     depth = 0
                 # Prepend appendix at first level
                 if item.level == 1 and item.appendix:
@@ -366,7 +368,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                         self.iref_marks[pos] = []
                     self.iref_marks[pos].append((item, subitem))
             elif element.tag == 'cref' and \
-                self.pis.get('comments', 'no') == 'yes':                
+                self.pis['comments'] == 'yes':                
                 # Render if processing instruction is enabled
                 anchor = element.attrib.get('anchor', '')
                 if anchor:
@@ -423,6 +425,7 @@ class RawTextRfcWriter(BaseRfcWriter):
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
                   delimiter=None, leading_blankline=True, source_line=None):
         """ Writes a raw stream of characters, preserving space and breaks """
+        
         if text:
             if leading_blankline:
                 # Start with a newline
@@ -445,7 +448,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             if align == 'center':
                 # Find the longest line, and use that as a fixed center.
                 longest_line = len(max(lines, key=len))
-                center_indent = ((self.width - longest_line) / 2)
+                center_indent = indent + ((self.width - indent - longest_line) / 2)
                 indent_str = center_indent > indent and ' ' * center_indent or \
                                                         ' ' * indent
                 for line in lines:
@@ -615,7 +618,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 lines.append('Fax:   ' + facsimile.text)
             email = address.find('email')
             if email is not None and email.text:
-                label = self.pis.get('rfcedstyle', 'no') == 'yes' and 'EMail' or 'Email'
+                label = self.pis['rfcedstyle'] == 'yes' and 'EMail' or 'Email'
                 lines.append('%s: %s' % (label, email.text))
             uri = address.find('uri')
             if uri is not None and uri.text:
@@ -661,7 +664,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             refstring.append('.')
             annotation = ref.find('annotation')
             # Use anchor or num depending on PI
-            if self.pis.get('symrefs', 'yes') == 'yes':
+            if self.pis['symrefs'] == 'yes':
                 bullet = '[' + ref.attrib.get('anchor', str(i + 1)) + ']'
             else:
                 bullet = '[' + str(i + 1) + ']'
@@ -672,7 +675,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             if annotation is not None and annotation.text:
                 # Render annotation as a separate paragraph
                 annotationdict[bullet] = annotation.text
-        if self.pis.get('sortrefs', 'no') == 'yes':
+        if self.pis['sortrefs'] == 'yes':
             refkeys = sorted(refkeys)
         # Hard coded indentation amount
         refindent = 11
@@ -702,7 +705,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         for i, cell in enumerate(table.findall('c')):
             if i % num_columns == 0:
                 # Insert blank row if PI 'compact' is 'no'
-                if self.pis.get("compact", self.pis.get("rfcedstyle", "no")) == "no" and row > 0:
+                if self.pis["compact"] == "no" and row > 0:
                     row += 1
                     matrix.append(['']*num_columns)
                     pass

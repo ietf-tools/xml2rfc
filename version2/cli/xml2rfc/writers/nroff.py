@@ -6,6 +6,10 @@
 import os
 import time
 import datetime
+try:
+    import debug
+except ImportError:
+    pass
 
 # Local libs
 from xml2rfc import VERSION
@@ -74,7 +78,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         begin = len(self.buf)
 
         if leading_blankline:
-            if edit and self.pis.get('editing', 'no') == 'yes':
+            if edit and self.pis['editing'] == 'yes':
                 # Render an editing mark
                 self.edit_counter += 1
                 self._lb(buf=buf, text=str('<' + str(self.edit_counter) + '>'))
@@ -241,7 +245,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                     needed -= 1
                 if (text_type == "break"
                     or (text_type == "raw" and needed > available)
-                    or (self.pis.get('autobreaks', 'yes') == 'yes'
+                    or (self.pis['autobreaks'] == 'yes'
                         and needed > available
                         and (needed-available < 2 or available < 2) ) ):
                     self.output.append('.bp')

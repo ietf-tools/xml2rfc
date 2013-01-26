@@ -4,6 +4,10 @@
 
 # Python libs
 import datetime
+try:
+    import debug
+except ImportError:
+    pass
 
 # Local libs
 from xml2rfc.writers.base import BaseRfcWriter
@@ -93,7 +97,8 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         RawTextRfcWriter.write_heading(self, text, bullet=bullet, \
                                        autoAnchor=autoAnchor, anchor=anchor, \
                                        level=level)
-        end = len(self.buf) +2          # Reserve room for a blankline and one line of paragraph
+        # Reserve room for a blankline and some lines of section content
+        end = len(self.buf) + self.pis["sectionorphan"]
                                         # text, in order to prevent orphan headings
         self.break_hints[begin] = (end - begin, "txt")
                                         
@@ -221,7 +226,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
 
                 if (text_type == "break"
                     or (text_type == "raw" and needed > available and needed < max_page_length-2 )
-                    or (self.pis.get('autobreaks', 'yes') == 'yes'
+                    or (self.pis['autobreaks'] == 'yes'
                         and needed > available
                         and needed < max_page_length-2
                         and (needed-available < 2 or available < 2) ) ):
