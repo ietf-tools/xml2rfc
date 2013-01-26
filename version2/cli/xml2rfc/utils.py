@@ -421,3 +421,12 @@ _post_break_replacements = {
     '&#8288;': '',   # wj
 }
 
+def get_initials(author):
+    """author is an rfc2629 author element.  Return the author initials,
+    fixed up according to current flavour and policy."""
+    initials = author.attrib.get('initials', '').split()
+    for i in range(len(initials)):
+        initial = initials[i]
+        if not initial.endswith('.'):
+            initials[i] = initial+'.'
+        return ' '.join(initials)

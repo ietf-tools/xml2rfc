@@ -474,10 +474,7 @@ class BaseRfcWriter:
             organization = author.find('organization')
             surname = author.attrib.get('surname', '')
             if surname:
-                initials = author.attrib.get('initials', '')
-                # Append a dot if it doesnt already exist
-                if initials and not initials.endswith('.'):
-                    initials = initials + '.'
+                initials = xml2rfc.utils.get_initials(author)
                 if i == len(authors) - 1 and len(authors) > 1:
                     # Last author is rendered in reverse
                     buf.append('and ' + initials + ' ' + \
@@ -568,10 +565,7 @@ class BaseRfcWriter:
                 role = author.attrib.get('role', '')
                 if role == 'editor':
                     role = ', Ed.'
-                initials = author.attrib.get('initials', '')
-                # Append a dot if it doesnt already exist
-                if initials and not initials.endswith('.'):
-                    initials = initials + '.'
+                initials = xml2rfc.utils.get_initials(author)
                 lines.append(initials + ' ' + author.attrib.\
                              get('surname', '') + role)
                 organization = author.find('organization')
