@@ -448,6 +448,7 @@ class XmlRfc:
             "editing":		"no",
             "emoticonic":	"no",
             #"footer":		Unset
+            "figurecount":      "no",
             #"header":		Unset
             "inline":		"no",
             "iprnotified":	"no",
@@ -464,6 +465,7 @@ class XmlRfc:
             "sortrefs":		"no",
             "strict":		"no",
             "symrefs":		"yes",
+            "tablecount":       "no",
             "text-list-symbols": "o*+-",
             "toc":		"no",
             "tocappendix":	"yes",
@@ -537,12 +539,6 @@ class XmlRfc:
             for key, val in tmp_dict.items():
                 # Update main PI state
                 self.pis[key] = val
-                # Special cases
-                if key == "rfcedstyle":
-                    self.pis["compact"] = val
-                    self.pis["subcompact"] = val
-                if key == "compact":
-                    self.pis["subcompact"] = val
             # Return the new values added
             return tmp_dict
         return {}
