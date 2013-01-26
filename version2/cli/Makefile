@@ -13,11 +13,12 @@ install:
 	bin/python setup.py --quiet install
 
 test:	bin/python install
-	[ -d tmp ] || mkdir -p tmp
 	[ -d tests/failed/ ] && rm -f tests/failed/*
-	[ -d tmp/ ] && rm -f tmp/*
 	bin/python test.py
-	#
+
+tests: test
+	[ -d tmp ] || mkdir -p tmp
+	[ -d tmp ] && rm -f tmp/*
 	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc tests/input/rfc6787.xml --base tmp/ --raw --text --nroff --html --exp
 	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.raw.txt	tmp/rfc6787.raw.txt	|| echo "Diff failed for .raw.txt output"
 	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.txt	tmp/rfc6787.txt 	|| echo "Diff failed for .txt output"
