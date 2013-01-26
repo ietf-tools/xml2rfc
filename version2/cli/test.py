@@ -6,7 +6,7 @@ import xml2rfc
 import xml2rfc.utils
 import lxml
 import tempfile
-
+import re
 
 def arrstrip(arr):
     """ Strip beginning and end blanklines of an array """
@@ -31,17 +31,67 @@ def diff_test(case, valid, test, failpath):
 
 class XmlRfcDummy():
     """ Dummy rfc used for test fixtures """
+    def __init__(self):
+        self.pis = {
+            "artworkdelimiter":	None,
+            "artworklines":	0 ,
+            "authorship":	"yes",
+            "autobreaks":	"yes",
+            "background":	"" ,
+            "colonspace":	"no" ,
+            "comments":		"no" ,
+            "docmapping":	"no",
+            "editing":		"no",
+            "emoticonic":	"no",
+            #"footer":		Unset
+            "figurecount":      "no",
+            #"header":		Unset
+            "inline":		"no",
+            "iprnotified":	"no",
+            "linkmailto":	"yes",
+            #"linefile":	Unset
+            #"needLines":       Unset
+            "notedraftinprogress": "yes",
+            "private":		"",
+            "refparent":	"References",
+            "rfcedstyle":	"no",
+            "rfcprocack":	"no",
+            "sectionorphan":    5,
+            "slides":		"no",
+            "sortrefs":		"yes",  # different from default
+            "strict":		"no",
+            "symrefs":		"yes",
+            "tablecount":       "no",
+            "text-list-symbols": "o*+-",
+            "toc":		"no",
+            "tocappendix":	"yes",
+            "tocdepth":		3,
+            "tocindent":	"yes",
+            "tocnarrow":	"yes",
+            "tocompact":	"yes",
+            "topblock":		"yes",
+            #"typeout":		Unset
+            "useobject":	"no" ,
+        }
+        self.pis["compact"] = self.pis["rfcedstyle"]
+        self.pis["subcompact"] = self.pis["compact"]
+
     def getroot(self):
         return lxml.etree.Element('rfc')
 
     def getpis(self):
-        return {
-            'sortrefs': 'yes'
-        }
+        return self.pis
 
     def parse_pi(self, pi):
-        pass
-
+        if pi.text:
+            # Split text in the format 'key="val"'
+            chunks = re.split(r'=[\'"]([^\'"]*)[\'"]', pi.text)
+            # Create pairs from this flat list, discard last element if odd
+            tmp_dict = dict(zip(chunks[::2], chunks[1::2]))
+            for key, val in tmp_dict.items():
+                # Update main PI state
+                self.pis[key] = val
+            # Return the new values added
 
 output_format = [
     {
