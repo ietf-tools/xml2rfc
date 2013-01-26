@@ -701,6 +701,11 @@ class RawTextRfcWriter(BaseRfcWriter):
         num_columns = len(matrix[0])
         for i, cell in enumerate(table.findall('c')):
             if i % num_columns == 0:
+                # Insert blank row if PI 'compact' is 'no'
+                if self.pis.get("compact", self.pis.get("rfcedstyle", "no")) == "no" and row > 0:
+                    row += 1
+                    matrix.append(['']*num_columns)
+                    pass
                 row += 1
                 matrix.append([])
             text = cell.text or ''
@@ -795,10 +800,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         
         # Now construct the cells using textwrap against column_widths
         cell_lines = [
-            [
-                textwrap.wrap(cell, column_widths[j]) \
-                for j, cell in enumerate(matrix[i])
-            ] for i in range(0, len(matrix))
+            [ textwrap.wrap(cell, column_widths[j]) or [''] for j, cell in enumerate(matrix[i]) ]
+            for i in range(0, len(matrix))
         ]
 
         output = []
@@ -819,7 +822,9 @@ class RawTextRfcWriter(BaseRfcWriter):
 
         # Draw the table
         for i, cell_line in enumerate(cell_lines):
-            for row in range(max(map(len, cell_line))):
+            # produce as many outpur rows as the number of wrapped
+            # text lines in the cell with most lines, but at least 1
+            for row in range(0, max(map(len, cell_line))):
                 if style == 'headers' or style == 'none':
                     line = ['']
                 else:
