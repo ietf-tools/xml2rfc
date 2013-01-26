@@ -3898,36 +3898,48 @@ Copyright Notice
    |        |                       | or DEFINE-GRAMMAR succeeded in   |
    |        |                       | downloading and compiling the    |
    |        |                       | grammar.                         |
+   |        |                       |                                  |
    | 001    | no-match              | RECOGNIZE completed, but no      |
    |        |                       | match was found.                 |
+   |        |                       |                                  |
    | 002    | no-input-timeout      | RECOGNIZE completed without a    |
    |        |                       | match due to a no-input-timeout. |
+   |        |                       |                                  |
    | 003    | hotword-maxtime       | RECOGNIZE in hotword mode        |
    |        |                       | completed without a match due to |
    |        |                       | a recognition-timeout.           |
+   |        |                       |                                  |
    | 004    | grammar-load-failure  | RECOGNIZE failed due to grammar  |
    |        |                       | load failure.                    |
+   |        |                       |                                  |
    | 005    | grammar-compilation-  | RECOGNIZE failed due to grammar  |
    |        | failure               | compilation failure.             |
+   |        |                       |                                  |
    | 006    | recognizer-error      | RECOGNIZE request terminated     |
    |        |                       | prematurely due to a recognizer  |
    |        |                       | error.                           |
+   |        |                       |                                  |
    | 007    | speech-too-early      | RECOGNIZE request terminated     |
    |        |                       | because speech was too early.    |
    |        |                       | This happens when the audio      |
    |        |                       | stream is already "in-speech"    |
    |        |                       | when the RECOGNIZE request was   |
    |        |                       | received.                        |
+   |        |                       |                                  |
    | 008    | success-maxtime       | RECOGNIZE request terminated     |
    |        |                       | because speech was too long but  |
    |        |                       | whatever was spoken till that    |
    |        |                       | point was a full match.          |
+   |        |                       |                                  |
    | 009    | uri-failure           | Failure accessing a URI.         |
+   |        |                       |                                  |
    | 010    | language-unsupported  | Language not supported.          |
+   |        |                       |                                  |
    | 011    | cancelled             | A new RECOGNIZE cancelled this   |
    |        |                       | one, or a prior RECOGNIZE failed |
    |        |                       | while this one was still in the  |
    |        |                       | queue.                           |
+   |        |                       |                                  |
    | 012    | semantics-failure     | Recognition succeeded, but       |
    |        |                       | semantic interpretation of the   |
    |        |                       | recognized input failed. The     |
@@ -3935,16 +3947,19 @@ Copyright Notice
    |        |                       | contain the Recognition result   |
    |        |                       | with only input text and no      |
    |        |                       | interpretation.                  |
+   |        |                       |                                  |
    | 013    | partial-match         | Speech Incomplete Timeout        |
    |        |                       | expired before there was a full  |
    |        |                       | match. But whatever was spoken   |
    |        |                       | till that point was a partial    |
    |        |                       | match to one or more grammars.   |
+   |        |                       |                                  |
    | 014    | partial-match-maxtime | The Recognition-Timeout expired  |
    |        |                       | before full match was achieved.  |
    |        |                       | But whatever was spoken till     |
    |        |                       | that point was a partial match   |
    |        |                       | to one or more grammars.         |
+   |        |                       |                                  |
    | 015    | no-match-maxtime      | The Recognition-Timeout expired. |
    |        |                       | Whatever was spoken till that    |
    |        |                       | point did not match any of the   |
@@ -3952,6 +3967,7 @@ Copyright Notice
    |        |                       | be returned if the recognizer    |
    |        |                       | does not support detecting       |
    |        |                       | partial grammar matches.         |
+   |        |                       |                                  |
    | 016    | grammar-definition-   | Any DEFINE-GRAMMAR error other   |
    |        | failure               | than grammar-load-failure and    |
    |        |                       | grammar-compilation-failure.     |

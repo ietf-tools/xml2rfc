@@ -192,34 +192,34 @@ RFC 6787                         MRCPv2                    November 2012
        9.4.9.  Media-Type  . . . . . . . . . . . . . . . . . . . . .  81
        9.4.10. Input-Waveform-URI  . . . . . . . . . . . . . . . . .  81
        9.4.11. Completion-Cause  . . . . . . . . . . . . . . . . . .  82
-       9.4.12. Completion-Reason . . . . . . . . . . . . . . . . . .  83
+       9.4.12. Completion-Reason . . . . . . . . . . . . . . . . . .  84
        9.4.13. Recognizer-Context-Block  . . . . . . . . . . . . . .  84
-       9.4.14. Start-Input-Timers  . . . . . . . . . . . . . . . . .  84
+       9.4.14. Start-Input-Timers  . . . . . . . . . . . . . . . . .  85
        9.4.15. Speech-Complete-Timeout . . . . . . . . . . . . . . .  85
        9.4.16. Speech-Incomplete-Timeout . . . . . . . . . . . . . .  85
        9.4.17. DTMF-Interdigit-Timeout . . . . . . . . . . . . . . .  86
        9.4.18. DTMF-Term-Timeout . . . . . . . . . . . . . . . . . .  86
-       9.4.19. DTMF-Term-Char  . . . . . . . . . . . . . . . . . . .  86
+       9.4.19. DTMF-Term-Char  . . . . . . . . . . . . . . . . . . .  87
        9.4.20. Failed-URI  . . . . . . . . . . . . . . . . . . . . .  87
        9.4.21. Failed-URI-Cause  . . . . . . . . . . . . . . . . . .  87
        9.4.22. Save-Waveform . . . . . . . . . . . . . . . . . . . .  87
-       9.4.23. New-Audio-Channel . . . . . . . . . . . . . . . . . .  87
+       9.4.23. New-Audio-Channel . . . . . . . . . . . . . . . . . .  88
        9.4.24. Speech-Language . . . . . . . . . . . . . . . . . . .  88
        9.4.25. Ver-Buffer-Utterance  . . . . . . . . . . . . . . . .  88
-       9.4.26. Recognition-Mode  . . . . . . . . . . . . . . . . . .  88
+       9.4.26. Recognition-Mode  . . . . . . . . . . . . . . . . . .  89
        9.4.27. Cancel-If-Queue . . . . . . . . . . . . . . . . . . .  89
        9.4.28. Hotword-Max-Duration  . . . . . . . . . . . . . . . .  89
        9.4.29. Hotword-Min-Duration  . . . . . . . . . . . . . . . .  90
        9.4.30. Interpret-Text  . . . . . . . . . . . . . . . . . . .  90
        9.4.31. DTMF-Buffer-Time  . . . . . . . . . . . . . . . . . .  90
-       9.4.32. Clear-DTMF-Buffer . . . . . . . . . . . . . . . . . .  90
+       9.4.32. Clear-DTMF-Buffer . . . . . . . . . . . . . . . . . .  91
        9.4.33. Early-No-Match  . . . . . . . . . . . . . . . . . . .  91
        9.4.34. Num-Min-Consistent-Pronunciations . . . . . . . . . .  91
        9.4.35. Consistency-Threshold . . . . . . . . . . . . . . . .  91
        9.4.36. Clash-Threshold . . . . . . . . . . . . . . . . . . .  92
        9.4.37. Personal-Grammar-URI  . . . . . . . . . . . . . . . .  92
        9.4.38. Enroll-Utterance  . . . . . . . . . . . . . . . . . .  92
-       9.4.39. Phrase-Id . . . . . . . . . . . . . . . . . . . . . .  92
+       9.4.39. Phrase-Id . . . . . . . . . . . . . . . . . . . . . .  93
        9.4.40. Phrase-NL . . . . . . . . . . . . . . . . . . . . . .  93
 
 
@@ -230,11 +230,11 @@ RFC 6787                         MRCPv2                    November 2012
 
 
        9.4.41. Weight  . . . . . . . . . . . . . . . . . . . . . . .  93
-       9.4.42. Save-Best-Waveform  . . . . . . . . . . . . . . . . .  93
+       9.4.42. Save-Best-Waveform  . . . . . . . . . . . . . . . . .  94
        9.4.43. New-Phrase-Id . . . . . . . . . . . . . . . . . . . .  94
        9.4.44. Confusable-Phrases-URI  . . . . . . . . . . . . . . .  94
        9.4.45. Abort-Phrase-Enrollment . . . . . . . . . . . . . . .  94
-     9.5.  Recognizer Message Body . . . . . . . . . . . . . . . . .  94
+     9.5.  Recognizer Message Body . . . . . . . . . . . . . . . . .  95
        9.5.1.  Recognizer Grammar Data . . . . . . . . . . . . . . .  95
        9.5.2.  Recognizer Result Data  . . . . . . . . . . . . . . .  98
        9.5.3.  Enrollment Result Data  . . . . . . . . . . . . . . .  99
@@ -245,38 +245,38 @@ RFC 6787                         MRCPv2                    November 2012
                Relationships . . . . . . . . . . . . . . . . . . . . 101
        9.6.3.  Elements and Attributes . . . . . . . . . . . . . . . 102
      9.7.  Enrollment Results  . . . . . . . . . . . . . . . . . . . 107
-       9.7.1.  <num-clashes> Element . . . . . . . . . . . . . . . . 107
+       9.7.1.  <num-clashes> Element . . . . . . . . . . . . . . . . 108
        9.7.2.  <num-good-repetitions> Element  . . . . . . . . . . . 108
        9.7.3.  <num-repetitions-still-needed> Element  . . . . . . . 108
        9.7.4.  <consistency-status> Element  . . . . . . . . . . . . 108
        9.7.5.  <clash-phrase-ids> Element  . . . . . . . . . . . . . 108
        9.7.6.  <transcriptions> Element  . . . . . . . . . . . . . . 108
        9.7.7.  <confusable-phrases> Element  . . . . . . . . . . . . 108
-     9.8.  DEFINE-GRAMMAR  . . . . . . . . . . . . . . . . . . . . . 108
+     9.8.  DEFINE-GRAMMAR  . . . . . . . . . . . . . . . . . . . . . 109
      9.9.  RECOGNIZE . . . . . . . . . . . . . . . . . . . . . . . . 112
      9.10. STOP  . . . . . . . . . . . . . . . . . . . . . . . . . . 118
-     9.11. GET-RESULT  . . . . . . . . . . . . . . . . . . . . . . . 119
-     9.12. START-OF-INPUT  . . . . . . . . . . . . . . . . . . . . . 120
-     9.13. START-INPUT-TIMERS  . . . . . . . . . . . . . . . . . . . 121
-     9.14. RECOGNITION-COMPLETE  . . . . . . . . . . . . . . . . . . 121
-     9.15. START-PHRASE-ENROLLMENT . . . . . . . . . . . . . . . . . 123
-     9.16. ENROLLMENT-ROLLBACK . . . . . . . . . . . . . . . . . . . 124
-     9.17. END-PHRASE-ENROLLMENT . . . . . . . . . . . . . . . . . . 125
-     9.18. MODIFY-PHRASE . . . . . . . . . . . . . . . . . . . . . . 125
-     9.19. DELETE-PHRASE . . . . . . . . . . . . . . . . . . . . . . 126
-     9.20. INTERPRET . . . . . . . . . . . . . . . . . . . . . . . . 126
-     9.21. INTERPRETATION-COMPLETE . . . . . . . . . . . . . . . . . 128
-     9.22. DTMF Detection  . . . . . . . . . . . . . . . . . . . . . 129
-   10. Recorder Resource . . . . . . . . . . . . . . . . . . . . . . 129
-     10.1.  Recorder State Machine . . . . . . . . . . . . . . . . . 130
-     10.2.  Recorder Methods . . . . . . . . . . . . . . . . . . . . 130
-     10.3.  Recorder Events  . . . . . . . . . . . . . . . . . . . . 130
-     10.4.  Recorder Header Fields . . . . . . . . . . . . . . . . . 130
-       10.4.1.  Sensitivity-Level  . . . . . . . . . . . . . . . . . 131
-       10.4.2.  No-Input-Timeout . . . . . . . . . . . . . . . . . . 131
-       10.4.3.  Completion-Cause . . . . . . . . . . . . . . . . . . 131
-       10.4.4.  Completion-Reason  . . . . . . . . . . . . . . . . . 132
-       10.4.5.  Failed-URI . . . . . . . . . . . . . . . . . . . . . 133
+     9.11. GET-RESULT  . . . . . . . . . . . . . . . . . . . . . . . 120
+     9.12. START-OF-INPUT  . . . . . . . . . . . . . . . . . . . . . 121
+     9.13. START-INPUT-TIMERS  . . . . . . . . . . . . . . . . . . . 122
+     9.14. RECOGNITION-COMPLETE  . . . . . . . . . . . . . . . . . . 122
+     9.15. START-PHRASE-ENROLLMENT . . . . . . . . . . . . . . . . . 124
+     9.16. ENROLLMENT-ROLLBACK . . . . . . . . . . . . . . . . . . . 125
+     9.17. END-PHRASE-ENROLLMENT . . . . . . . . . . . . . . . . . . 126
+     9.18. MODIFY-PHRASE . . . . . . . . . . . . . . . . . . . . . . 126
+     9.19. DELETE-PHRASE . . . . . . . . . . . . . . . . . . . . . . 127
+     9.20. INTERPRET . . . . . . . . . . . . . . . . . . . . . . . . 127
+     9.21. INTERPRETATION-COMPLETE . . . . . . . . . . . . . . . . . 129
+     9.22. DTMF Detection  . . . . . . . . . . . . . . . . . . . . . 130
+   10. Recorder Resource . . . . . . . . . . . . . . . . . . . . . . 130
+     10.1.  Recorder State Machine . . . . . . . . . . . . . . . . . 131
+     10.2.  Recorder Methods . . . . . . . . . . . . . . . . . . . . 131
+     10.3.  Recorder Events  . . . . . . . . . . . . . . . . . . . . 131
+     10.4.  Recorder Header Fields . . . . . . . . . . . . . . . . . 131
+       10.4.1.  Sensitivity-Level  . . . . . . . . . . . . . . . . . 132
+       10.4.2.  No-Input-Timeout . . . . . . . . . . . . . . . . . . 132
+       10.4.3.  Completion-Cause . . . . . . . . . . . . . . . . . . 132
+       10.4.4.  Completion-Reason  . . . . . . . . . . . . . . . . . 133
+       10.4.5.  Failed-URI . . . . . . . . . . . . . . . . . . . . . 134
 
 
 
@@ -285,54 +285,54 @@ Burnett & Shanmugham        Standards Track                     [Page 5]
 RFC 6787                         MRCPv2                    November 2012
 
 
-       10.4.6.  Failed-URI-Cause . . . . . . . . . . . . . . . . . . 133
-       10.4.7.  Record-URI . . . . . . . . . . . . . . . . . . . . . 133
-       10.4.8.  Media-Type . . . . . . . . . . . . . . . . . . . . . 134
-       10.4.9.  Max-Time . . . . . . . . . . . . . . . . . . . . . . 134
-       10.4.10. Trim-Length  . . . . . . . . . . . . . . . . . . . . 134
-       10.4.11. Final-Silence  . . . . . . . . . . . . . . . . . . . 134
-       10.4.12. Capture-On-Speech  . . . . . . . . . . . . . . . . . 135
-       10.4.13. Ver-Buffer-Utterance . . . . . . . . . . . . . . . . 135
-       10.4.14. Start-Input-Timers . . . . . . . . . . . . . . . . . 135
-       10.4.15. New-Audio-Channel  . . . . . . . . . . . . . . . . . 136
-     10.5.  Recorder Message Body  . . . . . . . . . . . . . . . . . 136
-     10.6.  RECORD . . . . . . . . . . . . . . . . . . . . . . . . . 136
-     10.7.  STOP . . . . . . . . . . . . . . . . . . . . . . . . . . 137
-     10.8.  RECORD-COMPLETE  . . . . . . . . . . . . . . . . . . . . 138
-     10.9.  START-INPUT-TIMERS . . . . . . . . . . . . . . . . . . . 138
-     10.10. START-OF-INPUT . . . . . . . . . . . . . . . . . . . . . 139
-   11. Speaker Verification and Identification . . . . . . . . . . . 139
-     11.1.  Speaker Verification State Machine . . . . . . . . . . . 141
-     11.2.  Speaker Verification Methods . . . . . . . . . . . . . . 143
-     11.3.  Verification Events  . . . . . . . . . . . . . . . . . . 144
-     11.4.  Verification Header Fields . . . . . . . . . . . . . . . 144
-       11.4.1.  Repository-URI . . . . . . . . . . . . . . . . . . . 145
-       11.4.2.  Voiceprint-Identifier  . . . . . . . . . . . . . . . 145
-       11.4.3.  Verification-Mode  . . . . . . . . . . . . . . . . . 145
-       11.4.4.  Adapt-Model  . . . . . . . . . . . . . . . . . . . . 146
-       11.4.5.  Abort-Model  . . . . . . . . . . . . . . . . . . . . 147
-       11.4.6.  Min-Verification-Score . . . . . . . . . . . . . . . 147
-       11.4.7.  Num-Min-Verification-Phrases . . . . . . . . . . . . 147
-       11.4.8.  Num-Max-Verification-Phrases . . . . . . . . . . . . 148
-       11.4.9.  No-Input-Timeout . . . . . . . . . . . . . . . . . . 148
-       11.4.10. Save-Waveform  . . . . . . . . . . . . . . . . . . . 148
-       11.4.11. Media-Type . . . . . . . . . . . . . . . . . . . . . 149
-       11.4.12. Waveform-URI . . . . . . . . . . . . . . . . . . . . 149
-       11.4.13. Voiceprint-Exists  . . . . . . . . . . . . . . . . . 149
-       11.4.14. Ver-Buffer-Utterance . . . . . . . . . . . . . . . . 150
-       11.4.15. Input-Waveform-URI . . . . . . . . . . . . . . . . . 150
-       11.4.16. Completion-Cause . . . . . . . . . . . . . . . . . . 150
-       11.4.17. Completion-Reason  . . . . . . . . . . . . . . . . . 152
-       11.4.18. Speech-Complete-Timeout  . . . . . . . . . . . . . . 152
-       11.4.19. New-Audio-Channel  . . . . . . . . . . . . . . . . . 152
-       11.4.20. Abort-Verification . . . . . . . . . . . . . . . . . 152
-       11.4.21. Start-Input-Timers . . . . . . . . . . . . . . . . . 152
-     11.5.  Verification Message Body  . . . . . . . . . . . . . . . 153
-       11.5.1.  Verification Result Data . . . . . . . . . . . . . . 153
-       11.5.2.  Verification Result Elements . . . . . . . . . . . . 153
-     11.6.  START-SESSION  . . . . . . . . . . . . . . . . . . . . . 157
-     11.7.  END-SESSION  . . . . . . . . . . . . . . . . . . . . . . 158
-     11.8.  QUERY-VOICEPRINT . . . . . . . . . . . . . . . . . . . . 159
+       10.4.6.  Failed-URI-Cause . . . . . . . . . . . . . . . . . . 134
+       10.4.7.  Record-URI . . . . . . . . . . . . . . . . . . . . . 134
+       10.4.8.  Media-Type . . . . . . . . . . . . . . . . . . . . . 135
+       10.4.9.  Max-Time . . . . . . . . . . . . . . . . . . . . . . 135
+       10.4.10. Trim-Length  . . . . . . . . . . . . . . . . . . . . 135
+       10.4.11. Final-Silence  . . . . . . . . . . . . . . . . . . . 135
+       10.4.12. Capture-On-Speech  . . . . . . . . . . . . . . . . . 136
+       10.4.13. Ver-Buffer-Utterance . . . . . . . . . . . . . . . . 136
+       10.4.14. Start-Input-Timers . . . . . . . . . . . . . . . . . 136
+       10.4.15. New-Audio-Channel  . . . . . . . . . . . . . . . . . 137
+     10.5.  Recorder Message Body  . . . . . . . . . . . . . . . . . 137
+     10.6.  RECORD . . . . . . . . . . . . . . . . . . . . . . . . . 137
+     10.7.  STOP . . . . . . . . . . . . . . . . . . . . . . . . . . 138
+     10.8.  RECORD-COMPLETE  . . . . . . . . . . . . . . . . . . . . 139
+     10.9.  START-INPUT-TIMERS . . . . . . . . . . . . . . . . . . . 139
+     10.10. START-OF-INPUT . . . . . . . . . . . . . . . . . . . . . 140
+   11. Speaker Verification and Identification . . . . . . . . . . . 140
+     11.1.  Speaker Verification State Machine . . . . . . . . . . . 142
+     11.2.  Speaker Verification Methods . . . . . . . . . . . . . . 144
+     11.3.  Verification Events  . . . . . . . . . . . . . . . . . . 145
+     11.4.  Verification Header Fields . . . . . . . . . . . . . . . 145
+       11.4.1.  Repository-URI . . . . . . . . . . . . . . . . . . . 146
+       11.4.2.  Voiceprint-Identifier  . . . . . . . . . . . . . . . 146
+       11.4.3.  Verification-Mode  . . . . . . . . . . . . . . . . . 146
+       11.4.4.  Adapt-Model  . . . . . . . . . . . . . . . . . . . . 147
+       11.4.5.  Abort-Model  . . . . . . . . . . . . . . . . . . . . 148
+       11.4.6.  Min-Verification-Score . . . . . . . . . . . . . . . 148
+       11.4.7.  Num-Min-Verification-Phrases . . . . . . . . . . . . 148
+       11.4.8.  Num-Max-Verification-Phrases . . . . . . . . . . . . 149
+       11.4.9.  No-Input-Timeout . . . . . . . . . . . . . . . . . . 149
+       11.4.10. Save-Waveform  . . . . . . . . . . . . . . . . . . . 149
+       11.4.11. Media-Type . . . . . . . . . . . . . . . . . . . . . 150
+       11.4.12. Waveform-URI . . . . . . . . . . . . . . . . . . . . 150
+       11.4.13. Voiceprint-Exists  . . . . . . . . . . . . . . . . . 150
+       11.4.14. Ver-Buffer-Utterance . . . . . . . . . . . . . . . . 151
+       11.4.15. Input-Waveform-URI . . . . . . . . . . . . . . . . . 151
+       11.4.16. Completion-Cause . . . . . . . . . . . . . . . . . . 151
+       11.4.17. Completion-Reason  . . . . . . . . . . . . . . . . . 153
+       11.4.18. Speech-Complete-Timeout  . . . . . . . . . . . . . . 153
+       11.4.19. New-Audio-Channel  . . . . . . . . . . . . . . . . . 153
+       11.4.20. Abort-Verification . . . . . . . . . . . . . . . . . 153
+       11.4.21. Start-Input-Timers . . . . . . . . . . . . . . . . . 153
+     11.5.  Verification Message Body  . . . . . . . . . . . . . . . 154
+       11.5.1.  Verification Result Data . . . . . . . . . . . . . . 154
+       11.5.2.  Verification Result Elements . . . . . . . . . . . . 154
+     11.6.  START-SESSION  . . . . . . . . . . . . . . . . . . . . . 158
+     11.7.  END-SESSION  . . . . . . . . . . . . . . . . . . . . . . 159
+     11.8.  QUERY-VOICEPRINT . . . . . . . . . . . . . . . . . . . . 160
 
 
 
@@ -341,54 +341,54 @@ Burnett & Shanmugham        Standards Track                     [Page 6]
 RFC 6787                         MRCPv2                    November 2012
 
 
-     11.9.  DELETE-VOICEPRINT  . . . . . . . . . . . . . . . . . . . 160
-     11.10. VERIFY . . . . . . . . . . . . . . . . . . . . . . . . . 160
-     11.11. VERIFY-FROM-BUFFER . . . . . . . . . . . . . . . . . . . 161
-     11.12. VERIFY-ROLLBACK  . . . . . . . . . . . . . . . . . . . . 164
-     11.13. STOP . . . . . . . . . . . . . . . . . . . . . . . . . . 164
-     11.14. START-INPUT-TIMERS . . . . . . . . . . . . . . . . . . . 165
-     11.15. VERIFICATION-COMPLETE  . . . . . . . . . . . . . . . . . 166
-     11.16. START-OF-INPUT . . . . . . . . . . . . . . . . . . . . . 166
-     11.17. CLEAR-BUFFER . . . . . . . . . . . . . . . . . . . . . . 167
-     11.18. GET-INTERMEDIATE-RESULT  . . . . . . . . . . . . . . . . 167
-   12. Security Considerations . . . . . . . . . . . . . . . . . . . 168
-     12.1.  Rendezvous and Session Establishment . . . . . . . . . . 168
-     12.2.  Control Channel Protection . . . . . . . . . . . . . . . 169
-     12.3.  Media Session Protection . . . . . . . . . . . . . . . . 169
-     12.4.  Indirect Content Access  . . . . . . . . . . . . . . . . 169
-     12.5.  Protection of Stored Media . . . . . . . . . . . . . . . 171
-     12.6.  DTMF and Recognition Buffers . . . . . . . . . . . . . . 171
-     12.7.  Client-Set Server Parameters . . . . . . . . . . . . . . 171
-     12.8.  DELETE-VOICEPRINT and Authorization  . . . . . . . . . . 171
-   13. IANA Considerations . . . . . . . . . . . . . . . . . . . . . 171
-     13.1.  New Registries . . . . . . . . . . . . . . . . . . . . . 172
-       13.1.1.  MRCPv2 Resource Types  . . . . . . . . . . . . . . . 172
-       13.1.2.  MRCPv2 Methods and Events  . . . . . . . . . . . . . 172
-       13.1.3.  MRCPv2 Header Fields . . . . . . . . . . . . . . . . 173
-       13.1.4.  MRCPv2 Status Codes  . . . . . . . . . . . . . . . . 176
-       13.1.5.  Grammar Reference List Parameters  . . . . . . . . . 176
-       13.1.6.  MRCPv2 Vendor-Specific Parameters  . . . . . . . . . 176
-     13.2.  NLSML-Related Registrations  . . . . . . . . . . . . . . 177
-       13.2.1.  'application/nlsml+xml' Media Type Registration  . . 177
-     13.3.  NLSML XML Schema Registration  . . . . . . . . . . . . . 178
-     13.4.  MRCPv2 XML Namespace Registration  . . . . . . . . . . . 178
-     13.5.  Text Media Type Registrations  . . . . . . . . . . . . . 179
-       13.5.1.  text/grammar-ref-list  . . . . . . . . . . . . . . . 179
-     13.6.  'session' URI Scheme Registration  . . . . . . . . . . . 180
-     13.7.  SDP Parameter Registrations  . . . . . . . . . . . . . . 181
-       13.7.1.  Sub-Registry "proto" . . . . . . . . . . . . . . . . 181
-       13.7.2.  Sub-Registry "att-field (media-level)" . . . . . . . 182
-   14. Examples  . . . . . . . . . . . . . . . . . . . . . . . . . . 183
-     14.1.  Message Flow . . . . . . . . . . . . . . . . . . . . . . 183
-     14.2.  Recognition Result Examples  . . . . . . . . . . . . . . 193
-       14.2.1.  Simple ASR Ambiguity . . . . . . . . . . . . . . . . 193
-       14.2.2.  Mixed Initiative . . . . . . . . . . . . . . . . . . 193
-       14.2.3.  DTMF Input . . . . . . . . . . . . . . . . . . . . . 195
-       14.2.4.  Interpreting Meta-Dialog and Meta-Task Utterances  . 195
-       14.2.5.  Anaphora and Deixis  . . . . . . . . . . . . . . . . 196
+     11.9.  DELETE-VOICEPRINT  . . . . . . . . . . . . . . . . . . . 161
+     11.10. VERIFY . . . . . . . . . . . . . . . . . . . . . . . . . 161
+     11.11. VERIFY-FROM-BUFFER . . . . . . . . . . . . . . . . . . . 162
+     11.12. VERIFY-ROLLBACK  . . . . . . . . . . . . . . . . . . . . 165
+     11.13. STOP . . . . . . . . . . . . . . . . . . . . . . . . . . 165
+     11.14. START-INPUT-TIMERS . . . . . . . . . . . . . . . . . . . 166
+     11.15. VERIFICATION-COMPLETE  . . . . . . . . . . . . . . . . . 167
+     11.16. START-OF-INPUT . . . . . . . . . . . . . . . . . . . . . 167
+     11.17. CLEAR-BUFFER . . . . . . . . . . . . . . . . . . . . . . 168
+     11.18. GET-INTERMEDIATE-RESULT  . . . . . . . . . . . . . . . . 168
+   12. Security Considerations . . . . . . . . . . . . . . . . . . . 169
+     12.1.  Rendezvous and Session Establishment . . . . . . . . . . 169
+     12.2.  Control Channel Protection . . . . . . . . . . . . . . . 170
+     12.3.  Media Session Protection . . . . . . . . . . . . . . . . 170
+     12.4.  Indirect Content Access  . . . . . . . . . . . . . . . . 170
+     12.5.  Protection of Stored Media . . . . . . . . . . . . . . . 172
+     12.6.  DTMF and Recognition Buffers . . . . . . . . . . . . . . 172
+     12.7.  Client-Set Server Parameters . . . . . . . . . . . . . . 172
+     12.8.  DELETE-VOICEPRINT and Authorization  . . . . . . . . . . 172
+   13. IANA Considerations . . . . . . . . . . . . . . . . . . . . . 172
+     13.1.  New Registries . . . . . . . . . . . . . . . . . . . . . 173
+       13.1.1.  MRCPv2 Resource Types  . . . . . . . . . . . . . . . 173
+       13.1.2.  MRCPv2 Methods and Events  . . . . . . . . . . . . . 173
+       13.1.3.  MRCPv2 Header Fields . . . . . . . . . . . . . . . . 174
+       13.1.4.  MRCPv2 Status Codes  . . . . . . . . . . . . . . . . 177
+       13.1.5.  Grammar Reference List Parameters  . . . . . . . . . 177
+       13.1.6.  MRCPv2 Vendor-Specific Parameters  . . . . . . . . . 177
+     13.2.  NLSML-Related Registrations  . . . . . . . . . . . . . . 178
+       13.2.1.  'application/nlsml+xml' Media Type Registration  . . 178
+     13.3.  NLSML XML Schema Registration  . . . . . . . . . . . . . 179
+     13.4.  MRCPv2 XML Namespace Registration  . . . . . . . . . . . 179
+     13.5.  Text Media Type Registrations  . . . . . . . . . . . . . 180
+       13.5.1.  text/grammar-ref-list  . . . . . . . . . . . . . . . 180
+     13.6.  'session' URI Scheme Registration  . . . . . . . . . . . 181
+     13.7.  SDP Parameter Registrations  . . . . . . . . . . . . . . 182
+       13.7.1.  Sub-Registry "proto" . . . . . . . . . . . . . . . . 182
+       13.7.2.  Sub-Registry "att-field (media-level)" . . . . . . . 183
+   14. Examples  . . . . . . . . . . . . . . . . . . . . . . . . . . 184
+     14.1.  Message Flow . . . . . . . . . . . . . . . . . . . . . . 184
+     14.2.  Recognition Result Examples  . . . . . . . . . . . . . . 194
+       14.2.1.  Simple ASR Ambiguity . . . . . . . . . . . . . . . . 194
+       14.2.2.  Mixed Initiative . . . . . . . . . . . . . . . . . . 194
+       14.2.3.  DTMF Input . . . . . . . . . . . . . . . . . . . . . 196
+       14.2.4.  Interpreting Meta-Dialog and Meta-Task Utterances  . 196
+       14.2.5.  Anaphora and Deixis  . . . . . . . . . . . . . . . . 197
        14.2.6.  Distinguishing Individual Items from Sets with One
-                Member . . . . . . . . . . . . . . . . . . . . . . . 197
-       14.2.7.  Extensibility  . . . . . . . . . . . . . . . . . . . 197
+                Member . . . . . . . . . . . . . . . . . . . . . . . 198
+       14.2.7.  Extensibility  . . . . . . . . . . . . . . . . . . . 198
 
 
 
@@ -397,17 +397,17 @@ Burnett & Shanmugham        Standards Track                     [Page 7]
 RFC 6787                         MRCPv2                    November 2012
 
 
-   15. ABNF Normative Definition . . . . . . . . . . . . . . . . . . 198
-   16. XML Schemas . . . . . . . . . . . . . . . . . . . . . . . . . 212
-     16.1.  NLSML Schema Definition  . . . . . . . . . . . . . . . . 213
-     16.2.  Enrollment Results Schema Definition . . . . . . . . . . 214
-     16.3.  Verification Results Schema Definition . . . . . . . . . 216
-   17. References  . . . . . . . . . . . . . . . . . . . . . . . . . 219
-     17.1.  Normative References . . . . . . . . . . . . . . . . . . 219
-     17.2.  Informative References . . . . . . . . . . . . . . . . . 222
-   Appendix A.  Contributors . . . . . . . . . . . . . . . . . . . . 224
-   Appendix B.  Acknowledgements . . . . . . . . . . . . . . . . . . 224
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 225
+   15. ABNF Normative Definition . . . . . . . . . . . . . . . . . . 199
+   16. XML Schemas . . . . . . . . . . . . . . . . . . . . . . . . . 213
+     16.1.  NLSML Schema Definition  . . . . . . . . . . . . . . . . 214
+     16.2.  Enrollment Results Schema Definition . . . . . . . . . . 215
+     16.3.  Verification Results Schema Definition . . . . . . . . . 217
+   17. References  . . . . . . . . . . . . . . . . . . . . . . . . . 220
+     17.1.  Normative References . . . . . . . . . . . . . . . . . . 220
+     17.2.  Informative References . . . . . . . . . . . . . . . . . 223
+   Appendix A.  Contributors . . . . . . . . . . . . . . . . . . . . 225
+   Appendix B.  Acknowledgements . . . . . . . . . . . . . . . . . . 225
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 226
 
 1.  Introduction
 
@@ -4566,29 +4566,29 @@ RFC 6787                         MRCPv2                    November 2012
    |        |                       | or DEFINE-GRAMMAR succeeded in   |
    |        |                       | downloading and compiling the    |
    |        |                       | grammar.                         |
+   |        |                       |                                  |
    | 001    | no-match              | RECOGNIZE completed, but no      |
    |        |                       | match was found.                 |
+   |        |                       |                                  |
    | 002    | no-input-timeout      | RECOGNIZE completed without a    |
    |        |                       | match due to a no-input-timeout. |
+   |        |                       |                                  |
    | 003    | hotword-maxtime       | RECOGNIZE in hotword mode        |
    |        |                       | completed without a match due to |
    |        |                       | a recognition-timeout.           |
+   |        |                       |                                  |
    | 004    | grammar-load-failure  | RECOGNIZE failed due to grammar  |
    |        |                       | load failure.                    |
+   |        |                       |                                  |
    | 005    | grammar-compilation-  | RECOGNIZE failed due to grammar  |
    |        | failure               | compilation failure.             |
+   |        |                       |                                  |
    | 006    | recognizer-error      | RECOGNIZE request terminated     |
    |        |                       | prematurely due to a recognizer  |
    |        |                       | error.                           |
+   |        |                       |                                  |
    | 007    | speech-too-early      | RECOGNIZE request terminated     |
    |        |                       | because speech was too early.    |
-   |        |                       | This happens when the audio      |
-   |        |                       | stream is already "in-speech"    |
-   |        |                       | when the RECOGNIZE request was   |
-   |        |                       | received.                        |
-   | 008    | success-maxtime       | RECOGNIZE request terminated     |
-   |        |                       | because speech was too long but  |
-   |        |                       | whatever was spoken till that    |
 
 
 
@@ -4597,13 +4597,25 @@ Burnett & Shanmugham        Standards Track                    [Page 82]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   |        |                       | This happens when the audio      |
+   |        |                       | stream is already "in-speech"    |
+   |        |                       | when the RECOGNIZE request was   |
+   |        |                       | received.                        |
+   |        |                       |                                  |
+   | 008    | success-maxtime       | RECOGNIZE request terminated     |
+   |        |                       | because speech was too long but  |
+   |        |                       | whatever was spoken till that    |
    |        |                       | point was a full match.          |
+   |        |                       |                                  |
    | 009    | uri-failure           | Failure accessing a URI.         |
+   |        |                       |                                  |
    | 010    | language-unsupported  | Language not supported.          |
+   |        |                       |                                  |
    | 011    | cancelled             | A new RECOGNIZE cancelled this   |
    |        |                       | one, or a prior RECOGNIZE failed |
    |        |                       | while this one was still in the  |
    |        |                       | queue.                           |
+   |        |                       |                                  |
    | 012    | semantics-failure     | Recognition succeeded, but       |
    |        |                       | semantic interpretation of the   |
    |        |                       | recognized input failed. The     |
@@ -4611,16 +4623,19 @@ RFC 6787                         MRCPv2                    November 2012
    |        |                       | contain the Recognition result   |
    |        |                       | with only input text and no      |
    |        |                       | interpretation.                  |
+   |        |                       |                                  |
    | 013    | partial-match         | Speech Incomplete Timeout        |
    |        |                       | expired before there was a full  |
    |        |                       | match. But whatever was spoken   |
    |        |                       | till that point was a partial    |
    |        |                       | match to one or more grammars.   |
+   |        |                       |                                  |
    | 014    | partial-match-maxtime | The Recognition-Timeout expired  |
    |        |                       | before full match was achieved.  |
    |        |                       | But whatever was spoken till     |
    |        |                       | that point was a partial match   |
    |        |                       | to one or more grammars.         |
+   |        |                       |                                  |
    | 015    | no-match-maxtime      | The Recognition-Timeout expired. |
    |        |                       | Whatever was spoken till that    |
    |        |                       | point did not match any of the   |
@@ -4628,7 +4643,16 @@ RFC 6787                         MRCPv2                    November 2012
    |        |                       | be returned if the recognizer    |
    |        |                       | does not support detecting       |
    |        |                       | partial grammar matches.         |
+   |        |                       |                                  |
    | 016    | grammar-definition-   | Any DEFINE-GRAMMAR error other   |
+
+
+
+Burnett & Shanmugham        Standards Track                    [Page 83]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    |        | failure               | than grammar-load-failure and    |
    |        |                       | grammar-compilation-failure.     |
    +--------+-----------------------+----------------------------------+
@@ -4642,16 +4666,6 @@ RFC 6787                         MRCPv2                    November 2012
    this header field to communicate text describing the reason for the
    failure, such as the specific error encountered in parsing a grammar
    markup.
-
-
-
-
-
-
-Burnett & Shanmugham        Standards Track                    [Page 83]
-
-RFC 6787                         MRCPv2                    November 2012
-
 
    The completion reason text is provided for client use in logs and for
    debugging and instrumentation purposes.  Clients MUST NOT interpret
@@ -4687,6 +4701,14 @@ RFC 6787                         MRCPv2                    November 2012
                                 [1*VCHAR] CRLF
 
 
+
+
+
+Burnett & Shanmugham        Standards Track                    [Page 84]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
 9.4.14.  Start-Input-Timers
 
    This header field MAY be sent as part of the RECOGNIZE request.  A
@@ -4700,14 +4722,6 @@ RFC 6787                         MRCPv2                    November 2012
    simultaneously active so that it can detect and implement kill-on-
    barge-in.  However, the recognizer SHOULD NOT start the no-input
    timers until the prompt is finished.  The default value is "true".
-
-
-
-
-Burnett & Shanmugham        Standards Track                    [Page 84]
-
-RFC 6787                         MRCPv2                    November 2012
-
 
    start-input-timers  =  "Start-Input-Timers" ":" BOOLEAN CRLF
 
@@ -4743,6 +4757,14 @@ RFC 6787                         MRCPv2                    November 2012
    user speech after which a recognizer finalizes a result.  The
    incomplete timeout applies when the speech prior to the silence is an
    incomplete match of all active grammars.  In this case, once the
+
+
+
+Burnett & Shanmugham        Standards Track                    [Page 85]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    timeout is triggered, the partial result is rejected (with a
    Completion-Cause of "partial-match").  The value is in milliseconds.
    The value for this header field ranges from 0 to an implementation-
@@ -4757,14 +4779,6 @@ RFC 6787                         MRCPv2                    November 2012
    the silence is a complete match of an active grammar, but where it is
    possible to speak further and still match the grammar.  By contrast,
    the Speech-Complete-Timeout is used when the speech is a complete
-
-
-
-Burnett & Shanmugham        Standards Track                    [Page 85]
-
-RFC 6787                         MRCPv2                    November 2012
-
-
    match to an active grammar and no further spoken words can continue
    to represent a match.
 
@@ -4800,6 +4814,13 @@ RFC 6787                         MRCPv2                    November 2012
    specific maximum value.  The default value is 10 seconds.  This
    header field MAY occur in RECOGNIZE, SET-PARAMS, or GET-PARAMS.
 
+
+
+Burnett & Shanmugham        Standards Track                    [Page 86]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    dtmf-term-timeout        =  "DTMF-Term-Timeout" ":" 1*19DIGIT CRLF
 
 
@@ -4811,14 +4832,6 @@ RFC 6787                         MRCPv2                    November 2012
    RECOGNIZE, SET-PARAMS, or GET-PARAMS.
 
    dtmf-term-char           =  "DTMF-Term-Char" ":" VCHAR CRLF
-
-
-
-
-
-Burnett & Shanmugham        Standards Track                    [Page 86]
-
-RFC 6787                         MRCPv2                    November 2012
 
 
 9.4.20.  Failed-URI
@@ -4856,6 +4869,14 @@ RFC 6787                         MRCPv2                    November 2012
    content is otherwise not available, the recognizer MUST return an
    empty Waveform-URI header field.  The default value for this field is
    "false".  This header field MAY occur in RECOGNIZE, SET-PARAMS, or
+
+
+
+Burnett & Shanmugham        Standards Track                    [Page 87]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    GET-PARAMS.  See the discussion on the sensitivity of saved waveforms
    in Section 12.
 
@@ -4869,14 +4890,6 @@ RFC 6787                         MRCPv2                    November 2012
    audio comes from a different audio source, channel, or speaker.  If
    the recognizer resource had collected any input statistics or
    adaptation state, the recognizer resource MUST do what is appropriate
-
-
-
-Burnett & Shanmugham        Standards Track                    [Page 87]
-
-RFC 6787                         MRCPv2                    November 2012
-
-
    for the specific recognition technology, which includes but is not
    limited to discarding any collected input statistics or adaptation
    state before starting the RECOGNIZE request.  Note that if there are
@@ -4913,6 +4926,13 @@ RFC 6787                         MRCPv2                    November 2012
    session.  The buffer is released when the verifier resource is
    released from the session.
 
+
+
+Burnett & Shanmugham        Standards Track                    [Page 88]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
 9.4.26.  Recognition-Mode
 
    This header field specifies what mode the RECOGNIZE method will
@@ -4925,14 +4945,6 @@ RFC 6787                         MRCPv2                    November 2012
    complete because of a timeout waiting for speech.  If the value of
    this header field is "hotword", the RECOGNIZE method operates in
    hotword mode, where it only looks for the particular keywords or DTMF
-
-
-
-Burnett & Shanmugham        Standards Track                    [Page 88]
-
-RFC 6787                         MRCPv2                    November 2012
-
-
    sequences specified in the grammar and ignores silence or other
    speech in the audio stream.  The default value for this header field
    is "normal".  This header field MAY occur on the RECOGNIZE method.
@@ -4969,6 +4981,14 @@ RFC 6787                         MRCPv2                    November 2012
    This header field MAY be sent in a hotword mode RECOGNIZE request.
    It specifies the maximum length of an utterance (in seconds) that
    will be considered for hotword recognition.  This header field, along
+
+
+
+Burnett & Shanmugham        Standards Track                    [Page 89]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    with Hotword-Min-Duration, can be used to tune performance by
    preventing the recognizer from evaluating utterances that are too
    short or too long to be one of the hotwords in the grammar(s).  The
@@ -4978,15 +4998,6 @@ RFC 6787                         MRCPv2                    November 2012
 
    hotword-max-duration     =  "Hotword-Max-Duration" ":" 1*19DIGIT
                                CRLF
-
-
-
-
-
-
-Burnett & Shanmugham        Standards Track                    [Page 89]
-
-RFC 6787                         MRCPv2                    November 2012
 
 
 9.4.29.  Hotword-Min-Duration
@@ -5026,6 +5037,14 @@ RFC 6787                         MRCPv2                    November 2012
    RECOGNIZE command active.  When a subsequent RECOGNIZE method is
    received, it MUST look to this buffer to match the RECOGNIZE request.
    If the digits in the buffer are not sufficient, then it can continue
+
+
+
+Burnett & Shanmugham        Standards Track                    [Page 90]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    to listen to more digits to match the grammar.  The default size of
    this DTMF buffer is platform specific.
 
@@ -5037,14 +5056,6 @@ RFC 6787                         MRCPv2                    November 2012
    This header field MAY be specified in a RECOGNIZE method and is used
    to tell the recognizer to clear the DTMF type-ahead buffer before
    starting the RECOGNIZE.  The default value of this header field is
-
-
-
-Burnett & Shanmugham        Standards Track                    [Page 90]
-
-RFC 6787                         MRCPv2                    November 2012
-
-
    "false", which does not clear the type-ahead buffer before starting
    the RECOGNIZE method.  If this header field is specified to be
    "true", then the RECOGNIZE will clear the DTMF buffer before starting
@@ -5081,6 +5092,15 @@ RFC 6787                         MRCPv2                    November 2012
 
 9.4.35.  Consistency-Threshold
 
+
+
+
+
+Burnett & Shanmugham        Standards Track                    [Page 91]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    This header field MAY be sent as part of the START-PHRASE-ENROLLMENT,
    SET-PARAMS, or GET-PARAMS method.  Used during voice enrollment, this
    header field specifies how similar to a previously enrolled
@@ -5092,13 +5112,6 @@ RFC 6787                         MRCPv2                    November 2012
    for this header field is implementation specific.
 
    consistency-threshold    =  "Consistency-Threshold" ":" FLOAT CRLF
-
-
-
-
-Burnett & Shanmugham        Standards Track                    [Page 91]
-
-RFC 6787                         MRCPv2                    November 2012
 
 
 9.4.36.  Clash-Threshold
@@ -5136,6 +5149,14 @@ RFC 6787                         MRCPv2                    November 2012
 
    This header field MAY be specified in the RECOGNIZE method.  If this
    header field is set to "true" and an Enrollment is active, the
+
+
+
+Burnett & Shanmugham        Standards Track                    [Page 92]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    RECOGNIZE command MUST add the collected utterance to the personal
    grammar that is being enrolled.  The way in which this occurs is
    engine specific and may be an area of future standardization.  The
@@ -5149,14 +5170,6 @@ RFC 6787                         MRCPv2                    November 2012
    This header field in a request identifies a phrase in an existing
    personal grammar for which enrollment is desired.  It is also
    returned to the client in the RECOGNIZE complete event.  This header
-
-
-
-Burnett & Shanmugham        Standards Track                    [Page 92]
-
-RFC 6787                         MRCPv2                    November 2012
-
-
    field MAY occur in START-PHRASE-ENROLLMENT, MODIFY-PHRASE, or DELETE-
    PHRASE requests.  There is no default value for this header field.
 
@@ -5191,19 +5204,6 @@ RFC 6787                         MRCPv2                    November 2012
    and MODIFY-PHRASE requests.  The default value for this header field
    is implementation specific.
 
-   weight                   =  "Weight" ":" FLOAT CRLF
-
-
-9.4.42.  Save-Best-Waveform
-
-
-
-
-
-
-
-
-
 
 
 
@@ -5212,6 +5212,11 @@ Burnett & Shanmugham        Standards Track                    [Page 93]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   weight                   =  "Weight" ":" FLOAT CRLF
+
+
+9.4.42.  Save-Best-Waveform
 
    This header field allows the client to request the recognizer
    resource to save the audio stream for the best repetition of the
@@ -5257,11 +5262,6 @@ RFC 6787                         MRCPv2                    November 2012
                                BOOLEAN CRLF
 
 
-9.5.  Recognizer Message Body
-
-   A recognizer message can carry additional data associated with the
-   request, response, or event.  The client MAY provide the grammar to
-
 
 
 Burnett & Shanmugham        Standards Track                    [Page 94]
@@ -5269,6 +5269,10 @@ Burnett & Shanmugham        Standards Track                    [Page 94]
 RFC 6787                         MRCPv2                    November 2012
 
 
+9.5.  Recognizer Message Body
+
+   A recognizer message can carry additional data associated with the
+   request, response, or event.  The client MAY provide the grammar to
    be recognized in DEFINE-GRAMMAR or RECOGNIZE requests.  When one or
    more grammars are specified using the DEFINE-GRAMMAR method, the
    server MUST attempt to fetch, compile, and optimize the grammar
@@ -5313,10 +5317,6 @@ RFC 6787                         MRCPv2                    November 2012
    MUST be freed.  If the Content-ID is redefined through a subsequent
    DEFINE-GRAMMAR with an empty message body (i.e., no grammar
    definition), then in addition to freeing any grammar previously
-   associated with the Content-ID, the server MUST clear all bindings
-   and associations to the Content-ID.  Unless and until subsequently
-   redefined, this URI MUST be interpreted by the server as one that has
-   never been set.
 
 
 
@@ -5324,6 +5324,11 @@ Burnett & Shanmugham        Standards Track                    [Page 95]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   associated with the Content-ID, the server MUST clear all bindings
+   and associations to the Content-ID.  Unless and until subsequently
+   redefined, this URI MUST be interpreted by the server as one that has
+   never been set.
 
    Grammars that have been associated with a Content-ID can be
    referenced through the 'session' URI scheme (see Section 13.6).  For
@@ -5369,11 +5374,6 @@ RFC 6787                         MRCPv2                    November 2012
                </one-of>
          </rule>
 
-   <!-- single language attachment to a rule expansion -->
-         <rule id="request">
-               may I speak to
-               <one-of xml:lang="fr-CA">
-
 
 
 Burnett & Shanmugham        Standards Track                    [Page 96]
@@ -5381,6 +5381,10 @@ Burnett & Shanmugham        Standards Track                    [Page 96]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   <!-- single language attachment to a rule expansion -->
+         <rule id="request">
+               may I speak to
+               <one-of xml:lang="fr-CA">
                      <item>Michel Tremblay</item>
                      <item>Andre Roy</item>
                </one-of>
@@ -5425,10 +5429,6 @@ RFC 6787                         MRCPv2                    November 2012
    http://www.example.com/TAC-Contact-List.grxml
 
    --break
-   Content-Type:application/srgs+xml
-   Content-ID:<request1@form-level.store>
-   Content-Length:...
-
 
 
 
@@ -5436,6 +5436,10 @@ Burnett & Shanmugham        Standards Track                    [Page 97]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   Content-Type:application/srgs+xml
+   Content-ID:<request1@form-level.store>
+   Content-Length:...
 
    <?xml version="1.0"?>
 
@@ -5480,11 +5484,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 9.5.2.  Recognizer Result Data
 
-   Recognition results are returned to the client in the message body of
-   the RECOGNITION-COMPLETE event or the GET-RESULT response message as
-   described in Section 6.3.  Element and attribute descriptions for the
-   recognition portion of the NLSML format are provided in Section 9.6
-   with a normative definition of the schema in Section 16.1.
+
 
 
 
@@ -5492,6 +5492,12 @@ Burnett & Shanmugham        Standards Track                    [Page 98]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   Recognition results are returned to the client in the message body of
+   the RECOGNITION-COMPLETE event or the GET-RESULT response message as
+   described in Section 6.3.  Element and attribute descriptions for the
+   recognition portion of the NLSML format are provided in Section 9.6
+   with a normative definition of the schema in Section 16.1.
 
    Content-Type:application/nlsml+xml
    Content-Length:...
@@ -5535,12 +5541,6 @@ RFC 6787                         MRCPv2                    November 2012
    This block of data is communicated in the SET-PARAMS and GET-PARAMS
    method/response messages.  In the GET-PARAMS method, if an empty
    Recognizer-Context-Block header field is present, then the recognizer
-   SHOULD return its vendor-specific context block, if any, in the
-   message body as an entity of media type 'application/octets' with a
-   specific Content-ID.  The Content-ID value MUST also be specified in
-   the Recognizer-Context-Block header field in the GET-PARAMS response.
-   The SET-PARAMS request wishing to provide this vendor-specific data
-   MUST send it in the message body as a typed entity with the same
 
 
 
@@ -5549,6 +5549,12 @@ Burnett & Shanmugham        Standards Track                    [Page 99]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   SHOULD return its vendor-specific context block, if any, in the
+   message body as an entity of media type 'application/octets' with a
+   specific Content-ID.  The Content-ID value MUST also be specified in
+   the Recognizer-Context-Block header field in the GET-PARAMS response.
+   The SET-PARAMS request wishing to provide this vendor-specific data
+   MUST send it in the message body as a typed entity with the same
    Content-ID that it received from the GET-PARAMS.  The Content-ID MUST
    also be sent in the Recognizer-Context-Block header field of the
    SET-PARAMS message.
@@ -5591,12 +5597,6 @@ RFC 6787                         MRCPv2                    November 2012
 
    1.  The client application might have additional information, for
        example, information from a database, that would allow it to
-       select a preferred interpretation from among the possible
-       interpretations returned from the semantic interpreter.
-
-   2.  A client-based dialog manager (e.g., VoiceXML
-       [W3C.REC-voicexml20-20040316]) that was unable to select between
-       several competing interpretations could use this information to
 
 
 
@@ -5605,6 +5605,12 @@ Burnett & Shanmugham        Standards Track                   [Page 100]
 RFC 6787                         MRCPv2                    November 2012
 
 
+       select a preferred interpretation from among the possible
+       interpretations returned from the semantic interpreter.
+
+   2.  A client-based dialog manager (e.g., VoiceXML
+       [W3C.REC-voicexml20-20040316]) that was unable to select between
+       several competing interpretations could use this information to
        go back to the user and find out what was intended.  For example,
        it could issue a SPEAK request to a synthesizer resource to emit
        "Did you say 'Boston' or 'Austin'?"
@@ -5647,12 +5653,6 @@ RFC 6787                         MRCPv2                    November 2012
    <result> can contain multiple <interpretation> elements, each of
    which is taken to be an alternative.  Similarly, <input> can contain
    multiple child <input> elements, which are taken to be cumulative.
-   To illustrate the basic usage of these elements, as a simple example,
-   consider the utterance "OK" (interpreted as "yes").  The example
-   illustrates how that utterance and its interpretation would be
-   represented in the NLSML markup.
-
-
 
 
 
@@ -5660,6 +5660,11 @@ Burnett & Shanmugham        Standards Track                   [Page 101]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   To illustrate the basic usage of these elements, as a simple example,
+   consider the utterance "OK" (interpreted as "yes").  The example
+   illustrates how that utterance and its interpretation would be
+   represented in the NLSML markup.
 
    <?xml version="1.0"?>
    <result xmlns="urn:ietf:params:xml:ns:mrcpv2"
@@ -5704,11 +5709,6 @@ RFC 6787                         MRCPv2                    November 2012
        be overridden by a grammar attribute in the <interpretation>
        element if the input was ambiguous as to which grammar it
        matched.  If all interpretation elements within the result
-       element contain their own grammar attributes, the attribute can
-       be dropped from the result element.
-
-   <?xml version="1.0"?>
-   <result xmlns="urn:ietf:params:xml:ns:mrcpv2"
 
 
 
@@ -5717,6 +5717,11 @@ Burnett & Shanmugham        Standards Track                   [Page 102]
 RFC 6787                         MRCPv2                    November 2012
 
 
+       element contain their own grammar attributes, the attribute can
+       be dropped from the result element.
+
+   <?xml version="1.0"?>
+   <result xmlns="urn:ietf:params:xml:ns:mrcpv2"
            grammar="http://www.example.com/grammar">
      <interpretation>
       ....
@@ -5759,11 +5764,6 @@ RFC 6787                         MRCPv2                    November 2012
    containing the input being analyzed, and at least one <instance>
    element containing the interpretation of the utterance.
 
-   <interpretation confidence="0.75"
-                   grammar="http://www.example.com/grammar">
-       ...
-   </interpretation>
-
 
 
 
@@ -5771,6 +5771,12 @@ RFC 6787                         MRCPv2                    November 2012
 Burnett & Shanmugham        Standards Track                   [Page 103]
 
 RFC 6787                         MRCPv2                    November 2012
+
+
+   <interpretation confidence="0.75"
+                   grammar="http://www.example.com/grammar">
+       ...
+   </interpretation>
 
 
 9.6.3.3.  <instance> Element
@@ -5815,12 +5821,6 @@ RFC 6787                         MRCPv2                    November 2012
    <instance>
        I would like to buy a coca-cola
    </instance>
-   <input>
-     I would like to buy a coke
-   </input>
-
-                          Figure 2: NSLML Example
-
 
 
 
@@ -5828,6 +5828,12 @@ Burnett & Shanmugham        Standards Track                   [Page 104]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   <input>
+     I would like to buy a coke
+   </input>
+
+                          Figure 2: NSLML Example
 
 9.6.3.4.  <input> Element
 
@@ -5872,18 +5878,18 @@ RFC 6787                         MRCPv2                    November 2012
        capable of producing prosodic information.  MRCPv2 clients MUST
        be prepared to receive such markup and MAY make use of it.
 
-   2.  An <input> tag can also contain additional <input> tags.  Having
-       additional input elements allows the representation to support
-       future multi-modal inputs as well as finer-grained speech
-       information, such as timestamps for individual words and word-
-       level confidences.
-
 
 
 Burnett & Shanmugham        Standards Track                   [Page 105]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   2.  An <input> tag can also contain additional <input> tags.  Having
+       additional input elements allows the representation to support
+       future multi-modal inputs as well as finer-grained speech
+       information, such as timestamps for individual words and word-
+       level confidences.
 
     <input>
          <input mode="speech" confidence="0.5"
@@ -5926,12 +5932,6 @@ RFC 6787                         MRCPv2                    November 2012
    <noinput> indicates that there was no input -- a timeout occurred in
    the speech recognizer due to silence.
 
-   <interpretation>
-      <instance/>
-      <input>
-         <noinput/>
-      </input>
-   </interpretation>
 
 
 
@@ -5939,6 +5939,14 @@ RFC 6787                         MRCPv2                    November 2012
 Burnett & Shanmugham        Standards Track                   [Page 106]
 
 RFC 6787                         MRCPv2                    November 2012
+
+
+   <interpretation>
+      <instance/>
+      <input>
+         <noinput/>
+      </input>
+   </interpretation>
 
 
    If there are multiple levels of inputs, the most natural place for
@@ -5980,14 +5988,6 @@ RFC 6787                         MRCPv2                    November 2012
 
    7.  confusable-phrases
 
-9.7.1.  <num-clashes> Element
-
-   The <num-clashes> element contains the number of clashes that this
-   pronunciation has with other pronunciations in an active enrollment
-   session.  The associated Clash-Threshold header field determines the
-   sensitivity of the clash measurement.  Note that clash testing can be
-   turned off completely by setting the Clash-Threshold header field
-   value to 0.
 
 
 
@@ -5996,6 +5996,15 @@ Burnett & Shanmugham        Standards Track                   [Page 107]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+9.7.1.  <num-clashes> Element
+
+   The <num-clashes> element contains the number of clashes that this
+   pronunciation has with other pronunciations in an active enrollment
+   session.  The associated Clash-Threshold header field determines the
+   sensitivity of the clash measurement.  Note that clash testing can be
+   turned off completely by setting the Clash-Threshold header field
+   value to 0.
 
 9.7.2.  <num-good-repetitions> Element
 
@@ -6036,6 +6045,14 @@ RFC 6787                         MRCPv2                    November 2012
    the personal grammar.  This element MAY be absent if there are no
    confusable phrases.
 
+
+
+
+Burnett & Shanmugham        Standards Track                   [Page 108]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
 9.8.  DEFINE-GRAMMAR
 
    The DEFINE-GRAMMAR method, from the client to the server, provides
@@ -6045,14 +6062,6 @@ RFC 6787                         MRCPv2                    November 2012
    that operation.  If caching is implemented, this URI fetching MUST
    conform to the cache control hints and parameter header fields
    associated with the method in deciding whether the URIs should be
-
-
-
-Burnett & Shanmugham        Standards Track                   [Page 108]
-
-RFC 6787                         MRCPv2                    November 2012
-
-
    fetched from cache or from the external server.  If these hints/
    parameters are not specified in the method, the values set for the
    session using SET-PARAMS/GET-PARAMS apply.  If it was not set for the
@@ -6092,6 +6101,14 @@ RFC 6787                         MRCPv2                    November 2012
                </one-of>
          </rule>
 
+
+
+
+Burnett & Shanmugham        Standards Track                   [Page 109]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    <!-- single language attachment to a rule expansion -->
          <rule id="request">
                may I speak to
@@ -6100,14 +6117,6 @@ RFC 6787                         MRCPv2                    November 2012
                      <item>Andre Roy</item>
                </one-of>
          </rule>
-
-
-
-
-Burnett & Shanmugham        Standards Track                   [Page 109]
-
-RFC 6787                         MRCPv2                    November 2012
-
 
          </grammar>
 
@@ -6148,6 +6157,14 @@ RFC 6787                         MRCPv2                    November 2012
                      "http://www.w3.org/TR/speech-grammar/grammar.dtd">
 
    <grammar xmlns="http://www.w3.org/2001/06/grammar" xml:lang="en"
+
+
+
+Burnett & Shanmugham        Standards Track                   [Page 110]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.w3.org/2001/06/grammar
               http://www.w3.org/TR/speech-grammar/grammar.xsd"
@@ -6157,14 +6174,6 @@ RFC 6787                         MRCPv2                    November 2012
 
    <rule id="basicCmd" scope="public">
      <example> please move the window </example>
-
-
-
-Burnett & Shanmugham        Standards Track                   [Page 110]
-
-RFC 6787                         MRCPv2                    November 2012
-
-
      <example> open a file </example>
 
      <ruleref
@@ -6206,6 +6215,12 @@ RFC 6787                         MRCPv2                    November 2012
    </grammar>
 
 
+
+Burnett & Shanmugham        Standards Track                   [Page 111]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    S->C:MRCP/2.0 ... 543259 200 COMPLETE
    Channel-Identifier:32AECB23433801@speechrecog
            Completion-Cause:000 success
@@ -6213,14 +6228,6 @@ RFC 6787                         MRCPv2                    November 2012
    C->S:MRCP/2.0 ... RECOGNIZE 543260
    Channel-Identifier:32AECB23433801@speechrecog
            N-Best-List-Length:2
-
-
-
-Burnett & Shanmugham        Standards Track                   [Page 111]
-
-RFC 6787                         MRCPv2                    November 2012
-
-
    Content-Type:text/uri-list
    Content-Length:...
 
@@ -6262,13 +6269,6 @@ RFC 6787                         MRCPv2                    November 2012
 
    The RECOGNIZE method from the client to the server requests the
    recognizer to start recognition and provides it with one or more
-   grammar references for grammars to match against the input media.
-   The RECOGNIZE method can carry header fields to control the
-   sensitivity, confidence level, and the level of detail in results
-   provided by the recognizer.  These header field values override the
-   current values set by a previous SET-PARAMS method.
-
-
 
 
 
@@ -6276,6 +6276,12 @@ Burnett & Shanmugham        Standards Track                   [Page 112]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   grammar references for grammars to match against the input media.
+   The RECOGNIZE method can carry header fields to control the
+   sensitivity, confidence level, and the level of detail in results
+   provided by the recognizer.  These header field values override the
+   current values set by a previous SET-PARAMS method.
 
    The RECOGNIZE method can request the recognizer resource to operate
    in normal or hotword mode as specified by the Recognition-Mode header
@@ -6319,12 +6325,6 @@ RFC 6787                         MRCPv2                    November 2012
    MUST also enroll the collected utterance in a personal grammar if the
    Enroll-Utterance header field is set to true and an Enrollment is
    active (via an earlier execution of the START-PHRASE-ENROLLMENT
-   method).  If so, and if the RECOGNIZE request contains a Content-ID
-   header field, then the resulting grammar (which includes the personal
-   grammar as a sub-grammar) can be referenced through the 'session' URI
-   scheme (see Section 13.6).
-
-
 
 
 
@@ -6332,6 +6332,11 @@ Burnett & Shanmugham        Standards Track                   [Page 113]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   method).  If so, and if the RECOGNIZE request contains a Content-ID
+   header field, then the resulting grammar (which includes the personal
+   grammar as a sub-grammar) can be referenced through the 'session' URI
+   scheme (see Section 13.6).
 
    If the resource was able to successfully start the recognition, the
    server MUST return a success status-code and a request-state of
@@ -6376,11 +6381,6 @@ RFC 6787                         MRCPv2                    November 2012
 
    Note that since the audio and the messages are carried over separate
    communication paths there may be a race condition between the start
-   of the flow of audio and the receipt of the RECOGNIZE method.  For
-   example, if an audio flow is started by the client at the same time
-   as the RECOGNIZE method is sent, either the audio or the RECOGNIZE
-   can arrive at the recognizer first.  As another example, the client
-   may choose to continuously send audio to the server and signal the
 
 
 
@@ -6389,6 +6389,11 @@ Burnett & Shanmugham        Standards Track                   [Page 114]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   of the flow of audio and the receipt of the RECOGNIZE method.  For
+   example, if an audio flow is started by the client at the same time
+   as the RECOGNIZE method is sent, either the audio or the RECOGNIZE
+   can arrive at the recognizer first.  As another example, the client
+   may choose to continuously send audio to the server and signal the
    server to recognize using the RECOGNIZE method.  Mechanisms to
    resolve this condition are outside the scope of this specification.
    The recognizer can expect the media to start flowing when it receives
@@ -6432,11 +6437,6 @@ RFC 6787                         MRCPv2                    November 2012
        case it MUST return a Completion-Cause code of "no-match".  The
        recognizer MAY return results for the partially matched grammar.
 
-   4.  When the Speech-Complete-Timer expires, the recognizer MUST
-       complete with a Completion-Cause code of "success".
-
-   5.  When the Recognition-Timeout expires, one of the following MUST
-       happen:
 
 
 
@@ -6444,6 +6444,12 @@ Burnett & Shanmugham        Standards Track                   [Page 115]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   4.  When the Speech-Complete-Timer expires, the recognizer MUST
+       complete with a Completion-Cause code of "success".
+
+   5.  When the Recognition-Timeout expires, one of the following MUST
+       happen:
 
        5.1.  If there was a partial-match, the recognizer SHOULD
              complete with a Completion-Cause code of "partial-match-
@@ -6487,12 +6493,6 @@ RFC 6787                         MRCPv2                    November 2012
    RECOGNIZE, the IN-PROGRESS and START-OF-INPUT status messages, and
    the final RECOGNITION-COMPLETE message containing the result.
 
-   C->S:MRCP/2.0 ... RECOGNIZE 543257
-   Channel-Identifier:32AECB23433801@speechrecog
-           Confidence-Threshold:0.9
-   Content-Type:application/srgs+xml
-   Content-ID:<request1@form-level.store>
-   Content-Length:...
 
 
 
@@ -6500,6 +6500,13 @@ Burnett & Shanmugham        Standards Track                   [Page 116]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   C->S:MRCP/2.0 ... RECOGNIZE 543257
+   Channel-Identifier:32AECB23433801@speechrecog
+           Confidence-Threshold:0.9
+   Content-Type:application/srgs+xml
+   Content-ID:<request1@form-level.store>
+   Content-Length:...
 
    <?xml version="1.0"?>
 
@@ -6542,13 +6549,6 @@ RFC 6787                         MRCPv2                    November 2012
 
    <?xml version="1.0"?>
    <result xmlns="urn:ietf:params:xml:ns:mrcpv2"
-           xmlns:ex="http://www.example.com/example"
-           grammar="session:request1@form-level.store">
-       <interpretation>
-           <instance name="Person">
-               <ex:Person>
-                   <ex:Name> Andre Roy </ex:Name>
-               </ex:Person>
 
 
 
@@ -6557,6 +6557,13 @@ Burnett & Shanmugham        Standards Track                   [Page 117]
 RFC 6787                         MRCPv2                    November 2012
 
 
+           xmlns:ex="http://www.example.com/example"
+           grammar="session:request1@form-level.store">
+       <interpretation>
+           <instance name="Person">
+               <ex:Person>
+                   <ex:Name> Andre Roy </ex:Name>
+               </ex:Person>
            </instance>
                <input>   may I speak to Andre Roy </input>
        </interpretation>
@@ -6598,6 +6605,14 @@ RFC 6787                         MRCPv2                    November 2012
 
    The STOP method from the client to the server tells the resource to
    stop recognition if a request is active.  If a RECOGNIZE request is
+
+
+
+Burnett & Shanmugham        Standards Track                   [Page 118]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    active and the STOP request successfully terminated it, then the
    response header section contains an Active-Request-Id-List header
    field containing the request-id of the RECOGNIZE request that was
@@ -6608,7 +6623,48 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 118]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Burnett & Shanmugham        Standards Track                   [Page 119]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -6664,7 +6720,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 119]
+Burnett & Shanmugham        Standards Track                   [Page 120]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -6720,7 +6776,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 120]
+Burnett & Shanmugham        Standards Track                   [Page 121]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -6776,7 +6832,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 121]
+Burnett & Shanmugham        Standards Track                   [Page 122]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -6832,7 +6888,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 122]
+Burnett & Shanmugham        Standards Track                   [Page 123]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -6888,7 +6944,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 123]
+Burnett & Shanmugham        Standards Track                   [Page 124]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -6944,7 +7000,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 124]
+Burnett & Shanmugham        Standards Track                   [Page 125]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7000,7 +7056,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 125]
+Burnett & Shanmugham        Standards Track                   [Page 126]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7056,7 +7112,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 126]
+Burnett & Shanmugham        Standards Track                   [Page 127]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7112,7 +7168,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 127]
+Burnett & Shanmugham        Standards Track                   [Page 128]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7168,7 +7224,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 128]
+Burnett & Shanmugham        Standards Track                   [Page 129]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7224,7 +7280,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 129]
+Burnett & Shanmugham        Standards Track                   [Page 130]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7280,7 +7336,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 130]
+Burnett & Shanmugham        Standards Track                   [Page 131]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7336,7 +7392,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 131]
+Burnett & Shanmugham        Standards Track                   [Page 132]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7392,7 +7448,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 132]
+Burnett & Shanmugham        Standards Track                   [Page 133]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7448,7 +7504,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 133]
+Burnett & Shanmugham        Standards Track                   [Page 134]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7504,7 +7560,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 134]
+Burnett & Shanmugham        Standards Track                   [Page 135]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7560,7 +7616,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 135]
+Burnett & Shanmugham        Standards Track                   [Page 136]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7616,7 +7672,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 136]
+Burnett & Shanmugham        Standards Track                   [Page 137]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7672,7 +7728,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 137]
+Burnett & Shanmugham        Standards Track                   [Page 138]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7728,7 +7784,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 138]
+Burnett & Shanmugham        Standards Track                   [Page 139]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7784,7 +7840,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 139]
+Burnett & Shanmugham        Standards Track                   [Page 140]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7840,7 +7896,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 140]
+Burnett & Shanmugham        Standards Track                   [Page 141]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7896,7 +7952,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 141]
+Burnett & Shanmugham        Standards Track                   [Page 142]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -7952,7 +8008,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 142]
+Burnett & Shanmugham        Standards Track                   [Page 143]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8008,7 +8064,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 143]
+Burnett & Shanmugham        Standards Track                   [Page 144]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8064,7 +8120,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 144]
+Burnett & Shanmugham        Standards Track                   [Page 145]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8120,7 +8176,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 145]
+Burnett & Shanmugham        Standards Track                   [Page 146]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8176,7 +8232,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 146]
+Burnett & Shanmugham        Standards Track                   [Page 147]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8232,7 +8288,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 147]
+Burnett & Shanmugham        Standards Track                   [Page 148]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8288,7 +8344,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 148]
+Burnett & Shanmugham        Standards Track                   [Page 149]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8344,7 +8400,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 149]
+Burnett & Shanmugham        Standards Track                   [Page 150]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8400,7 +8456,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 150]
+Burnett & Shanmugham        Standards Track                   [Page 151]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8456,7 +8512,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 151]
+Burnett & Shanmugham        Standards Track                   [Page 152]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8512,7 +8568,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 152]
+Burnett & Shanmugham        Standards Track                   [Page 153]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8568,7 +8624,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 153]
+Burnett & Shanmugham        Standards Track                   [Page 154]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8624,7 +8680,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 154]
+Burnett & Shanmugham        Standards Track                   [Page 155]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8680,7 +8736,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 155]
+Burnett & Shanmugham        Standards Track                   [Page 156]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8736,7 +8792,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 156]
+Burnett & Shanmugham        Standards Track                   [Page 157]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8792,7 +8848,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 157]
+Burnett & Shanmugham        Standards Track                   [Page 158]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8848,7 +8904,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 158]
+Burnett & Shanmugham        Standards Track                   [Page 159]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8904,7 +8960,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 159]
+Burnett & Shanmugham        Standards Track                   [Page 160]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -8960,7 +9016,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 160]
+Burnett & Shanmugham        Standards Track                   [Page 161]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9016,7 +9072,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 161]
+Burnett & Shanmugham        Standards Track                   [Page 162]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9072,7 +9128,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 162]
+Burnett & Shanmugham        Standards Track                   [Page 163]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9128,7 +9184,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 163]
+Burnett & Shanmugham        Standards Track                   [Page 164]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9184,7 +9240,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 164]
+Burnett & Shanmugham        Standards Track                   [Page 165]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9240,7 +9296,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 165]
+Burnett & Shanmugham        Standards Track                   [Page 166]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9296,7 +9352,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 166]
+Burnett & Shanmugham        Standards Track                   [Page 167]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9352,7 +9408,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 167]
+Burnett & Shanmugham        Standards Track                   [Page 168]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9408,7 +9464,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 168]
+Burnett & Shanmugham        Standards Track                   [Page 169]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9464,7 +9520,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 169]
+Burnett & Shanmugham        Standards Track                   [Page 170]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9520,7 +9576,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 170]
+Burnett & Shanmugham        Standards Track                   [Page 171]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9576,7 +9632,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 171]
+Burnett & Shanmugham        Standards Track                   [Page 172]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9632,7 +9688,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 172]
+Burnett & Shanmugham        Standards Track                   [Page 173]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9688,7 +9744,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 173]
+Burnett & Shanmugham        Standards Track                   [Page 174]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9744,7 +9800,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 174]
+Burnett & Shanmugham        Standards Track                   [Page 175]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9800,7 +9856,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 175]
+Burnett & Shanmugham        Standards Track                   [Page 176]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9856,7 +9912,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 176]
+Burnett & Shanmugham        Standards Track                   [Page 177]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9912,7 +9968,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 177]
+Burnett & Shanmugham        Standards Track                   [Page 178]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -9968,7 +10024,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 178]
+Burnett & Shanmugham        Standards Track                   [Page 179]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10024,7 +10080,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 179]
+Burnett & Shanmugham        Standards Track                   [Page 180]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10080,7 +10136,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 180]
+Burnett & Shanmugham        Standards Track                   [Page 181]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10136,7 +10192,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 181]
+Burnett & Shanmugham        Standards Track                   [Page 182]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10192,7 +10248,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 182]
+Burnett & Shanmugham        Standards Track                   [Page 183]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10248,7 +10304,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 183]
+Burnett & Shanmugham        Standards Track                   [Page 184]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10304,7 +10360,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 184]
+Burnett & Shanmugham        Standards Track                   [Page 185]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10360,7 +10416,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 185]
+Burnett & Shanmugham        Standards Track                   [Page 186]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10416,7 +10472,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 186]
+Burnett & Shanmugham        Standards Track                   [Page 187]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10472,7 +10528,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 187]
+Burnett & Shanmugham        Standards Track                   [Page 188]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10528,7 +10584,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 188]
+Burnett & Shanmugham        Standards Track                   [Page 189]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10584,7 +10640,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 189]
+Burnett & Shanmugham        Standards Track                   [Page 190]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10640,7 +10696,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 190]
+Burnett & Shanmugham        Standards Track                   [Page 191]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10696,7 +10752,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 191]
+Burnett & Shanmugham        Standards Track                   [Page 192]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10752,7 +10808,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 192]
+Burnett & Shanmugham        Standards Track                   [Page 193]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10808,7 +10864,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 193]
+Burnett & Shanmugham        Standards Track                   [Page 194]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10864,7 +10920,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 194]
+Burnett & Shanmugham        Standards Track                   [Page 195]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10920,7 +10976,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 195]
+Burnett & Shanmugham        Standards Track                   [Page 196]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -10976,7 +11032,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 196]
+Burnett & Shanmugham        Standards Track                   [Page 197]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11032,7 +11088,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 197]
+Burnett & Shanmugham        Standards Track                   [Page 198]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11088,7 +11144,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 198]
+Burnett & Shanmugham        Standards Track                   [Page 199]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11144,7 +11200,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 199]
+Burnett & Shanmugham        Standards Track                   [Page 200]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11200,7 +11256,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 200]
+Burnett & Shanmugham        Standards Track                   [Page 201]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11256,7 +11312,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 201]
+Burnett & Shanmugham        Standards Track                   [Page 202]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11312,7 +11368,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 202]
+Burnett & Shanmugham        Standards Track                   [Page 203]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11368,7 +11424,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 203]
+Burnett & Shanmugham        Standards Track                   [Page 204]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11424,7 +11480,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 204]
+Burnett & Shanmugham        Standards Track                   [Page 205]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11480,7 +11536,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 205]
+Burnett & Shanmugham        Standards Track                   [Page 206]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11536,7 +11592,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 206]
+Burnett & Shanmugham        Standards Track                   [Page 207]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11592,7 +11648,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 207]
+Burnett & Shanmugham        Standards Track                   [Page 208]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11648,7 +11704,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 208]
+Burnett & Shanmugham        Standards Track                   [Page 209]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11704,7 +11760,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 209]
+Burnett & Shanmugham        Standards Track                   [Page 210]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11760,7 +11816,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 210]
+Burnett & Shanmugham        Standards Track                   [Page 211]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11816,7 +11872,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 211]
+Burnett & Shanmugham        Standards Track                   [Page 212]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11872,7 +11928,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 212]
+Burnett & Shanmugham        Standards Track                   [Page 213]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11928,7 +11984,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 213]
+Burnett & Shanmugham        Standards Track                   [Page 214]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -11984,7 +12040,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 214]
+Burnett & Shanmugham        Standards Track                   [Page 215]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -12040,7 +12096,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 215]
+Burnett & Shanmugham        Standards Track                   [Page 216]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -12096,7 +12152,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 216]
+Burnett & Shanmugham        Standards Track                   [Page 217]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -12152,7 +12208,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 217]
+Burnett & Shanmugham        Standards Track                   [Page 218]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -12208,7 +12264,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 218]
+Burnett & Shanmugham        Standards Track                   [Page 219]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -12264,7 +12320,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 219]
+Burnett & Shanmugham        Standards Track                   [Page 220]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -12320,7 +12376,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 220]
+Burnett & Shanmugham        Standards Track                   [Page 221]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -12376,7 +12432,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 221]
+Burnett & Shanmugham        Standards Track                   [Page 222]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -12432,7 +12488,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 222]
+Burnett & Shanmugham        Standards Track                   [Page 223]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -12488,7 +12544,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 223]
+Burnett & Shanmugham        Standards Track                   [Page 224]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -12544,7 +12600,7 @@ Appendix B.  Acknowledgements
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 224]
+Burnett & Shanmugham        Standards Track                   [Page 225]
 
 RFC 6787                         MRCPv2                    November 2012
 
@@ -12599,4 +12655,4 @@ Authors' Addresses
 
 
 
-Burnett & Shanmugham        Standards Track                   [Page 225]
+Burnett & Shanmugham        Standards Track                   [Page 226]
