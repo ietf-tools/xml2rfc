@@ -6,6 +6,7 @@
 import os
 import time
 import datetime
+import re
 try:
     import debug
 except ImportError:
@@ -95,6 +96,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                 fix_doublespace = False
             else:
                 fix_doublespace = True
+
             par = self.wrapper.wrap(string, break_on_hyphens=False, fix_doublespace=fix_doublespace,
                                     fix_sentence_endings=fix_sentence_endings)
             # Use bullet for indentation if sub not specified
@@ -194,6 +196,14 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             bullet += '  '
         self.write_line('.ti 0')
         self.write_line(bullet + text)
+
+    def urlkeep(self, text):
+        return re.sub(r'http://', r'\%http://', text)
+
+    def write_paragraph(self, text, align='left', autoAnchor=None):
+        """ Write a generic paragraph of text.  Used for boilerplate. """
+        text = self.urlkeep(text)
+        self.write_text(text, indent=3, align=align, leading_blankline=True)
 
     def pre_indexing(self):
         # escape backslashes in the text
