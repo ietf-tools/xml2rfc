@@ -11,7 +11,7 @@ The README file                                                  M. Rose
                                                                AT&T Labs
                                                               J. Reschke
                                                               greenbytes
-                                                           July 10, 2012
+                                                               July 2012
 
 
                            xml2rfc v1.36pre1
