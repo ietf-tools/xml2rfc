@@ -261,10 +261,12 @@ class HtmlRfcWriter(BaseRfcWriter):
         # Use a hierarchy of header tags if docmapping set
         h = E.H1()
         if self.pis.get('docmapping', 'no') == 'yes':
-            if level > 1:
+            if level == 2:
                 h = E.H2()
-            elif level > 2:
+            elif level == 3:
                 h = E.H3()
+            elif level >= 4:
+                h = E.H4()
         if autoAnchor:
             h.attrib['id'] = autoAnchor
         if bullet:
