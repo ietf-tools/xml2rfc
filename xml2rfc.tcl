@@ -4332,13 +4332,22 @@ set rfc5741StatusOfMemo2_ietf_info_consensus {
 set rfc5741StatusOfMemo2_ietf_info_noconsensus {
 "This document is a product of the Internet Engineering Task Force (IETF). It has been approved for publication by the Internet Engineering Steering Group (IESG). Not all documents approved by the IESG are a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
-set rfc5741StatusOfMemo2_iab_exp {
+set rfc5741StatusOfMemo2_iab_exp_consensus {
+"This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. It represents the consensus of the Internet Architecture Board (IAB). Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_iab_exp_noconsensus {
 "This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
-set rfc5741StatusOfMemo2_iab_historic {
+set rfc5741StatusOfMemo2_iab_historic_consensus {
+"This document defines a Historic Document for the Internet community. This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. It represents the consensus of the Internet Architecture Board (IAB). Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_iab_historic_noconsensus {
 "This document defines a Historic Document for the Internet community. This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
-set rfc5741StatusOfMemo2_iab_info {
+set rfc5741StatusOfMemo2_iab_info_consensus {
+"This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. It represents the consensus of the Internet Architecture Board (IAB). Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_iab_info_noconsensus {
 "This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
 set rfc5741StatusOfMemo2_irtf_exp_consensus {
@@ -6489,16 +6498,52 @@ proc pass2begin_front {elemX} {
                             if {![catch { set rv(category) }]} {
                                 switch -- $rv(category) {
                                     exp {
-                                        global rfc5741StatusOfMemo_iab_exp rfc5741StatusOfMemo2_iab_exp 
-                                        set status "$rfc5741StatusOfMemo_iab_exp $rfc5741StatusOfMemo2_iab_exp $statusOfMemo3"
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                global rfc5741StatusOfMemo_iab_exp rfc5741StatusOfMemo2_iab_exp_consensus 
+                                                set status "$rfc5741StatusOfMemo_iab_exp $rfc5741StatusOfMemo2_iab_exp_consensus $statusOfMemo3"
+                                            }
+                                            no {
+                                                global rfc5741StatusOfMemo_iab_exp rfc5741StatusOfMemo2_iab_exp_noconsensus
+                                                set status "$rfc5741StatusOfMemo_iab_exp $rfc5741StatusOfMemo2_iab_exp_noconsensus $statusOfMemo3"
+                                            }
+                                            default {
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                            }
+                                        }
                                     }
                                     historic {
-                                        global rfc5741StatusOfMemo_iab_historic rfc5741StatusOfMemo2_iab_historic
-                                        set status "$rfc5741StatusOfMemo_iab_historic $rfc5741StatusOfMemo2_iab_historic $statusOfMemo3"
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                global rfc5741StatusOfMemo_iab_historic rfc5741StatusOfMemo2_iab_historic_consensus
+                                                set status "$rfc5741StatusOfMemo_iab_historic $rfc5741StatusOfMemo2_iab_historic_consensus $statusOfMemo3"
+                                            }
+                                            no {
+                                                global rfc5741StatusOfMemo_iab_historic rfc5741StatusOfMemo2_iab_historic_noconsensus
+                                                set status "$rfc5741StatusOfMemo_iab_historic $rfc5741StatusOfMemo2_iab_historic_noconsensus $statusOfMemo3"
+                                            }
+                                            default {
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                            }
+                                        }
                                     }
                                     info {
-                                        global rfc5741StatusOfMemo_iab_info rfc5741StatusOfMemo2_iab_info
-                                        set status "$rfc5741StatusOfMemo_iab_info $rfc5741StatusOfMemo2_iab_info $statusOfMemo3"
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                global rfc5741StatusOfMemo_iab_info rfc5741StatusOfMemo2_iab_info_consensus
+                                                set status "$rfc5741StatusOfMemo_iab_info $rfc5741StatusOfMemo2_iab_info_consensus $statusOfMemo3"
+                                            }
+                                            no {
+                                                global rfc5741StatusOfMemo_iab_info rfc5741StatusOfMemo2_iab_info_noconsensus
+                                                set status "$rfc5741StatusOfMemo_iab_info $rfc5741StatusOfMemo2_iab_info_noconsensus $statusOfMemo3"
+                                            }
+                                            default {
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                            }
+                                        }
                                     }
                                     default {
                                         unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
