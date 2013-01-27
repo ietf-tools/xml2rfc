@@ -3,7 +3,7 @@
 NAME         = 'xml2rfc'
 VERSION      = (2, 3, 12, "dev")
 CACHES       = ['/var/cache/xml2rfc', '~/.cache/xml2rfc']  # Ordered by priority
-CACHE_PREFIX = '_HTTP_CACHE'
+CACHE_PREFIX = ''
 NET_SUBDIRS  = ['bibxml', 'bibxml2', 'bibxml3', 'bibxml4', 'bibxml5']
 
 from xml2rfc.parser import *
