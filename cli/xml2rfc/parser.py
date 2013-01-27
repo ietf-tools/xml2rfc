@@ -326,6 +326,16 @@ class XmlRfcParser:
             if raw_dir not in self.library_dirs:
                 self.library_dirs.append(raw_dir)
 
+        # Initialize the caching system.  We'll replace this later if parsing.
+        self.cachingResolver = CachingResolver(cache_path=self.cache_path,
+                                        library_dirs=self.library_dirs,
+                                        templates_path=self.templates_path,
+                                        source=self.source,
+                                        network_loc=self.network_loc,
+                                        verbose=self.verbose,
+                                        quiet=self.quiet,
+                                    )
+
     def delete_cache(self, path=None):
         self.cachingResolver.delete_cache(path=path)
 
