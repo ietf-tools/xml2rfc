@@ -3,7 +3,6 @@
 import sys
 import optparse
 import os
-import shutil
 import xml2rfc
 import lxml.etree
 import datetime
@@ -112,6 +111,7 @@ def main():
     # Setup warnings module
     # xml2rfc.log.warn_error = options.warn_error and True or False
     xml2rfc.log.quiet = options.quiet and True or False
+    xml2rfc.log.verbose = options.verbose
 
     # Parse the document into an xmlrfc tree instance
     parser = xml2rfc.XmlRfcParser(source, verbose=options.verbose,
