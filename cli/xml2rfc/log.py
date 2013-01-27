@@ -51,4 +51,6 @@ def exception(message, list):
         list = [ list ]
     for e in list:
         attr = dict( [ (n,str(getattr(e, n)).replace("\n"," ")) for n in dir(e) if not n.startswith("_") ] )
+        if attr["message"].endswith(", got "):
+            attr["message"] += "nothing."
         write_err.write(" %(filename)s: Line %(line)s: %(message)s\n" % attr )
