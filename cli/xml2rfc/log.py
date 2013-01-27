@@ -13,6 +13,8 @@ import sys
 import parser
 
 quiet = False
+verbose = False
+
 write_out = sys.stdout
 write_err = sys.stderr
 
@@ -22,15 +24,17 @@ def write_on_line(*args):
     write_out.write(' '.join(args))
     write_out.flush()
 
-
 def write(*args):
     """ Prints a message to write_out """
     write_out.write(' '.join(args))
     write_out.write('\n')
 
+def note(*args):
+    if verbose and not quiet:
+        write(*args)
 
 def warn(*args):
-    """ Prints a warning message nuless quiet """
+    """ Prints a warning message unless quiet """
     if not quiet:
         write_err.write('WARNING: ' + ' '.join(args))
         write_err.write('\n')

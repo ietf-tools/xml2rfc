@@ -65,8 +65,7 @@ class CachingResolver(lxml.etree.Resolver):
             else:
                 try:
                     os.makedirs(dir)
-                    if self.verbose:
-                        xml2rfc.log.write('Created cache directory at', dir)
+                    xml2rfc.log.note('Created cache directory at', dir)
                     self.write_cache = dir
                 except OSError:
                     # Can't write to this directory, try the next one
@@ -247,10 +246,10 @@ class CachingResolver(lxml.etree.Resolver):
                              '\n    '.join(attempts)
             raise error
         else:
-            if not cached and self.verbose:
+            if not cached:
                 # Haven't printed a verbose messsage yet
                 typename = self.include and 'include' or 'entity'
-                xml2rfc.log.write('Resolving ' + typename + '...', result)
+                xml2rfc.log.note('Resolving ' + typename + '...', result)
             return result
 
     def cache(self, url):
@@ -264,9 +263,8 @@ class CachingResolver(lxml.etree.Resolver):
         for dir in self.read_caches:
             cached_path = os.path.join(dir, xml2rfc.CACHE_PREFIX, basename)
             if os.path.exists(cached_path):
-                if self.verbose:
-                    xml2rfc.log.write('Resolving ' + typename + '...', url)
-                    xml2rfc.log.write('Loaded from cache', cached_path)
+                xml2rfc.log.note('Resolving ' + typename + '...', url)
+                xml2rfc.log.note('Loaded from cache', cached_path)
                 return cached_path
         # Not found, save to `write_cache`
         if self.write_cache:
@@ -274,12 +272,12 @@ class CachingResolver(lxml.etree.Resolver):
                                       xml2rfc.CACHE_PREFIX, basename)
             try:
                 xml2rfc.utils.StrictUrlOpener().retrieve(url, write_path)
-                if self.verbose:
-                    xml2rfc.log.write('Resolving ' + typename + '...', url)
-                    xml2rfc.log.write('Created cache at', write_path)
+                xml2rfc.log.note('Resolving ' + typename + '...', url)
+                xml2rfc.log.note('Created cache at', write_path)
                 return write_path
-            except IOError:
+            except IOError, e:
                 # Invalid URL -- Error will be displayed in getReferenceRequest
+                xml2rfc.log.note("I/O Error: %s" % e)
                 return ''
         # No write cache available, test existance of URL and return
         else:
@@ -289,6 +287,7 @@ class CachingResolver(lxml.etree.Resolver):
                 return url
             except IOError:
                 # Invalid URL
+                xml2rfc.log.note("I/O Error: %s" % e)
                 return ''
 
 class XmlRfcParser:
@@ -519,7 +518,7 @@ class XmlRfc:
                 xml2rfc.log.error('DTD file does not exist:', dtd_path)
                 return False, []
             
-        # Otherwise, use documents DTD declaration
+        # Otherwise, use document's DTD declaration
         else:
             dtd = self.tree.docinfo.externalDTD
             
@@ -561,7 +560,6 @@ class XmlRfc:
         """
         # Grab processing instructions from xml tree
         element = self.tree.getroot().getprevious()
-        pairs = []
         while element is not None:
             if element.tag is lxml.etree.PI:
                 self.parse_pi(element)
