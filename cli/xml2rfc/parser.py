@@ -531,8 +531,11 @@ class XmlRfc:
             # The document was valid
             return True, []
         else:
-            # The document was not valid
-            return False, dtd.error_log
+            if len(dtd.error_log) == 0:
+                return True, []
+            else:
+                # The document was not valid
+                return False, dtd.error_log
     
     def parse_pi(self, pi):
         """ Add a processing instruction to the current state 
