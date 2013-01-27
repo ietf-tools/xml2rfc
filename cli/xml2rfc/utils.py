@@ -8,6 +8,10 @@ import re
 import textwrap
 import string
 import urllib
+try:
+    import debug
+except ImportError:
+    pass
 
 import xml2rfc.log
 
@@ -429,4 +433,4 @@ def get_initials(author):
         initial = initials[i]
         if not initial.endswith('.'):
             initials[i] = initial+'.'
-        return ' '.join(initials)
+    return ' '.join(initials)
