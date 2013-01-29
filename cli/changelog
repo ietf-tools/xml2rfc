@@ -1,9 +1,117 @@
+xml2rfc (2.4.0) ietf; urgency=medium
+
+  With this release, all issues against the 2.x series of xml2rfc has been
+  resolved.  Without doubt there will be new issues in the issue tracker,
+  but the current clean slate is nice to have.
+
+  For full details on all tickets, there's always the issue tracker:
+  http://trac.tools.ietf.org/tools/xml2rfc/trac/report/
+
+  An extract from the commit log is available below:
+
+  * In some cases, the error messages when validating an xml document are 
+    correct, but too obscure.  If a required element is absent, the error 
+    message could say for instance 'Element references content does not follow 
+    the DTD, expecting (reference)+, got ', which is correct -- the DTD 
+    validator  got nothing, when it required something, so it says 'got ', with 
+    nothing after 'got'.  But for a regular user, we now add on 'nothing.' to 
+    make things clearer.  Fixes issue #102.
+
+  * It seems there could be a bug in separate invocation of 
+    lxml.etree.DTD.validate(tree) after parsing, compared to doing parsing with 
+    dtd_validation=True.  The former fails in a case when it shouldn't, while 
+    the latter succeeds in validating a valid document.  Declaring validation 
+    as successful if the dtd.error_log is empty, even if validation returned 
+    False.  This resolves issue #103.
+
+  * Factored out the code which gets an author's initials from the xml 
+    author element, and made the get_initials() utility function return 
+    initials fixed up with trailing spaces, if missing.  The current code does 
+    not mangle initials by removing any initials but the first one.  Fixes 
+    issue #63, closes issue #10.
+
+
+  * Added code to avoid breaking URLs in boilerplate across lines.  Fixes 
+    issue #78.
+  * Added PI defaults for 'figurecount' and 'tablecount' (not listed in the 
+    xml2rfc readme...)  Also removed coupling between explicitly set 
+    rfcedstyle, compact, and subcompact settings, to follow v1 practice.
+
+  * Refactored the PI defaults to appear all in the same place, rather than 
+    spread out throughout the code.
+
+
+  * Updated draw_table to insert blank rows when PI compact is 'no'. Fixes 
+    issue #82.
+
+  * Added tests and special handling for the case when a hanging type list 
+    has less space left on the first line, after the bullet, than what's needed 
+    for the first following word.  In that case, start the list text on the 
+    following line.  Fixes issue #85.
+
+  * Modified the page-breaking code to better keep section titles together 
+    with the section text, and keep figure preamble, figure, postamble and 
+    caption together.  Updated tests.  Fixes issue #100.
+
+  * Added handling of tocdepth to the html writer.  Fixes issue #101.
+
+  * Modified how the --base switch to the xml2rfc script works, to make it 
+    easier to generate multiple output formats and place them all in the same 
+    target directory.  Also changed the default extensions for two output 
+    formats (.raw.txt and .exp.xml).
+
+  * Tweaked the html template to not permit crazy wide pages.
+
+  * Rewrote parts of the parsing in order to get hold of the number 
+    attribute of the <rfc/> tag before the full parsing is done, in order to be 
+    able to later resolve the &rfc.number; entity (which, based on how 
+    convoluted it is to get that right, I'd like to deprecate.)  Fixes issue 
+    #86.
+
+  * Numerous small fixes to indentation and wrapping of references.  Avoid 
+    wrapping URLs in references if possible.  Avoid wrapping 'Section 3.14.' if 
+    possible.  Indent more like xml2rfc v1.
+
+  * Added reduction of doublespaces in regular text, except when they might 
+    be at the end of a sentence.  Xml2rfc v1 would do this, v2 didn't till now.
+
+  * Generalized the _format_counter() method to consistently handle list 
+    counter field-widths internally, and made it adjust the field-width to the 
+    max counter width based on the list length and counter type.  Fixes an v1 
+    to -v2 incompatibility for numbered lists with 10 items or more, and other 
+    similar cases.
+
+  * Added generic base conversion code, and used that to generate list 
+    letters which will work for lists with more than 26 items.
+
+  * Reworked code to render roman numerals in lists, to place whitespace 
+    correctly in justification field.  Fixes issue #94.
+
+  * Added consensus vs. no-consensus options for IAB RFCs' Status of This 
+    Memo section.  Fixes issue #88.
+
+  * Made <t/> elements with an anchor attribute generate html with an <a 
+    name='...'/> elemnt, for linking.  Closes issue #67.
+
+  * Applied boilerplate URL-splitting prevention only in the raw writer 
+    where later do paragraph line-wrapping, instead of generically.  Fixes 
+    issue #62.
+
+  * Now permitting all versions of lxml >= 2.2.8, but notice that there may 
+    be missing build dependencies for lxml 3.x which may cause installation of 
+    lxml to fail.  (That's an lxml issue, rather than an xml2rfc issue, 
+    though...)  This fixes issue #99.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  27 Jan 2013 23:20:44 +0100
+
+
 xml2rfc (2.3.11.3) ietf; urgency=medium
 
   * Tweaked the install_required setting in setup.py to not pull down lxml 3.x
     (as it's not been tested with xml2rfc) and bumped the version.
 
  -- Henrik Levkowetz <henrik@levkowetz.com>  18 Jan 2013 17:38:18 +0100
+
 
 xml2rfc (2.3.11) ietf; urgency=medium
 
