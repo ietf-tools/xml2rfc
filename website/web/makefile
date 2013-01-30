@@ -27,7 +27,7 @@ index-debug.html: index.html
 	sed < index.html -e '/start debug section/s/!-- tr/tr/' -e '/end debug section/s/ --//' > index-debug.html
 
 install: all
-	@XML2RFC2VERSION=`xml2rfc2 --version`; \
+	@XML2RFC2VERSION=`/usr/local/bin/xml2rfc --version`; \
 	for i in $(INS) $(DERIVATIVES); do \
 	    if [ $$i -nt $(WEB)/$$i ];then \
 	        : echo cp $$i $(WEB)/$$i; \
@@ -35,6 +35,7 @@ install: all
 	        sed "s/XML2RFC2VERSION/$$XML2RFC2VERSION/g" < $$i > $(WEB)/$$i; \
 	    fi; \
 	done
+	( cd ../.. && svn log ) > $(WEB)/authoring/xml2rfc2-dev.log
 
 install-dev: all
 	cp experimental.html $(WEB)/experimental-dev.html
