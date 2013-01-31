@@ -1,7 +1,7 @@
 
 # Static values
 NAME         = 'xml2rfc'
-VERSION      = (2, 3, 12, "dev")
+VERSION      = (2, 4, 0, )
 CACHES       = ['/var/cache/xml2rfc', '~/.cache/xml2rfc']  # Ordered by priority
 CACHE_PREFIX = ''
 NET_SUBDIRS  = ['bibxml', 'bibxml2', 'bibxml3', 'bibxml4', 'bibxml5']
