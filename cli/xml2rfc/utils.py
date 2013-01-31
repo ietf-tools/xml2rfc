@@ -163,7 +163,7 @@ def num_to_baseX(num, digits=DEFAULT_DIGITS):
  
 def baseX_to_num(s, digits=DEFAULT_DIGITS):
    if s[0] == '-': return -1 * baseX_to_num(s[1:])
-   ctopos = {(c, pos) for pos, c in enumerate(digits)}
+   ctopos = dict([(c, pos) for pos, c in enumerate(digits)])
    X = len(digits)
    num = 0
    for c in s: num = num * X + ctopos[c]
