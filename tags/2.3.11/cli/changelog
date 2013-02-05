@@ -1,0 +1,133 @@
+xml2rfc (2.3.11.3) ietf; urgency=medium
+
+  * Tweaked the install_required setting in setup.py to not pull down lxml 3.x
+    (as it's not been tested with xml2rfc) and bumped the version.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  18 Jan 2013 17:38:18 +0100
+
+xml2rfc (2.3.11) ietf; urgency=medium
+
+  This release fixes all outstanding major bugs, details below.
+  The issue tracker is at http://tools.ietf.org/tools/xml2rfc/trac/.
+
+  * Updated the nroff writer to do backslash escaping on source text, to 
+    avoid escaping nroff control characters.  Fixes issue #77.
+
+  * Added a modified xref writer to the nroff output writer, in order to 
+    handle xref targets which should not be broken across lines.  This, 
+    together with changeset [688], fixes issue #80.
+
+  * Added text to the section test case to trigger the second part of issue 
+    #79.  It turns out that the changes in [688] fixed this, too; this closes 
+    issue #79.
+
+  * Tweaked the nroff generation to not break on hyphens, in order to avoid 
+    hyphenated words ending up with embedded spaces: 'pre-processing' becoming 
+    'pre- processing' if 'pre-' occurred at the end of an nroff text line.  
+    Also tweaked the line-width used in line-breaking to have matching 
+    line-breaks between .txt and .nroff output (with exception for lines ending 
+    in hyphens).
+
+  * Tweaked roman number list counter to output roman numbers in a field 5 
+    spaces wide, instead of having varied widths.  This is different from 
+    version 1, so may have to be reverted, depending on how people react.
+
+  * Added a warning for too long lines in figures and tables.  No 
+    outdenting for now; I'd like to consult some about that. Fixes issue #76.
+
+  * Updated tests showing that all list format specifiers mentioned in 
+    issue #70 now works.  Closes isssue #70.
+
+  * Changed spanx emphasis back to _this_ instead of -this-, matching the v1 
+    behaviour.  Addresses issue #70.
+
+  * Make <vspace/> in a hangindent list reset the indentation to the 
+    hang-indent, even if the bullet text is longer than the hang-indent.  
+    Addresses issue #70.
+
+  * Refined the page-breaking to not insert an extra page break for artwork
+    that won't fit on a page anyway.
+
+  * Refined the page-breaking to avoid breaking artwork and tables across 
+    pages, if possible.
+
+  * Fixed a problem with centering of titles and labels.  Fixes issue #73.
+
+  * Changed the leading and trailing whitespace lines of a page to better 
+    match legacy output.  Fixed the autobreaking algorithm to correctly avoid 
+    orphans and widows; fixes issue #72.  Removed an extra blank line at the 
+    top of the page following an early page break to avoid orphan or widow.
+
+  * Tweaked the generation of ToC dot-lines and page numbers to better 
+    match legacy xml2rfc.  Fixed a bug in the generation of xref text where 
+    trailing whitespace could cause double spaces.  Tweaked the output format 
+    to produce the correct number of leading blank lines on the first page of a 
+    document.
+
+  * Modified the handling of figure titles, so that given titles will be 
+    written also without anchor or figure counting.  Fixes issue #75.
+
+  * Tweaked the html writer to have a buffer interface that provides a 
+    self.buf similar to the other writers, for test purposes.
+
+  * Reworked the WriterElementTest suite to test all the output formats, 
+    not only paginated text.
+
+  * Added a note about /usr/local/bin permissions.  This closes issue #65.
+
+  * Added files describing possible install methods (INSTALL), and possible 
+    build commands (Makefile).
+
+  * The syntax that was used to specify the version of the lxml dependency 
+    ('>=') is not supported in python distutil setup.py files, and caused setup 
+    to try to find an lxml version greater than =2.2.8, which couldn't succeed. 
+    Fixed to say '>2.2.7' instead.  This was probably the cause of always 
+    reinstalling lxml even when it was present.
+
+  * Updated README.rst to cover the new --date option, and tweaked it a bit.
+
+  * Added some files to provide an enhanced source distribution package.
+
+  * Updated setup.py with maintainer and licence information.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  18 Jan 2013 17:38:18 +0100
+
+xml2rfc (2.3.10) ietf; urgency=low
+
+  * Changed the output text for Internet-Draft references to omit the 
+    series name, but add (work in progress).  Updated the test case to match 
+    draft revision number.
+
+  * Updated all the rfc editor boilerplate in valid test facits to match the 
+    correct outcome (which is also what the code actually produces).
+
+  * Changed the diff test error message so that the valid text is output as 
+    the original, not as the changed text of a diff.
+
+  * Corrected test cases to match correct expiry using 185 days instead of 
+    183 days from document date.
+
+  * Added missing attributes to the XmlRfcError Exception subclass, 
+    necessary in order to make it resemble lxml's error class and provide 
+    consistent error messages to the user whether they come from lxml or our 
+    own code.
+
+  * Added a licence file, indicating the licencing used by the IETF for the 
+    xml2rfc code.
+
+  * Fixed up the xml2rfc cli script to provide better help texts by telling 
+    the option parser the appropriate option variable names.
+
+  * Fixed up the help text formatting by explicitly providing an appropriate
+    help text formatter to the option parser.  
+
+  * Added an option (--date=DATE)to provide the document date on the command
+    line.
+
+  * Added an option (--no-dtd) to disable the DTD validation step.  
+
+  * Added code to catch additional exceptions and provide appropriate user
+    information, instead of an exception traceback.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  03 Jan 2013 16:59:50 +0100
+
