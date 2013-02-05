@@ -413,7 +413,7 @@ class BaseRfcWriter:
             month = date.attrib.get('month', '')
             # If year is this year, and month not specified, use current date
             if not year or (year == str(today.year) and not month) or \
-                           (year == str(today.year) and month == today.strftime("%B")):
+                           (self.draft and year == str(today.year) and month == today.strftime("%B")):
                 # Set everything to today
                 date.attrib['year'] = today.strftime('%Y')
                 date.attrib['month'] = today.strftime('%B')
