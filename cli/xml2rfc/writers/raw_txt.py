@@ -182,7 +182,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     if bullet.endswith(':') and \
                     self.pis['colonspace'] == 'yes':
                         bullet+= ' '
-                    if len(bullet) > self.width/2:
+                    if element.text and len(bullet) > self.width/2:
                         # extra check of remaining space if the bullet is
                         # very long
                         first_word = self.wrapper._split(element.text)[0]
@@ -407,7 +407,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 xml2rfc.log.warn("Output line (from source around line %s) is %s characters; longer than %s.  Excess characters: '%s':\n  '%s'\n"
                     % (source_line+num, len(line), self.width, line[self.width:], line))
             else:
-                xml2rfc.log.warn("Output line is %s characters; longer than %s.  Excess characters: '%s':\n  '%s'\n"
+                xml2rfc.log.warn("Output line (from source around line %s) is %s characters; longer than %s.  Excess characters: '%s':\n  '%s'\n"
                     % (buf_line+num, len(line), self.width, line[self.width:], line))
 
     # ---------------------------------------------------------
