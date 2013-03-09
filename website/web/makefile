@@ -1,6 +1,9 @@
 DIR=web
 PUB= $$HOME/public_html/$(DIR)
-INS= experimental.html index.html stripe.png xml2rfcFAQ.html
+CSS= xml2rfc.css xml2rfc-experimental.css xml2rfc-old.css
+PNG= blue-stripe.png stripe.png
+HTML= experimental.html index.html old.html xml2rfcFAQ.html
+INS= $(HTML) $(PNG) $(CSS)
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
 DERIVATIVES= experimental-debug.html index-debug.html \
 	experimental-new.html experimental-new-debug.html \

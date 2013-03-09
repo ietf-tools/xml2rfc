@@ -8,8 +8,6 @@ use Net::SMTP;
 use Digest::MD5 qw(md5 md5_hex);
 use Crypt::RC4;
 use XML::Parser;
-use HTTP::Request;
-use LWP::UserAgent;
 
 umask(02);
 my $dir = untaint(getcwd());
@@ -42,15 +40,6 @@ my @formats = ('ascii',  'pdf',  'epub',  'rtf',  'ps');
 umask(0);
 my $input    = $q->param('input');
 my $inputfn  = untaint($q->tmpFileName($input));
-my $url = $q->param('url');
-if (($input eq '') || ($inputfn eq '')) {
-    userError("No input file") if ($url eq '');
-    my ($content, $err) = wget($url);
-    userError($err) if ($err ne '');
-    $inputfn = "/tmp/CGItemp$$.txt";
-    createFile($inputfn, $content);
-}
-
 my $inputfndir = "$inputfn.dir";
 my $modeAsFormat = $q->param('modeAsFormat');
 if ($modeAsFormat =~ m((.*)/(.*))) {
@@ -61,7 +50,6 @@ my $mode = checkValue('mode', @modes);
 my $format = checkValue('format', @formats);
 my $type     = checkValue('type', 'ascii', 'binary', 'toframe', 'towindow', 'tofile');
 my $checking = checkValue('checking', 'strict', 'fast');
-$checking = 'fast';
 $type = 'towindow' if $type eq 'ascii';
 $type = 'tofile' if $type eq 'binary';
 
@@ -81,16 +69,16 @@ my %expandedFormats = (
     ps => "PostScript"
     );
 my %extensions = (
-    txt => 'txt',
-    html => 'html',
-    htmlxslt => 'html',
-    nr => 'nr',
-    unpg => 'unpg',
-    xml => 'xml',
-    pdf => 'pdf',
-    epub => 'epub',
-    rtf => 'rtf',
-    ps => 'ps'
+    txt => txt,
+    html => html,
+    htmlxslt => html,
+    nr => nr,
+    unpg => unpg,
+    xml => xml,
+    pdf => pdf,
+    epub => epub,
+    rtf => rtf,
+    ps => ps
     );
 
 printHeaders("text/plain") if $debug;
@@ -109,6 +97,7 @@ saveTracePass("Generating $expandedModes{$mode} output in $expandedFormats{$form
 ####### #		type = tofile
 ####### ########################### #######
 
+userError("No input file") if ($input eq '') || ($inputfn eq '');
 
 # if in cgi-bin, cd one level up
 if ($dir =~ /\/cgi-bin$/) {
@@ -125,7 +114,6 @@ $ENV{PATH} = "/usr/bin:/bin";
 $ENV{DOCUMENT_ROOT} = 'web' if !defined($ENV{DOCUMENT_ROOT});
 $ENV{SERVER_ADMIN} = 'tony@att.com';
 # $ENV{HOME} = "/var/tmp";
-# $ENV{HOME} = "/home/tonyh";
 $ENV{LANG} = "en_US";
 
 $ENV{XML_LIBRARY} = "$dir/web/public/rfc/bibxml";
@@ -146,9 +134,8 @@ foreach my $dtdFile ('rfc2629-other.ent', 'rfc2629-xhtml.ent', 'rfc2629.dtd', 'r
 # force xml to go to a file instead of the window
 $type = 'tofile' if (($type eq 'towindow') && ($mode eq 'xml'));
 
-my $newinputfn = setSubTempFile("$basename.xml");
-my $ret = rename($inputfn, $newinputfn);
-print "rename($inputfn,$newinputfn) ret='$ret'\n" if $debug;
+my $ret = rename($inputfn, setTempFile("$inputfn.xml"));
+print "rename($inputfn,$inputfn.xml) ret='$ret'\n" if $debug;
 # userError("Unable to rename temp file", $!) if $ret;
 
 
@@ -182,31 +169,13 @@ if ($mode eq 'xml') {
 }
 
 my $TMP1 = $finalTclPassHere ?
-    ($needExpansionToXml ?  setSubTempFile("$basename-2.xml") : setSubTempFile("$basename-2." . $extensions{$mode})) :
+    ($needExpansionToXml ?  setSubTempFile("$basename.xml") : setSubTempFile("$basename." . $extensions{$mode})) :
     ($needExpansionToXml ?  setTempFile("$inputfn-1.xml") : setTempFile("$inputfn-1." . $extensions{$mode}));
 
-my %xml2rfc2modes = (
-    epub => 'text',
-    html => 'html',
-    htmlxslt => 'exp',
-    nr => 'nroff',
-    pdf => 'text',
-    ps => 'text',
-    rtf => 'text',
-    txt => 'text',
-    unpg => 'raw',
-    xml => 'exp',
-    );
-# for my $key (keys %xml2rfc2modes) {
-#     print "key=$key, mode='$xml2rfc2modes{$key}'\n";
-# }
-my $xml2rfc2mode = $xml2rfc2modes{$mode};
-
-print "mode='$mode', xml2rfc2mode='$xml2rfc2mode'\n" if $debug;
 print "TMP1=$TMP1\n" if $debug;
 my $TMPERR = setTempFile("$inputfn.err");
 
-my ($ret, $out, $err) = runCommand("etc/xml2rfc2 --$xml2rfc2mode --file=$TMP1 $newinputfn", $newinputfn, $TMP1, 
+my ($ret, $out, $err) = runCommand("tclsh etc/xml2rfc-dev.tcl xml2rfc $inputfn $TMP1", $inputfn, $TMP1, 
     $needExpansionToXml ?  "Expanding internal references" : "Expanding internal references and generating $mode"
     );
 print "xml2rfc ret=$ret\n" if $debug;
@@ -389,7 +358,10 @@ if ($type eq 'towindow') {
     catFile($TMP3);
 } elsif ($type eq 'toframe') {
     my $TMPTRACE = "$inputfn-5.html";
-    createFile($TMPTRACE, $trace, "<hr/>\n");
+    open (TMPTRACE, ">", $TMPTRACE) or userError("Error writing temp files", $!);
+    print TMPTRACE $trace;
+    print TMPTRACE "<hr/>\n";
+    close TMPTRACE;
 
     # my $outputfn = getOutputName($input, $mode, $format);
     my $KEEP = keepTempFile($TMP3, "$inputfn-6." . getExtension($TMP3), $debug);
@@ -402,9 +374,9 @@ if ($type eq 'towindow') {
     print "</frameset>";
     print "</html>";
     if ($debug) {
-	print "\n================================================================\n";
+	print "\n================================================================n";
 	catFile($TMPTRACE);
-	print "================================================================\n";
+	print "================================================================n";
 	catFile($KEEP);
     }
 
@@ -592,16 +564,6 @@ sub getFile {
     return "";
 }
 
-# create a file and write the passed strings to it
-sub createFile {
-    my $fn = shift;
-    open (TMPTRACE, ">", $fn) or userError("Error writing temp files", $!);
-    for my $str (@_) {
-	print TMPTRACE $str;
-    }
-    close TMPTRACE;
-}
-
 ####### if not already generated, make sure there is a content 
 ####### type header, along with any other headers we will need
 my $printedHeader;
@@ -783,17 +745,4 @@ sub getFileValues {
 	}
     }               # Die if errors
     return "";
-}
-
-sub wget {
-    my $href = shift;
-    my $ua = new LWP::UserAgent;
-    $ua->timeout(60);
-    my $req = new HTTP::Request(GET => $href);
-    my $res = $ua->request($req);
-    if ($res->is_error) {
-	return (undef, "An error has occurred accessing $href: " . $res->status_line);
-    }
-    my $ret = $res->content;
-    return ($ret, undef);
 }
