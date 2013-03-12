@@ -212,7 +212,7 @@ my ($ret, $out, $err) = runCommand("etc/xml2rfc2 --$xml2rfc2mode --file=$TMP1 $n
 print "xml2rfc ret=$ret\n" if $debug;
 print "out='$out'\n" if $debug;
 print "err='$err'\n" if $debug;
-userError("Unable to Validate File", $err) if ($err ne '');
+userError("Unable to Validate File", $err, $out) if ($err ne '');
 
 # Do the strict DTD checking.
 if ($checking eq 'strict') {
@@ -504,9 +504,12 @@ sub userError {
  
     my $event = HTML::Entities::encode(shift);
     my $info = HTML::Entities::encode(shift);
+    my $text = HTML::Entities::encode(shift);
 
-    print "<h1>$event</h1>\n";
-    print "<pre>$info</pre>\n";
+    print "<style>.error { color: red; }</style>\n";
+    print "<h1 class='error'>$event</h1>\n";
+    print "<pre class='error'>$info</pre>\n";
+    print "<pre>$text</pre>\n";
     print "<hr/>\n";
     print $ENV{SERVER_SIGNATURE};
     print "</body></html>\n";

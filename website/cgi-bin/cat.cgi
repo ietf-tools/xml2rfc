@@ -26,7 +26,7 @@ userError("Invalid filename (empty)") if !defined($input);
 userError("Invalid filename (bad format)") if ($input !~ /^([a-zA-Z0-9]*-[0-9]*)$/);
 my $fn = decryptFileName($1);
 userError("Invalid filename (wrong directory)", $fn) if (($fn !~ "^/tmp/") && ($fn !~ "^/var/tmp/"));
-userError("File is gone -- did you click reload?") if (!-f $fn);
+userError("The file is not there -- check for error messages or you may have clicked reload") if (!-f $fn);
 userError("Invalid filename (unwritable)") if (!-w $fn);
 userError("Invalid filename (bad path)") if ($fn =~ "/../");
 
