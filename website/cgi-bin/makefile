@@ -1,6 +1,6 @@
 DIR=cgi-bin
 PUB= $$HOME/public_html/$(DIR)
-INS= cat.cgi xml2rfc-dev.cgi xml2rfc.cgi xml2rfc-old.cgi
+INS= cat.cgi xml2rfc-dev.cgi xml2rfc.cgi xml2rfc-old.cgi xml2rfc-version
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
 DERIVATIVES= 
 
@@ -10,7 +10,7 @@ install: all
 	@for i in $(INS); do \
 	    if [ $$i -nt $(WEB)/$$i ];then \
 	        echo cp $$i $(WEB)/$$i; \
-	        cp $$i $(WEB)/$$i; \
+	        chmod a+x $$i && cp $$i $(WEB)/$$i; \
 	    fi; \
 	done
 
@@ -24,7 +24,7 @@ test-install: all
 	@for i in $(INS); do \
 	    if [ $$i -nt $(PUB)/$$i ];then \
 	        echo cp $$i $(PUB)/$$i; \
-	        cp $$i $(PUB)/$$i; \
+	        chmod a+x $$i && cp $$i $(PUB)/$$i; \
 	    fi; \
 	done
 
