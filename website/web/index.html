@@ -93,15 +93,27 @@
 			      <td class="converter small" height="24"><b> Text: </b> </td>
 			      <td class="converter">
 				<input type="radio" checked="checked" value="txt/ascii" name="modeAsFormat"/> plaintext
-				<input type="radio" value="unpg/ascii" name="modeAsFormat"/> ... unpaginated
-				<input type="radio" value="txt/pdf" name="modeAsFormat"/> PDF
+				<input type="radio" value="txt/pdf" name="modeAsFormat"/> as PDF
+				</td>
+			      </tr>
+			    <tr>
+			      <td class="converter small" height="24"></td>
+			      <td class="converter">
+				<input type="radio" value="unpg/ascii" name="modeAsFormat"/> unpaginated
 			      </td>
 			    </tr>
 			    <tr>
 			      <td class="converter small" height="24"><b> Web page: </b> </td>
 			      <td class="converter">
 				<input type="radio" value="html/ascii" name="modeAsFormat"/> HTML
-				<input type="radio" value="html/pdf" name="modeAsFormat"/> PDF
+				<input type="radio" value="html/pdf" name="modeAsFormat"/> as PDF<br/>
+			      </td>
+			    </tr>
+			    <tr>
+			      <td class="converter small" height="24">&nbsp;</td>
+			      <td class="converter">
+				<input type="radio" value="htmlrfcmarkup/ascii" name="modeAsFormat"/> RfcMarkup
+				<input type="radio" value="htmlrfcmarkup/pdf" name="modeAsFormat"/> as PDF
 				<!-- <input type="radio" value="html/epub" name="modeAsFormat"/> ePub -->
 			      </td>
 			    </tr>
@@ -154,112 +166,6 @@
 	    </center>
 	  </td>
 	</tr>
-	<!--
-	<tr>
-	  <td width="10%" valign="top"><h3>Conversion</h3></td>
-	  <td>
-	    <ol>
-	      <li>Download <b>xml2rfc</b>
-		as a <a href="http://xml.resource.org/authoring/xml2rfc-1.36.zip"><b>zip</b></a>
-		or <a href="http://xml.resource.org/authoring/xml2rfc-1.36.tgz"><b>
-		    tgz</b></a> file, or </li>
-	      <li>Try your results in this handy converter form: </li>
-
-	    </ol>
-	    <center>
-	      <form action="cgi-bin/xml2rfc.cgi" method="post" enctype="multipart/form-data">
-		<table style='border: 1px solid black' cellpadding="2" cellspacing="0">
-		  <tbody>
-		    <tr>
-		      <td colspan="2" bgcolor="#cccccc" align="center">
-			<font color="#333333" size="3"><b>Convert Your XML Source</b></font>
-		      </td>
-		    </tr>
-		    <tr>
-		      <td class="converter small" height="24" >
-			<font color="#333333" size="1"><b>&nbsp;Input file</b></font>
-		      </td>
-		      <td class="converter" align="right" >
-			<input size="30" name="input" type="file"/>
-		      </td>
-		    </tr>
-		    <tr>
-		      <td colspan="2" class="converter " height="24" align="center">
-			<font color="#333333" size="1"><b>Output format</b></font>
-		      </td>
-		    </tr>
-		    <tr>
-		      <td class="converter small" height="24"><b> Text: </b> </td>
-		      <td class="converter">
-			<input type="radio" checked="checked" value="txt/ascii" name="modeAsFormat"/> plaintext
-			<input type="radio" value="unpg/ascii" name="modeAsFormat"/> ... unpaginated
-			<input type="radio" value="txt/pdf" name="modeAsFormat"/> PDF
-		      </td>
-		    </tr>
-		    <tr>
-		      <td class="converter small" height="24"><b> Web page: </b> </td>
-		      <td class="converter">
-			<input type="radio" value="html/ascii" name="modeAsFormat"/> HTML
-			<input type="radio" value="html/pdf" name="modeAsFormat"/> PDF
-			<input type="radio" value="html/epub" name="modeAsFormat"/> ePub
-		      </td>
-		    </tr>
-		    <tr>
-		      <td class="converter small" height="24"><b> Other: </b> </td>
-		      <td class="converter">
-			<input type="radio" value="nr/ascii" name="modeAsFormat"/> nroff
-			<input type="radio" value="xml/ascii" name="modeAsFormat"/> expanded XML
-		      </td>
-		    </tr>
-		    <tr>
-		      <td colspan="2" class="converter " height="24" align="center">
-			<font color="#333333" size="1"><b>Options</b></font>
-		      </td>
-		    </tr>
-		    <tr>
-		      <td class="converter small" height="24">
-			<b>&nbsp;Checking</b>
-		      </td>
-		      <td class="converter small">
-			<input checked="checked" value="strict" name="checking" type="radio"/> Strict
-			<input                   value="fast" name="checking" type="radio"/> Fast
-		      </td>
-		    </tr>
-		    <tr>
-		      <td class="converter small" height="24" >
-			<b>&nbsp;Output result</b>
-		      </td>
-		      <td class="converter small">
-			<input checked="checked" value="toframe" name="type" type="radio"/> Use frames to show Warnings &amp; Errors
-			<input value="ascii" name="type" type="radio"/> Window
-			<input value="binary" name="type" type="radio"/> File
-		      </td>
-		    </tr>
-		    <!-- start debug section --><!-- tr>
-						     <td class="converter small" height="24" >
-						       <b>&nbsp;Debugging</b>
-						     </td>
-		    <td class="converter small">
-		      <input checked="checked" value="0" name="debug" type="radio"/> Off
-		      <input value="1" name="debug" type="radio"/> On
-		    </td>
-		    </tr --><!-- end debug section -->
-		    <!--
-		    <tr>
-		      <td class="converter small"><br>
-		      </td>
-		      <td class="converter small" align="right">
-			<input value="Submit" name="Submit" type="submit"/>
-			<input value="Reset" name="Reset" type="reset"/>
-		      </td>
-		    </tr>
-		  </tbody>
-		</table>
-	      </form>
-	    </center>
-	  </td>
-	</tr>
--->
 
 	<!-- tr>
 	  <td valign="top"><h3>Living on the edge?</h3></td>
@@ -627,10 +533,11 @@
 		  </tr>
 		  <tr>
 		    <td class="converter small" height="24" >
-		      <font color="#333333" size="1"><b>&nbsp;Input file</b></font>
+		      <font color="#333333" size="1"><b>&nbsp;Input source</b></font>
 		    </td>
-		    <td class="converter" align="right" >
-		      <input size="30" name="input" type="file"/>
+		    <td class="converter" align="left" >
+		      File: <input size="30" name="input" type="file"/><br/>
+		      URL: <input size="30" name="url" type="text"/>
 		    </td>
 		  </tr>
 		  <tr>
@@ -641,6 +548,7 @@
 		      <input checked="checked" value="txt" name="mode" type="radio"/> Text
 		      <input value="html" name="mode" type="radio"/> HTML
 		      <input value="htmlxslt" name="mode" type="radio"/> <font size='-1'>(via xslt)</font>
+		      <input value="htmlrfcmarkup" name="mode" type="radio"/> RfcMarkup
 		      <input value="nr" name="mode" type="radio"/> nroff
 		      <input value="unpg" name="mode" type="radio"/> unpaginated
 		      <input value="xml" name="mode" type="radio"/> XML
@@ -658,7 +566,7 @@
 		      <input value="ps" name="format" type="radio"/> PostScript
 		    </td>
 		  </tr>
-		  <tr>
+		  <!-- tr>
 		    <td class="converter small" height="24">
 		      <b>&nbsp;Checking</b>
 		    </td>
@@ -666,7 +574,7 @@
 		      <input checked="checked" value="strict" name="checking" type="radio"/> Strict
 		      <input                   value="fast" name="checking" type="radio"/> Fast
 		    </td>
-		  </tr>
+		  </tr -->
 		  <tr>
 		    <td class="converter small" height="24" >
 		      <b>&nbsp;Output result</b>
@@ -677,16 +585,15 @@
 		      <input value="binary" name="type" type="radio"/> File
 		    </td>
 		  </tr>
-		  <!-- start debug section --><tr>
+		  <!-- start debug section --><!-- tr>
 						   <td class="converter small" height="24" >
 						     <b>&nbsp;Debugging</b>
 						   </td>
 		  <td class="converter small">
 		    <input checked="checked" value="0" name="debug" type="radio"/> Off
 		    <input value="1" name="debug" type="radio"/> On
-		    <input value="rfcmarkup" name="mode" type="radio"/> RfcMarkup
 		  </td>
-		  </tr><!-- end debug section -->
+		  </tr --><!-- end debug section -->
 		  <tr>
 		    <td class="converter small"><br>
 		    </td>

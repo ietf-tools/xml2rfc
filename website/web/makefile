@@ -57,7 +57,7 @@ test-install: all
 	@for i in $(INS) $(DERIVATIVES); do \
 	    if [ $$i -nt $(PUB)/$$i ];then \
 	        echo cp $$i $(PUB)/$$i; \
-	        cp $$i $(PUB)/$$i; \
+	        sed 's/cgi-bin/..\/cgi-bin/g' < $$i > $(PUB)/$$i; \
 	    fi; \
 	done
 
