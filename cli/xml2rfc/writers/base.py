@@ -305,7 +305,8 @@ class BaseRfcWriter:
         self.pis = xmlrfc.getpis()
 
         # Document counters
-        self.ref_start = 1
+        self.ref_start = 1              # Start of reference counters
+        self.refs_start = 1             # Start of references sections
         self.figure_count = 0
         self.table_count = 0
 
@@ -382,6 +383,18 @@ class BaseRfcWriter:
         counter = str(counter)
         autoName = 'Table ' + counter
         autoAnchor = 'rfc.table.' + counter
+        item = _RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
+                       toc=toc)
+        self._index.append(item)
+        return item
+
+    def _indexRef(self, counter, title=None, anchor=None, toc=False):
+        counter = str(counter)
+        if self.pis['symrefs'] == 'yes':
+            autoName = '[' + (anchor or counter ) +']'
+        else:
+            autoName = '['+counter+']'
+        autoAnchor = 'rfc.ref.' + counter
         item = _RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
                        toc=toc)
         self._index.append(item)
@@ -760,7 +773,7 @@ class BaseRfcWriter:
 
         # Set the ending index number so we know where to begin references
         if count_str == '' and appendix == False:
-            self.ref_start = s_count
+            self.refs_start = s_count
 
     def write_status_section(self):
         """ Writes the 'Status of this Memo' section """
@@ -873,7 +886,8 @@ class BaseRfcWriter:
     def _build_index(self):
         self.indexmode = True
         # Reset document counters
-        self.ref_start = 1
+        self.ref_start = 1              # Start of reference counters
+        self.refs_start = 1             # Start of references sections
         self.figure_count = 0
         self.table_count = 0
 
@@ -884,21 +898,27 @@ class BaseRfcWriter:
 
         # References sections
         # Treat references as nested only if there is more than one
-        ref_counter = str(self.ref_start)
+        ref_counter = 0
+        refs_counter = str(self.refs_start)
         references = self.r.findall('back/references')
         # Write root level references header
-        ref_title = self.pis['refparent']
+        refs_title = self.pis['refparent']
         if len(references) == 1:
-            ref_title = references[0].attrib.get('title', ref_title)
+            refs_title = references[0].attrib.get('title', refs_title)
 
-        self._indexReferences(ref_counter, title=ref_title)
+        self._indexReferences(refs_counter, title=refs_title)
 
         if len(references) > 1:
             for i, reference_list in enumerate(references):
-                ref_newcounter = ref_counter + '.' + str(i + 1)
-                ref_title = reference_list.attrib.get('title', self.pis["refparent"])
-                self._indexReferences(ref_newcounter, title=ref_title, \
+                refs_newcounter = refs_counter + '.' + str(i + 1)
+                refs_title = reference_list.attrib.get('title', self.pis["refparent"])
+                self._indexReferences(refs_newcounter, title=refs_title, \
                                       subCounter=i+1, level=2)
+        for reference_list in references:
+            for ref in reference_list:
+                ref_counter += 1
+                title = ref.find("front/title").text
+                self._indexRef(ref_counter, title=title, anchor=ref.attrib["anchor"])
 
         # Appendix sections
         back = self.r.find('back')
@@ -927,7 +947,8 @@ class BaseRfcWriter:
     def _build_document(self):
         self.indexmode = False
         # Reset document counters
-        self.ref_start = 1
+        self.ref_start = 1              # Start of reference counters
+        self.refs_start = 1             # Start of references sections
         self.figure_count = 0
         self.table_count = 0
 
@@ -981,21 +1002,21 @@ class BaseRfcWriter:
 
         # References sections
         # Treat references as nested only if there is more than one
-        ref_counter = str(self.ref_start)
+        refs_counter = str(self.refs_start)
         references = self.r.findall('back/references')
         # Write root level references header
-        ref_title = self.pis['refparent']
+        refs_title = self.pis['refparent']
         if len(references) == 1:
-            ref_title = references[0].attrib.get('title', ref_title)
+            refs_title = references[0].attrib.get('title', refs_title)
 
-        self.write_heading(ref_title, bullet=ref_counter + '.', \
+        self.write_heading(refs_title, bullet=refs_counter + '.', \
                                autoAnchor='rfc.references')
         if len(references) > 1:
             for i, reference_list in enumerate(references):
-                ref_newcounter = ref_counter + '.' + str(i + 1)
-                ref_title = reference_list.attrib.get('title', self.pis['refparent'])
+                refs_newcounter = refs_counter + '.' + str(i + 1)
+                refs_title = reference_list.attrib.get('title', self.pis['refparent'])
                 autoAnchor = 'rfc.references.' + str(i + 1)
-                self.write_heading(ref_title, bullet=ref_newcounter + '.',\
+                self.write_heading(refs_title, bullet=refs_newcounter + '.',\
                                    autoAnchor=autoAnchor, level=2)
                 self.write_reference_list(reference_list)
         elif len(references) == 1:

@@ -665,9 +665,9 @@ class RawTextRfcWriter(BaseRfcWriter):
             annotation = ref.find('annotation')
             # Use anchor or num depending on PI
             if self.pis['symrefs'] == 'yes':
-                bullet = '[' + ref.attrib.get('anchor', str(i + 1)) + ']'
+                bullet = '[' + ref.attrib.get('anchor', str(i + self.ref_start)) + ']'
             else:
-                bullet = '[' + str(i + 1) + ']'
+                bullet = '[' + str(i + self.ref_start) + ']'
             refdict[bullet] = ''.join(refstring)
             refsource[bullet] = ref.sourceline
             refkeys.append(bullet)
@@ -675,7 +675,11 @@ class RawTextRfcWriter(BaseRfcWriter):
             if annotation is not None and annotation.text:
                 # Render annotation as a separate paragraph
                 annotationdict[bullet] = annotation.text
-        if self.pis['sortrefs'] == 'yes':
+        self.ref_start += i + 1
+        # Don't sort if we're doing numbered refs; they are already in
+        # numeric order, and if we sort, they will be sorted alphabetically,
+        # rather than numerically ... ( i.e., [10], [11], ... [19], [1], ... )
+        if self.pis['sortrefs'] == 'yes' and self.pis['symrefs'] == 'yes' :
             refkeys = sorted(refkeys)
         # Hard coded indentation amount
         refindent = 11

@@ -459,9 +459,9 @@ class HtmlRfcWriter(BaseRfcWriter):
             tr = E.TR()
             # Use anchor or num depending on PI
             if self.pis['symrefs'] == 'yes':
-                bullet = reference.attrib.get('anchor', str(i + 1))
+                bullet = reference.attrib.get('anchor', str(i + self.ref_start))
             else:
-                bullet = str(i + 1)
+                bullet = str(i + self.ref_start)
             bullet_td = E.TD(E.B('[' + bullet + ']', id=bullet))
             bullet_td.attrib['class'] = 'reference'
             ref_td = E.TD()
@@ -531,7 +531,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             annotation = reference.find('annotation')
             if annotation is not None and annotation.text:
                 ref_td.append(E.P(annotation.text))
-                
+        self.ref_start += i + 1                
         # Add to body buffer
         self.buf.append(self._serialize(E.TABLE(tbody)))
 
