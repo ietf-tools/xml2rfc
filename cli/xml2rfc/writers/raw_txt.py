@@ -895,9 +895,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         """ Writes the buffer to the specified file """
         # write initial blank lines, not counted against page size...
         if self.draft:
-            file.write(os.linesep*3)
+            file.write("\n"*3)
         else:
-            file.write(os.linesep*6)
+            file.write("\n"*6)
         for line in self.output:
             file.write(line.rstrip(" \t"))
-            file.write(os.linesep)
+            file.write("\n")

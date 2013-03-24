@@ -270,5 +270,5 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         """ Writes the buffer to the specified file """
         for line in self.output:
             file.write(line.rstrip(" \t"))
-            file.write(os.linesep)
+            file.write("\n")
             
