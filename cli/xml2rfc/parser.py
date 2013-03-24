@@ -416,8 +416,10 @@ class XmlRfcParser:
                            include=True, line_no=getattr(element, 'sourceline', 0))
                     try:
                         # Parse the xml and attach it to the tree here
-                        root = lxml.etree.parse(path).getroot()
-                        element.addnext(root)
+                        parser = lxml.etree.XMLParser(remove_blank_text=True)
+                        ref_root = lxml.etree.parse(path, parser).getroot()
+                        parent = element.getparent()
+                        parent.replace(element, ref_root)
                     except (lxml.etree.XMLSyntaxError, IOError), error:
                         if error is lxml.etree.XMLSyntaxError:
                             xml2rfc.log.warn('The include file at', path,
