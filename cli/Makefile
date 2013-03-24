@@ -16,7 +16,7 @@ test:	bin/python install
 	[ -d tests/failed/ ] && rm -f tests/failed/*
 	bin/python test.py
 
-rfctest:
+rfctest:  bin/python install
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
 	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc --cache tests/cache tests/input/rfc6787.xml --base tmp/ --raw --text --nroff --html --exp
@@ -26,7 +26,7 @@ rfctest:
 	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.html	tmp/rfc6787.html 	|| echo "Diff failed for .html output"
 	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.exp.xml	tmp/rfc6787.exp.xml 	|| echo "Diff failed for .exp.xml output"
 
-drafttest:
+drafttest: bin/python install
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
 	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc --cache tests/cache tests/input/draft-template.xml --base tmp/ --raw --text --nroff --html --exp
