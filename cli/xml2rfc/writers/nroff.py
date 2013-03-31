@@ -50,7 +50,8 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                                         quiet=quiet, verbose=verbose, date=date)
         self.curr_indent = 0    # Used like a state machine to control
                                 # whether or not we print a .in command
-        self.wrapper.width = self.width-3
+        self.wrapper.width = self.width
+        self.wrapper.break_on_hyphens = False
         self.wrapper.post_break_replacements = {
             '&#160;' : r'\\0',  # nbsp
             '&#8209;': r'\-',  # nbhy
@@ -90,55 +91,41 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         # We should be able to handle mostly all of the nroff commands by
         # intercepting the alignment and indentation arguments
         #-------------------------------------------------------------
-        if not buf:
+        if buf is None:
             buf = self.buf
+        assert(buf == self.buf)
 
         # Store buffer position for paging information
         begin = len(self.buf)
 
-        if leading_blankline:
-            if edit and self.pis['editing'] == 'yes':
-                # Render an editing mark
-                self.edit_counter += 1
-                self._lb(buf=buf, text=str('<' + str(self.edit_counter) + '>'))
-            else:
-                self._lb(buf=buf)
-
         par = []
-        if string:
-            if strip:
-                # Strip initial whitespace
-                string = string.lstrip()
-            if bullet and len(bullet.strip()) > 0:
-                string = bullet + string
-                fix_doublespace = False
-            else:
-                fix_doublespace = True
+        RawTextRfcWriter.write_text(self, string,
+                    indent=indent, sub_indent=sub_indent, bullet=bullet,
+                    align=align, leading_blankline=leading_blankline,
+                    buf=par, strip=strip, edit=edit, wrap_urls=wrap_urls,
+                    fix_sentence_endings=fix_sentence_endings,
+                    source_line=source_line)
 
-            par = self.wrapper.wrap(string, break_on_hyphens=False, fix_doublespace=fix_doublespace,
-                                    fix_sentence_endings=fix_sentence_endings)
-            # Escape as needed
-            for i in range(len(par)):
-                if par[i][0] in nroff_linestart_meta:
-                    par[i] = nroff_escape_linestart(par[i])
+        # Escape as needed
+        for i in range(len(par)):
+            par[i] = par[i].strip()
+            if par[i] and par[i][0] in nroff_linestart_meta:
+                par[i] = nroff_escape_linestart(par[i])
+
+        # Handle alignment/indentation
+        if align == 'center':
+            self.write_nroff('.ce %s' % len(par))
+        else:
             # Use bullet for indentation if sub not specified
             full_indent = sub_indent and indent + sub_indent or indent + len(bullet)
-
-            # Handle alignment/indentation
-            if align == 'center':
-                self.write_nroff('.ce %s' % len(par))
-            else:
-                self._indent(full_indent)
+            self._indent(full_indent)
 
         if bullet and len(bullet.strip()) > 0:
             # Bullet line: title just uses base indent
             self.write_nroff('.ti ' + str(indent))
-            if not string:
-                # Just write the bullet
-                par.append(bullet)
 
         # Write to buffer
-        buf.extend(par)
+        self.buf.extend(par)
 
         # Page break information
         end = len(self.buf)
@@ -217,7 +204,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         if bullet:
             bullet += '  '
         if len(bullet+text) > (self.width - 3):
-            self.write_nroff('.in %s' % len(bullet))
+            self._indent(len(bullet))
         self.write_nroff('.ti 0')
         self.write_line(bullet + text)
 
@@ -244,7 +231,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         PaginatedTextRfcWriter.pre_rendering(self)
 
         # Insert a timestamp+version comment
-        self.write_line(self.comment_header % ('.'.join(map(str, VERSION)),
+        self.write_nroff(self.comment_header % ('.'.join(map(str, VERSION)),
             time.strftime('%Y-%m-%dT%H:%M:%SZ', datetime.datetime.utcnow().utctimetuple())))
         self._lb()
 
