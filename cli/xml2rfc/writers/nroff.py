@@ -216,6 +216,8 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self._lb()
         if bullet:
             bullet += '  '
+        if len(bullet+text) > (self.width - 3):
+            self.write_nroff('.in %s' % len(bullet))
         self.write_nroff('.ti 0')
         self.write_line(bullet + text)
 
