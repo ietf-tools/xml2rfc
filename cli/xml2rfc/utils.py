@@ -54,6 +54,9 @@ class MyTextWrapper(textwrap.TextWrapper):
             '&#8288;': '',   # wj
         }
 
+        self.break_on_hyphens = True
+
+
     def replace(self, text):
         """ Replace control entities with the proper character 
             after breaking has occured.
@@ -62,7 +65,7 @@ class MyTextWrapper(textwrap.TextWrapper):
             text = re.sub(re.escape(key), val, text)
         return text
 
-    def wrap(self, text, break_on_hyphens=True, initial_indent='', subsequent_indent='',
+    def wrap(self, text, initial_indent='', subsequent_indent='',
         fix_doublespace=True, fix_sentence_endings=True):
         """ Mirrored implementation of wrap which replaces characters properly
             also lets you easily specify indentation on the fly
@@ -70,7 +73,6 @@ class MyTextWrapper(textwrap.TextWrapper):
         # Set indentation
         self.initial_indent = initial_indent
         self.subsequent_indent = subsequent_indent
-        self.break_on_hyphens = break_on_hyphens
         self.fix_sentence_endings = fix_sentence_endings
 
         # Original implementation
