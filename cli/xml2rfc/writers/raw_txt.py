@@ -76,7 +76,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             to the buffer, with the exception of write_raw() that handles
             preserving of whitespace.
         """
-        if not buf:
+        if buf is None:
             buf = self.buf
         # We can take advantage of textwrap's initial_indent by using a bullet
         # parameter and treating it separately.  We still need to indent it.
