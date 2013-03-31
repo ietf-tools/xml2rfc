@@ -51,6 +51,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self.curr_indent = 0    # Used like a state machine to control
                                 # whether or not we print a .in command
         self.wrapper.width = self.width-3
+        self.wrapper.post_break_replacements = {
+            '&#160;' : r'\\0',  # nbsp
+            '&#8209;': r'\-',  # nbhy
+            '&#8288;': r'',     # wj
+        }
+
 
     def _indent(self, amount):
         # Writes an indent command if it differs from the last

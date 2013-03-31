@@ -47,11 +47,18 @@ class MyTextWrapper(textwrap.TextWrapper):
                             r'\Z'           # end of chunk
                             % (string.lowercase, string.uppercase))
 
+        # XmlCharRef replacements that occur AFTER line breaking logic
+        self.post_break_replacements = {
+            '&#160;': ' ',   # nbsp
+            '&#8209;': '-',  # nbhy
+            '&#8288;': '',   # wj
+        }
+
     def replace(self, text):
         """ Replace control entities with the proper character 
             after breaking has occured.
         """
-        for key, val in _post_break_replacements.items():
+        for key, val in self.post_break_replacements.items():
             text = re.sub(re.escape(key), val, text)
         return text
 
@@ -416,13 +423,6 @@ _unicode_replacements = {
     u'\u017d': 'Z',
     u'\u017e': 'z',
     u'\u2010': '-',
-}
-
-# XmlCharRef replacements that occur AFTER line breaking logic
-_post_break_replacements = {
-    '&#160;': ' ',   # nbsp
-    '&#8209;': '-',  # nbhy
-    '&#8288;': '',   # wj
 }
 
 def get_initials(author):
