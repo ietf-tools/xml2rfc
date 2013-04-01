@@ -705,6 +705,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         row = 0
         column_aligns = []
         ttcol_width_attrs = []
+        style = table.attrib.get('style', self.defaults['table_style'])        
         for ttcol in table.findall('ttcol'):
             column_aligns.append(ttcol.attrib.get('align',
                                                   self.defaults['ttcol_align']))
@@ -717,7 +718,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         for i, cell in enumerate(table.findall('c')):
             if i % num_columns == 0:
                 # Insert blank row if PI 'compact' is 'no'
-                if self.pis["compact"] == "no" and row > 0:
+                if self.pis["compact"] == "no" and style == 'none' and row == 0:
                     row += 1
                     matrix.append(['']*num_columns)
                     pass
@@ -733,7 +734,6 @@ class RawTextRfcWriter(BaseRfcWriter):
             matrix[row].append(text)
 
         # Get table style and determine maximum width of table
-        style = table.attrib.get('style', self.defaults['table_style'])
         if style == 'none':
             table_max_chars = self.width - 3
         elif style == 'headers':
@@ -867,12 +867,16 @@ class RawTextRfcWriter(BaseRfcWriter):
                         else:
                             line.append(' ' * (column_widths[col] + 2) + '|')
                 output.append(''.join(line))
-            if i == 0 and style != 'none':
-                # This is the header row, append the header decoration
+            if style in ['headers', 'full']:
+                if i == 0:
+                    # This is the header row, append the header decoration
+                    output.append(''.join(borderstring))
+            if style in ['full']:
+                if i == len(cell_lines)-1:
+                    output.append(''.join(borderstring))
+            if style in ['all']:
                 output.append(''.join(borderstring))
 
-        if not (style == 'headers' or style == 'none'):
-            output.append(''.join(borderstring))
 
         # Finally, write the table to the buffer with proper alignment
         align = table.attrib.get('align', 'center')

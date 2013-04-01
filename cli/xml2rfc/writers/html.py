@@ -536,8 +536,8 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.buf.append(self._serialize(E.TABLE(tbody)))
 
     def draw_table(self, table, table_num=None):
-        style = 'tt full ' + table.attrib.get('align', 
-                                              self.defaults['table_align'])
+        style = 'tt %s %s' % ( table.attrib.get('style', self.defaults['table_style']),
+                               table.attrib.get('align', self.defaults['table_align']) )
         cellpadding = '3'
         cellspacing = '0'
         htmltable = E.TABLE(cellpadding=cellpadding, cellspacing=cellspacing)
