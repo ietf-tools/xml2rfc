@@ -172,6 +172,18 @@ class WriterElementTest(unittest.TestCase):
     def test_texttable_small(self):
         return self.function_test("texttable_small", "draw_table")
 
+    def test_texttable_small_full(self):
+        return self.function_test("texttable_small_full", "draw_table")
+
+    def test_texttable_small_all(self):
+        return self.function_test("texttable_small_all", "draw_table")
+
+    def test_texttable_small_headers(self):
+        return self.function_test("texttable_small_headers", "draw_table")
+
+    def test_texttable_small_none(self):
+        return self.function_test("texttable_small_none", "draw_table")
+
     def test_figure_title(self):
         return self.function_test("figure_title", "write_t_rec")
 
