@@ -16,6 +16,8 @@ except ImportError:
 from xml2rfc import VERSION
 from xml2rfc.writers.paginated_txt import PaginatedTextRfcWriter
 from xml2rfc.writers.raw_txt import RawTextRfcWriter
+from xml2rfc.writers.base import BaseRfcWriter
+
 from compiler.pyassem import RAW
 
 nroff_linestart_meta = ["'", ".", ]
@@ -81,30 +83,46 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self.buf.append(string)
 
     # Override
-    def write_text(self, string, indent=0, sub_indent=0, bullet='',
-                    align='left', leading_blankline=False, buf=None,
-                    strip=True, edit=False, wrap_urls=False,
-                    fix_sentence_endings=True, source_line=None):
+    def write_figure(self, *args, **kwargs):
+        """ Override base writer to add a marking """
+        begin = len(self.buf)
+        BaseRfcWriter.write_figure(self, *args, **kwargs)
+        end = len(self.buf)
+        nr = len([ l for l in self.buf[begin:end] if l and l[0] in nroff_linestart_meta])
+        self.break_hints[begin] = (end - begin - nr, "txt")
+
+    def write_table(self, *args, **kwargs):
+        """ Override base writer to add a marking """
+        begin = len(self.buf)
+        BaseRfcWriter.write_table(self, *args, **kwargs)
+        end = len(self.buf)
+        nr = len([ l for l in self.buf[begin:end] if l and l[0] in nroff_linestart_meta])
+        self.break_hints[begin] = (end - begin - nr, "txt")
+
+    def write_raw(self, text, indent=3, align='left', blanklines=0, \
+                  delimiter=None, leading_blankline=True, source_line=None):
+        # Wrap in a no fill block
+        self._indent(indent)
+        self.write_nroff('.nf')
+        PaginatedTextRfcWriter.write_raw(self, text, indent=0, align=align,
+                                         blanklines=blanklines,
+                                         delimiter=delimiter,
+                                         leading_blankline=leading_blankline,
+                                         source_line=source_line)
+        self.write_nroff('.fi')
+
+    def write_text(self, *args, **kwargs):
         #-------------------------------------------------------------
         # RawTextRfcWriter override
         #
         # We should be able to handle mostly all of the nroff commands by
         # intercepting the alignment and indentation arguments
         #-------------------------------------------------------------
-        if buf is None:
-            buf = self.buf
-        assert(buf == self.buf)
-
         # Store buffer position for paging information
         begin = len(self.buf)
-
+        
         par = []
-        RawTextRfcWriter.write_text(self, string,
-                    indent=indent, sub_indent=sub_indent, bullet=bullet,
-                    align=align, leading_blankline=leading_blankline,
-                    buf=par, strip=strip, edit=edit, wrap_urls=wrap_urls,
-                    fix_sentence_endings=fix_sentence_endings,
-                    source_line=source_line)
+        RawTextRfcWriter.write_text(self, *args, buf=par, **kwargs)
 
         # Escape as needed
         for i in range(len(par)):
@@ -113,6 +131,11 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                 par[i] = nroff_escape_linestart(par[i])
 
         # Handle alignment/indentation
+        align = kwargs.get('align', 'left')
+        indent = kwargs.get('indent', 0)
+        sub_indent = kwargs.get('sub_indent', 0)
+        bullet = kwargs.get('bullet', '')
+        
         if align == 'center':
             self.write_nroff('.ce %s' % len(par))
         else:
@@ -122,15 +145,17 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
         if bullet and len(bullet.strip()) > 0:
             # Bullet line: title just uses base indent
-            self.write_nroff('.ti ' + str(indent))
+            self.write_nroff('.ti %s' % indent)
+
+
+        mark = len(self.buf)
 
         # Write to buffer
         self.buf.extend(par)
 
         # Page break information
         end = len(self.buf)
-        self.break_hints[begin] = (end - begin, "txt")
-
+        self.break_hints[begin] = (end - mark, "txt")
         """
         elif bullet:
             # If the string is empty but a bullet was declared, just
@@ -138,16 +163,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             buf.append(initial)
         """
 
-    def _post_write_toc(self, tmpbuf):
+    def pre_write_toc(self):
         # Wrap a nofill/fill block around TOC
-        tmpbuf.append('.ti 0')
-        tmpbuf.append('Table of Contents')
-        tmpbuf.append('')
-        tmpbuf.append('.in 3')
-        tmpbuf.append('.nf')
-        tmpbuf.extend(self.toc)
-        tmpbuf.append('.fi')
-        return tmpbuf
+        return ['','.ti 0','Table of Contents','.in 0', '.nf','']
+
+    def post_write_toc(self):
+        return ['.fi','.in 3']
 
     def _expand_xref(self, xref):
         """ Returns the proper text representation of an xref element """
@@ -179,26 +200,16 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     # ---------------------------------------------------------
 
     def write_title(self, text, docName=None, source_line=None):
-        # Override to use .ti commands
         self._lb()
         self.write_text(text, align='center', source_line=source_line)
         if docName:
             self.write_text(docName, align='center')
 
-    def write_raw(self, text, indent=3, align='left', blanklines=0, \
-                  delimiter=None, leading_blankline=True, source_line=None):
-        # Wrap in a no fill block
-        self._indent(indent)
-        self.write_nroff('.nf')
-        PaginatedTextRfcWriter.write_raw(self, text, indent=0, align=align,
-                                         blanklines=blanklines,
-                                         delimiter=delimiter,
-                                         leading_blankline=leading_blankline,
-                                         source_line=source_line)
-        self.write_nroff('.fi')
-
-    def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, \
-                      level=1):
+    def write_heading(self, text, bullet='', autoAnchor=None, anchor=None, level=1):
+        # Store the line number of this heading with its unique anchor, 
+        # to later create paging info
+        begin = len(self.buf)
+        self.heading_marks[begin] = autoAnchor
         # Override to use a .ti command
         self._lb()
         if bullet:
@@ -207,6 +218,10 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             self._indent(len(bullet))
         self.write_nroff('.ti 0')
         self.write_line(bullet + text)
+        # Reserve room for a blankline and some lines of section content
+        # text, in order to prevent orphan headings
+        end = len(self.buf) + self.pis["sectionorphan"]
+        self.break_hints[begin] = (end - begin - 1, "txt")
 
     def urlkeep(self, text):
         return re.sub(r'http://', r'\%http://', text)
@@ -246,35 +261,38 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self.write_nroff('.ds CF ' + self.center_footer)
         self.write_nroff('.ds RF FORMFEED[Page %]')
 
-    def post_rendering(self):
-        # Insert page break commands
-        # Write buffer to secondary buffer, inserting breaks every 58 lines
-        page_len = 0
-        page_maxlen = 55
-        for line_num, line in enumerate(self.buf):
-            if line_num in self.break_hints:
-                # If this section will exceed a page, insert a break command
-                available = page_maxlen - page_len
-                needed, text_type = self.break_hints[line_num]
-                if line.strip() == "":
-                    available -= 1
-                    needed -= 1
-                if (text_type == "break"
-                    or (text_type == "raw" and needed > available)
-                    or (self.pis['autobreaks'] == 'yes'
-                        and needed > available
-                        and (needed-available < 2 or available < 2) ) ):
-                    self.output.append('.bp')
-                    page_len = 0
-            if page_len + 1 > 55:
-                self.output.append('.bp')
-                page_len = 0
-            self.output.append(line)
-            page_len += 1
+
+    def page_break(self, final=False):
+        "Used by post_rendering() to insert page breaks."
+        if not final:
+            self.output.append('.bp')
+        self.page_length = 1
+        self.page_num += 1
+
+    def emit(self, text):
+        "Used by post_rendering() to emit and count lines."
+        if self.page_length == 1 and text.strip() == '':
+            return 
+        if isinstance(text, basestring):
+            self.output.append(text)
+            if not text or text[0] not in nroff_linestart_meta:
+                self.page_length += 1
+            elif text.startswith('.sp'):
+                parts = text.split()
+                if len(parts) >= 2:
+                    self.page_length += int(parts[1])
+        elif isinstance(text, list):
+            for line in text:
+                self.output.append(line)
+                if not line or line[0] not in nroff_linestart_meta:
+                    self.page_length += 1
+        else:
+            raise TypeError("a string or a list of strings is required")
 
     def write_to_file(self, file):
         """ Writes the buffer to the specified file """
         for line in self.output:
             file.write(line.rstrip(" \t"))
             file.write("\n")
+
             

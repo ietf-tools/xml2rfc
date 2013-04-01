@@ -31,6 +31,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.break_hints = {}
         self.heading_marks = {}
         self.paged_toc_marker = 0
+        self.page_line = 0
 
     def _make_footer_and_header(self, page, final=False):
         tmp = []
@@ -98,8 +99,8 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                                        autoAnchor=autoAnchor, anchor=anchor, \
                                        level=level)
         # Reserve room for a blankline and some lines of section content
+        # text, in order to prevent orphan headings
         end = len(self.buf) + self.pis["sectionorphan"]
-                                        # text, in order to prevent orphan headings
         self.break_hints[begin] = (end - begin, "txt")
                                         
 
@@ -146,20 +147,38 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.center_footer = self.pis.get('footer', self.center_footer)
         self.left_header = self.pis.get('header', self.left_header)
 
+    def page_break(self, final=False):
+        self.output.append('')
+        self.output.append('')
+        self.output.append('')
+        self.output.extend(self._make_footer_and_header(self.page_num, final))
+        if not final:
+            self.output.append('')
+            self.output.append('')
+        self.page_length = 1
+        self.page_num += 1
+
+    def emit(self, text):
+        """Write text to the output buffer if it's not just a blank
+           line at the top of the page"""
+        if self.page_length == 1 and text.strip() == '':
+            return 
+        if isinstance(text, basestring):
+            self.output.append(text)
+            self.page_length += 1
+        elif isinstance(text, list):
+            self.output.extend(text)
+            self.page_length += len(text)
+        else:
+            raise TypeError("a string or a list of strings is required")
+
     def post_rendering(self):
         """ Add paging information to a secondary buffer """
         # Counters    
-        current_page_length = 0
-        current_page_number = 1
+        self.page_length = 0
+        self.page_num = 1
         max_page_length = 51
 
-        def insertFooterAndHeader():
-            self.output.append('')
-            self.output.append('')
-            self.output.append('')
-            self.output.extend(self._make_footer_and_header(current_page_number))
-            self.output.append('')
-            self.output.append('')
 
         # Maintain a list of (start, end) pointers for elements to re-insert
         toc_pointers = []
@@ -169,21 +188,24 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
 
         for line_num, line in enumerate(self.buf):
             if line_num == self.toc_marker and self.toc_marker > 0:
+                # Don't start ToC too close to the end of the page
+                if self.page_length + 10 >= max_page_length:
+                    remainder = max_page_length - self.page_length - 2
+                    self.emit([''] * remainder)
+                    self.page_break()
+
                 # Insert a dummy table of contents here
                 toc_prev_start = len(self.output)
-                for n in range(self._toc_size_hint()):
-                    if current_page_length + 2 >= max_page_length:
+                preliminary_toc = self.write_toc(paging=True)
+                for l in preliminary_toc:
+                    if self.page_length + 2 >= max_page_length:
                         # Store a pair of TOC pointers
                         toc_pointers.append((toc_prev_start, len(self.output)))
                         # New page
-                        insertFooterAndHeader()
+                        self.page_break()
                         toc_prev_start = len(self.output)
-                        # Update counters
-                        current_page_length = 1
-                        current_page_number += 1
                     # Write dummy line
-                    self.output.append('')
-                    current_page_length += 1
+                    self.emit(l)
                 # Store last pair of toc pointers
                 toc_pointers.append((toc_prev_start, len(self.output)))
                 
@@ -191,22 +213,18 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 # Add page number for index
                 item = self._getItemByAnchor('rfc.index')
                 if item:
-                    item.page = current_page_number
+                    item.page = self.page_num
                 # Insert a dummy iref here
                 iref_prev_start = len(self.output)
                 for n in range(self._iref_size_hint()):
-                    if current_page_length + 2 >= max_page_length:
+                    if self.page_length + 2 >= max_page_length:
                         # Store a pair of pointers
                         iref_pointers.append((iref_prev_start, len(self.output)))
                         # New page
-                        insertFooterAndHeader()
+                        self.page_break()
                         iref_prev_start = len(self.output)
-                        # Update counters
-                        current_page_length = 1
-                        current_page_number += 1
                     # Write dummy line
-                    self.output.append('')
-                    current_page_length += 1
+                    self.emit('')
                 # Store last pair of pointers
                 iref_pointers.append((iref_prev_start, len(self.output)))
 
@@ -214,7 +232,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 # If this size hint exceeds the rest of the page, or is set
                 # to -1 (a forced break), insert a break.
 
-                available = max_page_length - (current_page_length + 2)
+                available = max_page_length - (self.page_length + 2)
                 needed, text_type = self.break_hints[line_num]
 
                 if line.strip() == "":
@@ -232,42 +250,34 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                         and (needed-available < 2 or available < 2) ) ):
 
                     # Insert break
-                    remainder = max_page_length - current_page_length - 2
-                    self.output.extend([''] * remainder)
-                    current_page_length += remainder
+                    remainder = max_page_length - self.page_length - 2
+                    self.emit([''] * remainder)
 
-            if current_page_length + 2 >= max_page_length:
+            if self.page_length + 2 >= max_page_length:
                 # New page
-                insertFooterAndHeader()
-                # Update counters -- done this way to preserve scope without reassigning
-                current_page_length = 1
-                current_page_number += 1
-  
-            # Write the line if it's not a blank line at the top of the page
-            if not (line.strip() == "" and current_page_length == 1):
-                self.output.append(line)
-                current_page_length += 1
+                self.page_break()
+
+            self.emit(line)
 
             # Store page numbers for any marked elements
             if line_num in self.heading_marks:
                 item = self._getItemByAnchor(self.heading_marks[line_num])
                 if item:
-                    item.page = current_page_number
+                    item.page = self.page_num
             if line_num in self.iref_marks:
                 for item, subitem in self.iref_marks[line_num]:
                     # Store pages in item unless there are subitems
                     if subitem:
                         self._iref_index[item].subitems[subitem].\
-                        pages.append(current_page_number)
+                        pages.append(self.page_num)
                     else:
                         self._iref_index[item].\
-                        pages.append(current_page_number)
+                        pages.append(self.page_num)
 
         # Write final footer
-        remainder = max_page_length - current_page_length
-        self.output.extend([''] * remainder)
-        self.output.extend(self._make_footer_and_header(current_page_number,
-                                                             final=True))
+        remainder = max_page_length - self.page_length - 2
+        self.emit([''] * remainder)
+        self.page_break(final=True)
         
         # Now we need to go back into the buffer and insert the real table 
         # of contents and iref based on the pointers we created
@@ -275,6 +285,8 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             tocbuf = self.write_toc(paging=True)
             ptr, end = toc_pointers.pop(0)
             for line in tocbuf:
+                if self.output[ptr] != '' and line == '':
+                    continue
                 self.output[ptr] = line
                 ptr += 1
                 if ptr >= end:
