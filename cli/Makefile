@@ -16,6 +16,16 @@ test:	bin/python install
 	[ -d tests/failed/ ] && rm -f tests/failed/*
 	bin/python test.py
 
+drafttest: bin/python install
+	[ -d tmp ] || mkdir -p tmp
+	[ -d tmp ] && rm -f tmp/*
+	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc --cache tests/cache tests/input/draft-template.xml --base tmp/ --raw --text --nroff --html --exp
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.raw.txt	tmp/draft-template.raw.txt	|| echo "Diff failed for .raw.txt output"
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.txt	tmp/draft-template.txt		|| echo "Diff failed for .txt output"
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.nroff	tmp/draft-template.nroff 	|| echo "Diff failed for .nroff output"
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.html	tmp/draft-template.html 	|| echo "Diff failed for .html output"
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.exp.xml	tmp/draft-template.exp.xml	|| echo "Diff failed for .exp.xml output"
+
 rfctest:  bin/python install
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
@@ -26,15 +36,6 @@ rfctest:  bin/python install
 	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.html	tmp/rfc6787.html 	|| echo "Diff failed for .html output"
 	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.exp.xml	tmp/rfc6787.exp.xml 	|| echo "Diff failed for .exp.xml output"
 
-drafttest: bin/python install
-	[ -d tmp ] || mkdir -p tmp
-	[ -d tmp ] && rm -f tmp/*
-	@ PYTHONPATH=$$PWD bin/python scripts/xml2rfc --cache tests/cache tests/input/draft-template.xml --base tmp/ --raw --text --nroff --html --exp
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.raw.txt	tmp/draft-template.raw.txt	|| echo "Diff failed for .raw.txt output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.txt	tmp/draft-template.txt		|| echo "Diff failed for .txt output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.nroff	tmp/draft-template.nroff 	|| echo "Diff failed for .nroff output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.html	tmp/draft-template.html 	|| echo "Diff failed for .html output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.exp.xml	tmp/draft-template.exp.xml	|| echo "Diff failed for .exp.xml output"
 
 tests: test drafttest rfctest
 
