@@ -207,12 +207,19 @@ class RawTextRfcWriter(BaseRfcWriter):
                 t_count += 1
 
         
+    def pre_write_toc(self):
+        return ['', 'Table of Contents', '']
+
+    def post_write_toc(self):
+        return []
+
     def write_toc(self, paging=False):
         """ Write table of contents to a temporary buffer and return """
         if self.toc_marker < 1:
             # Toc is either disabled, or the pointer was messed up
             return ['']
-        tmpbuf = ['', 'Table of Contents', '']
+        tmpbuf = []
+        tmpbuf.extend(self.pre_write_toc())
         # Retrieve toc from the index
         tocindex = self._getTocIndex()
         tocdepth = self.pis['tocdepth']
@@ -257,6 +264,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     # Insert page
                     lines[-1] = lines[-1][:0 - len(pagestr)] + pagestr
                 tmpbuf.extend(lines)
+        tmpbuf.extend(self.post_write_toc())
         return tmpbuf
             
     def write_iref_index(self):
