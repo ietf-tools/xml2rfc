@@ -582,7 +582,9 @@ class BaseRfcWriter:
                 lines.append(initials + ' ' + author.attrib.\
                              get('surname', '') + role)
                 organization = author.find('organization')
-                if organization is not None:
+                if organization is None or organization.text is None or organization.text.strip() == '':
+                    lines.append('')
+                else:
                     abbrev = organization.attrib.get('abbrev')
                     org_result = None
                     if abbrev:
