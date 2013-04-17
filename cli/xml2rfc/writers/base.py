@@ -964,6 +964,9 @@ class BaseRfcWriter:
         title = self.r.find('front/title')
         if title is not None:
             docName = self.r.attrib.get('docName', None)
+            rfcnum = self.r.attrib.get('number', None)
+            if not docName.strip() and not rfcnum:
+                xml2rfc.log.warn("No (or empty) 'docName' attribute in the <rfc/> element -- can't insert draft name on first page.")
             self.write_title(title.text, docName, title.sourceline)
 
         # Abstract
