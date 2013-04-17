@@ -431,7 +431,8 @@ class BaseRfcWriter:
                 date.attrib['year'] = today.strftime('%Y')
                 date.attrib['month'] = today.strftime('%B')
                 date.attrib['day'] = today.strftime('%d')
-        
+            elif year != str(today.year) and not month:
+                xml2rfc.log.warn("Incomplete and out-of date <date/> element: %s" % lxml.etree.tostring(date))
         # Setup the expiration string for drafts as published date + six months
         if self.draft:
             date = self.r.find('front/date')
@@ -965,7 +966,7 @@ class BaseRfcWriter:
         if title is not None:
             docName = self.r.attrib.get('docName', None)
             rfcnum = self.r.attrib.get('number', None)
-            if not docName.strip() and not rfcnum:
+            if (not docName or not docName.strip()) and not rfcnum:
                 xml2rfc.log.warn("No (or empty) 'docName' attribute in the <rfc/> element -- can't insert draft name on first page.")
             self.write_title(title.text, docName, title.sourceline)
 
