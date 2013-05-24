@@ -266,11 +266,12 @@ class BaseRfcWriter:
         'into languages other than English.'
 
     # Any extra boilerplate
-    boilerplate['iprnotified'] = \
-        'The IETF has been notified of intellectual property rights ' \
-        'claimed in regard to some or all of the specification contained ' \
-        'in this document.  For more information consult the online list ' \
-        'of claimed rights.'
+    # Disabled. See issue #123, http://trac.tools.ietf.org/tools/xml2rfc/trac/ticket/123
+    ## boilerplate['iprnotified'] = \
+    ##     'The IETF has been notified of intellectual property rights ' \
+    ##     'claimed in regard to some or all of the specification contained ' \
+    ##     'in this document.  For more information consult the online list ' \
+    ##     'of claimed rights.'
     
     # Stream approvers
     approvers = {
@@ -978,8 +979,9 @@ class BaseRfcWriter:
                 self.write_t_rec(t)
 
         # Optional notified boilerplate
-        if self.pis['iprnotified'] == 'yes':
-            self.write_paragraph(BaseRfcWriter.boilerplate['iprnotified'])
+        # Disabled. See issue #123, http://trac.tools.ietf.org/tools/xml2rfc/trac/ticket/123
+        ## if self.pis['iprnotified'] == 'yes':
+        ##    self.write_paragraph(BaseRfcWriter.boilerplate['iprnotified'])
 
         # Optional notes
         for note in self.r.findall('front/note'):
