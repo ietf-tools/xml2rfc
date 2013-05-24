@@ -718,12 +718,15 @@ class RawTextRfcWriter(BaseRfcWriter):
         for i, cell in enumerate(table.findall('c')):
             if i % num_columns == 0:
                 # Insert blank row if PI 'compact' is 'no'
-                if self.pis["compact"] == "no" and style == 'none' and row == 0:
-                    row += 1
-                    matrix.append(['']*num_columns)
-                    pass
+                if self.pis["compact"] == "no":
+                    if (style == 'none' and row == 0) or (style in ['headers', 'full'] and row != 0):
+                        row += 1
+                        matrix.append(['']*num_columns)
+                        pass
                 row += 1
                 matrix.append([])
+
+
             text = cell.text or ''
             if len(cell) > 0:
                 # <c> has children, render their text and add to line
