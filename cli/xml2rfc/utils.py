@@ -123,7 +123,10 @@ def justify_inline(left_str, center_str, right_str, width=72):
                          'too long:\n  ' + strings[longest_index])
         strings[longest_index] = strings[longest_index][:-(sumwidth - width)]
 
-    center = strings[1].center(width)
+    if len(strings[1]) % 2 == 0:
+        center = strings[1].center(width)
+    else:
+        center = strings[1].center(width+1)        
     right = strings[2].rjust(width)
     output = list(strings[0].ljust(width))
     for i, char in enumerate(output):
