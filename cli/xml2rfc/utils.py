@@ -66,7 +66,7 @@ class MyTextWrapper(textwrap.TextWrapper):
         return text
 
     def wrap(self, text, initial_indent='', subsequent_indent='',
-        fix_doublespace=True, fix_sentence_endings=True):
+        fix_doublespace=True, fix_sentence_endings=True, drop_whitespace=True):
         """ Mirrored implementation of wrap which replaces characters properly
             also lets you easily specify indentation on the fly
         """
@@ -74,6 +74,7 @@ class MyTextWrapper(textwrap.TextWrapper):
         self.initial_indent = initial_indent
         self.subsequent_indent = subsequent_indent
         self.fix_sentence_endings = fix_sentence_endings
+        self.drop_whitespace = drop_whitespace
 
         # Original implementation
         text = self._munge_whitespace(text)

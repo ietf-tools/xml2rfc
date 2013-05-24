@@ -78,17 +78,6 @@ class RawTextRfcWriter(BaseRfcWriter):
         """
         if buf is None:
             buf = self.buf
-        # We can take advantage of textwrap's initial_indent by using a bullet
-        # parameter and treating it separately.  We still need to indent it.
-        subsequent = ' ' * (indent + sub_indent)
-        if bullet:
-            initial = ' ' * indent + bullet
-            if not sub_indent:
-                # Use bullet length for subsequent indents
-                subsequent = ' ' * len(initial)
-        else:
-            # No bullet, so combine indent and sub_indent
-            initial = subsequent
 
         if leading_blankline:
             if edit and self.pis['editing'] == 'yes':
@@ -97,6 +86,24 @@ class RawTextRfcWriter(BaseRfcWriter):
                 self._lb(buf=buf, text=str('<' + str(self.edit_counter) + '>'))
             else:
                 self._lb(buf=buf)
+
+        # We can take advantage of textwrap's initial_indent by using a bullet
+        # parameter and treating it separately.  We still need to indent it.
+        subsequent = ' ' * (indent + sub_indent)
+        if bullet:
+            initial = ' ' * indent
+            bullet_parts = self.wrapper.wrap(bullet, initial_indent=initial, subsequent_indent=initial,
+                                             fix_doublespace=False, drop_whitespace=False)
+            if len(bullet_parts) > 1:
+                buf.extend(bullet_parts[:-1])
+            initial = bullet_parts[-1]
+            if not sub_indent:
+                # Use bullet length for subsequent indents
+                subsequent = ' ' * len(initial)
+        else:
+            # No bullet, so combine indent and sub_indent
+            initial = subsequent
+
         if string:
             if strip:
                 # Strip initial whitespace
