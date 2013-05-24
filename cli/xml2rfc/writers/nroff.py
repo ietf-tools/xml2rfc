@@ -223,8 +223,10 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         end = len(self.buf) + self.pis["sectionorphan"]
         self.break_hints[begin] = (end - begin - 1, "txt")
 
+    @debug.trace
     def urlkeep(self, text):
-        return re.sub(r'http://', r'\%http://', text)
+        text = re.sub(r'(\(?)http(s?)://', r'\%\1http\2://', text)
+        return text
 
     def write_paragraph(self, text, align='left', autoAnchor=None):
         """ Write a generic paragraph of text.  Used for boilerplate. """
