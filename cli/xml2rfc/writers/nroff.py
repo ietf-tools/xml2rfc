@@ -223,7 +223,6 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         end = len(self.buf) + self.pis["sectionorphan"]
         self.break_hints[begin] = (end - begin - 1, "txt")
 
-    @debug.trace
     def urlkeep(self, text):
         text = re.sub(r'(\(?)http(s?)://', r'\%\1http\2://', text)
         return text
