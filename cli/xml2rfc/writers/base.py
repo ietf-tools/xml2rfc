@@ -401,6 +401,18 @@ class BaseRfcWriter:
         self._index.append(item)
         return item
 
+    def get_initials(self, author):
+        """author is an rfc2629 author element.  Return the author initials,
+        fixed up according to current flavour and policy."""
+        import re
+        initials = author.attrib.get('initials', '')
+        initials_list = re.split("[. ]+", initials)
+        if self.pis["multiple-initials"] == "no":
+            initials = initials_list[0] + "."
+        else:
+            initials = ". ".join(initials_list) + "."
+        return initials
+
     def _getTocIndex(self):
         return [item for item in self._index if item.toc]
         
@@ -489,7 +501,7 @@ class BaseRfcWriter:
             organization = author.find('organization')
             surname = author.attrib.get('surname', '')
             if surname:
-                initials = xml2rfc.utils.get_initials(author)
+                initials = self.get_initials(author)
                 if i == len(authors) - 1 and len(authors) > 1:
                     # Last author is rendered in reverse
                     buf.append('and ' + initials + ' ' + \
@@ -581,7 +593,7 @@ class BaseRfcWriter:
                 role = author.attrib.get('role', '')
                 if role == 'editor':
                     role = ', Ed.'
-                initials = xml2rfc.utils.get_initials(author)
+                initials = self.get_initials(author)
                 lines.append(initials + ' ' + author.attrib.\
                              get('surname', '') + role)
                 organization = author.find('organization')

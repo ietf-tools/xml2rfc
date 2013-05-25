@@ -472,7 +472,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                 organization = author.find('organization')
                 email = author.find('address/email')
                 surname = author.attrib.get('surname')
-                initials = xml2rfc.utils.get_initials(author)
+                initials = self.get_initials(author)
                 if surname is not None:
                     if j == len(authors) - 1 and len(authors) > 1:
                         # Last author, render in reverse

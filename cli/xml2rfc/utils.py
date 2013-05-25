@@ -430,13 +430,3 @@ _unicode_replacements = {
     u'\u017e': 'z',
     u'\u2010': '-',
 }
-
-def get_initials(author):
-    """author is an rfc2629 author element.  Return the author initials,
-    fixed up according to current flavour and policy."""
-    initials = author.attrib.get('initials', '').split()
-    for i in range(len(initials)):
-        initial = initials[i]
-        if not initial.endswith('.'):
-            initials[i] = initial+'.'
-    return ' '.join(initials)
