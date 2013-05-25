@@ -41,11 +41,22 @@ class MyTextWrapper(textwrap.TextWrapper):
         self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
 
         # Override end of line regex, double space after '].'
-        self.sentence_end_re = re.compile(r'[%s%s0-9\>\]\)\"\']'  # lowercase letter, end parentheses
+        self.sentence_end_re = re.compile(r'[%s%s0-9\>\]\)\"\']'  # letter, end parentheses
                             r'[\.\!\?]'     # sentence-ending punct.
                             r'[\"\'\)\]]?'  # optional end-of-quote, end parentheses
                             r'\Z'           # end of chunk
                             % (string.lowercase, string.uppercase))
+
+        self.not_sentence_end_re = re.compile(
+            # start of string or non-alpha character
+            r'(^|[^%s%s])'
+            r'('
+            # Single uppercase letter, dot, enclosing parentheses or quotes
+            r'[A-Za-z]\.[\]\)\'"]*'
+            # Tla with leading uppercase, and special cases
+            r'|([A-Z][a-z][a-z]|Eq|[Cc]f|vs|resp|viz|ibid|[JS]r|M[rs]|Messrs|Mmes|Dr|Profs?|St|Lt)\.'
+            r')\Z' # trailing dot, end of group and end of chunk
+            %(string.lowercase, string.uppercase) )
 
         # XmlCharRef replacements that occur AFTER line breaking logic
         self.post_break_replacements = {
@@ -56,6 +67,25 @@ class MyTextWrapper(textwrap.TextWrapper):
 
         self.break_on_hyphens = True
 
+
+    def _fix_sentence_endings(self, chunks):
+        """_fix_sentence_endings(chunks : [string])
+
+        Correct for sentence endings buried in 'chunks'.  Eg. when the
+        original text contains "... foo.\nBar ...", munge_whitespace()
+        and split() will convert that to [..., "foo.", " ", "Bar", ...]
+        which has one too few spaces; this method simply changes the one
+        space to two.
+        """
+        i = 0
+        patsearch = self.sentence_end_re.search
+        skipsearch = self.not_sentence_end_re.search
+        while i < len(chunks)-1:
+            if chunks[i+1] == " " and patsearch(chunks[i]) and skipsearch(chunks[i])==None:
+                chunks[i+1] = "  "
+                i += 2
+            else:
+                i += 1
 
     def replace(self, text):
         """ Replace control entities with the proper character 
