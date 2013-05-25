@@ -576,6 +576,7 @@ class BaseRfcWriter:
         if authorship == 'yes':
             # Keep track of previous organization and remove if redundant.
             last_org = None
+            last_pos = None
             for author in self.r.findall('front/author'):
                 role = author.attrib.get('role', '')
                 if role == 'editor':
@@ -584,21 +585,22 @@ class BaseRfcWriter:
                 lines.append(initials + ' ' + author.attrib.\
                              get('surname', '') + role)
                 organization = author.find('organization')
-                if organization is None or organization.text is None or organization.text.strip() == '':
+                org_name = ''
+                if organization is not None:
+                    abbrev = organization.attrib.get("abbrev", None)
+                    if  abbrev != None and abbrev.strip() != '':
+                        org_name = abbrev.strip()
+                    elif organization.text and organization.text.strip() != '':
+                        org_name = organization.text.strip()
+                if org_name == '':
                     lines.append('')
                 else:
-                    abbrev = organization.attrib.get('abbrev')
-                    org_result = None
-                    if abbrev:
-                        org_result = abbrev
-                    elif organization.text:
-                        org_result = organization.text
-                    if org_result:
-                        if org_result == last_org:
-                            # Remove redundant organization
-                            lines.remove(last_org)
-                        last_org = org_result
-                        lines.append(org_result)
+                    if org_name == last_org:
+                        # Remove redundant organization
+                        del lines[last_pos]
+                    lines.append(org_name)
+                last_org = org_name
+                last_pos = len(lines)-1
 
         date = self.r.find('front/date')
         if date is not None:
