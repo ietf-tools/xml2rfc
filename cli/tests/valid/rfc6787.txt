@@ -85,7 +85,7 @@ Table of Contents
    2.  Document Conventions  . . . . . . . . . . . . . . . . . . . .   9
      2.1.  Definitions . . . . . . . . . . . . . . . . . . . . . . .  10
      2.2.  State-Machine Diagrams  . . . . . . . . . . . . . . . . .  10
-     2.3.  URI Schemes . . . . . . . . . . . . . . . . . . . . . . .  11
+     2.3.  URI Schemes . . . . . . . . . . . . . . . . . . . . . . .  10
    3.  Architecture  . . . . . . . . . . . . . . . . . . . . . . . .  11
      3.1.  MRCPv2 Media Resource Types . . . . . . . . . . . . . . .  12
      3.2.  Server and Resource Addressing  . . . . . . . . . . . . .  13
@@ -407,7 +407,6 @@ RFC 6787                         MRCPv2                    November 2012
      17.2.  Informative References . . . . . . . . . . . . . . . . . 223
    Appendix A.  Contributors . . . . . . . . . . . . . . . . . . . . 224
    Appendix B.  Acknowledgements . . . . . . . . . . . . . . . . . . 225
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 226
 
 1.  Introduction
 
@@ -444,7 +443,8 @@ RFC 6787                         MRCPv2                    November 2012
    Section 3.2 of [RFC4313].  This is the reason why MRCPv2 does not run
    over RTSP.
 
-
+   MRCPv2 leverages these capabilities by building upon SIP and the
+   Session Description Protocol (SDP) [RFC4566].  MRCPv2 uses SIP to set
 
 
 
@@ -453,8 +453,6 @@ Burnett & Shanmugham         Standards Track                    [Page 8]
 RFC 6787                         MRCPv2                    November 2012
 
 
-   MRCPv2 leverages these capabilities by building upon SIP and the
-   Session Description Protocol (SDP) [RFC4566].  MRCPv2 uses SIP to set
    up and tear down media and control sessions with the server.  In
    addition, the client can use a SIP re-INVITE method (an INVITE dialog
    sent within an existing SIP session) to change the characteristics of
@@ -500,7 +498,9 @@ RFC 6787                         MRCPv2                    November 2012
    All the mechanisms specified in this document are described in both
    prose and an augmented Backus-Naur form (ABNF [RFC5234]).
 
-
+   The complete message format in ABNF form is provided in Section 15
+   and is the normative format definition.  Note that productions may be
+   duplicated within the main body of the document for reading
 
 
 
@@ -509,9 +509,6 @@ Burnett & Shanmugham         Standards Track                    [Page 9]
 RFC 6787                         MRCPv2                    November 2012
 
 
-   The complete message format in ABNF form is provided in Section 15
-   and is the normative format definition.  Note that productions may be
-   duplicated within the main body of the document for reading
    convenience.  If a production in the body of the text conflicts with
    one in the normative definition, the latter rules.
 
@@ -558,14 +555,15 @@ RFC 6787                         MRCPv2                    November 2012
    to be processed, they are not reflected in the state-machine
    diagrams.
 
+2.3.  URI Schemes
+
+
 
 
 Burnett & Shanmugham         Standards Track                   [Page 10]
 
 RFC 6787                         MRCPv2                    November 2012
 
-
-2.3.  URI Schemes
 
    This document defines many protocol headers that contain URIs
    (Uniform Resource Identifiers [RFC3986]) or lists of URIs for
@@ -611,8 +609,10 @@ RFC 6787                         MRCPv2                    November 2012
    indicate the media processing resource associated with that channel.
    For information on message framing, see Section 5.
 
-   SIP also establishes the media sessions between the client (or other
-   source/sink of media) and the MRCPv2 server using SDP "m=" lines.
+
+
+
+
 
 
 
@@ -621,6 +621,8 @@ Burnett & Shanmugham         Standards Track                   [Page 11]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   SIP also establishes the media sessions between the client (or other
+   source/sink of media) and the MRCPv2 server using SDP "m=" lines.
    One or more media processing resources may share a media session
    under a SIP session, or each media processing resource may have its
    own media session.
@@ -667,8 +669,6 @@ RFC 6787                         MRCPv2                    November 2012
                   data is described using a limited subset of the Speech
                   Synthesis Markup Language (SSML)
                   [W3C.REC-speech-synthesis-20040907] elements.  A basic
-                  synthesizer MUST support the SSML tags <speak>,
-                  <audio>, <say-as>, and <mark>.
 
 
 
@@ -676,6 +676,9 @@ Burnett & Shanmugham         Standards Track                   [Page 12]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+                  synthesizer MUST support the SSML tags <speak>,
+                  <audio>, <say-as>, and <mark>.
 
    Speech Synthesizer
                   A full-capability speech synthesis resource that can
@@ -721,9 +724,6 @@ RFC 6787                         MRCPv2                    November 2012
 
 3.2.  Server and Resource Addressing
 
-   The MRCPv2 server is a generic SIP server, and is thus addressed by a
-   SIP URI (RFC 3261 [RFC3261]).
-
 
 
 
@@ -732,6 +732,9 @@ Burnett & Shanmugham         Standards Track                   [Page 13]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   The MRCPv2 server is a generic SIP server, and is thus addressed by a
+   SIP URI (RFC 3261 [RFC3261]).
 
    For example:
 
@@ -778,9 +781,6 @@ RFC 6787                         MRCPv2                    November 2012
    of any other MRCP channel currently allocated by that server.  MRCPv2
    defines the following IANA-registered types of media processing
    resources.  Additional resource types and their associated methods/
-   events and state machines may be added as described below in
-   Section 13.
-
 
 
 
@@ -788,6 +788,9 @@ Burnett & Shanmugham         Standards Track                   [Page 14]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   events and state machines may be added as described below in
+   Section 13.
 
           +---------------+----------------------+--------------+
           | Resource Type | Resource Description | Described in |
@@ -834,9 +837,6 @@ RFC 6787                         MRCPv2                    November 2012
    session, it issues a new SDP offer, according to the procedures of
    RFC 3264 [RFC3264], in a SIP re-INVITE request.  The SDP offer/answer
    exchange carried by this SIP transaction contains one or more
-   additional control "m=" lines for the new resources to be allocated
-   to the session.  The server, on seeing the new "m=" line, allocates
-   the resources (if they are available) and responds with a
 
 
 
@@ -845,6 +845,9 @@ Burnett & Shanmugham         Standards Track                   [Page 15]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   additional control "m=" lines for the new resources to be allocated
+   to the session.  The server, on seeing the new "m=" line, allocates
+   the resources (if they are available) and responds with a
    corresponding control "m=" line in the SDP answer carried in the SIP
    response.  If the new resources are not available, the re-INVITE
    receives an error message, and existing media processing going on
@@ -889,10 +892,7 @@ RFC 6787                         MRCPv2                    November 2012
    This will deallocate all the control channels and resources allocated
    under the session.
 
-   All servers MUST support TLS.  Servers MAY use TCP without TLS in
-   controlled environments (e.g., not in the public Internet) where both
-   nodes are inside a protected perimeter, for example, preventing
-   access to the MRCP server from remote nodes outside the controlled
+
 
 
 
@@ -901,6 +901,10 @@ Burnett & Shanmugham         Standards Track                   [Page 16]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   All servers MUST support TLS.  Servers MAY use TCP without TLS in
+   controlled environments (e.g., not in the public Internet) where both
+   nodes are inside a protected perimeter, for example, preventing
+   access to the MRCP server from remote nodes outside the controlled
    perimeter.  It is up to the client, through the SDP offer, to choose
    which transport it wants to use for an MRCPv2 session.  Aside from
    the exceptions given above, when using TCP, the "m=" lines MUST
@@ -945,10 +949,6 @@ RFC 6787                         MRCPv2                    November 2012
           t=0 0
           m=application 9 TCP/MRCPv2 1
           a=setup:active
-          a=connection:new
-          a=resource:speechsynth
-          a=cmid:1
-          m=audio 49170 RTP/AVP 0
 
 
 
@@ -957,6 +957,10 @@ Burnett & Shanmugham         Standards Track                   [Page 17]
 RFC 6787                         MRCPv2                    November 2012
 
 
+          a=connection:new
+          a=resource:speechsynth
+          a=cmid:1
+          m=audio 49170 RTP/AVP 0
           a=rtpmap:0 pcmu/8000
           a=recvonly
           a=mid:1
@@ -1001,10 +1005,6 @@ RFC 6787                         MRCPv2                    November 2012
 
                  Example: Add Synthesizer Control Channel
 
-   This example exchange continues from the previous figure and
-   allocates an additional resource control channel for a recognizer.
-   Since a recognizer would need to receive an audio stream for
-   recognition, this interaction also updates the audio stream to
 
 
 
@@ -1013,6 +1013,10 @@ Burnett & Shanmugham         Standards Track                   [Page 18]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   This example exchange continues from the previous figure and
+   allocates an additional resource control channel for a recognizer.
+   Since a recognizer would need to receive an audio stream for
+   recognition, this interaction also updates the audio stream to
    sendrecv, making it a two-way RTP media session.
 
    C->S:  INVITE sip:mresources@server.example.com SIP/2.0
@@ -1057,10 +1061,6 @@ RFC 6787                         MRCPv2                    November 2012
           From:sarvi <sip:sarvi@example.com>;tag=1928301774
           Call-ID:a84b4c76e66710
           CSeq:314162 INVITE
-          Contact:<sip:mresources@server.example.com>
-          Content-Type:application/sdp
-          Content-Length:...
-
 
 
 
@@ -1068,6 +1068,10 @@ Burnett & Shanmugham         Standards Track                   [Page 19]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+          Contact:<sip:mresources@server.example.com>
+          Content-Type:application/sdp
+          Content-Length:...
 
           v=0
           o=- 2890842808 2890842809 IN IP4 192.0.2.11
@@ -1113,10 +1117,6 @@ RFC 6787                         MRCPv2                    November 2012
           Via:SIP/2.0/TCP client.atlanta.example.com:5060;
            branch=z9hG4bK74bf5
           Max-Forwards:6
-          To:MediaServer <sip:mresources@example.com>;tag=62784
-          From:sarvi <sip:sarvi@example.com>;tag=1928301774
-          Call-ID:a84b4c76e66710
-          CSeq:314163 INVITE
 
 
 
@@ -1125,6 +1125,10 @@ Burnett & Shanmugham         Standards Track                   [Page 20]
 RFC 6787                         MRCPv2                    November 2012
 
 
+          To:MediaServer <sip:mresources@example.com>;tag=62784
+          From:sarvi <sip:sarvi@example.com>;tag=1928301774
+          Call-ID:a84b4c76e66710
+          CSeq:314163 INVITE
           Contact:<sip:sarvi@client.example.com>
           Content-Type:application/sdp
           Content-Length:...
@@ -1169,16 +1173,17 @@ RFC 6787                         MRCPv2                    November 2012
           a=rtpmap:0 pcmu/8000
           a=sendonly
           a=mid:1
-          m=application 0 TCP/MRCPv2 1
-          a=channel:32AECB234338@speechrecog
-          a=cmid:1
-
 
 
 
 Burnett & Shanmugham         Standards Track                   [Page 21]
 
 RFC 6787                         MRCPv2                    November 2012
+
+
+          m=application 0 TCP/MRCPv2 1
+          a=channel:32AECB234338@speechrecog
+          a=cmid:1
 
 
    C->S:  ACK sip:mresources@server.example.com SIP/2.0
@@ -1224,17 +1229,16 @@ RFC 6787                         MRCPv2                    November 2012
    formatting of the "cmid" attribute is described by the following
    ABNF:
 
-   cmid-attribute     = "a=cmid:" identification-tag
-   identification-tag = token
-
-
-
 
 
 
 Burnett & Shanmugham         Standards Track                   [Page 22]
 
 RFC 6787                         MRCPv2                    November 2012
+
+
+   cmid-attribute     = "a=cmid:" identification-tag
+   identification-tag = token
 
 
    To allow this flexible mapping of media sessions to MRCPv2 control
@@ -1280,11 +1284,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 4.5.  MRCPv2 Message Transport
 
-   The MRCPv2 messages defined in this document are transported over a
-   TCP or TLS connection between the client and the server.  The method
-   for setting up this transport connection and the resource control
-   channel is discussed in Sections 4.1 and 4.2.  Multiple resource
-   control channels between a client and a server that belong to
+
 
 
 
@@ -1293,6 +1293,11 @@ Burnett & Shanmugham         Standards Track                   [Page 23]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   The MRCPv2 messages defined in this document are transported over a
+   TCP or TLS connection between the client and the server.  The method
+   for setting up this transport connection and the resource control
+   channel is discussed in Sections 4.1 and 4.2.  Multiple resource
+   control channels between a client and a server that belong to
    different SIP dialogs can share one or more TLS or TCP connections
    between them; the server and client MUST support this mode of
    operation.  Clients and servers MUST use the MRCPv2 channel
@@ -1336,11 +1341,6 @@ RFC 6787                         MRCPv2                    November 2012
 
    Lines are terminated by CRLF (carriage return, then line feed).
    Also, some parameters in the message may contain binary data or a
-   record spanning multiple lines.  Such fields have a length value
-   associated with the parameter, which indicates the number of octets
-   immediately following the parameter.
-
-
 
 
 
@@ -1348,6 +1348,10 @@ Burnett & Shanmugham         Standards Track                   [Page 24]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   record spanning multiple lines.  Such fields have a length value
+   associated with the parameter, which indicates the number of octets
+   immediately following the parameter.
 
 5.1.  Common Protocol Elements
 
@@ -1393,10 +1397,6 @@ RFC 6787                         MRCPv2                    November 2012
    [H3.1]) or "MRCP/2.0" (as opposed to "HTTP/1.1" in [H3.1]).  To be
    compliant with this specification, clients and servers sending MRCPv2
    messages MUST indicate an mrcp-version of "MRCP/2.0".  ABNF
-   productions using mrcp-version can be found in Sections 5.2, 5.3, and
-   5.5.
-
-
 
 
 
@@ -1404,6 +1404,9 @@ Burnett & Shanmugham         Standards Track                   [Page 25]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   productions using mrcp-version can be found in Sections 5.2, 5.3, and
+   5.5.
 
    mrcp-version   =    "MRCP" "/" 1*2DIGIT "." 1*2DIGIT
 
@@ -1450,9 +1453,6 @@ RFC 6787                         MRCPv2                    November 2012
                </rule>
 
            <!-- single language attachment to a rule expansion -->
-               <rule id="request">
-                   may I speak to
-                   <one-of xml:lang="fr-CA">
 
 
 
@@ -1461,6 +1461,9 @@ Burnett & Shanmugham         Standards Track                   [Page 26]
 RFC 6787                         MRCPv2                    November 2012
 
 
+               <rule id="request">
+                   may I speak to
+                   <one-of xml:lang="fr-CA">
                        <item>Michel Tremblay</item>
                        <item>Andre Roy</item>
                    </one-of>
@@ -1505,9 +1508,6 @@ RFC 6787                         MRCPv2                    November 2012
 
 5.2.  Request
 
-   An MRCPv2 request consists of a Request line followed by the message
-   header section and an optional message body containing data specific
-   to the request message.
 
 
 
@@ -1516,6 +1516,10 @@ Burnett & Shanmugham         Standards Track                   [Page 27]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   An MRCPv2 request consists of a Request line followed by the message
+   header section and an optional message body containing data specific
+   to the request message.
 
    The Request message from a client to the server includes within the
    first line the method to be applied, a method tag for that request
@@ -1561,10 +1565,6 @@ RFC 6787                         MRCPv2                    November 2012
 
    The server resource MUST use the client-assigned identifier in its
    response to the request.  If the request does not complete
-   synchronously, future asynchronous events associated with this
-   request MUST carry the client-assigned request-id.
-
-
 
 
 
@@ -1572,6 +1572,9 @@ Burnett & Shanmugham         Standards Track                   [Page 28]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   synchronously, future asynchronous events associated with this
+   request MUST carry the client-assigned request-id.
 
    request-id     =    1*10DIGIT
 
@@ -1617,9 +1620,6 @@ RFC 6787                         MRCPv2                    November 2012
    being processed and is not yet complete.  A PENDING or IN-PROGRESS
    status indicates that further Event messages may be delivered with
    that request-id.
-
-
-
 
 
 
