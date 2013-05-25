@@ -51,6 +51,7 @@ class XmlRfcDummy():
             "linkmailto":	"yes",
             #"linefile":	Unset
             #"needLines":       Unset
+            "multiple-initials":"no",
             "notedraftinprogress": "yes",
             "private":		"",
             "refparent":	"References",
