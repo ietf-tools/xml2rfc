@@ -1,3 +1,107 @@
+xml2rfc (2.4.2) ietf; urgency=medium
+
+  This release fixes all major and critical issues registered in the issue
+  tracker as of 26 May 2013.  Details:
+
+  * Added pre-installation requirements to the INSTALL file.  Added code to
+    scripts/xml2rfc in order to avoid problems if that file is renamed to
+    scripts/xml2rfc.py.  This fixes issue #152.
+
+  * Added a setup requirement for python <3.0, as things don't currently
+    work if trying to run setup.py or xml2rfc with python 3.X.
+
+  * Added special cases to avoid adding double spaces after many common
+    abbreviations.  Refined the sentence-end double-space fixup further, to
+    look at whether what follows looks like the start of a new sentence.
+    This fixes issue #115.  
+
+  * Moved the get_initials() function to the BaseRfcWriter, as it now needs
+    to look at a PI.  Added code to return one initial only, or multiple,
+    depending on the PI 'multiple-initials' setting.  Fixes issue #138 (for
+    now).  It is possible that this resolution is too simpleminded, and a
+    cleaner way is needed to differentiate the handling of initials in the
+    current document versus initials in references.
+
+  * Added new undocumented PI multiple-initials to control whether multiple
+    initials will be shown for an author, or not.  The default is 'no',
+    matching the xml2rfc v1.x behaviour.
+
+  * Fixed the code which determines when an author affiliation doesn't need
+    to be listed again in the front page author list, and removes the
+    redundant affiliation (the old code would remove the *first* matching
+    organization, rather than the immediately preceeding organization name).
+    Also fixed a buggy test of when an organization element is present.
+    Fixes issue #135.
+
+  * Made appearance of 'Authors Address' (etc.) in ToC dependent on PI
+    'rfcedstyle' == 'yes'.  Fixes issue #125.
+
+  * Updated write_text() to handle long bullets that need to be wrapped
+    across lines better.  Fixes issue #124.
+
+  * Fixed two other cases of missing blank lines when PI 'compact' is 'no'.
+    Fixes issue #82 (some more).
+
+  * Disabled the iprnotified IP.  See issue #123; closes #123.
+
+  * When protecting http: URLs from line-breaking in nroff output, place the
+    \% outside enclosing parentheses, if any.  Fixes issue #120.
+
+  * Added a warning for incomplete and out-of-date <date/> elements.  Fixed
+    an issue with changeset [792].
+
+  * Issue a warning when the source file isn't for an RFC, but doesn't have
+    a docName attribute in the <rfc/> element.
+
+  * Fixed the use of separating lines in table drawing, to match v1 for text
+    and nroff output.  (There is no specification for the meaining of the
+    different styles though...).  Fixes issue #113.  Note that additional
+    style definitions are needed to get the correct results for the html
+    output.
+
+  * Refactored and re-wrote the paginated text writer and the nroff writer
+    in order to generate a ToC in nroff by re-using the fairly complex
+    post-rendering code which inserts the ToC (and iref entries) in the
+    paginated text writer.  As a side effect, the page-breaking calculations
+    for the nroff writer becomes the same as for the paginated writer.
+    Re-factored the line and page-break emitting code to be cleaner and more
+    readable.  Changed the code to not start inserting a ToC too close to
+    the end of a page (currently hardcoded to require at least 10 lines),
+    otherwise skip to a new page.  Fixes issue #109.
+
+  * Changed the author list in first-page header to show a blank line if no
+    organization has been given.  Fixes issue #108.
+
+  * Changed the wrapping of nroff output to match text output closely, in
+    order to minimize insertion of .bp in the middle of a line.  Fixes issue
+    #150 (mostly -- line breaks on hyphens may still cause .bp to be emitted
+    in the middle of a line in very rare cases).
+
+  * Changed nroff output for long titles (which will wrap) so that the
+    wrapped title text will be indented appropriately.  Fixes issue #128.
+
+  * Changed the handling of special characters (nbsp, nbhy) so as to emit
+    the proper non-breaking escapes for nroff.  Fixes issue #121.
+
+  * Changed start-of-line nroff escape handling, see issue #118.
+
+  * Changed the generation of xref text to use the same numeric indexes as
+    in the references section when symrefs='no'.  Don't start numbering over
+    again when starting a new references section (i.e., when moving from
+    normative to informative).  Don't re-sort numeric references
+    alphabetically; they are already sorted numerically.  Fixes issue #107.
+
+  * Changed os.linesep to '\n' when writing lines to text files.  The
+    library takes care of doing the right thing on different platforms;
+    writing os.linesep on the other hand will result in the file containing
+    '\r\r\n', which is wrong.  Fixes issue #141.
+
+  * Changed handling of include PIs to replace the PI instead of just
+    appending the included tree.  Updated a test file to match updated test
+    case.  Fixes issue #136.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  26 May 2013 14:45:13 +0200
+
 xml2rfc (2.4.1) ietf; urgency=medium
 
   * Fixed a problem with very long hangindent bullet text followed by
