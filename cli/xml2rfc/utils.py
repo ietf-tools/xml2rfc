@@ -47,6 +47,7 @@ class MyTextWrapper(textwrap.TextWrapper):
                             r'\Z'           # end of chunk
                             % (string.lowercase, string.uppercase))
 
+        # Exceptions which should not be treated like end-of-sentence
         self.not_sentence_end_re = re.compile(
             # start of string or non-alpha character
             r'(^|[^%s%s])'
@@ -57,6 +58,9 @@ class MyTextWrapper(textwrap.TextWrapper):
             r'|([A-Z][a-z][a-z]|Eq|[Cc]f|vs|resp|viz|ibid|[JS]r|M[rs]|Messrs|Mmes|Dr|Profs?|St|Lt)\.'
             r')\Z' # trailing dot, end of group and end of chunk
             %(string.lowercase, string.uppercase) )
+
+        # Start of next sentence regex
+        self.sentence_start_re = re.compile("^[\"'([]*[%s]" % string.uppercase)
 
         # XmlCharRef replacements that occur AFTER line breaking logic
         self.post_break_replacements = {
@@ -80,8 +84,11 @@ class MyTextWrapper(textwrap.TextWrapper):
         i = 0
         patsearch = self.sentence_end_re.search
         skipsearch = self.not_sentence_end_re.search
-        while i < len(chunks)-1:
-            if chunks[i+1] == " " and patsearch(chunks[i]) and skipsearch(chunks[i])==None:
+        startsearch = self.sentence_start_re.search
+        while i < len(chunks)-2:
+            if (chunks[i+1] == " " and patsearch(chunks[i])
+                                  and skipsearch(chunks[i])==None
+                                  and startsearch(chunks[i+2])):
                 chunks[i+1] = "  "
                 i += 2
             else:
