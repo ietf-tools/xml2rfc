@@ -455,6 +455,8 @@ class HtmlRfcWriter(BaseRfcWriter):
 
     def write_reference_list(self, list):
         tbody = E.TBODY()
+        refkeys = []
+        refdict = {}
         for i, reference in enumerate(list.findall('reference')):
             tr = E.TR()
             # Use anchor or num depending on PI
@@ -517,6 +519,10 @@ class HtmlRfcWriter(BaseRfcWriter):
                         seriesInfo.attrib.get('value', '')
                 title_a.tail += seriesInfo.attrib.get('name', '') + ' ' + \
                              seriesInfo.attrib.get('value', '') + ', '
+            if not title_a.attrib.has_key("href"):
+                href = reference.attrib.get("target", None)
+                if href:
+                    title_a.attrib['href'] = href
             date = reference.find('front/date')
             if date is not None:
                 month = date.attrib.get('month', '')
@@ -526,11 +532,16 @@ class HtmlRfcWriter(BaseRfcWriter):
                 title_a.tail += month + year + '.'
             tr.append(bullet_td)
             tr.append(ref_td)
-            tbody.append(tr)
+            refdict[bullet] = tr
+            refkeys.append(bullet)
             # Render annotation as a separate paragraph
             annotation = reference.find('annotation')
             if annotation is not None and annotation.text:
                 ref_td.append(E.P(annotation.text))
+        if self.pis['sortrefs'] == 'yes':
+            refkeys = sorted(refkeys)
+        for key in refkeys:
+            tbody.append(refdict[key])
         self.ref_start += i + 1                
         # Add to body buffer
         self.buf.append(self._serialize(E.TABLE(tbody)))
