@@ -210,13 +210,20 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 toc_pointers.append((toc_prev_start, len(self.output)))
                 
             if line_num == self.iref_marker and self.iref_marker > 0:
+#                 # Don't start Index too close to the end of the page
+#                 if self.page_length + 10 >= max_page_length:
+#                     remainder = max_page_length - self.page_length - 2
+#                     self.emit([''] * remainder)
+#                     self.page_break()
+
                 # Add page number for index
                 item = self._getItemByAnchor('rfc.index')
                 if item:
                     item.page = self.page_num
                 # Insert a dummy iref here
                 iref_prev_start = len(self.output)
-                for n in range(self._iref_size_hint()):
+                preliminary_iref_index = self.write_iref_index()
+                for l in preliminary_iref_index:
                     if self.page_length + 2 >= max_page_length:
                         # Store a pair of pointers
                         iref_pointers.append((iref_prev_start, len(self.output)))
@@ -224,7 +231,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                         self.page_break()
                         iref_prev_start = len(self.output)
                     # Write dummy line
-                    self.emit('')
+                    self.emit(l)
                 # Store last pair of pointers
                 iref_pointers.append((iref_prev_start, len(self.output)))
 
@@ -299,6 +306,8 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             irefbuf = self.write_iref_index()
             ptr, end = iref_pointers.pop(0)
             for line in irefbuf:
+                if self.output[ptr] != '' and line == '':
+                    continue
                 self.output[ptr] = line
                 ptr += 1
                 if ptr >= end:
