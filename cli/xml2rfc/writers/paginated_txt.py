@@ -210,11 +210,11 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 toc_pointers.append((toc_prev_start, len(self.output)))
                 
             if line_num == self.iref_marker and self.iref_marker > 0:
-#                 # Don't start Index too close to the end of the page
-#                 if self.page_length + 10 >= max_page_length:
-#                     remainder = max_page_length - self.page_length - 2
-#                     self.emit([''] * remainder)
-#                     self.page_break()
+                # Don't start Index too close to the end of the page
+                if self.page_length + 10 >= max_page_length:
+                    remainder = max_page_length - self.page_length - 2
+                    self.emit([''] * remainder)
+                    self.page_break()
 
                 # Add page number for index
                 item = self._getItemByAnchor('rfc.index')
