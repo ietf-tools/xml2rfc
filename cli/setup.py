@@ -6,6 +6,14 @@
 import os
 import re
 from setuptools import setup
+import sys
+
+major, minor = sys.version_info[:2]
+if not major == 2 and minor >= 6:
+    print ""
+    print "The xml2rfc installation requires python 2, with a version of 2.6 or higher."
+    print "Can't proceed, quitting."
+    exit()
 
 description = "Xml2rfc generates RFCs and IETF drafts from document source in XML according to the dtd in RFC2629."
 
@@ -54,7 +62,7 @@ Changelog
 setup(
     # Package metadata
     name='xml2rfc',
-    version='2.4.2',
+    version='2.4.2.rc2',
     author='Josh Bothun (Concentric Sky)',
     author_email='tools-discuss@ietf.org',
     maintainer = "Henrik Levkowetz",
@@ -81,6 +89,6 @@ setup(
     package_data={'xml2rfc': ['templates/*',
                               ]},
 
-    install_requires = ['lxml >=2.2.8', 'python <3.0' ],
+    install_requires = ['lxml >=2.2.8'],
     zip_safe = False,                   # We're reading templates from a package directory.
 )
