@@ -122,7 +122,8 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         begin = len(self.buf)
         
         par = []
-        RawTextRfcWriter.write_text(self, *args, buf=par, **kwargs)
+        kwargs["buf"] = par
+        RawTextRfcWriter.write_text(self, *args, **kwargs)
 
         # Escape as needed
         for i in range(len(par)):
