@@ -62,7 +62,7 @@ Changelog
 setup(
     # Package metadata
     name='xml2rfc',
-    version='2.4.2',
+    version='2.4.3.dev',
     author='Josh Bothun (Concentric Sky)',
     author_email='tools-discuss@ietf.org',
     maintainer = "Henrik Levkowetz",
