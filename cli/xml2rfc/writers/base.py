@@ -677,7 +677,8 @@ class BaseRfcWriter:
             self.write_label('Figure ' + str(self.figure_count) + title,
                             type='figure', source_line=figure.sourceline)
         else:
-            self.write_label(title, type='figure', source_line=figure.sourceline)
+            if title:
+                self.write_label(title, type='figure', source_line=figure.sourceline)
 
     def write_table(self, table):
         """ Writes <texttable> elements """
@@ -718,7 +719,8 @@ class BaseRfcWriter:
             self.write_label('Table ' + str(self.table_count) + title, \
                              type='table', source_line=table.sourceline)
         else:
-            self.write_label(title, type='table', source_line=table.sourceline)
+            if title:
+                self.write_label(title, type='table', source_line=table.sourceline)
 
     def _index_t_rec(self, element):
         """ Traverse a <t> element only performing indexing operations """

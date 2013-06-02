@@ -850,6 +850,8 @@ class RawTextRfcWriter(BaseRfcWriter):
 
         # Draw the table
         for i, cell_line in enumerate(cell_lines):
+            if i==0 and cell_line==[['']]:
+                continue
             # produce as many outpur rows as the number of wrapped
             # text lines in the cell with most lines, but at least 1
             for row in range(0, max(map(len, cell_line))):
