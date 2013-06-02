@@ -668,14 +668,17 @@ class RawTextRfcWriter(BaseRfcWriter):
             date = ref.find('front/date')
             if date is not None:
                 month = date.attrib.get('month', '')
-                if month:
-                    month += ' '
                 year = date.attrib.get('year', '')
-                refstring.append(month + year)
+                if month or year:
+                    if month:
+                        month += ' '
+                    refstring.append(month + year)
             # Target?
             target = ref.attrib.get('target')
             if target:
-                refstring.append(', <' + target + '>')
+                if not refstring[-1].endswith(', '):
+                    refstring.append(', ')
+                refstring.append('<' + target + '>')
             refstring.append('.')
             annotation = ref.find('annotation')
             # Use anchor or num depending on PI

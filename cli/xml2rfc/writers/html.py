@@ -475,10 +475,11 @@ class HtmlRfcWriter(BaseRfcWriter):
                 email = author.find('address/email')
                 surname = author.attrib.get('surname')
                 initials = self.get_initials(author)
+                if j == len(authors) - 1 and len(authors) > 1:
+                    last.tail = ' and '
                 if surname is not None:
                     if j == len(authors) - 1 and len(authors) > 1:
                         # Last author, render in reverse
-                        last.tail = ' and '
                         name_string = initials + ' ' + surname 
                     else:
                         name_string = surname + ', ' + initials
@@ -490,12 +491,12 @@ class HtmlRfcWriter(BaseRfcWriter):
                         a.attrib['title'] = organization.text
                     ref_td.append(a)
                     last = a
-                    a.tail = ', '
                 elif organization is not None and organization.text:
                     # Use organization instead of name
                     a = E.A(organization.text)
                     ref_td.append(a)
                     last = a
+                a.tail = ', '
             last.tail = ', "'
             title = reference.find('front/title')
             if title is not None and title.text:

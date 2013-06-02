@@ -500,11 +500,13 @@ class BaseRfcWriter:
         for i, author in enumerate(authors):
             organization = author.find('organization')
             surname = author.attrib.get('surname', '')
+            if i == len(authors) - 1 and len(authors) > 1:
+                buf.append('and ')
             if surname:
                 initials = self.get_initials(author)
                 if i == len(authors) - 1 and len(authors) > 1:
                     # Last author is rendered in reverse
-                    buf.append('and ' + initials + ' ' + \
+                    buf.append(initials + ' ' + \
                                      surname)
                 else:
                     buf.append(surname + ', ' + initials)
