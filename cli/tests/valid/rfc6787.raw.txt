@@ -699,7 +699,6 @@ Copyright Notice
      sip:mrcpv2@example.net   or
      sips:mrcpv2@example.net
 
-
 4.  MRCPv2 Basics
 
    MRCPv2 requires a connection-oriented transport-layer protocol such
@@ -1125,7 +1124,6 @@ Copyright Notice
    cmid-attribute     = "a=cmid:" identification-tag
    identification-tag = token
 
-
    To allow this flexible mapping of media sessions to MRCPv2 control
    channels, a single audio "m=" line can be associated with multiple
    resources, or each resource can have its own audio "m=" line.  For
@@ -1247,7 +1245,6 @@ Copyright Notice
                    /   recorder-header
                    /   verifier-header
 
-
    The message-body contains resource-specific and message-specific
    data.  The actual media types used to carry the data are specified in
    the sections defining the individual messages.  Generic header fields
@@ -1270,7 +1267,6 @@ Copyright Notice
 
    mrcp-version   =    "MRCP" "/" 1*2DIGIT "." 1*2DIGIT
 
-
    The message-length field specifies the length of the message in
    octets, including the start-line, and MUST be the second token from
    the beginning of the message.  This is to make the framing and
@@ -1285,7 +1281,6 @@ Copyright Notice
    indicate that the value is to be interpreted as a base-8 number.
 
    message-length =    1*19DIGIT
-
 
    The following sample MRCP exchange demonstrates proper message-length
    values.  The values for message-length have been removed from all
@@ -1345,7 +1340,6 @@ Copyright Notice
                </interpretation>
            </result>
 
-
    All MRCPv2 messages, responses and events MUST carry the Channel-
    Identifier header field so the server or client can differentiate
    messages from different control channels that may share the same
@@ -1371,7 +1365,6 @@ Copyright Notice
    request-line   =    mrcp-version SP message-length SP method-name
                        SP request-id CRLF
 
-
    The mrcp-version field is the MRCP protocol version that is being
    used by the client.
 
@@ -1391,7 +1384,6 @@ Copyright Notice
                   /    recognizer-method
                   /    recorder-method
                   /    verifier-method
-
 
    The request-id field is a unique identifier representable as an
    unsigned 32-bit integer created by the client and sent to the server.
@@ -1413,7 +1405,6 @@ Copyright Notice
 
    request-id     =    1*10DIGIT
 
-
 5.3.  Response
 
    After receiving and interpreting the request message for a method,
@@ -1424,7 +1415,6 @@ Copyright Notice
 
    response-line  =    mrcp-version SP message-length SP request-id
                        SP status-code SP request-state CRLF
-
 
    The mrcp-version field MUST contain the version of the request if
    supported; otherwise, it MUST contain the highest version of MRCP
@@ -1444,7 +1434,6 @@ Copyright Notice
 
    status-code     =    3DIGIT
 
-
    The request-state field indicates if the action initiated by the
    Request is PENDING, IN-PROGRESS, or COMPLETE.  The COMPLETE status
    means that the request was processed to completion and that there
@@ -1459,7 +1448,6 @@ Copyright Notice
    request-state    =  "COMPLETE"
                     /  "IN-PROGRESS"
                     /  "PENDING"
-
 
 5.4.  Status Codes
 
@@ -1528,7 +1516,6 @@ Copyright Notice
    event-line       =  mrcp-version SP message-length SP event-name
                        SP request-id SP request-state CRLF
 
-
    The mrcp-version used here is identical to the one used in the
    Request/Response line and indicates the highest version of MRCP
    running on the server.
@@ -1548,7 +1535,6 @@ Copyright Notice
                     /  recognizer-event
                     /  recorder-event
                     /  verifier-event
-
 
    The request-id used in the event MUST match the one sent in the
    request that caused this event.
@@ -1572,7 +1558,6 @@ Copyright Notice
 
    generic-method      =    "SET-PARAMS"
                        /    "GET-PARAMS"
-
 
    These are described in the following subsections.
 
@@ -1620,7 +1605,6 @@ Copyright Notice
    S->C:  MRCP/2.0 ... 543256 200 COMPLETE
           Channel-Identifier:32AECB23433802@speechsynth
 
-
 6.1.2.  GET-PARAMS
 
    The GET-PARAMS method, from the client to the server, asks the MRCPv2
@@ -1662,7 +1646,6 @@ Copyright Notice
            Vendor-Specific-Parameters:com.example.param1="Company Name";
                          com.example.param2="124324234@example.com"
 
-
 6.2.  Generic Message Headers
 
    All MRCPv2 header fields, which include both the generic-headers
@@ -1681,7 +1664,6 @@ Copyright Notice
    field-content  = <the OCTETs making up the field-value
                     and consisting of either *TEXT or combinations
                     of token, separators, and quoted-string>
-
 
    The field-content does not include any leading or trailing LWS (i.e.,
    linear white space occurring before the first non-whitespace
@@ -1730,7 +1712,6 @@ Copyright Notice
                        /    set-cookie
                        /    vendor-specific
 
-
 6.2.1.  Channel-Identifier
 
    All MRCPv2 requests, responses, and events MUST contain the Channel-
@@ -1748,7 +1729,6 @@ Copyright Notice
 
    channel-identifier  = "Channel-Identifier" ":" channel-id CRLF
    channel-id          = 1*alphanum "@" 1*alphanum
-
 
 6.2.2.  Accept
 
@@ -1791,7 +1771,6 @@ Copyright Notice
    active-request-id-list  =  "Active-Request-Id-List" ":"
                               request-id *("," request-id) CRLF
 
-
 6.2.4.  Proxy-Sync-Id
 
    When any server resource generates a "barge-in-able" event, it also
@@ -1810,7 +1789,6 @@ Copyright Notice
    and does not imply that a proxy server is involved.
 
    proxy-sync-id    =  "Proxy-Sync-Id" ":" 1*VCHAR CRLF
-
 
 6.2.5.  Accept-Charset
 
@@ -1847,7 +1825,6 @@ Copyright Notice
 
    value            =    token / quoted-string
 
-
 6.2.7.  Content-ID
 
    This header field contains an ID or name for the content by which it
@@ -1866,7 +1843,6 @@ Copyright Notice
    for resolving relative URIs within the entity.
 
    content-base      = "Content-Base" ":" absoluteURI CRLF
-
 
    Note, however, that the base URI of the contents within the entity-
    body may be redefined within that entity-body.  An example of this
@@ -1890,11 +1866,9 @@ Copyright Notice
                        *(*WSP "," *WSP content-coding *WSP )
                        CRLF
 
-
    Content codings are defined in [H3.5].  An example of its use is
 
    Content-Encoding:gzip
-
 
    If multiple encodings have been applied to an entity, the content
    encodings MUST be listed in the order in which they were applied.
@@ -1908,7 +1882,6 @@ Copyright Notice
 
    content-location  =  "Content-Location" ":"
                         ( absoluteURI / relativeURI ) CRLF
-
 
    The Content-Location value is a statement of the location of the
    resource corresponding to this particular entity at the time of the
@@ -1943,7 +1916,6 @@ Copyright Notice
 
    content-length  =  "Content-Length" ":" 1*19DIGIT CRLF
 
-
 6.2.12.  Fetch Timeout
 
    When the recognizer or synthesizer needs to fetch documents or other
@@ -1957,7 +1929,6 @@ Copyright Notice
    GRAMMAR, RECOGNIZE, SPEAK, SET-PARAMS, or GET-PARAMS.
 
    fetch-timeout       =   "Fetch-Timeout" ":" 1*19DIGIT CRLF
-
 
 6.2.13.  Cache-Control
 
@@ -1988,7 +1959,6 @@ Copyright Notice
                        / "min-fresh" "=" delta-seconds
 
    delta-seconds       = 1*19DIGIT
-
 
    Here, delta-seconds is a decimal time value specifying the number of
    seconds since the instant the message response or data was received
@@ -2050,7 +2020,6 @@ Copyright Notice
 
    logging-tag    = "Logging-Tag" ":" 1*UTFCHAR CRLF
 
-
 6.2.15.  Set-Cookie
 
    Since the associated HTTP client on an MRCPv2 server fetches
@@ -2110,7 +2079,6 @@ Copyright Notice
    extension-av      = <any CHAR except CTLs or ";">
    age-av            = "Age=" delta-seconds
 
-
    The Set-Cookie header field is specified in RFC 6265 [RFC6265].  The
    "Age" attribute is introduced in this specification to indicate the
    age of the cookie and is OPTIONAL.  An MRCPv2 client or server MUST
@@ -2162,7 +2130,6 @@ Copyright Notice
 
    vendor-av-pair-name     = 1*UTFCHAR
 
-
    Header fields of this form MAY be sent in any method (request) and
    are used to manage implementation-specific parameters on the server
    side.  The vendor-av-pair-name follows the reverse Internet Domain
@@ -2173,7 +2140,6 @@ Copyright Notice
    com.example.companyA.paramxyz=256
    com.example.companyA.paramabc=High
    com.example.companyB.paramxyz=Low
-
 
    When used in GET-PARAMS to get the current value of these parameters
    from the server, this header field value MAY contain a semicolon-
@@ -2383,14 +2349,12 @@ Copyright Notice
                         /  "CONTROL"
                         /  "DEFINE-LEXICON"
 
-
 8.3.  Synthesizer Events
 
    The synthesizer can generate the following events.
 
    synthesizer-event    =  "SPEECH-MARKER"
                         /  "SPEAK-COMPLETE"
-
 
 8.4.  Synthesizer Header Fields
 
@@ -2415,7 +2379,6 @@ Copyright Notice
                        /  speak-length
                        /  load-lexicon
                        /  lexicon-search-order
-
 
 8.4.1.  Jump-Size
 
@@ -2448,7 +2411,6 @@ Copyright Notice
                          /   "Sentence"
                          /   "Paragraph"
 
-
 8.4.2.  Kill-On-Barge-In
 
    This header field MAY be sent as part of the SPEAK method to enable
@@ -2458,7 +2420,6 @@ Copyright Notice
    resource.
 
    kill-on-barge-in      =   "Kill-On-Barge-In" ":" BOOLEAN CRLF
-
 
    The client MUST send a BARGE-IN-OCCURRED method to the synthesizer
    resource when it receives a barge-in-able event from any source.
@@ -2489,7 +2450,6 @@ Copyright Notice
 
    speaker-profile       =   "Speaker-Profile" ":" uri CRLF
 
-
 8.4.4.  Completion-Cause
 
    This header field MUST be specified in a SPEAK-COMPLETE event coming
@@ -2498,7 +2458,6 @@ Copyright Notice
 
    completion-cause      =   "Completion-Cause" ":" 3DIGIT SP
                              1*VCHAR CRLF
-
 
 
    +--------------+-------------------------+--------------------------+
@@ -2540,7 +2499,6 @@ Copyright Notice
                            quoted-string CRLF
 
 
-
    The completion reason text is provided for client use in logs and for
    debugging and instrumentation purposes.  Clients MUST NOT interpret
    the completion reason text.
@@ -2562,7 +2520,6 @@ Copyright Notice
    voice-variant       =   "Voice-Variant:" 1*19DIGIT CRLF
    voice-name          =   "Voice-Name:"
                            1*UTFCHAR *(1*WSP 1*UTFCHAR) CRLF
-
 
 
    The "Voice-" parameters are derived from the similarly named
@@ -2593,7 +2550,6 @@ Copyright Notice
    prosody-param-name    =    1*VCHAR
 
    prosody-param-value   =    1*VCHAR
-
 
 
    prosody-param-name is any one of the attribute names under the
@@ -2654,7 +2610,6 @@ Copyright Notice
                            timestamp
                            [";" 1*(UTFCHAR / %x20)] CRLF
 
-
 8.4.9.  Speech-Language
 
    This header field specifies the default language of the speech data
@@ -2663,7 +2618,6 @@ Copyright Notice
    header field MAY occur in SPEAK, SET-PARAMS, or GET-PARAMS requests.
 
    speech-language     =   "Speech-Language" ":" 1*VCHAR CRLF
-
 
 8.4.10.  Fetch-Hint
 
@@ -2679,7 +2633,6 @@ Copyright Notice
 
    fetch-hint          =   "Fetch-Hint" ":"
                 ("prefetch" / "safe") CRLF
-
 
 8.4.11.  Audio-Fetch-Hint
 
@@ -2697,7 +2650,6 @@ Copyright Notice
    audio-fetch-hint    =   "Audio-Fetch-Hint" ":"
                            ("prefetch" / "safe" / "stream") CRLF
 
-
 8.4.12.  Failed-URI
 
    When a synthesizer method needs a synthesizer to fetch or access a
@@ -2707,7 +2659,6 @@ Copyright Notice
    URIs in this header field in the method response.
 
    failed-uri          =   "Failed-URI" ":" absoluteURI CRLF
-
 
 8.4.13.  Failed-URI-Cause
 
@@ -2721,7 +2672,6 @@ Copyright Notice
 
    failed-uri-cause    =   "Failed-URI-Cause" ":" 1*UTFCHAR CRLF
 
-
 8.4.14.  Speak-Restart
 
    When a client issues a CONTROL request to a currently speaking
@@ -2732,7 +2682,6 @@ Copyright Notice
    field with a value of "true" indicating a restart.
 
    speak-restart       =   "Speak-Restart" ":" BOOLEAN CRLF
-
 
 8.4.15.  Speak-Length
 
@@ -2764,7 +2713,6 @@ Copyright Notice
                          /   "Sentence"
                          /   "Paragraph"
 
-
 8.4.16.  Load-Lexicon
 
    This header field is used to indicate whether a lexicon has to be
@@ -2774,7 +2722,6 @@ Copyright Notice
    This header field MAY be specified in a DEFINE-LEXICON method.
 
    load-lexicon       =   "Load-Lexicon" ":" BOOLEAN CRLF
-
 
 8.4.17.  Lexicon-Search-Order
 
@@ -2786,7 +2733,6 @@ Copyright Notice
 
    lexicon-search-order =   "Lexicon-Search-Order" ":"
              "<" absoluteURI ">" *(" " "<" absoluteURI ">") CRLF
-
 
 8.5.  Synthesizer Message Body
 
@@ -3616,7 +3562,6 @@ Copyright Notice
                         /  "START-INPUT-TIMERS"
                         /  "STOP"
 
-
    It is OPTIONAL for a recognizer resource to support voice enrolled
    grammars.  If the recognizer resource does support voice enrolled
    grammars, it MUST support the following methods.
@@ -3627,7 +3572,6 @@ Copyright Notice
                         /  "MODIFY-PHRASE"
                         /  "DELETE-PHRASE"
 
-
 9.3.  Recognizer Events
 
    The recognizer can generate the following events.
@@ -3635,7 +3579,6 @@ Copyright Notice
    recognizer-event     =  "START-OF-INPUT"
                         /  "RECOGNITION-COMPLETE"
                         /  "INTERPRETATION-COMPLETE"
-
 
 9.4.  Recognizer Header Fields
 
@@ -3680,7 +3623,6 @@ Copyright Notice
                         /  clear-dtmf-buffer
                         /  early-no-match
 
-
    If a recognizer resource supports voice enrolled grammars, the
    following header fields are also used.
 
@@ -3696,7 +3638,6 @@ Copyright Notice
                         /  new-phrase-id
                         /  confusable-phrases-uri
                         /  abort-phrase-enrollment
-
 
    For enrollment-specific header fields that can appear as part of
    SET-PARAMS or GET-PARAMS methods, the following general rule applies:
@@ -3726,7 +3667,6 @@ Copyright Notice
 
    confidence-threshold     =  "Confidence-Threshold" ":" FLOAT CRLF
 
-
 9.4.2.  Sensitivity-Level
 
    To filter out background noise and not mistake it for speech, the
@@ -3743,7 +3683,6 @@ Copyright Notice
 
    sensitivity-level        =  "Sensitivity-Level" ":" FLOAT CRLF
 
-
 9.4.3.  Speed-Vs-Accuracy
 
    Depending on the implementation and capability of the recognizer
@@ -3758,7 +3697,6 @@ Copyright Notice
    clients will tune this value over time for a given server.
 
    speed-vs-accuracy        =  "Speed-Vs-Accuracy" ":" FLOAT CRLF
-
 
 9.4.4.  N-Best-List-Length
 
@@ -3777,7 +3715,6 @@ Copyright Notice
 
    n-best-list-length       =  "N-Best-List-Length" ":" 1*19DIGIT CRLF
 
-
 9.4.5.  Input-Type
 
    When the recognizer detects barge-in-able input and generates a
@@ -3787,7 +3724,6 @@ Copyright Notice
 
    input-type         =  "Input-Type" ":"  inputs CRLF
    inputs             =  "speech" / "dtmf"
-
 
 9.4.6.  No-Input-Timeout
 
@@ -3802,7 +3738,6 @@ Copyright Notice
 
    no-input-timeout         =  "No-Input-Timeout" ":" 1*19DIGIT CRLF
 
-
 9.4.7.  Recognition-Timeout
 
    When recognition is started and there is no match for a certain
@@ -3815,7 +3750,6 @@ Copyright Notice
    in RECOGNIZE, SET-PARAMS, or GET-PARAMS.
 
    recognition-timeout      =  "Recognition-Timeout" ":" 1*19DIGIT CRLF
-
 
 9.4.8.  Waveform-URI
 
@@ -3851,7 +3785,6 @@ Copyright Notice
                                ";" "size" "=" 1*19DIGIT
                                ";" "duration" "=" 1*19DIGIT] CRLF
 
-
 9.4.9.  Media-Type
 
    This header field MAY be specified in the SET-PARAMS, GET-PARAMS, or
@@ -3862,7 +3795,6 @@ Copyright Notice
    media-type               =  "Media-Type" ":" media-type-value
                                CRLF
 
-
 9.4.10.  Input-Waveform-URI
 
    This optional header field specifies a URI pointing to audio content
@@ -3870,7 +3802,6 @@ Copyright Notice
    to request recognition from a specified buffer or audio file.
 
    input-waveform-uri       =  "Input-Waveform-URI" ":" uri CRLF
-
 
 9.4.11.  Completion-Cause
 
@@ -3887,7 +3818,6 @@ Copyright Notice
                                cause-name CRLF
    cause-code               =  3DIGIT
    cause-name               =  *VCHAR
-
 
    +--------+-----------------------+----------------------------------+
    | Cause- | Cause-Name            | Description                      |
@@ -3972,7 +3902,6 @@ Copyright Notice
    |        |                       | grammar-compilation-failure.     |
    +--------+-----------------------+----------------------------------+
 
-
 9.4.12.  Completion-Reason
 
    This header field MAY be specified in a RECOGNITION-COMPLETE event
@@ -3988,7 +3917,6 @@ Copyright Notice
 
    completion-reason        =  "Completion-Reason" ":"
                                quoted-string CRLF
-
 
 9.4.13.  Recognizer-Context-Block
 
@@ -4015,7 +3943,6 @@ Copyright Notice
    recognizer-context-block  =  "Recognizer-Context-Block" ":"
                                 [1*VCHAR] CRLF
 
-
 9.4.14.  Start-Input-Timers
 
    This header field MAY be sent as part of the RECOGNIZE request.  A
@@ -4032,7 +3959,6 @@ Copyright Notice
 
    start-input-timers  =  "Start-Input-Timers" ":" BOOLEAN CRLF
 
-
 9.4.15.  Speech-Complete-Timeout
 
    This header field specifies the length of silence required following
@@ -4046,7 +3972,6 @@ Copyright Notice
 
    speech-complete-timeout = "Speech-Complete-Timeout" ":"
                  1*19DIGIT CRLF
-
 
    A long Speech-Complete-Timeout value delays the result to the client
    and therefore makes the application's response to a user slow.  A
@@ -4072,7 +3997,6 @@ Copyright Notice
 
    speech-incomplete-timeout = "Speech-Incomplete-Timeout" ":" 1*19DIGIT
                                 CRLF
-
 
    The Speech-Incomplete-Timeout also applies when the speech prior to
    the silence is a complete match of an active grammar, but where it is
@@ -4102,7 +4026,6 @@ Copyright Notice
    dtmf-interdigit-timeout = "DTMF-Interdigit-Timeout" ":"
                   1*19DIGIT CRLF
 
-
 9.4.18.  DTMF-Term-Timeout
 
    This header field specifies the terminating timeout to use when
@@ -4115,7 +4038,6 @@ Copyright Notice
 
    dtmf-term-timeout        =  "DTMF-Term-Timeout" ":" 1*19DIGIT CRLF
 
-
 9.4.19.  DTMF-Term-Char
 
    This header field specifies the terminating DTMF character for DTMF
@@ -4124,7 +4046,6 @@ Copyright Notice
    RECOGNIZE, SET-PARAMS, or GET-PARAMS.
 
    dtmf-term-char           =  "DTMF-Term-Char" ":" VCHAR CRLF
-
 
 9.4.20.  Failed-URI
 
@@ -4135,7 +4056,6 @@ Copyright Notice
    field in the method response.
 
    failed-uri               =  "Failed-URI" ":" absoluteURI CRLF
-
 
 9.4.21.  Failed-URI-Cause
 
@@ -4148,7 +4068,6 @@ Copyright Notice
    numeric response code.
 
    failed-uri-cause         =  "Failed-URI-Cause" ":" 1*UTFCHAR CRLF
-
 
 9.4.22.  Save-Waveform
 
@@ -4165,7 +4084,6 @@ Copyright Notice
    in Section 12.
 
    save-waveform            =  "Save-Waveform" ":" BOOLEAN CRLF
-
 
 9.4.23.  New-Audio-Channel
 
@@ -4187,7 +4105,6 @@ Copyright Notice
    new-audio-channel        =  "New-Audio-Channel" ":" BOOLEAN
                                CRLF
 
-
 9.4.24.  Speech-Language
 
    This header field specifies the language of recognition grammar data
@@ -4197,7 +4114,6 @@ Copyright Notice
    GET-PARAMS requests.
 
    speech-language          =  "Speech-Language" ":" 1*VCHAR CRLF
-
 
 9.4.25.  Ver-Buffer-Utterance
 
@@ -4230,7 +4146,6 @@ Copyright Notice
                                "normal" / "hotword" CRLF
 
 
-
 9.4.27.  Cancel-If-Queue
 
    This header field specifies what will happen if the client attempts
@@ -4252,7 +4167,6 @@ Copyright Notice
 
    cancel-if-queue          =  "Cancel-If-Queue" ":" BOOLEAN CRLF
 
-
 9.4.28.  Hotword-Max-Duration
 
    This header field MAY be sent in a hotword mode RECOGNIZE request.
@@ -4268,7 +4182,6 @@ Copyright Notice
    hotword-max-duration     =  "Hotword-Max-Duration" ":" 1*19DIGIT
                                CRLF
 
-
 9.4.29.  Hotword-Min-Duration
 
    This header field MAY be sent in a hotword mode RECOGNIZE request.
@@ -4283,7 +4196,6 @@ Copyright Notice
 
    hotword-min-duration     =  "Hotword-Min-Duration" ":" 1*19DIGIT CRLF
 
-
 9.4.30.  Interpret-Text
 
    The value of this header field is used to provide a pointer to the
@@ -4295,7 +4207,6 @@ Copyright Notice
    the INTERPRET method.
 
    interpret-text           =  "Interpret-Text" ":" 1*VCHAR CRLF
-
 
 9.4.31.  DTMF-Buffer-Time
 
@@ -4311,7 +4222,6 @@ Copyright Notice
 
    dtmf-buffer-time  =  "DTMF-Buffer-Time" ":" 1*19DIGIT CRLF
 
-
 9.4.32.  Clear-DTMF-Buffer
 
    This header field MAY be specified in a RECOGNIZE method and is used
@@ -4325,7 +4235,6 @@ Copyright Notice
 
    clear-dtmf-buffer  = "Clear-DTMF-Buffer" ":" BOOLEAN CRLF
 
-
 9.4.33.  Early-No-Match
 
    This header field MAY be specified in a RECOGNIZE method and is used
@@ -4338,7 +4247,6 @@ Copyright Notice
 
    early-no-match  = "Early-No-Match" ":" BOOLEAN CRLF
 
-
 9.4.34.  Num-Min-Consistent-Pronunciations
 
    This header field MAY be specified in a START-PHRASE-ENROLLMENT,
@@ -4349,7 +4257,6 @@ Copyright Notice
 
    num-min-consistent-pronunciations  =
                  "Num-Min-Consistent-Pronunciations" ":" 1*19DIGIT CRLF
-
 
 9.4.35.  Consistency-Threshold
 
@@ -4364,7 +4271,6 @@ Copyright Notice
    for this header field is implementation specific.
 
    consistency-threshold    =  "Consistency-Threshold" ":" FLOAT CRLF
-
 
 9.4.36.  Clash-Threshold
 
@@ -4382,7 +4288,6 @@ Copyright Notice
 
    clash-threshold          =  "Clash-Threshold" ":" FLOAT CRLF
 
-
 9.4.37.  Personal-Grammar-URI
 
    This header field specifies the speaker-trained grammar to be used or
@@ -4396,7 +4301,6 @@ Copyright Notice
 
    personal-grammar-uri     =  "Personal-Grammar-URI" ":" uri CRLF
 
-
 9.4.38.  Enroll-Utterance
 
    This header field MAY be specified in the RECOGNIZE method.  If this
@@ -4408,7 +4312,6 @@ Copyright Notice
 
    enroll-utterance     =  "Enroll-Utterance" ":" BOOLEAN CRLF
 
-
 9.4.39.  Phrase-Id
 
    This header field in a request identifies a phrase in an existing
@@ -4419,7 +4322,6 @@ Copyright Notice
 
    phrase-id                =  "Phrase-ID" ":" 1*VCHAR CRLF
 
-
 9.4.40.  Phrase-NL
 
    This string specifies the interpreted text to be returned when the
@@ -4428,7 +4330,6 @@ Copyright Notice
    this header field.
 
    phrase-nl                =  "Phrase-NL" ":" 1*UTFCHAR CRLF
-
 
 9.4.41.  Weight
 
@@ -4450,7 +4351,6 @@ Copyright Notice
 
    weight                   =  "Weight" ":" FLOAT CRLF
 
-
 9.4.42.  Save-Best-Waveform
 
    This header field allows the client to request the recognizer
@@ -4466,7 +4366,6 @@ Copyright Notice
 
    save-best-waveform  =  "Save-Best-Waveform" ":" BOOLEAN CRLF
 
-
 9.4.43.  New-Phrase-Id
 
    This header field replaces the ID used to identify the phrase in a
@@ -4475,7 +4374,6 @@ Copyright Notice
    requests.
 
    new-phrase-id            =  "New-Phrase-ID" ":" 1*VCHAR CRLF
-
 
 9.4.44.  Confusable-Phrases-URI
 
@@ -4486,7 +4384,6 @@ Copyright Notice
 
    confusable-phrases-uri   =  "Confusable-Phrases-URI" ":" uri CRLF
 
-
 9.4.45.  Abort-Phrase-Enrollment
 
    This header field MAY be specified in the END-PHRASE-ENROLLMENT
@@ -4495,7 +4392,6 @@ Copyright Notice
 
    abort-phrase-enrollment  =  "Abort-Phrase-Enrollment" ":"
                                BOOLEAN CRLF
-
 
 9.5.  Recognizer Message Body
 
@@ -4555,7 +4451,6 @@ Copyright Notice
    example:
 
    session:help@root-level.store
-
 
    Grammar data MAY be specified using external URI references.  To do
    so, the client uses a body of media type 'text/uri-list' (see RFC
@@ -4850,7 +4745,6 @@ Copyright Notice
      </interpretation>
    </result>
 
-
    This example includes only the minimum required information.  There
    is an overall <result> element, which includes one interpretation and
    an input element.  The interpretation contains the application-
@@ -4892,7 +4786,6 @@ Copyright Notice
      </interpretation>
    </result>
 
-
 9.6.3.2.  <interpretation> Element
 
    An <interpretation> element contains a single semantic
@@ -4933,7 +4826,6 @@ Copyright Notice
        ...
    </interpretation>
 
-
 9.6.3.3.  <instance> Element
 
    The <instance> element contains the interpretation of the utterance.
@@ -4971,7 +4863,6 @@ Copyright Notice
      My address is 123 Maple Street,
      Mill Valley, California, 90952
    </input>
-
 
    <instance>
        I would like to buy a coca-cola
@@ -5017,7 +4908,6 @@ Copyright Notice
 
     <input>onions</input>
 
-
        A future possibility is for <input> to contain not only text but
        additional markup that represents prosodic information that was
        contained in the original utterance and extracted by the speech
@@ -5039,7 +4929,6 @@ Copyright Notice
              timestamp-start="2000-04-03T0:00:00.25"
              timestamp-end="2000-04-03T0:00:00.6">onions</input>
     </input>
-
 
    3.  Finally, the <input> element can contain <nomatch> and <noinput>
        elements, which describe situations in which the speech
@@ -5066,7 +4955,6 @@ Copyright Notice
       </input>
    </interpretation>
 
-
 9.6.3.6.  <noinput> Element
 
    <noinput> indicates that there was no input -- a timeout occurred in
@@ -5078,7 +4966,6 @@ Copyright Notice
          <noinput/>
       </input>
    </interpretation>
-
 
    If there are multiple levels of inputs, the most natural place for
    <nomatch> and <noinput> elements to appear is under the highest level
@@ -5092,7 +4979,6 @@ Copyright Notice
       <input mode="speech"><nomatch/></input>
       <input mode="dtmf">1 2 3 4</input>
    </input>
-
 
    Note: while <noinput> could be represented as an attribute of input,
    <nomatch> cannot, since it could potentially include PCDATA content
@@ -5613,7 +5499,6 @@ Copyright Notice
        </interpretation>
    </result>
 
-
    Below is an example of calling RECOGNIZE with a different grammar.
    No status or completion messages are shown in this example, although
    they would of course occur in normal usage.
@@ -5643,7 +5528,6 @@ Copyright Notice
                   </item>
               </one-of>
            </rule>
-
 
 9.10.  STOP
 
@@ -5698,7 +5582,6 @@ Copyright Notice
            Channel-Identifier:32AECB23433801@speechrecog
            Active-Request-Id-List:543257
 
-
 9.11.  GET-RESULT
 
    The GET-RESULT method from the client to the server MAY be issued
@@ -5738,7 +5621,6 @@ Copyright Notice
                    <input>   may I speak to Andre Roy </input>
                </interpretation>
            </result>
-
 
 9.12.  START-OF-INPUT
 
@@ -5851,7 +5733,6 @@ Copyright Notice
                </interpretation>
            </result>
 
-
    If the result were instead an enrollment result, the final message
    from the server above could have been:
 
@@ -5886,7 +5767,6 @@ Copyright Notice
                    </confusable-phrases>
                </enrollment-result>
            </result>
-
 
 9.15.  START-PHRASE-ENROLLMENT
 
@@ -5941,7 +5821,6 @@ Copyright Notice
    S->C:   MRCP/2.0 ... 543258 200 COMPLETE
            Channel-Identifier:32AECB23433801@speechrecog
 
-
 9.16.  ENROLLMENT-ROLLBACK
 
    The ENROLLMENT-ROLLBACK method discards the last live utterance from
@@ -5957,7 +5836,6 @@ Copyright Notice
 
    S->C:   MRCP/2.0 ... 543261 200 COMPLETE
            Channel-Identifier:32AECB23433801@speechrecog
-
 
 9.17.  END-PHRASE-ENROLLMENT
 
@@ -5984,7 +5862,6 @@ Copyright Notice
            Waveform-URI:<http://mediaserver.com/recordings/file1324.wav>
                 ;size=242453;duration=25432
 
-
 9.18.  MODIFY-PHRASE
 
    The MODIFY-PHRASE method sent from the client to the server is used
@@ -6004,7 +5881,6 @@ Copyright Notice
    S->C:   MRCP/2.0 ... 543265 200 COMPLETE
            Channel-Identifier:32AECB23433801@speechrecog
 
-
 9.19.  DELETE-PHRASE
 
    The DELETE-PHRASE method sent from the client to the server is used
@@ -6019,7 +5895,6 @@ Copyright Notice
 
    S->C:   MRCP/2.0 ... 543266 200 COMPLETE
            Channel-Identifier:32AECB23433801@speechrecog
-
 
 9.20.  INTERPRET
 
@@ -6092,7 +5967,6 @@ Copyright Notice
                </interpretation>
            </result>
 
-
 9.21.  INTERPRETATION-COMPLETE
 
    This event from the recognizer resource to the client indicates that
@@ -6154,7 +6028,6 @@ Copyright Notice
                    <input>   may I speak to Andre Roy </input>
                </interpretation>
            </result>
-
 
 9.22.  DTMF Detection
 
@@ -6219,14 +6092,12 @@ Copyright Notice
                         /  "STOP"
                         /  "START-INPUT-TIMERS"
 
-
 10.3.  Recorder Events
 
    The recorder resource can generate the following events.
 
    recorder-event       =  "START-OF-INPUT"
                         /  "RECORD-COMPLETE"
-
 
 10.4.  Recorder Header Fields
 
@@ -6250,7 +6121,6 @@ Copyright Notice
                         /  start-input-timers
                         /  new-audio-channel
 
-
 10.4.1.  Sensitivity-Level
 
    To filter out background noise and not mistake it for speech, the
@@ -6262,7 +6132,6 @@ Copyright Notice
    default value for this header field is implementation specific.
 
    sensitivity-level    =     "Sensitivity-Level" ":" FLOAT CRLF
-
 
 10.4.2.  No-Input-Timeout
 
@@ -6276,7 +6145,6 @@ Copyright Notice
    header field is implementation specific.
 
    no-input-timeout    =     "No-Input-Timeout" ":" 1*19DIGIT CRLF
-
 
 10.4.3.  Completion-Cause
 
@@ -6293,7 +6161,6 @@ Copyright Notice
                                cause-name CRLF
    cause-code               =  3DIGIT
    cause-name               =  *VCHAR
-
 
    +--------------+----------------------+-----------------------------+
    | Cause-Code   | Cause-Name           | Description                 |
@@ -6313,7 +6180,6 @@ Copyright Notice
    |              |                      | recorder error.             |
    +--------------+----------------------+-----------------------------+
 
-
 10.4.4.  Completion-Reason
 
    This header field MAY be present in a RECORD-COMPLETE event coming
@@ -6328,7 +6194,6 @@ Copyright Notice
    completion-reason        =  "Completion-Reason" ":"
                                quoted-string CRLF
 
-
 10.4.5.  Failed-URI
 
    When a recorder method needs to post the audio to a URI and access to
@@ -6336,7 +6201,6 @@ Copyright Notice
    field in the method response.
 
    failed-uri               =  "Failed-URI" ":" absoluteURI CRLF
-
 
 10.4.6.  Failed-URI-Cause
 
@@ -6349,7 +6213,6 @@ Copyright Notice
 
    failed-uri-cause         =  "Failed-URI-Cause" ":" 1*UTFCHAR
                                CRLF
-
 
 10.4.7.  Record-URI
 
@@ -6379,7 +6242,6 @@ Copyright Notice
                                ";" "size" "=" 1*19DIGIT
                                ";" "duration" "=" 1*19DIGIT] CRLF
 
-
 10.4.8.  Media-Type
 
    A RECORD method MUST contain this header field, which specifies to
@@ -6387,7 +6249,6 @@ Copyright Notice
 
    media-type               =  "Media-Type" ":" media-type-value
                                CRLF
-
 
 10.4.9.  Max-Time
 
@@ -6406,7 +6267,6 @@ Copyright Notice
 
    max-time                 =  "Max-Time" ":" 1*19DIGIT CRLF
 
-
 10.4.10.  Trim-Length
 
    This header field MAY be sent on a STOP method and specifies the
@@ -6415,7 +6275,6 @@ Copyright Notice
    value for this header field is 0.
 
    trim-length                 =  "Trim-Length" ":" 1*19DIGIT CRLF
-
 
 10.4.11.  Final-Silence
 
@@ -6431,7 +6290,6 @@ Copyright Notice
 
    final-silence            =  "Final-Silence" ":" 1*19DIGIT CRLF
 
-
 10.4.12.  Capture-On-Speech
 
    If "false", the recorder MUST start capturing immediately when
@@ -6442,7 +6300,6 @@ Copyright Notice
    header field is "false".
 
    capture-on-speech        =  "Capture-On-Speech " ":" BOOLEAN CRLF
-
 
 10.4.13.  Ver-Buffer-Utterance
 
@@ -6471,7 +6328,6 @@ Copyright Notice
 
    start-input-timers       =  "Start-Input-Timers" ":"
                                BOOLEAN CRLF
-
 
 10.4.15.  New-Audio-Channel
 
@@ -6642,7 +6498,6 @@ Copyright Notice
    S->C:  MRCP/2.0 ... START-OF-INPUT 543259 IN-PROGRESS
           Channel-Identifier:32AECB23433801@recorder
           Proxy-Sync-Id:987654321
-
 
 11.  Speaker Verification and Identification
 
@@ -6826,7 +6681,6 @@ Copyright Notice
                             / "START-INPUT-TIMERS"
                             / "GET-INTERMEDIATE-RESULT"
 
-
    These methods allow the client to control the mode and target of
    verification or identification operations within the context of a
    session.  All the verification input operations that occur within a
@@ -6885,7 +6739,6 @@ Copyright Notice
    verifier-event       =  "VERIFICATION-COMPLETE"
                         /  "START-OF-INPUT"
 
-
 11.4.  Verification Header Fields
 
    A verifier resource message can contain header fields containing
@@ -6914,7 +6767,6 @@ Copyright Notice
                             /  abort-verification
                             /  start-input-timers
 
-
 11.4.1.  Repository-URI
 
    This header field specifies the voiceprint repository to be used or
@@ -6923,7 +6775,6 @@ Copyright Notice
    and DELETE-VOICEPRINT methods.
 
    repository-uri           =  "Repository-URI" ":" uri CRLF
-
 
 11.4.2.  Voiceprint-Identifier
 
@@ -6941,7 +6792,6 @@ Copyright Notice
    voiceprint-identifier        =  "Voiceprint-Identifier" ":"
                                    vid *[";" vid] CRLF
    vid                          =  1*VCHAR ["." 1*VCHAR]
-
 
 11.4.3.  Verification-Mode
 
@@ -6994,7 +6844,6 @@ Copyright Notice
    verification-mode-string     =  "train"
                                 /  "verify"
 
-
 11.4.4.  Adapt-Model
 
    This header field indicates the desired behavior of the verifier
@@ -7007,7 +6856,6 @@ Copyright Notice
    This header field MAY occur in the START-SESSION method.
 
    adapt-model              = "Adapt-Model" ":" BOOLEAN CRLF
-
 
 11.4.5.  Abort-Model
 
@@ -7023,7 +6871,6 @@ Copyright Notice
 
    abort-model             = "Abort-Model" ":" BOOLEAN CRLF
 
-
 11.4.6.  Min-Verification-Score
 
    The Min-Verification-Score header field, when used with a verifier
@@ -7035,7 +6882,6 @@ Copyright Notice
 
    min-verification-score  = "Min-Verification-Score" ":"
                              [ %x2D ] FLOAT CRLF
-
 
 11.4.7.  Num-Min-Verification-Phrases
 
@@ -7049,7 +6895,6 @@ Copyright Notice
 
    num-min-verification-phrases =  "Num-Min-Verification-Phrases" ":"
                                    1*19DIGIT CRLF
-
 
 11.4.8.  Num-Max-Verification-Phrases
 
@@ -7065,7 +6910,6 @@ Copyright Notice
    num-max-verification-phrases =  "Num-Max-Verification-Phrases" ":"
                                     1*19DIGIT CRLF
 
-
 11.4.9.  No-Input-Timeout
 
    The No-Input-Timeout header field sets the length of time from the
@@ -7078,7 +6922,6 @@ Copyright Notice
    value for this header field is implementation specific.
 
    no-input-timeout         = "No-Input-Timeout" ":" 1*19DIGIT CRLF
-
 
 11.4.10.  Save-Waveform
 
@@ -7097,7 +6940,6 @@ Copyright Notice
 
    save-waveform            =  "Save-Waveform" ":" BOOLEAN CRLF
 
-
 11.4.11.  Media-Type
 
    This header field MAY be specified in the SET-PARAMS, GET-PARAMS, or
@@ -7107,7 +6949,6 @@ Copyright Notice
 
    media-type               =  "Media-Type" ":" media-type-value
                                CRLF
-
 
 11.4.12.  Waveform-URI
 
@@ -7134,7 +6975,6 @@ Copyright Notice
                                ";" "size" "=" 1*19DIGIT
                                ";" "duration" "=" 1*19DIGIT] CRLF
 
-
 11.4.13.  Voiceprint-Exists
 
    This header field MUST be returned in QUERY-VOICEPRINT and DELETE-
@@ -7144,7 +6984,6 @@ Copyright Notice
    moment the method execution started.
 
    voiceprint-exists    =  "Voiceprint-Exists" ":" BOOLEAN CRLF
-
 
 11.4.14.  Ver-Buffer-Utterance
 
@@ -7159,7 +6998,6 @@ Copyright Notice
    ver-buffer-utterance     = "Ver-Buffer-Utterance" ":" BOOLEAN
                               CRLF
 
-
 11.4.15.  Input-Waveform-URI
 
    This header field specifies stored audio content that the client
@@ -7171,7 +7009,6 @@ Copyright Notice
    used.  It MAY be specified on the VERIFY request.
 
    input-waveform-uri           =  "Input-Waveform-URI" ":" uri CRLF
-
 
 11.4.16.  Completion-Cause
 
@@ -7189,7 +7026,6 @@ Copyright Notice
                                cause-name CRLF
    cause-code               =  3DIGIT
    cause-name               =  *VCHAR
-
 
    +-------------+-------------------------+---------------------------+
    | Cause-Code  | Cause-Name              | Description               |
@@ -7240,7 +7076,6 @@ Copyright Notice
    |             |                         | etc.)                     |
    +-------------+-------------------------+---------------------------+
 
-
 11.4.17.  Completion-Reason
 
    This header field MAY be specified in a VERIFICATION-COMPLETE event
@@ -7254,7 +7089,6 @@ Copyright Notice
 
    completion-reason        =  "Completion-Reason" ":"
                                quoted-string CRLF
-
 
 11.4.18.  Speech-Complete-Timeout
 
@@ -7278,7 +7112,6 @@ Copyright Notice
 
    abort-verification   =  "Abort-Verification " ":" BOOLEAN CRLF
 
-
 11.4.21.  Start-Input-Timers
 
    This header field MAY be sent as part of a VERIFY request.  A value
@@ -7296,7 +7129,6 @@ Copyright Notice
 
    start-input-timers       =  "Start-Input-Timers" ":"
                                BOOLEAN CRLF
-
 
 11.5.  Verification Message Body
 
@@ -7553,7 +7385,6 @@ Copyright Notice
    S->C:  MRCP/2.0 ... 314161 200 COMPLETE
           Channel-Identifier:32AECB23433801@speakverify
 
-
 11.7.  END-SESSION
 
    The END-SESSION method terminates an ongoing verification session and
@@ -7589,7 +7420,6 @@ Copyright Notice
    S->C:  MRCP/2.0 ... 314174 200 COMPLETE
           Channel-Identifier:32AECB23433801@speakverify
 
-
 11.8.  QUERY-VOICEPRINT
 
    The QUERY-VOICEPRINT method is used to get status information on a
@@ -7624,7 +7454,6 @@ Copyright Notice
           Voiceprint-Identifier:johnsmith.voiceprint
           Voiceprint-Exists:true
 
-
    The following example assumes that the URI provided in the
    Repository-URI header field is a bad URI.
 
@@ -7638,7 +7467,6 @@ Copyright Notice
           Repository-URI:http://www.example.com/bad-uri/
           Voiceprint-Identifier:johnsmith.voiceprint
           Completion-Cause:007 repository-uri-failure
-
 
 11.9.  DELETE-VOICEPRINT
 
@@ -7665,7 +7493,6 @@ Copyright Notice
    S->C:  MRCP/2.0 ... 314168 200 COMPLETE
           Channel-Identifier:32AECB23433801@speakverify
 
-
 11.10.  VERIFY
 
    The VERIFY method is used to request that the verifier resource
@@ -7680,7 +7507,6 @@ Copyright Notice
 
    S->C:  MRCP/2.0 ... 543260 200 IN-PROGRESS
           Channel-Identifier:32AECB23433801@speakverify
-
 
    When the VERIFY request completes, the MRCPv2 server MUST send a
    VERIFICATION-COMPLETE event to the client.
@@ -7908,7 +7734,6 @@ Copyright Notice
    S->C:  MRCP/2.0 ... 543260 200 COMPLETE
           Channel-Identifier:32AECB23433801@speakverify
 
-
 11.15.  VERIFICATION-COMPLETE
 
    The VERIFICATION-COMPLETE event follows a call to VERIFY or VERIFY-
@@ -7944,7 +7769,6 @@ Copyright Notice
             </verification-result>
           </result>
 
-
 11.16.  START-OF-INPUT
 
    The START-OF-INPUT event is returned from the server to the client
@@ -7955,7 +7779,6 @@ Copyright Notice
 
    S->C:  MRCP/2.0 ... START-OF-INPUT 543259 IN-PROGRESS
           Channel-Identifier:32AECB23433801@speakverify
-
 
 11.17.  CLEAR-BUFFER
 
@@ -7975,7 +7798,6 @@ Copyright Notice
 
    S->C:  MRCP/2.0 ... 543260 200 COMPLETE
           Channel-Identifier:32AECB23433801@speakverify
-
 
 11.18.  GET-INTERMEDIATE-RESULT
 
@@ -8020,7 +7842,6 @@ Copyright Notice
               </voiceprint>
             </verification-result>
           </result>
-
 
 12.  Security Considerations
 
@@ -8215,7 +8036,6 @@ Copyright Notice
    speakverify    Speaker Verifier      [RFC6787]
    recorder       Speech Recorder       [RFC6787]
 
-
 13.1.2.  MRCPv2 Methods and Events
 
    IANA has created a new name space of "MRCPv2 Methods and Events".
@@ -8269,7 +8089,6 @@ Copyright Notice
    RECORD-COMPLETE          Recorder       Event         [RFC6787]
    VERIFICATION-COMPLETE    Verifier       Event         [RFC6787]
    START-OF-INPUT           Verifier       Event         [RFC6787]
-
 
 13.1.3.  MRCPv2 Header Fields
 
@@ -8401,7 +8220,6 @@ Copyright Notice
    Start-Input-Timers                 Verifier         [RFC6787]
    Input-Type                         Verifier         [RFC6787]
 
-
 13.1.4.  MRCPv2 Status Codes
 
    IANA has created a new name space of "MRCPv2 Status Codes" with the
@@ -8421,7 +8239,6 @@ Copyright Notice
    Name                       Reference
    ----                       -------------
    weight                     [RFC6787]
-
 
 13.1.6.  MRCPv2 Vendor-Specific Parameters
 
@@ -8576,7 +8393,6 @@ Copyright Notice
    parameters = ";" parameter *(";" parameter)
    parameter  = attribute "=" value
 
-
       This specification currently only defines a 'weight' parameter,
       but new parameters MAY be added through the "Grammar Reference
       List Parameters" IANA registry established through this
@@ -8586,7 +8402,6 @@ Copyright Notice
          <http://example.com/grammars/field2.gram>;weight="0.85"
          <session:field3@form-level.store>;weight="0.9"
          <http://example.com/grammars/universals.gram>;weight="0.75"
-
 
    Applications that use this media type:  MRCPv2 clients and servers
 
@@ -8820,7 +8635,6 @@ Copyright Notice
           CSeq:323123 ACK
           Content-Length:0
 
-
    The client requests the server to create a synthesizer resource
    control channel to do speech synthesis.  This also adds a media
    stream to send the generated speech.  Note that, in this example, the
@@ -8899,7 +8713,6 @@ Copyright Notice
           Call-ID:a84b4c76e66710
           CSeq:323124 ACK
           Content-Length:0
-
 
    This exchange allocates an additional resource control channel for a
    recognizer.  Since a recognizer would need to receive an audio stream
@@ -8996,7 +8809,6 @@ Copyright Notice
           CSeq:323125 ACK
           Content-Length:0
 
-
    A MRCPv2 SPEAK request initiates speech.
 
    C->S:
@@ -9033,7 +8845,6 @@ Copyright Notice
           Speech-Marker:timestamp=857205015059
 
 
-
    The synthesizer hits the special marker in the message to be spoken
    and faithfully informs the client of the event.
 
@@ -9041,13 +8852,11 @@ Copyright Notice
           Channel-Identifier:32AECB23433801@speechsynth
           Speech-Marker:timestamp=857206027059;Stephanie
 
-
    The synthesizer finishes with the SPEAK request.
 
    S->C:  MRCP/2.0 ... SPEAK-COMPLETE 543257 COMPLETE
           Channel-Identifier:32AECB23433801@speechsynth
           Speech-Marker:timestamp=857207685213;Stephanie
-
 
 
    The recognizer is issued a request to listen for the customer
@@ -9076,7 +8885,6 @@ Copyright Notice
    S->C:  MRCP/2.0 ... 543258 200 IN-PROGRESS
           Channel-Identifier:32AECB23433801@speechrecog
 
-
    The client issues the next MRCPv2 SPEAK method.
 
    C->S:  MRCP/2.0 ... SPEAK 543259
@@ -9101,7 +8909,6 @@ Copyright Notice
    S->C:  MRCP/2.0 ... 543259 200 IN-PROGRESS
           Channel-Identifier:32AECB23433801@speechsynth
           Speech-Marker:timestamp=857207696314
-
 
    This next section of this ongoing example demonstrates how kill-on-
    barge-in support works.  Since this last SPEAK request had Kill-On-
@@ -9141,7 +8948,6 @@ Copyright Notice
           Speech-Marker:timestamp=857207685213
 
 
-
    The recognizer resource matched the spoken stream to a grammar and
    generated results.  The result of the recognition is returned by the
    server as part of the RECOGNITION-COMPLETE event.
@@ -9168,7 +8974,6 @@ Copyright Notice
               </interpretation>
           </result>
 
-
    Since the client was now finished with the session, including all
    resources, it issued a SIP BYE request to close the SIP session.
    This caused all control channels and resources allocated under the
@@ -9183,7 +8988,6 @@ Copyright Notice
           Call-ID:a84b4c76e66710
           CSeq:323126 BYE
           Content-Length:0
-
 
 14.2.  Recognition Result Examples
 
@@ -9216,13 +9020,11 @@ Copyright Notice
      </interpretation>
    </result>
 
-
 14.2.2.  Mixed Initiative
 
    System: What would you like?
    User:   I would like 2 pizzas, one with pepperoni and cheese,
            one with sausage and a bottle of coke, to go.
-
 
    This example includes an order object which in turn contains objects
    named "food_item", "drink_item", and "delivery_method".  The
@@ -9264,14 +9066,12 @@ Copyright Notice
      </nl:interpretation>
    </nl:result>
 
-
 14.2.3.  DTMF Input
 
    A combination of DTMF input and speech is represented using nested
    input elements.  For example:
 
    User: My pin is (dtmf 1 2 3 4)
-
 
    <input>
      <input mode="speech" confidence ="1.0"
@@ -9283,7 +9083,6 @@ Copyright Notice
         timestamp-end="2000-04-03T0:00:02.0">1 2 3 4
      </input>
    </input>
-
 
    Note that grammars that recognize mixtures of speech and DTMF are not
    currently possible in SRGS; however, this representation might be
@@ -9331,7 +9130,6 @@ Copyright Notice
      <input mode="speech">slow down</input>
    </interpretation>
 
-
 14.2.5.  Anaphora and Deixis
 
    This specification can be used on an application-specific basis to
@@ -9369,7 +9167,6 @@ Copyright Notice
       </nl:interpretation>
    </nl:result>
 
-
 14.2.6.  Distinguishing Individual Items from Sets with One Member
 
    For programming convenience, it is useful to be able to distinguish
@@ -9390,7 +9187,6 @@ Copyright Notice
       </pizza>
       <drink>coke</drink>
    </order>
-
 
    In this example, the programmer can assume that there is supposed to
    be exactly one pizza and one drink in the order, but the fact that
@@ -10122,14 +9918,12 @@ Copyright Notice
    abort-verification    =    "Abort-Verification " ":"
                               BOOLEAN CRLF
 
-
    The following productions add a new SDP session-level attribute.  See
    Section 13.7.2, Paragraph 5.
 
    cmid-attribute     =    "a=cmid:" identification-tag
 
    identification-tag =    token
-
 
 16.  XML Schemas
 
@@ -10205,7 +9999,6 @@ Copyright Notice
      </xs:simpleType>
    </xs:schema>
 
-
 16.2.  Enrollment Results Schema Definition
 
    <?xml version="1.0" encoding="UTF-8"?>
@@ -10273,7 +10066,6 @@ Copyright Notice
      </define>
 
    </grammar>
-
 
 16.3.  Verification Results Schema Definition
 
@@ -10433,7 +10225,6 @@ Copyright Notice
      </define>
 
    </grammar>
-
 
 17.  References
 
@@ -10682,7 +10473,6 @@ Appendix A.  Contributors
 
    EMail: klaus.reifenrath@scansoft.com
 
-
 Appendix B.  Acknowledgements
 
    Andre Gillet (Nuance Communications)
@@ -10705,7 +10495,6 @@ Appendix B.  Acknowledgements
    Suresh Kaliannan (Cisco Systems, Inc.)
    Skip Cave (Intervoice, Inc.)
    Thomas Gal (LumenVox)
-
 
    The chairs of the SPEECHSC work group are Eric Burger (Georgetown
    University) and Dave Oran (Cisco Systems, Inc.).

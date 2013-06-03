@@ -208,7 +208,6 @@ Table of Contents
 
    This document was produced using the Pandoc2rfc tool.
 
-
 3.  Starting a new project
 
    When starting a new project with "pandoc2rfc" you'll need to copy the
@@ -313,7 +312,6 @@ Table of Contents
    # Section1 One
    Bla
 
-
    Converts to: "<section title="Section1 One" anchor="section1-one">"
    If you have another section that is also named "Section1 One", that
    anchor will be called "section1-one-1", but _only_ when the sections
@@ -333,7 +331,6 @@ Table of Contents
    * Item one;
    * Item two.
 
-
    Converts to "<list style="symbol">":
 
    o  Item one;
@@ -346,7 +343,6 @@ Table of Contents
 
    1. Item one;
    1. Item two.
-
 
    Converts to "<list style="numbers">":
 
@@ -363,7 +359,6 @@ Table of Contents
    #. Item one;
    #. Item two.
 
-
    Converts to "<list style="empty">":
 
       Item one;
@@ -377,7 +372,6 @@ Table of Contents
    ii. Item one;
    ii. Item two.
 
-
    Converts to "<list style="format %i.">":
 
    i.    Item one;
@@ -389,7 +383,6 @@ Table of Contents
 
    II. Item one;
    II. Item two.
-
 
    Yields "<list style="format (%d) ">":
 
@@ -404,7 +397,6 @@ Table of Contents
    a.  Item one;
    b.  Item two.
 
-
    Converts to "<list style="letters">":
 
    a.  Item one;
@@ -415,7 +407,6 @@ Table of Contents
 
    A.  Item one;
    B.  Item two.
-
 
    Becomes:
 
@@ -438,7 +429,6 @@ Table of Contents
 
    :   Explanation two
 
-
    Converts to: "<list style="hanging">" and "<t hangText="First item
    that...">"
 
@@ -450,7 +440,6 @@ Table of Contents
    Indent the paragraph with 4 spaces.
 
    Like this
-
 
    Converts to: "<figure><artwork> ..." Note that "xml2rfc" supports a
    caption with "<artwork>".  Pandoc does not support this, but
@@ -485,7 +474,6 @@ Table of Contents
 
    > quoted text
 
-
    Converts to: "<t><list style="empty"> ..." paragraph, making it
    indented.
 
@@ -497,7 +485,6 @@ Table of Contents
 
    [Click here](URI)
 
-
    Converts to: "<ulink target="URI">Click here ..."
 
 7.6.2.  Internal
@@ -505,7 +492,6 @@ Table of Contents
    Any reference like:
 
    [Click here](#localid)
-
 
    Converts to: "<link target="localid">Click here ..."
 
@@ -515,11 +501,9 @@ Table of Contents
 
    [](#RFC2119)
 
-
    And it does the right thing.  Referencing sections is done with:
 
    See [](#pandoc-constructs)
-
 
    The word 'Section' is inserted automatically: ... see Section 7 ...
    For referencing figures/artworks see Section 7.4.  For referencing
@@ -586,18 +570,15 @@ Table of Contents
 
    [^1]: footnote text
 
-
    We re-use this syntax for the "<iref>" tag.  The above text
    translates to:
 
    <iref item="footnote text"/>
 
-
    Sub items are also supported.  Use an exclamation mark ("!") to
    separate them:
 
    [^1]: item!sub item
-
 
 8.  Usage guidelines
 
@@ -615,7 +596,6 @@ Table of Contents
    allsections.pdc: section.pdc.1 section.pdc.2 section.pdc.3
            cat $@ > allsections.pdc
 
-
    And then process "allsection.pdc" in the normal way.
 
 8.2.  Setting the title
@@ -625,12 +605,10 @@ Table of Contents
 
    <rfc ipr="trust200902" docName="draft-gieben-writing-rfcs-pandoc-02">
 
-
    The Makefile will pick this up automatically and make a symbolic
    link:
 
    draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
-
 
    This makes uploading the file to the i-d tracker a bit easier.
 
@@ -690,7 +668,6 @@ A.4.  Verbatim code blocks
 
    A verbatim code block
    jkasjksajassjasjsajsajkas
-
 
 A.5.  Reference Tests
 
@@ -782,13 +759,11 @@ A.7.  List Tests
 
    Artwork
 
-
    4.  Final item.
 
    xml2rfc does not allow this, so the second paragraph is faked with a
 
    <vspace blankLines='1'>
-
 
    Ordered lists.
 
@@ -845,7 +820,6 @@ A.7.  List Tests
 
    miek.nl.    IN  NS  a.miek.nl.
    a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue
-
 
       Tell some more about it.  Tell some more about it.  Tell some more
       about it.
@@ -910,12 +884,10 @@ A.8.  Table Tests
                  | Oranges  | $2.10  | cures scurvy      |
                  +----------+--------+-------------------+
 
-
    This table has no caption, and therefor no reference.  But you can
    refer to some of the other tables, with for instance:
 
    See [](#tab:here-s-the)
-
 
    Which will become "See Table 2".
 
@@ -950,7 +922,6 @@ A.10.  Figure tests
    This is a figure with a title
    This is a figure with a title
    @title: and here it is: a title, don't mess it up *
-
 
 A.11.  Verse tests
 
