@@ -8,13 +8,6 @@ import re
 from setuptools import setup
 import sys
 
-major, minor = sys.version_info[:2]
-if not major == 2 and minor >= 6:
-    print("")
-    print("The xml2rfc installation requires python 2, with a version of 2.6 or higher.")
-    print("Can't proceed, quitting.")
-    exit()
-
 description = "Xml2rfc generates RFCs and IETF drafts from document source in XML according to the dtd in RFC2629."
 
 def parse(changelog):
