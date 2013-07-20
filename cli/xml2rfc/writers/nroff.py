@@ -2,6 +2,8 @@
 # Copyright The IETF Trust 2011, All Rights Reserved
 # --------------------------------------------------
 
+from __future__ import print_function
+
 # Python libs
 import os
 import time
@@ -17,8 +19,6 @@ from xml2rfc import VERSION
 from xml2rfc.writers.paginated_txt import PaginatedTextRfcWriter
 from xml2rfc.writers.raw_txt import RawTextRfcWriter
 from xml2rfc.writers.base import BaseRfcWriter
-
-from compiler.pyassem import RAW
 
 nroff_linestart_meta = ["'", ".", ]
 

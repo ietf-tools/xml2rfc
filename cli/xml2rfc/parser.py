@@ -9,7 +9,11 @@ import re
 import os
 import shutil
 import xml2rfc.log
-from urlparse import urlparse, urljoin
+
+try:
+    from urllib.parse import urlparse, urljoin
+except ImportError:
+    from urlparse import urlparse, urljoin
 try:
     import debug
 except ImportError:
@@ -51,7 +55,7 @@ class CachingResolver(lxml.etree.Resolver):
         self.source_dir = os.path.abspath(os.path.dirname(self.source))
 
         # Determine cache directories to read/write to
-        self.read_caches = map(os.path.expanduser, xml2rfc.CACHES)
+        self.read_caches = [ os.path.expanduser(path) for path in xml2rfc.CACHES ]
         self.write_cache = None
         if cache_path:
             # Explicit directory given, set as first directory in read_caches
@@ -275,7 +279,7 @@ class CachingResolver(lxml.etree.Resolver):
                 xml2rfc.log.note('Resolving ' + typename + '...', url)
                 xml2rfc.log.note('Created cache at', write_path)
                 return write_path
-            except IOError, e:
+            except IOError as e:
                 # Invalid URL -- Error will be displayed in getReferenceRequest
                 xml2rfc.log.note("I/O Error: %s" % e)
                 return ''
@@ -372,7 +376,6 @@ class XmlRfcParser:
         for action, element in context:
             if element.tag == "rfc":
                 self.rfc_number = element.attrib.get("number", None)
-                break
 
         # now get a regular parser, and parse again, this time resolving entities
         parser = lxml.etree.XMLParser(dtd_validation=False,
@@ -420,11 +423,11 @@ class XmlRfcParser:
                         ref_root = lxml.etree.parse(path, parser).getroot()
                         parent = element.getparent()
                         parent.replace(element, ref_root)
-                    except (lxml.etree.XMLSyntaxError, IOError), error:
-                        if error is lxml.etree.XMLSyntaxError:
+                    except (lxml.etree.XMLSyntaxError, IOError) as e:
+                        if e is lxml.etree.XMLSyntaxError:
                             xml2rfc.log.warn('The include file at', path,
                                              'contained an XML error and was '\
-                                             'not expanded:', error.msg)
+                                             'not expanded:', e.msg)
                         else:
                             xml2rfc.log.warn('Unable to load the include file at',
                                               path)
@@ -511,10 +514,10 @@ class XmlRfc:
             if os.path.exists(dtd_path):
                 try:
                     dtd = lxml.etree.DTD(dtd_path)
-                except lxml.etree.DTDParseError, error:
+                except lxml.etree.DTDParseError as e:
                     # The DTD itself has errors
                     xml2rfc.log.error('Could not parse the dtd file:',
-                                      dtd_path + '\n  ', error.message)
+                                      dtd_path + '\n  ', e.message)
                     return False, []
             else:
                 # Invalid path given

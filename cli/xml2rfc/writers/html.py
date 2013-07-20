@@ -46,7 +46,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                          'address_card.html']:
             file = open(os.path.join(self.templates_dir, filename), 'r')
             self.templates[filename] = string.Template(file.read())
-
+            file.close()
         # Buffers to aggregate various elements before processing template
         self.buffers = {'front': [],
                         'body': [],
@@ -82,7 +82,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         elif style.startswith('format'):
             format_str = style.partition('format ')[2]
             allowed_formats = ('%c', '%C', '%d', '%i', '%I')
-            if not any(map(lambda format: format in format_str, allowed_formats)):
+            if not any([ f in format_str for f in allowed_formats]):
                 xml2rfc.log.warn('Invalid format specified: %s ' 
                                  '(Must be one of %s)' % (style,
                                     ', '.join(allowed_formats)))
@@ -149,7 +149,10 @@ class HtmlRfcWriter(BaseRfcWriter):
                 li.append(a)
                 self.buffers['toc_rows'].append(self._serialize(li))
     def _serialize(self, element):
-        return lxml.html.tostring(element, pretty_print=True, method='xml')
+        if sys.version > '3':
+            return lxml.html.tostring(element, pretty_print=True, method='xml', encoding='ascii').decode()
+        else:
+            return lxml.html.tostring(element, pretty_print=True, method='xml')
     
     def _flush_temp_div(self):
         lines = []
@@ -282,7 +285,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             h.append(a_bullet)
             if anchor:
                 # Use an anchor link for heading
-                a_text = E.A(text, href='#' + anchor, id=anchor)
+                a_text = E.A(text, id=anchor, href='#' + anchor, )
                 h.append(a_text)
             else:
                 # Plain text
@@ -552,7 +555,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                                table.attrib.get('align', self.defaults['table_align']) )
         cellpadding = '3'
         cellspacing = '0'
-        htmltable = E.TABLE(cellpadding=cellpadding, cellspacing=cellspacing)
+        htmltable = E.TABLE(cellspacing=cellspacing, cellpadding=cellpadding, )
         htmltable.attrib['class'] = style
 
         # Add caption, if it exists
@@ -671,8 +674,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             description = abs_t.text
         keywords = self.r.findall('front/keyword')
         keyword_list = [keyword.text for keyword in keywords if keyword.text]
-        generator = "xml2rfc version %s - http://tools.ietf.org/tools/xml2rfc" % \
-                    '.'.join(map(str, xml2rfc.VERSION))
+        generator = "xml2rfc version %s - http://tools.ietf.org/tools/xml2rfc" % xml2rfc.__version__
 
         # Build ISO8601 date string
         docDate = ''

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import sys
 import os
 
@@ -18,9 +20,9 @@ import datetime
 
 major, minor = sys.version_info[:2]
 if not major == 2 and minor >= 6:
-    print ""
-    print "The xml2rfc script requires python 2, with a version of 2.6 or higher."
-    print "Can't proceed, quitting."
+    print ("")
+    print ("The xml2rfc script requires python 2, with a version of 2.6 or higher.")
+    print ("Can't proceed, quitting.")
     exit()
 
 def display_version(self, opt, value, parser):
@@ -114,12 +116,12 @@ def main():
                     xml2rfc.log.write('Created cache directory at', 
                                       options.cache)
             except OSError, e:
-                print 'Unable to make cache directory:', options.cache
-                print e
+                print('Unable to make cache directory: %s ' % options.cache)
+                print(e)
                 sys.exit(1)
         else:
             if not os.access(options.cache, os.W_OK):
-                print 'Cache directory is not writable:', options.cache
+                print('Cache directory is not writable: %s' % options.cache)
                 sys.exit(1)
     options.date = datetime.datetime.strptime(options.datestring, "%Y-%m-%d").date()
 

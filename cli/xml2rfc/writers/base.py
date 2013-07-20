@@ -579,7 +579,7 @@ class BaseRfcWriter:
             lines.append('ISSN: %s' % self.boilerplate['issn'])
 
         # Strip any whitespace from XML to make header as neat as possible
-        lines = map(string.strip, lines)
+        lines = [ l.strip() for l in lines ]
         return lines
 
     def _prepare_top_right(self):
@@ -627,7 +627,7 @@ class BaseRfcWriter:
                 day = day + ', '
             lines.append(month + day + year)
             # Strip any whitespace from XML to make header as neat as possible
-            lines = map(string.strip, lines)
+            lines = [ l.strip() for l in lines ]
         return lines
 
     def write_figure(self, figure):

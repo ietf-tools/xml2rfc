@@ -189,7 +189,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     if bullet.endswith(':') and \
                     self.pis['colonspace'] == 'yes':
                         bullet+= ' '
-                    if element.text and len(bullet) > self.width/2:
+                    if element.text and len(bullet) > self.width//2:
                         # extra check of remaining space if the bullet is
                         # very long
                         first_word = self.wrapper._split(element.text)[0]
@@ -266,7 +266,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if paging:
                     # Construct dots
                     dots = len(lines[-1]) % 2 and ' ' or ''
-                    dots += ' .' * int((self.width - len(lines[-1]) - len(dots) + 1)/2)
+                    dots += ' .' * int((self.width - len(lines[-1]) - len(dots) + 1)//2)
                     lines[-1] += dots
                     # Insert page
                     lines[-1] = lines[-1][:0 - len(pagestr)] + pagestr
@@ -463,7 +463,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             if align == 'center':
                 # Find the longest line, and use that as a fixed center.
                 longest_line = len(max(lines, key=len))
-                center_indent = indent + ((self.width - indent - longest_line) / 2)
+                center_indent = indent + ((self.width - indent - longest_line) // 2)
                 indent_str = center_indent > indent and ' ' * center_indent or \
                                                         ' ' * indent
                 for line in lines:
@@ -781,10 +781,10 @@ class RawTextRfcWriter(BaseRfcWriter):
                         column_weights[i] = int_width / 100.0
                 except ValueError:
                     pass
-            spec_weights = filter(bool, column_weights)
+            spec_weights = [ c for c in column_weights if c ]
             if 0 < len(spec_weights) < num_columns:
                 # Use explicit weights and divvy remaining equally
-                avg = (1 - sum(spec_weights)) /  num_columns - len(spec_weights)
+                avg = (1 - sum(spec_weights)) //  num_columns - len(spec_weights)
                 for i, weight in enumerate(column_weights):
                     if not weight:
                         column_weights[i] = avg
@@ -793,10 +793,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                 # each column as its minimum width.  If this sum exceeds max, cut
                 # each column from high to low until they all fit, and use those as
                 # weights.  Else, use longest_lines to fill in weights.
-                if sum(longest_words) > table_max_chars:
-                    column_weights = map(lambda x: float(x) / sum(longest_words), longest_words)
+                lwtot = sum(longest_words)
+                if lwtot > table_max_chars:
+                    column_weights = [ float(l)/lwtot for l in longest_words ]
                 else:
-                    column_weights = map(lambda x: float(x) / table_max_chars, longest_words)
+                    column_weights = [ float(l)/table_max_chars for l in longest_words ]
                     remainder = 1 - sum(column_weights)
                     for i, weight in enumerate(column_weights):
                         column_weights[i] += remainder * \
@@ -806,7 +807,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 pass
 
             # Compile column widths and correct floating point error
-            column_widths = map(lambda x: int(x * table_max_chars), column_weights)
+            column_widths = [ int(w*table_max_chars) for w in column_weights ]
             while(sum(column_widths) < table_max_chars):
                 broken = False
                 for i, wordlen in enumerate(longest_words):

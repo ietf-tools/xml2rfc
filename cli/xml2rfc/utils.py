@@ -7,7 +7,10 @@
 import re
 import textwrap
 import string
-import urllib
+try:
+    from urllib.request import FancyURLopener
+except ImportError:
+    from urllib import FancyURLopener
 try:
     import debug
 except ImportError:
@@ -16,10 +19,10 @@ except ImportError:
 import xml2rfc.log
 
 
-class StrictUrlOpener(urllib.FancyURLopener):
+class StrictUrlOpener(FancyURLopener):
     """ Override urllib opener to throw exceptions on 404s """
     def __init__(self, *args, **kwargs):
-        urllib.FancyURLopener.__init__(self, *args, **kwargs)
+        FancyURLopener.__init__(self, *args, **kwargs)
       
     def http_error_default(self, url, fp, errcode, errmsg, headers):
         raise IOError('Document not found')
@@ -41,26 +44,26 @@ class MyTextWrapper(textwrap.TextWrapper):
         self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
 
         # Override end of line regex, double space after '].'
-        self.sentence_end_re = re.compile(r'[%s%s0-9\>\]\)\"\']'  # letter, end parentheses
+        self.sentence_end_re = re.compile(r'[A-Za-z0-9\>\]\)\"\']'  # letter, end parentheses
                             r'[\.\!\?]'     # sentence-ending punct.
                             r'[\"\'\)\]]?'  # optional end-of-quote, end parentheses
                             r'\Z'           # end of chunk
-                            % (string.lowercase, string.uppercase))
+                            )
 
         # Exceptions which should not be treated like end-of-sentence
         self.not_sentence_end_re = re.compile(
             # start of string or non-alpha character
-            r'(^|[^%s%s])'
+            r'(^|[^A-Za-z])'
             r'('
             # Single uppercase letter, dot, enclosing parentheses or quotes
             r'[A-Za-z]\.[\]\)\'"]*'
             # Tla with leading uppercase, and special cases
             r'|([A-Z][a-z][a-z]|Eq|[Cc]f|vs|resp|viz|ibid|[JS]r|M[rs]|Messrs|Mmes|Dr|Profs?|St|Lt)\.'
             r')\Z' # trailing dot, end of group and end of chunk
-            %(string.lowercase, string.uppercase) )
+            )
 
         # Start of next sentence regex
-        self.sentence_start_re = re.compile("^[\"'([]*[%s]" % string.uppercase)
+        self.sentence_start_re = re.compile("^[\"'([]*[A-Z]")
 
         # XmlCharRef replacements that occur AFTER line breaking logic
         self.post_break_replacements = {
@@ -125,7 +128,7 @@ class MyTextWrapper(textwrap.TextWrapper):
         text = re.sub("(Section|Appendix) ", r"\1&#160;", text)
 
         # Replace some characters after splitting has occured
-        parts = map(self.replace, self._split(text))
+        parts = [ self.replace(s) for s in self._split(text) ]
         chunks = []
         max_word_len = self.width - len(subsequent_indent)
         for chunk in parts:
@@ -153,7 +156,7 @@ def justify_inline(left_str, center_str, right_str, width=72):
         greater than the width, and trims the longest string
     """
     strings = [left_str.strip(), center_str.strip(), right_str.strip()]
-    sumwidth = sum(map(len, strings))
+    sumwidth = sum( [len(s) for s in strings] )
     if sumwidth > width:
         # Trim longest string
         longest_index = strings.index(max(strings, key=len))
