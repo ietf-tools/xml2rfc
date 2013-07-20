@@ -162,7 +162,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
            line at the top of the page"""
         if self.page_length == 1 and text.strip() == '':
             return 
-        if isinstance(text, basestring):
+        if isinstance(text, str):
             self.output.append(text)
             self.page_length += 1
         elif isinstance(text, list):

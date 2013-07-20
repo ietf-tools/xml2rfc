@@ -784,7 +784,8 @@ class BaseRfcWriter:
         for child_sec in section.findall('section'):
             if appendix == True and not count_str:
                 # Use an alphabetic counter for first-level appendix
-                self.write_section_rec(child_sec, string.uppercase[s_count - 1],
+                uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                self.write_section_rec(child_sec, uppercase[s_count - 1],
                                         level=level + 1, appendix=True)
             else:
                 # Use a numeric counter

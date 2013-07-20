@@ -100,8 +100,7 @@ def main():
     source = args[0]
     if not os.path.exists(source):
         sys.exit('No such file: ' + source)
-    num_formats = len(filter(bool, [options.raw, options.text, options.nroff,
-                                    options.html, options.exp]))
+    num_formats = len([ o for o in [options.raw, options.text, options.nroff, options.html, options.exp] if o])
     if num_formats > 1 and options.filename:
         sys.exit('Cannot give an explicit filename with more than one format, '
                  'use --basename instead.')
@@ -115,7 +114,7 @@ def main():
                 if options.verbose:
                     xml2rfc.log.write('Created cache directory at', 
                                       options.cache)
-            except OSError, e:
+            except OSError as e:
                 print('Unable to make cache directory: %s ' % options.cache)
                 print(e)
                 sys.exit(1)
@@ -138,13 +137,13 @@ def main():
                                   templates_path=globals().get('_TEMPLATESPATH', None))
     try:
         xmlrfc = parser.parse()
-    except xml2rfc.parser.XmlRfcError, error:
-        xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], error)
+    except xml2rfc.parser.XmlRfcError as e:
+        xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], e)
         sys.exit(1)
-    except lxml.etree.XMLSyntaxError, error:
+    except lxml.etree.XMLSyntaxError as e:
         # Give the lxml.etree.XmlSyntaxError exception a line attribute which
         # matches lxml.etree._LogEntry, so we can use the same logging function
-        xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], error.error_log)
+        xml2rfc.log.exception('Unable to parse the XML document: ' + args[0], e.error_log)
         sys.exit(1)
         
     # Validate the document unless disabled
@@ -218,9 +217,9 @@ def main():
             if not filename:
                 filename = basename + '.nroff'
             nroffwriter.write(filename)
-    except xml2rfc.RfcWriterError, error:
+    except xml2rfc.RfcWriterError as e:
         xml2rfc.log.error('Unable to convert the document: ' + args[0],  
-                          '\n  ' + error.msg)
+                          '\n  ' + e.msg)
 
 if __name__ == '__main__':
     main()

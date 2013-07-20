@@ -15,7 +15,7 @@ except ImportError:
     pass
 
 # Local libs
-from xml2rfc import VERSION
+import xml2rfc
 from xml2rfc.writers.paginated_txt import PaginatedTextRfcWriter
 from xml2rfc.writers.raw_txt import RawTextRfcWriter
 from xml2rfc.writers.base import BaseRfcWriter
@@ -248,8 +248,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         PaginatedTextRfcWriter.pre_rendering(self)
 
         # Insert a timestamp+version comment
-        self.write_nroff(self.comment_header % ('.'.join(map(str, VERSION)),
-            time.strftime('%Y-%m-%dT%H:%M:%SZ', datetime.datetime.utcnow().utctimetuple())))
+        self.write_nroff(self.comment_header %
+            (
+                xml2rfc.__version__,
+                time.strftime('%Y-%m-%dT%H:%M:%SZ', datetime.datetime.utcnow().utctimetuple())
+            )
+        )
         self._lb()
 
         # Insert the standard nroff settings
@@ -275,7 +279,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         "Used by post_rendering() to emit and count lines."
         if self.page_length == 1 and text.strip() == '':
             return 
-        if isinstance(text, basestring):
+        if isinstance(text, str):
             self.output.append(text)
             if not text or text[0] not in nroff_linestart_meta:
                 self.page_length += 1

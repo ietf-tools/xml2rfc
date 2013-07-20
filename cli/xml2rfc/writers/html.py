@@ -121,7 +121,8 @@ class HtmlRfcWriter(BaseRfcWriter):
 
     def _create_toc(self):
         # Add link for toc itself
-        link = E.LINK(rel='Contents', href='#rfc.toc')
+        link = E.LINK(href='#rfc.toc')
+        link.attrib["rel"] = 'Contents'
         self.buffers['toc_head_links'].append(self._serialize(link))
         tocdepth = self.pis['tocdepth']
         try:
@@ -285,7 +286,8 @@ class HtmlRfcWriter(BaseRfcWriter):
             h.append(a_bullet)
             if anchor:
                 # Use an anchor link for heading
-                a_text = E.A(text, id=anchor, href='#' + anchor, )
+                a_text = E.A(text, href='#' + anchor, )
+                a_text.attrib["id"] = anchor
                 h.append(a_text)
             else:
                 # Plain text
@@ -555,7 +557,8 @@ class HtmlRfcWriter(BaseRfcWriter):
                                table.attrib.get('align', self.defaults['table_align']) )
         cellpadding = '3'
         cellspacing = '0'
-        htmltable = E.TABLE(cellspacing=cellspacing, cellpadding=cellpadding, )
+        htmltable = E.TABLE(cellpadding=cellpadding, )
+        htmltable.attrib['cellspacing'] = cellspacing
         htmltable.attrib['class'] = style
 
         # Add caption, if it exists

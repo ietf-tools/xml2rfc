@@ -2,6 +2,7 @@
 # Copyright The IETF Trust 2011, All Rights Reserved
 # --------------------------------------------------
 
+import sys
 import lxml.etree
 import xml2rfc
 import datetime
@@ -21,7 +22,13 @@ class ExpandedXmlWriter:
         """ Public method to write the XML document to a file """
         # Use lxml's built-in serialization
         file = open(filename, 'w')
-        file.write(lxml.etree.tostring(self.root.getroottree(), 
+        if sys.version > '3':
+            file.write(lxml.etree.tostring(self.root.getroottree(), 
+                                       xml_declaration=True, 
+                                       encoding='utf-8', 
+                                       pretty_print=True).decode())
+        else:
+            file.write(lxml.etree.tostring(self.root.getroottree(), 
                                        xml_declaration=True, 
                                        encoding='utf-8', 
                                        pretty_print=True))
