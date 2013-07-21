@@ -629,7 +629,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         for letter in sorted(alpha_bucket.keys()):
             # Add letter element
             table.append(E.TR(E.TD(E.STRONG(letter))))
-            for item in alpha_bucket[letter]:
+            for item in sorted(alpha_bucket[letter]):
                 # Add item element
                 anchor = self._iref_index[item].anchor or ''
                 if anchor:
@@ -638,7 +638,8 @@ class HtmlRfcWriter(BaseRfcWriter):
                 else:
                     td = E.TD(item)
                 table.append(E.TR(E.TD(' '), td))
-                for name, subitem in self._iref_index[item].subitems.items():
+                for name in sorted(self._iref_index[item].subitems.keys()):
+                    subitem = self._iref_index[item].subitems[name]
                     # Add subitem element
                     td = E.TD()
                     td.text = (u'\u00a0\u00a0')  # Spaces
