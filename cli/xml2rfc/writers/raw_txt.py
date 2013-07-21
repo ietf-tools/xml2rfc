@@ -291,12 +291,12 @@ class RawTextRfcWriter(BaseRfcWriter):
         for letter in sorted(alpha_bucket.keys()):
             # Write letter
             self.write_text(letter, indent=3, leading_blankline=True, buf=tmpbuf)
-            for item in alpha_bucket[letter]:
+            for item in sorted(alpha_bucket[letter]):
                 pages = self._iref_index[item].pages
                 # Write item
                 self.write_text(item + '  ' + ', '.join(map(str, pages))
                                                         , indent=6, buf=tmpbuf)
-                for subitem in self._iref_index[item].subitems:
+                for subitem in sorted(self._iref_index[item].subitems.keys()):
                     pages = self._iref_index[item].subitems[subitem].pages
                     # Write subitem
                     self.write_text(subitem + '  ' + ', '.join(map(str,pages))
