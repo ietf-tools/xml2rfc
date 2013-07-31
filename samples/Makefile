@@ -84,6 +84,6 @@ bps: $(BP:.xml=.txt)
 	@rm -f tmp.$@
 
 regression:	format
-	svn diff > tmp.$$$$ ; \
+	svn diff -x --ignore-eol-style > tmp.$$$$ ; \
 	[ -s tmp.$$$$ ] && ( echo ; echo ; echo "There are regressions in the generated sample files, please check:" ; echo ; cat tmp.$$$$ ) ; \
 	rm -f tmp.$$$$
