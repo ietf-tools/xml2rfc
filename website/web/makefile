@@ -5,7 +5,7 @@ PNG= blue-stripe.png stripe.png
 HTML= experimental.html index.html old.html xml2rfcFAQ.html
 INS= $(HTML) $(PNG) $(CSS)
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
-DERIVATIVES= experimental-debug.html index-debug.html \
+DERIVATIVES= experimental-debug.html index-debug.html old-debug.html \
 	experimental-new.html experimental-new-debug.html \
 	experimental-tee.html experimental-tee-debug.html \
 
@@ -27,7 +27,10 @@ experimental-tee-debug.html: experimental-debug.html
 	sed 's/xml2rfc-dev.cgi/xml2rfc-tee.cgi/' < experimental-debug.html > experimental-tee-debug.html
 
 index-debug.html: index.html
-	sed < index.html -e '/start debug section/s/!-- tr/tr/' -e '/end debug section/s/ --//' > index-debug.html
+	sed < index.html -e '/start debug section/s/!-- ! //' -e '/end debug section/s/ --//' > index-debug.html
+
+old-debug.html: old.html
+	sed < old.html -e '/start debug section/s/!-- ! //' -e '/end debug section/s/ --//' > old-debug.html
 
 install: all
 	@XML2RFC2VERSION=`/usr/local/bin/xml2rfc --version`; \

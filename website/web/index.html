@@ -114,7 +114,7 @@
 			      <td class="converter">
 				<input type="radio" value="htmlrfcmarkup/ascii" name="modeAsFormat"/> RfcMarkup
 				<input type="radio" value="htmlrfcmarkup/pdf" name="modeAsFormat"/> as PDF
-				<!-- <input type="radio" value="html/epub" name="modeAsFormat"/> ePub -->
+				<input type="radio" value="html/epub" name="modeAsFormat"/> ePub
 			      </td>
 			    </tr>
 			    <tr>
@@ -139,7 +139,7 @@
 				<input value="binary" name="type" type="radio"/> File
 			      </td>
 			    </tr>
-			    <!-- start debug section --><!-- tr>
+			    <!-- start debug section --><!-- ! tr>
 							     <td class="converter small" height="24" >
 							       <b>&nbsp;Debugging</b>
 							     </td>
@@ -519,7 +519,14 @@
 	    This version of the conversion form supports
 	    all combinations and output formats that are currently available.<p/>
 	    Note: NOT ALL COMBINATIONS WORK.<p/>
-	    There are currently known problems with the ePub generation -- for now, go to the <a href="old.html">old xml2rfc</a> page to generate ePub.
+	    <p>
+	      <ul>
+		<li>EPub support is provided using version 0.8 of <a href="http://www.calibre-ebook.com">ebook-convert</a>.
+		  <!-- start debug section --><!-- ! span><li>MOBI support is provided using version 0.8 of <a href="http://www.calibre-ebook.com">ebook-convert</a>.
+					     </span --><!-- end debug section -->
+		<li>PS and RTF support are provided using a combination of wkhtmltopdf, pdf2ps and/or GNU enscript.
+	      </ul>
+	    </p>
 	    <br/>
 
 	    <form action="cgi-bin/xml2rfc.cgi" method="post" enctype="multipart/form-data">
@@ -562,6 +569,8 @@
 		      <input checked="checked" value="ascii" name="format" type="radio"/> ASCII
 		      <input value="pdf" name="format" type="radio"/> PDF
 		      <input value="epub" name="format" type="radio"/> ePub
+		      <!-- start debug section --><!-- ! input value="mobi" name="format" type="radio"/> MOBI
+						       <span></span --><!-- end debug section -->
 		      <input value="rtf" name="format" type="radio"/> RTF
 		      <input value="ps" name="format" type="radio"/> PostScript
 		    </td>
@@ -585,7 +594,7 @@
 		      <input value="binary" name="type" type="radio"/> File
 		    </td>
 		  </tr>
-		  <!-- start debug section --><!-- tr>
+		  <!-- start debug section --><!-- ! tr>
 						   <td class="converter small" height="24" >
 						     <b>&nbsp;Debugging</b>
 						   </td>

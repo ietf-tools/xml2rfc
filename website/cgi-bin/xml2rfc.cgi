@@ -33,8 +33,8 @@ my %fileValues;
 	radio button "mode"
 	    one of txt, unpg, html, htmlxslt, htmlrfcmarkup, nr, or xml
 	radio button "format"
-	    one of ascii, pdf, epub, rtf, ps
-            epub requires an html* mode to be used
+	    one of ascii, pdf, epub, mobi, rtf, ps
+            epub and mobi requires an html* mode to be used
 	    rtp does not allow an html* mode to be used
 	radio button "type"
 	    either ascii (output to window), toframe (separate warnings/output windows)
@@ -70,11 +70,13 @@ htmlxslt/epub	xml2rfc-html2epub-viaxslt < xml > epub
 html*/epub	ebook-convert < html* > epub
 */epub		rename to *.txt; ebook-convert < txt > epub
 
+html*/mobi	ebook-convert < html* > mobi
+*/mobi		rename to *.txt; ebook-convert < txt > mobi
 
 COMMENT
 
 my @modes = ('txt', 'unpg', 'html', 'htmlxslt', 'htmlrfcmarkup', 'nr', 'xml');
-my @formats = ('ascii',  'pdf',  'epub',  'rtf',  'ps');
+my @formats = ('ascii',  'pdf',  'epub', 'mobi',  'rtf',  'ps');
 
 umask(0);
 my $input    = $q->param('input');
@@ -105,6 +107,7 @@ if ($type eq 'ascii') {
     $type = 'tofile';
 }
 userError("Error: epub requires an html mode") if (($format eq "epub") && ($mode !~ /^html/));
+userError("Error: mobi requires html mode") if (($format eq "mobi") && ($mode !~ /^html$/));
 userError("Error: rtf does not allow an html mode") if (($format eq "rtf") && ($mode =~ /^html/));
 
 my %expandedModes = (
@@ -120,6 +123,7 @@ my %expandedFormats = (
     ascii => "ASCII",
     pdf => "PDF",
     epub => "ePub",
+    mobi => "MOBI",
     rtf => "Rich Text Format",
     ps => "PostScript"
     );
@@ -133,6 +137,7 @@ my %extensions = (
     xml => 'xml',
     pdf => 'pdf',
     epub => 'epub',
+    mobi => 'mobi',
     rtf => 'rtf',
     ps => 'ps'
     );
@@ -247,7 +252,7 @@ given ($mode) {
     }
     when("htmlxslt") {
 	my $TMP1 = callXml2rfc("xml", "exp");
-	if ($format eq "epub") {
+	if (($format eq "epub") || ($format eq "mobi")) {
 	    $curfile = $TMP1;
 	} else {
 	    my $TMP2 = getTempFileWithSuffix("html");
@@ -357,14 +362,38 @@ given($format) {
 	    $fileValues{"rfc/front/title"} =~ s/'/_/g;
 	    $fileValues{"rfc/front/keyword"} =~ s/'/_/g;
 	    $fileValues{authors} =~ s/'/_/g;
-	    ($ret, $out, $err) = runCommand("ebook-convert $curfile $TMP2 " .
+	    my $TMP4 = getTempFileWithSuffix("html");
+	    ($ret, $out, $err) = runCommand("sed -e '/\@page {/,/]]>/d' -e '/<\\/style/s/^/\\/*]]>*\\//' < $curfile > $TMP4; ebook-convert $TMP4 $TMP2 " .
+	    # ($ret, $out, $err) = runCommand("ebook-convert $curfile $TMP2 " .
 		# "--no-svg-cover " .
 		"--no-default-epub-cover " .
 		"--authors='" . untaint($fileValues{authors}) . "' " .
-		"--title='" .  untaint($fileValues{"rfc/front/title"}) . "'" .
-		"--tags='" .  untaint($fileValues{"rfc/front/keyword"}) . "'",
+		"--title='" .  untaint($fileValues{"rfc/front/title"}) . "' " .
+		"--tags='" .  untaint($fileValues{"rfc/front/keyword"}) . "' ",
 		$curfile, $TMP2, "Converting to $format");
 	}
+	$curfile = $TMP2;
+    }
+    when("mobi") {
+	my $TMP2 = getTempFileWithSuffix("mobi");
+        if ($mode !~ /^html/) {
+	    my $TMP3 = getTempFileWithSuffix("txt");
+	    rename($curfile, $TMP3);
+	    $curfile = $TMP3;
+	}
+	getFileValues($newinputfn);
+	$fileValues{"rfc/front/title"} =~ s/'/_/g;
+	$fileValues{"rfc/front/keyword"} =~ s/'/_/g;
+	$fileValues{authors} =~ s/'/_/g;
+	my $TMP4 = getTempFileWithSuffix("html");
+	($ret, $out, $err) = runCommand("sed -e '/\@page {/,/]]>/d' -e '/<\\/style/s/^/\\/*]]>*\\//' < $curfile > $TMP4; ebook-convert $TMP4 $TMP2 " .
+	# ($ret, $out, $err) = runCommand("ebook-convert $curfile $TMP2 " .
+		# "--no-svg-cover " .
+		# "--no-default-epub-cover " .
+		"--authors='" . untaint($fileValues{authors}) . "' " .
+		"--title='" .  untaint($fileValues{"rfc/front/title"}) . "' " .
+		"--tags='" .  untaint($fileValues{"rfc/front/keyword"}) . "' ",
+		$curfile, $TMP2, "Converting to $format");
 	$curfile = $TMP2;
     }
     default {
@@ -670,6 +699,8 @@ sub getContentType {
 	return "application/pdf";
     } elsif ($format eq 'epub') {
 	return "application/epub+zip";
+    } elsif ($format eq 'mobi') {
+	return "application/x-mobipocket-ebook";
     } elsif ($format eq 'rtf') {
 	return "application/rtf";
     } elsif ($format eq 'ps') {
