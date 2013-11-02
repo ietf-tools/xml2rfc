@@ -1901,77 +1901,79 @@ proc be_do_get_3gpp {} {
 
     set loseP 0
     foreach docName [lsort -dictionary [array names docs]] {
-        set anchor 3GPP.$docName
+        # set anchor 3GPP.$docName
+        foreach anchor [list 3GPP.$docName SDO-3GPP.$docName] {
 
-        array set info [parse_3gpp_entry $anchor $docs($docName)]
-        if {![string compare $info(body) ""]} {
-            set loseP 1
-            continue
-        }
+            array set info [parse_3gpp_entry $anchor $docs($docName)]
+            if {![string compare $info(body) ""]} {
+		set loseP 1
+		continue
+	    }
 
-        set file $bibD/reference.$anchor.xml
-        set item $bibD/rdf/item.$anchor.rdf
+            set file $bibD/reference.$anchor.xml
+            set item $bibD/rdf/item.$anchor.rdf
 
-        if {[file exists $file]} {
-            set data ""
-            set fd ""
-            if {[catch { set data [read [set fd [open $file { RDONLY }]]] } \
+            if {[file exists $file]} {
+                set data ""
+                set fd ""
+                if {[catch { set data [read [set fd [open $file { RDONLY }]]] } \
                        result]} {       
-                beepcore::log::entry $logT system $result
+                    beepcore::log::entry $logT system $result
+                }
+                if {([string compare $fd ""]) && ([catch { close $fd } result])} {
+                    beepcore::log::entry $logT system $result
+                }
+                if {![string compare $info(body) $data]} {
+                    continue
+                }
+                catch { file delete -- $file }
+                set action updated
+            } else {
+                set action created
             }
-            if {([string compare $fd ""]) && ([catch { close $fd } result])} {
+
+            if {[catch { set fd [open $file { WRONLY CREAT TRUNC }] } result]} {
                 beepcore::log::entry $logT system $result
-            }
-            if {![string compare $info(body) $data]} {
                 continue
             }
-            catch { file delete -- $file }
-            set action updated
-        } else {
-            set action created
+
+            if {[catch { puts -nonewline $fd $info(body) ; flush $fd } result]} {
+                beepcore::log::entry $logT system $result
+            } else {
+                beepcore::log::entry $logT info $action $file
+            }
+
+            if {[catch { close $fd } result]} {
+                beepcore::log::entry $logT system $result
+            }
+
+            make_readonly $logT $file
+            if {[catch { file mtime $file $info(mtime) } result]} {
+                beepcore::log::entry $logT system $result
+            }
+
+            catch { file delete -- $item }
+
+            if {[catch { set fd [open $item { WRONLY CREAT TRUNC }] } result]} {
+                beepcore::log::entry $logT system $result
+                continue
+            }
+
+            if {[catch { puts -nonewline $fd $info(item) ; flush $fd } result]} {
+                beepcore::log::entry $logT system $result
+            }
+
+            if {[catch { close $fd } result]} {
+                beepcore::log::entry $logT system $result
+            }
+
+            make_readonly $logT $item
+            if {0 && ([catch { file mtime $item $info(mtime) } result])} {
+                beepcore::log::entry $logT system $result
+            }
+
+            set hitP 1
         }
-
-        if {[catch { set fd [open $file { WRONLY CREAT TRUNC }] } result]} {
-            beepcore::log::entry $logT system $result
-            continue
-        }
-
-        if {[catch { puts -nonewline $fd $info(body) ; flush $fd } result]} {
-            beepcore::log::entry $logT system $result
-        } else {
-            beepcore::log::entry $logT info $action $file
-        }
-
-        if {[catch { close $fd } result]} {
-            beepcore::log::entry $logT system $result
-        }
-
-        make_readonly $logT $file
-        if {[catch { file mtime $file $info(mtime) } result]} {
-            beepcore::log::entry $logT system $result
-        }
-
-        catch { file delete -- $item }
-
-        if {[catch { set fd [open $item { WRONLY CREAT TRUNC }] } result]} {
-            beepcore::log::entry $logT system $result
-            continue
-        }
-
-        if {[catch { puts -nonewline $fd $info(item) ; flush $fd } result]} {
-            beepcore::log::entry $logT system $result
-        }
-
-        if {[catch { close $fd } result]} {
-            beepcore::log::entry $logT system $result
-        }
-
-        make_readonly $logT $item
-        if {0 && ([catch { file mtime $item $info(mtime) } result])} {
-            beepcore::log::entry $logT system $result
-        }
-
-        set hitP 1
     }
     if {$hitP} {
         if {([file exists $bibD/browse.html]) \
