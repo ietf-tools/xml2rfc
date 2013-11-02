@@ -67,7 +67,17 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.iref_table = None
 
     def write_list(self, list, parent):
-        style = list.attrib.get('style', 'empty')
+        # style comes from the node if one exists
+        style = list.attrib.get('style', '')
+        if not style:
+            # otherwise look for the nearest list parent with a style and use it
+            for parent in list.iterancestors():
+                if parent.tag == 'list':
+                    style = parent.attrib.get('style', '')
+                    if style:
+                        break
+        if not style:
+            style = 'empty'
         if style == 'hanging':
             list_elem = E.DL()
             hangIndent = list.attrib.get('hangIndent', '8')
