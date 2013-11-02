@@ -1,0 +1,228 @@
+# Features covered:  Attribute Lists
+#
+# This file contains a collection of tests for the TclXML parser.
+# This file tests the parser's performance on Attribute Lists.
+# Sourcing this file into Tcl runs the tests and generates output
+# for errors.  No output means no errors were found.
+#
+# Copyright (c) 1998 Zveno Pty Ltd.
+#
+# $Id$
+
+if {[string compare test [info procs test]] == 1} then {source defs}
+
+if {[catch {package require xml 1.6}]} {
+    catch {puts stderr "Cannot load xml 1.6 package"}
+    return
+}
+
+catch {unset result}
+proc EStart {tagName attrList} {
+    global result
+    #puts stderr [list EStart $tagName $attrList]
+    foreach {name value} $attrList {
+	set result($tagName,$name) $value
+    }
+}
+catch {unset ::pcdata}
+proc pcdata t {
+    append ::pcdata $t
+}
+
+test attrList-1.1 {empty attribute list} {
+    catch {unset ::result}
+
+    catch {rename xml::attrList-1.1 {}}
+    set parser [xml::parser attrList-1.1 \
+	-elementstartcommand EStart]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test></Test>
+}
+    array size result
+} 0
+
+test attrList-1.2 {single attribute} {
+    catch {unset ::result}
+
+    catch {rename xml::attrList-1.2 {}}
+    set parser [xml::parser attrList-1.2 \
+	-elementstartcommand EStart]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test attr="1"></Test>
+}
+
+    array get result
+} {Test,attr 1}
+
+test attrList-1.3 {multiple distinct attributes} {
+    catch {unset ::result}
+
+    catch {rename xml::attrList-1.3 {}}
+    set parser [xml::parser attrList-1.3 \
+	-elementstartcommand EStart]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test first="1" second='2'></Test>
+}
+
+    list [array size result] $result(Test,first) $result(Test,second)
+} {2 1 2}
+
+test attrList-1.4 {hyphen in attribute name} {
+    catch {unset ::result}
+
+    catch {rename xml::attrList-1.4 {}}
+    set parser [xml::parser attrList-1.4 \
+	-elementstartcommand EStart]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test first-attr="1"></Test>
+}
+
+    array get result
+} {Test,first-attr 1}
+
+test attrList-2.1 {right angle bracket in attribute value} {
+    catch {unset ::result}
+
+    catch {rename xml::attrList-2.1 {}}
+    set parser [xml::parser attrList-2.1 \
+	-elementstartcommand EStart]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test attr="value>"></Test>
+}
+
+    array get result
+} {Test,attr value>}
+
+test attrList-2.2 {right angle bracket in attribute value} {
+    catch {unset ::result}
+
+    catch {rename xml::attrList-2.2 {}}
+    set parser [xml::parser attrList-2.2 \
+	-elementstartcommand EStart]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test attr="value1>value2"></Test>
+}
+
+    array get result
+} {Test,attr value1>value2}
+
+test attrList-2.3 {right angle bracket in attribute value} {
+    catch {unset ::result}
+
+    catch {rename xml::attrList-2.3 {}}
+    set parser [xml::parser attrList-2.3 \
+	-elementstartcommand EStart]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test attr1="value1" attr2="value2>"></Test>
+}
+
+    array get result
+} {Test,attr1 value1 Test,attr2 value2>}
+
+test attrList-2.4 {right angle bracket in attribute value} {
+    catch {unset ::result}
+
+    catch {rename xml::attrList-2.4 {}}
+    set parser [xml::parser attrList-2.4 \
+	-elementstartcommand EStart]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test attr2="value2>" attr1="value1"></Test>
+}
+
+    array get result
+} {Test,attr1 value1 Test,attr2 value2>}
+
+test attrList-2.5 {right angle brackets in attribute values} {
+    catch {unset ::result}
+
+    catch {rename xml::attrList-2.5 {}}
+    set parser [xml::parser attrList-2.5 \
+	-elementstartcommand EStart]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test attr1="value>1" attr2="value>2"></Test>
+}
+
+    array get result
+} {Test,attr1 value>1 Test,attr2 value>2}
+
+test attrList-2.6 {right angle brackets in attribute values} {
+    catch {unset ::result}
+    catch {unset ::pcdata}
+
+    catch {rename xml::attrList-2.6 {}}
+    set parser [xml::parser attrList-2.6 \
+	-elementstartcommand EStart \
+	-characterdatacommand pcdata]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test attr1="value>1">some text</Test>
+}
+
+    list [array get result] $::pcdata
+} {{Test,attr1 value>1} {some text}}
+
+test attrList-3.1 {unnested left brace in attribute value} {
+    catch {unset ::result}
+
+    catch {rename xml::attrList-3.1 {}}
+    set parser [xml::parser attrList-3.1 \
+	-elementstartcommand EStart]
+    $parser parse [format {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test attr="%svalue"></Test>
+} \{]
+
+    array get result
+} [list Test,attr [format {%svalue} \{]]
+
+test attrList-3.2 {unnested right brace in attribute value} {
+    catch {unset ::result}
+
+    catch {rename xml::attrList-3.2 {}}
+    set parser [xml::parser attrList-3.2 \
+	-elementstartcommand EStart]
+    $parser parse [format {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test attr="value%s"></Test>
+} \}]
+
+    array get result
+} [list Test,attr [format {value%s} \}]]
+
+test attrList-3.3 {Tcl special characters in attribute value} {
+    catch {unset ::result}
+
+    catch {rename xml::attrList-3.3 {}}
+    set parser [xml::parser attrList-3.3 \
+	-elementstartcommand EStart]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test attr="dollar $ backslash \ brackets [puts hello]"></Test>
+}
+
+    array get result
+} {Test,attr {dollar $ backslash \\ brackets [puts hello]}}
+
+test attrList-4.1 {Unquoted attribute value} {
+    catch {unset ::result}
+
+    catch {rename xml::attrList-3.3 {}}
+    set parser [xml::parser attrList-3.3 \
+	-elementstartcommand EStart]
+    set result [catch {
+	$parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test attr=noquotes></Test>
+}} msg]
+
+    list $result $msg
+} [list 1 {{invalid value for attribute "attr"} around line 2}]

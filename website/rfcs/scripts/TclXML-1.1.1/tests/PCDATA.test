@@ -1,0 +1,91 @@
+# Features covered:  PCDATA
+#
+# This file contains a collection of tests for the TclXML parser.
+# This file tests the parser's performance on PCDATA.
+# Sourcing this file into Tcl runs the tests and generates output
+# for errors.  No output means no errors were found.
+#
+# Copyright (c) 1998 Zveno Pty Ltd.
+#
+# $Id$
+
+if {[string compare test [info procs test]] == 1} then {source defs}
+
+if {[catch {package require xml 1.6}]} {
+    catch {puts stderr "Cannot load xml 1.6 package"}
+    return
+}
+
+catch {unset result}
+proc pcdata data {
+    append ::result $data
+    incr ::pcdataCounter
+}
+proc Estart {tagName attrList} {
+    switch -- $tagName {
+	Test {
+	}
+	default {
+	    incr ::element
+	}
+    }
+}
+
+proc EStop tagname {
+}
+
+test pcdata-1.1 {Simple PCDATA} {
+    set ::result {}
+    set ::element 0
+    set ::pcdataCounter 0
+
+    catch {rename xml::pcdata-1.1 {}}
+    set parser [xml::parser pcdata-1.1 \
+	-elementstartcommand Estart \
+	-elementendcommand EStop \
+	-characterdatacommand pcdata]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test>This is PCDATA</Test>
+}
+    list $::result $::element
+} {{This is PCDATA} 0}
+
+test pcdata-1.2 {PCDATA section with Tcl specials} {
+    set ::result {}
+    set ::element 0
+    set ::pcdataCounter 0
+
+    catch {rename xml::pcdata-1.2 {}}
+    set parser [xml::parser pcdata-1.2 \
+	-elementstartcommand Estart \
+	-elementendcommand EStop \
+	-characterdatacommand pcdata]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test>Dollar $ backslash \ square brackets [ ] braces { }</Test>
+}
+    list $::result $::element
+} {{Dollar $ backslash \ square brackets [ ] braces { }} 0}
+
+# Requested by Marshall Rose, 20/3/1999
+test pcdata-1.3 {PCDATA with no entity expansion} {
+    set ::result {}
+    set ::element 0
+    set ::pcdataCounter 0
+
+    array set noentities {}
+
+    catch {rename xml::pcdata-1.1 {}}
+    set parser [xml::parser pcdata-1.1 \
+	-elementstartcommand Estart \
+	-elementendcommand EStop \
+	-characterdatacommand pcdata \
+	-entityvariable noentities]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test>This is &lt;PCDATA&gt;</Test>
+}
+    list $::result $::pcdataCounter
+} {{This is &lt;PCDATA&gt;} 1}
+

@@ -1,0 +1,89 @@
+#!/bin/sh
+#\
+exec tclsh8.1 "$0" "$@"
+
+lappend auto_path [file dirname [info script]]
+
+# Parse XML document and output normalised form
+
+# Process arguments
+
+set filename [lindex $argv 0]
+array set options {-parser tclexpat}
+catch {array set options [lrange $argv 1 end]}
+
+# Setup procedures to output normalised document
+
+proc elementstart {name attrs} {
+    global out
+    set normattrs {}
+    if {[string length $attrs]} {
+	foreach {name value} $attrs {
+	    append normattrs \ $name="$value"
+	}
+    }
+    catch {puts -nonewline $out "<$name$normattrs>"}
+}
+
+proc elementend {name} {
+    global out
+    catch {puts -nonewline $out "</$name>"}
+}
+
+proc pcdata pcdata {
+    global out
+    catch {puts -nonewline $out [encodeData $pcdata]}
+}
+
+proc encodeData pcdata {
+    regsub -all {([^ -~])} \
+	$pcdata {[encodeChar {\1}]} pcdata
+    return [subst $pcdata]
+}
+
+proc encodeChar ch {
+    scan $ch %c hex
+    return [format {&#%d;} $hex]
+}
+
+switch $options(-parser) {
+    tclexpat {
+        package require expat
+        set parser {xmlparser parse}
+	set args {}
+	if {[info exists options(-o)]} {
+	    expat xmlparser -final yes \
+                 -elementstartcommand elementstart \
+	         -elementendcommand elementend \
+		 -characterdatacommand pcdata
+	} else {
+            expat xmlparser -final yes
+        }
+    }
+    tclxml {
+        package require xml
+	if {[info exists options(-o)]} {
+	    set args {-elementstartcommand elementstart \
+		-elementendcommand elementend \
+		-characterdatacommand pcdata}
+	} else {
+	    set args {}
+	}
+        set parser ::xml::parseEvent
+    }
+}
+
+# Get input data
+set ch [open $filename]
+set data [read $ch]
+close $ch
+
+# Setup output file
+catch {set out [open $options(-o) w]}
+
+if {[catch {eval $parser [list $data] $args} err]} {
+    puts stderr $err
+}
+
+catch {close $out}
+

@@ -1,0 +1,206 @@
+# Features covered:  Entities
+#
+# This file contains a collection of tests for the TclXML parser.
+# This file tests the parser's performance on entities.
+# Sourcing this file into Tcl runs the tests and generates output
+# for errors.  No output means no errors were found.
+#
+# Copyright (c) 1999 Zveno Pty Ltd.
+#
+# $Id$
+
+if {[string compare test [info procs test]] == 1} then {source defs}
+
+if {[catch {package require xml 1.8}]} {
+    catch {puts stderr "Cannot load xml 1.8 package"}
+    return
+}
+
+proc Start {name attrList args} {
+    incr ::elements
+}
+
+proc pcdata text {
+    append ::result $text
+}
+
+proc EntityRef name {
+    lappend ::references $name
+    append ::result ##entityreference##
+}
+
+test entity-1.1 {parameter entity in document entity} {
+    set ::result {}
+
+    catch {rename xml::entity-1.1 {}}
+    set parser [xml::parser entity-1.1 \
+	-characterdatacommand pcdata]
+    $parser parse {<!DOCTYPE Test [
+<!ENTITY % Wrong "This is wrong">
+]>
+<Test>%wrong;</Test>}
+    set ::result
+} {%wrong;}
+
+test entity-1.2 {character entities in hex} {
+    set ::result {}
+
+    catch {rename xml::entity-1.2 {}}
+    set parser [xml::parser entity-1.2 \
+	-characterdatacommand pcdata]
+    $parser parse {<Test>&#x41;&#x3C;&#x3e;&#x24;&#x5B;&#x5D;</Test>}
+    set ::result
+} {A<>$[]}
+
+test entity-1.3 {character entities in decimal} {
+    set ::result {}
+
+    catch {rename xml::entity-1.3 {}}
+    set parser [xml::parser entity-1.3 \
+	-characterdatacommand pcdata]
+    $parser parse {<Test>&#65;&#60;&#62;&#36;&#91;&#93;</Test>}
+    set ::result
+} {A<>$[]}
+
+test entity-1.4 {illegal character entity} {
+    set ::result {}
+
+    catch {rename xml::entity-1.4 {}}
+    set parser [xml::parser entity-1.4 \
+	-characterdatacommand pcdata]
+    set err [catch {$parser parse {<Test>&#blah;</Test>}}]
+    list $err $::result
+} {1 {}}
+
+test entity-2.1 {predefined general entities} {
+    set ::result {}
+
+    catch {rename xml::entity-2.1 {}}
+    set parser [xml::parser entity-2.1 \
+	-characterdatacommand pcdata]
+    $parser parse {<Test>&lt;&gt;&amp;&quot;&apos;</Test>}
+    set ::result
+} {<>&"'}
+
+test entity-2.2 {undefined general entities} {
+    set ::result {}
+
+    catch {rename xml::entity-2.2 {}}
+    set parser [xml::parser entity-2.2 \
+	-characterdatacommand pcdata]
+    $parser parse {<Test>&undefined;</Test>}
+    set ::result
+} {&undefined;}
+
+# Set up an array mapping general entities to their replacement text.
+# Don't be confused; we don't have DTD parsing occurring (yet)
+
+test entity-3.1 {replacement text with no markup} {
+
+    array set simple_map {
+	simple {Some simple text}
+	lt <
+	gt >
+	amp &
+	quot \"
+	apos '
+    }
+
+    set ::result {}
+
+    catch {rename xml::entity-3.1 {}}
+    set parser [xml::parser entity-3.1 \
+	-characterdatacommand pcdata \
+	-entityvariable simple_map]
+    $parser parse {<Test>&simple;</Test>}
+    set ::result
+} {Some simple text}
+
+test entity-3.2 {replacement text with entity markup} {
+
+    array set entity_map {
+	entity {an &amp; ampersand}
+	lt <
+	gt >
+	amp &
+	quot \"
+	apos '
+    }
+
+    set ::result {}
+
+    catch {rename xml::entity-3.2 {}}
+    set parser [xml::parser entity-3.2 \
+	-characterdatacommand pcdata \
+	-entityvariable entity_map]
+    $parser parse {<Test>&entity;</Test>}
+    set ::result
+} {an & ampersand}
+
+test entity-3.3 {replacement text with element markup} {
+
+    array set element_map {
+	element {some <Element>element</Element> markup}
+	combined {some <Entity>combined markup &lt;</Entity> with entity}
+	lt <
+	gt >
+	amp &
+	quot \"
+	apos '
+    }
+
+    set ::result {}
+    set ::elements 0
+
+    catch {rename xml::entity-3.3 {}}
+    set parser [xml::parser entity-3.3 \
+	-elementstartcommand Start \
+	-characterdatacommand pcdata \
+	-entityvariable element_map]
+    $parser parse {<Test>&element;&combined;</Test>}
+    list $::result $::elements
+} {{some element markupsome combined markup < with entity} 3}
+
+# This example is from the XML Recommendation, Appendix D p. 29.
+
+set example1_p_content {An ampersand (&) may be escaped
+numerically (&#38;) or with a general entity
+(&amp;).}
+
+test entity-3.4 {replacement text with element markup} {
+
+    array set example1 {
+	example {<p>An ampersand (&#38;) may be escaped
+numerically (&#38;#38;) or with a general entity
+(&amp;amp;).</p>}
+	lt <
+	gt >
+	amp &
+	quot \"
+	apos '
+    }
+
+    set ::result {}
+    set ::elements 0
+
+    catch {rename xml::entity-3.4 {}}
+    set parser [xml::parser entity-3.4 \
+	-elementstartcommand Start \
+	-characterdatacommand pcdata \
+	-entityvariable example1]
+    $parser parse {<Test>&example;</Test>}
+    list $::result $::elements
+} [list $example1_p_content 2]
+
+test entity-4.1 {entity references} {
+    set ::result {}
+    set ::references {}
+
+    catch {rename xml::entity-4.1 {}}
+    set parser [xml::parser entity-4.1 \
+	-characterdatacommand pcdata \
+	-entityreferencecommand EntityRef]
+    $parser parse {<Test>undefined &myentity; reference</Test>}
+    list $::result $::references
+} {{undefined ##entityreference## reference} myentity}
+

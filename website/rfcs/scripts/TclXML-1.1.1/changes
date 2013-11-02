@@ -1,0 +1,95 @@
+==============         TclXML Changes File         ==============
+
+14/12/1998 steve	CDATA
+
+	Fixed simple CDATA section processing
+
+	Started building test suite (at last!)
+
+15/12/1998 steve	Started changes file
+
+	Fixed bug which allowed trailing ? in PIs to
+	be passed through to the application.  Also
+	checks that trailing ? is included
+
+	Changed xml.tcl attribute list parsing proc
+	to use same "Name" definition as per spec for
+	attribute names.
+
+16/12/1998 steve	More CDATA fixes
+
+22/12/1998 steve	New -commentcommand option
+
+	Added -commentcommand option.  This is called with
+	comment data.  Added comment.test and made bug fixes
+	to comment code.
+
+	CDATA, PI bug fixes.
+
+18/1/1999 steve		Added xmldeclcommand and doctypecommand
+
+	XML Declaration and Document Type Definition are reported
+	to the application via the -xmldeclcommand and -doctypecommand
+	callbacks respectively.
+
+27/1/1999 steve		Added (approximate) line numbers to errors
+
+	Count lines during parsing.  Line numbers are reported by
+	error commands.
+
+31/1/1999 steve		Incompatibility: -empty option for element callbacks
+
+	When empty elements are encountered (eg <Example/>) the callback
+	command has an additional option, -empty 1, appended.
+	Both the -elementstartcommand and -elementendcommand are affected.
+
+24/2/1999 steve		Changed attribute list parsing
+
+	Attribute list parsing didn't cope with values containing '='
+	character.  New parser code iterates through the list, which may
+	be slower but more accurate.
+
+	steve		DTD parsing patches
+
+	Incorporated various patches to the DTD parsing code from 
+	Andreas Kupries <a.kupries@westend.com>
+
+	steve		Bug fix
+
+	Fixed bug in parsing PIs.  Tag and PI data were not protected
+	during an uplevel call.
+
+10/3/1999 Larry Kollar,
+	steve		Replaced entity reference processing
+
+	Larry submitted a fix for the xml::Entity, et al, procedure
+	but the whole entity reference handling issued had to be sorted
+	out properly.  Two options were added, -entityreferencecommand and
+	-entityvariable.  Parser now handles character entities, pre-defined
+	and defined general entities automatically using the latter option.
+	Unknown general entities are passed to the callback given by the
+	former option.  If no callback is given then the entity references 
+	are left as-is.
+
+==============   Released Version 1.1 10/03/1998   ==============
+
+20/3/1999 steve		Fixed misfiring internal DTD substitution, CDATA section
+					and misc. bug fixes
+
+	The tokenisation stage was extracting a CDATA section which it thought
+	was an internal DTD subset.  Tightened the RE to fix this.
+
+	CDATA sections should not be passed through entity replacement.
+
+	Fixed bugs in test scripts.
+
+	Fixed passing -reportempty option from xml module to sgml module.
+
+	Changed handling of PCDATA and entities.  TclXML 1.1 introduced an
+	incompatibility (reported by Marshall Rose).  PCDATA callbacks now occur
+	separately for entities.  The fix checks to see if an entity mappings
+	are defined or an entityreference callback.  If neither have been defined
+	then the old behaviour is restored.
+
+==============   Released Version 1.1.1 21/03/1998   ==============
+

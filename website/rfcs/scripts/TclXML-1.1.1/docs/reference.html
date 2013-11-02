@@ -1,0 +1,720 @@
+<!DOCTYPE HTML PUBLIC "-//W3C/DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Tcl XML Parsers</TITLE>
+
+<META NAME="description" CONTENT="Tcl XML Parsers">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+
+<LINK REL="TOP"	HREF="/">
+<LINK REL="COPYRIGHT"	HREF="/copyright.tml">
+
+</HEAD>
+
+<BODY LINK="#3333FF" 
+BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+  <TR>
+    <TD WIDTH="140" VALIGN="TOP"></TD>
+    <TD WIDTH="10"></TD>
+    <TD WIDTH="*"></TD>
+    <TD WIDTH="10"></TD>
+  </TR>
+  <TR>
+    <TD WIDTH="140" VALIGN="TOP" TEXT="#000000" LINK="#000000" VLINK="#000000"><FONT COLOR="#000000" FACE="Arial,Helvetica,san-serif">
+<!-- Left index bar -->
+
+    <TD WIDTH="10">&nbsp;</TD>
+    <TD WIDTH="*"><FONT FACE="Arial,Helvetica,san-serif">
+
+      <STRONG><BIG>Tcl XML Parsers</BIG></STRONG>
+<P>
+
+This document describes the Tcl interface for two XML document parsers, 
+TclExpat and TclXML.  Both of these parsers implement the same Tcl
+script level API.
+
+<P>
+TclExpat is a Tcl interface to 
+<A HREF='http://www.jclark.com/'>James Clark</A>'s expat XML parser.
+expat itself is written in C, and TclExpat builds as a loadable extension.
+
+<P>
+TclXML is a pure-Tcl implementation of a XML parser.  No extensions 
+to Tcl are necessary to use this parser.
+
+<P>
+The major difference between the two parsers is performance.
+TclXML has some additional functionality, as described below.
+
+<H3>Table Of Contents</H3>
+
+<OL>
+  <LI><A HREF="#current">Current Versions</A>
+  <LI><A HREF="#pkg_ns">Packages and Namespaces</A>
+  <LI><A HREF="#creation">Parser Creation</A>
+  <LI><A HREF="#summary">Summary</A>
+  <LI><A HREF="#methods">Parser Command Methods</A>
+    <UL>
+      <LI><A HREF="#method-cget">cget</A>
+      <LI><A HREF="#method-configure">configure</A>
+	<UL>
+	  <LI><A HREF="#option-final">-final</A>
+	  <LI><A HREF="#option-baseurl">-baseurl</A>
+	  <LI><A HREF="#option-reportempty">-reportempty</A>
+	  <LI><A HREF="#option-elementstartcommand">-elementstartcommand</A>
+	  <LI><A HREF="#option-elementendcommand">-elementendcommand</A>
+	  <LI><A HREF="#option-characterdatacommand">-characterdatacommand</A>
+	  <LI><A HREF="#option-processinginstructioncommand">-processinginstructioncommand</A>
+	  <LI><A HREF="#option-xmldeclcommand">-xmldeclcommand</A>
+	  <LI><A HREF="#option-doctypecommand">-doctypecommand</A>
+	  <LI><A HREF="#option-externalentityrefcommand">-externalentityrefcommand</A>
+	  <LI><A HREF="#option-entityreferencecommand">-entityreferencecommand</A>
+	  <LI><A HREF="#option-entityvariable">-entityvariable</A>
+	  <LI><A HREF="#option-defaultcommand">-defaultcommand</A>
+	  <LI><A HREF="#option-commentcommand">-commentcommand</A>
+	</UL>
+      <LI><A HREF="#method-parse">parse</A>
+      <LI><A HREF="#method-reset">reset</A>
+    </UL>
+  <LI><A HREF="#return_codes">Callback Command Return Codes</A>
+  <LI><A HREF="#entity_expansion">Entity Expansion</A>
+  <LI><A HREF="#references">References</A>
+</OL>
+
+<A NAME="current">
+<H3>Current Versions</H3>
+</A>
+
+This document describes TclExpat 1.1 and TclXML 1.1.
+
+<A NAME="pkg_ns">
+<H3>Packages and Namespaces</H3>
+</A>
+
+The TclExpat extension defines the package <code><strong>expat</strong></code>.
+The command:
+<P>
+<code>package require expat</code>
+<P>
+is used to make TclExpat available to a Tcl script.
+
+<P>
+TclXML defines the <EM>packages</EM> <code><strong>xml</strong></code> and 
+<code><strong>sgml</strong></code>.  An application normally only uses
+the <code><strong>xml</strong></code> package.
+The command:
+<P>
+<code>package require xml</code>
+<P>
+is used to make the TclXML parser available to a Tcl script.  This automatically
+includes the <code>sgml</code> package.
+
+<P>
+TclXML defines the <EM>namespaces</EM> <code><strong>xml</strong></code> and 
+<code><strong>sgml</strong></code>.  TclExpat defines no namespaces of
+its own.
+
+<A NAME="creation">
+<H3>Parser Creation</H3>
+</A>
+
+Both parsers use a similar method to create and use parser objects.
+Each parser package defines a parser creation command.  The application
+uses this command to create an instance of a parser.  Both packages
+allow multiple parsers to be created and used simultaneously.
+Both packages can be used within the one Tcl interpreter simultaneously.
+
+<P>
+TclExpat's parser creation command is <CODE><strong>expat</strong></CODE>.
+
+<P>
+TclXML's parser creation command is <CODE><strong>xml::parser</strong></CODE>
+
+<P>
+Both creation commands accept a single argument: the name of the parser
+instance to create.  If a name is not supplied then a unique name will
+be automatically generated.  The name of the newly created parser instance
+is returned.  Configuration options may also be given on the command line.
+
+<P>
+The command prototypes are:
+
+<dl>
+<dd><code>expat <em>name</em> <em>?configuration options...?</em></code>
+<dd><code>xml::parser <em>name</em> <em>?configuration options...?</em></code>
+</dl>
+
+<A NAME="summary">
+<H3>Summary</H3>
+</A>
+
+<table width='100%' border='1'>
+<tr><td></td><td valign='top'><strong>TclExpat</strong></td><td valign='top'><strong>TclXML</strong></td></tr>
+<tr><td valign='top'>Package(s)</td><td valign='top'><code>expat</code></td><td valign='top'><code>xml</code><br><code>sgml</code></td></tr>
+<tr><td valign='top'>Namespace(s)</td><td valign='top'>&nbsp;</td><td valign='top'><code>xml</code><br><code>sgml</code></td></tr>
+<tr><td valign='top'>Command Prototype</td><td valign='top'><code>expat <em>name</em> <em>?configuration options...?</em></code></td><td valign='top'><code>xml::parser <em>name</em> <em>?configuration options...?</em></code></td></tr>
+</table>
+
+<A NAME="methods">
+<H3>Parser Command Methods</H3>
+</A>
+
+Both parsers accept the same command methods, and their operation is (almost) identical.
+<P>
+Valid parser methods are:
+
+<DL>
+<DT><A NAME="method-cget"><CODE><EM>parser</EM> cget <EM>option</EM></CODE></A>
+<DD>
+	Queries a configuration option of the parser.
+	<A HREF="#method-configure">See below</A> for valid configuration options.
+
+<DT><A NAME="method-configure"><CODE><EM>parser</EM> configure <EM>option value ?option value ...?</EM></CODE></A>
+<DD>
+	Sets/queries configuration options for the parser.  Valid options include:
+
+<DL>
+<DT><A NAME="option-final"><CODE>-final <EM>boolean</EM></CODE></A>
+<DD>
+		This option indicates whether the document data next presented to the 
+		<A HREF="#method-parse"><code>parse</code></A> method is the final part
+		of the document.  A value of &quot;0&quot; indicates that more data is
+		expected.  A value of &quot;1&quot; indicates that no more is expected.
+		The default value is &quot;1&quot;.
+
+<P>
+		If this option is set to &quot;0&quot; then the parser will not report
+		certain errors if the XML data is not well-formed upon end of input,
+		such as unclosed or unbalanced start or end tags.  Instead some data
+		may be saved by the parser until the next call to the 
+		<A HREF="#method-parse"><code>parse</code></A> method, thus delaying
+		the reporting of some of the data.
+
+<P>
+		If this option is set to &quot;1&quot; then documents which are not
+		well-formed upon end of input will generate an error.
+
+<DT><A NAME="option-baseurl"><CODE>-baseurl <EM>URL</EM></CODE></A>
+<DD>
+		Used to resolve relative URL references (not currently used).
+
+<DT><A NAME="option-reportempty"><CODE>-reportempty <EM>boolean</EM></CODE></A>
+<DD>
+		Specifies whether the parser should include extra arguments to the
+		invocation of the 
+		<A NAME="#option-elementstartcommand">-elementstartcommand</A> and
+		<A NAME="#option-elementendcommand">-elementendcommand</A> 
+		callback commands to indicate that the element used the empty element
+		syntax, such as <code>&lt;Empty/&gt;</code>.
+
+<P>
+		If this option is set and an element does use the shorthand syntax
+		then the start and end callback commands have the arguments
+		&quot;<code>-empty 1</code>&quot; added.
+
+<P>
+		Without this option it is not possible to distinguish between an
+		empty element and an element which has no content 
+		(a subtle difference which probably few, if any, applications will care about).
+
+<P>
+		Example:
+<P>
+<pre>
+$parser configure -elementstartcommand HandleStart
+$parser configure -elementendcommand HandleEnd
+
+$parser parse {&lt;test/&gt;}
+</pre>
+
+This would result in the following commands being invoked:
+
+<PRE>
+HandleStart test {} -empty 1
+HandleEnd test -empty 1
+</PRE>
+
+<DT><A NAME="option-elementstartcommand"><CODE>-elementstartcommand <EM>script</EM></CODE></A>
+<DD>
+		Specifies a Tcl command to associate with the start tag of an element.  The actual command
+		consists of this option followed by at least two arguments: the element type name and the
+		attribute list.  In addition, if the <A HREF="#option-reportempty">-reportempty</A> option
+		is set then the command may be invoked with the <CODE>-empty</CODE> configuration option to 
+		indicate whether it is an empty element.  See the description of the 
+		<A HREF="#option-reportempty">-reportempty</A> option for an example.
+
+<P>
+		The attribute list is a Tcl list consisting of name/value pairs, suitable for passing to the
+		<code>array set</code> Tcl command.
+
+<P>
+		Example:
+<P>
+<PRE>
+$parser configure -elementstartcommand HandleStart
+
+proc HandleStart {name attlist} {
+    puts stderr "Element start ==&gt; $name has attributes $attlist"
+}
+
+$parser parse {&lt;test id=&quot;123&quot;&gt;&lt;/test&gt;}
+</PRE>
+
+This would result in the following command being invoked:
+
+<PRE>
+HandleStart test {id 123}
+</PRE>
+
+<DT><A NAME="option-elementendcommand"><CODE>-elementendcommand <EM>script</EM></CODE></A>
+<DD>
+		Specifies a Tcl command to associate with the end tag of an element.  The actual command
+		consists of this option followed by at least one argument: the element type name.
+		In addition, if the <A HREF="#option-reportempty">-reportempty</A> option
+		is set then the command may be invoked with the <CODE>-empty</CODE> configuration option to 
+		indicate whether it is an empty element.  See the description of the 
+		<A HREF="#option-reportempty">-reportempty</A> option for an example.
+
+<P>
+		Example:
+<P>
+<PRE>
+$parser configure -elementendcommand HandleEnd
+
+proc HandleEnd {name} {
+    puts stderr "Element end ==&gt; $name"
+}
+
+$parser parse {&lt;test id=&quot;123&quot;&gt;&lt;/test&gt;}
+</PRE>
+
+This would result in the following command being invoked:
+
+<PRE>
+HandleEnd test
+</PRE>
+
+<DT><A NAME="option-characterdatacommand"><CODE>-characterdatacommand <EM>script</EM></CODE></A>
+<DD>
+		Specifies a Tcl command to associate with character data in the document, ie. text.
+		The actual command consists of this option followed by one argument: the text.
+
+<P>
+		It is not guaranteed that character data will be passed to the application in a
+		single call to this command.  That is, the application should be prepared to receive
+		multiple invocations of this callback with no intervening callbacks from other
+		features.  This is especially true when using TclExpat, since expat itself appears to
+		break character data on line boundaries.  See the section 
+		<A HREF="#entity_expansion">Entity Expansion</A> for more information.
+
+<P>
+		Example:
+<P>
+<PRE>
+$parser configure -characterdatacommand HandleText
+
+proc HandleText {data} {
+    puts stderr "Character data ==&gt; $data"
+}
+
+$parser parse {&lt;test&gt;this is a test document&lt;/test&gt;}
+</PRE>
+
+This would result in the following command being invoked:
+
+<PRE>
+HandleText {this is a test document}
+</PRE>
+
+<DT><A NAME="option-processinginstructioncommand"><CODE>-processinginstructioncommand <EM>script</EM></CODE></A>
+<DD>
+		Specifies a Tcl command to associate with processing instructions in the document.
+		The actual command consists of this option followed by two arguments: the PI target
+		and the PI data.
+<P>
+		Example:
+<P>
+<PRE>
+$parser configure -processinginstructioncommand HandlePI
+
+proc HandlePI {target data} {
+    puts stderr "Processing instruction ==&gt; $target $data"
+}
+
+$parser parse {&lt;test&gt;&lt;?special this is a processing instruction?&gt;&lt;/test&gt;}
+</PRE>
+
+This would result in the following command being invoked:
+
+<PRE>
+HandlePI special {this is a processing instruction}
+</PRE>
+
+<DT><A NAME="option-xmldeclcommand"><CODE>-xmldeclcommand <EM>script</EM></CODE></A>
+<DD>
+		Specifies a Tcl command to associate with the XML declaration part of the document.
+		The actual command consists of this option followed by three arguments: the XML version,
+		the document encoding and the standalone declaration.
+
+<P>
+		TclExpat does not implement this option.
+
+<P>
+		Example:
+<P>
+<PRE>
+$parser configure -xmldeclcommand HandleXMLDecl
+
+proc HandleXMLDecl {version encoding standalone} {
+    puts stderr "XML Declaration ==&gt; version $version encoding $encoding standalone $standalone"
+}
+
+$parser parse {&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;test&gt;&lt;/test&gt;}
+</PRE>
+
+This would result in the following command being invoked:
+
+<PRE>
+HandleXMLDecl 1.0 {} {}
+</PRE>
+
+<DT><A NAME="option-doctypecommand"><CODE>-doctypecommand <EM>script</EM></CODE></A>
+<DD>
+		Specifies a Tcl command to associate with the document type declaration part of the 
+		document.
+		The actual command consists of this option followed by four arguments: 
+		the document element type, the public identifier, the system identifier and
+		the internal DTD subset.
+
+<P>
+		TclExpat does not implement this option.
+
+<P>
+		Example:
+<P>
+<PRE>
+$parser configure -doctypecommand HandleDocType
+
+proc HandleDocType {docelement publicID systemID internalDTD} {
+    puts stderr "Document Type Declaration ==&gt; document element $docelement, internal DTD subset $internalDTD"
+}
+
+$parser parse {&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE test [
+  &lt;!ELEMENT test ANY&gt;
+]&gt;
+&lt;test&gt;&lt;/test&gt;}
+</PRE>
+
+This would result in the following command being invoked:
+
+<PRE>
+HandleDocType test {} {} {
+  &lt;!ELEMENT test ANY&gt;
+}
+</PRE>
+
+<DT><A NAME="option-externalentityrefcommand"><CODE>-externalentityrefcommand <EM>script</EM></CODE></A>
+<DD>
+		Specifies a Tcl command to associate with an external entity reference.
+		The actual command consists of this option followed by one argument: 
+		the URI for the external entity.
+
+<P>
+		TclXML does not implement this option.
+
+<DT><A NAME="option-entityreferencecommand"><CODE>-entityreferencecommand <EM>script</EM></CODE></A>
+<DD>
+		Specifies a Tcl command to associate with a general entity reference.
+		The actual command consists of this option followed by one argument: 
+		the entity name.
+
+<P>
+		When an entity reference is encountered the parser will automatically
+		handle parameter entities and character entities.  If the general
+		entity has an entry defined in the 
+		<A HREF="#option-entityvariable">-entityvariable</A> array variable
+		then its substitution text will automatically be handled.  If this
+		option is set then the parser will perform the callback.
+		If this option is not set then the entity reference is left untouched
+		and passed to the application as character data.
+
+<P>
+		If the application wishes to handle all general entity references,
+		including those to the pre-defined entities, then it should set this
+		option and supply an empty array variable for the 
+		<A HREF="#option-entityvariable">-entityvariable</A> option.
+
+<P>
+		Note that this option only applies to general entities occurring in
+		character data sections.  It is up to the application to handle
+		entity references in attribute values.  See Section 4.4 of the
+		XML specification <A HREF="#references-1">[1]</A>.
+
+<P>
+		See the section <A HREF="#entity_expansion">Entity Expansion</A> for more
+		information.
+
+<P>
+		TclExpat does not implement this option.
+
+<DT><A NAME="option-entityvariable"><CODE>-entityvariable <EM>varName</EM></CODE></A>
+<DD>
+		Specifies a Tcl array variable which contains the substitution text for
+		entities.  The indices of the array are the entity references.
+		The parser will automatically perform the substitution
+		and pass the data to the application via the 
+		<A HREF="#option-characterdatacommand">-characterdatacommand</A> 
+		callback command.
+
+<P>
+		The default array variable has entries for the pre-defined XML entities:
+		<TABLE BORDER="0">
+		<TR><TD>lt</TD><TD>&amp;#60;<TD>&lt;</TD></TR>
+		<TR><TD>gt</TD><TD>&amp;#62;<TD>&gt;</TD></TR>
+		<TR><TD>amp</TD><TD>&amp;#38;<TD>&amp;</TD></TR>
+		<TR><TD>quot</TD><TD>&amp;#34;<TD>&quot;</TD></TR>
+		<TR><TD>apos</TD><TD>&amp;#39;<TD>&#39;</TD></TR>
+		</TABLE>
+
+<P>
+		Note that the current implementation of TclXML performs a separate
+		callback for the entity replacement text.
+
+<P>
+		See the section <A HREF="#entity_expansion">Entity Expansion</A> for more
+		information.
+
+<P>
+		TclExpat does not implement this option.
+
+<DT><A NAME="option-defaultcommand"><CODE>-defaultcommand <EM>script</EM></CODE></A>
+<DD>
+		Specifies a Tcl command to associate with document features not otherwise
+		specified above.
+		The actual command consists of this option followed by one argument: 
+		the details of the document feature.
+<P>
+		TclXML does not implement this option.
+
+<DT><A NAME="option-commentcommand"><CODE>-commentcommand <EM>script</EM></CODE></A>
+<DD>
+		Specifies a Tcl command to associate with comments in the document.
+		The actual command consists of this option followed by one argument: 
+		the comment data.
+<P>
+		Example:
+<P>
+<PRE>
+$parser configure -commentcommand HandleComment
+
+proc HandleComment {data} {
+    puts stderr "Comment ==&gt; $data"
+}
+
+$parser parse {&lt;test&gt;&lt;!-- this is &lt;obviously&gt; a comment --&gt;&lt;/test&gt;}
+</PRE>
+
+This would result in the following command being invoked:
+
+<PRE>
+HandleComment { this is &lt;obviously&gt; a comment }
+</PRE>
+
+</DL>
+
+<DT><A NAME="method-parse"><CODE><EM>parser</EM> parse <EM>data</EM></CODE></A>
+<DD>
+	Parses XML data.  Callbacks for various
+	document features, such as element start, element end,
+	character data, etc, will be invoked.
+
+<DT><A NAME="method-reset"><CODE><EM>parser</EM> reset</CODE></A>
+<DD>
+	Resets the parser in preparation for parsing another document.
+	See also the <code><A HREF="#option-final">-final</A></code> option.
+</DL>
+
+<A NAME="return_codes">
+<H3>Callback Command Return Codes</H3>
+</A>
+
+The script invoked for any of the parser callback commands, such as 
+<code>-elementstartcommand</code>, <code>-elementendcommand</code>, etc, 
+may return an error code other than &quot;ok&quot; or &quot;error&quot;.
+All callbacks may in addition return &quot;break&quot; or &quot;continue&quot;.
+
+<P>
+If a callback script returns an &quot;error&quot; error code then processing
+of the document is terminated and the error is propagated in the usual fashion.
+
+<P>
+If a callback script returns a &quot;break&quot; error code then all further
+processing of the document data ceases, and the parser returns with a normal
+status.
+
+<P>
+If a callback script returns a &quot;continue&quot; error code then processing
+of the current element, and its children, ceases and processing continues with
+the next (sibling) element.
+
+<H4>Examples</H4>
+
+Demonstration of <code>break</code>:
+
+<pre>
+proc EStart {name attlist} {
+    array set attr $attlist
+    if {[info exists attr(class)]} {
+	switch $attr(class) {
+	    break {
+		uplevel break
+	    }
+	    continue {
+		uplevel continue
+	    }
+	    error {
+		uplevel error {application invoked}
+	    }
+	}
+    }
+    set id {}
+    catch {set id &quot; id $attr(id)&quot;}
+    puts stderr &quot;Start element $name$id&quot;
+}
+$parser configure -elementstartcommand EStart
+
+$parser parse {&lt;test&gt;
+  &lt;child class=&quot;break&quot; id=&quot;1&quot;&gt;&lt;grandchild/&gt;&lt;/child&gt;
+  &lt;child class=&quot;break&quot; id=&quot;2&quot;&gt;&lt;grandchild/&gt;&lt;/child&gt;
+&lt;/test&gt;}
+</pre>
+
+This script produces the output:
+
+<pre>
+Start element test
+</pre>
+
+Demonstration of <code>continue</code>:
+
+<pre>
+$parser reset
+$parser parse {&lt;test&gt;
+  &lt;child class=&quot;continue&quot; id=&quot;1&quot;&gt;&lt;grandchild id=&quot;3&quot;/&gt;&lt;/child&gt;
+  &lt;child id=&quot;2&quot;&gt;&lt;grandchild id=&quot;4&quot;/&gt;&lt;/child&gt;
+&lt;/test&gt;}
+</pre>
+
+This script produces the output:
+
+<pre>
+Start element test
+Start element child id 2
+Start element grandchild id 4
+</pre>
+
+<A NAME="entity_expansion">
+<H3>Entity Expansion</H3>
+</A>
+
+TclXML has support for XML character and general entities.  This support is controlled
+by the <A HREF="#option-entityvariable">-entityvariable</A> and 
+<A HREF="#option-entityreferencecommand">-entityreferencecommand</A> options.
+TclXML is able to automatically substitute entity references for their replacement text.
+The replacement text is also parsed, so further entities and elements may occur.
+
+<P>
+By default, TclXML will automatically perform substitution of character entities and 
+the five predefined general entities: &amp;lt; (&lt;), &amp;gt; (&gt;), 
+&amp;quot; (&quot;), &amp;apos; (') and &amp;amp; (&amp;).  Other general entities will
+be included in the document's character data untouched.
+
+<P>
+Even though the replacement text for an entity may be only character data, it will be
+passed to the application in a separate invocation of the character data callback.
+For example, the script:
+
+<pre>
+set p [xml::parser]
+$p configure -characterdatacommand pcdata
+$p parse {<test>One general &amp;lt; entity</test>}
+</pre>
+
+will result in these (and only these) Tcl commands being evaluated:
+
+<pre>
+pcdata {One general }
+pcdata &lt;
+pcdata { entity}
+</pre>
+
+<P>
+An application may provide its own replacement text for general entities by supplying 
+a Tcl array name with the <A HREF="#option-entityvariable">-entityvariable</A> option.
+
+<P>
+An application may be provided with callbacks for undefined general entities by using
+the <A HREF="#option-entityreferencecommand">-entityreferencecommand</A> option.
+This option can be used to handle <em>all</em> entity references by giving an empty array for the
+<A HREF="#option-entityvariable">-entityvariable</A> option.
+
+<P>
+It is possible to disable all entity expansion functionality by giving an empty array for the
+<A HREF="#option-entityvariable">-entityvariable</A> option and an empty string for the
+<A HREF="#option-entityreferencecommand">-entityreferencecommand</A> option.  In this case
+character data will be delivered to the application in a single invocation with no expansion
+occurring.  For example, the script:
+
+<pre>
+array set empty {}
+set p [xml::parser]
+$p configure -characterdatacommand pcdata  -entityvariable empty  -entityreferencecommand {}
+$p parse {<test>One general &amp;lt; entity</test>}
+</pre>
+
+will result in this (and only this) Tcl command being evaluated:
+
+<pre>
+pcdata {One general &amp;lt; entity}
+</pre>
+
+<P>
+Note that TclXML does not currently support parsing XML DTDs and so it has no support for
+XML parameter entities.  If parameter entities occur in the document then they are left
+untouched, since the XML Recommendation specifies that they be ignored in that situation.
+
+<A NAME="references">
+<H3>References</H3>
+</A>
+
+<DL>
+<DT><A NAME="references-1">[1]</A>
+<DD><EM>Extensible Markup Language (XML) 1.0</EM>.  World Wide Web Consortium Recommendation.<BR>
+<A HREF="http://www.w3.org/TR/REC-xml">http://www.w3.org/TR/REC-xml</A>
+</DL>
+
+
+    <p align="left">&nbsp;</p>
+    <p align="left">&nbsp;</p>
+    <p align="left">&nbsp;</p>
+    <p align="left">&nbsp;</p>
+    <p>&nbsp;</td>
+    <td WIDTH="10"></td>
+  </tr>
+  <tr>
+    <td WIDTH="140" VALIGN="TOP"></td>
+    <td WIDTH="10"></td>
+    <td WIDTH="*"><FONT FACE="Arial,Helvetica,san-serif" SIZE="1">Copyright &copy; 1998,1999 Zveno Pty Ltd.  All Rights Reserved.<BR>
+    Comments on this site? Contact <a HREF="mailto:webmaster@zveno.com">mailto:webmaster@zveno.com</a></font></td>
+    <td WIDTH="10"></td>
+  </tr>
+
+</TABLE>
+</BODY>
+</HTML>
+
+

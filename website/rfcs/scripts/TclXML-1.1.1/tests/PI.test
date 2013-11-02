@@ -1,0 +1,62 @@
+# Features covered:  Processing Instructions
+#
+# This file contains a collection of tests for the TclXML parser.
+# This file tests the parser's performance on Processing Instructions.
+# Sourcing this file into Tcl runs the tests and generates output
+# for errors.  No output means no errors were found.
+#
+# Copyright (c) 1998 Zveno Pty Ltd.
+#
+# $Id$
+
+if {[string compare test [info procs test]] == 1} then {source defs}
+
+if {[catch {package require xml 1.6}]} {
+    catch {puts stderr "Cannot load xml 1.6 package"}
+    return
+}
+
+catch {unset result}
+proc PI {target data args} {
+    lappend ::result $target $data
+}
+
+test pi-1.1 {PI} {
+    set ::result {}
+
+    catch {rename xml::pi-1.1 {}}
+    set parser [xml::parser pi-1.1 \
+	-processinginstructioncommand PI]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test><?Test This is a processing instruction?></Test>
+}
+    set ::result
+} {Test {This is a processing instruction}}
+
+test pi-1.2 {PI: missing trailing ?} {
+    set ::result {}
+
+    catch {rename xml::pi-1.2 {}}
+    set parser [xml::parser pi-1.2 \
+	-processinginstructioncommand PI]
+    set returncode [catch {$parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test><?Test This is a syntax error></Test>
+}} msg]
+
+    list $returncode [regexp {PI: expected '\?' character.+} $msg]
+} {1 1}
+
+test pi-2.1 {PI with special characters} {
+    set ::result {}
+
+    catch {rename xml::pi-2.1 {}}
+    set parser [xml::parser pi-2.1 \
+	-processinginstructioncommand PI]
+    $parser parse {<?xml version="1.0"?>
+<!DOCTYPE Test>
+<Test><?[if !VMLRender]?></Test>
+}
+    set ::result
+} {{[if} !VMLRender\]}
