@@ -437,15 +437,25 @@ class BaseRfcWriter:
         if date is not None:
             year = date.attrib.get('year', '')
             month = date.attrib.get('month', '')
-            # If year is this year, and month not specified, use current date
-            if not year or (year == str(today.year) and not month) or \
-                           (self.draft and year == str(today.year) and month == today.strftime("%B")):
+            day = date.attrib.get('day', '')
+            if not year or (year == str(today.year) and\
+               (not month or month.lower() == today.strftime("%B").lower() or \
+                month.lower() == today.strftime("%b").lower())):
                 # Set everything to today
                 date.attrib['year'] = today.strftime('%Y')
                 date.attrib['month'] = today.strftime('%B')
-                date.attrib['day'] = today.strftime('%d')
+                if self.draft and not day:
+                    date.attrib['day'] = today.strftime('%d')
             elif year != str(today.year) and not month:
                 xml2rfc.log.warn("Incomplete and out-of date <date/> element: %s" % lxml.etree.tostring(date))
+        try:
+            dateX = datetime.datetime.strptime(date.attrib.get('year')+date.attrib.get('month'), '%Y%B')
+        except ValueError:
+            try:
+                dateX = datetime.datetime.strptime(date.attrib.get('year')+date.attrib.get('month'), '%Y%b')
+            except ValueError:
+                xml2rfc.log.warn("Year and/or month are incorrect values in <date/> element: %s" % lxml.etree.tostring(date))
+
         # Setup the expiration string for drafts as published date + six months
         if self.draft:
             date = self.r.find('front/date')
@@ -453,17 +463,19 @@ class BaseRfcWriter:
                 month = date.attrib.get('month', '')
                 year = date.attrib.get('year', '')
                 day = date.attrib.get('day', '1')  # Default to first of month
-                if month and year:
+                try:
+                    start_date = datetime.datetime.strptime(year + month + day, \
+                                                            '%Y%B%d')
+                except ValueError:
                     try:
                         start_date = datetime.datetime.strptime(year + month + day, \
-                                                                '%Y%B%d')
-                        expire_date = start_date + datetime.timedelta(185)
-                        self.expire_string = expire_date.strftime('%B %d, %Y')
+                                                                '%Y%b%d')
                     except ValueError:
-                        pass
-                elif not year:
-                    # Warn about no date
-                    xml2rfc.log.warn('No date specified for document.')
+                        start_date = today
+
+                expire_date = start_date + datetime.timedelta(185)
+                self.expire_string = expire_date.strftime('%B %d, %Y').replace(' 0', ' ')
+
 
     def _format_counter(self, text, count, list_length=1):
         """ Return a proper string for a formatted list bullet.  Allowed types:
