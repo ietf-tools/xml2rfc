@@ -270,6 +270,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
     def page_break(self, final=False):
         "Used by post_rendering() to insert page breaks."
+        while True:
+            x = self.output.pop()
+            if x:
+                self.output.append(x)
+                break;
+
         if not final:
             self.output.append('.bp')
         self.page_length = 1
@@ -300,5 +306,4 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         for line in self.output:
             file.write(line.rstrip(" \t"))
             file.write("\n")
-
             
