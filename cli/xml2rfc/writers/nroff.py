@@ -104,11 +104,15 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         # Wrap in a no fill block
         self._indent(indent)
         self.write_nroff('.nf')
+        begin = len(self.buf)
         PaginatedTextRfcWriter.write_raw(self, text, indent=0, align=align,
                                          blanklines=blanklines,
                                          delimiter=delimiter,
                                          leading_blankline=leading_blankline,
                                          source_line=source_line)
+        for i in range(begin, len(self.buf)):
+            if self.buf[i] and self.buf[i][0] == '.':
+               self.buf[i] = '\&' + self.buf[i]
         self.write_nroff('.fi')
 
     def write_text(self, *args, **kwargs):
