@@ -71,9 +71,9 @@ class HtmlRfcWriter(BaseRfcWriter):
         style = list.attrib.get('style', '')
         if not style:
             # otherwise look for the nearest list parent with a style and use it
-            for parent in list.iterancestors():
-                if parent.tag == 'list':
-                    style = parent.attrib.get('style', '')
+            for elder in list.iterancestors():
+                if elder.tag == 'list':
+                    style = elder.attrib.get('style', '')
                     if style:
                         break
         if not style:
