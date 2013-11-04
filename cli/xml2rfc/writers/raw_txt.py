@@ -158,7 +158,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         counter_index = None
         if style.startswith('format'):
             format_str = style.partition('format ')[2]
-            allowed_formats = ('%c', '%C', '%d', '%i', '%I')
+            allowed_formats = ('%c', '%C', '%d', '%i', '%I', '%o', '%x', '%X')
             if not any(map(lambda format: format in format_str, allowed_formats)):
                 xml2rfc.log.warn('Invalid format specified: %s ' 
                                  '(Must be one of %s)' % (style,

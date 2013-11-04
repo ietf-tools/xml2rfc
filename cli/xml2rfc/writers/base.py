@@ -484,6 +484,9 @@ class BaseRfcWriter:
                 %d: Digits
                 %i: Lowercase roman numerals
                 %I: Uppercase roman numerals
+                %o: octal
+                %x: Lowercase hex
+                %X: Uppercase hex
         """
         import math
         roman_widths = {        1:1,  2:2,  3:3,  4:2,  5:1,  6:2,  7:3,  8:4,  9:2,
@@ -493,6 +496,8 @@ class BaseRfcWriter:
         decimal_width = int(math.log(list_length, 10))
         roman_width = roman_widths.get(list_length, 6)
         letter_width = int(math.log(list_length, 26))
+        hex_width = int(math.log(list_length, 16))
+        octal_width = int(math.log(list_length, 8))
         extra_width = len(text)+1
         if '%d' in text:
             text = text.replace(r'%d', str(count)).ljust(decimal_width+extra_width)
@@ -504,6 +509,12 @@ class BaseRfcWriter:
             text = text.replace(r'%i', xml2rfc.utils.int2roman(count)).ljust(roman_width+extra_width)
         elif '%I' in text:
             text = text.replace(r'%I', xml2rfc.utils.int2roman(count).upper()).ljust(roman_width+extra_width)
+        elif '%o' in text:
+            text = text.replace(r'%o', oct(count).replace("0","",1)).ljust(octal_width+extra_width)
+        elif '%x' in text:
+            text = text.replace(r'%x', hex(count).replace("0x","",1)).ljust(hex_width+extra_width)
+        elif '%X' in text:
+            text = text.replace(r'%X', hex(count).replace("0x","",1).upper()).ljust(hex_width+extra_width)
         return text
 
     def _format_author_string(self, authors):
