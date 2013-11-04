@@ -147,6 +147,13 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.left_header = self.pis.get('header', self.left_header)
 
     def page_break(self, final=False):
+        # remove header if nothing on the page
+        if final and self.page_length == 1:
+            while len(self.output) > 0:
+                p = self.output.pop()
+                if p == '\f':
+                    break;
+            return
         self.output.append('')
         self.output.append('')
         self.output.append('')
@@ -160,12 +167,16 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     def emit(self, text):
         """Write text to the output buffer if it's not just a blank
            line at the top of the page"""
-        if self.page_length == 1 and text.strip() == '':
-            return 
         if isinstance(text, str):
+            if self.page_length == 1 and text.strip() == '':
+                return 
             self.output.append(text)
             self.page_length += 1
         elif isinstance(text, list):
+            if self.page_length == 1:
+                for line in text:
+                    self.emit(line)
+                return
             self.output.extend(text)
             self.page_length += len(text)
         else:
@@ -281,8 +292,9 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                         pages.append(self.page_num)
 
         # Write final footer
-        remainder = max_page_length - self.page_length - 2
-        self.emit([''] * remainder)
+        if self.page_length > 1:
+            remainder = max_page_length - self.page_length - 2
+            self.emit([''] * remainder)
         self.page_break(final=True)
         
         # Now we need to go back into the buffer and insert the real table 
