@@ -362,6 +362,7 @@
 <link href="#rfc.section.5" rel="Chapter" title="5 More about Lists"/>
 <link href="#rfc.section.5.1" rel="Chapter" title="5.1 Numbering Lists across Lists and Sections"/>
 <link href="#rfc.section.5.2" rel="Chapter" title="5.2 Where the List Numbering Continues"/>
+<link href="#rfc.section.5.3" rel="Chapter" title="5.3 nested lists"/>
 <link href="#rfc.section.6" rel="Chapter" title="6 Example of Code or MIB Module To Be Extracted"/>
 <link href="#rfc.section.7" rel="Chapter" title="7 Acknowledgements"/>
 <link href="#rfc.section.8" rel="Chapter" title="8 IANA Considerations"/>
@@ -445,6 +446,7 @@
 <li>5.   <a href="#rfc.section.5">More about Lists</a></li>
 <li>5.1.   <a href="#rfc.section.5.1">Numbering Lists across Lists and Sections</a></li>
 <li>5.2.   <a href="#rfc.section.5.2">Where the List Numbering Continues</a></li>
+<li>5.3.   <a href="#rfc.section.5.3">nested lists</a></li>
 <li>6.   <a href="#rfc.section.6">Example of Code or MIB Module To Be Extracted</a></li>
 <li>7.   <a href="#rfc.section.7">Acknowledgements</a></li>
 <li>8.   <a href="#rfc.section.8">IANA Considerations</a></li>
@@ -579,6 +581,16 @@
 </dl>
 
 <p> The end of the list.</p>
+<h1 id="rfc.section.5.3"><a href="#rfc.section.5.3">5.3.</a> nested lists</h1>
+<p id="rfc.section.5.3.p.1">Simulating more than one paragraph in a list item using &lt;vspace&gt;: </p>
+
+<ol style="list-style-type: lower-alpha">
+  <li>First, a short item.</li>
+  <li>Second, a longer list item.<br/><br/> And something that looks like a separate paragraph.</li>
+  <li>and a sublist, also with letters <ol style="list-style-type: lower-alpha"><li>first subitem</li><li>second subitem</li><li>and a sub-sublist, also with letters <ol style="list-style-type: lower-alpha"><li>first sub-subitem</li><li>second sub-subitem</li></ol><p> </p></li></ol><p> </p></li>
+</ol>
+
+<p> </p>
 <h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#codeExample" id="codeExample">Example of Code or MIB Module To Be Extracted</a></h1>
 <p>The &lt;artwork&gt; element has a number of extra attributes that can be used to substitute a more aesthetically pleasing rendition into HTML output while continuing to use the ASCII art version in the text and nroff outputs (see the xml2rfc README for details). It also has a "type" attribute. This is currently ignored except in the case 'type="abnf"'. In this case the "artwork" is expected to contain a piece of valid Augmented Backus-Naur Format (ABNF) grammar. This will be syntax checked by xml2rfc and any errors will cause a fatal error if the "strict" processing instruction is set to "yes". The ABNF will also be colorized in HTML output to highlight the syntactic components. Checking of additional "types" may be provided in future versions of xml2rfc.</p>
 <pre>

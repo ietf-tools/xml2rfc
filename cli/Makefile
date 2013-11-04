@@ -21,31 +21,31 @@ drafttest: install
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
 	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache tests/cache tests/input/draft-template.xml --base tmp/ --raw --text --nroff --html --exp
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.raw.txt	tmp/draft-template.raw.txt	#|| echo "Diff failed for .raw.txt output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.txt	tmp/draft-template.txt		#|| echo "Diff failed for .txt output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.nroff	tmp/draft-template.nroff 	#|| echo "Diff failed for .nroff output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.html	tmp/draft-template.html 	#|| echo "Diff failed for .html output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.exp.xml	tmp/draft-template.exp.xml	#|| echo "Diff failed for .exp.xml output"
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.raw.txt	tmp/draft-template.raw.txt	|| { echo "Diff failed for .raw.txt output"; exit 1; }
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.txt	tmp/draft-template.txt		|| { echo "Diff failed for .txt output"; exit 1; }
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.nroff	tmp/draft-template.nroff 	|| { echo "Diff failed for .nroff output"; exit 1; }
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.html	tmp/draft-template.html 	|| { echo "Diff failed for .html output"; exit 1; }
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-template.exp.xml	tmp/draft-template.exp.xml	|| { echo "Diff failed for .exp.xml output"; exit 1; }
 
 miektest: install
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
 	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache tests/cache tests/input/draft-miek-test.xml --base tmp/ --raw --text --nroff --html --exp
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-miek-test.raw.txt	tmp/draft-miek-test.raw.txt	#|| echo "Diff failed for .raw.txt output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-miek-test.txt	tmp/draft-miek-test.txt		#|| echo "Diff failed for .txt output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-miek-test.nroff	tmp/draft-miek-test.nroff 	#|| echo "Diff failed for .nroff output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-miek-test.html	tmp/draft-miek-test.html 	#|| echo "Diff failed for .html output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-miek-test.exp.xml	tmp/draft-miek-test.exp.xml	#|| echo "Diff failed for .exp.xml output"
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-miek-test.raw.txt	tmp/draft-miek-test.raw.txt	|| { echo "Diff failed for .raw.txt output"; exit 1; }
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-miek-test.txt	tmp/draft-miek-test.txt		|| { echo "Diff failed for .txt output"; exit 1; }
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-miek-test.nroff	tmp/draft-miek-test.nroff 	|| { echo "Diff failed for .nroff output"; exit 1; }
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-miek-test.html	tmp/draft-miek-test.html 	|| { echo "Diff failed for .html output"; exit 1; }
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/draft-miek-test.exp.xml	tmp/draft-miek-test.exp.xml	|| { echo "Diff failed for .exp.xml output"; exit 1; }
 
 rfctest:  bin/python install
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
 	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache tests/cache tests/input/rfc6787.xml --base tmp/ --raw --text --nroff --html --exp
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.raw.txt	tmp/rfc6787.raw.txt	#|| echo "Diff failed for .raw.txt output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.txt	tmp/rfc6787.txt 	#|| echo "Diff failed for .txt output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.nroff	tmp/rfc6787.nroff 	#|| echo "Diff failed for .nroff output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.html	tmp/rfc6787.html 	#|| echo "Diff failed for .html output"
-	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.exp.xml	tmp/rfc6787.exp.xml 	#|| echo "Diff failed for .exp.xml output"
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.raw.txt	tmp/rfc6787.raw.txt	|| { echo "Diff failed for .raw.txt output"; exit 1; }
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.txt	tmp/rfc6787.txt 	|| { echo "Diff failed for .txt output"; exit 1; }
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.nroff	tmp/rfc6787.nroff 	|| { echo "Diff failed for .nroff output"; exit 1; }
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.html	tmp/rfc6787.html 	|| { echo "Diff failed for .html output"; exit 1; }
+	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.exp.xml	tmp/rfc6787.exp.xml 	|| { echo "Diff failed for .exp.xml output"; exit 1; }
 
 
 tests: test drafttest miektest rfctest
