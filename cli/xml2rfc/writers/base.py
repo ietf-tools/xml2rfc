@@ -962,9 +962,10 @@ class BaseRfcWriter:
                                       subCounter=i+1, level=2)
         for reference_list in references:
             for ref in reference_list:
-                ref_counter += 1
-                title = ref.find("front/title").text
-                self._indexRef(ref_counter, title=title, anchor=ref.attrib["anchor"])
+                if ref:
+                    ref_counter += 1
+                    title = ref.find("front/title").text
+                    self._indexRef(ref_counter, title=title, anchor=ref.attrib["anchor"])
 
         # Appendix sections
         back = self.r.find('back')
