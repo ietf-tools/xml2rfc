@@ -186,7 +186,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                 elif style == 'numbers':
                     bullet = self._format_counter("%d.", t_count+1, listlength)
                 elif style == 'letters':
-                    bullet = self._format_counter("%c.", t_count+1, listlength)
+                    letter_style = "%C." if (level % 2) else "%c."
+                    bullet = self._format_counter(letter_style, t_count+1, listlength)
                 elif style == 'hanging':
                     bullet = element.attrib.get('hangText', '')
                     if len(bullet) < hangIndent:

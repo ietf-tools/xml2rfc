@@ -66,7 +66,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         # Table to insert the iref into
         self.iref_table = None
 
-    def write_list(self, list, parent):
+    def write_list(self, list, parent, level=0):
         # style comes from the node if one exists
         style = list.attrib.get('style', '')
         if not style:
@@ -88,7 +88,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                 dd = E.DD(style=style)
                 list_elem.append(dt)
                 list_elem.append(dd)
-                self.write_t_rec(t, parent=dd)
+                self.write_t_rec(t, parent=dd, level=level +1)
         elif style.startswith('format'):
             format_str = style.partition('format ')[2]
             allowed_formats = ('%c', '%C', '%d', '%i', '%I', '%o', '%x', '%X')
@@ -112,21 +112,22 @@ class HtmlRfcWriter(BaseRfcWriter):
                 dd = E.DD()
                 list_elem.append(dt)
                 list_elem.append(dd)
-                self.write_t_rec(t, parent=dd)
+                self.write_t_rec(t, parent=dd, level=level + 1)
         else:
             if style == 'symbols':
                 list_elem = E.UL()
             elif style == 'numbers':
                 list_elem = E.OL()
             elif style == 'letters':
-                list_elem = E.OL(style="list-style-type: lower-alpha")
+                letter_style = "list-style-type: upper-alpha" if (level % 2) else "list-style-type: lower-alpha"
+                list_elem = E.OL(style= letter_style)
             else:  # style == empty
                 list_elem = E.UL()
                 list_elem.attrib['class'] = 'empty'
             for t in list.findall('t'):
                 li = E.LI()
                 list_elem.append(li)
-                self.write_t_rec(t, parent=li)
+                self.write_t_rec(t, parent=li, level= level + 1)
         parent.append(list_elem)
 
     def _create_toc(self):
@@ -320,7 +321,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             # Add to body buffer
             self.buf.append(self._serialize(p))
 
-    def write_t_rec(self, t, autoAnchor=None, align='left', parent=None):
+    def write_t_rec(self, t, autoAnchor=None, align='left', parent=None, level=0):
         """ Recursively writes a <t> element
 
             If no parent is specified, a dummy div will be treated as the parent
@@ -358,7 +359,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                 if child.tail:
                     br.tail = child.tail
             elif child.tag == 'list':
-                self.write_list(child, parent)
+                self.write_list(child, parent, level=level)
                 if child.tail:
                     parent.append(E.P(child.tail))
             elif child.tag == 'figure':
