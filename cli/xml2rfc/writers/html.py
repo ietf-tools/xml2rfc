@@ -503,19 +503,19 @@ class HtmlRfcWriter(BaseRfcWriter):
                         if self.pis['linkmailto'] == 'yes':
                             a.attrib['href'] = 'mailto:' + email.text
                     if organization is not None and organization.text:
-                        a.attrib['title'] = organization.text
+                        a.attrib['title'] = organization.text.strip()
                     ref_td.append(a)
                     last = a
                 elif organization is not None and organization.text:
                     # Use organization instead of name
-                    a = E.A(organization.text)
+                    a = E.A(organization.text.strip())
                     ref_td.append(a)
                     last = a
                 a.tail = ', '
             last.tail = ', "'
             title = reference.find('front/title')
             if title is not None and title.text:
-                title_string = title.text
+                title_string = title.text.strip()
             else:
                 xml2rfc.log.warn('No title specified in reference', \
                                  reference.attrib.get('anchor', ''))

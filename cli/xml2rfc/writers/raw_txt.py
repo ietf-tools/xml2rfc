@@ -609,7 +609,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             lines.append(author.attrib.get('fullname', ''))
         organization = author.find('organization')
         if organization is not None and organization.text:
-            lines.append(organization.text)
+            lines.append(organization.text.strip())
         address = author.find('address')
         if address is not None:
             postal = address.find('postal')
@@ -665,7 +665,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             refstring.append(', ')
             title = ref.find('front/title')
             if title is not None and title.text:
-                refstring.append('"' + title.text + '", ')
+                refstring.append('"' + title.text.strip() + '", ')
             else:
                 xml2rfc.log.warn('No title specified in reference',
                                  ref.attrib.get('anchor', ''))

@@ -537,7 +537,7 @@ class BaseRfcWriter:
                     buf.append(', Ed.')
             elif organization is not None and organization.text:
                 # Use organization instead of name
-                buf.append(organization.text)
+                buf.append(organization.text.strip())
             if len(authors) == 2 and i == 0:
                 buf.append(' ')
             elif i < len(authors) - 1:
