@@ -446,6 +446,8 @@ class BaseRfcWriter:
                 date.attrib['month'] = today.strftime('%B')
                 if self.draft and not day:
                     date.attrib['day'] = today.strftime('%d')
+                    if date.attrib['day'][0] == '0':
+                        date.attrib['day'] = today.strftime('%d').replace('0', '')
             elif year != str(today.year) and not month:
                 xml2rfc.log.warn("Incomplete and out-of date <date/> element: %s" % lxml.etree.tostring(date))
         try:
