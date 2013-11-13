@@ -408,7 +408,8 @@ class BaseRfcWriter:
         initials = author.attrib.get('initials', '')
         initials_list = re.split("[. ]+", initials)
         if self.pis["multiple-initials"] == "no":
-            initials = initials_list[0] + "."
+            if not initials_list[0] == "":
+                initials = initials_list[0] + "."
         else:
             initials = ". ".join(initials_list) + "."
         return initials
