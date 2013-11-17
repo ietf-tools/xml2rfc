@@ -80,18 +80,18 @@ Table of Contents
      7.4.  Figure/Artwork  . . . . . . . . . . . . . . . . . . . . .  10
        7.4.1.  References  . . . . . . . . . . . . . . . . . . . . .  10
      7.5.  Block Quote . . . . . . . . . . . . . . . . . . . . . . .  10
-     7.6.  References  . . . . . . . . . . . . . . . . . . . . . . .  10
-       7.6.1.  External  . . . . . . . . . . . . . . . . . . . . . .  10
+     7.6.  References  . . . . . . . . . . . . . . . . . . . . . . .  11
+       7.6.1.  External  . . . . . . . . . . . . . . . . . . . . . .  11
        7.6.2.  Internal  . . . . . . . . . . . . . . . . . . . . . .  11
      7.7.  Spanx Styles  . . . . . . . . . . . . . . . . . . . . . .  11
-     7.8.  Tables  . . . . . . . . . . . . . . . . . . . . . . . . .  11
+     7.8.  Tables  . . . . . . . . . . . . . . . . . . . . . . . . .  12
        7.8.1.  References  . . . . . . . . . . . . . . . . . . . . .  12
      7.9.  Indexes . . . . . . . . . . . . . . . . . . . . . . . . .  12
    8.  Usage guidelines  . . . . . . . . . . . . . . . . . . . . . .  13
      8.1.  Working with multiple files . . . . . . . . . . . . . . .  13
      8.2.  Setting the title . . . . . . . . . . . . . . . . . . . .  13
      8.3.  Uploading the XML/txt . . . . . . . . . . . . . . . . . .  13
-     8.4.  VIM syntax highlighting . . . . . . . . . . . . . . . . .  13
+     8.4.  VIM syntax highlighting . . . . . . . . . . . . . . . . .  14
    9.  Security Considerations . . . . . . . . . . . . . . . . . . .  14
    10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
    11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  14
@@ -102,8 +102,8 @@ Table of Contents
            Already Deployed Routing Policy . . . . . . . . . . . . .  14
      A.2.  Markup in heading . . . . . . . . . . . . . . . . . . . .  14
      A.3.  Blockquote  . . . . . . . . . . . . . . . . . . . . . . .  14
-     A.4.  Verbatim code blocks  . . . . . . . . . . . . . . . . . .  14
-     A.5.  Reference Tests . . . . . . . . . . . . . . . . . . . . .  14
+     A.4.  Verbatim code blocks  . . . . . . . . . . . . . . . . . .  15
+     A.5.  Reference Tests . . . . . . . . . . . . . . . . . . . . .  15
      A.6.  Spanx Tests . . . . . . . . . . . . . . . . . . . . . . .  15
      A.7.  List Tests  . . . . . . . . . . . . . . . . . . . . . . .  15
 
@@ -116,7 +116,7 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
 
      A.8.  Table Tests . . . . . . . . . . . . . . . . . . . . . . .  18
      A.9.  Numbered examples . . . . . . . . . . . . . . . . . . . .  19
-     A.10. Figure tests  . . . . . . . . . . . . . . . . . . . . . .  19
+     A.10. Figure tests  . . . . . . . . . . . . . . . . . . . . . .  20
      A.11. Verse tests . . . . . . . . . . . . . . . . . . . . . . .  20
    Index . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  20
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  20
@@ -158,10 +158,10 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
    conversions are, in some way amusing, as we start off with (almost)
    plain text, use elaborate XML and end up with plain text again.
 
-             +-------------------+   pandoc   +---------+
-             | ALMOST PLAIN TEXT |   ------>  | DOCBOOK |
-             +-------------------+            +---------+
-                           |                       |
+
+
+
+
 
 
 
@@ -170,6 +170,10 @@ Gieben                    Expires July 5, 2013                  [Page 3]
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
 
+             +-------------------+   pandoc   +---------+
+             | ALMOST PLAIN TEXT |   ------>  | DOCBOOK |
+             +-------------------+            +---------+
+                           |                       |
              non-existent  |                       | xsltproc
                faster way  |                       |
                            v                       v
@@ -214,10 +218,6 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
 
    2.  back.pdc - holds appendices and references;
 
-   3.  template.xml (probably a fairly static file).
-
-
-
 
 
 
@@ -225,6 +225,8 @@ Gieben                    Expires July 5, 2013                  [Page 4]
 
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
+
+   3.  template.xml (probably a fairly static file).
 
    The draft ("draft.txt") you are reading now, is automatically created
    when you call "make".  The homepage of Pandoc2rfc is this github
@@ -272,8 +274,6 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
 
       *  style=empty (Section 7.3.3);
 
-      *  style=format %i, use roman lowercase numerals, (Section 7.3.4);
-
 
 
 
@@ -281,6 +281,8 @@ Gieben                    Expires July 5, 2013                  [Page 5]
 
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
+
+      *  style=format %i, use roman lowercase numerals, (Section 7.3.4);
 
       *  style=format (%d), use roman uppercase numerals
          (Section 7.3.4);
@@ -326,9 +328,7 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
 
 6.  Acknowledgements
 
-   The following people have helped to make Pandoc2rfc what it is today:
-   Benno Overeinder, Erlend Hamnaberg, Matthijs Mekking, Trygve
-   Laugstoel.
+
 
 
 
@@ -337,6 +337,10 @@ Gieben                    Expires July 5, 2013                  [Page 6]
 
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
+
+   The following people have helped to make Pandoc2rfc what it is today:
+   Benno Overeinder, Erlend Hamnaberg, Matthijs Mekking, Trygve
+   Laugstoel.
 
    This document was prepared using Pandoc2rfc.
 
@@ -382,10 +386,6 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
 
    Converts to "<list style="symbol">":
 
-   o  Item one;
-
-   o  Item two.
-
 
 
 
@@ -393,6 +393,10 @@ Gieben                    Expires July 5, 2013                  [Page 7]
 
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
+
+   o  Item one;
+
+   o  Item two.
 
 7.3.2.  Number
 
@@ -438,10 +442,6 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
    If you use uppercase Roman numerals, they convert to a different
    style:
 
-   II. Item one;
-   II. Item two.
-
-   Yields "<list style="format (%d) ">":
 
 
 
@@ -449,6 +449,11 @@ Gieben                    Expires July 5, 2013                  [Page 8]
 
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
+
+   II. Item one;
+   II. Item two.
+
+   Yields "<list style="format (%d) ">":
 
    (1)  Item one;
 
@@ -493,11 +498,6 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
 
    :   Explanation two
 
-   Converts to: "<list style="hanging">" and "<t hangText="First item
-   that...">"
-
-   If you want a newline after the hangTexts, search for the string
-   "OPTION" in "transform.xsl" and uncomment it.
 
 
 
@@ -505,6 +505,12 @@ Gieben                    Expires July 5, 2013                  [Page 9]
 
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
+
+   Converts to: "<list style="hanging">" and "<t hangText="First item
+   that...">"
+
+   If you want a newline after the hangTexts, search for the string
+   "OPTION" in "transform.xsl" and uncomment it.
 
 7.4.  Figure/Artwork
 
@@ -548,12 +554,6 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
    Converts to: "<t><list style="empty"> ..." paragraph, making it
    indented.
 
-7.6.  References
-
-7.6.1.  External
-
-   Any reference like:
-
 
 
 
@@ -561,6 +561,12 @@ Gieben                    Expires July 5, 2013                 [Page 10]
 
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
+
+7.6.  References
+
+7.6.1.  External
+
+   Any reference like:
 
    [Click here](URI)
 
@@ -599,6 +605,19 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
    And the emphasis style with double asterisks: "**text**" Converts to:
    "<spanx style="strong"> ..."
 
+
+
+
+
+
+
+
+
+Gieben                    Expires July 5, 2013                 [Page 11]
+
+Internet-Draft            Pandoc2rfc Version 2              January 2013
+
+
 7.8.  Tables
 
    A table can be entered as:
@@ -610,13 +629,6 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
                          1     1         1         1
 
                    Table: A caption describing the table.
-
-
-
-Gieben                    Expires July 5, 2013                 [Page 11]
-
-Internet-Draft            Pandoc2rfc Version 2              January 2013
-
 
       Figure 3: A caption describing the figure describing the table.
 
@@ -652,6 +664,16 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
    Footnotes are entered in two steps, you have a marker in the text,
    and later you give actual footnote text.  Like this:
 
+
+
+
+
+
+Gieben                    Expires July 5, 2013                 [Page 12]
+
+Internet-Draft            Pandoc2rfc Version 2              January 2013
+
+
    [^1]
 
    [^1]: footnote text
@@ -665,14 +687,6 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
    separate them:
 
    [^1]: item!sub item
-
-
-
-
-Gieben                    Expires July 5, 2013                 [Page 12]
-
-Internet-Draft            Pandoc2rfc Version 2              January 2013
-
 
 8.  Usage guidelines
 
@@ -708,6 +722,14 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
 
 8.3.  Uploading the XML/txt
 
+
+
+
+Gieben                    Expires July 5, 2013                 [Page 13]
+
+Internet-Draft            Pandoc2rfc Version 2              January 2013
+
+
    The "draft.xml" target will generate an XML file with all XML
    included, so you can upload just one file to the I-D tracker.
 
@@ -716,19 +738,6 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
    If you are a VIM user you might be interested in a syntax
    highlighting file (see [VIM]) that slightly lightens up your reading
    experience while viewing a draft.txt from VIM.
-
-
-
-
-
-
-
-
-
-Gieben                    Expires July 5, 2013                 [Page 13]
-
-Internet-Draft            Pandoc2rfc Version 2              January 2013
-
 
 9.  Security Considerations
 
@@ -769,6 +778,14 @@ A.2.  Markup in heading
 
 A.3.  Blockquote
 
+
+
+
+Gieben                    Expires July 5, 2013                 [Page 14]
+
+Internet-Draft            Pandoc2rfc Version 2              January 2013
+
+
       This is a blockquote, how does it look?
 
 A.4.  Verbatim code blocks
@@ -777,14 +794,6 @@ A.4.  Verbatim code blocks
    jkasjksajassjasjsajsajkas
 
 A.5.  Reference Tests
-
-
-
-
-Gieben                    Expires July 5, 2013                 [Page 14]
-
-Internet-Draft            Pandoc2rfc Version 2              January 2013
-
 
    Refer to RFC 2119 [RFC2119] if you will.  Or maybe you want to
    inspect Figure 2 in Section 2 again.  Or you might want to Click here
@@ -826,6 +835,13 @@ A.7.  List Tests
 
    Another item to explain:  More explaining.
 
+
+
+Gieben                    Expires July 5, 2013                 [Page 15]
+
+Internet-Draft            Pandoc2rfc Version 2              January 2013
+
+
       Multiple paragraphs in such a list.
 
    lists in description lists.
@@ -833,14 +849,6 @@ A.7.  List Tests
    Item to explain:  It works because of
 
       1.  One
-
-
-
-
-Gieben                    Expires July 5, 2013                 [Page 15]
-
-Internet-Draft            Pandoc2rfc Version 2              January 2013
-
 
       2.  Two
 
@@ -882,14 +890,6 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
 
    Artwork
 
-   4.  Final item.
-
-   xml2rfc does not allow this, so the second paragraph is faked with a
-
-   <vspace blankLines='1'>
-
-   Ordered lists.
-
 
 
 
@@ -897,6 +897,14 @@ Gieben                    Expires July 5, 2013                 [Page 16]
 
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
+
+   4.  Final item.
+
+   xml2rfc does not allow this, so the second paragraph is faked with a
+
+   <vspace blankLines='1'>
+
+   Ordered lists.
 
    1.  First item
 
@@ -939,20 +947,18 @@ Internet-Draft            Pandoc2rfc Version 2              January 2013
 
    Uppercase letters list.
 
-   A.  First item
-
-   B.  Second item
-
-   And artwork in a description list.
-
-
-
 
 
 Gieben                    Expires July 5, 2013                 [Page 17]
 
 Internet-Draft            Pandoc2rfc Version 2              January 2013
 
+
+   A.  First item
+
+   B.  Second item
+
+   And artwork in a description list.
 
    Item1:  Tell something about it.  Tell something about it.  Tell
       something about it.  Tell something about it.  Tell something
@@ -992,6 +998,18 @@ A.8.  Table Tests
 
               Table 1: Demonstration of simple table syntax.
 
+
+
+
+
+
+
+
+Gieben                    Expires July 5, 2013                 [Page 18]
+
+Internet-Draft            Pandoc2rfc Version 2              January 2013
+
+
    +--------------+-------------+-------------+------------------------+
    |   Centered   | Default     |       Right | Left Aligned           |
    |    Header    | Aligned     |     Aligned |                        |
@@ -1002,13 +1020,6 @@ A.8.  Table Tests
    |              |             |             | Note the blank line    |
    |              |             |             | between rows.          |
    +--------------+-------------+-------------+------------------------+
-
-
-
-Gieben                    Expires July 5, 2013                 [Page 18]
-
-Internet-Draft            Pandoc2rfc Version 2              January 2013
-
 
    Table 2: Here's the caption.  It, too, may span multiple lines.  This
                is a multiline table.  This is verbatim text.
@@ -1046,6 +1057,15 @@ A.9.  Numbered examples
 
    as (1) shows...
 
+
+
+
+
+Gieben                    Expires July 5, 2013                 [Page 19]
+
+Internet-Draft            Pandoc2rfc Version 2              January 2013
+
+
 A.10.  Figure tests
 
                              This is a figure
@@ -1058,13 +1078,6 @@ A.10.  Figure tests
 
    And how a figure that is not centered, do to using "figure" and not
    "Figure".
-
-
-
-Gieben                    Expires July 5, 2013                 [Page 19]
-
-Internet-Draft            Pandoc2rfc Version 2              January 2013
-
 
    This is a figure
    This is a figure
@@ -1086,14 +1099,28 @@ Index
    L
       list
          default markers 14, 17
-         uppercase letters 14, 17
+         uppercase letters 15, 18
 
    T
       table
          grid 16, 19
-         simple 15, 19
+         simple 16, 19
 
 Author's Address
+
+
+
+
+
+
+
+
+
+
+Gieben                    Expires July 5, 2013                 [Page 20]
+
+Internet-Draft            Pandoc2rfc Version 2              January 2013
+
 
    R. (Miek) Gieben
    Google
@@ -1117,4 +1144,33 @@ Author's Address
 
 
 
-Gieben                    Expires July 5, 2013                 [Page 20]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gieben                    Expires July 5, 2013                 [Page 21]

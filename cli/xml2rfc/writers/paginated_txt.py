@@ -46,40 +46,42 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                                                     self.right_header))
         return tmp
 
+    def write_with_break_hint(self, writer, type, *args, **kwargs):
+        """A helper function to wrap a fragment writer in code to a page break
+        hint.  This function also takes care to preserve a stronger break type
+        so that it's not overwritten with a weaker one."""
+        begin = len(self.buf)
+        writer(self, *args, **kwargs)
+        end = len(self.buf)
+        if begin in self.break_hints:
+            need, ptype = self.break_hints[begin]
+            if ptype in ['raw', 'break']:
+                type = ptype
+        self.break_hints[begin] = (end - begin, type)
+
     # Here we override some methods to mark line numbers for large sections.
     # We'll store each marking as a dictionary of line_num: section_length.
     # This way we can step through these markings during writing to
     # preemptively construct appropriate page breaks.
     def write_figure(self, *args, **kwargs):
         """ Override base writer to add a marking """
-        begin = len(self.buf)
-        BaseRfcWriter.write_figure(self, *args, **kwargs)
-        end = len(self.buf)
-        self.break_hints[begin] = (end - begin, "txt")
+        self.write_with_break_hint(BaseRfcWriter.write_figure, 'txt', *args, **kwargs)
 
     def write_table(self, *args, **kwargs):
         """ Override base writer to add a marking """
-        begin = len(self.buf)
-        BaseRfcWriter.write_table(self, *args, **kwargs)
-        end = len(self.buf)
-        self.break_hints[begin] = (end - begin, "txt")
+        self.write_with_break_hint(BaseRfcWriter.write_table, 'txt', *args, **kwargs)
 
     def write_raw(self, *args, **kwargs):
         """ Override text writer to add a marking """
-        begin = len(self.buf)
-        RawTextRfcWriter.write_raw(self, *args, **kwargs)
-        end = len(self.buf)
-        self.break_hints[begin] = (end - begin, "raw")
+        self.write_with_break_hint(RawTextRfcWriter.write_raw, 'raw', *args, **kwargs)
 
     def write_text(self, *args, **kwargs):
         """ Override text writer to add a marking """
-        begin = len(self.buf)
-        RawTextRfcWriter.write_text(self, *args, **kwargs)
-        end = len(self.buf)
-        self.break_hints[begin] = (end - begin, "txt")
+        self.write_with_break_hint(RawTextRfcWriter.write_text, 'txt', *args, **kwargs)
         
     def _force_break(self):
-        """ Force a pagebreak at the current buffer position """
+        """ Force a pagebreak at the current buffer position. Not used yet, waiting
+        for markup that indicates a forced page break to be defined"""
         self.break_hints[len(self.buf)] = (0, "break")
         
     def _toc_size_hint(self):
