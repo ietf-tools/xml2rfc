@@ -1,0 +1,55 @@
+Example usage
+=============
+
+This section provides a guide for using the command line application xml2rfc, as well as the graphical version.
+
+Command line application
+------------------------
+
+Official Usage: ``xml2rfc SOURCE [options] FORMATS...``
+
+**Options**
+    The following parameters affect how xml2rfc behaves, however none are required.
+	
+    ===============  ======================= ==================================================
+    Short            Long                    Description
+    ===============  ======================= ==================================================
+    ``-h``           ``--help``              show the help message and exit
+    ``-v``           ``--verbose``           print extra information
+    ``-q``           ``--quiet``             dont print anything`
+    ``-w``           ``--warn-error``        treat warnings as python exceptions.
+    ``-e``           ``--extcss``            write an external link to the stylesheet instead 
+                                             of expanding it.
+    ``-c CSS``       ``--css=CSS``           specify an alternate css file (ignored if 
+                                             html format is not enabled)
+    ``-d DTD``       ``--dtd=DTD``           specify an alternate dtd file
+    ``-f FILENAME``  ``--filename=FILENAME`` specify an output filename
+    (none)           ``--clear-cache``       purge the cache and exit
+    (none)           ``--version``           display the version number and exit
+    ===============  ======================= ==================================================
+
+**Formats**
+    At least one but as many as all of the following output formats must
+    be specified. The destination file will be created according to the
+    argument given to --filename.  If no argument was given, it will
+    create the file(s) "output.format".  If no format is specified, xml2rfc
+    will default to paginated text (``--text``).
+
+    ===========     ============================================================
+    Command         Description
+    ===========     ============================================================
+    ``--raw``       outputs to a text file, unpaginated
+    ``--text``      outputs to a text file with proper page breaks
+    ``--nroff``     outputs to an nroff file
+    ``--html``      outputs to an html file
+    ``--exp``       outputs to an XML file with all references expanded.
+    ===========     ============================================================
+
+
+**Examples**
+	| ``xml2rfc rfc.xml --text``
+	| ``xml2rfc draft.xml -c alt.css -d alt.dtd -f "Draft-1.0" --text --nroff --html``
+
+Graphical application
+---------------------
+*Not included in this version*

@@ -1,0 +1,60 @@
+======================
+Graphical Appplication
+======================
+
+This section provides a guide for using **xml2rfc-gui**.
+
+Converting a Document
+---------------------
+
+The application first needs a *source document* to work with.  **xml2rfc-gui** handles a single XML document at a time for processing.  A *source document* can be loaded in one of two ways:
+    1. As a command-line argument (Example ``xml2rfc-gui file.xml``)
+    2. By selecting **File > Open Source** from the menu, or pressing the cooresponding keyboard shortcut (Ctrl+O or CMD+O)
+    
+You may then select one or more *output formats*, either by clicking the check boxes at the top of the application underneath "Outputs", or by selecting **Options > Output formats** from the menu.
+
+Finally, press the **Convert** button to convert the document to the specified formats.  If the document was successfully converted without errors, the new documents will be available in the output directory specified in **Preferences**.  See :ref:`customization` for further information on configurable settings.
+
+Handling Errors
+---------------
+
+It's possible during conversion that an error was encountered.  The two classes of XML errors are:
+    1. XML syntax error, meaning the XML was not well-formed.
+    2. DTD validation error, meaning the document violated the DTD specification.
+
+In either case, upon reaching an error the conversion process will halt.  The **Console** window will contain verbose information about the nature of these errors, and the XML document will be shown to the user.  Any of the errors displayed in the **Console** contain clickable links, which will jump directly to the line in the XML source document that raised an error.  The line will also be highlighted.
+
+The document may then be edited externally and reloaded, OR edited within **xml2rfc-gui** itself.
+
+Editing XML
+-----------
+
+The application's XML view also serves as a lightweight editor.  Changes can be made to the current *source document* at any time by simply editing the text.  Note that you must save your changes before converting, either by selecting **File > Save Source** from the menu, or pressing the cooresponding keyboard shortcut (Ctrl+S or CMD+S)
+
+.. _customization:
+
+Customization
+-------------
+
+The application's primary behavior is customized by going to **Options > Preferences**, in which the following sections are available:
+
+**Conversion**
+
+    - *Output directory*: Specify the directory to create converted documents in.  Must be writable.
+
+**Appearance**
+
+    - *Document text*: Controls the font face and size of text in the main document view.  Also controls the showing/hiding of line numbers for XML or Text documents.
+    - *Console text*: Controls the font face and size of text in the console view.
+
+**Cache**
+
+    - *Cache directory*: Specify the directory to cache network-accessed document references.  Must be writable
+    - *Cache data*: Displays the file size of the cache and allows you to erase it.
+
+**References**
+    
+    - *Locations*: A list of colon (semicolon on windows) delimited directories that the application should search in for document references.  A blank directory signifies the application to check in the directory of the source document.  Note that this list is initially populated from the environment variable $XML_LIBRARY.
+    - *Network citation library*: Base URL that the application should search for document references at.
+
+Note that all of these settings may be reverted to their original values at any time by clicking **Restore Defaults**
