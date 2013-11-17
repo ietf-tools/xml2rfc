@@ -188,16 +188,15 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             target_text = item.title
         else: #Default
             target_text = item.autoName
-        if xref.text:
-            if not target_text.startswith('['):
-                target_text = '(' + target_text + ')'
-            else:
-                if "." in target_text or "-" in target_text:
-                    target_text = "\%" + target_text
+        if xref.text and not target_text.startswith('['):
+            target_text = '(' + target_text + ')'
+        target_text_list = target_text.split(" ")
+        target_text = "\\0".join(map(lambda x : ("\%" + x)
+                                    if "." in x or "-" in x else x,
+                                    target_text_list))
+        if xref.text:        
             return xref.text.rstrip() + ' ' + target_text
         else:
-            if "." in target_text or "-" in target_text:
-                target_text = "\%" + target_text
             return target_text
 
     # ---------------------------------------------------------
