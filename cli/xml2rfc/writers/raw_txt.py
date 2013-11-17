@@ -3,15 +3,13 @@
 # --------------------------------------------------
 
 # Python libs
-import os
 import textwrap
-import string
-import math
 import lxml
 import datetime
 import re
 try:
     import debug
+    assert debug
 except ImportError:
     pass
 

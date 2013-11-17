@@ -10,7 +10,6 @@
 """
 
 import sys
-import parser
 
 quiet = False
 verbose = False

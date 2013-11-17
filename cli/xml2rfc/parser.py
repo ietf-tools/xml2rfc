@@ -16,6 +16,7 @@ except ImportError:
     from urlparse import urlparse, urljoin
 try:
     import debug
+    assert debug
 except ImportError:
     pass
 

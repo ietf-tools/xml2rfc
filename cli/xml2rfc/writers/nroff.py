@@ -5,12 +5,12 @@
 from __future__ import print_function
 
 # Python libs
-import os
 import time
 import datetime
 import re
 try:
     import debug
+    assert debug
 except ImportError:
     pass
 

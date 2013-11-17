@@ -6,6 +6,7 @@
 import datetime
 try:
     import debug
+    assert debug
 except ImportError:
     pass
 

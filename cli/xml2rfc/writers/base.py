@@ -2,15 +2,14 @@
 # Copyright The IETF Trust 2011, All Rights Reserved
 # --------------------------------------------------
 
-import copy
 import codecs
-import string
 import datetime
 import lxml
 import xml2rfc.log
 import xml2rfc.utils
 try:
     import debug
+    assert debug
 except ImportError:
     pass
 
@@ -452,10 +451,10 @@ class BaseRfcWriter:
             elif year != str(today.year) and not month:
                 xml2rfc.log.warn("Incomplete and out-of date <date/> element: %s" % lxml.etree.tostring(date))
         try:
-            dateX = datetime.datetime.strptime(date.attrib.get('year')+date.attrib.get('month'), '%Y%B')
+            datetime.datetime.strptime(date.attrib.get('year')+date.attrib.get('month'), '%Y%B')
         except ValueError:
             try:
-                dateX = datetime.datetime.strptime(date.attrib.get('year')+date.attrib.get('month'), '%Y%b')
+                datetime.datetime.strptime(date.attrib.get('year')+date.attrib.get('month'), '%Y%b')
             except ValueError:
                 xml2rfc.log.warn("Year and/or month are incorrect values in <date/> element: %s" % lxml.etree.tostring(date))
 
@@ -681,12 +680,12 @@ class BaseRfcWriter:
 
         # Write figure with optional delimiter
         delimiter = self.pis['artworkdelimiter']
-        artwork = figure.find('artwork')
+        artwork = figure.find('artwork').text
         # artwork_align = artwork.attrib.get('align', align)
         # Explicitly use figure alignment
         artwork_align = align
         blanklines = int(self.pis['artworklines'])
-        self.write_raw(figure.find('artwork').text, align=artwork_align,
+        self.write_raw(artwork, align=artwork_align,
                        blanklines=blanklines, delimiter=delimiter,
                        source_line=figure.sourceline)
 

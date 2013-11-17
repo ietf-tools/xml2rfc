@@ -6,13 +6,13 @@
 
 import re
 import textwrap
-import string
 try:
     from urllib.request import FancyURLopener
 except ImportError:
     from urllib import FancyURLopener
 try:
     import debug
+    assert debug
 except ImportError:
     pass
 
@@ -142,7 +142,6 @@ class MyTextWrapper(textwrap.TextWrapper):
         
         # Original implementation
         if self.fix_sentence_endings:
-            pre = chunks
             self._fix_sentence_endings(chunks)
         return self._wrap_chunks(chunks)
 

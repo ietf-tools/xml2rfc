@@ -12,6 +12,7 @@ import datetime
 import cgi
 try:
     import debug
+    assert debug
 except ImportError:
     pass
 
