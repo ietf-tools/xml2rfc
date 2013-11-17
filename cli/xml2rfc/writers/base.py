@@ -513,7 +513,7 @@ class BaseRfcWriter:
         elif '%I' in text:
             text = text.replace(r'%I', xml2rfc.utils.int2roman(count).upper()).ljust(roman_width+extra_width)
         elif '%o' in text:
-            text = text.replace(r'%o', oct(count).replace("0","",1)).ljust(octal_width+extra_width)
+            text = text.replace(r'%o', oct(count).replace("0","",1)).replace("o","",1).ljust(octal_width+extra_width)
         elif '%x' in text:
             text = text.replace(r'%x', hex(count).replace("0x","",1)).ljust(hex_width+extra_width)
         elif '%X' in text:
@@ -965,7 +965,7 @@ class BaseRfcWriter:
                                       subCounter=i+1, level=2)
         for reference_list in references:
             for ref in reference_list:
-                if ref:
+                if len(ref):
                     ref_counter += 1
                     title = ref.find("front/title").text
                     self._indexRef(ref_counter, title=title, anchor=ref.attrib["anchor"])
