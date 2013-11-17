@@ -1,3 +1,73 @@
+xml2rfc (2.4.3) ietf; urgency=mediumq
+
+  From Tony Hansen <tony@att.com>:
+
+  * Eliminated spurious dots before author names on page 1.  Fixes issue #189.
+
+  * Fixed the style of nested letter-style lists.  Fixes issue #127
+
+  * Added a handling for empty <?rfc?> PIs within references.  Fixes issue #181.
+
+  * Removed trailing whitespace from reference title, organization.  Fixes
+    issue #171.
+
+  * Added support v1 list formats %o, %x, and %X.  Fixes issue #204.
+
+  * Fixed a bad html selector which had a trailing '3'.  Fixes issue #197.
+
+  From Jim Schaad <ietf@augustcellars>:
+
+  * Removed leading zeros on dates.  Fixes issue #206.
+
+  * Fixed a crash when a new page had just been created, and it was totally
+    empty.  It is unknown if this can occur someplace other than for the last
+    page, but it should have check in other locations to look for that.  In
+    addition we needed a change to figure out that we had already emitted a
+    header for the page we are not going to use any longer and delete it.  Fixes
+    issue #187.
+
+  * Handled the missing \& to escape a period at the beginning of a line.  If we
+    do a raw emission (i.e. inside of a figure) then we need to go back over the
+    lines we just put into the buffer and check to see if any of them have
+    leading periods and quote them.  Fixes issue #191.
+
+  * Removed extraneous .ce 0 and blank lines in the nroff.  Since it was using
+    the paging formatter in the process of building the nroff output, it kept
+    all of the blank lines at the end of each page and emitted them.  There is
+    no check in the nroff page_break function which removes any empty lines at
+    the end of the array prior to emitting the ".bp" directive (or not emitting
+    it if it is the last thing in the file.  Fixes issue #180.
+
+  * Now correctly picks up the day if a day is provided and uses the current day
+    for a draft if the month and year are current.  We now allow for both the
+    full name of the month and the abbreviated name of the month to be used,
+    however there may be some interesting questions to look at if November is
+    not in the current locale.  Fixes issue #195.
+
+  * Fixed the text-list-symbols PI to work at all levels.  The list should
+    inherit style from the nearest parent that has one.  Fixes issue #126.
+
+  From Elwyn Davies <elwynd@dial.pipex.com>: 
+
+  * Don't emit '\%' before 'Section' for xrefs in the nroff writer.  Fixes
+    issue #169.
+
+  From Henrik Levkowetz <henrik@levkowetz.com>:
+
+  * Modified the iref index output to use consistent sorting for items
+    and subitems.
+
+  * Removed the restriction to python 2.x from setup.py
+
+  * Ported xml2rfc to python 3.3 while maintaining compatibility with 2.6 
+    and 2.7.
+
+  * Added support for tox testing covering python versions 2.6, 2.7 and 3.3
+
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  17 Nov 2013 18:57:18 +0100
+
+
 xml2rfc (2.4.2) ietf; urgency=medium
 
   This release fixes all major and critical issues registered in the issue
