@@ -14,6 +14,7 @@ install:
 	python setup.py --quiet install
 
 test:	install
+	pyflakes xml2rfc
 	[ -d tests/failed/ ] && rm -f tests/failed/*
 	python test.py --verbose
 
