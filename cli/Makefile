@@ -13,9 +13,13 @@ install:
 	python --version
 	python setup.py --quiet install
 
-test:	install
+test:	install flaketests pytests
+
+flaketests:
 	pyflakes xml2rfc
 	[ -d tests/failed/ ] && rm -f tests/failed/*
+
+pytests:
 	python test.py --verbose
 
 drafttest: install
@@ -49,7 +53,11 @@ rfctest:  bin/python install
 	@ diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6787.exp.xml	tmp/rfc6787.exp.xml 	|| { echo "Diff failed for .exp.xml output"; exit 1; }
 
 
-tests: test drafttest miektest rfctest
+tests: test regressiontests
+
+noflakestests: install pytests regressiontests
+
+regressiontests: drafttest miektest rfctest
 
 test2:	test
 	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache tests/cache tests/input/rfc6635.xml --text --out tmp/rfc6635.txt	&& diff -I "$(datetime_regex)" -I "$(version_regex)" tests/valid/rfc6635.txt tmp/rfc6635.txt 
