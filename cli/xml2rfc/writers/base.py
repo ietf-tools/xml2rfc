@@ -954,7 +954,8 @@ class BaseRfcWriter:
         if len(references) == 1:
             refs_title = references[0].attrib.get('title', refs_title)
 
-        self._indexReferences(refs_counter, title=refs_title)
+        if len(references) > 0:
+            self._indexReferences(refs_counter, title=refs_title)
 
         if len(references) > 1:
             for i, reference_list in enumerate(references):
@@ -1063,7 +1064,8 @@ class BaseRfcWriter:
         if len(references) == 1:
             refs_title = references[0].attrib.get('title', refs_title)
 
-        self.write_heading(refs_title, bullet=refs_counter + '.', \
+        if len(references) > 0:
+            self.write_heading(refs_title, bullet=refs_counter + '.', \
                                autoAnchor='rfc.references')
         if len(references) > 1:
             for i, reference_list in enumerate(references):
