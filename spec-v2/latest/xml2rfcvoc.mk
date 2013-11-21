@@ -20,6 +20,7 @@ xml2rfcv2.rnc.folded: xml2rfcv2.rnc
 	fold -w69 -s $< > $@
 
 draft-reschke-xml2rfc-latest.xml: xml2rfcv2-spec.xml xml2rfcv2.rnc.folded
+	cp -v $@ $@.bak
 	./refresh-inclusions.sh $@
 
 trang.jar:	trang-20091111.zip
