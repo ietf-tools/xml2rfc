@@ -59,7 +59,11 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             '&#8209;': r'\-',  # nbhy
             '&#8288;': r'',     # wj
         }
-
+        
+    def _length(self, text):
+        # re.sub('\\\\.', '.', text)
+        # return len(re.sub('\\\\%', '', text))
+        return len(text)
 
     def _indent(self, amount):
         # Writes an indent command if it differs from the last
@@ -102,17 +106,17 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
                   delimiter=None, leading_blankline=True, source_line=None):
         # Wrap in a no fill block
-        self._indent(indent)
+        self._indent(0)
         self.write_nroff('.nf')
         begin = len(self.buf)
-        PaginatedTextRfcWriter.write_raw(self, text, indent=0, align=align,
+        PaginatedTextRfcWriter.write_raw(self, text, indent=indent, align=align,
                                          blanklines=blanklines,
                                          delimiter=delimiter,
                                          leading_blankline=leading_blankline,
                                          source_line=source_line)
         for i in range(begin, len(self.buf)):
-            if self.buf[i] and self.buf[i][0] == '.':
-               self.buf[i] = '\&' + self.buf[i]
+            if self.buf[i] and self.buf[i][0] in nroff_linestart_meta:
+               self.buf[i] = nroff_escape_linestart(self.buf[i])
         self.write_nroff('.fi')
 
     def write_text(self, *args, **kwargs):
@@ -286,9 +290,9 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
     def emit(self, text):
         "Used by post_rendering() to emit and count lines."
-        if self.page_length == 1 and text.strip() == '':
-            return 
         if isinstance(text, str):
+            if self.page_length == 1 and text.strip() == '':
+                return 
             self.output.append(text)
             if not text or text[0] not in nroff_linestart_meta:
                 self.page_length += 1
@@ -298,9 +302,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                     self.page_length += int(parts[1])
         elif isinstance(text, list):
             for line in text:
-                self.output.append(line)
-                if not line or line[0] not in nroff_linestart_meta:
-                    self.page_length += 1
+                self.emit(line)
         else:
             raise TypeError("a string or a list of strings is required")
 

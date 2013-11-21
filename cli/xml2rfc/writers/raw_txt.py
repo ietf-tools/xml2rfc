@@ -49,6 +49,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.wrapper = xml2rfc.utils.MyTextWrapper(width=self.width,
                                                    fix_sentence_endings=True)
 
+    def _length(self, text):
+        return len(text)
+
     def _lb(self, buf=None, text='', num=1):
         """ Write a blank line to the file, with optional filler text 
         
@@ -395,11 +398,14 @@ class RawTextRfcWriter(BaseRfcWriter):
                 self.pis['comments'] == 'yes':                
                 # Render if processing instruction is enabled
                 anchor = element.attrib.get('anchor', '')
-                if anchor:
-                    # TODO: Add anchor to index
-                    anchor = ': ' + anchor
-                if element.text:
-                    line.append('[[' + anchor + element.text + ']]')
+                if self.pis['inline'] == 'yes':
+                    if anchor:
+                        # TODO: Add anchor to index
+                        anchor = anchor + ': '
+                    if element.text:
+                        line.append('[[' + anchor + element.text + ']]')
+                else:
+                    line.append('[' + anchor + ']')
             elif element.tag == 'spanx':
                 style = element.attrib.get('style', 'emph')
                 edgechar = '?'
@@ -724,16 +730,26 @@ class RawTextRfcWriter(BaseRfcWriter):
         row = 0
         column_aligns = []
         ttcol_width_attrs = []
-        style = table.attrib.get('style', self.defaults['table_style'])        
+        style = table.attrib.get('style', self.defaults['table_style'])
+
+        # Extract information from the ttcol elements about each column
         for ttcol in table.findall('ttcol'):
-            column_aligns.append(ttcol.attrib.get('align',
-                                                  self.defaults['ttcol_align']))
+            column_aligns.append(ttcol.attrib.get('align', self.defaults['ttcol_align']))
             ttcol_width_attrs.append(ttcol.attrib.get('width', ''))
-            if ttcol.text:
-                matrix[row].append(ttcol.text)
-            else:
-                matrix[row].append('')
+
+            text = ttcol.text or ''
+            if len(ttcol) > 0:
+                # <c> has children, render their text and add to line
+                inline_text, null = \
+                    self._combine_inline_elements(ttcol.getchildren())
+                text += inline_text
+            text = self.wrapper.replace(text)
+            matrix[row].append(text)
+
         num_columns = len(matrix[0])
+
+        # Get the text for each cell into the matrix
+        #    Insert appropriate blank lines for filler at this time.
         for i, cell in enumerate(table.findall('c')):
             if i % num_columns == 0:
                 # Insert blank row if PI 'compact' is 'no'
@@ -755,13 +771,16 @@ class RawTextRfcWriter(BaseRfcWriter):
             text = self.wrapper.replace(text)
             matrix[row].append(text)
 
+        num_rows = len(matrix)
+
         # Get table style and determine maximum width of table
-        if style == 'none':
-            table_max_chars = self.width - 3
-        elif style == 'headers':
+        if style in ['none', 'headers']:
             table_max_chars = self.width - 3 - num_columns + 1
         else:
             table_max_chars = self.width - 3 - 3 * num_columns - 1  # indent+border
+
+        if table_max_chars < 0:
+            xml2rfc.log.error("too many <ttcol>s to even build <texttable> frame")
 
         # Find the longest line and longest word in each column
         longest_lines = [0] * num_columns
@@ -770,75 +789,273 @@ class RawTextRfcWriter(BaseRfcWriter):
             for row in matrix:
                 if col < len(row) and len(row[col]) > 0:  # Column exists
                     # Longest line
-                    if len(row[col]) > longest_lines[col]:
-                        longest_lines[col] = len(row[col])
+                    if self._length(row[col]) > longest_lines[col]:
+                        longest_lines[col] = self._length(row[col])
                     # Longest word
-                    word = max(row[col].split(), key=len)
-                    if len(word) > longest_words[col]:
-                        longest_words[col] = len(word)
+                    word = max(row[col].split(), key=self._length)
+                    if self._length(word) > longest_words[col]:
+                        longest_words[col] = self._length(word)
         
-        # If longest_lines sum exceeds max width, apply weighted algorithm
-        if sum(longest_lines) > table_max_chars:
-            # Determine weights for each column.  If any ttcol has a width attribute
-            # then we can determine all weights based on that.  Otherwise, apply
-            # a custom algorithm
-            column_weights = [None] * num_columns
-            for i, width in enumerate(ttcol_width_attrs):
-                try:
-                    int_width = int(width)
-                    if 0 < int_width < 100:
-                        column_weights[i] = int_width / 100.0
-                except ValueError:
-                    pass
-            spec_weights = [ c for c in column_weights if c ]
-            if 0 < len(spec_weights) < num_columns:
-                # Use explicit weights and divvy remaining equally
-                avg = (1 - sum(spec_weights)) //  num_columns - len(spec_weights)
-                for i, weight in enumerate(column_weights):
-                    if not weight:
-                        column_weights[i] = avg
-            elif len(spec_weights) == 0:
-                # Determine weights programatically.  First, use the longest word of
-                # each column as its minimum width.  If this sum exceeds max, cut
-                # each column from high to low until they all fit, and use those as
-                # weights.  Else, use longest_lines to fill in weights.
-                lwtot = sum(longest_words)
-                if lwtot > table_max_chars:
-                    column_weights = [ float(l)/lwtot for l in longest_words ]
-                else:
-                    column_weights = [ float(l)/table_max_chars for l in longest_words ]
-                    remainder = 1 - sum(column_weights)
-                    for i, weight in enumerate(column_weights):
-                        column_weights[i] += remainder * \
-                                             (float(longest_lines[i]) / sum(longest_lines))
+        max_width = sum(longest_lines)
+        min_width = sum(longest_words)
+        
+        # Assume one character per non-empty column - are there too many columns?
+        inf = []
+        for col in longest_words:
+            col = (col != 0)
+            inf.append(col)
+        if table_max_chars < sum(inf):
+            xml2rfc.log.error("too many non-empty columns in <texttable> to fit in page width")
+
+        # Translate width specs given available space
+        cols = []
+        rel_total = 0
+        ttcol_width_unspec = []
+
+        for col in ttcol_width_attrs:
+            #  what to do with the unspecified ones is touchy.
+            u = 0
+            if not col:
+                x = longest_words[len(cols)]
+                u = 1
+            elif col == '*':
+                x = -1
+                rel_total += x
             else:
-                # Weights given for all TTCOLs, nothing to do
-                pass
+                m = re.match("^0*([0-9]+)(|em|[%*])$", col)
+                if not m:
+                    xml2rfc.log.warn("Width attribute not in correct format: %s" & col)
+                    x = longest_words[len(cols)]
+                    u = 1
+                if m.group(2) == 'em':
+                    x = int(m.group(1));
+                elif m.group(2) == '%':
+                    x = (int(m.group(1)) * table_max_chars + 99)/100
+                elif m.group(2) == '*':
+                    x = -int(m.group(1))
+                    rel_total += x
 
-            # Compile column widths and correct floating point error
-            column_widths = [ int(w*table_max_chars) for w in column_weights ]
-            while(sum(column_widths) < table_max_chars):
-                broken = False
-                for i, wordlen in enumerate(longest_words):
-                    if (column_widths[i] - wordlen) % 2 == 1:
-                        column_widths[i] += 1
-                        broken = True
-                        break
-                if not broken:
-                    column_widths[column_widths.index(min(column_widths))] += 1
+            cols.append(x)
+            ttcol_width_unspec.append(u)
+
+        ttcol_width_attrs = cols
+
+        # Compute final cell widths ( and their totals )
+
+        width = table_max_chars
+        if table_max_chars == sum(longest_words):
+            #  Use the minimum widths if that is all we have
+            ttcol_widths = longest_words
+        elif table_max_chars == sum(inf):
+            #  ??????????????
+            ttcol_widths = inf
+        elif table_max_chars < sum(longest_words):
+            xml2rfc.log.warn("so many <ttcol>s in <texttable> that some words need to be split near line %s" % table.sourceline)
+
+            excess = sum(longest_words) - table_max_chars
+
+            # First, try the mins that are greater than what they requested.
+
+            rel_total = -rel_total
+            tol = []
+            fnum  = 1000 if (rel_total > 0) else 0
+            fden  = 1
+            for s, n in zip(ttcol_width_attrs, longest_words):
+                t = 0
+                if s >= 0:
+                    s += (s == 0)
+                    y = n - s
+                    if y > 0:
+                        t = y
+                elif fnum > 0:
+                    # Prepare in case we need to try the relative widths.
+                    n -= 1
+                    s = -s
+                    # We keep the smallest acceptable factor to all as a mixed number.
+                    if n <= 0:
+                        fnum = 0
+                    elif n * fden < s * fnum:
+                        fnum = n
+                        fden = s
+
+                tol.append(t)
+
+            excess, ttcol_widths = self.shave_cols_excess(longest_words, excess, tol, sum(tol))
+
+            # Second, try the unspecified widths.
+            if excess > 0:
+                tol = []
+                for w,u in zip(ttcol_widths, ttcol_width_unspec):
+                    t = (w-1) if (u and w > 0) else 0
+                    tol.append(t)
+
+                excess, ttcol_widths = self.shave_cols_excess(ttcol_widths, excess, tol, sum(tol))
+
+            # Third, try the relative widths (to shrink, not expand).
+            if excess > 0 and fnum > 0:
+                if excess * fden < rel_total * fnum:
+                    fnum = excess
+                    fden = rel_total
+
+                tol = []
+                for s in ttcol_width_attrs:
+                    t = ((fnum * -(s)) / fden) if (s < 0) else 0
+                    tol.append(t)
+
+                excess, ttcol_widths = self.shave_cols_excess(ttcol_widths, excess, tol, sum(tol))
+
+            # Finally, try anything that's left, leaving as little as one column.
+            # Start with largest.
+
+            p = 1
+            for w in ttcol_widths:
+                if w > p:
+                    p = w
+            
+            while excess > 0:
+                if p == 1:
+                    xml2rfc.log.error("bug in reducing <texttable> column widths")
+
+                # Find second largest.
+                q = 1
+                for w in ttcol_widths:
+                    if w > q and w < p:
+                        q = w
+
+                tol = []
+                for w in ttcol_widths:
+                    t = (w - q) if (w > q) else 0
+                    tol.append(t)
+
+                excess, ttcol_widths = self.shave_cols_excess(ttcol_widths, excess, tol, sum(tol))
+
+                p = q
+
         else:
-            column_widths = longest_lines
+           #  There is room beyond the minimum space
+           #  First, try and give everyone what they want or need
+           #   longest_words + ttcol_width_attrs + longest_lines(all)
+           ttcol_widths = []
+           cols_width = 0
 
-        # Force any column widths that got set to 0 to 1, raise warning
-        for i, width in enumerate(column_widths):
-            if width < 1:
-                column_widths[i] = 1
-                xml2rfc.log.warn('Table column width was forced to 1 from 0,' \
-                                 ' it may exceed the page width.')
-        
-        # Now construct the cells using textwrap against column_widths
+           #   longest_words + ttcol_width_attrs
+           mnsa = []
+
+           #   longest_words + ttcol_width_attrs + longest_lines(rel)
+           mnsb = []
+
+           #   longest_words + ttcol_width_attrs + longest_lines(rel + ttcol_width_unspec)
+           mnsc = []
+       
+           for m, n, s, u in zip(longest_lines, longest_words, ttcol_width_attrs, ttcol_width_unspec):
+                t = n
+                if (t < s):
+                    t = s
+                mnsa.append( t )
+
+                if (s < 0):
+                    t = m
+                mnsb.append( t )
+
+                if u:
+                    t = m
+                mnsc.append(t)
+
+                if (t < m):
+                    t = m
+                ttcol_widths.append(t)
+
+           cols_width = sum(ttcol_widths)
+
+           #  In decreasing order by width
+           if table_max_chars >= cols_width:
+               width = cols_width
+
+           elif table_max_chars > sum(mnsc):
+               # partially expand columns with greater maximal width from mnsc
+               target = table_max_chars - sum(mnsc)
+               target, ttcol_widths = self.expand_cols_by_height(mnsc, target, ttcol_widths)
+
+           elif table_max_chars == sum(mnsc):
+                ttcol_widths = mnsc
+
+           elif table_max_chars > sum(mnsb):
+               # Partially expand columns with unspecified width from mnsb
+               target = table_max_chars - sum(mnsb)
+               target, ttcol_widths = self.expand_cols_by_height(mnsb, target, ttcol_widths)
+
+           elif table_max_chars == sum(mnsb):
+                ttcol_widths = mnsb
+
+           elif table_max_chars > sum(mnsa):
+                #Partially expand columns with relative width from mnsa.
+            
+                ttcol_widths = mnsa
+                target = table_max_chars - sum(mnsa)
+                while target > 0:
+                   rel = []
+                   num_rel = 0
+                   rel_total = 0
+                   fnum = 1000
+                   fden = 1
+                   for m,s,w in zip(longest_lines, ttcol_width_attrs, ttcol_widths):
+                       x = 0
+                       if s < 0:
+                           d = m - w
+                           if d > 0:
+                               x = -s
+                               if d * fden < x * fnum:
+                                   fnum = d
+                                   fden = x
+                               num_rel += 1;
+                               rel_total += x
+                       rel.append(x)
+                       
+                   if target * fden < rel_total * fnum:
+                       fnum = target
+                       fden = rel_total
+
+                   plus_width = 0
+                   if (num_rel > 0) and (fnum > 0):
+                       kols = []
+                       for r,w in zip(rel, ttcol_widths):
+                           p = r*fnum/fden
+                           kols.append(w + p)
+                           plus_width += p
+
+                   if plus_width > 0:
+                       ttcol_widths = kols
+                       target += -plus_width
+
+                   elif num_rel > 0:
+                       dd = target
+                       kols = []
+                       for r,w in zip(rel, ttcol_widths):
+                           if r > 0:
+                              # prefer expanding the rightmost ones
+                              if dd >= num_rel:
+                                  w += 1
+                                  target -= 1
+                              dd += 1
+                           kols.append(w)
+                       ttcol_widths = kols
+
+                   else:
+                       xml2rfc.log.error("bug in expanding <texttable> columns with relative widths")
+
+           elif table_max_chars == sum(mnsa):
+               ttcol_widths = mnsa
+           else:
+               # Partially expand comns with greater specified width from longest_words
+               target = table_max_chars - min_width
+               plus = []
+               for a,b in zip(mnsa, longest_words):
+                   plus.append(a-b)
+               target, ttcol_widths = self.expand_cols(longest_words, target, plus)
+
+        # Now construct the cells using textwrap against ttcol_widths
         cell_lines = [
-            [ textwrap.wrap(cell, column_widths[j]) or [''] for j, cell in enumerate(matrix[i]) ]
+            [ textwrap.wrap(cell, ttcol_widths[j]) or [''] for j, cell in enumerate(matrix[i]) ]
             for i in range(0, len(matrix))
         ]
 
@@ -849,18 +1066,21 @@ class RawTextRfcWriter(BaseRfcWriter):
         elif style == 'headers':
             borderstring = []
             for i in range(num_columns):
-                borderstring.append('-' * column_widths[i])
+                borderstring.append('-' * ttcol_widths[i])
                 borderstring.append(' ')
         else:
             borderstring = ['+']
             for i in range(num_columns):
-                borderstring.append('-' * (column_widths[i] + 2))
+                borderstring.append('-' * (ttcol_widths[i] + 2))
                 borderstring.append('+')
             output.append(''.join(borderstring))
 
         # Draw the table
         for i, cell_line in enumerate(cell_lines):
-            if i==0 and cell_line==[['']]:
+            if i==0 and cell_line == [['']]*num_columns:
+                if style in ['headers']:
+                    # This is the header row, append the header decoration
+                    output.append(''.join(borderstring))
                 continue
             # produce as many outpur rows as the number of wrapped
             # text lines in the cell with most lines, but at least 1
@@ -871,8 +1091,9 @@ class RawTextRfcWriter(BaseRfcWriter):
                     line = ['|']
                 for col, cell in enumerate(cell_line):
                     align = column_aligns[col]
-                    width = column_widths[col]
+                    width = ttcol_widths[col]
                     if row < len(cell):
+                        # width = width + len(cell[row]) - self._length(cell[row])
                         if align == 'center':
                             text = cell[row].center(width)
                         elif align == 'right':
@@ -888,9 +1109,9 @@ class RawTextRfcWriter(BaseRfcWriter):
                             line.append(' |')
                     else:
                         if style == 'headers' or style == 'none':
-                            line.append(' ' * (column_widths[col] + 1))
+                            line.append(' ' * (ttcol_widths[col] + 1))
                         else:
-                            line.append(' ' * (column_widths[col] + 2) + '|')
+                            line.append(' ' * (ttcol_widths[col] + 2) + '|')
                 output.append(''.join(line))
             if style in ['headers', 'full']:
                 if i == 0:
@@ -904,9 +1125,166 @@ class RawTextRfcWriter(BaseRfcWriter):
 
 
         # Finally, write the table to the buffer with proper alignment
-        align = table.attrib.get('align', 'center')
+        align = table.attrib.get('align', self.defaults['table_align'])
         self.write_raw('\n'.join(output), align=align, indent=self.margin,
                         source_line=table.sourceline)
+
+
+    def expand_cols_by_height(self, cols, target, bound):
+        # cols - current column width
+        # target - expand by this amount 
+        # bound - this is the lower boundry of the column width
+
+        while target > 0:
+            # Compute the current width and boundry width for those where current is less than boundry
+            m_width = 0
+            w_width = 0
+            for m,w in zip(bound, cols):
+                if (m > w):
+                   # Only cover those columns below the bound.
+                   m_width += m
+                   w_width += w
+
+            #  This mixed number is the average height we could achieve.
+
+            fnum = m_width
+            fden = w_width + target
+            plus_num = 0
+            plus = []
+            plus_width = 0
+            kols = []
+            for m,w in zip(bound, cols):
+                p = 0
+                k = w
+                if m > w:
+                    x = m * fden
+                    y = w * fnum
+                    # Seek columns of above average heigth.
+                    if x >= y:
+                        # Nearly reduce height to average by augmenting width
+                        p = 1
+                        k = x / (fnum + fden - 1)
+                        if k < w:
+                            # but no smaller than before.
+                            k = w
+                        if k > w + target:
+                            k = w + target
+                        q = k - w
+                        plus_num += 1
+                        plus_width += q
+
+                plus.append(p)
+                kols.append(k)
+
+            if plus_width > 0:
+               cols = kols
+               target += (-plus_width)
+
+            elif plus_num > 0:
+                # No progress due to integer division.  Make some.
+                dd = target
+                cols = []
+                for p,w in zip(plus, kols):
+                    if p > 0:
+                        # Prefer expanding the rightmost ones.
+                        if dd >= plus_num:
+                            w += 1
+                            target -= 1
+                        dd += 1
+                    cols.append(w)
+
+            else:
+                # Should not happen, but just in case we were given a bad target
+                cols = cols
+                break;
+
+        return [target, cols]
+
+    def shave_cols_excess (self, cols, excess, give, give_width=-1):
+        if give_width < 0:
+            give_width =sum(give)
+
+        if excess <= 0 or give_width <= 0:
+            # Nothing to do.
+            pass
+        elif excess >= give_width:
+            # Take everything; it may still not be enough.
+            plus = []
+            for a,b in zip(cols, give):
+                plus.append(a-b)
+            cols = plus
+            excess += -(give_width)
+        else:
+            # Take only what we need, in relative proportion.
+            dd = 0
+            kols = []
+            for c, g in zip(cols, give):
+                if g > 0:
+                    d =(g * excess) / give_width
+                    c += -(d)
+                    dd += d
+                kols.append( c )
+            excess += -(dd)
+    
+            # Do the ones we missed because of integer division.
+            if excess > 0:
+                cols = []
+                for k, g in zip(kols, give):
+                    # Prefer shaving the leftmost ones.
+                    if excess > 0 and g > 0:
+                        k += -1
+                        excess += -1
+                    cols.append( k )
+            else:
+                cols = kols
+    
+        return [excess, cols]
+
+    def expand_cols(self, cols, target, plus, plus_width=-1):
+        if plus_width < 0:
+            plus_width =sum(plus)
+
+        if target <= 0 or plus_width <= 0:
+            # Nothing to do.
+            pass
+        elif target >= plus_width:
+            # Take everything; it may still not be enough.
+            tmp = []
+            for a,b in zip(cols, plus):
+                tmp.append(a+b)
+            cols = tmp
+            target += -(plus_width)
+        else:
+            # Take only what we need, in relative proportion.
+            dd = 0
+            dr = 0
+            kols = []
+            for c,p in zip(cols, plus):
+                if p > 0:
+                    d = (p * target) / plus_width
+                    c += d
+                    dd += d
+                    dr += 1
+                kols.append(c)
+
+            target += -(dd)
+
+            # Do the ones we missed because of integer division.
+            if target > 0:
+                dd = target
+                cols = []
+                for k, p in zip(kols, plus):
+                    if p > 0:
+                        # Prefer expanding the rightmost ones.
+                        if dd >= dr:
+                            k += 1
+                            target -= 1
+                        dd += 1
+                    cols.append( k )
+            else:
+                cols = kols
+
+        return [target, cols]
 
     def insert_anchor(self, text):
         # No anchors for text

@@ -125,28 +125,27 @@ defines the following IANA-registered types of media processing
 resources.  Additional resource types and their associated
 methods/events and state machines may be added as described below in
 \%[sec.iana].
+.in 0
 .nf
 
- +---------------+-----------------+---------------------------------+
- | Resource Type | Resource        | Described in                    |
- |               | Description     |                                 |
- +---------------+-----------------+---------------------------------+
- | speechrecog   | Speech          | \%[sec.recognizerResource]      |
- |               | Recognizer      |                                 |
- | dtmfrecog     | DTMF Recognizer | \%[sec.recognizerResource]      |
- | speechsynth   | Speech          | \%[sec.synthesizerResource]     |
- |               | Synthesizer     |                                 |
- | basicsynth    | Basic           | \%[sec.synthesizerResource]     |
- |               | Synthesizer     |                                 |
- | speakverify   | Speaker         | \%[sec.verifierResource]        |
- |               | Verification    |                                 |
- | recorder      | Speech Recorder | \%[sec.recorderResource]        |
- +---------------+-----------------+---------------------------------+
+   +---------------+---------------------+-----------------------------+
+   | Resource Type | Resource            | Described in                |
+   |               | Description         |                             |
+   +---------------+---------------------+-----------------------------+
+   | speechrecog   | Speech Recognizer   | \%[sec.recognizerResource]  |
+   | dtmfrecog     | DTMF Recognizer     | \%[sec.recognizerResource]  |
+   | speechsynth   | Speech Synthesizer  | \%[sec.synthesizerResource] |
+   | basicsynth    | Basic Synthesizer   | \%[sec.synthesizerResource] |
+   | speakverify   | Speaker             | \%[sec.verifierResource]    |
+   |               | Verification        |                             |
+   | recorder      | Speech Recorder     | \%[sec.recorderResource]    |
+   +---------------+---------------------+-----------------------------+
 .fi
 
 .ce 1
 Table 1: Resource Types
 
+.in 3
 The SIP INVITE or re-INVITE transaction and the SDP offer/answer
 exchange it carries contain "m=" lines describing the resource
 control channel to be allocated.  There MUST be one SDP "m=" line for

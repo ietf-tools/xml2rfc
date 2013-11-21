@@ -25,7 +25,7 @@ class StrictUrlOpener(FancyURLopener):
         FancyURLopener.__init__(self, *args, **kwargs)
       
     def http_error_default(self, url, fp, errcode, errmsg, headers):
-        raise IOError('Document not found')
+        raise IOError('Document not found ' + url)
 
 
 class MyTextWrapper(textwrap.TextWrapper):

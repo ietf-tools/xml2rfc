@@ -149,7 +149,7 @@ RFC 6787                         MRCPv2                    November 2012
        8.4.8.  Speech-Marker . . . . . . . . . . . . . . . . . . . .  55
        8.4.9.  Speech-Language . . . . . . . . . . . . . . . . . . .  56
        8.4.10. Fetch-Hint  . . . . . . . . . . . . . . . . . . . . .  56
-       8.4.11. Audio-Fetch-Hint  . . . . . . . . . . . . . . . . . .  56
+       8.4.11. Audio-Fetch-Hint  . . . . . . . . . . . . . . . . . .  57
        8.4.12. Failed-URI  . . . . . . . . . . . . . . . . . . . . .  57
        8.4.13. Failed-URI-Cause  . . . . . . . . . . . . . . . . . .  57
        8.4.14. Speak-Restart . . . . . . . . . . . . . . . . . . . .  57
@@ -1632,51 +1632,51 @@ RFC 6787                         MRCPv2                    November 2012
    The status codes are classified under the Success (2xx), Client
    Failure (4xx), and Server Failure (5xx) codes.
 
-        +------+--------------------------------------------------+
-        | Code | Meaning                                          |
-        +------+--------------------------------------------------+
-        | 200  | Success                                          |
-        | 201  | Success with some optional header fields ignored |
-        +------+--------------------------------------------------+
+     +------------+--------------------------------------------------+
+     | Code       | Meaning                                          |
+     +------------+--------------------------------------------------+
+     | 200        | Success                                          |
+     | 201        | Success with some optional header fields ignored |
+     +------------+--------------------------------------------------+
 
                                Success (2xx)
 
-   +-----------+-------------------------------------------------------+
-   | Code      | Meaning                                               |
-   +-----------+-------------------------------------------------------+
-   | 401       | Method not allowed                                    |
-   | 402       | Method not valid in this state                        |
-   | 403       | Unsupported header field                              |
-   | 404       | Illegal value for header field. This is the error for |
-   |           | a syntax violation.                                   |
-   | 405       | Resource not allocated for this session or does not   |
-   |           | exist                                                 |
-   | 406       | Mandatory Header Field Missing                        |
-   | 407       | Method or Operation Failed (e.g., Grammar compilation |
-   |           | failed in the recognizer. Detailed cause codes might  |
-   |           | be available through a resource-specific header.)     |
-   | 408       | Unrecognized or unsupported message entity            |
-   | 409       | Unsupported Header Field Value. This is a value that  |
-   |           | is syntactically legal but exceeds the                |
-   |           | implementation's capabilities or expectations.        |
-   | 410       | Non-Monotonic or Out-of-order sequence number in      |
-   |           | request.                                              |
-   | 411-420   | Reserved for future assignment                        |
-   +-----------+-------------------------------------------------------+
+   +------------+------------------------------------------------------+
+   | Code       | Meaning                                              |
+   +------------+------------------------------------------------------+
+   | 401        | Method not allowed                                   |
+   | 402        | Method not valid in this state                       |
+   | 403        | Unsupported header field                             |
+   | 404        | Illegal value for header field. This is the error    |
+   |            | for a syntax violation.                              |
+   | 405        | Resource not allocated for this session or does not  |
+   |            | exist                                                |
+   | 406        | Mandatory Header Field Missing                       |
+   | 407        | Method or Operation Failed (e.g., Grammar            |
+   |            | compilation failed in the recognizer. Detailed cause |
+   |            | codes might be available through a resource-specific |
+   |            | header.)                                             |
+   | 408        | Unrecognized or unsupported message entity           |
+   | 409        | Unsupported Header Field Value. This is a value that |
+   |            | is syntactically legal but exceeds the               |
+   |            | implementation's capabilities or expectations.       |
+   | 410        | Non-Monotonic or Out-of-order sequence number in     |
+   |            | request.                                             |
+   | 411-420    | Reserved for future assignment                       |
+   +------------+------------------------------------------------------+
 
                            Client Failure (4xx)
 
-                 +------+--------------------------------+
-                 | Code | Meaning                        |
-                 +------+--------------------------------+
-                 | 501  | Server Internal Error          |
-                 | 502  | Protocol Version not supported |
-                 | 503  | Reserved for future assignment |
-                 | 504  | Message too large              |
-                 +------+--------------------------------+
+              +------------+--------------------------------+
+              | Code       | Meaning                        |
+              +------------+--------------------------------+
+              | 501        | Server Internal Error          |
+              | 502        | Protocol Version not supported |
+              | 503        | Reserved for future assignment |
+              | 504        | Message too large              |
+              +------------+--------------------------------+
 
                            Server Failure (5xx)
-
 
 
 
@@ -2934,37 +2934,37 @@ RFC 6787                         MRCPv2                    November 2012
                              1*VCHAR CRLF
 
 
-   +--------------+-------------------------+--------------------------+
-   | Cause-Code   | Cause-Name              | Description              |
-   +--------------+-------------------------+--------------------------+
-   | 000          | normal                  | SPEAK completed          |
-   |              |                         | normally.                |
-   | 001          | barge-in                | SPEAK request was        |
-   |              |                         | terminated because of    |
-   |              |                         | barge-in.                |
-   | 002          | parse-failure           | SPEAK request terminated |
-   |              |                         | because of a failure to  |
-   |              |                         | parse the speech markup  |
-   |              |                         | text.                    |
-   | 003          | uri-failure             | SPEAK request terminated |
-   |              |                         | because access to one of |
-   |              |                         | the URIs failed.         |
-   | 004          | error                   | SPEAK request terminated |
-   |              |                         | prematurely due to       |
-   |              |                         | synthesizer error.       |
-   | 005          | language-unsupported    | Language not supported.  |
-   | 006          | lexicon-load-failure    | Lexicon loading failed.  |
-   | 007          | cancelled               | A prior SPEAK request    |
-   |              |                         | failed while this one    |
-   |              |                         | was still in the queue.  |
-   +--------------+-------------------------+--------------------------+
+   +------------+-----------------------+------------------------------+
+   | Cause-Code | Cause-Name            | Description                  |
+   +------------+-----------------------+------------------------------+
+   | 000        | normal                | SPEAK completed normally.    |
+   | 001        | barge-in              | SPEAK request was terminated |
+   |            |                       | because of barge-in.         |
+   | 002        | parse-failure         | SPEAK request terminated     |
+   |            |                       | because of a failure to      |
+   |            |                       | parse the speech markup      |
+   |            |                       | text.                        |
+   | 003        | uri-failure           | SPEAK request terminated     |
+   |            |                       | because access to one of the |
+   |            |                       | URIs failed.                 |
+   | 004        | error                 | SPEAK request terminated     |
+   |            |                       | prematurely due to           |
+   |            |                       | synthesizer error.           |
+   | 005        | language-unsupported  | Language not supported.      |
+   | 006        | lexicon-load-failure  | Lexicon loading failed.      |
+   | 007        | cancelled             | A prior SPEAK request failed |
+   |            |                       | while this one was still in  |
+   |            |                       | the queue.                   |
+   +------------+-----------------------+------------------------------+
 
                 Synthesizer Resource Completion Cause Codes
 
 8.4.5.  Completion-Reason
 
-   This header field MAY be specified in a SPEAK-COMPLETE event coming
-   from the synthesizer resource to the client.  This contains the
+
+
+
+
 
 
 
@@ -2973,6 +2973,8 @@ Burnett & Shanmugham         Standards Track                   [Page 53]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   This header field MAY be specified in a SPEAK-COMPLETE event coming
+   from the synthesizer resource to the client.  This contains the
    reason text behind the SPEAK request completion.  This header field
    communicates text describing the reason for the failure, such as an
    error in parsing the speech markup text.
@@ -3019,8 +3021,6 @@ RFC 6787                         MRCPv2                    November 2012
    Voice parameter header fields MAY also be sent in a CONTROL method to
    affect a SPEAK request in progress and change its behavior on the
    fly.  If the synthesizer resource does not support this operation, it
-   MUST reject the request with a status-code of 403 "Unsupported Header
-   Field".
 
 
 
@@ -3028,6 +3028,9 @@ Burnett & Shanmugham         Standards Track                   [Page 54]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+   MUST reject the request with a status-code of 403 "Unsupported Header
+   Field".
 
 8.4.7.  Prosody-Parameters
 
@@ -3074,9 +3077,6 @@ RFC 6787                         MRCPv2                    November 2012
    Markers are bookmarks that are defined within the markup.  Most
    speech markup formats provide mechanisms to embed marker fields
    within speech texts.  The synthesizer generates SPEECH-MARKER events
-   when it reaches these marker fields.  This header field MUST be part
-   of the SPEECH-MARKER event and contain the marker tag value after the
-   timestamp, separated by a semicolon.  In these events, the timestamp
 
 
 
@@ -3085,6 +3085,9 @@ Burnett & Shanmugham         Standards Track                   [Page 55]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   when it reaches these marker fields.  This header field MUST be part
+   of the SPEECH-MARKER event and contain the marker tag value after the
+   timestamp, separated by a semicolon.  In these events, the timestamp
    marks the time the text corresponding to the marker was emitted as
    speech by the synthesizer.
 
@@ -3131,15 +3134,14 @@ RFC 6787                         MRCPv2                    November 2012
    fetch-hint          =   "Fetch-Hint" ":"
                 ("prefetch" / "safe") CRLF
 
-8.4.11.  Audio-Fetch-Hint
-
-
 
 
 Burnett & Shanmugham         Standards Track                   [Page 56]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+8.4.11.  Audio-Fetch-Hint
 
    When the synthesizer needs to fetch documents or other resources like
    speech audio files, this header field controls the corresponding URI
@@ -3187,8 +3189,6 @@ RFC 6787                         MRCPv2                    November 2012
    field with a value of "true" indicating a restart.
 
    speak-restart       =   "Speak-Restart" ":" BOOLEAN CRLF
-
-
 
 
 
@@ -7574,23 +7574,23 @@ RFC 6787                         MRCPv2                    November 2012
    cause-code               =  3DIGIT
    cause-name               =  *VCHAR
 
-   +--------------+----------------------+-----------------------------+
-   | Cause-Code   | Cause-Name           | Description                 |
-   +--------------+----------------------+-----------------------------+
-   | 000          | success-silence      | RECORD completed with a     |
-   |              |                      | silence at the end.         |
-   | 001          | success-maxtime      | RECORD completed after      |
-   |              |                      | reaching maximum recording  |
-   |              |                      | time specified in record    |
-   |              |                      | method.                     |
-   | 002          | no-input-timeout     | RECORD failed due to no     |
-   |              |                      | input.                      |
-   | 003          | uri-failure          | Failure accessing the       |
-   |              |                      | record URI.                 |
-   | 004          | error                | RECORD request terminated   |
-   |              |                      | prematurely due to a        |
-   |              |                      | recorder error.             |
-   +--------------+----------------------+-----------------------------+
+   +------------+-----------------------+------------------------------+
+   | Cause-Code | Cause-Name            | Description                  |
+   +------------+-----------------------+------------------------------+
+   | 000        | success-silence       | RECORD completed with a      |
+   |            |                       | silence at the end.          |
+   | 001        | success-maxtime       | RECORD completed after       |
+   |            |                       | reaching maximum recording   |
+   |            |                       | time specified in record     |
+   |            |                       | method.                      |
+   | 002        | no-input-timeout      | RECORD failed due to no      |
+   |            |                       | input.                       |
+   | 003        | uri-failure           | Failure accessing the record |
+   |            |                       | URI.                         |
+   | 004        | error                 | RECORD request terminated    |
+   |            |                       | prematurely due to a         |
+   |            |                       | recorder error.              |
+   +------------+-----------------------+------------------------------+
 
 10.4.4.  Completion-Reason
 
@@ -8685,54 +8685,54 @@ Burnett & Shanmugham         Standards Track                  [Page 155]
 RFC 6787                         MRCPv2                    November 2012
 
 
-   +-------------+-------------------------+---------------------------+
-   | Cause-Code  | Cause-Name              | Description               |
-   +-------------+-------------------------+---------------------------+
-   | 000         | success                 | VERIFY or VERIFY-FROM-    |
-   |             |                         | BUFFER request completed  |
-   |             |                         | successfully.  The verify |
-   |             |                         | decision can be           |
-   |             |                         | "accepted", "rejected",   |
-   |             |                         | or "undecided".           |
-   | 001         | error                   | VERIFY or VERIFY-FROM-    |
-   |             |                         | BUFFER request terminated |
-   |             |                         | prematurely due to a      |
-   |             |                         | verifier resource or      |
-   |             |                         | system error.             |
-   | 002         | no-input-timeout        | VERIFY request completed  |
-   |             |                         | with no result due to a   |
-   |             |                         | no-input-timeout.         |
-   | 003         | too-much-speech-timeout | VERIFY request completed  |
-   |             |                         | with no result due to too |
-   |             |                         | much speech.              |
-   | 004         | speech-too-early        | VERIFY request completed  |
-   |             |                         | with no result due to     |
-   |             |                         | speech too soon.          |
-   | 005         | buffer-empty            | VERIFY-FROM-BUFFER        |
-   |             |                         | request completed with no |
-   |             |                         | result due to empty       |
-   |             |                         | buffer.                   |
-   | 006         | out-of-sequence         | Verification operation    |
-   |             |                         | failed due to out-of-     |
-   |             |                         | sequence method           |
-   |             |                         | invocations, for example, |
-   |             |                         | calling VERIFY before     |
-   |             |                         | QUERY-VOICEPRINT.         |
-   | 007         | repository-uri-failure  | Failure accessing         |
-   |             |                         | Repository URI.           |
-   | 008         | repository-uri-missing  | Repository-URI is not     |
-   |             |                         | specified.                |
-   | 009         | voiceprint-id-missing   | Voiceprint-Identifier is  |
-   |             |                         | not specified.            |
-   | 010         | voiceprint-id-not-exist | Voiceprint-Identifier     |
-   |             |                         | does not exist in the     |
-   |             |                         | voiceprint repository.    |
-   | 011         | speech-not-usable       | VERIFY request completed  |
-   |             |                         | with no result because    |
-   |             |                         | the speech was not usable |
-   |             |                         | (too noisy, too short,    |
-   |             |                         | etc.)                     |
-   +-------------+-------------------------+---------------------------+
+   +------------+--------------------------+---------------------------+
+   | Cause-Code | Cause-Name               | Description               |
+   +------------+--------------------------+---------------------------+
+   | 000        | success                  | VERIFY or VERIFY-FROM-    |
+   |            |                          | BUFFER request completed  |
+   |            |                          | successfully.  The verify |
+   |            |                          | decision can be           |
+   |            |                          | "accepted", "rejected",   |
+   |            |                          | or "undecided".           |
+   | 001        | error                    | VERIFY or VERIFY-FROM-    |
+   |            |                          | BUFFER request terminated |
+   |            |                          | prematurely due to a      |
+   |            |                          | verifier resource or      |
+   |            |                          | system error.             |
+   | 002        | no-input-timeout         | VERIFY request completed  |
+   |            |                          | with no result due to a   |
+   |            |                          | no-input-timeout.         |
+   | 003        | too-much-speech-timeout  | VERIFY request completed  |
+   |            |                          | with no result due to too |
+   |            |                          | much speech.              |
+   | 004        | speech-too-early         | VERIFY request completed  |
+   |            |                          | with no result due to     |
+   |            |                          | speech too soon.          |
+   | 005        | buffer-empty             | VERIFY-FROM-BUFFER        |
+   |            |                          | request completed with no |
+   |            |                          | result due to empty       |
+   |            |                          | buffer.                   |
+   | 006        | out-of-sequence          | Verification operation    |
+   |            |                          | failed due to out-of-     |
+   |            |                          | sequence method           |
+   |            |                          | invocations, for example, |
+   |            |                          | calling VERIFY before     |
+   |            |                          | QUERY-VOICEPRINT.         |
+   | 007        | repository-uri-failure   | Failure accessing         |
+   |            |                          | Repository URI.           |
+   | 008        | repository-uri-missing   | Repository-URI is not     |
+   |            |                          | specified.                |
+   | 009        | voiceprint-id-missing    | Voiceprint-Identifier is  |
+   |            |                          | not specified.            |
+   | 010        | voiceprint-id-not-exist  | Voiceprint-Identifier     |
+   |            |                          | does not exist in the     |
+   |            |                          | voiceprint repository.    |
+   | 011        | speech-not-usable        | VERIFY request completed  |
+   |            |                          | with no result because    |
+   |            |                          | the speech was not usable |
+   |            |                          | (too noisy, too short,    |
+   |            |                          | etc.)                     |
+   +------------+--------------------------+---------------------------+
 
 
 

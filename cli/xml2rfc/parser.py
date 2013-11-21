@@ -162,6 +162,7 @@ class CachingResolver(lxml.etree.Resolver):
         attempts = []  # Store the attempts
         original = request  # Used for the error message only
         result = None  # Our proper path
+        requestXML = None
         if request.endswith('.dtd') or request.endswith('.ent'):
             if os.path.isabs(request) or urlparse(request).netloc:
                 # Absolute request, return as-is
@@ -179,17 +180,24 @@ class CachingResolver(lxml.etree.Resolver):
                     result = os.path.join(self.source_dir, basename)
                     attempts.append(result)
         else:
+            requestXML = None
             if not request.endswith('.xml'):
                 # Forcibly append .xml
-                request = request + '.xml'
+                requestXML = request + '.xml'
             if os.path.isabs(request):
                 # Absolute path, return as-is
                 attempts.append(request)
                 result = request
+                if requestXML and not os.path.exists(result):
+                    attempts.append(requestXML)
+                    result = requestXML
             elif urlparse(request).netloc:
                 # URL requested, cache it
                 attempts.append(request)
                 result = self.cache(request)
+                if not result and requestXML:
+                    attempts.append(requestXML)
+                    result = self.cache(requestXML)
                 cached = True
             else:
                 if os.path.dirname(request):
@@ -201,11 +209,21 @@ class CachingResolver(lxml.etree.Resolver):
                         if os.path.exists(attempt):
                             result = attempt
                             break
+                        if requestXML:
+                            attempt  = os.path.join(dir, requestXML)
+                            attempts.append(attempt)
+                            if os.path.exists(attempt):
+                                result = attempt
+                                break
                     if not result:
                         # Try network location
                         url = urljoin(self.network_loc, request)
                         attempts.append(url)
-                        result = self.cache(request)
+                        result = self.cache(url)
+                        if not request and requestXML:
+                            url = urljoin(self.network_loc, requestXML)
+                            attempts.append(url)
+                            result = self.cache(url)
                         cached = True
                         # if not result:
                         #     # Document didn't exist, default to source dir
@@ -221,12 +239,22 @@ class CachingResolver(lxml.etree.Resolver):
                         if os.path.exists(attempt):
                             result = attempt
                             break
+                        if requestXML:
+                            attempt = os.path.join(dir, requestXML)
+                            attempts.append(attempt)
+                            if os.path.exists(attempt):
+                                result = attempt
+                                break
                     if not result:
                         # Try network subdirs
                         for subdir in xml2rfc.NET_SUBDIRS:
                             url = urljoin(self.network_loc, subdir + '/' + request)
                             attempts.append(url)
                             result = self.cache(url)
+                            if not result and requestXML:
+                                url = urljoin(self.network_loc, subdir + '/' + requestXML)
+                                attempts.append(url)
+                                result = self.cache(url)
                             cached = True
                             if result:
                                 break
@@ -343,7 +371,7 @@ class XmlRfcParser:
     def delete_cache(self, path=None):
         self.cachingResolver.delete_cache(path=path)
 
-    def parse(self, remove_comments=True, remove_pis=False, quiet=False):
+    def parse(self, remove_comments=True, remove_pis=False, quiet=False, strip_cdata=True):
         """ Parses the source XML file and returns an XmlRfc instance """
         if not (self.quiet or quiet):
             xml2rfc.log.write('Parsing file', self.source)
@@ -358,6 +386,7 @@ class XmlRfcParser:
                                       remove_pis=remove_pis,
                                       remove_blank_text=True,
                                       resolve_entities=False,
+                                      strip_cdata=strip_cdata,
                                       events=("start",),
                                       tag="rfc",
                                   )
@@ -386,7 +415,8 @@ class XmlRfcParser:
                                       remove_comments=remove_comments,
                                       remove_pis=remove_pis,
                                       remove_blank_text=True,
-                                      resolve_entities=True)
+                                      resolve_entities=True,
+                                      strip_cdata=strip_cdata)
 
         # Initialize the caching system
         self.cachingResolver = CachingResolver(cache_path=self.cache_path,
@@ -420,7 +450,14 @@ class XmlRfcParser:
                            include=True, line_no=getattr(element, 'sourceline', 0))
                     try:
                         # Parse the xml and attach it to the tree here
-                        parser = lxml.etree.XMLParser(remove_blank_text=True)
+                        parser = lxml.etree.XMLParser(load_dtd=False,
+                                                      no_network=False,
+                                                      remove_comments=remove_comments,
+                                                      remove_pis=remove_pis,
+                                                      remove_blank_text=True,
+                                                      resolve_entities=True,
+                                                      strip_cdata=strip_cdata)
+                        # parser.resolvers.add(self.cachingResolver) --- should this be done?
                         ref_root = lxml.etree.parse(path, parser).getroot()
                         parent = element.getparent()
                         parent.replace(element, ref_root)
