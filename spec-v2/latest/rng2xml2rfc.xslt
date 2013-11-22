@@ -8,6 +8,8 @@
 
 <xsl:output encoding="UTF-8" indent="yes" omit-xml-declaration="yes" />
 
+<xsl:strip-space elements="figure"/>
+
 <xsl:template match="/">
   <xsl:apply-templates select="rng:grammar"/>
 </xsl:template>
