@@ -692,6 +692,13 @@
    <x:anchor-alias value="eref"/>
    <iref item="Elements" subitem="eref" primary="true"/>
    <iref item="eref element" primary="true"/>
+   <t>
+      Represents an "external" link (as specified in the "target" attribute).
+   </t>
+   <t>
+      If the element has text content, that content will be used. Otherwise, the value of the
+      target attribute will be inserted in angle brackets (<xref target="RFC3986" x:fmt="," x:sec="C"/>).
+   </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <section title="Attributes" toc="exclude">
       <section title="target" anchor="element.eref.attribute.target" toc="exclude">
@@ -699,6 +706,9 @@
          <iref item="eref element" subitem="target attribute"/>
          <iref item="target attribute" subitem="in eref element"/>
          <t><!--AG-->(mandatory)</t>
+         <t>
+            URI of the link target (see <xref target="RFC3986" x:fmt="of" x:sec="3"/>). 
+         </t>
       </section>
    </section>
    <section title="Contents" toc="exclude" anchor="element.eref.contents">
@@ -2347,6 +2357,18 @@
       <date month='June' year='1999' />
     </front>
     <seriesInfo name='RFC' value='2629' />
+  </reference>
+
+  <reference anchor="RFC3986">
+   <front>
+    <title abbrev='URI Generic Syntax'>Uniform Resource Identifier (URI): Generic Syntax</title>
+    <author initials='T.' surname='Berners-Lee' fullname='Tim Berners-Lee'/>
+    <author initials='R.' surname='Fielding' fullname='Roy T. Fielding'/>
+    <author initials='L.' surname='Masinter' fullname='Larry Masinter'/>
+    <date month='January' year='2005'></date>
+   </front>
+   <seriesInfo name="STD" value="66"/>
+   <seriesInfo name="RFC" value="3986"/>
   </reference>
 
   <reference anchor='RFC5741'>
