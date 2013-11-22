@@ -149,11 +149,11 @@
     <xsl:variable name="container" select="ancestor::rng:element[1]"/>
     <iref item="{$elem} element" subitem="inside {$container/@name}"/>
     <xsl:choose>
-      <xsl:when test="parent::rng:oneOrMore">one or more </xsl:when>
-      <xsl:when test="parent::rng:zeroOrMore">optional </xsl:when>
-      <xsl:when test="parent::rng:optional">one optional </xsl:when>
+      <xsl:when test="parent::rng:oneOrMore">One or more </xsl:when>
+      <xsl:when test="parent::rng:zeroOrMore">Optional </xsl:when>
+      <xsl:when test="parent::rng:optional">One optional </xsl:when>
       <xsl:when test="parent::rng:choice"></xsl:when>
-      <xsl:otherwise>one </xsl:otherwise>
+      <xsl:otherwise>One </xsl:otherwise>
     </xsl:choose>
     <xsl:text>&lt;</xsl:text>
     <x:ref><xsl:value-of select="$elem"/></x:ref>
@@ -165,7 +165,7 @@
 <xsl:template match="rng:ref[@name='TEXT' or @name='CTEXT']">
   <t>
     <xsl:comment>AG</xsl:comment>
-    <xsl:text>text</xsl:text>
+    <xsl:text>Text</xsl:text>
   </t>
 </xsl:template>
 
