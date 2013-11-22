@@ -193,7 +193,14 @@
 </xsl:template>
 
 <xsl:template match="text()" mode="copy">
-  <xsl:copy />
+  <xsl:choose>
+    <xsl:when test="normalize-space()=''">
+      <!-- eat the node -->
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:copy />
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- experimental RNC conversion -->
