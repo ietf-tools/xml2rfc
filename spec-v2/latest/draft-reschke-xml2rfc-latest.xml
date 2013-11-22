@@ -925,6 +925,20 @@
    <x:anchor-alias value="iref"/>
    <iref item="Elements" subitem="iref" primary="true"/>
    <iref item="iref element" primary="true"/>
+   <t>
+      This element is used to include terms into the index.
+   </t>
+   <t>
+      Index entries can be either single items (just specify the "item"
+      attribute), or nested (by specifying "subitem" as well).
+   </t>
+   <figure>
+      <preamble>For instance:</preamble>
+      <artwork type="example">
+&lt;iref item="Grammar" subitem="item"/&gt;
+</artwork>
+      <postamble>will produce an index entry for "Grammar, item".</postamble>
+   </figure>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <section title="Attributes" toc="exclude">
       <section title="item" anchor="element.iref.attribute.item" toc="exclude">
@@ -932,12 +946,19 @@
          <iref item="iref element" subitem="item attribute"/>
          <iref item="item attribute" subitem="in iref element"/>
          <t><!--AG-->(mandatory)</t>
+         <t>
+            The item to include.
+         </t>
       </section>
       <section title="primary" anchor="element.iref.attribute.primary" toc="exclude">
          <iref item="Attributes" subitem="primary"/>
          <iref item="iref element" subitem="primary attribute"/>
          <iref item="primary attribute" subitem="in iref element"/>
          <t><!--AG-->(optional)</t>
+         <t>
+            Setting this to "true" declares the occurence as "primary",
+            which might cause it to be highlighted in the index.
+         </t>
          <t><!--AG-->Allowed values: <list style="symbols">
                <t>"true"</t>
                <t>"false" (default)</t>
@@ -949,6 +970,9 @@
          <iref item="iref element" subitem="subitem attribute"/>
          <iref item="subitem attribute" subitem="in iref element"/>
          <t><!--AG-->(optional)</t>
+         <t>
+            The subitem to include.
+         </t>
       </section>
    </section>
    <section title="Grammar" toc="exclude" anchor="element.iref.grammar">
@@ -1676,7 +1700,9 @@
             
             
             
+            
             <cref>Need to consider inheritance.</cref>
+         
          
          
          
