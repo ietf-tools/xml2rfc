@@ -55,22 +55,36 @@
     </t>
   </xsl:if>
   
-  <xsl:if test="$elementcontents">
-    <section title="Contents" toc="exclude" anchor="{$anchor}.contents">
-      <xsl:choose>
-        <xsl:when test="count($elementcontents)=1">
+  <xsl:choose>
+    <xsl:when test="not($elementcontents)">
+      <t anchor="{$anchor}.contents">
+        <xsl:comment>AG</xsl:comment>
+        Content model: this element does not have any contents.
+      </t>
+    </xsl:when>
+    <xsl:when test="count($elementcontents)=1 and local-name($elementcontents[1])='ref' and $elementcontents[1]/@name='CTEXT'">
+      <t anchor="{$anchor}.contents">
+        <xsl:comment>AG</xsl:comment>
+        Content model: only text content.        
+      </t>
+    </xsl:when>
+    <xsl:when test="count($elementcontents)=1">
+      <t anchor="{$anchor}.contents">
+        <xsl:comment>AG</xsl:comment>
+        Content model:
+      </t>
+      <xsl:apply-templates select="$elementcontents"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <t anchor="{$anchor}.contents">
+        <xsl:comment>AG</xsl:comment>
+        Content model:
+        <list style="numbers">
           <xsl:apply-templates select="$elementcontents"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <t>
-            <list style="numbers">
-              <xsl:apply-templates select="$elementcontents"/>
-            </list>
-          </t>
-        </xsl:otherwise>
-      </xsl:choose>
-    </section>
-  </xsl:if>  
+        </list>
+      </t>
+    </xsl:otherwise>
+  </xsl:choose>
 
   <xsl:if test="$attributecontents">
     <section title="Attributes" toc="exclude">
