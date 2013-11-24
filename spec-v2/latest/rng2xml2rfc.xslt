@@ -24,7 +24,7 @@
 
 <xsl:template match="rng:element">
 <xsl:variable name="anchor" select="concat('element.',@name)"/>
-<section title="{@name}" anchor="{$anchor}">
+<section title="&lt;{@name}&gt;" anchor="{$anchor}">
   <x:anchor-alias value="{@name}"/>
   <iref item="Elements" subitem="{@name}" primary="true"/>
   <iref item="{@name} element" primary="true"/>
@@ -55,14 +55,6 @@
     </t>
   </xsl:if>
   
-  <xsl:if test="$attributecontents">
-    <section title="Attributes" toc="exclude">
-      <xsl:apply-templates select="$attributecontents">
-        <xsl:sort select="concat(@name,*/@name)"/>
-      </xsl:apply-templates>
-    </section>
-  </xsl:if>  
-
   <xsl:if test="$elementcontents">
     <section title="Contents" toc="exclude" anchor="{$anchor}.contents">
       <xsl:choose>
@@ -77,6 +69,14 @@
           </t>
         </xsl:otherwise>
       </xsl:choose>
+    </section>
+  </xsl:if>  
+
+  <xsl:if test="$attributecontents">
+    <section title="Attributes" toc="exclude">
+      <xsl:apply-templates select="$attributecontents">
+        <xsl:sort select="concat(@name,*/@name)"/>
+      </xsl:apply-templates>
     </section>
   </xsl:if>  
 
