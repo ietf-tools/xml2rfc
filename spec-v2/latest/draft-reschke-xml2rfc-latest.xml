@@ -362,6 +362,11 @@
       are used to fill the boilerplate, and also to generate the "Author's Address"
       section (see <xref target="RFCSTYLE" x:fmt="of" x:sec="4.9"/>).
    </t>
+   <t>
+      Note that an "author" can also be just an organization (by not specifying any
+      of the name attributes, but adding the &lt;<ref>organization</ref>&gt;
+      child element).
+   </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <section title="Contents" toc="exclude" anchor="element.author.contents">
       <t>
@@ -1407,6 +1412,9 @@
    <x:anchor-alias value="reference"/>
    <iref item="Elements" subitem="reference" primary="true"/>
    <iref item="reference element" primary="true"/>
+   <t>
+      Represents a bibliographical reference.
+   </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
    <section title="Contents" toc="exclude" anchor="element.reference.contents">
       <t>
@@ -1444,6 +1452,14 @@
          <iref item="reference element" subitem="target attribute"/>
          <iref item="target attribute" subitem="in reference element"/>
          <t><!--AG-->(optional)</t>
+         <t>
+            Holds the URI for the reference.
+         </t>
+         <t>
+            Note that depending on the &lt;<ref>seriesInfo</ref>&gt;
+            element, a URI might not be needed, nor desirable, as it can 
+            be automatically generated (for instance, for RFCs).
+         </t>
       </section>
    </section>
    <section title="Grammar" toc="exclude" anchor="element.reference.grammar">
