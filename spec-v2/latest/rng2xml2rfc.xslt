@@ -192,6 +192,13 @@
   </xsl:element>
 </xsl:template>
 
+<xsl:template match="x:*" mode="copy">
+  <xsl:element name="x:{local-name()}">
+    <xsl:copy-of select="@*"/>
+    <xsl:apply-templates select="node()" mode="copy"/>
+  </xsl:element>
+</xsl:template>
+
 <xsl:template match="text()" mode="copy">
   <xsl:choose>
     <xsl:when test="normalize-space()=''">
