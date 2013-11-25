@@ -36,7 +36,10 @@
 
   <xsl:variable name="elemdoc" select="$spec/rfc/middle/section/section[@anchor=$anchor]/t[not(comment()='AG')] | $spec/rfc/middle/section/section[@anchor=$anchor]/figure | $spec/rfc/middle/section/section[@anchor=$anchor]/texttable"/>
   <xsl:if test="not($elemdoc)">
-    <xsl:message>No prose for element: <xsl:value-of select="@name"/></xsl:message>
+    <t>
+      <xsl:comment>AG</xsl:comment>
+      <cref anchor="{$anchor}.missing">element description missing</cref>
+    </t>
   </xsl:if>
   <xsl:apply-templates select="$elemdoc" mode="copy"/>
   
@@ -137,7 +140,16 @@
         <xsl:otherwise>(mandatory)</xsl:otherwise>
       </xsl:choose>
     </t>
-    <xsl:apply-templates select="$spec/rfc/middle/section/section/section/section[@anchor=$anchor]/t[not(comment()='AG')]" mode="copy"/>
+
+    <xsl:variable name="attrdoc" select="$spec/rfc/middle/section/section/section/section[@anchor=$anchor]/t[not(comment()='AG')] | $spec/rfc/middle/section/section/section/section[@anchor=$anchor]/figure | $spec/rfc/middle/section/section/section/section[@anchor=$anchor]/texttable"/>
+    <xsl:if test="not($attrdoc)">
+      <t>
+        <xsl:comment>AG</xsl:comment>
+        <cref anchor="{$anchor}.missing">attribute description missing</cref>
+      </t>
+    </xsl:if>
+    <xsl:apply-templates select="$attrdoc" mode="copy"/>
+
     <xsl:if test="rng:choice">
       <t>
         <xsl:comment>AG</xsl:comment>
