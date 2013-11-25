@@ -40,6 +40,7 @@
       <xsl:comment>AG</xsl:comment>
       <cref anchor="{$anchor}.missing">element description missing</cref>
     </t>
+    <xsl:message>Missing prose in <xsl:value-of select="$anchor"/></xsl:message>
   </xsl:if>
   <xsl:apply-templates select="$elemdoc" mode="copy"/>
   
@@ -147,6 +148,7 @@
         <xsl:comment>AG</xsl:comment>
         <cref anchor="{$anchor}.missing">attribute description missing</cref>
       </t>
+      <xsl:message>Missing prose in <xsl:value-of select="$anchor"/></xsl:message>
     </xsl:if>
     <xsl:apply-templates select="$attrdoc" mode="copy"/>
 
