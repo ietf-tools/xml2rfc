@@ -46,7 +46,7 @@
   <abstract>
     <t>
       This document defines the 'XML2RFC' version 2 vocabulary; an XML-based language used
-      for writing Internet-Drafts and RFCs. This vocabulary is used for current processing of XML into RFCs.
+      for writing Internet Drafts and RFCs. This vocabulary is used for current processing of XML into RFCs.
       A future version of this vocabulary will be used as the canonical version of RFCs.
     </t>
   </abstract>
@@ -66,7 +66,7 @@
 <t>
   This document describes version 2 ('v2') of the 'XML2RFC' vocabulary; an XML (Extensible Markup Language) 
   language (<xref target="XML"/>) used for writing RFCs
-  (<xref target="RFCSTYLE"/>) and Internet-Drafts (<xref target="IDGUIDE"/>).
+  (<xref target="RFCSTYLE"/>) and Internet Drafts (<xref target="IDGUIDE"/>).
 </t>
 <t>
   It obsoletes the original version ("v1") <xref target="RFC2629"/>, which
@@ -77,21 +77,19 @@
 
 <section title="Syntax Notation" anchor="syntax.notation">
 <t>
-  The XML vocabulary here is defined in prose, based on the Relax NG schema 
+  The vocabulary is defined in prose, based on the Relax NG schema 
   (<xref target="RNC"/>) contained in <xref target="schema"/> (specified in
   Relax NG Compact Notation, "RNC").
-</t>
-<t>  
-  Note that the schema can be used for automated validity
-  checks, but certain constraints are only described in prose (example:
-  the conditionally required presence of the "abbrev" attribute).
 </t>
 <t>
   Each element description also contains the RNC fragment for that specific
   element in a slightly simplified form (for instance, leaving out defaults).
   This is included as alternative for readers who prefer formal syntax over prose.
-  Note that, as just stated, the prose may be a more accurate representation of
-  the meaning of an element than the RNC fragment.
+</t>
+<t>  
+  Note that the schema can be used for automated validity
+  checks, but certain constraints are only described in prose (example:
+  the conditionally required presence of the "abbrev" attribute).
 </t>
 </section>
 
@@ -138,7 +136,7 @@
    <iref item="Elements" subitem="address" primary="true"/>
    <iref item="address element" primary="true"/>
    <t>
-     Provides address information for an author or editor.
+     Provides address information for the author.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>author</x:ref>&gt; (<xref target="element.author"/>).</t>
    <t anchor="element.address.contents"><!--AG-->
@@ -193,7 +191,16 @@
    <t>
       Provides additional prose augmenting a bibliographical reference.
    </t>
-<!-- JULIAN: I removed trivial example that didn't show anything unexpected. -->
+   <figure>
+      <preamble>For instance:</preamble>
+      <artwork type="example">
+&lt;annotation&gt;
+  Latest version available at &lt;eref
+  target='http://www.w3.org/TR/xml'/&gt;.
+&lt;/annotation&gt;
+</artwork>
+      <postamble>...will generate the text used in the reference for <xref target="XML"/>.</postamble>
+   </figure>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
    <t anchor="element.annotation.contents"><!--AG-->
         Content model:
@@ -238,7 +245,8 @@
    <iref item="Elements" subitem="area" primary="true"/>
    <iref item="area element" primary="true"/>
    <t>
-      Provides information about the IETF area this document applies to. It is not clear if this element is in current use.
+      Provides information about the IETF area this document applies to
+      (currently unused).
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.area.contents"><!--AG-->
@@ -354,13 +362,12 @@
    <iref item="Elements" subitem="author" primary="true"/>
    <iref item="author element" primary="true"/>
    <t>
-      Provides information about a document author or editor.
+      Provides information about a document author.
    </t>
    <t>
       The &lt;author&gt; elements contained within the document's &lt;front&gt; element
       are used to fill the boilerplate, and also to generate the "Author's Address"
-      section (see <xref target="RFCSTYLE" x:fmt="of" x:sec="4.9"/>). It is also used in
-      the &lt;front&gt; element of a reference to provide bibliographic information.
+      section (see <xref target="RFCSTYLE" x:fmt="of" x:sec="4.9"/>).
    </t>
    <t>
       Note that an "author" can also be just an organization (by not specifying any
@@ -399,7 +406,7 @@
          <iref item="initials attribute" subitem="in author element"/>
          <t><!--AG-->(optional)</t>
          <t>
-            Author's or editor's initials (used on the front page and in references).
+            Author initials (used on the front page and in references).
          </t>
          <t>
             Initials should be provided as a whitespace separated list of
@@ -422,7 +429,7 @@
          <iref item="surname attribute" subitem="in author element"/>
          <t><!--AG-->(optional)</t>
          <t>
-            The author's or editor's surname.
+            The author's surname.
          </t>
       </section>
    </section>
@@ -447,7 +454,7 @@
    <iref item="Elements" subitem="back" primary="true"/>
    <iref item="back element" primary="true"/>
    <t>
-      Contains the "back" part of the document: the references and appendices.
+      Contains the "back" part of the document: references and appendices.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.back.contents"><!--AG-->
@@ -482,7 +489,7 @@
    <iref item="Elements" subitem="c" primary="true"/>
    <iref item="c element" primary="true"/>
    <t>
-      Provides the content of a cell in a table.
+      A cell in a table.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
    <t anchor="element.c.contents"><!--AG-->
@@ -528,7 +535,7 @@
    <iref item="Elements" subitem="city" primary="true"/>
    <iref item="city element" primary="true"/>
    <t>
-      Gives the city name in a postal address.
+      The city name in a postal address.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.city.contents"><!--AG-->
@@ -550,7 +557,7 @@
    <iref item="Elements" subitem="code" primary="true"/>
    <iref item="code element" primary="true"/>
    <t>
-      Gives the postal region code.
+      The postal region code.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.code.contents"><!--AG-->
@@ -572,7 +579,7 @@
    <iref item="Elements" subitem="country" primary="true"/>
    <iref item="country element" primary="true"/>
    <t>
-      Gives the country in a postal address.
+      The country in a postal address.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.country.contents"><!--AG-->
@@ -637,7 +644,7 @@
    </t>
    <t>
       In the first case, it defines the publication date, which, when producing
-      Internet-Drafts, will be used for computing the expiration date (see <xref target="IDGUIDE" x:fmt="of" x:sec="8" x:rel="#expiry"/>). When "year",
+      internet drafts, will be used for computing the expiration date (see <xref target="IDGUIDE" x:fmt="of" x:sec="8" x:rel="#expiry"/>). When "year",
       "month" or "day" are left out, the processor will attempt to use the
       current system date if the attributes that are specified do match the system
       date. Note that month names need to match thee full (English) month name 
@@ -647,8 +654,8 @@
    </t>
    <t>
       In the second case, the date information will be embedded as-is into
-      the reference text. Therefore, also vague dates ("ca. 2000"), date ranges,
-      and so on, are allowed.
+      the reference text. Therefore, also vague dates ("ca. 2000"), date ranges
+      etc. are allowed.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.date.contents"><!--AG-->
@@ -693,7 +700,7 @@
    <iref item="Elements" subitem="email" primary="true"/>
    <iref item="email element" primary="true"/>
    <t>
-      Provides an email address.
+      Holds an email address.
    </t>
    <t>
       The value is expected to be the scheme-specific part of a "mailto" URI
@@ -1007,11 +1014,11 @@
    <iref item="Elements" subitem="iref" primary="true"/>
    <iref item="iref element" primary="true"/>
    <t>
-      Provides terms for the document's index.
+      This element is used to include terms into the index.
    </t>
    <t>
-      Index entries can be either single items (when just the "item"
-      attribute is given) or nested items (by specifying "subitem" as well).
+      Index entries can be either single items (just specify the "item"
+      attribute), or nested (by specifying "subitem" as well).
    </t>
    <figure>
       <preamble>For instance:</preamble>
@@ -1078,7 +1085,7 @@
    <iref item="Elements" subitem="keyword" primary="true"/>
    <iref item="keyword element" primary="true"/>
    <t>
-      Specifies a keyword applicable to the document.
+      Used for specifying a keyword applicable to the document.
    </t>
    <t>
       Note that each element should only contain a single keyword; for multiple keywords, the
@@ -1185,7 +1192,7 @@
    <iref item="Elements" subitem="note" primary="true"/>
    <iref item="note element" primary="true"/>
    <t>
-      Creates an
+      This element is similar to &lt;section&gt;, except that it is used for an
       unnumbered section that appears after the abstract.
    </t>
    <t>
@@ -1227,11 +1234,11 @@
    <iref item="Elements" subitem="organization" primary="true"/>
    <iref item="organization element" primary="true"/>
    <t>
-      Specifies the affiliation of an author or editor.
+      Holds the affiliation of the author.
    </t>
    <t>
-      This information appears in both the "Author's Address" section and
-      on the front page (<xref target="RFCSTYLE" x:fmt="," x:sec="4.1.2"/>).
+      This information does not only appear in the "Author's Address" Section,
+      but also on the front page (<xref target="RFCSTYLE" x:fmt="," x:sec="4.1.2"/>).
       If the value is long, an abbreviated variant can be specified in the
       "abbrev" attribute.
    </t>
@@ -1267,7 +1274,7 @@
    <iref item="Elements" subitem="phone" primary="true"/>
    <iref item="phone element" primary="true"/>
    <t>
-      Gives a phone number for an author or editor.
+      Represents a phone number.
    </t>
    <t>
       The value is expected to be the scheme-specific part of a "tel" URI
@@ -1295,7 +1302,7 @@
    <iref item="Elements" subitem="postal" primary="true"/>
    <iref item="postal element" primary="true"/>
    <t>
-      Contains child elements providing postal information for an author or editor.
+      Contains child elements providing postal information.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.postal.contents"><!--AG-->
@@ -1504,13 +1511,13 @@
    <iref item="Elements" subitem="references" primary="true"/>
    <iref item="references element" primary="true"/>
    <t>
-      Contains a set of bibliographical references.
+      This element holds a set of bibliographical references.
    </t>
    <t>
-      In the early days of the RFC series, there was only one "References" section per RFC. This convention
-      was later changed to group references into two sets, "Normative" and "Informative";
-      see item x of <xref target="RFCSTYLE" x:fmt="of" x:sec="4.8"/>).
-      This XML vocabulary supports the split with the "title" attribute.
+      Historically, there was only one "References" section in RFCs. This
+      was later changed to group references into "Normative" and "Informative"
+      ones (see item x) of <xref target="RFCSTYLE" x:fmt="of" x:sec="4.8"/>),
+      and the xml2rfc vocabulary supports this with the "title" attribute.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.references.contents"><!--AG-->
@@ -1554,7 +1561,7 @@
    <iref item="Elements" subitem="region" primary="true"/>
    <iref item="region element" primary="true"/>
    <t>
-      Provides the region name in a postal address.
+      The region name in a postal address.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.region.contents"><!--AG-->
@@ -1576,13 +1583,13 @@
    <iref item="Elements" subitem="rfc" primary="true"/>
    <iref item="rfc element" primary="true"/>
    <t>
-      Specifies the root element of the xml2rfc vocabulary.
+      This is the root element of the xml2rfc vocabulary.
    </t>
    <t>
       Processors distinguish between RFC mode ("number" attribute being
-      present) and Internet-Draft mode ("docName" attribute being present):
-      it is invalid to specify both. Setting neither "number" or "docName" can be useful for
-      producing other types of document but is out-of-scope for this specification.
+      present) and Internet-Draft mode ("docName" attribute being present).
+      It is invalid to specify both. Setting neither can be useful for
+      producing other types of document (but is out-of-scope for this specification).
    </t>
    <t anchor="element.rfc.contents"><!--AG-->
         Content model:
@@ -1641,7 +1648,7 @@
          <iref item="docName attribute" subitem="in rfc element"/>
          <t><!--AG-->(optional)</t>
          <t>
-            For Internet-Drafts, this specifies the draft name (which appears
+            For Internet Drafts, this specifies the draft name (which appears
             below the title).
          </t>
          <t>
@@ -1817,8 +1824,8 @@
    <iref item="Elements" subitem="section" primary="true"/>
    <iref item="section element" primary="true"/>
    <t>
-      Represents a section (when inside a &lt;middle&gt; element) or an appendix (when inside a
-      &lt;back&gt; element).
+      Represents a section (when inside &lt;middle&gt;) or an appendix (when inside
+      &lt;back&gt;).
    </t>
    <t>
       Sub-sections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
@@ -1907,7 +1914,7 @@
    <iref item="Elements" subitem="seriesInfo" primary="true"/>
    <iref item="seriesInfo element" primary="true"/>
    <t>
-      Specifies the document series in which this document appears, and also
+      Names the document series in which this document appears, and also
       specifies an identifier within that series.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
@@ -1939,7 +1946,7 @@
          </t>
          <t>
             For BCPs, FYIs, RFCs, and STDs this is the number within the series.
-            For Internet-Drafts, it is the full draft name (ending with the two-digit
+            For Internet Drafts, it is the full draft name (ending with the two-digit
             version number).
          </t>
       </section>
@@ -2002,7 +2009,7 @@
    <iref item="Elements" subitem="street" primary="true"/>
    <iref item="street element" primary="true"/>
    <t>
-      Provides a street address in a postal address.
+      A street address.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.street.contents"><!--AG-->
@@ -2024,7 +2031,7 @@
    <iref item="Elements" subitem="t" primary="true"/>
    <iref item="t element" primary="true"/>
    <t>
-      Contains a paragraph of text or an element of a list.
+      Contains a paragraph of text.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.t.contents"><!--AG-->
@@ -2201,11 +2208,10 @@
    <iref item="Elements" subitem="title" primary="true"/>
    <iref item="title element" primary="true"/>
    <t>
-      Represents the document's title for the current document, or for a document in a reference.
+      Represents the document title.
    </t>
    <t>
-      When this element appears in the &lt;front&gt; element of the current document,
-      the title might also appear in page headers or footers. If it's long
+      The title might also appear in page headers or footers. If it's long
       (~40 characters), the "abbrev" attribute is used to specified an
       abbreviated variant.
    </t>
@@ -2285,7 +2291,7 @@
    <iref item="Elements" subitem="uri" primary="true"/>
    <iref item="uri element" primary="true"/>
    <t>
-      Contains a web resouce that is associated with the author or editor.
+      Contains a web address associated with the author.
    </t>
    <t>
       The contents should be a valid URI (see <xref target="RFC3986" x:fmt="of" x:sec="3"/>). 
@@ -2339,12 +2345,12 @@
    <iref item="workgroup element" primary="true"/>
    <t>
       This element is used to specify the Working Group the document originates
-      from, if any. The recommended format is the official name of the Working Group
+      from. The recommended format is the official name of the Working Group
       (with some capitalization), plus the string "Working Group".
    </t>
    <t>
-      In Internet-Drafts, this is used in the upper left corner of the boilerplate,
-      replacing the "Network Working Group" string.
+      In Internet Drafts, this is used in the upper left corner of the boiler
+      plate, replacing the "Network Working Group" string.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.workgroup.contents"><!--AG-->
@@ -2581,8 +2587,7 @@
   
 </references>
 
-<!-- JULIAN: I removed the Appendix A wrapper because it only had two subsections, one of which
-was much longer than the other. -->
+<section title="Front Page Generation">
 
 <section title="The /rfc/@category Attribute" anchor="attribute-category">
 <t>
@@ -2592,16 +2597,16 @@ was much longer than the other. -->
   "exp" for "Experimental", and "historic" for - surprise - "Historic".
 </t>
 <t>
-  For Internet-Drafts, the category attribute is not needed, but
-  appear on the front page as "Intended Status". Supplying this information can 
-  be useful to reviewers.
+  For Internet Drafts, the category attribute is not needed, but <spanx>will</spanx>
+  appear on the front page ("Intended Status"). Supplying this information can 
+  be useful, because reviewers may want to know.
 </t>
 </section>
 
 <section title="The /rfc/@ipr Attribute" anchor="attribute-ipr">
 <t>
-  This attribute value can take a long list of values, each of which describes an IPR policy for the document. 
-  This attribute's values are not the result of a grand plan, but remain simply for historic
+  As of the time of this writing, this attribute value can take a long list of values. As
+  frequently, this is not the result of a grand plan, but simply for historic
   reasons. Of these values, only a few are currently in use; all others are
   supported by the various tools for backwards compatibility with old source
   files.
@@ -2611,24 +2616,18 @@ was much longer than the other. -->
     <x:h>Note:</x:h> some variations of the boilerplate are selected based
     on the document's date; therefore it is important to specify the "year",
     "month" and "day" attributes of the <spanx style="verb">&lt;date&gt;</spanx> element
-    when archiving the XML source of an Internet-Draft on the day of submission.
+    when archiving the XML source of an Internet Draft on the day of submission.
   </t>
 </x:note>
-<!--
-JULIAN: this disclaimer doesn't help anyone, and is confusing in the context. I propose you
-replace it with: "The use of this attribute may have some legal consequences for you. Those
-consequences cannot be adequately covered here, and you might want to retain legal assistance
-if you think they are important to you."
 <t>
   <spanx>Disclaimer: THIS ONLY PROVIDES IMPLEMENTATION INFORMATION. IF YOU NEED
   LEGAL ADVICE, PLEASE CONTACT A LAWYER.</spanx>
   For further information, refer to <eref target="http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf"/>.
 </t>
--->
 <t>
-  For the current "Status Of This Memo" text, the <spanx style="verb">submissionType</spanx> attribute
-  determines whether a statement about "Code Components" is inserted (which is the
-  case for the value "IETF", which is the default). Other values,
+  Finally, for the current "Status Of This Memo" text, the <spanx style="verb">submissionType</spanx> attribute
+  determines whether a statement about "Code Components" is inserted (this is the
+  case for the value "IETF", which also happens to be the default). Other values,
   such as "independent", suppress this part of the text. 
 </t>
 
@@ -2636,8 +2635,8 @@ if you think they are important to you."
 <section title="Current Values: '*trust200902'" anchor="attribute-ipr-current">
 <iref item="ipr attribute" subitem="'*trust200902'"/>
 <t>
-  The name for these values refers to the "IETF TRUST Legal Provisions Relating 
-  to IETF Documents", sometimes simply called the "TLP, that went into effect on February 15, 2009 (<xref target="TLP2.0"/>).
+  The name for these values refers to the "TLP" ("IETF TRUST Legal Provisions Relating 
+  to IETF Documents"), on effect February 15, 2009 (<xref target="TLP2.0"/>).
   Updates to this document were published on September 12, 2009 (<xref target="TLP3.0"/>)
   and on December 28, 2009 (<xref target="TLP4.0"/>),
   modifying the license for code components (see <eref target="http://trustee.ietf.org/license-info/"/>
@@ -2646,7 +2645,7 @@ if you think they are important to you."
   of these documents.
 </t>
 <t>  
-  The tools will automatically produce the "correct" text depending on the
+  The tools will automatically produce the "right" text depending on the
   document's date information (see above):
 </t>
 <texttable align="left">
@@ -2673,7 +2672,7 @@ if you think they are important to you."
 <section title="noModificationTrust200902" anchor="attribute-ipr-noModificationTrust200902">
 <iref item="ipr attribute" subitem="'noModificationTrust200902'"/>
 <t>
-  This produces additional text from Section 6.c.i of the TLP:
+  This produces the additional text from Section 6.c.i of the TLP:
 </t>
 <x:blockquote>
   <t>
@@ -2684,7 +2683,7 @@ if you think they are important to you."
 </x:blockquote>
 <x:note>
   <t>
-    <x:h>Note:</x:h> this clause is incompatible with RFCs that are published
+    <x:h>Note:</x:h> this clause is incompatible with RFCs to be published
     on the Standards Track.
   </t>
 </x:note>
@@ -2703,7 +2702,7 @@ if you think they are important to you."
 </x:blockquote>
 <x:note>
   <t>
-    <x:h>Note:</x:h> this clause is incompatible with RFCs that are published
+    <x:h>Note:</x:h> this clause is incompatible with RFCs to be published
     on the Standards Track.
   </t>
 </x:note>
@@ -2787,10 +2786,11 @@ if you think they are important to you."
 <t>
   The special value "<x:span anchor="attribute-ipr-none">none</x:span>"
   was also used back then, and denied the IETF any rights beyond publication
-  as Internet-Draft.
+  as Internet Draft.
 </t>
 </section>
 
+</section>
 </section>
 </section>
 
