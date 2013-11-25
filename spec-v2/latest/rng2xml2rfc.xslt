@@ -63,13 +63,13 @@
     <xsl:when test="not($elementcontents)">
       <t anchor="{$anchor}.contents">
         <xsl:comment>AG</xsl:comment>
-        Content model: this element does not have any contents.
+        <xsl:text>Content model: this element does not have any contents.</xsl:text>
       </t>
     </xsl:when>
     <xsl:when test="count($elementcontents)=1 and local-name($elementcontents[1])='ref' and $elementcontents[1]/@name='CTEXT'">
       <t anchor="{$anchor}.contents">
         <xsl:comment>AG</xsl:comment>
-        Content model: only text content.        
+        <xsl:text>Content model: only text content.</xsl:text>
       </t>
     </xsl:when>
     <xsl:when test="count($elementcontents)=1">
@@ -82,7 +82,7 @@
     <xsl:otherwise>
       <t anchor="{$anchor}.contents">
         <xsl:comment>AG</xsl:comment>
-        Content model:
+        <xsl:text>Content model:</xsl:text>
         <list style="numbers">
           <xsl:apply-templates select="$elementcontents"/>
         </list>
