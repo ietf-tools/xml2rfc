@@ -46,7 +46,7 @@
   <abstract>
     <t>
       This document defines the 'XML2RFC' version 2 vocabulary; an XML-based language used
-      for writing Internet Drafts and RFCs. This vocabulary is used for current processing of XML into RFCs.
+      for writing Internet-Drafts and RFCs. This vocabulary is used for current processing of XML into RFCs.
       A future version of this vocabulary will be used as the canonical version of RFCs.
     </t>
   </abstract>
@@ -66,7 +66,7 @@
 <t>
   This document describes version 2 ('v2') of the 'XML2RFC' vocabulary; an XML (Extensible Markup Language) 
   language (<xref target="XML"/>) used for writing RFCs
-  (<xref target="RFCSTYLE"/>) and Internet Drafts (<xref target="IDGUIDE"/>).
+  (<xref target="RFCSTYLE"/>) and Internet-Drafts (<xref target="IDGUIDE"/>).
 </t>
 <t>
   It obsoletes the original version ("v1") <xref target="RFC2629"/>, which
@@ -74,10 +74,16 @@
   extended ("v2"). Furthermore, it discusses potential extensions in a future
   revision ("v3").
 </t>
+<t>
+  Note that not the vocabulary contains certain constructs that might not be
+  used when generating the final text; however, they can provide useful
+  data for other uses (such index generation, populating a keyword database, or
+  syntax checks).
+</t>
 
 <section title="Syntax Notation" anchor="syntax.notation">
 <t>
-  The vocabulary is defined in prose, based on the Relax NG schema 
+  The XML vocabulary here is defined in prose, based on the Relax NG schema 
   (<xref target="RNC"/>) contained in <xref target="schema"/> (specified in
   Relax NG Compact Notation, "RNC").
 </t>
@@ -246,7 +252,7 @@
    <iref item="area element" primary="true"/>
    <t>
       Provides information about the IETF area this document applies to
-      (currently unused).
+      (currently not used when generating documents).
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.area.contents"><!--AG-->
@@ -454,7 +460,7 @@
    <iref item="Elements" subitem="back" primary="true"/>
    <iref item="back element" primary="true"/>
    <t>
-      Contains the "back" part of the document: references and appendices.
+      Contains the "back" part of the document: the references and appendices.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.back.contents"><!--AG-->
@@ -489,7 +495,7 @@
    <iref item="Elements" subitem="c" primary="true"/>
    <iref item="c element" primary="true"/>
    <t>
-      A cell in a table.
+      Provides the content of a cell in a table.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
    <t anchor="element.c.contents"><!--AG-->
@@ -535,7 +541,7 @@
    <iref item="Elements" subitem="city" primary="true"/>
    <iref item="city element" primary="true"/>
    <t>
-      The city name in a postal address.
+      Gives the city name in a postal address.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.city.contents"><!--AG-->
@@ -557,7 +563,7 @@
    <iref item="Elements" subitem="code" primary="true"/>
    <iref item="code element" primary="true"/>
    <t>
-      The postal region code.
+      Gives the postal region code.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.code.contents"><!--AG-->
@@ -579,7 +585,7 @@
    <iref item="Elements" subitem="country" primary="true"/>
    <iref item="country element" primary="true"/>
    <t>
-      The country in a postal address.
+      Gives the country in a postal address.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.country.contents"><!--AG-->
@@ -644,7 +650,7 @@
    </t>
    <t>
       In the first case, it defines the publication date, which, when producing
-      internet drafts, will be used for computing the expiration date (see <xref target="IDGUIDE" x:fmt="of" x:sec="8" x:rel="#expiry"/>). When "year",
+      Internet-Drafts, will be used for computing the expiration date (see <xref target="IDGUIDE" x:fmt="of" x:sec="8" x:rel="#expiry"/>). When "year",
       "month" or "day" are left out, the processor will attempt to use the
       current system date if the attributes that are specified do match the system
       date. Note that month names need to match thee full (English) month name 
@@ -654,8 +660,8 @@
    </t>
    <t>
       In the second case, the date information will be embedded as-is into
-      the reference text. Therefore, also vague dates ("ca. 2000"), date ranges
-      etc. are allowed.
+      the reference text. Therefore, also vague dates ("ca. 2000"), date ranges,
+      and so on, are allowed.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.date.contents"><!--AG-->
@@ -700,7 +706,7 @@
    <iref item="Elements" subitem="email" primary="true"/>
    <iref item="email element" primary="true"/>
    <t>
-      Holds an email address.
+      Provides an email address.
    </t>
    <t>
       The value is expected to be the scheme-specific part of a "mailto" URI
@@ -1014,11 +1020,11 @@
    <iref item="Elements" subitem="iref" primary="true"/>
    <iref item="iref element" primary="true"/>
    <t>
-      This element is used to include terms into the index.
+      Provides terms for the document's index.
    </t>
    <t>
-      Index entries can be either single items (just specify the "item"
-      attribute), or nested (by specifying "subitem" as well).
+      Index entries can be either single items (when just the "item"
+      attribute is given) or nested items (by specifying "subitem" as well).
    </t>
    <figure>
       <preamble>For instance:</preamble>
@@ -1085,7 +1091,7 @@
    <iref item="Elements" subitem="keyword" primary="true"/>
    <iref item="keyword element" primary="true"/>
    <t>
-      Used for specifying a keyword applicable to the document.
+      Specifies a keyword applicable to the document.
    </t>
    <t>
       Note that each element should only contain a single keyword; for multiple keywords, the
@@ -1648,7 +1654,7 @@
          <iref item="docName attribute" subitem="in rfc element"/>
          <t><!--AG-->(optional)</t>
          <t>
-            For Internet Drafts, this specifies the draft name (which appears
+            For Internet-Drafts, this specifies the draft name (which appears
             below the title).
          </t>
          <t>
@@ -1946,7 +1952,7 @@
          </t>
          <t>
             For BCPs, FYIs, RFCs, and STDs this is the number within the series.
-            For Internet Drafts, it is the full draft name (ending with the two-digit
+            For Internet-Drafts, it is the full draft name (ending with the two-digit
             version number).
          </t>
       </section>
@@ -2349,7 +2355,7 @@
       (with some capitalization), plus the string "Working Group".
    </t>
    <t>
-      In Internet Drafts, this is used in the upper left corner of the boiler
+      In Internet-Drafts, this is used in the upper left corner of the boiler
       plate, replacing the "Network Working Group" string.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
@@ -2597,7 +2603,7 @@
   "exp" for "Experimental", and "historic" for - surprise - "Historic".
 </t>
 <t>
-  For Internet Drafts, the category attribute is not needed, but <spanx>will</spanx>
+  For Internet-Drafts, the category attribute is not needed, but <spanx>will</spanx>
   appear on the front page ("Intended Status"). Supplying this information can 
   be useful, because reviewers may want to know.
 </t>
@@ -2616,7 +2622,7 @@
     <x:h>Note:</x:h> some variations of the boilerplate are selected based
     on the document's date; therefore it is important to specify the "year",
     "month" and "day" attributes of the <spanx style="verb">&lt;date&gt;</spanx> element
-    when archiving the XML source of an Internet Draft on the day of submission.
+    when archiving the XML source of an Internet-Draft on the day of submission.
   </t>
 </x:note>
 <t>
@@ -2786,7 +2792,7 @@
 <t>
   The special value "<x:span anchor="attribute-ipr-none">none</x:span>"
   was also used back then, and denied the IETF any rights beyond publication
-  as Internet Draft.
+  as Internet-Draft.
 </t>
 </section>
 
