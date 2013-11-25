@@ -1198,7 +1198,7 @@
    <iref item="Elements" subitem="note" primary="true"/>
    <iref item="note element" primary="true"/>
    <t>
-      This element is similar to &lt;section&gt;, except that it is used for an
+      Creates an
       unnumbered section that appears after the abstract.
    </t>
    <t>
@@ -1240,11 +1240,11 @@
    <iref item="Elements" subitem="organization" primary="true"/>
    <iref item="organization element" primary="true"/>
    <t>
-      Holds the affiliation of the author.
+      Specifies the affiliation of an author.
    </t>
    <t>
-      This information does not only appear in the "Author's Address" Section,
-      but also on the front page (<xref target="RFCSTYLE" x:fmt="," x:sec="4.1.2"/>).
+      This information appears in both the "Author's Address" section and
+      on the front page (<xref target="RFCSTYLE" x:fmt="," x:sec="4.1.2"/>).
       If the value is long, an abbreviated variant can be specified in the
       "abbrev" attribute.
    </t>
@@ -1517,13 +1517,13 @@
    <iref item="Elements" subitem="references" primary="true"/>
    <iref item="references element" primary="true"/>
    <t>
-      This element holds a set of bibliographical references.
+      Contains a set of bibliographical references.
    </t>
    <t>
-      Historically, there was only one "References" section in RFCs. This
-      was later changed to group references into "Normative" and "Informative"
-      ones (see item x) of <xref target="RFCSTYLE" x:fmt="of" x:sec="4.8"/>),
-      and the xml2rfc vocabulary supports this with the "title" attribute.
+      In the early days of the RFC series, there was only one "References" section per RFC. This convention
+      was later changed to group references into two sets, "Normative" and "Informative";
+      see item x of <xref target="RFCSTYLE" x:fmt="of" x:sec="4.8"/>).
+      This vocabulary supports the split with the "title" attribute.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.references.contents"><!--AG-->
@@ -1567,7 +1567,7 @@
    <iref item="Elements" subitem="region" primary="true"/>
    <iref item="region element" primary="true"/>
    <t>
-      The region name in a postal address.
+      Provides the region name in a postal address.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.region.contents"><!--AG-->
@@ -1593,9 +1593,9 @@
    </t>
    <t>
       Processors distinguish between RFC mode ("number" attribute being
-      present) and Internet-Draft mode ("docName" attribute being present).
-      It is invalid to specify both. Setting neither can be useful for
-      producing other types of document (but is out-of-scope for this specification).
+      present) and Internet-Draft mode ("docName" attribute being present):
+      it is invalid to specify both. Setting neither "number" or "docName" can be useful for
+      producing other types of document but is out-of-scope for this specification.
    </t>
    <t anchor="element.rfc.contents"><!--AG-->
         Content model:
@@ -1830,8 +1830,8 @@
    <iref item="Elements" subitem="section" primary="true"/>
    <iref item="section element" primary="true"/>
    <t>
-      Represents a section (when inside &lt;middle&gt;) or an appendix (when inside
-      &lt;back&gt;).
+      Represents a section (when inside a &lt;middle&gt; element) or an appendix (when inside a
+      &lt;back&gt; element).
    </t>
    <t>
       Sub-sections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
@@ -1920,7 +1920,7 @@
    <iref item="Elements" subitem="seriesInfo" primary="true"/>
    <iref item="seriesInfo element" primary="true"/>
    <t>
-      Names the document series in which this document appears, and also
+      Specifies the document series in which this document appears, and also
       specifies an identifier within that series.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
@@ -2015,7 +2015,7 @@
    <iref item="Elements" subitem="street" primary="true"/>
    <iref item="street element" primary="true"/>
    <t>
-      A street address.
+      Provides a street address.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.street.contents"><!--AG-->
@@ -2217,7 +2217,8 @@
       Represents the document title.
    </t>
    <t>
-      The title might also appear in page headers or footers. If it's long
+      When this element appears in the &lt;front&gt; element of the current document,
+      the title might also appear in page headers or footers. If it's long
       (~40 characters), the "abbrev" attribute is used to specified an
       abbreviated variant.
    </t>
@@ -2351,12 +2352,12 @@
    <iref item="workgroup element" primary="true"/>
    <t>
       This element is used to specify the Working Group the document originates
-      from. The recommended format is the official name of the Working Group
+      from, if any. The recommended format is the official name of the Working Group
       (with some capitalization), plus the string "Working Group".
    </t>
    <t>
-      In Internet-Drafts, this is used in the upper left corner of the boiler
-      plate, replacing the "Network Working Group" string.
+      In Internet-Drafts, this is used in the upper left corner of the boilerplate,
+      replacing the "Network Working Group" string.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.workgroup.contents"><!--AG-->
