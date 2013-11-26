@@ -463,7 +463,14 @@
       child element).
    </t>
    <t>
-      <cref>Need text about the difference between "author" and "editor".</cref>
+      Furthermore, the "role" attribute can be used to mark an author as
+      "editor". This is reflected both on the front page and in bibliographical
+      references. Note that this specification does not define a precise
+      meaning for the term "editor".
+   </t>
+   <t>
+      See Section "Authors vs. Contributors" of <xref target="RFCPOLICY"/>
+      for more information.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.author.contents"><!--AG-->Content model:<list style="numbers">
@@ -507,8 +514,8 @@
          <iref item="author element" subitem="role attribute"/>
          <iref item="role attribute" subitem="in author element"/>
          <t><!--AG-->(optional)</t>
-         <t><!--AG-->
-            <cref anchor="element.author.attribute.role.missing">attribute description missing</cref>
+         <t>
+            Specifies the role the author had in creating the document.
          </t>
          <t><!--AG-->Allowed values: <list style="symbols">
                <t>"editor"</t>
@@ -2786,6 +2793,16 @@
     </front>
   </reference>
 
+  <reference anchor="RFCPOLICY" target="http://www.rfc-editor.org/policy.html">
+    <front>
+      <title>RFC Editorial Guidelines and Procedures</title>
+      <author>
+        <organization>RFC Editor</organization>
+      </author>
+      <date month="February" year="2012" />
+    </front>
+  </reference>
+
   <reference anchor="RFCSTYLE" target="http://www.rfc-editor.org/rfc-style-guide/rfc-style">
     <front>
       <title>RFC Document Style (draft 09)</title>
@@ -3415,6 +3432,14 @@ start = rfc
 <t>
   &lt;<x:ref>facsimile</x:ref>&gt; looks outdated, while a container for IM 
   (messaging) URIs is missing. Maybe this area needs to be aligned with vCard.
+</t>
+<t>
+  <xref target="RFCSTYLE" x:fmt="of" x:sec="4.8"/> hints at a "Contributors"
+  Section that could supply contact information similar to the one in the 
+  auto-generated "Authors' Address" Section. Consider how to capture
+  contributor contact information (probably not using &lt;<x:ref>author</x:ref>&gt;
+  to avoid confusion). Furthermore, consider ways to augment the contact information
+  section with prose.
 </t>
 </section>
 
