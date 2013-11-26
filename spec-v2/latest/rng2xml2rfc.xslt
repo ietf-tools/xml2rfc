@@ -240,7 +240,7 @@
 
 <!-- experimental RNC conversion -->
 <xsl:template match="*" mode="rnc">
-  <xsl:message>Missing mode=rfc template for <xsl:value-of select="local-name()"/></xsl:message>
+  <xsl:message>Missing mode=rnc template for <xsl:value-of select="local-name()"/></xsl:message>
 </xsl:template>
 
 <xsl:template match="rng:element" mode="rnc">
