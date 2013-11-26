@@ -66,7 +66,7 @@
         <xsl:text>Content model: this element does not have any contents.</xsl:text>
       </t>
     </xsl:when>
-    <xsl:when test="count($elementcontents)=1 and local-name($elementcontents[1])='ref' and $elementcontents[1]/@name='CTEXT'">
+    <xsl:when test="count($elementcontents)=1 and $elementcontents[1]/self::rng:text">
       <t anchor="{$anchor}.contents">
         <xsl:comment>AG</xsl:comment>
         <xsl:text>Content model: only text content.</xsl:text>
@@ -108,6 +108,7 @@
 
 <xsl:template match="rng:*">
   <t>
+    <xsl:comment>AG</xsl:comment>
     <cref>
       Missing template for <xsl:value-of select="local-name(.)"/>.
     </cref>
@@ -192,14 +193,14 @@
   </t>
 </xsl:template>
 
-<xsl:template match="rng:ref[@name='TEXT' or @name='CTEXT']">
+<xsl:template match="rng:text">
   <t>
     <xsl:comment>AG</xsl:comment>
     <xsl:text>Text</xsl:text>
   </t>
 </xsl:template>
 
-<xsl:template match="rng:zeroOrMore[rng:ref]">
+<xsl:template match="rng:zeroOrMore[rng:ref | rng:text]">
   <xsl:apply-templates/>
 </xsl:template>
 
@@ -260,6 +261,10 @@
     <xsl:text>&#10;</xsl:text>
   </xsl:for-each>
   <xsl:text>  }&#10;</xsl:text>
+</xsl:template>
+
+<xsl:template match="rng:text" mode="rnc">
+  <xsl:text>text</xsl:text>
 </xsl:template>
 
 <xsl:template match="rng:oneOrMore" mode="rnc">
@@ -391,7 +396,7 @@
     <xsl:text>\</xsl:text>
   </xsl:if>
   <xsl:choose>
-    <xsl:when test="@name='TEXT' or @name='CTEXT'">
+    <xsl:when test="@name='text'">
       <xsl:value-of select="@name"/>
     </xsl:when>
     <xsl:otherwise>

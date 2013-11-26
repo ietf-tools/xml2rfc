@@ -12,10 +12,6 @@
 
 <!ENTITY % ATEXT "CDATA">
 
-<!ENTITY % CTEXT "#PCDATA">
-
-<!ENTITY % TEXT "#PCDATA">
-
 <!ELEMENT rfc (front,middle,back?)>
 
 <!ATTLIST rfc
@@ -38,7 +34,7 @@
 <!ELEMENT front (title,author+,date,area*,workgroup*,keyword*,abstract?,
                  note*)>
 
-<!ELEMENT title (%CTEXT;)>
+<!ELEMENT title (#PCDATA)>
 
 <!ATTLIST title
   abbrev %ATEXT; #IMPLIED>
@@ -51,7 +47,7 @@
   fullname %ATEXT; #IMPLIED
   role (editor) #IMPLIED>
 
-<!ELEMENT organization (%CTEXT;)>
+<!ELEMENT organization (#PCDATA)>
 
 <!ATTLIST organization
   abbrev %ATEXT; #IMPLIED>
@@ -60,23 +56,23 @@
 
 <!ELEMENT postal (street+,(city|region|code|country)*)>
 
-<!ELEMENT street (%CTEXT;)>
+<!ELEMENT street (#PCDATA)>
 
-<!ELEMENT city (%CTEXT;)>
+<!ELEMENT city (#PCDATA)>
 
-<!ELEMENT region (%CTEXT;)>
+<!ELEMENT region (#PCDATA)>
 
-<!ELEMENT code (%CTEXT;)>
+<!ELEMENT code (#PCDATA)>
 
-<!ELEMENT country (%CTEXT;)>
+<!ELEMENT country (#PCDATA)>
 
-<!ELEMENT phone (%CTEXT;)>
+<!ELEMENT phone (#PCDATA)>
 
-<!ELEMENT facsimile (%CTEXT;)>
+<!ELEMENT facsimile (#PCDATA)>
 
-<!ELEMENT email (%CTEXT;)>
+<!ELEMENT email (#PCDATA)>
 
-<!ELEMENT uri (%CTEXT;)>
+<!ELEMENT uri (#PCDATA)>
 
 <!ELEMENT date EMPTY>
 
@@ -85,11 +81,11 @@
   month %MONTH; #IMPLIED
   year %YEAR; #IMPLIED>
 
-<!ELEMENT area (%CTEXT;)>
+<!ELEMENT area (#PCDATA)>
 
-<!ELEMENT workgroup (%CTEXT;)>
+<!ELEMENT workgroup (#PCDATA)>
 
-<!ELEMENT keyword (%CTEXT;)>
+<!ELEMENT keyword (#PCDATA)>
 
 <!ELEMENT abstract (t)+>
 
@@ -107,7 +103,7 @@
   title %ATEXT; #REQUIRED
   toc (include|exclude|default) 'default'>
 
-<!ELEMENT t (%TEXT;|list|figure|xref|eref|iref|cref|spanx|vspace)*>
+<!ELEMENT t (#PCDATA|list|figure|xref|eref|iref|cref|spanx|vspace)*>
 
 <!ATTLIST t
   anchor ID #IMPLIED
@@ -120,14 +116,14 @@
   hangIndent %NUMBER; #IMPLIED
   counter %ATEXT; #IMPLIED>
 
-<!ELEMENT xref (%CTEXT;)>
+<!ELEMENT xref (#PCDATA)>
 
 <!ATTLIST xref
   target IDREF #REQUIRED
   pageno (true|false) 'false'
   format (counter|title|none|default) 'default'>
 
-<!ELEMENT eref (%CTEXT;)>
+<!ELEMENT eref (#PCDATA)>
 
 <!ATTLIST eref
   target %URI; #REQUIRED>
@@ -139,13 +135,13 @@
   subitem %ATEXT; ''
   primary (true|false) 'false'>
 
-<!ELEMENT cref (%CTEXT;)>
+<!ELEMENT cref (#PCDATA)>
 
 <!ATTLIST cref
   anchor ID #IMPLIED
   source %ATEXT; #IMPLIED>
 
-<!ELEMENT spanx (%CTEXT;)>
+<!ELEMENT spanx (#PCDATA)>
 
 <!ATTLIST spanx
   xml:space (default|preserve) 'preserve'
@@ -168,9 +164,9 @@
   width %ATEXT; ''
   height %ATEXT; ''>
 
-<!ELEMENT preamble (%TEXT;|xref|eref|iref|cref|spanx)*>
+<!ELEMENT preamble (#PCDATA|xref|eref|iref|cref|spanx)*>
 
-<!ELEMENT artwork (%TEXT;)*>
+<!ELEMENT artwork (#PCDATA)*>
 
 <!ATTLIST artwork
   xml:space (default|preserve) 'preserve'
@@ -182,7 +178,7 @@
   width %ATEXT; ''
   height %ATEXT; ''>
 
-<!ELEMENT postamble (%TEXT;|xref|eref|iref|cref|spanx)*>
+<!ELEMENT postamble (#PCDATA|xref|eref|iref|cref|spanx)*>
 
 <!ELEMENT texttable (preamble?,ttcol+,c*,postamble?)>
 
@@ -193,13 +189,13 @@
   align (left|center|right) 'center'
   style (all|none|headers|full) 'full'>
 
-<!ELEMENT ttcol (%CTEXT;)>
+<!ELEMENT ttcol (#PCDATA)>
 
 <!ATTLIST ttcol
   width %ATEXT; #IMPLIED
   align (left|center|right) 'left'>
 
-<!ELEMENT c (%TEXT;|xref|eref|iref|cref|spanx)*>
+<!ELEMENT c (#PCDATA|xref|eref|iref|cref|spanx)*>
 
 <!ELEMENT back (references*,section*)>
 
@@ -227,4 +223,4 @@
   type %ATEXT; #REQUIRED
   octets %NUMBER; #IMPLIED>
 
-<!ELEMENT annotation (%TEXT;|xref|eref|iref|cref|spanx)*>
+<!ELEMENT annotation (#PCDATA|xref|eref|iref|cref|spanx)*>
