@@ -333,8 +333,15 @@
          <iref item="artwork element" subitem="height attribute"/>
          <iref item="height attribute" subitem="in artwork element"/>
          <t><!--AG-->(optional)</t>
-         <t><!--AG-->
-            <cref anchor="element.artwork.attribute.height.missing">attribute description missing</cref>
+         <t>
+            The suggested height of the graphics included using the "src" attribute.
+         </t>
+         <t>
+            This attribute is format-dependant and ought to be avoided.
+         </t>
+         <t>
+            When generating HTML output, current implementations copy the attribute "as is".
+            For other output formats it is usually ignored.
          </t>
       </section>
       <section title="name" anchor="element.artwork.attribute.name" toc="exclude">
@@ -356,8 +363,12 @@
          <iref item="artwork element" subitem="src attribute"/>
          <iref item="src attribute" subitem="in artwork element"/>
          <t><!--AG-->(optional)</t>
-         <t><!--AG-->
-            <cref anchor="element.artwork.attribute.src.missing">attribute description missing</cref>
+         <t>
+            The URI of a graphics file.
+         </t>
+         <t>
+            Note that this can be a "data" URI (<xref target="RFC2397"/>) as well, in which case the graphics
+            file essentially is in-lined.
          </t>
       </section>
       <section title="type" anchor="element.artwork.attribute.type" toc="exclude">
@@ -365,8 +376,16 @@
          <iref item="artwork element" subitem="type attribute"/>
          <iref item="type attribute" subitem="in artwork element"/>
          <t><!--AG-->(optional)</t>
-         <t><!--AG-->
-            <cref anchor="element.artwork.attribute.type.missing">attribute description missing</cref>
+         <t>
+            Specifies the type of the artwork.
+         </t>
+         <t>
+            The value either is a well-known keyword (such as "abnf"), or
+            an Internet Media Type (see <xref target="RFC2046"/>).
+         </t>
+         <t>
+            How it is used depends on context and application. For instance, a formatter
+            can attempt to syntax-highlight code in certain known languages.
          </t>
       </section>
       <section title="width" anchor="element.artwork.attribute.width" toc="exclude">
@@ -374,8 +393,15 @@
          <iref item="artwork element" subitem="width attribute"/>
          <iref item="width attribute" subitem="in artwork element"/>
          <t><!--AG-->(optional)</t>
-         <t><!--AG-->
-            <cref anchor="element.artwork.attribute.width.missing">attribute description missing</cref>
+         <t>
+            The suggested width of the graphics included using the "src" attribute.
+         </t>
+         <t>
+            This attribute is format-dependant and ought to be avoided.
+         </t>
+         <t>
+            When generating HTML output, current implementations copy the attribute "as is".
+            For other output formats it is usually ignored.
          </t>
       </section>
       <section title="xml:space" anchor="element.artwork.attribute.xml-space" toc="exclude">
@@ -2657,6 +2683,25 @@
     </front>
     <seriesInfo name='BCP' value='9' />
     <seriesInfo name='RFC' value='2026' />
+  </reference>
+
+  <reference anchor="RFC2046">
+    <front>
+      <title abbrev="Media Types">Multipurpose Internet Mail Extensions (MIME) Part Two: Media Types</title>
+      <author initials="N." surname="Freed" fullname="Ned Freed"/>
+      <author initials="N." surname="Borenstein" fullname="Nathaniel S. Borenstein"/>
+      <date month="November" year="1996"/>
+    </front>
+    <seriesInfo name="RFC" value="2046"/>
+  </reference>
+
+  <reference anchor='RFC2397'>
+    <front>
+      <title abbrev='The &quot;data&quot; URL scheme'>The &quot;data&quot; URL scheme</title>
+      <author initials='L.' surname='Masinter' fullname='Larry Masinter'/>
+      <date year='1998' month='August' />
+    </front>
+    <seriesInfo name='RFC' value='2397' />
   </reference>
 
   <reference anchor='RFC2629'>
