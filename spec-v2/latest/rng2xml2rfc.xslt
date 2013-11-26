@@ -372,9 +372,16 @@
   <xsl:param name="indent"/>
   <xsl:text>attribute </xsl:text>
   <xsl:call-template name="escape-name"/>
-  <xsl:apply-templates select="*" mode="rnc">
-    <xsl:with-param name="indent" select="$indent"/>
-  </xsl:apply-templates>
+  <xsl:choose>
+    <xsl:when test="*">
+      <xsl:apply-templates select="*" mode="rnc">
+        <xsl:with-param name="indent" select="$indent"/>
+      </xsl:apply-templates>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text> { text }</xsl:text>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="rng:attribute/rng:ref" mode="rnc">

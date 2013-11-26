@@ -1,26 +1,12 @@
-<!ENTITY % NUMBER "CDATA">
-
-<!ENTITY % NUMBERS "CDATA">
-
-<!ENTITY % DAY "CDATA">
-
-<!ENTITY % MONTH "CDATA">
-
-<!ENTITY % YEAR "CDATA">
-
-<!ENTITY % URI "CDATA">
-
-<!ENTITY % ATEXT "CDATA">
-
 <!ELEMENT rfc (front,middle,back?)>
 
 <!ATTLIST rfc
-  number %NUMBER; #IMPLIED
-  obsoletes %NUMBERS; ''
-  updates %NUMBERS; ''
+  number CDATA #IMPLIED
+  obsoletes CDATA ''
+  updates CDATA ''
   category (std|bcp|info|exp|historic) #IMPLIED
   consensus (no|yes) #IMPLIED
-  seriesNo %NUMBER; #IMPLIED
+  seriesNo CDATA #IMPLIED
   ipr (full2026|noDerivativeWorks2026|none|full3667|noModification3667
        |noDerivatives3667|full3978|noModification3978|noDerivatives3978
        |trust200811|noModificationTrust200811|noDerivativesTrust200811
@@ -28,8 +14,8 @@
        |pre5378Trust200902) #IMPLIED
   iprExtract IDREF #IMPLIED
   submissionType (IETF|IAB|IRTF|independent) 'IETF'
-  docName %ATEXT; #IMPLIED
-  xml:lang %ATEXT; 'en'>
+  docName CDATA #IMPLIED
+  xml:lang CDATA 'en'>
 
 <!ELEMENT front (title,author+,date,area*,workgroup*,keyword*,abstract?,
                  note*)>
@@ -37,20 +23,20 @@
 <!ELEMENT title (#PCDATA)>
 
 <!ATTLIST title
-  abbrev %ATEXT; #IMPLIED>
+  abbrev CDATA #IMPLIED>
 
 <!ELEMENT author (organization?,address?)>
 
 <!ATTLIST author
-  initials %ATEXT; #IMPLIED
-  surname %ATEXT; #IMPLIED
-  fullname %ATEXT; #IMPLIED
+  initials CDATA #IMPLIED
+  surname CDATA #IMPLIED
+  fullname CDATA #IMPLIED
   role (editor) #IMPLIED>
 
 <!ELEMENT organization (#PCDATA)>
 
 <!ATTLIST organization
-  abbrev %ATEXT; #IMPLIED>
+  abbrev CDATA #IMPLIED>
 
 <!ELEMENT address (postal?,phone?,facsimile?,email?,uri?)>
 
@@ -77,9 +63,9 @@
 <!ELEMENT date EMPTY>
 
 <!ATTLIST date
-  day %DAY; #IMPLIED
-  month %MONTH; #IMPLIED
-  year %YEAR; #IMPLIED>
+  day CDATA #IMPLIED
+  month CDATA #IMPLIED
+  year CDATA #IMPLIED>
 
 <!ELEMENT area (#PCDATA)>
 
@@ -92,7 +78,7 @@
 <!ELEMENT note (t)+>
 
 <!ATTLIST note
-  title %ATEXT; #REQUIRED>
+  title CDATA #REQUIRED>
 
 <!ELEMENT middle (section)+>
 
@@ -100,21 +86,21 @@
 
 <!ATTLIST section
   anchor ID #IMPLIED
-  title %ATEXT; #REQUIRED
+  title CDATA #REQUIRED
   toc (include|exclude|default) 'default'>
 
 <!ELEMENT t (#PCDATA|list|figure|xref|eref|iref|cref|spanx|vspace)*>
 
 <!ATTLIST t
   anchor ID #IMPLIED
-  hangText %ATEXT; #IMPLIED>
+  hangText CDATA #IMPLIED>
 
 <!ELEMENT list (t)+>
 
 <!ATTLIST list
-  style %ATEXT; #IMPLIED
-  hangIndent %NUMBER; #IMPLIED
-  counter %ATEXT; #IMPLIED>
+  style CDATA #IMPLIED
+  hangIndent CDATA #IMPLIED
+  counter CDATA #IMPLIED>
 
 <!ELEMENT xref (#PCDATA)>
 
@@ -126,43 +112,43 @@
 <!ELEMENT eref (#PCDATA)>
 
 <!ATTLIST eref
-  target %URI; #REQUIRED>
+  target CDATA #REQUIRED>
 
 <!ELEMENT iref EMPTY>
 
 <!ATTLIST iref
-  item %ATEXT; #REQUIRED
-  subitem %ATEXT; ''
+  item CDATA #REQUIRED
+  subitem CDATA ''
   primary (true|false) 'false'>
 
 <!ELEMENT cref (#PCDATA)>
 
 <!ATTLIST cref
   anchor ID #IMPLIED
-  source %ATEXT; #IMPLIED>
+  source CDATA #IMPLIED>
 
 <!ELEMENT spanx (#PCDATA)>
 
 <!ATTLIST spanx
   xml:space (default|preserve) 'preserve'
-  style %ATEXT; 'emph'>
+  style CDATA 'emph'>
 
 <!ELEMENT vspace EMPTY>
 
 <!ATTLIST vspace
-  blankLines %NUMBER; '0'>
+  blankLines CDATA '0'>
 
 <!ELEMENT figure (iref*,preamble?,artwork,postamble?)>
 
 <!ATTLIST figure
   anchor ID #IMPLIED
-  title %ATEXT; ''
+  title CDATA ''
   suppress-title (true|false) 'false'
-  src %URI; #IMPLIED
+  src CDATA #IMPLIED
   align (left|center|right) 'left'
-  alt %ATEXT; ''
-  width %ATEXT; ''
-  height %ATEXT; ''>
+  alt CDATA ''
+  width CDATA ''
+  height CDATA ''>
 
 <!ELEMENT preamble (#PCDATA|xref|eref|iref|cref|spanx)*>
 
@@ -170,13 +156,13 @@
 
 <!ATTLIST artwork
   xml:space (default|preserve) 'preserve'
-  name %ATEXT; ''
-  type %ATEXT; ''
-  src %URI; #IMPLIED
+  name CDATA ''
+  type CDATA ''
+  src CDATA #IMPLIED
   align (left|center|right) 'left'
-  alt %ATEXT; ''
-  width %ATEXT; ''
-  height %ATEXT; ''>
+  alt CDATA ''
+  width CDATA ''
+  height CDATA ''>
 
 <!ELEMENT postamble (#PCDATA|xref|eref|iref|cref|spanx)*>
 
@@ -184,7 +170,7 @@
 
 <!ATTLIST texttable
   anchor ID #IMPLIED
-  title %ATEXT; ''
+  title CDATA ''
   suppress-title (true|false) 'false'
   align (left|center|right) 'center'
   style (all|none|headers|full) 'full'>
@@ -192,7 +178,7 @@
 <!ELEMENT ttcol (#PCDATA)>
 
 <!ATTLIST ttcol
-  width %ATEXT; #IMPLIED
+  width CDATA #IMPLIED
   align (left|center|right) 'left'>
 
 <!ELEMENT c (#PCDATA|xref|eref|iref|cref|spanx)*>
@@ -202,25 +188,25 @@
 <!ELEMENT references (reference)+>
 
 <!ATTLIST references
-  title %ATEXT; 'References'>
+  title CDATA 'References'>
 
 <!ELEMENT reference (front,seriesInfo*,format*,annotation*)>
 
 <!ATTLIST reference
   anchor ID #IMPLIED
-  target %URI; #IMPLIED>
+  target CDATA #IMPLIED>
 
 <!ELEMENT seriesInfo EMPTY>
 
 <!ATTLIST seriesInfo
-  name %ATEXT; #REQUIRED
-  value %ATEXT; #REQUIRED>
+  name CDATA #REQUIRED
+  value CDATA #REQUIRED>
 
 <!ELEMENT format EMPTY>
 
 <!ATTLIST format
-  target %URI; #IMPLIED
-  type %ATEXT; #REQUIRED
-  octets %NUMBER; #IMPLIED>
+  target CDATA #IMPLIED
+  type CDATA #REQUIRED
+  octets CDATA #IMPLIED>
 
 <!ELEMENT annotation (#PCDATA|xref|eref|iref|cref|spanx)*>

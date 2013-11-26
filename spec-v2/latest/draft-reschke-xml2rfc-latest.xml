@@ -432,13 +432,13 @@
          <artwork type="application/relax-ng-compact-syntax">artwork =
   element artwork {
     attribute xml:space<!--16--> ( "default" | "preserve" )?,
-    attribute name { ATEXT }?,
-    attribute type { ATEXT }?,
-    attribute src { URI }?,
+    attribute name { text }?,
+    attribute type { text }?,
+    attribute src { text }?,
     attribute align<!--17--> ( "left" | "center" | "right" )?,
-    attribute alt { ATEXT }?,
-    attribute width { ATEXT }?,
-    attribute height { ATEXT }?,
+    attribute alt { text }?,
+    attribute width { text }?,
+    attribute height { text }?,
     text*
   }
 </artwork>
@@ -537,9 +537,9 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">author =
   element author {
-    attribute initials { ATEXT }?,
-    attribute surname { ATEXT }?,
-    attribute fullname { ATEXT }?,
+    attribute initials { text }?,
+    attribute surname { text }?,
+    attribute fullname { text }?,
     attribute role<!--6--> { "editor" }?,
     <xref target="element.organization.grammar" format="none">organization</xref>?,
     <xref target="element.address.grammar" format="none">address</xref>?
@@ -729,7 +729,7 @@
          <artwork type="application/relax-ng-compact-syntax">cref =
   element cref {
     attribute anchor { xsd:ID }?,
-    attribute source { ATEXT }?,
+    attribute source { text }?,
     text
   }
 </artwork>
@@ -798,9 +798,9 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">date =
   element date {
-    attribute day { DAY }?,
-    attribute month { MONTH }?,
-    attribute year { YEAR }?,
+    attribute day { text }?,
+    attribute month { text }?,
+    attribute year { text }?,
     empty
   }
 </artwork>
@@ -861,7 +861,7 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">eref =
   element eref {
-    attribute target { URI },
+    attribute target { text },
     text
   }
 </artwork>
@@ -1016,13 +1016,13 @@
          <artwork type="application/relax-ng-compact-syntax">figure =
   element figure {
     attribute anchor { xsd:ID }?,
-    attribute title { ATEXT }?,
+    attribute title { text }?,
     attribute suppress-title<!--10--> ( "true" | "false" )?,
-    attribute src { URI }?,
+    attribute src { text }?,
     attribute align<!--17--> ( "left" | "center" | "right" )?,
-    attribute alt { ATEXT }?,
-    attribute width { ATEXT }?,
-    attribute height { ATEXT }?,
+    attribute alt { text }?,
+    attribute width { text }?,
+    attribute height { text }?,
     <xref target="element.iref.grammar" format="none">iref</xref>*,
     <xref target="element.preamble.grammar" format="none">preamble</xref>?,
     <xref target="element.artwork.grammar" format="none">artwork</xref>,
@@ -1084,9 +1084,9 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">format =
   element format {
-    attribute target { URI }?,
-    attribute type { ATEXT },
-    attribute octets { NUMBER }?,
+    attribute target { text }?,
+    attribute type { text },
+    attribute octets { text }?,
     empty
   }
 </artwork>
@@ -1219,8 +1219,8 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">iref =
   element iref {
-    attribute item { ATEXT },
-    attribute subitem { ATEXT }?,
+    attribute item { text },
+    attribute subitem { text }?,
     attribute primary<!--10--> ( "true" | "false" )?,
     empty
   }
@@ -1306,9 +1306,9 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">\list =
   element \list {
-    attribute style { ATEXT }?,
-    attribute hangIndent { NUMBER }?,
-    attribute counter { ATEXT }?,
+    attribute style { text }?,
+    attribute hangIndent { text }?,
+    attribute counter { text }?,
     <xref target="element.t.grammar" format="none">t</xref>+
   }
 </artwork>
@@ -1379,7 +1379,7 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">note =
   element note {
-    attribute title { ATEXT },
+    attribute title { text },
     <xref target="element.t.grammar" format="none">t</xref>+
   }
 </artwork>
@@ -1417,7 +1417,7 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">organization =
   element organization {
-    attribute abbrev { ATEXT }?,
+    attribute abbrev { text }?,
     text
   }
 </artwork>
@@ -1648,7 +1648,7 @@
          <artwork type="application/relax-ng-compact-syntax">reference =
   element reference {
     attribute anchor { xsd:ID }?,
-    attribute target { URI }?,
+    attribute target { text }?,
     <xref target="element.front.grammar" format="none">front</xref>,
     <xref target="element.seriesInfo.grammar" format="none">seriesInfo</xref>*,
     <xref target="element.format.grammar" format="none">format</xref>*,
@@ -1701,7 +1701,7 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">references =
   element references {
-    attribute title { ATEXT }?,
+    attribute title { text }?,
     <xref target="element.reference.grammar" format="none">reference</xref>+
   }
 </artwork>
@@ -1931,12 +1931,12 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">rfc =
   element rfc {
-    attribute number { NUMBER }?,
-    attribute obsoletes { NUMBERS }?,
-    attribute updates { NUMBERS }?,
+    attribute number { text }?,
+    attribute obsoletes { text }?,
+    attribute updates { text }?,
     attribute category<!--25--> ( "std" | "bcp" | "info" | "exp" | "historic" )?,
     attribute consensus<!--6--> ( "no" | "yes" )?,
-    attribute seriesNo { NUMBER }?,
+    attribute seriesNo { text }?,
     attribute ipr<!--272--> (
       "full2026"
       | "noDerivativeWorks2026"
@@ -1957,8 +1957,8 @@
     )?,
     attribute iprExtract { xsd:IDREF }?,
     attribute submissionType<!--25--> ( "IETF" | "IAB" | "IRTF" | "independent" )?,
-    attribute docName { ATEXT }?,
-    attribute xml:lang { ATEXT }?,
+    attribute docName { text }?,
+    attribute xml:lang { text }?,
     <xref target="element.front.grammar" format="none">front</xref>,
     <xref target="element.middle.grammar" format="none">middle</xref>,
     <xref target="element.back.grammar" format="none">back</xref>?
@@ -2046,7 +2046,7 @@
          <artwork type="application/relax-ng-compact-syntax">section =
   element section {
     attribute anchor { xsd:ID }?,
-    attribute title { ATEXT },
+    attribute title { text },
     attribute toc<!--23--> ( "include" | "exclude" | "default" )?,
     (<xref target="element.t.grammar" format="none">t</xref>
      | <xref target="element.figure.grammar" format="none">figure</xref>
@@ -2103,8 +2103,8 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">seriesInfo =
   element seriesInfo {
-    attribute name { ATEXT },
-    attribute value { ATEXT },
+    attribute name { text },
+    attribute value { text },
     empty
   }
 </artwork>
@@ -2159,7 +2159,7 @@
          <artwork type="application/relax-ng-compact-syntax">spanx =
   element spanx {
     attribute xml:space<!--16--> ( "default" | "preserve" )?,
-    attribute style { ATEXT }?,
+    attribute style { text }?,
     text
   }
 </artwork>
@@ -2251,7 +2251,7 @@
          <artwork type="application/relax-ng-compact-syntax">t =
   element t {
     attribute anchor { xsd:ID }?,
-    attribute hangText { ATEXT }?,
+    attribute hangText { text }?,
     (text
      | \<xref target="element.list.grammar" format="none">list</xref>
      | <xref target="element.figure.grammar" format="none">figure</xref>
@@ -2369,7 +2369,7 @@
          <artwork type="application/relax-ng-compact-syntax">texttable =
   element texttable {
     attribute anchor { xsd:ID }?,
-    attribute title { ATEXT }?,
+    attribute title { text }?,
     attribute suppress-title<!--10--> ( "true" | "false" )?,
     attribute align<!--17--> ( "left" | "center" | "right" )?,
     attribute style<!--21--> ( "all" | "none" | "headers" | "full" )?,
@@ -2413,7 +2413,7 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">title =
   element title {
-    attribute abbrev { ATEXT }?,
+    attribute abbrev { text }?,
     text
   }
 </artwork>
@@ -2460,7 +2460,7 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">ttcol =
   element ttcol {
-    attribute width { ATEXT }?,
+    attribute width { text }?,
     attribute align<!--17--> ( "left" | "center" | "right" )?,
     text
   }
@@ -2516,7 +2516,7 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">vspace =
   element vspace {
-    attribute blankLines { NUMBER }?,
+    attribute blankLines { text }?,
     empty
   }
 </artwork>
@@ -3148,22 +3148,15 @@
 <?BEGININC xml2rfcv2.rnc.folded ?>
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
-NUMBER = string
-NUMBERS = string
-DAY = string
-MONTH = string
-YEAR = string
-URI = string
-ATEXT = string
 rfc =
   element rfc {
-    attribute number { NUMBER }?,
-    [ a:defaultValue = "" ] attribute obsoletes { NUMBERS }?,
-    [ a:defaultValue = "" ] attribute updates { NUMBERS }?,
+    attribute number { text }?,
+    [ a:defaultValue = "" ] attribute obsoletes { text }?,
+    [ a:defaultValue = "" ] attribute updates { text }?,
     attribute category { "std" | "bcp" | "info" | "exp" | "historic" 
 }?,
     attribute consensus { "no" | "yes" }?,
-    attribute seriesNo { NUMBER }?,
+    attribute seriesNo { text }?,
     attribute ipr {
       "full2026"
       | "noDerivativeWorks2026"
@@ -3187,8 +3180,8 @@ rfc =
     attribute submissionType {
       "IETF" | "IAB" | "IRTF" | "independent"
     }?,
-    attribute docName { ATEXT }?,
-    [ a:defaultValue = "en" ] attribute xml:lang { ATEXT }?,
+    attribute docName { text }?,
+    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     front,
     middle,
     back?
@@ -3200,21 +3193,21 @@ note*
   }
 title =
   element title {
-    attribute abbrev { ATEXT }?,
+    attribute abbrev { text }?,
     text
   }
 author =
   element author {
-    attribute initials { ATEXT }?,
-    attribute surname { ATEXT }?,
-    attribute fullname { ATEXT }?,
+    attribute initials { text }?,
+    attribute surname { text }?,
+    attribute fullname { text }?,
     attribute role { "editor" }?,
     organization?,
     address?
   }
 organization =
   element organization {
-    attribute abbrev { ATEXT }?,
+    attribute abbrev { text }?,
     text
   }
 address = element address { postal?, phone?, facsimile?, email?, 
@@ -3232,9 +3225,9 @@ email = element email { text }
 uri = element uri { text }
 date =
   element date {
-    attribute day { DAY }?,
-    attribute month { MONTH }?,
-    attribute year { YEAR }?,
+    attribute day { text }?,
+    attribute month { text }?,
+    attribute year { text }?,
     empty
   }
 area = element area { text }
@@ -3243,14 +3236,14 @@ keyword = element keyword { text }
 abstract = element abstract { t+ }
 note =
   element note {
-    attribute title { ATEXT },
+    attribute title { text },
     t+
   }
 middle = element middle { section+ }
 section =
   element section {
     attribute anchor { xsd:ID }?,
-    attribute title { ATEXT },
+    attribute title { text },
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
     (t | figure | texttable | iref)*,
@@ -3259,7 +3252,7 @@ section =
 t =
   element t {
     attribute anchor { xsd:ID }?,
-    attribute hangText { ATEXT }?,
+    attribute hangText { text }?,
     (text
      | \list
      | figure
@@ -3272,9 +3265,9 @@ t =
   }
 \list =
   element list {
-    attribute style { ATEXT }?,
-    attribute hangIndent { NUMBER }?,
-    attribute counter { ATEXT }?,
+    attribute style { text }?,
+    attribute hangIndent { text }?,
+    attribute counter { text }?,
     t+
   }
 xref =
@@ -3288,13 +3281,13 @@ xref =
   }
 eref =
   element eref {
-    attribute target { URI },
+    attribute target { text },
     text
   }
 iref =
   element iref {
-    attribute item { ATEXT },
-    [ a:defaultValue = "" ] attribute subitem { ATEXT }?,
+    attribute item { text },
+    [ a:defaultValue = "" ] attribute subitem { text }?,
     [ a:defaultValue = "false" ]
     attribute primary { "true" | "false" }?,
     empty
@@ -3302,33 +3295,33 @@ iref =
 cref =
   element cref {
     attribute anchor { xsd:ID }?,
-    attribute source { ATEXT }?,
+    attribute source { text }?,
     text
   }
 spanx =
   element spanx {
     [ a:defaultValue = "preserve" ]
     attribute xml:space { "default" | "preserve" }?,
-    [ a:defaultValue = "emph" ] attribute style { ATEXT }?,
+    [ a:defaultValue = "emph" ] attribute style { text }?,
     text
   }
 vspace =
   element vspace {
-    [ a:defaultValue = "0" ] attribute blankLines { NUMBER }?,
+    [ a:defaultValue = "0" ] attribute blankLines { text }?,
     empty
   }
 figure =
   element figure {
     attribute anchor { xsd:ID }?,
-    [ a:defaultValue = "" ] attribute title { ATEXT }?,
+    [ a:defaultValue = "" ] attribute title { text }?,
     [ a:defaultValue = "false" ]
     attribute suppress-title { "true" | "false" }?,
-    attribute src { URI }?,
+    attribute src { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
-    [ a:defaultValue = "" ] attribute alt { ATEXT }?,
-    [ a:defaultValue = "" ] attribute width { ATEXT }?,
-    [ a:defaultValue = "" ] attribute height { ATEXT }?,
+    [ a:defaultValue = "" ] attribute alt { text }?,
+    [ a:defaultValue = "" ] attribute width { text }?,
+    [ a:defaultValue = "" ] attribute height { text }?,
     iref*,
     preamble?,
     artwork,
@@ -3340,14 +3333,14 @@ artwork =
   element artwork {
     [ a:defaultValue = "preserve" ]
     attribute xml:space { "default" | "preserve" }?,
-    [ a:defaultValue = "" ] attribute name { ATEXT }?,
-    [ a:defaultValue = "" ] attribute type { ATEXT }?,
-    attribute src { URI }?,
+    [ a:defaultValue = "" ] attribute name { text }?,
+    [ a:defaultValue = "" ] attribute type { text }?,
+    attribute src { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
-    [ a:defaultValue = "" ] attribute alt { ATEXT }?,
-    [ a:defaultValue = "" ] attribute width { ATEXT }?,
-    [ a:defaultValue = "" ] attribute height { ATEXT }?,
+    [ a:defaultValue = "" ] attribute alt { text }?,
+    [ a:defaultValue = "" ] attribute width { text }?,
+    [ a:defaultValue = "" ] attribute height { text }?,
     text*
   }
 postamble =
@@ -3355,7 +3348,7 @@ postamble =
 texttable =
   element texttable {
     attribute anchor { xsd:ID }?,
-    [ a:defaultValue = "" ] attribute title { ATEXT }?,
+    [ a:defaultValue = "" ] attribute title { text }?,
     [ a:defaultValue = "false" ]
     attribute suppress-title { "true" | "false" }?,
     [ a:defaultValue = "center" ]
@@ -3369,7 +3362,7 @@ texttable =
   }
 ttcol =
   element ttcol {
-    attribute width { ATEXT }?,
+    attribute width { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
     text
@@ -3378,13 +3371,13 @@ c = element c { (text | xref | eref | iref | cref | spanx)* }
 back = element back { references*, section* }
 references =
   element references {
-    [ a:defaultValue = "References" ] attribute title { ATEXT }?,
+    [ a:defaultValue = "References" ] attribute title { text }?,
     reference+
   }
 reference =
   element reference {
     attribute anchor { xsd:ID }?,
-    attribute target { URI }?,
+    attribute target { text }?,
     front,
     seriesInfo*,
     format*,
@@ -3392,15 +3385,15 @@ reference =
   }
 seriesInfo =
   element seriesInfo {
-    attribute name { ATEXT },
-    attribute value { ATEXT },
+    attribute name { text },
+    attribute value { text },
     empty
   }
 format =
   element format {
-    attribute target { URI }?,
-    attribute type { ATEXT },
-    attribute octets { NUMBER }?,
+    attribute target { text }?,
+    attribute type { text },
+    attribute octets { text }?,
     empty
   }
 annotation =
