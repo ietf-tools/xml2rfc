@@ -130,18 +130,14 @@
 <xsl:template match="rng:attribute">
   <xsl:variable name="elem" select="ancestor::rng:element"/>
   <xsl:variable name="anchor" select="concat('element.',$elem/@name,'.attribute.',translate(@name,':','-'))"/>
+  <xsl:variable name="pf">
+    <xsl:if test="not(parent::rng:optional)"> (mandatory)</xsl:if>
+  </xsl:variable>
   
-  <section title="{@name}" anchor="{$anchor}" toc="exclude">
+  <section title="'{@name}' attribute{$pf}" anchor="{$anchor}" toc="exclude">
     <iref item="Attributes" subitem="{@name}"/>
     <iref item="{$elem/@name} element" subitem="{@name} attribute"/>
     <iref item="{@name} attribute" subitem="in {$elem/@name} element"/>
-    <t>
-      <xsl:comment>AG</xsl:comment>
-      <xsl:choose>
-        <xsl:when test="parent::rng:optional">(optional)</xsl:when>
-        <xsl:otherwise>(mandatory)</xsl:otherwise>
-      </xsl:choose>
-    </t>
 
     <xsl:variable name="attrdoc" select="$spec/rfc/middle/section/section/section/section[@anchor=$anchor]/t[not(comment()='AG')] | $spec/rfc/middle/section/section/section/section[@anchor=$anchor]/figure | $spec/rfc/middle/section/section/section/section[@anchor=$anchor]/texttable"/>
     <xsl:if test="not($attrdoc)">
