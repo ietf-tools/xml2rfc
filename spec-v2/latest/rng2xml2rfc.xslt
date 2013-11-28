@@ -90,13 +90,9 @@
     </xsl:otherwise>
   </xsl:choose>
 
-  <xsl:if test="$attributecontents">
-    <section title="Attributes" toc="exclude">
-      <xsl:apply-templates select="$attributecontents">
-        <xsl:sort select="concat(@name,*/@name)"/>
-      </xsl:apply-templates>
-    </section>
-  </xsl:if>  
+  <xsl:apply-templates select="$attributecontents">
+    <xsl:sort select="concat(@name,*/@name)"/>
+  </xsl:apply-templates>
 
   <section title="Grammar" toc="exclude" anchor="{$anchor}.grammar">
     <t/>
