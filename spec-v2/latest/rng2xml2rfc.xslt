@@ -302,8 +302,9 @@
 <xsl:template match="rng:attribute/rng:choice" mode="rnc">
   <xsl:param name="indent"/>
   <xsl:variable name="content" select="normalize-space(.)"/>
+  <xsl:variable name="len" select="string-length($content) + count(*) * 5 + string-length(../@name)"/>
   <xsl:comment>
-    <xsl:value-of select="string-length($content)"/>
+    <xsl:value-of select="$len"/>
   </xsl:comment>
   <xsl:choose>
     <xsl:when test="count(*)=1">
@@ -313,7 +314,7 @@
       </xsl:apply-templates>
       <xsl:text> }</xsl:text>
     </xsl:when>
-    <xsl:when test="string-length($content) > 40">
+    <xsl:when test="$len > 55">
       <xsl:text> (</xsl:text>
       <xsl:for-each select="*">
         <xsl:text>&#10;</xsl:text>

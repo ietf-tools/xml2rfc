@@ -427,11 +427,11 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">artwork =
   element artwork {
-    attribute xml:space<!--16--> ( "default" | "preserve" )?,
+    attribute xml:space<!--35--> ( "default" | "preserve" )?,
     attribute name { text }?,
     attribute type { text }?,
     attribute src { text }?,
-    attribute align<!--17--> ( "left" | "center" | "right" )?,
+    attribute align<!--37--> ( "left" | "center" | "right" )?,
     attribute alt { text }?,
     attribute width { text }?,
     attribute height { text }?,
@@ -530,7 +530,7 @@
     attribute initials { text }?,
     attribute surname { text }?,
     attribute fullname { text }?,
-    attribute role<!--6--> { "editor" }?,
+    attribute role<!--15--> { "editor" }?,
     <xref target="element.organization.grammar" format="none">organization</xref>?,
     <xref target="element.address.grammar" format="none">address</xref>?
   }
@@ -985,9 +985,9 @@
   element figure {
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
-    attribute suppress-title<!--10--> ( "true" | "false" )?,
+    attribute suppress-title<!--34--> ( "true" | "false" )?,
     attribute src { text }?,
-    attribute align<!--17--> ( "left" | "center" | "right" )?,
+    attribute align<!--37--> ( "left" | "center" | "right" )?,
     attribute alt { text }?,
     attribute width { text }?,
     attribute height { text }?,
@@ -1179,7 +1179,7 @@
   element iref {
     attribute item { text },
     attribute subitem { text }?,
-    attribute primary<!--10--> ( "true" | "false" )?,
+    attribute primary<!--27--> ( "true" | "false" )?,
     empty
   }
 </artwork>
@@ -1861,10 +1861,16 @@
     attribute number { text }?,
     attribute obsoletes { text }?,
     attribute updates { text }?,
-    attribute category<!--25--> ( "std" | "bcp" | "info" | "exp" | "historic" )?,
-    attribute consensus<!--6--> ( "no" | "yes" )?,
+    attribute category<!--58--> (
+      "std"
+      | "bcp"
+      | "info"
+      | "exp"
+      | "historic"
+    )?,
+    attribute consensus<!--25--> ( "no" | "yes" )?,
     attribute seriesNo { text }?,
-    attribute ipr<!--272--> (
+    attribute ipr<!--355--> (
       "full2026"
       | "noDerivativeWorks2026"
       | "none"
@@ -1883,7 +1889,12 @@
       | "pre5378Trust200902"
     )?,
     attribute iprExtract { xsd:IDREF }?,
-    attribute submissionType<!--25--> ( "IETF" | "IAB" | "IRTF" | "independent" )?,
+    attribute submissionType<!--59--> (
+      "IETF"
+      | "IAB"
+      | "IRTF"
+      | "independent"
+    )?,
     attribute docName { text }?,
     attribute xml:lang { text }?,
     <xref target="element.front.grammar" format="none">front</xref>,
@@ -1969,7 +1980,7 @@
   element section {
     attribute anchor { xsd:ID }?,
     attribute title { text },
-    attribute toc<!--23--> ( "include" | "exclude" | "default" )?,
+    attribute toc<!--41--> ( "include" | "exclude" | "default" )?,
     (<xref target="element.t.grammar" format="none">t</xref>
      | <xref target="element.figure.grammar" format="none">figure</xref>
      | <xref target="element.texttable.grammar" format="none">texttable</xref>
@@ -2072,7 +2083,7 @@
       <figure>
          <artwork type="application/relax-ng-compact-syntax">spanx =
   element spanx {
-    attribute xml:space<!--16--> ( "default" | "preserve" )?,
+    attribute xml:space<!--35--> ( "default" | "preserve" )?,
     attribute style { text }?,
     text
   }
@@ -2273,9 +2284,9 @@
   element texttable {
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
-    attribute suppress-title<!--10--> ( "true" | "false" )?,
-    attribute align<!--17--> ( "left" | "center" | "right" )?,
-    attribute style<!--21--> ( "all" | "none" | "headers" | "full" )?,
+    attribute suppress-title<!--34--> ( "true" | "false" )?,
+    attribute align<!--37--> ( "left" | "center" | "right" )?,
+    attribute style<!--46--> ( "all" | "none" | "headers" | "full" )?,
     <xref target="element.preamble.grammar" format="none">preamble</xref>?,
     <xref target="element.ttcol.grammar" format="none">ttcol</xref>+,
     <xref target="element.c.grammar" format="none">c</xref>*,
@@ -2357,7 +2368,7 @@
          <artwork type="application/relax-ng-compact-syntax">ttcol =
   element ttcol {
     attribute width { text }?,
-    attribute align<!--17--> ( "left" | "center" | "right" )?,
+    attribute align<!--37--> ( "left" | "center" | "right" )?,
     text
   }
 </artwork>
@@ -2497,8 +2508,8 @@
          <artwork type="application/relax-ng-compact-syntax">xref =
   element xref {
     attribute target { xsd:IDREF },
-    attribute pageno<!--10--> ( "true" | "false" )?,
-    attribute format<!--26--> ( "counter" | "title" | "none" | "default" )?,
+    attribute pageno<!--26--> ( "true" | "false" )?,
+    attribute format<!--52--> ( "counter" | "title" | "none" | "default" )?,
     text
   }
 </artwork>
