@@ -135,7 +135,7 @@
     <iref item="{$elem/@name} element" subitem="{@name} attribute"/>
     <iref item="{@name} attribute" subitem="in {$elem/@name} element"/>
 
-    <xsl:variable name="attrdoc" select="$spec/rfc/middle/section/section/section/section[@anchor=$anchor]/t[not(comment()='AG')] | $spec/rfc/middle/section/section/section/section[@anchor=$anchor]/figure | $spec/rfc/middle/section/section/section/section[@anchor=$anchor]/texttable"/>
+    <xsl:variable name="attrdoc" select="$spec/rfc/middle/section/section/section[@anchor=$anchor]/t[not(comment()='AG')] | $spec/rfc/middle/section/section/section[@anchor=$anchor]/figure | $spec/rfc/middle/section/section/section[@anchor=$anchor]/texttable"/>
     <xsl:if test="not($attrdoc)">
       <t>
         <xsl:comment>AG</xsl:comment>
