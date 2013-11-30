@@ -20,14 +20,19 @@ def diff_test(case, valid, test, failpath):
         second string to a file.
     """
     validarr = [line.rstrip() for line in valid.splitlines()]
-    testarr = [line.rstrip() for line in test.splitlines()]
+    testarr = [line.rstrip() for line in test.encode('ascii', 'xmlcharrefreplace').splitlines()]
     if testarr != validarr:
         diff = difflib.ndiff(validarr, testarr)
         fh = open(failpath, 'w')
-        fh.write(test)
+        fh.write(test.encode('ascii', 'xmlcharrefreplace'))
         fh.close()
         case.fail("Output doesn't match, file saved to %s.\nDIFF:\n%s" % (failpath, '\n'.join(diff)))
 
+def strip_formatting_whitespace(text):
+    """ We use non-breaking space, non-breaking hyphen
+        internally for formattin purposes - they need to be cleaned out
+    """
+    return text.replace(u'\u00A0', ' ').replace(u'\u2011', '-')
 
 class XmlRfcDummy():
     """ Dummy rfc used for test fixtures """
@@ -100,30 +105,35 @@ output_format = [
         "spacefix": xml2rfc.utils.formatXmlWhitespace,
         "unicodefix": xml2rfc.utils.safeReplaceUnicode,
         "writer": xml2rfc.PaginatedTextRfcWriter,
+        "postprocesslines": "post_process_lines"
     },
     {
         "ext": "raw.txt",
         "spacefix": xml2rfc.utils.formatXmlWhitespace,
         "unicodefix": xml2rfc.utils.safeReplaceUnicode,
         "writer": xml2rfc.RawTextRfcWriter,
+        "postprocesslines": "post_process_lines"
     },
     {
         "ext": "nroff",
         "spacefix": xml2rfc.utils.formatXmlWhitespace,
         "unicodefix": xml2rfc.utils.safeReplaceUnicode,
         "writer": xml2rfc.NroffRfcWriter,
+        "postprocesslines": "post_process_lines"
     },
     {
         "ext": "html",
         "spacefix": lambda x: x,
         "unicodefix": lambda x: x,
         "writer": xml2rfc.HtmlRfcWriter,
+        "postprocesslines": "post_process_lines"
     },
     {
         "ext": "exp.xml",
         "spacefix": lambda x: x,
         "unicodefix": lambda x: x,
         "writer": xml2rfc.HtmlRfcWriter,
+        "postprocesslines": "post_process_lines"
     },
 ]
 
@@ -143,6 +153,7 @@ class WriterElementTest(unittest.TestCase):
             unicodefix = format["unicodefix"]
             writer = format["writer"](XmlRfcDummy(), quiet=True)
             testfunc = getattr(writer, func_name)
+            postprocessing = getattr(writer, format["postprocesslines"])
             #
             validpath = "tests/valid/%s.%s" % (name, ext)
             try:
@@ -155,7 +166,7 @@ class WriterElementTest(unittest.TestCase):
             spacefix(element)
             unicodefix(element)
             testfunc(element)
-            output = '\n'.join(arrstrip(writer.buf))  # Don't care about initial blank
+            output = '\n'.join(arrstrip(postprocessing(writer.buf)))  # Don't care about initial blank
             diff_test(self, valid, output, validpath.replace('valid', 'failed'))
 
     def test_references(self):
@@ -224,17 +235,20 @@ class WriterRootTest(unittest.TestCase):
 
     def header_footer_test(self):
         output = '\n'.join(self.writer._make_footer_and_header(1))
+        output = strip_formatting_whitespace(output)
         diff_test(self, self.valid, output, self.failpath)
 
     def top_test(self):
         self.writer.write_top(self.writer._prepare_top_left(), 
                               self.writer._prepare_top_right())
         output = '\n'.join(self.writer.buf)  # Care about initial blank
+        output = strip_formatting_whitespace(output)
         diff_test(self, self.valid, output, self.failpath)
 
     def status_test(self):
         self.writer.write_status_section()
         output = '\n'.join(arrstrip(self.writer.buf))  # Don't care about initial blank
+        output = strip_formatting_whitespace(output)
         diff_test(self, self.valid, output, self.failpath)
 
 

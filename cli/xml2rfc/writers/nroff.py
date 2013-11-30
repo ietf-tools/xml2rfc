@@ -24,7 +24,7 @@ nroff_linestart_meta = ["'", ".", ]
 
 def nroff_escape_linestart(line):
     if line.startswith("'"):
-        return "\\" + line
+        return "\\&" + line
     if line.startswith("."):
         return "\\&" + line
 
@@ -52,18 +52,14 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                                         quiet=quiet, verbose=verbose, date=date)
         self.curr_indent = 0    # Used like a state machine to control
                                 # whether or not we print a .in command
+
         self.wrapper.width = self.width
-        self.wrapper.break_on_hyphens = False
-        self.wrapper.post_break_replacements = {
-            '&#160;' : r'\\0',  # nbsp
-            '&#8209;': r'\-',  # nbhy
-            '&#8288;': r'',     # wj
-        }
+        self.wrapper.break_on_hyphens = True
         
     def _length(self, text):
-        # re.sub('\\\\.', '.', text)
-        # return len(re.sub('\\\\%', '', text))
-        return len(text)
+        """ Get rid of the zero width items before getting the length
+        """
+        return len(re.sub(u'[\u2060|\u200B]', '', text))
 
     def _indent(self, amount):
         # Writes an indent command if it differs from the last
@@ -179,29 +175,6 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     def post_write_toc(self):
         return ['.fi','.in 3']
 
-    def _expand_xref(self, xref):
-        """ Returns the proper text representation of an xref element """
-        target = xref.attrib.get('target', '')
-        format = xref.attrib.get('format', self.defaults['xref_format'])
-        item = self._getItemByAnchor(target)
-        if not item or format == 'none':
-            target_text = '[' + target + ']'
-        elif format == 'counter':
-            target_text = item.counter
-        elif format == 'title':
-            target_text = item.title
-        else: #Default
-            target_text = item.autoName
-        if xref.text and not target_text.startswith('['):
-            target_text = '(' + target_text + ')'
-        target_text_list = target_text.split(" ")
-        target_text = "\\0".join(map(lambda x : ("\%" + x)
-                                    if "." in x or "-" in x else x,
-                                    target_text_list))
-        if xref.text:        
-            return xref.text.rstrip() + ' ' + target_text
-        else:
-            return target_text
 
     # ---------------------------------------------------------
     # PaginatedTextRfcWriter overrides
@@ -230,23 +203,6 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         # text, in order to prevent orphan headings
         end = len(self.buf) + self.pis["sectionorphan"]
         self.break_hints[begin] = (end - begin - 1, "txt")
-
-    def urlkeep(self, text):
-        text = re.sub(r'(\(?)http(s?)://', r'\%\1http\2://', text)
-        return text
-
-    def write_paragraph(self, text, align='left', autoAnchor=None):
-        """ Write a generic paragraph of text.  Used for boilerplate. """
-        text = self.urlkeep(text)
-        self.write_text(text, indent=3, align=align, leading_blankline=True)
-
-    def pre_indexing(self):
-        # escape backslashes in the text
-        for element in self.r.iter():
-            if element.text:
-                element.text = element.text.replace('\\', '\\\\')
-            if element.tail:
-                element.tail = element.tail.replace('\\', '\\\\')
 
     def pre_rendering(self):
         """ Inserts an nroff header into the buffer """
@@ -288,9 +244,40 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         self.page_length = 1
         self.page_num += 1
 
+    def post_process_lines(self, lines):
+        output = []
+        flow_text = True
+        for line in lines:
+            if line == ".fi":
+                flow_text = True
+            elif line == ".nf":
+                flow_text = False
+            else:
+                line = self.post_process_nroff(flow_text, line)
+            output.append(line)
+        return output
+        
+    def post_process_nroff(self, flow_text, text):
+        if text and text[0] == '.':
+            return text
+        # normal quoting
+        text = text.replace('\\', '\\\\')       # slashes 
+        text = re.sub("^\\\\\\\\&\\.", "\\&.", text)  # repair start of line markers
+        text = re.sub("^\\\\\\\\&'", "\\&'", text)  # repair start of line markers
+
+        # character replacement
+        text = re.sub(u"\u2011", "-", text)
+        text = re.sub(u'\u00A0', r'\\0', text)
+        text = re.sub(u'\u200B', '', text)
+
+        # wrapping quoting
+        if flow_text:
+            text = re.sub("([^ \t\n]*-)", r"\%\1", text)
+        return text
+
     def emit(self, text):
         "Used by post_rendering() to emit and count lines."
-        if isinstance(text, str):
+        if isinstance(text, str) or isinstance(text, unicode):
             if self.page_length == 1 and text.strip() == '':
                 return 
             self.output.append(text)
@@ -308,7 +295,8 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
     def write_to_file(self, file):
         """ Writes the buffer to the specified file """
-        for line in self.output:
+        flow_text = True
+        for line in post_process_lines(self.output):
             file.write(line.rstrip(" \t"))
             file.write("\n")
             

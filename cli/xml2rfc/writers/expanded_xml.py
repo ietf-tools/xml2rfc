@@ -18,6 +18,10 @@ class ExpandedXmlWriter:
         self.quiet = quiet
         self.verbose = verbose
 
+    def post_process_lines(self, lines):
+        output = [ line.replace(u'\u00A0', ' ') for line in lines ]
+        return output
+
     def write(self, filename):
         """ Public method to write the XML document to a file """
         # clean out entity definitions first

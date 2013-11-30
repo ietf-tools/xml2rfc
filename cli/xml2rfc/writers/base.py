@@ -298,6 +298,7 @@ class BaseRfcWriter:
         self.date = date
         self.expire_string = ''
         self.ascii = False
+        self.nbws_cond = u'\u00A0'
 
         # We will refer to the XmlRfc document root as 'r'
         self.xmlrfc = xmlrfc
@@ -346,10 +347,10 @@ class BaseRfcWriter:
                       level=1, appendix=False):
         counter = str(counter)
         if appendix:
-            autoName = 'Appendix ' + counter
+            autoName = 'Appendix' + self.nbws_cond + counter
             autoAnchor = 'rfc.appendix.' + counter
         else:
-            autoName = 'Section ' + counter
+            autoName = 'Section' + self.nbws_cond + counter
             autoAnchor = 'rfc.section.' + counter
         item = _RfcItem(autoName, autoAnchor, counter=counter, title=title, \
                        anchor=anchor, toc=toc, level=level, appendix=appendix)
@@ -363,7 +364,7 @@ class BaseRfcWriter:
             autoAnchor = 'rfc.references'
         else:
             subCounter = str(subCounter)
-            autoName = 'References ' + subCounter
+            autoName = 'References' + self.nbws_cond + subCounter
             autoAnchor = 'rfc.references.' + subCounter
         item = _RfcItem(autoName, autoAnchor, counter=counter, title=title, \
                        anchor=anchor, toc=toc, level=level)
@@ -372,7 +373,7 @@ class BaseRfcWriter:
     
     def _indexFigure(self, counter, title=None, anchor=None, toc=False):
         counter = str(counter)
-        autoName = 'Figure ' + counter
+        autoName = 'Figure' + self.nbws_cond + counter
         autoAnchor = 'rfc.figure.' + counter
         item = _RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
                        toc=toc)
@@ -381,7 +382,7 @@ class BaseRfcWriter:
         
     def _indexTable(self, counter, title=None, anchor=None, toc=False):
         counter = str(counter)
-        autoName = 'Table ' + counter
+        autoName = 'Table' + self.nbws_cond + counter
         autoAnchor = 'rfc.table.' + counter
         item = _RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
                        toc=toc)

@@ -35,6 +35,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, date=date, verbose=verbose)
         self.list_counters = {}
         self.iref_index = []
+        self.nbws_cond = ' '    # Use space as they are in an anchor element anyway
         
         # Initialize templates directory
         self.templates_dir = templates_dir or \
@@ -731,6 +732,9 @@ class HtmlRfcWriter(BaseRfcWriter):
                  'toc_rows':        ''.join(self.buffers['toc_rows'])
                 }
         self.output = self.templates['base.html'].substitute(subs)
+
+    def post_process_lines(self, lines):
+        return lines
 
     def write_to_file(self, file):
         file.write(self.output)

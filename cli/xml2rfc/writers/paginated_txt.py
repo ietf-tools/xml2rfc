@@ -107,9 +107,6 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.break_hints[begin] = (end - begin, "txt")
                                         
 
-    def pre_indexing(self):
-        pass
-
     def pre_rendering(self):
         """ Prepares the header and footer information """
         # Raw textwriters preprocessing will replace unicode with safe ascii
@@ -170,7 +167,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     def emit(self, text):
         """Write text to the output buffer if it's not just a blank
            line at the top of the page"""
-        if isinstance(text, str):
+        if isinstance(text, str) or isinstance(text, unicode):
             if self.page_length == 1 and text.strip() == '':
                 return 
             self.output.append(text)
@@ -329,3 +326,6 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                         ptr, end = iref_pointers.pop(0)
                     else:
                         break
+
+    def post_process_lines(self, lines):
+        return RawTextRfcWriter.post_process_lines(self, lines)

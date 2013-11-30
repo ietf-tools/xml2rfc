@@ -35,11 +35,11 @@ class MyTextWrapper(textwrap.TextWrapper):
 
         # Override wrapping regex, preserve '/' before linebreak
         self.wordsep_re = re.compile(
-            r'(/|'                                    # a forward slash  
-            r'\s+|'                                   # any whitespace
-            r'[^\s\w]*\w+[^0-9\W]-(?=\w+[^0-9\W])|'   # hyphenated words
-            r'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))'    # em-dash
-            r'(?!&#8288;)')                           # UNLESS &wj;
+            ur'(/|'                                    # a forward slash  
+            ur'[ \t\n\r\f\v]+|'                        # any ASCII whitespace
+            ur'[^\s\w]*\w+[^0-9\W]-(?=\w+[^0-9\W])|'   # hyphenated words
+            ur'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))'    # em-dash
+            ur'(?![\u2060|\u200B])')                   # UNLESS &wj; or &zwbs; or &nbsp;
 
         self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
 
@@ -69,9 +69,8 @@ class MyTextWrapper(textwrap.TextWrapper):
 
         # XmlCharRef replacements that occur AFTER line breaking logic
         self.post_break_replacements = {
-            '&#160;': ' ',   # nbsp
-            '&#8209;': '-',  # nbhy
-            '&#8288;': '',   # wj
+            u'\u2060': '',    # wj
+            u'\u200B': '',    # zwsp
         }
 
         self.break_on_hyphens = True
@@ -127,18 +126,25 @@ class MyTextWrapper(textwrap.TextWrapper):
             text = re.sub("([.!?])   +", r"\1  ", text)
 
         # prevent breaking "Section N.N" and "Appendix X.X"
-        text = re.sub("(Section|Appendix) ", r"\1&#160;", text)
+        text = re.sub("(Section|Appendix|Figure|Table) ", u"\\1\u00A0", text)
 
         # Replace some characters after splitting has occured
-        parts = [ self.replace(s) for s in self._split(text) ]
+        parts = self._split(text)
         chunks = []
         max_word_len = self.width - len(subsequent_indent)
         for chunk in parts:
-            if len(chunk) > max_word_len:
-                bits = self._split(chunk)
-                chunks += bits
+            chunk2 = self.replace(chunk)
+            if len(chunk2) > max_word_len:
+                chunk2 = chunk.replace(u'\u200B', '')
+                bits = self._split(chunk2)
+                for bit in bits:
+                    chunk3 = self.replace(bit)
+                    if len(chunk3) > max_word_len:
+                        chunks += self._split(chunk3)
+                    else:
+                        chunks += [ chunk3 ]
             else:
-                chunks += [ chunk ]
+                chunks += [ chunk2 ]
         
         # Original implementation
         if self.fix_sentence_endings:
@@ -257,10 +263,13 @@ def urlkeep(text):
     """ Insert word join XML entities on forward slashes and hyphens
         in a URL so that it stays on one line
     """
-    wj_char = '&#8288;'
+    wj_char = u'\u2060'
+    zwsp_char = u'\u200B'
     def replacer(match):
-        return match.group(0).replace('/', '/' + wj_char) \
-                             .replace('-', '-' + wj_char)
+        return match.group(0).replace('/', '/' + zwsp_char) \
+                             .replace('/' + zwsp_char + '/' + zwsp_char, '/' + wj_char +'/' + wj_char) \
+                             .replace('-', '-' + wj_char) \
+                             .replace(':', ':' + wj_char)
     return re.sub('(?<=http:)\S*', replacer, text)
 
 
@@ -291,116 +300,119 @@ def safeReplaceUnicode(tree):
 
 
 def _replace_unicode_characters(str):
-    for key, val in _unicode_replacements.items():
-        str = re.sub(re.escape(key), val, str)
-    try:
-        str = str.encode('ascii')
-    except UnicodeEncodeError:
-        str = str.encode('ascii', 'xmlcharrefreplace')
-        # xml2rfc.log.warn('Unicode character(s) not replaced in string:\n  ' + \
-                         # str)
-    return str
+    """ replace those Unicode characters that we do not use internally
+        &wj; &zwsp; &nbsp; &nbhy;
+    """
+    while True:
+        match = re.search(u'([^ -\x7e\u2060\u200B\u00A0\u2011])', str)
+        if not match:
+            return str
+        if match.group(1) in _unicode_replacements:
+            str = re.sub(match.group(1), _unicode_replacements[match.group(1)], str)
+        else:
+            entity = match.group(1).encode('ascii', 'xmlcharrefreplace')
+            str = re.sub(match.group(1), entity, str)
+            xml2rfc.log.warn('Illegal character replaced in string: ' + entity)
 
 
 # Ascii representations of unicode chars from rfc2629-xhtml.ent
 # Auto-generated from comments in rfc2629-xhtml.ent
 _unicode_replacements = {
-    '\xa1': '!',
-    '\xa2': '[cents]',
-    '\xa3': 'GBP',
-    '\xa4': '[currency units]',
-    '\xa5': 'JPY',
-    '\xa6': '|',
-    '\xa7': 'S.',
-    '\xa9': '(C)',
-    '\xaa': 'a',
-    '\xab': '<<',
-    '\xac': '[not]',
-    '\xae': '(R)',
-    '\xaf': '_',
-    '\xb0': 'o',
-    '\xb1': '+/-',
-    '\xb2': '^2',
-    '\xb3': '^3',
-    '\xb4': "'",
-    '\xb5': '[micro]',
-    '\xb6': 'P.',
-    '\xb7': '.',
-    '\xb8': ',',
-    '\xb9': '^1',
-    '\xba': 'o',
-    '\xbb': '>>',
-    '\xbc': '1/4',
-    '\xbd': '1/2',
-    '\xbe': '3/4',
-    '\xbf': '?',
-    '\xc0': 'A',
-    '\xc1': 'A',
-    '\xc2': 'A',
-    '\xc3': 'A',
-    '\xc4': 'Ae',
-    '\xc5': 'Ae',
-    '\xc6': 'AE',
-    '\xc7': 'C',
-    '\xc8': 'E',
-    '\xc9': 'E',
-    '\xca': 'E',
-    '\xcb': 'E',
-    '\xcc': 'I',
-    '\xcd': 'I',
-    '\xce': 'I',
-    '\xcf': 'I',
-    '\xd0': '[ETH]',
-    '\xd1': 'N',
-    '\xd2': 'O',
-    '\xd3': 'O',
-    '\xd4': 'O',
-    '\xd5': 'O',
-    '\xd6': 'Oe',
-    '\xd7': 'x',
-    '\xd8': 'Oe',
-    '\xd9': 'U',
-    '\xda': 'U',
-    '\xdb': 'U',
-    '\xdc': 'Ue',
-    '\xdd': 'Y',
-    '\xde': '[THORN]',
-    '\xdf': 'ss',
-    '\xe0': 'a',
-    '\xe1': 'a',
-    '\xe2': 'a',
-    '\xe3': 'a',
-    '\xe4': 'ae',
-    '\xe5': 'ae',
-    '\xe6': 'ae',
-    '\xe7': 'c',
-    '\xe8': 'e',
-    '\xe9': 'e',
-    '\xea': 'e',
-    '\xeb': 'e',
-    '\xec': 'i',
-    '\xed': 'i',
-    '\xee': 'i',
-    '\xef': 'i',
-    '\xf0': '[eth]',
-    '\xf1': 'n',
-    '\xf2': 'o',
-    '\xf3': 'o',
-    '\xf4': 'o',
-    '\xf5': 'o',
-    '\xf6': 'oe',
-    '\xf7': '/',
-    '\xf8': 'oe',
-    '\xf9': 'u',
-    '\xfa': 'u',
-    '\xfb': 'u',
-    '\xfc': 'ue',
-    '\xfd': 'y',
-    '\xfe': '[thorn]',
-    '\xff': 'y',
+    u'\xa1': '!',
+    u'\xa2': '[cents]',
+    u'\xa3': 'GBP',
+    u'\xa4': '[currency units]',
+    u'\xa5': 'JPY',
+    u'\xa6': '|',
+    u'\xa7': 'S.',
+    u'\xa9': '(C)',
+    u'\xaa': 'a',
+    u'\xab': '<<',
+    u'\xac': '[not]',
+    u'\xae': '(R)',
+    u'\xaf': '_',
+    u'\xb0': 'o',
+    u'\xb1': '+/-',
+    u'\xb2': '^2',
+    u'\xb3': '^3',
+    u'\xb4': "'",
+    u'\xb5': '[micro]',
+    u'\xb6': 'P.',
+    u'\xb7': '.',
+    u'\xb8': ',',
+    u'\xb9': '^1',
+    u'\xba': 'o',
+    u'\xbb': '>>',
+    u'\xbc': '1/4',
+    u'\xbd': '1/2',
+    u'\xbe': '3/4',
+    u'\xbf': '?',
+    u'\xc0': 'A',
+    u'\xc1': 'A',
+    u'\xc2': 'A',
+    u'\xc3': 'A',
+    u'\xc4': 'Ae',
+    u'\xc5': 'Ae',
+    u'\xc6': 'AE',
+    u'\xc7': 'C',
+    u'\xc8': 'E',
+    u'\xc9': 'E',
+    u'\xca': 'E',
+    u'\xcb': 'E',
+    u'\xcc': 'I',
+    u'\xcd': 'I',
+    u'\xce': 'I',
+    u'\xcf': 'I',
+    u'\xd0': '[ETH]',
+    u'\xd1': 'N',
+    u'\xd2': 'O',
+    u'\xd3': 'O',
+    u'\xd4': 'O',
+    u'\xd5': 'O',
+    u'\xd6': 'Oe',
+    u'\xd7': 'x',
+    u'\xd8': 'Oe',
+    u'\xd9': 'U',
+    u'\xda': 'U',
+    u'\xdb': 'U',
+    u'\xdc': 'Ue',
+    u'\xdd': 'Y',
+    u'\xde': '[THORN]',
+    u'\xdf': 'ss',
+    u'\xe0': 'a',
+    u'\xe1': 'a',
+    u'\xe2': 'a',
+    u'\xe3': 'a',
+    u'\xe4': 'ae',
+    u'\xe5': 'ae',
+    u'\xe6': 'ae',
+    u'\xe7': 'c',
+    u'\xe8': 'e',
+    u'\xe9': 'e',
+    u'\xea': 'e',
+    u'\xeb': 'e',
+    u'\xec': 'i',
+    u'\xed': 'i',
+    u'\xee': 'i',
+    u'\xef': 'i',
+    u'\xf0': '[eth]',
+    u'\xf1': 'n',
+    u'\xf2': 'o',
+    u'\xf3': 'o',
+    u'\xf4': 'o',
+    u'\xf5': 'o',
+    u'\xf6': 'oe',
+    u'\xf7': '/',
+    u'\xf8': 'oe',
+    u'\xf9': 'u',
+    u'\xfa': 'u',
+    u'\xfb': 'u',
+    u'\xfc': 'ue',
+    u'\xfd': 'y',
+    u'\xfe': '[thorn]',
+    u'\xff': 'y',
     u'\u0152': 'OE',
     u'\u0153': 'oe',
-    u'\u0160': 'S',
     u'\u0161': 's',
     u'\u0178': 'Y',
     u'\u0192': 'f',
@@ -409,7 +421,7 @@ _unicode_replacements = {
     u'\u2003': ' ',
     u'\u2009': ' ',
     u'\u2013': '-',
-    u'\u2014': '-\u002D',
+    u'\u2014': u'-\u002D',
     u'\u2018': "'",
     u'\u2019': "'",
     u'\u201a': "'",
@@ -459,7 +471,6 @@ _unicode_replacements = {
     u'\u003f': '?',
     u'\u0040': '@',
     u'\u005b': '[',
-    u'\u005c': '\\\\',
     u'\u005d': ']',
     u'\u005e': '^',
     u'\u005f': '_',

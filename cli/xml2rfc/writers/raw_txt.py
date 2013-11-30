@@ -328,7 +328,8 @@ class RawTextRfcWriter(BaseRfcWriter):
             target_text = item.title
         else: #Default
             target_text = item.autoName
-        target_text = re.sub("([./-])", r"\1&#8288;", target_text)   # word joiner, to prevent line breaks
+        target_text = re.sub("-", u"\u2011", target_text) # switch to non-breaking hyphens
+        target_text = re.sub(" ", u"\u00A0", target_text)  # switch to non-breaking space
         if xref.text:
             if not target_text.startswith('['):
                 target_text = '(' + target_text + ')'
@@ -1305,10 +1306,23 @@ class RawTextRfcWriter(BaseRfcWriter):
     def post_rendering(self):
         # Insert the TOC and IREF into the main buffer
         self.output = self.buf[:self.toc_marker] + \
-                      self.write_toc() + \
-                      self.buf[self.toc_marker:self.iref_marker] + \
+                      self.write_toc()
+        if self.iref_marker > 0:
+            self.output += self.buf[self.toc_marker:self.iref_marker] + \
                       self.write_iref_index() + \
                       self.buf[self.iref_marker:]
+        else:
+            self.output += self.buf[self.toc_marker:]
+
+    def post_process_lines(self, lines):
+        output = []
+        for line in lines:
+            if isinstance(line, unicode):
+                line = line.replace(u"\u8209", '-')
+                line = line.replace(u'\u00A0', ' ')
+                line = line.replace(u'\u2011', '-')
+            output.append(line);
+        return output
 
     def write_to_file(self, file):
         """ Writes the buffer to the specified file """
@@ -1317,6 +1331,6 @@ class RawTextRfcWriter(BaseRfcWriter):
             file.write("\n"*3)
         else:
             file.write("\n"*6)
-        for line in self.output:
+        for line in post_process_lines(self.output):
             file.write(line.rstrip(" \t"))
             file.write("\n")
