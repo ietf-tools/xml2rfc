@@ -296,7 +296,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     def write_to_file(self, file):
         """ Writes the buffer to the specified file """
         flow_text = True
-        for line in post_process_lines(self.output):
+        for line in self.post_process_lines(self.output):
             file.write(line.rstrip(" \t"))
             file.write("\n")
             
