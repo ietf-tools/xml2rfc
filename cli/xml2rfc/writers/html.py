@@ -731,6 +731,8 @@ class HtmlRfcWriter(BaseRfcWriter):
                  'toc_head_links':  ''.join(self.buffers['toc_head_links']),
                  'toc_rows':        ''.join(self.buffers['toc_rows'])
                 }
+        for key in subs.keys():
+            subs[key] = subs[key].encode('ascii', 'xmlcharrefreplace')
         self.output = self.templates['base.html'].substitute(subs)
 
     def post_process_lines(self, lines):
