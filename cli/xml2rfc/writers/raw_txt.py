@@ -119,9 +119,12 @@ class RawTextRfcWriter(BaseRfcWriter):
                 buf.extend(par)
             elif align == 'center':
                 for line in par:
-                    margin = ' ' * (indent//2*2)
+                    margin = ' ' * indent
                     if line.startswith(margin):
-                        centered = margin + line[len(margin):].center(self.width-(indent//2*2)).rstrip()
+                        line = line.rstrip()
+                        centered = ' ' * ((self.width - len(line.rstrip())-indent)/2)
+                        centered += line
+                        # centered = margin + line[len(margin):].center(self.width-indent-4).rstrip()
                         buf.append(centered)
                     else:
                         buf.append(line.center(self.width).rstrip())
@@ -469,6 +472,13 @@ class RawTextRfcWriter(BaseRfcWriter):
             start_line = len(self.buf)
             # Format the input
             lines = [line.rstrip() for line in text.expandtabs(4).split('\n')]
+            # Outdent if it helps anything
+            longest_line = max(len(line.rstrip()) for line in lines)
+            if (longest_line > self.width-indent):
+                new_indent = max(self.width - longest_line, 0)
+                xml2rfc.log.warn('artwork outdented %s characters to avoid overruning right margin around input line %s)' % (indent - new_indent, source_line if source_line else 0))
+                indent = new_indent
+
             # Trim first and last lines if they are blank, whitespace is handled
             # by the `blanklines` and `delimiter` arguments
             if len(lines) > 1:
@@ -478,22 +488,19 @@ class RawTextRfcWriter(BaseRfcWriter):
                     lines.pop(-1)
             if align == 'center':
                 # Find the longest line, and use that as a fixed center.
-                longest_line = len(max(lines, key=len))
                 center_indent = indent + ((self.width - indent - longest_line) // 2)
                 indent_str = center_indent > indent and ' ' * center_indent or \
                                                         ' ' * indent
                 for line in lines:
-                    self.buf.append(indent_str + line)
+                    self.buf.append(indent_str + line.rstrip())
             elif align == 'right':
+                indent_str = ' ' * (self.width - longest_line)
                 for line in lines:
-                    self.buf.append(line.rjust(self.width))
+                    self.buf.append(indent_str + line.rstrip())
             else:  # align == left
-                # Enforce a minimum indentation if any of the lines are < indent
-                extra = indent - \
-                        min([len(line) - len(line.lstrip()) for line in lines])
-                indent_str = extra > 0 and ' ' * extra or ''
+                indent_str = ' ' * indent
                 for line in lines:
-                    self.buf.append(indent_str + line)
+                    self.buf.append(indent_str + line.rstrip())
             # Additional blank lines?
             self.buf.extend([''] * blanklines)
             # Delimiter?
@@ -1318,7 +1325,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         output = []
         for line in lines:
             if isinstance(line, unicode):
-                line = line.replace(u"\u8209", '-')
+                # line = line.replace(u"\u8209", '-')
                 line = line.replace(u'\u00A0', ' ')
                 line = line.replace(u'\u2011', '-')
             output.append(line);

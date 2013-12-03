@@ -658,9 +658,10 @@ class BaseRfcWriter:
 
     def write_figure(self, figure):
         """ Writes <figure> elements """
-        align = figure.attrib.get('align', self.defaults['figure_align'])
+        figure_align = figure.attrib.get('align', self.defaults['figure_align'])
         anchor = figure.attrib.get('anchor')
         title = figure.attrib.get('title', self.defaults['figure_title'])
+        suppress_title = figure.attrib.get('suppress-title', 'false')
 
         # Keep track of count if there is an anchor, or PI was enabled
         if anchor or self.pis['figurecount'] == 'yes':
@@ -677,40 +678,39 @@ class BaseRfcWriter:
         # Write preamble
         preamble = figure.find('preamble')
         if preamble is not None:
-            self.write_t_rec(preamble, align=align)
+            self.write_t_rec(preamble, align=figure_align)
 
         # Write figure with optional delimiter
         delimiter = self.pis['artworkdelimiter']
-        artwork = figure.find('artwork').text
-        # artwork_align = artwork.attrib.get('align', align)
-        # Explicitly use figure alignment
-        artwork_align = align
+        artwork = figure.find('artwork')
+        artwork_align = artwork.attrib.get('align', figure_align)
         blanklines = int(self.pis['artworklines'])
-        self.write_raw(artwork, align=artwork_align,
+        self.write_raw(artwork.text, align=artwork_align,
                        blanklines=blanklines, delimiter=delimiter,
                        source_line=figure.sourceline)
 
         # Write postamble
         postamble = figure.find('postamble')
         if postamble is not None:
-            self.write_t_rec(postamble, align=align)
+            self.write_t_rec(postamble, align=figure_align)
 
         # Write label
         title = figure.attrib.get('title', '')
         if anchor or self.pis['figurecount'] == 'yes':
-            if title:
-                title = ': ' + title
-            self.write_label('Figure ' + str(self.figure_count) + title,
-                            type='figure', source_line=figure.sourceline)
-        else:
-            if title:
-                self.write_label(title, type='figure', source_line=figure.sourceline)
+            if suppress_title == 'false':
+                if title:
+                    title = 'Figure ' + str(self.figure_count) + ': ' + title
+                else:
+                    title = 'Figure ' + str(self.figure_count)
+        if title:
+            self.write_label(title, type='figure', source_line=figure.sourceline)
 
     def write_table(self, table):
         """ Writes <texttable> elements """
         align = table.attrib.get('align', self.defaults['table_align'])
         anchor = table.attrib.get('anchor')
         title = table.attrib.get('title', self.defaults['table_title'])
+        suppress_title = table.attrib.get('suppress-title', 'false')
 
         # Keep track of count if there is an anchor, or PI was enabled
         if anchor or self.pis['tablecount'] == 'yes':
@@ -740,13 +740,13 @@ class BaseRfcWriter:
         # Write label if anchor is set or PI figurecount = yes
         if anchor or self.pis['tablecount'] == 'yes':
             title = table.attrib.get('title', '')
-            if title:
-                title = ': ' + title
-            self.write_label('Table ' + str(self.table_count) + title, \
-                             type='table', source_line=table.sourceline)
-        else:
-            if title:
-                self.write_label(title, type='table', source_line=table.sourceline)
+            if suppress_title == 'false':
+                if title:
+                    title = 'Table ' + str(self.table_count) + ': ' + title
+                else:
+                    title = 'Table ' + str(self.table_count)
+        if title:
+            self.write_label(title, type='table', source_line=table.sourceline)
 
     def _index_t_rec(self, element):
         """ Traverse a <t> element only performing indexing operations """

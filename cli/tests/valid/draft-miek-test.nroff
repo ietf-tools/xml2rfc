@@ -176,22 +176,22 @@ plain text, use elaborate XML and end up with plain text again.
 .in 0
 .nf
 .bp
-             +-------------------+   pandoc   +---------+
-             | ALMOST PLAIN TEXT |   ------>  | DOCBOOK |
-             +-------------------+            +---------+
-                           |                       |
-             non-existent  |                       | xsltproc
-               faster way  |                       |
-                           v                       v
-                   +------------+    xml2rfc  +---------+
-                   | PLAIN TEXT |  <--------  | XML2RFC |
-                   +------------+             +---------+
+   +-------------------+   pandoc   +---------+
+   | ALMOST PLAIN TEXT |   ------>  | DOCBOOK |
+   +-------------------+            +---------+
+                 |                       |
+   non-existent  |                       | xsltproc
+     faster way  |                       |
+                 v                       v
+         +------------+    xml2rfc  +---------+
+         | PLAIN TEXT |  <--------  | XML2RFC |
+         +------------+             +---------+
 .fi
+.in 3
 
 .ce 1
 Figure\01: Attempt to justify Pandoc2rfc.
 
-.in 3
 The XML generated (the output after the "xsltproc" step in Figure\01)
 is suitable for inclusion in either the "middle" or "back" section of
 an RFC.  The simplest way is to create a template XML file and
@@ -199,32 +199,32 @@ include the appropriate XML:
 .in 0
 .nf
 
-       <?xml version='1.0' ?>
-       <!DOCTYPE rfc SYSTEM 'rfc2629.dtd' [
-       <!ENTITY pandocMiddle PUBLIC '' 'middle.xml'>
-       <!ENTITY pandocBack   PUBLIC '' 'back.xml'>
-       ]>
+   <?xml version='1.0' ?>
+   <!DOCTYPE rfc SYSTEM 'rfc2629.dtd' [
+   <!ENTITY pandocMiddle PUBLIC '' 'middle.xml'>
+   <!ENTITY pandocBack   PUBLIC '' 'back.xml'>
+   ]>
 
-       <rfc ipr='trust200902' docName='draft-gieben-pandoc-rfcs-02'>
-        <front>
-           <title>Writing I-Ds and RFCs using Pandoc v2</title>
-       </front>
+   <rfc ipr='trust200902' docName='draft-gieben-pandoc-rfcs-02'>
+    <front>
+       <title>Writing I-Ds and RFCs using Pandoc v2</title>
+   </front>
 
-       <middle>
-           &pandocMiddle;
-       </middle>
+   <middle>
+       &pandocMiddle;
+   </middle>
 
-       <back>
-           &pandocBack;
-       </back>
+   <back>
+       &pandocBack;
+   </back>
 
-       </rfc>
+   </rfc>
 .fi
+.in 3
 
 .ce 1
 Figure\02: A minimal template.xml.
 
-.in 3
 See the Makefile for an example of this.  In this case you need to
 edit 3 documents:
 
@@ -255,13 +255,13 @@ Acknowledgements section:
 .in 0
 .nf
 
-   This document was produced using the Pandoc2rfc tool.
+    This document was produced using the Pandoc2rfc tool.
 .fi
+.in 3
 
 .ti 0
 3.  Starting a new project
 
-.in 3
 When starting a new project with "pandoc2rfc" you'll need to copy the
 following files:
 
@@ -413,8 +413,8 @@ instance:
    # Section1 One
    Bla
 .fi
-
 .in 3
+
 Converts to: "<section title="Section1 One" \%anchor="section1-one">"
 If you have another section that is also named "Section1 One", that
 anchor will be called \%"section1-one-1", but _only_ when the sections
@@ -438,8 +438,8 @@ A good number of styles are supported.
    * Item one;
    * Item two.
 .fi
-
 .in 3
+
 Converts to "<list style="symbol">":
 
 .in 6
@@ -459,8 +459,8 @@ o  Item two.
    1. Item one;
    1. Item two.
 .fi
-
 .in 3
+
 Converts to "<list style="numbers">":
 
 .in 7
@@ -483,8 +483,8 @@ Using the default list markers from Pandoc:
    #. Item one;
    #. Item two.
 .fi
-
 .in 3
+
 Converts to "<list style="empty">":
 
 .in 6
@@ -503,8 +503,8 @@ Use the supported Pandoc syntax:
    ii. Item one;
    ii. Item two.
 .fi
-
 .in 3
+
 Converts to "<list style="format %i.">":
 
 .in 6
@@ -545,8 +545,8 @@ A numbered list.
    a.  Item one;
    b.  Item two.
 .fi
-
 .in 3
+
 Converts to "<list style="letters">":
 
 .in 7
@@ -564,8 +564,8 @@ Uppercasing the letters works too (note two spaces after the letter.
    A.  Item one;
    B.  Item two.
 .fi
-
 .in 3
+
 Becomes:
 
 .in 6
@@ -594,8 +594,8 @@ This is more like a description list, so we need to use:
 
    :   Explanation two
 .fi
-
 .in 3
+
 Converts to: "<list style="hanging">" and "<t hangText="First item
 that...">"
 .bp
@@ -611,8 +611,8 @@ Indent the paragraph with 4 spaces.
 
    Like this
 .fi
-
 .in 3
+
 Converts to: "<figure><artwork> ..." Note that "xml2rfc" supports a
 caption with "<artwork>".  Pandoc does not support this, but
 Pandoc2rfc does.  If you add a "@Figure: some text" as the last line,
@@ -655,8 +655,8 @@ Any paragraph like:
 
    > quoted text
 .fi
-
 .in 3
+
 Converts to: "<t><list style="empty"> ..." paragraph, making it
 indented.
 
@@ -672,8 +672,8 @@ Any reference like:
 
    [Click here](URI)
 .fi
-
 .in 3
+
 Converts to: "<ulink target="URI">Click here ..."
 
 .ti 0
@@ -685,8 +685,8 @@ Any reference like:
 
    [Click here](#localid)
 .fi
-
 .in 3
+
 Converts to: "<link target="localid">Click here ..."
 
 For referring to RFCs (for which you manually need add the reference
@@ -697,16 +697,16 @@ use:
 
    [](#RFC2119)
 .fi
-
 .in 3
+
 And it does the right thing.  Referencing sections is done with:
 .in 0
 .nf
 
    See [](#pandoc-constructs)
 .fi
-
 .in 3
+
 The word 'Section' is inserted automatically: ... see Section\07 ...
 For referencing figures/artworks see Section\07.4.  For referencing
 tables see Section\07.8.
@@ -730,19 +730,19 @@ A table can be entered as:
 .in 0
 .nf
 .bp
-                   Right     Left     Center     Default
-                   -------   ------ ----------   -------
-                        12     12        12        12
-                       123     123       123       123
-                         1     1         1         1
+     Right     Left     Center     Default
+     -------   ------ ----------   -------
+          12     12        12        12
+         123     123       123       123
+           1     1         1         1
 
-                   Table: A caption describing the table.
+     Table: A caption describing the table.
 .fi
+.in 3
 
 .ce 1
 Figure\03: A caption describing the figure describing the table.
 
-.in 3
 Is translated to "<texttable>" element in "xml2rfc".  You can choose
 multiple styles as input, but they all are converted to the same
 style (plain "<texttable>") table in "xml2rfc".  The column alignment
@@ -788,8 +788,8 @@ and later you give actual footnote text.  Like this:
 
    [^1]: footnote text
 .fi
-
 .in 3
+
 We \%re-use this syntax for the "<iref>" tag.  The above text
 translates to:
 .bp
@@ -797,8 +797,8 @@ translates to:
 .nf
    <iref item="footnote text"/>
 .fi
-
 .in 3
+
 Sub items are also supported.  Use an exclamation mark ("!") to
 separate them:
 .in 0
@@ -806,6 +806,7 @@ separate them:
 
    [^1]: item!sub item
 .fi
+.in 3
 
 .ti 0
 8.  Usage guidelines
@@ -813,7 +814,6 @@ separate them:
 .ti 0
 8.1.  Working with multiple files
 
-.in 3
 As an author you will probably break up a draft in multiple files,
 each dealing with a subject or section.  When doing so sections with
 the same title will clash with each other.  Pandoc can deal with this
@@ -828,8 +828,8 @@ this:
    allsections.pdc: section.pdc.1 section.pdc.2 section.pdc.3
            cat $@ > allsections.pdc
 .fi
-
 .in 3
+
 And then process "allsection.pdc" in the normal way.
 
 .ti 0
@@ -842,8 +842,8 @@ attribute, like:
 
    <rfc ipr="trust200902" docName="draft-gieben-writing-rfcs-pandoc-02">
 .fi
-
 .in 3
+
 The Makefile will pick this up automatically and make a symbolic
 link:
 .in 0
@@ -851,8 +851,8 @@ link:
 
    draft-gieben-writing-rfcs-pandoc-00.txt -> draft.txt
 .fi
-
 .in 3
+
 This makes uploading the file to the \%i-d tracker a bit easier.
 
 .ti 0
@@ -934,11 +934,11 @@ A.4.  Verbatim code blocks
    A verbatim code block
    jkasjksajassjasjsajsajkas
 .fi
+.in 3
 .bp
 .ti 0
 A.5.  Reference Tests
 
-.in 3
 Refer to RFC 2119 [RFC2119] if you will.  Or maybe you want to
 inspect Figure\02 in Section\02 again.  Or you might want to Click here
 [8].
@@ -1079,6 +1079,7 @@ paragraphs...
 
    Artwork
 .fi
+.in 3
 
 .in 7
 .ti 3
@@ -1091,8 +1092,8 @@ xml2rfc does not allow this, so the second paragraph is faked with a
 
    <vspace blankLines='1'>
 .fi
-.bp
 .in 3
+.bp
 Ordered lists.
 
 .in 7
@@ -1176,6 +1177,7 @@ about it.  Tell something about it.
    miek.nl.    IN  NS  a.miek.nl.
    a.miek.nl.  IN  A   192.0.2.1    ; <- this is glue
 .fi
+.in 3
 .sp 1
 .in 6
 Tell some more about it.  Tell some more about it.  Tell some more
@@ -1219,9 +1221,11 @@ A.8.  Table Tests
                   |      1 | 1     |    1    | 1        |
                   +--------+-------+---------+----------+
 .fi
+.in 3
 
 .ce 1
 Table\01: Demonstration of simple table syntax.
+.in 0
 .nf
 
    +-----------+-----------+---------------+---------------------------+
@@ -1236,9 +1240,11 @@ Table\01: Demonstration of simple table syntax.
    +-----------+-----------+---------------+---------------------------+
 .bp
 .fi
+.in 3
 .ce 2
 Table\02: Here's the caption.  It, too, may span multiple lines.  This
 is a multiline table.  This is verbatim text.
+.in 0
 .nf
 
           +---------------+---------------+--------------------+
@@ -1248,11 +1254,11 @@ is a multiline table.  This is verbatim text.
           | Oranges       | $2.10         | cures scurvy       |
           +---------------+---------------+--------------------+
 .fi
+.in 3
 
 .ce 1
 Table\03: Sample grid table.
 
-.in 3
 Grid tables without a caption
 .in 0
 .nf
@@ -1264,8 +1270,8 @@ Grid tables without a caption
           | Oranges       | $2.10         | cures scurvy       |
           +---------------+---------------+--------------------+
 .fi
-
 .in 3
+
 This table has no caption, and therefor no reference.  But you can
 refer to some of the other tables, with for instance:
 .in 0
@@ -1273,8 +1279,8 @@ refer to some of the other tables, with for instance:
 
    See [](#tab:here-s-the)
 .fi
-
 .in 3
+
 Which will become "See Table\02".
 
 .ti 0
@@ -1294,17 +1300,17 @@ A.10.  Figure tests
 .in 0
 .nf
 
-                             This is a figure
-                             This is a figure
-                             This is a figure
-                             This is a figure
+   This is a figure
+   This is a figure
+   This is a figure
+   This is a figure
 .fi
+.in 3
 
 .ce 2
 Figure\04: This is the caption, with text in `typewriter`. Which isnt
 converted to a <spanx> style, because this is copied \%as-is.
 
-.in 3
 And how a figure that is not centered, do to using "figure" and not
 "Figure".
 .bp
@@ -1313,11 +1319,11 @@ And how a figure that is not centered, do to using "figure" and not
    This is a figure
    This is a figure
 .fi
+.in 3
 
 .ce 1
 Figure\05: A non centered figure.
 
-.in 3
 Test the use of "@title":
 .in 0
 .nf
@@ -1326,11 +1332,11 @@ Test the use of "@title":
    This is a figure with a title
    @title: and here it is: a title, don't mess it up *
 .fi
+.in 3
 
 .ti 0
 A.11.  Verse tests
 
-.in 3
 This is a verse text This is another line
 
 Index
@@ -1349,9 +1355,9 @@ Author's Address
    Email: miek@miek.nl
    URI:   http://miek.nl/
 .fi
-
-
 .in 3
+
+
 L
 .in 6
 list

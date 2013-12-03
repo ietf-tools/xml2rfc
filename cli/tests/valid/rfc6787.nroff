@@ -616,6 +616,7 @@ shown.
    |                   |
    |-------------------|
 .fi
+.in 3
 
 .ce 1
 Figure\01: Architectural Diagram
@@ -623,7 +624,6 @@ Figure\01: Architectural Diagram
 .ti 0
 3.1.  MRCPv2 Media Resource Types
 
-.in 3
 An MRCPv2 server may offer one or more of the following media
 processing resources to its clients.
 
@@ -703,14 +703,14 @@ For example:
 .in 0
 .nf
 
-     sip:mrcpv2@example.net   or
-     sips:mrcpv2@example.net
+        sip:mrcpv2@example.net   or
+        sips:mrcpv2@example.net
 .fi
+.in 3
 
 .ti 0
 4.  MRCPv2 Basics
 
-.in 3
 MRCPv2 requires a \%connection-oriented \%transport-layer protocol such
 as TCP to guarantee reliable sequencing and delivery of MRCPv2
 control messages between the client and the server.  In order to meet
@@ -766,11 +766,11 @@ Section\013.
           | recorder      | Speech Recorder      | Section\010   |
           +---------------+----------------------+--------------+
 .fi
+.in 3
 
 .ce 1
 Table\01: Resource Types
 
-.in 3
 The SIP INVITE or \%re-INVITE transaction and the SDP offer/answer
 exchange it carries contain "m=" lines describing the resource
 control channel to be allocated.  There MUST be one SDP "m=" line for
@@ -950,11 +950,11 @@ shown.
           CSeq:314161 ACK
           Content-Length:0
 .fi
+.in 3
 
 .ce 1
 Example: Add Synthesizer Control Channel
 
-.in 3
 This example exchange continues from the previous figure and
 allocates an additional resource control channel for a recognizer.
 Since a recognizer would need to receive an audio stream for
@@ -1044,11 +1044,11 @@ sendrecv, making it a \%two-way RTP media session.
           CSeq:314162 ACK
           Content-Length:0
 .fi
+.in 3
 
 .ce 1
 Example: Add Recognizer
 
-.in 3
 This example exchange continues from the previous figure and
 deallocates the recognizer channel.  Since a recognizer no longer
 needs to receive an audio stream, this interaction also updates the
@@ -1124,6 +1124,7 @@ RTP media session to recvonly.
           CSeq:314163 ACK
           Content-Length:0
 .fi
+.in 3
 
 .ce 1
 Example: Deallocate Recognizer
@@ -1131,7 +1132,6 @@ Example: Deallocate Recognizer
 .ti 0
 4.4.  Media Streams and RTP Ports
 
-.in 3
 Since MRCPv2 resources either generate or consume media streams, the
 client or the server needs to associate media sessions with their
 corresponding resource or resources.  More than one resource could be
@@ -1166,8 +1166,8 @@ ABNF:
    cmid-attribute     = "a=cmid:" identification-tag
    identification-tag = token
 .fi
-
 .in 3
+
 To allow this flexible mapping of media sessions to MRCPv2 control
 channels, a single audio "m=" line can be associated with multiple
 .bp
@@ -1297,8 +1297,8 @@ fields, and an optional message body.
                    /   recorder-header
                    /   verifier-header
 .fi
-
 .in 3
+
 The \%message-body contains \%resource-specific and \%message-specific
 data.  The actual media types used to carry the data are specified in
 the sections defining the individual messages.  Generic header fields
@@ -1323,8 +1323,8 @@ productions using \%mrcp-version can be found in Sections 5.2, 5.3, and
 
    mrcp-version   =    "MRCP" "/" 1*2DIGIT "." 1*2DIGIT
 .fi
-
 .in 3
+
 The \%message-length field specifies the length of the message in
 octets, including the \%start-line, and MUST be the second token from
 .bp
@@ -1343,8 +1343,8 @@ indicate that the value is to be interpreted as a \%base-8 number.
 
    message-length =    1*19DIGIT
 .fi
-
 .in 3
+
 The following sample MRCP exchange demonstrates proper \%message-length
 values.  The values for \%message-length have been removed from all
 other examples in the specification and replaced by '...' to reduce
@@ -1406,8 +1406,8 @@ those examples.
                </interpretation>
            </result>
 .fi
-
 .in 3
+
 All MRCPv2 messages, responses and events MUST carry the \%Channel-
 Identifier header field so the server or client can differentiate
 messages from different control channels that may share the same
@@ -1436,8 +1436,8 @@ and the version of the protocol in use.
    request-line   =    mrcp-version SP message-length SP method-name
                        SP request-id CRLF
 .fi
-.bp
 .in 3
+.bp
 The \%mrcp-version field is the MRCP protocol version that is being
 used by the client.
 
@@ -1460,8 +1460,8 @@ section of the specification for the corresponding resource.
                   /    recorder-method
                   /    verifier-method
 .fi
-
 .in 3
+
 The \%request-id field is a unique identifier representable as an
 unsigned \%32-bit integer created by the client and sent to the server.
 Clients MUST utilize monotonically increasing \%request-ids for
@@ -1484,11 +1484,11 @@ request MUST carry the \%client-assigned \%request-id.
 
    request-id     =    1*10DIGIT
 .fi
+.in 3
 
 .ti 0
 5.3.  Response
 
-.in 3
 After receiving and interpreting the request message for a method,
 the server resource responds with an MRCPv2 response message.  The
 response consists of a response line followed by the message header
@@ -1500,8 +1500,8 @@ method.
    response-line  =    mrcp-version SP message-length SP request-id
                        SP status-code SP request-state CRLF
 .fi
-
 .in 3
+
 The \%mrcp-version field MUST contain the version of the request if
 supported; otherwise, it MUST contain the highest version of MRCP
 supported by the server.
@@ -1522,8 +1522,8 @@ failure or other status of the request.
 
    status-code     =    3DIGIT
 .fi
-
 .in 3
+
 The \%request-state field indicates if the action initiated by the
 Request is PENDING, \%IN-PROGRESS, or COMPLETE.  The COMPLETE status
 means that the request was processed to completion and that there
@@ -1541,11 +1541,11 @@ that \%request-id.
                     /  "IN-PROGRESS"
                     /  "PENDING"
 .fi
+.in 3
 
 .ti 0
 5.4.  Status Codes
 
-.in 3
 The status codes are classified under the Success (2xx), Client
 Failure (4xx), and Server Failure (5xx) codes.
 .bp
@@ -1558,9 +1558,11 @@ Failure (4xx), and Server Failure (5xx) codes.
      | 201        | Success with some optional header fields ignored |
      +------------+--------------------------------------------------+
 .fi
+.in 3
 
 .ce 1
 Success (2xx)
+.in 0
 .nf
 
    +------------+------------------------------------------------------+
@@ -1587,9 +1589,11 @@ Success (2xx)
    | 411-420    | Reserved for future assignment                       |
    +------------+------------------------------------------------------+
 .fi
+.in 3
 
 .ce 1
 Client Failure (4xx)
+.in 0
 .nf
 
               +------------+--------------------------------+
@@ -1601,6 +1605,7 @@ Client Failure (4xx)
               | 504        | Message too large              |
               +------------+--------------------------------+
 .fi
+.in 3
 
 .ce 1
 Server Failure (5xx)
@@ -1608,7 +1613,6 @@ Server Failure (5xx)
 .ti 0
 5.5.  Events
 .bp
-.in 3
 The server resource may need to communicate a change in state or the
 occurrence of a certain event to the client.  These messages are used
 when a request does not complete immediately and the response returns
@@ -1626,8 +1630,8 @@ done and this was the last event, else it is \%IN-PROGRESS.
    event-line       =  mrcp-version SP message-length SP event-name
                        SP request-id SP request-state CRLF
 .fi
-
 .in 3
+
 The \%mrcp-version used here is identical to the one used in the
 Request/Response line and indicates the highest version of MRCP
 running on the server.
@@ -1650,8 +1654,8 @@ the document.
                     /  recorder-event
                     /  verifier-event
 .fi
-
 .in 3
+
 The \%request-id used in the event MUST match the one sent in the
 request that caused this event.
 
@@ -1679,8 +1683,8 @@ associated with a resource.
    generic-method      =    "SET-PARAMS"
                        /    "GET-PARAMS"
 .fi
-
 .in 3
+
 These are described in the following subsections.
 
 .ti 0
@@ -1735,11 +1739,11 @@ individual requests or requests that are \%IN-PROGRESS.
    S->C:  MRCP/2.0 ... 543256 200 COMPLETE
           Channel-Identifier:32AECB23433802@speechsynth
 .fi
+.in 3
 
 .ti 0
 6.1.2.  \%GET-PARAMS
 
-.in 3
 The \%GET-PARAMS method, from the client to the server, asks the MRCPv2
 resource for its current session parameters, such as voice
 characteristics and prosody on synthesizers, recognition timers on
@@ -1781,11 +1785,11 @@ were sent from the client, without values.
            Vendor-Specific-Parameters:com.example.param1="Company Name";
                          com.example.param2="124324234@example.com"
 .fi
+.in 3
 
 .ti 0
 6.2.  Generic Message Headers
 
-.in 3
 All MRCPv2 header fields, which include both the \%generic-headers
 defined in the following subsections and the \%resource-specific header
 fields defined later, follow the same generic format as that given in
@@ -1805,8 +1809,8 @@ line with at least one SP or HT (horizontal tab).
                     and consisting of either *TEXT or combinations
                     of token, separators, and quoted-string>
 .fi
-
 .in 3
+
 The \%field-content does not include any leading or trailing LWS (i.e.,
 linear white space occurring before the first \%non-whitespace
 character of the \%field-value or after the last \%non-whitespace
@@ -1857,11 +1861,11 @@ the order of these values when a message is forwarded.
                        /    set-cookie
                        /    vendor-specific
 .fi
+.in 3
 
 .ti 0
 6.2.1.  \%Channel-Identifier
 
-.in 3
 All MRCPv2 requests, responses, and events MUST contain the \%Channel-
 Identifier header field.  The value is allocated by the server when a
 control channel is added to the session and communicated to the
@@ -1880,11 +1884,11 @@ dialog.
    channel-identifier  = "Channel-Identifier" ":" channel-id CRLF
    channel-id          = 1*alphanum "@" 1*alphanum
 .fi
+.in 3
 
 .ti 0
 6.2.2.  Accept
 
-.in 3
 The Accept header field follows the syntax defined in [H14.1].  The
 semantics are also identical, with the exception that if no Accept
 header field is present, the server MUST assume a default value that
@@ -1927,11 +1931,11 @@ COMPLETE events for the terminated requests.
    active-request-id-list  =  "Active-Request-Id-List" ":"
                               request-id *("," request-id) CRLF
 .fi
+.in 3
 
 .ti 0
 6.2.4.  \%Proxy-Sync-Id
 
-.in 3
 When any server resource generates a \%"barge-in-able" event, it also
 generates a unique tag.  The tag is sent as this header field's value
 .bp
@@ -1952,11 +1956,11 @@ and does not imply that a proxy server is involved.
 
    proxy-sync-id    =  "Proxy-Sync-Id" ":" 1*VCHAR CRLF
 .fi
+.in 3
 
 .ti 0
 6.2.5.  \%Accept-Charset
 
-.in 3
 See [H14.2].  This specifies the acceptable character sets for
 entities returned in the response or events associated with this
 request.  This is useful in specifying the character set to use in
@@ -1993,11 +1997,11 @@ header field MAY occur on all messages.
 
    value            =    token / quoted-string
 .fi
+.in 3
 
 .ti 0
 6.2.7.  \%Content-ID
 
-.in 3
 This header field contains an ID or name for the content by which it
 can be referenced.  This header field operates according to the
 specification in RFC 2392 [RFC2392] and is required for content
@@ -2018,8 +2022,8 @@ for resolving relative URIs within the entity.
 
    content-base      = "Content-Base" ":" absoluteURI CRLF
 .fi
-
 .in 3
+
 Note, however, that the base URI of the contents within the \%entity-
 body may be redefined within that \%entity-body.  An example of this
 would be multipart media, which in turn can have multiple entities
@@ -2046,16 +2050,16 @@ header field MAY occur on all messages.
                        *(*WSP "," *WSP content-coding *WSP )
                        CRLF
 .fi
-
 .in 3
+
 Content codings are defined in [H3.5].  An example of its use is
 .in 0
 .nf
 
    Content-Encoding:gzip
 .fi
-
 .in 3
+
 If multiple encodings have been applied to an entity, the content
 encodings MUST be listed in the order in which they were applied.
 
@@ -2072,8 +2076,8 @@ URI.  Refer to [H14.14].
    content-location  =  "Content-Location" ":"
                         ( absoluteURI / relativeURI ) CRLF
 .fi
-
 .in 3
+
 The \%Content-Location value is a statement of the location of the
 resource corresponding to this particular entity at the time of the
 request.  This header field is provided for optimization purposes
@@ -2110,11 +2114,11 @@ messages.
 
    content-length  =  "Content-Length" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 6.2.12.  Fetch Timeout
 
-.in 3
 When the recognizer or synthesizer needs to fetch documents or other
 resources, this header field controls the corresponding URI access
 properties.  This defines the timeout for content that the server may
@@ -2129,11 +2133,11 @@ GRAMMAR, RECOGNIZE, SPEAK, \%SET-PARAMS, or \%GET-PARAMS.
 
    fetch-timeout       =   "Fetch-Timeout" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 6.2.13.  \%Cache-Control
 
-.in 3
 If the server implements content caching, it MUST adhere to the cache
 correctness rules of HTTP 1.1 [RFC2616] when accessing and caching
 stored content.  In particular, the "expires" and \%"cache-control"
@@ -2164,8 +2168,8 @@ setting on the server.  This header field MAY occur only on requests.
 
    delta-seconds       = 1*19DIGIT
 .fi
-
 .in 3
+
 Here, \%delta-seconds is a decimal time value specifying the number of
 seconds since the instant the message response or data was received
 by the server.
@@ -2234,11 +2238,11 @@ national identification numbers.
 
    logging-tag    = "Logging-Tag" ":" 1*UTFCHAR CRLF
 .fi
+.in 3
 
 .ti 0
 6.2.15.  \%Set-Cookie
 
-.in 3
 Since the associated HTTP client on an MRCPv2 server fetches
 documents for processing on behalf of the MRCPv2 client, the cookie
 store in the HTTP client of the MRCPv2 server is treated as an
@@ -2298,8 +2302,8 @@ requests.
    extension-av      = <any CHAR except CTLs or ";">
    age-av            = "Age=" delta-seconds
 .fi
-
 .in 3
+
 The \%Set-Cookie header field is specified in RFC 6265 [RFC6265].  The
 "Age" attribute is introduced in this specification to indicate the
 age of the cookie and is OPTIONAL.  An MRCPv2 client or server MUST
@@ -2354,8 +2358,8 @@ This set of header fields allows for the client to set or retrieve
 
    vendor-av-pair-name     = 1*UTFCHAR
 .fi
-
 .in 3
+
 Header fields of this form MAY be sent in any method (request) and
 are used to manage \%implementation-specific parameters on the server
 side.  The \%vendor-av-pair-name follows the reverse Internet Domain
@@ -2369,8 +2373,8 @@ the "=" symbol and MAY be quoted.  For example:
    com.example.companyA.paramabc=High
    com.example.companyB.paramxyz=Low
 .fi
-
 .in 3
+
 When used in \%GET-PARAMS to get the current value of these parameters
 from the server, this header field value MAY contain a \%semicolon-
 separated list of \%implementation-specific attribute names.
@@ -2417,6 +2421,7 @@ fully described in Section\06.3.1.
        </interpretation>
    </result>
 .fi
+.in 3
 
 .ce 1
 Result Example
@@ -2424,7 +2429,6 @@ Result Example
 .ti 0
 6.3.1.  Natural Language Semantics Markup Language
 
-.in 3
 The Natural Language Semantics Markup Language (NLSML) is an XML data
 structure with elements and attributes designed to carry result
 information from recognizer (including enrollment) and verifier
@@ -2515,6 +2519,7 @@ capabilities of the MRCPv2 server.
         a=rtpmap:0 PCMU/8000
         a=rtpmap:3 GSM/8000
 .fi
+.in 3
 
 .ce 1
 Using SIP OPTIONS for MRCPv2 Server Capability Discovery
@@ -2522,7 +2527,6 @@ Using SIP OPTIONS for MRCPv2 Server Capability Discovery
 .ti 0
 8.  Speech Synthesizer Resource
 
-.in 3
 This resource processes text markup provided by the client and
 generates a stream of synthesized speech in real time.  Depending
 upon the server implementation and capability of this resource, the
@@ -2586,6 +2590,7 @@ affecting the state of the resource.
      |<---------|             |                          |
      |<---------------BARGE-IN-OCCURRED------------------|
 .fi
+.in 3
 
 .ce 1
 Synthesizer State Machine
@@ -2593,7 +2598,6 @@ Synthesizer State Machine
 .ti 0
 8.2.  Synthesizer Methods
 
-.in 3
 The synthesizer supports the following methods.
 .in 0
 .nf
@@ -2606,11 +2610,11 @@ The synthesizer supports the following methods.
                         /  "CONTROL"
                         /  "DEFINE-LEXICON"
 .fi
+.in 3
 
 .ti 0
 8.3.  Synthesizer Events
 
-.in 3
 The synthesizer can generate the following events.
 .in 0
 .nf
@@ -2618,11 +2622,11 @@ The synthesizer can generate the following events.
    synthesizer-event    =  "SPEECH-MARKER"
                         /  "SPEAK-COMPLETE"
 .fi
+.in 3
 .bp
 .ti 0
 8.4.  Synthesizer Header Fields
 
-.in 3
 A synthesizer method can contain header fields containing request
 options and information to augment the Request, Response, or Event it
 is associated with.
@@ -2647,11 +2651,11 @@ is associated with.
                        /  load-lexicon
                        /  lexicon-search-order
 .fi
+.in 3
 
 .ti 0
 8.4.1.  \%Jump-Size
 
-.in 3
 This header field MAY be specified in a CONTROL method and controls
 the amount to jump forward or backward in an active SPEAK request.  A
 \&'+' or \%'-' indicates a relative value to what is being currently
@@ -2683,11 +2687,11 @@ support a unit for the operation, the resource MUST respond with a
                          /   "Sentence"
                          /   "Paragraph"
 .fi
+.in 3
 
 .ti 0
 8.4.2.  \%Kill-On-Barge-In
 
-.in 3
 This header field MAY be sent as part of the SPEAK method to enable
 \%"kill-on-barge-in" support.  If enabled, the SPEAK method is
 interrupted by DTMF input detected by a signal detector resource or
@@ -2698,8 +2702,8 @@ resource.
 
    kill-on-barge-in      =   "Kill-On-Barge-In" ":" BOOLEAN CRLF
 .fi
-
 .in 3
+
 The client MUST send a \%BARGE-IN-OCCURRED method to the synthesizer
 resource when it receives a \%barge-in-able event from any source.
 This source could be a synthesizer resource or signal detector
@@ -2732,11 +2736,11 @@ collections of voice parameters like gender, accent, etc.
 
    speaker-profile       =   "Speaker-Profile" ":" uri CRLF
 .fi
+.in 3
 
 .ti 0
 8.4.4.  \%Completion-Cause
 
-.in 3
 This header field MUST be specified in a \%SPEAK-COMPLETE event coming
 from the synthesizer resource to the client.  This indicates the
 reason the SPEAK request completed.
@@ -2747,6 +2751,8 @@ reason the SPEAK request completed.
                              1*VCHAR CRLF
 
 .fi
+.in 3
+.in 0
 .nf
 
    +------------+-----------------------+------------------------------+
@@ -2772,6 +2778,7 @@ reason the SPEAK request completed.
    |            |                       | the queue.                   |
    +------------+-----------------------+------------------------------+
 .fi
+.in 3
 
 .ce 1
 Synthesizer Resource Completion Cause Codes
@@ -2779,7 +2786,6 @@ Synthesizer Resource Completion Cause Codes
 .ti 0
 8.4.5.  \%Completion-Reason
 
-.in 3
 This header field MAY be specified in a \%SPEAK-COMPLETE event coming
 from the synthesizer resource to the client.  This contains the
 reason text behind the SPEAK request completion.  This header field
@@ -2793,8 +2799,8 @@ error in parsing the speech markup text.
                            quoted-string CRLF
 
 .fi
-
 .in 3
+
 The completion reason text is provided for client use in logs and for
 debugging and instrumentation purposes.  Clients MUST NOT interpret
 the completion reason text.
@@ -2821,8 +2827,8 @@ This set of header fields defines the voice of the speaker.
                            1*UTFCHAR *(1*WSP 1*UTFCHAR) CRLF
 
 .fi
-
 .in 3
+
 The \%"Voice-" parameters are derived from the similarly named
 attributes of the voice element specified in W3C's Speech Synthesis
 Markup Language Specification (SSML)
@@ -2856,8 +2862,8 @@ This set of header fields defines the prosody of the speech.
    prosody-param-value   =    1*VCHAR
 
 .fi
-
 .in 3
+
 \%prosody-param-name is any one of the attribute names under the
 prosody element specified in W3C's Speech Synthesis Markup Language
 Specification \%[W3C.REC-speech-synthesis-20040907].  The \%prosody-
@@ -2919,11 +2925,11 @@ end of SPEAK processing, receipt of \%CONTROL/STOP/BARGE-IN-OCCURRED).
                            timestamp
                            [";" 1*(UTFCHAR / %x20)] CRLF
 .fi
+.in 3
 
 .ti 0
 8.4.9.  \%Speech-Language
 
-.in 3
 This header field specifies the default language of the speech data
 if the language is not specified in the markup.  The value of this
 header field MUST follow RFC 5646 [RFC5646] for its values.  The
@@ -2933,11 +2939,11 @@ header field MAY occur in SPEAK, \%SET-PARAMS, or \%GET-PARAMS requests.
 
    speech-language     =   "Speech-Language" ":" 1*VCHAR CRLF
 .fi
+.in 3
 
 .ti 0
 8.4.10.  \%Fetch-Hint
 
-.in 3
 When the synthesizer needs to fetch documents or other resources like
 speech markup or audio files, this header field controls the
 corresponding URI access properties.  This provides client policy on
@@ -2953,11 +2959,11 @@ be downloaded until actually referenced.  The default value is
    fetch-hint          =   "Fetch-Hint" ":"
                 ("prefetch" / "safe") CRLF
 .fi
+.in 3
 
 .ti 0
 8.4.11.  \%Audio-Fetch-Hint
 
-.in 3
 When the synthesizer needs to fetch documents or other resources like
 speech audio files, this header field controls the corresponding URI
 access properties.  This provides client policy whether or not the
@@ -2974,11 +2980,11 @@ is "prefetch".  This header field MAY occur in SPEAK, \%SET-PARAMS, or
    audio-fetch-hint    =   "Audio-Fetch-Hint" ":"
                            ("prefetch" / "safe" / "stream") CRLF
 .fi
+.in 3
 
 .ti 0
 8.4.12.  \%Failed-URI
 
-.in 3
 When a synthesizer method needs a synthesizer to fetch or access a
 URI and the access fails, the server SHOULD provide the failed URI in
 this header field in the method response, unless there are multiple
@@ -2989,11 +2995,11 @@ URIs in this header field in the method response.
 
    failed-uri          =   "Failed-URI" ":" absoluteURI CRLF
 .fi
+.in 3
 
 .ti 0
 8.4.13.  \%Failed-URI-Cause
 
-.in 3
 When a synthesizer method needs a synthesizer to fetch or access a
 URI and the access fails, the server MUST provide the \%URI-specific or
 \%protocol-specific response code for the URI in the \%Failed-URI header
@@ -3006,11 +3012,11 @@ instead of a numeric response code.
 
    failed-uri-cause    =   "Failed-URI-Cause" ":" 1*UTFCHAR CRLF
 .fi
+.in 3
 
 .ti 0
 8.4.14.  \%Speak-Restart
 
-.in 3
 When a client issues a CONTROL request to a currently speaking
 synthesizer resource to jump backward, and the target jump point is
 before the start of the current SPEAK request, the current SPEAK
@@ -3023,11 +3029,11 @@ field with a value of "true" indicating a restart.
 
    speak-restart       =   "Speak-Restart" ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 8.4.15.  \%Speak-Length
 
-.in 3
 This header field MAY be specified in a CONTROL method to control the
 maximum length of speech to speak, relative to the current speaking
 point in the currently active SPEAK request.  If numeric, the value
@@ -3058,11 +3064,11 @@ with a \%status-code of 409 "Unsupported Header Field Value".
                          /   "Sentence"
                          /   "Paragraph"
 .fi
+.in 3
 
 .ti 0
 8.4.16.  \%Load-Lexicon
 
-.in 3
 This header field is used to indicate whether a lexicon has to be
 loaded or unloaded.  The value "true" means to load the lexicon if
 not already loaded, and the value "false" means to unload the lexicon
@@ -3073,11 +3079,11 @@ This header field MAY be specified in a \%DEFINE-LEXICON method.
 
    load-lexicon       =   "Load-Lexicon" ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 8.4.17.  \%Lexicon-Search-Order
 
-.in 3
 This header field is used to specify a list of active pronunciation
 lexicon URIs and the search order among the active lexicons.
 .bp
@@ -3090,11 +3096,11 @@ specified in the SPEAK, \%SET-PARAMS, and \%GET-PARAMS methods.
    lexicon-search-order =   "Lexicon-Search-Order" ":"
              "<" absoluteURI ">" *(" " "<" absoluteURI ">") CRLF
 .fi
+.in 3
 
 .ti 0
 8.5.  Synthesizer Message Body
 
-.in 3
 A synthesizer message can contain additional information associated
 with the Request, Response, or Event in its message body.
 
@@ -3146,9 +3152,11 @@ according to the 'multipart/mixed' media type specification.
    http://www.example.com/ASR-Conclusion.ssml
 
 .fi
+.in 3
 
 .ce 1
 URI List Example
+.in 0
 .nf
 
    Content-Type:application/ssml+xml
@@ -3172,9 +3180,11 @@ URI List Example
          </p>
         </speak>
 .fi
+.in 3
 
 .ce 1
 SSML Example
+.in 0
 .nf
 .bp
    Content-Type:multipart/mixed; boundary="break"
@@ -3211,6 +3221,7 @@ SSML Example
        </speak>
    --break--
 .fi
+.in 3
 
 .ce 1
 Multipart Example
@@ -3218,7 +3229,6 @@ Multipart Example
 .ti 0
 8.5.2.  Lexicon Data
 
-.in 3
 Synthesizer lexicon data from the client to the server can be
 provided inline or by reference.  Either way, they are carried as
 typed media in the message body of the MRCPv2 request message (see
@@ -3328,6 +3338,7 @@ request and a \%request-state of COMPLETE.
          Completion-Cause:000 normal
          Speech-Marker:timestamp=857206027059
 .fi
+.in 3
 
 .ce 1
 SPEAK Example
@@ -3335,7 +3346,6 @@ SPEAK Example
 .ti 0
 8.7.  STOP
 
-.in 3
 The STOP method from the client to the server tells the synthesizer
 resource to stop speaking if it is speaking something.
 
@@ -3397,6 +3407,7 @@ the paused state.
          Active-Request-Id-List:543258
          Speech-Marker:timestamp=857206039059
 .fi
+.in 3
 
 .ce 1
 STOP Example
@@ -3404,7 +3415,6 @@ STOP Example
 .ti 0
 8.8.  \%BARGE-IN-OCCURRED
 
-.in 3
 The \%BARGE-IN-OCCURRED method, when used with the synthesizer
 resource, provides a client that has detected a \%barge-in-able event a
 means to communicate the occurrence of the event to the synthesizer
@@ -3493,6 +3503,7 @@ PENDING or \%IN-PROGRESS state.
          Active-Request-Id-List:543258
          Speech-Marker:timestamp=857206039059
 .fi
+.in 3
 
 .ce 1
 \%BARGE-IN-OCCURRED Example
@@ -3500,7 +3511,6 @@ PENDING or \%IN-PROGRESS state.
 .ti 0
 8.9.  PAUSE
 
-.in 3
 The PAUSE method from the client to the server tells the synthesizer
 resource to pause speech output if it is speaking something.  If a
 PAUSE method is issued on a session when a SPEAK is not active, the
@@ -3551,6 +3561,7 @@ an \%Active-Request-Id-List header field whose value contains the
          Channel-Identifier:32AECB23433802@speechsynth
          Active-Request-Id-List:543258
 .fi
+.in 3
 
 .ce 1
 PAUSE Example
@@ -3558,7 +3569,6 @@ PAUSE Example
 .ti 0
 8.10.  RESUME
 
-.in 3
 The RESUME method from the client to the server tells a paused
 synthesizer resource to resume speaking.  If a RESUME request is
 issued on a session with no active SPEAK request, the server MUST
@@ -3614,6 +3624,7 @@ value contains the \%request-id of the SPEAK request that was resumed.
          Channel-Identifier:32AECB23433802@speechsynth
          Active-Request-Id-List:543258
 .fi
+.in 3
 
 .ce 1
 RESUME Example
@@ -3621,7 +3632,6 @@ RESUME Example
 .ti 0
 8.11.  CONTROL
 .bp
-.in 3
 The CONTROL method from the client to the server tells a synthesizer
 that is speaking to modify what it is speaking on the fly.  This
 method is used to request the synthesizer to jump forward or backward
@@ -3704,6 +3714,7 @@ containing the \%request-id of the SPEAK request that was active.
          Active-Request-Id-List:543258
          Speech-Marker:timestamp=857206039059
 .fi
+.in 3
 .bp
 .ce 1
 CONTROL Example
@@ -3711,7 +3722,6 @@ CONTROL Example
 .ti 0
 8.12.  \%SPEAK-COMPLETE
 
-.in 3
 This is an Event message from the synthesizer resource to the client
 that indicates the corresponding SPEAK request was completed.  The
 \%request-id field matches the \%request-id of the SPEAK request that
@@ -3758,6 +3768,7 @@ of an error, \%kill-on-barge-in, etc.
          Completion-Cause:000 normal
          Speech-Marker:timestamp=857206039059
 .fi
+.in 3
 
 .ce 1
 \%SPEAK-COMPLETE Example
@@ -3765,7 +3776,6 @@ of an error, \%kill-on-barge-in, etc.
 .ti 0
 8.13.  \%SPEECH-MARKER
 
-.in 3
 This is an event generated by the synthesizer resource to the client
 when the synthesizer encounters a marker tag in the speech markup it
 is currently processing.  The value of the \%request-id field MUST
@@ -3830,6 +3840,7 @@ machinery.
          Completion-Cause:000 normal
          Speech-Marker:timestamp=857207689259;ANSWER
 .fi
+.in 3
 
 .ce 1
 \%SPEECH-MARKER Example
@@ -3837,7 +3848,6 @@ machinery.
 .ti 0
 8.14.  \%DEFINE-LEXICON
 
-.in 3
 The \%DEFINE-LEXICON method, from the client to the server, provides a
 lexicon and tells the server to load or unload the lexicon (see
 Section\08.4.16).  The media type of the lexicon is provided in the
@@ -3982,11 +3992,11 @@ requests from the client.
     |<-------------------STOP--------------------------|
     |<-------------------DEFINE-GRAMMAR----------------|
 .fi
+.in 3
 
 .ce 1
 Recognizer State Machine
 
-.in 3
 If a recognizer resource supports voice enrolled grammars, starting
 an enrollment session does not change the state of the recognizer
 resource.  Once an enrollment session is started, then utterances are
@@ -4011,8 +4021,8 @@ The recognizer supports the following methods.
                         /  "START-INPUT-TIMERS"
                         /  "STOP"
 .fi
-
 .in 3
+
 It is OPTIONAL for a recognizer resource to support voice enrolled
 grammars.  If the recognizer resource does support voice enrolled
 grammars, it MUST support the following methods.
@@ -4025,11 +4035,11 @@ grammars, it MUST support the following methods.
                         /  "MODIFY-PHRASE"
                         /  "DELETE-PHRASE"
 .fi
+.in 3
 
 .ti 0
 9.3.  Recognizer Events
 
-.in 3
 The recognizer can generate the following events.
 .in 0
 .nf
@@ -4038,11 +4048,11 @@ The recognizer can generate the following events.
                         /  "RECOGNITION-COMPLETE"
                         /  "INTERPRETATION-COMPLETE"
 .fi
+.in 3
 
 .ti 0
 9.4.  Recognizer Header Fields
 
-.in 3
 A recognizer message can contain header fields containing request
 options and information to augment the Method, Response, or Event
 message it is associated with.
@@ -4086,8 +4096,8 @@ message it is associated with.
                         /  clear-dtmf-buffer
                         /  early-no-match
 .fi
-
 .in 3
+
 If a recognizer resource supports voice enrolled grammars, the
 following header fields are also used.
 .in 0
@@ -4106,8 +4116,8 @@ following header fields are also used.
                         /  confusable-phrases-uri
                         /  abort-phrase-enrollment
 .fi
-
 .in 3
+
 For \%enrollment-specific header fields that can appear as part of
 \%SET-PARAMS or \%GET-PARAMS methods, the following general rule applies:
 the \%START-PHRASE-ENROLLMENT method MUST be invoked before these
@@ -4139,11 +4149,11 @@ will tune this value over time for a given server.
 
    confidence-threshold     =  "Confidence-Threshold" ":" FLOAT CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.2.  \%Sensitivity-Level
 
-.in 3
 To filter out background noise and not mistake it for speech, the
 recognizer resource supports a variable level of sound sensitivity.
 The \%Sensitivity-Level header field is a float value between 0.0 and
@@ -4161,11 +4171,11 @@ will tune this value over time for a given server.
 
    sensitivity-level        =  "Sensitivity-Level" ":" FLOAT CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.3.  \%Speed-Vs-Accuracy
 
-.in 3
 Depending on the implementation and capability of the recognizer
 resource it may be tunable towards Performance or Accuracy.  Higher
 accuracy may mean more processing and higher CPU utilization, meaning
@@ -4181,11 +4191,11 @@ clients will tune this value over time for a given server.
 
    speed-vs-accuracy        =  "Speed-Vs-Accuracy" ":" FLOAT CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.4.  \%N-Best-List-Length
 
-.in 3
 When the recognizer matches an incoming stream with the grammar, it
 may come up with more than one alternative match because of
 confidence levels in certain words or conversation paths.  If this
@@ -4203,11 +4213,11 @@ is 1.  The default value for this header field is 1.
 
    n-best-list-length       =  "N-Best-List-Length" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.5.  \%Input-Type
 
-.in 3
 When the recognizer detects \%barge-in-able input and generates a
 \%START-OF-INPUT event, that event MUST carry this header field to
 specify whether the input that caused the \%barge-in was DTMF or
@@ -4218,11 +4228,11 @@ speech.
    input-type         =  "Input-Type" ":"  inputs CRLF
    inputs             =  "speech" / "dtmf"
 .fi
+.in 3
 
 .ti 0
 9.4.6.  \%No-Input-Timeout
 
-.in 3
 When recognition is started and there is no speech detected for a
 certain period of time, the recognizer can send a \%RECOGNITION-
 COMPLETE event to the client with a \%Completion-Cause of \%"no-input-
@@ -4236,11 +4246,11 @@ or \%GET-PARAMS.  The default value is implementation specific.
 
    no-input-timeout         =  "No-Input-Timeout" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.7.  \%Recognition-Timeout
 
-.in 3
 When recognition is started and there is no match for a certain
 period of time, the recognizer can send a \%RECOGNITION-COMPLETE event
 to the client and terminate the recognition operation.  The
@@ -4254,11 +4264,11 @@ in RECOGNIZE, \%SET-PARAMS, or \%GET-PARAMS.
 
    recognition-timeout      =  "Recognition-Timeout" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.8.  \%Waveform-URI
 
-.in 3
 If the \%Save-Waveform header field is set to "true", the recognizer
 MUST record the incoming audio stream of the recognition into a
 stored form and provide a URI for the client to access it.  This
@@ -4294,11 +4304,11 @@ with the header field.
                                ";" "size" "=" 1*19DIGIT
                                ";" "duration" "=" 1*19DIGIT] CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.9.  \%Media-Type
 
-.in 3
 This header field MAY be specified in the \%SET-PARAMS, \%GET-PARAMS, or
 the RECOGNIZE methods and tells the server resource the media type in
 which to store captured audio or video, such as the one captured and
@@ -4309,11 +4319,11 @@ returned by the \%Waveform-URI header field.
    media-type               =  "Media-Type" ":" media-type-value
                                CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.10.  \%Input-Waveform-URI
 
-.in 3
 This optional header field specifies a URI pointing to audio content
 to be processed by the RECOGNIZE operation.  This enables the client
 to request recognition from a specified buffer or audio file.
@@ -4322,11 +4332,11 @@ to request recognition from a specified buffer or audio file.
 
    input-waveform-uri       =  "Input-Waveform-URI" ":" uri CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.11.  \%Completion-Cause
 
-.in 3
 This header field MUST be part of a \%RECOGNITION-COMPLETE event coming
 from the recognizer resource to the client.  It indicates the reason
 behind the RECOGNIZE method completion.  This header field MUST be
@@ -4344,6 +4354,8 @@ corresponding token selected from the \%Cause-Name column.
    cause-name               =  *VCHAR
 .bp
 .fi
+.in 3
+.in 0
 .nf
    +--------+-----------------------+----------------------------------+
    | Cause- | Cause-Name            | Description                      |
@@ -4429,11 +4441,11 @@ corresponding token selected from the \%Cause-Name column.
    |        |                       | grammar-compilation-failure.     |
    +--------+-----------------------+----------------------------------+
 .fi
+.in 3
 
 .ti 0
 9.4.12.  \%Completion-Reason
 
-.in 3
 This header field MAY be specified in a \%RECOGNITION-COMPLETE event
 coming from the recognizer resource to the client.  This contains the
 reason text behind the RECOGNIZE request completion.  The server uses
@@ -4450,11 +4462,11 @@ the completion reason text.
    completion-reason        =  "Completion-Reason" ":"
                                quoted-string CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.13.  \%Recognizer-Context-Block
 
-.in 3
 This header field MAY be sent as part of the \%SET-PARAMS or \%GET-PARAMS
 request.  If the \%GET-PARAMS method contains this header field with no
 value, then it is a request to the recognizer to return the
@@ -4480,11 +4492,11 @@ content type in the IANA Media Type vendor tree.
    recognizer-context-block  =  "Recognizer-Context-Block" ":"
                                 [1*VCHAR] CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.14.  \%Start-Input-Timers
 
-.in 3
 This header field MAY be sent as part of the RECOGNIZE request.  A
 value of false tells the recognizer to start recognition but not to
 start the \%no-input timer yet.  The recognizer MUST NOT start the
@@ -4501,11 +4513,11 @@ timers until the prompt is finished.  The default value is "true".
 
    start-input-timers  =  "Start-Input-Timers" ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.15.  \%Speech-Complete-Timeout
 
-.in 3
 This header field specifies the length of silence required following
 user speech before the speech recognizer finalizes a result (either
 .bp
@@ -4521,8 +4533,8 @@ incomplete match to an active grammar.  The value is in milliseconds.
    speech-complete-timeout = "Speech-Complete-Timeout" ":"
                  1*19DIGIT CRLF
 .fi
-
 .in 3
+
 A long \%Speech-Complete-Timeout value delays the result to the client
 and therefore makes the application's response to a user slow.  A
 short \%Speech-Complete-Timeout may lead to an utterance being broken
@@ -4551,8 +4563,8 @@ implementation specific.
    speech-incomplete-timeout = "Speech-Incomplete-Timeout" ":" 1*19DIGIT
                                 CRLF
 .fi
-
 .in 3
+
 The \%Speech-Incomplete-Timeout also applies when the speech prior to
 the silence is a complete match of an active grammar, but where it is
 possible to speak further and still match the grammar.  By contrast,
@@ -4584,11 +4596,11 @@ in RECOGNIZE, \%SET-PARAMS, or \%GET-PARAMS.
    dtmf-interdigit-timeout = "DTMF-Interdigit-Timeout" ":"
                   1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.18.  \%DTMF-Term-Timeout
 
-.in 3
 This header field specifies the terminating timeout to use when
 recognizing DTMF input.  The \%DTMF-Term-Timeout applies only when no
 additional input is allowed by the grammar; otherwise, the
@@ -4601,11 +4613,11 @@ header field MAY occur in RECOGNIZE, \%SET-PARAMS, or \%GET-PARAMS.
 
    dtmf-term-timeout        =  "DTMF-Term-Timeout" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.19.  \%DTMF-Term-Char
 
-.in 3
 This header field specifies the terminating DTMF character for DTMF
 input recognition.  The default value is NULL, which is indicated by
 an empty header field value.  This header field MAY occur in
@@ -4615,11 +4627,11 @@ RECOGNIZE, \%SET-PARAMS, or \%GET-PARAMS.
 
    dtmf-term-char           =  "DTMF-Term-Char" ":" VCHAR CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.20.  \%Failed-URI
 
-.in 3
 When a recognizer needs to fetch or access a URI and the access
 fails, the server SHOULD provide the failed URI in this header field
 in the method response, unless there are multiple URI failures, in
@@ -4630,11 +4642,11 @@ field in the method response.
 
    failed-uri               =  "Failed-URI" ":" absoluteURI CRLF
 .fi
+.in 3
 .bp
 .ti 0
 9.4.21.  \%Failed-URI-Cause
 
-.in 3
 When a recognizer method needs a recognizer to fetch or access a URI
 and the access fails, the server MUST provide the \%URI-specific or
 \%protocol-specific response code for the URI in the \%Failed-URI header
@@ -4647,11 +4659,11 @@ numeric response code.
 
    failed-uri-cause         =  "Failed-URI-Cause" ":" 1*UTFCHAR CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.22.  \%Save-Waveform
 
-.in 3
 This header field allows the client to request the recognizer
 resource to save the audio input to the recognizer.  The recognizer
 resource MUST then attempt to record the recognized audio, without
@@ -4668,11 +4680,11 @@ in Section\012.
 
    save-waveform            =  "Save-Waveform" ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.23.  \%New-Audio-Channel
 
-.in 3
 This header field MAY be specified in a RECOGNIZE request and allows
 the client to tell the server that, from this point on, further input
 audio comes from a different audio source, channel, or speaker.  If
@@ -4693,11 +4705,11 @@ session with an existing media session for multiple telephone calls.
    new-audio-channel        =  "New-Audio-Channel" ":" BOOLEAN
                                CRLF
 .fi
+.in 3
 .bp
 .ti 0
 9.4.24.  \%Speech-Language
 
-.in 3
 This header field specifies the language of recognition grammar data
 within a session or request, if it is not specified within the data.
 The value of this header field MUST follow RFC 5646 [RFC5646] for its
@@ -4708,11 +4720,11 @@ values.  This MAY occur in \%DEFINE-GRAMMAR, RECOGNIZE, \%SET-PARAMS, or
 
    speech-language          =  "Speech-Language" ":" 1*VCHAR CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.25.  \%Ver-Buffer-Utterance
 
-.in 3
 This header field lets the client request the server to buffer the
 utterance associated with this recognition request into a buffer
 available to a \%co-resident verifier resource.  The buffer is shared
@@ -4745,11 +4757,11 @@ is "normal".  This header field MAY occur on the RECOGNIZE method.
                                "normal" / "hotword" CRLF
 
 .fi
+.in 3
 
 .ti 0
 9.4.27.  \%Cancel-If-Queue
 
-.in 3
 This header field specifies what will happen if the client attempts
 to invoke another RECOGNIZE method when this RECOGNIZE request is
 already in progress for the resource.  The value for this header
@@ -4772,11 +4784,11 @@ in every RECOGNIZE request.  There is no default value.
 
    cancel-if-queue          =  "Cancel-If-Queue" ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.28.  \%Hotword-Max-Duration
 
-.in 3
 This header field MAY be sent in a hotword mode RECOGNIZE request.
 It specifies the maximum length of an utterance (in seconds) that
 will be considered for hotword recognition.  This header field, along
@@ -4792,11 +4804,11 @@ If present in a RECOGNIZE request specifying a mode other than
    hotword-max-duration     =  "Hotword-Max-Duration" ":" 1*19DIGIT
                                CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.29.  \%Hotword-Min-Duration
 
-.in 3
 This header field MAY be sent in a hotword mode RECOGNIZE request.
 It specifies the minimum length of an utterance (in seconds) that
 will be considered for hotword recognition.  This header field, along
@@ -4811,11 +4823,11 @@ than "hotword", the header field is ignored.
 
    hotword-min-duration     =  "Hotword-Min-Duration" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 .bp
 .ti 0
 9.4.30.  \%Interpret-Text
 
-.in 3
 The value of this header field is used to provide a pointer to the
 text for which a natural language interpretation is desired.  The
 value is either a URI or text.  If the value is a URI, it MUST be a
@@ -4828,11 +4840,11 @@ the INTERPRET method.
 
    interpret-text           =  "Interpret-Text" ":" 1*VCHAR CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.31.  \%DTMF-Buffer-Time
 
-.in 3
 This header field MAY be specified in a \%GET-PARAMS or \%SET-PARAMS
 method and is used to specify the amount of time, in milliseconds, of
 the \%type-ahead buffer for the recognizer.  This is the buffer that
@@ -4847,11 +4859,11 @@ this DTMF buffer is platform specific.
 
    dtmf-buffer-time  =  "DTMF-Buffer-Time" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.32.  \%Clear-DTMF-Buffer
 
-.in 3
 This header field MAY be specified in a RECOGNIZE method and is used
 to tell the recognizer to clear the DTMF \%type-ahead buffer before
 starting the RECOGNIZE.  The default value of this header field is
@@ -4865,11 +4877,11 @@ RECOGNIZE command was issued are discarded.
 
    clear-dtmf-buffer  = "Clear-DTMF-Buffer" ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.33.  \%Early-No-Match
 
-.in 3
 This header field MAY be specified in a RECOGNIZE method and is used
 to tell the recognizer that it MUST NOT wait for the end of speech
 before processing the collected speech to match active grammars.  A
@@ -4882,11 +4894,11 @@ before the end of speech, this header field can be safely ignored.
 .nf
    early-no-match  = "Early-No-Match" ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.34.  \%Num-Min-Consistent-Pronunciations
 
-.in 3
 This header field MAY be specified in a \%START-PHRASE-ENROLLMENT,
 \%SET-PARAMS, or \%GET-PARAMS method and is used to specify the minimum
 number of consistent pronunciations that must be obtained to voice
@@ -4898,11 +4910,11 @@ implementation specific and MAY be greater than 1.
    num-min-consistent-pronunciations  =
                  "Num-Min-Consistent-Pronunciations" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.35.  \%Consistency-Threshold
 
-.in 3
 This header field MAY be sent as part of the \%START-PHRASE-ENROLLMENT,
 \%SET-PARAMS, or \%GET-PARAMS method.  Used during voice enrollment, this
 header field specifies how similar to a previously enrolled
@@ -4917,11 +4929,11 @@ for this header field is implementation specific.
 
    consistency-threshold    =  "Consistency-Threshold" ":" FLOAT CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.36.  \%Clash-Threshold
 
-.in 3
 This header field MAY be sent as part of the \%START-PHRASE-ENROLLMENT,
 \%SET-PARAMS, or \%GET-PARAMS method.  Used during voice enrollment, this
 header field specifies how similar the pronunciations of two
@@ -4938,11 +4950,11 @@ specific.  Clash testing can be turned off completely by setting the
 
    clash-threshold          =  "Clash-Threshold" ":" FLOAT CRLF
 .fi
+.in 3
 .bp
 .ti 0
 9.4.37.  \%Personal-Grammar-URI
 
-.in 3
 This header field specifies the \%speaker-trained grammar to be used or
 referenced during enrollment operations.  Phrases are added to this
 grammar during enrollment.  For example, a contact list for user
@@ -4956,11 +4968,11 @@ of the \%START-PHRASE-ENROLLMENT, \%SET-PARAMS, or \%GET-PARAMS method.
 
    personal-grammar-uri     =  "Personal-Grammar-URI" ":" uri CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.38.  \%Enroll-Utterance
 
-.in 3
 This header field MAY be specified in the RECOGNIZE method.  If this
 header field is set to "true" and an Enrollment is active, the
 RECOGNIZE command MUST add the collected utterance to the personal
@@ -4972,11 +4984,11 @@ default value for this header field is "false".
 
    enroll-utterance     =  "Enroll-Utterance" ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.39.  \%Phrase-Id
 
-.in 3
 This header field in a request identifies a phrase in an existing
 personal grammar for which enrollment is desired.  It is also
 returned to the client in the RECOGNIZE complete event.  This header
@@ -4987,11 +4999,11 @@ PHRASE requests.  There is no default value for this header field.
 
    phrase-id                =  "Phrase-ID" ":" 1*VCHAR CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.40.  \%Phrase-NL
 
-.in 3
 This string specifies the interpreted text to be returned when the
 phrase is recognized.  This header field MAY occur in \%START-PHRASE-
 ENROLLMENT and \%MODIFY-PHRASE requests.  There is no default value for
@@ -5001,11 +5013,11 @@ this header field.
 
    phrase-nl                =  "Phrase-NL" ":" 1*UTFCHAR CRLF
 .fi
+.in 3
 .bp
 .ti 0
 9.4.41.  Weight
 
-.in 3
 The value of this header field represents the occurrence likelihood
 of a phrase in an enrolled grammar.  When using grammar enrollment,
 the system is essentially constructing a grammar segment consisting
@@ -5026,11 +5038,11 @@ is implementation specific.
 
    weight                   =  "Weight" ":" FLOAT CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.42.  \%Save-Best-Waveform
 
-.in 3
 This header field allows the client to request the recognizer
 resource to save the audio stream for the best repetition of the
 phrase that was used during the enrollment session.  The recognizer
@@ -5046,11 +5058,11 @@ ENROLLMENT, \%SET-PARAMS, and \%GET-PARAMS methods.
 
    save-best-waveform  =  "Save-Best-Waveform" ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.43.  \%New-Phrase-Id
 
-.in 3
 This header field replaces the ID used to identify the phrase in a
 personal grammar.  The recognizer returns the new ID when using an
 enrollment grammar.  This header field MAY occur in \%MODIFY-PHRASE
@@ -5060,11 +5072,11 @@ requests.
 
    new-phrase-id            =  "New-Phrase-ID" ":" 1*VCHAR CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.44.  \%Confusable-Phrases-URI
 .bp
-.in 3
 This header field specifies a grammar that defines invalid phrases
 for enrollment.  For example, typical applications do not allow an
 enrolled phrase that is also a command word.  This header field MAY
@@ -5074,11 +5086,11 @@ occur in RECOGNIZE requests that are part of an enrollment session.
 
    confusable-phrases-uri   =  "Confusable-Phrases-URI" ":" uri CRLF
 .fi
+.in 3
 
 .ti 0
 9.4.45.  \%Abort-Phrase-Enrollment
 
-.in 3
 This header field MAY be specified in the \%END-PHRASE-ENROLLMENT
 method to abort the phrase enrollment, rather than committing the
 phrase to the personal grammar.
@@ -5088,11 +5100,11 @@ phrase to the personal grammar.
    abort-phrase-enrollment  =  "Abort-Phrase-Enrollment" ":"
                                BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 9.5.  Recognizer Message Body
 
-.in 3
 A recognizer message can carry additional data associated with the
 request, response, or event.  The client MAY provide the grammar to
 be recognized in \%DEFINE-GRAMMAR or RECOGNIZE requests.  When one or
@@ -5157,8 +5169,8 @@ example:
 
    session:help@root-level.store
 .fi
-
 .in 3
+
 Grammar data MAY be specified using external URI references.  To do
 so, the client uses a body of media type \%'text/uri-list' (see RFC
 2483 [RFC2483] ) to list the one or more URIs that point to the
@@ -5222,9 +5234,11 @@ this as a list of grammar alternatives to match against.
 
          </grammar>
 .fi
+.in 3
 
 .ce 1
 SRGS Grammar Example
+.in 0
 .nf
 .bp
    Content-Type:text/uri-list
@@ -5236,9 +5250,11 @@ SRGS Grammar Example
    http://www.example.com/TAC-Contact-List.grxml
    session:menu1@menu-level.store
 .fi
+.in 3
 
 .ce 1
 Grammar Reference Example
+.in 0
 .nf
 
    Content-Type:multipart/mixed; boundary="break"
@@ -5295,6 +5311,7 @@ Grammar Reference Example
          </grammar>
    --break--
 .fi
+.in 3
 
 .ce 1
 Mixed Grammar Reference Example
@@ -5302,7 +5319,6 @@ Mixed Grammar Reference Example
 .ti 0
 9.5.2.  Recognizer Result Data
 
-.in 3
 Recognition results are returned to the client in the message body of
 the \%RECOGNITION-COMPLETE event or the \%GET-RESULT response message as
 described in Section\06.3.  Element and attribute descriptions for the
@@ -5326,6 +5342,7 @@ with a normative definition of the schema in Section\016.1.
        </interpretation>
    </result>
 .fi
+.in 3
 
 .ce 1
 Result Example
@@ -5333,7 +5350,6 @@ Result Example
 .ti 0
 9.5.3.  Enrollment Result Data
 
-.in 3
 Enrollment results are returned to the client in the message body of
 the \%RECOGNITION-COMPLETE event as described in Section\06.3.  Element
 and attribute descriptions for the enrollment portion of the NLSML
@@ -5495,8 +5511,8 @@ represented in the NLSML markup.
      </interpretation>
    </result>
 .fi
-
 .in 3
+
 This example includes only the minimum required information.  There
 is an overall <result> element, which includes one interpretation and
 an input element.  The interpretation contains the \%application-
@@ -5544,11 +5560,11 @@ be dropped from the result element.
      </interpretation>
    </result>
 .fi
+.in 3
 
 .ti 0
 9.6.3.2.  <interpretation> Element
 
-.in 3
 An <interpretation> element contains a single semantic
 interpretation.
 
@@ -5593,11 +5609,11 @@ element containing the interpretation of the utterance.
        ...
    </interpretation>
 .fi
+.in 3
 
 .ti 0
 9.6.3.3.  <instance> Element
 
-.in 3
 The <instance> element contains the interpretation of the utterance.
 When the Semantic Interpretation for Speech Recognition format is
 used, the <instance> element contains the XML serialization of the
@@ -5638,6 +5654,8 @@ Threshold defined in Section\09.4.1.  This attribute is OPTIONAL.
      Mill Valley, California, 90952
    </input>
 .fi
+.in 3
+.in 0
 .nf
 
    <instance>
@@ -5647,6 +5665,7 @@ Threshold defined in Section\09.4.1.  This attribute is OPTIONAL.
      I would like to buy a coke
    </input>
 .fi
+.in 3
 
 .ce 1
 Figure\02: NSLML Example
@@ -5654,7 +5673,6 @@ Figure\02: NSLML Example
 .ti 0
 9.6.3.4.  <input> Element
 
-.in 3
 The <input> element is the text representation of a user's input.  It
 includes an optional "confidence" attribute, which indicates the
 recognizer's confidence in the recognition result (as opposed to the
@@ -5697,8 +5715,9 @@ There are three possible formats for the <input> element.
 .in 0
 .nf
 
-    <input>onions</input>
+       <input>onions</input>
 .fi
+.in 3
 
 .in 7
 A future possibility is for <input> to contain not only text but
@@ -5717,15 +5736,16 @@ level confidences.
 .in 0
 .nf
 
-    <input>
-         <input mode="speech" confidence="0.5"
-             timestamp-start="2000-04-03T0:00:00"
-             timestamp-end="2000-04-03T0:00:00.2">fried</input>
-         <input mode="speech" confidence="1.0"
-             timestamp-start="2000-04-03T0:00:00.25"
-             timestamp-end="2000-04-03T0:00:00.6">onions</input>
-    </input>
+       <input>
+            <input mode="speech" confidence="0.5"
+                timestamp-start="2000-04-03T0:00:00"
+                timestamp-end="2000-04-03T0:00:00.2">fried</input>
+            <input mode="speech" confidence="1.0"
+                timestamp-start="2000-04-03T0:00:00.25"
+                timestamp-end="2000-04-03T0:00:00.6">onions</input>
+       </input>
 .fi
+.in 3
 
 .in 7
 .ti 3
@@ -5758,11 +5778,11 @@ of the best of the (rejected) matches.
       </input>
    </interpretation>
 .fi
+.in 3
 
 .ti 0
 9.6.3.6.  <noinput> Element
 
-.in 3
 <noinput> indicates that there was no input \%-- a timeout occurred in
 the speech recognizer due to silence.
 .in 0
@@ -5775,8 +5795,8 @@ the speech recognizer due to silence.
       </input>
    </interpretation>
 .fi
-
 .in 3
+
 If there are multiple levels of inputs, the most natural place for
 <nomatch> and <noinput> elements to appear is under the highest level
 of <input> for <noinput>, and under the appropriate level of
@@ -5792,8 +5812,8 @@ with DTMF "1 2 3 4", the markup would be:
       <input mode="dtmf">1 2 3 4</input>
    </input>
 .fi
-
 .in 3
+
 Note: while <noinput> could be represented as an attribute of input,
 <nomatch> cannot, since it could potentially include PCDATA content
 with the best match.  For parallelism, <noinput> is also an element.
@@ -6079,6 +6099,7 @@ the failure reason.
        </interpretation>
    </result>
 .fi
+.in 3
 
 .ce 1
 Define Grammar Example
@@ -6086,7 +6107,6 @@ Define Grammar Example
 .ti 0
 9.9.  RECOGNIZE
 
-.in 3
 The RECOGNIZE method from the client to the server requests the
 recognizer to start recognition and provides it with one or more
 grammar references for grammars to match against the input media.
@@ -6369,8 +6389,8 @@ the final \%RECOGNITION-COMPLETE message containing the result.
        </interpretation>
    </result>
 .fi
-
 .in 3
+
 Below is an example of calling RECOGNIZE with a different grammar.
 No status or completion messages are shown in this example, although
 they would of course occur in normal usage.
@@ -6403,11 +6423,11 @@ they would of course occur in normal usage.
               </one-of>
            </rule>
 .fi
+.in 3
 
 .ti 0
 9.10.  STOP
 
-.in 3
 The STOP method from the client to the server tells the resource to
 stop recognition if a request is active.  If a RECOGNIZE request is
 active and the STOP request successfully terminated it, then the
@@ -6461,11 +6481,11 @@ Either way, the response MUST contain a \%status-code of 200 "Success".
            Channel-Identifier:32AECB23433801@speechrecog
            Active-Request-Id-List:543257
 .fi
+.in 3
 
 .ti 0
 9.11.  \%GET-RESULT
 .bp
-.in 3
 The \%GET-RESULT method from the client to the server MAY be issued
 when the recognizer resource is in the recognized state.  This
 request allows the client to retrieve results for a completed
@@ -6506,11 +6526,11 @@ not supported.
                </interpretation>
            </result>
 .fi
+.in 3
 
 .ti 0
 9.12.  \%START-OF-INPUT
 .bp
-.in 3
 This is an event from the server to the client indicating that the
 recognizer resource has detected speech or a DTMF digit in the media
 stream.  This event is useful in implementing \%kill-on-barge-in
@@ -6626,8 +6646,8 @@ with a recognition result.
                </interpretation>
            </result>
 .fi
-
 .in 3
+
 If the result were instead an enrollment result, the final message
 from the server above could have been:
 .in 0
@@ -6665,11 +6685,11 @@ from the server above could have been:
                </enrollment-result>
            </result>
 .fi
+.in 3
 .bp
 .ti 0
 9.15.  \%START-PHRASE-ENROLLMENT
 
-.in 3
 The \%START-PHRASE-ENROLLMENT method from the client to the server
 starts a new phrase enrollment session during which the client can
 call RECOGNIZE multiple times to enroll a new utterance in a grammar.
@@ -6723,11 +6743,11 @@ phrase.
    S->C:   MRCP/2.0 ... 543258 200 COMPLETE
            Channel-Identifier:32AECB23433801@speechrecog
 .fi
+.in 3
 
 .ti 0
 9.16.  \%ENROLLMENT-ROLLBACK
 
-.in 3
 The \%ENROLLMENT-ROLLBACK method discards the last live utterance from
 the RECOGNIZE operation.  The client can invoke this method when the
 caller provides undesirable input such as \%non-speech noises, \%side-
@@ -6744,11 +6764,11 @@ intervening recognition operation has no effect the second time.
    S->C:   MRCP/2.0 ... 543261 200 COMPLETE
            Channel-Identifier:32AECB23433801@speechrecog
 .fi
+.in 3
 
 .ti 0
 9.17.  \%END-PHRASE-ENROLLMENT
 
-.in 3
 The client MAY call the \%END-PHRASE-ENROLLMENT method ONLY during an
 active phrase enrollment session.  It MUST NOT be called during an
 ongoing RECOGNIZE operation.  To commit the new phrase in the
@@ -6774,11 +6794,11 @@ the best repetition of the learned phrase.
            Waveform-URI:<http://mediaserver.com/recordings/file1324.wav>
                 ;size=242453;duration=25432
 .fi
+.in 3
 
 .ti 0
 9.18.  \%MODIFY-PHRASE
 
-.in 3
 The \%MODIFY-PHRASE method sent from the client to the server is used
 to change the phrase ID, NL phrase, and/or weight for a given phrase
 in a personal grammar.
@@ -6798,11 +6818,11 @@ If no fields are supplied, then calling this method has no effect.
    S->C:   MRCP/2.0 ... 543265 200 COMPLETE
            Channel-Identifier:32AECB23433801@speechrecog
 .fi
+.in 3
 
 .ti 0
 9.19.  \%DELETE-PHRASE
 
-.in 3
 The \%DELETE-PHRASE method sent from the client to the server is used
 to delete a phase that is in a personal grammar and was added through
 voice enrollment or text enrollment.  If the specified phrase does
@@ -6818,11 +6838,11 @@ not exist, this method has no effect.
    S->C:   MRCP/2.0 ... 543266 200 COMPLETE
            Channel-Identifier:32AECB23433801@speechrecog
 .fi
+.in 3
 .bp
 .ti 0
 9.20.  INTERPRET
 
-.in 3
 The INTERPRET method from the client to the server takes as input an
 \%Interpret-Text header field containing the text for which the
 semantic interpretation is desired, and returns, via the
@@ -6895,11 +6915,11 @@ state", and a COMPLETE request state.
                </interpretation>
            </result>
 .fi
+.in 3
 
 .ti 0
 9.21.  \%INTERPRETATION-COMPLETE
 
-.in 3
 This event from the recognizer resource to the client indicates that
 the INTERPRET operation is complete.  The interpretation result is
 sent in the body of the MRCP message.  The request state MUST be set
@@ -6963,11 +6983,11 @@ MUST be set to an appropriate value from the list of cause codes.
                </interpretation>
            </result>
 .fi
+.in 3
 
 .ti 0
 9.22.  DTMF Detection
 
-.in 3
 Digits received as DTMF tones are delivered to the recognition
 resource in the MRCPv2 server in the RTP stream according to RFC 4733
 [RFC4733].  The Automatic Speech Recognizer (ASR) MUST support RFC
@@ -7028,6 +7048,7 @@ Section\012.
     |              |------->|
     |                       |
 .fi
+.in 3
 
 .ce 1
 Recorder State Machine
@@ -7035,7 +7056,6 @@ Recorder State Machine
 .ti 0
 10.2.  Recorder Methods
 
-.in 3
 The recorder resource supports the following methods.
 .bp
 .in 0
@@ -7044,11 +7064,11 @@ The recorder resource supports the following methods.
                         /  "STOP"
                         /  "START-INPUT-TIMERS"
 .fi
+.in 3
 
 .ti 0
 10.3.  Recorder Events
 
-.in 3
 The recorder resource can generate the following events.
 .in 0
 .nf
@@ -7056,11 +7076,11 @@ The recorder resource can generate the following events.
    recorder-event       =  "START-OF-INPUT"
                         /  "RECORD-COMPLETE"
 .fi
+.in 3
 
 .ti 0
 10.4.  Recorder Header Fields
 
-.in 3
 Method invocations for the recorder resource can contain \%resource-
 specific header fields containing request options and information to
 augment the Method, Response, or Event message it is associated with.
@@ -7083,11 +7103,11 @@ augment the Method, Response, or Event message it is associated with.
                         /  start-input-timers
                         /  new-audio-channel
 .fi
+.in 3
 
 .ti 0
 10.4.1.  \%Sensitivity-Level
 
-.in 3
 To filter out background noise and not mistake it for speech, the
 recorder can support a variable level of sound sensitivity.  The
 \%Sensitivity-Level header field is a float value between 0.0 and 1.0
@@ -7100,11 +7120,11 @@ default value for this header field is implementation specific.
 
    sensitivity-level    =     "Sensitivity-Level" ":" FLOAT CRLF
 .fi
+.in 3
 
 .ti 0
 10.4.2.  \%No-Input-Timeout
 .bp
-.in 3
 When recording is started and there is no speech detected for a
 certain period of time, the recorder can send a \%RECORD-COMPLETE event
 to the client and terminate the record operation.  The \%No-Input-
@@ -7118,11 +7138,11 @@ header field is implementation specific.
 
    no-input-timeout    =     "No-Input-Timeout" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 10.4.3.  \%Completion-Cause
 
-.in 3
 This header field MUST be part of a \%RECORD-COMPLETE event from the
 recorder resource to the client.  This indicates the reason behind
 the RECORD method completion.  This header field MUST be sent in the
@@ -7139,6 +7159,8 @@ The \%'cause-name' contains the corresponding token selected from the
    cause-code               =  3DIGIT
    cause-name               =  *VCHAR
 .fi
+.in 3
+.in 0
 .nf
 
    +------------+-----------------------+------------------------------+
@@ -7159,11 +7181,11 @@ The \%'cause-name' contains the corresponding token selected from the
    |            |                       | recorder error.              |
    +------------+-----------------------+------------------------------+
 .fi
+.in 3
 
 .ti 0
 10.4.4.  \%Completion-Reason
 .bp
-.in 3
 This header field MAY be present in a \%RECORD-COMPLETE event coming
 from the recorder resource to the client.  It contains the reason
 text behind the RECORD request completion.  This header field
@@ -7178,11 +7200,11 @@ the completion reason text.
    completion-reason        =  "Completion-Reason" ":"
                                quoted-string CRLF
 .fi
+.in 3
 
 .ti 0
 10.4.5.  \%Failed-URI
 
-.in 3
 When a recorder method needs to post the audio to a URI and access to
 the URI fails, the server MUST provide the failed URI in this header
 field in the method response.
@@ -7191,11 +7213,11 @@ field in the method response.
 
    failed-uri               =  "Failed-URI" ":" absoluteURI CRLF
 .fi
+.in 3
 
 .ti 0
 10.4.6.  \%Failed-URI-Cause
 
-.in 3
 When a recorder method needs to post the audio to a URI and access to
 the URI fails, the server MAY provide the \%URI-specific or \%protocol-
 specific response code through this header field in the method
@@ -7208,11 +7230,11 @@ response string instead of a numeric response code.
    failed-uri-cause         =  "Failed-URI-Cause" ":" 1*UTFCHAR
                                CRLF
 .fi
+.in 3
 
 .ti 0
 10.4.7.  \%Record-URI
 
-.in 3
 When a recorder method contains this header field, the server MUST
 capture the audio and store it.  If the header field is present but
 specified with no value, the server MUST store the content locally
@@ -7241,11 +7263,11 @@ implementations already exist that support other schemes.
                                ";" "size" "=" 1*19DIGIT
                                ";" "duration" "=" 1*19DIGIT] CRLF
 .fi
+.in 3
 
 .ti 0
 10.4.8.  \%Media-Type
 
-.in 3
 A RECORD method MUST contain this header field, which specifies to
 the server the media type of the captured audio or video.
 .in 0
@@ -7254,11 +7276,11 @@ the server the media type of the captured audio or video.
    media-type               =  "Media-Type" ":" media-type-value
                                CRLF
 .fi
+.in 3
 
 .ti 0
 10.4.9.  \%Max-Time
 
-.in 3
 When recording is started, this specifies the maximum length of the
 recording in milliseconds, calculated from the time the actual
 capture and store begins and is not necessarily the time the RECORD
@@ -7276,11 +7298,11 @@ conditions are met.  The default value for this header field is 0.
 
    max-time                 =  "Max-Time" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 10.4.10.  \%Trim-Length
 
-.in 3
 This header field MAY be sent on a STOP method and specifies the
 length of audio to be trimmed from the end of the recording after the
 stop.  The length is interpreted to be in milliseconds.  The default
@@ -7290,11 +7312,11 @@ value for this header field is 0.
 
    trim-length                 =  "Trim-Length" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 10.4.11.  \%Final-Silence
 .bp
-.in 3
 When the recorder is started and the actual capture begins, this
 header field specifies the length of silence in the audio that is to
 be interpreted as the end of the recording.  This header field MAY
@@ -7309,11 +7331,11 @@ field is implementation specific.
 
    final-silence            =  "Final-Silence" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 10.4.12.  \%Capture-On-Speech
 
-.in 3
 If "false", the recorder MUST start capturing immediately when
 started.  If "true", the recorder MUST wait for the endpointing
 functionality to detect speech before it starts capturing.  This
@@ -7325,11 +7347,11 @@ header field is "false".
 
    capture-on-speech        =  "Capture-On-Speech " ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 10.4.13.  \%Ver-Buffer-Utterance
 
-.in 3
 This header field is the same as the one described for the verifier
 resource (see Section\011.4.14).  This tells the server to buffer the
 utterance associated with this recording request into the
@@ -7359,11 +7381,11 @@ finished.  The default value is "true".
    start-input-timers       =  "Start-Input-Timers" ":"
                                BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 10.4.15.  \%New-Audio-Channel
 
-.in 3
 This header field is the same as the one described for the recognizer
 resource (see Section\09.4.23).
 
@@ -7434,6 +7456,7 @@ recording operation, the server generates a \%RECORD-COMPLETE event.
           Record-URI:<file://mediaserver/recordings/myfile.wav>;
                      size=242552;duration=25645
 .fi
+.in 3
 
 .ce 1
 RECORD Example
@@ -7441,7 +7464,6 @@ RECORD Example
 .ti 0
 10.7.  STOP
 
-.in 3
 The STOP method moves the recorder from the recording state back to
 the idle state.  If a RECORD request is active and the STOP request
 successfully terminates it, then the STOP response MUST contain an
@@ -7482,6 +7504,7 @@ contain a \%status-code of 200 "Success".
                      size=324253;duration=24561
           Active-Request-Id-List:543257
 .fi
+.in 3
 
 .ce 1
 STOP Example
@@ -7489,7 +7512,6 @@ STOP Example
 .ti 0
 10.8.  \%RECORD-COMPLETE
 
-.in 3
 If the recording completes due to no input, silence after speech, or
 reaching the \%max-time, the server MUST generate the \%RECORD-COMPLETE
 event to the client with a \%request-state of COMPLETE.  If the
@@ -7518,6 +7540,7 @@ to a typed entity in the message body containing the recorded audio.
           Record-URI:<file://mediaserver/recordings/myfile.wav>;
                      size=325325;duration=24652
 .fi
+.in 3
 
 .ce 1
 \%RECORD-COMPLETE Example
@@ -7525,7 +7548,6 @@ to a typed entity in the message body containing the recorded audio.
 .ti 0
 10.9.  \%START-INPUT-TIMERS
 
-.in 3
 This request is sent from the client to the recorder resource when it
 discovers that a \%kill-on-barge-in prompt has finished playing (see
 Section\08.4.2).  This is useful in the scenario when the recorder and
@@ -7556,10 +7578,10 @@ value for this event.
           Proxy-Sync-Id:987654321
 .bp
 .fi
+.in 3
 .ti 0
 11.  Speaker Verification and Identification
 
-.in 3
 This section describes the methods, responses and events employed by
 MRCPv2 for doing speaker verification/identification.
 
@@ -7661,73 +7683,74 @@ or \%VERIFY-FROM-BUFFER is called.
 .in 0
 .nf
 
-   Idle              Session Opened       Verifying/Training
-   State             State                State
-    |                   |                         |
-    |--START-SESSION--->|                         |
-    |                   |                         |
-    |                   |----------|              |
-    |                   |     START-SESSION       |
-    |                   |<---------|              |
-    |                   |                         |
-    |<--END-SESSION-----|                         |
-    |                   |                         |
-    |                   |---------VERIFY--------->|
-    |                   |                         |
-    |                   |---VERIFY-FROM-BUFFER--->|
-    |                   |                         |
-    |                   |----------|              |
-    |                   |  VERIFY-ROLLBACK        |
-    |                   |<---------|              |
-    |                   |                         |
-    |                   |                |--------|
-    |                   | GET-INTERMEDIATE-RESULT |
-    |                   |                |------->|
-    |                   |                         |
-    |                   |                |--------|
-    |                   |     START-INPUT-TIMERS  |
-    |                   |                |------->|
-    |                   |                         |
-    |                   |                |--------|
-    |                   |         START-OF-INPUT  |
-    |                   |                |------->|
-    |                   |                         |
-    |                   |<-VERIFICATION-COMPLETE--|
-    |                   |                         |
-    |                   |<--------STOP------------|
-    |                   |                         |
-    |                   |----------|              |
-    |                   |         STOP            |
-    |                   |<---------|              |
-    |                   |                         |
-    |----------|        |                         |
-    |         STOP      |                         |
-    |<---------|        |                         |
-    |                   |----------|              |
-    |                   |    CLEAR-BUFFER         |
-    |                   |<---------|              |
-    |                   |                         |
+     Idle              Session Opened       Verifying/Training
+     State             State                State
+      |                   |                         |
+      |--START-SESSION--->|                         |
+      |                   |                         |
+      |                   |----------|              |
+      |                   |     START-SESSION       |
+      |                   |<---------|              |
+      |                   |                         |
+      |<--END-SESSION-----|                         |
+      |                   |                         |
+      |                   |---------VERIFY--------->|
+      |                   |                         |
+      |                   |---VERIFY-FROM-BUFFER--->|
+      |                   |                         |
+      |                   |----------|              |
+      |                   |  VERIFY-ROLLBACK        |
+      |                   |<---------|              |
+      |                   |                         |
+      |                   |                |--------|
+      |                   | GET-INTERMEDIATE-RESULT |
+      |                   |                |------->|
+      |                   |                         |
+      |                   |                |--------|
+      |                   |     START-INPUT-TIMERS  |
+      |                   |                |------->|
+      |                   |                         |
+      |                   |                |--------|
+      |                   |         START-OF-INPUT  |
+      |                   |                |------->|
+      |                   |                         |
+      |                   |<-VERIFICATION-COMPLETE--|
+      |                   |                         |
+      |                   |<--------STOP------------|
+      |                   |                         |
+      |                   |----------|              |
+      |                   |         STOP            |
+      |                   |<---------|              |
+      |                   |                         |
+      |----------|        |                         |
+      |         STOP      |                         |
+      |<---------|        |                         |
+      |                   |----------|              |
+      |                   |    CLEAR-BUFFER         |
+      |                   |<---------|              |
+      |                   |                         |
 .bp
-    |----------|        |                         |
-    |   CLEAR-BUFFER    |                         |
-    |<---------|        |                         |
-    |                   |                         |
-    |                   |----------|              |
-    |                   |   QUERY-VOICEPRINT      |
-    |                   |<---------|              |
-    |                   |                         |
-    |----------|        |                         |
-    | QUERY-VOICEPRINT  |                         |
-    |<---------|        |                         |
-    |                   |                         |
-    |                   |----------|              |
-    |                   |  DELETE-VOICEPRINT      |
-    |                   |<---------|              |
-    |                   |                         |
-    |----------|        |                         |
-    | DELETE-VOICEPRINT |                         |
-    |<---------|        |                         |
+      |----------|        |                         |
+      |   CLEAR-BUFFER    |                         |
+      |<---------|        |                         |
+      |                   |                         |
+      |                   |----------|              |
+      |                   |   QUERY-VOICEPRINT      |
+      |                   |<---------|              |
+      |                   |                         |
+      |----------|        |                         |
+      | QUERY-VOICEPRINT  |                         |
+      |<---------|        |                         |
+      |                   |                         |
+      |                   |----------|              |
+      |                   |  DELETE-VOICEPRINT      |
+      |                   |<---------|              |
+      |                   |                         |
+      |----------|        |                         |
+      | DELETE-VOICEPRINT |                         |
+      |<---------|        |                         |
 .fi
+.in 3
 
 .ce 1
 Verifier Resource State Machine
@@ -7735,7 +7758,6 @@ Verifier Resource State Machine
 .ti 0
 11.2.  Speaker Verification Methods
 
-.in 3
 The verifier resource supports the following methods.
 .in 0
 .nf
@@ -7752,8 +7774,8 @@ The verifier resource supports the following methods.
                             / "START-INPUT-TIMERS"
                             / "GET-INTERMEDIATE-RESULT"
 .fi
-
 .in 3
+
 These methods allow the client to control the mode and target of
 verification or identification operations within the context of a
 session.  All the verification input operations that occur within a
@@ -7835,11 +7857,11 @@ The verifier resource generates the following events.
    verifier-event       =  "VERIFICATION-COMPLETE"
                         /  "START-OF-INPUT"
 .fi
+.in 3
 .bp
 .ti 0
 11.4.  Verification Header Fields
 
-.in 3
 A verifier resource message can contain header fields containing
 request options and information to augment the Request, Response, or
 Event message it is associated with.
@@ -7868,11 +7890,11 @@ Event message it is associated with.
                             /  abort-verification
                             /  start-input-timers
 .fi
+.in 3
 
 .ti 0
 11.4.1.  \%Repository-URI
 
-.in 3
 This header field specifies the voiceprint repository to be used or
 referenced during speaker verification or identification operations.
 This header field is required in the \%START-SESSION, \%QUERY-VOICEPRINT,
@@ -7882,11 +7904,11 @@ and \%DELETE-VOICEPRINT methods.
 
    repository-uri           =  "Repository-URI" ":" uri CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.2.  \%Voiceprint-Identifier
 
-.in 3
 This header field specifies the claimed identity for verification
 applications.  The claimed identity MAY be used to specify an
 existing voiceprint or to establish a new voiceprint.  This header
@@ -7905,11 +7927,11 @@ group identifier instead of a list of voiceprint identifiers.
                                    vid *[";" vid] CRLF
    vid                          =  1*VCHAR ["." 1*VCHAR]
 .fi
+.in 3
 
 .ti 0
 11.4.3.  \%Verification-Mode
 
-.in 3
 This header field specifies the mode of the verifier resource and is
 set by the \%START-SESSION method.  Acceptable values indicate whether
 the verification session will train a voiceprint ("train") or verify/
@@ -7965,11 +7987,11 @@ mode retains its current value.
    verification-mode-string     =  "train"
                                 /  "verify"
 .fi
+.in 3
 
 .ti 0
 11.4.4.  \%Adapt-Model
 
-.in 3
 This header field indicates the desired behavior of the verifier
 resource after a successful verification operation.  If the value of
 this header field is "true", the server SHOULD use audio collected
@@ -7983,11 +8005,11 @@ This header field MAY occur in the \%START-SESSION method.
 
    adapt-model              = "Adapt-Model" ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.5.  \%Abort-Model
 
-.in 3
 The \%Abort-Model header field indicates the desired behavior of the
 verifier resource upon session termination.  If the value of this
 header field is "true", the server MUST discard any pending changes
@@ -8002,11 +8024,11 @@ header field.  This header field MAY occur in the \%END-SESSION method.
 
    abort-model             = "Abort-Model" ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.6.  \%Min-Verification-Score
 
-.in 3
 The \%Min-Verification-Score header field, when used with a verifier
 resource through a \%SET-PARAMS, \%GET-PARAMS, or \%START-SESSION method,
 determines the minimum verification score for which a verification
@@ -8019,11 +8041,11 @@ field is implementation specific.
    min-verification-score  = "Min-Verification-Score" ":"
                              [ %x2D ] FLOAT CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.7.  \%Num-Min-Verification-Phrases
 
-.in 3
 The \%Num-Min-Verification-Phrases header field is used to specify the
 minimum number of valid utterances before a positive decision is
 given for verification.  The value for this header field is an
@@ -8037,11 +8059,11 @@ header field MAY occur in \%START-SESSION, \%SET-PARAMS, or \%GET-PARAMS.
    num-min-verification-phrases =  "Num-Min-Verification-Phrases" ":"
                                    1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.8.  \%Num-Max-Verification-Phrases
 
-.in 3
 The \%Num-Max-Verification-Phrases header field is used to specify the
 number of valid utterances required before a decision is forced for
 verification.  The verifier resource MUST NOT return a decision of
@@ -8056,11 +8078,11 @@ SESSION, \%SET-PARAMS, or \%GET-PARAMS.
    num-max-verification-phrases =  "Num-Max-Verification-Phrases" ":"
                                     1*19DIGIT CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.9.  \%No-Input-Timeout
 
-.in 3
 The \%No-Input-Timeout header field sets the length of time from the
 start of the verification timers (see \%START-INPUT-TIMERS) until the
 \%VERIFICATION-COMPLETE server event message declares that no input has
@@ -8074,11 +8096,11 @@ value for this header field is implementation specific.
 
    no-input-timeout         = "No-Input-Timeout" ":" 1*19DIGIT CRLF
 .fi
+.in 3
 .bp
 .ti 0
 11.4.10.  \%Save-Waveform
 
-.in 3
 This header field allows the client to request that the verifier
 resource save the audio stream that was used for verification/
 identification.  The verifier resource MUST attempt to record the
@@ -8096,11 +8118,11 @@ to save the waveform for live verification/identification operations.
 
    save-waveform            =  "Save-Waveform" ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.11.  \%Media-Type
 
-.in 3
 This header field MAY be specified in the \%SET-PARAMS, \%GET-PARAMS, or
 the VERIFY methods and tells the server resource the media type of
 the captured audio or video such as the one captured and returned by
@@ -8111,11 +8133,11 @@ the \%Waveform-URI header field.
    media-type               =  "Media-Type" ":" media-type-value
                                CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.12.  \%Waveform-URI
 
-.in 3
 If the \%Save-Waveform header field is set to "true", the verifier
 resource MUST attempt to record the incoming audio stream of the
 verification into a file and provide a URI for the client to access
@@ -8141,11 +8163,11 @@ with the header field.
                                ";" "size" "=" 1*19DIGIT
                                ";" "duration" "=" 1*19DIGIT] CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.13.  \%Voiceprint-Exists
 
-.in 3
 This header field MUST be returned in \%QUERY-VOICEPRINT and \%DELETE-
 VOICEPRINT responses.  This is the status of the voiceprint specified
 in the \%QUERY-VOICEPRINT method.  For the \%DELETE-VOICEPRINT method,
@@ -8156,11 +8178,11 @@ moment the method execution started.
 
    voiceprint-exists    =  "Voiceprint-Exists" ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.14.  \%Ver-Buffer-Utterance
 
-.in 3
 This header field is used to indicate that this utterance could be
 later considered for speaker verification.  This way, a client can
 request the server to buffer utterances while doing regular
@@ -8174,11 +8196,11 @@ value for this header field is "false".
    ver-buffer-utterance     = "Ver-Buffer-Utterance" ":" BOOLEAN
                               CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.15.  \%Input-Waveform-URI
 
-.in 3
 This header field specifies stored audio content that the client
 requests the server to fetch and process according to the current
 verification mode, either to train the voiceprint or verify a claimed
@@ -8191,11 +8213,11 @@ used.  It MAY be specified on the VERIFY request.
 
    input-waveform-uri           =  "Input-Waveform-URI" ":" uri CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.16.  \%Completion-Cause
 .bp
-.in 3
 This header field MUST be part of a \%VERIFICATION-COMPLETE event from
 the verifier resource to the client.  This indicates the cause of
 VERIFY or \%VERIFY-FROM-BUFFER method completion.  This header field
@@ -8213,6 +8235,8 @@ selected from the \%Cause-Code column of the following table.  The
    cause-code               =  3DIGIT
    cause-name               =  *VCHAR
 .fi
+.in 3
+.in 0
 .nf
 .bp
    +------------+--------------------------+---------------------------+
@@ -8265,10 +8289,10 @@ selected from the \%Cause-Code column of the following table.  The
    +------------+--------------------------+---------------------------+
 .bp
 .fi
+.in 3
 .ti 0
 11.4.17.  \%Completion-Reason
 
-.in 3
 This header field MAY be specified in a \%VERIFICATION-COMPLETE event
 coming from the verifier resource to the client.  It contains the
 reason text behind the VERIFY request completion.  This header field
@@ -8283,11 +8307,11 @@ the completion reason text.
    completion-reason        =  "Completion-Reason" ":"
                                quoted-string CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.18.  \%Speech-Complete-Timeout
 
-.in 3
 This header field is the same as the one described for the Recognizer
 resource.  See Section\09.4.15.  This header field MAY occur in
 VERIFY, \%SET-PARAMS, or \%GET-PARAMS.
@@ -8312,11 +8336,11 @@ results obtained up to the point it received the STOP request.
 
    abort-verification   =  "Abort-Verification " ":" BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 11.4.21.  \%Start-Input-Timers
 .bp
-.in 3
 This header field MAY be sent as part of a VERIFY request.  A value
 of "false" tells the verifier resource to start the VERIFY operation
 but not to start the \%no-input timer yet.  The verifier resource MUST
@@ -8335,11 +8359,11 @@ finished.  The default value is "true".
    start-input-timers       =  "Start-Input-Timers" ":"
                                BOOLEAN CRLF
 .fi
+.in 3
 
 .ti 0
 11.5.  Verification Message Body
 
-.in 3
 A verification response or event message can carry additional data as
 described in the following subsection.
 
@@ -8531,11 +8555,11 @@ the most recent utterance.
      </verification-result>
    </result>
 .fi
+.in 3
 
 .ce 1
 Verification Results Example 1
 
-.in 3
 In this next example, the verifier has enough information to decide
 to reject the speaker.
 .in 0
@@ -8566,6 +8590,7 @@ to reject the speaker.
      </verification-result>
    </result>
 .fi
+.in 3
 
 .ce 1
 Verification Results Example 2
@@ -8573,7 +8598,6 @@ Verification Results Example 2
 .ti 0
 11.6.  \%START-SESSION
 
-.in 3
 The \%START-SESSION method starts a speaker verification or speaker
 identification session.  Execution of this method places the verifier
 resource into its initial state.  If this method is called during an
@@ -8631,11 +8655,11 @@ at one time.
    S->C:  MRCP/2.0 ... 314161 200 COMPLETE
           Channel-Identifier:32AECB23433801@speakverify
 .fi
+.in 3
 
 .ti 0
 11.7.  \%END-SESSION
 
-.in 3
 The \%END-SESSION method terminates an ongoing verification session and
 releases the verification voiceprint resources.  The session may
 terminate in one of three ways:
@@ -8677,11 +8701,11 @@ verification session in progress.
    S->C:  MRCP/2.0 ... 314174 200 COMPLETE
           Channel-Identifier:32AECB23433801@speakverify
 .fi
+.in 3
 
 .ti 0
 11.8.  \%QUERY-VOICEPRINT
 
-.in 3
 The \%QUERY-VOICEPRINT method is used to get status information on a
 particular voiceprint and can be used by the client to ascertain if a
 voiceprint or repository exists and if it contains trained
@@ -8716,8 +8740,8 @@ and the voiceprint exists in the voiceprint repository.
           Voiceprint-Identifier:johnsmith.voiceprint
           Voiceprint-Exists:true
 .fi
-
 .in 3
+
 The following example assumes that the URI provided in the
 \%Repository-URI header field is a bad URI.
 .in 0
@@ -8734,11 +8758,11 @@ The following example assumes that the URI provided in the
           Voiceprint-Identifier:johnsmith.voiceprint
           Completion-Cause:007 repository-uri-failure
 .fi
+.in 3
 
 .ti 0
 11.9.  \%DELETE-VOICEPRINT
 
-.in 3
 The \%DELETE-VOICEPRINT method removes a voiceprint from a repository.
 This method MUST carry the \%Repository-URI and \%Voiceprint-Identifier
 header fields.
@@ -8764,11 +8788,11 @@ remove a specific voiceprint.
    S->C:  MRCP/2.0 ... 314168 200 COMPLETE
           Channel-Identifier:32AECB23433801@speakverify
 .fi
+.in 3
 
 .ti 0
 11.10.  VERIFY
 
-.in 3
 The VERIFY method is used to request that the verifier resource
 either train/adapt the voiceprint or verify/identify a claimed
 identity.  If the voiceprint is new or was deleted by a previous
@@ -8784,8 +8808,8 @@ the VERIFY command.
    S->C:  MRCP/2.0 ... 543260 200 IN-PROGRESS
           Channel-Identifier:32AECB23433801@speakverify
 .fi
-
 .in 3
+
 When the VERIFY request completes, the MRCPv2 server MUST send a
 \%VERIFICATION-COMPLETE event to the client.
 
@@ -8938,6 +8962,7 @@ the utterance is accepted.  For the example, we assume both
    S->C:  MRCP/2.0 ... 314166 200 COMPLETE
           Channel-Identifier:32AECB23433801@speakverify
 .fi
+.in 3
 
 .ce 1
 \%VERIFY-FROM-BUFFER Example
@@ -8945,7 +8970,6 @@ the utterance is accepted.  For the example, we assume both
 .ti 0
 11.12.  \%VERIFY-ROLLBACK
 
-.in 3
 The \%VERIFY-ROLLBACK method discards the last buffered utterance or
 discards the last live utterances (when the mode is "train" or
 "verify").  The client will likely want to invoke this method when
@@ -8963,6 +8987,7 @@ recognition operation has no effect on the second attempt.
    S->C:  MRCP/2.0 ... 314165 200 COMPLETE
           Channel-Identifier:32AECB23433801@speakverify
 .fi
+.in 3
 
 .ce 1
 \%VERIFY-ROLLBACK Example
@@ -8970,7 +8995,6 @@ recognition operation has no effect on the second attempt.
 .ti 0
 11.13.  STOP
 .bp
-.in 3
 The STOP method from the client to the server tells the verifier
 resource to stop the VERIFY or \%VERIFY-FROM-BUFFER request if one is
 active.  If such a request is active and the STOP request
@@ -9016,6 +9040,7 @@ established.
           Channel-Identifier:32AECB23433801@speakverify
           Active-Request-Id-List:314177
 .fi
+.in 3
 
 .ce 1
 STOP Verification Example
@@ -9023,7 +9048,6 @@ STOP Verification Example
 .ti 0
 11.14.  \%START-INPUT-TIMERS
 .bp
-.in 3
 This request is sent from the client to the verifier resource to
 start the \%no-input timer, usually once the client has ascertained
 that any audio prompts to the user have played to completion.
@@ -9036,11 +9060,11 @@ that any audio prompts to the user have played to completion.
    S->C:  MRCP/2.0 ... 543260 200 COMPLETE
           Channel-Identifier:32AECB23433801@speakverify
 .fi
+.in 3
 
 .ti 0
 11.15.  \%VERIFICATION-COMPLETE
 
-.in 3
 The \%VERIFICATION-COMPLETE event follows a call to VERIFY or \%VERIFY-
 \%FROM-BUFFER and is used to communicate the verification results to
 the client.  The event message body contains only verification
@@ -9076,11 +9100,11 @@ results.
             </verification-result>
           </result>
 .fi
+.in 3
 
 .ti 0
 11.16.  \%START-OF-INPUT
 .bp
-.in 3
 The \%START-OF-INPUT event is returned from the server to the client
 once the server has detected speech.  This event is always returned
 by the verifier resource when speech has been detected, irrespective
@@ -9092,11 +9116,11 @@ same session.
    S->C:  MRCP/2.0 ... START-OF-INPUT 543259 IN-PROGRESS
           Channel-Identifier:32AECB23433801@speakverify
 .fi
+.in 3
 
 .ti 0
 11.17.  \%CLEAR-BUFFER
 
-.in 3
 The \%CLEAR-BUFFER method can be used to clear the verification buffer.
 This buffer is used to buffer speech during recognition, record, or
 verification operations that may later be used by \%VERIFY-FROM-BUFFER.
@@ -9116,11 +9140,11 @@ to "true".
    S->C:  MRCP/2.0 ... 543260 200 COMPLETE
           Channel-Identifier:32AECB23433801@speakverify
 .fi
+.in 3
 
 .ti 0
 11.18.  \%GET-INTERMEDIATE-RESULT
 
-.in 3
 A client can use the \%GET-INTERMEDIATE-RESULT method to poll for
 intermediate results of a verification request that is in progress.
 Invoking this method does not change the state of the resource.  The
@@ -9165,11 +9189,11 @@ has a 402 failure \%status-code and no result in the body.
             </verification-result>
           </result>
 .fi
+.in 3
 
 .ti 0
 12.  Security Considerations
 
-.in 3
 MRCPv2 is designed to comply with the \%security-related requirements
 documented in the SPEECHSC requirements [RFC4313].  Implementers and
 users of MRCPv2 are strongly encouraged to read the Security
@@ -9381,11 +9405,11 @@ below:
    speakverify    Speaker Verifier      [RFC6787]
    recorder       Speech Recorder       [RFC6787]
 .fi
+.in 3
 
 .ti 0
 13.1.2.  MRCPv2 Methods and Events
 
-.in 3
 IANA has created a new name space of "MRCPv2 Methods and Events".
 All maintenance within and additions to the contents of this name
 space MUST be according to the "Standards Action" registration
@@ -9440,11 +9464,11 @@ Sections 5.2 and 5.5, are given below.
    VERIFICATION-COMPLETE    Verifier       Event         [RFC6787]
    START-OF-INPUT           Verifier       Event         [RFC6787]
 .fi
+.in 3
 
 .ti 0
 13.1.3.  MRCPv2 Header Fields
 .bp
-.in 3
 IANA has created a new name space of "MRCPv2 Header Fields".  All
 maintenance within and additions to the contents of this name space
 MUST be according to the "Standards Action" registration policy.  The
@@ -9577,11 +9601,11 @@ Section\013.1.6.
    Start-Input-Timers                 Verifier         [RFC6787]
    Input-Type                         Verifier         [RFC6787]
 .fi
+.in 3
 
 .ti 0
 13.1.4.  MRCPv2 Status Codes
 
-.in 3
 IANA has created a new name space of "MRCPv2 Status Codes" with the
 initial values that are defined in Section\05.4.  All maintenance
 within and additions to the contents of this name space MUST be
@@ -9603,11 +9627,11 @@ parameter as shown below.
    ----                       -------------
    weight                     [RFC6787]
 .fi
+.in 3
 
 .ti 0
 13.1.6.  MRCPv2 \%Vendor-Specific Parameters
 
-.in 3
 IANA has created a new name space of "MRCPv2 \%Vendor-Specific
 Parameters".  All maintenance within and additions to the contents of
 this name space MUST be according to the "Hierarchical Allocation"
@@ -9809,11 +9833,12 @@ type is as follows:
 .in 0
 .nf
 
-   body       = *reference
-   reference  = "<" uri ">" [parameters] CRLF
-   parameters = ";" parameter *(";" parameter)
-   parameter  = attribute "=" value
+      body       = *reference
+      reference  = "<" uri ">" [parameters] CRLF
+      parameters = ";" parameter *(";" parameter)
+      parameter  = attribute "=" value
 .fi
+.in 3
 
 .in 6
 This specification currently only defines a 'weight' parameter,
@@ -9823,11 +9848,12 @@ specification.  Example:
 .in 0
 .nf
 
-         <http://example.com/grammars/field1.gram>
-         <http://example.com/grammars/field2.gram>;weight="0.85"
-         <session:field3@form-level.store>;weight="0.9"
-         <http://example.com/grammars/universals.gram>;weight="0.75"
+            <http://example.com/grammars/field1.gram>
+            <http://example.com/grammars/field2.gram>;weight="0.85"
+            <session:field3@form-level.store>;weight="0.9"
+            <http://example.com/grammars/universals.gram>;weight="0.75"
 .fi
+.in 3
 
 .in 6
 .ti 3
@@ -10136,8 +10162,8 @@ establishes a SIP session with the MRCPv2 server.
           CSeq:323123 ACK
           Content-Length:0
 .fi
-
 .in 3
+
 The client requests the server to create a synthesizer resource
 control channel to do speech synthesis.  This also adds a media
 stream to send the generated speech.  Note that, in this example, the
@@ -10220,8 +10246,8 @@ existing connection.
           CSeq:323124 ACK
           Content-Length:0
 .fi
-.bp
 .in 3
+.bp
 This exchange allocates an additional resource control channel for a
 recognizer.  Since a recognizer would need to receive an audio stream
 for recognition, this interaction also updates the audio stream to
@@ -10320,8 +10346,8 @@ sendrecv, making it a \%two-way audio stream.
           CSeq:323125 ACK
           Content-Length:0
 .fi
-
 .in 3
+
 A MRCPv2 SPEAK request initiates speech.
 .bp
 .in 0
@@ -10360,8 +10386,8 @@ A MRCPv2 SPEAK request initiates speech.
           Speech-Marker:timestamp=857205015059
 
 .fi
-
 .in 3
+
 The synthesizer hits the special marker in the message to be spoken
 and faithfully informs the client of the event.
 .in 0
@@ -10371,8 +10397,8 @@ and faithfully informs the client of the event.
           Channel-Identifier:32AECB23433801@speechsynth
           Speech-Marker:timestamp=857206027059;Stephanie
 .fi
-
 .in 3
+
 The synthesizer finishes with the SPEAK request.
 .in 0
 .nf
@@ -10382,8 +10408,8 @@ The synthesizer finishes with the SPEAK request.
           Speech-Marker:timestamp=857207685213;Stephanie
 
 .fi
-.bp
 .in 3
+.bp
 The recognizer is issued a request to listen for the customer
 choices.
 .in 0
@@ -10412,8 +10438,8 @@ choices.
    S->C:  MRCP/2.0 ... 543258 200 IN-PROGRESS
           Channel-Identifier:32AECB23433801@speechrecog
 .fi
-
 .in 3
+
 The client issues the next MRCPv2 SPEAK method.
 .in 0
 .nf
@@ -10441,8 +10467,8 @@ The client issues the next MRCPv2 SPEAK method.
           Channel-Identifier:32AECB23433801@speechsynth
           Speech-Marker:timestamp=857207696314
 .fi
-
 .in 3
+
 This next section of this ongoing example demonstrates how \%kill-on-
 \%barge-in support works.  Since this last SPEAK request had \%Kill-On-
 \%Barge-In set to "true", when the recognizer (the server) generated
@@ -10483,8 +10509,8 @@ of MRCPv2.
           Speech-Marker:timestamp=857207685213
 
 .fi
-
 .in 3
+
 The recognizer resource matched the spoken stream to a grammar and
 generated results.  The result of the recognition is returned by the
 server as part of the \%RECOGNITION-COMPLETE event.
@@ -10513,8 +10539,8 @@ server as part of the \%RECOGNITION-COMPLETE event.
               </interpretation>
           </result>
 .fi
-.bp
 .in 3
+.bp
 Since the client was now finished with the session, including all
 resources, it issued a SIP BYE request to close the SIP session.
 This caused all control channels and resources allocated under the
@@ -10532,12 +10558,14 @@ session to be deallocated.
           CSeq:323126 BYE
           Content-Length:0
 .fi
+.in 3
 
 .ti 0
 14.2.  Recognition Result Examples
 
 .ti 0
 14.2.1.  Simple ASR Ambiguity
+.in 0
 .nf
 
    System: To which city will you be traveling?
@@ -10567,17 +10595,19 @@ session to be deallocated.
      </interpretation>
    </result>
 .fi
+.in 3
 
 .ti 0
 14.2.2.  Mixed Initiative
 .bp
+.in 0
 .nf
    System: What would you like?
    User:   I would like 2 pizzas, one with pepperoni and cheese,
            one with sausage and a bottle of coke, to go.
 .fi
-
 .in 3
+
 This example includes an order object which in turn contains objects
 named "food_item", "drink_item", and "delivery_method".  The
 representation assumes there are no ambiguities in the speech or
@@ -10620,11 +10650,11 @@ resolve the two "one"s as "pizza".
      </nl:interpretation>
    </nl:result>
 .fi
+.in 3
 
 .ti 0
 14.2.3.  DTMF Input
 
-.in 3
 A combination of DTMF input and speech is represented using nested
 input elements.  For example:
 .bp
@@ -10632,6 +10662,8 @@ input elements.  For example:
 .nf
    User: My pin is (dtmf 1 2 3 4)
 .fi
+.in 3
+.in 0
 .nf
 
    <input>
@@ -10645,8 +10677,8 @@ input elements.  For example:
      </input>
    </input>
 .fi
-
 .in 3
+
 Note that grammars that recognize mixtures of speech and DTMF are not
 currently possible in SRGS; however, this representation might be
 needed for other applications of NLSML, and this mixture capability
@@ -10696,11 +10728,11 @@ might be represented.
      <input mode="speech">slow down</input>
    </interpretation>
 .fi
+.in 3
 
 .ti 0
 14.2.5.  Anaphora and Deixis
 
-.in 3
 This specification can be used on an \%application-specific basis to
 represent utterances that contain unresolved anaphoric and deictic
 references.  Anaphoric references, which include pronouns and
@@ -10738,11 +10770,11 @@ actually resolving the reference).
       </nl:interpretation>
    </nl:result>
 .fi
+.in 3
 
 .ti 0
 14.2.6.  Distinguishing Individual Items from Sets with One Member
 
-.in 3
 For programming convenience, it is useful to be able to distinguish
 between individual items and sets containing one item in the XML
 representation of semantic results.  For example, a pizza order might
@@ -10764,8 +10796,8 @@ items in a grouping element, as in the following example.
       <drink>coke</drink>
    </order>
 .fi
-
 .in 3
+
 In this example, the programmer can assume that there is supposed to
 be exactly one pizza and one drink in the order, but the fact that
 there is only one topping is an accident of this particular pizza
@@ -11508,8 +11540,8 @@ Section\0B.1 of RFC 5234 [RFC5234].
    abort-verification    =    "Abort-Verification " ":"
                               BOOLEAN CRLF
 .fi
-
 .in 3
+
 The following productions add a new SDP \%session-level attribute.  See
 .bp
 Section\013.7.2,\0Paragraph\05.
@@ -11520,12 +11552,14 @@ Section\013.7.2,\0Paragraph\05.
 
    identification-tag =    token
 .fi
+.in 3
 
 .ti 0
 16.  XML Schemas
 
 .ti 0
 16.1.  NLSML Schema Definition
+.in 0
 .nf
 
    <?xml version="1.0" encoding="UTF-8"?>
@@ -11599,9 +11633,11 @@ Section\013.7.2,\0Paragraph\05.
      </xs:simpleType>
    </xs:schema>
 .fi
+.in 3
 
 .ti 0
 16.2.  Enrollment Results Schema Definition
+.in 0
 .nf
 
    <?xml version="1.0" encoding="UTF-8"?>
@@ -11672,9 +11708,11 @@ Section\013.7.2,\0Paragraph\05.
 
    </grammar>
 .fi
+.in 3
 
 .ti 0
 16.3.  Verification Results Schema Definition
+.in 0
 .nf
 
    <?xml version="1.0" encoding="UTF-8"?>
@@ -11837,6 +11875,7 @@ Section\013.7.2,\0Paragraph\05.
 
    </grammar>
 .fi
+.in 3
 
 .ti 0
 17.  References
@@ -11844,7 +11883,6 @@ Section\013.7.2,\0Paragraph\05.
 .ti 0
 17.1.  Normative References
 
-.in 3
 \%[ISO.8859-1.1987]
 .in 14
 International Organization for Standardization,
@@ -12156,9 +12194,11 @@ Appendix A.  Contributors
 
    EMail: klaus.reifenrath@scansoft.com
 .fi
+.in 3
 
 .ti 0
 Appendix B.  Acknowledgements
+.in 0
 .nf
 .bp
    Andre Gillet (Nuance Communications)
@@ -12182,8 +12222,8 @@ Appendix B.  Acknowledgements
    Skip Cave (Intervoice, Inc.)
    Thomas Gal (LumenVox)
 .fi
-
 .in 3
+
 The chairs of the SPEECHSC work group are Eric Burger (Georgetown
 University) and Dave Oran (Cisco Systems, Inc.).
 
@@ -12204,7 +12244,9 @@ Authors' Addresses
 
    EMail: dburnett@voxeo.com
 .fi
+.in 3
 
+.in 0
 .nf
 
    Saravanan Shanmugham
@@ -12215,3 +12257,4 @@ Authors' Addresses
 
    EMail: sarvi@cisco.com
 .fi
+.in 3

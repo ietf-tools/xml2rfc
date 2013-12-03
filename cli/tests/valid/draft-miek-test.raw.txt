@@ -143,16 +143,16 @@ Table of Contents
    conversions are, in some way amusing, as we start off with (almost)
    plain text, use elaborate XML and end up with plain text again.
 
-             +-------------------+   pandoc   +---------+
-             | ALMOST PLAIN TEXT |   ------>  | DOCBOOK |
-             +-------------------+            +---------+
-                           |                       |
-             non-existent  |                       | xsltproc
-               faster way  |                       |
-                           v                       v
-                   +------------+    xml2rfc  +---------+
-                   | PLAIN TEXT |  <--------  | XML2RFC |
-                   +------------+             +---------+
+   +-------------------+   pandoc   +---------+
+   | ALMOST PLAIN TEXT |   ------>  | DOCBOOK |
+   +-------------------+            +---------+
+                 |                       |
+   non-existent  |                       | xsltproc
+     faster way  |                       |
+                 v                       v
+         +------------+    xml2rfc  +---------+
+         | PLAIN TEXT |  <--------  | XML2RFC |
+         +------------+             +---------+
 
                  Figure 1: Attempt to justify Pandoc2rfc.
 
@@ -161,26 +161,26 @@ Table of Contents
    an RFC.  The simplest way is to create a template XML file and
    include the appropriate XML:
 
-       <?xml version='1.0' ?>
-       <!DOCTYPE rfc SYSTEM 'rfc2629.dtd' [
-       <!ENTITY pandocMiddle PUBLIC '' 'middle.xml'>
-       <!ENTITY pandocBack   PUBLIC '' 'back.xml'>
-       ]>
+   <?xml version='1.0' ?>
+   <!DOCTYPE rfc SYSTEM 'rfc2629.dtd' [
+   <!ENTITY pandocMiddle PUBLIC '' 'middle.xml'>
+   <!ENTITY pandocBack   PUBLIC '' 'back.xml'>
+   ]>
 
-       <rfc ipr='trust200902' docName='draft-gieben-pandoc-rfcs-02'>
-        <front>
-           <title>Writing I-Ds and RFCs using Pandoc v2</title>
-       </front>
+   <rfc ipr='trust200902' docName='draft-gieben-pandoc-rfcs-02'>
+    <front>
+       <title>Writing I-Ds and RFCs using Pandoc v2</title>
+   </front>
 
-       <middle>
-           &pandocMiddle;
-       </middle>
+   <middle>
+       &pandocMiddle;
+   </middle>
 
-       <back>
-           &pandocBack;
-       </back>
+   <back>
+       &pandocBack;
+   </back>
 
-       </rfc>
+   </rfc>
 
                      Figure 2: A minimal template.xml.
 
@@ -206,7 +206,7 @@ Table of Contents
    When using Pandoc2rfc consider adding the following sentence to an
    Acknowledgements section:
 
-   This document was produced using the Pandoc2rfc tool.
+    This document was produced using the Pandoc2rfc tool.
 
 3.  Starting a new project
 
@@ -524,13 +524,13 @@ Table of Contents
 
    A table can be entered as:
 
-                   Right     Left     Center     Default
-                   -------   ------ ----------   -------
-                        12     12        12        12
-                       123     123       123       123
-                         1     1         1         1
+     Right     Left     Center     Default
+     -------   ------ ----------   -------
+          12     12        12        12
+         123     123       123       123
+           1     1         1         1
 
-                   Table: A caption describing the table.
+     Table: A caption describing the table.
 
       Figure 3: A caption describing the figure describing the table.
 
@@ -901,10 +901,10 @@ A.9.  Numbered examples
 
 A.10.  Figure tests
 
-                             This is a figure
-                             This is a figure
-                             This is a figure
-                             This is a figure
+   This is a figure
+   This is a figure
+   This is a figure
+   This is a figure
 
    Figure 4: This is the caption, with text in `typewriter`. Which isnt
         converted to a <spanx> style, because this is copied as-is.

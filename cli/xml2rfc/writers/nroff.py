@@ -114,6 +114,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             if self.buf[i] and self.buf[i][0] in nroff_linestart_meta:
                self.buf[i] = nroff_escape_linestart(self.buf[i])
         self.write_nroff('.fi')
+        self._indent(indent)
 
     def write_text(self, *args, **kwargs):
         #-------------------------------------------------------------

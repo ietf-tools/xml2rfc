@@ -629,8 +629,8 @@ Table of Contents
 
    For example:
 
-     sip:mrcpv2@example.net   or
-     sips:mrcpv2@example.net
+        sip:mrcpv2@example.net   or
+        sips:mrcpv2@example.net
 
 4.  MRCPv2 Basics
 
@@ -4838,7 +4838,7 @@ Table of Contents
 
    1.  The <input> element can contain simple text:
 
-    <input>onions</input>
+       <input>onions</input>
 
        A future possibility is for <input> to contain not only text but
        additional markup that represents prosodic information that was
@@ -4853,14 +4853,14 @@ Table of Contents
        information, such as timestamps for individual words and word-
        level confidences.
 
-    <input>
-         <input mode="speech" confidence="0.5"
-             timestamp-start="2000-04-03T0:00:00"
-             timestamp-end="2000-04-03T0:00:00.2">fried</input>
-         <input mode="speech" confidence="1.0"
-             timestamp-start="2000-04-03T0:00:00.25"
-             timestamp-end="2000-04-03T0:00:00.6">onions</input>
-    </input>
+       <input>
+            <input mode="speech" confidence="0.5"
+                timestamp-start="2000-04-03T0:00:00"
+                timestamp-end="2000-04-03T0:00:00.2">fried</input>
+            <input mode="speech" confidence="1.0"
+                timestamp-start="2000-04-03T0:00:00.25"
+                timestamp-end="2000-04-03T0:00:00.6">onions</input>
+       </input>
 
    3.  Finally, the <input> element can contain <nomatch> and <noinput>
        elements, which describe situations in which the speech
@@ -6529,71 +6529,71 @@ Table of Contents
    verifier resources goes from IDLE to VERIFYING state each time VERIFY
    or VERIFY-FROM-BUFFER is called.
 
-   Idle              Session Opened       Verifying/Training
-   State             State                State
-    |                   |                         |
-    |--START-SESSION--->|                         |
-    |                   |                         |
-    |                   |----------|              |
-    |                   |     START-SESSION       |
-    |                   |<---------|              |
-    |                   |                         |
-    |<--END-SESSION-----|                         |
-    |                   |                         |
-    |                   |---------VERIFY--------->|
-    |                   |                         |
-    |                   |---VERIFY-FROM-BUFFER--->|
-    |                   |                         |
-    |                   |----------|              |
-    |                   |  VERIFY-ROLLBACK        |
-    |                   |<---------|              |
-    |                   |                         |
-    |                   |                |--------|
-    |                   | GET-INTERMEDIATE-RESULT |
-    |                   |                |------->|
-    |                   |                         |
-    |                   |                |--------|
-    |                   |     START-INPUT-TIMERS  |
-    |                   |                |------->|
-    |                   |                         |
-    |                   |                |--------|
-    |                   |         START-OF-INPUT  |
-    |                   |                |------->|
-    |                   |                         |
-    |                   |<-VERIFICATION-COMPLETE--|
-    |                   |                         |
-    |                   |<--------STOP------------|
-    |                   |                         |
-    |                   |----------|              |
-    |                   |         STOP            |
-    |                   |<---------|              |
-    |                   |                         |
-    |----------|        |                         |
-    |         STOP      |                         |
-    |<---------|        |                         |
-    |                   |----------|              |
-    |                   |    CLEAR-BUFFER         |
-    |                   |<---------|              |
-    |                   |                         |
-    |----------|        |                         |
-    |   CLEAR-BUFFER    |                         |
-    |<---------|        |                         |
-    |                   |                         |
-    |                   |----------|              |
-    |                   |   QUERY-VOICEPRINT      |
-    |                   |<---------|              |
-    |                   |                         |
-    |----------|        |                         |
-    | QUERY-VOICEPRINT  |                         |
-    |<---------|        |                         |
-    |                   |                         |
-    |                   |----------|              |
-    |                   |  DELETE-VOICEPRINT      |
-    |                   |<---------|              |
-    |                   |                         |
-    |----------|        |                         |
-    | DELETE-VOICEPRINT |                         |
-    |<---------|        |                         |
+     Idle              Session Opened       Verifying/Training
+     State             State                State
+      |                   |                         |
+      |--START-SESSION--->|                         |
+      |                   |                         |
+      |                   |----------|              |
+      |                   |     START-SESSION       |
+      |                   |<---------|              |
+      |                   |                         |
+      |<--END-SESSION-----|                         |
+      |                   |                         |
+      |                   |---------VERIFY--------->|
+      |                   |                         |
+      |                   |---VERIFY-FROM-BUFFER--->|
+      |                   |                         |
+      |                   |----------|              |
+      |                   |  VERIFY-ROLLBACK        |
+      |                   |<---------|              |
+      |                   |                         |
+      |                   |                |--------|
+      |                   | GET-INTERMEDIATE-RESULT |
+      |                   |                |------->|
+      |                   |                         |
+      |                   |                |--------|
+      |                   |     START-INPUT-TIMERS  |
+      |                   |                |------->|
+      |                   |                         |
+      |                   |                |--------|
+      |                   |         START-OF-INPUT  |
+      |                   |                |------->|
+      |                   |                         |
+      |                   |<-VERIFICATION-COMPLETE--|
+      |                   |                         |
+      |                   |<--------STOP------------|
+      |                   |                         |
+      |                   |----------|              |
+      |                   |         STOP            |
+      |                   |<---------|              |
+      |                   |                         |
+      |----------|        |                         |
+      |         STOP      |                         |
+      |<---------|        |                         |
+      |                   |----------|              |
+      |                   |    CLEAR-BUFFER         |
+      |                   |<---------|              |
+      |                   |                         |
+      |----------|        |                         |
+      |   CLEAR-BUFFER    |                         |
+      |<---------|        |                         |
+      |                   |                         |
+      |                   |----------|              |
+      |                   |   QUERY-VOICEPRINT      |
+      |                   |<---------|              |
+      |                   |                         |
+      |----------|        |                         |
+      | QUERY-VOICEPRINT  |                         |
+      |<---------|        |                         |
+      |                   |                         |
+      |                   |----------|              |
+      |                   |  DELETE-VOICEPRINT      |
+      |                   |<---------|              |
+      |                   |                         |
+      |----------|        |                         |
+      | DELETE-VOICEPRINT |                         |
+      |<---------|        |                         |
 
                       Verifier Resource State Machine
 
@@ -8320,20 +8320,20 @@ Table of Contents
       method.  The format of the proposed 'text/grammar-ref-list' media
       type is as follows:
 
-   body       = *reference
-   reference  = "<" uri ">" [parameters] CRLF
-   parameters = ";" parameter *(";" parameter)
-   parameter  = attribute "=" value
+      body       = *reference
+      reference  = "<" uri ">" [parameters] CRLF
+      parameters = ";" parameter *(";" parameter)
+      parameter  = attribute "=" value
 
       This specification currently only defines a 'weight' parameter,
       but new parameters MAY be added through the "Grammar Reference
       List Parameters" IANA registry established through this
       specification.  Example:
 
-         <http://example.com/grammars/field1.gram>
-         <http://example.com/grammars/field2.gram>;weight="0.85"
-         <session:field3@form-level.store>;weight="0.9"
-         <http://example.com/grammars/universals.gram>;weight="0.75"
+            <http://example.com/grammars/field1.gram>
+            <http://example.com/grammars/field2.gram>;weight="0.85"
+            <session:field3@form-level.store>;weight="0.9"
+            <http://example.com/grammars/universals.gram>;weight="0.75"
 
    Applications that use this media type:  MRCPv2 clients and servers
 
