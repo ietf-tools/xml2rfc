@@ -69,6 +69,14 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.iref_table = None
 
     def write_list(self, list, parent, level=0):
+        # grab the anchors that exist
+        if self.indexmode:
+            t_count = 0
+            for t in list.findall('t'):
+                t_count += 1
+                anchor = t.attrib.get('anchor')
+                if anchor:
+                    self._indexListParagraph(t_count, anchor)
         # style comes from the node if one exists
         style = list.attrib.get('style', '')
         if not style:
@@ -179,6 +187,12 @@ class HtmlRfcWriter(BaseRfcWriter):
         """ Return a list of HTML elements that represent the reference """   
         if element.tag == 'xref':
             target = element.attrib.get('target', '')
+            item = self._getItemByAnchor(target)
+            if not self.indexmode:
+                if not item:
+                    xml2rfc.log.warn("Can't resolve xref target %s" % target)
+                else:
+                    item.used = True
             if element.text:
                 cite = E.CITE('[' + target + ']', title='NONE')
                 a = E.A(element.text, href='#' + target)
@@ -191,9 +205,10 @@ class HtmlRfcWriter(BaseRfcWriter):
                 format = element.attrib.get('format', 
                                             self.defaults['xref_format'])
                 a = E.A(href='#' + target)
-                item = self._getItemByAnchor(target)
-                if not item or format == 'none':
+                if not item:
                     text = '[' + target + ']'
+                elif format == 'none':
+                    text = ''
                 elif format == 'counter':
                     text = item.counter
                 elif format == 'title':
@@ -478,11 +493,12 @@ class HtmlRfcWriter(BaseRfcWriter):
         for i, reference in enumerate(list.findall('reference')):
             tr = E.TR()
             # Use anchor or num depending on PI
+            anchor = reference.attrib.get('anchor', str(i + self.ref_start))
             if self.pis['symrefs'] == 'yes':
-                bullet = reference.attrib.get('anchor', str(i + self.ref_start))
+                bullet = anchor
             else:
                 bullet = str(i + self.ref_start)
-            bullet_td = E.TD(E.B('[' + bullet + ']', id=bullet))
+            bullet_td = E.TD(E.B('[' + bullet + ']', id=anchor))
             bullet_td.attrib['class'] = 'reference'
             ref_td = E.TD()
             ref_td.attrib['class'] = 'top'
@@ -557,13 +573,14 @@ class HtmlRfcWriter(BaseRfcWriter):
             annotation = reference.find('annotation')
             if annotation is not None and annotation.text:
                 ref_td.append(E.P(annotation.text))
-        if self.pis['sortrefs'] == 'yes':
+        if self.pis['sortrefs'] == 'yes' and self.pis['symrefs'] == 'yes':
             refkeys = sorted(refkeys)
         for key in refkeys:
             tbody.append(refdict[key])
         self.ref_start += i + 1                
         # Add to body buffer
         self.buf.append(self._serialize(E.TABLE(tbody)))
+        self.unused_references()
 
     def draw_table(self, table, table_num=None):
         style = 'tt %s %s' % ( table.attrib.get('style', self.defaults['table_style']),

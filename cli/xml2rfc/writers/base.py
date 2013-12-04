@@ -32,6 +32,7 @@ class _RfcItem:
         self.level = level
         self.appendix = appendix
         self.page = 0    # This will be set after buffers are complete!
+        self.used = False
 
 
 class _IrefItem:
@@ -339,7 +340,14 @@ class BaseRfcWriter:
         p_counter = str(p_counter)  # This is the paragraph counter
         autoName = 'Section ' + counter + ', Paragraph ' + p_counter
         autoAnchor = 'rfc.section.' + counter + '.p.' + p_counter
-        item = _RfcItem(autoName, autoAnchor, anchor=anchor, toc=toc)
+        item = _RfcItem(autoName, autoAnchor, anchor=anchor, toc=toc, counter=p_counter)
+        self._index.append(item)
+        return item
+
+    def _indexListParagraph(self, p_counter, anchor, toc=False):
+        p_counter = str(p_counter)
+        autoName = 'Paragraph ' + p_counter
+        item = _RfcItem(autoName, '', counter=p_counter, anchor=anchor, toc=toc)
         self._index.append(item)
         return item
 
@@ -1138,6 +1146,14 @@ class BaseRfcWriter:
         if not self.quiet and filename:
             xml2rfc.log.write('Created file', filename)
 
+    def unused_references(self):
+        """ If this is a reference and it is not used - then warn me
+        """
+        if not self.indexmode:
+            for item in self._index:
+                if item.autoAnchor.startswith("rfc.ref.") and not item.used:
+                    xml2rfc.log.warn("no <xref> in <rfc> targets <reference anchor='%s'>" % item.anchor)
+                
     # -----------------------------------------
     # Base writer interface methods to override
     # -----------------------------------------

@@ -122,7 +122,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     margin = ' ' * indent
                     if line.startswith(margin):
                         line = line.rstrip()
-                        centered = ' ' * ((self.width - len(line.rstrip())-indent)/2)
+                        centered = ' ' * ((self.width - len(line.rstrip()))/2)
                         centered += line
                         # centered = margin + line[len(margin):].center(self.width-indent-4).rstrip()
                         buf.append(centered)
@@ -223,6 +223,9 @@ class RawTextRfcWriter(BaseRfcWriter):
                     sub_indent = hangIndent
                 else:
                     sub_indent = len(bullet)
+                anchor = element.attrib.get('anchor')
+                if anchor and self.indexmode:
+                    self._indexListParagraph(t_count+1, anchor)
                 self.write_t_rec(element, bullet=bullet, indent=indent, \
                                  level=level + 1, \
                                  sub_indent=sub_indent, leading_blankline=leading_blankline)
@@ -323,8 +326,15 @@ class RawTextRfcWriter(BaseRfcWriter):
         target = xref.attrib.get('target', '')
         format = xref.attrib.get('format', self.defaults['xref_format'])
         item = self._getItemByAnchor(target)
-        if not item or format == 'none':
+        if not self.indexmode:
+            if not item:
+                xml2rfc.log.warn("Can't resolve xref target %s" % target)
+            else:
+                item.used = True
+        if not item:
             target_text = '[' + target + ']'
+        elif format == 'none':
+            return xref.text.rstrip()
         elif format == 'counter':
             target_text = item.counter
         elif format == 'title':
@@ -730,6 +740,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             if key in annotationdict:
                 self.write_text(annotationdict[key], indent=refindent + 3,
                                  leading_blankline=True, source_line=refsource[key])
+        self.unused_references()
 
     def draw_table(self, table, table_num=None):
         # First construct a 2d matrix from the table
