@@ -376,9 +376,9 @@ RFC 6787                         MRCPv2                    November 2012
        13.5.1.  text/grammar-ref-list  . . . . . . . . . . . . . . . 184
      13.6.  'session' URI Scheme Registration  . . . . . . . . . . . 185
      13.7.  SDP Parameter Registrations  . . . . . . . . . . . . . . 186
-       13.7.1.  Sub-Registry "proto" . . . . . . . . . . . . . . . . 187
+       13.7.1.  Sub-Registry "proto" . . . . . . . . . . . . . . . . 186
        13.7.2.  Sub-Registry "att-field (media-level)" . . . . . . . 187
-   14. Examples  . . . . . . . . . . . . . . . . . . . . . . . . . . 188
+   14. Examples  . . . . . . . . . . . . . . . . . . . . . . . . . . 189
      14.1.  Message Flow . . . . . . . . . . . . . . . . . . . . . . 189
      14.2.  Recognition Result Examples  . . . . . . . . . . . . . . 198
        14.2.1.  Simple ASR Ambiguity . . . . . . . . . . . . . . . . 198
@@ -6648,19 +6648,19 @@ RFC 6787                         MRCPv2                    November 2012
        happen:
 
        5.1.  If there was a partial-match, the recognizer SHOULD
-             complete with a Completion-Cause code of "partial-match-
-             maxtime", unless the recognizer cannot differentiate a
-             partial-match, in which case it MUST complete with a
-             Completion-Cause code of "no-match-maxtime".  The
-             recognizer MAY return results for the partially matched
-             grammar.
+          complete with a Completion-Cause code of "partial-match-
+          maxtime", unless the recognizer cannot differentiate a
+          partial-match, in which case it MUST complete with a
+          Completion-Cause code of "no-match-maxtime".  The recognizer
+          MAY return results for the partially matched grammar.
 
        5.2.  If there was a full-match, the recognizer MUST complete
-             with a Completion-Cause code of "success-maxtime".
+          with a Completion-Cause code of "success-maxtime".
 
        5.3.  If there was a no match, the recognizer MUST complete with
-             a Completion-Cause code of "no-match-maxtime".
+          a Completion-Cause code of "no-match-maxtime".
 
+   For recognition in hotword mode:
 
 
 
@@ -6668,8 +6668,6 @@ Burnett & Shanmugham         Standards Track                  [Page 119]
 
 RFC 6787                         MRCPv2                    November 2012
 
-
-   For recognition in hotword mode:
 
    Note that for recognition in hotword mode the START-OF-INPUT event is
    not generated when speech or a DTMF digit is detected.
@@ -6718,6 +6716,8 @@ RFC 6787                         MRCPv2                    November 2012
                </one-of>
          </rule>
 
+   <!-- single language attachment to a rule expansion -->
+
 
 
 Burnett & Shanmugham         Standards Track                  [Page 120]
@@ -6725,7 +6725,6 @@ Burnett & Shanmugham         Standards Track                  [Page 120]
 RFC 6787                         MRCPv2                    November 2012
 
 
-   <!-- single language attachment to a rule expansion -->
          <rule id="request">
                may I speak to
                <one-of xml:lang="fr-CA">
@@ -6767,6 +6766,7 @@ RFC 6787                         MRCPv2                    November 2012
    Below is an example of calling RECOGNIZE with a different grammar.
    No status or completion messages are shown in this example, although
    they would of course occur in normal usage.
+
 
 
 
@@ -10198,8 +10198,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
       charset:  All of the considerations described in RFC 3023
-            [RFC3023] also apply to the application/nlsml+xml media
-            type.
+         [RFC3023] also apply to the application/nlsml+xml media type.
 
    Encoding considerations:  All of the considerations described in RFC
       3023 also apply to the 'application/nlsml+xml' media type.
@@ -10245,6 +10244,7 @@ RFC 6787                         MRCPv2                    November 2012
 
    Registrant Contact:  IESG
 
+   XML:  See Section 16.1.
 
 
 
@@ -10252,8 +10252,6 @@ Burnett & Shanmugham         Standards Track                  [Page 183]
 
 RFC 6787                         MRCPv2                    November 2012
 
-
-   XML:  See Section 16.1.
 
 13.4.  MRCPv2 XML Namespace Registration
 
@@ -10301,6 +10299,8 @@ RFC 6787                         MRCPv2                    November 2012
 
    Published specification:  The RECOGNIZE method of the MRCP protocol
       performs a recognition operation that matches input against a set
+      of grammars.  When matching against more than one grammar, it is
+      sometimes necessary to use different weights for the individual
 
 
 
@@ -10309,8 +10309,6 @@ Burnett & Shanmugham         Standards Track                  [Page 184]
 RFC 6787                         MRCPv2                    November 2012
 
 
-      of grammars.  When matching against more than one grammar, it is
-      sometimes necessary to use different weights for the individual
       grammars.  These weights are not a property of the grammar
       resource itself but qualify the reference to that grammar for the
       particular recognition operation initiated by the RECOGNIZE
@@ -10356,7 +10354,9 @@ RFC 6787                         MRCPv2                    November 2012
    URI scheme syntax:  The syntax of this scheme is identical to that
       defined for the "cid" scheme in Section 2 of RFC 2392 [RFC2392].
 
-
+   URI scheme semantics:  The URI is intended to identify a data
+      resource previously given to the network computing resource.  The
+      purpose of this scheme is to permit access to the specific
 
 
 
@@ -10365,9 +10365,6 @@ Burnett & Shanmugham         Standards Track                  [Page 185]
 RFC 6787                         MRCPv2                    November 2012
 
 
-   URI scheme semantics:  The URI is intended to identify a data
-      resource previously given to the network computing resource.  The
-      purpose of this scheme is to permit access to the specific
       resource for the lifetime of the session with the entity storing
       the resource.  The media type of the resource CAN vary.  There is
       no explicit mechanism for communication of the media type.  This
@@ -10413,6 +10410,9 @@ RFC 6787                         MRCPv2                    November 2012
    information for each follows the template given in RFC 4566
    [RFC4566], Appendix B.
 
+13.7.1.  Sub-Registry "proto"
+
+   "TCP/MRCPv2" value of the "proto" parameter
 
 
 
@@ -10420,10 +10420,6 @@ Burnett & Shanmugham         Standards Track                  [Page 186]
 
 RFC 6787                         MRCPv2                    November 2012
 
-
-13.7.1.  Sub-Registry "proto"
-
-   "TCP/MRCPv2" value of the "proto" parameter
 
    Contact name, email address, and telephone number:  Sarvi Shanmugham,
       sarvi@cisco.com, +1.408.902.3875
@@ -10470,15 +10466,16 @@ RFC 6787                         MRCPv2                    November 2012
 
    Subject to charset attribute?  no
 
+   Explanation of attribute:  See Section 4.2 of RFC 6787 for
+      description and examples.
+
+
 
 
 Burnett & Shanmugham         Standards Track                  [Page 187]
 
 RFC 6787                         MRCPv2                    November 2012
 
-
-   Explanation of attribute:  See Section 4.2 of RFC 6787 for
-      description and examples.
 
    Specification of appropriate attribute values:  See section
       Section 13.1.1 of RFC 6787.
@@ -10523,7 +10520,10 @@ RFC 6787                         MRCPv2                    November 2012
    Specification of appropriate attribute values:  See Section 4.4 and
       the "cmid-attribute" ABNF production rules of RFC 6787.
 
-14.  Examples
+
+
+
+
 
 
 
@@ -10532,6 +10532,8 @@ Burnett & Shanmugham         Standards Track                  [Page 188]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+14.  Examples
 
 14.1.  Message Flow
 
@@ -10579,8 +10581,6 @@ RFC 6787                         MRCPv2                    November 2012
           Content-Length:...
 
           v=0
-          o=- 3000000001 3000000001 IN IP4 192.0.2.11
-          s=Set up MRCPv2 control and audio
 
 
 
@@ -10589,6 +10589,8 @@ Burnett & Shanmugham         Standards Track                  [Page 189]
 RFC 6787                         MRCPv2                    November 2012
 
 
+          o=- 3000000001 3000000001 IN IP4 192.0.2.11
+          s=Set up MRCPv2 control and audio
           i=Initial contact
           c=IN IP4 192.0.2.11
 
@@ -10635,8 +10637,6 @@ RFC 6787                         MRCPv2                    November 2012
           a=connection:new
           a=resource:speechsynth
           a=cmid:1
-          m=audio 49170 RTP/AVP 0 96
-          a=rtpmap:0 pcmu/8000
 
 
 
@@ -10645,6 +10645,8 @@ Burnett & Shanmugham         Standards Track                  [Page 190]
 RFC 6787                         MRCPv2                    November 2012
 
 
+          m=audio 49170 RTP/AVP 0 96
+          a=rtpmap:0 pcmu/8000
           a=rtpmap:96 telephone-event/8000
           a=fmtp:96 0-15
           a=recvonly
@@ -10691,8 +10693,6 @@ RFC 6787                         MRCPv2                    November 2012
           CSeq:323124 ACK
           Content-Length:0
 
-   This exchange allocates an additional resource control channel for a
-   recognizer.  Since a recognizer would need to receive an audio stream
 
 
 
@@ -10701,6 +10701,8 @@ Burnett & Shanmugham         Standards Track                  [Page 191]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   This exchange allocates an additional resource control channel for a
+   recognizer.  Since a recognizer would need to receive an audio stream
    for recognition, this interaction also updates the audio stream to
    sendrecv, making it a two-way audio stream.
 
@@ -10747,8 +10749,6 @@ RFC 6787                         MRCPv2                    November 2012
           a=mid:2
 
 
-   S->C:
-          SIP/2.0 200 OK
 
 
 
@@ -10757,6 +10757,8 @@ Burnett & Shanmugham         Standards Track                  [Page 192]
 RFC 6787                         MRCPv2                    November 2012
 
 
+   S->C:
+          SIP/2.0 200 OK
           Via:SIP/2.0/TCP client.atlanta.example.com:5060;
            branch=z9hG4bK74bg5;received=192.0.32.10
           To:MediaServer <sip:mresources@example.com>;tag=62784
@@ -10803,8 +10805,6 @@ RFC 6787                         MRCPv2                    November 2012
           Content-Length:0
 
    A MRCPv2 SPEAK request initiates speech.
-
-
 
 
 

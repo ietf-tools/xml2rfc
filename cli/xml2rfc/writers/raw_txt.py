@@ -114,7 +114,9 @@ class RawTextRfcWriter(BaseRfcWriter):
                                         fix_sentence_endings=fix_sentence_endings)
             else:
                 par = self.wrapper.wrap(xml2rfc.utils.urlkeep(string), initial_indent=initial,
-                                        subsequent_indent=subsequent, fix_sentence_endings=fix_sentence_endings)                    
+                                        subsequent_indent=subsequent, fix_sentence_endings=fix_sentence_endings)
+            if len(par) == 0 and bullet:
+                par = [ initial ]                    
             if align == 'left':
                 buf.extend(par)
             elif align == 'center':
@@ -155,9 +157,12 @@ class RawTextRfcWriter(BaseRfcWriter):
         if style == 'hanging' or style.startswith('format'):
             # Check for optional hangIndent
             try:
-                hangIndent = int(list.attrib.get('hangIndent', 3+level*3))
+                hangIndent = list.attrib.get('hangIndent', None)
+                if hangIndent:
+                    hangIndent = int(hangIndent)
             except (ValueError, TypeError):
-                hangIndent = 3 + level*3
+                xml2rfc.log.error("hangIndent value '%s' is not an integer" % hangIndent)
+                hangIndent = 6
         format_str = None
         counter_index = None
         if style.startswith('format'):
@@ -194,6 +199,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                     bullet = self._format_counter(letter_style, t_count+1, listlength)
                 elif style == 'hanging':
                     bullet = element.attrib.get('hangText', '')
+                    if not hangIndent:
+                        hangIndent = 3
                     if len(bullet) < hangIndent:
                         # Insert whitespace up to hangIndent
                         bullet = bullet.ljust(hangIndent)
@@ -546,6 +553,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         """ Recursively writes a <t> element """
         # Grab any initial text in <t>
         current_text = t.text or ''
+        if bullet and current_text == '':
+            current_text = ' '
         
         # Render child elements
         remainder = t.getchildren()

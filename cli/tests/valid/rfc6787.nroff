@@ -354,9 +354,9 @@ Table of Contents
        13.5.1.  text/grammar-ref-list  . . . . . . . . . . . . . . . 184
      13.6.  'session' URI Scheme Registration  . . . . . . . . . . . 185
      13.7.  SDP Parameter Registrations  . . . . . . . . . . . . . . 186
-       13.7.1.  Sub-Registry "proto" . . . . . . . . . . . . . . . . 187
+       13.7.1.  Sub-Registry "proto" . . . . . . . . . . . . . . . . 186
        13.7.2.  Sub-Registry "att-field (media-level)" . . . . . . . 187
-   14. Examples  . . . . . . . . . . . . . . . . . . . . . . . . . . 188
+   14. Examples  . . . . . . . . . . . . . . . . . . . . . . . . . . 189
      14.1.  Message Flow . . . . . . . . . . . . . . . . . . . . . . 189
      14.2.  Recognition Result Examples  . . . . . . . . . . . . . . 198
        14.2.1.  Simple ASR Ambiguity . . . . . . . . . . . . . . . . 198
@@ -6272,15 +6272,14 @@ complete with a \%Completion-Cause code of "success".
 5.  When the \%Recognition-Timeout expires, one of the following MUST
 happen:
 
-.in 13
+.in 10
 .ti 7
 5.1.  If there was a \%partial-match, the recognizer SHOULD
 complete with a \%Completion-Cause code of \%"partial-match-
 maxtime", unless the recognizer cannot differentiate a
 \%partial-match, in which case it MUST complete with a
-\%Completion-Cause code of \%"no-match-maxtime".  The
-recognizer MAY return results for the partially matched
-grammar.
+\%Completion-Cause code of \%"no-match-maxtime".  The recognizer
+MAY return results for the partially matched grammar.
 
 .ti 7
 5.2.  If there was a \%full-match, the recognizer MUST complete
@@ -6295,10 +6294,11 @@ For recognition in hotword mode:
 
 Note that for recognition in hotword mode the \%START-OF-INPUT event is
 not generated when speech or a DTMF digit is detected.
-.bp
+
 .in 7
 .ti 3
 1.  When the \%No-Input-Timer expires, the recognizer MUST complete
+.bp
 with a \%Completion-Cause code of \%"no-input-timeout".
 
 .ti 3
@@ -6353,8 +6353,8 @@ the final \%RECOGNITION-COMPLETE message containing the result.
          <rule id="request">
                may I speak to
                <one-of xml:lang="fr-CA">
-.bp
                      <item>Michel Tremblay</item>
+.bp
                      <item>Andre Roy</item>
                </one-of>
          </rule>
@@ -9683,11 +9683,10 @@ Required parameters:  none
 .ti 3
 Optional parameters:
 .bp
-.in 12
+.in 9
 .ti 6
 charset:  All of the considerations described in RFC 3023
-[RFC3023] also apply to the application/nlsml+xml media
-type.
+[RFC3023] also apply to the application/nlsml+xml media type.
 
 .in 6
 .ti 3
@@ -9751,10 +9750,10 @@ URI:  urn:ietf:params:xml:schema:nlsml
 
 .ti 3
 Registrant Contact:  IESG
-.bp
+
 .ti 3
 XML:  See Section\016.1.
-
+.bp
 .ti 0
 13.4.  MRCPv2 XML Namespace Registration
 
@@ -9822,9 +9821,9 @@ according to RFC 3986 [RFC3986].
 .ti 3
 Published specification:  The RECOGNIZE method of the MRCP protocol
 performs a recognition operation that matches input against a set
-.bp
 of grammars.  When matching against more than one grammar, it is
 sometimes necessary to use different weights for the individual
+.bp
 grammars.  These weights are not a property of the grammar
 resource itself but qualify the reference to that grammar for the
 particular recognition operation initiated by the RECOGNIZE
@@ -9893,11 +9892,12 @@ Status:  Permanent
 .ti 3
 URI scheme syntax:  The syntax of this scheme is identical to that
 defined for the "cid" scheme in Section\02 of RFC 2392 [RFC2392].
-.bp
+
 .ti 3
 URI scheme semantics:  The URI is intended to identify a data
 resource previously given to the network computing resource.  The
 purpose of this scheme is to permit access to the specific
+.bp
 resource for the lifetime of the session with the entity storing
 the resource.  The media type of the resource CAN vary.  There is
 no explicit mechanism for communication of the media type.  This
@@ -9951,12 +9951,12 @@ References:  This specification, particularly Sections 6.2.7, 8.5.2,
 IANA has registered the following SDP parameter values.  The
 information for each follows the template given in RFC 4566
 [RFC4566], Appendix\0B.
-.bp
+
 .ti 0
 13.7.1.  \%Sub-Registry "proto"
 
 "TCP/MRCPv2" value of the "proto" parameter
-
+.bp
 .in 6
 .ti 3
 Contact name, email address, and telephone number:  Sarvi Shanmugham,
@@ -10024,11 +10024,11 @@ Type of attribute:  \%media-level
 
 .ti 3
 Subject to charset attribute?  no
-.bp
+
 .ti 3
 Explanation of attribute:  See Section\04.2 of RFC 6787 for
 description and examples.
-
+.bp
 .ti 3
 Specification of appropriate attribute values:  See section
 Section\013.1.1 of RFC 6787.
@@ -10090,10 +10090,10 @@ description and examples.
 .ti 3
 Specification of appropriate attribute values:  See Section\04.4 and
 the \%"cmid-attribute" ABNF production rules of RFC 6787.
-
+.bp
 .ti 0
 14.  Examples
-.bp
+
 .ti 0
 14.1.  Message Flow
 
@@ -10144,9 +10144,9 @@ establishes a SIP session with the MRCPv2 server.
           Content-Length:...
 
           v=0
+.bp
           o=- 3000000001 3000000001 IN IP4 192.0.2.11
           s=Set up MRCPv2 control and audio
-.bp
           i=Initial contact
           c=IN IP4 192.0.2.11
 
@@ -10197,9 +10197,9 @@ existing connection.
           a=connection:new
           a=resource:speechsynth
           a=cmid:1
+.bp
           m=audio 49170 RTP/AVP 0 96
           a=rtpmap:0 pcmu/8000
-.bp
           a=rtpmap:96 telephone-event/8000
           a=fmtp:96 0-15
           a=recvonly
