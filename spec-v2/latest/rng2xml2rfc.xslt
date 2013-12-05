@@ -94,10 +94,10 @@
     <xsl:sort select="concat(@name,*/@name)"/>
   </xsl:apply-templates>
 
-  <section title="Grammar" toc="exclude" anchor="{$anchor}.grammar">
+  <!--<section title="Grammar" toc="exclude" anchor="{$anchor}.grammar">
     <t/>
     <figure><artwork type="application/relax-ng-compact-syntax">&#10;<xsl:apply-templates select="." mode="rnc"/></artwork></figure>
-  </section>
+  </section>-->
   
 </section>
 </xsl:template>

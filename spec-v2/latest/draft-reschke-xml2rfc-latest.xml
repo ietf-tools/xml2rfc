@@ -88,13 +88,6 @@
   (<xref target="RNC"/>) contained in <xref target="schema"/> (specified in
   Relax NG Compact Notation, "RNC").
 </t>
-<t>
-  Each element description also contains the RNC fragment for that specific
-  element in a slightly simplified form (for instance, leaving out defaults).
-  This is included as alternative for readers who prefer formal syntax over prose.
-  <cref>This information is redundant with the prose *and* repeated in the
-  index; I'd like to hear feedback whether it's more useful than distracting.</cref>
-</t>
 <t>  
   Note that the schema can be used for automated validity
   checks, but certain constraints are only described in prose (example:
@@ -135,16 +128,6 @@
       <iref item="Elements" subitem="t"/>
       <iref item="t element" subitem="inside abstract"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
       
-   <section title="Grammar" toc="exclude" anchor="element.abstract.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">abstract =
-  element abstract {
-    <xref target="element.t.grammar" format="none">t</xref>+
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;address&gt;" anchor="element.address">
    <x:anchor-alias value="address"/>
@@ -182,20 +165,6 @@
       
       </list>
    </t>
-   <section title="Grammar" toc="exclude" anchor="element.address.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">address =
-  element address {
-    <xref target="element.postal.grammar" format="none">postal</xref>?,
-    <xref target="element.phone.grammar" format="none">phone</xref>?,
-    <xref target="element.facsimile.grammar" format="none">facsimile</xref>?,
-    <xref target="element.email.grammar" format="none">email</xref>?,
-    <xref target="element.uri.grammar" format="none">uri</xref>?
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;annotation&gt;" anchor="element.annotation">
    <x:anchor-alias value="annotation"/>
@@ -237,21 +206,6 @@
             <iref item="spanx element" subitem="inside annotation"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</t>
       </list>
    </t>
-   <section title="Grammar" toc="exclude" anchor="element.annotation.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">annotation =
-  element annotation {
-    (text
-     | <xref target="element.xref.grammar" format="none">xref</xref>
-     | <xref target="element.eref.grammar" format="none">eref</xref>
-     | <xref target="element.iref.grammar" format="none">iref</xref>
-     | <xref target="element.cref.grammar" format="none">cref</xref>
-     | <xref target="element.spanx.grammar" format="none">spanx</xref>)*
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;area&gt;" anchor="element.area">
    <x:anchor-alias value="area"/>
@@ -263,16 +217,6 @@
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.area.contents"><!--AG-->Content model: only text content.</t>
-   <section title="Grammar" toc="exclude" anchor="element.area.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">area =
-  element area {
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;artwork&gt;" anchor="element.artwork">
    <x:anchor-alias value="artwork"/>
@@ -422,24 +366,6 @@
          </list>
       </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.artwork.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">artwork =
-  element artwork {
-    attribute xml:space<!--35--> ( "default" | "preserve" )?,
-    attribute name { text }?,
-    attribute type { text }?,
-    attribute src { text }?,
-    attribute align<!--37--> ( "left" | "center" | "right" )?,
-    attribute alt { text }?,
-    attribute width { text }?,
-    attribute height { text }?,
-    text*
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;author&gt;" anchor="element.author">
    <x:anchor-alias value="author"/>
@@ -522,21 +448,6 @@
             The author's surname.
          </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.author.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">author =
-  element author {
-    attribute initials { text }?,
-    attribute surname { text }?,
-    attribute fullname { text }?,
-    attribute role<!--15--> { "editor" }?,
-    <xref target="element.organization.grammar" format="none">organization</xref>?,
-    <xref target="element.address.grammar" format="none">address</xref>?
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;back&gt;" anchor="element.back">
    <x:anchor-alias value="back"/>
@@ -559,17 +470,6 @@
       
       </list>
    </t>
-   <section title="Grammar" toc="exclude" anchor="element.back.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">back =
-  element back {
-    <xref target="element.references.grammar" format="none">references</xref>*,
-    <xref target="element.section.grammar" format="none">section</xref>*
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;c&gt;" anchor="element.c">
    <x:anchor-alias value="c"/>
@@ -601,21 +501,6 @@
             <iref item="spanx element" subitem="inside c"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</t>
       </list>
    </t>
-   <section title="Grammar" toc="exclude" anchor="element.c.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">c =
-  element c {
-    (text
-     | <xref target="element.xref.grammar" format="none">xref</xref>
-     | <xref target="element.eref.grammar" format="none">eref</xref>
-     | <xref target="element.iref.grammar" format="none">iref</xref>
-     | <xref target="element.cref.grammar" format="none">cref</xref>
-     | <xref target="element.spanx.grammar" format="none">spanx</xref>)*
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;city&gt;" anchor="element.city">
    <x:anchor-alias value="city"/>
@@ -626,16 +511,6 @@
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.city.contents"><!--AG-->Content model: only text content.</t>
-   <section title="Grammar" toc="exclude" anchor="element.city.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">city =
-  element city {
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;code&gt;" anchor="element.code">
    <x:anchor-alias value="code"/>
@@ -646,16 +521,6 @@
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.code.contents"><!--AG-->Content model: only text content.</t>
-   <section title="Grammar" toc="exclude" anchor="element.code.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">code =
-  element code {
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;country&gt;" anchor="element.country">
    <x:anchor-alias value="country"/>
@@ -666,16 +531,6 @@
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.country.contents"><!--AG-->Content model: only text content.</t>
-   <section title="Grammar" toc="exclude" anchor="element.country.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">country =
-  element country {
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;cref&gt;" anchor="element.cref">
    <x:anchor-alias value="cref"/>
@@ -708,18 +563,6 @@
             Holds the "source" of a comment, such as the name or the initials
             of the person who made the comment.
          </t>
-   </section>
-   <section title="Grammar" toc="exclude" anchor="element.cref.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">cref =
-  element cref {
-    attribute anchor { xsd:ID }?,
-    attribute source { text }?,
-    text
-  }
-</artwork>
-      </figure>
    </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;date&gt;" anchor="element.date">
@@ -774,19 +617,6 @@
             Year of publication.
          </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.date.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">date =
-  element date {
-    attribute day { text }?,
-    attribute month { text }?,
-    attribute year { text }?,
-    empty
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;email&gt;" anchor="element.email">
    <x:anchor-alias value="email"/>
@@ -802,16 +632,6 @@
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.email.contents"><!--AG-->Content model: only text content.</t>
-   <section title="Grammar" toc="exclude" anchor="element.email.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">email =
-  element email {
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;eref&gt;" anchor="element.eref">
    <x:anchor-alias value="eref"/>
@@ -834,17 +654,6 @@
             URI of the link target (see <xref target="RFC3986" x:fmt="of" x:sec="3"/>). 
          </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.eref.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">eref =
-  element eref {
-    attribute target { text },
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;facsimile&gt;" anchor="element.facsimile">
    <x:anchor-alias value="facsimile"/>
@@ -861,16 +670,6 @@
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.facsimile.contents"><!--AG-->Content model: only text content.</t>
-   <section title="Grammar" toc="exclude" anchor="element.facsimile.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">facsimile =
-  element facsimile {
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;figure&gt;" anchor="element.figure">
    <x:anchor-alias value="figure"/>
@@ -978,27 +777,6 @@
             Duplicates functionality available on &lt;artwork&gt;; avoid it.
          </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.figure.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">figure =
-  element figure {
-    attribute anchor { xsd:ID }?,
-    attribute title { text }?,
-    attribute suppress-title<!--34--> ( "true" | "false" )?,
-    attribute src { text }?,
-    attribute align<!--37--> ( "left" | "center" | "right" )?,
-    attribute alt { text }?,
-    attribute width { text }?,
-    attribute height { text }?,
-    <xref target="element.iref.grammar" format="none">iref</xref>*,
-    <xref target="element.preamble.grammar" format="none">preamble</xref>?,
-    <xref target="element.artwork.grammar" format="none">artwork</xref>,
-    <xref target="element.postamble.grammar" format="none">postamble</xref>?
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;format&gt;" anchor="element.format">
    <x:anchor-alias value="format"/>
@@ -1042,19 +820,6 @@
             The type of the linked-to document, such as "TXT", "HTML", or "PDF".
          </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.format.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">format =
-  element format {
-    attribute target { text }?,
-    attribute type { text },
-    attribute octets { text }?,
-    empty
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;front&gt;" anchor="element.front">
    <x:anchor-alias value="front"/>
@@ -1083,7 +848,7 @@
             <iref item="area element" subitem="inside front"/>Optional &lt;<x:ref>area</x:ref>&gt; elements (<xref target="element.area"/>)</t>
       
         
-          <t><!--AG-->
+         <t><!--AG-->
             <iref item="Elements" subitem="workgroup"/>
             <iref item="workgroup element" subitem="inside front"/>Optional &lt;<x:ref>workgroup</x:ref>&gt; elements (<xref target="element.workgroup"/>)</t>
       
@@ -1104,23 +869,6 @@
       
       </list>
    </t>
-   <section title="Grammar" toc="exclude" anchor="element.front.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">front =
-  element front {
-    <xref target="element.title.grammar" format="none">title</xref>,
-    <xref target="element.author.grammar" format="none">author</xref>+,
-    <xref target="element.date.grammar" format="none">date</xref>,
-    <xref target="element.area.grammar" format="none">area</xref>*,
-    <xref target="element.workgroup.grammar" format="none">workgroup</xref>*,
-    <xref target="element.keyword.grammar" format="none">keyword</xref>*,
-    <xref target="element.abstract.grammar" format="none">abstract</xref>?,
-    <xref target="element.note.grammar" format="none">note</xref>*
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;iref&gt;" anchor="element.iref">
    <x:anchor-alias value="iref"/>
@@ -1172,19 +920,6 @@
             The subitem to include.
          </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.iref.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">iref =
-  element iref {
-    attribute item { text },
-    attribute subitem { text }?,
-    attribute primary<!--27--> ( "true" | "false" )?,
-    empty
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;keyword&gt;" anchor="element.keyword">
    <x:anchor-alias value="keyword"/>
@@ -1203,16 +938,6 @@
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.keyword.contents"><!--AG-->Content model: only text content.</t>
-   <section title="Grammar" toc="exclude" anchor="element.keyword.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">keyword =
-  element keyword {
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;list&gt;" anchor="element.list">
    <x:anchor-alias value="list"/>
@@ -1254,19 +979,6 @@
          <cref anchor="element.list.attribute.style.missing">attribute description missing</cref>
       </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.list.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">\list =
-  element \list {
-    attribute style { text }?,
-    attribute hangIndent { text }?,
-    attribute counter { text }?,
-    <xref target="element.t.grammar" format="none">t</xref>+
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;middle&gt;" anchor="element.middle">
    <x:anchor-alias value="middle"/>
@@ -1284,16 +996,6 @@
       <iref item="Elements" subitem="section"/>
       <iref item="section element" subitem="inside middle"/>One or more &lt;<x:ref>section</x:ref>&gt; elements (<xref target="element.section"/>)</t>
       
-   <section title="Grammar" toc="exclude" anchor="element.middle.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">middle =
-  element middle {
-    <xref target="element.section.grammar" format="none">section</xref>+
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;note&gt;" anchor="element.note">
    <x:anchor-alias value="note"/>
@@ -1324,17 +1026,6 @@
             The title of the note.
          </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.note.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">note =
-  element note {
-    attribute title { text },
-    <xref target="element.t.grammar" format="none">t</xref>+
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;organization&gt;" anchor="element.organization">
    <x:anchor-alias value="organization"/>
@@ -1359,17 +1050,6 @@
             Abbreviated variant.
          </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.organization.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">organization =
-  element organization {
-    attribute abbrev { text }?,
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;phone&gt;" anchor="element.phone">
    <x:anchor-alias value="phone"/>
@@ -1386,16 +1066,6 @@
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.phone.contents"><!--AG-->Content model: only text content.</t>
-   <section title="Grammar" toc="exclude" anchor="element.phone.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">phone =
-  element phone {
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;postal&gt;" anchor="element.postal">
    <x:anchor-alias value="postal"/>
@@ -1428,20 +1098,6 @@
          </t>
       </list>
    </t>
-   <section title="Grammar" toc="exclude" anchor="element.postal.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">postal =
-  element postal {
-    <xref target="element.street.grammar" format="none">street</xref>+,
-    (<xref target="element.city.grammar" format="none">city</xref>
-     | <xref target="element.region.grammar" format="none">region</xref>
-     | <xref target="element.code.grammar" format="none">code</xref>
-     | <xref target="element.country.grammar" format="none">country</xref>)*
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;postamble&gt;" anchor="element.postamble">
    <x:anchor-alias value="postamble"/>
@@ -1473,21 +1129,6 @@
             <iref item="spanx element" subitem="inside postamble"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</t>
       </list>
    </t>
-   <section title="Grammar" toc="exclude" anchor="element.postamble.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">postamble =
-  element postamble {
-    (text
-     | <xref target="element.xref.grammar" format="none">xref</xref>
-     | <xref target="element.eref.grammar" format="none">eref</xref>
-     | <xref target="element.iref.grammar" format="none">iref</xref>
-     | <xref target="element.cref.grammar" format="none">cref</xref>
-     | <xref target="element.spanx.grammar" format="none">spanx</xref>)*
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;preamble&gt;" anchor="element.preamble">
    <x:anchor-alias value="preamble"/>
@@ -1519,21 +1160,6 @@
             <iref item="spanx element" subitem="inside preamble"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</t>
       </list>
    </t>
-   <section title="Grammar" toc="exclude" anchor="element.preamble.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">preamble =
-  element preamble {
-    (text
-     | <xref target="element.xref.grammar" format="none">xref</xref>
-     | <xref target="element.eref.grammar" format="none">eref</xref>
-     | <xref target="element.iref.grammar" format="none">iref</xref>
-     | <xref target="element.cref.grammar" format="none">cref</xref>
-     | <xref target="element.spanx.grammar" format="none">spanx</xref>)*
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;reference&gt;" anchor="element.reference">
    <x:anchor-alias value="reference"/>
@@ -1585,21 +1211,6 @@
             be automatically generated (for instance, for RFCs).
          </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.reference.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">reference =
-  element reference {
-    attribute anchor { xsd:ID }?,
-    attribute target { text }?,
-    <xref target="element.front.grammar" format="none">front</xref>,
-    <xref target="element.seriesInfo.grammar" format="none">seriesInfo</xref>*,
-    <xref target="element.format.grammar" format="none">format</xref>*,
-    <xref target="element.annotation.grammar" format="none">annotation</xref>*
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;references&gt;" anchor="element.references">
    <x:anchor-alias value="references"/>
@@ -1636,17 +1247,6 @@
             "Informative References".
          </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.references.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">references =
-  element references {
-    attribute title { text }?,
-    <xref target="element.reference.grammar" format="none">reference</xref>+
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;region&gt;" anchor="element.region">
    <x:anchor-alias value="region"/>
@@ -1657,16 +1257,6 @@
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.region.contents"><!--AG-->Content model: only text content.</t>
-   <section title="Grammar" toc="exclude" anchor="element.region.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">region =
-  element region {
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;rfc&gt;" anchor="element.rfc">
    <x:anchor-alias value="rfc"/>
@@ -1853,57 +1443,6 @@
             for more information.
          </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.rfc.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">rfc =
-  element rfc {
-    attribute number { text }?,
-    attribute obsoletes { text }?,
-    attribute updates { text }?,
-    attribute category<!--58--> (
-      "std"
-      | "bcp"
-      | "info"
-      | "exp"
-      | "historic"
-    )?,
-    attribute consensus<!--25--> ( "no" | "yes" )?,
-    attribute seriesNo { text }?,
-    attribute ipr<!--355--> (
-      "full2026"
-      | "noDerivativeWorks2026"
-      | "none"
-      | "full3667"
-      | "noModification3667"
-      | "noDerivatives3667"
-      | "full3978"
-      | "noModification3978"
-      | "noDerivatives3978"
-      | "trust200811"
-      | "noModificationTrust200811"
-      | "noDerivativesTrust200811"
-      | "trust200902"
-      | "noModificationTrust200902"
-      | "noDerivativesTrust200902"
-      | "pre5378Trust200902"
-    )?,
-    attribute iprExtract { xsd:IDREF }?,
-    attribute submissionType<!--59--> (
-      "IETF"
-      | "IAB"
-      | "IRTF"
-      | "independent"
-    )?,
-    attribute docName { text }?,
-    attribute xml:lang { text }?,
-    <xref target="element.front.grammar" format="none">front</xref>,
-    <xref target="element.middle.grammar" format="none">middle</xref>,
-    <xref target="element.back.grammar" format="none">back</xref>?
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;section&gt;" anchor="element.section">
    <x:anchor-alias value="section"/>
@@ -1973,23 +1512,6 @@
          </list>
       </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.section.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">section =
-  element section {
-    attribute anchor { xsd:ID }?,
-    attribute title { text },
-    attribute toc<!--41--> ( "include" | "exclude" | "default" )?,
-    (<xref target="element.t.grammar" format="none">t</xref>
-     | <xref target="element.figure.grammar" format="none">figure</xref>
-     | <xref target="element.texttable.grammar" format="none">texttable</xref>
-     | <xref target="element.iref.grammar" format="none">iref</xref>)*,
-    <xref target="element.section.grammar" format="none">section</xref>*
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;seriesInfo&gt;" anchor="element.seriesInfo">
    <x:anchor-alias value="seriesInfo"/>
@@ -2026,18 +1548,6 @@
             For Internet-Drafts, it is the full draft name (ending with the two-digit
             version number).
          </t>
-   </section>
-   <section title="Grammar" toc="exclude" anchor="element.seriesInfo.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">seriesInfo =
-  element seriesInfo {
-    attribute name { text },
-    attribute value { text },
-    empty
-  }
-</artwork>
-      </figure>
    </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;spanx&gt;" anchor="element.spanx">
@@ -2078,18 +1588,6 @@
          </list>
       </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.spanx.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">spanx =
-  element spanx {
-    attribute xml:space<!--35--> ( "default" | "preserve" )?,
-    attribute style { text }?,
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;street&gt;" anchor="element.street">
    <x:anchor-alias value="street"/>
@@ -2100,16 +1598,6 @@
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.street.contents"><!--AG-->Content model: only text content.</t>
-   <section title="Grammar" toc="exclude" anchor="element.street.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">street =
-  element street {
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;t&gt;" anchor="element.t">
    <x:anchor-alias value="t"/>
@@ -2165,26 +1653,6 @@
       <t><!--AG-->
          <cref anchor="element.t.attribute.hangText.missing">attribute description missing</cref>
       </t>
-   </section>
-   <section title="Grammar" toc="exclude" anchor="element.t.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">t =
-  element t {
-    attribute anchor { xsd:ID }?,
-    attribute hangText { text }?,
-    (text
-     | \<xref target="element.list.grammar" format="none">list</xref>
-     | <xref target="element.figure.grammar" format="none">figure</xref>
-     | <xref target="element.xref.grammar" format="none">xref</xref>
-     | <xref target="element.eref.grammar" format="none">eref</xref>
-     | <xref target="element.iref.grammar" format="none">iref</xref>
-     | <xref target="element.cref.grammar" format="none">cref</xref>
-     | <xref target="element.spanx.grammar" format="none">spanx</xref>
-     | <xref target="element.vspace.grammar" format="none">vspace</xref>)*
-  }
-</artwork>
-      </figure>
    </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;texttable&gt;" anchor="element.texttable">
@@ -2277,24 +1745,6 @@
          <cref anchor="element.texttable.attribute.title.missing">attribute description missing</cref>
       </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.texttable.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">texttable =
-  element texttable {
-    attribute anchor { xsd:ID }?,
-    attribute title { text }?,
-    attribute suppress-title<!--34--> ( "true" | "false" )?,
-    attribute align<!--37--> ( "left" | "center" | "right" )?,
-    attribute style<!--46--> ( "all" | "none" | "headers" | "full" )?,
-    <xref target="element.preamble.grammar" format="none">preamble</xref>?,
-    <xref target="element.ttcol.grammar" format="none">ttcol</xref>+,
-    <xref target="element.c.grammar" format="none">c</xref>*,
-    <xref target="element.postamble.grammar" format="none">postamble</xref>?
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;title&gt;" anchor="element.title">
    <x:anchor-alias value="title"/>
@@ -2318,17 +1768,6 @@
       <t>
             Specifies an abbreviated variant of the document title.
          </t>
-   </section>
-   <section title="Grammar" toc="exclude" anchor="element.title.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">title =
-  element title {
-    attribute abbrev { text }?,
-    text
-  }
-</artwork>
-      </figure>
    </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;ttcol&gt;" anchor="element.ttcol">
@@ -2362,18 +1801,6 @@
          <cref anchor="element.ttcol.attribute.width.missing">attribute description missing</cref>
       </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.ttcol.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">ttcol =
-  element ttcol {
-    attribute width { text }?,
-    attribute align<!--37--> ( "left" | "center" | "right" )?,
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;uri&gt;" anchor="element.uri">
    <x:anchor-alias value="uri"/>
@@ -2387,16 +1814,6 @@
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.uri.contents"><!--AG-->Content model: only text content.</t>
-   <section title="Grammar" toc="exclude" anchor="element.uri.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">uri =
-  element uri {
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;vspace&gt;" anchor="element.vspace">
    <x:anchor-alias value="vspace"/>
@@ -2415,17 +1832,6 @@
          <cref anchor="element.vspace.attribute.blankLines.missing">attribute description missing</cref>
       </t>
    </section>
-   <section title="Grammar" toc="exclude" anchor="element.vspace.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">vspace =
-  element vspace {
-    attribute blankLines { text }?,
-    empty
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;workgroup&gt;" anchor="element.workgroup">
    <x:anchor-alias value="workgroup"/>
@@ -2442,16 +1848,6 @@
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.workgroup.contents"><!--AG-->Content model: only text content.</t>
-   <section title="Grammar" toc="exclude" anchor="element.workgroup.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">workgroup =
-  element workgroup {
-    text
-  }
-</artwork>
-      </figure>
-   </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;xref&gt;" anchor="element.xref">
    <x:anchor-alias value="xref"/>
@@ -2501,19 +1897,6 @@
       <t><!--AG-->
          <cref anchor="element.xref.attribute.target.missing">attribute description missing</cref>
       </t>
-   </section>
-   <section title="Grammar" toc="exclude" anchor="element.xref.grammar">
-      <t/>
-      <figure>
-         <artwork type="application/relax-ng-compact-syntax">xref =
-  element xref {
-    attribute target { xsd:IDREF },
-    attribute pageno<!--26--> ( "true" | "false" )?,
-    attribute format<!--52--> ( "counter" | "title" | "none" | "default" )?,
-    text
-  }
-</artwork>
-      </figure>
    </section>
 </section>
 <?ENDINC xml2rfcv2-spec.xml ?>
