@@ -433,8 +433,9 @@ class HtmlRfcWriter(BaseRfcWriter):
                 street_spans = []
                 for street in postal.findall('street'):
                     if street.text:
-                        span = self._serialize(E.SPAN(street.text))
-                        street_spans.append(span)
+                        span = E.SPAN(street.text)
+                        span.attrib['class'] = 'vcardline'
+                        street_spans.append(self._serialize(span))
                 subs['street_spans'] = ''.join(street_spans)
                 city = postal.find('city')
                 if city is not None and city.text:
@@ -531,7 +532,8 @@ class HtmlRfcWriter(BaseRfcWriter):
                     ref_td.append(a)
                     last = a
                 a.tail = ', '
-            last.tail = ', "'
+            if len(authors):
+                last.tail = ', "'
             title = reference.find('front/title')
             if title is not None and title.text:
                 title_string = title.text.strip()
@@ -580,7 +582,6 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.ref_start += i + 1                
         # Add to body buffer
         self.buf.append(self._serialize(E.TABLE(tbody)))
-        self.unused_references()
 
     def draw_table(self, table, table_num=None):
         style = 'tt %s %s' % ( table.attrib.get('style', self.defaults['table_style']),

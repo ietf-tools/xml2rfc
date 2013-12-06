@@ -1086,6 +1086,7 @@ class BaseRfcWriter:
                 self.write_reference_list(reference_list)
         elif len(references) == 1:
             self.write_reference_list(references[0])
+        self.unused_references()
 
         # Appendix sections
         back = self.r.find('back')

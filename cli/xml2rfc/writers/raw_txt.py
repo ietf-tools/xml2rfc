@@ -693,8 +693,10 @@ class RawTextRfcWriter(BaseRfcWriter):
         for i, ref in enumerate(list.findall('reference')):
             refstring = []
             authors = ref.findall('front/author')
-            refstring.append(self._format_author_string(authors))
-            refstring.append(', ')
+            author_string = self._format_author_string(authors)
+            refstring.append(author_string)
+            if len(author_string):
+                refstring.append(', ')
             title = ref.find('front/title')
             if title is not None and title.text:
                 refstring.append('"' + title.text.strip() + '", ')
@@ -734,7 +736,11 @@ class RawTextRfcWriter(BaseRfcWriter):
             # Add annotation if it exists to a separate dict
             if annotation is not None and annotation.text:
                 # Render annotation as a separate paragraph
+                remainder = annotation.getchildren()
                 annotationdict[bullet] = annotation.text
+                if len(remainder) > 0:
+                    inline_txt, remainder = self._combine_inline_elements(remainder)
+                    annotationdict[bullet] += inline_txt
         self.ref_start += i + 1
         # Don't sort if we're doing numbered refs; they are already in
         # numeric order, and if we sort, they will be sorted alphabetically,
@@ -749,7 +755,6 @@ class RawTextRfcWriter(BaseRfcWriter):
             if key in annotationdict:
                 self.write_text(annotationdict[key], indent=refindent + 3,
                                  leading_blankline=True, source_line=refsource[key])
-        self.unused_references()
 
     def draw_table(self, table, table_num=None):
         # First construct a 2d matrix from the table
