@@ -83,6 +83,10 @@
       <t anchor="{$anchor}.contents">
         <xsl:comment>AG</xsl:comment>
         <xsl:text>Content model:</xsl:text>
+      </t>
+      <t>
+        <xsl:comment>AG</xsl:comment>
+        <xsl:text>In this order:</xsl:text>
         <list style="numbers">
           <xsl:apply-templates select="$elementcontents"/>
         </list>
