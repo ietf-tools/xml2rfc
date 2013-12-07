@@ -4,9 +4,10 @@
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
 <?rfc compact="yes"?>
+<?rfc subcompact="no" ?>
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
-<?rfc subcompact="no"?>
+<?rfc linkmailto="no" ?>
 <?rfc rfcedstyle="yes"?>
 <?rfc-ext allow-markup-in-artwork="yes" ?>
 <?rfc-ext include-references-in-index="yes" ?>
@@ -1936,9 +1937,80 @@
 </section>
 
 <section title="IANA Considerations" anchor="iana.considerations">
+<section title="Internet Media Type Registration">
+<iref item="Media Type" subitem="application/rfc+xml" primary="true"/>
+<iref item="application/rfc+xml Media Type" primary="true"/>
 <t>
-  <cref>Register application/rfc+xml.</cref>
+  IANA maintains the registry of Internet media types <xref target="BCP13"/>
+  at <eref target="http://www.iana.org/assignments/media-types"/>.
 </t>
+<t>
+  This document serves as the specification for the Internet media type
+  "application/rfc+xml". The following is to be registered with IANA.
+</t>
+<t>
+  <list style="hanging" x:indent="12em">
+    <t hangText="Type name:">
+      application
+    </t>
+    <t hangText="Subtype name:">
+      rfc+xml
+    </t>
+    <t hangText="Required parameters:">
+      There are no required parameters.
+    </t>
+    <t hangText="Optional parameters:">
+      "charset": This parameter has identical semantics as the charset
+      parameter of the "application/xml" media type specified in <xref target="RFC3023"/>.
+    </t>
+    <t hangText="Encoding considerations:">
+      Identical to those of "application/xml" as described in <xref target="RFC3023" x:fmt="of" x:sec="3.2"/>.
+    </t>
+    <t hangText="Security considerations:">
+      As defined in <xref target="security.considerations"/>. In addition, as
+      this media type uses the "+xml" convention, it inherits the security
+      considerations described in <xref target="RFC3023" x:fmt="of" x:sec="10"/>.
+    </t>
+    <t hangText="Interoperability considerations:">
+      N/A
+    </t>
+    <t hangText="Published specification:">
+      This specification.
+    </t>
+    <t hangText="Applications that use this media type:">
+      Applications that either transform xml2rfc to output formats such
+      as plain text or HTML, plus additional analysis tools.
+    </t>
+    <t hangText="Fragment identifier considerations:">
+      See <xref target="RFC3023" x:fmt="of" x:sec="5"/>.
+      <cref>ref "anchor" attribute</cref>
+    </t>
+    <t hangText="Additional information:">
+      <list style="hanging">
+        <t hangText="Deprecated alias names for this type:">None.</t>
+        <t hangText="Magic number(s):">As specified for "application/xml" in <xref target="RFC3023" x:fmt="of" x:sec="3.2"/>.</t>
+        <t hangText="File extension(s):">.xml</t>
+        <t hangText="Macintosh file type code(s):">TEXT</t>
+      </list>
+    </t>
+    <t hangText="Person &amp; email address to contact for further information:">
+      See Authors Section.
+    </t>
+    <t hangText="Intended usage:">
+      COMMON
+    </t>
+    <t hangText="Restrictions on usage:">
+      N/A
+    </t>
+    <t hangText="Author:">
+      See Authors Section.
+    </t>
+    <t hangText="Change controller:">
+      <cref>Good Question -- RSE?</cref>
+    </t>
+  </list>
+</t>
+</section>
 </section>
 
 <section title="Acknowledgments" anchor="acknowledgements">
@@ -1979,6 +2051,18 @@
 
 <references title="Informative References">
 
+  <reference anchor="BCP13">
+    <front>
+      <title>Media Type Specifications and Registration Procedures</title>
+      <author initials="N." surname="Freed" fullname="Ned Freed"/>
+      <author initials="J." surname="Klensin" fullname="John C. Klensin"/>
+      <author initials="T." surname="Hansen" fullname="Tony Hansen"/>
+      <date year="2013" month="January"/>
+    </front>
+    <seriesInfo name="BCP" value="13"/>
+    <seriesInfo name="RFC" value="6838"/>
+  </reference>
+
   <reference anchor='RFC2026'>
     <front>
       <title abbrev='Internet Standards Process'>The Internet Standards Process -- Revision 3</title>
@@ -2015,6 +2099,17 @@
       <date month='June' year='1999' />
     </front>
     <seriesInfo name='RFC' value='2629' />
+  </reference>
+
+  <reference anchor="RFC3023">
+    <front>
+      <title>XML Media Types</title>
+      <author initials="M." surname="Murata" fullname="Murata Makoto"/>
+      <author initials="S." surname="St. Laurent" fullname="Simon St. Laurent"/>
+      <author initials="D." surname="Kohn" fullname="Dan Kohn"/>
+      <date year="2001" month="January"/>
+    </front>
+    <seriesInfo name="RFC" value="3023"/>
   </reference>
 
   <reference anchor="RFC3470">
