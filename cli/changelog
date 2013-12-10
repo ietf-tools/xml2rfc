@@ -1,3 +1,118 @@
+xml2rfc (2.4.4) ietf; urgency=medium
+
+  This is a bugfix release, with code fixes almost entirely from Jim Schaad.
+
+  From Jim Schaad <ietf@augustcellars.com>:
+
+  * Annotations now output more than just the first text field.  It now
+    expands all of the child elements as part of the output. Fixes issue #183.
+
+  * If the authors string is zero length, then we do not emit the comma
+    separating the authors and the title. Fixes issue #137.
+
+  * Each street line is now tagged as class vcardline so it is emitted on a
+    separate line. Fixes issue #153.
+
+  * Fixed a problem with unreferenced references warnings being emitted twice
+    if there were two references sections.
+
+  * Fixed some list indentation problems.  We now default to an indent of 3
+    for hanging lists which is the same thing that v1 did.  We also use a
+    value based on the bullet for format lists rather than using the 3 of a
+    default hang indent - this also now matches v1 behavior.
+
+  * Use width of bullet not default to 3*level+3
+
+  * Fixed issue #147 - a hangingText without any text in the body now emits
+    the hangingText. Fixes issue #117.
+
+  * Set of fixes that deal with xref in documents.
+
+  * Set of fixes that deal with references.
+
+  * We now use the anchor rather than the generated bullet as the id of the
+    reference element. Fixes issue #209.
+
+  * The html did not have the same check for symrefs when sorting references
+    that the text version did.  Copy it over so they both only sort if symrefs
+    is yes. Fixes issue #210.
+
+  *  And #170- anchors on t elements in a section were referencable, but no
+    those in lists.  They are now referencable. Fixes issue #149.
+
+  * We now generate a warning when we get a target in an xref that we have not
+    created an indexable reference for.  This basically gives us an internal
+    error check.
+
+  * We now generate a warning when a reference is created that is not targeted
+    by an xref in the document.
+
+  * Fixed the centering algorithm so that the nroff and txt output files are
+    more consistent.
+
+  * Left shift artwork that is greater than 69 characters wide and steal space
+    from the left margin. Fixes issue #129.
+
+  *  & 194 which deal with how figures are layout
+
+  * Fixed issue #132 - if the artwork has an alignment - then it overrides the
+    figure's version for the purpose of the artwork itself. Fixes issue #151.
+
+  * Suppres-title kills the title decoration (i.e. Figure 1:) which matches v1
+    behavior. Fixes issue #213.
+
+  * Convert all non-ASCII characters to entities when building the HTML body.
+    We now are correct when we advertise it as being a us-ascii file.
+
+  * Mixed two fixes back to the real source tree.
+
+  * Rewrite of the basic low level code to use unicode strings in many places
+    rather than convert the unicode characters into xml entity codes and try
+    to use them.  Doing so cleans up much of the line wrapping problems.
+
+  * URLs, when tagged to be not wrapped, now use different Unicode markers on
+    the slashes and hyphens so that they will preferentially break on slashes
+    rather than hyphens when a URL is too long to fit into a single line of
+    text.
+
+  * Tracker issues addressed: 192, 167, 168, 193, 200, 122, 139
+
+  * Increase the amount of text in the INSTALL document to deal with more
+    information on how to install for windows. Fixes issue #184.
+
+  * Don't emit the references section and TOC entry if there are no references
+    to be emitted. Fixes issue #205.
+
+  * Centering code did not take into account the .in X nroff command.  Always
+    use .in 0 for emission of raw text. Fixes issue #203.
+
+  * The TCL code for deciding on table column widths has been moved into the
+    new code. Fixes issue #173.
+
+  * We now look for and do expansions for header cells just like normal
+    cells. Fixes issue #131.
+
+  * We now remove all entity references when doing an xml output
+
+  * Fixed issue #146 - The code now allows for the assumption that the file
+    name given is what it really is and then tries with the .xml appended if
+    it is not found. Fixes issue #154.
+
+  * Lots of errors added to tell about bad table layouts
+
+  * allow make to run without pyflakes. Fixes issue #199.
+
+  From Henrik Levkowetz <henrik@levkowetz.com>:
+
+  * Modified the code that saves page-break hints when building the
+    unpaginated text so that it doesn't overwrite existing hints used for
+    artwork and tables (which should not be broken across pages if at all
+    possible) with hints that indicate regular text paragraphs (which may be
+    broken except if that creates a widow or orphan).  Fixes issue #179 by
+    making the code do for artwork and tables what needLines used to do,
+    without needing the manual needLines hint.
+
+
 xml2rfc (2.4.3) ietf; urgency=medium
 
   This release adds compatibility with Python 3.3; the test suite has been
@@ -73,7 +188,7 @@ xml2rfc (2.4.3) ietf; urgency=medium
   * Added support for tox testing covering python versions 2.6, 2.7 and 3.3
 
 
- -- Henrik Levkowetz <henrik@levkowetz.com>  17 Nov 2013 18:57:18 +0100
+ -- Henrik Levkowetz <henrik@levkowetz.com>  10 Dec 2013 23:59:30 +0100
 
 
 xml2rfc (2.4.2) ietf; urgency=medium
