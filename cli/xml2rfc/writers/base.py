@@ -1086,7 +1086,6 @@ class BaseRfcWriter:
                 self.write_reference_list(reference_list)
         elif len(references) == 1:
             self.write_reference_list(references[0])
-        self.unused_references()
 
         # Appendix sections
         back = self.r.find('back')
@@ -1108,6 +1107,7 @@ class BaseRfcWriter:
         for author in authors:
             self.write_address_card(author)
 
+        self.check_for_unused_references()
         
     def write(self, filename, tmpfile=None):
         """ Public method to write the RFC document to a file. """
@@ -1147,7 +1147,7 @@ class BaseRfcWriter:
         if not self.quiet and filename:
             xml2rfc.log.write('Created file', filename)
 
-    def unused_references(self):
+    def check_for_unused_references(self):
         """ If this is a reference and it is not used - then warn me
         """
         if not self.indexmode:
