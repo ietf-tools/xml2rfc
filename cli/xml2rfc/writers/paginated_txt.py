@@ -167,8 +167,8 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     def emit(self, text):
         """Write text to the output buffer if it's not just a blank
            line at the top of the page"""
-        if isinstance(text, str) or isinstance(text, unicode):
-            if self.page_length == 1 and text.strip() == '':
+        if isinstance(text, type('')) or isinstance(text, type(u'')):
+            if self.page_length == 1 and text.strip() in ['', u'']:
                 return 
             self.output.append(text)
             self.page_length += 1
