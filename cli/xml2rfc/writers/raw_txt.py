@@ -124,7 +124,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     margin = ' ' * indent
                     if line.startswith(margin):
                         line = line.rstrip()
-                        centered = ' ' * ((self.width - len(line.rstrip()))/2)
+                        centered = ' ' * ((self.width - len(line.rstrip()))//2)
                         centered += line
                         # centered = margin + line[len(margin):].center(self.width-indent-4).rstrip()
                         buf.append(centered)
@@ -804,8 +804,6 @@ class RawTextRfcWriter(BaseRfcWriter):
             text = self.wrapper.replace(text)
             matrix[row].append(text)
 
-        num_rows = len(matrix)
-
         # Get table style and determine maximum width of table
         if style in ['none', 'headers']:
             table_max_chars = self.width - 3 - num_columns + 1
@@ -829,7 +827,6 @@ class RawTextRfcWriter(BaseRfcWriter):
                     if self._length(word) > longest_words[col]:
                         longest_words[col] = self._length(word)
         
-        max_width = sum(longest_lines)
         min_width = sum(longest_words)
         
         # Assume one character per non-empty column - are there too many columns?
@@ -863,7 +860,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if m.group(2) == 'em':
                     x = int(m.group(1));
                 elif m.group(2) == '%':
-                    x = (int(m.group(1)) * table_max_chars + 99)/100
+                    x = (int(m.group(1)) * table_max_chars + 99)//100
                 elif m.group(2) == '*':
                     x = -int(m.group(1))
                     rel_total += x
@@ -932,7 +929,7 @@ class RawTextRfcWriter(BaseRfcWriter):
 
                 tol = []
                 for s in ttcol_width_attrs:
-                    t = ((fnum * -(s)) / fden) if (s < 0) else 0
+                    t = ((fnum * -(s)) // fden) if (s < 0) else 0
                     tol.append(t)
 
                 excess, ttcol_widths = self.shave_cols_excess(ttcol_widths, excess, tol, sum(tol))
@@ -1052,7 +1049,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                    if (num_rel > 0) and (fnum > 0):
                        kols = []
                        for r,w in zip(rel, ttcol_widths):
-                           p = r*fnum/fden
+                           p = r*fnum//fden
                            kols.append(w + p)
                            plus_width += p
 
@@ -1196,7 +1193,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     if x >= y:
                         # Nearly reduce height to average by augmenting width
                         p = 1
-                        k = x / (fnum + fden - 1)
+                        k = x // (fnum + fden - 1)
                         if k < w:
                             # but no smaller than before.
                             k = w
@@ -1253,7 +1250,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             kols = []
             for c, g in zip(cols, give):
                 if g > 0:
-                    d =(g * excess) / give_width
+                    d =(g * excess) // give_width
                     c += -(d)
                     dd += d
                 kols.append( c )
@@ -1294,7 +1291,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             kols = []
             for c,p in zip(cols, plus):
                 if p > 0:
-                    d = (p * target) / plus_width
+                    d = (p * target) // plus_width
                     c += d
                     dd += d
                     dr += 1
@@ -1349,10 +1346,10 @@ class RawTextRfcWriter(BaseRfcWriter):
     def post_process_lines(self, lines):
         output = []
         for line in lines:
-            if isinstance(line, unicode):
+            if isinstance(line, type(u'')):
                 # line = line.replace(u"\u8209", '-')
-                line = line.replace(u'\u00A0', ' ')
-                line = line.replace(u'\u2011', '-')
+                line = line.replace(u'\u00A0', u' ')
+                line = line.replace(u'\u2011', u'-')
             output.append(line);
         return output
 
