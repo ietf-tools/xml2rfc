@@ -35,11 +35,11 @@ class MyTextWrapper(textwrap.TextWrapper):
 
         # Override wrapping regex, preserve '/' before linebreak
         self.wordsep_re = re.compile(
-            ur'(/|'                                    # a forward slash  
-            ur'[ \t\n\r\f\v]+|'                        # any ASCII whitespace
-            ur'[^\s\w]*\w+[^0-9\W]-(?=\w+[^0-9\W])|'   # hyphenated words
-            ur'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))'    # em-dash
-            ur'(?![\u2060|\u200B])')                   # UNLESS &wj; or &zwbs; or &nbsp;
+            u'(/|'                                    # a forward slash  
+            u'[ \t\n\r\f\v]+|'                        # any ASCII whitespace
+            u'[^\\s\\w]*\\w+[^0-9\\W]-(?=\\w+[^0-9\\W])|'   # hyphenated words
+            u'''(?<=[\\w\\!"'\\&\\.\\,\\?])-{2,}(?=\\w))'''    # em-dash
+            u'(?![\u2060|\u200B])')                   # UNLESS &wj; or &zwbs; or &nbsp;
 
         self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
 
