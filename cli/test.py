@@ -19,8 +19,13 @@ def diff_test(case, valid, test, failpath):
     """ Compare two strings.  If not equal, fail with a useful diff and save
         second string to a file.
     """
+    # The following 2 lines does the right thing for both python 2.x and 3.x
+    test  = str(test)
+    valid = str(valid)
+    # replace the current version with someting static, if present
+    test  =  test.replace(xml2rfc.__version__, 'N.N.N')
     validarr = [line.rstrip() for line in valid.splitlines()]
-    testarr = [line.rstrip() for line in test.encode('ascii', 'xmlcharrefreplace').splitlines()]
+    testarr = [line.rstrip() for line in test.splitlines()]
     if testarr != validarr:
         diff = difflib.ndiff(validarr, testarr)
         fh = open(failpath, 'w')
