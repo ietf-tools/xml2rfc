@@ -278,7 +278,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
     def emit(self, text):
         "Used by post_rendering() to emit and count lines."
-        if isinstance(text, str) or isinstance(text, unicode):
+        if isinstance(text, type('')) or isinstance(text, type(u'')):
             if self.page_length == 1 and text.strip() == '':
                 return 
             self.output.append(text)
@@ -296,7 +296,6 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
     def write_to_file(self, file):
         """ Writes the buffer to the specified file """
-        flow_text = True
         for line in self.post_process_lines(self.output):
             file.write(line.rstrip(" \t"))
             file.write("\n")
