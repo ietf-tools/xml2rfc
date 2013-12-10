@@ -69,4 +69,4 @@ upload:
 
 
 changes:
-	svn log -r HEAD:800 | sed -n '1,/[Cc]hangelog entry/p' | sed -n -e 's/^/  * /' -e '1,400p' | egrep -v -- '^  \* (----------|r[0-9]+ |$$)' | head -n -1 | fold -sbw76 | sed -r 's/^([^ ].*)$$/    &/' | sed -r 's/^  \*/\n  * /'
+	svn log -r HEAD:800 | sed -n -e 's/^/  * /' -e '1,400p' | egrep -v -- '^  \* (----------|r[0-9]+ |$$)' | head -n -1 | fold -sbw76 | sed -r 's/^([^ ].*)$$/    &/' | sed -r 's/^  \*/\n  * /'
