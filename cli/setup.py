@@ -10,6 +10,13 @@ import sys
 
 description = "Xml2rfc generates RFCs and IETF drafts from document source in XML according to the dtd in RFC2629."
 
+major, minor = sys.version_info[:2] 
+if not ((major == 2 and minor >= 6) or (major == 3 and minor >= 3)):
+    print("") 
+    print("The xml2rfc installation requires python 2.6, 2.7, or 3.3") 
+    print("Can't proceed, quitting.") 
+    exit() 
+
 def parse(changelog):
     ver_line = "^([a-z0-9+-]+) \(([^)]+)\)(.*?) *$"
     sig_line = "^ -- ([^<]+) <([^>]+)>  (.*?) *$"
@@ -55,7 +62,7 @@ Changelog
 setup(
     # Package metadata
     name='xml2rfc',
-    version='2.4.4.dev',
+    version='2.4.4',
     author='Josh Bothun (Concentric Sky)',
     author_email='tools-discuss@ietf.org',
     maintainer = "Henrik Levkowetz",
@@ -82,6 +89,6 @@ setup(
     package_data={'xml2rfc': ['templates/*',
                               ]},
 
-    install_requires = ['lxml >=2.2.8'],
+    install_requires = ['lxml >=2.2.8', 'lxml <= 3.2.1' ],
     zip_safe = False,                   # We're reading templates from a package directory.
 )
