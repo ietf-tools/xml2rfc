@@ -94,7 +94,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         BaseRfcWriter.write_figure(self, *args, **kwargs)
         end = len(self.buf)
         nr = len([ l for l in self.buf[begin:end] if l and l[0] in nroff_linestart_meta])
-        self.break_hints[begin] = (end - begin - nr, "raw")
+        self._set_break_hint(end - begin - nr, 'raw', begin)
 
     def write_table(self, *args, **kwargs):
         """ Override base writer to add a marking """
@@ -102,7 +102,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         BaseRfcWriter.write_table(self, *args, **kwargs)
         end = len(self.buf)
         nr = len([ l for l in self.buf[begin:end] if l and l[0] in nroff_linestart_meta])
-        self.break_hints[begin] = (end - begin - nr, "raw")
+        self._set_break_hint(end - begin - nr, 'raw', begin)
 
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
                   delimiter=None, leading_blankline=True, source_line=None):
@@ -178,7 +178,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         # Page break information
         end = len(buffer)
         if buffer == self.buf:
-            self.break_hints[begin] = (end - mark, "txt")
+            self._set_break_hint(end - mark, 'txt', begin)
         """
         elif bullet:
             # If the string is empty but a bullet was declared, just
@@ -191,7 +191,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         PaginatedTextRfcWriter.write_ref_element(self, *args, **kwargs)
         end = len(self.buf)
         nr = len([ l for l in self.buf[begin:end] if l and l[0] in nroff_linestart_meta])
-        self.break_hints[begin] = (end - begin - nr, "raw")
+        self._set_break_hint(end - begin - nr, 'raw', begin)
 
     def pre_write_toc(self):
         # Wrap a nofill/fill block around TOC
@@ -229,7 +229,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
         end = len(self.buf)
         nr = len([ l for l in self.buf[begin:end] if l and l[0] in nroff_linestart_meta])
-        self.break_hints[begin] = (end - begin - nr + self.pis["sectionorphan"], "raw")
+        self._set_break_hint(end - begin - nr + self.pis["sectionorphan"], "raw", begin)
 
     def pre_rendering(self):
         """ Inserts an nroff header into the buffer """

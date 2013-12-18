@@ -322,6 +322,12 @@ class BaseRfcWriter:
         # Item Indicies
         self._index = []
         self._iref_index = {}
+
+        # cref and eref sections
+        self._cref_index = []
+        self._cref_count = 0
+        self._eref_index = []
+        self._eref_count = 0
         
     def _make_iref(self, item, subitem=None, anchor=None):
         """ Create an iref ID object if it doesnt exist yet """
@@ -794,7 +800,9 @@ class BaseRfcWriter:
         for element in section:
             # Check for a PI
             if element.tag is lxml.etree.PI:
-                self.xmlrfc.parse_pi(element)
+                pis = self.xmlrfc.parse_pi(element)
+                if "needLines" in pis:
+                    self.needLines(pis["needLines"])
             # Write elements in XML document order
             if element.tag == 't':
                 anchor = element.attrib.get('anchor')
@@ -817,6 +825,8 @@ class BaseRfcWriter:
         # Recurse on sections
         for child_sec in section.findall('section'):
             if appendix == True and not count_str:
+                if s_count == 1 and self.pis["rfcedstyle"] == "yes":
+                   self.needLines(-1)
                 # Use an alphabetic counter for first-level appendix
                 uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 self.write_section_rec(child_sec, uppercase[s_count - 1],
@@ -1154,6 +1164,10 @@ class BaseRfcWriter:
             for item in self._index:
                 if item.autoAnchor.startswith("rfc.ref.") and not item.used:
                     xml2rfc.log.warn("no <xref> in <rfc> targets <reference anchor='%s'>" % item.anchor)
+
+    def needLines(self, count):
+        """ Deal with the needLines PI """
+        pass
                 
     # -----------------------------------------
     # Base writer interface methods to override
@@ -1182,7 +1196,7 @@ class BaseRfcWriter:
         raise NotImplementedError('write_title() needs to be overridden')
 
     def write_heading(self, text, bullet='', autoAnchor=None, anchor=None,
-                      level=1):
+                      level=1, breakNeed=0):
         """ Writes a section heading """
         raise NotImplementedError('write_heading() needs to be overridden')
 

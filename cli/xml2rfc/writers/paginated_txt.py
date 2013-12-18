@@ -48,10 +48,29 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
 
     def _vspace(self, num=0):
         """ <vspace> needs to allow for forcing page breaks """
-        begin = len(self.buf)
-        self._lb(num=num)
         if num > 51:
-            self.break_hints[begin] = (-1, 'break')
+            self._set_break_hint(-1, 'break')
+            num = 1
+        self._lb(num=num)
+            
+    def _set_break_hint(self, needLines, type, where=-1):
+        """ Use this function to set break hints since it will do all of the
+            necessary checks to see that we don't overridete a stronger hint
+        """
+        if where == -1:
+            where = len(self.buf)
+        if where in self.break_hints:
+            need, ptype = self.break_hints[where]
+            if ptype == 'break':
+                # breaks always win
+                return
+            if ptype == 'raw':
+                # raw is better than text
+                type = ptype
+            # Extend the number of lines if greater
+            if need > needLines:
+                needLines = need
+        self.break_hints[where] = (needLines, type)
             
 
     def write_with_break_hint(self, writer, type, *args, **kwargs):
@@ -61,20 +80,14 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         begin = len(self.buf)
         writer(self, *args, **kwargs)
         needLines = len(self.buf) - begin
-        if begin in self.break_hints:
-            need, ptype = self.break_hints[begin]
-            if ptype in ['raw', 'break']:
-                type = ptype
-            if need > needLines:
-                needLines = need
-        self.break_hints[begin] = (needLines, type)
+        self._set_break_hint(needLines, type, begin)
 
     def needLines(self, count):
         """Deal with the PI directive needLines"""
         if count < 0:
-            self.break_hints[len(self.buf)] = (-1, 'break')
+            self._set_break_hint(1, 'break', len(self.buf))
         else:
-            self.break_hints[begin] = (needLines, 'raw')
+            self._set_break_hint(needLines, 'raw', len(self.buf))
 
     # Here we override some methods to mark line numbers for large sections.
     # We'll store each marking as a dictionary of line_num: section_length.
@@ -104,7 +117,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     def _force_break(self):
         """ Force a pagebreak at the current buffer position. Not used yet, waiting
         for markup that indicates a forced page break to be defined"""
-        self.break_hints[len(self.buf)] = (0, "break")
+        self._set_break_hint(-1, 'break', len(self.buf))
         
     def _toc_size_hint(self):
         return len(self.write_toc(paging=True))
@@ -127,7 +140,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         # Reserve room for a blankline and some lines of section content
         # text, in order to prevent orphan headings
         end = len(self.buf) + self.pis["sectionorphan"]
-        self.break_hints[begin] = (end - begin, "raw")
+        self._set_break_hint(end-begin, 'raw', begin)
                                         
 
     def pre_rendering(self):

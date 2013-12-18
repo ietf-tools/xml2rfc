@@ -827,7 +827,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     if self._length(row[col]) > longest_lines[col]:
                         longest_lines[col] = self._length(row[col])
                     # Longest word
-                    word = max(row[col].split(), key=self._length)
+                    word = max(xml2rfc.utils.ascii_split(row[col]), key=self._length)
                     if self._length(word) > longest_words[col]:
                         longest_words[col] = self._length(word)
         

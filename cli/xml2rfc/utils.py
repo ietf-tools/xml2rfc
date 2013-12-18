@@ -203,6 +203,15 @@ def formatXmlWhitespace(tree):
                                re.sub('\.\s*\n\s*', '.  ', \
                                element.tail))
 
+def ascii_split(text):
+    """ We have unicode strings, but we want to split only on the ASCII
+        whitespace characters so that nbsp does not get split.
+    """
+
+    if isinstance(text, type('')):
+        return text.split()
+    return re.split("[ \t\n\r\f\v]+", text)
+
 
 # ----------------------------------------------------------------------
 # Base conversions.
