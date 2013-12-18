@@ -58,7 +58,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             Filler text is usually used by editing marks
         """
         if num > 0:
-            if not buf:
+            if buf is None:
                 buf = self.buf
             buf.extend([text] * num)
 
@@ -298,13 +298,16 @@ class RawTextRfcWriter(BaseRfcWriter):
                 tmpbuf.extend(lines)
         tmpbuf.extend(self.post_write_toc())
         return tmpbuf
-            
+
+    def pre_write_iref_index(self):
+        return ['', 'Index']
+
     def write_iref_index(self):
         """ Write iref index to a temporary buffer and return """
         if self.iref_marker < 1:
             # iref is either disabled, or the pointer was messed up
             return ['']
-        tmpbuf = ['', 'Index']
+        tmpbuf = self.pre_write_iref_index()
         # Sort iref items alphabetically, store by first letter 
         alpha_bucket = {}
         for key in sorted(self._iref_index.keys()):
@@ -412,9 +415,10 @@ class RawTextRfcWriter(BaseRfcWriter):
                     self._make_iref(item, subitem)
                     # Store the buffer position for pagination data later
                     pos = len(self.buf)
-                    if pos not in self.iref_marks:
-                        self.iref_marks[pos] = []
-                    self.iref_marks[pos].append((item, subitem))
+                    if not self.indexmode:
+                        if pos not in self.iref_marks:
+                            self.iref_marks[pos] = []
+                        self.iref_marks[pos].append((item, subitem))
             elif element.tag == 'cref' and \
                 self.pis['comments'] == 'yes':                
                 # Render if processing instruction is enabled

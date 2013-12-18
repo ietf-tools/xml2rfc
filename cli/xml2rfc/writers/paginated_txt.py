@@ -63,13 +63,14 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     # We'll store each marking as a dictionary of line_num: section_length.
     # This way we can step through these markings during writing to
     # preemptively construct appropriate page breaks.
+    # Only those things which are supposed to be widowed or orphaned use 'txt'
     def write_figure(self, *args, **kwargs):
         """ Override base writer to add a marking """
-        self.write_with_break_hint(BaseRfcWriter.write_figure, 'txt', *args, **kwargs)
+        self.write_with_break_hint(BaseRfcWriter.write_figure, 'raw', *args, **kwargs)
 
     def write_table(self, *args, **kwargs):
         """ Override base writer to add a marking """
-        self.write_with_break_hint(BaseRfcWriter.write_table, 'txt', *args, **kwargs)
+        self.write_with_break_hint(BaseRfcWriter.write_table, 'raw', *args, **kwargs)
 
     def write_raw(self, *args, **kwargs):
         """ Override text writer to add a marking """
@@ -78,6 +79,10 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     def write_text(self, *args, **kwargs):
         """ Override text writer to add a marking """
         self.write_with_break_hint(RawTextRfcWriter.write_text, 'txt', *args, **kwargs)
+
+    def write_ref_element(self, *args, **kwargs):
+        """ Override text writr to add a marking """
+        self.write_with_break_hint(RawTextRfcWriter.write_ref_element, 'raw', *args, **kwargs)
         
     def _force_break(self):
         """ Force a pagebreak at the current buffer position. Not used yet, waiting
@@ -89,6 +94,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
     
     def _iref_size_hint(self):
         return len(self.write_iref_index())
+
     
     # ------------------------------------------------------------------------
     
@@ -104,7 +110,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         # Reserve room for a blankline and some lines of section content
         # text, in order to prevent orphan headings
         end = len(self.buf) + self.pis["sectionorphan"]
-        self.break_hints[begin] = (end - begin, "txt")
+        self.break_hints[begin] = (end - begin, "raw")
                                         
 
     def pre_rendering(self):
@@ -182,12 +188,16 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         else:
             raise TypeError("a string or a list of strings is required")
 
+    def IsFormatting(self, line):
+        return False
+
     def post_rendering(self):
         """ Add paging information to a secondary buffer """
         # Counters    
         self.page_length = 0
         self.page_num = 1
         max_page_length = 51
+        lines_until_break = -1
 
 
         # Maintain a list of (start, end) pointers for elements to re-insert
@@ -252,23 +262,41 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 available = max_page_length - (self.page_length + 2)
                 needed, text_type = self.break_hints[line_num]
 
-                if line.strip() == "":
+                blanks = 0
+                i = 0
+                while (self.buf[line_num+i].strip() == "" or
+                       self.IsFormatting(self.buf[line_num+i])):
+                    if not self.IsFormatting(self.buf[line_num+i]):
+                        blanks += 1
+                    i += 1
+                if blanks > 0:
                     # discount initial blank line in what we're about to
                     # write when considering whether we're about to create
                     # orphans or widows
-                    available -= 1
-                    needed -= 1
+                    available -= blanks
+                    needed -= blanks
 
                 if (text_type == "break"
-                    or (text_type == "raw" and needed > available and needed < max_page_length-2 )
-                    or (self.pis['autobreaks'] == 'yes'
-                        and needed > available
-                        and needed < max_page_length-2
-                        and (needed-available < 2 or available < 2) ) ):
+                    or (text_type == "raw" and needed > available and needed < max_page_length-2 )):
+                    lines_until_break = 0
 
-                    # Insert break
-                    remainder = max_page_length - self.page_length - 2
-                    self.emit([''] * remainder)
+                elif (self.pis['autobreaks'] == 'yes'
+                      and needed > available
+                      and needed < max_page_length-2
+                      and (needed-available < 2 or available < 2) ):
+                    lines_until_break = 0 if available < 2 else needed - 2
+                    if available == needed - 1:
+                        lines_until_break = 0
+                    if lines_until_break > 0 and line.strip() == "":
+                        # put back that blank line since we are going to emit it
+                        lines_until_break += 1
+
+            if lines_until_break == 0:
+                # Insert break
+                remainder = max_page_length - self.page_length - 2
+                self.emit([''] * remainder)
+            if not self.IsFormatting(line):
+                lines_until_break -= 1
 
             if self.page_length + 2 >= max_page_length:
                 # New page

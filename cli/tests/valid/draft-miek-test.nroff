@@ -28,18 +28,18 @@ Writing \%I-Ds and RFCs using Pandoc and xml2rfc 2.x
 .ce 1
 \%draft-gieben-writing-rfcs-pandoc-02
 
-.ti 0
 Abstract
-
 .in 3
+
 This memo presents a technique for using Pandoc syntax as a source
 format for documents in the \%Internet-Drafts \%(I-Ds) and Request for
 Comments (RFC) series.
 
 This version is adapted to work with "xml2rfc" version 2.x.
+.in 0
 
-.ti 0
 Status of This Memo
+.in 3
 
 This \%Internet-Draft is submitted in full conformance with the
 provisions of BCP 78 and BCP 79.
@@ -55,9 +55,10 @@ time.  It is inappropriate to use \%Internet-Drafts as reference
 material or to cite them other than as "work in progress."
 
 This \%Internet-Draft will expire on July 5, 2013.
+.in 0
 
-.ti 0
 Copyright Notice
+.in 3
 
 Copyright (c) 2013 IETF Trust and the persons identified as the
 document authors.  All rights reserved.
@@ -83,7 +84,7 @@ Table of Contents
    3.  Starting a new project  . . . . . . . . . . . . . . . . . . .   5
    4.  Supported Features  . . . . . . . . . . . . . . . . . . . . .   5
    5.  Unsupported Features  . . . . . . . . . . . . . . . . . . . .   6
-   6.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   6
+   6.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   7
    7.  Pandoc Constructs . . . . . . . . . . . . . . . . . . . . . .   7
      7.1.  Paragraph . . . . . . . . . . . . . . . . . . . . . . . .   7
      7.2.  Section . . . . . . . . . . . . . . . . . . . . . . . . .   7
@@ -96,19 +97,19 @@ Table of Contents
        7.3.6.  Hanging . . . . . . . . . . . . . . . . . . . . . . .   9
      7.4.  Figure/Artwork  . . . . . . . . . . . . . . . . . . . . .  10
        7.4.1.  References  . . . . . . . . . . . . . . . . . . . . .  10
-     7.5.  Block Quote . . . . . . . . . . . . . . . . . . . . . . .  10
-     7.6.  References  . . . . . . . . . . . . . . . . . . . . . . .  10
+     7.5.  Block Quote . . . . . . . . . . . . . . . . . . . . . . .  11
+     7.6.  References  . . . . . . . . . . . . . . . . . . . . . . .  11
        7.6.1.  External  . . . . . . . . . . . . . . . . . . . . . .  11
        7.6.2.  Internal  . . . . . . . . . . . . . . . . . . . . . .  11
-     7.7.  Spanx Styles  . . . . . . . . . . . . . . . . . . . . . .  11
-     7.8.  Tables  . . . . . . . . . . . . . . . . . . . . . . . . .  11
+     7.7.  Spanx Styles  . . . . . . . . . . . . . . . . . . . . . .  12
+     7.8.  Tables  . . . . . . . . . . . . . . . . . . . . . . . . .  12
        7.8.1.  References  . . . . . . . . . . . . . . . . . . . . .  12
-     7.9.  Indexes . . . . . . . . . . . . . . . . . . . . . . . . .  12
+     7.9.  Indexes . . . . . . . . . . . . . . . . . . . . . . . . .  13
    8.  Usage guidelines  . . . . . . . . . . . . . . . . . . . . . .  13
      8.1.  Working with multiple files . . . . . . . . . . . . . . .  13
      8.2.  Setting the title . . . . . . . . . . . . . . . . . . . .  13
-     8.3.  Uploading the XML/txt . . . . . . . . . . . . . . . . . .  13
-     8.4.  VIM syntax highlighting . . . . . . . . . . . . . . . . .  13
+     8.3.  Uploading the XML/txt . . . . . . . . . . . . . . . . . .  14
+     8.4.  VIM syntax highlighting . . . . . . . . . . . . . . . . .  14
    9.  Security Considerations . . . . . . . . . . . . . . . . . . .  14
    10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
    11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  14
@@ -116,25 +117,27 @@ Table of Contents
      11.2.  Normative References . . . . . . . . . . . . . . . . . .  14
    Appendix A.  Tests  . . . . . . . . . . . . . . . . . . . . . . .  14
      A.1.  A Very Long Title Considerations With Regards to the
-           Already Deployed Routing Policy . . . . . . . . . . . . .  14
-     A.2.  Markup in heading . . . . . . . . . . . . . . . . . . . .  14
-     A.3.  Blockquote  . . . . . . . . . . . . . . . . . . . . . . .  14
-     A.4.  Verbatim code blocks  . . . . . . . . . . . . . . . . . .  14
+           Already Deployed Routing Policy . . . . . . . . . . . . .  15
+     A.2.  Markup in heading . . . . . . . . . . . . . . . . . . . .  15
+     A.3.  Blockquote  . . . . . . . . . . . . . . . . . . . . . . .  15
+     A.4.  Verbatim code blocks  . . . . . . . . . . . . . . . . . .  15
      A.5.  Reference Tests . . . . . . . . . . . . . . . . . . . . .  15
      A.6.  Spanx Tests . . . . . . . . . . . . . . . . . . . . . . .  15
      A.7.  List Tests  . . . . . . . . . . . . . . . . . . . . . . .  15
 .bp
-     A.8.  Table Tests . . . . . . . . . . . . . . . . . . . . . . .  18
-     A.9.  Numbered examples . . . . . . . . . . . . . . . . . . . .  19
-     A.10. Figure tests  . . . . . . . . . . . . . . . . . . . . . .  19
+     A.8.  Table Tests . . . . . . . . . . . . . . . . . . . . . . .  19
+     A.9.  Numbered examples . . . . . . . . . . . . . . . . . . . .  20
+     A.10. Figure tests  . . . . . . . . . . . . . . . . . . . . . .  20
      A.11. Verse tests . . . . . . . . . . . . . . . . . . . . . . .  20
    Index . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  20
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  20
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  21
 .fi
 .in 3
-
+.in 4
 .ti 0
+
 1.  Introduction
+.in 3
 
 This document presents a technique for using Pandoc syntax as a
 source format for documents in the \%Internet-Drafts \%(I-Ds) and Request
@@ -144,17 +147,19 @@ This version is adapted to work with "xml2rfc" version 2.x.
 
 Pandoc is an "almost plain text" format and therefor particularly
 well suited for editing \%RFC-like documents.
-
 .in 6
+
 Note: this document is typeset in Pandoc and does not render
 completely correct when reading it on github.
-
+.in 4
 .ti 0
+
 2.  Pandoc to RFC
+.in 6
 
 Pandoc2rfc \%-- designed to do the right thing, until it doesn't.
-
 .in 3
+
 When writing [RFC4641] we directly wrote the XML.  Needless to say it
 was tedious even thought the XML of xml2rfc [1] is very "light".  The
 latest version of xml2rfc version 2 can be found here [2].
@@ -173,9 +178,9 @@ So using Pandoc for writing RFCs seems like a sane choice.  As
 and transform that using XSLT.  Pandoc2rfc does just that.  The
 conversions are, in some way amusing, as we start off with (almost)
 plain text, use elaborate XML and end up with plain text again.
+.bp
 .in 0
 .nf
-.bp
    +-------------------+   pandoc   +---------+
    | ALMOST PLAIN TEXT |   ------>  | DOCBOOK |
    +-------------------+            +---------+
@@ -188,8 +193,8 @@ plain text, use elaborate XML and end up with plain text again.
          +------------+             +---------+
 .fi
 .in 3
-
 .ce 1
+
 Figure\01: Attempt to justify Pandoc2rfc.
 
 The XML generated (the output after the "xsltproc" step in Figure\01)
@@ -221,30 +226,32 @@ include the appropriate XML:
    </rfc>
 .fi
 .in 3
-
 .ce 1
+
 Figure\02: A minimal template.xml.
 
 See the Makefile for an example of this.  In this case you need to
 edit 3 documents:
-
 .in 7
 .ti 3
-1.  middle.pdc \%- contains the main body of text;
 
+1.  middle.pdc \%- contains the main body of text;
 .ti 3
+
 2.  back.pdc \%- holds appendices and references;
 .bp
 .ti 3
 3.  template.xml (probably a fairly static file).
-
 .in 3
+
 The draft ("draft.txt") you are reading now, is automatically created
 when you call "make".  The homepage of Pandoc2rfc is this github
 repository [5].
-
+.in 6
 .ti 0
+
 2.1.  Dependencies
+.in 3
 
 It needs "xsltproc" and "pandoc" to be installed.  See the Pandoc
 user manual for the details [6] on how to type in Pandoc style.  And
@@ -258,137 +265,144 @@ Acknowledgements section:
     This document was produced using the Pandoc2rfc tool.
 .fi
 .in 3
-
+.in 4
 .ti 0
+
 3.  Starting a new project
+.in 3
 
 When starting a new project with "pandoc2rfc" you'll need to copy the
 following files:
-
 .in 6
 .ti 3
+
 o  "Makefile"
-
 .ti 3
+
 o  "transform.xslt"
-
 .ti 3
-o  And the above mentioned files:
 
+o  And the above mentioned files:
 .in 9
 .ti 6
+
 *  "middle.pdc"
-
 .ti 6
+
 *  "back.pdc"
-
 .ti 6
+
 *  "template.xml"
-
 .in 3
+
 After that you can start editing.
-
+.in 4
 .ti 0
-4.  Supported Features
 
+4.  Supported Features
 .in 6
 .ti 3
+
 o  Sections with an anchor and title attributes (Section\07.2);
-
 .ti 3
-o  Lists
 
+o  Lists
 .in 9
 .ti 6
+
 *  style=symbols (Section\07.3.1);
-
 .ti 6
+
 *  style=numbers (Section\07.3.2);
-
 .ti 6
+
 *  style=empty (Section\07.3.3);
 .bp
 .ti 6
 *  style=format %i, use roman lowercase numerals, (Section\07.3.4);
-
 .ti 6
+
 *  style=format (%d), use roman uppercase numerals
 (Section\07.3.4);
-
 .ti 6
+
 *  style=letters \%(lower- and uppercase, Section\07.3.5);
-
 .ti 6
-*  style=hanging (Section\07.3.6);
 
+*  style=hanging (Section\07.3.6);
 .in 6
 .ti 3
-o  Figure/artwork with a title (Section\07.4);
 
+o  Figure/artwork with a title (Section\07.4);
 .ti 3
+
 o  Block quote this is converted to "<list style="empty">" paragraph
 (Section\07.5);
-
 .ti 3
-o  References
 
+o  References
 .in 9
 .ti 6
+
 *  external (eref) (Section\07.6.1);
-
 .ti 6
-*  internal (xref) (Section\07.6.2), you can refer to:
 
+*  internal (xref) (Section\07.6.2), you can refer to:
 .in 12
 .ti 9
+
 +  section (handled by Pandoc, see Section\07.6));
-
 .ti 9
+
 +  figures (handled by XSLT, see Section\07.4.1);
-
 .ti 9
-+  tables (handled by XSLT, see Section\07.8.1).
 
++  tables (handled by XSLT, see Section\07.8.1).
 .in 6
 .ti 3
+
 o  Citations, by using internal references;
-
 .ti 3
+
 o  Spanx style=verb, style=emph and style=strong (Section\07.7);
-
 .ti 3
+
 o  Tables with an anchor and title (Section\07.8);
-
 .ti 3
+
 o  Indexes, by using footnotes (Section\07.9).
-
+.in 4
 .ti 0
+
 5.  Unsupported Features
-
+.in 6
 .ti 3
+
 o  Lists inside a table ("xml2rfc" doesn't handle this);
-
 .ti 3
+
 o  Pandoc markup in the caption for figures/artwork.  Pandoc markup
 for table captions _is_ supported;
-
 .ti 3
+
 o  crefs: for comments (no input syntax available), use HTML
 comments: \%"<!-- ... \%-->";
-
+.bp
+.in 4
 .ti 0
 6.  Acknowledgements
-
 .in 3
+
 The following people have helped to make Pandoc2rfc what it is today:
 Benno Overeinder, Erlend Hamnaberg, Matthijs Mekking, Trygve
-.bp
 Laugstoel.
 
 This document was prepared using Pandoc2rfc.
-
+.in 4
 .ti 0
+
 7.  Pandoc Constructs
+.in 3
 
 So, what syntax do you need to use to get the correct output?  Well,
 it is _just_ Pandoc.  The best introduction to the Pandoc style is
@@ -396,14 +410,18 @@ given in this README from Pandoc itself [7].
 
 For convenience we list the most important ones in the following
 sections.
-
+.in 6
 .ti 0
+
 7.1.  Paragraph
+.in 3
 
 Paragraphs are separated with an empty line.
-
+.in 6
 .ti 0
+
 7.2.  Section
+.in 3
 
 Just use the normal sectioning commands available in Pandoc, for
 instance:
@@ -422,13 +440,16 @@ are in the _same_ source file!
 
 Referencing the section is done with "see \%[](#section1-one)", as in
 see Section\07.2.
-
+.in 6
 .ti 0
+
 7.3.  List Styles
+.in 3
 
 A good number of styles are supported.
-
+.in 8
 .ti 0
+
 7.3.1.  Symbol
 .in 0
 .nf
@@ -439,17 +460,18 @@ A good number of styles are supported.
    * Item two.
 .fi
 .in 3
-
+.bp
 Converts to "<list style="symbol">":
-
 .in 6
 .ti 3
-o  Item one;
-.bp
-.ti 3
-o  Item two.
 
+o  Item one;
+.ti 3
+
+o  Item two.
+.in 8
 .ti 0
+
 7.3.2.  Number
 .in 0
 .nf
@@ -462,18 +484,19 @@ o  Item two.
 .in 3
 
 Converts to "<list style="numbers">":
-
 .in 7
 .ti 3
+
 1.  Item one;
-
 .ti 3
+
 2.  Item two.
-
+.in 8
 .ti 0
-7.3.3.  Empty
 
+7.3.3.  Empty
 .in 3
+
 Using the default list markers from Pandoc:
 .in 0
 .nf
@@ -486,16 +509,17 @@ Using the default list markers from Pandoc:
 .in 3
 
 Converts to "<list style="empty">":
-
 .in 6
+
 Item one;
 
 Item two.
-
+.in 8
 .ti 0
-7.3.4.  Roman
 
+7.3.4.  Roman
 .in 3
+
 Use the supported Pandoc syntax:
 .in 0
 .nf
@@ -506,14 +530,14 @@ Use the supported Pandoc syntax:
 .in 3
 
 Converts to "<list style="format %i.">":
-
 .in 9
 .ti 3
+
 i.    Item one;
-
 .ti 3
-ii.   Item two.
 
+ii.   Item two.
+.bp
 .in 3
 If you use uppercase Roman numerals, they convert to a different
 style:
@@ -522,22 +546,22 @@ style:
 
    II. Item one;
    II. Item two.
-.bp
 .fi
 .in 3
-Yields "<list style="format (%d) ">":
 
+Yields "<list style="format (%d) ">":
 .in 8
 .ti 3
+
 (1)  Item one;
-
 .ti 3
+
 (2)  Item two.
-
 .ti 0
-7.3.5.  Letter
 
+7.3.5.  Letter
 .in 3
+
 A numbered list.
 .in 0
 .nf
@@ -548,15 +572,15 @@ A numbered list.
 .in 3
 
 Converts to "<list style="letters">":
-
 .in 7
 .ti 3
+
 a.  Item one;
-
 .ti 3
-b.  Item two.
 
+b.  Item two.
 .in 3
+
 Uppercasing the letters works too (note two spaces after the letter.
 .in 0
 .nf
@@ -567,22 +591,23 @@ Uppercasing the letters works too (note two spaces after the letter.
 .in 3
 
 Becomes:
-
 .in 7
 .ti 3
+
 A.  Item one;
-
 .ti 3
+
 B.  Item two.
-
+.in 8
 .ti 0
-7.3.6.  Hanging
 
+7.3.6.  Hanging
 .in 3
+
 This is more like a description list, so we need to use:
+.bp
 .in 0
 .nf
-
    First item that needs clarification:
 
    :   Explanation one
@@ -598,12 +623,14 @@ This is more like a description list, so we need to use:
 
 Converts to: "<list style="hanging">" and "<t hangText="First item
 that...">"
-.bp
+
 If you want a newline after the hangTexts, search for the string
 "OPTION" in "transform.xsl" and uncomment it.
-
+.in 6
 .ti 0
+
 7.4.  Figure/Artwork
+.in 3
 
 Indent the paragraph with 4 spaces.
 .in 0
@@ -620,34 +647,38 @@ the artwork gets a "title" attribute with the text after "@Figure:".
 It will also be possible to reference the artwork.  If a caption is
 supplied the artwork will be centered.  If a caption is needed but
 the figure should not be centered use "@figure:\\".
-
+.in 8
 .ti 0
+
 7.4.1.  References
+.in 3
 
 The reference anchor attribute will be: "fig:" + "first 10
 (normalized) characters from the caption".  Where normalized means:
-
 .in 6
 .ti 3
+
 o  Take the first 10 characters of the caption (i.e. this is the text
 _after_ the string "@Figure:");
-
 .ti 3
+
 o  Spaces and single quotes (') are translated to a minus \%"-";
-
 .ti 3
-o  Uppercase letters translated to lowercase.
 
+o  Uppercase letters translated to lowercase.
 .in 3
+
 So the first artwork with a caption will get \%"fig:a-minimal-" as a
 reference.  See for instance Figure\02.
-
+.bp
 This anchoring is completely handled from within the "xslt".  Note
 that duplicate anchors are an XML validation error which will make
 "xml2rfc" fail.
-
+.in 6
 .ti 0
+
 7.5.  Block Quote
+.in 3
 
 Any paragraph like:
 .in 0
@@ -659,12 +690,15 @@ Any paragraph like:
 
 Converts to: "<t><list style="empty"> ..." paragraph, making it
 indented.
+.in 6
+.ti 0
 
-.ti 0
 7.6.  References
-.bp
+.in 8
 .ti 0
+
 7.6.1.  External
+.in 3
 
 Any reference like:
 .in 0
@@ -675,9 +709,11 @@ Any reference like:
 .in 3
 
 Converts to: "<ulink target="URI">Click here ..."
-
+.in 8
 .ti 0
+
 7.6.2.  Internal
+.in 3
 
 Any reference like:
 .in 0
@@ -710,9 +746,11 @@ And it does the right thing.  Referencing sections is done with:
 The word 'Section' is inserted automatically: ... see Section\07 ...
 For referencing figures/artworks see Section\07.4.  For referencing
 tables see Section\07.8.
-
+.bp
+.in 6
 .ti 0
 7.7.  Spanx Styles
+.in 3
 
 The verb style can be selected with \%back-tics: "`text`" Converts to:
 "<spanx style="verb"> ..."
@@ -722,14 +760,16 @@ And the emphasis style with asterisks: "*text*" or underscores:
 
 And the emphasis style with double asterisks: "**text**" Converts to:
 "<spanx style="strong"> ..."
-
+.in 6
 .ti 0
+
 7.8.  Tables
+.in 3
 
 A table can be entered as:
 .in 0
 .nf
-.bp
+
      Right     Left     Center     Default
      -------   ------ ----------   -------
           12     12        12        12
@@ -739,44 +779,48 @@ A table can be entered as:
      Table: A caption describing the table.
 .fi
 .in 3
-
 .ce 1
+
 Figure\03: A caption describing the figure describing the table.
 
 Is translated to "<texttable>" element in "xml2rfc".  You can choose
 multiple styles as input, but they all are converted to the same
 style (plain "<texttable>") table in "xml2rfc".  The column alignment
 is copied over to the generated XML.
-
+.in 8
 .ti 0
+
 7.8.1.  References
+.in 3
 
 The caption is _always_ translated to a "title" attribute.  If a
 table has a caption, it will _also_ get a reference.  The reference
 anchor attribute will be: "tab:" + "first 10 (normalized) characters
 from the caption".  Where normalized means:
-
 .in 6
 .ti 3
+
 o  Take the first 10 characters of the caption (i.e. this is the text
 _after_ the string "Table:");
-
 .ti 3
+
 o  Spaces and single quotes (') are translated to a minus \%"-";
-
 .ti 3
-o  Uppercase letters translated to lowercase.
 
+o  Uppercase letters translated to lowercase.
 .in 3
+
 So the first table with a caption will get \%"tab:a-caption-" for
 reference use.  See for instance
-
+.bp
 This anchoring is completely handled from within the "xslt".  Note
 that duplicate anchors are an XML validation error which will make
 "xml2rfc" fail.
-
+.in 6
 .ti 0
+
 7.9.  Indexes
+.in 3
 
 The footnote syntax of Pandoc is slightly abused to support an index.
 Footnotes are entered in two steps, you have a marker in the text,
@@ -792,9 +836,9 @@ and later you give actual footnote text.  Like this:
 
 We \%re-use this syntax for the "<iref>" tag.  The above text
 translates to:
-.bp
 .in 0
 .nf
+
    <iref item="footnote text"/>
 .fi
 .in 3
@@ -807,12 +851,15 @@ separate them:
    [^1]: item!sub item
 .fi
 .in 3
-
+.in 4
 .ti 0
+
 8.  Usage guidelines
-
+.in 6
 .ti 0
+
 8.1.  Working with multiple files
+.in 3
 
 As an author you will probably break up a draft in multiple files,
 each dealing with a subject or section.  When doing so sections with
@@ -831,9 +878,11 @@ this:
 .in 3
 
 And then process "allsection.pdc" in the normal way.
-
+.in 6
 .ti 0
+
 8.2.  Setting the title
+.in 3
 
 If you use double quotes in the documents title in the "docName"
 attribute, like:
@@ -841,9 +890,9 @@ attribute, like:
 .nf
 
    <rfc ipr="trust200902" docName="draft-gieben-writing-rfcs-pandoc-02">
+.bp
 .fi
 .in 3
-
 The Makefile will pick this up automatically and make a symbolic
 link:
 .in 0
@@ -854,79 +903,94 @@ link:
 .in 3
 
 This makes uploading the file to the \%i-d tracker a bit easier.
-
+.in 6
 .ti 0
+
 8.3.  Uploading the XML/txt
+.in 3
 
 The "draft.xml" target will generate an XML file with all XML
 included, so you can upload just one file to the \%I-D tracker.
-
+.in 6
 .ti 0
+
 8.4.  VIM syntax highlighting
+.in 3
 
 If you are a VIM user you might be interested in a syntax
 highlighting file (see [VIM]) that slightly lightens up your reading
-.bp
 experience while viewing a draft.txt from VIM.
-
+.in 4
 .ti 0
+
 9.  Security Considerations
+.in 3
 
 This document raises no security issues.
-
+.in 5
 .ti 0
+
 10.  IANA Considerations
+.in 3
 
 This document has no actions for IANA.
-
+.in 5
 .ti 0
+
 11.  References
-
+.in 7
 .ti 0
-11.1.  Informative References
 
+11.1.  Informative References
 .in 14
 .ti 3
+
 [VIM]      Gieben, R., "VIM syntax file for RFCs and \%I-Ds", October
 2012, <http://github.com/miekg/rfc>.
-
+.in 7
 .ti 0
-11.2.  Normative References
 
+11.2.  Normative References
+.in 14
 .ti 3
+
 [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
 Requirement Levels", BCP 14, RFC 2119, March 1997.
-
 .ti 3
+
 [RFC4641]  Kolkman, O. and R. Gieben, "DNSSEC Operational Practices",
 RFC 4641, September 2006.
-
+.in 13
 .ti 0
-Appendix A.  Tests
 
+Appendix\0A.  Tests
 .in 3
+
 This appendix consists out of a few tests that should all render to
 proper "xml2rfc" XML.
-
+.bp
 .in 6
 .ti 0
-A.1.  A Very Long Title Considerations With Regards to the Already Deployed Routing Policy
-
+A.1.  A Very Long Title Considerations With Regards to the Already
+Deployed Routing Policy
 .in 3
-Test a very long title.
 
+Test a very long title.
+.in 6
 .ti 0
+
 A.2.  Markup in heading
+.in 3
 
 This is discarded by "xml2rfc".
-
+.in 6
 .ti 0
+
 A.3.  Blockquote
 
-.in 6
 This is a blockquote, how does it look?
-
 .ti 0
+
 A.4.  Verbatim code blocks
 .in 0
 .nf
@@ -935,18 +999,20 @@ A.4.  Verbatim code blocks
    jkasjksajassjasjsajsajkas
 .fi
 .in 3
-.bp
+.in 6
 .ti 0
+
 A.5.  Reference Tests
+.in 3
 
 Refer to RFC 2119 [RFC2119] if you will.  Or maybe you want to
 inspect Figure\02 in Section\02 again.  Or you might want to Click here
 [8].
-
+.in 6
 .ti 0
+
 A.6.  Spanx Tests
 
-.in 6
 underscores: _underscores_
 
 asterisks: _asterisks_
@@ -954,125 +1020,125 @@ asterisks: _asterisks_
 double asterisks: *double asterisks*
 
 backticks: "backticks"
-
 .ti 0
-A.7.  List Tests
 
+A.7.  List Tests
 .in 7
 .ti 3
+
 1.  First we do
-
 .ti 3
-2.  And then
 
+2.  And then
 .in 10
 .ti 7
+
 *  item 1
-
 .ti 7
+
 *  item 2
-
 .in 3
-And the other around.
 
+And the other around.
 .in 6
 .ti 3
-o  First we do
 
+o  First we do
+.bp
 .ti 3
 o  Then
-
 .in 10
 .ti 6
+
 1.  Something
-
 .ti 6
+
 2.  Another thing
-
 .in 3
-Description lists:
 
+Description lists:
 .in 6
 .ti 3
-Item to explain:  It works because of herbs.
 
+Item to explain:  It works because of herbs.
 .ti 3
+
 Another item to explain:  More explaining.
 .sp 1
 Multiple paragraphs in such a list.
-
 .in 3
+
 lists in description lists.
-
 .in 6
 .ti 3
+
 Item to explain:  It works because of
-.bp
 .in 10
 .ti 6
+
 1.  One
-
 .ti 6
-2.  Two
 
+2.  Two
 .in 6
 .ti 3
+
 Another item to explain:  More explaining
-
 .ti 3
-Item to explain:  It works because of
 
+Item to explain:  It works because of
 .in 10
 .ti 6
+
 1.  One1
-
 .ti 6
-2.  Two1
 
+2.  Two1
 .in 13
 .ti 10
+
 +  Itemize list
-
 .ti 10
-+  Another item
 
++  Another item
 .in 6
 .ti 3
+
 Another item to explain again:  More explaining
-
 .in 3
-list with description lists.
 
+list with description lists.
 .in 7
 .ti 3
-1.  More
 
+1.  More
 .in 10
 .ti 7
+
 Item to explain:  Explanation ...
-
 .ti 7
-Item to explain:  Another explanation ...
 
+Item to explain:  Another explanation ...
 .in 7
 .ti 3
+
 2.  Go'bye
-
 .in 3
-Multiple paragraphs in a list.
 
+Multiple paragraphs in a list.
+.bp
 .in 7
 .ti 3
 1.  This is the first bullet point and it needs multiple
 paragraphs...
 .sp 1
 \&... to be explained properly.
-
 .ti 3
+
 2.  This is the next bullet.  New paragraphs should be indented with
 4 four spaces.
-
 .ti 3
+
 3.  Another item with some artwork, indented by 8 spaces.
 .in 0
 .nf
@@ -1080,12 +1146,12 @@ paragraphs...
    Artwork
 .fi
 .in 3
-
 .in 7
 .ti 3
-4.  Final item.
 
+4.  Final item.
 .in 3
+
 xml2rfc does not allow this, so the second paragraph is faked with a
 .in 0
 .nf
@@ -1093,81 +1159,81 @@ xml2rfc does not allow this, so the second paragraph is faked with a
    <vspace blankLines='1'>
 .fi
 .in 3
-.bp
-Ordered lists.
 
+Ordered lists.
 .in 7
 .ti 3
+
 1.  First item
-
 .ti 3
+
 2.  Second item
-
 .in 3
-A lowercase roman list:
 
+A lowercase roman list:
 .in 9
 .ti 3
+
 i.    Item 1
-
 .ti 3
+
 ii.   Item 2
-
 .in 3
-An uppercase roman list.
 
+An uppercase roman list.
 .in 8
 .ti 3
+
 (1)  Item1
-
 .ti 3
+
 (2)  Item2
-
 .ti 3
-(3)  Item 3
 
+(3)  Item 3
 .in 3
+
 And default list markers.
 
 Some surrounding text, to make it look better.
-
 .in 6
+
 First item.  Use lot of text to get a real paragraphs sense.
 First item.  Use lot of text to get a real paragraphs sense.
 First item.  Use lot of text to get a real paragraphs sense.
 First item.  Use lot of text to get a real paragraphs sense.
 
 Second item.  So this is the second para in your list.  Enjoy;
-
+.bp
 Another item.
-
 .in 3
+
 Text at the end.
 
 Lowercase letters list.
-
 .in 7
 .ti 3
+
 a.  First item
-
 .ti 3
+
 b.  Second item
-
 .in 3
-Uppercase letters list.
 
+Uppercase letters list.
 .in 7
 .ti 3
+
 A.  First item
-
 .ti 3
-B.  Second item
 
+B.  Second item
 .in 3
+
 And artwork in a description list.
-.bp
 .in 6
 .ti 3
+
 Item1:  Tell something about it.  Tell something about it.  Tell
 something about it.  Tell something about it.  Tell something
 about it.  Tell something about it.
@@ -1182,34 +1248,35 @@ about it.  Tell something about it.
 .in 6
 Tell some more about it.  Tell some more about it.  Tell some more
 about it.
-
 .ti 3
+
 Item2:  Another description
-
 .in 3
-List with a sublist with a paragraph above the sublist
 
+List with a sublist with a paragraph above the sublist
 .in 7
 .ti 3
+
 1.  First Item
-
 .ti 3
+
 2.  Second item
-
 .ti 3
+
 3.  Third item
 .sp 1
 A paragraph that comes first
-
 .in 11
 .ti 7
+
 A.  But what do you know
-
 .ti 7
-B.  This is another list
 
+B.  This is another list
+.bp
+.in 6
 .ti 0
-A.8.  Table Tests
+A.8.  Table\0Tests
 .in 0
 .nf
 
@@ -1222,8 +1289,8 @@ A.8.  Table Tests
                   +--------+-------+---------+----------+
 .fi
 .in 3
-
 .ce 1
+
 Table\01: Demonstration of simple table syntax.
 .in 0
 .nf
@@ -1238,10 +1305,10 @@ Table\01: Demonstration of simple table syntax.
    |           |           |               | the blank line between    |
    |           |           |               | rows.                     |
    +-----------+-----------+---------------+---------------------------+
-.bp
 .fi
 .in 3
 .ce 2
+
 Table\02: Here's the caption.  It, too, may span multiple lines.  This
 is a multiline table.  This is verbatim text.
 .in 0
@@ -1255,8 +1322,8 @@ is a multiline table.  This is verbatim text.
           +---------------+---------------+--------------------+
 .fi
 .in 3
-
 .ce 1
+
 Table\03: Sample grid table.
 
 Grid tables without a caption
@@ -1278,25 +1345,28 @@ refer to some of the other tables, with for instance:
 .nf
 
    See [](#tab:here-s-the)
+.bp
 .fi
 .in 3
-
 Which will become "See Table\02".
-
+.in 6
 .ti 0
+
 A.9.  Numbered examples
+.in 3
 
 This is another example:
-
 .in 7
 .ti 3
+
 1.  Another bla bla..
-
 .in 3
-as (1) shows...
 
+as (1) shows...
+.in 7
 .ti 0
-A.10.  Figure tests
+
+A.10.  Figure\0tests
 .in 0
 .nf
 
@@ -1306,22 +1376,22 @@ A.10.  Figure tests
    This is a figure
 .fi
 .in 3
-
 .ce 2
+
 Figure\04: This is the caption, with text in `typewriter`. Which isnt
 converted to a <spanx> style, because this is copied \%as-is.
 
 And how a figure that is not centered, do to using "figure" and not
 "Figure".
-.bp
 .in 0
 .nf
+
    This is a figure
    This is a figure
 .fi
 .in 3
-
 .ce 1
+
 Figure\05: A non centered figure.
 
 Test the use of "@title":
@@ -1333,17 +1403,38 @@ Test the use of "@title":
    @title: and here it is: a title, don't mess it up *
 .fi
 .in 3
-
+.in 7
 .ti 0
+
 A.11.  Verse tests
+.in 3
 
 This is a verse text This is another line
 
-Index
-
 .ti 0
-Author's Address
+Index
+.in 3
+
+L
+.in 6
+list
+.in 9
+default markers 17
+.in 9
+uppercase letters 18
+.in 3
+
+T
+.in 6
+table
+.in 9
+grid 20
+.bp
+.in 9
+simple 19
 .in 0
+
+Author's Address
 .nf
 
    R. (Miek) Gieben
@@ -1356,19 +1447,3 @@ Author's Address
    URI:   http://miek.nl/
 .fi
 .in 3
-
-
-L
-.in 6
-list
-.in 9
-default markers 14, 17
-uppercase letters 15, 17
-
-.in 3
-T
-.in 6
-table
-.in 9
-grid 16, 19
-simple 16, 19

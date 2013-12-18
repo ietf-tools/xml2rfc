@@ -61,9 +61,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         """
         return len(re.sub(u'[\u2060|\u200B]', '', text))
 
-    def _indent(self, amount):
+    def _indent(self, amount, buf=None):
         # Writes an indent command if it differs from the last
-        if amount != self.curr_indent:
+        # If it is not the global buffer - ways write and never remember
+        if not (buf is None or buf == self.buf):
+            self.write_nroff('.in ' + str(amount), buf=buf)
+        elif amount != self.curr_indent:
             self.write_nroff('.in ' + str(amount))
             self.curr_indent = amount
 
@@ -72,9 +75,11 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         """ nroff uses a .sp command in addition to a literal blank line """
         self.write_nroff('.sp %s' % num)
 
-    def write_nroff(self, string):
+    def write_nroff(self, string, buf=None):
         # Used by nroff to write a line with nroff commands.  No escaping
-        self.buf.append(string)
+        if buf is None:
+            buf = self.buf
+        buf.append(string)
 
     def write_line(self, string):
         # Used by nroff to write a line with no nroff commands
@@ -89,7 +94,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         BaseRfcWriter.write_figure(self, *args, **kwargs)
         end = len(self.buf)
         nr = len([ l for l in self.buf[begin:end] if l and l[0] in nroff_linestart_meta])
-        self.break_hints[begin] = (end - begin - nr, "txt")
+        self.break_hints[begin] = (end - begin - nr, "raw")
 
     def write_table(self, *args, **kwargs):
         """ Override base writer to add a marking """
@@ -97,11 +102,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         BaseRfcWriter.write_table(self, *args, **kwargs)
         end = len(self.buf)
         nr = len([ l for l in self.buf[begin:end] if l and l[0] in nroff_linestart_meta])
-        self.break_hints[begin] = (end - begin - nr, "txt")
+        self.break_hints[begin] = (end - begin - nr, "raw")
 
     def write_raw(self, text, indent=3, align='left', blanklines=0, \
                   delimiter=None, leading_blankline=True, source_line=None):
         # Wrap in a no fill block
+        first = len(self.buf)
         self._indent(0)
         self.write_nroff('.nf')
         begin = len(self.buf)
@@ -115,6 +121,10 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
                self.buf[i] = nroff_escape_linestart(self.buf[i])
         self.write_nroff('.fi')
         self._indent(indent)
+        # Move the paging hint to the first command
+        self.break_hints[first] = self.break_hints[begin]
+        del self.break_hints[begin]
+        
 
     def write_text(self, *args, **kwargs):
         #-------------------------------------------------------------
@@ -124,10 +134,17 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         # intercepting the alignment and indentation arguments
         #-------------------------------------------------------------
         # Store buffer position for paging information
-        begin = len(self.buf)
-        
+
+        if 'buf' in kwargs:
+            buffer = kwargs["buf"]
+        else:
+            buffer = self.buf
+
         par = []
         kwargs["buf"] = par
+
+        begin = len(buffer)
+        
         RawTextRfcWriter.write_text(self, *args, **kwargs)
 
         # Escape as needed
@@ -143,31 +160,38 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         bullet = kwargs.get('bullet', '')
         
         if align == 'center':
-            self.write_nroff('.ce %s' % len(par))
+            self.write_nroff('.ce %s' % len([x for x in par if x != ""]), buf=buffer)
         else:
             # Use bullet for indentation if sub not specified
             full_indent = sub_indent and indent + sub_indent or indent + len(bullet)
-            self._indent(full_indent)
+            self._indent(full_indent, buf=buffer)
 
         if bullet and len(bullet.strip()) > 0:
             # Bullet line: title just uses base indent
-            self.write_nroff('.ti %s' % indent)
+            self.write_nroff('.ti %s' % indent, buf=buffer)
 
-
-        mark = len(self.buf)
+        mark = len(buffer)
 
         # Write to buffer
-        self.buf.extend(par)
+        buffer.extend(par)
 
         # Page break information
-        end = len(self.buf)
-        self.break_hints[begin] = (end - mark, "txt")
+        end = len(buffer)
+        if buffer == self.buf:
+            self.break_hints[begin] = (end - mark, "txt")
         """
         elif bullet:
             # If the string is empty but a bullet was declared, just
             # print the bullet
             buf.append(initial)
         """
+
+    def write_ref_element(self, *args, **kwargs):
+        begin = len(self.buf)
+        PaginatedTextRfcWriter.write_ref_element(self, *args, **kwargs)
+        end = len(self.buf)
+        nr = len([ l for l in self.buf[begin:end] if l and l[0] in nroff_linestart_meta])
+        self.break_hints[begin] = (end - begin - nr, "raw")
 
     def pre_write_toc(self):
         # Wrap a nofill/fill block around TOC
@@ -176,7 +200,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
     def post_write_toc(self):
         return ['.fi','.in 3']
 
+    def pre_write_iref_index(self):
+        return ['', '.ti 0','Index']
 
+    def IsFormatting(self, line):
+        return len(line) > 0 and line[0] in nroff_linestart_meta
+    
     # ---------------------------------------------------------
     # PaginatedTextRfcWriter overrides
     # ---------------------------------------------------------
@@ -192,18 +221,15 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         # to later create paging info
         begin = len(self.buf)
         self.heading_marks[begin] = autoAnchor
-        # Override to use a .ti command
-        self._lb()
-        if bullet:
-            bullet += '  '
-        if len(bullet+text) > (self.width - 3):
-            self._indent(len(bullet))
-        self.write_nroff('.ti 0')
-        self.write_line(bullet + text)
+
+        RawTextRfcWriter.write_heading(self, text, bullet=bullet, \
+                                       autoAnchor=autoAnchor, anchor=anchor, level=level)
         # Reserve room for a blankline and some lines of section content
         # text, in order to prevent orphan headings
-        end = len(self.buf) + self.pis["sectionorphan"]
-        self.break_hints[begin] = (end - begin - 1, "txt")
+
+        end = len(self.buf)
+        nr = len([ l for l in self.buf[begin:end] if l and l[0] in nroff_linestart_meta])
+        self.break_hints[begin] = (end - begin - nr + self.pis["sectionorphan"], "raw")
 
     def pre_rendering(self):
         """ Inserts an nroff header into the buffer """

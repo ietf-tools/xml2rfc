@@ -107,6 +107,7 @@ class CachingResolver(lxml.etree.Resolver):
         if request == u"internal:/rfc.number":
             if self.rfc_number:
                 return self.resolve_string(self.rfc_number, context)
+            return self.resolve_string("XXXX", context)
         if not urlparse(request).netloc:
             # Format the request from the relative path of the source so that 
             # We get the exact same path as in the XML document
@@ -513,7 +514,7 @@ class XmlRfc:
             "refparent":	"References",
             "rfcedstyle":	"no",
             "rfcprocack":	"no",
-            "sectionorphan":    5,
+            "sectionorphan":    4,
             "slides":		"no",
             "sortrefs":		"no",
             "strict":		"no",
