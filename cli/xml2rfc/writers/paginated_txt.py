@@ -46,18 +46,35 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                                                     self.right_header))
         return tmp
 
+    def _vspace(self, num=0):
+        """ <vspace> needs to allow for forcing page breaks """
+        begin = len(self.buf)
+        self._lb(num=num)
+        if num > 51:
+            self.break_hints[begin] = (-1, 'break')
+            
+
     def write_with_break_hint(self, writer, type, *args, **kwargs):
         """A helper function to wrap a fragment writer in code to a page break
         hint.  This function also takes care to preserve a stronger break type
         so that it's not overwritten with a weaker one."""
         begin = len(self.buf)
         writer(self, *args, **kwargs)
-        end = len(self.buf)
+        needLines = len(self.buf) - begin
         if begin in self.break_hints:
             need, ptype = self.break_hints[begin]
             if ptype in ['raw', 'break']:
                 type = ptype
-        self.break_hints[begin] = (end - begin, type)
+            if need > needLines:
+                needLines = need
+        self.break_hints[begin] = (needLines, type)
+
+    def needLines(self, count):
+        """Deal with the PI directive needLines"""
+        if count < 0:
+            self.break_hints[len(self.buf)] = (-1, 'break')
+        else:
+            self.break_hints[begin] = (needLines, 'raw')
 
     # Here we override some methods to mark line numbers for large sections.
     # We'll store each marking as a dictionary of line_num: section_length.
@@ -284,12 +301,14 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                       and needed > available
                       and needed < max_page_length-2
                       and (needed-available < 2 or available < 2) ):
-                    lines_until_break = 0 if available < 2 else needed - 2
+                    lines_until_break = available
                     if available == needed - 1:
+                        lines_until_break -= 1
+                    if lines_until_break < 2:
                         lines_until_break = 0
-                    if lines_until_break > 0 and line.strip() == "":
+                    if lines_until_break > 0 and blanks > 0:
                         # put back that blank line since we are going to emit it
-                        lines_until_break += 1
+                        lines_until_break += blanks
 
             if lines_until_break == 0:
                 # Insert break
