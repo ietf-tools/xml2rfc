@@ -801,7 +801,7 @@ class BaseRfcWriter:
             # Check for a PI
             if element.tag is lxml.etree.PI:
                 pis = self.xmlrfc.parse_pi(element)
-                if "needLines" in pis:
+                if pis and "needLines" in pis:
                     self.needLines(pis["needLines"])
             # Write elements in XML document order
             if element.tag == 't':

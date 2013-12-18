@@ -70,7 +70,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
             # Extend the number of lines if greater
             if need > needLines:
                 needLines = need
-        self.break_hints[where] = (needLines, type)
+        self.break_hints[where] = (int(needLines), type)
             
 
     def write_with_break_hint(self, writer, type, *args, **kwargs):
@@ -80,6 +80,9 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         begin = len(self.buf)
         writer(self, *args, **kwargs)
         needLines = len(self.buf) - begin
+        for line in self.buf[begin:]:
+            if self.IsFormatting(line):
+                needLines -= 1
         self._set_break_hint(needLines, type, begin)
 
     def needLines(self, count):
@@ -87,7 +90,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         if count < 0:
             self._set_break_hint(1, 'break', len(self.buf))
         else:
-            self._set_break_hint(needLines, 'raw', len(self.buf))
+            self._set_break_hint(count, 'raw', len(self.buf))
 
     # Here we override some methods to mark line numbers for large sections.
     # We'll store each marking as a dictionary of line_num: section_length.

@@ -229,7 +229,7 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
         end = len(self.buf)
         nr = len([ l for l in self.buf[begin:end] if l and l[0] in nroff_linestart_meta])
-        self._set_break_hint(end - begin - nr + self.pis["sectionorphan"], "raw", begin)
+        self._set_break_hint(end - begin - nr + int(self.pis["sectionorphan"]), "raw", begin)
 
     def pre_rendering(self):
         """ Inserts an nroff header into the buffer """
