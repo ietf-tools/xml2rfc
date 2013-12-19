@@ -404,7 +404,6 @@ class XmlRfcParser:
 
         # Get hold of the rfc number (if any) in the rfc element, so we can
         # later resolve the "&rfc.number;" entity.
-        self.rfc_number = 0
         try:
             for action, element in context:
                 if element.tag == "rfc":

@@ -1363,7 +1363,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         if self.draft:
             file.write("\n"*3)
         else:
-            file.write("\n"*6)
+            file.write("\n"*5)
         for line in self.post_process_lines(self.output):
             file.write(line.rstrip(" \t"))
             file.write("\n")
