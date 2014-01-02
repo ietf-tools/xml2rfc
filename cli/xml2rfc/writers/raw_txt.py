@@ -35,8 +35,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.iref_marker = 0    # Line number in buffer to write index to
         self.list_counters = {} # Maintain counters for 'format' type lists
         self.edit_counter = 0   # Counter for edit marks
-        self.eref_counter = 0   # Counter for <eref> elements
         self.ascii = True       # Enable ascii flag
+        self.cref_counter = 0   # Counter for cref anchors
+        self.cref_list = []
 
         # Marks position of iref elements
         self.iref_marks = {}
@@ -174,7 +175,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                                     ', '.join(allowed_formats)))
             counter_index = list.attrib.get('counter', None)
             if not counter_index:
-                counter_index = 'temp'
+                counter_index = 'temp' + str(level)
                 self.list_counters[counter_index] = 0
             elif counter_index not in self.list_counters:
                 # Initialize if we need to
@@ -406,8 +407,11 @@ class RawTextRfcWriter(BaseRfcWriter):
             elif element.tag == 'eref':
                 if element.text:
                     line.append(element.text + ' ')
-                self.eref_counter += 1
-                line.append('[' + str(self.eref_counter) + ']')
+                self.eref_count += 1
+                if element.text != element.attrib['target']:
+                    line.append('[' + str(self.eref_count) + ']')
+                    if self.indexmode:
+                        self.eref_list.append([self.eref_count, element])
             elif element.tag == 'iref':
                 item = element.attrib.get('item', None)
                 if item:
@@ -422,15 +426,23 @@ class RawTextRfcWriter(BaseRfcWriter):
             elif element.tag == 'cref' and \
                 self.pis['comments'] == 'yes':                
                 # Render if processing instruction is enabled
-                anchor = element.attrib.get('anchor', '')
+                self.cref_counter += 1
+                anchor = element.attrib.get('anchor', None)
+                if anchor is None:
+                    anchor = 'CREF' + str(self.cref_counter)
+                    element.attrib['anchor'] = anchor
+                self._indexCref(self.cref_counter, anchor)
                 if self.pis['inline'] == 'yes':
                     if anchor:
-                        # TODO: Add anchor to index
                         anchor = anchor + ': '
+                    source = element.attrib.get('source', None)
+                    if source:
+                        source = " --" + source
                     if element.text:
-                        line.append('[[' + anchor + element.text + ']]')
+                        line.append('[[' + anchor + element.text + source + ']]')
                 else:
                     line.append('[' + anchor + ']')
+                    self.cref_list.append(element)
             elif element.tag == 'spanx':
                 style = element.attrib.get('style', 'emph')
                 edgechar = '?'
@@ -759,6 +771,28 @@ class RawTextRfcWriter(BaseRfcWriter):
             if key in annotationdict:
                 self.write_text(annotationdict[key], indent=refindent + 3,
                                  leading_blankline=True, source_line=refsource[key])
+
+    def write_erefs(self, refs_counter, refs_subsection):
+        bullet=str(refs_counter) + '.' + str(refs_subsection)
+        self.write_heading("URIs", bullet=bullet +'.',
+                           level = 2, autoAnchor='rfc.references.' + str(refs_subsection))
+        for i, element in self.eref_list:
+            self.write_text(element.attrib['target'], bullet='['+str(i)+'] ',
+                            leading_blankline=True, indent=3)
+
+    def write_crefs(self):
+        """ If we have any of these because the are not inline, then
+            write them out here
+        """
+        if self.cref_list:
+            self.write_heading('Editorial Comments')
+            for cref in self.cref_list:
+                body = cref.text
+                source = cref.attrib.get('source', None)
+                if source:
+                    body = source + ': ' + body
+                self.write_text(body, bullet='['+cref.attrib['anchor']+'] ',
+                                leading_blankline=True)
 
     def draw_table(self, table, table_num=None):
         # First construct a 2d matrix from the table
@@ -1334,7 +1368,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         # Reset document counters from indexing pass
         self.list_counters = {}
         self.edit_counter = 0   # Counter for edit marks
-        self.eref_counter = 0   # Counter for <eref> elements
+        self.cref_counter = 0
+        self.cref_list = []
 
     def post_rendering(self):
         # Insert the TOC and IREF into the main buffer

@@ -36,6 +36,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         self.list_counters = {}
         self.iref_index = []
         self.nbws_cond = ' '    # Use space as they are in an anchor element anyway
+        self.cref_counter = 0
         
         # Initialize templates directory
         self.templates_dir = templates_dir or \
@@ -108,7 +109,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                                     ', '.join(allowed_formats)))
             counter_index = list.attrib.get('counter', None)
             if not counter_index:
-                counter_index = 'temp'
+                counter_index = 'temp' + str(level)
                 self.list_counters[counter_index] = 0
             elif counter_index not in self.list_counters:
                 # Initialize if we need to
@@ -229,6 +230,21 @@ class HtmlRfcWriter(BaseRfcWriter):
 #                cite = E.CITE('[' + target + ']', title='NONE')
 #                current.append(cite)
                 return [a]
+        elif element.tag == 'cref':
+            self.cref_counter += 1
+            anchor = element.attrib.get('anchor', None)
+            if anchor is None:
+                anchor = 'CREF' + str(self.cref_counter)
+            a = E.A('[' + anchor + ']', id=anchor)
+            a.attrib['class'] = 'info'
+            source = element.attrib.get('source', '')
+            if source:
+                source = source + ": "
+            b = E.SPAN(source + element.text)
+            b.attrib['class'] = 'info'
+            a.append( b )
+            self._indexCref(self.cref_counter, anchor)
+            return [a]
         elif element.tag == 'iref':
             # Add anchor to index
             item = element.attrib.get('item', None)
@@ -362,7 +378,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             if autoAnchor:
                 current.attrib['id'] = autoAnchor
         for child in t:
-            if child.tag in ['xref', 'eref', 'iref', 'spanx']:
+            if child.tag in ['xref', 'eref', 'iref', 'cref', 'spanx']:
                 for element in self._expand_ref(child):
                     current.append(element)
             elif child.tag == 'vspace':
@@ -693,6 +709,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                         'toc_rows': []}
         self.list_counters = {}
         self.buf = self.buffers['front']
+        self.cref_counter = 0
 
     def post_rendering(self):
         # Create table of contents buffers

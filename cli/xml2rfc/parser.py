@@ -111,7 +111,12 @@ class CachingResolver(lxml.etree.Resolver):
         if not urlparse(request).netloc:
             # Format the request from the relative path of the source so that 
             # We get the exact same path as in the XML document
-            request = os.path.relpath(request, self.source_dir)
+            if request.startswith("file:///"):
+                request = request[8:]
+            try:
+                request = os.path.relpath(request, self.source_dir)
+            except ValueError:
+                pass
         path = self.getReferenceRequest(request)
         return self.resolve_filename(path, context)
     
@@ -409,7 +414,7 @@ class XmlRfcParser:
                 if element.tag == "rfc":
                     self.rfc_number = element.attrib.get("number", None)
         except lxml.etree.XMLSyntaxError:
-            pass
+            self.rfc_number = None
 
         # now get a regular parser, and parse again, this time resolving entities
         parser = lxml.etree.XMLParser(dtd_validation=False,

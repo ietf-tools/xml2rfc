@@ -300,6 +300,7 @@ class BaseRfcWriter:
         self.expire_string = ''
         self.ascii = False
         self.nbws_cond = u'\u00A0'
+        self.eref_list = []
 
         # We will refer to the XmlRfc document root as 'r'
         self.xmlrfc = xmlrfc
@@ -311,6 +312,7 @@ class BaseRfcWriter:
         self.refs_start = 1             # Start of references sections
         self.figure_count = 0
         self.table_count = 0
+        self.eref_count = 0
 
         # Set RFC number and draft flag
         self.rfcnumber = self.r.attrib.get('number', '')
@@ -323,12 +325,6 @@ class BaseRfcWriter:
         self._index = []
         self._iref_index = {}
 
-        # cref and eref sections
-        self._cref_index = []
-        self._cref_count = 0
-        self._eref_index = []
-        self._eref_count = 0
-        
     def _make_iref(self, item, subitem=None, anchor=None):
         """ Create an iref ID object if it doesnt exist yet """
         last = None
@@ -412,6 +408,14 @@ class BaseRfcWriter:
         autoAnchor = 'rfc.ref.' + counter
         item = _RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
                        toc=toc)
+        self._index.append(item)
+        return item
+
+    def _indexCref(self, counter, anchor):
+        counter = str(counter)
+        autoName = 'Comment' + self.nbws_cond + anchor
+        autoAnchor = 'rfc.comment.' + counter
+        item = _RfcItem(autoName, autoAnchor, anchor=anchor, toc=False)
         self._index.append(item)
         return item
 
@@ -957,6 +961,7 @@ class BaseRfcWriter:
         self.refs_start = 1             # Start of references sections
         self.figure_count = 0
         self.table_count = 0
+        self.eref_count = 0
 
         # Middle sections
         middle = self.r.find('middle')
@@ -970,24 +975,30 @@ class BaseRfcWriter:
         references = self.r.findall('back/references')
         # Write root level references header
         refs_title = self.pis['refparent']
-        if len(references) == 1:
+        if len(references) == 1 and not self.eref_list:
             refs_title = references[0].attrib.get('title', refs_title)
 
         if len(references) > 0:
             self._indexReferences(refs_counter, title=refs_title)
 
-        if len(references) > 1:
+        if len(references) > 1 or self.eref_list:
             for i, reference_list in enumerate(references):
                 refs_newcounter = refs_counter + '.' + str(i + 1)
                 refs_title = reference_list.attrib.get('title', self.pis["refparent"])
                 self._indexReferences(refs_newcounter, title=refs_title, \
                                       subCounter=i+1, level=2)
+            if self.eref_list:
+                refs_newcounter = refs_counter + '.' + str(len(references)+1)
+                self._indexReferences(refs_newcounter, title="URIs", level=2, subCounter=len(references)+1)
+
         for reference_list in references:
             for ref in reference_list:
                 if len(ref):
                     ref_counter += 1
                     title = ref.find("front/title").text
                     self._indexRef(ref_counter, title=title, anchor=ref.attrib["anchor"])
+
+            
 
         # Appendix sections
         back = self.r.find('back')
@@ -1021,6 +1032,7 @@ class BaseRfcWriter:
         self.refs_start = 1             # Start of references sections
         self.figure_count = 0
         self.table_count = 0
+        self.eref_count = 0
 
         # Block header
         topblock = self.pis['topblock']
@@ -1080,10 +1092,10 @@ class BaseRfcWriter:
         references = self.r.findall('back/references')
         # Write root level references header
         refs_title = self.pis['refparent']
-        if len(references) == 1:
+        if len(references) == 1 and not self.eref_list:
             refs_title = references[0].attrib.get('title', refs_title)
 
-        if len(references) > 0:
+        if len(references) > 0 or self.eref_list:
             self.write_heading(refs_title, bullet=refs_counter + '.', \
                                autoAnchor='rfc.references')
         if len(references) > 1:
@@ -1097,10 +1109,15 @@ class BaseRfcWriter:
         elif len(references) == 1:
             self.write_reference_list(references[0])
 
+        if self.eref_list:
+            self.write_erefs(refs_counter, len(references)+1)
+
         # Appendix sections
         back = self.r.find('back')
         if back is not None:
             self.write_section_rec(back, None, appendix=True)
+
+        self.write_crefs()
 
         # Index section, disable if there are no irefs
         if len(self._iref_index) > 0:
@@ -1156,6 +1173,16 @@ class BaseRfcWriter:
 
         if not self.quiet and filename:
             xml2rfc.log.write('Created file', filename)
+
+    def write_erefs(self, refs_counter, refs_subsection):
+        """ Only text versions do this so provide a default that does nothing
+        """
+        pass
+
+    def write_crefs(self):
+        """ Only text versions do this so provide a default that does nothing
+        """
+        pass
 
     def check_for_unused_references(self):
         """ If this is a reference and it is not used - then warn me

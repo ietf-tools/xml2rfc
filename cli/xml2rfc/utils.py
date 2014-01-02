@@ -313,7 +313,7 @@ def _replace_unicode_characters(str):
         &wj; &zwsp; &nbsp; &nbhy;
     """
     while True:
-        match = re.search(u'([^ -\x7e\u2060\u200B\u00A0\u2011])', str)
+        match = re.search(u'([^ -\x7e\u2060\u200B\u00A0\u2011\r\n])', str)
         if not match:
             return str
         if match.group(1) in _unicode_replacements:
