@@ -24,27 +24,19 @@ class ExpandedXmlWriter:
 
     def write(self, filename):
         """ Public method to write the XML document to a file """
-        # clean out entity definitions first
 
-        element = self.root
-        lines = []
-        while element is not None:
-            lines.append(lxml.etree.tostring(element, pretty_print=True))
-            element = element.getprevious()
-        lines.append("<!DOCTYPE rfc SYSTEM \"rfc2629.dtd\">\n")
-        lines.append("<?xml version=\"1.0\" encoding='utf-8'?>\n")
-        lines.reverse()
-       
         # Use lxml's built-in serialization
         file = open(filename, 'w')
-        if sys.version > '3':
-            file.write(lxml.etree.tostring(self.root.getroottree(), 
+        text = lxml.etree.tostring(self.root.getroottree(), 
                                        xml_declaration=True, 
-                                       encoding='utf-8', 
-                                       pretty_print=True).decode())
+                                       encoding='ascii',
+                                       doctype='<!DOCTYPE rfc SYSTEM "rfc2629.dtd">',
+                                       pretty_print=True)
+
+        if sys.version > '3':
+            file.write(text.decode())
         else:
-            foo = ''
-            file.write(foo.join(lines))
+            file.write(text)
 
         if not self.quiet:
             xml2rfc.log.write('Created file', filename)
