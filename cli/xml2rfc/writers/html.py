@@ -244,6 +244,8 @@ class HtmlRfcWriter(BaseRfcWriter):
             b.attrib['class'] = 'info'
             a.append( b )
             self._indexCref(self.cref_counter, anchor)
+            if element.tail:
+                a.tail = element.tail
             return [a]
         elif element.tag == 'iref':
             # Add anchor to index
