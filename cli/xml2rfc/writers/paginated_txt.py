@@ -87,7 +87,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
 
     def needLines(self, count):
         """Deal with the PI directive needLines"""
-        if count < 0:
+        if int(count) < 0:
             self._set_break_hint(1, 'break', len(self.buf))
         else:
             self._set_break_hint(count, 'raw', len(self.buf))
