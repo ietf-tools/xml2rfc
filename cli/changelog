@@ -1,3 +1,85 @@
+xml2rfc (2.4.5) ietf; urgency=medium
+
+  Another bugfix release, with a majority of the contributions from Jim Schaad.
+
+  * If there is not an RFC number then XXXX is used for the RFC number for to
+    internal:/rfc.number - matches v1 behavior.  Fixes issue #114.
+
+  * We now do a better (but not perfect) job of mking sure that section
+    headings are not orphaned.  If you have two section headings in a row then
+    the first may still be orphaned.  Fixes issue #166.
+
+  * All known page breaking issues have been fixed.  Closes issue #172.
+
+  * Fixed a number of places where the code has to be made to work with both
+    Python 2.7 unicode and string whitespace, and Python 3.3. whitespace
+    strings, which are always unicode.  Fixes issue #217.
+
+  * Don't count formatting lines (which we can now tell) when computing 
+    break hints.
+
+  * Catch any syntax errors raised while we're looking for an RFC number 
+    attribute on <rfc/>, so that we'll show all syntax errors found (during the 
+    next parse) instead of just one and one.
+
+  * Added tests which generate .txt from .nroff and compares that to the 
+    xml2rfc-generated .txt (with some tweaks to handle different number of 
+    starting blanklines.  Also corrected the number of initial blank lines 
+    output for RFCs in the raw text writer.
+
+  * Not all files on Windows systems have a common root.  This means that one
+    cannot always get a relative path between to absolute path file names.
+    Catch the error that occurs in these circumstances and just use the
+    absolute path name.
+
+  * Nested "format" style lists now include the level in the auto-generated
+    counter value.  Fixes issue #218.
+
+  * EREFs are now put into the references section for text based output.
+    Fixes issue #133.
+
+  * cref elements are not dealt with when inline is either yes or no for text
+    files.  They are also now populated for html files as well.  Fixes issue
+    #201.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  17 Jan 2014 17:07:16 +0100
+
+xml2rfc (2.4.4) ietf; urgency=medium
+
+  Another release with major contributions from Jim Schaad.  This release
+  primarily addresses page-breaking issues, but also improves the reporting
+  of syntax errors (if any) in the xml input.
+
+  From Jim Schaad <ietf@augustcellars.com>:
+
+  * We now do a better (but not perfect) job of mking sure that section
+    headings are not orphaned.  If you have two section headings in a row then
+    the first may still be orphaned.  Fixes issue #166.
+
+  * Improved autobreaking, in a number of different places.  Fixes issue #172.
+
+  * In all examples in the test suite, the .txt and .nroff output now have the
+    same page breaks.
+
+  * Eliminated the line-breaking of 'Section N' in text-tables which was
+    introduced in 2.4.4.  Fixes ticket #217.
+
+  * If there is not an RFC number then XXXX is used for the RFC number for to
+    internal:/rfc.number - matches v1 behavior.  Fixes issue #114.
+
+  From Henrik Levkowetz <henrik@levkowetz.com>:
+
+  * Instead of previously only showing one single syntax error per invocation
+    of xml2rfc, we're now showing all syntax errors found throughout the xml
+    file at once.
+
+  * Added tests which generate .txt from .nroff and compares that to the 
+    xml2rfc-generated .txt (with some tweaks to handle different number of 
+    starting blanklines.  Also corrected the number of initial blank lines 
+    output for RFCs in the raw text writer.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  19 Dec 2013 21:20:04 +0100
+
 xml2rfc (2.4.4) ietf; urgency=medium
 
   This is a bugfix release, with code fixes almost entirely from Jim Schaad.
