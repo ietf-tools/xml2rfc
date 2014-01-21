@@ -1109,6 +1109,12 @@ class BaseRfcWriter:
                                    autoAnchor=autoAnchor, level=2)
                 self.write_reference_list(reference_list)
         elif len(references) == 1:
+            if self.eref_list:
+                refs_newcounter = refs_counter + '.1'
+                refs_title = references[0].attrib.get('title', self.pis['refparent'])
+                autoAnchor = 'rfc.references.1'
+                self.write_heading(refs_title, bullet=refs_newcounter + '.',\
+                                   autoAnchor=autoAnchor, level=2)
             self.write_reference_list(references[0])
 
         if self.eref_list:
