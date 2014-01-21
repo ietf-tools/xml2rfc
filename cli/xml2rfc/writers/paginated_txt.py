@@ -155,7 +155,9 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.break_hints = {}
         self.heading_marks = {}
 
-        if self.draft:
+        if self.pis['private']:
+            self.left_header = ''
+        elif self.draft:
             self.left_header = 'Internet-Draft'
         else:
             self.left_header = 'RFC %s' % self.r.attrib.get('number', '')

@@ -569,58 +569,59 @@ class BaseRfcWriter:
         """ Returns a lines of lines for the top left header """
         lines = []
         # Document stream / workgroup
-        if self.draft:
-            workgroup = self.r.find('front/workgroup')
-            if workgroup is not None and workgroup.text:
-                lines.append(workgroup.text)
-            else:
-                lines.append(self.boilerplate['draft_workgroup'])
-        else:
-            # Determine 'workgroup' from submissionType
-            subtype = self.r.attrib.get('submissionType', 
-                                         self.defaults['submissionType'])
-            docstream = self.boilerplate['document_stream'].get(subtype)
-            lines.append(docstream)
-
-        # RFC number
-        if not self.draft:
-            lines.append('Request for Comments: ' + self.rfcnumber)
-        else:
-            lines.append('Internet-Draft')
-
-        # Series number
-        category = self.r.attrib.get('category', '')
-        seriesNo = self.r.attrib.get('seriesNo')
-        if seriesNo is not None and category in self.boilerplate['series_name']:
-            lines.append('%s: %s' % (self.boilerplate['series_name'][category], 
-                                     seriesNo))
-
-        # RFC relation notice
-        approved_text = self.draft and '(if approved)' or ''
-        obsoletes = self.r.attrib.get('obsoletes')
-        if obsoletes:
-            lines.append('Obsoletes: %s %s' % (obsoletes, approved_text))
-        updates = self.r.attrib.get('updates')
-        if updates:
-            lines.append('Updates: %s %s' % (updates, approved_text))
-
-        # Cateogory
-        if category:
-            cat_text = self.boilerplate[category]
+        if not self.pis['private']:
             if self.draft:
-                lines.append('Intended status: ' + cat_text)
+                workgroup = self.r.find('front/workgroup')
+                if workgroup is not None and workgroup.text:
+                    lines.append(workgroup.text)
+                else:
+                    lines.append(self.boilerplate['draft_workgroup'])
             else:
-                lines.append('Category: ' + cat_text)
-        else:
-            xml2rfc.log.warn('No category specified for document.')
+                # Determine 'workgroup' from submissionType
+                subtype = self.r.attrib.get('submissionType', 
+                                            self.defaults['submissionType'])
+                docstream = self.boilerplate['document_stream'].get(subtype)
+                lines.append(docstream)
 
-        # Expiration notice for drafts
-        if self.expire_string:
-            lines.append('Expires: ' + self.expire_string)
+            # RFC number
+            if not self.draft:
+                lines.append('Request for Comments: ' + self.rfcnumber)
+            elif not self.pis['private']:
+                lines.append('Internet-Draft')
 
-        # ISSN identifier
-        if not self.draft:
-            lines.append('ISSN: %s' % self.boilerplate['issn'])
+            # Series number
+            category = self.r.attrib.get('category', '')
+            seriesNo = self.r.attrib.get('seriesNo')
+            if seriesNo is not None and category in self.boilerplate['series_name']:
+                lines.append('%s: %s' % (self.boilerplate['series_name'][category], 
+                                         seriesNo))
+
+            # RFC relation notice
+            approved_text = self.draft and '(if approved)' or ''
+            obsoletes = self.r.attrib.get('obsoletes')
+            if obsoletes:
+                lines.append('Obsoletes: %s %s' % (obsoletes, approved_text))
+            updates = self.r.attrib.get('updates')
+            if updates:
+                lines.append('Updates: %s %s' % (updates, approved_text))
+
+            # Category
+            if category:
+                cat_text = self.boilerplate[category]
+                if self.draft:
+                    lines.append('Intended status: ' + cat_text)
+                else:
+                    lines.append('Category: ' + cat_text)
+            else:
+                xml2rfc.log.warn('No category specified for document.')
+
+            # Expiration notice for drafts
+            if self.expire_string and not self.pis['private']:
+                lines.append('Expires: ' + self.expire_string)
+
+            # ISSN identifier
+            if not self.draft:
+                lines.append('ISSN: %s' % self.boilerplate['issn'])
 
         # Strip any whitespace from XML to make header as neat as possible
         lines = [ l.strip() for l in lines ]
@@ -1067,14 +1068,15 @@ class BaseRfcWriter:
             for t in note.findall('t'):
                 self.write_t_rec(t)
 
-        # Verify that 'ipr' attribute is valid before continuing
-        self._validate_ipr()
+        if not self.pis['private']:
+            # Verify that 'ipr' attribute is valid before continuing
+            self._validate_ipr()
 
-        # "Status of this Memo" section
-        self.write_status_section()
+            # "Status of this Memo" section
+            self.write_status_section()
 
-        # Copyright section
-        self.write_copyright()
+            # Copyright section
+            self.write_copyright()
 
         # Insert the table of contents marker at this position
         toc_enabled = self.pis['toc']
