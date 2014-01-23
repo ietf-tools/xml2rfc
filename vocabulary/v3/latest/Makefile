@@ -1,6 +1,6 @@
 all: \
-	draft-reschke-xml2rfc-latest.html \
-	draft-reschke-xml2rfc-latest.txt
+	draft-hoffman-xml2rfc-latest.html \
+	draft-hoffman-xml2rfc-latest.txt
 
 include xml2rfcvoc.mk
 
