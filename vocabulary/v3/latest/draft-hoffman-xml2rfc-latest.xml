@@ -89,6 +89,10 @@
 </t>
 
 <t>
+  In  &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>author</x:ref>&gt;, added optional "xml:lang" attribute.
+</t>
+
+<t>
   Added the &lt;b&gt;, &lt;i&gt;, and &lt;tt&gt; elements.
 </t>
 
@@ -383,6 +387,15 @@
             For other output formats it is usually ignored.
          </t>
    </section>
+   <section title="'xml:lang' attribute" anchor="element.artwork.attribute.xml-lang" toc="exclude">
+      <iref item="Attributes" subitem="xml:lang"/>
+      <iref item="artwork element" subitem="xml:lang attribute"/>
+      <iref item="xml:lang attribute" subitem="in artwork element"/>
+      <t>
+            Allows specification of the language used. This is sometimes useful for renderers which display
+            different fonts for CJK characters.
+      </t>
+   </section>
    <section title="'xml:space' attribute" anchor="element.artwork.attribute.xml-space" toc="exclude">
       <iref item="Attributes" subitem="xml:space"/>
       <iref item="artwork element" subitem="xml:space attribute"/>
@@ -485,6 +498,15 @@
       <t>
             The author's surname.
          </t>
+   </section>
+   <section title="'xml:lang' attribute" anchor="element.author.attribute.xml-lang" toc="exclude">
+      <iref item="Attributes" subitem="xml:lang"/>
+      <iref item="author element" subitem="xml:lang attribute"/>
+      <iref item="xml:lang attribute" subitem="in author element"/>
+      <t>
+            Allows specification of the language used. This is sometimes useful for renderers which display
+            different fonts for CJK characters.
+      </t>
    </section>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;b&gt;" anchor="element.b">
@@ -2124,8 +2146,8 @@
 <section title="Acknowledgments" anchor="acknowledgements">
 <t>
   Thanks to everybody who reviewed this document and provided feedback and/or
-  specification text. Thanks especially go to those who provided feedback for
-  <xref target="XML2RFCv2"/>.
+  specification text. Thanks especially go to Julian Reschke for editing <xref target="XML2RFCv2"/>
+  and those who provided feedback on that document. 
 </t>
 <t>
   We also thank Marshall T. Rose for both the original design and the reference
@@ -2677,6 +2699,7 @@ author =
     attribute surname { text }?,
     attribute fullname { text }?,
     attribute role { "editor" }?,
+    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     organization?,
     address?
   }
@@ -2816,6 +2839,7 @@ artwork =
     [ a:defaultValue = "" ] attribute alt { text }?,
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
+    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     text*
   }
 postamble =
