@@ -92,24 +92,17 @@ section =
   element section {
     attribute anchor { xsd:ID }?,
     attribute title { text },
+    [ a:defaultValue = "yes" ] attribute numbered { "yes" | "no" }?,
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
-    (t | figure | texttable | iref)*,
+    (t | figure | texttable | xref | eref | iref | cref)*,
     section*
   }
 t =
   element t {
     attribute anchor { xsd:ID }?,
     attribute hangText { text }?,
-    (text
-     | \list
-     | figure
-     | xref
-     | eref
-     | iref
-     | cref
-     | spanx
-     | vspace)*
+    (text | \list | figure | xref | eref | iref | cref | vspace)*
   }
 \list =
   element list {
@@ -145,13 +138,6 @@ cref =
     attribute source { text }?,
     text
   }
-spanx =
-  element spanx {
-    [ a:defaultValue = "preserve" ]
-    attribute xml:space { "default" | "preserve" }?,
-    [ a:defaultValue = "emph" ] attribute style { text }?,
-    text
-  }
 vspace =
   element vspace {
     [ a:defaultValue = "0" ] attribute blankLines { text }?,
@@ -174,8 +160,7 @@ figure =
     artwork,
     postamble?
   }
-preamble =
-  element preamble { (text | xref | eref | iref | cref | spanx)* }
+preamble = element preamble { (text | xref | eref | iref | cref)* }
 artwork =
   element artwork {
     [ a:defaultValue = "preserve" ]
@@ -190,8 +175,7 @@ artwork =
     [ a:defaultValue = "" ] attribute height { text }?,
     text*
   }
-postamble =
-  element postamble { (text | xref | eref | iref | cref | spanx)* }
+postamble = element postamble { (text | xref | eref | iref | cref)* }
 texttable =
   element texttable {
     attribute anchor { xsd:ID }?,
@@ -214,7 +198,7 @@ ttcol =
     attribute align { "left" | "center" | "right" }?,
     text
   }
-c = element c { (text | xref | eref | iref | cref | spanx)* }
+c = element c { (text | xref | eref | iref | cref)* }
 back = element back { references*, section* }
 references =
   element references {
@@ -243,6 +227,5 @@ format =
     attribute octets { text }?,
     empty
   }
-annotation =
-  element annotation { (text | xref | eref | iref | cref | spanx)* }
+annotation = element annotation { (text | xref | eref | iref | cref)* }
 start = rfc

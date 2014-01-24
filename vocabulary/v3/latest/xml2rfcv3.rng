@@ -288,6 +288,14 @@
       </optional>
       <attribute name="title"/>
       <optional>
+        <attribute name="numbered" a:defaultValue="yes">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="toc" a:defaultValue="default">
           <choice>
             <value>include</value>
@@ -296,20 +304,15 @@
           </choice>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="numbered" a:defaultValue="yes">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
       <zeroOrMore>
         <choice>
           <ref name="t"/>
           <ref name="figure"/>
           <ref name="texttable"/>
+          <ref name="xref"/>
+          <ref name="eref"/>
           <ref name="iref"/>
+          <ref name="cref"/>
         </choice>
       </zeroOrMore>
       <zeroOrMore>
@@ -336,7 +339,6 @@
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="cref"/>
-          <ref name="spanx"/>
           <ref name="vspace"/>
         </choice>
       </zeroOrMore>
@@ -420,22 +422,6 @@
       <text/>
     </element>
   </define>
-  <define name="spanx">
-    <element name="spanx">
-      <optional>
-        <attribute name="xml:space" a:defaultValue="preserve">
-          <choice>
-            <value>default</value>
-            <value>preserve</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="style" a:defaultValue="emph"/>
-      </optional>
-      <text/>
-    </element>
-  </define>
   <define name="vspace">
     <element name="vspace">
       <optional>
@@ -504,7 +490,6 @@
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="cref"/>
-          <ref name="spanx"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -560,7 +545,6 @@
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="cref"/>
-          <ref name="spanx"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -630,16 +614,7 @@
           </choice>
         </attribute>
       </optional>
-      <zeroOrMore>
-        <choice>
-          <text/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="iref"/>
-          <ref name="cref"/>
-          <ref name="spanx"/>
-        </choice>
-      </zeroOrMore>
+      <text/>
     </element>
   </define>
   <define name="c">
@@ -651,7 +626,6 @@
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="cref"/>
-          <ref name="spanx"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -726,7 +700,6 @@
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="cref"/>
-          <ref name="spanx"/>
         </choice>
       </zeroOrMore>
     </element>

@@ -82,14 +82,15 @@
 
 <!ELEMENT middle (section)+>
 
-<!ELEMENT section ((t|figure|texttable|iref)*,section*)>
+<!ELEMENT section ((t|figure|texttable|xref|eref|iref|cref)*,section*)>
 
 <!ATTLIST section
   anchor ID #IMPLIED
   title CDATA #REQUIRED
+  numbered (yes|no) 'yes'
   toc (include|exclude|default) 'default'>
 
-<!ELEMENT t (#PCDATA|list|figure|xref|eref|iref|cref|spanx|vspace)*>
+<!ELEMENT t (#PCDATA|list|figure|xref|eref|iref|cref|vspace)*>
 
 <!ATTLIST t
   anchor ID #IMPLIED
@@ -127,12 +128,6 @@
   anchor ID #IMPLIED
   source CDATA #IMPLIED>
 
-<!ELEMENT spanx (#PCDATA)>
-
-<!ATTLIST spanx
-  xml:space (default|preserve) 'preserve'
-  style CDATA 'emph'>
-
 <!ELEMENT vspace EMPTY>
 
 <!ATTLIST vspace
@@ -150,7 +145,7 @@
   width CDATA ''
   height CDATA ''>
 
-<!ELEMENT preamble (#PCDATA|xref|eref|iref|cref|spanx)*>
+<!ELEMENT preamble (#PCDATA|xref|eref|iref|cref)*>
 
 <!ELEMENT artwork (#PCDATA)*>
 
@@ -164,7 +159,7 @@
   width CDATA ''
   height CDATA ''>
 
-<!ELEMENT postamble (#PCDATA|xref|eref|iref|cref|spanx)*>
+<!ELEMENT postamble (#PCDATA|xref|eref|iref|cref)*>
 
 <!ELEMENT texttable (preamble?,ttcol+,c*,postamble?)>
 
@@ -181,7 +176,7 @@
   width CDATA #IMPLIED
   align (left|center|right) 'left'>
 
-<!ELEMENT c (#PCDATA|xref|eref|iref|cref|spanx)*>
+<!ELEMENT c (#PCDATA|xref|eref|iref|cref)*>
 
 <!ELEMENT back (references*,section*)>
 
@@ -209,4 +204,4 @@
   type CDATA #REQUIRED
   octets CDATA #IMPLIED>
 
-<!ELEMENT annotation (#PCDATA|xref|eref|iref|cref|spanx)*>
+<!ELEMENT annotation (#PCDATA|xref|eref|iref|cref)*>
