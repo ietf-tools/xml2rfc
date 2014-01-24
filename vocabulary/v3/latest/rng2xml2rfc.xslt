@@ -14,7 +14,7 @@
   <xsl:apply-templates select="rng:grammar"/>
 </xsl:template>
 
-<xsl:variable name="spec" select="document('draft-reschke-xml2rfc-latest.xml')"/>
+<xsl:variable name="spec" select="document('draft-hoffman-xml2rfc-latest.xml')"/>
 
 <xsl:template match="rng:grammar">
   <xsl:apply-templates select="rng:define/rng:element">
