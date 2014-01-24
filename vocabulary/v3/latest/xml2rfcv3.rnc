@@ -60,8 +60,9 @@ organization =
     attribute abbrev { text }?,
     text
   }
-address = element address { postal?, phone?, facsimile?, email?, uri? }
-postal = element postal { street+, (city | region | code | country)* }
+address =
+  element address { (postal | phone | facsimile | email | uri)* }
+postal = element postal { (street | city | region | code | country)* }
 street = element street { text }
 city = element city { text }
 region = element region { text }

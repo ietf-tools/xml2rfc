@@ -192,7 +192,11 @@ Internet-Draft                  XML2RFCv3                   January 2014
    The following is a hopefully-complete list of all the technical
    changes between [XML2RFCv2] and this document.
 
+   o  In <address>, allowed the sub-elements to be in any order.
+
    o  Added the <b>, <i>, and <tt> elements.
+
+   o  In <postal>, allowed the sub-elements to be in any order.
 
    o  In <section>, added the optional "numbered" attribute.
 
@@ -213,10 +217,6 @@ Internet-Draft                  XML2RFCv3                   January 2014
    Note that the schema can be used for automated validity checks, but
    certain constraints are only described in prose (example: the
    conditionally required presence of the "abbrev" attribute).
-
-
-
-
 
 
 
@@ -255,17 +255,17 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    Content model:
 
-   In this order:
+   In any order:
 
-   1.  One optional <postal> element (Section 2.29)
+   o  <postal> elements (Section 2.29)
 
-   2.  One optional <phone> element (Section 2.28)
+   o  <phone> elements (Section 2.28)
 
-   3.  One optional <facsimile> element (Section 2.17)
+   o  <facsimile> elements (Section 2.17)
 
-   4.  One optional <email> element (Section 2.15)
+   o  <email> elements (Section 2.15)
 
-   5.  One optional <uri> element (Section 2.44)
+   o  <uri> elements (Section 2.44)
 
 2.3.  <annotation>
 
@@ -1049,13 +1049,13 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    Content model:
 
-   In this order:
+   In any order:
 
-   1.  One or more <street> elements (Section 2.38)
+   o  <street> elements (Section 2.38)
 
-   2.  In any order:
+   o  <city> elements (Section 2.10)
 
-       *  <city> elements (Section 2.10)
+   o  <region> elements (Section 2.34)
 
 
 
@@ -1065,11 +1065,9 @@ Hoffman                   Expires July 28, 2014                [Page 19]
 Internet-Draft                  XML2RFCv3                   January 2014
 
 
-       *  <region> elements (Section 2.34)
+   o  <code> elements (Section 2.11)
 
-       *  <code> elements (Section 2.11)
-
-       *  <country> elements (Section 2.12)
+   o  <country> elements (Section 2.12)
 
 2.30.  <postamble>
 
@@ -1113,6 +1111,8 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    o  <xref> elements (Section 2.47)
 
+   o  <eref> elements (Section 2.16)
+
 
 
 
@@ -1120,8 +1120,6 @@ Hoffman                   Expires July 28, 2014                [Page 20]
 
 Internet-Draft                  XML2RFCv3                   January 2014
 
-
-   o  <eref> elements (Section 2.16)
 
    o  <iref> elements (Section 2.22)
 
@@ -1169,6 +1167,8 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    Contains a set of bibliographical references.
 
+   In the early days of the RFC series, there was only one "References"
+   section per RFC.  This convention was later changed to group
 
 
 
@@ -1177,8 +1177,6 @@ Hoffman                   Expires July 28, 2014                [Page 21]
 Internet-Draft                  XML2RFCv3                   January 2014
 
 
-   In the early days of the RFC series, there was only one "References"
-   section per RFC.  This convention was later changed to group
    references into two sets, "Normative" and "Informative"; see item x
    of Section 4.8 of [RFCSTYLE]).  This vocabulary supports the split
    with the "title" attribute.
@@ -1224,6 +1222,8 @@ Internet-Draft                  XML2RFCv3                   January 2014
    2.  One <middle> element (Section 2.25)
 
    3.  One optional <back> element (Section 2.8)
+
+
 
 
 
@@ -2285,9 +2285,9 @@ Internet-Draft                  XML2RFCv3                   January 2014
        attribute abbrev { text }?,
        text
      }
-   address = element address { postal?, phone?, facsimile?, email?,
-   uri? }
-   postal = element postal { street+, (city | region | code | country)*
+   address =
+     element address { (postal | phone | facsimile | email | uri)* }
+   postal = element postal { (street | city | region | code | country)*
    }
 
 
@@ -2706,7 +2706,7 @@ Internet-Draft                  XML2RFCv3                   January 2014
          cref  6, 11, 20-21, 26, 28
          date  12, 16
          email  5, 13
-         eref  6, 11, 13, 20-21, 26, 28
+         eref  6, 11, 13, 20, 26, 28
          facsimile  5, 13
          figure  14, 26, 28
          format  15, 21
@@ -2724,7 +2724,7 @@ Internet-Draft                  XML2RFCv3                   January 2014
          preamble  14, 20, 29
          reference  21-22
          references  10, 21
-         region  20, 22
+         region  19, 22
          rfc  22
          section  10, 18, 25-26
          seriesInfo  21, 27
@@ -2752,7 +2752,7 @@ Internet-Draft                  XML2RFCv3                   January 2014
          inside annotation  6
          inside c  11
          inside postamble  20
-         inside preamble  21
+         inside preamble  20
          inside section  26
          inside t  28
          target attribute  13
@@ -2918,7 +2918,7 @@ Internet-Draft                  XML2RFCv3                   January 2014
          inside back  10
          title attribute  22
       region element  22
-         inside postal  20
+         inside postal  19
       rfc element  22
          category attribute  23
          consensus attribute  23

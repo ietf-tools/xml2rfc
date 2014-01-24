@@ -85,7 +85,15 @@
 <list style="symbols">
 
 <t>
+  In  &lt;<x:ref>address</x:ref>&gt;, allowed the sub-elements to be in any order.
+</t>
+
+<t>
   Added the &lt;b&gt;, &lt;i&gt;, and &lt;tt&gt; elements.
+</t>
+
+<t>
+  In  &lt;<x:ref>postal</x:ref>&gt;, allowed the sub-elements to be in any order.
 </t>
 
 <t>
@@ -166,33 +174,25 @@
      Provides address information for the author.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>author</x:ref>&gt; (<xref target="element.author"/>).</t>
-   <t anchor="element.address.contents"><!--AG-->Content model:</t>
-   <t><!--AG-->In this order:<list style="numbers">
-        
+   <t anchor="element.address.contents"><!--AG-->
+        Content model:
+      </t>
+   <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->
             <iref item="Elements" subitem="postal"/>
-            <iref item="postal element" subitem="inside address"/>One optional &lt;<x:ref>postal</x:ref>&gt; element (<xref target="element.postal"/>)</t>
-      
-        
+            <iref item="postal element" subitem="inside address"/>&lt;<x:ref>postal</x:ref>&gt; elements (<xref target="element.postal"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="phone"/>
-            <iref item="phone element" subitem="inside address"/>One optional &lt;<x:ref>phone</x:ref>&gt; element (<xref target="element.phone"/>)</t>
-      
-        
+            <iref item="phone element" subitem="inside address"/>&lt;<x:ref>phone</x:ref>&gt; elements (<xref target="element.phone"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="facsimile"/>
-            <iref item="facsimile element" subitem="inside address"/>One optional &lt;<x:ref>facsimile</x:ref>&gt; element (<xref target="element.facsimile"/>)</t>
-      
-        
+            <iref item="facsimile element" subitem="inside address"/>&lt;<x:ref>facsimile</x:ref>&gt; elements (<xref target="element.facsimile"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="email"/>
-            <iref item="email element" subitem="inside address"/>One optional &lt;<x:ref>email</x:ref>&gt; element (<xref target="element.email"/>)</t>
-      
-        
+            <iref item="email element" subitem="inside address"/>&lt;<x:ref>email</x:ref>&gt; elements (<xref target="element.email"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="uri"/>
-            <iref item="uri element" subitem="inside address"/>One optional &lt;<x:ref>uri</x:ref>&gt; element (<xref target="element.uri"/>)</t>
-      
+            <iref item="uri element" subitem="inside address"/>&lt;<x:ref>uri</x:ref>&gt; elements (<xref target="element.uri"/>)</t>
       </list>
    </t>
 </section>
@@ -1146,28 +1146,25 @@
       Contains child elements providing postal information.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
-   <t anchor="element.postal.contents"><!--AG-->Content model:</t>
-   <t><!--AG-->In this order:<list style="numbers">
-        
+   <t anchor="element.postal.contents"><!--AG-->
+        Content model:
+      </t>
+   <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->
             <iref item="Elements" subitem="street"/>
-            <iref item="street element" subitem="inside postal"/>One or more &lt;<x:ref>street</x:ref>&gt; elements (<xref target="element.street"/>)</t>
-      
-         <t><!--AG-->In any order: <list style="symbols">
-               <t><!--AG-->
-                  <iref item="Elements" subitem="city"/>
-                  <iref item="city element" subitem="inside postal"/>&lt;<x:ref>city</x:ref>&gt; elements (<xref target="element.city"/>)</t>
-               <t><!--AG-->
-                  <iref item="Elements" subitem="region"/>
-                  <iref item="region element" subitem="inside postal"/>&lt;<x:ref>region</x:ref>&gt; elements (<xref target="element.region"/>)</t>
-               <t><!--AG-->
-                  <iref item="Elements" subitem="code"/>
-                  <iref item="code element" subitem="inside postal"/>&lt;<x:ref>code</x:ref>&gt; elements (<xref target="element.code"/>)</t>
-               <t><!--AG-->
-                  <iref item="Elements" subitem="country"/>
-                  <iref item="country element" subitem="inside postal"/>&lt;<x:ref>country</x:ref>&gt; elements (<xref target="element.country"/>)</t>
-            </list>
-         </t>
+            <iref item="street element" subitem="inside postal"/>&lt;<x:ref>street</x:ref>&gt; elements (<xref target="element.street"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="city"/>
+            <iref item="city element" subitem="inside postal"/>&lt;<x:ref>city</x:ref>&gt; elements (<xref target="element.city"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="region"/>
+            <iref item="region element" subitem="inside postal"/>&lt;<x:ref>region</x:ref>&gt; elements (<xref target="element.region"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="code"/>
+            <iref item="code element" subitem="inside postal"/>&lt;<x:ref>code</x:ref>&gt; elements (<xref target="element.code"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="country"/>
+            <iref item="country element" subitem="inside postal"/>&lt;<x:ref>country</x:ref>&gt; elements (<xref target="element.country"/>)</t>
       </list>
    </t>
 </section>
@@ -2688,9 +2685,9 @@ organization =
     attribute abbrev { text }?,
     text
   }
-address = element address { postal?, phone?, facsimile?, email?, 
-uri? }
-postal = element postal { street+, (city | region | code | country)* 
+address =
+  element address { (postal | phone | facsimile | email | uri)* }
+postal = element postal { (street | city | region | code | country)* 
 }
 street = element street { text }
 city = element city { text }

@@ -151,30 +151,22 @@
   </define>
   <define name="address">
     <element name="address">
-      <optional>
-        <ref name="postal"/>
-      </optional>
-      <optional>
-        <ref name="phone"/>
-      </optional>
-      <optional>
-        <ref name="facsimile"/>
-      </optional>
-      <optional>
-        <ref name="email"/>
-      </optional>
-      <optional>
-        <ref name="uri"/>
-      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="postal"/>
+          <ref name="phone"/>
+          <ref name="facsimile"/>
+          <ref name="email"/>
+          <ref name="uri"/>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="postal">
     <element name="postal">
-      <oneOrMore>
-        <ref name="street"/>
-      </oneOrMore>
       <zeroOrMore>
         <choice>
+          <ref name="street"/>
           <ref name="city"/>
           <ref name="region"/>
           <ref name="code"/>
