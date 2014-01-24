@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This file generates <xref/> test cases for the xml2rfc vocabulary. It is written as an XSLT 2.0 stylesheet that requires no input, so you might want to feed it to itself. The output is an xml2rfc document that contains a set of test cases for the <xref/> element, varying aspects such as target, format, and content of the element. -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
   <xsl:output method="xml" doctype-system="rfc2629.dtd" exclude-result-prefixes="xsl" indent="yes"/>
   <xsl:variable name="format" select="('', 'counter', 'title', 'none', 'default')"/>
-  <xsl:variable name="pageno" select="('', 'true', 'false')"/>
-  <xsl:variable name="target" select="('section-anchor', 'reference-anchor')"/>  
+  <xsl:variable name="target" select="('section-anchor', 't-anchor', 'list-t-anchor', 'texttable-anchor', 'figure-anchor', 'reference-anchor')"/>  
   <xsl:template match="/">
     <rfc ipr="trust200902" docName="xref-tests" category="std" xml:lang="en">
       <front>
-        <title abbrev="xref">xref Test Cases</title>
+        <title>XML2RFC xref Test Cases</title>
         <author initials="E." surname="Wilde" fullname="Erik Wilde">
           <organization>UC Berkeley</organization>
           <address>
@@ -21,49 +21,76 @@
         </abstract>
       </front>
       <middle>
-        <section title="Tests">
-          <xsl:for-each select="$format">
-            <xsl:variable name="formatval" select="."/>
-            <xsl:for-each select="$pageno">
-              <xsl:variable name="pagenoval" select="."/>
-              <xsl:for-each select="$target">
-                <xsl:variable name="targetval" select="."/>
+        <section title="Tests" anchor="tests">
+          <t>This section contains test cases for &lt;xref/>, testing <xsl:value-of select="count($target)"/> different types of targets. Each target is tested for all possible values of the @format attribute, and for &lt;xref/> elements with and without content.</t>
+          <xsl:for-each select="$target">
+            <xsl:variable name="targetval" select="."/>
+            <section title="Tests for {$targetval}" anchor="{$targetval}-tests">
+              <xsl:for-each select="$format">
+                <xsl:variable name="formatval" select="."/>
                 <t>
                   <xsl:text>&lt;xref</xsl:text>
-                    <xsl:if test="$formatval ne ''">
-                      <xsl:text> format="</xsl:text>
-                      <xsl:value-of select="$formatval"/>
-                      <xsl:text>"</xsl:text>
-                    </xsl:if>
-                    <xsl:if test="$pagenoval ne ''">
-                      <xsl:text> pageno="</xsl:text>
-                      <xsl:value-of select="$pagenoval"/>
-                      <xsl:text>"</xsl:text>
-                    </xsl:if>
-                    <xsl:if test="$targetval ne ''">
-                      <xsl:text> target="</xsl:text>
-                      <xsl:value-of select="$targetval"/>
-                      <xsl:text>"</xsl:text>
-                    </xsl:if>
+                  <xsl:if test="$formatval ne ''">
+                    <xsl:text> format="</xsl:text>
+                    <xsl:value-of select="$formatval"/>
+                    <xsl:text>"</xsl:text>
+                  </xsl:if>
+                  <xsl:if test="$targetval ne ''">
+                    <xsl:text> target="</xsl:text>
+                    <xsl:value-of select="$targetval"/>
+                    <xsl:text>"</xsl:text>
+                  </xsl:if>
                   <xsl:text>/>: </xsl:text>
                   <xref>
                     <xsl:if test="$formatval ne ''">
                       <xsl:attribute name="format" select="$formatval"/>
-                    </xsl:if>
-                    <xsl:if test="$pagenoval ne ''">
-                      <xsl:attribute name="pageno" select="$pagenoval"/>
                     </xsl:if>
                     <xsl:if test="$targetval ne ''">
                       <xsl:attribute name="target" select="$targetval"/>
                     </xsl:if>
                   </xref>
                 </t>
+                <t>
+                  <xsl:text>&lt;xref</xsl:text>
+                  <xsl:if test="$formatval ne ''">
+                    <xsl:text> format="</xsl:text>
+                    <xsl:value-of select="$formatval"/>
+                    <xsl:text>"</xsl:text>
+                  </xsl:if>
+                  <xsl:if test="$targetval ne ''">
+                    <xsl:text> target="</xsl:text>
+                    <xsl:value-of select="$targetval"/>
+                    <xsl:text>"</xsl:text>
+                  </xsl:if>
+                  <xsl:text>>reference text&lt;/xref>: </xsl:text>
+                  <xref>
+                    <xsl:if test="$formatval ne ''">
+                      <xsl:attribute name="format" select="$formatval"/>
+                    </xsl:if>
+                    <xsl:if test="$targetval ne ''">
+                      <xsl:attribute name="target" select="$targetval"/>
+                    </xsl:if>
+                    <xsl:text>reference text</xsl:text>
+                  </xref>
+                </t>
               </xsl:for-each>
-            </xsl:for-each>
+            </section>
           </xsl:for-each>
         </section>
-        <section title="Test Target" anchor="section-anchor">
-          <t>Some text...</t>
+        <section title="Test Targets" anchor="section-anchor">
+          <t>This section contains a couple of markup constructs carrying anchors.</t>
+          <t anchor="t-anchor">Some regular paragraph text...</t>
+          <t>
+            <list>
+              <t anchor="list-t-anchor">Some paragraph in a list...</t>
+            </list>
+          </t>
+          <texttable anchor="texttable-anchor">
+            <ttcol>Some texttable text...</ttcol>
+          </texttable>
+          <figure anchor="figure-anchor">
+            <artwork>Some figure text...</artwork>
+          </figure>
         </section>
       </middle>
       <back>

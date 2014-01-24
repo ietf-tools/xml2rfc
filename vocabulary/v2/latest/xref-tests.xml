@@ -6,7 +6,7 @@
      category="std"
      xml:lang="en">
    <front>
-      <title abbrev="xref">xref Test Cases</title>
+      <title>XML2RFC xref Test Cases</title>
       <author initials="E." surname="Wilde" fullname="Erik Wilde">
          <organization>UC Berkeley</organization>
          <address>
@@ -20,70 +20,155 @@
       </abstract>
    </front>
    <middle>
-      <section title="Tests">
-         <t>&lt;xref target="section-anchor"/&gt;: <xref target="section-anchor"/>
-         </t>
-         <t>&lt;xref target="reference-anchor"/&gt;: <xref target="reference-anchor"/>
-         </t>
-         <t>&lt;xref pageno="true" target="section-anchor"/&gt;: <xref pageno="true" target="section-anchor"/>
-         </t>
-         <t>&lt;xref pageno="true" target="reference-anchor"/&gt;: <xref pageno="true" target="reference-anchor"/>
-         </t>
-         <t>&lt;xref pageno="false" target="section-anchor"/&gt;: <xref pageno="false" target="section-anchor"/>
-         </t>
-         <t>&lt;xref pageno="false" target="reference-anchor"/&gt;: <xref pageno="false" target="reference-anchor"/>
-         </t>
-         <t>&lt;xref format="counter" target="section-anchor"/&gt;: <xref format="counter" target="section-anchor"/>
-         </t>
-         <t>&lt;xref format="counter" target="reference-anchor"/&gt;: <xref format="counter" target="reference-anchor"/>
-         </t>
-         <t>&lt;xref format="counter" pageno="true" target="section-anchor"/&gt;: <xref format="counter" pageno="true" target="section-anchor"/>
-         </t>
-         <t>&lt;xref format="counter" pageno="true" target="reference-anchor"/&gt;: <xref format="counter" pageno="true" target="reference-anchor"/>
-         </t>
-         <t>&lt;xref format="counter" pageno="false" target="section-anchor"/&gt;: <xref format="counter" pageno="false" target="section-anchor"/>
-         </t>
-         <t>&lt;xref format="counter" pageno="false" target="reference-anchor"/&gt;: <xref format="counter" pageno="false" target="reference-anchor"/>
-         </t>
-         <t>&lt;xref format="title" target="section-anchor"/&gt;: <xref format="title" target="section-anchor"/>
-         </t>
-         <t>&lt;xref format="title" target="reference-anchor"/&gt;: <xref format="title" target="reference-anchor"/>
-         </t>
-         <t>&lt;xref format="title" pageno="true" target="section-anchor"/&gt;: <xref format="title" pageno="true" target="section-anchor"/>
-         </t>
-         <t>&lt;xref format="title" pageno="true" target="reference-anchor"/&gt;: <xref format="title" pageno="true" target="reference-anchor"/>
-         </t>
-         <t>&lt;xref format="title" pageno="false" target="section-anchor"/&gt;: <xref format="title" pageno="false" target="section-anchor"/>
-         </t>
-         <t>&lt;xref format="title" pageno="false" target="reference-anchor"/&gt;: <xref format="title" pageno="false" target="reference-anchor"/>
-         </t>
-         <t>&lt;xref format="none" target="section-anchor"/&gt;: <xref format="none" target="section-anchor"/>
-         </t>
-         <t>&lt;xref format="none" target="reference-anchor"/&gt;: <xref format="none" target="reference-anchor"/>
-         </t>
-         <t>&lt;xref format="none" pageno="true" target="section-anchor"/&gt;: <xref format="none" pageno="true" target="section-anchor"/>
-         </t>
-         <t>&lt;xref format="none" pageno="true" target="reference-anchor"/&gt;: <xref format="none" pageno="true" target="reference-anchor"/>
-         </t>
-         <t>&lt;xref format="none" pageno="false" target="section-anchor"/&gt;: <xref format="none" pageno="false" target="section-anchor"/>
-         </t>
-         <t>&lt;xref format="none" pageno="false" target="reference-anchor"/&gt;: <xref format="none" pageno="false" target="reference-anchor"/>
-         </t>
-         <t>&lt;xref format="default" target="section-anchor"/&gt;: <xref format="default" target="section-anchor"/>
-         </t>
-         <t>&lt;xref format="default" target="reference-anchor"/&gt;: <xref format="default" target="reference-anchor"/>
-         </t>
-         <t>&lt;xref format="default" pageno="true" target="section-anchor"/&gt;: <xref format="default" pageno="true" target="section-anchor"/>
-         </t>
-         <t>&lt;xref format="default" pageno="true" target="reference-anchor"/&gt;: <xref format="default" pageno="true" target="reference-anchor"/>
-         </t>
-         <t>&lt;xref format="default" pageno="false" target="section-anchor"/&gt;: <xref format="default" pageno="false" target="section-anchor"/>
-         </t>
-         <t>&lt;xref format="default" pageno="false" target="reference-anchor"/&gt;: <xref format="default" pageno="false" target="reference-anchor"/>
-         </t>
+      <section title="Tests" anchor="tests">
+         <t>This section contains test cases for &lt;xref/&gt;, testing 6 different types of targets. Each target is tested for all possible values of the @format attribute, and for &lt;xref/&gt; elements with and without content.</t>
+         <section title="Tests for section-anchor" anchor="section-anchor-tests">
+            <t>&lt;xref target="section-anchor"/&gt;: <xref target="section-anchor"/>
+            </t>
+            <t>&lt;xref target="section-anchor"&gt;reference text&lt;/xref&gt;: <xref target="section-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="counter" target="section-anchor"/&gt;: <xref format="counter" target="section-anchor"/>
+            </t>
+            <t>&lt;xref format="counter" target="section-anchor"&gt;reference text&lt;/xref&gt;: <xref format="counter" target="section-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="title" target="section-anchor"/&gt;: <xref format="title" target="section-anchor"/>
+            </t>
+            <t>&lt;xref format="title" target="section-anchor"&gt;reference text&lt;/xref&gt;: <xref format="title" target="section-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="none" target="section-anchor"/&gt;: <xref format="none" target="section-anchor"/>
+            </t>
+            <t>&lt;xref format="none" target="section-anchor"&gt;reference text&lt;/xref&gt;: <xref format="none" target="section-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="default" target="section-anchor"/&gt;: <xref format="default" target="section-anchor"/>
+            </t>
+            <t>&lt;xref format="default" target="section-anchor"&gt;reference text&lt;/xref&gt;: <xref format="default" target="section-anchor">reference text</xref>
+            </t>
+         </section>
+         <section title="Tests for t-anchor" anchor="t-anchor-tests">
+            <t>&lt;xref target="t-anchor"/&gt;: <xref target="t-anchor"/>
+            </t>
+            <t>&lt;xref target="t-anchor"&gt;reference text&lt;/xref&gt;: <xref target="t-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="counter" target="t-anchor"/&gt;: <xref format="counter" target="t-anchor"/>
+            </t>
+            <t>&lt;xref format="counter" target="t-anchor"&gt;reference text&lt;/xref&gt;: <xref format="counter" target="t-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="title" target="t-anchor"/&gt;: <xref format="title" target="t-anchor"/>
+            </t>
+            <t>&lt;xref format="title" target="t-anchor"&gt;reference text&lt;/xref&gt;: <xref format="title" target="t-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="none" target="t-anchor"/&gt;: <xref format="none" target="t-anchor"/>
+            </t>
+            <t>&lt;xref format="none" target="t-anchor"&gt;reference text&lt;/xref&gt;: <xref format="none" target="t-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="default" target="t-anchor"/&gt;: <xref format="default" target="t-anchor"/>
+            </t>
+            <t>&lt;xref format="default" target="t-anchor"&gt;reference text&lt;/xref&gt;: <xref format="default" target="t-anchor">reference text</xref>
+            </t>
+         </section>
+         <section title="Tests for list-t-anchor" anchor="list-t-anchor-tests">
+            <t>&lt;xref target="list-t-anchor"/&gt;: <xref target="list-t-anchor"/>
+            </t>
+            <t>&lt;xref target="list-t-anchor"&gt;reference text&lt;/xref&gt;: <xref target="list-t-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="counter" target="list-t-anchor"/&gt;: <xref format="counter" target="list-t-anchor"/>
+            </t>
+            <t>&lt;xref format="counter" target="list-t-anchor"&gt;reference text&lt;/xref&gt;: <xref format="counter" target="list-t-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="title" target="list-t-anchor"/&gt;: <xref format="title" target="list-t-anchor"/>
+            </t>
+            <t>&lt;xref format="title" target="list-t-anchor"&gt;reference text&lt;/xref&gt;: <xref format="title" target="list-t-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="none" target="list-t-anchor"/&gt;: <xref format="none" target="list-t-anchor"/>
+            </t>
+            <t>&lt;xref format="none" target="list-t-anchor"&gt;reference text&lt;/xref&gt;: <xref format="none" target="list-t-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="default" target="list-t-anchor"/&gt;: <xref format="default" target="list-t-anchor"/>
+            </t>
+            <t>&lt;xref format="default" target="list-t-anchor"&gt;reference text&lt;/xref&gt;: <xref format="default" target="list-t-anchor">reference text</xref>
+            </t>
+         </section>
+         <section title="Tests for texttable-anchor" anchor="texttable-anchor-tests">
+            <t>&lt;xref target="texttable-anchor"/&gt;: <xref target="texttable-anchor"/>
+            </t>
+            <t>&lt;xref target="texttable-anchor"&gt;reference text&lt;/xref&gt;: <xref target="texttable-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="counter" target="texttable-anchor"/&gt;: <xref format="counter" target="texttable-anchor"/>
+            </t>
+            <t>&lt;xref format="counter" target="texttable-anchor"&gt;reference text&lt;/xref&gt;: <xref format="counter" target="texttable-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="title" target="texttable-anchor"/&gt;: <xref format="title" target="texttable-anchor"/>
+            </t>
+            <t>&lt;xref format="title" target="texttable-anchor"&gt;reference text&lt;/xref&gt;: <xref format="title" target="texttable-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="none" target="texttable-anchor"/&gt;: <xref format="none" target="texttable-anchor"/>
+            </t>
+            <t>&lt;xref format="none" target="texttable-anchor"&gt;reference text&lt;/xref&gt;: <xref format="none" target="texttable-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="default" target="texttable-anchor"/&gt;: <xref format="default" target="texttable-anchor"/>
+            </t>
+            <t>&lt;xref format="default" target="texttable-anchor"&gt;reference text&lt;/xref&gt;: <xref format="default" target="texttable-anchor">reference text</xref>
+            </t>
+         </section>
+         <section title="Tests for figure-anchor" anchor="figure-anchor-tests">
+            <t>&lt;xref target="figure-anchor"/&gt;: <xref target="figure-anchor"/>
+            </t>
+            <t>&lt;xref target="figure-anchor"&gt;reference text&lt;/xref&gt;: <xref target="figure-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="counter" target="figure-anchor"/&gt;: <xref format="counter" target="figure-anchor"/>
+            </t>
+            <t>&lt;xref format="counter" target="figure-anchor"&gt;reference text&lt;/xref&gt;: <xref format="counter" target="figure-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="title" target="figure-anchor"/&gt;: <xref format="title" target="figure-anchor"/>
+            </t>
+            <t>&lt;xref format="title" target="figure-anchor"&gt;reference text&lt;/xref&gt;: <xref format="title" target="figure-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="none" target="figure-anchor"/&gt;: <xref format="none" target="figure-anchor"/>
+            </t>
+            <t>&lt;xref format="none" target="figure-anchor"&gt;reference text&lt;/xref&gt;: <xref format="none" target="figure-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="default" target="figure-anchor"/&gt;: <xref format="default" target="figure-anchor"/>
+            </t>
+            <t>&lt;xref format="default" target="figure-anchor"&gt;reference text&lt;/xref&gt;: <xref format="default" target="figure-anchor">reference text</xref>
+            </t>
+         </section>
+         <section title="Tests for reference-anchor" anchor="reference-anchor-tests">
+            <t>&lt;xref target="reference-anchor"/&gt;: <xref target="reference-anchor"/>
+            </t>
+            <t>&lt;xref target="reference-anchor"&gt;reference text&lt;/xref&gt;: <xref target="reference-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="counter" target="reference-anchor"/&gt;: <xref format="counter" target="reference-anchor"/>
+            </t>
+            <t>&lt;xref format="counter" target="reference-anchor"&gt;reference text&lt;/xref&gt;: <xref format="counter" target="reference-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="title" target="reference-anchor"/&gt;: <xref format="title" target="reference-anchor"/>
+            </t>
+            <t>&lt;xref format="title" target="reference-anchor"&gt;reference text&lt;/xref&gt;: <xref format="title" target="reference-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="none" target="reference-anchor"/&gt;: <xref format="none" target="reference-anchor"/>
+            </t>
+            <t>&lt;xref format="none" target="reference-anchor"&gt;reference text&lt;/xref&gt;: <xref format="none" target="reference-anchor">reference text</xref>
+            </t>
+            <t>&lt;xref format="default" target="reference-anchor"/&gt;: <xref format="default" target="reference-anchor"/>
+            </t>
+            <t>&lt;xref format="default" target="reference-anchor"&gt;reference text&lt;/xref&gt;: <xref format="default" target="reference-anchor">reference text</xref>
+            </t>
+         </section>
       </section>
-      <section title="Test Target" anchor="section-anchor">
-         <t>Some text...</t>
+      <section title="Test Targets" anchor="section-anchor">
+         <t>This section contains a couple of markup constructs carrying anchors.</t>
+         <t anchor="t-anchor">Some regular paragraph text...</t>
+         <t>
+            <list>
+               <t anchor="list-t-anchor">Some paragraph in a list...</t>
+            </list>
+         </t>
+         <texttable anchor="texttable-anchor">
+            <ttcol>Some texttable text...</ttcol>
+         </texttable>
+         <figure anchor="figure-anchor">
+            <artwork>Some figure text...</artwork>
+         </figure>
       </section>
    </middle>
    <back>
