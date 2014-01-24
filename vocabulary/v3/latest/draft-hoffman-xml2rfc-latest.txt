@@ -198,6 +198,8 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    o  Added the <b>, <i>, and <tt> elements.
 
+   o  In <front>, made <date> optional.
+
    o  In <postal>, allowed the sub-elements to be in any order.
 
    o  In <section>, added the optional "numbered" attribute.
@@ -216,8 +218,6 @@ Internet-Draft                  XML2RFCv3                   January 2014
    schema ([RNC]) contained in Appendix B (specified in Relax NG Compact
    Notation, "RNC").
 
-   Note that the schema can be used for automated validity checks, but
-
 
 
 Hoffman                   Expires July 28, 2014                 [Page 4]
@@ -225,6 +225,7 @@ Hoffman                   Expires July 28, 2014                 [Page 4]
 Internet-Draft                  XML2RFCv3                   January 2014
 
 
+   Note that the schema can be used for automated validity checks, but
    certain constraints are only described in prose (example: the
    conditionally required presence of the "abbrev" attribute).
 
@@ -269,7 +270,6 @@ Internet-Draft                  XML2RFCv3                   January 2014
    o  <email> elements (Section 2.15)
 
    o  <uri> elements (Section 2.44)
-
 
 
 
@@ -878,7 +878,7 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    2.  One or more <author> elements (Section 2.6)
 
-   3.  One <date> element (Section 2.14)
+   3.  One optional <date> element (Section 2.14)
 
    4.  Optional <area> elements (Section 2.4)
 
@@ -2280,7 +2280,7 @@ Internet-Draft                  XML2RFCv3                   January 2014
      }
    front =
      element front {
-       title, author+, date, area*, workgroup*, keyword*, abstract?,
+       title, author+, date?, area*, workgroup*, keyword*, abstract?,
    note*
      }
    title =

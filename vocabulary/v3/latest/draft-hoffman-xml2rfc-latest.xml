@@ -97,6 +97,10 @@
 </t>
 
 <t>
+  In  &lt;<x:ref>front</x:ref>&gt;, made &lt;<x:ref>date</x:ref>&gt; optional.
+</t>
+
+<t>
   In  &lt;<x:ref>postal</x:ref>&gt;, allowed the sub-elements to be in any order.
 </t>
 
@@ -922,9 +926,11 @@
             <iref item="Elements" subitem="author"/>
             <iref item="author element" subitem="inside front"/>One or more &lt;<x:ref>author</x:ref>&gt; elements (<xref target="element.author"/>)</t>
       
+        
          <t><!--AG-->
             <iref item="Elements" subitem="date"/>
-            <iref item="date element" subitem="inside front"/>One &lt;<x:ref>date</x:ref>&gt; element (<xref target="element.date"/>)</t>
+            <iref item="date element" subitem="inside front"/>One optional &lt;<x:ref>date</x:ref>&gt; element (<xref target="element.date"/>)</t>
+      
         
          <t><!--AG-->
             <iref item="Elements" subitem="area"/>
@@ -2685,7 +2691,7 @@ rfc =
   }
 front =
   element front {
-    title, author+, date, area*, workgroup*, keyword*, abstract?, 
+    title, author+, date?, area*, workgroup*, keyword*, abstract?, 
 note*
   }
 title =
