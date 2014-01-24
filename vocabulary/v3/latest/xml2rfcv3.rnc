@@ -102,7 +102,17 @@ t =
   element t {
     attribute anchor { xsd:ID }?,
     attribute hangText { text }?,
-    (text | \list | figure | xref | eref | iref | cref | vspace)*
+    (text
+     | \list
+     | figure
+     | xref
+     | eref
+     | iref
+     | cref
+     | const
+     | em
+     | ital
+     | vspace)*
   }
 \list =
   element list {
@@ -138,6 +148,9 @@ cref =
     attribute source { text }?,
     text
   }
+const = element const { text }
+em = element em { text }
+ital = element ital { text }
 vspace =
   element vspace {
     [ a:defaultValue = "0" ] attribute blankLines { text }?,
@@ -160,7 +173,10 @@ figure =
     artwork,
     postamble?
   }
-preamble = element preamble { (text | xref | eref | iref | cref)* }
+preamble =
+  element preamble {
+    (text | xref | eref | iref | cref | const | em | ital)*
+  }
 artwork =
   element artwork {
     [ a:defaultValue = "preserve" ]
@@ -175,7 +191,10 @@ artwork =
     [ a:defaultValue = "" ] attribute height { text }?,
     text*
   }
-postamble = element postamble { (text | xref | eref | iref | cref)* }
+postamble =
+  element postamble {
+    (text | xref | eref | iref | cref | const | em | ital)*
+  }
 texttable =
   element texttable {
     attribute anchor { xsd:ID }?,
@@ -198,7 +217,8 @@ ttcol =
     attribute align { "left" | "center" | "right" }?,
     text
   }
-c = element c { (text | xref | eref | iref | cref)* }
+c =
+  element c { (text | xref | eref | iref | cref | const | em | ital)* }
 back = element back { references*, section* }
 references =
   element references {
@@ -227,5 +247,8 @@ format =
     attribute octets { text }?,
     empty
   }
-annotation = element annotation { (text | xref | eref | iref | cref)* }
+annotation =
+  element annotation {
+    (text | xref | eref | iref | cref | const | em | ital)*
+  }
 start = rfc
