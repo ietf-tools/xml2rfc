@@ -1356,6 +1356,9 @@
    <t>
       Sub-sections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
    </t>
+   <t>
+      CHANGED IN V3: added optional "numbered" attribute.
+   </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>), &lt;<x:ref>middle</x:ref>&gt; (<xref target="element.middle"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.section.contents"><!--AG-->Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
@@ -1387,6 +1390,20 @@
       <iref item="anchor attribute" subitem="in section element"/>
       <t><!--AG-->
          <cref anchor="element.section.attribute.anchor.missing">attribute description missing</cref>
+      </t>
+   </section>
+   <section title="'numbered' attribute" anchor="element.section.attribute.numbered" toc="exclude">
+      <iref item="Attributes" subitem="numbered"/>
+      <iref item="section element" subitem="numbered attribute"/>
+      <iref item="numbered attribute" subitem="in section element"/>
+      <t>
+            Specifies whether the section is numbered. Processors only allow top-level sections to be unnumbered
+            at the end of parts; using numbered="no" anywhere else will cause an error.
+         </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"yes" (default)</t>
+            <t>"no"</t>
+         </list>
       </t>
    </section>
    <section title="'title' attribute (mandatory)" anchor="element.section.attribute.title" toc="exclude">
