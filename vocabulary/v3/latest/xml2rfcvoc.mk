@@ -1,14 +1,11 @@
 xml2rfc.all: \
-	draft-hoffman-xml2rfc-latest.xml xml2rfcv3-annotated.rng
+	draft-hoffman-xml2rfc-latest.xml xml2rfcv3-annotated.rng xml2rfcv3.dtd
 
-xml2rfcv1.rnc: xml2rfcv1.dtd trang.jar
-	java -jar trang.jar -i inline-attlist $< $@
+xml2rfcv3.rnc: xml2rfcv3.rng trang.jar
+	java -jar trang.jar $< $@
 
-xml2rfcv3.rnc: xml2rfcv3.dtd trang.jar
-	java -jar trang.jar -i inline-attlist $< $@
-
-xml2rfcv3.rng: xml2rfcv3.dtd trang.jar
-	java -jar trang.jar -i inline-attlist $< $@
+xml2rfcv3.dtd: xml2rfcv3.rng trang.jar
+	java -jar trang.jar $< $@
 
 xml2rfcv3-annotated.rng: xml2rfcv3.rng annotate-rng.xslt draft-hoffman-xml2rfc-latest.xml
 	saxon $< annotate-rng.xslt doc=draft-hoffman-xml2rfc-latest.xml > $@
@@ -25,6 +22,7 @@ draft-hoffman-xml2rfc-latest.xml: xml2rfcv3-spec.xml xml2rfcv3.rnc.folded
 
 trang.jar:	trang-20091111.zip
 	unzip -j trang-20091111.zip trang-20091111/trang.jar
+	touch trang.jar
 
 trang-20091111.zip:
 	wget http://jing-trang.googlecode.com/files/trang-20091111.zip || \

@@ -1,6 +1,7 @@
 all: \
 	draft-hoffman-xml2rfc-latest.html \
-	draft-hoffman-xml2rfc-latest.txt
+	draft-hoffman-xml2rfc-latest.txt \
+	xml2rfcv3.dtd
 
 TOOLS=../../tools/
 
