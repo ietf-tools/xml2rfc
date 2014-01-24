@@ -1409,9 +1409,6 @@
    <t>
       Sub-sections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
    </t>
-   <t>
-      CHANGED IN V3: added optional "numbered" attribute. 
-   </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>), &lt;<x:ref>middle</x:ref>&gt; (<xref target="element.middle"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.section.contents"><!--AG-->Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
@@ -1458,12 +1455,28 @@
       <iref item="Attributes" subitem="numbered"/>
       <iref item="section element" subitem="numbered attribute"/>
       <iref item="numbered attribute" subitem="in section element"/>
-      <t><!--AG-->
-         <cref anchor="element.section.attribute.numbered.missing">attribute description missing</cref>
+      <t>
+         If set to "no", this section does not get a section number. Processors will verify that such a
+         section is not followed by a numbered section in a part, and will verify that the section is a
+         top-level section.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"yes" (default)</t>
             <t>"no"</t>
+         </list>
+      </t>
+   </section>
+   <section title="'removeinrfc' attribute" anchor="element.section.attribute.removeinrfc" toc="exclude">
+      <iref item="Attributes" subitem="removeinrfc"/>
+      <iref item="section element" subitem="removeinrfc attribute"/>
+      <iref item="removeinrfc attribute" subitem="in section element"/>
+      <t>
+         If set to "yes", this section is marked in the processor with text indicating that it should be
+         removed before the document is published as an RFC.
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"yes"</t>
+            <t>"no" (default)</t>
          </list>
       </t>
    </section>
