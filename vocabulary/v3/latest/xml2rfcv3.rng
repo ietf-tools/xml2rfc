@@ -432,17 +432,47 @@
   </define>
   <define name="tt">
     <element name="tt">
-      <text/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="xref"/>
+          <ref name="eref"/>
+          <ref name="iref"/>
+          <ref name="cref"/>
+          <ref name="b"/>
+          <ref name="i"/>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="b">
     <element name="b">
-      <text/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="xref"/>
+          <ref name="eref"/>
+          <ref name="iref"/>
+          <ref name="cref"/>
+          <ref name="tt"/>
+          <ref name="i"/>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="i">
     <element name="i">
-      <text/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="xref"/>
+          <ref name="eref"/>
+          <ref name="iref"/>
+          <ref name="cref"/>
+          <ref name="b"/>
+          <ref name="tt"/>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="vspace">

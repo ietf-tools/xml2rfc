@@ -151,9 +151,9 @@ cref =
     attribute source { text }?,
     text
   }
-tt = element tt { text }
-b = element b { text }
-i = element i { text }
+tt = element tt { (text | xref | eref | iref | cref | b | i)* }
+b = element b { (text | xref | eref | iref | cref | tt | i)* }
+i = element i { (text | xref | eref | iref | cref | b | tt)* }
 vspace =
   element vspace {
     [ a:defaultValue = "0" ] attribute blankLines { text }?,
