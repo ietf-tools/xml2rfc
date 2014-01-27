@@ -955,6 +955,7 @@
             <iref item="Elements" subitem="author"/>
             <iref item="author element" subitem="inside front"/>One or more &lt;<x:ref>author</x:ref>&gt; elements (<xref target="element.author"/>)</t>
       
+        
          <t><!--AG-->
             <iref item="Elements" subitem="date"/>
             <iref item="date element" subitem="inside front"/>One optional &lt;<x:ref>date</x:ref>&gt; element (<xref target="element.date"/>)</t>
@@ -1939,6 +1940,22 @@
       <iref item="hangText attribute" subitem="in t element"/>
       <t><!--AG-->
          <cref anchor="element.t.attribute.hangText.missing">attribute description missing</cref>
+      </t>
+   </section>
+   <section title="'listContinue' attribute" anchor="element.t.attribute.listContinue" toc="exclude">
+      <iref item="Attributes" subitem="listContinue"/>
+      <iref item="t element" subitem="listContinue attribute"/>
+      <iref item="listContinue attribute" subitem="in t element"/>
+      <t>
+         If this paragraph is part of a list, if "listContinue" is set to "yes", the paragraph
+         will be considered part of the current list item. Processors will not add new bullets,
+         numbers, and so on to this paragraph. If a &lt;t&gt; item that is not part of a list
+         has "listContinue" is set to "yes", the processor will stop with an error.
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"yes"</t>
+            <t>"no" (default)</t>
+         </list>
       </t>
    </section>
 </section>
@@ -2963,6 +2980,8 @@ t =
   element t {
     attribute anchor { xsd:ID }?,
     attribute hangText { text }?,
+    [ a:defaultValue = "no" ] attribute listContinue { "yes" | "no" 
+}?,
     (text
      | \list
      | figure

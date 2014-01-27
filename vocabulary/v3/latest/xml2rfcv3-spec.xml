@@ -531,12 +531,12 @@
       "month" or "day" are left out, the processor will attempt to use the
       current system date if the attributes that are specified do match the system
       date.
-    </t>
+   </t>
    <t>
       Note that month names need to match the full (English) month name 
       ("January", "February", "March", "April", "May, "June", "July", "August",
       "September", "October", "November", or "December") in order for expiration
-      calculations to work  (some implementations might support additional
+      calculations to work (some implementations might support additional
       formats, though).
    </t>
    <t>
@@ -940,6 +940,11 @@
    <iref item="list element" primary="true"/>
    <t>
       Delineates a text list.
+   </t>
+   <t>
+      Each list item is represented by a &lt;<x:ref>t</x:ref>&gt; element.
+      The vocabulary currently does not directly support list items consisting
+      of multiple paragraphs; this will be added in a future update of the vocabulary.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.list.contents"><!--AG-->
@@ -1778,6 +1783,19 @@
       <iref item="hangText attribute" subitem="in t element"/>
       <t><!--AG-->
          <cref anchor="element.t.attribute.hangText.missing">attribute description missing</cref>
+      </t>
+   </section>
+   <section title="'listContinue' attribute" anchor="element.t.attribute.listContinue" toc="exclude">
+      <iref item="Attributes" subitem="listContinue"/>
+      <iref item="t element" subitem="listContinue attribute"/>
+      <iref item="listContinue attribute" subitem="in t element"/>
+      <t><!--AG-->
+         <cref anchor="element.t.attribute.listContinue.missing">attribute description missing</cref>
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"yes"</t>
+            <t>"no" (default)</t>
+         </list>
       </t>
    </section>
 </section>
