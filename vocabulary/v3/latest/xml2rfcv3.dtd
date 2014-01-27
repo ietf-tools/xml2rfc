@@ -79,7 +79,7 @@
 
 <!ELEMENT middle (section)+>
 
-<!ELEMENT section ((t|figure|texttable|xref|eref|iref|cref)*,section*)>
+<!ELEMENT section ((t|figure|texttable)*,section*)>
 <!ATTLIST section
   anchor ID #IMPLIED
   title CDATA #REQUIRED
@@ -165,7 +165,7 @@
   align (left|center|right) 'center'
   style (all|none|headers|full) 'full'>
 
-<!ELEMENT ttcol (#PCDATA)>
+<!ELEMENT ttcol (#PCDATA|xref|eref|iref|cref)*>
 <!ATTLIST ttcol
   width CDATA #IMPLIED
   align (left|center|right) 'left'>

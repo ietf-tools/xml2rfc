@@ -98,7 +98,7 @@ section =
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "no" ] attribute removeinrfc { "yes" | "no" }?,
-    (t | figure | texttable | xref | eref | iref | cref)*,
+    (t | figure | texttable)*,
     section*
   }
 t =
@@ -216,7 +216,7 @@ ttcol =
     attribute width { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
-    text
+    (xref | eref | iref | cref | text)*
   }
 c = element c { (text | xref | eref | iref | cref | tt | b | i)* }
 back = element back { references*, section* }

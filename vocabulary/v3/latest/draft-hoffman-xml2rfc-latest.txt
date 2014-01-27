@@ -116,10 +116,10 @@ Internet-Draft                  XML2RFCv3                   January 2014
      2.36. <section>  . . . . . . . . . . . . . . . . . . . . . . . . 28
      2.37. <seriesInfo> . . . . . . . . . . . . . . . . . . . . . . . 30
      2.38. <street> . . . . . . . . . . . . . . . . . . . . . . . . . 30
-     2.39. <t>  . . . . . . . . . . . . . . . . . . . . . . . . . . . 31
+     2.39. <t>  . . . . . . . . . . . . . . . . . . . . . . . . . . . 30
      2.40. <texttable>  . . . . . . . . . . . . . . . . . . . . . . . 32
      2.41. <title>  . . . . . . . . . . . . . . . . . . . . . . . . . 33
-     2.42. <tt> . . . . . . . . . . . . . . . . . . . . . . . . . . . 34
+     2.42. <tt> . . . . . . . . . . . . . . . . . . . . . . . . . . . 33
      2.43. <ttcol>  . . . . . . . . . . . . . . . . . . . . . . . . . 34
      2.44. <uri>  . . . . . . . . . . . . . . . . . . . . . . . . . . 35
      2.45. <vspace> . . . . . . . . . . . . . . . . . . . . . . . . . 35
@@ -658,8 +658,8 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.7), <c> (Section 2.9), <i> (Section 2.21), <postamble>
-   (Section 2.30), <preamble> (Section 2.31), <section> (Section 2.36),
-   <t> (Section 2.39), and <tt> (Section 2.42).
+   (Section 2.30), <preamble> (Section 2.31), <t> (Section 2.39), <tt>
+   (Section 2.42), and <ttcol> (Section 2.43).
 
    Content model: only text content.
 
@@ -756,8 +756,8 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.7), <c> (Section 2.9), <i> (Section 2.21), <postamble>
-   (Section 2.30), <preamble> (Section 2.31), <section> (Section 2.36),
-   <t> (Section 2.39), and <tt> (Section 2.42).
+   (Section 2.30), <preamble> (Section 2.31), <t> (Section 2.39), <tt>
+   (Section 2.42), and <ttcol> (Section 2.43).
 
    Content model: only text content.
 
@@ -982,8 +982,8 @@ Internet-Draft                  XML2RFCv3                   January 2014
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.7), <c> (Section 2.9), <figure> (Section 2.18), <i>
    (Section 2.21), <postamble> (Section 2.30), <preamble>
-   (Section 2.31), <section> (Section 2.36), <t> (Section 2.39), and
-   <tt> (Section 2.42).
+   (Section 2.31), <t> (Section 2.39), <tt> (Section 2.42), and <ttcol>
+   (Section 2.43).
 
    Content model: this element does not have any contents.
 
@@ -1571,14 +1571,6 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
        *  <texttable> elements (Section 2.40)
 
-       *  <xref> elements (Section 2.47)
-
-       *  <eref> elements (Section 2.16)
-
-       *  <iref> elements (Section 2.22)
-
-       *  <cref> elements (Section 2.13)
-
    2.  Optional <section> elements (Section 2.36)
 
 2.36.1.  'anchor' attribute
@@ -1615,16 +1607,6 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    The title of the section.
 
-
-
-
-
-
-Hoffman                   Expires July 31, 2014                [Page 29]
-
-Internet-Draft                  XML2RFCv3                   January 2014
-
-
 2.36.5.  'toc' attribute
 
    Determines whether the section is included in the Table Of Contents.
@@ -1634,6 +1616,14 @@ Internet-Draft                  XML2RFCv3                   January 2014
    Allowed values:
 
    o  "include"
+
+
+
+
+Hoffman                   Expires July 31, 2014                [Page 29]
+
+Internet-Draft                  XML2RFCv3                   January 2014
+
 
    o  "exclude"
 
@@ -1672,15 +1662,6 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    Content model: only text content.
 
-
-
-
-
-Hoffman                   Expires July 31, 2014                [Page 30]
-
-Internet-Draft                  XML2RFCv3                   January 2014
-
-
 2.39.  <t>
 
    Contains a paragraph of text.
@@ -1692,6 +1673,13 @@ Internet-Draft                  XML2RFCv3                   January 2014
    Content model:
 
    In any order:
+
+
+
+Hoffman                   Expires July 31, 2014                [Page 30]
+
+Internet-Draft                  XML2RFCv3                   January 2014
+
 
    o  Text
 
@@ -1729,14 +1717,6 @@ Internet-Draft                  XML2RFCv3                   January 2014
    If this paragraph is part of a list, if "listContinue" is set to
    "yes", the paragraph will be considered part of the current list
    item.  Processors will not add new bullets, numbers, and so on to
-
-
-
-Hoffman                   Expires July 31, 2014                [Page 31]
-
-Internet-Draft                  XML2RFCv3                   January 2014
-
-
    this paragraph.  If a <t> item that is not part of a list has
    "listContinue" is set to "yes", the processor will stop with an
    error.
@@ -1746,6 +1726,16 @@ Internet-Draft                  XML2RFCv3                   January 2014
    o  "yes"
 
    o  "no" (default)
+
+
+
+
+
+
+Hoffman                   Expires July 31, 2014                [Page 31]
+
+Internet-Draft                  XML2RFCv3                   January 2014
+
 
 2.40.  <texttable>
 
@@ -1784,15 +1774,6 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    o  "right"
 
-
-
-
-
-Hoffman                   Expires July 31, 2014                [Page 32]
-
-Internet-Draft                  XML2RFCv3                   January 2014
-
-
 2.40.2.  'anchor' attribute
 
    [[element.texttable.attribute.anchor.missing: attribute description
@@ -1804,6 +1785,13 @@ Internet-Draft                  XML2RFCv3                   January 2014
    missing]]
 
    Allowed values:
+
+
+
+Hoffman                   Expires July 31, 2014                [Page 32]
+
+Internet-Draft                  XML2RFCv3                   January 2014
+
 
    o  "all"
 
@@ -1842,13 +1830,6 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    Content model: only text content.
 
-
-
-Hoffman                   Expires July 31, 2014                [Page 33]
-
-Internet-Draft                  XML2RFCv3                   January 2014
-
-
 2.41.1.  'abbrev' attribute
 
    Specifies an abbreviated variant of the document title.
@@ -1860,6 +1841,13 @@ Internet-Draft                  XML2RFCv3                   January 2014
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.7), <c> (Section 2.9), <i> (Section 2.21), <postamble>
    (Section 2.30), <preamble> (Section 2.31), and <t> (Section 2.39).
+
+
+
+Hoffman                   Expires July 31, 2014                [Page 33]
+
+Internet-Draft                  XML2RFCv3                   January 2014
+
 
    Content model:
 
@@ -1885,7 +1873,19 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    This element appears as child element of: <texttable> (Section 2.40).
 
-   Content model: only text content.
+   Content model:
+
+   In any order:
+
+   o  <xref> elements (Section 2.47)
+
+   o  <eref> elements (Section 2.16)
+
+   o  <iref> elements (Section 2.22)
+
+   o  <cref> elements (Section 2.13)
+
+   o  Text
 
 2.43.1.  'align' attribute
 
@@ -1967,8 +1967,8 @@ Internet-Draft                  XML2RFCv3                   January 2014
 
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.7), <c> (Section 2.9), <i> (Section 2.21), <postamble>
-   (Section 2.30), <preamble> (Section 2.31), <section> (Section 2.36),
-   <t> (Section 2.39), and <tt> (Section 2.42).
+   (Section 2.30), <preamble> (Section 2.31), <t> (Section 2.39), <tt>
+   (Section 2.42), and <ttcol> (Section 2.43).
 
    Content model: only text content.
 
@@ -2541,7 +2541,7 @@ Internet-Draft                  XML2RFCv3                   January 2014
        attribute toc { "include" | "exclude" | "default" }?,
        [ a:defaultValue = "no" ] attribute removeinrfc { "yes" | "no"
    }?,
-       (t | figure | texttable | xref | eref | iref | cref)*,
+       (t | figure | texttable)*,
        section*
      }
    t =
@@ -2679,7 +2679,7 @@ Internet-Draft                  XML2RFCv3                   January 2014
        attribute width { text }?,
        [ a:defaultValue = "left" ]
        attribute align { "left" | "center" | "right" }?,
-       text
+       (xref | eref | iref | cref | text)*
      }
 
 
@@ -2730,7 +2730,7 @@ Index
    A
       abbrev attribute
          in organization element  22
-         in title element  34
+         in title element  33
       abstract element  5
          inside front  17
       address element  5
@@ -2757,7 +2757,7 @@ Internet-Draft                  XML2RFCv3                   January 2014
          in reference element  24
          in section element  29
          in t element  31
-         in texttable element  33
+         in texttable element  32
       annotation element  6
          inside reference  24
       application/rfc+xml Media Type  37
@@ -2775,10 +2775,10 @@ Internet-Draft                  XML2RFCv3                   January 2014
          xml:lang attribute  9
          xml:space attribute  9
       Attributes
-         abbrev  22, 34
+         abbrev  22, 33
          align  7, 15, 32, 34
          alt  8, 15
-         anchor  13, 15, 24, 29, 31, 33
+         anchor  13, 15, 24, 29, 31-32
          blankLines  35
          category  25
          consensus  26
@@ -2816,14 +2816,14 @@ Internet-Draft                  XML2RFCv3                   January 2014
          seriesNo  27
          source  13
          src  8, 16
-         style  20, 33
+         style  20, 32
          subitem  19
          submissionType  28
          suppress-title  16, 33
          surname  10
          target  14, 16, 24, 36
          title  16, 21, 25, 29, 33
-         toc  30
+         toc  29
          type  8, 17
          updates  28
          value  30
@@ -2884,9 +2884,9 @@ Internet-Draft                  XML2RFCv3                   January 2014
          inside i  18
          inside postamble  23
          inside preamble  23
-         inside section  29
          inside t  31
          inside tt  34
+         inside ttcol  34
          source attribute  13
 
    D
@@ -2922,16 +2922,16 @@ Internet-Draft                  XML2RFCv3                   January 2014
          city  12, 22
          code  12, 22
          country  12, 22
-         cref  6, 11-12, 18, 23, 29, 31, 34
+         cref  6, 11-12, 18, 23, 31, 34
          date  13, 17
          email  6, 14
-         eref  6, 11, 14, 18, 23, 29, 31, 34
+         eref  6, 11, 14, 18, 23, 31, 34
          facsimile  5, 14
          figure  15, 28, 31
          format  16, 24
          front  17, 24-25
          i  6, 11-12, 17, 23-24, 31, 34
-         iref  6, 11, 15, 18, 23, 29, 31, 34
+         iref  6, 11, 15, 18, 23, 31, 34
          keyword  17, 19
          list  19, 31
          middle  21, 25
@@ -2948,15 +2948,15 @@ Internet-Draft                  XML2RFCv3                   January 2014
          section  11, 21, 28-29
          seriesInfo  24, 30
          street  22, 30
-         t  5, 19, 21, 28, 31
+         t  5, 19, 21, 28, 30
          texttable  29, 32
          title  17, 33
-         tt  6, 11-12, 18, 23-24, 31, 34
+         tt  6, 11-12, 18, 23-24, 31, 33
          ttcol  32, 34
          uri  6, 35
          vspace  31, 35
          workgroup  17, 35
-         xref  6, 11, 18, 23, 29, 31, 34, 36
+         xref  6, 11, 18, 23, 31, 34, 36
       email element  14
          inside address  6
       eref element  14
@@ -2974,9 +2974,9 @@ Internet-Draft                  XML2RFCv3                   January 2014
          inside i  18
          inside postamble  23
          inside preamble  23
-         inside section  29
          inside t  31
          inside tt  34
+         inside ttcol  34
          target attribute  14
 
    F
@@ -3055,9 +3055,9 @@ Internet-Draft                  XML2RFCv3                   January 2014
          inside i  18
          inside postamble  23
          inside preamble  23
-         inside section  29
          inside t  31
          inside tt  34
+         inside ttcol  34
          item attribute  18
          primary attribute  18
          subitem attribute  19
@@ -3181,7 +3181,7 @@ Internet-Draft                  XML2RFCv3                   January 2014
          numbered attribute  29
          removeinrfc attribute  29
          title attribute  29
-         toc attribute  30
+         toc attribute  29
       seriesInfo element  30
          inside reference  24
          name attribute  30
@@ -3205,7 +3205,7 @@ Internet-Draft                  XML2RFCv3                   January 2014
          inside postal  22
       style attribute
          in list element  20
-         in texttable element  33
+         in texttable element  32
       subitem attribute
          in iref element  19
       submissionType attribute
@@ -3217,7 +3217,7 @@ Internet-Draft                  XML2RFCv3                   January 2014
          in author element  10
 
    T
-      t element  31
+      t element  30
          anchor attribute  31
          hangText attribute  31
          inside abstract  5
@@ -3232,9 +3232,9 @@ Internet-Draft                  XML2RFCv3                   January 2014
          in xref element  36
       texttable element  32
          align attribute  32
-         anchor attribute  33
+         anchor attribute  32
          inside section  29
-         style attribute  33
+         style attribute  32
          suppress-title attribute  33
          title attribute  33
       title attribute
@@ -3252,11 +3252,11 @@ Internet-Draft                  XML2RFCv3                   January 2014
          in section element  29
          in texttable element  33
       title element  33
-         abbrev attribute  34
+         abbrev attribute  33
          inside front  17
       toc attribute
-         in section element  30
-      tt element  34
+         in section element  29
+      tt element  33
          inside annotation  6
          inside b  11
          inside c  12
@@ -3316,9 +3316,9 @@ Internet-Draft                  XML2RFCv3                   January 2014
          inside i  18
          inside postamble  23
          inside preamble  23
-         inside section  29
          inside t  31
          inside tt  34
+         inside ttcol  34
          pageno attribute  36
          target attribute  36
 
