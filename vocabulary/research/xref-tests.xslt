@@ -3,7 +3,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
   <xsl:output method="xml" doctype-system="rfc2629.dtd" exclude-result-prefixes="xsl" indent="yes"/>
   <xsl:variable name="format" select="('', 'counter', 'title', 'none', 'default')"/>
-  <xsl:variable name="target" select="('section-anchor', 't-anchor', 'list-t-anchor', 'texttable-anchor', 'figure-anchor', 'reference-anchor')"/>  
+  <xsl:variable name="target" select="('section-anchor', 't-anchor', 'list-t-anchor-empty', 'list-t-anchor-numbers', 'list-t-anchor-letters', 'texttable-anchor', 'figure-anchor', 'reference-anchor', 'cref-anchor')"/>  
   <xsl:template match="/">
     <rfc ipr="trust200902" docName="xref-tests" category="std" xml:lang="en">
       <front>
@@ -62,7 +62,7 @@
                     <xsl:value-of select="$targetval"/>
                     <xsl:text>"</xsl:text>
                   </xsl:if>
-                  <xsl:text>>reference text&lt;/xref>: </xsl:text>
+                  <xsl:text>>TEXT-CONTENT&lt;/xref>: </xsl:text>
                   <xref>
                     <xsl:if test="$formatval ne ''">
                       <xsl:attribute name="format" select="$formatval"/>
@@ -70,7 +70,7 @@
                     <xsl:if test="$targetval ne ''">
                       <xsl:attribute name="target" select="$targetval"/>
                     </xsl:if>
-                    <xsl:text>reference text</xsl:text>
+                    <xsl:text>TEXT-CONTENT</xsl:text>
                   </xref>
                 </t>
               </xsl:for-each>
@@ -78,19 +78,32 @@
           </xsl:for-each>
         </section>
         <section title="Test Targets" anchor="section-anchor">
-          <t>This section contains a couple of markup constructs carrying anchors.</t>
-          <t anchor="t-anchor">Some regular paragraph text...</t>
+          <t>This section contains a couple of markup constructs carrying anchors (this is paragraph 1).</t>
+          <t anchor="t-anchor">Some regular paragraph text... (this is paragraph 2)</t>
           <t>
             <list>
-              <t anchor="list-t-anchor">Some paragraph in a list...</t>
+              <t anchor="list-t-anchor-empty">Some paragraph in a list... (this is list item 1 in a default style list)</t>
             </list>
           </t>
-          <texttable anchor="texttable-anchor">
+          <t>
+            <list style="numbers">
+              <t anchor="list-t-anchor-numbers">Some paragraph in a list... (this is list item 1 in a "numbers" style list)</t>
+            </list>
+          </t>
+          <t>
+            <list style="letters">
+              <t anchor="list-t-anchor-letters">Some paragraph in a list... (this is list item 1 in a "letters" style list)</t>
+            </list>
+          </t>
+          <texttable anchor="texttable-anchor" title="TEXTTABLE-TITLE">
             <ttcol>Some texttable text...</ttcol>
           </texttable>
-          <figure anchor="figure-anchor">
+          <figure anchor="figure-anchor" title="FIGURE-TITLE">
             <artwork>Some figure text...</artwork>
           </figure>
+          <t>
+            <cref anchor="cref-anchor">A comment.</cref>
+          </t>
         </section>
       </middle>
       <back>
