@@ -883,7 +883,7 @@
 </artwork>
       <postamble>will produce an index entry for "Grammar, item".</postamble>
    </figure>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.iref.contents"><!--AG-->Content model: this element does not have any contents.</t>
    <section title="'item' attribute (mandatory)" anchor="element.iref.attribute.item" toc="exclude">
       <iref item="Attributes" subitem="item"/>
@@ -944,7 +944,8 @@
    <t>
       Each list item is represented by a &lt;<x:ref>t</x:ref>&gt; element.
       The vocabulary currently does not directly support list items consisting
-      of multiple paragraphs; this will be added in a future update of the vocabulary.
+      of multiple paragraphs; if this is needed, &lt;<x:ref>vspace</x:ref>&gt;
+      (<xref target="element.vspace"/>) can be used as workaround.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.list.contents"><!--AG-->
@@ -973,8 +974,15 @@
       <iref item="Attributes" subitem="hangIndent"/>
       <iref item="list element" subitem="hangIndent attribute"/>
       <iref item="hangIndent attribute" subitem="in list element"/>
-      <t><!--AG-->
-         <cref anchor="element.list.attribute.hangIndent.missing">attribute description missing</cref>
+      <t>
+        For list styles with potentially wide labels, this attribute can
+        override the default indentation level, measured in characters.
+      </t>
+      <t>
+        Note that it only affects style with variable-width labels
+        ("format..." and "hanging", see below), and it may not affect formats
+        in which the list item text appears <spanx>below</spanx> the
+        label.
       </t>
    </section>
    <section title="'style' attribute" anchor="element.list.attribute.style" toc="exclude">
@@ -1186,10 +1194,10 @@
    <iref item="postal element" primary="true"/>
    <t>
       Contains optional child elements providing postal information. These elements will be
-      displayed in an order that is processor-specific. If the &lt;postal&gt; element also
-      contains free text, that text appears before any of the child elements. Processors will
-      maintain horizontal whitespace and line breaks in the optional free text. In general, a
-      postal address should probably contain only child elements or free text, but not both.
+      displayed in an order that is processor-specific. Thus, a
+      postal address should probably contain only a set of &lt;<x:ref>street</x:ref>&gt;, &lt;<x:ref>city</x:ref>&gt;,
+      &lt;<x:ref>region</x:ref>&gt;, &lt;<x:ref>code</x:ref>&gt;, and &lt;<x:ref>country</x:ref>&gt;
+      elements, or only a single &lt;<x:ref>postalbody</x:ref>&gt; element, but not both.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.postal.contents"><!--AG-->
@@ -1221,8 +1229,11 @@
    <x:anchor-alias value="postalbody"/>
    <iref item="Elements" subitem="postalbody" primary="true"/>
    <iref item="postalbody element" primary="true"/>
-   <t><!--AG-->
-      <cref anchor="element.postalbody.missing">element description missing</cref>
+   <t>
+      A method for presenting a postal address without using &lt;<x:ref>street</x:ref>&gt;, &lt;<x:ref>city</x:ref>&gt;,
+      &lt;<x:ref>region</x:ref>&gt;, &lt;<x:ref>code</x:ref>&gt;, and &lt;<x:ref>country</x:ref>&gt;
+      elements. Processors will
+      maintain horizontal whitespace and line breaks in the text of the &lt;<x:ref>postalbody</x:ref>&gt; element. 
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.postalbody.contents"><!--AG-->Content model: only text content.</t>
@@ -1610,6 +1621,9 @@
                <t><!--AG-->
                   <iref item="Elements" subitem="texttable"/>
                   <iref item="texttable element" subitem="inside section"/>&lt;<x:ref>texttable</x:ref>&gt; elements (<xref target="element.texttable"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="iref"/>
+                  <iref item="iref element" subitem="inside section"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
             </list>
          </t>
         
@@ -1788,22 +1802,6 @@
       <iref item="hangText attribute" subitem="in t element"/>
       <t><!--AG-->
          <cref anchor="element.t.attribute.hangText.missing">attribute description missing</cref>
-      </t>
-   </section>
-   <section title="'listContinue' attribute" anchor="element.t.attribute.listContinue" toc="exclude">
-      <iref item="Attributes" subitem="listContinue"/>
-      <iref item="t element" subitem="listContinue attribute"/>
-      <iref item="listContinue attribute" subitem="in t element"/>
-      <t>
-         If this paragraph is part of a list, if "listContinue" is set to "yes", the paragraph
-         will be considered part of the current list item. Processors will not add new bullets,
-         numbers, and so on to this paragraph. If a &lt;t&gt; item that is not part of a list
-         has "listContinue" is set to "yes", the processor will stop with an error.
-      </t>
-      <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"yes"</t>
-            <t>"no" (default)</t>
-         </list>
       </t>
    </section>
 </section>

@@ -81,7 +81,7 @@
 
 <!ELEMENT middle (section)+>
 
-<!ELEMENT section ((t|figure|texttable)*,section*)>
+<!ELEMENT section ((t|figure|texttable|iref)*,section*)>
 <!ATTLIST section
   anchor ID #IMPLIED
   title CDATA #REQUIRED
@@ -92,8 +92,7 @@
 <!ELEMENT t (#PCDATA|list|figure|xref|eref|iref|cref|tt|b|i|vspace)*>
 <!ATTLIST t
   anchor ID #IMPLIED
-  hangText CDATA #IMPLIED
-  listContinue (yes|no) 'no'>
+  hangText CDATA #IMPLIED>
 
 <!ELEMENT list (t)+>
 <!ATTLIST list

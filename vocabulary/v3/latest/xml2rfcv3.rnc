@@ -102,14 +102,13 @@ section =
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "no" ] attribute removeinrfc { "yes" | "no" }?,
-    (t | figure | texttable)*,
+    (t | figure | texttable | iref)*,
     section*
   }
 t =
   element t {
     attribute anchor { xsd:ID }?,
     attribute hangText { text }?,
-    [ a:defaultValue = "no" ] attribute listContinue { "yes" | "no" }?,
     (text
      | \list
      | figure
