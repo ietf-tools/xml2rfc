@@ -114,7 +114,7 @@
       This element allows the inclusion of "artwork" into the document.
    </t>
    <t>
-      &lt;artwork&gt; is the only element in the vocabulary that provides
+      &lt;artwork&gt; provides
       full control of horizontal whitespace and line breaks, and thus is
       used for a variety of things, such as:
       <list style="symbols">
@@ -1185,7 +1185,11 @@
    <iref item="Elements" subitem="postal" primary="true"/>
    <iref item="postal element" primary="true"/>
    <t>
-      Contains child elements providing postal information.
+      Contains optional child elements providing postal information. These elements will be
+      displayed in an order that is processor-specific. If the &lt;postal&gt; element also
+      contains free text, that text appears before any of the child elements. Processors will
+      maintain horizontal whitespace and line breaks in the optional free text. In general, a
+      postal address should probably contain only child elements or free text, but not both.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.postal.contents"><!--AG-->
@@ -1207,9 +1211,21 @@
          <t><!--AG-->
             <iref item="Elements" subitem="country"/>
             <iref item="country element" subitem="inside postal"/>&lt;<x:ref>country</x:ref>&gt; elements (<xref target="element.country"/>)</t>
-         <t><!--AG-->Text</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="postalbody"/>
+            <iref item="postalbody element" subitem="inside postal"/>&lt;<x:ref>postalbody</x:ref>&gt; elements (<xref target="element.postalbody"/>)</t>
       </list>
    </t>
+</section>
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;postalbody&gt;" anchor="element.postalbody">
+   <x:anchor-alias value="postalbody"/>
+   <iref item="Elements" subitem="postalbody" primary="true"/>
+   <iref item="postalbody element" primary="true"/>
+   <t><!--AG-->
+      <cref anchor="element.postalbody.missing">element description missing</cref>
+   </t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
+   <t anchor="element.postalbody.contents"><!--AG-->Content model: only text content.</t>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;postamble&gt;" anchor="element.postamble">
    <x:anchor-alias value="postamble"/>

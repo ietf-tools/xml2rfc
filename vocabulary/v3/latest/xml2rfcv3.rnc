@@ -64,12 +64,15 @@ organization =
 address =
   element address { (postal | phone | facsimile | email | uri)* }
 postal =
-  element postal { (street | city | region | code | country | text)* }
+  element postal {
+    (street | city | region | code | country | postalbody)*
+  }
 street = element street { text }
 city = element city { text }
 region = element region { text }
 code = element code { text }
 country = element country { text }
+postalbody = element postalbody { text }
 phone = element phone { text }
 facsimile = element facsimile { text }
 email = element email { text }

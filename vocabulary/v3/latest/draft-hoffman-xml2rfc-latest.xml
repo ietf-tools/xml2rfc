@@ -80,7 +80,9 @@
 <section title="Differences from v2 to v3" anchor="differences.from.v2.to.v3">
 <t>
   The following is a hopefully-complete list of all the technical changes between <xref target="XML2RFCv2"/>
-  and this document.
+  and this document. Note that the list is for the current version of this document only. There are *many*
+  additional changes that are expected to the v3 vocabulary that are being discussed. Also note that
+  changes to the design choices for the differences are also expected.
 
 <list style="symbols">
 
@@ -93,7 +95,7 @@
 </t>
 
 <t>
-  Added the &lt;b&gt;, &lt;i&gt;, and &lt;tt&gt; elements.
+  Added the &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;, and &lt;<x:ref>tt</x:ref>&gt; elements.
 </t>
 
 <t>
@@ -102,7 +104,11 @@
 
 <t>
   In  &lt;<x:ref>postal</x:ref>&gt;, allowed the sub-elements to be in any order. Also allowed the inclusion
-  of free text that will be the beginning of the address.
+  of &lt;<x:ref>postalbody</x:ref>&gt;.
+</t>
+
+<t>
+  Added &lt;<x:ref>postalbody</x:ref>&gt;, free text that represents the address.
 </t>
 
 <t>
@@ -121,10 +127,6 @@
 <t>
   In  &lt;<x:ref>ttcol</x:ref>&gt;, added &lt;<x:ref>xref</x:ref>&gt;, &lt;<x:ref>eref</x:ref>&gt;, &lt;<x:ref>iref</x:ref>&gt;,
   and &lt;<x:ref>cref</x:ref>&gt; as optional children.
-</t>
-
-<t>
-  [[ MORE WILL GO HERE ]]
 </t>
 
 </list>
@@ -1349,10 +1351,10 @@
    <iref item="postal element" primary="true"/>
    <t>
       Contains optional child elements providing postal information. These elements will be
-      displayed in an order that is processor-specific. If the &lt;postal&gt; element also
-      contains free text, that text appears before any of the child elements. Processors will
-      maintain horizontal whitespace and line breaks in the optional free text. In general, a
-      postal address should probably contain only child elements or free text, but not both.
+      displayed in an order that is processor-specific. Thus, a
+      postal address should probably contain only a set of &lt;<x:ref>street</x:ref>&gt;, &lt;<x:ref>city</x:ref>&gt;,
+      &lt;<x:ref>region</x:ref>&gt;, &lt;<x:ref>code</x:ref>&gt;, and &lt;<x:ref>country</x:ref>&gt;
+      elements, or only a single &lt;<x:ref>postalbody</x:ref>&gt; element, but not both.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.postal.contents"><!--AG-->
@@ -1374,9 +1376,24 @@
          <t><!--AG-->
             <iref item="Elements" subitem="country"/>
             <iref item="country element" subitem="inside postal"/>&lt;<x:ref>country</x:ref>&gt; elements (<xref target="element.country"/>)</t>
-         <t><!--AG-->Text</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="postalbody"/>
+            <iref item="postalbody element" subitem="inside postal"/>&lt;<x:ref>postalbody</x:ref>&gt; elements (<xref target="element.postalbody"/>)</t>
       </list>
    </t>
+</section>
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;postalbody&gt;" anchor="element.postalbody">
+   <x:anchor-alias value="postalbody"/>
+   <iref item="Elements" subitem="postalbody" primary="true"/>
+   <iref item="postalbody element" primary="true"/>
+   <t>
+      A method for presenting a postal address without using &lt;<x:ref>street</x:ref>&gt;, &lt;<x:ref>city</x:ref>&gt;,
+      &lt;<x:ref>region</x:ref>&gt;, &lt;<x:ref>code</x:ref>&gt;, and &lt;<x:ref>country</x:ref>&gt;
+      elements. Processors will
+      maintain horizontal whitespace and line breaks in the text of the &lt;<x:ref>postalbody</x:ref>&gt; element. 
+   </t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
+   <t anchor="element.postalbody.contents"><!--AG-->Content model: only text content.</t>
 </section>
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;postamble&gt;" anchor="element.postamble">
    <x:anchor-alias value="postamble"/>
@@ -2954,13 +2971,15 @@ organization =
 address =
   element address { (postal | phone | facsimile | email | uri)* }
 postal =
-  element postal { (street | city | region | code | country | text)* 
-}
+  element postal {
+    (street | city | region | code | country | postalbody)*
+  }
 street = element street { text }
 city = element city { text }
 region = element region { text }
 code = element code { text }
 country = element country { text }
+postalbody = element postalbody { text }
 phone = element phone { text }
 facsimile = element facsimile { text }
 email = element email { text }
