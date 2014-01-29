@@ -26,6 +26,8 @@
 
 <xsl:template match="rng:element">
 <xsl:variable name="anchor" select="concat('element.',@name)"/>
+<xsl:text>&#10;&#10;</xsl:text>
+<xsl:comment><xsl:value-of select="@name"/></xsl:comment>
 <section title="&lt;{@name}&gt;" anchor="{$anchor}">
   <x:anchor-alias value="{@name}"/>
   <iref item="Elements" subitem="{@name}" primary="true"/>
