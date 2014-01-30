@@ -138,6 +138,9 @@
     <xsl:if test="not(parent::rng:optional)"> (mandatory)</xsl:if>
   </xsl:variable>
   
+  <xsl:text>&#10;&#10;</xsl:text>
+  <xsl:text>   </xsl:text>
+  <xsl:comment><xsl:value-of select="$elem/@name"/>/@<xsl:value-of select="@name"/></xsl:comment>
   <section title="'{@name}' attribute{$pf}" anchor="{$anchor}" toc="exclude">
     <iref item="Attributes" subitem="{@name}"/>
     <iref item="{$elem/@name} element" subitem="{@name} attribute"/>
