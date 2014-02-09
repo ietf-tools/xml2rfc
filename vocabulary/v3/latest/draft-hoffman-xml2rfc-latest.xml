@@ -127,6 +127,65 @@
 
 </t>
 
+<section title="Design for Changes in List Handling">
+
+<t>This section describes one of the larger changes in the design of v3, namely the way lists are handled.</t>
+
+<!-- ##########################################################################
+
+1) List items can have more than one paragraph without triggering another list label.
+
+2) Lists should be block elements, not inline (flow) elements. They should be usable outside <t>.
+
+3) Give more control over the labels for "style" of "letters", "numbers", or "symbols". Make more explicit the rules for nested lists that use the defaults for a "style".
+
+4) Make hanging lists more like other list styles.
+
+5) Make a real "dictionary" style, with the definition starting on a new line.
+
+6) Don't mix label style with content (the "format" attribute).
+
+7) Create a new mechanism to cause a paragraph to be indented, without using <list style="empty">.
+
+
+Proposal:
+
+<list> is changed to have each list item is represented by a <li> element. The content model for <li> is the same as that of <annotation> with the addtion of <t>, namely: text, <b>, <cref>, <eref>, <i>, <iref>, <t>, <tt>, and <xref>. Inside of an <li> element, a <t> elements causes a break but without triggering another label. The <li> element has optional attributes only where needed.
+
+<list> no longer needs to be inside of <t>, and can appear in the other contexts where a list might be expected.
+
+<list> has a new optional "anchor" attribute so that a list can be referenced from other places in the text.
+
+For the "style" attributes in <list>:
+- For "letters", "numbers", and "symbols", there is an optional "format" attribute that matches the current one for formatting the label. There will be a clear set of defaults for each of these given in the spec.
+- For "hanging", the <li> element has an optional attribute of "hangText".
+- Add a new style of "dictionary", the <li> element has an optional attribute of "definition".
+- Remove the "empty" style (to be replaced by a new <blockquote> entity).
+
+###############################################################-->
+
+</section>
+
+<section title="Design for Changes in Reference Handling">
+
+<t>This section describes one of the larger changes in the design of v3, namely the additions to make using references easier.</t>
+
+<!-- ##########################################################################
+
+Most references in most recent RFCs are just to RFCs; sometimes they are Internet Drafts as work-in-progress; much less often they are pointers to standards of other SDOs, research articles, or just plain URLs. There have been many complaints about how difficult it is for people who don't have strong XML skills to use references when making Internet Drafts.
+
+The two popular methods now for references to RFCs are entering the whole reference by hand (hopefully getting all the fiddly bits of <front> and <seriesinfo> correct), or using XML entities that call out the xml.resource.org. Both have their faults. The first requires good copying skills and sometimes causes difficult XML errors; the second prevents you from changing the anchor name and also requires that you be online when you run the xml2rfc processor.
+
+The <reference> element can take another optional attribute: "rfc", "fyi", "id" "bcp", or "std". Each takes a string that is a number. If "bcp" or "std" are given, an additional mandatory "expanded" attribute can be given: it is a comma-separated list of numbers. At the same time, the contents of <reference> goes from requiring <front> to making <front> optional.
+
+The processor would need to make sure that exactly zero or one of "rfc", "fyi", "id" "bcp", or "std" is given. It would also have to do a sanity check on the "expanded" list to see if that list matches the present or a previous set of values for the BCP or STD. It would then emit the properly-formatted output for the reference in the non-canonical display formats.
+
+Also do "3GPP", "ANSI", "CCITT", "FIPS", "IANA", "IEEE", "ISO", "ITU", "NIST", "OASIS", "PKCS", and "W3C".
+
+###############################################################-->
+
+</section>
+
 </section>
 
 <section title="Syntax Notation" anchor="syntax.notation">
