@@ -318,6 +318,7 @@
       <zeroOrMore>
         <choice>
           <ref name="t"/>
+          <ref name="list"/>
           <ref name="figure"/>
           <ref name="texttable"/>
           <ref name="iref"/>
@@ -334,9 +335,6 @@
         <attribute name="anchor">
           <data type="ID"/>
         </attribute>
-      </optional>
-      <optional>
-        <attribute name="hangText"/>
       </optional>
       <zeroOrMore>
         <choice>
@@ -358,17 +356,44 @@
   <define name="list">
     <element name="list">
       <optional>
-        <attribute name="style"/>
-      </optional>
-      <optional>
-        <attribute name="hangIndent"/>
+        <attribute name="style" a:defaultValue="empty"/>
       </optional>
       <optional>
         <attribute name="counter"/>
       </optional>
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="format"/>
+      </optional>
       <oneOrMore>
-        <ref name="t"/>
+        <ref name="li"/>
       </oneOrMore>
+    </element>
+  </define>
+  <define name="li">
+    <element name="li">
+      <optional>
+        <attribute name="hangtext"/>
+      </optional>
+      <optional>
+        <attribute name="definition"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="t"/>
+          <ref name="xref"/>
+          <ref name="eref"/>
+          <ref name="iref"/>
+          <ref name="cref"/>
+          <ref name="tt"/>
+          <ref name="b"/>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="xref">

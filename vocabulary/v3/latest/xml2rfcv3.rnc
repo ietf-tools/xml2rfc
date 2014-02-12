@@ -102,13 +102,12 @@ section =
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "no" ] attribute removeinrfc { "yes" | "no" }?,
-    (t | figure | texttable | iref)*,
+    (t | \list | figure | texttable | iref)*,
     section*
   }
 t =
   element t {
     attribute anchor { xsd:ID }?,
-    attribute hangText { text }?,
     (text
      | \list
      | figure
@@ -123,10 +122,17 @@ t =
   }
 \list =
   element list {
-    attribute style { text }?,
-    attribute hangIndent { text }?,
+    [ a:defaultValue = "empty" ] attribute style { text }?,
     attribute counter { text }?,
-    t+
+    attribute anchor { xsd:ID }?,
+    attribute format { text }?,
+    li+
+  }
+li =
+  element li {
+    attribute hangtext { text }?,
+    attribute definition { text }?,
+    (text | t | xref | eref | iref | cref | tt | b)*
   }
 xref =
   element xref {

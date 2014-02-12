@@ -81,7 +81,7 @@
 
 <!ELEMENT middle (section)+>
 
-<!ELEMENT section ((t|figure|texttable|iref)*,section*)>
+<!ELEMENT section ((t|list|figure|texttable|iref)*,section*)>
 <!ATTLIST section
   anchor ID #IMPLIED
   title CDATA #REQUIRED
@@ -91,14 +91,19 @@
 
 <!ELEMENT t (#PCDATA|list|figure|xref|eref|iref|cref|tt|b|i|vspace)*>
 <!ATTLIST t
-  anchor ID #IMPLIED
-  hangText CDATA #IMPLIED>
+  anchor ID #IMPLIED>
 
-<!ELEMENT list (t)+>
+<!ELEMENT list (li)+>
 <!ATTLIST list
-  style CDATA #IMPLIED
-  hangIndent CDATA #IMPLIED
-  counter CDATA #IMPLIED>
+  style CDATA 'empty'
+  counter CDATA #IMPLIED
+  anchor ID #IMPLIED
+  format CDATA #IMPLIED>
+
+<!ELEMENT li (#PCDATA|t|xref|eref|iref|cref|tt|b)*>
+<!ATTLIST li
+  hangtext CDATA #IMPLIED
+  definition CDATA #IMPLIED>
 
 <!ELEMENT xref (#PCDATA)>
 <!ATTLIST xref
