@@ -12,6 +12,16 @@
 <?rfc-ext allow-markup-in-artwork="yes" ?>
 <?rfc-ext include-references-in-index="yes" ?>
 
+<!--
+
+Allow artwork or code in <li>
+
+Add <blockquote>, make it clear that it is for quotes
+
+Add <note> that is indented
+
+-->
+
 <!DOCTYPE rfc [
   <!ENTITY MAY "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>MAY</bcp14>">
   <!ENTITY MUST "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>MUST</bcp14>">
@@ -97,10 +107,11 @@ RFCs. That might happen eventually, but it is likely to be years away.</t>
 
 </list>
 
-There is a desire to keep as much of the v2 grammar as makes sense within the above design criteria and not
-to make gratuitous changes to the v2 grammar. However, the goal of starting and editing a v3 document
-being easier than for a v2 document is more important than backwards compatibility with v2, given the latter
-two design criteria.</t>
+There is a desire to keep as much of the v2 grammar as makes sense within the above design
+criteria and not to make gratuitous changes to the v2 grammar. Another way to say this is
+"we would rather encourage backward compatibility but not be constrained by it". Still, the
+goal of starting and editing a v3 document being easier than for a v2 document is more
+important than backwards compatibility with v2, given the latter two design criteria.</t>
 
 <t>
 The list of changes so far is:
@@ -1377,6 +1388,16 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       </list>
    </t>
 
+   <!--li/@anchor-->
+   <section title="'anchor' attribute" anchor="element.li.attribute.anchor" toc="exclude">
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="li element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in li element"/>
+      <t>
+        Document-wide unique identifier for this list item.
+      </t>
+   </section>
+
    <!--li/@hangtext-->
    <section title="'hangtext' attribute" anchor="element.li.attribute.hangtext" toc="exclude">
       <iref item="Attributes" subitem="hangtext"/>
@@ -1946,73 +1967,89 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    </t>
    <t>
       For example, a refernence to RFC 6068 is given as either:
-<figure><artwork><![CDATA[
-<reference anchor="RFC6068">
-  <front>
-    <title>The 'mailto' URI Scheme</title>
-    <author initials="M." surname="Duerst" fullname="M. Duerst"/>
-    <author initials="L." surname="Masinter" fullname="L. Masinter"/>
-    <author initials="J." surname="Zawinski" fullname="J. Zawinski"/>
-    <date year="2010" month="October"/>
-  </front>
-  <seriesInfo name="RFC" value="6068"/>
-</reference>
-]]></artwork></figure>
+<figure>
+         <artwork>
+&lt;reference anchor="RFC6068"&gt;
+  &lt;front&gt;
+    &lt;title&gt;The 'mailto' URI Scheme&lt;/title&gt;
+    &lt;author initials="M." surname="Duerst" fullname="M. Duerst"/&gt;
+    &lt;author initials="L." surname="Masinter" fullname="L. Masinter"/&gt;
+    &lt;author initials="J." surname="Zawinski" fullname="J. Zawinski"/&gt;
+    &lt;date year="2010" month="October"/&gt;
+  &lt;/front&gt;
+  &lt;seriesInfo name="RFC" value="6068"/&gt;
+&lt;/reference&gt;
+</artwork>
+      </figure>
 
 or
 
-<figure><artwork><![CDATA[
-<reference anchor="RFC6068" series="rfc" document="6068">
-]]></artwork></figure>
-</t>
-
+<figure>
+         <artwork>
+&lt;reference anchor="RFC6068" series="rfc" document="6068"&gt;
+</artwork>
+      </figure>
+   </t>
    <t>
       The values for the "series" attribute are:
    </t>
-
-      <texttable align="left">
-      <ttcol>Value for "series"</ttcol><ttcol>Value for "document</ttcol><ttcol>Example</ttcol>
-
-<c>rfc</c>  <c>number</c>  <c>"6068"</c>
-
-<c>fyi</c>  <c>number</c>  <c>"7"</c>
-
-<c>id</c>  <c>file name</c>  <c>"draft-hoffman-xml2rfc"</c>
-
-<c>bcp</c>  <c>comma-separated list of numbers; the first number is the BCP number
-and the others are the RFCs that make up the BCP</c> <c>"79,3979,4879"</c>
-
-<c>std</c>  <c>comma-separated list of numbers; the first number is the STD number
-and the others are the RFCs that make up the STD</c>  <c>"69,5730,5731,5732,5733,5734"</c>
-
-<c>3gpp</c>  <c>TBD</c>  <c>"TBD"</c>
-
-<c>ansi</c>  <c>document name and year</c>  <c>"T1-102.1987"</c>
-
-<c>ccitt</c>  <c>document name and year</c>  <c>"X690.2002"</c>  
-
-<c>fips</c>  <c>document name and year</c>  <c>"500-166.1989"</c>
-
-<c>ieee</c>  <c>document name and year</c>  <c>"802-11H.2003"</c>
-
-<c>iso</c>  <c>document name and year</c>  <c>"8859-6.1988"</c>
-
-<c>itu</c>  <c>document name and year</c>  <c>"X509.2000"</c>
-
-<c>nist</c>  <c>document name and year</c>  <c>"500-214.1993"</c>
-
-<c>pkcs</c>  <c>document name and year</c>  <c>"9.1993"</c>
-
-<c>w3c</c>  <c>document name (and year?)</c>  <c>"TBD"</c>
-
-</texttable> 
-
+   <texttable align="left">
+      <ttcol>Value for "series"</ttcol>
+      <ttcol>Value for "document</ttcol>
+      <ttcol>Example</ttcol>
+      <c>rfc</c>
+      <c>number</c>
+      <c>"6068"</c>
+      <c>fyi</c>
+      <c>number</c>
+      <c>"7"</c>
+      <c>id</c>
+      <c>file name</c>
+      <c>"draft-hoffman-xml2rfc"</c>
+      <c>bcp</c>
+      <c>comma-separated list of numbers; the first number is the BCP number
+and the others are the RFCs that make up the BCP</c>
+      <c>"79,3979,4879"</c>
+      <c>std</c>
+      <c>comma-separated list of numbers; the first number is the STD number
+and the others are the RFCs that make up the STD</c>
+      <c>"69,5730,5731,5732,5733,5734"</c>
+      <c>3gpp</c>
+      <c>TBD</c>
+      <c>"TBD"</c>
+      <c>ansi</c>
+      <c>document name and year</c>
+      <c>"T1-102.1987"</c>
+      <c>ccitt</c>
+      <c>document name and year</c>
+      <c>"X690.2002"</c>
+      <c>fips</c>
+      <c>document name and year</c>
+      <c>"500-166.1989"</c>
+      <c>ieee</c>
+      <c>document name and year</c>
+      <c>"802-11H.2003"</c>
+      <c>iso</c>
+      <c>document name and year</c>
+      <c>"8859-6.1988"</c>
+      <c>itu</c>
+      <c>document name and year</c>
+      <c>"X509.2000"</c>
+      <c>nist</c>
+      <c>document name and year</c>
+      <c>"500-214.1993"</c>
+      <c>pkcs</c>
+      <c>document name and year</c>
+      <c>"9.1993"</c>
+      <c>w3c</c>
+      <c>document name (and year?)</c>
+      <c>"TBD"</c>
+   </texttable>
    <t>The processor needs to make sure that exactly zero or one of "series" is given. It has to
    do a sanity check on the "document" value to be sure that the value is valid for the
    "series". If the "series" value is "bcp" or "std", the processor needs to check if the list
    in the "document" list matches the present or a previous set of values for the BCP or
    STD.</t>
-
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
    <t anchor="element.reference.contents"><!--AG-->Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
@@ -3731,6 +3768,7 @@ li =
   element li {
     attribute hangtext { text }?,
     attribute term { text }?,
+    attribute anchor { text }?,
     (text | t | xref | eref | iref | cref | tt | b)*
   }
 xref =

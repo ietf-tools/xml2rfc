@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                          February 11, 2014
+Obsoletes: 2629 (if approved)                          February 13, 2014
 Intended status: Standards Track
-Expires: August 15, 2014
+Expires: August 17, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 15, 2014.
+   This Internet-Draft will expire on August 17, 2014.
 
 Copyright Notice
 
@@ -170,10 +170,11 @@ Table of Contents
 
    There is a desire to keep as much of the v2 grammar as makes sense
    within the above design criteria and not to make gratuitous changes
-   to the v2 grammar.  However, the goal of starting and editing a v3
-   document being easier than for a v2 document is more important than
-   backwards compatibility with v2, given the latter two design
-   criteria.
+   to the v2 grammar.  Another way to say this is "we would rather
+   encourage backward compatibility but not be constrained by it".
+   Still, the goal of starting and editing a v3 document being easier
+   than for a v2 document is more important than backwards compatibility
+   with v2, given the latter two design criteria.
 
    The list of changes so far is:
 
@@ -1037,13 +1038,17 @@ Table of Contents
 
    o  <b> elements (Section 2.7)
 
-2.24.1.  'hangtext' attribute
+2.24.1.  'anchor' attribute
+
+   Document-wide unique identifier for this list item.
+
+2.24.2.  'hangtext' attribute
 
    In a list whose style is "hanging", the "hangText" attribute of <li>
    gives the term that will be at the left margin.  In a list whose
    style is not "hanging", the processor will return an error.
 
-2.24.2.  'term' attribute
+2.24.3.  'term' attribute
 
    In a list whose style is "dictionary", the "term" attribute of <li>
    gives the term being defined.  In a list whose style is not
@@ -2553,6 +2558,7 @@ Appendix B.  Relax NG Schema
      element li {
        attribute hangtext { text }?,
        attribute term { text }?,
+       attribute anchor { text }?,
        (text | t | xref | eref | iref | cref | tt | b)*
      }
    xref =
@@ -2705,6 +2711,7 @@ Index
       anchor attribute
          in cref element  1
          in figure element  1
+         in li element  1
          in list element  1
          in reference element  1
          in section element  1
@@ -2987,6 +2994,7 @@ Index
 
    L
       li element  1
+         anchor attribute  1
          hangtext attribute  1
          inside list  1
          term attribute  1
