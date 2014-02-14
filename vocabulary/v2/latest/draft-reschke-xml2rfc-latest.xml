@@ -2420,6 +2420,47 @@
 </t>
 </section>
 
+<section title="Including Files" anchor="including.files">
+<t>
+  This version of the vocabulary does not support an inclusion mechanism on
+  it's own &mdash; thus, a document always needs to be self-contained.
+</t>
+<t>
+  That being said, some processors do support file inclusion using
+  processing instructions (<xref target="XML" x:fmt="of" x:sec="2.6" x:rel="#sec-pi"/>).
+</t>
+<t>
+  Furthermore, XML itself allows inclusion of external content using the
+  "internal subset" (<xref target="XML" x:fmt="of" x:sec="2.8" x:rel="#sec-prolog-dtd"/>).
+  Unfortunately, this requires declaring the external data in the DTD upfront.
+</t>
+  <figure>
+  <preamble>For instance:</preamble>
+  <artwork type="example">
+&lt;?xml version="1.0"?>
+
+&lt;!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+
+  &lt;!-- <spanx>allow later RFC2616 reference using "&amp;rfc2616;"</spanx> -->
+  &lt;!-- <spanx>the data will be fetched from xml.resource.org</spanx> -->
+  &lt;!ENTITY rfc2616 PUBLIC
+  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml">
+]>
+</artwork>
+<postamble>...declares the entity "rfc2616", which then can be used in the "references" section:
+</postamble></figure>
+  <figure>
+  <artwork type="example">
+  &lt;references>
+    &amp;rfc2616;
+  &lt;/references>
+</artwork></figure>
+<t>
+  Note that this mechanism only works for well-formed XML fragments; thus
+  any plain text that would need to be escaped in XML can't be included as-is.
+</t>
+</section>
+
 <section title="Internationalization Considerations" anchor="i18n.considerations">
 <t>
   This format is based on <xref target="XML"/>, thus does not have any

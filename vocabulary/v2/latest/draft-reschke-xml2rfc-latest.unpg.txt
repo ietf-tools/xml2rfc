@@ -105,14 +105,15 @@ Table of Contents
      2.44. <workgroup>
      2.45. <xref>
    3.  Special Unicode Code Points
-   4.  Internationalization Considerations
-   5.  Security Considerations
-   6.  IANA Considerations
-     6.1.  Internet Media Type Registration
-   7.  Acknowledgments
-   8.  References
-     8.1.  Normative References
-     8.2.  Informative References
+   4.  Including Files
+   5.  Internationalization Considerations
+   6.  Security Considerations
+   7.  IANA Considerations
+     7.1.  Internet Media Type Registration
+   8.  Acknowledgments
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
    Appendix A.  Front Page Generation
      A.1.  The /rfc/@category Attribute
      A.2.  The /rfc/@ipr Attribute
@@ -1618,7 +1619,43 @@ Table of Contents
    [[anchor6: Explain those code points where the processors implement
    something special, such as "nbsp".]]
 
-4.  Internationalization Considerations
+4.  Including Files
+
+   This version of the vocabulary does not support an inclusion
+   mechanism on it's own -- thus, a document always needs to be self-
+   contained.
+
+   That being said, some processors do support file inclusion using
+   processing instructions (Section 2.6 of [XML]).
+
+   Furthermore, XML itself allows inclusion of external content using
+   the "internal subset" (Section 2.8 of [XML]).  Unfortunately, this
+   requires declaring the external data in the DTD upfront.
+
+   For instance:
+
+   <?xml version="1.0"?>
+
+   <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+
+     <!-- allow later RFC2616 reference using "&rfc2616;" -->
+     <!-- the data will be fetched from xml.resource.org -->
+     <!ENTITY rfc2616 PUBLIC
+     "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml">
+   ]>
+
+   ...declares the entity "rfc2616", which then can be used in the
+   "references" section:
+
+     <references>
+       &rfc2616;
+     </references>
+
+   Note that this mechanism only works for well-formed XML fragments;
+   thus any plain text that would need to be escaped in XML can't be
+   included as-is.
+
+5.  Internationalization Considerations
 
    This format is based on [XML], thus does not have any issues
    representing arbitrary Unicode [UNICODE] characters in text content.
@@ -1629,7 +1666,7 @@ Table of Contents
    will be extended so that US-ACSII alternatives can be provided when
    that makes sense (for instance, in contact information).
 
-5.  Security Considerations
+6.  Security Considerations
 
    [[anchor7: This section is likely incomplete.]]
 
@@ -1641,9 +1678,9 @@ Table of Contents
    Furthermore, all security considerations related to XML processing
    are relevant as well (see Section 7 of [RFC3470]).
 
-6.  IANA Considerations
+7.  IANA Considerations
 
-6.1.  Internet Media Type Registration
+7.1.  Internet Media Type Registration
 
    IANA maintains the registry of Internet media types [BCP13] at
    <http://www.iana.org/assignments/media-types>.
@@ -1664,7 +1701,7 @@ Table of Contents
    Encoding considerations:  Identical to those of "application/xml" as
       described in Section 3.2 of [RFC3023].
 
-   Security considerations:  As defined in Section 5.  In addition, as
+   Security considerations:  As defined in Section 6.  In addition, as
       this media type uses the "+xml" convention, it inherits the
       security considerations described in Section 10 of [RFC3023].
 
@@ -1702,7 +1739,7 @@ Table of Contents
 
    Change controller:  RFC Series Editor (rse@rfc-editor.org)
 
-7.  Acknowledgments
+8.  Acknowledgments
 
    Thanks to everybody who reviewed this document and provided feedback
    and/or specification text, in particular Brian Carpenter, Tony
@@ -1712,9 +1749,9 @@ Table of Contents
    We also thank Marshall T. Rose for both the original design and the
    reference implementation of the "xml2rfc" formatter.
 
-8.  References
+9.  References
 
-8.1.  Normative References
+9.1.  Normative References
 
    [XML]        Maler, E., Yergeau, F., Paoli, J., Sperberg-McQueen, M.,
                 and T. Bray, "Extensible Markup Language (XML) 1.0
@@ -1724,7 +1761,7 @@ Table of Contents
 
                 Latest version available at <http://www.w3.org/TR/xml>.
 
-8.2.  Informative References
+9.2.  Informative References
 
    [BCP13]      Freed, N., Klensin, J., and T. Hansen, "Media Type
                 Specifications and Registration Procedures", BCP 13,
