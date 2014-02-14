@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                          February 13, 2014
+Obsoletes: 2629 (if approved)                          February 14, 2014
 Intended status: Standards Track
-Expires: August 17, 2014
+Expires: August 18, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 17, 2014.
+   This Internet-Draft will expire on August 18, 2014.
 
 Copyright Notice
 
@@ -182,12 +182,16 @@ Table of Contents
 
    o  In <artwork> and <author>, added optional "xml:lang" attribute.
 
+   o  Allowed <artwork> to be in a <section>, not just a figure.
+
+   o  Gave more specifics of handling the "type" attribute in <artwork>.
+
    o  Added the <b>, <i>, and <tt> elements.
 
    o  In <front>, made <date> optional.
 
-   o  Changed the handling of <list>.  This large change is described in
-      Section 1.1.1.
+   o  Changed the handling of <list>.  This large change, including the
+      addition of the <li> element, is described in Section 1.1.1.
 
    o  In <postal>, allowed the sub-elements to be in any order.  Also
       allowed the inclusion of <postalbody>.
@@ -447,7 +451,8 @@ Table of Contents
    included image in sufficient detail.  Note that RFCs occasionally are
    published with enhanced diagrams; a recent example is [RFC5598].
 
-   This element appears as child element of: <figure> (Section 2.18).
+   This element appears as child element of: <figure> (Section 2.18),
+   and <section> (Section 2.38).
 
    Content model:
 
@@ -498,14 +503,41 @@ Table of Contents
 
 2.5.6.  'type' attribute
 
-   Specifies the type of the artwork.
+   Specifies the type of the artwork.  The value of this attribute is
+   free text with certain values designated as preferred.  A processor
+   might add type-specific formatting to artwork with the preferred
+   values in the non-canonical output formats.  If the processor
+   encounters a value for "type" that is not one of the preferred
+   values, it can issue a warning.
 
-   The value either is a well-known keyword (such as "abnf"), or an
-   Internet Media Type (see [RFC2046]).
+   The beginning list of preferred values are:
 
-   How it is used depends on context and application.  For instance, a
-   formatter can attempt to syntax-highlight code in certain known
-   languages.
+   o  abnf
+
+   o  ascii-art
+
+   o  asn.1
+
+   o  bash
+
+   o  c++
+
+   o  c
+
+   o  call-flow
+
+   o  hex-dump
+
+   o  mib
+
+   o  perl
+
+   o  python
+
+   The RFC Editor will mainatin a complete list of the preferred values
+   on its web site, and that list is expected to be updated over time.
+   Thus, a consumer of v3 XML should not cause a failure when it
+   encounters an unexpected type.
 
 2.5.7.  'width' attribute
 
@@ -1694,6 +1726,8 @@ Table of Contents
 
        *  <iref> elements (Section 2.22)
 
+       *  <artwork> elements (Section 2.5)
+
    2.  Optional <section> elements (Section 2.38)
 
 2.38.1.  'anchor' attribute
@@ -2207,10 +2241,6 @@ Table of Contents
    [RFC2026]    Bradner, S., "The Internet Standards Process -- Revision
                 3", BCP 9, RFC 2026, October 1996.
 
-   [RFC2046]    Freed, N. and N. Borenstein, "Multipurpose Internet Mail
-                Extensions (MIME) Part Two: Media Types", RFC 2046,
-                November 1996.
-
    [RFC2223]    Postel, J. and J. Reynolds, "Instructions to RFC
                 Authors", RFC 2223, October 1997.
 
@@ -2540,7 +2570,7 @@ Appendix B.  Relax NG Schema
        attribute toc { "include" | "exclude" | "default" }?,
        [ a:defaultValue = "no" ] attribute removeinrfc { "yes" | "no"
    }?,
-       (t | \list | figure | texttable | iref)*,
+       (t | \list | figure | texttable | iref | artwork)*,
        section*
      }
    t =
@@ -2729,6 +2759,7 @@ Index
          alt attribute  1
          height attribute  1
          inside figure  1
+         inside section  1
          name attribute  1
          src attribute  1
          type attribute  1

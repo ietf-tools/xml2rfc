@@ -14,11 +14,20 @@
 
 <!--
 
-Allow artwork or code in <li>
+Send note about <artwork> not being in <t> has semantic problems for when the code needs to
+   be on a line of its own
 
 Add <blockquote>, make it clear that it is for quotes
 
 Add <note> that is indented
+
+Maybe deprecate <list> for HTML-like equivalents
+   Or mabye just for dictionary and hanging
+
+The model for lists is now consistent, but would break if we went with interior
+   elements for definition and hangText.
+
+Maybe combind hanging and dictionary styles into one with an attribute for where the split happens
 
 -->
 
@@ -122,11 +131,16 @@ The list of changes so far is:
 
 <t>In  &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>author</x:ref>&gt;, added optional "xml:lang" attribute.</t>
 
+<t>Allowed &lt;<x:ref>artwork</x:ref>&gt; to be in a &lt;<x:ref>section</x:ref>&gt;, not just a figure.</t>
+
+<t>Gave more specifics of handling the "type" attribute in &lt;<x:ref>artwork</x:ref>&gt;.</t>
+
 <t>Added the &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;, and &lt;<x:ref>tt</x:ref>&gt; elements.</t>
 
 <t>In  &lt;<x:ref>front</x:ref>&gt;, made &lt;<x:ref>date</x:ref>&gt; optional.</t>
 
-<t>Changed the handling of &lt;<x:ref>list</x:ref>&gt;. This large change is described in <xref target="list_changes"/>.</t>
+<t>Changed the handling of &lt;<x:ref>list</x:ref>&gt;. This large change, including the addition of the
+&lt;<x:ref>li</x:ref>&gt; element, is described in <xref target="list_changes"/>.</t>
 
 <t>In  &lt;<x:ref>postal</x:ref>&gt;, allowed the sub-elements to be in any order. Also allowed the inclusion
 of &lt;<x:ref>postalbody</x:ref>&gt;.</t>
@@ -436,7 +450,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       Note that RFCs occasionally are published with enhanced diagrams;
       a recent example is <xref target="RFC5598"/>.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
         Content model:
       </t>
@@ -523,15 +537,30 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="artwork element" subitem="type attribute"/>
       <iref item="type attribute" subitem="in artwork element"/>
       <t>
-            Specifies the type of the artwork.
+            Specifies the type of the artwork. The value of this attribute is free text with
+            certain values designated as preferred. A processor might add type-specific
+            formatting to artwork with the preferred values in the non-canonical output
+            formats. If the processor encounters a value for "type" that is not one of the
+            preferred values, it can issue a warning.
          </t>
       <t>
-            The value either is a well-known keyword (such as "abnf"), or
-            an Internet Media Type (see <xref target="RFC2046"/>).
-         </t>
-      <t>
-            How it is used depends on context and application. For instance, a formatter
-            can attempt to syntax-highlight code in certain known languages.
+            The beginning list of preferred values are:
+            <list style="symbols">
+               <t>abnf</t>
+               <t>ascii-art</t>
+               <t>asn.1</t>
+               <t>bash</t>
+               <t>c++</t>
+               <t>c</t>
+               <t>call-flow</t>
+               <t>hex-dump</t>
+               <t>mib</t>
+               <t>perl</t>
+               <t>python</t>
+            </list>
+            The RFC Editor will mainatin a complete list of the preferred values on its
+            web site, and that list is expected to be updated over time. Thus, a consumer
+            of v3 XML should not cause a failure when it encounters an unexpected type. 
          </t>
    </section>
 
@@ -2422,6 +2451,9 @@ and the others are the RFCs that make up the STD</c>
                <t><!--AG-->
                   <iref item="Elements" subitem="iref"/>
                   <iref item="iref element" subitem="inside section"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="artwork"/>
+                  <iref item="artwork element" subitem="inside section"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
             </list>
          </t>
         
@@ -3202,16 +3234,6 @@ and the others are the RFCs that make up the STD</c>
     <seriesInfo name='RFC' value='2026' />
   </reference>
 
-  <reference anchor="RFC2046">
-    <front>
-      <title abbrev="Media Types">Multipurpose Internet Mail Extensions (MIME) Part Two: Media Types</title>
-      <author initials="N." surname="Freed" fullname="Ned Freed"/>
-      <author initials="N." surname="Borenstein" fullname="Nathaniel S. Borenstein"/>
-      <date month="November" year="1996"/>
-    </front>
-    <seriesInfo name="RFC" value="2046"/>
-  </reference>
-
   <reference anchor='RFC2223'>
     <front>
       <title>Instructions to RFC Authors</title>
@@ -3749,7 +3771,7 @@ section =
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "no" ] attribute removeinrfc { "yes" | "no" 
 }?,
-    (t | \list | figure | texttable | iref)*,
+    (t | \list | figure | texttable | iref | artwork)*,
     section*
   }
 t =

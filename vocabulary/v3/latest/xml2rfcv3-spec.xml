@@ -151,7 +151,7 @@
       Note that RFCs occasionally are published with enhanced diagrams;
       a recent example is <xref target="RFC5598"/>.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
         Content model:
       </t>
@@ -1069,8 +1069,10 @@
    <iref item="Elements" subitem="li" primary="true"/>
    <iref item="li element" primary="true"/>
    <t>
-      Specifies an item in a list. In an &lt;li&gt; item, a &lt;t&gt; item causes the item to have
-      an additional paragraph without triggering another label.
+      Specifies an item in a list. The content model for &lt;li&gt; is that it either contains
+      free text (which can contain non-blick elements such as &lt;b&gt;, &lt;cref&gt;), or it
+      contains one or more &lt;t&gt; elements. In the latter case, having more than one
+      &lt;t&gt; element causes breaks but without triggering another label.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>).</t>
    <t anchor="element.li.contents"><!--AG-->
@@ -1107,8 +1109,8 @@
       <iref item="Attributes" subitem="anchor"/>
       <iref item="li element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in li element"/>
-      <t><!--AG-->
-         <cref anchor="element.li.attribute.anchor.missing">attribute description missing</cref>
+      <t>
+        Document-wide unique identifier for this list item.
       </t>
    </section>
 
@@ -2135,6 +2137,9 @@ and the others are the RFCs that make up the STD</c>
                <t><!--AG-->
                   <iref item="Elements" subitem="iref"/>
                   <iref item="iref element" subitem="inside section"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="artwork"/>
+                  <iref item="artwork element" subitem="inside section"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
             </list>
          </t>
         
