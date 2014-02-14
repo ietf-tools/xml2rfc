@@ -254,6 +254,9 @@ Internet-Draft                  XML2RFCv3                  February 2014
    o  Removed the <spanx> element, and replaced it with <b>, <i>, and
       <tt>.
 
+   o  Added a "style" attribute to <t> to allow for block quotes and
+      indented paragraphs.
+
    o  In <ttcol>, added <xref>, <eref>, <iref>, and <cref> as optional
       children.
 
@@ -270,9 +273,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
    o  List items can have more than one paragraph without triggering
       another list label.
 
-   o  Lists should be block elements, not inline (flow) elements.  They
-      should be usable outside <t>.
-
 
 
 
@@ -280,6 +280,9 @@ Hoffman                  Expires August 18, 2014                [Page 5]
 
 Internet-Draft                  XML2RFCv3                  February 2014
 
+
+   o  Lists should be block elements, not inline (flow) elements.  They
+      should be usable outside <t>.
 
    o  Give more control over the labels for "style" of "letters",
       "numbers", or "symbols".  Make more explicit the rules for nested
@@ -326,9 +329,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
       *  Add a new style of "dictionary", the <li> element has an
          optional attribute of "term".
 
-   An example of using the new format for a simple bulleted list where
-   the second item has two paragraphs is:
-
 
 
 
@@ -336,6 +336,9 @@ Hoffman                  Expires August 18, 2014                [Page 6]
 
 Internet-Draft                  XML2RFCv3                  February 2014
 
+
+   An example of using the new format for a simple bulleted list where
+   the second item has two paragraphs is:
 
    <list style="symbols">
       <li>This is the first element with a bullet.</li>
@@ -381,9 +384,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
       used for expansion of the references will be maintained by the RFC
       Editor.
 
-   o  Thus, the contents of <reference> changes from requiring a <front>
-      element to making the <front> element optional if a "series" is
-      given.
 
 
 
@@ -392,6 +392,10 @@ Hoffman                  Expires August 18, 2014                [Page 7]
 
 Internet-Draft                  XML2RFCv3                  February 2014
 
+
+   o  Thus, the contents of <reference> changes from requiring a <front>
+      element to making the <front> element optional if a "series" is
+      given.
 
 1.2.  Syntax Notation
 
@@ -437,10 +441,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
 
    o  <postal> elements (Section 2.30)
 
-   o  <phone> elements (Section 2.29)
-
-   o  <facsimile> elements (Section 2.17)
-
 
 
 
@@ -448,6 +448,10 @@ Hoffman                  Expires August 18, 2014                [Page 8]
 
 Internet-Draft                  XML2RFCv3                  February 2014
 
+
+   o  <phone> elements (Section 2.29)
+
+   o  <facsimile> elements (Section 2.17)
 
    o  <email> elements (Section 2.15)
 
@@ -493,10 +497,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
    Provides information about the IETF area this document applies to
    (currently not used when generating documents).
 
-   The value ought to be either the fullname or the abbreviation of one
-   of the IETF areas as listed on <http://www.ietf.org/iesg/area.html>:
-   "Applications", "app", "General", "gen", "Internet", "int",
-   "Operations and Management", "ops", "Real-time Applications and
 
 
 
@@ -505,6 +505,10 @@ Hoffman                  Expires August 18, 2014                [Page 9]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+   The value ought to be either the fullname or the abbreviation of one
+   of the IETF areas as listed on <http://www.ietf.org/iesg/area.html>:
+   "Applications", "app", "General", "gen", "Internet", "int",
+   "Operations and Management", "ops", "Real-time Applications and
    Infrastructure", "rai", "Routing", "rtg", "Security", "sec",
    "Transport", "tsv".
 
@@ -550,16 +554,14 @@ Internet-Draft                  XML2RFCv3                  February 2014
    Controls whether the artwork appears left (default), centered, or
    right.
 
-   Allowed values:
-
-
-
 
 
 Hoffman                  Expires August 18, 2014               [Page 10]
 
 Internet-Draft                  XML2RFCv3                  February 2014
 
+
+   Allowed values:
 
    o  "left" (default)
 
@@ -607,8 +609,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
    values, it can issue a warning.
 
    The beginning list of preferred values are:
-
-
 
 
 
@@ -3450,7 +3450,7 @@ Internet-Draft                  XML2RFCv3                  February 2014
          date  17, 21
          email  9, 17
          eref  9, 14-15, 18, 21, 23, 29-30, 39, 42-43
-         facsimile  8, 18
+         facsimile  9, 18
          figure  18, 37, 39
          format  20, 32
          front  20, 32, 34
@@ -3462,7 +3462,7 @@ Internet-Draft                  XML2RFCv3                  February 2014
          middle  27, 34
          note  21, 27
          organization  13, 28
-         phone  8, 28
+         phone  9, 28
          postal  8, 28
          postalbody  29
 
@@ -3507,7 +3507,7 @@ Internet-Draft                  XML2RFCv3                  February 2014
 
    F
       facsimile element  18
-         inside address  8
+         inside address  9
       figure element  18
          align attribute  19
          alt attribute  19
@@ -3666,7 +3666,7 @@ Internet-Draft                  XML2RFCv3                  February 2014
       pageno attribute
          in xref element  45
       phone element  28
-         inside address  8
+         inside address  9
       postal element  28
          inside address  8
       postalbody element  29
