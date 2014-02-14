@@ -240,13 +240,13 @@ Table of Contents
    vocabulary:
 
    o  <list> is changed to have each list item is represented by a <li>
-      element.  The content model for <li> is the same as that of
-      <annotation> with the addition of <t>, namely: text, <b>, <cref>,
-      <eref>, <i>, <iref>, <t>, <tt>, and <xref>.
+      element.
 
-   o  Inside of an <li> element, a <t> elements causes a break but
-      without triggering another label.  The <li> element has optional
-      attributes only where needed.
+   o  The content model for <li> is that it either contains free text
+      (which can contain non-blick elements such as <b>, <cref>), or it
+      contains one or more <t> elements.  In the latter case, having
+      more than one <t> element causes breaks but without triggering
+      another label.
 
    o  <list> no longer needs to be inside of <t>, and can appear in the
       other contexts where a list might be expected.
@@ -272,9 +272,9 @@ Table of Contents
 
    <list style="symbols">
       <li>This is the first element with a bullet.</li>
-      <li>This is the second element with a bullet.
-         <t>This is part of the second element,
-         but it does not have a bullet</t></li>
+      <li><t>This is the second element with a bullet.</t>
+          <t>This is part of the second element,
+          but it does not have a bullet.</t></li>
       <li>This is the third element with a bullet.</li>
    </list>
 
@@ -1012,9 +1012,11 @@ Table of Contents
 
 2.24.  <li>
 
-   Specifies an item in a list.  In an <li> item, a <t> item causes the
-   item to have an additional paragraph without triggering another
-   label.
+   Specifies an item in a list.  The content model for <li> is that it
+   either contains free text (which can contain non-blick elements such
+   as <b>, <cref>), or it contains one or more <t> elements.  In the
+   latter case, having more than one <t> element causes breaks but
+   without triggering another label.
 
    This element appears as child element of: <list> (Section 2.25).
 

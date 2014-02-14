@@ -175,12 +175,11 @@ Make more explicit the rules for nested lists that use the defaults for a "style
 
 <list style="symbols">
 
-<t>&lt;<x:ref>list</x:ref>&gt; is changed to have each list item is represented by a &lt;<x:ref>li</x:ref>&gt; element.
-The content model for &lt;li&gt; is the same as that of &lt;annotation&gt; with the addition of &lt;t&gt;, namely:
-text, &lt;b&gt;, &lt;cref&gt;, &lt;eref&gt;, &lt;i&gt;, &lt;iref&gt;, &lt;t&gt;, &lt;tt&gt;, and &lt;xref&gt;.</t>
+<t>&lt;<x:ref>list</x:ref>&gt; is changed to have each list item is represented by a &lt;<x:ref>li</x:ref>&gt; element.</t>
 
-<t>Inside of an &lt;li&gt; element, a &lt;t&gt; elements causes a break but without triggering another label.
-The &lt;li&gt; element has optional attributes only where needed.</t>
+<t>The content model for &lt;li&gt; is that it either contains free text (which can contain non-blick elements such as
+&lt;b&gt;, &lt;cref&gt;), or it contains one or more &lt;t&gt; elements. In the latter case, having more than one
+&lt;t&gt; element causes breaks but without triggering another label.</t>
 
 <t>&lt;list&gt; no longer needs to be inside of &lt;t&gt;, and can appear in the other contexts where a list might be expected.</t>
 
@@ -206,9 +205,9 @@ for formatting the label. There will be a clear set of defaults for each of thes
 <figure><artwork><![CDATA[
 <list style="symbols">
    <li>This is the first element with a bullet.</li>
-   <li>This is the second element with a bullet.
-      <t>This is part of the second element,
-      but it does not have a bullet</t></li>
+   <li><t>This is the second element with a bullet.</t>
+       <t>This is part of the second element,
+       but it does not have a bullet.</t></li>
    <li>This is the third element with a bullet.</li>
 </list>
 ]]></artwork></figure>
@@ -1355,8 +1354,10 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <iref item="Elements" subitem="li" primary="true"/>
    <iref item="li element" primary="true"/>
    <t>
-      Specifies an item in a list. In an &lt;li&gt; item, a &lt;t&gt; item causes the item to have
-      an additional paragraph without triggering another label.
+      Specifies an item in a list. The content model for &lt;li&gt; is that it either contains
+      free text (which can contain non-blick elements such as &lt;b&gt;, &lt;cref&gt;), or it
+      contains one or more &lt;t&gt; elements. In the latter case, having more than one
+      &lt;t&gt; element causes breaks but without triggering another label.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>).</t>
    <t anchor="element.li.contents"><!--AG-->
