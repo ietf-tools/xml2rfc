@@ -142,13 +142,26 @@ goal of starting and editing a v3 document being easier than for a v2 document i
 important than backwards compatibility with v2, given the latter two design criteria.</t>
 
 <t>
+v3 is upwards compatible with v2, meaning that a v2 document is meant to be a valid v3
+document as well. However, some features of v2 are deprecated in v3 in favor of new
+elements. Deprecated features are described in <xref target="XML2RFCv2"/>.
+</t>
+
+<t>The canonical RFCs will not have any markup that uses a deprecated feature. The
+RFC Editor's processor will have a "convert with warnings" mode that will convert a v2
+document to a v3 document that converts deprecated features wherever possible, issuing
+warnings for where it cannot convert. The processor will also have a "strict" mode that
+will issue errors if any deprecated features are in the input.
+</t>
+
+<t>
 The list of changes so far is:
 
 <list style="symbols">
 
-<t>In  &lt;<x:ref>address</x:ref>&gt;, allowed the sub-elements to be in any order.</t>
+<t>In &lt;<x:ref>address</x:ref>&gt;, allowed the sub-elements to be in any order.</t>
 
-<t>In  &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>author</x:ref>&gt;, added optional "xml:lang" attribute.</t>
+<t>In &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>author</x:ref>&gt;, added optional "xml:lang" attribute.</t>
 
 <t>Allowed &lt;<x:ref>artwork</x:ref>&gt; to be in a &lt;<x:ref>section</x:ref>&gt;, not just a figure.</t>
 
@@ -156,99 +169,30 @@ The list of changes so far is:
 
 <t>Added the &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;, and &lt;<x:ref>tt</x:ref>&gt; elements.</t>
 
-<t>In  &lt;<x:ref>front</x:ref>&gt;, made &lt;<x:ref>date</x:ref>&gt; optional.</t>
+<t>In &lt;<x:ref>front</x:ref>&gt;, made &lt;<x:ref>date</x:ref>&gt; optional.</t>
 
-<t>Changed the handling of &lt;<x:ref>list</x:ref>&gt;. This large change, including the addition of the
-&lt;<x:ref>li</x:ref>&gt; element, is described in <xref target="list_changes"/>.</t>
+<t>Deprecated &lt;<x:ref>list</x:ref>&gt; in favor of *** list of new list styles goes here ***.</t>
 
-<t>In  &lt;<x:ref>postal</x:ref>&gt;, allowed the sub-elements to be in any order. Also allowed the inclusion
+<t>In &lt;<x:ref>postal</x:ref>&gt;, allowed the sub-elements to be in any order. Also allowed the inclusion
 of &lt;<x:ref>postalbody</x:ref>&gt;.</t>
 
 <t>Added &lt;<x:ref>postalbody</x:ref>&gt;, free text that represents the address.</t>
 
 <t>Changed the handling of &lt;<x:ref>reference</x:ref>&gt;. This large change is described in <xref target="reference_changes"/>.</t>
 
-<t>In  &lt;<x:ref>section</x:ref>&gt;, added the optional "numbered" and "removeinrfc" attributes.</t>
+<t>In &lt;<x:ref>section</x:ref>&gt;, added the optional "numbered" and "removeinrfc" attributes.</t>
 
-<t>Removed the &lt;spanx&gt; element, and replaced it with &lt;b&gt;, &lt;i&gt;, and &lt;tt&gt;.</t>
+<t>Deprecated &lt;spanx&gt; element, and replaced it with &lt;b&gt;, &lt;i&gt;, and &lt;tt&gt;.</t>
 
 <t>Added a "style" attribute to &lt;t&gt; to allow for block quotes and indented paragraphs.</t>
 
-<t>In  &lt;<x:ref>ttcol</x:ref>&gt;, added &lt;<x:ref>xref</x:ref>&gt;, &lt;<x:ref>eref</x:ref>&gt;, &lt;<x:ref>iref</x:ref>&gt;,
+<t>In &lt;<x:ref>ttcol</x:ref>&gt;, added &lt;<x:ref>xref</x:ref>&gt;, &lt;<x:ref>eref</x:ref>&gt;, &lt;<x:ref>iref</x:ref>&gt;,
 and &lt;<x:ref>cref</x:ref>&gt; as optional children.</t>
 
-<t>Removed the  &lt;vspace&gt; element because the v2 spec labeled it as "a purely
+<t>Deprecated &lt;vspace&gt; because the v2 spec labeled it as "a purely
 presentational element and thus its use ought to be avoided".</t>
 
 </list></t>
-
-<section anchor="list_changes" title="Design for Changes in List Handling">
-
-<t>This section describes one of the larger changes in the design of v3, namely the way lists are handled.
-The community has asked for many changes to list handing to make creating and editing lists more
-intuitive. The goals include:
-
-<list style="symbols">
-
-<t>List items can have more than one paragraph without triggering another list label.</t>
-
-<t>Lists should be block elements, not inline (flow) elements. They should be usable outside &lt;t&gt;.</t>
-
-<t>Give more control over the labels for "style" of "letters", "numbers", or "symbols".
-Make more explicit the rules for nested lists that use the defaults for a "style".</t>
-
-<t>Make hanging lists more like other list styles.</t>
-
-<t>Make a real "dictionary" style, with the definition starting on a new line.</t>
-
-<t>Don't mix label style with content (the "format" attribute).</t>
-
-<t>Create a new mechanism to cause a paragraph to be indented, without using &lt;list style="empty"&gt;.</t>
-
-</list></t>
-
-<t>To meet these goals, the following changes have been made in the v3 vocabulary:
-
-<list style="symbols">
-
-<t>&lt;<x:ref>list</x:ref>&gt; is changed to have each list item is represented by a &lt;<x:ref>li</x:ref>&gt; element.</t>
-
-<t>The content model for &lt;li&gt; is that it either contains free text (which can contain non-blick elements such as
-&lt;b&gt;, &lt;cref&gt;), or it contains one or more &lt;t&gt; elements. In the latter case, having more than one
-&lt;t&gt; element causes breaks but without triggering another label.</t>
-
-<t>&lt;list&gt; no longer needs to be inside of &lt;t&gt;, and can appear in the other contexts where a list might be expected.</t>
-
-<t>&lt;list&gt; has a new optional "anchor" attribute so that a list can be referenced from other places in the text.</t>
-
-<t>For the "style" attributes in &lt;list&gt;:
-
-<list style="symbols">
-
-<t>For "letters", "numbers", and "symbols", there is an optional "format" attribute that matches the current one
-for formatting the label. There will be a clear set of defaults for each of these given in the spec.</t>
-
-<t>For "hanging", the &lt;li&gt; element has an optional attribute of "hangText".</t>
-
-<t>Add a new style of "dictionary", the &lt;li&gt; element has an optional attribute of "term".</t>
-
-</list></t>
-
-</list></t>
-
-<t>An example of using the new format for a simple bulleted list where the second item has two paragraphs is:</t>
-
-<figure><artwork><![CDATA[
-<list style="symbols">
-   <li>This is the first element with a bullet.</li>
-   <li><t>This is the second element with a bullet.</t>
-       <t>This is part of the second element,
-       but it does not have a bullet.</t></li>
-   <li>This is the third element with a bullet.</li>
-</list>
-]]></artwork></figure>
-
-</section>
 
 <section anchor = "reference_changes" title="Design for Changes in Reference Handling">
 
@@ -410,6 +354,9 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
          <t><!--AG-->
             <iref item="Elements" subitem="cref"/>
             <iref item="cref element" subitem="inside annotation"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="spanx"/>
+            <iref item="spanx element" subitem="inside annotation"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="tt"/>
             <iref item="tt element" subitem="inside annotation"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
@@ -749,7 +696,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <t>
             Causes the text to be displayed in a bold font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.b.contents"><!--AG-->
         Content model:
       </t>
@@ -829,6 +776,9 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
             <iref item="Elements" subitem="cref"/>
             <iref item="cref element" subitem="inside c"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
          <t><!--AG-->
+            <iref item="Elements" subitem="spanx"/>
+            <iref item="spanx element" subitem="inside c"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</t>
+         <t><!--AG-->
             <iref item="Elements" subitem="tt"/>
             <iref item="tt element" subitem="inside c"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
          <t><!--AG-->
@@ -891,7 +841,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       (depending on file format and settings of the formatter), or not at
       all (when generating an RFC).
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.cref.contents"><!--AG-->Content model: only text content.</t>
 
    <!--cref/@anchor-->
@@ -1014,7 +964,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       If the element has text content, that content will be used. Otherwise, the value of the
       target attribute will be inserted in angle brackets (<xref target="RFC3986" x:fmt="," x:sec="C"/>).
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.eref.contents"><!--AG-->Content model: only text content.</t>
 
    <!--eref/@target-->
@@ -1339,7 +1289,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
 </artwork>
       <postamble>will produce an index entry for "Grammar, item".</postamble>
    </figure>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.iref.contents"><!--AG-->Content model: this element does not have any contents.</t>
 
    <!--iref/@item-->
@@ -1399,112 +1349,23 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <t anchor="element.keyword.contents"><!--AG-->Content model: only text content.</t>
 </section>
 
-<!--li-->
-<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;li&gt;" anchor="element.li">
-   <x:anchor-alias value="li"/>
-   <iref item="Elements" subitem="li" primary="true"/>
-   <iref item="li element" primary="true"/>
-   <t>
-      Specifies an item in a list. The content model for &lt;li&gt; is that it either contains
-      free text (which can contain non-blick elements such as &lt;b&gt;, &lt;cref&gt;), or it
-      contains one or more &lt;t&gt; elements. In the latter case, having more than one
-      &lt;t&gt; element causes breaks but without triggering another label.
-   </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>).</t>
-   <t anchor="element.li.contents"><!--AG-->
-        Content model:
-      </t>
-   <t><!--AG-->In any order: <list style="symbols">
-         <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="t"/>
-            <iref item="t element" subitem="inside li"/>&lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="xref"/>
-            <iref item="xref element" subitem="inside li"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="eref"/>
-            <iref item="eref element" subitem="inside li"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="iref"/>
-            <iref item="iref element" subitem="inside li"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="cref"/>
-            <iref item="cref element" subitem="inside li"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="tt"/>
-            <iref item="tt element" subitem="inside li"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside li"/>&lt;<x:ref>b</x:ref>&gt; elements (<xref target="element.b"/>)</t>
-      </list>
-   </t>
-
-   <!--li/@anchor-->
-   <section title="'anchor' attribute" anchor="element.li.attribute.anchor" toc="exclude">
-      <iref item="Attributes" subitem="anchor"/>
-      <iref item="li element" subitem="anchor attribute"/>
-      <iref item="anchor attribute" subitem="in li element"/>
-      <t>
-        Document-wide unique identifier for this list item.
-      </t>
-   </section>
-
-   <!--li/@hangtext-->
-   <section title="'hangtext' attribute" anchor="element.li.attribute.hangtext" toc="exclude">
-      <iref item="Attributes" subitem="hangtext"/>
-      <iref item="li element" subitem="hangtext attribute"/>
-      <iref item="hangtext attribute" subitem="in li element"/>
-      <t>
-         In a list whose style is "hanging", the "hangText" attribute of &lt;li&gt; gives
-         the term that will be at the left margin. In a list whose style is not "hanging", the processor will
-         return an error.
-      </t>
-   </section>
-
-   <!--li/@term-->
-   <section title="'term' attribute" anchor="element.li.attribute.term" toc="exclude">
-      <iref item="Attributes" subitem="term"/>
-      <iref item="li element" subitem="term attribute"/>
-      <iref item="term attribute" subitem="in li element"/>
-      <t>
-         In a list whose style is "dictionary", the "term" attribute of &lt;li&gt; gives
-         the term being defined. In a list whose style is not "dictionary", the processor will
-         return an error.
-      </t>
-   </section>
-</section>
-
 <!--list-->
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;list&gt;" anchor="element.list">
    <x:anchor-alias value="list"/>
    <iref item="Elements" subitem="list" primary="true"/>
    <iref item="list element" primary="true"/>
    <t>
-      Delineates a text list.
+      Deprecated. Use **** the other kinds of lists go here ***.
    </t>
-   <t>
-      Each list item is represented by a &lt;<x:ref>li</x:ref>&gt; element.
-   </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.list.contents"><!--AG-->
         Content model:
       </t>
         
    <t><!--AG-->
-      <iref item="Elements" subitem="li"/>
-      <iref item="li element" subitem="inside list"/>One or more &lt;<x:ref>li</x:ref>&gt; elements (<xref target="element.li"/>)</t>
+      <iref item="Elements" subitem="t"/>
+      <iref item="t element" subitem="inside list"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
       
-
-   <!--list/@anchor-->
-   <section title="'anchor' attribute" anchor="element.list.attribute.anchor" toc="exclude">
-      <iref item="Attributes" subitem="anchor"/>
-      <iref item="list element" subitem="anchor attribute"/>
-      <iref item="anchor attribute" subitem="in list element"/>
-      <t>
-         Document-wide unique identifier for this list.
-      </t>
-   </section>
 
    <!--list/@counter-->
    <section title="'counter' attribute" anchor="element.list.attribute.counter" toc="exclude">
@@ -1512,30 +1373,17 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="list element" subitem="counter attribute"/>
       <iref item="counter attribute" subitem="in list element"/>
       <t>
-        This attribute holds a token that serves as an identifier for a counter.
-        The intended use is continuation of lists.
-      </t>
-      <t>
-        Note that this attribute functions only when the style attribute is
-        using the "format..." syntax (<xref target="element.list.attribute.style"/>);
-        otherwise, it is ignored.
+        Deprecated.
       </t>
    </section>
 
-   <!--list/@format-->
-   <section title="'format' attribute" anchor="element.list.attribute.format" toc="exclude">
-      <iref item="Attributes" subitem="format"/>
-      <iref item="list element" subitem="format attribute"/>
-      <iref item="format attribute" subitem="in list element"/>
-      <t>
-         The format for the labels in this list. The "format" attribute only applies to lists whose
-         "style" is "letters", "numbers", and "symbols". If the "format" attribute is given for
-         a list with any other "style", the processor will issue an error.
-      </t>
-      <t>
-         The default format for "letters" is "%c". The default format for "numbers" is "%d". The
-         default format for "symbols" is "o". <cref>That last one is almost certainly wrong and this needs
-         to be specified better in the style="format" part as well.</cref>
+   <!--list/@hangIndent-->
+   <section title="'hangIndent' attribute" anchor="element.list.attribute.hangIndent" toc="exclude">
+      <iref item="Attributes" subitem="hangIndent"/>
+      <iref item="list element" subitem="hangIndent attribute"/>
+      <iref item="hangIndent attribute" subitem="in list element"/>
+      <t><!--AG-->
+         Deprecated.
       </t>
    </section>
 
@@ -1545,226 +1393,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="list element" subitem="style attribute"/>
       <iref item="style attribute" subitem="in list element"/>
       <t>
-        This attribute is used to control the display of a list.
-      </t>
-      <t>
-        The value of this attribute is inherited by any nested lists that do
-        not have this attribute set. It may be set to:
-      </t>
-      <t>
-         <iref item="list styles" subitem="empty" primary="true"/>
-        "empty" (or not set)
-        <list style="empty">
-            <t>
-            For unlabeled list items; it can also be used for indentation
-            purposes (this is the default value).
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="list styles" subitem="dictionary" primary="true"/>
-        "dictionary"
-        <list style="empty">
-            <t>
-            For lists that have a term and a definition. The term is given
-            in the &lt;<x:ref>li</x:ref>&gt; element in the "term" attribute.
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="list styles" subitem="hanging" primary="true"/>
-        "hanging"
-        <list style="empty">
-            <t>
-            For lists where the items are labeled with a piece of text.
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="list styles" subitem="letters" primary="true"/>
-        "letters"
-        <list style="empty">
-            <t>
-            For ordered lists using letters as labels (lowercase letters
-            followed by a period; after "z", it rolls over to a two-letter
-            format). For nested lists, processors usually flip between uppercase and lowercase.
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="list styles" subitem="numbers" primary="true"/>
-        "numbers"
-        <list style="empty">
-            <t>
-            For ordered lists using numbers as labels.
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="list styles" subitem="symbols" primary="true"/>
-        "symbols"
-        <list style="empty">
-            <t>
-            For unordered (bulleted) lists.
-          </t>
-            <t>
-            The style of the bullets is chosen automatically be the processor
-            (some implementations allow overriding the default using a
-            processing instruction).
-          </t>
-         </list>
-      </t>
-      <t>
-        And, finally:
-      </t>
-      <t>
-         <iref item="list styles" subitem="format ..." primary="true"/>
-        "format ..."
-        <list style="empty">
-            <t>
-            For lists with customized labels, consisting of fixed text and
-            an item counter in various formats.
-          </t>
-            <t>
-            The value is a free-form text that allows counter values to be
-            inserted using a "percent-letter" format. For instance, "[REQ%d]"
-            generates labels of the form "[REQ1]", where "%d" inserts the
-            item number as decimal number.
-          </t>
-            <t>
-            The following formats are supported:
-            <list style="hanging">
-                  <t hangText="%c">
-                lowercase letters (a, b, c, etc.)
-              </t>
-                  <t hangText="%C">
-                uppercase letters (A, B, C, etc.)
-              </t>
-                  <t hangText="%d">
-                decimal numbers (1, 2, 3, etc.)
-              </t>
-                  <t hangText="%i">
-                lowercase Roman numerals (i, ii, iii, etc.)
-              </t>
-                  <t hangText="%I">
-                uppercase Roman numerals (I, II, III, etc.)
-              </t>
-                  <t hangText="%%">
-                represents a percent sign
-              </t>
-               </list>
-            </t>
-            <t>
-            Other formats are reserved for future use.
-          </t>
-            <t/>
-         </list>
-      </t>
-      <t>
-        This attribute is used to control the display of a list.
-      </t>
-      <t>
-        The value of this attribute is inherited by any nested lists that do
-        not have this attribute set. It may be set to:
-      </t>
-      <t>
-         <iref item="list styles" subitem="empty" primary="true"/>
-        "empty" (or not set)
-        <list style="empty">
-            <t>
-            For unlabeled list items; it can also be used for indentation
-            purposes (this is the default value).
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="list styles" subitem="hanging" primary="true"/>
-        "hanging"
-        <list style="empty">
-            <t>
-            For lists where the items are labeled with a piece of text.
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="list styles" subitem="letters" primary="true"/>
-        "letters"
-        <list style="empty">
-            <t>
-            For ordered lists using letters as labels (lowercase letters
-            followed by a period; after "z", it rolls over to a two-letter
-            format). For nested lists, processors usually flip between uppercase and lowercase.
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="list styles" subitem="numbers" primary="true"/>
-        "numbers"
-        <list style="empty">
-            <t>
-            For ordered lists using numbers as labels.
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="list styles" subitem="symbols" primary="true"/>
-        "symbols"
-        <list style="empty">
-            <t>
-            For unordered (bulleted) lists.
-          </t>
-            <t>
-            The style of the bullets is chosen automatically be the processor
-            (some implementations allow overriding the default using a
-            processing instruction).
-          </t>
-         </list>
-      </t>
-      <t>
-        And, finally:
-      </t>
-      <t>
-         <iref item="list styles" subitem="format ..." primary="true"/>
-        "format ..."
-        <list style="empty">
-            <t>
-            For lists with customized labels, consisting of fixed text and
-            an item counter in various formats.
-          </t>
-            <t>
-            The value is a free-form text that allows counter values to be
-            inserted using a "percent-letter" format. For instance, "[REQ%d]"
-            generates labels of the form "[REQ1]", where "%d" inserts the
-            item number as decimal number.
-          </t>
-            <t>
-            The following formats are supported:
-            <list style="hanging">
-                  <t hangText="%c">
-                lowercase letters (a, b, c, etc.)
-              </t>
-                  <t hangText="%C">
-                uppercase letters (A, B, C, etc.)
-              </t>
-                  <t hangText="%d">
-                decimal numbers (1, 2, 3, etc.)
-              </t>
-                  <t hangText="%i">
-                lowercase Roman numerals (i, ii, iii, etc.)
-              </t>
-                  <t hangText="%I">
-                uppercase Roman numerals (I, II, III, etc.)
-              </t>
-                  <t hangText="%%">
-                represents a percent sign
-              </t>
-               </list>
-            </t>
-            <t>
-            Other formats are reserved for future use.
-          </t>
-            <t/>
-         </list>
+        Deprecated.
       </t>
    </section>
 </section>
@@ -1949,6 +1578,9 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
             <iref item="Elements" subitem="cref"/>
             <iref item="cref element" subitem="inside postamble"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
          <t><!--AG-->
+            <iref item="Elements" subitem="spanx"/>
+            <iref item="spanx element" subitem="inside postamble"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</t>
+         <t><!--AG-->
             <iref item="Elements" subitem="tt"/>
             <iref item="tt element" subitem="inside postamble"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
          <t><!--AG-->
@@ -1987,6 +1619,9 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
          <t><!--AG-->
             <iref item="Elements" subitem="cref"/>
             <iref item="cref element" subitem="inside preamble"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="spanx"/>
+            <iref item="spanx element" subitem="inside preamble"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="tt"/>
             <iref item="tt element" subitem="inside preamble"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
@@ -2462,9 +2097,6 @@ and the others are the RFCs that make up the STD</c>
                   <iref item="Elements" subitem="t"/>
                   <iref item="t element" subitem="inside section"/>&lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
                <t><!--AG-->
-                  <iref item="Elements" subitem="list"/>
-                  <iref item="list element" subitem="inside section"/>&lt;<x:ref>list</x:ref>&gt; elements (<xref target="element.list"/>)</t>
-               <t><!--AG-->
                   <iref item="Elements" subitem="figure"/>
                   <iref item="figure element" subitem="inside section"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</t>
                <t><!--AG-->
@@ -2605,6 +2237,43 @@ and the others are the RFCs that make up the STD</c>
    </section>
 </section>
 
+<!--spanx-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;spanx&gt;" anchor="element.spanx">
+   <x:anchor-alias value="spanx"/>
+   <iref item="Elements" subitem="spanx" primary="true"/>
+   <iref item="spanx element" primary="true"/>
+   <t>
+      Deprecated. Use &lt;b&gt;, &lt;i&gt;, and &lt;tt&gt; instead.
+   </t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t anchor="element.spanx.contents"><!--AG-->Content model: only text content.</t>
+
+   <!--spanx/@style-->
+   <section title="'style' attribute" anchor="element.spanx.attribute.style" toc="exclude">
+      <iref item="Attributes" subitem="style"/>
+      <iref item="spanx element" subitem="style attribute"/>
+      <iref item="style attribute" subitem="in spanx element"/>
+      <t>
+         Deprecated.
+      </t>
+   </section>
+
+   <!--spanx/@xml:space-->
+   <section title="'xml:space' attribute" anchor="element.spanx.attribute.xml-space" toc="exclude">
+      <iref item="Attributes" subitem="xml:space"/>
+      <iref item="spanx element" subitem="xml:space attribute"/>
+      <iref item="xml:space attribute" subitem="in spanx element"/>
+      <t>
+         Deprecated.
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"default"</t>
+            <t>"preserve" (default)</t>
+         </list>
+      </t>
+   </section>
+</section>
+
 <!--street-->
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;street&gt;" anchor="element.street">
    <x:anchor-alias value="street"/>
@@ -2625,7 +2294,7 @@ and the others are the RFCs that make up the STD</c>
    <t>
       Contains a paragraph of text.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.t.contents"><!--AG-->
         Content model:
       </t>
@@ -2649,6 +2318,12 @@ and the others are the RFCs that make up the STD</c>
          <t><!--AG-->
             <iref item="Elements" subitem="cref"/>
             <iref item="cref element" subitem="inside t"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="spanx"/>
+            <iref item="spanx element" subitem="inside t"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="vspace"/>
+            <iref item="vspace element" subitem="inside t"/>&lt;<x:ref>vspace</x:ref>&gt; elements (<xref target="element.vspace"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="tt"/>
             <iref item="tt element" subitem="inside t"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
@@ -2680,9 +2355,7 @@ and the others are the RFCs that make up the STD</c>
       <iref item="t element" subitem="cite attribute"/>
       <iref item="cite attribute" subitem="in t element"/>
       <t><!--AG-->
-         A citation for a block quote. It is an error to use this attribute in a &lt;t&gt;
-         element that does not have style="blockquote". *** TBD: is this meant to be an anchor
-         to a reference, a URL, or free text? ***
+         <cref anchor="element.t.attribute.cite.missing">attribute description missing</cref>
       </t>
    </section>
 
@@ -2692,10 +2365,7 @@ and the others are the RFCs that make up the STD</c>
       <iref item="t element" subitem="style attribute"/>
       <iref item="style attribute" subitem="in t element"/>
       <t><!--AG-->
-         The style for the paragraph. Specifying a style will cause a change in the
-         formatting of the paragraph in the non-canonical formats generated by a processor.
-         The default value is "normal". Other values are "blockquote" for a block quotation
-         and "note" for regular text that is meant to be indented from the left margin.
+         <cref anchor="element.t.attribute.style.missing">attribute description missing</cref>
       </t>
    </section>
 </section>
@@ -2866,7 +2536,7 @@ and the others are the RFCs that make up the STD</c>
    <t>
             Causes the text to be displayed in a constant-width font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.tt.contents"><!--AG-->
         Content model:
       </t>
@@ -2965,6 +2635,28 @@ and the others are the RFCs that make up the STD</c>
    <t anchor="element.uri.contents"><!--AG-->Content model: only text content.</t>
 </section>
 
+<!--vspace-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;vspace&gt;" anchor="element.vspace">
+   <x:anchor-alias value="vspace"/>
+   <iref item="Elements" subitem="vspace" primary="true"/>
+   <iref item="vspace element" primary="true"/>
+   <t>
+      Deprecated.
+   </t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t anchor="element.vspace.contents"><!--AG-->Content model: this element does not have any contents.</t>
+
+   <!--vspace/@blankLines-->
+   <section title="'blankLines' attribute" anchor="element.vspace.attribute.blankLines" toc="exclude">
+      <iref item="Attributes" subitem="blankLines"/>
+      <iref item="vspace element" subitem="blankLines attribute"/>
+      <iref item="blankLines attribute" subitem="in vspace element"/>
+      <t>
+         Deprecated.
+      </t>
+   </section>
+</section>
+
 <!--workgroup-->
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;workgroup&gt;" anchor="element.workgroup">
    <x:anchor-alias value="workgroup"/>
@@ -3011,7 +2703,7 @@ and the others are the RFCs that make up the STD</c>
       <cref>This needs to be expanded with examples and with a discussion
       how the autogenerated text differs when &lt;xref&gt; is not empty</cref>
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.xref.contents"><!--AG-->Content model: only text content.</t>
 
    <!--xref/@format-->
@@ -3833,7 +3525,7 @@ section =
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "no" ] attribute removeinrfc { "yes" | "no" 
 }?,
-    (t | \list | figure | texttable | iref | artwork)*,
+    (t | figure | texttable | iref | artwork)*,
     section*
   }
 t =
@@ -3841,22 +3533,25 @@ t =
     attribute anchor { xsd:ID }?,
     [ a:defaultValue = "normal" ] attribute style { text }?,
     attribute cite { text }?,
-    (text | \list | figure | xref | eref | iref | cref | tt | b | i)*
+    (text
+     | \list
+     | figure
+     | xref
+     | eref
+     | iref
+     | cref
+     | spanx
+     | vspace
+     | tt
+     | b
+     | i)*
   }
 \list =
   element list {
     [ a:defaultValue = "empty" ] attribute style { text }?,
+    attribute hangIndent { text }?,
     attribute counter { text }?,
-    attribute anchor { xsd:ID }?,
-    attribute format { text }?,
-    li+
-  }
-li =
-  element li {
-    attribute hangtext { text }?,
-    attribute term { text }?,
-    attribute anchor { text }?,
-    (text | t | xref | eref | iref | cref | tt | b)*
+    t+
   }
 xref =
   element xref {
@@ -3889,6 +3584,18 @@ cref =
 tt = element tt { (text | xref | eref | iref | cref | b | i)* }
 b = element b { (text | xref | eref | iref | cref | tt | i)* }
 i = element i { (text | xref | eref | iref | cref | b | tt)* }
+spanx =
+  element spanx {
+    [ a:defaultValue = "preserve" ]
+    attribute xml:space { "default" | "preserve" }?,
+    [ a:defaultValue = "emph" ] attribute style { text }?,
+    text
+  }
+vspace =
+  element vspace {
+    [ a:defaultValue = "0" ] attribute blankLines { text }?,
+    empty
+  }
 figure =
   element figure {
     attribute anchor { xsd:ID }?,
@@ -3907,8 +3614,9 @@ figure =
     postamble?
   }
 preamble =
-  element preamble { (text | xref | eref | iref | cref | tt | b | 
-i)* }
+  element preamble {
+    (text | xref | eref | iref | cref | spanx | tt | b | i)*
+  }
 artwork =
   element artwork {
     [ a:defaultValue = "preserve" ]
@@ -3925,8 +3633,9 @@ artwork =
     text*
   }
 postamble =
-  element postamble { (text | xref | eref | iref | cref | tt | b | 
-i)* }
+  element postamble {
+    (text | xref | eref | iref | cref | spanx | tt | b | i)*
+  }
 texttable =
   element texttable {
     attribute anchor { xsd:ID }?,
@@ -3949,7 +3658,9 @@ ttcol =
     attribute align { "left" | "center" | "right" }?,
     (xref | eref | iref | cref | text)*
   }
-c = element c { (text | xref | eref | iref | cref | tt | b | i)* }
+c =
+  element c { (text | xref | eref | iref | cref | spanx | tt | b | 
+i)* }
 back = element back { references*, section* }
 references =
   element references {
@@ -3982,7 +3693,7 @@ format =
   }
 annotation =
   element annotation {
-    (text | xref | eref | iref | cref | tt | b | i)*
+    (text | xref | eref | iref | cref | spanx | tt | b | i)*
   }
 start = rfc
 <?ENDINC xml2rfcv3.rnc.folded ?>

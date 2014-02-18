@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                          February 14, 2014
+Obsoletes: 2629 (if approved)                          February 18, 2014
 Intended status: Standards Track
-Expires: August 18, 2014
+Expires: August 22, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 18, 2014.
+   This Internet-Draft will expire on August 22, 2014.
 
 Copyright Notice
 
@@ -60,8 +60,7 @@ Table of Contents
 
    1.  Introduction
      1.1.  Differences from v2 to v3
-       1.1.1.  Design for Changes in List Handling
-       1.1.2.  Design for Changes in Reference Handling
+       1.1.1.  Design for Changes in Reference Handling
      1.2.  Syntax Notation
    2.  Elements
      2.1.  <abstract>
@@ -87,22 +86,22 @@ Table of Contents
      2.21. <i>
      2.22. <iref>
      2.23. <keyword>
-     2.24. <li>
-     2.25. <list>
-     2.26. <middle>
-     2.27. <note>
-     2.28. <organization>
-     2.29. <phone>
-     2.30. <postal>
-     2.31. <postalbody>
-     2.32. <postamble>
-     2.33. <preamble>
-     2.34. <reference>
-     2.35. <references>
-     2.36. <region>
-     2.37. <rfc>
-     2.38. <section>
-     2.39. <seriesInfo>
+     2.24. <list>
+     2.25. <middle>
+     2.26. <note>
+     2.27. <organization>
+     2.28. <phone>
+     2.29. <postal>
+     2.30. <postalbody>
+     2.31. <postamble>
+     2.32. <preamble>
+     2.33. <reference>
+     2.34. <references>
+     2.35. <region>
+     2.36. <rfc>
+     2.37. <section>
+     2.38. <seriesInfo>
+     2.39. <spanx>
      2.40. <street>
      2.41. <t>
      2.42. <texttable>
@@ -110,8 +109,9 @@ Table of Contents
      2.44. <tt>
      2.45. <ttcol>
      2.46. <uri>
-     2.47. <workgroup>
-     2.48. <xref>
+     2.47. <vspace>
+     2.48. <workgroup>
+     2.49. <xref>
    3.  Special Unicode Code Points
    4.  Internationalization Considerations
    5.  Security Considerations
@@ -176,6 +176,19 @@ Table of Contents
    than for a v2 document is more important than backwards compatibility
    with v2, given the latter two design criteria.
 
+   v3 is upwards compatible with v2, meaning that a v2 document is meant
+   to be a valid v3 document as well.  However, some features of v2 are
+   deprecated in v3 in favor of new elements.  Deprecated features are
+   described in [XML2RFCv2].
+
+   The canonical RFCs will not have any markup that uses a deprecated
+   feature.  The RFC Editor's processor will have a "convert with
+   warnings" mode that will convert a v2 document to a v3 document that
+   converts deprecated features wherever possible, issuing warnings for
+   where it cannot convert.  The processor will also have a "strict"
+   mode that will issue errors if any deprecated features are in the
+   input.
+
    The list of changes so far is:
 
    o  In <address>, allowed the sub-elements to be in any order.
@@ -190,8 +203,8 @@ Table of Contents
 
    o  In <front>, made <date> optional.
 
-   o  Changed the handling of <list>.  This large change, including the
-      addition of the <li> element, is described in Section 1.1.1.
+   o  Deprecated <list> in favor of *** list of new list styles goes
+      here ***.
 
    o  In <postal>, allowed the sub-elements to be in any order.  Also
       allowed the inclusion of <postalbody>.
@@ -199,12 +212,12 @@ Table of Contents
    o  Added <postalbody>, free text that represents the address.
 
    o  Changed the handling of <reference>.  This large change is
-      described in Section 1.1.2.
+      described in Section 1.1.1.
 
    o  In <section>, added the optional "numbered" and "removeinrfc"
       attributes.
 
-   o  Removed the <spanx> element, and replaced it with <b>, <i>, and
+   o  Deprecated <spanx> element, and replaced it with <b>, <i>, and
       <tt>.
 
    o  Added a "style" attribute to <t> to allow for block quotes and
@@ -213,79 +226,10 @@ Table of Contents
    o  In <ttcol>, added <xref>, <eref>, <iref>, and <cref> as optional
       children.
 
-   o  Removed the <vspace> element because it is no longer needed for
-      lists.
+   o  Deprecated <vspace> because the v2 spec labeled it as "a purely
+      presentational element and thus its use ought to be avoided".
 
-1.1.1.  Design for Changes in List Handling
-
-   This section describes one of the larger changes in the design of v3,
-   namely the way lists are handled.  The community has asked for many
-   changes to list handing to make creating and editing lists more
-   intuitive.  The goals include:
-
-   o  List items can have more than one paragraph without triggering
-      another list label.
-
-   o  Lists should be block elements, not inline (flow) elements.  They
-      should be usable outside <t>.
-
-   o  Give more control over the labels for "style" of "letters",
-      "numbers", or "symbols".  Make more explicit the rules for nested
-      lists that use the defaults for a "style".
-
-   o  Make hanging lists more like other list styles.
-
-   o  Make a real "dictionary" style, with the definition starting on a
-      new line.
-
-   o  Don't mix label style with content (the "format" attribute).
-
-   o  Create a new mechanism to cause a paragraph to be indented,
-      without using <list style="empty">.
-
-   To meet these goals, the following changes have been made in the v3
-   vocabulary:
-
-   o  <list> is changed to have each list item is represented by a <li>
-      element.
-
-   o  The content model for <li> is that it either contains free text
-      (which can contain non-blick elements such as <b>, <cref>), or it
-      contains one or more <t> elements.  In the latter case, having
-      more than one <t> element causes breaks but without triggering
-      another label.
-
-   o  <list> no longer needs to be inside of <t>, and can appear in the
-      other contexts where a list might be expected.
-
-   o  <list> has a new optional "anchor" attribute so that a list can be
-      referenced from other places in the text.
-
-   o  For the "style" attributes in <list>:
-
-      *  For "letters", "numbers", and "symbols", there is an optional
-         "format" attribute that matches the current one for formatting
-         the label.  There will be a clear set of defaults for each of
-         these given in the spec.
-
-      *  For "hanging", the <li> element has an optional attribute of
-         "hangText".
-
-      *  Add a new style of "dictionary", the <li> element has an
-         optional attribute of "term".
-
-   An example of using the new format for a simple bulleted list where
-   the second item has two paragraphs is:
-
-   <list style="symbols">
-      <li>This is the first element with a bullet.</li>
-      <li><t>This is the second element with a bullet.</t>
-          <t>This is part of the second element,
-          but it does not have a bullet.</t></li>
-      <li>This is the third element with a bullet.</li>
-   </list>
-
-1.1.2.  Design for Changes in Reference Handling
+1.1.1.  Design for Changes in Reference Handling
 
    This section describes one of the larger changes in the design of v3,
    namely the additions to make using references easier.  Most
@@ -367,9 +311,9 @@ Table of Contents
 
    In any order:
 
-   o  <postal> elements (Section 2.30)
+   o  <postal> elements (Section 2.29)
 
-   o  <phone> elements (Section 2.29)
+   o  <phone> elements (Section 2.28)
 
    o  <facsimile> elements (Section 2.17)
 
@@ -390,7 +334,7 @@ Table of Contents
 
    ...will generate the text used in the reference for [XML].
 
-   This element appears as child element of: <reference> (Section 2.34).
+   This element appears as child element of: <reference> (Section 2.33).
 
    Content model:
 
@@ -398,13 +342,15 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.48)
+   o  <xref> elements (Section 2.49)
 
    o  <eref> elements (Section 2.16)
 
    o  <iref> elements (Section 2.22)
 
    o  <cref> elements (Section 2.13)
+
+   o  <spanx> elements (Section 2.39)
 
    o  <tt> elements (Section 2.44)
 
@@ -455,7 +401,7 @@ Table of Contents
    published with enhanced diagrams; a recent example is [RFC5598].
 
    This element appears as child element of: <figure> (Section 2.18),
-   and <section> (Section 2.38).
+   and <section> (Section 2.37).
 
    Content model:
 
@@ -598,7 +544,7 @@ Table of Contents
 
    In this order:
 
-   1.  One optional <organization> element (Section 2.28)
+   1.  One optional <organization> element (Section 2.27)
 
    2.  One optional <address> element (Section 2.2)
 
@@ -636,9 +582,9 @@ Table of Contents
    Causes the text to be displayed in a bold font.
 
    This element appears as child element of: <annotation> (Section 2.3),
-   <c> (Section 2.9), <i> (Section 2.21), <li> (Section 2.24),
-   <postamble> (Section 2.32), <preamble> (Section 2.33), <t>
-   (Section 2.41), and <tt> (Section 2.44).
+   <c> (Section 2.9), <i> (Section 2.21), <postamble> (Section 2.31),
+   <preamble> (Section 2.32), <t> (Section 2.41), and <tt>
+   (Section 2.44).
 
    Content model:
 
@@ -646,7 +592,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.48)
+   o  <xref> elements (Section 2.49)
 
    o  <eref> elements (Section 2.16)
 
@@ -663,15 +609,15 @@ Table of Contents
    Contains the "back" part of the document: the references and
    appendices.
 
-   This element appears as child element of: <rfc> (Section 2.37).
+   This element appears as child element of: <rfc> (Section 2.36).
 
    Content model:
 
    In this order:
 
-   1.  Optional <references> elements (Section 2.35)
+   1.  Optional <references> elements (Section 2.34)
 
-   2.  Optional <section> elements (Section 2.38)
+   2.  Optional <section> elements (Section 2.37)
 
 2.9.  <c>
 
@@ -685,13 +631,15 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.48)
+   o  <xref> elements (Section 2.49)
 
    o  <eref> elements (Section 2.16)
 
    o  <iref> elements (Section 2.22)
 
    o  <cref> elements (Section 2.13)
+
+   o  <spanx> elements (Section 2.39)
 
    o  <tt> elements (Section 2.44)
 
@@ -703,7 +651,7 @@ Table of Contents
 
    Gives the city name in a postal address.
 
-   This element appears as child element of: <postal> (Section 2.30).
+   This element appears as child element of: <postal> (Section 2.29).
 
    Content model: only text content.
 
@@ -711,7 +659,7 @@ Table of Contents
 
    Gives the postal region code.
 
-   This element appears as child element of: <postal> (Section 2.30).
+   This element appears as child element of: <postal> (Section 2.29).
 
    Content model: only text content.
 
@@ -719,7 +667,7 @@ Table of Contents
 
    Gives the country in a postal address.
 
-   This element appears as child element of: <postal> (Section 2.30).
+   This element appears as child element of: <postal> (Section 2.29).
 
    Content model: only text content.
 
@@ -733,10 +681,9 @@ Table of Contents
    formatter), or not at all (when generating an RFC).
 
    This element appears as child element of: <annotation> (Section 2.3),
-   <b> (Section 2.7), <c> (Section 2.9), <i> (Section 2.21), <li>
-   (Section 2.24), <postamble> (Section 2.32), <preamble>
-   (Section 2.33), <t> (Section 2.41), <tt> (Section 2.44), and <ttcol>
-   (Section 2.45).
+   <b> (Section 2.7), <c> (Section 2.9), <i> (Section 2.21), <postamble>
+   (Section 2.31), <preamble> (Section 2.32), <t> (Section 2.41), <tt>
+   (Section 2.44), and <ttcol> (Section 2.45).
 
    Content model: only text content.
 
@@ -813,10 +760,9 @@ Table of Contents
    angle brackets ([RFC3986], Appendix C).
 
    This element appears as child element of: <annotation> (Section 2.3),
-   <b> (Section 2.7), <c> (Section 2.9), <i> (Section 2.21), <li>
-   (Section 2.24), <postamble> (Section 2.32), <preamble>
-   (Section 2.33), <t> (Section 2.41), <tt> (Section 2.44), and <ttcol>
-   (Section 2.45).
+   <b> (Section 2.7), <c> (Section 2.9), <i> (Section 2.21), <postamble>
+   (Section 2.31), <preamble> (Section 2.32), <t> (Section 2.41), <tt>
+   (Section 2.44), and <ttcol> (Section 2.45).
 
    Content model: only text content.
 
@@ -840,7 +786,7 @@ Table of Contents
 
    [[element.figure.missing: element description missing]]
 
-   This element appears as child element of: <section> (Section 2.38),
+   This element appears as child element of: <section> (Section 2.37),
    and <t> (Section 2.41).
 
    Content model:
@@ -849,11 +795,11 @@ Table of Contents
 
    1.  Optional <iref> elements (Section 2.22)
 
-   2.  One optional <preamble> element (Section 2.33)
+   2.  One optional <preamble> element (Section 2.32)
 
    3.  One <artwork> element (Section 2.5)
 
-   4.  One optional <postamble> element (Section 2.32)
+   4.  One optional <postamble> element (Section 2.31)
 
 2.18.1.  'align' attribute
 
@@ -917,7 +863,7 @@ Table of Contents
    for a reference, the "target" attribute on <reference> can be used
    instead.
 
-   This element appears as child element of: <reference> (Section 2.34).
+   This element appears as child element of: <reference> (Section 2.33).
 
    Content model: this element does not have any contents.
 
@@ -940,8 +886,8 @@ Table of Contents
    Represent the "front matter": metadata (such as author information),
    abstract, and additional notes.
 
-   This element appears as child element of: <reference> (Section 2.34),
-   and <rfc> (Section 2.37).
+   This element appears as child element of: <reference> (Section 2.33),
+   and <rfc> (Section 2.36).
 
    Content model:
 
@@ -955,21 +901,21 @@ Table of Contents
 
    4.  Optional <area> elements (Section 2.4)
 
-   5.  Optional <workgroup> elements (Section 2.47)
+   5.  Optional <workgroup> elements (Section 2.48)
 
    6.  Optional <keyword> elements (Section 2.23)
 
    7.  One optional <abstract> element (Section 2.1)
 
-   8.  Optional <note> elements (Section 2.27)
+   8.  Optional <note> elements (Section 2.26)
 
 2.21.  <i>
 
    Causes the text to be displayed in an italic font.
 
    This element appears as child element of: <annotation> (Section 2.3),
-   <b> (Section 2.7), <c> (Section 2.9), <postamble> (Section 2.32),
-   <preamble> (Section 2.33), <t> (Section 2.41), and <tt>
+   <b> (Section 2.7), <c> (Section 2.9), <postamble> (Section 2.31),
+   <preamble> (Section 2.32), <t> (Section 2.41), and <tt>
    (Section 2.44).
 
    Content model:
@@ -978,7 +924,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.48)
+   o  <xref> elements (Section 2.49)
 
    o  <eref> elements (Section 2.16)
 
@@ -1006,9 +952,9 @@ Table of Contents
 
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.7), <c> (Section 2.9), <figure> (Section 2.18), <i>
-   (Section 2.21), <li> (Section 2.24), <postamble> (Section 2.32),
-   <preamble> (Section 2.33), <section> (Section 2.38), <t>
-   (Section 2.41), <tt> (Section 2.44), and <ttcol> (Section 2.45).
+   (Section 2.21), <postamble> (Section 2.31), <preamble>
+   (Section 2.32), <section> (Section 2.37), <t> (Section 2.41), <tt>
+   (Section 2.44), and <ttcol> (Section 2.45).
 
    Content model: this element does not have any contents.
 
@@ -1045,234 +991,39 @@ Table of Contents
 
    Content model: only text content.
 
-2.24.  <li>
+2.24.  <list>
 
-   Specifies an item in a list.  The content model for <li> is that it
-   either contains free text (which can contain non-blick elements such
-   as <b>, <cref>), or it contains one or more <t> elements.  In the
-   latter case, having more than one <t> element causes breaks but
-   without triggering another label.
+   Deprecated.  Use **** the other kinds of lists go here ***.
 
-   This element appears as child element of: <list> (Section 2.25).
+   This element appears as child element of: <t> (Section 2.41).
 
    Content model:
 
-   In any order:
+   One or more <t> elements (Section 2.41)
 
-   o  Text
+2.24.1.  'counter' attribute
 
-   o  <t> elements (Section 2.41)
+   Deprecated.
 
-   o  <xref> elements (Section 2.48)
+2.24.2.  'hangIndent' attribute
 
-   o  <eref> elements (Section 2.16)
+   Deprecated.
 
-   o  <iref> elements (Section 2.22)
+2.24.3.  'style' attribute
 
-   o  <cref> elements (Section 2.13)
+   Deprecated.
 
-   o  <tt> elements (Section 2.44)
-
-   o  <b> elements (Section 2.7)
-
-2.24.1.  'anchor' attribute
-
-   Document-wide unique identifier for this list item.
-
-2.24.2.  'hangtext' attribute
-
-   In a list whose style is "hanging", the "hangText" attribute of <li>
-   gives the term that will be at the left margin.  In a list whose
-   style is not "hanging", the processor will return an error.
-
-2.24.3.  'term' attribute
-
-   In a list whose style is "dictionary", the "term" attribute of <li>
-   gives the term being defined.  In a list whose style is not
-   "dictionary", the processor will return an error.
-
-2.25.  <list>
-
-   Delineates a text list.
-
-   Each list item is represented by a <li> element.
-
-   This element appears as child element of: <section> (Section 2.38),
-   and <t> (Section 2.41).
-
-   Content model:
-
-   One or more <li> elements (Section 2.24)
-
-2.25.1.  'anchor' attribute
-
-   Document-wide unique identifier for this list.
-
-2.25.2.  'counter' attribute
-
-   This attribute holds a token that serves as an identifier for a
-   counter.  The intended use is continuation of lists.
-
-   Note that this attribute functions only when the style attribute is
-   using the "format..." syntax (Section 2.25.4); otherwise, it is
-   ignored.
-
-2.25.3.  'format' attribute
-
-   The format for the labels in this list.  The "format" attribute only
-   applies to lists whose "style" is "letters", "numbers", and
-   "symbols".  If the "format" attribute is given for a list with any
-   other "style", the processor will issue an error.
-
-   The default format for "letters" is "%c".  The default format for
-   "numbers" is "%d".  The default format for "symbols" is "o".
-   [[anchor4: That last one is almost certainly wrong and this needs to
-   be specified better in the style="format" part as well.]]
-
-2.25.4.  'style' attribute
-
-   This attribute is used to control the display of a list.
-
-   The value of this attribute is inherited by any nested lists that do
-   not have this attribute set.  It may be set to:
-
-   "empty" (or not set)
-
-      For unlabeled list items; it can also be used for indentation
-      purposes (this is the default value).
-
-   "dictionary"
-
-      For lists that have a term and a definition.  The term is given in
-      the <li> element in the "term" attribute.
-
-   "hanging"
-
-      For lists where the items are labeled with a piece of text.
-
-   "letters"
-
-      For ordered lists using letters as labels (lowercase letters
-      followed by a period; after "z", it rolls over to a two-letter
-      format).  For nested lists, processors usually flip between
-      uppercase and lowercase.
-
-   "numbers"
-
-      For ordered lists using numbers as labels.
-
-   "symbols"
-
-      For unordered (bulleted) lists.
-
-      The style of the bullets is chosen automatically be the processor
-      (some implementations allow overriding the default using a
-      processing instruction).
-
-   And, finally:
-
-   "format ..."
-
-      For lists with customized labels, consisting of fixed text and an
-      item counter in various formats.
-
-      The value is a free-form text that allows counter values to be
-      inserted using a "percent-letter" format.  For instance, "[REQ%d]"
-      generates labels of the form "[REQ1]", where "%d" inserts the item
-      number as decimal number.
-
-      The following formats are supported:
-
-      %c lowercase letters (a, b, c, etc.)
-
-      %C uppercase letters (A, B, C, etc.)
-
-      %d decimal numbers (1, 2, 3, etc.)
-
-      %i lowercase Roman numerals (i, ii, iii, etc.)
-
-      %I uppercase Roman numerals (I, II, III, etc.)
-
-      %% represents a percent sign
-
-      Other formats are reserved for future use.
-
-
-
-   This attribute is used to control the display of a list.
-
-   The value of this attribute is inherited by any nested lists that do
-   not have this attribute set.  It may be set to:
-
-   "empty" (or not set)
-
-      For unlabeled list items; it can also be used for indentation
-      purposes (this is the default value).
-
-   "hanging"
-
-      For lists where the items are labeled with a piece of text.
-
-   "letters"
-
-      For ordered lists using letters as labels (lowercase letters
-      followed by a period; after "z", it rolls over to a two-letter
-      format).  For nested lists, processors usually flip between
-      uppercase and lowercase.
-
-   "numbers"
-
-      For ordered lists using numbers as labels.
-
-   "symbols"
-
-      For unordered (bulleted) lists.
-
-      The style of the bullets is chosen automatically be the processor
-      (some implementations allow overriding the default using a
-      processing instruction).
-
-   And, finally:
-
-   "format ..."
-
-      For lists with customized labels, consisting of fixed text and an
-      item counter in various formats.
-
-      The value is a free-form text that allows counter values to be
-      inserted using a "percent-letter" format.  For instance, "[REQ%d]"
-      generates labels of the form "[REQ1]", where "%d" inserts the item
-      number as decimal number.
-
-      The following formats are supported:
-
-      %c lowercase letters (a, b, c, etc.)
-
-      %C uppercase letters (A, B, C, etc.)
-
-      %d decimal numbers (1, 2, 3, etc.)
-
-      %i lowercase Roman numerals (i, ii, iii, etc.)
-
-      %I uppercase Roman numerals (I, II, III, etc.)
-
-      %% represents a percent sign
-
-      Other formats are reserved for future use.
-
-
-
-2.26.  <middle>
+2.25.  <middle>
 
    Represents the main content of the document.
 
-   This element appears as child element of: <rfc> (Section 2.37).
+   This element appears as child element of: <rfc> (Section 2.36).
 
    Content model:
 
-   One or more <section> elements (Section 2.38)
+   One or more <section> elements (Section 2.37)
 
-2.27.  <note>
+2.26.  <note>
 
    Creates an unnumbered section that appears after the abstract.
 
@@ -1286,11 +1037,11 @@ Table of Contents
 
    One or more <t> elements (Section 2.41)
 
-2.27.1.  'title' attribute (mandatory)
+2.26.1.  'title' attribute (mandatory)
 
    The title of the note.
 
-2.28.  <organization>
+2.27.  <organization>
 
    Specifies the affiliation of an author.
 
@@ -1302,11 +1053,11 @@ Table of Contents
 
    Content model: only text content.
 
-2.28.1.  'abbrev' attribute
+2.27.1.  'abbrev' attribute
 
    Abbreviated variant.
 
-2.29.  <phone>
+2.28.  <phone>
 
    Represents a phone number.
 
@@ -1318,7 +1069,7 @@ Table of Contents
 
    Content model: only text content.
 
-2.30.  <postal>
+2.29.  <postal>
 
    Contains optional child elements providing postal information.  These
    elements will be displayed in an order that is processor-specific.
@@ -1336,26 +1087,26 @@ Table of Contents
 
    o  <city> elements (Section 2.10)
 
-   o  <region> elements (Section 2.36)
+   o  <region> elements (Section 2.35)
 
    o  <code> elements (Section 2.11)
 
    o  <country> elements (Section 2.12)
 
-   o  <postalbody> elements (Section 2.31)
+   o  <postalbody> elements (Section 2.30)
 
-2.31.  <postalbody>
+2.30.  <postalbody>
 
    A method for presenting a postal address without using <street>,
    <city>, <region>, <code>, and <country> elements.  Processors will
    maintain horizontal whitespace and line breaks in the text of the
    <postalbody> element.
 
-   This element appears as child element of: <postal> (Section 2.30).
+   This element appears as child element of: <postal> (Section 2.29).
 
    Content model: only text content.
 
-2.32.  <postamble>
+2.31.  <postamble>
 
    Gives text that appears at the bottom of a figure or table.
 
@@ -1368,7 +1119,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.48)
+   o  <xref> elements (Section 2.49)
 
    o  <eref> elements (Section 2.16)
 
@@ -1376,13 +1127,15 @@ Table of Contents
 
    o  <cref> elements (Section 2.13)
 
+   o  <spanx> elements (Section 2.39)
+
    o  <tt> elements (Section 2.44)
 
    o  <b> elements (Section 2.7)
 
    o  <i> elements (Section 2.21)
 
-2.33.  <preamble>
+2.32.  <preamble>
 
    Gives text that appears at the top of a figure or table.
 
@@ -1395,7 +1148,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.48)
+   o  <xref> elements (Section 2.49)
 
    o  <eref> elements (Section 2.16)
 
@@ -1403,13 +1156,15 @@ Table of Contents
 
    o  <cref> elements (Section 2.13)
 
+   o  <spanx> elements (Section 2.39)
+
    o  <tt> elements (Section 2.44)
 
    o  <b> elements (Section 2.7)
 
    o  <i> elements (Section 2.21)
 
-2.34.  <reference>
+2.33.  <reference>
 
    Represents a bibliographical reference.
 
@@ -1484,7 +1239,7 @@ Table of Contents
    the BCP or STD.
 
    This element appears as child element of: <references>
-   (Section 2.35).
+   (Section 2.34).
 
    Content model:
 
@@ -1492,13 +1247,13 @@ Table of Contents
 
    1.  Optional <front> elements (Section 2.20)
 
-   2.  Optional <seriesInfo> elements (Section 2.39)
+   2.  Optional <seriesInfo> elements (Section 2.38)
 
    3.  Optional <format> elements (Section 2.19)
 
    4.  Optional <annotation> elements (Section 2.3)
 
-2.34.1.  'anchor' attribute
+2.33.1.  'anchor' attribute
 
    Document-wide unique identifier for this reference.  Usually, this
    will be used both to "label" the reference in the references section,
@@ -1506,17 +1261,17 @@ Table of Contents
 
    The value needs to be a valid XML "Name" (Section 2.3 of [XML]).
 
-2.34.2.  'document' attribute
+2.33.2.  'document' attribute
 
    The document or documents that make up a reference, as described
    earlier in this section.
 
-2.34.3.  'series' attribute
+2.33.3.  'series' attribute
 
    The series from which the referred-to document comes from, as
    described earlier in this section.
 
-2.34.4.  'target' attribute
+2.33.4.  'target' attribute
 
    Holds the URI for the reference.
 
@@ -1524,7 +1279,7 @@ Table of Contents
    needed, nor desirable, as it can be automatically generated (for
    instance, for RFCs).
 
-2.35.  <references>
+2.34.  <references>
 
    Contains a set of bibliographical references.
 
@@ -1538,9 +1293,9 @@ Table of Contents
 
    Content model:
 
-   One or more <reference> elements (Section 2.34)
+   One or more <reference> elements (Section 2.33)
 
-2.35.1.  'title' attribute
+2.34.1.  'title' attribute
 
    Provides the title for the References section (defaulting to
    "References").
@@ -1548,15 +1303,15 @@ Table of Contents
    In general, the title should be either "Normative References" or
    "Informative References".
 
-2.36.  <region>
+2.35.  <region>
 
    Provides the region name in a postal address.
 
-   This element appears as child element of: <postal> (Section 2.30).
+   This element appears as child element of: <postal> (Section 2.29).
 
    Content model: only text content.
 
-2.37.  <rfc>
+2.36.  <rfc>
 
    This is the root element of the xml2rfc vocabulary.
 
@@ -1572,11 +1327,11 @@ Table of Contents
 
    1.  One <front> element (Section 2.20)
 
-   2.  One <middle> element (Section 2.26)
+   2.  One <middle> element (Section 2.25)
 
    3.  One optional <back> element (Section 2.8)
 
-2.37.1.  'category' attribute
+2.36.1.  'category' attribute
 
    Document category (see Appendix A.1).
 
@@ -1592,7 +1347,7 @@ Table of Contents
 
    o  "historic"
 
-2.37.2.  'consensus' attribute
+2.36.2.  'consensus' attribute
 
    Affects the generated boilerplate.
 
@@ -1604,7 +1359,7 @@ Table of Contents
 
    o  "yes"
 
-2.37.3.  'docName' attribute
+2.36.3.  'docName' attribute
 
    For Internet-Drafts, this specifies the draft name (which appears
    below the title).
@@ -1618,7 +1373,7 @@ Table of Contents
 
    See Section 7 of [IDGUIDE] for further information.
 
-2.37.4.  'ipr' attribute
+2.36.4.  'ipr' attribute
 
    Represents the Intellectual Property status of the document.  See
    Appendix A.2 for details.
@@ -1657,26 +1412,26 @@ Table of Contents
 
    o  "pre5378Trust200902"
 
-2.37.5.  'iprExtract' attribute
+2.36.5.  'iprExtract' attribute
 
    Identifies a Section within the document for which extraction "as-is"
    is explicitly allowed (only relevant for historic values of the "ipr"
    attribute).
 
-2.37.6.  'number' attribute
+2.36.6.  'number' attribute
 
    The number of the RFC to be produced.
 
-2.37.7.  'obsoletes' attribute
+2.36.7.  'obsoletes' attribute
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
-2.37.8.  'seriesNo' attribute
+2.36.8.  'seriesNo' attribute
 
    When producing a document within document series (such as "STD"): the
    number within that series.
 
-2.37.9.  'submissionType' attribute
+2.36.9.  'submissionType' attribute
 
    The document stream.
 
@@ -1692,17 +1447,17 @@ Table of Contents
 
    o  "independent"
 
-2.37.10.  'updates' attribute
+2.36.10.  'updates' attribute
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
-2.37.11.  'xml:lang' attribute
+2.36.11.  'xml:lang' attribute
 
    The natural language used in the document (defaults to "en").
 
    See Section 2.12 of [XML] for more information.
 
-2.38.  <section>
+2.37.  <section>
 
    Represents a section (when inside a <middle> element) or an appendix
    (when inside a <back> element).
@@ -1711,7 +1466,7 @@ Table of Contents
    <section> elements.
 
    This element appears as child element of: <back> (Section 2.8),
-   <middle> (Section 2.26), and <section> (Section 2.38).
+   <middle> (Section 2.25), and <section> (Section 2.37).
 
    Content model:
 
@@ -1721,8 +1476,6 @@ Table of Contents
 
        *  <t> elements (Section 2.41)
 
-       *  <list> elements (Section 2.25)
-
        *  <figure> elements (Section 2.18)
 
        *  <texttable> elements (Section 2.42)
@@ -1731,15 +1484,15 @@ Table of Contents
 
        *  <artwork> elements (Section 2.5)
 
-   2.  Optional <section> elements (Section 2.38)
+   2.  Optional <section> elements (Section 2.37)
 
-2.38.1.  'anchor' attribute
+2.37.1.  'anchor' attribute
 
    Document-wide unique identifier for this section.
 
    The value needs to be a valid XML "Name" (Section 2.3 of [XML]).
 
-2.38.2.  'numbered' attribute
+2.37.2.  'numbered' attribute
 
    If set to "no", this section does not get a section number.
    Processors will verify that such a section is not followed by a
@@ -1752,7 +1505,7 @@ Table of Contents
 
    o  "no"
 
-2.38.3.  'removeinrfc' attribute
+2.37.3.  'removeinrfc' attribute
 
    If set to "yes", this section is marked in the processor with text
    indicating that it should be removed before the document is published
@@ -1764,15 +1517,15 @@ Table of Contents
 
    o  "no" (default)
 
-2.38.4.  'title' attribute (mandatory)
+2.37.4.  'title' attribute (mandatory)
 
    The title of the section.
 
-2.38.5.  'toc' attribute
+2.37.5.  'toc' attribute
 
    Determines whether the section is included in the Table Of Contents.
 
-   [[anchor5: Need to consider inheritance.]]
+   [[anchor4: Need to consider inheritance.]]
 
    Allowed values:
 
@@ -1782,16 +1535,16 @@ Table of Contents
 
    o  "default" (default)
 
-2.39.  <seriesInfo>
+2.38.  <seriesInfo>
 
    Specifies the document series in which this document appears, and
    also specifies an identifier within that series.
 
-   This element appears as child element of: <reference> (Section 2.34).
+   This element appears as child element of: <reference> (Section 2.33).
 
    Content model: this element does not have any contents.
 
-2.39.1.  'name' attribute (mandatory)
+2.38.1.  'name' attribute (mandatory)
 
    The name of the series.
 
@@ -1799,7 +1552,7 @@ Table of Contents
    generating links, and adding descriptions such as "work in
    progress"): "BCP", "FYI", "Internet-Draft", "RFC", and "STD".
 
-2.39.2.  'value' attribute (mandatory)
+2.38.2.  'value' attribute (mandatory)
 
    The identifier within the series specified by the "name" attribute.
 
@@ -1807,11 +1560,35 @@ Table of Contents
    For Internet-Drafts, it is the full draft name (ending with the two-
    digit version number).
 
+2.39.  <spanx>
+
+   Deprecated.  Use <b>, <i>, and <tt> instead.
+
+   This element appears as child element of: <annotation> (Section 2.3),
+   <c> (Section 2.9), <postamble> (Section 2.31), <preamble>
+   (Section 2.32), and <t> (Section 2.41).
+
+   Content model: only text content.
+
+2.39.1.  'style' attribute
+
+   Deprecated.
+
+2.39.2.  'xml:space' attribute
+
+   Deprecated.
+
+   Allowed values:
+
+   o  "default"
+
+   o  "preserve" (default)
+
 2.40.  <street>
 
    Provides a street address.
 
-   This element appears as child element of: <postal> (Section 2.30).
+   This element appears as child element of: <postal> (Section 2.29).
 
    Content model: only text content.
 
@@ -1820,8 +1597,8 @@ Table of Contents
    Contains a paragraph of text.
 
    This element appears as child element of: <abstract> (Section 2.1),
-   <li> (Section 2.24), <note> (Section 2.27), and <section>
-   (Section 2.38).
+   <list> (Section 2.24), <note> (Section 2.26), and <section>
+   (Section 2.37).
 
    Content model:
 
@@ -1829,17 +1606,21 @@ Table of Contents
 
    o  Text
 
-   o  <list> elements (Section 2.25)
+   o  <list> elements (Section 2.24)
 
    o  <figure> elements (Section 2.18)
 
-   o  <xref> elements (Section 2.48)
+   o  <xref> elements (Section 2.49)
 
    o  <eref> elements (Section 2.16)
 
    o  <iref> elements (Section 2.22)
 
    o  <cref> elements (Section 2.13)
+
+   o  <spanx> elements (Section 2.39)
+
+   o  <vspace> elements (Section 2.47)
 
    o  <tt> elements (Section 2.44)
 
@@ -1855,17 +1636,11 @@ Table of Contents
 
 2.41.2.  'cite' attribute
 
-   A citation for a block quote.  It is an error to use this attribute
-   in a <t> element that does not have style="blockquote". *** TBD: is
-   this meant to be an anchor to a reference, a URL, or free text? ***
+   [[element.t.attribute.cite.missing: attribute description missing]]
 
 2.41.3.  'style' attribute
 
-   The style for the paragraph.  Specifying a style will cause a change
-   in the formatting of the paragraph in the non-canonical formats
-   generated by a processor.  The default value is "normal".  Other
-   values are "blockquote" for a block quotation and "note" for regular
-   text that is meant to be indented from the left margin.
+   [[element.t.attribute.style.missing: attribute description missing]]
 
 2.42.  <texttable>
 
@@ -1878,19 +1653,19 @@ Table of Contents
    is no requirement that the number of <c> elements be evenly divisible
    by the number of columns.
 
-   This element appears as child element of: <section> (Section 2.38).
+   This element appears as child element of: <section> (Section 2.37).
 
    Content model:
 
    In this order:
 
-   1.  One optional <preamble> element (Section 2.33)
+   1.  One optional <preamble> element (Section 2.32)
 
    2.  One or more <ttcol> elements (Section 2.45)
 
    3.  Optional <c> elements (Section 2.9)
 
-   4.  One optional <postamble> element (Section 2.32)
+   4.  One optional <postamble> element (Section 2.31)
 
 2.42.1.  'align' attribute
 
@@ -1972,9 +1747,8 @@ Table of Contents
    Causes the text to be displayed in a constant-width font.
 
    This element appears as child element of: <annotation> (Section 2.3),
-   <b> (Section 2.7), <c> (Section 2.9), <i> (Section 2.21), <li>
-   (Section 2.24), <postamble> (Section 2.32), <preamble>
-   (Section 2.33), and <t> (Section 2.41).
+   <b> (Section 2.7), <c> (Section 2.9), <i> (Section 2.21), <postamble>
+   (Section 2.31), <preamble> (Section 2.32), and <t> (Section 2.41).
 
    Content model:
 
@@ -1982,7 +1756,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.48)
+   o  <xref> elements (Section 2.49)
 
    o  <eref> elements (Section 2.16)
 
@@ -2004,7 +1778,7 @@ Table of Contents
 
    In any order:
 
-   o  <xref> elements (Section 2.48)
+   o  <xref> elements (Section 2.49)
 
    o  <eref> elements (Section 2.16)
 
@@ -2040,7 +1814,19 @@ Table of Contents
 
    Content model: only text content.
 
-2.47.  <workgroup>
+2.47.  <vspace>
+
+   Deprecated.
+
+   This element appears as child element of: <t> (Section 2.41).
+
+   Content model: this element does not have any contents.
+
+2.47.1.  'blankLines' attribute
+
+   Deprecated.
+
+2.48.  <workgroup>
 
    This element is used to specify the Working Group the document
    originates from, if any.  The recommended format is the official name
@@ -2050,13 +1836,13 @@ Table of Contents
    boilerplate, replacing the "Network Working Group" string.
    Formatting software can append the words "Working Group" or "Research
    Group", depending on the "submissionType" property on the <rfc>
-   element (Section 2.37.9).
+   element (Section 2.36.9).
 
    This element appears as child element of: <front> (Section 2.20).
 
    Content model: only text content.
 
-2.48.  <xref>
+2.49.  <xref>
 
    Inserts a reference to a different part of a document.
 
@@ -2071,19 +1857,18 @@ Table of Contents
    to make sure that the prose is sufficient for a reader to understand
    what is being referred to.
 
-   [[anchor6: This needs to be expanded with examples and with a
+   [[anchor5: This needs to be expanded with examples and with a
    discussion how the autogenerated text differs when <xref> is not
    empty]]
 
    This element appears as child element of: <annotation> (Section 2.3),
-   <b> (Section 2.7), <c> (Section 2.9), <i> (Section 2.21), <li>
-   (Section 2.24), <postamble> (Section 2.32), <preamble>
-   (Section 2.33), <t> (Section 2.41), <tt> (Section 2.44), and <ttcol>
-   (Section 2.45).
+   <b> (Section 2.7), <c> (Section 2.9), <i> (Section 2.21), <postamble>
+   (Section 2.31), <preamble> (Section 2.32), <t> (Section 2.41), <tt>
+   (Section 2.44), and <ttcol> (Section 2.45).
 
    Content model: only text content.
 
-2.48.1.  'format' attribute
+2.49.1.  'format' attribute
 
    This attribute is used to control the format of the generated
    reference text.
@@ -2118,7 +1903,7 @@ Table of Contents
 
    o  "default" (default)
 
-2.48.2.  'pageno' attribute
+2.49.2.  'pageno' attribute
 
    Unused.
 
@@ -2131,7 +1916,7 @@ Table of Contents
 
    o  "false" (default)
 
-2.48.3.  'target' attribute (mandatory)
+2.49.3.  'target' attribute (mandatory)
 
    Identifies the document component being referenced.
 
@@ -2140,7 +1925,7 @@ Table of Contents
 
 3.  Special Unicode Code Points
 
-   [[anchor7: Explain those code points where the processors implement
+   [[anchor6: Explain those code points where the processors implement
    something special, such as "nbsp".]]
 
 4.  Internationalization Considerations
@@ -2156,7 +1941,7 @@ Table of Contents
 
 5.  Security Considerations
 
-   [[anchor8: This section is likely incomplete.]]
+   [[anchor7: This section is likely incomplete.]]
 
    The "name" attribute on the <artwork> element (Section 2.5.4) can be
    used to derive a filename for saving to a local file system.
@@ -2595,7 +2380,7 @@ Appendix B.  Relax NG Schema
        attribute toc { "include" | "exclude" | "default" }?,
        [ a:defaultValue = "no" ] attribute removeinrfc { "yes" | "no"
    }?,
-       (t | \list | figure | texttable | iref | artwork)*,
+       (t | figure | texttable | iref | artwork)*,
        section*
      }
    t =
@@ -2603,22 +2388,25 @@ Appendix B.  Relax NG Schema
        attribute anchor { xsd:ID }?,
        [ a:defaultValue = "normal" ] attribute style { text }?,
        attribute cite { text }?,
-       (text | \list | figure | xref | eref | iref | cref | tt | b | i)*
+       (text
+        | \list
+        | figure
+        | xref
+        | eref
+        | iref
+        | cref
+        | spanx
+        | vspace
+        | tt
+        | b
+        | i)*
      }
    \list =
      element list {
        [ a:defaultValue = "empty" ] attribute style { text }?,
+       attribute hangIndent { text }?,
        attribute counter { text }?,
-       attribute anchor { xsd:ID }?,
-       attribute format { text }?,
-       li+
-     }
-   li =
-     element li {
-       attribute hangtext { text }?,
-       attribute term { text }?,
-       attribute anchor { text }?,
-       (text | t | xref | eref | iref | cref | tt | b)*
+       t+
      }
    xref =
      element xref {
@@ -2651,6 +2439,18 @@ Appendix B.  Relax NG Schema
    tt = element tt { (text | xref | eref | iref | cref | b | i)* }
    b = element b { (text | xref | eref | iref | cref | tt | i)* }
    i = element i { (text | xref | eref | iref | cref | b | tt)* }
+   spanx =
+     element spanx {
+       [ a:defaultValue = "preserve" ]
+       attribute xml:space { "default" | "preserve" }?,
+       [ a:defaultValue = "emph" ] attribute style { text }?,
+       text
+     }
+   vspace =
+     element vspace {
+       [ a:defaultValue = "0" ] attribute blankLines { text }?,
+       empty
+     }
    figure =
      element figure {
        attribute anchor { xsd:ID }?,
@@ -2669,8 +2469,9 @@ Appendix B.  Relax NG Schema
        postamble?
      }
    preamble =
-     element preamble { (text | xref | eref | iref | cref | tt | b |
-   i)* }
+     element preamble {
+       (text | xref | eref | iref | cref | spanx | tt | b | i)*
+     }
    artwork =
      element artwork {
        [ a:defaultValue = "preserve" ]
@@ -2687,8 +2488,9 @@ Appendix B.  Relax NG Schema
        text*
      }
    postamble =
-     element postamble { (text | xref | eref | iref | cref | tt | b |
-   i)* }
+     element postamble {
+       (text | xref | eref | iref | cref | spanx | tt | b | i)*
+     }
    texttable =
      element texttable {
        attribute anchor { xsd:ID }?,
@@ -2711,7 +2513,9 @@ Appendix B.  Relax NG Schema
        attribute align { "left" | "center" | "right" }?,
        (xref | eref | iref | cref | text)*
      }
-   c = element c { (text | xref | eref | iref | cref | tt | b | i)* }
+   c =
+     element c { (text | xref | eref | iref | cref | spanx | tt | b |
+   i)* }
    back = element back { references*, section* }
    references =
      element references {
@@ -2744,7 +2548,7 @@ Appendix B.  Relax NG Schema
      }
    annotation =
      element annotation {
-       (text | xref | eref | iref | cref | tt | b | i)*
+       (text | xref | eref | iref | cref | spanx | tt | b | i)*
      }
    start = rfc
 
@@ -2770,8 +2574,6 @@ Index
       anchor attribute
          in cref element  1
          in figure element  1
-         in li element  1
-         in list element  1
          in reference element  1
          in section element  1
          in t element  1
@@ -2798,6 +2600,7 @@ Index
          align  1
          alt  1
          anchor  1
+         blankLines  1
          category  1
          cite  1
          consensus  1
@@ -2807,7 +2610,7 @@ Index
          document  1
          format  1
          fullname  1
-         hangtext  1
+         hangIndent  1
          height  1
          initials  1
          ipr  1
@@ -2833,7 +2636,6 @@ Index
          suppress-title  1
          surname  1
          target  1
-         term  1
          title  1
          toc  1
          type  1
@@ -2856,13 +2658,14 @@ Index
          inside annotation  1
          inside c  1
          inside i  1
-         inside li  1
          inside postamble  1
          inside preamble  1
          inside t  1
          inside tt  1
       back element  1
          inside rfc  1
+      blankLines attribute
+         in vspace element  1
 
    C
       c element  1
@@ -2887,7 +2690,6 @@ Index
          inside b  1
          inside c  1
          inside i  1
-         inside li  1
          inside postamble  1
          inside preamble  1
          inside t  1
@@ -2933,7 +2735,6 @@ Index
          i  1
          iref  1
          keyword  1
-         li  1
          list  1
          middle  1
          note  1
@@ -2949,6 +2750,7 @@ Index
          rfc  1
          section  1
          seriesInfo  1
+         spanx  1
          street  1
          t  1
          texttable  1
@@ -2956,6 +2758,7 @@ Index
          tt  1
          ttcol  1
          uri  1
+         vspace  1
          workgroup  1
          xref  1
       email element  1
@@ -2965,7 +2768,6 @@ Index
          inside b  1
          inside c  1
          inside i  1
-         inside li  1
          inside postamble  1
          inside preamble  1
          inside t  1
@@ -2988,7 +2790,6 @@ Index
          title attribute  1
          width attribute  1
       format attribute
-         in list element  1
          in xref element  1
       format element  1
          inside reference  1
@@ -3002,8 +2803,8 @@ Index
          in author element  1
 
    H
-      hangtext attribute
-         in li element  1
+      hangIndent attribute
+         in list element  1
       height attribute
          in artwork element  1
          in figure element  1
@@ -3038,7 +2839,6 @@ Index
          inside c  1
          inside figure  1
          inside i  1
-         inside li  1
          inside postamble  1
          inside preamble  1
          inside section  1
@@ -3056,26 +2856,11 @@ Index
          inside front  1
 
    L
-      li element  1
-         anchor attribute  1
-         hangtext attribute  1
-         inside list  1
-         term attribute  1
       list element  1
-         anchor attribute  1
          counter attribute  1
-         format attribute  1
-         inside section  1
+         hangIndent attribute  1
          inside t  1
          style attribute  1
-      list styles
-         dictionary  1
-         empty  1
-         format ...  1
-         hanging  1
-         letters  1
-         numbers  1
-         symbols  1
 
    M
       Media Type
@@ -3173,6 +2958,14 @@ Index
          in rfc element  1
       source attribute
          in cref element  1
+      spanx element  1
+         inside annotation  1
+         inside c  1
+         inside postamble  1
+         inside preamble  1
+         inside t  1
+         style attribute  1
+         xml:space attribute  1
       src attribute
          in artwork element  1
          in figure element  1
@@ -3180,6 +2973,7 @@ Index
          inside postal  1
       style attribute
          in list element  1
+         in spanx element  1
          in t element  1
          in texttable element  1
       subitem attribute
@@ -3197,7 +2991,7 @@ Index
          anchor attribute  1
          cite attribute  1
          inside abstract  1
-         inside li  1
+         inside list  1
          inside note  1
          inside section  1
          style attribute  1
@@ -3206,8 +3000,6 @@ Index
          in format element  1
          in reference element  1
          in xref element  1
-      term attribute
-         in li element  1
       texttable element  1
          align attribute  1
          anchor attribute  1
@@ -3231,7 +3023,6 @@ Index
          inside b  1
          inside c  1
          inside i  1
-         inside li  1
          inside postamble  1
          inside preamble  1
          inside t  1
@@ -3252,6 +3043,9 @@ Index
    V
       value attribute
          in seriesInfo element  1
+      vspace element  1
+         blankLines attribute  1
+         inside t  1
 
    W
       width attribute
@@ -3268,13 +3062,13 @@ Index
          in rfc element  1
       xml:space attribute
          in artwork element  1
+         in spanx element  1
       xref element  1
          format attribute  1
          inside annotation  1
          inside b  1
          inside c  1
          inside i  1
-         inside li  1
          inside postamble  1
          inside preamble  1
          inside t  1

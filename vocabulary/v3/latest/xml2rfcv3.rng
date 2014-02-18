@@ -318,7 +318,6 @@
       <zeroOrMore>
         <choice>
           <ref name="t"/>
-          <ref name="list"/>
           <ref name="figure"/>
           <ref name="texttable"/>
           <ref name="iref"/>
@@ -352,6 +351,8 @@
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="cref"/>
+          <ref name="spanx"/>
+          <ref name="vspace"/>
           <ref name="tt"/>
           <ref name="b"/>
           <ref name="i"/>
@@ -365,44 +366,14 @@
         <attribute name="style" a:defaultValue="empty"/>
       </optional>
       <optional>
+        <attribute name="hangIndent"/>
+      </optional>
+      <optional>
         <attribute name="counter"/>
       </optional>
-      <optional>
-        <attribute name="anchor">
-          <data type="ID"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="format"/>
-      </optional>
       <oneOrMore>
-        <ref name="li"/>
+        <ref name="t"/>
       </oneOrMore>
-    </element>
-  </define>
-  <define name="li">
-    <element name="li">
-      <optional>
-        <attribute name="hangtext"/>
-      </optional>
-      <optional>
-        <attribute name="term"/>
-      </optional>
-      <optional>
-        <attribute name="anchor"/>
-      </optional>
-      <zeroOrMore>
-        <choice>
-          <text/>
-          <ref name="t"/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="iref"/>
-          <ref name="cref"/>
-          <ref name="tt"/>
-          <ref name="b"/>
-        </choice>
-      </zeroOrMore>
     </element>
   </define>
   <define name="xref">
@@ -512,6 +483,30 @@
       </zeroOrMore>
     </element>
   </define>
+  <define name="spanx">
+    <element name="spanx">
+      <optional>
+        <attribute name="xml:space" a:defaultValue="preserve">
+          <choice>
+            <value>default</value>
+            <value>preserve</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="style" a:defaultValue="emph"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="vspace">
+    <element name="vspace">
+      <optional>
+        <attribute name="blankLines" a:defaultValue="0"/>
+      </optional>
+      <empty/>
+    </element>
+  </define>
   <define name="figure">
     <element name="figure">
       <optional>
@@ -572,6 +567,7 @@
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="cref"/>
+          <ref name="spanx"/>
           <ref name="tt"/>
           <ref name="b"/>
           <ref name="i"/>
@@ -633,6 +629,7 @@
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="cref"/>
+          <ref name="spanx"/>
           <ref name="tt"/>
           <ref name="b"/>
           <ref name="i"/>
@@ -725,6 +722,7 @@
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="cref"/>
+          <ref name="spanx"/>
           <ref name="tt"/>
           <ref name="b"/>
           <ref name="i"/>
@@ -810,6 +808,7 @@
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="cref"/>
+          <ref name="spanx"/>
           <ref name="tt"/>
           <ref name="b"/>
           <ref name="i"/>

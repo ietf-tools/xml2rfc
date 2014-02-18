@@ -81,7 +81,7 @@
 
 <!ELEMENT middle (section)+>
 
-<!ELEMENT section ((t|list|figure|texttable|iref|artwork)*,section*)>
+<!ELEMENT section ((t|figure|texttable|iref|artwork)*,section*)>
 <!ATTLIST section
   anchor ID #IMPLIED
   title CDATA #REQUIRED
@@ -89,24 +89,18 @@
   toc (include|exclude|default) 'default'
   removeinrfc (yes|no) 'no'>
 
-<!ELEMENT t (#PCDATA|list|figure|xref|eref|iref|cref|tt|b|i)*>
+<!ELEMENT t (#PCDATA|list|figure|xref|eref|iref|cref|spanx|vspace|tt|b
+             |i)*>
 <!ATTLIST t
   anchor ID #IMPLIED
   style CDATA 'normal'
   cite CDATA #IMPLIED>
 
-<!ELEMENT list (li)+>
+<!ELEMENT list (t)+>
 <!ATTLIST list
   style CDATA 'empty'
-  counter CDATA #IMPLIED
-  anchor ID #IMPLIED
-  format CDATA #IMPLIED>
-
-<!ELEMENT li (#PCDATA|t|xref|eref|iref|cref|tt|b)*>
-<!ATTLIST li
-  hangtext CDATA #IMPLIED
-  term CDATA #IMPLIED
-  anchor CDATA #IMPLIED>
+  hangIndent CDATA #IMPLIED
+  counter CDATA #IMPLIED>
 
 <!ELEMENT xref (#PCDATA)>
 <!ATTLIST xref
@@ -135,6 +129,15 @@
 
 <!ELEMENT i (#PCDATA|xref|eref|iref|cref|b|tt)*>
 
+<!ELEMENT spanx (#PCDATA)>
+<!ATTLIST spanx
+  xml:space (default|preserve) 'preserve'
+  style CDATA 'emph'>
+
+<!ELEMENT vspace EMPTY>
+<!ATTLIST vspace
+  blankLines CDATA '0'>
+
 <!ELEMENT figure (iref*,preamble?,artwork,postamble?)>
 <!ATTLIST figure
   anchor ID #IMPLIED
@@ -146,7 +149,7 @@
   width CDATA ''
   height CDATA ''>
 
-<!ELEMENT preamble (#PCDATA|xref|eref|iref|cref|tt|b|i)*>
+<!ELEMENT preamble (#PCDATA|xref|eref|iref|cref|spanx|tt|b|i)*>
 
 <!ELEMENT artwork (#PCDATA)*>
 <!ATTLIST artwork
@@ -160,7 +163,7 @@
   height CDATA ''
   xml:lang CDATA 'en'>
 
-<!ELEMENT postamble (#PCDATA|xref|eref|iref|cref|tt|b|i)*>
+<!ELEMENT postamble (#PCDATA|xref|eref|iref|cref|spanx|tt|b|i)*>
 
 <!ELEMENT texttable (preamble?,ttcol+,c*,postamble?)>
 <!ATTLIST texttable
@@ -175,7 +178,7 @@
   width CDATA #IMPLIED
   align (left|center|right) 'left'>
 
-<!ELEMENT c (#PCDATA|xref|eref|iref|cref|tt|b|i)*>
+<!ELEMENT c (#PCDATA|xref|eref|iref|cref|spanx|tt|b|i)*>
 
 <!ELEMENT back (references*,section*)>
 
@@ -201,4 +204,4 @@
   type CDATA #REQUIRED
   octets CDATA #IMPLIED>
 
-<!ELEMENT annotation (#PCDATA|xref|eref|iref|cref|tt|b|i)*>
+<!ELEMENT annotation (#PCDATA|xref|eref|iref|cref|spanx|tt|b|i)*>
