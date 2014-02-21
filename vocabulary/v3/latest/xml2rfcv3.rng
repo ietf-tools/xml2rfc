@@ -419,8 +419,10 @@
     <element name="li">
       <zeroOrMore>
         <choice>
-          <ref name="t"/>
-          <choice>
+          <oneOrMore>
+            <ref name="t"/>
+           </oneOrMore>
+          <oneOrMore>
             <text/>
             <ref name="ol"/>
             <ref name="ul"/>
@@ -433,7 +435,7 @@
             <ref name="tt"/>
             <ref name="b"/>
             <ref name="i"/>
-           </choice>
+           </oneOrMore>
         </choice>
       </zeroOrMore>
     </element>
