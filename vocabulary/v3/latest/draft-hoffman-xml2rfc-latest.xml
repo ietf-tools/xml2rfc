@@ -1026,7 +1026,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="dl element" subitem="spacing attribute"/>
       <iref item="spacing attribute" subitem="in dl element"/>
       <t>
-         The spacing attribute defines whether or not there is a blank line between entries. spacing="normal"
+         Defines whether or not there is a blank line between entries. spacing="normal"
          indicates a single blank line, while spacing="compact" indicates no space between.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
@@ -1686,7 +1686,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="ol element" subitem="spacing attribute"/>
       <iref item="spacing attribute" subitem="in ol element"/>
       <t>
-         The spacing attribute defines whether or not there is a blank line between entries. spacing="normal"
+         Defines whether or not there is a blank line between entries. spacing="normal"
          indicates a single blank line, while spacing="compact" indicates no space between.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
@@ -2928,8 +2928,8 @@ and the others are the RFCs that make up the STD</c>
    <x:anchor-alias value="ul"/>
    <iref item="Elements" subitem="ul" primary="true"/>
    <iref item="ul element" primary="true"/>
-   <t><!--AG-->
-      <cref anchor="element.ul.missing">element description missing</cref>
+   <t>
+      An unordered list. The labels on the items will be symbols picked by the processor.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.ul.contents"><!--AG-->
@@ -2941,13 +2941,28 @@ and the others are the RFCs that make up the STD</c>
       <iref item="li element" subitem="inside ul"/>One or more &lt;<x:ref>li</x:ref>&gt; elements (<xref target="element.li"/>)</t>
       
 
+   <!--ul/@empty-->
+   <section title="'empty' attribute" anchor="element.ul.attribute.empty" toc="exclude">
+      <iref item="Attributes" subitem="empty"/>
+      <iref item="ul element" subitem="empty attribute"/>
+      <iref item="empty attribute" subitem="in ul element"/>
+      <t>
+         Defines whether or not the label is empty. empty="true" indicates that no label be shown.
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"false" (default)</t>
+            <t>"true"</t>
+         </list>
+      </t>
+   </section>
+
    <!--ul/@spacing-->
    <section title="'spacing' attribute" anchor="element.ul.attribute.spacing" toc="exclude">
       <iref item="Attributes" subitem="spacing"/>
       <iref item="ul element" subitem="spacing attribute"/>
       <iref item="spacing attribute" subitem="in ul element"/>
       <t>
-         The spacing attribute defines whether or not there is a blank line between entries. spacing="normal"
+         Defines whether or not there is a blank line between entries. spacing="normal"
          indicates a single blank line, while spacing="compact" indicates no space between.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
@@ -3906,6 +3921,8 @@ ul =
   element ul {
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
+    [ a:defaultValue = "false" ] attribute empty { "false" | "true" 
+}?,
     li+
   }
 li =

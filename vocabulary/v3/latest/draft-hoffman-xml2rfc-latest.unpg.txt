@@ -805,9 +805,9 @@ Table of Contents
 
 2.16.2.  'spacing' attribute
 
-   The spacing attribute defines whether or not there is a blank line
-   between entries. spacing="normal" indicates a single blank line,
-   while spacing="compact" indicates no space between.
+   Defines whether or not there is a blank line between entries.
+   spacing="normal" indicates a single blank line, while
+   spacing="compact" indicates no space between.
 
    Allowed values:
 
@@ -1199,9 +1199,9 @@ Table of Contents
 
 2.31.1.  'spacing' attribute
 
-   The spacing attribute defines whether or not there is a blank line
-   between entries. spacing="normal" indicates a single blank line,
-   while spacing="compact" indicates no space between.
+   Defines whether or not there is a blank line between entries.
+   spacing="normal" indicates a single blank line, while
+   spacing="compact" indicates no space between.
 
    Allowed values:
 
@@ -2023,7 +2023,8 @@ Table of Contents
 
 2.51.  <ul>
 
-   [[element.ul.missing: element description missing]]
+   An unordered list.  The labels on the items will be symbols picked by
+   the processor.
 
    This element appears as child element of: <dd> (Section 2.15), <li>
    (Section 2.27), and <t> (Section 2.46).
@@ -2032,11 +2033,22 @@ Table of Contents
 
    One or more <li> elements (Section 2.27)
 
-2.51.1.  'spacing' attribute
+2.51.1.  'empty' attribute
 
-   The spacing attribute defines whether or not there is a blank line
-   between entries. spacing="normal" indicates a single blank line,
-   while spacing="compact" indicates no space between.
+   Defines whether or not the label is empty. empty="true" indicates
+   that no label be shown.
+
+   Allowed values:
+
+   o  "false" (default)
+
+   o  "true"
+
+2.51.2.  'spacing' attribute
+
+   Defines whether or not there is a blank line between entries.
+   spacing="normal" indicates a single blank line, while
+   spacing="compact" indicates no space between.
 
    Allowed values:
 
@@ -2664,6 +2676,8 @@ Appendix B.  Relax NG Schema
      element ul {
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
+       [ a:defaultValue = "false" ] attribute empty { "false" | "true"
+   }?,
        li+
      }
    li =
@@ -2885,6 +2899,7 @@ Index
          day  1
          docName  1
          document  1
+         empty  1
          format  1
          fullname  1
          hangIndent  1
@@ -3064,6 +3079,8 @@ Index
          xref  1
       email element  1
          inside address  1
+      empty attribute
+         in ul element  1
       eref element  1
          inside annotation  1
          inside b  1
@@ -3370,6 +3387,7 @@ Index
 
    U
       ul element  1
+         empty attribute  1
          inside dd  1
          inside li  1
          inside t  1
