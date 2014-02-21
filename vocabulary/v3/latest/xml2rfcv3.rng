@@ -346,6 +346,9 @@
         <choice>
           <text/>
           <ref name="list"/>
+          <ref name="ol"/>
+          <ref name="ul"/>
+          <ref name="dl"/>
           <ref name="figure"/>
           <ref name="xref"/>
           <ref name="eref"/>
@@ -374,6 +377,126 @@
       <oneOrMore>
         <ref name="t"/>
       </oneOrMore>
+    </element>
+  </define>
+  <define name="ol">
+    <element name="ol">
+      <optional>
+        <attribute name="style" a:defaultValue="1"/>
+      </optional>
+      <optional>
+        <attribute name="start" a:defaultValue="1"/>
+      </optional>
+      <optional>
+        <attribute name="spacing" a:defaultValue="normal">
+          <choice>
+            <value>normal</value>
+            <value>compact</value>
+          </choice>
+        </attribute>
+      </optional>
+      <oneOrMore>
+        <ref name="li"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="ul">
+    <element name="ul">
+      <optional>
+        <attribute name="style" a:defaultValue="o"/>
+      </optional>
+      <optional>
+        <attribute name="spacing" a:defaultValue="normal">
+          <choice>
+            <value>normal</value>
+            <value>compact</value>
+          </choice>
+        </attribute>
+      </optional>
+      <oneOrMore>
+        <ref name="li"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="li">
+    <element name="li">
+      <zeroOrMore>
+        <choice>
+          <ref name="t"/>
+          <choice>
+            <text/>
+            <ref name="ol"/>
+            <ref name="ul"/>
+            <ref name="dl"/>
+            <ref name="figure"/>
+            <ref name="xref"/>
+            <ref name="eref"/>
+            <ref name="iref"/>
+            <ref name="cref"/>
+            <ref name="tt"/>
+            <ref name="b"/>
+            <ref name="i"/>
+           </choice>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="dl">
+    <element name="dl">
+      <optional>
+        <attribute name="spacing" a:defaultValue="normal">
+          <choice>
+            <value>normal</value>
+            <value>compact</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="hanging" a:defaultValue="false">
+          <choice>
+            <value>false</value>
+            <value>true</value>
+          </choice>
+        </attribute>
+      </optional>
+      <oneOrMore>
+        <ref name="dt"/>
+        <ref name="dd"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="dt">
+    <element name="dt">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="xref"/>
+          <ref name="eref"/>
+          <ref name="iref"/>
+          <ref name="cref"/>
+          <ref name="tt"/>
+          <ref name="b"/>
+          <ref name="i"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="dd">
+    <element name="dd">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="ol"/>
+          <ref name="ul"/>
+          <ref name="xref"/>
+          <ref name="eref"/>
+          <ref name="iref"/>
+          <ref name="cref"/>
+          <ref name="tt"/>
+          <ref name="b"/>
+          <ref name="i"/>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="xref">
