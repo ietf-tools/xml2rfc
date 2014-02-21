@@ -1187,7 +1187,8 @@ Table of Contents
 
 2.31.  <ol>
 
-   [[element.ol.missing: element description missing]]
+   An ordered list.  The labels on the items will be either a number or
+   a letter, depending on the value of the style attribute.
 
    This element appears as child element of: <dd> (Section 2.15), <li>
    (Section 2.27), and <t> (Section 2.46).
@@ -1198,8 +1199,9 @@ Table of Contents
 
 2.31.1.  'spacing' attribute
 
-   [[element.ol.attribute.spacing.missing: attribute description
-   missing]]
+   The spacing attribute defines whether or not there is a blank line
+   between entries. spacing="normal" indicates a single blank line,
+   while spacing="compact" indicates no space between.
 
    Allowed values:
 
@@ -1209,11 +1211,45 @@ Table of Contents
 
 2.31.2.  'start' attribute
 
-   [[element.ol.attribute.start.missing: attribute description missing]]
+   The ordinal value to start the list at.  This defaults to "1".
 
 2.31.3.  'style' attribute
 
-   [[element.ol.attribute.style.missing: attribute description missing]]
+   The style of the labels on list items.  If the length of the style
+   value is 1, the meaning is the same as it is for HTML:
+
+   a  Lowercase letters (a, b, c, ...)
+
+   A  Uppercase letters (A, B, C, ...)
+
+   1  Decimal numbers (1, 2, 3, ...)
+
+   i  Lowercase Roman numerals (i, ii, iii, ...)
+
+   I  Uppercase Roman numerals (I, II, III, ...)
+
+   If the length of the style value is greater than 1, the value must
+   contain a percent-encoded indicator and other text.  The value is a
+   free-form text that allows counter values to be inserted using a
+   "percent-letter" format.  For instance, "[REQ%d]" generates labels of
+   the form "[REQ1]", where "%d" inserts the item number as decimal
+   number.
+
+   The following formats are supported:
+
+   %c Lowercase letters (a, b, c, ...)
+
+   %C Uppercase letters (A, B, C, ...)
+
+   %d Decimal numbers (1, 2, 3, ...)
+
+   %i Lowercase Roman numerals (i, ii, iii, ...)
+
+   %I Uppercase Roman numerals (I, II, III, ...)
+
+   %% Represents a percent sign
+
+   Other formats are reserved for future use.
 
 2.32.  <organization>
 
@@ -1998,8 +2034,9 @@ Table of Contents
 
 2.51.1.  'spacing' attribute
 
-   [[element.ul.attribute.spacing.missing: attribute description
-   missing]]
+   The spacing attribute defines whether or not there is a blank line
+   between entries. spacing="normal" indicates a single blank line,
+   while spacing="compact" indicates no space between.
 
    Allowed values:
 

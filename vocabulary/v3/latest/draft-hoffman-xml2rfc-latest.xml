@@ -1702,7 +1702,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="ol element" subitem="start attribute"/>
       <iref item="start attribute" subitem="in ol element"/>
       <t>
-         The ordinal value to start the list at. This defaults to "1" unless otherwise specified.
+         The ordinal value to start the list at. This defaults to "1".
       </t>
    </section>
 
@@ -1714,17 +1714,34 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <t>
          The style of the labels on list items. If the length of the style value is 1, the
          meaning is the same as it is for HTML:
-         <list style="symbols">
-         <t>"A" -- Capital letters (A, B, C, ...)</t>
-         <t>"a" -- Lowercase letters (a, b, c, ...)</t>
-         <t>"1" -- Decimal numerals (1, 2, 3, ...)</t>
-         <t>"I" -- Capital Roman numerals (I, II, III, ...)</t>
-         <t>"i" -- Lowercase Roman numerals (i, ii, iii, ...)</t>
+         <list style="hanging">
+            <t hangText="a">Lowercase letters (a, b, c, ...)</t>
+            <t hangText="A">Uppercase letters (A, B, C, ...)</t>
+            <t hangText="1">Decimal numbers (1, 2, 3, ...)</t>
+            <t hangText="i">Lowercase Roman numerals (i, ii, iii, ...)</t>
+            <t hangText="I">Uppercase Roman numerals (I, II, III, ...)</t>
          </list>
- 
-        If the length of the style value is greater than 1, the value must contain a
-         percent-encoded indicator, preceded by optional other text.
       </t>
+      <t>
+        If the length of the style value is greater than 1, the value must contain a
+        percent-encoded indicator and other text.
+        The value is a free-form text that allows counter values to be
+        inserted using a "percent-letter" format. For instance, "[REQ%d]"
+        generates labels of the form "[REQ1]", where "%d" inserts the
+        item number as decimal number.
+      </t>
+      <t>
+         The following formats are supported:
+         <list style="hanging">
+            <t hangText="%c">Lowercase letters (a, b, c, ...)</t>
+            <t hangText="%C">Uppercase letters (A, B, C, ...)</t>
+            <t hangText="%d">Decimal numbers (1, 2, 3, ...)</t>
+            <t hangText="%i">Lowercase Roman numerals (i, ii, iii, ...)</t>
+            <t hangText="%I">Uppercase Roman numerals (I, II, III, ...)</t>
+            <t hangText="%%">Represents a percent sign</t>
+         </list>
+         Other formats are reserved for future use.
+       </t>
    </section>
 </section>
 
