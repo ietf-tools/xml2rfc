@@ -110,9 +110,10 @@
 
 <!ELEMENT ul (li)+>
 <!ATTLIST ul
-  spacing (normal|compact) 'normal'>
+  spacing (normal|compact) 'normal'
+  empty (false|true) 'false'>
 
-<!ELEMENT li (#PCDATA|ol|ul|dl|figure|xref|eref|iref|cref|tt|b|i|t)*>
+<!ELEMENT li (t+|(ol,ul,dl,figure,xref,eref,iref,cref,tt,b,i)+)>
 
 <!ELEMENT dl (dt,dd)+>
 <!ATTLIST dl
