@@ -2096,8 +2096,8 @@ Internet-Draft                  XML2RFCv3                  February 2014
    Contains a paragraph of text.
 
    This element appears as child element of: <abstract> (Section 2.1),
-   <list> (Section 2.28), <note> (Section 2.30), and <section>
-   (Section 2.42).
+   <li> (Section 2.27), <list> (Section 2.28), <note> (Section 2.30),
+   and <section> (Section 2.42).
 
    Content model:
 
@@ -3127,8 +3127,8 @@ Internet-Draft                  XML2RFCv3                  February 2014
      }
    li =
      element li {
-       (text, ol, ul, dl, figure, xref, eref, iref, cref, tt, b, i)+
-     }
+       t+ | (text, ol, ul, dl, figure, xref, eref, iref, cref, tt, b,
+   i)+
 
 
 
@@ -3137,6 +3137,7 @@ Hoffman                  Expires August 27, 2014               [Page 56]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+     }
    dl =
      element dl {
        [ a:defaultValue = "normal" ]
@@ -3184,7 +3185,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
    spanx =
      element spanx {
        [ a:defaultValue = "preserve" ]
-       attribute xml:space { "default" | "preserve" }?,
 
 
 
@@ -3193,6 +3193,7 @@ Hoffman                  Expires August 27, 2014               [Page 57]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+       attribute xml:space { "default" | "preserve" }?,
        [ a:defaultValue = "emph" ] attribute style { text }?,
        text
      }
@@ -3240,7 +3241,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
    postamble =
      element postamble {
        (text | xref | eref | iref | cref | spanx | tt | b | i)*
-     }
 
 
 
@@ -3249,6 +3249,7 @@ Hoffman                  Expires August 27, 2014               [Page 58]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+     }
    texttable =
      element texttable {
        attribute anchor { xsd:ID }?,
@@ -3296,7 +3297,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
        attribute name { text },
        attribute value { text },
        empty
-     }
 
 
 
@@ -3305,6 +3305,7 @@ Hoffman                  Expires August 27, 2014               [Page 59]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+     }
    format =
      element format {
        attribute target { text }?,
@@ -3352,7 +3353,6 @@ Index
       artwork element  9
          align attribute  9
          alt attribute  10
-         height attribute  10
 
 
 
@@ -3361,6 +3361,7 @@ Hoffman                  Expires August 27, 2014               [Page 60]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+         height attribute  10
          inside figure  20
          inside section  36
          name attribute  10
@@ -3408,7 +3409,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
          spacing  18, 25, 43
          src  10, 20
          start  26
-         style  24, 26, 37, 39-40
 
 
 
@@ -3417,6 +3417,7 @@ Hoffman                  Expires August 27, 2014               [Page 61]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+         style  24, 26, 37, 39-40
          subitem  23
          submissionType  35
          suppress-title  20, 41
@@ -3464,7 +3465,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
          in t element  39
       city element  14
          inside postal  27
-      code element  15
 
 
 
@@ -3473,6 +3473,7 @@ Hoffman                  Expires August 27, 2014               [Page 62]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+      code element  15
          inside postal  27
       consensus attribute
          in rfc element  33
@@ -3520,7 +3521,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
       Elements
          abstract  7, 22
          address  7, 12
-         annotation  8, 31
 
 
 
@@ -3529,6 +3529,7 @@ Hoffman                  Expires August 27, 2014               [Page 63]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+         annotation  8, 31
          area  8, 22
          artwork  9, 20, 36
          author  12, 22
@@ -3576,7 +3577,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
          title  22, 41
          tt  8, 13-14, 17-18, 22, 28-29, 39, 41
          ttcol  39, 42
-         ul  17, 38, 43
 
 
 
@@ -3585,6 +3585,7 @@ Hoffman                  Expires August 27, 2014               [Page 64]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+         ul  17, 38, 43
          uri  7, 43
          vspace  39, 44
          workgroup  22, 44
@@ -3632,7 +3633,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
          inside reference  31
          inside rfc  32
       fullname attribute
-         in author element  12
 
 
 
@@ -3640,6 +3640,8 @@ Hoffman                  Expires August 27, 2014               [Page 65]
 
 Internet-Draft                  XML2RFCv3                  February 2014
 
+
+         in author element  12
 
    H
       hangIndent attribute
@@ -3687,8 +3689,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
          inside postamble  28
          inside preamble  29
          inside section  36
-         inside t  38
-         inside tt  42
 
 
 
@@ -3697,6 +3697,8 @@ Hoffman                  Expires August 27, 2014               [Page 66]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+         inside t  38
+         inside tt  42
          inside ttcol  42
          item attribute  23
          primary attribute  23
@@ -3743,8 +3745,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
          in rfc element  34
       octets attribute
          in format element  21
-      ol element  25
-         inside dd  17
 
 
 
@@ -3753,6 +3753,8 @@ Hoffman                  Expires August 27, 2014               [Page 67]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+      ol element  25
+         inside dd  17
          inside t  38
          spacing attribute  25
          start attribute  26
@@ -3799,8 +3801,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
          docName attribute  33
          ipr attribute  33
          iprExtract attribute  34
-         number attribute  34
-         obsoletes attribute  34
 
 
 
@@ -3809,6 +3809,8 @@ Hoffman                  Expires August 27, 2014               [Page 68]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+         number attribute  34
+         obsoletes attribute  34
          seriesNo attribute  34
          submissionType attribute  35
          updates attribute  35
@@ -3855,8 +3857,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
          in ol element  26
       street element  38
          inside postal  27
-      style attribute
-         in list element  24
 
 
 
@@ -3865,6 +3865,8 @@ Hoffman                  Expires August 27, 2014               [Page 69]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+      style attribute
+         in list element  24
          in ol element  26
          in spanx element  37
          in t element  39
@@ -3911,8 +3913,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
          inside front  22
       toc attribute
          in section element  36
-      tt element  41
-         inside annotation  8
 
 
 
@@ -3921,6 +3921,8 @@ Hoffman                  Expires August 27, 2014               [Page 70]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+      tt element  41
+         inside annotation  8
          inside b  13
          inside c  14
          inside dd  17
@@ -3967,8 +3969,6 @@ Internet-Draft                  XML2RFCv3                  February 2014
       xml:lang attribute
          in artwork element  11
          in author element  13
-         in rfc element  35
-      xml:space attribute
 
 
 
@@ -3977,6 +3977,8 @@ Hoffman                  Expires August 27, 2014               [Page 71]
 Internet-Draft                  XML2RFCv3                  February 2014
 
 
+         in rfc element  35
+      xml:space attribute
          in artwork element  11
          in spanx element  38
       xref element  44
@@ -4010,8 +4012,6 @@ Author's Address
    VPN Consortium
 
    EMail: paul.hoffman@vpnc.org
-
-
 
 
 

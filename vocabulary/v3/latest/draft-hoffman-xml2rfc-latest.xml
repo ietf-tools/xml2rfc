@@ -14,6 +14,8 @@
 
 <!--
 
+Note that v3 is not going to have a DTD
+
 Send note about <artwork> not being in <t> has semantic problems for when the code needs to
    be on a line of its own
 
@@ -36,17 +38,7 @@ Describe draft file naming for drafts vs. canonical RFCs.
 
 <artwork> should say what kind (probably MIME type) of the art it is holding
 
-Should <list> still be OK under <t>, now that it is block-level?
-
 Make processing of <cref> more specified
-
-Maybe deprecate <list> for HTML-like equivalents
-   Or mabye just for dictionary and hanging
-
-The model for lists is now consistent, but would break if we went with interior
-   elements for definition and hangText.
-
-Maybe combind hanging and dictionary styles into one with an attribute for where the split happens
 
 -->
 
@@ -2541,7 +2533,7 @@ and the others are the RFCs that make up the STD</c>
    <t>
       Contains a paragraph of text.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.t.contents"><!--AG-->
         Content model:
       </t>
@@ -3880,7 +3872,8 @@ ul =
   }
 li =
   element li {
-    (text, ol, ul, dl, figure, xref, eref, iref, cref, tt, b, i)+
+    t+ | (text, ol, ul, dl, figure, xref, eref, iref, cref, tt, b, 
+i)+
   }
 dl =
   element dl {
