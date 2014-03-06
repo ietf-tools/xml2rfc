@@ -1483,7 +1483,7 @@
    </t>
 
    <!--reference/@anchor-->
-   <section title="'anchor' attribute" anchor="element.reference.attribute.anchor" toc="exclude">
+   <section title="'anchor' attribute (mandatory)" anchor="element.reference.attribute.anchor" toc="exclude">
       <iref item="Attributes" subitem="anchor"/>
       <iref item="reference element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in reference element"/>
@@ -2121,21 +2121,20 @@
       <t>
         Selects which borders should be drawn, where
         <list style="symbols">
-          <t>
+            <t>
             "all" means borders around all table cells,
           </t>
-          <t>
+            <t>
             "full" is like "all" except no horizontal lines between table
             rows (except below the column titles),
           </t>
-          <t>
+            <t>
             "headers" adds just a separator between column titles and rows, and
           </t>
-          <t>
+            <t>
             "none" means no borders at all.
           </t>
-        </list>
-      
+         </list>
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"all"</t>
@@ -3164,7 +3163,7 @@
 </t>
 <t>
   &lt;<x:ref>reference</x:ref>&gt;:  &lt;<x:ref>annotation</x:ref>&gt; allows 
-  adding prose to a reference.
+  adding prose to a reference. The "anchor" attribute has been made mandatory.
   (<xref target="element.reference"/>)
 </t>
 <t>
@@ -3432,7 +3431,7 @@ references =
   }
 reference =
   element reference {
-    attribute anchor { xsd:ID }?,
+    attribute anchor { xsd:ID },
     attribute target { text }?,
     front,
     seriesInfo*,

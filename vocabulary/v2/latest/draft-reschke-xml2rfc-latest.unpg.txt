@@ -3,9 +3,9 @@
 
 Network Working Group                                         J. Reschke
 Internet-Draft                                                greenbytes
-Obsoletes: 2629 (if approved)                          February 15, 2014
+Obsoletes: 2629 (if approved)                              March 6, 2014
 Intended status: Standards Track
-Expires: August 19, 2014
+Expires: September 7, 2014
 
 
                    The 'XML2RFC' version 2 Vocabulary
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 19, 2014.
+   This Internet-Draft will expire on September 7, 2014.
 
 Copyright Notice
 
@@ -1013,7 +1013,7 @@ Table of Contents
 
    4.  Optional <annotation> elements (Section 2.3)
 
-2.30.1.  'anchor' attribute
+2.30.1.  'anchor' attribute (mandatory)
 
    Document-wide unique identifier for this reference.  Usually, this
    will be used both to "label" the reference in the references section,
@@ -2060,8 +2060,8 @@ B.3.  Changed Elements
    attributes "consensus", "iprExtract", "submissionType", and "xml:
    lang" have been added.  (Section 2.33)
 
-   <reference>: <annotation> allows adding prose to a reference.
-   (Section 2.30)
+   <reference>: <annotation> allows adding prose to a reference.  The
+   "anchor" attribute has been made mandatory.  (Section 2.30)
 
    <references>: Can now appear multiple times, and carry a "title"
    attribute (so that normative and informative references can be
@@ -2313,7 +2313,7 @@ Appendix C.  Relax NG Schema
      }
    reference =
      element reference {
-       attribute anchor { xsd:ID }?,
+       attribute anchor { xsd:ID },
        attribute target { text }?,
        front,
        seriesInfo*,
