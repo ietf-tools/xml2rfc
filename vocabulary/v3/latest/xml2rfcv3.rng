@@ -337,10 +337,11 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="style" a:defaultValue="normal"/>
-      </optional>
-      <optional>
-        <attribute name="cite"/>
+        <attribute name="indent" a:defaultValue="none"/>
+          <choice>
+            <value>none</value>
+            <value>both</value>
+          </choice>
       </optional>
       <zeroOrMore>
         <choice>
@@ -350,12 +351,33 @@
           <ref name="ul"/>
           <ref name="dl"/>
           <ref name="figure"/>
+          <ref name="artwork"/>
           <ref name="xref"/>
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="cref"/>
           <ref name="spanx"/>
           <ref name="vspace"/>
+          <ref name="tt"/>
+          <ref name="b"/>
+          <ref name="i"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="blockquote">
+    <element name="blockquote">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <attribute name="cite"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="figure"/>
+          <ref name="artwork"/>
           <ref name="tt"/>
           <ref name="b"/>
           <ref name="i"/>

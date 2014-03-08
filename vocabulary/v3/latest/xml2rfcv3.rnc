@@ -108,14 +108,15 @@ section =
 t =
   element t {
     attribute anchor { xsd:ID }?,
-    [ a:defaultValue = "normal" ] attribute style { text }?,
-    attribute cite { text }?,
+    ([ a:defaultValue = "none" ] attribute indent { text },
+     ("none" | "both"))?,
     (text
      | \list
      | ol
      | ul
      | dl
      | figure
+     | artwork
      | xref
      | eref
      | iref
@@ -125,6 +126,12 @@ t =
      | tt
      | b
      | i)*
+  }
+blockquote =
+  element blockquote {
+    attribute anchor { xsd:ID }?,
+    attribute cite { text },
+    (text | figure | artwork | tt | b | i)*
   }
 \list =
   element list {

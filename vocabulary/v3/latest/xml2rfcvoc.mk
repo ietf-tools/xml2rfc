@@ -1,5 +1,5 @@
 xml2rfc.all: \
-	draft-hoffman-xml2rfc-latest.xml xml2rfcv3-annotated.rng xml2rfcv3.dtd
+	draft-hoffman-xml2rfc-latest.xml xml2rfcv3-annotated.rng
 
 xml2rfcv3.rnc: xml2rfcv3.rng trang.jar
 	java -jar trang.jar $< $@

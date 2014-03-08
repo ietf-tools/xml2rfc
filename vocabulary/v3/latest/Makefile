@@ -1,8 +1,7 @@
 all: \
 	draft-hoffman-xml2rfc-latest.html \
 	draft-hoffman-xml2rfc-latest.unpg.txt \
-	draft-hoffman-xml2rfc-latest.txt \
-	xml2rfcv3.dtd
+	draft-hoffman-xml2rfc-latest.txt
 
 TOOLS=../../tools
 

@@ -154,7 +154,7 @@
       Note that RFCs occasionally are published with enhanced diagrams;
       a recent example is <xref target="RFC5598"/>.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
         Content model:
       </t>
@@ -431,7 +431,7 @@
    <t>
             Causes the text to be displayed in a bold font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.b.contents"><!--AG-->
         Content model:
       </t>
@@ -482,6 +482,60 @@
       
       </list>
    </t>
+</section>
+
+<!--blockquote-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;blockquote&gt;" anchor="element.blockquote">
+   <x:anchor-alias value="blockquote"/>
+   <iref item="Elements" subitem="blockquote" primary="true"/>
+   <iref item="blockquote element" primary="true"/>
+   <t>
+      Specifies a block of text is a quotation. The "cite" attribute is required, and must be a URL.
+   </t>
+   <t anchor="element.blockquote.contents"><!--AG-->
+        Content model:
+      </t>
+   <t><!--AG-->In any order: <list style="symbols">
+         <t><!--AG-->Text</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="figure"/>
+            <iref item="figure element" subitem="inside blockquote"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="artwork"/>
+            <iref item="artwork element" subitem="inside blockquote"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="tt"/>
+            <iref item="tt element" subitem="inside blockquote"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="b"/>
+            <iref item="b element" subitem="inside blockquote"/>&lt;<x:ref>b</x:ref>&gt; elements (<xref target="element.b"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="i"/>
+            <iref item="i element" subitem="inside blockquote"/>&lt;<x:ref>i</x:ref>&gt; elements (<xref target="element.i"/>)</t>
+      </list>
+   </t>
+
+   <!--blockquote/@anchor-->
+   <section title="'anchor' attribute" anchor="element.blockquote.attribute.anchor" toc="exclude">
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="blockquote element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in blockquote element"/>
+      <t>
+        Document-wide unique identifier for this quotation. The processor
+        will auto-generate an identifier when none is given.
+      </t>
+   </section>
+
+   <!--blockquote/@cite-->
+   <section title="'cite' attribute (mandatory)" anchor="element.blockquote.attribute.cite" toc="exclude">
+      <iref item="Attributes" subitem="cite"/>
+      <iref item="blockquote element" subitem="cite attribute"/>
+      <iref item="cite attribute" subitem="in blockquote element"/>
+      <t>
+         The source of the citation. This must be a URL. NEEDS AN EXAMPLE OF A CITE FOR A REFERENCE THAT IS
+         ALREADY IN THE SPEC.
+      </t>
+   </section>
 </section>
 
 <!--c-->
@@ -880,7 +934,7 @@
    <t><!--AG-->
       <cref anchor="element.figure.missing">element description missing</cref>
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.figure.contents"><!--AG-->Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
         
@@ -1118,7 +1172,7 @@
    <t>
             Causes the text to be displayed in an italic font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.i.contents"><!--AG-->
         Content model:
       </t>
@@ -2298,6 +2352,9 @@ and the others are the RFCs that make up the STD</c>
             <iref item="Elements" subitem="figure"/>
             <iref item="figure element" subitem="inside t"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</t>
          <t><!--AG-->
+            <iref item="Elements" subitem="artwork"/>
+            <iref item="artwork element" subitem="inside t"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
+         <t><!--AG-->
             <iref item="Elements" subitem="xref"/>
             <iref item="xref element" subitem="inside t"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
          <t><!--AG-->
@@ -2340,23 +2397,15 @@ and the others are the RFCs that make up the STD</c>
       </t>
    </section>
 
-   <!--t/@cite-->
-   <section title="'cite' attribute" anchor="element.t.attribute.cite" toc="exclude">
-      <iref item="Attributes" subitem="cite"/>
-      <iref item="t element" subitem="cite attribute"/>
-      <iref item="cite attribute" subitem="in t element"/>
-      <t><!--AG-->
-         <cref anchor="element.t.attribute.cite.missing">attribute description missing</cref>
-      </t>
-   </section>
-
-   <!--t/@style-->
-   <section title="'style' attribute" anchor="element.t.attribute.style" toc="exclude">
-      <iref item="Attributes" subitem="style"/>
-      <iref item="t element" subitem="style attribute"/>
-      <iref item="style attribute" subitem="in t element"/>
-      <t><!--AG-->
-         <cref anchor="element.t.attribute.style.missing">attribute description missing</cref>
+   <!--t/@indent-->
+   <section title="'indent' attribute" anchor="element.t.attribute.indent" toc="exclude">
+      <iref item="Attributes" subitem="indent"/>
+      <iref item="t element" subitem="indent attribute"/>
+      <iref item="indent attribute" subitem="in t element"/>
+      <t>
+         Specifies the indentation for the paragraph. The default value is "none"; the other possible
+         value is "both", which specifies that the processor will indent the resulting paragraph a small
+         amount from both margins.
       </t>
    </section>
 </section>
@@ -2527,7 +2576,7 @@ and the others are the RFCs that make up the STD</c>
    <t>
             Causes the text to be displayed in a constant-width font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.tt.contents"><!--AG-->
         Content model:
       </t>
