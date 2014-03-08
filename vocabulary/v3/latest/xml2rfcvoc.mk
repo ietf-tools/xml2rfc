@@ -4,8 +4,8 @@ xml2rfc.all: \
 xml2rfcv3.rnc: xml2rfcv3.rng trang.jar
 	java -jar trang.jar $< $@
 
-xml2rfcv3.dtd: xml2rfcv3.rng trang.jar
-	java -jar trang.jar $< $@
+#xml2rfcv3.dtd: xml2rfcv3.rng trang.jar
+#	java -jar trang.jar $< $@
 
 xml2rfcv3-annotated.rng: xml2rfcv3.rng annotate-rng.xslt draft-hoffman-xml2rfc-latest.xml
 	saxon $< annotate-rng.xslt doc=draft-hoffman-xml2rfc-latest.xml > $@
