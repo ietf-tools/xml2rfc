@@ -243,6 +243,11 @@ Table of Contents
    o  Deprecated <vspace> because the v2 spec labeled it as "a purely
       presentational element and thus its use ought to be avoided".
 
+   o  Added "ascii" attributes to <author>, <email>, and <organization>
+      elements.  This allows an athor to specify their information in
+      their native scripts as the primary entry and still allow the
+      ASCII-equivalent values to appear in the processed documents.
+
 1.1.1.  Design for Changes in Reference Handling
 
    This section describes one of the larger changes in the design of v3,
@@ -563,19 +568,23 @@ Table of Contents
 
    2.  One optional <address> element (Section 2.2)
 
-2.6.1.  'fullname' attribute
+2.6.1.  'ascii' attribute
+
+   The ASCII equivalent of the author's full name.
+
+2.6.2.  'fullname' attribute
 
    The full name (used in the automatically generated "Author's Address"
    section).
 
-2.6.2.  'initials' attribute
+2.6.3.  'initials' attribute
 
    Author initials (used on the front page and in references).
 
    Initials should be provided as a whitespace separated list of pairs
    of a letter and a dot.
 
-2.6.3.  'role' attribute
+2.6.4.  'role' attribute
 
    Specifies the role the author had in creating the document.
 
@@ -583,11 +592,11 @@ Table of Contents
 
    o  "editor"
 
-2.6.4.  'surname' attribute
+2.6.5.  'surname' attribute
 
    The author's surname.
 
-2.6.5.  'xml:lang' attribute
+2.6.6.  'xml:lang' attribute
 
    Allows specification of the language used.  This is sometimes useful
    for renderers which display different fonts for CJK characters.
@@ -893,6 +902,12 @@ Table of Contents
    This element appears as child element of: <address> (Section 2.2).
 
    Content model: only text content.
+
+2.19.1.  'ascii' attribute
+
+   The ASCII equivalent of the author's email address.  This is only
+   used if the email address has one or two internationalized
+   components.
 
 2.20.  <eref>
 
@@ -1285,6 +1300,10 @@ Table of Contents
 2.33.1.  'abbrev' attribute
 
    Abbreviated variant.
+
+2.33.2.  'ascii' attribute
+
+   The ASCII equivalent of the organization's name.
 
 2.34.  <phone>
 
@@ -2617,12 +2636,14 @@ Appendix B.  Relax NG Schema
        attribute fullname { text }?,
        attribute role { "editor" }?,
        [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+       attribute ascii { text }?,
        organization?,
        address?
      }
    organization =
      element organization {
        attribute abbrev { text }?,
+       attribute ascii { text }?,
        text
      }
    address =
@@ -2639,7 +2660,11 @@ Appendix B.  Relax NG Schema
    postalline = element postalline { text }
    phone = element phone { text }
    facsimile = element facsimile { text }
-   email = element email { text }
+   email =
+     element email {
+       attribute ascii { text }?,
+       text
+     }
    uri = element uri { text }
    date =
      element date {
@@ -2935,11 +2960,16 @@ Index
          width attribute  1
          xml:lang attribute  1
          xml:space attribute  1
+      ascii attribute
+         in author element  1
+         in email element  1
+         in organization element  1
       Attributes
          abbrev  1
          align  1
          alt  1
          anchor  1
+         ascii  1
          blankLines  1
          category  1
          cite  1
@@ -2990,6 +3020,7 @@ Index
          xml:space  1
          year  1
       author element  1
+         ascii attribute  1
          fullname attribute  1
          initials attribute  1
          inside front  1
@@ -3129,6 +3160,7 @@ Index
          workgroup  1
          xref  1
       email element  1
+         ascii attribute  1
          inside address  1
       empty attribute
          in ul element  1
@@ -3281,6 +3313,7 @@ Index
          style attribute  1
       organization element  1
          abbrev attribute  1
+         ascii attribute  1
          inside author  1
 
    P

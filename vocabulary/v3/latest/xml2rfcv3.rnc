@@ -53,12 +53,14 @@ author =
     attribute fullname { text }?,
     attribute role { "editor" }?,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+    attribute ascii { text }?,
     organization?,
     address?
   }
 organization =
   element organization {
     attribute abbrev { text }?,
+    attribute ascii { text }?,
     text
   }
 address =
@@ -75,7 +77,11 @@ country = element country { text }
 postalline = element postalline { text }
 phone = element phone { text }
 facsimile = element facsimile { text }
-email = element email { text }
+email =
+  element email {
+    attribute ascii { text }?,
+    text
+  }
 uri = element uri { text }
 date =
   element date {
