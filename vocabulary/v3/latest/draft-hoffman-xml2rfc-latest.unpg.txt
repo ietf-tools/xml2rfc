@@ -220,7 +220,8 @@ Table of Contents
       here ***.
 
    o  In <postal>, allowed the sub-elements to be in any order.  Also
-      allowed the inclusion of <postalline>.
+      allowed the inclusion of <postalline> instead of the older
+      elements.
 
    o  Added <postalline>, free text that represents one line of the
       address.
@@ -1302,8 +1303,8 @@ Table of Contents
    Contains optional child elements providing postal information.  These
    elements will be displayed in an order that is processor-specific.
    Thus, a postal address should probably contain only a set of
-   <street>, <city>, <region>, <code>, and <country> elements, or only a
-   set of <postalline> elements, but not both.
+   <street>, <city>, <region>, <code>, and <country> elements, or only
+   an ordered set of <postalline> elements, but not both.
 
    This element appears as child element of: <address> (Section 2.2).
 
@@ -1313,7 +1314,8 @@ Table of Contents
 
 2.36.  <postalline>
 
-   Represents one line of a postal address.
+   Represents one line of a postal address.  When more than one
+   <postalline> is given, the processor emits them in the order given.
 
    This element appears as child element of: <postal> (Section 2.35).
 
@@ -2626,8 +2628,9 @@ Appendix B.  Relax NG Schema
    address =
      element address { (postal | phone | facsimile | email | uri)* }
    postal =
-     element postal { (street, city, region, code, country)* |
-   postalline }
+     element postal {
+       (street, city, region, code, country)* | postalline+
+     }
    street = element street { text }
    city = element city { text }
    region = element region { text }

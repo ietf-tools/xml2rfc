@@ -163,7 +163,7 @@ The list of changes so far is:
 <t>Deprecated &lt;<x:ref>list</x:ref>&gt; in favor of *** list of new list styles goes here ***.</t>
 
 <t>In &lt;<x:ref>postal</x:ref>&gt;, allowed the sub-elements to be in any order. Also allowed the inclusion
-of &lt;<x:ref>postalline</x:ref>&gt;.</t>
+of &lt;<x:ref>postalline</x:ref>&gt; instead of the older elements.</t>
 
 <t>Added &lt;<x:ref>postalline</x:ref>&gt;, free text that represents one line of the address.</t>
 
@@ -1797,7 +1797,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       displayed in an order that is processor-specific. Thus, a
       postal address should probably contain only a set of &lt;<x:ref>street</x:ref>&gt;, &lt;<x:ref>city</x:ref>&gt;,
       &lt;<x:ref>region</x:ref>&gt;, &lt;<x:ref>code</x:ref>&gt;, and &lt;<x:ref>country</x:ref>&gt;
-      elements, or only a set of &lt;<x:ref>postalline</x:ref>&gt; elements, but not both.
+      elements, or only an ordered set of &lt;<x:ref>postalline</x:ref>&gt; elements, but not both.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.postal.contents"><!--AG-->
@@ -1816,7 +1816,8 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <iref item="Elements" subitem="postalline" primary="true"/>
    <iref item="postalline element" primary="true"/>
    <t>
-      Represents one line of a postal address.
+      Represents one line of a postal address. When more than one &lt;postalline&gt; is given, the processor
+      emits them in the order given.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.postalline.contents"><!--AG-->Content model: only text content.</t>
@@ -3854,8 +3855,9 @@ organization =
 address =
   element address { (postal | phone | facsimile | email | uri)* }
 postal =
-  element postal { (street, city, region, code, country)* | 
-postalline }
+  element postal {
+    (street, city, region, code, country)* | postalline+
+  }
 street = element street { text }
 city = element city { text }
 region = element region { text }
