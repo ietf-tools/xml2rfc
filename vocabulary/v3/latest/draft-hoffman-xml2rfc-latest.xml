@@ -1803,26 +1803,10 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <t anchor="element.postal.contents"><!--AG-->
         Content model:
       </t>
-   <t><!--AG-->In any order: <list style="symbols">
-         <t><!--AG-->
-            <iref item="Elements" subitem="street"/>
-            <iref item="street element" subitem="inside postal"/>&lt;<x:ref>street</x:ref>&gt; elements (<xref target="element.street"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="city"/>
-            <iref item="city element" subitem="inside postal"/>&lt;<x:ref>city</x:ref>&gt; elements (<xref target="element.city"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="region"/>
-            <iref item="region element" subitem="inside postal"/>&lt;<x:ref>region</x:ref>&gt; elements (<xref target="element.region"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="code"/>
-            <iref item="code element" subitem="inside postal"/>&lt;<x:ref>code</x:ref>&gt; elements (<xref target="element.code"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="country"/>
-            <iref item="country element" subitem="inside postal"/>&lt;<x:ref>country</x:ref>&gt; elements (<xref target="element.country"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="postalline"/>
-            <iref item="postalline element" subitem="inside postal"/>&lt;<x:ref>postalline</x:ref>&gt; elements (<xref target="element.postalline"/>)</t>
-      </list>
+   <t><!--AG-->
+      <cref>
+      Missing template for choice.
+    </cref>
    </t>
 </section>
 
@@ -3870,9 +3854,8 @@ organization =
 address =
   element address { (postal | phone | facsimile | email | uri)* }
 postal =
-  element postal {
-    (street | city | region | code | country | postalline)*
-  }
+  element postal { (street, city, region, code, country)* | 
+postalline }
 street = element street { text }
 city = element city { text }
 region = element region { text }
