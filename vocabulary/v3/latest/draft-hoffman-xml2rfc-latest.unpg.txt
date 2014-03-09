@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                              March 8, 2014
+Obsoletes: 2629 (if approved)                              March 9, 2014
 Intended status: Standards Track
-Expires: September 9, 2014
+Expires: September 10, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 9, 2014.
+   This Internet-Draft will expire on September 10, 2014.
 
 Copyright Notice
 
@@ -98,7 +98,7 @@ Table of Contents
      2.33. <organization>
      2.34. <phone>
      2.35. <postal>
-     2.36. <postalbody>
+     2.36. <postalline>
      2.37. <postamble>
      2.38. <preamble>
      2.39. <reference>
@@ -111,14 +111,15 @@ Table of Contents
      2.46. <street>
      2.47. <t>
      2.48. <texttable>
-     2.49. <title>
-     2.50. <tt>
-     2.51. <ttcol>
-     2.52. <ul>
-     2.53. <uri>
-     2.54. <vspace>
-     2.55. <workgroup>
-     2.56. <xref>
+     2.49. <tindent>
+     2.50. <title>
+     2.51. <tt>
+     2.52. <ttcol>
+     2.53. <ul>
+     2.54. <uri>
+     2.55. <vspace>
+     2.56. <workgroup>
+     2.57. <xref>
    3.  Special Unicode Code Points
    4.  Internationalization Considerations
    5.  Security Considerations
@@ -232,7 +233,7 @@ Table of Contents
    o  Deprecated <spanx> element, and replaced it with <b>, <i>, and
       <tt>.
 
-   o  Added a "indent" attribute to <t> to specify indented paragraphs.
+   o  Added the <tindent> element for indented paragraphs.
 
    o  In <ttcol>, added <xref>, <eref>, <iref>, and <cref> as optional
       children.
@@ -330,7 +331,7 @@ Table of Contents
 
    o  <email> elements (Section 2.19)
 
-   o  <uri> elements (Section 2.53)
+   o  <uri> elements (Section 2.54)
 
 2.3.  <annotation>
 
@@ -353,7 +354,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.56)
+   o  <xref> elements (Section 2.57)
 
    o  <eref> elements (Section 2.20)
 
@@ -363,7 +364,7 @@ Table of Contents
 
    o  <spanx> elements (Section 2.45)
 
-   o  <tt> elements (Section 2.50)
+   o  <tt> elements (Section 2.51)
 
    o  <b> elements (Section 2.7)
 
@@ -412,8 +413,8 @@ Table of Contents
    published with enhanced diagrams; a recent example is [RFC5598].
 
    This element appears as child element of: <blockquote> (Section 2.9),
-   <figure> (Section 2.22), <section> (Section 2.43), and <t>
-   (Section 2.47).
+   <figure> (Section 2.22), <section> (Section 2.43), <t>
+   (Section 2.47), and <tindent> (Section 2.49).
 
    Content model:
 
@@ -597,7 +598,7 @@ Table of Contents
    <blockquote> (Section 2.9), <c> (Section 2.10), <dd> (Section 2.16),
    <dt> (Section 2.18), <i> (Section 2.25), <li> (Section 2.28),
    <postamble> (Section 2.37), <preamble> (Section 2.38), <t>
-   (Section 2.47), and <tt> (Section 2.50).
+   (Section 2.47), <tindent> (Section 2.49), and <tt> (Section 2.51).
 
    Content model:
 
@@ -605,7 +606,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.56)
+   o  <xref> elements (Section 2.57)
 
    o  <eref> elements (Section 2.20)
 
@@ -613,7 +614,7 @@ Table of Contents
 
    o  <cref> elements (Section 2.14)
 
-   o  <tt> elements (Section 2.50)
+   o  <tt> elements (Section 2.51)
 
    o  <i> elements (Section 2.25)
 
@@ -647,7 +648,7 @@ Table of Contents
 
    o  <artwork> elements (Section 2.5)
 
-   o  <tt> elements (Section 2.50)
+   o  <tt> elements (Section 2.51)
 
    o  <b> elements (Section 2.7)
 
@@ -675,7 +676,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.56)
+   o  <xref> elements (Section 2.57)
 
    o  <eref> elements (Section 2.20)
 
@@ -685,7 +686,7 @@ Table of Contents
 
    o  <spanx> elements (Section 2.45)
 
-   o  <tt> elements (Section 2.50)
+   o  <tt> elements (Section 2.51)
 
    o  <b> elements (Section 2.7)
 
@@ -727,8 +728,9 @@ Table of Contents
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.7), <c> (Section 2.10), <dd> (Section 2.16), <dt>
    (Section 2.18), <i> (Section 2.25), <li> (Section 2.28), <postamble>
-   (Section 2.37), <preamble> (Section 2.38), <t> (Section 2.47), <tt>
-   (Section 2.50), and <ttcol> (Section 2.51).
+   (Section 2.37), <preamble> (Section 2.38), <t> (Section 2.47),
+   <tindent> (Section 2.49), <tt> (Section 2.51), and <ttcol>
+   (Section 2.52).
 
    Content model: only text content.
 
@@ -797,9 +799,9 @@ Table of Contents
 
    o  <ol> elements (Section 2.32)
 
-   o  <ul> elements (Section 2.52)
+   o  <ul> elements (Section 2.53)
 
-   o  <xref> elements (Section 2.56)
+   o  <xref> elements (Section 2.57)
 
    o  <eref> elements (Section 2.20)
 
@@ -807,7 +809,7 @@ Table of Contents
 
    o  <cref> elements (Section 2.14)
 
-   o  <tt> elements (Section 2.50)
+   o  <tt> elements (Section 2.51)
 
    o  <b> elements (Section 2.7)
 
@@ -864,7 +866,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.56)
+   o  <xref> elements (Section 2.57)
 
    o  <eref> elements (Section 2.20)
 
@@ -872,7 +874,7 @@ Table of Contents
 
    o  <cref> elements (Section 2.14)
 
-   o  <tt> elements (Section 2.50)
+   o  <tt> elements (Section 2.51)
 
    o  <b> elements (Section 2.7)
 
@@ -902,8 +904,9 @@ Table of Contents
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.7), <c> (Section 2.10), <dd> (Section 2.16), <dt>
    (Section 2.18), <i> (Section 2.25), <li> (Section 2.28), <postamble>
-   (Section 2.37), <preamble> (Section 2.38), <t> (Section 2.47), <tt>
-   (Section 2.50), and <ttcol> (Section 2.51).
+   (Section 2.37), <preamble> (Section 2.38), <t> (Section 2.47),
+   <tindent> (Section 2.49), <tt> (Section 2.51), and <ttcol>
+   (Section 2.52).
 
    Content model: only text content.
 
@@ -928,8 +931,8 @@ Table of Contents
    [[element.figure.missing: element description missing]]
 
    This element appears as child element of: <blockquote> (Section 2.9),
-   <li> (Section 2.28), <section> (Section 2.43), and <t>
-   (Section 2.47).
+   <li> (Section 2.28), <section> (Section 2.43), <t> (Section 2.47),
+   and <tindent> (Section 2.49).
 
    Content model:
 
@@ -1035,7 +1038,7 @@ Table of Contents
 
    In this order:
 
-   1.  One <title> element (Section 2.49)
+   1.  One <title> element (Section 2.50)
 
    2.  One or more <author> elements (Section 2.6)
 
@@ -1043,7 +1046,7 @@ Table of Contents
 
    4.  Optional <area> elements (Section 2.4)
 
-   5.  Optional <workgroup> elements (Section 2.55)
+   5.  Optional <workgroup> elements (Section 2.56)
 
    6.  Optional <keyword> elements (Section 2.27)
 
@@ -1059,7 +1062,7 @@ Table of Contents
    <b> (Section 2.7), <blockquote> (Section 2.9), <c> (Section 2.10),
    <dd> (Section 2.16), <dt> (Section 2.18), <li> (Section 2.28),
    <postamble> (Section 2.37), <preamble> (Section 2.38), <t>
-   (Section 2.47), and <tt> (Section 2.50).
+   (Section 2.47), <tindent> (Section 2.49), and <tt> (Section 2.51).
 
    Content model:
 
@@ -1067,7 +1070,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.56)
+   o  <xref> elements (Section 2.57)
 
    o  <eref> elements (Section 2.20)
 
@@ -1077,7 +1080,7 @@ Table of Contents
 
    o  <b> elements (Section 2.7)
 
-   o  <tt> elements (Section 2.50)
+   o  <tt> elements (Section 2.51)
 
 2.26.  <iref>
 
@@ -1097,8 +1100,9 @@ Table of Contents
    <b> (Section 2.7), <c> (Section 2.10), <dd> (Section 2.16), <dt>
    (Section 2.18), <figure> (Section 2.22), <i> (Section 2.25), <li>
    (Section 2.28), <postamble> (Section 2.37), <preamble>
-   (Section 2.38), <section> (Section 2.43), <t> (Section 2.47), <tt>
-   (Section 2.50), and <ttcol> (Section 2.51).
+   (Section 2.38), <section> (Section 2.43), <t> (Section 2.47),
+   <tindent> (Section 2.49), <tt> (Section 2.51), and <ttcol>
+   (Section 2.52).
 
    Content model: this element does not have any contents.
 
@@ -1140,7 +1144,7 @@ Table of Contents
    A list element, used in <ol> and <ul>.
 
    This element appears as child element of: <ol> (Section 2.32), and
-   <ul> (Section 2.52).
+   <ul> (Section 2.53).
 
    Content model:
 
@@ -1316,14 +1320,11 @@ Table of Contents
 
    o  <country> elements (Section 2.13)
 
-   o  <postalbody> elements (Section 2.36)
+   o  <postalline> elements (Section 2.36)
 
-2.36.  <postalbody>
+2.36.  <postalline>
 
-   A method for presenting a postal address without using <street>,
-   <city>, <region>, <code>, and <country> elements.  Processors will
-   maintain horizontal whitespace and line breaks in the text of the
-   <postalbody> element.
+   [[element.postalline.missing: element description missing]]
 
    This element appears as child element of: <postal> (Section 2.35).
 
@@ -1342,7 +1343,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.56)
+   o  <xref> elements (Section 2.57)
 
    o  <eref> elements (Section 2.20)
 
@@ -1352,7 +1353,7 @@ Table of Contents
 
    o  <spanx> elements (Section 2.45)
 
-   o  <tt> elements (Section 2.50)
+   o  <tt> elements (Section 2.51)
 
    o  <b> elements (Section 2.7)
 
@@ -1371,7 +1372,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.56)
+   o  <xref> elements (Section 2.57)
 
    o  <eref> elements (Section 2.20)
 
@@ -1381,7 +1382,7 @@ Table of Contents
 
    o  <spanx> elements (Section 2.45)
 
-   o  <tt> elements (Section 2.50)
+   o  <tt> elements (Section 2.51)
 
    o  <b> elements (Section 2.7)
 
@@ -1833,7 +1834,7 @@ Table of Contents
 
    o  <ol> elements (Section 2.32)
 
-   o  <ul> elements (Section 2.52)
+   o  <ul> elements (Section 2.53)
 
    o  <dl> elements (Section 2.17)
 
@@ -1841,7 +1842,7 @@ Table of Contents
 
    o  <artwork> elements (Section 2.5)
 
-   o  <xref> elements (Section 2.56)
+   o  <xref> elements (Section 2.57)
 
    o  <eref> elements (Section 2.20)
 
@@ -1851,9 +1852,9 @@ Table of Contents
 
    o  <spanx> elements (Section 2.45)
 
-   o  <vspace> elements (Section 2.54)
+   o  <vspace> elements (Section 2.55)
 
-   o  <tt> elements (Section 2.50)
+   o  <tt> elements (Section 2.51)
 
    o  <b> elements (Section 2.7)
 
@@ -1864,13 +1865,6 @@ Table of Contents
    Document-wide unique identifier for this paragraph.
 
    The value needs to be a valid XML "Name" (Section 2.3 of [XML]).
-
-2.47.2.  'indent' attribute
-
-   Specifies the indentation for the paragraph.  The default value is
-   "none"; the other possible value is "both", which specifies that the
-   processor will indent the resulting paragraph a small amount from
-   both margins.
 
 2.48.  <texttable>
 
@@ -1891,7 +1885,7 @@ Table of Contents
 
    1.  One optional <preamble> element (Section 2.38)
 
-   2.  One or more <ttcol> elements (Section 2.51)
+   2.  One or more <ttcol> elements (Section 2.52)
 
    3.  Optional <c> elements (Section 2.10)
 
@@ -1955,7 +1949,40 @@ Table of Contents
    [[element.texttable.attribute.title.missing: attribute description
    missing]]
 
-2.49.  <title>
+2.49.  <tindent>
+
+   Contains a paragraph of text.  The paragraph is displayed with the
+   left and right paragraph margins indented from the page margins.
+
+   Content model:
+
+   In any order:
+
+   o  Text
+
+   o  <figure> elements (Section 2.22)
+
+   o  <artwork> elements (Section 2.5)
+
+   o  <xref> elements (Section 2.57)
+
+   o  <eref> elements (Section 2.20)
+
+   o  <iref> elements (Section 2.26)
+
+   o  <cref> elements (Section 2.14)
+
+   o  <tt> elements (Section 2.51)
+
+   o  <b> elements (Section 2.7)
+
+   o  <i> elements (Section 2.25)
+
+2.49.1.  'anchor' attribute
+
+   Document-wide unique identifier for this indented paragraph.
+
+2.50.  <title>
 
    Represents the document title.
 
@@ -1968,11 +1995,11 @@ Table of Contents
 
    Content model: only text content.
 
-2.49.1.  'abbrev' attribute
+2.50.1.  'abbrev' attribute
 
    Specifies an abbreviated variant of the document title.
 
-2.50.  <tt>
+2.51.  <tt>
 
    Causes the text to be displayed in a constant-width font.
 
@@ -1980,7 +2007,7 @@ Table of Contents
    <b> (Section 2.7), <blockquote> (Section 2.9), <c> (Section 2.10),
    <dd> (Section 2.16), <dt> (Section 2.18), <i> (Section 2.25), <li>
    (Section 2.28), <postamble> (Section 2.37), <preamble>
-   (Section 2.38), and <t> (Section 2.47).
+   (Section 2.38), <t> (Section 2.47), and <tindent> (Section 2.49).
 
    Content model:
 
@@ -1988,7 +2015,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.56)
+   o  <xref> elements (Section 2.57)
 
    o  <eref> elements (Section 2.20)
 
@@ -2000,7 +2027,7 @@ Table of Contents
 
    o  <i> elements (Section 2.25)
 
-2.51.  <ttcol>
+2.52.  <ttcol>
 
    Contains a column heading in a table.
 
@@ -2010,7 +2037,7 @@ Table of Contents
 
    In any order:
 
-   o  <xref> elements (Section 2.56)
+   o  <xref> elements (Section 2.57)
 
    o  <eref> elements (Section 2.20)
 
@@ -2020,7 +2047,7 @@ Table of Contents
 
    o  Text
 
-2.51.1.  'align' attribute
+2.52.1.  'align' attribute
 
    Determines the horizontal alignment within the table column.
 
@@ -2032,11 +2059,11 @@ Table of Contents
 
    o  "right"
 
-2.51.2.  'width' attribute
+2.52.2.  'width' attribute
 
    The desired column width (as integer 0..100 followed by "%").
 
-2.52.  <ul>
+2.53.  <ul>
 
    An unordered list.  The labels on the items will be symbols picked by
    the processor.
@@ -2048,7 +2075,7 @@ Table of Contents
 
    One or more <li> elements (Section 2.28)
 
-2.52.1.  'empty' attribute
+2.53.1.  'empty' attribute
 
    Defines whether or not the label is empty. empty="true" indicates
    that no label be shown.
@@ -2059,7 +2086,7 @@ Table of Contents
 
    o  "true"
 
-2.52.2.  'spacing' attribute
+2.53.2.  'spacing' attribute
 
    Defines whether or not there is a blank line between entries.
    spacing="normal" indicates a single blank line, while
@@ -2071,7 +2098,7 @@ Table of Contents
 
    o  "compact"
 
-2.53.  <uri>
+2.54.  <uri>
 
    Contains a web address associated with the author.
 
@@ -2081,7 +2108,7 @@ Table of Contents
 
    Content model: only text content.
 
-2.54.  <vspace>
+2.55.  <vspace>
 
    Deprecated.
 
@@ -2089,11 +2116,11 @@ Table of Contents
 
    Content model: this element does not have any contents.
 
-2.54.1.  'blankLines' attribute
+2.55.1.  'blankLines' attribute
 
    Deprecated.
 
-2.55.  <workgroup>
+2.56.  <workgroup>
 
    This element is used to specify the Working Group the document
    originates from, if any.  The recommended format is the official name
@@ -2109,7 +2136,7 @@ Table of Contents
 
    Content model: only text content.
 
-2.56.  <xref>
+2.57.  <xref>
 
    Inserts a reference to a different part of a document.
 
@@ -2131,12 +2158,13 @@ Table of Contents
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.7), <c> (Section 2.10), <dd> (Section 2.16), <dt>
    (Section 2.18), <i> (Section 2.25), <li> (Section 2.28), <postamble>
-   (Section 2.37), <preamble> (Section 2.38), <t> (Section 2.47), <tt>
-   (Section 2.50), and <ttcol> (Section 2.51).
+   (Section 2.37), <preamble> (Section 2.38), <t> (Section 2.47),
+   <tindent> (Section 2.49), <tt> (Section 2.51), and <ttcol>
+   (Section 2.52).
 
    Content model: only text content.
 
-2.56.1.  'format' attribute
+2.57.1.  'format' attribute
 
    This attribute is used to control the format of the generated
    reference text.
@@ -2171,7 +2199,7 @@ Table of Contents
 
    o  "default" (default)
 
-2.56.2.  'pageno' attribute
+2.57.2.  'pageno' attribute
 
    Unused.
 
@@ -2184,7 +2212,7 @@ Table of Contents
 
    o  "false" (default)
 
-2.56.3.  'target' attribute (mandatory)
+2.57.3.  'target' attribute (mandatory)
 
    Identifies the document component being referenced.
 
@@ -2610,14 +2638,14 @@ Appendix B.  Relax NG Schema
      element address { (postal | phone | facsimile | email | uri)* }
    postal =
      element postal {
-       (street | city | region | code | country | postalbody)*
+       (street | city | region | code | country | postalline)*
      }
    street = element street { text }
    city = element city { text }
    region = element region { text }
    code = element code { text }
    country = element country { text }
-   postalbody = element postalbody { text }
+   postalline = element postalline { text }
    phone = element phone { text }
    facsimile = element facsimile { text }
    email = element email { text }
@@ -2654,8 +2682,6 @@ Appendix B.  Relax NG Schema
    t =
      element t {
        attribute anchor { xsd:ID }?,
-       ([ a:defaultValue = "none" ] attribute indent { text },
-        ("none" | "both"))?,
        (text
         | \list
         | ol
@@ -2672,6 +2698,12 @@ Appendix B.  Relax NG Schema
         | tt
         | b
         | i)*
+     }
+   tindent =
+     element tindent {
+       attribute anchor { xsd:ID }?,
+       (text | figure | artwork | xref | eref | iref | cref | tt | b |
+   i)*
      }
    blockquote =
      element blockquote {
@@ -2891,6 +2923,7 @@ Index
          in section element  1
          in t element  1
          in texttable element  1
+         in tindent element  1
       annotation element  1
          inside reference  1
       application/rfc+xml Media Type  1
@@ -2904,6 +2937,7 @@ Index
          inside figure  1
          inside section  1
          inside t  1
+         inside tindent  1
          name attribute  1
          src attribute  1
          type attribute  1
@@ -2929,7 +2963,6 @@ Index
          hangIndent  1
          hanging  1
          height  1
-         indent  1
          initials  1
          ipr  1
          iprExtract  1
@@ -2984,6 +3017,7 @@ Index
          inside postamble  1
          inside preamble  1
          inside t  1
+         inside tindent  1
          inside tt  1
       back element  1
          inside rfc  1
@@ -3021,6 +3055,7 @@ Index
          inside postamble  1
          inside preamble  1
          inside t  1
+         inside tindent  1
          inside tt  1
          inside ttcol  1
          source attribute  1
@@ -3083,7 +3118,7 @@ Index
          organization  1
          phone  1
          postal  1
-         postalbody  1
+         postalline  1
          postamble  1
          preamble  1
          reference  1
@@ -3096,6 +3131,7 @@ Index
          street  1
          t  1
          texttable  1
+         tindent  1
          title  1
          tt  1
          ttcol  1
@@ -3118,6 +3154,7 @@ Index
          inside postamble  1
          inside preamble  1
          inside t  1
+         inside tindent  1
          inside tt  1
          inside ttcol  1
          target attribute  1
@@ -3133,6 +3170,7 @@ Index
          inside blockquote  1
          inside section  1
          inside t  1
+         inside tindent  1
          src attribute  1
          suppress-title attribute  1
          title attribute  1
@@ -3170,9 +3208,8 @@ Index
          inside postamble  1
          inside preamble  1
          inside t  1
+         inside tindent  1
          inside tt  1
-      indent attribute
-         in t element  1
       initials attribute
          in author element  1
       ipr attribute
@@ -3200,6 +3237,7 @@ Index
          inside preamble  1
          inside section  1
          inside t  1
+         inside tindent  1
          inside tt  1
          inside ttcol  1
          item attribute  1
@@ -3264,7 +3302,7 @@ Index
          inside address  1
       postal element  1
          inside address  1
-      postalbody element  1
+      postalline element  1
          inside postal  1
       postamble element  1
          inside figure  1
@@ -3361,7 +3399,6 @@ Index
    T
       t element  1
          anchor attribute  1
-         indent attribute  1
          inside abstract  1
          inside list  1
          inside note  1
@@ -3378,6 +3415,8 @@ Index
          style attribute  1
          suppress-title attribute  1
          title attribute  1
+      tindent element  1
+         anchor attribute  1
       title attribute
          in figure element  1
          in note element  1
@@ -3400,6 +3439,7 @@ Index
          inside postamble  1
          inside preamble  1
          inside t  1
+         inside tindent  1
       ttcol element  1
          align attribute  1
          inside texttable  1
@@ -3453,6 +3493,7 @@ Index
          inside postamble  1
          inside preamble  1
          inside t  1
+         inside tindent  1
          inside tt  1
          inside ttcol  1
          pageno attribute  1

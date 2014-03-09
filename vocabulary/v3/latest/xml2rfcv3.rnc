@@ -65,14 +65,14 @@ address =
   element address { (postal | phone | facsimile | email | uri)* }
 postal =
   element postal {
-    (street | city | region | code | country | postalbody)*
+    (street | city | region | code | country | postalline)*
   }
 street = element street { text }
 city = element city { text }
 region = element region { text }
 code = element code { text }
 country = element country { text }
-postalbody = element postalbody { text }
+postalline = element postalline { text }
 phone = element phone { text }
 facsimile = element facsimile { text }
 email = element email { text }
@@ -108,8 +108,6 @@ section =
 t =
   element t {
     attribute anchor { xsd:ID }?,
-    ([ a:defaultValue = "none" ] attribute indent { text },
-     ("none" | "both"))?,
     (text
      | \list
      | ol
@@ -126,6 +124,11 @@ t =
      | tt
      | b
      | i)*
+  }
+tindent =
+  element tindent {
+    attribute anchor { xsd:ID }?,
+    (text | figure | artwork | xref | eref | iref | cref | tt | b | i)*
   }
 blockquote =
   element blockquote {
