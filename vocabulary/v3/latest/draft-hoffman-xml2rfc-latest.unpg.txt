@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                              March 9, 2014
+Obsoletes: 2629 (if approved)                             March 11, 2014
 Intended status: Standards Track
-Expires: September 10, 2014
+Expires: September 12, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 10, 2014.
+   This Internet-Draft will expire on September 12, 2014.
 
 Copyright Notice
 
@@ -307,6 +307,10 @@ Table of Contents
    The sections below describe all elements and their attributes.
 
    Note that attributes not labeled "mandatory" are optional.
+
+   Many elements have an optional "anchor" attribute.  In all cases, The
+   value of the "anchor" attribute needs to be a valid XML "Name"
+   (Section 2.3 of [XML]).
 
 2.1.  <abstract>
 
@@ -750,8 +754,6 @@ Table of Contents
    Document-wide unique identifier for this comment.  The processor will
    auto-generate an identifier when none is given.
 
-   The value needs to be a valid XML "Name" (Section 2.3 of [XML]).
-
 2.14.2.  'source' attribute
 
    Holds the "source" of a comment, such as the name or the initials of
@@ -984,8 +986,6 @@ Table of Contents
 2.22.3.  'anchor' attribute
 
    Document-wide unique identifier for this figure.
-
-   The value needs to be a valid XML "Name" (Section 2.3 of [XML]).
 
 2.22.4.  'height' attribute
 
@@ -1493,8 +1493,6 @@ Table of Contents
    will be used both to "label" the reference in the references section,
    and as an identifier in links to this reference entry.
 
-   The value needs to be a valid XML "Name" (Section 2.3 of [XML]).
-
 2.39.2.  'document' attribute
 
    The document or documents that make up a reference, as described
@@ -1724,8 +1722,6 @@ Table of Contents
 
    Document-wide unique identifier for this section.
 
-   The value needs to be a valid XML "Name" (Section 2.3 of [XML]).
-
 2.43.2.  'numbered' attribute
 
    If set to "no", this section does not get a section number.
@@ -1874,8 +1870,6 @@ Table of Contents
 
    Document-wide unique identifier for this paragraph.
 
-   The value needs to be a valid XML "Name" (Section 2.3 of [XML]).
-
 2.48.  <texttable>
 
    Contains a table, consisting of an optional preamble, a header line,
@@ -1916,8 +1910,6 @@ Table of Contents
 2.48.2.  'anchor' attribute
 
    Document-wide unique identifier for this table.
-
-   The value needs to be a valid XML "Name" (Section 2.3 of [XML]).
 
 2.48.3.  'style' attribute
 
@@ -2650,7 +2642,7 @@ Appendix B.  Relax NG Schema
      element address { (postal | phone | facsimile | email | uri)* }
    postal =
      element postal {
-       (street, city, region, code, country)* | postalline+
+       (street | city | region | code | country)* | postalline+
      }
    street = element street { text }
    city = element city { text }
