@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                             March 11, 2014
+Obsoletes: 2629 (if approved)                             March 12, 2014
 Intended status: Standards Track
-Expires: September 12, 2014
+Expires: September 13, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 12, 2014.
+   This Internet-Draft will expire on September 13, 2014.
 
 Copyright Notice
 
@@ -216,8 +216,7 @@ Table of Contents
 
    o  In <front>, made <date> optional.
 
-   o  Deprecated <list> in favor of *** list of new list styles goes
-      here ***.
+   o  Deprecated <list> in favor of <dl>, <ul>, and <ol>.
 
    o  In <postal>, allowed the sub-elements to be in any order.  Also
       allowed the inclusion of <postalline> instead of the older
@@ -228,6 +227,8 @@ Table of Contents
 
    o  Changed the handling of <reference>.  This large change is
       described in Section 1.1.1.
+
+   o  Allowed the elements inside a <reference> to be in any order.
 
    o  In <section>, added the optional "numbered" and "removeinrfc"
       attributes.
@@ -310,7 +311,8 @@ Table of Contents
 
    Many elements have an optional "anchor" attribute.  In all cases, The
    value of the "anchor" attribute needs to be a valid XML "Name"
-   (Section 2.3 of [XML]).
+   (Section 2.3 of [XML]).  In short, it is a text string with no spaces
+   or colons; hyphens and underscores are allowed.
 
 2.1.  <abstract>
 
@@ -424,8 +426,9 @@ Table of Contents
    published with enhanced diagrams; a recent example is [RFC5598].
 
    This element appears as child element of: <blockquote> (Section 2.9),
-   <figure> (Section 2.22), <section> (Section 2.43), <t>
-   (Section 2.47), and <tindent> (Section 2.49).
+   <dd> (Section 2.16), <figure> (Section 2.22), <li> (Section 2.28),
+   <section> (Section 2.43), <t> (Section 2.47), and <tindent>
+   (Section 2.49).
 
    Content model:
 
@@ -814,6 +817,10 @@ Table of Contents
 
    o  <ul> elements (Section 2.53)
 
+   o  <figure> elements (Section 2.22)
+
+   o  <artwork> elements (Section 2.5)
+
    o  <xref> elements (Section 2.57)
 
    o  <eref> elements (Section 2.20)
@@ -950,8 +957,8 @@ Table of Contents
    [[element.figure.missing: element description missing]]
 
    This element appears as child element of: <blockquote> (Section 2.9),
-   <li> (Section 2.28), <section> (Section 2.43), <t> (Section 2.47),
-   and <tindent> (Section 2.49).
+   <dd> (Section 2.16), <li> (Section 2.28), <section> (Section 2.43),
+   <t> (Section 2.47), and <tindent> (Section 2.49).
 
    Content model:
 
@@ -1475,17 +1482,7 @@ Table of Contents
    This element appears as child element of: <references>
    (Section 2.40).
 
-   Content model:
-
-   In this order:
-
-   1.  Optional <front> elements (Section 2.24)
-
-   2.  Optional <seriesInfo> elements (Section 2.44)
-
-   3.  Optional <format> elements (Section 2.23)
-
-   4.  Optional <annotation> elements (Section 2.3)
+   Content model: this element does not have any contents.
 
 2.39.1.  'anchor' attribute (mandatory)
 
@@ -1493,12 +1490,12 @@ Table of Contents
    will be used both to "label" the reference in the references section,
    and as an identifier in links to this reference entry.
 
-2.39.2.  'document' attribute
+2.39.2.  'document' attribute (mandatory)
 
    The document or documents that make up a reference, as described
    earlier in this section.
 
-2.39.3.  'series' attribute
+2.39.3.  'series' attribute (mandatory)
 
    The series from which the referred-to document comes from, as
    described earlier in this section.
@@ -1707,6 +1704,8 @@ Table of Contents
    1.  In any order:
 
        *  <t> elements (Section 2.47)
+
+       *  <tindent> elements (Section 2.49)
 
        *  <figure> elements (Section 2.22)
 
@@ -1955,6 +1954,8 @@ Table of Contents
 
    Contains a paragraph of text.  The paragraph is displayed with the
    left and right paragraph margins indented from the page margins.
+
+   This element appears as child element of: <section> (Section 2.43).
 
    Content model:
 
@@ -2684,7 +2685,7 @@ Appendix B.  Relax NG Schema
        attribute toc { "include" | "exclude" | "default" }?,
        [ a:defaultValue = "no" ] attribute removeinrfc { "yes" | "no"
    }?,
-       (t | figure | texttable | iref | artwork)*,
+       (t | tindent | figure | texttable | iref | artwork)*,
        section*
      }
    t =
@@ -2744,8 +2745,20 @@ Appendix B.  Relax NG Schema
      }
    li =
      element li {
-       t+ | (text, ol, ul, dl, figure, xref, eref, iref, cref, tt, b,
-   i)+
+       t+
+       | (text,
+          ol,
+          ul,
+          dl,
+          figure,
+          artwork,
+          xref,
+          eref,
+          iref,
+          cref,
+          tt,
+          b,
+          i)+
      }
    dl =
      element dl {
@@ -2758,7 +2771,18 @@ Appendix B.  Relax NG Schema
    dt = element dt { (text | xref | eref | iref | cref | tt | b | i)* }
    dd =
      element dd {
-       (text | ol | ul | xref | eref | iref | cref | tt | b | i)*
+       (text
+        | ol
+        | ul
+        | figure
+        | artwork
+        | xref
+        | eref
+        | iref
+        | cref
+        | tt
+        | b
+        | i)*
      }
    xref =
      element xref {
@@ -2878,12 +2902,9 @@ Appendix B.  Relax NG Schema
      element reference {
        attribute anchor { xsd:ID },
        attribute target { text }?,
-       attribute series { text }?,
-       attribute document { text }?,
-       front*,
-       seriesInfo*,
-       format*,
-       annotation*
+       ((attribute series { text },
+         attribute document { text })
+        | (front, (seriesInfo | format | annotation)*))
      }
    seriesInfo =
      element seriesInfo {
@@ -2933,7 +2954,6 @@ Index
          in texttable element  1
          in tindent element  1
       annotation element  1
-         inside reference  1
       application/rfc+xml Media Type  1
       area element  1
          inside front  1
@@ -2942,6 +2962,7 @@ Index
          alt attribute  1
          height attribute  1
          inside blockquote  1
+         inside dd  1
          inside figure  1
          inside section  1
          inside t  1
@@ -3180,6 +3201,7 @@ Index
          anchor attribute  1
          height attribute  1
          inside blockquote  1
+         inside dd  1
          inside section  1
          inside t  1
          inside tindent  1
@@ -3190,12 +3212,10 @@ Index
       format attribute
          in xref element  1
       format element  1
-         inside reference  1
          octets attribute  1
          target attribute  1
          type attribute  1
       front element  1
-         inside reference  1
          inside rfc  1
       fullname attribute
          in author element  1
@@ -3366,7 +3386,6 @@ Index
       series attribute
          in reference element  1
       seriesInfo element  1
-         inside reference  1
          name attribute  1
          value attribute  1
       seriesNo attribute
@@ -3427,6 +3446,7 @@ Index
          title attribute  1
       tindent element  1
          anchor attribute  1
+         inside section  1
       title attribute
          in figure element  1
          in note element  1

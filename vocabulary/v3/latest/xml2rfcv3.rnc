@@ -108,7 +108,7 @@ section =
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "no" ] attribute removeinrfc { "yes" | "no" }?,
-    (t | figure | texttable | iref | artwork)*,
+    (t | tindent | figure | texttable | iref | artwork)*,
     section*
   }
 t =
@@ -166,7 +166,20 @@ ul =
   }
 li =
   element li {
-    t+ | (text, ol, ul, dl, figure, xref, eref, iref, cref, tt, b, i)+
+    t+
+    | (text,
+       ol,
+       ul,
+       dl,
+       figure,
+       artwork,
+       xref,
+       eref,
+       iref,
+       cref,
+       tt,
+       b,
+       i)+
   }
 dl =
   element dl {
@@ -179,7 +192,18 @@ dl =
 dt = element dt { (text | xref | eref | iref | cref | tt | b | i)* }
 dd =
   element dd {
-    (text | ol | ul | xref | eref | iref | cref | tt | b | i)*
+    (text
+     | ol
+     | ul
+     | figure
+     | artwork
+     | xref
+     | eref
+     | iref
+     | cref
+     | tt
+     | b
+     | i)*
   }
 xref =
   element xref {
@@ -297,12 +321,9 @@ reference =
   element reference {
     attribute anchor { xsd:ID },
     attribute target { text }?,
-    attribute series { text }?,
-    attribute document { text }?,
-    front*,
-    seriesInfo*,
-    format*,
-    annotation*
+    ((attribute series { text },
+      attribute document { text })
+     | (front, (seriesInfo | format | annotation)*))
   }
 seriesInfo =
   element seriesInfo {

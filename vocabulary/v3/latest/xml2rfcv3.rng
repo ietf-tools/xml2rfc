@@ -320,7 +320,7 @@
           </choice>
         </attribute>
       </optional>
-       <optional>
+      <optional>
         <attribute name="removeinrfc" a:defaultValue="no">
           <choice>
             <value>yes</value>
@@ -331,6 +331,7 @@
       <zeroOrMore>
         <choice>
           <ref name="t"/>
+          <ref name="tindent"/>
           <ref name="figure"/>
           <ref name="texttable"/>
           <ref name="iref"/>
@@ -486,6 +487,7 @@
           <ref name="ul"/>
           <ref name="dl"/>
           <ref name="figure"/>
+          <ref name="artwork"/>
           <ref name="xref"/>
           <ref name="eref"/>
           <ref name="iref"/>
@@ -544,6 +546,8 @@
           <text/>
           <ref name="ol"/>
           <ref name="ul"/>
+          <ref name="figure"/>
+          <ref name="artwork"/>
           <ref name="xref"/>
           <ref name="eref"/>
           <ref name="iref"/>
@@ -937,24 +941,22 @@
       <optional>
         <attribute name="target"/>
       </optional>
-      <optional>
-        <attribute name="series"/>
-      </optional>
-      <optional>
-        <attribute name="document"/>
-      </optional>
-      <zeroOrMore>
-        <ref name="front"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="seriesInfo"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="format"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="annotation"/>
-      </zeroOrMore>
+      <choice>
+        <group>
+          <attribute name="series"/>
+          <attribute name="document"/>
+        </group>
+        <group>
+          <ref name="front"/>
+          <zeroOrMore>
+            <choice>
+              <ref name="seriesInfo"/>
+              <ref name="format"/>
+              <ref name="annotation"/>
+            </choice>
+          </zeroOrMore>
+        </group>
+      </choice>
     </element>
   </define>
   <define name="seriesInfo">
