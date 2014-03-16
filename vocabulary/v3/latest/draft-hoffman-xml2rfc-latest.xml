@@ -14,43 +14,60 @@
 
 <!--
 
-Fix the RNG for any "either/or" choices.  Got to <email>
+Find all remaining <cref>s and resolve them
 
-Deprecate <facsimile>
+Clean up the set of overlapping attributes between <figure> and <artwork>.
 
-Start a discussion of leaving in the obsolete parts of v2 that I have already removed, but
-   be clear they won't appear in the canonical XML. This would work well for <list>. Use
-   XML comments as an example.
+Extend <xref> so that subsection and/or anchors can be specified.
 
-Maybe add a section of restrictions for v3 documents published as RFCs.
+Maybe allow anchors in <li>, but need to specify what a processor should output for the text
+	<ol>s are easy, but what about <ul>? <dl> is doable but ugly
+	What happens with <t> currently, both inside and outside lists?
 
-Describe draft file naming for drafts vs. canonical RFCs.
+Add a way to add prose to a reference that avoids abuse of <seriesInfo>.
 
-Possible for i18n: attributes for each postal address entity for i18n
+The content model for <cref> should be extended to allow more flow elements, such as <xref> and <eref>.
 
-Difficult to do non-ASCII for <references>
+Section titles should really be elements, not attributes (this would allow them to contain markup).
 
-Difficult to do non-ASCII for <postal> content entries
+Some way to do includes for Intenet Drafts that does not apply to RFCs
+	Maybe not; this can be done with tooling on the client side
+	Safety issue for tools.ietf.org?
 
-Issue of not showing combining mark
+The content model for <postal> ought to be more strict to allow at most one of <city>, <region>, <code>, and <country>.
 
-Markup for Unicode characters and their equivalents
+It should be possible to have multiple <email> and <uri> elements.
+
+<figure> element should contain multiple <artwork> elements (to assist code to find good places for page breaks
+
+Discussion of v3 processors:
+	Restrictions for v3 documents published as RFCs
+		No comments, PIs, or deprecated elements/attributes
+		No external includes of any kind
+		What about ENTITYs? Valid but possibly confusing.
+	All auto-generated text that appears in the other formats needs to also exist in the canonical XML file as well.
+		The auto-generated text needs its own markup. 
+	    Section numbers
+    	Figure numbers
+	    Table numbers
+    	IPR boilerplate
+
+Deprecating
+	Deprecate <facsimile>
+	Check that anything that has to do with horizontal or vertical whitespace has been deprecated.
+	Remove the "pageno" attribute.
+	Deprecate or remove the <format> element.
+		Maybe use @rel; another is to just point to the main RFC Info page for RFCs and BCPs
+
+Non-ASCII
+	Resolve discussion of markup for Unicode characters and their equivalents
+	Mention that not all characters can be included, such as combining marks
+	Difficult to do non-ASCII for <references>
+	Difficult to do non-ASCII for <postal> content entries
 
 -->
 
-<!DOCTYPE rfc [
-  <!ENTITY MAY "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>MAY</bcp14>">
-  <!ENTITY MUST "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>MUST</bcp14>">
-  <!ENTITY MUST-NOT "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>MUST NOT</bcp14>">
-  <!ENTITY OPTIONAL "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>OPTIONAL</bcp14>">
-  <!ENTITY RECOMMENDED "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>RECOMMENDED</bcp14>">
-  <!ENTITY REQUIRED "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>REQUIRED</bcp14>">
-  <!ENTITY SHALL "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>SHALL</bcp14>">
-  <!ENTITY SHALL-NOT "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>SHALL NOT</bcp14>">
-  <!ENTITY SHOULD "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>SHOULD</bcp14>">
-  <!ENTITY SHOULD-NOT "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>SHOULD NOT</bcp14>">
-  <!ENTITY mdash "&#8212;">
-]>
+<!DOCTYPE rfc []>
 
 <rfc xmlns:x="http://purl.org/net/xml2rfc/ext" obsoletes="2629" xmlns:ed="http://greenbytes.de/2002/rfcedit" ipr="trust200902" docName="draft-hoffman-xml2rfc-latest" category="std" xml:lang="en">
   <x:feedback template="mailto:xml2rfc@ietf.org?subject={docname},%20%22{section}%22&amp;body=&lt;{ref}&gt;:"/>
