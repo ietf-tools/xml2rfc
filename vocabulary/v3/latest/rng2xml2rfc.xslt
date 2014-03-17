@@ -217,6 +217,27 @@
 </t>
 </xsl:template>
 
+<xsl:template match="rng:choice">
+<xsl:for-each select="*">
+  <t>
+    <xsl:comment>AG</xsl:comment>
+    <xsl:choose>
+      <xsl:when test="position()=1">
+        <xsl:text>Either:</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>Or:</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+    <list style="symbols">
+      <x:lt>
+        <xsl:apply-templates select="."/>
+      </x:lt>
+    </list>
+  </t>
+</xsl:for-each>
+</xsl:template>
+
 <xsl:template match="*" mode="copy">
   <xsl:element name="{local-name()}">
     <xsl:copy-of select="@*"/>
