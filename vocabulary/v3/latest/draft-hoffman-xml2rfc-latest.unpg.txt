@@ -208,6 +208,9 @@ Table of Contents
 
    o  Allowed <artwork> to be in a <section>, not just a figure.
 
+   o  Deprecated "xml:space" in <artwork> because there was only one
+      useful value.
+
    o  Gave more specifics of handling the "type" attribute in <artwork>.
 
    o  Added the <b>, <i>, and <tt> elements.
@@ -528,18 +531,7 @@ Table of Contents
 
 2.5.9.  'xml:space' attribute
 
-   Determines whitespace handling.
-
-   "preserve" is both the default value and the only meaningful setting
-   anyway (because that's what the <artwork> element is for).
-
-   See also Section 2.10 of [XML].
-
-   Allowed values:
-
-   o  "default"
-
-   o  "preserve" (default)
+   Deprecated.
 
 2.6.  <author>
 
@@ -2897,8 +2889,7 @@ Appendix B.  Relax NG Schema
      }
    artwork =
      element artwork {
-       [ a:defaultValue = "preserve" ]
-       attribute xml:space { "default" | "preserve" }?,
+       attribute xml:space { text }?,
        [ a:defaultValue = "" ] attribute name { text }?,
        [ a:defaultValue = "" ] attribute type { text }?,
        attribute src { text }?,

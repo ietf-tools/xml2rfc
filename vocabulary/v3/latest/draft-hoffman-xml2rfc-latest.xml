@@ -172,6 +172,8 @@ The list of changes so far is:
 
 <t>Allowed &lt;<x:ref>artwork</x:ref>&gt; to be in a &lt;<x:ref>section</x:ref>&gt;, not just a figure.</t>
 
+<t>Deprecated "xml:space" in &lt;<x:ref>artwork</x:ref>&gt; because there was only one useful value.</t>
+
 <t>Gave more specifics of handling the "type" attribute in &lt;<x:ref>artwork</x:ref>&gt;.</t>
 
 <t>Added the &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;, and &lt;<x:ref>tt</x:ref>&gt; elements.</t>
@@ -585,20 +587,8 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="artwork element" subitem="xml:space attribute"/>
       <iref item="xml:space attribute" subitem="in artwork element"/>
       <t>
-            Determines whitespace handling.
-         </t>
-      <t>
-            "preserve" is both the default value and the only meaningful
-            setting anyway (because that's what the &lt;artwork&gt; element is for).
-         </t>
-      <t>
-            See also <xref target="XML" x:fmt="of" x:sec="2.10" x:rel="#sec-white-space"/>.
-         </t>
-      <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"default"</t>
-            <t>"preserve" (default)</t>
-         </list>
-      </t>
+            Deprecated.
+       </t>
    </section>
 </section>
 
@@ -4189,8 +4179,7 @@ preamble =
   }
 artwork =
   element artwork {
-    [ a:defaultValue = "preserve" ]
-    attribute xml:space { "default" | "preserve" }?,
+    attribute xml:space { text }?,
     [ a:defaultValue = "" ] attribute name { text }?,
     [ a:defaultValue = "" ] attribute type { text }?,
     attribute src { text }?,
