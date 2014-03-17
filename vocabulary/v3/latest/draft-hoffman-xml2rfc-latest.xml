@@ -16,8 +16,6 @@
 
 Find all remaining <cref>s and resolve them
 
-Clean up the set of overlapping attributes between <figure> and <artwork>.
-
 Extend <xref> so that subsection and/or anchors can be specified.
 
 Maybe allow anchors in <li>, but need to specify what a processor should output for the text
@@ -174,6 +172,9 @@ The list of changes so far is:
 <t>Added the &lt;<x:ref>blockquote</x:ref>&gt; element.</t>
 
 <t>Deprecated &lt;<x:ref>facsimile</x:ref>&gt; because it is rarely used and is not actually useful.</t>
+
+<t>Deprecated the "alt", "height", "src", and "width" attributes in &lt;<x:ref>figure</x:ref>&gt;
+because they overlap with the attributes in &lt;<x:ref>artwork</x:ref>&gt;.</t>
 
 <t>In &lt;<x:ref>front</x:ref>&gt;, made &lt;<x:ref>date</x:ref>&gt; optional.</t>
 
@@ -1274,8 +1275,8 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="figure element" subitem="alt attribute"/>
       <iref item="alt attribute" subitem="in figure element"/>
       <t>
-            Duplicates functionality available on &lt;artwork&gt;; avoid it.
-         </t>
+         Deprecated.
+       </t>
    </section>
 
    <!--figure/@anchor-->
@@ -1294,8 +1295,8 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="figure element" subitem="height attribute"/>
       <iref item="height attribute" subitem="in figure element"/>
       <t>
-            Duplicates functionality available on &lt;artwork&gt;; avoid it.
-         </t>
+         Deprecated.
+       </t>
    </section>
 
    <!--figure/@src-->
@@ -1304,8 +1305,8 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="figure element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in figure element"/>
       <t>
-            Duplicates functionality available on &lt;artwork&gt;; avoid it.
-         </t>
+         Deprecated.
+       </t>
    </section>
 
    <!--figure/@suppress-title-->
@@ -1343,8 +1344,8 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="figure element" subitem="width attribute"/>
       <iref item="width attribute" subitem="in figure element"/>
       <t>
-            Duplicates functionality available on &lt;artwork&gt;; avoid it.
-         </t>
+         Deprecated.
+       </t>
    </section>
 </section>
 
@@ -3283,9 +3284,6 @@ and the others are the RFCs that make up the STD</c>
 </section>
 
 <section title="Security Considerations" anchor="security.considerations">
-<t>
-  <cref>This section is likely incomplete.</cref>
-</t>
 <t>
   The "name" attribute on the &lt;<x:ref>artwork</x:ref>&gt; element
   (<xref target="element.artwork.attribute.name"/>)
