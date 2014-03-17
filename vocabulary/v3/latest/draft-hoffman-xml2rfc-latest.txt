@@ -97,7 +97,7 @@ Table of Contents
      2.24. <front>  . . . . . . . . . . . . . . . . . . . . . . . . . 22
      2.25. <i>  . . . . . . . . . . . . . . . . . . . . . . . . . . . 23
      2.26. <iref> . . . . . . . . . . . . . . . . . . . . . . . . . . 24
-     2.27. <keyword>  . . . . . . . . . . . . . . . . . . . . . . . . 25
+     2.27. <keyword>  . . . . . . . . . . . . . . . . . . . . . . . . 24
      2.28. <li> . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
      2.29. <list> . . . . . . . . . . . . . . . . . . . . . . . . . . 26
      2.30. <middle> . . . . . . . . . . . . . . . . . . . . . . . . . 26
@@ -114,7 +114,7 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
 
      2.35. <postal> . . . . . . . . . . . . . . . . . . . . . . . . . 29
-     2.36. <postalline> . . . . . . . . . . . . . . . . . . . . . . . 30
+     2.36. <postalline> . . . . . . . . . . . . . . . . . . . . . . . 29
      2.37. <postamble>  . . . . . . . . . . . . . . . . . . . . . . . 30
      2.38. <preamble> . . . . . . . . . . . . . . . . . . . . . . . . 30
      2.39. <reference>  . . . . . . . . . . . . . . . . . . . . . . . 31
@@ -262,6 +262,9 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
    o  In <front>, made <date> optional.
 
+   o  Deprecated <format> because it is not useful and has caused
+      surprise for authors in the past.
+
    o  Deprecated <list> in favor of <dl>, <ul>, and <ol>.
 
    o  In <postal>, allowed the sub-elements to be in any order.  Also
@@ -271,15 +274,15 @@ Internet-Draft                  XML2RFCv3                     March 2014
    o  Added <postalline>, free text that represents one line of the
       address.
 
-   o  Changed the handling of <reference>.  This large change is
-      described in Section 1.1.1.
-
 
 
 Hoffman                Expires September 18, 2014               [Page 5]
 
 Internet-Draft                  XML2RFCv3                     March 2014
 
+
+   o  Changed the handling of <reference>.  This large change is
+      described in Section 1.1.1.
 
    o  Allowed the elements inside a <reference> to be in any order.
 
@@ -326,9 +329,6 @@ Internet-Draft                  XML2RFCv3                     March 2014
    the xml2rfc processor.
 
    To make entering references easier for the vast majority of cases,
-   the following changes have been made in the v3 vocabulary:
-
-
 
 
 
@@ -336,6 +336,8 @@ Hoffman                Expires September 18, 2014               [Page 6]
 
 Internet-Draft                  XML2RFCv3                     March 2014
 
+
+   the following changes have been made in the v3 vocabulary:
 
    o  The <reference> element can take another optional pair of
       attributes: "series" and "document".  For example, the value for
@@ -383,8 +385,6 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
    This element appears as child element of: <front> (Section 2.24).
 
-   Content model:
-
 
 
 
@@ -392,6 +392,8 @@ Hoffman                Expires September 18, 2014               [Page 7]
 
 Internet-Draft                  XML2RFCv3                     March 2014
 
+
+   Content model:
 
    One or more <t> elements (Section 2.47)
 
@@ -438,8 +440,6 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
    o  <xref> elements (Section 2.57)
 
-   o  <eref> elements (Section 2.20)
-
 
 
 
@@ -448,6 +448,8 @@ Hoffman                Expires September 18, 2014               [Page 8]
 
 Internet-Draft                  XML2RFCv3                     March 2014
 
+
+   o  <eref> elements (Section 2.20)
 
    o  <iref> elements (Section 2.26)
 
@@ -495,8 +497,6 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
    o  protocol unit diagrams.
 
-   Alternatively, the "src" attribute allows referencing an external
-   graphics file, such as a bitmap or a vector drawing.  In this case,
 
 
 
@@ -505,6 +505,8 @@ Hoffman                Expires September 18, 2014               [Page 9]
 Internet-Draft                  XML2RFCv3                     March 2014
 
 
+   Alternatively, the "src" attribute allows referencing an external
+   graphics file, such as a bitmap or a vector drawing.  In this case,
    the textual content acts as fallback for output formats that do not
    support graphics, and thus ought to contain either a "line art"
    variant of the graphics, or otherwise prose that describes the
@@ -552,8 +554,6 @@ Internet-Draft                  XML2RFCv3                     March 2014
    A filename suitable for the contents (such as for extraction to a
    local file).
 
-   This attribute generally isn't used for document generation, but it
-
 
 
 Hoffman                Expires September 18, 2014              [Page 10]
@@ -561,6 +561,7 @@ Hoffman                Expires September 18, 2014              [Page 10]
 Internet-Draft                  XML2RFCv3                     March 2014
 
 
+   This attribute generally isn't used for document generation, but it
    can be helpful for other kinds of tools (such as automated syntax
    checkers which work by extracting the source code).
 
@@ -608,7 +609,6 @@ Internet-Draft                  XML2RFCv3                     March 2014
    on its web site, and that list is expected to be updated over time.
    Thus, a consumer of v3 XML should not cause a failure when it
    encounters an unexpected type.
-
 
 
 
@@ -1196,12 +1196,8 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
 2.23.  <format>
 
-   Provides a link to an additional format variant for a reference.
-
-   Note that these additional links are neither used in published RFCs,
-   nor supported by all tools.  If the goal is to provide a single URI
-   for a reference, the "target" attribute on <reference> can be used
-   instead.
+   Depredated.  If the goal is to provide a single URI for a reference,
+   use the "target" attribute on <reference> instead.
 
    This element appears as child element of: <reference> (Section 2.39).
 
@@ -1209,22 +1205,26 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
 2.23.1.  'octets' attribute
 
-   Octet length of linked-to document.
+   Deprecated.
 
 2.23.2.  'target' attribute
 
-   URI of document.
-
-   [[anchor2: Why is this optional?]]
+   Deprecated.
 
 2.23.3.  'type' attribute (mandatory)
 
-   The type of the linked-to document, such as "TXT", "HTML", or "PDF".
+   Deprecated.
 
 2.24.  <front>
 
    Represent the "front matter": metadata (such as author information),
    abstract, and additional notes.
+
+   This element appears as child element of: <reference> (Section 2.39),
+   and <rfc> (Section 2.42).
+
+   Content model:
+
 
 
 
@@ -1232,11 +1232,6 @@ Hoffman                Expires September 18, 2014              [Page 22]
 
 Internet-Draft                  XML2RFCv3                     March 2014
 
-
-   This element appears as child element of: <reference> (Section 2.39),
-   and <rfc> (Section 2.42).
-
-   Content model:
 
    In this order:
 
@@ -1280,6 +1275,11 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
    o  <cref> elements (Section 2.14)
 
+   o  <b> elements (Section 2.7)
+
+   o  <tt> elements (Section 2.51)
+
+
 
 
 
@@ -1288,10 +1288,6 @@ Hoffman                Expires September 18, 2014              [Page 23]
 
 Internet-Draft                  XML2RFCv3                     March 2014
 
-
-   o  <b> elements (Section 2.7)
-
-   o  <tt> elements (Section 2.51)
 
 2.26.  <iref>
 
@@ -1336,7 +1332,11 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
    The subitem to include.
 
+2.27.  <keyword>
 
+   Specifies a keyword applicable to the document.
+
+   Note that each element should only contain a single keyword; for
 
 
 
@@ -1345,11 +1345,6 @@ Hoffman                Expires September 18, 2014              [Page 24]
 Internet-Draft                  XML2RFCv3                     March 2014
 
 
-2.27.  <keyword>
-
-   Specifies a keyword applicable to the document.
-
-   Note that each element should only contain a single keyword; for
    multiple keywords, the element can simply be repeated.
 
    Keywords are used both in the RFC Index and in the metadata of
@@ -1394,16 +1389,17 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
       One or more <cref> elements (Section 2.14)
 
+      One or more <tt> elements (Section 2.51)
+
+      One or more <b> elements (Section 2.7)
+
+
 
 
 Hoffman                Expires September 18, 2014              [Page 25]
 
 Internet-Draft                  XML2RFCv3                     March 2014
 
-
-      One or more <tt> elements (Section 2.51)
-
-      One or more <b> elements (Section 2.7)
 
       One or more <i> elements (Section 2.25)
 
@@ -1449,6 +1445,10 @@ Internet-Draft                  XML2RFCv3                     March 2014
    group information, mailing list, ...), or for additional publication
    information such as "IESG Notes".
 
+   This element appears as child element of: <front> (Section 2.24).
+
+   Content model:
+
 
 
 
@@ -1456,10 +1456,6 @@ Hoffman                Expires September 18, 2014              [Page 26]
 
 Internet-Draft                  XML2RFCv3                     March 2014
 
-
-   This element appears as child element of: <front> (Section 2.24).
-
-   Content model:
 
    One or more <t> elements (Section 2.47)
 
@@ -1502,6 +1498,10 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
    a  Lowercase letters (a, b, c, ...)
 
+   A  Uppercase letters (A, B, C, ...)
+
+   1  Decimal numbers (1, 2, 3, ...)
+
 
 
 
@@ -1512,10 +1512,6 @@ Hoffman                Expires September 18, 2014              [Page 27]
 
 Internet-Draft                  XML2RFCv3                     March 2014
 
-
-   A  Uppercase letters (A, B, C, ...)
-
-   1  Decimal numbers (1, 2, 3, ...)
 
    i  Lowercase Roman numerals (i, ii, iii, ...)
 
@@ -1561,6 +1557,10 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
    Abbreviated variant.
 
+2.33.2.  'ascii' attribute
+
+   The ASCII equivalent of the organization's name.
+
 
 
 
@@ -1568,10 +1568,6 @@ Hoffman                Expires September 18, 2014              [Page 28]
 
 Internet-Draft                  XML2RFCv3                     March 2014
 
-
-2.33.2.  'ascii' attribute
-
-   The ASCII equivalent of the organization's name.
 
 2.34.  <phone>
 
@@ -1615,8 +1611,12 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
    o  One or more <postalline> elements (Section 2.36)
 
+2.36.  <postalline>
 
+   Represents one line of a postal address.  When more than one
+   <postalline> is given, the processor emits them in the order given.
 
+   This element appears as child element of: <postal> (Section 2.35).
 
 
 
@@ -1624,13 +1624,6 @@ Hoffman                Expires September 18, 2014              [Page 29]
 
 Internet-Draft                  XML2RFCv3                     March 2014
 
-
-2.36.  <postalline>
-
-   Represents one line of a postal address.  When more than one
-   <postalline> is given, the processor emits them in the order given.
-
-   This element appears as child element of: <postal> (Section 2.35).
 
    Content model: only text content.
 
@@ -1674,18 +1667,19 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
    In any order:
 
+   o  Text
+
+   o  <xref> elements (Section 2.57)
+
+   o  <eref> elements (Section 2.20)
+
+
 
 
 Hoffman                Expires September 18, 2014              [Page 30]
 
 Internet-Draft                  XML2RFCv3                     March 2014
 
-
-   o  Text
-
-   o  <xref> elements (Section 2.57)
-
-   o  <eref> elements (Section 2.20)
 
    o  <iref> elements (Section 2.26)
 
@@ -1729,6 +1723,12 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
    or
 
+   <reference anchor="RFC6068" series="rfc" document="6068">
+
+   The values for the "series" attribute are:
+
+
+
 
 
 
@@ -1736,10 +1736,6 @@ Hoffman                Expires September 18, 2014              [Page 31]
 
 Internet-Draft                  XML2RFCv3                     March 2014
 
-
-   <reference anchor="RFC6068" series="rfc" document="6068">
-
-   The values for the "series" attribute are:
 
    +----------+------------------------+-------------------------------+
    | Value    | Value for "document    | Example                       |
@@ -1785,6 +1781,10 @@ Internet-Draft                  XML2RFCv3                     March 2014
    (Section 2.40).
 
    Content model: this element does not have any contents.
+
+
+
+
 
 
 
@@ -2110,7 +2110,7 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
    Determines whether the section is included in the Table Of Contents.
 
-   [[anchor3: Need to consider inheritance.]]
+   [[anchor2: Need to consider inheritance.]]
 
    Allowed values:
 
@@ -2660,7 +2660,7 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
 3.  Special Unicode Code Points
 
-   [[anchor4: Explain those code points where the processors implement
+   [[anchor3: Explain those code points where the processors implement
    something special, such as "nbsp".]]
 
 4.  Internationalization Considerations
@@ -2676,7 +2676,7 @@ Internet-Draft                  XML2RFCv3                     March 2014
 
 5.  Security Considerations
 
-   [[anchor5: This section is likely incomplete.]]
+   [[anchor4: This section is likely incomplete.]]
 
    The "name" attribute on the <artwork> element (Section 2.5.4) can be
    used to derive a filename for saving to a local file system.
@@ -3546,13 +3546,13 @@ Internet-Draft                  XML2RFCv3                     March 2014
       ascii attribute
          in author element  13
          in email element  20
-         in organization element  29
+         in organization element  28
       Attributes
          abbrev  28, 44
          align  10, 21, 41, 45
          alt  10, 21
          anchor  15-16, 21, 33, 38, 41-43
-         ascii  13, 20, 29
+         ascii  13, 20, 28
          blankLines  46
          category  34
          cite  15
@@ -3626,8 +3626,8 @@ Internet-Draft                  XML2RFCv3                     March 2014
          inside c  15
          inside dd  18
          inside dt  19
-         inside i  24
-         inside li  26
+         inside i  23
+         inside li  25
          inside postamble  30
          inside preamble  31
          inside t  41
@@ -3721,7 +3721,7 @@ Internet-Draft                  XML2RFCv3                     March 2014
          area  9, 23
          artwork  9, 14, 18, 21, 25, 37, 40, 43
          author  12, 23
-         b  9, 13-15, 18-19, 24, 26, 30-31, 41, 43-44
+         b  9, 13-15, 18-19, 23, 25, 30-31, 41, 43-44
          back  14, 34
          blockquote  14
          c  15, 41
@@ -3734,14 +3734,14 @@ Internet-Draft                  XML2RFCv3                     March 2014
          dl  18, 25, 40
          dt  18-19
          email  8, 19
-         eref  8, 14-15, 18-20, 23, 25, 30-31, 40, 43-44
+         eref  9, 14-15, 18-20, 23, 25, 30, 40, 43-44
          facsimile  8, 20
          figure  14, 18, 20, 25, 37, 40, 43
          format  22
          front  22, 34
          i  9, 14-15, 18-19, 23, 26, 30-31, 41, 43-44
          iref  9, 14-15, 18-19, 21, 23-25, 30-31, 37, 40, 43-44
-         keyword  23, 25
+         keyword  23-24
          li  25, 27, 45
          list  26, 40
          middle  26, 34
@@ -3758,7 +3758,7 @@ Internet-Draft                  XML2RFCv3                     March 2014
          organization  12, 28
          phone  8, 29
          postal  8, 29
-         postalline  29-30
+         postalline  29
          postamble  21, 30, 41
          preamble  21, 30, 41
          reference  31, 33
@@ -3773,20 +3773,20 @@ Internet-Draft                  XML2RFCv3                     March 2014
          texttable  37, 41
          tindent  37, 43
          title  23, 43
-         tt  9, 14-15, 18-19, 24, 26, 30-31, 41, 43-44
+         tt  9, 14-15, 18-19, 23, 25, 30-31, 41, 43-44
          ttcol  41, 44
          ul  18, 25, 40, 45
          uri  8, 46
          vspace  40, 46
          workgroup  23, 46
-         xref  8, 14-15, 18-19, 23, 25, 30-31, 40, 43-44, 46
+         xref  8, 14-15, 18-19, 23, 25, 30, 40, 43-44, 46
       email element  19
          ascii attribute  20
          inside address  8
       empty attribute
          in ul element  45
       eref element  20
-         inside annotation  8
+         inside annotation  9
          inside b  14
          inside c  15
          inside dd  18
@@ -3794,7 +3794,7 @@ Internet-Draft                  XML2RFCv3                     March 2014
          inside i  23
          inside li  25
          inside postamble  30
-         inside preamble  31
+         inside preamble  30
          inside t  40
          inside tindent  43
          inside tt  44
@@ -3907,7 +3907,7 @@ Internet-Draft                  XML2RFCv3                     March 2014
          in iref element  24
 
    K
-      keyword element  25
+      keyword element  24
          inside front  23
 
    L
@@ -3962,7 +3962,7 @@ Internet-Draft                  XML2RFCv3                     March 2014
          style attribute  27
       organization element  28
          abbrev attribute  28
-         ascii attribute  29
+         ascii attribute  28
          inside author  12
 
    P
@@ -3980,7 +3980,7 @@ Internet-Draft                  XML2RFCv3                     March 2014
          inside address  8
       postal element  29
          inside address  8
-      postalline element  30
+      postalline element  29
          inside postal  29
       postamble element  30
          inside figure  21
@@ -4130,8 +4130,8 @@ Internet-Draft                  XML2RFCv3                     March 2014
          inside c  15
          inside dd  18
          inside dt  19
-         inside i  24
-         inside li  26
+         inside i  23
+         inside li  25
          inside postamble  30
          inside preamble  31
          inside t  41
@@ -4205,7 +4205,7 @@ Internet-Draft                  XML2RFCv3                     March 2014
          inside i  23
          inside li  25
          inside postamble  30
-         inside preamble  31
+         inside preamble  30
          inside t  40
          inside tindent  43
          inside tt  44

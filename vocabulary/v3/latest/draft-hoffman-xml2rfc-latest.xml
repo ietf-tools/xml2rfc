@@ -52,11 +52,6 @@ Discussion of v3 processors:
 	    Table numbers
     	IPR boilerplate
 
-Deprecating
-	Check that anything that has to do with horizontal or vertical whitespace has been deprecated.
-	Deprecate or remove the <format> element.
-		Maybe use @rel; another is to just point to the main RFC Info page for RFCs and BCPs
-
 Non-ASCII
 	Resolve discussion of markup for Unicode characters and their equivalents
 	Mention that not all characters can be included, such as combining marks
@@ -181,6 +176,8 @@ The list of changes so far is:
 <t>Deprecated &lt;<x:ref>facsimile</x:ref>&gt; because it is rarely used and is not actually useful.</t>
 
 <t>In &lt;<x:ref>front</x:ref>&gt;, made &lt;<x:ref>date</x:ref>&gt; optional.</t>
+
+<t>Deprecated &lt;<x:ref>format</x:ref>&gt; because it is not useful and has caused surprise for authors in the past.</t>
 
 <t>Deprecated &lt;<x:ref>list</x:ref>&gt; in favor of &lt;<x:ref>dl</x:ref>&gt;, &lt;<x:ref>ul</x:ref>&gt;,
 and &lt;<x:ref>ol</x:ref>&gt;.</t>
@@ -1357,13 +1354,8 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <iref item="Elements" subitem="format" primary="true"/>
    <iref item="format element" primary="true"/>
    <t>
-      Provides a link to an additional format variant for a reference. 
-   </t>
-   <t>
-      Note that these additional links are neither used in published RFCs, nor
-      supported by all tools. If the goal is to provide a single URI for
-      a reference, the "target" attribute on &lt;<x:ref>reference</x:ref>&gt;
-      can be used instead.
+      Depredated. If the goal is to provide a single URI for
+      a reference, use the "target" attribute on &lt;<x:ref>reference</x:ref>&gt; instead.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
    <t anchor="element.format.contents"><!--AG-->Content model: this element does not have any contents.</t>
@@ -1374,8 +1366,8 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="format element" subitem="octets attribute"/>
       <iref item="octets attribute" subitem="in format element"/>
       <t>
-            Octet length of linked-to document.
-         </t>
+        Deprecated.
+       </t>
    </section>
 
    <!--format/@target-->
@@ -1384,11 +1376,8 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="format element" subitem="target attribute"/>
       <iref item="target attribute" subitem="in format element"/>
       <t>
-            URI of document.
-         </t>
-      <t>
-         <cref>Why is this optional?</cref>
-      </t>
+        Deprecated.
+       </t>
    </section>
 
    <!--format/@type-->
@@ -1397,8 +1386,8 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="format element" subitem="type attribute"/>
       <iref item="type attribute" subitem="in format element"/>
       <t>
-            The type of the linked-to document, such as "TXT", "HTML", or "PDF".
-         </t>
+        Deprecated.
+       </t>
    </section>
 </section>
 
