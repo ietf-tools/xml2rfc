@@ -14,7 +14,7 @@ xml2rfcv3-spec.xml: xml2rfcv3.rng rng2xml2rfc.xslt
 	saxon $< rng2xml2rfc.xslt > $@
 
 xml2rfcv3.rnc.folded: xml2rfcv3.rnc
-	fold -w69 -s $< > $@
+	fold -w69 -s $< | sed "s/\&/\&amp;/g" > $@
 
 draft-hoffman-xml2rfc-latest.xml: xml2rfcv3-spec.xml xml2rfcv3.rnc.folded
 	cp -v $@ $@.bak

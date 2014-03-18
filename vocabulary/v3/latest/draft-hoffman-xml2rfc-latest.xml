@@ -20,9 +20,6 @@ Maybe allow anchors in <li>, but need to specify what a processor should output 
 	<ol>s are easy, but what about <ul>? <dl> is doable but ugly
 	What happens with <t> currently, both inside and outside lists?
 
-The content model for <postal> ought to be more strict to allow at most one of <city>, <region>, <code>, and <country>.
-	Waiting for possible fix to RNC to eliminate ampersands
-
 Probably will not do:
 
 	Section titles should really be elements, not attributes (this would allow them to contain markup).
@@ -183,7 +180,9 @@ because they overlap with the attributes in &lt;<x:ref>artwork</x:ref>&gt;.</t>
 <t>Deprecated &lt;<x:ref>list</x:ref>&gt; in favor of &lt;<x:ref>dl</x:ref>&gt;, &lt;<x:ref>ul</x:ref>&gt;,
 and &lt;<x:ref>ol</x:ref>&gt;.</t>
 
-<t>In &lt;<x:ref>postal</x:ref>&gt;, allowed the sub-elements to be in any order. Also allowed the inclusion
+<t>In &lt;<x:ref>postal</x:ref>&gt;, allowed the sub-elements to be in any order, but at
+most one of &lt;<x:ref>city</x:ref>&gt;, &lt;<x:ref>region</x:ref>&gt;,
+&lt;<x:ref>code</x:ref>&gt;, and &lt;<x:ref>country</x:ref>&gt;. Also allowed the inclusion
 of &lt;<x:ref>postalline</x:ref>&gt; instead of the older elements.</t>
 
 <t>Added &lt;<x:ref>postalline</x:ref>&gt;, free text that represents one line of the address.</t>
@@ -1512,8 +1511,10 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <x:anchor-alias value="innerRefContent"/>
    <iref item="Elements" subitem="innerRefContent" primary="true"/>
    <iref item="innerRefContent element" primary="true"/>
-   <t><!--AG-->
-      <cref anchor="element.innerRefContent.missing">element description missing</cref>
+   <t>
+      Text that should appear between the title and the date of a reference. The purpose
+      of this element is to prevent the need to abuse &lt;<x:ref>seriesInfo</x:ref>&gt; to
+      get such text in a reference.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
    <t anchor="element.innerRefContent.contents"><!--AG-->
@@ -1956,23 +1957,10 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       </t>
    <t><!--AG-->Either:<list style="symbols">
          <x:lt>
-            <t><!--AG-->In any order: <list style="symbols">
-                  <t><!--AG-->
-                     <iref item="Elements" subitem="street"/>
-                     <iref item="street element" subitem="inside postal"/>&lt;<x:ref>street</x:ref>&gt; elements (<xref target="element.street"/>)</t>
-                  <t><!--AG-->
-                     <iref item="Elements" subitem="city"/>
-                     <iref item="city element" subitem="inside postal"/>&lt;<x:ref>city</x:ref>&gt; elements (<xref target="element.city"/>)</t>
-                  <t><!--AG-->
-                     <iref item="Elements" subitem="region"/>
-                     <iref item="region element" subitem="inside postal"/>&lt;<x:ref>region</x:ref>&gt; elements (<xref target="element.region"/>)</t>
-                  <t><!--AG-->
-                     <iref item="Elements" subitem="code"/>
-                     <iref item="code element" subitem="inside postal"/>&lt;<x:ref>code</x:ref>&gt; elements (<xref target="element.code"/>)</t>
-                  <t><!--AG-->
-                     <iref item="Elements" subitem="country"/>
-                     <iref item="country element" subitem="inside postal"/>&lt;<x:ref>country</x:ref>&gt; elements (<xref target="element.country"/>)</t>
-               </list>
+            <t><!--AG-->
+               <cref>
+      Missing template for interleave.
+    </cref>
             </t>
          </x:lt>
       </list>
@@ -4020,7 +4008,7 @@ address =
   element address { (postal | phone | facsimile | email | uri)* }
 postal =
   element postal {
-    (street | city | region | code | country)* | postalline+
+    (street* &amp; city? &amp; region? &amp; code? &amp; country?) | postalline+
   }
 street = element street { text }
 city = element city { text }
