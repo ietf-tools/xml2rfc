@@ -32,8 +32,6 @@ The content model for <postal> ought to be more strict to allow at most one of <
 
 It should be possible to have multiple <email> and <uri> elements.
 
-<figure> element should contain multiple <artwork> elements (to assist code to find good places for page breaks
-
 Discussion of v3 processors:
 	Restrictions for v3 documents published as RFCs
 		No comments, PIs, or deprecated elements/attributes
@@ -174,6 +172,8 @@ and &lt;<x:ref>xref</x:ref>&gt; in &lt;<x:ref>cref</x:ref>&gt;.</t>
 
 <t>Deprecated the "alt", "height", "src", and "width" attributes in &lt;<x:ref>figure</x:ref>&gt;
 because they overlap with the attributes in &lt;<x:ref>artwork</x:ref>&gt;.</t>
+
+<t>Allowed more than one &lt;<x:ref>artwork</x:ref>&gt; in &lt;<x:ref>figure</x:ref>&gt;.</t>
 
 <t>In &lt;<x:ref>front</x:ref>&gt;, made &lt;<x:ref>date</x:ref>&gt; optional.</t>
 
@@ -1260,9 +1260,11 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
             <iref item="Elements" subitem="preamble"/>
             <iref item="preamble element" subitem="inside figure"/>One optional &lt;<x:ref>preamble</x:ref>&gt; element (<xref target="element.preamble"/>)</t>
       
+        
          <t><!--AG-->
             <iref item="Elements" subitem="artwork"/>
-            <iref item="artwork element" subitem="inside figure"/>One &lt;<x:ref>artwork</x:ref>&gt; element (<xref target="element.artwork"/>)</t>
+            <iref item="artwork element" subitem="inside figure"/>One or more &lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
+      
         
          <t><!--AG-->
             <iref item="Elements" subitem="postamble"/>
@@ -4189,7 +4191,7 @@ figure =
     [ a:defaultValue = "" ] attribute height { text }?,
     iref*,
     preamble?,
-    artwork,
+    artwork+,
     postamble?
   }
 preamble =

@@ -225,6 +225,8 @@ Table of Contents
    o  Deprecated the "alt", "height", "src", and "width" attributes in
       <figure> because they overlap with the attributes in <artwork>.
 
+   o  Allowed more than one <artwork> in <figure>.
+
    o  In <front>, made <date> optional.
 
    o  Deprecated <format> because it is not useful and has caused
@@ -984,7 +986,7 @@ Table of Contents
 
    2.  One optional <preamble> element (Section 2.38)
 
-   3.  One <artwork> element (Section 2.5)
+   3.  One or more <artwork> elements (Section 2.5)
 
    4.  One optional <postamble> element (Section 2.37)
 
@@ -2905,7 +2907,7 @@ Appendix B.  Relax NG Schema
        [ a:defaultValue = "" ] attribute height { text }?,
        iref*,
        preamble?,
-       artwork,
+       artwork+,
        postamble?
      }
    preamble =
