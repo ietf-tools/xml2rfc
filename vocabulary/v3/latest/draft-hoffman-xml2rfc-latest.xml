@@ -20,8 +20,6 @@ Maybe allow anchors in <li>, but need to specify what a processor should output 
 	<ol>s are easy, but what about <ul>? <dl> is doable but ugly
 	What happens with <t> currently, both inside and outside lists?
 
-Add a way to add prose to a reference that avoids abuse of <seriesInfo>.
-
 Section titles should really be elements, not attributes (this would allow them to contain markup).
 
 Some way to do includes for Intenet Drafts that does not apply to RFCs
@@ -29,8 +27,6 @@ Some way to do includes for Intenet Drafts that does not apply to RFCs
 	Safety issue for tools.ietf.org?
 
 The content model for <postal> ought to be more strict to allow at most one of <city>, <region>, <code>, and <country>.
-
-It should be possible to have multiple <email> and <uri> elements.
 
 Discussion of v3 processors:
 	Restrictions for v3 documents published as RFCs
@@ -177,6 +173,8 @@ because they overlap with the attributes in &lt;<x:ref>artwork</x:ref>&gt;.</t>
 
 <t>In &lt;<x:ref>front</x:ref>&gt;, made &lt;<x:ref>date</x:ref>&gt; optional.</t>
 
+<t>Added &lt;<x:ref>innerRefContent</x:ref>&gt; to allow better control of text in a reference.</t>
+
 <t>Deprecated &lt;<x:ref>format</x:ref>&gt; because it is not useful and has caused surprise for authors in the past.</t>
 
 <t>Deprecated &lt;<x:ref>list</x:ref>&gt; in favor of &lt;<x:ref>dl</x:ref>&gt;, &lt;<x:ref>ul</x:ref>&gt;,
@@ -224,7 +222,7 @@ many complaints about how difficult it is for people who don't have strong XML s
 references when making Internet Drafts.</t>
 
 <t>The two popular methods now for references to RFCs are entering the whole reference by
-hand (hopefully getting all the fiddly bits of &lt;front&gt; and &lt;seriesinfo&gt;
+hand (hopefully getting all the fiddly bits of &lt;front&gt; and &lt;seriesInfo&gt;
 correct), or using XML entities that call out the xml.resource.org. Both work, but both have
 their faults. The first requires good copying skills and sometimes causes difficult XML
 errors; the second prevents you from changing the anchor name and, less importantly, also
@@ -715,7 +713,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <t>
             Causes the text to be displayed in a bold font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>innerRefContent</x:ref>&gt; (<xref target="element.innerRefContent"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.b.contents"><!--AG-->
         Content model:
       </t>
@@ -1478,7 +1476,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <t>
             Causes the text to be displayed in an italic font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>innerRefContent</x:ref>&gt; (<xref target="element.innerRefContent"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.i.contents"><!--AG-->
         Content model:
       </t>
@@ -1502,6 +1500,35 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
          <t><!--AG-->
             <iref item="Elements" subitem="tt"/>
             <iref item="tt element" subitem="inside i"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
+      </list>
+   </t>
+</section>
+
+<!--innerRefContent-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;innerRefContent&gt;" anchor="element.innerRefContent">
+   <x:anchor-alias value="innerRefContent"/>
+   <iref item="Elements" subitem="innerRefContent" primary="true"/>
+   <iref item="innerRefContent element" primary="true"/>
+   <t>
+      Text that should appear between the title and the date of a reference. The purpose
+      of this element is to prevent the need to abuse &lt;<x:ref>seriesInfo</x:ref>&gt; to
+      get such text in a reference.
+   </t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
+   <t anchor="element.innerRefContent.contents"><!--AG-->
+        Content model:
+      </t>
+   <t><!--AG-->In any order: <list style="symbols">
+         <t><!--AG-->Text</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="tt"/>
+            <iref item="tt element" subitem="inside innerRefContent"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="b"/>
+            <iref item="b element" subitem="inside innerRefContent"/>&lt;<x:ref>b</x:ref>&gt; elements (<xref target="element.b"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="i"/>
+            <iref item="i element" subitem="inside innerRefContent"/>&lt;<x:ref>i</x:ref>&gt; elements (<xref target="element.i"/>)</t>
       </list>
    </t>
 </section>
@@ -2979,7 +3006,7 @@ and the others are the RFCs that make up the STD</c>
    <t>
             Causes the text to be displayed in a constant-width font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>innerRefContent</x:ref>&gt; (<xref target="element.innerRefContent"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
    <t anchor="element.tt.contents"><!--AG-->
         Content model:
       </t>
@@ -4253,7 +4280,8 @@ reference =
     attribute target { text }?,
     ((attribute series { text },
       attribute document { text })
-     | (front, (seriesInfo | format | annotation)*))
+     | (front, (seriesInfo | format | innerRefContent | 
+annotation)*))
   }
 seriesInfo =
   element seriesInfo {
@@ -4272,6 +4300,7 @@ annotation =
   element annotation {
     (text | xref | eref | iref | cref | spanx | tt | b | i)*
   }
+innerRefContent = element innerRefContent { (text | tt | b | i)* }
 start = rfc
 <?ENDINC xml2rfcv3.rnc.folded ?>
 </artwork></figure>
