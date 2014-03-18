@@ -20,13 +20,16 @@ Maybe allow anchors in <li>, but need to specify what a processor should output 
 	<ol>s are easy, but what about <ul>? <dl> is doable but ugly
 	What happens with <t> currently, both inside and outside lists?
 
-Section titles should really be elements, not attributes (this would allow them to contain markup).
-
-Some way to do includes for Intenet Drafts that does not apply to RFCs
-	Maybe not; this can be done with tooling on the client side
-	Safety issue for tools.ietf.org?
-
 The content model for <postal> ought to be more strict to allow at most one of <city>, <region>, <code>, and <country>.
+	Waiting for possible fix to RNC to eliminate ampersands
+
+Probably will not do:
+
+	Section titles should really be elements, not attributes (this would allow them to contain markup).
+
+	Some way to do includes for Intenet Drafts that does not apply to RFCs
+		Maybe not; this can be done with tooling on the client side
+		Safety issue for tools.ietf.org?
 
 Discussion of v3 processors:
 	Restrictions for v3 documents published as RFCs
@@ -1509,10 +1512,8 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <x:anchor-alias value="innerRefContent"/>
    <iref item="Elements" subitem="innerRefContent" primary="true"/>
    <iref item="innerRefContent element" primary="true"/>
-   <t>
-      Text that should appear between the title and the date of a reference. The purpose
-      of this element is to prevent the need to abuse &lt;<x:ref>seriesInfo</x:ref>&gt; to
-      get such text in a reference.
+   <t><!--AG-->
+      <cref anchor="element.innerRefContent.missing">element description missing</cref>
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
    <t anchor="element.innerRefContent.contents"><!--AG-->
