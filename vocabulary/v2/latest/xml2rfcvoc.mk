@@ -17,7 +17,7 @@ xml2rfcv2-spec.xml: xml2rfcv2.rng rng2xml2rfc.xslt
 	saxon $< rng2xml2rfc.xslt > $@
 
 xml2rfcv2.rnc.folded: xml2rfcv2.rnc
-	fold -w69 -s $< > $@
+	fold -w69 -s $< | sed "s/\&/\&amp;/g" | sed "s/</\&lt;/g" | sed "s/>/\&gt;/g" > $@
 
 draft-reschke-xml2rfc-latest.xml: xml2rfcv2-spec.xml xml2rfcv2.rnc.folded
 	cp -v $@ $@.bak
