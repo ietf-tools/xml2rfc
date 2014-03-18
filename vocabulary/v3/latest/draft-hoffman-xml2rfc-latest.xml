@@ -16,8 +16,6 @@
 
 Find all remaining <cref>s and resolve them
 
-Extend <xref> so that subsection and/or anchors can be specified.
-
 Maybe allow anchors in <li>, but need to specify what a processor should output for the text
 	<ol>s are easy, but what about <ul>? <dl> is doable but ugly
 	What happens with <t> currently, both inside and outside lists?
@@ -205,6 +203,8 @@ and &lt;<x:ref>cref</x:ref>&gt; as optional children.</t>
 presentational element and thus its use ought to be avoided".</t>
 
 <t>Deprecated the "pageno" attribute in &lt;<x:ref>xref</x:ref>&gt; because it was unused in v2.</t>
+
+<t>Added the "section" attribute in &lt;<x:ref>xref</x:ref>&gt;.</t>
 
 <t>Added "ascii" attributes to &lt;<x:ref>author</x:ref>&gt;, &lt;<x:ref>email</x:ref>&gt;, and
 &lt;<x:ref>organization</x:ref>&gt; elements. This allows an athor to specify their information in their
@@ -3245,6 +3245,23 @@ and the others are the RFCs that make up the STD</c>
       </t>
    </section>
 
+   <!--xref/@section-->
+   <section title="'section' attribute" anchor="element.xref.attribute.section" toc="exclude">
+      <iref item="Attributes" subitem="section"/>
+      <iref item="xref element" subitem="section attribute"/>
+      <iref item="section attribute" subitem="in xref element"/>
+      <t>
+         Specifies a section for the generated reference. For example,
+<figure><artwork>
+     See &lt;xref section="2.3" target="RFC6949"/&gt; for more inforation.
+</artwork></figure>
+would generate
+<figure><artwork>
+     See Section 2.3 of [RFC6949] for more information.
+</artwork></figure>
+      </t>
+   </section>
+
    <!--xref/@target-->
    <section title="'target' attribute (mandatory)" anchor="element.xref.attribute.target" toc="exclude">
       <iref item="Attributes" subitem="target"/>
@@ -4095,6 +4112,7 @@ xref =
 }?,
     [ a:defaultValue = "default" ]
     attribute format { "counter" | "title" | "none" | "default" }?,
+    attribute section { text }?,
     text
   }
 eref =

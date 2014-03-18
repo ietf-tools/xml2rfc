@@ -259,6 +259,8 @@ Table of Contents
    o  Deprecated the "pageno" attribute in <xref> because it was unused
       in v2.
 
+   o  Added the "section" attribute in <xref>.
+
    o  Added "ascii" attributes to <author>, <email>, and <organization>
       elements.  This allows an athor to specify their information in
       their native scripts as the primary entry and still allow the
@@ -2251,7 +2253,17 @@ Table of Contents
 
    o  "false" (default)
 
-2.57.3.  'target' attribute (mandatory)
+2.57.3.  'section' attribute
+
+   Specifies a section for the generated reference.  For example,
+
+        See <xref section="2.3" target="RFC6949"/> for more inforation.
+
+   would generate
+
+        See Section 2.3 of [RFC6949] for more information.
+
+2.57.4.  'target' attribute (mandatory)
 
    Identifies the document component being referenced.
 
@@ -2823,6 +2835,7 @@ Appendix B.  Relax NG Schema
    }?,
        [ a:defaultValue = "default" ]
        attribute format { "counter" | "title" | "none" | "default" }?,
+       attribute section { text }?,
        text
      }
    eref =
@@ -3043,6 +3056,7 @@ Index
          primary  1
          removeinrfc  1
          role  1
+         section  1
          series  1
          seriesNo  1
          source  1
@@ -3419,6 +3433,8 @@ Index
          in author element  1
 
    S
+      section attribute
+         in xref element  1
       section element  1
          anchor attribute  1
          inside back  1
@@ -3577,6 +3593,7 @@ Index
          inside tt  1
          inside ttcol  1
          pageno attribute  1
+         section attribute  1
          target attribute  1
       xref formats
          counter  1
