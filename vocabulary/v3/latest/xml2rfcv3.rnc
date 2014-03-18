@@ -323,7 +323,7 @@ reference =
     attribute target { text }?,
     ((attribute series { text },
       attribute document { text })
-     | (front, (seriesInfo | format | annotation)*))
+     | (front, (seriesInfo | format | innerRefContent | annotation)*))
   }
 seriesInfo =
   element seriesInfo {
@@ -342,4 +342,5 @@ annotation =
   element annotation {
     (text | xref | eref | iref | cref | spanx | tt | b | i)*
   }
+innerRefContent = element innerRefContent { (text | tt | b | i)* }
 start = rfc
