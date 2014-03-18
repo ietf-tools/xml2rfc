@@ -176,23 +176,15 @@
   <define name="postal">
     <element name="postal">
       <choice>
-        <interleave>
-          <zeroOrMore>
+        <zeroOrMore>
+          <choice>
             <ref name="street"/>
-          </zeroOrMore>
-          <optional>
             <ref name="city"/>
-          </optional>
-          <optional>
             <ref name="region"/>
-          </optional>
-          <optional>
             <ref name="code"/>
-          </optional>
-          <optional>
             <ref name="country"/>
-          </optional>
-        </interleave>
+          </choice>
+        </zeroOrMore>
         <oneOrMore>
           <ref name="postalline"/>
         </oneOrMore>

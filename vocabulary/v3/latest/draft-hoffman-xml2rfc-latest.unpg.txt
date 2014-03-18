@@ -238,9 +238,9 @@ Table of Contents
 
    o  Deprecated <list> in favor of <dl>, <ul>, and <ol>.
 
-   o  In <postal>, allowed the sub-elements to be in any order, but at
-      most one of <city>, <region>, <code>, and <country>.  Also allowed
-      the inclusion of <postalline> instead of the older elements.
+   o  In <postal>, allowed the sub-elements to be in any order.  Also
+      allowed the inclusion of <postalline> instead of the older
+      elements.
 
    o  Added <postalline>, free text that represents one line of the
       address.
@@ -1398,10 +1398,10 @@ Table of Contents
 2.36.  <postal>
 
    Contains optional child elements providing postal information.  These
-   elements will be displayed in an order that is processor-specific.
-   Thus, a postal address should probably contain only a set of
-   <street>, <city>, <region>, <code>, and <country> elements, or only
-   an ordered set of <postalline> elements, but not both.
+   elements will be displayed in an order that is processor-specific.  A
+   postal address can contain only a set of <street>, <city>, <region>,
+   <code>, and <country> elements, or only an ordered set of
+   <postalline> elements, but not both.
 
    This element appears as child element of: <address> (Section 2.2).
 
@@ -1409,7 +1409,17 @@ Table of Contents
 
    Either:
 
-   o  [[anchor2: Missing template for interleave.]]
+   o  In any order:
+
+      *  <street> elements (Section 2.47)
+
+      *  <city> elements (Section 2.11)
+
+      *  <region> elements (Section 2.42)
+
+      *  <code> elements (Section 2.12)
+
+      *  <country> elements (Section 2.13)
 
    Or:
 
@@ -1831,7 +1841,7 @@ Table of Contents
 
    Determines whether the section is included in the Table Of Contents.
 
-   [[anchor3: Need to consider inheritance.]]
+   [[anchor2: Need to consider inheritance.]]
 
    Allowed values:
 
@@ -2308,7 +2318,7 @@ Table of Contents
 
 3.  Special Unicode Code Points
 
-   [[anchor4: Explain those code points where the processors implement
+   [[anchor3: Explain those code points where the processors implement
    something special, such as "nbsp".]]
 
 4.  Internationalization Considerations
@@ -2723,7 +2733,7 @@ Appendix B.  Relax NG Schema
      element address { (postal | phone | facsimile | email | uri)* }
    postal =
      element postal {
-       (street* & city? & region? & code? & country?) | postalline+
+       (street | city | region | code | country)* | postalline+
      }
    street = element street { text }
    city = element city { text }
@@ -3157,12 +3167,15 @@ Index
       cite attribute
          in blockquote element  1
       city element  1
+         inside postal  1
       code element  1
+         inside postal  1
       consensus attribute
          in rfc element  1
       counter attribute
          in list element  1
       country element  1
+         inside postal  1
       cref element  1
          anchor attribute  1
          inside annotation  1
@@ -3456,6 +3469,7 @@ Index
          inside back  1
          title attribute  1
       region element  1
+         inside postal  1
       removeinrfc attribute
          in section element  1
       rfc element  1
@@ -3512,6 +3526,7 @@ Index
       start attribute
          in ol element  1
       street element  1
+         inside postal  1
       style attribute
          in list element  1
          in ol element  1

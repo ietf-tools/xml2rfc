@@ -1225,8 +1225,10 @@
    <x:anchor-alias value="innerRefContent"/>
    <iref item="Elements" subitem="innerRefContent" primary="true"/>
    <iref item="innerRefContent element" primary="true"/>
-   <t><!--AG-->
-      <cref anchor="element.innerRefContent.missing">element description missing</cref>
+   <t>
+      Text that should appear between the title and the date of a reference. The purpose
+      of this element is to prevent the need to abuse &lt;<x:ref>seriesInfo</x:ref>&gt; to
+      get such text in a reference.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
    <t anchor="element.innerRefContent.contents"><!--AG-->
@@ -1658,8 +1660,8 @@
    <iref item="postal element" primary="true"/>
    <t>
       Contains optional child elements providing postal information. These elements will be
-      displayed in an order that is processor-specific. Thus, a
-      postal address should probably contain only a set of &lt;<x:ref>street</x:ref>&gt;, &lt;<x:ref>city</x:ref>&gt;,
+      displayed in an order that is processor-specific.
+      A postal address can contain only a set of &lt;<x:ref>street</x:ref>&gt;, &lt;<x:ref>city</x:ref>&gt;,
       &lt;<x:ref>region</x:ref>&gt;, &lt;<x:ref>code</x:ref>&gt;, and &lt;<x:ref>country</x:ref>&gt;
       elements, or only an ordered set of &lt;<x:ref>postalline</x:ref>&gt; elements, but not both.
    </t>
@@ -1669,10 +1671,23 @@
       </t>
    <t><!--AG-->Either:<list style="symbols">
          <x:lt>
-            <t><!--AG-->
-               <cref>
-      Missing template for interleave.
-    </cref>
+            <t><!--AG-->In any order: <list style="symbols">
+                  <t><!--AG-->
+                     <iref item="Elements" subitem="street"/>
+                     <iref item="street element" subitem="inside postal"/>&lt;<x:ref>street</x:ref>&gt; elements (<xref target="element.street"/>)</t>
+                  <t><!--AG-->
+                     <iref item="Elements" subitem="city"/>
+                     <iref item="city element" subitem="inside postal"/>&lt;<x:ref>city</x:ref>&gt; elements (<xref target="element.city"/>)</t>
+                  <t><!--AG-->
+                     <iref item="Elements" subitem="region"/>
+                     <iref item="region element" subitem="inside postal"/>&lt;<x:ref>region</x:ref>&gt; elements (<xref target="element.region"/>)</t>
+                  <t><!--AG-->
+                     <iref item="Elements" subitem="code"/>
+                     <iref item="code element" subitem="inside postal"/>&lt;<x:ref>code</x:ref>&gt; elements (<xref target="element.code"/>)</t>
+                  <t><!--AG-->
+                     <iref item="Elements" subitem="country"/>
+                     <iref item="country element" subitem="inside postal"/>&lt;<x:ref>country</x:ref>&gt; elements (<xref target="element.country"/>)</t>
+               </list>
             </t>
          </x:lt>
       </list>
