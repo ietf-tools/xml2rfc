@@ -22,8 +22,6 @@ Maybe allow anchors in <li>, but need to specify what a processor should output 
 
 Add a way to add prose to a reference that avoids abuse of <seriesInfo>.
 
-The content model for <cref> should be extended to allow more flow elements, such as <xref> and <eref>.
-
 Section titles should really be elements, not attributes (this would allow them to contain markup).
 
 Some way to do includes for Intenet Drafts that does not apply to RFCs
@@ -168,6 +166,9 @@ The list of changes so far is:
 <t>Added the &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;, and &lt;<x:ref>tt</x:ref>&gt; elements.</t>
 
 <t>Added the &lt;<x:ref>blockquote</x:ref>&gt; element.</t>
+
+<t>Allowed &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>eref</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;, &lt;<x:ref>tt</x:ref>&gt;,
+and &lt;<x:ref>xref</x:ref>&gt; in &lt;<x:ref>cref</x:ref>&gt;.</t>
 
 <t>Deprecated &lt;<x:ref>facsimile</x:ref>&gt; because it is rarely used and is not actually useful.</t>
 
@@ -714,7 +715,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <t>
             Causes the text to be displayed in a bold font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.b.contents"><!--AG-->
         Content model:
       </t>
@@ -914,7 +915,28 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       all (when generating an RFC).
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
-   <t anchor="element.cref.contents"><!--AG-->Content model: only text content.</t>
+   <t anchor="element.cref.contents"><!--AG-->
+        Content model:
+      </t>
+   <t><!--AG-->In any order: <list style="symbols">
+         <t><!--AG-->Text</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="xref"/>
+            <iref item="xref element" subitem="inside cref"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="eref"/>
+            <iref item="eref element" subitem="inside cref"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="b"/>
+            <iref item="b element" subitem="inside cref"/>&lt;<x:ref>b</x:ref>&gt; elements (<xref target="element.b"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="i"/>
+            <iref item="i element" subitem="inside cref"/>&lt;<x:ref>i</x:ref>&gt; elements (<xref target="element.i"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="tt"/>
+            <iref item="tt element" subitem="inside cref"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
+      </list>
+   </t>
 
    <!--cref/@anchor-->
    <section title="'anchor' attribute" anchor="element.cref.attribute.anchor" toc="exclude">
@@ -1191,7 +1213,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       If the element has text content, that content will be used. Otherwise, the value of the
       target attribute will be inserted in angle brackets (<xref target="RFC3986" x:fmt="," x:sec="C"/>).
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.eref.contents"><!--AG-->Content model: only text content.</t>
 
    <!--eref/@target-->
@@ -1454,7 +1476,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <t>
             Causes the text to be displayed in an italic font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.i.contents"><!--AG-->
         Content model:
       </t>
@@ -2955,7 +2977,7 @@ and the others are the RFCs that make up the STD</c>
    <t>
             Causes the text to be displayed in a constant-width font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
    <t anchor="element.tt.contents"><!--AG-->
         Content model:
       </t>
@@ -3168,7 +3190,7 @@ and the others are the RFCs that make up the STD</c>
       make sure that the prose is sufficient for a reader to understand what
       is being referred to.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.xref.contents"><!--AG-->Content model: only text content.</t>
 
    <!--xref/@format-->
@@ -3252,13 +3274,17 @@ and the others are the RFCs that make up the STD</c>
       <iref item="section attribute" subitem="in xref element"/>
       <t>
          Specifies a section for the generated reference. For example,
-<figure><artwork>
+<figure>
+            <artwork>
      See &lt;xref section="2.3" target="RFC6949"/&gt; for more inforation.
-</artwork></figure>
+</artwork>
+         </figure>
 would generate
-<figure><artwork>
+<figure>
+            <artwork>
      See Section 2.3 of [RFC6949] for more information.
-</artwork></figure>
+</artwork>
+         </figure>
       </t>
    </section>
 
@@ -4132,7 +4158,7 @@ cref =
   element cref {
     attribute anchor { xsd:ID }?,
     attribute source { text }?,
-    text
+    (text | xref | eref | b | i | tt)*
   }
 tt = element tt { (text | xref | eref | iref | cref | b | i)* }
 b = element b { (text | xref | eref | iref | cref | tt | i)* }

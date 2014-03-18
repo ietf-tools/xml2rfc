@@ -217,6 +217,8 @@ Table of Contents
 
    o  Added the <blockquote> element.
 
+   o  Allowed <b>, <eref>, <i>, <tt>, and <xref> in <cref>.
+
    o  Deprecated <facsimile> because it is rarely used and is not
       actually useful.
 
@@ -615,10 +617,11 @@ Table of Contents
    Causes the text to be displayed in a bold font.
 
    This element appears as child element of: <annotation> (Section 2.3),
-   <blockquote> (Section 2.9), <c> (Section 2.10), <dd> (Section 2.16),
-   <dt> (Section 2.18), <i> (Section 2.25), <li> (Section 2.28),
-   <postamble> (Section 2.37), <preamble> (Section 2.38), <t>
-   (Section 2.47), <tindent> (Section 2.49), and <tt> (Section 2.51).
+   <blockquote> (Section 2.9), <c> (Section 2.10), <cref>
+   (Section 2.14), <dd> (Section 2.16), <dt> (Section 2.18), <i>
+   (Section 2.25), <li> (Section 2.28), <postamble> (Section 2.37),
+   <preamble> (Section 2.38), <t> (Section 2.47), <tindent>
+   (Section 2.49), and <tt> (Section 2.51).
 
    Content model:
 
@@ -752,7 +755,21 @@ Table of Contents
    <tindent> (Section 2.49), <tt> (Section 2.51), and <ttcol>
    (Section 2.52).
 
-   Content model: only text content.
+   Content model:
+
+   In any order:
+
+   o  Text
+
+   o  <xref> elements (Section 2.57)
+
+   o  <eref> elements (Section 2.20)
+
+   o  <b> elements (Section 2.7)
+
+   o  <i> elements (Section 2.25)
+
+   o  <tt> elements (Section 2.51)
 
 2.14.1.  'anchor' attribute
 
@@ -930,11 +947,11 @@ Table of Contents
    angle brackets ([RFC3986], Appendix C).
 
    This element appears as child element of: <annotation> (Section 2.3),
-   <b> (Section 2.7), <c> (Section 2.10), <dd> (Section 2.16), <dt>
-   (Section 2.18), <i> (Section 2.25), <li> (Section 2.28), <postamble>
-   (Section 2.37), <preamble> (Section 2.38), <t> (Section 2.47),
-   <tindent> (Section 2.49), <tt> (Section 2.51), and <ttcol>
-   (Section 2.52).
+   <b> (Section 2.7), <c> (Section 2.10), <cref> (Section 2.14), <dd>
+   (Section 2.16), <dt> (Section 2.18), <i> (Section 2.25), <li>
+   (Section 2.28), <postamble> (Section 2.37), <preamble>
+   (Section 2.38), <t> (Section 2.47), <tindent> (Section 2.49), <tt>
+   (Section 2.51), and <ttcol> (Section 2.52).
 
    Content model: only text content.
 
@@ -1079,9 +1096,10 @@ Table of Contents
 
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.7), <blockquote> (Section 2.9), <c> (Section 2.10),
-   <dd> (Section 2.16), <dt> (Section 2.18), <li> (Section 2.28),
-   <postamble> (Section 2.37), <preamble> (Section 2.38), <t>
-   (Section 2.47), <tindent> (Section 2.49), and <tt> (Section 2.51).
+   <cref> (Section 2.14), <dd> (Section 2.16), <dt> (Section 2.18), <li>
+   (Section 2.28), <postamble> (Section 2.37), <preamble>
+   (Section 2.38), <t> (Section 2.47), <tindent> (Section 2.49), and
+   <tt> (Section 2.51).
 
    Content model:
 
@@ -2053,9 +2071,10 @@ Table of Contents
 
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.7), <blockquote> (Section 2.9), <c> (Section 2.10),
-   <dd> (Section 2.16), <dt> (Section 2.18), <i> (Section 2.25), <li>
-   (Section 2.28), <postamble> (Section 2.37), <preamble>
-   (Section 2.38), <t> (Section 2.47), and <tindent> (Section 2.49).
+   <cref> (Section 2.14), <dd> (Section 2.16), <dt> (Section 2.18), <i>
+   (Section 2.25), <li> (Section 2.28), <postamble> (Section 2.37),
+   <preamble> (Section 2.38), <t> (Section 2.47), and <tindent>
+   (Section 2.49).
 
    Content model:
 
@@ -2200,11 +2219,11 @@ Table of Contents
    what is being referred to.
 
    This element appears as child element of: <annotation> (Section 2.3),
-   <b> (Section 2.7), <c> (Section 2.10), <dd> (Section 2.16), <dt>
-   (Section 2.18), <i> (Section 2.25), <li> (Section 2.28), <postamble>
-   (Section 2.37), <preamble> (Section 2.38), <t> (Section 2.47),
-   <tindent> (Section 2.49), <tt> (Section 2.51), and <ttcol>
-   (Section 2.52).
+   <b> (Section 2.7), <c> (Section 2.10), <cref> (Section 2.14), <dd>
+   (Section 2.16), <dt> (Section 2.18), <i> (Section 2.25), <li>
+   (Section 2.28), <postamble> (Section 2.37), <preamble>
+   (Section 2.38), <t> (Section 2.47), <tindent> (Section 2.49), <tt>
+   (Section 2.51), and <ttcol> (Section 2.52).
 
    Content model: only text content.
 
@@ -2855,7 +2874,7 @@ Appendix B.  Relax NG Schema
      element cref {
        attribute anchor { xsd:ID }?,
        attribute source { text }?,
-       text
+       (text | xref | eref | b | i | tt)*
      }
    tt = element tt { (text | xref | eref | iref | cref | b | i)* }
    b = element b { (text | xref | eref | iref | cref | tt | i)* }
@@ -3092,6 +3111,7 @@ Index
          inside annotation  1
          inside blockquote  1
          inside c  1
+         inside cref  1
          inside dd  1
          inside dt  1
          inside i  1
@@ -3233,6 +3253,7 @@ Index
          inside annotation  1
          inside b  1
          inside c  1
+         inside cref  1
          inside dd  1
          inside dt  1
          inside i  1
@@ -3289,6 +3310,7 @@ Index
          inside b  1
          inside blockquote  1
          inside c  1
+         inside cref  1
          inside dd  1
          inside dt  1
          inside li  1
@@ -3526,6 +3548,7 @@ Index
          inside b  1
          inside blockquote  1
          inside c  1
+         inside cref  1
          inside dd  1
          inside dt  1
          inside i  1
@@ -3582,6 +3605,7 @@ Index
          inside annotation  1
          inside b  1
          inside c  1
+         inside cref  1
          inside dd  1
          inside dt  1
          inside i  1
