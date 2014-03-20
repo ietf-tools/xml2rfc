@@ -211,7 +211,9 @@ xref =
     [ a:defaultValue = "false" ] attribute pageno { "true" | "false" }?,
     [ a:defaultValue = "default" ]
     attribute format { "counter" | "title" | "none" | "default" }?,
-    attribute section { text }?,
+    (attribute section { text },
+     attribute relative { text }?,
+     attribute sectionFormat { text }?)?,
     text
   }
 eref =

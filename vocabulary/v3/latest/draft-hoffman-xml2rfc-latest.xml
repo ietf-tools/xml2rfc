@@ -16,19 +16,17 @@
 
 Find the remaining <cref>s and resolve them
 
+Change xref/@section to use x:fmt from http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html#ext-rfc2629.xref
+
 Maybe allow anchors in <li>, but need to specify what a processor should output for the text
 	<ol>s are easy, but what about <ul>? <dl> is doable but ugly
 	What happens with <t> currently, both inside and outside lists?
 
-Deal with PIs as part of the v3 vocabulary; message sent to rfc-interest 2014-03-18
-	inline
-	sortrefs
-	symrefs
-	toc
-	tocappendix
-	tocdepth
+Deal with PIs as part of the v3 vocabulary; message sent to rfc-interest 2014-03-18; response on 2014-03-20
 
 	Figure out what to do with section/@toc="default"
+
+	Document the include="file" PI for other processors
 
 Consider
 	<reference url="http://....."/>
@@ -48,7 +46,6 @@ Discussion of v3 processors:
 	Restrictions for v3 documents published as RFCs
 		No comments, PIs, or deprecated elements/attributes
 		No external includes of any kind
-		What about ENTITYs? Valid but possibly confusing.
 	All auto-generated text that appears in the other formats needs to also exist in the canonical XML file as well.
 		The auto-generated text needs its own markup. 
 	    Section numbers
@@ -219,7 +216,8 @@ presentational element and thus its use ought to be avoided".</t>
 
 <t>Deprecated the "pageno" attribute in &lt;<x:ref>xref</x:ref>&gt; because it was unused in v2.</t>
 
-<t>Added the "section" attribute in &lt;<x:ref>xref</x:ref>&gt;.</t>
+<t>Added the "section", "relative", and "sectionFormat" attributes to &lt;<x:ref>xref</x:ref>&gt;.
+Also deprected "format" because it doesn't seem to be in any significant use.</t>
 
 <t>Added "ascii" attributes to &lt;<x:ref>author</x:ref>&gt;, &lt;<x:ref>email</x:ref>&gt;, and
 &lt;<x:ref>organization</x:ref>&gt; elements. This allows an athor to specify their information in their
@@ -3247,49 +3245,7 @@ and the others are the RFCs that make up the STD</c>
       <iref item="xref element" subitem="format attribute"/>
       <iref item="format attribute" subitem="in xref element"/>
       <t>
-        This attribute is used to control the format of the generated 
-        reference text.
-      </t>
-      <t>
-         <iref item="xref formats" subitem="counter" primary="true"/>
-        "counter"
-        <list style="empty">
-            <t>
-            Inserts a counter, such as the number of a section, figure, or
-            table.
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="xref formats" subitem="default" primary="true"/>
-        "default"
-        <list style="empty">
-            <t>
-            Inserts a text fragment that describes the referenced part 
-            completely, such as "Section 2", "Table 4", or "[XML]".
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="xref formats" subitem="none" primary="true"/>
-        "none"
-        <list style="empty">
-            <t>
-            There will be no auto-generated text.
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="xref formats" subitem="title" primary="true"/>
-        "title"
-        <list style="empty">
-            <t>
-            Inserts a title for the referenced element (usually obtained from
-            the referenced element's "title" attribute; some processors
-            also use the &lt;title&gt; child element or a &lt;reference&gt;
-            target).
-          </t>
-         </list>
+        Deprecated
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"counter"</t>
@@ -3315,24 +3271,54 @@ and the others are the RFCs that make up the STD</c>
       </t>
    </section>
 
+   <!--xref/@relative-->
+   <section title="'relative' attribute" anchor="element.xref.attribute.relative" toc="exclude">
+      <iref item="Attributes" subitem="relative"/>
+      <iref item="xref element" subitem="relative attribute"/>
+      <iref item="relative attribute" subitem="in xref element"/>
+      <t>
+         Specifies a relative reference from the main target.  <cref>NEED MORE DESCRIPTION
+         HERE ABOUT HOW THIS WILL BE DISPLAYED.</cref>
+      </t>
+   </section>
+
    <!--xref/@section-->
    <section title="'section' attribute" anchor="element.xref.attribute.section" toc="exclude">
       <iref item="Attributes" subitem="section"/>
       <iref item="xref element" subitem="section attribute"/>
       <iref item="section attribute" subitem="in xref element"/>
       <t>
-         Specifies a section for the generated reference. For example,
-<figure>
-            <artwork>
-     See &lt;xref section="2.3" target="RFC6949"/&gt; for more inforation.
-</artwork>
-         </figure>
-would generate
-<figure>
-            <artwork>
+         Specifies a section for the generated reference.
+      </t>
+   </section>
+
+   <!--xref/@sectionFormat-->
+   <section title="'sectionFormat' attribute" anchor="element.xref.attribute.sectionFormat" toc="exclude">
+      <iref item="Attributes" subitem="sectionFormat"/>
+      <iref item="xref element" subitem="sectionFormat attribute"/>
+      <iref item="sectionFormat attribute" subitem="in xref element"/>
+      <t>
+         The format that the section reference will be displayed in. The acceptable values are:
+         <list style="symbols">
+           <t>"of" (default)</t>
+           <t>"comma"</t>
+           <t>"parens"</t>
+         </list>
+         For example:
+<figure><artwork>
+  See &lt;xref target="RFC6949" section="2.3" sectionFormat="of"/&gt;
+  for more inforation.
+  See &lt;xref target="RFC6949" section="2.4" sectionFormat="comma"/&gt;
+  for more inforation.
+  See &lt;xref target="RFC6949" section="2.5" sectionFormat="parens"/&gt;
+  for more inforation.
+</artwork></figure>
+         would generate
+<figure><artwork>
      See Section 2.3 of [RFC6949] for more information.
-</artwork>
-         </figure>
+     See [RFC6949], Section 2.4 for more information.
+     See [RFC6949] (Section 2.5) for more information.
+</artwork></figure>
       </t>
    </section>
 
@@ -4186,7 +4172,9 @@ xref =
 }?,
     [ a:defaultValue = "default" ]
     attribute format { "counter" | "title" | "none" | "default" }?,
-    attribute section { text }?,
+    (attribute section { text },
+     attribute relative { text }?,
+     attribute sectionFormat { text }?)?,
     text
   }
 eref =

@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                             March 19, 2014
+Obsoletes: 2629 (if approved)                             March 20, 2014
 Intended status: Standards Track
-Expires: September 20, 2014
+Expires: September 21, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 20, 2014.
+   This Internet-Draft will expire on September 21, 2014.
 
 Copyright Notice
 
@@ -267,7 +267,9 @@ Table of Contents
    o  Deprecated the "pageno" attribute in <xref> because it was unused
       in v2.
 
-   o  Added the "section" attribute in <xref>.
+   o  Added the "section", "relative", and "sectionFormat" attributes to
+      <xref>.  Also deprected "format" because it doesn't seem to be in
+      any significant use.
 
    o  Added "ascii" attributes to <author>, <email>, and <organization>
       elements.  This allows an athor to specify their information in
@@ -2258,28 +2260,7 @@ Table of Contents
 
 2.58.1.  'format' attribute
 
-   This attribute is used to control the format of the generated
-   reference text.
-
-   "counter"
-
-      Inserts a counter, such as the number of a section, figure, or
-      table.
-
-   "default"
-
-      Inserts a text fragment that describes the referenced part
-      completely, such as "Section 2", "Table 4", or "[XML]".
-
-   "none"
-
-      There will be no auto-generated text.
-
-   "title"
-
-      Inserts a title for the referenced element (usually obtained from
-      the referenced element's "title" attribute; some processors also
-      use the <title> child element or a <reference> target).
+   Deprecated
 
    Allowed values:
 
@@ -2301,17 +2282,42 @@ Table of Contents
 
    o  "false" (default)
 
-2.58.3.  'section' attribute
+2.58.3.  'relative' attribute
 
-   Specifies a section for the generated reference.  For example,
+   Specifies a relative reference from the main target. [[anchor3: NEED
+   MORE DESCRIPTION HERE ABOUT HOW THIS WILL BE DISPLAYED.]]
 
-        See <xref section="2.3" target="RFC6949"/> for more inforation.
+2.58.4.  'section' attribute
+
+   Specifies a section for the generated reference.
+
+2.58.5.  'sectionFormat' attribute
+
+   The format that the section reference will be displayed in.  The
+   acceptable values are:
+
+   o  "of" (default)
+
+   o  "comma"
+
+   o  "parens"
+
+   For example:
+
+     See <xref target="RFC6949" section="2.3" sectionFormat="of"/>
+     for more inforation.
+     See <xref target="RFC6949" section="2.4" sectionFormat="comma"/>
+     for more inforation.
+     See <xref target="RFC6949" section="2.5" sectionFormat="parens"/>
+     for more inforation.
 
    would generate
 
         See Section 2.3 of [RFC6949] for more information.
+        See [RFC6949], Section 2.4 for more information.
+        See [RFC6949] (Section 2.5) for more information.
 
-2.58.4.  'target' attribute (mandatory)
+2.58.6.  'target' attribute (mandatory)
 
    Identifies the document component being referenced.
 
@@ -2320,7 +2326,7 @@ Table of Contents
 
 3.  Special Unicode Code Points
 
-   [[anchor3: Explain those code points where the processors implement
+   [[anchor4: Explain those code points where the processors implement
    something special, such as "nbsp".]]
 
 4.  Internationalization Considerations
@@ -2884,7 +2890,9 @@ Appendix B.  Relax NG Schema
    }?,
        [ a:defaultValue = "default" ]
        attribute format { "counter" | "title" | "none" | "default" }?,
-       attribute section { text }?,
+       (attribute section { text },
+        attribute relative { text }?,
+        attribute sectionFormat { text }?)?,
        text
      }
    eref =
@@ -3105,9 +3113,11 @@ Index
          octets  1
          pageno  1
          primary  1
+         relative  1
          removeinrfc  1
          role  1
          section  1
+         sectionFormat  1
          series  1
          seriesNo  1
          source  1
@@ -3473,6 +3483,8 @@ Index
          title attribute  1
       region element  1
          inside postal  1
+      relative attribute
+         in xref element  1
       removeinrfc attribute
          in section element  1
       rfc element  1
@@ -3502,6 +3514,8 @@ Index
          removeinrfc attribute  1
          title attribute  1
          toc attribute  1
+      sectionFormat attribute
+         in xref element  1
       series attribute
          in reference element  1
       seriesInfo element  1
@@ -3654,13 +3668,10 @@ Index
          inside tt  1
          inside ttcol  1
          pageno attribute  1
+         relative attribute  1
          section attribute  1
+         sectionFormat attribute  1
          target attribute  1
-      xref formats
-         counter  1
-         default  1
-         none  1
-         title  1
 
    Y
       year attribute
