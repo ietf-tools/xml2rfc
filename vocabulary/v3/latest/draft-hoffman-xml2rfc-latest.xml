@@ -216,10 +216,12 @@ and &lt;<x:ref>cref</x:ref>&gt; as optional children.</t>
 <t>Deprecated &lt;vspace&gt; because the v2 spec labeled it as "a purely
 presentational element and thus its use ought to be avoided".</t>
 
-<t>Deprecated the "pageno" attribute in &lt;<x:ref>xref</x:ref>&gt; because it was unused in v2.</t>
+<t>Deprecated the "pageno" attribute in &lt;<x:ref>xref</x:ref>&gt; because it was unused in v2.
+Deprecated the "none" and "title" values for the "format" attribute in &lt;<x:ref>xref</x:ref>&gt;
+because the former makes no sense semantically and the latter because it has unpredictable
+output.</t>
 
-<t>Added the "section", "relative", and "sectionFormat" attributes to &lt;<x:ref>xref</x:ref>&gt;.
-Also deprected "format" because it doesn't seem to be in any significant use.</t>
+<t>Added the "section", "relative", and "sectionFormat" attributes to &lt;<x:ref>xref</x:ref>&gt;.</t>
 
 <t>Added "ascii" attributes to &lt;<x:ref>author</x:ref>&gt;, &lt;<x:ref>email</x:ref>&gt;, and
 &lt;<x:ref>organization</x:ref>&gt; elements. This allows an athor to specify their information in their
@@ -3247,7 +3249,66 @@ and the others are the RFCs that make up the STD</c>
       <iref item="xref element" subitem="format attribute"/>
       <iref item="format attribute" subitem="in xref element"/>
       <t>
-        Deprecated
+        This attribute is used to control the format of the generated 
+        reference text.
+      </t>
+      <t>
+         <iref item="xref formats" subitem="counter" primary="true"/>
+        "counter"
+        <list style="empty">
+            <t>
+            Inserts just a counter; this use used for the number of a section, figure, or
+            table. For example:
+<figure><artwork>
+  &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
+  . . .
+  See Section &lt;xref target="overview" format="counter"/&gt;
+  for an overview.
+</artwork></figure>
+         might generate
+<figure><artwork>
+  See Section 1.7 for an overview.
+</artwork></figure>
+          </t>
+         </list>
+      </t>
+      <t>
+         <iref item="xref formats" subitem="default" primary="true"/>
+        "default"
+        <list style="empty">
+            <t>
+            Inserts a text fragment that describes the referenced part 
+            completely, such as "Section 2" or "Table 4" for internal
+            links, or "[XML]" for links to references. For example:
+<figure><artwork>
+  &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
+  . . .
+  See &lt;xref target="overview"/&gt; for an overview.
+</artwork></figure>
+         might generate
+<figure><artwork>
+  See Section 1.7 for an overview.
+</artwork></figure>
+          </t>
+         </list>
+      </t>
+      <t>
+         <iref item="xref formats" subitem="none" primary="true"/>
+        "none"
+        <list style="empty">
+            <t>
+            This attribute value is deprecated.
+          </t>
+         </list>
+      </t>
+      <t>
+         <iref item="xref formats" subitem="title" primary="true"/>
+        "title"
+        <list style="empty">
+            <t>
+            This attribute value is deprecated.
+          </t>
+         </list>
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"counter"</t>

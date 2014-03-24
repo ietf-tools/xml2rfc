@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                             March 20, 2014
+Obsoletes: 2629 (if approved)                             March 24, 2014
 Intended status: Standards Track
-Expires: September 21, 2014
+Expires: September 25, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 21, 2014.
+   This Internet-Draft will expire on September 25, 2014.
 
 Copyright Notice
 
@@ -265,11 +265,12 @@ Table of Contents
       presentational element and thus its use ought to be avoided".
 
    o  Deprecated the "pageno" attribute in <xref> because it was unused
-      in v2.
+      in v2.  Deprecated the "none" and "title" values for the "format"
+      attribute in <xref> because the former makes no sense semantically
+      and the latter because it has unpredictable output.
 
    o  Added the "section", "relative", and "sectionFormat" attributes to
-      <xref>.  Also deprected "format" because it doesn't seem to be in
-      any significant use.
+      <xref>.
 
    o  Added "ascii" attributes to <author>, <email>, and <organization>
       elements.  This allows an athor to specify their information in
@@ -2260,7 +2261,44 @@ Table of Contents
 
 2.58.1.  'format' attribute
 
-   Deprecated
+   This attribute is used to control the format of the generated
+   reference text.
+
+   "counter"
+
+      Inserts just a counter; this use used for the number of a section,
+      figure, or table.  For example:
+
+     <section anchor="overview">Protocol Overview</section>
+     . . .
+     See Section <xref target="overview" format="counter"/>
+     for an overview.
+
+      might generate
+
+     See Section 1.7 for an overview.
+
+   "default"
+
+      Inserts a text fragment that describes the referenced part
+      completely, such as "Section 2" or "Table 4" for internal links,
+      or "[XML]" for links to references.  For example:
+
+     <section anchor="overview">Protocol Overview</section>
+     . . .
+     See <xref target="overview"/> for an overview.
+
+      might generate
+
+     See Section 1.7 for an overview.
+
+   "none"
+
+      This attribute value is deprecated.
+
+   "title"
+
+      This attribute value is deprecated.
 
    Allowed values:
 
@@ -3672,6 +3710,11 @@ Index
          section attribute  1
          sectionFormat attribute  1
          target attribute  1
+      xref formats
+         counter  1
+         default  1
+         none  1
+         title  1
 
    Y
       year attribute
