@@ -28,15 +28,16 @@ Consider
 	<reference url="http://....."/>
 	<reference include='reference.I-D.draft-flanagan-style'/>
 
-Discussion of v3 processors:
-	All auto-generated text that appears in the other formats needs to also exist in the canonical XML file as well.
+All auto-generated text that appears in the other formats needs to also exist in the canonical XML as well.
+For example, section numbers that appear in the generated HTML and text files need to appear in the XML,
+but in its own XML markup.
+
 		The auto-generated text needs its own markup. 
 	    Section numbers
     	Figure numbers
 	    Table numbers
     	IPR boilerplate
-	when encountering an error, the processor will give more context than just a line number
-
+	
 Non-ASCII
 	Resolve discussion of markup for Unicode characters and their equivalents
 	Mention that not all characters can be included, such as combining marks
@@ -4113,6 +4114,11 @@ authors that create documents in formats different than those supported by the R
 and the Internet Drafts repository.</t>
 
 </list></t>
+
+<t>Users of current and older XML processors for Internet Drafts and RFCs may be used to them having
+unhelpful error messages. Beginning with v3, the RFC Processor and Draft Processor 
+will have much better error reporting, giving more context than just a line number. For example, 
+the error messages will differentiate between errors in XML and those from the v3 format.</t>
 
 <section title="The RFC Processor">
 
