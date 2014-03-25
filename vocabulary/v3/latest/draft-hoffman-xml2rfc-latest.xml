@@ -16,11 +16,13 @@
 
 Find the remaining <cref>s and resolve them
 
-Change xref/@section to use x:fmt from http://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html#ext-rfc2629.xref
+Section titles should really be elements, not attributes (this would allow them to contain markup).
 
-Maybe allow anchors in <li>, but need to specify what a processor should output for the text
-	<ol>s are easy, but what about <ul>? <dl> is doable but ugly
+Not doing:
+	Maybe allow anchors in <li>, but need to specify what a processor should output for the text
+		<ol>s are easy, but what about <ul>? <dl> is doable but ugly
 	What happens with <t> currently, both inside and outside lists?
+		The text doesn't indicate where the list is. That sucks.
 
 Deal with PIs as part of the v3 vocabulary; message sent to rfc-interest 2014-03-18; response on 2014-03-20
 
@@ -33,16 +35,6 @@ Deal with PIs as part of the v3 vocabulary; message sent to rfc-interest 2014-03
 Consider
 	<reference url="http://....."/>
 	<reference include='reference.I-D.draft-flanagan-style'/>
-
-Think about the MIME type
-
-Probably will not do:
-
-	Section titles should really be elements, not attributes (this would allow them to contain markup).
-
-	Some way to do includes for Intenet Drafts that does not apply to RFCs
-		Maybe not; this can be done with tooling on the client side
-		Safety issue for tools.ietf.org?
 
 Discussion of v3 processors:
 	Restrictions for v3 documents published as RFCs
@@ -3249,66 +3241,7 @@ and the others are the RFCs that make up the STD</c>
       <iref item="xref element" subitem="format attribute"/>
       <iref item="format attribute" subitem="in xref element"/>
       <t>
-        This attribute is used to control the format of the generated 
-        reference text.
-      </t>
-      <t>
-         <iref item="xref formats" subitem="counter" primary="true"/>
-        "counter"
-        <list style="empty">
-            <t>
-            Inserts just a counter; this use used for the number of a section, figure, or
-            table. For example:
-<figure><artwork>
-  &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
-  . . .
-  See Section &lt;xref target="overview" format="counter"/&gt;
-  for an overview.
-</artwork></figure>
-         might generate
-<figure><artwork>
-  See Section 1.7 for an overview.
-</artwork></figure>
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="xref formats" subitem="default" primary="true"/>
-        "default"
-        <list style="empty">
-            <t>
-            Inserts a text fragment that describes the referenced part 
-            completely, such as "Section 2" or "Table 4" for internal
-            links, or "[XML]" for links to references. For example:
-<figure><artwork>
-  &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
-  . . .
-  See &lt;xref target="overview"/&gt; for an overview.
-</artwork></figure>
-         might generate
-<figure><artwork>
-  See Section 1.7 for an overview.
-</artwork></figure>
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="xref formats" subitem="none" primary="true"/>
-        "none"
-        <list style="empty">
-            <t>
-            This attribute value is deprecated.
-          </t>
-         </list>
-      </t>
-      <t>
-         <iref item="xref formats" subitem="title" primary="true"/>
-        "title"
-        <list style="empty">
-            <t>
-            This attribute value is deprecated.
-          </t>
-         </list>
+        Deprecated
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"counter"</t>
@@ -3339,9 +3272,8 @@ and the others are the RFCs that make up the STD</c>
       <iref item="Attributes" subitem="relative"/>
       <iref item="xref element" subitem="relative attribute"/>
       <iref item="relative attribute" subitem="in xref element"/>
-      <t>
-         Specifies a relative reference from the main target.  <cref>NEED MORE DESCRIPTION
-         HERE ABOUT HOW THIS WILL BE DISPLAYED.</cref>
+      <t><!--AG-->
+         <cref anchor="element.xref.attribute.relative.missing">attribute description missing</cref>
       </t>
    </section>
 
@@ -3351,7 +3283,18 @@ and the others are the RFCs that make up the STD</c>
       <iref item="xref element" subitem="section attribute"/>
       <iref item="section attribute" subitem="in xref element"/>
       <t>
-         Specifies a section for the generated reference.
+         Specifies a section for the generated reference. For example,
+<figure>
+            <artwork>
+     See &lt;xref section="2.3" target="RFC6949"/&gt; for more inforation.
+</artwork>
+         </figure>
+would generate
+<figure>
+            <artwork>
+     See Section 2.3 of [RFC6949] for more information.
+</artwork>
+         </figure>
       </t>
    </section>
 
@@ -3360,28 +3303,8 @@ and the others are the RFCs that make up the STD</c>
       <iref item="Attributes" subitem="sectionFormat"/>
       <iref item="xref element" subitem="sectionFormat attribute"/>
       <iref item="sectionFormat attribute" subitem="in xref element"/>
-      <t>
-         The format that the section reference will be displayed in. The acceptable values are:
-         <list style="symbols">
-           <t>"of" (default)</t>
-           <t>"comma"</t>
-           <t>"parens"</t>
-         </list>
-         For example:
-<figure><artwork>
-  See &lt;xref target="RFC6949" section="2.3" sectionFormat="of"/&gt;
-  for more inforation.
-  See &lt;xref target="RFC6949" section="2.4" sectionFormat="comma"/&gt;
-  for more inforation.
-  See &lt;xref target="RFC6949" section="2.5" sectionFormat="parens"/&gt;
-  for more inforation.
-</artwork></figure>
-         would generate
-<figure><artwork>
-     See Section 2.3 of [RFC6949] for more information.
-     See [RFC6949], Section 2.4 for more information.
-     See [RFC6949] (Section 2.5) for more information.
-</artwork></figure>
+      <t><!--AG-->
+         <cref anchor="element.xref.attribute.sectionFormat.missing">attribute description missing</cref>
       </t>
    </section>
 
@@ -3698,6 +3621,14 @@ and the others are the RFCs that make up the STD</c>
     <seriesInfo name='RFC' value='6266' />
   </reference>
 
+<reference anchor="RFC6949">
+<front><title>RFC Series Format Requirements and Future Development</title>
+<author initials="H." surname="Flanagan" fullname="H. Flanagan"><organization/></author>
+<author initials="N." surname="Brownlee" fullname="N. Brownlee"><organization/></author>
+<date year="2013" month="May"/>
+</front><seriesInfo name="RFC" value="6949"/><format type="TXT" octets="29181" target="http://www.rfc-editor.org/rfc/rfc6949.txt"/>
+</reference>
+
   <reference anchor="RNC" target="http://www.oasis-open.org/committees/relax-ng/compact-20021121.html">
     <front>
       <title>RELAX NG Compact Syntax</title>
@@ -4011,6 +3942,68 @@ and the others are the RFCs that make up the STD</c>
 
 </section>
 </section>
+</section>
+
+<section title="The v3 Format and Processors">
+
+<t>As described in <xref target="RFC6949"/>, the v3 format will be the format for canonical RFCs.
+The format will also likely be allowed for submission of Internet Drafts.
+The format for both of these tasks is the same; however, software processing an XML
+file for creation of an Internet Draft will act differently than it will for creation
+of what is expected to be an RFC. </t>
+
+<t>This section describes topics that ares specific to processors. Note that there is some
+discussion of processors in the main body of the document as well. For example, some elements
+have descriptions of how a processor might create output from the element.</t>
+
+<t>This section differentiates between three types of processors:
+<list style="symbols">
+
+<t>RFC Processor -- The processor used by the RFC Editor to validate the contents of the
+intended RFC and to create the non-canonical formats.</t>
+
+<t>Draft Processor -- The processor used by the IETF to validate the contents of XML that
+is submitted and to create the other formats that will be supported for Internet Drafts.</t>
+
+<t>Private Processors -- There may be processors that are meant to run on the computers of
+authors that create documents in formats different than those supported by the RFC Editor
+and the Internet Drafts repository.</t>
+
+</list></t>
+
+<section title="Processor Instructions">
+
+<t>In the v2 format, XML Processor Instructions (PIs) were used for a wide variety of tasks,
+including changing some formatting of the text outputs, adding information to HTML versions
+of Internet Drafts, and specifying other instructions to processors. In the v3 format, a much
+smaller set of PIs is supported for the Draft Processor and Private Processors. It is important
+to note that canonical RFCs will not contain any PIs.</t>
+
+<t>The following PIs will be supported by the Draft Processor:
+
+<list style="symbols">
+
+<t>linefile -- MORE GOES HERE</t>
+
+<t>editing -- MORE GOES HERE</t>
+
+</list></t>
+
+<t>The following PIs will not be supported by the Draft Processor, but are included so that Private
+Processors have a common way of referring to them:
+
+<list style="symbols">
+
+<t>comments -- MORE GOES HERE</t>
+
+<t>include -- MORE GOES HERE</t>
+
+</list></t>
+
+<t>Note that a Private Processor can have its own PIs.</t>
+
+</section>
+
 </section>
 
 <section title="Relax NG Schema" anchor="schema">

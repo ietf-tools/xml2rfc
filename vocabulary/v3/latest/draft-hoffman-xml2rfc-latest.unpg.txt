@@ -135,7 +135,9 @@ Table of Contents
      A.2.  The /rfc/@ipr Attribute
        A.2.1.  Current Values: '*trust200902'
        A.2.2.  Historic Values
-   Appendix B.  Relax NG Schema
+   Appendix B.  The v3 Format and Processors
+     B.1.  Processor Instructions
+   Appendix C.  Relax NG Schema
    Index
 
 1.  Introduction
@@ -320,7 +322,7 @@ Table of Contents
 1.2.  Syntax Notation
 
    The XML vocabulary here is defined in prose, based on the Relax NG
-   schema ([RNC]) contained in Appendix B (specified in Relax NG Compact
+   schema ([RNC]) contained in Appendix C (specified in Relax NG Compact
    Notation, "RNC").
 
    Note that the schema can be used for automated validity checks, but
@@ -2261,44 +2263,7 @@ Table of Contents
 
 2.58.1.  'format' attribute
 
-   This attribute is used to control the format of the generated
-   reference text.
-
-   "counter"
-
-      Inserts just a counter; this use used for the number of a section,
-      figure, or table.  For example:
-
-     <section anchor="overview">Protocol Overview</section>
-     . . .
-     See Section <xref target="overview" format="counter"/>
-     for an overview.
-
-      might generate
-
-     See Section 1.7 for an overview.
-
-   "default"
-
-      Inserts a text fragment that describes the referenced part
-      completely, such as "Section 2" or "Table 4" for internal links,
-      or "[XML]" for links to references.  For example:
-
-     <section anchor="overview">Protocol Overview</section>
-     . . .
-     See <xref target="overview"/> for an overview.
-
-      might generate
-
-     See Section 1.7 for an overview.
-
-   "none"
-
-      This attribute value is deprecated.
-
-   "title"
-
-      This attribute value is deprecated.
+   Deprecated
 
    Allowed values:
 
@@ -2322,38 +2287,23 @@ Table of Contents
 
 2.58.3.  'relative' attribute
 
-   Specifies a relative reference from the main target. [[anchor3: NEED
-   MORE DESCRIPTION HERE ABOUT HOW THIS WILL BE DISPLAYED.]]
+   [[element.xref.attribute.relative.missing: attribute description
+   missing]]
 
 2.58.4.  'section' attribute
 
-   Specifies a section for the generated reference.
+   Specifies a section for the generated reference.  For example,
 
-2.58.5.  'sectionFormat' attribute
-
-   The format that the section reference will be displayed in.  The
-   acceptable values are:
-
-   o  "of" (default)
-
-   o  "comma"
-
-   o  "parens"
-
-   For example:
-
-     See <xref target="RFC6949" section="2.3" sectionFormat="of"/>
-     for more inforation.
-     See <xref target="RFC6949" section="2.4" sectionFormat="comma"/>
-     for more inforation.
-     See <xref target="RFC6949" section="2.5" sectionFormat="parens"/>
-     for more inforation.
+        See <xref section="2.3" target="RFC6949"/> for more inforation.
 
    would generate
 
         See Section 2.3 of [RFC6949] for more information.
-        See [RFC6949], Section 2.4 for more information.
-        See [RFC6949] (Section 2.5) for more information.
+
+2.58.5.  'sectionFormat' attribute
+
+   [[element.xref.attribute.sectionFormat.missing: attribute description
+   missing]]
 
 2.58.6.  'target' attribute (mandatory)
 
@@ -2364,7 +2314,7 @@ Table of Contents
 
 3.  Special Unicode Code Points
 
-   [[anchor4: Explain those code points where the processors implement
+   [[anchor3: Explain those code points where the processors implement
    something special, such as "nbsp".]]
 
 4.  Internationalization Considerations
@@ -2525,6 +2475,10 @@ Table of Contents
    [RFC6266]    Reschke, J., "Use of the Content-Disposition Header
                 Field in the Hypertext Transfer Protocol (HTTP)",
                 RFC 6266, June 2011.
+
+   [RFC6949]    Flanagan, H. and N. Brownlee, "RFC Series Format
+                Requirements and Future Development", RFC 6949,
+                May 2013.
 
    [RFCPOLICY]  RFC Editor, "RFC Editorial Guidelines and Procedures",
                 <http://www.rfc-editor.org/policy.html>.
@@ -2706,7 +2660,62 @@ A.2.2.4.  Historic Values: '*2026'
    The special value "none" was also used back then, and denied the IETF
    any rights beyond publication as Internet-Draft.
 
-Appendix B.  Relax NG Schema
+Appendix B.  The v3 Format and Processors
+
+   As described in [RFC6949], the v3 format will be the format for
+   canonical RFCs.  The format will also likely be allowed for
+   submission of Internet Drafts.  The format for both of these tasks is
+   the same; however, software processing an XML file for creation of an
+   Internet Draft will act differently than it will for creation of what
+   is expected to be an RFC.
+
+   This section describes topics that ares specific to processors.  Note
+   that there is some discussion of processors in the main body of the
+   document as well.  For example, some elements have descriptions of
+   how a processor might create output from the element.
+
+   This section differentiates between three types of processors:
+
+   o  RFC Processor -- The processor used by the RFC Editor to validate
+      the contents of the intended RFC and to create the non-canonical
+      formats.
+
+   o  Draft Processor -- The processor used by the IETF to validate the
+      contents of XML that is submitted and to create the other formats
+      that will be supported for Internet Drafts.
+
+   o  Private Processors -- There may be processors that are meant to
+      run on the computers of authors that create documents in formats
+      different than those supported by the RFC Editor and the Internet
+      Drafts repository.
+
+B.1.  Processor Instructions
+
+   In the v2 format, XML Processor Instructions (PIs) were used for a
+   wide variety of tasks, including changing some formatting of the text
+   outputs, adding information to HTML versions of Internet Drafts, and
+   specifying other instructions to processors.  In the v3 format, a
+   much smaller set of PIs is supported for the Draft Processor and
+   Private Processors.  It is important to note that canonical RFCs will
+   not contain any PIs.
+
+   The following PIs will be supported by the Draft Processor:
+
+   o  linefile -- MORE GOES HERE
+
+   o  editing -- MORE GOES HERE
+
+   The following PIs will not be supported by the Draft Processor, but
+   are included so that Private Processors have a common way of
+   referring to them:
+
+   o  comments -- MORE GOES HERE
+
+   o  include -- MORE GOES HERE
+
+   Note that a Private Processor can have its own PIs.
+
+Appendix C.  Relax NG Schema
 
 
    namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -3710,11 +3719,6 @@ Index
          section attribute  1
          sectionFormat attribute  1
          target attribute  1
-      xref formats
-         counter  1
-         default  1
-         none  1
-         title  1
 
    Y
       year attribute
