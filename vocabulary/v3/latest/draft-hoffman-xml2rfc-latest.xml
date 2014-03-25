@@ -24,14 +24,6 @@ Not doing:
 	What happens with <t> currently, both inside and outside lists?
 		The text doesn't indicate where the list is. That sucks.
 
-Deal with PIs as part of the v3 vocabulary; message sent to rfc-interest 2014-03-18; response on 2014-03-20
-
-	Figure out what to do with section/@toc="default"
-
-	Document the include="file" PI for other processors
-
-	when encountering an error, the processor will give more context than just a line number
-
 Consider
 	<reference url="http://....."/>
 	<reference include='reference.I-D.draft-flanagan-style'/>
@@ -46,6 +38,7 @@ Discussion of v3 processors:
     	Figure numbers
 	    Table numbers
     	IPR boilerplate
+	when encountering an error, the processor will give more context than just a line number
 
 Non-ASCII
 	Resolve discussion of markup for Unicode characters and their equivalents
@@ -2673,11 +2666,16 @@ and the others are the RFCs that make up the STD</c>
       <iref item="section element" subitem="toc attribute"/>
       <iref item="toc attribute" subitem="in section element"/>
       <t>
-            Determines whether the section is included in the Table Of Contents.
+            Indicates to a processor whether or not the section is to be included in the
+            table of contents. This only takes effect if the level of the section would have
+            appeared in the table of contents based on the "tocDepth" attribute of the
+            &lt;<x:ref>rfc</x:ref>&gt; element, and of course only if the table of contents
+            is being created based on the "tocInclude" attribute of the
+            &lt;<x:ref>rfc</x:ref>&gt; element. If this is set to "exclude", any section
+            below this one will be excluded as well. The "default" value indicates to
+            include the section if it would be included by the tocDepth attribute of the
+            &lt;<x:ref>rfc</x:ref>&gt; element.
          </t>
-      <t>
-         <cref>Need to consider inheritance.</cref>
-      </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"include"</t>
             <t>"exclude"</t>

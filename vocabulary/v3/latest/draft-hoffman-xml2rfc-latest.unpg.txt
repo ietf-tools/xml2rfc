@@ -1885,9 +1885,15 @@ Table of Contents
 
 2.44.5.  'toc' attribute
 
-   Determines whether the section is included in the Table Of Contents.
-
-   [[anchor2: Need to consider inheritance.]]
+   Indicates to a processor whether or not the section is to be included
+   in the table of contents.  This only takes effect if the level of the
+   section would have appeared in the table of contents based on the
+   "tocDepth" attribute of the <rfc> element, and of course only if the
+   table of contents is being created based on the "tocInclude"
+   attribute of the <rfc> element.  If this is set to "exclude", any
+   section below this one will be excluded as well.  The "default" value
+   indicates to include the section if it would be included by the
+   tocDepth attribute of the <rfc> element.
 
    Allowed values:
 
@@ -2363,7 +2369,7 @@ Table of Contents
 
 2.58.3.  'relative' attribute
 
-   Specifies a relative reference from the main target. [[anchor3: NEED
+   Specifies a relative reference from the main target. [[anchor2: NEED
    MORE DESCRIPTION HERE ABOUT HOW THIS WILL BE DISPLAYED.]]
 
 2.58.4.  'section' attribute
@@ -2411,7 +2417,7 @@ Table of Contents
 
 3.  Special Unicode Code Points
 
-   [[anchor4: Explain those code points where the processors implement
+   [[anchor3: Explain those code points where the processors implement
    something special, such as "nbsp".]]
 
 4.  Internationalization Considerations
