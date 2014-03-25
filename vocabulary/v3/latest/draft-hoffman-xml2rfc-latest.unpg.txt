@@ -1754,7 +1754,18 @@ Table of Contents
    When producing a document within document series (such as "STD"): the
    number within that series.
 
-2.43.9.  'submissionType' attribute
+2.43.9.  'sortRefs' attribute
+
+   [[element.rfc.attribute.sortRefs.missing: attribute description
+   missing]]
+
+   Allowed values:
+
+   o  "yes"
+
+   o  "no" (default)
+
+2.43.10.  'submissionType' attribute
 
    The document stream.
 
@@ -1770,11 +1781,38 @@ Table of Contents
 
    o  "independent"
 
-2.43.10.  'updates' attribute
+2.43.11.  'symRefs' attribute
+
+   [[element.rfc.attribute.symRefs.missing: attribute description
+   missing]]
+
+   Allowed values:
+
+   o  "yes" (default)
+
+   o  "no"
+
+2.43.12.  'tocDepth' attribute
+
+   [[element.rfc.attribute.tocDepth.missing: attribute description
+   missing]]
+
+2.43.13.  'tocInclude' attribute
+
+   [[element.rfc.attribute.tocInclude.missing: attribute description
+   missing]]
+
+   Allowed values:
+
+   o  "yes" (default)
+
+   o  "no"
+
+2.43.14.  'updates' attribute
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
-2.43.11.  'xml:lang' attribute
+2.43.15.  'xml:lang' attribute
 
    The natural language used in the document (defaults to "en").
 
@@ -2231,7 +2269,7 @@ Table of Contents
    boilerplate, replacing the "Network Working Group" string.
    Formatting software can append the words "Working Group" or "Research
    Group", depending on the "submissionType" property on the <rfc>
-   element (Section 2.43.9).
+   element (Section 2.43.10).
 
    This element appears as child element of: <front> (Section 2.24).
 
@@ -2263,7 +2301,44 @@ Table of Contents
 
 2.58.1.  'format' attribute
 
-   Deprecated
+   This attribute is used to control the format of the generated
+   reference text.
+
+   "counter"
+
+      Inserts just a counter; this use used for the number of a section,
+      figure, or table.  For example:
+
+     <section anchor="overview">Protocol Overview</section>
+     . . .
+     See Section <xref target="overview" format="counter"/>
+     for an overview.
+
+      might generate
+
+     See Section 1.7 for an overview.
+
+   "default"
+
+      Inserts a text fragment that describes the referenced part
+      completely, such as "Section 2" or "Table 4" for internal links,
+      or "[XML]" for links to references.  For example:
+
+     <section anchor="overview">Protocol Overview</section>
+     . . .
+     See <xref target="overview"/> for an overview.
+
+      might generate
+
+     See Section 1.7 for an overview.
+
+   "none"
+
+      This attribute value is deprecated.
+
+   "title"
+
+      This attribute value is deprecated.
 
    Allowed values:
 
@@ -2287,8 +2362,8 @@ Table of Contents
 
 2.58.3.  'relative' attribute
 
-   [[element.xref.attribute.relative.missing: attribute description
-   missing]]
+   Specifies a relative reference from the main target. [[anchor3: NEED
+   MORE DESCRIPTION HERE ABOUT HOW THIS WILL BE DISPLAYED.]]
 
 2.58.4.  'section' attribute
 
@@ -2302,8 +2377,29 @@ Table of Contents
 
 2.58.5.  'sectionFormat' attribute
 
-   [[element.xref.attribute.sectionFormat.missing: attribute description
-   missing]]
+   The format that the section reference will be displayed in.  The
+   acceptable values are:
+
+   o  "of" (default)
+
+   o  "comma"
+
+   o  "parens"
+
+   For example:
+
+     See <xref target="RFC6949" section="2.3" sectionFormat="of"/>
+     for more inforation.
+     See <xref target="RFC6949" section="2.4" sectionFormat="comma"/>
+     for more inforation.
+     See <xref target="RFC6949" section="2.5" sectionFormat="parens"/>
+     for more inforation.
+
+   would generate
+
+        See Section 2.3 of [RFC6949] for more information.
+        See [RFC6949], Section 2.4 for more information.
+        See [RFC6949] (Section 2.5) for more information.
 
 2.58.6.  'target' attribute (mandatory)
 
@@ -2314,7 +2410,7 @@ Table of Contents
 
 3.  Special Unicode Code Points
 
-   [[anchor3: Explain those code points where the processors implement
+   [[anchor4: Explain those code points where the processors implement
    something special, such as "nbsp".]]
 
 4.  Internationalization Considerations
@@ -2754,6 +2850,11 @@ Appendix C.  Relax NG Schema
        }?,
        attribute docName { text }?,
        [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+       [ a:defaultValue = "no" ] attribute sortRefs { "yes" | "no" }?,
+       [ a:defaultValue = "yes" ] attribute symRefs { "yes" | "no" }?,
+       [ a:defaultValue = "yes" ] attribute tocInclude { "yes" | "no"
+   }?,
+       [ a:defaultValue = "3" ] attribute tocDepth { text }?,
        front,
        middle,
        back?
@@ -3167,6 +3268,7 @@ Index
          sectionFormat  1
          series  1
          seriesNo  1
+         sortRefs  1
          source  1
          spacing  1
          src  1
@@ -3176,9 +3278,12 @@ Index
          submissionType  1
          suppress-title  1
          surname  1
+         symRefs  1
          target  1
          title  1
          toc  1
+         tocDepth  1
+         tocInclude  1
          type  1
          updates  1
          value  1
@@ -3543,7 +3648,11 @@ Index
          number attribute  1
          obsoletes attribute  1
          seriesNo attribute  1
+         sortRefs attribute  1
          submissionType attribute  1
+         symRefs attribute  1
+         tocDepth attribute  1
+         tocInclude attribute  1
          updates attribute  1
          xml:lang attribute  1
       role attribute
@@ -3569,6 +3678,8 @@ Index
          name attribute  1
          value attribute  1
       seriesNo attribute
+         in rfc element  1
+      sortRefs attribute
          in rfc element  1
       source attribute
          in cref element  1
@@ -3605,6 +3716,8 @@ Index
          in texttable element  1
       surname attribute
          in author element  1
+      symRefs attribute
+         in rfc element  1
 
    T
       t element  1
@@ -3640,6 +3753,10 @@ Index
          inside front  1
       toc attribute
          in section element  1
+      tocDepth attribute
+         in rfc element  1
+      tocInclude attribute
+         in rfc element  1
       tt element  1
          inside annotation  1
          inside b  1
@@ -3719,6 +3836,11 @@ Index
          section attribute  1
          sectionFormat attribute  1
          target attribute  1
+      xref formats
+         counter  1
+         default  1
+         none  1
+         title  1
 
    Y
       year attribute

@@ -2174,6 +2174,21 @@ and the others are the RFCs that make up the STD</c>
          </t>
    </section>
 
+   <!--rfc/@sortRefs-->
+   <section title="'sortRefs' attribute" anchor="element.rfc.attribute.sortRefs" toc="exclude">
+      <iref item="Attributes" subitem="sortRefs"/>
+      <iref item="rfc element" subitem="sortRefs attribute"/>
+      <iref item="sortRefs attribute" subitem="in rfc element"/>
+      <t><!--AG-->
+         <cref anchor="element.rfc.attribute.sortRefs.missing">attribute description missing</cref>
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"yes"</t>
+            <t>"no" (default)</t>
+         </list>
+      </t>
+   </section>
+
    <!--rfc/@submissionType-->
    <section title="'submissionType' attribute" anchor="element.rfc.attribute.submissionType" toc="exclude">
       <iref item="Attributes" subitem="submissionType"/>
@@ -2190,6 +2205,46 @@ and the others are the RFCs that make up the STD</c>
             <t>"IAB"</t>
             <t>"IRTF"</t>
             <t>"independent"</t>
+         </list>
+      </t>
+   </section>
+
+   <!--rfc/@symRefs-->
+   <section title="'symRefs' attribute" anchor="element.rfc.attribute.symRefs" toc="exclude">
+      <iref item="Attributes" subitem="symRefs"/>
+      <iref item="rfc element" subitem="symRefs attribute"/>
+      <iref item="symRefs attribute" subitem="in rfc element"/>
+      <t><!--AG-->
+         <cref anchor="element.rfc.attribute.symRefs.missing">attribute description missing</cref>
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"yes" (default)</t>
+            <t>"no"</t>
+         </list>
+      </t>
+   </section>
+
+   <!--rfc/@tocDepth-->
+   <section title="'tocDepth' attribute" anchor="element.rfc.attribute.tocDepth" toc="exclude">
+      <iref item="Attributes" subitem="tocDepth"/>
+      <iref item="rfc element" subitem="tocDepth attribute"/>
+      <iref item="tocDepth attribute" subitem="in rfc element"/>
+      <t><!--AG-->
+         <cref anchor="element.rfc.attribute.tocDepth.missing">attribute description missing</cref>
+      </t>
+   </section>
+
+   <!--rfc/@tocInclude-->
+   <section title="'tocInclude' attribute" anchor="element.rfc.attribute.tocInclude" toc="exclude">
+      <iref item="Attributes" subitem="tocInclude"/>
+      <iref item="rfc element" subitem="tocInclude attribute"/>
+      <iref item="tocInclude attribute" subitem="in rfc element"/>
+      <t><!--AG-->
+         <cref anchor="element.rfc.attribute.tocInclude.missing">attribute description missing</cref>
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"yes" (default)</t>
+            <t>"no"</t>
          </list>
       </t>
    </section>
@@ -2947,7 +3002,74 @@ and the others are the RFCs that make up the STD</c>
       <iref item="xref element" subitem="format attribute"/>
       <iref item="format attribute" subitem="in xref element"/>
       <t>
-        Deprecated
+        This attribute is used to control the format of the generated 
+        reference text.
+      </t>
+      <t>
+         <iref item="xref formats" subitem="counter" primary="true"/>
+        "counter"
+        <list style="empty">
+            <t>
+            Inserts just a counter; this use used for the number of a section, figure, or
+            table. For example:
+<figure>
+                  <artwork>
+  &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
+  . . .
+  See Section &lt;xref target="overview" format="counter"/&gt;
+  for an overview.
+</artwork>
+               </figure>
+         might generate
+<figure>
+                  <artwork>
+  See Section 1.7 for an overview.
+</artwork>
+               </figure>
+            </t>
+         </list>
+      </t>
+      <t>
+         <iref item="xref formats" subitem="default" primary="true"/>
+        "default"
+        <list style="empty">
+            <t>
+            Inserts a text fragment that describes the referenced part 
+            completely, such as "Section 2" or "Table 4" for internal
+            links, or "[XML]" for links to references. For example:
+<figure>
+                  <artwork>
+  &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
+  . . .
+  See &lt;xref target="overview"/&gt; for an overview.
+</artwork>
+               </figure>
+         might generate
+<figure>
+                  <artwork>
+  See Section 1.7 for an overview.
+</artwork>
+               </figure>
+            </t>
+         </list>
+      </t>
+      <t>
+         <iref item="xref formats" subitem="none" primary="true"/>
+        "none"
+        <list style="empty">
+            <t>
+            This attribute value is deprecated.
+          </t>
+         </list>
+      </t>
+      <t>
+         <iref item="xref formats" subitem="title" primary="true"/>
+        "title"
+        <list style="empty">
+            <t>
+            This attribute value is deprecated.
+          </t>
+         </list>
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"counter"</t>
@@ -2978,8 +3100,9 @@ and the others are the RFCs that make up the STD</c>
       <iref item="Attributes" subitem="relative"/>
       <iref item="xref element" subitem="relative attribute"/>
       <iref item="relative attribute" subitem="in xref element"/>
-      <t><!--AG-->
-         <cref anchor="element.xref.attribute.relative.missing">attribute description missing</cref>
+      <t>
+         Specifies a relative reference from the main target.  <cref>NEED MORE DESCRIPTION
+         HERE ABOUT HOW THIS WILL BE DISPLAYED.</cref>
       </t>
    </section>
 
@@ -3009,8 +3132,32 @@ would generate
       <iref item="Attributes" subitem="sectionFormat"/>
       <iref item="xref element" subitem="sectionFormat attribute"/>
       <iref item="sectionFormat attribute" subitem="in xref element"/>
-      <t><!--AG-->
-         <cref anchor="element.xref.attribute.sectionFormat.missing">attribute description missing</cref>
+      <t>
+         The format that the section reference will be displayed in. The acceptable values are:
+         <list style="symbols">
+            <t>"of" (default)</t>
+            <t>"comma"</t>
+            <t>"parens"</t>
+         </list>
+         For example:
+<figure>
+            <artwork>
+  See &lt;xref target="RFC6949" section="2.3" sectionFormat="of"/&gt;
+  for more inforation.
+  See &lt;xref target="RFC6949" section="2.4" sectionFormat="comma"/&gt;
+  for more inforation.
+  See &lt;xref target="RFC6949" section="2.5" sectionFormat="parens"/&gt;
+  for more inforation.
+</artwork>
+         </figure>
+         would generate
+<figure>
+            <artwork>
+     See Section 2.3 of [RFC6949] for more information.
+     See [RFC6949], Section 2.4 for more information.
+     See [RFC6949] (Section 2.5) for more information.
+</artwork>
+         </figure>
       </t>
    </section>
 
