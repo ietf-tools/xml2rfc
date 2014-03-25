@@ -29,9 +29,6 @@ Consider
 	<reference include='reference.I-D.draft-flanagan-style'/>
 
 Discussion of v3 processors:
-	Restrictions for v3 documents published as RFCs
-		No comments, PIs, or deprecated elements/attributes
-		No external includes of any kind
 	All auto-generated text that appears in the other formats needs to also exist in the canonical XML file as well.
 		The auto-generated text needs its own markup. 
 	    Section numbers
@@ -4117,9 +4114,20 @@ and the Internet Drafts repository.</t>
 
 </list></t>
 
+<section title="The RFC Processor">
+
+<t>The canonical format for RFCs have a number of restrictions that the RFC Processor needs to enforce.
+The processor will give a hard error when an input XML file has any XML comments or any XML Processor
+Instructions (PIs). Further, the processor will give a hard error if the input XML file has any
+external include of any kind such as an external DTD or ENTITYs that have a SYSTEM component.
+The RFC Processor will also give hard errors when any element or attribute listed as
+"deprecated" in the v3 vocabulary is present in the XML input file.</t>
+
+</section>
+
 <section title="Processor Instructions">
 
-<t>In the v2 format, XML Processor Instructions (PIs) were used for a wide variety of tasks,
+<t>In the v2 format, XML PIs were used for a wide variety of tasks,
 including changing some formatting of the text outputs, adding information to HTML versions
 of Internet Drafts, and specifying other instructions to processors. In the v3 format, a much
 smaller set of PIs is supported for the Draft Processor and Private Processors. It is important

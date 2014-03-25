@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                             March 24, 2014
+Obsoletes: 2629 (if approved)                             March 25, 2014
 Intended status: Standards Track
-Expires: September 25, 2014
+Expires: September 26, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 25, 2014.
+   This Internet-Draft will expire on September 26, 2014.
 
 Copyright Notice
 
@@ -136,7 +136,8 @@ Table of Contents
        A.2.1.  Current Values: '*trust200902'
        A.2.2.  Historic Values
    Appendix B.  The v3 Format and Processors
-     B.1.  Processor Instructions
+     B.1.  The RFC Processor
+     B.2.  Processor Instructions
    Appendix C.  Relax NG Schema
    Index
 
@@ -2792,15 +2793,26 @@ Appendix B.  The v3 Format and Processors
       different than those supported by the RFC Editor and the Internet
       Drafts repository.
 
-B.1.  Processor Instructions
+B.1.  The RFC Processor
 
-   In the v2 format, XML Processor Instructions (PIs) were used for a
-   wide variety of tasks, including changing some formatting of the text
-   outputs, adding information to HTML versions of Internet Drafts, and
-   specifying other instructions to processors.  In the v3 format, a
-   much smaller set of PIs is supported for the Draft Processor and
-   Private Processors.  It is important to note that canonical RFCs will
-   not contain any PIs.
+   The canonical format for RFCs have a number of restrictions that the
+   RFC Processor needs to enforce.  The processor will give a hard error
+   when an input XML file has any XML comments or any XML Processor
+   Instructions (PIs).  Further, the processor will give a hard error if
+   the input XML file has any external include of any kind such as an
+   external DTD or ENTITYs that have a SYSTEM component.  The RFC
+   Processor will also give hard errors when any element or attribute
+   listed as "deprecated" in the v3 vocabulary is present in the XML
+   input file.
+
+B.2.  Processor Instructions
+
+   In the v2 format, XML PIs were used for a wide variety of tasks,
+   including changing some formatting of the text outputs, adding
+   information to HTML versions of Internet Drafts, and specifying other
+   instructions to processors.  In the v3 format, a much smaller set of
+   PIs is supported for the Draft Processor and Private Processors.  It
+   is important to note that canonical RFCs will not contain any PIs.
 
    The following PIs will be supported by the Draft Processor:
 
