@@ -179,7 +179,7 @@ because they overlap with the attributes in &lt;<x:ref>artwork</x:ref>&gt;.</t>
 and &lt;<x:ref>ol</x:ref>&gt;.</t>
 
 <t>In &lt;<x:ref>postal</x:ref>&gt;, allowed the sub-elements to be in any order. Also allowed the inclusion
-of &lt;<x:ref>postalline</x:ref>&gt; instead of the older elements.</t>
+of &lt;<x:ref>postalline</x:ref>&gt; instead of the older elements. Also added optional "xml:lang" attribute.</t>
 
 <t>Added &lt;<x:ref>postalline</x:ref>&gt;, free text that represents one line of the address.</t>
 
@@ -1991,6 +1991,17 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
          </x:lt>
       </list>
    </t>
+
+   <!--postal/@xml:lang-->
+   <section title="'xml:lang' attribute" anchor="element.postal.attribute.xml-lang" toc="exclude">
+      <iref item="Attributes" subitem="xml:lang"/>
+      <iref item="postal element" subitem="xml:lang attribute"/>
+      <iref item="xml:lang attribute" subitem="in postal element"/>
+      <t>
+            Allows specification of the language used. This is sometimes useful for renderers which display
+            different fonts for CJK characters.
+      </t>
+   </section>
 </section>
 
 <!--postalline-->
@@ -4262,7 +4273,8 @@ address =
   element address { (postal | phone | facsimile | email | uri)* }
 postal =
   element postal {
-    (street | city | region | code | country)* | postalline+
+    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+    ((street | city | region | code | country)* | postalline+)
   }
 street = element street { text }
 city = element city { text }

@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                             March 25, 2014
+Obsoletes: 2629 (if approved)                             March 26, 2014
 Intended status: Standards Track
-Expires: September 26, 2014
+Expires: September 27, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 26, 2014.
+   This Internet-Draft will expire on September 27, 2014.
 
 Copyright Notice
 
@@ -204,7 +204,7 @@ Table of Contents
    The list of changes so far is:
 
    o  Did not generate the grammar from a DTD, but instead directly from
-      the RNG grammar.
+      the Relax Next Generation (RNG) grammar.
 
    o  In <address>, allowed the sub-elements to be in any order.
 
@@ -243,7 +243,7 @@ Table of Contents
 
    o  In <postal>, allowed the sub-elements to be in any order.  Also
       allowed the inclusion of <postalline> instead of the older
-      elements.
+      elements.  Also added optional "xml:lang" attribute.
 
    o  Added <postalline>, free text that represents one line of the
       address.
@@ -280,7 +280,7 @@ Table of Contents
       <xref>.
 
    o  Added "ascii" attributes to <author>, <email>, and <organization>
-      elements.  This allows an athor to specify their information in
+      elements.  This allows an author to specify their information in
       their native scripts as the primary entry and still allow the
       ASCII-equivalent values to appear in the processed documents.
 
@@ -291,18 +291,18 @@ Table of Contents
    references in most recent RFCs are just to RFCs; sometimes they are
    Internet Drafts as work-in-progress; much less often they are
    pointers to standards of other SDOs, research articles, or just plain
-   URLs.  There have been many complaints about how difficult it is for
+   URIs.  There have been many complaints about how difficult it is for
    people who don't have strong XML skills to use references when making
    Internet Drafts.
 
    The two popular methods now for references to RFCs are entering the
    whole reference by hand (hopefully getting all the fiddly bits of
    <front> and <seriesInfo> correct), or using XML entities that call
-   out the xml.resource.org.  Both work, but both have their faults.
-   The first requires good copying skills and sometimes causes difficult
-   XML errors; the second prevents you from changing the anchor name
-   and, less importantly, also requires that you be online when you run
-   the xml2rfc processor.
+   out to xml.resource.org.  Both work, but both have their faults.  The
+   first requires good copying skills and sometimes causes difficult XML
+   errors; the second prevents you from changing the anchor name and,
+   less importantly, also requires that you be online when you run the
+   xml2rfc processor.
 
    To make entering references easier for the vast majority of cases,
    the following changes have been made in the v3 vocabulary:
@@ -340,16 +340,15 @@ Table of Contents
 
    Note that attributes not labeled "mandatory" are optional.
 
-   Many elements have an optional "anchor" attribute.  In all cases, The
+   Many elements have an optional "anchor" attribute.  In all cases, the
    value of the "anchor" attribute needs to be a valid XML "Name"
    (Section 2.3 of [XML]).  In short, it is a text string with no spaces
    or colons; hyphens and underscores are allowed.
 
 2.1.  <abstract>
 
-   Contains the abstract of the document.  The abstract ought to be
-   self-contained and thus should not contain references or unexpanded
-   abbreviations.  See [RFCSTYLE] for more information.
+   Contains the abstract of the document.  See [RFCSTYLE] for more
+   information on restrictions for the abstract.
 
    This element appears as child element of: <front> (Section 2.24).
 
@@ -420,11 +419,12 @@ Table of Contents
    (currently not used when generating documents).
 
    The value ought to be either the fullname or the abbreviation of one
-   of the IETF areas as listed on <http://www.ietf.org/iesg/area.html>:
+   of the IETF areas as listed on <http://www.ietf.org/iesg/area.html>.
+   The list at the time that this document is being published is:
    "Applications", "app", "General", "gen", "Internet", "int",
    "Operations and Management", "ops", "Real-time Applications and
    Infrastructure", "rai", "Routing", "rtg", "Security", "sec",
-   "Transport", "tsv".
+   "Transport", "tsv", but that list will likely change over time.
 
    This element appears as child element of: <front> (Section 2.24).
 
@@ -506,7 +506,7 @@ Table of Contents
    The URI of a graphics file.
 
    Note that this can be a "data" URI ([RFC2397]) as well, in which case
-   the graphics file essentially is in-lined.
+   the graphics file is wholly part of the XML file.
 
 2.5.6.  'type' attribute
 
@@ -541,7 +541,7 @@ Table of Contents
 
    o  python
 
-   The RFC Editor will mainatin a complete list of the preferred values
+   The RFC Editor will maintain a complete list of the preferred values
    on its web site, and that list is expected to be updated over time.
    Thus, a consumer of v3 XML should not cause a failure when it
    encounters an unexpected type.
@@ -676,7 +676,7 @@ Table of Contents
 2.9.  <blockquote>
 
    Specifies a block of text is a quotation.  The "cite" attribute is
-   required, and must be a URL.
+   required, and must be a URI.
 
    Content model:
 
@@ -701,8 +701,8 @@ Table of Contents
 
 2.9.2.  'cite' attribute (mandatory)
 
-   The source of the citation.  This must be a URL.  NEEDS AN EXAMPLE OF
-   A CITE FOR A REFERENCE THAT IS ALREADY IN THE SPEC.
+   The source of the citation.  This must be a URI. [[anchor2: NEEDS AN
+   EXAMPLE OF A CITE FOR A REFERENCE THAT IS ALREADY IN THE SPEC.]]
 
 2.10.  <c>
 
@@ -839,7 +839,7 @@ Table of Contents
 
 2.16.  <dd>
 
-   The definition part of a entry in a definition list.
+   The definition part of an entry in a definition list.
 
    This element appears as child element of: <dl> (Section 2.17).
 
@@ -874,7 +874,7 @@ Table of Contents
 2.17.  <dl>
 
    A definition list.  Each entry has a pair of elements: a term (<dt>)
-   and a defintion (<dd>).
+   and a definition (<dd>).
 
    This element appears as child element of: <li> (Section 2.29), and
    <t> (Section 2.48).
@@ -912,7 +912,7 @@ Table of Contents
 
 2.18.  <dt>
 
-   The definition part of a entry in a definition list.
+   The definition part of an entry in a definition list.
 
    This element appears as child element of: <dl> (Section 2.17).
 
@@ -1435,6 +1435,11 @@ Table of Contents
 
    o  One or more <postalline> elements (Section 2.37)
 
+2.36.1.  'xml:lang' attribute
+
+   Allows specification of the language used.  This is sometimes useful
+   for renderers which display different fonts for CJK characters.
+
 2.37.  <postalline>
 
    Represents one line of a postal address.  When more than one
@@ -1517,7 +1522,7 @@ Table of Contents
    specifics for the reference other than a simple specification of the
    reference.
 
-   For example, a refernence to RFC 6068 is given as either:
+   For example, a reference to RFC 6068 is given as either:
 
    <reference anchor="RFC6068">
      <front>
@@ -1537,7 +1542,7 @@ Table of Contents
    The values for the "series" attribute are:
 
    +----------+------------------------+-------------------------------+
-   | Value    | Value for "document    | Example                       |
+   | Value    | Value for "document"   | Example                       |
    | for      |                        |                               |
    | "series" |                        |                               |
    +----------+------------------------+-------------------------------+
@@ -1561,9 +1566,12 @@ Table of Contents
    | ccitt    | document name and year | "X690.2002"                   |
    | fips     | document name and year | "500-166.1989"                |
    | ieee     | document name and year | "802-11H.2003"                |
+   | ien      | number                 | "23"                          |
    | iso      | document name and year | "8859-6.1988"                 |
    | itu      | document name and year | "X509.2000"                   |
    | nist     | document name and year | "500-214.1993"                |
+   | oasis    | document name (and     | "TBD"                         |
+   |          | year?)                 |                               |
    | pkcs     | document name and year | "9.1993"                      |
    | w3c      | document name (and     | "TBD"                         |
    |          | year?)                 |                               |
@@ -1742,7 +1750,7 @@ Table of Contents
 
 2.43.5.  'iprExtract' attribute
 
-   Identifies a Section within the document for which extraction "as-is"
+   Identifies a section within the document for which extraction "as-is"
    is explicitly allowed (only relevant for historic values of the "ipr"
    attribute).
 
@@ -2138,8 +2146,8 @@ Table of Contents
 
    When this element appears in the <front> element of the current
    document, the title might also appear in page headers or footers.  If
-   it's long (~40 characters), the "abbrev" attribute is used to
-   specified an abbreviated variant.
+   it's long (~40 characters), the "abbrev" attribute is used to specify
+   an abbreviated variant.
 
    This element appears as child element of: <front> (Section 2.24).
 
@@ -2273,9 +2281,10 @@ Table of Contents
 
 2.57.  <workgroup>
 
-   This element is used to specify the Working Group the document
-   originates from, if any.  The recommended format is the official name
-   of the Working Group (with some capitalization).
+   This element is used to specify the Working Group (IETF) or Research
+   Group (IRTF) from which the document originates, if any.  The
+   recommended format is the official name of the Working Group (with
+   some capitalization).
 
    In Internet-Drafts, this is used in the upper left corner of the
    boilerplate, replacing the "Network Working Group" string.
@@ -2374,7 +2383,7 @@ Table of Contents
 
 2.58.3.  'relative' attribute
 
-   Specifies a relative reference from the main target. [[anchor2: NEED
+   Specifies a relative reference from the main target. [[anchor3: NEED
    MORE DESCRIPTION HERE ABOUT HOW THIS WILL BE DISPLAYED.]]
 
 2.58.4.  'section' attribute
@@ -2422,7 +2431,7 @@ Table of Contents
 
 3.  Special Unicode Code Points
 
-   [[anchor3: Explain those code points where the processors implement
+   [[anchor4: Explain those code points where the processors implement
    something special, such as "nbsp".]]
 
 4.  Internationalization Considerations
@@ -2433,7 +2442,7 @@ Table of Contents
    However, the current canonical RFC format is restricted to US-ASCII
    [USASCII] characters ([RFC2223], Section 3).  Future versions are
    likely to relax this role, and it is expected that the vocabulary
-   will be extended so that US-ACSII alternatives can be provided when
+   will be extended so that US-ASCII alternatives can be provided when
    that makes sense (for instance, in contact information).
 
 5.  Security Considerations
@@ -2634,7 +2643,7 @@ A.1.  The /rfc/@category Attribute
    For RFCs, the category determines the "maturity level" (see Section 4
    of [RFC2026]).  The allowed values are "std" for "Standards Track",
    "bcp" for "BCP", "info" for "Informational", "exp" for
-   "Experimental", and "historic" for - surprise - "Historic".
+   "Experimental", and "historic" for "Historic".
 
    For Internet-Drafts, the category attribute is not needed, but will
    appear on the front page as "Intended Status".  Supplying this
@@ -2811,10 +2820,11 @@ B.1.  The RFC Processor
    when an input XML file has any XML comments or any XML Processor
    Instructions (PIs).  Further, the processor will give a hard error if
    the input XML file has any external include of any kind such as an
-   external DTD or ENTITYs that have a SYSTEM component.  The RFC
-   Processor will also give hard errors when any element or attribute
-   listed as "deprecated" in the v3 vocabulary is present in the XML
-   input file.
+   external DTD or ENTITYs that have a SYSTEM component, or an <artwork>
+   element with a "src" attribute that points to a URI with a scheme
+   other than "data:".  The RFC Processor will also give hard errors
+   when any element or attribute listed as "deprecated" in the v3
+   vocabulary is present in the XML input file.
 
 B.2.  Processor Instructions
 
@@ -2842,7 +2852,7 @@ B.2.  Processor Instructions
    o  include -- Allows the author to combine other files into the XML
       file to complete the document. argument can be a local file name
       (with a possible prefix from the environment variables on the
-      computer) or a URL.
+      computer) or a URI.
 
    o  linefile -- Causes the processor to emit more detailed information
       about which line of which input file caused an error or warning.
@@ -2928,7 +2938,8 @@ Appendix C.  Relax NG Schema
      element address { (postal | phone | facsimile | email | uri)* }
    postal =
      element postal {
-       (street | city | region | code | country)* | postalline+
+       [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+       ((street | city | region | code | country)* | postalline+)
      }
    street = element street { text }
    city = element city { text }
@@ -3650,6 +3661,7 @@ Index
          inside address  1
       postal element  1
          inside address  1
+         xml:lang attribute  1
       postalline element  1
          inside postal  1
       postamble element  1
@@ -3849,6 +3861,7 @@ Index
       xml:lang attribute
          in artwork element  1
          in author element  1
+         in postal element  1
          in rfc element  1
       xml:space attribute
          in artwork element  1

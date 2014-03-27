@@ -6,9 +6,8 @@
    <iref item="Elements" subitem="abstract" primary="true"/>
    <iref item="abstract element" primary="true"/>
    <t>
-     Contains the abstract of the document. The abstract ought to be self-contained
-     and thus should not contain references or unexpanded abbreviations.
-     See <xref target="RFCSTYLE"/> for more information.
+     Contains the abstract of the document.
+     See <xref target="RFCSTYLE"/> for more information on restrictions for the abstract.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.abstract.contents"><!--AG-->
@@ -116,10 +115,12 @@
    </t>
    <t>
       The value ought to be either the fullname or the abbreviation of one of
-      the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>:
+      the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
+      The list at the time that this document is being published is:
       "Applications", "app", "General", "gen", "Internet", "int", "Operations
       and Management", "ops", "Real-time Applications and Infrastructure", "rai",
-      "Routing", "rtg", "Security", "sec", "Transport", "tsv".
+      "Routing", "rtg", "Security", "sec", "Transport", "tsv", but that list will likely
+      change over time.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.area.contents"><!--AG-->Content model: only text content.</t>
@@ -231,7 +232,7 @@
          </t>
       <t>
             Note that this can be a "data" URI (<xref target="RFC2397"/>) as well, in which case the graphics
-            file essentially is in-lined.
+            file is wholly part of the XML file.
          </t>
    </section>
 
@@ -262,7 +263,7 @@
             <t>perl</t>
             <t>python</t>
          </list>
-            The RFC Editor will mainatin a complete list of the preferred values on its
+            The RFC Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
             of v3 XML should not cause a failure when it encounters an unexpected type. 
          </t>
@@ -488,7 +489,7 @@
    <iref item="Elements" subitem="blockquote" primary="true"/>
    <iref item="blockquote element" primary="true"/>
    <t>
-      Specifies a block of text is a quotation. The "cite" attribute is required, and must be a URL.
+      Specifies a block of text is a quotation. The "cite" attribute is required, and must be a URI.
    </t>
    <t anchor="element.blockquote.contents"><!--AG-->
         Content model:
@@ -530,8 +531,8 @@
       <iref item="blockquote element" subitem="cite attribute"/>
       <iref item="cite attribute" subitem="in blockquote element"/>
       <t>
-         The source of the citation. This must be a URL. NEEDS AN EXAMPLE OF A CITE FOR A REFERENCE THAT IS
-         ALREADY IN THE SPEC.
+         The source of the citation. This must be a URI. <cref>NEEDS AN EXAMPLE OF A CITE FOR A REFERENCE THAT IS
+         ALREADY IN THE SPEC.</cref>
       </t>
    </section>
 </section>
@@ -746,7 +747,7 @@
    <iref item="Elements" subitem="dd" primary="true"/>
    <iref item="dd element" primary="true"/>
    <t>
-      The definition part of a entry in a definition list.
+      The definition part of an entry in a definition list.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>dl</x:ref>&gt; (<xref target="element.dl"/>).</t>
    <t anchor="element.dd.contents"><!--AG-->
@@ -798,7 +799,7 @@
    <iref item="dl element" primary="true"/>
    <t>
       A definition list. Each entry has a pair of elements: a term (&lt;<x:ref>dt</x:ref>&gt;) and
-      a defintion (&lt;<x:ref>dd</x:ref>&gt;).
+      a definition (&lt;<x:ref>dd</x:ref>&gt;).
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.dl.contents"><!--AG-->
@@ -854,7 +855,7 @@
    <iref item="Elements" subitem="dt" primary="true"/>
    <iref item="dt element" primary="true"/>
    <t>
-      The definition part of a entry in a definition list.
+      The definition part of an entry in a definition list.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>dl</x:ref>&gt; (<xref target="element.dl"/>).</t>
    <t anchor="element.dt.contents"><!--AG-->
@@ -1702,6 +1703,16 @@
          </x:lt>
       </list>
    </t>
+
+   <!--postal/@xml:lang-->
+   <section title="'xml:lang' attribute" anchor="element.postal.attribute.xml-lang" toc="exclude">
+      <iref item="Attributes" subitem="xml:lang"/>
+      <iref item="postal element" subitem="xml:lang attribute"/>
+      <iref item="xml:lang attribute" subitem="in postal element"/>
+      <t><!--AG-->
+         <cref anchor="element.postal.attribute.xml-lang.missing">attribute description missing</cref>
+      </t>
+   </section>
 </section>
 
 <!--postalline-->
@@ -1819,7 +1830,7 @@
       specification of the reference.
    </t>
    <t>
-      For example, a refernence to RFC 6068 is given as either:
+      For example, a reference to RFC 6068 is given as either:
 <figure>
          <artwork>
 &lt;reference anchor="RFC6068"&gt;
@@ -1848,7 +1859,7 @@ or
    </t>
    <texttable align="left">
       <ttcol>Value for "series"</ttcol>
-      <ttcol>Value for "document</ttcol>
+      <ttcol>Value for "document"</ttcol>
       <ttcol>Example</ttcol>
       <c>rfc</c>
       <c>number</c>
@@ -1882,6 +1893,9 @@ and the others are the RFCs that make up the STD</c>
       <c>ieee</c>
       <c>document name and year</c>
       <c>"802-11H.2003"</c>
+      <c>ien</c>
+      <c>number</c>
+      <c>"23"</c>
       <c>iso</c>
       <c>document name and year</c>
       <c>"8859-6.1988"</c>
@@ -1891,6 +1905,9 @@ and the others are the RFCs that make up the STD</c>
       <c>nist</c>
       <c>document name and year</c>
       <c>"500-214.1993"</c>
+      <c>oasis</c>
+      <c>document name (and year?)</c>
+      <c>"TBD"</c>
       <c>pkcs</c>
       <c>document name and year</c>
       <c>"9.1993"</c>
@@ -2136,7 +2153,7 @@ and the others are the RFCs that make up the STD</c>
       <iref item="rfc element" subitem="iprExtract attribute"/>
       <iref item="iprExtract attribute" subitem="in rfc element"/>
       <t>
-            Identifies a Section within the document for which extraction "as-is"
+            Identifies a section within the document for which extraction "as-is"
             is explicitly allowed (only relevant for historic values of the "ipr"
             attribute).
          </t>
@@ -2179,8 +2196,8 @@ and the others are the RFCs that make up the STD</c>
       <iref item="Attributes" subitem="sortRefs"/>
       <iref item="rfc element" subitem="sortRefs attribute"/>
       <iref item="sortRefs attribute" subitem="in rfc element"/>
-      <t><!--AG-->
-         <cref anchor="element.rfc.attribute.sortRefs.missing">attribute description missing</cref>
+      <t>
+         Specifies whether or not a processor will sort the references in each reference section.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"yes"</t>
@@ -2214,8 +2231,9 @@ and the others are the RFCs that make up the STD</c>
       <iref item="Attributes" subitem="symRefs"/>
       <iref item="rfc element" subitem="symRefs attribute"/>
       <iref item="symRefs attribute" subitem="in rfc element"/>
-      <t><!--AG-->
-         <cref anchor="element.rfc.attribute.symRefs.missing">attribute description missing</cref>
+      <t>
+         Specifies whether or not a processor will use symbolic references (such as "[RFC2119]"). If the
+         value for this is "no", the references come out as numbers (such as "[3]").
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"yes" (default)</t>
@@ -2229,8 +2247,8 @@ and the others are the RFCs that make up the STD</c>
       <iref item="Attributes" subitem="tocDepth"/>
       <iref item="rfc element" subitem="tocDepth attribute"/>
       <iref item="tocDepth attribute" subitem="in rfc element"/>
-      <t><!--AG-->
-         <cref anchor="element.rfc.attribute.tocDepth.missing">attribute description missing</cref>
+      <t>
+         Specifies number of levels of heading for a processor to include in the table of contents; the default is "3".
       </t>
    </section>
 
@@ -2239,8 +2257,8 @@ and the others are the RFCs that make up the STD</c>
       <iref item="Attributes" subitem="tocInclude"/>
       <iref item="rfc element" subitem="tocInclude attribute"/>
       <iref item="tocInclude attribute" subitem="in rfc element"/>
-      <t><!--AG-->
-         <cref anchor="element.rfc.attribute.tocInclude.missing">attribute description missing</cref>
+      <t>
+         Specifies whether or not a processor will include a table of contents in generated files.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"yes" (default)</t>
@@ -2378,11 +2396,16 @@ and the others are the RFCs that make up the STD</c>
       <iref item="section element" subitem="toc attribute"/>
       <iref item="toc attribute" subitem="in section element"/>
       <t>
-            Determines whether the section is included in the Table Of Contents.
+            Indicates to a processor whether or not the section is to be included in the
+            table of contents. This only takes effect if the level of the section would have
+            appeared in the table of contents based on the "tocDepth" attribute of the
+            &lt;<x:ref>rfc</x:ref>&gt; element, and of course only if the table of contents
+            is being created based on the "tocInclude" attribute of the
+            &lt;<x:ref>rfc</x:ref>&gt; element. If this is set to "exclude", any section
+            below this one will be excluded as well. The "default" value indicates to
+            include the section if it would be included by the tocDepth attribute of the
+            &lt;<x:ref>rfc</x:ref>&gt; element.
          </t>
-      <t>
-         <cref>Need to consider inheritance.</cref>
-      </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"include"</t>
             <t>"exclude"</t>
@@ -2755,7 +2778,7 @@ and the others are the RFCs that make up the STD</c>
    <t>
       When this element appears in the &lt;front&gt; element of the current document,
       the title might also appear in page headers or footers. If it's long
-      (~40 characters), the "abbrev" attribute is used to specified an
+      (~40 characters), the "abbrev" attribute is used to specify an
       abbreviated variant.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
@@ -2957,8 +2980,8 @@ and the others are the RFCs that make up the STD</c>
    <iref item="Elements" subitem="workgroup" primary="true"/>
    <iref item="workgroup element" primary="true"/>
    <t>
-      This element is used to specify the Working Group the document originates
-      from, if any. The recommended format is the official name of the Working Group
+      This element is used to specify the Working Group (IETF) or Research Group (IRTF) from which the document originates,
+      if any. The recommended format is the official name of the Working Group
       (with some capitalization).
    </t>
    <t>

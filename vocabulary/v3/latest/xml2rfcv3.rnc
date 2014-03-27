@@ -71,7 +71,8 @@ address =
   element address { (postal | phone | facsimile | email | uri)* }
 postal =
   element postal {
-    (street | city | region | code | country)* | postalline+
+    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+    ((street | city | region | code | country)* | postalline+)
   }
 street = element street { text }
 city = element city { text }
