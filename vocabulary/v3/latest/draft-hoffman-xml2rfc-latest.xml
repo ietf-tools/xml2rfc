@@ -143,7 +143,7 @@ The list of changes so far is:
 
 <list style="symbols">
 
-<t>Did not generate the grammar from a DTD, but instead directly from the RNG grammar.</t>
+<t>Did not generate the grammar from a DTD, but instead directly from the Relax Next Generation (RNG) grammar.</t>
 
 <t>In &lt;<x:ref>address</x:ref>&gt;, allowed the sub-elements to be in any order.</t>
 
@@ -210,7 +210,7 @@ output.</t>
 <t>Added the "section", "relative", and "sectionFormat" attributes to &lt;<x:ref>xref</x:ref>&gt;.</t>
 
 <t>Added "ascii" attributes to &lt;<x:ref>author</x:ref>&gt;, &lt;<x:ref>email</x:ref>&gt;, and
-&lt;<x:ref>organization</x:ref>&gt; elements. This allows an athor to specify their information in their
+&lt;<x:ref>organization</x:ref>&gt; elements. This allows an author to specify their information in their
 native scripts as the primary entry and still allow the ASCII-equivalent values to appear in the
 processed documents.</t>
 
@@ -221,13 +221,13 @@ processed documents.</t>
 <t>This section describes one of the larger changes in the design of v3, namely the
 additions to make using references easier. Most references in most recent RFCs are just to
 RFCs; sometimes they are Internet Drafts as work-in-progress; much less often they are
-pointers to standards of other SDOs, research articles, or just plain URLs. There have been
+pointers to standards of other SDOs, research articles, or just plain URIs. There have been
 many complaints about how difficult it is for people who don't have strong XML skills to use
 references when making Internet Drafts.</t>
 
 <t>The two popular methods now for references to RFCs are entering the whole reference by
 hand (hopefully getting all the fiddly bits of &lt;front&gt; and &lt;seriesInfo&gt;
-correct), or using XML entities that call out the xml.resource.org. Both work, but both have
+correct), or using XML entities that call out to xml.resource.org. Both work, but both have
 their faults. The first requires good copying skills and sometimes causes difficult XML
 errors; the second prevents you from changing the anchor name and, less importantly, also
 requires that you be online when you run the xml2rfc processor.</t>
@@ -280,7 +280,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
   Note that attributes not labeled "mandatory" are optional.
 </t>
 <t>
-  Many elements have an optional "anchor" attribute. In all cases, The value of the "anchor"
+  Many elements have an optional "anchor" attribute. In all cases, the value of the "anchor"
   attribute needs to be a valid XML "Name" (<xref target="XML" x:fmt="of" x:sec="2.3"
   x:rel="#sec-common-syn"/>). In short, it is a text string with no spaces or colons; hyphens
   and underscores are allowed.
@@ -294,9 +294,8 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <iref item="Elements" subitem="abstract" primary="true"/>
    <iref item="abstract element" primary="true"/>
    <t>
-     Contains the abstract of the document. The abstract ought to be self-contained
-     and thus should not contain references or unexpanded abbreviations.
-     See <xref target="RFCSTYLE"/> for more information.
+     Contains the abstract of the document.
+     See <xref target="RFCSTYLE"/> for more information on restrictions for the abstract.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.abstract.contents"><!--AG-->
@@ -404,10 +403,12 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    </t>
    <t>
       The value ought to be either the fullname or the abbreviation of one of
-      the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>:
+      the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
+      The list at the time that this document is being published is:
       "Applications", "app", "General", "gen", "Internet", "int", "Operations
       and Management", "ops", "Real-time Applications and Infrastructure", "rai",
-      "Routing", "rtg", "Security", "sec", "Transport", "tsv".
+      "Routing", "rtg", "Security", "sec", "Transport", "tsv", but that list will likely
+      change over time.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.area.contents"><!--AG-->Content model: only text content.</t>
@@ -519,7 +520,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
          </t>
       <t>
             Note that this can be a "data" URI (<xref target="RFC2397"/>) as well, in which case the graphics
-            file essentially is in-lined.
+            file is wholly part of the XML file.
          </t>
    </section>
 
@@ -550,7 +551,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
             <t>perl</t>
             <t>python</t>
          </list>
-            The RFC Editor will mainatin a complete list of the preferred values on its
+            The RFC Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
             of v3 XML should not cause a failure when it encounters an unexpected type. 
          </t>
@@ -776,7 +777,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <iref item="Elements" subitem="blockquote" primary="true"/>
    <iref item="blockquote element" primary="true"/>
    <t>
-      Specifies a block of text is a quotation. The "cite" attribute is required, and must be a URL.
+      Specifies a block of text is a quotation. The "cite" attribute is required, and must be a URI.
    </t>
    <t anchor="element.blockquote.contents"><!--AG-->
         Content model:
@@ -818,8 +819,8 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       <iref item="blockquote element" subitem="cite attribute"/>
       <iref item="cite attribute" subitem="in blockquote element"/>
       <t>
-         The source of the citation. This must be a URL. NEEDS AN EXAMPLE OF A CITE FOR A REFERENCE THAT IS
-         ALREADY IN THE SPEC.
+         The source of the citation. This must be a URI. <cref>NEEDS AN EXAMPLE OF A CITE FOR A REFERENCE THAT IS
+         ALREADY IN THE SPEC.</cref>
       </t>
    </section>
 </section>
@@ -1034,7 +1035,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <iref item="Elements" subitem="dd" primary="true"/>
    <iref item="dd element" primary="true"/>
    <t>
-      The definition part of a entry in a definition list.
+      The definition part of an entry in a definition list.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>dl</x:ref>&gt; (<xref target="element.dl"/>).</t>
    <t anchor="element.dd.contents"><!--AG-->
@@ -1086,7 +1087,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <iref item="dl element" primary="true"/>
    <t>
       A definition list. Each entry has a pair of elements: a term (&lt;<x:ref>dt</x:ref>&gt;) and
-      a defintion (&lt;<x:ref>dd</x:ref>&gt;).
+      a definition (&lt;<x:ref>dd</x:ref>&gt;).
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.dl.contents"><!--AG-->
@@ -1142,7 +1143,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
    <iref item="Elements" subitem="dt" primary="true"/>
    <iref item="dt element" primary="true"/>
    <t>
-      The definition part of a entry in a definition list.
+      The definition part of an entry in a definition list.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>dl</x:ref>&gt; (<xref target="element.dl"/>).</t>
    <t anchor="element.dt.contents"><!--AG-->
@@ -2107,7 +2108,7 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       specification of the reference.
    </t>
    <t>
-      For example, a refernence to RFC 6068 is given as either:
+      For example, a reference to RFC 6068 is given as either:
 <figure>
          <artwork>
 &lt;reference anchor="RFC6068"&gt;
@@ -2136,7 +2137,7 @@ or
    </t>
    <texttable align="left">
       <ttcol>Value for "series"</ttcol>
-      <ttcol>Value for "document</ttcol>
+      <ttcol>Value for "document"</ttcol>
       <ttcol>Example</ttcol>
       <c>rfc</c>
       <c>number</c>
@@ -2170,6 +2171,9 @@ and the others are the RFCs that make up the STD</c>
       <c>ieee</c>
       <c>document name and year</c>
       <c>"802-11H.2003"</c>
+      <c>ien</c>
+      <c>number</c>
+      <c>"23"</c>
       <c>iso</c>
       <c>document name and year</c>
       <c>"8859-6.1988"</c>
@@ -2179,6 +2183,9 @@ and the others are the RFCs that make up the STD</c>
       <c>nist</c>
       <c>document name and year</c>
       <c>"500-214.1993"</c>
+      <c>oasis</c>
+      <c>document name (and year?)</c>
+      <c>"TBD"</c>
       <c>pkcs</c>
       <c>document name and year</c>
       <c>"9.1993"</c>
@@ -2424,7 +2431,7 @@ and the others are the RFCs that make up the STD</c>
       <iref item="rfc element" subitem="iprExtract attribute"/>
       <iref item="iprExtract attribute" subitem="in rfc element"/>
       <t>
-            Identifies a Section within the document for which extraction "as-is"
+            Identifies a section within the document for which extraction "as-is"
             is explicitly allowed (only relevant for historic values of the "ipr"
             attribute).
          </t>
@@ -3049,7 +3056,7 @@ and the others are the RFCs that make up the STD</c>
    <t>
       When this element appears in the &lt;front&gt; element of the current document,
       the title might also appear in page headers or footers. If it's long
-      (~40 characters), the "abbrev" attribute is used to specified an
+      (~40 characters), the "abbrev" attribute is used to specify an
       abbreviated variant.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
@@ -3251,8 +3258,8 @@ and the others are the RFCs that make up the STD</c>
    <iref item="Elements" subitem="workgroup" primary="true"/>
    <iref item="workgroup element" primary="true"/>
    <t>
-      This element is used to specify the Working Group the document originates
-      from, if any. The recommended format is the official name of the Working Group
+      This element is used to specify the Working Group (IETF) or Research Group (IRTF) from which the document originates,
+      if any. The recommended format is the official name of the Working Group
       (with some capitalization).
    </t>
    <t>
@@ -3487,7 +3494,7 @@ would generate
 <t>
   However, the current canonical RFC format is restricted to US-ASCII <xref target="USASCII"/>
   characters (<xref target="RFC2223" x:sec="3" x:fmt=","/>). Future versions are likely to relax this role, and it is
-  expected that the vocabulary will be extended so that US-ACSII
+  expected that the vocabulary will be extended so that US-ASCII
   alternatives can be provided when that makes sense (for instance, in
   contact information).
 </t>
@@ -3892,7 +3899,7 @@ would generate
   For RFCs, the category determines the "maturity level"
   (see <xref target="RFC2026" x:fmt="of" x:sec="4"/>). The allowed values
   are "std" for "Standards Track", "bcp" for "BCP", "info" for "Informational",
-  "exp" for "Experimental", and "historic" for - surprise - "Historic".
+  "exp" for "Experimental", and "historic" for "Historic".
 </t>
 <t>
   For Internet-Drafts, the category attribute is not needed, but will
@@ -4128,7 +4135,9 @@ the error messages will differentiate between errors in XML and those from the v
 <t>The canonical format for RFCs have a number of restrictions that the RFC Processor needs to enforce.
 The processor will give a hard error when an input XML file has any XML comments or any XML Processor
 Instructions (PIs). Further, the processor will give a hard error if the input XML file has any
-external include of any kind such as an external DTD or ENTITYs that have a SYSTEM component.
+external include of any kind such as an external DTD or ENTITYs that have a SYSTEM component,
+or an &lt;<x:ref>artwork</x:ref>&gt; element with a "src" attribute that points to a URI with
+a scheme other than "data:".
 The RFC Processor will also give hard errors when any element or attribute listed as
 "deprecated" in the v3 vocabulary is present in the XML input file.</t>
 
@@ -4161,7 +4170,7 @@ in the output files. The default is "yes".</t>
 
 <t>include -- Allows the author to combine other files into the XML file to complete the document.
 argument can be a local file name (with a possible prefix from the environment variables on the
-computer) or a URL.</t>
+computer) or a URI.</t>
 
 <t>linefile -- Causes the processor to emit more detailed information about which line of which input file
 caused an error or warning.</t>
