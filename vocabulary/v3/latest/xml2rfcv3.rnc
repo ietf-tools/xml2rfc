@@ -108,13 +108,18 @@ middle = element middle { section+ }
 section =
   element section {
     attribute anchor { xsd:ID }?,
-    attribute title { text },
+    attribute title { text }?,
     [ a:defaultValue = "yes" ] attribute numbered { "yes" | "no" }?,
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no" }?,
+    sectiontitle?,
     (t | tindent | figure | texttable | iref | artwork)*,
     section*
+  }
+sectiontitle =
+  element sectiontitle {
+    (text | xref | eref | iref | cref | tt | b | i)*
   }
 t =
   element t {

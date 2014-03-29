@@ -332,7 +332,9 @@
           <data type="ID"/>
         </attribute>
       </optional>
-      <attribute name="title"/>
+      <optional>
+        <attribute name="title"/>
+      </optional>
       <optional>
         <attribute name="numbered" a:defaultValue="yes">
           <choice>
@@ -358,6 +360,9 @@
           </choice>
         </attribute>
       </optional>
+      <optional>
+        <ref name="sectiontitle"/>
+      </optional>
       <zeroOrMore>
         <choice>
           <ref name="t"/>
@@ -370,6 +375,22 @@
       </zeroOrMore>
       <zeroOrMore>
         <ref name="section"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="sectiontitle">
+    <element name="sectiontitle">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="xref"/>
+          <ref name="eref"/>
+          <ref name="iref"/>
+          <ref name="cref"/>
+          <ref name="tt"/>
+          <ref name="b"/>
+          <ref name="i"/>
+        </choice>
       </zeroOrMore>
     </element>
   </define>
