@@ -1613,12 +1613,21 @@ Table of Contents
    The document or documents that make up a reference, as described
    earlier in this section.
 
-2.40.3.  'series' attribute (mandatory)
+2.40.3.  'includeFile' attribute (mandatory)
+
+   The name of a file on the local computer that has the XML that would
+   replace this reference.
+
+2.40.4.  'includeUrl' attribute (mandatory)
+
+   A URL that has the XML that would replace this reference.
+
+2.40.5.  'series' attribute (mandatory)
 
    The series from which the referred-to document comes from, as
    described earlier in this section.
 
-2.40.4.  'target' attribute
+2.40.6.  'target' attribute
 
    Holds the URI for the reference.
 
@@ -1907,7 +1916,7 @@ Table of Contents
 
 2.44.4.  'title' attribute
 
-   The title of the section.
+   Deprecated.  Use <sectiontitle> instead.
 
 2.44.5.  'toc' attribute
 
@@ -1931,7 +1940,8 @@ Table of Contents
 
 2.45.  <sectiontitle>
 
-   [[element.sectiontitle.missing: element description missing]]
+   The title of the section.  This title can have flow markup such as to
+   make some parts bold or to include references.
 
    This element appears as child element of: <section> (Section 2.44).
 
@@ -3278,6 +3288,8 @@ Appendix C.  Relax NG Schema
        attribute target { text }?,
        ((attribute series { text },
          attribute document { text })
+        | attribute includeUrl { text }
+        | attribute includeFile { text }
         | (front, (seriesInfo | format | innerRefContent |
    annotation)*))
      }
@@ -3374,6 +3386,8 @@ Index
          hangIndent  1
          hanging  1
          height  1
+         includeFile  1
+         includeUrl  1
          initials  1
          ipr  1
          iprExtract  1
@@ -3646,6 +3660,10 @@ Index
          inside t  1
          inside tindent  1
          inside tt  1
+      includeFile attribute
+         in reference element  1
+      includeUrl attribute
+         in reference element  1
       initials attribute
          in author element  1
       innerRefContent element  1
@@ -3759,6 +3777,8 @@ Index
       reference element  1
          anchor attribute  1
          document attribute  1
+         includeFile attribute  1
+         includeUrl attribute  1
          inside references  1
          series attribute  1
          target attribute  1
