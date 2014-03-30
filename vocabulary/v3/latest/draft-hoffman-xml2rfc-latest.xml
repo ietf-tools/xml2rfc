@@ -190,9 +190,8 @@ of &lt;<x:ref>postalline</x:ref>&gt; instead of the older elements. Also added o
 
 <t>Added &lt;<x:ref>postalline</x:ref>&gt;, free text that represents one line of the address.</t>
 
-<t>Changed the handling of &lt;<x:ref>reference</x:ref>&gt;. This large change is described in <xref target="reference_changes"/>.</t>
-
-<t>Allowed the elements inside a &lt;<x:ref>reference</x:ref>&gt; to be in any order.</t>
+<t>Changed the handling of &lt;<x:ref>reference</x:ref>&gt;. This large change is described in <xref target="reference_changes"/>.
+Also, allowed the elements inside a &lt;<x:ref>reference</x:ref>&gt; to be in any order.</t>
 
 <t>Added "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes in the &lt;<x:ref>rfc</x:ref>&gt;
 element to cover PIs that were in v2 that are still needed in the grammar.</t>
@@ -251,13 +250,20 @@ attributes: "series" and "document". For example, the value for "series" would b
 non-IETF documents as well. The value for "document" depends on the series, as described in
 &lt;<x:ref>reference</x:ref>&gt;.</t>
 
+<t>Instead of using the "series" and "document" attributes, the document author can instead
+use the "includeFile" or "includeURI" attributes. The "includeFile" attribute tells the
+processor that the XML for this reference is actually in a file on the local disk;
+the "includeURI" attribute tells the processor that the XML for this reference is actually
+needs to be retrieved from the web.</t>
+
 <t>The processor would emit a properly-formatted output for the reference in the
 non-canonical display formats based on rules built into the processor and data for the
 references. The library used for expansion of the references will be maintained by the RFC
 Editor.</t>
 
 <t>Thus, the contents of &lt;reference&gt; changes from requiring a &lt;front&gt; element to
-making the &lt;front&gt; element optional if a "series" is given.</t>
+making the &lt;front&gt; element optional if the "series"/"document" pair of attributes is given,
+or if the entire reference is retrieved from disk or from a URL.</t>
 
 </list></t>
 
@@ -2118,10 +2124,12 @@ making the &lt;front&gt; element optional if a "series" is given.</t>
       Represents a bibliographical reference.
    </t>
    <t>
-      The reference can be expressed in one of two ways:
+      The reference can be expressed in one of four ways:
       <list>
          <t>As a &lt;front&gt; element plus optional &lt;seriesInfo&gt;, &lt;format&gt;, and &lt;annotation&gt; elements.</t>
          <t>As a pair of attributes: "series" and "document".</t>
+         <t>As a "includeFile" attribute that points to XML that is in a file on the local disk.</t>
+         <t>As a "includeURI" attribute that points to XML that is retrieved from the web.</t>
       </list>
       In the latter method, the document does not need to contain any specifics for the reference other than a simple
       specification of the reference.
@@ -2251,17 +2259,17 @@ and the others are the RFCs that make up the STD</c>
       <iref item="reference element" subitem="includeFile attribute"/>
       <iref item="includeFile attribute" subitem="in reference element"/>
       <t>
-         The name of a file on the local computer that has the XML that would replace this reference.
+         The name of a file on the local computer that contains the XML that would replace this reference.
       </t>
    </section>
 
-   <!--reference/@includeUrl-->
-   <section title="'includeUrl' attribute (mandatory)" anchor="element.reference.attribute.includeUrl" toc="exclude">
-      <iref item="Attributes" subitem="includeUrl"/>
-      <iref item="reference element" subitem="includeUrl attribute"/>
-      <iref item="includeUrl attribute" subitem="in reference element"/>
+   <!--reference/@includeURI-->
+   <section title="'includeURI' attribute (mandatory)" anchor="element.reference.attribute.includeURI" toc="exclude">
+      <iref item="Attributes" subitem="includeURI"/>
+      <iref item="reference element" subitem="includeURI attribute"/>
+      <iref item="includeURI attribute" subitem="in reference element"/>
       <t>
-         A URL that has the XML that would replace this reference.
+         A URI that contains the XML that would replace this reference.
       </t>
    </section>
 
@@ -4644,7 +4652,7 @@ reference =
     attribute target { text }?,
     ((attribute series { text },
       attribute document { text })
-     | attribute includeUrl { text }
+     | attribute includeURI { text }
      | attribute includeFile { text }
      | (front, (seriesInfo | format | innerRefContent | 
 annotation)*))

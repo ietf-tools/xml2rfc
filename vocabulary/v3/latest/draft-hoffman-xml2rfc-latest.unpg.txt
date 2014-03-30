@@ -258,9 +258,8 @@ Table of Contents
       address.
 
    o  Changed the handling of <reference>.  This large change is
-      described in Section 1.1.1.
-
-   o  Allowed the elements inside a <reference> to be in any order.
+      described in Section 1.1.1.  Also, allowed the elements inside a
+      <reference> to be in any order.
 
    o  Added "sortRefs", "symRefs", "tocDepth", and "tocInclude"
       attributes in the <rfc> element to cover PIs that were in v2 that
@@ -323,6 +322,13 @@ Table of Contents
       documents as well.  The value for "document" depends on the
       series, as described in <reference>.
 
+   o  Instead of using the "series" and "document" attributes, the
+      document author can instead use the "includeFile" or "includeURI"
+      attributes.  The "includeFile" attribute tells the processor that
+      the XML for this reference is actually in a file on the local
+      disk; the "includeURI" attribute tells the processor that the XML
+      for this reference is actually needs to be retrieved from the web.
+
    o  The processor would emit a properly-formatted output for the
       reference in the non-canonical display formats based on rules
       built into the processor and data for the references.  The library
@@ -330,8 +336,9 @@ Table of Contents
       Editor.
 
    o  Thus, the contents of <reference> changes from requiring a <front>
-      element to making the <front> element optional if a "series" is
-      given.
+      element to making the <front> element optional if the
+      "series"/"document" pair of attributes is given, or if the entire
+      reference is retrieved from disk or from a URL.
 
 1.2.  Syntax Notation
 
@@ -1522,12 +1529,18 @@ Table of Contents
 
    Represents a bibliographical reference.
 
-   The reference can be expressed in one of two ways:
+   The reference can be expressed in one of four ways:
 
       As a <front> element plus optional <seriesInfo>, <format>, and
       <annotation> elements.
 
       As a pair of attributes: "series" and "document".
+
+      As a "includeFile" attribute that points to XML that is in a file
+      on the local disk.
+
+      As a "includeURI" attribute that points to XML that is retrieved
+      from the web.
 
    In the latter method, the document does not need to contain any
    specifics for the reference other than a simple specification of the
@@ -1615,12 +1628,12 @@ Table of Contents
 
 2.40.3.  'includeFile' attribute (mandatory)
 
-   The name of a file on the local computer that has the XML that would
-   replace this reference.
+   The name of a file on the local computer that contains the XML that
+   would replace this reference.
 
-2.40.4.  'includeUrl' attribute (mandatory)
+2.40.4.  'includeURI' attribute (mandatory)
 
-   A URL that has the XML that would replace this reference.
+   A URI that contains the XML that would replace this reference.
 
 2.40.5.  'series' attribute (mandatory)
 
@@ -3288,7 +3301,7 @@ Appendix C.  Relax NG Schema
        attribute target { text }?,
        ((attribute series { text },
          attribute document { text })
-        | attribute includeUrl { text }
+        | attribute includeURI { text }
         | attribute includeFile { text }
         | (front, (seriesInfo | format | innerRefContent |
    annotation)*))
@@ -3387,7 +3400,7 @@ Index
          hanging  1
          height  1
          includeFile  1
-         includeUrl  1
+         includeURI  1
          initials  1
          ipr  1
          iprExtract  1
@@ -3662,7 +3675,7 @@ Index
          inside tt  1
       includeFile attribute
          in reference element  1
-      includeUrl attribute
+      includeURI attribute
          in reference element  1
       initials attribute
          in author element  1
@@ -3778,7 +3791,7 @@ Index
          anchor attribute  1
          document attribute  1
          includeFile attribute  1
-         includeUrl attribute  1
+         includeURI attribute  1
          inside references  1
          series attribute  1
          target attribute  1
