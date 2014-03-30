@@ -2851,8 +2851,8 @@ Appendix B.  The v3 Format and Processors
    the RFC Processor and the Draft Processor, with different application
    settings to differentiate between them.  For example, some XML that
    is valid for Internet Drafts will not be valid for canonical RFCs, so
-   the Draft Processor will give warnings for those features but the RFC
-   Processor will give hard errors.
+   the Draft Processor can be set to give warnings for those features
+   but the RFC Processor can be set to give hard errors.
 
    Users of current and older XML processors for Internet Drafts and
    RFCs may be used to them having unhelpful error messages.  Beginning
@@ -2864,20 +2864,38 @@ Appendix B.  The v3 Format and Processors
    The new processor can also help in the transition from the v2 format
    to the v3 format.  A user could request that the processor convert a
    v2 document to v3, using the new features of v3 where appropriate,
-   and removing the parts that are no longer supported.
+   and removing the parts that are no longer supported.  The processor
+   might be able to fully convert a v2 document to v3, or it might have
+   to only give advice on some of the v2 features that could not be
+   automatically converted.
 
 B.1.  The RFC Processor
 
    The canonical format for RFCs have a number of restrictions that the
-   RFC Processor needs to enforce.  The processor will give a hard error
-   when an input XML file has any XML comments or any XML Processor
-   Instructions (PIs).  Further, the processor will give a hard error if
-   the input XML file has any external include of any kind such as an
-   external DTD or ENTITYs that have a SYSTEM component, or an <artwork>
-   element with a "src" attribute that points to a URI with a scheme
-   other than "data:".  The RFC Processor will also give hard errors
-   when any element or attribute listed as "deprecated" in the v3
-   vocabulary is present in the XML input file.
+   RFC Processor needs to enforce before a document can be published in
+   its final form.  In this "final" mode, the processor will give a hard
+   error when an input XML file has:
+
+   o  any element or attribute listed as "deprecated" in the v3
+      vocabulary
+
+   o  XML comments
+
+   o  XML Processor Instructions (PIs)
+
+   o  an external DTD
+
+   o  ENTITYs that have a SYSTEM component
+
+   o  <artwork> elements with a "src" attribute that points to a URI
+      with a scheme other than "data:"
+
+   o  <cref> elements
+
+   The RFC Editor will also have a mode that gives hard errors on all of
+   the above other than <cref> elements.  This is to allow the RPC to
+   insert <cref> elements in the working XML for notes to authors in
+   AUTH 48, notes to IANA, and so on.
 
 B.2.  Processor Instructions
 
