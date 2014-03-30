@@ -90,6 +90,14 @@ Non-ASCII
   toward RFC publication, this document will incorporate as many of the changes as possible.
 </t>
 <t>
+The v3 format will be used as part of the new RFC series described in <xref target="RFC6949"/>.
+The new series will have multiple formats: the canonical document will be in XML using the
+v3 format described here, and many non-canonical formats (such as HTML and text) will be
+generated as well. The generation of these non-canonical formats means that there will be
+much more emphasis put on the processor that handles the XML. Features of the expected
+processor are described in <xref target="processors"/>.
+</t>
+<t>
   Note that the vocabulary contains certain constructs that might not be
   used when generating the final text; however, they can provide useful
   data for other uses (such index generation, populating a keyword database, or
@@ -129,8 +137,9 @@ document as well. However, some features of v2 are deprecated in v3 in favor of 
 elements. Deprecated features are described in <xref target="XML2RFCv2"/>.
 </t>
 
-<t>The canonical RFCs will not have any markup that uses a deprecated feature. The
-RFC Editor's processor will have a "convert with warnings" mode that will convert a v2
+<t>
+The canonical RFCs will not have any markup that uses a deprecated feature. The
+processor described in <xref target="processors"/> will have a "convert with warnings" mode that will convert a v2
 document to a v3 document that converts deprecated features wherever possible, issuing
 warnings for where it cannot convert. The processor will also have a "strict" mode that
 will issue errors if any deprecated features are in the input.
@@ -4152,7 +4161,7 @@ would generate
 </section>
 </section>
 
-<section title="The v3 Format and Processors">
+<section title="The v3 Format and Processors" anchor="processors">
 
 <t>As described in <xref target="RFC6949"/>, the v3 format will be the format for canonical RFCs.
 The format will also likely be allowed for submission of Internet Drafts.
