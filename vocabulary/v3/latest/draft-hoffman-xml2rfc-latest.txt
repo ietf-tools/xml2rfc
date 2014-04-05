@@ -123,10 +123,10 @@ Internet-Draft                  XML2RFCv3                     April 2014
      2.41. <references> . . . . . . . . . . . . . . . . . . . . . . . 36
      2.42. <region> . . . . . . . . . . . . . . . . . . . . . . . . . 36
      2.43. <rfc>  . . . . . . . . . . . . . . . . . . . . . . . . . . 36
-     2.44. <section>  . . . . . . . . . . . . . . . . . . . . . . . . 40
-     2.45. <sectiontitle> . . . . . . . . . . . . . . . . . . . . . . 42
+     2.44. <section>  . . . . . . . . . . . . . . . . . . . . . . . . 41
+     2.45. <sectiontitle> . . . . . . . . . . . . . . . . . . . . . . 43
      2.46. <seriesInfo> . . . . . . . . . . . . . . . . . . . . . . . 43
-     2.47. <spanx>  . . . . . . . . . . . . . . . . . . . . . . . . . 43
+     2.47. <spanx>  . . . . . . . . . . . . . . . . . . . . . . . . . 44
      2.48. <street> . . . . . . . . . . . . . . . . . . . . . . . . . 44
      2.49. <t>  . . . . . . . . . . . . . . . . . . . . . . . . . . . 44
      2.50. <texttable>  . . . . . . . . . . . . . . . . . . . . . . . 45
@@ -140,22 +140,22 @@ Internet-Draft                  XML2RFCv3                     April 2014
      2.58. <workgroup>  . . . . . . . . . . . . . . . . . . . . . . . 51
      2.59. <xref> . . . . . . . . . . . . . . . . . . . . . . . . . . 51
    3.  Special Unicode Code Points  . . . . . . . . . . . . . . . . . 54
-   4.  Internationalization Considerations  . . . . . . . . . . . . . 54
-   5.  Security Considerations  . . . . . . . . . . . . . . . . . . . 54
+   4.  Internationalization Considerations  . . . . . . . . . . . . . 55
+   5.  Security Considerations  . . . . . . . . . . . . . . . . . . . 55
    6.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 55
      6.1.  Internet Media Type Registration . . . . . . . . . . . . . 55
-   7.  Acknowledgments  . . . . . . . . . . . . . . . . . . . . . . . 56
-   8.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 56
-     8.1.  Normative References . . . . . . . . . . . . . . . . . . . 56
-     8.2.  Informative References . . . . . . . . . . . . . . . . . . 56
-   Appendix A.  Front Page Generation . . . . . . . . . . . . . . . . 58
-     A.1.  The /rfc/@category Attribute . . . . . . . . . . . . . . . 58
+   7.  Acknowledgments  . . . . . . . . . . . . . . . . . . . . . . . 57
+   8.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 57
+     8.1.  Normative References . . . . . . . . . . . . . . . . . . . 57
+     8.2.  Informative References . . . . . . . . . . . . . . . . . . 57
+   Appendix A.  Front Page Generation . . . . . . . . . . . . . . . . 59
+     A.1.  The /rfc/@category Attribute . . . . . . . . . . . . . . . 59
      A.2.  The /rfc/@ipr Attribute  . . . . . . . . . . . . . . . . . 59
-       A.2.1.  Current Values: '*trust200902' . . . . . . . . . . . . 59
+       A.2.1.  Current Values: '*trust200902' . . . . . . . . . . . . 60
        A.2.2.  Historic Values  . . . . . . . . . . . . . . . . . . . 61
-   Appendix B.  The v3 Format and Processors  . . . . . . . . . . . . 61
-     B.1.  The RFC Processor  . . . . . . . . . . . . . . . . . . . . 62
-     B.2.  Processor Instructions . . . . . . . . . . . . . . . . . . 63
+   Appendix B.  The v3 Format and Processors  . . . . . . . . . . . . 62
+     B.1.  The RFC Processor  . . . . . . . . . . . . . . . . . . . . 63
+     B.2.  Processor Instructions . . . . . . . . . . . . . . . . . . 64
    Appendix C.  Relax NG Schema . . . . . . . . . . . . . . . . . . . 64
    Index  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 72
 
@@ -2143,6 +2143,11 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
+   Processors ought to parse the attribute value, so that incorrect
+   references can be detected and, depending on output format,
+   hyperlinks can be generated.  Also, the value ought to be reformatted
+   to insert whitespace after each comma if not already present.
+
 2.43.9.  'seriesNo' attribute
 
    When producing a document within document series (such as "STD"): the
@@ -2171,11 +2176,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    o  "IAB"
 
-   o  "IRTF"
-
-   o  "independent"
-
-
 
 
 
@@ -2184,6 +2184,10 @@ Hoffman                  Expires October 7, 2014               [Page 39]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
+
+   o  "IRTF"
+
+   o  "independent"
 
 2.43.12.  'symRefs' attribute
 
@@ -2217,11 +2221,25 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
+   Processors ought to parse the attribute value, so that incorrect
+   references can be detected and, depending on output format,
+   hyperlinks can be generated.  Also, the value ought to be reformatted
+   to insert whitespace after each comma if not already present.
+
 2.43.16.  'xml:lang' attribute
 
    The natural language used in the document (defaults to "en").
 
    See Section 2.12 of [XML] for more information.
+
+
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 40]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
 
 2.44.  <section>
 
@@ -2233,13 +2251,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    This element appears as child element of: <back> (Section 2.8),
    <middle> (Section 2.31), and <section> (Section 2.44).
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 40]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
 
    Content model:
 
@@ -2278,6 +2289,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    If set to "no", this section does not get a section number.
    Processors will verify that such a section is not followed by a
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 41]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
    numbered section in a part, and will verify that the section is a
    top-level section.
 
@@ -2286,16 +2305,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    o  "yes" (default)
 
    o  "no"
-
-
-
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 41]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
 
 2.44.4.  'removeInRFC' attribute
 
@@ -2333,6 +2342,17 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    o  "default" (default)
 
+
+
+
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 42]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
 2.45.  <sectiontitle>
 
    The title of the section.  This title can have flow markup such as to
@@ -2343,15 +2363,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    Content model:
 
    In any order:
-
-
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 42]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
 
    o  Text
 
@@ -2390,6 +2401,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    The identifier within the series specified by the "name" attribute.
 
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 43]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
    For BCPs, FYIs, RFCs, and STDs this is the number within the series.
    For Internet-Drafts, it is the full draft name (ending with the two-
    digit version number).
@@ -2401,13 +2420,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    This element appears as child element of: <annotation> (Section 2.3),
    <c> (Section 2.10), <postamble> (Section 2.38), <preamble>
    (Section 2.39), and <t> (Section 2.49).
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 43]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
 
    Content model: only text content.
 
@@ -2445,6 +2457,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    In any order:
 
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 44]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
    o  Text
 
    o  <list> elements (Section 2.30)
@@ -2456,14 +2476,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    o  <dl> elements (Section 2.17)
 
    o  <figure> elements (Section 2.22)
-
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 44]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
 
    o  <artwork> elements (Section 2.5)
 
@@ -2502,6 +2514,13 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    This element appears as child element of: <section> (Section 2.44).
 
+
+
+Hoffman                  Expires October 7, 2014               [Page 45]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
    Content model:
 
    In this order:
@@ -2511,15 +2530,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    2.  One or more <ttcol> elements (Section 2.54)
 
    3.  Optional <c> elements (Section 2.10)
-
-
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 45]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
 
    4.  One optional <postamble> element (Section 2.38)
 
@@ -2558,6 +2568,15 @@ Internet-Draft                  XML2RFCv3                     April 2014
    o  "full" is like "all" except no horizontal lines between table rows
       (except below the column titles),
 
+
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 46]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
    o  "headers" adds just a separator between column titles and rows,
       and
 
@@ -2568,14 +2587,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    o  "all"
 
    o  "none"
-
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 46]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
 
    o  "headers"
 
@@ -2614,6 +2625,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    o  <figure> elements (Section 2.22)
 
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 47]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
    o  <artwork> elements (Section 2.5)
 
    o  <xref> elements (Section 2.59)
@@ -2623,15 +2642,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    o  <iref> elements (Section 2.27)
 
    o  <cref> elements (Section 2.14)
-
-
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 47]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
 
    o  <tt> elements (Section 2.53)
 
@@ -2672,6 +2682,13 @@ Internet-Draft                  XML2RFCv3                     April 2014
    (Section 2.39), <sectiontitle> (Section 2.45), <t> (Section 2.49),
    and <tindent> (Section 2.51).
 
+
+
+Hoffman                  Expires October 7, 2014               [Page 48]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
    Content model:
 
    In any order:
@@ -2679,15 +2696,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    o  Text
 
    o  <xref> elements (Section 2.59)
-
-
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 48]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
 
    o  <eref> elements (Section 2.20)
 
@@ -2729,14 +2737,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    o  "center"
 
-   o  "right"
-
-2.54.2.  'width' attribute
-
-   The desired column width (as integer 0..100 followed by "%").
-
-
-
 
 
 
@@ -2744,6 +2744,12 @@ Hoffman                  Expires October 7, 2014               [Page 49]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
+
+   o  "right"
+
+2.54.2.  'width' attribute
+
+   The desired column width (as integer 0..100 followed by "%").
 
 2.55.  <ul>
 
@@ -2788,18 +2794,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    This element appears as child element of: <address> (Section 2.2).
 
-   Content model: only text content.
-
-
-
-
-
 
 
 Hoffman                  Expires October 7, 2014               [Page 50]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
+
+   Content model: only text content.
 
 2.57.  <vspace>
 
@@ -2847,8 +2849,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.7), <c> (Section 2.10), <cref> (Section 2.14), <dd>
-   (Section 2.16), <dt> (Section 2.18), <i> (Section 2.25), <li>
-   (Section 2.29), <postamble> (Section 2.38), <preamble>
 
 
 
@@ -2857,6 +2857,8 @@ Hoffman                  Expires October 7, 2014               [Page 51]
 Internet-Draft                  XML2RFCv3                     April 2014
 
 
+   (Section 2.16), <dt> (Section 2.18), <i> (Section 2.25), <li>
+   (Section 2.29), <postamble> (Section 2.38), <preamble>
    (Section 2.39), <sectiontitle> (Section 2.45), <t> (Section 2.49),
    <tindent> (Section 2.51), <tt> (Section 2.53), and <ttcol>
    (Section 2.54).
@@ -2902,9 +2904,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    "title"
 
-      This attribute value is deprecated.
 
-   Allowed values:
 
 
 
@@ -2912,6 +2912,10 @@ Hoffman                  Expires October 7, 2014               [Page 52]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
+
+      This attribute value is deprecated.
+
+   Allowed values:
 
    o  "counter"
 
@@ -2957,10 +2961,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    o  "parens"
 
-   For example:
-
-
-
 
 
 
@@ -2968,6 +2968,8 @@ Hoffman                  Expires October 7, 2014               [Page 53]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
+
+   For example:
 
      See <xref target="RFC6949" section="2.3" sectionFormat="of"/>
      for more inforation.
@@ -2991,8 +2993,50 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
 3.  Special Unicode Code Points
 
-   [[anchor4: Explain those code points where the processors implement
-   something special, such as "nbsp".]]
+   Although the current RFC format does not allow non-ASCII Unicode
+   characters ([UNICODE]), some of them can be used to enforce certain
+   behaviors of formatters.
+
+   For instance:
+
+   non-breaking space (U+00A0)
+
+      Represents a space character where no line break should happen.
+      This is frequenly used in titles (by excluding certain space
+      characters from the line breaking algorithm, the processor will
+      use the remaining whitespace ocurrences for line breaks).
+
+   non-breaking hyphen (U+2011)
+
+      Similarly, this represents a hyphen character where nevertheless
+      no line breaking ought to occur.
+
+   word joiner (U+2060)
+
+      Also called "zero width non-breaking space".  This can be used to
+      disallow line breaking between two non-whitespace characters.
+
+   Note that in order to use these characters by name, they need to be
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 54]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
+   declared either in the Document Type Definition (DTD, [XML], Section
+   2.9), or in the "internal subset" ([XML], Section 2.8), like this:
+
+   <?xml version="1.0"?>
+
+   <!DOCTYPE rfc [
+
+     <!-- declare nbsp and friends -->
+     <!ENTITY nbsp    "&#xa0;">
+     <!ENTITY nbhy    "&#x2011;">
+     <!ENTITY wj      "&#x2060;">
+   ]>
 
 4.  Internationalization Considerations
 
@@ -3015,16 +3059,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    Furthermore, all security considerations related to XML processing
    are relevant as well (see Section 7 of [RFC3470]).
 
-
-
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 54]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
 6.  IANA Considerations
 
 6.1.  Internet Media Type Registration
@@ -3035,6 +3069,17 @@ Internet-Draft                  XML2RFCv3                     April 2014
    This document updates the specification for the Internet media type
    "application/rfc+xml" from the one in [XML2RFCv2].  The following is
    to be registered with IANA.
+
+
+
+
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 55]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
 
    Type name:  application
 
@@ -3072,15 +3117,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
       Magic number(s):  As specified for "application/xml" in Section
          3.2 of [RFC3023].
 
-
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 55]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
       File extension(s):  .xml
 
       Macintosh file type code(s):  TEXT
@@ -3089,6 +3125,17 @@ Internet-Draft                  XML2RFCv3                     April 2014
       Authors Section.
 
    Intended usage:  COMMON
+
+
+
+
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 56]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
 
    Restrictions on usage:  N/A
 
@@ -3129,14 +3176,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
                 RFC 6838, January 2013.
 
    [IDGUIDE]    Housley, R., "Guidelines to Authors of Internet-Drafts",
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 56]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
                 <http://www.ietf.org/id-info/guidelines.html>.
 
    [RFC2026]    Bradner, S., "The Internet Standards Process -- Revision
@@ -3146,6 +3185,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
                 Authors", RFC 2223, October 1997.
 
    [RFC2397]    Masinter, L., "The "data" URL scheme", RFC 2397,
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 57]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
                 August 1998.
 
    [RFC2629]    Rose, M., "Writing I-Ds and RFCs using XML", RFC 2629,
@@ -3185,14 +3232,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    [RFCSTYLE]   Heather, H. and S. Ginoza, "RFC Style Guide",
                 draft-iab-styleguide (work in progress).
 
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 57]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
    [RNC]        Clark, J., "RELAX NG Compact Syntax", OASIS ,
                 November 2002, <http://www.oasis-open.org/committees/
                 relax-ng/compact-20021121.html>.
@@ -3202,6 +3241,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
                 <http://trustee.ietf.org/license-info/IETF-TLP-2.htm>.
 
    [TLP3.0]     IETF Trust, "Legal Provisions Relating to IETF
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 58]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
                 Documents", September 2009,
                 <http://trustee.ietf.org/license-info/IETF-TLP-3.htm>.
 
@@ -3239,16 +3286,6 @@ A.1.  The /rfc/@category Attribute
    appear on the front page as "Intended Status".  Supplying this
    information can be useful to reviewers.
 
-
-
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 58]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
 A.2.  The /rfc/@ipr Attribute
 
    This attribute value can take a long list of values, each of which
@@ -3257,6 +3294,16 @@ A.2.  The /rfc/@ipr Attribute
    reasons.  Of these values, only a few are currently in use; all
    others are supported by the various tools for backwards compatibility
    with old source files.
+
+
+
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 59]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
 
       Note: some variations of the boilerplate are selected based on the
       document's date; therefore it is important to specify the "year",
@@ -3294,17 +3341,6 @@ A.2.1.  Current Values: '*trust200902'
    | [TLP4.0] | 2010-04-01                     |
    +----------+--------------------------------+
 
-
-
-
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 59]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
 A.2.1.1.  trust200902
 
    This should be the default, unless one of the more specific
@@ -3314,6 +3350,16 @@ A.2.1.1.  trust200902
 A.2.1.2.  noModificationTrust200902
 
    This produces additional text from Section 6.c.i of the TLP:
+
+
+
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 60]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
 
       This document may not be modified, and derivative works of it may
       not be created, except to format it for publication as an RFC or
@@ -3353,14 +3399,6 @@ A.2.1.4.  pre5378Trust200902
    <http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf> for further
    information about when to use this value.
 
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 60]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
       Note: this text appears under "Copyright Notice", unless the
       document was published before November 2009, in which case it
       appears under "Status Of This Memo".
@@ -3371,6 +3409,14 @@ A.2.2.1.  Historic Values: '*trust200811'
 
    The attribute values "trust200811", "noModificationTrust200811" and
    "noDerivativesTrust200811" are similar to their "trust200902"
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 61]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
    counterparts, except that they use text specified in <http://
    trustee.ietf.org/license-info/archive/
    IETF-Trust-License-Policy_11-10-08.pdf>.
@@ -3410,13 +3456,6 @@ Appendix B.  The v3 Format and Processors
    document as well.  For example, some elements have descriptions of
    how a processor might create output from the element.
 
-
-
-Hoffman                  Expires October 7, 2014               [Page 61]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
    This section differentiates between three types of processors:
 
    o  RFC Processor -- The processor used by the RFC Editor to validate
@@ -3426,6 +3465,13 @@ Internet-Draft                  XML2RFCv3                     April 2014
    o  Draft Processor -- The processor used by the IETF to validate the
       contents of XML that is submitted and to create the other formats
       that will be supported for Internet Drafts.
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 62]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
 
    o  Private Processors -- There may be processors that are meant to
       run on the computers of authors that create documents in formats
@@ -3464,15 +3510,6 @@ B.1.  The RFC Processor
    o  any element or attribute listed as "deprecated" in the v3
       vocabulary
 
-
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 62]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
    o  XML comments
 
    o  XML Processor Instructions (PIs)
@@ -3483,6 +3520,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    o  <artwork> elements with a "src" attribute that points to a URI
       with a scheme other than "data:"
+
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 63]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
 
    o  <cref> elements
 
@@ -3520,15 +3565,6 @@ B.2.  Processor Instructions
    o  comments -- When set to "yes", causes all <cref> elements to be
       rendered in the output files.  The default is "yes".
 
-
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 63]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
    o  include -- Allows the author to combine other files into the XML
       file to complete the document. argument can be a local file name
       (with a possible prefix from the environment variables on the
@@ -3540,6 +3576,13 @@ Internet-Draft                  XML2RFCv3                     April 2014
    Note that a Private Processor can have its own PIs.
 
 Appendix C.  Relax NG Schema
+
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 64]
+
+Internet-Draft                  XML2RFCv3                     April 2014
 
 
    namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -3577,14 +3620,6 @@ Appendix C.  Relax NG Schema
          "IETF" | "IAB" | "IRTF" | "independent"
        }?,
        attribute docName { text }?,
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 64]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
        [ a:defaultValue = "en" ] attribute xml:lang { text }?,
        [ a:defaultValue = "no" ] attribute sortRefs { "yes" | "no" }?,
        [ a:defaultValue = "yes" ] attribute symRefs { "yes" | "no" }?,
@@ -3598,6 +3633,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
      }
    front =
      element front {
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 65]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
        title, author+, date?, area*, workgroup*, keyword*, abstract?,
    note*
      }
@@ -3633,14 +3676,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    street = element street { text }
    city = element city { text }
    region = element region { text }
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 65]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
    code = element code { text }
    country = element country { text }
    postalline = element postalline { text }
@@ -3654,6 +3689,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
    uri = element uri { text }
    date =
      element date {
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 66]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
        attribute day { text }?,
        attribute month { text }?,
        attribute year { text }?,
@@ -3689,14 +3732,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
      }
    t =
      element t {
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 66]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
        attribute anchor { xsd:ID }?,
        (text
         | \list
@@ -3710,6 +3745,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
         | iref
         | cref
         | spanx
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 67]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
         | vspace
         | tt
         | b
@@ -3745,14 +3788,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    ul =
      element ul {
        [ a:defaultValue = "normal" ]
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 67]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
        attribute spacing { "normal" | "compact" }?,
        [ a:defaultValue = "false" ] attribute empty { "false" | "true"
    }?,
@@ -3766,6 +3801,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
           ul,
           dl,
           figure,
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 68]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
           artwork,
           xref,
           eref,
@@ -3801,14 +3844,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
      }
    xref =
      element xref {
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 68]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
        attribute target { xsd:IDREF },
        [ a:defaultValue = "false" ] attribute pageno { "true" | "false"
    }?,
@@ -3822,6 +3857,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
    eref =
      element eref {
        attribute target { text },
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 69]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
        text
      }
    iref =
@@ -3857,14 +3900,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
      element figure {
        attribute anchor { xsd:ID }?,
        [ a:defaultValue = "" ] attribute title { text }?,
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 69]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
        [ a:defaultValue = "false" ]
        attribute suppress-title { "true" | "false" }?,
        attribute src { text }?,
@@ -3878,6 +3913,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
        preamble?,
        artwork+,
        postamble?
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 70]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
      }
    preamble =
      element preamble {
@@ -3913,14 +3956,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
        attribute style { "all" | "none" | "headers" | "full" }?,
        attribute autogeneratedTableNumber { text }?,
        preamble?,
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 70]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
        ttcol+,
        c*,
        postamble?
@@ -3934,6 +3969,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
      }
    c =
      element c { (text | xref | eref | iref | cref | spanx | tt | b |
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 71]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
    i)* }
    back = element back { references*, section* }
    references =
@@ -3969,14 +4012,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
      element annotation {
        (text | xref | eref | iref | cref | spanx | tt | b | i)*
      }
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 71]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
    innerRefContent = element innerRefContent { (text | tt | b | i)* }
    start = rfc
 
@@ -3990,6 +4025,14 @@ Index
       abstract element  8
          inside front  24
       address element  8
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 72]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
          inside author  13
       align attribute
          in artwork element  11
@@ -4022,17 +4065,9 @@ Index
          inside li  27
          inside section  41
          inside t  45
-         inside tindent  47
+         inside tindent  48
          name attribute  11
          src attribute  11
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 72]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
          type attribute  12
          width attribute  12
          xml:lang attribute  13
@@ -4046,6 +4081,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
          align  11, 22, 46, 49
          alt  11, 23
          anchor  16, 18, 23, 35, 41, 45-46, 48
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 73]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
          ascii  13, 21, 31
          autogeneratedBoilerplateText  37
          autogeneratedFigureNumber  23
@@ -4081,14 +4124,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
          primary  26
          relative  53
          removeInRFC  42
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 73]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
          role  14
          section  53
          sectionFormat  53
@@ -4102,6 +4137,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
          style  28-29, 44, 46
          subitem  26
          submissionType  39
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 74]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
          suppress-title  23, 47
          surname  14
          symRefs  40
@@ -4113,7 +4156,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          type  12, 24
          updates  40
          value  43
-         width  12, 23, 49
+         width  12, 23, 50
          xml:lang  13-14, 32, 40
          xml:space  13, 44
          year  19
@@ -4137,14 +4180,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    B
       b element  14
          inside annotation  10
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 74]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
          inside blockquote  15
          inside c  16
          inside cref  17
@@ -4158,6 +4193,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
          inside sectiontitle  43
          inside t  45
          inside tindent  48
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 75]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
          inside tt  49
       back element  15
          inside rfc  37
@@ -4169,7 +4212,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    C
       c element  16
-         inside texttable  45
+         inside texttable  46
       category attribute
          in rfc element  37
       cite attribute
@@ -4193,19 +4236,11 @@ Internet-Draft                  XML2RFCv3                     April 2014
          inside dt  21
          inside i  25
          inside li  27
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 75]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
          inside postamble  32
          inside preamble  33
          inside sectiontitle  43
          inside t  45
-         inside tindent  47
+         inside tindent  48
          inside tt  49
          inside ttcol  49
          source attribute  18
@@ -4214,6 +4249,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
       date element  18
          day attribute  18
          inside front  24
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 76]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
          month attribute  18
          year attribute  19
       day attribute
@@ -4223,7 +4266,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
       dl element  19
          hanging attribute  20
          inside li  27
-         inside t  44
+         inside t  45
          spacing attribute  20
       docName attribute
          in rfc element  37
@@ -4238,73 +4281,30 @@ Internet-Draft                  XML2RFCv3                     April 2014
          address  8, 13
          annotation  9
          area  10, 24
-         artwork  10, 15, 19, 22, 27, 41, 45, 47
+         artwork  10, 15, 19, 22, 27, 41, 45, 48
          author  13, 24
          b  10, 14-17, 19, 21, 25-26, 28, 32-33, 43, 45, 48-49
          back  15, 37
          blockquote  15
-         c  16, 45
+         c  16, 46
          city  16, 31
          code  17, 31
          country  17, 31
-         cref  9, 15-17, 19, 21, 25, 27, 32-33, 43, 45, 47, 49
+         cref  9, 15-17, 19, 21, 25, 27, 32-33, 43, 45, 48-49
          date  18, 24
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 76]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
          dd  19-20
-         dl  19, 27, 44
+         dl  19, 27, 45
          dt  20
          email  9, 21
-         eref  9, 15-17, 19-21, 25, 27, 32-33, 43, 45, 47, 49
+         eref  9, 15-17, 19-21, 25, 27, 32-33, 43, 45, 48-49
          facsimile  9, 22
-         figure  15, 19, 22, 27, 41, 44, 47
+         figure  15, 19, 22, 27, 41, 45, 47
          format  24
          front  24, 37
          i  10, 15-17, 19, 21, 25-26, 28, 32-33, 43, 45, 48-49
          innerRefContent  25
-         iref  9, 15-16, 19-20, 22, 25-27, 32-33, 41, 43, 45, 47, 49
+         iref  9, 15-16, 19-20, 22, 25-27, 32-33, 41, 43, 45, 48-49
          keyword  24, 27
-         li  27, 29, 50
-         list  28, 44
-         middle  28, 37
-         note  25, 28
-         ol  19, 27, 29, 44
-         organization  13, 30
-         phone  9, 31
-         postal  9, 31
-         postalline  31-32
-         postamble  22, 32, 46
-         preamble  22, 32, 45
-         reference  33, 36
-         references  15, 36
-         region  31, 36
-         rfc  36
-         section  15, 28, 40-41
-         sectiontitle  41-42
-         seriesInfo  43
-         spanx  9, 16, 32-33, 43, 45
-         street  31, 44
-         t  8, 27-29, 41, 44
-         texttable  41, 45
-         tindent  41, 47
-         title  24, 48
-         tt  9, 15-17, 19, 21, 25, 28, 32-33, 43, 45, 48
-         ttcol  45, 49
-         ul  19, 27, 44, 50
-         uri  9, 50
-         vspace  45, 51
-         workgroup  24, 51
-         xref  9, 15-17, 19-20, 25, 27, 32-33, 43, 45, 47-49, 51
-      email element  21
-         ascii attribute  21
-         inside address  9
-      empty attribute
 
 
 
@@ -4313,6 +4313,41 @@ Hoffman                  Expires October 7, 2014               [Page 77]
 Internet-Draft                  XML2RFCv3                     April 2014
 
 
+         li  27, 29, 50
+         list  28, 45
+         middle  28, 37
+         note  25, 28
+         ol  19, 27, 29, 45
+         organization  13, 30
+         phone  9, 31
+         postal  9, 31
+         postalline  31-32
+         postamble  22, 32, 46
+         preamble  22, 32, 46
+         reference  33, 36
+         references  15, 36
+         region  31, 36
+         rfc  36
+         section  15, 28, 41
+         sectiontitle  41, 43
+         seriesInfo  43
+         spanx  9, 16, 32-33, 44-45
+         street  31, 44
+         t  8, 27-29, 41, 44
+         texttable  41, 45
+         tindent  41, 47
+         title  24, 48
+         tt  9, 15-17, 19, 21, 25, 28, 32-33, 43, 45, 48
+         ttcol  46, 49
+         ul  19, 27, 45, 50
+         uri  9, 50
+         vspace  45, 51
+         workgroup  24, 51
+         xref  9, 15-17, 19-20, 25, 27, 32-33, 43, 45, 48-49, 51
+      email element  21
+         ascii attribute  21
+         inside address  9
+      empty attribute
          in ul element  50
       eref element  21
          inside annotation  9
@@ -4326,8 +4361,16 @@ Internet-Draft                  XML2RFCv3                     April 2014
          inside postamble  32
          inside preamble  33
          inside sectiontitle  43
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 78]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
          inside t  45
-         inside tindent  47
+         inside tindent  48
          inside tt  49
          inside ttcol  49
          target attribute  22
@@ -4345,7 +4388,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          inside dd  19
          inside li  27
          inside section  41
-         inside t  44
+         inside t  45
          inside tindent  47
          src attribute  23
          suppress-title attribute  23
@@ -4362,13 +4405,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
       fullname attribute
          in author element  14
 
-
-
-Hoffman                  Expires October 7, 2014               [Page 78]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
    H
       hangIndent attribute
          in list element  28
@@ -4381,6 +4417,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
    I
       i element  25
          inside annotation  10
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 79]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
          inside b  15
          inside blockquote  15
          inside c  16
@@ -4403,28 +4447,20 @@ Internet-Draft                  XML2RFCv3                     April 2014
          in author element  14
       innerRefContent element  25
       ipr attribute
-         '*2026'  61
-         '*3667'  61
-         '*3978'  61
+         '*2026'  62
+         '*3667'  62
+         '*3978'  62
          '*trust200811'  61
-         '*trust200902'  59
-         'noDerivativesTrust200902'  60
+         '*trust200902'  60
+         'noDerivativesTrust200902'  61
          'noModificationTrust200902'  60
-         'pre5378Trust200902'  60
+         'pre5378Trust200902'  61
          'trust200902'  60
          in rfc element  38
       iprExtract attribute
          in rfc element  39
       iref element  26
          inside annotation  9
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 79]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
          inside b  15
          inside c  16
          inside dd  19
@@ -4437,7 +4473,15 @@ Internet-Draft                  XML2RFCv3                     April 2014
          inside section  41
          inside sectiontitle  43
          inside t  45
-         inside tindent  47
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 80]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
+         inside tindent  48
          inside tt  49
          inside ttcol  49
          item attribute  26
@@ -4457,7 +4501,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
       list element  28
          counter attribute  28
          hangIndent attribute  28
-         inside t  44
+         inside t  45
          style attribute  28
 
    M
@@ -4473,14 +4517,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
          in artwork element  11
          in seriesInfo element  43
       note element  28
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 80]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
          inside front  25
          title attribute  29
       number attribute
@@ -4493,10 +4529,18 @@ Internet-Draft                  XML2RFCv3                     April 2014
          in rfc element  39
       octets attribute
          in format element  24
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 81]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
       ol element  29
          inside dd  19
          inside li  27
-         inside t  44
+         inside t  45
          spacing attribute  29
          start attribute  29
          style attribute  29
@@ -4520,7 +4564,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          inside texttable  46
       preamble element  32
          inside figure  22
-         inside texttable  45
+         inside texttable  46
       primary attribute
          in iref element  26
 
@@ -4529,14 +4573,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
          anchor attribute  35
          document attribute  35
          includeFile attribute  35
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 81]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
          includeURI attribute  35
          inside references  36
          series attribute  35
@@ -4549,6 +4585,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
       relative attribute
          in xref element  53
       removeInRFC attribute
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 82]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
          in section element  42
       rfc element  36
          autogeneratedBoilerplateText attribute  37
@@ -4573,7 +4617,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
    S
       section attribute
          in xref element  53
-      section element  40
+      section element  41
          anchor attribute  41
          autogeneratedSectionNumber attribute  41
          inside back  15
@@ -4585,15 +4629,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          toc attribute  42
       sectionFormat attribute
          in xref element  53
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 82]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
-      sectiontitle element  42
+      sectiontitle element  43
          inside section  41
       series attribute
          in reference element  35
@@ -4605,12 +4641,20 @@ Internet-Draft                  XML2RFCv3                     April 2014
       sortRefs attribute
          in rfc element  39
       source attribute
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 83]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
          in cref element  18
       spacing attribute
          in dl element  20
          in ol element  29
          in ul element  50
-      spanx element  43
+      spanx element  44
          inside annotation  9
          inside c  16
          inside postamble  32
@@ -4642,13 +4686,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
       symRefs attribute
          in rfc element  40
 
-
-
-Hoffman                  Expires October 7, 2014               [Page 83]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
    T
       t element  44
          anchor attribute  45
@@ -4660,6 +4697,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
       target attribute
          in eref element  22
          in format element  24
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 84]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
          in reference element  35
          in xref element  54
       texttable element  45
@@ -4697,14 +4742,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
          inside dd  19
          inside dt  21
          inside i  25
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 84]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
          inside innerRefContent  25
          inside li  28
          inside postamble  32
@@ -4714,8 +4751,16 @@ Internet-Draft                  XML2RFCv3                     April 2014
          inside tindent  48
       ttcol element  49
          align attribute  49
-         inside texttable  45
-         width attribute  49
+         inside texttable  46
+         width attribute  50
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 85]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
       type attribute
          in artwork element  12
          in format element  24
@@ -4725,7 +4770,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          empty attribute  50
          inside dd  19
          inside li  27
-         inside t  44
+         inside t  45
          spacing attribute  50
       updates attribute
          in rfc element  40
@@ -4743,7 +4788,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
       width attribute
          in artwork element  12
          in figure element  23
-         in ttcol element  49
+         in ttcol element  50
       workgroup element  51
          inside front  24
 
@@ -4753,14 +4798,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
          in author element  14
          in postal element  32
          in rfc element  40
-
-
-
-Hoffman                  Expires October 7, 2014               [Page 85]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
       xml:space attribute
          in artwork element  13
          in spanx element  44
@@ -4772,14 +4809,22 @@ Internet-Draft                  XML2RFCv3                     April 2014
          inside cref  17
          inside dd  19
          inside dt  20
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 86]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
          inside i  25
          inside li  27
          inside postamble  32
          inside preamble  33
          inside sectiontitle  43
          inside t  45
-         inside tindent  47
-         inside tt  48
+         inside tindent  48
+         inside tt  49
          inside ttcol  49
          pageno attribute  53
          relative attribute  53
@@ -4812,5 +4857,16 @@ Author's Address
 
 
 
-Hoffman                  Expires October 7, 2014               [Page 86]
+
+
+
+
+
+
+
+
+
+
+
+Hoffman                  Expires October 7, 2014               [Page 87]
 

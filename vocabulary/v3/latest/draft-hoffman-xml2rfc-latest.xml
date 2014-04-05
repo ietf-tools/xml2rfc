@@ -2522,6 +2522,12 @@ and the others are the RFCs that make up the STD</c>
             A comma-separated list of RFC numbers or
             Internet-Draft names.
          </t>
+      <t>
+            Processors ought to parse the attribute value, so that incorrect
+            references can be detected and, depending on output format, 
+            hyperlinks can be generated. Also, the value ought to be reformatted
+            to insert whitespace after each comma if not already present.
+      </t>
    </section>
 
    <!--rfc/@seriesNo-->
@@ -2620,6 +2626,12 @@ and the others are the RFCs that make up the STD</c>
             A comma-separated list of RFC numbers or
             Internet-Draft names.
          </t>
+      <t>
+            Processors ought to parse the attribute value, so that incorrect
+            references can be detected and, depending on output format, 
+            hyperlinks can be generated. Also, the value ought to be reformatted
+            to insert whitespace after each comma if not already present.
+      </t>
    </section>
 
    <!--rfc/@xml:lang-->
@@ -3617,9 +3629,60 @@ would generate
 
 <section title="Special Unicode Code Points" anchor="special.unicode.code.points">
 <t>
-  <cref>Explain those code points where the processors implement something
-  special, such as "nbsp".</cref>
+  Although the current RFC format does not allow non-ASCII Unicode characters
+  (<xref target="UNICODE"/>), some of them can be used to enforce certain
+  behaviors of formatters.
 </t>
+<t>
+  For instance:
+</t>
+<t>
+  non-breaking space (U+00A0)
+  <list>
+    <t>
+      Represents a space character where no line break should happen. This is
+      frequenly used in titles (by excluding certain space characters from
+      the line breaking algorithm, the processor will use the remaining
+      whitespace ocurrences for line breaks).
+    </t> 
+  </list>
+</t>
+<t>
+  non-breaking hyphen (U+2011)
+  <list>
+    <t>
+      Similarly, this represents a hyphen character where nevertheless no
+      line breaking ought to occur.
+    </t>
+  </list>
+</t>
+<t>
+  word joiner (U+2060)
+  <list>
+    <t>
+      Also called "zero width non-breaking space". This can be used to
+      disallow line breaking between two non-whitespace characters.
+    </t>
+  </list>
+</t>
+<t>
+  Note that in order to use these characters by name, they need to be 
+  declared either in the Document Type Definition (DTD,
+  <xref target="XML" x:sec="2.9" x:fmt="," x:rel="#sec-rmd"/>), or
+  in the "internal subset" (<xref target="XML" x:sec="2.8" x:fmt="," x:rel="#sec-prolog-dtd"/>),
+  like this:
+</t>
+<figure><artwork type="example">
+&lt;?xml version="1.0"?>
+
+&lt;!DOCTYPE rfc [
+
+  &lt;!-- <spanx>declare nbsp and friends</spanx> -->
+  &lt;!ENTITY nbsp    "&amp;#xa0;">
+  &lt;!ENTITY nbhy    "&amp;#x2011;">
+  &lt;!ENTITY wj      "&amp;#x2060;">
+]>
+</artwork></figure>
 </section>
 
 <section title="Internationalization Considerations" anchor="i18n.considerations">

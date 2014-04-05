@@ -1823,6 +1823,11 @@ Table of Contents
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
+   Processors ought to parse the attribute value, so that incorrect
+   references can be detected and, depending on output format,
+   hyperlinks can be generated.  Also, the value ought to be reformatted
+   to insert whitespace after each comma if not already present.
+
 2.43.9.  'seriesNo' attribute
 
    When producing a document within document series (such as "STD"): the
@@ -1886,6 +1891,11 @@ Table of Contents
 2.43.15.  'updates' attribute
 
    A comma-separated list of RFC numbers or Internet-Draft names.
+
+   Processors ought to parse the attribute value, so that incorrect
+   references can be detected and, depending on output format,
+   hyperlinks can be generated.  Also, the value ought to be reformatted
+   to insert whitespace after each comma if not already present.
 
 2.43.16.  'xml:lang' attribute
 
@@ -2539,8 +2549,42 @@ Table of Contents
 
 3.  Special Unicode Code Points
 
-   [[anchor4: Explain those code points where the processors implement
-   something special, such as "nbsp".]]
+   Although the current RFC format does not allow non-ASCII Unicode
+   characters ([UNICODE]), some of them can be used to enforce certain
+   behaviors of formatters.
+
+   For instance:
+
+   non-breaking space (U+00A0)
+
+      Represents a space character where no line break should happen.
+      This is frequenly used in titles (by excluding certain space
+      characters from the line breaking algorithm, the processor will
+      use the remaining whitespace ocurrences for line breaks).
+
+   non-breaking hyphen (U+2011)
+
+      Similarly, this represents a hyphen character where nevertheless
+      no line breaking ought to occur.
+
+   word joiner (U+2060)
+
+      Also called "zero width non-breaking space".  This can be used to
+      disallow line breaking between two non-whitespace characters.
+
+   Note that in order to use these characters by name, they need to be
+   declared either in the Document Type Definition (DTD, [XML], Section
+   2.9), or in the "internal subset" ([XML], Section 2.8), like this:
+
+   <?xml version="1.0"?>
+
+   <!DOCTYPE rfc [
+
+     <!-- declare nbsp and friends -->
+     <!ENTITY nbsp    "&#xa0;">
+     <!ENTITY nbhy    "&#x2011;">
+     <!ENTITY wj      "&#x2060;">
+   ]>
 
 4.  Internationalization Considerations
 
