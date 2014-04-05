@@ -237,9 +237,10 @@ have been made in the v3 vocabulary:
 <list style="symbols">
 
 <t>The &lt;<x:ref>reference</x:ref>&gt; element can take another optional pair of
-attributes: "series" and "document". For example, the value for "series" would be "rfc",
-"fyi", "id", "bcp", and "std" for IETF-controlled documents; there would be many series for
-non-IETF documents as well. The value for "document" depends on the series, as described in
+attributes: "series" and "document". For example, the value for "series" would be 
+"id", "rfc", "fyi", "bcp", and "std" for Internet-Drafts, RFCs, and the BCP, FYI, and STD subseries;
+there would be many series for
+other documents as well. The value for "document" depends on the series, as described in
 &lt;<x:ref>reference</x:ref>&gt;.</t>
 
 <t>Instead of using the "series" and "document" attributes, the document author can instead
@@ -446,8 +447,6 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       content acts as fallback for output formats that do not support graphics,
       and thus ought to contain either a "line art" variant of the graphics, or
       otherwise prose that describes the included image in sufficient detail.
-      Note that RFCs occasionally are published with enhanced diagrams;
-      a recent example is <xref target="RFC5598"/>.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
@@ -556,6 +555,7 @@ or if the entire reference is retrieved from disk or from a URL.</t>
             <t>mib</t>
             <t>perl</t>
             <t>python</t>
+            <t>svg</t>
          </list>
             The RFC Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
@@ -624,7 +624,8 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       Furthermore, the "role" attribute can be used to mark an author as
       "editor". This is reflected both on the front page and in bibliographical
       references. Note that this specification does not define a precise
-      meaning for the term "editor".
+      meaning for the term "editor". For RFCs, it is the stream that determines who is
+      listed as authors or editors.
    </t>
    <t>
       See Section "Authors vs. Contributors" of <xref target="RFCPOLICY"/>
@@ -1041,7 +1042,7 @@ or if the entire reference is retrieved from disk or from a URL.</t>
    <iref item="Elements" subitem="dd" primary="true"/>
    <iref item="dd element" primary="true"/>
    <t>
-      The definition part of an entry in a definition list.
+      The term being defined in a definition list.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>dl</x:ref>&gt; (<xref target="element.dl"/>).</t>
    <t anchor="element.dd.contents"><!--AG-->
@@ -1726,7 +1727,7 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       Deprecated. Instead, use
       &lt;<x:ref>dl</x:ref>&gt; for list/@style "hanging";
       &lt;<x:ref>ul</x:ref>&gt; for list/@style "empty" or "symbols"; and
-      &lt;<x:ref>ol</x:ref>&gt; for list/@style "letters", "numbers", or "format"
+      &lt;<x:ref>ol</x:ref>&gt; for list/@style "letters", "numbers", or "format".
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.list.contents"><!--AG-->
@@ -1744,7 +1745,7 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       <iref item="list element" subitem="counter attribute"/>
       <iref item="counter attribute" subitem="in list element"/>
       <t>
-        Deprecated.
+        Deprecated. The functionality of this attribute has been replaced with &lt;<x:ref>ol</x:ref>&gt;/@start.
       </t>
    </section>
 
@@ -3870,6 +3871,7 @@ would generate
    <seriesInfo name="RFC" value="3986"/>
   </reference>
 
+<!--
   <reference anchor='RFC5598'>
     <front>
     <title>Internet Mail Architecture</title>
@@ -3879,6 +3881,7 @@ would generate
     <seriesInfo name='RFC' value='5598' />
     <annotation>PDF version: <eref target="http://www.rfc-editor.org/rfc/rfc5598.pdf"/></annotation>
   </reference>
+-->
 
   <reference anchor='RFC5741'>
     <front>
