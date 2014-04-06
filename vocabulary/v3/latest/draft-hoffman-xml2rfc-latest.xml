@@ -16,6 +16,8 @@
 
 Find the remaining <cref>s and resolve them.
 
+Still need to figure out about the new references format.
+
 Not doing:
 	Maybe allow anchors in <li>, but need to specify what a processor should output for the text
 		<ol>s are easy, but what about <ul>? <dl> is doable but ugly
@@ -666,8 +668,7 @@ or if the entire reference is retrieved from disk or from a URL.</t>
             Author initials (used on the front page and in references).
          </t>
       <t>
-            Initials should be provided as a whitespace separated list of
-            pairs of a letter and a dot.
+            The value contains one or more initials, each followed by a period.
          </t>
    </section>
 
@@ -2240,11 +2241,22 @@ and the others are the RFCs that make up the STD</c>
       <c>document name (and year?)</c>
       <c>"XEP-0334"</c>
    </texttable>
-   <t>The processor needs to make sure that exactly zero or one of "series" is given. It has to
-   do a sanity check on the "document" value to be sure that the value is valid for the
-   "series". If the "series" value is "bcp" or "std", the processor needs to check if the list
-   in the "document" list matches the present or a previous set of values for the BCP or
-   STD.</t>
+
+   <t>
+     The processor needs to make sure that exactly zero or one of "series" is given. It has to
+     do a sanity check on the "document" value to be sure that the value is valid for the
+     "series". If the "series" value is "bcp" or "std", the processor needs to check if the list
+     in the "document" list matches the present or a previous set of values for the BCP or
+     STD.
+   </t>
+
+   <t>
+     The reason why the "bcp" and "std" types require that the author list the RFCs that are part
+     of the possibly-multipart item is that the contents of a BCP or STD can change over time, such
+     as if one of the RFCs is obsoleted. The author must specify the contents they intend at the
+     time of publication of the document.
+   </t>
+
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
    <t anchor="element.reference.contents"><!--AG-->Content model: this element does not have any contents.</t>
 
