@@ -100,7 +100,7 @@ Table of Contents
      2.34. <organization>
      2.35. <phone>
      2.36. <postal>
-     2.37. <postalline>
+     2.37. <postalLine>
      2.38. <postamble>
      2.39. <preamble>
      2.40. <reference>
@@ -165,7 +165,7 @@ Table of Contents
    Features of the expected processor are described in Appendix B.
 
    Note that the vocabulary contains certain constructs that might not
-   be used when generating the final text; however, they can provide
+   affect the rendering of the final text; however, they can provide
    useful data for other uses (such index generation, populating a
    keyword database, or syntax checks).
 
@@ -213,92 +213,93 @@ Table of Contents
 
    The list of changes so far is:
 
-   o  Did not generate the grammar from a DTD, but instead directly from
-      the Relax Next Generation (RNG) grammar.
+   o  Do not generate the grammar from a DTD, but instead get it
+      directly from the Relax Next Generation (RNG) grammar.
 
-   o  In <address>, allowed the sub-elements to be in any order.
+   o  In <address>, allow the sub-elements to be in any order.
 
-   o  In <artwork> and <author>, added optional "xml:lang" attribute.
+   o  In <artwork> and <author>, add optional "xml:lang" attribute.
+      Also deprecate "height" and "width".
 
-   o  Allowed <artwork> to be in a <section>, not just a figure.
+   o  Allow <artwork> to be in a <section>, not just a figure.
 
-   o  Deprecated "xml:space" in <artwork> because there was only one
+   o  Deprecat "xml:space" in <artwork> because there was only one
       useful value.
 
-   o  Gave more specifics of handling the "type" attribute in <artwork>.
+   o  Give more specifics of handling the "type" attribute in <artwork>.
 
-   o  Added the <b>, <i>, and <tt> elements.
+   o  Add the <b>, <i>, and <tt> elements.
 
-   o  Added the <blockquote> element.
+   o  Add the <blockquote> element.
 
-   o  Allowed <b>, <eref>, <i>, <tt>, and <xref> in <cref>.
+   o  Allow <b>, <eref>, <i>, <tt>, and <xref> in <cref>.
 
-   o  Deprecated <facsimile> because it is rarely used and is not
+   o  Deprecate <facsimile> because it is rarely used and is not
       actually useful.
 
-   o  Deprecated the "alt", "height", "src", and "width" attributes in
+   o  Deprecate the "alt", "height", "src", and "width" attributes in
       <figure> because they overlap with the attributes in <artwork>.
 
-   o  Allowed more than one <artwork> in <figure>.
+   o  Allow more than one <artwork> in <figure>.
 
-   o  In <front>, made <date> optional.
+   o  In <front>, make <date> optional.
 
-   o  Added <innerRefContent> to allow better control of text in a
+   o  Add <innerRefContent> to allow better control of text in a
       reference.
 
-   o  Deprecated <format> because it is not useful and has caused
+   o  Deprecate <format> because it is not useful and has caused
       surprise for authors in the past.
 
-   o  Deprecated <list> in favor of <dl>, <ul>, and <ol>.
+   o  Deprecate <list> in favor of <dl>, <ul>, and <ol>.
 
-   o  In <postal>, allowed the sub-elements to be in any order.  Also
-      allowed the inclusion of <postalline> instead of the older
-      elements.  Also added optional "xml:lang" attribute.
+   o  In <postal>, allow the sub-elements to be in any order.  Also
+      allow the inclusion of <postalLine> instead of the older elements.
+      Also add optional "xml:lang" attribute.
 
-   o  Added <postalline>, free text that represents one line of the
+   o  Add <postalLine>, free text that represents one line of the
       address.
 
-   o  Changed the handling of <reference>.  This large change is
-      described in Section 1.1.1.  Also, allowed the elements inside a
+   o  Change the handling of <reference>.  This large change is
+      described in Section 1.1.1.  Also, allow the elements inside a
       <reference> to be in any order.
 
-   o  Added "sortRefs", "symRefs", "tocDepth", and "tocInclude"
-      attributes in the <rfc> element to cover PIs that were in v2 that
-      are still needed in the grammar.
+   o  Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes
+      in the <rfc> element to cover PIs that were in v2 that are still
+      needed in the grammar.
 
-   o  In <section>, added the optional "numbered" and "removeinrfc"
-      attributes.  Also deprecated "title" in favor of <sectiontitle>.
+   o  In <section>, add the optional "numbered" and "removeinrfc"
+      attributes.  Also deprecate "title" in favor of <sectiontitle>.
 
-   o  Deprecated <spanx> element, and replaced it with <b>, <i>, and
+   o  Deprecate <spanx> element, and replaced it with <b>, <i>, and
       <tt>.
 
-   o  Added the <tindent> element for indented paragraphs.
+   o  Add the <tindent> element for indented paragraphs.
 
-   o  In <ttcol>, added <xref>, <eref>, <iref>, and <cref> as optional
+   o  In <ttcol>, add <xref>, <eref>, <iref>, and <cref> as optional
       children.
 
-   o  Deprecated <vspace> because the v2 spec labeled it as "a purely
+   o  Deprecate <vspace> because the v2 spec labeled it as "a purely
       presentational element and thus its use ought to be avoided".
 
-   o  Deprecated the "pageno" attribute in <xref> because it was unused
-      in v2.  Deprecated the "none" and "title" values for the "format"
+   o  Deprecate the "pageno" attribute in <xref> because it was unused
+      in v2.  Deprecate the "none" and "title" values for the "format"
       attribute in <xref> because the former makes no sense semantically
       and the latter because it has unpredictable output.
 
-   o  Added the "section", "relative", and "sectionFormat" attributes to
+   o  Add the "section", "relative", and "sectionFormat" attributes to
       <xref>.
 
-   o  Added "ascii" attributes to <author>, <email>, and <organization>
+   o  Add "ascii" attributes to <author>, <email>, and <organization>
       elements.  This allows an author to specify their information in
       their native scripts as the primary entry and still allow the
       ASCII-equivalent values to appear in the processed documents.
 
-   o  Added "autogeneratedBoilerplateText",
-      "autogeneratedSectionNumber", "autogeneratedFigureNumber", and
-      "autogeneratedTableNumber" attributes to <rfc>, <section>,
-      <figure>, and <texttable>, respectively.  These will be filled in
-      by the RFC processor so that the canonical XML file has all of the
-      same information as the non-canonical formats.
+   o  Add "autogeneratedBoilerplateText", "autogeneratedSectionNumber",
+      "autogeneratedFigureNumber", and "autogeneratedTableNumber"
+      attributes to <rfc>, <section>, <figure>, and <texttable>,
+      respectively.  These will be filled in by the RFC processor so
+      that the canonical XML file has all of the same information as the
+      non-canonical formats.
 
 1.1.1.  Design for Changes in Reference Handling
 
@@ -316,9 +317,8 @@ Table of Contents
    <front> and <seriesInfo> correct), or using XML entities that call
    out to xml.resource.org.  Both work, but both have their faults.  The
    first requires good copying skills and sometimes causes difficult XML
-   errors; the second prevents you from changing the anchor name and,
-   less importantly, also requires that you be online when you run the
-   xml2rfc processor.
+   errors; the second prevents you from changing the anchor name and
+   also requires that you be online when you run the xml2rfc processor.
 
    To make entering references easier for the vast majority of cases,
    the following changes have been made in the v3 vocabulary:
@@ -507,13 +507,7 @@ Table of Contents
 
 2.5.3.  'height' attribute
 
-   The suggested height of the graphics included using the "src"
-   attribute.
-
-   This attribute is format-dependent and ought to be avoided.
-
-   When generating HTML output, current implementations copy the
-   attribute "as is".  For other output formats it is usually ignored.
+   Deprecated.
 
 2.5.4.  'name' attribute
 
@@ -530,6 +524,8 @@ Table of Contents
 
    Note that this can be a "data" URI ([RFC2397]) as well, in which case
    the graphics file is wholly part of the XML file.
+
+   [[anchor2: Add an example of in-lined SVG here.]]
 
 2.5.6.  'type' attribute
 
@@ -573,18 +569,13 @@ Table of Contents
 
 2.5.7.  'width' attribute
 
-   The suggested width of the graphics included using the "src"
-   attribute.
-
-   This attribute is format-dependent and ought to be avoided.
-
-   When generating HTML output, current implementations copy the
-   attribute "as is".  For other output formats it is usually ignored.
+   Deprecated.
 
 2.5.8.  'xml:lang' attribute
 
    Allows specification of the language used.  This is sometimes useful
-   for renderers which display different fonts for CJK characters.
+   for renderers which display different fonts for ideographic
+   characters used in China and Japan.
 
 2.5.9.  'xml:space' attribute
 
@@ -727,7 +718,7 @@ Table of Contents
 
 2.9.2.  'cite' attribute (mandatory)
 
-   The source of the citation.  This must be a URI. [[anchor2: NEEDS AN
+   The source of the citation.  This must be a URI. [[anchor3: NEEDS AN
    EXAMPLE OF A CITE FOR A REFERENCE THAT IS ALREADY IN THE SPEC.]]
 
 2.10.  <c>
@@ -837,11 +828,9 @@ Table of Contents
    the processor will attempt to use the current system date if the
    attributes that are specified do match the system date.
 
-   Note that month names need to match the full (English) month name
-   ("January", "February", "March", "April", "May, "June", "July",
-   "August", "September", "October", "November", or "December") in order
-   for expiration calculations to work (some implementations might
-   support additional formats, though).
+   Note that month names, if given, need to match the full English month
+   name{ "January", "February", "March", "April", "May, "June", "July",
+   "August", "September", "October", "November", or "December".
 
    In the second case, the date information will be embedded as-is into
    the reference text.  Therefore, also vague dates ("ca. 2000"), date
@@ -1180,6 +1169,22 @@ Table of Contents
    reference.  The purpose of this element is to prevent the need to
    abuse <seriesInfo> to get such text in a reference.
 
+   For example:
+
+   <reference anchor="April1">
+     <front>
+       <title>On Being A Fool</title>
+       <author initials="K." surname="Phunny" fullname="Knot Phunny"/>
+       <date year="2000" month="April"/>
+     </front>
+     <innerRefContent>Self-published pamphlet</innerRefContent>
+   </reference>
+
+   would render as:
+
+      [April1]     Phunny, K., "On Being A Fool", Self-published
+                   pamphlet, April 2000.
+
    This element appears as child element of: <reference> (Section 2.40).
 
    Content model:
@@ -1450,7 +1455,7 @@ Table of Contents
    elements will be displayed in an order that is processor-specific.  A
    postal address can contain only a set of <street>, <city>, <region>,
    <code>, and <country> elements, or only an ordered set of
-   <postalline> elements, but not both.
+   <postalLine> elements, but not both.
 
    This element appears as child element of: <address> (Section 2.2).
 
@@ -1472,14 +1477,14 @@ Table of Contents
 
    Or:
 
-   o  One or more <postalline> elements (Section 2.37)
+   o  One or more <postalLine> elements (Section 2.37)
 
 2.36.1.  'xml:lang' attribute
 
    Allows specification of the language used.  This is sometimes useful
    for renderers which display different fonts for CJK characters.
 
-2.37.  <postalline>
+2.37.  <postalLine>
 
    Represents one line of a postal address.  When more than one
    <postalline> is given, the processor emits them in the order given.
@@ -1813,7 +1818,8 @@ Table of Contents
 
    Identifies a section within the document for which extraction "as-is"
    is explicitly allowed (only relevant for historic values of the "ipr"
-   attribute).
+   attribute). [[anchor4: Is this an anchor?  Free text describing the
+   section?]]
 
 2.43.7.  'number' attribute
 
@@ -2419,7 +2425,9 @@ Table of Contents
 
    The generated text depends on whether the <xref> is empty (in which
    case the processor will try to generate a meaningful text fragment),
-   and the nature of the referenced document part.
+   and the nature of the referenced document part. [[anchor5: Need to
+   say more about the processor output if the element is empyt and if it
+   has text.]]
 
    Any element that allows the "anchor" attribute can be referenced,
    however there are restrictions with respect to the text content being
@@ -2501,7 +2509,7 @@ Table of Contents
 
 2.59.3.  'relative' attribute
 
-   Specifies a relative reference from the main target. [[anchor3: NEED
+   Specifies a relative reference from the main target. [[anchor6: NEED
    MORE DESCRIPTION HERE ABOUT HOW THIS WILL BE DISPLAYED.]]
 
 2.59.4.  'section' attribute
@@ -2603,6 +2611,11 @@ Table of Contents
    used to derive a filename for saving to a local file system.
    Trusting this kind of information without pre-processing is a known
    security risk; see Section 4.3 of [RFC6266] for more information.
+
+   The "type" attribute of the <artwork> element could be interpreted by
+   some processors as a queue to automatically execute the artwork if it
+   is executable code.  That is clearly a terrible idea from a security
+   perspective.
 
    Furthermore, all security considerations related to XML processing
    are relevant as well (see Section 7 of [RFC3470]).
@@ -3123,14 +3136,14 @@ Appendix C.  Relax NG Schema
    postal =
      element postal {
        [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-       ((street | city | region | code | country)* | postalline+)
+       ((street | city | region | code | country)* | postalLine+)
      }
    street = element street { text }
    city = element city { text }
    region = element region { text }
    code = element code { text }
    country = element country { text }
-   postalline = element postalline { text }
+   postalLine = element postalLine { text }
    phone = element phone { text }
    facsimile = element facsimile { text }
    email =
@@ -3677,7 +3690,7 @@ Index
          organization  1
          phone  1
          postal  1
-         postalline  1
+         postalLine  1
          postamble  1
          preamble  1
          reference  1
@@ -3881,7 +3894,7 @@ Index
       postal element  1
          inside address  1
          xml:lang attribute  1
-      postalline element  1
+      postalLine element  1
          inside postal  1
       postamble element  1
          inside figure  1

@@ -14,7 +14,7 @@
 
 <!--
 
-Find the remaining <cref>s and resolve them
+Find the remaining <cref>s and resolve them.
 
 Not doing:
 	Maybe allow anchors in <li>, but need to specify what a processor should output for the text
@@ -84,8 +84,8 @@ much more emphasis put on the processor that handles the XML. Features of the ex
 processor are described in <xref target="processors"/>.
 </t>
 <t>
-  Note that the vocabulary contains certain constructs that might not be
-  used when generating the final text; however, they can provide useful
+  Note that the vocabulary contains certain constructs that might not affect the rendering of
+  the final text; however, they can provide useful
   data for other uses (such index generation, populating a keyword database, or
   syntax checks).
 </t>
@@ -136,78 +136,79 @@ The list of changes so far is:
 
 <list style="symbols">
 
-<t>Did not generate the grammar from a DTD, but instead directly from the Relax Next Generation (RNG) grammar.</t>
+<t>Do not generate the grammar from a DTD, but instead get it directly from the Relax Next Generation (RNG) grammar.</t>
 
-<t>In &lt;<x:ref>address</x:ref>&gt;, allowed the sub-elements to be in any order.</t>
+<t>In &lt;<x:ref>address</x:ref>&gt;, allow the sub-elements to be in any order.</t>
 
-<t>In &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>author</x:ref>&gt;, added optional "xml:lang" attribute.</t>
+<t>In &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>author</x:ref>&gt;, add optional "xml:lang" attribute.
+Also deprecate "height" and "width".</t>
 
-<t>Allowed &lt;<x:ref>artwork</x:ref>&gt; to be in a &lt;<x:ref>section</x:ref>&gt;, not just a figure.</t>
+<t>Allow &lt;<x:ref>artwork</x:ref>&gt; to be in a &lt;<x:ref>section</x:ref>&gt;, not just a figure.</t>
 
-<t>Deprecated "xml:space" in &lt;<x:ref>artwork</x:ref>&gt; because there was only one useful value.</t>
+<t>Deprecat "xml:space" in &lt;<x:ref>artwork</x:ref>&gt; because there was only one useful value.</t>
 
-<t>Gave more specifics of handling the "type" attribute in &lt;<x:ref>artwork</x:ref>&gt;.</t>
+<t>Give more specifics of handling the "type" attribute in &lt;<x:ref>artwork</x:ref>&gt;.</t>
 
-<t>Added the &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;, and &lt;<x:ref>tt</x:ref>&gt; elements.</t>
+<t>Add the &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;, and &lt;<x:ref>tt</x:ref>&gt; elements.</t>
 
-<t>Added the &lt;<x:ref>blockquote</x:ref>&gt; element.</t>
+<t>Add the &lt;<x:ref>blockquote</x:ref>&gt; element.</t>
 
-<t>Allowed &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>eref</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;, &lt;<x:ref>tt</x:ref>&gt;,
+<t>Allow &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>eref</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;, &lt;<x:ref>tt</x:ref>&gt;,
 and &lt;<x:ref>xref</x:ref>&gt; in &lt;<x:ref>cref</x:ref>&gt;.</t>
 
-<t>Deprecated &lt;<x:ref>facsimile</x:ref>&gt; because it is rarely used and is not actually useful.</t>
+<t>Deprecate &lt;<x:ref>facsimile</x:ref>&gt; because it is rarely used and is not actually useful.</t>
 
-<t>Deprecated the "alt", "height", "src", and "width" attributes in &lt;<x:ref>figure</x:ref>&gt;
+<t>Deprecate the "alt", "height", "src", and "width" attributes in &lt;<x:ref>figure</x:ref>&gt;
 because they overlap with the attributes in &lt;<x:ref>artwork</x:ref>&gt;.</t>
 
-<t>Allowed more than one &lt;<x:ref>artwork</x:ref>&gt; in &lt;<x:ref>figure</x:ref>&gt;.</t>
+<t>Allow more than one &lt;<x:ref>artwork</x:ref>&gt; in &lt;<x:ref>figure</x:ref>&gt;.</t>
 
-<t>In &lt;<x:ref>front</x:ref>&gt;, made &lt;<x:ref>date</x:ref>&gt; optional.</t>
+<t>In &lt;<x:ref>front</x:ref>&gt;, make &lt;<x:ref>date</x:ref>&gt; optional.</t>
 
-<t>Added &lt;<x:ref>innerRefContent</x:ref>&gt; to allow better control of text in a reference.</t>
+<t>Add &lt;<x:ref>innerRefContent</x:ref>&gt; to allow better control of text in a reference.</t>
 
-<t>Deprecated &lt;<x:ref>format</x:ref>&gt; because it is not useful and has caused surprise for authors in the past.</t>
+<t>Deprecate &lt;<x:ref>format</x:ref>&gt; because it is not useful and has caused surprise for authors in the past.</t>
 
-<t>Deprecated &lt;<x:ref>list</x:ref>&gt; in favor of &lt;<x:ref>dl</x:ref>&gt;, &lt;<x:ref>ul</x:ref>&gt;,
+<t>Deprecate &lt;<x:ref>list</x:ref>&gt; in favor of &lt;<x:ref>dl</x:ref>&gt;, &lt;<x:ref>ul</x:ref>&gt;,
 and &lt;<x:ref>ol</x:ref>&gt;.</t>
 
-<t>In &lt;<x:ref>postal</x:ref>&gt;, allowed the sub-elements to be in any order. Also allowed the inclusion
-of &lt;<x:ref>postalline</x:ref>&gt; instead of the older elements. Also added optional "xml:lang" attribute.</t>
+<t>In &lt;<x:ref>postal</x:ref>&gt;, allow the sub-elements to be in any order. Also allow the inclusion
+of &lt;<x:ref>postalLine</x:ref>&gt; instead of the older elements. Also add optional "xml:lang" attribute.</t>
 
-<t>Added &lt;<x:ref>postalline</x:ref>&gt;, free text that represents one line of the address.</t>
+<t>Add &lt;<x:ref>postalLine</x:ref>&gt;, free text that represents one line of the address.</t>
 
-<t>Changed the handling of &lt;<x:ref>reference</x:ref>&gt;. This large change is described in <xref target="reference_changes"/>.
-Also, allowed the elements inside a &lt;<x:ref>reference</x:ref>&gt; to be in any order.</t>
+<t>Change the handling of &lt;<x:ref>reference</x:ref>&gt;. This large change is described in <xref target="reference_changes"/>.
+Also, allow the elements inside a &lt;<x:ref>reference</x:ref>&gt; to be in any order.</t>
 
-<t>Added "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes in the &lt;<x:ref>rfc</x:ref>&gt;
+<t>Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes in the &lt;<x:ref>rfc</x:ref>&gt;
 element to cover PIs that were in v2 that are still needed in the grammar.</t>
 
-<t>In &lt;<x:ref>section</x:ref>&gt;, added the optional "numbered" and "removeinrfc" attributes.
-Also deprecated "title" in favor of &lt;<x:ref>sectiontitle</x:ref>&gt;.</t>
+<t>In &lt;<x:ref>section</x:ref>&gt;, add the optional "numbered" and "removeinrfc" attributes.
+Also deprecate "title" in favor of &lt;<x:ref>sectiontitle</x:ref>&gt;.</t>
 
-<t>Deprecated &lt;spanx&gt; element, and replaced it with &lt;b&gt;, &lt;i&gt;, and &lt;tt&gt;.</t>
+<t>Deprecate &lt;spanx&gt; element, and replaced it with &lt;b&gt;, &lt;i&gt;, and &lt;tt&gt;.</t>
 
-<t>Added the &lt;tindent&gt; element for indented paragraphs.</t>
+<t>Add the &lt;tindent&gt; element for indented paragraphs.</t>
 
-<t>In &lt;<x:ref>ttcol</x:ref>&gt;, added &lt;<x:ref>xref</x:ref>&gt;, &lt;<x:ref>eref</x:ref>&gt;, &lt;<x:ref>iref</x:ref>&gt;,
+<t>In &lt;<x:ref>ttcol</x:ref>&gt;, add &lt;<x:ref>xref</x:ref>&gt;, &lt;<x:ref>eref</x:ref>&gt;, &lt;<x:ref>iref</x:ref>&gt;,
 and &lt;<x:ref>cref</x:ref>&gt; as optional children.</t>
 
-<t>Deprecated &lt;vspace&gt; because the v2 spec labeled it as "a purely
+<t>Deprecate &lt;vspace&gt; because the v2 spec labeled it as "a purely
 presentational element and thus its use ought to be avoided".</t>
 
-<t>Deprecated the "pageno" attribute in &lt;<x:ref>xref</x:ref>&gt; because it was unused in v2.
-Deprecated the "none" and "title" values for the "format" attribute in &lt;<x:ref>xref</x:ref>&gt;
+<t>Deprecate the "pageno" attribute in &lt;<x:ref>xref</x:ref>&gt; because it was unused in v2.
+Deprecate the "none" and "title" values for the "format" attribute in &lt;<x:ref>xref</x:ref>&gt;
 because the former makes no sense semantically and the latter because it has unpredictable
 output.</t>
 
-<t>Added the "section", "relative", and "sectionFormat" attributes to &lt;<x:ref>xref</x:ref>&gt;.</t>
+<t>Add the "section", "relative", and "sectionFormat" attributes to &lt;<x:ref>xref</x:ref>&gt;.</t>
 
-<t>Added "ascii" attributes to &lt;<x:ref>author</x:ref>&gt;, &lt;<x:ref>email</x:ref>&gt;, and
+<t>Add "ascii" attributes to &lt;<x:ref>author</x:ref>&gt;, &lt;<x:ref>email</x:ref>&gt;, and
 &lt;<x:ref>organization</x:ref>&gt; elements. This allows an author to specify their information in their
 native scripts as the primary entry and still allow the ASCII-equivalent values to appear in the
 processed documents.</t>
 
-<t>Added "autogeneratedBoilerplateText", "autogeneratedSectionNumber", "autogeneratedFigureNumber",
+<t>Add "autogeneratedBoilerplateText", "autogeneratedSectionNumber", "autogeneratedFigureNumber",
 and "autogeneratedTableNumber" attributes to &lt;<x:ref>rfc</x:ref>&gt;, &lt;<x:ref>section</x:ref>&gt;,
 &lt;<x:ref>figure</x:ref>&gt;, and &lt;<x:ref>texttable</x:ref>&gt;, respectively. These will be
 filled in by the RFC processor so that the canonical XML file has all of the same information
@@ -228,7 +229,7 @@ references when making Internet Drafts.</t>
 hand (hopefully getting all the fiddly bits of &lt;front&gt; and &lt;seriesInfo&gt;
 correct), or using XML entities that call out to xml.resource.org. Both work, but both have
 their faults. The first requires good copying skills and sometimes causes difficult XML
-errors; the second prevents you from changing the anchor name and, less importantly, also
+errors; the second prevents you from changing the anchor name and also
 requires that you be online when you run the xml2rfc processor.</t>
 
 <t>To make entering references easier for the vast majority of cases, the following changes
@@ -489,15 +490,8 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       <iref item="artwork element" subitem="height attribute"/>
       <iref item="height attribute" subitem="in artwork element"/>
       <t>
-            The suggested height of the graphics included using the "src" attribute.
-         </t>
-      <t>
-            This attribute is format-dependent and ought to be avoided.
-         </t>
-      <t>
-            When generating HTML output, current implementations copy the attribute "as is".
-            For other output formats it is usually ignored.
-         </t>
+            Deprecated.
+      </t>
    </section>
 
    <!--artwork/@name-->
@@ -527,6 +521,9 @@ or if the entire reference is retrieved from disk or from a URL.</t>
             Note that this can be a "data" URI (<xref target="RFC2397"/>) as well, in which case the graphics
             file is wholly part of the XML file.
          </t>
+      <t>
+         <cref>Add an example of in-lined SVG here.</cref>
+      </t>
    </section>
 
    <!--artwork/@type-->
@@ -569,15 +566,8 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       <iref item="artwork element" subitem="width attribute"/>
       <iref item="width attribute" subitem="in artwork element"/>
       <t>
-            The suggested width of the graphics included using the "src" attribute.
-         </t>
-      <t>
-            This attribute is format-dependent and ought to be avoided.
-         </t>
-      <t>
-            When generating HTML output, current implementations copy the attribute "as is".
-            For other output formats it is usually ignored.
-         </t>
+            Deprecated.
+      </t>
    </section>
 
    <!--artwork/@xml:lang-->
@@ -587,7 +577,7 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       <iref item="xml:lang attribute" subitem="in artwork element"/>
       <t>
             Allows specification of the language used. This is sometimes useful for renderers which display
-            different fonts for CJK characters.
+            different fonts for ideographic characters used in China and Japan.
       </t>
    </section>
 
@@ -991,11 +981,9 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       date.
    </t>
    <t>
-      Note that month names need to match the full (English) month name 
-      ("January", "February", "March", "April", "May, "June", "July", "August",
-      "September", "October", "November", or "December") in order for expiration
-      calculations to work (some implementations might support additional
-      formats, though).
+      Note that month names, if given, need to match the full English month name{ 
+      "January", "February", "March", "April", "May, "June", "July", "August",
+      "September", "October", "November", or "December".
    </t>
    <t>
       In the second case, the date information will be embedded as-is into
@@ -1540,6 +1528,28 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       of this element is to prevent the need to abuse &lt;<x:ref>seriesInfo</x:ref>&gt; to
       get such text in a reference.
    </t>
+   <t>
+     For example:
+<figure>
+         <artwork>
+&lt;reference anchor="April1"&gt;
+  &lt;front&gt;
+    &lt;title&gt;On Being A Fool&lt;/title&gt;
+    &lt;author initials="K." surname="Phunny" fullname="Knot Phunny"/&gt;
+    &lt;date year="2000" month="April"/&gt;
+  &lt;/front&gt;
+  &lt;innerRefContent&gt;Self-published pamphlet&lt;/innerRefContent&gt;
+&lt;/reference&gt;
+</artwork>
+      </figure>
+     would render as:
+<figure>
+         <artwork>
+   [April1]     Phunny, K., "On Being A Fool", Self-published
+                pamphlet, April 2000.
+</artwork>
+      </figure>
+   </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
    <t anchor="element.innerRefContent.contents"><!--AG-->
         Content model:
@@ -1973,7 +1983,7 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       displayed in an order that is processor-specific.
       A postal address can contain only a set of &lt;<x:ref>street</x:ref>&gt;, &lt;<x:ref>city</x:ref>&gt;,
       &lt;<x:ref>region</x:ref>&gt;, &lt;<x:ref>code</x:ref>&gt;, and &lt;<x:ref>country</x:ref>&gt;
-      elements, or only an ordered set of &lt;<x:ref>postalline</x:ref>&gt; elements, but not both.
+      elements, or only an ordered set of &lt;<x:ref>postalLine</x:ref>&gt; elements, but not both.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.postal.contents"><!--AG-->
@@ -2006,8 +2016,8 @@ or if the entire reference is retrieved from disk or from a URL.</t>
          <x:lt>
           
             <t><!--AG-->
-               <iref item="Elements" subitem="postalline"/>
-               <iref item="postalline element" subitem="inside postal"/>One or more &lt;<x:ref>postalline</x:ref>&gt; elements (<xref target="element.postalline"/>)</t>
+               <iref item="Elements" subitem="postalLine"/>
+               <iref item="postalLine element" subitem="inside postal"/>One or more &lt;<x:ref>postalLine</x:ref>&gt; elements (<xref target="element.postalLine"/>)</t>
         
          </x:lt>
       </list>
@@ -2025,17 +2035,17 @@ or if the entire reference is retrieved from disk or from a URL.</t>
    </section>
 </section>
 
-<!--postalline-->
-<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;postalline&gt;" anchor="element.postalline">
-   <x:anchor-alias value="postalline"/>
-   <iref item="Elements" subitem="postalline" primary="true"/>
-   <iref item="postalline element" primary="true"/>
+<!--postalLine-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;postalLine&gt;" anchor="element.postalLine">
+   <x:anchor-alias value="postalLine"/>
+   <iref item="Elements" subitem="postalLine" primary="true"/>
+   <iref item="postalLine element" primary="true"/>
    <t>
       Represents one line of a postal address. When more than one &lt;postalline&gt; is given, the processor
       emits them in the order given.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
-   <t anchor="element.postalline.contents"><!--AG-->Content model: only text content.</t>
+   <t anchor="element.postalLine.contents"><!--AG-->Content model: only text content.</t>
 </section>
 
 <!--postamble-->
@@ -2499,8 +2509,8 @@ and the others are the RFCs that make up the STD</c>
       <t>
             Identifies a section within the document for which extraction "as-is"
             is explicitly allowed (only relevant for historic values of the "ipr"
-            attribute).
-         </t>
+            attribute). <cref>Is this an anchor? Free text describing the section?</cref>
+      </t>
    </section>
 
    <!--rfc/@number-->
@@ -3433,6 +3443,8 @@ and the others are the RFCs that make up the STD</c>
       The generated text depends on whether the &lt;xref&gt; is empty
       (in which case the processor will try to generate a meaningful text
       fragment), and the nature of the referenced document part.
+      <cref>Need to say more about the processor output if the element
+      is empyt and if it has text.</cref>
    </t>
    <t>   
       Any element that allows the "anchor" attribute can be referenced, however
@@ -3707,6 +3719,12 @@ would generate
   Trusting this kind of information without pre-processing is a known
   security risk; see <xref target="RFC6266" x:fmt="of" x:sec="4.3"/> for
   more information.
+</t>
+<t>
+  The "type" attribute of the &lt;<x:ref>artwork</x:ref>&gt; element could
+  be interpreted by some processors as a queue to automatically execute
+  the artwork if it is executable code. That is clearly a terrible idea
+  from a security perspective.
 </t>
 <t>
   Furthermore, all security considerations related to XML processing are
@@ -4499,14 +4517,14 @@ address =
 postal =
   element postal {
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-    ((street | city | region | code | country)* | postalline+)
+    ((street | city | region | code | country)* | postalLine+)
   }
 street = element street { text }
 city = element city { text }
 region = element region { text }
 code = element code { text }
 country = element country { text }
-postalline = element postalline { text }
+postalLine = element postalLine { text }
 phone = element phone { text }
 facsimile = element facsimile { text }
 email =
