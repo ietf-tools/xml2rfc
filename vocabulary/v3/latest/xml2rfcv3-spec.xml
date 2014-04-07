@@ -188,6 +188,16 @@
          </t>
    </section>
 
+   <!--artwork/@anchor-->
+   <section title="'anchor' attribute" anchor="element.artwork.attribute.anchor" toc="exclude">
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="artwork element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in artwork element"/>
+      <t><!--AG-->
+         <cref anchor="element.artwork.attribute.anchor.missing">attribute description missing</cref>
+      </t>
+   </section>
+
    <!--artwork/@height-->
    <section title="'height' attribute" anchor="element.artwork.attribute.height" toc="exclude">
       <iref item="Attributes" subitem="height"/>
@@ -370,8 +380,7 @@
             Author initials (used on the front page and in references).
          </t>
       <t>
-            Initials should be provided as a whitespace separated list of
-            pairs of a letter and a dot.
+            The value contains one or more initials, each followed by a period.
          </t>
    </section>
 
@@ -509,8 +518,7 @@
       <iref item="blockquote element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in blockquote element"/>
       <t>
-        Document-wide unique identifier for this quotation. The processor
-        will auto-generate an identifier when none is given.
+        Document-wide unique identifier for this quotation.
       </t>
    </section>
 
@@ -520,8 +528,8 @@
       <iref item="blockquote element" subitem="cite attribute"/>
       <iref item="cite attribute" subitem="in blockquote element"/>
       <t>
-         The source of the citation. This must be a URI. <cref>NEEDS AN EXAMPLE OF A CITE FOR A REFERENCE THAT IS
-         ALREADY IN THE SPEC.</cref>
+         The source of the citation. This must be a URI. <cref>Needs an example of a cite for a reference that is
+         already in the spec.</cref>
       </t>
    </section>
 </section>
@@ -648,8 +656,7 @@
       <iref item="cref element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in cref element"/>
       <t>
-        Document-wide unique identifier for this comment. The processor
-        will auto-generate an identifier when none is given.
+        Document-wide unique identifier for this comment.
       </t>
    </section>
 
@@ -1687,7 +1694,7 @@
       displayed in an order that is processor-specific.
       A postal address can contain only a set of &lt;<x:ref>street</x:ref>&gt;, &lt;<x:ref>city</x:ref>&gt;,
       &lt;<x:ref>region</x:ref>&gt;, &lt;<x:ref>code</x:ref>&gt;, and &lt;<x:ref>country</x:ref>&gt;
-      elements, or only an ordered set of &lt;<x:ref>postalline</x:ref>&gt; elements, but not both.
+      elements, or only an ordered set of &lt;<x:ref>postalLine</x:ref>&gt; elements, but not both.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.postal.contents"><!--AG-->
@@ -1744,8 +1751,9 @@
    <x:anchor-alias value="postalLine"/>
    <iref item="Elements" subitem="postalLine" primary="true"/>
    <iref item="postalLine element" primary="true"/>
-   <t><!--AG-->
-      <cref anchor="element.postalLine.missing">element description missing</cref>
+   <t>
+      Represents one line of a postal address. When more than one &lt;postalline&gt; is given, the processor
+      emits them in the order given.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.postalLine.contents"><!--AG-->Content model: only text content.</t>
@@ -1943,11 +1951,19 @@ and the others are the RFCs that make up the STD</c>
       <c>document name (and year?)</c>
       <c>"XEP-0334"</c>
    </texttable>
-   <t>The processor needs to make sure that exactly zero or one of "series" is given. It has to
-   do a sanity check on the "document" value to be sure that the value is valid for the
-   "series". If the "series" value is "bcp" or "std", the processor needs to check if the list
-   in the "document" list matches the present or a previous set of values for the BCP or
-   STD.</t>
+   <t>
+     The processor needs to make sure that exactly zero or one of "series" is given. It has to
+     do a sanity check on the "document" value to be sure that the value is valid for the
+     "series". If the "series" value is "bcp" or "std", the processor needs to check if the list
+     in the "document" list matches the present or a previous set of values for the BCP or
+     STD.
+   </t>
+   <t>
+     The reason why the "bcp" and "std" types require that the author list the RFCs that are part
+     of the possibly-multipart item is that the contents of a BCP or STD can change over time, such
+     as if one of the RFCs is obsoleted. The author must specify the contents they intend at the
+     time of publication of the document.
+   </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
    <t anchor="element.reference.contents"><!--AG-->Content model: this element does not have any contents.</t>
 
@@ -3265,8 +3281,8 @@ and the others are the RFCs that make up the STD</c>
       <iref item="xref element" subitem="relative attribute"/>
       <iref item="relative attribute" subitem="in xref element"/>
       <t>
-         Specifies a relative reference from the main target.  <cref>NEED MORE DESCRIPTION
-         HERE ABOUT HOW THIS WILL BE DISPLAYED.</cref>
+         Specifies a relative reference from the main target.  <cref>Need more description
+         here about how this will be displayed.</cref>
       </t>
    </section>
 

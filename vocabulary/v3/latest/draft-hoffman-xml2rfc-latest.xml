@@ -18,9 +18,6 @@ Find the remaining <cref>s and resolve them.
 
 Still need to figure out about the new references format.
 
-Add optional anchor attributes to block-level things, but need to say how they
-   will be rendered. Remove the anchor auto-generation from <cref> and <blockquote>
-
 Maybe not doing:
 	Maybe allow anchors in <li>, but need to specify what a processor should output for the text
 		<ol>s are easy, but what about <ul>? <dl> is doable but ugly
@@ -147,11 +144,9 @@ The list of changes so far is:
 <t>In &lt;<x:ref>address</x:ref>&gt;, allow the sub-elements to be in any order.</t>
 
 <t>In &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>author</x:ref>&gt;, add optional "xml:lang" attribute.
-Also deprecate "height" and "width".</t>
-
-<t>Allow &lt;<x:ref>artwork</x:ref>&gt; to be in a &lt;<x:ref>section</x:ref>&gt;, not just a figure.</t>
-
-<t>Deprecat "xml:space" in &lt;<x:ref>artwork</x:ref>&gt; because there was only one useful value.</t>
+Deprecate "xml:space" in &lt;<x:ref>artwork</x:ref>&gt; because there was only one useful value.
+Deprecate "height" and "width" attribute. Add "anchor" attribute.
+Allow &lt;<x:ref>artwork</x:ref>&gt; to be in a &lt;<x:ref>section</x:ref>&gt;, not just a figure.</t>
 
 <t>Give more specifics of handling the "type" attribute in &lt;<x:ref>artwork</x:ref>&gt;.</t>
 
@@ -489,6 +484,16 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       <t>
             Alternative text description of the artwork (not just the caption).
          </t>
+   </section>
+
+   <!--artwork/@anchor-->
+   <section title="'anchor' attribute" anchor="element.artwork.attribute.anchor" toc="exclude">
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="artwork element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in artwork element"/>
+      <t><!--AG-->
+         <cref anchor="element.artwork.attribute.anchor.missing">attribute description missing</cref>
+      </t>
    </section>
 
    <!--artwork/@height-->
@@ -2244,7 +2249,6 @@ and the others are the RFCs that make up the STD</c>
       <c>document name (and year?)</c>
       <c>"XEP-0334"</c>
    </texttable>
-
    <t>
      The processor needs to make sure that exactly zero or one of "series" is given. It has to
      do a sanity check on the "document" value to be sure that the value is valid for the
@@ -2252,14 +2256,12 @@ and the others are the RFCs that make up the STD</c>
      in the "document" list matches the present or a previous set of values for the BCP or
      STD.
    </t>
-
    <t>
      The reason why the "bcp" and "std" types require that the author list the RFCs that are part
      of the possibly-multipart item is that the contents of a BCP or STD can change over time, such
      as if one of the RFCs is obsoleted. The author must specify the contents they intend at the
      time of publication of the document.
    </t>
-
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
    <t anchor="element.reference.contents"><!--AG-->Content model: this element does not have any contents.</t>
 
@@ -4759,6 +4761,7 @@ artwork =
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+    attribute anchor { text }?,
     text*
   }
 postamble =
