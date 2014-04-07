@@ -18,7 +18,10 @@ Find the remaining <cref>s and resolve them.
 
 Still need to figure out about the new references format.
 
-Not doing:
+Add optional anchor attributes to block-level things, but need to say how they
+   will be rendered. Remove the anchor auto-generation from <cref> and <blockquote>
+
+Maybe not doing:
 	Maybe allow anchors in <li>, but need to specify what a processor should output for the text
 		<ol>s are easy, but what about <ul>? <dl> is doable but ugly
 	What happens with <t> currently, both inside and outside lists?
@@ -76,6 +79,7 @@ Non-ASCII
   the original version ("v1") <xref target="RFC2629"/>. This document directly copies the
   material from <xref target="XML2RFCv2"/> where possible; as that document makes its way
   toward RFC publication, this document will incorporate as many of the changes as possible.
+  <cref>More needs to be said here about what "obsoletes" means in this case.</cref>
 </t>
 <t>
 The v3 format will be used as part of the new RFC series described in <xref target="RFC6949"/>.
@@ -806,8 +810,7 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       <iref item="blockquote element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in blockquote element"/>
       <t>
-        Document-wide unique identifier for this quotation. The processor
-        will auto-generate an identifier when none is given.
+        Document-wide unique identifier for this quotation.
       </t>
    </section>
 
@@ -817,8 +820,8 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       <iref item="blockquote element" subitem="cite attribute"/>
       <iref item="cite attribute" subitem="in blockquote element"/>
       <t>
-         The source of the citation. This must be a URI. <cref>NEEDS AN EXAMPLE OF A CITE FOR A REFERENCE THAT IS
-         ALREADY IN THE SPEC.</cref>
+         The source of the citation. This must be a URI. <cref>Needs an example of a cite for a reference that is
+         already in the spec.</cref>
       </t>
    </section>
 </section>
@@ -945,8 +948,7 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       <iref item="cref element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in cref element"/>
       <t>
-        Document-wide unique identifier for this comment. The processor
-        will auto-generate an identifier when none is given.
+        Document-wide unique identifier for this comment.
       </t>
    </section>
 
@@ -3574,8 +3576,8 @@ and the others are the RFCs that make up the STD</c>
       <iref item="xref element" subitem="relative attribute"/>
       <iref item="relative attribute" subitem="in xref element"/>
       <t>
-         Specifies a relative reference from the main target.  <cref>NEED MORE DESCRIPTION
-         HERE ABOUT HOW THIS WILL BE DISPLAYED.</cref>
+         Specifies a relative reference from the main target.  <cref>Need more description
+         here about how this will be displayed.</cref>
       </t>
    </section>
 
