@@ -1,12 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
-    <title>v2 xml2rfc</title>
+    <title>xml2rfc (version v2)</title>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <link rel="stylesheet" type="text/css" href="xml2rfc.css">
   </head>
   <body>
-    <h1 align="center">v2 xml2rfc</h1>
+    <h1 align="center">xml2rfc (version v2)</h1>
     <p><br clear="all">
       A handy little tool,
       <b>xml2rfc</b>, will allow you to take your XML source (using the format defined in
@@ -43,30 +43,7 @@
 	      <li style='font-size: 1.5em;' colspan='2'>
 		Try your results in this handy converter form (which also supports more options than the
 		xml2rfc tool).
-	      </li>
-	      <li style='font-size: 1.5em; background-color: #0b0;' colspan='2'>
-		Note 1: This page is now using the v2 xml2rfc program.
-		(The current version number can be found <a href="/cgi-bin/xml2rfc-version">here</a>.)
-	      </li>
-	      <li style='font-size: 1.5em; background-color: #0b0;' colspan='2'>
-		Note 2: This version is <em>much</em> stricter in following the language spec than version v1.
-		(Version v1 would accept invalid XML in a variety of places.)
-	      </li>
-	      <li style='font-size: 1.5em; background-color: #0b0;' colspan='2'>
-		Note 3: If you find errors, please report them in the <a href="http://trac.tools.ietf.org/tools/xml2rfc/trac/">trac system</a>.
-	      </li>
-	      <li style='font-size: 1.5em; background-color: #0b0;' colspan='2'>
-		If you prefer to use the v1 version,
-		you can go to the <a href='old.html'>old xml2rfc</a> page.
-	      </li>
-	      <li style='font-size: 1.5em; background-color: orange' colspan='2'>
-		There is a GUI version of xml2rfc version 2 that may be run on your local computer, and
-		has been built and packaged for Linux (RPM + DEB), Mac and Windows.
-		Installation packages may be found on the IETF
-		<a href='http://tools.ietf.org/tools/'>tools</a>
-		web site.
-	      </li>
-	    </ol>
+
 	    <center>
 	      <form action="cgi-bin/xml2rfc.cgi" method="post" enctype="multipart/form-data">
 		<table bgcolor="#333333" border="0" cellpadding="1" cellspacing="0">
@@ -179,6 +156,40 @@
 		</table>
 	      </form>
 	    </center>
+	      </li>
+	      <li style='font-size: 1.5em; background-color: #0c0;' colspan='2'>
+		Note 1: This page is now using the v2 xml2rfc program.
+		(The specific version number can be found <a href="/cgi-bin/xml2rfc-version">here</a>.)
+	      </li>
+	      <li style='font-size: 1.5em; background-color: #0b0;' colspan='2'>
+		Note 2: Version v2 is <em>much</em> stricter in following the language spec than version v1.
+		For example,
+		<ul>
+		  <li>Version v1 would accept invalid XML in a variety of places. For example:
+		    <ul>
+		      <li>ENTITY declarations must be inside &lt;!DOCTYPE rfc SYSTEM "rfc2629.dtd"[   ]&gt;
+		      <li>Needs &lt;![CDATA[  ]]&gt; for some artwork that didn't need it for v1.
+		    </ul>
+		  <li>&lt;list&gt; &lt;/list&gt; must be inside &lt;t&gt; &lt;/t&gt; (and other similar nesting restrictions)
+		  <li>Version v2 does not tolerate characters that are not expressed in UTF-8.
+		</ul>
+	      </li>
+	      <li style='font-size: 1.5em; background-color: #0c0;' colspan='2'>
+		Note 3: If you find errors, please report them in the <a href="http://trac.tools.ietf.org/tools/xml2rfc/trac/">trac system</a>.
+	      </li>
+	      <li style='font-size: 1.5em; background-color: #0b0;' colspan='2'>
+		If you prefer to use the v1 version,
+		you can go to the <a href='old.html'>old xml2rfc</a> page.
+		(Note that after June 30, 2014, XML submitted to the RFC Editor XML must be able to be processed by the v2 version.)
+	      </li>
+	      <li style='font-size: 1.5em; background-color: orange' colspan='2'>
+		There is a GUI version of xml2rfc version 2 that may be run on your local computer, and
+		has been built and packaged for Linux (RPM + DEB), Mac and Windows.
+		Installation packages may be found on the IETF
+		<a href='http://tools.ietf.org/tools/'>tools</a>
+		web site.
+	      </li>
+	    </ol>
 	  </td>
 	</tr>
 
