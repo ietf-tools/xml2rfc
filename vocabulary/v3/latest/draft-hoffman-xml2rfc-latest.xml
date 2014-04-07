@@ -18,11 +18,12 @@ Find the remaining <cref>s and resolve them.
 
 Still need to figure out about the new references format.
 
-Maybe not doing:
+Probably not doing:
 	Maybe allow anchors in <li>, but need to specify what a processor should output for the text
 		<ol>s are easy, but what about <ul>? <dl> is doable but ugly
 	What happens with <t> currently, both inside and outside lists?
 		The text doesn't indicate where the list is. That sucks.
+	Anchor for <artwork> because there is no sensible way to specify what the processor should output.
 
 Non-ASCII
 	Resolve discussion of markup for Unicode characters and their equivalents
@@ -145,7 +146,7 @@ The list of changes so far is:
 
 <t>In &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>author</x:ref>&gt;, add optional "xml:lang" attribute.
 Deprecate "xml:space" in &lt;<x:ref>artwork</x:ref>&gt; because there was only one useful value.
-Deprecate "height" and "width" attribute. Add "anchor" attribute.
+Deprecate "height" and "width" attribute.
 Allow &lt;<x:ref>artwork</x:ref>&gt; to be in a &lt;<x:ref>section</x:ref>&gt;, not just a figure.</t>
 
 <t>Give more specifics of handling the "type" attribute in &lt;<x:ref>artwork</x:ref>&gt;.</t>
@@ -484,16 +485,6 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       <t>
             Alternative text description of the artwork (not just the caption).
          </t>
-   </section>
-
-   <!--artwork/@anchor-->
-   <section title="'anchor' attribute" anchor="element.artwork.attribute.anchor" toc="exclude">
-      <iref item="Attributes" subitem="anchor"/>
-      <iref item="artwork element" subitem="anchor attribute"/>
-      <iref item="anchor attribute" subitem="in artwork element"/>
-      <t><!--AG-->
-         <cref anchor="element.artwork.attribute.anchor.missing">attribute description missing</cref>
-      </t>
    </section>
 
    <!--artwork/@height-->
@@ -4761,7 +4752,6 @@ artwork =
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-    attribute anchor { text }?,
     text*
   }
 postamble =

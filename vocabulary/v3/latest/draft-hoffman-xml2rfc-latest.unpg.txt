@@ -221,9 +221,8 @@ Table of Contents
 
    o  In <artwork> and <author>, add optional "xml:lang" attribute.
       Deprecate "xml:space" in <artwork> because there was only one
-      useful value.  Deprecate "height" and "width" attribute.  Add
-      "anchor" attribute.  Allow <artwork> to be in a <section>, not
-      just a figure.
+      useful value.  Deprecate "height" and "width" attribute.  Allow
+      <artwork> to be in a <section>, not just a figure.
 
    o  Give more specifics of handling the "type" attribute in <artwork>.
 
@@ -506,16 +505,11 @@ Table of Contents
 
    Alternative text description of the artwork (not just the caption).
 
-2.5.3.  'anchor' attribute
-
-   [[element.artwork.attribute.anchor.missing: attribute description
-   missing]]
-
-2.5.4.  'height' attribute
+2.5.3.  'height' attribute
 
    Deprecated.
 
-2.5.5.  'name' attribute
+2.5.4.  'name' attribute
 
    A filename suitable for the contents (such as for extraction to a
    local file).
@@ -524,7 +518,7 @@ Table of Contents
    can be helpful for other kinds of tools (such as automated syntax
    checkers which work by extracting the source code).
 
-2.5.6.  'src' attribute
+2.5.5.  'src' attribute
 
    The URI of a graphics file.
 
@@ -533,7 +527,7 @@ Table of Contents
 
    [[anchor3: Add an example of in-lined SVG here.]]
 
-2.5.7.  'type' attribute
+2.5.6.  'type' attribute
 
    Specifies the type of the artwork.  The value of this attribute is
    free text with certain values designated as preferred.  A processor
@@ -573,17 +567,17 @@ Table of Contents
    Thus, a consumer of v3 XML should not cause a failure when it
    encounters an unexpected type.
 
-2.5.8.  'width' attribute
+2.5.7.  'width' attribute
 
    Deprecated.
 
-2.5.9.  'xml:lang' attribute
+2.5.8.  'xml:lang' attribute
 
    Allows specification of the language used.  This is sometimes useful
    for renderers which display different fonts for ideographic
    characters used in China and Japan.
 
-2.5.10.  'xml:space' attribute
+2.5.9.  'xml:space' attribute
 
    Deprecated.
 
@@ -2616,7 +2610,7 @@ Table of Contents
 
 5.  Security Considerations
 
-   The "name" attribute on the <artwork> element (Section 2.5.5) can be
+   The "name" attribute on the <artwork> element (Section 2.5.4) can be
    used to derive a filename for saving to a local file system.
    Trusting this kind of information without pre-processing is a known
    security risk; see Section 4.3 of [RFC6266] for more information.
@@ -3372,7 +3366,6 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "" ] attribute width { text }?,
        [ a:defaultValue = "" ] attribute height { text }?,
        [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-       attribute anchor { text }?,
        text*
      }
    postamble =
@@ -3462,7 +3455,6 @@ Index
          in artwork element  1
          in figure element  1
       anchor attribute
-         in artwork element  1
          in blockquote element  1
          in cref element  1
          in figure element  1
@@ -3478,7 +3470,6 @@ Index
       artwork element  1
          align attribute  1
          alt attribute  1
-         anchor attribute  1
          height attribute  1
          inside blockquote  1
          inside dd  1
