@@ -18,6 +18,10 @@ Find the remaining <cref>s and resolve them.
 
 Still need to figure out about the new references format.
 
+Before finishing, check for "so far" and "expected" wording and remove those.
+
+Add some tooling to mark the things that are deprecated?
+
 Probably not doing:
 	Maybe allow anchors in <li>, but need to specify what a processor should output for the text
 		<ol>s are easy, but what about <ul>? <dl> is doable but ugly
@@ -136,7 +140,7 @@ will issue errors if any deprecated features are in the input.
 </t>
 
 <t>
-The list of changes so far is:
+The list of format changes so far is:
 
 <list style="symbols">
 
@@ -536,10 +540,10 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       <iref item="type attribute" subitem="in artwork element"/>
       <t>
             Specifies the type of the artwork. The value of this attribute is free text with
-            certain values designated as preferred. A processor might add type-specific
+            certain values designated as preferred. A priave processor (as described in <xref target="processors"/> might add type-specific
             formatting to artwork with the preferred values in the non-canonical output
-            formats. If the processor encounters a value for "type" that is not one of the
-            preferred values, it can issue a warning.
+            formats. If a processor encounters a value for "type" that is not one of the
+            preferred values, it can issue a warning but should still use the artwork as if it had no "type" attribute.
          </t>
       <t>
             The beginning list of preferred values are:
@@ -976,7 +980,7 @@ or if the entire reference is retrieved from disk or from a URL.</t>
    </t>
    <t>
       Note that this element is used both for the boilerplate of the document
-      being produced, and also inside bibliographic references.
+      being produced, and also inside bibliographic references that use the &lt;<x:ref>front</x:ref>&gt; element.
    </t>
    <t>
       In the first case, it defines the publication date, which, when producing
@@ -2181,6 +2185,7 @@ or
 </artwork>
       </figure>
    </t>
+   <t><cref>Need to describe what will be rendered, particularly if the referenced stuff is not found.</cref></t>
    <t>
       The values for the "series" attribute are:
    </t>
@@ -4341,6 +4346,11 @@ of what is expected to be an RFC. </t>
 <t>This section describes topics that ares specific to processors. Note that there is some
 discussion of processors in the main body of the document as well. For example, some elements
 have descriptions of how a processor might create output from the element.</t>
+
+<t>In v2, the grammar was specified as a DTD. In v3, the grammar is specified only as Relax
+Next Generation (RNG). This means that processors most work from the RNG, not from a DTD. In
+fact, the author believes that some of the features of the v3 grammar cannot be specified as
+a DTD.</t>
 
 <t>This section differentiates between three types of processors:
 <list style="symbols">
