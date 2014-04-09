@@ -16,7 +16,7 @@
 
 Find the remaining <cref>s and resolve them.
 
-Split out <sourcecode> from <artwork>
+Split out <sourcecode> from <artwork>. Add this to the Security Considerations wording
 
 Still need to figure out about the new references format.
 
@@ -3744,9 +3744,12 @@ would generate
   more information.
 </t>
 <t>
-  The "type" attribute of the &lt;<x:ref>artwork</x:ref>&gt; element could
-  be interpreted by some processors as a queue to automatically execute
-  the artwork if it is executable code. That is clearly a terrible idea
+  The "type" attribute of the &lt;<x:ref>artwork</x:ref>&gt; element is meant
+  to encourage processors to automatically extract known types of content from
+  an RFC or Internet Draft. While extraction is probalby safe, those processors
+  might also think that they could further process the extracted content
+  such as by rendering artwork or executing code. Doing so without first
+  sanity-checking the extracted content is clearly a terrible idea
   from a security perspective.
 </t>
 <t>
