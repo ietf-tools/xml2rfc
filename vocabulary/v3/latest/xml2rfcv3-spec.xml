@@ -237,10 +237,10 @@
       <iref item="type attribute" subitem="in artwork element"/>
       <t>
             Specifies the type of the artwork. The value of this attribute is free text with
-            certain values designated as preferred. A processor might add type-specific
+            certain values designated as preferred. A priave processor (as described in <xref target="processors"/> might add type-specific
             formatting to artwork with the preferred values in the non-canonical output
-            formats. If the processor encounters a value for "type" that is not one of the
-            preferred values, it can issue a warning.
+            formats. If a processor encounters a value for "type" that is not one of the
+            preferred values, it can issue a warning but should still use the artwork as if it had no "type" attribute.
          </t>
       <t>
             The beginning list of preferred values are:
@@ -252,11 +252,19 @@
             <t>c++</t>
             <t>c</t>
             <t>call-flow</t>
+            <t>cbor</t>
+            <t>dtd</t>
             <t>hex-dump</t>
+            <t>java</t>
+            <t>javascript</t>
+            <t>json</t>
             <t>mib</t>
             <t>perl</t>
+            <t>pseudocode</t>
             <t>python</t>
+            <t>rnc</t>
             <t>svg</t>
+            <t>xml</t>
          </list>
             The RFC Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
@@ -672,7 +680,7 @@
    </t>
    <t>
       Note that this element is used both for the boilerplate of the document
-      being produced, and also inside bibliographic references.
+      being produced, and also inside bibliographic references that use the &lt;<x:ref>front</x:ref>&gt; element.
    </t>
    <t>
       In the first case, it defines the publication date, which, when producing
@@ -1878,6 +1886,9 @@ or
       </figure>
    </t>
    <t>
+      <cref>Need to describe what will be rendered, particularly if the referenced stuff is not found.</cref>
+   </t>
+   <t>
       The values for the "series" attribute are:
    </t>
    <texttable align="left">
@@ -1976,16 +1987,6 @@ and the others are the RFCs that make up the STD</c>
       <iref item="document attribute" subitem="in reference element"/>
       <t>
          The document or documents that make up a reference, as described earlier in this section.
-      </t>
-   </section>
-
-   <!--reference/@includeFile-->
-   <section title="'includeFile' attribute (mandatory)" anchor="element.reference.attribute.includeFile" toc="exclude">
-      <iref item="Attributes" subitem="includeFile"/>
-      <iref item="reference element" subitem="includeFile attribute"/>
-      <iref item="includeFile attribute" subitem="in reference element"/>
-      <t>
-         The name of a file on the local computer that contains the XML that would replace this reference.
       </t>
    </section>
 
@@ -2216,9 +2217,9 @@ and the others are the RFCs that make up the STD</c>
       <iref item="rfc element" subitem="iprExtract attribute"/>
       <iref item="iprExtract attribute" subitem="in rfc element"/>
       <t>
-            Identifies a section within the document for which extraction "as-is"
+            Identifies a Section within the document for which extraction "as-is"
             is explicitly allowed (only relevant for historic values of the "ipr"
-            attribute). <cref>Is this an anchor? Free text describing the section?</cref>
+            attribute).
       </t>
    </section>
 

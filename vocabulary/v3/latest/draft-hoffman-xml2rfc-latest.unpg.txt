@@ -3,10 +3,10 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629, draft-reschke-xml2rfc                     April 8, 2014
+Obsoletes: 2629, draft-reschke-xml2rfc                    April 10, 2014
 (if approved)
 Intended status: Standards Track
-Expires: October 10, 2014
+Expires: October 12, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 10, 2014.
+   This Internet-Draft will expire on October 12, 2014.
 
 Copyright Notice
 
@@ -555,6 +555,8 @@ Table of Contents
 
    o  cbor
 
+   o  dtd
+
    o  hex-dump
 
    o  java
@@ -571,7 +573,11 @@ Table of Contents
 
    o  python
 
+   o  rnc
+
    o  svg
+
+   o  xml
 
    The RFC Editor will maintain a complete list of the preferred values
    on its web site, and that list is expected to be updated over time.
@@ -1670,21 +1676,16 @@ Table of Contents
    The document or documents that make up a reference, as described
    earlier in this section.
 
-2.40.3.  'includeFile' attribute (mandatory)
-
-   The name of a file on the local computer that contains the XML that
-   would replace this reference.
-
-2.40.4.  'includeURI' attribute (mandatory)
+2.40.3.  'includeURI' attribute (mandatory)
 
    A URI that contains the XML that would replace this reference.
 
-2.40.5.  'series' attribute (mandatory)
+2.40.4.  'series' attribute (mandatory)
 
    The series from which the referred-to document comes from, as
    described earlier in this section.
 
-2.40.6.  'target' attribute
+2.40.5.  'target' attribute
 
    Holds the URI for the reference.
 
@@ -2629,10 +2630,15 @@ Table of Contents
    Trusting this kind of information without pre-processing is a known
    security risk; see Section 4.3 of [RFC6266] for more information.
 
-   The "type" attribute of the <artwork> element could be interpreted by
-   some processors as a queue to automatically execute the artwork if it
-   is executable code.  That is clearly a terrible idea from a security
-   perspective.
+   The "type" attribute of the <artwork> element is meant to encourage
+   processors to automatically extract known types of content from an
+   RFC or Internet Draft.  While extraction is probalby safe, those
+   processors might also think that they could further process the
+   extracted content such as by rendering artwork or executing code.
+   Doing so without first sanity-checking the extracted content is
+   clearly a terrible idea from a security perspective.  More generally,
+   a processor that is reading RFCs or Internet Drafts needs to be
+   suspicious of any content that it intends to post-process.
 
    Furthermore, all security considerations related to XML processing
    are relevant as well (see Section 7 of [RFC3470]).
@@ -3431,7 +3437,6 @@ Appendix C.  Relax NG Schema
        ((attribute series { text },
          attribute document { text })
         | attribute includeURI { text }
-        | attribute includeFile { text }
         | (front, (seriesInfo | format | innerRefContent |
    annotation)*))
      }
@@ -3532,7 +3537,6 @@ Index
          hangIndent  1
          hanging  1
          height  1
-         includeFile  1
          includeURI  1
          initials  1
          ipr  1
@@ -3815,8 +3819,6 @@ Index
          inside t  1
          inside tindent  1
          inside tt  1
-      includeFile attribute
-         in reference element  1
       includeURI attribute
          in reference element  1
       initials attribute
@@ -3932,7 +3934,6 @@ Index
       reference element  1
          anchor attribute  1
          document attribute  1
-         includeFile attribute  1
          includeURI attribute  1
          inside references  1
          series attribute  1
