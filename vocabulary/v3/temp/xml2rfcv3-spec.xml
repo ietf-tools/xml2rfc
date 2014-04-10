@@ -152,8 +152,6 @@
       content acts as fallback for output formats that do not support graphics,
       and thus ought to contain either a "line art" variant of the graphics, or
       otherwise prose that describes the included image in sufficient detail.
-      Note that RFCs occasionally are published with enhanced diagrams;
-      a recent example is <xref target="RFC5598"/>.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
@@ -196,15 +194,8 @@
       <iref item="artwork element" subitem="height attribute"/>
       <iref item="height attribute" subitem="in artwork element"/>
       <t>
-            The suggested height of the graphics included using the "src" attribute.
-         </t>
-      <t>
-            This attribute is format-dependent and ought to be avoided.
-         </t>
-      <t>
-            When generating HTML output, current implementations copy the attribute "as is".
-            For other output formats it is usually ignored.
-         </t>
+            Deprecated.
+      </t>
    </section>
 
    <!--artwork/@name-->
@@ -234,6 +225,9 @@
             Note that this can be a "data" URI (<xref target="RFC2397"/>) as well, in which case the graphics
             file is wholly part of the XML file.
          </t>
+      <t>
+         <cref>Add an example of in-lined SVG here.</cref>
+      </t>
    </section>
 
    <!--artwork/@type-->
@@ -243,10 +237,10 @@
       <iref item="type attribute" subitem="in artwork element"/>
       <t>
             Specifies the type of the artwork. The value of this attribute is free text with
-            certain values designated as preferred. A processor might add type-specific
+            certain values designated as preferred. A priave processor (as described in <xref target="processors"/> might add type-specific
             formatting to artwork with the preferred values in the non-canonical output
-            formats. If the processor encounters a value for "type" that is not one of the
-            preferred values, it can issue a warning.
+            formats. If a processor encounters a value for "type" that is not one of the
+            preferred values, it can issue a warning but should still use the artwork as if it had no "type" attribute.
          </t>
       <t>
             The beginning list of preferred values are:
@@ -258,10 +252,19 @@
             <t>c++</t>
             <t>c</t>
             <t>call-flow</t>
+            <t>cbor</t>
+            <t>dtd</t>
             <t>hex-dump</t>
+            <t>java</t>
+            <t>javascript</t>
+            <t>json</t>
             <t>mib</t>
             <t>perl</t>
+            <t>pseudocode</t>
             <t>python</t>
+            <t>rnc</t>
+            <t>svg</t>
+            <t>xml</t>
          </list>
             The RFC Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
@@ -275,15 +278,8 @@
       <iref item="artwork element" subitem="width attribute"/>
       <iref item="width attribute" subitem="in artwork element"/>
       <t>
-            The suggested width of the graphics included using the "src" attribute.
-         </t>
-      <t>
-            This attribute is format-dependent and ought to be avoided.
-         </t>
-      <t>
-            When generating HTML output, current implementations copy the attribute "as is".
-            For other output formats it is usually ignored.
-         </t>
+            Deprecated.
+      </t>
    </section>
 
    <!--artwork/@xml:lang-->
@@ -293,7 +289,7 @@
       <iref item="xml:lang attribute" subitem="in artwork element"/>
       <t>
             Allows specification of the language used. This is sometimes useful for renderers which display
-            different fonts for CJK characters.
+            different fonts for ideographic characters used in China and Japan.
       </t>
    </section>
 
@@ -330,7 +326,8 @@
       Furthermore, the "role" attribute can be used to mark an author as
       "editor". This is reflected both on the front page and in bibliographical
       references. Note that this specification does not define a precise
-      meaning for the term "editor".
+      meaning for the term "editor". For RFCs, it is the stream that determines who is
+      listed as authors or editors.
    </t>
    <t>
       See Section "Authors vs. Contributors" of <xref target="RFCPOLICY"/>
@@ -381,8 +378,7 @@
             Author initials (used on the front page and in references).
          </t>
       <t>
-            Initials should be provided as a whitespace separated list of
-            pairs of a letter and a dot.
+            The value contains one or more initials, each followed by a period.
          </t>
    </section>
 
@@ -520,8 +516,7 @@
       <iref item="blockquote element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in blockquote element"/>
       <t>
-        Document-wide unique identifier for this quotation. The processor
-        will auto-generate an identifier when none is given.
+        Document-wide unique identifier for this quotation.
       </t>
    </section>
 
@@ -531,8 +526,8 @@
       <iref item="blockquote element" subitem="cite attribute"/>
       <iref item="cite attribute" subitem="in blockquote element"/>
       <t>
-         The source of the citation. This must be a URI. <cref>NEEDS AN EXAMPLE OF A CITE FOR A REFERENCE THAT IS
-         ALREADY IN THE SPEC.</cref>
+         The source of the citation. This must be a URI. <cref>Needs an example of a cite for a reference that is
+         already in the spec.</cref>
       </t>
    </section>
 </section>
@@ -659,8 +654,7 @@
       <iref item="cref element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in cref element"/>
       <t>
-        Document-wide unique identifier for this comment. The processor
-        will auto-generate an identifier when none is given.
+        Document-wide unique identifier for this comment.
       </t>
    </section>
 
@@ -686,7 +680,7 @@
    </t>
    <t>
       Note that this element is used both for the boilerplate of the document
-      being produced, and also inside bibliographic references.
+      being produced, and also inside bibliographic references that use the &lt;<x:ref>front</x:ref>&gt; element.
    </t>
    <t>
       In the first case, it defines the publication date, which, when producing
@@ -696,11 +690,9 @@
       date.
    </t>
    <t>
-      Note that month names need to match the full (English) month name 
-      ("January", "February", "March", "April", "May, "June", "July", "August",
-      "September", "October", "November", or "December") in order for expiration
-      calculations to work (some implementations might support additional
-      formats, though).
+      Note that month names, if given, need to match the full English month name{ 
+      "January", "February", "March", "April", "May, "June", "July", "August",
+      "September", "October", "November", or "December".
    </t>
    <t>
       In the second case, the date information will be embedded as-is into
@@ -747,7 +739,7 @@
    <iref item="Elements" subitem="dd" primary="true"/>
    <iref item="dd element" primary="true"/>
    <t>
-      The definition part of an entry in a definition list.
+      The term being defined in a definition list.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>dl</x:ref>&gt; (<xref target="element.dl"/>).</t>
    <t anchor="element.dd.contents"><!--AG-->
@@ -960,7 +952,8 @@
    <iref item="Elements" subitem="figure" primary="true"/>
    <iref item="figure element" primary="true"/>
    <t>
-      A container for artwork that can have an optional title, preamble text, and postamable text.
+      This element is used to represent a figure, consisting of an optional	preamble,
+      the actual figure, an optional postamble, and an optional title.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
    <t anchor="element.figure.contents"><!--AG-->Content model:</t>
@@ -1026,6 +1019,9 @@
       <t>
         Document-wide unique identifier for this figure.
       </t>
+      <t>
+        Furthermore, the presence of this attribute causes the figure to be	numbered.
+      </t>
    </section>
 
    <!--figure/@autogeneratedFigureNumber-->
@@ -1067,8 +1063,8 @@
       <iref item="suppress-title attribute" subitem="in figure element"/>
       <t>
             Figures that have an "anchor" attribute will automatically get
-            an autogenerated title (such as "Figure 1"). Setting this
-            attribute to "false" will prevent this.
+            an autogenerated title (such as "Figure 1"), even if the "title"
+            attribute is absent. Setting this attribute to "true" will prevent this.
          </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"true"</t>
@@ -1083,9 +1079,7 @@
       <iref item="figure element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in figure element"/>
       <t>
-         The title for the figure; this appears on a line after the artwork. If the figure has
-         an "anchor" attribute, the title gets an autogenerated label such as "Figure 1", unless
-         the "suppress-title" attribute is set to "true".
+         The title for the figure; this usually appears on a line after the artwork.
       </t>
    </section>
 
@@ -1242,6 +1236,28 @@
       Text that should appear between the title and the date of a reference. The purpose
       of this element is to prevent the need to abuse &lt;<x:ref>seriesInfo</x:ref>&gt; to
       get such text in a reference.
+   </t>
+   <t>
+     For example:
+<figure>
+         <artwork>
+&lt;reference anchor="April1"&gt;
+  &lt;front&gt;
+    &lt;title&gt;On Being A Fool&lt;/title&gt;
+    &lt;author initials="K." surname="Phunny" fullname="Knot Phunny"/&gt;
+    &lt;date year="2000" month="April"/&gt;
+  &lt;/front&gt;
+  &lt;innerRefContent&gt;Self-published pamphlet&lt;/innerRefContent&gt;
+&lt;/reference&gt;
+</artwork>
+      </figure>
+     would render as:
+<figure>
+         <artwork>
+   [April1]     Phunny, K., "On Being A Fool", Self-published
+                pamphlet, April 2000.
+</artwork>
+      </figure>
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
    <t anchor="element.innerRefContent.contents"><!--AG-->
@@ -1430,7 +1446,7 @@
       Deprecated. Instead, use
       &lt;<x:ref>dl</x:ref>&gt; for list/@style "hanging";
       &lt;<x:ref>ul</x:ref>&gt; for list/@style "empty" or "symbols"; and
-      &lt;<x:ref>ol</x:ref>&gt; for list/@style "letters", "numbers", or "format"
+      &lt;<x:ref>ol</x:ref>&gt; for list/@style "letters", "numbers", or "format".
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.list.contents"><!--AG-->
@@ -1448,7 +1464,7 @@
       <iref item="list element" subitem="counter attribute"/>
       <iref item="counter attribute" subitem="in list element"/>
       <t>
-        Deprecated.
+        Deprecated. The functionality of this attribute has been replaced with &lt;<x:ref>ol</x:ref>&gt;/@start.
       </t>
    </section>
 
@@ -1676,7 +1692,7 @@
       displayed in an order that is processor-specific.
       A postal address can contain only a set of &lt;<x:ref>street</x:ref>&gt;, &lt;<x:ref>city</x:ref>&gt;,
       &lt;<x:ref>region</x:ref>&gt;, &lt;<x:ref>code</x:ref>&gt;, and &lt;<x:ref>country</x:ref>&gt;
-      elements, or only an ordered set of &lt;<x:ref>postalline</x:ref>&gt; elements, but not both.
+      elements, or only an ordered set of &lt;<x:ref>postalLine</x:ref>&gt; elements, but not both.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.postal.contents"><!--AG-->
@@ -1709,8 +1725,8 @@
          <x:lt>
           
             <t><!--AG-->
-               <iref item="Elements" subitem="postalline"/>
-               <iref item="postalline element" subitem="inside postal"/>One or more &lt;<x:ref>postalline</x:ref>&gt; elements (<xref target="element.postalline"/>)</t>
+               <iref item="Elements" subitem="postalLine"/>
+               <iref item="postalLine element" subitem="inside postal"/>One or more &lt;<x:ref>postalLine</x:ref>&gt; elements (<xref target="element.postalLine"/>)</t>
         
          </x:lt>
       </list>
@@ -1728,17 +1744,17 @@
    </section>
 </section>
 
-<!--postalline-->
-<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;postalline&gt;" anchor="element.postalline">
-   <x:anchor-alias value="postalline"/>
-   <iref item="Elements" subitem="postalline" primary="true"/>
-   <iref item="postalline element" primary="true"/>
+<!--postalLine-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;postalLine&gt;" anchor="element.postalLine">
+   <x:anchor-alias value="postalLine"/>
+   <iref item="Elements" subitem="postalLine" primary="true"/>
+   <iref item="postalLine element" primary="true"/>
    <t>
       Represents one line of a postal address. When more than one &lt;postalline&gt; is given, the processor
       emits them in the order given.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
-   <t anchor="element.postalline.contents"><!--AG-->Content model: only text content.</t>
+   <t anchor="element.postalLine.contents"><!--AG-->Content model: only text content.</t>
 </section>
 
 <!--postamble-->
@@ -1825,18 +1841,6 @@
    </t>
 </section>
 
-<!--refdocument-->
-<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;refdocument&gt;" anchor="element.refdocument">
-   <x:anchor-alias value="refdocument"/>
-   <iref item="Elements" subitem="refdocument" primary="true"/>
-   <iref item="refdocument element" primary="true"/>
-   <t><!--AG-->
-      <cref anchor="element.refdocument.missing">element description missing</cref>
-   </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
-   <t anchor="element.refdocument.contents"><!--AG-->Content model: only text content.</t>
-</section>
-
 <!--reference-->
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;reference&gt;" anchor="element.reference">
    <x:anchor-alias value="reference"/>
@@ -1880,6 +1884,9 @@ or
 &lt;reference anchor="RFC6068" series="rfc" document="6068"&gt;
 </artwork>
       </figure>
+   </t>
+   <t>
+      <cref>Need to describe what will be rendered, particularly if the referenced stuff is not found.</cref>
    </t>
    <t>
       The values for the "series" attribute are:
@@ -1945,11 +1952,19 @@ and the others are the RFCs that make up the STD</c>
       <c>document name (and year?)</c>
       <c>"XEP-0334"</c>
    </texttable>
-   <t>The processor needs to make sure that exactly zero or one of "series" is given. It has to
-   do a sanity check on the "document" value to be sure that the value is valid for the
-   "series". If the "series" value is "bcp" or "std", the processor needs to check if the list
-   in the "document" list matches the present or a previous set of values for the BCP or
-   STD.</t>
+   <t>
+     The processor needs to make sure that exactly zero or one of "series" is given. It has to
+     do a sanity check on the "document" value to be sure that the value is valid for the
+     "series". If the "series" value is "bcp" or "std", the processor needs to check if the list
+     in the "document" list matches the present or a previous set of values for the BCP or
+     STD.
+   </t>
+   <t>
+     The reason why the "bcp" and "std" types require that the author list the RFCs that are part
+     of the possibly-multipart item is that the contents of a BCP or STD can change over time, such
+     as if one of the RFCs is obsoleted. The author must specify the contents they intend at the
+     time of publication of the document.
+   </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
    <t anchor="element.reference.contents"><!--AG-->Content model: this element does not have any contents.</t>
 
@@ -2039,18 +2054,6 @@ and the others are the RFCs that make up the STD</c>
             "Informative References".
          </t>
    </section>
-</section>
-
-<!--refseries-->
-<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;refseries&gt;" anchor="element.refseries">
-   <x:anchor-alias value="refseries"/>
-   <iref item="Elements" subitem="refseries" primary="true"/>
-   <iref item="refseries element" primary="true"/>
-   <t><!--AG-->
-      <cref anchor="element.refseries.missing">element description missing</cref>
-   </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
-   <t anchor="element.refseries.contents"><!--AG-->Content model: only text content.</t>
 </section>
 
 <!--region-->
@@ -2204,10 +2207,10 @@ and the others are the RFCs that make up the STD</c>
       <iref item="rfc element" subitem="iprExtract attribute"/>
       <iref item="iprExtract attribute" subitem="in rfc element"/>
       <t>
-            Identifies a section within the document for which extraction "as-is"
+            Identifies a Section within the document for which extraction "as-is"
             is explicitly allowed (only relevant for historic values of the "ipr"
             attribute).
-         </t>
+      </t>
    </section>
 
    <!--rfc/@number-->
@@ -2229,6 +2232,12 @@ and the others are the RFCs that make up the STD</c>
             A comma-separated list of RFC numbers or
             Internet-Draft names.
          </t>
+      <t>
+            Processors ought to parse the attribute value, so that incorrect
+            references can be detected and, depending on output format, 
+            hyperlinks can be generated. Also, the value ought to be reformatted
+            to insert whitespace after each comma if not already present.
+      </t>
    </section>
 
    <!--rfc/@seriesNo-->
@@ -2327,6 +2336,12 @@ and the others are the RFCs that make up the STD</c>
             A comma-separated list of RFC numbers or
             Internet-Draft names.
          </t>
+      <t>
+            Processors ought to parse the attribute value, so that incorrect
+            references can be detected and, depending on output format, 
+            hyperlinks can be generated. Also, the value ought to be reformatted
+            to insert whitespace after each comma if not already present.
+      </t>
    </section>
 
    <!--rfc/@xml:lang-->
@@ -2695,7 +2710,7 @@ and the others are the RFCs that make up the STD</c>
    <iref item="texttable element" primary="true"/>
    <t>
       Contains a table, consisting of an optional preamble, a header line,
-      rows, and an optional postamble.
+      rows, an optional postamble, and an optional title.
    </t>
    <t>
       The number of columns in the table is determined by the number of
@@ -2755,6 +2770,9 @@ and the others are the RFCs that make up the STD</c>
       <t>
         Document-wide unique identifier for this table.
       </t>
+      <t>
+        Furthermore, the presence of this attribute causes the table to be numbered.
+      </t>
    </section>
 
    <!--texttable/@autogeneratedTableNumber-->
@@ -2808,8 +2826,8 @@ and the others are the RFCs that make up the STD</c>
       <iref item="suppress-title attribute" subitem="in texttable element"/>
       <t>
             Tables that have an "anchor" attribute will automatically get
-            an autogenerated title (such as "Table 1"). Setting this
-            attribute to "false" will prevent this.
+            an autogenerated title (such as "Table 1"), even if the "title"
+            attribute is absent. Setting this attribute to "true" will prevent this.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"true"</t>
@@ -2824,9 +2842,7 @@ and the others are the RFCs that make up the STD</c>
       <iref item="texttable element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in texttable element"/>
       <t>
-         The title for the table; this appears on a line after the table's body. If the table has
-         an "anchor" attribute, the title gets an autogenerated label such as "Table 1", unless
-         the "suppress-title" attribute is set to "true".
+         The title for the table; this appears on a line after the table's body.
       </t>
    </section>
 </section>
@@ -3127,6 +3143,8 @@ and the others are the RFCs that make up the STD</c>
       The generated text depends on whether the &lt;xref&gt; is empty
       (in which case the processor will try to generate a meaningful text
       fragment), and the nature of the referenced document part.
+      <cref>Need to say more about the processor output if the element
+      is empyt and if it has text.</cref>
    </t>
    <t>   
       Any element that allows the "anchor" attribute can be referenced, however
@@ -3244,8 +3262,8 @@ and the others are the RFCs that make up the STD</c>
       <iref item="xref element" subitem="relative attribute"/>
       <iref item="relative attribute" subitem="in xref element"/>
       <t>
-         Specifies a relative reference from the main target.  <cref>NEED MORE DESCRIPTION
-         HERE ABOUT HOW THIS WILL BE DISPLAYED.</cref>
+         Specifies a relative reference from the main target.  <cref>Need more description
+         here about how this will be displayed.</cref>
       </t>
    </section>
 

@@ -219,7 +219,7 @@
           </choice>
         </zeroOrMore>
         <oneOrMore>
-          <ref name="postalline"/>
+          <ref name="postalLine"/>
         </oneOrMore>
       </choice>
     </element>
@@ -249,8 +249,8 @@
       <text/>
     </element>
   </define>
-  <define name="postalline">
-    <element name="postalline">
+  <define name="postalLine">
+    <element name="postalLine">
       <text/>
     </element>
   </define>
@@ -1021,14 +1021,13 @@
       </optional>
       <choice>
         <group>
-          <ref name="refseries"/>
-          <ref name="refdocument"/>
-        </group>
-        <group>
           <attribute name="includeURI"/>
         </group>
         <group>
           <attribute name="includeFile"/>
+        </group>
+        <group>
+          <ref name="seriesInfo"/>
         </group>
         <group>
           <ref name="front"/>
@@ -1044,17 +1043,7 @@
       </choice>
     </element>
   </define>
-   <define name="refseries">
-    <element name="refseries">
-      <text/>
-    </element>
-  </define>
-  <define name="refdocument">
-    <element name="refdocument">
-      <text/>
-    </element>
-  </define>
- <define name="seriesInfo">
+  <define name="seriesInfo">
     <element name="seriesInfo">
       <attribute name="name"/>
       <attribute name="value"/>
