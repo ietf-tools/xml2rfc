@@ -382,9 +382,9 @@ Internet-Draft                  XML2RFCv3                     April 2014
       "document" depends on the series, as described in <reference>.
 
    o  Instead of using the "series" and "document" attributes, the
-      document author can instead use the "includeFile" or "includeURI"
-      attributes.  The "includeFile" attribute tells the processor that
-      the XML for this reference is actually in a file on the local
+      document author can instead use the "includeURI" attribute.  The
+      "includeURI" attribute tells the processor that the XML for this
+      reference is actually needs to be retrieved from the web (with the
 
 
 
@@ -393,8 +393,7 @@ Hoffman                 Expires October 12, 2014                [Page 7]
 Internet-Draft                  XML2RFCv3                     April 2014
 
 
-      disk; the "includeURI" attribute tells the processor that the XML
-      for this reference is actually needs to be retrieved from the web.
+      "http:" scheme) or on disk (with the "file:" scheme).
 
    o  The processor would emit a properly-formatted output for the
       reference in the non-canonical display formats based on rules
@@ -438,6 +437,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
    Content model:
 
    One or more <t> elements (Section 2.50)
+
 
 
 
@@ -1822,32 +1822,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
       As a pair of attributes: "series" and "document".
 
-      As a "includeFile" attribute that points to XML that is in a file
-      on the local disk.
-
       As a "includeURI" attribute that points to XML that is retrieved
-      from the web.
+      from the web or the local disk.
 
    In the latter method, the document does not need to contain any
    specifics for the reference other than a simple specification of the
    reference.
 
    For example, a reference to RFC 6068 is given as either:
-
-
-
-
-
-
-
-
-
-
-
-Hoffman                 Expires October 12, 2014               [Page 33]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
 
    <reference anchor="RFC6068">
      <front>
@@ -1859,6 +1841,13 @@ Internet-Draft                  XML2RFCv3                     April 2014
      </front>
      <seriesInfo name="RFC" value="6068"/>
    </reference>
+
+
+
+Hoffman                 Expires October 12, 2014               [Page 33]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
 
    or
 
@@ -1897,14 +1886,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    | ien      | number                 | "23"                          |
    | iso      | document name and year | "8859-6.1988"                 |
    | itu      | document name and year | "X509.2000"                   |
-
-
-
-Hoffman                 Expires October 12, 2014               [Page 34]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
    | nist     | document name and year | "500-214.1993"                |
    | oasis    | document name (and     | "TBD"                         |
    |          | year?)                 |                               |
@@ -1916,6 +1897,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
    +----------+------------------------+-------------------------------+
 
    The processor needs to make sure that exactly zero or one of "series"
+
+
+
+Hoffman                 Expires October 12, 2014               [Page 34]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
    is given.  It has to do a sanity check on the "document" value to be
    sure that the value is valid for the "series".  If the "series" value
    is "bcp" or "std", the processor needs to check if the list in the
@@ -1953,14 +1942,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    The series from which the referred-to document comes from, as
    described earlier in this section.
 
-
-
-
-Hoffman                 Expires October 12, 2014               [Page 35]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
 2.40.5.  'target' attribute
 
    Holds the URI for the reference.
@@ -1968,6 +1949,17 @@ Internet-Draft                  XML2RFCv3                     April 2014
    Note that depending on the <seriesInfo> element, a URI might not be
    needed, nor desirable, as it can be automatically generated (for
    instance, for RFCs).
+
+
+
+
+
+
+
+Hoffman                 Expires October 12, 2014               [Page 35]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
 
 2.41.  <references>
 
@@ -2009,14 +2001,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    present) and Internet-Draft mode ("docName" attribute being present):
    it is invalid to specify both.  Setting neither "number" nor
    "docName" can be useful for producing other types of document but is
-
-
-
-Hoffman                 Expires October 12, 2014               [Page 36]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
    out-of-scope for this specification.
 
    Content model:
@@ -2024,6 +2008,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
    In this order:
 
    1.  One <front> element (Section 2.24)
+
+
+
+
+Hoffman                 Expires October 12, 2014               [Page 36]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
 
    2.  One <middle> element (Section 2.31)
 
@@ -2064,15 +2056,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    o  "yes"
 
-
-
-
-
-Hoffman                 Expires October 12, 2014               [Page 37]
-
-Internet-Draft                  XML2RFCv3                     April 2014
-
-
 2.43.4.  'docName' attribute
 
    For Internet-Drafts, this specifies the draft name (which appears
@@ -2082,6 +2065,14 @@ Internet-Draft                  XML2RFCv3                     April 2014
    it should end with the current draft number ("-", plus two digits).
 
    Furthermore, it is good practice to disambiguate current editor
+
+
+
+Hoffman                 Expires October 12, 2014               [Page 37]
+
+Internet-Draft                  XML2RFCv3                     April 2014
+
+
    copies from submitted drafts (for instance, by replacing the draft
    number with the string "latest").
 
@@ -2120,6 +2111,15 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    o  "trust200902"
 
+   o  "noModificationTrust200902"
+
+   o  "noDerivativesTrust200902"
+
+   o  "pre5378Trust200902"
+
+
+
+
 
 
 
@@ -2128,12 +2128,6 @@ Hoffman                 Expires October 12, 2014               [Page 38]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
-
-   o  "noModificationTrust200902"
-
-   o  "noDerivativesTrust200902"
-
-   o  "pre5378Trust200902"
 
 2.43.6.  'iprExtract' attribute
 
@@ -2178,16 +2172,18 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    Allowed values:
 
+   o  "IETF" (default)
+
+   o  "IAB"
+
+
+
 
 
 Hoffman                 Expires October 12, 2014               [Page 39]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
-
-   o  "IETF" (default)
-
-   o  "IAB"
 
    o  "IRTF"
 
@@ -2230,7 +2226,11 @@ Internet-Draft                  XML2RFCv3                     April 2014
    hyperlinks can be generated.  Also, the value ought to be reformatted
    to insert whitespace after each comma if not already present.
 
+2.43.16.  'xml:lang' attribute
 
+   The natural language used in the document (defaults to "en").
+
+   See Section 2.12 of [XML] for more information.
 
 
 
@@ -2240,12 +2240,6 @@ Hoffman                 Expires October 12, 2014               [Page 40]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
-
-2.43.16.  'xml:lang' attribute
-
-   The natural language used in the document (defaults to "en").
-
-   See Section 2.12 of [XML] for more information.
 
 2.44.  <section>
 
@@ -2286,6 +2280,12 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    Document-wide unique identifier for this section.
 
+2.44.2.  'autogeneratedSectionNumber' attribute
+
+   The number for this section, if one is generated by the processor.
+   This attribute and its value are automatically generated by the RFC
+   Processor, and are ignored by other processors.  If the value already
+   exists when the RFC Processor is run, it is replaced.
 
 
 
@@ -2296,13 +2296,6 @@ Hoffman                 Expires October 12, 2014               [Page 41]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
-
-2.44.2.  'autogeneratedSectionNumber' attribute
-
-   The number for this section, if one is generated by the processor.
-   This attribute and its value are automatically generated by the RFC
-   Processor, and are ignored by other processors.  If the value already
-   exists when the RFC Processor is run, it is replaced.
 
 2.44.3.  'numbered' attribute
 
@@ -2345,6 +2338,13 @@ Internet-Draft                  XML2RFCv3                     April 2014
    indicates to include the section if it would be included by the
    tocDepth attribute of the <rfc> element.
 
+   Allowed values:
+
+   o  "include"
+
+   o  "exclude"
+
+
 
 
 
@@ -2352,12 +2352,6 @@ Hoffman                 Expires October 12, 2014               [Page 42]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
-
-   Allowed values:
-
-   o  "include"
-
-   o  "exclude"
 
    o  "default" (default)
 
@@ -2401,6 +2395,12 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    The name of the series.
 
+   The following names trigger specific processing (such as for auto-
+   generating links, and adding descriptions such as "work in
+   progress"): "BCP", "FYI", "Internet-Draft", "RFC", and "STD".
+
+
+
 
 
 
@@ -2408,10 +2408,6 @@ Hoffman                 Expires October 12, 2014               [Page 43]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
-
-   The following names trigger specific processing (such as for auto-
-   generating links, and adding descriptions such as "work in
-   progress"): "BCP", "FYI", "Internet-Draft", "RFC", and "STD".
 
 2.46.2.  'value' attribute (mandatory)
 
@@ -2458,14 +2454,16 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    The preferred values for <sourcecode> types are:
 
+   o  abnf
+
+
+
 
 
 Hoffman                 Expires October 12, 2014               [Page 44]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
-
-   o  abnf
 
    o  asn.1
 
@@ -2511,6 +2509,8 @@ Internet-Draft                  XML2RFCv3                     April 2014
    (Section 2.39), and <t> (Section 2.50).
 
    Content model: only text content.
+
+
 
 
 
@@ -4238,7 +4238,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          ascii  13, 20, 30
          autogeneratedBoilerplateText  37
          autogeneratedFigureNumber  22
-         autogeneratedSectionNumber  42
+         autogeneratedSectionNumber  41
          autogeneratedTableNumber  48
          blankLines  53
          category  37
@@ -4246,7 +4246,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          consensus  37
          counter  28
          day  18
-         docName  38
+         docName  37
          document  35
          empty  52
 
@@ -4293,7 +4293,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          suppress-title  23, 49
          surname  14
          symRefs  40
-         target  21, 23, 36, 56
+         target  21, 23, 35, 56
          title  23, 29, 36, 42, 49
          toc  42
          tocDepth  40
@@ -4302,7 +4302,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          updates  40
          value  44
          width  12, 23, 52
-         xml:lang  12, 14, 31, 41
+         xml:lang  12, 14, 31, 40
          xml:space  12, 46
          year  18
 
@@ -4326,7 +4326,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
       autogeneratedFigureNumber attribute
          in figure element  22
       autogeneratedSectionNumber attribute
-         in section element  42
+         in section element  41
       autogeneratedTableNumber attribute
          in texttable element  48
 
@@ -4414,7 +4414,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          inside t  46
          spacing attribute  19
       docName attribute
-         in rfc element  38
+         in rfc element  37
       document attribute
          in reference element  35
 
@@ -4453,7 +4453,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          facsimile  9, 21
          figure  15, 18, 21, 27, 41, 46, 49
          format  23
-         front  23, 37
+         front  23, 36
          i  10, 14-17, 19-20, 24-25, 27, 32-33, 43, 47, 50-51
          innerRefContent  25
          iref  9, 14, 16, 19-21, 24-25, 27, 32-33, 41, 43, 47, 49, 51
@@ -4555,7 +4555,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          target attribute  23
          type attribute  23
       front element  23
-         inside rfc  37
+         inside rfc  36
       fullname attribute
          in author element  13
 
@@ -4728,7 +4728,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          includeURI attribute  35
          inside references  36
          series attribute  35
-         target attribute  36
+         target attribute  35
       references element  36
          inside back  15
          title attribute  36
@@ -4742,7 +4742,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          autogeneratedBoilerplateText attribute  37
          category attribute  37
          consensus attribute  37
-         docName attribute  38
+         docName attribute  37
          ipr attribute  38
          iprExtract attribute  39
          number attribute  39
@@ -4762,7 +4762,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
 
          updates attribute  40
-         xml:lang attribute  41
+         xml:lang attribute  40
       role attribute
          in author element  13
 
@@ -4771,7 +4771,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          in xref element  55
       section element  41
          anchor attribute  41
-         autogeneratedSectionNumber attribute  42
+         autogeneratedSectionNumber attribute  41
          inside back  15
          inside middle  28
          inside section  41
@@ -4858,7 +4858,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
       target attribute
          in eref element  21
          in format element  23
-         in reference element  36
+         in reference element  35
          in xref element  56
       texttable element  47
          align attribute  48
@@ -4959,7 +4959,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          in artwork element  12
          in author element  14
          in postal element  31
-         in rfc element  41
+         in rfc element  40
       xml:space attribute
          in artwork element  12
          in spanx element  46
