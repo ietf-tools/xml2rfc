@@ -16,7 +16,7 @@
 
 Find the remaining <cref>s and resolve them.
 
-Split out <sourcecode> from <artwork>. Add this to the Security Considerations wording
+Should <sourcecode> be allowed in <figure>?
 
 Still need to figure out about the new references format.
 
@@ -195,14 +195,17 @@ element to cover PIs that were in v2 that are still needed in the grammar.</t>
 <t>In &lt;<x:ref>section</x:ref>&gt;, add the optional "numbered" and "removeinrfc" attributes.
 Also deprecate "title" in favor of &lt;<x:ref>sectiontitle</x:ref>&gt;.</t>
 
-<t>Deprecate &lt;spanx&gt; element, and replaced it with &lt;b&gt;, &lt;i&gt;, and &lt;tt&gt;.</t>
+<t>Deprecate &lt;<x:ref>spanx</x:ref>&gt; element, and replaced it with &lt;<x:ref>b</x:ref>&gt;,
+&lt;<x:ref>i</x:ref>&gt;, and &lt;<x:ref>tt</x:ref>&gt;.</t>
 
-<t>Add the &lt;tindent&gt; element for indented paragraphs.</t>
+<t>Add the &lt;<x:ref>sourcecode</x:ref>&gt; element to differentiate from &lt;<x:ref>artwork</x:ref>&gt;.</t>
+
+<t>Add the &lt;<x:ref>tindent</x:ref>&gt; element for indented paragraphs.</t>
 
 <t>In &lt;<x:ref>ttcol</x:ref>&gt;, add &lt;<x:ref>xref</x:ref>&gt;, &lt;<x:ref>eref</x:ref>&gt;, &lt;<x:ref>iref</x:ref>&gt;,
 and &lt;<x:ref>cref</x:ref>&gt; as optional children.</t>
 
-<t>Deprecate &lt;vspace&gt; because the v2 spec labeled it as "a purely
+<t>Deprecate &lt;<x:ref>vspace</x:ref>&gt; because the v2 spec labeled it as "a purely
 presentational element and thus its use ought to be avoided".</t>
 
 <t>Deprecate the "pageno" attribute in &lt;<x:ref>xref</x:ref>&gt; because it was unused in v2.
@@ -445,8 +448,6 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       used for a variety of things, such as:
       <list style="symbols">
          <t>diagrams ("line art"),</t>
-         <t>source code,</t>
-         <t>formal languages (such as ABNF or the RNC notation used in this document),</t>
          <t>complex tables, or</t>
          <t>protocol unit diagrams.</t>
       </list>
@@ -457,6 +458,10 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       content acts as fallback for output formats that do not support graphics,
       and thus ought to contain either a "line art" variant of the graphics, or
       otherwise prose that describes the included image in sufficient detail.
+   </t>
+   <t>
+      In <xref target="XML2RFCv2"/>, the &lt;artwork&gt; element was also used for source code and formal
+      languages; in v3, this is now done with &lt;<x:ref>sourcecode</x:ref>&gt;.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
@@ -514,7 +519,7 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       <t>
             This attribute generally isn't used for document generation, but it can
             be helpful for other kinds of tools (such as automated syntax checkers
-            which work by extracting the source code).
+            which work by extracting the artwork).
          </t>
    </section>
 
@@ -542,34 +547,18 @@ or if the entire reference is retrieved from disk or from a URL.</t>
       <iref item="type attribute" subitem="in artwork element"/>
       <t>
             Specifies the type of the artwork. The value of this attribute is free text with
-            certain values designated as preferred. A priave processor (as described in <xref target="processors"/> might add type-specific
+            certain values designated as preferred. A private processor (as described in <xref target="processors"/> might add type-specific
             formatting to artwork with the preferred values in the non-canonical output
             formats. If a processor encounters a value for "type" that is not one of the
             preferred values, it can issue a warning but should still use the artwork as if it had no "type" attribute.
          </t>
       <t>
-            The beginning list of preferred values are:
+            The preferred values for &lt;artwork&gt; types are:
             <list style="symbols">
-            <t>abnf</t>
             <t>ascii-art</t>
-            <t>asn.1</t>
-            <t>bash</t>
-            <t>c++</t>
-            <t>c</t>
             <t>call-flow</t>
-            <t>cbor</t>
-            <t>dtd</t>
             <t>hex-dump</t>
-            <t>java</t>
-            <t>javascript</t>
-            <t>json</t>
-            <t>mib</t>
-            <t>perl</t>
-            <t>pseudocode</t>
-            <t>python</t>
-            <t>rnc</t>
             <t>svg</t>
-            <t>xml</t>
          </list>
             The RFC Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
@@ -803,6 +792,9 @@ or if the entire reference is retrieved from disk or from a URL.</t>
          <t><!--AG-->
             <iref item="Elements" subitem="artwork"/>
             <iref item="artwork element" subitem="inside blockquote"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="sourcecode"/>
+            <iref item="sourcecode element" subitem="inside blockquote"/>&lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="tt"/>
             <iref item="tt element" subitem="inside blockquote"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
@@ -1064,6 +1056,9 @@ or if the entire reference is retrieved from disk or from a URL.</t>
          <t><!--AG-->
             <iref item="Elements" subitem="artwork"/>
             <iref item="artwork element" subitem="inside dd"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="sourcecode"/>
+            <iref item="sourcecode element" subitem="inside dd"/>&lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="xref"/>
             <iref item="xref element" subitem="inside dd"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
@@ -1708,6 +1703,10 @@ or if the entire reference is retrieved from disk or from a URL.</t>
             <t><!--AG-->
                <iref item="Elements" subitem="artwork"/>
                <iref item="artwork element" subitem="inside li"/>One or more &lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="sourcecode"/>
+               <iref item="sourcecode element" subitem="inside li"/>One or more &lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</t>
           
             <t><!--AG-->
                <iref item="Elements" subitem="xref"/>
@@ -2713,6 +2712,9 @@ and the others are the RFCs that make up the STD</c>
                <t><!--AG-->
                   <iref item="Elements" subitem="artwork"/>
                   <iref item="artwork element" subitem="inside section"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="sourcecode"/>
+                  <iref item="sourcecode element" subitem="inside section"/>&lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</t>
             </list>
          </t>
         
@@ -2896,6 +2898,78 @@ and the others are the RFCs that make up the STD</c>
    </section>
 </section>
 
+<!--sourcecode-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;sourcecode&gt;" anchor="element.sourcecode">
+   <x:anchor-alias value="sourcecode"/>
+   <iref item="Elements" subitem="sourcecode" primary="true"/>
+   <iref item="sourcecode element" primary="true"/>
+   <t>
+      This element allows the inclusion of sourcecode into the document.
+   </t>
+   <t>
+      &lt;sourcecode&gt; provides
+      full control of horizontal whitespace and line breaks.
+      It is thus useful for source code and formal languages (such as ABNF or the RNC notation used in this document).
+   </t>
+   <t>
+      For artwork such as character-based art, diagrams of message layouts, and so on,
+      use the &lt;<x:ref>artwork</x:ref>&gt; element instead.
+   </t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
+   <t anchor="element.sourcecode.contents"><!--AG-->Content model: only text content.</t>
+
+   <!--sourcecode/@name-->
+   <section title="'name' attribute" anchor="element.sourcecode.attribute.name" toc="exclude">
+      <iref item="Attributes" subitem="name"/>
+      <iref item="sourcecode element" subitem="name attribute"/>
+      <iref item="name attribute" subitem="in sourcecode element"/>
+      <t>
+            A filename suitable for the contents (such as for extraction to a local file).
+            This attribute generally isn't used for document generation, but it can
+            be helpful for other kinds of tools (such as automated syntax checkers
+            which work by extracting the source code).
+         </t>
+   </section>
+
+   <!--sourcecode/@type-->
+   <section title="'type' attribute" anchor="element.sourcecode.attribute.type" toc="exclude">
+      <iref item="Attributes" subitem="type"/>
+      <iref item="sourcecode element" subitem="type attribute"/>
+      <iref item="type attribute" subitem="in sourcecode element"/>
+      <t>
+            Specifies the type of the sourcecode. The value of this attribute is free text with
+            certain values designated as preferred. A private processor (as described in <xref target="processors"/> might add type-specific
+            formatting to sourcecode with the preferred values in the non-canonical output
+            formats. If a processor encounters a value for "type" that is not one of the
+            preferred values, it can issue a warning but should still use the artwork as if it had no "type" attribute.
+      </t>
+      <t>
+            The preferred values for &lt;sourcecode&gt; types are:
+            <list style="symbols">
+            <t>abnf</t>
+            <t>asn.1</t>
+            <t>bash</t>
+            <t>c++</t>
+            <t>c</t>
+            <t>cbor</t>
+            <t>dtd</t>
+            <t>java</t>
+            <t>javascript</t>
+            <t>json</t>
+            <t>mib</t>
+            <t>perl</t>
+            <t>pseudocode</t>
+            <t>python</t>
+            <t>rnc</t>
+            <t>xml</t>
+         </list>
+            The RFC Editor will maintain a complete list of the preferred values on its
+            web site, and that list is expected to be updated over time. Thus, a consumer
+            of v3 XML should not cause a failure when it encounters an unexpected type. 
+         </t>
+   </section>
+</section>
+
 <!--spanx-->
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;spanx&gt;" anchor="element.spanx">
    <x:anchor-alias value="spanx"/>
@@ -2977,6 +3051,9 @@ and the others are the RFCs that make up the STD</c>
          <t><!--AG-->
             <iref item="Elements" subitem="artwork"/>
             <iref item="artwork element" subitem="inside t"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="sourcecode"/>
+            <iref item="sourcecode element" subitem="inside t"/>&lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="xref"/>
             <iref item="xref element" subitem="inside t"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
@@ -3183,6 +3260,9 @@ and the others are the RFCs that make up the STD</c>
          <t><!--AG-->
             <iref item="Elements" subitem="artwork"/>
             <iref item="artwork element" subitem="inside tindent"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="sourcecode"/>
+            <iref item="sourcecode element" subitem="inside tindent"/>&lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="xref"/>
             <iref item="xref element" subitem="inside tindent"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
@@ -3736,7 +3816,7 @@ would generate
   more information.
 </t>
 <t>
-  The "type" attribute of the &lt;<x:ref>artwork</x:ref>&gt; element is meant
+  The "type" attribute of the &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt; elements is meant
   to encourage processors to automatically extract known types of content from
   an RFC or Internet Draft. While extraction is probalby safe, those processors
   might also think that they could further process the extracted content
@@ -4586,7 +4666,8 @@ section =
 }?,
     attribute autogeneratedSectionNumber { text }?,
     sectiontitle?,
-    (t | tindent | figure | texttable | iref | artwork)*,
+    (t | tindent | figure | texttable | iref | artwork | 
+sourcecode)*,
     section*
   }
 sectiontitle =
@@ -4603,6 +4684,7 @@ t =
      | dl
      | figure
      | artwork
+     | sourcecode
      | xref
      | eref
      | iref
@@ -4616,14 +4698,23 @@ t =
 tindent =
   element tindent {
     attribute anchor { xsd:ID }?,
-    (text | figure | artwork | xref | eref | iref | cref | tt | b | 
-i)*
+    (text
+     | figure
+     | artwork
+     | sourcecode
+     | xref
+     | eref
+     | iref
+     | cref
+     | tt
+     | b
+     | i)*
   }
 blockquote =
   element blockquote {
     attribute anchor { xsd:ID }?,
     attribute cite { text },
-    (text | figure | artwork | tt | b | i)*
+    (text | figure | artwork | sourcecode | tt | b | i)*
   }
 \list =
   element list {
@@ -4657,6 +4748,7 @@ li =
        dl,
        figure,
        artwork,
+       sourcecode,
        xref,
        eref,
        iref,
@@ -4681,6 +4773,7 @@ dd =
      | ul
      | figure
      | artwork
+     | sourcecode
      | xref
      | eref
      | iref
@@ -4770,6 +4863,12 @@ artwork =
     [ a:defaultValue = "" ] attribute height { text }?,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     text*
+  }
+sourcecode =
+  element sourcecode {
+    [ a:defaultValue = "" ] attribute name { text }?,
+    [ a:defaultValue = "" ] attribute type { text }?,
+    text
   }
 postamble =
   element postamble {

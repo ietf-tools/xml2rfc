@@ -110,19 +110,20 @@ Table of Contents
      2.44. <section>
      2.45. <sectiontitle>
      2.46. <seriesInfo>
-     2.47. <spanx>
-     2.48. <street>
-     2.49. <t>
-     2.50. <texttable>
-     2.51. <tindent>
-     2.52. <title>
-     2.53. <tt>
-     2.54. <ttcol>
-     2.55. <ul>
-     2.56. <uri>
-     2.57. <vspace>
-     2.58. <workgroup>
-     2.59. <xref>
+     2.47. <sourcecode>
+     2.48. <spanx>
+     2.49. <street>
+     2.50. <t>
+     2.51. <texttable>
+     2.52. <tindent>
+     2.53. <title>
+     2.54. <tt>
+     2.55. <ttcol>
+     2.56. <ul>
+     2.57. <uri>
+     2.58. <vspace>
+     2.59. <workgroup>
+     2.60. <xref>
    3.  Special Unicode Code Points
    4.  Internationalization Considerations
    5.  Security Considerations
@@ -273,6 +274,8 @@ Table of Contents
    o  Deprecate <spanx> element, and replaced it with <b>, <i>, and
       <tt>.
 
+   o  Add the <sourcecode> element to differentiate from <artwork>.
+
    o  Add the <tindent> element for indented paragraphs.
 
    o  In <ttcol>, add <xref>, <eref>, <iref>, and <cref> as optional
@@ -378,7 +381,7 @@ Table of Contents
 
    Content model:
 
-   One or more <t> elements (Section 2.49)
+   One or more <t> elements (Section 2.50)
 
 2.2.  <address>
 
@@ -398,7 +401,7 @@ Table of Contents
 
    o  <email> elements (Section 2.19)
 
-   o  <uri> elements (Section 2.56)
+   o  <uri> elements (Section 2.57)
 
 2.3.  <annotation>
 
@@ -421,7 +424,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.59)
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -429,9 +432,9 @@ Table of Contents
 
    o  <cref> elements (Section 2.14)
 
-   o  <spanx> elements (Section 2.47)
+   o  <spanx> elements (Section 2.48)
 
-   o  <tt> elements (Section 2.53)
+   o  <tt> elements (Section 2.54)
 
    o  <b> elements (Section 2.7)
 
@@ -463,11 +466,6 @@ Table of Contents
 
    o  diagrams ("line art"),
 
-   o  source code,
-
-   o  formal languages (such as ABNF or the RNC notation used in this
-      document),
-
    o  complex tables, or
 
    o  protocol unit diagrams.
@@ -479,10 +477,13 @@ Table of Contents
    variant of the graphics, or otherwise prose that describes the
    included image in sufficient detail.
 
+   In [XML2RFCv2], the <artwork> element was also used for source code
+   and formal languages; in v3, this is now done with <sourcecode>.
+
    This element appears as child element of: <blockquote> (Section 2.9),
    <dd> (Section 2.16), <figure> (Section 2.22), <li> (Section 2.29),
-   <section> (Section 2.44), <t> (Section 2.49), and <tindent>
-   (Section 2.51).
+   <section> (Section 2.44), <t> (Section 2.50), and <tindent>
+   (Section 2.52).
 
    Content model:
 
@@ -516,7 +517,7 @@ Table of Contents
 
    This attribute generally isn't used for document generation, but it
    can be helpful for other kinds of tools (such as automated syntax
-   checkers which work by extracting the source code).
+   checkers which work by extracting the artwork).
 
 2.5.5.  'src' attribute
 
@@ -530,54 +531,22 @@ Table of Contents
 2.5.6.  'type' attribute
 
    Specifies the type of the artwork.  The value of this attribute is
-   free text with certain values designated as preferred.  A priave
+   free text with certain values designated as preferred.  A private
    processor (as described in Appendix B might add type-specific
    formatting to artwork with the preferred values in the non-canonical
    output formats.  If a processor encounters a value for "type" that is
    not one of the preferred values, it can issue a warning but should
    still use the artwork as if it had no "type" attribute.
 
-   The beginning list of preferred values are:
-
-   o  abnf
+   The preferred values for <artwork> types are:
 
    o  ascii-art
 
-   o  asn.1
-
-   o  bash
-
-   o  c++
-
-   o  c
-
    o  call-flow
-
-   o  cbor
-
-   o  dtd
 
    o  hex-dump
 
-   o  java
-
-   o  javascript
-
-   o  json
-
-   o  mib
-
-   o  perl
-
-   o  pseudocode
-
-   o  python
-
-   o  rnc
-
    o  svg
-
-   o  xml
 
    The RFC Editor will maintain a complete list of the preferred values
    on its web site, and that list is expected to be updated over time.
@@ -670,8 +639,8 @@ Table of Contents
    (Section 2.14), <dd> (Section 2.16), <dt> (Section 2.18), <i>
    (Section 2.25), <innerRefContent> (Section 2.26), <li>
    (Section 2.29), <postamble> (Section 2.38), <preamble>
-   (Section 2.39), <sectiontitle> (Section 2.45), <t> (Section 2.49),
-   <tindent> (Section 2.51), and <tt> (Section 2.53).
+   (Section 2.39), <sectiontitle> (Section 2.45), <t> (Section 2.50),
+   <tindent> (Section 2.52), and <tt> (Section 2.54).
 
    Content model:
 
@@ -679,7 +648,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.59)
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -687,7 +656,7 @@ Table of Contents
 
    o  <cref> elements (Section 2.14)
 
-   o  <tt> elements (Section 2.53)
+   o  <tt> elements (Section 2.54)
 
    o  <i> elements (Section 2.25)
 
@@ -721,7 +690,9 @@ Table of Contents
 
    o  <artwork> elements (Section 2.5)
 
-   o  <tt> elements (Section 2.53)
+   o  <sourcecode> elements (Section 2.47)
+
+   o  <tt> elements (Section 2.54)
 
    o  <b> elements (Section 2.7)
 
@@ -740,7 +711,7 @@ Table of Contents
 
    Provides the content of a cell in a table.
 
-   This element appears as child element of: <texttable> (Section 2.50).
+   This element appears as child element of: <texttable> (Section 2.51).
 
    Content model:
 
@@ -748,7 +719,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.59)
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -756,9 +727,9 @@ Table of Contents
 
    o  <cref> elements (Section 2.14)
 
-   o  <spanx> elements (Section 2.47)
+   o  <spanx> elements (Section 2.48)
 
-   o  <tt> elements (Section 2.53)
+   o  <tt> elements (Section 2.54)
 
    o  <b> elements (Section 2.7)
 
@@ -801,8 +772,8 @@ Table of Contents
    <b> (Section 2.7), <c> (Section 2.10), <dd> (Section 2.16), <dt>
    (Section 2.18), <i> (Section 2.25), <li> (Section 2.29), <postamble>
    (Section 2.38), <preamble> (Section 2.39), <sectiontitle>
-   (Section 2.45), <t> (Section 2.49), <tindent> (Section 2.51), <tt>
-   (Section 2.53), and <ttcol> (Section 2.54).
+   (Section 2.45), <t> (Section 2.50), <tindent> (Section 2.52), <tt>
+   (Section 2.54), and <ttcol> (Section 2.55).
 
    Content model:
 
@@ -810,7 +781,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.59)
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -818,7 +789,7 @@ Table of Contents
 
    o  <i> elements (Section 2.25)
 
-   o  <tt> elements (Section 2.53)
+   o  <tt> elements (Section 2.54)
 
 2.14.1.  'anchor' attribute
 
@@ -881,13 +852,15 @@ Table of Contents
 
    o  <ol> elements (Section 2.33)
 
-   o  <ul> elements (Section 2.55)
+   o  <ul> elements (Section 2.56)
 
    o  <figure> elements (Section 2.22)
 
    o  <artwork> elements (Section 2.5)
 
-   o  <xref> elements (Section 2.59)
+   o  <sourcecode> elements (Section 2.47)
+
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -895,7 +868,7 @@ Table of Contents
 
    o  <cref> elements (Section 2.14)
 
-   o  <tt> elements (Section 2.53)
+   o  <tt> elements (Section 2.54)
 
    o  <b> elements (Section 2.7)
 
@@ -907,7 +880,7 @@ Table of Contents
    and a definition (<dd>).
 
    This element appears as child element of: <li> (Section 2.29), and
-   <t> (Section 2.49).
+   <t> (Section 2.50).
 
    Content model:
 
@@ -952,7 +925,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.59)
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -960,7 +933,7 @@ Table of Contents
 
    o  <cref> elements (Section 2.14)
 
-   o  <tt> elements (Section 2.53)
+   o  <tt> elements (Section 2.54)
 
    o  <b> elements (Section 2.7)
 
@@ -997,9 +970,9 @@ Table of Contents
    <b> (Section 2.7), <c> (Section 2.10), <cref> (Section 2.14), <dd>
    (Section 2.16), <dt> (Section 2.18), <i> (Section 2.25), <li>
    (Section 2.29), <postamble> (Section 2.38), <preamble>
-   (Section 2.39), <sectiontitle> (Section 2.45), <t> (Section 2.49),
-   <tindent> (Section 2.51), <tt> (Section 2.53), and <ttcol>
-   (Section 2.54).
+   (Section 2.39), <sectiontitle> (Section 2.45), <t> (Section 2.50),
+   <tindent> (Section 2.52), <tt> (Section 2.54), and <ttcol>
+   (Section 2.55).
 
    Content model: only text content.
 
@@ -1023,7 +996,7 @@ Table of Contents
 
    This element appears as child element of: <blockquote> (Section 2.9),
    <dd> (Section 2.16), <li> (Section 2.29), <section> (Section 2.44),
-   <t> (Section 2.49), and <tindent> (Section 2.51).
+   <t> (Section 2.50), and <tindent> (Section 2.52).
 
    Content model:
 
@@ -1132,7 +1105,7 @@ Table of Contents
 
    In this order:
 
-   1.  One <title> element (Section 2.52)
+   1.  One <title> element (Section 2.53)
 
    2.  One or more <author> elements (Section 2.6)
 
@@ -1140,7 +1113,7 @@ Table of Contents
 
    4.  Optional <area> elements (Section 2.4)
 
-   5.  Optional <workgroup> elements (Section 2.58)
+   5.  Optional <workgroup> elements (Section 2.59)
 
    6.  Optional <keyword> elements (Section 2.28)
 
@@ -1157,8 +1130,8 @@ Table of Contents
    <cref> (Section 2.14), <dd> (Section 2.16), <dt> (Section 2.18),
    <innerRefContent> (Section 2.26), <li> (Section 2.29), <postamble>
    (Section 2.38), <preamble> (Section 2.39), <sectiontitle>
-   (Section 2.45), <t> (Section 2.49), <tindent> (Section 2.51), and
-   <tt> (Section 2.53).
+   (Section 2.45), <t> (Section 2.50), <tindent> (Section 2.52), and
+   <tt> (Section 2.54).
 
    Content model:
 
@@ -1166,7 +1139,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.59)
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -1176,7 +1149,7 @@ Table of Contents
 
    o  <b> elements (Section 2.7)
 
-   o  <tt> elements (Section 2.53)
+   o  <tt> elements (Section 2.54)
 
 2.26.  <innerRefContent>
 
@@ -1208,7 +1181,7 @@ Table of Contents
 
    o  Text
 
-   o  <tt> elements (Section 2.53)
+   o  <tt> elements (Section 2.54)
 
    o  <b> elements (Section 2.7)
 
@@ -1233,8 +1206,8 @@ Table of Contents
    (Section 2.18), <figure> (Section 2.22), <i> (Section 2.25), <li>
    (Section 2.29), <postamble> (Section 2.38), <preamble>
    (Section 2.39), <section> (Section 2.44), <sectiontitle>
-   (Section 2.45), <t> (Section 2.49), <tindent> (Section 2.51), <tt>
-   (Section 2.53), and <ttcol> (Section 2.54).
+   (Section 2.45), <t> (Section 2.50), <tindent> (Section 2.52), <tt>
+   (Section 2.54), and <ttcol> (Section 2.55).
 
    Content model: this element does not have any contents.
 
@@ -1276,13 +1249,13 @@ Table of Contents
    A list element, used in <ol> and <ul>.
 
    This element appears as child element of: <ol> (Section 2.33), and
-   <ul> (Section 2.55).
+   <ul> (Section 2.56).
 
    Content model:
 
    Either:
 
-   o  One or more <t> elements (Section 2.49)
+   o  One or more <t> elements (Section 2.50)
 
    Or:
 
@@ -1290,7 +1263,7 @@ Table of Contents
 
       One or more <ol> elements (Section 2.33)
 
-      One or more <ul> elements (Section 2.55)
+      One or more <ul> elements (Section 2.56)
 
       One or more <dl> elements (Section 2.17)
 
@@ -1298,7 +1271,9 @@ Table of Contents
 
       One or more <artwork> elements (Section 2.5)
 
-      One or more <xref> elements (Section 2.59)
+      One or more <sourcecode> elements (Section 2.47)
+
+      One or more <xref> elements (Section 2.60)
 
       One or more <eref> elements (Section 2.20)
 
@@ -1306,7 +1281,7 @@ Table of Contents
 
       One or more <cref> elements (Section 2.14)
 
-      One or more <tt> elements (Section 2.53)
+      One or more <tt> elements (Section 2.54)
 
       One or more <b> elements (Section 2.7)
 
@@ -1318,11 +1293,11 @@ Table of Contents
    list/@style "empty" or "symbols"; and <ol> for list/@style "letters",
    "numbers", or "format".
 
-   This element appears as child element of: <t> (Section 2.49).
+   This element appears as child element of: <t> (Section 2.50).
 
    Content model:
 
-   One or more <t> elements (Section 2.49)
+   One or more <t> elements (Section 2.50)
 
 2.30.1.  'counter' attribute
 
@@ -1359,7 +1334,7 @@ Table of Contents
 
    Content model:
 
-   One or more <t> elements (Section 2.49)
+   One or more <t> elements (Section 2.50)
 
 2.32.1.  'title' attribute (mandatory)
 
@@ -1371,7 +1346,7 @@ Table of Contents
    a letter, depending on the value of the style attribute.
 
    This element appears as child element of: <dd> (Section 2.16), <li>
-   (Section 2.29), and <t> (Section 2.49).
+   (Section 2.29), and <t> (Section 2.50).
 
    Content model:
 
@@ -1480,7 +1455,7 @@ Table of Contents
 
    o  In any order:
 
-      *  <street> elements (Section 2.48)
+      *  <street> elements (Section 2.49)
 
       *  <city> elements (Section 2.11)
 
@@ -1513,7 +1488,7 @@ Table of Contents
    Gives text that appears at the bottom of a figure or table.
 
    This element appears as child element of: <figure> (Section 2.22),
-   and <texttable> (Section 2.50).
+   and <texttable> (Section 2.51).
 
    Content model:
 
@@ -1521,7 +1496,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.59)
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -1529,9 +1504,9 @@ Table of Contents
 
    o  <cref> elements (Section 2.14)
 
-   o  <spanx> elements (Section 2.47)
+   o  <spanx> elements (Section 2.48)
 
-   o  <tt> elements (Section 2.53)
+   o  <tt> elements (Section 2.54)
 
    o  <b> elements (Section 2.7)
 
@@ -1542,7 +1517,7 @@ Table of Contents
    Gives text that appears at the top of a figure or table.
 
    This element appears as child element of: <figure> (Section 2.22),
-   and <texttable> (Section 2.50).
+   and <texttable> (Section 2.51).
 
    Content model:
 
@@ -1550,7 +1525,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.59)
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -1558,9 +1533,9 @@ Table of Contents
 
    o  <cref> elements (Section 2.14)
 
-   o  <spanx> elements (Section 2.47)
+   o  <spanx> elements (Section 2.48)
 
-   o  <tt> elements (Section 2.53)
+   o  <tt> elements (Section 2.54)
 
    o  <b> elements (Section 2.7)
 
@@ -1946,17 +1921,19 @@ Table of Contents
 
    2.  In any order:
 
-       *  <t> elements (Section 2.49)
+       *  <t> elements (Section 2.50)
 
-       *  <tindent> elements (Section 2.51)
+       *  <tindent> elements (Section 2.52)
 
        *  <figure> elements (Section 2.22)
 
-       *  <texttable> elements (Section 2.50)
+       *  <texttable> elements (Section 2.51)
 
        *  <iref> elements (Section 2.27)
 
        *  <artwork> elements (Section 2.5)
+
+       *  <sourcecode> elements (Section 2.47)
 
    3.  Optional <section> elements (Section 2.44)
 
@@ -2033,7 +2010,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.59)
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -2041,7 +2018,7 @@ Table of Contents
 
    o  <cref> elements (Section 2.14)
 
-   o  <tt> elements (Section 2.53)
+   o  <tt> elements (Section 2.54)
 
    o  <b> elements (Section 2.7)
 
@@ -2072,21 +2049,95 @@ Table of Contents
    For Internet-Drafts, it is the full draft name (ending with the two-
    digit version number).
 
-2.47.  <spanx>
+2.47.  <sourcecode>
+
+   This element allows the inclusion of sourcecode into the document.
+
+   <sourcecode> provides full control of horizontal whitespace and line
+   breaks.  It is thus useful for source code and formal languages (such
+   as ABNF or the RNC notation used in this document).
+
+   For artwork such as character-based art, diagrams of message layouts,
+   and so on, use the <artwork> element instead.
+
+   This element appears as child element of: <blockquote> (Section 2.9),
+   <dd> (Section 2.16), <li> (Section 2.29), <section> (Section 2.44),
+   <t> (Section 2.50), and <tindent> (Section 2.52).
+
+   Content model: only text content.
+
+2.47.1.  'name' attribute
+
+   A filename suitable for the contents (such as for extraction to a
+   local file).  This attribute generally isn't used for document
+   generation, but it can be helpful for other kinds of tools (such as
+   automated syntax checkers which work by extracting the source code).
+
+2.47.2.  'type' attribute
+
+   Specifies the type of the sourcecode.  The value of this attribute is
+   free text with certain values designated as preferred.  A private
+   processor (as described in Appendix B might add type-specific
+   formatting to sourcecode with the preferred values in the non-
+   canonical output formats.  If a processor encounters a value for
+   "type" that is not one of the preferred values, it can issue a
+   warning but should still use the artwork as if it had no "type"
+   attribute.
+
+   The preferred values for <sourcecode> types are:
+
+   o  abnf
+
+   o  asn.1
+
+   o  bash
+
+   o  c++
+
+   o  c
+
+   o  cbor
+
+   o  dtd
+
+   o  java
+
+   o  javascript
+
+   o  json
+
+   o  mib
+
+   o  perl
+
+   o  pseudocode
+
+   o  python
+
+   o  rnc
+
+   o  xml
+
+   The RFC Editor will maintain a complete list of the preferred values
+   on its web site, and that list is expected to be updated over time.
+   Thus, a consumer of v3 XML should not cause a failure when it
+   encounters an unexpected type.
+
+2.48.  <spanx>
 
    Deprecated.  Use <b>, <i>, and <tt> instead.
 
    This element appears as child element of: <annotation> (Section 2.3),
    <c> (Section 2.10), <postamble> (Section 2.38), <preamble>
-   (Section 2.39), and <t> (Section 2.49).
+   (Section 2.39), and <t> (Section 2.50).
 
    Content model: only text content.
 
-2.47.1.  'style' attribute
+2.48.1.  'style' attribute
 
    Deprecated.
 
-2.47.2.  'xml:space' attribute
+2.48.2.  'xml:space' attribute
 
    Deprecated.
 
@@ -2096,7 +2147,7 @@ Table of Contents
 
    o  "preserve" (default)
 
-2.48.  <street>
+2.49.  <street>
 
    Provides a street address.
 
@@ -2104,7 +2155,7 @@ Table of Contents
 
    Content model: only text content.
 
-2.49.  <t>
+2.50.  <t>
 
    Contains a paragraph of text.
 
@@ -2122,7 +2173,7 @@ Table of Contents
 
    o  <ol> elements (Section 2.33)
 
-   o  <ul> elements (Section 2.55)
+   o  <ul> elements (Section 2.56)
 
    o  <dl> elements (Section 2.17)
 
@@ -2130,7 +2181,9 @@ Table of Contents
 
    o  <artwork> elements (Section 2.5)
 
-   o  <xref> elements (Section 2.59)
+   o  <sourcecode> elements (Section 2.47)
+
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -2138,21 +2191,21 @@ Table of Contents
 
    o  <cref> elements (Section 2.14)
 
-   o  <spanx> elements (Section 2.47)
+   o  <spanx> elements (Section 2.48)
 
-   o  <vspace> elements (Section 2.57)
+   o  <vspace> elements (Section 2.58)
 
-   o  <tt> elements (Section 2.53)
+   o  <tt> elements (Section 2.54)
 
    o  <b> elements (Section 2.7)
 
    o  <i> elements (Section 2.25)
 
-2.49.1.  'anchor' attribute
+2.50.1.  'anchor' attribute
 
    Document-wide unique identifier for this paragraph.
 
-2.50.  <texttable>
+2.51.  <texttable>
 
    Contains a table, consisting of an optional preamble, a header line,
    rows, an optional postamble, and an optional title.
@@ -2171,13 +2224,13 @@ Table of Contents
 
    1.  One optional <preamble> element (Section 2.39)
 
-   2.  One or more <ttcol> elements (Section 2.54)
+   2.  One or more <ttcol> elements (Section 2.55)
 
    3.  Optional <c> elements (Section 2.10)
 
    4.  One optional <postamble> element (Section 2.38)
 
-2.50.1.  'align' attribute
+2.51.1.  'align' attribute
 
    Determines the horizontal alignment of the table.
 
@@ -2189,21 +2242,21 @@ Table of Contents
 
    o  "right"
 
-2.50.2.  'anchor' attribute
+2.51.2.  'anchor' attribute
 
    Document-wide unique identifier for this table.
 
    Furthermore, the presence of this attribute causes the table to be
    numbered.
 
-2.50.3.  'autogeneratedTableNumber' attribute
+2.51.3.  'autogeneratedTableNumber' attribute
 
    The number for this table, if one is generated by the processor.
    This attribute and its value are automatically generated by the RFC
    Processor, and are ignored by other processors.  If the value already
    exists when the RFC Processor is run, it is replaced.
 
-2.50.4.  'style' attribute
+2.51.4.  'style' attribute
 
    Selects which borders should be drawn, where
 
@@ -2227,7 +2280,7 @@ Table of Contents
 
    o  "full" (default)
 
-2.50.5.  'suppress-title' attribute
+2.51.5.  'suppress-title' attribute
 
    Tables that have an "anchor" attribute will automatically get an
    autogenerated title (such as "Table 1"), even if the "title"
@@ -2240,12 +2293,12 @@ Table of Contents
 
    o  "false" (default)
 
-2.50.6.  'title' attribute
+2.51.6.  'title' attribute
 
    The title for the table; this appears on a line after the table's
    body.
 
-2.51.  <tindent>
+2.52.  <tindent>
 
    Contains a paragraph of text.  The paragraph is displayed with the
    left and right paragraph margins indented from the page margins.
@@ -2262,7 +2315,9 @@ Table of Contents
 
    o  <artwork> elements (Section 2.5)
 
-   o  <xref> elements (Section 2.59)
+   o  <sourcecode> elements (Section 2.47)
+
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -2270,17 +2325,17 @@ Table of Contents
 
    o  <cref> elements (Section 2.14)
 
-   o  <tt> elements (Section 2.53)
+   o  <tt> elements (Section 2.54)
 
    o  <b> elements (Section 2.7)
 
    o  <i> elements (Section 2.25)
 
-2.51.1.  'anchor' attribute
+2.52.1.  'anchor' attribute
 
    Document-wide unique identifier for this indented paragraph.
 
-2.52.  <title>
+2.53.  <title>
 
    Represents the document title.
 
@@ -2293,11 +2348,11 @@ Table of Contents
 
    Content model: only text content.
 
-2.52.1.  'abbrev' attribute
+2.53.1.  'abbrev' attribute
 
    Specifies an abbreviated variant of the document title.
 
-2.53.  <tt>
+2.54.  <tt>
 
    Causes the text to be displayed in a constant-width font.
 
@@ -2306,8 +2361,8 @@ Table of Contents
    <cref> (Section 2.14), <dd> (Section 2.16), <dt> (Section 2.18), <i>
    (Section 2.25), <innerRefContent> (Section 2.26), <li>
    (Section 2.29), <postamble> (Section 2.38), <preamble>
-   (Section 2.39), <sectiontitle> (Section 2.45), <t> (Section 2.49),
-   and <tindent> (Section 2.51).
+   (Section 2.39), <sectiontitle> (Section 2.45), <t> (Section 2.50),
+   and <tindent> (Section 2.52).
 
    Content model:
 
@@ -2315,7 +2370,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.59)
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -2327,17 +2382,17 @@ Table of Contents
 
    o  <i> elements (Section 2.25)
 
-2.54.  <ttcol>
+2.55.  <ttcol>
 
    Contains a column heading in a table.
 
-   This element appears as child element of: <texttable> (Section 2.50).
+   This element appears as child element of: <texttable> (Section 2.51).
 
    Content model:
 
    In any order:
 
-   o  <xref> elements (Section 2.59)
+   o  <xref> elements (Section 2.60)
 
    o  <eref> elements (Section 2.20)
 
@@ -2347,7 +2402,7 @@ Table of Contents
 
    o  Text
 
-2.54.1.  'align' attribute
+2.55.1.  'align' attribute
 
    Determines the horizontal alignment within the table column.
 
@@ -2359,23 +2414,23 @@ Table of Contents
 
    o  "right"
 
-2.54.2.  'width' attribute
+2.55.2.  'width' attribute
 
    The desired column width (as integer 0..100 followed by "%").
 
-2.55.  <ul>
+2.56.  <ul>
 
    An unordered list.  The labels on the items will be symbols picked by
    the processor.
 
    This element appears as child element of: <dd> (Section 2.16), <li>
-   (Section 2.29), and <t> (Section 2.49).
+   (Section 2.29), and <t> (Section 2.50).
 
    Content model:
 
    One or more <li> elements (Section 2.29)
 
-2.55.1.  'empty' attribute
+2.56.1.  'empty' attribute
 
    Defines whether or not the label is empty. empty="true" indicates
    that no label be shown.
@@ -2386,7 +2441,7 @@ Table of Contents
 
    o  "true"
 
-2.55.2.  'spacing' attribute
+2.56.2.  'spacing' attribute
 
    Defines whether or not there is a blank line between entries.
    spacing="normal" indicates a single blank line, while
@@ -2398,7 +2453,7 @@ Table of Contents
 
    o  "compact"
 
-2.56.  <uri>
+2.57.  <uri>
 
    Contains a web address associated with the author.
 
@@ -2408,19 +2463,19 @@ Table of Contents
 
    Content model: only text content.
 
-2.57.  <vspace>
+2.58.  <vspace>
 
    Deprecated.
 
-   This element appears as child element of: <t> (Section 2.49).
+   This element appears as child element of: <t> (Section 2.50).
 
    Content model: this element does not have any contents.
 
-2.57.1.  'blankLines' attribute
+2.58.1.  'blankLines' attribute
 
    Deprecated.
 
-2.58.  <workgroup>
+2.59.  <workgroup>
 
    This element is used to specify the Working Group (IETF) or Research
    Group (IRTF) from which the document originates, if any.  The
@@ -2437,7 +2492,7 @@ Table of Contents
 
    Content model: only text content.
 
-2.59.  <xref>
+2.60.  <xref>
 
    Inserts a reference to a different part of a document.
 
@@ -2458,13 +2513,13 @@ Table of Contents
    <b> (Section 2.7), <c> (Section 2.10), <cref> (Section 2.14), <dd>
    (Section 2.16), <dt> (Section 2.18), <i> (Section 2.25), <li>
    (Section 2.29), <postamble> (Section 2.38), <preamble>
-   (Section 2.39), <sectiontitle> (Section 2.45), <t> (Section 2.49),
-   <tindent> (Section 2.51), <tt> (Section 2.53), and <ttcol>
-   (Section 2.54).
+   (Section 2.39), <sectiontitle> (Section 2.45), <t> (Section 2.50),
+   <tindent> (Section 2.52), <tt> (Section 2.54), and <ttcol>
+   (Section 2.55).
 
    Content model: only text content.
 
-2.59.1.  'format' attribute
+2.60.1.  'format' attribute
 
    This attribute is used to control the format of the generated
    reference text.
@@ -2515,7 +2570,7 @@ Table of Contents
 
    o  "default" (default)
 
-2.59.2.  'pageno' attribute
+2.60.2.  'pageno' attribute
 
    Deprecated.
 
@@ -2525,12 +2580,12 @@ Table of Contents
 
    o  "false" (default)
 
-2.59.3.  'relative' attribute
+2.60.3.  'relative' attribute
 
    Specifies a relative reference from the main target. [[anchor7: Need
    more description here about how this will be displayed.]]
 
-2.59.4.  'section' attribute
+2.60.4.  'section' attribute
 
    Specifies a section for the generated reference.  For example,
 
@@ -2540,7 +2595,7 @@ Table of Contents
 
         See Section 2.3 of [RFC6949] for more information.
 
-2.59.5.  'sectionFormat' attribute
+2.60.5.  'sectionFormat' attribute
 
    The format that the section reference will be displayed in.  The
    acceptable values are:
@@ -2566,7 +2621,7 @@ Table of Contents
         See [RFC6949], Section 2.4 for more information.
         See [RFC6949] (Section 2.5) for more information.
 
-2.59.6.  'target' attribute (mandatory)
+2.60.6.  'target' attribute (mandatory)
 
    Identifies the document component being referenced.
 
@@ -2630,15 +2685,15 @@ Table of Contents
    Trusting this kind of information without pre-processing is a known
    security risk; see Section 4.3 of [RFC6266] for more information.
 
-   The "type" attribute of the <artwork> element is meant to encourage
-   processors to automatically extract known types of content from an
-   RFC or Internet Draft.  While extraction is probalby safe, those
-   processors might also think that they could further process the
-   extracted content such as by rendering artwork or executing code.
-   Doing so without first sanity-checking the extracted content is
-   clearly a terrible idea from a security perspective.  More generally,
-   a processor that is reading RFCs or Internet Drafts needs to be
-   suspicious of any content that it intends to post-process.
+   The "type" attribute of the <artwork> and <sourcecode> elements is
+   meant to encourage processors to automatically extract known types of
+   content from an RFC or Internet Draft.  While extraction is probalby
+   safe, those processors might also think that they could further
+   process the extracted content such as by rendering artwork or
+   executing code.  Doing so without first sanity-checking the extracted
+   content is clearly a terrible idea from a security perspective.  More
+   generally, a processor that is reading RFCs or Internet Drafts needs
+   to be suspicious of any content that it intends to post-process.
 
    Furthermore, all security considerations related to XML processing
    are relevant as well (see Section 7 of [RFC3470]).
@@ -3209,7 +3264,8 @@ Appendix C.  Relax NG Schema
    }?,
        attribute autogeneratedSectionNumber { text }?,
        sectiontitle?,
-       (t | tindent | figure | texttable | iref | artwork)*,
+       (t | tindent | figure | texttable | iref | artwork |
+   sourcecode)*,
        section*
      }
    sectiontitle =
@@ -3226,6 +3282,7 @@ Appendix C.  Relax NG Schema
         | dl
         | figure
         | artwork
+        | sourcecode
         | xref
         | eref
         | iref
@@ -3239,14 +3296,23 @@ Appendix C.  Relax NG Schema
    tindent =
      element tindent {
        attribute anchor { xsd:ID }?,
-       (text | figure | artwork | xref | eref | iref | cref | tt | b |
-   i)*
+       (text
+        | figure
+        | artwork
+        | sourcecode
+        | xref
+        | eref
+        | iref
+        | cref
+        | tt
+        | b
+        | i)*
      }
    blockquote =
      element blockquote {
        attribute anchor { xsd:ID }?,
        attribute cite { text },
-       (text | figure | artwork | tt | b | i)*
+       (text | figure | artwork | sourcecode | tt | b | i)*
      }
    \list =
      element list {
@@ -3280,6 +3346,7 @@ Appendix C.  Relax NG Schema
           dl,
           figure,
           artwork,
+          sourcecode,
           xref,
           eref,
           iref,
@@ -3304,6 +3371,7 @@ Appendix C.  Relax NG Schema
         | ul
         | figure
         | artwork
+        | sourcecode
         | xref
         | eref
         | iref
@@ -3393,6 +3461,12 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "" ] attribute height { text }?,
        [ a:defaultValue = "en" ] attribute xml:lang { text }?,
        text*
+     }
+   sourcecode =
+     element sourcecode {
+       [ a:defaultValue = "" ] attribute name { text }?,
+       [ a:defaultValue = "" ] attribute type { text }?,
+       text
      }
    postamble =
      element postamble {
@@ -3727,6 +3801,7 @@ Index
          section  1
          sectiontitle  1
          seriesInfo  1
+         sourcecode  1
          spanx  1
          street  1
          t  1
@@ -3886,6 +3961,7 @@ Index
       name attribute
          in artwork element  1
          in seriesInfo element  1
+         in sourcecode element  1
       note element  1
          inside front  1
          title attribute  1
@@ -3995,6 +4071,15 @@ Index
          in rfc element  1
       source attribute
          in cref element  1
+      sourcecode element  1
+         inside blockquote  1
+         inside dd  1
+         inside li  1
+         inside section  1
+         inside t  1
+         inside tindent  1
+         name attribute  1
+         type attribute  1
       spacing attribute
          in dl element  1
          in ol element  1
@@ -4093,6 +4178,7 @@ Index
       type attribute
          in artwork element  1
          in format element  1
+         in sourcecode element  1
 
    U
       ul element  1
