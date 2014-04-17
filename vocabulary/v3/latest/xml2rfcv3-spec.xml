@@ -1890,8 +1890,32 @@
    <x:anchor-alias value="refcontent"/>
    <iref item="Elements" subitem="refcontent" primary="true"/>
    <iref item="refcontent element" primary="true"/>
-   <t><!--AG-->
-      <cref anchor="element.refcontent.missing">element description missing</cref>
+   <t>
+      Text that should appear between the title and the date of a reference. The purpose
+      of this element is to prevent the need to abuse &lt;<x:ref>seriesInfo</x:ref>&gt; to
+      get such text in a reference.
+   </t>
+   <t>
+     For example:
+<figure>
+         <artwork>
+&lt;reference anchor="April1"&gt;
+  &lt;front&gt;
+    &lt;title&gt;On Being A Fool&lt;/title&gt;
+    &lt;author initials="K." surname="Phunny" fullname="Knot Phunny"/&gt;
+    &lt;date year="2000" month="April"/&gt;
+  &lt;/front&gt;
+  &lt;innerRefContent&gt;Self-published pamphlet&lt;/innerRefContent&gt;
+&lt;/reference&gt;
+</artwork>
+      </figure>
+     would render as:
+<figure>
+         <artwork>
+   [April1]     Phunny, K., "On Being A Fool", Self-published
+                pamphlet, April 2000.
+</artwork>
+      </figure>
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
    <t anchor="element.refcontent.contents"><!--AG-->
@@ -1920,124 +1944,29 @@
    <t>
       Represents a bibliographical reference.
    </t>
-   <t>
-      The reference can be expressed in one of four ways:
-      <list>
-         <t>As a &lt;front&gt; element plus optional &lt;seriesInfo&gt;, &lt;format&gt;, and &lt;annotation&gt; elements.</t>
-         <t>As a pair of attributes: "series" and "document".</t>
-         <t>As a "includeFile" attribute that points to XML that is in a file on the local disk.</t>
-         <t>As a "includeURI" attribute that points to XML that is retrieved from the web.</t>
-      </list>
-      In the latter method, the document does not need to contain any specifics for the reference other than a simple
-      specification of the reference.
-   </t>
-   <t>
-      For example, a reference to RFC 6068 is given as either:
-<figure>
-         <artwork>
-&lt;reference anchor="RFC6068"&gt;
-  &lt;front&gt;
-    &lt;title&gt;The 'mailto' URI Scheme&lt;/title&gt;
-    &lt;author initials="M." surname="Duerst" fullname="M. Duerst"/&gt;
-    &lt;author initials="L." surname="Masinter" fullname="L. Masinter"/&gt;
-    &lt;author initials="J." surname="Zawinski" fullname="J. Zawinski"/&gt;
-    &lt;date year="2010" month="October"/&gt;
-  &lt;/front&gt;
-  &lt;seriesInfo name="RFC" value="6068"/&gt;
-&lt;/reference&gt;
-</artwork>
-      </figure>
-
-or
-
-<figure>
-         <artwork>
-&lt;reference anchor="RFC6068" series="rfc" document="6068"&gt;
-</artwork>
-      </figure>
-   </t>
-   <t>
-      <cref>Need to describe what will be rendered, particularly if the referenced stuff is not found.</cref>
-   </t>
-   <t>
-      The values for the "series" attribute are:
-   </t>
-   <texttable align="left">
-      <ttcol>Value for "series"</ttcol>
-      <ttcol>Value for "document"</ttcol>
-      <ttcol>Example</ttcol>
-      <c>rfc</c>
-      <c>number</c>
-      <c>"6068"</c>
-      <c>fyi</c>
-      <c>number</c>
-      <c>"7"</c>
-      <c>id</c>
-      <c>file name</c>
-      <c>"draft-hoffman-xml2rfc"</c>
-      <c>bcp</c>
-      <c>comma-separated list of numbers; the first number is the BCP number
-and the others are the RFCs that make up the BCP</c>
-      <c>"79,3979,4879"</c>
-      <c>std</c>
-      <c>comma-separated list of numbers; the first number is the STD number
-and the others are the RFCs that make up the STD</c>
-      <c>"69,5730,5731,5732,5733,5734"</c>
-      <c>3gpp</c>
-      <c>TBD</c>
-      <c>"TBD"</c>
-      <c>ansi</c>
-      <c>document name and year</c>
-      <c>"T1-102.1987"</c>
-      <c>ccitt</c>
-      <c>document name and year</c>
-      <c>"X690.2002"</c>
-      <c>fips</c>
-      <c>document name and year</c>
-      <c>"500-166.1989"</c>
-      <c>ieee</c>
-      <c>document name and year</c>
-      <c>"802-11H.2003"</c>
-      <c>ien</c>
-      <c>number</c>
-      <c>"23"</c>
-      <c>iso</c>
-      <c>document name and year</c>
-      <c>"8859-6.1988"</c>
-      <c>itu</c>
-      <c>document name and year</c>
-      <c>"X509.2000"</c>
-      <c>nist</c>
-      <c>document name and year</c>
-      <c>"500-214.1993"</c>
-      <c>oasis</c>
-      <c>document name (and year?)</c>
-      <c>"TBD"</c>
-      <c>pkcs</c>
-      <c>document name and year</c>
-      <c>"9.1993"</c>
-      <c>w3c</c>
-      <c>document name (and year?)</c>
-      <c>"TBD"</c>
-      <c>xsf</c>
-      <c>document name (and year?)</c>
-      <c>"XEP-0334"</c>
-   </texttable>
-   <t>
-     The processor needs to make sure that exactly zero or one of "series" is given. It has to
-     do a sanity check on the "document" value to be sure that the value is valid for the
-     "series". If the "series" value is "bcp" or "std", the processor needs to check if the list
-     in the "document" list matches the present or a previous set of values for the BCP or
-     STD.
-   </t>
-   <t>
-     The reason why the "bcp" and "std" types require that the author list the RFCs that are part
-     of the possibly-multipart item is that the contents of a BCP or STD can change over time, such
-     as if one of the RFCs is obsoleted. The author must specify the contents they intend at the
-     time of publication of the document.
-   </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
-   <t anchor="element.reference.contents"><!--AG-->Content model: this element does not have any contents.</t>
+   <t anchor="element.reference.contents"><!--AG-->Content model:</t>
+   <t><!--AG-->In this order:<list style="numbers">
+         <t><!--AG-->
+            <iref item="Elements" subitem="front"/>
+            <iref item="front element" subitem="inside reference"/>One &lt;<x:ref>front</x:ref>&gt; element (<xref target="element.front"/>)</t>
+         <t><!--AG-->In any order: <list style="symbols">
+               <t><!--AG-->
+                  <iref item="Elements" subitem="seriesInfo"/>
+                  <iref item="seriesInfo element" subitem="inside reference"/>&lt;<x:ref>seriesInfo</x:ref>&gt; elements (<xref target="element.seriesInfo"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="format"/>
+                  <iref item="format element" subitem="inside reference"/>&lt;<x:ref>format</x:ref>&gt; elements (<xref target="element.format"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="refcontent"/>
+                  <iref item="refcontent element" subitem="inside reference"/>&lt;<x:ref>refcontent</x:ref>&gt; elements (<xref target="element.refcontent"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="annotation"/>
+                  <iref item="annotation element" subitem="inside reference"/>&lt;<x:ref>annotation</x:ref>&gt; elements (<xref target="element.annotation"/>)</t>
+            </list>
+         </t>
+      </list>
+   </t>
 
    <!--reference/@anchor-->
    <section title="'anchor' attribute (mandatory)" anchor="element.reference.attribute.anchor" toc="exclude">
@@ -2048,36 +1977,6 @@ and the others are the RFCs that make up the STD</c>
         Document-wide unique identifier for this reference. Usually, this will
         be used both to "label" the reference in the references section, and
         as an identifier in links to this reference entry.
-      </t>
-   </section>
-
-   <!--reference/@document-->
-   <section title="'document' attribute (mandatory)" anchor="element.reference.attribute.document" toc="exclude">
-      <iref item="Attributes" subitem="document"/>
-      <iref item="reference element" subitem="document attribute"/>
-      <iref item="document attribute" subitem="in reference element"/>
-      <t>
-         The document or documents that make up a reference, as described earlier in this section.
-      </t>
-   </section>
-
-   <!--reference/@includeURI-->
-   <section title="'includeURI' attribute (mandatory)" anchor="element.reference.attribute.includeURI" toc="exclude">
-      <iref item="Attributes" subitem="includeURI"/>
-      <iref item="reference element" subitem="includeURI attribute"/>
-      <iref item="includeURI attribute" subitem="in reference element"/>
-      <t>
-         A URI that contains the XML that would replace this reference.
-      </t>
-   </section>
-
-   <!--reference/@series-->
-   <section title="'series' attribute (mandatory)" anchor="element.reference.attribute.series" toc="exclude">
-      <iref item="Attributes" subitem="series"/>
-      <iref item="reference element" subitem="series attribute"/>
-      <iref item="series attribute" subitem="in reference element"/>
-      <t>
-         The series from which the referred-to document comes from, as described earlier in this section.
       </t>
    </section>
 

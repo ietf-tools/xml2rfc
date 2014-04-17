@@ -385,14 +385,11 @@
     element reference {
       attribute anchor { xsd:ID },
       attribute target { text }?,
--     front,
+      front,
 -     seriesInfo*,
 -     format*,
 -     annotation*
-+     ((attribute series { text },
-+       attribute document { text })
-+      | attribute includeURI { text }
-+      | (front, (seriesInfo | format | refcontent | annotation)*))
++     (seriesInfo | format | refcontent | annotation)*
     }
   seriesInfo =
     element seriesInfo {

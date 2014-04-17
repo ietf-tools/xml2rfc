@@ -1040,26 +1040,15 @@
       <optional>
         <attribute name="target"/>
       </optional>
-      <choice>
-        <group>
-          <attribute name="series"/>
-          <attribute name="document"/>
-        </group>
-        <group>
-          <attribute name="includeURI"/>
-        </group>
-        <group>
-          <ref name="front"/>
-          <zeroOrMore>
-            <choice>
-              <ref name="seriesInfo"/>
-              <ref name="format"/>
-              <ref name="refcontent"/>
-              <ref name="annotation"/>
-            </choice>
-          </zeroOrMore>
-        </group>
-      </choice>
+        <ref name="front"/>
+        <zeroOrMore>
+          <choice>
+            <ref name="seriesInfo"/>
+            <ref name="format"/>
+            <ref name="refcontent"/>
+            <ref name="annotation"/>
+          </choice>
+        </zeroOrMore>
     </element>
   </define>
   <define name="seriesInfo">

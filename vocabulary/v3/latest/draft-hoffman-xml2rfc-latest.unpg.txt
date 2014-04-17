@@ -61,7 +61,6 @@ Table of Contents
 
    1.  Introduction
      1.1.  Differences from v2 to v3
-       1.1.1.  Design for Changes in Reference Handling
      1.2.  Syntax Notation
    2.  Elements
      2.1.  <abstract>
@@ -268,9 +267,7 @@ Table of Contents
 
    o  Add <refcontent> to allow better control of text in a reference.
 
-   o  Change the handling of <reference>.  This large change is
-      described in Section 1.1.1.  Also, allow the elements inside a
-      <reference> to be in any order.
+   o  Allow the elements inside a <reference> to be in any order.
 
    o  Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes
       in the <rfc> element to cover PIs that were in v2 that are still
@@ -309,52 +306,6 @@ Table of Contents
       respectively.  These will be filled in by the RFC processor so
       that the canonical XML file has all of the same information as the
       non-canonical formats.
-
-1.1.1.  Design for Changes in Reference Handling
-
-   This section describes one of the larger changes in the design of v3,
-   namely the additions to make using references easier.  Most
-   references in most recent RFCs are just to RFCs; sometimes they are
-   Internet Drafts as work-in-progress; much less often they are
-   pointers to standards of other SDOs, research articles, or just plain
-   URIs.  There have been many complaints about how difficult it is for
-   people who don't have strong XML skills to use references when making
-   Internet Drafts.
-
-   The two popular methods now for references to RFCs are entering the
-   whole reference by hand (hopefully getting all the fiddly bits of
-   <front> and <seriesInfo> correct), or using XML entities that call
-   out to xml.resource.org.  Both work, but both have their faults.  The
-   first requires good copying skills and sometimes causes difficult XML
-   errors; the second prevents you from changing the anchor name and
-   also requires that you be online when you run the xml2rfc processor.
-
-   To make entering references easier for the vast majority of cases,
-   the following changes have been made in the v3 vocabulary:
-
-   o  The <reference> element can take another optional pair of
-      attributes: "series" and "document".  For example, the value for
-      "series" would be "id", "rfc", "fyi", "bcp", and "std" for
-      Internet-Drafts, RFCs, and the BCP, FYI, and STD subseries; there
-      would be many series for other documents as well.  The value for
-      "document" depends on the series, as described in <reference>.
-
-   o  Instead of using the "series" and "document" attributes, the
-      document author can instead use the "includeURI" attribute.  The
-      "includeURI" attribute tells the processor that the XML for this
-      reference is actually needs to be retrieved from the web (with the
-      "http:" scheme) or on disk (with the "file:" scheme).
-
-   o  The processor would emit a properly-formatted output for the
-      reference in the non-canonical display formats based on rules
-      built into the processor and data for the references.  The library
-      used for expansion of the references will be maintained by the RFC
-      Editor.
-
-   o  Thus, the contents of <reference> changes from requiring a <front>
-      element to making the <front> element optional if the
-      "series"/"document" pair of attributes is given, or if the entire
-      reference is retrieved from disk or from a URL.
 
 1.2.  Syntax Notation
 
@@ -1609,100 +1560,24 @@ Table of Contents
 
    Represents a bibliographical reference.
 
-   The reference can be expressed in one of four ways:
-
-      As a <front> element plus optional <seriesInfo>, <format>, and
-      <annotation> elements.
-
-      As a pair of attributes: "series" and "document".
-
-      As a "includeFile" attribute that points to XML that is in a file
-      on the local disk.
-
-      As a "includeURI" attribute that points to XML that is retrieved
-      from the web.
-
-   In the latter method, the document does not need to contain any
-   specifics for the reference other than a simple specification of the
-   reference.
-
-   For example, a reference to RFC 6068 is given as either:
-
-   <reference anchor="RFC6068">
-     <front>
-       <title>The 'mailto' URI Scheme</title>
-       <author initials="M." surname="Duerst" fullname="M. Duerst"/>
-       <author initials="L." surname="Masinter" fullname="L. Masinter"/>
-       <author initials="J." surname="Zawinski" fullname="J. Zawinski"/>
-       <date year="2010" month="October"/>
-     </front>
-     <seriesInfo name="RFC" value="6068"/>
-   </reference>
-
-   or
-
-   <reference anchor="RFC6068" series="rfc" document="6068">
-
-   [[anchor5: Need to describe what will be rendered, particularly if
-   the referenced stuff is not found.]]
-
-   The values for the "series" attribute are:
-
-   +----------+------------------------+-------------------------------+
-   | Value    | Value for "document"   | Example                       |
-   | for      |                        |                               |
-   | "series" |                        |                               |
-   +----------+------------------------+-------------------------------+
-   | rfc      | number                 | "6068"                        |
-   | fyi      | number                 | "7"                           |
-   | id       | file name              | "draft-hoffman-xml2rfc"       |
-   | bcp      | comma-separated list   | "79,3979,4879"                |
-   |          | of numbers; the first  |                               |
-   |          | number is the BCP      |                               |
-   |          | number and the others  |                               |
-   |          | are the RFCs that make |                               |
-   |          | up the BCP             |                               |
-   | std      | comma-separated list   | "69,5730,5731,5732,5733,5734" |
-   |          | of numbers; the first  |                               |
-   |          | number is the STD      |                               |
-   |          | number and the others  |                               |
-   |          | are the RFCs that make |                               |
-   |          | up the STD             |                               |
-   | 3gpp     | TBD                    | "TBD"                         |
-   | ansi     | document name and year | "T1-102.1987"                 |
-   | ccitt    | document name and year | "X690.2002"                   |
-   | fips     | document name and year | "500-166.1989"                |
-   | ieee     | document name and year | "802-11H.2003"                |
-   | ien      | number                 | "23"                          |
-   | iso      | document name and year | "8859-6.1988"                 |
-   | itu      | document name and year | "X509.2000"                   |
-   | nist     | document name and year | "500-214.1993"                |
-   | oasis    | document name (and     | "TBD"                         |
-   |          | year?)                 |                               |
-   | pkcs     | document name and year | "9.1993"                      |
-   | w3c      | document name (and     | "TBD"                         |
-   |          | year?)                 |                               |
-   | xsf      | document name (and     | "XEP-0334"                    |
-   |          | year?)                 |                               |
-   +----------+------------------------+-------------------------------+
-
-   The processor needs to make sure that exactly zero or one of "series"
-   is given.  It has to do a sanity check on the "document" value to be
-   sure that the value is valid for the "series".  If the "series" value
-   is "bcp" or "std", the processor needs to check if the list in the
-   "document" list matches the present or a previous set of values for
-   the BCP or STD.
-
-   The reason why the "bcp" and "std" types require that the author list
-   the RFCs that are part of the possibly-multipart item is that the
-   contents of a BCP or STD can change over time, such as if one of the
-   RFCs is obsoleted.  The author must specify the contents they intend
-   at the time of publication of the document.
-
    This element appears as child element of: <references>
    (Section 2.43).
 
-   Content model: this element does not have any contents.
+   Content model:
+
+   In this order:
+
+   1.  One <front> element (Section 2.26)
+
+   2.  In any order:
+
+       *  <seriesInfo> elements (Section 2.48)
+
+       *  <format> elements (Section 2.25)
+
+       *  <refcontent> elements (Section 2.41)
+
+       *  <annotation> elements (Section 2.3)
 
 2.42.1.  'anchor' attribute (mandatory)
 
@@ -1710,21 +1585,7 @@ Table of Contents
    will be used both to "label" the reference in the references section,
    and as an identifier in links to this reference entry.
 
-2.42.2.  'document' attribute (mandatory)
-
-   The document or documents that make up a reference, as described
-   earlier in this section.
-
-2.42.3.  'includeURI' attribute (mandatory)
-
-   A URI that contains the XML that would replace this reference.
-
-2.42.4.  'series' attribute (mandatory)
-
-   The series from which the referred-to document comes from, as
-   described earlier in this section.
-
-2.42.5.  'target' attribute
+2.42.2.  'target' attribute
 
    Holds the URI for the reference.
 
@@ -2526,7 +2387,7 @@ Table of Contents
 
    The generated text depends on whether the <xref> is empty (in which
    case the processor will try to generate a meaningful text fragment),
-   and the nature of the referenced document part. [[anchor6: Need to
+   and the nature of the referenced document part. [[anchor5: Need to
    say more about the processor output if the element is empyt and if it
    has text.]]
 
@@ -2609,7 +2470,7 @@ Table of Contents
 
 2.61.3.  'relative' attribute
 
-   Specifies a relative reference from the main target. [[anchor7: Need
+   Specifies a relative reference from the main target. [[anchor6: Need
    more description here about how this will be displayed.]]
 
 2.61.4.  'section' attribute
@@ -3530,10 +3391,8 @@ Appendix C.  Relax NG Schema
      element reference {
        attribute anchor { xsd:ID },
        attribute target { text }?,
-       ((attribute series { text },
-         attribute document { text })
-        | attribute includeURI { text }
-        | (front, (seriesInfo | format | refcontent | annotation)*))
+       front,
+       (seriesInfo | format | refcontent | annotation)*
      }
    seriesInfo =
      element seriesInfo {
@@ -3950,14 +3809,11 @@ Appendix D.  Schema Differences from v2
        element reference {
          attribute anchor { xsd:ID },
          attribute target { text }?,
-   -     front,
+         front,
    -     seriesInfo*,
    -     format*,
    -     annotation*
-   +     ((attribute series { text },
-   +       attribute document { text })
-   +      | attribute includeURI { text }
-   +      | (front, (seriesInfo | format | refcontent | annotation)*))
+   +     (seriesInfo | format | refcontent | annotation)*
        }
      seriesInfo =
        element seriesInfo {
@@ -4009,6 +3865,7 @@ Index
          in t element  1
          in texttable element  1
       annotation element  1
+         inside reference  1
       application/rfc+xml Media Type  1
       area element  1
          inside front  1
@@ -4052,7 +3909,6 @@ Index
          counter  1
          day  1
          docName  1
-         document  1
          empty  1
          format  1
          from  1
@@ -4060,7 +3916,6 @@ Index
          hangIndent  1
          hanging  1
          height  1
-         includeURI  1
          initials  1
          ipr  1
          iprExtract  1
@@ -4078,7 +3933,6 @@ Index
          role  1
          section  1
          sectionFormat  1
-         series  1
          seriesNo  1
          sortRefs  1
          source  1
@@ -4200,8 +4054,6 @@ Index
          spacing attribute  1
       docName attribute
          in rfc element  1
-      document attribute
-         in reference element  1
       dt element  1
          inside dl  1
 
@@ -4312,12 +4164,14 @@ Index
       format attribute
          in xref element  1
       format element  1
+         inside reference  1
          octets attribute  1
          target attribute  1
          type attribute  1
       from attribute
          in displayreference element  1
       front element  1
+         inside reference  1
          inside rfc  1
       fullname attribute
          in author element  1
@@ -4347,8 +4201,6 @@ Index
          inside sectiontitle  1
          inside t  1
          inside tt  1
-      includeURI attribute
-         in reference element  1
       initials attribute
          in author element  1
       ipr attribute
@@ -4460,12 +4312,10 @@ Index
 
    R
       refcontent element  1
+         inside reference  1
       reference element  1
          anchor attribute  1
-         document attribute  1
-         includeURI attribute  1
          inside references  1
-         series attribute  1
          target attribute  1
       references element  1
          inside back  1
@@ -4513,9 +4363,8 @@ Index
          in xref element  1
       sectiontitle element  1
          inside section  1
-      series attribute
-         in reference element  1
       seriesInfo element  1
+         inside reference  1
          name attribute  1
          value attribute  1
       seriesNo attribute
