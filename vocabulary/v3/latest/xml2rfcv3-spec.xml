@@ -155,7 +155,7 @@
       In <xref target="XML2RFCv2"/>, the &lt;artwork&gt; element was also used for source code and formal
       languages; in v3, this is now done with &lt;<x:ref>sourcecode</x:ref>&gt;.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
         Content model:
       </t>
@@ -288,6 +288,43 @@
             Deprecated.
        </t>
    </section>
+</section>
+
+<!--aside-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;aside&gt;" anchor="element.aside">
+   <x:anchor-alias value="aside"/>
+   <iref item="Elements" subitem="aside" primary="true"/>
+   <iref item="aside element" primary="true"/>
+   <t><!--AG-->
+      <cref anchor="element.aside.missing">element description missing</cref>
+   </t>
+   <t anchor="element.aside.contents"><!--AG-->
+        Content model:
+      </t>
+   <t><!--AG-->In any order: <list style="symbols">
+         <t><!--AG-->
+            <iref item="Elements" subitem="t"/>
+            <iref item="t element" subitem="inside aside"/>&lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="tindent"/>
+            <iref item="tindent element" subitem="inside aside"/>&lt;<x:ref>tindent</x:ref>&gt; elements (<xref target="element.tindent"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="figure"/>
+            <iref item="figure element" subitem="inside aside"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="texttable"/>
+            <iref item="texttable element" subitem="inside aside"/>&lt;<x:ref>texttable</x:ref>&gt; elements (<xref target="element.texttable"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="iref"/>
+            <iref item="iref element" subitem="inside aside"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="artwork"/>
+            <iref item="artwork element" subitem="inside aside"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="sourcecode"/>
+            <iref item="sourcecode element" subitem="inside aside"/>&lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</t>
+      </list>
+   </t>
 </section>
 
 <!--author-->
@@ -947,7 +984,7 @@
       This element is used to represent a figure, consisting of an optional	preamble,
       the actual figure, an optional postamble, and an optional title.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
    <t anchor="element.figure.contents"><!--AG-->Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
         
@@ -1289,7 +1326,7 @@
 </artwork>
       <postamble>will produce an index entry for "Grammar, item".</postamble>
    </figure>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>sectiontitle</x:ref>&gt; (<xref target="element.sectiontitle"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>sectiontitle</x:ref>&gt; (<xref target="element.sectiontitle"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.iref.contents"><!--AG-->Content model: this element does not have any contents.</t>
 
    <!--iref/@item-->
@@ -2607,7 +2644,7 @@ and the others are the RFCs that make up the STD</c>
       For artwork such as character-based art, diagrams of message layouts, and so on,
       use the &lt;<x:ref>artwork</x:ref>&gt; element instead.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tindent</x:ref>&gt; (<xref target="element.tindent"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->Content model: only text content.</t>
 
    <!--sourcecode/@name-->
@@ -2719,7 +2756,7 @@ and the others are the RFCs that make up the STD</c>
    <t>
       Contains a paragraph of text.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.t.contents"><!--AG-->
         Content model:
       </t>
@@ -2804,7 +2841,7 @@ and the others are the RFCs that make up the STD</c>
       &lt;<x:ref>c</x:ref>&gt; elements be evenly divisible by the number of
       columns.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.texttable.contents"><!--AG-->Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
         
@@ -2940,7 +2977,7 @@ and the others are the RFCs that make up the STD</c>
       Contains a paragraph of text. The paragraph is displayed with the left and right paragraph margins indented
       from the page margins.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.tindent.contents"><!--AG-->
         Content model:
       </t>
