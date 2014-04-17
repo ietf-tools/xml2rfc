@@ -490,6 +490,11 @@
    <t><!--AG-->In this order:<list style="numbers">
         
          <t><!--AG-->
+            <iref item="Elements" subitem="displayreference"/>
+            <iref item="displayreference element" subitem="inside back"/>Optional &lt;<x:ref>displayreference</x:ref>&gt; elements (<xref target="element.displayreference"/>)</t>
+      
+        
+         <t><!--AG-->
             <iref item="Elements" subitem="references"/>
             <iref item="references element" subitem="inside back"/>Optional &lt;<x:ref>references</x:ref>&gt; elements (<xref target="element.references"/>)</t>
       
@@ -497,11 +502,6 @@
          <t><!--AG-->
             <iref item="Elements" subitem="section"/>
             <iref item="section element" subitem="inside back"/>Optional &lt;<x:ref>section</x:ref>&gt; elements (<xref target="element.section"/>)</t>
-      
-        
-         <t><!--AG-->
-            <iref item="Elements" subitem="displayreference"/>
-            <iref item="displayreference element" subitem="inside back"/>Optional &lt;<x:ref>displayreference</x:ref>&gt; elements (<xref target="element.displayreference"/>)</t>
       
       </list>
    </t>
@@ -823,8 +823,16 @@
    <x:anchor-alias value="displayreference"/>
    <iref item="Elements" subitem="displayreference" primary="true"/>
    <iref item="displayreference element" primary="true"/>
-   <t><!--AG-->
-      <cref anchor="element.displayreference.missing">element description missing</cref>
+   <t>
+      This element gives a mapping between the anchor of a reference and a name that will be displayed instead.
+      This allows authors to display more mneumonic anchor names for automatically-included references.
+      For example, if the reference uses the anchor "RFC6949", the following would cause that anchor in the body
+      of displayed documents to be "RFC-dev":
+<figure>
+         <artwork>
+&lt;displayreference from="RFC6449" to="RFC-dev"/&gt;
+</artwork>
+      </figure>
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.displayreference.contents"><!--AG-->Content model: this element does not have any contents.</t>
@@ -834,8 +842,8 @@
       <iref item="Attributes" subitem="from"/>
       <iref item="displayreference element" subitem="from attribute"/>
       <iref item="from attribute" subitem="in displayreference element"/>
-      <t><!--AG-->
-         <cref anchor="element.displayreference.attribute.from.missing">attribute description missing</cref>
+      <t>
+         This attribute must be the name of an anchor in a &lt;<x:ref>reference</x:ref>&gt; element.
       </t>
    </section>
 
@@ -844,8 +852,10 @@
       <iref item="Attributes" subitem="to"/>
       <iref item="displayreference element" subitem="to attribute"/>
       <iref item="to attribute" subitem="in displayreference element"/>
-      <t><!--AG-->
-         <cref anchor="element.displayreference.attribute.to.missing">attribute description missing</cref>
+      <t>
+        This attribute is a name that will be displayed as the anchor instead of the anchror that is given
+        in the &lt;<x:ref>reference</x:ref>&gt; element. The string given must start with one of the following
+        characters: 0-9, a-z, A-Z. The other characters in the string must be 0-9, a-z, A-Z, "-", ".", and "_".
       </t>
    </section>
 </section>
