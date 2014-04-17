@@ -20,6 +20,8 @@ Should <sourcecode> be allowed in <figure>?
 
 Maybe get rid of all including and replace with XInclude
 
+Get rid of camelCasing in new element names
+
 Still need to figure out about the new references format.
 
 Before finishing, check for "so far" and "expected" wording and remove those.
@@ -168,6 +170,9 @@ Allow &lt;<x:ref>artwork</x:ref>&gt; to be in a &lt;<x:ref>section</x:ref>&gt;, 
 <t>Allow &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>eref</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;, &lt;<x:ref>tt</x:ref>&gt;,
 and &lt;<x:ref>xref</x:ref>&gt; in &lt;<x:ref>cref</x:ref>&gt;. Also turned of the auto-generation
 of anchors in &lt;<x:ref>cref</x:ref>&gt; because there is no use case for them that cannot be achieved in other ways.</t>
+
+<t>Add &lt;<x:ref>displayreference</x:ref>&gt;, allowing authors to display more mneumonic anchor names
+for automatically-included references.</t>
 
 <t>Deprecate &lt;<x:ref>facsimile</x:ref>&gt; because it is rarely used and is not actually useful.</t>
 
@@ -808,6 +813,11 @@ or if the entire reference is retrieved from disk or from a URL.</t>
             <iref item="Elements" subitem="section"/>
             <iref item="section element" subitem="inside back"/>Optional &lt;<x:ref>section</x:ref>&gt; elements (<xref target="element.section"/>)</t>
       
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="displayreference"/>
+            <iref item="displayreference element" subitem="inside back"/>Optional &lt;<x:ref>displayreference</x:ref>&gt; elements (<xref target="element.displayreference"/>)</t>
+      
       </list>
    </t>
 </section>
@@ -1121,6 +1131,46 @@ or if the entire reference is retrieved from disk or from a URL.</t>
             <iref item="i element" subitem="inside dd"/>&lt;<x:ref>i</x:ref>&gt; elements (<xref target="element.i"/>)</t>
       </list>
    </t>
+</section>
+
+<!--displayreference-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;displayreference&gt;" anchor="element.displayreference">
+   <x:anchor-alias value="displayreference"/>
+   <iref item="Elements" subitem="displayreference" primary="true"/>
+   <iref item="displayreference element" primary="true"/>
+   <t>
+      This element gives a mapping between the anchor of a reference and a name that will be displayed instead.
+      This allows authors to display more mneumonic anchor names for automatically-included references.
+      For example, if the reference uses the anchor "RFC6949", the following would cause that anchor in the body
+      of displayed documents to be "RFC-dev":
+<figure><artwork>
+&lt;displayreference from="RFC6449" to="RFC-dev"/&gt;
+</artwork></figure>
+   </t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
+   <t anchor="element.displayreference.contents"><!--AG-->Content model: this element does not have any contents.</t>
+
+   <!--displayreference/@from-->
+   <section title="'from' attribute (mandatory)" anchor="element.displayreference.attribute.from" toc="exclude">
+      <iref item="Attributes" subitem="from"/>
+      <iref item="displayreference element" subitem="from attribute"/>
+      <iref item="from attribute" subitem="in displayreference element"/>
+      <t>
+         This attribute must be the name of an anchor in a &lt;<x:ref>reference</x:ref>&gt; element.
+      </t>
+   </section>
+
+   <!--displayreference/@to-->
+   <section title="'to' attribute (mandatory)" anchor="element.displayreference.attribute.to" toc="exclude">
+      <iref item="Attributes" subitem="to"/>
+      <iref item="displayreference element" subitem="to attribute"/>
+      <iref item="to attribute" subitem="in displayreference element"/>
+      <t>
+        This attribute is a name that will be displayed as the anchor instead of the anchror that is given
+        in the &lt;<x:ref>reference</x:ref>&gt; element. The string given must start with one of the following
+        characters: 0-9, a-z, A-Z. The other characters in the string must be 0-9, a-z, A-Z, "-", ".", and "_".
+      </t>
+   </section>
 </section>
 
 <!--dl-->
@@ -4871,7 +4921,12 @@ ttcol =
 c =
   element c { (text | xref | eref | iref | cref | spanx | tt | b | 
 i)* }
-back = element back { references*, section* }
+back = element back { references*, section*, displayreference* }
+displayreference =
+  element displayreference {
+    attribute from { text },
+    attribute to { text }
+  }
 references =
   element references {
     [ a:defaultValue = "References" ] attribute title { text }?,
@@ -5284,12 +5339,18 @@ to the v3 schema.</t>
       attribute align { "left" | "center" | "right" }?,
 -     text
 +     (xref | eref | iref | cref | text)*
-    }
-- c = element c { (text | xref | eref | iref | cref | spanx)* }
++   }
 + c =
 +   element c { (text | xref | eref | iref | cref | spanx | tt | b 
 + | i)* }
-  back = element back { references*, section* }
++ back = element back { references*, section*, displayreference* }
++ displayreference =
++   element displayreference {
++     attribute from { text },
++     attribute to { text }
+    }
+- c = element c { (text | xref | eref | iref | cref | spanx)* }
+- back = element back { references*, section* }
   references =
     element references {
       [ a:defaultValue = "References" ] attribute title { text }?,

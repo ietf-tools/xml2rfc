@@ -364,12 +364,18 @@
       attribute align { "left" | "center" | "right" }?,
 -     text
 +     (xref | eref | iref | cref | text)*
-    }
-- c = element c { (text | xref | eref | iref | cref | spanx)* }
++   }
 + c =
 +   element c { (text | xref | eref | iref | cref | spanx | tt | b 
 + | i)* }
-  back = element back { references*, section* }
++ back = element back { references*, section*, displayreference* }
++ displayreference =
++   element displayreference {
++     attribute from { text },
++     attribute to { text }
+    }
+- c = element c { (text | xref | eref | iref | cref | spanx)* }
+- back = element back { references*, section* }
   references =
     element references {
       [ a:defaultValue = "References" ] attribute title { text }?,
