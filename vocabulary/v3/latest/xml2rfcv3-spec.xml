@@ -449,7 +449,7 @@
    <t>
             Causes the text to be displayed in a bold font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>innerRefContent</x:ref>&gt; (<xref target="element.innerRefContent"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>sectiontitle</x:ref>&gt; (<xref target="element.sectiontitle"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>sectiontitle</x:ref>&gt; (<xref target="element.sectiontitle"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.b.contents"><!--AG-->
         Content model:
       </t>
@@ -1290,7 +1290,7 @@
    <t>
             Causes the text to be displayed in an italic font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>innerRefContent</x:ref>&gt; (<xref target="element.innerRefContent"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>sectiontitle</x:ref>&gt; (<xref target="element.sectiontitle"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>sectiontitle</x:ref>&gt; (<xref target="element.sectiontitle"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.i.contents"><!--AG-->
         Content model:
       </t>
@@ -1314,57 +1314,6 @@
          <t><!--AG-->
             <iref item="Elements" subitem="tt"/>
             <iref item="tt element" subitem="inside i"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
-      </list>
-   </t>
-</section>
-
-<!--innerRefContent-->
-<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;innerRefContent&gt;" anchor="element.innerRefContent">
-   <x:anchor-alias value="innerRefContent"/>
-   <iref item="Elements" subitem="innerRefContent" primary="true"/>
-   <iref item="innerRefContent element" primary="true"/>
-   <t>
-      Text that should appear between the title and the date of a reference. The purpose
-      of this element is to prevent the need to abuse &lt;<x:ref>seriesInfo</x:ref>&gt; to
-      get such text in a reference.
-   </t>
-   <t>
-     For example:
-<figure>
-         <artwork>
-&lt;reference anchor="April1"&gt;
-  &lt;front&gt;
-    &lt;title&gt;On Being A Fool&lt;/title&gt;
-    &lt;author initials="K." surname="Phunny" fullname="Knot Phunny"/&gt;
-    &lt;date year="2000" month="April"/&gt;
-  &lt;/front&gt;
-  &lt;innerRefContent&gt;Self-published pamphlet&lt;/innerRefContent&gt;
-&lt;/reference&gt;
-</artwork>
-      </figure>
-     would render as:
-<figure>
-         <artwork>
-   [April1]     Phunny, K., "On Being A Fool", Self-published
-                pamphlet, April 2000.
-</artwork>
-      </figure>
-   </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
-   <t anchor="element.innerRefContent.contents"><!--AG-->
-        Content model:
-      </t>
-   <t><!--AG-->In any order: <list style="symbols">
-         <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="tt"/>
-            <iref item="tt element" subitem="inside innerRefContent"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside innerRefContent"/>&lt;<x:ref>b</x:ref>&gt; elements (<xref target="element.b"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="i"/>
-            <iref item="i element" subitem="inside innerRefContent"/>&lt;<x:ref>i</x:ref>&gt; elements (<xref target="element.i"/>)</t>
       </list>
    </t>
 </section>
@@ -1932,6 +1881,33 @@
          <t><!--AG-->
             <iref item="Elements" subitem="i"/>
             <iref item="i element" subitem="inside preamble"/>&lt;<x:ref>i</x:ref>&gt; elements (<xref target="element.i"/>)</t>
+      </list>
+   </t>
+</section>
+
+<!--refcontent-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;refcontent&gt;" anchor="element.refcontent">
+   <x:anchor-alias value="refcontent"/>
+   <iref item="Elements" subitem="refcontent" primary="true"/>
+   <iref item="refcontent element" primary="true"/>
+   <t><!--AG-->
+      <cref anchor="element.refcontent.missing">element description missing</cref>
+   </t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
+   <t anchor="element.refcontent.contents"><!--AG-->
+        Content model:
+      </t>
+   <t><!--AG-->In any order: <list style="symbols">
+         <t><!--AG-->Text</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="tt"/>
+            <iref item="tt element" subitem="inside refcontent"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="b"/>
+            <iref item="b element" subitem="inside refcontent"/>&lt;<x:ref>b</x:ref>&gt; elements (<xref target="element.b"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="i"/>
+            <iref item="i element" subitem="inside refcontent"/>&lt;<x:ref>i</x:ref>&gt; elements (<xref target="element.i"/>)</t>
       </list>
    </t>
 </section>
@@ -3066,7 +3042,7 @@ and the others are the RFCs that make up the STD</c>
    <t>
             Causes the text to be displayed in a constant-width font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>innerRefContent</x:ref>&gt; (<xref target="element.innerRefContent"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>sectiontitle</x:ref>&gt; (<xref target="element.sectiontitle"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>sectiontitle</x:ref>&gt; (<xref target="element.sectiontitle"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.tt.contents"><!--AG-->
         Content model:
       </t>

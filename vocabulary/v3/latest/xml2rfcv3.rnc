@@ -353,7 +353,7 @@ reference =
     ((attribute series { text },
       attribute document { text })
      | attribute includeURI { text }
-     | (front, (seriesInfo | format | innerRefContent | annotation)*))
+     | (front, (seriesInfo | format | refcontent | annotation)*))
   }
 seriesInfo =
   element seriesInfo {
@@ -372,5 +372,5 @@ annotation =
   element annotation {
     (text | xref | eref | iref | cref | spanx | tt | b | i)*
   }
-innerRefContent = element innerRefContent { (text | tt | b | i)* }
+refcontent = element refcontent { (text | tt | b | i)* }
 start = rfc
