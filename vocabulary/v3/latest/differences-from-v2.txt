@@ -139,7 +139,7 @@
     }
 + sectiontitle =
 +   element sectiontitle {
-+     (text | xref | eref | iref | cref | tt | b | i)*
++     (text | xref | eref | iref | cref | tt | b | i | em | strong)*
 +   }
   t =
     element t {
@@ -162,7 +162,9 @@
 +      | vspace
 +      | tt
 +      | b
-+      | i)*
++      | i
++      | em
++      | strong)*
 +   }
 + aside =
 +   element aside {
@@ -172,7 +174,8 @@
 +   element blockquote {
 +     attribute anchor { xsd:ID }?,
 +     attribute cite { text },
-+     (text | figure | artwork | sourcecode | tt | b | i)*
++     (text | figure | artwork | sourcecode | tt | b | i | em | 
++ strong)*
     }
   \list =
     element list {
@@ -214,7 +217,9 @@
 +        cref,
 +        tt,
 +        b,
-+        i)+
++        i,
++        em,
++        strong)+
 +   }
 + dl =
 +   element dl {
@@ -224,8 +229,10 @@
 +     attribute hanging { "false" | "true" }?,
 +     (dt, dd)+
 +   }
-+ dt = element dt { (text | xref | eref | iref | cref | tt | b | 
-+ i)* }
++ dt =
++   element dt {
++     (text | xref | eref | iref | cref | tt | b | i | em | strong)*
++   }
 + dd =
 +   element dd {
 +     (text
@@ -240,7 +247,9 @@
 +      | cref
 +      | tt
 +      | b
-+      | i)*
++      | i
++      | em
++      | strong)*
 +   }
   xref =
     element xref {
@@ -273,11 +282,19 @@
       attribute anchor { xsd:ID }?,
       attribute source { text }?,
 -     text
-+     (text | xref | eref | b | i | tt)*
++     (text | xref | eref | b | i | em | strong | tt)*
     }
 + tt = element tt { (text | xref | eref | iref | cref | b | i)* }
-+ b = element b { (text | xref | eref | iref | cref | tt | i)* }
-+ i = element i { (text | xref | eref | iref | cref | b | tt)* }
++ b = element b { (text | xref | eref | iref | cref | tt | i | em)* 
++ }
++ strong =
++   element strong { (text | xref | eref | iref | cref | tt | i | 
++ em)* }
++ i = element i { (text | xref | eref | iref | cref | b | strong | 
++ tt)* }
++ em =
++   element em { (text | xref | eref | iref | cref | b | strong | 
++ tt)* }
   spanx =
     element spanx {
       [ a:defaultValue = "preserve" ]
@@ -312,7 +329,17 @@
   preamble =
 -   element preamble { (text | xref | eref | iref | cref | spanx)* }
 +   element preamble {
-+     (text | xref | eref | iref | cref | spanx | tt | b | i)*
++     (text
++      | xref
++      | eref
++      | iref
++      | cref
++      | spanx
++      | tt
++      | b
++      | i
++      | em
++      | strong)*
 +   }
   artwork =
     element artwork {
@@ -339,7 +366,17 @@
   postamble =
 -   element postamble { (text | xref | eref | iref | cref | spanx)* 
 +   element postamble {
-+     (text | xref | eref | iref | cref | spanx | tt | b | i)*
++     (text
++      | xref
++      | eref
++      | iref
++      | cref
++      | spanx
++      | tt
++      | b
++      | i
++      | em
++      | strong)*
   }
   texttable =
     element texttable {
@@ -366,8 +403,19 @@
 +     (xref | eref | iref | cref | text)*
 +   }
 + c =
-+   element c { (text | xref | eref | iref | cref | spanx | tt | b 
-+ | i)* }
++   element c {
++     (text
++      | xref
++      | eref
++      | iref
++      | cref
++      | spanx
++      | tt
++      | b
++      | i
++      | em
++      | strong)*
++   }
 + back = element back { displayreference*, references*, section* }
 + displayreference =
 +   element displayreference {
@@ -408,7 +456,18 @@
 -   element annotation { (text | xref | eref | iref | cref | 
 - spanx)* }
 +   element annotation {
-+     (text | xref | eref | iref | cref | spanx | tt | b | i)*
++     (text
++      | xref
++      | eref
++      | iref
++      | cref
++      | spanx
++      | tt
++      | b
++      | i
++      | em
++      | strong)*
 +   }
-+ refcontent = element refcontent { (text | tt | b | i)* }
++ refcontent = element refcontent { (text | tt | b | i | em | 
++ strong)* }
   start = rfc
