@@ -16,11 +16,11 @@
 
 Find the remaining <cref>s and resolve them.
 
-Maybe get rid of all including and replace with XInclude
-
-Still need to figure out about the new references format.
-
 Before finishing, check for "so far" and "expected" wording and remove those.
+
+Maybe deprecate <texttable> with something new based on HTML tables
+
+Maybe have <artwork> include microlanguages for packets and call sequences
 
 Add some tooling to mark the things that are deprecated?
 
@@ -4065,6 +4065,21 @@ would generate
     <seriesInfo name="ANSI" value="X3.4"/>
   </reference>
   
+  <reference anchor='XInclude' target='http://www.w3.org/TR/xinclude/'>
+    <front>
+      <title>XML Inclusions (XInclude) Version 1.0 (Second Edition)</title>
+      <author fullname='Jonathan Marsh' surname='Marsh' initials='J.'/>
+      <author fullname='David Orchard' surname='Orchard' initials='D.'/>
+      <author fullname='Daniel Veillard' surname='Veillard' initials='D.'/>
+      <date year='2006' month='November' day='15'/>
+    </front>
+    <seriesInfo name='W3C Recommendation' value='REC-xinclude-20061115'/>
+    <annotation>
+      Latest version available at
+      <eref target='http://www.w3.org/TR/xinclude/'/>.
+    </annotation>
+  </reference>
+
   <reference anchor='XPOINTER' target='http://www.w3.org/TR/2003/REC-xptr-framework-20030325/'>
     <front>
       <title>XPointer Framework</title>
@@ -4080,6 +4095,7 @@ would generate
       <eref target='http://www.w3.org/TR/xptr-framework/'/>.
     </annotation>
   </reference>
+
 </references>
 
 <section title="Front Page Generation">
@@ -4306,17 +4322,25 @@ fact, the author believes that some of the features of the v3 grammar cannot be 
 a DTD.</t>
 
 <t>This section differentiates between three types of processors:
+
 <list style="symbols">
 
 <t>RFC Processor -- The processor used by the RFC Editor to validate the contents of the
-intended RFC and to create the non-canonical formats.</t>
+intended RFC and to create the non-canonical formats that will be published by the RFC
+Editor.</t>
 
 <t>Draft Processor -- The processor used by the IETF to validate the contents of XML that
-is submitted and to create the other formats that will be supported for Internet Drafts.</t>
+is submitted and to create the other formats that will be supported for Internet Drafts;
+to produce interim versions of the non-canonical formats
+so that authors can see how their XML might later be rendered;
+and to convert documents that use the v2 format to v3.</t>
 
 <t>Private Processors -- There may be processors that are meant to run on the computers of
-authors that create documents in formats different than those supported by the RFC Editor
-and the Internet Drafts repository.</t>
+authors. These processors may be used to produce interim versions of the non-canonical formats
+so that authors can see how their XML might later be rendered; to
+create documents in formats different than those supported by the RFC Editor;
+and to convert XML that has external information into XML that has that external information
+included.</t>
 
 </list></t>
 
@@ -4324,18 +4348,59 @@ and the Internet Drafts repository.</t>
 and the Draft Processor, with different application settings to differentiate between them.
 For example, some XML that is valid for Internet Drafts will not be valid for canonical
 RFCs, so the Draft Processor can be set to give warnings for those features but the RFC Processor
-can be set to give hard errors.</t>
+can be set to give hard errors. It is also expected that the same software could be used
+as a Private Processor; others might create Private Processors independently, or using parts
+of, the software used by the RFC Editor.</t>
 
 <t>Users of current and older XML processors for Internet Drafts and RFCs may be used to them having
 unhelpful error messages. Beginning with v3, the RFC Processor and Draft Processor 
 will have much better error reporting, giving more context than just a line number. For example, 
 the error messages will differentiate between errors in XML and those from the v3 format.</t>
 
-<t>The new processor can also help in the transition from the v2 format to the v3 format. A
-user could request that the processor convert a v2 document to v3, using the new features of
-v3 where appropriate, and removing the parts that are no longer supported.
-The processor might be able to fully convert a v2 document to v3, or it might have to only
-give advice on some of the v2 features that could not be automatically converted.</t>
+<section title="Including External Text">
+
+<t>All XML processors for v3 are expected to support XInclude <xref target="XInclude"/>.
+XInclude specifies a processing model and syntax for general purpose inclusion of information
+that is either on the Internet or local to the user's computer.</t>
+
+<t>
+In the v3 format, XInclude is expressed as the &lt;xi:include>&gt; element. To use this
+element, you need to include the "xi" namespace in the &lt;<x:ref>rfc</x:ref>&gt; element; that is, you need to specify
+<figure><artwork>
+xmlns:xi="http://www.w3.org/2001/XInclude"
+</artwork></figure>
+as one of the attributes in the &lt;<x:ref>rfc</x:ref>&gt; element.</t>
+
+<t>The most common way to use &lt;xi:include&gt; is to pull in references
+that are already formed as XML. Currently, this is done from xml.resource.org, but later is
+expected to be from the RFC Editor. For example, if a document has three normative
+refernces, all RFCs, the document might contain:
+<figure><artwork>
+&lt;references&gt;
+    &lt;xi:include href="http://xml.resource.org/public/rfc/
+       bibxml/reference.RFC.2119.xml"/&gt;
+    &lt;xi:include href="http://xml.resource.org/public/rfc/
+       bibxml/reference.RFC.4869.xml"/&gt;
+    &lt;xi:include href="http://xml.resource.org/public/rfc/
+       bibxml/reference.RFC.7169.xml"/&gt;
+&lt;/references&gt;
+</artwork></figure>
+</t>
+
+<t>&lt;xi:include&gt; can be used anywhere where an XML element could be used (but not where
+free text is used). For example, if three Internet Drafts are all including a particular paragraph
+or section verbatim, that text can be kept either in a file or somewhere on the web, and be
+included with &lt;xi:include&gt;. An example of pulling something from the local disk would
+be:
+<figure><artwork>
+&lt;x:include href="file://home/chris/ietf/drafts/commontext.xml"/&gt;
+</artwork></figure>
+</t>
+
+<t><cref>Need to think a bit more about using xi:include to replace src= for artwork
+or sourcecode.</cref></t>
+
+</section>
 
 <section title="The RFC Processor">
 
@@ -4372,6 +4437,19 @@ attributes in &lt;<x:ref>rfc</x:ref>&gt;, &lt;<x:ref>section</x:ref>&gt;,
 
 </section>
 
+<section title="The Draft Processor">
+
+<t>The Draft Processor will help in the transition from the v2 format to the v3 format. A
+user could request that the Draft Processor convert a v2 document to v3, using the new features of
+v3 where appropriate, and removing the parts that are no longer supported.
+The processor might be able to fully convert a v2 document to v3, or it might have to only
+give advice on some of the v2 features that could not be automatically converted.</t>
+
+<t>The Draft Processor should have a mode that mimics the RFC Processor's restictive mode,
+but that instead gives warningis instead of hard errors.</t>
+
+</section>
+
 <section title="Processor Instructions">
 
 <t>In the v2 format, XML PIs were used for a wide variety of tasks,
@@ -4397,16 +4475,12 @@ Processors have a common way of referring to them:
 <t>comments -- When set to "yes", causes all &lt;<x:ref>cref</x:ref>&gt; elements to be rendered
 in the output files. The default is "yes".</t>
 
-<t>include -- Allows the author to combine other files into the XML file to complete the document.
-argument can be a local file name (with a possible prefix from the environment variables on the
-computer) or a URI.</t>
-
 <t>linefile -- Causes the processor to emit more detailed information about which line of which input file
 caused an error or warning.</t>
 
 </list></t>
 
-<t>Note that a Private Processor can have its own PIs.</t>
+<t>Note that a Private Processor can have PIs not from this list.</t>
 
 </section>
 

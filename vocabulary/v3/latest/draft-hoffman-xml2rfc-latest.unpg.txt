@@ -139,8 +139,10 @@ Table of Contents
        A.2.1.  Current Values: '*trust200902'
        A.2.2.  Historic Values
    Appendix B.  The v3 Format and Processors
-     B.1.  The RFC Processor
-     B.2.  Processor Instructions
+     B.1.  Including External Text
+     B.2.  The RFC Processor
+     B.3.  The Draft Processor
+     B.4.  Processor Instructions
    Appendix C.  Relax NG Schema
    Appendix D.  Schema Differences from v2
    Index
@@ -2753,6 +2755,14 @@ Table of Contents
                 Set -- 7-bit American Standard Code for Information
                 Interchange", ANSI X3.4, 1986.
 
+   [XInclude]   Marsh, J., Orchard, D., and D. Veillard, "XML Inclusions
+                (XInclude) Version 1.0 (Second Edition)", W3C
+                Recommendation REC-xinclude-20061115, November 2006,
+                <http://www.w3.org/TR/xinclude/>.
+
+                Latest version available at
+                <http://www.w3.org/TR/xinclude/>.
+
    [XPOINTER]   Grosso, P., Maler, E., Marsh, J., and N. Walsh,
                 "XPointer Framework", W3C Recommendation REC-xptr-
                 framework-20030325, March 2003,
@@ -2927,23 +2937,32 @@ Appendix B.  The v3 Format and Processors
 
    o  RFC Processor -- The processor used by the RFC Editor to validate
       the contents of the intended RFC and to create the non-canonical
-      formats.
+      formats that will be published by the RFC Editor.
 
    o  Draft Processor -- The processor used by the IETF to validate the
       contents of XML that is submitted and to create the other formats
-      that will be supported for Internet Drafts.
+      that will be supported for Internet Drafts; to produce interim
+      versions of the non-canonical formats so that authors can see how
+      their XML might later be rendered; and to convert documents that
+      use the v2 format to v3.
 
    o  Private Processors -- There may be processors that are meant to
-      run on the computers of authors that create documents in formats
-      different than those supported by the RFC Editor and the Internet
-      Drafts repository.
+      run on the computers of authors.  These processors may be used to
+      produce interim versions of the non-canonical formats so that
+      authors can see how their XML might later be rendered; to create
+      documents in formats different than those supported by the RFC
+      Editor; and to convert XML that has external information into XML
+      that has that external information included.
 
    It is expected that a single piece of software will be used for both
    the RFC Processor and the Draft Processor, with different application
    settings to differentiate between them.  For example, some XML that
    is valid for Internet Drafts will not be valid for canonical RFCs, so
    the Draft Processor can be set to give warnings for those features
-   but the RFC Processor can be set to give hard errors.
+   but the RFC Processor can be set to give hard errors.  It is also
+   expected that the same software could be used as a Private Processor;
+   others might create Private Processors independently, or using parts
+   of, the software used by the RFC Editor.
 
    Users of current and older XML processors for Internet Drafts and
    RFCs may be used to them having unhelpful error messages.  Beginning
@@ -2952,15 +2971,49 @@ Appendix B.  The v3 Format and Processors
    example, the error messages will differentiate between errors in XML
    and those from the v3 format.
 
-   The new processor can also help in the transition from the v2 format
-   to the v3 format.  A user could request that the processor convert a
-   v2 document to v3, using the new features of v3 where appropriate,
-   and removing the parts that are no longer supported.  The processor
-   might be able to fully convert a v2 document to v3, or it might have
-   to only give advice on some of the v2 features that could not be
-   automatically converted.
+B.1.  Including External Text
 
-B.1.  The RFC Processor
+   All XML processors for v3 are expected to support XInclude
+   [XInclude].  XInclude specifies a processing model and syntax for
+   general purpose inclusion of information that is either on the
+   Internet or local to the user's computer.
+
+   In the v3 format, XInclude is expressed as the <xi:include>> element.
+   To use this element, you need to include the "xi" namespace in the
+   <rfc> element; that is, you need to specify
+
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+
+   as one of the attributes in the <rfc> element.
+
+   The most common way to use <xi:include> is to pull in references that
+   are already formed as XML.  Currently, this is done from
+   xml.resource.org, but later is expected to be from the RFC Editor.
+   For example, if a document has three normative refernces, all RFCs,
+   the document might contain:
+
+   <references>
+       <xi:include href="http://xml.resource.org/public/rfc/
+          bibxml/reference.RFC.2119.xml"/>
+       <xi:include href="http://xml.resource.org/public/rfc/
+          bibxml/reference.RFC.4869.xml"/>
+       <xi:include href="http://xml.resource.org/public/rfc/
+          bibxml/reference.RFC.7169.xml"/>
+   </references>
+
+   <xi:include> can be used anywhere where an XML element could be used
+   (but not where free text is used).  For example, if three Internet
+   Drafts are all including a particular paragraph or section verbatim,
+   that text can be kept either in a file or somewhere on the web, and
+   be included with <xi:include>.  An example of pulling something from
+   the local disk would be:
+
+   <x:include href="file://home/chris/ietf/drafts/commontext.xml"/>
+
+   [[anchor12: Need to think a bit more about using xi:include to
+   replace src= for artwork or sourcecode.]]
+
+B.2.  The RFC Processor
 
    The canonical format for RFCs have a number of restrictions that the
    RFC Processor needs to enforce before a document can be published in
@@ -2994,7 +3047,21 @@ B.1.  The RFC Processor
    attributes in <rfc>, <section>, <figure>, and <texttable>,
    respectively.
 
-B.2.  Processor Instructions
+B.3.  The Draft Processor
+
+   The Draft Processor will help in the transition from the v2 format to
+   the v3 format.  A user could request that the Draft Processor convert
+   a v2 document to v3, using the new features of v3 where appropriate,
+   and removing the parts that are no longer supported.  The processor
+   might be able to fully convert a v2 document to v3, or it might have
+   to only give advice on some of the v2 features that could not be
+   automatically converted.
+
+   The Draft Processor should have a mode that mimics the RFC
+   Processor's restictive mode, but that instead gives warningis instead
+   of hard errors.
+
+B.4.  Processor Instructions
 
    In the v2 format, XML PIs were used for a wide variety of tasks,
    including changing some formatting of the text outputs, adding
@@ -3017,15 +3084,10 @@ B.2.  Processor Instructions
    o  comments -- When set to "yes", causes all <cref> elements to be
       rendered in the output files.  The default is "yes".
 
-   o  include -- Allows the author to combine other files into the XML
-      file to complete the document. argument can be a local file name
-      (with a possible prefix from the environment variables on the
-      computer) or a URI.
-
    o  linefile -- Causes the processor to emit more detailed information
       about which line of which input file caused an error or warning.
 
-   Note that a Private Processor can have its own PIs.
+   Note that a Private Processor can have PIs not from this list.
 
 Appendix C.  Relax NG Schema
 
