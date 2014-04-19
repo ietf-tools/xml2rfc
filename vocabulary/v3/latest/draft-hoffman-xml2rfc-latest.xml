@@ -141,89 +141,53 @@ warnings for where it cannot convert. The processor will also have a "strict" mo
 will issue errors if any deprecated features are in the input.
 </t>
 
-<t>
-The list of format changes so far is:
+<t>The format changes in v3 are listed in the following subsections.</t>
 
-<list style="symbols">
+<section title="New Elements in v3">
 
-<t>Do not generate the grammar from a DTD, but instead get it directly from the Relax Next Generation (RNG) grammar.</t>
+<t><list style="symbols">
 
-<t>In &lt;<x:ref>address</x:ref>&gt;, allow the sub-elements to be in any order.</t>
+<t>Add &lt;<x:ref>strong</x:ref>&gt;, &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>em</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;,
+and &lt;<x:ref>tt</x:ref>&gt; for character formatting.</t>
 
-<t>In &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>author</x:ref>&gt;, add optional "xml:lang" attribute.
-Deprecate "xml:space" in &lt;<x:ref>artwork</x:ref>&gt; because there was only one useful value.
-Deprecate "height" and "width" attribute.
-Allow &lt;<x:ref>artwork</x:ref>&gt; to be in a &lt;<x:ref>section</x:ref>&gt;, not just a figure.</t>
+<t>Add &lt;<x:ref>aside</x:ref>&gt; for incidental text that will be indented when displayed.</t>
 
-<t>Give more specifics of handling the "type" attribute in &lt;<x:ref>artwork</x:ref>&gt;.</t>
+<t>Add &lt;<x:ref>sourcecode</x:ref>&gt; to differentiate from &lt;<x:ref>artwork</x:ref>&gt;.</t>
 
-<t>Add the &lt;<x:ref>aside</x:ref>&gt; element for incidental text that will be indented when displayed.</t>
+<t>Add &lt;<x:ref>blockquote</x:ref>&gt; to indicate a quotation as in a paragraph-like format.</t>
 
-<t>Add the &lt;<x:ref>strong</x:ref>&gt;, &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>em</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;,
-and &lt;<x:ref>tt</x:ref>&gt; elements.</t>
-
-<t>Add the &lt;<x:ref>blockquote</x:ref>&gt; element.</t>
-
-<t>Allow&lt;<x:ref>strong</x:ref>&gt;,  &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>em</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;,
-&lt;<x:ref>tt</x:ref>&gt;,
-&lt;<x:ref>eref</x:ref>&gt;, and &lt;<x:ref>xref</x:ref>&gt; in &lt;<x:ref>cref</x:ref>&gt;. Also turned of the auto-generation
-of anchors in &lt;<x:ref>cref</x:ref>&gt; because there is no use case for them that cannot be achieved in other ways.</t>
-
-<t>Add &lt;<x:ref>displayreference</x:ref>&gt;, allowing authors to display more mneumonic anchor names
-for automatically-included references.</t>
-
-<t>Deprecate &lt;<x:ref>facsimile</x:ref>&gt; because it is rarely used and is not actually useful.</t>
-
-<t>Deprecate the "alt", "height", "src", and "width" attributes in &lt;<x:ref>figure</x:ref>&gt;
-because they overlap with the attributes in &lt;<x:ref>artwork</x:ref>&gt;.</t>
-
-<t>Allow more than one &lt;<x:ref>artwork</x:ref>&gt;, or more than one
-&lt;<x:ref>sourcecode</x:ref>&gt;, in &lt;<x:ref>figure</x:ref>&gt;.</t>
-
-<t>In &lt;<x:ref>front</x:ref>&gt;, make &lt;<x:ref>date</x:ref>&gt; optional.</t>
-
-<t>Deprecate &lt;<x:ref>format</x:ref>&gt; because it is not useful and has caused surprise for authors in the past.</t>
-
-<t>Deprecate &lt;<x:ref>list</x:ref>&gt; in favor of &lt;<x:ref>dl</x:ref>&gt;, &lt;<x:ref>ul</x:ref>&gt;,
-and &lt;<x:ref>ol</x:ref>&gt;.</t>
-
-<t>In &lt;<x:ref>postal</x:ref>&gt;, allow the sub-elements to be in any order. Also allow the inclusion
-of &lt;<x:ref>postalLine</x:ref>&gt; instead of the older elements. Also add optional "xml:lang" attribute.</t>
+<t>Add &lt;<x:ref>sectiontitle</x:ref>&gt; for sections to allow character formatting in section titles.</t>
 
 <t>Add &lt;<x:ref>postalLine</x:ref>&gt;, free text that represents one line of the address.</t>
 
+<t>Add &lt;<x:ref>displayreference</x:ref>&gt; to allow display of more mneumonic anchor names
+for automatically-included references.</t>
+
 <t>Add &lt;<x:ref>refcontent</x:ref>&gt; to allow better control of text in a reference.</t>
 
-<t>Allow the elements inside a &lt;<x:ref>reference</x:ref>&gt; to be in any order.</t>
+</list></t>
 
-<t>Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes in the &lt;<x:ref>rfc</x:ref>&gt;
-element to cover PIs that were in v2 that are still needed in the grammar.</t>
+</section>
 
-<t>In &lt;<x:ref>section</x:ref>&gt;, add the optional "numbered" and "removeinrfc" attributes.
-Also deprecate "title" in favor of &lt;<x:ref>sectiontitle</x:ref>&gt;.</t>
+<section title="New Attributes for Existing Elements">
 
-<t>Deprecate &lt;<x:ref>spanx</x:ref>&gt; element, and replaced it with &lt;<x:ref>b</x:ref>&gt;,
-&lt;<x:ref>i</x:ref>&gt;, and &lt;<x:ref>tt</x:ref>&gt;.</t>
+<t><list style="symbols">
 
-<t>Add the &lt;<x:ref>sourcecode</x:ref>&gt; element to differentiate from &lt;<x:ref>artwork</x:ref>&gt;.</t>
+<t>Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes to &lt;<x:ref>rfc</x:ref>&gt;
+to cover processor instructions (PIs) that were in v2 that are still needed in the grammar.</t>
 
-<t>In &lt;<x:ref>ttcol</x:ref>&gt;, add &lt;<x:ref>xref</x:ref>&gt;, &lt;<x:ref>eref</x:ref>&gt;, &lt;<x:ref>iref</x:ref>&gt;,
-and &lt;<x:ref>cref</x:ref>&gt; as optional children.</t>
+<t>Add "ascii" attributes to &lt;<x:ref>author</x:ref>&gt;, &lt;<x:ref>email</x:ref>&gt;, and
+&lt;<x:ref>organization</x:ref>&gt;. This allows an author to specify their information in their
+native scripts as the primary entry and still allow the ASCII-equivalent values to appear in the
+processed documents.</t>
 
-<t>Deprecate &lt;<x:ref>vspace</x:ref>&gt; because the major use for it,
-creating pseudo-paragraph-breaks in lists, is now handled properly.</t>
-
-<t>Deprecate the "pageno" attribute in &lt;<x:ref>xref</x:ref>&gt; because it was unused in v2.
-Deprecate the "none" and "title" values for the "format" attribute in &lt;<x:ref>xref</x:ref>&gt;
-because the former makes no sense semantically and the latter because it has unpredictable
-output.</t>
+<t>Add "xml:lang" attribute to &lt;<x:ref>artwork</x:ref>&gt;, &lt;<x:ref>postal</x:ref>&gt;, and
+&lt;<x:ref>author</x:ref>&gt;. This is sometimes useful for renderers which display
+different fonts for ideographic characters used in China and Japan.</t>
 
 <t>Add the "section", "relative", and "sectionFormat" attributes to &lt;<x:ref>xref</x:ref>&gt;.</t>
 
-<t>Add "ascii" attributes to &lt;<x:ref>author</x:ref>&gt;, &lt;<x:ref>email</x:ref>&gt;, and
-&lt;<x:ref>organization</x:ref>&gt; elements. This allows an author to specify their information in their
-native scripts as the primary entry and still allow the ASCII-equivalent values to appear in the
-processed documents.</t>
+<t>Add the "numbered" and "removeinrfc" attributes to &lt;<x:ref>section</x:ref>&gt;.</t>
 
 <t>Add "autogeneratedBoilerplateText", "autogeneratedSectionNumber", "autogeneratedFigureNumber",
 and "autogeneratedTableNumber" attributes to &lt;<x:ref>rfc</x:ref>&gt;, &lt;<x:ref>section</x:ref>&gt;,
@@ -232,6 +196,83 @@ filled in by the RFC processor so that the canonical XML file has all of the sam
 as the non-canonical formats.</t>
 
 </list></t>
+
+</section>
+
+<section title="Elements and Attributes Deprecated from v2">
+
+<t><list style="symbols">
+
+<t>Deprecate &lt;<x:ref>list</x:ref>&gt; in favor of &lt;<x:ref>dl</x:ref>&gt;, &lt;<x:ref>ul</x:ref>&gt;,
+and &lt;<x:ref>ol</x:ref>&gt;.</t>
+
+<t>Deprecate &lt;<x:ref>spanx</x:ref>&gt;; replace it with &lt;<x:ref>strong</x:ref>&gt;,
+&lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>em</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;,
+and &lt;<x:ref>tt</x:ref>&gt;.</t>
+
+<t>Deprecate &lt;<x:ref>vspace</x:ref>&gt; because the major use for it,
+creating pseudo-paragraph-breaks in lists, is now handled properly.</t>
+
+<t>Deprecate &lt;<x:ref>facsimile</x:ref>&gt; because it is rarely used and is not actually useful.</t>
+
+<t>Deprecate &lt;<x:ref>format</x:ref>&gt; because it is not useful and has caused surprise for authors in the past.</t>
+
+<t>Deprecate the "title" attribute in &lt;<x:ref>section</x:ref>&gt;
+in favor of the new &lt;<x:ref>sectiontitle</x:ref>&gt;.</t>
+
+<t>Deprecate the "alt", "height", "src", and "width" attributes in &lt;<x:ref>figure</x:ref>&gt;
+because they overlap with the attributes in &lt;<x:ref>artwork</x:ref>&gt;.</t>
+
+<t>Deprecate the "xml:space" attribute in &lt;<x:ref>artwork</x:ref>&gt; because there was only one useful value.
+Deprecate "height" and "width" attribute.</t>
+
+<t>Deprecate the "pageno" attribute in &lt;<x:ref>xref</x:ref>&gt; because it was unused in v2.
+Deprecate the "none" and "title" values for the "format" attribute in &lt;<x:ref>xref</x:ref>&gt;
+because the former makes no sense semantically and the latter because it has unpredictable
+output.</t>
+
+</list></t>
+
+</section>
+
+<section title="Additional Changes from v2">
+
+<t><list style="symbols">
+
+<t>Allow &lt;<x:ref>artwork</x:ref>&gt; to be used on its own in &lt;<x:ref>section</x:ref>&gt;
+(no longer confine it to a figure).</t>
+
+<t>Give more specifics of handling the "type" attribute in &lt;<x:ref>artwork</x:ref>&gt;.</t>
+
+<t>In &lt;<x:ref>address</x:ref>&gt;, allow the sub-elements to be in any order.</t>
+
+<t>Allow &lt;<x:ref>strong</x:ref>&gt;, &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>em</x:ref>&gt;,
+&lt;<x:ref>i</x:ref>&gt;, &lt;<x:ref>tt</x:ref>&gt;, &lt;<x:ref>eref</x:ref>&gt;, and
+&lt;<x:ref>xref</x:ref>&gt; in &lt;<x:ref>cref</x:ref>&gt;.</t>
+
+<t>Allow the sub-elements inside a &lt;<x:ref>reference</x:ref>&gt; to be in any order.</t>
+
+<t>Turned off the auto-generation of anchors in &lt;<x:ref>cref</x:ref>&gt; because there is
+no use case for them that cannot be achieved in other ways.</t>
+
+<t>Allow more than one &lt;<x:ref>artwork</x:ref>&gt;, or more than one
+&lt;<x:ref>sourcecode</x:ref>&gt;, in &lt;<x:ref>figure</x:ref>&gt;.</t>
+
+<t>In &lt;<x:ref>front</x:ref>&gt;, make &lt;<x:ref>date</x:ref>&gt; optional.</t>
+
+<t>In &lt;<x:ref>postal</x:ref>&gt;, allow the sub-elements to be in any order. Also allow the inclusion
+of the new &lt;<x:ref>postalLine</x:ref>&gt; instead of the older elements.</t>
+
+<t>In &lt;<x:ref>ttcol</x:ref>&gt;, allow &lt;<x:ref>xref</x:ref>&gt;,
+&lt;<x:ref>eref</x:ref>&gt;, &lt;<x:ref>iref</x:ref>&gt;, and &lt;<x:ref>cref</x:ref>&gt;
+as optional children.</t>
+
+<t>Do not generate the grammar from a DTD, but instead get it directly from the Relax Next Generation (RNG) grammar.</t>
+
+</list></t>
+
+</section>
+
 
 </section>
 

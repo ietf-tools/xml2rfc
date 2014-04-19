@@ -61,6 +61,10 @@ Table of Contents
 
    1.  Introduction
      1.1.  Differences from v2 to v3
+       1.1.1.  New Elements in v3
+       1.1.2.  New Attributes for Existing Elements
+       1.1.3.  Elements and Attributes Deprecated from v2
+       1.1.4.  Additional Changes from v2
      1.2.  Syntax Notation
    2.  Elements
      2.1.  <abstract>
@@ -218,92 +222,50 @@ Table of Contents
    mode that will issue errors if any deprecated features are in the
    input.
 
-   The list of format changes so far is:
+   The format changes in v3 are listed in the following subsections.
 
-   o  Do not generate the grammar from a DTD, but instead get it
-      directly from the Relax Next Generation (RNG) grammar.
+1.1.1.  New Elements in v3
 
-   o  In <address>, allow the sub-elements to be in any order.
+   o  Add <strong>, <b>, <em>, <i>, and <tt> for character formatting.
 
-   o  In <artwork> and <author>, add optional "xml:lang" attribute.
-      Deprecate "xml:space" in <artwork> because there was only one
-      useful value.  Deprecate "height" and "width" attribute.  Allow
-      <artwork> to be in a <section>, not just a figure.
+   o  Add <aside> for incidental text that will be indented when
+      displayed.
 
-   o  Give more specifics of handling the "type" attribute in <artwork>.
+   o  Add <sourcecode> to differentiate from <artwork>.
 
-   o  Add the <aside> element for incidental text that will be indented
-      when displayed.
+   o  Add <blockquote> to indicate a quotation as in a paragraph-like
+      format.
 
-   o  Add the <strong>, <b>, <em>, <i>, and <tt> elements.
-
-   o  Add the <blockquote> element.
-
-   o  Allow<strong>, <b>, <em>, <i>, <tt>, <eref>, and <xref> in <cref>.
-      Also turned of the auto-generation of anchors in <cref> because
-      there is no use case for them that cannot be achieved in other
-      ways.
-
-   o  Add <displayreference>, allowing authors to display more mneumonic
-      anchor names for automatically-included references.
-
-   o  Deprecate <facsimile> because it is rarely used and is not
-      actually useful.
-
-   o  Deprecate the "alt", "height", "src", and "width" attributes in
-      <figure> because they overlap with the attributes in <artwork>.
-
-   o  Allow more than one <artwork>, or more than one <sourcecode>, in
-      <figure>.
-
-   o  In <front>, make <date> optional.
-
-   o  Deprecate <format> because it is not useful and has caused
-      surprise for authors in the past.
-
-   o  Deprecate <list> in favor of <dl>, <ul>, and <ol>.
-
-   o  In <postal>, allow the sub-elements to be in any order.  Also
-      allow the inclusion of <postalLine> instead of the older elements.
-      Also add optional "xml:lang" attribute.
+   o  Add <sectiontitle> for sections to allow character formatting in
+      section titles.
 
    o  Add <postalLine>, free text that represents one line of the
       address.
 
+   o  Add <displayreference> to allow display of more mneumonic anchor
+      names for automatically-included references.
+
    o  Add <refcontent> to allow better control of text in a reference.
 
-   o  Allow the elements inside a <reference> to be in any order.
+1.1.2.  New Attributes for Existing Elements
 
    o  Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes
-      in the <rfc> element to cover PIs that were in v2 that are still
-      needed in the grammar.
+      to <rfc> to cover processor instructions (PIs) that were in v2
+      that are still needed in the grammar.
 
-   o  In <section>, add the optional "numbered" and "removeinrfc"
-      attributes.  Also deprecate "title" in favor of <sectiontitle>.
+   o  Add "ascii" attributes to <author>, <email>, and <organization>.
+      This allows an author to specify their information in their native
+      scripts as the primary entry and still allow the ASCII-equivalent
+      values to appear in the processed documents.
 
-   o  Deprecate <spanx> element, and replaced it with <b>, <i>, and
-      <tt>.
-
-   o  Add the <sourcecode> element to differentiate from <artwork>.
-
-   o  In <ttcol>, add <xref>, <eref>, <iref>, and <cref> as optional
-      children.
-
-   o  Deprecate <vspace> because the major use for it, creating pseudo-
-      paragraph-breaks in lists, is now handled properly.
-
-   o  Deprecate the "pageno" attribute in <xref> because it was unused
-      in v2.  Deprecate the "none" and "title" values for the "format"
-      attribute in <xref> because the former makes no sense semantically
-      and the latter because it has unpredictable output.
+   o  Add "xml:lang" attribute to <artwork>, <postal>, and <author>.
+      This is sometimes useful for renderers which display different
+      fonts for ideographic characters used in China and Japan.
 
    o  Add the "section", "relative", and "sectionFormat" attributes to
       <xref>.
 
-   o  Add "ascii" attributes to <author>, <email>, and <organization>
-      elements.  This allows an author to specify their information in
-      their native scripts as the primary entry and still allow the
-      ASCII-equivalent values to appear in the processed documents.
+   o  Add the "numbered" and "removeinrfc" attributes to <section>.
 
    o  Add "autogeneratedBoilerplateText", "autogeneratedSectionNumber",
       "autogeneratedFigureNumber", and "autogeneratedTableNumber"
@@ -311,6 +273,68 @@ Table of Contents
       respectively.  These will be filled in by the RFC processor so
       that the canonical XML file has all of the same information as the
       non-canonical formats.
+
+1.1.3.  Elements and Attributes Deprecated from v2
+
+   o  Deprecate <list> in favor of <dl>, <ul>, and <ol>.
+
+   o  Deprecate <spanx>; replace it with <strong>, <b>, <em>, <i>, and
+      <tt>.
+
+   o  Deprecate <vspace> because the major use for it, creating pseudo-
+      paragraph-breaks in lists, is now handled properly.
+
+   o  Deprecate <facsimile> because it is rarely used and is not
+      actually useful.
+
+   o  Deprecate <format> because it is not useful and has caused
+      surprise for authors in the past.
+
+   o  Deprecate the "title" attribute in <section> in favor of the new
+      <sectiontitle>.
+
+   o  Deprecate the "alt", "height", "src", and "width" attributes in
+      <figure> because they overlap with the attributes in <artwork>.
+
+   o  Deprecate the "xml:space" attribute in <artwork> because there was
+      only one useful value.  Deprecate "height" and "width" attribute.
+
+   o  Deprecate the "pageno" attribute in <xref> because it was unused
+      in v2.  Deprecate the "none" and "title" values for the "format"
+      attribute in <xref> because the former makes no sense semantically
+      and the latter because it has unpredictable output.
+
+1.1.4.  Additional Changes from v2
+
+   o  Allow <artwork> to be used on its own in <section> (no longer
+      confine it to a figure).
+
+   o  Give more specifics of handling the "type" attribute in <artwork>.
+
+   o  In <address>, allow the sub-elements to be in any order.
+
+   o  Allow <strong>, <b>, <em>, <i>, <tt>, <eref>, and <xref> in
+      <cref>.
+
+   o  Allow the sub-elements inside a <reference> to be in any order.
+
+   o  Turned off the auto-generation of anchors in <cref> because there
+      is no use case for them that cannot be achieved in other ways.
+
+   o  Allow more than one <artwork>, or more than one <sourcecode>, in
+      <figure>.
+
+   o  In <front>, make <date> optional.
+
+   o  In <postal>, allow the sub-elements to be in any order.  Also
+      allow the inclusion of the new <postalLine> instead of the older
+      elements.
+
+   o  In <ttcol>, allow <xref>, <eref>, <iref>, and <cref> as optional
+      children.
+
+   o  Do not generate the grammar from a DTD, but instead get it
+      directly from the Relax Next Generation (RNG) grammar.
 
 1.2.  Syntax Notation
 
@@ -491,7 +515,7 @@ Table of Contents
    Note that this can be a "data" URI ([RFC2397]) as well, in which case
    the graphics file is wholly part of the XML file.
 
-   [[anchor3: Add an example of in-lined SVG here.]]
+   [[anchor7: Add an example of in-lined SVG here.]]
 
 2.5.6.  'type' attribute
 
@@ -702,7 +726,7 @@ Table of Contents
 
 2.10.2.  'cite' attribute (mandatory)
 
-   The source of the citation.  This must be a URI. [[anchor4: Needs an
+   The source of the citation.  This must be a URI. [[anchor8: Needs an
    example of a cite for a reference that is already in the spec.]]
 
 2.11.  <c>
@@ -2510,7 +2534,7 @@ Table of Contents
 
    The generated text depends on whether the <xref> is empty (in which
    case the processor will try to generate a meaningful text fragment),
-   and the nature of the referenced document part. [[anchor5: Need to
+   and the nature of the referenced document part. [[anchor9: Need to
    say more about the processor output if the element is empyt and if it
    has text.]]
 
@@ -2594,7 +2618,7 @@ Table of Contents
 
 2.63.3.  'relative' attribute
 
-   Specifies a relative reference from the main target. [[anchor6: Need
+   Specifies a relative reference from the main target. [[anchor10: Need
    more description here about how this will be displayed.]]
 
 2.63.4.  'section' attribute
@@ -3132,7 +3156,7 @@ B.1.  Including External Text
 
    <x:include href="file://home/chris/ietf/drafts/commontext.xml"/>
 
-   [[anchor12: Need to think a bit more about using xi:include to
+   [[anchor16: Need to think a bit more about using xi:include to
    replace src= for artwork or sourcecode.]]
 
 B.2.  The RFC Processor
