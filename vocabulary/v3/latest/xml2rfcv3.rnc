@@ -120,9 +120,7 @@ section =
     section*
   }
 sectiontitle =
-  element sectiontitle {
-    (text | xref | eref | iref | cref | tt | b | i | em | strong)*
-  }
+  element sectiontitle { (text | xref | eref | iref | cref | tt)* }
 t =
   element t {
     attribute anchor { xsd:ID }?,
@@ -141,10 +139,10 @@ t =
      | spanx
      | vspace
      | tt
+     | strong
      | b
-     | i
      | em
-     | strong)*
+     | i)*
   }
 aside =
   element aside {
@@ -154,7 +152,7 @@ blockquote =
   element blockquote {
     attribute anchor { xsd:ID }?,
     attribute cite { text },
-    (text | figure | artwork | sourcecode | tt | b | i | em | strong)*
+    (text | figure | artwork | sourcecode | tt | strong | b | em | i)*
   }
 \list =
   element list {
@@ -193,10 +191,10 @@ li =
        iref,
        cref,
        tt,
+       strong,
        b,
-       i,
        em,
-       strong)+
+       i)+
   }
 dl =
   element dl {
@@ -208,7 +206,7 @@ dl =
   }
 dt =
   element dt {
-    (text | xref | eref | iref | cref | tt | b | i | em | strong)*
+    (text | xref | eref | iref | cref | tt | strong | b | em | i)*
   }
 dd =
   element dd {
@@ -223,10 +221,10 @@ dd =
      | iref
      | cref
      | tt
+     | strong
      | b
-     | i
      | em
-     | strong)*
+     | i)*
   }
 xref =
   element xref {
@@ -256,15 +254,18 @@ cref =
   element cref {
     attribute anchor { xsd:ID }?,
     attribute source { text }?,
-    (text | xref | eref | b | i | em | strong | tt)*
+    (text | xref | eref | tt | strong | b | em | i)*
   }
-tt = element tt { (text | xref | eref | iref | cref | b | i)* }
-b = element b { (text | xref | eref | iref | cref | tt | i | em)* }
+tt =
+  element tt {
+    (text | xref | eref | iref | cref | strong | b | em | i)*
+  }
+b = element b { (text | xref | eref | iref | cref | tt | em | i)* }
 strong =
-  element strong { (text | xref | eref | iref | cref | tt | i | em)* }
-i = element i { (text | xref | eref | iref | cref | b | strong | tt)* }
+  element strong { (text | xref | eref | iref | cref | tt | em | i)* }
+i = element i { (text | xref | eref | iref | cref | tt | strong | b)* }
 em =
-  element em { (text | xref | eref | iref | cref | b | strong | tt)* }
+  element em { (text | xref | eref | iref | cref | tt | strong | b)* }
 spanx =
   element spanx {
     [ a:defaultValue = "preserve" ]
@@ -304,10 +305,10 @@ preamble =
      | cref
      | spanx
      | tt
+     | strong
      | b
-     | i
      | em
-     | strong)*
+     | i)*
   }
 artwork =
   element artwork {
@@ -338,10 +339,10 @@ postamble =
      | cref
      | spanx
      | tt
+     | strong
      | b
-     | i
      | em
-     | strong)*
+     | i)*
   }
 texttable =
   element texttable {
@@ -375,10 +376,10 @@ c =
      | cref
      | spanx
      | tt
+     | strong
      | b
-     | i
      | em
-     | strong)*
+     | i)*
   }
 back = element back { displayreference*, references*, section* }
 displayreference =
@@ -420,10 +421,10 @@ annotation =
      | cref
      | spanx
      | tt
+     | strong
      | b
-     | i
      | em
-     | strong)*
+     | i)*
   }
 refcontent = element refcontent { (text | tt | b | i | em | strong)* }
 start = rfc
