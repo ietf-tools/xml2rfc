@@ -695,7 +695,7 @@ Table of Contents
 2.9.  <back>
 
    Contains the "back" part of the document: the references and
-   appendices.
+   appendices.  In <back>, <section> elements indicate appendices.
 
    This element appears as child element of: <rfc> (Section 2.46).
 
@@ -875,11 +875,11 @@ Table of Contents
 
 2.16.1.  'day' attribute
 
-   Day of publication.
+   Day of publication; this is a number.
 
 2.16.2.  'month' attribute
 
-   Month of publication.
+   Month of publication; this is the English name of the month.
 
 2.16.3.  'year' attribute
 
@@ -1082,7 +1082,8 @@ Table of Contents
 2.23.  <eref>
 
    Represents an "external" link (as specified in the "target"
-   attribute).
+   attribute).  This can be used for creating linked references, such as
+   in HTML output.
 
    If the element has text content, that content will be used.
    Otherwise, the value of the target attribute will be inserted in
@@ -1203,7 +1204,7 @@ Table of Contents
 
 2.26.  <format>
 
-   Depredated.  If the goal is to provide a single URI for a reference,
+   Deprecated.  If the goal is to provide a single URI for a reference,
    use the "target" attribute on <reference> instead.
 
    This element appears as child element of: <reference> (Section 2.43).
@@ -1481,6 +1482,9 @@ Table of Contents
    i  Lowercase Roman numerals (i, ii, iii, ...)
 
    I  Uppercase Roman numerals (I, II, III, ...)
+
+   [[anchor10: Need to determine, and then specify, what happens after
+   the 26th letter.]]
 
    If the length of the style value is greater than 1, the value must
    contain a percent-encoded indicator and other text.  The value is a
@@ -1965,7 +1969,7 @@ Table of Contents
    (when inside a <back> element).
 
    Sub-sections are created by nesting <section> elements inside
-   <section> elements.
+   <section> elements.  Sections are allowed to be empty.
 
    This element appears as child element of: <back> (Section 2.9),
    <middle> (Section 2.33), and <section> (Section 2.47).
@@ -2573,7 +2577,7 @@ Table of Contents
 
    The generated text depends on whether the <xref> is empty (in which
    case the processor will try to generate a meaningful text fragment),
-   and the nature of the referenced document part. [[anchor10: Need to
+   and the nature of the referenced document part. [[anchor11: Need to
    say more about the processor output if the element is empyt and if it
    has text.]]
 
@@ -2657,7 +2661,7 @@ Table of Contents
 
 2.63.3.  'relative' attribute
 
-   Specifies a relative reference from the main target. [[anchor11: Need
+   Specifies a relative reference from the main target. [[anchor12: Need
    more description here about how this will be displayed.]]
 
 2.63.4.  'section' attribute
@@ -3195,7 +3199,7 @@ B.1.  Including External Text
 
    <x:include href="file://home/chris/ietf/drafts/commontext.xml"/>
 
-   [[anchor17: Need to think a bit more about using xi:include to
+   [[anchor18: Need to think a bit more about using xi:include to
    replace src= for artwork or sourcecode.]]
 
 B.2.  The RFC Processor

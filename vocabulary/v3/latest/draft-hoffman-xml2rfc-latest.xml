@@ -20,6 +20,10 @@ Before finishing, check for "so far" and "expected" wording and remove those.
 
 Maybe deprecate <texttable> with something new based on HTML tables
 
+Add wording about <b>, <i>, and <tt> being cumulative.
+
+Deal with "cite" in <blockquote>; people object to it being a URI.
+
 Deal with <ol> not being able to continue numbering across sections.
 
 Should subelements of <postal> allow non-ASCII and have "ascii" attributes?
@@ -822,7 +826,8 @@ as optional children.</t>
    <iref item="Elements" subitem="back" primary="true"/>
    <iref item="back element" primary="true"/>
    <t>
-      Contains the "back" part of the document: the references and appendices.
+      Contains the "back" part of the document: the references and appendices. In &lt;back&gt;,
+      &lt;<x:ref>section</x:ref>&gt; elements indicate appendices.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.back.contents"><!--AG-->Content model:</t>
@@ -1096,7 +1101,7 @@ as optional children.</t>
       <iref item="date element" subitem="day attribute"/>
       <iref item="day attribute" subitem="in date element"/>
       <t>
-            Day of publication.
+            Day of publication; this is a number.
          </t>
    </section>
 
@@ -1106,7 +1111,7 @@ as optional children.</t>
       <iref item="date element" subitem="month attribute"/>
       <iref item="month attribute" subitem="in date element"/>
       <t>
-            Month of publication.
+            Month of publication; this is the English name of the month.
          </t>
    </section>
 
@@ -1431,7 +1436,8 @@ as optional children.</t>
    <iref item="Elements" subitem="eref" primary="true"/>
    <iref item="eref element" primary="true"/>
    <t>
-      Represents an "external" link (as specified in the "target" attribute).
+      Represents an "external" link (as specified in the "target" attribute). This can be used for creating linked
+      references, such as in HTML output.
    </t>
    <t>
       If the element has text content, that content will be used. Otherwise, the value of the
@@ -1637,7 +1643,7 @@ as optional children.</t>
    <iref item="Elements" subitem="format" primary="true"/>
    <iref item="format element" primary="true"/>
    <t>
-      Depredated. If the goal is to provide a single URI for
+      Deprecated. If the goal is to provide a single URI for
       a reference, use the "target" attribute on &lt;<x:ref>reference</x:ref>&gt; instead.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
@@ -2104,6 +2110,7 @@ as optional children.</t>
             <t hangText="i">Lowercase Roman numerals (i, ii, iii, ...)</t>
             <t hangText="I">Uppercase Roman numerals (I, II, III, ...)</t>
          </list>
+         <cref>Need to determine, and then specify, what happens after the 26th letter.</cref>
       </t>
       <t>
         If the length of the style value is greater than 1, the value must contain a
@@ -2826,6 +2833,7 @@ as optional children.</t>
    </t>
    <t>
       Sub-sections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
+      Sections are allowed to be empty.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>), &lt;<x:ref>middle</x:ref>&gt; (<xref target="element.middle"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.section.contents"><!--AG-->Content model:</t>

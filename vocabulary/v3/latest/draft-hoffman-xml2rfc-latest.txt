@@ -860,7 +860,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
 2.9.  <back>
 
    Contains the "back" part of the document: the references and
-   appendices.
+   appendices.  In <back>, <section> elements indicate appendices.
 
    This element appears as child element of: <rfc> (Section 2.46).
 
@@ -1071,11 +1071,11 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
 2.16.1.  'day' attribute
 
-   Day of publication.
+   Day of publication; this is a number.
 
 2.16.2.  'month' attribute
 
-   Month of publication.
+   Month of publication; this is the English name of the month.
 
 2.16.3.  'year' attribute
 
@@ -1312,7 +1312,8 @@ Internet-Draft                  XML2RFCv3                     April 2014
 2.23.  <eref>
 
    Represents an "external" link (as specified in the "target"
-   attribute).
+   attribute).  This can be used for creating linked references, such as
+   in HTML output.
 
    If the element has text content, that content will be used.
    Otherwise, the value of the target attribute will be inserted in
@@ -1336,7 +1337,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    Deprecated.
 
-   This element appears as child element of: <address> (Section 2.2).
 
 
 
@@ -1344,6 +1344,8 @@ Hoffman                 Expires October 21, 2014               [Page 24]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
+
+   This element appears as child element of: <address> (Section 2.2).
 
    Content model: only text content.
 
@@ -1390,8 +1392,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    o  "center"
 
    o  "right"
-
-
 
 
 
@@ -1459,7 +1459,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
 2.26.  <format>
 
-   Depredated.  If the goal is to provide a single URI for a reference,
+   Deprecated.  If the goal is to provide a single URI for a reference,
    use the "target" attribute on <reference> instead.
 
    This element appears as child element of: <reference> (Section 2.43).
@@ -1780,11 +1780,11 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    I  Uppercase Roman numerals (I, II, III, ...)
 
+   [[anchor10: Need to determine, and then specify, what happens after
+   the 26th letter.]]
+
    If the length of the style value is greater than 1, the value must
    contain a percent-encoded indicator and other text.  The value is a
-   free-form text that allows counter values to be inserted using a
-   "percent-letter" format.  For instance, "[REQ%d]" generates labels of
-   the form "[REQ1]", where "%d" inserts the item number as decimal
 
 
 
@@ -1793,6 +1793,9 @@ Hoffman                 Expires October 21, 2014               [Page 32]
 Internet-Draft                  XML2RFCv3                     April 2014
 
 
+   free-form text that allows counter values to be inserted using a
+   "percent-letter" format.  For instance, "[REQ%d]" generates labels of
+   the form "[REQ1]", where "%d" inserts the item number as decimal
    number.
 
    The following formats are supported:
@@ -1838,9 +1841,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    The value is expected to be the scheme-specific part of a "tel" URI
    (so does not include the prefix "tel:"), using the "global numbers"
-   syntax.  See Section 3 of [RFC3966] for details.
-
-   This element appears as child element of: <address> (Section 2.2).
 
 
 
@@ -1848,6 +1848,10 @@ Hoffman                 Expires October 21, 2014               [Page 33]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
+
+   syntax.  See Section 3 of [RFC3966] for details.
+
+   This element appears as child element of: <address> (Section 2.2).
 
    Content model: only text content.
 
@@ -1893,10 +1897,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    This element appears as child element of: <postal> (Section 2.38).
 
-   Content model: only text content.
-
-
-
 
 
 
@@ -1904,6 +1904,8 @@ Hoffman                 Expires October 21, 2014               [Page 34]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
+
+   Content model: only text content.
 
 2.40.  <postamble>
 
@@ -1951,8 +1953,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    o  Text
 
-   o  <xref> elements (Section 2.63)
-
 
 
 
@@ -1960,6 +1960,8 @@ Hoffman                 Expires October 21, 2014               [Page 35]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
+
+   o  <xref> elements (Section 2.63)
 
    o  <eref> elements (Section 2.23)
 
@@ -2007,8 +2009,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    In any order:
 
-   o  Text
-
 
 
 
@@ -2016,6 +2016,8 @@ Hoffman                 Expires October 21, 2014               [Page 36]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
+
+   o  Text
 
    o  <tt> elements (Section 2.57)
 
@@ -2063,8 +2065,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    Note that depending on the <seriesInfo> element, a URI might not be
    needed, nor desirable, as it can be automatically generated (for
    instance, for RFCs).
-
-
 
 
 
@@ -2359,7 +2359,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
    (when inside a <back> element).
 
    Sub-sections are created by nesting <section> elements inside
-   <section> elements.
+   <section> elements.  Sections are allowed to be empty.
 
    This element appears as child element of: <back> (Section 2.9),
    <middle> (Section 2.33), and <section> (Section 2.47).
@@ -3064,7 +3064,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    The generated text depends on whether the <xref> is empty (in which
    case the processor will try to generate a meaningful text fragment),
-   and the nature of the referenced document part. [[anchor10: Need to
+   and the nature of the referenced document part. [[anchor11: Need to
    say more about the processor output if the element is empyt and if it
    has text.]]
 
@@ -3165,7 +3165,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
 2.63.3.  'relative' attribute
 
-   Specifies a relative reference from the main target. [[anchor11: Need
+   Specifies a relative reference from the main target. [[anchor12: Need
    more description here about how this will be displayed.]]
 
 2.63.4.  'section' attribute
@@ -3796,7 +3796,7 @@ B.1.  Including External Text
 
    <x:include href="file://home/chris/ietf/drafts/commontext.xml"/>
 
-   [[anchor17: Need to think a bit more about using xi:include to
+   [[anchor18: Need to think a bit more about using xi:include to
    replace src= for artwork or sourcecode.]]
 
 
@@ -5327,7 +5327,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          uri  10, 54
          vspace  49, 55
          workgroup  27, 55
-         xref  10, 16-17, 19-20, 22-23, 28, 30, 35, 48-49, 52-53, 55
+         xref  10, 16-17, 19-20, 22-23, 28, 30, 35-36, 48-49, 52-53, 55
       em element  23
          inside annotation  10
          inside b  16
@@ -5848,7 +5848,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          inside i  28
          inside li  30
          inside postamble  35
-         inside preamble  35
+         inside preamble  36
          inside strong  48
          inside t  49
          inside titleelement  52
