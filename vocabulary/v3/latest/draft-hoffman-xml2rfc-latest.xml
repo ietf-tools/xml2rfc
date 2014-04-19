@@ -20,6 +20,8 @@ Before finishing, check for "so far" and "expected" wording and remove those.
 
 Maybe deprecate <texttable> with something new based on HTML tables
 
+Should subelements of <postal> allow non-ASCII and have "ascii" attributes?
+
 Maybe have <artwork> include microlanguages for packets and call sequences
 
 Add some tooling to mark the things that are deprecated?
@@ -100,13 +102,14 @@ processor are described in <xref target="processors"/>.
   syntax checks).
 </t>
 
-<section title="Differences from v2 to v3" anchor="differences.from.v2.to.v3">
-
 <t>
 The following is a hopefully-complete list of all the technical changes between <xref target="XML2RFCv2"/>
-and this document. Note that the list is for the current version of this document only. There are
+and this document, as welll as the design criteria for those changes.
+Note that the list is for the current version of this document only. There are
 additional changes that are expected to the v3 vocabulary that are being discussed. Also note that
 changes to the design choices for the differences are also expected.</t>
+
+<section title="Design Criteria for the Changes in v3">
 
 <t>The design criteria of the changes from v2 to v3 are:
 
@@ -141,6 +144,10 @@ warnings for where it cannot convert. The processor will also have a "strict" mo
 will issue errors if any deprecated features are in the input.
 </t>
 
+</section>
+
+<section title="Differences from v2 to v3" anchor="differences.from.v2.to.v3">
+
 <t>The format changes in v3 are listed in the following subsections.</t>
 
 <section title="New Elements in v3">
@@ -156,7 +163,8 @@ and &lt;<x:ref>tt</x:ref>&gt; for character formatting.</t>
 
 <t>Add &lt;<x:ref>blockquote</x:ref>&gt; to indicate a quotation as in a paragraph-like format.</t>
 
-<t>Add &lt;<x:ref>sectiontitle</x:ref>&gt; for sections to allow character formatting in section titles.</t>
+<t>Add &lt;<x:ref>titleelement</x:ref>&gt; to sections, figures, and texttables to allow character formatting
+(fixed-width font) in their titles, and to allow references.</t>
 
 <t>Add &lt;<x:ref>postalLine</x:ref>&gt;, free text that represents one line of the address.</t>
 
@@ -217,8 +225,8 @@ creating pseudo-paragraph-breaks in lists, is now handled properly.</t>
 
 <t>Deprecate &lt;<x:ref>format</x:ref>&gt; because it is not useful and has caused surprise for authors in the past.</t>
 
-<t>Deprecate the "title" attribute in &lt;<x:ref>section</x:ref>&gt;
-in favor of the new &lt;<x:ref>sectiontitle</x:ref>&gt;.</t>
+<t>Deprecate the "title" attribute in &lt;<x:ref>section</x:ref>&gt;,  &lt;<x:ref>figure</x:ref>&gt;, and  &lt;<x:ref>texttable</x:ref>&gt;
+in favor of the new &lt;<x:ref>titleelement</x:ref>&gt;.</t>
 
 <t>Deprecate the "alt", "height", "src", and "width" attributes in &lt;<x:ref>figure</x:ref>&gt;
 because they overlap with the attributes in &lt;<x:ref>artwork</x:ref>&gt;.</t>
@@ -984,7 +992,7 @@ as optional children.</t>
       (depending on file format and settings of the formatter), or not at
       all (when generating an RFC).
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>sectiontitle</x:ref>&gt; (<xref target="element.sectiontitle"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>titleelement</x:ref>&gt; (<xref target="element.titleelement"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.cref.contents"><!--AG-->
         Content model:
       </t>
@@ -1111,50 +1119,82 @@ as optional children.</t>
    <t anchor="element.dd.contents"><!--AG-->
         Content model:
       </t>
-   <t><!--AG-->In any order: <list style="symbols">
-         <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="ol"/>
-            <iref item="ol element" subitem="inside dd"/>&lt;<x:ref>ol</x:ref>&gt; elements (<xref target="element.ol"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="ul"/>
-            <iref item="ul element" subitem="inside dd"/>&lt;<x:ref>ul</x:ref>&gt; elements (<xref target="element.ul"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="figure"/>
-            <iref item="figure element" subitem="inside dd"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="artwork"/>
-            <iref item="artwork element" subitem="inside dd"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="sourcecode"/>
-            <iref item="sourcecode element" subitem="inside dd"/>&lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="xref"/>
-            <iref item="xref element" subitem="inside dd"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="eref"/>
-            <iref item="eref element" subitem="inside dd"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="iref"/>
-            <iref item="iref element" subitem="inside dd"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="cref"/>
-            <iref item="cref element" subitem="inside dd"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="tt"/>
-            <iref item="tt element" subitem="inside dd"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="strong"/>
-            <iref item="strong element" subitem="inside dd"/>&lt;<x:ref>strong</x:ref>&gt; elements (<xref target="element.strong"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside dd"/>&lt;<x:ref>b</x:ref>&gt; elements (<xref target="element.b"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="em"/>
-            <iref item="em element" subitem="inside dd"/>&lt;<x:ref>em</x:ref>&gt; elements (<xref target="element.em"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="i"/>
-            <iref item="i element" subitem="inside dd"/>&lt;<x:ref>i</x:ref>&gt; elements (<xref target="element.i"/>)</t>
+   <t><!--AG-->Either:<list style="symbols">
+         <x:lt>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="t"/>
+               <iref item="t element" subitem="inside dd"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
+        
+         </x:lt>
+      </list>
+   </t>
+   <t><!--AG-->Or:<list style="symbols">
+         <x:lt>
+          
+            <t><!--AG-->Text</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="ol"/>
+               <iref item="ol element" subitem="inside dd"/>One or more &lt;<x:ref>ol</x:ref>&gt; elements (<xref target="element.ol"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="ul"/>
+               <iref item="ul element" subitem="inside dd"/>One or more &lt;<x:ref>ul</x:ref>&gt; elements (<xref target="element.ul"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="dl"/>
+               <iref item="dl element" subitem="inside dd"/>One or more &lt;<x:ref>dl</x:ref>&gt; elements (<xref target="element.dl"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="figure"/>
+               <iref item="figure element" subitem="inside dd"/>One or more &lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="artwork"/>
+               <iref item="artwork element" subitem="inside dd"/>One or more &lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="sourcecode"/>
+               <iref item="sourcecode element" subitem="inside dd"/>One or more &lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="xref"/>
+               <iref item="xref element" subitem="inside dd"/>One or more &lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="eref"/>
+               <iref item="eref element" subitem="inside dd"/>One or more &lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="iref"/>
+               <iref item="iref element" subitem="inside dd"/>One or more &lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="cref"/>
+               <iref item="cref element" subitem="inside dd"/>One or more &lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="tt"/>
+               <iref item="tt element" subitem="inside dd"/>One or more &lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="strong"/>
+               <iref item="strong element" subitem="inside dd"/>One or more &lt;<x:ref>strong</x:ref>&gt; elements (<xref target="element.strong"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="b"/>
+               <iref item="b element" subitem="inside dd"/>One or more &lt;<x:ref>b</x:ref>&gt; elements (<xref target="element.b"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="em"/>
+               <iref item="em element" subitem="inside dd"/>One or more &lt;<x:ref>em</x:ref>&gt; elements (<xref target="element.em"/>)</t>
+          
+            <t><!--AG-->
+               <iref item="Elements" subitem="i"/>
+               <iref item="i element" subitem="inside dd"/>One or more &lt;<x:ref>i</x:ref>&gt; elements (<xref target="element.i"/>)</t>
+        
+         </x:lt>
       </list>
    </t>
 </section>
@@ -1210,7 +1250,7 @@ as optional children.</t>
       A definition list. Each entry has a pair of elements: a term (&lt;<x:ref>dt</x:ref>&gt;) and
       a definition (&lt;<x:ref>dd</x:ref>&gt;).
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.dl.contents"><!--AG-->
         Content model:
       </t>
@@ -1383,7 +1423,7 @@ as optional children.</t>
       If the element has text content, that content will be used. Otherwise, the value of the
       target attribute will be inserted in angle brackets (<xref target="RFC3986" x:fmt="," x:sec="C"/>).
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>sectiontitle</x:ref>&gt; (<xref target="element.sectiontitle"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>titleelement</x:ref>&gt; (<xref target="element.titleelement"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.eref.contents"><!--AG-->Content model: only text content.</t>
 
    <!--eref/@target-->
@@ -1421,6 +1461,11 @@ as optional children.</t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.figure.contents"><!--AG-->Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="titleelement"/>
+            <iref item="titleelement element" subitem="inside figure"/>One optional &lt;<x:ref>titleelement</x:ref>&gt; element (<xref target="element.titleelement"/>)</t>
+      
         
          <t><!--AG-->
             <iref item="Elements" subitem="iref"/>
@@ -1557,7 +1602,7 @@ as optional children.</t>
       <iref item="figure element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in figure element"/>
       <t>
-         The title for the figure; this usually appears on a line after the artwork.
+            Deprecated. Use &lt;<x:ref>titleelement</x:ref>&gt; instead.
       </t>
    </section>
 
@@ -1728,7 +1773,7 @@ as optional children.</t>
 </artwork>
       <postamble>will produce an index entry for "Grammar, item".</postamble>
    </figure>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>sectiontitle</x:ref>&gt; (<xref target="element.sectiontitle"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>titleelement</x:ref>&gt; (<xref target="element.titleelement"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.iref.contents"><!--AG-->Content model: this element does not have any contents.</t>
 
    <!--iref/@item-->
@@ -2773,8 +2818,8 @@ as optional children.</t>
    <t><!--AG-->In this order:<list style="numbers">
         
          <t><!--AG-->
-            <iref item="Elements" subitem="sectiontitle"/>
-            <iref item="sectiontitle element" subitem="inside section"/>One optional &lt;<x:ref>sectiontitle</x:ref>&gt; element (<xref target="element.sectiontitle"/>)</t>
+            <iref item="Elements" subitem="titleelement"/>
+            <iref item="titleelement element" subitem="inside section"/>One optional &lt;<x:ref>titleelement</x:ref>&gt; element (<xref target="element.titleelement"/>)</t>
       
          <t><!--AG-->In any order: <list style="symbols">
                <t><!--AG-->
@@ -2869,7 +2914,7 @@ as optional children.</t>
       <iref item="section element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in section element"/>
       <t>
-            Deprecated. Use &lt;<x:ref>sectiontitle</x:ref>&gt; instead.
+            Deprecated. Use &lt;<x:ref>titleelement</x:ref>&gt; instead.
          </t>
    </section>
 
@@ -2896,40 +2941,6 @@ as optional children.</t>
          </list>
       </t>
    </section>
-</section>
-
-<!--sectiontitle-->
-<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;sectiontitle&gt;" anchor="element.sectiontitle">
-   <x:anchor-alias value="sectiontitle"/>
-   <iref item="Elements" subitem="sectiontitle" primary="true"/>
-   <iref item="sectiontitle element" primary="true"/>
-   <t>
-      The title of the section. This title can have flow markup such as to make some parts bold
-      or to include references.
-   </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
-   <t anchor="element.sectiontitle.contents"><!--AG-->
-        Content model:
-      </t>
-   <t><!--AG-->In any order: <list style="symbols">
-         <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="xref"/>
-            <iref item="xref element" subitem="inside sectiontitle"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="eref"/>
-            <iref item="eref element" subitem="inside sectiontitle"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="iref"/>
-            <iref item="iref element" subitem="inside sectiontitle"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="cref"/>
-            <iref item="cref element" subitem="inside sectiontitle"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="tt"/>
-            <iref item="tt element" subitem="inside sectiontitle"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
-      </list>
-   </t>
 </section>
 
 <!--seriesInfo-->
@@ -3144,7 +3155,7 @@ as optional children.</t>
    <t>
       Contains a paragraph of text.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.t.contents"><!--AG-->
         Content model:
       </t>
@@ -3238,6 +3249,11 @@ as optional children.</t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.texttable.contents"><!--AG-->Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="titleelement"/>
+            <iref item="titleelement element" subitem="inside texttable"/>One optional &lt;<x:ref>titleelement</x:ref>&gt; element (<xref target="element.titleelement"/>)</t>
+      
         
          <t><!--AG-->
             <iref item="Elements" subitem="preamble"/>
@@ -3357,7 +3373,7 @@ as optional children.</t>
       <iref item="texttable element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in texttable element"/>
       <t>
-         The title for the table; this appears on a line after the table's body.
+            Deprecated. Use &lt;<x:ref>titleelement</x:ref>&gt; instead.
       </t>
    </section>
 </section>
@@ -3390,6 +3406,40 @@ as optional children.</t>
    </section>
 </section>
 
+<!--titleelement-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;titleelement&gt;" anchor="element.titleelement">
+   <x:anchor-alias value="titleelement"/>
+   <iref item="Elements" subitem="titleelement" primary="true"/>
+   <iref item="titleelement element" primary="true"/>
+   <t>
+      The title of the section, figure, or texttable. This title can have flow markup such
+      as to make some characters use a fixed-width font, or to include references.
+   </t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
+   <t anchor="element.titleelement.contents"><!--AG-->
+        Content model:
+      </t>
+   <t><!--AG-->In any order: <list style="symbols">
+         <t><!--AG-->Text</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="xref"/>
+            <iref item="xref element" subitem="inside titleelement"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="eref"/>
+            <iref item="eref element" subitem="inside titleelement"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="iref"/>
+            <iref item="iref element" subitem="inside titleelement"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="cref"/>
+            <iref item="cref element" subitem="inside titleelement"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="tt"/>
+            <iref item="tt element" subitem="inside titleelement"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
+      </list>
+   </t>
+</section>
+
 <!--tt-->
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;tt&gt;" anchor="element.tt">
    <x:anchor-alias value="tt"/>
@@ -3398,7 +3448,7 @@ as optional children.</t>
    <t>
             Causes the text to be displayed in a constant-width font.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>sectiontitle</x:ref>&gt; (<xref target="element.sectiontitle"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>titleelement</x:ref>&gt; (<xref target="element.titleelement"/>).</t>
    <t anchor="element.tt.contents"><!--AG-->
         Content model:
       </t>
@@ -3619,7 +3669,7 @@ as optional children.</t>
       make sure that the prose is sufficient for a reader to understand what
       is being referred to.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>sectiontitle</x:ref>&gt; (<xref target="element.sectiontitle"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>titleelement</x:ref>&gt; (<xref target="element.titleelement"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.xref.contents"><!--AG-->Content model: only text content.</t>
 
    <!--xref/@format-->
@@ -4812,12 +4862,12 @@ section =
     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no" 
 }?,
     attribute autogeneratedSectionNumber { text }?,
-    sectiontitle?,
+    titleelement?,
     (t | aside | figure | texttable | iref | artwork | sourcecode)*,
     section*
   }
-sectiontitle =
-  element sectiontitle { (text | xref | eref | iref | cref | tt)* }
+titleelement =
+  element titleelement { (text | xref | eref | iref | cref | tt)* }
 t =
   element t {
     attribute anchor { xsd:ID }?,
@@ -4909,21 +4959,23 @@ dt =
   }
 dd =
   element dd {
-    (text
-     | ol
-     | ul
-     | figure
-     | artwork
-     | sourcecode
-     | xref
-     | eref
-     | iref
-     | cref
-     | tt
-     | strong
-     | b
-     | em
-     | i)*
+    t+
+    | (text,
+       ol,
+       ul,
+       dl,
+       figure,
+       artwork,
+       sourcecode,
+       xref,
+       eref,
+       iref,
+       cref,
+       tt,
+       strong,
+       b,
+       em,
+       i)+
   }
 xref =
   element xref {
@@ -4994,6 +5046,7 @@ figure =
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
     attribute autogeneratedFigureNumber { text }?,
+    titleelement?,
     iref*,
     preamble?,
     (artwork+ | sourcecode+),
@@ -5058,6 +5111,7 @@ texttable =
     [ a:defaultValue = "full" ]
     attribute style { "all" | "none" | "headers" | "full" }?,
     attribute autogeneratedTableNumber { text }?,
+    titleelement?,
     preamble?,
     ttcol+,
     c*,
@@ -5278,13 +5332,13 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | 
 + "no" }?,
 +     attribute autogeneratedSectionNumber { text }?,
-+     sectiontitle?,
++     titleelement?,
 +     (t | aside | figure | texttable | iref | artwork | 
 + sourcecode)*,
       section*
     }
-+ sectiontitle =
-+   element sectiontitle { (text | xref | eref | iref | cref | tt)* 
++ titleelement =
++   element titleelement { (text | xref | eref | iref | cref | tt)* 
 + }
   t =
     element t {
@@ -5380,21 +5434,23 @@ to the v3 schema.</t>
 +   }
 + dd =
 +   element dd {
-+     (text
-+      | ol
-+      | ul
-+      | figure
-+      | artwork
-+      | sourcecode
-+      | xref
-+      | eref
-+      | iref
-+      | cref
-+      | tt
-+      | strong
-+      | b
-+      | em
-+      | i)*
++     t+
++     | (text,
++        ol,
++        ul,
++        dl,
++        figure,
++        artwork,
++        sourcecode,
++        xref,
++        eref,
++        iref,
++        cref,
++        tt,
++        strong,
++        b,
++        em,
++        i)+
 +   }
   xref =
     element xref {
@@ -5468,6 +5524,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
 +     attribute autogeneratedFigureNumber { text }?,
++     titleelement?,
       iref*,
       preamble?,
 -     artwork,
@@ -5537,6 +5594,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "full" ]
       attribute style { "all" | "none" | "headers" | "full" }?,
 +     attribute autogeneratedTableNumber { text }?,
++     titleelement?,
       preamble?,
       ttcol+,
       c*,
