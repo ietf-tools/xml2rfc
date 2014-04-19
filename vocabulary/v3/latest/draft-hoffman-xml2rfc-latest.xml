@@ -2382,7 +2382,7 @@ as optional children.</t>
     &lt;author initials="K." surname="Phunny" fullname="Knot Phunny"/&gt;
     &lt;date year="2000" month="April"/&gt;
   &lt;/front&gt;
-  &lt;innerRefContent&gt;Self-published pamphlet&lt;/innerRefContent&gt;
+  &lt;refcontent&gt;Self-published pamphlet&lt;/refcontent&gt;
 &lt;/reference&gt;
 </artwork>
       </figure>
@@ -3028,10 +3028,10 @@ as optional children.</t>
    <t>
        A common problem authors have with &lt;sourcecode&gt; is that the XML processor returns errors
        if the text in the artwork contains either the "&amp;" or "&lt;" character. To avoid these problems,
-       the artwork needs to be surrounded in a CDATA structure: "&lt;![CDATA[]]". For example:
+       the artwork needs to be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;". For example:
 <figure><artwork>
 &lt;artwork&gt;
-&lt;![CDATA[allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]
+&lt;![CDATA[allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]&gt;
 &lt;/artwork&gt;
 </artwork></figure>
        Instead of using a CDATA structure, the authour could instead escape the "&amp;" and "&lt;" characters
@@ -4647,7 +4647,7 @@ XInclude specifies a processing model and syntax for general purpose inclusion o
 that is either on the Internet or local to the user's computer.</t>
 
 <t>
-In the v3 format, XInclude is expressed as the &lt;xi:include>&gt; element. To use this
+In the v3 format, XInclude is expressed as the &lt;xi:include&gt; element. To use this
 element, you need to include the "xi" namespace in the &lt;<x:ref>rfc</x:ref>&gt; element; that is, you need to specify
 <figure><artwork>
 xmlns:xi="http://www.w3.org/2001/XInclude"
