@@ -319,16 +319,16 @@ Internet-Draft                  XML2RFCv3                     April 2014
    o  Add the <aside> element for incidental text that will be indented
       when displayed.
 
-   o  Add the <b>, <i>, <strong>, <em>, and <tt> elements.
+   o  Add the <strong>, <b>, <em>, <i>, and <tt> elements.
 
    o  Add the <blockquote> element.
 
-   o  Allow <b>, <eref>, <i>, <tt>, and <xref> in <cref>.  Also turned
-      of the auto-generation of anchors in <cref> because there is no
-      use case for them that cannot be achieved in other ways.
+   o  Allow<strong>, <b>, <em>, <i>, <tt>, <eref>, and <xref> in <cref>.
+      Also turned of the auto-generation of anchors in <cref> because
+      there is no use case for them that cannot be achieved in other
+      ways.
 
-   o  Add <displayreference>, allowing authors to display more mneumonic
-      anchor names for automatically-included references.
+
 
 
 
@@ -336,6 +336,9 @@ Hoffman                 Expires October 20, 2014                [Page 6]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
+
+   o  Add <displayreference>, allowing authors to display more mneumonic
+      anchor names for automatically-included references.
 
    o  Deprecate <facsimile> because it is rarely used and is not
       actually useful.
@@ -382,9 +385,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    o  Deprecate <vspace> because the major use for it, creating pseudo-
       paragraph-breaks in lists, is now handled properly.
 
-   o  Deprecate the "pageno" attribute in <xref> because it was unused
-      in v2.  Deprecate the "none" and "title" values for the "format"
-      attribute in <xref> because the former makes no sense semantically
 
 
 
@@ -393,6 +393,9 @@ Hoffman                 Expires October 20, 2014                [Page 7]
 Internet-Draft                  XML2RFCv3                     April 2014
 
 
+   o  Deprecate the "pageno" attribute in <xref> because it was unused
+      in v2.  Deprecate the "none" and "title" values for the "format"
+      attribute in <xref> because the former makes no sense semantically
       and the latter because it has unpredictable output.
 
    o  Add the "section", "relative", and "sectionFormat" attributes to
@@ -438,9 +441,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    This element appears as child element of: <front> (Section 2.27).
 
-   Content model:
-
-   One or more <t> elements (Section 2.54)
 
 
 
@@ -448,6 +448,10 @@ Hoffman                 Expires October 20, 2014                [Page 8]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
+
+   Content model:
+
+   One or more <t> elements (Section 2.54)
 
 2.2.  <address>
 
@@ -492,10 +496,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    o  <xref> elements (Section 2.63)
 
-   o  <eref> elements (Section 2.23)
-
-   o  <iref> elements (Section 2.29)
-
 
 
 
@@ -504,6 +504,10 @@ Hoffman                 Expires October 20, 2014                [Page 9]
 
 Internet-Draft                  XML2RFCv3                     April 2014
 
+
+   o  <eref> elements (Section 2.23)
+
+   o  <iref> elements (Section 2.29)
 
    o  <cref> elements (Section 2.15)
 
@@ -549,10 +553,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    o  protocol unit diagrams.
 
-   Alternatively, the "src" attribute allows referencing an external
-   graphics file, such as a bitmap or a vector drawing.  In this case,
-   the textual content acts as fallback for output formats that do not
-   support graphics, and thus ought to contain either a "line art"
 
 
 
@@ -561,6 +561,10 @@ Hoffman                 Expires October 20, 2014               [Page 10]
 Internet-Draft                  XML2RFCv3                     April 2014
 
 
+   Alternatively, the "src" attribute allows referencing an external
+   graphics file, such as a bitmap or a vector drawing.  In this case,
+   the textual content acts as fallback for output formats that do not
+   support graphics, and thus ought to contain either a "line art"
    variant of the graphics, or otherwise prose that describes the
    included image in sufficient detail.
 
@@ -605,10 +609,6 @@ Internet-Draft                  XML2RFCv3                     April 2014
    This attribute generally isn't used for document generation, but it
    can be helpful for other kinds of tools (such as automated syntax
    checkers which work by extracting the artwork).
-
-
-
-
 
 
 
@@ -5209,13 +5209,13 @@ Hoffman                 Expires October 20, 2014               [Page 93]
 Internet-Draft                  XML2RFCv3                     April 2014
 
 
-         eref  9, 15-16, 18, 20, 22-23, 27, 29, 34-35, 44, 48, 52
+         eref  10, 15-16, 18, 20, 22-23, 27, 29, 34-35, 44, 48, 52
          facsimile  9, 24
          figure  13, 16, 19, 24, 29, 42, 48
          format  26, 36
          front  26, 36, 38
          i  10, 15-18, 20, 22, 27, 29, 34-36, 44, 48-49, 52
-         iref  9, 13, 15-16, 20, 22, 24, 27, 29, 34-35, 42, 44, 48, 52
+         iref  10, 13, 15-16, 20, 22, 24, 27, 29, 34-35, 42, 44, 48, 52
          keyword  27-28
          li  29, 31, 53
          list  30, 48
@@ -5240,7 +5240,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
          spanx  10, 17, 34-35, 46, 49
          street  33, 47
          strong  10, 16-18, 20, 22-23, 27, 29, 34-36, 44, 47, 49
-         t  8, 13, 29-30, 42, 48
+         t  9, 13, 29-30, 42, 48
          texttable  13, 42, 49
          title  26, 51
          tt  10, 15-18, 20, 22-23, 27, 29, 34-36, 44, 48-49, 51
@@ -5279,7 +5279,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
       empty attribute
          in ul element  53
       eref element  23
-         inside annotation  9
+         inside annotation  10
          inside b  15
          inside c  16
          inside cref  18
@@ -5389,7 +5389,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
       iprExtract attribute
          in rfc element  40
       iref element  27
-         inside annotation  9
+         inside annotation  10
          inside aside  13
          inside b  15
          inside c  16
@@ -5643,7 +5643,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
    T
       t element  48
          anchor attribute  49
-         inside abstract  8
+         inside abstract  9
          inside aside  13
          inside li  29
          inside list  30
