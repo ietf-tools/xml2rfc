@@ -230,6 +230,12 @@ Table of Contents
 
 1.2.1.  New Elements in v3
 
+   o  Add <dl>, <ul>, and <ol> as new ways to make lists.  This is a
+      significant change from v2 in that the child under these elements
+      is <li>, not <t>. <li> has a model of either containing one or
+      more <t> elements, or containing the flowing text normally found
+      in <t>.
+
    o  Add <strong>, <b>, <em>, <i>, and <tt> for character formatting.
 
    o  Add <aside> for incidental text that will be indented when
@@ -436,8 +442,8 @@ Table of Contents
 
 2.4.  <area>
 
-   Provides information about the IETF area this document applies to
-   (currently not used when generating documents).
+   Provides information about the IETF area to which this document
+   relates (currently not used when generating documents).
 
    The value ought to be either the fullname or the abbreviation of one
    of the IETF areas as listed on <http://www.ietf.org/iesg/area.html>.
@@ -465,11 +471,16 @@ Table of Contents
    o  protocol unit diagrams.
 
    Alternatively, the "src" attribute allows referencing an external
-   graphics file, such as a bitmap or a vector drawing.  In this case,
-   the textual content acts as fallback for output formats that do not
-   support graphics, and thus ought to contain either a "line art"
-   variant of the graphics, or otherwise prose that describes the
-   included image in sufficient detail.
+   graphics file, such as a bitmap or a vector drawing, using a URI.  In
+   this case, the textual content acts as fallback for output formats
+   that do not support graphics, and thus ought to contain either a
+   "line art" variant of the graphics, or otherwise prose that describes
+   the included image in sufficient detail.
+
+   If the artwork includes either "&" or "<" characters, those
+   characters either need to be escaped or the artwork needs to be in a
+   CDATA structure; see <sourcecode> for a fuller description of these
+   solutions.
 
    In [XML2RFCv2], the <artwork> element was also used for source code
    and formal languages; in v3, this is now done with <sourcecode>.
@@ -1565,7 +1576,7 @@ Table of Contents
 2.39.  <postalLine>
 
    Represents one line of a postal address.  When more than one
-   <postalline> is given, the processor emits them in the order given.
+   <postalLine> is given, the processor emits them in the order given.
 
    This element appears as child element of: <postal> (Section 2.38).
 
@@ -2078,6 +2089,18 @@ Table of Contents
 
    For artwork such as character-based art, diagrams of message layouts,
    and so on, use the <artwork> element instead.
+
+   A common problem authors have with <sourcecode> is that the XML
+   processor returns errors if the text in the artwork contains either
+   the "&" or "<" character.  To avoid these problems, the artwork needs
+   to be surrounded in a CDATA structure: "<![CDATA[]]".  For example:
+
+   <artwork>
+   <![CDATA[allowed-chars = "." | "," | "&" | "<" | ">" | "|"]]
+   </artwork>
+
+   Instead of using a CDATA structure, the authour could instead escape
+   the "&" and "<" characters as "&amp;" and "&lt;".
 
    This element appears as child element of: <aside> (Section 2.6),
    <blockquote> (Section 2.10), <dd> (Section 2.17), <figure>

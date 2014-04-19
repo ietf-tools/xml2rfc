@@ -20,6 +20,8 @@ Before finishing, check for "so far" and "expected" wording and remove those.
 
 Maybe deprecate <texttable> with something new based on HTML tables
 
+Deal with <ol> not being able to continue numbering across sections.
+
 Should subelements of <postal> allow non-ASCII and have "ascii" attributes?
 
 Maybe have <artwork> include microlanguages for packets and call sequences
@@ -153,6 +155,13 @@ will issue errors if any deprecated features are in the input.
 <section title="New Elements in v3">
 
 <t><list style="symbols">
+
+<t>Add &lt;<x:ref>dl</x:ref>&gt;, &lt;<x:ref>ul</x:ref>&gt;, and &lt;<x:ref>ol</x:ref>&gt;
+as new ways to make lists. This is a significant change from v2 in that the child under
+these elements is &lt;<x:ref>li</x:ref>&gt;, not &lt;<x:ref>t</x:ref>&gt;.
+&lt;<x:ref>li</x:ref>&gt; has a model of either containing one or more
+&lt;<x:ref>t</x:ref>&gt; elements, or containing the flowing text normally found in
+&lt;<x:ref>t</x:ref>&gt;.</t>
 
 <t>Add &lt;<x:ref>strong</x:ref>&gt;, &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>em</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;,
 and &lt;<x:ref>tt</x:ref>&gt; for character formatting.</t>
@@ -431,7 +440,7 @@ as optional children.</t>
    <iref item="Elements" subitem="area" primary="true"/>
    <iref item="area element" primary="true"/>
    <t>
-      Provides information about the IETF area this document applies to
+      Provides information about the IETF area to which this document relates
       (currently not used when generating documents).
    </t>
    <t>
@@ -467,10 +476,15 @@ as optional children.</t>
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
-      file, such as a bitmap or a vector drawing. In this case, the textual
+      file, such as a bitmap or a vector drawing, using a URI. In this case, the textual
       content acts as fallback for output formats that do not support graphics,
       and thus ought to contain either a "line art" variant of the graphics, or
       otherwise prose that describes the included image in sufficient detail.
+   </t>
+   <t>
+      If the artwork includes either "&amp;" or "&lt;" characters, those characters either need to be escaped
+      or the artwork needs to be in a CDATA structure; see &lt;<x:ref>sourcecode</x:ref>&gt; for a fuller
+      description of these solutions.
    </t>
    <t>
       In <xref target="XML2RFCv2"/>, the &lt;artwork&gt; element was also used for source code and formal
@@ -2238,7 +2252,7 @@ as optional children.</t>
    <iref item="Elements" subitem="postalLine" primary="true"/>
    <iref item="postalLine element" primary="true"/>
    <t>
-      Represents one line of a postal address. When more than one &lt;postalline&gt; is given, the processor
+      Represents one line of a postal address. When more than one &lt;postalLine&gt; is given, the processor
       emits them in the order given.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
@@ -3002,6 +3016,18 @@ as optional children.</t>
    <t>
       For artwork such as character-based art, diagrams of message layouts, and so on,
       use the &lt;<x:ref>artwork</x:ref>&gt; element instead.
+   </t>
+   <t>
+       A common problem authors have with &lt;sourcecode&gt; is that the XML processor returns errors
+       if the text in the artwork contains either the "&amp;" or "&lt;" character. To avoid these problems,
+       the artwork needs to be surrounded in a CDATA structure: "&lt;![CDATA[]]". For example:
+<figure><artwork>
+&lt;artwork&gt;
+&lt;![CDATA[allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]
+&lt;/artwork&gt;
+</artwork></figure>
+       Instead of using a CDATA structure, the authour could instead escape the "&amp;" and "&lt;" characters
+       as "&amp;amp;" and "&amp;lt;".
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->Content model: only text content.</t>
