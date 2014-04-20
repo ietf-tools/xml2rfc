@@ -253,7 +253,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
    keyword database, or syntax checks).
 
    The following is a hopefully-complete list of all the technical
-   changes between [XML2RFCv2] and this document, as welll as the design
+   changes between [XML2RFCv2] and this document, as well as the design
    criteria for those changes.  Note that the list is for the current
    version of this document only.  There are additional changes that are
    expected to the v3 vocabulary that are being discussed.  Also note
@@ -2505,12 +2505,12 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    A common problem authors have with <sourcecode> is that the XML
    processor returns errors if the text in the artwork contains either
-   the "&" or "<" character.  To avoid these problems, the artwork needs
-   to be surrounded in a CDATA structure: "<![CDATA[]]>".  For example:
+   the "&" or "<" character.  To avoid these problems, the artwork may
+   be surrounded in a CDATA structure: "<![CDATA[]]>".  For example:
 
-   <artwork>
+   <sourcecode>
    <![CDATA[allowed-chars = "." | "," | "&" | "<" | ">" | "|"]]>
-   </artwork>
+   </sourcecode>
 
    Instead of using a CDATA structure, the authour could instead escape
 
@@ -3230,7 +3230,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
    non-breaking space (U+00A0)
 
       Represents a space character where no line break should happen.
-      This is frequenly used in titles (by excluding certain space
+      This is frequently used in titles (by excluding certain space
       characters from the line breaking algorithm, the processor will
       use the remaining whitespace ocurrences for line breaks).
 
@@ -3707,7 +3707,7 @@ Internet-Draft                  XML2RFCv3                     April 2014
 
    In v2, the grammar was specified as a DTD.  In v3, the grammar is
    specified only as Relax Next Generation (RNG).  This means that
-   processors most work from the RNG, not from a DTD.  In fact, the
+   processors need to work from the RNG, not from a DTD.  In fact, the
    author believes that some of the features of the v3 grammar cannot be
    specified as a DTD.
 
@@ -3787,12 +3787,12 @@ B.1.  Including External Text
           bibxml/reference.RFC.7169.xml"/>
    </references>
 
-   <xi:include> can be used anywhere where an XML element could be used
-   (but not where free text is used).  For example, if three Internet
-   Drafts are all including a particular paragraph or section verbatim,
-   that text can be kept either in a file or somewhere on the web, and
-   be included with <xi:include>.  An example of pulling something from
-   the local disk would be:
+   <xi:include> can be used anywhere an XML element could be used (but
+   not where free text is used).  For example, if three Internet Drafts
+   are all including a particular paragraph or section verbatim, that
+   text can be kept either in a file or somewhere on the web, and be
+   included with <xi:include>.  An example of pulling something from the
+   local disk would be:
 
    <x:include href="file://home/chris/ietf/drafts/commontext.xml"/>
 
@@ -3854,7 +3854,7 @@ B.3.  The Draft Processor
    automatically converted.
 
    The Draft Processor should have a mode that mimics the RFC
-   Processor's restictive mode, but that instead gives warningis instead
+   Processor's restictive mode, but that instead gives warnings instead
    of hard errors.
 
 

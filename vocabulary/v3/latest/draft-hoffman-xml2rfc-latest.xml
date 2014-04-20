@@ -110,7 +110,7 @@ processor are described in <xref target="processors"/>.
 
 <t>
 The following is a hopefully-complete list of all the technical changes between <xref target="XML2RFCv2"/>
-and this document, as welll as the design criteria for those changes.
+and this document, as well as the design criteria for those changes.
 Note that the list is for the current version of this document only. There are
 additional changes that are expected to the v3 vocabulary that are being discussed. Also note that
 changes to the design choices for the differences are also expected.</t>
@@ -3028,11 +3028,11 @@ as optional children.</t>
    <t>
        A common problem authors have with &lt;sourcecode&gt; is that the XML processor returns errors
        if the text in the artwork contains either the "&amp;" or "&lt;" character. To avoid these problems,
-       the artwork needs to be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;". For example:
+       the artwork may be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;". For example:
 <figure><artwork>
-&lt;artwork&gt;
+&lt;sourcecode&gt;
 &lt;![CDATA[allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]&gt;
-&lt;/artwork&gt;
+&lt;/sourcecode&gt;
 </artwork></figure>
        Instead of using a CDATA structure, the authour could instead escape the "&amp;" and "&lt;" characters
        as "&amp;amp;" and "&amp;lt;".
@@ -3902,7 +3902,7 @@ would generate
   <list>
     <t>
       Represents a space character where no line break should happen. This is
-      frequenly used in titles (by excluding certain space characters from
+      frequently used in titles (by excluding certain space characters from
       the line breaking algorithm, the processor will use the remaining
       whitespace ocurrences for line breaks).
     </t> 
@@ -4600,7 +4600,7 @@ discussion of processors in the main body of the document as well. For example, 
 have descriptions of how a processor might create output from the element.</t>
 
 <t>In v2, the grammar was specified as a DTD. In v3, the grammar is specified only as Relax
-Next Generation (RNG). This means that processors most work from the RNG, not from a DTD. In
+Next Generation (RNG). This means that processors need to work from the RNG, not from a DTD. In
 fact, the author believes that some of the features of the v3 grammar cannot be specified as
 a DTD.</t>
 
@@ -4670,7 +4670,7 @@ refernces, all RFCs, the document might contain:
 </artwork></figure>
 </t>
 
-<t>&lt;xi:include&gt; can be used anywhere where an XML element could be used (but not where
+<t>&lt;xi:include&gt; can be used anywhere an XML element could be used (but not where
 free text is used). For example, if three Internet Drafts are all including a particular paragraph
 or section verbatim, that text can be kept either in a file or somewhere on the web, and be
 included with &lt;xi:include&gt;. An example of pulling something from the local disk would
@@ -4729,7 +4729,7 @@ The processor might be able to fully convert a v2 document to v3, or it might ha
 give advice on some of the v2 features that could not be automatically converted.</t>
 
 <t>The Draft Processor should have a mode that mimics the RFC Processor's restictive mode,
-but that instead gives warningis instead of hard errors.</t>
+but that instead gives warnings instead of hard errors.</t>
 
 </section>
 
