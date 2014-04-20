@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                             April 19, 2014
+Obsoletes: 2629 (if approved)                             April 20, 2014
 Intended status: Standards Track
-Expires: October 21, 2014
+Expires: October 22, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -16,7 +16,8 @@ Abstract
    This document defines the 'XML2RFC' version 3 vocabulary; an XML-
    based language used for writing RFCs and Internet-Drafts.  It is
    heavily derived from the version 2 vocabulary that is also under
-   discussion.
+   discussion.  This document obsoletes the v2 grammar described in
+   draft-reschke-xml2rfc.
 
 Editorial Note (To be removed by RFC Editor)
 
@@ -39,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 21, 2014.
+   This Internet-Draft will expire on October 22, 2014.
 
 Copyright Notice
 
@@ -476,10 +477,10 @@ Table of Contents
    "line art" variant of the graphics, or otherwise prose that describes
    the included image in sufficient detail.
 
-   If the artwork includes either "&" or "<" characters, those
-   characters either need to be escaped or the artwork needs to be in a
-   CDATA structure; see <sourcecode> for a fuller description of these
-   solutions.
+   If the artwork includes either "&" or "<" characters, or the string
+   "]]>" those characters either need to be escaped or the artwork needs
+   to be in a CDATA structure; see <sourcecode> for a fuller description
+   of these solutions.
 
    In [XML2RFCv2], the <artwork> element was also used for source code
    and formal languages; in v3, this is now done with <sourcecode>.
@@ -2095,8 +2096,9 @@ Table of Contents
 
    A common problem authors have with <sourcecode> is that the XML
    processor returns errors if the text in the artwork contains either
-   the "&" or "<" character.  To avoid these problems, the artwork may
-   be surrounded in a CDATA structure: "<![CDATA[]]>".  For example:
+   the "&" or "<" character, or the string "]]>".  To avoid these
+   problems, the artwork may be surrounded in a CDATA structure:
+   "<![CDATA[]]>".  For example:
 
    <sourcecode>
    <![CDATA[allowed-chars = "." | "," | "&" | "<" | ">" | "|"]]>
@@ -2860,9 +2862,8 @@ Table of Contents
 
                 Latest version available at <http://www.w3.org/TR/xml>.
 
-   [XML2RFCv2]  Freed, N. and J. Reschke, "The 'XML2RFC' version 2
-                Vocabulary", draft-reschke-xml2rfc (work in progress),
-                January 2014.
+   [XML2RFCv2]  Reschke, J., "The 'XML2RFC' version 2 Vocabulary",
+                draft-reschke-xml2rfc (work in progress), January 2014.
 
 8.2.  Informative References
 

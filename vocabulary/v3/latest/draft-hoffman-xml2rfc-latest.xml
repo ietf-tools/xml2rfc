@@ -64,7 +64,8 @@ Non-ASCII
     <t>
       This document defines the 'XML2RFC' version 3 vocabulary; an XML-based
       language used for writing RFCs and Internet-Drafts. It is heavily derived
-      from the version 2 vocabulary that is also under discussion.
+      from the version 2 vocabulary that is also under discussion. This document
+      obsoletes the v2 grammar described in draft-reschke-xml2rfc.
     </t>
   </abstract>
 
@@ -486,7 +487,7 @@ as optional children.</t>
       otherwise prose that describes the included image in sufficient detail.
    </t>
    <t>
-      If the artwork includes either "&amp;" or "&lt;" characters, those characters either need to be escaped
+      If the artwork includes either "&amp;" or "&lt;" characters, or the string "]]&gt;" those characters either need to be escaped
       or the artwork needs to be in a CDATA structure; see &lt;<x:ref>sourcecode</x:ref>&gt; for a fuller
       description of these solutions.
    </t>
@@ -3027,7 +3028,7 @@ as optional children.</t>
    </t>
    <t>
        A common problem authors have with &lt;sourcecode&gt; is that the XML processor returns errors
-       if the text in the artwork contains either the "&amp;" or "&lt;" character. To avoid these problems,
+       if the text in the artwork contains either the "&amp;" or "&lt;" character, or the string "]]&gt;". To avoid these problems,
        the artwork may be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;". For example:
 <figure><artwork>
 &lt;sourcecode&gt;
@@ -4101,7 +4102,6 @@ would generate
   <reference anchor="XML2RFCv2">
     <front>
       <title>The 'XML2RFC' version 2 Vocabulary</title>
-      <author initials="N." surname="Freed" fullname="Ned Freed"/>
       <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
       <date year="2014" month="January"/>
     </front>
