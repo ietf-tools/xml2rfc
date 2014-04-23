@@ -74,12 +74,8 @@
     element organization {
       attribute abbrev { text }?,
 +     attribute ascii { text }?,
-      text
-    }
-- address = element address { postal?, phone?, facsimile?, email?, 
-- uri? }
-- postal = element postal { street+, (city | region | code | 
-- country)* }
++     text
++   }
 + address =
 +   element address { (postal | phone | facsimile | email | uri)* }
 + postal =
@@ -87,12 +83,40 @@
 +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
 +     ((street | city | region | code | country)* | postalLine+)
 +   }
-  street = element street { text }
-  city = element city { text }
-  region = element region { text }
-  code = element code { text }
++ street =
++   element street {
++     attribute ascii { text }?,
++     text
++   }
++ city =
++   element city {
++     attribute ascii { text }?,
++     text
++   }
++ region =
++   element region {
++     attribute ascii { text }?,
++     text
++   }
++ code =
++   element code {
++     attribute ascii { text }?,
+      text
+    }
+- address = element address { postal?, phone?, facsimile?, email?, 
+- uri? }
+- postal = element postal { street+, (city | region | code | 
+- country)* }
+- street = element street { text }
+- city = element city { text }
+- region = element region { text }
+- code = element code { text }
   country = element country { text }
-+ postalLine = element postalLine { text }
++ postalLine =
++   element postalLine {
++     attribute ascii { text }?,
++     text
++   }
   phone = element phone { text }
   facsimile = element facsimile { text }
 - email = element email { text }
@@ -285,11 +309,11 @@
       attribute source { text }?,
 -     text
 +     (text | xref | eref | tt | strong | b | em | i)*
-    }
++   }
 + tt =
 +   element tt {
 +     (text | xref | eref | iref | cref | strong | b | em | i)*
-+   }
+    }
 + b = element b { (text | xref | eref | iref | cref | tt | em | i)* 
 + }
 + strong =

@@ -24,11 +24,6 @@ Add wording about <b>, <i>, and <tt> being cumulative.
 
 Deal with "cite" in <blockquote>; people object to it being a URI.
 
-Deal with <ol> not being able to continue numbering across sections.
-	Elwyn's suggestion on 2014-04-21 about "list groups"
-
-Should subelements of <postal> allow non-ASCII and have "ascii" attributes?
-
 Maybe have <artwork> include microlanguages for packets and call sequences
 
 Add some tooling to mark the things that are deprecated?
@@ -44,7 +39,6 @@ Non-ASCII
 	Resolve discussion of markup for Unicode characters and their equivalents
 	Mention that not all characters can be included, such as combining marks
 	Difficult to do non-ASCII for <references>
-	Difficult to do non-ASCII for <postal> content entries
 
 -->
 
@@ -199,10 +193,11 @@ for automatically-included references.</t>
 <t>Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes to &lt;<x:ref>rfc</x:ref>&gt;
 to cover processor instructions (PIs) that were in v2 that are still needed in the grammar.</t>
 
-<t>Add "ascii" attributes to &lt;<x:ref>author</x:ref>&gt;, &lt;<x:ref>email</x:ref>&gt;, and
-&lt;<x:ref>organization</x:ref>&gt;. This allows an author to specify their information in their
-native scripts as the primary entry and still allow the ASCII-equivalent values to appear in the
-processed documents.</t>
+<t>Add "ascii" attributes to &lt;<x:ref>author</x:ref>&gt;, &lt;<x:ref>email</x:ref>&gt;,
+&lt;<x:ref>organization</x:ref>&gt;, &lt;<x:ref>street</x:ref>&gt;,
+&lt;<x:ref>city</x:ref>&gt;, &lt;<x:ref>region</x:ref>&gt; and &lt;<x:ref>code</x:ref>&gt;.
+This allows an author to specify their information in their native scripts as the primary
+entry and still allow the ASCII-equivalent values to appear in the processed documents.</t>
 
 <t>Add "xml:lang" attribute to &lt;<x:ref>artwork</x:ref>&gt;, &lt;<x:ref>postal</x:ref>&gt;, and
 &lt;<x:ref>author</x:ref>&gt;. This is sometimes useful for renderers which display
@@ -973,6 +968,16 @@ as optional children.</t>
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.city.contents"><!--AG-->Content model: only text content.</t>
+
+   <!--city/@ascii-->
+   <section title="'ascii' attribute" anchor="element.city.attribute.ascii" toc="exclude">
+      <iref item="Attributes" subitem="ascii"/>
+      <iref item="city element" subitem="ascii attribute"/>
+      <iref item="ascii attribute" subitem="in city element"/>
+      <t>
+         The ASCII equivalent of the city name.
+      </t>
+   </section>
 </section>
 
 <!--code-->
@@ -985,6 +990,16 @@ as optional children.</t>
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.code.contents"><!--AG-->Content model: only text content.</t>
+
+   <!--code/@ascii-->
+   <section title="'ascii' attribute" anchor="element.code.attribute.ascii" toc="exclude">
+      <iref item="Attributes" subitem="ascii"/>
+      <iref item="code element" subitem="ascii attribute"/>
+      <iref item="ascii attribute" subitem="in code element"/>
+      <t>
+         The ASCII equivalent of the postal code.
+      </t>
+   </section>
 </section>
 
 <!--country-->
@@ -2073,6 +2088,7 @@ as optional children.</t>
       <iref item="Elements" subitem="li"/>
       <iref item="li element" subitem="inside ol"/>One or more &lt;<x:ref>li</x:ref>&gt; elements (<xref target="element.li"/>)</t>
       
+
    <!--ol/@group-->
    <section title="'group' attribute" anchor="element.ol.attribute.group" toc="exclude">
       <iref item="Attributes" subitem="group"/>
@@ -2281,6 +2297,16 @@ as optional children.</t>
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.postalLine.contents"><!--AG-->Content model: only text content.</t>
+
+   <!--postalLine/@ascii-->
+   <section title="'ascii' attribute" anchor="element.postalLine.attribute.ascii" toc="exclude">
+      <iref item="Attributes" subitem="ascii"/>
+      <iref item="postalLine element" subitem="ascii attribute"/>
+      <iref item="ascii attribute" subitem="in postalLine element"/>
+      <t>
+         The ASCII equivalent of the text in the address line.
+      </t>
+   </section>
 </section>
 
 <!--postamble-->
@@ -2546,6 +2572,16 @@ as optional children.</t>
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.region.contents"><!--AG-->Content model: only text content.</t>
+
+   <!--region/@ascii-->
+   <section title="'ascii' attribute" anchor="element.region.attribute.ascii" toc="exclude">
+      <iref item="Attributes" subitem="ascii"/>
+      <iref item="region element" subitem="ascii attribute"/>
+      <iref item="ascii attribute" subitem="in region element"/>
+      <t>
+         The ASCII equivalent of the region name.
+      </t>
+   </section>
 </section>
 
 <!--rfc-->
@@ -3158,6 +3194,16 @@ as optional children.</t>
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.street.contents"><!--AG-->Content model: only text content.</t>
+
+   <!--street/@ascii-->
+   <section title="'ascii' attribute" anchor="element.street.attribute.ascii" toc="exclude">
+      <iref item="Attributes" subitem="ascii"/>
+      <iref item="street element" subitem="ascii attribute"/>
+      <iref item="ascii attribute" subitem="in street element"/>
+      <t>
+         The ASCII equivalent of the street address.
+      </t>
+   </section>
 </section>
 
 <!--strong-->
@@ -4873,12 +4919,32 @@ postal =
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     ((street | city | region | code | country)* | postalLine+)
   }
-street = element street { text }
-city = element city { text }
-region = element region { text }
-code = element code { text }
+street =
+  element street {
+    attribute ascii { text }?,
+    text
+  }
+city =
+  element city {
+    attribute ascii { text }?,
+    text
+  }
+region =
+  element region {
+    attribute ascii { text }?,
+    text
+  }
+code =
+  element code {
+    attribute ascii { text }?,
+    text
+  }
 country = element country { text }
-postalLine = element postalLine { text }
+postalLine =
+  element postalLine {
+    attribute ascii { text }?,
+    text
+  }
 phone = element phone { text }
 facsimile = element facsimile { text }
 email =
@@ -5327,12 +5393,8 @@ to the v3 schema.</t>
     element organization {
       attribute abbrev { text }?,
 +     attribute ascii { text }?,
-      text
-    }
-- address = element address { postal?, phone?, facsimile?, email?, 
-- uri? }
-- postal = element postal { street+, (city | region | code | 
-- country)* }
++     text
++   }
 + address =
 +   element address { (postal | phone | facsimile | email | uri)* }
 + postal =
@@ -5340,12 +5402,40 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
 +     ((street | city | region | code | country)* | postalLine+)
 +   }
-  street = element street { text }
-  city = element city { text }
-  region = element region { text }
-  code = element code { text }
++ street =
++   element street {
++     attribute ascii { text }?,
++     text
++   }
++ city =
++   element city {
++     attribute ascii { text }?,
++     text
++   }
++ region =
++   element region {
++     attribute ascii { text }?,
++     text
++   }
++ code =
++   element code {
++     attribute ascii { text }?,
+      text
+    }
+- address = element address { postal?, phone?, facsimile?, email?, 
+- uri? }
+- postal = element postal { street+, (city | region | code | 
+- country)* }
+- street = element street { text }
+- city = element city { text }
+- region = element region { text }
+- code = element code { text }
   country = element country { text }
-+ postalLine = element postalLine { text }
++ postalLine =
++   element postalLine {
++     attribute ascii { text }?,
++     text
++   }
   phone = element phone { text }
   facsimile = element facsimile { text }
 - email = element email { text }
@@ -5538,11 +5628,11 @@ to the v3 schema.</t>
       attribute source { text }?,
 -     text
 +     (text | xref | eref | tt | strong | b | em | i)*
-    }
++   }
 + tt =
 +   element tt {
 +     (text | xref | eref | iref | cref | strong | b | em | i)*
-+   }
+    }
 + b = element b { (text | xref | eref | iref | cref | tt | em | i)* 
 + }
 + strong =

@@ -264,10 +264,11 @@ Table of Contents
       to <rfc> to cover processor instructions (PIs) that were in v2
       that are still needed in the grammar.
 
-   o  Add "ascii" attributes to <author>, <email>, and <organization>.
-      This allows an author to specify their information in their native
-      scripts as the primary entry and still allow the ASCII-equivalent
-      values to appear in the processed documents.
+   o  Add "ascii" attributes to <author>, <email>, <organization>,
+      <street>, <city>, <region> and <code>.  This allows an author to
+      specify their information in their native scripts as the primary
+      entry and still allow the ASCII-equivalent values to appear in the
+      processed documents.
 
    o  Add "xml:lang" attribute to <artwork>, <postal>, and <author>.
       This is sometimes useful for renderers which display different
@@ -785,6 +786,10 @@ Table of Contents
 
    Content model: only text content.
 
+2.12.1.  'ascii' attribute
+
+   The ASCII equivalent of the city name.
+
 2.13.  <code>
 
    Gives the postal region code.
@@ -792,6 +797,10 @@ Table of Contents
    This element appears as child element of: <postal> (Section 2.38).
 
    Content model: only text content.
+
+2.13.1.  'ascii' attribute
+
+   The ASCII equivalent of the postal code.
 
 2.14.  <country>
 
@@ -1597,6 +1606,10 @@ Table of Contents
 
    Content model: only text content.
 
+2.39.1.  'ascii' attribute
+
+   The ASCII equivalent of the text in the address line.
+
 2.40.  <postamble>
 
    Gives text that appears at the bottom of a figure or table.
@@ -1771,6 +1784,10 @@ Table of Contents
    This element appears as child element of: <postal> (Section 2.38).
 
    Content model: only text content.
+
+2.45.1.  'ascii' attribute
+
+   The ASCII equivalent of the region name.
 
 2.46.  <rfc>
 
@@ -2213,6 +2230,10 @@ Table of Contents
    This element appears as child element of: <postal> (Section 2.38).
 
    Content model: only text content.
+
+2.51.1.  'ascii' attribute
+
+   The ASCII equivalent of the street address.
 
 2.52.  <strong>
 
@@ -3374,12 +3395,32 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "en" ] attribute xml:lang { text }?,
        ((street | city | region | code | country)* | postalLine+)
      }
-   street = element street { text }
-   city = element city { text }
-   region = element region { text }
-   code = element code { text }
+   street =
+     element street {
+       attribute ascii { text }?,
+       text
+     }
+   city =
+     element city {
+       attribute ascii { text }?,
+       text
+     }
+   region =
+     element region {
+       attribute ascii { text }?,
+       text
+     }
+   code =
+     element code {
+       attribute ascii { text }?,
+       text
+     }
    country = element country { text }
-   postalLine = element postalLine { text }
+   postalLine =
+     element postalLine {
+       attribute ascii { text }?,
+       text
+     }
    phone = element phone { text }
    facsimile = element facsimile { text }
    email =
@@ -3825,12 +3866,8 @@ Appendix D.  Schema Differences from v2
        element organization {
          attribute abbrev { text }?,
    +     attribute ascii { text }?,
-         text
-       }
-   - address = element address { postal?, phone?, facsimile?, email?,
-   - uri? }
-   - postal = element postal { street+, (city | region | code |
-   - country)* }
+   +     text
+   +   }
    + address =
    +   element address { (postal | phone | facsimile | email | uri)* }
    + postal =
@@ -3838,12 +3875,40 @@ Appendix D.  Schema Differences from v2
    +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
    +     ((street | city | region | code | country)* | postalLine+)
    +   }
-     street = element street { text }
-     city = element city { text }
-     region = element region { text }
-     code = element code { text }
+   + street =
+   +   element street {
+   +     attribute ascii { text }?,
+   +     text
+   +   }
+   + city =
+   +   element city {
+   +     attribute ascii { text }?,
+   +     text
+   +   }
+   + region =
+   +   element region {
+   +     attribute ascii { text }?,
+   +     text
+   +   }
+   + code =
+   +   element code {
+   +     attribute ascii { text }?,
+         text
+       }
+   - address = element address { postal?, phone?, facsimile?, email?,
+   - uri? }
+   - postal = element postal { street+, (city | region | code |
+   - country)* }
+   - street = element street { text }
+   - city = element city { text }
+   - region = element region { text }
+   - code = element code { text }
      country = element country { text }
-   + postalLine = element postalLine { text }
+   + postalLine =
+   +   element postalLine {
+   +     attribute ascii { text }?,
+   +     text
+   +   }
      phone = element phone { text }
      facsimile = element facsimile { text }
    - email = element email { text }
@@ -4036,11 +4101,11 @@ Appendix D.  Schema Differences from v2
          attribute source { text }?,
    -     text
    +     (text | xref | eref | tt | strong | b | em | i)*
-       }
+   +   }
    + tt =
    +   element tt {
    +     (text | xref | eref | iref | cref | strong | b | em | i)*
-   +   }
+       }
    + b = element b { (text | xref | eref | iref | cref | tt | em | i)*
    + }
    + strong =
@@ -4281,8 +4346,13 @@ Index
          xml:space attribute  1
       ascii attribute
          in author element  1
+         in city element  1
+         in code element  1
          in email element  1
          in organization element  1
+         in postalLine element  1
+         in region element  1
+         in street element  1
       aside element  1
          inside section  1
       Attributes
@@ -4401,8 +4471,10 @@ Index
       cite attribute
          in blockquote element  1
       city element  1
+         ascii attribute  1
          inside postal  1
       code element  1
+         ascii attribute  1
          inside postal  1
       consensus attribute
          in rfc element  1
@@ -4723,6 +4795,7 @@ Index
          inside address  1
          xml:lang attribute  1
       postalLine element  1
+         ascii attribute  1
          inside postal  1
       postamble element  1
          inside figure  1
@@ -4744,6 +4817,7 @@ Index
          inside back  1
          title attribute  1
       region element  1
+         ascii attribute  1
          inside postal  1
       relative attribute
          in xref element  1
@@ -4822,6 +4896,7 @@ Index
       start attribute
          in ol element  1
       street element  1
+         ascii attribute  1
          inside postal  1
       strong element  1
          inside annotation  1

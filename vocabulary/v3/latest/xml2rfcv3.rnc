@@ -75,12 +75,32 @@ postal =
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     ((street | city | region | code | country)* | postalLine+)
   }
-street = element street { text }
-city = element city { text }
-region = element region { text }
-code = element code { text }
+street =
+  element street {
+    attribute ascii { text }?,
+    text
+  }
+city =
+  element city {
+    attribute ascii { text }?,
+    text
+  }
+region =
+  element region {
+    attribute ascii { text }?,
+    text
+  }
+code =
+  element code {
+    attribute ascii { text }?,
+    text
+  }
 country = element country { text }
-postalLine = element postalLine { text }
+postalLine =
+  element postalLine {
+    attribute ascii { text }?,
+    text
+  }
 phone = element phone { text }
 facsimile = element facsimile { text }
 email =
