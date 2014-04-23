@@ -2073,6 +2073,18 @@ as optional children.</t>
       <iref item="Elements" subitem="li"/>
       <iref item="li element" subitem="inside ol"/>One or more &lt;<x:ref>li</x:ref>&gt; elements (<xref target="element.li"/>)</t>
       
+   <!--ol/@group-->
+   <section title="'group' attribute" anchor="element.ol.attribute.group" toc="exclude">
+      <iref item="Attributes" subitem="group"/>
+      <iref item="ol element" subitem="group attribute"/>
+      <iref item="group attribute" subitem="in ol element"/>
+      <t>
+         When a processor sees an &lt;ol&gt; element with a "group" attribute that has already been seen,
+         the processor continues the numbering of the list from where the previous list with the same
+         group name left off. This action is overridden by the "start" attribute; that is, if an
+         &lt;ol&gt; element has both a "group" and "start" attribute, the "start" attribute takes precedence.
+      </t>
+   </section>
 
    <!--ol/@spacing-->
    <section title="'spacing' attribute" anchor="element.ol.attribute.spacing" toc="exclude">
@@ -3034,11 +3046,13 @@ as optional children.</t>
        A common problem authors have with &lt;sourcecode&gt; is that the XML processor returns errors
        if the text in the artwork contains either the "&amp;" or "&lt;" character, or the string "]]&gt;". To avoid these problems,
        the artwork may be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;". For example:
-<figure><artwork>
+<figure>
+         <artwork>
 &lt;sourcecode&gt;
 &lt;![CDATA[allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]&gt;
 &lt;/sourcecode&gt;
-</artwork></figure>
+</artwork>
+      </figure>
        Instead of using a CDATA structure, the authour could instead escape the "&amp;" and "&lt;" characters
        as "&amp;amp;" and "&amp;lt;".
    </t>
@@ -4951,6 +4965,7 @@ ol =
   element ol {
     [ a:defaultValue = "1" ] attribute style { text }?,
     [ a:defaultValue = "1" ] attribute start { text }?,
+    attribute group { text }?,
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
     li+
@@ -5426,6 +5441,7 @@ to the v3 schema.</t>
 +   element ol {
 +     [ a:defaultValue = "1" ] attribute style { text }?,
 +     [ a:defaultValue = "1" ] attribute start { text }?,
++     attribute group { text }?,
 +     [ a:defaultValue = "normal" ]
 +     attribute spacing { "normal" | "compact" }?,
 +     li+

@@ -116,7 +116,7 @@
    <iref item="Elements" subitem="area" primary="true"/>
    <iref item="area element" primary="true"/>
    <t>
-      Provides information about the IETF area this document applies to
+      Provides information about the IETF area to which this document relates
       (currently not used when generating documents).
    </t>
    <t>
@@ -152,10 +152,15 @@
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
-      file, such as a bitmap or a vector drawing. In this case, the textual
+      file, such as a bitmap or a vector drawing, using a URI. In this case, the textual
       content acts as fallback for output formats that do not support graphics,
       and thus ought to contain either a "line art" variant of the graphics, or
       otherwise prose that describes the included image in sufficient detail.
+   </t>
+   <t>
+      If the artwork includes either "&amp;" or "&lt;" characters, or the string "]]&gt;" those characters either need to be escaped
+      or the artwork needs to be in a CDATA structure; see &lt;<x:ref>sourcecode</x:ref>&gt; for a fuller
+      description of these solutions.
    </t>
    <t>
       In <xref target="XML2RFCv2"/>, the &lt;artwork&gt; element was also used for source code and formal
@@ -493,7 +498,8 @@
    <iref item="Elements" subitem="back" primary="true"/>
    <iref item="back element" primary="true"/>
    <t>
-      Contains the "back" part of the document: the references and appendices.
+      Contains the "back" part of the document: the references and appendices. In &lt;back&gt;,
+      &lt;<x:ref>section</x:ref>&gt; elements indicate appendices.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.back.contents"><!--AG-->Content model:</t>
@@ -767,7 +773,7 @@
       <iref item="date element" subitem="day attribute"/>
       <iref item="day attribute" subitem="in date element"/>
       <t>
-            Day of publication.
+            Day of publication; this is a number.
          </t>
    </section>
 
@@ -777,7 +783,7 @@
       <iref item="date element" subitem="month attribute"/>
       <iref item="month attribute" subitem="in date element"/>
       <t>
-            Month of publication.
+            Month of publication; this is the English name of the month.
          </t>
    </section>
 
@@ -798,7 +804,7 @@
    <iref item="Elements" subitem="dd" primary="true"/>
    <iref item="dd element" primary="true"/>
    <t>
-      The term being defined in a definition list.
+      The definition part of an entry in a definition list.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>dl</x:ref>&gt; (<xref target="element.dl"/>).</t>
    <t anchor="element.dd.contents"><!--AG-->
@@ -935,6 +941,9 @@
       A definition list. Each entry has a pair of elements: a term (&lt;<x:ref>dt</x:ref>&gt;) and
       a definition (&lt;<x:ref>dd</x:ref>&gt;).
    </t>
+   <t>
+      <cref>The content model below is wrong in the -05 draft.</cref>
+   </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.dl.contents"><!--AG-->
         Content model:
@@ -989,7 +998,7 @@
    <iref item="Elements" subitem="dt" primary="true"/>
    <iref item="dt element" primary="true"/>
    <t>
-      The definition part of an entry in a definition list.
+      The term being defined in a definition list.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>dl</x:ref>&gt; (<xref target="element.dl"/>).</t>
    <t anchor="element.dt.contents"><!--AG-->
@@ -1102,7 +1111,8 @@
    <iref item="Elements" subitem="eref" primary="true"/>
    <iref item="eref element" primary="true"/>
    <t>
-      Represents an "external" link (as specified in the "target" attribute).
+      Represents an "external" link (as specified in the "target" attribute). This can be used for creating linked
+      references, such as in HTML output.
    </t>
    <t>
       If the element has text content, that content will be used. Otherwise, the value of the
@@ -1287,7 +1297,7 @@
       <iref item="figure element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in figure element"/>
       <t>
-         The title for the figure; this usually appears on a line after the artwork.
+            Deprecated. Use &lt;<x:ref>titleelement</x:ref>&gt; instead.
       </t>
    </section>
 
@@ -1308,7 +1318,7 @@
    <iref item="Elements" subitem="format" primary="true"/>
    <iref item="format element" primary="true"/>
    <t>
-      Depredated. If the goal is to provide a single URI for
+      Deprecated. If the goal is to provide a single URI for
       a reference, use the "target" attribute on &lt;<x:ref>reference</x:ref>&gt; instead.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
@@ -1734,6 +1744,16 @@
       <iref item="li element" subitem="inside ol"/>One or more &lt;<x:ref>li</x:ref>&gt; elements (<xref target="element.li"/>)</t>
       
 
+   <!--ol/@group-->
+   <section title="'group' attribute" anchor="element.ol.attribute.group" toc="exclude">
+      <iref item="Attributes" subitem="group"/>
+      <iref item="ol element" subitem="group attribute"/>
+      <iref item="group attribute" subitem="in ol element"/>
+      <t><!--AG-->
+         <cref anchor="element.ol.attribute.group.missing">attribute description missing</cref>
+      </t>
+   </section>
+
    <!--ol/@spacing-->
    <section title="'spacing' attribute" anchor="element.ol.attribute.spacing" toc="exclude">
       <iref item="Attributes" subitem="spacing"/>
@@ -1775,6 +1795,7 @@
             <t hangText="i">Lowercase Roman numerals (i, ii, iii, ...)</t>
             <t hangText="I">Uppercase Roman numerals (I, II, III, ...)</t>
          </list>
+         <cref>Need to determine, and then specify, what happens after the 26th letter.</cref>
       </t>
       <t>
         If the length of the style value is greater than 1, the value must contain a
@@ -1923,7 +1944,7 @@
    <iref item="Elements" subitem="postalLine" primary="true"/>
    <iref item="postalLine element" primary="true"/>
    <t>
-      Represents one line of a postal address. When more than one &lt;postalline&gt; is given, the processor
+      Represents one line of a postal address. When more than one &lt;postalLine&gt; is given, the processor
       emits them in the order given.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
@@ -2046,7 +2067,7 @@
     &lt;author initials="K." surname="Phunny" fullname="Knot Phunny"/&gt;
     &lt;date year="2000" month="April"/&gt;
   &lt;/front&gt;
-  &lt;innerRefContent&gt;Self-published pamphlet&lt;/innerRefContent&gt;
+  &lt;refcontent&gt;Self-published pamphlet&lt;/refcontent&gt;
 &lt;/reference&gt;
 </artwork>
       </figure>
@@ -2497,6 +2518,7 @@
    </t>
    <t>
       Sub-sections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
+      Sections are allowed to be empty.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>), &lt;<x:ref>middle</x:ref>&gt; (<xref target="element.middle"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.section.contents"><!--AG-->Content model:</t>
@@ -2599,7 +2621,7 @@
       <iref item="section element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in section element"/>
       <t>
-            Deprecated. Use &lt;<x:ref>sectiontitle</x:ref>&gt; instead.
+            Deprecated. Use &lt;<x:ref>titleelement</x:ref>&gt; instead.
          </t>
    </section>
 
@@ -2687,6 +2709,20 @@
    <t>
       For artwork such as character-based art, diagrams of message layouts, and so on,
       use the &lt;<x:ref>artwork</x:ref>&gt; element instead.
+   </t>
+   <t>
+       A common problem authors have with &lt;sourcecode&gt; is that the XML processor returns errors
+       if the text in the artwork contains either the "&amp;" or "&lt;" character, or the string "]]&gt;". To avoid these problems,
+       the artwork may be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;". For example:
+<figure>
+         <artwork>
+&lt;sourcecode&gt;
+&lt;![CDATA[allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]&gt;
+&lt;/sourcecode&gt;
+</artwork>
+      </figure>
+       Instead of using a CDATA structure, the authour could instead escape the "&amp;" and "&lt;" characters
+       as "&amp;amp;" and "&amp;lt;".
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->Content model: only text content.</t>
@@ -3058,7 +3094,7 @@
       <iref item="texttable element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in texttable element"/>
       <t>
-         The title for the table; this appears on a line after the table's body.
+            Deprecated. Use &lt;<x:ref>titleelement</x:ref>&gt; instead.
       </t>
    </section>
 </section>
@@ -3096,8 +3132,9 @@
    <x:anchor-alias value="titleelement"/>
    <iref item="Elements" subitem="titleelement" primary="true"/>
    <iref item="titleelement element" primary="true"/>
-   <t><!--AG-->
-      <cref anchor="element.titleelement.missing">element description missing</cref>
+   <t>
+      The title of the section, figure, or texttable. This title can have flow markup such
+      as to make some characters use a fixed-width font, or to include references.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
    <t anchor="element.titleelement.contents"><!--AG-->
