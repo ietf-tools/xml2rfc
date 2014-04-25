@@ -35,11 +35,6 @@ Probably not doing:
 		The text doesn't indicate where the list is. That sucks.
 	Anchor for <artwork> because there is no sensible way to specify what the processor should output.
 
-Non-ASCII
-	Resolve discussion of markup for Unicode characters and their equivalents
-	Mention that not all characters can be included, such as combining marks
-	Difficult to do non-ASCII for <references>
-
 -->
 
 <!DOCTYPE rfc []>
@@ -433,6 +428,16 @@ as optional children.</t>
             <iref item="i element" subitem="inside annotation"/>&lt;<x:ref>i</x:ref>&gt; elements (<xref target="element.i"/>)</t>
       </list>
    </t>
+
+   <!--annotation/@ascii-->
+   <section title="'ascii' attribute" anchor="element.annotation.attribute.ascii" toc="exclude">
+      <iref item="Attributes" subitem="ascii"/>
+      <iref item="annotation element" subitem="ascii attribute"/>
+      <iref item="ascii attribute" subitem="in annotation element"/>
+      <t>
+                  The ASCII equivalent of the annotation.
+      </t>
+   </section>
 </section>
 
 <!--area-->
@@ -2460,6 +2465,16 @@ as optional children.</t>
             <iref item="strong element" subitem="inside refcontent"/>&lt;<x:ref>strong</x:ref>&gt; elements (<xref target="element.strong"/>)</t>
       </list>
    </t>
+
+   <!--refcontent/@ascii-->
+   <section title="'ascii' attribute" anchor="element.refcontent.attribute.ascii" toc="exclude">
+      <iref item="Attributes" subitem="ascii"/>
+      <iref item="refcontent element" subitem="ascii attribute"/>
+      <iref item="ascii attribute" subitem="in refcontent element"/>
+      <t>
+         The ASCII equivalent of the added text.
+      </t>
+   </section>
 </section>
 
 <!--reference-->
@@ -3030,6 +3045,26 @@ as optional children.</t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
    <t anchor="element.seriesInfo.contents"><!--AG-->Content model: this element does not have any contents.</t>
 
+   <!--seriesInfo/@asciiname-->
+   <section title="'asciiname' attribute" anchor="element.seriesInfo.attribute.asciiname" toc="exclude">
+      <iref item="Attributes" subitem="asciiname"/>
+      <iref item="seriesInfo element" subitem="asciiname attribute"/>
+      <iref item="asciiname attribute" subitem="in seriesInfo element"/>
+      <t>
+         The ASCII equivalent of the name field.
+      </t>
+   </section>
+
+   <!--seriesInfo/@asciivalue-->
+   <section title="'asciivalue' attribute" anchor="element.seriesInfo.attribute.asciivalue" toc="exclude">
+      <iref item="Attributes" subitem="asciivalue"/>
+      <iref item="seriesInfo element" subitem="asciivalue attribute"/>
+      <iref item="asciivalue attribute" subitem="in seriesInfo element"/>
+      <t>
+         The ASCII equivalent of the value field.
+      </t>
+   </section>
+
    <!--seriesInfo/@name-->
    <section title="'name' attribute (mandatory)" anchor="element.seriesInfo.attribute.name" toc="exclude">
       <iref item="Attributes" subitem="name"/>
@@ -3502,6 +3537,16 @@ as optional children.</t>
       <t>
             Specifies an abbreviated variant of the document title.
          </t>
+   </section>
+
+   <!--title/@ascii-->
+   <section title="'ascii' attribute" anchor="element.title.attribute.ascii" toc="exclude">
+      <iref item="Attributes" subitem="ascii"/>
+      <iref item="title element" subitem="ascii attribute"/>
+      <iref item="ascii attribute" subitem="in title element"/>
+      <t>
+         The ASCII equivalent of the title.
+      </t>
    </section>
 </section>
 
@@ -4893,6 +4938,7 @@ note*
 title =
   element title {
     attribute abbrev { text }?,
+    attribute ascii { text }?,
     text
   }
 author =
@@ -5279,6 +5325,8 @@ seriesInfo =
   element seriesInfo {
     attribute name { text },
     attribute value { text },
+    attribute asciiname { text }?,
+    attribute asciivalue { text }?,
     empty
   }
 format =
@@ -5290,6 +5338,7 @@ format =
   }
 annotation =
   element annotation {
+    attribute ascii { text }?,
     (text
      | xref
      | eref
@@ -5302,8 +5351,11 @@ annotation =
      | em
      | i)*
   }
-refcontent = element refcontent { (text | tt | b | i | em | strong)* 
-}
+refcontent =
+  element refcontent {
+    attribute ascii { text }?,
+    (text | tt | b | i | em | strong)*
+  }
 start = rfc
 <?ENDINC xml2rfcv3.rnc.folded ?>
 </artwork></figure>
@@ -5376,6 +5428,7 @@ to the v3 schema.</t>
   title =
     element title {
       attribute abbrev { text }?,
++     attribute ascii { text }?,
       text
     }
   author =
@@ -5628,11 +5681,11 @@ to the v3 schema.</t>
       attribute source { text }?,
 -     text
 +     (text | xref | eref | tt | strong | b | em | i)*
-+   }
+    }
 + tt =
 +   element tt {
 +     (text | xref | eref | iref | cref | strong | b | em | i)*
-    }
++   }
 + b = element b { (text | xref | eref | iref | cref | tt | em | i)* 
 + }
 + strong =
@@ -5793,6 +5846,8 @@ to the v3 schema.</t>
     element seriesInfo {
       attribute name { text },
       attribute value { text },
++     attribute asciiname { text }?,
++     attribute asciivalue { text }?,
       empty
     }
   format =
@@ -5806,6 +5861,7 @@ to the v3 schema.</t>
 -   element annotation { (text | xref | eref | iref | cref | 
 - spanx)* }
 +   element annotation {
++     attribute ascii { text }?,
 +     (text
 +      | xref
 +      | eref
@@ -5818,8 +5874,11 @@ to the v3 schema.</t>
 +      | em
 +      | i)*
 +   }
-+ refcontent = element refcontent { (text | tt | b | i | em | 
-+ strong)* }
++ refcontent =
++   element refcontent {
++     attribute ascii { text }?,
++     (text | tt | b | i | em | strong)*
++   }
   start = rfc
 <?ENDINC differences-from-v2.txt ?>
 </artwork></figure>

@@ -49,6 +49,7 @@ front =
 title =
   element title {
     attribute abbrev { text }?,
+    attribute ascii { text }?,
     text
   }
 author =
@@ -428,6 +429,8 @@ seriesInfo =
   element seriesInfo {
     attribute name { text },
     attribute value { text },
+    attribute asciiname { text }?,
+    attribute asciivalue { text }?,
     empty
   }
 format =
@@ -439,6 +442,7 @@ format =
   }
 annotation =
   element annotation {
+    attribute ascii { text }?,
     (text
      | xref
      | eref
@@ -451,5 +455,9 @@ annotation =
      | em
      | i)*
   }
-refcontent = element refcontent { (text | tt | b | i | em | strong)* }
+refcontent =
+  element refcontent {
+    attribute ascii { text }?,
+    (text | tt | b | i | em | strong)*
+  }
 start = rfc

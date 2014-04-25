@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                             April 22, 2014
+Obsoletes: 2629 (if approved)                             April 25, 2014
 Intended status: Standards Track
-Expires: October 24, 2014
+Expires: October 27, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 24, 2014.
+   This Internet-Draft will expire on October 27, 2014.
 
 Copyright Notice
 
@@ -440,6 +440,10 @@ Table of Contents
    o  <em> elements (Section 2.21)
 
    o  <i> elements (Section 2.28)
+
+2.3.1.  'ascii' attribute
+
+   The ASCII equivalent of the annotation.
 
 2.4.  <area>
 
@@ -1716,6 +1720,10 @@ Table of Contents
 
    o  <strong> elements (Section 2.52)
 
+2.42.1.  'ascii' attribute
+
+   The ASCII equivalent of the added text.
+
 2.43.  <reference>
 
    Represents a bibliographical reference.
@@ -2095,7 +2103,15 @@ Table of Contents
 
    Content model: this element does not have any contents.
 
-2.48.1.  'name' attribute (mandatory)
+2.48.1.  'asciiname' attribute
+
+   The ASCII equivalent of the name field.
+
+2.48.2.  'asciivalue' attribute
+
+   The ASCII equivalent of the value field.
+
+2.48.3.  'name' attribute (mandatory)
 
    The name of the series.
 
@@ -2103,7 +2119,7 @@ Table of Contents
    generating links, and adding descriptions such as "work in
    progress"): "BCP", "FYI", "Internet-Draft", "RFC", and "STD".
 
-2.48.2.  'value' attribute (mandatory)
+2.48.4.  'value' attribute (mandatory)
 
    The identifier within the series specified by the "name" attribute.
 
@@ -2434,6 +2450,10 @@ Table of Contents
 2.55.1.  'abbrev' attribute
 
    Specifies an abbreviated variant of the document title.
+
+2.55.2.  'ascii' attribute
+
+   The ASCII equivalent of the title.
 
 2.56.  <titleelement>
 
@@ -3369,6 +3389,7 @@ Appendix C.  Relax NG Schema
    title =
      element title {
        attribute abbrev { text }?,
+       attribute ascii { text }?,
        text
      }
    author =
@@ -3755,6 +3776,8 @@ Appendix C.  Relax NG Schema
      element seriesInfo {
        attribute name { text },
        attribute value { text },
+       attribute asciiname { text }?,
+       attribute asciivalue { text }?,
        empty
      }
    format =
@@ -3766,6 +3789,7 @@ Appendix C.  Relax NG Schema
      }
    annotation =
      element annotation {
+       attribute ascii { text }?,
        (text
         | xref
         | eref
@@ -3778,8 +3802,11 @@ Appendix C.  Relax NG Schema
         | em
         | i)*
      }
-   refcontent = element refcontent { (text | tt | b | i | em | strong)*
-   }
+   refcontent =
+     element refcontent {
+       attribute ascii { text }?,
+       (text | tt | b | i | em | strong)*
+     }
    start = rfc
 
 
@@ -3849,6 +3876,7 @@ Appendix D.  Schema Differences from v2
      title =
        element title {
          attribute abbrev { text }?,
+   +     attribute ascii { text }?,
          text
        }
      author =
@@ -4101,11 +4129,11 @@ Appendix D.  Schema Differences from v2
          attribute source { text }?,
    -     text
    +     (text | xref | eref | tt | strong | b | em | i)*
-   +   }
+       }
    + tt =
    +   element tt {
    +     (text | xref | eref | iref | cref | strong | b | em | i)*
-       }
+   +   }
    + b = element b { (text | xref | eref | iref | cref | tt | em | i)*
    + }
    + strong =
@@ -4266,6 +4294,8 @@ Appendix D.  Schema Differences from v2
        element seriesInfo {
          attribute name { text },
          attribute value { text },
+   +     attribute asciiname { text }?,
+   +     attribute asciivalue { text }?,
          empty
        }
      format =
@@ -4279,6 +4309,7 @@ Appendix D.  Schema Differences from v2
    -   element annotation { (text | xref | eref | iref | cref |
    - spanx)* }
    +   element annotation {
+   +     attribute ascii { text }?,
    +     (text
    +      | xref
    +      | eref
@@ -4291,8 +4322,11 @@ Appendix D.  Schema Differences from v2
    +      | em
    +      | i)*
    +   }
-   + refcontent = element refcontent { (text | tt | b | i | em |
-   + strong)* }
+   + refcontent =
+   +   element refcontent {
+   +     attribute ascii { text }?,
+   +     (text | tt | b | i | em | strong)*
+   +   }
      start = rfc
 
 
@@ -4323,6 +4357,7 @@ Index
          in t element  1
          in texttable element  1
       annotation element  1
+         ascii attribute  1
          inside reference  1
       application/rfc+xml Media Type  1
       area element  1
@@ -4345,14 +4380,21 @@ Index
          xml:lang attribute  1
          xml:space attribute  1
       ascii attribute
+         in annotation element  1
          in author element  1
          in city element  1
          in code element  1
          in email element  1
          in organization element  1
          in postalLine element  1
+         in refcontent element  1
          in region element  1
          in street element  1
+         in title element  1
+      asciiname attribute
+         in seriesInfo element  1
+      asciivalue attribute
+         in seriesInfo element  1
       aside element  1
          inside section  1
       Attributes
@@ -4361,6 +4403,8 @@ Index
          alt  1
          anchor  1
          ascii  1
+         asciiname  1
+         asciivalue  1
          autogeneratedBoilerplateText  1
          autogeneratedFigureNumber  1
          autogeneratedSectionNumber  1
@@ -4808,6 +4852,7 @@ Index
 
    R
       refcontent element  1
+         ascii attribute  1
          inside reference  1
       reference element  1
          anchor attribute  1
@@ -4859,6 +4904,8 @@ Index
       sectionFormat attribute
          in xref element  1
       seriesInfo element  1
+         asciiname attribute  1
+         asciivalue attribute  1
          inside reference  1
          name attribute  1
          value attribute  1
@@ -4962,6 +5009,7 @@ Index
          in texttable element  1
       title element  1
          abbrev attribute  1
+         ascii attribute  1
          inside front  1
       titleelement element  1
          inside figure  1

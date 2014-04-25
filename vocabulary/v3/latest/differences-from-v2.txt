@@ -57,6 +57,7 @@
   title =
     element title {
       attribute abbrev { text }?,
++     attribute ascii { text }?,
       text
     }
   author =
@@ -309,11 +310,11 @@
       attribute source { text }?,
 -     text
 +     (text | xref | eref | tt | strong | b | em | i)*
-+   }
+    }
 + tt =
 +   element tt {
 +     (text | xref | eref | iref | cref | strong | b | em | i)*
-    }
++   }
 + b = element b { (text | xref | eref | iref | cref | tt | em | i)* 
 + }
 + strong =
@@ -474,6 +475,8 @@
     element seriesInfo {
       attribute name { text },
       attribute value { text },
++     attribute asciiname { text }?,
++     attribute asciivalue { text }?,
       empty
     }
   format =
@@ -487,6 +490,7 @@
 -   element annotation { (text | xref | eref | iref | cref | 
 - spanx)* }
 +   element annotation {
++     attribute ascii { text }?,
 +     (text
 +      | xref
 +      | eref
@@ -499,6 +503,9 @@
 +      | em
 +      | i)*
 +   }
-+ refcontent = element refcontent { (text | tt | b | i | em | 
-+ strong)* }
++ refcontent =
++   element refcontent {
++     attribute ascii { text }?,
++     (text | tt | b | i | em | strong)*
++   }
   start = rfc
