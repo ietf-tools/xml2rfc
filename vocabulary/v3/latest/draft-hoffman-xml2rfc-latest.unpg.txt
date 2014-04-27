@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                             April 25, 2014
+Obsoletes: 2629 (if approved)                             April 27, 2014
 Intended status: Standards Track
-Expires: October 27, 2014
+Expires: October 29, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 27, 2014.
+   This Internet-Draft will expire on October 29, 2014.
 
 Copyright Notice
 
@@ -120,17 +120,19 @@ Table of Contents
      2.50. <spanx>
      2.51. <street>
      2.52. <strong>
-     2.53. <t>
-     2.54. <texttable>
-     2.55. <title>
-     2.56. <titleelement>
-     2.57. <tt>
-     2.58. <ttcol>
-     2.59. <ul>
-     2.60. <uri>
-     2.61. <vspace>
-     2.62. <workgroup>
-     2.63. <xref>
+     2.53. <sub>
+     2.54. <sup>
+     2.55. <t>
+     2.56. <texttable>
+     2.57. <title>
+     2.58. <titleelement>
+     2.59. <tt>
+     2.60. <ttcol>
+     2.61. <ul>
+     2.62. <uri>
+     2.63. <vspace>
+     2.64. <workgroup>
+     2.65. <xref>
    3.  Special Unicode Code Points
    4.  Internationalization Considerations
    5.  Security Considerations
@@ -236,7 +238,8 @@ Table of Contents
       more <t> elements, or containing the flowing text normally found
       in <t>.
 
-   o  Add <strong>, <b>, <em>, <i>, and <tt> for character formatting.
+   o  Add <strong>, <b>, <em>, <i>, <tt>, <sub>, and <sup> for character
+      formatting.
 
    o  Add <aside> for incidental text that will be indented when
       displayed.
@@ -378,7 +381,7 @@ Table of Contents
 
    Content model:
 
-   One or more <t> elements (Section 2.53)
+   One or more <t> elements (Section 2.55)
 
 2.2.  <address>
 
@@ -398,7 +401,7 @@ Table of Contents
 
    o  <email> elements (Section 2.22)
 
-   o  <uri> elements (Section 2.60)
+   o  <uri> elements (Section 2.62)
 
 2.3.  <annotation>
 
@@ -421,7 +424,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
@@ -431,7 +434,7 @@ Table of Contents
 
    o  <spanx> elements (Section 2.50)
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
    o  <strong> elements (Section 2.52)
 
@@ -440,6 +443,10 @@ Table of Contents
    o  <em> elements (Section 2.21)
 
    o  <i> elements (Section 2.28)
+
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
 
 2.3.1.  'ascii' attribute
 
@@ -493,7 +500,7 @@ Table of Contents
    This element appears as child element of: <aside> (Section 2.6),
    <blockquote> (Section 2.10), <dd> (Section 2.17), <figure>
    (Section 2.25), <li> (Section 2.31), <section> (Section 2.47), and
-   <t> (Section 2.53).
+   <t> (Section 2.55).
 
    Content model:
 
@@ -590,11 +597,11 @@ Table of Contents
 
    In any order:
 
-   o  <t> elements (Section 2.53)
+   o  <t> elements (Section 2.55)
 
    o  <figure> elements (Section 2.25)
 
-   o  <texttable> elements (Section 2.54)
+   o  <texttable> elements (Section 2.56)
 
    o  <iref> elements (Section 2.29)
 
@@ -675,7 +682,8 @@ Table of Contents
    (Section 2.15), <dd> (Section 2.17), <dt> (Section 2.20), <em>
    (Section 2.21), <i> (Section 2.28), <li> (Section 2.31), <postamble>
    (Section 2.40), <preamble> (Section 2.41), <refcontent>
-   (Section 2.42), <t> (Section 2.53), and <tt> (Section 2.57).
+   (Section 2.42), <sub> (Section 2.53), <sup> (Section 2.54), <t>
+   (Section 2.55), and <tt> (Section 2.59).
 
    Content model:
 
@@ -683,7 +691,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
@@ -691,11 +699,15 @@ Table of Contents
 
    o  <cref> elements (Section 2.15)
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
    o  <em> elements (Section 2.21)
 
    o  <i> elements (Section 2.28)
+
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
 
 2.9.  <back>
 
@@ -731,7 +743,7 @@ Table of Contents
 
    o  <sourcecode> elements (Section 2.49)
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
    o  <strong> elements (Section 2.52)
 
@@ -740,6 +752,10 @@ Table of Contents
    o  <em> elements (Section 2.21)
 
    o  <i> elements (Section 2.28)
+
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
 
 2.10.1.  'anchor' attribute
 
@@ -754,7 +770,7 @@ Table of Contents
 
    Provides the content of a cell in a table.
 
-   This element appears as child element of: <texttable> (Section 2.54).
+   This element appears as child element of: <texttable> (Section 2.56).
 
    Content model:
 
@@ -762,7 +778,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
@@ -772,7 +788,7 @@ Table of Contents
 
    o  <spanx> elements (Section 2.50)
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
    o  <strong> elements (Section 2.52)
 
@@ -781,6 +797,10 @@ Table of Contents
    o  <em> elements (Section 2.21)
 
    o  <i> elements (Section 2.28)
+
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
 
 2.12.  <city>
 
@@ -827,9 +847,9 @@ Table of Contents
    <b> (Section 2.8), <c> (Section 2.11), <dd> (Section 2.17), <dt>
    (Section 2.20), <em> (Section 2.21), <i> (Section 2.28), <li>
    (Section 2.31), <postamble> (Section 2.40), <preamble>
-   (Section 2.41), <strong> (Section 2.52), <t> (Section 2.53),
-   <titleelement> (Section 2.56), <tt> (Section 2.57), and <ttcol>
-   (Section 2.58).
+   (Section 2.41), <strong> (Section 2.52), <sub> (Section 2.53), <sup>
+   (Section 2.54), <t> (Section 2.55), <titleelement> (Section 2.58),
+   <tt> (Section 2.59), and <ttcol> (Section 2.60).
 
    Content model:
 
@@ -837,11 +857,11 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
    o  <strong> elements (Section 2.52)
 
@@ -850,6 +870,10 @@ Table of Contents
    o  <em> elements (Section 2.21)
 
    o  <i> elements (Section 2.28)
+
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
 
 2.15.1.  'anchor' attribute
 
@@ -908,7 +932,7 @@ Table of Contents
 
    Either:
 
-   o  One or more <t> elements (Section 2.53)
+   o  One or more <t> elements (Section 2.55)
 
    Or:
 
@@ -916,7 +940,7 @@ Table of Contents
 
       One or more <ol> elements (Section 2.35)
 
-      One or more <ul> elements (Section 2.59)
+      One or more <ul> elements (Section 2.61)
 
       One or more <dl> elements (Section 2.19)
 
@@ -926,7 +950,7 @@ Table of Contents
 
       One or more <sourcecode> elements (Section 2.49)
 
-      One or more <xref> elements (Section 2.63)
+      One or more <xref> elements (Section 2.65)
 
       One or more <eref> elements (Section 2.23)
 
@@ -934,7 +958,7 @@ Table of Contents
 
       One or more <cref> elements (Section 2.15)
 
-      One or more <tt> elements (Section 2.57)
+      One or more <tt> elements (Section 2.59)
 
       One or more <strong> elements (Section 2.52)
 
@@ -943,6 +967,10 @@ Table of Contents
       One or more <em> elements (Section 2.21)
 
       One or more <i> elements (Section 2.28)
+
+      One or more <sub> elements (Section 2.53)
+
+      One or more <sup> elements (Section 2.54)
 
 2.18.  <displayreference>
 
@@ -980,7 +1008,7 @@ Table of Contents
    [[anchor10: The content model below is wrong in the -05 draft.]]
 
    This element appears as child element of: <dd> (Section 2.17), <li>
-   (Section 2.31), and <t> (Section 2.53).
+   (Section 2.31), and <t> (Section 2.55).
 
    Content model:
 
@@ -1025,7 +1053,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
@@ -1033,7 +1061,7 @@ Table of Contents
 
    o  <cref> elements (Section 2.15)
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
    o  <strong> elements (Section 2.52)
 
@@ -1042,6 +1070,10 @@ Table of Contents
    o  <em> elements (Section 2.21)
 
    o  <i> elements (Section 2.28)
+
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
 
 2.21.  <em>
 
@@ -1054,7 +1086,8 @@ Table of Contents
    <cref> (Section 2.15), <dd> (Section 2.17), <dt> (Section 2.20), <li>
    (Section 2.31), <postamble> (Section 2.40), <preamble>
    (Section 2.41), <refcontent> (Section 2.42), <strong> (Section 2.52),
-   <t> (Section 2.53), and <tt> (Section 2.57).
+   <sub> (Section 2.53), <sup> (Section 2.54), <t> (Section 2.55), and
+   <tt> (Section 2.59).
 
    Content model:
 
@@ -1062,7 +1095,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
@@ -1070,11 +1103,15 @@ Table of Contents
 
    o  <cref> elements (Section 2.15)
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
    o  <strong> elements (Section 2.52)
 
    o  <b> elements (Section 2.8)
+
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
 
 2.22.  <email>
 
@@ -1108,9 +1145,10 @@ Table of Contents
    <b> (Section 2.8), <c> (Section 2.11), <cref> (Section 2.15), <dd>
    (Section 2.17), <dt> (Section 2.20), <em> (Section 2.21), <i>
    (Section 2.28), <li> (Section 2.31), <postamble> (Section 2.40),
-   <preamble> (Section 2.41), <strong> (Section 2.52), <t>
-   (Section 2.53), <titleelement> (Section 2.56), <tt> (Section 2.57),
-   and <ttcol> (Section 2.58).
+   <preamble> (Section 2.41), <strong> (Section 2.52), <sub>
+   (Section 2.53), <sup> (Section 2.54), <t> (Section 2.55),
+   <titleelement> (Section 2.58), <tt> (Section 2.59), and <ttcol>
+   (Section 2.60).
 
    Content model: only text content.
 
@@ -1134,13 +1172,13 @@ Table of Contents
 
    This element appears as child element of: <aside> (Section 2.6),
    <blockquote> (Section 2.10), <dd> (Section 2.17), <li>
-   (Section 2.31), <section> (Section 2.47), and <t> (Section 2.53).
+   (Section 2.31), <section> (Section 2.47), and <t> (Section 2.55).
 
    Content model:
 
    In this order:
 
-   1.  One optional <titleelement> element (Section 2.56)
+   1.  One optional <titleelement> element (Section 2.58)
 
    2.  Optional <iref> elements (Section 2.29)
 
@@ -1250,7 +1288,7 @@ Table of Contents
 
    In this order:
 
-   1.  One <title> element (Section 2.55)
+   1.  One <title> element (Section 2.57)
 
    2.  One or more <author> elements (Section 2.7)
 
@@ -1258,7 +1296,7 @@ Table of Contents
 
    4.  Optional <area> elements (Section 2.4)
 
-   5.  Optional <workgroup> elements (Section 2.62)
+   5.  Optional <workgroup> elements (Section 2.64)
 
    6.  Optional <keyword> elements (Section 2.30)
 
@@ -1276,7 +1314,8 @@ Table of Contents
    <cref> (Section 2.15), <dd> (Section 2.17), <dt> (Section 2.20), <li>
    (Section 2.31), <postamble> (Section 2.40), <preamble>
    (Section 2.41), <refcontent> (Section 2.42), <strong> (Section 2.52),
-   <t> (Section 2.53), and <tt> (Section 2.57).
+   <sub> (Section 2.53), <sup> (Section 2.54), <t> (Section 2.55), and
+   <tt> (Section 2.59).
 
    Content model:
 
@@ -1284,7 +1323,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
@@ -1292,11 +1331,15 @@ Table of Contents
 
    o  <cref> elements (Section 2.15)
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
    o  <strong> elements (Section 2.52)
 
    o  <b> elements (Section 2.8)
+
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
 
 2.29.  <iref>
 
@@ -1317,8 +1360,9 @@ Table of Contents
    (Section 2.17), <dt> (Section 2.20), <em> (Section 2.21), <figure>
    (Section 2.25), <i> (Section 2.28), <li> (Section 2.31), <postamble>
    (Section 2.40), <preamble> (Section 2.41), <section> (Section 2.47),
-   <strong> (Section 2.52), <t> (Section 2.53), <titleelement>
-   (Section 2.56), <tt> (Section 2.57), and <ttcol> (Section 2.58).
+   <strong> (Section 2.52), <sub> (Section 2.53), <sup> (Section 2.54),
+   <t> (Section 2.55), <titleelement> (Section 2.58), <tt>
+   (Section 2.59), and <ttcol> (Section 2.60).
 
    Content model: this element does not have any contents.
 
@@ -1360,13 +1404,13 @@ Table of Contents
    A list element, used in <ol> and <ul>.
 
    This element appears as child element of: <ol> (Section 2.35), and
-   <ul> (Section 2.59).
+   <ul> (Section 2.61).
 
    Content model:
 
    Either:
 
-   o  One or more <t> elements (Section 2.53)
+   o  One or more <t> elements (Section 2.55)
 
    Or:
 
@@ -1374,7 +1418,7 @@ Table of Contents
 
       One or more <ol> elements (Section 2.35)
 
-      One or more <ul> elements (Section 2.59)
+      One or more <ul> elements (Section 2.61)
 
       One or more <dl> elements (Section 2.19)
 
@@ -1384,7 +1428,7 @@ Table of Contents
 
       One or more <sourcecode> elements (Section 2.49)
 
-      One or more <xref> elements (Section 2.63)
+      One or more <xref> elements (Section 2.65)
 
       One or more <eref> elements (Section 2.23)
 
@@ -1392,7 +1436,7 @@ Table of Contents
 
       One or more <cref> elements (Section 2.15)
 
-      One or more <tt> elements (Section 2.57)
+      One or more <tt> elements (Section 2.59)
 
       One or more <strong> elements (Section 2.52)
 
@@ -1402,17 +1446,21 @@ Table of Contents
 
       One or more <i> elements (Section 2.28)
 
+      One or more <sub> elements (Section 2.53)
+
+      One or more <sup> elements (Section 2.54)
+
 2.32.  <list>
 
    Deprecated.  Instead, use <dl> for list/@style "hanging"; <ul> for
    list/@style "empty" or "symbols"; and <ol> for list/@style "letters",
    "numbers", or "format".
 
-   This element appears as child element of: <t> (Section 2.53).
+   This element appears as child element of: <t> (Section 2.55).
 
    Content model:
 
-   One or more <t> elements (Section 2.53)
+   One or more <t> elements (Section 2.55)
 
 2.32.1.  'counter' attribute
 
@@ -1449,7 +1497,7 @@ Table of Contents
 
    Content model:
 
-   One or more <t> elements (Section 2.53)
+   One or more <t> elements (Section 2.55)
 
 2.34.1.  'title' attribute (mandatory)
 
@@ -1461,7 +1509,7 @@ Table of Contents
    a letter, depending on the value of the style attribute.
 
    This element appears as child element of: <dd> (Section 2.17), <li>
-   (Section 2.31), and <t> (Section 2.53).
+   (Section 2.31), and <t> (Section 2.55).
 
    Content model:
 
@@ -1619,7 +1667,7 @@ Table of Contents
    Gives text that appears at the bottom of a figure or table.
 
    This element appears as child element of: <figure> (Section 2.25),
-   and <texttable> (Section 2.54).
+   and <texttable> (Section 2.56).
 
    Content model:
 
@@ -1627,7 +1675,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
@@ -1637,7 +1685,7 @@ Table of Contents
 
    o  <spanx> elements (Section 2.50)
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
    o  <strong> elements (Section 2.52)
 
@@ -1646,13 +1694,17 @@ Table of Contents
    o  <em> elements (Section 2.21)
 
    o  <i> elements (Section 2.28)
+
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
 
 2.41.  <preamble>
 
    Gives text that appears at the top of a figure or table.
 
    This element appears as child element of: <figure> (Section 2.25),
-   and <texttable> (Section 2.54).
+   and <texttable> (Section 2.56).
 
    Content model:
 
@@ -1660,7 +1712,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
@@ -1670,7 +1722,7 @@ Table of Contents
 
    o  <spanx> elements (Section 2.50)
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
    o  <strong> elements (Section 2.52)
 
@@ -1679,6 +1731,10 @@ Table of Contents
    o  <em> elements (Section 2.21)
 
    o  <i> elements (Section 2.28)
+
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
 
 2.42.  <refcontent>
 
@@ -1710,7 +1766,7 @@ Table of Contents
 
    o  Text
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
    o  <b> elements (Section 2.8)
 
@@ -1719,6 +1775,10 @@ Table of Contents
    o  <em> elements (Section 2.21)
 
    o  <strong> elements (Section 2.52)
+
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
 
 2.42.1.  'ascii' attribute
 
@@ -2014,17 +2074,17 @@ Table of Contents
 
    In this order:
 
-   1.  One optional <titleelement> element (Section 2.56)
+   1.  One optional <titleelement> element (Section 2.58)
 
    2.  In any order:
 
-       *  <t> elements (Section 2.53)
+       *  <t> elements (Section 2.55)
 
        *  <aside> elements (Section 2.6)
 
        *  <figure> elements (Section 2.25)
 
-       *  <texttable> elements (Section 2.54)
+       *  <texttable> elements (Section 2.56)
 
        *  <iref> elements (Section 2.29)
 
@@ -2154,7 +2214,7 @@ Table of Contents
    This element appears as child element of: <aside> (Section 2.6),
    <blockquote> (Section 2.10), <dd> (Section 2.17), <figure>
    (Section 2.25), <li> (Section 2.31), <section> (Section 2.47), and
-   <t> (Section 2.53).
+   <t> (Section 2.55).
 
    Content model: only text content.
 
@@ -2221,7 +2281,7 @@ Table of Contents
 
    This element appears as child element of: <annotation> (Section 2.3),
    <c> (Section 2.11), <postamble> (Section 2.40), <preamble>
-   (Section 2.41), and <t> (Section 2.53).
+   (Section 2.41), and <t> (Section 2.55).
 
    Content model: only text content.
 
@@ -2262,7 +2322,8 @@ Table of Contents
    (Section 2.15), <dd> (Section 2.17), <dt> (Section 2.20), <em>
    (Section 2.21), <i> (Section 2.28), <li> (Section 2.31), <postamble>
    (Section 2.40), <preamble> (Section 2.41), <refcontent>
-   (Section 2.42), <t> (Section 2.53), and <tt> (Section 2.57).
+   (Section 2.42), <sub> (Section 2.53), <sup> (Section 2.54), <t>
+   (Section 2.55), and <tt> (Section 2.59).
 
    Content model:
 
@@ -2270,7 +2331,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
@@ -2278,13 +2339,91 @@ Table of Contents
 
    o  <cref> elements (Section 2.15)
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
    o  <em> elements (Section 2.21)
 
    o  <i> elements (Section 2.28)
 
-2.53.  <t>
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
+
+2.53.  <sub>
+
+   Causes the text to be displayed as subscript, approximately half a
+   letter-height lower than normal text.
+
+   This element appears as child element of: <annotation> (Section 2.3),
+   <b> (Section 2.8), <blockquote> (Section 2.10), <c> (Section 2.11),
+   <cref> (Section 2.15), <dd> (Section 2.17), <dt> (Section 2.20), <em>
+   (Section 2.21), <i> (Section 2.28), <li> (Section 2.31), <postamble>
+   (Section 2.40), <preamble> (Section 2.41), <refcontent>
+   (Section 2.42), <strong> (Section 2.52), <t> (Section 2.55), and <tt>
+   (Section 2.59).
+
+   Content model:
+
+   In any order:
+
+   o  Text
+
+   o  <xref> elements (Section 2.65)
+
+   o  <eref> elements (Section 2.23)
+
+   o  <iref> elements (Section 2.29)
+
+   o  <cref> elements (Section 2.15)
+
+   o  <tt> elements (Section 2.59)
+
+   o  <strong> elements (Section 2.52)
+
+   o  <b> elements (Section 2.8)
+
+   o  <em> elements (Section 2.21)
+
+   o  <i> elements (Section 2.28)
+
+2.54.  <sup>
+
+   Causes the text to be displayed as superscript, approximately half a
+   letter-height higher than normal text.
+
+   This element appears as child element of: <annotation> (Section 2.3),
+   <b> (Section 2.8), <blockquote> (Section 2.10), <c> (Section 2.11),
+   <cref> (Section 2.15), <dd> (Section 2.17), <dt> (Section 2.20), <em>
+   (Section 2.21), <i> (Section 2.28), <li> (Section 2.31), <postamble>
+   (Section 2.40), <preamble> (Section 2.41), <refcontent>
+   (Section 2.42), <strong> (Section 2.52), <t> (Section 2.55), and <tt>
+   (Section 2.59).
+
+   Content model:
+
+   In any order:
+
+   o  Text
+
+   o  <xref> elements (Section 2.65)
+
+   o  <eref> elements (Section 2.23)
+
+   o  <iref> elements (Section 2.29)
+
+   o  <cref> elements (Section 2.15)
+
+   o  <tt> elements (Section 2.59)
+
+   o  <strong> elements (Section 2.52)
+
+   o  <b> elements (Section 2.8)
+
+   o  <em> elements (Section 2.21)
+
+   o  <i> elements (Section 2.28)
+
+2.55.  <t>
 
    Contains a paragraph of text.
 
@@ -2303,7 +2442,7 @@ Table of Contents
 
    o  <ol> elements (Section 2.35)
 
-   o  <ul> elements (Section 2.59)
+   o  <ul> elements (Section 2.61)
 
    o  <dl> elements (Section 2.19)
 
@@ -2313,7 +2452,7 @@ Table of Contents
 
    o  <sourcecode> elements (Section 2.49)
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
@@ -2323,9 +2462,9 @@ Table of Contents
 
    o  <spanx> elements (Section 2.50)
 
-   o  <vspace> elements (Section 2.61)
+   o  <vspace> elements (Section 2.63)
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
    o  <strong> elements (Section 2.52)
 
@@ -2335,11 +2474,15 @@ Table of Contents
 
    o  <i> elements (Section 2.28)
 
-2.53.1.  'anchor' attribute
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
+
+2.55.1.  'anchor' attribute
 
    Document-wide unique identifier for this paragraph.
 
-2.54.  <texttable>
+2.56.  <texttable>
 
    Contains a table, consisting of an optional preamble, a header line,
    rows, an optional postamble, and an optional title.
@@ -2357,17 +2500,17 @@ Table of Contents
 
    In this order:
 
-   1.  One optional <titleelement> element (Section 2.56)
+   1.  One optional <titleelement> element (Section 2.58)
 
    2.  One optional <preamble> element (Section 2.41)
 
-   3.  One or more <ttcol> elements (Section 2.58)
+   3.  One or more <ttcol> elements (Section 2.60)
 
    4.  Optional <c> elements (Section 2.11)
 
    5.  One optional <postamble> element (Section 2.40)
 
-2.54.1.  'align' attribute
+2.56.1.  'align' attribute
 
    Determines the horizontal alignment of the table.
 
@@ -2379,21 +2522,21 @@ Table of Contents
 
    o  "right"
 
-2.54.2.  'anchor' attribute
+2.56.2.  'anchor' attribute
 
    Document-wide unique identifier for this table.
 
    Furthermore, the presence of this attribute causes the table to be
    numbered.
 
-2.54.3.  'autogeneratedTableNumber' attribute
+2.56.3.  'autogeneratedTableNumber' attribute
 
    The number for this table, if one is generated by the processor.
    This attribute and its value are automatically generated by the RFC
    Processor, and are ignored by other processors.  If the value already
    exists when the RFC Processor is run, it is replaced.
 
-2.54.4.  'style' attribute
+2.56.4.  'style' attribute
 
    Selects which borders should be drawn, where
 
@@ -2417,7 +2560,7 @@ Table of Contents
 
    o  "full" (default)
 
-2.54.5.  'suppress-title' attribute
+2.56.5.  'suppress-title' attribute
 
    Tables that have an "anchor" attribute will automatically get an
    autogenerated title (such as "Table 1"), even if the "title"
@@ -2430,11 +2573,11 @@ Table of Contents
 
    o  "false" (default)
 
-2.54.6.  'title' attribute
+2.56.6.  'title' attribute
 
    Deprecated.  Use <titleelement> instead.
 
-2.55.  <title>
+2.57.  <title>
 
    Represents the document title.
 
@@ -2447,22 +2590,22 @@ Table of Contents
 
    Content model: only text content.
 
-2.55.1.  'abbrev' attribute
+2.57.1.  'abbrev' attribute
 
    Specifies an abbreviated variant of the document title.
 
-2.55.2.  'ascii' attribute
+2.57.2.  'ascii' attribute
 
    The ASCII equivalent of the title.
 
-2.56.  <titleelement>
+2.58.  <titleelement>
 
    The title of the section, figure, or texttable.  This title can have
    flow markup such as to make some characters use a fixed-width font,
    or to include references.
 
    This element appears as child element of: <figure> (Section 2.25),
-   <section> (Section 2.47), and <texttable> (Section 2.54).
+   <section> (Section 2.47), and <texttable> (Section 2.56).
 
    Content model:
 
@@ -2470,7 +2613,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
@@ -2478,9 +2621,9 @@ Table of Contents
 
    o  <cref> elements (Section 2.15)
 
-   o  <tt> elements (Section 2.57)
+   o  <tt> elements (Section 2.59)
 
-2.57.  <tt>
+2.59.  <tt>
 
    Causes the text to be displayed in a constant-width font.
 
@@ -2489,8 +2632,9 @@ Table of Contents
    <cref> (Section 2.15), <dd> (Section 2.17), <dt> (Section 2.20), <em>
    (Section 2.21), <i> (Section 2.28), <li> (Section 2.31), <postamble>
    (Section 2.40), <preamble> (Section 2.41), <refcontent>
-   (Section 2.42), <strong> (Section 2.52), <t> (Section 2.53), and
-   <titleelement> (Section 2.56).
+   (Section 2.42), <strong> (Section 2.52), <sub> (Section 2.53), <sup>
+   (Section 2.54), <t> (Section 2.55), and <titleelement>
+   (Section 2.58).
 
    Content model:
 
@@ -2498,7 +2642,7 @@ Table of Contents
 
    o  Text
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
@@ -2514,17 +2658,21 @@ Table of Contents
 
    o  <i> elements (Section 2.28)
 
-2.58.  <ttcol>
+   o  <sub> elements (Section 2.53)
+
+   o  <sup> elements (Section 2.54)
+
+2.60.  <ttcol>
 
    Contains a column heading in a table.
 
-   This element appears as child element of: <texttable> (Section 2.54).
+   This element appears as child element of: <texttable> (Section 2.56).
 
    Content model:
 
    In any order:
 
-   o  <xref> elements (Section 2.63)
+   o  <xref> elements (Section 2.65)
 
    o  <eref> elements (Section 2.23)
 
@@ -2534,7 +2682,7 @@ Table of Contents
 
    o  Text
 
-2.58.1.  'align' attribute
+2.60.1.  'align' attribute
 
    Determines the horizontal alignment within the table column.
 
@@ -2546,23 +2694,23 @@ Table of Contents
 
    o  "right"
 
-2.58.2.  'width' attribute
+2.60.2.  'width' attribute
 
    The desired column width (as integer 0..100 followed by "%").
 
-2.59.  <ul>
+2.61.  <ul>
 
    An unordered list.  The labels on the items will be symbols picked by
    the processor.
 
    This element appears as child element of: <dd> (Section 2.17), <li>
-   (Section 2.31), and <t> (Section 2.53).
+   (Section 2.31), and <t> (Section 2.55).
 
    Content model:
 
    One or more <li> elements (Section 2.31)
 
-2.59.1.  'empty' attribute
+2.61.1.  'empty' attribute
 
    Defines whether or not the label is empty. empty="true" indicates
    that no label be shown.
@@ -2573,7 +2721,7 @@ Table of Contents
 
    o  "true"
 
-2.59.2.  'spacing' attribute
+2.61.2.  'spacing' attribute
 
    Defines whether or not there is a blank line between entries.
    spacing="normal" indicates a single blank line, while
@@ -2585,7 +2733,7 @@ Table of Contents
 
    o  "compact"
 
-2.60.  <uri>
+2.62.  <uri>
 
    Contains a web address associated with the author.
 
@@ -2595,19 +2743,19 @@ Table of Contents
 
    Content model: only text content.
 
-2.61.  <vspace>
+2.63.  <vspace>
 
    Deprecated.
 
-   This element appears as child element of: <t> (Section 2.53).
+   This element appears as child element of: <t> (Section 2.55).
 
    Content model: this element does not have any contents.
 
-2.61.1.  'blankLines' attribute
+2.63.1.  'blankLines' attribute
 
    Deprecated.
 
-2.62.  <workgroup>
+2.64.  <workgroup>
 
    This element is used to specify the Working Group (IETF) or Research
    Group (IRTF) from which the document originates, if any.  The
@@ -2624,7 +2772,7 @@ Table of Contents
 
    Content model: only text content.
 
-2.63.  <xref>
+2.65.  <xref>
 
    Inserts a reference to a different part of a document.
 
@@ -2645,13 +2793,14 @@ Table of Contents
    <b> (Section 2.8), <c> (Section 2.11), <cref> (Section 2.15), <dd>
    (Section 2.17), <dt> (Section 2.20), <em> (Section 2.21), <i>
    (Section 2.28), <li> (Section 2.31), <postamble> (Section 2.40),
-   <preamble> (Section 2.41), <strong> (Section 2.52), <t>
-   (Section 2.53), <titleelement> (Section 2.56), <tt> (Section 2.57),
-   and <ttcol> (Section 2.58).
+   <preamble> (Section 2.41), <strong> (Section 2.52), <sub>
+   (Section 2.53), <sup> (Section 2.54), <t> (Section 2.55),
+   <titleelement> (Section 2.58), <tt> (Section 2.59), and <ttcol>
+   (Section 2.60).
 
    Content model: only text content.
 
-2.63.1.  'format' attribute
+2.65.1.  'format' attribute
 
    This attribute is used to control the format of the generated
    reference text.
@@ -2702,7 +2851,7 @@ Table of Contents
 
    o  "default" (default)
 
-2.63.2.  'pageno' attribute
+2.65.2.  'pageno' attribute
 
    Deprecated.
 
@@ -2712,12 +2861,12 @@ Table of Contents
 
    o  "false" (default)
 
-2.63.3.  'relative' attribute
+2.65.3.  'relative' attribute
 
    Specifies a relative reference from the main target. [[anchor13: Need
    more description here about how this will be displayed.]]
 
-2.63.4.  'section' attribute
+2.65.4.  'section' attribute
 
    Specifies a section for the generated reference.  For example,
 
@@ -2727,7 +2876,7 @@ Table of Contents
 
         See Section 2.3 of [RFC6949] for more information.
 
-2.63.5.  'sectionFormat' attribute
+2.65.5.  'sectionFormat' attribute
 
    The format that the section reference will be displayed in.  The
    acceptable values are:
@@ -2753,7 +2902,7 @@ Table of Contents
         See [RFC6949], Section 2.4 for more information.
         See [RFC6949] (Section 2.5) for more information.
 
-2.63.6.  'target' attribute (mandatory)
+2.65.6.  'target' attribute (mandatory)
 
    Identifies the document component being referenced.
 
@@ -3504,7 +3653,9 @@ Appendix C.  Relax NG Schema
         | strong
         | b
         | em
-        | i)*
+        | i
+        | sub
+        | sup)*
      }
    aside =
      element aside {
@@ -3514,8 +3665,17 @@ Appendix C.  Relax NG Schema
      element blockquote {
        attribute anchor { xsd:ID }?,
        attribute cite { text },
-       (text | figure | artwork | sourcecode | tt | strong | b | em |
-   i)*
+       (text
+        | figure
+        | artwork
+        | sourcecode
+        | tt
+        | strong
+        | b
+        | em
+        | i
+        | sub
+        | sup)*
      }
    \list =
      element list {
@@ -3559,7 +3719,9 @@ Appendix C.  Relax NG Schema
           strong,
           b,
           em,
-          i)+
+          i,
+          sub,
+          sup)+
      }
    dl =
      element dl {
@@ -3571,7 +3733,18 @@ Appendix C.  Relax NG Schema
      }
    dt =
      element dt {
-       (text | xref | eref | iref | cref | tt | strong | b | em | i)*
+       (text
+        | xref
+        | eref
+        | iref
+        | cref
+        | tt
+        | strong
+        | b
+        | em
+        | i
+        | sub
+        | sup)*
      }
    dd =
      element dd {
@@ -3591,7 +3764,9 @@ Appendix C.  Relax NG Schema
           strong,
           b,
           em,
-          i)+
+          i,
+          sub,
+          sup)+
      }
    xref =
      element xref {
@@ -3622,21 +3797,46 @@ Appendix C.  Relax NG Schema
      element cref {
        attribute anchor { xsd:ID }?,
        attribute source { text }?,
-       (text | xref | eref | tt | strong | b | em | i)*
+       (text | xref | eref | tt | strong | b | em | i | sub | sup)*
      }
    tt =
      element tt {
-       (text | xref | eref | iref | cref | strong | b | em | i)*
+       (text
+        | xref
+        | eref
+        | iref
+        | cref
+        | strong
+        | b
+        | em
+        | i
+        | sub
+        | sup)*
      }
-   b = element b { (text | xref | eref | iref | cref | tt | em | i)* }
+   b =
+     element b {
+       (text | xref | eref | iref | cref | tt | em | i | sub | sup)*
+     }
    strong =
-     element strong { (text | xref | eref | iref | cref | tt | em | i)*
-   }
-   i = element i { (text | xref | eref | iref | cref | tt | strong |
-   b)* }
+     element strong {
+       (text | xref | eref | iref | cref | tt | em | i | sub | sup)*
+     }
+   i =
+     element i {
+       (text | xref | eref | iref | cref | tt | strong | b | sub | sup)*
+     }
    em =
-     element em { (text | xref | eref | iref | cref | tt | strong | b)*
-   }
+     element em {
+       (text | xref | eref | iref | cref | tt | strong | b | sub | sup)*
+     }
+   sub =
+     element sub {
+       (text | xref | eref | iref | cref | tt | strong | b | em | i)*
+     }
+   sup =
+     element sup {
+       (text | xref | eref | iref | cref | tt | strong | b | em | i)*
+     }
    spanx =
      element spanx {
        [ a:defaultValue = "preserve" ]
@@ -3680,7 +3880,9 @@ Appendix C.  Relax NG Schema
         | strong
         | b
         | em
-        | i)*
+        | i
+        | sub
+        | sup)*
      }
    artwork =
      element artwork {
@@ -3714,7 +3916,9 @@ Appendix C.  Relax NG Schema
         | strong
         | b
         | em
-        | i)*
+        | i
+        | sub
+        | sup)*
      }
    texttable =
      element texttable {
@@ -3752,7 +3956,9 @@ Appendix C.  Relax NG Schema
         | strong
         | b
         | em
-        | i)*
+        | i
+        | sub
+        | sup)*
      }
    back = element back { displayreference*, references*, section* }
    displayreference =
@@ -3800,12 +4006,14 @@ Appendix C.  Relax NG Schema
         | strong
         | b
         | em
-        | i)*
+        | i
+        | sub
+        | sup)*
      }
    refcontent =
      element refcontent {
        attribute ascii { text }?,
-       (text | tt | b | i | em | strong)*
+       (text | tt | b | i | em | strong | sub | sup)*
      }
    start = rfc
 
@@ -4007,7 +4215,9 @@ Appendix D.  Schema Differences from v2
    +      | strong
    +      | b
    +      | em
-   +      | i)*
+   +      | i
+   +      | sub
+   +      | sup)*
    +   }
    + aside =
    +   element aside {
@@ -4017,8 +4227,17 @@ Appendix D.  Schema Differences from v2
    +   element blockquote {
    +     attribute anchor { xsd:ID }?,
    +     attribute cite { text },
-   +     (text | figure | artwork | sourcecode | tt | strong | b | em
-   + | i)*
+   +     (text
+   +      | figure
+   +      | artwork
+   +      | sourcecode
+   +      | tt
+   +      | strong
+   +      | b
+   +      | em
+   +      | i
+   +      | sub
+   +      | sup)*
        }
      \list =
        element list {
@@ -4063,7 +4282,9 @@ Appendix D.  Schema Differences from v2
    +        strong,
    +        b,
    +        em,
-   +        i)+
+   +        i,
+   +        sub,
+   +        sup)+
    +   }
    + dl =
    +   element dl {
@@ -4075,7 +4296,18 @@ Appendix D.  Schema Differences from v2
    +   }
    + dt =
    +   element dt {
-   +     (text | xref | eref | iref | cref | tt | strong | b | em | i)*
+   +     (text
+   +      | xref
+   +      | eref
+   +      | iref
+   +      | cref
+   +      | tt
+   +      | strong
+   +      | b
+   +      | em
+   +      | i
+   +      | sub
+   +      | sup)*
    +   }
    + dd =
    +   element dd {
@@ -4095,7 +4327,9 @@ Appendix D.  Schema Differences from v2
    +        strong,
    +        b,
    +        em,
-   +        i)+
+   +        i,
+   +        sub,
+   +        sup)+
    +   }
      xref =
        element xref {
@@ -4128,22 +4362,48 @@ Appendix D.  Schema Differences from v2
          attribute anchor { xsd:ID }?,
          attribute source { text }?,
    -     text
-   +     (text | xref | eref | tt | strong | b | em | i)*
-       }
+   +     (text | xref | eref | tt | strong | b | em | i | sub | sup)*
+   +   }
    + tt =
    +   element tt {
-   +     (text | xref | eref | iref | cref | strong | b | em | i)*
+   +     (text
+   +      | xref
+   +      | eref
+   +      | iref
+   +      | cref
+   +      | strong
+   +      | b
+   +      | em
+   +      | i
+   +      | sub
+   +      | sup)*
    +   }
-   + b = element b { (text | xref | eref | iref | cref | tt | em | i)*
-   + }
+   + b =
+   +   element b {
+   +     (text | xref | eref | iref | cref | tt | em | i | sub | sup)*
+   +   }
    + strong =
-   +   element strong { (text | xref | eref | iref | cref | tt | em |
-   + i)* }
-   + i = element i { (text | xref | eref | iref | cref | tt | strong |
-   + b)* }
+   +   element strong {
+   +     (text | xref | eref | iref | cref | tt | em | i | sub | sup)*
+   +   }
+   + i =
+   +   element i {
+   +     (text | xref | eref | iref | cref | tt | strong | b | sub |
+   + sup)*
+   +   }
    + em =
-   +   element em { (text | xref | eref | iref | cref | tt | strong |
-   + b)* }
+   +   element em {
+   +     (text | xref | eref | iref | cref | tt | strong | b | sub |
+   + sup)*
+   +   }
+   + sub =
+   +   element sub {
+   +     (text | xref | eref | iref | cref | tt | strong | b | em | i)*
+   +   }
+   + sup =
+   +   element sup {
+   +     (text | xref | eref | iref | cref | tt | strong | b | em | i)*
+       }
      spanx =
        element spanx {
          [ a:defaultValue = "preserve" ]
@@ -4189,7 +4449,9 @@ Appendix D.  Schema Differences from v2
    +      | strong
    +      | b
    +      | em
-   +      | i)*
+   +      | i
+   +      | sub
+   +      | sup)*
    +   }
      artwork =
        element artwork {
@@ -4226,7 +4488,9 @@ Appendix D.  Schema Differences from v2
    +      | strong
    +      | b
    +      | em
-   +      | i)*
+   +      | i
+   +      | sub
+   +      | sup)*
      }
      texttable =
        element texttable {
@@ -4265,7 +4529,9 @@ Appendix D.  Schema Differences from v2
    +      | strong
    +      | b
    +      | em
-   +      | i)*
+   +      | i
+   +      | sub
+   +      | sup)*
    +   }
    + back = element back { displayreference*, references*, section* }
    + displayreference =
@@ -4320,12 +4586,14 @@ Appendix D.  Schema Differences from v2
    +      | strong
    +      | b
    +      | em
-   +      | i)*
+   +      | i
+   +      | sub
+   +      | sup)*
    +   }
    + refcontent =
    +   element refcontent {
    +     attribute ascii { text }?,
-   +     (text | tt | b | i | em | strong)*
+   +     (text | tt | b | i | em | strong | sub | sup)*
    +   }
      start = rfc
 
@@ -4497,6 +4765,8 @@ Index
          inside postamble  1
          inside preamble  1
          inside refcontent  1
+         inside sub  1
+         inside sup  1
          inside t  1
          inside tt  1
       back element  1
@@ -4539,6 +4809,8 @@ Index
          inside postamble  1
          inside preamble  1
          inside strong  1
+         inside sub  1
+         inside sup  1
          inside t  1
          inside titleelement  1
          inside tt  1
@@ -4624,6 +4896,8 @@ Index
          spanx  1
          street  1
          strong  1
+         sub  1
+         sup  1
          t  1
          texttable  1
          title  1
@@ -4648,6 +4922,8 @@ Index
          inside preamble  1
          inside refcontent  1
          inside strong  1
+         inside sub  1
+         inside sup  1
          inside t  1
          inside tt  1
       email element  1
@@ -4668,6 +4944,8 @@ Index
          inside postamble  1
          inside preamble  1
          inside strong  1
+         inside sub  1
+         inside sup  1
          inside t  1
          inside titleelement  1
          inside tt  1
@@ -4735,6 +5013,8 @@ Index
          inside preamble  1
          inside refcontent  1
          inside strong  1
+         inside sub  1
+         inside sup  1
          inside t  1
          inside tt  1
       initials attribute
@@ -4767,6 +5047,8 @@ Index
          inside preamble  1
          inside section  1
          inside strong  1
+         inside sub  1
+         inside sup  1
          inside t  1
          inside titleelement  1
          inside tt  1
@@ -4958,6 +5240,8 @@ Index
          inside postamble  1
          inside preamble  1
          inside refcontent  1
+         inside sub  1
+         inside sup  1
          inside t  1
          inside tt  1
       style attribute
@@ -4965,10 +5249,44 @@ Index
          in ol element  1
          in spanx element  1
          in texttable element  1
+      sub element  1
+         inside annotation  1
+         inside b  1
+         inside blockquote  1
+         inside c  1
+         inside cref  1
+         inside dd  1
+         inside dt  1
+         inside em  1
+         inside i  1
+         inside li  1
+         inside postamble  1
+         inside preamble  1
+         inside refcontent  1
+         inside strong  1
+         inside t  1
+         inside tt  1
       subitem attribute
          in iref element  1
       submissionType attribute
          in rfc element  1
+      sup element  1
+         inside annotation  1
+         inside b  1
+         inside blockquote  1
+         inside c  1
+         inside cref  1
+         inside dd  1
+         inside dt  1
+         inside em  1
+         inside i  1
+         inside li  1
+         inside postamble  1
+         inside preamble  1
+         inside refcontent  1
+         inside strong  1
+         inside t  1
+         inside tt  1
       suppress-title attribute
          in figure element  1
          in texttable element  1
@@ -5038,6 +5356,8 @@ Index
          inside preamble  1
          inside refcontent  1
          inside strong  1
+         inside sub  1
+         inside sup  1
          inside t  1
          inside titleelement  1
       ttcol element  1
@@ -5099,6 +5419,8 @@ Index
          inside postamble  1
          inside preamble  1
          inside strong  1
+         inside sub  1
+         inside sup  1
          inside t  1
          inside titleelement  1
          inside tt  1
