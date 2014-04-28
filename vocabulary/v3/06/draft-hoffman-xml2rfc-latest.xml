@@ -18,16 +18,6 @@ Find the remaining <cref>s and resolve them.
 
 Maybe deprecate <texttable> with something new based on HTML tables
 
-Deal with entities that the RPC uses. &rfc.number;, characters, ...
-
-CDATA hack:
-   The solution is to break the string up, such as using multiple CDATA blocks, as in this example:
-   ...]]]]><![CDATA[>...
-
-   (the first two ]] are before the end of the first CDATA block, and the trailing > is the first character
-   of the next CDATA block), or escaping one of the characters, such as just the ">"
-   ...]]&gt;...
-
 Deal with "cite" in <blockquote>; people object to it being a URI.
 
 Maybe have <artwork> include microlanguages for packets and call sequences
@@ -2173,9 +2163,8 @@ as optional children.</t>
       <t>
          When a processor sees an &lt;ol&gt; element with a "group" attribute that has already been seen,
          the processor continues the numbering of the list from where the previous list with the same
-         group name left off.
-         If an &lt;ol&gt; element has both a "group" and "start" attribute, the group's
-         numbering is reset to the given start value.
+         group name left off. This action is overridden by the "start" attribute; that is, if an
+         &lt;ol&gt; element has both a "group" and "start" attribute, the "start" attribute takes precedence.
       </t>
    </section>
 
