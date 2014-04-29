@@ -20,14 +20,6 @@ Maybe deprecate <texttable> with something new based on HTML tables
 
 Deal with entities that the RPC uses. &rfc.number;, characters, ...
 
-CDATA hack:
-   The solution is to break the string up, such as using multiple CDATA blocks, as in this example:
-   ...]]]]><![CDATA[>...
-
-   (the first two ]] are before the end of the first CDATA block, and the trailing > is the first character
-   of the next CDATA block), or escaping one of the characters, such as just the ">"
-   ...]]&gt;...
-
 Deal with "cite" in <blockquote>; people object to it being a URI.
 
 Maybe have <artwork> include microlanguages for packets and call sequences
@@ -495,8 +487,8 @@ as optional children.</t>
       otherwise prose that describes the included image in sufficient detail.
    </t>
    <t>
-      If the artwork includes either "&amp;" or "&lt;" characters, or the string "]]&gt;" those characters either need to be escaped
-      or the artwork needs to be in a CDATA structure; see &lt;<x:ref>sourcecode</x:ref>&gt; for a fuller
+      If the artwork includes either "&amp;" or "&lt;" characters, or the string "]]&gt;" those characters
+      need to be encoded using escaping or CDATA block(s); see &lt;<x:ref>sourcecode</x:ref>&gt; for a fuller
       description of these solutions.
    </t>
    <t>
@@ -3206,16 +3198,27 @@ as optional children.</t>
    <t>
        A common problem authors have with &lt;sourcecode&gt; is that the XML processor returns errors
        if the text in the artwork contains either the "&amp;" or "&lt;" character, or the string "]]&gt;". To avoid these problems,
-       the artwork may be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;". For example:
+       the "&amp;" and "&lt;" characters may be escaped using the strings
+       "&amp;amp;" and "&amp;lt;", respectively; the "]]&gt;" string can be represented as "]]&amp;gt;".
+       Alternatively, they may be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;".  For example:
 <figure>
          <artwork>
+Desired output:
+   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"
+
+Using escaping:
 &lt;sourcecode&gt;
-&lt;![CDATA[allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]&gt;
+   allowed-chars = "." | "," | "&amp;amp;" | "&amp;lt;" | "&amp;gt;" | "|"
+&lt;/sourcecode&gt;
+
+Using CDATA:
+&lt;sourcecode&gt;
+&lt;![CDATA[   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]&gt;
 &lt;/sourcecode&gt;
 </artwork>
       </figure>
-       Instead of using a CDATA structure, the authour could instead escape the "&amp;" and "&lt;" characters
-       as "&amp;amp;" and "&amp;lt;".
+       Using CDATA is not a panacea, but it does help prevent having to use escapes in places where using
+       using escapes can cause other problems, such as difficulty of inclusion from other documents.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->Content model: only text content.</t>
