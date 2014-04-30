@@ -119,15 +119,25 @@
   </t>
 </xsl:template>
 
-<xsl:template match="rng:oneOrMore[rng:ref]">
+<xsl:template match="rng:oneOrMore[count(rng:ref)=1]">
   <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="rng:oneOrMore[count(rng:ref) &gt; 1]">
+  <t>
+    <xsl:comment>AG</xsl:comment>
+    One or more sequences of:
+    <list style="numbers">
+      <xsl:apply-templates mode="simple"/>
+    </list>
+  </t>
 </xsl:template>
 
 <xsl:template match="rng:optional[rng:attribute]">
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="rng:optional[rng:ref]">
+<xsl:template match="rng:optional[count(rng:ref)=1]">
   <xsl:apply-templates/>
 </xsl:template>
 
@@ -193,6 +203,19 @@
     <x:ref><xsl:value-of select="$elem"/></x:ref>
     <xsl:text>&gt; element</xsl:text>
     <xsl:if test="parent::rng:zeroOrMore or parent::rng:oneOrMore or parent::rng:choice">s</xsl:if><xsl:text> (</xsl:text><xref target="element.{$elem}"/><xsl:text>)</xsl:text>
+  </t>
+</xsl:template>
+
+<xsl:template match="rng:ref" mode="simple">
+  <t>
+    <xsl:comment>AG</xsl:comment>
+    <xsl:variable name="elem" select="//rng:define[@name=current()/@name]/rng:element/@name"/>
+    <iref item="Elements" subitem="{$elem}"/>
+    <xsl:variable name="container" select="ancestor::rng:element[1]"/>
+    <iref item="{$elem} element" subitem="inside {$container/@name}"/>
+    <xsl:text>One &lt;</xsl:text>
+    <x:ref><xsl:value-of select="$elem"/></x:ref>
+    <xsl:text>&gt; element</xsl:text>
   </t>
 </xsl:template>
 
