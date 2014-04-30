@@ -119,7 +119,7 @@
   </t>
 </xsl:template>
 
-<xsl:template match="rng:oneOrMore[rng:ref]">
+<xsl:template match="rng:oneOrMore[count(rng:ref)=1]">
   <xsl:apply-templates/>
 </xsl:template>
 
@@ -127,7 +127,7 @@
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="rng:optional[rng:ref]">
+<xsl:template match="rng:optional[count(rng:ref)=1]">
   <xsl:apply-templates/>
 </xsl:template>
 
