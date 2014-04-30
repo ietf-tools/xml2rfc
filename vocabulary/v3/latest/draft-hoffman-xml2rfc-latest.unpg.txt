@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                             April 29, 2014
+Obsoletes: 2629 (if approved)                             April 30, 2014
 Intended status: Standards Track
-Expires: October 31, 2014
+Expires: November 1, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 31, 2014.
+   This Internet-Draft will expire on November 1, 2014.
 
 Copyright Notice
 
@@ -490,9 +490,9 @@ Table of Contents
    the included image in sufficient detail.
 
    If the artwork includes either "&" or "<" characters, or the string
-   "]]>" those characters need to be encoded using escaping or CDATA
-   block(s); see <sourcecode> for a fuller description of these
-   solutions.
+   "]]>" those characters either need to be escaped or the artwork needs
+   to be in a CDATA structure; see <sourcecode> for a fuller description
+   of these solutions.
 
    In [XML2RFCv2], the <artwork> element was also used for source code
    and formal languages; in v3, this is now done with <sourcecode>.
@@ -675,9 +675,7 @@ Table of Contents
 2.8.  <b>
 
    Causes the text to be displayed in bold.  It is almost always a
-   better idea to use the <strong> element instead.  This element can be
-   combined with other character formatting elements, and the formatting
-   will be additive.
+   better idea to use the <strong> element instead.
 
    This element appears as child element of: <annotation> (Section 2.3),
    <blockquote> (Section 2.10), <c> (Section 2.11), <cref>
@@ -1081,8 +1079,7 @@ Table of Contents
 
    Indicates text that is semantically empahsized.  This element will be
    displayed as italic after processing.  This element has the same
-   effects as <i>.  This element can be combined with other character
-   formatting elements, and the formatting will be additive.
+   effects as <i>.
 
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.8), <blockquote> (Section 2.10), <c> (Section 2.11),
@@ -1310,9 +1307,7 @@ Table of Contents
 2.28.  <i>
 
    Causes the text to be displayed in italic.  It is almost always a
-   better idea to use the <em> element instead.  This element can be
-   combined with other character formatting elements, and the formatting
-   will be additive.
+   better idea to use the <em> element instead.
 
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.8), <blockquote> (Section 2.10), <c> (Section 2.11),
@@ -1525,8 +1520,9 @@ Table of Contents
    When a processor sees an <ol> element with a "group" attribute that
    has already been seen, the processor continues the numbering of the
    list from where the previous list with the same group name left off.
-   If an <ol> element has both a "group" and "start" attribute, the
-   group's numbering is reset to the given start value.
+   This action is overridden by the "start" attribute; that is, if an
+   <ol> element has both a "group" and "start" attribute, the "start"
+   attribute takes precedence.
 
 2.35.2.  'spacing' attribute
 
@@ -2205,27 +2201,15 @@ Table of Contents
    A common problem authors have with <sourcecode> is that the XML
    processor returns errors if the text in the artwork contains either
    the "&" or "<" character, or the string "]]>".  To avoid these
-   problems, the "&" and "<" characters may be escaped using the strings
-   "&amp;" and "&lt;", respectively; the "]]>" string can be represented
-   as "]]&gt;".  Alternatively, they may be surrounded in a CDATA
-   structure: "<![CDATA[]]>".  For example:
+   problems, the artwork may be surrounded in a CDATA structure:
+   "<![CDATA[]]>".  For example:
 
-   Desired output:
-      allowed-chars = "." | "," | "&" | "<" | ">" | "|"
-
-   Using escaping:
    <sourcecode>
-      allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"
+   <![CDATA[allowed-chars = "." | "," | "&" | "<" | ">" | "|"]]>
    </sourcecode>
 
-   Using CDATA:
-   <sourcecode>
-   <![CDATA[   allowed-chars = "." | "," | "&" | "<" | ">" | "|"]]>
-   </sourcecode>
-
-   Using CDATA is not a panacea, but it does help prevent having to use
-   escapes in places where using using escapes can cause other problems,
-   such as difficulty of inclusion from other documents.
+   Instead of using a CDATA structure, the authour could instead escape
+   the "&" and "<" characters as "&amp;" and "&lt;".
 
    This element appears as child element of: <aside> (Section 2.6),
    <blockquote> (Section 2.10), <dd> (Section 2.17), <figure>
@@ -2331,8 +2315,7 @@ Table of Contents
 
    Indicates text that is semantically strong.  This element will be
    displayed as bold after processing.  This element has the same
-   effects as <b>.  This element can be combined with other character
-   formatting elements, and the formatting will be additive.
+   effects as <b>.
 
    This element appears as child element of: <annotation> (Section 2.3),
    <blockquote> (Section 2.10), <c> (Section 2.11), <cref>
@@ -2369,9 +2352,7 @@ Table of Contents
 2.53.  <sub>
 
    Causes the text to be displayed as subscript, approximately half a
-   letter-height lower than normal text.  This element can be combined
-   with other character formatting elements, and the formatting will be
-   additive.
+   letter-height lower than normal text.
 
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.8), <blockquote> (Section 2.10), <c> (Section 2.11),
@@ -2408,9 +2389,7 @@ Table of Contents
 2.54.  <sup>
 
    Causes the text to be displayed as superscript, approximately half a
-   letter-height higher than normal text.  This element can be combined
-   with other character formatting elements, and the formatting will be
-   additive.
+   letter-height higher than normal text.
 
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.8), <blockquote> (Section 2.10), <c> (Section 2.11),
@@ -2646,9 +2625,7 @@ Table of Contents
 
 2.59.  <tt>
 
-   Causes the text to be displayed in a constant-width font.  This
-   element can be combined with other character formatting elements, and
-   the formatting will be additive.
+   Causes the text to be displayed in a constant-width font.
 
    This element appears as child element of: <annotation> (Section 2.3),
    <b> (Section 2.8), <blockquote> (Section 2.10), <c> (Section 2.11),
