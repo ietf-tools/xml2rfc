@@ -245,6 +245,9 @@ output.</t>
 
 <t><list style="symbols">
 
+<t>Allow non-ASCII characters in the format; the characters that are actually allowed will
+be determined by the RFC Editor.</t>
+
 <t>Allow &lt;<x:ref>artwork</x:ref>&gt; to be used on its own in &lt;<x:ref>section</x:ref>&gt;
 (no longer confine it to a figure).</t>
 
@@ -4216,75 +4219,13 @@ would generate
 <?ENDINC xml2rfcv3-spec.xml ?>
 </section>
 
-<section title="Special Unicode Code Points" anchor="special.unicode.code.points">
-<t>
-  Although the current RFC format does not allow non-ASCII Unicode characters
-  (<xref target="UNICODE"/>), some of them can be used to enforce certain
-  behaviors of formatters.
-</t>
-<t>
-  For instance:
-</t>
-<t>
-  non-breaking space (U+00A0)
-  <list>
-    <t>
-      Represents a space character where no line break should happen. This is
-      frequently used in titles (by excluding certain space characters from
-      the line breaking algorithm, the processor will use the remaining
-      whitespace ocurrences for line breaks).
-    </t> 
-  </list>
-</t>
-<t>
-  non-breaking hyphen (U+2011)
-  <list>
-    <t>
-      Similarly, this represents a hyphen character where nevertheless no
-      line breaking ought to occur.
-    </t>
-  </list>
-</t>
-<t>
-  word joiner (U+2060)
-  <list>
-    <t>
-      Also called "zero width non-breaking space". This can be used to
-      disallow line breaking between two non-whitespace characters.
-    </t>
-  </list>
-</t>
-<t>
-  Note that in order to use these characters by name, they need to be 
-  declared either in the Document Type Definition (DTD,
-  <xref target="XML" x:sec="2.9" x:fmt="," x:rel="#sec-rmd"/>), or
-  in the "internal subset" (<xref target="XML" x:sec="2.8" x:fmt="," x:rel="#sec-prolog-dtd"/>),
-  like this:
-</t>
-<figure><artwork type="example">
-&lt;?xml version="1.0"?>
-
-&lt;!DOCTYPE rfc [
-
-  &lt;!-- <spanx>declare nbsp and friends</spanx> -->
-  &lt;!ENTITY nbsp    "&amp;#xa0;">
-  &lt;!ENTITY nbhy    "&amp;#x2011;">
-  &lt;!ENTITY wj      "&amp;#x2060;">
-]>
-</artwork></figure>
-</section>
-
 <section title="Internationalization Considerations" anchor="i18n.considerations">
 <t>
   This format is based on <xref target="XML"/>, thus does not have any
   issues representing arbitrary Unicode <xref target="UNICODE"/> characters in text content.
-</t>
-<t>
-  However, the current canonical RFC format is restricted to US-ASCII <xref target="USASCII"/>
-  characters (<xref target="RFC2223" x:sec="3" x:fmt=","/>). Future versions are likely to relax this role, and it is
-  expected that the vocabulary will be extended so that US-ASCII
-  alternatives can be provided when that makes sense (for instance, in
-  contact information).
+  The RFC Editor may restrict some of the characters that can be used in a particular RFC;
+  the rules for such restrictions are covered in <cref>some other document to be named
+  later when it is stable</cref>.
 </t>
 </section>
 

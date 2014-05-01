@@ -133,15 +133,14 @@ Table of Contents
      2.63. <vspace>
      2.64. <workgroup>
      2.65. <xref>
-   3.  Special Unicode Code Points
-   4.  Internationalization Considerations
-   5.  Security Considerations
-   6.  IANA Considerations
-     6.1.  Internet Media Type Registration
-   7.  Acknowledgments
-   8.  References
-     8.1.  Normative References
-     8.2.  Informative References
+   3.  Internationalization Considerations
+   4.  Security Considerations
+   5.  IANA Considerations
+     5.1.  Internet Media Type Registration
+   6.  Acknowledgments
+   7.  References
+     7.1.  Normative References
+     7.2.  Informative References
    Appendix A.  Front Page Generation
      A.1.  The /rfc/@category Attribute
      A.2.  The /rfc/@ipr Attribute
@@ -320,6 +319,9 @@ Table of Contents
       and the latter because it has unpredictable output.
 
 1.2.4.  Additional Changes from v2
+
+   o  Allow non-ASCII characters in the format; the characters that are
+      actually allowed will be determined by the RFC Editor.
 
    o  Allow <artwork> to be used on its own in <section> (no longer
       confine it to a figure).
@@ -2931,57 +2933,16 @@ Table of Contents
    The value needs to match the value of the "anchor" attribute of
    another element in the document.
 
-3.  Special Unicode Code Points
-
-   Although the current RFC format does not allow non-ASCII Unicode
-   characters ([UNICODE]), some of them can be used to enforce certain
-   behaviors of formatters.
-
-   For instance:
-
-   non-breaking space (U+00A0)
-
-      Represents a space character where no line break should happen.
-      This is frequently used in titles (by excluding certain space
-      characters from the line breaking algorithm, the processor will
-      use the remaining whitespace ocurrences for line breaks).
-
-   non-breaking hyphen (U+2011)
-
-      Similarly, this represents a hyphen character where nevertheless
-      no line breaking ought to occur.
-
-   word joiner (U+2060)
-
-      Also called "zero width non-breaking space".  This can be used to
-      disallow line breaking between two non-whitespace characters.
-
-   Note that in order to use these characters by name, they need to be
-   declared either in the Document Type Definition (DTD, [XML], Section
-   2.9), or in the "internal subset" ([XML], Section 2.8), like this:
-
-   <?xml version="1.0"?>
-
-   <!DOCTYPE rfc [
-
-     <!-- declare nbsp and friends -->
-     <!ENTITY nbsp    "&#xa0;">
-     <!ENTITY nbhy    "&#x2011;">
-     <!ENTITY wj      "&#x2060;">
-   ]>
-
-4.  Internationalization Considerations
+3.  Internationalization Considerations
 
    This format is based on [XML], thus does not have any issues
    representing arbitrary Unicode [UNICODE] characters in text content.
+   The RFC Editor may restrict some of the characters that can be used
+   in a particular RFC; the rules for such restrictions are covered in
+   [[anchor14: some other document to be named later when it is
+   stable]].
 
-   However, the current canonical RFC format is restricted to US-ASCII
-   [USASCII] characters ([RFC2223], Section 3).  Future versions are
-   likely to relax this role, and it is expected that the vocabulary
-   will be extended so that US-ASCII alternatives can be provided when
-   that makes sense (for instance, in contact information).
-
-5.  Security Considerations
+4.  Security Considerations
 
    The "name" attribute on the <artwork> element (Section 2.5.4) can be
    used to derive a filename for saving to a local file system.
@@ -3001,9 +2962,9 @@ Table of Contents
    Furthermore, all security considerations related to XML processing
    are relevant as well (see Section 7 of [RFC3470]).
 
-6.  IANA Considerations
+5.  IANA Considerations
 
-6.1.  Internet Media Type Registration
+5.1.  Internet Media Type Registration
 
    IANA maintains the registry of Internet media types [BCP13] at
    <http://www.iana.org/assignments/media-types>.
@@ -3025,7 +2986,7 @@ Table of Contents
    Encoding considerations:  Identical to those of "application/xml" as
       described in Section 3.2 of [RFC3023].
 
-   Security considerations:  As defined in Section 5.  In addition, as
+   Security considerations:  As defined in Section 4.  In addition, as
       this media type uses the "+xml" convention, it inherits the
       security considerations described in Section 10 of [RFC3023].
 
@@ -3063,7 +3024,7 @@ Table of Contents
 
    Change controller:  RFC Series Editor (rse@rfc-editor.org)
 
-7.  Acknowledgments
+6.  Acknowledgments
 
    Thanks to everybody who reviewed this document and provided feedback
    and/or specification text.  Thanks especially go to Julian Reschke
@@ -3073,9 +3034,9 @@ Table of Contents
    We also thank Marshall T. Rose for both the original design and the
    reference implementation of the "xml2rfc" formatter.
 
-8.  References
+7.  References
 
-8.1.  Normative References
+7.1.  Normative References
 
    [XML]        Maler, E., Yergeau, F., Paoli, J., Sperberg-McQueen, M.,
                 and T. Bray, "Extensible Markup Language (XML) 1.0
@@ -3088,7 +3049,7 @@ Table of Contents
    [XML2RFCv2]  Reschke, J., "The 'XML2RFC' version 2 Vocabulary",
                 draft-reschke-xml2rfc (work in progress), 2014.
 
-8.2.  Informative References
+7.2.  Informative References
 
    [BCP13]      Freed, N., Klensin, J., and T. Hansen, "Media Type
                 Specifications and Registration Procedures", BCP 13,
@@ -3422,7 +3383,7 @@ B.1.  Including External Text
 
    <x:include href="file://home/chris/ietf/drafts/commontext.xml"/>
 
-   [[anchor19: Need to think a bit more about using xi:include to
+   [[anchor20: Need to think a bit more about using xi:include to
    replace src= for artwork or sourcecode.]]
 
 B.2.  The RFC Processor
