@@ -174,8 +174,8 @@
       otherwise prose that describes the included image in sufficient detail.
    </t>
    <t>
-      If the artwork includes either "&amp;" or "&lt;" characters, or the string "]]&gt;" those characters either need to be escaped
-      or the artwork needs to be in a CDATA structure; see &lt;<x:ref>sourcecode</x:ref>&gt; for a fuller
+      If the artwork includes either "&amp;" or "&lt;" characters, or the string "]]&gt;" those characters
+      need to be encoded using escaping or CDATA block(s); see &lt;<x:ref>sourcecode</x:ref>&gt; for a fuller
       description of these solutions.
    </t>
    <t>
@@ -360,7 +360,9 @@
    <iref item="Elements" subitem="author" primary="true"/>
    <iref item="author element" primary="true"/>
    <t>
-      Provides information about a document author.
+      Provides information about a document's author. This is used both for
+      the document itself (at the beginning of the document) and for
+      referenced documents (inside of &lt;<x:ref>reference</x:ref>&gt;).
    </t>
    <t>
       The &lt;author&gt; elements contained within the document's &lt;front&gt; element
@@ -476,6 +478,8 @@
    <t>
         Causes the text to be displayed in bold.  It is almost always a better idea
         to use the &lt;<x:ref>strong</x:ref>&gt; element instead.
+        This element can be combined with other character formatting elements, and the
+        formatting will be additive.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.b.contents"><!--AG-->
@@ -553,6 +557,7 @@
    <t>
       Specifies a block of text is a quotation. The "cite" attribute is required, and must be a URI.
    </t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.blockquote.contents"><!--AG-->
         Content model:
       </t>
@@ -997,7 +1002,7 @@
       <iref item="displayreference element" subitem="to attribute"/>
       <iref item="to attribute" subitem="in displayreference element"/>
       <t>
-        This attribute is a name that will be displayed as the anchor instead of the anchror that is given
+        This attribute is a name that will be displayed as the anchor instead of the anchor that is given
         in the &lt;<x:ref>reference</x:ref>&gt; element. The string given must start with one of the following
         characters: 0-9, a-z, A-Z. The other characters in the string must be 0-9, a-z, A-Z, "-", ".", and "_".
       </t>
@@ -1260,25 +1265,10 @@
             <iref item="Elements" subitem="preamble"/>
             <iref item="preamble element" subitem="inside figure"/>One optional &lt;<x:ref>preamble</x:ref>&gt; element (<xref target="element.preamble"/>)</t>
       
-         <t><!--AG-->Either:<list style="symbols">
-               <x:lt>
-          
-                  <t><!--AG-->
-                     <iref item="Elements" subitem="artwork"/>
-                     <iref item="artwork element" subitem="inside figure"/>One or more &lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
-        
-               </x:lt>
-            </list>
-         </t>
-         <t><!--AG-->Or:<list style="symbols">
-               <x:lt>
-          
-                  <t><!--AG-->
-                     <iref item="Elements" subitem="sourcecode"/>
-                     <iref item="sourcecode element" subitem="inside figure"/>One or more &lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</t>
-        
-               </x:lt>
-            </list>
+         <t><!--AG-->
+            <cref>
+      Missing template for oneOrMore.
+    </cref>
          </t>
         
          <t><!--AG-->
@@ -1859,8 +1849,9 @@
       <t>
          When a processor sees an &lt;ol&gt; element with a "group" attribute that has already been seen,
          the processor continues the numbering of the list from where the previous list with the same
-         group name left off. This action is overridden by the "start" attribute; that is, if an
-         &lt;ol&gt; element has both a "group" and "start" attribute, the "start" attribute takes precedence.
+         group name left off.
+         If an &lt;ol&gt; element has both a "group" and "start" attribute, the group's
+         numbering is reset to the given start value.
       </t>
    </section>
 
@@ -2694,6 +2685,9 @@
                   <iref item="Elements" subitem="aside"/>
                   <iref item="aside element" subitem="inside section"/>&lt;<x:ref>aside</x:ref>&gt; elements (<xref target="element.aside"/>)</t>
                <t><!--AG-->
+                  <iref item="Elements" subitem="blockquote"/>
+                  <iref item="blockquote element" subitem="inside section"/>&lt;<x:ref>blockquote</x:ref>&gt; elements (<xref target="element.blockquote"/>)</t>
+               <t><!--AG-->
                   <iref item="Elements" subitem="figure"/>
                   <iref item="figure element" subitem="inside section"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</t>
                <t><!--AG-->
@@ -2891,16 +2885,27 @@
    <t>
        A common problem authors have with &lt;sourcecode&gt; is that the XML processor returns errors
        if the text in the artwork contains either the "&amp;" or "&lt;" character, or the string "]]&gt;". To avoid these problems,
-       the artwork may be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;". For example:
+       the "&amp;" and "&lt;" characters may be escaped using the strings
+       "&amp;amp;" and "&amp;lt;", respectively; the "]]&gt;" string can be represented as "]]&amp;gt;".
+       Alternatively, they may be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;".  For example:
 <figure>
          <artwork>
+Desired output:
+   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"
+
+Using escaping:
 &lt;sourcecode&gt;
-&lt;![CDATA[allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]&gt;
+   allowed-chars = "." | "," | "&amp;amp;" | "&amp;lt;" | "&amp;gt;" | "|"
+&lt;/sourcecode&gt;
+
+Using CDATA:
+&lt;sourcecode&gt;
+&lt;![CDATA[   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]&gt;
 &lt;/sourcecode&gt;
 </artwork>
       </figure>
-       Instead of using a CDATA structure, the authour could instead escape the "&amp;" and "&lt;" characters
-       as "&amp;amp;" and "&amp;lt;".
+       Using CDATA is not a panacea, but it does help prevent having to use escapes in places where using
+       using escapes can cause other problems, such as difficulty of inclusion from other documents.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->Content model: only text content.</t>
@@ -3024,6 +3029,8 @@
    <t>
         Indicates text that is semantically strong. This element will be displayed as bold after processing.
         This element has the same effects as &lt;<x:ref>b</x:ref>&gt;.
+        This element can be combined with other character formatting elements, and the
+        formatting will be additive.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.strong.contents"><!--AG-->
@@ -3069,6 +3076,8 @@
    <iref item="sub element" primary="true"/>
    <t>
         Causes the text to be displayed as subscript, approximately half a letter-height lower than normal text.
+        This element can be combined with other character formatting elements, and the
+        formatting will be additive.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.sub.contents"><!--AG-->
@@ -3114,6 +3123,8 @@
    <iref item="sup element" primary="true"/>
    <t>
         Causes the text to be displayed as superscript, approximately half a letter-height higher than normal text.
+        This element can be combined with other character formatting elements, and the
+        formatting will be additive.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.sup.contents"><!--AG-->
@@ -3468,6 +3479,8 @@
    <iref item="tt element" primary="true"/>
    <t>
             Causes the text to be displayed in a constant-width font.
+        This element can be combined with other character formatting elements, and the
+        formatting will be additive.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), and &lt;<x:ref>titleelement</x:ref>&gt; (<xref target="element.titleelement"/>).</t>
    <t anchor="element.tt.contents"><!--AG-->
