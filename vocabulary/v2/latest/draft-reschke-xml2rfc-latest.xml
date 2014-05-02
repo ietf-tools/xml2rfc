@@ -2447,6 +2447,27 @@
 <?ENDINC xml2rfcv2-spec.xml ?>
 </section>
 
+<section title="Escaping for use in XML" anchor="escaping">
+<t>
+  Text in XML can not use the literal characters "&lt;" and "&amp;", as they
+  have special meaning to the XML processor (starting entities, elements, etc.).
+  Usually, these characters will need to be substituted by "&amp;lt;" and
+  "&amp;amp;" (see <xref target="XML" x:sec="4.6" x:rel="#sec-predefined-ent" x:fmt="of"/>).
+</t>
+<t>
+  "&gt;" does not require escaping, unless it appears in the sequence "]]&gt;"
+  (which indicates the end of a CDATA section, see below).
+</t>
+<t>
+  Escaping the indivual characters can be a lot of work (when done manually), 
+  and also messes up alignment in artwork. Another approach to escaping is
+  to use CDATA sections (<xref target="XML" x:sec="2.7" x:rel="#sec-cdata-sect" x:fmt=","/>).
+  Within these, no further escaping is needed, except when the "end-of-CDATA"
+  marker needs to be used (in that case, the CDATA section needs to be closed, 
+  and a new one needs to be started).
+</t>
+</section>
+
 <section title="Special Unicode Code Points" anchor="special.unicode.code.points">
 <t>
   Although the current RFC format does not allow non-ASCII Unicode characters

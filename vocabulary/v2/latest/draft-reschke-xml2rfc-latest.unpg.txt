@@ -104,16 +104,17 @@ Table of Contents
      2.43. <vspace>
      2.44. <workgroup>
      2.45. <xref>
-   3.  Special Unicode Code Points
-   4.  Including Files
-   5.  Internationalization Considerations
-   6.  Security Considerations
-   7.  IANA Considerations
-     7.1.  Internet Media Type Registration
-   8.  Acknowledgments
-   9.  References
-     9.1.  Normative References
-     9.2.  Informative References
+   3.  Escaping for use in XML
+   4.  Special Unicode Code Points
+   5.  Including Files
+   6.  Internationalization Considerations
+   7.  Security Considerations
+   8.  IANA Considerations
+     8.1.  Internet Media Type Registration
+   9.  Acknowledgments
+   10. References
+     10.1. Normative References
+     10.2. Informative References
    Appendix A.  Front Page Generation
      A.1.  The /rfc/@category Attribute
      A.2.  The /rfc/@ipr Attribute
@@ -1645,7 +1646,24 @@ Table of Contents
    The value needs to match the value of the "anchor" attribute of
    another element in the document.
 
-3.  Special Unicode Code Points
+3.  Escaping for use in XML
+
+   Text in XML can not use the literal characters "<" and "&", as they
+   have special meaning to the XML processor (starting entities,
+   elements, etc.).  Usually, these characters will need to be
+   substituted by "&lt;" and "&amp;" (see Section 4.6 of [XML]).
+
+   ">" does not require escaping, unless it appears in the sequence
+   "]]>" (which indicates the end of a CDATA section, see below).
+
+   Escaping the indivual characters can be a lot of work (when done
+   manually), and also messes up alignment in artwork.  Another approach
+   to escaping is to use CDATA sections ([XML], Section 2.7).  Within
+   these, no further escaping is needed, except when the "end-of-CDATA"
+   marker needs to be used (in that case, the CDATA section needs to be
+   closed, and a new one needs to be started).
+
+4.  Special Unicode Code Points
 
    Although the current RFC format does not allow non-ASCII Unicode
    characters ([UNICODE]), some of them can be used to enforce certain
@@ -1684,7 +1702,7 @@ Table of Contents
      <!ENTITY wj      "&#x2060;">
    ]>
 
-4.  Including Files
+5.  Including Files
 
    This version of the vocabulary does not support an inclusion
    mechanism on it's own -- thus, a document always needs to be self-
@@ -1720,7 +1738,7 @@ Table of Contents
    thus any plain text that would need to be escaped in XML can't be
    included as-is.
 
-5.  Internationalization Considerations
+6.  Internationalization Considerations
 
    This format is based on [XML], thus does not have any issues
    representing arbitrary Unicode [UNICODE] characters in text content.
@@ -1731,7 +1749,7 @@ Table of Contents
    will be extended so that US-ACSII alternatives can be provided when
    that makes sense (for instance, in contact information).
 
-6.  Security Considerations
+7.  Security Considerations
 
    The "name" attribute on the <artwork> element (Section 2.5.4) can be
    used to derive a filename for saving to a local file system.
@@ -1747,9 +1765,9 @@ Table of Contents
    Finallly, all security considerations related to XML processing are
    relevant as well (see Section 7 of [RFC3470]).
 
-7.  IANA Considerations
+8.  IANA Considerations
 
-7.1.  Internet Media Type Registration
+8.1.  Internet Media Type Registration
 
    IANA maintains the registry of Internet media types [BCP13] at
    <http://www.iana.org/assignments/media-types>.
@@ -1770,7 +1788,7 @@ Table of Contents
    Encoding considerations:  Identical to those of "application/xml" as
       described in Section 3.2 of [RFC3023].
 
-   Security considerations:  As defined in Section 6.  In addition, as
+   Security considerations:  As defined in Section 7.  In addition, as
       this media type uses the "+xml" convention, it inherits the
       security considerations described in Section 10 of [RFC3023].
 
@@ -1808,7 +1826,7 @@ Table of Contents
 
    Change controller:  RFC Series Editor (rse@rfc-editor.org)
 
-8.  Acknowledgments
+9.  Acknowledgments
 
    Thanks to everybody who reviewed this document and provided feedback
    and/or specification text, in particular Brian Carpenter, Tony
@@ -1818,9 +1836,9 @@ Table of Contents
    We also thank Marshall T. Rose for both the original design and the
    reference implementation of the "xml2rfc" formatter.
 
-9.  References
+10.  References
 
-9.1.  Normative References
+10.1.  Normative References
 
    [XML]        Maler, E., Yergeau, F., Paoli, J., Sperberg-McQueen, M.,
                 and T. Bray, "Extensible Markup Language (XML) 1.0
@@ -1830,7 +1848,7 @@ Table of Contents
 
                 Latest version available at <http://www.w3.org/TR/xml>.
 
-9.2.  Informative References
+10.2.  Informative References
 
    [BCP13]      Freed, N., Klensin, J., and T. Hansen, "Media Type
                 Specifications and Registration Procedures", BCP 13,
@@ -2512,7 +2530,7 @@ D.7.  Document Metadata
 
 D.8.  Including Material
 
-   As discussed in Section 4, file inclusion currently uses out-of-the-
+   As discussed in Section 5, file inclusion currently uses out-of-the-
    box XML mechanisms or processor-specific directives.
 
    We need to decide whether the vocabulary should have its own
