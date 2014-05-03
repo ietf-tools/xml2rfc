@@ -183,6 +183,8 @@ for automatically-included references.</t>
 
 <t>Add &lt;<x:ref>refcontent</x:ref>&gt; to allow better control of text in a reference.</t>
 
+<t>Add &lt;<x:ref>alternateURI</x:ref>&gt; to allow reference to things such as DOIs.</t>
+
 </list></t>
 
 </section>
@@ -379,6 +381,31 @@ as optional children.</t>
             <iref item="uri element" subitem="inside address"/>&lt;<x:ref>uri</x:ref>&gt; elements (<xref target="element.uri"/>)</t>
       </list>
    </t>
+</section>
+
+<!--alternateURI-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;alternateURI&gt;" anchor="element.alternateURI">
+   <x:anchor-alias value="alternateURI"/>
+   <iref item="Elements" subitem="alternateURI" primary="true"/>
+   <iref item="alternateURI element" primary="true"/>
+   <t>
+      A URI that is a non-normative location for a different pointer for this document. This
+      can be used during Internet-Draft development to point to an author's rendition of the
+      draft. When published as an RFC, this entity is filled in by the RFC Editor to point
+      to approved URIs that also refer to this document, such as DOIs. 
+   </t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t anchor="element.alternateURI.contents"><!--AG-->Content model: only text content.</t>
+
+   <!--alternateURI/@type-->
+   <section title="'type' attribute" anchor="element.alternateURI.attribute.type" toc="exclude">
+      <iref item="Attributes" subitem="type"/>
+      <iref item="alternateURI element" subitem="type attribute"/>
+      <iref item="type attribute" subitem="in alternateURI element"/>
+      <t>
+         The type of URI. Some possible values include "DOI" and "personal".
+      </t>
+   </section>
 </section>
 
 <!--annotation-->
@@ -1813,6 +1840,11 @@ as optional children.</t>
          <t><!--AG-->
             <iref item="Elements" subitem="note"/>
             <iref item="note element" subitem="inside front"/>Optional &lt;<x:ref>note</x:ref>&gt; elements (<xref target="element.note"/>)</t>
+      
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="alternateURI"/>
+            <iref item="alternateURI element" subitem="inside front"/>Optional &lt;<x:ref>alternateURI</x:ref>&gt; elements (<xref target="element.alternateURI"/>)</t>
       
       </list>
    </t>
@@ -5088,8 +5120,15 @@ rfc =
   }
 front =
   element front {
-    title, author+, date?, area*, workgroup*, keyword*, abstract?, 
-note*
+    title,
+    author+,
+    date?,
+    area*,
+    workgroup*,
+    keyword*,
+    abstract?,
+    note*,
+    alternateURI*
   }
 title =
   element title {
@@ -5170,6 +5209,11 @@ note =
   element note {
     attribute title { text },
     t+
+  }
+alternateURI =
+  element alternateURI {
+    attribute type { text }?,
+    text
   }
 middle = element middle { section+ }
 section =
@@ -5645,8 +5689,15 @@ to the v3 schema.</t>
     element front {
 -     title, author+, date, area*, workgroup*, keyword*, abstract?, 
 - note*
-+     title, author+, date?, area*, workgroup*, keyword*, 
-+ abstract?, note*
++     title,
++     author+,
++     date?,
++     area*,
++     workgroup*,
++     keyword*,
++     abstract?,
++     note*,
++     alternateURI*
     }
   title =
     element title {
@@ -5737,6 +5788,11 @@ to the v3 schema.</t>
       attribute title { text },
       t+
     }
++ alternateURI =
++   element alternateURI {
++     attribute type { text }?,
++     text
++   }
   middle = element middle { section+ }
   section =
     element section {
