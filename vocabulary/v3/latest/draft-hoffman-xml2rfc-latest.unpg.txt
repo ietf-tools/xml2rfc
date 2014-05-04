@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                                May 3, 2014
+Obsoletes: 2629 (if approved)                                May 4, 2014
 Intended status: Standards Track
-Expires: November 4, 2014
+Expires: November 5, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 4, 2014.
+   This Internet-Draft will expire on November 5, 2014.
 
 Copyright Notice
 
@@ -171,12 +171,13 @@ Table of Contents
    to be said here about what "obsoletes" means in this case.]]
 
    The v3 format will be used as part of the new RFC series described in
-   [RFC6949].  The new series will have multiple formats: the canonical
-   document will be in XML using the v3 format described here, and many
-   non-canonical formats (such as HTML and text) will be generated as
-   well.  The generation of these non-canonical formats means that there
-   will be much more emphasis put on the processor that handles the XML.
-   Features of the expected processor are described in Appendix B.
+   [RFC6949].  The new series will have multiple representations: the
+   canonical document will be in XML using the v3 format described here,
+   and many non-canonical representations (such as HTML and text) will
+   be generated as well.  The generation of these non-canonical
+   representations means that there will be much more emphasis put on
+   the processor that handles the XML.  Features of the expected
+   processor are described in Appendix B.
 
    Note that the vocabulary contains certain constructs that might not
    affect the rendering of the final text; however, they can provide
@@ -202,8 +203,8 @@ Table of Contents
       wants to change versions.
 
    o  There are no current plans to make v3 XML the required submission
-      format for drafts or RFCs.  That might happen eventually, but it
-      is likely to be years away.
+      representation for drafts or RFCs.  That might happen eventually,
+      but it is likely to be years away.
 
    There is a desire to keep as much of the v2 grammar as makes sense
    within the above design criteria and not to make gratuitous changes
@@ -289,7 +290,7 @@ Table of Contents
       attributes to <rfc>, <section>, <figure>, and <texttable>,
       respectively.  These will be filled in by the RFC processor so
       that the canonical XML file has all of the same information as the
-      non-canonical formats.
+      non-canonical representations.
 
 1.2.3.  Elements and Attributes Deprecated from v2
 
@@ -505,10 +506,10 @@ Table of Contents
 
    Alternatively, the "src" attribute allows referencing an external
    graphics file, such as a bitmap or a vector drawing, using a URI.  In
-   this case, the textual content acts as fallback for output formats
-   that do not support graphics, and thus ought to contain either a
-   "line art" variant of the graphics, or otherwise prose that describes
-   the included image in sufficient detail.
+   this case, the textual content acts as fallback for output
+   representations that do not support graphics, and thus ought to
+   contain either a "line art" variant of the graphics, or otherwise
+   prose that describes the included image in sufficient detail.
 
    If the artwork includes either "&" or "<" characters, or the string
    "]]>" those characters need to be encoded using escaping or CDATA
@@ -572,9 +573,9 @@ Table of Contents
    free text with certain values designated as preferred.  A private
    processor (as described in Appendix B might add type-specific
    formatting to artwork with the preferred values in the non-canonical
-   output formats.  If a processor encounters a value for "type" that is
-   not one of the preferred values, it can issue a warning but should
-   still use the artwork as if it had no "type" attribute.
+   output representations.  If a processor encounters a value for "type"
+   that is not one of the preferred values, it can issue a warning but
+   should still use the artwork as if it had no "type" attribute.
 
    The preferred values for <artwork> types are:
 
@@ -867,8 +868,8 @@ Table of Contents
 
    Comments can be used in a document while it is work-in-progress.
    They usually appear either inline and visually highlighted, at the
-   end of the document (depending on file format and settings of the
-   formatter), or not at all (when generating an RFC).
+   end of the document (depending on file representation and settings of
+   the formatter), or not at all (when generating an RFC).
 
    This element appears as child element of: <annotation> (Section 2.4),
    <b> (Section 2.9), <c> (Section 2.12), <dd> (Section 2.18), <dt>
@@ -1418,7 +1419,7 @@ Table of Contents
    multiple keywords, the element can simply be repeated.
 
    Keywords are used both in the RFC Index and in the metadata of
-   generated document formats.
+   generated document representations.
 
    This element appears as child element of: <front> (Section 2.28).
 
@@ -2009,7 +2010,7 @@ Table of Contents
    A comma-separated list of RFC numbers or Internet-Draft names.
 
    Processors ought to parse the attribute value, so that incorrect
-   references can be detected and, depending on output format,
+   references can be detected and, depending on output representation,
    hyperlinks can be generated.  Also, the value ought to be reformatted
    to insert whitespace after each comma if not already present.
 
@@ -2078,7 +2079,7 @@ Table of Contents
    A comma-separated list of RFC numbers or Internet-Draft names.
 
    Processors ought to parse the attribute value, so that incorrect
-   references can be detected and, depending on output format,
+   references can be detected and, depending on output representation,
    hyperlinks can be generated.  Also, the value ought to be reformatted
    to insert whitespace after each comma if not already present.
 
@@ -2274,8 +2275,8 @@ Table of Contents
    free text with certain values designated as preferred.  A private
    processor (as described in Appendix B might add type-specific
    formatting to sourcecode with the preferred values in the non-
-   canonical output formats.  If a processor encounters a value for
-   "type" that is not one of the preferred values, it can issue a
+   canonical output representations.  If a processor encounters a value
+   for "type" that is not one of the preferred values, it can issue a
    warning but should still use the artwork as if it had no "type"
    attribute.
 
@@ -3021,8 +3022,8 @@ Table of Contents
    Published specification:  This specification.
 
    Applications that use this media type:  Applications that either
-      transform xml2rfc to output formats such as plain text or HTML,
-      plus additional analysis tools.
+      transform xml2rfc to output representations such as plain text or
+      HTML, plus additional analysis tools.
 
    Fragment identifier considerations:  The "anchor" attribute is used
       for assigning document-wide unique identifiers that can be uses as
@@ -3321,30 +3322,29 @@ Appendix B.  The v3 Format and Processors
 
    In v2, the grammar was specified as a DTD.  In v3, the grammar is
    specified only as Relax Next Generation (RNG).  This means that
-   processors need to work from the RNG, not from a DTD.  In fact, the
-   author believes that some of the features of the v3 grammar cannot be
-   specified as a DTD.
+   processors need to work from the RNG, not from a DTD.  Some of the
+   features of the v3 grammar cannot be specified as a DTD.
 
    This section differentiates between three types of processors:
 
    o  RFC Processor -- The processor used by the RFC Editor to validate
       the contents of the intended RFC and to create the non-canonical
-      formats that will be published by the RFC Editor.
+      representations that will be published by the RFC Editor.
 
    o  Draft Processor -- The processor used by the IETF to validate the
-      contents of XML that is submitted and to create the other formats
-      that will be supported for Internet Drafts; to produce interim
-      versions of the non-canonical formats so that authors can see how
-      their XML might later be rendered; and to convert documents that
-      use the v2 format to v3.
+      contents of XML that is submitted and to create the other
+      representations that will be supported for Internet Drafts; to
+      produce interim versions of the non-canonical representations so
+      that authors can see how their XML might later be rendered; and to
+      convert documents that use the v2 format to v3.
 
    o  Private Processors -- There may be processors that are meant to
       run on the computers of authors.  These processors may be used to
-      produce interim versions of the non-canonical formats so that
-      authors can see how their XML might later be rendered; to create
-      documents in formats different than those supported by the RFC
-      Editor; and to convert XML that has external information into XML
-      that has that external information included.
+      produce interim versions of the non-canonical representations so
+      that authors can see how their XML might later be rendered; to
+      create documents in representations different than those supported
+      by the RFC Editor; and to convert XML that has external
+      information into XML that has that external information included.
 
    It is expected that a single piece of software will be used for both
    the RFC Processor and the Draft Processor, with different application
