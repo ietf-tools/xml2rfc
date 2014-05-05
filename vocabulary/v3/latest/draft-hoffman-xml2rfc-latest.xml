@@ -22,11 +22,6 @@ Remove discussion of "canonical" from this document?
 since s2.5 envisages that the text content of the <artwork> is the 'alt'
 text for any graphics file.  I suspect "alt" is now redundant.
 
-<date>: I am still not sure where the specification of a "vague date"
-would be provided since hard and limited specifications are provided for
-day/month/year.  Could it be the content text if none of day/month/year
-are provided (but illegal for the document itself)?
-
 Maybe deprecate <texttable> with something new based on HTML tables
 
 RNG problem in <figure> for oneOrMore
@@ -1167,21 +1162,21 @@ as optional children.</t>
       being produced, and also inside bibliographic references that use the &lt;<x:ref>front</x:ref>&gt; element.
    </t>
    <t>
-      In the first case, it defines the publication date, which, when producing
-      Internet-Drafts, will be used for computing the expiration date (see <xref target="IDGUIDE"/>). When "year",
+      In the first case, it defines the date of publication for the current document (Internet Draft or RFC).
+      When producing Internet-Drafts, the Draft Processor uses this date to compute the expiration date (see <xref target="IDGUIDE"/>). When "year",
       "month" or "day" are left out, the processor will attempt to use the
       current system date if the attributes that are specified do match the system
       date.
    </t>
    <t>
-      Note that month names, if given, need to match the full English month name: 
+      Also in the first case, that month names, if given, need to match the full English month name: 
       "January", "February", "March", "April", "May, "June", "July", "August",
       "September", "October", "November", or "December".
    </t>
    <t>
-      In the second case, the date information will be embedded as-is into
-      the reference text. Therefore, also vague dates ("ca. 2000"), date ranges,
-      and so on, are allowed.
+      In the second case, the date information can have prose text for the month or year.
+      For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013")
+      non-specific months (month="Second quarter") and so on, are allowed.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.date.contents"><!--AG-->Content model: this element does not have any contents.</t>

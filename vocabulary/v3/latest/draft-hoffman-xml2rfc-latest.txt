@@ -1121,19 +1121,22 @@ Hoffman                 Expires November 5, 2014               [Page 20]
 Internet-Draft                  XML2RFCv3                       May 2014
 
 
-   In the first case, it defines the publication date, which, when
-   producing Internet-Drafts, will be used for computing the expiration
-   date (see [IDGUIDE]).  When "year", "month" or "day" are left out,
-   the processor will attempt to use the current system date if the
+   In the first case, it defines the date of publication for the current
+   document (Internet Draft or RFC).  When producing Internet-Drafts,
+   the Draft Processor uses this date to compute the expiration date
+   (see [IDGUIDE]).  When "year", "month" or "day" are left out, the
+   processor will attempt to use the current system date if the
    attributes that are specified do match the system date.
 
-   Note that month names, if given, need to match the full English month
-   name: "January", "February", "March", "April", "May, "June", "July",
-   "August", "September", "October", "November", or "December".
+   Also in the first case, that month names, if given, need to match the
+   full English month name: "January", "February", "March", "April",
+   "May, "June", "July", "August", "September", "October", "November",
+   or "December".
 
-   In the second case, the date information will be embedded as-is into
-   the reference text.  Therefore, also vague dates ("ca. 2000"), date
-   ranges, and so on, are allowed.
+   In the second case, the date information can have prose text for the
+   month or year.  For example, vague dates (year="ca. 2000"), date
+   ranges (year="2012-2013") non-specific months (month="Second
+   quarter") and so on, are allowed.
 
    This element appears as child element of: <front> (Section 2.28).
 
@@ -1165,9 +1168,6 @@ Internet-Draft                  XML2RFCv3                       May 2014
 
    Or:
 
-   o  One or more sequences of:
-
-      1.   One <ol> element
 
 
 
@@ -1176,6 +1176,10 @@ Hoffman                 Expires November 5, 2014               [Page 21]
 
 Internet-Draft                  XML2RFCv3                       May 2014
 
+
+   o  One or more sequences of:
+
+      1.   One <ol> element
 
       2.   One <ul> element
 
@@ -1222,16 +1226,14 @@ Internet-Draft                  XML2RFCv3                       May 2014
 
    This element appears as child element of: <back> (Section 2.10).
 
-   Content model: this element does not have any contents.
-
-
-
 
 
 Hoffman                 Expires November 5, 2014               [Page 22]
 
 Internet-Draft                  XML2RFCv3                       May 2014
 
+
+   Content model: this element does not have any contents.
 
 2.19.1.  'from' attribute (mandatory)
 
@@ -1276,8 +1278,6 @@ Internet-Draft                  XML2RFCv3                       May 2014
    o  "false" (default)
 
    o  "true"
-
-
 
 
 
@@ -5848,7 +5848,7 @@ Internet-Draft                  XML2RFCv3                       May 2014
          list  32, 54
          middle  33, 41
          note  29, 33
-         ol  21, 32-33, 54
+         ol  22, 32-33, 54
          organization  15, 35
          phone  10, 35
          postal  10, 36
@@ -6111,7 +6111,7 @@ Internet-Draft                  XML2RFCv3                       May 2014
          in format element  28
       ol element  33
          group attribute  34
-         inside dd  21
+         inside dd  22
          inside li  32
          inside t  54
          spacing attribute  34
