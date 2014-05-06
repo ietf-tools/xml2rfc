@@ -71,8 +71,8 @@
       <iref item="Attributes" subitem="type"/>
       <iref item="alternateURI element" subitem="type attribute"/>
       <iref item="type attribute" subitem="in alternateURI element"/>
-      <t><!--AG-->
-         <cref anchor="element.alternateURI.attribute.type.missing">attribute description missing</cref>
+      <t>
+         The type of URI. Some possible values include "DOI" and "personal".
       </t>
    </section>
 </section>
@@ -194,7 +194,7 @@
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
       file, such as a bitmap or a vector drawing, using a URI. In this case, the textual
-      content acts as fallback for output formats that do not support graphics,
+      content acts as fallback for output representations that do not support graphics,
       and thus ought to contain either a "line art" variant of the graphics, or
       otherwise prose that describes the included image in sufficient detail.
    </t>
@@ -291,9 +291,9 @@
       <iref item="type attribute" subitem="in artwork element"/>
       <t>
             Specifies the type of the artwork. The value of this attribute is free text with
-            certain values designated as preferred. A private processor (as described in <xref target="processors"/> might add type-specific
-            formatting to artwork with the preferred values in the non-canonical output
-            formats. If a processor encounters a value for "type" that is not one of the
+            certain values designated as preferred. A private processor (as described in <xref target="processors"/>) might add type-specific
+            formatting to artwork with the preferred values.
+            If a processor encounters a value for "type" that is not one of the
             preferred values, it can issue a warning but should still use the artwork as if it had no "type" attribute.
          </t>
       <t>
@@ -764,7 +764,7 @@
    <t>
       Comments can be used in a document while it is work-in-progress. They
       usually appear either inline and visually highlighted, at the end of the document
-      (depending on file format and settings of the formatter), or not at
+      (depending on file representation and settings of the formatter), or not at
       all (when generating an RFC).
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>titleelement</x:ref>&gt; (<xref target="element.titleelement"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
@@ -838,21 +838,21 @@
       being produced, and also inside bibliographic references that use the &lt;<x:ref>front</x:ref>&gt; element.
    </t>
    <t>
-      In the first case, it defines the publication date, which, when producing
-      Internet-Drafts, will be used for computing the expiration date (see <xref target="IDGUIDE"/>). When "year",
+      In the first case, it defines the date of publication for the current document (Internet Draft or RFC).
+      When producing Internet-Drafts, the Draft Processor uses this date to compute the expiration date (see <xref target="IDGUIDE"/>). When "year",
       "month" or "day" are left out, the processor will attempt to use the
       current system date if the attributes that are specified do match the system
       date.
    </t>
    <t>
-      Note that month names, if given, need to match the full English month name: 
+      Also in the first case, that month names, if given, need to match the full English month name: 
       "January", "February", "March", "April", "May, "June", "July", "August",
       "September", "October", "November", or "December".
    </t>
    <t>
-      In the second case, the date information will be embedded as-is into
-      the reference text. Therefore, also vague dates ("ca. 2000"), date ranges,
-      and so on, are allowed.
+      In the second case, the date information can have prose text for the month or year.
+      For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013")
+      non-specific months (month="Second quarter") and so on, are allowed.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.date.contents"><!--AG-->Content model: this element does not have any contents.</t>
@@ -1638,7 +1638,7 @@
    </t>
    <t>
       Keywords are used both in the RFC Index and in the metadata of generated
-      document formats.
+      document representations.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.keyword.contents"><!--AG-->Content model: only text content.</t>
@@ -2573,7 +2573,7 @@
          </t>
       <t>
             Processors ought to parse the attribute value, so that incorrect
-            references can be detected and, depending on output format, 
+            references can be detected and, depending on output representation, 
             hyperlinks can be generated. Also, the value ought to be reformatted
             to insert whitespace after each comma if not already present.
       </t>
@@ -2677,7 +2677,7 @@
          </t>
       <t>
             Processors ought to parse the attribute value, so that incorrect
-            references can be detected and, depending on output format, 
+            references can be detected and, depending on output representation, 
             hyperlinks can be generated. Also, the value ought to be reformatted
             to insert whitespace after each comma if not already present.
       </t>
@@ -2972,9 +2972,9 @@ Using CDATA:
       <iref item="type attribute" subitem="in sourcecode element"/>
       <t>
             Specifies the type of the sourcecode. The value of this attribute is free text with
-            certain values designated as preferred. A private processor (as described in <xref target="processors"/> might add type-specific
-            formatting to sourcecode with the preferred values in the non-canonical output
-            formats. If a processor encounters a value for "type" that is not one of the
+            certain values designated as preferred. A private processor (as described in <xref target="processors"/>) might add type-specific
+            formatting to sourcecode with the preferred values.
+            If a processor encounters a value for "type" that is not one of the
             preferred values, it can issue a warning but should still use the artwork as if it had no "type" attribute.
       </t>
       <t>
