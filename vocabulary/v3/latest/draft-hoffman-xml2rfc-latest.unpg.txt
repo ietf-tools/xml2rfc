@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                                May 6, 2014
+Obsoletes: 2629 (if approved)                                May 7, 2014
 Intended status: Standards Track
-Expires: November 7, 2014
+Expires: November 8, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 7, 2014.
+   This Internet-Draft will expire on November 8, 2014.
 
 Copyright Notice
 
@@ -283,7 +283,17 @@ Table of Contents
       attributes to <rfc>, <section>, <figure>, and <texttable>,
       respectively.
 
+   o  Add the optional "outputType" to <rfc> to tell processors what
+      kind of document is being produced: an Internet Draft, an RFC, or
+      a private document.
+
 1.2.3.  Elements and Attributes Deprecated from v2
+
+   Deprecated elements and attributes are legacy vocabulary from v2 that
+   are supported for input to v3 processors.  They are likely to be
+   removed from those processors in the future.  See Appendix B for more
+   information on processors and how they will handle deprecated
+   features.
 
    o  Deprecate <list> in favor of <dl>, <ul>, and <ol>.
 
@@ -294,10 +304,13 @@ Table of Contents
       paragraph-breaks in lists, is now handled properly.
 
    o  Deprecate <facsimile> because it is rarely used and is not
-      actually useful.
+      actually useful; <email> is a much more useful way to get in touch
+      with authors.
 
    o  Deprecate <format> because it is not useful and has caused
-      surprise for authors in the past.
+      surprise for authors in the past.  If the goal is to provide a
+      single URI for a reference, use the "target" attribute on
+      <reference> instead.
 
    o  Deprecate the "title" attribute in <section>, <figure>, and
       <texttable> in favor of the new <titleelement>.
@@ -346,7 +359,7 @@ Table of Contents
       children.
 
    o  Do not generate the grammar from a DTD, but instead get it
-      directly from the Relax Next Generation (RNG) grammar.
+      directly from the Relax Next Generation (RNG) grammar [RNG].
 
 1.3.  Syntax Notation
 
@@ -2008,12 +2021,26 @@ Table of Contents
    hyperlinks can be generated.  Also, the value ought to be reformatted
    to insert whitespace after each comma if not already present.
 
-2.47.10.  'seriesNo' attribute
+2.47.10.  'outputType' attribute
+
+   The type of document that will be output by a processor.  This
+   affects what the processor might output as boilerplate text at the
+   beginning and end of the output document.
+
+   Allowed values:
+
+   o  "draft" (default)
+
+   o  "rfc"
+
+   o  "private"
+
+2.47.11.  'seriesNo' attribute
 
    When producing a document within document series (such as "STD"): the
    number within that series.
 
-2.47.11.  'sortRefs' attribute
+2.47.12.  'sortRefs' attribute
 
    Specifies whether or not a processor will sort the references in each
    reference section.
@@ -2024,7 +2051,7 @@ Table of Contents
 
    o  "no" (default)
 
-2.47.12.  'submissionType' attribute
+2.47.13.  'submissionType' attribute
 
    The document stream.
 
@@ -2040,7 +2067,7 @@ Table of Contents
 
    o  "independent"
 
-2.47.13.  'symRefs' attribute
+2.47.14.  'symRefs' attribute
 
    Specifies whether or not a processor will use symbolic references
    (such as "[RFC2119]").  If the value for this is "no", the references
@@ -2052,12 +2079,12 @@ Table of Contents
 
    o  "no"
 
-2.47.14.  'tocDepth' attribute
+2.47.15.  'tocDepth' attribute
 
    Specifies number of levels of heading for a processor to include in
    the table of contents; the default is "3".
 
-2.47.15.  'tocInclude' attribute
+2.47.16.  'tocInclude' attribute
 
    Specifies whether or not a processor will include a table of contents
    in generated files.
@@ -2068,7 +2095,7 @@ Table of Contents
 
    o  "no"
 
-2.47.16.  'updates' attribute
+2.47.17.  'updates' attribute
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
@@ -2077,7 +2104,7 @@ Table of Contents
    hyperlinks can be generated.  Also, the value ought to be reformatted
    to insert whitespace after each comma if not already present.
 
-2.47.17.  'xml:lang' attribute
+2.47.18.  'xml:lang' attribute
 
    The natural language used in the document (defaults to "en").
 
@@ -2810,7 +2837,7 @@ Table of Contents
    boilerplate, replacing the "Network Working Group" string.
    Formatting software can append the words "Working Group" or "Research
    Group", depending on the "submissionType" property on the <rfc>
-   element (Section 2.47.12).
+   element (Section 2.47.13).
 
    This element appears as child element of: <front> (Section 2.28).
 
@@ -3125,6 +3152,14 @@ Table of Contents
                 November 2002, <http://www.oasis-open.org/committees/
                 relax-ng/compact-20021121.html>.
 
+   [RNG]        ISO/IEC, "Information Technology - Document Schema
+                Definition Languages (DSDL) - Part 2: Regular-Grammar-
+                Based Validation - RELAX NG. Second Edition.", ISO/
+                IEC 19757-2:2008(E), December 2008.
+
+                A useful source of RNG-related information is
+                <http://relaxng.org/>.
+
    [TLP2.0]     IETF Trust, "Legal Provisions Relating to IETF
                 Documents", February 2009,
                 <http://trustee.ietf.org/license-info/IETF-TLP-2.htm>.
@@ -3343,12 +3378,10 @@ Appendix B.  The v3 Format and Processors
    create Private Processors independently, or using parts of, the
    software used by the RFC Editor.
 
-   Users of current and older XML processors for Internet Drafts and
-   RFCs may be used to them having unhelpful error messages.  Beginning
-   with v3, the RFC Processor and Draft Processor will have much better
-   error reporting, giving more context than just a line number.  For
-   example, the error messages will differentiate between errors in XML
-   and those from the v3 format.
+   The RFC Processor and Draft Processor must have clear error
+   reporting, giving more context than just a line number.  For example,
+   the error messages will differentiate between errors in XML and those
+   from the v3 format.
 
 B.1.  Including External Text
 
@@ -3368,7 +3401,7 @@ B.1.  Including External Text
    The most common way to use <xi:include> is to pull in references that
    are already formed as XML.  Currently, this is done from
    xml.resource.org, but later is expected to be from the RFC Editor.
-   For example, if a document has three normative refernces, all RFCs,
+   For example, if a document has three normative references, all RFCs,
    the document might contain:
 
    <references>
@@ -3398,8 +3431,8 @@ Appendix C.  Format and Content of RFCs (Future)
    section is in this document only temporarily: it soon move to its own
    page on the RFC Editor's web site. ]]]
 
-   The v3 format will be used as part of the new RFC series described in
-   [RFC6949].  The new series will have multiple representations: the
+   The v3 format will be used as part of the new RFC series format
+   described in [RFC6949].  RFCs will have multiple representations: the
    canonical document will be in XML using the v3 format, and many non-
    canonical representations (such as HTML and text) will be generated
    as well.
@@ -4133,6 +4166,8 @@ Appendix F.  Schema Differences from v2
    +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
    +     attribute autogeneratedBoilerplateText { text }?,
    +     attribute autogeneratedISSN { text }?,
+   +     [ a:defaultValue = "draft" ]
+   +     attribute outputType { "draft" | "rfc" | "private" }?,
          front,
          middle,
          back?
@@ -4786,6 +4821,7 @@ Index
          numbered  1
          obsoletes  1
          octets  1
+         outputType  1
          pageno  1
          primary  1
          relative  1
@@ -5199,6 +5235,8 @@ Index
          abbrev attribute  1
          ascii attribute  1
          inside author  1
+      outputType attribute
+         in rfc element  1
 
    P
       pageno attribute
@@ -5248,6 +5286,7 @@ Index
          iprExtract attribute  1
          number attribute  1
          obsoletes attribute  1
+         outputType attribute  1
          seriesNo attribute  1
          sortRefs attribute  1
          submissionType attribute  1
