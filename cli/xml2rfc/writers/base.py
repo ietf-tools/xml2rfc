@@ -4,6 +4,7 @@
 
 import codecs
 import datetime
+import textwrap
 import lxml
 import xml2rfc.log
 import xml2rfc.utils
@@ -600,10 +601,14 @@ class BaseRfcWriter:
             approved_text = self.draft and '(if approved)' or ''
             obsoletes = self.r.attrib.get('obsoletes')
             if obsoletes:
-                lines.append('Obsoletes: %s %s' % (obsoletes, approved_text))
+                wrapper = textwrap.TextWrapper(width=40, subsequent_indent=' '*len('Obsoletes: '))
+                line = 'Obsoletes: %s %s' % (obsoletes, approved_text)
+                lines += wrapper.wrap(line)
             updates = self.r.attrib.get('updates')
             if updates:
-                lines.append('Updates: %s %s' % (updates, approved_text))
+                wrapper = textwrap.TextWrapper(width=40, subsequent_indent=' '*len('Updates: '))
+                line = 'Updates: %s %s' % (updates, approved_text)
+                lines += wrapper.wrap(line)
 
             # Category
             if category:
@@ -624,7 +629,7 @@ class BaseRfcWriter:
                 lines.append('ISSN: %s' % self.boilerplate['issn'])
 
         # Strip any whitespace from XML to make header as neat as possible
-        lines = [ l.strip() for l in lines ]
+        lines = [ l.rstrip() for l in lines ]
         return lines
 
     def _prepare_top_right(self):
