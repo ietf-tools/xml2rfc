@@ -435,7 +435,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if self.pis['inline'] == 'yes':
                     if anchor:
                         anchor = anchor + ': '
-                    source = element.attrib.get('source', None)
+                    source = element.attrib.get('source', "")
                     if source:
                         source = " --" + source
                     if element.text:
