@@ -377,7 +377,7 @@ class BaseRfcWriter:
             subCounter = str(subCounter)
             autoName = 'References' + self.nbws_cond + subCounter
             autoAnchor = 'rfc.references.' + subCounter
-        item = _RfcItem(autoName, autoAnchor, counter=counter, title=title, \
+        item = _RfcItem(autoName, autoAnchor, title=title, \
                        anchor=anchor, toc=toc, level=level)
         self._index.append(item)
         return item
@@ -386,7 +386,7 @@ class BaseRfcWriter:
         counter = str(counter)
         autoName = 'Figure' + self.nbws_cond + counter
         autoAnchor = 'rfc.figure.' + counter
-        item = _RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
+        item = _RfcItem(autoName, autoAnchor, counter=counter, title=title, anchor=anchor, \
                        toc=toc)
         self._index.append(item)
         return item
@@ -395,8 +395,7 @@ class BaseRfcWriter:
         counter = str(counter)
         autoName = 'Table' + self.nbws_cond + counter
         autoAnchor = 'rfc.table.' + counter
-        item = _RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
-                       toc=toc)
+        item = _RfcItem(autoName, autoAnchor, counter=counter, title=title, anchor=anchor, toc=toc)
         self._index.append(item)
         return item
 
@@ -407,8 +406,7 @@ class BaseRfcWriter:
         else:
             autoName = '['+counter+']'
         autoAnchor = 'rfc.ref.' + counter
-        item = _RfcItem(autoName, autoAnchor, title=title, anchor=anchor, \
-                       toc=toc)
+        item = _RfcItem(autoName, autoAnchor, counter=counter, title=title, anchor=anchor, toc=toc)
         self._index.append(item)
         return item
 
@@ -416,7 +414,7 @@ class BaseRfcWriter:
         counter = str(counter)
         autoName = 'Comment' + self.nbws_cond + anchor
         autoAnchor = 'rfc.comment.' + counter
-        item = _RfcItem(autoName, autoAnchor, anchor=anchor, toc=False)
+        item = _RfcItem(autoName, autoAnchor, counter=counter, anchor=anchor, toc=False)
         self._index.append(item)
         return item
 
