@@ -377,7 +377,7 @@ class BaseRfcWriter:
             subCounter = str(subCounter)
             autoName = 'References' + self.nbws_cond + subCounter
             autoAnchor = 'rfc.references.' + subCounter
-        item = _RfcItem(autoName, autoAnchor, title=title, \
+        item = _RfcItem(autoName, autoAnchor, counter=counter, title=title, \
                        anchor=anchor, toc=toc, level=level)
         self._index.append(item)
         return item
