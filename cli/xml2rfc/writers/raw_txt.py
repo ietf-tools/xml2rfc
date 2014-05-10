@@ -509,7 +509,8 @@ class RawTextRfcWriter(BaseRfcWriter):
             longest_line = max(len(line.rstrip()) for line in lines)
             if (longest_line > self.width-indent):
                 new_indent = max(self.width - longest_line, 0)
-                xml2rfc.log.warn('artwork outdented %s characters to avoid overruning right margin around input line %s)' % (indent - new_indent, source_line if source_line else 0))
+                if not self.indexmode:
+                    xml2rfc.log.warn('artwork outdented %s characters to avoid overrunning right margin around input line %s)' % (indent - new_indent, source_line if source_line else 0))
                 indent = new_indent
 
             # Trim first and last lines if they are blank, whitespace is handled
