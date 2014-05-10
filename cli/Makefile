@@ -68,6 +68,7 @@ test2:	test
 	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache tests/cache tests/input/rfc6635.xml --text --out tmp/rfc6635.txt	&& diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/rfc6635.txt tmp/rfc6635.txt 
 
 upload:
+	rst2html changelog > /dev/null	# verify that the changelog is valid rst
 	python setup.py sdist upload --sign
 	rsync dist/xml2rfc-$(shell PYTHONPATH=$$PWD python scripts/xml2rfc --version).tar.gz /www/tools.ietf.org/tools/xml2rfc2/cli/
 	toolpush /www/tools.ietf.org/tools/xml2rfc2/cli/
