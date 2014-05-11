@@ -43,7 +43,6 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.iref_marks = {}
 
         # Text lookups
-        self.list_symbols = self.pis['text-list-symbols']
         self.inline_tags = ['xref', 'eref', 'iref', 'cref', 'spanx']
         
         # Custom textwrapper object
@@ -191,7 +190,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if t_count > 0 and self.pis['subcompact'] == 'yes':
                     leading_blankline = False
                 if style == 'symbols':
-                    bullet = self.list_symbols[level % len(self.list_symbols)]
+                    bullet = self.pis['text-list-symbols'][level % len(self.pis['text-list-symbols'])]
                     bullet += '  '
                 elif style == 'numbers':
                     bullet = self._format_counter("%d.", t_count+1, listlength)
