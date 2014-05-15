@@ -69,7 +69,8 @@ class RawTextRfcWriter(BaseRfcWriter):
     def write_text(self, string, indent=0, sub_indent=0, bullet='',
                   align='left', leading_blankline=False, buf=None,
                   strip=True, edit=False, wrap_urls=True,
-                  fix_sentence_endings=True, source_line=None):
+                  fix_sentence_endings=True, source_line=None,
+                  fix_doublespace=True):
         """ Writes a line or multiple lines of text to the buffer.
 
             Several parameters are included here.  All of the API calls
@@ -111,10 +112,13 @@ class RawTextRfcWriter(BaseRfcWriter):
                 string = string.lstrip()
             if wrap_urls:
                 par = self.wrapper.wrap(string, initial_indent=initial, subsequent_indent=subsequent,
-                                        fix_sentence_endings=fix_sentence_endings)
+                                        fix_sentence_endings=fix_sentence_endings,
+                                        fix_doublespace=fix_doublespace)
             else:
                 par = self.wrapper.wrap(xml2rfc.utils.urlkeep(string), initial_indent=initial,
-                                        subsequent_indent=subsequent, fix_sentence_endings=fix_sentence_endings)
+                                        subsequent_indent=subsequent,
+                                        fix_sentence_endings=fix_sentence_endings,
+                                        fix_doublespace=fix_doublespace)
             if len(par) == 0 and bullet:
                 par = [ initial ]                    
             if align == 'left':
@@ -304,6 +308,26 @@ class RawTextRfcWriter(BaseRfcWriter):
 
     def write_iref_index(self):
         """ Write iref index to a temporary buffer and return """
+        def pagelist(pages):
+            pages = list(set(pages))
+            pages.sort()
+            # find ranges
+            items = []
+            prev = None
+            for page in pages:
+                if prev and (page - prev == 1):
+                    items[-1].append(page)
+                else:
+                    items.append([page])
+                prev = page
+            pagelist = []
+            for item in items:
+                if len(item) == 1:
+                    pagelist.append("%d"%item[0])
+                else:
+                    pagelist.append("%d-%d"%(item[0], item[-1]))
+            return ", ".join(pagelist)
+
         if self.iref_marker < 1:
             # iref is either disabled, or the pointer was messed up
             return ['']
@@ -322,13 +346,13 @@ class RawTextRfcWriter(BaseRfcWriter):
             for item in sorted(alpha_bucket[letter]):
                 pages = self._iref_index[item].pages
                 # Write item
-                self.write_text(item + '  ' + ', '.join(map(str, pages))
-                                                        , indent=6, buf=tmpbuf)
+                self.write_text(item + '  ' + pagelist(pages)
+                                                        , indent=6, buf=tmpbuf, fix_doublespace=False)
                 for subitem in sorted(self._iref_index[item].subitems.keys()):
-                    pages = self._iref_index[item].subitems[subitem].pages
+                    pages = set(self._iref_index[item].subitems[subitem].pages)
                     # Write subitem
-                    self.write_text(subitem + '  ' + ', '.join(map(str,pages))
-                                                        , indent=9, buf=tmpbuf)
+                    self.write_text(subitem + '  ' + pagelist(pages)
+                                                        , indent=9, buf=tmpbuf, fix_doublespace=False)
         return tmpbuf
 
     def _expand_xref(self, xref):
@@ -412,16 +436,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     if self.indexmode:
                         self.eref_list.append([self.eref_count, element])
             elif element.tag == 'iref':
-                item = element.attrib.get('item', None)
-                if item:
-                    subitem = element.attrib.get('subitem', None)
-                    self._make_iref(item, subitem)
-                    # Store the buffer position for pagination data later
-                    pos = len(self.buf)
-                    if not self.indexmode:
-                        if pos not in self.iref_marks:
-                            self.iref_marks[pos] = []
-                        self.iref_marks[pos].append((item, subitem))
+                self._add_iref_to_index(element)
             elif element.tag == 'cref' and \
                 self.pis['comments'] == 'yes':                
                 # Render if processing instruction is enabled

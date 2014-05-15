@@ -8,6 +8,7 @@ import textwrap
 import lxml
 import xml2rfc.log
 import xml2rfc.utils
+import debug
 try:
     import debug
     assert debug
@@ -337,6 +338,18 @@ class BaseRfcWriter:
             last = self._iref_index[item].subitems[subitem]
         if last and anchor:
             last.anchor = anchor
+
+    def _add_iref_to_index(self, element):
+        item = element.attrib.get('item', None)
+        if item:
+            subitem = element.attrib.get('subitem', None)
+            self._make_iref(item, subitem)
+            # Store the buffer position for pagination data later
+            pos = len(self.buf)
+            if not self.indexmode:
+                if pos not in self.iref_marks:
+                    self.iref_marks[pos] = []
+                self.iref_marks[pos].append((item, subitem))
 
     def _indexParagraph(self, counter, p_counter, anchor=None, toc=False):
         counter = str(counter)  # This is the section counter
@@ -702,6 +715,11 @@ class BaseRfcWriter:
         if preamble is not None:
             self.write_t_rec(preamble, align=figure_align)
 
+        # iref
+        for element in figure:
+            if element.tag == 'iref':
+                self._add_iref_to_index(element)
+
         # Write figure with optional delimiter
         delimiter = self.pis['artworkdelimiter']
         artwork = figure.find('artwork')
@@ -823,6 +841,8 @@ class BaseRfcWriter:
                 self.write_figure(element)
             elif element.tag == 'texttable':
                 self.write_table(element)
+            elif element.tag == 'iref':
+                self._add_iref_to_index(element)
 
         s_count = 1  # Section counter
         

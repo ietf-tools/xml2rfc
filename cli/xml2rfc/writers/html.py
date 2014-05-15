@@ -69,6 +69,22 @@ class HtmlRfcWriter(BaseRfcWriter):
         # Table to insert the iref into
         self.iref_table = None
 
+    def _add_iref_to_index(self, element):
+        # Add anchor to index
+        item = element.attrib.get('item', None)
+        if item:
+            subitem = element.attrib.get('subitem', None)
+            anchor = '.'.join(('index', item))
+            if subitem:
+                anchor += '.' + subitem
+            # Create internal iref
+            self._make_iref(item, subitem=subitem, anchor=anchor)
+            # Create anchor element
+            a = E.A(name=anchor)
+            if element.tail:
+                a.tail = element.tail
+            return [a]
+
     def write_list(self, list, parent, level=0):
         # grab the anchors that exist
         if self.indexmode:
@@ -248,20 +264,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                 a.tail = element.tail
             return [a]
         elif element.tag == 'iref':
-            # Add anchor to index
-            item = element.attrib.get('item', None)
-            if item:
-                subitem = element.attrib.get('subitem', None)
-                anchor = '.'.join(('index', item))
-                if subitem:
-                    anchor += '.' + subitem
-                # Create internal iref
-                self._make_iref(item, subitem=subitem, anchor=anchor)
-                # Create anchor element
-                a = E.A(name=anchor)
-                if element.tail:
-                    a.tail = element.tail
-                return [a]
+            return self._add_iref_to_index(element)
         elif element.tag == 'spanx':
             style = element.attrib.get('style', self.defaults['spanx_style'])
             text = ''
@@ -594,7 +597,9 @@ class HtmlRfcWriter(BaseRfcWriter):
             if annotation is not None and annotation.text:
                 ref_td.append(E.P(annotation.text))
         if self.pis['sortrefs'] == 'yes' and self.pis['symrefs'] == 'yes':
+            debug.show('refkeys')
             refkeys = sorted(refkeys)
+            debug.show('refkeys')
         for key in refkeys:
             tbody.append(refdict[key])
         self.ref_start += i + 1                

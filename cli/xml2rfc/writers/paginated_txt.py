@@ -350,11 +350,9 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 for item, subitem in self.iref_marks[line_num]:
                     # Store pages in item unless there are subitems
                     if subitem:
-                        self._iref_index[item].subitems[subitem].\
-                        pages.append(self.page_num)
+                        self._iref_index[item].subitems[subitem].pages.append(self.page_num)
                     else:
-                        self._iref_index[item].\
-                        pages.append(self.page_num)
+                        self._iref_index[item].pages.append(self.page_num)
 
         # Write final footer
         if self.page_length > 1:
