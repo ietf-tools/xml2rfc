@@ -8,7 +8,6 @@ import textwrap
 import lxml
 import xml2rfc.log
 import xml2rfc.utils
-import debug
 try:
     import debug
     assert debug

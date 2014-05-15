@@ -777,7 +777,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         # numeric order, and if we sort, they will be sorted alphabetically,
         # rather than numerically ... ( i.e., [10], [11], ... [19], [1], ... )
         if self.pis['sortrefs'] == 'yes' and self.pis['symrefs'] == 'yes' :
-            refkeys = sorted(refkeys)
+            tmpkeys = [ key[1:-1] for key in refkeys ]
+            tmpkeys.sort()
+            refkeys = [ '['+key+']' for key in tmpkeys ]
         # Hard coded indentation amount
         refindent = 11
         for key in refkeys:
