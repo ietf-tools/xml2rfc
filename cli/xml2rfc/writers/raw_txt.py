@@ -758,32 +758,31 @@ class RawTextRfcWriter(BaseRfcWriter):
             annotation = ref.find('annotation')
             # Use anchor or num depending on PI
             if self.pis['symrefs'] == 'yes':
-                bullet = '[' + ref.attrib.get('anchor', str(i + self.ref_start)) + ']'
+                key = ref.attrib.get('anchor', str(i + self.ref_start))
             else:
-                bullet = '[' + str(i + self.ref_start) + ']'
-            refdict[bullet] = ''.join(refstring)
-            refsource[bullet] = ref.sourceline
-            refkeys.append(bullet)
+                key = str(i + self.ref_start)
+            refdict[key] = ''.join(refstring)
+            refsource[key] = ref.sourceline
+            refkeys.append(key)
             # Add annotation if it exists to a separate dict
             if annotation is not None and annotation.text:
                 # Render annotation as a separate paragraph
                 remainder = annotation.getchildren()
-                annotationdict[bullet] = annotation.text
+                annotationdict[key] = annotation.text
                 if len(remainder) > 0:
                     inline_txt, remainder = self._combine_inline_elements(remainder)
-                    annotationdict[bullet] += inline_txt
+                    annotationdict[key] += inline_txt
         self.ref_start += i + 1
         # Don't sort if we're doing numbered refs; they are already in
         # numeric order, and if we sort, they will be sorted alphabetically,
         # rather than numerically ... ( i.e., [10], [11], ... [19], [1], ... )
         if self.pis['sortrefs'] == 'yes' and self.pis['symrefs'] == 'yes' :
-            tmpkeys = [ key[1:-1] for key in refkeys ]
-            tmpkeys.sort()
-            refkeys = [ '['+key+']' for key in tmpkeys ]
+            refkeys.sort()
         # Hard coded indentation amount
         refindent = 11
         for key in refkeys:
-            self.write_ref_element(key, refdict[key], refindent, source_line=refsource[key])
+            reflabel = '['+key+']'
+            self.write_ref_element(reflabel, refdict[key], refindent, source_line=refsource[key])
             # Render annotation as a separate paragraph
             if key in annotationdict:
                 self.write_text(annotationdict[key], indent=refindent + 3,
