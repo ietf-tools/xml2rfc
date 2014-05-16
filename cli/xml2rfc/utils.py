@@ -53,10 +53,10 @@ class MyTextWrapper(textwrap.TextWrapper):
         # Exceptions which should not be treated like end-of-sentence
         self.not_sentence_end_re = re.compile(
             # start of string or non-alpha character
-            r'(^|[^A-Za-z])'
+            r'(^|\s)'
             r'('
             # Single uppercase letter, dot, enclosing parentheses or quotes
-            r'[A-Za-z]\.[\]\)\'"]*'
+            r'\.[\]\)\'"]*'
             # Tla with leading uppercase, and special cases
             # (Note: v1 spelled out Fig, Tbl, Mrs, Drs, Rep, Sen, Gov, Rev, Gen, Col, Maj and Cap,
             #  but those are redundant with the Tla regex.)
