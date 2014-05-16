@@ -123,6 +123,7 @@ Table of Contents
      B.3.  Changed Elements
      B.4.  New Elements
    Appendix C.  Relax NG Schema
+     C.1.  Checking Validity
    Appendix D.  Proposed Future Changes for 'v3'
      D.1.  Contact Information
      D.2.  Figures
@@ -1856,6 +1857,14 @@ Table of Contents
                 December 2010,
                 <http://www.ietf.org/id-info/guidelines.html>.
 
+   [JING]       Thai Open Source Software Center Ltd, "Jing - A RELAX NG
+                validator in Java", W3C Recommendation REC-xptr-
+                framework-20030325, 2008,
+                <http://www.thaiopensource.com/relaxng/jing.html>.
+
+                Downloads:
+                <https://code.google.com/p/jing-trang/downloads/list>.
+
    [RFC2026]    Bradner, S., "The Internet Standards Process -- Revision
                 3", BCP 9, RFC 2026, October 1996.
 
@@ -2414,6 +2423,24 @@ Appendix C.  Relax NG Schema
    ('Document Type Definition', [XML], Section 2.8), available from <htt
    p://svn.tools.ietf.org/svn/tools/xml2rfc/vocabulary/v2/03/
    xml2rfcv2.dtd>).
+
+C.1.  Checking Validity
+
+   The validity of XML files can be checked with any tool that supports
+   Relax NG ([RNC]).  The reference implementation is the Java-based,
+   open sourced "JING" ([JING]).
+
+   To use JING, download the latest ZIP file from the downloads page
+   (currently <https://code.google.com/p/jing-trang/downloads/
+   detail?name=jing-20091111.zip>), extract the archive, copy "jing.jar"
+   from the "bin" folder, and make sure Java is installed).
+
+   To check a file "test.xml" using the RNC file "schema.rnc", run (from
+   a command line prompt):
+
+   java -jar jing.jar -c schema.rnc test.xml
+
+   In good Unix tradition, no output means the file is valid.
 
 Appendix D.  Proposed Future Changes for 'v3'
 

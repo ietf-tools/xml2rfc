@@ -2986,6 +2986,21 @@
       <eref target='http://www.w3.org/TR/xptr-framework/'/>.
     </annotation>
   </reference>
+
+  <reference anchor='JING' target='http://www.thaiopensource.com/relaxng/jing.html'>
+    <front>
+      <title>Jing - A RELAX NG validator in Java</title>
+      <author>
+        <organization>Thai Open Source Software Center Ltd</organization>
+      </author>
+      <date year='2008'/>
+    </front>
+    <seriesInfo name='W3C Recommendation' value='REC-xptr-framework-20030325'/>
+    <annotation>
+      Downloads:
+      <eref target='https://code.google.com/p/jing-trang/downloads/list'/>.
+    </annotation>
+  </reference>
 </references>
 
 <section title="Front Page Generation">
@@ -3554,6 +3569,30 @@ start = rfc
   Definition', <xref target="XML" x:fmt="," x:sec="2.8" x:rel='#sec-prolog-dtd'/>),
   available from <eref target="http://svn.tools.ietf.org/svn/tools/xml2rfc/vocabulary/v2/03/xml2rfcv2.dtd"/>).
 </t>
+
+<section title="Checking Validity" anchor="checking.validity">
+<t>
+  The validity of XML files can be checked with any tool that supports Relax NG
+  (<xref target="RNC"/>). The reference implementation is the Java-based, open
+  sourced "JING" (<xref target="JING"/>).
+</t>
+<t>
+  To use JING, download the latest ZIP file from the downloads page
+  (currently <eref target="https://code.google.com/p/jing-trang/downloads/detail?name=jing-20091111.zip"/>),
+  extract the archive, copy "jing.jar" from the "bin" folder, and make
+  sure Java is installed).
+</t>
+<t>
+  To check a file "test.xml" using the RNC file "schema.rnc", run (from a command
+  line prompt):
+</t>
+<figure><artwork type="example">
+java -jar jing.jar -c schema.rnc test.xml
+</artwork></figure>
+<t>
+  In good Unix tradition, no output means the file is valid.
+</t>
+</section>
 </section>
 
 <section title="Proposed Future Changes for 'v3'" anchor="proposed.future.changes">
