@@ -37,7 +37,7 @@ class MyTextWrapper(textwrap.TextWrapper):
         self.wordsep_re = re.compile(
             u'('
             u'[ \t\n\r\f\v]+|'                        # any ASCII whitespace
-            u'[^\\s\\w]*\\w+/(?=\\w+)|'               # forward-slash separated words
+            u'[^\\s\\w]*\\w+/(?=[A-Za-z]\\w*)|'               # forward-slash separated words
             u'[^\\s\\w]*\\w+[^0-9\\W]-(?=\\w+[^0-9\\W])|'   # hyphenated words
             u'''(?<=[\\w\\!"'\\&\\.\\,\\?])-{2,}(?=\\w))'''    # em-dash
             u'(?![\u2060|\u200B])')                   # UNLESS &wj; or &zwbs; or &nbsp;
