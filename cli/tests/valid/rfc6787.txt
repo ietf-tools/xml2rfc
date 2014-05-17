@@ -228,10 +228,10 @@ Burnett & Shanmugham         Standards Track                    [Page 4]
 RFC 6787                         MRCPv2                    November 2012
 
 
-       9.4.41. Weight  . . . . . . . . . . . . . . . . . . . . . . .  95
+       9.4.41. Weight  . . . . . . . . . . . . . . . . . . . . . . .  96
        9.4.42. Save-Best-Waveform  . . . . . . . . . . . . . . . . .  96
        9.4.43. New-Phrase-Id . . . . . . . . . . . . . . . . . . . .  96
-       9.4.44. Confusable-Phrases-URI  . . . . . . . . . . . . . . .  96
+       9.4.44. Confusable-Phrases-URI  . . . . . . . . . . . . . . .  97
        9.4.45. Abort-Phrase-Enrollment . . . . . . . . . . . . . . .  97
      9.5.  Recognizer Message Body . . . . . . . . . . . . . . . . .  97
        9.5.1.  Recognizer Grammar Data . . . . . . . . . . . . . . .  97
@@ -4217,9 +4217,9 @@ RFC 6787                         MRCPv2                    November 2012
    MUST respond with a failure status-code of 402 "Method not valid in
    this state".
 
-   If the resource is in the idle state and is able to successfully load
-   /unload the lexicon, the status MUST return a 200 "Success" status-
-   code and the request-state MUST be COMPLETE.
+   If the resource is in the idle state and is able to successfully
+   load/unload the lexicon, the status MUST return a 200 "Success"
+   status-code and the request-state MUST be COMPLETE.
 
    If the synthesizer could not define the lexicon for some reason, for
    example, because the download failed or the lexicon was in an
@@ -5273,11 +5273,12 @@ RFC 6787                         MRCPv2                    November 2012
    This header field specifies the speaker-trained grammar to be used or
    referenced during enrollment operations.  Phrases are added to this
    grammar during enrollment.  For example, a contact list for user
-   "Jeff" could be stored at the Personal-Grammar-URI "http://
-   myserver.example.com/myenrollmentdb/jeff-list".  The generated
-   grammar syntax MAY be implementation specific.  There is no default
-   value for this header field.  This header field MAY be sent as part
-   of the START-PHRASE-ENROLLMENT, SET-PARAMS, or GET-PARAMS method.
+   "Jeff" could be stored at the Personal-Grammar-URI
+   "http://myserver.example.com/myenrollmentdb/jeff-list".  The
+   generated grammar syntax MAY be implementation specific.  There is no
+   default value for this header field.  This header field MAY be sent
+   as part of the START-PHRASE-ENROLLMENT, SET-PARAMS, or GET-PARAMS
+   method.
 
    personal-grammar-uri     =  "Personal-Grammar-URI" ":" uri CRLF
 
@@ -5311,11 +5312,10 @@ RFC 6787                         MRCPv2                    November 2012
 
    phrase-nl                =  "Phrase-NL" ":" 1*UTFCHAR CRLF
 
-9.4.41.  Weight
 
-   The value of this header field represents the occurrence likelihood
-   of a phrase in an enrolled grammar.  When using grammar enrollment,
-   the system is essentially constructing a grammar segment consisting
+
+
+
 
 
 
@@ -5324,6 +5324,11 @@ Burnett & Shanmugham         Standards Track                   [Page 95]
 RFC 6787                         MRCPv2                    November 2012
 
 
+9.4.41.  Weight
+
+   The value of this header field represents the occurrence likelihood
+   of a phrase in an enrolled grammar.  When using grammar enrollment,
+   the system is essentially constructing a grammar segment consisting
    of a list of possible match phrases.  This can be thought of to be
    similar to the dynamic construction of a <one-of> tag in the W3C
    grammar specification.  Each enrolled-phrase becomes an item in the
@@ -5363,14 +5368,9 @@ RFC 6787                         MRCPv2                    November 2012
 
    new-phrase-id            =  "New-Phrase-ID" ":" 1*VCHAR CRLF
 
-9.4.44.  Confusable-Phrases-URI
 
-   This header field specifies a grammar that defines invalid phrases
-   for enrollment.  For example, typical applications do not allow an
-   enrolled phrase that is also a command word.  This header field MAY
-   occur in RECOGNIZE requests that are part of an enrollment session.
 
-   confusable-phrases-uri   =  "Confusable-Phrases-URI" ":" uri CRLF
+
 
 
 
@@ -5379,6 +5379,15 @@ Burnett & Shanmugham         Standards Track                   [Page 96]
 
 RFC 6787                         MRCPv2                    November 2012
 
+
+9.4.44.  Confusable-Phrases-URI
+
+   This header field specifies a grammar that defines invalid phrases
+   for enrollment.  For example, typical applications do not allow an
+   enrolled phrase that is also a command word.  This header field MAY
+   occur in RECOGNIZE requests that are part of an enrollment session.
+
+   confusable-phrases-uri   =  "Confusable-Phrases-URI" ":" uri CRLF
 
 9.4.45.  Abort-Phrase-Enrollment
 
@@ -5418,6 +5427,15 @@ RFC 6787                         MRCPv2                    November 2012
 
    o  the ABNF form (media type 'application/srgs') of SRGS
 
+
+
+
+
+Burnett & Shanmugham         Standards Track                   [Page 97]
+
+RFC 6787                         MRCPv2                    November 2012
+
+
    o  Sun's Java Speech Grammar Format (JSGF)
       [refs.javaSpeechGrammarFormat]
 
@@ -5428,14 +5446,6 @@ RFC 6787                         MRCPv2                    November 2012
    When a grammar is specified inline in the request, the client MUST
    provide a Content-ID for that grammar as part of the content header
    fields.  If there is no space on the server to store the inline
-
-
-
-Burnett & Shanmugham         Standards Track                   [Page 97]
-
-RFC 6787                         MRCPv2                    November 2012
-
-
    grammar, the request MUST return with a Completion-Cause code of 016
    "grammar-definition-failure".  Otherwise, the server MUST associate
    the inline grammar block with that Content-ID and MUST store it on
@@ -5474,16 +5484,6 @@ RFC 6787                         MRCPv2                    November 2012
    When more than one grammar URI or inline grammar block is specified
    in a message body of the RECOGNIZE request, the server interprets
    this as a list of grammar alternatives to match against.
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -12647,9 +12647,9 @@ RFC 6787                         MRCPv2                    November 2012
               Internet Protocol", RFC 4301, December 2005.
 
    [RFC4313]  Oran, D., "Requirements for Distributed Control of
-              Automatic Speech Recognition (ASR), Speaker Identification
-              /Speaker Verification (SI/SV), and Text-to-Speech (TTS)
-              Resources", RFC 4313, December 2005.
+              Automatic Speech Recognition (ASR), Speaker
+              Identification/Speaker Verification (SI/SV), and Text-to-
+              Speech (TTS) Resources", RFC 4313, December 2005.
 
 
 
