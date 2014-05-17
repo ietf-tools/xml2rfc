@@ -288,7 +288,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 indent = 3
                 sub_indent = indent + len(bullet)
                 pagestr = '%4s' % item.page
-                lines = textwrap.wrap(bullet + item.title, 
+                lines = textwrap.wrap(bullet + (item.title if item.title else "")
                                       self.width - len(pagestr),
                                       initial_indent=' ' * indent,
                                       subsequent_indent=' ' * sub_indent)
