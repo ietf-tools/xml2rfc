@@ -89,6 +89,6 @@ setup(
     package_data={'xml2rfc': ['templates/*',
                               ]},
 
-    install_requires = ['lxml >=2.2.8', 'lxml <= 3.2.1' ],
+    install_requires = ['lxml >=2.2.8'],
     zip_safe = False,                   # We're reading templates from a package directory.
 )
