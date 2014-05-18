@@ -1,3 +1,87 @@
+xml2rfc (2.4.6) ietf; urgency=medium
+
+  This release addresses the known bugs in xml2rfc which has hindered the
+  RFC-Editor staff from consistently using xml2rfc v2 in production (and a
+  number of other bugs, too).  There still remains a number of open issues,
+  and these will be addressed in upcoming releases.  Here are some details
+  about the issues fixed:
+
+  * Tweaked the forward-slash part of the word-separator regex to handle IP 
+    address prefix lenght indications better.  Related to issue #252.
+    Thanks to Brian Carpenter for pointing this aspect out.
+
+  * Changed the code so as to not blow up on empty section titles.  Fixes
+    issue #245.
+
+  * Updated the textwrapping word-separator regex to handle slash-separated
+    words in a similar manner as hyphenated words, to avoid line-breaks that
+    place the forward slash at the start of a line.  Fixes issue #252.
+
+  * Updated the regex for end-of-sentence exceptions to treat a single
+    alphabetic character followed by period as end-of-sentence, rather than
+    considering it to be the abbreviation of a given name.  This fixes issue
+    #251.
+
+  * Updated the sorting to not sort the ref keys surrounded by squere
+    brackest, instead sorting only the key strings.  Fixes issue #250.  
+
+  * Added iref handling directly under section, and for figures, both of which
+    were missing previously.  Fixes issue #249.  Also modified the format in
+    which iref index page lists are emitted, to combine consecutive page
+    numbers into range indications, and eliminate repeat mentions of the same
+    page number.  Finally, changed things to avoid compressing the double
+    space between index item and page list to a single space.  This should
+    bring the iref output closer to that of xml2rfc v1.
+
+  * Removed a static copy of the initial text-list-symbols PI, instead
+    consulting the master PI dictionary every time, in order to catch changes
+    in the text-list-symbols setting.  Fixes issue #246
+
+  * Made a warning conditional on not building the indexes, to avoid duplicate
+    error messages.  Fixes issue #242.
+
+  * Provided the relevant counter when creating _RfcItem objects for Figures,
+    Tables, numbered References, and Crefs, to make it possible to refer to
+    them by xref elements with format='counter'.  Fixes issue #241.
+
+  * Added wrapping and indentation of long Obsoletes: and Updates: list in the
+    text formats.  Fixes issue #232.
+
+  * Tweaked the top_rfc test to require proper line wrapping for long
+    Obsoletes: lines; see issue #232.
+
+  * We're now using a blank string for source when rendering a cref element
+    with no source given, rather failing to concatenate None to a string.
+    Fixes issue #225.
+
+  * Rewrote the xml expansion code to use the same serialization mechanism
+    under python 2.x and 3.x, and removed external references by replacing
+    the doctype declaration during lxml serialization.
+
+  * Fixed some code that didn't work correctly under python 3.3, by making
+    sure to insert unicode strings instead of byte strings into unicode
+    templates.
+
+  * Fixed a bug where text was compared with an integer when handling the
+    needLines PI.
+
+  From Jim Schaad <ietf@augustcellars>:
+
+  * Fixed ticket #186 based on diffs provided by Leif Johansson <leifj@mnt.se>:
+    If the first parse of the XML tree generates a syntax error, then we now 
+    produce a warning of that fact.  This is in part to help me track down what 
+    is happening at odd intervolts on my system where it generates an error and 
+    then has entity resolution problems.
+
+  * Fixed the case of one reference section occurring with an eref.  In this
+    case we need to emit the extra header in both locations.  Fixes ticket
+    #222.
+
+  * Fixed a bug where text following a cref is missing.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  18 May 2014 16:18:22 +0200
+
+
 xml2rfc (2.4.5) ietf; urgency=medium
 
   Another bugfix release, with a majority of the contributions from Jim Schaad.
