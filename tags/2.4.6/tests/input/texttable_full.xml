@@ -1,0 +1,136 @@
+<section title="Table Tester">
+<t>
+  Table Tester
+</t>
+<!---
+
+table
+        style='none|headers|full|all'
+        align='center*|right|left'
+
+ttcol
+        align= center|right|left*
+        width=  "^0*([0-9]+)(|em|[%*])$"
+
+<?pi compact='yes|no'>
+     Insert row if style='none|headers|full'
+
+
+mnsa = max(longest words, asked for length)
+mnsb = max(mnsa or longest line (if relative width))
+mnsc = max(mnsb or longest line (if no width specified))
+ -->
+     
+<!-- Use percents -->
+<texttable>
+  <ttcol width="20%">C1</ttcol><ttcol width="10%">C2</ttcol><ttcol width="40%">C3</ttcol>
+  <c>12</c><c>12</c><c>12</c>
+</texttable>
+
+<!-- Use fixed withds (ems) -->
+<texttable>
+  <ttcol width="20em">C1</ttcol><ttcol width="10em">C2</ttcol><ttcol width="40em">C3</ttcol>
+  <c>12</c><c>12</c><c>12</c>
+</texttable>
+
+<!-- Use * method -->
+<texttable>
+  <ttcol width="2*">C1</ttcol><ttcol width="1*">C2</ttcol><ttcol width="4*">C3</ttcol>
+  <c>12</c><c>12</c><c>12</c>
+</texttable>
+
+<!-- 1) sum(longest_words) = page width -->
+<t>Test #1 - table_max_chars == sum(longest_words)</t>
+<texttable style='none' align='right'>
+  <ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/>
+  <c>12345678901</c><c>12345678901</c><c>12345678901</c><c>1234567890</c><c>1234567890</c><c>12345678901</c>
+</texttable>
+
+<!-- 2) sum(non-zero columns) = page width -->
+<t>Test #2 - table_max_chars == sum(inf)</t>
+<texttable style='none' align='center'>
+  <ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/>
+  <ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/>
+  <ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/>
+  <ttcol/><ttcol/><ttcol/><ttcol/><ttcol/>
+  <c>12</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c>
+  <c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c>
+  <c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c>
+  <c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c>
+  <c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c>
+  <c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c>
+  <c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c><c>1</c>
+</texttable>
+
+<!-- 3) sum(longest words) > page width -->
+<t>Test #3 - table_max_chars &lt; sum(longest_words) </t>
+<texttable style='full' align='left' title="Steal from columns with % and em widths">
+  <ttcol width="5em"/><ttcol width="8em"/><ttcol/><ttcol/><ttcol/><ttcol/>
+  <c>123456789012</c><c>123456789012</c><c>123456789012</c><c>123456789012</c><c>123456789012</c><c>123456789012</c>
+</texttable>
+
+<texttable style='full' align='left' title="Steal from relative widths">
+  <ttcol width="3*"/><ttcol width="2*"/><ttcol width="1*"/><ttcol width="2*"/><ttcol width="1*"/><ttcol width="1*"/>
+  <c>123456789012</c><c>123456789012</c><c>123456789012</c><c>123456789012</c><c>123456789012</c><c>123456789012</c>
+</texttable>
+
+<texttable style='full' align='left' title="Steam from unspecified widths">
+  <ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/>
+  <c>123456789012</c><c>123456789012</c><c>123456789012</c><c>123456789012</c><c>123456789012</c><c>123456789012</c>
+</texttable>
+
+<!-- 4) sum(longest_lines) >= page width -->
+<t>Test #4 - table_max_chars &gt;= sum(ttcol_widths)</t>
+<texttable style='all'>
+  <ttcol/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/>
+  <c>123 5678</c><c>123 5678</c><c>123 5678</c><c>123 5678</c><c>123 5678</c><c>123 5678</c>
+</texttable>
+
+<!-- 5) sum(asked for) >= page width -->
+<t> table_max_chars &gt; sum(mnsc) </t>
+<texttable>
+  <ttcol width="8em"/><ttcol width="8em"/><ttcol width="8em"/><ttcol width="8em"/><ttcol width="8em"/><ttcol width="8em"/>
+  <c>123 567890 2345</c><c>123 567890 234</c><c>123 567890 234</c><c>123 567890 234</c><c>123 567890 234</c><c>123 567890 234</c>
+</texttable>
+
+<!-- 6) sum( mnsc ) == page width -->
+<t> Test #6 - table_max_chars == sum(mnsc)</t>
+<texttable style='none'>
+  <ttcol width="13em"/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/>
+  <c>123 5678901</c><c>123 5678901</c><c>123 5678901</c><c>123 567890</c><c>123 567890</c><c>123 56789</c>
+</texttable>
+
+<!-- 7) sum( mnsb ) < page width -->
+<t>Test #7 table_max_chars &gt; sum(mnsb) </t>
+<texttable style='headers'>
+  <ttcol width="13em"/><ttcol/><ttcol/><ttcol/><ttcol/><ttcol/>
+  <c>123 5678901</c><c>123 5678901</c><c>123 5678901</c><c>123 567890</c><c>123 567890</c><c>123 567890</c>
+</texttable>
+
+<!-- 8 sum( mnsb ) == page width -->
+<t>Test #8 table_max_chars == sum(mnsb)</t>
+<texttable style='full'>
+  <ttcol width="9em"/><ttcol width="9em"/><ttcol width="9em"/><ttcol width="9em"/><ttcol width="8em"/><ttcol/>
+  <c>123 567890 23456</c><c>123 567890 23456</c><c>123 567890 23456</c><c>123 567890 23456</c><c>123 567890 23456</c><c>123 567890 23456</c>
+</texttable>
+
+<!-- 9) sum( mnsa ) < page width -->
+<t>Test #9 table_max_chars &gt; sum(mnsa)</t>
+<texttable style='all'>
+  <ttcol width="8em"/><ttcol width="8em"/><ttcol/><ttcol/><ttcol/><ttcol width="1*"/>
+  <c>123 567890 23456</c><c>123 567890 23456</c><c>123 567890 23456</c><c>123456789 0123456</c><c>1234567890 23456</c><c>123 567890 23456</c>
+</texttable>
+
+<!-- 10) sum( mnsa ) == page width -->
+<texttable style='full'>
+  <ttcol width="10em"/><ttcol width="9em"/><ttcol width="9em"/><ttcol width="9em"/><ttcol/><ttcol width="1*"/>
+  <c>123 567890 23456</c><c>123 567890 23456</c><c>123 567890 23456</c><c>123 567890 23456</c><c>123 567890 23456</c><c>123 5678901 3456</c>
+</texttable>
+
+<!-- 12) do your best with words -->
+<t>Grow from max words to requested lengths</t>
+<texttable style='all'>
+  <ttcol width="10em"/><ttcol width="9em"/><ttcol width="9em"/><ttcol width="9em"/><ttcol width="9em"/><ttcol width="1*"/>
+  <c>123 567890 23456</c><c>123 567890 23456</c><c>123 567890 23456</c><c>123 567890 23456</c><c>123 567890 23456</c><c>123 567890 23456</c>
+</texttable>
+</section>
