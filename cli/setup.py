@@ -67,10 +67,10 @@ setup(
     author_email='tools-discuss@ietf.org',
     maintainer = "Henrik Levkowetz",
     maintainer_email = "henrik@levkowetz.com",
-    url='http://tools.ietf.org/tools/xml2rfc/trac/',
+    url='https://tools.ietf.org/tools/xml2rfc/trac/',
     description=description,
     long_description=long_description,
-    download_url = "http://pypi.python.org/pypi/xml2rfc",
+    download_url = "https://pypi.python.org/pypi/xml2rfc",
     classifiers= [
         'Environment :: Console',
         'Operating System :: MacOS :: MacOS X',
