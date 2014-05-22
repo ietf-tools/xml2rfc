@@ -1,0 +1,236 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Example usage &mdash; xml2rfc v0.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="xml2rfc v0.3 documentation" href="index.html" />
+    <link rel="next" title="Parser Module" href="parser.html" />
+    <link rel="prev" title="Xml2rfc Documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parser.html" title="Parser Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Xml2rfc Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">xml2rfc v0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="example-usage">
+<h1>Example usage<a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h1>
+<p>This section provides a guide for using the command line application xml2rfc, as well as the graphical version.</p>
+<div class="section" id="command-line-application">
+<h2>Command line application<a class="headerlink" href="#command-line-application" title="Permalink to this headline">¶</a></h2>
+<p>Official Usage: <tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">SOURCE</span> <span class="pre">[options]</span> <span class="pre">FORMATS...</span></tt></p>
+<dl class="docutils">
+<dt><strong>Options</strong></dt>
+<dd><p class="first">The following parameters affect how xml2rfc behaves, however none are required.</p>
+<table border="1" class="last docutils">
+<colgroup>
+<col width="17%" />
+<col width="26%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Short</th>
+<th class="head">Long</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">-h</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--help</span></tt></td>
+<td>show the help message and exit</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">-v</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--verbose</span></tt></td>
+<td>print extra information</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">-q</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--quiet</span></tt></td>
+<td>dont print anything`</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">-w</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--warn-error</span></tt></td>
+<td>treat warnings as python exceptions.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">-e</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--extcss</span></tt></td>
+<td>write an external link to the stylesheet instead
+of expanding it.</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">-c</span> <span class="pre">CSS</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--css=CSS</span></tt></td>
+<td>specify an alternate css file (ignored if
+html format is not enabled)</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">-d</span> <span class="pre">DTD</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--dtd=DTD</span></tt></td>
+<td>specify an alternate dtd file</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">-f</span> <span class="pre">FILENAME</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--filename=FILENAME</span></tt></td>
+<td>specify an output filename</td>
+</tr>
+<tr><td>(none)</td>
+<td><tt class="docutils literal"><span class="pre">--clear-cache</span></tt></td>
+<td>purge the cache and exit</td>
+</tr>
+<tr><td>(none)</td>
+<td><tt class="docutils literal"><span class="pre">--version</span></tt></td>
+<td>display the version number and exit</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt><strong>Formats</strong></dt>
+<dd><p class="first">At least one but as many as all of the following output formats must
+be specified. The destination file will be created according to the
+argument given to &#8211;filename.  If no argument was given, it will
+create the file(s) &#8220;output.format&#8221;.  If no format is specified, xml2rfc
+will default to paginated text (<tt class="docutils literal"><span class="pre">--text</span></tt>).</p>
+<table border="1" class="last docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Command</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">--raw</span></tt></td>
+<td>outputs to a text file, unpaginated</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">--text</span></tt></td>
+<td>outputs to a text file with proper page breaks</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">--nroff</span></tt></td>
+<td>outputs to an nroff file</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">--html</span></tt></td>
+<td>outputs to an html file</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">--exp</span></tt></td>
+<td>outputs to an XML file with all references expanded.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt><strong>Examples</strong></dt>
+<dd><div class="first last line-block">
+<div class="line"><tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">rfc.xml</span> <span class="pre">--text</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">xml2rfc</span> <span class="pre">draft.xml</span> <span class="pre">-c</span> <span class="pre">alt.css</span> <span class="pre">-d</span> <span class="pre">alt.dtd</span> <span class="pre">-f</span> <span class="pre">&quot;Draft-1.0&quot;</span> <span class="pre">--text</span> <span class="pre">--nroff</span> <span class="pre">--html</span></tt></div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="graphical-application">
+<h2>Graphical application<a class="headerlink" href="#graphical-application" title="Permalink to this headline">¶</a></h2>
+<p><em>Not included in this version</em></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Example usage</a><ul>
+<li><a class="reference internal" href="#command-line-application">Command line application</a></li>
+<li><a class="reference internal" href="#graphical-application">Graphical application</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Xml2rfc Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parser.html"
+                        title="next chapter">Parser Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/example.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parser.html" title="Parser Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Xml2rfc Documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">xml2rfc v0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Concentric Sky.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,189 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Graphical Appplication &mdash; xml2rfc v2.3.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2.3.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="xml2rfc v2.3.3 documentation" href="index.html" />
+    <link rel="next" title="Parser Module" href="parser.html" />
+    <link rel="prev" title="Command Line Application" href="cli.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parser.html" title="Parser Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cli.html" title="Command Line Application"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">xml2rfc v2.3.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="graphical-appplication">
+<h1>Graphical Appplication<a class="headerlink" href="#graphical-appplication" title="Permalink to this headline">¶</a></h1>
+<p>This section provides a guide for using <strong>xml2rfc-gui</strong>.</p>
+<div class="section" id="converting-a-document">
+<h2>Converting a Document<a class="headerlink" href="#converting-a-document" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>The application first needs a <em>source document</em> to work with.  <strong>xml2rfc-gui</strong> handles a single XML document at a time for processing.  A <em>source document</em> can be loaded in one of two ways:</dt>
+<dd><ol class="first last arabic simple">
+<li>As a command-line argument (Example <tt class="docutils literal"><span class="pre">xml2rfc-gui</span> <span class="pre">file.xml</span></tt>)</li>
+<li>By selecting <strong>File &gt; Open Source</strong> from the menu, or pressing the cooresponding keyboard shortcut (Ctrl+O or CMD+O)</li>
+</ol>
+</dd>
+</dl>
+<p>You may then select one or more <em>output formats</em>, either by clicking the check boxes at the top of the application underneath &#8220;Outputs&#8221;, or by selecting <strong>Options &gt; Output formats</strong> from the menu.</p>
+<p>Finally, press the <strong>Convert</strong> button to convert the document to the specified formats.  If the document was successfully converted without errors, the new documents will be available in the output directory specified in <strong>Preferences</strong>.  See <a class="reference internal" href="#customization"><em>Customization</em></a> for further information on configurable settings.</p>
+</div>
+<div class="section" id="handling-errors">
+<h2>Handling Errors<a class="headerlink" href="#handling-errors" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>It&#8217;s possible during conversion that an error was encountered.  The two classes of XML errors are:</dt>
+<dd><ol class="first last arabic simple">
+<li>XML syntax error, meaning the XML was not well-formed.</li>
+<li>DTD validation error, meaning the document violated the DTD specification.</li>
+</ol>
+</dd>
+</dl>
+<p>In either case, upon reaching an error the conversion process will halt.  The <strong>Console</strong> window will contain verbose information about the nature of these errors, and the XML document will be shown to the user.  Any of the errors displayed in the <strong>Console</strong> contain clickable links, which will jump directly to the line in the XML source document that raised an error.  The line will also be highlighted.</p>
+<p>The document may then be edited externally and reloaded, OR edited within <strong>xml2rfc-gui</strong> itself.</p>
+</div>
+<div class="section" id="editing-xml">
+<h2>Editing XML<a class="headerlink" href="#editing-xml" title="Permalink to this headline">¶</a></h2>
+<p>The application&#8217;s XML view also serves as a lightweight editor.  Changes can be made to the current <em>source document</em> at any time by simply editing the text.  Note that you must save your changes before converting, either by selecting <strong>File &gt; Save Source</strong> from the menu, or pressing the cooresponding keyboard shortcut (Ctrl+S or CMD+S)</p>
+</div>
+<div class="section" id="customization">
+<span id="id1"></span><h2>Customization<a class="headerlink" href="#customization" title="Permalink to this headline">¶</a></h2>
+<p>The application&#8217;s primary behavior is customized by going to <strong>Options &gt; Preferences</strong>, in which the following sections are available:</p>
+<p><strong>Conversion</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><em>Output directory</em>: Specify the directory to create converted documents in.  Must be writable.</li>
+</ul>
+</div></blockquote>
+<p><strong>Appearance</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><em>Document text</em>: Controls the font face and size of text in the main document view.  Also controls the showing/hiding of line numbers for XML or Text documents.</li>
+<li><em>Console text</em>: Controls the font face and size of text in the console view.</li>
+</ul>
+</div></blockquote>
+<p><strong>Cache</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><em>Cache directory</em>: Specify the directory to cache network-accessed document references.  Must be writable</li>
+<li><em>Cache data</em>: Displays the file size of the cache and allows you to erase it.</li>
+</ul>
+</div></blockquote>
+<p><strong>References</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><em>Locations</em>: A list of colon (semicolon on windows) delimited directories that the application should search in for document references.  A blank directory signifies the application to check in the directory of the source document.  Note that this list is initially populated from the environment variable $XML_LIBRARY.</li>
+<li><em>Network citation library</em>: Base URL that the application should search for document references at.</li>
+</ul>
+</div></blockquote>
+<p>Note that all of these settings may be reverted to their original values at any time by clicking <strong>Restore Defaults</strong></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Graphical Appplication</a><ul>
+<li><a class="reference internal" href="#converting-a-document">Converting a Document</a></li>
+<li><a class="reference internal" href="#handling-errors">Handling Errors</a></li>
+<li><a class="reference internal" href="#editing-xml">Editing XML</a></li>
+<li><a class="reference internal" href="#customization">Customization</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cli.html"
+                        title="previous chapter">Command Line Application</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parser.html"
+                        title="next chapter">Parser Module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/gui.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parser.html" title="Parser Module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cli.html" title="Command Line Application"
+             >previous</a> |</li>
+        <li><a href="index.html">xml2rfc v2.3.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Concentric Sky.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
