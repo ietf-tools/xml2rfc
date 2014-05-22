@@ -1,7 +1,7 @@
 
 
 # Static values
-2.4.7.dev1__version__  = '2.4.6'
+__version__  = '2.4.7'
 NAME         = 'xml2rfc'
 VERSION      = [ int(i) if i.isdigit() else i for i in __version__.split('.') ]
 CACHES       = ['/var/cache/xml2rfc', '~/.cache/xml2rfc']  # Ordered by priority
