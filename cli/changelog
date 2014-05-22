@@ -1,3 +1,21 @@
+xml2rfc (2.4.7) ietf; urgency=high
+
+  This release changes the reference resolution code to try 3 different
+  network hosts when trying to find bibxml reference files on the net,
+  instead of trying only xml.reference.org.  It now tries, in order::
+
+     http://xml2rfc.ietf.org/
+     http://xml2rfc.tools.ietf.org/
+     http://xml.reference.org/
+
+  The next release is expected to change this to using https: instead of http:,
+  but that change requires both that the resources be available over https,
+  and that there's been explicit testing of access over https, something which
+  is absent from the current test suite.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  22 May 2014 19:05:12 +0200
+
+
 xml2rfc (2.4.6) ietf; urgency=medium
 
   This release addresses the known bugs in xml2rfc which has hindered the
