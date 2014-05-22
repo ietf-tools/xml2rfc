@@ -41,14 +41,18 @@ class CachingResolver(lxml.etree.Resolver):
     """ Custom ENTITY request handler that uses a local cache """
     def __init__(self, cache_path=None, library_dirs=None, source=None,
                  templates_path='templates', verbose=False, quiet=False,
-                 network_loc='http://xml.resource.org/public/rfc/',
+                 network_locs= [
+                     'http://xml2rfc.ietf.org/public/rfc/',
+                     'http://xml2rfc.tools.ietf.org/public/rfc/',
+                     'http://xml.resource.org/public/rfc/',
+                 ],
                  rfc_number=None):
         self.verbose = verbose
         self.quiet = quiet
         self.source = source
         self.library_dirs = library_dirs
         self.templates_path = templates_path
-        self.network_loc = network_loc
+        self.network_locs = network_locs
         self.include = False
         self.rfc_number = rfc_number
 
@@ -164,11 +168,10 @@ class CachingResolver(lxml.etree.Resolver):
             by the application if the reference cannot be properly resolved
         """
         self.include = include # include state
-        cached = False
+        tried_cache = False
         attempts = []  # Store the attempts
         original = request  # Used for the error message only
         result = None  # Our proper path
-        requestXML = None
         if request.endswith('.dtd') or request.endswith('.ent'):
             if os.path.isabs(request) or urlparse(request).netloc:
                 # Absolute request, return as-is
@@ -186,51 +189,61 @@ class CachingResolver(lxml.etree.Resolver):
                     result = os.path.join(self.source_dir, basename)
                     attempts.append(result)
         else:
-            requestXML = None
-            if not request.endswith('.xml'):
-                # Forcibly append .xml
-                requestXML = request + '.xml'
-            if os.path.isabs(request):
-                # Absolute path, return as-is
-                attempts.append(request)
-                result = request
-                if requestXML and not os.path.exists(result):
-                    attempts.append(requestXML)
-                    result = requestXML
-            elif urlparse(request).netloc:
-                # URL requested, cache it
-                attempts.append(request)
-                result = self.cache(request)
-                if not result and requestXML:
-                    attempts.append(requestXML)
-                    result = self.cache(requestXML)
-                cached = True
+            if request.endswith('.xml'):
+                paths = [ request ]
             else:
-                if os.path.dirname(request):
+                paths = [ request, request + '.xml' ]
+            if os.path.isabs(paths[0]):
+                # Absolute path, return as-is
+                for path in paths:
+                    attempts.append(path)
+                    result = path
+                    if os.path.exists(path):
+                        break
+            elif urlparse(paths[0]).netloc:
+                # URL requested, cache it
+                origloc = urlparse(paths[0]).netloc
+                if True in [ urlparse(loc).netloc == urlparse(paths[0]).netloc for loc in self.network_locs ]:
+                    for loc in self.network_locs:
+                        newloc = urlparse(loc).netloc
+                        for path in paths:
+                            path = path.replace(origloc, newloc)
+                            attempts.append(path)
+                            result = self.cache(path)
+                            if result:
+                                break
+                        if result:
+                            break
+                else:
+                    for path in paths:
+                        attempts.append(path)
+                        result = self.cache(path)
+                        if result:
+                            break
+                tried_cache = True
+            else:
+                if os.path.dirname(paths[0]):
                     # Intermediate directories, only do flat searches
                     for dir in self.library_dirs:
                         # Try local library directories
-                        attempt = os.path.join(dir, request)
-                        attempts.append(attempt)
-                        if os.path.exists(attempt):
-                            result = attempt
-                            break
-                        if requestXML:
-                            attempt  = os.path.join(dir, requestXML)
+                        for path in paths:
+                            attempt = os.path.join(dir, path)
                             attempts.append(attempt)
                             if os.path.exists(attempt):
                                 result = attempt
                                 break
                     if not result:
                         # Try network location
-                        url = urljoin(self.network_loc, request)
-                        attempts.append(url)
-                        result = self.cache(url)
-                        if not request and requestXML:
-                            url = urljoin(self.network_loc, requestXML)
-                            attempts.append(url)
-                            result = self.cache(url)
-                        cached = True
+                        for loc in self.network_locs:
+                            for path in paths:
+                                url = urljoin(loc, path)
+                                attempts.append(url)
+                                result = self.cache(url)
+                                if result:
+                                    break
+                            if result:
+                                break
+                        tried_cache = True
                         # if not result:
                         #     # Document didn't exist, default to source dir
                         #     result = os.path.join(self.source_dir, request)
@@ -240,13 +253,8 @@ class CachingResolver(lxml.etree.Resolver):
                     for dir in self.library_dirs:
                         # NOTE: Recursion can be implemented here
                         # Try local library directories
-                        attempt = os.path.join(dir, request)
-                        attempts.append(attempt)
-                        if os.path.exists(attempt):
-                            result = attempt
-                            break
-                        if requestXML:
-                            attempt = os.path.join(dir, requestXML)
+                        for path in paths:
+                            attempt = os.path.join(dir, path)
                             attempts.append(attempt)
                             if os.path.exists(attempt):
                                 result = attempt
@@ -254,14 +262,16 @@ class CachingResolver(lxml.etree.Resolver):
                     if not result:
                         # Try network subdirs
                         for subdir in xml2rfc.NET_SUBDIRS:
-                            url = urljoin(self.network_loc, subdir + '/' + request)
-                            attempts.append(url)
-                            result = self.cache(url)
-                            if not result and requestXML:
-                                url = urljoin(self.network_loc, subdir + '/' + requestXML)
-                                attempts.append(url)
-                                result = self.cache(url)
-                            cached = True
+                            for loc in self.network_locs:
+                                for path in paths:
+                                    url = urljoin(loc, subdir + '/' + path)
+                                    attempts.append(url)
+                                    result = self.cache(url)
+                                    if result:
+                                        break
+                                if result:
+                                    break
+                            tried_cache = True
                             if result:
                                 break
                     # if not result:
@@ -272,10 +282,9 @@ class CachingResolver(lxml.etree.Resolver):
         # Verify the result -- either raise exception or return it
         if not os.path.exists(result) and not urlparse(result).netloc:
             if os.path.isabs(original):
-                xml2rfc.log.warn('A reference was requested with an '
-                                 'absolute path.  Removing the path component '
-                                 'will cause xml2rfc to look for the file '
-                                 'automatically in standard locations.')
+                xml2rfc.log.warn('A reference was requested with an absolute path, but not found '
+                    'in that location.  Removing the path component will cause xml2rfc to look for'
+                    'the file automatically in standard locations.')
             # Couldn't resolve.  Throw an exception
             error = XmlRfcError('Unable to resolve external request: '
                                       + '"' + original + '"', line_no=line_no, filename=self.source)
@@ -285,7 +294,7 @@ class CachingResolver(lxml.etree.Resolver):
                              '\n    '.join(attempts)
             raise error
         else:
-            if not cached:
+            if not tried_cache:
                 # Haven't printed a verbose messsage yet
                 typename = self.include and 'include' or 'entity'
                 xml2rfc.log.note('Resolving ' + typename + '...', result)
@@ -310,8 +319,8 @@ class CachingResolver(lxml.etree.Resolver):
             write_path = os.path.join(self.write_cache, 
                                       xml2rfc.CACHE_PREFIX, basename)
             try:
-                xml2rfc.utils.StrictUrlOpener().retrieve(url, write_path)
                 xml2rfc.log.note('Resolving ' + typename + '...', url)
+                xml2rfc.utils.StrictUrlOpener().retrieve(url, write_path)
                 xml2rfc.log.note('Created cache at', write_path)
                 return write_path
             except IOError as e:
@@ -321,10 +330,10 @@ class CachingResolver(lxml.etree.Resolver):
         # No write cache available, test existance of URL and return
         else:
             try:
-                xml2rfc.utils.StrictUrlOpener().open(url)
                 xml2rfc.log.write('Resolving ' + typename + '...', url)
+                xml2rfc.utils.StrictUrlOpener().open(url)
                 return url
-            except IOError:
+            except IOError as e:
                 # Invalid URL
                 xml2rfc.log.note("I/O Error: %s" % e)
                 return ''
@@ -334,12 +343,17 @@ class XmlRfcParser:
     """ XML parser container with callbacks to construct an RFC tree """
     def __init__(self, source, verbose=False, quiet=False,
                  cache_path=None, templates_path=None, library_dirs=None,
-                 network_loc='http://xml.resource.org/public/rfc/'):
+                 network_locs=[
+                     'http://xml2rfc.ietf.org/public/rfc/',
+                     'http://xml2rfc.tools.ietf.org/public/rfc/',
+                     'http://xml.resource.org/public/rfc/',
+                 ]
+                 ):
         self.verbose = verbose
         self.quiet = quiet
         self.source = source
         self.cache_path = cache_path
-        self.network_loc = network_loc
+        self.network_locs = network_locs
 
         # Initialize templates directory
         self.templates_path = templates_path or \
@@ -369,7 +383,7 @@ class XmlRfcParser:
                                         library_dirs=self.library_dirs,
                                         templates_path=self.templates_path,
                                         source=self.source,
-                                        network_loc=self.network_loc,
+                                        network_locs=self.network_locs,
                                         verbose=self.verbose,
                                         quiet=self.quiet,
                                     )
@@ -401,7 +415,7 @@ class XmlRfcParser:
                                         library_dirs=self.library_dirs,
                                         templates_path=self.templates_path,
                                         source=self.source,
-                                        network_loc=self.network_loc,
+                                        network_locs=self.network_locs,
                                         verbose=self.verbose,
                                         quiet=self.quiet,
                                     )
@@ -433,7 +447,7 @@ class XmlRfcParser:
                                         library_dirs=self.library_dirs,
                                         templates_path=self.templates_path,
                                         source=self.source,
-                                        network_loc=self.network_loc,
+                                        network_locs=self.network_locs,
                                         verbose=self.verbose,
                                         quiet=self.quiet,
                                         rfc_number = self.rfc_number,
