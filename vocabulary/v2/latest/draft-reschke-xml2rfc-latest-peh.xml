@@ -76,8 +76,8 @@
   revision ("v3").
 </t>
 <t>
-  Note that the vocabulary contains certain constructs that might not be
-  used when generating the final text; however, they can provide useful
+  Note that the vocabulary contains certain constructs that might not affect the rendering of
+  the final text; however, they can provide useful
   data for other uses (such index generation, populating a keyword database, or
   syntax checks).
 </t>
@@ -113,9 +113,8 @@
    <iref item="Elements" subitem="abstract" primary="true"/>
    <iref item="abstract element" primary="true"/>
    <t>
-     Contains the abstract of the document. The abstract ought to be self-contained
-     and thus should not contain references or unexpanded abbreviations.
-     See <xref target="RFCSTYLE" x:fmt="of" x:sec="4.3"/> for more information.
+     Contains the abstract of the document.
+     See <xref target="RFCSTYLE" x:fmt="of" x:sec="4.3"/> for more information on restrictions for the abstract.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.abstract.contents"><!--AG-->
@@ -217,15 +216,16 @@
    <iref item="Elements" subitem="area" primary="true"/>
    <iref item="area element" primary="true"/>
    <t>
-      Provides information about the IETF area this document applies to
+      Provides information about the IETF area to which this document relates
       (currently not used when generating documents).
    </t>
    <t>
       The value ought to be either the fullname or the abbreviation of one of
-      the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>:
+      the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
+      The list at the time that this document is being published is:
       "Applications", "app", "General", "gen", "Internet", "int", "Operations
       and Management", "ops", "Real-time Applications and Infrastructure", "rai",
-      "Routing", "rtg", "Security", "sec", "Transport", "tsv".
+      "Routing", "rtg", "Security", "sec", "Transport", "tsv", but that list will likely
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.area.contents"><!--AG-->Content model: only text content.</t>
@@ -253,8 +253,8 @@
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
-      file, such as a bitmap or a vector drawing. In this case, the textual
-      content acts as fallback for output formats that do not support graphics,
+      file, such as a bitmap or a vector drawing, using a URI. In this case, the textual
+      content acts as fallback for output representations that do not support graphics,
       and thus ought to contain either a "line art" variant of the graphics, or
       otherwise prose that describes the included image in sufficient detail.
       Note that RFCs occasionally are published with enhanced diagrams;
@@ -337,7 +337,7 @@
          </t>
       <t>
             Note that this can be a "data" URI (<xref target="RFC2397"/>) as well, in which case the graphics
-            file essentially is in-lined.
+            file is wholly part of the XML file.
          </t>
    </section>
 
@@ -405,7 +405,9 @@
    <iref item="Elements" subitem="author" primary="true"/>
    <iref item="author element" primary="true"/>
    <t>
-      Provides information about a document author.
+      Provides information about a document's author. This is used both for
+      the document itself (at the beginning of the document) and for
+      referenced documents (inside of &lt;<x:ref>reference</x:ref>&gt;).
    </t>
    <t>
       The &lt;author&gt; elements contained within the document's &lt;front&gt; element
@@ -421,7 +423,8 @@
       Furthermore, the "role" attribute can be used to mark an author as
       "editor". This is reflected both on the front page and in bibliographical
       references. Note that this specification does not define a precise
-      meaning for the term "editor".
+      meaning for the term "editor". For RFCs, it is the stream that determines who is
+      listed as authors or editors.
    </t>
    <t>
       See Section "Authors vs. Contributors" of <xref target="RFCPOLICY"/>
@@ -462,8 +465,7 @@
             Author initials (used on the front page and in references).
          </t>
       <t>
-            Initials should be provided as a whitespace separated list of
-            pairs of a letter and a dot.
+            The value contains one or more initials, each followed by a period.
          </t>
    </section>
 
@@ -498,7 +500,8 @@
    <iref item="Elements" subitem="back" primary="true"/>
    <iref item="back element" primary="true"/>
    <t>
-      Contains the "back" part of the document: the references and appendices.
+      Contains the "back" part of the document: the references and appendices. In &lt;back&gt;,
+      &lt;<x:ref>section</x:ref>&gt; elements indicate appendices.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.back.contents"><!--AG-->Content model:</t>
@@ -597,7 +600,7 @@
    <t>
       Comments can be used in a document while it is work-in-progress. They
       usually appear either inline and visually highlighted, at the end of the document
-      (depending on file format and settings of the formatter), or not at
+      (depending on file representation and settings of the processor), or not at
       all (when generating an RFC).
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
@@ -640,7 +643,7 @@
    </t>
    <t>
       Note that this element is used both for the boilerplate of the document
-      being produced, and also inside bibliographic references.
+      being produced, and also inside bibliographic references that use the &lt;<x:ref>front</x:ref>&gt; element.
    </t>
    <t>
       In the first case, it defines the publication date, which, when producing
@@ -650,16 +653,14 @@
       date.
    </t>
    <t>
-      Note that month names need to match the full (English) month name 
-      ("January", "February", "March", "April", "May, "June", "July", "August",
-      "September", "October", "November", or "December") in order for expiration
-      calculations to work (some implementations might support additional
-      formats, though).
+      Also in the first case, that month names, if given, need to match the full English month name: 
+      "January", "February", "March", "April", "May, "June", "July", "August",
+      "September", "October", "November", or "December".
    </t>
    <t>
-      In the second case, the date information will be embedded as-is into
-      the reference text. Therefore, also vague dates ("ca. 2000"), date ranges,
-      and so on, are allowed.
+      In the second case, the date information can have prose text for the month or year.
+      For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013")
+      non-specific months (month="Second quarter") and so on, are allowed.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.date.contents"><!--AG-->Content model: this element does not have any contents.</t>
@@ -670,7 +671,7 @@
       <iref item="date element" subitem="day attribute"/>
       <iref item="day attribute" subitem="in date element"/>
       <t>
-            Day of publication.
+            Day of publication; this is a number.
          </t>
    </section>
 
@@ -680,7 +681,7 @@
       <iref item="date element" subitem="month attribute"/>
       <iref item="month attribute" subitem="in date element"/>
       <t>
-            Month of publication.
+            Month of publication; this is the English name of the month.
          </t>
    </section>
 
@@ -718,7 +719,8 @@
    <iref item="Elements" subitem="eref" primary="true"/>
    <iref item="eref element" primary="true"/>
    <t>
-      Represents an "external" link (as specified in the "target" attribute).
+      Represents an "external" link (as specified in the "target" attribute). This can be used for creating linked
+      references, such as in HTML output.
    </t>
    <t>
       If the element has text content, that content will be used. Otherwise, the value of the
@@ -762,7 +764,7 @@
    <iref item="Elements" subitem="figure" primary="true"/>
    <iref item="figure element" primary="true"/>
    <t>
-      This element is used to represent a figure, consisting of an optional preamble,
+      This element is used to represent a figure, consisting of an optional	preamble,
       the actual figure, an optional postamble, and an optional title.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
@@ -828,7 +830,7 @@
         Document-wide unique identifier for this figure.
       </t>
       <t>
-        Furthermore, the presence of this attribute causes the figure to be numbered.
+        Furthermore, the presence of this attribute causes the figure to be	numbered.
       </t>
       <t>
         The value needs to be a valid XML "Name" (<xref target="XML" x:fmt="of" x:sec="2.3" x:rel="#sec-common-syn"/>).
@@ -1066,7 +1068,7 @@
    </t>
    <t>
       Keywords are used both in the RFC Index and in the metadata of generated
-      document formats.
+      document representations.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.keyword.contents"><!--AG-->Content model: only text content.</t>
@@ -1310,7 +1312,7 @@
    </t>
    <t>
       This information appears in both the "Author's Address" section and
-      on the front page (<xref target="RFCSTYLE" x:fmt="," x:sec="4.1.1"/>).
+      on the front page (see <xref target="RFCSTYLE" x:fmt="," x:sec="4.1.1"/> for more information).
       If the value is long, an abbreviated variant can be specified in the
       "abbrev" attribute.
    </t>
@@ -1521,8 +1523,8 @@
    </t>
    <t>
       In the early days of the RFC series, there was only one "References" section per RFC. This convention
-      was later changed to group references into two sets, "Normative" and "Informative";
-      see <xref target="RFCSTYLE" x:fmt="of" x:sec="4.8.6"/>).
+      was later changed to group references into two sets, "Normative" and "Informative"
+      as described in <xref target="RFCSTYLE" x:fmt="of" x:sec="4.8.6"/>).
       This vocabulary supports the split with the "title" attribute.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
@@ -1635,23 +1637,19 @@
       <iref item="rfc element" subitem="docName attribute"/>
       <iref item="docName attribute" subitem="in rfc element"/>
       <t>
-            For Internet-Drafts, this specifies the draft name (which appears
-            below the title).
-         </t>
+            Specifies the name or the Internet Draft or private document. A private document
+            is one whose representation is not meant to be an Internet Draft or RFC. If the
+            value for this attribute starts with the string "draft-", a processor treats the
+            input as an Internet Draft; if the value starts with any other string, a
+            processor treats this as a private document. The name in the value should be the
+            document name without any file extension. That is, the value for this attribute
+            should be "draft-ietf-somewg-someprotocol-07", not
+            "draft-ietf-somewg-someprotocol-07.txt".
+      </t>
       <t>
-            Note that the file extension is not part of the draft, so in
-            general it should end with the current draft number ("-", plus two
-            digits).
-         </t>
-      <t>
-            Furthermore, it is good practice to disambiguate current editor
-            copies from submitted drafts (for instance, by replacing the
-            draft number with the string "latest").
-         </t>
-      <t>
-            See <xref target="IDGUIDE" x:fmt="of" x:sec="7" x:rel="#naming"/>
-            for further information.
-         </t>
+            A processor should give an error if both the "docName" and "number"
+            attributes are given in the &lt;rfc&gt; element.
+      </t>
    </section>
 
    <!--rfc/@ipr-->
@@ -1690,9 +1688,9 @@
       <iref item="rfc element" subitem="iprExtract attribute"/>
       <iref item="iprExtract attribute" subitem="in rfc element"/>
       <t>
-            Identifies a single section within the document (by its 'anchor'
-            attribute) for which extraction "as-is" is explicitly allowed (this
-            is only relevant for historic values of the "ipr" attribute).
+            Identifies a Section within the document for which extraction "as-is"
+            is explicitly allowed (only relevant for historic values of the "ipr"
+            attribute).
       </t>
    </section>
 
@@ -1702,7 +1700,11 @@
       <iref item="rfc element" subitem="number attribute"/>
       <iref item="number attribute" subitem="in rfc element"/>
       <t>
-            The number of the RFC to be produced.
+            The number of the RFC to be produced by a processor.
+      </t>
+      <t>
+            A processor should give an error if both the "docName" and "number"
+            attributes are given in the &lt;rfc&gt; element.
          </t>
    </section>
 
@@ -1717,7 +1719,7 @@
          </t>
       <t>
             Processors ought to parse the attribute value, so that incorrect
-            references can be detected and, depending on output format, 
+            references can be detected and, depending on output representation, 
             hyperlinks can be generated. Also, the value ought to be reformatted
             to insert whitespace after each comma if not already present.
       </t>
@@ -1765,7 +1767,7 @@
          </t>
       <t>
             Processors ought to parse the attribute value, so that incorrect
-            references can be detected and, depending on output format, 
+            references can be detected and, depending on output representation, 
             hyperlinks can be generated. Also, the value ought to be reformatted
             to insert whitespace after each comma if not already present.
       </t>
@@ -1797,6 +1799,7 @@
    </t>
    <t>
       Sub-sections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
+      Sections are allowed to be empty.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>), &lt;<x:ref>middle</x:ref>&gt; (<xref target="element.middle"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.section.contents"><!--AG-->Content model:</t>
@@ -1853,15 +1856,16 @@
       <iref item="section element" subitem="toc attribute"/>
       <iref item="toc attribute" subitem="in section element"/>
       <t>
-            Determines whether the section is included in the Table Of Contents.
-      </t>
-      <t>
-            The processor usually has defaults for whether a Table Of Contents
-            will be produced at all, and sections of which maximal depth will 
-            be included (frequently: 3). "include" and "exclude" allow overriding
-            the processor's default behavior for the element they are specified
-            on (they do not affect nested elements).
-      </t>
+            Indicates to a processor whether or not the section is to be included in the
+            table of contents. This only takes effect if the level of the section would have
+            appeared in the table of contents based on the "tocDepth" attribute of the
+            &lt;<x:ref>rfc</x:ref>&gt; element, and of course only if the table of contents
+            is being created based on the "tocInclude" attribute of the
+            &lt;<x:ref>rfc</x:ref>&gt; element. If this is set to "exclude", any section
+            below this one will be excluded as well. The "default" value indicates to
+            include the section if it would be included by the tocDepth attribute of the
+            &lt;<x:ref>rfc</x:ref>&gt; element.
+         </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"include"</t>
             <t>"exclude"</t>
@@ -2201,7 +2205,7 @@
    <t>
       When this element appears in the &lt;front&gt; element of the current document,
       the title might also appear in page headers or footers. If it's long
-      (~40 characters), the "abbrev" attribute is used to specified an
+      (~40 characters), the "abbrev" attribute is used to specify an
       abbreviated variant.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
@@ -2309,8 +2313,8 @@
    <iref item="Elements" subitem="workgroup" primary="true"/>
    <iref item="workgroup element" primary="true"/>
    <t>
-      This element is used to specify the Working Group the document originates
-      from, if any. The recommended format is the official name of the Working Group
+      This element is used to specify the Working Group (IETF) or Research Group (IRTF) from which the document originates,
+      if any. The recommended format is the official name of the Working Group
       (with some capitalization).
    </t>
    <t>
@@ -2366,8 +2370,8 @@
         "counter"
         <list style="empty">
             <t>
-            Inserts a counter, such as the number of a section, figure, or
-            table.
+            Inserts just a counter; this is used for the number of a section, figure, or
+            table. For example:
           </t>
          </list>
       </t>
@@ -2377,7 +2381,21 @@
         <list style="empty">
             <t>
             Inserts a text fragment that describes the referenced part 
-            completely, such as "Section 2", "Table 4", or "[XML]".
+            completely, such as "Section 2" or "Table 4" for internal
+            links, or "[XML]" for links to references. For example:
+<figure>
+                  <artwork>
+  &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
+  . . .
+  See &lt;xref target="overview"/&gt; for an overview.
+</artwork>
+               </figure>
+         might generate
+<figure>
+                  <artwork>
+  See Section 1.7 for an overview.
+</artwork>
+               </figure>
           </t>
          </list>
       </t>
@@ -2571,13 +2589,9 @@
 <t>
   This format is based on <xref target="XML"/>, thus does not have any
   issues representing arbitrary Unicode <xref target="UNICODE"/> characters in text content.
-</t>
-<t>
-  However, the current canonical RFC format is restricted to US-ASCII <xref target="USASCII"/>
-  characters (<xref target="RFC2223" x:sec="3" x:fmt=","/>). Future versions are likely to relax this role, and it is
-  expected that the vocabulary will be extended so that US-ACSII
-  alternatives can be provided when that makes sense (for instance, in
-  contact information).
+  The RFC Editor may restrict some of the characters that can be used in a particular RFC;
+  the rules for such restrictions are covered in <cref>some other document to be named
+  later when it is stable</cref>.
 </t>
 </section>
 
@@ -2591,14 +2605,18 @@
   more information.
 </t>
 <t>
-  Furthermore, the nature of XML, plus vocabulary features such as typed artwork,
-  make it attractive to extract content from documents for further
-  processing, such for the purpose of checking syntax, or computing/verifying
-  examples. In the latter case, care needs to be taken that only trusted
-  content is processed.
+  The "type" attribute of the &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt; elements is meant
+  to encourage processors to automatically extract known types of content from
+  an RFC or Internet Draft. While extraction is probalby safe, those processors
+  might also think that they could further process the extracted content
+  such as by rendering artwork or executing code. Doing so without first
+  sanity-checking the extracted content is clearly a terrible idea
+  from a security perspective. More generally, a processor that is reading RFCs
+  or Internet Drafts needs to be suspicious of any content that it intends
+  to post-process.
 </t>
 <t>
-  Finallly, all security considerations related to XML processing are
+  Furthermore, all security considerations related to XML processing are
   relevant as well (see <xref target="RFC3470" x:fmt="of" x:sec="7"/>).
 </t>
 </section>
@@ -2645,7 +2663,7 @@
       This specification.
     </t>
     <t hangText="Applications that use this media type:">
-      Applications that either transform xml2rfc to output formats such
+      Applications that either transform xml2rfc to output representations such
       as plain text or HTML, plus additional analysis tools.
     </t>
     <t hangText="Fragment identifier considerations:">
@@ -2657,7 +2675,7 @@
       <list style="hanging">
         <t hangText="Deprecated alias names for this type:">None.</t>
         <t hangText="Magic number(s):">As specified for "application/xml" in <xref target="RFC3023" x:fmt="of" x:sec="3.2"/>.</t>
-        <t hangText="File extension(s):">.xml or .rfcxml when disambiguation from other XML files is needed</t>
+        <t hangText="File extension(s):">.xml</t>
         <t hangText="Macintosh file type code(s):">TEXT</t>
       </list>
     </t>
@@ -2689,7 +2707,7 @@
 </t>
 <t>
   We also thank Marshall T. Rose for both the original design and the reference
-  implementation of the "xml2rfc" formatter.
+  implementation of the "xml2rfc" processor.
 </t>
 </section>
 
@@ -3010,7 +3028,7 @@
   For RFCs, the <spanx style="verb">category</spanx> determines the "maturity level"
   (see <xref target="RFC2026" x:fmt="of" x:sec="4"/>). The allowed values
   are "std" for "Standards Track", "bcp" for "BCP", "info" for "Informational",
-  "exp" for "Experimental", and "historic" for - surprise - "Historic".
+  "exp" for "Experimental", and "historic" for "Historic".
 </t>
 <t>
   For Internet-Drafts, the category attribute is not needed, but will
