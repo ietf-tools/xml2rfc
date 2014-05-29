@@ -672,7 +672,9 @@ class HtmlRfcWriter(BaseRfcWriter):
         table = E.TABLE()
         # Sort iref items alphabetically, store by first letter 
         alpha_bucket = {}
-        for key in sorted(self._iref_index.keys()):
+        keys = self._iref_index.keys()
+        keys.sort(key=str.upper)
+        for key in keys:
             letter = key[0].upper()
             if letter in alpha_bucket:
                 alpha_bucket[letter].append(key)
@@ -690,7 +692,9 @@ class HtmlRfcWriter(BaseRfcWriter):
                 else:
                     td = E.TD(item)
                 table.append(E.TR(E.TD(' '), td))
-                for name in sorted(self._iref_index[item].subitems.keys()):
+                subkeys = self._iref_index[item].subitems.keys()
+                subkeys.sort(key=str.upper)
+                for name in subkeys:
                     subitem = self._iref_index[item].subitems[name]
                     # Add subitem element
                     td = E.TD()
