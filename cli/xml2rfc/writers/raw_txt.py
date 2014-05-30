@@ -938,7 +938,8 @@ class RawTextRfcWriter(BaseRfcWriter):
             #  ??????????????
             ttcol_widths = inf
         elif table_max_chars < sum(longest_words):
-            xml2rfc.log.warn("so many <ttcol>s in <texttable> that some words need to be split near line %s" % table.sourceline)
+            if not self.write_cache:
+                xml2rfc.log.warn("so many <ttcol>s in <texttable> that some words need to be split near line %s" % table.sourceline)
 
             excess = sum(longest_words) - table_max_chars
 
