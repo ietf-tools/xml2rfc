@@ -213,6 +213,9 @@ class WriterElementTest(unittest.TestCase):
     def test_section(self):
         return self.function_test("section", "write_section_rec")
 
+    def test_textwrap(self):
+        return self.function_test("textwrap", "write_section_rec")
+
 class WriterRootTest(unittest.TestCase):
     """ Performs tests of full <rfc> + <front> trees against text writer functions """
 
