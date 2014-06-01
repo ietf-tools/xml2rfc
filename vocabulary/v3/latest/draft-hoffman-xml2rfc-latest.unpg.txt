@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                               May 14, 2014
-Intended status: Standards Track
-Expires: November 15, 2014
+Obsoletes: 2629 (if approved)                               June 1, 2014
+Intended status: Informational
+Expires: December 3, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 15, 2014.
+   This Internet-Draft will expire on December 3, 2014.
 
 Copyright Notice
 
@@ -2858,7 +2858,7 @@ Table of Contents
    The generated text depends on whether the <xref> is empty (in which
    case the processor will try to generate a meaningful text fragment),
    and the nature of the referenced document part. [[anchor12: Need to
-   say more about the processor output if the element is empyt and if it
+   say more about the processor output if the element is empty and if it
    has text.]]
 
    Any element that allows the "anchor" attribute can be referenced,
@@ -2918,7 +2918,9 @@ Table of Contents
 
    "title"
 
-      This attribute value is deprecated.
+      Inserts a title for the referenced element (usually obtained from
+      the referenced element's "title" attribute; some processors also
+      use the <title> child element or a <reference> target).
 
    Allowed values:
 
@@ -2949,7 +2951,7 @@ Table of Contents
 
    Specifies a section for the generated reference.  For example,
 
-        See <xref section="2.3" target="RFC6949"/> for more inforation.
+        See <xref section="2.3" target="RFC6949"/> for more information.
 
    would generate
 
@@ -2969,11 +2971,11 @@ Table of Contents
    For example:
 
      See <xref target="RFC6949" section="2.3" sectionFormat="of"/>
-     for more inforation.
+     for more information.
      See <xref target="RFC6949" section="2.4" sectionFormat="comma"/>
-     for more inforation.
+     for more information.
      See <xref target="RFC6949" section="2.5" sectionFormat="parens"/>
-     for more inforation.
+     for more information.
 
    would generate
 
@@ -3436,17 +3438,17 @@ B.1.  Including External Text
    as one of the attributes in the <rfc> element.
 
    The most common way to use <xi:include> is to pull in references that
-   are already formed as XML.  Currently, this is done from
-   xml.resource.org, but later is expected to be from the RFC Editor.
-   For example, if a document has three normative references, all RFCs,
-   the document might contain:
+   are already formed as XML.  Currently, this can be done from
+   xml2rfc.tools.ietf.org, but later is expected to be from the RFC
+   Editor.  For example, if a document has three normative references,
+   all RFCs, the document might contain:
 
    <references>
-       <xi:include href="http://xml.resource.org/public/rfc/
+       <xi:include href="http://xml2rfc.tools.ietf.org/public/rfc/
           bibxml/reference.RFC.2119.xml"/>
-       <xi:include href="http://xml.resource.org/public/rfc/
+       <xi:include href="http://xml2rfc.tools.ietf.org/public/rfc/
           bibxml/reference.RFC.4869.xml"/>
-       <xi:include href="http://xml.resource.org/public/rfc/
+       <xi:include href="http://xml2rfc.tools.ietf.org/public/rfc/
           bibxml/reference.RFC.7169.xml"/>
    </references>
 
