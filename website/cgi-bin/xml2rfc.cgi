@@ -568,6 +568,7 @@ sub userError {
     print "<pre>$text</pre>\n";
     print "<hr/>\n";
     print $ENV{SERVER_SIGNATURE};
+    print " <span style='font-size: xx-small'>" . `uname -n` . "</span>";
     print "</body></html>\n";
     cleanup();
     exit();
