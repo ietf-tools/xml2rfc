@@ -334,7 +334,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         tmpbuf = self.pre_write_iref_index()
         # Sort iref items alphabetically, store by first letter 
         alpha_bucket = {}
-        keys = self._iref_index.keys()
+        keys = list(self._iref_index.keys())
         keys.sort(key=str.upper)
         for key in keys:
             letter = key[0].upper()
@@ -350,7 +350,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 # Write item
                 self.write_text(item + '  ' + pagelist(pages)
                                                         , indent=6, buf=tmpbuf, fix_doublespace=False)
-                subkeys = self._iref_index[item].subitems.keys()
+                subkeys = list(self._iref_index[item].subitems.keys())
                 subkeys.sort(key=str.upper)
                 for subitem in subkeys:
                     pages = set(self._iref_index[item].subitems[subitem].pages)
