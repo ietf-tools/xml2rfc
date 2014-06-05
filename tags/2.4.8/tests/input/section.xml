@@ -1,0 +1,294 @@
+  <section title="First Section">
+    <?rfc compact="yes"?>
+    <section title="Document Conventions">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref target="RFC2119">
+      RFC 2119</xref>.</t>
+
+      <t>Since many of the definitions and syntax are identical to those for
+      the <xref target="RFC2616">Hypertext Transfer Protocol -- HTTP/1.1</xref>, this specification refers to the section where they
+      are defined rather than copying it. For brevity, [HX.Y] is to be taken
+      to refer to Section X.Y of RFC 2616.</t>
+
+      <t>All the mechanisms specified in this document are described in both
+      prose and an augmented Backus-Naur form (<xref
+      target="RFC5234">ABNF</xref>).</t>
+
+      <t>The complete message format in ABNF form is provided in <xref
+      target="S.abnf"></xref> and is the normative format definition. Note
+      that productions may be duplicated within the main body of the document
+      for reading convenience. If a production in the body of the text
+      conflicts with one in the normative definition, the latter rules.</t>
+
+      <section title="Definitions">
+        <t><list hangIndent="15" style="hanging">
+            <t hangText="Media Resource"><vspace blankLines="0" />An entity on
+            the speech processing server that can be controlled through 
+            MRCPv2.</t>
+
+            <t hangText="MRCP Server"><vspace blankLines="0" />
+	       Aggregate of one or more "Media Resource" entities on
+                a server, exposed through MRCPv2.  Often, 'server' in 
+                this document refers to an MRCP server.</t>
+
+            <t hangText="MRCP Client"><vspace blankLines="0" />An entity
+            controlling one or more Media Resources through MRCPv2
+            ("Client" for short).</t>
+
+            <t hangText="DTMF"><vspace blankLines="0" />Dual-Tone
+            Multi-Frequency; a method of transmitting key presses in-band,
+            either as actual tones (<xref target="Q.23">Q.23</xref>) or as
+            named tone events (<xref target="RFC4733">RFC 4733</xref>).</t>
+
+            <t hangText="Endpointing"><vspace blankLines="0" />The process of
+            automatically detecting the beginning and end of speech in an
+            audio stream. This is critical both for speech recognition and for
+            automated recording as one would find in voice mail systems.</t>
+
+            <t hangText="Hotword Mode"><vspace blankLines="0" />A mode of
+            speech recognition where a stream of utterances is evaluated for
+            match against a small set of command words. This is generally
+            employed either to trigger some action or to control the
+            subsequent grammar to be used for further recognition.</t>
+          </list></t>
+      </section>
+
+      <section title="Nroff Beginning-of-Line Character Escaping">
+	 <t>'Line starting with single apostrophe'.</t>
+	 <t>... Line starting with period.</t>
+      </section>
+
+      <section title="A Section Title which is so long that it will extend to the next Line.">
+	 Section text.
+      </section>
+
+      <section title="State-Machine Diagrams">
+        <t anchor="state-machine-diagram-para-1">
+	The state-machine diagrams in this document do not show every
+        possible method call. Rather, they reflect the state of the resource
+        based on the methods that have moved to IN-PROGRESS or COMPLETE states
+        (see <xref target="sec.response"></xref>). Note that since PENDING
+        requests essentially have not affected the resource yet and are in the
+        queue to be processed, they are not reflected in the state-machine
+        diagrams.</t>
+      </section>
+
+      <section title="URI Schemes">
+        <t>This document defines many protocol headers that contain URIs
+        (<xref target="RFC3986">Uniform Resource Identifiers</xref>) or
+        lists of URIs for referencing media. The entire document, including
+        the Security Considerations section (Section 12), assumes that HTTP or
+        <xref target="RFC2818">HTTP over TLS (HTTPS)</xref> will be used as
+        the URI addressing scheme unless otherwise stated. However,
+        implementations MAY support other schemes (such as 'file'), provided
+        they have addressed any security considerations described in this
+        document and any others particular to the specific scheme. For
+        example, implementations where the client and server both reside on
+        the same physical hardware and the file system is secured by
+        traditional file access controls on user-level could be reasonable
+        candidates for supporting the 'file' scheme.</t>
+      </section>
+    </section>
+
+
+    <section anchor="sec.resourceControl"
+	     title="Managing Resource Control Channels">
+      <t>The client needs a separate MRCPv2 resource control channel to
+      control each media processing resource under the SIP dialog. A unique
+      channel identifier string identifies these resource control channels.
+      The channel identifier is a difficult-to-guess, unambiguous string followed by an
+      "@", then by a string token specifying the type of resource. The
+      server generates the channel identifier and MUST make sure it does not
+      clash with the identifier of any other MRCP channel currently
+      allocated by that server. MRCPv2 defines the following IANA-registered
+      types of media processing resources. Additional resource types and their
+      associated methods/events and state machines may be added as described
+      below in <xref target="sec.iana"></xref>.</t>
+
+      <texttable anchor="table.resourceTypes" title="Resource Types">
+	<ttcol>Resource Type</ttcol>
+
+	<ttcol>Resource Description</ttcol>
+
+	<ttcol>Described in</ttcol>
+
+	<c>speechrecog</c>
+
+	<c>Speech Recognizer</c>
+
+	<c><xref target="sec.recognizerResource"></xref></c>
+
+	<c>dtmfrecog</c>
+
+	<c>DTMF Recognizer</c>
+
+	<c><xref target="sec.recognizerResource"></xref></c>
+
+	<c>speechsynth</c>
+
+	<c>Speech Synthesizer</c>
+
+	<c><xref target="sec.synthesizerResource"></xref></c>
+
+	<c>basicsynth</c>
+
+	<c>Basic Synthesizer</c>
+
+	<c><xref target="sec.synthesizerResource"></xref></c>
+
+	<c>speakverify</c>
+
+	<c>Speaker Verification</c>
+
+	<c><xref target="sec.verifierResource"></xref></c>
+
+	<c>recorder</c>
+
+	<c>Speech Recorder</c>
+
+	<c><xref target="sec.recorderResource"></xref></c>
+      </texttable>
+
+      <t>The SIP INVITE or re-INVITE transaction and the SDP offer/answer
+      exchange it carries contain "m=" lines describing the resource control
+      channel to be allocated. There MUST be one SDP "m=" line for each MRCPv2
+      resource to be used in the session. This "m=" line MUST have a media type
+      field of "application" and a transport type field of either
+      "TCP/MRCPv2" or "TCP/TLS/MRCPv2". The port number field of the
+      "m=" line MUST contain the "discard" port of the transport protocol (port
+      9 for TCP) in the SDP offer from the client and MUST contain the TCP
+      listen port on the server in the SDP answer. The client may then
+      either set up a TCP or TLS connection to that server port or share an
+      already established connection to that port. Since MRCPv2 allows
+      multiple sessions to share the same TCP connection, multiple "m=" lines
+      in a single SDP document MAY share the same port field value; MRCPv2
+      servers MUST NOT assume any relationship between resources using the
+      same port other than the sharing of the communication channel.</t>
+
+      <t>MRCPv2 resources do not use the port or format field of the "m=" line
+      to distinguish themselves from other resources using the same channel.
+      The client MUST specify the resource type identifier in the resource
+      attribute associated with the control "m=" line of the SDP offer. The
+      server MUST respond with the full Channel-Identifier (which includes
+      the resource type identifier and a difficult-to-guess, unambiguous string) in the
+      "channel" attribute associated with the control "m=" line of the SDP
+      answer. To remain backwards compatible with conventional SDP usage,
+      the format field of the "m=" line MUST have the arbitrarily selected
+      value of "1".</t>
+
+      <t>When the client wants to add a media processing resource to the
+      session, it issues a new SDP offer, according to the procedures of
+      <xref target="RFC3264">RFC 3264</xref>, in a SIP re-INVITE request.
+      The SDP offer/answer exchange carried by this SIP transaction contains
+      one or more additional control "m=" lines for the new resources to be
+      allocated to the session. The server, on seeing the new "m=" line,
+      allocates the resources (if they are available) and responds with a
+      corresponding control "m=" line in the SDP answer carried in the SIP
+      response. If the new resources are not available, the re-INVITE
+      receives an error message, and existing media processing going on
+      before the re-INVITE will continue as it was before. It is not
+      possible to allocate more than one resource of each type. If a client
+      requests more than one resource of any type, the server MUST behave as
+      if the resources of that type (beyond the first one) are not available.</t>
+
+      <t>MRCPv2 clients and servers using TCP as a transport
+      protocol MUST use the procedures specified
+      in <xref target="RFC4145">RFC 4145</xref> for setting up the
+      TCP connection, with the considerations described
+      hereby. Similarly, MRCPv2 clients and servers using TCP/TLS as
+      a transport protocol MUST use the procedures specified
+      in <xref target="RFC4572">RFC 4572</xref> for setting up the
+      TLS connection, with the considerations described hereby. The
+      a=setup attribute, as described in <xref target="RFC4145">RFC
+      4145</xref>, MUST be "active" for the offer from the client
+      and MUST be "passive" for the answer from the MRCPv2
+      server. The a=connection attribute MUST have a value of "new"
+      on the very first control "m=" line offer from the client to an
+      MRCPv2 server. Subsequent control "m=" line offers from the
+      client to the MRCP server MAY contain "new" or "existing",
+      depending on whether the client wants to set up a new
+      connection or share an existing connection, respectively. If
+      the client specifies a value of "new", the server MUST respond
+      with a value of "new". If the client specifies a value of
+      "existing", the server MUST respond. The legal values in the
+      response are "existing" if the server prefers to share an
+      existing connection or "new" if not. In the latter case, the
+      client MUST initiate a new transport connection.</t>
+
+      <t>When the client wants to deallocate the resource from this
+      session, it issues a new SDP offer, according to <xref
+      target="RFC3264">RFC 3264</xref>, where the control "m=" line port MUST
+      be set to 0. This SDP offer is sent in a SIP re-INVITE request. This
+      deallocates the associated MRCPv2 identifier and resource. The server
+      MUST NOT close the TCP or TLS connection if it is currently
+      being shared among multiple MRCP channels. When all MRCP channels that
+      may be sharing the connection are released and/or the associated SIP
+      dialog is terminated, the client or server terminates the
+      connection.</t>
+
+      <t>When the client wants to tear down the whole session and all its
+      resources, it MUST issue a SIP BYE request to close the SIP session.
+      This will deallocate all the control channels and resources allocated
+      under the session.</t>
+
+      <t>All servers MUST support TLS. Servers MAY use TCP without TLS
+      in controlled environments (e.g., not in the public Internet) where
+      both nodes are inside a protected perimeter, for example, preventing
+      access to the MRCP server from remote nodes outside the controlled
+      perimeter. It is up to the client, through the SDP offer, to choose
+      which transport it wants to use for an MRCPv2 session. Aside from the
+      exceptions given above, when using TCP, the "m=" lines MUST conform to
+      <xref target="RFC4145">RFC4145</xref>, which describes the usage of
+      SDP for connection-oriented transport. When using TLS, the SDP "m=" line
+      for the control stream MUST conform to <xref target="RFC4572">Connection-Oriented Media (COMEDIA)
+      over TLS</xref>, which specifies the usage of SDP for establishing a
+      secure connection-oriented transport over TLS.</t>
+    </section>
+
+    <section title="Section Three">
+      <section anchor="sec.synthMessageBody" title="Synthesizer Message Body ">
+        <t>A synthesizer message can contain additional information associated
+        with the Request, Response, or Event in its message body.</t>
+
+        <section title="Synthesizer Speech Data">
+          <t>Marked-up text for the synthesizer to speak is specified as a
+          typed media entity in the message body. The speech data to be spoken
+          by the synthesizer can be specified inline by embedding the data in
+          the message body or by reference by providing a URI for accessing
+          the data. In either case, the data and the format used to markup the
+          speech needs to be of a content type supported by the server.</t>
+
+          <t>All MRCPv2 servers containing synthesizer resources MUST support
+          both plain text speech data and W3C's <xref
+          target="W3C.REC-speech-synthesis-20040907">Speech Synthesis Markup
+          Language</xref> and hence MUST support the media types 'text/plain'
+          and 'application/ssml+xml'. Other formats MAY be supported.</t>
+
+          <t>If the speech data is to be fetched by URI reference, the media
+          type 'text/uri-list' (see <xref target="RFC2483">RFC 2483</xref>) is
+          used to indicate one or more URIs that, when dereferenced, will
+          contain the content to be spoken. If a list of speech URIs is
+          specified, the resource MUST speak the speech data provided by each
+          URI in the order in which the URIs are specified in the content.</t>
+
+          <t>MRCPv2 clients and servers MUST support the 'multipart/mixed' media
+          type. This is the appropriate media type to use when providing a mix
+          of URI and inline speech data. Embedded within the multipart
+          content block, there MAY be content for the 'text/uri-list',
+          'application/ssml+xml', and/or 'text/plain' media types. The character
+          set and encoding used in the speech data is specified according to
+          standard media type definitions. The multipart content MAY also
+          contain actual audio data. Clients may have recorded audio clips
+          stored in memory or on a local device and wish to play it as part of
+          the SPEAK request. The audio portions MAY be sent by the client as
+          part of the multipart content block. This audio is referenced in
+          the speech markup data that is another part in the multipart
+          content block according to the 'multipart/mixed' media type
+          specification.</t>
+
+       </section>
+     </section>
+  </section>
+</section>
+  

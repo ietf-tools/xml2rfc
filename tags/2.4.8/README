@@ -1,0 +1,137 @@
+Introduction
+============
+
+The IETF_ uses a specific format for the standards and other documents it
+publishes as RFCs_, and for the draft documents which are produced when
+developing documents for publications.  There exists a number of different
+tools to facilitate the formatting of drafts and RFCs according to the
+existing rules, and this tool, **xml2rfc**, is one of them.  It takes as input
+an xml file which contains the text and meta-information about author names
+etc., and transforms it into suitably formatted output.  The input xml file
+should follow the DTD given in RFC2629_ (or it's `inofficial successor`_).
+
+The current incarnation of **xml2rfc** provides output in the following
+formats: Paginated and unpaginated ascii text, html, nroff, and expanded xml.
+Only the paginated text format is currently (January 2013) accepable as draft
+submissions to the IETF.
+
+.. _IETF: https://www.ietf.org/
+.. _RFCs: https://www.rfc-editor.org/
+.. _RFC2629: https://tools.ietf.org/html/rfc2629
+.. _inofficial successor: https://tools.ietf.org/html/draft-mrose-writing-rfcs
+
+Installation
+============
+
+System Install
+--------------
+
+To install a system-wide version of xml2rfc, download and unpack the `xml2rfc 
+distribution package`_, then cd into the resulting package directory and run::
+
+    $ python setup.py install
+
+Alternatively, if you have the 'pip_' command ('Pip Installs Packages') installed,
+you can run pip to download and install the package::
+
+    $ pip install xml2rfc
+
+.. _lxml:				http://lxml.de/
+.. _pip:				https://pypi.python.org/pypi/pip
+.. _xml2rfc distribution package:	https://pypi.python.org/pypi/pip
+
+
+
+User Install
+------------
+
+If you want to perform a local installation for a specific user,
+you have a couple of options.  You may use python's default location
+of user site-packages by specifying the flag ``--user``.  These locations are:
+
+    * UNIX: $HOME/.local/lib/python<ver>/site-packages
+    * OSX: $HOME/Library/Python/<ver>/lib/python/site-packages
+    * Windows: %APPDATA%/Python/Python<ver>/site-packages
+
+You can additionally combine the flag ``--install-scripts`` with ``--user`` to
+specify a directory on your PATH to install the xml2rfc executable to.  For
+example, the following command::
+
+    $ python setup.py install --user --install-scripts=$HOME/bin
+
+will install the xml2rfc library and data to your local site-packages
+directory, and an executable python script ``xml2rfc`` to $HOME/bin.
+
+Custom Install
+--------------
+
+The option ``--prefix`` allows you to specify the base path for all
+installation files.  The setup.py script will exit with an error if your
+PYTHONPATH is not correctly configured to contain the library path
+the script tries to install to.
+
+The command is used as follows::
+
+    $ python setup.py install --prefix=<path>
+
+For further fine-tuning of the installation behavior, you can get a list
+of all available options by running::
+
+    $ python setup.py install --help
+
+Usage
+=====
+
+xml2rfc accepts a single XML document as input and outputs to one or more conversion formats.
+
+**Basic Usage**: ``xml2rfc SOURCE [options] FORMATS...``
+
+**Options**
+    The following parameters affect how xml2rfc behaves, however none are required.
+    
+    ===============  ======================= ==================================================
+    Short            Long                    Description
+    ===============  ======================= ==================================================
+    ``-h``           ``--help``              show the help message and exit
+    ``-v``           ``--verbose``           print extra information
+    ``-q``           ``--quiet``             dont print anything
+    ``-n``           ``--no-dtd``            disable DTD validation step
+    ``-c CACHE``     ``--cache=CACHE``       specify an alternate cache directory to write to
+    ``-d DTD``       ``--dtd=DTD``           specify an alternate dtd file
+    ``-b BASENAME``  ``--basename=BASENAME`` specify the base name for output files
+    ``-f FILENAME``  ``--filename=FILENAME`` specify an output filename
+    (none)           ``--date=DATE``         run as if todays date is DATE (format: yyyy-mm-dd)
+    (none)           ``--clear-cache``       purge the cache and exit
+    (none)           ``--version``           display the version number and exit
+    ===============  ======================= ==================================================
+
+**Formats**
+    At least one but as many as all of the following output formats must
+    be specified. The destination file will be created according to the
+    argument given to --filename.  If no argument was given, it will
+    create the file(s) "output.format".  If no format is specified, xml2rfc
+    will default to paginated text (``--text``).
+
+    ===========     ============================================================
+    Command         Description
+    ===========     ============================================================
+    ``--raw``       outputs to a text file, unpaginated
+    ``--text``      outputs to a text file with proper page breaks
+    ``--nroff``     outputs to an nroff file
+    ``--html``      outputs to an html file
+    ``--exp``       outputs to an XML file with all references expanded
+    ===========     ============================================================
+
+
+**Examples**
+    | ``xml2rfc draft.xml``
+    | ``xml2rfc draft.xml --dtd=alt.dtd --basename=draft-1.0 --text --nroff --html``
+
+Dependencies
+============
+xml2rfc depends on the following packages:
+
+* lxml_ *(> 2.2.7)*
+
+
+
