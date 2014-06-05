@@ -3,7 +3,7 @@
 # --------------------------------------------------
 
 # Python libs
-import datetime, sys
+import datetime
 try:
     import debug
     assert debug
