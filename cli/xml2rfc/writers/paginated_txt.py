@@ -3,7 +3,7 @@
 # --------------------------------------------------
 
 # Python libs
-import datetime
+import datetime, sys
 try:
     import debug
     assert debug
@@ -299,8 +299,9 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
 
                 blanks = 0
                 i = 0
-                while (self.buf[line_num+i].strip() == "" or
-                       self.IsFormatting(self.buf[line_num+i])):
+                while ((line_num+i < len(self.buf)) and
+		       (self.buf[line_num+i].strip() == "" or
+                        self.IsFormatting(self.buf[line_num+i]))):
                     if not self.IsFormatting(self.buf[line_num+i]):
                         blanks += 1
                     i += 1
