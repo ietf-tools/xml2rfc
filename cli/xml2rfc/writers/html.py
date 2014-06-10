@@ -169,8 +169,16 @@ class HtmlRfcWriter(BaseRfcWriter):
             xml2rfc.log.warn('Invalid tocdepth specified, must be integer:', \
                              tocdepth)
             tocdepth = 3
+        curdepth = 1
         for item in self._getTocIndex():
             if item.level <= tocdepth:
+                # set UL level
+                if item.level > curdepth:
+                    self.buffers['toc_rows'].append('<ul>')
+                for i in range(item.level, curdepth):
+                    self.buffers['toc_rows'].append('</ul>')
+                curdepth = item.level
+
                 # Create link for head
                 link = E.LINK(href='#' + item.autoAnchor)
                 link.attrib['rel'] = 'copyright' in item.autoAnchor and \
@@ -187,6 +195,9 @@ class HtmlRfcWriter(BaseRfcWriter):
                 li = E.LI(counter_text)
                 li.append(a)
                 self.buffers['toc_rows'].append(self._serialize(li))
+        for i in range(1, curdepth):
+            self.buffers['toc_rows'].append('</ul>')
+
     def _serialize(self, element):
         if sys.version > '3':
             return lxml.html.tostring(element, pretty_print=True, method='xml', encoding='ascii').decode()
