@@ -3,9 +3,9 @@
 
 Network Working Group                                         J. Reschke
 Internet-Draft                                                greenbytes
-Obsoletes: 2629 (if approved)                               May 16, 2014
+Obsoletes: 2629 (if approved)                              June 10, 2014
 Intended status: Informational
-Expires: November 17, 2014
+Expires: December 12, 2014
 
 
                    The 'XML2RFC' version 2 Vocabulary
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 17, 2014.
+   This Internet-Draft will expire on December 12, 2014.
 
 Copyright Notice
 
@@ -233,11 +233,12 @@ Table of Contents
 
 2.4.  <area>
 
-   Provides information about the IETF area this document applies to
-   (currently not used when generating documents).
+   Provides information about the IETF area to which this document
+   relates (currently not used when generating documents).
 
    The value ought to be either the fullname or the abbreviation of one
-   of the IETF areas as listed on <http://www.ietf.org/iesg/area.html>:
+   of the IETF areas as listed on <http://www.ietf.org/iesg/area.html>.
+   The list at the time that this document is being published is:
    "Applications", "app", "General", "gen", "Internet", "int",
    "Operations and Management", "ops", "Real-time Applications and
    Infrastructure", "rai", "Routing", "rtg", "Security", "sec",
@@ -267,12 +268,12 @@ Table of Contents
    o  protocol unit diagrams.
 
    Alternatively, the "src" attribute allows referencing an external
-   graphics file, such as a bitmap or a vector drawing.  In this case,
-   the textual content acts as fallback for output formats that do not
-   support graphics, and thus ought to contain either a "line art"
-   variant of the graphics, or otherwise prose that describes the
-   included image in sufficient detail.  Note that RFCs occasionally are
-   published with enhanced diagrams; a recent example is [RFC5598].
+   graphics file, such as a bitmap or a vector drawing, using a URI.  In
+   this case, the textual content acts as fallback for output formats
+   that do not support graphics, and thus ought to contain either a
+   "line art" variant of the graphics, or otherwise prose that describes
+   the included image in sufficient detail.  Note that RFCs occasionally
+   are published with enhanced diagrams; a recent example is [RFC5598].
 
    This element appears as child element of: <figure> (Section 2.17).
 
@@ -321,7 +322,7 @@ Table of Contents
    The URI of a graphics file.
 
    Note that this can be a "data" URI ([RFC2397]) as well, in which case
-   the graphics file essentially is in-lined.
+   the graphics file is wholly part of the XML file.
 
 2.5.6.  'type' attribute
 
@@ -361,7 +362,9 @@ Table of Contents
 
 2.6.  <author>
 
-   Provides information about a document author.
+   Provides information about a document's author.  This is used both
+   for the document itself (at the beginning of the document) and for
+   referenced documents (inside of <reference>).
 
    The <author> elements contained within the document's <front> element
    are used to fill the boilerplate, and also to generate the "Author's
@@ -416,7 +419,7 @@ Table of Contents
 2.7.  <back>
 
    Contains the "back" part of the document: the references and
-   appendices.
+   appendices.  In <back>, <section> elements indicate appendices.
 
    This element appears as child element of: <rfc> (Section 2.33).
 
@@ -515,15 +518,16 @@ Table of Contents
    left out, the processor will attempt to use the current system date
    if the attributes that are specified do match the system date.
 
-   Note that month names need to match the full (English) month name
-   ("January", "February", "March", "April", "May, "June", "July",
-   "August", "September", "October", "November", or "December") in order
-   for expiration calculations to work (some implementations might
-   support additional formats, though).
+   Note that in the frst case, month names need to match the full
+   (English) month name ("January", "February", "March", "April", "May,
+   "June", "July", "August", "September", "October", "November", or
+   "December") in order for expiration calculations to work (some
+   implementations might support additional formats, though).
 
-   In the second case, the date information will be embedded as-is into
-   the reference text.  Therefore, also vague dates ("ca. 2000"), date
-   ranges, and so on, are allowed.
+   In the second case, the date information can have prose text for the
+   month or year.  For example, vague dates (year="ca. 2000"), date
+   ranges (year="2012-2013") non-specific months (month="Second
+   quarter") and so on, are allowed.
 
    This element appears as child element of: <front> (Section 2.19).
 
@@ -531,11 +535,11 @@ Table of Contents
 
 2.13.1.  'day' attribute
 
-   Day of publication.
+   Day of publication; this is a number.
 
 2.13.2.  'month' attribute
 
-   Month of publication.
+   Month of publication; this is the English name of the month.
 
 2.13.3.  'year' attribute
 
@@ -903,8 +907,9 @@ Table of Contents
    Specifies the affiliation of an author.
 
    This information appears in both the "Author's Address" section and
-   on the front page ([RFCSTYLE], Section 4.1.1).  If the value is long,
-   an abbreviated variant can be specified in the "abbrev" attribute.
+   on the front page (see [RFCSTYLE], Section 4.1.1 for more
+   information).  If the value is long, an abbreviated variant can be
+   specified in the "abbrev" attribute.
 
    This element appears as child element of: <author> (Section 2.6).
 
@@ -1036,9 +1041,9 @@ Table of Contents
 
    In the early days of the RFC series, there was only one "References"
    section per RFC.  This convention was later changed to group
-   references into two sets, "Normative" and "Informative"; see Section
-   4.8.6 of [RFCSTYLE]).  This vocabulary supports the split with the
-   "title" attribute.
+   references into two sets, "Normative" and "Informative" as described
+   in Section 4.8.6 of [RFCSTYLE]).  This vocabulary supports the split
+   with the "title" attribute.
 
    This element appears as child element of: <back> (Section 2.7).
 
@@ -1483,8 +1488,8 @@ Table of Contents
 
    When this element appears in the <front> element of the current
    document, the title might also appear in page headers or footers.  If
-   it's long (~40 characters), the "abbrev" attribute is used to
-   specified an abbreviated variant.
+   it's long (~40 characters), the "abbrev" attribute is used to specify
+   an abbreviated variant.
 
    This element appears as child element of: <front> (Section 2.19).
 
@@ -1550,9 +1555,10 @@ Table of Contents
 
 2.44.  <workgroup>
 
-   This element is used to specify the Working Group the document
-   originates from, if any.  The recommended format is the official name
-   of the Working Group (with some capitalization).
+   This element is used to specify the Working Group (IETF) or Research
+   Group (IRTF) from which the document originates, if any.  The
+   recommended format is the official name of the Working Group (with
+   some capitalization).
 
    In Internet-Drafts, this is used in the upper left corner of the
    boilerplate, replacing the "Network Working Group" string.
@@ -1760,8 +1766,8 @@ Table of Contents
    computing/verifying examples.  In the latter case, care needs to be
    taken that only trusted content is processed.
 
-   Finallly, all security considerations related to XML processing are
-   relevant as well (see Section 7 of [RFC3470]).
+   Furthermore, all security considerations related to XML processing
+   are relevant as well (see Section 7 of [RFC3470]).
 
 8.  IANA Considerations
 
@@ -1964,7 +1970,7 @@ A.1.  The /rfc/@category Attribute
    For RFCs, the "category" determines the "maturity level" (see Section
    4 of [RFC2026]).  The allowed values are "std" for "Standards Track",
    "bcp" for "BCP", "info" for "Informational", "exp" for
-   "Experimental", and "historic" for - surprise - "Historic".
+   "Experimental", and "historic" for "Historic".
 
    For Internet-Drafts, the category attribute is not needed, but will
    appear on the front page as "Intended Status".  Supplying this

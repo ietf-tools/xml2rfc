@@ -217,12 +217,13 @@
    <iref item="Elements" subitem="area" primary="true"/>
    <iref item="area element" primary="true"/>
    <t>
-      Provides information about the IETF area this document applies to
+      Provides information about the IETF area to which this document relates
       (currently not used when generating documents).
    </t>
    <t>
       The value ought to be either the fullname or the abbreviation of one of
-      the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>:
+      the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
+      The list at the time that this document is being published is:
       "Applications", "app", "General", "gen", "Internet", "int", "Operations
       and Management", "ops", "Real-time Applications and Infrastructure", "rai",
       "Routing", "rtg", "Security", "sec", "Transport", "tsv".
@@ -253,7 +254,7 @@
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
-      file, such as a bitmap or a vector drawing. In this case, the textual
+      file, such as a bitmap or a vector drawing, using a URI. In this case, the textual
       content acts as fallback for output formats that do not support graphics,
       and thus ought to contain either a "line art" variant of the graphics, or
       otherwise prose that describes the included image in sufficient detail.
@@ -337,7 +338,7 @@
          </t>
       <t>
             Note that this can be a "data" URI (<xref target="RFC2397"/>) as well, in which case the graphics
-            file essentially is in-lined.
+            file is wholly part of the XML file.
          </t>
    </section>
 
@@ -405,7 +406,9 @@
    <iref item="Elements" subitem="author" primary="true"/>
    <iref item="author element" primary="true"/>
    <t>
-      Provides information about a document author.
+      Provides information about a document's author. This is used both for
+      the document itself (at the beginning of the document) and for
+      referenced documents (inside of &lt;<x:ref>reference</x:ref>&gt;).
    </t>
    <t>
       The &lt;author&gt; elements contained within the document's &lt;front&gt; element
@@ -498,7 +501,8 @@
    <iref item="Elements" subitem="back" primary="true"/>
    <iref item="back element" primary="true"/>
    <t>
-      Contains the "back" part of the document: the references and appendices.
+      Contains the "back" part of the document: the references and appendices. In &lt;back&gt;,
+      &lt;<x:ref>section</x:ref>&gt; elements indicate appendices.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.back.contents"><!--AG-->Content model:</t>
@@ -650,16 +654,16 @@
       date.
    </t>
    <t>
-      Note that month names need to match the full (English) month name 
+      Note that in the frst case, month names need to match the full (English) month name 
       ("January", "February", "March", "April", "May, "June", "July", "August",
       "September", "October", "November", or "December") in order for expiration
       calculations to work (some implementations might support additional
       formats, though).
    </t>
    <t>
-      In the second case, the date information will be embedded as-is into
-      the reference text. Therefore, also vague dates ("ca. 2000"), date ranges,
-      and so on, are allowed.
+      In the second case, the date information can have prose text for the month or year.
+      For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013")
+      non-specific months (month="Second quarter") and so on, are allowed.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.date.contents"><!--AG-->Content model: this element does not have any contents.</t>
@@ -670,7 +674,7 @@
       <iref item="date element" subitem="day attribute"/>
       <iref item="day attribute" subitem="in date element"/>
       <t>
-            Day of publication.
+            Day of publication; this is a number.
          </t>
    </section>
 
@@ -680,7 +684,7 @@
       <iref item="date element" subitem="month attribute"/>
       <iref item="month attribute" subitem="in date element"/>
       <t>
-            Month of publication.
+            Month of publication; this is the English name of the month.
          </t>
    </section>
 
@@ -1310,7 +1314,7 @@
    </t>
    <t>
       This information appears in both the "Author's Address" section and
-      on the front page (<xref target="RFCSTYLE" x:fmt="," x:sec="4.1.1"/>).
+      on the front page (see <xref target="RFCSTYLE" x:fmt="," x:sec="4.1.1"/> for more information).
       If the value is long, an abbreviated variant can be specified in the
       "abbrev" attribute.
    </t>
@@ -1521,8 +1525,8 @@
    </t>
    <t>
       In the early days of the RFC series, there was only one "References" section per RFC. This convention
-      was later changed to group references into two sets, "Normative" and "Informative";
-      see <xref target="RFCSTYLE" x:fmt="of" x:sec="4.8.6"/>).
+      was later changed to group references into two sets, "Normative" and "Informative"
+      as described in <xref target="RFCSTYLE" x:fmt="of" x:sec="4.8.6"/>).
       This vocabulary supports the split with the "title" attribute.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
@@ -2201,7 +2205,7 @@
    <t>
       When this element appears in the &lt;front&gt; element of the current document,
       the title might also appear in page headers or footers. If it's long
-      (~40 characters), the "abbrev" attribute is used to specified an
+      (~40 characters), the "abbrev" attribute is used to specify an
       abbreviated variant.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
@@ -2309,8 +2313,8 @@
    <iref item="Elements" subitem="workgroup" primary="true"/>
    <iref item="workgroup element" primary="true"/>
    <t>
-      This element is used to specify the Working Group the document originates
-      from, if any. The recommended format is the official name of the Working Group
+      This element is used to specify the Working Group (IETF) or Research Group (IRTF) from which the document originates,
+      if any. The recommended format is the official name of the Working Group
       (with some capitalization).
    </t>
    <t>
@@ -2598,7 +2602,7 @@
   content is processed.
 </t>
 <t>
-  Finallly, all security considerations related to XML processing are
+  Furthermore, all security considerations related to XML processing are
   relevant as well (see <xref target="RFC3470" x:fmt="of" x:sec="7"/>).
 </t>
 </section>
@@ -3010,7 +3014,7 @@
   For RFCs, the <spanx style="verb">category</spanx> determines the "maturity level"
   (see <xref target="RFC2026" x:fmt="of" x:sec="4"/>). The allowed values
   are "std" for "Standards Track", "bcp" for "BCP", "info" for "Informational",
-  "exp" for "Experimental", and "historic" for - surprise - "Historic".
+  "exp" for "Experimental", and "historic" for "Historic".
 </t>
 <t>
   For Internet-Drafts, the category attribute is not needed, but will
