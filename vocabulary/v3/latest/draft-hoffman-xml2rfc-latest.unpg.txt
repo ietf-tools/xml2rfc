@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                              June 10, 2014
+Obsoletes: 2629 (if approved)                              June 11, 2014
 Intended status: Informational
-Expires: December 12, 2014
+Expires: December 13, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 12, 2014.
+   This Internet-Draft will expire on December 13, 2014.
 
 Copyright Notice
 
@@ -181,7 +181,7 @@ Table of Contents
    in Appendix B.
 
    Note that the vocabulary contains certain constructs that might not
-   affect the rendering of the final text; however, they can provide
+   be used when generating of the final text; however, they can provide
    useful data for other uses (such index generation, populating a
    keyword database, or syntax checks).
 
@@ -472,7 +472,7 @@ Table of Contents
    "Applications", "app", "General", "gen", "Internet", "int",
    "Operations and Management", "ops", "Real-time Applications and
    Infrastructure", "rai", "Routing", "rtg", "Security", "sec",
-   "Transport", "tsv", but that list will likely change over time.
+   "Transport", "tsv".
 
    This element appears as child element of: <front> (Section 2.27).
 
@@ -635,8 +635,7 @@ Table of Contents
    Furthermore, the "role" attribute can be used to mark an author as
    "editor".  This is reflected both on the front page and in
    bibliographical references.  Note that this specification does not
-   define a precise meaning for the term "editor".  For RFCs, it is the
-   stream that determines who is listed as authors or editors.
+   define a precise meaning for the term "editor".
 
    See Section "Authors vs. Contributors" of [RFCPOLICY] for more
    information.
@@ -665,6 +664,8 @@ Table of Contents
    Author initials (used on the front page and in references).
 
    The value contains one or more initials, each followed by a period.
+   Initials should be provided as a whitespace separated list of pairs
+   of a letter and a dot.
 
 2.7.4.  'role' attribute
 
@@ -2025,9 +2026,9 @@ Table of Contents
 
 2.47.6.  'iprExtract' attribute
 
-   Identifies a Section within the document for which extraction "as-is"
-   is explicitly allowed (only relevant for historic values of the "ipr"
-   attribute).
+   Identifies a single section within the document for which extraction
+   "as-is" is explicitly allowed (only relevant for historic values of
+   the "ipr" attribute).
 
 2.47.7.  'number' attribute
 
@@ -3011,7 +3012,7 @@ Table of Contents
 
    The "type" attribute of the <artwork> and <sourcecode> elements is
    meant to encourage processors to automatically extract known types of
-   content from an RFC or Internet Draft.  While extraction is probalby
+   content from an RFC or Internet Draft.  While extraction is probably
    safe, those processors might also think that they could further
    process the extracted content such as by rendering artwork or
    executing code.  Doing so without first sanity-checking the extracted
@@ -3069,7 +3070,8 @@ Table of Contents
       Magic number(s):  As specified for "application/xml" in Section
          3.2 of [RFC3023].
 
-      File extension(s):  .xml
+      File extension(s):  .xml or .rfcxml when disambiguation from other
+         XML files is needed
 
       Macintosh file type code(s):  TEXT
 

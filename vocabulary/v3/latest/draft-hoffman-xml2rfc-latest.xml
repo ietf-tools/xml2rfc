@@ -97,7 +97,7 @@ Features of the expected
 processors are described in <xref target="processors"/>.
 </t>
 <t>
-  Note that the vocabulary contains certain constructs that might not affect the rendering of
+  Note that the vocabulary contains certain constructs that might not be used when generating of
   the final text; however, they can provide useful
   data for other uses (such index generation, populating a keyword database, or
   syntax checks).
@@ -472,8 +472,7 @@ as optional children.</t>
       The list at the time that this document is being published is:
       "Applications", "app", "General", "gen", "Internet", "int", "Operations
       and Management", "ops", "Real-time Applications and Infrastructure", "rai",
-      "Routing", "rtg", "Security", "sec", "Transport", "tsv", but that list will likely
-      change over time.
+      "Routing", "rtg", "Security", "sec", "Transport", "tsv".
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.area.contents"><!--AG-->Content model: only text content.</t>
@@ -709,8 +708,7 @@ as optional children.</t>
       Furthermore, the "role" attribute can be used to mark an author as
       "editor". This is reflected both on the front page and in bibliographical
       references. Note that this specification does not define a precise
-      meaning for the term "editor". For RFCs, it is the stream that determines who is
-      listed as authors or editors.
+      meaning for the term "editor".
    </t>
    <t>
       See Section "Authors vs. Contributors" of <xref target="RFCPOLICY"/>
@@ -762,6 +760,8 @@ as optional children.</t>
          </t>
       <t>
             The value contains one or more initials, each followed by a period.
+            Initials should be provided as a whitespace separated list of pairs
+            of a letter and a dot.
          </t>
    </section>
 
@@ -2900,7 +2900,7 @@ as optional children.</t>
       <iref item="rfc element" subitem="iprExtract attribute"/>
       <iref item="iprExtract attribute" subitem="in rfc element"/>
       <t>
-            Identifies a Section within the document for which extraction "as-is"
+            Identifies a single section within the document for which extraction "as-is"
             is explicitly allowed (only relevant for historic values of the "ipr"
             attribute).
       </t>
@@ -4320,7 +4320,7 @@ would generate
 <t>
   The "type" attribute of the &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt; elements is meant
   to encourage processors to automatically extract known types of content from
-  an RFC or Internet Draft. While extraction is probalby safe, those processors
+  an RFC or Internet Draft. While extraction is probably safe, those processors
   might also think that they could further process the extracted content
   such as by rendering artwork or executing code. Doing so without first
   sanity-checking the extracted content is clearly a terrible idea
@@ -4388,7 +4388,7 @@ would generate
       <list style="hanging">
         <t hangText="Deprecated alias names for this type:">None.</t>
         <t hangText="Magic number(s):">As specified for "application/xml" in <xref target="RFC3023" x:fmt="of" x:sec="3.2"/>.</t>
-        <t hangText="File extension(s):">.xml</t>
+        <t hangText="File extension(s):">.xml or .rfcxml when disambiguation from other XML files is needed</t>
         <t hangText="Macintosh file type code(s):">TEXT</t>
       </list>
     </t>
