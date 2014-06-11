@@ -3363,7 +3363,10 @@ Internet-Draft                  XML2RFCv3                      June 2014
 
 2.64.  <vspace>
 
-   Deprecated.
+   Deprecated.  In earlier versions of this format, <vspace> was often
+   used to get an extra blank line in a list element.  In the v3
+   vocabulary, that can be done instead by using multiple <t> elements
+   inside the <li> element.
 
    This element appears as child element of: <t> (Section 2.56).
 
@@ -3407,9 +3410,6 @@ Internet-Draft                  XML2RFCv3                      June 2014
    to make sure that the prose is sufficient for a reader to understand
    what is being referred to.
 
-   This element appears as child element of: <annotation> (Section 2.3),
-   <b> (Section 2.8), <c> (Section 2.11), <cref> (Section 2.15), <dd>
-
 
 
 Hoffman                 Expires December 13, 2014              [Page 61]
@@ -3417,6 +3417,8 @@ Hoffman                 Expires December 13, 2014              [Page 61]
 Internet-Draft                  XML2RFCv3                      June 2014
 
 
+   This element appears as child element of: <annotation> (Section 2.3),
+   <b> (Section 2.8), <c> (Section 2.11), <cref> (Section 2.15), <dd>
    (Section 2.17), <dt> (Section 2.20), <em> (Section 2.21), <i>
    (Section 2.28), <li> (Section 2.31), <postamble> (Section 2.41),
    <preamble> (Section 2.42), <strong> (Section 2.53), <sub>
@@ -3464,14 +3466,14 @@ Internet-Draft                  XML2RFCv3                      June 2014
       There will be no auto-generated text.  This is useful for creating
       a link that will appear in the processed text.
 
-   "title"
-
 
 
 Hoffman                 Expires December 13, 2014              [Page 62]
 
 Internet-Draft                  XML2RFCv3                      June 2014
 
+
+   "title"
 
       Inserts a title for the referenced element (usually obtained from
       the referenced element's "title" attribute; some processors also
@@ -3519,8 +3521,6 @@ Internet-Draft                  XML2RFCv3                      June 2014
 
    o  "of" (default)
 
-   o  "comma"
-
 
 
 
@@ -3528,6 +3528,8 @@ Hoffman                 Expires December 13, 2014              [Page 63]
 
 Internet-Draft                  XML2RFCv3                      June 2014
 
+
+   o  "comma"
 
    o  "parens"
 
@@ -3575,8 +3577,6 @@ Internet-Draft                  XML2RFCv3                      June 2014
    safe, those processors might also think that they could further
    process the extracted content such as by rendering artwork or
    executing code.  Doing so without first sanity-checking the extracted
-   content is clearly a terrible idea from a security perspective.  More
-   generally, a processor that is reading RFCs or Internet Drafts needs
 
 
 
@@ -3585,6 +3585,8 @@ Hoffman                 Expires December 13, 2014              [Page 64]
 Internet-Draft                  XML2RFCv3                      June 2014
 
 
+   content is clearly a terrible idea from a security perspective.  More
+   generally, a processor that is reading RFCs or Internet Drafts needs
    to be suspicious of any content that it intends to post-process.
 
    Furthermore, all security considerations related to XML processing
@@ -3629,8 +3631,6 @@ Internet-Draft                  XML2RFCv3                      June 2014
    Fragment identifier considerations:  The "anchor" attribute is used
       for assigning document-wide unique identifiers that can be uses as
       shorthand pointers, as described in Section 2.8 of [XPOINTER].
-
-
 
 
 
@@ -6584,7 +6584,7 @@ Internet-Draft                  XML2RFCv3                      June 2014
          counter  62
          default  62
          none  62
-         title  62
+         title  63
 
    Y
       year attribute

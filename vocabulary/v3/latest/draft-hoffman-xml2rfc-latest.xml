@@ -17,6 +17,10 @@
 Show the equivalents of <spanx> in v3. Also, the <spanx> definition should talk
 about <strong> and <em>.
 
+<list counter=> has been deprecated, replaced by <ol group=>
+
+There's no description of how <t hangText=...> has been replaced with <dd> inside a <list>.
+
 Find the remaining <cref>s and resolve them.
 
 Add text about what to use instead of deprecated items both in section 1 and in the
@@ -4049,7 +4053,9 @@ Using CDATA:
    <iref item="Elements" subitem="vspace" primary="true"/>
    <iref item="vspace element" primary="true"/>
    <t>
-      Deprecated.
+      Deprecated. In earlier versions of this format, &lt;vspace&gt; was often used to get an extra
+      blank line in a list element. In the v3 vocabulary, that can be done instead by using multiple
+      &lt;<x:ref>t</x:ref>&gt; elements inside the &lt;<x:ref>li</x:ref>&gt; element.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.vspace.contents"><!--AG-->Content model: this element does not have any contents.</t>
