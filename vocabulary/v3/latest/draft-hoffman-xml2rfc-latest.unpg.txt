@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                               June 1, 2014
+Obsoletes: 2629 (if approved)                              June 10, 2014
 Intended status: Informational
-Expires: December 3, 2014
+Expires: December 12, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 3, 2014.
+   This Internet-Draft will expire on December 12, 2014.
 
 Copyright Notice
 
@@ -312,11 +312,13 @@ Table of Contents
    o  Deprecate the "title" attribute in <section>, <figure>, and
       <texttable> in favor of the new <titleelement>.
 
-   o  Deprecate the "alt", "height", "src", and "width" attributes in
-      <figure> because they overlap with the attributes in <artwork>.
+   o  Deprecate the "alt", and "src" attributes in <figure> because they
+      overlap with the attributes in <artwork>.
 
    o  Deprecate the "xml:space" attribute in <artwork> because there was
-      only one useful value.  Deprecate "height" and "width" attribute.
+      only one useful value.  Deprecate "height" and "width" attribute
+      in both <artwork> and <figure> because they are not needed for the
+      new output formats.
 
    o  Deprecate the "pageno" attribute in <xref> because it was unused
       in v2.  Deprecate the "none" and "title" values for the "format"
@@ -2914,7 +2916,8 @@ Table of Contents
 
    "none"
 
-      This attribute value is deprecated.
+      There will be no auto-generated text.  This is useful for creating
+      a link that will appear in the processed text.
 
    "title"
 
@@ -3577,7 +3580,7 @@ D.2.  Processor Instructions
 
    The following PIs will be supported by the Draft Processor:
 
-   o  editing -- When set ot "yes", causes the processor to insert
+   o  editing -- When set to "yes", causes the processor to insert
       reference numbers throughout the output files to allow ease of
       referral to particular paragraphs or artwork in the text.  The
       default is "no".
