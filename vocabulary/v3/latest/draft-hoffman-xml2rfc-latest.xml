@@ -19,7 +19,7 @@ about <strong> and <em>.
 
 <list counter=> has been deprecated, replaced by <ol group=>
 
-There's no description of how <t hangText=...> has been replaced with <dd> inside a <list>.
+There's no description of how <t hangText=...> has been replaced with <dd> inside a <dl>.
 
 Find the remaining <cref>s and resolve them.
 
@@ -2317,6 +2317,12 @@ as optional children.</t>
          </list>
          Other formats are reserved for future use.
        </t>
+      <t>
+        It is an error for the style string to be empty, and processors will reject documents
+        with an element that has such a style. If the intention is to have a list that is
+        indented without bullets or numbers, use &lt;<x:ref>ul</x:ref>&gt; with the 'empty="true"'
+        attribute instead.
+      </t>
    </section>
 </section>
 
@@ -4053,9 +4059,10 @@ Using CDATA:
    <iref item="Elements" subitem="vspace" primary="true"/>
    <iref item="vspace element" primary="true"/>
    <t>
-      Deprecated. In earlier versions of this format, &lt;vspace&gt; was often used to get an extra
-      blank line in a list element. In the v3 vocabulary, that can be done instead by using multiple
-      &lt;<x:ref>t</x:ref>&gt; elements inside the &lt;<x:ref>li</x:ref>&gt; element.
+      Deprecated.  In earlier versions of this format, <vspace> was often
+      used to get an extra blank line in a list element; in the v3 vocabulary,
+      that can be done instead by using multiple &lt;<x:ref>t</x:ref>&gt; elements inside the
+      &lt;<x:ref>li</x:ref>&gt; element. Other uses have no direct replacement.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.vspace.contents"><!--AG-->Content model: this element does not have any contents.</t>
@@ -5054,6 +5061,11 @@ be:
 </artwork></figure>
 </t>
 
+<t>
+In general, XInclude should be used instead of ENTITY references and XML Processor Instructions (PIs)
+that allow external inclusions.
+</t>
+
 <t><cref>Need to think a bit more about using xi:include to replace src= for artwork
 or sourcecode.</cref></t>
 
@@ -5089,7 +5101,7 @@ the processor will give a hard error when an input XML file has:
 
 <t>XML comments</t>
 
-<t>XML Processor Instructions (PIs)</t>
+<t>XML Processor Instructions</t>
 
 <t>an external DTD</t>
 
@@ -5132,7 +5144,7 @@ be much more emphasis put on the RFC Processor.</t>
 
 <t>[[[ This section describes a future where the v3 format will be allowed as the input
 for Internet Draft publication. The section is in this document only
-temporarily: it soon move to its own page managed by someone yet to be determined. ]]]</t>
+temporarily: it will soon move to its own page managed by someone yet to be determined. ]]]</t>
 
 <t>[[[ Description of the transition from the current text format to also allowing
 v3 XML. ]]]</t>
