@@ -1,0 +1,161 @@
+<!ENTITY % NUMBER "CDATA">
+
+<!ENTITY % NUMBERS "CDATA">
+
+<!ENTITY % DAY "CDATA">
+
+<!ENTITY % MONTH "CDATA">
+
+<!ENTITY % YEAR "CDATA">
+
+<!ENTITY % URI "CDATA">
+
+<!ENTITY % ATEXT "CDATA">
+
+<!ENTITY % CTEXT "#PCDATA">
+
+<!ENTITY % TEXT "#PCDATA">
+
+<!ELEMENT rfc (front,middle,back?)>
+
+<!ATTLIST rfc
+  number %NUMBER; #IMPLIED
+  obsoletes %NUMBERS; ''
+  updates %NUMBERS; ''
+  category (std|bcp|info|exp|historic) 'info'
+  seriesNo %NUMBER; #IMPLIED
+  ipr (full2026|noDerivativeWorks2026|none) #IMPLIED
+  docName %ATEXT; #IMPLIED>
+
+<!ELEMENT front (title,author+,date,area*,workgroup*,keyword*,abstract?,
+                 note*)>
+
+<!ELEMENT title (%CTEXT;)>
+
+<!ATTLIST title
+  abbrev %ATEXT; #IMPLIED>
+
+<!ELEMENT author (organization,address?)>
+
+<!ATTLIST author
+  initials %ATEXT; #IMPLIED
+  surname %ATEXT; #IMPLIED
+  fullname %ATEXT; #IMPLIED>
+
+<!ELEMENT organization (%CTEXT;)>
+
+<!ATTLIST organization
+  abbrev %ATEXT; #IMPLIED>
+
+<!ELEMENT address (postal?,phone?,facsimile?,email?,uri?)>
+
+<!ELEMENT postal (street+,(city|region|code|country)*)>
+
+<!ELEMENT street (%CTEXT;)>
+
+<!ELEMENT city (%CTEXT;)>
+
+<!ELEMENT region (%CTEXT;)>
+
+<!ELEMENT code (%CTEXT;)>
+
+<!ELEMENT country (%CTEXT;)>
+
+<!ELEMENT phone (%CTEXT;)>
+
+<!ELEMENT facsimile (%CTEXT;)>
+
+<!ELEMENT email (%CTEXT;)>
+
+<!ELEMENT uri (%CTEXT;)>
+
+<!ELEMENT date EMPTY>
+
+<!ATTLIST date
+  day %DAY; #IMPLIED
+  month %MONTH; #REQUIRED
+  year %YEAR; #REQUIRED>
+
+<!ELEMENT area (%CTEXT;)>
+
+<!ELEMENT workgroup (%CTEXT;)>
+
+<!ELEMENT keyword (%CTEXT;)>
+
+<!ELEMENT abstract (t)+>
+
+<!ELEMENT note (t)+>
+
+<!ATTLIST note
+  title %ATEXT; #REQUIRED>
+
+<!ELEMENT middle (section)+>
+
+<!ELEMENT section (t|figure|section)*>
+
+<!ATTLIST section
+  anchor ID #IMPLIED
+  title %ATEXT; #REQUIRED>
+
+<!ELEMENT t (%TEXT;|list|figure|xref|eref|iref|vspace)*>
+
+<!ATTLIST t
+  hangText %ATEXT; #IMPLIED>
+
+<!ELEMENT list (t)+>
+
+<!ATTLIST list
+  style (numbers|symbols|hanging|empty) 'empty'>
+
+<!ELEMENT xref (%CTEXT;)>
+
+<!ATTLIST xref
+  target IDREF #REQUIRED
+  pageno (true|false) 'false'>
+
+<!ELEMENT eref (%CTEXT;)>
+
+<!ATTLIST eref
+  target %URI; #REQUIRED>
+
+<!ELEMENT iref EMPTY>
+
+<!ATTLIST iref
+  item %ATEXT; #REQUIRED
+  subitem %ATEXT; ''>
+
+<!ELEMENT vspace EMPTY>
+
+<!ATTLIST vspace
+  blankLines %NUMBER; '0'>
+
+<!ELEMENT figure (preamble?,artwork,postamble?)>
+
+<!ATTLIST figure
+  anchor ID #IMPLIED
+  title %ATEXT; ''>
+
+<!ELEMENT preamble (%TEXT;|xref|eref|iref)*>
+
+<!ELEMENT artwork (%TEXT;)*>
+
+<!ATTLIST artwork
+  xml:space (default|preserve) 'preserve'>
+
+<!ELEMENT postamble (%TEXT;|xref|eref|iref)*>
+
+<!ELEMENT back (references?,section*)>
+
+<!ELEMENT references (reference)+>
+
+<!ELEMENT reference (front,seriesInfo*)>
+
+<!ATTLIST reference
+  anchor ID #IMPLIED
+  target %URI; #IMPLIED>
+
+<!ELEMENT seriesInfo EMPTY>
+
+<!ATTLIST seriesInfo
+  name %ATEXT; #REQUIRED
+  value %ATEXT; #REQUIRED>
