@@ -375,12 +375,12 @@
 <xsl:param name="rfcUrlPrefix" select="'http://www.ietf.org/rfc/rfc'" />
 <xsl:param name="rfcUrlPostfix" select="'.txt'" />
 -->
-<!-- Reference the marked up versions over on http://tools.ietf.org/html. -->
-<xsl:param name="rfcUrlPrefix" select="'http://tools.ietf.org/html/rfc'" />
+<!-- Reference the marked up versions over on https://tools.ietf.org/html. -->
+<xsl:param name="rfcUrlPrefix" select="'https://tools.ietf.org/html/rfc'" />
 <xsl:param name="rfcUrlPostfix" select="''" />
 <xsl:param name="rfcUrlFragSection" select="'section-'" />
 <xsl:param name="rfcUrlFragAppendix" select="'appendix-'" />
-<xsl:param name="internetDraftUrlPrefix" select="'http://tools.ietf.org/html/'" />
+<xsl:param name="internetDraftUrlPrefix" select="'https://tools.ietf.org/html/'" />
 <xsl:param name="internetDraftUrlPostfix" select="''" />
 <xsl:param name="internetDraftUrlFrag" select="'section-'" />
 
@@ -398,6 +398,8 @@
 <xsl:variable name="lcase" select="'abcdefghijklmnopqrstuvwxyz'" />
 <xsl:variable name="ucase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'" />
 <xsl:variable name="digits" select="'0123456789'" />
+<xsl:variable name="alpha" select="concat($lcase,$ucase)"/>
+<xsl:variable name="alnum" select="concat($alpha,$digits)"/>
 
 <!-- build help keys for indices -->
 <xsl:key name="index-first-letter"
@@ -1080,14 +1082,24 @@
       </xsl:call-template>
     </xsl:if>
   </xsl:for-each>
+  <xsl:variable name="anch-container">
+    <xsl:choose>
+      <xsl:when test="ancestor::t">span</xsl:when>
+      <xsl:otherwise>div</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:if test="@anchor!=''">
     <xsl:call-template name="check-anchor"/>
-    <div id="{@anchor}"/>
+    <xsl:element name="{$anch-container}">
+    <xsl:attribute name="id"><xsl:value-of select="@anchor"/></xsl:attribute>
+    </xsl:element>
   </xsl:if>
   <xsl:variable name="anch">
     <xsl:call-template name="get-figure-anchor"/>
   </xsl:variable>
-  <div id="{$anch}" />
+  <xsl:element name="{$anch-container}">
+    <xsl:attribute name="id"><xsl:value-of select="$anch"/></xsl:attribute>
+  </xsl:element>
   <xsl:apply-templates />
   <xsl:if test="(@title!='') or (@anchor!='' and not(@suppress-title='true'))">
     <xsl:variable name="n"><xsl:call-template name="get-figure-number"/></xsl:variable>
@@ -1142,11 +1154,21 @@
 
     <xsl:apply-templates select="title"/>
     <xsl:if test="/rfc/@docName">
+    
       <xsl:variable name="docname" select="/rfc/@docName"/>
 
-      <br/>
-      <span class="filename"><xsl:value-of select="$docname"/></span>
-
+      <xsl:choose>
+        <xsl:when test="$rfcno!=''">
+          <xsl:call-template name="warning">
+            <xsl:with-param name="msg">The @docName attribute '<xsl:value-of select="$docname"/>' is ignored because an RFC number is specified as well.</xsl:with-param>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <br/>
+          <span class="filename"><xsl:value-of select="$docname"/></span>
+        </xsl:otherwise>
+      </xsl:choose>
+      
       <xsl:variable name="docname-noext">
         <xsl:choose>
           <xsl:when test="contains($docname,'.')">
@@ -1306,13 +1328,13 @@
 
 <xsl:template name="compute-iref-anchor">
   <xsl:variable name="first" select="translate(substring(@item,1,1),$ucase,$lcase)"/>
-  <xsl:variable name="nkey" select="translate($first,$lcase,'')"/>
+  <xsl:variable name="nkey" select="translate($first,$alnum,'')"/>
   <xsl:choose>
     <xsl:when test="$nkey=''">
       <xsl:value-of select="$anchor-prefix"/>.iref.<xsl:value-of select="$first"/>.<xsl:number level="any" count="iref[starts-with(translate(@item,$ucase,$lcase),$first)]"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:value-of select="$anchor-prefix"/>.iref.<xsl:number level="any" count="iref[translate(substring(@item,1,1),concat($lcase,$ucase),'')='']"/>
+      <xsl:value-of select="$anchor-prefix"/>.iref.<xsl:number level="any" count="iref[translate(substring(@item,1,1),$alnum,'')!='']"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -1332,7 +1354,7 @@
 
 <!-- list templates depend on the list style -->
 
-<xsl:template match="list[@style='empty' or not(@style)]">
+<xsl:template match="list[@style='empty' or (not(@style) and not(ancestor::list[@style]) or (not(@style) and ancestor::list[@style='empty']))]">
   <xsl:call-template name="check-no-text-content"/>
   <ul class="empty">
     <xsl:call-template name="insertInsDelClass"/>
@@ -1356,7 +1378,7 @@
   </dl>
 </xsl:template>
 
-<xsl:template match="list[@style='numbers']">
+<xsl:template match="list[@style='numbers' or (not(@style) and ancestor::list[@style='numbers'])]">
   <xsl:call-template name="check-no-text-content"/>
   <ol>
     <xsl:call-template name="insertInsDelClass"/>
@@ -1364,7 +1386,7 @@
   </ol>
 </xsl:template>
 
-<xsl:template match="list[@style='letters']">
+<xsl:template match="list[@style='letters' or (not(@style) and ancestor::list[@style='letters'])]">
   <xsl:call-template name="check-no-text-content"/>
   <xsl:variable name="style">
     <xsl:choose>
@@ -1380,7 +1402,7 @@
   </ol>
 </xsl:template>
 
-<xsl:template match="list[@style='symbols']">
+<xsl:template match="list[@style='symbols' or (not(@style) and ancestor::list[@style='symbols'])]">
   <xsl:call-template name="check-no-text-content"/>
   <ul>
     <xsl:call-template name="insertInsDelClass"/>
@@ -6400,9 +6422,10 @@ dd, li, p {
 
   <!-- check ABNF syntax references -->
   <xsl:if test="//artwork[@type='abnf2616']">
-    <xsl:if test="not(//reference/seriesInfo[@name='RFC' and (@value='2068' or @value='2616')]) and not(//reference/seriesInfo[@name='Internet-Draft' and (starts-with(@value, 'draft-ietf-httpbis-p1-messaging-'))])">
+    <xsl:if test="not(//reference/seriesInfo[@name='RFC' and (@value='2068' or @value='2616' or @value='7230')]) and not(//reference/seriesInfo[@name='Internet-Draft' and (starts-with(@value, 'draft-ietf-httpbis-p1-messaging-'))])">
+      <!-- check for draft-ietf-httpbis-p1-messaging- is for backwards compat -->
       <xsl:call-template name="warning">
-        <xsl:with-param name="msg">document uses HTTP-style ABNF syntax, but doesn't reference RFC 2068, RFC 2616, or draft-ietf-httpbis-p1-messaging.</xsl:with-param>
+        <xsl:with-param name="msg">document uses HTTP-style ABNF syntax, but doesn't reference RFC 2068, RFC 2616, or RFC 7230.</xsl:with-param>
       </xsl:call-template>
     </xsl:if>
   </xsl:if>
@@ -7049,11 +7072,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.629 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.629 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.640 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.640 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2014/04/17 09:22:01 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/04/17 09:22:01 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2014/06/13 12:42:58 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/06/13 12:42:58 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>
