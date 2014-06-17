@@ -105,7 +105,7 @@ regsub -all {&} $options(-subtitle) {\&amp;}  subtitle
 regsub -all {'} $subtitle           {\&apos;} subtitle
 
 set preamble \
-"<?xml version='1.0' encoding='iso-8859-1'?>
+"<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE rfc SYSTEM 'rfc2629.dtd'>
 
 <?rfc private=' '?>
