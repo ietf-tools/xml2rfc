@@ -654,21 +654,21 @@
       being produced, and also inside bibliographic references.
    </t>
    <t>
-      In the first case, it defines the publication date, which, when producing
-      Internet-Drafts, will be used for computing the expiration date (see <xref target="IDGUIDE" x:fmt="of" x:sec="8" x:rel="#expiry"/>). When "year",
-      "month" or "day" are left out, the processor will attempt to use the
-      current system date if the attributes that are specified do match the system
-      date.
+      In the boilerplate case, it defines the publication date, which, when producing
+      Internet-Drafts, will be used for computing the expiration date (see <xref target="IDGUIDE" x:fmt="of" x:sec="8" x:rel="#expiry"/>).
+      When one or more of "year", "month", or "day" are left out, the processor
+      will attempt to use the current system date if the attributes that are
+      present are consistent with that date. 
    </t>
    <t>
-      Note that in the first case, month names need to match the full (English) month name 
+      Note that in this case, month names need to match the full (English) month name 
       ("January", "February", "March", "April", "May, "June", "July", "August",
       "September", "October", "November", or "December") in order for expiration
       calculations to work (some implementations might support additional
       formats, though).
    </t>
    <t>
-      In the second case, the date information can have prose text for the month or year.
+      In the case of bibliographic references, the date information can have prose text for the month or year.
       For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013")
       non-specific months (month="Second quarter") and so on, are allowed.
    </t>
@@ -1956,7 +1956,7 @@
           Strong emphasis.
         </t>
          <t hangText="verb">
-          "Verbatim" text (usually displayed usign a monospaced font face).
+          "Verbatim" text (usually displayed using a monospaced font face).
         </t>
       </list>
    </t>
@@ -2467,9 +2467,9 @@
 <?ENDINC xml2rfcv2-spec.xml ?>
 </section>
 
-<section title="Escaping for use in XML" anchor="escaping">
+<section title="Escaping for Use in XML" anchor="escaping">
 <t>
-  Text in XML can not use the literal characters "&lt;" and "&amp;", as they
+  Text in XML cannot use the literal characters "&lt;" and "&amp;", as they
   have special meaning to the XML processor (starting entities, elements, etc.).
   Usually, these characters will need to be substituted by "&amp;lt;" and
   "&amp;amp;" (see <xref target="XML" x:sec="4.6" x:rel="#sec-predefined-ent" x:fmt="of"/>).
@@ -2531,7 +2531,7 @@
   declared either in the Document Type Definition (DTD,
   <xref target="XML" x:sec="2.9" x:fmt="," x:rel="#sec-rmd"/>), or
   in the "internal subset" (<xref target="XML" x:sec="2.8" x:fmt="," x:rel="#sec-prolog-dtd"/>),
-  like that:
+  like this:
 </t>
 <figure><artwork type="example">
 &lt;?xml version="1.0"?>
@@ -2549,7 +2549,7 @@
 <section title="Including Files" anchor="including.files">
 <t>
   This version of the vocabulary does not support an inclusion mechanism on
-  it's own &mdash; thus, a document always needs to be self-contained.
+  its own &mdash; thus, a document always needs to be self-contained.
 </t>
 <t>
   That being said, some processors do support file inclusion using
@@ -2594,9 +2594,10 @@
   issues representing arbitrary Unicode <xref target="UNICODE"/> characters in text content.
 </t>
 <t>
-  However, the current canonical RFC format is restricted to US-ASCII <xref target="USASCII"/>
-  characters (<xref target="RFC2223" x:sec="3" x:fmt=","/>). Future versions are likely to relax this role, and it is
-  expected that the vocabulary will be extended so that US-ACSII
+  However, the current canonical RFC format is restricted to US-ASCII
+  characters (<xref target="USASCII"/> and <xref target="RFC2223" x:sec="3" x:fmt="of"/>). Future versions are
+  likely to relax this rule, and it is
+  expected that the vocabulary will be extended so that US-ASCII
   alternatives can be provided when that makes sense (for instance, in
   contact information).
 </t>
@@ -2619,7 +2620,7 @@
   content is processed.
 </t>
 <t>
-  Furthermore, all security considerations related to XML processing are
+  All security considerations related to XML processing are
   relevant as well (see <xref target="RFC3470" x:fmt="of" x:sec="7"/>).
 </t>
 </section>
@@ -2666,12 +2667,12 @@
       This specification.
     </t>
     <t hangText="Applications that use this media type:">
-      Applications that either transform xml2rfc to output formats such
+      Applications that transform xml2rfc to output formats such
       as plain text or HTML, plus additional analysis tools.
     </t>
     <t hangText="Fragment identifier considerations:">
       The "anchor" attribute is used for assigning document-wide unique
-      identifiers that can be uses as shorthand pointers, as described
+      identifiers that can be used as shorthand pointers, as described
       in <xref target="XPOINTER" x:fmt="of" x:sec="2.8" x:rel="#shorthand"/>.
     </t>
     <t hangText="Additional information:">

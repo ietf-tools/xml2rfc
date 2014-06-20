@@ -101,7 +101,7 @@ Table of Contents
      2.43. <vspace>
      2.44. <workgroup>
      2.45. <xref>
-   3.  Escaping for use in XML
+   3.  Escaping for Use in XML
    4.  Special Unicode Code Points
    5.  Including Files
    6.  Internationalization Considerations
@@ -518,22 +518,23 @@ Table of Contents
    Note that this element is used both for the boilerplate of the
    document being produced, and also inside bibliographic references.
 
-   In the first case, it defines the publication date, which, when
+   In the boilerplate case, it defines the publication date, which, when
    producing Internet-Drafts, will be used for computing the expiration
-   date (see Section 8 of [IDGUIDE]).  When "year", "month" or "day" are
-   left out, the processor will attempt to use the current system date
-   if the attributes that are specified do match the system date.
+   date (see Section 8 of [IDGUIDE]).  When one or more of "year",
+   "month", or "day" are left out, the processor will attempt to use the
+   current system date if the attributes that are present are consistent
+   with that date.
 
-   Note that in the first case, month names need to match the full
-   (English) month name ("January", "February", "March", "April", "May,
-   "June", "July", "August", "September", "October", "November", or
-   "December") in order for expiration calculations to work (some
-   implementations might support additional formats, though).
+   Note that in this case, month names need to match the full (English)
+   month name ("January", "February", "March", "April", "May, "June",
+   "July", "August", "September", "October", "November", or "December")
+   in order for expiration calculations to work (some implementations
+   might support additional formats, though).
 
-   In the second case, the date information can have prose text for the
-   month or year.  For example, vague dates (year="ca. 2000"), date
-   ranges (year="2012-2013") non-specific months (month="Second
-   quarter") and so on, are allowed.
+   In the case of bibliographic references, the date information can
+   have prose text for the month or year.  For example, vague dates
+   (year="ca. 2000"), date ranges (year="2012-2013") non-specific months
+   (month="Second quarter") and so on, are allowed.
 
    This element appears as child element of: <front> (Section 2.19).
 
@@ -1329,7 +1330,7 @@ Table of Contents
 
    strong  Strong emphasis.
 
-   verb  "Verbatim" text (usually displayed usign a monospaced font
+   verb  "Verbatim" text (usually displayed using a monospaced font
       face).
 
    This element appears as child element of: <annotation> (Section 2.3),
@@ -1663,9 +1664,9 @@ Table of Contents
    The value needs to match the value of the "anchor" attribute of
    another element in the document.
 
-3.  Escaping for use in XML
+3.  Escaping for Use in XML
 
-   Text in XML can not use the literal characters "<" and "&", as they
+   Text in XML cannot use the literal characters "<" and "&", as they
    have special meaning to the XML processor (starting entities,
    elements, etc.).  Usually, these characters will need to be
    substituted by "&lt;" and "&amp;" (see Section 4.6 of [XML]).
@@ -1707,7 +1708,7 @@ Table of Contents
 
    Note that in order to use these characters by name, they need to be
    declared either in the Document Type Definition (DTD, [XML], Section
-   2.9), or in the "internal subset" ([XML], Section 2.8), like that:
+   2.9), or in the "internal subset" ([XML], Section 2.8), like this:
 
    <?xml version="1.0"?>
 
@@ -1722,7 +1723,7 @@ Table of Contents
 5.  Including Files
 
    This version of the vocabulary does not support an inclusion
-   mechanism on it's own -- thus, a document always needs to be self-
+   mechanism on its own -- thus, a document always needs to be self-
    contained.
 
    That being said, some processors do support file inclusion using
@@ -1762,9 +1763,9 @@ Table of Contents
    representing arbitrary Unicode [UNICODE] characters in text content.
 
    However, the current canonical RFC format is restricted to US-ASCII
-   [USASCII] characters ([RFC2223], Section 3).  Future versions are
-   likely to relax this role, and it is expected that the vocabulary
-   will be extended so that US-ACSII alternatives can be provided when
+   characters ([USASCII] and Section 3 of [RFC2223]).  Future versions
+   are likely to relax this rule, and it is expected that the vocabulary
+   will be extended so that US-ASCII alternatives can be provided when
    that makes sense (for instance, in contact information).
 
 7.  Security Considerations
@@ -1780,8 +1781,8 @@ Table of Contents
    computing/verifying examples.  In the latter case, care needs to be
    taken that only trusted content is processed.
 
-   Furthermore, all security considerations related to XML processing
-   are relevant as well (see Section 7 of [RFC3470]).
+   All security considerations related to XML processing are relevant as
+   well (see Section 7 of [RFC3470]).
 
 8.  IANA Considerations
 
@@ -1814,12 +1815,12 @@ Table of Contents
 
    Published specification:  This specification.
 
-   Applications that use this media type:  Applications that either
-      transform xml2rfc to output formats such as plain text or HTML,
-      plus additional analysis tools.
+   Applications that use this media type:  Applications that transform
+      xml2rfc to output formats such as plain text or HTML, plus
+      additional analysis tools.
 
    Fragment identifier considerations:  The "anchor" attribute is used
-      for assigning document-wide unique identifiers that can be uses as
+      for assigning document-wide unique identifiers that can be used as
       shorthand pointers, as described in Section 2.8 of [XPOINTER].
 
    Additional information:
