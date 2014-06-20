@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                              June 11, 2014
+Obsoletes: 2629 (if approved)                              June 20, 2014
 Intended status: Informational
-Expires: December 13, 2014
+Expires: December 22, 2014
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 13, 2014.
+   This Internet-Draft will expire on December 22, 2014.
 
 Copyright Notice
 
@@ -908,22 +908,22 @@ Table of Contents
    document being produced, and also inside bibliographic references
    that use the <front> element.
 
-   In the first case, it defines the date of publication for the current
-   document (Internet Draft or RFC).  When producing Internet-Drafts,
-   the Draft Processor uses this date to compute the expiration date
-   (see [IDGUIDE]).  When "year", "month" or "day" are left out, the
-   processor will attempt to use the current system date if the
-   attributes that are specified do match the system date.
+   In the boilerplate case, it defines the date of publication for the
+   current document (Internet Draft or RFC).  When producing Internet-
+   Drafts, the Draft Processor uses this date to compute the expiration
+   date (see [IDGUIDE]).  When one or more of "year", "month", or "day"
+   are left out, the processor will attempt to use the current system
+   date if the attributes that are present are consisten with that date.
 
    Also in the first case, that month names, if given, need to match the
    full English month name: "January", "February", "March", "April",
    "May, "June", "July", "August", "September", "October", "November",
    or "December".
 
-   In the second case, the date information can have prose text for the
-   month or year.  For example, vague dates (year="ca. 2000"), date
-   ranges (year="2012-2013") non-specific months (month="Second
-   quarter") and so on, are allowed.
+   In the case of bibliographic references, the date information can
+   have prose text for the month or year.  For example, vague dates
+   (year="ca. 2000"), date ranges (year="2012-2013") non-specific months
+   (month="Second quarter") and so on, are allowed.
 
    This element appears as child element of: <front> (Section 2.27).
 
@@ -1636,6 +1636,11 @@ Table of Contents
    %% Represents a percent sign
 
    Other formats are reserved for future use.
+
+   It is an error for the style string to be empty, and processors will
+   reject documents with an element that has such a style.  If the
+   intention is to have a list that is indented without bullets or
+   numbers, use <ul> with the 'empty="true"' attribute instead.
 
 2.37.  <organization>
 
@@ -2663,8 +2668,8 @@ Table of Contents
 
    When this element appears in the <front> element of the current
    document, the title might also appear in page headers or footers.  If
-   it's long (~40 characters), the "abbrev" attribute is used to specify
-   an abbreviated variant.
+   it is long (~40 characters), the "abbrev" attribute is used to
+   specify an abbreviated variant.
 
    This element appears as child element of: <front> (Section 2.27).
 
@@ -2828,9 +2833,9 @@ Table of Contents
 2.64.  <vspace>
 
    Deprecated.  In earlier versions of this format, <vspace> was often
-   used to get an extra blank line in a list element.  In the v3
+   used to get an extra blank line in a list element; in the v3
    vocabulary, that can be done instead by using multiple <t> elements
-   inside the <li> element.
+   inside the <li> element.  Other uses have no direct replacement.
 
    This element appears as child element of: <t> (Section 2.56).
 
@@ -3023,8 +3028,8 @@ Table of Contents
    generally, a processor that is reading RFCs or Internet Drafts needs
    to be suspicious of any content that it intends to post-process.
 
-   Furthermore, all security considerations related to XML processing
-   are relevant as well (see Section 7 of [RFC3470]).
+   All security considerations related to XML processing are relevant as
+   well (see Section 7 of [RFC3470]).
 
 5.  IANA Considerations
 
@@ -3058,12 +3063,12 @@ Table of Contents
 
    Published specification:  This specification.
 
-   Applications that use this media type:  Applications that either
-      transform xml2rfc to output representations such as plain text or
-      HTML, plus additional analysis tools.
+   Applications that use this media type:  Applications that transform
+      xml2rfc to output representations such as plain text or HTML, plus
+      additional analysis tools.
 
    Fragment identifier considerations:  The "anchor" attribute is used
-      for assigning document-wide unique identifiers that can be uses as
+      for assigning document-wide unique identifiers that can be used as
       shorthand pointers, as described in Section 2.8 of [XPOINTER].
 
    Additional information:
@@ -3469,6 +3474,9 @@ B.1.  Including External Text
 
    <x:include href="file://home/chris/ietf/drafts/commontext.xml"/>
 
+   In general, XInclude should be used instead of ENTITY references and
+   XML Processor Instructions (PIs) that allow external inclusions.
+
    [[anchor21: Need to think a bit more about using xi:include to
    replace src= for artwork or sourcecode.]]
 
@@ -3504,7 +3512,7 @@ C.1.  Canonical RFCs
 
    o  XML comments
 
-   o  XML Processor Instructions (PIs)
+   o  XML Processor Instructions
 
    o  an external DTD
 
@@ -3543,7 +3551,7 @@ Appendix D.  Format and Content of Internet Drafts (Future)
 
    [[[ This section describes a future where the v3 format will be
    allowed as the input for Internet Draft publication.  The section is
-   in this document only temporarily: it soon move to its own page
+   in this document only temporarily: it will soon move to its own page
    managed by someone yet to be determined. ]]]
 
    [[[ Description of the transition from the current text format to
