@@ -11,7 +11,7 @@ exec tclsh "$0" "$0" "$@"
 
 global prog prog_version prog_url prog_ack
 set prog "xml2rfc"
-set prog_version "v1.36"
+set prog_version "v1.37pre1"
 set prog_url "http://xml.resource.org/"
 set prog_ack \
 "This document was produced
@@ -2922,6 +2922,25 @@ if {[catch { package require http 2 }]} {
     set ::http::defaultCharset unknown
 }
 
+# from http://wiki.tcl.tk/11831
+package require uri
+proc geturl_followRedirects {url args} {
+   array set URI [::uri::split $url] ;# Need host info from here
+   foreach x {1 2 3 4 5} {
+       set token [eval [list http::geturl $url] $args]
+       if {![string match {30[1237]} [::http::ncode $token]]} {return $token}
+       array set meta [set ${token}(meta)]
+       if {![info exist meta(Location)]} {
+           return $token
+       }
+       array set uri [::uri::split $meta(Location)]
+       unset meta
+       if {$uri(host) == ""} { set uri(host) $URI(host) }
+       # problem w/ relative versus absolute paths
+       set url [eval ::uri::join [array get uri]]
+   }
+}
+
 proc check_vrsn {} {
     global env
     global guiP
@@ -2941,7 +2960,7 @@ proc check_vrsn {} {
     }
 
     catch {
-        ::http::geturl ${prog_url}authoring/$file \
+        geturl_followRedirects ${prog_url}authoring/$file \
                        -command check_vrsn_command -timeout 3000
     }
 }
@@ -3563,17 +3582,17 @@ proc prexml_find_uri {s u} {
     set code "http package failed"
     catch {
         if {$httpV >= 2.4} {
-            set httpT [http::geturl $u -binary true]
+            set httpT [geturl_followRedirects $u -binary true]
         } else {
-            set httpT [http::geturl $u]
+            set httpT [geturl_followRedirects $u]
         }
         set code [http::code $httpT]
         if {![string compare [lindex $code 1] 404]} {
             set u $u.xml
             if {$httpV >= 2.4} {
-                set httpT [http::geturl $u -binary true]
+                set httpT [geturl_followRedirects $u -binary true]
             } else {
-                set httpT [http::geturl $u]
+                set httpT [geturl_followRedirects $u]
             }
             set code [http::code $httpT]
         }
@@ -4332,13 +4351,22 @@ set rfc5741StatusOfMemo2_ietf_info_consensus {
 set rfc5741StatusOfMemo2_ietf_info_noconsensus {
 "This document is a product of the Internet Engineering Task Force (IETF). It has been approved for publication by the Internet Engineering Steering Group (IESG). Not all documents approved by the IESG are a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
-set rfc5741StatusOfMemo2_iab_exp {
+set rfc5741StatusOfMemo2_iab_exp_consensus {
+"This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. It represents the consensus of the Internet Architecture Board (IAB). Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_iab_exp_noconsensus {
 "This document defines an Experimental Protocol for the Internet community. This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
-set rfc5741StatusOfMemo2_iab_historic {
+set rfc5741StatusOfMemo2_iab_historic_consensus {
+"This document defines a Historic Document for the Internet community. This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. It represents the consensus of the Internet Architecture Board (IAB). Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_iab_historic_noconsensus {
 "This document defines a Historic Document for the Internet community. This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
-set rfc5741StatusOfMemo2_iab_info {
+set rfc5741StatusOfMemo2_iab_info_consensus {
+"This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. It represents the consensus of the Internet Architecture Board (IAB). Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
+}
+set rfc5741StatusOfMemo2_iab_info_noconsensus {
 "This document is a product of the Internet Architecture Board (IAB) and represents information that the IAB has deemed valuable to provide for permanent record. Documents approved for publication by the IAB are not a candidate for any level of Internet Standard; see Section 2 of RFC 5741."
 }
 set rfc5741StatusOfMemo2_irtf_exp_consensus {
@@ -6489,16 +6517,52 @@ proc pass2begin_front {elemX} {
                             if {![catch { set rv(category) }]} {
                                 switch -- $rv(category) {
                                     exp {
-                                        global rfc5741StatusOfMemo_iab_exp rfc5741StatusOfMemo2_iab_exp 
-                                        set status "$rfc5741StatusOfMemo_iab_exp $rfc5741StatusOfMemo2_iab_exp $statusOfMemo3"
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                global rfc5741StatusOfMemo_iab_exp rfc5741StatusOfMemo2_iab_exp_consensus 
+                                                set status "$rfc5741StatusOfMemo_iab_exp $rfc5741StatusOfMemo2_iab_exp_consensus $statusOfMemo3"
+                                            }
+                                            no {
+                                                global rfc5741StatusOfMemo_iab_exp rfc5741StatusOfMemo2_iab_exp_noconsensus
+                                                set status "$rfc5741StatusOfMemo_iab_exp $rfc5741StatusOfMemo2_iab_exp_noconsensus $statusOfMemo3"
+                                            }
+                                            default {
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                            }
+                                        }
                                     }
                                     historic {
-                                        global rfc5741StatusOfMemo_iab_historic rfc5741StatusOfMemo2_iab_historic
-                                        set status "$rfc5741StatusOfMemo_iab_historic $rfc5741StatusOfMemo2_iab_historic $statusOfMemo3"
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                global rfc5741StatusOfMemo_iab_historic rfc5741StatusOfMemo2_iab_historic_consensus
+                                                set status "$rfc5741StatusOfMemo_iab_historic $rfc5741StatusOfMemo2_iab_historic_consensus $statusOfMemo3"
+                                            }
+                                            no {
+                                                global rfc5741StatusOfMemo_iab_historic rfc5741StatusOfMemo2_iab_historic_noconsensus
+                                                set status "$rfc5741StatusOfMemo_iab_historic $rfc5741StatusOfMemo2_iab_historic_noconsensus $statusOfMemo3"
+                                            }
+                                            default {
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                            }
+                                        }
                                     }
                                     info {
-                                        global rfc5741StatusOfMemo_iab_info rfc5741StatusOfMemo2_iab_info
-                                        set status "$rfc5741StatusOfMemo_iab_info $rfc5741StatusOfMemo2_iab_info $statusOfMemo3"
+                                        set consensusConsumed "yes"
+                                        switch -- $consensus {
+                                            yes {
+                                                global rfc5741StatusOfMemo_iab_info rfc5741StatusOfMemo2_iab_info_consensus
+                                                set status "$rfc5741StatusOfMemo_iab_info $rfc5741StatusOfMemo2_iab_info_consensus $statusOfMemo3"
+                                            }
+                                            no {
+                                                global rfc5741StatusOfMemo_iab_info rfc5741StatusOfMemo2_iab_info_noconsensus
+                                                set status "$rfc5741StatusOfMemo_iab_info $rfc5741StatusOfMemo2_iab_info_noconsensus $statusOfMemo3"
+                                            }
+                                            default {
+                                                unexpected_error "invalid combination of submissionType=\$rv(submissionType\", category=\"$rv(category)\" and consensus=\"$rv(consensus)\""
+                                            }
+                                        }
                                     }
                                     default {
                                         unexpected_error "invalid combination of submissionType=\$rv(submissionType\" and category=\"$rv(category)\""
