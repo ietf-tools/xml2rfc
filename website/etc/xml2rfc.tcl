@@ -2928,7 +2928,7 @@ proc geturl_followRedirects {url args} {
    array set URI [::uri::split $url] ;# Need host info from here
    foreach x {1 2 3 4 5} {
        set token [eval [list http::geturl $url] $args]
-       if {![string match {30[1237]} [::http::ncode $token]]} {return $token}
+       if {![string match {30[12378]} [::http::ncode $token]]} {return $token}
        array set meta [set ${token}(meta)]
        if {![info exist meta(Location)]} {
            return $token
