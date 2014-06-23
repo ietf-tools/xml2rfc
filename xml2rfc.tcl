@@ -2922,6 +2922,25 @@ if {[catch { package require http 2 }]} {
     set ::http::defaultCharset unknown
 }
 
+# from http://wiki.tcl.tk/11831
+package require uri
+proc geturl_followRedirects {url args} {
+   array set URI [::uri::split $url] ;# Need host info from here
+   foreach x {1 2 3 4 5} {
+       set token [eval [list http::geturl $url] $args]
+       if {![string match {30[1237]} [::http::ncode $token]]} {return $token}
+       array set meta [set ${token}(meta)]
+       if {![info exist meta(Location)]} {
+           return $token
+       }
+       array set uri [::uri::split $meta(Location)]
+       unset meta
+       if {$uri(host) == ""} { set uri(host) $URI(host) }
+       # problem w/ relative versus absolute paths
+       set url [eval ::uri::join [array get uri]]
+   }
+}
+
 proc check_vrsn {} {
     global env
     global guiP
@@ -2941,7 +2960,7 @@ proc check_vrsn {} {
     }
 
     catch {
-        ::http::geturl ${prog_url}authoring/$file \
+        geturl_followRedirects ${prog_url}authoring/$file \
                        -command check_vrsn_command -timeout 3000
     }
 }
@@ -3563,17 +3582,17 @@ proc prexml_find_uri {s u} {
     set code "http package failed"
     catch {
         if {$httpV >= 2.4} {
-            set httpT [http::geturl $u -binary true]
+            set httpT [geturl_followRedirects $u -binary true]
         } else {
-            set httpT [http::geturl $u]
+            set httpT [geturl_followRedirects $u]
         }
         set code [http::code $httpT]
         if {![string compare [lindex $code 1] 404]} {
             set u $u.xml
             if {$httpV >= 2.4} {
-                set httpT [http::geturl $u -binary true]
+                set httpT [geturl_followRedirects $u -binary true]
             } else {
-                set httpT [http::geturl $u]
+                set httpT [geturl_followRedirects $u]
             }
             set code [http::code $httpT]
         }
