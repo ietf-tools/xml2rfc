@@ -16,7 +16,12 @@
   <xsl:apply-templates select="rng:grammar"/>
 </xsl:template>
 
-<xsl:variable name="spec" select="document('draft-hoffman-xml2rfc-latest.xml')"/>
+<!-- generate deprecated section? -->
+<xsl:param name="deprecated" select="'no'"/>
+
+<!-- source of spec -->
+<xsl:param name="specsrc" select="'draft-reschke-xml2rfc-latest.xml'"/>
+<xsl:variable name="spec" select="document($specsrc)"/>
 
 <xsl:template match="rng:grammar">
   <xsl:apply-templates select="rng:define/rng:element">
@@ -25,89 +30,104 @@
 </xsl:template>
 
 <xsl:template match="rng:element">
+
 <xsl:variable name="anchor" select="concat('element.',@name)"/>
+<xsl:variable name="sec" select="$spec/rfc//section/section[@anchor=$anchor]"/>
+<xsl:variable name="indeprecated" select="contains($sec/../@title,'Deprecated')"/>
+
+<xsl:choose>
+  <xsl:when test="$deprecated='yes' and not($indeprecated)">
+    <!-- skip -->
+  </xsl:when>
+  <xsl:when test="$deprecated='no' and $indeprecated">
+    <!-- skip -->
+  </xsl:when>
+  <xsl:otherwise>
 <xsl:text>&#10;&#10;</xsl:text>
 <xsl:comment><xsl:value-of select="@name"/></xsl:comment>
 <section title="&lt;{@name}&gt;" anchor="{$anchor}">
-  <x:anchor-alias value="{@name}"/>
-  <iref item="Elements" subitem="{@name}" primary="true"/>
-  <iref item="{@name} element" primary="true"/>
+<x:anchor-alias value="{@name}"/>
+<iref item="Elements" subitem="{@name}" primary="true"/>
+<iref item="{@name} element" primary="true"/>
 
-  <xsl:variable name="attributecontents" select="descendant-or-self::rng:attribute"/>
-  <xsl:variable name="elementcontents" select="*[not(descendant-or-self::rng:attribute) and not(self::rng:empty)]"/>
+<xsl:variable name="attributecontents" select="descendant-or-self::rng:attribute"/>
+<xsl:variable name="elementcontents" select="*[not(descendant-or-self::rng:attribute) and not(self::rng:empty)]"/>
 
-  <xsl:variable name="appearsin" select="//rng:element[.//rng:ref/@name=current()/@name]"/>
+<xsl:variable name="appearsin" select="//rng:element[.//rng:ref/@name=current()/@name]"/>
 
-  <xsl:variable name="elemdoc" select="$spec/rfc/middle/section/section[@anchor=$anchor]/t[not(comment()='AG')] | $spec/rfc/middle/section/section[@anchor=$anchor]/figure | $spec/rfc/middle/section/section[@anchor=$anchor]/texttable"/>
-  <xsl:if test="not($elemdoc)">
+<xsl:variable name="elemdoc" select="$spec/rfc/middle/section/section[@anchor=$anchor]/t[not(comment()='AG')] | $spec/rfc/middle/section/section[@anchor=$anchor]/figure | $spec/rfc/middle/section/section[@anchor=$anchor]/texttable"/>
+<xsl:if test="not($elemdoc)">
+  <t>
+    <xsl:comment>AG</xsl:comment>
+    <cref anchor="{$anchor}.missing">element description missing</cref>
+  </t>
+  <xsl:message>Missing prose in <xsl:value-of select="$anchor"/></xsl:message>
+</xsl:if>
+
+<xsl:apply-templates select="$elemdoc" mode="copy"/>
+
+<xsl:if test="$appearsin">
+  <t>
+    <xsl:comment>AG</xsl:comment>
+    <xsl:text>This element appears as child element of: </xsl:text>
+    <xsl:for-each select="$appearsin">
+      <xsl:sort select="@name"/>
+        <xsl:text>&lt;</xsl:text>
+        <x:ref><xsl:value-of select="@name"/></x:ref>
+        <xsl:text>&gt;</xsl:text> (<xref target="element.{@name}"/>)<xsl:if test="position() != last()">, </xsl:if>
+        <xsl:if test="position() = last() -1">and </xsl:if>
+    </xsl:for-each>
+    <xsl:text>.</xsl:text>
+  </t>
+</xsl:if>
+
+<xsl:choose>
+  <xsl:when test="not($elementcontents)">
+    <t anchor="{$anchor}.contents">
+      <xsl:comment>AG</xsl:comment>
+      <xsl:text>Content model: this element does not have any contents.</xsl:text>
+    </t>
+  </xsl:when>
+  <xsl:when test="count($elementcontents)=1 and $elementcontents[1]/self::rng:text">
+    <t anchor="{$anchor}.contents">
+      <xsl:comment>AG</xsl:comment>
+      <xsl:text>Content model: only text content.</xsl:text>
+    </t>
+  </xsl:when>
+  <xsl:when test="count($elementcontents)=1">
+    <t anchor="{$anchor}.contents">
+      <xsl:comment>AG</xsl:comment>
+      Content model:
+    </t>
+    <xsl:apply-templates select="$elementcontents"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <t anchor="{$anchor}.contents">
+      <xsl:comment>AG</xsl:comment>
+      <xsl:text>Content model:</xsl:text>
+    </t>
     <t>
       <xsl:comment>AG</xsl:comment>
-      <cref anchor="{$anchor}.missing">element description missing</cref>
+      <xsl:text>In this order:</xsl:text>
+      <list style="numbers">
+        <xsl:apply-templates select="$elementcontents"/>
+      </list>
     </t>
-    <xsl:message>Missing prose in <xsl:value-of select="$anchor"/></xsl:message>
-  </xsl:if>
-  <xsl:apply-templates select="$elemdoc" mode="copy"/>
-  
-  <xsl:if test="$appearsin">
-    <t>
-      <xsl:comment>AG</xsl:comment>
-      <xsl:text>This element appears as child element of: </xsl:text>
-      <xsl:for-each select="$appearsin">
-        <xsl:sort select="@name"/>
-          <xsl:text>&lt;</xsl:text>
-          <x:ref><xsl:value-of select="@name"/></x:ref>
-          <xsl:text>&gt;</xsl:text> (<xref target="element.{@name}"/>)<xsl:if test="position() != last()">, </xsl:if>
-          <xsl:if test="position() = last() -1">and </xsl:if>
-      </xsl:for-each>
-      <xsl:text>.</xsl:text>
-    </t>
-  </xsl:if>
-  
-  <xsl:choose>
-    <xsl:when test="not($elementcontents)">
-      <t anchor="{$anchor}.contents">
-        <xsl:comment>AG</xsl:comment>
-        <xsl:text>Content model: this element does not have any contents.</xsl:text>
-      </t>
-    </xsl:when>
-    <xsl:when test="count($elementcontents)=1 and $elementcontents[1]/self::rng:text">
-      <t anchor="{$anchor}.contents">
-        <xsl:comment>AG</xsl:comment>
-        <xsl:text>Content model: only text content.</xsl:text>
-      </t>
-    </xsl:when>
-    <xsl:when test="count($elementcontents)=1">
-      <t anchor="{$anchor}.contents">
-        <xsl:comment>AG</xsl:comment>
-        Content model:
-      </t>
-      <xsl:apply-templates select="$elementcontents"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <t anchor="{$anchor}.contents">
-        <xsl:comment>AG</xsl:comment>
-        <xsl:text>Content model:</xsl:text>
-      </t>
-      <t>
-        <xsl:comment>AG</xsl:comment>
-        <xsl:text>In this order:</xsl:text>
-        <list style="numbers">
-          <xsl:apply-templates select="$elementcontents"/>
-        </list>
-      </t>
-    </xsl:otherwise>
-  </xsl:choose>
+  </xsl:otherwise>
+</xsl:choose>
 
-  <xsl:apply-templates select="$attributecontents">
-    <xsl:sort select="concat(@name,*/@name)"/>
-  </xsl:apply-templates>
+<xsl:apply-templates select="$attributecontents">
+  <xsl:sort select="concat(@name,*/@name)"/>
+</xsl:apply-templates>
 
-  <!--<section title="Grammar" toc="exclude" anchor="{$anchor}.grammar">
-    <t/>
-    <figure><artwork type="application/relax-ng-compact-syntax">&#10;<xsl:apply-templates select="." mode="rnc"/></artwork></figure>
-  </section>-->
-  
-</section>
+<!--<section title="Grammar" toc="exclude" anchor="{$anchor}.grammar">
+  <t/>
+  <figure><artwork type="application/relax-ng-compact-syntax">&#10;<xsl:apply-templates select="." mode="rnc"/></artwork></figure>
+</section>-->
+    </section>
+  </xsl:otherwise>
+</xsl:choose>
+
 </xsl:template>
 
 <xsl:template match="rng:*">
@@ -238,27 +258,6 @@
     <xsl:apply-templates select="rng:choice/*"/>
   </list>
 </t>
-</xsl:template>
-
-<xsl:template match="rng:choice">
-<xsl:for-each select="*">
-  <t>
-    <xsl:comment>AG</xsl:comment>
-    <xsl:choose>
-      <xsl:when test="position()=1">
-        <xsl:text>Either:</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>Or:</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-    <list style="symbols">
-      <x:lt>
-        <xsl:apply-templates select="."/>
-      </x:lt>
-    </list>
-  </t>
-</xsl:for-each>
 </xsl:template>
 
 <xsl:template match="*" mode="copy">

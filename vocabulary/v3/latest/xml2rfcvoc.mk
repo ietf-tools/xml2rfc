@@ -11,12 +11,15 @@ xml2rfcv3-annotated.rng: xml2rfcv3.rng annotate-rng.xslt draft-hoffman-xml2rfc-l
 	saxon $< annotate-rng.xslt doc=draft-hoffman-xml2rfc-latest.xml > $@
 
 xml2rfcv3-spec.xml: xml2rfcv3.rng rng2xml2rfc.xslt
-	saxon $< rng2xml2rfc.xslt > $@
+	saxon $< rng2xml2rfc.xslt specsrc=draft-hoffman-xml2rfc-latest.xml > $@
+
+xml2rfcv3-spec-deprecated.xml: xml2rfcv3.rng rng2xml2rfc.xslt
+	saxon $< rng2xml2rfc.xslt specsrc=draft-hoffman-xml2rfc-latest.xml deprecated=yes > $@
 
 xml2rfcv3.rnc.folded: xml2rfcv3.rnc
 	fold -w69 -s $< | sed "s/\&/\&amp;/g" > $@
 
-draft-hoffman-xml2rfc-latest.xml: xml2rfcv3-spec.xml xml2rfcv3.rnc.folded differences-from-v2.txt
+draft-hoffman-xml2rfc-latest.xml: xml2rfcv3-spec.xml xml2rfcv3-spec-deprecated.xml xml2rfcv3.rnc.folded differences-from-v2.txt
 	cp -v $@ $@.bak
 	./refresh-inclusions.sh $@
 
