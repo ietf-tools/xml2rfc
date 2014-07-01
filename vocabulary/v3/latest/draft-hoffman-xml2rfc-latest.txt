@@ -250,13 +250,14 @@ Internet-Draft                  XML2RFCv3                      June 2014
    useful data for other uses (such index generation, populating a
    keyword database, or syntax checks).
 
-   The following is a hopefully-complete list of all the technical
-   changes between [XML2RFCv2] and this document, as well as the design
-   criteria for those changes.  Note that the list is for the current
-   version of this document only.  There are additional changes that are
-   expected to the v3 vocabulary that are being discussed.  Also note
-   that changes to the design choices for the differences are also
-   expected.
+   In this document, the term "format" is used when describing types of
+   documents, primarily XML and HTML.  The term "representation" is used
+   when talking about a specific instatiation of a format, such as an
+   XML document or an HTML document that was created by an XML document.
+
+   The following two sections are a hopefully-complete list of all the
+   technical changes between [XML2RFCv2] and this document, as well as
+   the design criteria for those changes.
 
 1.1.  Design Criteria for the Changes in v3
 
@@ -272,7 +273,6 @@ Internet-Draft                  XML2RFCv3                      June 2014
       representation for drafts or RFCs.  That might happen eventually,
       but it is likely to be years away.
 
-   There is a desire to keep as much of the v2 grammar as makes sense
 
 
 
@@ -281,6 +281,7 @@ Hoffman                  Expires January 1, 2015                [Page 5]
 Internet-Draft                  XML2RFCv3                      June 2014
 
 
+   There is a desire to keep as much of the v2 grammar as makes sense
    within the above design criteria and not to make gratuitous changes
    to the v2 grammar.  Another way to say this is "we would rather
    encourage backward compatibility but not be constrained by it".
@@ -327,7 +328,6 @@ Internet-Draft                  XML2RFCv3                      June 2014
    o  Add <displayreference> to allow display of more mneumonic anchor
       names for automatically-included references.
 
-   o  Add <refcontent> to allow better control of text in a reference.
 
 
 
@@ -336,6 +336,8 @@ Hoffman                  Expires January 1, 2015                [Page 6]
 
 Internet-Draft                  XML2RFCv3                      June 2014
 
+
+   o  Add <refcontent> to allow better control of text in a reference.
 
    o  Add <link> to point to a resource related to the RFC.
 
@@ -383,8 +385,6 @@ Internet-Draft                  XML2RFCv3                      June 2014
 
    o  Deprecate <facsimile> because it is rarely used and is not
       actually useful; <email> is a much more useful way to get in touch
-      with authors.
-
 
 
 
@@ -392,6 +392,8 @@ Hoffman                  Expires January 1, 2015                [Page 7]
 
 Internet-Draft                  XML2RFCv3                      June 2014
 
+
+      with authors.
 
    o  Deprecate <format> because it is not useful and has caused
       surprise for authors in the past.  If the goal is to provide a
@@ -439,8 +441,6 @@ Internet-Draft                  XML2RFCv3                      June 2014
 
    o  In <front>, make <date> optional.
 
-   o  In <postal>, allow the sub-elements to be in any order.  Also
-      allow the inclusion of the new <postalLine> instead of the older
 
 
 
@@ -449,6 +449,8 @@ Hoffman                  Expires January 1, 2015                [Page 8]
 Internet-Draft                  XML2RFCv3                      June 2014
 
 
+   o  In <postal>, allow the sub-elements to be in any order.  Also
+      allow the inclusion of the new <postalLine> instead of the older
       elements.
 
    o  In <ttcol>, allow <xref>, <eref>, <iref>, and <cref> as optional
@@ -495,8 +497,6 @@ Internet-Draft                  XML2RFCv3                      June 2014
 
    This element appears as child element of: <author> (Section 2.7).
 
-   Content model:
-
 
 
 
@@ -504,6 +504,8 @@ Hoffman                  Expires January 1, 2015                [Page 9]
 
 Internet-Draft                  XML2RFCv3                      June 2014
 
+
+   Content model:
 
    In any order:
 
@@ -550,8 +552,6 @@ Internet-Draft                  XML2RFCv3                      June 2014
 
    o  <tt> elements (Section 2.61)
 
-   o  <strong> elements (Section 2.54)
-
 
 
 
@@ -560,6 +560,8 @@ Hoffman                  Expires January 1, 2015               [Page 10]
 
 Internet-Draft                  XML2RFCv3                      June 2014
 
+
+   o  <strong> elements (Section 2.54)
 
    o  <b> elements (Section 2.8)
 
@@ -607,8 +609,6 @@ Internet-Draft                  XML2RFCv3                      June 2014
 
    Alternatively, the "src" attribute allows referencing an external
    graphics file, such as a bitmap or a vector drawing, using a URI.  In
-   this case, the textual content acts as fallback for output
-   representations that do not support graphics, and thus ought to
 
 
 
@@ -617,6 +617,8 @@ Hoffman                  Expires January 1, 2015               [Page 11]
 Internet-Draft                  XML2RFCv3                      June 2014
 
 
+   this case, the textual content acts as fallback for output
+   representations that do not support graphics, and thus ought to
    contain either a "line art" variant of the graphics, or otherwise
    prose that describes the included image in sufficient detail.
 
@@ -663,8 +665,6 @@ Internet-Draft                  XML2RFCv3                      June 2014
    A filename suitable for the contents (such as for extraction to a
    local file).
 
-   This attribute generally isn't used for document generation, but it
-   can be helpful for other kinds of tools (such as automated syntax
 
 
 
@@ -673,6 +673,8 @@ Hoffman                  Expires January 1, 2015               [Page 12]
 Internet-Draft                  XML2RFCv3                      June 2014
 
 
+   This attribute generally isn't used for document generation, but it
+   can be helpful for other kinds of tools (such as automated syntax
    checkers which work by extracting the artwork).
 
 2.5.5.  'src' attribute
@@ -718,8 +720,6 @@ Internet-Draft                  XML2RFCv3                      June 2014
    Allows specification of the language used.  This is sometimes useful
    for renderers which display different fonts for ideographic
    characters used in China and Japan.
-
-
 
 
 
@@ -1827,7 +1827,7 @@ Internet-Draft                  XML2RFCv3                      June 2014
 
    Deprecated.  Instead, use <dl> for list/@style "hanging"; <ul> for
    list/@style "empty" or "symbols"; and <ol> for list/@style "letters",
-   "numbers", or "format".
+   "numbers", "counter", or "format".
 
    This element appears as child element of: <t> (Section 2.57).
 
@@ -6022,7 +6022,7 @@ Internet-Draft                  XML2RFCv3                      June 2014
          sourcecode  14, 17, 22, 32, 47, 49, 55
          spanx  10, 18, 38-39, 51, 55
          street  37, 52
-         strong  10, 17-18, 20, 22, 24-25, 30, 32, 38-40, 52, 54-55, 60
+         strong  11, 17-18, 20, 22, 24-25, 30, 32, 38-40, 52, 54-55, 60
          sub  11, 16, 18-20, 22, 24-25, 30, 32, 38-40, 53, 56, 60
          sup  11, 16, 18-20, 22, 24-25, 30, 32, 38-40, 53-54, 56, 60
          t  9, 14, 21, 31, 33-34, 47, 55
@@ -6419,7 +6419,7 @@ Internet-Draft                  XML2RFCv3                      June 2014
          ascii attribute  52
          inside postal  37
       strong element  52
-         inside annotation  10
+         inside annotation  11
          inside blockquote  17
          inside c  18
          inside cref  20
