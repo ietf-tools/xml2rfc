@@ -499,6 +499,14 @@ as optional children.</t>
       In <xref target="XML2RFCv2"/>, the &lt;artwork&gt; element was also used for source code and formal
       languages; in v3, this is now done with &lt;<x:ref>sourcecode</x:ref>&gt;.
    </t>
+   <t>
+      There are three ways to include SVG in artwork in Internet Drafts:
+      <list style="symbols">
+         <t>Inline, by including all of the SVG in the content of the element</t>
+         <t>As a data: URI (such as "&lt;artwork type="svg" src="data:&lt;svg xmlns..."&gt;")</t>
+         <t>As a URI to an external entity (such as "&lt;artwork type="svg" src="http:www.example.com/..."&gt;")</t>
+      </list>
+   </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       Content model:
@@ -570,8 +578,7 @@ as optional children.</t>
             The URI of a graphics file.
          </t>
       <t>
-            Note that this can be a "data" URI (<xref target="RFC2397"/>) as well, in which case the graphics
-            file is wholly part of the XML file.
+            Note that this can be a "data" URI (<xref target="RFC2397"/>).
          </t>
       <t>
          <cref>Add an example of in-lined SVG here.</cref>

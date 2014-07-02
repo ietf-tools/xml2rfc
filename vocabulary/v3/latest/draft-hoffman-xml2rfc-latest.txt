@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                               July 1, 2014
+Obsoletes: 2629 (if approved)                               July 2, 2014
 Intended status: Informational
-Expires: January 2, 2015
+Expires: January 3, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 2, 2015.
+   This Internet-Draft will expire on January 3, 2015.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Hoffman                  Expires January 2, 2015                [Page 1]
+Hoffman                  Expires January 3, 2015                [Page 1]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Hoffman                  Expires January 2, 2015                [Page 2]
+Hoffman                  Expires January 3, 2015                [Page 2]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -164,7 +164,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015                [Page 3]
+Hoffman                  Expires January 3, 2015                [Page 3]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -220,7 +220,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015                [Page 4]
+Hoffman                  Expires January 3, 2015                [Page 4]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -276,7 +276,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015                [Page 5]
+Hoffman                  Expires January 3, 2015                [Page 5]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -332,7 +332,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015                [Page 6]
+Hoffman                  Expires January 3, 2015                [Page 6]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -388,7 +388,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015                [Page 7]
+Hoffman                  Expires January 3, 2015                [Page 7]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -444,7 +444,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015                [Page 8]
+Hoffman                  Expires January 3, 2015                [Page 8]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -500,7 +500,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015                [Page 9]
+Hoffman                  Expires January 3, 2015                [Page 9]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -556,7 +556,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 10]
+Hoffman                  Expires January 3, 2015               [Page 10]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -612,7 +612,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 11]
+Hoffman                  Expires January 3, 2015               [Page 11]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -627,6 +627,16 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
    In [XML2RFCv2], the <artwork> element was also used for source code
    and formal languages; in v3, this is now done with <sourcecode>.
+
+   There are three ways to include SVG in artwork in Internet Drafts:
+
+   o  Inline, by including all of the SVG in the content of the element
+
+   o  As a data: URI (such as "<artwork type="svg" src="data:<svg
+      xmlns...">")
+
+   o  As a URI to an external entity (such as "<artwork type="svg"
+      src="http:www.example.com/...">")
 
    This element appears as child element of: <aside> (Section 2.6),
    <blockquote> (Section 2.11), <dd> (Section 2.18), <figure>
@@ -655,6 +665,14 @@ Internet-Draft                  XML2RFCv3                      July 2014
    Alternative text description of the artwork (not just the caption).
    This is only used with artwork that is text-based; when the art comes
    from the "src" attribute, the alternative text comes from the text of
+
+
+
+Hoffman                  Expires January 3, 2015               [Page 12]
+
+Internet-Draft                  XML2RFCv3                      July 2014
+
+
    the artwork itself.
 
 2.5.3.  'height' attribute
@@ -666,13 +684,6 @@ Internet-Draft                  XML2RFCv3                      July 2014
    A filename suitable for the contents (such as for extraction to a
    local file).
 
-
-
-Hoffman                  Expires January 2, 2015               [Page 12]
-
-Internet-Draft                  XML2RFCv3                      July 2014
-
-
    This attribute generally isn't used for document generation, but it
    can be helpful for other kinds of tools (such as automated syntax
    checkers which work by extracting the artwork).
@@ -681,8 +692,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
    The URI of a graphics file.
 
-   Note that this can be a "data" URI ([RFC2397]) as well, in which case
-   the graphics file is wholly part of the XML file.
+   Note that this can be a "data" URI ([RFC2397]).
 
    [[anchor7: Add an example of in-lined SVG here.]]
 
@@ -711,23 +721,20 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
    The RFC Editor will maintain a complete list of the preferred values
    on its web site, and that list is expected to be updated over time.
+
+
+
+Hoffman                  Expires January 3, 2015               [Page 13]
+
+Internet-Draft                  XML2RFCv3                      July 2014
+
+
    Thus, a consumer of v3 XML should not cause a failure when it
    encounters an unexpected type.
 
 2.5.7.  'width' attribute
 
    Deprecated.
-
-
-
-
-
-
-
-Hoffman                  Expires January 2, 2015               [Page 13]
-
-Internet-Draft                  XML2RFCv3                      July 2014
-
 
 2.5.8.  'xml:lang' attribute
 
@@ -770,6 +777,14 @@ Internet-Draft                  XML2RFCv3                      July 2014
    for the document itself (at the beginning of the document) and for
    referenced documents (inside of <reference>).
 
+
+
+
+Hoffman                  Expires January 3, 2015               [Page 14]
+
+Internet-Draft                  XML2RFCv3                      July 2014
+
+
    The <author> elements contained within the document's <front> element
    are used to fill the boilerplate, and also to generate the "Author's
    Address" section (see [RFCSTYLE]).
@@ -777,13 +792,6 @@ Internet-Draft                  XML2RFCv3                      July 2014
    Note that an "author" can also be just an organization (by not
    specifying any of the name attributes, but adding the <organization>
    child element).
-
-
-
-Hoffman                  Expires January 2, 2015               [Page 14]
-
-Internet-Draft                  XML2RFCv3                      July 2014
-
 
    Furthermore, the "role" attribute can be used to mark an author as
    "editor".  This is reflected both on the front page and in
@@ -826,20 +834,18 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
    Allowed values:
 
+
+
+Hoffman                  Expires January 3, 2015               [Page 15]
+
+Internet-Draft                  XML2RFCv3                      July 2014
+
+
    o  "editor"
 
 2.7.5.  'surname' attribute
 
    The author's surname.
-
-
-
-
-
-Hoffman                  Expires January 2, 2015               [Page 15]
-
-Internet-Draft                  XML2RFCv3                      July 2014
-
 
 2.7.6.  'xml:lang' attribute
 
@@ -883,19 +889,15 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
    o  <sub> elements (Section 2.51)
 
-   o  <sup> elements (Section 2.52)
 
 
 
-
-
-
-
-
-Hoffman                  Expires January 2, 2015               [Page 16]
+Hoffman                  Expires January 3, 2015               [Page 16]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
+
+   o  <sup> elements (Section 2.52)
 
 2.9.  <back>
 
@@ -943,15 +945,15 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
    o  Text
 
-   o  <figure> elements (Section 2.25)
 
 
 
-
-Hoffman                  Expires January 2, 2015               [Page 17]
+Hoffman                  Expires January 3, 2015               [Page 17]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
+
+   o  <figure> elements (Section 2.25)
 
    o  <artwork> elements (Section 2.5)
 
@@ -998,16 +1000,16 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
    o  <iref> elements (Section 2.28)
 
-   o  <cref> elements (Section 2.16)
 
 
 
 
-
-Hoffman                  Expires January 2, 2015               [Page 18]
+Hoffman                  Expires January 3, 2015               [Page 18]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
+
+   o  <cref> elements (Section 2.16)
 
    o  <spanx> elements (Section 3.4)
 
@@ -1055,15 +1057,15 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
    This element appears as child element of: <postal> (Section 2.37).
 
-   Content model: only text content.
 
 
 
-
-Hoffman                  Expires January 2, 2015               [Page 19]
+Hoffman                  Expires January 3, 2015               [Page 19]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
+
+   Content model: only text content.
 
 2.16.  <cref>
 
@@ -1114,9 +1116,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-
-
-Hoffman                  Expires January 2, 2015               [Page 20]
+Hoffman                  Expires January 3, 2015               [Page 20]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1172,7 +1172,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 21]
+Hoffman                  Expires January 3, 2015               [Page 21]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1228,7 +1228,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 22]
+Hoffman                  Expires January 3, 2015               [Page 22]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1284,7 +1284,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 23]
+Hoffman                  Expires January 3, 2015               [Page 23]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1340,7 +1340,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 24]
+Hoffman                  Expires January 3, 2015               [Page 24]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1396,7 +1396,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 25]
+Hoffman                  Expires January 3, 2015               [Page 25]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1452,7 +1452,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 26]
+Hoffman                  Expires January 3, 2015               [Page 26]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1508,7 +1508,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 27]
+Hoffman                  Expires January 3, 2015               [Page 27]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1564,7 +1564,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 28]
+Hoffman                  Expires January 3, 2015               [Page 28]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1620,7 +1620,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 29]
+Hoffman                  Expires January 3, 2015               [Page 29]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1676,7 +1676,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 30]
+Hoffman                  Expires January 3, 2015               [Page 30]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1732,7 +1732,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 31]
+Hoffman                  Expires January 3, 2015               [Page 31]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1788,7 +1788,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 32]
+Hoffman                  Expires January 3, 2015               [Page 32]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1844,7 +1844,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 33]
+Hoffman                  Expires January 3, 2015               [Page 33]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1900,7 +1900,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 34]
+Hoffman                  Expires January 3, 2015               [Page 34]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -1956,7 +1956,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 35]
+Hoffman                  Expires January 3, 2015               [Page 35]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2012,7 +2012,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 36]
+Hoffman                  Expires January 3, 2015               [Page 36]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2068,7 +2068,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 37]
+Hoffman                  Expires January 3, 2015               [Page 37]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2124,7 +2124,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 38]
+Hoffman                  Expires January 3, 2015               [Page 38]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2180,7 +2180,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 39]
+Hoffman                  Expires January 3, 2015               [Page 39]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2236,7 +2236,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 40]
+Hoffman                  Expires January 3, 2015               [Page 40]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2292,7 +2292,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 41]
+Hoffman                  Expires January 3, 2015               [Page 41]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2348,7 +2348,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 42]
+Hoffman                  Expires January 3, 2015               [Page 42]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2404,7 +2404,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 43]
+Hoffman                  Expires January 3, 2015               [Page 43]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2460,7 +2460,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 44]
+Hoffman                  Expires January 3, 2015               [Page 44]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2516,7 +2516,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 45]
+Hoffman                  Expires January 3, 2015               [Page 45]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2572,7 +2572,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 46]
+Hoffman                  Expires January 3, 2015               [Page 46]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2628,7 +2628,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 47]
+Hoffman                  Expires January 3, 2015               [Page 47]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2684,7 +2684,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 48]
+Hoffman                  Expires January 3, 2015               [Page 48]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2740,7 +2740,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 49]
+Hoffman                  Expires January 3, 2015               [Page 49]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2796,7 +2796,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 50]
+Hoffman                  Expires January 3, 2015               [Page 50]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2852,7 +2852,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 51]
+Hoffman                  Expires January 3, 2015               [Page 51]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2908,7 +2908,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 52]
+Hoffman                  Expires January 3, 2015               [Page 52]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -2964,7 +2964,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 53]
+Hoffman                  Expires January 3, 2015               [Page 53]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3020,7 +3020,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 54]
+Hoffman                  Expires January 3, 2015               [Page 54]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3076,7 +3076,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 55]
+Hoffman                  Expires January 3, 2015               [Page 55]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3132,7 +3132,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 56]
+Hoffman                  Expires January 3, 2015               [Page 56]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3188,7 +3188,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 57]
+Hoffman                  Expires January 3, 2015               [Page 57]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3244,7 +3244,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 58]
+Hoffman                  Expires January 3, 2015               [Page 58]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3300,7 +3300,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 59]
+Hoffman                  Expires January 3, 2015               [Page 59]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3356,7 +3356,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 60]
+Hoffman                  Expires January 3, 2015               [Page 60]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3412,7 +3412,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 61]
+Hoffman                  Expires January 3, 2015               [Page 61]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3468,7 +3468,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 62]
+Hoffman                  Expires January 3, 2015               [Page 62]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3524,7 +3524,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 63]
+Hoffman                  Expires January 3, 2015               [Page 63]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3580,7 +3580,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 64]
+Hoffman                  Expires January 3, 2015               [Page 64]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3636,7 +3636,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 65]
+Hoffman                  Expires January 3, 2015               [Page 65]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3692,7 +3692,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 66]
+Hoffman                  Expires January 3, 2015               [Page 66]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3748,7 +3748,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 67]
+Hoffman                  Expires January 3, 2015               [Page 67]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3804,7 +3804,7 @@ Appendix A.  Front Page Generation
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 68]
+Hoffman                  Expires January 3, 2015               [Page 68]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3860,7 +3860,7 @@ A.2.1.  Current Values: '*trust200902'
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 69]
+Hoffman                  Expires January 3, 2015               [Page 69]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3916,7 +3916,7 @@ A.2.1.4.  pre5378Trust200902
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 70]
+Hoffman                  Expires January 3, 2015               [Page 70]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -3972,7 +3972,7 @@ Appendix B.  The v3 Format and Processors
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 71]
+Hoffman                  Expires January 3, 2015               [Page 71]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4028,7 +4028,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 72]
+Hoffman                  Expires January 3, 2015               [Page 72]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4084,7 +4084,7 @@ B.1.  Including External Text
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 73]
+Hoffman                  Expires January 3, 2015               [Page 73]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4140,7 +4140,7 @@ C.1.  Canonical RFCs
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 74]
+Hoffman                  Expires January 3, 2015               [Page 74]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4196,7 +4196,7 @@ D.1.  The Draft Processor
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 75]
+Hoffman                  Expires January 3, 2015               [Page 75]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4252,7 +4252,7 @@ Appendix E.  Relax NG Schema
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 76]
+Hoffman                  Expires January 3, 2015               [Page 76]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4308,7 +4308,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 77]
+Hoffman                  Expires January 3, 2015               [Page 77]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4364,7 +4364,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 78]
+Hoffman                  Expires January 3, 2015               [Page 78]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4420,7 +4420,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 79]
+Hoffman                  Expires January 3, 2015               [Page 79]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4476,7 +4476,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 80]
+Hoffman                  Expires January 3, 2015               [Page 80]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4532,7 +4532,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 81]
+Hoffman                  Expires January 3, 2015               [Page 81]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4588,7 +4588,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 82]
+Hoffman                  Expires January 3, 2015               [Page 82]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4644,7 +4644,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 83]
+Hoffman                  Expires January 3, 2015               [Page 83]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4700,7 +4700,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 84]
+Hoffman                  Expires January 3, 2015               [Page 84]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4756,7 +4756,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 85]
+Hoffman                  Expires January 3, 2015               [Page 85]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4812,7 +4812,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 86]
+Hoffman                  Expires January 3, 2015               [Page 86]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4868,7 +4868,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 87]
+Hoffman                  Expires January 3, 2015               [Page 87]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4924,7 +4924,7 @@ Appendix F.  Schema Differences from v2
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 88]
+Hoffman                  Expires January 3, 2015               [Page 88]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -4980,7 +4980,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 89]
+Hoffman                  Expires January 3, 2015               [Page 89]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5036,7 +5036,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 90]
+Hoffman                  Expires January 3, 2015               [Page 90]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5092,7 +5092,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 91]
+Hoffman                  Expires January 3, 2015               [Page 91]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5148,7 +5148,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 92]
+Hoffman                  Expires January 3, 2015               [Page 92]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5204,7 +5204,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 93]
+Hoffman                  Expires January 3, 2015               [Page 93]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5260,7 +5260,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 94]
+Hoffman                  Expires January 3, 2015               [Page 94]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5316,7 +5316,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 95]
+Hoffman                  Expires January 3, 2015               [Page 95]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5372,7 +5372,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 96]
+Hoffman                  Expires January 3, 2015               [Page 96]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5428,7 +5428,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 97]
+Hoffman                  Expires January 3, 2015               [Page 97]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5484,7 +5484,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 98]
+Hoffman                  Expires January 3, 2015               [Page 98]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5540,7 +5540,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015               [Page 99]
+Hoffman                  Expires January 3, 2015               [Page 99]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5596,7 +5596,7 @@ Index
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 100]
+Hoffman                  Expires January 3, 2015              [Page 100]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5619,15 +5619,15 @@ Internet-Draft                  XML2RFCv3                      July 2014
       artwork element  11
          align attribute  12
          alt attribute  12
-         height attribute  12
+         height attribute  13
          inside aside  14
          inside blockquote  18
          inside section  44
          inside t  51
-         name attribute  12
+         name attribute  13
          src attribute  13
          type attribute  13
-         width attribute  13
+         width attribute  14
          xml:lang attribute  14
          xml:space attribute  14
       ascii attribute
@@ -5652,7 +5652,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 101]
+Hoffman                  Expires January 3, 2015              [Page 101]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5684,14 +5684,14 @@ Internet-Draft                  XML2RFCv3                      July 2014
          hangIndent  62
          hanging  23
          hangText  52
-         height  12, 27
+         height  13, 27
          href  31
          initials  15
          ipr  40
          iprExtract  41
          item  29
          month  21
-         name  12, 46-47
+         name  13, 46-47
          number  41
          numbered  44
          obsoletes  41
@@ -5708,7 +5708,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 102]
+Hoffman                  Expires January 3, 2015              [Page 102]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5722,7 +5722,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
          subitem  30
          submissionType  42
          suppress-title  27, 54
-         surname  15
+         surname  16
          symRefs  42
          target  26, 38, 61-62
          title  27, 32, 38, 45, 54
@@ -5733,7 +5733,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
          type  13, 47, 62
          updates  43
          value  46
-         width  13, 27, 57
+         width  14, 27, 57
          xml:lang  14, 16, 34, 43
          xml:space  14, 63
          year  21
@@ -5743,7 +5743,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
          initials attribute  15
          inside front  28
          role attribute  15
-         surname attribute  15
+         surname attribute  16
          xml:lang attribute  16
       autogeneratedBoilerplateText attribute
          in rfc element  39
@@ -5764,7 +5764,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 103]
+Hoffman                  Expires January 3, 2015              [Page 103]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5810,7 +5810,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
          anchor attribute  20
          inside annotation  10
          inside b  16
-         inside c  18
+         inside c  19
          inside dt  24
          inside em  24
          inside i  29
@@ -5820,7 +5820,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 104]
+Hoffman                  Expires January 3, 2015              [Page 104]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5876,12 +5876,12 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 105]
+Hoffman                  Expires January 3, 2015              [Page 105]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
 
-         cref  10, 16, 18, 20, 24, 29, 35-36, 49-52, 55-57
+         cref  10, 16, 19-20, 24, 29, 35-36, 49-52, 55-57
          date  21, 28
          dd  22-23
          displayreference  17, 22
@@ -5891,7 +5891,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
          email  10, 25
          eref  10, 16, 18, 20, 24-25, 28, 35-36, 49-52, 55-56
          facsimile  10, 61
-         figure  14, 17, 26, 44, 51
+         figure  14, 18, 26, 44, 51
          format  38, 62
          front  27, 38-39
          i  11, 16, 18-20, 24, 28, 35-37, 49-52, 56
@@ -5921,7 +5921,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
          street  48
          strong  10, 18-20, 24-25, 29, 35-37, 49-52, 56
          sub  11, 16, 18-20, 24-25, 29, 35-37, 49, 52, 56
-         sup  11, 16, 18-20, 24-25, 29, 36-37, 49-50, 52, 56
+         sup  11, 17-20, 24-25, 29, 36-37, 49-50, 52, 56
          t  9, 14, 32, 44, 51, 62
          texttable  14, 44, 52
          title  28, 54
@@ -5932,7 +5932,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 106]
+Hoffman                  Expires January 3, 2015              [Page 106]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5988,7 +5988,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 107]
+Hoffman                  Expires January 3, 2015              [Page 107]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -5998,7 +5998,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
          autogeneratedFigureNumber attribute  27
          height attribute  27
          inside aside  14
-         inside blockquote  17
+         inside blockquote  18
          inside section  44
          inside t  51
          src attribute  27
@@ -6032,7 +6032,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
       hangText attribute
          in t element  52
       height attribute
-         in artwork element  12
+         in artwork element  13
          in figure element  27
       href attribute
          in link element  31
@@ -6044,7 +6044,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 108]
+Hoffman                  Expires January 3, 2015              [Page 108]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -6100,7 +6100,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 109]
+Hoffman                  Expires January 3, 2015              [Page 109]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -6137,7 +6137,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
    N
       name attribute
-         in artwork element  12
+         in artwork element  13
          in seriesInfo element  46
          in sourcecode element  47
       note element  31
@@ -6156,7 +6156,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 110]
+Hoffman                  Expires January 3, 2015              [Page 110]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -6212,7 +6212,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 111]
+Hoffman                  Expires January 3, 2015              [Page 111]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -6268,7 +6268,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 112]
+Hoffman                  Expires January 3, 2015              [Page 112]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -6324,7 +6324,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 113]
+Hoffman                  Expires January 3, 2015              [Page 113]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -6348,7 +6348,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
          in rfc element  42
       sup element  50
          inside annotation  11
-         inside b  16
+         inside b  17
          inside blockquote  18
          inside c  19
          inside cref  20
@@ -6365,7 +6365,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
          in figure element  27
          in texttable element  54
       surname attribute
-         in author element  15
+         in author element  16
       symRefs attribute
          in rfc element  42
 
@@ -6380,7 +6380,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 114]
+Hoffman                  Expires January 3, 2015              [Page 114]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -6436,7 +6436,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 115]
+Hoffman                  Expires January 3, 2015              [Page 115]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -6476,7 +6476,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
    W
       width attribute
-         in artwork element  13
+         in artwork element  14
          in figure element  27
          in ttcol element  57
       workgroup element  58
@@ -6492,7 +6492,7 @@ Internet-Draft                  XML2RFCv3                      July 2014
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 116]
+Hoffman                  Expires January 3, 2015              [Page 116]
 
 Internet-Draft                  XML2RFCv3                      July 2014
 
@@ -6548,5 +6548,5 @@ Author's Address
 
 
 
-Hoffman                  Expires January 2, 2015              [Page 117]
+Hoffman                  Expires January 3, 2015              [Page 117]
 
