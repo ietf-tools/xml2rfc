@@ -509,9 +509,14 @@ Table of Contents
    In [XML2RFCv2], the <artwork> element was also used for source code
    and formal languages; in v3, this is now done with <sourcecode>.
 
-   There are three ways to include SVG in artwork in Internet Drafts:
+   There are at least four ways to include SVG in artwork in Internet
+   Drafts:
 
    o  Inline, by including all of the SVG in the content of the element
+      (such as "<artwork type="svg"><svg xmlns...">")
+
+   o  Inline, but using XInclude (see Appendix B.1 (such as "<artwork
+      type="svg"><xi:include href=...")
 
    o  As a data: URI (such as "<artwork type="svg" src="data:<svg
       xmlns...">")
@@ -3441,7 +3446,7 @@ B.1.  Including External Text
    In general, XInclude should be used instead of ENTITY references and
    XML Processor Instructions (PIs) that allow external inclusions.
 
-   [[anchor26: Need to think a bit more about using xi:include to
+   [[anchor25: Need to think a bit more about using xi:include to
    replace src= for artwork or sourcecode.]]
 
 Appendix C.  Format and Content of RFCs (Future)

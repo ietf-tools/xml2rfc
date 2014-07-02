@@ -500,13 +500,16 @@ as optional children.</t>
       languages; in v3, this is now done with &lt;<x:ref>sourcecode</x:ref>&gt;.
    </t>
    <t>
-      There are three ways to include SVG in artwork in Internet Drafts:
+      There are at least four ways to include SVG in artwork in Internet Drafts:
       <list style="symbols">
-         <t>Inline, by including all of the SVG in the content of the element</t>
+         <t>Inline, by including all of the SVG in the content of the element
+            (such as "&lt;artwork type="svg"&gt;&lt;svg xmlns..."&gt;")</t>
+         <t>Inline, but using XInclude (see <xref target="includingexternal"/>
+            (such as "&lt;artwork type="svg"&gt;&lt;xi:include href=...")</t>
          <t>As a data: URI (such as "&lt;artwork type="svg" src="data:&lt;svg xmlns..."&gt;")</t>
          <t>As a URI to an external entity (such as "&lt;artwork type="svg" src="http:www.example.com/..."&gt;")</t>
       </list>
-   </t>
+   </t> 
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       Content model:
@@ -4877,7 +4880,7 @@ errors in XML and those from the v3 format.</t>
 produce different types of output. For example, they might have a "convert XML to XML" option
 that expands the XML entities in the output.</t>
 
-<section title="Including External Text">
+<section title="Including External Text" anchor="includingexternal">
 
 <t>All XML processors for v3 are expected to support XInclude <xref target="XInclude"/>.
 XInclude specifies a processing model and syntax for general purpose inclusion of information
