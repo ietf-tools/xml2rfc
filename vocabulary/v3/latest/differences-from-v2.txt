@@ -203,7 +203,8 @@
 +      | em
 +      | i
 +      | sub
-+      | sup)*
++      | sup
++      | bcp14)*
 +   }
 + aside =
 +   element aside {
@@ -223,7 +224,8 @@
 +      | em
 +      | i
 +      | sub
-+      | sup)*
++      | sup
++      | bcp14)*
     }
   \list =
     element list {
@@ -270,7 +272,8 @@
 +        em,
 +        i,
 +        sub,
-+        sup)+
++        sup,
++        bcp14)+
 +   }
 + dl =
 +   element dl {
@@ -293,7 +296,8 @@
 +      | em
 +      | i
 +      | sub
-+      | sup)*
++      | sup
++      | bcp14)*
 +   }
 + dd =
 +   element dd {
@@ -315,7 +319,8 @@
 +        em,
 +        i,
 +        sub,
-+        sup)+
++        sup,
++        bcp14)+
 +   }
   xref =
     element xref {
@@ -362,33 +367,92 @@
 +      | em
 +      | i
 +      | sub
-+      | sup)*
++      | sup
++      | bcp14)*
 +   }
 + b =
 +   element b {
-+     (text | xref | eref | iref | cref | tt | em | i | sub | sup)*
++     (text
++      | xref
++      | eref
++      | iref
++      | cref
++      | tt
++      | em
++      | i
++      | sub
++      | sup
++      | bcp14)*
 +   }
 + strong =
 +   element strong {
-+     (text | xref | eref | iref | cref | tt | em | i | sub | sup)*
++     (text
++      | xref
++      | eref
++      | iref
++      | cref
++      | tt
++      | em
++      | i
++      | sub
++      | sup
++      | bcp14)*
 +   }
 + i =
 +   element i {
-+     (text | xref | eref | iref | cref | tt | strong | b | sub | 
-+ sup)*
++     (text
++      | xref
++      | eref
++      | iref
++      | cref
++      | tt
++      | strong
++      | b
++      | sub
++      | sup
++      | bcp14)*
 +   }
 + em =
 +   element em {
-+     (text | xref | eref | iref | cref | tt | strong | b | sub | 
-+ sup)*
++     (text
++      | xref
++      | eref
++      | iref
++      | cref
++      | tt
++      | strong
++      | b
++      | sub
++      | sup
++      | bcp14)*
 +   }
 + sub =
 +   element sub {
-+     (text | xref | eref | iref | cref | tt | strong | b | em | i)*
++     (text
++      | xref
++      | eref
++      | iref
++      | cref
++      | tt
++      | strong
++      | b
++      | em
++      | i
++      | bcp14)*
 +   }
 + sup =
 +   element sup {
-+     (text | xref | eref | iref | cref | tt | strong | b | em | i)*
++     (text
++      | xref
++      | eref
++      | iref
++      | cref
++      | tt
++      | strong
++      | b
++      | em
++      | i
++      | bcp14)*
     }
   spanx =
     element spanx {
@@ -437,7 +501,8 @@
 +      | em
 +      | i
 +      | sub
-+      | sup)*
++      | sup
++      | bcp14)*
 +   }
   artwork =
     element artwork {
@@ -476,7 +541,8 @@
 +      | em
 +      | i
 +      | sub
-+      | sup)*
++      | sup
++      | bcp14)*
   }
   texttable =
     element texttable {
@@ -517,7 +583,8 @@
 +      | em
 +      | i
 +      | sub
-+      | sup)*
++      | sup
++      | bcp14)*
 +   }
 + bcp14 = element bcp14 { text }
 + back = element back { displayreference*, references*, section* }
@@ -575,11 +642,12 @@
 +      | em
 +      | i
 +      | sub
-+      | sup)*
++      | sup
++      | bcp14)*
 +   }
 + refcontent =
 +   element refcontent {
 +     attribute ascii { text }?,
-+     (text | tt | b | i | em | strong | sub | sup)*
++     (text | tt | b | i | em | strong | sub | sup | bcp14)*
 +   }
   start = rfc
