@@ -246,6 +246,25 @@
   </t>
 </xsl:template>
 
+<xsl:template match="rng:choice">
+  <xsl:for-each select="*">
+    <t>
+      <xsl:comment>AG</xsl:comment>
+    <xsl:choose>
+        <xsl:when test="position()=1">
+          <xsl:text>Either:</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>Or:</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+      <list style="empty">
+        <xsl:apply-templates select="."/>
+      </list>
+    </t>
+  </xsl:for-each>
+</xsl:template>
+
 <xsl:template match="rng:zeroOrMore[rng:ref | rng:text]">
   <xsl:apply-templates/>
 </xsl:template>

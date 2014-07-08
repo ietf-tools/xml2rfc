@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                               July 7, 2014
+Obsoletes: 2629 (if approved)                               July 8, 2014
 Intended status: Informational
-Expires: January 8, 2015
+Expires: January 9, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 8, 2015.
+   This Internet-Draft will expire on January 9, 2015.
 
 Copyright Notice
 
@@ -1004,7 +1004,49 @@ Table of Contents
 
    Content model:
 
-   [[anchor11: Missing template for choice.]]
+   Either:
+
+      One or more <t> elements (Section 2.54)
+
+   Or:
+
+      One or more sequences of:
+
+      1.   One <ol> element
+
+      2.   One <ul> element
+
+      3.   One <dl> element
+
+      4.   One <figure> element
+
+      5.   One <artwork> element
+
+      6.   One <sourcecode> element
+
+      7.   One <xref> element
+
+      8.   One <eref> element
+
+      9.   One <iref> element
+
+      10.  One <cref> element
+
+      11.  One <tt> element
+
+      12.  One <strong> element
+
+      13.  One <b> element
+
+      14.  One <em> element
+
+      15.  One <i> element
+
+      16.  One <sub> element
+
+      17.  One <sup> element
+
+      18.  One <bcp14> element
 
 2.19.  <displayreference>
 
@@ -1213,7 +1255,7 @@ Table of Contents
 
    3.  One optional <preamble> element (Section 2.41)
 
-   4.  [[anchor12: Missing template for oneOrMore.]]
+   4.  [[anchor11: Missing template for oneOrMore.]]
 
    5.  One optional <postamble> element (Section 2.40)
 
@@ -1413,7 +1455,49 @@ Table of Contents
 
    Content model:
 
-   [[anchor13: Missing template for choice.]]
+   Either:
+
+      One or more <t> elements (Section 2.54)
+
+   Or:
+
+      One or more sequences of:
+
+      1.   One <ol> element
+
+      2.   One <ul> element
+
+      3.   One <dl> element
+
+      4.   One <figure> element
+
+      5.   One <artwork> element
+
+      6.   One <sourcecode> element
+
+      7.   One <xref> element
+
+      8.   One <eref> element
+
+      9.   One <iref> element
+
+      10.  One <cref> element
+
+      11.  One <tt> element
+
+      12.  One <strong> element
+
+      13.  One <b> element
+
+      14.  One <em> element
+
+      15.  One <i> element
+
+      16.  One <sub> element
+
+      17.  One <sup> element
+
+      18.  One <bcp14> element
 
 2.31.  <link>
 
@@ -1468,7 +1552,9 @@ Table of Contents
 
 2.33.  <name>
 
-   [[element.name.missing: element description missing]]
+   The name of the section, note, figure, or texttable.  This name can
+   have flow markup such as to make some characters use a fixed-width
+   font, or to include references.
 
    This element appears as child element of: <figure> (Section 2.25),
    <note> (Section 2.34), <section> (Section 2.47), and <texttable>
@@ -1640,7 +1726,23 @@ Table of Contents
 
    Content model:
 
-   [[anchor14: Missing template for choice.]]
+   Either:
+
+      In any order:
+
+      *  <street> elements (Section 2.50)
+
+      *  <city> elements (Section 2.13)
+
+      *  <region> elements (Section 2.45)
+
+      *  <code> elements (Section 2.14)
+
+      *  <country> elements (Section 2.15)
+
+   Or:
+
+      One or more <postalLine> elements (Section 2.39)
 
 2.38.1.  'xml:lang' attribute
 
@@ -2767,7 +2869,7 @@ Table of Contents
 
    The generated text depends on whether the <xref> is empty (in which
    case the processor will try to generate a meaningful text fragment),
-   and the nature of the referenced document part. [[anchor15: Need to
+   and the nature of the referenced document part. [[anchor12: Need to
    say more about the processor output if the element is empty and if it
    has text.]]
 
@@ -2854,7 +2956,7 @@ Table of Contents
 
 2.62.3.  'relative' attribute
 
-   Specifies a relative reference from the main target. [[anchor16: Need
+   Specifies a relative reference from the main target. [[anchor13: Need
    more description here about how this will be displayed.]]
 
 2.62.4.  'section' attribute
@@ -3008,7 +3110,7 @@ Table of Contents
    representing arbitrary Unicode [UNICODE] characters in text content.
    The RFC Editor may restrict some of the characters that can be used
    in a particular RFC; the rules for such restrictions are covered in
-   [[anchor17: some other document to be named later when it is
+   [[anchor14: some other document to be named later when it is
    stable]].
 
 5.  Security Considerations
@@ -3482,7 +3584,7 @@ B.1.  Including External Text
    In general, XInclude should be used instead of ENTITY references and
    XML Processor Instructions (PIs) that allow external inclusions.
 
-   [[anchor23: Need to think a bit more about using xi:include to
+   [[anchor20: Need to think a bit more about using xi:include to
    replace src= for artwork or sourcecode.]]
 
 Appendix C.  Format and Content of RFCs (Future)
@@ -4940,6 +5042,8 @@ Index
          height attribute  1
          inside aside  1
          inside blockquote  1
+         inside dd  1
+         inside li  1
          inside section  1
          inside t  1
          name attribute  1
@@ -5064,9 +5168,11 @@ Index
          inside blockquote  1
          inside c  1
          inside cref  1
+         inside dd  1
          inside dt  1
          inside em  1
          inside i  1
+         inside li  1
          inside postamble  1
          inside preamble  1
          inside refcontent  1
@@ -5081,9 +5187,11 @@ Index
          inside b  1
          inside blockquote  1
          inside c  1
+         inside dd  1
          inside dt  1
          inside em  1
          inside i  1
+         inside li  1
          inside postamble  1
          inside preamble  1
          inside refcontent  1
@@ -5108,21 +5216,26 @@ Index
          in blockquote element  1
       city element  1
          ascii attribute  1
+         inside postal  1
       code element  1
          ascii attribute  1
+         inside postal  1
       consensus attribute
          in rfc element  1
       counter attribute
          in list element  1
       country element  1
+         inside postal  1
       cref element  1
          anchor attribute  1
          inside annotation  1
          inside b  1
          inside c  1
+         inside dd  1
          inside dt  1
          inside em  1
          inside i  1
+         inside li  1
          inside name  1
          inside postamble  1
          inside preamble  1
@@ -5150,6 +5263,8 @@ Index
          to attribute  1
       dl element  1
          hanging attribute  1
+         inside dd  1
+         inside li  1
          inside t  1
          spacing attribute  1
       docName attribute
@@ -5232,7 +5347,9 @@ Index
          inside blockquote  1
          inside c  1
          inside cref  1
+         inside dd  1
          inside dt  1
+         inside li  1
          inside postamble  1
          inside preamble  1
          inside refcontent  1
@@ -5251,9 +5368,11 @@ Index
          inside b  1
          inside c  1
          inside cref  1
+         inside dd  1
          inside dt  1
          inside em  1
          inside i  1
+         inside li  1
          inside name  1
          inside postamble  1
          inside preamble  1
@@ -5276,6 +5395,8 @@ Index
          height attribute  1
          inside aside  1
          inside blockquote  1
+         inside dd  1
+         inside li  1
          inside section  1
          inside t  1
          src attribute  1
@@ -5321,7 +5442,9 @@ Index
          inside blockquote  1
          inside c  1
          inside cref  1
+         inside dd  1
          inside dt  1
+         inside li  1
          inside postamble  1
          inside preamble  1
          inside refcontent  1
@@ -5350,10 +5473,12 @@ Index
          inside aside  1
          inside b  1
          inside c  1
+         inside dd  1
          inside dt  1
          inside em  1
          inside figure  1
          inside i  1
+         inside li  1
          inside name  1
          inside postamble  1
          inside preamble  1
@@ -5421,6 +5546,8 @@ Index
          in format element  1
       ol element  1
          group attribute  1
+         inside dd  1
+         inside li  1
          inside t  1
          spacing attribute  1
          start attribute  1
@@ -5440,6 +5567,7 @@ Index
          xml:lang attribute  1
       postalLine element  1
          ascii attribute  1
+         inside postal  1
       postamble element  1
          inside figure  1
          inside texttable  1
@@ -5462,6 +5590,7 @@ Index
          title attribute  1
       region element  1
          ascii attribute  1
+         inside postal  1
       rel attribute
          in link element  1
       relative attribute
@@ -5518,6 +5647,8 @@ Index
       sourcecode element  1
          inside aside  1
          inside blockquote  1
+         inside dd  1
+         inside li  1
          inside section  1
          inside t  1
          name attribute  1
@@ -5541,14 +5672,17 @@ Index
          in ol element  1
       street element  1
          ascii attribute  1
+         inside postal  1
       strong element  1
          inside annotation  1
          inside blockquote  1
          inside c  1
          inside cref  1
+         inside dd  1
          inside dt  1
          inside em  1
          inside i  1
+         inside li  1
          inside postamble  1
          inside preamble  1
          inside refcontent  1
@@ -5567,9 +5701,11 @@ Index
          inside blockquote  1
          inside c  1
          inside cref  1
+         inside dd  1
          inside dt  1
          inside em  1
          inside i  1
+         inside li  1
          inside postamble  1
          inside preamble  1
          inside refcontent  1
@@ -5586,9 +5722,11 @@ Index
          inside blockquote  1
          inside c  1
          inside cref  1
+         inside dd  1
          inside dt  1
          inside em  1
          inside i  1
+         inside li  1
          inside postamble  1
          inside preamble  1
          inside refcontent  1
@@ -5610,6 +5748,8 @@ Index
          hangText attribute  1
          inside abstract  1
          inside aside  1
+         inside dd  1
+         inside li  1
          inside list  1
          inside note  1
          inside section  1
@@ -5651,9 +5791,11 @@ Index
          inside blockquote  1
          inside c  1
          inside cref  1
+         inside dd  1
          inside dt  1
          inside em  1
          inside i  1
+         inside li  1
          inside name  1
          inside postamble  1
          inside preamble  1
@@ -5674,6 +5816,8 @@ Index
    U
       ul element  1
          empty attribute  1
+         inside dd  1
+         inside li  1
          inside t  1
          spacing attribute  1
       updates attribute
@@ -5711,9 +5855,11 @@ Index
          inside b  1
          inside c  1
          inside cref  1
+         inside dd  1
          inside dt  1
          inside em  1
          inside i  1
+         inside li  1
          inside name  1
          inside postamble  1
          inside preamble  1
