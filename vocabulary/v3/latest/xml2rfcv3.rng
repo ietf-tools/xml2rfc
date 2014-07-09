@@ -208,10 +208,10 @@
     <element name="address">
       <zeroOrMore>
         <choice>
-          <ref name="postal"/>
-          <ref name="phone"/>
-          <ref name="facsimile"/>
           <ref name="email"/>
+          <ref name="facsimile"/>
+          <ref name="phone"/>
+          <ref name="postal"/>
           <ref name="uri"/>
         </choice>
       </zeroOrMore>
@@ -225,11 +225,11 @@
       <choice>
         <zeroOrMore>
           <choice>
-            <ref name="street"/>
             <ref name="city"/>
-            <ref name="region"/>
             <ref name="code"/>
             <ref name="country"/>
+            <ref name="region"/>
+            <ref name="street"/>
           </choice>
         </zeroOrMore>
         <oneOrMore>
@@ -405,14 +405,14 @@
       </optional>
       <zeroOrMore>
         <choice>
-          <ref name="t"/>
+          <ref name="artwork"/>
           <ref name="aside"/>
           <ref name="blockquote"/>
           <ref name="figure"/>
-          <ref name="texttable"/>
           <ref name="iref"/>
-          <ref name="artwork"/>
           <ref name="sourcecode"/>
+          <ref name="t"/>
+          <ref name="texttable"/>
         </choice>
       </zeroOrMore>
       <zeroOrMore>
@@ -425,11 +425,11 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
+          <ref name="cref"/>
           <ref name="eref"/>
           <ref name="iref"/>
-          <ref name="cref"/>
           <ref name="tt"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -450,27 +450,27 @@
       <zeroOrMore>
         <choice>
           <text/>
+          <ref name="artwork"/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="dl"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="figure"/>
+          <ref name="i"/>
+          <ref name="iref"/>
           <ref name="list"/>
           <ref name="ol"/>
-          <ref name="ul"/>
-          <ref name="dl"/>
-          <ref name="figure"/>
-          <ref name="artwork"/>
           <ref name="sourcecode"/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="iref"/>
-          <ref name="cref"/>
           <ref name="spanx"/>
-          <ref name="vspace"/>
-          <ref name="tt"/>
           <ref name="strong"/>
-          <ref name="b"/>
-          <ref name="em"/>
-          <ref name="i"/>
           <ref name="sub"/>
           <ref name="sup"/>
-          <ref name="bcp14"/>
+          <ref name="tt"/>
+          <ref name="ul"/>
+          <ref name="vspace"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -479,12 +479,12 @@
     <element name="aside">
       <zeroOrMore>
         <choice>
-          <ref name="t"/>
-          <ref name="figure"/>
-          <ref name="texttable"/>
-          <ref name="iref"/>
           <ref name="artwork"/>
+          <ref name="figure"/>
+          <ref name="iref"/>
           <ref name="sourcecode"/>
+          <ref name="t"/>
+          <ref name="texttable"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -500,17 +500,17 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="figure"/>
           <ref name="artwork"/>
-          <ref name="sourcecode"/>
-          <ref name="tt"/>
-          <ref name="strong"/>
           <ref name="b"/>
+          <ref name="bcp14"/>
           <ref name="em"/>
+          <ref name="figure"/>
           <ref name="i"/>
+          <ref name="sourcecode"/>
+          <ref name="strong"/>
           <ref name="sub"/>
           <ref name="sup"/>
-          <ref name="bcp14"/>
+          <ref name="tt"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -586,25 +586,25 @@
         </oneOrMore>
         <oneOrMore>
           <choice>
-          <text/>
-            <ref name="ol"/>
-            <ref name="ul"/>
-            <ref name="dl"/>
-            <ref name="figure"/>
+            <text/>
             <ref name="artwork"/>
-            <ref name="sourcecode"/>
-            <ref name="xref"/>
-            <ref name="eref"/>
-            <ref name="iref"/>
-            <ref name="cref"/>
-            <ref name="tt"/>
-            <ref name="strong"/>
             <ref name="b"/>
+            <ref name="bcp14"/>
+            <ref name="cref"/>
+            <ref name="dl"/>
             <ref name="em"/>
+            <ref name="eref"/>
+            <ref name="figure"/>
             <ref name="i"/>
+            <ref name="iref"/>
+            <ref name="ol"/>
+            <ref name="sourcecode"/>
+            <ref name="strong"/>
             <ref name="sub"/>
             <ref name="sup"/>
-            <ref name="bcp14"/>
+            <ref name="tt"/>
+            <ref name="ul"/>
+            <ref name="xref"/>
           </choice>
         </oneOrMore>
       </choice>
@@ -639,18 +639,18 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="iref"/>
-          <ref name="cref"/>
-          <ref name="tt"/>
-          <ref name="strong"/>
           <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
           <ref name="em"/>
+          <ref name="eref"/>
           <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="strong"/>
           <ref name="sub"/>
           <ref name="sup"/>
-          <ref name="bcp14"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -664,24 +664,24 @@
         <oneOrMore>
           <choice>
             <text/>
-            <ref name="ol"/>
-            <ref name="ul"/>
-            <ref name="dl"/>
-            <ref name="figure"/>
             <ref name="artwork"/>
-            <ref name="sourcecode"/>
-            <ref name="xref"/>
-            <ref name="eref"/>
-            <ref name="iref"/>
-            <ref name="cref"/>
-            <ref name="tt"/>
-            <ref name="strong"/>
             <ref name="b"/>
+            <ref name="bcp14"/>
+            <ref name="cref"/>
+            <ref name="dl"/>
             <ref name="em"/>
+            <ref name="eref"/>
+            <ref name="figure"/>
             <ref name="i"/>
+            <ref name="iref"/>
+            <ref name="ol"/>
+            <ref name="sourcecode"/>
+            <ref name="strong"/>
             <ref name="sub"/>
             <ref name="sup"/>
-            <ref name="bcp14"/>
+            <ref name="tt"/>
+            <ref name="ul"/>
+            <ref name="xref"/>
           </choice>
         </oneOrMore>
       </choice>
@@ -758,15 +758,15 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="tt"/>
-          <ref name="strong"/>
           <ref name="b"/>
           <ref name="em"/>
+          <ref name="eref"/>
           <ref name="i"/>
+          <ref name="strong"/>
           <ref name="sub"/>
           <ref name="sup"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -776,17 +776,17 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="iref"/>
-          <ref name="cref"/>
-          <ref name="strong"/>
           <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
           <ref name="em"/>
+          <ref name="eref"/>
           <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="strong"/>
           <ref name="sub"/>
           <ref name="sup"/>
-          <ref name="bcp14"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -796,16 +796,16 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="iref"/>
+          <ref name="bcp14"/>
           <ref name="cref"/>
-          <ref name="tt"/>
           <ref name="em"/>
+          <ref name="eref"/>
           <ref name="i"/>
+          <ref name="iref"/>
           <ref name="sub"/>
           <ref name="sup"/>
-          <ref name="bcp14"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -815,16 +815,16 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="iref"/>
+          <ref name="bcp14"/>
           <ref name="cref"/>
-          <ref name="tt"/>
           <ref name="em"/>
+          <ref name="eref"/>
           <ref name="i"/>
+          <ref name="iref"/>
           <ref name="sub"/>
           <ref name="sup"/>
-          <ref name="bcp14"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -834,16 +834,16 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
           <ref name="eref"/>
           <ref name="iref"/>
-          <ref name="cref"/>
-          <ref name="tt"/>
           <ref name="strong"/>
-          <ref name="b"/>
           <ref name="sub"/>
           <ref name="sup"/>
-          <ref name="bcp14"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -853,16 +853,16 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
           <ref name="eref"/>
           <ref name="iref"/>
-          <ref name="cref"/>
-          <ref name="tt"/>
           <ref name="strong"/>
-          <ref name="b"/>
           <ref name="sub"/>
           <ref name="sup"/>
-          <ref name="bcp14"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -872,16 +872,16 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="iref"/>
-          <ref name="cref"/>
-          <ref name="tt"/>
-          <ref name="strong"/>
           <ref name="b"/>
-          <ref name="em"/>
-          <ref name="i"/>
           <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="strong"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -891,16 +891,16 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="iref"/>
-          <ref name="cref"/>
-          <ref name="tt"/>
-          <ref name="strong"/>
           <ref name="b"/>
-          <ref name="em"/>
-          <ref name="i"/>
           <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="strong"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -996,19 +996,19 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="iref"/>
-          <ref name="cref"/>
-          <ref name="spanx"/>
-          <ref name="tt"/>
-          <ref name="strong"/>
           <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
           <ref name="em"/>
+          <ref name="eref"/>
           <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="spanx"/>
+          <ref name="strong"/>
           <ref name="sub"/>
           <ref name="sup"/>
-          <ref name="bcp14"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -1069,19 +1069,19 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="iref"/>
-          <ref name="cref"/>
-          <ref name="spanx"/>
-          <ref name="tt"/>
-          <ref name="strong"/>
           <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
           <ref name="em"/>
+          <ref name="eref"/>
           <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="spanx"/>
+          <ref name="strong"/>
           <ref name="sub"/>
           <ref name="sup"/>
-          <ref name="bcp14"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -1159,10 +1159,10 @@
       </optional>
       <zeroOrMore>
         <choice>
-          <ref name="xref"/>
+          <ref name="cref"/>
           <ref name="eref"/>
           <ref name="iref"/>
-          <ref name="cref"/>
+          <ref name="xref"/>
           <text/>
         </choice>
       </zeroOrMore>
@@ -1173,19 +1173,19 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="iref"/>
-          <ref name="cref"/>
-          <ref name="spanx"/>
-          <ref name="tt"/>
-          <ref name="strong"/>
           <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
           <ref name="em"/>
+          <ref name="eref"/>
           <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="spanx"/>
+          <ref name="strong"/>
           <ref name="sub"/>
           <ref name="sup"/>
-          <ref name="bcp14"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -1235,10 +1235,10 @@
         <ref name="front"/>
         <zeroOrMore>
           <choice>
-            <ref name="seriesInfo"/>
+            <ref name="annotation"/>
             <ref name="format"/>
             <ref name="refcontent"/>
-            <ref name="annotation"/>
+            <ref name="seriesInfo"/>
           </choice>
         </zeroOrMore>
     </element>
@@ -1276,19 +1276,19 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="xref"/>
-          <ref name="eref"/>
-          <ref name="iref"/>
-          <ref name="cref"/>
-          <ref name="spanx"/>
-          <ref name="tt"/>
-          <ref name="strong"/>
           <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
           <ref name="em"/>
+          <ref name="eref"/>
           <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="spanx"/>
+          <ref name="strong"/>
           <ref name="sub"/>
           <ref name="sup"/>
-          <ref name="bcp14"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
         </choice>
       </zeroOrMore>
     </element>
@@ -1301,14 +1301,14 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="tt"/>
           <ref name="b"/>
-          <ref name="i"/>
+          <ref name="bcp14"/>
           <ref name="em"/>
+          <ref name="i"/>
           <ref name="strong"/>
           <ref name="sub"/>
           <ref name="sup"/>
-          <ref name="bcp14"/>
+          <ref name="tt"/>
         </choice>
       </zeroOrMore>
     </element>
