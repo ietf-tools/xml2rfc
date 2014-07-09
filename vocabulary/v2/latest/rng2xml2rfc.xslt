@@ -279,6 +279,16 @@
 </t>
 </xsl:template>
 
+<xsl:template match="rng:oneOrMore[rng:choice]">
+<t>
+  <xsl:comment>AG</xsl:comment>
+  <xsl:text>In any order, but at least one of: </xsl:text>
+  <list style="symbols">
+    <xsl:apply-templates select="rng:choice/*"/>
+  </list>
+</t>
+</xsl:template>
+
 <xsl:template match="*" mode="copy">
   <xsl:element name="{local-name()}">
     <xsl:copy-of select="@*"/>
