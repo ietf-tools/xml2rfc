@@ -92,6 +92,16 @@ def main():
 
     optionparser.add_option_group(formatgroup)
 
+    formatoptions = optparse.OptionGroup(optionparser, 'Format Options', 
+                                       ' Some formats accept additional format-specific options')
+    formatoptions.add_option('', '--no-headers', dest='omit_headers', action='store_true',
+                           help='with --text: calculate page breaks, and emit form feeds and page top'
+                           ' spacing, but omit headers and footers from the paginated format'
+                       )
+
+    optionparser.add_option_group(formatoptions)
+
+
     # Parse and validate arguments
     (options, args) = optionparser.parse_args()
     if len(args) < 1:
@@ -124,6 +134,8 @@ def main():
                 sys.exit(1)
     options.date = datetime.datetime.strptime(options.datestring, "%Y-%m-%d").date()
 
+    if options.omit_headers and not options.text:
+        sys.exit("You can only use --no-headers with paginated text output.")
 
     # Setup warnings module
     # xml2rfc.log.warn_error = options.warn_error and True or False
@@ -203,7 +215,9 @@ def main():
             pagedwriter = xml2rfc.PaginatedTextRfcWriter(xmlrfc,
                                                          quiet=options.quiet,
                                                          verbose=options.verbose,
-                                                         date=options.date)
+                                                         date=options.date,
+                                                         omit_headers=options.omit_headers,
+                                                     )
             filename = options.filename
             if not filename:
                 filename = basename + '.txt'

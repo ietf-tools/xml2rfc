@@ -21,7 +21,8 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         The page width is controlled by the *width* parameter.
     """
 
-    def __init__(self, xmlrfc, width=72, quiet=False, verbose=False, date=datetime.date.today()):
+    def __init__(self, xmlrfc, width=72, quiet=False, verbose=False, date=datetime.date.today(),
+                    omit_headers=False):
         RawTextRfcWriter.__init__(self, xmlrfc, width=width, quiet=quiet, \
                                   verbose=verbose, date=date)
         self.left_header = ''
@@ -33,6 +34,7 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         self.heading_marks = {}
         self.paged_toc_marker = 0
         self.page_line = 0
+        self.omit_headers = omit_headers
 
     def _make_footer_and_header(self, page, final=False):
         tmp = []
@@ -195,13 +197,17 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
                 if p == '\f':
                     break;
             return
-        self.output.append('')
-        self.output.append('')
-        self.output.append('')
-        self.output.extend(self._make_footer_and_header(self.page_num, final))
+        if self.omit_headers:
+            self.output.append('\f')
+        else:
+            self.output.append('')
+            self.output.append('')
+            self.output.append('')
+            self.output.extend(self._make_footer_and_header(self.page_num, final))
         if not final:
             self.output.append('')
             self.output.append('')
+
         self.page_length = 1
         self.page_num += 1
 
