@@ -41,7 +41,7 @@ After draft-reschke-xml2rfc gets published as an RFC, update the "obsoletes" lin
   
   <abstract>
     <t>
-      This document defines the 'XML2RFC' version 3 vocabulary; an XML-based
+      This document defines the "XML2RFC" version 3 vocabulary; an XML-based
       language used for writing RFCs and Internet-Drafts. It is heavily derived
       from the version 2 vocabulary that is also under discussion. This document
       obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-reschke-xml2rfc.
@@ -61,7 +61,7 @@ After draft-reschke-xml2rfc gets published as an RFC, update the "obsoletes" lin
   <middle>
 <section title="Introduction">
 <t>
-  This document describes version 3 ('v3') of the 'XML2RFC' vocabulary; an XML-based
+  This document describes version 3 ("v3") of the "XML2RFC" vocabulary; an XML-based
   language ('Extensible Markup Language', <xref target="XML"/>) used for writing RFCs
   (<xref target="RFCSTYLE"/>) and Internet-Drafts (<xref target="IDGUIDE"/>).
 </t>
@@ -220,7 +220,7 @@ creating pseudo-paragraph-breaks in lists, is now handled properly.</t>
 &lt;<x:ref>email</x:ref>&gt; is a much more useful way to get in touch with authors.</t>
 
 <t>Deprecate &lt;<x:ref>format</x:ref>&gt; because it is not useful and has caused surprise for authors in the past.
-If the goal is to provide a single URI for
+If the goal is to provide a single URI (Uniform Resource Identifier) for
 a reference, use the "target" attribute on &lt;<x:ref>reference</x:ref>&gt; instead.</t>
 
 <t>Deprecate the "title" attribute in &lt;<x:ref>section</x:ref>&gt;,  &lt;<x:ref>note</x:ref>&gt;,
@@ -458,7 +458,7 @@ as optional children.</t>
       (currently not used when generating documents).
    </t>
    <t>
-      The value ought to be either the fullname or the abbreviation of one of
+      The value ought to be either the full name or the abbreviation of one of
       the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
       The list at the time that this document is being published is:
       "Applications", "app", "General", "gen", "Internet", "int", "Operations
@@ -529,8 +529,8 @@ as optional children.</t>
       <iref item="artwork element" subitem="align attribute"/>
       <iref item="align attribute" subitem="in artwork element"/>
       <t>
-            Controls whether the artwork appears left (default), centered,
-            or right.
+            Controls whether the artwork appears left justified (default), centered,
+            or right justified.
          </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"left" (default)</t>
@@ -583,7 +583,7 @@ as optional children.</t>
       <iref item="artwork element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in artwork element"/>
       <t>
-            The URI of a graphics file.
+            The URI reference of a graphics file (<xref target="RFC3986"/>).
          </t>
       <t>
             Note that this can be a "data" URI (<xref target="RFC2397"/>).
@@ -793,7 +793,7 @@ as optional children.</t>
       <iref item="author element" subitem="surname attribute"/>
       <iref item="surname attribute" subitem="in author element"/>
       <t>
-            The author's surname.
+            The author's surname (used on the front page and in references).
          </t>
    </section>
 
@@ -2666,6 +2666,10 @@ as optional children.</t>
       as described in <xref target="RFCSTYLE"/>).
       This vocabulary supports the split with the "title" attribute.
    </t>
+   <t>
+      By default, the order of references is significant. Processors, however,
+      can be instructed to sort them based on their anchor names.
+   </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.references.contents"><!--AG-->
       Content model:
@@ -4435,15 +4439,15 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
     </t>
     <t hangText="Optional parameters:">
       "charset": This parameter has identical semantics as the charset
-      parameter of the "application/xml" media type specified in <xref target="RFC3023"/>.
+      parameter of the "application/xml" media type specified in <xref target="RFC7303" x:fmt="of" x:sec="9.1"/>.
     </t>
     <t hangText="Encoding considerations:">
-      Identical to those of "application/xml" as described in <xref target="RFC3023" x:fmt="of" x:sec="3.2"/>.
+      Identical to those of "application/xml" as described in <xref target="RFC7303" x:fmt="of" x:sec="9.1"/>.
     </t>
     <t hangText="Security considerations:">
       As defined in <xref target="security.considerations"/>. In addition, as
       this media type uses the "+xml" convention, it inherits the security
-      considerations described in <xref target="RFC3023" x:fmt="of" x:sec="10"/>.
+      considerations described in <xref target="RFC7303" x:fmt="of" x:sec="10"/>.
     </t>
     <t hangText="Interoperability considerations:">
       N/A
@@ -4463,7 +4467,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
     <t hangText="Additional information:">
       <list style="hanging">
         <t hangText="Deprecated alias names for this type:">None.</t>
-        <t hangText="Magic number(s):">As specified for "application/xml" in <xref target="RFC3023" x:fmt="of" x:sec="3.2"/>.</t>
+        <t hangText="Magic number(s):">As specified for "application/xml" in <xref target="RFC7303" x:fmt="of" x:sec="9.1"/>.</t>
         <t hangText="File extension(s):">.xml or .rfcxml when disambiguation from other XML files is needed</t>
         <t hangText="Macintosh file type code(s):">TEXT</t>
       </list>
@@ -4617,17 +4621,6 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name='RFC' value='2629' />
   </reference>
 
-  <reference anchor="RFC3023">
-    <front>
-      <title>XML Media Types</title>
-      <author initials="M." surname="Murata" fullname="Murata Makoto"/>
-      <author initials="S." surname="St. Laurent" fullname="Simon St. Laurent"/>
-      <author initials="D." surname="Kohn" fullname="Dan Kohn"/>
-      <date year="2001" month="January"/>
-    </front>
-    <seriesInfo name="RFC" value="3023"/>
-  </reference>
-
   <reference anchor="RFC3470">
     <front>
       <title>Guidelines for the Use of Extensible Markup Language (XML) within IETF Protocols</title>
@@ -4710,6 +4703,16 @@ not those that are part of a sequence of resources.</t>
 <date year="2013" month="May"/>
 </front><seriesInfo name="RFC" value="6949"/><format type="TXT" octets="29181" target="http://www.rfc-editor.org/rfc/rfc6949.txt"/>
 </reference>
+
+  <reference anchor="RFC7303">
+    <front>
+      <title>XML Media Types</title>
+      <author initials="H." surname="Thompson" fullname="H. Thompson"/>
+      <author initials="C." surname="Lilley" fullname="C. Lilley"/>
+      <date year="2014" month="July"/>
+    </front>
+    <seriesInfo name="RFC" value="7303"/>
+  </reference>
 
   <reference anchor="RNC" target="http://www.oasis-open.org/committees/relax-ng/compact-20021121.html">
     <front>

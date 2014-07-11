@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                               July 9, 2014
+Obsoletes: 2629 (if approved)                              July 11, 2014
 Intended status: Informational
-Expires: January 10, 2015
+Expires: January 12, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -13,7 +13,7 @@ Expires: January 10, 2015
 
 Abstract
 
-   This document defines the 'XML2RFC' version 3 vocabulary; an XML-
+   This document defines the "XML2RFC" version 3 vocabulary; an XML-
    based language used for writing RFCs and Internet-Drafts.  It is
    heavily derived from the version 2 vocabulary that is also under
    discussion.  This document obsoletes the v2 grammar described in RFC
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 10, 2015.
+   This Internet-Draft will expire on January 12, 2015.
 
 Copyright Notice
 
@@ -164,7 +164,7 @@ Table of Contents
 
 1.  Introduction
 
-   This document describes version 3 ('v3') of the 'XML2RFC' vocabulary;
+   This document describes version 3 ("v3") of the "XML2RFC" vocabulary;
    an XML-based language ('Extensible Markup Language', [XML]) used for
    writing RFCs ([RFCSTYLE]) and Internet-Drafts ([IDGUIDE]).
 
@@ -309,8 +309,8 @@ Table of Contents
 
    o  Deprecate <format> because it is not useful and has caused
       surprise for authors in the past.  If the goal is to provide a
-      single URI for a reference, use the "target" attribute on
-      <reference> instead.
+      single URI (Uniform Resource Identifier) for a reference, use the
+      "target" attribute on <reference> instead.
 
    o  Deprecate the "title" attribute in <section>, <note>, <figure>,
       and <texttable> in favor of the new <name>.
@@ -471,7 +471,7 @@ Table of Contents
    Provides information about the IETF area to which this document
    relates (currently not used when generating documents).
 
-   The value ought to be either the fullname or the abbreviation of one
+   The value ought to be either the full name or the abbreviation of one
    of the IETF areas as listed on <http://www.ietf.org/iesg/area.html>.
    The list at the time that this document is being published is:
    "Applications", "app", "General", "gen", "Internet", "int",
@@ -537,8 +537,8 @@ Table of Contents
 
 2.5.1.  'align' attribute
 
-   Controls whether the artwork appears left (default), centered, or
-   right.
+   Controls whether the artwork appears left justified (default),
+   centered, or right justified.
 
    Allowed values:
 
@@ -570,7 +570,7 @@ Table of Contents
 
 2.5.5.  'src' attribute
 
-   The URI of a graphics file.
+   The URI reference of a graphics file ([RFC3986]).
 
    Note that this can be a "data" URI ([RFC2397]).
 
@@ -702,7 +702,7 @@ Table of Contents
 
 2.7.5.  'surname' attribute
 
-   The author's surname.
+   The author's surname (used on the front page and in references).
 
 2.7.6.  'xml:lang' attribute
 
@@ -1945,6 +1945,9 @@ Table of Contents
    in [RFCSTYLE]).  This vocabulary supports the split with the "title"
    attribute.
 
+   By default, the order of references is significant.  Processors,
+   however, can be instructed to sort them based on their anchor names.
+
    This element appears as child element of: <back> (Section 2.9).
 
    Content model:
@@ -3160,14 +3163,14 @@ Table of Contents
 
    Optional parameters:  "charset": This parameter has identical
       semantics as the charset parameter of the "application/xml" media
-      type specified in [RFC3023].
+      type specified in Section 9.1 of [RFC7303].
 
    Encoding considerations:  Identical to those of "application/xml" as
-      described in Section 3.2 of [RFC3023].
+      described in Section 9.1 of [RFC7303].
 
    Security considerations:  As defined in Section 5.  In addition, as
       this media type uses the "+xml" convention, it inherits the
-      security considerations described in Section 10 of [RFC3023].
+      security considerations described in Section 10 of [RFC7303].
 
    Interoperability considerations:  N/A
 
@@ -3186,7 +3189,7 @@ Table of Contents
       Deprecated alias names for this type:  None.
 
       Magic number(s):  As specified for "application/xml" in Section
-         3.2 of [RFC3023].
+         9.1 of [RFC7303].
 
       File extension(s):  .xml or .rfcxml when disambiguation from other
          XML files is needed
@@ -3273,9 +3276,6 @@ Table of Contents
    [RFC2629]        Rose, M., "Writing I-Ds and RFCs using XML",
                     RFC 2629, June 1999.
 
-   [RFC3023]        Murata, M., St. Laurent, S., and D. Kohn, "XML Media
-                    Types", RFC 3023, January 2001.
-
    [RFC3470]        Hollenbeck, S., Rose, M., and L. Masinter,
                     "Guidelines for the Use of Extensible Markup
                     Language (XML) within IETF Protocols", BCP 70,
@@ -3301,6 +3301,9 @@ Table of Contents
    [RFC6949]        Flanagan, H. and N. Brownlee, "RFC Series Format
                     Requirements and Future Development", RFC 6949,
                     May 2013.
+
+   [RFC7303]        Thompson, H. and C. Lilley, "XML Media Types",
+                    RFC 7303, July 2014.
 
    [RFCPOLICY]      RFC Editor, "RFC Editorial Guidelines and
                     Procedures",
