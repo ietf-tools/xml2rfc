@@ -69,7 +69,7 @@
   <middle>
 <section title="Introduction">
 <t>
-  This document describes version 2 ('v2') of the 'XML2RFC' vocabulary; an XML-based
+  This document describes version 2 ("v2") of the 'XML2RFC' vocabulary; an XML-based
   language ('Extensible Markup Language', <xref target="XML"/>) used for writing RFCs
   (<xref target="RFCSTYLE"/>) and Internet-Drafts (<xref target="IDGUIDE"/>).
 </t>
@@ -80,8 +80,9 @@
 <t>
   It obsoletes the original version ("v1") <xref target="RFC2629"/>, which
   contained the original language definition, and which was subsequently
-  extended ("v2", <xref target="V1rev"/>). Furthermore, it discusses potential extensions in a future
-  revision ("v3").
+  extended. Many of the changes leading to version 2 have been described in
+  "Writing I-Ds and RFCs using XML (revised)" (<xref target="V1rev"/>), but
+  that document has not been updated since 2008.
 </t>
 <t>
   Processing Instructions (<xref target="XML" x:fmt="of" x:sec="2.6" x:rel="#sec-pi"/>)
@@ -236,7 +237,7 @@
       (currently not used when generating documents).
    </t>
    <t>
-      The value ought to be either the fullname or the abbreviation of one of
+      The value ought to be either the full name or the abbreviation of one of
       the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
       The list at the time that this document is being published is:
       "Applications", "app", "General", "gen", "Internet", "int", "Operations
@@ -263,13 +264,15 @@
          <t>diagrams ("line art"),</t>
          <t>source code,</t>
          <t>formal languages (such as ABNF or the RNC notation used in this document),</t>
+         <t>message flow diagrams,</t>
          <t>complex tables, or</t>
          <t>protocol unit diagrams.</t>
       </list>
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
-      file, such as a bitmap or a vector drawing, using a URI. In this case, the textual
+      file, such as a bitmap or a vector drawing, using a URI ("Uniform Resource Identifier", <xref target="RFC3986"/>).
+      In this case, the textual
       content acts as fallback for output formats that do not support graphics,
       and thus ought to contain either a "line art" variant of the graphics, or
       otherwise prose that describes the included image in sufficient detail.
@@ -290,8 +293,8 @@
       <iref item="artwork element" subitem="align attribute"/>
       <iref item="align attribute" subitem="in artwork element"/>
       <t>
-            Controls whether the artwork appears left (default), centered,
-            or right.
+            Controls whether the artwork appears left justified (default), centered,
+            or right justified.
          </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"left" (default)</t>
@@ -349,7 +352,7 @@
       <iref item="artwork element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in artwork element"/>
       <t>
-            The URI of a graphics file.
+            The URI reference of a graphics file (<xref target="RFC3986" x:fmt="," x:sec="4.1"/>).
          </t>
       <t>
             Note that this can be a "data" URI (<xref target="RFC2397"/>) as well, in which case the graphics
@@ -366,8 +369,9 @@
             Specifies the type of the artwork.
          </t>
       <t>
-            The value either is a well-known keyword (such as "abnf"), or
-            an Internet Media Type (see <xref target="RFC2046"/>).
+            The value either is an Internet Media Type (see <xref target="RFC2046"/>)
+            or a keyword (such as "abnf"). The set of recognized keywords varies
+            across implementations.
          </t>
       <t>
             How it is used depends on context and application. For instance, a formatter
@@ -505,7 +509,7 @@
       <iref item="author element" subitem="surname attribute"/>
       <iref item="surname attribute" subitem="in author element"/>
       <t>
-            The author's surname.
+            The author's surname (used on the front page and in references).
          </t>
    </section>
 </section>
@@ -1103,7 +1107,7 @@
       Each list item is represented by a &lt;<x:ref>t</x:ref>&gt; element.
       The vocabulary currently does not directly support list items consisting
       of multiple paragraphs; if this is needed, &lt;<x:ref>vspace</x:ref>&gt;
-      (<xref target="element.vspace"/>) can be used as workaround.
+      (<xref target="element.vspace"/>) can be used as a workaround.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.list.contents"><!--AG-->
@@ -2714,8 +2718,9 @@
 <section title="Acknowledgments" anchor="acknowledgements">
 <t>
   Thanks to everybody who reviewed this document and provided feedback and/or
-  specification text, in particular Brian Carpenter, Tony Hansen, Paul Hoffman,
-  Henrik Levkowetz, Alice Russo, Tom Taylor, Jim Schaad, and Nico Williams.
+  specification text, in particular Brian Carpenter, Elwyn Davies, Tony Hansen,
+  Paul Hoffman, Henrik Levkowetz, Alice Russo, Tom Taylor, Jim Schaad, and Nico
+  Williams.
 </t>
 <t>
   We also thank Marshall T. Rose for both the original design and the reference
@@ -3643,7 +3648,7 @@ java -jar jing.jar -c schema.rnc test.xml
 </section>
 </section>
 
-<section title="Proposed Future Changes for 'v3'" anchor="proposed.future.changes">
+<section title="Proposed Future Changes for 'v3' (to be removed by RFC Editor before publication)" anchor="proposed.future.changes">
 <t>
   Discussion of "v3" changes takes place on the rfc-interest
   mailing list (rfc-interest@rfc-editor.org), which has its home page at

@@ -3,9 +3,9 @@
 
 Network Working Group                                         J. Reschke
 Internet-Draft                                                greenbytes
-Obsoletes: 2629 (if approved)                               July 7, 2014
+Obsoletes: 2629 (if approved)                              July 11, 2014
 Intended status: Informational
-Expires: January 8, 2015
+Expires: January 12, 2015
 
 
                    The 'XML2RFC' version 2 Vocabulary
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 8, 2015.
+   This Internet-Draft will expire on January 12, 2015.
 
 Copyright Notice
 
@@ -128,7 +128,8 @@ Table of Contents
      B.4.  New Elements
    Appendix C.  Relax NG Schema
      C.1.  Checking Validity
-   Appendix D.  Proposed Future Changes for 'v3'
+   Appendix D.  Proposed Future Changes for 'v3' (to be removed
+                by RFC Editor before publication)
      D.1.  Contact Information
      D.2.  Figures
      D.3.  Linking
@@ -142,7 +143,7 @@ Table of Contents
 
 1.  Introduction
 
-   This document describes version 2 ('v2') of the 'XML2RFC' vocabulary;
+   This document describes version 2 ("v2") of the 'XML2RFC' vocabulary;
    an XML-based language ('Extensible Markup Language', [XML]) used for
    writing RFCs ([RFCSTYLE]) and Internet-Drafts ([IDGUIDE]).
 
@@ -151,9 +152,10 @@ Table of Contents
    2014.
 
    It obsoletes the original version ("v1") [RFC2629], which contained
-   the original language definition, and which was subsequently extended
-   ("v2", [V1rev]).  Furthermore, it discusses potential extensions in a
-   future revision ("v3").
+   the original language definition, and which was subsequently
+   extended.  Many of the changes leading to version 2 have been
+   described in "Writing I-Ds and RFCs using XML (revised)" ([V1rev]),
+   but that document has not been updated since 2008.
 
    Processing Instructions (Section 2.6 of [XML]) generally are specific
    to a given processor, and thus are not considered to be part of the
@@ -250,7 +252,7 @@ Table of Contents
    Provides information about the IETF area to which this document
    relates (currently not used when generating documents).
 
-   The value ought to be either the fullname or the abbreviation of one
+   The value ought to be either the full name or the abbreviation of one
    of the IETF areas as listed on <http://www.ietf.org/iesg/area.html>.
    The list at the time that this document is being published is:
    "Applications", "app", "General", "gen", "Internet", "int",
@@ -277,17 +279,20 @@ Table of Contents
    o  formal languages (such as ABNF or the RNC notation used in this
       document),
 
+   o  message flow diagrams,
+
    o  complex tables, or
 
    o  protocol unit diagrams.
 
    Alternatively, the "src" attribute allows referencing an external
-   graphics file, such as a bitmap or a vector drawing, using a URI.  In
-   this case, the textual content acts as fallback for output formats
-   that do not support graphics, and thus ought to contain either a
-   "line art" variant of the graphics, or otherwise prose that describes
-   the included image in sufficient detail.  Note that RFCs occasionally
-   are published with enhanced diagrams; a recent example is [RFC5598].
+   graphics file, such as a bitmap or a vector drawing, using a URI
+   ("Uniform Resource Identifier", [RFC3986]).  In this case, the
+   textual content acts as fallback for output formats that do not
+   support graphics, and thus ought to contain either a "line art"
+   variant of the graphics, or otherwise prose that describes the
+   included image in sufficient detail.  Note that RFCs occasionally are
+   published with enhanced diagrams; a recent example is [RFC5598].
 
    This element appears as child element of: <figure> (Section 2.17).
 
@@ -297,8 +302,8 @@ Table of Contents
 
 2.5.1.  'align' attribute
 
-   Controls whether the artwork appears left (default), centered, or
-   right.
+   Controls whether the artwork appears left justified (default),
+   centered, or right justified.
 
    Allowed values:
 
@@ -333,7 +338,7 @@ Table of Contents
 
 2.5.5.  'src' attribute
 
-   The URI of a graphics file.
+   The URI reference of a graphics file ([RFC3986], Section 4.1).
 
    Note that this can be a "data" URI ([RFC2397]) as well, in which case
    the graphics file is wholly part of the XML file.
@@ -342,8 +347,9 @@ Table of Contents
 
    Specifies the type of the artwork.
 
-   The value either is a well-known keyword (such as "abnf"), or an
-   Internet Media Type (see [RFC2046]).
+   The value either is an Internet Media Type (see [RFC2046]) or a
+   keyword (such as "abnf").  The set of recognized keywords varies
+   across implementations.
 
    How it is used depends on context and application.  For instance, a
    formatter can attempt to syntax-highlight code in certain known
@@ -428,7 +434,7 @@ Table of Contents
 
 2.6.4.  'surname' attribute
 
-   The author's surname.
+   The author's surname (used on the front page and in references).
 
 2.7.  <back>
 
@@ -795,7 +801,7 @@ Table of Contents
    Each list item is represented by a <t> element.  The vocabulary
    currently does not directly support list items consisting of multiple
    paragraphs; if this is needed, <vspace> (Section 2.43) can be used as
-   workaround.
+   a workaround.
 
    This element appears as child element of: <t> (Section 2.38).
 
@@ -1857,9 +1863,9 @@ Table of Contents
 9.  Acknowledgments
 
    Thanks to everybody who reviewed this document and provided feedback
-   and/or specification text, in particular Brian Carpenter, Tony
-   Hansen, Paul Hoffman, Henrik Levkowetz, Alice Russo, Tom Taylor, Jim
-   Schaad, and Nico Williams.
+   and/or specification text, in particular Brian Carpenter, Elwyn
+   Davies, Tony Hansen, Paul Hoffman, Henrik Levkowetz, Alice Russo, Tom
+   Taylor, Jim Schaad, and Nico Williams.
 
    We also thank Marshall T. Rose for both the original design and the
    reference implementation of the "xml2rfc" formatter.
@@ -2478,7 +2484,8 @@ C.1.  Checking Validity
 
    In good Unix tradition, no output means the file is valid.
 
-Appendix D.  Proposed Future Changes for 'v3'
+Appendix D.  Proposed Future Changes for 'v3' (to be removed by RFC
+             Editor before publication)
 
    Discussion of "v3" changes takes place on the rfc-interest mailing
    list (rfc-interest@rfc-editor.org), which has its home page at
