@@ -812,7 +812,9 @@ Table of Contents
 2.22.1.  'counter' attribute
 
    This attribute holds a token that serves as an identifier for a
-   counter.  The intended use is continuation of lists.
+   counter.  The intended use is continuation of lists, where the
+   counter will be incremented for every list item, and there is no way
+   to reset the counter.
 
    Note that this attribute functions only when the style attribute is
    using the "format..." syntax (Section 2.22.3); otherwise, it is
@@ -821,7 +823,8 @@ Table of Contents
 2.22.2.  'hangIndent' attribute
 
    For list styles with potentially wide labels, this attribute can
-   override the default indentation level, measured in characters.
+   override the default indentation level, measured in number of
+   characters.
 
    Note that it only affects style with variable-width labels
    ("format..." and "hanging", see below), and it may not affect formats
@@ -1066,6 +1069,9 @@ Table of Contents
    references into two sets, "Normative" and "Informative" as described
    in Section 4.8.6 of [RFCSTYLE]).  This vocabulary supports the split
    with the "title" attribute.
+
+   By default, the order of references is significant.  Processors
+   however can be instructed to sort them based on their anchor names.
 
    This element appears as child element of: <back> (Section 2.7).
 

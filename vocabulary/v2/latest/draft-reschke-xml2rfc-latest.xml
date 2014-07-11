@@ -1126,7 +1126,9 @@
       <iref item="counter attribute" subitem="in list element"/>
       <t>
         This attribute holds a token that serves as an identifier for a counter.
-        The intended use is continuation of lists.
+        The intended use is continuation of lists, where the counter will
+        be incremented for every list item, and there is no way to reset the
+        counter.
       </t>
       <t>
         Note that this attribute functions only when the style attribute is
@@ -1142,7 +1144,7 @@
       <iref item="hangIndent attribute" subitem="in list element"/>
       <t>
         For list styles with potentially wide labels, this attribute can
-        override the default indentation level, measured in characters.
+        override the default indentation level, measured in number of characters.
       </t>
       <t>
         Note that it only affects style with variable-width labels
@@ -1548,6 +1550,10 @@
       was later changed to group references into two sets, "Normative" and "Informative"
       as described in <xref target="RFCSTYLE" x:fmt="of" x:sec="4.8.6"/>).
       This vocabulary supports the split with the "title" attribute.
+   </t>
+   <t>
+      By default, the order of references is significant. Processors however
+      can be instructed to sort them based on their anchor names.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.references.contents"><!--AG-->
