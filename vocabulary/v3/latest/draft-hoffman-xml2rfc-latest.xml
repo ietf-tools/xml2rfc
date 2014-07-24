@@ -379,16 +379,6 @@ as optional children.</t>
    <t>
       Provides additional prose augmenting a bibliographical reference.
    </t>
-   <figure>
-      <preamble>For instance:</preamble>
-      <artwork type="example">
-&lt;annotation&gt;
-  Latest version available at &lt;eref
-  target='http://www.w3.org/TR/xml'/&gt;.
-&lt;/annotation&gt;
-</artwork>
-      <postamble>...will generate the text used in the reference for <xref target="XML"/>.</postamble>
-   </figure>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
    <t anchor="element.annotation.contents"><!--AG-->
       Content model:
@@ -1197,7 +1187,7 @@ as optional children.</t>
    </t>
    <t>
       In the case of bibliographic references, the date information can have prose text for the month or year.
-      For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013")
+      For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
       non-specific months (month="Second quarter") and so on, are allowed.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
@@ -1853,13 +1843,6 @@ as optional children.</t>
       Index entries can be either single items (when just the "item"
       attribute is given) or nested items (by specifying "subitem" as well).
    </t>
-   <figure>
-      <preamble>For instance:</preamble>
-      <artwork type="example">
-&lt;iref item="Grammar" subitem="item"/&gt;
-</artwork>
-      <postamble>will produce an index entry for "Grammar, item".</postamble>
-   </figure>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.iref.contents"><!--AG-->Content model: this element does not have any contents.</t>
 
@@ -4004,7 +3987,7 @@ Using CDATA:
       is empty and if it has text.</cref>
    </t>
    <t>   
-      Any element that allows the "anchor" attribute can be referenced, however
+      Any element that allows the "anchor" attribute can be referenced; however,
       there are restrictions with respect to the text content being generated.
       For instance, a &lt;<x:ref>t</x:ref>&gt; can be a reference target, however, 
       because paragraphs are not (visibly) numbered, the author will have to
