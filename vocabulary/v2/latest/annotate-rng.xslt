@@ -46,12 +46,59 @@
       <xsl:variable name="t" select="$section/t[not(comment()='AG')]"/>
       <xsl:if test="$t">
         <a:annotation>
-          <xsl:value-of select="normalize-space($t[1])"/>
+          <xsl:variable name="o">
+            <xsl:apply-templates select="$t[1]" mode="plain"/>
+          </xsl:variable>
+          <xsl:value-of select="normalize-space($o)"/>
         </a:annotation>
       </xsl:if>
     </xsl:if>
     <xsl:apply-templates select="node()" />
   </xsl:copy>
+</xsl:template>
+
+<xsl:template match="text()" mode="plain">
+  <xsl:value-of select="."/>
+</xsl:template>
+
+<xsl:template match="t" mode="plain">
+  <xsl:apply-templates mode="plain"/>
+</xsl:template>
+
+<xsl:template match="spanx" mode="plain">
+  <xsl:text>*</xsl:text>
+  <xsl:value-of select="normalize-space(.)"/>
+  <xsl:text>*</xsl:text>
+</xsl:template>
+
+<xsl:template match="xref" mode="plain">
+  <xsl:variable name="t" select="@target"/>
+  <xsl:variable name="s" select="$d//*[@anchor=$t]"/>
+  <xsl:choose>
+    <xsl:when test="$s/self::section">
+      <xsl:choose>
+        <xsl:when test="$s/ancestor::back">
+          <xsl:text>Appendix</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>Section</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text> "</xsl:text>
+      <xsl:value-of select="$s/@title"/>
+      <xsl:text>"</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>???</xsl:otherwise>
+  </xsl:choose>
+  <xsl:text> of </xsl:text>
+  <xsl:choose>
+    <xsl:when test="$d/rfc/@number">
+      <xsl:value-of select="concat('RFC ',$d/rfc/@number)"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="concat('Internet-Draft ',$d/rfc/@docName)"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- rules for identity transformation -->
