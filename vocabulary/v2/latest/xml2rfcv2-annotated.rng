@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:x="http://purl.org/net/xml2rfc/ext" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
    <define name="rfc">
       <element name="rfc">
          <a:annotation>This is the root element of the xml2rfc vocabulary.</a:annotation>
@@ -311,7 +311,7 @@
    </define>
    <define name="abstract">
       <element name="abstract">
-         <a:annotation>Contains the abstract of the document. The abstract ought to be self-contained and thus should not contain references or unexpanded abbreviations. See for more information.</a:annotation>
+         <a:annotation>Contains the abstract of the document. The abstract ought to be self-contained and thus should not contain references or unexpanded abbreviations. See Section 4.3 of [RFCSTYLE] for more information.</a:annotation>
          <oneOrMore>
             <ref name="t"/>
          </oneOrMore>
@@ -457,7 +457,7 @@
       <element name="eref">
          <a:annotation>Represents an "external" link (as specified in the "target" attribute).</a:annotation>
          <attribute name="target">
-            <a:annotation>URI of the link target (see ??? of Internet-Draft draft-reschke-xml2rfc-latest).</a:annotation>
+            <a:annotation>URI of the link target (see Section 3 of [RFC3986]).</a:annotation>
          </attribute>
          <text/>
       </element>
@@ -635,7 +635,7 @@
          </optional>
          <optional>
             <attribute name="src">
-               <a:annotation>The URI reference of a graphics file (??? of Internet-Draft draft-reschke-xml2rfc-latest).</a:annotation>
+               <a:annotation>The URI reference of a graphics file (Section 4.1 of [RFC3986]).</a:annotation>
             </attribute>
          </optional>
          <optional>

@@ -2,6 +2,7 @@
                xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                xmlns:rng="http://relaxng.org/ns/structure/1.0"
                xmlns="http://relaxng.org/ns/structure/1.0"
+               xmlns:x="http://purl.org/net/xml2rfc/ext"
                version="1.0"
 >
 
@@ -28,7 +29,10 @@
       <xsl:variable name="t" select="$section/t[not(comment()='AG')]"/>
       <xsl:if test="$t">
         <a:annotation>
-          <xsl:value-of select="normalize-space($t[1])"/>
+          <xsl:variable name="o">
+            <xsl:apply-templates select="$t[1]" mode="plain"/>
+          </xsl:variable>
+          <xsl:value-of select="normalize-space($o)"/>
         </a:annotation>
       </xsl:if>
     </xsl:if>
@@ -87,17 +91,25 @@
       <xsl:text> "</xsl:text>
       <xsl:value-of select="$s/@title"/>
       <xsl:text>"</xsl:text>
+      <xsl:text> of </xsl:text>
+      <xsl:choose>
+        <xsl:when test="$d/rfc/@number">
+          <xsl:value-of select="concat('RFC ',$d/rfc/@number)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat('Internet-Draft ',$d/rfc/@docName)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:when test="$s/self::reference">
+      <xsl:if test="@x:sec">
+        <xsl:value-of select="concat('Section ',@x:sec,' of ')"/>
+      </xsl:if>
+      <xsl:text>[</xsl:text>
+      <xsl:value-of select="$t"/>
+      <xsl:text>]</xsl:text>
     </xsl:when>
     <xsl:otherwise>???</xsl:otherwise>
-  </xsl:choose>
-  <xsl:text> of </xsl:text>
-  <xsl:choose>
-    <xsl:when test="$d/rfc/@number">
-      <xsl:value-of select="concat('RFC ',$d/rfc/@number)"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="concat('Internet-Draft ',$d/rfc/@docName)"/>
-    </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
