@@ -1,7 +1,8 @@
 all: \
 	draft-reschke-xml2rfc-latest.html \
 	draft-reschke-xml2rfc-latest.unpg.txt \
-	draft-reschke-xml2rfc-latest.txt
+	draft-reschke-xml2rfc-latest.txt \
+	xml2rfcv2-annotated.rng
 
 TOOLS=../../tools
 
@@ -19,4 +20,3 @@ include xml2rfcvoc.mk
 %.unpg.txt:	%.redxml
 	tclsh xml2rfc.tcl xml2rfc $< $@.unpg
 	mv $@.unpg $@
-

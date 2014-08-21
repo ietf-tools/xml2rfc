@@ -20,7 +20,7 @@
 </xsl:template>
 
 <xsl:template match="rng:define/rng:element">
-	<xsl:copy>
+  <xsl:copy>
     <xsl:apply-templates select="@*" />
     <xsl:variable name="a" select="concat('element.',@name)"/>
     <xsl:variable name="section" select="$d//section[@anchor=$a]"/>
@@ -36,6 +36,23 @@
   </xsl:copy>
 </xsl:template>
 
+<xsl:template match="rng:define/rng:element//rng:attribute">
+  <xsl:copy>
+    <xsl:apply-templates select="@*" />
+    <xsl:variable name="e" select="ancestor::rng:element/@name"/>
+    <xsl:variable name="a" select="concat('element.',$e,'.attribute.',@name)"/>
+    <xsl:variable name="section" select="$d//section[@anchor=$a]"/>
+    <xsl:if test="$section">
+      <xsl:variable name="t" select="$section/t[not(comment()='AG')]"/>
+      <xsl:if test="$t">
+        <a:annotation>
+          <xsl:value-of select="normalize-space($t[1])"/>
+        </a:annotation>
+      </xsl:if>
+    </xsl:if>
+    <xsl:apply-templates select="node()" />
+  </xsl:copy>
+</xsl:template>
 
 <!-- rules for identity transformation -->
 

@@ -1,0 +1,879 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+   <define name="rfc">
+      <element name="rfc">
+         <a:annotation>This is the root element of the xml2rfc vocabulary.</a:annotation>
+         <optional>
+            <attribute name="number">
+               <a:annotation>The number of the RFC to be produced.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="obsoletes" a:defaultValue="">
+               <a:annotation>A comma-separated list of RFC numbers or Internet-Draft names.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="updates" a:defaultValue="">
+               <a:annotation>A comma-separated list of RFC numbers or Internet-Draft names.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="category">
+               <a:annotation>Document category (see ).</a:annotation>
+               <choice>
+                  <value>std</value>
+                  <value>bcp</value>
+                  <value>info</value>
+                  <value>exp</value>
+                  <value>historic</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="consensus">
+               <a:annotation>Affects the generated boilerplate.</a:annotation>
+               <choice>
+                  <value>no</value>
+                  <value>yes</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="seriesNo">
+               <a:annotation>When producing a document within document series (such as "STD"): the number within that series.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="ipr">
+               <a:annotation>Represents the Intellectual Property status of the document. See for details.</a:annotation>
+               <choice>
+                  <value>full2026</value>
+                  <value>noDerivativeWorks2026</value>
+                  <value>none</value>
+                  <value>full3667</value>
+                  <value>noModification3667</value>
+                  <value>noDerivatives3667</value>
+                  <value>full3978</value>
+                  <value>noModification3978</value>
+                  <value>noDerivatives3978</value>
+                  <value>trust200811</value>
+                  <value>noModificationTrust200811</value>
+                  <value>noDerivativesTrust200811</value>
+                  <value>trust200902</value>
+                  <value>noModificationTrust200902</value>
+                  <value>noDerivativesTrust200902</value>
+                  <value>pre5378Trust200902</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="iprExtract">
+               <a:annotation>Identifies a single section within the document (by its 'anchor' attribute) for which extraction "as-is" is explicitly allowed (this is only relevant for historic values of the "ipr" attribute).</a:annotation>
+               <data type="IDREF"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="submissionType" a:defaultValue="IETF">
+               <a:annotation>The document stream.</a:annotation>
+               <choice>
+                  <value>IETF</value>
+                  <value>IAB</value>
+                  <value>IRTF</value>
+                  <value>independent</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="docName">
+               <a:annotation>For Internet-Drafts, this specifies the draft name (which appears below the title).</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="xml:lang" a:defaultValue="en"/>
+         </optional>
+         <ref name="front"/>
+         <ref name="middle"/>
+         <optional>
+            <ref name="back"/>
+         </optional>
+      </element>
+   </define>
+   <define name="front">
+      <element name="front">
+         <a:annotation>Represent the "front matter": metadata (such as author information), abstract, and additional notes.</a:annotation>
+         <ref name="title"/>
+         <oneOrMore>
+            <ref name="author"/>
+         </oneOrMore>
+         <ref name="date"/>
+         <zeroOrMore>
+            <ref name="area"/>
+         </zeroOrMore>
+         <zeroOrMore>
+            <ref name="workgroup"/>
+         </zeroOrMore>
+         <zeroOrMore>
+            <ref name="keyword"/>
+         </zeroOrMore>
+         <optional>
+            <ref name="abstract"/>
+         </optional>
+         <zeroOrMore>
+            <ref name="note"/>
+         </zeroOrMore>
+      </element>
+   </define>
+   <define name="title">
+      <element name="title">
+         <a:annotation>Represents the document title.</a:annotation>
+         <optional>
+            <attribute name="abbrev">
+               <a:annotation>Specifies an abbreviated variant of the document title.</a:annotation>
+            </attribute>
+         </optional>
+         <text/>
+      </element>
+   </define>
+   <define name="author">
+      <element name="author">
+         <a:annotation>Provides information about a document's author. This is used both for the document itself (at the beginning of the document) and for referenced documents (inside of &lt;reference&gt;).</a:annotation>
+         <optional>
+            <attribute name="initials">
+               <a:annotation>Author initials (used on the front page and in references).</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="surname">
+               <a:annotation>The author's surname (used on the front page and in references).</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fullname">
+               <a:annotation>The full name (used in the automatically generated "Author's Address" section).</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="role">
+               <a:annotation>Specifies the role the author had in creating the document.</a:annotation>
+               <choice>
+                  <value>editor</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <ref name="organization"/>
+         </optional>
+         <optional>
+            <ref name="address"/>
+         </optional>
+      </element>
+   </define>
+   <define name="organization">
+      <element name="organization">
+         <a:annotation>Specifies the affiliation of an author.</a:annotation>
+         <optional>
+            <attribute name="abbrev">
+               <a:annotation>Abbreviated variant.</a:annotation>
+            </attribute>
+         </optional>
+         <text/>
+      </element>
+   </define>
+   <define name="address">
+      <element name="address">
+         <a:annotation>Provides address information for the author.</a:annotation>
+         <optional>
+            <ref name="postal"/>
+         </optional>
+         <optional>
+            <ref name="phone"/>
+         </optional>
+         <optional>
+            <ref name="facsimile"/>
+         </optional>
+         <optional>
+            <ref name="email"/>
+         </optional>
+         <optional>
+            <ref name="uri"/>
+         </optional>
+      </element>
+   </define>
+   <define name="postal">
+      <element name="postal">
+         <a:annotation>Contains child elements providing postal information.</a:annotation>
+         <oneOrMore>
+            <ref name="street"/>
+         </oneOrMore>
+         <zeroOrMore>
+            <choice>
+               <ref name="city"/>
+               <ref name="region"/>
+               <ref name="code"/>
+               <ref name="country"/>
+            </choice>
+         </zeroOrMore>
+      </element>
+   </define>
+   <define name="street">
+      <element name="street">
+         <a:annotation>Provides a street address.</a:annotation>
+         <text/>
+      </element>
+   </define>
+   <define name="city">
+      <element name="city">
+         <a:annotation>Gives the city name in a postal address.</a:annotation>
+         <text/>
+      </element>
+   </define>
+   <define name="region">
+      <element name="region">
+         <a:annotation>Provides the region name in a postal address.</a:annotation>
+         <text/>
+      </element>
+   </define>
+   <define name="code">
+      <element name="code">
+         <a:annotation>Gives the postal region code.</a:annotation>
+         <text/>
+      </element>
+   </define>
+   <define name="country">
+      <element name="country">
+         <a:annotation>Gives the country in a postal address.</a:annotation>
+         <text/>
+      </element>
+   </define>
+   <define name="phone">
+      <element name="phone">
+         <a:annotation>Represents a phone number.</a:annotation>
+         <text/>
+      </element>
+   </define>
+   <define name="facsimile">
+      <element name="facsimile">
+         <a:annotation>Represents the phone number of a fax machine.</a:annotation>
+         <text/>
+      </element>
+   </define>
+   <define name="email">
+      <element name="email">
+         <a:annotation>Provides an email address.</a:annotation>
+         <text/>
+      </element>
+   </define>
+   <define name="uri">
+      <element name="uri">
+         <a:annotation>Contains a web address associated with the author.</a:annotation>
+         <text/>
+      </element>
+   </define>
+   <define name="date">
+      <element name="date">
+         <a:annotation>Provides information about the publication date.</a:annotation>
+         <optional>
+            <attribute name="day">
+               <a:annotation>Day of publication; this is a number.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="month">
+               <a:annotation>Month of publication; this is the English name of the month.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="year">
+               <a:annotation>Year of publication.</a:annotation>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="area">
+      <element name="area">
+         <a:annotation>Provides information about the IETF area to which this document relates (currently not used when generating documents).</a:annotation>
+         <text/>
+      </element>
+   </define>
+   <define name="workgroup">
+      <element name="workgroup">
+         <a:annotation>This element is used to specify the Working Group (IETF) or Research Group (IRTF) from which the document originates, if any. The recommended format is the official name of the Working Group (with some capitalization).</a:annotation>
+         <text/>
+      </element>
+   </define>
+   <define name="keyword">
+      <element name="keyword">
+         <a:annotation>Specifies a keyword applicable to the document.</a:annotation>
+         <text/>
+      </element>
+   </define>
+   <define name="abstract">
+      <element name="abstract">
+         <a:annotation>Contains the abstract of the document. The abstract ought to be self-contained and thus should not contain references or unexpanded abbreviations. See for more information.</a:annotation>
+         <oneOrMore>
+            <ref name="t"/>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="note">
+      <element name="note">
+         <a:annotation>Creates an unnumbered section that appears after the abstract.</a:annotation>
+         <attribute name="title">
+            <a:annotation>The title of the note.</a:annotation>
+         </attribute>
+         <oneOrMore>
+            <ref name="t"/>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="middle">
+      <element name="middle">
+         <a:annotation>Represents the main content of the document.</a:annotation>
+         <oneOrMore>
+            <ref name="section"/>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="section">
+      <element name="section">
+         <a:annotation>Represents a section (when inside a &lt;middle&gt; element) or an appendix (when inside a &lt;back&gt; element).</a:annotation>
+         <optional>
+            <attribute name="anchor">
+               <a:annotation>Document-wide unique identifier for this section.</a:annotation>
+               <data type="ID"/>
+            </attribute>
+         </optional>
+         <attribute name="title">
+            <a:annotation>The title of the section.</a:annotation>
+         </attribute>
+         <optional>
+            <attribute name="toc" a:defaultValue="default">
+               <a:annotation>Determines whether the section is included in the Table Of Contents.</a:annotation>
+               <choice>
+                  <value>include</value>
+                  <value>exclude</value>
+                  <value>default</value>
+               </choice>
+            </attribute>
+         </optional>
+         <zeroOrMore>
+            <choice>
+               <ref name="t"/>
+               <ref name="figure"/>
+               <ref name="texttable"/>
+               <ref name="iref"/>
+            </choice>
+         </zeroOrMore>
+         <zeroOrMore>
+            <ref name="section"/>
+         </zeroOrMore>
+      </element>
+   </define>
+   <define name="t">
+      <element name="t">
+         <a:annotation>Contains a paragraph of text.</a:annotation>
+         <optional>
+            <attribute name="anchor">
+               <a:annotation>Document-wide unique identifier for this paragraph.</a:annotation>
+               <data type="ID"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="hangText">
+               <a:annotation>Holds the label ("hanging text") for items in lists using the "hanging" style (see ).</a:annotation>
+            </attribute>
+         </optional>
+         <zeroOrMore>
+            <choice>
+               <text/>
+               <ref name="list"/>
+               <ref name="figure"/>
+               <ref name="xref"/>
+               <ref name="eref"/>
+               <ref name="iref"/>
+               <ref name="cref"/>
+               <ref name="spanx"/>
+               <ref name="vspace"/>
+            </choice>
+         </zeroOrMore>
+      </element>
+   </define>
+   <define name="list">
+      <element name="list">
+         <a:annotation>Delineates a text list.</a:annotation>
+         <optional>
+            <attribute name="style">
+               <a:annotation>This attribute is used to control the display of a list.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="hangIndent">
+               <a:annotation>For list styles with potentially wide labels, this attribute can override the default indentation level, measured in number of characters.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="counter">
+               <a:annotation>This attribute holds a token that serves as an identifier for a counter. The intended use is continuation of lists, where the counter will be incremented for every list item, and there is no way to reset the counter.</a:annotation>
+            </attribute>
+         </optional>
+         <oneOrMore>
+            <ref name="t"/>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="xref">
+      <element name="xref">
+         <a:annotation>Inserts a reference to a different part of a document.</a:annotation>
+         <attribute name="target">
+            <a:annotation>Identifies the document component being referenced.</a:annotation>
+            <data type="IDREF"/>
+         </attribute>
+         <optional>
+            <attribute name="pageno" a:defaultValue="false">
+               <a:annotation>Unused.</a:annotation>
+               <choice>
+                  <value>true</value>
+                  <value>false</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="format" a:defaultValue="default">
+               <a:annotation>This attribute is used to control the format of the generated reference text.</a:annotation>
+               <choice>
+                  <value>counter</value>
+                  <value>title</value>
+                  <value>none</value>
+                  <value>default</value>
+               </choice>
+            </attribute>
+         </optional>
+         <text/>
+      </element>
+   </define>
+   <define name="eref">
+      <element name="eref">
+         <a:annotation>Represents an "external" link (as specified in the "target" attribute).</a:annotation>
+         <attribute name="target">
+            <a:annotation>URI of the link target (see ).</a:annotation>
+         </attribute>
+         <text/>
+      </element>
+   </define>
+   <define name="iref">
+      <element name="iref">
+         <a:annotation>Provides terms for the document's index.</a:annotation>
+         <attribute name="item">
+            <a:annotation>The item to include.</a:annotation>
+         </attribute>
+         <optional>
+            <attribute name="subitem" a:defaultValue="">
+               <a:annotation>The subitem to include.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="primary" a:defaultValue="false">
+               <a:annotation>Setting this to "true" declares the occurrence as "primary", which might cause it to be highlighted in the index.</a:annotation>
+               <choice>
+                  <value>true</value>
+                  <value>false</value>
+               </choice>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="cref">
+      <element name="cref">
+         <a:annotation>Represents a comment.</a:annotation>
+         <optional>
+            <attribute name="anchor">
+               <a:annotation>Document-wide unique identifier for this comment. The processor will auto-generate an identifier when none is given.</a:annotation>
+               <data type="ID"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="source">
+               <a:annotation>Holds the "source" of a comment, such as the name or the initials of the person who made the comment.</a:annotation>
+            </attribute>
+         </optional>
+         <text/>
+      </element>
+   </define>
+   <define name="spanx">
+      <element name="spanx">
+         <a:annotation>Wraps a piece of text, indicating special formatting styles.</a:annotation>
+         <optional>
+            <attribute name="xml:space" a:defaultValue="preserve">
+               <choice>
+                  <value>default</value>
+                  <value>preserve</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="style" a:defaultValue="emph">
+               <a:annotation>The style to be used (defaults to "emph").</a:annotation>
+            </attribute>
+         </optional>
+         <text/>
+      </element>
+   </define>
+   <define name="vspace">
+      <element name="vspace">
+         <a:annotation>This element can be used to force the inclusion of a single line break or multiple blank lines.</a:annotation>
+         <optional>
+            <attribute name="blankLines" a:defaultValue="0">
+               <a:annotation>Number of blank lines to be inserted, where "0" indicates a single line break (defaults to "0").</a:annotation>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="figure">
+      <element name="figure">
+         <a:annotation>This element is used to represent a figure, consisting of an optional preamble, the actual figure, an optional postamble, and an optional title.</a:annotation>
+         <optional>
+            <attribute name="anchor">
+               <a:annotation>Document-wide unique identifier for this figure.</a:annotation>
+               <data type="ID"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="title" a:defaultValue="">
+               <a:annotation>The title for the figure; this usually appears on a line after the figure.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="suppress-title" a:defaultValue="false">
+               <a:annotation>Figures that have an "anchor" attribute will automatically get an autogenerated title (such as "Figure 1"), even if the "title" attribute is absent. Setting this attribute to "true" will prevent this.</a:annotation>
+               <choice>
+                  <value>true</value>
+                  <value>false</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="src">
+               <a:annotation>Duplicates functionality available on &lt;artwork&gt;; avoid it.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="align" a:defaultValue="left">
+               <a:annotation>Used to change the alignment of &lt;preamble&gt; and &lt;postamble&gt;.</a:annotation>
+               <choice>
+                  <value>left</value>
+                  <value>center</value>
+                  <value>right</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="alt" a:defaultValue="">
+               <a:annotation>Duplicates functionality available on &lt;artwork&gt;; avoid it.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="width" a:defaultValue="">
+               <a:annotation>Duplicates functionality available on &lt;artwork&gt;; avoid it.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="height" a:defaultValue="">
+               <a:annotation>Duplicates functionality available on &lt;artwork&gt;; avoid it.</a:annotation>
+            </attribute>
+         </optional>
+         <zeroOrMore>
+            <ref name="iref"/>
+         </zeroOrMore>
+         <optional>
+            <ref name="preamble"/>
+         </optional>
+         <ref name="artwork"/>
+         <optional>
+            <ref name="postamble"/>
+         </optional>
+      </element>
+   </define>
+   <define name="preamble">
+      <element name="preamble">
+         <a:annotation>Gives text that appears at the top of a figure or table.</a:annotation>
+         <zeroOrMore>
+            <choice>
+               <text/>
+               <ref name="xref"/>
+               <ref name="eref"/>
+               <ref name="iref"/>
+               <ref name="cref"/>
+               <ref name="spanx"/>
+            </choice>
+         </zeroOrMore>
+      </element>
+   </define>
+   <define name="artwork">
+      <element name="artwork">
+         <a:annotation>This element allows the inclusion of "artwork" into the document.</a:annotation>
+         <optional>
+            <attribute name="xml:space" a:defaultValue="preserve">
+               <choice>
+                  <value>default</value>
+                  <value>preserve</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="name" a:defaultValue="">
+               <a:annotation>A filename suitable for the contents (such as for extraction to a local file).</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="type" a:defaultValue="">
+               <a:annotation>Specifies the type of the artwork.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="src">
+               <a:annotation>The URI reference of a graphics file ().</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="align" a:defaultValue="left">
+               <a:annotation>Controls whether the artwork appears left justified (default), centered, or right justified.</a:annotation>
+               <choice>
+                  <value>left</value>
+                  <value>center</value>
+                  <value>right</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="alt" a:defaultValue="">
+               <a:annotation>Alternative text description of the artwork (not just the caption).</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="width" a:defaultValue="">
+               <a:annotation>The suggested width of the graphics included using the "src" attribute.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="height" a:defaultValue="">
+               <a:annotation>The suggested height of the graphics included using the "src" attribute.</a:annotation>
+            </attribute>
+         </optional>
+         <zeroOrMore>
+            <text/>
+         </zeroOrMore>
+      </element>
+   </define>
+   <define name="postamble">
+      <element name="postamble">
+         <a:annotation>Gives text that appears at the bottom of a figure or table.</a:annotation>
+         <zeroOrMore>
+            <choice>
+               <text/>
+               <ref name="xref"/>
+               <ref name="eref"/>
+               <ref name="iref"/>
+               <ref name="cref"/>
+               <ref name="spanx"/>
+            </choice>
+         </zeroOrMore>
+      </element>
+   </define>
+   <define name="texttable">
+      <element name="texttable">
+         <a:annotation>Contains a table, consisting of an optional preamble, a header line, rows, an optional postamble, and an optional title.</a:annotation>
+         <optional>
+            <attribute name="anchor">
+               <a:annotation>Document-wide unique identifier for this table.</a:annotation>
+               <data type="ID"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="title" a:defaultValue="">
+               <a:annotation>The title for the table; this usually appears on a line below the table body.</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="suppress-title" a:defaultValue="false">
+               <a:annotation>Tables that have an "anchor" attribute will automatically get an autogenerated title (such as "Table 1"), even if the "title" attribute is absent. Setting this attribute to "true" will prevent this.</a:annotation>
+               <choice>
+                  <value>true</value>
+                  <value>false</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="align" a:defaultValue="center">
+               <a:annotation>Determines the horizontal alignment of the table.</a:annotation>
+               <choice>
+                  <value>left</value>
+                  <value>center</value>
+                  <value>right</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="style" a:defaultValue="full">
+               <a:annotation>Selects which borders should be drawn, where "all" means borders around all table cells, "full" is like "all" except no horizontal lines between table rows (except below the column titles), "headers" adds just a separator between column titles and rows, and "none" means no borders at all.</a:annotation>
+               <choice>
+                  <value>all</value>
+                  <value>none</value>
+                  <value>headers</value>
+                  <value>full</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <ref name="preamble"/>
+         </optional>
+         <oneOrMore>
+            <ref name="ttcol"/>
+         </oneOrMore>
+         <zeroOrMore>
+            <ref name="c"/>
+         </zeroOrMore>
+         <optional>
+            <ref name="postamble"/>
+         </optional>
+      </element>
+   </define>
+   <define name="ttcol">
+      <element name="ttcol">
+         <a:annotation>Contains a column heading in a table.</a:annotation>
+         <optional>
+            <attribute name="width">
+               <a:annotation>The desired column width (as integer 0..100 followed by "%").</a:annotation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="align" a:defaultValue="left">
+               <a:annotation>Determines the horizontal alignment within the table column.</a:annotation>
+               <choice>
+                  <value>left</value>
+                  <value>center</value>
+                  <value>right</value>
+               </choice>
+            </attribute>
+         </optional>
+         <text/>
+      </element>
+   </define>
+   <define name="c">
+      <element name="c">
+         <a:annotation>Provides the content of a cell in a table.</a:annotation>
+         <zeroOrMore>
+            <choice>
+               <text/>
+               <ref name="xref"/>
+               <ref name="eref"/>
+               <ref name="iref"/>
+               <ref name="cref"/>
+               <ref name="spanx"/>
+            </choice>
+         </zeroOrMore>
+      </element>
+   </define>
+   <define name="back">
+      <element name="back">
+         <a:annotation>Contains the "back" part of the document: the references and appendices. In &lt;back&gt;, &lt;section&gt; elements indicate appendices.</a:annotation>
+         <zeroOrMore>
+            <ref name="references"/>
+         </zeroOrMore>
+         <zeroOrMore>
+            <ref name="section"/>
+         </zeroOrMore>
+      </element>
+   </define>
+   <define name="references">
+      <element name="references">
+         <a:annotation>Contains a set of bibliographical references.</a:annotation>
+         <optional>
+            <attribute name="title" a:defaultValue="References">
+               <a:annotation>Provides the title for the References section (defaulting to "References").</a:annotation>
+            </attribute>
+         </optional>
+         <oneOrMore>
+            <ref name="reference"/>
+         </oneOrMore>
+      </element>
+   </define>
+   <define name="reference">
+      <element name="reference">
+         <a:annotation>Represents a bibliographical reference.</a:annotation>
+         <attribute name="anchor">
+            <a:annotation>Document-wide unique identifier for this reference. Usually, this will be used both to "label" the reference in the references section, and as an identifier in links to this reference entry.</a:annotation>
+            <data type="ID"/>
+         </attribute>
+         <optional>
+            <attribute name="target">
+               <a:annotation>Holds the URI for the reference.</a:annotation>
+            </attribute>
+         </optional>
+         <ref name="front"/>
+         <zeroOrMore>
+            <ref name="seriesInfo"/>
+         </zeroOrMore>
+         <zeroOrMore>
+            <ref name="format"/>
+         </zeroOrMore>
+         <zeroOrMore>
+            <ref name="annotation"/>
+         </zeroOrMore>
+      </element>
+   </define>
+   <define name="seriesInfo">
+      <element name="seriesInfo">
+         <a:annotation>Specifies the document series in which this document appears, and also specifies an identifier within that series.</a:annotation>
+         <attribute name="name">
+            <a:annotation>The name of the series.</a:annotation>
+         </attribute>
+         <attribute name="value">
+            <a:annotation>The identifier within the series specified by the "name" attribute.</a:annotation>
+         </attribute>
+         <empty/>
+      </element>
+   </define>
+   <define name="format">
+      <element name="format">
+         <a:annotation>Provides a link to an additional format variant for a reference.</a:annotation>
+         <optional>
+            <attribute name="target">
+               <a:annotation>URI of document.</a:annotation>
+            </attribute>
+         </optional>
+         <attribute name="type">
+            <a:annotation>The type of the linked-to document, such as "TXT", "HTML", or "PDF".</a:annotation>
+         </attribute>
+         <optional>
+            <attribute name="octets">
+               <a:annotation>Octet length of linked-to document.</a:annotation>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="annotation">
+      <element name="annotation">
+         <a:annotation>Provides additional prose augmenting a bibliographical reference.</a:annotation>
+         <zeroOrMore>
+            <choice>
+               <text/>
+               <ref name="xref"/>
+               <ref name="eref"/>
+               <ref name="iref"/>
+               <ref name="cref"/>
+               <ref name="spanx"/>
+            </choice>
+         </zeroOrMore>
+      </element>
+   </define>
+   <start>
+      <choice>
+         <ref name="rfc"/>
+      </choice>
+   </start>
+</grammar>
