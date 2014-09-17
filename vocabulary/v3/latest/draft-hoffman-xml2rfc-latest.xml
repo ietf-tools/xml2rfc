@@ -224,7 +224,8 @@ If the goal is to provide a single URI (Uniform Resource Identifier) for
 a reference, use the "target" attribute on &lt;<x:ref>reference</x:ref>&gt; instead.</t>
 
 <t>Deprecate &lt;<x:ref>preamble</x:ref>&gt; and &lt;<x:ref>postamble</x:ref>&gt; in favor of 
-simply using &lt;<x:ref>t</x:ref>&gt;.</t>
+simply using &lt;<x:ref>t</x:ref>&gt;. This also deprecates the "align" attribute in
+&lt;<x:ref>figure</x:ref>&gt;.</t>
 
 <t>Deprecate the "title" attribute in &lt;<x:ref>section</x:ref>&gt;,  &lt;<x:ref>note</x:ref>&gt;,
 &lt;<x:ref>figure</x:ref>&gt;, and 
@@ -1581,8 +1582,7 @@ as optional children.</t>
    <iref item="Elements" subitem="figure" primary="true"/>
    <iref item="figure element" primary="true"/>
    <t>
-      This element is used to represent a figure, consisting of an optional	preamble,
-      the actual figure, an optional postamble, and an optional title.
+      This element is used to represent a figure and an optional title.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.figure.contents"><!--AG-->Content model:</t>
@@ -1625,8 +1625,7 @@ as optional children.</t>
       <iref item="figure element" subitem="align attribute"/>
       <iref item="align attribute" subitem="in figure element"/>
       <t>
-          Used to change the alignment of &lt;<x:ref>preamble</x:ref>&gt;
-          and &lt;<x:ref>postamble</x:ref>&gt;.
+          Deprecated.
       </t>
       <t> 
           Note: does not affect title or &lt;<x:ref>artwork</x:ref>&gt; alignment.
@@ -3515,8 +3514,8 @@ Using CDATA:
    <iref item="Elements" subitem="texttable" primary="true"/>
    <iref item="texttable element" primary="true"/>
    <t>
-      Contains a table, consisting of an optional preamble, a header line,
-      rows, an optional postamble, and an optional title.
+      Contains a table, consisting of a header line,
+      rows, and an optional title.
    </t>
    <t>
       The number of columns in the table is determined by the number of
