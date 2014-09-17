@@ -984,6 +984,7 @@
         <choice>
           <ref name="artwork"/>
           <ref name="sourcecode"/>
+          <ref name="tr"/>
         </choice>
       </oneOrMore>
       <optional>
@@ -1062,6 +1063,87 @@
         <attribute name="type" a:defaultValue=""/>
       </optional>
       <text/>
+    </element>
+  </define>
+  <define name="tr">
+    <element name="tr">
+      <optional>
+        <attribute name="border" a:defaultValue="0"/>
+      </optional>
+      <oneOrMore>
+        <ref name="td"/>
+        <ref name="th"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="td">
+    <element name="td">
+      <optional>
+        <attribute name="border" a:defaultValue="0"/>
+      </optional>
+      <choice>
+        <oneOrMore>
+          <ref name="t"/>
+        </oneOrMore>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <ref name="artwork"/>
+            <ref name="b"/>
+            <ref name="bcp14"/>
+            <ref name="cref"/>
+            <ref name="dl"/>
+            <ref name="em"/>
+            <ref name="eref"/>
+            <ref name="figure"/>
+            <ref name="i"/>
+            <ref name="iref"/>
+            <ref name="ol"/>
+            <ref name="sourcecode"/>
+            <ref name="strong"/>
+            <ref name="sub"/>
+            <ref name="sup"/>
+            <ref name="tt"/>
+            <ref name="ul"/>
+            <ref name="xref"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="th">
+    <element name="th">
+      <optional>
+        <attribute name="border" a:defaultValue="0"/>
+      </optional>
+      <choice>
+        <oneOrMore>
+          <ref name="t"/>
+        </oneOrMore>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <ref name="artwork"/>
+            <ref name="b"/>
+            <ref name="bcp14"/>
+            <ref name="cref"/>
+            <ref name="dl"/>
+            <ref name="em"/>
+            <ref name="eref"/>
+            <ref name="figure"/>
+            <ref name="i"/>
+            <ref name="iref"/>
+            <ref name="ol"/>
+            <ref name="sourcecode"/>
+            <ref name="strong"/>
+            <ref name="sub"/>
+            <ref name="sup"/>
+            <ref name="tt"/>
+            <ref name="ul"/>
+            <ref name="xref"/>
+          </choice>
+        </oneOrMore>
+      </choice>
     </element>
   </define>
   <define name="postamble">

@@ -487,7 +487,7 @@
       iref*,
       preamble?,
 -     artwork,
-+     (artwork | sourcecode)+,
++     (artwork | sourcecode | tr)+,
       postamble?
     }
   preamble =
@@ -529,6 +529,59 @@
 +     [ a:defaultValue = "" ] attribute name { text }?,
 +     [ a:defaultValue = "" ] attribute type { text }?,
 +     text
++   }
++ tr =
++   element tr {
++     [ a:defaultValue = "0" ] attribute border { text }?,
++     (td, th)+
++   }
++ td =
++   element td {
++     [ a:defaultValue = "0" ] attribute border { text }?,
++     (t+
++      | (text
++         | artwork
++         | b
++         | bcp14
++         | cref
++         | dl
++         | em
++         | eref
++         | figure
++         | i
++         | iref
++         | ol
++         | sourcecode
++         | strong
++         | sub
++         | sup
++         | tt
++         | ul
++         | xref)+)
++   }
++ th =
++   element th {
++     [ a:defaultValue = "0" ] attribute border { text }?,
++     (t+
++      | (text
++         | artwork
++         | b
++         | bcp14
++         | cref
++         | dl
++         | em
++         | eref
++         | figure
++         | i
++         | iref
++         | ol
++         | sourcecode
++         | strong
++         | sub
++         | sup
++         | tt
++         | ul
++         | xref)+)
 +   }
   postamble =
 -   element postamble { (text | xref | eref | iref | cref | spanx)* 
