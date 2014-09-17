@@ -1232,15 +1232,25 @@
       <optional>
         <attribute name="target"/>
       </optional>
-        <ref name="front"/>
-        <zeroOrMore>
-          <choice>
-            <ref name="annotation"/>
-            <ref name="format"/>
-            <ref name="refcontent"/>
-            <ref name="seriesInfo"/>
-          </choice>
-        </zeroOrMore>
+      <ref name="front"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="annotation"/>
+          <ref name="format"/>
+          <ref name="refcontent"/>
+          <ref name="seriesInfo"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="referencegroup">
+    <element name="referencegroup">
+      <attribute name="anchor">
+        <data type="ID"/>
+      </attribute>
+      <oneOrMore>
+        <ref name="reference"/>
+      </oneOrMore>
     </element>
   </define>
   <define name="seriesInfo">

@@ -14,8 +14,6 @@
 
 <!--
 
-Add <referencegroup> for STDs and such
-
 Remove the appendicies that will be web pages 
 
 Consider the content model for <blockquote>, with a choice like <li>
@@ -2585,7 +2583,7 @@ as optional children.</t>
    <t>
       Represents a bibliographical reference.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>referencegroup</x:ref>&gt; (<xref target="element.referencegroup"/>), and &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
    <t anchor="element.reference.contents"><!--AG-->Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
          <t><!--AG-->
@@ -2634,6 +2632,38 @@ as optional children.</t>
             element, a URI might not be needed, nor desirable, as it can 
             be automatically generated (for instance, for RFCs).
          </t>
+   </section>
+</section>
+
+<!--referencegroup-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;referencegroup&gt;" anchor="element.referencegroup">
+   <x:anchor-alias value="referencegroup"/>
+   <iref item="Elements" subitem="referencegroup" primary="true"/>
+   <iref item="referencegroup element" primary="true"/>
+   <t>
+      Represents a list of bibliographic references that will be represented as a single reference.
+      This is most often used for references in the STD and BCP series, where a single reference
+      (such as "BCP 9") encompasses more than one RFC.
+   </t>
+   <t anchor="element.referencegroup.contents"><!--AG-->
+      Content model:
+    </t>
+        
+   <t><!--AG-->
+      <iref item="Elements" subitem="reference"/>
+      <iref item="reference element" subitem="inside referencegroup"/>One or more &lt;<x:ref>reference</x:ref>&gt; elements (<xref target="element.reference"/>)</t>
+      
+
+   <!--referencegroup/@anchor-->
+   <section title="'anchor' attribute (mandatory)" anchor="element.referencegroup.attribute.anchor" toc="exclude">
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="referencegroup element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in referencegroup element"/>
+      <t>
+        Document-wide unique identifier for this reference group. Usually, this will
+        be used both to "label" the reference in the references section, and
+        as an identifier in links to this reference entry.
+      </t>
    </section>
 </section>
 
@@ -5848,6 +5878,11 @@ reference =
     front,
     (annotation | format | refcontent | seriesInfo)*
   }
+referencegroup =
+  element referencegroup {
+    attribute anchor { xsd:ID },
+    reference+
+  }
 seriesInfo =
   element seriesInfo {
     attribute name { text },
@@ -6514,6 +6549,11 @@ to the v3 schema.</t>
 -     format*,
 -     annotation*
 +     (annotation | format | refcontent | seriesInfo)*
++   }
++ referencegroup =
++   element referencegroup {
++     attribute anchor { xsd:ID },
++     reference+
     }
   seriesInfo =
     element seriesInfo {

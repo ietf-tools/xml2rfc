@@ -60,16 +60,6 @@
    <t>
       Provides additional prose augmenting a bibliographical reference.
    </t>
-   <figure>
-      <preamble>For instance:</preamble>
-      <artwork type="example">
-&lt;annotation&gt;
-  Latest version available at &lt;eref
-  target='http://www.w3.org/TR/xml'/&gt;.
-&lt;/annotation&gt;
-</artwork>
-      <postamble>...will generate the text used in the reference for <xref target="XML"/>.</postamble>
-   </figure>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
    <t anchor="element.annotation.contents"><!--AG-->
       Content model:
@@ -139,7 +129,7 @@
       (currently not used when generating documents).
    </t>
    <t>
-      The value ought to be either the fullname or the abbreviation of one of
+      The value ought to be either the full name or the abbreviation of one of
       the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
       The list at the time that this document is being published is:
       "Applications", "app", "General", "gen", "Internet", "int", "Operations
@@ -210,8 +200,8 @@
       <iref item="artwork element" subitem="align attribute"/>
       <iref item="align attribute" subitem="in artwork element"/>
       <t>
-            Controls whether the artwork appears left (default), centered,
-            or right.
+            Controls whether the artwork appears left justified (default), centered,
+            or right justified.
          </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"left" (default)</t>
@@ -264,7 +254,7 @@
       <iref item="artwork element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in artwork element"/>
       <t>
-            The URI of a graphics file.
+            The URI reference of a graphics file (<xref target="RFC3986"/>).
          </t>
       <t>
             Note that this can be a "data" URI (<xref target="RFC2397"/>).
@@ -474,7 +464,7 @@
       <iref item="author element" subitem="surname attribute"/>
       <iref item="surname attribute" subitem="in author element"/>
       <t>
-            The author's surname.
+            The author's surname (used on the front page and in references).
          </t>
    </section>
 
@@ -878,7 +868,7 @@
    </t>
    <t>
       In the case of bibliographic references, the date information can have prose text for the month or year.
-      For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013")
+      For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
       non-specific months (month="Second quarter") and so on, are allowed.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
@@ -1534,13 +1524,6 @@
       Index entries can be either single items (when just the "item"
       attribute is given) or nested items (by specifying "subitem" as well).
    </t>
-   <figure>
-      <preamble>For instance:</preamble>
-      <artwork type="example">
-&lt;iref item="Grammar" subitem="item"/&gt;
-</artwork>
-      <postamble>will produce an index entry for "Grammar, item".</postamble>
-   </figure>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>b</x:ref>&gt; (<xref target="element.b"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>i</x:ref>&gt; (<xref target="element.i"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.iref.contents"><!--AG-->Content model: this element does not have any contents.</t>
 
@@ -2281,7 +2264,7 @@
    <t>
       Represents a bibliographical reference.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>referencegroup</x:ref>&gt; (<xref target="element.referencegroup"/>), and &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
    <t anchor="element.reference.contents"><!--AG-->Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
          <t><!--AG-->
@@ -2333,6 +2316,34 @@
    </section>
 </section>
 
+<!--referencegroup-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;referencegroup&gt;" anchor="element.referencegroup">
+   <x:anchor-alias value="referencegroup"/>
+   <iref item="Elements" subitem="referencegroup" primary="true"/>
+   <iref item="referencegroup element" primary="true"/>
+   <t><!--AG-->
+      <cref anchor="element.referencegroup.missing">element description missing</cref>
+   </t>
+   <t anchor="element.referencegroup.contents"><!--AG-->
+      Content model:
+    </t>
+        
+   <t><!--AG-->
+      <iref item="Elements" subitem="reference"/>
+      <iref item="reference element" subitem="inside referencegroup"/>One or more &lt;<x:ref>reference</x:ref>&gt; elements (<xref target="element.reference"/>)</t>
+      
+
+   <!--referencegroup/@anchor-->
+   <section title="'anchor' attribute (mandatory)" anchor="element.referencegroup.attribute.anchor" toc="exclude">
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="referencegroup element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in referencegroup element"/>
+      <t><!--AG-->
+         <cref anchor="element.referencegroup.attribute.anchor.missing">attribute description missing</cref>
+      </t>
+   </section>
+</section>
+
 <!--references-->
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;references&gt;" anchor="element.references">
    <x:anchor-alias value="references"/>
@@ -2346,6 +2357,10 @@
       was later changed to group references into two sets, "Normative" and "Informative"
       as described in <xref target="RFCSTYLE"/>).
       This vocabulary supports the split with the "title" attribute.
+   </t>
+   <t>
+      By default, the order of references is significant. Processors, however,
+      can be instructed to sort them based on their anchor names.
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.references.contents"><!--AG-->
@@ -3681,7 +3696,7 @@ Using CDATA:
       is empty and if it has text.</cref>
    </t>
    <t>   
-      Any element that allows the "anchor" attribute can be referenced, however
+      Any element that allows the "anchor" attribute can be referenced; however,
       there are restrictions with respect to the text content being generated.
       For instance, a &lt;<x:ref>t</x:ref>&gt; can be a reference target, however, 
       because paragraphs are not (visibly) numbered, the author will have to
