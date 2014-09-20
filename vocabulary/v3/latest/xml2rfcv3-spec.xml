@@ -656,63 +656,6 @@
    </section>
 </section>
 
-<!--c-->
-<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;c&gt;" anchor="element.c">
-   <x:anchor-alias value="c"/>
-   <iref item="Elements" subitem="c" primary="true"/>
-   <iref item="c element" primary="true"/>
-   <t>
-      Provides the content of a cell in a table.
-   </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
-   <t anchor="element.c.contents"><!--AG-->
-      Content model:
-    </t>
-   <t><!--AG-->In any order: <list style="symbols">
-         <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside c"/>&lt;<x:ref>b</x:ref>&gt; elements (<xref target="element.b"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="bcp14"/>
-            <iref item="bcp14 element" subitem="inside c"/>&lt;<x:ref>bcp14</x:ref>&gt; elements (<xref target="element.bcp14"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="cref"/>
-            <iref item="cref element" subitem="inside c"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="em"/>
-            <iref item="em element" subitem="inside c"/>&lt;<x:ref>em</x:ref>&gt; elements (<xref target="element.em"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="eref"/>
-            <iref item="eref element" subitem="inside c"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="i"/>
-            <iref item="i element" subitem="inside c"/>&lt;<x:ref>i</x:ref>&gt; elements (<xref target="element.i"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="iref"/>
-            <iref item="iref element" subitem="inside c"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="spanx"/>
-            <iref item="spanx element" subitem="inside c"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="strong"/>
-            <iref item="strong element" subitem="inside c"/>&lt;<x:ref>strong</x:ref>&gt; elements (<xref target="element.strong"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="sub"/>
-            <iref item="sub element" subitem="inside c"/>&lt;<x:ref>sub</x:ref>&gt; elements (<xref target="element.sub"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="sup"/>
-            <iref item="sup element" subitem="inside c"/>&lt;<x:ref>sup</x:ref>&gt; elements (<xref target="element.sup"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="tt"/>
-            <iref item="tt element" subitem="inside c"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="xref"/>
-            <iref item="xref element" subitem="inside c"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
-      </list>
-   </t>
-</section>
-
 <!--city-->
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;city&gt;" anchor="element.city">
    <x:anchor-alias value="city"/>
@@ -3197,6 +3140,10 @@ Using CDATA:
    <t>
       A cell in a table row.
    </t>
+   <t>
+      <cref>Should this also have attributes for horizontal alignment, vertical alignment, spanning
+      cells in the row, and spanning cells in a column? These all exist in HTML.</cref>
+   </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>tr</x:ref>&gt; (<xref target="element.tr"/>).</t>
    <t anchor="element.td.contents"><!--AG-->
       Content model:
@@ -3282,155 +3229,6 @@ Using CDATA:
    </section>
 </section>
 
-<!--texttable-->
-<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;texttable&gt;" anchor="element.texttable">
-   <x:anchor-alias value="texttable"/>
-   <iref item="Elements" subitem="texttable" primary="true"/>
-   <iref item="texttable element" primary="true"/>
-   <t>
-      Contains a table, consisting of a header line,
-      rows, and an optional title.
-   </t>
-   <t>
-      The number of columns in the table is determined by the number of
-      &lt;<x:ref>ttcol</x:ref>&gt; elements. The number of rows in the table is
-      determined by the number of &lt;<x:ref>c</x:ref>&gt; elements divided
-      by the number of columns. There is no requirement that the number of
-      &lt;<x:ref>c</x:ref>&gt; elements be evenly divisible by the number of
-      columns.
-   </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
-   <t anchor="element.texttable.contents"><!--AG-->Content model:</t>
-   <t><!--AG-->In this order:<list style="numbers">
-        
-         <t><!--AG-->
-            <iref item="Elements" subitem="name"/>
-            <iref item="name element" subitem="inside texttable"/>One optional &lt;<x:ref>name</x:ref>&gt; element (<xref target="element.name"/>)</t>
-      
-        
-         <t><!--AG-->
-            <iref item="Elements" subitem="preamble"/>
-            <iref item="preamble element" subitem="inside texttable"/>One optional &lt;<x:ref>preamble</x:ref>&gt; element (<xref target="element.preamble"/>)</t>
-      
-        
-         <t><!--AG-->
-            <iref item="Elements" subitem="ttcol"/>
-            <iref item="ttcol element" subitem="inside texttable"/>One or more &lt;<x:ref>ttcol</x:ref>&gt; elements (<xref target="element.ttcol"/>)</t>
-      
-        
-         <t><!--AG-->
-            <iref item="Elements" subitem="c"/>
-            <iref item="c element" subitem="inside texttable"/>Optional &lt;<x:ref>c</x:ref>&gt; elements (<xref target="element.c"/>)</t>
-      
-        
-         <t><!--AG-->
-            <iref item="Elements" subitem="postamble"/>
-            <iref item="postamble element" subitem="inside texttable"/>One optional &lt;<x:ref>postamble</x:ref>&gt; element (<xref target="element.postamble"/>)</t>
-      
-      </list>
-   </t>
-
-   <!--texttable/@align-->
-   <section title="'align' attribute" anchor="element.texttable.attribute.align" toc="exclude">
-      <iref item="Attributes" subitem="align"/>
-      <iref item="texttable element" subitem="align attribute"/>
-      <iref item="align attribute" subitem="in texttable element"/>
-      <t>
-            Determines the horizontal alignment of the table.
-         </t>
-      <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"left"</t>
-            <t>"center" (default)</t>
-            <t>"right"</t>
-         </list>
-      </t>
-   </section>
-
-   <!--texttable/@anchor-->
-   <section title="'anchor' attribute" anchor="element.texttable.attribute.anchor" toc="exclude">
-      <iref item="Attributes" subitem="anchor"/>
-      <iref item="texttable element" subitem="anchor attribute"/>
-      <iref item="anchor attribute" subitem="in texttable element"/>
-      <t>
-        Document-wide unique identifier for this table.
-      </t>
-      <t>
-        Furthermore, the presence of this attribute causes the table to be numbered.
-      </t>
-   </section>
-
-   <!--texttable/@autogeneratedTableNumber-->
-   <section title="'autogeneratedTableNumber' attribute" anchor="element.texttable.attribute.autogeneratedTableNumber" toc="exclude">
-      <iref item="Attributes" subitem="autogeneratedTableNumber"/>
-      <iref item="texttable element" subitem="autogeneratedTableNumber attribute"/>
-      <iref item="autogeneratedTableNumber attribute" subitem="in texttable element"/>
-      <t>
-         The number for this table, if one is generated by the processor. This attribute and its value are automatically generated by
-         the RFC Processor, and are ignored by other processors. If the value already exists when
-         the RFC Processor is run, it is replaced.
-      </t>
-   </section>
-
-   <!--texttable/@style-->
-   <section title="'style' attribute" anchor="element.texttable.attribute.style" toc="exclude">
-      <iref item="Attributes" subitem="style"/>
-      <iref item="texttable element" subitem="style attribute"/>
-      <iref item="style attribute" subitem="in texttable element"/>
-      <t>
-        Selects which borders should be drawn, where
-        <list style="symbols">
-            <t>
-            "all" means borders around all table cells,
-          </t>
-            <t>
-            "full" is like "all" except no horizontal lines between table
-            rows (except below the column titles),
-          </t>
-            <t>
-            "headers" adds just a separator between column titles and rows, and
-          </t>
-            <t>
-            "none" means no borders at all.
-          </t>
-         </list>
-      </t>
-      <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"all"</t>
-            <t>"none"</t>
-            <t>"headers"</t>
-            <t>"full" (default)</t>
-         </list>
-      </t>
-   </section>
-
-   <!--texttable/@suppress-title-->
-   <section title="'suppress-title' attribute" anchor="element.texttable.attribute.suppress-title" toc="exclude">
-      <iref item="Attributes" subitem="suppress-title"/>
-      <iref item="texttable element" subitem="suppress-title attribute"/>
-      <iref item="suppress-title attribute" subitem="in texttable element"/>
-      <t>
-            Tables that have an "anchor" attribute will automatically get
-            an autogenerated title (such as "Table 1"), even if the "title"
-            attribute is absent. Setting this attribute to "true" will prevent this.
-      </t>
-      <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"true"</t>
-            <t>"false" (default)</t>
-         </list>
-      </t>
-   </section>
-
-   <!--texttable/@title-->
-   <section title="'title' attribute" anchor="element.texttable.attribute.title" toc="exclude">
-      <iref item="Attributes" subitem="title"/>
-      <iref item="texttable element" subitem="title attribute"/>
-      <iref item="title attribute" subitem="in texttable element"/>
-      <t>
-            Deprecated. Use &lt;<x:ref>name</x:ref>&gt; instead.
-      </t>
-   </section>
-</section>
-
 <!--th-->
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;th&gt;" anchor="element.th">
    <x:anchor-alias value="th"/>
@@ -3439,6 +3237,10 @@ Using CDATA:
    <t>
       A cell in a table row. When rendered, this will normally come out in boldface; other than that,
       there is no difference between this and the <x:ref>td</x:ref>&gt; element.
+   </t>
+   <t>
+      <cref>Should this also have attributes for horizontal alignment, vertical alignment, spanning
+      cells in the row, and spanning cells in a column? These all exist in HTML.</cref>
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>tr</x:ref>&gt; (<xref target="element.tr"/>).</t>
    <t anchor="element.th.contents"><!--AG-->
@@ -3654,62 +3456,6 @@ Using CDATA:
             <iref item="xref element" subitem="inside tt"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
       </list>
    </t>
-</section>
-
-<!--ttcol-->
-<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;ttcol&gt;" anchor="element.ttcol">
-   <x:anchor-alias value="ttcol"/>
-   <iref item="Elements" subitem="ttcol" primary="true"/>
-   <iref item="ttcol element" primary="true"/>
-   <t>
-      Contains a column heading in a table.
-   </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
-   <t anchor="element.ttcol.contents"><!--AG-->
-      Content model:
-    </t>
-   <t><!--AG-->In any order: <list style="symbols">
-         <t><!--AG-->
-            <iref item="Elements" subitem="cref"/>
-            <iref item="cref element" subitem="inside ttcol"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="eref"/>
-            <iref item="eref element" subitem="inside ttcol"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="iref"/>
-            <iref item="iref element" subitem="inside ttcol"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="xref"/>
-            <iref item="xref element" subitem="inside ttcol"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
-         <t><!--AG-->Text</t>
-      </list>
-   </t>
-
-   <!--ttcol/@align-->
-   <section title="'align' attribute" anchor="element.ttcol.attribute.align" toc="exclude">
-      <iref item="Attributes" subitem="align"/>
-      <iref item="ttcol element" subitem="align attribute"/>
-      <iref item="align attribute" subitem="in ttcol element"/>
-      <t>
-            Determines the horizontal alignment within the table column.
-         </t>
-      <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"left" (default)</t>
-            <t>"center"</t>
-            <t>"right"</t>
-         </list>
-      </t>
-   </section>
-
-   <!--ttcol/@width-->
-   <section title="'width' attribute" anchor="element.ttcol.attribute.width" toc="exclude">
-      <iref item="Attributes" subitem="width"/>
-      <iref item="ttcol element" subitem="width attribute"/>
-      <iref item="width attribute" subitem="in ttcol element"/>
-      <t>
-         The desired column width (as integer 0..100 followed by "%").
-      </t>
-   </section>
 </section>
 
 <!--ul-->
