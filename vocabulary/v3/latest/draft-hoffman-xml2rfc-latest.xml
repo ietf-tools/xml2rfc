@@ -210,11 +210,16 @@ different fonts for ideographic characters used in China and Japan.</t>
 
 <t>Add the "numbered" and "removeinrfc" attributes to &lt;<x:ref>section</x:ref>&gt;.</t>
 
-<t>Add "boilerplateText", "figureNumber", "tagleNumber", "partNumber",
+<t>Add "boilerplateText", "figureNumber", "tagleNumber",
 and "sectionNumber" attributes to &lt;<x:ref>rfc</x:ref>&gt;,
-&lt;<x:ref>figure</x:ref>&gt;, &lt;<x:ref>table</x:ref>&gt;, &lt;<x:ref>t</x:ref>&gt;, and &lt;<x:ref>section</x:ref>&gt;,
+&lt;<x:ref>figure</x:ref>&gt;, &lt;<x:ref>table</x:ref>&gt;, and &lt;<x:ref>section</x:ref>&gt;,
 respectively.
 </t>
+
+<t>Add "partNumber" to &lt;<x:ref>artwork</x:ref>&gt;, &lt;<x:ref>artwork</x:ref>&gt;,
+&lt;<x:ref>aside</x:ref>&gt;, &lt;<x:ref>blockquote</x:ref>&gt;, &lt;<x:ref>li</x:ref>&gt;,
+&lt;<x:ref>sourcecode</x:ref>&gt;, and &lt;<x:ref>t</x:ref>&gt; to hold automatically generated
+numbers for items in a section that don't have their own numbering (namely figures and tables).</t>
 
 </list></t>
 
@@ -603,6 +608,17 @@ some types of sections.</t>
          </t>
    </section>
 
+   <!--artwork/@partNumber-->
+   <section title="'partNumber' attribute" anchor="element.artwork.attribute.partNumber" toc="exclude">
+      <iref item="Attributes" subitem="partNumber"/>
+      <iref item="artwork element" subitem="partNumber attribute"/>
+      <iref item="partNumber attribute" subitem="in artwork element"/>
+      <t>
+         The number for this artwork within the section. The numbering is shared with other elements of a section.
+         This is described in more detail in <xref target="anchorsandids"/>.
+      </t>
+   </section>
+
    <!--artwork/@src-->
    <section title="'src' attribute" anchor="element.artwork.attribute.src" toc="exclude">
       <iref item="Attributes" subitem="src"/>
@@ -716,6 +732,17 @@ some types of sections.</t>
             <iref item="texttable element" subitem="inside aside"/>&lt;<x:ref>texttable</x:ref>&gt; elements (<xref target="element.texttable"/>)</t>
       </list>
    </t>
+
+   <!--aside/@partNumber-->
+   <section title="'partNumber' attribute" anchor="element.aside.attribute.partNumber" toc="exclude">
+      <iref item="Attributes" subitem="partNumber"/>
+      <iref item="aside element" subitem="partNumber attribute"/>
+      <iref item="partNumber attribute" subitem="in aside element"/>
+      <t>
+         The number for this aside within the section. The numbering is shared with other elements of a section.
+         This is described in more detail in <xref target="anchorsandids"/>.
+      </t>
+   </section>
 </section>
 
 <!--author-->
@@ -1006,6 +1033,17 @@ some types of sections.</t>
       <t>
          The source of the citation. This must be a URI. <cref>Needs an example of a cite for a reference that is
          already in the spec.</cref>
+      </t>
+   </section>
+
+   <!--blockquote/@partNumber-->
+   <section title="'partNumber' attribute" anchor="element.blockquote.attribute.partNumber" toc="exclude">
+      <iref item="Attributes" subitem="partNumber"/>
+      <iref item="blockquote element" subitem="partNumber attribute"/>
+      <iref item="partNumber attribute" subitem="in blockquote element"/>
+      <t>
+         The number for this blockquote within the section. The numbering is shared with other elements of a section.
+         This is described in more detail in <xref target="anchorsandids"/>.
       </t>
    </section>
 </section>
@@ -1955,6 +1993,17 @@ some types of sections.</t>
          </t>
       </list>
    </t>
+
+   <!--li/@partNumber-->
+   <section title="'partNumber' attribute" anchor="element.li.attribute.partNumber" toc="exclude">
+      <iref item="Attributes" subitem="partNumber"/>
+      <iref item="li element" subitem="partNumber attribute"/>
+      <iref item="partNumber attribute" subitem="in li element"/>
+      <t>
+         The number for this list item within the section. The numbering is shared with other elements of a section.
+         This is described in more detail in <xref target="anchorsandids"/>.
+      </t>
+   </section>
 </section>
 
 <!--link-->
@@ -2071,6 +2120,17 @@ some types of sections.</t>
             <iref item="xref element" subitem="inside name"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
       </list>
    </t>
+
+   <!--name/@slugifiedName-->
+   <section title="'slugifiedName' attribute" anchor="element.name.attribute.slugifiedName" toc="exclude">
+      <iref item="Attributes" subitem="slugifiedName"/>
+      <iref item="name element" subitem="slugifiedName attribute"/>
+      <iref item="slugifiedName attribute" subitem="in name element"/>
+      <t>
+         The name after the processor has filled in a slugified version.
+         This is described in more detail in <xref target="anchorsandids"/>.
+      </t>
+   </section>
 </section>
 
 <!--note-->
@@ -3165,6 +3225,17 @@ Using CDATA:
          </t>
    </section>
 
+   <!--sourcecode/@partNumber-->
+   <section title="'partNumber' attribute" anchor="element.sourcecode.attribute.partNumber" toc="exclude">
+      <iref item="Attributes" subitem="partNumber"/>
+      <iref item="sourcecode element" subitem="partNumber attribute"/>
+      <iref item="partNumber attribute" subitem="in sourcecode element"/>
+      <t>
+         The number for this sourceode within the section. The numbering is shared with other elements of a section.
+         This is described in more detail in <xref target="anchorsandids"/>.
+      </t>
+   </section>
+
    <!--sourcecode/@type-->
    <section title="'type' attribute" anchor="element.sourcecode.attribute.type" toc="exclude">
       <iref item="Attributes" subitem="type"/>
@@ -3468,9 +3539,8 @@ Using CDATA:
       <iref item="t element" subitem="partNumber attribute"/>
       <iref item="partNumber attribute" subitem="in t element"/>
       <t>
-         The number for this paragraph, if one is generated by the processor. This attribute and its value are automatically generated by
-         the RFC Processor, and are ignored by other processors. If the value already exists when
-         the RFC Processor is run, it is replaced.
+         The number for this paragraph within the section. The numbering is shared with other elements of a section.
+         This is described in more detail in <xref target="anchorsandids"/>.
       </t>
    </section>
 </section>
@@ -5488,6 +5558,15 @@ or sourcecode.</cref></t>
 
 </section>
 
+<section anchor="anchorsandids" title="Anchors and IDs">
+
+<t>Description goes here about the values for anchor= attributes and the authomatically
+generated ids.</t>
+
+<t>Also talk about slugification and snowflakes</t>
+
+</section>
+
 </section>
 
 <section title="Format and Content of RFCs (Future)">
@@ -5795,7 +5874,11 @@ section =
      | ul)*,
     section*
   }
-name = element name { (text | cref | eref | iref | tt | xref)* }
+name =
+  element name {
+    attribute slugifiedName { text }?,
+    (text | cref | eref | iref | tt | xref)*
+  }
 t =
   element t {
     attribute anchor { xsd:ID }?,
@@ -5821,11 +5904,13 @@ t =
   }
 aside =
   element aside {
+    attribute partNumber { text }?,
     (artwork | figure | iref | sourcecode | t | texttable)*
   }
 blockquote =
   element blockquote {
     attribute anchor { xsd:ID }?,
+    attribute partNumber { text }?,
     attribute cite { text },
     (text
      | artwork
@@ -5866,26 +5951,27 @@ ul =
   }
 li =
   element li {
-    t+
-    | (text
-       | artwork
-       | b
-       | bcp14
-       | cref
-       | dl
-       | em
-       | eref
-       | figure
-       | i
-       | iref
-       | ol
-       | sourcecode
-       | strong
-       | sub
-       | sup
-       | tt
-       | ul
-       | xref)+
+    attribute partNumber { text }?,
+    (t+
+     | (text
+        | artwork
+        | b
+        | bcp14
+        | cref
+        | dl
+        | em
+        | eref
+        | figure
+        | i
+        | iref
+        | ol
+        | sourcecode
+        | strong
+        | sub
+        | sup
+        | tt
+        | ul
+        | xref)+)
   }
 dl =
   element dl {
@@ -6134,12 +6220,14 @@ artwork =
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+    attribute partNumber { text }?,
     text*
   }
 sourcecode =
   element sourcecode {
     [ a:defaultValue = "" ] attribute name { text }?,
     [ a:defaultValue = "" ] attribute type { text }?,
+    attribute partNumber { text }?,
     text
   }
 thead = element thead { tr+ }
@@ -6512,7 +6600,11 @@ to the v3 schema.</t>
 +      | ul)*,
       section*
     }
-+ name = element name { (text | cref | eref | iref | tt | xref)* }
++ name =
++   element name {
++     attribute slugifiedName { text }?,
++     (text | cref | eref | iref | tt | xref)*
++   }
   t =
     element t {
       attribute anchor { xsd:ID }?,
@@ -6543,11 +6635,13 @@ to the v3 schema.</t>
 +   }
 + aside =
 +   element aside {
++     attribute partNumber { text }?,
 +     (artwork | figure | iref | sourcecode | t | texttable)*
 +   }
 + blockquote =
 +   element blockquote {
 +     attribute anchor { xsd:ID }?,
++     attribute partNumber { text }?,
 +     attribute cite { text },
 +     (text
 +      | artwork
@@ -6589,26 +6683,27 @@ to the v3 schema.</t>
 +   }
 + li =
 +   element li {
-+     t+
-+     | (text
-+        | artwork
-+        | b
-+        | bcp14
-+        | cref
-+        | dl
-+        | em
-+        | eref
-+        | figure
-+        | i
-+        | iref
-+        | ol
-+        | sourcecode
-+        | strong
-+        | sub
-+        | sup
-+        | tt
-+        | ul
-+        | xref)+
++     attribute partNumber { text }?,
++     (t+
++      | (text
++         | artwork
++         | b
++         | bcp14
++         | cref
++         | dl
++         | em
++         | eref
++         | figure
++         | i
++         | iref
++         | ol
++         | sourcecode
++         | strong
++         | sub
++         | sup
++         | tt
++         | ul
++         | xref)+)
 +   }
 + dl =
 +   element dl {
@@ -6863,12 +6958,14 @@ to the v3 schema.</t>
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
 +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
++     attribute partNumber { text }?,
       text*
     }
 + sourcecode =
 +   element sourcecode {
 +     [ a:defaultValue = "" ] attribute name { text }?,
 +     [ a:defaultValue = "" ] attribute type { text }?,
++     attribute partNumber { text }?,
 +     text
 +   }
 + thead = element thead { tr+ }

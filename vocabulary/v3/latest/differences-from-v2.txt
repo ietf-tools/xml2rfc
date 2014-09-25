@@ -180,7 +180,11 @@
 +      | ul)*,
       section*
     }
-+ name = element name { (text | cref | eref | iref | tt | xref)* }
++ name =
++   element name {
++     attribute slugifiedName { text }?,
++     (text | cref | eref | iref | tt | xref)*
++   }
   t =
     element t {
       attribute anchor { xsd:ID }?,
@@ -211,11 +215,13 @@
 +   }
 + aside =
 +   element aside {
++     attribute partNumber { text }?,
 +     (artwork | figure | iref | sourcecode | t | texttable)*
 +   }
 + blockquote =
 +   element blockquote {
 +     attribute anchor { xsd:ID }?,
++     attribute partNumber { text }?,
 +     attribute cite { text },
 +     (text
 +      | artwork
@@ -257,26 +263,27 @@
 +   }
 + li =
 +   element li {
-+     t+
-+     | (text
-+        | artwork
-+        | b
-+        | bcp14
-+        | cref
-+        | dl
-+        | em
-+        | eref
-+        | figure
-+        | i
-+        | iref
-+        | ol
-+        | sourcecode
-+        | strong
-+        | sub
-+        | sup
-+        | tt
-+        | ul
-+        | xref)+
++     attribute partNumber { text }?,
++     (t+
++      | (text
++         | artwork
++         | b
++         | bcp14
++         | cref
++         | dl
++         | em
++         | eref
++         | figure
++         | i
++         | iref
++         | ol
++         | sourcecode
++         | strong
++         | sub
++         | sup
++         | tt
++         | ul
++         | xref)+)
 +   }
 + dl =
 +   element dl {
@@ -531,12 +538,14 @@
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
 +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
++     attribute partNumber { text }?,
       text*
     }
 + sourcecode =
 +   element sourcecode {
 +     [ a:defaultValue = "" ] attribute name { text }?,
 +     [ a:defaultValue = "" ] attribute type { text }?,
++     attribute partNumber { text }?,
 +     text
 +   }
 + thead = element thead { tr+ }
