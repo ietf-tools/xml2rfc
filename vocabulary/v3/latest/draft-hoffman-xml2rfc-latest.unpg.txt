@@ -241,7 +241,7 @@ Table of Contents
       significant change from v2 in that the child under these elements
       is <li>, not <t>. <li> has a model of either containing one or
       more <t> elements, or containing the flowing text normally found
-      in <t>.
+      in <t>.  These lists are children of <section>s instead of <t>.
 
    o  Add <strong>, <b>, <em>, <i>, <tt>, <sub>, and <sup> for character
       formatting.
@@ -353,8 +353,8 @@ Table of Contents
    o  Allow non-ASCII characters in the format; the characters that are
       actually allowed will be determined by the RFC Editor.
 
-   o  Allow <artwork> to be used on its own in <section> (no longer
-      confine it to a figure).
+   o  Allow <artwork> and <sourcecode> to be used on their own in
+      <section> (no longer confine them to a figure).
 
    o  Give more specifics of handling the "type" attribute in <artwork>.
 
@@ -380,8 +380,8 @@ Table of Contents
    o  In <section>, restricted the names of the anchors that can be used
       on some types of sections.
 
-   o  In <ttcol>, allow <xref>, <eref>, <iref>, and <cref> as optional
-      children.
+   o  <t> now only contains non-block elements, so it no longer contains
+      <figure> elements.
 
    o  Do not generate the grammar from a DTD, but instead get it
       directly from the Relax Next Generation (RNG) grammar [RNG].
@@ -544,8 +544,8 @@ Table of Contents
 
    This element appears as child element of: <aside> (Section 2.6),
    <blockquote> (Section 2.11), <dd> (Section 2.17), <figure>
-   (Section 2.24), <li> (Section 2.29), <section> (Section 2.45), <t>
-   (Section 2.52), <td> (Section 2.55), and <th> (Section 2.57).
+   (Section 2.24), <li> (Section 2.29), <section> (Section 2.45), <td>
+   (Section 2.55), and <th> (Section 2.57).
 
    Content model:
 
@@ -1064,8 +1064,8 @@ Table of Contents
    and a definition (<dd>).
 
    This element appears as child element of: <dd> (Section 2.17), <li>
-   (Section 2.29), <t> (Section 2.52), <td> (Section 2.55), and <th>
-   (Section 2.57).
+   (Section 2.29), <section> (Section 2.45), <td> (Section 2.55), and
+   <th> (Section 2.57).
 
    Content model:
 
@@ -1227,8 +1227,8 @@ Table of Contents
 
    This element appears as child element of: <aside> (Section 2.6),
    <blockquote> (Section 2.11), <dd> (Section 2.17), <li>
-   (Section 2.29), <section> (Section 2.45), <t> (Section 2.52), <td>
-   (Section 2.55), and <th> (Section 2.57).
+   (Section 2.29), <section> (Section 2.45), <td> (Section 2.55), and
+   <th> (Section 2.57).
 
    Content model:
 
@@ -1586,8 +1586,8 @@ Table of Contents
    a letter, depending on the value of the style attribute.
 
    This element appears as child element of: <dd> (Section 2.17), <li>
-   (Section 2.29), <t> (Section 2.52), <td> (Section 2.55), and <th>
-   (Section 2.57).
+   (Section 2.29), <section> (Section 2.45), <t> (Section 2.52), <td>
+   (Section 2.55), and <th> (Section 2.57).
 
    Content model:
 
@@ -2121,15 +2121,23 @@ Table of Contents
 
        *  <blockquote> elements (Section 2.11)
 
+       *  <dl> elements (Section 2.19)
+
        *  <figure> elements (Section 2.24)
 
        *  <iref> elements (Section 2.27)
+
+       *  <ol> elements (Section 2.34)
 
        *  <sourcecode> elements (Section 2.47)
 
        *  <t> elements (Section 2.52)
 
+       *  <table> elements (Section 2.53)
+
        *  <texttable> elements (Section 3.8)
+
+       *  <ul> elements (Section 2.62)
 
    3.  Optional <section> elements (Section 2.45)
 
@@ -2264,8 +2272,8 @@ Table of Contents
 
    This element appears as child element of: <aside> (Section 2.6),
    <blockquote> (Section 2.11), <dd> (Section 2.17), <figure>
-   (Section 2.24), <li> (Section 2.29), <section> (Section 2.45), <t>
-   (Section 2.52), <td> (Section 2.55), and <th> (Section 2.57).
+   (Section 2.24), <li> (Section 2.29), <section> (Section 2.45), <td>
+   (Section 2.55), and <th> (Section 2.57).
 
    Content model: only text content.
 
@@ -2475,21 +2483,15 @@ Table of Contents
 
    o  Text
 
-   o  <artwork> elements (Section 2.5)
-
    o  <b> elements (Section 2.8)
 
    o  <bcp14> elements (Section 2.10)
 
    o  <cref> elements (Section 2.15)
 
-   o  <dl> elements (Section 2.19)
-
    o  <em> elements (Section 2.21)
 
    o  <eref> elements (Section 2.23)
-
-   o  <figure> elements (Section 2.24)
 
    o  <i> elements (Section 2.26)
 
@@ -2498,8 +2500,6 @@ Table of Contents
    o  <list> elements (Section 3.4)
 
    o  <ol> elements (Section 2.34)
-
-   o  <sourcecode> elements (Section 2.47)
 
    o  <spanx> elements (Section 3.7)
 
@@ -2510,8 +2510,6 @@ Table of Contents
    o  <sup> elements (Section 2.51)
 
    o  <tt> elements (Section 2.61)
-
-   o  <ul> elements (Section 2.62)
 
    o  <vspace> elements (Section 3.10)
 
@@ -2537,6 +2535,8 @@ Table of Contents
    Contains a table with a caption with the table number.  If the
    element contains a <name> element, the caption will also show that
    name.
+
+   This element appears as child element of: <section> (Section 2.45).
 
    Content model:
 
@@ -2811,8 +2811,8 @@ Table of Contents
    the processor.
 
    This element appears as child element of: <dd> (Section 2.17), <li>
-   (Section 2.29), <t> (Section 2.52), <td> (Section 2.55), and <th>
-   (Section 2.57).
+   (Section 2.29), <section> (Section 2.45), <td> (Section 2.55), and
+   <th> (Section 2.57).
 
    Content model:
 
@@ -4090,11 +4090,15 @@ Appendix E.  Relax NG Schema
        (artwork
         | aside
         | blockquote
+        | dl
         | figure
         | iref
+        | ol
         | sourcecode
         | t
-        | texttable)*,
+        | table
+        | texttable
+        | ul)*,
        section*
      }
    name = element name { (text | cref | eref | iref | tt | xref)* }
@@ -4104,25 +4108,20 @@ Appendix E.  Relax NG Schema
        attribute hangText { text }?,
        attribute autogeneratedParagraphNumber { text }?,
        (text
-        | artwork
         | b
         | bcp14
         | cref
-        | dl
         | em
         | eref
-        | figure
         | i
         | iref
         | \list
         | ol
-        | sourcecode
         | spanx
         | strong
         | sub
         | sup
         | tt
-        | ul
         | vspace
         | xref)*
      }
@@ -4805,11 +4804,15 @@ Appendix F.  Schema Differences from v2
    +     (artwork
    +      | aside
    +      | blockquote
+   +      | dl
    +      | figure
    +      | iref
+   +      | ol
    +      | sourcecode
    +      | t
-   +      | texttable)*,
+   +      | table
+   +      | texttable
+   +      | ul)*,
          section*
        }
    + name = element name { (text | cref | eref | iref | tt | xref)* }
@@ -4822,27 +4825,22 @@ Appendix F.  Schema Differences from v2
    -      | \list
    -      | figure
    -      | xref
-   +      | artwork
    +      | b
    +      | bcp14
    +      | cref
-   +      | dl
    +      | em
           | eref
-   +      | figure
    +      | i
           | iref
    -      | cref
    +      | \list
    +      | ol
-   +      | sourcecode
           | spanx
    -      | vspace)*
    +      | strong
    +      | sub
    +      | sup
    +      | tt
-   +      | ul
    +      | vspace
    +      | xref)*
    +   }
@@ -5407,7 +5405,6 @@ Index
          inside figure  1
          inside li  1
          inside section  1
-         inside t  1
          inside td  1
          inside th  1
          name attribute  1
@@ -5640,7 +5637,7 @@ Index
          hanging attribute  1
          inside dd  1
          inside li  1
-         inside t  1
+         inside section  1
          inside td  1
          inside th  1
          spacing attribute  1
@@ -5787,7 +5784,6 @@ Index
          inside dd  1
          inside li  1
          inside section  1
-         inside t  1
          inside td  1
          inside th  1
          src attribute  1
@@ -5945,6 +5941,7 @@ Index
          group attribute  1
          inside dd  1
          inside li  1
+         inside section  1
          inside t  1
          inside td  1
          inside th  1
@@ -6053,7 +6050,6 @@ Index
          inside figure  1
          inside li  1
          inside section  1
-         inside t  1
          inside td  1
          inside th  1
          name attribute  1
@@ -6169,6 +6165,7 @@ Index
       table element  1
          anchor attribute  1
          autogeneratedTableNumber attribute  1
+         inside section  1
       target attribute
          in eref element  1
          in format element  1
@@ -6252,7 +6249,7 @@ Index
          empty attribute  1
          inside dd  1
          inside li  1
-         inside t  1
+         inside section  1
          inside td  1
          inside th  1
          spacing attribute  1

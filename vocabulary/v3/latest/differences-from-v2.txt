@@ -169,11 +169,15 @@
 +     (artwork
 +      | aside
 +      | blockquote
++      | dl
 +      | figure
 +      | iref
++      | ol
 +      | sourcecode
 +      | t
-+      | texttable)*,
++      | table
++      | texttable
++      | ul)*,
       section*
     }
 + name = element name { (text | cref | eref | iref | tt | xref)* }
@@ -186,27 +190,22 @@
 -      | \list
 -      | figure
 -      | xref
-+      | artwork
 +      | b
 +      | bcp14
 +      | cref
-+      | dl
 +      | em
        | eref
-+      | figure
 +      | i
        | iref
 -      | cref
 +      | \list
 +      | ol
-+      | sourcecode
        | spanx
 -      | vspace)*
 +      | strong
 +      | sub
 +      | sup
 +      | tt
-+      | ul
 +      | vspace
 +      | xref)*
 +   }

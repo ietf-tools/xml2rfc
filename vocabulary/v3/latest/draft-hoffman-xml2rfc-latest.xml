@@ -27,10 +27,6 @@ acknowledgments
 
 - If a section has no anchor, slugify the name and give it in a different attribute
 
-- A section can contain the current stuff plus <tr> and lists (<ul>, <ol>, <dl>)
-
-- <t> can contain the current stuff minus <artwork>, <sourcecode>, <figure>, and lists.
-
 - Figures will always be rendered with a caption.
   If the figure has a <name>, that appears in the caption; otherwise, the caption is just "Figure 14".
 
@@ -158,7 +154,8 @@ as new ways to make lists. This is a significant change from v2 in that the chil
 these elements is &lt;<x:ref>li</x:ref>&gt;, not &lt;<x:ref>t</x:ref>&gt;.
 &lt;<x:ref>li</x:ref>&gt; has a model of either containing one or more
 &lt;<x:ref>t</x:ref>&gt; elements, or containing the flowing text normally found in
-&lt;<x:ref>t</x:ref>&gt;.</t>
+&lt;<x:ref>t</x:ref>&gt;. These lists are children of &lt;<x:ref>section</x:ref>&gt;s
+instead of &lt;<x:ref>t</x:ref>&gt;.</t>
 
 <t>Add &lt;<x:ref>strong</x:ref>&gt;, &lt;<x:ref>b</x:ref>&gt;, &lt;<x:ref>em</x:ref>&gt;, &lt;<x:ref>i</x:ref>&gt;,
 &lt;<x:ref>tt</x:ref>&gt;, &lt;<x:ref>sub</x:ref>&gt;, and &lt;<x:ref>sup</x:ref>&gt; for character formatting.</t>
@@ -285,8 +282,9 @@ output.</t>
 <t>Allow non-ASCII characters in the format; the characters that are actually allowed will
 be determined by the RFC Editor.</t>
 
-<t>Allow &lt;<x:ref>artwork</x:ref>&gt; to be used on its own in &lt;<x:ref>section</x:ref>&gt;
-(no longer confine it to a figure).</t>
+<t>Allow &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt; to be used on
+their own in &lt;<x:ref>section</x:ref>&gt;
+(no longer confine them to a figure).</t>
 
 <t>Give more specifics of handling the "type" attribute in &lt;<x:ref>artwork</x:ref>&gt;.</t>
 
@@ -312,9 +310,8 @@ of the new &lt;<x:ref>postalLine</x:ref>&gt; instead of the older elements.</t>
 <t>In &lt;<x:ref>section</x:ref>&gt;, restricted the names of the anchors that can be used on
 some types of sections.</t>
 
-<t>In &lt;<x:ref>ttcol</x:ref>&gt;, allow &lt;<x:ref>xref</x:ref>&gt;,
-&lt;<x:ref>eref</x:ref>&gt;, &lt;<x:ref>iref</x:ref>&gt;, and &lt;<x:ref>cref</x:ref>&gt;
-as optional children.</t>
+<t>&lt;<x:ref>t</x:ref>&gt; now only contains non-block elements, so it no longer contains
+&lt;<x:ref>figure</x:ref>&gt; elements.</t>
 
 <t>Do not generate the grammar from a DTD, but instead get it directly from the Relax Next Generation (RNG) grammar
 <xref target="RNG"/>.</t>
@@ -544,7 +541,7 @@ as optional children.</t>
          <t>As a URI to an external entity (such as "&lt;artwork type="svg" src="http://www.example.com/..."&gt;")</t>
       </list>
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       Content model:
     </t>
@@ -1340,7 +1337,7 @@ as optional children.</t>
       A definition list. Each entry has a pair of elements: a term (&lt;<x:ref>dt</x:ref>&gt;) and
       a definition (&lt;<x:ref>dd</x:ref>&gt;).
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.dl.contents"><!--AG-->
       Content model:
     </t>
@@ -1560,7 +1557,7 @@ as optional children.</t>
       Contains a figure with a caption with the table number.
       If the element contains a &lt;<x:ref>name</x:ref>&gt; element, the caption will also show that name.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.figure.contents"><!--AG-->Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
         
@@ -2129,7 +2126,7 @@ as optional children.</t>
       An ordered list. The labels on the items will be either a number or a letter, depending
       on the value of the style attribute. 
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.ol.contents"><!--AG-->
       Content model:
     </t>
@@ -2925,11 +2922,17 @@ as optional children.</t>
                   <iref item="Elements" subitem="blockquote"/>
                   <iref item="blockquote element" subitem="inside section"/>&lt;<x:ref>blockquote</x:ref>&gt; elements (<xref target="element.blockquote"/>)</t>
                <t><!--AG-->
+                  <iref item="Elements" subitem="dl"/>
+                  <iref item="dl element" subitem="inside section"/>&lt;<x:ref>dl</x:ref>&gt; elements (<xref target="element.dl"/>)</t>
+               <t><!--AG-->
                   <iref item="Elements" subitem="figure"/>
                   <iref item="figure element" subitem="inside section"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="iref"/>
                   <iref item="iref element" subitem="inside section"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="ol"/>
+                  <iref item="ol element" subitem="inside section"/>&lt;<x:ref>ol</x:ref>&gt; elements (<xref target="element.ol"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="sourcecode"/>
                   <iref item="sourcecode element" subitem="inside section"/>&lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</t>
@@ -2937,8 +2940,14 @@ as optional children.</t>
                   <iref item="Elements" subitem="t"/>
                   <iref item="t element" subitem="inside section"/>&lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
                <t><!--AG-->
+                  <iref item="Elements" subitem="table"/>
+                  <iref item="table element" subitem="inside section"/>&lt;<x:ref>table</x:ref>&gt; elements (<xref target="element.table"/>)</t>
+               <t><!--AG-->
                   <iref item="Elements" subitem="texttable"/>
                   <iref item="texttable element" subitem="inside section"/>&lt;<x:ref>texttable</x:ref>&gt; elements (<xref target="element.texttable"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="ul"/>
+                  <iref item="ul element" subitem="inside section"/>&lt;<x:ref>ul</x:ref>&gt; elements (<xref target="element.ul"/>)</t>
             </list>
          </t>
         
@@ -3144,7 +3153,7 @@ Using CDATA:
        Using CDATA is not a panacea, but it does help prevent having to use escapes in places where using
        using escapes can cause other problems, such as difficulty of inclusion from other documents.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->Content model: only text content.</t>
 
    <!--sourcecode/@name-->
@@ -3387,9 +3396,6 @@ Using CDATA:
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
          <t><!--AG-->
-            <iref item="Elements" subitem="artwork"/>
-            <iref item="artwork element" subitem="inside t"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
-         <t><!--AG-->
             <iref item="Elements" subitem="b"/>
             <iref item="b element" subitem="inside t"/>&lt;<x:ref>b</x:ref>&gt; elements (<xref target="element.b"/>)</t>
          <t><!--AG-->
@@ -3399,17 +3405,11 @@ Using CDATA:
             <iref item="Elements" subitem="cref"/>
             <iref item="cref element" subitem="inside t"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
          <t><!--AG-->
-            <iref item="Elements" subitem="dl"/>
-            <iref item="dl element" subitem="inside t"/>&lt;<x:ref>dl</x:ref>&gt; elements (<xref target="element.dl"/>)</t>
-         <t><!--AG-->
             <iref item="Elements" subitem="em"/>
             <iref item="em element" subitem="inside t"/>&lt;<x:ref>em</x:ref>&gt; elements (<xref target="element.em"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="eref"/>
             <iref item="eref element" subitem="inside t"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="figure"/>
-            <iref item="figure element" subitem="inside t"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="i"/>
             <iref item="i element" subitem="inside t"/>&lt;<x:ref>i</x:ref>&gt; elements (<xref target="element.i"/>)</t>
@@ -3422,9 +3422,6 @@ Using CDATA:
          <t><!--AG-->
             <iref item="Elements" subitem="ol"/>
             <iref item="ol element" subitem="inside t"/>&lt;<x:ref>ol</x:ref>&gt; elements (<xref target="element.ol"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="sourcecode"/>
-            <iref item="sourcecode element" subitem="inside t"/>&lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="spanx"/>
             <iref item="spanx element" subitem="inside t"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</t>
@@ -3440,9 +3437,6 @@ Using CDATA:
          <t><!--AG-->
             <iref item="Elements" subitem="tt"/>
             <iref item="tt element" subitem="inside t"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="ul"/>
-            <iref item="ul element" subitem="inside t"/>&lt;<x:ref>ul</x:ref>&gt; elements (<xref target="element.ul"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="vspace"/>
             <iref item="vspace element" subitem="inside t"/>&lt;<x:ref>vspace</x:ref>&gt; elements (<xref target="element.vspace"/>)</t>
@@ -3494,6 +3488,7 @@ Using CDATA:
       Contains a table with a caption with the table number.
       If the element contains a &lt;<x:ref>name</x:ref>&gt; element, the caption will also show that name. 
   </t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.table.contents"><!--AG-->Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
         
@@ -3938,7 +3933,7 @@ Using CDATA:
    <t>
       An unordered list. The labels on the items will be symbols picked by the processor.
    </t>
-   <t><!--AG-->This element appears as child element of: &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as child element of: &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.ul.contents"><!--AG-->
       Content model:
     </t>
@@ -5793,11 +5788,15 @@ section =
     (artwork
      | aside
      | blockquote
+     | dl
      | figure
      | iref
+     | ol
      | sourcecode
      | t
-     | texttable)*,
+     | table
+     | texttable
+     | ul)*,
     section*
   }
 name = element name { (text | cref | eref | iref | tt | xref)* }
@@ -5807,25 +5806,20 @@ t =
     attribute hangText { text }?,
     attribute autogeneratedParagraphNumber { text }?,
     (text
-     | artwork
      | b
      | bcp14
      | cref
-     | dl
      | em
      | eref
-     | figure
      | i
      | iref
      | \list
      | ol
-     | sourcecode
      | spanx
      | strong
      | sub
      | sup
      | tt
-     | ul
      | vspace
      | xref)*
   }
@@ -6511,11 +6505,15 @@ to the v3 schema.</t>
 +     (artwork
 +      | aside
 +      | blockquote
++      | dl
 +      | figure
 +      | iref
++      | ol
 +      | sourcecode
 +      | t
-+      | texttable)*,
++      | table
++      | texttable
++      | ul)*,
       section*
     }
 + name = element name { (text | cref | eref | iref | tt | xref)* }
@@ -6528,27 +6526,22 @@ to the v3 schema.</t>
 -      | \list
 -      | figure
 -      | xref
-+      | artwork
 +      | b
 +      | bcp14
 +      | cref
-+      | dl
 +      | em
        | eref
-+      | figure
 +      | i
        | iref
 -      | cref
 +      | \list
 +      | ol
-+      | sourcecode
        | spanx
 -      | vspace)*
 +      | strong
 +      | sub
 +      | sup
 +      | tt
-+      | ul
 +      | vspace
 +      | xref)*
 +   }
