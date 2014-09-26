@@ -161,6 +161,7 @@ Table of Contents
    Appendix B.  The v3 Format and Processors
      B.1.  Including External Text
      B.2.  Anchors and IDs
+       B.2.1.  Overlapping Values
    Appendix C.  Format and Content of RFCs (Future)
      C.1.  Canonical RFCs
      C.2.  Non-canonical RFC Representations
@@ -296,7 +297,7 @@ Table of Contents
 
    o  Add the "numbered" and "removeinrfc" attributes to <section>.
 
-   o  Add "boilerplateText", "figureNumber", "tagleNumber", and
+   o  Add "boilerplateText", "figureNumber", "tableNumber", and
       "sectionNumber" attributes to <rfc>, <figure>, <table>, and
       <section>, respectively.
 
@@ -577,11 +578,15 @@ Table of Contents
    from the "src" attribute, the alternative text comes from the text of
    the artwork itself.
 
-2.5.3.  'height' attribute
+2.5.3.  'anchor' attribute
+
+   Document-wide unique identifier for this artwork.
+
+2.5.4.  'height' attribute
 
    Deprecated.
 
-2.5.4.  'name' attribute
+2.5.5.  'name' attribute
 
    A filename suitable for the contents (such as for extraction to a
    local file).
@@ -590,13 +595,13 @@ Table of Contents
    can be helpful for other kinds of tools (such as automated syntax
    checkers which work by extracting the artwork).
 
-2.5.5.  'partNumber' attribute
+2.5.6.  'partNumber' attribute
 
    The number for this artwork within the section.  The numbering is
    shared with other elements of a section.  This is described in more
    detail in Appendix B.2.
 
-2.5.6.  'src' attribute
+2.5.7.  'src' attribute
 
    The URI reference of a graphics file ([RFC3986]).
 
@@ -607,7 +612,7 @@ Table of Contents
    [[anchor8: Maybe include microlanguages for packets and call
    sequences if people want to create them.]]
 
-2.5.7.  'type' attribute
+2.5.8.  'type' attribute
 
    Specifies the type of the artwork.  The value of this attribute is
    free text with certain values designated as preferred.  A private
@@ -632,17 +637,17 @@ Table of Contents
    Thus, a consumer of v3 XML should not cause a failure when it
    encounters an unexpected type.
 
-2.5.8.  'width' attribute
+2.5.9.  'width' attribute
 
    Deprecated.
 
-2.5.9.  'xml:lang' attribute
+2.5.10.  'xml:lang' attribute
 
    Allows specification of the language used.  This is sometimes useful
    for renderers which display different fonts for ideographic
    characters used in China and Japan.
 
-2.5.10.  'xml:space' attribute
+2.5.11.  'xml:space' attribute
 
    Deprecated.
 
@@ -671,7 +676,11 @@ Table of Contents
 
    o  <texttable> elements (Section 3.8)
 
-2.6.1.  'partNumber' attribute
+2.6.1.  'anchor' attribute
+
+   Document-wide unique identifier for this aside.
+
+2.6.2.  'partNumber' attribute
 
    The number for this aside within the section.  The numbering is
    shared with other elements of a section.  This is described in more
@@ -1501,7 +1510,11 @@ Table of Contents
 
       *  <xref> elements (Section 2.65)
 
-2.29.1.  'partNumber' attribute
+2.29.1.  'anchor' attribute
+
+   Document-wide unique identifier for this list item.
+
+2.29.2.  'partNumber' attribute
 
    The number for this list item within the section.  The numbering is
    shared with other elements of a section.  This is described in more
@@ -1586,8 +1599,9 @@ Table of Contents
 
 2.32.1.  'slugifiedName' attribute
 
-   The name after the processor has filled in a slugified version.  This
-   is described in more detail in Appendix B.2.
+   This attribute is filled in by a processor with a "slugified" version
+   of the text in the element.  This attribute can be used in the output
+   formats for elements that have both names and numbers.
 
 2.33.  <note>
 
@@ -1877,8 +1891,9 @@ Table of Contents
 2.41.1.  'anchor' attribute (mandatory)
 
    Document-wide unique identifier for this reference group.  Usually,
-   this will be used both to "label" the reference in the references
-   section, and as an identifier in links to this reference entry.
+   this will be used both to "label" the reference group in the
+   references section, and as an identifier in links to this reference
+   entry.
 
 2.42.  <references>
 
@@ -2308,20 +2323,24 @@ Table of Contents
 
    Content model: only text content.
 
-2.47.1.  'name' attribute
+2.47.1.  'anchor' attribute
+
+   Document-wide unique identifier for this sourcecode.
+
+2.47.2.  'name' attribute
 
    A filename suitable for the contents (such as for extraction to a
    local file).  This attribute generally isn't used for document
    generation, but it can be helpful for other kinds of tools (such as
    automated syntax checkers which work by extracting the source code).
 
-2.47.2.  'partNumber' attribute
+2.47.3.  'partNumber' attribute
 
    The number for this sourceode within the section.  The numbering is
    shared with other elements of a section.  This is described in more
    detail in Appendix B.2.
 
-2.47.3.  'type' attribute
+2.47.4.  'type' attribute
 
    Specifies the type of the sourcecode.  The value of this attribute is
    free text with certain values designated as preferred.  A private
@@ -3366,7 +3385,7 @@ Table of Contents
 
 5.  Security Considerations
 
-   The "name" attribute on the <artwork> element (Section 2.5.4) can be
+   The "name" attribute on the <artwork> element (Section 2.5.5) can be
    used to derive a filename for saving to a local file system.
    Trusting this kind of information without pre-processing is a known
    security risk; see Section 4.3 of [RFC6266] for more information.
@@ -3840,10 +3859,70 @@ B.1.  Including External Text
 
 B.2.  Anchors and IDs
 
-   Description goes here about the values for anchor= attributes and the
-   authomatically generated ids.
+   People writing and reading Internet Drafts and RFCs often want to
+   make reference to specific locations in those documents.  In the case
+   of RFC authors, it is common to want to reference another part of
+   their document, such as "see Section 3.2 of this document".  Readers,
+   on the other hand, want to reference part of documents that they
+   didn't write, such as "see Section 3.2 of RFC 6949".  The XML
+   vocabulary in this document attempts to support both sets of people.
 
-   Also talk about slugification and snowflakes
+   Authors can leave anchors in a document that can later be used for
+   references with the "anchor" attribute.  Anchors can included in the
+   following elements: <artwork>, <aside>, <blockquote>, <cref>,
+   <figure>, <li>, <reference>, <referencegroup>, <section>,
+   <sourcecode>, <t>, and <table>.  The author can then refer to that
+   anchor in the "target" attribute of the <xref> element.
+
+   Readers can refer to any element that has an "anchor" attribute by
+   that attribute.  Note, however, that most of the time, elements won't
+   have anchors.  In the common case, the reader wants to refer to an
+   element that does not have an "anchor" attribute, but that element
+   has "partNumber" attribute.
+
+   Processors add the "partNumber" attribute to many elements during
+   processing.  This attribute and its value are automatically generated
+   by the processor if the attribute is not there; if the attribute is
+   already there, the processor may replace the value.
+
+B.2.1.  Overlapping Values
+
+   In the HTML representation of this XML vocabulary, both anchors and
+   partNumber attributes will be used in the "id" attributes of
+   elements.  Thus, there can be no overlap between the names entered in
+   "anchor" attributes, the values in the "figureNumber", "tableNumber",
+   and "sectionNumber" attributes, in "slugifiedName" attributes, and
+   those that are generated for the "partNumber" attributes.  Also,
+   there are some values for the "anchor" values that are reserved for
+   sections, and those sections can only have those anchor values.
+
+   The following rules prevent this overlap:
+
+   o  "figureNumber" always has the format "f-nnn", where "nnn" is the
+      figure number.  For example, this would be "f-5" for Figure 5.
+
+   o  "tableNumber" always has the format "t-nnn", where "nnn" is the
+      figure number.  For example, this would be "t-5" for Table 5.
+
+   o  "sectionNumber" always has the format "s-nnn", where "nnn" is the
+      section number.  For example, this would be "s-2.1.3" for Section
+      2.1.3.
+
+   o  "partNumber" always has the format "p-nnn-mmm", where "nnn" is the
+      section number and "mmm" is the relative position in the section.
+      For example, this would be "p-2.1.3-7" for the seventh part number
+      in Section 2.1.3.
+
+   o  "slugifiedName" always has the format "n-ttt", where "ttt" is the
+      text of the name after slugification.  For example, this would be
+      "n-protocol-overview" for the name "Protocol Overview".
+      [[anchor23: Need to say more about slugification here]].
+
+   o  Anchors must never overlap with any of the above.  The easiest way
+      to assure that is to not pick an anchor name that starts with a
+      single letter followed by a hyphen.  If an anchor does overlap
+      with one of the types of names above, the processor will reject
+      the document.
 
 Appendix C.  Format and Content of RFCs (Future)
 
@@ -4173,6 +4252,7 @@ Appendix E.  Relax NG Schema
      }
    aside =
      element aside {
+       attribute anchor { xsd:ID }?,
        attribute partNumber { text }?,
        (artwork | figure | iref | sourcecode | t | texttable)*
      }
@@ -4220,6 +4300,7 @@ Appendix E.  Relax NG Schema
      }
    li =
      element li {
+       attribute anchor { xsd:ID }?,
        attribute partNumber { text }?,
        (t+
         | (text
@@ -4489,6 +4570,7 @@ Appendix E.  Relax NG Schema
        [ a:defaultValue = "" ] attribute width { text }?,
        [ a:defaultValue = "" ] attribute height { text }?,
        [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+       attribute anchor { xsd:ID }?,
        attribute partNumber { text }?,
        text*
      }
@@ -4496,6 +4578,7 @@ Appendix E.  Relax NG Schema
      element sourcecode {
        [ a:defaultValue = "" ] attribute name { text }?,
        [ a:defaultValue = "" ] attribute type { text }?,
+       attribute anchor { xsd:ID }?,
        attribute partNumber { text }?,
        text
      }
@@ -4901,6 +4984,7 @@ Appendix F.  Schema Differences from v2
    +   }
    + aside =
    +   element aside {
+   +     attribute anchor { xsd:ID }?,
    +     attribute partNumber { text }?,
    +     (artwork | figure | iref | sourcecode | t | texttable)*
    +   }
@@ -4949,6 +5033,7 @@ Appendix F.  Schema Differences from v2
    +   }
    + li =
    +   element li {
+   +     attribute anchor { xsd:ID }?,
    +     attribute partNumber { text }?,
    +     (t+
    +      | (text
@@ -5224,6 +5309,7 @@ Appendix F.  Schema Differences from v2
          [ a:defaultValue = "" ] attribute width { text }?,
          [ a:defaultValue = "" ] attribute height { text }?,
    +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+   +     attribute anchor { xsd:ID }?,
    +     attribute partNumber { text }?,
          text*
        }
@@ -5231,6 +5317,7 @@ Appendix F.  Schema Differences from v2
    +   element sourcecode {
    +     [ a:defaultValue = "" ] attribute name { text }?,
    +     [ a:defaultValue = "" ] attribute type { text }?,
+   +     attribute anchor { xsd:ID }?,
    +     attribute partNumber { text }?,
    +     text
    +   }
@@ -5440,12 +5527,16 @@ Index
          in artwork element  1
          in figure element  1
       anchor attribute
+         in artwork element  1
+         in aside element  1
          in blockquote element  1
          in cref element  1
          in figure element  1
+         in li element  1
          in reference element  1
          in referencegroup element  1
          in section element  1
+         in sourcecode element  1
          in t element  1
          in table element  1
          in texttable element  1
@@ -5458,6 +5549,7 @@ Index
       artwork element  1
          align attribute  1
          alt attribute  1
+         anchor attribute  1
          height attribute  1
          inside aside  1
          inside blockquote  1
@@ -5491,6 +5583,7 @@ Index
       asciivalue attribute
          in seriesInfo element  1
       aside element  1
+         anchor attribute  1
          inside section  1
          partNumber attribute  1
       Attributes
@@ -5951,6 +6044,7 @@ Index
 
    L
       li element  1
+         anchor attribute  1
          inside ol  1
          inside ul  1
          partNumber attribute  1
@@ -6115,6 +6209,7 @@ Index
       source attribute
          in cref element  1
       sourcecode element  1
+         anchor attribute  1
          inside aside  1
          inside blockquote  1
          inside dd  1

@@ -188,6 +188,7 @@ t =
   }
 aside =
   element aside {
+    attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
     (artwork | figure | iref | sourcecode | t | texttable)*
   }
@@ -234,6 +235,7 @@ ul =
   }
 li =
   element li {
+    attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
     (t+
      | (text
@@ -502,6 +504,7 @@ artwork =
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
     text*
   }
@@ -509,6 +512,7 @@ sourcecode =
   element sourcecode {
     [ a:defaultValue = "" ] attribute name { text }?,
     [ a:defaultValue = "" ] attribute type { text }?,
+    attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
     text
   }

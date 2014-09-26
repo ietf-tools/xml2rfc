@@ -13,27 +13,6 @@
 
 <!--
 
-Rearchitect blocks:
-
-- Snowflakes
-title
-abstract
-ipr
-security-considerations
-iana-considerations
-references
-acknowledgements
-acknowledgments
-
-- If a section has no anchor, slugify the name and give it in a different attribute
-
-- Figures will always be rendered with a caption.
-  If the figure has a <name>, that appears in the caption; otherwise, the caption is just "Figure 14".
-
-Autonumbering:
-	Have a shorter name
-	Paragraph numbering applies to <t>, <li>, <artwork>, <sourcecode>, <aside>, <blockquote>
-
 Remove the appendicies that will be web pages 
 
 Find the remaining <cref>s and resolve them.
@@ -210,7 +189,7 @@ different fonts for ideographic characters used in China and Japan.</t>
 
 <t>Add the "numbered" and "removeinrfc" attributes to &lt;<x:ref>section</x:ref>&gt;.</t>
 
-<t>Add "boilerplateText", "figureNumber", "tagleNumber",
+<t>Add "boilerplateText", "figureNumber", "tableNumber",
 and "sectionNumber" attributes to &lt;<x:ref>rfc</x:ref>&gt;,
 &lt;<x:ref>figure</x:ref>&gt;, &lt;<x:ref>table</x:ref>&gt;, and &lt;<x:ref>section</x:ref>&gt;,
 respectively.
@@ -583,6 +562,16 @@ some types of sections.</t>
          </t>
    </section>
 
+   <!--artwork/@anchor-->
+   <section title="'anchor' attribute" anchor="element.artwork.attribute.anchor" toc="exclude">
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="artwork element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in artwork element"/>
+      <t>
+        Document-wide unique identifier for this artwork.
+      </t>
+   </section>
+
    <!--artwork/@height-->
    <section title="'height' attribute" anchor="element.artwork.attribute.height" toc="exclude">
       <iref item="Attributes" subitem="height"/>
@@ -732,6 +721,16 @@ some types of sections.</t>
             <iref item="texttable element" subitem="inside aside"/>&lt;<x:ref>texttable</x:ref>&gt; elements (<xref target="element.texttable"/>)</t>
       </list>
    </t>
+
+   <!--aside/@anchor-->
+   <section title="'anchor' attribute" anchor="element.aside.attribute.anchor" toc="exclude">
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="aside element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in aside element"/>
+      <t>
+        Document-wide unique identifier for this aside.
+      </t>
+   </section>
 
    <!--aside/@partNumber-->
    <section title="'partNumber' attribute" anchor="element.aside.attribute.partNumber" toc="exclude">
@@ -1994,6 +1993,16 @@ some types of sections.</t>
       </list>
    </t>
 
+   <!--li/@anchor-->
+   <section title="'anchor' attribute" anchor="element.li.attribute.anchor" toc="exclude">
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="li element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in li element"/>
+      <t>
+        Document-wide unique identifier for this list item.
+      </t>
+   </section>
+
    <!--li/@partNumber-->
    <section title="'partNumber' attribute" anchor="element.li.attribute.partNumber" toc="exclude">
       <iref item="Attributes" subitem="partNumber"/>
@@ -2127,8 +2136,9 @@ some types of sections.</t>
       <iref item="name element" subitem="slugifiedName attribute"/>
       <iref item="slugifiedName attribute" subitem="in name element"/>
       <t>
-         The name after the processor has filled in a slugified version.
-         This is described in more detail in <xref target="anchorsandids"/>.
+         This attribute is filled in by a processor with a "slugified" version of the text in the
+         element. This attribute can be used in the output formats for elements that have both names
+         and numbers.
       </t>
    </section>
 </section>
@@ -2578,7 +2588,7 @@ some types of sections.</t>
       <iref item="anchor attribute" subitem="in referencegroup element"/>
       <t>
         Document-wide unique identifier for this reference group. Usually, this will
-        be used both to "label" the reference in the references section, and
+        be used both to "label" the reference group in the references section, and
         as an identifier in links to this reference entry.
       </t>
    </section>
@@ -3211,6 +3221,16 @@ Using CDATA:
    </t>
    <t><!--AG-->This element appears as child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->Content model: only text content.</t>
+
+   <!--sourcecode/@anchor-->
+   <section title="'anchor' attribute" anchor="element.sourcecode.attribute.anchor" toc="exclude">
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="sourcecode element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in sourcecode element"/>
+      <t>
+        Document-wide unique identifier for this sourcecode.
+      </t>
+   </section>
 
    <!--sourcecode/@name-->
    <section title="'name' attribute" anchor="element.sourcecode.attribute.name" toc="exclude">
@@ -5560,10 +5580,69 @@ or sourcecode.</cref></t>
 
 <section anchor="anchorsandids" title="Anchors and IDs">
 
-<t>Description goes here about the values for anchor= attributes and the authomatically
-generated ids.</t>
+<t>People writing and reading Internet Drafts and RFCs often want to make reference to
+specific locations in those documents. In the case of RFC authors, it is common
+to want to reference another part of their document, such as "see Section 3.2 of this
+document". Readers, on the other hand, want to reference part of documents that they
+didn't write, such as "see Section 3.2 of RFC 6949".
+The XML vocabulary in this document attempts to support both sets of people.</t>
 
-<t>Also talk about slugification and snowflakes</t>
+<t>Authors can leave anchors in a document that can later be used for references with the "anchor"
+attribute. Anchors can included in the following elements: &lt;<x:ref>artwork</x:ref>&gt;,
+&lt;<x:ref>aside</x:ref>&gt;, &lt;<x:ref>blockquote</x:ref>&gt;,  &lt;<x:ref>cref</x:ref>&gt;,
+&lt;<x:ref>figure</x:ref>&gt;, &lt;<x:ref>li</x:ref>&gt;, &lt;<x:ref>reference</x:ref>&gt;,
+&lt;<x:ref>referencegroup</x:ref>&gt;, &lt;<x:ref>section</x:ref>&gt;,
+&lt;<x:ref>sourcecode</x:ref>&gt;, &lt;<x:ref>t</x:ref>&gt;, and &lt;<x:ref>table</x:ref>&gt;. The
+author can then refer to that anchor in the "target" attribute of the &lt;<x:ref>xref</x:ref>&gt;
+element.</t>
+
+<t>Readers can refer to any element that has an "anchor" attribute by that attribute. Note, however,
+that most of the time, elements won't have anchors. In the common case, the reader wants to refer to
+an element that does not have an "anchor" attribute, but that element has "partNumber" attribute.</t>
+
+<t>Processors add the "partNumber" attribute to many elements during processing. This attribute and
+its value are automatically generated by the processor if the attribute is not there; if the
+attribute is already there, the processor may replace the value.</t>
+
+<section title="Overlapping Values">
+
+<t>In the HTML representation of this XML vocabulary, both anchors and partNumber attributes will
+be used in the "id" attributes of elements. Thus, there can be no overlap between the names entered
+in "anchor" attributes, the values in the "figureNumber", "tableNumber",
+and "sectionNumber" attributes, in "slugifiedName" attributes, and those that are generated for the "partNumber" attributes.
+Also, there are some values for the "anchor" values that are reserved for sections, and those
+sections can only have those anchor values.</t>
+
+<t>The following rules prevent this overlap:
+
+<list style="symbols">
+
+<t>"figureNumber" always has the format "f-nnn", where "nnn" is the figure number.
+For example, this would be "f-5" for Figure 5.</t>
+
+<t>"tableNumber" always has the format "t-nnn", where "nnn" is the figure number.
+For example, this would be "t-5" for Table 5.</t>
+
+<t>"sectionNumber" always has the format "s-nnn", where "nnn" is the section number.
+For example, this would be "s-2.1.3" for Section 2.1.3.</t>
+
+<t>"partNumber" always has the format "p-nnn-mmm", where "nnn" is the section number
+and "mmm" is the relative position in the section.
+For example, this would be "p-2.1.3-7" for the seventh part number in Section 2.1.3.</t>
+
+<t>"slugifiedName" always has the format "n-ttt", where "ttt" is the text of the name after
+slugification. For example, this would be "n-protocol-overview" for the name "Protocol Overview".
+<cref>Need to say more about slugification here</cref>.</t>
+
+<t>Anchors must never overlap with any of the above. The easiest way to assure that is to
+not pick an anchor name that starts with a single letter followed by a hyphen. If an anchor
+does overlap with one of the types of names above, the processor will reject the
+document.</t>
+
+</list>
+</t>
+
+</section>
 
 </section>
 
@@ -5904,6 +5983,7 @@ t =
   }
 aside =
   element aside {
+    attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
     (artwork | figure | iref | sourcecode | t | texttable)*
   }
@@ -5951,6 +6031,7 @@ ul =
   }
 li =
   element li {
+    attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
     (t+
      | (text
@@ -6220,6 +6301,7 @@ artwork =
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
     text*
   }
@@ -6227,6 +6309,7 @@ sourcecode =
   element sourcecode {
     [ a:defaultValue = "" ] attribute name { text }?,
     [ a:defaultValue = "" ] attribute type { text }?,
+    attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
     text
   }
@@ -6635,6 +6718,7 @@ to the v3 schema.</t>
 +   }
 + aside =
 +   element aside {
++     attribute anchor { xsd:ID }?,
 +     attribute partNumber { text }?,
 +     (artwork | figure | iref | sourcecode | t | texttable)*
 +   }
@@ -6683,6 +6767,7 @@ to the v3 schema.</t>
 +   }
 + li =
 +   element li {
++     attribute anchor { xsd:ID }?,
 +     attribute partNumber { text }?,
 +     (t+
 +      | (text
@@ -6958,6 +7043,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
 +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
++     attribute anchor { xsd:ID }?,
 +     attribute partNumber { text }?,
       text*
     }
@@ -6965,6 +7051,7 @@ to the v3 schema.</t>
 +   element sourcecode {
 +     [ a:defaultValue = "" ] attribute name { text }?,
 +     [ a:defaultValue = "" ] attribute type { text }?,
++     attribute anchor { xsd:ID }?,
 +     attribute partNumber { text }?,
 +     text
 +   }
