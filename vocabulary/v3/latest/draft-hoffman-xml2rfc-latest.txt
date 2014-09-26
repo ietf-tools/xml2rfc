@@ -508,7 +508,11 @@ Internet-Draft                  XML2RFCv3                 September 2014
    (Section 2.3 of [XML]).  In short, it is a text string with no spaces
    or colons; hyphens, periods, and underscores are allowed; some
    characters cannot be in the first position (such as digits, hypen, or
-   period).
+   period).  Anchors are described in more detail in Appendix B.2.
+
+   Except inside <artwork> and <sourcecode>, horizontal whitespace and
+   linebreaks are collapsed into a single whitespace, and leading and
+   trailing whitespace are trimmed off.
 
 2.1.  <abstract>
 
@@ -549,10 +553,6 @@ Internet-Draft                  XML2RFCv3                 September 2014
 
    Content model:
 
-   In any order:
-
-   o  Text
-
 
 
 
@@ -560,6 +560,10 @@ Hoffman                  Expires March 29, 2015                [Page 10]
 
 Internet-Draft                  XML2RFCv3                 September 2014
 
+
+   In any order:
+
+   o  Text
 
    o  <b> elements (Section 2.8)
 
@@ -606,16 +610,14 @@ Internet-Draft                  XML2RFCv3                 September 2014
 
    This element appears as child element of: <front> (Section 2.25).
 
-   Content model: only text content.
-
-
-
 
 
 Hoffman                  Expires March 29, 2015                [Page 11]
 
 Internet-Draft                  XML2RFCv3                 September 2014
 
+
+   Content model: only text content.
 
 2.5.  <artwork>
 
@@ -663,8 +665,6 @@ Internet-Draft                  XML2RFCv3                 September 2014
    This element appears as child element of: <aside> (Section 2.6),
    <blockquote> (Section 2.11), <dd> (Section 2.17), <figure>
    (Section 2.24), <li> (Section 2.29), <section> (Section 2.45), <td>
-   (Section 2.55), and <th> (Section 2.57).
-
 
 
 
@@ -672,6 +672,8 @@ Hoffman                  Expires March 29, 2015                [Page 12]
 
 Internet-Draft                  XML2RFCv3                 September 2014
 
+
+   (Section 2.55), and <th> (Section 2.57).
 
    Content model:
 
@@ -719,8 +721,6 @@ Internet-Draft                  XML2RFCv3                 September 2014
    The number for this artwork within the section.  The numbering is
    shared with other elements of a section.  This is described in more
    detail in Appendix B.2.
-
-
 
 
 
