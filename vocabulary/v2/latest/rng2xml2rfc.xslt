@@ -69,7 +69,7 @@
 <xsl:if test="$appearsin">
   <t>
     <xsl:comment>AG</xsl:comment>
-    <xsl:text>This element appears as child element of: </xsl:text>
+    <xsl:text>This element appears as a child element of: </xsl:text>
     <xsl:for-each select="$appearsin">
       <xsl:sort select="@name"/>
         <xsl:text>&lt;</xsl:text>
