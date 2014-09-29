@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                         September 27, 2014
+Obsoletes: 2629 (if approved)                         September 29, 2014
 Intended status: Informational
-Expires: March 31, 2015
+Expires: April 2, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 31, 2015.
+   This Internet-Draft will expire on April 2, 2015.
 
 Copyright Notice
 
@@ -162,21 +162,15 @@ Table of Contents
      B.1.  Including External Text
      B.2.  Anchors and IDs
        B.2.1.  Overlapping Values
-   Appendix C.  Format and Content of RFCs (Future)
-     C.1.  Canonical RFCs
-     C.2.  Non-canonical RFC Representations
-   Appendix D.  Format and Content of Internet Drafts (Future)
-     D.1.  The Draft Processor
-     D.2.  Processor Instructions
-   Appendix E.  Relax NG Schema
-   Appendix F.  Schema Differences from v2
+   Appendix C.  Relax NG Schema
+   Appendix D.  Schema Differences from v2
    Index
 
 1.  Introduction
 
    This document describes version 3 ("v3") of the "XML2RFC" vocabulary;
    an XML-based language ('Extensible Markup Language', [XML]) used for
-   writing RFCs ([RFCSTYLE]) and Internet-Drafts ([IDGUIDE]).
+   writing RFCs ([RFC7322]) and Internet-Drafts ([IDGUIDE]).
 
    This document obsoletes the version ("v2") vocabulary [XML2RFCv2],
    which contains the extended language definition.  That document in
@@ -396,7 +390,7 @@ Table of Contents
 1.3.  Syntax Notation
 
    The XML vocabulary here is defined in prose, based on the Relax NG
-   schema ([RNC]) contained in Appendix E (specified in Relax NG Compact
+   schema ([RNC]) contained in Appendix C (specified in Relax NG Compact
    Notation, "RNC").
 
    Note that the schema can be used for automated validity checks, but
@@ -422,7 +416,7 @@ Table of Contents
 
 2.1.  <abstract>
 
-   Contains the abstract of the document.  See [RFCSTYLE] for more
+   Contains the abstract of the document.  See [RFC7322] for more
    information on restrictions for the abstract.
 
    This element appears as a child element of: <front> (Section 2.25).
@@ -699,7 +693,7 @@ Table of Contents
 
    The <author> elements contained within the document's <front> element
    are used to fill the boilerplate, and also to generate the "Author's
-   Address" section (see [RFCSTYLE]).
+   Address" section (see [RFC7322]).
 
    Note that an "author" can also be just an organization (by not
    specifying any of the name attributes, but adding the <organization>
@@ -1721,9 +1715,9 @@ Table of Contents
    Specifies the affiliation of an author.
 
    This information appears in both the "Author's Address" section and
-   on the front page (see [RFCSTYLE] for more information).  If the
-   value is long, an abbreviated variant can be specified in the
-   "abbrev" attribute.
+   on the front page (see [RFC7322] for more information).  If the value
+   is long, an abbreviated variant can be specified in the "abbrev"
+   attribute.
 
    This element appears as a child element of: <author> (Section 2.7).
 
@@ -1910,7 +1904,7 @@ Table of Contents
    In the early days of the RFC series, there was only one "References"
    section per RFC.  This convention was later changed to group
    references into two sets, "Normative" and "Informative" as described
-   in [RFCSTYLE]).  This vocabulary supports the split with the "title"
+   in [RFC7322]).  This vocabulary supports the split with the "title"
    attribute.
 
    By default, the order of references is significant.  Processors,
@@ -3585,12 +3579,12 @@ Table of Contents
    [RFC7303]        Thompson, H. and C. Lilley, "XML Media Types",
                     RFC 7303, July 2014.
 
+   [RFC7322]        Heather, H. and S. Ginoza, "RFC Style Guide",
+                    RFC 7322, September 2014.
+
    [RFCPOLICY]      RFC Editor, "RFC Editorial Guidelines and
                     Procedures",
                     <http://www.rfc-editor.org/policy.html>.
-
-   [RFCSTYLE]       Heather, H. and S. Ginoza, "RFC Style Guide",
-                    draft-iab-styleguide (work in progress).
 
    [RNC]            Clark, J., "RELAX NG Compact Syntax", OASIS ,
                     November 2002, <http://www.oasis-open.org/
@@ -3945,136 +3939,7 @@ B.2.1.  Overlapping Values
       with one of the types of names above, the processor will reject
       the document.
 
-Appendix C.  Format and Content of RFCs (Future)
-
-   [[[ This section describes the format of RFCs in the future.  The
-   section is in this document only temporarily: it soon move to its own
-   page on the RFC Editor's web site. ]]]
-
-   The v3 format will be used as part of the new RFC series format
-   described in [RFC6949].  RFCs will have multiple representations: the
-   canonical document will be in XML using the v3 format, and many non-
-   canonical representations (such as HTML and text) will be generated
-   as well.
-
-C.1.  Canonical RFCs
-
-   The canonical RFCs will not have any markup that uses a deprecated
-   feature.  The processor described in Appendix B will have a "convert
-   with warnings" mode that will convert a v2 XML document to a v3 XML
-   document that converts deprecated features wherever possible, issuing
-   warnings for where it cannot convert.  The processor will also have a
-   "strict" mode that will issue errors if any deprecated features are
-   in the input.
-
-   The canonical format for RFCs have a number of restrictions that the
-   RFC Processor needs to enforce before a document can be published in
-   its final form.  In this "final" mode, the processor will give a hard
-   error when an input XML file has:
-
-   o  any element or attribute listed as "deprecated" in the v3
-      vocabulary
-
-   o  XML comments
-
-   o  XML Processor Instructions
-
-   o  an external DTD
-
-   o  ENTITYs that have a SYSTEM component
-
-   o  <artwork> elements with a "src" attribute that points to a URI
-      with a scheme other than "data:"
-
-   o  <cref> elements
-
-   The RFC Processor will have a mode that gives hard errors on all of
-   the above other than <cref> elements.  This exception is to allow the
-   RPC to insert <cref> elements in the working XML for notes to authors
-   in AUTH 48, notes to IANA, and so on.
-
-   The RFC Processor will also generate values for the "boilerplateText"
-   attribute in <rfc>, and "sectionNumber", "figureNumber", and
-   "tableNumber" attributes in <section>, <figure>, and <texttable>
-   elements, respectively.  These will be filled in by the RFC processor
-   so that the canonical XML file has all of the same information as the
-   non-canonical representations.
-
-C.2.  Non-canonical RFC Representations
-
-   As described in [RFC6949], the RFC Editor will publish non-canonical
-   representations of RFCs.  Those non-canonical representations will be
-   derived from the canonical XML.  The generation of these non-
-   canonical representations means that there will be much more emphasis
-   put on the RFC Processor.
-
-   [[[ Stuff will go on the web page about each non-canonical
-   representation. ]]]
-
-Appendix D.  Format and Content of Internet Drafts (Future)
-
-   [[[ This section describes a future where the v3 format will be
-   allowed as the input for Internet Draft publication.  The section is
-   in this document only temporarily: it will soon move to its own page
-   managed by someone yet to be determined. ]]]
-
-   [[[ Description of the transition from the current text format to
-   also allowing v3 XML. ]]]
-
-   [[[ Description of what will and won't be allowed in input XML. ]]]
-
-D.1.  The Draft Processor
-
-   The Draft Processor will handle input differently than the RFC
-   Processor.  For example, some XML that is valid for Internet Drafts
-   will not be valid for canonical RFCs, so the Draft Processor can be
-   set to give warnings for those features but the RFC Processor can be
-   set to give hard errors.
-
-   The Draft Processor will help in the transition from the v2 format to
-   the v3 format.  A user could request that the Draft Processor convert
-   a v2 document to v3, using the new features of v3 where appropriate,
-   and removing the parts that are no longer supported.  The processor
-   might be able to fully convert a v2 document to v3, or it might have
-   to only give advice on some of the v2 features that could not be
-   automatically converted.
-
-   The Draft Processor should have a mode that mimics the RFC
-   Processor's restictive mode, but that instead gives warnings instead
-   of hard errors.  The Draft Processor should also produce interim
-   versions of the non-canonical representations so that authors can see
-   how their XML might later be rendered; and to convert documents that
-   use the v2 format to v3.
-
-D.2.  Processor Instructions
-
-   In the v2 format, XML PIs were used for a wide variety of tasks,
-   including changing some formatting of the text outputs, adding
-   information to HTML versions of Internet Drafts, and specifying other
-   instructions to processors.  In the v3 format, a much smaller set of
-   PIs is supported for the Draft Processor and Private Processors.  It
-   is important to note that canonical RFCs will not contain any PIs.
-
-   The following PIs will be supported by the Draft Processor:
-
-   o  editing -- When set to "yes", causes the processor to insert
-      reference numbers throughout the output files to allow ease of
-      referral to particular paragraphs or artwork in the text.  The
-      default is "no".
-
-   The following PIs will not be supported by the Draft Processor, but
-   are included so that Private Processors have a common way of
-   referring to them:
-
-   o  comments -- When set to "yes", causes all <cref> elements to be
-      rendered in the output files.  The default is "yes".
-
-   o  linefile -- Causes the processor to emit more detailed information
-      about which line of which input file caused an error or warning.
-
-   Note that a Private Processor can have PIs not from this list.
-
-Appendix E.  Relax NG Schema
+Appendix C.  Relax NG Schema
 
    The following is the RelaxNG schema for the v3 format.
 
@@ -4781,7 +4646,7 @@ Appendix E.  Relax NG Schema
    start = rfc
 
 
-Appendix F.  Schema Differences from v2
+Appendix D.  Schema Differences from v2
 
    The following is a non-normative comparison of the v3 format to the
    v2 format.  A "-" indicates lines removed from the v2 schema, and a
