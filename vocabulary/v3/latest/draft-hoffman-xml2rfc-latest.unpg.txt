@@ -2702,6 +2702,18 @@ Table of Contents
    The width of the border for this cell.  The default is 0, meaning no
    border.
 
+2.55.2.  'colspan' attribute
+
+   The number of columns that the cell to span.  For example, setting
+   "colspan='3'" indicates that the cell occupies the same horizontal
+   space as three cells in the row above or below this one.
+
+2.55.3.  'rowspan' attribute
+
+   The number of rows that the cell to span.  For example, setting
+   "rowspan='3'" indicates that the cell occupies the same vertical
+   space as three rows.
+
 2.56.  <tfoot>
 
    A container for a set of footer rows for a table.
@@ -2776,6 +2788,18 @@ Table of Contents
 
    The width of the border for this cell.  The default is 0, meaning no
    border.
+
+2.57.2.  'colspan' attribute
+
+   The number of columns that the cell to span.  For example, setting
+   "colspan='3'" indicates that the cell occupies the same horizontal
+   space as three cells in the row above or below this one.
+
+2.57.3.  'rowspan' attribute
+
+   The number of rows that the cell to span.  For example, setting
+   "rowspan='3'" indicates that the cell occupies the same vertical
+   space as three rows.
 
 2.58.  <thead>
 
@@ -4479,6 +4503,8 @@ Appendix C.  Relax NG Schema
    td =
      element td {
        [ a:defaultValue = "0" ] attribute border { text }?,
+       [ a:defaultValue = "0" ] attribute colspan { text }?,
+       [ a:defaultValue = "0" ] attribute rowspan { text }?,
        (t+
         | (text
            | artwork
@@ -4503,6 +4529,8 @@ Appendix C.  Relax NG Schema
    th =
      element th {
        [ a:defaultValue = "0" ] attribute border { text }?,
+       [ a:defaultValue = "0" ] attribute colspan { text }?,
+       [ a:defaultValue = "0" ] attribute rowspan { text }?,
        (t+
         | (text
            | artwork
@@ -5218,6 +5246,8 @@ Appendix D.  Schema Differences from v2
    + td =
    +   element td {
    +     [ a:defaultValue = "0" ] attribute border { text }?,
+   +     [ a:defaultValue = "0" ] attribute colspan { text }?,
+   +     [ a:defaultValue = "0" ] attribute rowspan { text }?,
    +     (t+
    +      | (text
    +         | artwork
@@ -5242,6 +5272,8 @@ Appendix D.  Schema Differences from v2
    + th =
    +   element th {
    +     [ a:defaultValue = "0" ] attribute border { text }?,
+   +     [ a:defaultValue = "0" ] attribute colspan { text }?,
+   +     [ a:defaultValue = "0" ] attribute rowspan { text }?,
    +     (t+
    +      | (text
    +         | artwork
@@ -5485,6 +5517,7 @@ Index
          border  1
          category  1
          cite  1
+         colspan  1
          consensus  1
          counter  1
          day  1
@@ -5517,6 +5550,7 @@ Index
          relative  1
          removeInRFC  1
          role  1
+         rowspan  1
          section  1
          sectionFormat  1
          sectionNumber  1
@@ -5625,6 +5659,9 @@ Index
       code element  1
          ascii attribute  1
          inside postal  1
+      colspan attribute
+         in td element  1
+         in th element  1
       consensus attribute
          in rfc element  1
       counter attribute
@@ -6062,6 +6099,9 @@ Index
          xml:lang attribute  1
       role attribute
          in author element  1
+      rowspan attribute
+         in td element  1
+         in th element  1
 
    S
       section attribute
@@ -6230,7 +6270,9 @@ Index
          inside table  1
       td element  1
          border attribute  1
+         colspan attribute  1
          inside tr  1
+         rowspan attribute  1
       texttable element  1
          align attribute  1
          anchor attribute  1
@@ -6243,7 +6285,9 @@ Index
          inside table  1
       th element  1
          border attribute  1
+         colspan attribute  1
          inside tr  1
+         rowspan attribute  1
       thead element  1
          inside table  1
       title attribute

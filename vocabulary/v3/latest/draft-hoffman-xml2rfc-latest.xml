@@ -3755,6 +3755,29 @@ Using CDATA:
          The width of the border for this cell. The default is 0, meaning no border.
       </t>
    </section>
+
+   <!--td/@colspan-->
+   <section title="'colspan' attribute" anchor="element.td.attribute.colspan" toc="exclude">
+      <iref item="Attributes" subitem="colspan"/>
+      <iref item="td element" subitem="colspan attribute"/>
+      <iref item="colspan attribute" subitem="in td element"/>
+      <t>
+         The number of columns that the cell to span. For example, setting "colspan='3'"
+         indicates that the cell occupies the same horizontal space as three cells in the
+         row above or below this one.
+      </t>
+   </section>
+
+   <!--td/@rowspan-->
+   <section title="'rowspan' attribute" anchor="element.td.attribute.rowspan" toc="exclude">
+      <iref item="Attributes" subitem="rowspan"/>
+      <iref item="td element" subitem="rowspan attribute"/>
+      <iref item="rowspan attribute" subitem="in td element"/>
+      <t>
+         The number of rows that the cell to span. For example, setting "rowspan='3'"
+         indicates that the cell occupies the same vertical space as three rows.
+      </t>
+   </section>
 </section>
 
 <!--tfoot-->
@@ -3870,6 +3893,29 @@ Using CDATA:
       <iref item="border attribute" subitem="in th element"/>
       <t>
          The width of the border for this cell. The default is 0, meaning no border.
+      </t>
+   </section>
+
+   <!--th/@colspan-->
+   <section title="'colspan' attribute" anchor="element.th.attribute.colspan" toc="exclude">
+      <iref item="Attributes" subitem="colspan"/>
+      <iref item="th element" subitem="colspan attribute"/>
+      <iref item="colspan attribute" subitem="in th element"/>
+      <t>
+         The number of columns that the cell to span. For example, setting "colspan='3'"
+         indicates that the cell occupies the same horizontal space as three cells in the
+         row above or below this one.
+      </t>
+   </section>
+
+   <!--th/@rowspan-->
+   <section title="'rowspan' attribute" anchor="element.th.attribute.rowspan" toc="exclude">
+      <iref item="Attributes" subitem="rowspan"/>
+      <iref item="th element" subitem="rowspan attribute"/>
+      <iref item="rowspan attribute" subitem="in th element"/>
+      <t>
+         The number of rows that the cell to span. For example, setting "rowspan='3'"
+         indicates that the cell occupies the same vertical space as three rows.
       </t>
    </section>
 </section>
@@ -6202,6 +6248,8 @@ tr =
 td =
   element td {
     [ a:defaultValue = "0" ] attribute border { text }?,
+    [ a:defaultValue = "0" ] attribute colspan { text }?,
+    [ a:defaultValue = "0" ] attribute rowspan { text }?,
     (t+
      | (text
         | artwork
@@ -6226,6 +6274,8 @@ td =
 th =
   element th {
     [ a:defaultValue = "0" ] attribute border { text }?,
+    [ a:defaultValue = "0" ] attribute colspan { text }?,
+    [ a:defaultValue = "0" ] attribute rowspan { text }?,
     (t+
      | (text
         | artwork
@@ -6944,6 +6994,8 @@ to the v3 schema.</t>
 + td =
 +   element td {
 +     [ a:defaultValue = "0" ] attribute border { text }?,
++     [ a:defaultValue = "0" ] attribute colspan { text }?,
++     [ a:defaultValue = "0" ] attribute rowspan { text }?,
 +     (t+
 +      | (text
 +         | artwork
@@ -6968,6 +7020,8 @@ to the v3 schema.</t>
 + th =
 +   element th {
 +     [ a:defaultValue = "0" ] attribute border { text }?,
++     [ a:defaultValue = "0" ] attribute colspan { text }?,
++     [ a:defaultValue = "0" ] attribute rowspan { text }?,
 +     (t+
 +      | (text
 +         | artwork
