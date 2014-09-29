@@ -12,19 +12,21 @@
 ## TODO STILL: ????????????????
 ## inside <!DOCTYPE, cut down newlines between [ ]
 ## is hangIndent used somewhere?
+## for PIs, handle multiple-attribute PIs, as in <?rfc toc='yes' tocindent='3' ...?>
 
 use strict;
 use XML::Parser;
 use Getopt::Std;
 
 my %optargs;
-getopts('C#', \%optargs) or usage();
+getopts('EC#', \%optargs) or usage();
 
 sub usage {
-    print STDERR "Usage: $0 [-C] [-#]\n";
+    print STDERR "Usage: $0 [-C] [-#] [-E]\n";
     print STDERR "convert xml2rfc v2 to v3\n";
     print STDERR "-C\tomit comments about changes that were made\n";
     print STDERR "-#\tprint the ## comments from this script\n";
+    print STDERR "-E\tprint WARNINGS and ERRORS to stderr (in addition to within the document)\n";
     exit 1;
 }
 
@@ -60,6 +62,7 @@ my %publicEntities;
 my $omitComments = $optargs{C};
 my $additionalRfcAttributes = '';
 my @insideList;
+my @insideListOriginalStyle;
 my @insideListElementCount;
 my %vspaceElementCounts;
 my $compact;
@@ -75,6 +78,9 @@ my %referenceTarget;
 my %replacementStack;
 my $cdata;
 my $output = '';
+my $errorOutput = '';
+my $expat;
+my $filename = '';
 my $pendingArtworkAlt;
 my $pendingArtworkSrc;
 
@@ -110,6 +116,7 @@ my %replacedElements = fillHash(1, @replacedElements);
 
 my $REMOVED = 1;
 my $KEPT = 2;
+my $LOWERCASED = 3;
 my %removedPIs = (
     artworkdelimiter => $REMOVED,	    artworklines => $REMOVED,
     authorship => $REMOVED,		    autobreaks => $REMOVED,
@@ -130,7 +137,7 @@ my %removedPIs = (
     tocdepth => $KEPT,			    tocindent => $REMOVED,
     tocnarrow => $REMOVED,		    tocompact => $REMOVED,
     topblock => $REMOVED,		    typeout => $REMOVED,
-    useobject => $REMOVED
+    useobject => $REMOVED,		    needlines => $LOWERCASED
     );
 
 main();
@@ -180,8 +187,8 @@ sub main {
 	}
 	);
 
-    if( $ARGV[0]) { $parser->parsefile( $ARGV[0]); }
-    else          { $parser->parse( \*STDIN);      }
+    if( $ARGV[0]) { $filename = $ARGV[0]; $parser->parsefile($filename); }
+    else          { $filename = "stdin"; $parser->parse( \*STDIN);      }
 
     ## For the elements that are supposed to be EMPTY, convert the closing "></foo>" tag to "/>".
     ## For the elements that are only contain text and can potentially be empty,
@@ -196,7 +203,7 @@ sub main {
     ##      single URI for a reference, use the "target" attribute on
     ##      <reference> instead.
     ## ...
-    ## move <format target='..'> to enclosing <reference target='..'>
+    ## move first <format target='..'> to enclosing <reference target='..'>
     for my $elementCount (keys %referenceTarget) {
 	my $target = $referenceTarget{$elementCount};
 	$output =~ s/ elementCount='$elementCount'/ target='$target'/g;
@@ -233,7 +240,18 @@ sub main {
 	$output .= comment("added attributes to <rfc> moved from PIs: $additionalRfcAttributes");
     }
     $output =~ s( END-OF-RFC>)(>);
+
+    # check for non-ascii in the output
+    $output =~ /^([[:ascii:]]*)/;
+    my $ucount = length($1);
+    if ($ucount != length($output)) {
+	$output .= "\n";
+	$output .= comment("WARNING: wide character found at character $ucount of the output");
+	# print "ucount=$ucount\n";
+	# print "len(output)=" . length($output) . "\n";
+    }
     print $output;
+    print STDERR $errorOutput if $optargs{E};
 }
 
 # nothing to do
@@ -241,9 +259,11 @@ sub initHandler  { }
 # nothing to do
 sub finalHandler { }
 
-# replicate <?xml ...?>
+## xml declaration handler
 sub xmldeclHandler {
     my ($expat, $version, $encoding, $standalone) = @_;
+    saveExpat($expat);
+    ## replicate <?xml ...?>
     $output .= '<?xml';
     $output .= " version='$version'" if defined($version);
     $output .= " encoding='$encoding'" if defined($encoding);
@@ -251,9 +271,16 @@ sub xmldeclHandler {
     $output .= '?>';
 }
 
+sub saveExpat {
+    $expat = shift;
+}
+
+## start element handler
 sub startHandler {
     my ( $expat, $element, @attrvals ) = @_;
+    saveExpat($expat);
 
+    my $originalElement = $element;
     push @xmlPath, $element;
     $xmlPath = join('/', @xmlPath);
     $xmlCharVal = '';
@@ -277,15 +304,19 @@ sub startHandler {
 	    ## If the goal is to provide a single URI for a reference,
 	    ## use the "target" attribute on <reference> instead.
 	    ## ...
-	    ## If it has a target attribute, move target to enclosing
+	    ## If it has a target attribute, move first target to enclosing
 	    ## <reference>.
 	    ## Otherwise, just remove.
 	    my %attrvals = @attrvals;
 	    if (defined($attrvals{target})) {
-		if ($referenceHasTarget{$lastReferenceElementCount}) {
-		    $comments .= comment("WARNING: <reference>/<format target=...> found for <reference> that already has target=");
+		if (defined($referenceHasTarget{$lastReferenceElementCount})) {
+		    if ($referenceHasTarget{$lastReferenceElementCount} eq $attrvals{target}) {
+			$comments .= comment("duplicate <reference target=...>/<format target=...> removed");
+		    } else {
+			$comments .= comment("WARNING: <reference>/<format target='$attrvals{target}'> found for <reference> that already has different target='$referenceHasTarget{$lastReferenceElementCount}'. Please verify which is correct for promotion.");
+		    }
 		} elsif (defined($referenceTarget{$lastReferenceElementCount})) {
-		    $comments .= comment("WARNING: multiple <reference>/<format target=...> values found");
+		    $comments .= comment("additional <reference>/<format target='$attrvals{target}'> values ignored");
 		} else {
 		    $referenceTarget{$lastReferenceElementCount} = $attrvals{target};
 		    $comments .= comment("moving <$element target=...> to enclosing <reference>");
@@ -340,33 +371,34 @@ sub startHandler {
 		## ???????????????? inheriting style='format Req %d' is tricky
 		$attrvals{empty} = 'true';
 		if ($#insideList >= 0) {
-		    $attrvals{style} = $insideList[$#insideList];
+		    $attrvals{style} = $insideListOriginalStyle[$#insideListOriginalStyle];
 		} else {
 		    $attrvals{style} = '';
 		}
 	    }
-	    if ($attrvals{style} eq '') {
+	    my $curStyle = $attrvals{style};
+	    if ($curStyle eq '') {
 		## ???????????????? missing style needs to be inherited?
 		$newelement = 'ul';
 		$comments .= comment("converting empty style to <ul empty=true>");
-	    } elsif ($attrvals{style} eq 'hanging') {
+	    } elsif ($curStyle eq 'hanging') {
 		$newelement = 'dl';
-	    } elsif ($attrvals{style} eq 'empty') {
+	    } elsif ($curStyle eq 'empty') {
 		$newelement = 'ul';
-	    } elsif ($attrvals{style} eq 'symbols') {
+	    } elsif ($curStyle eq 'symbols') {
 		$newelement = 'ul';
-	    } elsif ($attrvals{style} eq 'letters') {
+	    } elsif ($curStyle eq 'letters') {
 		$newelement = 'ol';
 		$newstyle = 'a';
-	    } elsif ($attrvals{style} eq 'numbers') {
+	    } elsif ($curStyle eq 'numbers') {
 		$newelement = 'ol';
 		$newstyle = '1';
-	    } elsif ($attrvals{style} =~ /^format /) {
+	    } elsif ($curStyle =~ /^format /) {
 		$newelement = 'ol';
-		$newstyle = $attrvals{style};
+		$newstyle = $curStyle;
 		$newstyle =~ s/^format //;
 	    } else {
-		$comments .= comment("WARNING: unknown <list style=$attrvals{style}> value");
+		$comments .= comment("WARNING: unknown <list style=$curStyle> value");
 		$newelement = 'ul';
 	    }
 	    if (defined($attrvals{counter})) {
@@ -393,9 +425,10 @@ sub startHandler {
 	    @attrvals = %attrvals;
 	    $replacementStack{$xmlPath} = $newelement;
 	    $comments .= comment("converting <$element> to <$newelement>");
-	    $element = $newelement;
+	    push @insideListOriginalStyle, $curStyle;
 	    push @insideList, $newelement;
 	    push @insideListElementCount, $elementCount;
+	    $element = $newelement;
 	    # $comments .= comment("pushed elementCount=$elementCount");
 	} elsif ($element eq 'spanx') {
 	    ## 1.2.3.  Elements and Attributes Deprecated from v2
@@ -594,7 +627,7 @@ sub startHandler {
 	} elsif ($element eq 'reference') {
 	    $lastReferenceElementCount = $elementCount - 1;
 	    if ($name eq 'target') {
-		$referenceHasTarget{$lastReferenceElementCount} = 1;
+		$referenceHasTarget{$lastReferenceElementCount} = $val;
 	    }
 	} elsif (($element eq 'strong') || ($element eq 'tt') || ($element eq 'em')) {
 	    ## ?? spanx
@@ -615,14 +648,17 @@ sub startHandler {
 	    } elsif ($name eq 'hangIndent') {
 		$skip = 1;
 		$comments .= comment("<$element $name='$val'> deprecated and removed");
-	    } else {
-		$comments .= comment("WARNING: unhandled attribute <$element $name='$val'> removed");
+	    } elsif ($name ne 'anchor') {
+		$comments .= comment("WARNING: unhandled attribute <$originalElement $name='$val'> removed");
 		$skip = 1;
 	    }
 	} elsif ($element eq 'li') {
-	    # ???????????????? do we need to do this?
-	    $comments .= comment("WARNING: unhandled attribute <$element $name='$val'> removed");
-	    $skip = 1;
+	    if ($name ne 'anchor') {
+		## When under a <list style=hanging>, <t> is handled above.
+		## Other types of <t> elements should not have any attributes other than anchor=
+		$comments .= comment("WARNING: unhandled attribute <$originalElement $name='$val'> removed.");
+		$skip = 1;
+	    }
 	}
 
 	if (!$skip) {
@@ -653,8 +689,10 @@ sub startHandler {
     }
 }
 
+## end element handler
 sub endHandler {
     my ( $expat, $element ) = @_;
+    saveExpat($expat);
     my $comments = '';
     my $skip;
     my $prefix = '';
@@ -670,6 +708,7 @@ sub endHandler {
 	$comments .= comment("</$element> replaced with </$newelement>");
 	if ($element eq 'list') {
 	    pop @insideList;
+	    pop @insideListOriginalStyle;
 	    my $p = pop @insideListElementCount;
 	    # $comments .= comment("popped elementCount=$p");
 	}
@@ -702,8 +741,10 @@ sub endHandler {
     $xmlPath = join('/', @xmlPath);
 }
 
+## character text handler
 sub charHandler {
     my ( $expat, $string ) = @_;
+    saveExpat($expat);
     if ($optargs{v}) {
 	$output .= "'$string'";
     } else {
@@ -711,8 +752,10 @@ sub charHandler {
     }
 }
 
+## processing element handler
 sub procHandler {
     my ( $expat, $target, $data ) = @_;
+    saveExpat($expat);
     ## 1.2.2.  New Attributes for Existing Elements
     ## o  Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes
     ## to <rfc> to cover processor instructions (PIs) that were in v2
@@ -725,7 +768,10 @@ sub procHandler {
     ## Convert this PI to xi:include:
     ##    include=
     ## Remove other known V2 PIs.
+    ## Remove various known extension V2 PIs.
     ## Warning on all other PIs.
+    ##
+    ## ???????????????? handle multiple-attribute PIs, as in <?rfc toc='yes' tocindent='3' ...?>
 
     my $skip;
     my $comments = '';
@@ -754,32 +800,33 @@ sub procHandler {
 	    $compact = ($1 eq 'yes') ? 'compact' : 'normal';
 	    $skip = 1;
 	    $comments .= comment("moving PI $target $data to <dl>/<ol>/<ul> elements");
-	} elsif ($data =~ /^\s*tocdepth='\d+'\s*/i) {
+	} elsif (($data =~ /^\s*tocdepth='\d+'\s*/i) ||
+		 ($data =~ /^\s*tocdepth="\d+"\s*/i)) {
 	    $data =~ s/tocdepth/tocDepth/i;
 	    $additionalRfcAttributes .= " $data";
 	    $comments .= comment("moving PI $target $data to <rfc> element");
 	    $skip = 1;
-	} elsif ($data =~ /symrefs=/i) {
-	    $comments .= comment("ERROR: symrefs should have a yes|no value");
+	} elsif ($data =~ /^\s*symrefs=/i) {
+	    $comments .= comment("ERROR: symrefs should have a yes|no value, instead found '$data'");
 	    $skip = 1;
-	} elsif ($data =~ /sortrefs=/i) {
-	    $comments .= comment("ERROR: sortrefs should have a yes|no value");
+	} elsif ($data =~ /^\s*sortrefs=/i) {
+	    $comments .= comment("ERROR: sortrefs should have a yes|no value, instead found '$data'");
 	    $skip = 1;
-	} elsif ($data =~ /^toc=/i) {
-	    $comments .= comment("ERROR: toc should have a yes|no value");
+	} elsif ($data =~ /^\s*toc=/i) {
+	    $comments .= comment("ERROR: toc should have a yes|no value, instead found '$data'");
 	    $skip = 1;
-	} elsif ($data =~ /^tocdepth=/i) {
-	    $comments .= comment("ERROR: tocdepth should have a numeric value");
+	} elsif ($data =~ /^\s*tocdepth=/i) {
+	    $comments .= comment("ERROR: tocdepth should have a numeric value, instead found '$data'");
 	    $skip = 1;
-	} elsif (($data =~ /^editing='(yes|no)'\s*$/) ||
-		 ($data =~ /^editing="(yes|no)"\s*$/) ||
-		 ($data =~ /^comments='(yes|no)'\s*$/) ||
-		 ($data =~ /^comments="(yes|no)"\s*$/) ||
-		 ($data =~ /^linefile='.*'\s*$/) ||
-		 ($data =~ /^linefile=".*"\s*$/)) {
+	} elsif (($data =~ /^\s*editing='(yes|no)'\s*$/) ||
+		 ($data =~ /^\s*editing="(yes|no)"\s*$/) ||
+		 ($data =~ /^\*comments='(yes|no)'\s*$/) ||
+		 ($data =~ /^\s*comments="(yes|no)"\s*$/) ||
+		 ($data =~ /^\s*linefile='.*'\s*$/) ||
+		 ($data =~ /^\s*linefile=".*"\s*$/)) {
 	    ## these are allowed through unchanged
-	} elsif (($data =~ /^include='(.*)'\s*$/) ||
-		 ($data =~ /^include="(.*)"\s*$/)) {
+	} elsif (($data =~ /^\s*include='(.*)'\s*$/) ||
+		 ($data =~ /^\s*include="(.*)"\s*$/)) {
 	    ## convert to xi:include
 	    my $path = $1;
 	    my ($noutput, $ncomments) = xiInclude($path);
@@ -791,20 +838,33 @@ sub procHandler {
 		 ($data =~ /^(.*)="(.*)"\s*$/)) {
 	    my $name = $1;
 	    my $val = $2;
-	    if ($removedPIs{$name} == $REMOVED) {
+	    if (defined($removedPIs{$name}) && ($removedPIs{$name} == $REMOVED)) {
 		$comments .= comment("processing instruction '<?$target $data?>' deprecated and removed");
 		$skip = 1;
+	    } elsif (defined($removedPIs{$name}) && ($removedPIs{$name} == $LOWERCASED)) {
+		$comments .= comment("misspelled processing instruction '<?$target $data?>' deprecated and removed");
+		$skip = 1;
 	    } else {
-		$comments .= comment("WARNING: removing unrecognized processing instruction '<?$target $data?>'");
+		$comments .= comment("WARNING: unrecognized processing instruction '<?$target $data?>' removed(1)");
 		$skip = 1;
 	    }
+	} elsif ($data =~ /^\s*$/i) {
+	    $comments .= comment("empty processing instruction '<?$target $data?>' removed");
+	    $skip = 1;
 	} else {
-	    $comments .= comment("WARNING: removing unrecognized processing instruction '<?$target $data?>'");
+	    $comments .= comment("WARNING: unrecognized processing instruction '<?$target $data?>' removed(2)");
 	    $skip = 1;
 	}
+    } elsif ($target eq 'xml-stylesheet') {
+	$comments .= comment("non-standard processing instruction '<?$target $data?>' removed(4)");
+	$skip = 1;
+    } elsif ($target eq 'rfc-ext') {
+	$comments .= comment("non-standard processing instruction '<?$target $data?>' removed(5)");
+	$skip = 1;
     } else {
 	## non-rfc PIs
-	$comments .= comment("WARNING: removing unrecognized processing instruction '<?$target $data?>'");
+	# $comments .= comment("WARNING: target='$target'");
+	$comments .= comment("WARNING: unrecognized processing instruction '<?$target $data?>' removed(3)");
 	$skip = 1;
     }
 
@@ -814,22 +874,30 @@ sub procHandler {
     }
 }
 
+## comment handler
 sub commentHandler {
     my ( $expat, $data ) = @_;
+    ## copy through intact
+    saveExpat($expat);
     $output .= "<!--$data-->";
 }
 
+## cdata start handler
 sub cdstartHandler {
     $output .= "<![CDATA[";
     $cdata++ ;
 }
+
+## cdata end handler
 sub cdendHandler   {
     $output .= "]]>";
     $cdata--
 }
 
+## doctype start handler
 sub doctypeHandler {
     my ( $expat, $name, $sysid, $pubid, $internal ) = @_;
+    saveExpat($expat);
     $name = "" if !defined($name);
     $output .= "<!DOCTYPE $name";
     $output .= " SYSTEM '$sysid'" if defined($sysid);
@@ -839,8 +907,10 @@ sub doctypeHandler {
     #    $output .= ",internal=$internal\n";
 }
 
+## doctype end handler
 sub doctypefinHandler {
     my ( $expat ) = @_;
+    saveExpat($expat);
     #    $output .= "\n>>>>>>>>>>>>>>>> doctypefin()\n";
     if ($haveEntityDeclarations) {
 	$output .= "]";
@@ -850,15 +920,19 @@ sub doctypefinHandler {
     $haveEntityComments = "";
 }
 
+## default handler, for anything not handled by other handlers
 sub pdefaultHandler {
     my ( $expat, $string ) = @_;
+    saveExpat($expat);
     ## non-system entities will show up as &FOO;. Just pass them through.
     # $output .= "\n>>>> Default($string)\n";
     $output .= $string;
 }
 
+## external entity start handler
 sub externentHandler {
     my ($expat, $base, $sysid, $pubid) = @_;
+    saveExpat($expat);
     ## convert external entity &foo; references into xi:includes
     # $output .= ">>>>>>>>>>>>>>>> ExternEnt()\n";
     # $output .= "base='$base'" if defined($base);
@@ -889,13 +963,16 @@ sub externentHandler {
     return "";
 }
 
+## external entity end handler
 sub externentfinHandler {
     my ( $e ) = @_;
     #    $output .= ">>>>>>>>>>>>>>>>externentfin()\n";
 }
 
+## entity definition handler
 sub entityHandler {
     my ($expat, $name, $val, $sysid, $pubid, $ndata, $isparam) = @_;
+    saveExpat($expat);
     ## PUBLIC/SYSTEM entity definitions are saved for later xi:include processing
     ## other entity definitions are rendered as-is
     # $output .= ">>>>>>>>>>>>>>>> entity()\n";
@@ -921,7 +998,7 @@ sub entityHandler {
 	    $output .= "[";
 	}
 	$output .= "<!ENTITY $name";
-	$output .= " '$val'" if defined($val);
+	$output .= toEntityValues(" '$val'") if defined($val);
 	if (defined($sysid)) {
 	    $output .= " SYSTEM '$sysid'";
 	    $systemEntities{$sysid} = $name;
@@ -933,11 +1010,68 @@ sub entityHandler {
 	$output .= " NDATA $ndata" if defined($ndata);
 	# isparam ????
 	$output .= ">";
+	# my $ucount = ($output =~ /^[[:ascii:]]*/);
+	# print "ucount=$ucount\n";
+	# print $output;exit;
     }
+}
+
+# as_entity() and entitify() came from
+# http://stackoverflow.com/questions/6056048/perl-how-to-replace-extended-characters-by-their-corresponding-entity-in-an-xml
+sub as_entity {
+    my $char = shift;
+    return sprintf("&#x%.4x;", ord($char));
+}
+
+sub entitify {
+    my $str = shift;
+    $str =~ s/([\x80-\x{ffffffff}])/as_entity($1)/ge;
+    return $str;
+}
+
+# based on code from
+# http://c2.com/cgi/wiki?HexDumpInManyProgrammingLanguages
+sub hexdump {
+    my $str = shift;
+    my $start = shift;
+    $start = 0 if !defined($start);
+    my $end = shift;
+    $end = length($str) if !defined($end);
+    my $width = 32;
+    my $block;
+    my $ret = '';
+    for (my $left = $end - $start; $left > 0 && substr($str, $start, min($width, $left)); $left -= length($block), $start += length($block)) {
+	my $hex = join(" ", (map { sprintf("%02X", ord($_)) } split(//, $block)));
+	$hex .= '' x ($width - length($block));
+	my $plain = join("", (map { printable($_) ? $_ : "." } split(//, $block)));
+	$ret .= "$hex: $plain\n";
+    }
+    return $ret;
+}
+sub printable { my $o = ord($_[0]); return $o >= 33 && $o <= 126; }
+sub min {
+    my $ret = shift;
+    for my $n (@_) {
+	$ret = $n if ($n < $ret);
+    }
+    return $ret;
+}
+
+
+
+sub toEntityValues {
+    my $ret = '';
+    for my $str (@_) {
+	# $ret .= $expat->xml_escape($str);
+	$ret .= entitify($str)
+    }
+    # print STDERR hexdump($ret);
+    return $ret;
 }
 
 sub attlistHandler {
     my ($expat, $elname, $attname, $type, $default, $fixed) = @_;
+    saveExpat($expat);
     $output .= ">>>>>>>>>>>>>>>> attlist()\n";
     $output .= "elname=$elname\n";
     $output .= "attname=$attname\n";
@@ -965,10 +1099,20 @@ sub fillHash {
     return %ret;
 }
 
+## comment handler
 sub comment {
     my $str = shift;
     $str =~ s/--/- -/g;
-    return "" if $omitComments && ($str !~ /^WARNING:/);
+    my $line = -1;
+    my $col = -1;
+    my $loc = "";
+    if (defined($expat)) {
+	$line = $expat->current_line;
+	$col = $expat->current_column;
+	$loc = "$filename:$line:$col";
+    }
+    $errorOutput .= "$loc: $str\n" if ($str =~ /^(WARNING|ERROR):/);
+    return "" if $omitComments && ($str !~ /^(WARNING|ERROR):/);
     return "<!-- CONVERT $str -->";
 }
 
