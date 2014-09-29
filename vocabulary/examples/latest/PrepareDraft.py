@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 import subprocess
 
 DraftInputFile = "draft-hoffman-rfcexamples-input.xml"
@@ -56,6 +56,10 @@ OutF.write(FullDraftText)
 OutF.close()
 
 OutFileNameBase = DraftOutputFile[:-4]
+
+import os.path
+if not os.path.isfile(Xml2rfcBin):
+	exit("{} does not exist\n".format(Xml2rfcBin))
 
 # Prepare the .txt file
 p = subprocess.Popen("{} {}.xml --filename={}.txt --text".format(Xml2rfcBin, OutFileNameBase, OutFileNameBase),
