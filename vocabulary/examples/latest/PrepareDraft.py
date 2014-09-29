@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import subprocess
+import os.path, subprocess
 
 DraftInputFile = "draft-hoffman-rfcexamples-input.xml"
 DraftOutputFile = "draft-hoffman-rfcexamples-latest.xml"
@@ -44,7 +44,6 @@ try:
 except:
 	exit("Could not find '{}'. Exiting.".format(ExampleFullV3File))
 
-
 # Replace the v3 full comment with the escaped replacement
 if not  (V3FullMarker in FullDraftText):
 	exit("Could not find '{}' in the draft input. Exiting.".format(V3FullMarker))
@@ -57,13 +56,35 @@ OutF.close()
 
 OutFileNameBase = DraftOutputFile[:-4]
 
-import os.path
-if not os.path.isfile(Xml2rfcBin):
-	exit("{} does not exist\n".format(Xml2rfcBin))
-
 # Prepare the .txt file
-p = subprocess.Popen("{} {}.xml --filename={}.txt --text".format(Xml2rfcBin, OutFileNameBase, OutFileNameBase),
+if not os.path.isfile(Xml2rfcBin):
+	print("{} does not exist, so the .txt file was NOT UPDATED.".format(Xml2rfcBin))
+else:
+	p = subprocess.Popen("{} {}.xml --filename={}.txt --text".format(Xml2rfcBin, OutFileNameBase, OutFileNameBase),
+		stdout=subprocess.PIPE, shell=True)
+	p.wait()
+	TheOutput = (p.stdout.read()).decode("ascii")
+	print("Running xml2rfc said:\n{}".format(TheOutput))
+
+# Do the diff
+ConvertedV2File = "/tmp/" + ExampleFullV2File
+ConvertedV3File = "/tmp/" + ExampleFullV3File
+try:
+	OutConvV2File = open(ConvertedV2File, "w")
+except:
+	exit("Could not write to {}. Exiting.".format(OutConvV2File))
+try:
+	OutConvV3File = open(ConvertedV3File, "w")
+except:
+	exit("Could not write to {}. Exiting.".format(OutConvV3File))
+def ConvForDiff(InText):
+	return(InText.replace("'", '"').replace("\n\n\n", "\n\n"))
+OutConvV2File.write(ConvForDiff(FullV2ExampleText))
+OutConvV2File.close()
+OutConvV3File.write(ConvForDiff(FullV3ExampleText))
+OutConvV3File.close()
+p = subprocess.Popen("diff {} {}".format(ConvertedV2File, ConvertedV3File),
 	stdout=subprocess.PIPE, shell=True)
 p.wait()
 TheOutput = (p.stdout.read()).decode("ascii")
-print("Running xml2rfc said:\n{}".format(TheOutput))
+print("The diff said:\n{}".format(TheOutput))
