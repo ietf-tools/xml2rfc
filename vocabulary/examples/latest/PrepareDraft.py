@@ -4,7 +4,11 @@ import subprocess
 DraftInputFile = "draft-hoffman-rfcexamples-input.xml"
 DraftOutputFile = "draft-hoffman-rfcexamples-latest.xml"
 ExampleFullV2File = "example-full-v2.xml"
+ExampleFullV3File = "example-full-v3.xml"
 V2FullMarker = "<!-- INSERTV2FULL-->"
+V3FullMarker = "<!-- INSERTV3FULL-->"
+# The following might only work on Paul's machine
+Xml2rfcBin = "/usr/local/bin/xml2rfc"
 
 # Make sure the parts are there
 try:
@@ -29,6 +33,23 @@ if not  (V2FullMarker in FullDraftText):
 	exit("Could not find '{}' in the draft input. Exiting.".format(V2FullMarker))
 FullDraftText = FullDraftText.replace(V2FullMarker, EscapedFigure(FullV2ExampleText))
 
+# Do the conversion from v2 to v3
+p = subprocess.Popen("./convertv2v3.pl -C {} > {}".format(ExampleFullV2File, ExampleFullV3File),
+	stdout=subprocess.PIPE, shell=True)
+p.wait()
+TheOutput = (p.stdout.read()).decode("ascii")
+print("Running convertv2v3.pl said:\n{}".format(TheOutput))
+try:
+	FullV3ExampleText = open(ExampleFullV3File, mode="r").read()
+except:
+	exit("Could not find '{}'. Exiting.".format(ExampleFullV3File))
+
+
+# Replace the v3 full comment with the escaped replacement
+if not  (V3FullMarker in FullDraftText):
+	exit("Could not find '{}' in the draft input. Exiting.".format(V3FullMarker))
+FullDraftText = FullDraftText.replace(V3FullMarker, EscapedFigure(FullV3ExampleText))
+
 # Write out the coverted stuff
 OutF = open(DraftOutputFile, mode="w")
 OutF.write(FullDraftText)
@@ -36,8 +57,8 @@ OutF.close()
 
 OutFileNameBase = DraftOutputFile[:-4]
 
-# Prepare the .txt file; this possibly only works on Paul's machine
-p = subprocess.Popen("xml2rfc {}.xml --filename={}.txt --text".format(OutFileNameBase, OutFileNameBase),
+# Prepare the .txt file
+p = subprocess.Popen("{} {}.xml --filename={}.txt --text".format(Xml2rfcBin, OutFileNameBase, OutFileNameBase),
 	stdout=subprocess.PIPE, shell=True)
 p.wait()
 TheOutput = (p.stdout.read()).decode("ascii")
