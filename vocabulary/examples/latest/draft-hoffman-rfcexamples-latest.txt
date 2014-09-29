@@ -68,11 +68,11 @@ Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
    2.  Example of a v2 Document  . . . . . . . . . . . . . . . . . .   2
-   3.  Example of a v3 Document  . . . . . . . . . . . . . . . . . .   2
-   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   3
-   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   3
-   6.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   3
-   7.  Normative References  . . . . . . . . . . . . . . . . . . . .   3
+   3.  Example of a v3 Document  . . . . . . . . . . . . . . . . . .   7
+   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
+   6.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   7
+   7.  Normative References  . . . . . . . . . . . . . . . . . . . .   7
 
 1.  Introduction
 
@@ -93,19 +93,19 @@ Table of Contents
    The following is a v2 document that has all the elements that are
    needed for typical Internet Drafts.
 
+   <?xml version="1.0" encoding="US-ASCII"?>
+   <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+   <!ENTITY RFC2119 SYSTEM
+     "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+   ]>
 
+   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+   <?rfc strict="yes" ?>
 
-3.  Example of a v3 Document
-
-   The following is a v3 document that has all the elements that are
-   needed for typical Internet Drafts.  It was converted from the
-   example in Section 2.
-
-
-
-
-
-
+   <rfc
+       category="std"
+       docName="draft-example-of-xml-00"
+       ipr="trust200902"
 
 
 
@@ -113,6 +113,245 @@ Hoffman                   Expires April 1, 2015                 [Page 2]
 
 Internet-Draft              RFC XML Examples              September 2014
 
+
+   >
+
+   <front>
+   <title abbrev="XML Example">
+   An Exmaple of Using XML for an Internet Draft
+   </title>
+
+   <author fullname="Chris Smith" initials="C." surname="Smith">
+   <organization>Examplecorp</organization>
+   <address>
+   <postal>
+   <street>123 Exemplar Way</street>
+   <city>Anytown</city>
+   <region>California</region>
+   <code>95060</code>
+   <country>US</country>
+   </postal>
+   <phone>+1 123-456-7890</phone>
+   <email>chrissmith@example.com</email>
+   </address>
+   </author>
+
+   <!-- The following author has no organization and no postal or phone
+        information. -->
+   <author fullname="Kim Jones" initials="K." surname="Jones">
+   <organization/>
+   <address>
+   <email>jk@lmn.op</email>
+   </address>
+   </author>
+
+   <date year="2014" month="September"/>
+
+   <area>General</area>
+   <workgroup>Imaginary WG</workgroup>
+
+   <keyword>XML</keyword>
+   <keyword>Imagination</keyword>
+
+   <abstract>
+
+   <t>This is an example of an abstract. It is a short paragraph that
+   gives an overview of the document in order to help the
+   reader determine whether or not they are interested in reading
+   further.</t>
+
+   </abstract>
+
+
+
+
+Hoffman                   Expires April 1, 2015                 [Page 3]
+
+Internet-Draft              RFC XML Examples              September 2014
+
+
+   </front>
+
+   <middle>
+
+   <section anchor="intro" title="Introduction">
+
+   <t>This is this is the first paragraph of the introduction to this
+   document. This introduction is probably much shorter than it would
+   be for a real Internet Draft.</t>
+
+   <t>Something to note about this paragraph is that it has a
+   pointer to <xref target="protocol"/>, and one to
+   <xref target="haiku"/>, both of which appear later in the
+   document.</t>
+
+   <!-- This is a comment. Comments in the XML do not appear in the
+   output formats. -->
+
+   <section title="Terminology">
+
+   <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+   NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL"
+   in this document are to be interpreted as described in
+   <xref target="RFC2119"/>.</t>
+
+   </section>
+
+   </section>
+
+   <section anchor="protocol" title="The Protocol Being Described">
+
+   <t>This is a reference to <xref target="RFC6949"/>.
+   Actually, the reference itself is not all that interesting, but the
+   way that the reference is incorporated is. Note that the inclusion
+   of RFC 2119 was done at the top of the XML, while the information
+   for RFC 6949 is done directly in the references section.</t>
+
+   </section>
+
+   <section title="Basic Lists">
+
+   <t>Bulleted lists are good for items that
+   are not ordered:
+
+   <list style="symbols">
+
+   <t>This is the first item.</t>
+
+
+
+
+Hoffman                   Expires April 1, 2015                 [Page 4]
+
+Internet-Draft              RFC XML Examples              September 2014
+
+
+   <t>This is the second item. Here comes a sub-list:
+
+   <list style="symbols">
+
+   <t>This is the first sub-item.</t>
+
+   <t>This is the second sub-item</t>
+
+   </list></t>
+
+   <t>This is the item after the sub-list.</t>
+
+   </list>
+
+   </t>
+
+   <t>Numbered lists are good for items that are ordered:
+
+   <list style="numbers">
+
+   <t>This is the first item.</t>
+
+   <t>This is the second item. Here comes a sub-list:
+
+   <list style="numbers">
+
+   <t>This is the first sub-item.</t>
+
+   <t>This is the second sub-item</t>
+
+   </list></t>
+
+   <t>This is the item after the sub-list.</t>
+
+   </list>
+
+   </t>
+
+   </section>
+
+   <section title="Figures">
+
+   <t>The following is a figure with a caption.
+   Also, it uses the ampersand (&amp;) and less than
+   (&lt;) characters in the example text.</t>
+
+   <figure title="This could be haiku" anchor="haiku">
+   <artwork>
+
+
+
+Hoffman                   Expires April 1, 2015                 [Page 5]
+
+Internet-Draft              RFC XML Examples              September 2014
+
+
+      The ampersand (&amp;) and
+      the less than (&lt;) are two characters
+      that need escaping.
+   </artwork>
+   </figure>
+
+   </section>
+
+   <section anchor="IANA" title="IANA Considerations">
+
+   <t>None.</t>
+
+   </section>
+
+   <section anchor="Security" title="Security Considerations">
+
+   <t>There are no security considerations for an imaginary
+   Internet Draft.</t>
+
+   </section>
+
+   <section anchor="Acknowledgements" title="Acknowledgements">
+
+   <t>Some of the things included in this draft came from
+   Elwyn Davies' templates.</t>
+
+   </section>
+
+   </middle>
+
+   <back>
+
+   <references title="Normative References">
+
+   &RFC2119;
+
+   </references>
+
+   <references title="Informative References">
+
+   <reference anchor="RFC6949">
+   <front><title>RFC Series Format Requirements and Future
+   Development</title>
+   <author initials="H." surname="Flanagan" fullname="H.
+   Flanagan"><organization/></author>
+   <author initials="N." surname="Brownlee" fullname="N.
+   Brownlee"><organization/></author>
+   <date year="2013" month="May"/>
+
+
+
+Hoffman                   Expires April 1, 2015                 [Page 6]
+
+Internet-Draft              RFC XML Examples              September 2014
+
+
+   </front>
+   <seriesInfo name="RFC" value="6949"/>
+   </reference>
+
+   </references>
+
+   </back>
+   </rfc>
+
+3.  Example of a v3 Document
+
+   The following is a v3 document that has all the elements that are
+   needed for typical Internet Drafts.  It was converted from the
+   example in Section 2.
 
 4.  Security Considerations
 
@@ -150,19 +389,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Hoffman                   Expires April 1, 2015                 [Page 3]
+Hoffman                   Expires April 1, 2015                 [Page 7]
