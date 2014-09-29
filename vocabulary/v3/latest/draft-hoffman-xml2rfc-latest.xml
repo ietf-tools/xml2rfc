@@ -13,8 +13,6 @@
 
 <!--
 
-Remove the appendicies that will be web pages.
-
 Find the remaining <cref>s and resolve them.
 
 After draft-reschke-xml2rfc gets published as an RFC, update the "obsoletes" line.
@@ -66,7 +64,6 @@ After draft-reschke-xml2rfc gets published as an RFC, update the "obsoletes" lin
   the original version ("v1") <xref target="RFC2629"/>. This document directly copies the
   material from <xref target="XML2RFCv2"/> where possible; as that document makes its way
   toward RFC publication, this document will incorporate as many of the changes as possible.
-  <cref>More needs to be said here about what "obsoletes" means in this case.</cref>
 </t>
 <t>
 The v3 format will be used as part of the new RFC series described in <xref target="RFC6949"/>.
@@ -621,17 +618,10 @@ some types of sections.</t>
       <iref item="artwork element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in artwork element"/>
       <t>
-            The URI reference of a graphics file (<xref target="RFC3986"/>).
-         </t>
-      <t>
-            Note that this can be a "data" URI (<xref target="RFC2397"/>).
-         </t>
-      <t>
-         <cref>Add an example of in-lined SVG here.</cref>
+         The URI reference of a graphics file (<xref target="RFC3986"/>).
       </t>
       <t>
-         <cref>Maybe include microlanguages for packets and call sequences if people
-         want to create them.</cref>
+         Note that this can be a "data" URI (<xref target="RFC2397"/>).
       </t>
    </section>
 
@@ -977,7 +967,6 @@ some types of sections.</t>
    <iref item="blockquote element" primary="true"/>
    <t>
       Specifies a block of text is a quotation. The "cite" attribute is required, and must be a URI.
-      <cref>Should this element also use paragraphNumber?</cref>
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.blockquote.contents"><!--AG-->
@@ -1037,8 +1026,7 @@ some types of sections.</t>
       <iref item="blockquote element" subitem="cite attribute"/>
       <iref item="cite attribute" subitem="in blockquote element"/>
       <t>
-         The source of the citation. This must be a URI. <cref>Needs an example of a cite for a reference that is
-         already in the spec.</cref>
+         The source of the citation. This must be a URI.
       </t>
    </section>
 
@@ -3668,10 +3656,6 @@ Using CDATA:
    <t>
       A cell in a table row.
    </t>
-   <t>
-      <cref>Should this also have attributes for horizontal alignment, vertical alignment, spanning
-      cells in the row, and spanning cells in a column? These all exist in HTML.</cref>
-   </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>tr</x:ref>&gt; (<xref target="element.tr"/>).</t>
    <t anchor="element.td.contents"><!--AG-->
       Content model:
@@ -3807,10 +3791,6 @@ Using CDATA:
    <t>
       A cell in a table row. When rendered, this will normally come out in boldface; other than that,
       there is no difference between this and the <x:ref>td</x:ref>&gt; element.
-   </t>
-   <t>
-      <cref>Should this also have attributes for horizontal alignment, vertical alignment, spanning
-      cells in the row, and spanning cells in a column? These all exist in HTML.</cref>
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>tr</x:ref>&gt; (<xref target="element.tr"/>).</t>
    <t anchor="element.th.contents"><!--AG-->
@@ -4292,7 +4272,7 @@ Using CDATA:
       <iref item="relative attribute" subitem="in xref element"/>
       <t>
          Specifies a relative reference from the main target.  <cref>Need more description
-         here about how this will be displayed.</cref>
+         here about how this will be rendered by a processor.</cref>
       </t>
    </section>
 
@@ -4879,8 +4859,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
   This format is based on <xref target="XML"/>, thus does not have any
   issues representing arbitrary Unicode <xref target="UNICODE"/> characters in text content.
   The RFC Editor may restrict some of the characters that can be used in a particular RFC;
-  the rules for such restrictions are covered in <cref>some other document to be named
-  later when it is stable</cref>.
+  the rules for such restrictions are covered in <xref target="NONASCII"/>.
 </t>
 </section>
 
@@ -5087,6 +5066,15 @@ not those that are part of a sequence of resources.</t>
       </author>
       <date/>
     </front>
+  </reference>
+
+  <reference anchor="NONASCII">
+    <front>
+      <title>The Use of Non-ASCII Characters in RFCs</title>
+      <author initials="H." surname="Flanagan" fullname="Heather Flanagan"/>
+      <date year="2014"/>
+    </front>
+    <seriesInfo name="Internet-Draft" value="draft-flanagan-nonascii"/>
   </reference>
 
   <reference anchor='RFC2026'>
@@ -5573,6 +5561,10 @@ included.</t>
 
 </list></t>
 
+<t><cref>There needs to be more focus on processors before this document is complete.
+In specific, does this document get to say what the Draft Processor gets to do? Should
+this document say even less about Private Processors?</cref></t>
+
 <t>It is expected that a single piece of software will be used for both the RFC Processor
 and the Draft Processor, with different application settings to differentiate between them.
 It is also expected that the same software could be used
@@ -5691,7 +5683,7 @@ For example, this would be "p-2.1.3-7" for the seventh part number in Section 2.
 
 <t>"slugifiedName" always has the format "n-ttt", where "ttt" is the text of the name after
 slugification. For example, this would be "n-protocol-overview" for the name "Protocol Overview".
-<cref>Need to say more about slugification here</cref>.</t>
+The actual conversions done in slugification will be specified at a later time..</t>
 
 <t>Anchors must never overlap with any of the above. The easiest way to assure that is to
 not pick an anchor name that starts with a single letter followed by a hyphen. If an anchor

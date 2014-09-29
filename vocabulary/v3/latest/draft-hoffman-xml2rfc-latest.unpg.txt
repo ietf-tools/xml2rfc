@@ -177,8 +177,7 @@ Table of Contents
    turn obsoletes the original version ("v1") [RFC2629].  This document
    directly copies the material from [XML2RFCv2] where possible; as that
    document makes its way toward RFC publication, this document will
-   incorporate as many of the changes as possible. [[anchor2: More needs
-   to be said here about what "obsoletes" means in this case.]]
+   incorporate as many of the changes as possible.
 
    The v3 format will be used as part of the new RFC series described in
    [RFC6949].  The new format will be handled by one or more new
@@ -606,11 +605,6 @@ Table of Contents
 
    Note that this can be a "data" URI ([RFC2397]).
 
-   [[anchor7: Add an example of in-lined SVG here.]]
-
-   [[anchor8: Maybe include microlanguages for packets and call
-   sequences if people want to create them.]]
-
 2.5.8.  'type' attribute
 
    Specifies the type of the artwork.  The value of this attribute is
@@ -835,8 +829,7 @@ Table of Contents
 2.11.  <blockquote>
 
    Specifies a block of text is a quotation.  The "cite" attribute is
-   required, and must be a URI. [[anchor9: Should this element also use
-   paragraphNumber?]]
+   required, and must be a URI.
 
    This element appears as a child element of: <section> (Section 2.45).
 
@@ -874,8 +867,7 @@ Table of Contents
 
 2.11.2.  'cite' attribute (mandatory)
 
-   The source of the citation.  This must be a URI. [[anchor10: Needs an
-   example of a cite for a reference that is already in the spec.]]
+   The source of the citation.  This must be a URI.
 
 2.11.3.  'partNumber' attribute
 
@@ -2643,10 +2635,6 @@ Table of Contents
 
    A cell in a table row.
 
-   [[anchor11: Should this also have attributes for horizontal
-   alignment, vertical alignment, spanning cells in the row, and
-   spanning cells in a column?  These all exist in HTML.]]
-
    This element appears as a child element of: <tr> (Section 2.60).
 
    Content model:
@@ -2729,10 +2717,6 @@ Table of Contents
    A cell in a table row.  When rendered, this will normally come out in
    boldface; other than that, there is no difference between this and
    the td> element.
-
-   [[anchor12: Should this also have attributes for horizontal
-   alignment, vertical alignment, spanning cells in the row, and
-   spanning cells in a column?  These all exist in HTML.]]
 
    This element appears as a child element of: <tr> (Section 2.60).
 
@@ -2965,7 +2949,7 @@ Table of Contents
 
    The generated text depends on whether the <xref> is empty (in which
    case the processor will try to generate a meaningful text fragment),
-   and the nature of the referenced document part. [[anchor13: Need to
+   and the nature of the referenced document part. [[anchor6: Need to
    say more about the processor output if the element is empty and if it
    has text.]]
 
@@ -3053,8 +3037,9 @@ Table of Contents
 
 2.65.3.  'relative' attribute
 
-   Specifies a relative reference from the main target. [[anchor14: Need
-   more description here about how this will be displayed.]]
+   Specifies a relative reference from the main target. [[anchor7: Need
+   more description here about how this will be rendered by a
+   processor.]]
 
 2.65.4.  'section' attribute
 
@@ -3419,8 +3404,7 @@ Table of Contents
    representing arbitrary Unicode [UNICODE] characters in text content.
    The RFC Editor may restrict some of the characters that can be used
    in a particular RFC; the rules for such restrictions are covered in
-   [[anchor15: some other document to be named later when it is
-   stable]].
+   [NONASCII].
 
 5.  Security Considerations
 
@@ -3564,6 +3548,10 @@ Table of Contents
 
    [LINKRELATIONS]  IANA, "Link Relations", <http://www.iana.org/
                     assignments/link-relations/link-relations.xhtml>.
+
+   [NONASCII]       Flanagan, H., "The Use of Non-ASCII Characters in
+                    RFCs", draft-flanagan-nonascii (work in progress),
+                    2014.
 
    [RFC2026]        Bradner, S., "The Internet Standards Process --
                     Revision 3", BCP 9, RFC 2026, October 1996.
@@ -3834,6 +3822,11 @@ Appendix B.  The v3 Format and Processors
       external information into XML that has that external information
       included.
 
+   [[anchor13: There needs to be more focus on processors before this
+   document is complete.  In specific, does this document get to say
+   what the Draft Processor gets to do?  Should this document say even
+   less about Private Processors?]]
+
    It is expected that a single piece of software will be used for both
    the RFC Processor and the Draft Processor, with different application
    settings to differentiate between them.  It is also expected that the
@@ -3893,7 +3886,7 @@ B.1.  Including External Text
    In general, XInclude should be used instead of ENTITY references and
    XML Processor Instructions (PIs) that allow external inclusions.
 
-   [[anchor21: Need to think a bit more about using xi:include to
+   [[anchor14: Need to think a bit more about using xi:include to
    replace src= for artwork or sourcecode.]]
 
 B.2.  Anchors and IDs
@@ -3954,8 +3947,9 @@ B.2.1.  Overlapping Values
 
    o  "slugifiedName" always has the format "n-ttt", where "ttt" is the
       text of the name after slugification.  For example, this would be
-      "n-protocol-overview" for the name "Protocol Overview".
-      [[anchor23: Need to say more about slugification here]].
+      "n-protocol-overview" for the name "Protocol Overview".  The
+      actual conversions done in slugification will be specified at a
+      later time..
 
    o  Anchors must never overlap with any of the above.  The easiest way
       to assure that is to not pick an anchor name that starts with a
