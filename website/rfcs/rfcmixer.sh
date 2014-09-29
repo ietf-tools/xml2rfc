@@ -33,6 +33,10 @@ for line in sys.stdin:
 '
 }
 
+# rfcindexer.tcl:
+#    retrieves rfc-index.xml
+#    parses rfc-index.xml to create data/rfc-index.tcl
+
 case $SKIPINDEXER in
     n )
 	cp /dev/null logs/indexer.log
@@ -45,6 +49,15 @@ case $SKIPINDEXER in
 	fi
 	;;
 esac
+
+# rfcmixer.tcl
+#    retrieves rfc-index.txt
+#    generates bibxml/*, bibxml3/*, bibxml4/*, bibxml5/*
+#    there are also other documents created as a side-affect
+# see comments in rfcmixer.tcl for more details
+# for bibxml/* (the RFC entries)
+#    most of the information comes from rfc-index.txt
+#    abstract and DOI comes from rfc-index.xml
 
 case $SKIPMIXER in
     n )
