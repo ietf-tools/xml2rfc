@@ -19,12 +19,13 @@ use XML::Parser;
 use Getopt::Std;
 
 my %optargs;
-getopts('EC#', \%optargs) or usage();
+getopts('CfE#v', \%optargs) or usage();
 
 sub usage {
-    print STDERR "Usage: $0 [-C] [-#] [-E]\n";
+    print STDERR "Usage: $0 [-C] [-#] [-E] [-f]\n";
     print STDERR "convert xml2rfc v2 to v3\n";
     print STDERR "-C\tomit comments about changes that were made\n";
+    print STDERR "-f\tfix syntactic errors when possible\n";
     print STDERR "-#\tprint the ## comments from this script\n";
     print STDERR "-E\tprint WARNINGS and ERRORS to stderr (in addition to within the document)\n";
     exit 1;
@@ -76,8 +77,9 @@ my $lastReferenceElementCount = -1;
 my %referenceHasTarget;
 my %referenceTarget;
 my %replacementStack;
-my $cdata;
+my $cdata = 0;
 my $output = '';
+my $fixupOutput = '';
 my $errorOutput = '';
 my $expat;
 my $filename = '';
@@ -187,8 +189,219 @@ sub main {
 	}
 	);
 
-    if( $ARGV[0]) { $filename = $ARGV[0]; $parser->parsefile($filename); }
-    else          { $filename = "stdin"; $parser->parse( \*STDIN);      }
+    my $input = getFileContents($ARGV[0]);
+
+    if( $ARGV[0]) { $filename = $ARGV[0]; }
+    else          { $filename = "stdin"; }
+
+    # if there are any broken XML comments with "--" embedded, change them to "- - " before further processing.
+    if ($optargs{f}) {
+	my $newinput = '';
+	my $lineCount = 0;
+	# loop through all XML comments
+	while ($input =~ /^(.*?<!--)(.*?)(-->)(.*$)/s) {
+	    my $pre = $1;
+	    my $com = $2;
+	    my $postcom = $3;
+	    my $post = $4;
+	    
+	    # print STDERR "prefix='$pre'\n" if $optargs{v};
+	    $newinput .= $pre;
+	    # print STDERR "comment='$com'\n" if $optargs{v};
+	    my $comChanged = ($com =~ s/--/- - /g);
+	    # print STDERR "comChanged=$comChanged\n";
+	    if ($com =~ /-$/) {
+		$com .= " " ;
+		$comChanged++;
+	    }
+	    if ($comChanged) {
+		my $nlCount = ($newinput =~ tr/\n//);
+		$pre =~ /([^\n]*)$/s;
+		my $colCount = length($1);
+		$fixupOutput .= comment("$filename:" . ($nlCount+1) . ":" . ($colCount-3) . ": comment modified because of internal dash-dash") . "\n";
+	    }
+	    # print STDERR "comChanged=$comChanged\n";
+	    # print STDERR "comment now='$com'\n" if $optargs{v};
+	    $newinput .= $com;
+	    # print STDERR "postcomment='$postcom'\n" if $optargs{v};
+	    $newinput .= $postcom;
+	    $input = $post;
+	}
+
+	# add final non-matching piece of the input
+	$newinput .= $input;
+	# reset the input
+	$input = $newinput;
+    }
+
+    # if there is anything else we can easily fix up as we process things, do so
+    my $fixable = 1;
+    my $lastpos = -1;
+    my $lasterr = '';
+    my $addedXhtmlEntRefs = '';
+    my $attemptCount = 0;
+    while ($fixable) {
+	eval {
+	    resetState();
+	    $parser->parse($input); 
+	};
+
+	$fixable = undef;
+	$attemptCount++;
+	my $printFixedupText = 1;
+	my $error = $@;
+
+	# get rid of useless pointers to internal locations
+	$error =~ s( at /.*Parser.pm line \d*)();
+
+	if ($error && !$optargs{f}) {
+	    print STDERR $error;
+	} elsif ($error =~ / at line (\d+), column (\d+), byte (\d+)/) {
+	    if ($attemptCount > 1) {
+		$fixupOutput .= comment("Note: Location references on further errors may have moved and are no longer accurate.") . "\n";
+	    }
+	    my ($line, $column, $byte) = ($1,$2,$3);
+	    if (($error eq $lasterr) && ($lastpos == $byte)) {
+		$fixupOutput .= comment("$filename:$line:$column: Error repeated, unfixable $error") . "\n";
+		$fixupOutput .= comment("text surrounding error:\n" . ashex($input, $byte-16, 32)) . "\n";
+	    } else {
+		$lasterr = $error;
+		$lastpos = $byte;
+		$fixupOutput .= comment("$filename:$line:$column: Error found, possibly fixable $error") . "\n";
+		$fixupOutput .= comment("text surrounding error:\n" . ashex($input, $byte-16, 32)) . "\n";
+		if ($error =~ /not well-formed [(]invalid token[)]/) {
+		    my $prevchars = substr($input, $byte-9, 10);
+		    # $fixupOutput .= comment("prevchars=\n" . ashex($prevchars) . "\n");
+		    if (($prevchars =~ /(&[a-z0-9_]*)$/i) || ($prevchars =~ /(&[a-z0-9_]*)[^;]$/i)) {
+			my $foundText = $1;
+			# $fixupOutput .= comment("foundText=\n" . ashex($foundText)) . "\n";
+			my $offset = length($foundText);
+			$fixupOutput .= comment("$filename:$line:" . ($column-$offset) . ": byte " . ($byte-$offset) . ": found a bare '&'") . "\n";
+			$fixupOutput .= comment("Changing to '&amp;' and trying again") . "\n";
+			substr($input, $byte-$offset, 1) = "&amp;";
+			$fixable = 1;
+		    } else {
+			my $badchar = substr($input, $byte, 1);
+			my $badcharM1 = ($byte >= 1) ? substr($input, $byte-1, 1) : "";
+			my $badcharM2 = ($byte >= 2) ? substr($input, $byte-2, 1) : "";
+
+			if ($badchar eq "\0") {
+			    $fixupOutput .= comment("$filename:$line:$column: byte $byte: Removing NUL(s)") . "\n";
+			    $fixupOutput .= comment("Removing NUL and trying again") . "\n";
+			    my $prefix = substr($input, 0, $byte);
+			    # $fixupOutput .= comment("end of prefix=\n" . ashex(substr($prefix, -16))) . "\n";
+			    my $rest = substr($input, $byte);
+			    # $fixupOutput .= comment("rest=" . length($rest) . "\n" . ashex($rest)) . "\n";
+			    while ($rest =~ s/^\0+//) { }
+			    # $fixupOutput .= comment("rest now=" . length($rest) . "\n" . ashex($rest)) . "\n";
+			    $input = $prefix . $rest;
+			    $fixable = 1;
+			} elsif (($badchar eq '<') || ($badcharM1 eq '<') || ($badcharM2 eq '<')) {
+			    $fixupOutput .= comment("$filename:$line:" . ($column-3) . ": byte " . ($byte-3) . ": found a potentially bad '<'") . "\n";
+			    $fixupOutput .= comment("Should it be '&lt;'?") . "\n";
+			} elsif (($badchar ne ' ') && (($badcharM1 eq '"') || ($badcharM1 eq "'"))) {
+			    $fixupOutput .= comment("$filename:$line:" . ($column-1) . ": byte " . ($byte-1) . ": found a potentially missing space") . "\n";
+			    $fixupOutput .= comment("Adding a space and trying again") . "\n";
+			    substr($input, $byte, 0) = " ";
+			    $fixable = 1;
+			} else {
+			    $fixupOutput .= comment("$filename:$line:$column: byte $byte: Unfixable $error") . "\n";
+			}
+		    }
+		} elsif ($error =~ /undefined entity/) {
+		    #
+		    # NOTE FOR POST-PROTOTYPE VERSION:
+		    #
+		    # The following code to handle entities is a hack. The real solution is
+		    # to have the rfc2629-*.ent definitions plus &rfc.number; pre-defined for
+		    # the XML processor.
+		    #
+		    if ($addedXhtmlEntRefs) {
+			$fixupOutput .= comment("$filename:$line:$column: An unrecognized entity was found. $error") . "\n";
+		    } else {
+			$addedXhtmlEntRefs = 1;
+			my $entities =
+			    "<!ENTITY % rfc2629xhtmlent SYSTEM \"rfc2629-xhtml.ent\" >%rfc2629xhtmlent;" .
+			    "<!ENTITY % rfc2629otherent SYSTEM \"rfc2629-other.ent\" >%rfc2629otherent;" .
+			    "<!ENTITY rfc.number \"ENTITY_rfc.number\">";
+			if (substr($input,0,500) =~ /(<!DOCTYPE[^>]*[[][^>]*>)/s) {
+			    $fixupOutput .= comment("found DOCTYPE with []:'$1'") . "\n";
+			    my $doctype = index($input, "<!DOCTYPE");
+			    my $doctypeBracket = index($input, "[", $doctype);
+			    substr($input, $doctypeBracket+1, 0) = $entities;
+			    $fixupOutput .= comment("Adding reference to rfc2629-xhtml.ent and rfc2629-other.ent inside DOCTYPE and trying again") . "\n";
+			    $fixable = 1;
+			} elsif (substr($input,0,500) =~ /(<!DOCTYPE[^>]*>)/s) {
+			    $fixupOutput .= comment("found DOCTYPE:'$1'") . "\n";
+			    my $doctype = index($input, "<!DOCTYPE");
+			    my $doctypeBracket = index($input, ">", $doctype);
+			    substr($input, $doctypeBracket, 0) = "[ $entities ]";
+			    $fixupOutput .= comment("Adding reference to rfc2629-xhtml.ent and rfc2629-other.ent inside DOCTYPE and trying again") . "\n";
+			    $fixable = 1;
+			} elsif (substr($input,0,500) =~ /^(\s*<[?]xml[^>]*[?]>)/s) {
+			    # $fixupOutput .= comment("found XML decl:'$1'") . "\n";
+			    $fixupOutput .= comment("Adding reference to rfc2629-xhtml.ent and rfc2629-other.ent and trying again") . "\n";
+			    # add rfc2629-xhtml.ent DOCTYPE include
+			    my $docEntities = "<!DOCTYPE rfc SYSTEM \"rfc2629.dtd\" [ " . $entities . "]>";
+			    substr($input,length($1),0) = $docEntities;
+			    $fixable = 1;
+			}
+			$printFixedupText = 0;
+		    }
+		} elsif ($error =~ /syntax error/) {
+		    $fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
+		    if ((substr($input, $byte-32, 64) =~ /DOCTYPE/) || (substr($input, $byte-32, 64) =~ /ENTITY/)) {
+			$fixupOutput .= comment("The error may be related to the DOCTYPE declaration.") . "\n";
+			$fixupOutput .= comment("There should be a single DOCTYPE section with all ENTITY declarations within") . "\n";
+		    } elsif (substr($input, $byte-10, 20) =~ /<[?]xml/) {
+			$fixupOutput .= comment("The error may be related to a <?xml ... ?> declaration.") . "\n";
+			$fixupOutput .= comment("There should be a single <?xml ... ?> section at the very beginning of the document and nowhere else.") . "\n";
+		    }
+		} elsif ($error =~ /XML or text declaration not at start of entity/) {
+		    $fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
+		    $fixupOutput .= comment("Note: there can only be a single <?xml ... ?> declaration at the beginning of the file") . "\n";
+		} elsif ($error =~ /duplicate attribute/) {
+		    $fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
+		    $fixupOutput .= comment("Text surrounding now looks like this:\n" . ashex($input, $byte-64, 128)) . "\n";
+		} elsif ($error =~ /XML declaration not well-formed/) {
+		    if ($input =~ /<[?]xml[^>]*[^?]>/) {
+			$fixupOutput .= comment("The XML declaration is missing a closing '?' before the '>'") . "\n";
+			$fixupOutput .= comment("Adding a ? and trying again") . "\n";
+			substr($input, index($input,'>'), 0) = "?";
+			$fixable = 1;
+		    } else {
+			$fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
+		    }
+		} elsif ($error ne '') {
+		    # ($error =~ /illegal parameter entity reference/) {
+		    # ($error =~ /mismatched tag/) {
+		    $fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
+		}
+		# we fixed something, so show what the new text looks like
+		if ($fixable && $printFixedupText) {
+		    $fixupOutput .= comment("Text surrounding now looks like this:\n" . ashex($input, $byte-16, 32)) . "\n";
+		}
+	    }
+	} elsif ($error =~ /Couldn't open encmap/) {
+	    if ($error =~ /ascii[.]enc/ && ($input =~ /(<[?]xml[^>]*encoding=)/)) {
+		my $xmlLength = $1;
+		$fixupOutput .= comment("Fixing the encoding specification for ASCII to use encoding='US-ASCII'") . "\n";
+		$fixupOutput .= comment("The opening looked like=" . ashex($input, 0, length($xmlLength) + 20)) . "\n";
+		$input =~ s/encoding=['"]+[^'"]*['"]/encoding="US-ASCII"/;
+		$fixable = 1;
+		$fixupOutput .= comment("The opening now looks like this\n" . ashex($input, 0, length($xmlLength) + 20)) . "\n";
+	    } else {
+		$fixupOutput .= comment("Unfixable error $error") . "\n";
+		$fixupOutput .= comment("Check the <?xml encoding= ?> for a proper value.") . "\n";
+	    }
+	} elsif ($error ne '') {
+	    $fixupOutput .= comment("unfixable error: $error") . "\n";
+	} else {
+	    if ($attemptCount > 1) {
+		$fixupOutput .= comment("No more syntactic errors") . "\n";
+	    }
+	}
+    }
 
     ## For the elements that are supposed to be EMPTY, convert the closing "></foo>" tag to "/>".
     ## For the elements that are only contain text and can potentially be empty,
@@ -250,8 +463,31 @@ sub main {
 	# print "ucount=$ucount\n";
 	# print "len(output)=" . length($output) . "\n";
     }
+    binmode STDOUT, ':utf8';
+    if ($output !~ /\n$/s) {
+	$output .= "\n";
+    }
+    print $fixupOutput;
     print $output;
-    print STDERR $errorOutput if $optargs{E};
+    if ($optargs{E}) {
+	print STDERR $fixupOutput;
+	print STDERR $errorOutput;
+    }
+}
+
+sub getFileContents {
+    my $fn = shift;
+    if (!$fn) {
+	local($/) = undef; # slurp
+	return <STDIN>;
+    } else {
+	local($/) = undef; # slurp
+	open(FH, "<", $fn) or die "Cannot open $fn: $!\n";
+	my $ret = '';
+	$ret .= $_ while (<FH>);
+	close(FH);
+	return $ret;
+    }
 }
 
 # nothing to do
@@ -445,6 +681,9 @@ sub startHandler {
 	    ## o  "preserve" (default)
 	    my %attrvals = @attrvals;
 	    my $newelement;
+	    if (!defined($attrvals{style})) {
+		$attrvals{style} = '';
+	    }
 	    if ($attrvals{style} eq 'strong') {
 		$newelement = 'strong';
 	    } elsif ($attrvals{style} eq 'verb') {
@@ -1073,11 +1312,11 @@ sub attlistHandler {
     my ($expat, $elname, $attname, $type, $default, $fixed) = @_;
     saveExpat($expat);
     $output .= ">>>>>>>>>>>>>>>> attlist()\n";
-    $output .= "elname=$elname\n";
-    $output .= "attname=$attname\n";
-    $output .= "type=$type\n";
-    $output .= "default=$default\n";
-    $output .= "fixed=$fixed\n";
+    $output .= "elname=$elname\n" if defined($elname);
+    $output .= "attname=$attname\n" if defined($attname);
+    $output .= "type=$type\n" if defined($type);
+    $output .= "default=$default\n" if defined($default);
+    $output .= "fixed=$fixed\n" if defined($fixed);
 }
 
 ################
@@ -1102,7 +1341,7 @@ sub fillHash {
 ## comment handler
 sub comment {
     my $str = shift;
-    $str =~ s/--/- -/g;
+    while ($str =~ s/--/- -/g) { }
     my $line = -1;
     my $col = -1;
     my $loc = "";
@@ -1162,4 +1401,80 @@ sub xiInclude {
     }
     $usingXIinclude = 1;
     return ("<xi:include href='$path'/>", $comments);
+}
+
+sub resetState {
+    # hold the PIs
+    $haveEntityDeclarations = undef;
+    $haveEntityComments = "";
+    $usingXIinclude = undef;
+    %systemEntities = ();
+    %publicEntities = ();
+    $additionalRfcAttributes = '';
+    @insideList = ();
+    @insideListOriginalStyle = ();
+    @insideListElementCount = ();
+    %vspaceElementCounts = ();
+    $compact = undef;
+
+    # the current XML path
+    @xmlPath = ();
+    $xmlPath = '';
+    $xmlCharVal = '';
+    $elementCount = 0;
+    $lastReferenceElementCount = -1;
+    %referenceHasTarget = ();
+    %referenceTarget = ();
+    %replacementStack = ();
+    $cdata = 0;
+    $output = '';
+    $expat = undef;
+    $filename = '';
+    $pendingArtworkAlt = '';
+    $pendingArtworkSrc = '';
+}
+
+sub ashex {
+    my ($str, $start, $length) = @_;
+    $start = 0 if (!defined($start));
+    $length = (length($str) - $start) if (!defined($length));
+    if ($start < 0) {
+	$length += $start;
+	$start = 0;
+    } elsif ($start > length($str)) {
+	$start = length($str);
+    }
+    if ($length <= 0) {
+	return "";
+    }
+    if ($start + $length > length($str)) {
+	$length = length($str) - $start;
+    }
+    my $ret = '';
+    my $blockLength = 16;
+    for (my $o = 0; $o < $length; $o += $blockLength) {
+	my $iend = ($o + $blockLength < $length) ? ($o + $blockLength) : $length;
+	my $pend = $o + $blockLength;
+	$ret .= sprintf("%9.9d   ", $o + $start);
+	for (my $i = $o; $i < $iend; $i++) {
+	    my $c = substr($str, $i + $start, 1);
+	    my $b = ord($c);
+	    $ret .= sprintf("%2.2X", $b);
+	}
+	for (my $i = $iend; $i < $pend; $i++) {
+	    $ret .= "  ";
+	}
+	$ret .= "  |";
+	for (my $i = $o; $i < $iend; $i++) {
+	    my $c = substr($str, $i + $start, 1);
+	    my $b = ord($c);
+	    $ret .= (($b >= 0x20) && ($b < 0x7f)) ? $c : ".";
+	}
+	$ret .= "|";
+	if ($iend < $length) {
+	    $ret .= "\n";
+	}
+    }
+    $ret .= "\n";
+    return $ret;
 }
