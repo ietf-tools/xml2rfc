@@ -2,7 +2,7 @@
 
 ## Convert xml2rfc v2 to xml2rfc v3.
 ## In particular, this conversion tool removes all elements that are marked as "deprecated" in
-## <a href="http://tools.ietf.org/html/draft-hoffman-xml2rfc-08">draft-hoffman-xml2rfc-08</a>,
+## <a href="http://tools.ietf.org/html/draft-hoffman-xml2rfc-11">draft-hoffman-xml2rfc-11</a>,
 ## and converts them to their intended replacements.
 
 ## Original Author: Tony Hansen
@@ -13,6 +13,28 @@
 ## inside <!DOCTYPE, cut down newlines between [ ]
 ## is hangIndent used somewhere?
 ## for PIs, handle multiple-attribute PIs, as in <?rfc toc='yes' tocindent='3' ...?>
+
+## done ## <titleelement> => <name>
+
+## done ## <note title=> => <name>
+
+## <texttable title=> => <name>
+
+## <texttable> => <table>
+## <table><preamble> => move to a <t> outside of the table. What happens to <texttable> alignment?
+## <table><postamble> => move to a <t> outside of the table. What happens to <texttable> alignment?
+## <figure><preamble> => move to a <t> outside of the figure. What happens to <figure> alignment?
+## <figure><postamble> => move to a <t> outside of the figure. What happens to <figure> alignment?
+## <ttcol>s get collected into a <tr> with <th>s
+## <c>s get arranged into lines of <tr> with <td>s in them (using count of <ttcol>)
+
+## 1.2.4
+##   o  In <section>, restricted the names of the anchors that can be used
+##      on some types of sections.
+##
+##   o  <t> now only contains non-block elements, so it no longer contains
+##      <figure> elements.
+
 
 use strict;
 use XML::Parser;
@@ -68,15 +90,20 @@ my @insideListElementCount;
 my %vspaceElementCounts;
 my $compact;
 
-# the current XML path
+# the current XML state
 my @xmlPath;
 my $xmlPath;
 my $xmlCharVal;
 my $elementCount = 0;
 my $lastReferenceElementCount = -1;
+my @elementCountStack;
+my %elements;
 my %referenceHasTarget;
 my %referenceTarget;
 my %replacementStack;
+my %moveBefore;
+my %moveAfter;
+my %movedTags;
 my $cdata = 0;
 my $output = '';
 my $fixupOutput = '';
@@ -85,6 +112,8 @@ my $expat;
 my $filename = '';
 my $pendingArtworkAlt;
 my $pendingArtworkSrc;
+my $thCount = 0;
+my $tdCount = 0;
 
 my @emptyElements = (
     'date',	    'iref',	    'vspace',	    'seriesInfo',
@@ -103,16 +132,21 @@ my %ctextElements = fillHash(1, @ctextElements);
 
 # these elements get removed, possibly moving information elsewhere
 my @removedElements = (
-    'facsimile', # 2.24
-    'format', # 2.26
-    'vspace', # 2.64
+    'facsimile', # 3.2
+    'format', # 3.3
+    'vspace', # 3.10
     );
 my %removedElements = fillHash(1, @removedElements);
 
 # these elements get replaced with something else
 my @replacedElements = (
-    'list', # 2.33
-    'spanx', # 2.51
+    'list', # 3.4
+    'spanx', # 3.7
+    'texttable', # 3.8
+    'ttcol', # 3.9
+    'c', # 3.1
+    'preamble', # 3.6
+    'postamble', # 3.5
     );
 my %replacedElements = fillHash(1, @replacedElements);
 
@@ -145,6 +179,14 @@ my %removedPIs = (
 main();
 
 sub main {
+    my $input = getFileContents($ARGV[0]);
+
+    if( $ARGV[0]) { $filename = $ARGV[0]; }
+    else          { $filename = "stdin"; }
+
+    # if there are any broken XML comments with "--" embedded, change them to "- - " before further processing.
+    $input = fixComments($input) if ($optargs{f});
+
     my $parser = new XML::Parser(
 	NoExpand => 1,
 	Handlers => {
@@ -189,219 +231,13 @@ sub main {
 	}
 	);
 
-    my $input = getFileContents($ARGV[0]);
+    # Process the input.
+    # If there is anything else we can easily fix up as we process things, do so.
+    processInput($parser, $input);
 
-    if( $ARGV[0]) { $filename = $ARGV[0]; }
-    else          { $filename = "stdin"; }
-
-    # if there are any broken XML comments with "--" embedded, change them to "- - " before further processing.
-    if ($optargs{f}) {
-	my $newinput = '';
-	my $lineCount = 0;
-	# loop through all XML comments
-	while ($input =~ /^(.*?<!--)(.*?)(-->)(.*$)/s) {
-	    my $pre = $1;
-	    my $com = $2;
-	    my $postcom = $3;
-	    my $post = $4;
-	    
-	    # print STDERR "prefix='$pre'\n" if $optargs{v};
-	    $newinput .= $pre;
-	    # print STDERR "comment='$com'\n" if $optargs{v};
-	    my $comChanged = ($com =~ s/--/- - /g);
-	    # print STDERR "comChanged=$comChanged\n";
-	    if ($com =~ /-$/) {
-		$com .= " " ;
-		$comChanged++;
-	    }
-	    if ($comChanged) {
-		my $nlCount = ($newinput =~ tr/\n//);
-		$pre =~ /([^\n]*)$/s;
-		my $colCount = length($1);
-		$fixupOutput .= comment("$filename:" . ($nlCount+1) . ":" . ($colCount-3) . ": comment modified because of internal dash-dash") . "\n";
-	    }
-	    # print STDERR "comChanged=$comChanged\n";
-	    # print STDERR "comment now='$com'\n" if $optargs{v};
-	    $newinput .= $com;
-	    # print STDERR "postcomment='$postcom'\n" if $optargs{v};
-	    $newinput .= $postcom;
-	    $input = $post;
-	}
-
-	# add final non-matching piece of the input
-	$newinput .= $input;
-	# reset the input
-	$input = $newinput;
-    }
-
-    # if there is anything else we can easily fix up as we process things, do so
-    my $fixable = 1;
-    my $lastpos = -1;
-    my $lasterr = '';
-    my $addedXhtmlEntRefs = '';
-    my $attemptCount = 0;
-    while ($fixable) {
-	eval {
-	    resetState();
-	    $parser->parse($input); 
-	};
-
-	$fixable = undef;
-	$attemptCount++;
-	my $printFixedupText = 1;
-	my $error = $@;
-
-	# get rid of useless pointers to internal locations
-	$error =~ s( at /.*Parser.pm line \d*)();
-
-	if ($error && !$optargs{f}) {
-	    print STDERR $error;
-	} elsif ($error =~ / at line (\d+), column (\d+), byte (\d+)/) {
-	    if ($attemptCount > 1) {
-		$fixupOutput .= comment("Note: Location references on further errors may have moved and are no longer accurate.") . "\n";
-	    }
-	    my ($line, $column, $byte) = ($1,$2,$3);
-	    if (($error eq $lasterr) && ($lastpos == $byte)) {
-		$fixupOutput .= comment("$filename:$line:$column: Error repeated, unfixable $error") . "\n";
-		$fixupOutput .= comment("text surrounding error:\n" . ashex($input, $byte-16, 32)) . "\n";
-	    } else {
-		$lasterr = $error;
-		$lastpos = $byte;
-		$fixupOutput .= comment("$filename:$line:$column: Error found, possibly fixable $error") . "\n";
-		$fixupOutput .= comment("text surrounding error:\n" . ashex($input, $byte-16, 32)) . "\n";
-		if ($error =~ /not well-formed [(]invalid token[)]/) {
-		    my $prevchars = substr($input, $byte-9, 10);
-		    # $fixupOutput .= comment("prevchars=\n" . ashex($prevchars) . "\n");
-		    if (($prevchars =~ /(&[a-z0-9_]*)$/i) || ($prevchars =~ /(&[a-z0-9_]*)[^;]$/i)) {
-			my $foundText = $1;
-			# $fixupOutput .= comment("foundText=\n" . ashex($foundText)) . "\n";
-			my $offset = length($foundText);
-			$fixupOutput .= comment("$filename:$line:" . ($column-$offset) . ": byte " . ($byte-$offset) . ": found a bare '&'") . "\n";
-			$fixupOutput .= comment("Changing to '&amp;' and trying again") . "\n";
-			substr($input, $byte-$offset, 1) = "&amp;";
-			$fixable = 1;
-		    } else {
-			my $badchar = substr($input, $byte, 1);
-			my $badcharM1 = ($byte >= 1) ? substr($input, $byte-1, 1) : "";
-			my $badcharM2 = ($byte >= 2) ? substr($input, $byte-2, 1) : "";
-
-			if ($badchar eq "\0") {
-			    $fixupOutput .= comment("$filename:$line:$column: byte $byte: Removing NUL(s)") . "\n";
-			    $fixupOutput .= comment("Removing NUL and trying again") . "\n";
-			    my $prefix = substr($input, 0, $byte);
-			    # $fixupOutput .= comment("end of prefix=\n" . ashex(substr($prefix, -16))) . "\n";
-			    my $rest = substr($input, $byte);
-			    # $fixupOutput .= comment("rest=" . length($rest) . "\n" . ashex($rest)) . "\n";
-			    while ($rest =~ s/^\0+//) { }
-			    # $fixupOutput .= comment("rest now=" . length($rest) . "\n" . ashex($rest)) . "\n";
-			    $input = $prefix . $rest;
-			    $fixable = 1;
-			} elsif (($badchar eq '<') || ($badcharM1 eq '<') || ($badcharM2 eq '<')) {
-			    $fixupOutput .= comment("$filename:$line:" . ($column-3) . ": byte " . ($byte-3) . ": found a potentially bad '<'") . "\n";
-			    $fixupOutput .= comment("Should it be '&lt;'?") . "\n";
-			} elsif (($badchar ne ' ') && (($badcharM1 eq '"') || ($badcharM1 eq "'"))) {
-			    $fixupOutput .= comment("$filename:$line:" . ($column-1) . ": byte " . ($byte-1) . ": found a potentially missing space") . "\n";
-			    $fixupOutput .= comment("Adding a space and trying again") . "\n";
-			    substr($input, $byte, 0) = " ";
-			    $fixable = 1;
-			} else {
-			    $fixupOutput .= comment("$filename:$line:$column: byte $byte: Unfixable $error") . "\n";
-			}
-		    }
-		} elsif ($error =~ /undefined entity/) {
-		    #
-		    # NOTE FOR POST-PROTOTYPE VERSION:
-		    #
-		    # The following code to handle entities is a hack. The real solution is
-		    # to have the rfc2629-*.ent definitions plus &rfc.number; pre-defined for
-		    # the XML processor.
-		    #
-		    if ($addedXhtmlEntRefs) {
-			$fixupOutput .= comment("$filename:$line:$column: An unrecognized entity was found. $error") . "\n";
-		    } else {
-			$addedXhtmlEntRefs = 1;
-			my $entities =
-			    "<!ENTITY % rfc2629xhtmlent SYSTEM \"rfc2629-xhtml.ent\" >%rfc2629xhtmlent;" .
-			    "<!ENTITY % rfc2629otherent SYSTEM \"rfc2629-other.ent\" >%rfc2629otherent;" .
-			    "<!ENTITY rfc.number \"ENTITY_rfc.number\">";
-			if (substr($input,0,500) =~ /(<!DOCTYPE[^>]*[[][^>]*>)/s) {
-			    $fixupOutput .= comment("found DOCTYPE with []:'$1'") . "\n";
-			    my $doctype = index($input, "<!DOCTYPE");
-			    my $doctypeBracket = index($input, "[", $doctype);
-			    substr($input, $doctypeBracket+1, 0) = $entities;
-			    $fixupOutput .= comment("Adding reference to rfc2629-xhtml.ent and rfc2629-other.ent inside DOCTYPE and trying again") . "\n";
-			    $fixable = 1;
-			} elsif (substr($input,0,500) =~ /(<!DOCTYPE[^>]*>)/s) {
-			    $fixupOutput .= comment("found DOCTYPE:'$1'") . "\n";
-			    my $doctype = index($input, "<!DOCTYPE");
-			    my $doctypeBracket = index($input, ">", $doctype);
-			    substr($input, $doctypeBracket, 0) = "[ $entities ]";
-			    $fixupOutput .= comment("Adding reference to rfc2629-xhtml.ent and rfc2629-other.ent inside DOCTYPE and trying again") . "\n";
-			    $fixable = 1;
-			} elsif (substr($input,0,500) =~ /^(\s*<[?]xml[^>]*[?]>)/s) {
-			    # $fixupOutput .= comment("found XML decl:'$1'") . "\n";
-			    $fixupOutput .= comment("Adding reference to rfc2629-xhtml.ent and rfc2629-other.ent and trying again") . "\n";
-			    # add rfc2629-xhtml.ent DOCTYPE include
-			    my $docEntities = "<!DOCTYPE rfc SYSTEM \"rfc2629.dtd\" [ " . $entities . "]>";
-			    substr($input,length($1),0) = $docEntities;
-			    $fixable = 1;
-			}
-			$printFixedupText = 0;
-		    }
-		} elsif ($error =~ /syntax error/) {
-		    $fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
-		    if ((substr($input, $byte-32, 64) =~ /DOCTYPE/) || (substr($input, $byte-32, 64) =~ /ENTITY/)) {
-			$fixupOutput .= comment("The error may be related to the DOCTYPE declaration.") . "\n";
-			$fixupOutput .= comment("There should be a single DOCTYPE section with all ENTITY declarations within") . "\n";
-		    } elsif (substr($input, $byte-10, 20) =~ /<[?]xml/) {
-			$fixupOutput .= comment("The error may be related to a <?xml ... ?> declaration.") . "\n";
-			$fixupOutput .= comment("There should be a single <?xml ... ?> section at the very beginning of the document and nowhere else.") . "\n";
-		    }
-		} elsif ($error =~ /XML or text declaration not at start of entity/) {
-		    $fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
-		    $fixupOutput .= comment("Note: there can only be a single <?xml ... ?> declaration at the beginning of the file") . "\n";
-		} elsif ($error =~ /duplicate attribute/) {
-		    $fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
-		    $fixupOutput .= comment("Text surrounding now looks like this:\n" . ashex($input, $byte-64, 128)) . "\n";
-		} elsif ($error =~ /XML declaration not well-formed/) {
-		    if ($input =~ /<[?]xml[^>]*[^?]>/) {
-			$fixupOutput .= comment("The XML declaration is missing a closing '?' before the '>'") . "\n";
-			$fixupOutput .= comment("Adding a ? and trying again") . "\n";
-			substr($input, index($input,'>'), 0) = "?";
-			$fixable = 1;
-		    } else {
-			$fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
-		    }
-		} elsif ($error ne '') {
-		    # ($error =~ /illegal parameter entity reference/) {
-		    # ($error =~ /mismatched tag/) {
-		    $fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
-		}
-		# we fixed something, so show what the new text looks like
-		if ($fixable && $printFixedupText) {
-		    $fixupOutput .= comment("Text surrounding now looks like this:\n" . ashex($input, $byte-16, 32)) . "\n";
-		}
-	    }
-	} elsif ($error =~ /Couldn't open encmap/) {
-	    if ($error =~ /ascii[.]enc/ && ($input =~ /(<[?]xml[^>]*encoding=)/)) {
-		my $xmlLength = $1;
-		$fixupOutput .= comment("Fixing the encoding specification for ASCII to use encoding='US-ASCII'") . "\n";
-		$fixupOutput .= comment("The opening looked like=" . ashex($input, 0, length($xmlLength) + 20)) . "\n";
-		$input =~ s/encoding=['"]+[^'"]*['"]/encoding="US-ASCII"/;
-		$fixable = 1;
-		$fixupOutput .= comment("The opening now looks like this\n" . ashex($input, 0, length($xmlLength) + 20)) . "\n";
-	    } else {
-		$fixupOutput .= comment("Unfixable error $error") . "\n";
-		$fixupOutput .= comment("Check the <?xml encoding= ?> for a proper value.") . "\n";
-	    }
-	} elsif ($error ne '') {
-	    $fixupOutput .= comment("unfixable error: $error") . "\n";
-	} else {
-	    if ($attemptCount > 1) {
-		$fixupOutput .= comment("No more syntactic errors") . "\n";
-	    }
-	}
-    }
+    ####
+    #### Post-process the output.
+    ####
 
     ## For the elements that are supposed to be EMPTY, convert the closing "></foo>" tag to "/>".
     ## For the elements that are only contain text and can potentially be empty,
@@ -413,8 +249,8 @@ sub main {
     ## 1.2.3
     ##   o  Deprecate <format> because it is not useful and has caused
     ##      surprise for authors in the past.  If the goal is to provide a
-    ##      single URI for a reference, use the "target" attribute on
-    ##      <reference> instead.
+    ##      single URI (Uniform Resource Identifier) for a reference, use the
+    ##      "target" attribute on <reference> instead.
     ## ...
     ## move first <format target='..'> to enclosing <reference target='..'>
     for my $elementCount (keys %referenceTarget) {
@@ -430,6 +266,41 @@ sub main {
     # clean up other places where vspace was NOT added
     $output =~ s(<!-- CONVERT opening list elementCount='\d+' -->)()g;
     $output =~ s(<!-- CONVERT closing list elementCount='\d+' -->)()g;
+
+    # Move things that need moving.
+    # Looking for moveBefore keys:
+    for my $key (keys %moveBefore) {
+	my $moveTo = $moveBefore{$key};
+	my $moveToTag = $elements{$moveTo};
+	my $movedTag = $movedTags{$key};
+	# print STDERR "key=$key,\nmoveTo=$moveTo,\nmoveToTag=$moveToTag,\nmovedTag=$movedTag\n\n";
+	if ($output =~ m(^(.*)(<$moveToTag elementCount='$moveTo'.*)(<$movedTag elementCount='$key'.*</$movedTag elementCount='$key'>)(.*)$)s) {
+	    my $prefix = $1;
+	    my $moveToContents = $2;
+	    my $movedContents = $3;
+	    my $rest = $4;
+	    # print STDERR "moveToContents='\n" . ashex($moveToContents) . "'\n";
+	    # print STDERR "movedContents='\n" . ashex($movedContents) . "'\n";
+	    $output = "$prefix$movedContents$moveToContents$rest";
+	}
+    }
+
+    # Looking for moveAfter keys:
+    for my $key (keys %moveAfter) {
+	my $moveTo = $moveAfter{$key};
+	my $moveToTag = $elements{$moveTo};
+	my $movedTag = $movedTags{$key};
+	# print STDERR "key=$key,\nmoveTo=$moveTo,\nmoveToTag=$moveToTag,\nmovedTag=$movedTag\n\n";
+	if ($output =~ m(^(.*)(<$movedTag elementCount='$key'.*</$movedTag elementCount='$key'>.*)(</$moveToTag elementCount='$moveTo'>)(.*)$)s) {
+	    my $prefix = $1;
+	    my $moveToContents = $2;
+	    my $movedContents = $3;
+	    my $rest = $4;
+	    # print STDERR "moveToContents='\n" . ashex($moveToContents) . "'\n";
+	    # print STDERR "movedContents='\n" . ashex($movedContents) . "'\n";
+	    $output = "$prefix$movedContents$moveToContents$rest";
+	}
+    }
 
     # remove the element counts
     $output =~ s/ elementCount='\d+'//g;
@@ -524,19 +395,24 @@ sub startHandler {
     my $comments = '';
     my $suffix = '';
 
+    # Remove some elements.
+    ### startHandler
     if ($removedElements{$element}) {
+	### startHandler
 	if ($element eq 'facsimile') {
 	    ## 1.2.3. Elements and Attributes Deprecated from v2
-	    ## o  Deprecate <facsimile> because it is rarely used and is not
-	    ## actually useful; <email> is a much more useful way to get in touch
-	    ## with authors.
-	    ## 2.24.  <facsimile>
+	    ##   o  Deprecate <facsimile> because it is rarely used and is not
+	    ##      actually useful; <email> is a much more useful way to get in touch
+	    ##      with authors.
+
+	    ## 3.2.  <facsimile>
 	    ## Deprecated.
 	    ## ... just remove
 	    $comments .= comment("<$element> deprecated and removed");
+	    ### startHandler
 	} elsif ($element eq 'format') {
 	    $comments .= comment("<$element> deprecated and removed");
-	    ## 2.26.  <format>
+	    ## 3.3.  <format>
 	    ## If the goal is to provide a single URI for a reference,
 	    ## use the "target" attribute on <reference> instead.
 	    ## ...
@@ -558,11 +434,12 @@ sub startHandler {
 		    $comments .= comment("moving <$element target=...> to enclosing <reference>");
 		}
 	    }
+	    ### startHandler
 	} elsif ($element eq 'vspace') {
 	    ## 1.2.3. Elements and Attributes Deprecated from v2
 	    ## o  Deprecate <vspace> because the major use for it, creating pseudo-
 	    ## paragraph-breaks in lists, is now handled properly.
-	    ## 2.64.  <vspace>
+	    ## 3.10.  <vspace>
 	    ## Deprecated.
 	    ## ...
 	    ## When <vspace/> is found in a list, handle it by adding an extra layer of <t></t>
@@ -581,19 +458,21 @@ sub startHandler {
 	$output .= $comments;
 	return;
     }
-
+    
+    # Replace names as appropriate.
+    ### startHandler
     if ($replacedElements{$element}) {
 	if ($element eq 'list') {
-	    ## 2.33.  <list>
+	    ## 3.4.  <list>
 	    ## Deprecated.  Instead, use <dl> for list/@style "hanging"; <ul> for
 	    ## list/@style "empty" or "symbols"; and <ol> for list/@style "letters",
 	    ## "numbers", or "format".
-	    ## 2.33.1.  'counter' attribute
+	    ## 3.4.1.  'counter' attribute
 	    ## Deprecated.  The functionality of this attribute has been replaced
 	    ## with <ol>/@start.
-	    ## 2.33.2.  'hangIndent' attribute
+	    ## 3.4.2.  'hangIndent' attribute
 	    ## Deprecated.
-	    ## 2.33.3.  'style' attribute
+	    ## 3.4.3.  'style' attribute
 	    ## Deprecated.
 	    ## ...
 	    ## convert <list> to other form, depending on style attribute.
@@ -602,6 +481,7 @@ sub startHandler {
 	    my %attrvals = @attrvals;
 	    my $newelement = "LISTREPLACEMENT";
 	    my $newstyle;
+	    ### startHandler
 	    if (!defined($attrvals{style})) {
 		## ???????????????? style needs to be inherited?
 		## ???????????????? inheriting style='format Req %d' is tricky
@@ -649,7 +529,7 @@ sub startHandler {
 	    ## Replace PI compact=yes/no with list spacing attributes.
 	    ## This is not documented in draft-hoffman-xml2rfc.
 	    ## 2.19.2.  <dl> 'spacing' attribute
-	    ## 2.36.2.  <ol> 'spacing' attribute
+	    ## 2.34.2.  <ol> 'spacing' attribute
 	    ## 2.62.2.  <ul> 'spacing' attribute
 	    ## ...
 	    ## PI compact=yes => dl/ol/ul spacing=compact
@@ -666,15 +546,16 @@ sub startHandler {
 	    push @insideListElementCount, $elementCount;
 	    $element = $newelement;
 	    # $comments .= comment("pushed elementCount=$elementCount");
+	    ### startHandler
 	} elsif ($element eq 'spanx') {
 	    ## 1.2.3.  Elements and Attributes Deprecated from v2
 	    ## o  Deprecate <spanx>; replace it with <strong>, <b>, <em>, <i>, and <tt>.
-	    ## 2.51.  <spanx>
+	    ## 3.7.  <spanx>
 	    ## Deprecated.  Use <b>, <i>, and <tt> instead.
 	    ## Content model: only text content.
-	    ## 2.51.1.  'style' attribute
+	    ## 3.7.1.  'style' attribute
 	    ## Deprecated.
-	    ## 2.51.2.  'xml:space' attribute
+	    ## 3.7.2.  'xml:space' attribute
 	    ## Deprecated.
 	    ## Allowed values:
 	    ## o  "default"
@@ -694,9 +575,109 @@ sub startHandler {
 	    $replacementStack{$xmlPath} = $newelement;
 	    $comments .= comment("converting <$element style='$attrvals{style}'> to <$newelement>");
 	    $element = $newelement;
+	    ### startHandler
+	} elsif ($element eq 'texttable') {
+	    ## 1.2.3.  Elements and Attributes Deprecated from v2
+	    ##   o  Deprecate <texttable>, <ttcol>, and <c>; replace them with the new
+	    ##      table elements (<table> and the elements that can be contained
+	    ##      within it).
+	    # 3.8.  <texttable>
+	    #    Deprecated.  Use <table> instead.
+	    # 3.8.1.  'align' attribute
+	    #    Deprecated
+	    # 3.8.2.  'anchor' attribute
+	    #    Deprecated
+	    # 3.8.3.  'style' attribute
+	    #    Deprecated.
+	    # 3.8.4.  'suppress-title' attribute
+	    #    Deprecated.
+	    # 3.8.5.  'title' attribute
+	    #    Deprecated.
+	    my $newelement = 'table';
+	    $replacementStack{$xmlPath} = $newelement;
+	    $comments .= comment("converting <$element> to <$newelement>");
+  	    $element = $newelement;
+	    $thCount = $tdCount = 0;
+	    ### startHandler
+	} elsif ($element eq 'ttcol') {
+	    # 1.2.3.  Elements and Attributes Deprecated from v2
+	    #    o  Deprecate <texttable>, <ttcol>, and <c>; replace them with the new
+	    #       table elements (<table> and the elements that can be contained
+	    #       within it).
+	    # 3.9.  <ttcol>
+	    #    Deprecated.  Instead, use <tr>, <td>, and <th>.
+	    # 3.9.1.  'align' attribute
+	    #    Deprecated.
+	    # 3.9.2.  'width' attribute
+	    #    Deprecated.
+	    my $newelement = 'th';
+	    $replacementStack{$xmlPath} = $newelement;
+	    $comments .= comment("converting <$element> to <$newelement>");
+  	    $element = $newelement;
+	    if ($thCount == 0) {
+		$output .= "<tr>";
+	    }
+	    $thCount++;
+	    ### startHandler
+	} elsif ($element eq 'c') {
+	    # 1.2.3.  Elements and Attributes Deprecated from v2
+	    #    o  Deprecate <texttable>, <ttcol>, and <c>; replace them with the new
+	    #       table elements (<table> and the elements that can be contained
+	    #       within it).
+	    # 3.1.  <c>
+	    #    Deprecated.  Instead, use <tr>, <td>, and <th>.
+	    my $newelement = 'td';
+	    $replacementStack{$xmlPath} = $newelement;
+	    $comments .= comment("converting <$element> to <$newelement>");
+  	    $element = $newelement;
+	    if ($thCount == 0) {
+		$comments .= comment("ERROR: no ttcol found in texttable");
+		$thCount = 1;
+	    }
+	    if ($tdCount == 0) {
+		# close off the ttcol/th row
+		$output .= "</tr>";
+	    }
+	    if (($tdCount % $thCount) == 0) {
+		$output .= "<tr>";
+	    }
+	    $tdCount++;
+	    ### startHandler
+	} elsif ($element eq 'preamble') {
+	    # 1.2.3.  Elements and Attributes Deprecated from v2
+	    #    o  Deprecate <preamble> and <postamble> in favor of simply using <t>.
+	    #       This also deprecates the "align" attribute in <figure>. ????????????????
+	    # 3.6.  <preamble>
+	    #    Deprecated.  Instead, use a regular paragraph before the figure or
+	    #    table.
+	    my $enclosingElementCount = $elementCountStack[$#elementCountStack];
+	    # $output .= "\n<!-- moveMeBefore=$enclosingElementCount -->\n";
+	    $moveBefore{$elementCount} = $enclosingElementCount;
+	    my $newelement = 't';
+	    $movedTags{$elementCount} = $newelement;
+	    $replacementStack{$xmlPath} = $newelement;
+	    $comments .= comment("converting <$element> to <$newelement> and moving before $elements{$enclosingElementCount}");
+  	    $element = $newelement;
+	    ### startHandler
+	} elsif ($element eq 'postamble') {
+	    # 1.2.3.  Elements and Attributes Deprecated from v2
+	    #    o  Deprecate <preamble> and <postamble> in favor of simply using <t>.
+	    #       This also deprecates the "align" attribute in <figure>. ????????????????
+	    # 3.5.  <postamble>
+	    #    Deprecated.  Instead, use a regular paragraph after the figure or
+	    #    table.
+	    my $enclosingElementCount = $elementCountStack[$#elementCountStack];
+	    # $output .= "\n<!-- moveMeAfter=$enclosingElementCount -->\n";
+	    $moveAfter{$elementCount} = $enclosingElementCount;
+	    my $newelement = 't';
+	    $movedTags{$elementCount} = $newelement;
+	    $replacementStack{$xmlPath} = $newelement;
+	    $comments .= comment("converting <$element> to <$newelement> and moving after $elements{$enclosingElementCount}");
+  	    $element = $newelement;
 	}
     }
 
+    ### startHandler
     if ($element eq 'figure') {
 	if (defined($pendingArtworkAlt)) {
 	    $comments .= comment("WARNING: alt='$pendingArtworkAlt' was removed from a previous <figure>, but no <artwork> was found to place it in");
@@ -705,6 +686,7 @@ sub startHandler {
 	    $comments .= comment("WARNING: alt='$pendingArtworkAlt' was removed from a previous <figure>, but no <artwork> was found to place it in");
 	}
 	$pendingArtworkAlt = $pendingArtworkSrc = undef;
+	### startHandler
     } elsif ($element eq 't') {
 	if ($#insideList != -1) {
 	    my $newelement;
@@ -723,7 +705,10 @@ sub startHandler {
 	}
     }
     $output .= "<$element elementCount='$elementCount'";
+    push @elementCountStack, $elementCount;
+    $elements{$elementCount} = $element;
     $elementCount++;
+    ### startHandler
     if ($element eq 'artwork') {
 	if (defined($pendingArtworkAlt)) {
 	    my %attrvals = @attrvals;
@@ -756,44 +741,58 @@ sub startHandler {
     }
     my $titleSaved = "";
     my $hangText = "";
+    ## startHandler
     for (my $i = 0; $i < $#attrvals; $i += 2) {
 	my $skip;
 	my $name = $attrvals[$i];
 	my $val = $attrvals[$i+1];
 
+	### startHandler
 	if ($element eq 'section') {
 	    if ($name eq 'title') {
-		## 2.48.5 title
-		## ... move section/title to <titleelement>
-		$comments .= comment("title= moved to <titleelement>");
+		## 2.45.5 title
+		## ... move section/title to <name>
+		$comments .= comment("title= moved to <name>");
 		$titleSaved = $val;
 		$skip = 1;
 	    }
+	    ### startHandler
 	} elsif ($element eq 'texttable') {
 	    if ($name eq 'title') {
-		## 2.57.6 title
-		## ... move texttable/title to <titleelement>
-		$comments .= comment("title= moved to <titleelement>");
+		## 3.8.6 title
+		## ... move texttable/title to <name>
+		$comments .= comment("title= moved to <name>");
 		$titleSaved = $val;
 		$skip = 1;
 	    }
+	    ### startHandler
+	} elsif ($element eq 'note') {
+	    if ($name eq 'title') {
+		## 2.33.1 title
+		## ... move note/title to <name>
+		$comments .= comment("title= moved to <name>");
+		$titleSaved = $val;
+		$skip = 1;
+	    }
+	    ### startHandler
 	} elsif ($element eq 'artwork') {
 	    if (($name eq 'height') ||
 		($name eq 'width') ||
 		($name eq 'xml:space')) {
-		## 2.5.3 artwork/height= is deprecated
-		## 2.5.7 artwork/width= is deprecated
-		## 2.5.9 artwork/xml:space= is deprecated
+		## 2.5.4 artwork/height= is deprecated
+		## 2.5.9 artwork/width= is deprecated
+		## 2.5.11 artwork/xml:space= is deprecated
 		## ... replace with nothing
 		$comments .= comment("<$element $name='$val'> deprecated and removed");
 		$skip = 1;
 	    }
+	    ### startHandler
 	} elsif ($element eq 'figure') {
 	    if ($name eq 'alt') {
 		## 1.2.3.  Elements and Attributes Deprecated from v2
 		## o  Deprecate the "alt", "height", "src", and "width" attributes in
 		## <figure> because they overlap with the attributes in <artwork>.
-		## 2.25.2 figure alt= deprecated
+		## 2.24.2 figure alt= deprecated
 		## Deprecated.
 		## ... move to enclosed <artwork>
 		$skip = 1;
@@ -803,7 +802,7 @@ sub startHandler {
 		## 1.2.3.  Elements and Attributes Deprecated from v2
 		## o  Deprecate the "alt", "height", "src", and "width" attributes in
 		## <figure> because they overlap with the attributes in <artwork>.
-		## 2.25.6 figure src= deprecated
+		## 2.24.6 figure src= deprecated
 		## Deprecated.
 		## ... move to enclosed <artwork>
 		$skip = 1;
@@ -813,7 +812,7 @@ sub startHandler {
 		## 1.2.3.  Elements and Attributes Deprecated from v2
 		## o  Deprecate the "alt", "height", "src", and "width" attributes in
 		## <figure> because they overlap with the attributes in <artwork>.
-		## 2.25.5 <figure> height= deprecated
+		## 2.24.5 <figure> height= deprecated
 		## Deprecated.
 		## 2.5.3. <artwork>  'height' attribute
 		## Deprecated.
@@ -824,7 +823,7 @@ sub startHandler {
 		## 1.2.3.  Elements and Attributes Deprecated from v2
 		## o  Deprecate the "alt", "height", "src", and "width" attributes in
 		## <figure> because they overlap with the attributes in <artwork>.
-		## 2.25.9 <figure> width= deprecated
+		## 2.24.9 <figure> width= deprecated
 		## Deprecated.
 		## 2.5.7. <artwork> 'width' attribute
 		## Deprecated.
@@ -834,16 +833,17 @@ sub startHandler {
 	    } elsif ($name eq 'title') {
 		## 1.2.3.  Elements and Attributes Deprecated from v2
 		## o  Deprecate the "title" attribute in <section>, <figure>, and
-		## <texttable> in favor of the new <titleelement>.
-		## 2.25.8 figure title= deprecated
-		## Deprecated.  Use <titleelement> instead.
-		## ... move it to <titleelement>
+		## <texttable> in favor of the new <name>.
+		## 2.24.8 figure title= deprecated
+		## Deprecated.  Use <name> instead.
+		## ... move it to <name>
 		$titleSaved = $val;
 		$skip = 1;
 	    }
+	    ### startHandler
 	} elsif ($element eq 'xref') {
 	    if ($name eq 'format') {
-		## 2.66.1.  xref/'format' attribute
+		## 2.65.1.  xref/'format' attribute
 		if (($val eq 'none') ||
 		    ($val eq 'title')) {
 		    ## xref/format="none"
@@ -854,7 +854,7 @@ sub startHandler {
 		    $comments .= comment("<$element $name='$val'> deprecated and removed");
 		}
 	    } elsif ($name eq 'pageno') {
-		## 2.66.2.  xref/'pageno' attribute
+		## 2.65.2.  xref/'pageno' attribute
 		## Deprecated.
 		## Allowed values:
 		## o  "true"
@@ -863,11 +863,13 @@ sub startHandler {
 		$skip = 1;
 		$comments .= comment("<$element $name='$val'> deprecated and removed");
 	    }
+	    ### startHandler
 	} elsif ($element eq 'reference') {
 	    $lastReferenceElementCount = $elementCount - 1;
 	    if ($name eq 'target') {
 		$referenceHasTarget{$lastReferenceElementCount} = $val;
 	    }
+	    ### startHandler
 	} elsif (($element eq 'strong') || ($element eq 'tt') || ($element eq 'em')) {
 	    ## ?? spanx
 	    ## ... see above
@@ -879,6 +881,7 @@ sub startHandler {
 		$comments .= comment("WARNING: invalid extension <spanx $name=...> ignored");
 	    }
 	    $skip = 1;
+	    ### startHandler
 	} elsif ($element eq 'dt') {
 	    if ($name eq 'hangText') {
 		$skip = 1;
@@ -891,6 +894,7 @@ sub startHandler {
 		$comments .= comment("WARNING: unhandled attribute <$originalElement $name='$val'> removed");
 		$skip = 1;
 	    }
+	    ### startHandler
 	} elsif ($element eq 'li') {
 	    if ($name ne 'anchor') {
 		## When under a <list style=hanging>, <t> is handled above.
@@ -906,6 +910,8 @@ sub startHandler {
 	    $output .= " $name='$val'";
 	}
     }
+
+    ## startHandler
     ## When using xi:include,
     ##    add to <rfc>, xmlns:xi="http://www.w3.org/2001/XInclude"
     if ($element eq 'rfc') {
@@ -924,7 +930,7 @@ sub startHandler {
 	$output .= $comments;
     }
     if ($titleSaved ne '') {
-	$output .= "<titleelement>$titleSaved</titleelement>";
+	$output .= "<name>$titleSaved</name>";
     }
 }
 
@@ -936,11 +942,14 @@ sub endHandler {
     my $skip;
     my $prefix = '';
 
+    ## endHandler
     if ($removedElements{$element}) {
 	## just remove these
 	$skip = 1;
 	$comments .= comment("</$element> removed") unless $emptyElements{$element};
     }
+
+    ## endHandler
     if ($replacedElements{$element}) {
 	my $newelement = $replacementStack{$xmlPath};
 	delete $replacementStack{$xmlPath};
@@ -950,9 +959,17 @@ sub endHandler {
 	    pop @insideListOriginalStyle;
 	    my $p = pop @insideListElementCount;
 	    # $comments .= comment("popped elementCount=$p");
+	} elsif ($element eq 'texttable') {
+	    if ($tdCount > 0) {
+		$output .= "</tr>";
+	    }
+	} elsif ($element eq 'postamble') {
+	} elsif ($element eq 'preamble') {
 	}
 	$element = $newelement;
     }
+
+    ## endHandler
     if ($element eq 't') {
 	if ($#insideList != -1) {
 	    my $newelement;
@@ -970,9 +987,10 @@ sub endHandler {
 	}
     }
 
+    my $poppedElementCount = pop @elementCountStack;
     if (!$skip && !$emptyElements{$element}) {
 	$output .= $prefix;
-	$output .= "</$element>";
+	$output .= "</$element elementCount='$poppedElementCount'>";
     }
     $output .= $comments;
 
@@ -1423,15 +1441,21 @@ sub resetState {
     $xmlCharVal = '';
     $elementCount = 0;
     $lastReferenceElementCount = -1;
+    @elementCountStack = ();
+    %elements = ();
     %referenceHasTarget = ();
     %referenceTarget = ();
     %replacementStack = ();
+    %moveBefore = ();
+    %moveAfter = ();
     $cdata = 0;
     $output = '';
     $expat = undef;
     $filename = '';
     $pendingArtworkAlt = '';
     $pendingArtworkSrc = '';
+    $thCount = 0;
+    $tdCount = 0;
 }
 
 sub ashex {
@@ -1477,4 +1501,220 @@ sub ashex {
     }
     $ret .= "\n";
     return $ret;
+}
+
+# if there are any broken XML comments with "--" embedded, change them to "- - " before further processing.
+sub fixComments {
+    my $input = shift;
+    my $newinput = '';
+    my $lineCount = 0;
+    # loop through all XML comments
+    while ($input =~ /^(.*?<!--)(.*?)(-->)(.*$)/s) {
+	my $pre = $1;
+	my $com = $2;
+	my $postcom = $3;
+	my $post = $4;
+
+	# print STDERR "prefix='$pre'\n" if $optargs{v};
+	$newinput .= $pre;
+	# print STDERR "comment='$com'\n" if $optargs{v};
+	my $comChanged = ($com =~ s/--/- - /g);
+	# print STDERR "comChanged=$comChanged\n";
+	if ($com =~ /-$/) {
+	    $com .= " " ;
+	    $comChanged++;
+	}
+	if ($comChanged) {
+	    my $nlCount = ($newinput =~ tr/\n//);
+	    $pre =~ /([^\n]*)$/s;
+	    my $colCount = length($1);
+	    $fixupOutput .= comment("$filename:" . ($nlCount+1) . ":" . ($colCount-3) . ": comment modified because of internal dash-dash") . "\n";
+	}
+	# print STDERR "comChanged=$comChanged\n";
+	# print STDERR "comment now='$com'\n" if $optargs{v};
+	$newinput .= $com;
+	# print STDERR "postcomment='$postcom'\n" if $optargs{v};
+	$newinput .= $postcom;
+	$input = $post;
+    }
+
+    # add final non-matching piece of the input
+    $newinput .= $input;
+
+    # reset the input
+    return $newinput;
+}
+
+# Process the input.
+# If there is anything else we can easily fix up as we process things, do so
+sub processInput {
+    my $parser = shift;
+    my $input = shift;
+    my $fixable = 1;
+    my $lastpos = -1;
+    my $lasterr = '';
+    my $addedXhtmlEntRefs = '';
+    my $attemptCount = 0;
+    while ($fixable) {
+	eval {
+	    resetState();
+	    $parser->parse($input);
+	};
+
+	$fixable = undef;
+	$attemptCount++;
+	my $printFixedupText = 1;
+	my $error = $@;
+
+	# get rid of useless pointers to internal locations
+	$error =~ s( at /.*Parser.pm line \d*)();
+
+	if ($error && !$optargs{f}) {
+	    print STDERR $error;
+	} elsif ($error =~ / at line (\d+), column (\d+), byte (\d+)/) {
+	    if ($attemptCount > 1) {
+		$fixupOutput .= comment("Note: Location references on further errors may have moved and are no longer accurate.") . "\n";
+	    }
+	    my ($line, $column, $byte) = ($1,$2,$3);
+	    if (($error eq $lasterr) && ($lastpos == $byte)) {
+		$fixupOutput .= comment("$filename:$line:$column: Error repeated, unfixable $error") . "\n";
+		$fixupOutput .= comment("text surrounding error:\n" . ashex($input, $byte-16, 32)) . "\n";
+	    } else {
+		$lasterr = $error;
+		$lastpos = $byte;
+		$fixupOutput .= comment("$filename:$line:$column: Error found, possibly fixable $error") . "\n";
+		$fixupOutput .= comment("text surrounding error:\n" . ashex($input, $byte-16, 32)) . "\n";
+		if ($error =~ /not well-formed [(]invalid token[)]/) {
+		    my $prevchars = substr($input, $byte-9, 10);
+		    # $fixupOutput .= comment("prevchars=\n" . ashex($prevchars) . "\n");
+		    if (($prevchars =~ /(&[a-z0-9_]*)$/i) || ($prevchars =~ /(&[a-z0-9_]*)[^;]$/i)) {
+			my $foundText = $1;
+			# $fixupOutput .= comment("foundText=\n" . ashex($foundText)) . "\n";
+			my $offset = length($foundText);
+			$fixupOutput .= comment("$filename:$line:" . ($column-$offset) . ": byte " . ($byte-$offset) . ": found a bare '&'") . "\n";
+			$fixupOutput .= comment("Changing to '&amp;' and trying again") . "\n";
+			substr($input, $byte-$offset, 1) = "&amp;";
+			$fixable = 1;
+		    } else {
+			my $badchar = substr($input, $byte, 1);
+			my $badcharM1 = ($byte >= 1) ? substr($input, $byte-1, 1) : "";
+			my $badcharM2 = ($byte >= 2) ? substr($input, $byte-2, 1) : "";
+
+			if ($badchar eq "\0") {
+			    $fixupOutput .= comment("$filename:$line:$column: byte $byte: Removing NUL(s)") . "\n";
+			    $fixupOutput .= comment("Removing NUL and trying again") . "\n";
+			    my $prefix = substr($input, 0, $byte);
+			    # $fixupOutput .= comment("end of prefix=\n" . ashex(substr($prefix, -16))) . "\n";
+			    my $rest = substr($input, $byte);
+			    # $fixupOutput .= comment("rest=" . length($rest) . "\n" . ashex($rest)) . "\n";
+			    while ($rest =~ s/^\0+//) { }
+			    # $fixupOutput .= comment("rest now=" . length($rest) . "\n" . ashex($rest)) . "\n";
+			    $input = $prefix . $rest;
+			    $fixable = 1;
+			} elsif (($badchar eq '<') || ($badcharM1 eq '<') || ($badcharM2 eq '<')) {
+			    $fixupOutput .= comment("$filename:$line:" . ($column-3) . ": byte " . ($byte-3) . ": found a potentially bad '<'") . "\n";
+			    $fixupOutput .= comment("Should it be '&lt;'?") . "\n";
+			} elsif (($badchar ne ' ') && (($badcharM1 eq '"') || ($badcharM1 eq "'"))) {
+			    $fixupOutput .= comment("$filename:$line:" . ($column-1) . ": byte " . ($byte-1) . ": found a potentially missing space") . "\n";
+			    $fixupOutput .= comment("Adding a space and trying again") . "\n";
+			    substr($input, $byte, 0) = " ";
+			    $fixable = 1;
+			} else {
+			    $fixupOutput .= comment("$filename:$line:$column: byte $byte: Unfixable $error") . "\n";
+			}
+		    }
+		} elsif ($error =~ /undefined entity/) {
+		    #
+		    # NOTE FOR POST-PROTOTYPE VERSION:
+		    #
+		    # The following code to handle entities is a hack. The real solution is
+		    # to have the rfc2629-*.ent definitions plus &rfc.number; pre-defined for
+		    # the XML processor.
+		    #
+		    if ($addedXhtmlEntRefs) {
+			$fixupOutput .= comment("$filename:$line:$column: An unrecognized entity was found. $error") . "\n";
+		    } else {
+			$addedXhtmlEntRefs = 1;
+			my $entities =
+			    "<!ENTITY % rfc2629xhtmlent SYSTEM \"rfc2629-xhtml.ent\" >%rfc2629xhtmlent;" .
+			    "<!ENTITY % rfc2629otherent SYSTEM \"rfc2629-other.ent\" >%rfc2629otherent;" .
+			    "<!ENTITY rfc.number \"ENTITY_rfc.number\">";
+			if (substr($input,0,500) =~ /(<!DOCTYPE[^>]*[[][^>]*>)/s) {
+			    $fixupOutput .= comment("found DOCTYPE with []:'$1'") . "\n";
+			    my $doctype = index($input, "<!DOCTYPE");
+			    my $doctypeBracket = index($input, "[", $doctype);
+			    substr($input, $doctypeBracket+1, 0) = $entities;
+			    $fixupOutput .= comment("Adding reference to rfc2629-xhtml.ent and rfc2629-other.ent inside DOCTYPE and trying again") . "\n";
+			    $fixable = 1;
+			} elsif (substr($input,0,500) =~ /(<!DOCTYPE[^>]*>)/s) {
+			    $fixupOutput .= comment("found DOCTYPE:'$1'") . "\n";
+			    my $doctype = index($input, "<!DOCTYPE");
+			    my $doctypeBracket = index($input, ">", $doctype);
+			    substr($input, $doctypeBracket, 0) = "[ $entities ]";
+			    $fixupOutput .= comment("Adding reference to rfc2629-xhtml.ent and rfc2629-other.ent inside DOCTYPE and trying again") . "\n";
+			    $fixable = 1;
+			} elsif (substr($input,0,500) =~ /^(\s*<[?]xml[^>]*[?]>)/s) {
+			    # $fixupOutput .= comment("found XML decl:'$1'") . "\n";
+			    $fixupOutput .= comment("Adding reference to rfc2629-xhtml.ent and rfc2629-other.ent and trying again") . "\n";
+			    # add rfc2629-xhtml.ent DOCTYPE include
+			    my $docEntities = "<!DOCTYPE rfc SYSTEM \"rfc2629.dtd\" [ " . $entities . "]>";
+			    substr($input,length($1),0) = $docEntities;
+			    $fixable = 1;
+			}
+			$printFixedupText = 0;
+		    }
+		} elsif ($error =~ /syntax error/) {
+		    $fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
+		    if ((substr($input, $byte-32, 64) =~ /DOCTYPE/) || (substr($input, $byte-32, 64) =~ /ENTITY/)) {
+			$fixupOutput .= comment("The error may be related to the DOCTYPE declaration.") . "\n";
+			$fixupOutput .= comment("There should be a single DOCTYPE section with all ENTITY declarations within") . "\n";
+		    } elsif (substr($input, $byte-10, 20) =~ /<[?]xml/) {
+			$fixupOutput .= comment("The error may be related to a <?xml ... ?> declaration.") . "\n";
+			$fixupOutput .= comment("There should be a single <?xml ... ?> section at the very beginning of the document and nowhere else.") . "\n";
+		    }
+		} elsif ($error =~ /XML or text declaration not at start of entity/) {
+		    $fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
+		    $fixupOutput .= comment("Note: there can only be a single <?xml ... ?> declaration at the beginning of the file") . "\n";
+		} elsif ($error =~ /duplicate attribute/) {
+		    $fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
+		    $fixupOutput .= comment("Text surrounding now looks like this:\n" . ashex($input, $byte-64, 128)) . "\n";
+		} elsif ($error =~ /XML declaration not well-formed/) {
+		    if ($input =~ /<[?]xml[^>]*[^?]>/) {
+			$fixupOutput .= comment("The XML declaration is missing a closing '?' before the '>'") . "\n";
+			$fixupOutput .= comment("Adding a ? and trying again") . "\n";
+			substr($input, index($input,'>'), 0) = "?";
+			$fixable = 1;
+		    } else {
+			$fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
+		    }
+		} elsif ($error ne '') {
+		    # ($error =~ /illegal parameter entity reference/) {
+		    # ($error =~ /mismatched tag/) {
+		    $fixupOutput .= comment("$filename:$line:$column: Unfixable error $error") . "\n";
+		}
+		# we fixed something, so show what the new text looks like
+		if ($fixable && $printFixedupText) {
+		    $fixupOutput .= comment("Text surrounding now looks like this:\n" . ashex($input, $byte-16, 32)) . "\n";
+		}
+	    }
+	} elsif ($error =~ /Couldn't open encmap/) {
+	    if ($error =~ /ascii[.]enc/ && ($input =~ /(<[?]xml[^>]*encoding=)/)) {
+		my $xmlLength = $1;
+		$fixupOutput .= comment("Fixing the encoding specification for ASCII to use encoding='US-ASCII'") . "\n";
+		$fixupOutput .= comment("The opening looked like=" . ashex($input, 0, length($xmlLength) + 20)) . "\n";
+		$input =~ s/encoding=['"]+[^'"]*['"]/encoding="US-ASCII"/;
+		$fixable = 1;
+		$fixupOutput .= comment("The opening now looks like this\n" . ashex($input, 0, length($xmlLength) + 20)) . "\n";
+	    } else {
+		$fixupOutput .= comment("Unfixable error $error") . "\n";
+		$fixupOutput .= comment("Check the <?xml encoding= ?> for a proper value.") . "\n";
+	    }
+	} elsif ($error ne '') {
+	    $fixupOutput .= comment("unfixable error: $error") . "\n";
+	} else {
+	    if ($attemptCount > 1) {
+		$fixupOutput .= comment("No more syntactic errors") . "\n";
+	    }
+	}
+    }
 }
