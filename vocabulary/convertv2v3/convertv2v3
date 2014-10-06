@@ -456,6 +456,9 @@ sub startHandler {
 	    $comments .= comment("removing deprecated element $element");
 	}
 	$output .= $comments;
+	push @elementCountStack, $elementCount;
+	$elements{$elementCount} = $element;
+	$elementCount++;
 	return;
     }
     
