@@ -187,53 +187,9 @@ sub main {
     # if there are any broken XML comments with "--" embedded, change them to "- - " before further processing.
     $input = fixComments($input) if ($optargs{f});
 
-    my $parser = new XML::Parser(
-	NoExpand => 1,
-	Handlers => {
-	    # http://search.cpan.org/dist/XML-Parser/Parser.pm
-	    #    Init (Expat)
-	    Init       => \&initHandler,
-	    #    Final (Expat)
-	    Final      => \&finalHandler,
-	    #    Start (Expat, Element [, Attr, Val [,...]])
-	    Start      => \&startHandler,
-	    #    End (Expat, Element)
-	    End        => \&endHandler,
-	    #    Char (Expat, String)
-	    Char       => \&charHandler,
-	    #    Proc (Expat, Target, Data)
-	    Proc       => \&procHandler,
-	    #    Comment (Expat, Data)
-	    Comment    => \&commentHandler,
-	    #    CdataStart (Expat)
-	    CdataStart => \&cdstartHandler,
-	    #    CdataEnd (Expat)
-	    CdataEnd   => \&cdendHandler,
-	    #    Default (Expat, String)
-	    Default => \&pdefaultHandler,
-	    #    Unparsed (Expat, Entity, Base, Sysid, Pubid, Notation)
-	    #    Notation (Expat, Notation, Base, Sysid, Pubid)
-	    #    ExternEnt (Expat, Base, Sysid, Pubid)
-	    ExternEnt => \&externentHandler,
-	    #    ExternEntFin (Expat)
-	    ExternEntFin => \&externentfinHandler,
-	    #    Entity (Expat, Name, Val, Sysid, Pubid, Ndata, IsParam)
-	    Entity => \&entityHandler,
-	    #    Element (Expat, Name, Model)
-	    #    Attlist (Expat, Elname, Attname, Type, Default, Fixed)
-	    Attlist => \&attlistHandler,
-	    #    Doctype (Expat, Name, Sysid, Pubid, Internal)
-	    Doctype    => \&doctypeHandler,
-	    #    * DoctypeFin (Parser)
-	    DoctypeFin => \&doctypefinHandler,
-	    #    XMLDecl (Expat, Version, Encoding, Standalone)
-	    XMLDecl    => \&xmldeclHandler,
-	}
-	);
-
     # Process the input.
     # If there is anything else we can easily fix up as we process things, do so.
-    processInput($parser, $input);
+    processInput($input);
 
     ####
     #### Post-process the output.
@@ -1455,8 +1411,8 @@ sub resetState {
     $output = '';
     $expat = undef;
     $filename = '';
-    $pendingArtworkAlt = '';
-    $pendingArtworkSrc = '';
+    $pendingArtworkAlt = undef;
+    $pendingArtworkSrc = undef;
     $thCount = 0;
     $tdCount = 0;
 }
@@ -1551,13 +1507,57 @@ sub fixComments {
 # Process the input.
 # If there is anything else we can easily fix up as we process things, do so
 sub processInput {
-    my $parser = shift;
     my $input = shift;
     my $fixable = 1;
     my $lastpos = -1;
     my $lasterr = '';
     my $addedXhtmlEntRefs = '';
     my $attemptCount = 0;
+
+    my $parser = new XML::Parser(
+	NoExpand => 1,
+	Handlers => {
+	    # http://search.cpan.org/dist/XML-Parser/Parser.pm
+	    #    Init (Expat)
+	    Init       => \&initHandler,
+	    #    Final (Expat)
+	    Final      => \&finalHandler,
+	    #    Start (Expat, Element [, Attr, Val [,...]])
+	    Start      => \&startHandler,
+	    #    End (Expat, Element)
+	    End        => \&endHandler,
+	    #    Char (Expat, String)
+	    Char       => \&charHandler,
+	    #    Proc (Expat, Target, Data)
+	    Proc       => \&procHandler,
+	    #    Comment (Expat, Data)
+	    Comment    => \&commentHandler,
+	    #    CdataStart (Expat)
+	    CdataStart => \&cdstartHandler,
+	    #    CdataEnd (Expat)
+	    CdataEnd   => \&cdendHandler,
+	    #    Default (Expat, String)
+	    Default => \&pdefaultHandler,
+	    #    Unparsed (Expat, Entity, Base, Sysid, Pubid, Notation)
+	    #    Notation (Expat, Notation, Base, Sysid, Pubid)
+	    #    ExternEnt (Expat, Base, Sysid, Pubid)
+	    ExternEnt => \&externentHandler,
+	    #    ExternEntFin (Expat)
+	    ExternEntFin => \&externentfinHandler,
+	    #    Entity (Expat, Name, Val, Sysid, Pubid, Ndata, IsParam)
+	    Entity => \&entityHandler,
+	    #    Element (Expat, Name, Model)
+	    #    Attlist (Expat, Elname, Attname, Type, Default, Fixed)
+	    Attlist => \&attlistHandler,
+	    #    Doctype (Expat, Name, Sysid, Pubid, Internal)
+	    Doctype    => \&doctypeHandler,
+	    #    * DoctypeFin (Parser)
+	    DoctypeFin => \&doctypefinHandler,
+	    #    XMLDecl (Expat, Version, Encoding, Standalone)
+	    XMLDecl    => \&xmldeclHandler,
+	}
+	);
+
     while ($fixable) {
 	eval {
 	    resetState();
