@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc compact="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc linkmailto="no" ?>
+<?rfc rfcedstyle="yes"?>
+<?rfc-ext allow-markup-in-artwork="yes" ?>
+<?rfc-ext include-references-in-index="yes" ?>
+
+<!DOCTYPE rfc []>
+
+<!-- Notes for Paul and Tony
+
+Want to add a section on tables:
+	Conversion from <texttable>
+	Interesting new things in tables
+
+Want to add links to the rendered outputs in the repo
+
+Want to add a separate section on links, using lots of the attributes.
+	But leave them in the main example because they are common.
+
+Want to add examples of <blockquote>
+	Example of a cite for a reference that is already in the spec.
+	Tony should do this, because Paul thinks <blockquote> is dumb
+
+-->
+
+<rfc ipr="trust200902" docName="draft-hoffman-rfcexamples-latest" category="info">
+<front>
+<title abbrev="RFC XML Examples">Examples of the 'XML2RFC' Version 2 and 3 Vocabularies</title>
+<author initials="P." surname="Hoffman" fullname="Paul Hoffman">
+<organization>VPN Consortium</organization>
+<address><email>paul.hoffman@vpnc.org</email></address>
+</author>
+<author initials='T.' surname='Hansen' fullname='Tony Hansen' role='editor'>
+<organization>AT&amp;T Laboratories</organization>
+<address>
+<postal>
+<street>200 Laurel Ave. South</street>
+<city>Middletown</city>
+<region>NJ</region>
+<code>07748</code>
+<country>USA</country>
+</postal>
+<email>tony+rfcv3@maillennium.att.com</email>
+</address>
+</author>
+
+<date/>
+
+<abstract>
+<t>
+This document gives examples of use of the "XML2RFC" vocabulary. The examples cover both version 2
+and version 3. The purposes of this draft it to give authors of Internet Drafts examples of how to
+use the XML vocabularies, and to show how use of the version 2 vocabulary will change with version 3.
+</t>
+</abstract>
+
+<note title="Editorial Note (To be removed by RFC Editor)">
+<t>
+Discussion of this draft takes place on the rfc-interest
+mailing list (rfc-interest@rfc-editor.org), which has its home page at
+<eref target="https://www.rfc-editor.org/mailman/listinfo/rfc-interest"/>.
+</t>
+</note>
+
+</front>
+
+<middle>
+
+<section title="Introduction">
+
+<t>
+This document gives examples of use of the "XML2RFC" vocabulary. The examples cover both version 2
+<xref target="XML2RFCv2"/> and version 3 <xref target="XML2RFCv3"/>. Some of the examples are given to help
+authors use parts of the vocabulary common to both versions (called "v2" and "v3" in this document), while
+others appear in order to help authors transitioning from version 2 to version 3 to see how features from
+the earlier version relate to features in the later version.
+</t>
+
+<t>
+This document currently only has one main example, which shows the commonly-used XML elements.
+A future version of the document may have a more complete example, and will very likely have
+topic-specific examples (such as lists, tables, and so on).
+</t>
+
+</section>
+
+<section anchor="v2-basic" title="Example of a v2 Document">
+
+<t>The following is a v2 document that has all the elements that are needed for typical
+Internet Drafts.</t>
+
+<figure><artwork>&lt;?xml version="1.0" encoding="US-ASCII"?>
+&lt;!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+&lt;!ENTITY RFC2119 SYSTEM
+  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+]>
+
+&lt;?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+&lt;?rfc strict="yes" ?>
+
+&lt;rfc
+	category="std"
+	docName="draft-example-of-xml-00"
+	ipr="trust200902"
+>
+
+&lt;front>
+&lt;title abbrev="XML Example">
+An Exmaple of Using XML for an Internet Draft
+&lt;/title>
+
+&lt;author fullname="Chris Smith" initials="C." surname="Smith">
+&lt;organization>Examplecorp&lt;/organization>
+&lt;address>
+&lt;postal>
+&lt;street>123 Exemplar Way&lt;/street>
+&lt;city>Anytown&lt;/city>
+&lt;region>California&lt;/region>
+&lt;code>95060&lt;/code>
+&lt;country>US&lt;/country>
+&lt;/postal>
+&lt;phone>+1 123-456-7890&lt;/phone>
+&lt;email>chrissmith@example.com&lt;/email>
+&lt;/address>
+&lt;/author>
+
+&lt;!-- The following author has no organization and no postal or
+     phone information. -->
+&lt;author fullname="Kim Jones" initials="K." surname="Jones">
+&lt;organization/>
+&lt;address>
+&lt;email>jk@lmn.op&lt;/email>
+&lt;/address>
+&lt;/author>
+
+&lt;date year="2014" month="September"/>
+
+&lt;area>General&lt;/area>
+&lt;workgroup>Imaginary WG&lt;/workgroup>
+
+&lt;keyword>XML&lt;/keyword>
+&lt;keyword>Imagination&lt;/keyword>
+
+&lt;abstract>
+
+&lt;t>This is an example of an abstract. It is a short paragraph that
+gives an overview of the document in order to help the
+reader determine whether or not they are interested in reading
+further.&lt;/t>
+
+&lt;/abstract>
+
+&lt;/front>
+
+&lt;middle>
+
+&lt;section anchor="intro" title="Introduction">
+
+&lt;t>This is this is the first paragraph of the introduction to this
+document. This introduction is probably much shorter than it would
+be for a real Internet Draft.&lt;/t>
+
+&lt;t>Something to note about this paragraph is that it has a
+pointer to &lt;xref target="protocol"/>, and one to
+&lt;xref target="haiku"/>, both of which appear later in the
+document.&lt;/t>
+
+&lt;!-- This is a comment. Comments in the XML do not appear in the
+output formats. -->
+
+&lt;section title="Terminology">
+
+&lt;t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL"
+in this document are to be interpreted as described in
+&lt;xref target="RFC2119"/>.&lt;/t>
+
+&lt;/section>
+
+&lt;/section>
+
+&lt;section anchor="protocol" title="The Protocol Being Described">
+
+&lt;t>This is a reference to &lt;xref target="RFC6949"/>.
+Actually, the reference itself is not all that interesting, but the
+way that the reference is incorporated is. Note that the inclusion
+of RFC 2119 was done at the top of the XML, while the information
+for RFC 6949 is done directly in the references section.&lt;/t>
+
+&lt;/section>
+
+&lt;section title="Basic Lists">
+
+&lt;t>Bulleted lists are good for items that
+are not ordered:
+
+&lt;list style="symbols">
+
+&lt;t>This is the first item.&lt;/t>
+
+&lt;t>This is the second item. Here comes a sub-list:
+
+&lt;list style="symbols">
+
+&lt;t>This is the first sub-item.&lt;/t>
+
+&lt;t>This is the second sub-item&lt;/t>
+
+&lt;/list>&lt;/t>
+
+&lt;t>This is the item after the sub-list.&lt;/t>
+
+&lt;/list>
+
+&lt;/t>
+
+&lt;t>Numbered lists are good for items that are ordered:
+
+&lt;list style="numbers">
+
+&lt;t>This is the first item.&lt;/t>
+
+&lt;t>This is the second item. Here comes a sub-list:
+
+&lt;list style="numbers">
+
+&lt;t>This is the first sub-item.&lt;/t>
+
+&lt;t>This is the second sub-item&lt;/t>
+
+&lt;/list>&lt;/t>
+
+&lt;t>This is the item after the sub-list.&lt;/t>
+
+&lt;/list>
+
+&lt;/t>
+
+&lt;/section>
+
+&lt;section title="Figures">
+
+&lt;t>The following is a figure with a caption.
+Also, it uses the ampersand (&amp;amp;) and less than
+(&amp;lt;) characters in the example text.&lt;/t>
+
+&lt;figure title="This could be haiku" anchor="haiku">
+&lt;artwork>
+   The ampersand (&amp;amp;) and
+   the less than (&amp;lt;) are two characters
+   that need escaping. 
+&lt;/artwork>
+&lt;/figure>
+
+&lt;/section>
+
+&lt;section anchor="IANA" title="IANA Considerations">
+
+&lt;t>None.&lt;/t>
+
+&lt;/section>
+
+&lt;section anchor="Security" title="Security Considerations">
+
+&lt;t>There are no security considerations for an imaginary
+Internet Draft.&lt;/t>
+
+&lt;/section>
+
+&lt;section anchor="Acknowledgements" title="Acknowledgements">
+
+&lt;t>Some of the things included in this draft came from
+Elwyn Davies' templates.&lt;/t>
+
+&lt;/section>
+
+&lt;/middle>
+
+&lt;back>
+
+&lt;references title="Normative References">
+
+&amp;RFC2119;
+
+&lt;/references>
+
+&lt;references title="Informative References">
+
+&lt;reference anchor="RFC6949">
+&lt;front>&lt;title>RFC Series Format Requirements and Future
+Development&lt;/title>
+&lt;author initials="H." surname="Flanagan" fullname="H.
+Flanagan">&lt;organization/>&lt;/author>
+&lt;author initials="N." surname="Brownlee" fullname="N.
+Brownlee">&lt;organization/>&lt;/author>
+&lt;date year="2013" month="May"/>
+&lt;/front>
+&lt;seriesInfo name="RFC" value="6949"/>
+&lt;/reference>
+
+&lt;/references>
+
+&lt;/back>
+&lt;/rfc>
+</artwork></figure>
+
+</section>
+
+<section title="Example of a v3 Document">
+
+<t>The following is a v3 document that has all the elements that are needed for typical
+Internet Drafts. It was converted from the example in <xref target="v2-basic"/>.</t>
+
+<figure><artwork>&lt;?xml version='1.0' encoding='US-ASCII'?>
+&lt;!DOCTYPE rfc SYSTEM 'rfc2629.dtd'
+
+>
+
+&lt;rfc category='std' docName='draft-example-of-xml-00'
+ipr='trust200902' xmlns:xi="http://www.w3.org/2001/XInclude">
+
+&lt;front>
+&lt;title abbrev='XML Example'>
+An Exmaple of Using XML for an Internet Draft
+&lt;/title>
+
+&lt;author fullname='Chris Smith' initials='C.' surname='Smith'>
+&lt;organization>Examplecorp&lt;/organization>
+&lt;address>
+&lt;postal>
+&lt;street>123 Exemplar Way&lt;/street>
+&lt;city>Anytown&lt;/city>
+&lt;region>California&lt;/region>
+&lt;code>95060&lt;/code>
+&lt;country>US&lt;/country>
+&lt;/postal>
+&lt;phone>+1 123-456-7890&lt;/phone>
+&lt;email>chrissmith@example.com&lt;/email>
+&lt;/address>
+&lt;/author>
+
+&lt;!-- The following author has no organization and no postal or
+     phone information. -->
+&lt;author fullname='Kim Jones' initials='K.' surname='Jones'>
+&lt;organization>&lt;/organization>
+&lt;address>
+&lt;email>jk@lmn.op&lt;/email>
+&lt;/address>
+&lt;/author>
+
+&lt;date year='2014' month='September'/>
+
+&lt;area>General&lt;/area>
+&lt;workgroup>Imaginary WG&lt;/workgroup>
+
+&lt;keyword>XML&lt;/keyword>
+&lt;keyword>Imagination&lt;/keyword>
+
+&lt;abstract>
+
+&lt;t>This is an example of an abstract. It is a short paragraph that
+gives an overview of the document in order to help the
+reader determine whether or not they are interested in reading
+further.&lt;/t>
+
+&lt;/abstract>
+
+&lt;/front>
+
+&lt;middle>
+
+&lt;section anchor='intro'>&lt;name>
+Introduction&lt;/name>
+
+&lt;t>This is this is the first paragraph of the introduction to this
+document. This introduction is probably much shorter than it would
+be for a real Internet Draft.&lt;/t>
+
+&lt;t>Something to note about this paragraph is that it has a
+pointer to &lt;xref target='protocol'>&lt;/xref>, and one to
+&lt;xref target='haiku'>&lt;/xref>, both of which appear later in the
+document.&lt;/t>
+
+&lt;!-- This is a comment. Comments in the XML do not appear in the
+output formats. -->
+
+&lt;section>&lt;name>
+Terminology&lt;/name>
+
+&lt;t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL"
+in this document are to be interpreted as described in
+&lt;xref target='RFC2119'>&lt;/xref>.&lt;/t>
+
+&lt;/section>
+
+&lt;/section>
+
+&lt;section anchor='protocol'>&lt;name>
+The Protocol Being Described&lt;/name>
+
+&lt;t>This is a reference to &lt;xref target='RFC6949'>&lt;/xref>.
+Actually, the reference itself is not all that interesting, but the
+way that the reference is incorporated is. Note that the inclusion
+of RFC 2119 was done at the top of the XML, while the information
+for RFC 6949 is done directly in the references section.&lt;/t>
+
+&lt;/section>
+
+&lt;section>&lt;name>
+Basic Lists&lt;/name>
+
+&lt;t>Bulleted lists are good for items that
+are not ordered:
+
+&lt;ul>
+
+&lt;li>This is the first item.&lt;/li>
+
+&lt;li>This is the second item. Here comes a sub-list:
+
+&lt;ul>
+
+&lt;li>This is the first sub-item.&lt;/li>
+
+&lt;li>This is the second sub-item&lt;/li>
+
+&lt;/ul>&lt;/li>
+
+&lt;li>This is the item after the sub-list.&lt;/li>
+
+&lt;/ul>
+
+&lt;/t>
+
+&lt;t>Numbered lists are good for items that are ordered:
+
+&lt;ol style='1'>
+
+&lt;li>This is the first item.&lt;/li>
+
+&lt;li>This is the second item. Here comes a sub-list:
+
+&lt;ol style='1'>
+
+&lt;li>This is the first sub-item.&lt;/li>
+
+&lt;li>This is the second sub-item&lt;/li>
+
+&lt;/ol>&lt;/li>
+
+&lt;li>This is the item after the sub-list.&lt;/li>
+
+&lt;/ol>
+
+&lt;/t>
+
+&lt;/section>
+
+&lt;section>&lt;name>
+Figures&lt;/name>
+
+&lt;t>The following is a figure with a caption.
+Also, it uses the ampersand (&amp;amp;) and less than
+(&amp;lt;) characters in the example text.&lt;/t>
+
+&lt;figure anchor='haiku'>&lt;name>
+This could be haiku&lt;/name>
+&lt;artwork>
+   The ampersand (&amp;amp;) and
+   the less than (&amp;lt;) are two characters
+   that need escaping. 
+&lt;/artwork>
+&lt;/figure>
+
+&lt;/section>
+
+&lt;section anchor='IANA'>&lt;name>
+IANA Considerations&lt;/name>
+
+&lt;t>None.&lt;/t>
+
+&lt;/section>
+
+&lt;section anchor='Security'>&lt;name>
+Security Considerations&lt;/name>
+
+&lt;t>There are no security considerations for an imaginary
+Internet Draft.&lt;/t>
+
+&lt;/section>
+
+&lt;section anchor='Acknowledgements'>&lt;name>
+Acknowledgements&lt;/name>
+
+&lt;t>Some of the things included in this draft came from
+Elwyn Davies' templates.&lt;/t>
+
+&lt;/section>
+
+&lt;/middle>
+
+&lt;back>
+
+&lt;references title='Normative References'>
+
+&lt;xi:include href='http://xml.resource.org/public/rfc/
+bibxml/reference.RFC.2119.xml'/>
+
+&lt;/references>
+
+&lt;references title='Informative References'>
+
+&lt;reference anchor='RFC6949'>
+&lt;front>&lt;title>RFC Series Format Requirements and Future
+Development&lt;/title>
+&lt;author initials='H.' surname='Flanagan' fullname='H. Flanagan'>
+&lt;organization>&lt;/organization>&lt;/author>
+&lt;author initials='N.' surname='Brownlee' fullname='N. Brownlee'>
+&lt;organization>&lt;/organization>&lt;/author>
+&lt;date year='2013' month='May'/>
+&lt;/front>
+&lt;seriesInfo name='RFC' value='6949'/>
+&lt;/reference>
+
+&lt;/references>
+
+&lt;/back>
+&lt;/rfc>
+</artwork></figure>
+
+</section>
+
+<section title="Security Considerations" anchor="security.considerations">
+
+<t>
+The examples in this document do not introduce any new security considerations.
+</t>
+
+</section>
+
+<section title="IANA Considerations" anchor="iana.considerations">
+
+<t>
+There are no IANA considerations for this document.
+</t>
+
+</section>
+
+<section title="Acknowledgments" anchor="acknowledgements">
+
+<t>
+The ideas for the examples in this document come from many people over a long period of time.
+</t>
+
+</section>
+
+</middle>
+
+<back>
+  
+<references title="Normative References">
+
+  <reference anchor="XML2RFCv2">
+    <front>
+      <title>The 'XML2RFC' version 2 Vocabulary</title>
+      <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
+      <date year="2014"/>
+    </front>
+    <seriesInfo name="Internet-Draft" value="draft-reschke-xml2rfc"/>
+  </reference>
+
+  <reference anchor="XML2RFCv3">
+    <front>
+      <title>The 'XML2RFC' version 3 Vocabulary</title>
+      <author initials="P." surname="Hoffman" fullname="Paul Hoffman"/>
+      <date year="2014"/>
+    </front>
+    <seriesInfo name="Internet-Draft" value="draft-hoffman-xml2rfc"/>
+  </reference>
+
+</references>
+
+</back>
+
+</rfc>
