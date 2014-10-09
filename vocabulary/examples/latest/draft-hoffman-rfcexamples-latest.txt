@@ -5,12 +5,12 @@
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
 Intended status: Informational                            T. Hansen, Ed.
-Expires: April 11, 2015                                AT&T Laboratories
-                                                         October 8, 2014
+Expires: April 12, 2015                                AT&T Laboratories
+                                                         October 9, 2014
 
 
          Examples of the 'XML2RFC' Version 2 and 3 Vocabularies
-                    draft-hoffman-rfcexamples-latest
+                    draft-hoffman-rfcexamples-00
 
 Abstract
 
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 11, 2015.
+   This Internet-Draft will expire on April 12, 2015.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Hoffman & Hansen         Expires April 11, 2015                 [Page 1]
+Hoffman & Hansen         Expires April 12, 2015                 [Page 1]
 
 Internet-Draft              RFC XML Examples                October 2014
 
@@ -71,9 +71,9 @@ Table of Contents
    2.  Example of a v2 Document  . . . . . . . . . . . . . . . . . .   2
    3.  Example of a v3 Document  . . . . . . . . . . . . . . . . . .   7
    4.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
-   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
-   6.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  11
-   7.  Normative References  . . . . . . . . . . . . . . . . . . . .  11
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
+   6.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  12
+   7.  Normative References  . . . . . . . . . . . . . . . . . . . .  12
 
 1.  Introduction
 
@@ -87,7 +87,8 @@ Table of Contents
 
    This document currently only has one main example, which shows the
    commonly-used XML elements.  A future version of the document may
-   have a complete example.
+   have a more complete example, and will very likely have topic-
+   specific examples (such as lists, tables, and so on).
 
 2.  Example of a v2 Document
 
@@ -105,15 +106,15 @@ Table of Contents
 
    <rfc
        category="std"
-       docName="draft-example-of-xml-00"
 
 
 
-Hoffman & Hansen         Expires April 11, 2015                 [Page 2]
+Hoffman & Hansen         Expires April 12, 2015                 [Page 2]
 
 Internet-Draft              RFC XML Examples                October 2014
 
 
+       docName="draft-example-of-xml-00"
        ipr="trust200902"
    >
 
@@ -161,14 +162,15 @@ Internet-Draft              RFC XML Examples                October 2014
    reader determine whether or not they are interested in reading
    further.</t>
 
-   </abstract>
 
 
 
-Hoffman & Hansen         Expires April 11, 2015                 [Page 3]
+Hoffman & Hansen         Expires April 12, 2015                 [Page 3]
 
 Internet-Draft              RFC XML Examples                October 2014
 
+
+   </abstract>
 
    </front>
 
@@ -216,15 +218,15 @@ Internet-Draft              RFC XML Examples                October 2014
 
    <list style="symbols">
 
-   <t>This is the first item.</t>
 
 
 
-
-Hoffman & Hansen         Expires April 11, 2015                 [Page 4]
+Hoffman & Hansen         Expires April 12, 2015                 [Page 4]
 
 Internet-Draft              RFC XML Examples                October 2014
 
+
+   <t>This is the first item.</t>
 
    <t>This is the second item. Here comes a sub-list:
 
@@ -272,16 +274,16 @@ Internet-Draft              RFC XML Examples                October 2014
    Also, it uses the ampersand (&amp;) and less than
    (&lt;) characters in the example text.</t>
 
-   <figure title="This could be haiku" anchor="haiku">
-   <artwork>
 
 
 
-Hoffman & Hansen         Expires April 11, 2015                 [Page 5]
+Hoffman & Hansen         Expires April 12, 2015                 [Page 5]
 
 Internet-Draft              RFC XML Examples                October 2014
 
 
+   <figure title="This could be haiku" anchor="haiku">
+   <artwork>
       The ampersand (&amp;) and
       the less than (&lt;) are two characters
       that need escaping.
@@ -328,16 +330,16 @@ Internet-Draft              RFC XML Examples                October 2014
    <author initials="H." surname="Flanagan" fullname="H.
    Flanagan"><organization/></author>
    <author initials="N." surname="Brownlee" fullname="N.
-   Brownlee"><organization/></author>
-   <date year="2013" month="May"/>
 
 
 
-Hoffman & Hansen         Expires April 11, 2015                 [Page 6]
+Hoffman & Hansen         Expires April 12, 2015                 [Page 6]
 
 Internet-Draft              RFC XML Examples                October 2014
 
 
+   Brownlee"><organization/></author>
+   <date year="2013" month="May"/>
    </front>
    <seriesInfo name="RFC" value="6949"/>
    </reference>
@@ -353,248 +355,268 @@ Internet-Draft              RFC XML Examples                October 2014
    needed for typical Internet Drafts.  It was converted from the
    example in Section 2.
 
-<?xml version='1.0' encoding='US-ASCII'?>
-<!DOCTYPE rfc SYSTEM 'rfc2629.dtd'
+   <?xml version='1.0' encoding='US-ASCII'?>
+   <!DOCTYPE rfc SYSTEM 'rfc2629.dtd'
 
->
+   >
 
+   <rfc category='std' docName='draft-example-of-xml-00'
+   ipr='trust200902' xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <front>
+   <title abbrev='XML Example'>
+   An Exmaple of Using XML for an Internet Draft
+   </title>
 
+   <author fullname='Chris Smith' initials='C.' surname='Smith'>
+   <organization>Examplecorp</organization>
+   <address>
+   <postal>
+   <street>123 Exemplar Way</street>
+   <city>Anytown</city>
+   <region>California</region>
+   <code>95060</code>
+   <country>US</country>
+   </postal>
+   <phone>+1 123-456-7890</phone>
+   <email>chrissmith@example.com</email>
+   </address>
+   </author>
 
-<rfc category='std' docName='draft-example-of-xml-00' ipr='trust200902' xmlns:xi="http://www.w3.org/2001/XInclude">
-
-<front>
-<title abbrev='XML Example'>
-An Exmaple of Using XML for an Internet Draft
-</title>
-
-<author fullname='Chris Smith' initials='C.' surname='Smith'>
-<organization>Examplecorp</organization>
-<address>
-<postal>
-<street>123 Exemplar Way</street>
-<city>Anytown</city>
-<region>California</region>
-<code>95060</code>
-<country>US</country>
-</postal>
-<phone>+1 123-456-7890</phone>
-<email>chrissmith@example.com</email>
-</address>
-</author>
-
-<!-- The following author has no organization and no postal or
-     phone information. -->
-<author fullname='Kim Jones' initials='K.' surname='Jones'>
+   <!-- The following author has no organization and no postal or
+        phone information. -->
+   <author fullname='Kim Jones' initials='K.' surname='Jones'>
 
 
 
-Hoffman & Hansen         Expires April 11, 2015                 [Page 7]
+Hoffman & Hansen         Expires April 12, 2015                 [Page 7]
 
 Internet-Draft              RFC XML Examples                October 2014
 
 
-<organization></organization>
-<address>
-<email>jk@lmn.op</email>
-</address>
-</author>
+   <organization></organization>
+   <address>
+   <email>jk@lmn.op</email>
+   </address>
+   </author>
 
-<date year='2014' month='September'/>
+   <date year='2014' month='September'/>
 
-<area>General</area>
-<workgroup>Imaginary WG</workgroup>
+   <area>General</area>
+   <workgroup>Imaginary WG</workgroup>
 
-<keyword>XML</keyword>
-<keyword>Imagination</keyword>
+   <keyword>XML</keyword>
+   <keyword>Imagination</keyword>
 
-<abstract>
+   <abstract>
 
-<t>This is an example of an abstract. It is a short paragraph that
-gives an overview of the document in order to help the
-reader determine whether or not they are interested in reading
-further.</t>
+   <t>This is an example of an abstract. It is a short paragraph that
+   gives an overview of the document in order to help the
+   reader determine whether or not they are interested in reading
+   further.</t>
 
-</abstract>
+   </abstract>
 
-</front>
+   </front>
 
-<middle>
+   <middle>
 
-<section anchor='intro'><name>Introduction</name>
+   <section anchor='intro'><name>
+   Introduction</name>
 
-<t>This is this is the first paragraph of the introduction to this
-document. This introduction is probably much shorter than it would
-be for a real Internet Draft.</t>
+   <t>This is this is the first paragraph of the introduction to this
+   document. This introduction is probably much shorter than it would
+   be for a real Internet Draft.</t>
 
-<t>Something to note about this paragraph is that it has a
-pointer to <xref target='protocol'></xref>, and one to
-<xref target='haiku'></xref>, both of which appear later in the
-document.</t>
+   <t>Something to note about this paragraph is that it has a
+   pointer to <xref target='protocol'></xref>, and one to
+   <xref target='haiku'></xref>, both of which appear later in the
+   document.</t>
 
-<!-- This is a comment. Comments in the XML do not appear in the
-output formats. -->
+   <!-- This is a comment. Comments in the XML do not appear in the
+   output formats. -->
 
-<section><name>Terminology</name>
+   <section><name>
+   Terminology</name>
 
-<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL"
-in this document are to be interpreted as described in
-<xref target='RFC2119'></xref>.</t>
-
-
+   <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+   NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL"
+   in this document are to be interpreted as described in
 
 
-Hoffman & Hansen         Expires April 11, 2015                 [Page 8]
+
+Hoffman & Hansen         Expires April 12, 2015                 [Page 8]
 
 Internet-Draft              RFC XML Examples                October 2014
 
 
-</section>
+   <xref target='RFC2119'></xref>.</t>
 
-</section>
+   </section>
 
-<section anchor='protocol'><name>The Protocol Being Described</name>
+   </section>
 
-<t>This is a reference to <xref target='RFC6949'></xref>.
-Actually, the reference itself is not all that interesting, but the
-way that the reference is incorporated is. Note that the inclusion
-of RFC 2119 was done at the top of the XML, while the information
-for RFC 6949 is done directly in the references section.</t>
+   <section anchor='protocol'><name>
+   The Protocol Being Described</name>
 
-</section>
+   <t>This is a reference to <xref target='RFC6949'></xref>.
+   Actually, the reference itself is not all that interesting, but the
+   way that the reference is incorporated is. Note that the inclusion
+   of RFC 2119 was done at the top of the XML, while the information
+   for RFC 6949 is done directly in the references section.</t>
 
-<section><name>Basic Lists</name>
+   </section>
 
-<t>Bulleted lists are good for items that
-are not ordered:
+   <section><name>
+   Basic Lists</name>
 
-<ul>
+   <t>Bulleted lists are good for items that
+   are not ordered:
 
-<li>This is the first item.</li>
+   <ul>
 
-<li>This is the second item. Here comes a sub-list:
+   <li>This is the first item.</li>
 
-<ul>
+   <li>This is the second item. Here comes a sub-list:
 
-<li>This is the first sub-item.</li>
+   <ul>
 
-<li>This is the second sub-item</li>
+   <li>This is the first sub-item.</li>
 
-</ul></li>
+   <li>This is the second sub-item</li>
 
-<li>This is the item after the sub-list.</li>
+   </ul></li>
 
-</ul>
+   <li>This is the item after the sub-list.</li>
 
-</t>
+   </ul>
 
-<t>Numbered lists are good for items that are ordered:
+   </t>
 
-<ol style='1'>
+   <t>Numbered lists are good for items that are ordered:
 
-<li>This is the first item.</li>
+   <ol style='1'>
 
-<li>This is the second item. Here comes a sub-list:
-
-<ol style='1'>
-
+   <li>This is the first item.</li>
 
 
-Hoffman & Hansen         Expires April 11, 2015                 [Page 9]
+
+Hoffman & Hansen         Expires April 12, 2015                 [Page 9]
 
 Internet-Draft              RFC XML Examples                October 2014
 
 
-<li>This is the first sub-item.</li>
+   <li>This is the second item. Here comes a sub-list:
 
-<li>This is the second sub-item</li>
+   <ol style='1'>
 
-</ol></li>
+   <li>This is the first sub-item.</li>
 
-<li>This is the item after the sub-list.</li>
+   <li>This is the second sub-item</li>
 
-</ol>
+   </ol></li>
 
-</t>
+   <li>This is the item after the sub-list.</li>
 
-</section>
+   </ol>
 
-<section><name>Figures</name>
+   </t>
 
-<t>The following is a figure with a caption.
-Also, it uses the ampersand (&amp;) and less than
-(&lt;) characters in the example text.</t>
+   </section>
 
-<figure anchor='haiku'><name>This could be haiku</name>
-<artwork>
-   The ampersand (&amp;) and
-   the less than (&lt;) are two characters
-   that need escaping.
-</artwork>
-</figure>
+   <section><name>
+   Figures</name>
 
-</section>
+   <t>The following is a figure with a caption.
+   Also, it uses the ampersand (&amp;) and less than
+   (&lt;) characters in the example text.</t>
 
-<section anchor='IANA'><name>IANA Considerations</name>
+   <figure anchor='haiku'><name>
+   This could be haiku</name>
+   <artwork>
+      The ampersand (&amp;) and
+      the less than (&lt;) are two characters
+      that need escaping.
+   </artwork>
+   </figure>
 
-<t>None.</t>
+   </section>
 
-</section>
+   <section anchor='IANA'><name>
+   IANA Considerations</name>
 
-<section anchor='Security'><name>Security Considerations</name>
+   <t>None.</t>
 
-<t>There are no security considerations for an imaginary
-Internet Draft.</t>
+   </section>
 
-</section>
+   <section anchor='Security'><name>
+   Security Considerations</name>
 
-<section anchor='Acknowledgements'><name>Acknowledgements</name>
-
-<t>Some of the things included in this draft came from
-Elwyn Davies' templates.</t>
-
+   <t>There are no security considerations for an imaginary
+   Internet Draft.</t>
 
 
 
-Hoffman & Hansen         Expires April 11, 2015                [Page 10]
+Hoffman & Hansen         Expires April 12, 2015                [Page 10]
 
 Internet-Draft              RFC XML Examples                October 2014
 
 
-</section>
+   </section>
 
-</middle>
+   <section anchor='Acknowledgements'><name>
+   Acknowledgements</name>
 
-<back>
+   <t>Some of the things included in this draft came from
+   Elwyn Davies' templates.</t>
 
-<references title='Normative References'>
+   </section>
 
-<xi:include href='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'/>
+   </middle>
 
-</references>
+   <back>
 
-<references title='Informative References'>
+   <references title='Normative References'>
 
-<reference anchor='RFC6949'>
-<front><title>RFC Series Format Requirements and Future
-Development</title>
-<author initials='H.' surname='Flanagan' fullname='H. Flanagan'><organization></organization></author>
-<author initials='N.' surname='Brownlee' fullname='N. Brownlee'><organization></organization></author>
-<date year='2013' month='May'/>
-</front>
-<seriesInfo name='RFC' value='6949'/>
-</reference>
+   <xi:include href='http://xml.resource.org/public/rfc/
+   bibxml/reference.RFC.2119.xml'/>
 
-</references>
+   </references>
 
-</back>
-</rfc>
+   <references title='Informative References'>
+
+   <reference anchor='RFC6949'>
+   <front><title>RFC Series Format Requirements and Future
+   Development</title>
+   <author initials='H.' surname='Flanagan' fullname='H. Flanagan'>
+   <organization></organization></author>
+   <author initials='N.' surname='Brownlee' fullname='N. Brownlee'>
+   <organization></organization></author>
+   <date year='2013' month='May'/>
+   </front>
+   <seriesInfo name='RFC' value='6949'/>
+   </reference>
+
+   </references>
+
+   </back>
+   </rfc>
 
 4.  Security Considerations
 
    The examples in this document do not introduce any new security
    considerations.
+
+
+
+
+
+
+
+Hoffman & Hansen         Expires April 12, 2015                [Page 11]
+
+Internet-Draft              RFC XML Examples                October 2014
+
 
 5.  IANA Considerations
 
@@ -610,13 +632,6 @@ Development</title>
    [XML2RFCv2]
               Reschke, J., "The 'XML2RFC' version 2 Vocabulary", draft-
               reschke-xml2rfc (work in progress), 2014.
-
-
-
-Hoffman & Hansen         Expires April 11, 2015                [Page 11]
-
-Internet-Draft              RFC XML Examples                October 2014
-
 
    [XML2RFCv3]
               Hoffman, P., "The 'XML2RFC' version 3 Vocabulary", draft-
@@ -654,19 +669,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Hoffman & Hansen         Expires April 11, 2015                [Page 12]
+Hoffman & Hansen         Expires April 12, 2015                [Page 12]
