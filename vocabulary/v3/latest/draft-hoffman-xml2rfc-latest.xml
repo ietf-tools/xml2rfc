@@ -192,8 +192,8 @@ and "sectionNumber" attributes to &lt;<x:ref>rfc</x:ref>&gt;,
 respectively.
 </t>
 
-<t>Add "partNumber" to &lt;<x:ref>artwork</x:ref>&gt;, &lt;<x:ref>artwork</x:ref>&gt;,
-&lt;<x:ref>aside</x:ref>&gt;, &lt;<x:ref>blockquote</x:ref>&gt;, &lt;<x:ref>li</x:ref>&gt;,
+<t>Add "partNumber" to &lt;<x:ref>artwork</x:ref>&gt;,
+&lt;<x:ref>aside</x:ref>&gt;, &lt;<x:ref>blockquote</x:ref>&gt;, &lt;<x:ref>dt</x:ref>&gt;, &lt;<x:ref>li</x:ref>&gt;,
 &lt;<x:ref>sourcecode</x:ref>&gt;, and &lt;<x:ref>t</x:ref>&gt; to hold automatically generated
 numbers for items in a section that don't have their own numbering (namely figures and tables).</t>
 
@@ -1473,6 +1473,17 @@ some types of sections.</t>
             <iref item="xref element" subitem="inside dt"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
       </list>
    </t>
+
+   <!--dt/@partNumber-->
+   <section title="'partNumber' attribute" anchor="element.dt.attribute.partNumber" toc="exclude">
+      <iref item="Attributes" subitem="partNumber"/>
+      <iref item="dt element" subitem="partNumber attribute"/>
+      <iref item="partNumber attribute" subitem="in dt element"/>
+      <t>
+         The number for this term within the section. The numbering is shared with other elements of a section.
+         This is described in more detail in <xref target="anchorsandids"/>.
+      </t>
+   </section>
 </section>
 
 <!--em-->
@@ -5980,6 +5991,7 @@ dl =
   }
 dt =
   element dt {
+    attribute partNumber { text }?,
     (text
      | b
      | bcp14
@@ -6720,6 +6732,7 @@ to the v3 schema.</t>
 +   }
 + dt =
 +   element dt {
++     attribute partNumber { text }?,
 +     (text
 +      | b
 +      | bcp14

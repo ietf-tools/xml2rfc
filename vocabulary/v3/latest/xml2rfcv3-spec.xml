@@ -275,17 +275,10 @@
       <iref item="artwork element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in artwork element"/>
       <t>
-            The URI reference of a graphics file (<xref target="RFC3986"/>).
-         </t>
-      <t>
-            Note that this can be a "data" URI (<xref target="RFC2397"/>).
-         </t>
-      <t>
-         <cref>Add an example of in-lined SVG here.</cref>
+         The URI reference of a graphics file (<xref target="RFC3986"/>).
       </t>
       <t>
-         <cref>Maybe include microlanguages for packets and call sequences if people
-         want to create them.</cref>
+         Note that this can be a "data" URI (<xref target="RFC2397"/>).
       </t>
    </section>
 
@@ -631,7 +624,6 @@
    <iref item="blockquote element" primary="true"/>
    <t>
       Specifies a block of text is a quotation. The "cite" attribute is required, and must be a URI.
-      <cref>Should this element also use paragraphNumber?</cref>
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.blockquote.contents"><!--AG-->
@@ -691,8 +683,7 @@
       <iref item="blockquote element" subitem="cite attribute"/>
       <iref item="cite attribute" subitem="in blockquote element"/>
       <t>
-         The source of the citation. This must be a URI. <cref>Needs an example of a cite for a reference that is
-         already in the spec.</cref>
+         The source of the citation. This must be a URI.
       </t>
    </section>
 
@@ -1139,6 +1130,16 @@
             <iref item="xref element" subitem="inside dt"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</t>
       </list>
    </t>
+
+   <!--dt/@partNumber-->
+   <section title="'partNumber' attribute" anchor="element.dt.attribute.partNumber" toc="exclude">
+      <iref item="Attributes" subitem="partNumber"/>
+      <iref item="dt element" subitem="partNumber attribute"/>
+      <iref item="partNumber attribute" subitem="in dt element"/>
+      <t><!--AG-->
+         <cref anchor="element.dt.attribute.partNumber.missing">attribute description missing</cref>
+      </t>
+   </section>
 </section>
 
 <!--em-->
@@ -3322,10 +3323,6 @@ Using CDATA:
    <t>
       A cell in a table row.
    </t>
-   <t>
-      <cref>Should this also have attributes for horizontal alignment, vertical alignment, spanning
-      cells in the row, and spanning cells in a column? These all exist in HTML.</cref>
-   </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>tr</x:ref>&gt; (<xref target="element.tr"/>).</t>
    <t anchor="element.td.contents"><!--AG-->
       Content model:
@@ -3415,8 +3412,10 @@ Using CDATA:
       <iref item="Attributes" subitem="colspan"/>
       <iref item="td element" subitem="colspan attribute"/>
       <iref item="colspan attribute" subitem="in td element"/>
-      <t><!--AG-->
-         <cref anchor="element.td.attribute.colspan.missing">attribute description missing</cref>
+      <t>
+         The number of columns that the cell to span. For example, setting "colspan='3'"
+         indicates that the cell occupies the same horizontal space as three cells in the
+         row above or below this one.
       </t>
    </section>
 
@@ -3425,8 +3424,9 @@ Using CDATA:
       <iref item="Attributes" subitem="rowspan"/>
       <iref item="td element" subitem="rowspan attribute"/>
       <iref item="rowspan attribute" subitem="in td element"/>
-      <t><!--AG-->
-         <cref anchor="element.td.attribute.rowspan.missing">attribute description missing</cref>
+      <t>
+         The number of rows that the cell to span. For example, setting "rowspan='3'"
+         indicates that the cell occupies the same vertical space as three rows.
       </t>
    </section>
 </section>
@@ -3458,10 +3458,6 @@ Using CDATA:
    <t>
       A cell in a table row. When rendered, this will normally come out in boldface; other than that,
       there is no difference between this and the <x:ref>td</x:ref>&gt; element.
-   </t>
-   <t>
-      <cref>Should this also have attributes for horizontal alignment, vertical alignment, spanning
-      cells in the row, and spanning cells in a column? These all exist in HTML.</cref>
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>tr</x:ref>&gt; (<xref target="element.tr"/>).</t>
    <t anchor="element.th.contents"><!--AG-->
@@ -3552,8 +3548,10 @@ Using CDATA:
       <iref item="Attributes" subitem="colspan"/>
       <iref item="th element" subitem="colspan attribute"/>
       <iref item="colspan attribute" subitem="in th element"/>
-      <t><!--AG-->
-         <cref anchor="element.th.attribute.colspan.missing">attribute description missing</cref>
+      <t>
+         The number of columns that the cell to span. For example, setting "colspan='3'"
+         indicates that the cell occupies the same horizontal space as three cells in the
+         row above or below this one.
       </t>
    </section>
 
@@ -3562,8 +3560,9 @@ Using CDATA:
       <iref item="Attributes" subitem="rowspan"/>
       <iref item="th element" subitem="rowspan attribute"/>
       <iref item="rowspan attribute" subitem="in th element"/>
-      <t><!--AG-->
-         <cref anchor="element.th.attribute.rowspan.missing">attribute description missing</cref>
+      <t>
+         The number of rows that the cell to span. For example, setting "rowspan='3'"
+         indicates that the cell occupies the same vertical space as three rows.
       </t>
    </section>
 </section>
@@ -3940,7 +3939,7 @@ Using CDATA:
       <iref item="relative attribute" subitem="in xref element"/>
       <t>
          Specifies a relative reference from the main target.  <cref>Need more description
-         here about how this will be displayed.</cref>
+         here about how this will be rendered by a processor.</cref>
       </t>
    </section>
 

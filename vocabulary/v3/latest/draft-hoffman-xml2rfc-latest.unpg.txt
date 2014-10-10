@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                         September 29, 2014
+Obsoletes: 2629 (if approved)                           October 10, 2014
 Intended status: Informational
-Expires: April 2, 2015
+Expires: April 13, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 2, 2015.
+   This Internet-Draft will expire on April 13, 2015.
 
 Copyright Notice
 
@@ -294,10 +294,10 @@ Table of Contents
       "sectionNumber" attributes to <rfc>, <figure>, <table>, and
       <section>, respectively.
 
-   o  Add "partNumber" to <artwork>, <artwork>, <aside>, <blockquote>,
-      <li>, <sourcecode>, and <t> to hold automatically generated
-      numbers for items in a section that don't have their own numbering
-      (namely figures and tables).
+   o  Add "partNumber" to <artwork>, <aside>, <blockquote>, <dt>, <li>,
+      <sourcecode>, and <t> to hold automatically generated numbers for
+      items in a section that don't have their own numbering (namely
+      figures and tables).
 
 1.2.3.  Elements and Attributes Deprecated from v2
 
@@ -1158,6 +1158,12 @@ Table of Contents
    o  <tt> elements (Section 2.61)
 
    o  <xref> elements (Section 2.65)
+
+2.20.1.  'partNumber' attribute
+
+   The number for this term within the section.  The numbering is shared
+   with other elements of a section.  This is described in more detail
+   in Appendix B.2.
 
 2.21.  <em>
 
@@ -3949,7 +3955,7 @@ B.2.1.  Overlapping Values
       text of the name after slugification.  For example, this would be
       "n-protocol-overview" for the name "Protocol Overview".  The
       actual conversions done in slugification will be specified at a
-      later time..
+      later time.
 
    o  Anchors must never overlap with any of the above.  The easiest way
       to assure that is to not pick an anchor name that starts with a
@@ -4237,6 +4243,7 @@ Appendix C.  Relax NG Schema
      }
    dt =
      element dt {
+       attribute partNumber { text }?,
        (text
         | b
         | bcp14
@@ -4974,6 +4981,7 @@ Appendix D.  Schema Differences from v2
    +   }
    + dt =
    +   element dt {
+   +     attribute partNumber { text }?,
    +     (text
    +      | b
    +      | bcp14
@@ -5711,6 +5719,7 @@ Index
          in rfc element  1
       dt element  1
          inside dl  1
+         partNumber attribute  1
 
    E
       Elements
@@ -6031,6 +6040,7 @@ Index
          in artwork element  1
          in aside element  1
          in blockquote element  1
+         in dt element  1
          in li element  1
          in sourcecode element  1
          in t element  1
