@@ -10,13 +10,8 @@
 ## The code is in the public domain.
 
 ## TODO STILL: ????????????????
-## inside <!DOCTYPE, cut down newlines between [ ]
 ## is hangIndent used somewhere?
 ## for PIs, handle multiple-attribute PIs, as in <?rfc toc='yes' tocindent='3' ...?>
-
-## done ## <titleelement> => <name>
-
-## done ## <note title=> => <name>
 
 ## <texttable title=> => <name>
 
@@ -41,15 +36,17 @@ use XML::Parser;
 use Getopt::Std;
 
 my %optargs;
-getopts('CfE#v', \%optargs) or usage();
+getopts('CEfs:v#', \%optargs) or usage();
 
 sub usage {
-    print STDERR "Usage: $0 [-C] [-#] [-E] [-f]\n";
-    print STDERR "convert xml2rfc v2 to v3\n";
+    print STDERR "Usage: $0 [-C] [-f] [-#] [-E] [-s suffix] [filename ...]\n";
+    print STDERR "Convert xml2rfc v2 to v3.\n";
+    print STDERR "If filenames are provided, write to -V3.xml filenames\n";
     print STDERR "-C\tomit comments about changes that were made\n";
     print STDERR "-f\tfix syntactic errors when possible\n";
     print STDERR "-#\tprint the ## comments from this script\n";
     print STDERR "-E\tprint WARNINGS and ERRORS to stderr (in addition to within the document)\n";
+    print STDERR "-s suffix\twhen filenames are given, use this suffix instead of '-v3.xml'\n";
     exit 1;
 }
 
@@ -98,6 +95,9 @@ my $elementCount = 0;
 my $lastReferenceElementCount = -1;
 my @elementCountStack;
 my %elements;
+my %originalElements;
+my %originalElementLine;
+my %originalElementColumn;
 my %referenceHasTarget;
 my %referenceTarget;
 my %replacementStack;
@@ -121,14 +121,14 @@ my @emptyElements = (
     );
 my %emptyElements = fillHash(1, @emptyElements);
 
-my @ctextElements = (
+my @textOnlyElements = (
     'area',	    'city',	    'code',	    'country',
     'cref',	    'email',	    'eref',	    'facsimile',
     'keyword',	    'organization', 'phone',	    'region',
     'spanx',	    'street',	    'title',	    'ttcol',
     'uri',	    'workgroup',    'xref',
     );
-my %ctextElements = fillHash(1, @ctextElements);
+my %textOnlyElements = fillHash(1, @textOnlyElements);
 
 # these elements get removed, possibly moving information elsewhere
 my @removedElements = (
@@ -179,10 +179,32 @@ my %removedPIs = (
 main();
 
 sub main {
-    my $input = getFileContents($ARGV[0]);
+    if ($#ARGV == -1) {
+	$filename = "stdin";
+	processFile(\*STDIN, \*STDOUT);
+    } else {
+	my $suffix = $optargs{s} ? $optargs{s} : "-v3.xml";
+	for my $fn (@ARGV) {
+	    $filename = $fn;
+	    open(my $infh, "<", $filename) or die "Cannot read $filename: $!\n";
+	    my $outfilename = $filename;
+	    if ($outfilename =~ /^(.*)[.]xml$/) {
+		$outfilename = "$1$suffix";
+	    } else {
+		$outfilename = "$filename$suffix";
+	    }
+	    open(my $outfh, ">", $outfilename) or die "Cannot write $outfilename: $!\n";
+	    processFile($infh, $outfh);
+	    close($outfh);
+	    close($infh);
+	}
+    }
+}
 
-    if( $ARGV[0]) { $filename = $ARGV[0]; }
-    else          { $filename = "stdin"; }
+sub processFile {
+    my $infh = shift;
+    my $outfh = shift;
+    my $input = getFileContents($infh);
 
     # if there are any broken XML comments with "--" embedded, change them to "- - " before further processing.
     $input = fixComments($input) if ($optargs{f});
@@ -191,130 +213,14 @@ sub main {
     # If there is anything else we can easily fix up as we process things, do so.
     processInput($input);
 
-    ####
-    #### Post-process the output.
-    ####
-
-    ## For the elements that are supposed to be EMPTY, convert the closing "></foo>" tag to "/>".
-    ## For the elements that are only contain text and can potentially be empty,
-    ## convert the closing "></foo>" tag to "/>".
-    for my $el (@emptyElements) {
-	$output =~ s(></$el>)(/>)g;
-    }
-
-    ## 1.2.3
-    ##   o  Deprecate <format> because it is not useful and has caused
-    ##      surprise for authors in the past.  If the goal is to provide a
-    ##      single URI (Uniform Resource Identifier) for a reference, use the
-    ##      "target" attribute on <reference> instead.
-    ## ...
-    ## move first <format target='..'> to enclosing <reference target='..'>
-    for my $elementCount (keys %referenceTarget) {
-	my $target = $referenceTarget{$elementCount};
-	$output =~ s/ elementCount='$elementCount'/ target='$target'/g;
-    }
-
-    # fix up any lists that need vspace
-    for my $ec (keys %vspaceElementCounts) {
-	$output =~ s(<!-- CONVERT opening list elementCount='$ec' -->)(<t>)g;
-	$output =~ s(<!-- CONVERT closing list elementCount='$ec' -->)(</t>)g;
-    }
-    # clean up other places where vspace was NOT added
-    $output =~ s(<!-- CONVERT opening list elementCount='\d+' -->)()g;
-    $output =~ s(<!-- CONVERT closing list elementCount='\d+' -->)()g;
-
-    # Move things that need moving.
-    # Looking for moveBefore keys:
-    for my $key (keys %moveBefore) {
-	my $moveTo = $moveBefore{$key};
-	my $moveToTag = $elements{$moveTo};
-	my $movedTag = $movedTags{$key};
-	# print STDERR "key=$key,\nmoveTo=$moveTo,\nmoveToTag=$moveToTag,\nmovedTag=$movedTag\n\n";
-	if ($output =~ m(^(.*)(<$moveToTag elementCount='$moveTo'.*)(<$movedTag elementCount='$key'.*</$movedTag elementCount='$key'>)(.*)$)s) {
-	    my $prefix = $1;
-	    my $moveToContents = $2;
-	    my $movedContents = $3;
-	    my $rest = $4;
-	    # print STDERR "moveToContents='\n" . ashex($moveToContents) . "'\n";
-	    # print STDERR "movedContents='\n" . ashex($movedContents) . "'\n";
-	    $output = "$prefix$movedContents$moveToContents$rest";
-	}
-    }
-
-    # Looking for moveAfter keys:
-    for my $key (keys %moveAfter) {
-	my $moveTo = $moveAfter{$key};
-	my $moveToTag = $elements{$moveTo};
-	my $movedTag = $movedTags{$key};
-	# print STDERR "key=$key,\nmoveTo=$moveTo,\nmoveToTag=$moveToTag,\nmovedTag=$movedTag\n\n";
-	if ($output =~ m(^(.*)(<$movedTag elementCount='$key'.*</$movedTag elementCount='$key'>.*)(</$moveToTag elementCount='$moveTo'>)(.*)$)s) {
-	    my $prefix = $1;
-	    my $moveToContents = $2;
-	    my $movedContents = $3;
-	    my $rest = $4;
-	    # print STDERR "moveToContents='\n" . ashex($moveToContents) . "'\n";
-	    # print STDERR "movedContents='\n" . ashex($movedContents) . "'\n";
-	    $output = "$prefix$movedContents$moveToContents$rest";
-	}
-    }
-
-    # remove the element counts
-    $output =~ s/ elementCount='\d+'//g;
-
-    # add blank line between CONVERT comments
-    $output =~ s/--><!-- CONVERT/-->\n<!-- CONVERT/g;
-
-    ## B.1.
-    ## When using xi:include,
-    ##    add to <rfc>, xmlns:xi="http://www.w3.org/2001/XInclude"
-    $output =~ s( END-OF-RFC>)( xmlns:xi="http://www.w3.org/2001/XInclude" END-OF-RFC>) if $usingXIinclude;
-
-    ## 1.2.2.  New Attributes for Existing Elements
-    ## o  Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes
-    ## to <rfc> to cover processor instructions (PIs) that were in v2
-    ## that are still needed in the grammar.
-    ## ...
-    ## Move various PI values into <rfc>
-    if ($additionalRfcAttributes ne '') {
-	$output =~ s( END-OF-RFC>)($additionalRfcAttributes END-OF-RFC>);
-	$output .= comment("added attributes to <rfc> moved from PIs: $additionalRfcAttributes");
-    }
-    $output =~ s( END-OF-RFC>)(>);
-
-    # check for non-ascii in the output
-    $output =~ /^([[:ascii:]]*)/;
-    my $ucount = length($1);
-    if ($ucount != length($output)) {
-	$output .= "\n";
-	$output .= comment("WARNING: wide character found at character $ucount of the output");
-	# print "ucount=$ucount\n";
-	# print "len(output)=" . length($output) . "\n";
-    }
-    binmode STDOUT, ':utf8';
-    if ($output !~ /\n$/s) {
-	$output .= "\n";
-    }
-    print $fixupOutput;
-    print $output;
-    if ($optargs{E}) {
-	print STDERR $fixupOutput;
-	print STDERR $errorOutput;
-    }
+    # Post-process the output.
+    postProcessOutput($outfh);
 }
 
 sub getFileContents {
-    my $fn = shift;
-    if (!$fn) {
-	local($/) = undef; # slurp
-	return <STDIN>;
-    } else {
-	local($/) = undef; # slurp
-	open(FH, "<", $fn) or die "Cannot open $fn: $!\n";
-	my $ret = '';
-	$ret .= $_ while (<FH>);
-	close(FH);
-	return $ret;
-    }
+    my $fh = shift;
+    local($/) = undef; # slurp
+    return <$fh>;
 }
 
 # nothing to do
@@ -414,6 +320,9 @@ sub startHandler {
 	$output .= $comments;
 	push @elementCountStack, $elementCount;
 	$elements{$elementCount} = $element;
+	$originalElements{$elementCount} = $originalElement;
+	$originalElementLine{$elementCount} = $expat->current_line;
+	$originalElementColumn{$elementCount} = $expat->current_column;
 	$elementCount++;
 	return;
     }
@@ -663,10 +572,15 @@ sub startHandler {
 	    $suffix = "<!-- CONVERT opening list elementCount='$elementCount' -->";
 	}
     }
+
     $output .= "<$element elementCount='$elementCount'";
     push @elementCountStack, $elementCount;
     $elements{$elementCount} = $element;
+    $originalElements{$elementCount} = $originalElement;
+    $originalElementLine{$elementCount} = $expat->current_line;
+    $originalElementColumn{$elementCount} = $expat->current_column;
     $elementCount++;
+
     ### startHandler
     if ($element eq 'artwork') {
 	if (defined($pendingArtworkAlt)) {
@@ -900,6 +814,8 @@ sub endHandler {
     my $comments = '';
     my $skip;
     my $prefix = '';
+
+    # print STDERR "endHandler($element)\n";
 
     ## endHandler
     if ($removedElements{$element}) {
@@ -1410,7 +1326,6 @@ sub resetState {
     $cdata = 0;
     $output = '';
     $expat = undef;
-    $filename = '';
     $pendingArtworkAlt = undef;
     $pendingArtworkSrc = undef;
     $thCount = 0;
@@ -1508,11 +1423,7 @@ sub fixComments {
 # If there is anything else we can easily fix up as we process things, do so
 sub processInput {
     my $input = shift;
-    my $fixable = 1;
-    my $lastpos = -1;
-    my $lasterr = '';
-    my $addedXhtmlEntRefs = '';
-    my $attemptCount = 0;
+    # print STDERR "processInput(filename=$filename)\n";
 
     my $parser = new XML::Parser(
 	NoExpand => 1,
@@ -1558,6 +1469,12 @@ sub processInput {
 	}
 	);
 
+    my $fixable = 1;
+    my $lastpos = -1;
+    my $lasterr = '';
+    my $addedXhtmlEntRefs = 0;
+    my $attemptCount = 0;
+
     while ($fixable) {
 	eval {
 	    resetState();
@@ -1568,6 +1485,8 @@ sub processInput {
 	$attemptCount++;
 	my $printFixedupText = 1;
 	my $error = $@;
+
+	# print STDERR "ERROR: '$error'\n";
 
 	# get rid of useless pointers to internal locations
 	$error =~ s( at /.*Parser.pm line \d*)();
@@ -1635,7 +1554,7 @@ sub processInput {
 		    # the XML processor.
 		    #
 		    if ($addedXhtmlEntRefs) {
-			$fixupOutput .= comment("$filename:$line:$column: An unrecognized entity was found. $error") . "\n";
+			$fixupOutput .= comment("$filename:$line:$column: CONVERSION HALTED BECAUSE an unrecognized entity was found. $error") . "\n";
 		    } else {
 			$addedXhtmlEntRefs = 1;
 			my $entities =
@@ -1700,6 +1619,8 @@ sub processInput {
 		    $fixupOutput .= comment("Text surrounding now looks like this:\n" . ashex($input, $byte-16, 32)) . "\n";
 		}
 	    }
+	    my $whileProcessing = getWhileProcessing();
+	    print STDERR "$filename:$line:$column: CONVERSION HALTED$whileProcessing BECAUSE of: $error\n" if (!$fixable);
 	} elsif ($error =~ /Couldn't open encmap/) {
 	    if ($error =~ /ascii[.]enc/ && ($input =~ /(<[?]xml[^>]*encoding=)/)) {
 		my $xmlLength = $1;
@@ -1712,12 +1633,158 @@ sub processInput {
 		$fixupOutput .= comment("Unfixable error $error") . "\n";
 		$fixupOutput .= comment("Check the <?xml encoding= ?> for a proper value.") . "\n";
 	    }
+	    my $whileProcessing = getWhileProcessing();
+	    print STDERR "CONVERSION HALTED$whileProcessing BECAUSE of: $error\n" if (!$fixable);
 	} elsif ($error ne '') {
 	    $fixupOutput .= comment("unfixable error: $error") . "\n";
+	    my $whileProcessing = getWhileProcessing();
+	    print STDERR "CONVERSION HALTED$whileProcessing BECAUSE of: $error\n" if (!$fixable);
 	} else {
 	    if ($attemptCount > 1) {
 		$fixupOutput .= comment("No more syntactic errors") . "\n";
 	    }
 	}
     }
+}
+
+####
+#### Post-process the output.
+####
+sub postProcessOutput {
+    my $outfh = shift;
+
+    ## inside <!DOCTYPE, cut down empty lines resulting from ENTITYs being removed
+    if (substr($output, 0, 1000) =~ /<!DOCTYPE[^>]*\n\s*\n/m) {
+	if ($output =~ /(.*)(<!DOCTYPE[^>]*\n>)(.*)/s) {
+	    my $before = $1;
+	    my $doctype = $2;
+	    my $after = $3;
+	    while ($doctype =~ s/\n[ \t]*\n/\n/) { }
+	    $doctype =~ s/\n>$/>/m;
+	    $output = "$before$doctype$after";
+	}
+    }
+
+    ## 1.2.3
+    ##   o  Deprecate <format> because it is not useful and has caused
+    ##      surprise for authors in the past.  If the goal is to provide a
+    ##      single URI (Uniform Resource Identifier) for a reference, use the
+    ##      "target" attribute on <reference> instead.
+    ## ...
+    ## move first <format target='..'> to enclosing <reference target='..'>
+    for my $elementCount (keys %referenceTarget) {
+	my $target = $referenceTarget{$elementCount};
+	$output =~ s/ elementCount='$elementCount'/ target='$target'/g;
+    }
+
+    # fix up any lists that need vspace
+    for my $ec (keys %vspaceElementCounts) {
+	$output =~ s(<!-- CONVERT opening list elementCount='$ec' -->)(<t>)g;
+	$output =~ s(<!-- CONVERT closing list elementCount='$ec' -->)(</t>)g;
+    }
+    # clean up other places where vspace was NOT added
+    $output =~ s(<!-- CONVERT opening list elementCount='\d+' -->)()g;
+    $output =~ s(<!-- CONVERT closing list elementCount='\d+' -->)()g;
+
+    # Move things that need moving.
+    # Looking for moveBefore keys:
+    for my $key (keys %moveBefore) {
+	my $moveTo = $moveBefore{$key};
+	my $moveToTag = $elements{$moveTo};
+	my $movedTag = $movedTags{$key};
+	# print STDERR "key=$key,\nmoveTo=$moveTo,\nmoveToTag=$moveToTag,\nmovedTag=$movedTag\n\n";
+	if ($output =~ m(^(.*)(<$moveToTag elementCount='$moveTo'.*)(<$movedTag elementCount='$key'.*</$movedTag elementCount='$key'>)(.*)$)s) {
+	    my $prefix = $1;
+	    my $moveToContents = $2;
+	    my $movedContents = $3;
+	    my $rest = $4;
+	    # print STDERR "moveToContents='\n" . ashex($moveToContents) . "'\n";
+	    # print STDERR "movedContents='\n" . ashex($movedContents) . "'\n";
+	    $output = "$prefix$movedContents$moveToContents$rest";
+	}
+    }
+
+    # Looking for moveAfter keys:
+    for my $key (keys %moveAfter) {
+	my $moveTo = $moveAfter{$key};
+	my $moveToTag = $elements{$moveTo};
+	my $movedTag = $movedTags{$key};
+	# print STDERR "key=$key,\nmoveTo=$moveTo,\nmoveToTag=$moveToTag,\nmovedTag=$movedTag\n\n";
+	if ($output =~ m(^(.*)(<$movedTag elementCount='$key'.*</$movedTag elementCount='$key'>.*)(</$moveToTag elementCount='$moveTo'>)(.*)$)s) {
+	    my $prefix = $1;
+	    my $moveToContents = $2;
+	    my $movedContents = $3;
+	    my $rest = $4;
+	    # print STDERR "moveToContents='\n" . ashex($moveToContents) . "'\n";
+	    # print STDERR "movedContents='\n" . ashex($movedContents) . "'\n";
+	    $output = "$prefix$movedContents$moveToContents$rest";
+	}
+    }
+
+    # remove the element counts
+    $output =~ s/ elementCount='\d+'//g;
+
+    ## For the elements that are supposed to be EMPTY, or 
+    ## can only contain text and can potentially be empty,
+    ## convert the closing "></foo>" tag to "/>".
+    for my $el (@emptyElements, @textOnlyElements) {
+	$output =~ s(></$el>)(/>)g;
+    }
+
+    # add blank line between CONVERT comments
+    $output =~ s/--><!-- CONVERT/-->\n<!-- CONVERT/g;
+
+    ## B.1.
+    ## When using xi:include,
+    ##    add to <rfc>, xmlns:xi="http://www.w3.org/2001/XInclude"
+    $output =~ s( END-OF-RFC>)( xmlns:xi="http://www.w3.org/2001/XInclude" END-OF-RFC>) if $usingXIinclude;
+
+    ## 1.2.2.  New Attributes for Existing Elements
+    ## o  Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes
+    ## to <rfc> to cover processor instructions (PIs) that were in v2
+    ## that are still needed in the grammar.
+    ## ...
+    ## Move various PI values into <rfc>
+    if ($additionalRfcAttributes ne '') {
+	$output =~ s( END-OF-RFC>)($additionalRfcAttributes END-OF-RFC>);
+	$output .= comment("added attributes to <rfc> moved from PIs: $additionalRfcAttributes");
+    }
+    $output =~ s( END-OF-RFC>)(>);
+
+    # check for non-ascii in the output
+    $output =~ /^([[:ascii:]]*)/;
+    my $ucount = length($1);
+    if ($ucount != length($output)) {
+	$output .= "\n";
+	$output .= comment("WARNING: wide character found at character $ucount of the output");
+	# print "ucount=$ucount\n";
+	# print "len(output)=" . length($output) . "\n";
+    }
+    binmode STDOUT, ':utf8';
+    if ($output !~ /\n$/s) {
+	$output .= "\n";
+    }
+    print $outfh $fixupOutput;
+    print $outfh $output;
+    if ($optargs{E}) {
+	print STDERR $fixupOutput;
+	print STDERR $errorOutput;
+    }
+}
+
+# Determine 
+# if inside a tag, return the tag name.
+sub getWhileProcessing {
+    if ($#elementCountStack >= 0) {
+	my $topElementCount = $elementCountStack[$#elementCountStack];
+	my $topOriginalElement = $originalElements{$topElementCount};
+	my $topOriginalElementLine = $originalElementLine{$topElementCount};
+	my $topOriginalElementColumn = $originalElementColumn{$topElementCount};
+	my $loc = "$filename:$topOriginalElementLine:$topOriginalElementColumn:";
+	return " WHILE PROCESSING <$topOriginalElement>\n(begun at $loc)";
+    }
+    if ($elementCount > 0) {
+	return " AFTER THE OUTERMOST TAG WAS PROCESSED";
+    }
+    return " BEFORE THE OUTERMOST TAG HAD BEGUN BEING PROCESSED";
 }
