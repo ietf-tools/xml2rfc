@@ -3,9 +3,9 @@
 
 Network Working Group                                         J. Reschke
 Internet-Draft                                                greenbytes
-Obsoletes: 2629 (if approved)                         September 29, 2014
+Obsoletes: 2629 (if approved)                           October 15, 2014
 Intended status: Informational
-Expires: April 2, 2015
+Expires: April 18, 2015
 
 
                    The 'XML2RFC' version 2 Vocabulary
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 2, 2015.
+   This Internet-Draft will expire on April 18, 2015.
 
 Copyright Notice
 
@@ -128,17 +128,6 @@ Table of Contents
      B.4.  New Elements
    Appendix C.  Relax NG Schema
      C.1.  Checking Validity
-   Appendix D.  Proposed Future Changes for 'v3' (to be removed
-                by RFC Editor before publication)
-     D.1.  Contact Information
-     D.2.  Figures
-     D.3.  Linking
-     D.4.  Lists
-     D.5.  References
-     D.6.  Archival Considerations
-     D.7.  Document Metadata
-     D.8.  Including Material
-     D.9.  Misc.
    Index
 
 1.  Introduction
@@ -1982,14 +1971,6 @@ Table of Contents
                 February 2008, <http://svn.tools.ietf.org/svn/tools/
                 xml2rfc/archive/draft-mrose-writing-rfcs.html>.
 
-   [XINCLUDE]   Marsh, J., Orchard, D., and D. Veillard, "XML Inclusions
-                (XInclude) Version 1.0 (Second Edition)", W3C
-                Recommendation REC-xinclude-20061115, November 2006,
-                <http://www.w3.org/TR/2006/REC-xinclude-20061115/>.
-
-                Latest version available at
-                <http://www.w3.org/TR/xinclude/>.
-
    [XPOINTER]   Grosso, P., Maler, E., Marsh, J., and N. Walsh,
                 "XPointer Framework", W3C Recommendation REC-xptr-
                 framework-20030325, March 2003,
@@ -2484,158 +2465,6 @@ C.1.  Checking Validity
    java -jar jing.jar -c schema.rnc test.xml
 
    In good Unix tradition, no output means the file is valid.
-
-Appendix D.  Proposed Future Changes for 'v3' (to be removed by RFC
-             Editor before publication)
-
-   Discussion of "v3" changes takes place on the rfc-interest mailing
-   list (rfc-interest@rfc-editor.org), which has its home page at
-   <http://www.rfc-editor.org/mailman/listinfo/rfc-interest>.  See also
-   <https://www.rfc-editor.org/rse/wiki/doku.php?id=design:xml-tags> for
-   a related Wiki page.
-
-D.1.  Contact Information
-
-   If contact information is changed to allow non-ASCII characters: add
-   a place for a ASCII fallback (probably just for the author names).
-
-   The content model for <postal> ought to be more strict to allow at
-   most one of <city>, <region>, <code>, and <country>.
-
-   It should be possible to have multiple <email> and <uri> elements
-   (see also <http://trac.tools.ietf.org/tools/xml2rfc/trac/ticket/36>).
-
-   <facsimile> looks outdated, while a container for IM (messaging) URIs
-   is missing.  Maybe this area needs to be aligned with vCard.
-
-   Section 4.11 of [RFC7322] hints at a "Contributors" Section that
-   could supply contact information similar to the one in the auto-
-   generated "Authors' Address" Section.  Consider how to capture
-   contributor contact information (probably not using <author> to avoid
-   confusion).  Furthermore, consider ways to augment the contact
-   information section with prose.
-
-D.2.  Figures
-
-   Cleanup the set of overlapping attributes between <figure> and
-   <artwork>.
-
-   For artwork that consists of a sequence of items (such as messages in
-   a protocol example), it would be good if a <figure> element could
-   contain multiple <artwork> elements (to assist code to find good
-   places for page breaks).
-
-   Extend <figure> to support different types of artwork (such as by
-   specifying certain type attribute values, see <http://greenbytes.de/
-   tech/webdav/rfc2629xslt/rfc2629xslt.html#artwork.types>), and also
-   avoid having to markup code (such as ABNF) as "artwork".
-
-   It would be good if "code components" could be marked as such.
-
-   Finally, even in preformatted text use of markup could be useful to
-   support (a) references, or (b) highlighting the important bits (<http
-   ://greenbytes.de/tech/webdav/rfc2629xslt/
-   rfc2629xslt.html#ext-rfc2629.artwork>).
-
-D.3.  Linking
-
-   Extend <xref> so that subsection/anchors can be specified (see <http:
-   //greenbytes.de/tech/webdav/rfc2629xslt/
-   rfc2629xslt.html#ext-rfc2629.xref>).
-
-   Remove the "pageno" attribute which seems to be both undocumented and
-   non-functional.
-
-D.4.  Lists
-
-   Allow multiple paragraphs in list items; eliminating the need to use
-   <vspace> -- this could be achieved by adding a list item container
-   element ("<lt>", see <http://greenbytes.de/tech/webdav/rfc2629xslt/
-   rfc2629xslt.html#ext.element.lt> and
-   <http://www.ietf.org/mail-archive/web/xml2rfc/current/
-   msg02010.html>).
-
-   Add support for a "dictionary" style; eliminating the need to combine
-   "hanging" with <vspace> to force new lines (see thread around <http:/
-   /www.rfc-editor.org/pipermail/rfc-interest/2013-December/
-   005876.html>).
-
-D.5.  References
-
-   Allow overriding the "anchor" attribute of an included <reference>
-   element.
-
-   Add a way to add prose to a reference that avoids abuse of
-   <seriesInfo>.
-
-   Allow <reference>s that identify a document set such as a BCP.
-
-   Deprecate or remove the <format> element; right now it's not used for
-   the generation of the plain text document anyway.
-
-   The "anchor" attribute is optional because it is not needed when
-   using numeric references (symrefs processing instruction), and the
-   reference actually is not in use.  This is an edge case that doesn't
-   need special support in the vocabulary and thus should be removed.
-
-D.6.  Archival Considerations
-
-   When this vocabulary becomes the canonical RFC format, it will need
-   to be able to capture all generated information, such as section/
-   figure/table numbers, plus any auto-generated boilerplate (copyright
-   statements etc.).
-
-D.7.  Document Metadata
-
-   Extend the concept of language tagging to at least examples and
-   contact information to address potential japanese/chinese font
-   confusion.
-
-   Provide a way to indicate the intended level on the standards track.
-
-   Include feedback information in a way so that generated documents can
-   provide usable feedback links (see <http://greenbytes.de/tech/webdav/
-   rfc2629xslt/rfc2629xslt.html#ext.element.feedback>).
-
-D.8.  Including Material
-
-   As discussed in Section 5, file inclusion currently uses out-of-the-
-   box XML mechanisms or processor-specific directives.
-
-   We need to decide whether the vocabulary should have its own
-   inclusion mechanism, or whether it would be better to use a generic
-   solution such as [XINCLUDE] instead.
-
-D.9.  Misc.
-
-   Make the <date> element optional; all of its content is optional
-   already.
-
-   <spanx> has both a weird whitespace model ("preserve") and
-   problematic styling.  Consider to deprecate it in favor of elements
-   such as <b>, <i>, and <tt>.
-
-   Indented paragraphs currently can be created by abusing the <list>.
-   It would be good to have a special element for this purpose.
-
-   Provide a special element for inserting block quotes (<http://
-   greenbytes.de/tech/webdav/rfc2629xslt/
-   rfc2629xslt.html#ext.element.blockquote>).
-
-   The content model for <cref> should be extended to allow more flow
-   elements, such as <xref> and <eref>.
-
-   Section titles should really be elements, not attributes (this would
-   allow them to contain markup).
-
-   Text tables are currently very constrained.  For instance, it would
-   be good if alignment of headers and table cells could be de-coupled
-   (<http://trac.tools.ietf.org/tools/xml2rfc/trac/ticket/69>).
-
-   Counters are currently restricted to lists, figures, and tables.
-   Maybe there should be a generic mechanism that is not directly tied
-   to other elements
-   (<http://trac.tools.ietf.org/tools/xml2rfc/trac/ticket/68>).
 
 Index
 
