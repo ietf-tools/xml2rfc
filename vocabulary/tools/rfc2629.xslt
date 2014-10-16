@@ -212,6 +212,30 @@
   </xsl:call-template>
 </xsl:param>
 
+<!-- CSS max page width -->
+
+<xsl:param name="xml2rfc-ext-maxwidth">
+  <xsl:call-template name="parse-pis">
+    <xsl:with-param name="nodes" select="/processing-instruction('rfc-ext')"/>
+    <xsl:with-param name="attr" select="'maxwidth'"/>
+    <xsl:with-param name="default" select="'1000'"/>
+  </xsl:call-template>
+</xsl:param>
+
+<xsl:variable name="parsedMaxwidth">
+  <xsl:choose>
+    <xsl:when test="string(number($xml2rfc-ext-maxwidth)) != 'NaN'">
+      <xsl:value-of select="$xml2rfc-ext-maxwidth"/>
+    </xsl:when>
+    <xsl:when test="$xml2rfc-ext-maxwidth='none'"></xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="warning">
+        <xsl:with-param name="msg" select="concat('Unsupported value of rfc-ext maxwidth PI: ', $xml2rfc-ext-maxwidth)"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:variable>
+
 <!-- initials handling? -->
 
 <xsl:param name="xml2rfc-multiple-initials">
@@ -750,6 +774,12 @@
       </xsl:if>
     </xsl:if>
   </xsl:if>
+  <xsl:if test="contains(.,'&#9;')">
+    <xsl:call-template name="error">
+      <xsl:with-param name="msg" select="'artwork contains HTAB character'"/>
+      <xsl:with-param name="inline" select="'no'"/>
+    </xsl:call-template>
+  </xsl:if>
   <xsl:variable name="display">
     <xsl:choose>
       <xsl:when test="$xml2rfc-ext-allow-markup-in-artwork='yes'">
@@ -1159,17 +1189,13 @@
   <xsl:call-template name="check-no-text-content"/>
   <xsl:if test="$xml2rfc-topblock!='no'">
     <!-- collect information for left column -->
-
     <xsl:variable name="leftColumn">
       <xsl:call-template name="collectLeftHeaderColumn" />
     </xsl:variable>
-
     <!-- collect information for right column -->
-
     <xsl:variable name="rightColumn">
       <xsl:call-template name="collectRightHeaderColumn" />
     </xsl:variable>
-
     <!-- insert the collected information -->
     <table class="header" id="{$anchor-prefix}.headerblock">
       <xsl:choose>
@@ -2245,6 +2271,10 @@
 
 
 <xsl:template match="t">
+  <xsl:param name="inherited-self-link"/>
+  <xsl:variable name="p">
+    <xsl:call-template name="get-paragraph-number" />
+  </xsl:variable>
   <xsl:if test="preceding-sibling::section or preceding-sibling::appendix">
     <xsl:call-template name="inline-warning">
       <xsl:with-param name="msg">The paragraph below is misplaced; maybe a section is closed in the wrong place: </xsl:with-param>
@@ -2253,10 +2283,38 @@
   </xsl:if>
   <xsl:choose>
     <xsl:when test="@anchor">
-      <div id="{@anchor}"><xsl:apply-templates mode="t-content" select="node()[1]" /></div>
+      <div id="{@anchor}">
+        <xsl:choose>
+          <xsl:when test="$p!='' and not(ancestor::list) and not(ancestor::ed:del) and not(ancestor::ed:ins)">
+            <div id="{$anchor-prefix}.section.{$p}">
+              <xsl:apply-templates mode="t-content" select="node()[1]">
+                <xsl:with-param name="inherited-self-link" select="$inherited-self-link"/>
+              </xsl:apply-templates>
+            </div>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates mode="t-content" select="node()[1]">
+              <xsl:with-param name="inherited-self-link" select="$inherited-self-link"/>
+            </xsl:apply-templates>
+          </xsl:otherwise>          
+        </xsl:choose>
+      </div>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:apply-templates mode="t-content" select="node()[1]" />
+      <xsl:choose>
+        <xsl:when test="$p!='' and not(ancestor::list) and not(ancestor::ed:del) and not(ancestor::ed:ins)">
+          <div id="{$anchor-prefix}.section.{$p}">
+            <xsl:apply-templates mode="t-content" select="node()[1]">
+              <xsl:with-param name="inherited-self-link" select="$inherited-self-link"/>
+            </xsl:apply-templates>
+          </div>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates mode="t-content" select="node()[1]">
+            <xsl:with-param name="inherited-self-link" select="$inherited-self-link"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>          
+      </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -2270,6 +2328,7 @@
 
 <!-- ... otherwise group into p elements -->
 <xsl:template mode="t-content" match="*|node()">
+  <xsl:param name="inherited-self-link"/>
   <xsl:variable name="p">
     <xsl:call-template name="get-paragraph-number" />
   </xsl:variable>
@@ -2287,15 +2346,15 @@
             <xsl:value-of select="concat($anchor-prefix,'.section.',$p)"/>
           </xsl:if>
         </xsl:variable>
-        <xsl:if test="$anchor!=''">
-          <xsl:attribute name="id"><xsl:value-of select="$anchor"/></xsl:attribute>
-        </xsl:if>
         <xsl:call-template name="insertInsDelClass"/>
         <xsl:call-template name="editingMark" />
         <xsl:apply-templates mode="t-content2" select="." />
         <xsl:if test="$xml2rfc-ext-paragraph-links='yes'">
           <xsl:if test="$anchor!=''">
             <a class='self' href='#{$anchor}'>&#xb6;</a>
+          </xsl:if>
+          <xsl:if test="$inherited-self-link!=''">
+            <a class='self' href='#{$inherited-self-link}'>&#xb6;</a>
           </xsl:if>
         </xsl:if>
       </p>
@@ -3289,6 +3348,11 @@
         <xsl:text>,</xsl:text>
       </xsl:if>
     </xsl:if>
+    <xsl:if test="$xml2rfc-ext-pub-month='' and $rfcno!=''">
+      <xsl:call-template name="error">
+        <xsl:with-param name="msg" select="'month missing but is required for RFCs'"/>
+      </xsl:call-template>
+    </xsl:if>
     <xsl:if test="$xml2rfc-ext-pub-day='' and /rfc/@docName and not(substring(/rfc/@docName, string-length(/rfc/@docName) - string-length('-latest') + 1) = '-latest')">
       <xsl:call-template name="warning">
         <xsl:with-param name="msg" select="concat('/rfc/front/date/@day appears to be missing for a historic draft dated ', $pub-yearmonth)"/>
@@ -4025,36 +4089,18 @@ function getMeta(rfcno, container) {
           appendRfcLinks(cont, c.textContent);
         }
         
-        insertErrata(rfcno, cont);
-  
-        cont.style.display = "block";
-      } else {
-        console.error(xhr.statusText);
-      }
-    }
-  };
-  xhr.onerror = function (e) {
-    console.error(xhr.status + " " + xhr.statusText);
-  };
-  xhr.send(null);
-}
-
-function insertErrata(rfcno, container) {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://greenbytes.de/tech/webdav/rfcerrata.raw", true);
-  xhr.onload = function (e) {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        var t = "\n" + xhr.responseText + "\n";
-        if (t.indexOf(rfcno) >= 0) {
-          container.appendChild(newElement("br"));
+        c = getChildByName(info, "errata");
+        if (c !== null) {
+          cont.appendChild(newElement("br"));
           var link = newElementWithText("a", "errata");
           link.setAttribute("href", "http://www.rfc-editor.org/errata_search.php?rfc=" + rfcno);
           var errata = newElementWithText("i", "This document has ");
           errata.appendChild(link);
           errata.appendChild(newText("."));
-          container.appendChild(errata);
+          cont.appendChild(errata);
         }
+
+        cont.style.display = "block";
       } else {
         console.error(xhr.statusText);
       }
@@ -4145,13 +4191,13 @@ blockquote {
 body {<xsl:if test="$xml2rfc-background!=''">
   background: url(<xsl:value-of select="$xml2rfc-background" />) #ffffff left top;</xsl:if>
   color: black;
-  font-family: cambria, helvetica, arial, sans-serif;
+  font-family: cambria, georgia, serif;
   font-size: 12pt;
-  margin: 2em auto;
-  max-width: 1000px;
+  margin: 2em auto;<xsl:if test="$parsedMaxwidth!=''">
+  max-width: <xsl:value-of select="$parsedMaxwidth"/>px;</xsl:if>
 }
 samp, tt, code, pre {
-  font-family: consolas, monospace;
+  font-family: consolas, monaco, monospace;
 }<xsl:if test="//xhtml:p">
 br.p {
   line-height: 150%;
@@ -4252,6 +4298,7 @@ pre.text2 {
 pre.inline {
   background-color: white;
   padding: 0em;
+  page-break-inside: auto;
 }
 pre.text {
   border-style: dotted;
@@ -4386,10 +4433,7 @@ ul p {
   margin-left: 0em;
 }
 .title, .filename, h1, h2, h3, h4 {
-  font-family: candara, helvetica, arial, sans-serif;
-}
-samp, tt, code, pre {
-  font: consolas, monospace;
+  font-family: candara, calibri, segoe, optima, arial, sans-serif;
 }
 <xsl:if test="$has-index">ul.ind, ul.ind ul {
   list-style: none;
@@ -4606,7 +4650,7 @@ dd, li, p {
     font-size: 110%;
   }
 
-  ul.toc a:nth-child(2)::after {
+  ul.toc a:last-child::after {
     content: leader('.') target-counter(attr(href), page);
   }
 
@@ -6202,7 +6246,13 @@ dd, li, p {
     <xsl:if test="$p!='' and not(ancestor::ed:del) and not(ancestor::ed:ins)">
       <xsl:attribute name="id"><xsl:value-of select="$anchor-prefix"/>.section.<xsl:value-of select="$p"/></xsl:attribute>
     </xsl:if>
-    <xsl:apply-templates/>
+    <xsl:for-each select="*">
+      <xsl:apply-templates select=".">
+        <xsl:with-param name="inherited-self-link">
+          <xsl:if test="$p!='' and position()=last()"><xsl:value-of select="$anchor-prefix"/>.section.<xsl:value-of select="$p"/></xsl:if>
+        </xsl:with-param>
+      </xsl:apply-templates>
+    </xsl:for-each>
   </div>
 </xsl:template>
 
@@ -7420,11 +7470,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.662 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.662 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.671 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.671 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2014/07/19 09:19:17 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/07/19 09:19:17 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2014/10/16 11:25:38 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/10/16 11:25:38 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>
