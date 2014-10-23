@@ -13,7 +13,7 @@
 
 <!--
 
-Find the remaining <cref>s and resolve them.
+Nico's suggestion of an attribute that goes in many elements that suggests no breaking
 
 After draft-reschke-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
@@ -4224,8 +4224,11 @@ Using CDATA:
       The generated text depends on whether the &lt;xref&gt; is empty
       (in which case the processor will try to generate a meaningful text
       fragment), and the nature of the referenced document part.
-      <cref>Need to say more about the processor output if the element
-      is empty and if it has text.</cref>
+   </t>
+   <t>
+      If the element is empty, a converter must invent text to show for the reference. If the element is filled in
+      and the format being converted to supports links, the text from the element is surrounded by a link to
+      the reference.
    </t>
    <t>   
       Any element that allows the "anchor" attribute can be referenced; however,
@@ -4347,8 +4350,8 @@ Using CDATA:
       <iref item="xref element" subitem="relative attribute"/>
       <iref item="relative attribute" subitem="in xref element"/>
       <t>
-         Specifies a relative reference from the main target.  <cref>Need more description
-         here about how this will be rendered by a processor.</cref>
+         Specifies a relative reference from the main target. Rendering relative references is based
+         on the format for the converted document.
       </t>
    </section>
 
@@ -5625,7 +5628,8 @@ Some of the features of the v3 grammar cannot be specified as a DTD.</t>
 <t>RFC Processor -- The processor used by the RFC Editor to process the input from one of
 the RFC streams, and to process XML produced during the RFC editing process.</t>
 
-<t>Draft Processor -- The processor used by the Internet Draft submission tool.</t>
+<t>Draft Processor -- The processor used by the Internet Draft submission tool. This processor
+will be defined in a different document.</t>
 
 <t>Private Processors -- There may be processors that are meant to run on the computers of
 authors. These processors may be used to produce interim versions of the non-canonical representations
@@ -5636,10 +5640,6 @@ and to convert XML that has external information into XML that has that external
 included.</t>
 
 </list></t>
-
-<t><cref>There needs to be more focus on processors before this document is complete.
-In specific, does this document get to say what the Draft Processor gets to do? Should
-this document say even less about Private Processors?</cref></t>
 
 <t>It is expected that a single piece of software will be used for both the RFC Processor
 and the Draft Processor, with different application settings to differentiate between them.
@@ -5699,9 +5699,6 @@ be:
 In general, XInclude should be used instead of ENTITY references and XML Processor Instructions (PIs)
 that allow external inclusions.
 </t>
-
-<t><cref>Need to think a bit more about using xi:include to replace src= for artwork
-or sourcecode.</cref></t>
 
 </section>
 
