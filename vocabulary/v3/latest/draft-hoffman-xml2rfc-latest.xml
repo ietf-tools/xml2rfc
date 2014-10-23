@@ -184,7 +184,9 @@ different fonts for ideographic characters used in China and Japan.</t>
 
 <t>Add the "section", "relative", and "sectionFormat" attributes to &lt;<x:ref>xref</x:ref>&gt;.</t>
 
-<t>Add the "numbered" and "removeinrfc" attributes to &lt;<x:ref>section</x:ref>&gt;.</t>
+<t>Add the "numbered" and "removeInRFC" attributes to &lt;<x:ref>section</x:ref>&gt;.</t>
+
+<t>Add the "removeInRFC" attribute to &lt;<x:ref>note</x:ref>&gt;.</t>
 
 <t>Add "boilerplateText", "figureNumber", "tableNumber",
 and "sectionNumber" attributes to &lt;<x:ref>rfc</x:ref>&gt;,
@@ -2202,6 +2204,22 @@ some types of sections.</t>
       
       </list>
    </t>
+
+   <!--note/@removeInRFC-->
+   <section title="'removeInRFC' attribute" anchor="element.note.attribute.removeInRFC" toc="exclude">
+      <iref item="Attributes" subitem="removeInRFC"/>
+      <iref item="note element" subitem="removeInRFC attribute"/>
+      <iref item="removeInRFC attribute" subitem="in note element"/>
+      <t>
+         If set to "yes", this section is marked in the processor with text indicating that it should be
+         removed before the document is published as an RFC.
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"yes"</t>
+            <t>"no" (default)</t>
+         </list>
+      </t>
+   </section>
 
    <!--note/@sectionNumber-->
    <section title="'sectionNumber' attribute" anchor="element.note.attribute.sectionNumber" toc="exclude">
@@ -5898,6 +5916,8 @@ note =
     attribute title { text }?,
     name?,
     attribute sectionNumber { text }?,
+    [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no" 
+}?,
     t+
   }
 middle = element middle { section+ }
@@ -6638,6 +6658,8 @@ to the v3 schema.</t>
 +     attribute title { text }?,
 +     name?,
 +     attribute sectionNumber { text }?,
++     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | 
++ "no" }?,
       t+
     }
   middle = element middle { section+ }

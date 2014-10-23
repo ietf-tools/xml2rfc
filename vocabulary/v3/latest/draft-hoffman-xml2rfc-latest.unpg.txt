@@ -288,7 +288,9 @@ Table of Contents
    o  Add the "section", "relative", and "sectionFormat" attributes to
       <xref>.
 
-   o  Add the "numbered" and "removeinrfc" attributes to <section>.
+   o  Add the "numbered" and "removeInRFC" attributes to <section>.
+
+   o  Add the "removeInRFC" attribute to <note>.
 
    o  Add "boilerplateText", "figureNumber", "tableNumber", and
       "sectionNumber" attributes to <rfc>, <figure>, <table>, and
@@ -1636,12 +1638,24 @@ Table of Contents
 
    2.  One or more <t> elements (Section 2.52)
 
-2.33.1.  'sectionNumber' attribute
+2.33.1.  'removeInRFC' attribute
+
+   If set to "yes", this section is marked in the processor with text
+   indicating that it should be removed before the document is published
+   as an RFC.
+
+   Allowed values:
+
+   o  "yes"
+
+   o  "no" (default)
+
+2.33.2.  'sectionNumber' attribute
 
    The name for this note.  See Appendix B.2.1 for a description of
    this.
 
-2.33.2.  'title' attribute
+2.33.3.  'title' attribute
 
    Deprecated.  Use <name> instead.
 
@@ -4136,6 +4150,8 @@ Appendix C.  Relax NG Schema
        attribute title { text }?,
        name?,
        attribute sectionNumber { text }?,
+       [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no"
+   }?,
        t+
      }
    middle = element middle { section+ }
@@ -4873,6 +4889,8 @@ Appendix D.  Schema Differences from v2
    +     attribute title { text }?,
    +     name?,
    +     attribute sectionNumber { text }?,
+   +     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" |
+   + "no" }?,
          t+
        }
      middle = element middle { section+ }
@@ -6051,6 +6069,7 @@ Index
          slugifiedName attribute  1
       note element  1
          inside front  1
+         removeInRFC attribute  1
          sectionNumber attribute  1
          title attribute  1
       number attribute
@@ -6133,6 +6152,7 @@ Index
       relative attribute
          in xref element  1
       removeInRFC attribute
+         in note element  1
          in section element  1
       rfc element  1
          boilerplateText attribute  1
