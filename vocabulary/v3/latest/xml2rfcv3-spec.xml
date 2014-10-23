@@ -662,6 +662,9 @@
             <iref item="Elements" subitem="sup"/>
             <iref item="sup element" subitem="inside blockquote"/>&lt;<x:ref>sup</x:ref>&gt; elements (<xref target="element.sup"/>)</t>
          <t><!--AG-->
+            <iref item="Elements" subitem="t"/>
+            <iref item="t element" subitem="inside blockquote"/>&lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
+         <t><!--AG-->
             <iref item="Elements" subitem="tt"/>
             <iref item="tt element" subitem="inside blockquote"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
       </list>
@@ -673,17 +676,18 @@
       <iref item="blockquote element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in blockquote element"/>
       <t>
-        Document-wide unique identifier for this quotation.
+         Document-wide unique identifier for this quotation.
       </t>
    </section>
 
    <!--blockquote/@cite-->
-   <section title="'cite' attribute (mandatory)" anchor="element.blockquote.attribute.cite" toc="exclude">
+   <section title="'cite' attribute" anchor="element.blockquote.attribute.cite" toc="exclude">
       <iref item="Attributes" subitem="cite"/>
       <iref item="blockquote element" subitem="cite attribute"/>
       <iref item="cite attribute" subitem="in blockquote element"/>
       <t>
-         The source of the citation. This must be a URI.
+         The source of the citation. This must be a URI. If the quotedFrom attribute is given, this URI will be
+         used by processors as the link for the text of that attribute.
       </t>
    </section>
 
@@ -695,6 +699,16 @@
       <t>
          The number for this blockquote within the section. The numbering is shared with other elements of a section.
          This is described in more detail in <xref target="anchorsandids"/>.
+      </t>
+   </section>
+
+   <!--blockquote/@quotedFrom-->
+   <section title="'quotedFrom' attribute" anchor="element.blockquote.attribute.quotedFrom" toc="exclude">
+      <iref item="Attributes" subitem="quotedFrom"/>
+      <iref item="blockquote element" subitem="quotedFrom attribute"/>
+      <iref item="quotedFrom attribute" subitem="in blockquote element"/>
+      <t><!--AG-->
+         <cref anchor="element.blockquote.attribute.quotedFrom.missing">attribute description missing</cref>
       </t>
    </section>
 </section>
@@ -844,7 +858,7 @@
       When producing Internet-Drafts, the Draft Processor uses this date to compute the expiration date (see <xref target="IDGUIDE"/>).
       When one or more of "year",
       "month", or "day" are left out, the processor will attempt to use the
-      current system date if the attributes that are present are consisten with that
+      current system date if the attributes that are present are consistent with that
       date.
    </t>
    <t>
@@ -1136,8 +1150,9 @@
       <iref item="Attributes" subitem="partNumber"/>
       <iref item="dt element" subitem="partNumber attribute"/>
       <iref item="partNumber attribute" subitem="in dt element"/>
-      <t><!--AG-->
-         <cref anchor="element.dt.attribute.partNumber.missing">attribute description missing</cref>
+      <t>
+         The number for this term within the section. The numbering is shared with other elements of a section.
+         This is described in more detail in <xref target="anchorsandids"/>.
       </t>
    </section>
 </section>
@@ -3138,7 +3153,7 @@ Using CDATA:
    <t>
       Contains a paragraph of text.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.t.contents"><!--AG-->
       Content model:
     </t>

@@ -1005,6 +1005,9 @@ some types of sections.</t>
             <iref item="Elements" subitem="sup"/>
             <iref item="sup element" subitem="inside blockquote"/>&lt;<x:ref>sup</x:ref>&gt; elements (<xref target="element.sup"/>)</t>
          <t><!--AG-->
+            <iref item="Elements" subitem="t"/>
+            <iref item="t element" subitem="inside blockquote"/>&lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
+         <t><!--AG-->
             <iref item="Elements" subitem="tt"/>
             <iref item="tt element" subitem="inside blockquote"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</t>
       </list>
@@ -1021,7 +1024,7 @@ some types of sections.</t>
    </section>
 
    <!--blockquote/@cite-->
-   <section title="'cite' attribute (mandatory)" anchor="element.blockquote.attribute.cite" toc="exclude">
+   <section title="'cite' attribute" anchor="element.blockquote.attribute.cite" toc="exclude">
       <iref item="Attributes" subitem="cite"/>
       <iref item="blockquote element" subitem="cite attribute"/>
       <iref item="cite attribute" subitem="in blockquote element"/>
@@ -1039,6 +1042,17 @@ some types of sections.</t>
       <t>
          The number for this blockquote within the section. The numbering is shared with other elements of a section.
          This is described in more detail in <xref target="anchorsandids"/>.
+      </t>
+   </section>
+
+   <!--blockquote/@quotedFrom-->
+   <section title="'quotedFrom' attribute" anchor="element.blockquote.attribute.quotedFrom" toc="exclude">
+      <iref item="Attributes" subitem="quotedFrom"/>
+      <iref item="blockquote element" subitem="quotedFrom attribute"/>
+      <iref item="quotedFrom attribute" subitem="in blockquote element"/>
+      <t>
+         Name of person or document the text in this element is quoted from. This will be rendered by the
+         processor as visible text at the end of the quotation.
       </t>
    </section>
 </section>
@@ -3483,7 +3497,7 @@ Using CDATA:
    <t>
       Contains a paragraph of text.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.t.contents"><!--AG-->
       Content model:
     </t>
@@ -5922,7 +5936,8 @@ blockquote =
   element blockquote {
     attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
-    attribute cite { text },
+    attribute cite { text }?,
+    attribute quotedFrom { text }?,
     (text
      | artwork
      | b
@@ -5934,6 +5949,7 @@ blockquote =
      | strong
      | sub
      | sup
+     | t
      | tt)*
   }
 \list =
@@ -6662,7 +6678,8 @@ to the v3 schema.</t>
 +   element blockquote {
 +     attribute anchor { xsd:ID }?,
 +     attribute partNumber { text }?,
-+     attribute cite { text },
++     attribute cite { text }?,
++     attribute quotedFrom { text }?,
 +     (text
 +      | artwork
 +      | b
@@ -6674,6 +6691,7 @@ to the v3 schema.</t>
 +      | strong
 +      | sub
 +      | sup
++      | t
 +      | tt)*
     }
   \list =
