@@ -37,7 +37,6 @@ rfc =
     [ a:defaultValue = "yes" ] attribute symRefs { "yes" | "no" }?,
     [ a:defaultValue = "yes" ] attribute tocInclude { "yes" | "no" }?,
     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
-    attribute boilerplateText { text }?,
     link?,
     front,
     middle,
@@ -50,7 +49,15 @@ link =
   }
 front =
   element front {
-    title, author+, date?, area*, workgroup*, keyword*, abstract?, note*
+    title,
+    author+,
+    date?,
+    area*,
+    workgroup*,
+    keyword*,
+    abstract?,
+    note*,
+    boilerplate?
   }
 title =
   element title {
@@ -139,6 +146,7 @@ note =
     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no" }?,
     t+
   }
+boilerplate = element boilerplate { section+ }
 middle = element middle { section+ }
 section =
   element section {

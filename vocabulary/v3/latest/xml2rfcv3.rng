@@ -104,9 +104,6 @@
         <attribute name="tocDepth" a:defaultValue="3"/>
       </optional>
       <optional>
-        <attribute name="boilerplateText"/>
-      </optional>
-      <optional>
         <ref name="link"/>
       </optional>
       <ref name="front"/>
@@ -148,6 +145,9 @@
       <zeroOrMore>
         <ref name="note"/>
       </zeroOrMore>
+      <optional>
+        <ref name="boilerplate"/>
+      </optional>
     </element>
   </define>
   <define name="title">
@@ -366,6 +366,13 @@
       </optional>
       <oneOrMore>
         <ref name="t"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="boilerplate">
+    <element name="boilerplate">
+      <oneOrMore>
+        <ref name="section"/>
       </oneOrMore>
     </element>
   </define>
