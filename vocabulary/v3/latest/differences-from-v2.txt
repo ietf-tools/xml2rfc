@@ -143,12 +143,18 @@
   area = element area { text }
   workgroup = element workgroup { text }
   keyword = element keyword { text }
-  abstract = element abstract { t+ }
+- abstract = element abstract { t+ }
++ abstract =
++   element abstract {
++     attribute sectionNumber { text }?,
++     t+
++   }
   note =
     element note {
 -     attribute title { text },
 +     attribute title { text }?,
 +     name?,
++     attribute sectionNumber { text }?,
       t+
     }
   middle = element middle { section+ }

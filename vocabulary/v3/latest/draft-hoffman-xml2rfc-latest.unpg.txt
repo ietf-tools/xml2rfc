@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                           October 22, 2014
+Obsoletes: 2629 (if approved)                           October 23, 2014
 Intended status: Informational
-Expires: April 25, 2015
+Expires: April 26, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 25, 2015.
+   This Internet-Draft will expire on April 26, 2015.
 
 Copyright Notice
 
@@ -423,6 +423,11 @@ Table of Contents
    Content model:
 
    One or more <t> elements (Section 2.52)
+
+2.1.1.  'sectionNumber' attribute
+
+   The name for the abstract.  See Appendix B.2.1 for a description of
+   this.
 
 2.2.  <address>
 
@@ -1631,7 +1636,12 @@ Table of Contents
 
    2.  One or more <t> elements (Section 2.52)
 
-2.33.1.  'title' attribute
+2.33.1.  'sectionNumber' attribute
+
+   The name for this note.  See Appendix B.2.1 for a description of
+   this.
+
+2.33.2.  'title' attribute
 
    Deprecated.  Use <name> instead.
 
@@ -3954,9 +3964,11 @@ B.2.1.  Overlapping Values
    o  "tableNumber" always has the format "t-nnn", where "nnn" is the
       figure number.  For example, this would be "t-5" for Table 5.
 
-   o  "sectionNumber" always has the format "s-nnn", where "nnn" is the
-      section number.  For example, this would be "s-2.1.3" for Section
-      2.1.3.
+   o  "sectionNumber" for regular sections always has the format
+      "s-nnn", where "nnn" is the section number.  For example, this
+      would be "s-2.1.3" for Section 2.1.3.  For the <abstract> element,
+      it is always "s-abstract".  For the <note> element, it is always
+      "s-note-nnn", where "nnn" is a sequential value.
 
    o  "partNumber" always has the format "p-nnn-mmm", where "nnn" is the
       section number and "mmm" is the relative position in the section.
@@ -4114,11 +4126,16 @@ Appendix C.  Relax NG Schema
    area = element area { text }
    workgroup = element workgroup { text }
    keyword = element keyword { text }
-   abstract = element abstract { t+ }
+   abstract =
+     element abstract {
+       attribute sectionNumber { text }?,
+       t+
+     }
    note =
      element note {
        attribute title { text }?,
        name?,
+       attribute sectionNumber { text }?,
        t+
      }
    middle = element middle { section+ }
@@ -4844,12 +4861,18 @@ Appendix D.  Schema Differences from v2
      area = element area { text }
      workgroup = element workgroup { text }
      keyword = element keyword { text }
-     abstract = element abstract { t+ }
+   - abstract = element abstract { t+ }
+   + abstract =
+   +   element abstract {
+   +     attribute sectionNumber { text }?,
+   +     t+
+   +   }
      note =
        element note {
    -     attribute title { text },
    +     attribute title { text }?,
    +     name?,
+   +     attribute sectionNumber { text }?,
          t+
        }
      middle = element middle { section+ }
@@ -5455,6 +5478,7 @@ Index
          in title element  1
       abstract element  1
          inside front  1
+         sectionNumber attribute  1
       address element  1
          inside author  1
       align attribute
@@ -6027,6 +6051,7 @@ Index
          slugifiedName attribute  1
       note element  1
          inside front  1
+         sectionNumber attribute  1
          title attribute  1
       number attribute
          in rfc element  1
@@ -6148,6 +6173,8 @@ Index
       sectionFormat attribute
          in xref element  1
       sectionNumber attribute
+         in abstract element  1
+         in note element  1
          in section element  1
       seriesInfo element  1
          asciiname attribute  1
