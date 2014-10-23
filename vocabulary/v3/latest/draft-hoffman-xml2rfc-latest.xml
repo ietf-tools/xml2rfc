@@ -1016,7 +1016,7 @@ some types of sections.</t>
       <iref item="blockquote element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in blockquote element"/>
       <t>
-        Document-wide unique identifier for this quotation.
+         Document-wide unique identifier for this quotation.
       </t>
    </section>
 
@@ -1026,7 +1026,8 @@ some types of sections.</t>
       <iref item="blockquote element" subitem="cite attribute"/>
       <iref item="cite attribute" subitem="in blockquote element"/>
       <t>
-         The source of the citation. This must be a URI.
+         The source of the citation. This must be a URI. If the quotedFrom attribute is given, this URI will be
+         used by processors as the link for the text of that attribute.
       </t>
    </section>
 
@@ -5700,6 +5701,9 @@ The actual conversions done in slugification will be specified at a later time.<
 not pick an anchor name that starts with a single letter followed by a hyphen. If an anchor
 does overlap with one of the types of names above, the processor will reject the
 document.</t>
+
+<t>In the values for "figureNumber", "tableNumber", sectionNumber", and "partNumber", there is never
+a trailing period.</t>
 
 </list>
 </t>
