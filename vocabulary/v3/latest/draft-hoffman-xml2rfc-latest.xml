@@ -290,6 +290,9 @@ no use case for them that cannot be achieved in other ways.</t>
 <t>In &lt;<x:ref>postal</x:ref>&gt;, allow the sub-elements to be in any order. Also allow the inclusion
 of the new &lt;<x:ref>postalLine</x:ref>&gt; instead of the older elements.</t>
 
+<t>In &lt;<x:ref>references</x:ref>&gt;, now require &lt;<x:ref>name</x:ref>&gt;
+to give the section name.</t>
+
 <t>In &lt;<x:ref>section</x:ref>&gt;, restricted the names of the anchors that can be used on
 some types of sections.</t>
 
@@ -2171,7 +2174,7 @@ some types of sections.</t>
       The name of the section, note, figure, or texttable. This name can have flow markup such
       as to make some characters use a fixed-width font, or to include references.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>), and &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>), and &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
    <t anchor="element.name.contents"><!--AG-->
       Content model:
     </t>
@@ -2697,36 +2700,29 @@ some types of sections.</t>
       In the early days of the RFC series, there was only one "References" section per RFC. This convention
       was later changed to group references into two sets, "Normative" and "Informative"
       as described in <xref target="RFC7322"/>).
-      This vocabulary supports the split with the "title" attribute.
+      This vocabulary supports the split with the &lt;<x:ref>name</x:ref>&gt; child element.
+      If that element is not given, the default value is "References".
+      In general, the title should be either "Normative References" or "Informative References".
    </t>
    <t>
       By default, the order of references is significant. Processors, however,
       can be instructed to sort them based on their anchor names.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
-   <t anchor="element.references.contents"><!--AG-->
-      Content model:
-    </t>
+   <t anchor="element.references.contents"><!--AG-->Content model:</t>
+   <t><!--AG-->In this order:<list style="numbers">
         
-   <t><!--AG-->
-      <iref item="Elements" subitem="reference"/>
-      <iref item="reference element" subitem="inside references"/>One or more &lt;<x:ref>reference</x:ref>&gt; elements (<xref target="element.reference"/>)</t>
+         <t><!--AG-->
+            <iref item="Elements" subitem="name"/>
+            <iref item="name element" subitem="inside references"/>One optional &lt;<x:ref>name</x:ref>&gt; element (<xref target="element.name"/>)</t>
       
-
-   <!--references/@title-->
-   <section title="'title' attribute" anchor="element.references.attribute.title" toc="exclude">
-      <iref item="Attributes" subitem="title"/>
-      <iref item="references element" subitem="title attribute"/>
-      <iref item="title attribute" subitem="in references element"/>
-      <t>
-            Provides the title for the References section (defaulting to
-            "References").
-         </t>
-      <t>
-            In general, the title should be either "Normative References" or
-            "Informative References".
-         </t>
-   </section>
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="reference"/>
+            <iref item="reference element" subitem="inside references"/>One or more &lt;<x:ref>reference</x:ref>&gt; elements (<xref target="element.reference"/>)</t>
+      
+      </list>
+   </t>
 </section>
 
 <!--region-->
@@ -6457,11 +6453,7 @@ displayreference =
     attribute from { text },
     attribute to { text }
   }
-references =
-  element references {
-    [ a:defaultValue = "References" ] attribute title { text }?,
-    reference+
-  }
+references = element references { name?, reference+ }
 reference =
   element reference {
     attribute anchor { xsd:ID },
@@ -7198,7 +7190,13 @@ to the v3 schema.</t>
       attribute align { "left" | "center" | "right" }?,
 -     text
 +     (cref | eref | iref | xref | text)*
-+   }
+    }
+- c = element c { (text | xref | eref | iref | cref | spanx)* }
+- back = element back { references*, section* }
+- references =
+-   element references {
+-     [ a:defaultValue = "References" ] attribute title { text }?,
+-     reference+
 + c =
 +   element c {
 +     (text
@@ -7215,21 +7213,15 @@ to the v3 schema.</t>
 +      | sup
 +      | tt
 +      | xref)*
-+   }
+    }
 + bcp14 = element bcp14 { text }
 + back = element back { displayreference*, references*, section* }
 + displayreference =
 +   element displayreference {
 +     attribute from { text },
 +     attribute to { text }
-    }
-- c = element c { (text | xref | eref | iref | cref | spanx)* }
-- back = element back { references*, section* }
-  references =
-    element references {
-      [ a:defaultValue = "References" ] attribute title { text }?,
-      reference+
-    }
++   }
++ references = element references { name?, reference+ }
   reference =
     element reference {
       attribute anchor { xsd:ID },

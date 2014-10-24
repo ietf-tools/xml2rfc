@@ -671,7 +671,13 @@
       attribute align { "left" | "center" | "right" }?,
 -     text
 +     (cref | eref | iref | xref | text)*
-+   }
+    }
+- c = element c { (text | xref | eref | iref | cref | spanx)* }
+- back = element back { references*, section* }
+- references =
+-   element references {
+-     [ a:defaultValue = "References" ] attribute title { text }?,
+-     reference+
 + c =
 +   element c {
 +     (text
@@ -688,21 +694,15 @@
 +      | sup
 +      | tt
 +      | xref)*
-+   }
+    }
 + bcp14 = element bcp14 { text }
 + back = element back { displayreference*, references*, section* }
 + displayreference =
 +   element displayreference {
 +     attribute from { text },
 +     attribute to { text }
-    }
-- c = element c { (text | xref | eref | iref | cref | spanx)* }
-- back = element back { references*, section* }
-  references =
-    element references {
-      [ a:defaultValue = "References" ] attribute title { text }?,
-      reference+
-    }
++   }
++ references = element references { name?, reference+ }
   reference =
     element reference {
       attribute anchor { xsd:ID },
