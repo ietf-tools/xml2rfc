@@ -1657,7 +1657,7 @@ Table of Contents
 
    In this order:
 
-   1.  One optional <name> element (Section 2.33)
+   1.  One <name> element (Section 2.33)
 
    2.  One or more <t> elements (Section 2.53)
 
@@ -1961,8 +1961,7 @@ Table of Contents
    section per RFC.  This convention was later changed to group
    references into two sets, "Normative" and "Informative" as described
    in [RFC7322]).  This vocabulary supports the split with the <name>
-   child element.  If that element is not given, the default value is
-   "References".  In general, the title should be either "Normative
+   child element.  In general, the title should be either "Normative
    References" or "Informative References".
 
    By default, the order of references is significant.  Processors,
@@ -1974,7 +1973,7 @@ Table of Contents
 
    In this order:
 
-   1.  One optional <name> element (Section 2.33)
+   1.  One <name> element (Section 2.33)
 
    2.  One or more <reference> elements (Section 2.41)
 
@@ -2207,7 +2206,7 @@ Table of Contents
 
    In this order:
 
-   1.  One optional <name> element (Section 2.33)
+   1.  One <name> element (Section 2.33)
 
    2.  In any order:
 
@@ -4166,7 +4165,7 @@ Appendix C.  Relax NG Schema
    note =
      element note {
        attribute title { text }?,
-       name?,
+       name,
        attribute sectionNumber { text }?,
        [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no"
    }?,
@@ -4184,7 +4183,7 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no"
    }?,
        attribute sectionNumber { text }?,
-       name?,
+       name,
        (artwork
         | aside
         | blockquote
@@ -4686,7 +4685,7 @@ Appendix C.  Relax NG Schema
        attribute from { text },
        attribute to { text }
      }
-   references = element references { name?, reference+ }
+   references = element references { name, reference+ }
    reference =
      element reference {
        attribute anchor { xsd:ID },
@@ -4908,7 +4907,7 @@ Appendix D.  Schema Differences from v2
        element note {
    -     attribute title { text },
    +     attribute title { text }?,
-   +     name?,
+   +     name,
    +     attribute sectionNumber { text }?,
    +     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" |
    + "no" }?,
@@ -4929,7 +4928,7 @@ Appendix D.  Schema Differences from v2
    +     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" |
    + "no" }?,
    +     attribute sectionNumber { text }?,
-   +     name?,
+   +     name,
    +     (artwork
    +      | aside
    +      | blockquote
@@ -5451,7 +5450,7 @@ Appendix D.  Schema Differences from v2
    +     attribute from { text },
    +     attribute to { text }
    +   }
-   + references = element references { name?, reference+ }
+   + references = element references { name, reference+ }
      reference =
        element reference {
          attribute anchor { xsd:ID },

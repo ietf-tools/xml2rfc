@@ -141,7 +141,7 @@ abstract =
 note =
   element note {
     attribute title { text }?,
-    name?,
+    name,
     attribute sectionNumber { text }?,
     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no" }?,
     t+
@@ -157,7 +157,7 @@ section =
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no" }?,
     attribute sectionNumber { text }?,
-    name?,
+    name,
     (artwork
      | aside
      | blockquote
@@ -657,7 +657,7 @@ displayreference =
     attribute from { text },
     attribute to { text }
   }
-references = element references { name?, reference+ }
+references = element references { name, reference+ }
 reference =
   element reference {
     attribute anchor { xsd:ID },
