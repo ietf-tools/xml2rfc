@@ -1437,9 +1437,15 @@ Table of Contents
 
    Provides terms for the document's index.
 
-   Index entries can be either single items (when just the "item"
-   attribute is given) or nested items (by specifying "subitem" as
-   well).
+   Index entries can be either be regular entries (when just the "item"
+   attribute is given) or nested entries (by specifying "subitem" as
+   well), grouped under a regular entry.
+
+   Index entries generally refer to the exact place where the <iref>
+   element occured.  An exception is the occurence as a child element of
+   <section>, in which case the whole section is considered to be
+   relevant for that index entry.  In some formats, index entries of
+   this type might be displayed as range.
 
    This element appears as a child element of: <annotation>
    (Section 2.3), <aside> (Section 2.6), <b> (Section 2.8), <c>
@@ -2999,9 +3005,12 @@ Table of Contents
 
    The generated text depends on whether the <xref> is empty (in which
    case the processor will try to generate a meaningful text fragment),
-   and the nature of the referenced document part. [[anchor6: Need to
-   say more about the processor output if the element is empty and if it
-   has text.]]
+   and the nature of the referenced document part.
+
+   If the element is empty, a converter must invent text to show for the
+   reference.  If the element is filled in and the format being
+   converted to supports links, the text from the element is surrounded
+   by a link to the reference.
 
    Any element that allows the "anchor" attribute can be referenced;
    however, there are restrictions with respect to the text content
@@ -3087,9 +3096,9 @@ Table of Contents
 
 2.66.3.  'relative' attribute
 
-   Specifies a relative reference from the main target. [[anchor7: Need
-   more description here about how this will be rendered by a
-   processor.]]
+   Specifies a relative reference from the main target.  Rendering
+   relative references is based on the format for the converted
+   document.
 
 2.66.4.  'section' attribute
 
@@ -3860,7 +3869,8 @@ Appendix B.  The v3 Format and Processors
       during the RFC editing process.
 
    o  Draft Processor -- The processor used by the Internet Draft
-      submission tool.
+      submission tool.  This processor will be defined in a different
+      document.
 
    o  Private Processors -- There may be processors that are meant to
       run on the computers of authors.  These processors may be used to
@@ -3871,11 +3881,6 @@ Appendix B.  The v3 Format and Processors
       to be Internet Drafts or RFCs; and to convert XML that has
       external information into XML that has that external information
       included.
-
-   [[anchor13: There needs to be more focus on processors before this
-   document is complete.  In specific, does this document get to say
-   what the Draft Processor gets to do?  Should this document say even
-   less about Private Processors?]]
 
    It is expected that a single piece of software will be used for both
    the RFC Processor and the Draft Processor, with different application
@@ -3935,9 +3940,6 @@ B.1.  Including External Text
 
    In general, XInclude should be used instead of ENTITY references and
    XML Processor Instructions (PIs) that allow external inclusions.
-
-   [[anchor14: Need to think a bit more about using xi:include to
-   replace src= for artwork or sourcecode.]]
 
 B.2.  Anchors and IDs
 
