@@ -1,0 +1,1530 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <define name="rfc">
+    <element name="rfc">
+      <optional>
+        <attribute name="number"/>
+      </optional>
+      <optional>
+        <attribute name="obsoletes" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="updates" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="category">
+          <choice>
+            <value>std</value>
+            <value>bcp</value>
+            <value>info</value>
+            <value>exp</value>
+            <value>historic</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="consensus">
+          <choice>
+            <value>no</value>
+            <value>yes</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="seriesNo"/>
+      </optional>
+      <optional>
+        <attribute name="ipr">
+          <choice>
+            <value>full2026</value>
+            <value>noDerivativeWorks2026</value>
+            <value>none</value>
+            <value>full3667</value>
+            <value>noModification3667</value>
+            <value>noDerivatives3667</value>
+            <value>full3978</value>
+            <value>noModification3978</value>
+            <value>noDerivatives3978</value>
+            <value>trust200811</value>
+            <value>noModificationTrust200811</value>
+            <value>noDerivativesTrust200811</value>
+            <value>trust200902</value>
+            <value>noModificationTrust200902</value>
+            <value>noDerivativesTrust200902</value>
+            <value>pre5378Trust200902</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="iprExtract">
+          <data type="IDREF"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="submissionType" a:defaultValue="IETF">
+          <choice>
+            <value>IETF</value>
+            <value>IAB</value>
+            <value>IRTF</value>
+            <value>independent</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="docName"/>
+      </optional>
+      <optional>
+        <attribute name="xml:lang" a:defaultValue="en"/>
+      </optional>
+      <optional>
+        <attribute name="sortRefs" a:defaultValue="no">
+           <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="symRefs" a:defaultValue="yes">
+           <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="tocInclude" a:defaultValue="yes">
+           <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="tocDepth" a:defaultValue="3"/>
+      </optional>
+      <optional>
+        <ref name="link"/>
+      </optional>
+      <ref name="front"/>
+      <ref name="middle"/>
+      <optional>
+        <ref name="back"/>
+      </optional>
+    </element>
+  </define>
+  <define name="link">
+    <element name="link">
+      <attribute name="href"/>
+      <optional>
+        <attribute name="rel"/>
+      </optional>
+    </element>
+  </define>
+  <define name="front">
+    <element name="front">
+      <ref name="title"/>
+      <oneOrMore>
+        <ref name="author"/>
+      </oneOrMore>
+      <optional>
+        <ref name="date"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="area"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="workgroup"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="keyword"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="abstract"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="note"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="boilerplate"/>
+      </optional>
+    </element>
+  </define>
+  <define name="title">
+    <element name="title">
+      <optional>
+        <attribute name="abbrev"/>
+      </optional>
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="author">
+    <element name="author">
+      <optional>
+        <attribute name="initials"/>
+      </optional>
+      <optional>
+        <attribute name="surname"/>
+      </optional>
+      <optional>
+        <attribute name="fullname"/>
+      </optional>
+      <optional>
+        <attribute name="role">
+          <choice>
+            <value>editor</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="xml:lang" a:defaultValue="en"/>
+      </optional>
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <optional>
+        <ref name="organization"/>
+      </optional>
+      <optional>
+        <ref name="address"/>
+      </optional>
+    </element>
+  </define>
+  <define name="organization">
+    <element name="organization">
+      <optional>
+        <attribute name="abbrev"/>
+      </optional>
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="address">
+    <element name="address">
+      <zeroOrMore>
+        <choice>
+          <ref name="email"/>
+          <ref name="facsimile"/>
+          <ref name="phone"/>
+          <ref name="postal"/>
+          <ref name="uri"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="postal">
+    <element name="postal">
+      <optional>
+        <attribute name="xml:lang" a:defaultValue="en"/>
+      </optional>
+      <choice>
+        <zeroOrMore>
+          <choice>
+            <ref name="city"/>
+            <ref name="code"/>
+            <ref name="country"/>
+            <ref name="region"/>
+            <ref name="street"/>
+          </choice>
+        </zeroOrMore>
+        <oneOrMore>
+          <ref name="postalLine"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="street">
+    <element name="street">
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="city">
+    <element name="city">
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="region">
+    <element name="region">
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="code">
+    <element name="code">
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="country">
+    <element name="country">
+      <text/>
+    </element>
+  </define>
+  <define name="postalLine">
+    <element name="postalLine">
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="phone">
+    <element name="phone">
+      <text/>
+    </element>
+  </define>
+  <define name="facsimile">
+    <element name="facsimile">
+      <text/>
+    </element>
+  </define>
+  <define name="email">
+    <element name="email">
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="uri">
+    <element name="uri">
+      <text/>
+    </element>
+  </define>
+  <define name="date">
+    <element name="date">
+      <optional>
+        <attribute name="day"/>
+      </optional>
+      <optional>
+        <attribute name="month"/>
+      </optional>
+      <optional>
+        <attribute name="year"/>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="area">
+    <element name="area">
+      <text/>
+    </element>
+  </define>
+  <define name="workgroup">
+    <element name="workgroup">
+      <text/>
+    </element>
+  </define>
+  <define name="keyword">
+    <element name="keyword">
+      <text/>
+    </element>
+  </define>
+  <define name="abstract">
+    <element name="abstract">
+      <optional>
+        <attribute name="sectionNumber"/>
+      </optional>
+      <oneOrMore>
+        <ref name="t"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="note">
+    <element name="note">
+      <optional>
+        <attribute name="title"/>
+      </optional>
+      <ref name="name"/>
+      <optional>
+        <attribute name="sectionNumber"/>
+      </optional>
+      <optional>
+        <attribute name="removeInRFC" a:defaultValue="no">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <oneOrMore>
+        <ref name="t"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="boilerplate">
+    <element name="boilerplate">
+      <oneOrMore>
+        <ref name="section"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="middle">
+    <element name="middle">
+      <oneOrMore>
+        <ref name="section"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="section">
+    <element name="section">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="title"/>
+      </optional>
+      <optional>
+        <attribute name="numbered" a:defaultValue="yes">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="toc" a:defaultValue="default">
+          <choice>
+            <value>include</value>
+            <value>exclude</value>
+            <value>default</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="removeInRFC" a:defaultValue="no">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="sectionNumber"/>
+      </optional>
+      <ref name="name"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="artwork"/>
+          <ref name="aside"/>
+          <ref name="blockquote"/>
+          <ref name="dl"/>
+          <ref name="figure"/>
+          <ref name="iref"/>
+          <ref name="ol"/>
+          <ref name="sourcecode"/>
+          <ref name="t"/>
+          <ref name="table"/>
+          <ref name="texttable"/>
+          <ref name="ul"/>
+        </choice>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="section"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="name">
+    <element name="name">
+      <optional>
+        <attribute name="slugifiedName"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="cref"/>
+          <ref name="eref"/>
+          <ref name="iref"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="t">
+    <element name="t">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="hangText"/>
+      </optional>
+      <optional>
+        <attribute name="partNumber"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="list"/>
+          <ref name="ol"/>
+          <ref name="spanx"/>
+          <ref name="strong"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="tt"/>
+          <ref name="vspace"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="aside">
+    <element name="aside">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="partNumber"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="artwork"/>
+          <ref name="figure"/>
+          <ref name="iref"/>
+          <ref name="sourcecode"/>
+          <ref name="t"/>
+          <ref name="texttable"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="blockquote">
+    <element name="blockquote">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="partNumber"/>
+      </optional>
+      <optional>
+        <attribute name="cite"/>
+      </optional>
+      <optional>
+        <attribute name="quotedFrom"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="artwork"/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="em"/>
+          <ref name="figure"/>
+          <ref name="i"/>
+          <ref name="sourcecode"/>
+          <ref name="strong"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="t"/>
+          <ref name="tt"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="list">
+    <element name="list">
+      <optional>
+        <attribute name="style" a:defaultValue="empty"/>
+      </optional>
+      <optional>
+        <attribute name="hangIndent"/>
+      </optional>
+      <optional>
+        <attribute name="counter"/>
+      </optional>
+      <oneOrMore>
+        <ref name="t"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="ol">
+    <element name="ol">
+      <optional>
+        <attribute name="style" a:defaultValue="1"/>
+      </optional>
+      <optional>
+        <attribute name="start" a:defaultValue="1"/>
+      </optional>
+      <optional>
+        <attribute name="group"/>
+      </optional>
+      <optional>
+        <attribute name="spacing" a:defaultValue="normal">
+          <choice>
+            <value>normal</value>
+            <value>compact</value>
+          </choice>
+        </attribute>
+      </optional>
+      <oneOrMore>
+        <ref name="li"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="ul">
+    <element name="ul">
+      <optional>
+        <attribute name="spacing" a:defaultValue="normal">
+          <choice>
+            <value>normal</value>
+            <value>compact</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="empty" a:defaultValue="false">
+          <choice>
+            <value>false</value>
+            <value>true</value>
+          </choice>
+        </attribute>
+      </optional>
+      <oneOrMore>
+        <ref name="li"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="li">
+    <element name="li">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="partNumber"/>
+      </optional>
+      <choice>
+        <oneOrMore>
+          <ref name="t"/>
+        </oneOrMore>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <ref name="artwork"/>
+            <ref name="b"/>
+            <ref name="bcp14"/>
+            <ref name="cref"/>
+            <ref name="dl"/>
+            <ref name="em"/>
+            <ref name="eref"/>
+            <ref name="figure"/>
+            <ref name="i"/>
+            <ref name="iref"/>
+            <ref name="ol"/>
+            <ref name="sourcecode"/>
+            <ref name="strong"/>
+            <ref name="sub"/>
+            <ref name="sup"/>
+            <ref name="tt"/>
+            <ref name="ul"/>
+            <ref name="xref"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="dl">
+    <element name="dl">
+      <optional>
+        <attribute name="spacing" a:defaultValue="normal">
+          <choice>
+            <value>normal</value>
+            <value>compact</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="hanging" a:defaultValue="false">
+          <choice>
+            <value>false</value>
+            <value>true</value>
+          </choice>
+        </attribute>
+      </optional>
+      <oneOrMore>
+        <ref name="dt"/>
+        <ref name="dd"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="dt">
+    <element name="dt">
+      <optional>
+        <attribute name="partNumber"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="strong"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="dd">
+    <element name="dd">
+      <choice>
+        <oneOrMore>
+          <ref name="t"/>
+        </oneOrMore>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <ref name="artwork"/>
+            <ref name="b"/>
+            <ref name="bcp14"/>
+            <ref name="cref"/>
+            <ref name="dl"/>
+            <ref name="em"/>
+            <ref name="eref"/>
+            <ref name="figure"/>
+            <ref name="i"/>
+            <ref name="iref"/>
+            <ref name="ol"/>
+            <ref name="sourcecode"/>
+            <ref name="strong"/>
+            <ref name="sub"/>
+            <ref name="sup"/>
+            <ref name="tt"/>
+            <ref name="ul"/>
+            <ref name="xref"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="xref">
+    <element name="xref">
+      <attribute name="target">
+        <data type="IDREF"/>
+      </attribute>
+      <optional>
+        <attribute name="pageno" a:defaultValue="false">
+          <choice>
+            <value>true</value>
+            <value>false</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="format" a:defaultValue="default">
+          <choice>
+            <value>counter</value>
+            <value>title</value>
+            <value>none</value>
+            <value>default</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="section"/>
+        <optional>
+          <attribute name="relative"/>
+        </optional>
+        <optional>
+          <attribute name="sectionFormat"/>
+        </optional>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="eref">
+    <element name="eref">
+      <attribute name="target"/>
+      <text/>
+    </element>
+  </define>
+  <define name="iref">
+    <element name="iref">
+      <attribute name="item"/>
+      <optional>
+        <attribute name="subitem" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="primary" a:defaultValue="false">
+          <choice>
+            <value>true</value>
+            <value>false</value>
+          </choice>
+        </attribute>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="cref">
+    <element name="cref">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="source"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="b"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="strong"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="tt">
+    <element name="tt">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="strong"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="b">
+    <element name="b">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="strong">
+    <element name="strong">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="i">
+    <element name="i">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="eref"/>
+          <ref name="iref"/>
+          <ref name="strong"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="em">
+    <element name="em">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="eref"/>
+          <ref name="iref"/>
+          <ref name="strong"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="sub">
+    <element name="sub">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="strong"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="sup">
+    <element name="sup">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="strong"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="spanx">
+    <element name="spanx">
+      <optional>
+        <attribute name="xml:space" a:defaultValue="preserve">
+          <choice>
+            <value>default</value>
+            <value>preserve</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="style" a:defaultValue="emph"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="vspace">
+    <element name="vspace">
+      <optional>
+        <attribute name="blankLines" a:defaultValue="0"/>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="figure">
+    <element name="figure">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="title" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="suppress-title" a:defaultValue="false">
+          <choice>
+            <value>true</value>
+            <value>false</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="src"/>
+      </optional>
+      <optional>
+        <attribute name="align" a:defaultValue="left">
+          <choice>
+            <value>left</value>
+            <value>center</value>
+            <value>right</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="alt" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="width" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="height" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="figureNumber"/>
+      </optional>
+      <optional>
+        <ref name="name"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="iref"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="preamble"/>
+      </optional>
+      <oneOrMore>
+        <choice>
+          <ref name="artwork"/>
+          <ref name="sourcecode"/>
+        </choice>
+      </oneOrMore>
+      <optional>
+        <ref name="postamble"/>
+      </optional>
+    </element>
+  </define>
+  <define name="table">
+    <element name="table">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="tableNumber"/>
+      </optional>
+      <optional>
+        <ref name="name"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="iref"/>
+      </zeroOrMore>
+      <optional>
+		<ref name="thead"/>
+      </optional>
+      <oneOrMore>
+		<ref name="tbody"/>
+      </oneOrMore>
+      <optional>
+        <ref name="tfoot"/>
+      </optional>
+    </element>
+  </define>
+  <define name="preamble">
+    <element name="preamble">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="spanx"/>
+          <ref name="strong"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="artwork">
+    <element name="artwork">
+      <optional>
+        <attribute name="xml:space"/>
+      </optional>
+      <optional>
+        <attribute name="name" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="type" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="src"/>
+      </optional>
+      <optional>
+        <attribute name="align" a:defaultValue="left">
+          <choice>
+            <value>left</value>
+            <value>center</value>
+            <value>right</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="alt" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="width" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="height" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="xml:lang" a:defaultValue="en"/>
+      </optional>
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="partNumber"/>
+      </optional>
+      <zeroOrMore>
+        <text/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="sourcecode">
+    <element name="sourcecode">
+      <optional>
+        <attribute name="name" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="type" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional> 
+        <attribute name="partNumber"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="thead">
+    <element name="thead">
+      <oneOrMore>
+        <ref name="tr"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="tbody">
+    <element name="tbody">
+      <oneOrMore>
+        <ref name="tr"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="tfoot">
+    <element name="tfoot">
+      <oneOrMore>
+        <ref name="tr"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="tr">
+    <element name="tr">
+      <optional>
+        <attribute name="border" a:defaultValue="0"/>
+      </optional>
+      <oneOrMore>
+        <ref name="td"/>
+        <ref name="th"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="td">
+    <element name="td">
+      <optional>
+        <attribute name="border" a:defaultValue="0"/>
+      </optional>
+      <optional>
+        <attribute name="colspan" a:defaultValue="0"/>
+      </optional>
+      <optional>
+        <attribute name="rowspan" a:defaultValue="0"/>
+      </optional>
+      <choice>
+        <oneOrMore>
+          <ref name="t"/>
+        </oneOrMore>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <ref name="artwork"/>
+            <ref name="b"/>
+            <ref name="bcp14"/>
+            <ref name="cref"/>
+            <ref name="dl"/>
+            <ref name="em"/>
+            <ref name="eref"/>
+            <ref name="figure"/>
+            <ref name="i"/>
+            <ref name="iref"/>
+            <ref name="ol"/>
+            <ref name="sourcecode"/>
+            <ref name="strong"/>
+            <ref name="sub"/>
+            <ref name="sup"/>
+            <ref name="tt"/>
+            <ref name="ul"/>
+            <ref name="xref"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="th">
+    <element name="th">
+      <optional>
+        <attribute name="border" a:defaultValue="0"/>
+      </optional>
+      <optional>
+        <attribute name="colspan" a:defaultValue="0"/>
+      </optional>
+      <optional>
+        <attribute name="rowspan" a:defaultValue="0"/>
+      </optional>
+      <choice>
+        <oneOrMore>
+          <ref name="t"/>
+        </oneOrMore>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <ref name="artwork"/>
+            <ref name="b"/>
+            <ref name="bcp14"/>
+            <ref name="cref"/>
+            <ref name="dl"/>
+            <ref name="em"/>
+            <ref name="eref"/>
+            <ref name="figure"/>
+            <ref name="i"/>
+            <ref name="iref"/>
+            <ref name="ol"/>
+            <ref name="sourcecode"/>
+            <ref name="strong"/>
+            <ref name="sub"/>
+            <ref name="sup"/>
+            <ref name="tt"/>
+            <ref name="ul"/>
+            <ref name="xref"/>
+          </choice>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="postamble">
+    <element name="postamble">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="spanx"/>
+          <ref name="strong"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="texttable">
+    <element name="texttable">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="title" a:defaultValue=""/>
+      </optional>
+      <optional>
+        <attribute name="suppress-title" a:defaultValue="false">
+          <choice>
+            <value>true</value>
+            <value>false</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="align" a:defaultValue="center">
+          <choice>
+            <value>left</value>
+            <value>center</value>
+            <value>right</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="style" a:defaultValue="full">
+          <choice>
+            <value>all</value>
+            <value>none</value>
+            <value>headers</value>
+            <value>full</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <ref name="name"/>
+      </optional>
+      <optional>
+        <ref name="preamble"/>
+      </optional>
+      <oneOrMore>
+        <ref name="ttcol"/>
+      </oneOrMore>
+      <zeroOrMore>
+        <ref name="c"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="postamble"/>
+      </optional>
+    </element>
+  </define>
+  <define name="ttcol">
+    <element name="ttcol">
+      <optional>
+        <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="align" a:defaultValue="left">
+          <choice>
+            <value>left</value>
+            <value>center</value>
+            <value>right</value>
+          </choice>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="cref"/>
+          <ref name="eref"/>
+          <ref name="iref"/>
+          <ref name="xref"/>
+          <text/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="c">
+    <element name="c">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="spanx"/>
+          <ref name="strong"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="bcp14">
+    <element name="bcp14">
+      <text/>
+    </element>
+  </define>
+  <define name="back">
+    <element name="back">
+      <zeroOrMore>
+        <ref name="displayreference"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="references"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="section"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="displayreference">
+    <element name="displayreference">
+      <attribute name="from"/>
+      <attribute name="to"/>
+    </element>
+  </define>
+  <define name="references">
+    <element name="references">
+      <ref name="name"/>
+      <oneOrMore>
+        <ref name="reference"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="reference">
+    <element name="reference">
+      <attribute name="anchor">
+        <data type="ID"/>
+      </attribute>
+      <optional>
+        <attribute name="target"/>
+      </optional>
+      <ref name="front"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="annotation"/>
+          <ref name="format"/>
+          <ref name="refcontent"/>
+          <ref name="seriesInfo"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="referencegroup">
+    <element name="referencegroup">
+      <attribute name="anchor">
+        <data type="ID"/>
+      </attribute>
+      <oneOrMore>
+        <ref name="reference"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="seriesInfo">
+    <element name="seriesInfo">
+      <attribute name="name"/>
+      <attribute name="value"/>
+      <optional>
+        <attribute name="asciiname"/>
+      </optional>
+      <optional>
+        <attribute name="asciivalue"/>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="format">
+    <element name="format">
+      <optional>
+        <attribute name="target"/>
+      </optional>
+      <attribute name="type"/>
+      <optional>
+        <attribute name="octets"/>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="annotation">
+    <element name="annotation">
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="cref"/>
+          <ref name="em"/>
+          <ref name="eref"/>
+          <ref name="i"/>
+          <ref name="iref"/>
+          <ref name="spanx"/>
+          <ref name="strong"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="tt"/>
+          <ref name="xref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="refcontent">
+    <element name="refcontent">
+      <optional>
+        <attribute name="ascii"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="b"/>
+          <ref name="bcp14"/>
+          <ref name="em"/>
+          <ref name="i"/>
+          <ref name="strong"/>
+          <ref name="sub"/>
+          <ref name="sup"/>
+          <ref name="tt"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <start>
+    <choice>
+      <ref name="rfc"/>
+    </choice>
+  </start>
+</grammar>
