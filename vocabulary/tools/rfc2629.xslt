@@ -2528,21 +2528,35 @@
   </div>
 </xsl:template>
 
-<xsl:template match="spanx[@style='emph' or not(@style)]">
+<xsl:template match="spanx[@style='emph' or not(@style)]|em">
   <em>
     <xsl:call-template name="copy-anchor"/>
     <xsl:apply-templates />
   </em>
 </xsl:template>
 
-<xsl:template match="spanx[@style='verb' or @style='vbare']">
-  <samp>
+<xsl:template match="i">
+  <i>
     <xsl:call-template name="copy-anchor"/>
     <xsl:apply-templates />
-  </samp>
+  </i>
 </xsl:template>
 
-<xsl:template match="spanx[@style='strong']">
+<xsl:template match="spanx[@style='verb' or @style='vbare']|tt">
+  <tt>
+    <xsl:call-template name="copy-anchor"/>
+    <xsl:apply-templates />
+  </tt>
+</xsl:template>
+
+<xsl:template match="b">
+  <b>
+    <xsl:call-template name="copy-anchor"/>
+    <xsl:apply-templates />
+  </b>
+</xsl:template>
+
+<xsl:template match="spanx[@style='strong']|strong">
   <strong>
     <xsl:call-template name="copy-anchor"/>
     <xsl:apply-templates />
@@ -4314,8 +4328,11 @@ pre.drawing {
 q {
   font-style: italic;
 }</xsl:if>
-<xsl:if test="//x:sup">
+<xsl:if test="//x:sup|sup">
 sup {
+  font-size: 60%;
+}</xsl:if><xsl:if test="sub">
+sub {
   font-size: 60%;
 }</xsl:if>
 table {
@@ -5952,11 +5969,18 @@ dd, li, p {
       <li>Figures
         <ul>
           <xsl:for-each select="//figure[@title!='' or @anchor!='']">
-            <xsl:variable name="title">Figure <xsl:value-of select="position()"/><xsl:if test="@title">: <xsl:value-of select="@title"/></xsl:if>
+            <xsl:variable name="n"><xsl:call-template name="get-figure-number"/></xsl:variable>
+            <xsl:variable name="title">
+              <xsl:if test="not(starts-with($n,'u'))">
+                <xsl:text>Figure </xsl:text>
+                <xsl:value-of select="$n"/>
+                <xsl:if test="@title!=''">: </xsl:if>
+              </xsl:if>
+              <xsl:if test="@title"><xsl:value-of select="@title"/></xsl:if>
             </xsl:variable>
             <li>
               <xsl:call-template name="insert-toc-line">
-                <xsl:with-param name="target" select="concat($anchor-prefix,'.figure.',position())" />
+                <xsl:with-param name="target" select="concat($anchor-prefix,'.figure.',$n)" />
                 <xsl:with-param name="title" select="$title" />
               </xsl:call-template>
             </li>
@@ -6315,10 +6339,19 @@ dd, li, p {
 </xsl:template>
 
 <!-- superscripts -->
-<xsl:template match="x:sup">
+<xsl:template match="x:sup|sup">
   <sup>
+    <xsl:call-template name="copy-anchor"/>
     <xsl:apply-templates/>
   </sup>
+</xsl:template>
+
+<!-- subscripts -->
+<xsl:template match="sub">
+  <sub>
+    <xsl:call-template name="copy-anchor"/>
+    <xsl:apply-templates/>
+  </sub>
 </xsl:template>
 
 <!-- bold -->
@@ -7470,11 +7503,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.671 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.671 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.675 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.675 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2014/10/16 11:25:38 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/10/16 11:25:38 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2014/10/29 15:00:20 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/10/29 15:00:20 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>

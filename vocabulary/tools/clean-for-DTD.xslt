@@ -246,8 +246,13 @@
   <xsl:apply-templates mode="cleanup"/>
 </xsl:template>
 
-<xsl:template match="x:sup" mode="cleanup">
+<xsl:template match="x:sup|sup" mode="cleanup">
   <xsl:text>^</xsl:text>
+  <xsl:apply-templates mode="cleanup" />
+</xsl:template>
+
+<xsl:template match="sub" mode="cleanup">
+  <xsl:text>_</xsl:text>
   <xsl:apply-templates mode="cleanup" />
 </xsl:template>
 
@@ -765,5 +770,57 @@
 <xsl:template match="c/@anchor" mode="cleanup"/>
 <xsl:template match="preamble/@anchor" mode="cleanup"/>
 <xsl:template match="spanx/@anchor" mode="cleanup"/>
+
+<!-- v3 features -->
+<xsl:template match="strong | b" mode="cleanup">
+  <xsl:choose>
+    <xsl:when test="*">
+      <xsl:call-template name="warning">
+        <xsl:with-param name="inline" select="'no'"/>
+        <xsl:with-param name="msg">strong|b not translated when they include child elements</xsl:with-param>
+      </xsl:call-template>
+      <xsl:apply-templates mode="cleanup"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <spanx style="strong">
+        <xsl:apply-templates mode="cleanup"/>
+      </spanx>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="em | i" mode="cleanup">
+  <xsl:choose>
+    <xsl:when test="*">
+      <xsl:call-template name="warning">
+        <xsl:with-param name="inline" select="'no'"/>
+        <xsl:with-param name="msg">em|i not translated when they include child elements</xsl:with-param>
+      </xsl:call-template>
+      <xsl:apply-templates mode="cleanup"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <spanx style="emph">
+        <xsl:apply-templates mode="cleanup"/>
+      </spanx>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="tt" mode="cleanup">
+  <xsl:choose>
+    <xsl:when test="*">
+      <xsl:call-template name="warning">
+        <xsl:with-param name="inline" select="'no'"/>
+        <xsl:with-param name="msg">tt not translated when they include child elements</xsl:with-param>
+      </xsl:call-template>
+      <xsl:apply-templates mode="cleanup"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <spanx style="verb">
+        <xsl:apply-templates mode="cleanup"/>
+      </spanx>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 </xsl:transform>
