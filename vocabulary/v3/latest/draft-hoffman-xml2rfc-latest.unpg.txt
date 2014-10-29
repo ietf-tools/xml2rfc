@@ -2390,7 +2390,11 @@ Table of Contents
    shared with other elements of a section.  This is described in more
    detail in Appendix B.2.
 
-2.48.4.  'type' attribute
+2.48.4.  'src' attribute
+
+   The URI reference of a source file ([RFC3986]).
+
+2.48.5.  'type' attribute
 
    Specifies the type of the sourcecode.  The value of this attribute is
    free text with certain values designated as preferred.  A private
@@ -4562,6 +4566,7 @@ Appendix C.  Relax NG Schema
      element sourcecode {
        [ a:defaultValue = "" ] attribute name { text }?,
        [ a:defaultValue = "" ] attribute type { text }?,
+       attribute src { text }?,
        attribute anchor { xsd:ID }?,
        attribute partNumber { text }?,
        text
@@ -5317,6 +5322,7 @@ Appendix D.  Schema Differences from v2
    +   element sourcecode {
    +     [ a:defaultValue = "" ] attribute name { text }?,
    +     [ a:defaultValue = "" ] attribute type { text }?,
+   +     attribute src { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute partNumber { text }?,
    +     text
@@ -6246,6 +6252,7 @@ Index
          inside th  1
          name attribute  1
          partNumber attribute  1
+         src attribute  1
          type attribute  1
       spacing attribute
          in dl element  1
@@ -6262,6 +6269,7 @@ Index
       src attribute
          in artwork element  1
          in figure element  1
+         in sourcecode element  1
       start attribute
          in ol element  1
       street element  1
