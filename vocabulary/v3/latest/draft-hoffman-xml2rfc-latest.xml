@@ -387,25 +387,33 @@ some types of sections.</t>
      Provides address information for the author.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>author</x:ref>&gt; (<xref target="element.author"/>).</t>
-   <t anchor="element.address.contents"><!--AG-->
-      Content model:
-    </t>
-   <t><!--AG-->In any order: <list style="symbols">
-         <t><!--AG-->
-            <iref item="Elements" subitem="email"/>
-            <iref item="email element" subitem="inside address"/>&lt;<x:ref>email</x:ref>&gt; elements (<xref target="element.email"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="facsimile"/>
-            <iref item="facsimile element" subitem="inside address"/>&lt;<x:ref>facsimile</x:ref>&gt; elements (<xref target="element.facsimile"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="phone"/>
-            <iref item="phone element" subitem="inside address"/>&lt;<x:ref>phone</x:ref>&gt; elements (<xref target="element.phone"/>)</t>
+   <t anchor="element.address.contents"><!--AG-->Content model:</t>
+   <t><!--AG-->In this order:<list style="numbers">
+        
          <t><!--AG-->
             <iref item="Elements" subitem="postal"/>
-            <iref item="postal element" subitem="inside address"/>&lt;<x:ref>postal</x:ref>&gt; elements (<xref target="element.postal"/>)</t>
+            <iref item="postal element" subitem="inside address"/>One optional &lt;<x:ref>postal</x:ref>&gt; element (<xref target="element.postal"/>)</t>
+      
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="phone"/>
+            <iref item="phone element" subitem="inside address"/>One optional &lt;<x:ref>phone</x:ref>&gt; element (<xref target="element.phone"/>)</t>
+      
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="facsimile"/>
+            <iref item="facsimile element" subitem="inside address"/>One optional &lt;<x:ref>facsimile</x:ref>&gt; element (<xref target="element.facsimile"/>)</t>
+      
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="email"/>
+            <iref item="email element" subitem="inside address"/>One optional &lt;<x:ref>email</x:ref>&gt; element (<xref target="element.email"/>)</t>
+      
+        
          <t><!--AG-->
             <iref item="Elements" subitem="uri"/>
-            <iref item="uri element" subitem="inside address"/>&lt;<x:ref>uri</x:ref>&gt; elements (<xref target="element.uri"/>)</t>
+            <iref item="uri element" subitem="inside address"/>One optional &lt;<x:ref>uri</x:ref>&gt; element (<xref target="element.uri"/>)</t>
+      
       </list>
    </t>
 </section>
@@ -5871,8 +5879,8 @@ organization =
     attribute ascii { text }?,
     text
   }
-address =
-  element address { (email | facsimile | phone | postal | uri)* }
+address = element address { postal?, phone?, facsimile?, email?, 
+uri? }
 postal =
   element postal {
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
@@ -6603,10 +6611,16 @@ to the v3 schema.</t>
     element organization {
       attribute abbrev { text }?,
 +     attribute ascii { text }?,
-+     text
-+   }
-+ address =
-+   element address { (email | facsimile | phone | postal | uri)* }
+      text
+    }
+  address = element address { postal?, phone?, facsimile?, email?, 
+  uri? }
+- postal = element postal { street+, (city | region | code | 
+- country)* }
+- street = element street { text }
+- city = element city { text }
+- region = element region { text }
+- code = element code { text }
 + postal =
 +   element postal {
 +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
@@ -6630,16 +6644,8 @@ to the v3 schema.</t>
 + code =
 +   element code {
 +     attribute ascii { text }?,
-      text
-    }
-- address = element address { postal?, phone?, facsimile?, email?, 
-- uri? }
-- postal = element postal { street+, (city | region | code | 
-- country)* }
-- street = element street { text }
-- city = element city { text }
-- region = element region { text }
-- code = element code { text }
++     text
++   }
   country = element country { text }
 + postalLine =
 +   element postalLine {

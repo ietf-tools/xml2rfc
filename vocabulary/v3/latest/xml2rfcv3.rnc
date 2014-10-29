@@ -82,8 +82,7 @@ organization =
     attribute ascii { text }?,
     text
   }
-address =
-  element address { (email | facsimile | phone | postal | uri)* }
+address = element address { postal?, phone?, facsimile?, email?, uri? }
 postal =
   element postal {
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,

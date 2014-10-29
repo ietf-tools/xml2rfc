@@ -206,15 +206,21 @@
   </define>
   <define name="address">
     <element name="address">
-      <zeroOrMore>
-        <choice>
-          <ref name="email"/>
-          <ref name="facsimile"/>
-          <ref name="phone"/>
-          <ref name="postal"/>
-          <ref name="uri"/>
-        </choice>
-      </zeroOrMore>
+      <optional>
+        <ref name="postal"/>
+      </optional>
+      <optional>
+        <ref name="phone"/>
+      </optional>
+      <optional>
+        <ref name="facsimile"/>
+      </optional>
+      <optional>
+        <ref name="email"/>
+      </optional>
+      <optional>
+        <ref name="uri"/>
+      </optional>
     </element>
   </define>
   <define name="postal">

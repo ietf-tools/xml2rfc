@@ -87,10 +87,16 @@
     element organization {
       attribute abbrev { text }?,
 +     attribute ascii { text }?,
-+     text
-+   }
-+ address =
-+   element address { (email | facsimile | phone | postal | uri)* }
+      text
+    }
+  address = element address { postal?, phone?, facsimile?, email?, 
+  uri? }
+- postal = element postal { street+, (city | region | code | 
+- country)* }
+- street = element street { text }
+- city = element city { text }
+- region = element region { text }
+- code = element code { text }
 + postal =
 +   element postal {
 +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
@@ -114,16 +120,8 @@
 + code =
 +   element code {
 +     attribute ascii { text }?,
-      text
-    }
-- address = element address { postal?, phone?, facsimile?, email?, 
-- uri? }
-- postal = element postal { street+, (city | region | code | 
-- country)* }
-- street = element street { text }
-- city = element city { text }
-- region = element region { text }
-- code = element code { text }
++     text
++   }
   country = element country { text }
 + postalLine =
 +   element postalLine {
