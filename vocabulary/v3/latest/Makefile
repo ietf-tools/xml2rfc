@@ -1,5 +1,6 @@
 all: \
 	draft-hoffman-xml2rfc-latest.html \
+	draft-hoffman-xml2rfc-latest.redxml \
 	draft-hoffman-xml2rfc-latest.unpg.txt \
 	draft-hoffman-xml2rfc-latest.txt
 
