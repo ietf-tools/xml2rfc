@@ -11,7 +11,6 @@
 
 ## TODO STILL: ????????????????
 ## is hangIndent used somewhere?
-## for PIs, handle multiple-attribute PIs, as in <?rfc toc='yes' tocindent='3' ...?>
 
 ## <texttable title=> => <name>
 
@@ -72,6 +71,9 @@ if ($optargs{"#"}) {
     close F;
     print "================================ end of conversion rules ================================ -->\n";
 }
+
+my $SQUOTE = "'";
+my $DQUOTE = '"';
 
 # hold the PIs
 my $haveEntityDeclarations;
@@ -884,6 +886,17 @@ sub charHandler {
     }
 }
 
+# yesno(value)
+# return:
+#    'yes' if value is 'yes' in any case,
+#    'no' if value is 'no' in any case, 
+#    and undef if neither
+sub yesno {
+    my $val = shift;
+    $val = lc($val);
+    return ($val eq 'yes') ? 'yes' : ($val eq 'no') ? 'no' : undef;
+}    
+
 ## processing element handler
 sub procHandler {
     my ( $expat, $target, $data ) = @_;
@@ -903,104 +916,106 @@ sub procHandler {
     ## Remove various known extension V2 PIs.
     ## Warning on all other PIs.
     ##
-    ## ???????????????? handle multiple-attribute PIs, as in <?rfc toc='yes' tocindent='3' ...?>
+    ## Also handle multiple-attribute PIs, as in <?rfc toc='yes' tocindent='3' ...?>
 
-    my $skip;
     my $comments = '';
+    my $outputData = '';
 
+    # print STDERR "processing PI, target='$target', data='$data'\n";
     if ($target eq 'rfc') {
-	if (($data =~ /^\s*symrefs='(yes|no)'\s*$/i) ||
-	    ($data =~ /^\s*symrefs="(yes|no)"\s*$/i)) {
-	    $data =~ s/^symrefs/symRefs/i;
-	    $additionalRfcAttributes .= " $data";
-	    $comments .= comment("moving PI $target $data to <rfc> element");
-	    $skip = 1;
-	} elsif (($data =~ /^\s*sortrefs='(yes|no)'\s*$/i) ||
-		 ($data =~ /^\s*sortrefs="(yes|no)"\s*$/i)) {
-	    $data =~ s/^sortrefs/sortRefs/i;
-	    $additionalRfcAttributes .= " $data";
-	    $comments .= comment("moving PI $target $data to <rfc> element");
-	    $skip = 1;
-	} elsif (($data =~ /^\s*toc='(yes|no)'\s*$/i) ||
-		 ($data =~ /^\s*toc="(yes|no)"\s*$/i)) {
-	    $data =~ s/^toc/tocInclude/i;
-	    $additionalRfcAttributes .= " $data";
-	    $skip = 1;
-	    $comments .= comment("moving PI $target $data to <rfc> element");
-	} elsif (($data =~ /^\s*compact='(yes|no)'\s*$/i) ||
-		 ($data =~ /^\s*compact="(yes|no)"\s*$/i)) {
-	    $compact = ($1 eq 'yes') ? 'compact' : 'normal';
-	    $skip = 1;
-	    $comments .= comment("moving PI $target $data to <dl>/<ol>/<ul> elements");
-	} elsif (($data =~ /^\s*tocdepth='\d+'\s*/i) ||
-		 ($data =~ /^\s*tocdepth="\d+"\s*/i)) {
-	    $data =~ s/tocdepth/tocDepth/i;
-	    $additionalRfcAttributes .= " $data";
-	    $comments .= comment("moving PI $target $data to <rfc> element");
-	    $skip = 1;
-	} elsif ($data =~ /^\s*symrefs=/i) {
-	    $comments .= comment("ERROR: symrefs should have a yes|no value, instead found '$data'");
-	    $skip = 1;
-	} elsif ($data =~ /^\s*sortrefs=/i) {
-	    $comments .= comment("ERROR: sortrefs should have a yes|no value, instead found '$data'");
-	    $skip = 1;
-	} elsif ($data =~ /^\s*toc=/i) {
-	    $comments .= comment("ERROR: toc should have a yes|no value, instead found '$data'");
-	    $skip = 1;
-	} elsif ($data =~ /^\s*tocdepth=/i) {
-	    $comments .= comment("ERROR: tocdepth should have a numeric value, instead found '$data'");
-	    $skip = 1;
-	} elsif (($data =~ /^\s*editing='(yes|no)'\s*$/) ||
-		 ($data =~ /^\s*editing="(yes|no)"\s*$/) ||
-		 ($data =~ /^\*comments='(yes|no)'\s*$/) ||
-		 ($data =~ /^\s*comments="(yes|no)"\s*$/) ||
-		 ($data =~ /^\s*linefile='.*'\s*$/) ||
-		 ($data =~ /^\s*linefile=".*"\s*$/)) {
-	    ## these are allowed through unchanged
-	} elsif (($data =~ /^\s*include='(.*)'\s*$/) ||
-		 ($data =~ /^\s*include="(.*)"\s*$/)) {
-	    ## convert to xi:include
-	    my $path = $1;
-	    my ($noutput, $ncomments) = xiInclude($path);
-	    $output .= $noutput;
-	    $comments .= comment("moving include processing instruction to xi:include");
-	    $comments .= $ncomments;
-	    $skip = 1;
-	} elsif (($data =~ /^(.*)='(.*)'\s*$/) ||
-		 ($data =~ /^(.*)="(.*)"\s*$/)) {
+	my $foundNameValue = undef;
+	# print STDERR "Looking at:'$data'\n";
+	# print STDERR "matching squote:'" . ($data =~ /^\s*([^=]+)=($SQUOTE)([^$SQUOTE]*)$SQUOTE(.*)$/m) . "'\n";
+	# print STDERR "matching dquote:'" . ($data =~ /^\s*([^=]+)=($DQUOTE)([^$DQUOTE]*)$DQUOTE(.*)$/m) . "'\n";
+	while (($data =~ /^\s*([^=]+)=($SQUOTE)([^$SQUOTE]*)$SQUOTE(.*)$/m) ||
+	       ($data =~ /^\s*([^=]+)=($DQUOTE)([^$DQUOTE]*)$DQUOTE(.*)$/m)) {
+	    $foundNameValue = 1;
 	    my $name = $1;
-	    my $val = $2;
-	    if (defined($removedPIs{$name}) && ($removedPIs{$name} == $REMOVED)) {
-		$comments .= comment("processing instruction '<?$target $data?>' deprecated and removed");
-		$skip = 1;
-	    } elsif (defined($removedPIs{$name}) && ($removedPIs{$name} == $LOWERCASED)) {
-		$comments .= comment("misspelled processing instruction '<?$target $data?>' deprecated and removed");
-		$skip = 1;
+	    my $nm = lc($name);
+	    my $quote = $2;
+	    my $val = $3;
+	    my $rest = $4;
+	    my $fullvalue = "$name=$quote$val$quote";
+	    # print STDERR "found $fullvalue\n";
+	    # print STDERR "rest='$rest'\n";
+	    my $yesno = yesno($val);
+	    $data = $rest;
+	    # print STDERR "Data is now:'$data'\n";
+
+	    if (($nm eq 'symrefs') && $yesno) {
+		$nm = "symRefs";
+		$additionalRfcAttributes .= " $nm=$quote$val$quote";
+		$comments .= comment("moving PI <?$target $fullvalue?> to <rfc> element as $nm attribute");
+	    } elsif (($nm eq 'sortrefs') && $yesno) {
+		$nm = "sortRefs";
+		$additionalRfcAttributes .= " $nm=$quote$val$quote";
+		$comments .= comment("moving PI <?$target $fullvalue?> to <rfc> element as $nm attribute");
+	    } elsif (($nm eq 'toc') && $yesno) {
+		$nm = "tocInclude";
+		$additionalRfcAttributes .= " $nm=$quote$val$quote";
+		$comments .= comment("moving PI <?$target $fullvalue?> to <rfc> element as $nm attribute");
+	    } elsif (($nm eq 'compact') && $yesno) {
+		$compact = ($yesno eq 'yes') ? 'compact' : 'normal';
+		$comments .= comment("moving PI <?$target $fullvalue?> to <dl>/<ol>/<ul> elements");
+	    } elsif (($nm eq 'tocdepth') && ($val =~ /^\d+$/)) {
+		$nm = "tocDepth";
+		$additionalRfcAttributes .= " $nm=$quote$val$quote";
+		$comments .= comment("moving PI <?$target $fullvalue to <rfc> element as $nm attribute");
+	    } elsif ($nm eq "symrefs") {
+		$comments .= comment("ERROR: symrefs should have a yes|no value, instead found '$fullvalue'");
+	    } elsif ($nm eq "sortrefs") {
+		$comments .= comment("ERROR: sortrefs should have a yes|no value, instead found '$fullvalue'");
+	    } elsif ($nm eq "toc") {
+		$comments .= comment("ERROR: toc should have a yes|no value, instead found '$fullvalue'");
+	    } elsif ($nm eq "tocdepth") {
+		$comments .= comment("ERROR: tocdepth should have a numeric value, instead found '$fullvalue'");
+	    } elsif ($yesno && (($nm eq 'editing') || ($nm eq 'comments'))) {
+		## these are allowed through unchanged
+		$outputData .= " $nm=$quote$val$quote";
+	    } elsif ($nm eq 'linefile') {
+		$outputData .= " $nm=$quote$val$quote";
+		## these are allowed through unchanged
+	    } elsif ($nm eq 'include') {
+		## convert to xi:include
+		my ($noutput, $ncomments) = xiInclude($val);
+		$output .= $noutput;
+		$comments .= comment("moving include processing instruction to xi:include");
+		$comments .= $ncomments;
 	    } else {
-		$comments .= comment("WARNING: unrecognized processing instruction '<?$target $data?>' removed(1)");
-		$skip = 1;
+		if (defined($removedPIs{$name})) {
+		    if ($removedPIs{$name} == $REMOVED) {
+			$comments .= comment("processing instruction '<?$target $fullvalue?>' deprecated and removed");
+		    } elsif ($removedPIs{$nm} == $LOWERCASED) {
+			$comments .= comment("misspelled processing instruction '<?$target $fullvalue?>' deprecated and removed");
+		    } else {
+			$comments .= comment("WARNING: unrecognized processing instruction '<?$target $fullvalue?>' removed(1)");
+		    }
+		} else {
+		    $comments .= comment("WARNING: unrecognized processing instruction '<?$target $fullvalue?>' removed(1)");
+		}
 	    }
-	} elsif ($data =~ /^\s*$/i) {
+	}
+	# print STDERR "end of loop looking at data. Data still contains '$data'\n";
+	if (!$foundNameValue && ($data =~ /^\s*$/)) {
 	    $comments .= comment("empty processing instruction '<?$target $data?>' removed");
-	    $skip = 1;
-	} else {
+	} elsif ($data !~ /^\s*$/) {
 	    $comments .= comment("WARNING: unrecognized processing instruction '<?$target $data?>' removed(2)");
-	    $skip = 1;
 	}
     } elsif ($target eq 'xml-stylesheet') {
 	$comments .= comment("non-standard processing instruction '<?$target $data?>' removed(4)");
-	$skip = 1;
     } elsif ($target eq 'rfc-ext') {
 	$comments .= comment("non-standard processing instruction '<?$target $data?>' removed(5)");
-	$skip = 1;
     } else {
 	## non-rfc PIs
 	# $comments .= comment("WARNING: target='$target'");
 	$comments .= comment("WARNING: unrecognized processing instruction '<?$target $data?>' removed(3)");
-	$skip = 1;
     }
 
-    $output .= "<?$target $data?>" unless $skip;
+    # print STDERR "outputData='$outputData'\n";
+    # print STDERR "comments='$comments'\n";
+    if ($outputData ne '') {
+	$output .= "<?$target$outputData?>";
+    }
     if ($comments ne '') {
 	$output .= $comments;
     }
