@@ -2425,6 +2425,14 @@
         <xsl:value-of select="@title"/>
       </ins>
     </xsl:when>
+    <xsl:when test="name">
+      <xsl:if test="@title">
+        <xsl:call-template name="warning">
+          <xsl:with-param name="msg">both @title attribute and name child node present</xsl:with-param>
+        </xsl:call-template>
+      </xsl:if>
+      <xsl:apply-templates select="name/node()"/>
+    </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="@title"/>
     </xsl:otherwise>
@@ -2528,6 +2536,9 @@
   </div>
 </xsl:template>
 
+<!-- already processed by insertTitle -->
+<xsl:template match="section/name"/>
+
 <xsl:template match="spanx[@style='emph' or not(@style)]|em">
   <em>
     <xsl:call-template name="copy-anchor"/>
@@ -2612,15 +2623,32 @@
       <xsl:call-template name="get-section-number" />
     </xsl:for-each>
   </xsl:variable>
+  <xsl:variable name="title">
+    <xsl:choose>
+      <xsl:when test="$to/name">
+        <xsl:value-of select="$to/name"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$to/@title"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:attribute name="title">
-    <xsl:value-of select="$to/@title" />
+    <xsl:value-of select="$title" />
   </xsl:attribute>
   <xsl:choose>
     <xsl:when test="$from/@format='counter'">
       <xsl:value-of select="$refnum"/>
     </xsl:when>
     <xsl:when test="$from/@format='title'">
-      <xsl:value-of select="$to/@title"/>
+    <xsl:choose>
+      <xsl:when test="$to/name">
+        <xsl:apply-templates select="$to/name/node()"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$to/@title"/>
+      </xsl:otherwise>
+    </xsl:choose>
     </xsl:when>
     <xsl:when test="$from/@format='none'">
       <!-- Nothing to do -->
@@ -5696,6 +5724,7 @@ dd, li, p {
   <xsl:param name="number" />
   <xsl:param name="target" />
   <xsl:param name="title" />
+  <xsl:param name="name" />
   <xsl:param name="tocparam" />
   <xsl:param name="oldtitle" />
   <xsl:param name="waschanged" />
@@ -5737,6 +5766,9 @@ dd, li, p {
               <xsl:when test="$waschanged!=''">
                 <ins><xsl:value-of select="$title"/></ins>
                 <del><xsl:value-of select="$oldtitle"/></del>
+              </xsl:when>
+              <xsl:when test="$name">
+                <xsl:apply-templates select="$name/node()"/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:value-of select="$title"/>
@@ -5906,6 +5938,7 @@ dd, li, p {
         <xsl:with-param name="number" select="$sectionNumber"/>
         <xsl:with-param name="target" select="$target"/>
         <xsl:with-param name="title" select="@title"/>
+        <xsl:with-param name="name" select="name"/>
         <xsl:with-param name="tocparam" select="@toc"/>
         <xsl:with-param name="oldtitle" select="@ed:old-title"/>
         <xsl:with-param name="waschanged" select="@ed:resolves"/>
@@ -5923,6 +5956,7 @@ dd, li, p {
         <xsl:with-param name="number" select="$sectionNumber"/>
         <xsl:with-param name="target" select="$target"/>
         <xsl:with-param name="title" select="@title"/>
+        <xsl:with-param name="name" select="name"/>
         <xsl:with-param name="tocparam" select="@toc"/>
         <xsl:with-param name="oldtitle" select="@ed:old-title"/>
         <xsl:with-param name="waschanged" select="@ed:resolves"/>
@@ -7503,11 +7537,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.675 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.675 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.676 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.676 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2014/10/29 15:00:20 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/10/29 15:00:20 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2014/10/30 20:54:36 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/10/30 20:54:36 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>

@@ -14,7 +14,7 @@ xml2rfcv2-annotated.rng: xml2rfcv2.rng annotate-rng.xslt draft-reschke-xml2rfc-l
 	saxon $< annotate-rng.xslt doc=draft-reschke-xml2rfc-latest.xml > $@
 
 xml2rfcv2-spec.xml: xml2rfcv2.rng rng2xml2rfc.xslt
-	saxon $< rng2xml2rfc.xslt > $@
+	saxon $< rng2xml2rfc.xslt voc=v3 > $@
 
 xml2rfcv2.rnc.folded: xml2rfcv2.rnc
 	fold -w69 -s $< > $@

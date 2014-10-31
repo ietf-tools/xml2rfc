@@ -823,4 +823,26 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- Section titles -->
+<xsl:template match="section" mode="cleanup">
+  <section>
+    <xsl:copy-of select="@anchor|@toc"/>
+    <xsl:attribute name="title">
+      <xsl:choose>
+        <xsl:when test="name">
+          <xsl:variable name="hold">
+            <xsl:apply-templates select="name/node()"/>
+          </xsl:variable>
+          <xsl:value-of select="normalize-space($hold)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@title"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+    <xsl:apply-templates mode="cleanup"/>
+  </section>
+</xsl:template>
+<xsl:template match="section/name" mode="cleanup"/>
+
 </xsl:transform>
