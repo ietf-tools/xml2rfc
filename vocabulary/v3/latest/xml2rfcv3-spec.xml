@@ -235,8 +235,9 @@
       <iref item="artwork element" subitem="alt attribute"/>
       <iref item="alt attribute" subitem="in artwork element"/>
       <t>
-            Alternative text description of the artwork (not just the caption). This is only
-            used with artwork that is text-based; when the art comes from the "src" attribute,
+            Alternative text description of the artwork (which is more than just a summary or caption). This is primarily
+            used with artwork that is text-based. When the art comes from the "src" attribute,
+            and the format of that artwork supports alternate text,
             the alternative text comes from the text of the artwork itself.
          </t>
    </section>
@@ -867,6 +868,18 @@
       </t>
    </section>
 
+   <!--cref/@display-->
+   <section title="'display' attribute" anchor="element.cref.attribute.display" toc="exclude">
+      <iref item="Attributes" subitem="display"/>
+      <iref item="cref element" subitem="display attribute"/>
+      <iref item="display attribute" subitem="in cref element"/>
+      <t>
+         Says whether or not the the comment should be displayed by processors. This might be
+         set to "no" if you want to keep a comment in a document after the contents of the comment
+         have already been dealt with.
+      </t>
+   </section>
+
    <!--cref/@source-->
    <section title="'source' attribute" anchor="element.cref.attribute.source" toc="exclude">
       <iref item="Attributes" subitem="source"/>
@@ -1041,6 +1054,9 @@
 &lt;displayreference from="RFC6449" to="RFC-dev"/&gt;
 </artwork>
       </figure>
+   </t>
+   <t>
+     If a reference section is sorted, this element changes the sort order.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.displayreference.contents"><!--AG-->Content model: this element does not have any contents.</t>
@@ -2077,6 +2093,17 @@
          The ASCII equivalent of the organization's name.
       </t>
    </section>
+
+   <!--organization/@xml:lang-->
+   <section title="'xml:lang' attribute" anchor="element.organization.attribute.xml-lang" toc="exclude">
+      <iref item="Attributes" subitem="xml:lang"/>
+      <iref item="organization element" subitem="xml:lang attribute"/>
+      <iref item="xml:lang attribute" subitem="in organization element"/>
+      <t>
+            Allows specification of the language used. This is sometimes useful for renderers which display
+            different fonts for ideographic characters used in China and Japan.
+      </t>
+   </section>
 </section>
 
 <!--phone-->
@@ -2324,6 +2351,7 @@
       This is most often used for references in the STD and BCP series, where a single reference
       (such as "BCP 9") encompasses more than one RFC.
    </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
    <t anchor="element.referencegroup.contents"><!--AG-->
       Content model:
     </t>
@@ -2371,11 +2399,15 @@
          <t><!--AG-->
             <iref item="Elements" subitem="name"/>
             <iref item="name element" subitem="inside references"/>One &lt;<x:ref>name</x:ref>&gt; element (<xref target="element.name"/>)</t>
-        
-         <t><!--AG-->
-            <iref item="Elements" subitem="reference"/>
-            <iref item="reference element" subitem="inside references"/>One or more &lt;<x:ref>reference</x:ref>&gt; elements (<xref target="element.reference"/>)</t>
-      
+         <t><!--AG-->In any order: <list style="symbols">
+               <t><!--AG-->
+                  <iref item="Elements" subitem="reference"/>
+                  <iref item="reference element" subitem="inside references"/>&lt;<x:ref>reference</x:ref>&gt; elements (<xref target="element.reference"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="referencegroup"/>
+                  <iref item="referencegroup element" subitem="inside references"/>&lt;<x:ref>referencegroup</x:ref>&gt; elements (<xref target="element.referencegroup"/>)</t>
+            </list>
+         </t>
       </list>
    </t>
 </section>
@@ -2421,7 +2453,7 @@
         
          <t><!--AG-->
             <iref item="Elements" subitem="link"/>
-            <iref item="link element" subitem="inside rfc"/>One optional &lt;<x:ref>link</x:ref>&gt; element (<xref target="element.link"/>)</t>
+            <iref item="link element" subitem="inside rfc"/>Optional &lt;<x:ref>link</x:ref>&gt; elements (<xref target="element.link"/>)</t>
       
          <t><!--AG-->
             <iref item="Elements" subitem="front"/>
@@ -2702,9 +2734,11 @@
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>), &lt;<x:ref>boilerplate</x:ref>&gt; (<xref target="element.boilerplate"/>), &lt;<x:ref>middle</x:ref>&gt; (<xref target="element.middle"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.section.contents"><!--AG-->Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
+        
          <t><!--AG-->
             <iref item="Elements" subitem="name"/>
-            <iref item="name element" subitem="inside section"/>One &lt;<x:ref>name</x:ref>&gt; element (<xref target="element.name"/>)</t>
+            <iref item="name element" subitem="inside section"/>One optional &lt;<x:ref>name</x:ref>&gt; element (<xref target="element.name"/>)</t>
+      
          <t><!--AG-->In any order: <list style="symbols">
                <t><!--AG-->
                   <iref item="Elements" subitem="artwork"/>
@@ -2813,8 +2847,9 @@
       <iref item="section element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in section element"/>
       <t>
-            Deprecated. Use &lt;<x:ref>name</x:ref>&gt; instead.
-         </t>
+         Deprecated. Use &lt;<x:ref>name</x:ref>&gt; instead. Processors will flag sections that have
+         no &lt;<x:ref>name</x:ref>&gt; element as errors because all sections need a name. 
+      </t>
    </section>
 
    <!--section/@toc-->
@@ -2917,6 +2952,7 @@
       &lt;sourcecode&gt; provides
       full control of horizontal whitespace and line breaks.
       It is thus useful for source code and formal languages (such as ABNF or the RNC notation used in this document).
+      When rendered, sourcecode is always shown in a monospace font.
    </t>
    <t>
       For artwork such as character-based art, diagrams of message layouts, and so on,
@@ -2989,8 +3025,8 @@ Using CDATA:
       <iref item="Attributes" subitem="src"/>
       <iref item="sourcecode element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in sourcecode element"/>
-      <t><!--AG-->
-         <cref anchor="element.sourcecode.attribute.src.missing">attribute description missing</cref>
+      <t>
+         The URI reference of a source file (<xref target="RFC3986"/>).
       </t>
    </section>
 
@@ -3473,6 +3509,24 @@ Using CDATA:
       </list>
    </t>
 
+   <!--td/@align-->
+   <section title="'align' attribute" anchor="element.td.attribute.align" toc="exclude">
+      <iref item="Attributes" subitem="align"/>
+      <iref item="td element" subitem="align attribute"/>
+      <iref item="align attribute" subitem="in td element"/>
+      <t>
+         Controls whether the content of the cell appears left justified (default), centered,
+         or right justified. Note that "center" or "right" probably only work well in cells with plain text; any
+         other elements might make the contents render badly.
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"left" (default)</t>
+            <t>"center"</t>
+            <t>"right"</t>
+         </list>
+      </t>
+   </section>
+
    <!--td/@border-->
    <section title="'border' attribute" anchor="element.td.attribute.border" toc="exclude">
       <iref item="Attributes" subitem="border"/>
@@ -3533,7 +3587,7 @@ Using CDATA:
    <iref item="th element" primary="true"/>
    <t>
       A cell in a table row. When rendered, this will normally come out in boldface; other than that,
-      there is no difference between this and the <x:ref>td</x:ref>&gt; element.
+      there is no difference between this and the &lt;<x:ref>td</x:ref>&gt; element.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>tr</x:ref>&gt; (<xref target="element.tr"/>).</t>
    <t anchor="element.th.contents"><!--AG-->
@@ -3608,6 +3662,22 @@ Using CDATA:
          </t>
       </list>
    </t>
+
+   <!--th/@align-->
+   <section title="'align' attribute" anchor="element.th.attribute.align" toc="exclude">
+      <iref item="Attributes" subitem="align"/>
+      <iref item="th element" subitem="align attribute"/>
+      <iref item="align attribute" subitem="in th element"/>
+      <t><!--AG-->
+         <cref anchor="element.th.attribute.align.missing">attribute description missing</cref>
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"left" (default)</t>
+            <t>"center"</t>
+            <t>"right"</t>
+         </list>
+      </t>
+   </section>
 
    <!--th/@border-->
    <section title="'border' attribute" anchor="element.th.attribute.border" toc="exclude">
@@ -3981,9 +4051,9 @@ Using CDATA:
         <list style="empty">
             <t>
             Inserts a title for the referenced element (usually obtained from
-            the referenced element's "title" attribute; some processors
-            also use the &lt;title&gt; child element or a &lt;reference&gt;
-            target).
+            the referenced element's &lt;<x:ref>name</x:ref>&gt; child element.
+            If the target is a reference, then the &lt;<x:ref>title</x:ref>&gt; element
+            inside the &lt;<x:ref>front</x:ref>&gt; element is used.
           </t>
          </list>
       </t>

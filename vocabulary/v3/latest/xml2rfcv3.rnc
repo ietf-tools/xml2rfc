@@ -37,7 +37,7 @@ rfc =
     [ a:defaultValue = "yes" ] attribute symRefs { "yes" | "no" }?,
     [ a:defaultValue = "yes" ] attribute tocInclude { "yes" | "no" }?,
     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
-    link?,
+    link*,
     front,
     middle,
     back?
@@ -80,7 +80,8 @@ organization =
   element organization {
     attribute abbrev { text }?,
     attribute ascii { text }?,
-    text
+    text,
+    [ a:defaultValue = "en" ] attribute xml:lang { text }?
   }
 address = element address { postal?, phone?, facsimile?, email?, uri? }
 postal =
@@ -156,7 +157,7 @@ section =
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no" }?,
     attribute sectionNumber { text }?,
-    name,
+    name?,
     (artwork
      | aside
      | blockquote
@@ -349,6 +350,8 @@ cref =
   element cref {
     attribute anchor { xsd:ID }?,
     attribute source { text }?,
+    ([ a:defaultValue = "true" ] attribute display { text },
+     ("true" | "false"))?,
     (text | b | em | eref | i | strong | sub | sup | tt | xref)*
   }
 tt =
@@ -546,6 +549,8 @@ td =
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
     [ a:defaultValue = "0" ] attribute rowspan { text }?,
+    [ a:defaultValue = "left" ]
+    attribute align { "left" | "center" | "right" }?,
     (t+
      | (text
         | artwork
@@ -572,6 +577,8 @@ th =
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
     [ a:defaultValue = "0" ] attribute rowspan { text }?,
+    [ a:defaultValue = "left" ]
+    attribute align { "left" | "center" | "right" }?,
     (t+
      | (text
         | artwork
@@ -657,7 +664,7 @@ displayreference =
     attribute from { text },
     attribute to { text }
   }
-references = element references { name, reference+ }
+references = element references { name, (reference | referencegroup)* }
 reference =
   element reference {
     attribute anchor { xsd:ID },

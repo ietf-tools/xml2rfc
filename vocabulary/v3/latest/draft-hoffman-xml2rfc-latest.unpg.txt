@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                           October 29, 2014
+Obsoletes: 2629 (if approved)                           November 8, 2014
 Intended status: Informational
-Expires: May 2, 2015
+Expires: May 12, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 2, 2015.
+   This Internet-Draft will expire on May 12, 2015.
 
 Copyright Notice
 
@@ -237,7 +237,8 @@ Table of Contents
       significant change from v2 in that the child under these elements
       is <li>, not <t>. <li> has a model of either containing one or
       more <t> elements, or containing the flowing text normally found
-      in <t>.  These lists are children of <section>s instead of <t>.
+      in <t>.  These lists are children of <section>s and other lists
+      instead of <t>.
 
    o  Add <strong>, <b>, <em>, <i>, <tt>, <sub>, and <sup> for character
       formatting.
@@ -249,6 +250,9 @@ Table of Contents
 
    o  Add <table>, <thead>, <tbody>, <tfoot>, <tr>, <td>, and <th> to
       give table functionality like that in HTML.
+
+   o  Add <boilerplate> to hold the automatically-generated boilerplate
+      text.
 
    o  Add <blockquote> to indicate a quotation as in a paragraph-like
       format.
@@ -282,9 +286,10 @@ Table of Contents
       entry and still allow the ASCII-equivalent values to appear in the
       processed documents.
 
-   o  Add "xml:lang" attribute to <artwork>, <postal>, and <author>.
-      This is sometimes useful for renderers which display different
-      fonts for ideographic characters used in China and Japan.
+   o  Add "xml:lang" attribute to <artwork>, <postal>, <author>, and
+      <organization>.  This is sometimes useful for renderers which
+      display different fonts for ideographic characters used in China
+      and Japan.
 
    o  Add the "section", "relative", and "sectionFormat" attributes to
       <xref>.
@@ -293,14 +298,16 @@ Table of Contents
 
    o  Add the "removeInRFC" attribute to <note>.
 
-   o  Add "boilerplateText", "figureNumber", "tableNumber", and
-      "sectionNumber" attributes to <rfc>, <figure>, <table>, and
-      <section>, respectively.
+   o  Add "figureNumber", "tableNumber", and "sectionNumber" attributes
+      to <figure>, <table>, and <section>, respectively.
 
    o  Add "partNumber" to <artwork>, <aside>, <blockquote>, <dt>, <li>,
       <sourcecode>, and <t> to hold automatically generated numbers for
       items in a section that don't have their own numbering (namely
       figures and tables).
+
+   o  Addd "display" to <cref> to indicate to processors whether or not
+      to display the comment.
 
 1.2.3.  Elements and Attributes Deprecated from v2
 
@@ -332,8 +339,9 @@ Table of Contents
       single URI (Uniform Resource Identifier) for a reference, use the
       "target" attribute on <reference> instead.
 
-   o  Deprecate <preamble> and <postamble> in favor of simply using <t>.
-      This also deprecates the "align" attribute in <figure>.
+   o  Deprecate <preamble> and <postamble> in favor of simply using <t>
+      before or after the figure.  This also deprecates the "align"
+      attribute in <figure>.
 
    o  Deprecate the "title" attribute in <section>, <note>, <figure>,
       and <texttable> in favor of the new <name>.
@@ -360,8 +368,6 @@ Table of Contents
       <section> (no longer confine them to a figure).
 
    o  Give more specifics of handling the "type" attribute in <artwork>.
-
-   o  In <address>, allow the sub-elements to be in any order.
 
    o  Allow <strong>, <b>, <em>, <i>, <tt>, <eref>, and <xref> in
       <cref>.
@@ -581,10 +587,11 @@ Table of Contents
 
 2.5.2.  'alt' attribute
 
-   Alternative text description of the artwork (not just the caption).
-   This is only used with artwork that is text-based; when the art comes
-   from the "src" attribute, the alternative text comes from the text of
-   the artwork itself.
+   Alternative text description of the artwork (which is more than just
+   a summary or caption).  This is primarily used with artwork that is
+   text-based.  When the art comes from the "src" attribute, and the
+   format of that artwork supports alternate text, the alternative text
+   comes from the text of the artwork itself.
 
 2.5.3.  'anchor' attribute
 
@@ -984,7 +991,14 @@ Table of Contents
 
    Document-wide unique identifier for this comment.
 
-2.16.2.  'source' attribute
+2.16.2.  'display' attribute
+
+   Says whether or not the the comment should be displayed by
+   processors.  This might be set to "no" if you want to keep a comment
+   in a document after the contents of the comment have already been
+   dealt with.
+
+2.16.3.  'source' attribute
 
    Holds the "source" of a comment, such as the name or the initials of
    the person who made the comment.
@@ -1095,6 +1109,9 @@ Table of Contents
    to be "RFC-dev":
 
    <displayreference from="RFC6449" to="RFC-dev"/>
+
+   If a reference section is sorted, this element changes the sort
+   order.
 
    This element appears as a child element of: <back> (Section 2.9).
 
@@ -1787,6 +1804,12 @@ Table of Contents
 
    The ASCII equivalent of the organization's name.
 
+2.36.3.  'xml:lang' attribute
+
+   Allows specification of the language used.  This is sometimes useful
+   for renderers which display different fonts for ideographic
+   characters used in China and Japan.
+
 2.37.  <phone>
 
    Represents a phone number.
@@ -1942,6 +1965,9 @@ Table of Contents
    references in the STD and BCP series, where a single reference (such
    as "BCP 9") encompasses more than one RFC.
 
+   This element appears as a child element of: <references>
+   (Section 2.43).
+
    Content model:
 
    One or more <reference> elements (Section 2.41)
@@ -1975,7 +2001,11 @@ Table of Contents
 
    1.  One <name> element (Section 2.33)
 
-   2.  One or more <reference> elements (Section 2.41)
+   2.  In any order:
+
+       *  <reference> elements (Section 2.41)
+
+       *  <referencegroup> elements (Section 2.42)
 
 2.44.  <region>
 
@@ -2003,7 +2033,7 @@ Table of Contents
 
    In this order:
 
-   1.  One optional <link> element (Section 2.31)
+   1.  Optional <link> elements (Section 2.31)
 
    2.  One <front> element (Section 2.26)
 
@@ -2206,7 +2236,7 @@ Table of Contents
 
    In this order:
 
-   1.  One <name> element (Section 2.33)
+   1.  One optional <name> element (Section 2.33)
 
    2.  In any order:
 
@@ -2274,7 +2304,8 @@ Table of Contents
 
 2.46.5.  'title' attribute
 
-   Deprecated.  Use <name> instead.
+   Deprecated.  Use <name> instead.  Processors will flag sections that
+   have no <name> element as errors because all sections need a name.
 
 2.46.6.  'toc' attribute
 
@@ -2336,7 +2367,8 @@ Table of Contents
 
    <sourcecode> provides full control of horizontal whitespace and line
    breaks.  It is thus useful for source code and formal languages (such
-   as ABNF or the RNC notation used in this document).
+   as ABNF or the RNC notation used in this document).  When rendered,
+   sourcecode is always shown in a monospace font.
 
    For artwork such as character-based art, diagrams of message layouts,
    and so on, use the <artwork> element instead.
@@ -2745,18 +2777,33 @@ Table of Contents
 
       *  <xref> elements (Section 2.66)
 
-2.56.1.  'border' attribute
+2.56.1.  'align' attribute
+
+   Controls whether the content of the cell appears left justified
+   (default), centered, or right justified.  Note that "center" or
+   "right" probably only work well in cells with plain text; any other
+   elements might make the contents render badly.
+
+   Allowed values:
+
+   o  "left" (default)
+
+   o  "center"
+
+   o  "right"
+
+2.56.2.  'border' attribute
 
    The width of the border for this cell.  The default is 0, meaning no
    border.
 
-2.56.2.  'colspan' attribute
+2.56.3.  'colspan' attribute
 
    The number of columns that the cell to span.  For example, setting
    "colspan='3'" indicates that the cell occupies the same horizontal
    space as three cells in the row above or below this one.
 
-2.56.3.  'rowspan' attribute
+2.56.4.  'rowspan' attribute
 
    The number of rows that the cell to span.  For example, setting
    "rowspan='3'" indicates that the cell occupies the same vertical
@@ -2776,7 +2823,7 @@ Table of Contents
 
    A cell in a table row.  When rendered, this will normally come out in
    boldface; other than that, there is no difference between this and
-   the td> element.
+   the <td> element.
 
    This element appears as a child element of: <tr> (Section 2.61).
 
@@ -2828,18 +2875,33 @@ Table of Contents
 
       *  <xref> elements (Section 2.66)
 
-2.58.1.  'border' attribute
+2.58.1.  'align' attribute
+
+   Controls whether the content of the cell appears left justified
+   (default), centered, or right justified.  Note that "center" or
+   "right" probably only work well in cells with plain text; any other
+   elements might make the contents render badly.
+
+   Allowed values:
+
+   o  "left" (default)
+
+   o  "center"
+
+   o  "right"
+
+2.58.2.  'border' attribute
 
    The width of the border for this cell.  The default is 0, meaning no
    border.
 
-2.58.2.  'colspan' attribute
+2.58.3.  'colspan' attribute
 
    The number of columns that the cell to span.  For example, setting
    "colspan='3'" indicates that the cell occupies the same horizontal
    space as three cells in the row above or below this one.
 
-2.58.3.  'rowspan' attribute
+2.58.4.  'rowspan' attribute
 
    The number of rows that the cell to span.  For example, setting
    "rowspan='3'" indicates that the cell occupies the same vertical
@@ -3075,8 +3137,9 @@ Table of Contents
    "title"
 
       Inserts a title for the referenced element (usually obtained from
-      the referenced element's "title" attribute; some processors also
-      use the <title> child element or a <reference> target).
+      the referenced element's <name> child element.  If the target is a
+      reference, then the <title> element inside the <front> element is
+      used.
 
    Allowed values:
 
@@ -4070,7 +4133,7 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "yes" ] attribute tocInclude { "yes" | "no"
    }?,
        [ a:defaultValue = "3" ] attribute tocDepth { text }?,
-       link?,
+       link*,
        front,
        middle,
        back?
@@ -4113,7 +4176,8 @@ Appendix C.  Relax NG Schema
      element organization {
        attribute abbrev { text }?,
        attribute ascii { text }?,
-       text
+       text,
+       [ a:defaultValue = "en" ] attribute xml:lang { text }?
      }
    address = element address { postal?, phone?, facsimile?, email?,
    uri? }
@@ -4192,7 +4256,7 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no"
    }?,
        attribute sectionNumber { text }?,
-       name,
+       name?,
        (artwork
         | aside
         | blockquote
@@ -4387,6 +4451,8 @@ Appendix C.  Relax NG Schema
      element cref {
        attribute anchor { xsd:ID }?,
        attribute source { text }?,
+       ([ a:defaultValue = "true" ] attribute display { text },
+        ("true" | "false"))?,
        (text | b | em | eref | i | strong | sub | sup | tt | xref)*
      }
    tt =
@@ -4584,6 +4650,8 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "0" ] attribute border { text }?,
        [ a:defaultValue = "0" ] attribute colspan { text }?,
        [ a:defaultValue = "0" ] attribute rowspan { text }?,
+       [ a:defaultValue = "left" ]
+       attribute align { "left" | "center" | "right" }?,
        (t+
         | (text
            | artwork
@@ -4610,6 +4678,8 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "0" ] attribute border { text }?,
        [ a:defaultValue = "0" ] attribute colspan { text }?,
        [ a:defaultValue = "0" ] attribute rowspan { text }?,
+       [ a:defaultValue = "left" ]
+       attribute align { "left" | "center" | "right" }?,
        (t+
         | (text
            | artwork
@@ -4695,7 +4765,8 @@ Appendix C.  Relax NG Schema
        attribute from { text },
        attribute to { text }
      }
-   references = element references { name, reference+ }
+   references = element references { name, (reference |
+   referencegroup)* }
    reference =
      element reference {
        attribute anchor { xsd:ID },
@@ -4800,7 +4871,7 @@ Appendix D.  Schema Differences from v2
    +     [ a:defaultValue = "yes" ] attribute tocInclude { "yes" |
    + "no" }?,
    +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
-   +     link?,
+   +     link*,
          front,
          middle,
          back?
@@ -4844,8 +4915,10 @@ Appendix D.  Schema Differences from v2
      organization =
        element organization {
          attribute abbrev { text }?,
+   -     text
    +     attribute ascii { text }?,
-         text
+   +     text,
+   +     [ a:defaultValue = "en" ] attribute xml:lang { text }?
        }
      address = element address { postal?, phone?, facsimile?, email?,
      uri? }
@@ -4936,7 +5009,7 @@ Appendix D.  Schema Differences from v2
    +     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" |
    + "no" }?,
    +     attribute sectionNumber { text }?,
-   +     name,
+   +     name?,
    +     (artwork
    +      | aside
    +      | blockquote
@@ -5139,6 +5212,8 @@ Appendix D.  Schema Differences from v2
          attribute anchor { xsd:ID }?,
          attribute source { text }?,
    -     text
+   +     ([ a:defaultValue = "true" ] attribute display { text },
+   +      ("true" | "false"))?,
    +     (text | b | em | eref | i | strong | sub | sup | tt | xref)*
    +   }
    + tt =
@@ -5340,6 +5415,8 @@ Appendix D.  Schema Differences from v2
    +     [ a:defaultValue = "0" ] attribute border { text }?,
    +     [ a:defaultValue = "0" ] attribute colspan { text }?,
    +     [ a:defaultValue = "0" ] attribute rowspan { text }?,
+   +     [ a:defaultValue = "left" ]
+   +     attribute align { "left" | "center" | "right" }?,
    +     (t+
    +      | (text
    +         | artwork
@@ -5366,6 +5443,8 @@ Appendix D.  Schema Differences from v2
    +     [ a:defaultValue = "0" ] attribute border { text }?,
    +     [ a:defaultValue = "0" ] attribute colspan { text }?,
    +     [ a:defaultValue = "0" ] attribute rowspan { text }?,
+   +     [ a:defaultValue = "left" ]
+   +     attribute align { "left" | "center" | "right" }?,
    +     (t+
    +      | (text
    +         | artwork
@@ -5459,7 +5538,8 @@ Appendix D.  Schema Differences from v2
    +     attribute from { text },
    +     attribute to { text }
    +   }
-   + references = element references { name, reference+ }
+   + references = element references { name, (reference |
+   + referencegroup)* }
      reference =
        element reference {
          attribute anchor { xsd:ID },
@@ -5532,7 +5612,9 @@ Index
       align attribute
          in artwork element  1
          in figure element  1
+         in td element  1
          in texttable element  1
+         in th element  1
          in ttcol element  1
       alt attribute
          in artwork element  1
@@ -5613,6 +5695,7 @@ Index
          consensus  1
          counter  1
          day  1
+         display  1
          docName  1
          empty  1
          figureNumber  1
@@ -5764,6 +5847,7 @@ Index
          inside postal  1
       cref element  1
          anchor attribute  1
+         display attribute  1
          inside annotation  1
          inside b  1
          inside c  1
@@ -5795,6 +5879,8 @@ Index
          in date element  1
       dd element  1
          inside dl  1
+      display attribute
+         in cref element  1
       displayreference element  1
          from attribute  1
          inside back  1
@@ -6128,6 +6214,7 @@ Index
          abbrev attribute  1
          ascii attribute  1
          inside author  1
+         xml:lang attribute  1
 
    P
       pageno attribute
@@ -6172,6 +6259,7 @@ Index
          target attribute  1
       referencegroup element  1
          anchor attribute  1
+         inside references  1
       references element  1
          inside back  1
       region element  1
@@ -6378,6 +6466,7 @@ Index
       tbody element  1
          inside table  1
       td element  1
+         align attribute  1
          border attribute  1
          colspan attribute  1
          inside tr  1
@@ -6393,6 +6482,7 @@ Index
       tfoot element  1
          inside table  1
       th element  1
+         align attribute  1
          border attribute  1
          colspan attribute  1
          inside tr  1
@@ -6484,6 +6574,7 @@ Index
       xml:lang attribute
          in artwork element  1
          in author element  1
+         in organization element  1
          in postal element  1
          in rfc element  1
       xml:space attribute

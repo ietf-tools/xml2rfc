@@ -103,9 +103,9 @@
       <optional>
         <attribute name="tocDepth" a:defaultValue="3"/>
       </optional>
-      <optional>
+      <zeroOrMore>
         <ref name="link"/>
-      </optional>
+      </zeroOrMore>
       <ref name="front"/>
       <ref name="middle"/>
       <optional>
@@ -202,6 +202,9 @@
         <attribute name="ascii"/>
       </optional>
       <text/>
+      <optional>
+        <attribute name="xml:lang" a:defaultValue="en"/>
+      </optional>
     </element>
   </define>
   <define name="address">
@@ -425,7 +428,9 @@
       <optional>
         <attribute name="sectionNumber"/>
       </optional>
-      <ref name="name"/>
+      <optional>
+        <ref name="name"/>
+      </optional>
       <zeroOrMore>
         <choice>
           <ref name="artwork"/>
@@ -807,6 +812,13 @@
       </optional>
       <optional>
         <attribute name="source"/>
+      </optional>
+      <optional>
+        <attribute name="display" a:defaultValue="true"/>
+          <choice>
+            <value>true</value>
+            <value>false</value>
+          </choice>
       </optional>
       <zeroOrMore>
         <choice>
@@ -1206,6 +1218,15 @@
       <optional>
         <attribute name="rowspan" a:defaultValue="0"/>
       </optional>
+      <optional>
+        <attribute name="align" a:defaultValue="left">
+          <choice>
+            <value>left</value>
+            <value>center</value>
+            <value>right</value>
+          </choice>
+        </attribute>
+      </optional>
       <choice>
         <oneOrMore>
           <ref name="t"/>
@@ -1246,6 +1267,15 @@
       </optional>
       <optional>
         <attribute name="rowspan" a:defaultValue="0"/>
+      </optional>
+      <optional>
+        <attribute name="align" a:defaultValue="left">
+          <choice>
+            <value>left</value>
+            <value>center</value>
+            <value>right</value>
+          </choice>
+        </attribute>
       </optional>
       <choice>
         <oneOrMore>
@@ -1427,9 +1457,12 @@
   <define name="references">
     <element name="references">
       <ref name="name"/>
-      <oneOrMore>
-        <ref name="reference"/>
-      </oneOrMore>
+      <zeroOrMore>
+        <choice>
+          <ref name="reference"/>
+          <ref name="referencegroup"/>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="reference">
