@@ -157,6 +157,21 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template match="refcontent" mode="cleanup">
+  <xsl:variable name="text">
+    <xsl:apply-templates mode="cleanup"/>
+  </xsl:variable>
+  <xsl:comment>Converted from rfc2629.xslt refcontent extension</xsl:comment>
+  <xsl:choose>
+    <xsl:when test="contains($text,' ')">
+      <seriesInfo name="{substring-before($text,' ')}" value="{substring-after($text,' ')}"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <seriesInfo name="" value="{$text}"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="x:ref" mode="cleanup">
   <xsl:variable name="val" select="normalize-space(.)"/>
   <xsl:variable name="target" select="//*[@anchor and (@anchor=$val or x:anchor-alias/@value=$val)][not(ancestor::ed:del)] | //reference/x:source[x:defines=$val]"/>
@@ -271,22 +286,24 @@
   </t>
 </xsl:template>
 
-<!-- extended reference formatting -->
-
-<xsl:template match="xref[(@x:fmt or @x:sec or @x:rel) and not(node())]" mode="cleanup">
+<xsl:template match="xref[(@x:fmt or @x:sec or @x:rel or @section or @sectionFormat or @relative) and not(node())]" mode="cleanup">
   <xsl:call-template name="insert-iref-for-xref"/>
   <xsl:variable name="node" select="$src//*[@anchor=current()/@target]" />
 
+  <xsl:variable name="ssec">
+    <xsl:call-template name="get-section-xref-section"/>
+  </xsl:variable>
+
   <xsl:variable name="sec">
     <xsl:choose>
-      <xsl:when test="starts-with(@x:rel,'#') and not(@x:sec) and $node/x:source/@href">
+      <xsl:when test="starts-with(@x:rel,'#') and $ssec='' and $node/x:source/@href">
         <xsl:variable name="extdoc" select="document($node/x:source/@href)"/>
         <xsl:for-each select="$extdoc//*[@anchor=substring-after(current()/@x:rel,'#')]">
           <xsl:call-template name="get-section-number"/>
         </xsl:for-each>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="@x:sec"/>
+        <xsl:value-of select="$ssec"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -299,16 +316,19 @@
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:variable name="fmt">
-    <xsl:choose>
-      <xsl:when test="@x:fmt!=''"><xsl:value-of select="@x:fmt"/></xsl:when>
-      <xsl:when test="ancestor::artwork">,</xsl:when>
-      <xsl:otherwise>of</xsl:otherwise>
-    </xsl:choose>
+  <xsl:variable name="sfmt">
+    <xsl:call-template name="get-section-xref-format">
+      <xsl:with-param name="default">
+        <xsl:choose>
+          <xsl:when test="ancestor::artwork">comma</xsl:when>
+          <xsl:otherwise>of</xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:variable>
-
+  
   <xsl:choose>
-    <xsl:when test="$fmt=','">
+    <xsl:when test="$sfmt='comma'">
       <xref>
         <xsl:apply-templates select="@target|@format|@pageno|text()|*" mode="cleanup"/>
       </xref>
@@ -317,15 +337,15 @@
       <xsl:text> </xsl:text>
       <xsl:value-of select="$sec"/>
     </xsl:when>
-    <xsl:when test="$fmt='sec'">
+    <xsl:when test="$sfmt='sec'">
       <xsl:value-of select="$secterm"/>
       <xsl:text> </xsl:text>
       <xsl:value-of select="$sec"/>
     </xsl:when>
-    <xsl:when test="$fmt='number'">
+    <xsl:when test="$sfmt='number'">
       <xsl:value-of select="$sec"/>
     </xsl:when>
-    <xsl:when test="$fmt='()'">
+    <xsl:when test="$sfmt='parens'">
       <xref>
         <xsl:apply-templates select="@target|@format|@pageno|text()|*" mode="cleanup"/>
       </xref>
@@ -335,7 +355,7 @@
       <xsl:value-of select="$sec"/>
       <xsl:text>)</xsl:text>
     </xsl:when>
-    <xsl:when test="$fmt='of'">
+    <xsl:when test="$sfmt='of'">
       <xsl:value-of select="$secterm"/>
       <xsl:text> </xsl:text>
       <xsl:value-of select="$sec"/>
@@ -343,15 +363,6 @@
       <xref>
         <xsl:apply-templates select="@target|@format|@pageno|text()|*" mode="cleanup"/>
       </xref>
-    </xsl:when>
-    <xsl:when test="$fmt='anchor'">
-      <xsl:variable name="val">
-        <xsl:call-template name="referencename">
-          <xsl:with-param name="node" select="$node" />
-        </xsl:call-template>
-      </xsl:variable>
-      <!-- remove brackets -->
-      <xsl:value-of select="substring($val,2,string-length($val)-2)"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:copy>

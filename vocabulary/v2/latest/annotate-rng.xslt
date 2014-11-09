@@ -102,8 +102,8 @@
       </xsl:choose>
     </xsl:when>
     <xsl:when test="$s/self::reference">
-      <xsl:if test="@x:sec">
-        <xsl:value-of select="concat('Section ',@x:sec,' of ')"/>
+      <xsl:if test="@x:sec|@section">
+        <xsl:value-of select="concat('Section ',@x:sec,@section,' of ')"/>
       </xsl:if>
       <xsl:text>[</xsl:text>
       <xsl:value-of select="$t"/>
