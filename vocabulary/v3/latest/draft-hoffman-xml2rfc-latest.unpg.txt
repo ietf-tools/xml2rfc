@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                           November 8, 2014
+Obsoletes: 2629 (if approved)                           November 9, 2014
 Intended status: Informational
-Expires: May 12, 2015
+Expires: May 13, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 12, 2015.
+   This Internet-Draft will expire on May 13, 2015.
 
 Copyright Notice
 
@@ -1156,9 +1156,9 @@ Table of Contents
 
    Allowed values:
 
-   o  "false" (default)
+   o  "false"
 
-   o  "true"
+   o  "true" (default)
 
 2.20.2.  'spacing' attribute
 
@@ -4378,8 +4378,8 @@ Appendix C.  Relax NG Schema
      element dl {
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
-       [ a:defaultValue = "false" ]
-       attribute hanging { "false" | "true" }?,
+       [ a:defaultValue = "true" ] attribute hanging { "false" | "true"
+   }?,
        (dt, dd)+
      }
    dt =
@@ -5137,8 +5137,8 @@ Appendix D.  Schema Differences from v2
    +   element dl {
    +     [ a:defaultValue = "normal" ]
    +     attribute spacing { "normal" | "compact" }?,
-   +     [ a:defaultValue = "false" ]
-   +     attribute hanging { "false" | "true" }?,
+   +     [ a:defaultValue = "true" ] attribute hanging { "false" |
+   + "true" }?,
    +     (dt, dd)+
    +   }
    + dt =
