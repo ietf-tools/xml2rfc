@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                           November 9, 2014
+Obsoletes: 2629 (if approved)                          November 11, 2014
 Intended status: Informational
-Expires: May 13, 2015
+Expires: May 15, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 13, 2015.
+   This Internet-Draft will expire on May 15, 2015.
 
 Copyright Notice
 
@@ -173,7 +173,7 @@ Table of Contents
    an XML-based language ('Extensible Markup Language', [XML]) used for
    writing RFCs ([RFC7322]) and Internet-Drafts ([IDGUIDE]).
 
-   This document obsoletes the version ("v2") vocabulary [XML2RFCv2],
+   This document obsoletes the version 2 vocabulary ("v2") [XML2RFCv2],
    which contains the extended language definition.  That document in
    turn obsoletes the original version ("v1") [RFC2629].  This document
    directly copies the material from [XML2RFCv2] where possible; as that
@@ -534,11 +534,9 @@ Table of Contents
    o  protocol unit diagrams.
 
    Alternatively, the "src" attribute allows referencing an external
-   graphics file, such as a bitmap or a vector drawing, using a URI.  In
-   this case, the textual content acts as fallback for output
-   representations that do not support graphics, and thus ought to
-   contain either a "line art" variant of the graphics, or otherwise
-   prose that describes the included image in sufficient detail.
+   graphics file in SVN format, using a URI.  In this case, the textual
+   content acts as prose that describes the included image in sufficient
+   detail.
 
    If the artwork includes either "&" or "<" characters, or the string
    "]]>" those characters need to be encoded using escaping or CDATA
@@ -562,6 +560,9 @@ Table of Contents
 
    o  As a URI to an external entity (such as "<artwork type="svg"
       src="http://www.example.com/...">")
+
+   These four methods can also be used for including text artwork, but
+   using a data: URI is probably confusing for text artwork.
 
    This element appears as a child element of: <aside> (Section 2.6),
    <blockquote> (Section 2.11), <dd> (Section 2.18), <figure>
@@ -664,9 +665,7 @@ Table of Contents
 2.6.  <aside>
 
    This element is a container for content that is semantically less
-   important or tangential to the content that surrounds it.  The
-   elements inside this container are indented from both margins when
-   displayed.
+   important or tangential to the content that surrounds it.
 
    This element appears as a child element of: <section> (Section 2.46).
 
@@ -845,8 +844,7 @@ Table of Contents
 
 2.11.  <blockquote>
 
-   Specifies a block of text is a quotation.  The "cite" attribute is
-   required, and must be a URI.
+   Specifies a block of text is a quotation.
 
    This element appears as a child element of: <section> (Section 2.46).
 
@@ -1117,7 +1115,7 @@ Table of Contents
 
    Content model: this element does not have any contents.
 
-2.19.1.  'from' attribute (mandatory)
+2.19.1.  'target' attribute (mandatory)
 
    This attribute must be the name of an anchor in a <reference>
    element.
@@ -1779,9 +1777,9 @@ Table of Contents
    Other formats are reserved for future use.
 
    It is an error for the style string to be empty, and processors will
-   reject documents with an element that has such a style.  If the
-   intention is to have a list that is indented without bullets or
-   numbers, use <ul> with the 'empty="true"' attribute instead.
+   reject documents with an element that has such a style.  For bulleted
+   lists, you use the <ul> element.  For lists that have neither bullets
+   nor numbers, use the <ul> element with the 'empty="true"' attribute.
 
 2.36.  <organization>
 
@@ -4762,7 +4760,7 @@ Appendix C.  Relax NG Schema
    back = element back { displayreference*, references*, section* }
    displayreference =
      element displayreference {
-       attribute from { text },
+       attribute target { xsd:IDREF },
        attribute to { text }
      }
    references = element references { name, (reference |
@@ -5535,7 +5533,7 @@ Appendix D.  Schema Differences from v2
    + back = element back { displayreference*, references*, section* }
    + displayreference =
    +   element displayreference {
-   +     attribute from { text },
+   +     attribute target { xsd:IDREF },
    +     attribute to { text }
    +   }
    + references = element references { name, (reference |
@@ -5700,7 +5698,6 @@ Index
          empty  1
          figureNumber  1
          format  1
-         from  1
          fullname  1
          group  1
          hangIndent  1
@@ -5882,8 +5879,8 @@ Index
       display attribute
          in cref element  1
       displayreference element  1
-         from attribute  1
          inside back  1
+         target attribute  1
          to attribute  1
       dl element  1
          hanging attribute  1
@@ -6053,8 +6050,6 @@ Index
          octets attribute  1
          target attribute  1
          type attribute  1
-      from attribute
-         in displayreference element  1
       front element  1
          inside reference  1
          inside rfc  1
@@ -6459,6 +6454,7 @@ Index
       tableNumber attribute
          in table element  1
       target attribute
+         in displayreference element  1
          in eref element  1
          in format element  1
          in reference element  1

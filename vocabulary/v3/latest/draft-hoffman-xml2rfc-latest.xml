@@ -25,6 +25,9 @@ Future threads:
 	How are <refernecegroup>s rendered?
 	What happens if an <xref> points inside a reference group?
 
+Julian says that text for <displayreference> needs to be fixed and clarified.
+
+Need to specify the default values for ol/@style
 
 After draft-reschke-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
@@ -564,6 +567,8 @@ some types of sections.</t>
             src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3..."&gt;")</t>
          <t>As a URI to an external entity (such as "&lt;artwork type="svg" src="http://www.example.com/..."&gt;")</t>
       </list>
+      These four methods can also be used for including text artwork, but using a data: URI is probably
+      confusing for text artwork.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
@@ -1002,7 +1007,7 @@ some types of sections.</t>
    <iref item="Elements" subitem="blockquote" primary="true"/>
    <iref item="blockquote element" primary="true"/>
    <t>
-      Specifies a block of text is a quotation. The "cite" attribute is required, and must be a URI.
+      Specifies a block of text is a quotation.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.blockquote.contents"><!--AG-->
@@ -1421,11 +1426,11 @@ some types of sections.</t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.displayreference.contents"><!--AG-->Content model: this element does not have any contents.</t>
 
-   <!--displayreference/@from-->
-   <section title="'from' attribute (mandatory)" anchor="element.displayreference.attribute.from" toc="exclude">
-      <iref item="Attributes" subitem="from"/>
-      <iref item="displayreference element" subitem="from attribute"/>
-      <iref item="from attribute" subitem="in displayreference element"/>
+   <!--displayreference/@target-->
+   <section title="'target' attribute (mandatory)" anchor="element.displayreference.attribute.target" toc="exclude">
+      <iref item="Attributes" subitem="target"/>
+      <iref item="displayreference element" subitem="target attribute"/>
+      <iref item="target attribute" subitem="in displayreference element"/>
       <t>
          This attribute must be the name of an anchor in a &lt;<x:ref>reference</x:ref>&gt; element.
       </t>
@@ -2410,9 +2415,10 @@ some types of sections.</t>
        </t>
       <t>
         It is an error for the style string to be empty, and processors will reject documents
-        with an element that has such a style. If the intention is to have a list that is
-        indented without bullets or numbers, use &lt;<x:ref>ul</x:ref>&gt; with the 'empty="true"'
-        attribute instead.
+        with an element that has such a style.
+        For bulleted lists, you use the &lt;<x:ref>ul</x:ref>&gt; element.
+        For lists that have neither bullets nor numbers, use the &lt;<x:ref>ul</x:ref>&gt; element with the
+        'empty="true"' attribute.
       </t>
    </section>
 </section>
@@ -6557,7 +6563,7 @@ bcp14 = element bcp14 { text }
 back = element back { displayreference*, references*, section* }
 displayreference =
   element displayreference {
-    attribute from { text },
+    attribute target { xsd:IDREF },
     attribute to { text }
   }
 references = element references { name, (reference | 
@@ -7333,7 +7339,7 @@ to the v3 schema.</t>
 + back = element back { displayreference*, references*, section* }
 + displayreference =
 +   element displayreference {
-+     attribute from { text },
++     attribute target { xsd:IDREF },
 +     attribute to { text }
 +   }
 + references = element references { name, (reference | 
