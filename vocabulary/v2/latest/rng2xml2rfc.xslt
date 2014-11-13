@@ -97,26 +97,26 @@
   <xsl:when test="not($elementcontents)">
     <t anchor="{$anchor}.contents">
       <xsl:comment>AG</xsl:comment>
-      <xsl:text>Content model: this element does not have any contents.</xsl:text>
+      <xref format="none" target="grammar.{@name}">Content model</xref><xsl:text>: this element does not have any contents.</xsl:text>
     </t>
   </xsl:when>
   <xsl:when test="count($elementcontents)=1 and $elementcontents[1]/self::rng:text">
     <t anchor="{$anchor}.contents">
       <xsl:comment>AG</xsl:comment>
-      <xsl:text>Content model: only text content.</xsl:text>
+      <xref format="none" target="grammar.{@name}">Content model</xref><xsl:text>: only text content.</xsl:text>
     </t>
   </xsl:when>
   <xsl:when test="count($elementcontents)=1">
     <t anchor="{$anchor}.contents">
       <xsl:comment>AG</xsl:comment>
-      Content model:
+      <xref format="none" target="grammar.{@name}">Content model</xref>:
     </t>
     <xsl:apply-templates select="$elementcontents"/>
   </xsl:when>
   <xsl:otherwise>
     <t anchor="{$anchor}.contents">
       <xsl:comment>AG</xsl:comment>
-      <xsl:text>Content model:</xsl:text>
+      <xref format="none" target="grammar.{@name}">Content model</xref><xsl:text>:</xsl:text>
     </t>
     <t>
       <xsl:comment>AG</xsl:comment>

@@ -3,9 +3,9 @@
 
 Network Working Group                                         J. Reschke
 Internet-Draft                                                greenbytes
-Obsoletes: 2629 (if approved)                          November 11, 2014
+Obsoletes: 2629 (if approved)                          November 13, 2014
 Intended status: Informational
-Expires: May 15, 2015
+Expires: May 17, 2015
 
 
                    The 'XML2RFC' version 2 Vocabulary
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 15, 2015.
+   This Internet-Draft will expire on May 17, 2015.
 
 Copyright Notice
 
@@ -546,21 +546,15 @@ Table of Contents
 
 2.13.1.  'day' attribute
 
-   In the "boilerplate" case: the day of publication; this is a number.
-   Otherwise: an indication of the publication day, with the format not
-   being restricted.
+   Day of publication; this is a number.
 
 2.13.2.  'month' attribute
 
-   In the "boilerplate" case: the month of publication; this is the
-   English name of the month.  Otherwise: an indication of the
-   publication month, with the format not being restricted.
+   Month of publication; this is the English name of the month.
 
 2.13.3.  'year' attribute
 
-   In the "boilerplate" case: the year of publication; this is a number
-   (usually four-digit).  Otherwise: an indication of the publication
-   year, with the format not being restricted.
+   Year of publication.
 
 2.14.  <email>
 
@@ -2213,6 +2207,7 @@ Appendix C.  Relax NG Schema
 
    namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
+
    rfc =
      element rfc {
        attribute number { text }?,
@@ -2251,16 +2246,19 @@ Appendix C.  Relax NG Schema
        middle,
        back?
      }
+
    front =
      element front {
        title, author+, date, area*, workgroup*, keyword*, abstract?,
    note*
      }
+
    title =
      element title {
        attribute abbrev { text }?,
        text
      }
+
    author =
      element author {
        attribute initials { text }?,
@@ -2270,24 +2268,37 @@ Appendix C.  Relax NG Schema
        organization?,
        address?
      }
+
    organization =
      element organization {
        attribute abbrev { text }?,
        text
      }
+
    address = element address { postal?, phone?, facsimile?, email?,
    uri? }
+
    postal = element postal { street+, (city | region | code | country)*
    }
+
    street = element street { text }
+
    city = element city { text }
+
    region = element region { text }
+
    code = element code { text }
+
    country = element country { text }
+
    phone = element phone { text }
+
    facsimile = element facsimile { text }
+
    email = element email { text }
+
    uri = element uri { text }
+
    date =
      element date {
        attribute day { text }?,
@@ -2295,16 +2306,23 @@ Appendix C.  Relax NG Schema
        attribute year { text }?,
        empty
      }
+
    area = element area { text }
+
    workgroup = element workgroup { text }
+
    keyword = element keyword { text }
+
    abstract = element abstract { t+ }
+
    note =
      element note {
        attribute title { text },
        t+
      }
+
    middle = element middle { section+ }
+
    section =
      element section {
        attribute anchor { xsd:ID }?,
@@ -2314,6 +2332,7 @@ Appendix C.  Relax NG Schema
        (t | figure | texttable | iref)*,
        section*
      }
+
    t =
      element t {
        attribute anchor { xsd:ID }?,
@@ -2328,6 +2347,7 @@ Appendix C.  Relax NG Schema
         | spanx
         | vspace)*
      }
+
    \list =
      element list {
        attribute style { text }?,
@@ -2335,6 +2355,7 @@ Appendix C.  Relax NG Schema
        attribute counter { text }?,
        t+
      }
+
    xref =
      element xref {
        attribute target { xsd:IDREF },
@@ -2344,11 +2365,13 @@ Appendix C.  Relax NG Schema
        attribute format { "counter" | "title" | "none" | "default" }?,
        text
      }
+
    eref =
      element eref {
        attribute target { text },
        text
      }
+
    iref =
      element iref {
        attribute item { text },
@@ -2357,12 +2380,14 @@ Appendix C.  Relax NG Schema
        attribute primary { "true" | "false" }?,
        empty
      }
+
    cref =
      element cref {
        attribute anchor { xsd:ID }?,
        attribute source { text }?,
        text
      }
+
    spanx =
      element spanx {
        [ a:defaultValue = "preserve" ]
@@ -2370,11 +2395,13 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "emph" ] attribute style { text }?,
        text
      }
+
    vspace =
      element vspace {
        [ a:defaultValue = "0" ] attribute blankLines { text }?,
        empty
      }
+
    figure =
      element figure {
        attribute anchor { xsd:ID }?,
@@ -2392,8 +2419,10 @@ Appendix C.  Relax NG Schema
        artwork,
        postamble?
      }
+
    preamble =
      element preamble { (text | xref | eref | iref | cref | spanx)* }
+
    artwork =
      element artwork {
        [ a:defaultValue = "preserve" ]
@@ -2408,8 +2437,10 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "" ] attribute height { text }?,
        text*
      }
+
    postamble =
      element postamble { (text | xref | eref | iref | cref | spanx)* }
+
    texttable =
      element texttable {
        attribute anchor { xsd:ID }?,
@@ -2425,6 +2456,7 @@ Appendix C.  Relax NG Schema
        c*,
        postamble?
      }
+
    ttcol =
      element ttcol {
        attribute width { text }?,
@@ -2432,13 +2464,17 @@ Appendix C.  Relax NG Schema
        attribute align { "left" | "center" | "right" }?,
        text
      }
+
    c = element c { (text | xref | eref | iref | cref | spanx)* }
+
    back = element back { references*, section* }
+
    references =
      element references {
        [ a:defaultValue = "References" ] attribute title { text }?,
        reference+
      }
+
    reference =
      element reference {
        attribute anchor { xsd:ID },
@@ -2448,12 +2484,14 @@ Appendix C.  Relax NG Schema
        format*,
        annotation*
      }
+
    seriesInfo =
      element seriesInfo {
        attribute name { text },
        attribute value { text },
        empty
      }
+
    format =
      element format {
        attribute target { text }?,
@@ -2461,8 +2499,10 @@ Appendix C.  Relax NG Schema
        attribute octets { text }?,
        empty
      }
+
    annotation =
      element annotation { (text | xref | eref | iref | cref | spanx)* }
+
    start = rfc
 
    (This schema was derived from version 1.3.6 of the xml2rfc DTD
@@ -2858,6 +2898,7 @@ Index
       src attribute
          in artwork element  1
          in figure element  1
+      start element  1
       street element  1
          inside postal  1
       style attribute

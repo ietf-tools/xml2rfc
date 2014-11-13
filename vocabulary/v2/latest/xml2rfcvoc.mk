@@ -17,7 +17,11 @@ xml2rfcv2-spec.xml: xml2rfcv2.rng rng2xml2rfc.xslt
 	saxon $< rng2xml2rfc.xslt voc=v3 > $@
 
 xml2rfcv2.rnc.folded: xml2rfcv2.rnc
-	fold -w69 -s $< > $@
+	fold -w69 -s < $< | \
+	sed "s|^\([-a-zA-Z\]*\)* =|\n<b anchor='grammar.\1'>\1</b><iref item='\1 element'/> =|" | \
+	sed "s/anchor='grammar\.\\\\/anchor='grammar\./" | \
+	sed "s/item='\\\\/item='/" \
+	> $@
 
 draft-reschke-xml2rfc-latest.xml: xml2rfcv2-spec.xml xml2rfcv2.rnc.folded
 	cp -v $@ $@.bak

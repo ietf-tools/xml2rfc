@@ -131,7 +131,7 @@
 
 <xsl:template match="x:anchor-alias" mode="cleanup"/>
 
-<xsl:template match="x:bcp14" mode="cleanup">
+<xsl:template match="x:bcp14|bcp14" mode="cleanup">
   <xsl:apply-templates/>
 </xsl:template>
 
@@ -170,6 +170,11 @@
       <seriesInfo name="" value="{$text}"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="postalLine" mode="cleanup">
+  <xsl:comment>converted from v3 &lt;postalLine&gt;</xsl:comment>
+  <street><xsl:value-of select="."/></street>
 </xsl:template>
 
 <xsl:template match="x:ref" mode="cleanup">
@@ -395,6 +400,11 @@
   <xsl:apply-templates select="node()" mode="cleanup"/>
 </xsl:template>
 
+<xsl:template match="xref[node() and @format='none' and @target=//artwork//@anchor]" mode="cleanup">
+  <!-- remove the link -->
+  <xsl:apply-templates select="node()" mode="cleanup"/>
+</xsl:template>
+
 <xsl:template match="xref[not(node()) and (@target=//preamble/@anchor or @target=//spanx/@anchor)]" mode="cleanup">
   <!-- fatal -->
   <xsl:message terminate="yes">Broken xref <xsl:value-of select="@target"/> due to target being filtered out.</xsl:message>
@@ -403,7 +413,7 @@
 <xsl:template match="xref" mode="cleanup" priority="0">
   <xsl:call-template name="insert-iref-for-xref"/>
   <xref>
-    <xsl:copy-of select="@target|@format"/>
+    <xsl:apply-templates select="@target|@format" mode="cleanup"/>
     <xsl:apply-templates mode="cleanup"/>
   </xref>
 </xsl:template>
@@ -855,5 +865,36 @@
   </section>
 </xsl:template>
 <xsl:template match="section/name" mode="cleanup"/>
+
+<!-- Display names for references -->
+<xsl:template match="displayreference" mode="cleanup"/>
+<xsl:template match="reference/@anchor[.=/rfc/back/displayreference/@from]" mode="cleanup">
+  <xsl:attribute name="anchor">
+    <xsl:call-template name="generate-ref-name"/>
+  </xsl:attribute>
+</xsl:template>
+<xsl:template match="xref/@target[.=/rfc/back/displayreference/@from]" mode="cleanup">
+  <xsl:attribute name="target">
+    <xsl:call-template name="generate-ref-name"/>
+  </xsl:attribute>
+</xsl:template>
+
+<xsl:template name="generate-ref-name">
+  <xsl:variable name="tnewname">
+    <xsl:value-of select="/rfc/back/displayreference[@from=current()]/@to"/>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="translate(substring($tnewname,1,1),$digits,'')=''">
+      <xsl:value-of select="concat('_',$tnewname)"/>
+      <xsl:call-template name="warning">
+        <xsl:with-param name="inline" select="'no'"/>
+        <xsl:with-param name="msg">rewriting reference name '<xsl:value-of select="$tnewname"/>' to '<xsl:value-of select="concat('_',$tnewname)"/>' due to illegal start character</xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$tnewname"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 </xsl:transform>
