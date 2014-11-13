@@ -141,7 +141,7 @@
    <t>
      Contains the abstract of the document. The abstract ought to be self-contained
      and thus should not contain references or unexpanded abbreviations.
-     See <xref target="RFC7322" x:fmt="of" x:sec="4.3"/> for more information.
+     See <xref target="RFC7322" sectionFormat="of" section="4.3"/> for more information.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.abstract.contents"><!--AG-->
@@ -428,7 +428,7 @@
             setting anyway (because that's what the &lt;artwork&gt; element is for).
          </t>
       <t>
-            See also <xref target="XML" x:fmt="of" x:sec="2.10" x:rel="#sec-white-space"/>.
+            See also <xref target="XML" sectionFormat="of" section="2.10" relative="#sec-white-space"/>.
          </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"default"</t>
@@ -454,7 +454,7 @@
    <t>
       The &lt;author&gt; elements contained within the document's &lt;front&gt; element
       are used to fill the boilerplate, and also to generate the "Author's Address"
-      section (see <xref target="RFC7322" x:fmt="of" x:sec="4.12"/>).
+      section (see <xref target="RFC7322" sectionFormat="of" section="4.12"/>).
    </t>
    <t>
       Note that an "author" can also be just an organization (by not specifying any
@@ -682,7 +682,7 @@
         will auto-generate an identifier when none is given.
       </t>
       <t>
-        The value needs to be a valid XML "Name" (<xref target="XML" x:fmt="of" x:sec="2.3" x:rel="#sec-common-syn"/>),
+        The value needs to be a valid XML "Name" (<xref target="XML" sectionFormat="of" section="2.3" relative="#sec-common-syn"/>),
         additionally constrained to US-ASCII characters (<xref target="USASCII"/>).
       </t>
    </section>
@@ -716,7 +716,7 @@
    </t>
    <t>
       In the boilerplate case, it defines the publication date, which, when producing
-      Internet-Drafts, will be used for computing the expiration date (see <xref target="IDGUIDE" x:fmt="of" x:sec="8" x:rel="#expiry"/>).
+      Internet-Drafts, will be used for computing the expiration date (see <xref target="IDGUIDE" sectionFormat="of" section="8" relative="#expiry"/>).
       When one or more of "year", "month", or "day" are left out, the processor
       will attempt to use the current system date if the attributes that are
       present are consistent with that date. 
@@ -743,7 +743,9 @@
       <iref item="date element" subitem="day attribute"/>
       <iref item="day attribute" subitem="in date element"/>
       <t>
-            Day of publication; this is a number.
+            In the "boilerplate" case: the day of publication; this is a number.
+            Otherwise: an indication of the publication day, with the format
+            not being restricted.
          </t>
    </section>
 
@@ -753,7 +755,9 @@
       <iref item="date element" subitem="month attribute"/>
       <iref item="month attribute" subitem="in date element"/>
       <t>
-            Month of publication; this is the English name of the month.
+            In the "boilerplate" case: the month of publication; this is the English name of the month.
+            Otherwise: an indication of the publication month, with the format
+            not being restricted.
          </t>
    </section>
 
@@ -763,7 +767,9 @@
       <iref item="date element" subitem="year attribute"/>
       <iref item="year attribute" subitem="in date element"/>
       <t>
-            Year of publication.
+            In the "boilerplate" case: the year of publication; this is a number (usually four-digit).
+            Otherwise: an indication of the publication year, with the format
+            not being restricted.
          </t>
    </section>
 </section>
@@ -781,7 +787,7 @@
    </t>
    <t>
       The value is expected to be the scheme-specific part of a "mailto" URI
-      (so does not include the prefix "mailto:"). See <xref target="RFC6068" x:fmt="of" x:sec="2"/> 
+      (so does not include the prefix "mailto:"). See <xref target="RFC6068" sectionFormat="of" section="2"/> 
       for details.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
@@ -802,7 +808,7 @@
    </t>
    <t>
       If the element has text content, that content will be used. Otherwise, the value of the
-      target attribute will be inserted in angle brackets (<xref target="RFC3986" x:fmt="," x:sec="C"/>).
+      target attribute will be inserted in angle brackets (<xref target="RFC3986" sectionFormat="comma" section="C"/>).
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
    <t anchor="element.eref.contents"><!--AG-->
@@ -814,7 +820,7 @@
       <iref item="eref element" subitem="target attribute"/>
       <iref item="target attribute" subitem="in eref element"/>
       <t>
-            URI of the link target (see <xref target="RFC3986" x:fmt="of" x:sec="3"/>). 
+            URI of the link target (see <xref target="RFC3986" sectionFormat="of" section="3"/>). 
          </t>
    </section>
 </section>
@@ -833,7 +839,7 @@
    <t>
       The value is expected to be the scheme-specific part of a "tel" URI
       (so does not include the prefix "tel:"), using the "global numbers"
-      syntax. See <xref target="RFC3966" x:fmt="of" x:sec="3"/> 
+      syntax. See <xref target="RFC3966" sectionFormat="of" section="3"/> 
       for details.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
@@ -920,7 +926,7 @@
         Furthermore, the presence of this attribute causes the figure to be numbered.
       </t>
       <t>
-        The value needs to be a valid XML "Name" (<xref target="XML" x:fmt="of" x:sec="2.3" x:rel="#sec-common-syn"/>).
+        The value needs to be a valid XML "Name" (<xref target="XML" sectionFormat="of" section="2.3" relative="#sec-common-syn"/>).
       </t>
    </section>
 
@@ -1437,7 +1443,7 @@
    </t>
    <t>
       This information appears in both the "Author's Address" section and
-      on the front page (see <xref target="RFC7322" x:fmt="," x:sec="4.1.1"/> for more information).
+      on the front page (see <xref target="RFC7322" sectionFormat="comma" section="4.1.1"/> for more information).
       If the value is long, an abbreviated variant can be specified in the
       "abbrev" attribute.
    </t>
@@ -1470,7 +1476,7 @@
    <t>
       The value is expected to be the scheme-specific part of a "tel" URI
       (so does not include the prefix "tel:"), using the "global numbers"
-      syntax. See <xref target="RFC3966" x:fmt="of" x:sec="3"/> 
+      syntax. See <xref target="RFC3966" sectionFormat="of" section="3"/> 
       for details.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
@@ -1636,7 +1642,7 @@
         as an identifier in links to this reference entry.
       </t>
       <t>
-        The value needs to be a valid XML "Name" (<xref target="XML" x:fmt="of" x:sec="2.3" x:rel="#sec-common-syn"/>),
+        The value needs to be a valid XML "Name" (<xref target="XML" sectionFormat="of" section="2.3" relative="#sec-common-syn"/>),
         additionally constrained to US-ASCII characters (<xref target="USASCII"/>).
       </t>
    </section>
@@ -1671,7 +1677,7 @@
    <t>
       In the early days of the RFC series, there was only one "References" section per RFC. This convention
       was later changed to group references into two sets, "Normative" and "Informative"
-      as described in <xref target="RFC7322" x:fmt="of" x:sec="4.8.6"/>).
+      as described in <xref target="RFC7322" sectionFormat="of" section="4.8.6"/>).
       This vocabulary supports the split with the "title" attribute.
    </t>
    <t>
@@ -1814,7 +1820,7 @@
             draft number with the string "latest").
          </t>
       <t>
-            See <xref target="IDGUIDE" x:fmt="of" x:sec="7" x:rel="#naming"/>
+            See <xref target="IDGUIDE" sectionFormat="of" section="7" relative="#naming"/>
             for further information.
          </t>
    </section>
@@ -1912,7 +1918,7 @@
             The document stream.
          </t>
       <t>
-            See <xref target="RFC5741" x:fmt="of" x:sec="2"/> for details.
+            See <xref target="RFC5741" sectionFormat="of" section="2"/> for details.
          </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"IETF" (default)</t>
@@ -1949,7 +1955,7 @@
             The natural language used in the document (defaults to "en").
          </t>
       <t>
-            See <xref target="XML" x:fmt="of" x:sec="2.12" x:rel="#sec-lang-tag"/>
+            See <xref target="XML" sectionFormat="of" section="2.12" relative="#sec-lang-tag"/>
             for more information.
          </t>
    </section>
@@ -2006,7 +2012,7 @@
         Document-wide unique identifier for this section.
       </t>
       <t>
-        The value needs to be a valid XML "Name" (<xref target="XML" x:fmt="of" x:sec="2.3" x:rel="#sec-common-syn"/>).
+        The value needs to be a valid XML "Name" (<xref target="XML" sectionFormat="of" section="2.3" relative="#sec-common-syn"/>).
       </t>
    </section>
 
@@ -2148,7 +2154,7 @@
             attribute will be removed in future versions of the vocabulary.
          </t>
       <t>            
-            See also <xref target="XML" x:fmt="of" x:sec="2.10" x:rel="#sec-white-space"/>.
+            See also <xref target="XML" sectionFormat="of" section="2.10" relative="#sec-white-space"/>.
          </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"default"</t>
@@ -2227,7 +2233,7 @@
         Document-wide unique identifier for this paragraph.
       </t>
       <t>
-        The value needs to be a valid XML "Name" (<xref target="XML" x:fmt="of" x:sec="2.3" x:rel="#sec-common-syn"/>).
+        The value needs to be a valid XML "Name" (<xref target="XML" sectionFormat="of" section="2.3" relative="#sec-common-syn"/>).
       </t>
    </section>
 
@@ -2318,7 +2324,7 @@
         Furthermore, the presence of this attribute causes the table to be numbered.
       </t>
       <t>
-        The value needs to be a valid XML "Name" (<xref target="XML" x:fmt="of" x:sec="2.3" x:rel="#sec-common-syn"/>).
+        The value needs to be a valid XML "Name" (<xref target="XML" sectionFormat="of" section="2.3" relative="#sec-common-syn"/>).
       </t>
    </section>
 
@@ -2468,7 +2474,7 @@
       Contains a web address associated with the author.
    </t>
    <t>
-      The contents should be a valid URI (see <xref target="RFC3986" x:fmt="of" x:sec="3"/>). 
+      The contents should be a valid URI (see <xref target="RFC3986" sectionFormat="of" section="3"/>). 
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.uri.contents"><!--AG-->
