@@ -26,11 +26,10 @@ Future threads:
 	What happens if an <xref> points inside a reference group?
 
 Change all "figureNumber", "tableNumber", and "sectionNumber" to "generatedNumber".
+	**** DON'T DO THIS UNTIL WE FIGURE OUT HOW ****
 
 Possibly kill <dl hanging>, but make sure that the list agrees.
-
-Add a <br> element, particularly for tables. Add prose that says that it is not for
-emphasis, only for clarity.
+	**** Joe figured out that the current definition is probably fine ****
 
 There needs to be ASCII equivalents for initials and surnames.
 
@@ -1129,6 +1128,23 @@ some types of sections.</t>
       
 </section>
 
+<!--br-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;br&gt;" anchor="element.br">
+   <x:anchor-alias value="br"/>
+   <iref item="Elements" subitem="br" primary="true"/>
+   <iref item="br element" primary="true"/>
+   <t>
+      Indicates that a line break should be inserted in the generated output by the processor.
+      Multiple successive instances of this element does not cause blank lines to appear in the output,
+      and is thus not useful.
+      This element is to be used only where absolutely necessary, such as in table cells where
+      running text might be ambiguous. In particular, this element should not be used to
+      create emphasis by putting running text on its own line.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t anchor="element.br.contents"><!--AG-->Content model: this element does not have any contents.</t>
+</section>
+
 <!--city-->
 <section xmlns:x="http://purl.org/net/xml2rfc/ext" title="&lt;city&gt;" anchor="element.city">
    <x:anchor-alias value="city"/>
@@ -1371,6 +1387,9 @@ some types of sections.</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="bcp14"/>
                   <iref item="bcp14 element" subitem="inside dd"/>&lt;<x:ref>bcp14</x:ref>&gt; elements (<xref target="element.bcp14"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="br"/>
+                  <iref item="br element" subitem="inside dd"/>&lt;<x:ref>br</x:ref>&gt; elements (<xref target="element.br"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="cref"/>
                   <iref item="cref element" subitem="inside dd"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
@@ -2070,6 +2089,9 @@ some types of sections.</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="bcp14"/>
                   <iref item="bcp14 element" subitem="inside li"/>&lt;<x:ref>bcp14</x:ref>&gt; elements (<xref target="element.bcp14"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="br"/>
+                  <iref item="br element" subitem="inside li"/>&lt;<x:ref>br</x:ref>&gt; elements (<xref target="element.br"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="cref"/>
                   <iref item="cref element" subitem="inside li"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
@@ -3659,6 +3681,9 @@ Using CDATA:
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside t"/>&lt;<x:ref>bcp14</x:ref>&gt; elements (<xref target="element.bcp14"/>)</t>
          <t><!--AG-->
+            <iref item="Elements" subitem="br"/>
+            <iref item="br element" subitem="inside t"/>&lt;<x:ref>br</x:ref>&gt; elements (<xref target="element.br"/>)</t>
+         <t><!--AG-->
             <iref item="Elements" subitem="cref"/>
             <iref item="cref element" subitem="inside t"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
          <t><!--AG-->
@@ -3856,6 +3881,9 @@ Using CDATA:
                   <iref item="Elements" subitem="bcp14"/>
                   <iref item="bcp14 element" subitem="inside td"/>&lt;<x:ref>bcp14</x:ref>&gt; elements (<xref target="element.bcp14"/>)</t>
                <t><!--AG-->
+                  <iref item="Elements" subitem="br"/>
+                  <iref item="br element" subitem="inside td"/>&lt;<x:ref>br</x:ref>&gt; elements (<xref target="element.br"/>)</t>
+               <t><!--AG-->
                   <iref item="Elements" subitem="cref"/>
                   <iref item="cref element" subitem="inside td"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
                <t><!--AG-->
@@ -4009,6 +4037,9 @@ Using CDATA:
                <t><!--AG-->
                   <iref item="Elements" subitem="bcp14"/>
                   <iref item="bcp14 element" subitem="inside th"/>&lt;<x:ref>bcp14</x:ref>&gt; elements (<xref target="element.bcp14"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="br"/>
+                  <iref item="br element" subitem="inside th"/>&lt;<x:ref>br</x:ref>&gt; elements (<xref target="element.br"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="cref"/>
                   <iref item="cref element" subitem="inside th"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
@@ -6126,6 +6157,7 @@ t =
     (text
      | b
      | bcp14
+     | br
      | cref
      | em
      | eref
@@ -6200,6 +6232,7 @@ li =
         | artwork
         | b
         | bcp14
+        | br
         | cref
         | dl
         | em
@@ -6248,6 +6281,7 @@ dd =
        | artwork
        | b
        | bcp14
+       | br
        | cref
        | dl
        | em
@@ -6499,6 +6533,7 @@ td =
         | artwork
         | b
         | bcp14
+        | br
         | cref
         | dl
         | em
@@ -6527,6 +6562,7 @@ th =
         | artwork
         | b
         | bcp14
+        | br
         | cref
         | dl
         | em
@@ -6601,6 +6637,7 @@ c =
      | xref)*
   }
 bcp14 = element bcp14 { text }
+br = element br { empty }
 back = element back { displayreference*, references*, section* }
 displayreference =
   element displayreference {
@@ -6886,6 +6923,7 @@ to the v3 schema.</t>
 -      | xref
 +      | b
 +      | bcp14
++      | br
 +      | cref
 +      | em
        | eref
@@ -6963,6 +7001,7 @@ to the v3 schema.</t>
 +         | artwork
 +         | b
 +         | bcp14
++         | br
 +         | cref
 +         | dl
 +         | em
@@ -7011,6 +7050,7 @@ to the v3 schema.</t>
 +        | artwork
 +        | b
 +        | bcp14
++        | br
 +        | cref
 +        | dl
 +        | em
@@ -7268,6 +7308,7 @@ to the v3 schema.</t>
 +         | artwork
 +         | b
 +         | bcp14
++         | br
 +         | cref
 +         | dl
 +         | em
@@ -7296,6 +7337,7 @@ to the v3 schema.</t>
 +         | artwork
 +         | b
 +         | bcp14
++         | br
 +         | cref
 +         | dl
 +         | em
@@ -7378,6 +7420,7 @@ to the v3 schema.</t>
 +      | xref)*
     }
 + bcp14 = element bcp14 { text }
++ br = element br { empty }
 + back = element back { displayreference*, references*, section* }
 + displayreference =
 +   element displayreference {
