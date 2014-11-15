@@ -31,10 +31,6 @@ Change all "figureNumber", "tableNumber", and "sectionNumber" to "generatedNumbe
 Possibly kill <dl hanging>, but make sure that the list agrees.
 	**** Joe figured out that the current definition is probably fine ****
 
-Julian says that text for <displayreference> needs to be fixed and clarified.
-	...so names can start with ":" and "_" right now.
-	See Julian's recent changes to v3
-
 Need to specify the default values for ol/@style
 
 After draft-reschke-xml2rfc gets published as an RFC, update the "obsoletes" line.
@@ -364,9 +360,10 @@ some types of sections.</t>
 <t>
   Many elements have an optional "anchor" attribute. In all cases, the value of the "anchor"
   attribute needs to be a valid XML "Name" (<xref target="XML" x:fmt="of" x:sec="2.3"
-  x:rel="#sec-common-syn"/>). In short, it is a text string with no spaces or colons; hyphens, periods,
-  and underscores are allowed; some characters cannot be in the first position (such as digits,
-  hypen, or period). Anchors are described in more detail in <xref target="anchorsandids"/>.
+  x:rel="#sec-common-syn"/>),
+  additionally constrained to US-ASCII characters (<xref target="USASCII"/>). Thus, the character repertoire consists of
+  "A-Z", "a-z", "0-9", "_", "-", ".", and ":", where "0-9", ".", and "-" are disallowed as start character.
+  Anchors are described in more detail in <xref target="anchorsandids"/>.
 </t>
 
 <t>
@@ -5561,6 +5558,17 @@ not those that are part of a sequence of resources.</t>
       </author>
       <date year="2013" month="September"/>
     </front>
+  </reference>
+
+  <reference anchor="USASCII">
+    <front>
+      <title>Coded Character Set -- 7-bit American Standard Code for Information Interchange</title>
+      <author>
+        <organization>American National Standards Institute</organization>
+      </author>
+      <date year="1986"/>
+    </front>
+    <seriesInfo name="ANSI" value="X3.4"/>
   </reference>
 
   <reference anchor='XInclude' target='http://www.w3.org/TR/xinclude/'>

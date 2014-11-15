@@ -421,10 +421,11 @@ Table of Contents
 
    Many elements have an optional "anchor" attribute.  In all cases, the
    value of the "anchor" attribute needs to be a valid XML "Name"
-   (Section 2.3 of [XML]).  In short, it is a text string with no spaces
-   or colons; hyphens, periods, and underscores are allowed; some
-   characters cannot be in the first position (such as digits, hypen, or
-   period).  Anchors are described in more detail in Appendix B.2.
+   (Section 2.3 of [XML]), additionally constrained to US-ASCII
+   characters ([USASCII]).  Thus, the character repertoire consists of
+   "A-Z", "a-z", "0-9", "_", "-", ".", and ":", where "0-9", ".", and
+   "-" are disallowed as start character.  Anchors are described in more
+   detail in Appendix B.2.
 
    Except inside <artwork> and <sourcecode>, horizontal whitespace and
    linebreaks are collapsed into a single whitespace, and leading and
@@ -3805,6 +3806,10 @@ Table of Contents
    [UNICODE]        The Unicode Consortium, "The Unicode Standard,
                     Version 6.3.0", September 2013,
                     <http://www.unicode.org/versions/Unicode6.3.0/>.
+
+   [USASCII]        American National Standards Institute, "Coded
+                    Character Set -- 7-bit American Standard Code for
+                    Information Interchange", ANSI X3.4, 1986.
 
    [XInclude]       Marsh, J., Orchard, D., and D. Veillard, "XML
                     Inclusions (XInclude) Version 1.0 (Second Edition)",
