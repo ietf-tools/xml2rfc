@@ -275,6 +275,9 @@ Table of Contents
 
    o  Add <link> to point to a resource related to the RFC.
 
+   o  Add <br> to allow line breaks (but not blank lines) in generated
+      output.
+
 1.2.2.  New Attributes for Existing Elements
 
    o  Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes
@@ -282,11 +285,12 @@ Table of Contents
       that are still needed in the grammar.  Also add "finalizedTime" to
       indicate the time that the XML is published.
 
-   o  Add "ascii" attributes to <author>, <email>, <organization>,
-      <street>, <city>, <region> and <code>.  This allows an author to
-      specify their information in their native scripts as the primary
-      entry and still allow the ASCII-equivalent values to appear in the
-      processed documents.
+   o  Add "ascii" attributes to <email>, <organization>, <street>,
+      <city>, <region> and <code>.  Also add "asciiFullname",
+      "asciiInitials", and "asciiSurname" to <author>.  This allows an
+      author to specify their information in their native scripts as the
+      primary entry and still allow the ASCII-equivalent values to
+      appear in the processed documents.
 
    o  Add "xml:lang" attribute to <artwork>, <postal>, <author>, and
       <organization>.  This is sometimes useful for renderers which
@@ -729,16 +733,24 @@ Table of Contents
 
    2.  One optional <address> element (Section 2.2)
 
-2.7.1.  'ascii' attribute
+2.7.1.  'asciiFullname' attribute
 
    The ASCII equivalent of the author's full name.
 
-2.7.2.  'fullname' attribute
+2.7.2.  'asciiInitials' attribute
+
+   The ASCII equivalent of the author's intials.
+
+2.7.3.  'asciiSurname' attribute
+
+   The ASCII equivalent of the author's surname.
+
+2.7.4.  'fullname' attribute
 
    The full name (used in the automatically generated "Author's Address"
    section).
 
-2.7.3.  'initials' attribute
+2.7.5.  'initials' attribute
 
    Author initials (used on the front page and in references).
 
@@ -746,7 +758,7 @@ Table of Contents
    Initials should be provided as a whitespace separated list of pairs
    of a letter and a dot.
 
-2.7.4.  'role' attribute
+2.7.6.  'role' attribute
 
    Specifies the role the author had in creating the document.
 
@@ -754,11 +766,11 @@ Table of Contents
 
    o  "editor"
 
-2.7.5.  'surname' attribute
+2.7.7.  'surname' attribute
 
    The author's surname (used on the front page and in references).
 
-2.7.6.  'xml:lang' attribute
+2.7.8.  'xml:lang' attribute
 
    Allows specification of the language used.  This is sometimes useful
    for renderers which display different fonts for CJK characters.
@@ -4207,11 +4219,13 @@ Appendix C.  Relax NG Schema
    author =
      element author {
        attribute initials { text }?,
+       attribute asciiInitials { text }?,
        attribute surname { text }?,
+       attribute asciiSurname { text }?,
        attribute fullname { text }?,
        attribute role { "editor" }?,
        [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-       attribute ascii { text }?,
+       attribute asciiFullname { text }?,
        organization?,
        address?
      }
@@ -4954,11 +4968,13 @@ Appendix D.  Schema Differences from v2
      author =
        element author {
          attribute initials { text }?,
+   +     attribute asciiInitials { text }?,
          attribute surname { text }?,
+   +     attribute asciiSurname { text }?,
          attribute fullname { text }?,
          attribute role { "editor" }?,
    +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-   +     attribute ascii { text }?,
+   +     attribute asciiFullname { text }?,
          organization?,
          address?
        }
@@ -5717,7 +5733,6 @@ Index
          xml:space attribute  1
       ascii attribute
          in annotation element  1
-         in author element  1
          in city element  1
          in code element  1
          in email element  1
@@ -5727,8 +5742,14 @@ Index
          in region element  1
          in street element  1
          in title element  1
+      asciiFullname attribute
+         in author element  1
+      asciiInitials attribute
+         in author element  1
       asciiname attribute
          in seriesInfo element  1
+      asciiSurname attribute
+         in author element  1
       asciivalue attribute
          in seriesInfo element  1
       aside element  1
@@ -5741,7 +5762,10 @@ Index
          alt  1
          anchor  1
          ascii  1
+         asciiFullname  1
+         asciiInitials  1
          asciiname  1
+         asciiSurname  1
          asciivalue  1
          blankLines  1
          border  1
@@ -5814,7 +5838,9 @@ Index
          xml:space  1
          year  1
       author element  1
-         ascii attribute  1
+         asciiFullname attribute  1
+         asciiInitials attribute  1
+         asciiSurname attribute  1
          fullname attribute  1
          initials attribute  1
          inside front  1

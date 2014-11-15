@@ -31,8 +31,6 @@ Change all "figureNumber", "tableNumber", and "sectionNumber" to "generatedNumbe
 Possibly kill <dl hanging>, but make sure that the list agrees.
 	**** Joe figured out that the current definition is probably fine ****
 
-There needs to be ASCII equivalents for initials and surnames.
-
 Julian says that text for <displayreference> needs to be fixed and clarified.
 	...so names can start with ":" and "_" right now.
 	See Julian's recent changes to v3
@@ -188,6 +186,8 @@ as STDs and BCPs.</t>
 
 <t>Add &lt;<x:ref>link</x:ref>&gt; to point to a resource related to the RFC.</t>
 
+<t>Add &lt;<x:ref>br</x:ref>&gt; to allow line breaks (but not blank lines) in generated output.</t>
+
 </list></t>
 
 </section>
@@ -200,9 +200,10 @@ as STDs and BCPs.</t>
 to cover processor instructions (PIs) that were in v2 that are still needed in the grammar.
 Also add "finalizedTime" to indicate the time that the XML is published.</t>
 
-<t>Add "ascii" attributes to &lt;<x:ref>author</x:ref>&gt;, &lt;<x:ref>email</x:ref>&gt;,
+<t>Add "ascii" attributes to &lt;<x:ref>email</x:ref>&gt;,
 &lt;<x:ref>organization</x:ref>&gt;, &lt;<x:ref>street</x:ref>&gt;,
 &lt;<x:ref>city</x:ref>&gt;, &lt;<x:ref>region</x:ref>&gt; and &lt;<x:ref>code</x:ref>&gt;.
+Also add "asciiFullname", "asciiInitials", and "asciiSurname" to &lt;<x:ref>author</x:ref>&gt;.
 This allows an author to specify their information in their native scripts as the primary
 entry and still allow the ASCII-equivalent values to appear in the processed documents.</t>
 
@@ -839,13 +840,33 @@ some types of sections.</t>
       </list>
    </t>
 
-   <!--author/@ascii-->
-   <section title="'ascii' attribute" anchor="element.author.attribute.ascii" toc="exclude">
-      <iref item="Attributes" subitem="ascii"/>
-      <iref item="author element" subitem="ascii attribute"/>
-      <iref item="ascii attribute" subitem="in author element"/>
+   <!--author/@asciiFullname-->
+   <section title="'asciiFullname' attribute" anchor="element.author.attribute.asciiFullname" toc="exclude">
+      <iref item="Attributes" subitem="asciiFullname"/>
+      <iref item="author element" subitem="asciiFullname attribute"/>
+      <iref item="asciiFullname attribute" subitem="in author element"/>
       <t>
          The ASCII equivalent of the author's full name.
+      </t>
+   </section>
+
+   <!--author/@asciiInitials-->
+   <section title="'asciiInitials' attribute" anchor="element.author.attribute.asciiInitials" toc="exclude">
+      <iref item="Attributes" subitem="asciiInitials"/>
+      <iref item="author element" subitem="asciiInitials attribute"/>
+      <iref item="asciiInitials attribute" subitem="in author element"/>
+      <t>
+         The ASCII equivalent of the author's intials.
+      </t>
+   </section>
+
+   <!--author/@asciiSurname-->
+   <section title="'asciiSurname' attribute" anchor="element.author.attribute.asciiSurname" toc="exclude">
+      <iref item="Attributes" subitem="asciiSurname"/>
+      <iref item="author element" subitem="asciiSurname attribute"/>
+      <iref item="asciiSurname attribute" subitem="in author element"/>
+      <t>
+         The ASCII equivalent of the author's surname.
       </t>
    </section>
 
@@ -6037,11 +6058,13 @@ title =
 author =
   element author {
     attribute initials { text }?,
+    attribute asciiInitials { text }?,
     attribute surname { text }?,
+    attribute asciiSurname { text }?,
     attribute fullname { text }?,
     attribute role { "editor" }?,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-    attribute ascii { text }?,
+    attribute asciiFullname { text }?,
     organization?,
     address?
   }
@@ -6787,11 +6810,13 @@ to the v3 schema.</t>
   author =
     element author {
       attribute initials { text }?,
++     attribute asciiInitials { text }?,
       attribute surname { text }?,
++     attribute asciiSurname { text }?,
       attribute fullname { text }?,
       attribute role { "editor" }?,
 +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-+     attribute ascii { text }?,
++     attribute asciiFullname { text }?,
       organization?,
       address?
     }

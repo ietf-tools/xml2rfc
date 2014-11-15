@@ -31,11 +31,6 @@ Change all "figureNumber", "tableNumber", and "sectionNumber" to "generatedNumbe
 Possibly kill <dl hanging>, but make sure that the list agrees.
 	**** Joe figured out that the current definition is probably fine ****
 
-Add a <br> element, particularly for tables. Add prose that says that it is not for
-emphasis, only for clarity.
-
-There needs to be ASCII equivalents for initials and surnames.
-
 Julian says that text for <displayreference> needs to be fixed and clarified.
 	...so names can start with ":" and "_" right now.
 	See Julian's recent changes to v3
@@ -190,6 +185,8 @@ as STDs and BCPs.</t>
 
 <t>Add &lt;<xref target="element.link" format="none">link</xref>&gt; to point to a resource related to the RFC.</t>
 
+<t>Add &lt;<xref target="element.br" format="none">br</xref>&gt; to allow line breaks (but not blank lines) in generated output.</t>
+
 </list></t>
 
 </section>
@@ -202,9 +199,10 @@ as STDs and BCPs.</t>
 to cover processor instructions (PIs) that were in v2 that are still needed in the grammar.
 Also add "finalizedTime" to indicate the time that the XML is published.</t>
 
-<t>Add "ascii" attributes to &lt;<xref target="element.author" format="none">author</xref>&gt;, &lt;<xref target="element.email" format="none">email</xref>&gt;,
+<t>Add "ascii" attributes to &lt;<xref target="element.email" format="none">email</xref>&gt;,
 &lt;<xref target="element.organization" format="none">organization</xref>&gt;, &lt;<xref target="element.street" format="none">street</xref>&gt;,
 &lt;<xref target="element.city" format="none">city</xref>&gt;, &lt;<xref target="element.region" format="none">region</xref>&gt; and &lt;<xref target="element.code" format="none">code</xref>&gt;.
+Also add "asciiFullname", "asciiInitials", and "asciiSurname" to &lt;<xref target="element.author" format="none">author</xref>&gt;.
 This allows an author to specify their information in their native scripts as the primary
 entry and still allow the ASCII-equivalent values to appear in the processed documents.</t>
 
@@ -840,13 +838,33 @@ some types of sections.</t>
       </list>
    </t>
 
-   <!--author/@ascii-->
-   <section anchor="element.author.attribute.ascii" toc="exclude" title="'ascii' attribute">
-      <iref item="Attributes" subitem="ascii"/>
-      <iref item="author element" subitem="ascii attribute"/>
-      <iref item="ascii attribute" subitem="in author element"/>
+   <!--author/@asciiFullname-->
+   <section anchor="element.author.attribute.asciiFullname" toc="exclude" title="'asciiFullname' attribute">
+      <iref item="Attributes" subitem="asciiFullname"/>
+      <iref item="author element" subitem="asciiFullname attribute"/>
+      <iref item="asciiFullname attribute" subitem="in author element"/>
       <t>
          The ASCII equivalent of the author's full name.
+      </t>
+   </section>
+
+   <!--author/@asciiInitials-->
+   <section anchor="element.author.attribute.asciiInitials" toc="exclude" title="'asciiInitials' attribute">
+      <iref item="Attributes" subitem="asciiInitials"/>
+      <iref item="author element" subitem="asciiInitials attribute"/>
+      <iref item="asciiInitials attribute" subitem="in author element"/>
+      <t>
+         The ASCII equivalent of the author's intials.
+      </t>
+   </section>
+
+   <!--author/@asciiSurname-->
+   <section anchor="element.author.attribute.asciiSurname" toc="exclude" title="'asciiSurname' attribute">
+      <iref item="Attributes" subitem="asciiSurname"/>
+      <iref item="author element" subitem="asciiSurname attribute"/>
+      <iref item="asciiSurname attribute" subitem="in author element"/>
+      <t>
+         The ASCII equivalent of the author's surname.
       </t>
    </section>
 
@@ -6038,11 +6056,13 @@ title =
 author =
   element author {
     attribute initials { text }?,
+    attribute asciiInitials { text }?,
     attribute surname { text }?,
+    attribute asciiSurname { text }?,
     attribute fullname { text }?,
     attribute role { "editor" }?,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-    attribute ascii { text }?,
+    attribute asciiFullname { text }?,
     organization?,
     address?
   }
@@ -6788,11 +6808,13 @@ to the v3 schema.</t>
   author =
     element author {
       attribute initials { text }?,
++     attribute asciiInitials { text }?,
       attribute surname { text }?,
++     attribute asciiSurname { text }?,
       attribute fullname { text }?,
       attribute role { "editor" }?,
 +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-+     attribute ascii { text }?,
++     attribute asciiFullname { text }?,
       organization?,
       address?
     }
