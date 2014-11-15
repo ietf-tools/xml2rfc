@@ -40,10 +40,6 @@ Julian says that text for <displayreference> needs to be fixed and clarified.
 
 Need to specify the default values for ol/@style
 
-Add:
-	- <finalized datetime="2014-11-13T01:02:49Z"/>
-	which is included in the XML just before publication, and is stripped by processors from other XML files
-
 After draft-reschke-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
 -->
@@ -202,7 +198,8 @@ as STDs and BCPs.</t>
 <t><list style="symbols">
 
 <t>Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes to &lt;<x:ref>rfc</x:ref>&gt;
-to cover processor instructions (PIs) that were in v2 that are still needed in the grammar.</t>
+to cover processor instructions (PIs) that were in v2 that are still needed in the grammar.
+Also add "finalizedTime" to indicate the time that the XML is published.</t>
 
 <t>Add "ascii" attributes to &lt;<x:ref>author</x:ref>&gt;, &lt;<x:ref>email</x:ref>&gt;,
 &lt;<x:ref>organization</x:ref>&gt;, &lt;<x:ref>street</x:ref>&gt;,
@@ -231,7 +228,7 @@ respectively.
 &lt;<x:ref>sourcecode</x:ref>&gt;, and &lt;<x:ref>t</x:ref>&gt; to hold automatically generated
 numbers for items in a section that don't have their own numbering (namely figures and tables).</t>
 
-<t>Addd "display" to &lt;<x:ref>cref</x:ref>&gt; to indicate to processors whether or not
+<t>Add "display" to &lt;<x:ref>cref</x:ref>&gt; to indicate to processors whether or not
 to display the comment.</t>
 
 </list></t>
@@ -2913,6 +2910,18 @@ some types of sections.</t>
       </t>
    </section>
 
+   <!--rfc/@finalizedTime-->
+   <section title="'finalizedTime' attribute" anchor="element.rfc.attribute.finalizedTime" toc="exclude">
+      <iref item="Attributes" subitem="finalizedTime"/>
+      <iref item="rfc element" subitem="finalizedTime attribute"/>
+      <iref item="finalizedTime attribute" subitem="in rfc element"/>
+      <t>
+         The date that the XML was finalized by the RFC Editor when publising an RFC.
+         This is included in the XML file just before publication, and is stripped by processors from  all other XML files.
+         The value is formatted using the format from <xref target="RFC3339"/>.
+      </t>
+   </section>
+
    <!--rfc/@ipr-->
    <section title="'ipr' attribute" anchor="element.rfc.attribute.ipr" toc="exclude">
       <iref item="Attributes" subitem="ipr"/>
@@ -5310,6 +5319,16 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name='RFC' value='2629' />
   </reference>
 
+  <reference anchor="RFC3339">
+    <front>
+      <title>Date and Time on the Internet: Timestamps</title>
+      <author initials='G.' surname='Klyne' fullname='Graham Klyne' role='editor'/>
+      <author initials='C.' surname='Newman' fullname='Chris Newman'/>
+      <date year='2002' month='July' />
+    </front>
+    <seriesInfo name='RFC' value='3339' />
+  </reference>
+
   <reference anchor="RFC3470">
     <front>
       <title>Guidelines for the Use of Extensible Markup Language (XML) within IETF Protocols</title>
@@ -5955,6 +5974,7 @@ rfc =
     [ a:defaultValue = "yes" ] attribute tocInclude { "yes" | "no" 
 }?,
     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
+    attribute finalizedTime { text }?,
     link*,
     front,
     middle,
@@ -6696,6 +6716,7 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "yes" ] attribute tocInclude { "yes" | 
 + "no" }?,
 +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
++     attribute finalizedTime { text }?,
 +     link*,
       front,
       middle,

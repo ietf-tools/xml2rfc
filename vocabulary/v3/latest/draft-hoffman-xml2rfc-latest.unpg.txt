@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                          November 11, 2014
+Obsoletes: 2629 (if approved)                          November 15, 2014
 Intended status: Informational
-Expires: May 15, 2015
+Expires: May 19, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 15, 2015.
+   This Internet-Draft will expire on May 19, 2015.
 
 Copyright Notice
 
@@ -278,7 +278,8 @@ Table of Contents
 
    o  Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes
       to <rfc> to cover processor instructions (PIs) that were in v2
-      that are still needed in the grammar.
+      that are still needed in the grammar.  Also add "finalizedTime" to
+      indicate the time that the XML is published.
 
    o  Add "ascii" attributes to <author>, <email>, <organization>,
       <street>, <city>, <region> and <code>.  This allows an author to
@@ -306,7 +307,7 @@ Table of Contents
       items in a section that don't have their own numbering (namely
       figures and tables).
 
-   o  Addd "display" to <cref> to indicate to processors whether or not
+   o  Add "display" to <cref> to indicate to processors whether or not
       to display the comment.
 
 1.2.3.  Elements and Attributes Deprecated from v2
@@ -2088,7 +2089,14 @@ Table of Contents
    A processor should give an error if both the "docName" and "number"
    attributes are given in the <rfc> element.
 
-2.45.4.  'ipr' attribute
+2.45.4.  'finalizedTime' attribute
+
+   The date that the XML was finalized by the RFC Editor when publising
+   an RFC.  This is included in the XML file just before publication,
+   and is stripped by processors from all other XML files.  The value is
+   formatted using the format from [RFC3339].
+
+2.45.5.  'ipr' attribute
 
    Represents the Intellectual Property status of the document.  See
    Appendix A.2 for details.
@@ -2127,20 +2135,20 @@ Table of Contents
 
    o  "pre5378Trust200902"
 
-2.45.5.  'iprExtract' attribute
+2.45.6.  'iprExtract' attribute
 
    Identifies a single section within the document for which extraction
    "as-is" is explicitly allowed (only relevant for historic values of
    the "ipr" attribute).
 
-2.45.6.  'number' attribute
+2.45.7.  'number' attribute
 
    The number of the RFC to be produced by a processor.
 
    A processor should give an error if both the "docName" and "number"
    attributes are given in the <rfc> element.
 
-2.45.7.  'obsoletes' attribute
+2.45.8.  'obsoletes' attribute
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
@@ -2149,12 +2157,12 @@ Table of Contents
    hyperlinks can be generated.  Also, the value ought to be reformatted
    to insert whitespace after each comma if not already present.
 
-2.45.8.  'seriesNo' attribute
+2.45.9.  'seriesNo' attribute
 
    When producing a document within document series (such as "STD"): the
    number within that series.
 
-2.45.9.  'sortRefs' attribute
+2.45.10.  'sortRefs' attribute
 
    Specifies whether or not a processor will sort the references in each
    reference section.
@@ -2165,7 +2173,7 @@ Table of Contents
 
    o  "no" (default)
 
-2.45.10.  'submissionType' attribute
+2.45.11.  'submissionType' attribute
 
    The document stream.
 
@@ -2181,7 +2189,7 @@ Table of Contents
 
    o  "independent"
 
-2.45.11.  'symRefs' attribute
+2.45.12.  'symRefs' attribute
 
    Specifies whether or not a processor will use symbolic references
    (such as "[RFC2119]").  If the value for this is "no", the references
@@ -2193,12 +2201,12 @@ Table of Contents
 
    o  "no"
 
-2.45.12.  'tocDepth' attribute
+2.45.13.  'tocDepth' attribute
 
    Specifies number of levels of heading for a processor to include in
    the table of contents; the default is "3".
 
-2.45.13.  'tocInclude' attribute
+2.45.14.  'tocInclude' attribute
 
    Specifies whether or not a processor will include a table of contents
    in generated files.
@@ -2209,7 +2217,7 @@ Table of Contents
 
    o  "no"
 
-2.45.14.  'updates' attribute
+2.45.15.  'updates' attribute
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
@@ -2218,7 +2226,7 @@ Table of Contents
    hyperlinks can be generated.  Also, the value ought to be reformatted
    to insert whitespace after each comma if not already present.
 
-2.45.15.  'xml:lang' attribute
+2.45.16.  'xml:lang' attribute
 
    The natural language used in the document (defaults to "en").
 
@@ -3063,7 +3071,7 @@ Table of Contents
    boilerplate, replacing the "Network Working Group" string.
    Formatting software can append the words "Working Group" or "Research
    Group", depending on the "submissionType" property on the <rfc>
-   element (Section 2.45.10).
+   element (Section 2.45.11).
 
    This element appears as a child element of: <front> (Section 2.26).
 
@@ -3692,6 +3700,9 @@ Table of Contents
    [RFC2629]        Rose, M., "Writing I-Ds and RFCs using XML",
                     RFC 2629, June 1999.
 
+   [RFC3339]        Klyne, G., Ed. and C. Newman, "Date and Time on the
+                    Internet: Timestamps", RFC 3339, July 2002.
+
    [RFC3470]        Hollenbeck, S., Rose, M., and L. Masinter,
                     "Guidelines for the Use of Extensible Markup
                     Language (XML) within IETF Protocols", BCP 70,
@@ -4137,6 +4148,7 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "yes" ] attribute tocInclude { "yes" | "no"
    }?,
        [ a:defaultValue = "3" ] attribute tocDepth { text }?,
+       attribute finalizedTime { text }?,
        link*,
        front,
        middle,
@@ -4875,6 +4887,7 @@ Appendix D.  Schema Differences from v2
    +     [ a:defaultValue = "yes" ] attribute tocInclude { "yes" |
    + "no" }?,
    +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
+   +     attribute finalizedTime { text }?,
    +     link*,
          front,
          middle,
@@ -5703,6 +5716,7 @@ Index
          docName  1
          empty  1
          figureNumber  1
+         finalizedTime  1
          format  1
          fullname  1
          group  1
@@ -6049,6 +6063,8 @@ Index
          width attribute  1
       figureNumber attribute
          in figure element  1
+      finalizedTime attribute
+         in rfc element  1
       format attribute
          in xref element  1
       format element  1
@@ -6277,6 +6293,7 @@ Index
          category attribute  1
          consensus attribute  1
          docName attribute  1
+         finalizedTime attribute  1
          ipr attribute  1
          iprExtract attribute  1
          number attribute  1
