@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                          November 15, 2014
+Obsoletes: 2629 (if approved)                          November 17, 2014
 Intended status: Informational
-Expires: May 19, 2015
+Expires: May 21, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 19, 2015.
+   This Internet-Draft will expire on May 21, 2015.
 
 Copyright Notice
 
@@ -4156,6 +4156,7 @@ Appendix C.  Relax NG Schema
 
    namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
+
    rfc =
      element rfc {
        attribute number { text }?,
@@ -4201,11 +4202,13 @@ Appendix C.  Relax NG Schema
        middle,
        back?
      }
+
    link =
      element link {
        attribute href { text },
        attribute rel { text }?
      }
+
    front =
      element front {
        title,
@@ -4218,12 +4221,14 @@ Appendix C.  Relax NG Schema
        note*,
        boilerplate?
      }
+
    title =
      element title {
        attribute abbrev { text }?,
        attribute ascii { text }?,
        text
      }
+
    author =
      element author {
        attribute initials { text }?,
@@ -4237,6 +4242,7 @@ Appendix C.  Relax NG Schema
        organization?,
        address?
      }
+
    organization =
      element organization {
        attribute abbrev { text }?,
@@ -4244,47 +4250,60 @@ Appendix C.  Relax NG Schema
        text,
        [ a:defaultValue = "en" ] attribute xml:lang { text }?
      }
+
    address = element address { postal?, phone?, facsimile?, email?,
    uri? }
+
    postal =
      element postal {
        [ a:defaultValue = "en" ] attribute xml:lang { text }?,
        ((city | code | country | region | street)* | postalLine+)
      }
+
    street =
      element street {
        attribute ascii { text }?,
        text
      }
+
    city =
      element city {
        attribute ascii { text }?,
        text
      }
+
    region =
      element region {
        attribute ascii { text }?,
        text
      }
+
    code =
      element code {
        attribute ascii { text }?,
        text
      }
+
    country = element country { text }
+
    postalLine =
      element postalLine {
        attribute ascii { text }?,
        text
      }
+
    phone = element phone { text }
+
    facsimile = element facsimile { text }
+
    email =
      element email {
        attribute ascii { text }?,
        text
      }
+
    uri = element uri { text }
+
    date =
      element date {
        attribute day { text }?,
@@ -4292,14 +4311,19 @@ Appendix C.  Relax NG Schema
        attribute year { text }?,
        empty
      }
+
    area = element area { text }
+
    workgroup = element workgroup { text }
+
    keyword = element keyword { text }
+
    abstract =
      element abstract {
        attribute sectionNumber { text }?,
        t+
      }
+
    note =
      element note {
        attribute title { text }?,
@@ -4309,8 +4333,11 @@ Appendix C.  Relax NG Schema
    }?,
        t+
      }
+
    boilerplate = element boilerplate { section+ }
+
    middle = element middle { section+ }
+
    section =
      element section {
        attribute anchor { xsd:ID }?,
@@ -4336,11 +4363,13 @@ Appendix C.  Relax NG Schema
         | ul)*,
        section*
      }
+
    name =
      element name {
        attribute slugifiedName { text }?,
        (text | cref | eref | iref | tt | xref)*
      }
+
    t =
      element t {
        attribute anchor { xsd:ID }?,
@@ -4365,12 +4394,14 @@ Appendix C.  Relax NG Schema
         | vspace
         | xref)*
      }
+
    aside =
      element aside {
        attribute anchor { xsd:ID }?,
        attribute partNumber { text }?,
        (artwork | figure | iref | sourcecode | t | texttable)*
      }
+
    blockquote =
      element blockquote {
        attribute anchor { xsd:ID }?,
@@ -4391,6 +4422,7 @@ Appendix C.  Relax NG Schema
         | t
         | tt)*
      }
+
    \list =
      element list {
        [ a:defaultValue = "empty" ] attribute style { text }?,
@@ -4398,6 +4430,7 @@ Appendix C.  Relax NG Schema
        attribute counter { text }?,
        t+
      }
+
    ol =
      element ol {
        [ a:defaultValue = "1" ] attribute style { text }?,
@@ -4407,6 +4440,7 @@ Appendix C.  Relax NG Schema
        attribute spacing { "normal" | "compact" }?,
        li+
      }
+
    ul =
      element ul {
        [ a:defaultValue = "normal" ]
@@ -4415,6 +4449,7 @@ Appendix C.  Relax NG Schema
    }?,
        li+
      }
+
    li =
      element li {
        attribute anchor { xsd:ID }?,
@@ -4441,6 +4476,7 @@ Appendix C.  Relax NG Schema
            | ul
            | xref)+)
      }
+
    dl =
      element dl {
        [ a:defaultValue = "normal" ]
@@ -4449,6 +4485,7 @@ Appendix C.  Relax NG Schema
    }?,
        (dt, dd)+
      }
+
    dt =
      element dt {
        attribute partNumber { text }?,
@@ -4466,6 +4503,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
+
    dd =
      element dd {
        t+
@@ -4490,6 +4528,7 @@ Appendix C.  Relax NG Schema
           | ul
           | xref)+
      }
+
    xref =
      element xref {
        attribute target { xsd:IDREF },
@@ -4502,11 +4541,13 @@ Appendix C.  Relax NG Schema
         attribute sectionFormat { text }?)?,
        text
      }
+
    eref =
      element eref {
        attribute target { text },
        text
      }
+
    iref =
      element iref {
        attribute item { text },
@@ -4515,6 +4556,7 @@ Appendix C.  Relax NG Schema
        attribute primary { "true" | "false" }?,
        empty
      }
+
    cref =
      element cref {
        attribute anchor { xsd:ID }?,
@@ -4523,6 +4565,7 @@ Appendix C.  Relax NG Schema
         ("true" | "false"))?,
        (text | b | em | eref | i | strong | sub | sup | tt | xref)*
      }
+
    tt =
      element tt {
        (text
@@ -4538,6 +4581,7 @@ Appendix C.  Relax NG Schema
         | sup
         | xref)*
      }
+
    b =
      element b {
        (text
@@ -4552,6 +4596,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
+
    strong =
      element strong {
        (text
@@ -4566,6 +4611,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
+
    i =
      element i {
        (text
@@ -4580,6 +4626,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
+
    em =
      element em {
        (text
@@ -4594,6 +4641,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
+
    sub =
      element sub {
        (text
@@ -4608,6 +4656,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
+
    sup =
      element sup {
        (text
@@ -4622,6 +4671,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
+
    spanx =
      element spanx {
        [ a:defaultValue = "preserve" ]
@@ -4629,11 +4679,13 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "emph" ] attribute style { text }?,
        text
      }
+
    vspace =
      element vspace {
        [ a:defaultValue = "0" ] attribute blankLines { text }?,
        empty
      }
+
    figure =
      element figure {
        attribute anchor { xsd:ID }?,
@@ -4653,6 +4705,7 @@ Appendix C.  Relax NG Schema
        (artwork | sourcecode)+,
        postamble?
      }
+
    table =
      element table {
        attribute anchor { xsd:ID }?,
@@ -4663,6 +4716,7 @@ Appendix C.  Relax NG Schema
        tbody+,
        tfoot?
      }
+
    preamble =
      element preamble {
        (text
@@ -4680,6 +4734,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
+
    artwork =
      element artwork {
        attribute xml:space { text }?,
@@ -4696,6 +4751,7 @@ Appendix C.  Relax NG Schema
        attribute partNumber { text }?,
        text*
      }
+
    sourcecode =
      element sourcecode {
        [ a:defaultValue = "" ] attribute name { text }?,
@@ -4705,14 +4761,19 @@ Appendix C.  Relax NG Schema
        attribute partNumber { text }?,
        text
      }
+
    thead = element thead { tr+ }
+
    tbody = element tbody { tr+ }
+
    tfoot = element tfoot { tr+ }
+
    tr =
      element tr {
        [ a:defaultValue = "0" ] attribute border { text }?,
        (td, th)+
      }
+
    td =
      element td {
        [ a:defaultValue = "0" ] attribute border { text }?,
@@ -4742,6 +4803,7 @@ Appendix C.  Relax NG Schema
            | ul
            | xref)+)
      }
+
    th =
      element th {
        [ a:defaultValue = "0" ] attribute border { text }?,
@@ -4771,6 +4833,7 @@ Appendix C.  Relax NG Schema
            | ul
            | xref)+)
      }
+
    postamble =
      element postamble {
        (text
@@ -4788,6 +4851,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
+
    texttable =
      element texttable {
        attribute anchor { xsd:ID }?,
@@ -4804,6 +4868,7 @@ Appendix C.  Relax NG Schema
        c*,
        postamble?
      }
+
    ttcol =
      element ttcol {
        attribute width { text }?,
@@ -4811,6 +4876,7 @@ Appendix C.  Relax NG Schema
        attribute align { "left" | "center" | "right" }?,
        (cref | eref | iref | xref | text)*
      }
+
    c =
      element c {
        (text
@@ -4828,16 +4894,22 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
+
    bcp14 = element bcp14 { text }
+
    br = element br { empty }
+
    back = element back { displayreference*, references*, section* }
+
    displayreference =
      element displayreference {
        attribute target { xsd:IDREF },
        attribute to { text }
      }
+
    references = element references { name, (reference |
    referencegroup)* }
+
    reference =
      element reference {
        attribute anchor { xsd:ID },
@@ -4845,11 +4917,13 @@ Appendix C.  Relax NG Schema
        front,
        (annotation | format | refcontent | seriesInfo)*
      }
+
    referencegroup =
      element referencegroup {
        attribute anchor { xsd:ID },
        reference+
      }
+
    seriesInfo =
      element seriesInfo {
        attribute name { text },
@@ -4858,6 +4932,7 @@ Appendix C.  Relax NG Schema
        attribute asciivalue { text }?,
        empty
      }
+
    format =
      element format {
        attribute target { text }?,
@@ -4865,6 +4940,7 @@ Appendix C.  Relax NG Schema
        attribute octets { text }?,
        empty
      }
+
    annotation =
      element annotation {
        attribute ascii { text }?,
@@ -4883,11 +4959,13 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
+
    refcontent =
      element refcontent {
        attribute ascii { text }?,
        (text | b | bcp14 | em | i | strong | sub | sup | tt)*
      }
+
    start = rfc
 
 
