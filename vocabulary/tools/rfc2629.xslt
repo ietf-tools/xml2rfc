@@ -1441,6 +1441,36 @@
   </ul>
 </xsl:template>
 
+<xsl:template match="dl">
+  <xsl:variable name="hang" select="@hanging"/>
+  <xsl:variable name="spac" select="@spacing"/>
+  <xsl:variable name="class">
+    <xsl:if test="$spac='compact'">compact </xsl:if>
+    <xsl:if test="not($hang='true')">nohang </xsl:if>
+  </xsl:variable>
+  <dl>
+    <xsl:if test="normalize-space($class)!=''">
+      <xsl:attribute name="class"><xsl:value-of select="normalize-space($class)"/></xsl:attribute>
+    </xsl:if>
+    <xsl:for-each select="dt">
+      <xsl:apply-templates select="."/>
+      <xsl:apply-templates select="following-sibling::dd[1]"/>
+    </xsl:for-each>
+  </dl>
+</xsl:template>
+
+<xsl:template match="dt">
+  <dt>
+    <xsl:apply-templates/>
+  </dt>
+</xsl:template>
+
+<xsl:template match="dd">
+  <dd>
+    <xsl:apply-templates/>
+  </dd>
+</xsl:template>
+
 <xsl:template match="list[starts-with(@style,'format ')]">
   <xsl:call-template name="check-no-text-content"/>
   <dl>
@@ -1449,9 +1479,44 @@
   </dl>
 </xsl:template>
 
+<!-- get value of "compact" mode, checking subcompact first, then compact -->
+<xsl:template name="get-compact-setting">
+  <xsl:variable name="t1">
+    <xsl:call-template name="parse-pis">
+      <xsl:with-param name="nodes" select="preceding::processing-instruction('rfc')"/>
+      <xsl:with-param name="attr" select="'subcompact'"/>
+      <xsl:with-param name="default" select="'?'"/>
+      <xsl:with-param name="duplicate-warning" select="'no'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="$t1='?'">
+      <xsl:call-template name="parse-pis">
+        <xsl:with-param name="nodes" select="preceding::processing-instruction('rfc')"/>
+        <xsl:with-param name="attr" select="'compact'"/>
+        <xsl:with-param name="default" select="'?'"/>
+        <xsl:with-param name="duplicate-warning" select="'no'"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$t1"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="list[@style='hanging']">
   <xsl:call-template name="check-no-text-content"/>
+  <xsl:variable name="compact">
+    <xsl:call-template name="get-compact-setting"/>
+  </xsl:variable>
+  <!-- insert a hard space for nested lists so that indentation works ok -->
+  <xsl:if test="ancestor::list and normalize-space(preceding-sibling::text())=''">
+    <xsl:text>&#160;</xsl:text>
+  </xsl:if>
   <dl>
+    <xsl:if test="$compact='yes'">
+      <xsl:attribute name="class">compact</xsl:attribute>
+    </xsl:if>
     <xsl:call-template name="insertInsDelClass"/>
     <xsl:apply-templates />
   </dl>
@@ -4336,6 +4401,22 @@ div.note {
 dl {
   margin-left: 2em;
 }
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.nohang > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .5em;
+}
+dl.compact > dd {
+  margin-bottom: .0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+}
 ul.empty {<!-- spacing between two entries in definition lists -->
   list-style-type: none;
 }
@@ -4344,9 +4425,6 @@ ul.empty li {
 }
 dl p {
   margin-left: 0em;
-}
-dt {
-  margin-top: .5em;
 }
 h1 {
   font-size: 130%;
@@ -7640,11 +7718,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.690 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.690 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.694 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.694 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2014/11/12 21:37:29 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/11/12 21:37:29 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2014/11/19 16:58:52 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/11/19 16:58:52 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>
@@ -7952,6 +8030,7 @@ prev: <xsl:value-of select="$prev"/>
   <xsl:param name="sep"/>
   <xsl:param name="ret"/>
   <xsl:param name="default"/>
+  <xsl:param name="duplicate-warning" select="'yes'"/>
 
   <xsl:choose>
     <xsl:when test="count($nodes)=0">
@@ -7972,6 +8051,7 @@ prev: <xsl:value-of select="$prev"/>
             <xsl:with-param name="attr" select="$attr"/>
             <xsl:with-param name="sep" select="$sep"/>
             <xsl:with-param name="ret" select="$ret"/>
+            <xsl:with-param name="duplicate-warning" select="$duplicate-warning"/>
           </xsl:call-template>
         </xsl:for-each>
       </xsl:variable>
@@ -7982,6 +8062,7 @@ prev: <xsl:value-of select="$prev"/>
         <xsl:with-param name="sep" select="$sep"/>
         <xsl:with-param name="ret" select="$ret2"/>
         <xsl:with-param name="default" select="$default"/>
+        <xsl:with-param name="duplicate-warning" select="$duplicate-warning"/>
       </xsl:call-template>
 
     </xsl:otherwise>
@@ -7994,6 +8075,7 @@ prev: <xsl:value-of select="$prev"/>
   <xsl:param name="attr"/>
   <xsl:param name="sep"/>
   <xsl:param name="ret"/>
+  <xsl:param name="duplicate-warning"/>
 
   <xsl:variable name="str2">
     <xsl:call-template name="eat-leading-whitespace">
@@ -8095,6 +8177,7 @@ prev: <xsl:value-of select="$prev"/>
                       <xsl:when test="$attrname='private'"/>
                       <xsl:when test="$attrname='rfcedstyle'"/>
                       <xsl:when test="$attrname='sortrefs'"/>
+                      <xsl:when test="$attrname='subcompact'"/>
                       <xsl:when test="$attrname='strict'"/>
                       <xsl:when test="$attrname='symrefs'"/>
                       <xsl:when test="$attrname='toc'"/>
@@ -8115,11 +8198,12 @@ prev: <xsl:value-of select="$prev"/>
                         <xsl:with-param name="attr" select="$attr"/>
                         <xsl:with-param name="sep" select="$sep"/>
                         <xsl:with-param name="ret" select="$ret"/>
+                        <xsl:with-param name="duplicate-warning" select="$duplicate-warning"/>
                       </xsl:call-template>
                     </xsl:when>
                     <xsl:when test="$sep='' and $ret!=''">
                       <!-- pseudo-attr does match, but we only want one value -->
-                      <xsl:if test="$ret != $value">
+                      <xsl:if test="$ret != $value and $duplicate-warning='yes'">
                         <xsl:call-template name="warning">
                           <xsl:with-param name="msg">duplicate pseudo-attribute <xsl:value-of select="$attr"/>, overwriting value <xsl:value-of select="$ret"/></xsl:with-param>
                         </xsl:call-template>
@@ -8129,6 +8213,7 @@ prev: <xsl:value-of select="$prev"/>
                         <xsl:with-param name="attr" select="$attr"/>
                         <xsl:with-param name="sep" select="$sep"/>
                         <xsl:with-param name="ret" select="$value"/>
+                        <xsl:with-param name="duplicate-warning" select="$duplicate-warning"/>
                       </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
@@ -8137,6 +8222,7 @@ prev: <xsl:value-of select="$prev"/>
                         <xsl:with-param name="str" select="substring($rem2, 2 + string-length($value))"/>
                         <xsl:with-param name="attr" select="$attr"/>
                         <xsl:with-param name="sep" select="$sep"/>
+                        <xsl:with-param name="duplicate-warning" select="$duplicate-warning"/>
                         <xsl:with-param name="ret">
                           <xsl:choose>
                             <xsl:when test="$ret!=''">

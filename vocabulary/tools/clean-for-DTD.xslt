@@ -866,6 +866,35 @@
 </xsl:template>
 <xsl:template match="section/name" mode="cleanup"/>
 
+<!-- Definition Lists -->
+<xsl:template match="dl" mode="cleanup">
+  <xsl:variable name="hang" select="@hanging"/>
+  <xsl:variable name="spac" select="@spacing"/>
+  <t>
+    <xsl:processing-instruction name="rfc">
+      <xsl:choose>
+        <xsl:when test="not($spac='compact')">subcompact='no'</xsl:when>
+        <xsl:otherwise>subcompact='yes'</xsl:otherwise>
+      </xsl:choose>
+    </xsl:processing-instruction>
+    <list style="hanging">
+      <xsl:for-each select="dt">
+        <xsl:variable name="txt">
+          <xsl:apply-templates select="." mode="cleanup"/>
+        </xsl:variable>
+        <t hangText="{$txt}">
+          <!-- TODO anchor?-->
+          <xsl:if test="not($hang='true')">
+            <vspace blankLines="0"/>
+          </xsl:if>
+          <xsl:apply-templates select="following-sibling::dd[1]/node()" mode="cleanup"/>
+        </t>
+      </xsl:for-each>
+    </list>
+  </t>
+</xsl:template>
+
+
 <!-- Display names for references -->
 <xsl:template match="displayreference" mode="cleanup"/>
 <xsl:template match="reference/@anchor[.=/rfc/back/displayreference/@from]" mode="cleanup">
