@@ -31,8 +31,10 @@ Change all "figureNumber", "tableNumber", and "sectionNumber" to "generatedNumbe
 Possibly kill <dl hanging>, but make sure that the list agrees.
 	**** Joe figured out that the current definition is probably fine ****
 
-After draft-reschke-xml2rfc gets published as an RFC, update the "obsoletes" line.
+Content model of <li> and <dt> should be simpler.
+	I propose making <li> and <dd> both be <t> or text-with-flow.
 
+After draft-reschke-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
 -->
 
@@ -1585,6 +1587,8 @@ some types of sections.</t>
    <t>
       A definition list. Each entry has a pair of elements: a term (&lt;<x:ref>dt</x:ref>&gt;) and
       a definition (&lt;<x:ref>dd</x:ref>&gt;).
+      (This is slightly different than the model used in HTML, whicl allows for multiple terms for
+      a single definition.)
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.dl.contents"><!--AG-->
