@@ -182,7 +182,8 @@ as STDs and BCPs.</t>
 
 <t>Add &lt;<xref target="element.link" format="none">link</xref>&gt; to point to a resource related to the RFC.</t>
 
-<t>Add &lt;<xref target="element.br" format="none">br</xref>&gt; to allow line breaks (but not blank lines) in generated output.</t>
+<t>Add &lt;<xref target="element.br" format="none">br</xref>&gt; to allow line breaks (but not blank lines) in the generated output
+for table cells.</t>
 
 </list></t>
 
@@ -559,8 +560,10 @@ some types of sections.</t>
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
-      file in SVN format, using a URI. In this case, the textual
-      content acts as prose that describes the included image in sufficient detail.
+      file, such as a bitmap or a vector drawing in SVN, using a URI. In this case, the textual
+      content acts as fallback for output representations that do not support graphics,
+      and thus ought to contain either a "line art" variant of the graphics, or
+      otherwise prose that describes the included image in sufficient detail.
    </t>
    <t>
       If the artwork includes either "&amp;" or "&lt;" characters, or the string "]]&gt;" those characters
@@ -1172,11 +1175,8 @@ some types of sections.</t>
       Indicates that a line break should be inserted in the generated output by the processor.
       Multiple successive instances of this element does not cause blank lines to appear in the output,
       and is thus not useful.
-      This element is to be used only where absolutely necessary, such as in table cells where
-      running text might be ambiguous. In particular, this element should not be used to
-      create emphasis by putting running text on its own line.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.br.contents"><!--AG-->
       Content model: this element does not have any contents.</t>
 </section>
@@ -1311,7 +1311,7 @@ some types of sections.</t>
       <iref item="display attribute" subitem="in cref element"/>
       <t>
          Says whether or not the the comment should be displayed by processors. This might be
-         set to "no" if you want to keep a comment in a document after the contents of the comment
+         set to "false" if you want to keep a comment in a document after the contents of the comment
          have already been dealt with.
       </t>
    </section>
@@ -1433,9 +1433,6 @@ some types of sections.</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="bcp14"/>
                   <iref item="bcp14 element" subitem="inside dd"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
-               <t><!--AG-->
-                  <iref item="Elements" subitem="br"/>
-                  <iref item="br element" subitem="inside dd"/>&lt;<xref target="element.br" format="none">br</xref>&gt; elements (<xref target="element.br"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="cref"/>
                   <iref item="cref element" subitem="inside dd"/>&lt;<xref target="element.cref" format="none">cref</xref>&gt; elements (<xref target="element.cref"/>)</t>
@@ -2166,9 +2163,6 @@ some types of sections.</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="bcp14"/>
                   <iref item="bcp14 element" subitem="inside li"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
-               <t><!--AG-->
-                  <iref item="Elements" subitem="br"/>
-                  <iref item="br element" subitem="inside li"/>&lt;<xref target="element.br" format="none">br</xref>&gt; elements (<xref target="element.br"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="cref"/>
                   <iref item="cref element" subitem="inside li"/>&lt;<xref target="element.cref" format="none">cref</xref>&gt; elements (<xref target="element.cref"/>)</t>
@@ -3796,9 +3790,6 @@ Using CDATA:
          <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside t"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="br"/>
-            <iref item="br element" subitem="inside t"/>&lt;<xref target="element.br" format="none">br</xref>&gt; elements (<xref target="element.br"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="cref"/>
             <iref item="cref element" subitem="inside t"/>&lt;<xref target="element.cref" format="none">cref</xref>&gt; elements (<xref target="element.cref"/>)</t>
@@ -6304,7 +6295,6 @@ nt =
     (text
      | b
      | bcp14
-     | br
      | cref
      | em
      | eref
@@ -6379,7 +6369,6 @@ nli =
         | artwork
         | b
         | bcp14
-        | br
         | cref
         | dl
         | em
@@ -6429,7 +6418,6 @@ ndd =
        | artwork
        | b
        | bcp14
-       | br
        | cref
        | dl
        | em
@@ -7073,7 +7061,6 @@ to the v3 schema.</t>
 -      | xref
 +      | b
 +      | bcp14
-+      | br
 +      | cref
 +      | em
        | eref
@@ -7151,7 +7138,6 @@ to the v3 schema.</t>
 +         | artwork
 +         | b
 +         | bcp14
-+         | br
 +         | cref
 +         | dl
 +         | em
@@ -7201,7 +7187,6 @@ to the v3 schema.</t>
 +        | artwork
 +        | b
 +        | bcp14
-+        | br
 +        | cref
 +        | dl
 +        | em

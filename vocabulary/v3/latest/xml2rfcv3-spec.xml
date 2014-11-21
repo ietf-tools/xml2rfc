@@ -195,8 +195,10 @@
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
-      file in SVN format, using a URI. In this case, the textual
-      content acts as prose that describes the included image in sufficient detail.
+      file, such as a bitmap or a vector drawing in SVN, using a URI. In this case, the textual
+      content acts as fallback for output representations that do not support graphics,
+      and thus ought to contain either a "line art" variant of the graphics, or
+      otherwise prose that describes the included image in sufficient detail.
    </t>
    <t>
       If the artwork includes either "&amp;" or "&lt;" characters, or the string "]]&gt;" those characters
@@ -824,11 +826,8 @@
       Indicates that a line break should be inserted in the generated output by the processor.
       Multiple successive instances of this element does not cause blank lines to appear in the output,
       and is thus not useful.
-      This element is to be used only where absolutely necessary, such as in table cells where
-      running text might be ambiguous. In particular, this element should not be used to
-      create emphasis by putting running text on its own line.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.br.contents"><!--AG-->
       <xref format="none" target="grammar.br">Content model</xref>: this element does not have any contents.</t>
 </section>
@@ -971,7 +970,7 @@
       <iref item="display attribute" subitem="in cref element"/>
       <t>
          Says whether or not the the comment should be displayed by processors. This might be
-         set to "no" if you want to keep a comment in a document after the contents of the comment
+         set to "false" if you want to keep a comment in a document after the contents of the comment
          have already been dealt with.
       </t>
    </section>
@@ -1098,9 +1097,6 @@
                   <iref item="Elements" subitem="bcp14"/>
                   <iref item="bcp14 element" subitem="inside dd"/>&lt;<x:ref>bcp14</x:ref>&gt; elements (<xref target="element.bcp14"/>)</t>
                <t><!--AG-->
-                  <iref item="Elements" subitem="br"/>
-                  <iref item="br element" subitem="inside dd"/>&lt;<x:ref>br</x:ref>&gt; elements (<xref target="element.br"/>)</t>
-               <t><!--AG-->
                   <iref item="Elements" subitem="cref"/>
                   <iref item="cref element" subitem="inside dd"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
                <t><!--AG-->
@@ -1211,6 +1207,8 @@
    <t>
       A definition list. Each entry has a pair of elements: a term (&lt;<x:ref>dt</x:ref>&gt;) and
       a definition (&lt;<x:ref>dd</x:ref>&gt;).
+      (This is slightly different than the model used in HTML, whicl allows for multiple terms for
+      a single definition.)
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.dl.contents"><!--AG-->
@@ -1326,8 +1324,8 @@
       <iref item="Attributes" subitem="anchor"/>
       <iref item="dt element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in dt element"/>
-      <t><!--AG-->
-         <cref anchor="element.dt.attribute.anchor.missing">attribute description missing</cref>
+      <t>
+        Document-wide unique identifier for this term.
       </t>
    </section>
 
@@ -1852,9 +1850,6 @@
                <t><!--AG-->
                   <iref item="Elements" subitem="bcp14"/>
                   <iref item="bcp14 element" subitem="inside li"/>&lt;<x:ref>bcp14</x:ref>&gt; elements (<xref target="element.bcp14"/>)</t>
-               <t><!--AG-->
-                  <iref item="Elements" subitem="br"/>
-                  <iref item="br element" subitem="inside li"/>&lt;<x:ref>br</x:ref>&gt; elements (<xref target="element.br"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="cref"/>
                   <iref item="cref element" subitem="inside li"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
@@ -3528,9 +3523,6 @@ Using CDATA:
          <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside t"/>&lt;<x:ref>bcp14</x:ref>&gt; elements (<xref target="element.bcp14"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="br"/>
-            <iref item="br element" subitem="inside t"/>&lt;<x:ref>br</x:ref>&gt; elements (<xref target="element.br"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="cref"/>
             <iref item="cref element" subitem="inside t"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</t>
