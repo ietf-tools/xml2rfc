@@ -1024,6 +1024,12 @@ Table of Contents
    comment in a document after the contents of the comment have already
    been dealt with.
 
+   Allowed values:
+
+   o  "true" (default)
+
+   o  "false"
+
 2.17.3.  'source' attribute
 
    Holds the "source" of a comment, such as the name or the initials of
@@ -4515,8 +4521,8 @@ Appendix C.  Relax NG Schema
      element cref {
        attribute anchor { xsd:ID }?,
        attribute source { text }?,
-       ([ a:defaultValue = "true" ] attribute display { text },
-        ("true" | "false"))?,
+       [ a:defaultValue = "true" ] attribute display { "true" | "false"
+   }?,
        (text | b | em | eref | i | strong | sub | sup | tt | xref)*
      }
 
@@ -5307,8 +5313,8 @@ Appendix D.  Schema Differences from v2
          attribute anchor { xsd:ID }?,
          attribute source { text }?,
    -     text
-   +     ([ a:defaultValue = "true" ] attribute display { text },
-   +      ("true" | "false"))?,
+   +     [ a:defaultValue = "true" ] attribute display { "true" |
+   + "false" }?,
    +     (text | b | em | eref | i | strong | sub | sup | tt | xref)*
    +   }
    + tt =
