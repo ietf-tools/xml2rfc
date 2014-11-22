@@ -67,7 +67,7 @@
 
 <xsl:variable name="appearsin" select="//rng:element[.//rng:ref/@name=current()/@name]"/>
 
-<xsl:variable name="elemdoc" select="$spec/rfc/middle/section/section[@anchor=$anchor]/t[not(comment()='AG')] | $spec/rfc/middle/section/section[@anchor=$anchor]/figure | $spec/rfc/middle/section/section[@anchor=$anchor]/texttable"/>
+<xsl:variable name="elemdoc" select="$spec/rfc/middle/section/section[@anchor=$anchor]/t[not(comment()='AG')] | $spec/rfc/middle/section/section[@anchor=$anchor]/figure | $spec/rfc/middle/section/section[@anchor=$anchor]/texttable | $spec/rfc/middle/section/section[@anchor=$anchor]/dl"/>
 <xsl:if test="not($elemdoc)">
   <t>
     <xsl:comment>AG</xsl:comment>
@@ -183,7 +183,17 @@
   <xsl:text>&#10;&#10;</xsl:text>
   <xsl:text>   </xsl:text>
   <xsl:comment><xsl:value-of select="$elem/@name"/>/@<xsl:value-of select="@name"/></xsl:comment>
-  <section title="'{@name}' attribute{$pf}" anchor="{$anchor}" toc="exclude">
+  <section anchor="{$anchor}" toc="exclude">
+    <xsl:choose>
+      <xsl:when test="$voc='v3'">
+        <name>'<xsl:value-of select="@name"/>' attribute<xsl:if test="$pf!=''"><xsl:text> </xsl:text><i>(mandatory)</i></xsl:if></name>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:attribute name="title">
+          <xsl:value-of select="concat(@name,' attribute',$pf)"/>
+        </xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
     <iref item="Attributes" subitem="{@name}"/>
     <iref item="{$elem/@name} element" subitem="{@name} attribute"/>
     <iref item="{@name} attribute" subitem="in {$elem/@name} element"/>
