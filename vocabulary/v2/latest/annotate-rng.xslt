@@ -89,7 +89,7 @@
         </xsl:otherwise>
       </xsl:choose>
       <xsl:text> "</xsl:text>
-      <xsl:value-of select="$s/@title"/>
+      <xsl:value-of select="concat($s/@title,$s/name)"/>
       <xsl:text>"</xsl:text>
       <xsl:text> of </xsl:text>
       <xsl:choose>
