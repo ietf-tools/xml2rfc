@@ -882,8 +882,8 @@
         <xsl:variable name="txt">
           <xsl:apply-templates select="." mode="cleanup"/>
         </xsl:variable>
-        <t hangText="{$txt}">
-          <!-- TODO anchor?-->
+        <t hangText="{normalize-space($txt)}">
+          <xsl:copy-of select="@anchor"/>
           <xsl:if test="not($hang='true')">
             <vspace blankLines="0"/>
           </xsl:if>

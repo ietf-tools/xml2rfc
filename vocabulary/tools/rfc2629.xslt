@@ -1461,6 +1461,7 @@
 
 <xsl:template match="dt">
   <dt>
+    <xsl:call-template name="copy-anchor"/>
     <xsl:apply-templates/>
   </dt>
 </xsl:template>
@@ -3007,7 +3008,7 @@
       </xsl:when>
 
       <!-- Paragraph links -->
-      <xsl:when test="$node/self::t">
+      <xsl:when test="$node/self::t or $node/self::dt">
         <a href="#{$xref/@target}">
           <xsl:variable name="tcnt">
             <xsl:for-each select="$node">
@@ -3020,6 +3021,7 @@
               <xsl:when test="$pparent/self::list">
                 <xsl:value-of select="$pparent/@style"/>
               </xsl:when>
+              <xsl:when test="$pparent/self::dl">definition</xsl:when> 
               <xsl:otherwise></xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
@@ -3048,7 +3050,7 @@
                   <xsl:call-template name="warning">
                     <xsl:with-param name="msg" select="concat('Use of format=counter for unsupported list type ',$listtype)"/>
                   </xsl:call-template>
-                  <xsl:value-of select="$tcnt"/>              
+                  <xsl:value-of select="$tcnt"/>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="$tcnt"/>              
@@ -3059,7 +3061,17 @@
               <!-- Nothing to do -->
             </xsl:when>
             <xsl:when test="$xref/@format='title'">
-              <xsl:value-of select="$node/@title" />
+              <xsl:choose>
+                <xsl:when test="$node/self::dt">
+                  <xsl:apply-templates select="$node/node()"/>
+                </xsl:when>
+                <xsl:when test="$node/@hangText">
+                  <xsl:value-of select="$node/@hangText"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$node/@title" />
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="normalize-space(concat('Paragraph&#160;',substring-after($tcnt,'p.')))"/>
@@ -7718,11 +7730,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.694 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.694 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.695 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.695 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2014/11/19 16:58:52 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/11/19 16:58:52 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2014/11/21 14:26:15 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/11/21 14:26:15 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>
@@ -8142,6 +8154,7 @@ prev: <xsl:value-of select="$prev"/>
                       <xsl:when test="$attrname='include-index'"/>
                       <xsl:when test="$attrname='include-references-in-index'"/>
                       <xsl:when test="$attrname='justification'"/>
+                      <xsl:when test="$attrname='paragraph-links'"/>
                       <xsl:when test="$attrname='parse-xml-in-artwork'"/>
                       <xsl:when test="$attrname='refresh-from'"/>
                       <xsl:when test="$attrname='refresh-interval'"/>
