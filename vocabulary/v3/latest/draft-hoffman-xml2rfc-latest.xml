@@ -31,9 +31,6 @@ Change all "figureNumber", "tableNumber", and "sectionNumber" to "generatedNumbe
 Possibly kill <dl hanging>, but make sure that the list agrees.
 	**** Joe figured out that the current definition is probably fine ****
 
-Content model of <li> and <dt> should be simpler.
-	I propose making <li> and <dd> both be <t> or text-with-flow.
-
 After draft-reschke-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
 -->
@@ -5668,6 +5665,15 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="6838"/>
   </reference>
 
+  <reference anchor="DOI">
+    <front>
+      <title>Assigning Digital Object Identifiers to RFCs</title>
+      <author initials="J." surname="Levine" fullname="John Levine"/>
+      <date year="2014"/>
+    </front>
+    <seriesInfo name="Internet-Draft" value="draft-iab-doi"/>
+  </reference>
+
   <reference anchor="IDGUIDE" target="http://www.ietf.org/id-info/guidelines.html">
     <front>
       <title>Guidelines to Authors of Internet-Drafts</title>
@@ -6350,8 +6356,7 @@ a trailing period.</t>
 <?BEGININC xml2rfcv3.rnc.folded ?>
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
-
-<b anchor='grammar.rfc'>rfc</b><iref item='rfc element'/> =
+n<b anchor='grammar.rfc'>rfc</b><iref item='rfc element'/> =
   element rfc {
     attribute number { text }?,
     [ a:defaultValue = "" ] attribute obsoletes { text }?,
@@ -6396,14 +6401,12 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     middle,
     back?
   }
-
-<b anchor='grammar.link'>link</b><iref item='link element'/> =
+n<b anchor='grammar.link'>link</b><iref item='link element'/> =
   element link {
     attribute href { text },
     attribute rel { text }?
   }
-
-<b anchor='grammar.front'>front</b><iref item='front element'/> =
+n<b anchor='grammar.front'>front</b><iref item='front element'/> =
   element front {
     title,
     author+,
@@ -6415,15 +6418,13 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     note*,
     boilerplate?
   }
-
-<b anchor='grammar.title'>title</b><iref item='title element'/> =
+n<b anchor='grammar.title'>title</b><iref item='title element'/> =
   element title {
     attribute abbrev { text }?,
     attribute ascii { text }?,
     text
   }
-
-<b anchor='grammar.author'>author</b><iref item='author element'/> =
+n<b anchor='grammar.author'>author</b><iref item='author element'/> =
   element author {
     attribute initials { text }?,
     attribute asciiInitials { text }?,
@@ -6436,89 +6437,70 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     organization?,
     address?
   }
-
-<b anchor='grammar.organization'>organization</b><iref item='organization element'/> =
+n<b anchor='grammar.organization'>organization</b><iref item='organization element'/> =
   element organization {
     attribute abbrev { text }?,
     attribute ascii { text }?,
     text,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?
   }
-
-<b anchor='grammar.address'>address</b><iref item='address element'/> = element address { postal?, phone?, facsimile?, email?, 
+n<b anchor='grammar.address'>address</b><iref item='address element'/> = element address { postal?, phone?, facsimile?, email?, 
 uri? }
-
-<b anchor='grammar.postal'>postal</b><iref item='postal element'/> =
+n<b anchor='grammar.postal'>postal</b><iref item='postal element'/> =
   element postal {
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     ((city | code | country | region | street)* | postalLine+)
   }
-
-<b anchor='grammar.street'>street</b><iref item='street element'/> =
+n<b anchor='grammar.street'>street</b><iref item='street element'/> =
   element street {
     attribute ascii { text }?,
     text
   }
-
-<b anchor='grammar.city'>city</b><iref item='city element'/> =
+n<b anchor='grammar.city'>city</b><iref item='city element'/> =
   element city {
     attribute ascii { text }?,
     text
   }
-
-<b anchor='grammar.region'>region</b><iref item='region element'/> =
+n<b anchor='grammar.region'>region</b><iref item='region element'/> =
   element region {
     attribute ascii { text }?,
     text
   }
-
-<b anchor='grammar.code'>code</b><iref item='code element'/> =
+n<b anchor='grammar.code'>code</b><iref item='code element'/> =
   element code {
     attribute ascii { text }?,
     text
   }
-
-<b anchor='grammar.country'>country</b><iref item='country element'/> = element country { text }
-
-<b anchor='grammar.postalLine'>postalLine</b><iref item='postalLine element'/> =
+n<b anchor='grammar.country'>country</b><iref item='country element'/> = element country { text }
+n<b anchor='grammar.postalLine'>postalLine</b><iref item='postalLine element'/> =
   element postalLine {
     attribute ascii { text }?,
     text
   }
-
-<b anchor='grammar.phone'>phone</b><iref item='phone element'/> = element phone { text }
-
-<b anchor='grammar.facsimile'>facsimile</b><iref item='facsimile element'/> = element facsimile { text }
-
-<b anchor='grammar.email'>email</b><iref item='email element'/> =
+n<b anchor='grammar.phone'>phone</b><iref item='phone element'/> = element phone { text }
+n<b anchor='grammar.facsimile'>facsimile</b><iref item='facsimile element'/> = element facsimile { text }
+n<b anchor='grammar.email'>email</b><iref item='email element'/> =
   element email {
     attribute ascii { text }?,
     text
   }
-
-<b anchor='grammar.uri'>uri</b><iref item='uri element'/> = element uri { text }
-
-<b anchor='grammar.date'>date</b><iref item='date element'/> =
+n<b anchor='grammar.uri'>uri</b><iref item='uri element'/> = element uri { text }
+n<b anchor='grammar.date'>date</b><iref item='date element'/> =
   element date {
     attribute day { text }?,
     attribute month { text }?,
     attribute year { text }?,
     empty
   }
-
-<b anchor='grammar.area'>area</b><iref item='area element'/> = element area { text }
-
-<b anchor='grammar.workgroup'>workgroup</b><iref item='workgroup element'/> = element workgroup { text }
-
-<b anchor='grammar.keyword'>keyword</b><iref item='keyword element'/> = element keyword { text }
-
-<b anchor='grammar.abstract'>abstract</b><iref item='abstract element'/> =
+n<b anchor='grammar.area'>area</b><iref item='area element'/> = element area { text }
+n<b anchor='grammar.workgroup'>workgroup</b><iref item='workgroup element'/> = element workgroup { text }
+n<b anchor='grammar.keyword'>keyword</b><iref item='keyword element'/> = element keyword { text }
+n<b anchor='grammar.abstract'>abstract</b><iref item='abstract element'/> =
   element abstract {
     attribute sectionNumber { text }?,
     t+
   }
-
-<b anchor='grammar.note'>note</b><iref item='note element'/> =
+n<b anchor='grammar.note'>note</b><iref item='note element'/> =
   element note {
     attribute title { text }?,
     name,
@@ -6527,12 +6509,9 @@ uri? }
 }?,
     t+
   }
-
-<b anchor='grammar.boilerplate'>boilerplate</b><iref item='boilerplate element'/> = element boilerplate { section+ }
-
-<b anchor='grammar.middle'>middle</b><iref item='middle element'/> = element middle { section+ }
-
-<b anchor='grammar.section'>section</b><iref item='section element'/> =
+n<b anchor='grammar.boilerplate'>boilerplate</b><iref item='boilerplate element'/> = element boilerplate { section+ }
+n<b anchor='grammar.middle'>middle</b><iref item='middle element'/> = element middle { section+ }
+n<b anchor='grammar.section'>section</b><iref item='section element'/> =
   element section {
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
@@ -6557,14 +6536,12 @@ uri? }
      | ul)*,
     section*
   }
-
-<b anchor='grammar.name'>name</b><iref item='name element'/> =
+n<b anchor='grammar.name'>name</b><iref item='name element'/> =
   element name {
     attribute slugifiedName { text }?,
     (text | cref | eref | iref | tt | xref)*
   }
-
-<b anchor='grammar.t'>t</b><iref item='t element'/> =
+n<b anchor='grammar.t'>t</b><iref item='t element'/> =
   element t {
     attribute anchor { xsd:ID }?,
     attribute hangText { text }?,
@@ -6587,15 +6564,13 @@ uri? }
      | vspace
      | xref)*
   }
-
-<b anchor='grammar.aside'>aside</b><iref item='aside element'/> =
+n<b anchor='grammar.aside'>aside</b><iref item='aside element'/> =
   element aside {
     attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
     (artwork | figure | iref | sourcecode | t | texttable)*
   }
-
-<b anchor='grammar.blockquote'>blockquote</b><iref item='blockquote element'/> =
+n<b anchor='grammar.blockquote'>blockquote</b><iref item='blockquote element'/> =
   element blockquote {
     attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
@@ -6615,16 +6590,14 @@ uri? }
      | t
      | tt)*
   }
-
-<b anchor='grammar.list'>\list</b><iref item='list element'/> =
+n<b anchor='grammar.list'>\list</b><iref item='list element'/> =
   element list {
     [ a:defaultValue = "empty" ] attribute style { text }?,
     attribute hangIndent { text }?,
     attribute counter { text }?,
     t+
   }
-
-<b anchor='grammar.ol'>ol</b><iref item='ol element'/> =
+n<b anchor='grammar.ol'>ol</b><iref item='ol element'/> =
   element ol {
     [ a:defaultValue = "1" ] attribute style { text }?,
     [ a:defaultValue = "1" ] attribute start { text }?,
@@ -6633,8 +6606,7 @@ uri? }
     attribute spacing { "normal" | "compact" }?,
     li+
   }
-
-<b anchor='grammar.ul'>ul</b><iref item='ul element'/> =
+n<b anchor='grammar.ul'>ul</b><iref item='ul element'/> =
   element ul {
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
@@ -6642,8 +6614,7 @@ uri? }
 }?,
     li+
   }
-
-<b anchor='grammar.li'>li</b><iref item='li element'/> =
+n<b anchor='grammar.li'>li</b><iref item='li element'/> =
   element li {
     attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
@@ -6662,8 +6633,7 @@ uri? }
         | tt
         | xref)+)
   }
-
-<b anchor='grammar.dl'>dl</b><iref item='dl element'/> =
+n<b anchor='grammar.dl'>dl</b><iref item='dl element'/> =
   element dl {
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
@@ -6671,8 +6641,7 @@ uri? }
 }?,
     (dt, dd)+
   }
-
-<b anchor='grammar.dt'>dt</b><iref item='dt element'/> =
+n<b anchor='grammar.dt'>dt</b><iref item='dt element'/> =
   element dt {
     attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
@@ -6690,8 +6659,7 @@ uri? }
      | tt
      | xref)*
   }
-
-<b anchor='grammar.dd'>dd</b><iref item='dd element'/> =
+n<b anchor='grammar.dd'>dd</b><iref item='dd element'/> =
   element dd {
     t+
     | (text
@@ -6708,8 +6676,7 @@ uri? }
        | tt
        | xref)+
   }
-
-<b anchor='grammar.xref'>xref</b><iref item='xref element'/> =
+n<b anchor='grammar.xref'>xref</b><iref item='xref element'/> =
   element xref {
     attribute target { xsd:IDREF },
     [ a:defaultValue = "false" ] attribute pageno { "true" | "false" 
@@ -6721,14 +6688,12 @@ uri? }
      attribute sectionFormat { text }?)?,
     text
   }
-
-<b anchor='grammar.eref'>eref</b><iref item='eref element'/> =
+n<b anchor='grammar.eref'>eref</b><iref item='eref element'/> =
   element eref {
     attribute target { text },
     text
   }
-
-<b anchor='grammar.iref'>iref</b><iref item='iref element'/> =
+n<b anchor='grammar.iref'>iref</b><iref item='iref element'/> =
   element iref {
     attribute item { text },
     [ a:defaultValue = "" ] attribute subitem { text }?,
@@ -6736,8 +6701,7 @@ uri? }
     attribute primary { "true" | "false" }?,
     empty
   }
-
-<b anchor='grammar.cref'>cref</b><iref item='cref element'/> =
+n<b anchor='grammar.cref'>cref</b><iref item='cref element'/> =
   element cref {
     attribute anchor { xsd:ID }?,
     attribute source { text }?,
@@ -6745,8 +6709,7 @@ uri? }
 }?,
     (text | b | em | eref | i | strong | sub | sup | tt | xref)*
   }
-
-<b anchor='grammar.tt'>tt</b><iref item='tt element'/> =
+n<b anchor='grammar.tt'>tt</b><iref item='tt element'/> =
   element tt {
     (text
      | b
@@ -6761,8 +6724,7 @@ uri? }
      | sup
      | xref)*
   }
-
-<b anchor='grammar.b'>b</b><iref item='b element'/> =
+n<b anchor='grammar.b'>b</b><iref item='b element'/> =
   element b {
     (text
      | bcp14
@@ -6776,8 +6738,7 @@ uri? }
      | tt
      | xref)*
   }
-
-<b anchor='grammar.strong'>strong</b><iref item='strong element'/> =
+n<b anchor='grammar.strong'>strong</b><iref item='strong element'/> =
   element strong {
     (text
      | bcp14
@@ -6791,8 +6752,7 @@ uri? }
      | tt
      | xref)*
   }
-
-<b anchor='grammar.i'>i</b><iref item='i element'/> =
+n<b anchor='grammar.i'>i</b><iref item='i element'/> =
   element i {
     (text
      | b
@@ -6806,8 +6766,7 @@ uri? }
      | tt
      | xref)*
   }
-
-<b anchor='grammar.em'>em</b><iref item='em element'/> =
+n<b anchor='grammar.em'>em</b><iref item='em element'/> =
   element em {
     (text
      | b
@@ -6821,8 +6780,7 @@ uri? }
      | tt
      | xref)*
   }
-
-<b anchor='grammar.sub'>sub</b><iref item='sub element'/> =
+n<b anchor='grammar.sub'>sub</b><iref item='sub element'/> =
   element sub {
     (text
      | b
@@ -6836,8 +6794,7 @@ uri? }
      | tt
      | xref)*
   }
-
-<b anchor='grammar.sup'>sup</b><iref item='sup element'/> =
+n<b anchor='grammar.sup'>sup</b><iref item='sup element'/> =
   element sup {
     (text
      | b
@@ -6851,22 +6808,19 @@ uri? }
      | tt
      | xref)*
   }
-
-<b anchor='grammar.spanx'>spanx</b><iref item='spanx element'/> =
+n<b anchor='grammar.spanx'>spanx</b><iref item='spanx element'/> =
   element spanx {
     [ a:defaultValue = "preserve" ]
     attribute xml:space { "default" | "preserve" }?,
     [ a:defaultValue = "emph" ] attribute style { text }?,
     text
   }
-
-<b anchor='grammar.vspace'>vspace</b><iref item='vspace element'/> =
+n<b anchor='grammar.vspace'>vspace</b><iref item='vspace element'/> =
   element vspace {
     [ a:defaultValue = "0" ] attribute blankLines { text }?,
     empty
   }
-
-<b anchor='grammar.figure'>figure</b><iref item='figure element'/> =
+n<b anchor='grammar.figure'>figure</b><iref item='figure element'/> =
   element figure {
     attribute anchor { xsd:ID }?,
     [ a:defaultValue = "" ] attribute title { text }?,
@@ -6885,8 +6839,7 @@ uri? }
     (artwork | sourcecode)+,
     postamble?
   }
-
-<b anchor='grammar.table'>table</b><iref item='table element'/> =
+n<b anchor='grammar.table'>table</b><iref item='table element'/> =
   element table {
     attribute anchor { xsd:ID }?,
     attribute tableNumber { text }?,
@@ -6896,8 +6849,7 @@ uri? }
     tbody+,
     tfoot?
   }
-
-<b anchor='grammar.preamble'>preamble</b><iref item='preamble element'/> =
+n<b anchor='grammar.preamble'>preamble</b><iref item='preamble element'/> =
   element preamble {
     (text
      | b
@@ -6914,8 +6866,7 @@ uri? }
      | tt
      | xref)*
   }
-
-<b anchor='grammar.artwork'>artwork</b><iref item='artwork element'/> =
+n<b anchor='grammar.artwork'>artwork</b><iref item='artwork element'/> =
   element artwork {
     attribute xml:space { text }?,
     [ a:defaultValue = "" ] attribute name { text }?,
@@ -6931,8 +6882,7 @@ uri? }
     attribute partNumber { text }?,
     text*
   }
-
-<b anchor='grammar.sourcecode'>sourcecode</b><iref item='sourcecode element'/> =
+n<b anchor='grammar.sourcecode'>sourcecode</b><iref item='sourcecode element'/> =
   element sourcecode {
     [ a:defaultValue = "" ] attribute name { text }?,
     [ a:defaultValue = "" ] attribute type { text }?,
@@ -6941,20 +6891,15 @@ uri? }
     attribute partNumber { text }?,
     text
   }
-
-<b anchor='grammar.thead'>thead</b><iref item='thead element'/> = element thead { tr+ }
-
-<b anchor='grammar.tbody'>tbody</b><iref item='tbody element'/> = element tbody { tr+ }
-
-<b anchor='grammar.tfoot'>tfoot</b><iref item='tfoot element'/> = element tfoot { tr+ }
-
-<b anchor='grammar.tr'>tr</b><iref item='tr element'/> =
+n<b anchor='grammar.thead'>thead</b><iref item='thead element'/> = element thead { tr+ }
+n<b anchor='grammar.tbody'>tbody</b><iref item='tbody element'/> = element tbody { tr+ }
+n<b anchor='grammar.tfoot'>tfoot</b><iref item='tfoot element'/> = element tfoot { tr+ }
+n<b anchor='grammar.tr'>tr</b><iref item='tr element'/> =
   element tr {
     [ a:defaultValue = "0" ] attribute border { text }?,
     (td, th)+
   }
-
-<b anchor='grammar.td'>td</b><iref item='td element'/> =
+n<b anchor='grammar.td'>td</b><iref item='td element'/> =
   element td {
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -6983,8 +6928,7 @@ uri? }
         | ul
         | xref)+)
   }
-
-<b anchor='grammar.th'>th</b><iref item='th element'/> =
+n<b anchor='grammar.th'>th</b><iref item='th element'/> =
   element th {
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -7013,8 +6957,7 @@ uri? }
         | ul
         | xref)+)
   }
-
-<b anchor='grammar.postamble'>postamble</b><iref item='postamble element'/> =
+n<b anchor='grammar.postamble'>postamble</b><iref item='postamble element'/> =
   element postamble {
     (text
      | b
@@ -7031,8 +6974,7 @@ uri? }
      | tt
      | xref)*
   }
-
-<b anchor='grammar.texttable'>texttable</b><iref item='texttable element'/> =
+n<b anchor='grammar.texttable'>texttable</b><iref item='texttable element'/> =
   element texttable {
     attribute anchor { xsd:ID }?,
     [ a:defaultValue = "" ] attribute title { text }?,
@@ -7048,16 +6990,14 @@ uri? }
     c*,
     postamble?
   }
-
-<b anchor='grammar.ttcol'>ttcol</b><iref item='ttcol element'/> =
+n<b anchor='grammar.ttcol'>ttcol</b><iref item='ttcol element'/> =
   element ttcol {
     attribute width { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
     (cref | eref | iref | xref | text)*
   }
-
-<b anchor='grammar.c'>c</b><iref item='c element'/> =
+n<b anchor='grammar.c'>c</b><iref item='c element'/> =
   element c {
     (text
      | b
@@ -7074,37 +7014,29 @@ uri? }
      | tt
      | xref)*
   }
-
-<b anchor='grammar.bcp14'>bcp14</b><iref item='bcp14 element'/> = element bcp14 { text }
-
-<b anchor='grammar.br'>br</b><iref item='br element'/> = element br { empty }
-
-<b anchor='grammar.back'>back</b><iref item='back element'/> = element back { displayreference*, references*, section* }
-
-<b anchor='grammar.displayreference'>displayreference</b><iref item='displayreference element'/> =
+n<b anchor='grammar.bcp14'>bcp14</b><iref item='bcp14 element'/> = element bcp14 { text }
+n<b anchor='grammar.br'>br</b><iref item='br element'/> = element br { empty }
+n<b anchor='grammar.back'>back</b><iref item='back element'/> = element back { displayreference*, references*, section* }
+n<b anchor='grammar.displayreference'>displayreference</b><iref item='displayreference element'/> =
   element displayreference {
     attribute target { xsd:IDREF },
     attribute to { text }
   }
-
-<b anchor='grammar.references'>references</b><iref item='references element'/> = element references { name, (reference | 
+n<b anchor='grammar.references'>references</b><iref item='references element'/> = element references { name, (reference | 
 referencegroup)* }
-
-<b anchor='grammar.reference'>reference</b><iref item='reference element'/> =
+n<b anchor='grammar.reference'>reference</b><iref item='reference element'/> =
   element reference {
     attribute anchor { xsd:ID },
     attribute target { text }?,
     front,
     (annotation | format | refcontent | seriesInfo)*
   }
-
-<b anchor='grammar.referencegroup'>referencegroup</b><iref item='referencegroup element'/> =
+n<b anchor='grammar.referencegroup'>referencegroup</b><iref item='referencegroup element'/> =
   element referencegroup {
     attribute anchor { xsd:ID },
     reference+
   }
-
-<b anchor='grammar.seriesInfo'>seriesInfo</b><iref item='seriesInfo element'/> =
+n<b anchor='grammar.seriesInfo'>seriesInfo</b><iref item='seriesInfo element'/> =
   element seriesInfo {
     attribute name { text },
     attribute value { text },
@@ -7112,16 +7044,14 @@ referencegroup)* }
     attribute asciivalue { text }?,
     empty
   }
-
-<b anchor='grammar.format'>format</b><iref item='format element'/> =
+n<b anchor='grammar.format'>format</b><iref item='format element'/> =
   element format {
     attribute target { text }?,
     attribute type { text },
     attribute octets { text }?,
     empty
   }
-
-<b anchor='grammar.annotation'>annotation</b><iref item='annotation element'/> =
+n<b anchor='grammar.annotation'>annotation</b><iref item='annotation element'/> =
   element annotation {
     attribute ascii { text }?,
     (text
@@ -7139,14 +7069,12 @@ referencegroup)* }
      | tt
      | xref)*
   }
-
-<b anchor='grammar.refcontent'>refcontent</b><iref item='refcontent element'/> =
+n<b anchor='grammar.refcontent'>refcontent</b><iref item='refcontent element'/> =
   element refcontent {
     attribute ascii { text }?,
     (text | b | bcp14 | em | i | strong | sub | sup | tt)*
   }
-
-start = rfc
+nstart = rfc
 <?ENDINC xml2rfcv3.rnc.folded ?>
 </artwork></figure>
 </section>
