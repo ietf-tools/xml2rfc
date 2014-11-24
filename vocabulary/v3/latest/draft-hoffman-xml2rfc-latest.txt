@@ -2825,7 +2825,7 @@ Internet-Draft                  XML2RFCv3                  November 2014
 
    The following names trigger specific processing (such as for auto-
    generating links, and adding descriptions such as "work in
-   progress"): "BCP", "FYI", "Internet-Draft", "RFC", and "STD".
+   progress"): "BCP", "FYI", "Internet-Draft", "RFC", "STD", and "DOI".
 
 2.48.4.  'value' attribute (mandatory)
 
@@ -2833,7 +2833,9 @@ Internet-Draft                  XML2RFCv3                  November 2014
 
    For BCPs, FYIs, RFCs, and STDs this is the number within the series.
    For Internet-Drafts, it is the full draft name (ending with the two-
-   digit version number).
+   digit version number).  For DOIs, the value is given such as
+   "10.123456/rfc1149", (the actual value will be specified later in
+   [DOI]).
 
 2.49.  <sourcecode>
 
@@ -2847,8 +2849,6 @@ Internet-Draft                  XML2RFCv3                  November 2014
    For artwork such as character-based art, diagrams of message layouts,
    and so on, use the <artwork> element instead.
 
-   A common problem authors have with <sourcecode> is that the XML
-   processor returns errors if the text in the artwork contains either
 
 
 
@@ -2857,6 +2857,8 @@ Hoffman                   Expires May 28, 2015                 [Page 51]
 Internet-Draft                  XML2RFCv3                  November 2014
 
 
+   A common problem authors have with <sourcecode> is that the XML
+   processor returns errors if the text in the artwork contains either
    the "&" or "<" character, or the string "]]>".  To avoid these
    problems, the "&" and "<" characters may be escaped using the strings
    "&amp;" and "&lt;", respectively; the "]]>" string can be represented
@@ -2902,8 +2904,6 @@ Internet-Draft                  XML2RFCv3                  November 2014
    The number for this sourceode within the section.  The numbering is
    shared with other elements of a section.  This is described in more
    detail in Appendix B.2.
-
-
 
 
 
