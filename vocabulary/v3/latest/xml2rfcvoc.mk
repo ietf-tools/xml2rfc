@@ -18,7 +18,7 @@ xml2rfcv3-spec-deprecated.xml: xml2rfcv3.rng rng2xml2rfc.xslt
 
 xml2rfcv3.rnc.folded: xml2rfcv3.rnc
 	fold -w69 -s < $< | \
-	sed "s|^\([-a-zA-Z0-9\]*\)* =|\n<b anchor='grammar.\1'>\1</b><iref item='\1 element'/> =|" | \
+	sed "s|^\([-a-zA-Z0-9\]*\)* =|\\n<b anchor='grammar.\1'>\1</b><iref item='\1 element'/> =|" | \
 	sed "s/anchor='grammar\.\\\\/anchor='grammar\./" | \
 	sed "s/item='\\\\/item='/" | \
 	sed "s|<b anchor='grammar.start'>start</b><iref item='start element'/>|start|" \

@@ -6211,7 +6211,8 @@ a trailing period.</t>
 
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
-nrfc =
+
+rfc =
   element rfc {
     attribute number { text }?,
     [ a:defaultValue = "" ] attribute obsoletes { text }?,
@@ -6256,12 +6257,14 @@ nrfc =
     middle,
     back?
   }
-nlink =
+
+link =
   element link {
     attribute href { text },
     attribute rel { text }?
   }
-nfront =
+
+front =
   element front {
     title,
     author+,
@@ -6273,13 +6276,15 @@ nfront =
     note*,
     boilerplate?
   }
-ntitle =
+
+title =
   element title {
     attribute abbrev { text }?,
     attribute ascii { text }?,
     text
   }
-nauthor =
+
+author =
   element author {
     attribute initials { text }?,
     attribute asciiInitials { text }?,
@@ -6292,70 +6297,89 @@ nauthor =
     organization?,
     address?
   }
-norganization =
+
+organization =
   element organization {
     attribute abbrev { text }?,
     attribute ascii { text }?,
     text,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?
   }
-naddress = element address { postal?, phone?, facsimile?, email?, 
+
+address = element address { postal?, phone?, facsimile?, email?, 
 uri? }
-npostal =
+
+postal =
   element postal {
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     ((city | code | country | region | street)* | postalLine+)
   }
-nstreet =
+
+street =
   element street {
     attribute ascii { text }?,
     text
   }
-ncity =
+
+city =
   element city {
     attribute ascii { text }?,
     text
   }
-nregion =
+
+region =
   element region {
     attribute ascii { text }?,
     text
   }
-ncode =
+
+code =
   element code {
     attribute ascii { text }?,
     text
   }
-ncountry = element country { text }
-npostalLine =
+
+country = element country { text }
+
+postalLine =
   element postalLine {
     attribute ascii { text }?,
     text
   }
-nphone = element phone { text }
-nfacsimile = element facsimile { text }
-nemail =
+
+phone = element phone { text }
+
+facsimile = element facsimile { text }
+
+email =
   element email {
     attribute ascii { text }?,
     text
   }
-nuri = element uri { text }
-ndate =
+
+uri = element uri { text }
+
+date =
   element date {
     attribute day { text }?,
     attribute month { text }?,
     attribute year { text }?,
     empty
   }
-narea = element area { text }
-nworkgroup = element workgroup { text }
-nkeyword = element keyword { text }
-nabstract =
+
+area = element area { text }
+
+workgroup = element workgroup { text }
+
+keyword = element keyword { text }
+
+abstract =
   element abstract {
     attribute sectionNumber { text }?,
     t+
   }
-nnote =
+
+note =
   element note {
     attribute title { text }?,
     name,
@@ -6364,9 +6388,12 @@ nnote =
 }?,
     t+
   }
-nboilerplate = element boilerplate { section+ }
-nmiddle = element middle { section+ }
-nsection =
+
+boilerplate = element boilerplate { section+ }
+
+middle = element middle { section+ }
+
+section =
   element section {
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
@@ -6391,12 +6418,14 @@ nsection =
      | ul)*,
     section*
   }
-nname =
+
+name =
   element name {
     attribute slugifiedName { text }?,
     (text | cref | eref | iref | tt | xref)*
   }
-nt =
+
+t =
   element t {
     attribute anchor { xsd:ID }?,
     attribute hangText { text }?,
@@ -6419,13 +6448,15 @@ nt =
      | vspace
      | xref)*
   }
-naside =
+
+aside =
   element aside {
     attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
     (artwork | figure | iref | sourcecode | t | texttable)*
   }
-nblockquote =
+
+blockquote =
   element blockquote {
     attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
@@ -6445,14 +6476,16 @@ nblockquote =
      | t
      | tt)*
   }
-n\list =
+
+\list =
   element list {
     [ a:defaultValue = "empty" ] attribute style { text }?,
     attribute hangIndent { text }?,
     attribute counter { text }?,
     t+
   }
-nol =
+
+ol =
   element ol {
     [ a:defaultValue = "1" ] attribute style { text }?,
     [ a:defaultValue = "1" ] attribute start { text }?,
@@ -6461,7 +6494,8 @@ nol =
     attribute spacing { "normal" | "compact" }?,
     li+
   }
-nul =
+
+ul =
   element ul {
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
@@ -6469,7 +6503,8 @@ nul =
 }?,
     li+
   }
-nli =
+
+li =
   element li {
     attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
@@ -6488,7 +6523,8 @@ nli =
         | tt
         | xref)+)
   }
-ndl =
+
+dl =
   element dl {
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
@@ -6496,7 +6532,8 @@ ndl =
 }?,
     (dt, dd)+
   }
-ndt =
+
+dt =
   element dt {
     attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
@@ -6514,7 +6551,8 @@ ndt =
      | tt
      | xref)*
   }
-ndd =
+
+dd =
   element dd {
     t+
     | (text
@@ -6531,7 +6569,8 @@ ndd =
        | tt
        | xref)+
   }
-nxref =
+
+xref =
   element xref {
     attribute target { xsd:IDREF },
     [ a:defaultValue = "false" ] attribute pageno { "true" | "false" 
@@ -6543,12 +6582,14 @@ nxref =
      attribute sectionFormat { text }?)?,
     text
   }
-neref =
+
+eref =
   element eref {
     attribute target { text },
     text
   }
-niref =
+
+iref =
   element iref {
     attribute item { text },
     [ a:defaultValue = "" ] attribute subitem { text }?,
@@ -6556,7 +6597,8 @@ niref =
     attribute primary { "true" | "false" }?,
     empty
   }
-ncref =
+
+cref =
   element cref {
     attribute anchor { xsd:ID }?,
     attribute source { text }?,
@@ -6564,7 +6606,8 @@ ncref =
 }?,
     (text | b | em | eref | i | strong | sub | sup | tt | xref)*
   }
-ntt =
+
+tt =
   element tt {
     (text
      | b
@@ -6579,7 +6622,8 @@ ntt =
      | sup
      | xref)*
   }
-nb =
+
+b =
   element b {
     (text
      | bcp14
@@ -6593,7 +6637,8 @@ nb =
      | tt
      | xref)*
   }
-nstrong =
+
+strong =
   element strong {
     (text
      | bcp14
@@ -6607,7 +6652,8 @@ nstrong =
      | tt
      | xref)*
   }
-ni =
+
+i =
   element i {
     (text
      | b
@@ -6621,7 +6667,8 @@ ni =
      | tt
      | xref)*
   }
-nem =
+
+em =
   element em {
     (text
      | b
@@ -6635,7 +6682,8 @@ nem =
      | tt
      | xref)*
   }
-nsub =
+
+sub =
   element sub {
     (text
      | b
@@ -6649,7 +6697,8 @@ nsub =
      | tt
      | xref)*
   }
-nsup =
+
+sup =
   element sup {
     (text
      | b
@@ -6663,19 +6712,22 @@ nsup =
      | tt
      | xref)*
   }
-nspanx =
+
+spanx =
   element spanx {
     [ a:defaultValue = "preserve" ]
     attribute xml:space { "default" | "preserve" }?,
     [ a:defaultValue = "emph" ] attribute style { text }?,
     text
   }
-nvspace =
+
+vspace =
   element vspace {
     [ a:defaultValue = "0" ] attribute blankLines { text }?,
     empty
   }
-nfigure =
+
+figure =
   element figure {
     attribute anchor { xsd:ID }?,
     [ a:defaultValue = "" ] attribute title { text }?,
@@ -6694,7 +6746,8 @@ nfigure =
     (artwork | sourcecode)+,
     postamble?
   }
-ntable =
+
+table =
   element table {
     attribute anchor { xsd:ID }?,
     attribute tableNumber { text }?,
@@ -6704,7 +6757,8 @@ ntable =
     tbody+,
     tfoot?
   }
-npreamble =
+
+preamble =
   element preamble {
     (text
      | b
@@ -6721,7 +6775,8 @@ npreamble =
      | tt
      | xref)*
   }
-nartwork =
+
+artwork =
   element artwork {
     attribute xml:space { text }?,
     [ a:defaultValue = "" ] attribute name { text }?,
@@ -6737,7 +6792,8 @@ nartwork =
     attribute partNumber { text }?,
     text*
   }
-nsourcecode =
+
+sourcecode =
   element sourcecode {
     [ a:defaultValue = "" ] attribute name { text }?,
     [ a:defaultValue = "" ] attribute type { text }?,
@@ -6746,15 +6802,20 @@ nsourcecode =
     attribute partNumber { text }?,
     text
   }
-nthead = element thead { tr+ }
-ntbody = element tbody { tr+ }
-ntfoot = element tfoot { tr+ }
-ntr =
+
+thead = element thead { tr+ }
+
+tbody = element tbody { tr+ }
+
+tfoot = element tfoot { tr+ }
+
+tr =
   element tr {
     [ a:defaultValue = "0" ] attribute border { text }?,
     (td, th)+
   }
-ntd =
+
+td =
   element td {
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -6783,7 +6844,8 @@ ntd =
         | ul
         | xref)+)
   }
-nth =
+
+th =
   element th {
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -6812,7 +6874,8 @@ nth =
         | ul
         | xref)+)
   }
-npostamble =
+
+postamble =
   element postamble {
     (text
      | b
@@ -6829,7 +6892,8 @@ npostamble =
      | tt
      | xref)*
   }
-ntexttable =
+
+texttable =
   element texttable {
     attribute anchor { xsd:ID }?,
     [ a:defaultValue = "" ] attribute title { text }?,
@@ -6845,14 +6909,16 @@ ntexttable =
     c*,
     postamble?
   }
-nttcol =
+
+ttcol =
   element ttcol {
     attribute width { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
     (cref | eref | iref | xref | text)*
   }
-nc =
+
+c =
   element c {
     (text
      | b
@@ -6869,29 +6935,37 @@ nc =
      | tt
      | xref)*
   }
-nbcp14 = element bcp14 { text }
-nbr = element br { empty }
-nback = element back { displayreference*, references*, section* }
-ndisplayreference =
+
+bcp14 = element bcp14 { text }
+
+br = element br { empty }
+
+back = element back { displayreference*, references*, section* }
+
+displayreference =
   element displayreference {
     attribute target { xsd:IDREF },
     attribute to { text }
   }
-nreferences = element references { name, (reference | 
+
+references = element references { name, (reference | 
 referencegroup)* }
-nreference =
+
+reference =
   element reference {
     attribute anchor { xsd:ID },
     attribute target { text }?,
     front,
     (annotation | format | refcontent | seriesInfo)*
   }
-nreferencegroup =
+
+referencegroup =
   element referencegroup {
     attribute anchor { xsd:ID },
     reference+
   }
-nseriesInfo =
+
+seriesInfo =
   element seriesInfo {
     attribute name { text },
     attribute value { text },
@@ -6899,14 +6973,16 @@ nseriesInfo =
     attribute asciivalue { text }?,
     empty
   }
-nformat =
+
+format =
   element format {
     attribute target { text }?,
     attribute type { text },
     attribute octets { text }?,
     empty
   }
-nannotation =
+
+annotation =
   element annotation {
     attribute ascii { text }?,
     (text
@@ -6924,12 +7000,14 @@ nannotation =
      | tt
      | xref)*
   }
-nrefcontent =
+
+refcontent =
   element refcontent {
     attribute ascii { text }?,
     (text | b | bcp14 | em | i | strong | sub | sup | tt)*
   }
-nstart = rfc
+
+start = rfc
 
 ]]></artwork></figure>
 </section>
