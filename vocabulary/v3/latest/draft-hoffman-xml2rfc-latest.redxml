@@ -31,6 +31,8 @@ Change all "figureNumber", "tableNumber", and "sectionNumber" to "generatedNumbe
 Possibly kill <dl hanging>, but make sure that the list agrees.
 	**** Joe figured out that the current definition is probably fine ****
 
+Register "isPartOf" and "convertedFrom" link type relations.
+
 After draft-reschke-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
 -->
@@ -2103,7 +2105,7 @@ some types of sections.</t>
       considered to be relevant for that index entry. In some formats, index
       entries of this type might be displayed as range.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.b" format="none">b</xref>&gt; (<xref target="element.b"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.table" format="none">table</xref>&gt; (<xref target="element.table"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.b" format="none">b</xref>&gt; (<xref target="element.b"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.table" format="none">table</xref>&gt; (<xref target="element.table"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.iref.contents"><!--AG-->
       Content model: this element does not have any contents.</t>
 
@@ -2367,9 +2369,6 @@ some types of sections.</t>
          <t><!--AG-->
             <iref item="Elements" subitem="eref"/>
             <iref item="eref element" subitem="inside name"/>&lt;<xref target="element.eref" format="none">eref</xref>&gt; elements (<xref target="element.eref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="iref"/>
-            <iref item="iref element" subitem="inside name"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="tt"/>
             <iref item="tt element" subitem="inside name"/>&lt;<xref target="element.tt" format="none">tt</xref>&gt; elements (<xref target="element.tt"/>)</t>
@@ -6211,8 +6210,7 @@ a trailing period.</t>
 
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
-
-rfc =
+nrfc =
   element rfc {
     attribute number { text }?,
     [ a:defaultValue = "" ] attribute obsoletes { text }?,
@@ -6257,14 +6255,12 @@ rfc =
     middle,
     back?
   }
-
-link =
+nlink =
   element link {
     attribute href { text },
     attribute rel { text }?
   }
-
-front =
+nfront =
   element front {
     title,
     author+,
@@ -6276,15 +6272,13 @@ front =
     note*,
     boilerplate?
   }
-
-title =
+ntitle =
   element title {
     attribute abbrev { text }?,
     attribute ascii { text }?,
     text
   }
-
-author =
+nauthor =
   element author {
     attribute initials { text }?,
     attribute asciiInitials { text }?,
@@ -6297,89 +6291,70 @@ author =
     organization?,
     address?
   }
-
-organization =
+norganization =
   element organization {
     attribute abbrev { text }?,
     attribute ascii { text }?,
     text,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?
   }
-
-address = element address { postal?, phone?, facsimile?, email?, 
+naddress = element address { postal?, phone?, facsimile?, email?, 
 uri? }
-
-postal =
+npostal =
   element postal {
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     ((city | code | country | region | street)* | postalLine+)
   }
-
-street =
+nstreet =
   element street {
     attribute ascii { text }?,
     text
   }
-
-city =
+ncity =
   element city {
     attribute ascii { text }?,
     text
   }
-
-region =
+nregion =
   element region {
     attribute ascii { text }?,
     text
   }
-
-code =
+ncode =
   element code {
     attribute ascii { text }?,
     text
   }
-
-country = element country { text }
-
-postalLine =
+ncountry = element country { text }
+npostalLine =
   element postalLine {
     attribute ascii { text }?,
     text
   }
-
-phone = element phone { text }
-
-facsimile = element facsimile { text }
-
-email =
+nphone = element phone { text }
+nfacsimile = element facsimile { text }
+nemail =
   element email {
     attribute ascii { text }?,
     text
   }
-
-uri = element uri { text }
-
-date =
+nuri = element uri { text }
+ndate =
   element date {
     attribute day { text }?,
     attribute month { text }?,
     attribute year { text }?,
     empty
   }
-
-area = element area { text }
-
-workgroup = element workgroup { text }
-
-keyword = element keyword { text }
-
-abstract =
+narea = element area { text }
+nworkgroup = element workgroup { text }
+nkeyword = element keyword { text }
+nabstract =
   element abstract {
     attribute sectionNumber { text }?,
     t+
   }
-
-note =
+nnote =
   element note {
     attribute title { text }?,
     name,
@@ -6388,12 +6363,9 @@ note =
 }?,
     t+
   }
-
-boilerplate = element boilerplate { section+ }
-
-middle = element middle { section+ }
-
-section =
+nboilerplate = element boilerplate { section+ }
+nmiddle = element middle { section+ }
+nsection =
   element section {
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
@@ -6418,14 +6390,12 @@ section =
      | ul)*,
     section*
   }
-
-name =
+nname =
   element name {
     attribute slugifiedName { text }?,
-    (text | cref | eref | iref | tt | xref)*
+    (text | cref | eref | tt | xref)*
   }
-
-t =
+nt =
   element t {
     attribute anchor { xsd:ID }?,
     attribute hangText { text }?,
@@ -6448,15 +6418,13 @@ t =
      | vspace
      | xref)*
   }
-
-aside =
+naside =
   element aside {
     attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
     (artwork | figure | iref | sourcecode | t | texttable)*
   }
-
-blockquote =
+nblockquote =
   element blockquote {
     attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
@@ -6476,16 +6444,14 @@ blockquote =
      | t
      | tt)*
   }
-
-\list =
+n\list =
   element list {
     [ a:defaultValue = "empty" ] attribute style { text }?,
     attribute hangIndent { text }?,
     attribute counter { text }?,
     t+
   }
-
-ol =
+nol =
   element ol {
     [ a:defaultValue = "1" ] attribute style { text }?,
     [ a:defaultValue = "1" ] attribute start { text }?,
@@ -6494,8 +6460,7 @@ ol =
     attribute spacing { "normal" | "compact" }?,
     li+
   }
-
-ul =
+nul =
   element ul {
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
@@ -6503,8 +6468,7 @@ ul =
 }?,
     li+
   }
-
-li =
+nli =
   element li {
     attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
@@ -6523,8 +6487,7 @@ li =
         | tt
         | xref)+)
   }
-
-dl =
+ndl =
   element dl {
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
@@ -6532,8 +6495,7 @@ dl =
 }?,
     (dt, dd)+
   }
-
-dt =
+ndt =
   element dt {
     attribute anchor { xsd:ID }?,
     attribute partNumber { text }?,
@@ -6551,8 +6513,7 @@ dt =
      | tt
      | xref)*
   }
-
-dd =
+ndd =
   element dd {
     t+
     | (text
@@ -6569,8 +6530,7 @@ dd =
        | tt
        | xref)+
   }
-
-xref =
+nxref =
   element xref {
     attribute target { xsd:IDREF },
     [ a:defaultValue = "false" ] attribute pageno { "true" | "false" 
@@ -6582,14 +6542,12 @@ xref =
      attribute sectionFormat { text }?)?,
     text
   }
-
-eref =
+neref =
   element eref {
     attribute target { text },
     text
   }
-
-iref =
+niref =
   element iref {
     attribute item { text },
     [ a:defaultValue = "" ] attribute subitem { text }?,
@@ -6597,8 +6555,7 @@ iref =
     attribute primary { "true" | "false" }?,
     empty
   }
-
-cref =
+ncref =
   element cref {
     attribute anchor { xsd:ID }?,
     attribute source { text }?,
@@ -6606,8 +6563,7 @@ cref =
 }?,
     (text | b | em | eref | i | strong | sub | sup | tt | xref)*
   }
-
-tt =
+ntt =
   element tt {
     (text
      | b
@@ -6622,8 +6578,7 @@ tt =
      | sup
      | xref)*
   }
-
-b =
+nb =
   element b {
     (text
      | bcp14
@@ -6637,8 +6592,7 @@ b =
      | tt
      | xref)*
   }
-
-strong =
+nstrong =
   element strong {
     (text
      | bcp14
@@ -6652,8 +6606,7 @@ strong =
      | tt
      | xref)*
   }
-
-i =
+ni =
   element i {
     (text
      | b
@@ -6667,8 +6620,7 @@ i =
      | tt
      | xref)*
   }
-
-em =
+nem =
   element em {
     (text
      | b
@@ -6682,8 +6634,7 @@ em =
      | tt
      | xref)*
   }
-
-sub =
+nsub =
   element sub {
     (text
      | b
@@ -6697,8 +6648,7 @@ sub =
      | tt
      | xref)*
   }
-
-sup =
+nsup =
   element sup {
     (text
      | b
@@ -6712,22 +6662,19 @@ sup =
      | tt
      | xref)*
   }
-
-spanx =
+nspanx =
   element spanx {
     [ a:defaultValue = "preserve" ]
     attribute xml:space { "default" | "preserve" }?,
     [ a:defaultValue = "emph" ] attribute style { text }?,
     text
   }
-
-vspace =
+nvspace =
   element vspace {
     [ a:defaultValue = "0" ] attribute blankLines { text }?,
     empty
   }
-
-figure =
+nfigure =
   element figure {
     attribute anchor { xsd:ID }?,
     [ a:defaultValue = "" ] attribute title { text }?,
@@ -6746,8 +6693,7 @@ figure =
     (artwork | sourcecode)+,
     postamble?
   }
-
-table =
+ntable =
   element table {
     attribute anchor { xsd:ID }?,
     attribute tableNumber { text }?,
@@ -6757,8 +6703,7 @@ table =
     tbody+,
     tfoot?
   }
-
-preamble =
+npreamble =
   element preamble {
     (text
      | b
@@ -6775,8 +6720,7 @@ preamble =
      | tt
      | xref)*
   }
-
-artwork =
+nartwork =
   element artwork {
     attribute xml:space { text }?,
     [ a:defaultValue = "" ] attribute name { text }?,
@@ -6792,8 +6736,7 @@ artwork =
     attribute partNumber { text }?,
     text*
   }
-
-sourcecode =
+nsourcecode =
   element sourcecode {
     [ a:defaultValue = "" ] attribute name { text }?,
     [ a:defaultValue = "" ] attribute type { text }?,
@@ -6802,20 +6745,15 @@ sourcecode =
     attribute partNumber { text }?,
     text
   }
-
-thead = element thead { tr+ }
-
-tbody = element tbody { tr+ }
-
-tfoot = element tfoot { tr+ }
-
-tr =
+nthead = element thead { tr+ }
+ntbody = element tbody { tr+ }
+ntfoot = element tfoot { tr+ }
+ntr =
   element tr {
     [ a:defaultValue = "0" ] attribute border { text }?,
     (td, th)+
   }
-
-td =
+ntd =
   element td {
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -6844,8 +6782,7 @@ td =
         | ul
         | xref)+)
   }
-
-th =
+nth =
   element th {
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -6874,8 +6811,7 @@ th =
         | ul
         | xref)+)
   }
-
-postamble =
+npostamble =
   element postamble {
     (text
      | b
@@ -6892,8 +6828,7 @@ postamble =
      | tt
      | xref)*
   }
-
-texttable =
+ntexttable =
   element texttable {
     attribute anchor { xsd:ID }?,
     [ a:defaultValue = "" ] attribute title { text }?,
@@ -6909,16 +6844,14 @@ texttable =
     c*,
     postamble?
   }
-
-ttcol =
+nttcol =
   element ttcol {
     attribute width { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
     (cref | eref | iref | xref | text)*
   }
-
-c =
+nc =
   element c {
     (text
      | b
@@ -6935,37 +6868,29 @@ c =
      | tt
      | xref)*
   }
-
-bcp14 = element bcp14 { text }
-
-br = element br { empty }
-
-back = element back { displayreference*, references*, section* }
-
-displayreference =
+nbcp14 = element bcp14 { text }
+nbr = element br { empty }
+nback = element back { displayreference*, references*, section* }
+ndisplayreference =
   element displayreference {
     attribute target { xsd:IDREF },
     attribute to { text }
   }
-
-references = element references { name, (reference | 
+nreferences = element references { name, (reference | 
 referencegroup)* }
-
-reference =
+nreference =
   element reference {
     attribute anchor { xsd:ID },
     attribute target { text }?,
     front,
     (annotation | format | refcontent | seriesInfo)*
   }
-
-referencegroup =
+nreferencegroup =
   element referencegroup {
     attribute anchor { xsd:ID },
     reference+
   }
-
-seriesInfo =
+nseriesInfo =
   element seriesInfo {
     attribute name { text },
     attribute value { text },
@@ -6973,16 +6898,14 @@ seriesInfo =
     attribute asciivalue { text }?,
     empty
   }
-
-format =
+nformat =
   element format {
     attribute target { text }?,
     attribute type { text },
     attribute octets { text }?,
     empty
   }
-
-annotation =
+nannotation =
   element annotation {
     attribute ascii { text }?,
     (text
@@ -7000,14 +6923,12 @@ annotation =
      | tt
      | xref)*
   }
-
-refcontent =
+nrefcontent =
   element refcontent {
     attribute ascii { text }?,
     (text | b | bcp14 | em | i | strong | sub | sup | tt)*
   }
-
-start = rfc
+nstart = rfc
 
 ]]></artwork></figure>
 </section>
@@ -7223,7 +7144,7 @@ to the v3 schema.</t>
 + name =
 +   element name {
 +     attribute slugifiedName { text }?,
-+     (text | cref | eref | iref | tt | xref)*
++     (text | cref | eref | tt | xref)*
 +   }
   t =
     element t {

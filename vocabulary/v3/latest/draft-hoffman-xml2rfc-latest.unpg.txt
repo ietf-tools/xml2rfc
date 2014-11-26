@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                          November 25, 2014
+Obsoletes: 2629 (if approved)                          November 26, 2014
 Intended status: Informational
-Expires: May 29, 2015
+Expires: May 30, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 29, 2015.
+   This Internet-Draft will expire on May 30, 2015.
 
 Copyright Notice
 
@@ -1500,11 +1500,11 @@ Table of Contents
    (Section 2.3), <aside> (Section 2.6), <b> (Section 2.8), <c>
    (Section 3.1), <dd> (Section 2.19), <dt> (Section 2.22), <em>
    (Section 2.23), <figure> (Section 2.26), <i> (Section 2.28), <li>
-   (Section 2.31), <name> (Section 2.34), <postamble> (Section 3.5),
-   <preamble> (Section 3.6), <section> (Section 2.47), <strong>
-   (Section 2.51), <sub> (Section 2.52), <sup> (Section 2.53), <t>
-   (Section 2.54), <table> (Section 2.55), <td> (Section 2.57), <th>
-   (Section 2.59), <tt> (Section 2.63), and <ttcol> (Section 3.9).
+   (Section 2.31), <postamble> (Section 3.5), <preamble> (Section 3.6),
+   <section> (Section 2.47), <strong> (Section 2.51), <sub>
+   (Section 2.52), <sup> (Section 2.53), <t> (Section 2.54), <table>
+   (Section 2.55), <td> (Section 2.57), <th> (Section 2.59), <tt>
+   (Section 2.63), and <ttcol> (Section 3.9).
 
    Content model: this element does not have any contents.
 
@@ -1665,8 +1665,6 @@ Table of Contents
    o  <cref> elements (Section 2.17)
 
    o  <eref> elements (Section 2.25)
-
-   o  <iref> elements (Section 2.29)
 
    o  <tt> elements (Section 2.63)
 
@@ -4135,8 +4133,7 @@ Appendix C.  Relax NG Schema
 
    namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
-
-   rfc =
+   nrfc =
      element rfc {
        attribute number { text }?,
        [ a:defaultValue = "" ] attribute obsoletes { text }?,
@@ -4181,14 +4178,12 @@ Appendix C.  Relax NG Schema
        middle,
        back?
      }
-
-   link =
+   nlink =
      element link {
        attribute href { text },
        attribute rel { text }?
      }
-
-   front =
+   nfront =
      element front {
        title,
        author+,
@@ -4200,15 +4195,13 @@ Appendix C.  Relax NG Schema
        note*,
        boilerplate?
      }
-
-   title =
+   ntitle =
      element title {
        attribute abbrev { text }?,
        attribute ascii { text }?,
        text
      }
-
-   author =
+   nauthor =
      element author {
        attribute initials { text }?,
        attribute asciiInitials { text }?,
@@ -4221,89 +4214,70 @@ Appendix C.  Relax NG Schema
        organization?,
        address?
      }
-
-   organization =
+   norganization =
      element organization {
        attribute abbrev { text }?,
        attribute ascii { text }?,
        text,
        [ a:defaultValue = "en" ] attribute xml:lang { text }?
      }
-
-   address = element address { postal?, phone?, facsimile?, email?,
+   naddress = element address { postal?, phone?, facsimile?, email?,
    uri? }
-
-   postal =
+   npostal =
      element postal {
        [ a:defaultValue = "en" ] attribute xml:lang { text }?,
        ((city | code | country | region | street)* | postalLine+)
      }
-
-   street =
+   nstreet =
      element street {
        attribute ascii { text }?,
        text
      }
-
-   city =
+   ncity =
      element city {
        attribute ascii { text }?,
        text
      }
-
-   region =
+   nregion =
      element region {
        attribute ascii { text }?,
        text
      }
-
-   code =
+   ncode =
      element code {
        attribute ascii { text }?,
        text
      }
-
-   country = element country { text }
-
-   postalLine =
+   ncountry = element country { text }
+   npostalLine =
      element postalLine {
        attribute ascii { text }?,
        text
      }
-
-   phone = element phone { text }
-
-   facsimile = element facsimile { text }
-
-   email =
+   nphone = element phone { text }
+   nfacsimile = element facsimile { text }
+   nemail =
      element email {
        attribute ascii { text }?,
        text
      }
-
-   uri = element uri { text }
-
-   date =
+   nuri = element uri { text }
+   ndate =
      element date {
        attribute day { text }?,
        attribute month { text }?,
        attribute year { text }?,
        empty
      }
-
-   area = element area { text }
-
-   workgroup = element workgroup { text }
-
-   keyword = element keyword { text }
-
-   abstract =
+   narea = element area { text }
+   nworkgroup = element workgroup { text }
+   nkeyword = element keyword { text }
+   nabstract =
      element abstract {
        attribute sectionNumber { text }?,
        t+
      }
-
-   note =
+   nnote =
      element note {
        attribute title { text }?,
        name,
@@ -4312,12 +4286,9 @@ Appendix C.  Relax NG Schema
    }?,
        t+
      }
-
-   boilerplate = element boilerplate { section+ }
-
-   middle = element middle { section+ }
-
-   section =
+   nboilerplate = element boilerplate { section+ }
+   nmiddle = element middle { section+ }
+   nsection =
      element section {
        attribute anchor { xsd:ID }?,
        attribute title { text }?,
@@ -4342,14 +4313,12 @@ Appendix C.  Relax NG Schema
         | ul)*,
        section*
      }
-
-   name =
+   nname =
      element name {
        attribute slugifiedName { text }?,
-       (text | cref | eref | iref | tt | xref)*
+       (text | cref | eref | tt | xref)*
      }
-
-   t =
+   nt =
      element t {
        attribute anchor { xsd:ID }?,
        attribute hangText { text }?,
@@ -4372,15 +4341,13 @@ Appendix C.  Relax NG Schema
         | vspace
         | xref)*
      }
-
-   aside =
+   naside =
      element aside {
        attribute anchor { xsd:ID }?,
        attribute partNumber { text }?,
        (artwork | figure | iref | sourcecode | t | texttable)*
      }
-
-   blockquote =
+   nblockquote =
      element blockquote {
        attribute anchor { xsd:ID }?,
        attribute partNumber { text }?,
@@ -4400,16 +4367,14 @@ Appendix C.  Relax NG Schema
         | t
         | tt)*
      }
-
-   \list =
+   n\list =
      element list {
        [ a:defaultValue = "empty" ] attribute style { text }?,
        attribute hangIndent { text }?,
        attribute counter { text }?,
        t+
      }
-
-   ol =
+   nol =
      element ol {
        [ a:defaultValue = "1" ] attribute style { text }?,
        [ a:defaultValue = "1" ] attribute start { text }?,
@@ -4418,8 +4383,7 @@ Appendix C.  Relax NG Schema
        attribute spacing { "normal" | "compact" }?,
        li+
      }
-
-   ul =
+   nul =
      element ul {
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
@@ -4427,8 +4391,7 @@ Appendix C.  Relax NG Schema
    }?,
        li+
      }
-
-   li =
+   nli =
      element li {
        attribute anchor { xsd:ID }?,
        attribute partNumber { text }?,
@@ -4447,8 +4410,7 @@ Appendix C.  Relax NG Schema
            | tt
            | xref)+)
      }
-
-   dl =
+   ndl =
      element dl {
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
@@ -4456,8 +4418,7 @@ Appendix C.  Relax NG Schema
    }?,
        (dt, dd)+
      }
-
-   dt =
+   ndt =
      element dt {
        attribute anchor { xsd:ID }?,
        attribute partNumber { text }?,
@@ -4475,8 +4436,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
-
-   dd =
+   ndd =
      element dd {
        t+
        | (text
@@ -4493,8 +4453,7 @@ Appendix C.  Relax NG Schema
           | tt
           | xref)+
      }
-
-   xref =
+   nxref =
      element xref {
        attribute target { xsd:IDREF },
        [ a:defaultValue = "false" ] attribute pageno { "true" | "false"
@@ -4506,14 +4465,12 @@ Appendix C.  Relax NG Schema
         attribute sectionFormat { text }?)?,
        text
      }
-
-   eref =
+   neref =
      element eref {
        attribute target { text },
        text
      }
-
-   iref =
+   niref =
      element iref {
        attribute item { text },
        [ a:defaultValue = "" ] attribute subitem { text }?,
@@ -4521,8 +4478,7 @@ Appendix C.  Relax NG Schema
        attribute primary { "true" | "false" }?,
        empty
      }
-
-   cref =
+   ncref =
      element cref {
        attribute anchor { xsd:ID }?,
        attribute source { text }?,
@@ -4530,8 +4486,7 @@ Appendix C.  Relax NG Schema
    }?,
        (text | b | em | eref | i | strong | sub | sup | tt | xref)*
      }
-
-   tt =
+   ntt =
      element tt {
        (text
         | b
@@ -4546,8 +4501,7 @@ Appendix C.  Relax NG Schema
         | sup
         | xref)*
      }
-
-   b =
+   nb =
      element b {
        (text
         | bcp14
@@ -4561,8 +4515,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
-
-   strong =
+   nstrong =
      element strong {
        (text
         | bcp14
@@ -4576,8 +4529,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
-
-   i =
+   ni =
      element i {
        (text
         | b
@@ -4591,8 +4543,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
-
-   em =
+   nem =
      element em {
        (text
         | b
@@ -4606,8 +4557,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
-
-   sub =
+   nsub =
      element sub {
        (text
         | b
@@ -4621,8 +4571,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
-
-   sup =
+   nsup =
      element sup {
        (text
         | b
@@ -4636,22 +4585,19 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
-
-   spanx =
+   nspanx =
      element spanx {
        [ a:defaultValue = "preserve" ]
        attribute xml:space { "default" | "preserve" }?,
        [ a:defaultValue = "emph" ] attribute style { text }?,
        text
      }
-
-   vspace =
+   nvspace =
      element vspace {
        [ a:defaultValue = "0" ] attribute blankLines { text }?,
        empty
      }
-
-   figure =
+   nfigure =
      element figure {
        attribute anchor { xsd:ID }?,
        [ a:defaultValue = "" ] attribute title { text }?,
@@ -4670,8 +4616,7 @@ Appendix C.  Relax NG Schema
        (artwork | sourcecode)+,
        postamble?
      }
-
-   table =
+   ntable =
      element table {
        attribute anchor { xsd:ID }?,
        attribute tableNumber { text }?,
@@ -4681,8 +4626,7 @@ Appendix C.  Relax NG Schema
        tbody+,
        tfoot?
      }
-
-   preamble =
+   npreamble =
      element preamble {
        (text
         | b
@@ -4699,8 +4643,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
-
-   artwork =
+   nartwork =
      element artwork {
        attribute xml:space { text }?,
        [ a:defaultValue = "" ] attribute name { text }?,
@@ -4716,8 +4659,7 @@ Appendix C.  Relax NG Schema
        attribute partNumber { text }?,
        text*
      }
-
-   sourcecode =
+   nsourcecode =
      element sourcecode {
        [ a:defaultValue = "" ] attribute name { text }?,
        [ a:defaultValue = "" ] attribute type { text }?,
@@ -4726,20 +4668,15 @@ Appendix C.  Relax NG Schema
        attribute partNumber { text }?,
        text
      }
-
-   thead = element thead { tr+ }
-
-   tbody = element tbody { tr+ }
-
-   tfoot = element tfoot { tr+ }
-
-   tr =
+   nthead = element thead { tr+ }
+   ntbody = element tbody { tr+ }
+   ntfoot = element tfoot { tr+ }
+   ntr =
      element tr {
        [ a:defaultValue = "0" ] attribute border { text }?,
        (td, th)+
      }
-
-   td =
+   ntd =
      element td {
        [ a:defaultValue = "0" ] attribute border { text }?,
        [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -4768,8 +4705,7 @@ Appendix C.  Relax NG Schema
            | ul
            | xref)+)
      }
-
-   th =
+   nth =
      element th {
        [ a:defaultValue = "0" ] attribute border { text }?,
        [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -4798,8 +4734,7 @@ Appendix C.  Relax NG Schema
            | ul
            | xref)+)
      }
-
-   postamble =
+   npostamble =
      element postamble {
        (text
         | b
@@ -4816,8 +4751,7 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
-
-   texttable =
+   ntexttable =
      element texttable {
        attribute anchor { xsd:ID }?,
        [ a:defaultValue = "" ] attribute title { text }?,
@@ -4833,16 +4767,14 @@ Appendix C.  Relax NG Schema
        c*,
        postamble?
      }
-
-   ttcol =
+   nttcol =
      element ttcol {
        attribute width { text }?,
        [ a:defaultValue = "left" ]
        attribute align { "left" | "center" | "right" }?,
        (cref | eref | iref | xref | text)*
      }
-
-   c =
+   nc =
      element c {
        (text
         | b
@@ -4859,37 +4791,29 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
-
-   bcp14 = element bcp14 { text }
-
-   br = element br { empty }
-
-   back = element back { displayreference*, references*, section* }
-
-   displayreference =
+   nbcp14 = element bcp14 { text }
+   nbr = element br { empty }
+   nback = element back { displayreference*, references*, section* }
+   ndisplayreference =
      element displayreference {
        attribute target { xsd:IDREF },
        attribute to { text }
      }
-
-   references = element references { name, (reference |
+   nreferences = element references { name, (reference |
    referencegroup)* }
-
-   reference =
+   nreference =
      element reference {
        attribute anchor { xsd:ID },
        attribute target { text }?,
        front,
        (annotation | format | refcontent | seriesInfo)*
      }
-
-   referencegroup =
+   nreferencegroup =
      element referencegroup {
        attribute anchor { xsd:ID },
        reference+
      }
-
-   seriesInfo =
+   nseriesInfo =
      element seriesInfo {
        attribute name { text },
        attribute value { text },
@@ -4897,16 +4821,14 @@ Appendix C.  Relax NG Schema
        attribute asciivalue { text }?,
        empty
      }
-
-   format =
+   nformat =
      element format {
        attribute target { text }?,
        attribute type { text },
        attribute octets { text }?,
        empty
      }
-
-   annotation =
+   nannotation =
      element annotation {
        attribute ascii { text }?,
        (text
@@ -4924,14 +4846,12 @@ Appendix C.  Relax NG Schema
         | tt
         | xref)*
      }
-
-   refcontent =
+   nrefcontent =
      element refcontent {
        attribute ascii { text }?,
        (text | b | bcp14 | em | i | strong | sub | sup | tt)*
      }
-
-   start = rfc
+   nstart = rfc
 
 
 Appendix D.  Schema Differences from v2
@@ -5144,7 +5064,7 @@ Appendix D.  Schema Differences from v2
    + name =
    +   element name {
    +     attribute slugifiedName { text }?,
-   +     (text | cref | eref | iref | tt | xref)*
+   +     (text | cref | eref | tt | xref)*
    +   }
      t =
        element t {
@@ -6243,7 +6163,6 @@ Index
          inside figure  1
          inside i  1
          inside li  1
-         inside name  1
          inside postamble  1
          inside preamble  1
          inside section  1
