@@ -672,13 +672,7 @@
       attribute align { "left" | "center" | "right" }?,
 -     text
 +     (cref | eref | iref | xref | text)*
-    }
-- c = element c { (text | xref | eref | iref | cref | spanx)* }
-- back = element back { references*, section* }
-- references =
--   element references {
--     [ a:defaultValue = "References" ] attribute title { text }?,
--     reference+
++   }
 + c =
 +   element c {
 +     (text
@@ -695,7 +689,7 @@
 +      | sup
 +      | tt
 +      | xref)*
-    }
++   }
 + bcp14 = element bcp14 { text }
 + br = element br { empty }
 + back = element back { displayreference*, references*, section* }
@@ -703,9 +697,17 @@
 +   element displayreference {
 +     attribute target { xsd:IDREF },
 +     attribute to { text }
-+   }
-+ references = element references { name, (reference | 
-+ referencegroup)* }
+    }
+- c = element c { (text | xref | eref | iref | cref | spanx)* }
+- back = element back { references*, section* }
+  references =
+    element references {
+-     [ a:defaultValue = "References" ] attribute title { text }?,
+-     reference+
++     attribute anchor { xsd:ID },
++     name,
++     (reference | referencegroup)*
+    }
   reference =
     element reference {
       attribute anchor { xsd:ID },

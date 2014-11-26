@@ -2025,6 +2025,11 @@ Table of Contents
 
        *  <referencegroup> elements (Section 2.43)
 
+2.44.1.  'anchor' attribute (mandatory)
+
+   [[element.references.attribute.anchor.missing: attribute description
+   missing]]
+
 2.45.  <region>
 
    Provides the region name in a postal address.
@@ -4799,8 +4804,12 @@ Appendix C.  Relax NG Schema
        attribute target { xsd:IDREF },
        attribute to { text }
      }
-   nreferences = element references { name, (reference |
-   referencegroup)* }
+   nreferences =
+     element references {
+       attribute anchor { xsd:ID },
+       name,
+       (reference | referencegroup)*
+     }
    nreference =
      element reference {
        attribute anchor { xsd:ID },
@@ -5535,13 +5544,7 @@ Appendix D.  Schema Differences from v2
          attribute align { "left" | "center" | "right" }?,
    -     text
    +     (cref | eref | iref | xref | text)*
-       }
-   - c = element c { (text | xref | eref | iref | cref | spanx)* }
-   - back = element back { references*, section* }
-   - references =
-   -   element references {
-   -     [ a:defaultValue = "References" ] attribute title { text }?,
-   -     reference+
+   +   }
    + c =
    +   element c {
    +     (text
@@ -5558,7 +5561,7 @@ Appendix D.  Schema Differences from v2
    +      | sup
    +      | tt
    +      | xref)*
-       }
+   +   }
    + bcp14 = element bcp14 { text }
    + br = element br { empty }
    + back = element back { displayreference*, references*, section* }
@@ -5566,9 +5569,17 @@ Appendix D.  Schema Differences from v2
    +   element displayreference {
    +     attribute target { xsd:IDREF },
    +     attribute to { text }
-   +   }
-   + references = element references { name, (reference |
-   + referencegroup)* }
+       }
+   - c = element c { (text | xref | eref | iref | cref | spanx)* }
+   - back = element back { references*, section* }
+     references =
+       element references {
+   -     [ a:defaultValue = "References" ] attribute title { text }?,
+   -     reference+
+   +     attribute anchor { xsd:ID },
+   +     name,
+   +     (reference | referencegroup)*
+       }
      reference =
        element reference {
          attribute anchor { xsd:ID },
@@ -5658,6 +5669,7 @@ Index
          in li element  1
          in reference element  1
          in referencegroup element  1
+         in references element  1
          in section element  1
          in sourcecode element  1
          in t element  1
@@ -6297,6 +6309,7 @@ Index
          anchor attribute  1
          inside references  1
       references element  1
+         anchor attribute  1
          inside back  1
       region element  1
          ascii attribute  1

@@ -657,7 +657,12 @@ displayreference =
     attribute target { xsd:IDREF },
     attribute to { text }
   }
-references = element references { name, (reference | referencegroup)* }
+references =
+  element references {
+    attribute anchor { xsd:ID },
+    name,
+    (reference | referencegroup)*
+  }
 reference =
   element reference {
     attribute anchor { xsd:ID },

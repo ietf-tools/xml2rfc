@@ -2951,6 +2951,17 @@ some types of sections.</t>
          </t>
       </list>
    </t>
+
+   <!--references/@anchor-->
+   <section anchor="element.references.attribute.anchor" toc="exclude" title="'anchor' attribute (mandatory)">
+      
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="references element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in references element"/>
+      <t><!--AG-->
+         <cref anchor="element.references.attribute.anchor.missing">attribute description missing</cref>
+      </t>
+   </section>
 </section>
 
 <!--region-->
@@ -6876,8 +6887,12 @@ ndisplayreference =
     attribute target { xsd:IDREF },
     attribute to { text }
   }
-nreferences = element references { name, (reference | 
-referencegroup)* }
+nreferences =
+  element references {
+    attribute anchor { xsd:ID },
+    name,
+    (reference | referencegroup)*
+  }
 nreference =
   element reference {
     attribute anchor { xsd:ID },
@@ -7615,13 +7630,7 @@ to the v3 schema.</t>
       attribute align { "left" | "center" | "right" }?,
 -     text
 +     (cref | eref | iref | xref | text)*
-    }
-- c = element c { (text | xref | eref | iref | cref | spanx)* }
-- back = element back { references*, section* }
-- references =
--   element references {
--     [ a:defaultValue = "References" ] attribute title { text }?,
--     reference+
++   }
 + c =
 +   element c {
 +     (text
@@ -7638,7 +7647,7 @@ to the v3 schema.</t>
 +      | sup
 +      | tt
 +      | xref)*
-    }
++   }
 + bcp14 = element bcp14 { text }
 + br = element br { empty }
 + back = element back { displayreference*, references*, section* }
@@ -7646,9 +7655,17 @@ to the v3 schema.</t>
 +   element displayreference {
 +     attribute target { xsd:IDREF },
 +     attribute to { text }
-+   }
-+ references = element references { name, (reference | 
-+ referencegroup)* }
+    }
+- c = element c { (text | xref | eref | iref | cref | spanx)* }
+- back = element back { references*, section* }
+  references =
+    element references {
+-     [ a:defaultValue = "References" ] attribute title { text }?,
+-     reference+
++     attribute anchor { xsd:ID },
++     name,
++     (reference | referencegroup)*
+    }
   reference =
     element reference {
       attribute anchor { xsd:ID },
