@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                          November 26, 2014
+Obsoletes: 2629 (if approved)                          November 27, 2014
 Intended status: Informational
-Expires: May 30, 2015
+Expires: May 31, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 30, 2015.
+   This Internet-Draft will expire on May 31, 2015.
 
 Copyright Notice
 
@@ -683,15 +683,21 @@ Table of Contents
 
    o  <artwork> elements (Section 2.5)
 
+   o  <dl> elements (Section 2.21)
+
    o  <figure> elements (Section 2.26)
 
    o  <iref> elements (Section 2.29)
 
-   o  <sourcecode> elements (Section 2.49)
+   o  <list> elements (Section 3.4)
+
+   o  <ol> elements (Section 2.36)
 
    o  <t> elements (Section 2.54)
 
-   o  <texttable> elements (Section 3.8)
+   o  <table> elements (Section 2.55)
+
+   o  <ul> elements (Section 2.64)
 
 2.6.1.  'anchor' attribute
 
@@ -1163,8 +1169,9 @@ Table of Contents
    used in HTML, whicl allows for multiple terms for a single
    definition.)
 
-   This element appears as a child element of: <section> (Section 2.47),
-   <td> (Section 2.57), and <th> (Section 2.59).
+   This element appears as a child element of: <aside> (Section 2.6),
+   <section> (Section 2.47), <td> (Section 2.57), and <th>
+   (Section 2.59).
 
    Content model:
 
@@ -1720,8 +1727,9 @@ Table of Contents
    An ordered list.  The labels on the items will be either a number or
    a letter, depending on the value of the style attribute.
 
-   This element appears as a child element of: <section> (Section 2.47),
-   <t> (Section 2.54), <td> (Section 2.57), and <th> (Section 2.59).
+   This element appears as a child element of: <aside> (Section 2.6),
+   <section> (Section 2.47), <t> (Section 2.54), <td> (Section 2.57),
+   and <th> (Section 2.59).
 
    Content model:
 
@@ -2430,9 +2438,9 @@ Table of Contents
    escapes in places where using using escapes can cause other problems,
    such as difficulty of inclusion from other documents.
 
-   This element appears as a child element of: <aside> (Section 2.6),
-   <blockquote> (Section 2.11), <figure> (Section 2.26), <section>
-   (Section 2.47), <td> (Section 2.57), and <th> (Section 2.59).
+   This element appears as a child element of: <blockquote>
+   (Section 2.11), <figure> (Section 2.26), <section> (Section 2.47),
+   <td> (Section 2.57), and <th> (Section 2.59).
 
    Content model: only text content.
 
@@ -2718,7 +2726,8 @@ Table of Contents
    printed HTML), the header and footer are meant to appear on each
    page.
 
-   This element appears as a child element of: <section> (Section 2.47).
+   This element appears as a child element of: <aside> (Section 2.6),
+   and <section> (Section 2.47).
 
    Content model:
 
@@ -3042,8 +3051,9 @@ Table of Contents
    An unordered list.  The labels on the items will be symbols picked by
    the processor.
 
-   This element appears as a child element of: <section> (Section 2.47),
-   <td> (Section 2.57), and <th> (Section 2.59).
+   This element appears as a child element of: <aside> (Section 2.6),
+   <section> (Section 2.47), <td> (Section 2.57), and <th>
+   (Section 2.59).
 
    Content model:
 
@@ -4350,7 +4360,7 @@ Appendix C.  Relax NG Schema
      element aside {
        attribute anchor { xsd:ID }?,
        attribute partNumber { text }?,
-       (artwork | figure | iref | sourcecode | t | texttable)*
+       (artwork | dl | figure | iref | \list | ol | t | table | ul)*
      }
    nblockquote =
      element blockquote {
@@ -5107,7 +5117,7 @@ Appendix D.  Schema Differences from v2
    +   element aside {
    +     attribute anchor { xsd:ID }?,
    +     attribute partNumber { text }?,
-   +     (artwork | figure | iref | sourcecode | t | texttable)*
+   +     (artwork | dl | figure | iref | \list | ol | t | table | ul)*
    +   }
    + blockquote =
    +   element blockquote {
@@ -5940,6 +5950,7 @@ Index
          to attribute  1
       dl element  1
          hanging attribute  1
+         inside aside  1
          inside section  1
          inside td  1
          inside th  1
@@ -6210,6 +6221,7 @@ Index
       list element  1
          counter attribute  1
          hangIndent attribute  1
+         inside aside  1
          inside t  1
          style attribute  1
 
@@ -6251,6 +6263,7 @@ Index
          in format element  1
       ol element  1
          group attribute  1
+         inside aside  1
          inside section  1
          inside t  1
          inside td  1
@@ -6380,7 +6393,6 @@ Index
          in cref element  1
       sourcecode element  1
          anchor attribute  1
-         inside aside  1
          inside blockquote  1
          inside figure  1
          inside section  1
@@ -6502,6 +6514,7 @@ Index
          partNumber attribute  1
       table element  1
          anchor attribute  1
+         inside aside  1
          inside section  1
          tableNumber attribute  1
       tableNumber attribute
@@ -6523,7 +6536,6 @@ Index
       texttable element  1
          align attribute  1
          anchor attribute  1
-         inside aside  1
          inside section  1
          style attribute  1
          suppress-title attribute  1
@@ -6593,6 +6605,7 @@ Index
    U
       ul element  1
          empty attribute  1
+         inside aside  1
          inside section  1
          inside td  1
          inside th  1
