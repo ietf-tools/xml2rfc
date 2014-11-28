@@ -243,8 +243,9 @@
   </t>
 </xsl:template>
 
-<xsl:template match="x:note" mode="cleanup">
+<xsl:template match="x:note|aside" mode="cleanup">
   <t>
+    <xsl:apply-templates select="@anchor" mode="cleanup"/>
     <list>
       <xsl:apply-templates mode="cleanup"/>
     </list>
