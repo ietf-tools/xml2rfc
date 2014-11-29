@@ -886,6 +886,7 @@
           <xsl:value-of select="@title"/>
         </xsl:otherwise>
       </xsl:choose>
+      <xsl:if test="@removeInRFC='yes'"> (to be removed in RFC before publication)</xsl:if>
     </xsl:attribute>
     <xsl:apply-templates mode="cleanup"/>
   </section>

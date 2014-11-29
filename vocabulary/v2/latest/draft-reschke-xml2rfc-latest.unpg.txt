@@ -3,9 +3,9 @@
 
 Network Working Group                                         J. Reschke
 Internet-Draft                                                greenbytes
-Obsoletes: 2629 (if approved)                          November 28, 2014
+Obsoletes: 2629 (if approved)                          November 29, 2014
 Intended status: Informational
-Expires: June 1, 2015
+Expires: June 2, 2015
 
 
                    The 'XML2RFC' version 2 Vocabulary
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 1, 2015.
+   This Internet-Draft will expire on June 2, 2015.
 
 Copyright Notice
 
@@ -124,10 +124,12 @@ Table of Contents
      A.3.  The /rfc/@submissionType Attribute
      A.4.  The /rfc/@consensus Attribute
    Appendix B.  Changes from RFC 2629 ('v1')
-     B.1.  Removed Elements
-     B.2.  Changed Defaults
-     B.3.  Changed Elements
-     B.4.  New Elements
+     B.1.  RNC Schema Differences (to be removed in RFC before
+           publication)
+     B.2.  Removed Elements
+     B.3.  Changed Defaults
+     B.4.  Changed Elements
+     B.5.  New Elements
    Appendix C.  Relax NG Schema
      C.1.  Checking Validity
    Index
@@ -2207,23 +2209,25 @@ A.4.  The /rfc/@consensus Attribute
 
 Appendix B.  Changes from RFC 2629 ('v1')
 
-   [[v1diff: See <http://greenbytes.de/tech/webdav/
-   draft-reschke-xml2rfc-02.html#rfc.section.E> for a comparison of the
-   schemata.]]
+B.1.  RNC Schema Differences (to be removed in RFC before publication)
 
-B.1.  Removed Elements
+   See <http://greenbytes.de/tech/webdav/
+   draft-reschke-xml2rfc-02.html#rfc.section.E> for a comparison of the
+   schemata.
+
+B.2.  Removed Elements
 
    The <appendix> element has been removed; to generate an appendix,
    place a <section> inside <back>.
 
-B.2.  Changed Defaults
+B.3.  Changed Defaults
 
    Many attributes have lost their "default" value; this is to avoid
    having document semantics differ based on whether a DTD was specified
    and evaluated.  Processors will handle absent values the way the
    default value was specified before.
 
-B.3.  Changed Elements
+B.4.  Changed Elements
 
    <artwork>: Has a set of new attributes: "name", "type", "src",
    "align", "alt", "width", and "height".  (Section 2.5)
@@ -2263,7 +2267,7 @@ B.3.  Changed Elements
    <t>: The "anchor" attribute can now be used as well, however there
    are restrictions on how they can be referred to.  (Section 2.38)
 
-B.4.  New Elements
+B.5.  New Elements
 
    The following elements have been added: <annotation> (Section 2.3),
    <c> (Section 2.8), <cref> (Section 2.12), <format> (Section 2.18),

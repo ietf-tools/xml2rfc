@@ -2552,6 +2552,7 @@
       <xsl:value-of select="@title"/>
     </xsl:otherwise>
   </xsl:choose>
+  <xsl:if test="@removeInRFC='yes'"><xsl:text> </xsl:text><i>(to be removed in RFC before publication)</i></xsl:if>
 </xsl:template>
 
 <!-- irefs that are section-level thus can use the section anchor -->
@@ -7670,7 +7671,17 @@ dd, li, p {
       <xsl:value-of select="$sectionNumber"/>
       <xsl:text> </xsl:text>
     </xsl:if>
-    <xsl:value-of select="@title"/>
+    <xsl:choose>
+      <xsl:when test="name">
+        <xsl:variable name="hold">
+          <xsl:apply-templates select="name/node()"/>
+        </xsl:variable>
+        <xsl:value-of select="normalize-space($hold)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@title"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
   <link rel="Chapter" title="{$title}" href="#{$anchor-prefix}.section.{$sectionNumber}"/>
   <xsl:apply-templates mode="links" />
@@ -7683,7 +7694,17 @@ dd, li, p {
       <xsl:value-of select="$sectionNumber"/>
       <xsl:text> </xsl:text>
     </xsl:if>
-    <xsl:value-of select="@title"/>
+    <xsl:choose>
+      <xsl:when test="name">
+        <xsl:variable name="hold">
+          <xsl:apply-templates select="name/node()"/>
+        </xsl:variable>
+        <xsl:value-of select="normalize-space($hold)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@title"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
   <link rel="Appendix" title="{$title}" href="#{$anchor-prefix}.section.{$sectionNumber}"/>
   <xsl:apply-templates mode="links" />
@@ -7776,11 +7797,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.702 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.702 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.703 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.703 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2014/11/28 12:27:42 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/11/28 12:27:42 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2014/11/29 14:33:15 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2014/11/29 14:33:15 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>
