@@ -5772,6 +5772,15 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="3470"/>
   </reference>
 
+  <reference anchor='RFC3667'>
+    <front>
+      <title>IETF Rights in Contributions</title>
+      <author initials='S.' surname='Bradner' fullname='S. Bradner'/>
+      <date year='2004' month='February' />
+    </front>
+    <seriesInfo name='RFC' value='3667' />
+  </reference>
+
   <reference anchor='RFC3966'>
     <front>
       <title>The tel URI for Telephone Numbers</title>
@@ -5779,6 +5788,15 @@ not those that are part of a sequence of resources.</t>
       <date year='2004' month='December' />
     </front>
     <seriesInfo name='RFC' value='3966' />
+  </reference>
+
+  <reference anchor="RFC3978">
+    <front>
+      <title>IETF Rights in Contributions</title>
+      <author initials="S." surname="Bradner" fullname="S. Bradner"/>
+      <date year="2005" month="March"/>
+    </front>
+    <seriesInfo name="RFC" value="3978"/>
   </reference>
 
   <reference anchor="RFC3986">
@@ -5986,14 +6004,14 @@ not those that are part of a sequence of resources.</t>
 
 </references>
 
-<section title="Front Page Generation">
+<section title="Front Page ('Boilerplate') Generation" anchor="front.page">
 
 <section title="The /rfc/@category Attribute" anchor="attribute-category">
 <t>
-  For RFCs, the category determines the "maturity level"
-  (see <xref target="RFC2026" x:fmt="of" x:sec="4"/>). The allowed values
-  are "std" for "Standards Track", "bcp" for "BCP", "info" for "Informational",
-  "exp" for "Experimental", and "historic" for "Historic".
+  For RFCs, the category attribute (<xref target="element.rfc.attribute.category"/>)
+  determines the "maturity level" (see <xref target="RFC2026" sectionFormat="of" section="4"/>).
+  The allowed values are "std" for "Standards Track", "bcp" for "BCP", "info"
+  for "Informational", "exp" for "Experimental", and "historic" for "Historic".
 </t>
 <t>
   For Internet-Drafts, the category attribute is not needed, but will
@@ -6004,27 +6022,29 @@ not those that are part of a sequence of resources.</t>
 
 <section title="The /rfc/@ipr Attribute" anchor="attribute-ipr">
 <t>
-  This attribute value can take a long list of values, each of which describes an IPR policy for the document. 
-  This attribute's values are not the result of a grand plan, but remain simply for historic
+  This attribute value can take a long list of values, each of which describes an IPR policy for the document
+  (<xref target="element.rfc.attribute.ipr"/>). 
+  The values are not the result of a grand design, but remain simply for historic
   reasons. Of these values, only a few are currently in use; all others are
-  supported by the various tools for backwards compatibility with old source
+  supported by various tools for backwards compatibility with old source
   files.
 </t>
-<x:note>
+<aside>
   <t>
-    <x:h>Note:</x:h> some variations of the boilerplate are selected based
+    <b>Note:</b> some variations of the boilerplate are selected based
     on the document's date; therefore it is important to specify the "year",
-    "month" and "day" attributes of the &lt;date&gt; element
+    "month" and "day" attributes of the &lt;<x:ref>date</x:ref>&gt; element
     when archiving the XML source of an Internet-Draft on the day of submission.
   </t>
-</x:note>
+</aside>
 <t>
-  Disclaimer: THIS ONLY PROVIDES IMPLEMENTATION INFORMATION. IF YOU NEED
-  LEGAL ADVICE, PLEASE CONTACT A LAWYER.
+  <em>Disclaimer: THIS ONLY PROVIDES IMPLEMENTATION INFORMATION. IF YOU NEED
+  LEGAL ADVICE, PLEASE CONTACT A LAWYER.</em>
   For further information, refer to <eref target="http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf"/>.
 </t>
 <t>
   For the current "Status Of This Memo" text, the submissionType attribute
+  (<xref target="element.rfc.attribute.submissionType"/>)
   determines whether a statement about "Code Components" is inserted (which is the
   case for the value "IETF", which is the default). Other values,
   such as "independent", suppress this part of the text. 
@@ -6035,7 +6055,7 @@ not those that are part of a sequence of resources.</t>
 <iref item="ipr attribute" subitem="'*trust200902'"/>
 <t>
   The name for these values refers to the "IETF TRUST Legal Provisions Relating 
-  to IETF Documents", sometimes simply called the "TLP, that went into effect on February 15, 2009 (<xref target="TLP2.0"/>).
+  to IETF Documents", sometimes simply called the "TLP", which went into effect on February 15, 2009 (<xref target="TLP2.0"/>).
   Updates to this document were published on September 12, 2009 (<xref target="TLP3.0"/>)
   and on December 28, 2009 (<xref target="TLP4.0"/>),
   modifying the license for code components (see <eref target="http://trustee.ietf.org/license-info/"/>
@@ -6044,7 +6064,7 @@ not those that are part of a sequence of resources.</t>
   of these documents.
 </t>
 <t>  
-  The tools will automatically produce the "correct" text depending on the
+  Formatters will automatically produce the "correct" text depending on the
   document's date information (see above):
 </t>
 <texttable align="left">
@@ -6062,7 +6082,7 @@ not those that are part of a sequence of resources.</t>
 <section title="trust200902" anchor="attribute-ipr-trust200902">
 <iref item="ipr attribute" subitem="'trust200902'"/>
 <t>
-  This should be the default, unless one of the more specific '*trust200902'
+  This value should be used unless one of the more specific '*trust200902'
   values is a better fit. It produces the text in Sections 6.a and 6.b of
   the TLP.
 </t>
@@ -6073,19 +6093,19 @@ not those that are part of a sequence of resources.</t>
 <t>
   This produces additional text from Section 6.c.i of the TLP:
 </t>
-<x:blockquote>
+<blockquote>
   <t>
     This document may not be modified, and derivative works of it may
     not be created, except to format it for publication as an RFC or
     to translate it into languages other than English.
   </t>
-</x:blockquote>
-<x:note>
+</blockquote>
+<aside>
   <t>
-    <x:h>Note:</x:h> this clause is incompatible with RFCs that are published
+    <b>Note:</b> this clause is incompatible with RFCs that are published
     on the Standards Track.
   </t>
-</x:note>
+</aside>
 </section>
 
 <section title="noDerivativesTrust200902" anchor="attribute-ipr-noDerivativesTrust200902">
@@ -6093,17 +6113,17 @@ not those that are part of a sequence of resources.</t>
 <t>
   This produces the additional text from Section 6.c.ii of the TLP:
 </t>
-<x:blockquote>
+<blockquote>
   <t>
     This document may not be modified, and derivative works of it may
     not be created, and it may not be published except as an Internet-Draft.
   </t>
-</x:blockquote>
-<x:note>
+</blockquote>
+<aside>
   <t>
-    <x:h>Note:</x:h> this clause is incompatible with RFCs.
+    <b>Note:</b> this clause is incompatible with RFCs.
   </t>
-</x:note>
+</aside>
 </section>
 
 <section title="pre5378Trust200902" anchor="attribute-ipr-pre5378Trust200902">
@@ -6112,7 +6132,7 @@ not those that are part of a sequence of resources.</t>
   This produces the additional text from Section 6.c.iii of the TLP, frequently
   called the "pre-5378 escape clause":
 </t>
-<x:blockquote>
+<blockquote>
   <t>
     This document may contain material from IETF Documents or IETF Contributions published or
     made publicly available before November 10, 2008. The person(s) controlling the copyright in
@@ -6123,18 +6143,18 @@ not those that are part of a sequence of resources.</t>
     Standards Process, except to format it for publication as an RFC or to translate it into languages
     other than English.
   </t>
-</x:blockquote>
+</blockquote>
 <t>
   See Section 4 of <eref target="http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf"/>
   for further information about when to use this value.
 </t>
-<x:note>
+<aside>
   <t>
-    <x:h>Note:</x:h> this text appears under "Copyright Notice", unless the 
+    <b>Note:</b> this text appears under "Copyright Notice", unless the 
     document was published before November 2009, in which case it appears
     under "Status Of This Memo".
   </t>
-</x:note>
+</aside>
 </section>
 </section> 
 
@@ -6158,7 +6178,7 @@ not those that are part of a sequence of resources.</t>
   "<x:span anchor="attribute-ipr-noModification3978">noModification3978</x:span>" and
   "<x:span anchor="attribute-ipr-noDerivatives3978">noDerivatives3978</x:span>"
   are similar to their counterparts above, except that they use text
-  specified in RFC 3978 (March 2005).
+  specified in <xref target="RFC3978" section="5" sectionFormat="of"/>.
 </t>
 </section>
 
@@ -6169,7 +6189,7 @@ not those that are part of a sequence of resources.</t>
   "<x:span anchor="attribute-ipr-noModification3667">noModification3667</x:span>" and
   "<x:span anchor="attribute-ipr-noDerivatives3667">noDerivatives3667</x:span>"
   are similar to their counterparts above, except that they use text
-  specified in RFC 3667 (February 2004).
+  specified in <xref target="RFC3667" section="5" sectionFormat="of"/>.
 </t>
 </section>
 
@@ -6179,7 +6199,7 @@ not those that are part of a sequence of resources.</t>
   The attribute values "<x:span anchor="attribute-ipr-full2026">full2026</x:span>" and
   "<x:span anchor="attribute-ipr-noDerivativeWorks2026">noDerivativeWorks2026</x:span>"
   are similar to their counterparts above, except that they use text
-  specified in RFC 2026 (October 1996).
+  specified in <xref target="RFC2026" section="10" sectionFormat="of"/>.
 </t>
 <t>
   The special value "<x:span anchor="attribute-ipr-none">none</x:span>"
@@ -6187,11 +6207,67 @@ not those that are part of a sequence of resources.</t>
   as Internet-Draft.
 </t>
 </section>
-
-</section>
 </section>
 </section>
 
+<section title="The /rfc/@submissionType Attribute" anchor="attribute-submissiontype">
+<t>
+  The RFC Editor publishes documents from different "document streams", of which
+  the "IETF stream" is the most prominent one. Other streams are the "independent stream"
+  (used for things such as administrative information or April 1st RFCs),
+  the "IAB stream" (Internet Architecture Board) and the "IRTF stream" (Internet Research Task Force).
+</t>
+<t>
+  The values for the attribute are "IETF" (the default value),
+  "independent", "IAB", and "IRTF".
+</t>
+<t>
+  Historically, this attribute did not affect the final appearance of RFCs, except for
+  subtle differences in Copyright notices.
+  Nowadays (as of <xref target="RFC5741"/>), the stream name appears in the first
+  line of the front page, and it also affects the text in the "Status Of This Memo"
+  section.
+</t>
+<t>
+  For current documents, setting submissionType attribute will
+  have the following effect:
+  <list style="symbols">
+    <t>
+      For RFCs, the stream name appears in the upper left corner of the 
+      first page (in Internet Drafts, this is either "Network Working Group",
+      or the value of the &lt;<x:ref>workgroup</x:ref>&gt; element).
+    </t>
+    <t>
+      For RFCs, if affects the whole "Status Of This Memo" section (see
+      <xref x:sec="3.2.2" x:fmt="of" target="RFC5741"/>).
+    </t>
+    <t>
+      For all RFCs and Internet Drafts, it determines whether the "Copyright
+      Notice" mentions the Copyright on Code Components (see TLP, Section "Text To Be Included in IETF Documents"). 
+    </t>
+  </list>
+</t>
+</section>
+
+<section title="The /rfc/@consensus Attribute" anchor="attribute-consensus">
+<t>
+  For some of the publication streams (see <xref target="attribute-submissiontype"/>),
+  the "Status Of This Memo" section depends on whether there was a consensus
+  to publish (again, see <xref x:sec="3.2.2" x:fmt="of" target="RFC5741"/>).
+</t>
+<t>
+  The consensus attribute ("yes"/"no", defaulting to "yes")
+  can be used to supply this information. The effect for the various streams is:
+  <list style="symbols">
+    <t>"independent" and "IAB": none.</t>
+    <t>"IETF": mention that there was an IETF consensus.</t>
+    <t>"IRTF": mention that there was a research group consensus (where the name of the research
+    group is extracted from the &lt;<x:ref>workgroup</x:ref>&gt; element).</t>
+  </list>
+</t>
+</section>
+
+</section>
 <section title="The v3 Format and Processors" anchor="processors">
 
 <t>This section describes topics that are specific to processors. Note that there is some

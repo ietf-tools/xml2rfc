@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                          November 27, 2014
+Obsoletes: 2629 (if approved)                          November 28, 2014
 Intended status: Informational
-Expires: May 31, 2015
+Expires: June 1, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 31, 2015.
+   This Internet-Draft will expire on June 1, 2015.
 
 Copyright Notice
 
@@ -155,11 +155,13 @@ Table of Contents
    8.  References
      8.1.  Normative References
      8.2.  Informative References
-   Appendix A.  Front Page Generation
+   Appendix A.  Front Page ('Boilerplate') Generation
      A.1.  The /rfc/@category Attribute
      A.2.  The /rfc/@ipr Attribute
        A.2.1.  Current Values: '*trust200902'
        A.2.2.  Historic Values
+     A.3.  The /rfc/@submissionType Attribute
+     A.4.  The /rfc/@consensus Attribute
    Appendix B.  The v3 Format and Processors
      B.1.  Including External Text
      B.2.  Anchors and IDs
@@ -3743,8 +3745,14 @@ Table of Contents
                     Language (XML) within IETF Protocols", BCP 70,
                     RFC 3470, January 2003.
 
+   [RFC3667]        Bradner, S., "IETF Rights in Contributions",
+                    RFC 3667, February 2004.
+
    [RFC3966]        Schulzrinne, H., "The tel URI for Telephone
                     Numbers", RFC 3966, December 2004.
+
+   [RFC3978]        Bradner, S., "IETF Rights in Contributions",
+                    RFC 3978, March 2005.
 
    [RFC3986]        Berners-Lee, T., Fielding, R., and L. Masinter,
                     "Uniform Resource Identifier (URI): Generic Syntax",
@@ -3822,14 +3830,15 @@ Table of Contents
                     Latest version available at
                     <http://www.w3.org/TR/xptr-framework/>.
 
-Appendix A.  Front Page Generation
+Appendix A.  Front Page ('Boilerplate') Generation
 
 A.1.  The /rfc/@category Attribute
 
-   For RFCs, the category determines the "maturity level" (see Section 4
-   of [RFC2026]).  The allowed values are "std" for "Standards Track",
-   "bcp" for "BCP", "info" for "Informational", "exp" for
-   "Experimental", and "historic" for "Historic".
+   For RFCs, the category attribute (Section 2.46.1) determines the
+   "maturity level" (see Section 4 of [RFC2026]).  The allowed values
+   are "std" for "Standards Track", "bcp" for "BCP", "info" for
+   "Informational", "exp" for "Experimental", and "historic" for
+   "Historic".
 
    For Internet-Drafts, the category attribute is not needed, but will
    appear on the front page as "Intended Status".  Supplying this
@@ -3838,31 +3847,32 @@ A.1.  The /rfc/@category Attribute
 A.2.  The /rfc/@ipr Attribute
 
    This attribute value can take a long list of values, each of which
-   describes an IPR policy for the document.  This attribute's values
-   are not the result of a grand plan, but remain simply for historic
-   reasons.  Of these values, only a few are currently in use; all
-   others are supported by the various tools for backwards compatibility
+   describes an IPR policy for the document (Section 2.46.5).  The
+   values are not the result of a grand design, but remain simply for
+   historic reasons.  Of these values, only a few are currently in use;
+   all others are supported by various tools for backwards compatibility
    with old source files.
 
-      Note: some variations of the boilerplate are selected based on the
-      document's date; therefore it is important to specify the "year",
-      "month" and "day" attributes of the <date> element when archiving
-      the XML source of an Internet-Draft on the day of submission.
+      *Note:* some variations of the boilerplate are selected based on
+      the document's date; therefore it is important to specify the
+      "year", "month" and "day" attributes of the <date> element when
+      archiving the XML source of an Internet-Draft on the day of
+      submission.
 
-   Disclaimer: THIS ONLY PROVIDES IMPLEMENTATION INFORMATION.  IF YOU
-   NEED LEGAL ADVICE, PLEASE CONTACT A LAWYER.  For further information,
+   _Disclaimer: THIS ONLY PROVIDES IMPLEMENTATION INFORMATION.  IF YOU
+   NEED LEGAL ADVICE, PLEASE CONTACT A LAWYER._ For further information,
    refer to <http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf>.
 
    For the current "Status Of This Memo" text, the submissionType
-   attribute determines whether a statement about "Code Components" is
-   inserted (which is the case for the value "IETF", which is the
-   default).  Other values, such as "independent", suppress this part of
-   the text.
+   attribute (Section 2.46.11) determines whether a statement about
+   "Code Components" is inserted (which is the case for the value
+   "IETF", which is the default).  Other values, such as "independent",
+   suppress this part of the text.
 
 A.2.1.  Current Values: '*trust200902'
 
    The name for these values refers to the "IETF TRUST Legal Provisions
-   Relating to IETF Documents", sometimes simply called the "TLP, that
+   Relating to IETF Documents", sometimes simply called the "TLP", which
    went into effect on February 15, 2009 ([TLP2.0]).  Updates to this
    document were published on September 12, 2009 ([TLP3.0]) and on
    December 28, 2009 ([TLP4.0]), modifying the license for code
@@ -3870,7 +3880,7 @@ A.2.1.  Current Values: '*trust200902'
    information).  The actual text is located in Section 6 ("Text To Be
    Included in IETF Documents") of these documents.
 
-   The tools will automatically produce the "correct" text depending on
+   Formatters will automatically produce the "correct" text depending on
    the document's date information (see above):
 
    +----------+--------------------------------+
@@ -3882,7 +3892,7 @@ A.2.1.  Current Values: '*trust200902'
 
 A.2.1.1.  trust200902
 
-   This should be the default, unless one of the more specific
+   This value should be used unless one of the more specific
    '*trust200902' values is a better fit.  It produces the text in
    Sections 6.a and 6.b of the TLP.
 
@@ -3894,8 +3904,8 @@ A.2.1.2.  noModificationTrust200902
       not be created, except to format it for publication as an RFC or
       to translate it into languages other than English.
 
-      Note: this clause is incompatible with RFCs that are published on
-      the Standards Track.
+      *Note:* this clause is incompatible with RFCs that are published
+      on the Standards Track.
 
 A.2.1.3.  noDerivativesTrust200902
 
@@ -3905,7 +3915,7 @@ A.2.1.3.  noDerivativesTrust200902
       not be created, and it may not be published except as an Internet-
       Draft.
 
-      Note: this clause is incompatible with RFCs.
+      *Note:* this clause is incompatible with RFCs.
 
 A.2.1.4.  pre5378Trust200902
 
@@ -3928,7 +3938,7 @@ A.2.1.4.  pre5378Trust200902
    <http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf> for further
    information about when to use this value.
 
-      Note: this text appears under "Copyright Notice", unless the
+      *Note:* this text appears under "Copyright Notice", unless the
       document was published before November 2009, in which case it
       appears under "Status Of This Memo".
 
@@ -3946,22 +3956,71 @@ A.2.2.2.  Historic Values: '*3978'
 
    The attribute values "full3978", "noModification3978" and
    "noDerivatives3978" are similar to their counterparts above, except
-   that they use text specified in RFC 3978 (March 2005).
+   that they use text specified in Section 5 of [RFC3978].
 
 A.2.2.3.  Historic Values: '*3667'
 
    The attribute values "full3667", "noModification3667" and
    "noDerivatives3667" are similar to their counterparts above, except
-   that they use text specified in RFC 3667 (February 2004).
+   that they use text specified in Section 5 of [RFC3667].
 
 A.2.2.4.  Historic Values: '*2026'
 
    The attribute values "full2026" and "noDerivativeWorks2026" are
    similar to their counterparts above, except that they use text
-   specified in RFC 2026 (October 1996).
+   specified in Section 10 of [RFC2026].
 
    The special value "none" was also used back then, and denied the IETF
    any rights beyond publication as Internet-Draft.
+
+A.3.  The /rfc/@submissionType Attribute
+
+   The RFC Editor publishes documents from different "document streams",
+   of which the "IETF stream" is the most prominent one.  Other streams
+   are the "independent stream" (used for things such as administrative
+   information or April 1st RFCs), the "IAB stream" (Internet
+   Architecture Board) and the "IRTF stream" (Internet Research Task
+   Force).
+
+   The values for the attribute are "IETF" (the default value),
+   "independent", "IAB", and "IRTF".
+
+   Historically, this attribute did not affect the final appearance of
+   RFCs, except for subtle differences in Copyright notices.  Nowadays
+   (as of [RFC5741]), the stream name appears in the first line of the
+   front page, and it also affects the text in the "Status Of This Memo"
+   section.
+
+   For current documents, setting submissionType attribute will have the
+   following effect:
+
+   o  For RFCs, the stream name appears in the upper left corner of the
+      first page (in Internet Drafts, this is either "Network Working
+      Group", or the value of the <workgroup> element).
+
+   o  For RFCs, if affects the whole "Status Of This Memo" section (see
+      Section 3.2.2 of [RFC5741]).
+
+   o  For all RFCs and Internet Drafts, it determines whether the
+      "Copyright Notice" mentions the Copyright on Code Components (see
+      TLP, Section "Text To Be Included in IETF Documents").
+
+A.4.  The /rfc/@consensus Attribute
+
+   For some of the publication streams (see Appendix A.3), the "Status
+   Of This Memo" section depends on whether there was a consensus to
+   publish (again, see Section 3.2.2 of [RFC5741]).
+
+   The consensus attribute ("yes"/"no", defaulting to "yes") can be used
+   to supply this information.  The effect for the various streams is:
+
+   o  "independent" and "IAB": none.
+
+   o  "IETF": mention that there was an IETF consensus.
+
+   o  "IRTF": mention that there was a research group consensus (where
+      the name of the research group is extracted from the <workgroup>
+      element).
 
 Appendix B.  The v3 Format and Processors
 
