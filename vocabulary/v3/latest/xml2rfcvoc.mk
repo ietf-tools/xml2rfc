@@ -17,12 +17,7 @@ xml2rfcv3-spec-deprecated.xml: xml2rfcv3.rng rng2xml2rfc.xslt
 	saxon $< rng2xml2rfc.xslt specsrc=draft-hoffman-xml2rfc-latest.xml deprecated=yes > $@
 
 xml2rfcv3.rnc.folded: xml2rfcv3.rnc
-	fold -w69 -s < $< | \
-	sed "s|^\([-a-zA-Z0-9\]*\)* =|\\n<b anchor='grammar.\1'>\1</b><iref item='\1 element'/> =|" | \
-	sed "s/anchor='grammar\.\\\\/anchor='grammar\./" | \
-	sed "s/item='\\\\/item='/" | \
-	sed "s|<b anchor='grammar.start'>start</b><iref item='start element'/>|start|" \
-	> $@
+	./fold-rnc.sh $< > $@
 
 draft-hoffman-xml2rfc-latest.xml: xml2rfcv3-spec.xml xml2rfcv3-spec-deprecated.xml xml2rfcv3.rnc.folded differences-from-v2.txt
 	cp -v $@ $@.bak
