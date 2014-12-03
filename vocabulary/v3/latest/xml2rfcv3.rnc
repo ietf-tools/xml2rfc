@@ -138,14 +138,14 @@ workgroup = element workgroup { text }
 keyword = element keyword { text }
 abstract =
   element abstract {
-    attribute sectionNumber { text }?,
+    attribute pn { text }?,
     t+
   }
 note =
   element note {
     attribute title { text }?,
     name,
-    attribute sectionNumber { text }?,
+    attribute pn { text }?,
     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no" }?,
     t+
   }
@@ -159,7 +159,7 @@ section =
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no" }?,
-    attribute sectionNumber { text }?,
+    attribute pn { text }?,
     name?,
     (artwork
      | aside
@@ -184,7 +184,7 @@ t =
   element t {
     attribute anchor { xsd:ID }?,
     attribute hangText { text }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     (text
      | b
      | bcp14
@@ -206,13 +206,13 @@ t =
 aside =
   element aside {
     attribute anchor { xsd:ID }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     (artwork | dl | figure | iref | \list | ol | t | table | ul)*
   }
 blockquote =
   element blockquote {
     attribute anchor { xsd:ID }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     attribute cite { text }?,
     attribute quotedFrom { text }?,
     (text
@@ -255,7 +255,7 @@ ul =
 li =
   element li {
     attribute anchor { xsd:ID }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     (t+
      | (text
         | b
@@ -281,7 +281,7 @@ dl =
 dt =
   element dt {
     attribute anchor { xsd:ID }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     (text
      | b
      | bcp14
@@ -467,7 +467,7 @@ figure =
     [ a:defaultValue = "" ] attribute alt { text }?,
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
-    attribute figureNumber { text }?,
+    attribute pn { text }?,
     name?,
     iref*,
     preamble?,
@@ -477,7 +477,7 @@ figure =
 table =
   element table {
     attribute anchor { xsd:ID }?,
-    attribute tableNumber { text }?,
+    attribute pn { text }?,
     name?,
     iref*,
     thead?,
@@ -514,7 +514,7 @@ artwork =
     [ a:defaultValue = "" ] attribute height { text }?,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     text*
   }
 sourcecode =
@@ -523,7 +523,7 @@ sourcecode =
     [ a:defaultValue = "" ] attribute type { text }?,
     attribute src { text }?,
     attribute anchor { xsd:ID }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     text
   }
 thead = element thead { tr+ }

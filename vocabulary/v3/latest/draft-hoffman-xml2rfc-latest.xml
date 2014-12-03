@@ -25,9 +25,6 @@ Future threads:
 	How are <refernecegroup>s rendered?
 	What happens if an <xref> points inside a reference group?
 
-Change all "figureNumber", "tableNumber", and "sectionNumber" to "generatedNumber".
-	**** DON'T DO THIS UNTIL WE FIGURE OUT HOW ****
-
 Possibly kill <dl hanging>, but make sure that the list agrees.
 	**** Joe figured out that the current definition is probably fine ****
 
@@ -216,15 +213,11 @@ different fonts for ideographic characters used in China and Japan.</t>
 
 <t>Add the "removeInRFC" attribute to &lt;<x:ref>note</x:ref>&gt;.</t>
 
-<t>Add "figureNumber", "tableNumber",
-and "sectionNumber" attributes to
-&lt;<x:ref>figure</x:ref>&gt;, &lt;<x:ref>table</x:ref>&gt;, and &lt;<x:ref>section</x:ref>&gt;,
-respectively.
-</t>
-
-<t>Add "partNumber" to &lt;<x:ref>artwork</x:ref>&gt;,
-&lt;<x:ref>aside</x:ref>&gt;, &lt;<x:ref>blockquote</x:ref>&gt;, &lt;<x:ref>dt</x:ref>&gt;, &lt;<x:ref>li</x:ref>&gt;,
-&lt;<x:ref>sourcecode</x:ref>&gt;, and &lt;<x:ref>t</x:ref>&gt; to hold automatically generated
+<t>Add "pn" to &lt;<x:ref>artwork</x:ref>&gt;,
+&lt;<x:ref>aside</x:ref>&gt;, &lt;<x:ref>blockquote</x:ref>&gt;, &lt;<x:ref>dt</x:ref>&gt;,
+&lt;<x:ref>figure</x:ref>&gt;, &lt;<x:ref>li</x:ref>&gt;, &lt;<x:ref>section</x:ref>&gt;
+&lt;<x:ref>sourcecode</x:ref>&gt;, &lt;<x:ref>t</x:ref>&gt;,
+and &lt;<x:ref>table</x:ref>&gt; to hold automatically generated
 numbers for items in a section that don't have their own numbering (namely figures and tables).</t>
 
 <t>Add "display" to &lt;<x:ref>cref</x:ref>&gt; to indicate to processors whether or not
@@ -400,12 +393,12 @@ some types of sections.</t>
       <iref item="t element" subitem="inside abstract"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
       
 
-   <!--abstract/@sectionNumber-->
-   <section anchor="element.abstract.attribute.sectionNumber" toc="exclude">
-      <name>'sectionNumber' attribute</name>
-      <iref item="Attributes" subitem="sectionNumber"/>
-      <iref item="abstract element" subitem="sectionNumber attribute"/>
-      <iref item="sectionNumber attribute" subitem="in abstract element"/>
+   <!--abstract/@pn-->
+   <section anchor="element.abstract.attribute.pn" toc="exclude">
+      <name>'pn' attribute</name>
+      <iref item="Attributes" subitem="pn"/>
+      <iref item="abstract element" subitem="pn attribute"/>
+      <iref item="pn attribute" subitem="in abstract element"/>
       <t>
          The name for the abstract. See <xref target="overlap"/> for a description of this.
       </t>
@@ -681,12 +674,12 @@ some types of sections.</t>
          </t>
    </section>
 
-   <!--artwork/@partNumber-->
-   <section anchor="element.artwork.attribute.partNumber" toc="exclude">
-      <name>'partNumber' attribute</name>
-      <iref item="Attributes" subitem="partNumber"/>
-      <iref item="artwork element" subitem="partNumber attribute"/>
-      <iref item="partNumber attribute" subitem="in artwork element"/>
+   <!--artwork/@pn-->
+   <section anchor="element.artwork.attribute.pn" toc="exclude">
+      <name>'pn' attribute</name>
+      <iref item="Attributes" subitem="pn"/>
+      <iref item="artwork element" subitem="pn attribute"/>
+      <iref item="pn attribute" subitem="in artwork element"/>
       <t>
          The number for this artwork within the section. The numbering is shared with other elements of a section.
          This is described in more detail in <xref target="anchorsandids"/>.
@@ -827,12 +820,12 @@ some types of sections.</t>
       </t>
    </section>
 
-   <!--aside/@partNumber-->
-   <section anchor="element.aside.attribute.partNumber" toc="exclude">
-      <name>'partNumber' attribute</name>
-      <iref item="Attributes" subitem="partNumber"/>
-      <iref item="aside element" subitem="partNumber attribute"/>
-      <iref item="partNumber attribute" subitem="in aside element"/>
+   <!--aside/@pn-->
+   <section anchor="element.aside.attribute.pn" toc="exclude">
+      <name>'pn' attribute</name>
+      <iref item="Attributes" subitem="pn"/>
+      <iref item="aside element" subitem="pn attribute"/>
+      <iref item="pn attribute" subitem="in aside element"/>
       <t>
          The number for this aside within the section. The numbering is shared with other elements of a section.
          This is described in more detail in <xref target="anchorsandids"/>.
@@ -1181,12 +1174,12 @@ some types of sections.</t>
       </t>
    </section>
 
-   <!--blockquote/@partNumber-->
-   <section anchor="element.blockquote.attribute.partNumber" toc="exclude">
-      <name>'partNumber' attribute</name>
-      <iref item="Attributes" subitem="partNumber"/>
-      <iref item="blockquote element" subitem="partNumber attribute"/>
-      <iref item="partNumber attribute" subitem="in blockquote element"/>
+   <!--blockquote/@pn-->
+   <section anchor="element.blockquote.attribute.pn" toc="exclude">
+      <name>'pn' attribute</name>
+      <iref item="Attributes" subitem="pn"/>
+      <iref item="blockquote element" subitem="pn attribute"/>
+      <iref item="pn attribute" subitem="in blockquote element"/>
       <t>
          The number for this blockquote within the section. The numbering is shared with other elements of a section.
          This is described in more detail in <xref target="anchorsandids"/>.
@@ -1745,12 +1738,12 @@ some types of sections.</t>
       </t>
    </section>
 
-   <!--dt/@partNumber-->
-   <section anchor="element.dt.attribute.partNumber" toc="exclude">
-      <name>'partNumber' attribute</name>
-      <iref item="Attributes" subitem="partNumber"/>
-      <iref item="dt element" subitem="partNumber attribute"/>
-      <iref item="partNumber attribute" subitem="in dt element"/>
+   <!--dt/@pn-->
+   <section anchor="element.dt.attribute.pn" toc="exclude">
+      <name>'pn' attribute</name>
+      <iref item="Attributes" subitem="pn"/>
+      <iref item="dt element" subitem="pn attribute"/>
+      <iref item="pn attribute" subitem="in dt element"/>
       <t>
          The number for this term within the section. The numbering is shared with other elements of a section.
          This is described in more detail in <xref target="anchorsandids"/>.
@@ -1967,19 +1960,6 @@ some types of sections.</t>
       </t>
    </section>
 
-   <!--figure/@figureNumber-->
-   <section anchor="element.figure.attribute.figureNumber" toc="exclude">
-      <name>'figureNumber' attribute</name>
-      <iref item="Attributes" subitem="figureNumber"/>
-      <iref item="figure element" subitem="figureNumber attribute"/>
-      <iref item="figureNumber attribute" subitem="in figure element"/>
-      <t>
-         The number for this figure. This attribute and its value are automatically generated by
-         the RFC Processor. If the value already exists when
-         the RFC Processor is run, it is replaced.
-      </t>
-   </section>
-
    <!--figure/@height-->
    <section anchor="element.figure.attribute.height" toc="exclude">
       <name>'height' attribute</name>
@@ -1989,6 +1969,18 @@ some types of sections.</t>
       <t>
          Deprecated.
        </t>
+   </section>
+
+   <!--figure/@pn-->
+   <section anchor="element.figure.attribute.pn" toc="exclude">
+      <name>'pn' attribute</name>
+      <iref item="Attributes" subitem="pn"/>
+      <iref item="figure element" subitem="pn attribute"/>
+      <iref item="pn attribute" subitem="in figure element"/>
+      <t>
+         The number for this figure. This attribute and its value are automatically generated by
+         the RFC Processor.
+      </t>
    </section>
 
    <!--figure/@src-->
@@ -2326,12 +2318,12 @@ some types of sections.</t>
       </t>
    </section>
 
-   <!--li/@partNumber-->
-   <section anchor="element.li.attribute.partNumber" toc="exclude">
-      <name>'partNumber' attribute</name>
-      <iref item="Attributes" subitem="partNumber"/>
-      <iref item="li element" subitem="partNumber attribute"/>
-      <iref item="partNumber attribute" subitem="in li element"/>
+   <!--li/@pn-->
+   <section anchor="element.li.attribute.pn" toc="exclude">
+      <name>'pn' attribute</name>
+      <iref item="Attributes" subitem="pn"/>
+      <iref item="li element" subitem="pn attribute"/>
+      <iref item="pn attribute" subitem="in li element"/>
       <t>
          The number for this list item within the section. The numbering is shared with other elements of a section.
          This is described in more detail in <xref target="anchorsandids"/>.
@@ -2509,6 +2501,17 @@ some types of sections.</t>
       </list>
    </t>
 
+   <!--note/@pn-->
+   <section anchor="element.note.attribute.pn" toc="exclude">
+      <name>'pn' attribute</name>
+      <iref item="Attributes" subitem="pn"/>
+      <iref item="note element" subitem="pn attribute"/>
+      <iref item="pn attribute" subitem="in note element"/>
+      <t>
+         The name for this note. See <xref target="overlap"/> for a description of this.
+      </t>
+   </section>
+
    <!--note/@removeInRFC-->
    <section anchor="element.note.attribute.removeInRFC" toc="exclude">
       <name>'removeInRFC' attribute</name>
@@ -2523,17 +2526,6 @@ some types of sections.</t>
             <t>"yes"</t>
             <t>"no" (default)</t>
          </list>
-      </t>
-   </section>
-
-   <!--note/@sectionNumber-->
-   <section anchor="element.note.attribute.sectionNumber" toc="exclude">
-      <name>'sectionNumber' attribute</name>
-      <iref item="Attributes" subitem="sectionNumber"/>
-      <iref item="note element" subitem="sectionNumber attribute"/>
-      <iref item="sectionNumber attribute" subitem="in note element"/>
-      <t>
-         The name for this note. See <xref target="overlap"/> for a description of this.
       </t>
    </section>
 
@@ -3067,8 +3059,9 @@ some types of sections.</t>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="references element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in references element"/>
-      <t><!--AG-->
-         <cref anchor="element.references.attribute.anchor.missing">attribute description missing</cref>
+      <t>
+         The number for this section. This attribute and its value are automatically generated by
+         the RFC Processor, and are ignored by other processors.
       </t>
    </section>
 </section>
@@ -3517,6 +3510,18 @@ some types of sections.</t>
       </t>
    </section>
 
+   <!--section/@pn-->
+   <section anchor="element.section.attribute.pn" toc="exclude">
+      <name>'pn' attribute</name>
+      <iref item="Attributes" subitem="pn"/>
+      <iref item="section element" subitem="pn attribute"/>
+      <iref item="pn attribute" subitem="in section element"/>
+      <t>
+         The number for this section, if one is generated by the processor. This attribute and its value are automatically generated by
+         the RFC Processor, and are ignored by other processors.
+      </t>
+   </section>
+
    <!--section/@removeInRFC-->
    <section anchor="element.section.attribute.removeInRFC" toc="exclude">
       <name>'removeInRFC' attribute</name>
@@ -3532,19 +3537,6 @@ some types of sections.</t>
             <t>"yes"</t>
             <t>"no" (default)</t>
          </list>
-      </t>
-   </section>
-
-   <!--section/@sectionNumber-->
-   <section anchor="element.section.attribute.sectionNumber" toc="exclude">
-      <name>'sectionNumber' attribute</name>
-      <iref item="Attributes" subitem="sectionNumber"/>
-      <iref item="section element" subitem="sectionNumber attribute"/>
-      <iref item="sectionNumber attribute" subitem="in section element"/>
-      <t>
-         The number for this section, if one is generated by the processor. This attribute and its value are automatically generated by
-         the RFC Processor, and are ignored by other processors. If the value already exists when
-         the RFC Processor is run, it is replaced.
       </t>
    </section>
 
@@ -3735,12 +3727,12 @@ Using CDATA:
          </t>
    </section>
 
-   <!--sourcecode/@partNumber-->
-   <section anchor="element.sourcecode.attribute.partNumber" toc="exclude">
-      <name>'partNumber' attribute</name>
-      <iref item="Attributes" subitem="partNumber"/>
-      <iref item="sourcecode element" subitem="partNumber attribute"/>
-      <iref item="partNumber attribute" subitem="in sourcecode element"/>
+   <!--sourcecode/@pn-->
+   <section anchor="element.sourcecode.attribute.pn" toc="exclude">
+      <name>'pn' attribute</name>
+      <iref item="Attributes" subitem="pn"/>
+      <iref item="sourcecode element" subitem="pn attribute"/>
+      <iref item="pn attribute" subitem="in sourcecode element"/>
       <t>
          The number for this sourceode within the section. The numbering is shared with other elements of a section.
          This is described in more detail in <xref target="anchorsandids"/>.
@@ -4075,12 +4067,12 @@ Using CDATA:
       </t>
    </section>
 
-   <!--t/@partNumber-->
-   <section anchor="element.t.attribute.partNumber" toc="exclude">
-      <name>'partNumber' attribute</name>
-      <iref item="Attributes" subitem="partNumber"/>
-      <iref item="t element" subitem="partNumber attribute"/>
-      <iref item="partNumber attribute" subitem="in t element"/>
+   <!--t/@pn-->
+   <section anchor="element.t.attribute.pn" toc="exclude">
+      <name>'pn' attribute</name>
+      <iref item="Attributes" subitem="pn"/>
+      <iref item="t element" subitem="pn attribute"/>
+      <iref item="pn attribute" subitem="in t element"/>
       <t>
          The number for this paragraph within the section. The numbering is shared with other elements of a section.
          This is described in more detail in <xref target="anchorsandids"/>.
@@ -4149,16 +4141,15 @@ Using CDATA:
       </t>
    </section>
 
-   <!--table/@tableNumber-->
-   <section anchor="element.table.attribute.tableNumber" toc="exclude">
-      <name>'tableNumber' attribute</name>
-      <iref item="Attributes" subitem="tableNumber"/>
-      <iref item="table element" subitem="tableNumber attribute"/>
-      <iref item="tableNumber attribute" subitem="in table element"/>
+   <!--table/@pn-->
+   <section anchor="element.table.attribute.pn" toc="exclude">
+      <name>'pn' attribute</name>
+      <iref item="Attributes" subitem="pn"/>
+      <iref item="table element" subitem="pn attribute"/>
+      <iref item="pn attribute" subitem="in table element"/>
       <t>
          The number for this table. This attribute and its value are automatically generated by
-         the RFC Processor. If the value already exists when
-         the RFC Processor is run, it is replaced.
+         the RFC Processor.
       </t>
    </section>
 </section>
@@ -6392,18 +6383,17 @@ element.</t>
 
 <t>Readers can refer to any element that has an "anchor" attribute by that attribute. Note, however,
 that most of the time, elements won't have anchors. In the common case, the reader wants to refer to
-an element that does not have an "anchor" attribute, but that element has "partNumber" attribute.</t>
+an element that does not have an "anchor" attribute, but that element has "pn" attribute.</t>
 
-<t>Processors add the "partNumber" attribute to many elements during processing. This attribute and
+<t>Processors add the "pn" attribute to many elements during processing. This attribute and
 its value are automatically generated by the processor if the attribute is not there; if the
 attribute is already there, the processor may replace the value.</t>
 
 <section anchor="overlap" title="Overlapping Values">
 
-<t>In the HTML representation of this XML vocabulary, both anchors and partNumber attributes will
+<t>In the HTML representation of this XML vocabulary, both anchors and "pn" attributes will
 be used in the "id" attributes of elements. Thus, there can be no overlap between the names entered
-in "anchor" attributes, the values in the "figureNumber", "tableNumber",
-and "sectionNumber" attributes, in "slugifiedName" attributes, and those that are generated for the "partNumber" attributes.
+in "anchor" attributes, in "slugifiedName" attributes, and those that are generated for the "pn" attributes.
 Also, there are some values for the "anchor" values that are reserved for sections, and those
 sections can only have those anchor values.</t>
 
@@ -6411,19 +6401,22 @@ sections can only have those anchor values.</t>
 
 <list style="symbols">
 
-<t>"figureNumber" always has the format "f-nnn", where "nnn" is the figure number.
-For example, this would be "f-5" for Figure 5.</t>
-
-<t>"tableNumber" always has the format "t-nnn", where "nnn" is the figure number.
-For example, this would be "t-5" for Table 5.</t>
-
-<t>"sectionNumber" for regular sections always has the format "s-nnn", where "nnn" is the section or appendix number.
+<t>"pn" for regular sections always has the format "s-nnn", where "nnn" is the section or appendix number.
 For example, this would be "s-2.1.3" for Section 2.1.3 and "s-a" for Appendix A.
 For the &lt;<x:ref>abstract</x:ref>&gt; element, it is always "s-abstract".
 For the &lt;<x:ref>note</x:ref>&gt; element, it is always "s-note-nnn", where "nnn" is a sequential value.
 </t>
 
-<t>"partNumber" always has the format "p-nnn-mmm", where "nnn" is the section number
+<t>"pn" for &lt;<x:ref>figure</x:ref>&gt; elements
+always has the format "f-nnn", where "nnn" is the figure number.
+For example, this would be "f-5" for Figure 5.</t>
+
+<t>"pn" for &lt;<x:ref>table</x:ref>&gt; elements
+always has the format "t-nnn", where "nnn" is the figure number.
+For example, this would be "t-5" for Table 5.</t>
+
+<t>"pn" for all elements not listed above
+always has the format "p-nnn-mmm", where "nnn" is the section number
 and "mmm" is the relative position in the section.
 For example, this would be "p-2.1.3-7" for the seventh part number in Section 2.1.3.</t>
 
@@ -6435,9 +6428,6 @@ The actual conversions done in slugification will be specified at a later time.<
 not pick an anchor name that starts with a single letter followed by a hyphen. If an anchor
 does overlap with one of the types of names above, the processor will reject the
 document.</t>
-
-<t>In the values for "figureNumber", "tableNumber", sectionNumber", and "partNumber", there is never
-a trailing period.</t>
 
 </list>
 </t>
@@ -6597,14 +6587,14 @@ n<b anchor='grammar.workgroup'>workgroup</b><iref item='workgroup element'/> = e
 n<b anchor='grammar.keyword'>keyword</b><iref item='keyword element'/> = element keyword { text }
 n<b anchor='grammar.abstract'>abstract</b><iref item='abstract element'/> =
   element abstract {
-    attribute sectionNumber { text }?,
+    attribute pn { text }?,
     t+
   }
 n<b anchor='grammar.note'>note</b><iref item='note element'/> =
   element note {
     attribute title { text }?,
     name,
-    attribute sectionNumber { text }?,
+    attribute pn { text }?,
     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no" 
 }?,
     t+
@@ -6620,7 +6610,7 @@ n<b anchor='grammar.section'>section</b><iref item='section element'/> =
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no" 
 }?,
-    attribute sectionNumber { text }?,
+    attribute pn { text }?,
     name?,
     (artwork
      | aside
@@ -6645,7 +6635,7 @@ n<b anchor='grammar.t'>t</b><iref item='t element'/> =
   element t {
     attribute anchor { xsd:ID }?,
     attribute hangText { text }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     (text
      | b
      | bcp14
@@ -6667,13 +6657,13 @@ n<b anchor='grammar.t'>t</b><iref item='t element'/> =
 n<b anchor='grammar.aside'>aside</b><iref item='aside element'/> =
   element aside {
     attribute anchor { xsd:ID }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     (artwork | dl | figure | iref | \list | ol | t | table | ul)*
   }
 n<b anchor='grammar.blockquote'>blockquote</b><iref item='blockquote element'/> =
   element blockquote {
     attribute anchor { xsd:ID }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     attribute cite { text }?,
     attribute quotedFrom { text }?,
     (text
@@ -6717,7 +6707,7 @@ n<b anchor='grammar.ul'>ul</b><iref item='ul element'/> =
 n<b anchor='grammar.li'>li</b><iref item='li element'/> =
   element li {
     attribute anchor { xsd:ID }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     (t+
      | (text
         | b
@@ -6744,7 +6734,7 @@ n<b anchor='grammar.dl'>dl</b><iref item='dl element'/> =
 n<b anchor='grammar.dt'>dt</b><iref item='dt element'/> =
   element dt {
     attribute anchor { xsd:ID }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     (text
      | b
      | bcp14
@@ -6932,7 +6922,7 @@ n<b anchor='grammar.figure'>figure</b><iref item='figure element'/> =
     [ a:defaultValue = "" ] attribute alt { text }?,
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
-    attribute figureNumber { text }?,
+    attribute pn { text }?,
     name?,
     iref*,
     preamble?,
@@ -6942,7 +6932,7 @@ n<b anchor='grammar.figure'>figure</b><iref item='figure element'/> =
 n<b anchor='grammar.table'>table</b><iref item='table element'/> =
   element table {
     attribute anchor { xsd:ID }?,
-    attribute tableNumber { text }?,
+    attribute pn { text }?,
     name?,
     iref*,
     thead?,
@@ -6979,7 +6969,7 @@ n<b anchor='grammar.artwork'>artwork</b><iref item='artwork element'/> =
     [ a:defaultValue = "" ] attribute height { text }?,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     text*
   }
 n<b anchor='grammar.sourcecode'>sourcecode</b><iref item='sourcecode element'/> =
@@ -6988,7 +6978,7 @@ n<b anchor='grammar.sourcecode'>sourcecode</b><iref item='sourcecode element'/> 
     [ a:defaultValue = "" ] attribute type { text }?,
     attribute src { text }?,
     attribute anchor { xsd:ID }?,
-    attribute partNumber { text }?,
+    attribute pn { text }?,
     text
   }
 n<b anchor='grammar.thead'>thead</b><iref item='thead element'/> = element thead { tr+ }
@@ -7348,7 +7338,7 @@ to the v3 schema.</t>
 - abstract = element abstract { t+ }
 + abstract =
 +   element abstract {
-+     attribute sectionNumber { text }?,
++     attribute pn { text }?,
 +     t+
 +   }
   note =
@@ -7356,7 +7346,7 @@ to the v3 schema.</t>
 -     attribute title { text },
 +     attribute title { text }?,
 +     name,
-+     attribute sectionNumber { text }?,
++     attribute pn { text }?,
 +     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | 
 + "no" }?,
       t+
@@ -7375,7 +7365,7 @@ to the v3 schema.</t>
 -     (t | figure | texttable | iref)*,
 +     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | 
 + "no" }?,
-+     attribute sectionNumber { text }?,
++     attribute pn { text }?,
 +     name?,
 +     (artwork
 +      | aside
@@ -7400,7 +7390,7 @@ to the v3 schema.</t>
     element t {
       attribute anchor { xsd:ID }?,
       attribute hangText { text }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
       (text
 -      | \list
 -      | figure
@@ -7427,13 +7417,13 @@ to the v3 schema.</t>
 + aside =
 +   element aside {
 +     attribute anchor { xsd:ID }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
 +     (artwork | dl | figure | iref | \list | ol | t | table | ul)*
 +   }
 + blockquote =
 +   element blockquote {
 +     attribute anchor { xsd:ID }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
 +     attribute cite { text }?,
 +     attribute quotedFrom { text }?,
 +     (text
@@ -7478,7 +7468,7 @@ to the v3 schema.</t>
 + li =
 +   element li {
 +     attribute anchor { xsd:ID }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
 +     (t+
 +      | (text
 +         | b
@@ -7505,7 +7495,7 @@ to the v3 schema.</t>
 + dt =
 +   element dt {
 +     attribute anchor { xsd:ID }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
 +     (text
 +      | b
 +      | bcp14
@@ -7695,7 +7685,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "" ] attribute alt { text }?,
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
-+     attribute figureNumber { text }?,
++     attribute pn { text }?,
 +     name?,
       iref*,
       preamble?,
@@ -7706,7 +7696,7 @@ to the v3 schema.</t>
 + table =
 +   element table {
 +     attribute anchor { xsd:ID }?,
-+     attribute tableNumber { text }?,
++     attribute pn { text }?,
 +     name?,
 +     iref*,
 +     thead?,
@@ -7746,7 +7736,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "" ] attribute height { text }?,
 +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
       text*
     }
 + sourcecode =
@@ -7755,7 +7745,7 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "" ] attribute type { text }?,
 +     attribute src { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
 +     text
 +   }
 + thead = element thead { tr+ }

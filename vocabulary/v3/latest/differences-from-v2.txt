@@ -155,7 +155,7 @@
 - abstract = element abstract { t+ }
 + abstract =
 +   element abstract {
-+     attribute sectionNumber { text }?,
++     attribute pn { text }?,
 +     t+
 +   }
   note =
@@ -163,7 +163,7 @@
 -     attribute title { text },
 +     attribute title { text }?,
 +     name,
-+     attribute sectionNumber { text }?,
++     attribute pn { text }?,
 +     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | 
 + "no" }?,
       t+
@@ -182,7 +182,7 @@
 -     (t | figure | texttable | iref)*,
 +     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | 
 + "no" }?,
-+     attribute sectionNumber { text }?,
++     attribute pn { text }?,
 +     name?,
 +     (artwork
 +      | aside
@@ -207,7 +207,7 @@
     element t {
       attribute anchor { xsd:ID }?,
       attribute hangText { text }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
       (text
 -      | \list
 -      | figure
@@ -234,13 +234,13 @@
 + aside =
 +   element aside {
 +     attribute anchor { xsd:ID }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
 +     (artwork | dl | figure | iref | \list | ol | t | table | ul)*
 +   }
 + blockquote =
 +   element blockquote {
 +     attribute anchor { xsd:ID }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
 +     attribute cite { text }?,
 +     attribute quotedFrom { text }?,
 +     (text
@@ -285,7 +285,7 @@
 + li =
 +   element li {
 +     attribute anchor { xsd:ID }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
 +     (t+
 +      | (text
 +         | b
@@ -312,7 +312,7 @@
 + dt =
 +   element dt {
 +     attribute anchor { xsd:ID }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
 +     (text
 +      | b
 +      | bcp14
@@ -502,7 +502,7 @@
       [ a:defaultValue = "" ] attribute alt { text }?,
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
-+     attribute figureNumber { text }?,
++     attribute pn { text }?,
 +     name?,
       iref*,
       preamble?,
@@ -513,7 +513,7 @@
 + table =
 +   element table {
 +     attribute anchor { xsd:ID }?,
-+     attribute tableNumber { text }?,
++     attribute pn { text }?,
 +     name?,
 +     iref*,
 +     thead?,
@@ -553,7 +553,7 @@
       [ a:defaultValue = "" ] attribute height { text }?,
 +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
       text*
     }
 + sourcecode =
@@ -562,7 +562,7 @@
 +     [ a:defaultValue = "" ] attribute type { text }?,
 +     attribute src { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute partNumber { text }?,
++     attribute pn { text }?,
 +     text
 +   }
 + thead = element thead { tr+ }
