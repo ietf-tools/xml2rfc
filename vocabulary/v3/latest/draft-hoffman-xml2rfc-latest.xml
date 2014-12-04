@@ -3286,9 +3286,13 @@ some types of sections.</t>
       <iref item="rfc element" subitem="seriesNo attribute"/>
       <iref item="seriesNo attribute" subitem="in rfc element"/>
       <t>
-            When producing a document within document series (such as "STD"):
-            the number within that series.
-         </t>
+            Number within a document series.
+      </t>
+      <t>
+            The document series is defined by the "category" attribute; "seriesNo"
+            is only applicable to the values "info" ("FYI" series),
+            "std" ("STD" series), and "bcp" ("BCP" series).
+      </t>
    </section>
 
    <!--rfc/@sortRefs-->
@@ -3561,11 +3565,10 @@ some types of sections.</t>
             appeared in the table of contents based on the "tocDepth" attribute of the
             &lt;<x:ref>rfc</x:ref>&gt; element, and of course only if the table of contents
             is being created based on the "tocInclude" attribute of the
-            &lt;<x:ref>rfc</x:ref>&gt; element. If this is set to "exclude", any section
-            below this one will be excluded as well. The "default" value indicates to
-            include the section if it would be included by the tocDepth attribute of the
             &lt;<x:ref>rfc</x:ref>&gt; element.
-         </t>
+            "include" and "exclude" allow overriding
+            the processor's default behavior for the element they are specified
+            on (they do not affect either nested or parent elements).         </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"include"</t>
             <t>"exclude"</t>

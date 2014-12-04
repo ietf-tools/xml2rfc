@@ -20,8 +20,6 @@ Future threads:
 
 	<rfc> with multi-doc categories: how can seriesNo indicate that this is one part of the series?
 
-	What does "include" for section/@toc mean?
-
 	How are <refernecegroup>s rendered?
 	What happens if an <xref> points inside a reference group?
 
@@ -1520,7 +1518,7 @@ some types of sections.</t>
       of displayed documents to be "RFC-dev":
 <figure>
          <artwork><![CDATA[
-<displayreference from="RFC6449" to="RFC-dev"/>
+<displayreference target="RFC6449" to="RFC-dev"/>
 ]]></artwork>
       </figure>
    </t>
@@ -3186,9 +3184,13 @@ some types of sections.</t>
       <iref item="rfc element" subitem="seriesNo attribute"/>
       <iref item="seriesNo attribute" subitem="in rfc element"/>
       <t>
-            When producing a document within document series (such as "STD"):
-            the number within that series.
-         </t>
+            Number within a document series.
+      </t>
+      <t>
+            The document series is defined by the "category" attribute; "seriesNo"
+            is only applicable to the values "info" ("FYI" series),
+            "std" ("STD" series), and "bcp" ("BCP" series).
+      </t>
    </section>
 
    <!--rfc/@sortRefs-->
@@ -3459,11 +3461,10 @@ some types of sections.</t>
             appeared in the table of contents based on the "tocDepth" attribute of the
             &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element, and of course only if the table of contents
             is being created based on the "tocInclude" attribute of the
-            &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element. If this is set to "exclude", any section
-            below this one will be excluded as well. The "default" value indicates to
-            include the section if it would be included by the tocDepth attribute of the
             &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element.
-         </t>
+            "include" and "exclude" allow overriding
+            the processor's default behavior for the element they are specified
+            on (they do not affect either nested or parent elements).         </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"include"</t>
             <t>"exclude"</t>

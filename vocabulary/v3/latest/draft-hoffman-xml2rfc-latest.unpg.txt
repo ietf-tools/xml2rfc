@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                           December 2, 2014
+Obsoletes: 2629 (if approved)                           December 4, 2014
 Intended status: Informational
-Expires: June 5, 2015
+Expires: June 7, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 5, 2015.
+   This Internet-Draft will expire on June 7, 2015.
 
 Copyright Notice
 
@@ -1139,7 +1139,7 @@ Table of Contents
    following would cause that anchor in the body of displayed documents
    to be "RFC-dev":
 
-   <displayreference from="RFC6449" to="RFC-dev"/>
+   <displayreference target="RFC6449" to="RFC-dev"/>
 
    If a reference section is sorted, this element changes the sort
    order.
@@ -2184,8 +2184,11 @@ Table of Contents
 
 2.46.9.  'seriesNo' attribute
 
-   When producing a document within document series (such as "STD"): the
-   number within that series.
+   Number within a document series.
+
+   The document series is defined by the "category" attribute;
+   "seriesNo" is only applicable to the values "info" ("FYI" series),
+   "std" ("STD" series), and "bcp" ("BCP" series).
 
 2.46.10.  'sortRefs' attribute
 
@@ -2350,10 +2353,9 @@ Table of Contents
    section would have appeared in the table of contents based on the
    "tocDepth" attribute of the <rfc> element, and of course only if the
    table of contents is being created based on the "tocInclude"
-   attribute of the <rfc> element.  If this is set to "exclude", any
-   section below this one will be excluded as well.  The "default" value
-   indicates to include the section if it would be included by the
-   tocDepth attribute of the <rfc> element.
+   attribute of the <rfc> element. "include" and "exclude" allow
+   overriding the processor's default behavior for the element they are
+   specified on (they do not affect either nested or parent elements).
 
    Allowed values:
 
