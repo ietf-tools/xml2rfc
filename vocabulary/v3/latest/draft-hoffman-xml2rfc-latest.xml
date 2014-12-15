@@ -17,12 +17,6 @@ Future threads:
 
 	<rfc> with multi-doc categories: how can seriesNo indicate that this is one part of the series?
 
-Make seriesInfo part of front
-- Deprecate <seriesInfo> in <reference>
-- Add <seriesInfo> to front
-- Deprecate @docName, @number, and @category in <front>
-- Add @category to <seriesInfo>
-
 Possibly kill <dl hanging>, but make sure that the list agrees.
 	**** Joe figured out that the current definition is probably fine ****
 
@@ -3615,6 +3609,17 @@ and deprecated it as a child of &lt;<x:ref>reference</x:ref>&gt;.</t>
       </t>
    </section>
 
+   <!--seriesInfo/@category-->
+   <section anchor="element.seriesInfo.attribute.category" toc="exclude">
+      <name>'category' attribute</name>
+      <iref item="Attributes" subitem="category"/>
+      <iref item="seriesInfo element" subitem="category attribute"/>
+      <iref item="category attribute" subitem="in seriesInfo element"/>
+      <t><!--AG-->
+         Document category (see <xref target="attribute-category"/>).
+      </t>
+   </section>
+
    <!--seriesInfo/@name-->
    <section anchor="element.seriesInfo.attribute.name" toc="exclude">
       <name>'name' attribute <i>(mandatory)</i>
@@ -5999,9 +6004,9 @@ not those that are part of a sequence of resources.</t>
 
 <section title="Front Page ('Boilerplate') Generation" anchor="front.page">
 
-<section title="The /rfc/@category Attribute" anchor="attribute-category">
+<section title="The /seriesInfo/@category Attribute" anchor="attribute-category">
 <t>
-  For RFCs, the category attribute (<xref target="element.rfc.attribute.category"/>)
+  For RFCs, the category attribute (<xref target="element.seriesInfo.attribute.category"/>)
   determines the "maturity level" (see <xref target="RFC2026" sectionFormat="of" section="4"/>).
   The allowed values are "std" for "Standards Track", "bcp" for "BCP", "info"
   for "Informational", "exp" for "Experimental", and "historic" for "Historic".
@@ -7210,6 +7215,7 @@ uri? }
     attribute value { text },
     attribute asciiname { text }?,
     attribute asciivalue { text }?,
+    attribute category { text }?,
     empty
   }
 
@@ -7991,6 +7997,7 @@ to the v3 schema.</t>
       attribute value { text },
 +     attribute asciiname { text }?,
 +     attribute asciivalue { text }?,
++     attribute category { text }?,
       empty
     }
   format =

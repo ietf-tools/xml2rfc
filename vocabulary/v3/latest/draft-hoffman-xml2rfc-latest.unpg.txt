@@ -156,7 +156,7 @@ Table of Contents
      8.1.  Normative References
      8.2.  Informative References
    Appendix A.  Front Page ('Boilerplate') Generation
-     A.1.  The /rfc/@category Attribute
+     A.1.  The /seriesInfo/@category Attribute
      A.2.  The /rfc/@ipr Attribute
        A.2.1.  Current Values: '*trust200902'
        A.2.2.  Historic Values
@@ -2383,7 +2383,11 @@ Table of Contents
 
    The ASCII equivalent of the value field.
 
-2.48.3.  'name' attribute (mandatory)
+2.48.3.  'category' attribute
+
+   Document category (see Appendix A.1).
+
+2.48.4.  'name' attribute (mandatory)
 
    The name of the series.
 
@@ -2391,7 +2395,7 @@ Table of Contents
    generating links, and adding descriptions such as "work in
    progress"): "BCP", "FYI", "Internet-Draft", "RFC", "STD", and "DOI".
 
-2.48.4.  'value' attribute (mandatory)
+2.48.5.  'value' attribute (mandatory)
 
    The identifier within the series specified by the "name" attribute.
 
@@ -3829,9 +3833,9 @@ Table of Contents
 
 Appendix A.  Front Page ('Boilerplate') Generation
 
-A.1.  The /rfc/@category Attribute
+A.1.  The /seriesInfo/@category Attribute
 
-   For RFCs, the category attribute (Section 2.46.1) determines the
+   For RFCs, the category attribute (Section 2.48.3) determines the
    "maturity level" (see Section 4 of [RFC2026]).  The allowed values
    are "std" for "Standards Track", "bcp" for "BCP", "info" for
    "Informational", "exp" for "Experimental", and "historic" for
@@ -4967,6 +4971,7 @@ Appendix C.  Relax NG Schema
        attribute value { text },
        attribute asciiname { text }?,
        attribute asciivalue { text }?,
+       attribute category { text }?,
        empty
      }
 
@@ -5745,6 +5750,7 @@ Appendix D.  Schema Differences from v2
          attribute value { text },
    +     attribute asciiname { text }?,
    +     attribute asciivalue { text }?,
+   +     attribute category { text }?,
          empty
        }
      format =
@@ -6022,6 +6028,7 @@ Index
          inside texttable  1
       category attribute
          in rfc element  1
+         in seriesInfo element  1
       cite attribute
          in blockquote element  1
       city element  1
@@ -6510,6 +6517,7 @@ Index
       seriesInfo element  1
          asciiname attribute  1
          asciivalue attribute  1
+         category attribute  1
          inside front  1
          inside reference  1
          name attribute  1
