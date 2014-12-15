@@ -82,12 +82,17 @@
   <t>
     <xsl:comment>AG</xsl:comment>
     <xsl:text>This element appears as a child element of: </xsl:text>
+    <xsl:variable name="name" select="@name"/>
     <xsl:for-each select="$appearsin">
       <xsl:sort select="@name"/>
-        <xsl:text>&lt;</xsl:text>
-        <x:ref><xsl:value-of select="@name"/></x:ref>
-        <xsl:text>&gt;</xsl:text> (<xref target="element.{@name}"/>)<xsl:if test="position() != last()">, </xsl:if>
-        <xsl:if test="position() = last() -1">and </xsl:if>
+      <xsl:text>&lt;</xsl:text>
+      <x:ref><xsl:value-of select="@name"/></x:ref>
+      <xsl:text>&gt; (</xsl:text>
+      <xref target="element.{@name}"/>
+      <xsl:if test=".//rng:ref[@name=$name]/processing-instruction('deprecated')">; deprecated in this context</xsl:if>
+      <xsl:text>)</xsl:text>
+      <xsl:if test="position() != last()">, </xsl:if>
+      <xsl:if test="position() = last() -1">and </xsl:if>
     </xsl:for-each>
     <xsl:text>.</xsl:text>
   </t>
@@ -244,7 +249,11 @@
     <xsl:text>&lt;</xsl:text>
     <x:ref><xsl:value-of select="$elem"/></x:ref>
     <xsl:text>&gt; element</xsl:text>
-    <xsl:if test="parent::rng:zeroOrMore or parent::rng:oneOrMore or parent::rng:choice">s</xsl:if><xsl:text> (</xsl:text><xref target="element.{$elem}"/><xsl:text>)</xsl:text>
+    <xsl:if test="parent::rng:zeroOrMore or parent::rng:oneOrMore or parent::rng:choice">s</xsl:if>
+    <xsl:text> (</xsl:text>
+    <xref target="element.{$elem}"/>
+    <xsl:if test="processing-instruction('deprecated')">; deprecated in this context</xsl:if>
+    <xsl:text>)</xsl:text>
   </t>
 </xsl:template>
 

@@ -2847,6 +2847,9 @@ and deprecated it as a child of &lt;<xref target="element.reference" format="non
                <t><!--AG-->
                   <iref item="Elements" subitem="refcontent"/>
                   <iref item="refcontent element" subitem="inside reference"/>&lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; elements (<xref target="element.refcontent"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="seriesInfo"/>
+                  <iref item="seriesInfo element" subitem="inside reference"/>&lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements (<xref target="element.seriesInfo"/>; deprecated in this context)</t>
             </list>
          </t>
       </list>
@@ -3480,7 +3483,7 @@ and deprecated it as a child of &lt;<xref target="element.reference" format="non
       Specifies the document series in which this document appears, and also
       specifies an identifier within that series.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.front" format="none">front</xref>&gt; (<xref target="element.front"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.front" format="none">front</xref>&gt; (<xref target="element.front"/>), and &lt;<xref target="element.reference" format="none">reference</xref>&gt; (<xref target="element.reference"/>; deprecated in this context).</t>
    <t anchor="element.seriesInfo.contents"><!--AG-->
       Content model: this element does not have any contents.</t>
 
@@ -7045,7 +7048,7 @@ reference =
     attribute anchor { xsd:ID },
     attribute target { text }?,
     front,
-    (annotation | format | refcontent)*
+    (annotation | format | refcontent | seriesInfo)*
   }
 
 referencegroup =
@@ -7828,7 +7831,7 @@ to the v3 schema.</t>
 -     seriesInfo*,
 -     format*,
 -     annotation*
-+     (annotation | format | refcontent)*
++     (annotation | format | refcontent | seriesInfo)*
 +   }
 + referencegroup =
 +   element referencegroup {

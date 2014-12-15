@@ -1971,6 +1971,9 @@ Table of Contents
 
        *  <refcontent> elements (Section 2.41)
 
+       *  <seriesInfo> elements (Section 2.48; deprecated in this
+          context)
+
 2.42.1.  'anchor' attribute (mandatory)
 
    Document-wide unique identifier for this reference.  Usually, this
@@ -2367,7 +2370,8 @@ Table of Contents
    Specifies the document series in which this document appears, and
    also specifies an identifier within that series.
 
-   This element appears as a child element of: <front> (Section 2.27).
+   This element appears as a child element of: <front> (Section 2.27),
+   and <reference> (Section 2.42; deprecated in this context).
 
    Content model: this element does not have any contents.
 
@@ -4948,7 +4952,7 @@ Appendix C.  Relax NG Schema
        attribute anchor { xsd:ID },
        attribute target { text }?,
        front,
-       (annotation | format | refcontent)*
+       (annotation | format | refcontent | seriesInfo)*
      }
 
    referencegroup =
@@ -5728,7 +5732,7 @@ Appendix D.  Schema Differences from v2
    -     seriesInfo*,
    -     format*,
    -     annotation*
-   +     (annotation | format | refcontent)*
+   +     (annotation | format | refcontent | seriesInfo)*
    +   }
    + referencegroup =
    +   element referencegroup {
@@ -6507,6 +6511,7 @@ Index
          asciiname attribute  1
          asciivalue attribute  1
          inside front  1
+         inside reference  1
          name attribute  1
          value attribute  1
       seriesNo attribute
