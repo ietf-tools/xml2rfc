@@ -313,6 +313,9 @@ to give the section name.</t>
 <t>In &lt;<xref target="element.section" format="none">section</xref>&gt;, restricted the names of the anchors that can be used on
 some types of sections.</t>
 
+<t>Made &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; a child of &lt;<xref target="element.front" format="none">front</xref>&gt;,
+and deprecated it as a child of &lt;<xref target="element.reference" format="none">reference</xref>&gt;.</t>
+
 <t>&lt;<xref target="element.t" format="none">t</xref>&gt; now only contains non-block elements, so it no longer contains
 &lt;<xref target="element.figure" format="none">figure</xref>&gt; elements.</t>
 
@@ -2844,9 +2847,6 @@ some types of sections.</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="refcontent"/>
                   <iref item="refcontent element" subitem="inside reference"/>&lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; elements (<xref target="element.refcontent"/>)</t>
-               <t><!--AG-->
-                  <iref item="Elements" subitem="seriesInfo"/>
-                  <iref item="seriesInfo element" subitem="inside reference"/>&lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements (<xref target="element.seriesInfo"/>)</t>
             </list>
          </t>
       </list>
@@ -2873,11 +2873,6 @@ some types of sections.</t>
       <iref item="target attribute" subitem="in reference element"/>
       <t>
             Holds the URI for the reference.
-         </t>
-      <t>
-            Note that depending on the &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
-            element, a URI might not be needed, nor desirable, as it can 
-            be automatically generated (for instance, for RFCs).
          </t>
    </section>
 </section>
@@ -3485,7 +3480,7 @@ some types of sections.</t>
       Specifies the document series in which this document appears, and also
       specifies an identifier within that series.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.front" format="none">front</xref>&gt; (<xref target="element.front"/>), and &lt;<xref target="element.reference" format="none">reference</xref>&gt; (<xref target="element.reference"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.front" format="none">front</xref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.seriesInfo.contents"><!--AG-->
       Content model: this element does not have any contents.</t>
 
@@ -7050,7 +7045,7 @@ reference =
     attribute anchor { xsd:ID },
     attribute target { text }?,
     front,
-    (annotation | format | refcontent | seriesInfo)*
+    (annotation | format | refcontent)*
   }
 
 referencegroup =
@@ -7833,7 +7828,7 @@ to the v3 schema.</t>
 -     seriesInfo*,
 -     format*,
 -     annotation*
-+     (annotation | format | refcontent | seriesInfo)*
++     (annotation | format | refcontent)*
 +   }
 + referencegroup =
 +   element referencegroup {

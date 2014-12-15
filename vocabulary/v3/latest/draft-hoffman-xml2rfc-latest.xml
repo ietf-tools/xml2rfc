@@ -314,6 +314,9 @@ to give the section name.</t>
 <t>In &lt;<x:ref>section</x:ref>&gt;, restricted the names of the anchors that can be used on
 some types of sections.</t>
 
+<t>Made &lt;<x:ref>seriesInfo</x:ref>&gt; a child of &lt;<x:ref>front</x:ref>&gt;,
+and deprecated it as a child of &lt;<x:ref>reference</x:ref>&gt;.</t>
+
 <t>&lt;<x:ref>t</x:ref>&gt; now only contains non-block elements, so it no longer contains
 &lt;<x:ref>figure</x:ref>&gt; elements.</t>
 
@@ -2935,9 +2938,6 @@ some types of sections.</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="refcontent"/>
                   <iref item="refcontent element" subitem="inside reference"/>&lt;<x:ref>refcontent</x:ref>&gt; elements (<xref target="element.refcontent"/>)</t>
-               <t><!--AG-->
-                  <iref item="Elements" subitem="seriesInfo"/>
-                  <iref item="seriesInfo element" subitem="inside reference"/>&lt;<x:ref>seriesInfo</x:ref>&gt; elements (<xref target="element.seriesInfo"/>)</t>
             </list>
          </t>
       </list>
@@ -2965,11 +2965,6 @@ some types of sections.</t>
       <iref item="target attribute" subitem="in reference element"/>
       <t>
             Holds the URI for the reference.
-         </t>
-      <t>
-            Note that depending on the &lt;<x:ref>seriesInfo</x:ref>&gt;
-            element, a URI might not be needed, nor desirable, as it can 
-            be automatically generated (for instance, for RFCs).
          </t>
    </section>
 </section>
@@ -3591,7 +3586,7 @@ some types of sections.</t>
       Specifies the document series in which this document appears, and also
       specifies an identifier within that series.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>), and &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.seriesInfo.contents"><!--AG-->
       <xref format="none" target="grammar.seriesInfo">Content model</xref>: this element does not have any contents.</t>
 
@@ -7197,7 +7192,7 @@ uri? }
     attribute anchor { xsd:ID },
     attribute target { text }?,
     front,
-    (annotation | format | refcontent | seriesInfo)*
+    (annotation | format | refcontent)*
   }
 
 <b anchor="grammar.referencegroup">referencegroup</b><iref item="referencegroup element"/> =
@@ -7980,7 +7975,7 @@ to the v3 schema.</t>
 -     seriesInfo*,
 -     format*,
 -     annotation*
-+     (annotation | format | refcontent | seriesInfo)*
++     (annotation | format | refcontent)*
 +   }
 + referencegroup =
 +   element referencegroup {

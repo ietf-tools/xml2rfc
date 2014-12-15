@@ -396,6 +396,9 @@ Table of Contents
    o  In <section>, restricted the names of the anchors that can be used
       on some types of sections.
 
+   o  Made <seriesInfo> a child of <front>, and deprecated it as a child
+      of <reference>.
+
    o  <t> now only contains non-block elements, so it no longer contains
       <figure> elements.
 
@@ -1968,8 +1971,6 @@ Table of Contents
 
        *  <refcontent> elements (Section 2.41)
 
-       *  <seriesInfo> elements (Section 2.48)
-
 2.42.1.  'anchor' attribute (mandatory)
 
    Document-wide unique identifier for this reference.  Usually, this
@@ -1979,10 +1980,6 @@ Table of Contents
 2.42.2.  'target' attribute
 
    Holds the URI for the reference.
-
-   Note that depending on the <seriesInfo> element, a URI might not be
-   needed, nor desirable, as it can be automatically generated (for
-   instance, for RFCs).
 
 2.43.  <referencegroup>
 
@@ -2370,8 +2367,7 @@ Table of Contents
    Specifies the document series in which this document appears, and
    also specifies an identifier within that series.
 
-   This element appears as a child element of: <front> (Section 2.27),
-   and <reference> (Section 2.42).
+   This element appears as a child element of: <front> (Section 2.27).
 
    Content model: this element does not have any contents.
 
@@ -4952,7 +4948,7 @@ Appendix C.  Relax NG Schema
        attribute anchor { xsd:ID },
        attribute target { text }?,
        front,
-       (annotation | format | refcontent | seriesInfo)*
+       (annotation | format | refcontent)*
      }
 
    referencegroup =
@@ -5732,7 +5728,7 @@ Appendix D.  Schema Differences from v2
    -     seriesInfo*,
    -     format*,
    -     annotation*
-   +     (annotation | format | refcontent | seriesInfo)*
+   +     (annotation | format | refcontent)*
    +   }
    + referencegroup =
    +   element referencegroup {
@@ -6511,7 +6507,6 @@ Index
          asciiname attribute  1
          asciivalue attribute  1
          inside front  1
-         inside reference  1
          name attribute  1
          value attribute  1
       seriesNo attribute
