@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                          December 15, 2014
+Obsoletes: 2629 (if approved)                          December 17, 2014
 Intended status: Informational
-Expires: June 18, 2015
+Expires: June 20, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 18, 2015.
+   This Internet-Draft will expire on June 20, 2015.
 
 Copyright Notice
 
@@ -397,7 +397,8 @@ Table of Contents
       on some types of sections.
 
    o  Made <seriesInfo> a child of <front>, and deprecated it as a child
-      of <reference>.
+      of <reference>.  This also deprecates some of the attributes from
+      <rfc> and moves them into <seriesInfo>.
 
    o  <t> now only contains non-block elements, so it no longer contains
       <figure> elements.
@@ -2075,19 +2076,7 @@ Table of Contents
 
 2.46.1.  'category' attribute
 
-   Document category (see Appendix A.1).
-
-   Allowed values:
-
-   o  "std"
-
-   o  "bcp"
-
-   o  "info"
-
-   o  "exp"
-
-   o  "historic"
+   Deprecated; instead, use the "category" attribute in <seriesInfo>.
 
 2.46.2.  'consensus' attribute
 
@@ -2103,18 +2092,7 @@ Table of Contents
 
 2.46.3.  'docName' attribute
 
-   Specifies the name or the Internet Draft or private document.  A
-   private document is one whose representation is not meant to be an
-   Internet Draft or RFC.  If the value for this attribute starts with
-   the string "draft-", a processor treats the input as an Internet
-   Draft; if the value starts with any other string, a processor treats
-   this as a private document.  The name in the value should be the
-   document name without any file extension.  That is, the value for
-   this attribute should be "draft-ietf-somewg-someprotocol-07", not
-   "draft-ietf-somewg-someprotocol-07.txt".
-
-   A processor should give an error if both the "docName" and "number"
-   attributes are given in the <rfc> element.
+   Deprecated; instead, use the "value" attribute in <seriesInfo>.
 
 2.46.4.  'finalizedTime' attribute
 
@@ -2170,10 +2148,7 @@ Table of Contents
 
 2.46.7.  'number' attribute
 
-   The number of the RFC to be produced by a processor.
-
-   A processor should give an error if both the "docName" and "number"
-   attributes are given in the <rfc> element.
+   Deprecated; instead, use the "value" attribute in <seriesInfo>.
 
 2.46.8.  'obsoletes' attribute
 
@@ -2186,8 +2161,7 @@ Table of Contents
 
 2.46.9.  'seriesNo' attribute
 
-   When producing a document within document series (such as "STD"): the
-   number within that series.
+   Deprecated; instead, use the "value" attribute in <seriesInfo>.
 
 2.46.10.  'sortRefs' attribute
 
@@ -2385,7 +2359,8 @@ Table of Contents
 
 2.48.3.  'category' attribute
 
-   Document category (see Appendix A.1).
+   [[element.seriesInfo.attribute.category.missing: attribute
+   description missing]]
 
 2.48.4.  'name' attribute (mandatory)
 
@@ -2404,6 +2379,11 @@ Table of Contents
    digit version number).  For DOIs, the value is given such as
    "10.123456/rfc1149", (the actual value will be specified later in
    [DOI]).
+
+   The name in the value should be the document name without any file
+   extension.  For Internet Drafts, the value for this attribute should
+   be "draft-ietf-somewg-someprotocol-07", not
+   "draft-ietf-somewg-someprotocol-07.txt".
 
 2.49.  <sourcecode>
 
@@ -4212,8 +4192,7 @@ Appendix C.  Relax NG Schema
        attribute number { text }?,
        [ a:defaultValue = "" ] attribute obsoletes { text }?,
        [ a:defaultValue = "" ] attribute updates { text }?,
-       attribute category { "std" | "bcp" | "info" | "exp" | "historic"
-   }?,
+       attribute category { text }?,
        attribute consensus { "no" | "yes" }?,
        attribute seriesNo { text }?,
        attribute ipr {
@@ -5026,8 +5005,9 @@ Appendix D.  Schema Differences from v2
          attribute number { text }?,
          [ a:defaultValue = "" ] attribute obsoletes { text }?,
          [ a:defaultValue = "" ] attribute updates { text }?,
-         attribute category { "std" | "bcp" | "info" | "exp" |
-     "historic" }?,
+   -     attribute category { "std" | "bcp" | "info" | "exp" |
+   - "historic" }?,
+   +     attribute category { text }?,
          attribute consensus { "no" | "yes" }?,
          attribute seriesNo { text }?,
          attribute ipr {

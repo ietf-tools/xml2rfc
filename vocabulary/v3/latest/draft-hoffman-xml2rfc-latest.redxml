@@ -306,7 +306,9 @@ to give the section name.</t>
 some types of sections.</t>
 
 <t>Made &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; a child of &lt;<xref target="element.front" format="none">front</xref>&gt;,
-and deprecated it as a child of &lt;<xref target="element.reference" format="none">reference</xref>&gt;.</t>
+and deprecated it as a child of &lt;<xref target="element.reference" format="none">reference</xref>&gt;. This also
+deprecates some of the attributes from &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; and moves
+them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;.</t>
 
 <t>&lt;<xref target="element.t" format="none">t</xref>&gt; now only contains non-block elements, so it no longer contains
 &lt;<xref target="element.figure" format="none">figure</xref>&gt; elements.</t>
@@ -3028,15 +3030,7 @@ and deprecated it as a child of &lt;<xref target="element.reference" format="non
       <iref item="rfc element" subitem="category attribute"/>
       <iref item="category attribute" subitem="in rfc element"/>
       <t>
-            Document category (see <xref target="attribute-category"/>).
-         </t>
-      <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"std"</t>
-            <t>"bcp"</t>
-            <t>"info"</t>
-            <t>"exp"</t>
-            <t>"historic"</t>
-         </list>
+            Deprecated; instead, use the "category" attribute in &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;.
       </t>
    </section>
 
@@ -3066,18 +3060,7 @@ and deprecated it as a child of &lt;<xref target="element.reference" format="non
       <iref item="rfc element" subitem="docName attribute"/>
       <iref item="docName attribute" subitem="in rfc element"/>
       <t>
-            Specifies the name or the Internet Draft or private document. A private document
-            is one whose representation is not meant to be an Internet Draft or RFC. If the
-            value for this attribute starts with the string "draft-", a processor treats the
-            input as an Internet Draft; if the value starts with any other string, a
-            processor treats this as a private document. The name in the value should be the
-            document name without any file extension. That is, the value for this attribute
-            should be "draft-ietf-somewg-someprotocol-07", not
-            "draft-ietf-somewg-someprotocol-07.txt".
-      </t>
-      <t>
-            A processor should give an error if both the "docName" and "number"
-            attributes are given in the &lt;rfc&gt; element.
+            Deprecated; instead, use the "value" attribute in &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;.
       </t>
    </section>
 
@@ -3145,11 +3128,7 @@ and deprecated it as a child of &lt;<xref target="element.reference" format="non
       <iref item="rfc element" subitem="number attribute"/>
       <iref item="number attribute" subitem="in rfc element"/>
       <t>
-            The number of the RFC to be produced by a processor.
-      </t>
-      <t>
-            A processor should give an error if both the "docName" and "number"
-            attributes are given in the &lt;rfc&gt; element.
+            Deprecated; instead, use the "value" attribute in &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;.
       </t>
    </section>
 
@@ -3178,8 +3157,7 @@ and deprecated it as a child of &lt;<xref target="element.reference" format="non
       <iref item="rfc element" subitem="seriesNo attribute"/>
       <iref item="seriesNo attribute" subitem="in rfc element"/>
       <t>
-            When producing a document within document series (such as "STD"):
-            the number within that series.
+            Deprecated; instead, use the "value" attribute in &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;.
          </t>
    </section>
 
@@ -3508,7 +3486,7 @@ and deprecated it as a child of &lt;<xref target="element.reference" format="non
       <iref item="seriesInfo element" subitem="category attribute"/>
       <iref item="category attribute" subitem="in seriesInfo element"/>
       <t><!--AG-->
-         Document category (see <xref target="attribute-category"/>).
+         <cref anchor="element.seriesInfo.attribute.category.missing">attribute description missing</cref>
       </t>
    </section>
 
@@ -3520,12 +3498,12 @@ and deprecated it as a child of &lt;<xref target="element.reference" format="non
       <iref item="name attribute" subitem="in seriesInfo element"/>
       <t>
             The name of the series.
-         </t>
+      </t>
       <t>
             The following names trigger specific processing (such as for
             auto-generating links, and adding descriptions such as
             "work in progress"): "BCP", "FYI", "Internet-Draft", "RFC", "STD", and "DOI".
-         </t>
+      </t>
    </section>
 
    <!--seriesInfo/@value-->
@@ -3536,13 +3514,19 @@ and deprecated it as a child of &lt;<xref target="element.reference" format="non
       <iref item="value attribute" subitem="in seriesInfo element"/>
       <t>
             The identifier within the series specified by the "name" attribute.
-         </t>
+      </t>
       <t>
             For BCPs, FYIs, RFCs, and STDs this is the number within the series.
             For Internet-Drafts, it is the full draft name (ending with the two-digit
             version number). For DOIs, the value is given such as "10.123456/rfc1149",
             (the actual value will be specified later in <xref target="DOI"/>).
-         </t>
+      </t>
+      <t>
+            The name in the value should be the document name without any file
+            extension. For Internet Drafts, the value for this attribute should
+            be "draft-ietf-somewg-someprotocol-07", not
+            "draft-ietf-somewg-someprotocol-07.txt".
+      </t>
    </section>
 </section>
 
@@ -6307,8 +6291,7 @@ rfc =
     attribute number { text }?,
     [ a:defaultValue = "" ] attribute obsoletes { text }?,
     [ a:defaultValue = "" ] attribute updates { text }?,
-    attribute category { "std" | "bcp" | "info" | "exp" | "historic" 
-}?,
+    attribute category { text }?,
     attribute consensus { "no" | "yes" }?,
     attribute seriesNo { text }?,
     attribute ipr {
@@ -7124,8 +7107,9 @@ to the v3 schema.</t>
       attribute number { text }?,
       [ a:defaultValue = "" ] attribute obsoletes { text }?,
       [ a:defaultValue = "" ] attribute updates { text }?,
-      attribute category { "std" | "bcp" | "info" | "exp" | 
-  "historic" }?,
+-     attribute category { "std" | "bcp" | "info" | "exp" | 
+- "historic" }?,
++     attribute category { text }?,
       attribute consensus { "no" | "yes" }?,
       attribute seriesNo { text }?,
       attribute ipr {

@@ -2768,15 +2768,7 @@
       <iref item="rfc element" subitem="category attribute"/>
       <iref item="category attribute" subitem="in rfc element"/>
       <t>
-            Document category (see <xref target="attribute-category"/>).
-         </t>
-      <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"std"</t>
-            <t>"bcp"</t>
-            <t>"info"</t>
-            <t>"exp"</t>
-            <t>"historic"</t>
-         </list>
+            Deprecated; instead, use the "category" attribute in &lt;<x:ref>seriesInfo</x:ref>&gt;.
       </t>
    </section>
 
@@ -2806,18 +2798,7 @@
       <iref item="rfc element" subitem="docName attribute"/>
       <iref item="docName attribute" subitem="in rfc element"/>
       <t>
-            Specifies the name or the Internet Draft or private document. A private document
-            is one whose representation is not meant to be an Internet Draft or RFC. If the
-            value for this attribute starts with the string "draft-", a processor treats the
-            input as an Internet Draft; if the value starts with any other string, a
-            processor treats this as a private document. The name in the value should be the
-            document name without any file extension. That is, the value for this attribute
-            should be "draft-ietf-somewg-someprotocol-07", not
-            "draft-ietf-somewg-someprotocol-07.txt".
-      </t>
-      <t>
-            A processor should give an error if both the "docName" and "number"
-            attributes are given in the &lt;rfc&gt; element.
+            Deprecated; instead, use the "value" attribute in &lt;<x:ref>seriesInfo</x:ref>&gt;.
       </t>
    </section>
 
@@ -2885,11 +2866,7 @@
       <iref item="rfc element" subitem="number attribute"/>
       <iref item="number attribute" subitem="in rfc element"/>
       <t>
-            The number of the RFC to be produced by a processor.
-      </t>
-      <t>
-            A processor should give an error if both the "docName" and "number"
-            attributes are given in the &lt;rfc&gt; element.
+            Deprecated; instead, use the "value" attribute in &lt;<x:ref>seriesInfo</x:ref>&gt;.
       </t>
    </section>
 
@@ -2918,8 +2895,7 @@
       <iref item="rfc element" subitem="seriesNo attribute"/>
       <iref item="seriesNo attribute" subitem="in rfc element"/>
       <t>
-            When producing a document within document series (such as "STD"):
-            the number within that series.
+            Deprecated; instead, use the "value" attribute in &lt;<x:ref>seriesInfo</x:ref>&gt;.
          </t>
    </section>
 
@@ -3265,12 +3241,12 @@
       <iref item="name attribute" subitem="in seriesInfo element"/>
       <t>
             The name of the series.
-         </t>
+      </t>
       <t>
             The following names trigger specific processing (such as for
             auto-generating links, and adding descriptions such as
             "work in progress"): "BCP", "FYI", "Internet-Draft", "RFC", "STD", and "DOI".
-         </t>
+      </t>
    </section>
 
    <!--seriesInfo/@value-->
@@ -3282,13 +3258,19 @@
       <iref item="value attribute" subitem="in seriesInfo element"/>
       <t>
             The identifier within the series specified by the "name" attribute.
-         </t>
+      </t>
       <t>
             For BCPs, FYIs, RFCs, and STDs this is the number within the series.
             For Internet-Drafts, it is the full draft name (ending with the two-digit
             version number). For DOIs, the value is given such as "10.123456/rfc1149",
             (the actual value will be specified later in <xref target="DOI"/>).
-         </t>
+      </t>
+      <t>
+            The name in the value should be the document name without any file
+            extension. For Internet Drafts, the value for this attribute should
+            be "draft-ietf-somewg-someprotocol-07", not
+            "draft-ietf-somewg-someprotocol-07.txt".
+      </t>
    </section>
 </section>
 
