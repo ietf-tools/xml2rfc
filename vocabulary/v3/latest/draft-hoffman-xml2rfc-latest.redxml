@@ -17,6 +17,16 @@ Future threads:
 
 	<rfc> with multi-doc categories: how can seriesNo indicate that this is one part of the series?
 
+Either continue trying to get new link relations, or use:
+              The current ISSN for the RFC Series.
+              The value for the "rel" attribute is "collection".
+              The link should use the form "urn:issn:".
+
+              The Internet Draft that was submitted to the RFC Editor to become the published RFC.
+              The value for the "rel" attribute is "alternate".
+              The link should be to an IETF-controlled web site that retains copies of Internet Drafts.
+
+
 Possibly kill <dl hanging>, but make sure that the list agrees.
 	**** Joe figured out that the current definition is probably fine ****
 
@@ -2995,12 +3005,6 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <t>
       This is the root element of the xml2rfc vocabulary.
    </t>
-   <t>
-      Processors distinguish between RFC mode ("number" attribute being
-      present) and Internet-Draft mode ("docName" attribute being present):
-      it is invalid to specify both. Setting neither "number" nor "docName" can be useful for
-      producing other types of document but is out-of-scope for this specification.
-   </t>
    <t anchor="element.rfc.contents"><!--AG-->
       Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
@@ -3486,7 +3490,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="seriesInfo element" subitem="category attribute"/>
       <iref item="category attribute" subitem="in seriesInfo element"/>
       <t><!--AG-->
-         <cref anchor="element.seriesInfo.attribute.category.missing">attribute description missing</cref>
+         Document category (see <xref target="attribute-category"/>).
       </t>
    </section>
 
