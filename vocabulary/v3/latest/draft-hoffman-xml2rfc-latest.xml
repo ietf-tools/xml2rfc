@@ -2050,33 +2050,39 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
    </t>
    <t>
       A &lt;<x:ref>front</x:ref>&gt; element may have more than one
-      &lt;<x:ref>seriesInfo</x:ref>&gt; elements. The "name" attributes of those
+      &lt;<x:ref>seriesInfo</x:ref>&gt; elements. For RFCs, the category attribute determines the
+      "maturity level" (see <xref target="RFC2026" sectionFormat="of" section="4"/>). The allowed
+      values are "std" for "Standards Track", "bcp" for "BCP", "info" for "Informational", "exp" for
+      "Experimental", and "historic" for "Historic".
+   </t>
+
+   <t>
+      The "name" attributes of those
       multiple &lt;<x:ref>seriesInfo</x:ref>&gt; elements interact as follows:
    </t>
    <t><list style="symbols">
       <t>
-         If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of
-         "Internet-Draft", it can also have at most one additional &lt;<x:ref>seriesInfo</x:ref>&gt;
-         element with a name of "STD", "BCP", "FYI", "EXP", or "HIST" to
-         indicate the intended status of this Internet Draft, if it is
-         eventually published as an RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt;
-         element has one of those names, the value attribute for that name MUST
-         be "".
+         If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt;
+         element with a name of "Internet-Draft", it can also have at most one additional
+         &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of "std", "bcp", "fyi", "exp", or
+         "hist" to indicate the intended status of this Internet Draft, if it is eventually
+         published as an RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt; element has
+         one of those names, the value attribute for that name MUST be "".
       </t>
       <t>
-        If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of
-        "RFC", it can also have at most one additional &lt;<x:ref>seriesInfo</x:ref>&gt; element with
-        a name of "STD", "BCP", or "FYI" to indicate the current status of this
-        RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt; element has one of those names,
-        the value attribute for that name MUST be the number within the series.
-        That &lt;<x:ref>front</x:ref>&gt; element might also contain an additional &lt;<x:ref>seriesInfo</x:ref>&gt; with
-        the name "EXP" or "HIST" and a value of "" to indicate the status of the
-        RFC.
+        If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt;
+        element with a name of "rfc", it can also have at most one additional
+        &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of "std", "bcp", or "fyi" to indicate
+        the current status of this RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt;
+        element has one of those names, the value attribute for that name MUST be the number within
+        the series. That &lt;<x:ref>front</x:ref>&gt; element might also contain an additional
+        &lt;<x:ref>seriesInfo</x:ref>&gt; with the name "exp" or "hist" and a value of "" to
+        indicate the status of the RFC.
       </t>
       <t>
-         A &lt;<x:ref>front</x:ref>&gt; element that has a &lt;<x:ref>seriesInfo</x:ref>&gt; element that has the name
-         "Internet-Draft" MUST NOT also have a &lt;<x:ref>seriesInfo</x:ref>&gt; element that has the
-         name "RFC".
+         A &lt;<x:ref>front</x:ref>&gt; element that has a &lt;<x:ref>seriesInfo</x:ref>&gt; element
+         that has the name "Internet-Draft" MUST NOT also have a &lt;<x:ref>seriesInfo</x:ref>&gt;
+         element that has the name "rfc".
       </t>
    </list></t>      
 
@@ -6010,20 +6016,6 @@ not those that are part of a sequence of resources.</t>
 </references>
 
 <section title="Front Page ('Boilerplate') Generation" anchor="front.page">
-
-<section title="The /seriesInfo/@category Attribute" anchor="attribute-category">
-<t>
-  For RFCs, the category attribute
-  determines the "maturity level" (see <xref target="RFC2026" sectionFormat="of" section="4"/>).
-  The allowed values are "std" for "Standards Track", "bcp" for "BCP", "info"
-  for "Informational", "exp" for "Experimental", and "historic" for "Historic".
-</t>
-<t>
-  For Internet-Drafts, the category attribute is not needed, but will
-  appear on the front page as "Intended Status". Supplying this information can 
-  be useful to reviewers.
-</t>
-</section>
 
 <section title="The /rfc/@ipr Attribute" anchor="attribute-ipr">
 <t>
