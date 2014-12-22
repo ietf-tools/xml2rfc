@@ -1989,6 +1989,38 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       Represent the "front matter": metadata (such as author information),
       abstract, and additional notes.
    </t>
+   <t>
+      A &lt;<xref target="element.front" format="none">front</xref>&gt; element may have more than one
+      &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements. The "name" attributes of those
+      multiple &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements interact as follows:
+   </t>
+   <t><list style="symbols">
+      <t>
+         If a &lt;<xref target="element.front" format="none">front</xref>&gt; element contains a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element with a name of
+         "Internet-Draft", it can also have at most one additional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
+         element with a name of "STD", "BCP", "FYI", "EXP", or "HIST" to
+         indicate the intended status of this Internet Draft, if it is
+         eventually published as an RFC. If such an additional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
+         element has one of those names, the value attribute for that name MUST
+         be "".
+      </t>
+      <t>
+        If a &lt;<xref target="element.front" format="none">front</xref>&gt; element contains a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element with a name of
+        "RFC", it can also have at most one additional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element with
+        a name of "STD", "BCP", or "FYI" to indicate the current status of this
+        RFC. If such an additional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element has one of those names,
+        the value attribute for that name MUST be the number within the series.
+        That &lt;<xref target="element.front" format="none">front</xref>&gt; element might also contain an additional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; with
+        the name "EXP" or "HIST" and a value of "" to indicate the status of the
+        RFC.
+      </t>
+      <t>
+         A &lt;<xref target="element.front" format="none">front</xref>&gt; element that has a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element that has the name
+         "Internet-Draft" MUST NOT also have a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element that has the
+         name "RFC".
+      </t>
+   </list></t>      
+
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.reference" format="none">reference</xref>&gt; (<xref target="element.reference"/>), and &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.front.contents"><!--AG-->
       Content model:</t>

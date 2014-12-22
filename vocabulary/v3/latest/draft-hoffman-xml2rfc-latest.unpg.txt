@@ -1426,6 +1426,31 @@ Table of Contents
    Represent the "front matter": metadata (such as author information),
    abstract, and additional notes.
 
+   A <front> element may have more than one <seriesInfo> elements.  The
+   "name" attributes of those multiple <seriesInfo> elements interact as
+   follows:
+
+   o  If a <front> element contains a <seriesInfo> element with a name
+      of "Internet-Draft", it can also have at most one additional
+      <seriesInfo> element with a name of "STD", "BCP", "FYI", "EXP", or
+      "HIST" to indicate the intended status of this Internet Draft, if
+      it is eventually published as an RFC.  If such an additional
+      <seriesInfo> element has one of those names, the value attribute
+      for that name MUST be "".
+
+   o  If a <front> element contains a <seriesInfo> element with a name
+      of "RFC", it can also have at most one additional <seriesInfo>
+      element with a name of "STD", "BCP", or "FYI" to indicate the
+      current status of this RFC.  If such an additional <seriesInfo>
+      element has one of those names, the value attribute for that name
+      MUST be the number within the series.  That <front> element might
+      also contain an additional <seriesInfo> with the name "EXP" or
+      "HIST" and a value of "" to indicate the status of the RFC.
+
+   o  A <front> element that has a <seriesInfo> element that has the
+      name "Internet-Draft" MUST NOT also have a <seriesInfo> element
+      that has the name "RFC".
+
    This element appears as a child element of: <reference>
    (Section 2.42), and <rfc> (Section 2.46).
 

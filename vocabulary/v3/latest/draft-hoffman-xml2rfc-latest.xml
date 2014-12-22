@@ -2048,6 +2048,38 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       Represent the "front matter": metadata (such as author information),
       abstract, and additional notes.
    </t>
+   <t>
+      A &lt;<x:ref>front</x:ref>&gt; element may have more than one
+      &lt;<x:ref>seriesInfo</x:ref>&gt; elements. The "name" attributes of those
+      multiple &lt;<x:ref>seriesInfo</x:ref>&gt; elements interact as follows:
+   </t>
+   <t><list style="symbols">
+      <t>
+         If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of
+         "Internet-Draft", it can also have at most one additional &lt;<x:ref>seriesInfo</x:ref>&gt;
+         element with a name of "STD", "BCP", "FYI", "EXP", or "HIST" to
+         indicate the intended status of this Internet Draft, if it is
+         eventually published as an RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt;
+         element has one of those names, the value attribute for that name MUST
+         be "".
+      </t>
+      <t>
+        If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of
+        "RFC", it can also have at most one additional &lt;<x:ref>seriesInfo</x:ref>&gt; element with
+        a name of "STD", "BCP", or "FYI" to indicate the current status of this
+        RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt; element has one of those names,
+        the value attribute for that name MUST be the number within the series.
+        That &lt;<x:ref>front</x:ref>&gt; element might also contain an additional &lt;<x:ref>seriesInfo</x:ref>&gt; with
+        the name "EXP" or "HIST" and a value of "" to indicate the status of the
+        RFC.
+      </t>
+      <t>
+         A &lt;<x:ref>front</x:ref>&gt; element that has a &lt;<x:ref>seriesInfo</x:ref>&gt; element that has the name
+         "Internet-Draft" MUST NOT also have a &lt;<x:ref>seriesInfo</x:ref>&gt; element that has the
+         name "RFC".
+      </t>
+   </list></t>      
+
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>), and &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.front.contents"><!--AG-->
       <xref format="none" target="grammar.front">Content model</xref>:</t>
