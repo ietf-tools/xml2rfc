@@ -2070,7 +2070,7 @@ Table of Contents
 
 2.46.1.  'category' attribute
 
-   Deprecated; instead, use the "category" attribute in <seriesInfo>.
+   Deprecated; instead, use the "name" attribute in <seriesInfo>.
 
 2.46.2.  'consensus' attribute
 
@@ -2351,12 +2351,7 @@ Table of Contents
 
    The ASCII equivalent of the value field.
 
-2.48.3.  'category' attribute
-
-   [[element.seriesInfo.attribute.category.missing: attribute
-   description missing]]
-
-2.48.4.  'name' attribute (mandatory)
+2.48.3.  'name' attribute (mandatory)
 
    The name of the series.
 
@@ -2364,7 +2359,7 @@ Table of Contents
    generating links, and adding descriptions such as "work in
    progress"): "BCP", "FYI", "Internet-Draft", "RFC", "STD", and "DOI".
 
-2.48.5.  'value' attribute (mandatory)
+2.48.4.  'value' attribute (mandatory)
 
    The identifier within the series specified by the "name" attribute.
 
@@ -3809,11 +3804,10 @@ Appendix A.  Front Page ('Boilerplate') Generation
 
 A.1.  The /seriesInfo/@category Attribute
 
-   For RFCs, the category attribute (Section 2.48.3) determines the
-   "maturity level" (see Section 4 of [RFC2026]).  The allowed values
-   are "std" for "Standards Track", "bcp" for "BCP", "info" for
-   "Informational", "exp" for "Experimental", and "historic" for
-   "Historic".
+   For RFCs, the category attribute determines the "maturity level" (see
+   Section 4 of [RFC2026]).  The allowed values are "std" for "Standards
+   Track", "bcp" for "BCP", "info" for "Informational", "exp" for
+   "Experimental", and "historic" for "Historic".
 
    For Internet-Drafts, the category attribute is not needed, but will
    appear on the front page as "Intended Status".  Supplying this
@@ -4944,7 +4938,6 @@ Appendix C.  Relax NG Schema
        attribute value { text },
        attribute asciiname { text }?,
        attribute asciivalue { text }?,
-       attribute category { text }?,
        empty
      }
 
@@ -5724,7 +5717,6 @@ Appendix D.  Schema Differences from v2
          attribute value { text },
    +     attribute asciiname { text }?,
    +     attribute asciivalue { text }?,
-   +     attribute category { text }?,
          empty
        }
      format =
@@ -6002,7 +5994,6 @@ Index
          inside texttable  1
       category attribute
          in rfc element  1
-         in seriesInfo element  1
       cite attribute
          in blockquote element  1
       city element  1
@@ -6491,7 +6482,6 @@ Index
       seriesInfo element  1
          asciiname attribute  1
          asciivalue attribute  1
-         category attribute  1
          inside front  1
          inside reference  1
          name attribute  1
