@@ -1425,13 +1425,14 @@ Table of Contents
    Represent the "front matter": metadata (such as author information),
    abstract, and additional notes.
 
-   A <front> element may have more than one <seriesInfo> elements.  For
-   RFCs, the "name" attribute determines the "maturity level" (see
-   Section 4 of [RFC2026]).  The allowed values are "std" for "Standards
-   Track", "bcp" for "BCP", "info" for "Informational", "exp" for
-   "Experimental", and "historic" for "Historic".  The "name" attributes
-   of those multiple <seriesInfo> elements interact as described in the
-   section on <seriesInfo>.
+   A <front> element may have more than one <seriesInfo> elements.  A
+   <seriesInfo> element determines the document number (for RFCs) or
+   name (for Internet-Drafts).  Another <seriesInfo> element determines
+   the "maturity level" (see Section 4 of [RFC2026]), using values of
+   "std" for "Standards Track", "bcp" for "BCP", "info" for
+   "Informational", "exp" for "Experimental", and "historic" for
+   "Historic".  The "name" attributes of those multiple <seriesInfo>
+   elements interact as described in the section on <seriesInfo>.
 
    This element appears as a child element of: <reference>
    (Section 2.42), and <rfc> (Section 2.46).
@@ -2345,6 +2346,17 @@ Table of Contents
    Specifies the document series in which this document appears, and
    also specifies an identifier within that series.
 
+   A processor determines if it is working on an RFC or an Internet-
+   Draft by inspecting the "name" attribute of a <seriesInfo> element
+   inside the <front> element inside the <rfc> element, looking for
+   "rfc" or "Internet-Draft".  (Specifying neither value in any of the
+   <seriesInfo> elements can be useful for producing other types of
+   documents, but is out-of-scope for this specification.)  It is
+   invalid to have multiple <seriesInfo> elements inside the <front>
+   element inside the <rfc> element that have "name" values of "rfc", or
+   that have "name" values of "Internet-Draft", or that have both "rfc"
+   and "Internet-Draft".
+
    This element appears as a child element of: <front> (Section 2.27),
    and <reference> (Section 2.42; deprecated in this context).
 
@@ -2367,8 +2379,8 @@ Table of Contents
    o  If a <front> element contains a <seriesInfo> element with a name
       of "Internet-Draft", it can also have at most one additional
       <seriesInfo> element with a name of "std", "bcp", "fyi", "exp", or
-      "hist" to indicate the intended status of this Internet Draft, if
-      it were to be later published as an RFC.  If such an additional
+      "historic" to indicate the intended status of this Internet Draft,
+      if it were to be later published as an RFC.  If such an additional
       <seriesInfo> element has one of those names, the value attribute
       for that name MUST be "".
 
@@ -2377,9 +2389,9 @@ Table of Contents
       element with a name of "std", "bcp", or "fyi" to indicate the
       current status of this RFC.  If such an additional <seriesInfo>
       element has one of those names, the value attribute for that name
-      MUST be the number within the series.  That <front> element might
+      MUST be the number within that series.  That <front> element might
       also contain an additional <seriesInfo> with the name "exp" or
-      "hist" and a value of "" to indicate the status of the RFC.
+      "historic" and a value of "" to indicate the status of the RFC.
 
    o  A <front> element that has a <seriesInfo> element that has the
       name "Internet-Draft" MUST NOT also have a <seriesInfo> element
