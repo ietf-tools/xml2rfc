@@ -17,6 +17,8 @@ Future threads:
 
 	<rfc> with multi-doc categories: how can seriesNo indicate that this is one part of the series?
 
+	Describe DOI in <seriesInfo>
+
 Either continue trying to get new link relations, or use:
               The current ISSN for the RFC Series.
               The value for the "rel" attribute is "collection".
@@ -25,7 +27,6 @@ Either continue trying to get new link relations, or use:
               The Internet Draft that was submitted to the RFC Editor to become the published RFC.
               The value for the "rel" attribute is "alternate".
               The link should be to an IETF-controlled web site that retains copies of Internet Drafts.
-
 
 Possibly kill <dl hanging>, but make sure that the list agrees.
 	**** Joe figured out that the current definition is probably fine ****
@@ -1995,37 +1996,10 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       "maturity level" (see Section 4 of <xref target="RFC2026"/>). The allowed
       values are "std" for "Standards Track", "bcp" for "BCP", "info" for "Informational", "exp" for
       "Experimental", and "historic" for "Historic".
-   </t>
-
-   <t>
       The "name" attributes of those
-      multiple &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements interact as follows:
+      multiple &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements interact as described in the section on
+      &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;.
    </t>
-   <t><list style="symbols">
-      <t>
-         If a &lt;<xref target="element.front" format="none">front</xref>&gt; element contains a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
-         element with a name of "Internet-Draft", it can also have at most one additional
-         &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element with a name of "std", "bcp", "fyi", "exp", or
-         "hist" to indicate the intended status of this Internet Draft, if it is eventually
-         published as an RFC. If such an additional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element has
-         one of those names, the value attribute for that name MUST be "".
-      </t>
-      <t>
-        If a &lt;<xref target="element.front" format="none">front</xref>&gt; element contains a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
-        element with a name of "rfc", it can also have at most one additional
-        &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element with a name of "std", "bcp", or "fyi" to indicate
-        the current status of this RFC. If such an additional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
-        element has one of those names, the value attribute for that name MUST be the number within
-        the series. That &lt;<xref target="element.front" format="none">front</xref>&gt; element might also contain an additional
-        &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; with the name "exp" or "hist" and a value of "" to
-        indicate the status of the RFC.
-      </t>
-      <t>
-         A &lt;<xref target="element.front" format="none">front</xref>&gt; element that has a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element
-         that has the name "Internet-Draft" MUST NOT also have a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
-         element that has the name "rfc".
-      </t>
-   </list></t>      
 
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.reference" format="none">reference</xref>&gt; (<xref target="element.reference"/>), and &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.front.contents"><!--AG-->
@@ -3531,10 +3505,36 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
             The name of the series.
       </t>
       <t>
-            A description of the how some of the values for "name" interact appears in the description of the
-            &lt;<xref target="element.front" format="none">front</xref>&gt; element. That description lists some of the values for the "name"
-            attribute. Other values might be added at a later time by the RFC Editor. 
+            Some of the values for "name" interact as follows:
       </t>
+   <t><list style="symbols">
+      <t>
+         If a &lt;<xref target="element.front" format="none">front</xref>&gt; element contains a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
+         element with a name of "Internet-Draft", it can also have at most one additional
+         &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element with a name of "std", "bcp", "fyi", "exp", or
+         "hist" to indicate the intended status of this Internet Draft, if it were to be later
+         published as an RFC. If such an additional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element has
+         one of those names, the value attribute for that name MUST be "".
+      </t>
+      <t>
+        If a &lt;<xref target="element.front" format="none">front</xref>&gt; element contains a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
+        element with a name of "rfc", it can also have at most one additional
+        &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element with a name of "std", "bcp", or "fyi" to indicate
+        the current status of this RFC. If such an additional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
+        element has one of those names, the value attribute for that name MUST be the number within
+        the series. That &lt;<xref target="element.front" format="none">front</xref>&gt; element might also contain an additional
+        &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; with the name "exp" or "hist" and a value of "" to
+        indicate the status of the RFC.
+      </t>
+      <t>
+         A &lt;<xref target="element.front" format="none">front</xref>&gt; element that has a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element
+         that has the name "Internet-Draft" MUST NOT also have a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
+         element that has the name "rfc".
+      </t>
+   </list></t>      
+   <t>
+      Other values might be added at a later time by the RFC Editor.
+   </t>
    </section>
 
    <!--seriesInfo/@value-->

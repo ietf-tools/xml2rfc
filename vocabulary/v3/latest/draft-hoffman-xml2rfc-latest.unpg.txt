@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                          December 22, 2014
+Obsoletes: 2629 (if approved)                          December 23, 2014
 Intended status: Informational
-Expires: June 25, 2015
+Expires: June 26, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 25, 2015.
+   This Internet-Draft will expire on June 26, 2015.
 
 Copyright Notice
 
@@ -1429,31 +1429,9 @@ Table of Contents
    RFCs, the "name" attribute determines the "maturity level" (see
    Section 4 of [RFC2026]).  The allowed values are "std" for "Standards
    Track", "bcp" for "BCP", "info" for "Informational", "exp" for
-   "Experimental", and "historic" for "Historic".
-
-   The "name" attributes of those multiple <seriesInfo> elements
-   interact as follows:
-
-   o  If a <front> element contains a <seriesInfo> element with a name
-      of "Internet-Draft", it can also have at most one additional
-      <seriesInfo> element with a name of "std", "bcp", "fyi", "exp", or
-      "hist" to indicate the intended status of this Internet Draft, if
-      it is eventually published as an RFC.  If such an additional
-      <seriesInfo> element has one of those names, the value attribute
-      for that name MUST be "".
-
-   o  If a <front> element contains a <seriesInfo> element with a name
-      of "rfc", it can also have at most one additional <seriesInfo>
-      element with a name of "std", "bcp", or "fyi" to indicate the
-      current status of this RFC.  If such an additional <seriesInfo>
-      element has one of those names, the value attribute for that name
-      MUST be the number within the series.  That <front> element might
-      also contain an additional <seriesInfo> with the name "exp" or
-      "hist" and a value of "" to indicate the status of the RFC.
-
-   o  A <front> element that has a <seriesInfo> element that has the
-      name "Internet-Draft" MUST NOT also have a <seriesInfo> element
-      that has the name "rfc".
+   "Experimental", and "historic" for "Historic".  The "name" attributes
+   of those multiple <seriesInfo> elements interact as described in the
+   section on <seriesInfo>.
 
    This element appears as a child element of: <reference>
    (Section 2.42), and <rfc> (Section 2.46).
@@ -2384,10 +2362,30 @@ Table of Contents
 
    The name of the series.
 
-   A description of the how some of the values for "name" interact
-   appears in the description of the <front> element.  That description
-   lists some of the values for the "name" attribute.  Other values
-   might be added at a later time by the RFC Editor.
+   Some of the values for "name" interact as follows:
+
+   o  If a <front> element contains a <seriesInfo> element with a name
+      of "Internet-Draft", it can also have at most one additional
+      <seriesInfo> element with a name of "std", "bcp", "fyi", "exp", or
+      "hist" to indicate the intended status of this Internet Draft, if
+      it were to be later published as an RFC.  If such an additional
+      <seriesInfo> element has one of those names, the value attribute
+      for that name MUST be "".
+
+   o  If a <front> element contains a <seriesInfo> element with a name
+      of "rfc", it can also have at most one additional <seriesInfo>
+      element with a name of "std", "bcp", or "fyi" to indicate the
+      current status of this RFC.  If such an additional <seriesInfo>
+      element has one of those names, the value attribute for that name
+      MUST be the number within the series.  That <front> element might
+      also contain an additional <seriesInfo> with the name "exp" or
+      "hist" and a value of "" to indicate the status of the RFC.
+
+   o  A <front> element that has a <seriesInfo> element that has the
+      name "Internet-Draft" MUST NOT also have a <seriesInfo> element
+      that has the name "rfc".
+
+   Other values might be added at a later time by the RFC Editor.
 
 2.48.4.  'value' attribute (mandatory)
 

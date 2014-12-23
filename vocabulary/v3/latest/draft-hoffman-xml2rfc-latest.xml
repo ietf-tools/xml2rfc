@@ -17,6 +17,8 @@ Future threads:
 
 	<rfc> with multi-doc categories: how can seriesNo indicate that this is one part of the series?
 
+	Describe DOI in <seriesInfo>
+
 Either continue trying to get new link relations, or use:
               The current ISSN for the RFC Series.
               The value for the "rel" attribute is "collection".
@@ -25,7 +27,6 @@ Either continue trying to get new link relations, or use:
               The Internet Draft that was submitted to the RFC Editor to become the published RFC.
               The value for the "rel" attribute is "alternate".
               The link should be to an IETF-controlled web site that retains copies of Internet Drafts.
-
 
 Possibly kill <dl hanging>, but make sure that the list agrees.
 	**** Joe figured out that the current definition is probably fine ****
@@ -2054,37 +2055,10 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       "maturity level" (see <xref target="RFC2026" sectionFormat="of" section="4"/>). The allowed
       values are "std" for "Standards Track", "bcp" for "BCP", "info" for "Informational", "exp" for
       "Experimental", and "historic" for "Historic".
-   </t>
-
-   <t>
       The "name" attributes of those
-      multiple &lt;<x:ref>seriesInfo</x:ref>&gt; elements interact as follows:
+      multiple &lt;<x:ref>seriesInfo</x:ref>&gt; elements interact as described in the section on
+      &lt;<x:ref>seriesInfo</x:ref>&gt;.
    </t>
-   <t><list style="symbols">
-      <t>
-         If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt;
-         element with a name of "Internet-Draft", it can also have at most one additional
-         &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of "std", "bcp", "fyi", "exp", or
-         "hist" to indicate the intended status of this Internet Draft, if it is eventually
-         published as an RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt; element has
-         one of those names, the value attribute for that name MUST be "".
-      </t>
-      <t>
-        If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt;
-        element with a name of "rfc", it can also have at most one additional
-        &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of "std", "bcp", or "fyi" to indicate
-        the current status of this RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt;
-        element has one of those names, the value attribute for that name MUST be the number within
-        the series. That &lt;<x:ref>front</x:ref>&gt; element might also contain an additional
-        &lt;<x:ref>seriesInfo</x:ref>&gt; with the name "exp" or "hist" and a value of "" to
-        indicate the status of the RFC.
-      </t>
-      <t>
-         A &lt;<x:ref>front</x:ref>&gt; element that has a &lt;<x:ref>seriesInfo</x:ref>&gt; element
-         that has the name "Internet-Draft" MUST NOT also have a &lt;<x:ref>seriesInfo</x:ref>&gt;
-         element that has the name "rfc".
-      </t>
-   </list></t>      
 
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>), and &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.front.contents"><!--AG-->
@@ -3638,10 +3612,36 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
             The name of the series.
       </t>
       <t>
-            A description of the how some of the values for "name" interact appears in the description of the
-            &lt;<x:ref>front</x:ref>&gt; element. That description lists some of the values for the "name"
-            attribute. Other values might be added at a later time by the RFC Editor. 
+            Some of the values for "name" interact as follows:
       </t>
+   <t><list style="symbols">
+      <t>
+         If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt;
+         element with a name of "Internet-Draft", it can also have at most one additional
+         &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of "std", "bcp", "fyi", "exp", or
+         "hist" to indicate the intended status of this Internet Draft, if it were to be later
+         published as an RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt; element has
+         one of those names, the value attribute for that name MUST be "".
+      </t>
+      <t>
+        If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt;
+        element with a name of "rfc", it can also have at most one additional
+        &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of "std", "bcp", or "fyi" to indicate
+        the current status of this RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt;
+        element has one of those names, the value attribute for that name MUST be the number within
+        the series. That &lt;<x:ref>front</x:ref>&gt; element might also contain an additional
+        &lt;<x:ref>seriesInfo</x:ref>&gt; with the name "exp" or "hist" and a value of "" to
+        indicate the status of the RFC.
+      </t>
+      <t>
+         A &lt;<x:ref>front</x:ref>&gt; element that has a &lt;<x:ref>seriesInfo</x:ref>&gt; element
+         that has the name "Internet-Draft" MUST NOT also have a &lt;<x:ref>seriesInfo</x:ref>&gt;
+         element that has the name "rfc".
+      </t>
+   </list></t>      
+   <t>
+      Other values might be added at a later time by the RFC Editor.
+   </t>
    </section>
 
    <!--seriesInfo/@value-->
