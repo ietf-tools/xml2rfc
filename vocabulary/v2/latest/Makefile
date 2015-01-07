@@ -1,7 +1,7 @@
 all: \
-	draft-reschke-xml2rfc-latest.html \
-	draft-reschke-xml2rfc-latest.unpg.txt \
-	draft-reschke-xml2rfc-latest.txt \
+	draft-iab-xml2rfcv2-latest.html \
+	draft-iab-xml2rfcv2-latest.unpg.txt \
+	draft-iab-xml2rfcv2-latest.txt \
 	xml2rfcv2-annotated.rng
 
 TOOLS=../../tools

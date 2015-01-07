@@ -1,5 +1,5 @@
 xml2rfc.all: \
-	draft-reschke-xml2rfc-latest.xml xml2rfcv2-annotated.rng
+	draft-iab-xml2rfcv2-latest.xml xml2rfcv2-annotated.rng
 
 xml2rfcv1.rnc: xml2rfcv1.dtd trang.jar
 	java -jar trang.jar -i inline-attlist $< $@
@@ -10,8 +10,8 @@ xml2rfcv2.rnc: xml2rfcv2.dtd trang.jar
 xml2rfcv2.rng: xml2rfcv2.dtd trang.jar
 	java -jar trang.jar -i inline-attlist $< $@
 
-xml2rfcv2-annotated.rng: xml2rfcv2.rng annotate-rng.xslt draft-reschke-xml2rfc-latest.xml
-	saxon $< annotate-rng.xslt doc=draft-reschke-xml2rfc-latest.xml > $@
+xml2rfcv2-annotated.rng: xml2rfcv2.rng annotate-rng.xslt draft-iab-xml2rfcv2-latest.xml
+	saxon $< annotate-rng.xslt doc=draft-iab-xml2rfcv2-latest.xml > $@
 
 xml2rfcv2-spec.xml: xml2rfcv2.rng rng2xml2rfc.xslt
 	saxon $< rng2xml2rfc.xslt voc=v3 > $@
@@ -19,7 +19,7 @@ xml2rfcv2-spec.xml: xml2rfcv2.rng rng2xml2rfc.xslt
 xml2rfcv2.rnc.folded: xml2rfcv2.rnc
 	./fold-rnc.sh $< > $@
 
-draft-reschke-xml2rfc-latest.xml: xml2rfcv2-spec.xml xml2rfcv2.rnc.folded
+draft-iab-xml2rfcv2-latest.xml: xml2rfcv2-spec.xml xml2rfcv2.rnc.folded
 	cp -v $@ $@.bak
 	./refresh-inclusions.sh $@
 
