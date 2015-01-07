@@ -1,0 +1,212 @@
+<!ELEMENT rfc (front,middle,back?)>
+
+<!ATTLIST rfc
+  number CDATA #IMPLIED
+  obsoletes CDATA ''
+  updates CDATA ''
+  category (std|bcp|info|exp|historic) #IMPLIED
+  consensus (no|yes) #IMPLIED
+  seriesNo CDATA #IMPLIED
+  ipr (full2026|noDerivativeWorks2026|none|full3667|noModification3667
+       |noDerivatives3667|full3978|noModification3978|noDerivatives3978
+       |trust200811|noModificationTrust200811|noDerivativesTrust200811
+       |trust200902|noModificationTrust200902|noDerivativesTrust200902
+       |pre5378Trust200902) #IMPLIED
+  iprExtract IDREF #IMPLIED
+  submissionType (IETF|IAB|IRTF|independent) 'IETF'
+  docName CDATA #IMPLIED
+  xml:lang CDATA 'en'>
+
+<!ELEMENT front (title,author+,date,area*,workgroup*,keyword*,abstract?,
+                 note*)>
+
+<!ELEMENT title (#PCDATA)>
+
+<!ATTLIST title
+  abbrev CDATA #IMPLIED>
+
+<!ELEMENT author (organization?,address?)>
+
+<!ATTLIST author
+  initials CDATA #IMPLIED
+  surname CDATA #IMPLIED
+  fullname CDATA #IMPLIED
+  role (editor) #IMPLIED>
+
+<!ELEMENT organization (#PCDATA)>
+
+<!ATTLIST organization
+  abbrev CDATA #IMPLIED>
+
+<!ELEMENT address (postal?,phone?,facsimile?,email?,uri?)>
+
+<!ELEMENT postal (street+,(city|region|code|country)*)>
+
+<!ELEMENT street (#PCDATA)>
+
+<!ELEMENT city (#PCDATA)>
+
+<!ELEMENT region (#PCDATA)>
+
+<!ELEMENT code (#PCDATA)>
+
+<!ELEMENT country (#PCDATA)>
+
+<!ELEMENT phone (#PCDATA)>
+
+<!ELEMENT facsimile (#PCDATA)>
+
+<!ELEMENT email (#PCDATA)>
+
+<!ELEMENT uri (#PCDATA)>
+
+<!ELEMENT date EMPTY>
+
+<!ATTLIST date
+  day CDATA #IMPLIED
+  month CDATA #IMPLIED
+  year CDATA #IMPLIED>
+
+<!ELEMENT area (#PCDATA)>
+
+<!ELEMENT workgroup (#PCDATA)>
+
+<!ELEMENT keyword (#PCDATA)>
+
+<!ELEMENT abstract (t)+>
+
+<!ELEMENT note (t)+>
+
+<!ATTLIST note
+  title CDATA #REQUIRED>
+
+<!ELEMENT middle (section)+>
+
+<!ELEMENT section ((t|figure|texttable|iref)*,section*)>
+
+<!ATTLIST section
+  anchor ID #IMPLIED
+  title CDATA #REQUIRED
+  toc (include|exclude|default) 'default'>
+
+<!ELEMENT t (#PCDATA|list|figure|xref|eref|iref|cref|spanx|vspace)*>
+
+<!ATTLIST t
+  anchor ID #IMPLIED
+  hangText CDATA #IMPLIED>
+
+<!ELEMENT list (t)+>
+
+<!ATTLIST list
+  style CDATA #IMPLIED
+  hangIndent CDATA #IMPLIED
+  counter CDATA #IMPLIED>
+
+<!ELEMENT xref (#PCDATA)>
+
+<!ATTLIST xref
+  target IDREF #REQUIRED
+  pageno (true|false) 'false'
+  format (counter|title|none|default) 'default'>
+
+<!ELEMENT eref (#PCDATA)>
+
+<!ATTLIST eref
+  target CDATA #REQUIRED>
+
+<!ELEMENT iref EMPTY>
+
+<!ATTLIST iref
+  item CDATA #REQUIRED
+  subitem CDATA ''
+  primary (true|false) 'false'>
+
+<!ELEMENT cref (#PCDATA)>
+
+<!ATTLIST cref
+  anchor ID #IMPLIED
+  source CDATA #IMPLIED>
+
+<!ELEMENT spanx (#PCDATA)>
+
+<!ATTLIST spanx
+  xml:space (default|preserve) 'preserve'
+  style CDATA 'emph'>
+
+<!ELEMENT vspace EMPTY>
+
+<!ATTLIST vspace
+  blankLines CDATA '0'>
+
+<!ELEMENT figure (iref*,preamble?,artwork,postamble?)>
+
+<!ATTLIST figure
+  anchor ID #IMPLIED
+  title CDATA ''
+  suppress-title (true|false) 'false'
+  src CDATA #IMPLIED
+  align (left|center|right) 'left'
+  alt CDATA ''
+  width CDATA ''
+  height CDATA ''>
+
+<!ELEMENT preamble (#PCDATA|xref|eref|iref|cref|spanx)*>
+
+<!ELEMENT artwork (#PCDATA)*>
+
+<!ATTLIST artwork
+  xml:space (default|preserve) 'preserve'
+  name CDATA ''
+  type CDATA ''
+  src CDATA #IMPLIED
+  align (left|center|right) 'left'
+  alt CDATA ''
+  width CDATA ''
+  height CDATA ''>
+
+<!ELEMENT postamble (#PCDATA|xref|eref|iref|cref|spanx)*>
+
+<!ELEMENT texttable (preamble?,ttcol+,c*,postamble?)>
+
+<!ATTLIST texttable
+  anchor ID #IMPLIED
+  title CDATA ''
+  suppress-title (true|false) 'false'
+  align (left|center|right) 'center'
+  style (all|none|headers|full) 'full'>
+
+<!ELEMENT ttcol (#PCDATA)>
+
+<!ATTLIST ttcol
+  width CDATA #IMPLIED
+  align (left|center|right) 'left'>
+
+<!ELEMENT c (#PCDATA|xref|eref|iref|cref|spanx)*>
+
+<!ELEMENT back (references*,section*)>
+
+<!ELEMENT references (reference)+>
+
+<!ATTLIST references
+  title CDATA 'References'>
+
+<!ELEMENT reference (front,seriesInfo*,format*,annotation*)>
+
+<!ATTLIST reference
+  anchor ID #REQUIRED
+  target CDATA #IMPLIED>
+
+<!ELEMENT seriesInfo EMPTY>
+
+<!ATTLIST seriesInfo
+  name CDATA #REQUIRED
+  value CDATA #REQUIRED>
+
+<!ELEMENT format EMPTY>
+
+<!ATTLIST format
+  target CDATA #IMPLIED
+  type CDATA #REQUIRED
+  octets CDATA #IMPLIED>
+
+<!ELEMENT annotation (#PCDATA|xref|eref|iref|cref|spanx)*>
