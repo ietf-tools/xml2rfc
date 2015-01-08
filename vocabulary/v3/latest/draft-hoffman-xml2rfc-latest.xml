@@ -21,6 +21,17 @@ Future threads:
 
     Processors ignore case in attribute values that are important to it, such as for seriesInfo/@name
 
+=====
+Add two attributes to <t>: keepwithnext= true/false and keepwithprevious= true/false, defaults for
+both being false.
+
+These act as hints to the output formatters that do pagination to do a best effort attempt to keep
+the <t> paragraph with the next or previous element, whatever that happens to be. For example, the
+HTML output @media print CSS might translate this to page-break-after: avoid and page-break-before:
+avoid, respectively. For PDF, the paginator could attempt to keep the paragraphs with the next or
+previous elements. Note: this attribute is strictly a hint and not always actionable.
+=====
+
 Either continue trying to get new link relations, or use:
               The current ISSN for the RFC Series.
               The value for the "rel" attribute is "collection".
