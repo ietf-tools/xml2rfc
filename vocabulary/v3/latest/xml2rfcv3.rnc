@@ -190,6 +190,11 @@ t =
     attribute anchor { xsd:ID }?,
     attribute hangText { text }?,
     attribute pn { text }?,
+    ([ a:defaultValue = "false" ] attribute keepwithnext { text },
+     ("false" | "true"))?,
+    ([ a:defaultValue = "false" ]
+     attribute keepwithprevious { text },
+     ("false" | "true"))?,
     (text
      | b
      | bcp14

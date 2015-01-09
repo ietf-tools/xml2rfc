@@ -313,6 +313,10 @@ Table of Contents
    o  Add "display" to <cref> to indicate to processors whether or not
       to display the comment.
 
+   o  Add "keepwithnext" and "keepwithprevious" to <t> as a hint to
+      processors that do pagination that the should try to keep the
+      paragraph with the next/previous element.
+
 1.2.3.  Elements and Attributes Deprecated from v2
 
    Deprecated elements and attributes are legacy vocabulary from v2 that
@@ -2726,7 +2730,27 @@ Table of Contents
 
    Deprecated.  Instead use <dd> inside of a definition list (<dl>).
 
-2.54.3.  'pn' attribute
+2.54.3.  'keepwithnext' attribute
+
+   Acts as a hint to the output formatters that do pagination to do a
+   best effort attempt to keep the paragraph with the next element,
+   whatever that happens to be.  For example, the HTML output @media
+   print CSS might translate this to page-break-after: avoid.  For PDF,
+   the paginator could attempt to keep the paragraph with the next
+   element.  Note: this attribute is strictly a hint and not always
+   actionable.
+
+2.54.4.  'keepwithprevious' attribute
+
+   Acts as a hint to the output formatters that do pagination to do a
+   best effort attempt to keep the paragraph with the previous element,
+   whatever that happens to be.  For example, the HTML output @media
+   print CSS might translate this to page-break-before: avoid.  For PDF,
+   the paginator could attempt to keep the paragraph with the previous
+   element.  Note: this attribute is strictly a hint and not always
+   actionable.
+
+2.54.5.  'pn' attribute
 
    The number for this paragraph within the section.  The numbering is
    shared with other elements of a section.  This is described in more
@@ -4245,8 +4269,8 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "en" ] attribute xml:lang { text }?,
        [ a:defaultValue = "no" ] attribute sortRefs { "yes" | "no" }?,
        [ a:defaultValue = "yes" ] attribute symRefs { "yes" | "no" }?,
-       [ a:defaultValue = "yes" ] attribute tocInclude { "yes" | "no"
-   }?,
+       [ a:defaultValue = "yes" ]
+       attribute tocInclude { "yes" | "no" }?,
        [ a:defaultValue = "3" ] attribute tocDepth { text }?,
        attribute finalizedTime { text }?,
        link*,
@@ -4304,8 +4328,8 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "en" ] attribute xml:lang { text }?
      }
 
-   address = element address { postal?, phone?, facsimile?, email?,
-   uri? }
+   address =
+     element address { postal?, phone?, facsimile?, email?, uri? }
 
    postal =
      element postal {
@@ -4382,8 +4406,8 @@ Appendix C.  Relax NG Schema
        attribute title { text }?,
        name,
        attribute pn { text }?,
-       [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no"
-   }?,
+       [ a:defaultValue = "no" ]
+       attribute removeInRFC { "yes" | "no" }?,
        t+
      }
 
@@ -4398,8 +4422,8 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "yes" ] attribute numbered { "yes" | "no" }?,
        [ a:defaultValue = "default" ]
        attribute toc { "include" | "exclude" | "default" }?,
-       [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no"
-   }?,
+       [ a:defaultValue = "no" ]
+       attribute removeInRFC { "yes" | "no" }?,
        attribute pn { text }?,
        name?,
        (artwork
@@ -4428,6 +4452,11 @@ Appendix C.  Relax NG Schema
        attribute anchor { xsd:ID }?,
        attribute hangText { text }?,
        attribute pn { text }?,
+       ([ a:defaultValue = "false" ] attribute keepwithnext { text },
+        ("false" | "true"))?,
+       ([ a:defaultValue = "false" ]
+        attribute keepwithprevious { text },
+        ("false" | "true"))?,
        (text
         | b
         | bcp14
@@ -4497,8 +4526,8 @@ Appendix C.  Relax NG Schema
      element ul {
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
-       [ a:defaultValue = "false" ] attribute empty { "false" | "true"
-   }?,
+       [ a:defaultValue = "false" ]
+       attribute empty { "false" | "true" }?,
        li+
      }
 
@@ -4526,8 +4555,8 @@ Appendix C.  Relax NG Schema
      element dl {
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
-       [ a:defaultValue = "true" ] attribute hanging { "false" | "true"
-   }?,
+       [ a:defaultValue = "true" ]
+       attribute hanging { "false" | "true" }?,
        (dt, dd)+
      }
 
@@ -4571,8 +4600,8 @@ Appendix C.  Relax NG Schema
    xref =
      element xref {
        attribute target { xsd:IDREF },
-       [ a:defaultValue = "false" ] attribute pageno { "true" | "false"
-   }?,
+       [ a:defaultValue = "false" ]
+       attribute pageno { "true" | "false" }?,
        [ a:defaultValue = "default" ]
        attribute format { "counter" | "title" | "none" | "default" }?,
        (attribute section { text },
@@ -4600,8 +4629,8 @@ Appendix C.  Relax NG Schema
      element cref {
        attribute anchor { xsd:ID }?,
        attribute source { text }?,
-       [ a:defaultValue = "true" ] attribute display { "true" | "false"
-   }?,
+       [ a:defaultValue = "true" ]
+       attribute display { "true" | "false" }?,
        (text | b | em | eref | i | strong | sub | sup | tt | xref)*
      }
 
@@ -5061,8 +5090,8 @@ Appendix D.  Schema Differences from v2
    + }?,
    +     [ a:defaultValue = "yes" ] attribute symRefs { "yes" | "no"
    + }?,
-   +     [ a:defaultValue = "yes" ] attribute tocInclude { "yes" |
-   + "no" }?,
+   +     [ a:defaultValue = "yes" ]
+   +     attribute tocInclude { "yes" | "no" }?,
    +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
    +     attribute finalizedTime { text }?,
    +     link*,
@@ -5112,19 +5141,12 @@ Appendix D.  Schema Differences from v2
      organization =
        element organization {
          attribute abbrev { text }?,
-   -     text
    +     attribute ascii { text }?,
    +     text,
    +     [ a:defaultValue = "en" ] attribute xml:lang { text }?
-       }
-     address = element address { postal?, phone?, facsimile?, email?,
-     uri? }
-   - postal = element postal { street+, (city | region | code |
-   - country)* }
-   - street = element street { text }
-   - city = element city { text }
-   - region = element region { text }
-   - code = element code { text }
+   +   }
+   + address =
+   +   element address { postal?, phone?, facsimile?, email?, uri? }
    + postal =
    +   element postal {
    +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
@@ -5148,8 +5170,16 @@ Appendix D.  Schema Differences from v2
    + code =
    +   element code {
    +     attribute ascii { text }?,
-   +     text
-   +   }
+         text
+       }
+   - address = element address { postal?, phone?, facsimile?, email?,
+   - uri? }
+   - postal = element postal { street+, (city | region | code |
+   - country)* }
+   - street = element street { text }
+   - city = element city { text }
+   - region = element region { text }
+   - code = element code { text }
      country = element country { text }
    + postalLine =
    +   element postalLine {
@@ -5187,8 +5217,8 @@ Appendix D.  Schema Differences from v2
    +     attribute title { text }?,
    +     name,
    +     attribute pn { text }?,
-   +     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" |
-   + "no" }?,
+   +     [ a:defaultValue = "no" ]
+   +     attribute removeInRFC { "yes" | "no" }?,
          t+
        }
    + boilerplate = element boilerplate { section+ }
@@ -5203,8 +5233,8 @@ Appendix D.  Schema Differences from v2
          [ a:defaultValue = "default" ]
          attribute toc { "include" | "exclude" | "default" }?,
    -     (t | figure | texttable | iref)*,
-   +     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" |
-   + "no" }?,
+   +     [ a:defaultValue = "no" ]
+   +     attribute removeInRFC { "yes" | "no" }?,
    +     attribute pn { text }?,
    +     name?,
    +     (artwork
@@ -5231,6 +5261,11 @@ Appendix D.  Schema Differences from v2
          attribute anchor { xsd:ID }?,
          attribute hangText { text }?,
    +     attribute pn { text }?,
+   +     ([ a:defaultValue = "false" ] attribute keepwithnext { text },
+   +      ("false" | "true"))?,
+   +     ([ a:defaultValue = "false" ]
+   +      attribute keepwithprevious { text },
+   +      ("false" | "true"))?,
          (text
    -      | \list
    -      | figure
@@ -5301,8 +5336,8 @@ Appendix D.  Schema Differences from v2
    +   element ul {
    +     [ a:defaultValue = "normal" ]
    +     attribute spacing { "normal" | "compact" }?,
-   +     [ a:defaultValue = "false" ] attribute empty { "false" |
-   + "true" }?,
+   +     [ a:defaultValue = "false" ]
+   +     attribute empty { "false" | "true" }?,
    +     li+
    +   }
    + li =
@@ -5328,8 +5363,8 @@ Appendix D.  Schema Differences from v2
    +   element dl {
    +     [ a:defaultValue = "normal" ]
    +     attribute spacing { "normal" | "compact" }?,
-   +     [ a:defaultValue = "true" ] attribute hanging { "false" |
-   + "true" }?,
+   +     [ a:defaultValue = "true" ]
+   +     attribute hanging { "false" | "true" }?,
    +     (dt, dd)+
    +   }
    + dt =
@@ -5370,8 +5405,10 @@ Appendix D.  Schema Differences from v2
      xref =
        element xref {
          attribute target { xsd:IDREF },
-         [ a:defaultValue = "false" ] attribute pageno { "true" |
-     "false" }?,
+   -     [ a:defaultValue = "false" ] attribute pageno { "true" |
+   - "false" }?,
+   +     [ a:defaultValue = "false" ]
+   +     attribute pageno { "true" | "false" }?,
          [ a:defaultValue = "default" ]
          attribute format { "counter" | "title" | "none" | "default"
      }?,
@@ -5398,8 +5435,8 @@ Appendix D.  Schema Differences from v2
          attribute anchor { xsd:ID }?,
          attribute source { text }?,
    -     text
-   +     [ a:defaultValue = "true" ] attribute display { "true" |
-   + "false" }?,
+   +     [ a:defaultValue = "true" ]
+   +     attribute display { "true" | "false" }?,
    +     (text | b | em | eref | i | strong | sub | sup | tt | xref)*
    +   }
    + tt =
@@ -5910,6 +5947,8 @@ Index
          ipr  1
          iprExtract  1
          item  1
+         keepwithnext  1
+         keepwithprevious  1
          month  1
          name  1
          number  1
@@ -6341,6 +6380,10 @@ Index
          in iref element  1
 
    K
+      keepwithnext attribute
+         in t element  1
+      keepwithprevious attribute
+         in t element  1
       keyword element  1
          inside front  1
 
@@ -6649,6 +6692,8 @@ Index
          inside section  1
          inside td  1
          inside th  1
+         keepwithnext attribute  1
+         keepwithprevious attribute  1
          pn attribute  1
       table element  1
          anchor attribute  1

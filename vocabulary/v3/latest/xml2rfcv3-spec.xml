@@ -1674,6 +1674,18 @@
       Represent the "front matter": metadata (such as author information),
       abstract, and additional notes.
    </t>
+   <t>
+      A &lt;<x:ref>front</x:ref>&gt; element may have more than one &lt;<x:ref>seriesInfo</x:ref>&gt; elements.
+      A &lt;<x:ref>seriesInfo</x:ref>&gt; element determines the document number (for RFCs)
+      or name (for Internet-Drafts).
+      Another &lt;<x:ref>seriesInfo</x:ref>&gt; element determines the "maturity level"
+      (see <xref target="RFC2026" sectionFormat="of" section="4"/>), using values of "std" for
+      "Standards Track", "bcp" for "BCP", "info" for "Informational", "exp" for "Experimental", and
+      "historic" for "Historic".
+      The "name" attributes of those
+      multiple &lt;<x:ref>seriesInfo</x:ref>&gt; elements interact as described in the section on
+      &lt;<x:ref>seriesInfo</x:ref>&gt;.
+   </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>), and &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.front.contents"><!--AG-->
       <xref format="none" target="grammar.front">Content model</xref>:</t>
@@ -2762,7 +2774,7 @@
       <iref item="rfc element" subitem="category attribute"/>
       <iref item="category attribute" subitem="in rfc element"/>
       <t>
-            Deprecated; instead, use the "category" attribute in &lt;<x:ref>seriesInfo</x:ref>&gt;.
+            Deprecated; instead, use the "name" attribute in &lt;<x:ref>seriesInfo</x:ref>&gt;.
       </t>
    </section>
 
@@ -3189,6 +3201,20 @@
       Specifies the document series in which this document appears, and also
       specifies an identifier within that series.
    </t>
+   <t>
+      A processor determines if it is working on an RFC or an Internet-Draft by inspecting the
+      "name" attribute of a &lt;<x:ref>seriesInfo</x:ref>&gt; element inside the
+      &lt;<x:ref>front</x:ref>&gt; element inside the &lt;<x:ref>rfc</x:ref>&gt; element, looking
+      for "rfc" or "Internet-Draft". (Specifying neither value in any of the
+      &lt;<x:ref>seriesInfo</x:ref>&gt; elements can be useful for producing other types of
+      documents, but is out-of-scope for this specification.)
+   </t>
+   <t>
+      It is invalid to have multiple
+      &lt;<x:ref>seriesInfo</x:ref>&gt; elements inside the &lt;<x:ref>front</x:ref>&gt; element
+      inside the &lt;<x:ref>rfc</x:ref>&gt; element that have "name" values of "rfc", or that have
+      "name" values of "Internet-Draft", or that have both "rfc" and "Internet-Draft".
+   </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>), and &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>; deprecated in this context).</t>
    <t anchor="element.seriesInfo.contents"><!--AG-->
       <xref format="none" target="grammar.seriesInfo">Content model</xref>: this element does not have any contents.</t>
@@ -3226,10 +3252,44 @@
             The name of the series.
       </t>
       <t>
-            The following names trigger specific processing (such as for
-            auto-generating links, and adding descriptions such as
-            "work in progress"): "BCP", "FYI", "Internet-Draft", "RFC", "STD", and "DOI".
+            Some of the values for "name" interact as follows:
       </t>
+      <t>
+         <list style="symbols">
+            <t>
+         If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt;
+         element with a name of "Internet-Draft", it can also have at most one additional
+         &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of "std", "bcp", "fyi", "exp", or
+         "historic" to indicate the intended status of this Internet Draft, if it were to be later
+         published as an RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt; element has
+         one of those names, the value attribute for that name MUST be "".
+      </t>
+            <t>
+        If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt;
+        element with a name of "rfc", it can also have at most one additional
+        &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of "std", "bcp", or "fyi" to indicate
+        the current status of this RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt;
+        element has one of those names, the value attribute for that name MUST be the number within
+        that series. That &lt;<x:ref>front</x:ref>&gt; element might also contain an additional
+        &lt;<x:ref>seriesInfo</x:ref>&gt; with the name "exp" or "historic" and a value of "" to
+        indicate the status of the RFC.
+      </t>
+            <t>
+         A &lt;<x:ref>front</x:ref>&gt; element that has a &lt;<x:ref>seriesInfo</x:ref>&gt; element
+         that has the name "Internet-Draft" MUST NOT also have a &lt;<x:ref>seriesInfo</x:ref>&gt;
+         element that has the name "rfc".
+      </t>
+            <t>
+         The DOI for the referenced document.  This MUST NOT be used when &lt;<x:ref>seriesInfo</x:ref>&gt;
+         element is an eventual child element of a &lt;<x:ref>rfc</x:ref>&gt; element,
+         only as an enventual child of a &lt;<x:ref>reference</x:ref>&gt; element.
+         The value attribute should use the form specified in <xref target="DOI"/>.
+      </t>
+         </list>
+      </t>
+      <t>
+      Other values might be added at a later time by the RFC Editor.
+   </t>
    </section>
 
    <!--seriesInfo/@value-->
@@ -3669,6 +3729,28 @@ Using CDATA:
       <iref item="hangText attribute" subitem="in t element"/>
       <t>
          Deprecated. Instead use &lt;<x:ref>dd</x:ref>&gt; inside of a definition list (&lt;<x:ref>dl</x:ref>&gt;).
+      </t>
+   </section>
+
+   <!--t/@keepwithnext-->
+   <section anchor="element.t.attribute.keepwithnext" toc="exclude">
+      <name>'keepwithnext' attribute</name>
+      <iref item="Attributes" subitem="keepwithnext"/>
+      <iref item="t element" subitem="keepwithnext attribute"/>
+      <iref item="keepwithnext attribute" subitem="in t element"/>
+      <t><!--AG-->
+         <cref anchor="element.t.attribute.keepwithnext.missing">attribute description missing</cref>
+      </t>
+   </section>
+
+   <!--t/@keepwithprevious-->
+   <section anchor="element.t.attribute.keepwithprevious" toc="exclude">
+      <name>'keepwithprevious' attribute</name>
+      <iref item="Attributes" subitem="keepwithprevious"/>
+      <iref item="t element" subitem="keepwithprevious attribute"/>
+      <iref item="keepwithprevious attribute" subitem="in t element"/>
+      <t><!--AG-->
+         <cref anchor="element.t.attribute.keepwithprevious.missing">attribute description missing</cref>
       </t>
    </section>
 

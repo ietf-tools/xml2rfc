@@ -40,8 +40,8 @@
 + }?,
 +     [ a:defaultValue = "yes" ] attribute symRefs { "yes" | "no" 
 + }?,
-+     [ a:defaultValue = "yes" ] attribute tocInclude { "yes" | 
-+ "no" }?,
++     [ a:defaultValue = "yes" ]
++     attribute tocInclude { "yes" | "no" }?,
 +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
 +     attribute finalizedTime { text }?,
 +     link*,
@@ -91,19 +91,12 @@
   organization =
     element organization {
       attribute abbrev { text }?,
--     text
 +     attribute ascii { text }?,
 +     text,
 +     [ a:defaultValue = "en" ] attribute xml:lang { text }?
-    }
-  address = element address { postal?, phone?, facsimile?, email?, 
-  uri? }
-- postal = element postal { street+, (city | region | code | 
-- country)* }
-- street = element street { text }
-- city = element city { text }
-- region = element region { text }
-- code = element code { text }
++   }
++ address =
++   element address { postal?, phone?, facsimile?, email?, uri? }
 + postal =
 +   element postal {
 +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
@@ -127,8 +120,16 @@
 + code =
 +   element code {
 +     attribute ascii { text }?,
-+     text
-+   }
+      text
+    }
+- address = element address { postal?, phone?, facsimile?, email?, 
+- uri? }
+- postal = element postal { street+, (city | region | code | 
+- country)* }
+- street = element street { text }
+- city = element city { text }
+- region = element region { text }
+- code = element code { text }
   country = element country { text }
 + postalLine =
 +   element postalLine {
@@ -166,8 +167,8 @@
 +     attribute title { text }?,
 +     name,
 +     attribute pn { text }?,
-+     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | 
-+ "no" }?,
++     [ a:defaultValue = "no" ]
++     attribute removeInRFC { "yes" | "no" }?,
       t+
     }
 + boilerplate = element boilerplate { section+ }
@@ -182,8 +183,8 @@
       [ a:defaultValue = "default" ]
       attribute toc { "include" | "exclude" | "default" }?,
 -     (t | figure | texttable | iref)*,
-+     [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | 
-+ "no" }?,
++     [ a:defaultValue = "no" ]
++     attribute removeInRFC { "yes" | "no" }?,
 +     attribute pn { text }?,
 +     name?,
 +     (artwork
@@ -210,6 +211,11 @@
       attribute anchor { xsd:ID }?,
       attribute hangText { text }?,
 +     attribute pn { text }?,
++     ([ a:defaultValue = "false" ] attribute keepwithnext { text },
++      ("false" | "true"))?,
++     ([ a:defaultValue = "false" ]
++      attribute keepwithprevious { text },
++      ("false" | "true"))?,
       (text
 -      | \list
 -      | figure
@@ -280,8 +286,8 @@
 +   element ul {
 +     [ a:defaultValue = "normal" ]
 +     attribute spacing { "normal" | "compact" }?,
-+     [ a:defaultValue = "false" ] attribute empty { "false" | 
-+ "true" }?,
++     [ a:defaultValue = "false" ]
++     attribute empty { "false" | "true" }?,
 +     li+
 +   }
 + li =
@@ -307,8 +313,8 @@
 +   element dl {
 +     [ a:defaultValue = "normal" ]
 +     attribute spacing { "normal" | "compact" }?,
-+     [ a:defaultValue = "true" ] attribute hanging { "false" | 
-+ "true" }?,
++     [ a:defaultValue = "true" ]
++     attribute hanging { "false" | "true" }?,
 +     (dt, dd)+
 +   }
 + dt =
@@ -349,8 +355,10 @@
   xref =
     element xref {
       attribute target { xsd:IDREF },
-      [ a:defaultValue = "false" ] attribute pageno { "true" | 
-  "false" }?,
+-     [ a:defaultValue = "false" ] attribute pageno { "true" | 
+- "false" }?,
++     [ a:defaultValue = "false" ]
++     attribute pageno { "true" | "false" }?,
       [ a:defaultValue = "default" ]
       attribute format { "counter" | "title" | "none" | "default" 
   }?,
@@ -377,8 +385,8 @@
       attribute anchor { xsd:ID }?,
       attribute source { text }?,
 -     text
-+     [ a:defaultValue = "true" ] attribute display { "true" | 
-+ "false" }?,
++     [ a:defaultValue = "true" ]
++     attribute display { "true" | "false" }?,
 +     (text | b | em | eref | i | strong | sub | sup | tt | xref)*
 +   }
 + tt =
