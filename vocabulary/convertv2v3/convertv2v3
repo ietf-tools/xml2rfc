@@ -2,7 +2,7 @@
 
 ## Convert xml2rfc v2 to xml2rfc v3.
 ## In particular, this conversion tool removes all elements that are marked as "deprecated" in
-## <a href="http://tools.ietf.org/html/draft-hoffman-xml2rfc-11">draft-hoffman-xml2rfc-11</a>,
+## <a href="http://tools.ietf.org/html/draft-hoffman-xml2rfc-14">draft-hoffman-xml2rfc-14</a>,
 ## and converts them to their intended replacements.
 
 ## Original Author: Tony Hansen
@@ -12,15 +12,11 @@
 ## TODO STILL: ????????????????
 ## is hangIndent used somewhere?
 
-## <texttable title=> => <name>
+#
+# document keepwithnext/keepwithprevious
 
-## <texttable> => <table>
-## <table><preamble> => move to a <t> outside of the table. What happens to <texttable> alignment?
-## <table><postamble> => move to a <t> outside of the table. What happens to <texttable> alignment?
-## <figure><preamble> => move to a <t> outside of the figure. What happens to <figure> alignment?
-## <figure><postamble> => move to a <t> outside of the figure. What happens to <figure> alignment?
-## <ttcol>s get collected into a <tr> with <th>s
-## <c>s get arranged into lines of <tr> with <td>s in them (using count of <ttcol>)
+#
+# cleanup - remove empty preamble/postamble sections ?
 
 ## 1.2.4
 ##   o  In <section>, restricted the names of the anchors that can be used
@@ -28,6 +24,8 @@
 ##
 ##   o  <t> now only contains non-block elements, so it no longer contains
 ##      <figure> elements.
+
+
 
 
 use strict;
@@ -115,7 +113,9 @@ my $filename = '';
 my $pendingArtworkAlt;
 my $pendingArtworkSrc;
 my $thCount = 0;
+my @thAlignment;
 my $tdCount = 0;
+my $seriesInfoSaved = '';
 
 my @emptyElements = (
     'date',	    'iref',	    'vspace',	    'seriesInfo',
@@ -255,6 +255,7 @@ sub startHandler {
     push @xmlPath, $element;
     $xmlPath = join('/', @xmlPath);
     $xmlCharVal = '';
+    my @newAttributeVals;
 
     my $comments = '';
     my $suffix = '';
@@ -308,13 +309,31 @@ sub startHandler {
 	    ## ...
 	    ## When <vspace/> is found in a list, handle it by adding an extra layer of <t></t>
 	    ## Otherwise, just remove it.
+	    ##
+	    ## 1.2.1.
+	    ##    o  Add <br> to allow line breaks (but not blank lines) in the
+	    ##       generated output for table cells.
+	    ## 2.13. <br>
+	    ##   Indicates that a line break should be inserted in the generated
+	    ##   output by the processor.  Multiple successive instances of this
+	    ##   element does not cause blank lines to appear in the output, and is
+	    ##   thus not useful.
+	    ##
+	    ##   This element appears as a child element of: <td> (Section 2.57), and
+	    ##   <th> (Section 2.59).
 	    if ($xmlPath =~ /\/list\/t\/vspace$/) {
 		my $p = $insideListElementCount[$#insideListElementCount];
 		$comments .= comment("<vspace/> inside list converted to nested <t>");
 		$vspaceElementCounts{$p} = 1;
 		$output .= "</t><t>";
+	    } elsif ($xmlPath =~ /\/ttcol\/vspace$/) {
+		$comments .= comment("<vspace/> inside table heading converted to <br/>");
+		$output .= "<br/>";
+	    } elsif ($xmlPath =~ /\/c\/vspace$/) {
+		$comments .= comment("<vspace/> inside table element converted to <br/>");
+		$output .= "<br/>";
 	    } else {
-		$comments .= comment("<$element> deprecated and removed");
+		$comments .= comment("<$element> deprecated and removed from $xmlPath");
 	    }
 	} else {
 	    $comments .= comment("removing deprecated element $element");
@@ -468,6 +487,7 @@ sub startHandler {
 	    $comments .= comment("converting <$element> to <$newelement>");
   	    $element = $newelement;
 	    $thCount = $tdCount = 0;
+	    @thAlignment = ();
 	    ### startHandler
 	} elsif ($element eq 'ttcol') {
 	    # 1.2.3.  Elements and Attributes Deprecated from v2
@@ -478,6 +498,7 @@ sub startHandler {
 	    #    Deprecated.  Instead, use <tr>, <td>, and <th>.
 	    # 3.9.1.  'align' attribute
 	    #    Deprecated.
+	    ##   Move align value to corresponding <th> or <td>.
 	    # 3.9.2.  'width' attribute
 	    #    Deprecated.
 	    my $newelement = 'th';
@@ -487,6 +508,7 @@ sub startHandler {
 	    if ($thCount == 0) {
 		$output .= "<tr>";
 	    }
+	    $thAlignment[$thCount] = '';
 	    $thCount++;
 	    ### startHandler
 	} elsif ($element eq 'c') {
@@ -503,13 +525,18 @@ sub startHandler {
 	    if ($thCount == 0) {
 		$comments .= comment("ERROR: no ttcol found in texttable");
 		$thCount = 1;
+		$thAlignment[0] = '';
 	    }
 	    if ($tdCount == 0) {
 		# close off the ttcol/th row
 		$output .= "</tr>";
 	    }
-	    if (($tdCount % $thCount) == 0) {
+	    my $tdCol = $tdCount % $thCount;
+	    if ($tdCol == 0) {
 		$output .= "<tr>";
+	    }
+	    if ($thAlignment[$tdCol] ne '') {
+		push @newAttributeVals, 'align', $thAlignment[$tdCol];
 	    }
 	    $tdCount++;
 	    ### startHandler
@@ -528,6 +555,8 @@ sub startHandler {
 	    $replacementStack{$xmlPath} = $newelement;
 	    $comments .= comment("converting <$element> to <$newelement> and moving before $elements{$enclosingElementCount}");
   	    $element = $newelement;
+	    # 2.54.3 'keepwithnext' attribute
+	    push @newAttributeVals, 'keepwithnext', 'true';
 	    ### startHandler
 	} elsif ($element eq 'postamble') {
 	    # 1.2.3.  Elements and Attributes Deprecated from v2
@@ -544,10 +573,13 @@ sub startHandler {
 	    $replacementStack{$xmlPath} = $newelement;
 	    $comments .= comment("converting <$element> to <$newelement> and moving after $elements{$enclosingElementCount}");
   	    $element = $newelement;
+	    # 2.54.4 'keepwithprevious' attribute
+	    push @newAttributeVals, 'keepwithprevious', 'true';
 	}
     }
 
     ### startHandler
+    # do element processing that is most easily done for the entire element
     if ($element eq 'figure') {
 	if (defined($pendingArtworkAlt)) {
 	    $comments .= comment("WARNING: alt='$pendingArtworkAlt' was removed from a previous <figure>, but no <artwork> was found to place it in");
@@ -583,7 +615,18 @@ sub startHandler {
     $originalElementColumn{$elementCount} = $expat->current_column;
     $elementCount++;
 
+    # We may have added some attributes above. Add them now.
+    if ($#newAttributeVals > -1) {
+	for (my $i = 0; $i < $#newAttributeVals; $i += 2) {
+	    my $name = $newAttributeVals[$i];
+	    my $val = $newAttributeVals[$i+1];
+	    $output .= " $name='$val'";
+	    $comments .= comment("adding $name='$val'");
+	}
+    }
+
     ### startHandler
+    # Do more per-element processing.
     if ($element eq 'artwork') {
 	if (defined($pendingArtworkAlt)) {
 	    my %attrvals = @attrvals;
@@ -614,8 +657,14 @@ sub startHandler {
 	    $pendingArtworkSrc = undef;
 	}
     }
-    my $titleSaved = "";
-    my $hangText = "";
+
+    # loop through the attribute values, doing processing that is most easily done attribute by attribute
+    my $titleSaved = "";	# used with various elements
+    my $hangText = "";		# used with hanging lists
+    my $categorySaved = "";	# used with <rfc>
+    my $docNameSaved = "";	# used with <rfc>
+    my $seriesNoSaved = "";	# used with <rfc>
+    my $numberSaved = "";	# used with <rfc>
     ## startHandler
     for (my $i = 0; $i < $#attrvals; $i += 2) {
 	my $skip;
@@ -777,6 +826,31 @@ sub startHandler {
 		$comments .= comment("WARNING: unhandled attribute <$originalElement $name='$val'> removed.");
 		$skip = 1;
 	    }
+	} elsif ($element eq 'th') {
+	    if ($name eq 'align') {
+		$comments .= comment("preserving $name='$val'");
+		$thAlignment[$thCount-1] = $val;
+		my $th1 = $thCount - 1;
+	    }
+	    $skip = 1;
+	} elsif ($element eq 'rfc') {
+	    if ($name eq 'category') {
+		$categorySaved = $val;
+		$skip = 1;
+		$comments .= comment("moving category to <front/>");
+	    } elsif ($name eq 'docName') {
+		$docNameSaved = $val;
+		$skip = 1;
+		$comments .= comment("moving docName to <front/>");
+	    } elsif ($name eq 'seriesNo') {
+		$seriesNoSaved = $val;
+		$skip = 1;
+		$comments .= comment("moving seriesNo to <front/>");
+	    } elsif ($name eq 'number') {
+		$numberSaved = $val;
+		$skip = 1;
+		$comments .= comment("moving number to <front/>");
+	    }
 	}
 
 	if (!$skip) {
@@ -789,8 +863,38 @@ sub startHandler {
     ## startHandler
     ## When using xi:include,
     ##    add to <rfc>, xmlns:xi="http://www.w3.org/2001/XInclude"
+    ##
+    ## move <seriesInfo> from <reference> to <reference><front>
+    ## move <seriesInfo> from <rfc> to <rfc><front>
+    ## rfc/@category => <rfc><front><seriesInfo>@category
+    ## one of the following should be present:
+    ##    rfc/@docName => rfc/front/seriesInfo/@value name=Internet-Draft
+    ##    rfc/@number => rfc/front/seriesInfo/@value name=RFC
+    ##    rfc/@seriesNo => rfc/front/seriesInfo/@value name=rfc/@category
+    ##    rfc/@category => rfc/front/seriesIno/@name value=
+    ##
+    ## <seriesInfo name='RFC' value='1' />
+    ## <seriesInfo name='Internet-Draft' value='draft-aboba-radius-ipv6-10' />
     if ($element eq 'rfc') {
 	$output .= ' END-OF-RFC';
+	my $seriesInfoAdded = '';
+
+	if ($numberSaved ne '') {
+	    $seriesInfoSaved .=
+		"<seriesInfo name='RFC' value='$numberSaved'/>";
+	    $seriesInfoAdded = 1;
+	}
+	if ($docNameSaved ne '') {
+	    $seriesInfoSaved .=
+		"<seriesInfo name='Internet-Draft' value='$docNameSaved'/>";
+	    $seriesInfoAdded = 1;
+	}
+	if ($categorySaved ne '') {
+	    $seriesInfoSaved .=
+		"<seriesInfo name='$categorySaved' value='$seriesNoSaved'/>";
+	    $seriesInfoAdded = 1;
+	}
+	$comments .= comment("moved number/docName/category/seriesNo to <front/>") if $seriesInfoAdded;
     }
     if ($emptyElements{$element}) {
 	$output .= "/>";
@@ -806,6 +910,10 @@ sub startHandler {
     }
     if ($titleSaved ne '') {
 	$output .= "<name>$titleSaved</name>";
+    }
+    if (($element eq 'front') && ($seriesInfoSaved ne '')) {
+	$output .= $seriesInfoSaved;
+	$seriesInfoSaved = '';
     }
 }
 
@@ -1345,6 +1453,7 @@ sub resetState {
     $pendingArtworkSrc = undef;
     $thCount = 0;
     $tdCount = 0;
+    $seriesInfoSaved = '';
 }
 
 sub ashex {
