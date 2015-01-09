@@ -22,7 +22,7 @@
 <xsl:param name="deprecated" select="'no'"/>
 
 <!-- source of spec -->
-<xsl:param name="specsrc" select="'draft-reschke-xml2rfc-latest.xml'"/>
+<xsl:param name="specsrc" select="'draft-iab-xml2rfcv2-latest.xml'"/>
 <xsl:variable name="spec" select="document($specsrc)"/>
 
 <xsl:template match="rng:grammar">

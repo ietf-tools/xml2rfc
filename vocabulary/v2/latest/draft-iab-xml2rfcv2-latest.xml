@@ -2687,11 +2687,11 @@
          <iref item="xref formats" subitem="counter" primary="true"/>
         "counter"
         <list style="empty">
-          <t>
+            <t>
             Inserts a counter, such as the number of a section, figure, or
             table.
           </t>
-          <t>
+            <t>
             For targets that are not inherently numbered, such as references
             or comments, it uses the anchor name instead.
           </t>
@@ -3731,8 +3731,9 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     attribute number { text }?,
     [ a:defaultValue = "" ] attribute obsoletes { text }?,
     [ a:defaultValue = "" ] attribute updates { text }?,
-    attribute category { "std" | "bcp" | "info" | "exp" | "historic" 
-}?,
+    attribute category {
+      "std" | "bcp" | "info" | "exp" | "historic"
+    }?,
     attribute consensus { "no" | "yes" }?,
     attribute seriesNo { text }?,
     attribute ipr {
@@ -3767,8 +3768,14 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
 <b anchor="grammar.front">front</b><iref item="front element"/> =
   element front {
-    title, author+, date, area*, workgroup*, keyword*, abstract?, 
-note*
+    title,
+    author+,
+    date,
+    area*,
+    workgroup*,
+    keyword*,
+    abstract?,
+    note*
   }
 
 <b anchor="grammar.title">title</b><iref item="title element"/> =
@@ -3793,11 +3800,11 @@ note*
     text
   }
 
-<b anchor="grammar.address">address</b><iref item="address element"/> = element address { postal?, phone?, facsimile?, email?, 
-uri? }
+<b anchor="grammar.address">address</b><iref item="address element"/> =
+  element address { postal?, phone?, facsimile?, email?, uri? }
 
-<b anchor="grammar.postal">postal</b><iref item="postal element"/> = element postal { street+, (city | region | code | country)* 
-}
+<b anchor="grammar.postal">postal</b><iref item="postal element"/> =
+  element postal { street+, (city | region | code | country)* }
 
 <b anchor="grammar.street">street</b><iref item="street element"/> = element street { text }
 
@@ -3877,8 +3884,8 @@ uri? }
 <b anchor="grammar.xref">xref</b><iref item="xref element"/> =
   element xref {
     attribute target { xsd:IDREF },
-    [ a:defaultValue = "false" ] attribute pageno { "true" | "false" 
-}?,
+    [ a:defaultValue = "false" ]
+    attribute pageno { "true" | "false" }?,
     [ a:defaultValue = "default" ]
     attribute format { "counter" | "title" | "none" | "default" }?,
     text

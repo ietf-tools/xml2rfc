@@ -3,9 +3,9 @@
 
 Network Working Group                                         J. Reschke
 Internet-Draft                                                greenbytes
-Obsoletes: 2629 (if approved)                            January 7, 2015
+Obsoletes: 2629 (if approved)                            January 9, 2015
 Intended status: Informational
-Expires: July 11, 2015
+Expires: July 13, 2015
 
 
                    The 'XML2RFC' version 2 Vocabulary
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 11, 2015.
+   This Internet-Draft will expire on July 13, 2015.
 
 Copyright Notice
 
@@ -2296,8 +2296,9 @@ Appendix C.  Relax NG Schema
        attribute number { text }?,
        [ a:defaultValue = "" ] attribute obsoletes { text }?,
        [ a:defaultValue = "" ] attribute updates { text }?,
-       attribute category { "std" | "bcp" | "info" | "exp" | "historic"
-   }?,
+       attribute category {
+         "std" | "bcp" | "info" | "exp" | "historic"
+       }?,
        attribute consensus { "no" | "yes" }?,
        attribute seriesNo { text }?,
        attribute ipr {
@@ -2332,8 +2333,14 @@ Appendix C.  Relax NG Schema
 
    front =
      element front {
-       title, author+, date, area*, workgroup*, keyword*, abstract?,
-   note*
+       title,
+       author+,
+       date,
+       area*,
+       workgroup*,
+       keyword*,
+       abstract?,
+       note*
      }
 
    title =
@@ -2358,11 +2365,11 @@ Appendix C.  Relax NG Schema
        text
      }
 
-   address = element address { postal?, phone?, facsimile?, email?,
-   uri? }
+   address =
+     element address { postal?, phone?, facsimile?, email?, uri? }
 
-   postal = element postal { street+, (city | region | code | country)*
-   }
+   postal =
+     element postal { street+, (city | region | code | country)* }
 
    street = element street { text }
 
@@ -2442,8 +2449,8 @@ Appendix C.  Relax NG Schema
    xref =
      element xref {
        attribute target { xsd:IDREF },
-       [ a:defaultValue = "false" ] attribute pageno { "true" | "false"
-   }?,
+       [ a:defaultValue = "false" ]
+       attribute pageno { "true" | "false" }?,
        [ a:defaultValue = "default" ]
        attribute format { "counter" | "title" | "none" | "default" }?,
        text
