@@ -35,7 +35,8 @@ rfc =
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     [ a:defaultValue = "no" ] attribute sortRefs { "yes" | "no" }?,
     [ a:defaultValue = "yes" ] attribute symRefs { "yes" | "no" }?,
-    [ a:defaultValue = "yes" ] attribute tocInclude { "yes" | "no" }?,
+    [ a:defaultValue = "yes" ]
+    attribute tocInclude { "yes" | "no" }?,
     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
     attribute finalizedTime { text }?,
     link*,
@@ -87,7 +88,8 @@ organization =
     text,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?
   }
-address = element address { postal?, phone?, facsimile?, email?, uri? }
+address =
+  element address { postal?, phone?, facsimile?, email?, uri? }
 postal =
   element postal {
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
@@ -147,7 +149,8 @@ note =
     attribute title { text }?,
     name,
     attribute pn { text }?,
-    [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no" }?,
+    [ a:defaultValue = "no" ]
+    attribute removeInRFC { "yes" | "no" }?,
     t+
   }
 boilerplate = element boilerplate { section+ }
@@ -159,7 +162,8 @@ section =
     [ a:defaultValue = "yes" ] attribute numbered { "yes" | "no" }?,
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
-    [ a:defaultValue = "no" ] attribute removeInRFC { "yes" | "no" }?,
+    [ a:defaultValue = "no" ]
+    attribute removeInRFC { "yes" | "no" }?,
     attribute pn { text }?,
     name?,
     (artwork
@@ -250,7 +254,8 @@ ul =
   element ul {
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
-    [ a:defaultValue = "false" ] attribute empty { "false" | "true" }?,
+    [ a:defaultValue = "false" ]
+    attribute empty { "false" | "true" }?,
     li+
   }
 li =
@@ -276,7 +281,8 @@ dl =
   element dl {
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
-    [ a:defaultValue = "true" ] attribute hanging { "false" | "true" }?,
+    [ a:defaultValue = "true" ]
+    attribute hanging { "false" | "true" }?,
     (dt, dd)+
   }
 dt =
@@ -317,7 +323,8 @@ dd =
 xref =
   element xref {
     attribute target { xsd:IDREF },
-    [ a:defaultValue = "false" ] attribute pageno { "true" | "false" }?,
+    [ a:defaultValue = "false" ]
+    attribute pageno { "true" | "false" }?,
     [ a:defaultValue = "default" ]
     attribute format { "counter" | "title" | "none" | "default" }?,
     (attribute section { text },
@@ -342,7 +349,8 @@ cref =
   element cref {
     attribute anchor { xsd:ID }?,
     attribute source { text }?,
-    [ a:defaultValue = "true" ] attribute display { "true" | "false" }?,
+    [ a:defaultValue = "true" ]
+    attribute display { "true" | "false" }?,
     (text | b | em | eref | i | strong | sub | sup | tt | xref)*
   }
 tt =
