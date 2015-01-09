@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                          December 23, 2014
+Obsoletes: 2629 (if approved)                            January 9, 2015
 Intended status: Informational
-Expires: June 26, 2015
+Expires: July 13, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,11 +40,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 26, 2015.
+   This Internet-Draft will expire on July 13, 2015.
 
 Copyright Notice
 
-   Copyright (c) 2014 IETF Trust and the persons identified as the
+   Copyright (c) 2015 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -2351,11 +2351,12 @@ Table of Contents
    inside the <front> element inside the <rfc> element, looking for
    "rfc" or "Internet-Draft".  (Specifying neither value in any of the
    <seriesInfo> elements can be useful for producing other types of
-   documents, but is out-of-scope for this specification.)  It is
-   invalid to have multiple <seriesInfo> elements inside the <front>
-   element inside the <rfc> element that have "name" values of "rfc", or
-   that have "name" values of "Internet-Draft", or that have both "rfc"
-   and "Internet-Draft".
+   documents, but is out-of-scope for this specification.)
+
+   It is invalid to have multiple <seriesInfo> elements inside the
+   <front> element inside the <rfc> element that have "name" values of
+   "rfc", or that have "name" values of "Internet-Draft", or that have
+   both "rfc" and "Internet-Draft".
 
    This element appears as a child element of: <front> (Section 2.27),
    and <reference> (Section 2.42; deprecated in this context).
@@ -2396,6 +2397,11 @@ Table of Contents
    o  A <front> element that has a <seriesInfo> element that has the
       name "Internet-Draft" MUST NOT also have a <seriesInfo> element
       that has the name "rfc".
+
+   o  The DOI for the referenced document.  This MUST NOT be used when
+      <seriesInfo> element is an eventual child element of a <rfc>
+      element, only as an enventual child of a <reference> element.  The
+      value attribute should use the form specified in [DOI].
 
    Other values might be added at a later time by the RFC Editor.
 

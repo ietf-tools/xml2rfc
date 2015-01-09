@@ -15,10 +15,6 @@
 
 Future threads:
 
-	<rfc> with multi-doc categories: how can seriesNo indicate that this is one part of the series?
-
-	Describe DOI in <seriesInfo>
-
     Processors ignore case in attribute values that are important to it, such as for seriesInfo/@name
 
 =====
@@ -3598,7 +3594,10 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       &lt;<x:ref>front</x:ref>&gt; element inside the &lt;<x:ref>rfc</x:ref>&gt; element, looking
       for "rfc" or "Internet-Draft". (Specifying neither value in any of the
       &lt;<x:ref>seriesInfo</x:ref>&gt; elements can be useful for producing other types of
-      documents, but is out-of-scope for this specification.) It is invalid to have multiple
+      documents, but is out-of-scope for this specification.)
+   </t>
+   <t>
+      It is invalid to have multiple
       &lt;<x:ref>seriesInfo</x:ref>&gt; elements inside the &lt;<x:ref>front</x:ref>&gt; element
       inside the &lt;<x:ref>rfc</x:ref>&gt; element that have "name" values of "rfc", or that have
       "name" values of "Internet-Draft", or that have both "rfc" and "Internet-Draft".
@@ -3665,6 +3664,12 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          A &lt;<x:ref>front</x:ref>&gt; element that has a &lt;<x:ref>seriesInfo</x:ref>&gt; element
          that has the name "Internet-Draft" MUST NOT also have a &lt;<x:ref>seriesInfo</x:ref>&gt;
          element that has the name "rfc".
+      </t>
+      <t>
+         The DOI for the referenced document.  This MUST NOT be used when &lt;<x:ref>seriesInfo</x:ref>&gt;
+         element is an eventual child element of a &lt;<x:ref>rfc</x:ref>&gt; element,
+         only as an enventual child of a &lt;<x:ref>reference</x:ref>&gt; element.
+         The value attribute should use the form specified in <xref target="DOI"/>.
       </t>
    </list></t>      
    <t>

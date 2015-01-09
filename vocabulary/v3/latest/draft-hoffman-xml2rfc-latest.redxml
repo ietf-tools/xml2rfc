@@ -15,11 +15,18 @@
 
 Future threads:
 
-	<rfc> with multi-doc categories: how can seriesNo indicate that this is one part of the series?
-
-	Describe DOI in <seriesInfo>
-
     Processors ignore case in attribute values that are important to it, such as for seriesInfo/@name
+
+=====
+Add two attributes to <t>: keepwithnext= true/false and keepwithprevious= true/false, defaults for
+both being false.
+
+These act as hints to the output formatters that do pagination to do a best effort attempt to keep
+the <t> paragraph with the next or previous element, whatever that happens to be. For example, the
+HTML output @media print CSS might translate this to page-break-after: avoid and page-break-before:
+avoid, respectively. For PDF, the paginator could attempt to keep the paragraphs with the next or
+previous elements. Note: this attribute is strictly a hint and not always actionable.
+=====
 
 Either continue trying to get new link relations, or use:
               The current ISSN for the RFC Series.
@@ -29,6 +36,8 @@ Either continue trying to get new link relations, or use:
               The Internet Draft that was submitted to the RFC Editor to become the published RFC.
               The value for the "rel" attribute is "alternate".
               The link should be to an IETF-controlled web site that retains copies of Internet Drafts.
+
+Think about all the "processor" wording, whether it should be here, and so on.
 
 Possibly kill <dl hanging>, but make sure that the list agrees.
 	**** Joe figured out that the current definition is probably fine ****
@@ -3479,7 +3488,10 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       &lt;<xref target="element.front" format="none">front</xref>&gt; element inside the &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element, looking
       for "rfc" or "Internet-Draft". (Specifying neither value in any of the
       &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements can be useful for producing other types of
-      documents, but is out-of-scope for this specification.) It is invalid to have multiple
+      documents, but is out-of-scope for this specification.)
+   </t>
+   <t>
+      It is invalid to have multiple
       &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements inside the &lt;<xref target="element.front" format="none">front</xref>&gt; element
       inside the &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element that have "name" values of "rfc", or that have
       "name" values of "Internet-Draft", or that have both "rfc" and "Internet-Draft".
@@ -3545,6 +3557,12 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          A &lt;<xref target="element.front" format="none">front</xref>&gt; element that has a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element
          that has the name "Internet-Draft" MUST NOT also have a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
          element that has the name "rfc".
+      </t>
+      <t>
+         The DOI for the referenced document.  This MUST NOT be used when &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
+         element is an eventual child element of a &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element,
+         only as an enventual child of a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element.
+         The value attribute should use the form specified in <xref target="DOI"/>.
       </t>
    </list></t>      
    <t>
