@@ -197,7 +197,7 @@
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
-      file, such as a bitmap or a vector drawing in SVN, using a URI. In this case, the textual
+      file, such as a bitmap or a vector drawing in SVG, using a URI. In this case, the textual
       content acts as fallback for output representations that do not support graphics,
       and thus ought to contain either a "line art" variant of the graphics, or
       otherwise prose that describes the included image in sufficient detail.
@@ -1994,7 +1994,7 @@
          <list style="symbols">
          <t>
                The current ISSN for the RFC Series.
-               The value for the "rel" attribute is "isPartOf".
+               The value for the "rel" attribute is "item".
                The link should use the form "urn:issn:".
             </t>
          <t>
@@ -2004,7 +2004,7 @@
             </t>
          <t>
                The Internet Draft that was submitted to the RFC Editor to become the published RFC.
-               The value for the "rel" attribute is "convertedFrom".
+               The value for the "rel" attribute is "derivedFrom".
                The link should be to an IETF-controlled web site that retains copies of Internet Drafts.
             </t>
          <t>
@@ -3738,8 +3738,12 @@ Using CDATA:
       <iref item="Attributes" subitem="keepwithnext"/>
       <iref item="t element" subitem="keepwithnext attribute"/>
       <iref item="keepwithnext attribute" subitem="in t element"/>
-      <t><!--AG-->
-         <cref anchor="element.t.attribute.keepwithnext.missing">attribute description missing</cref>
+      <t>
+         Acts as a hint to the output formatters that do pagination to do a best effort attempt to
+         keep the paragraph with the next element, whatever that happens to be. For example, the
+         HTML output @media print CSS might translate this to page-break-after: avoid. For PDF, the
+         paginator could attempt to keep the paragraph with the next element. Note: this attribute
+         is strictly a hint and not always actionable.
       </t>
    </section>
 
@@ -3749,8 +3753,12 @@ Using CDATA:
       <iref item="Attributes" subitem="keepwithprevious"/>
       <iref item="t element" subitem="keepwithprevious attribute"/>
       <iref item="keepwithprevious attribute" subitem="in t element"/>
-      <t><!--AG-->
-         <cref anchor="element.t.attribute.keepwithprevious.missing">attribute description missing</cref>
+      <t>
+         Acts as a hint to the output formatters that do pagination to do a best effort attempt to
+         keep the paragraph with the previous element, whatever that happens to be. For example, the
+         HTML output @media print CSS might translate this to page-break-before: avoid. For PDF, the
+         paginator could attempt to keep the paragraph with the previous element. Note: this attribute
+         is strictly a hint and not always actionable.
       </t>
    </section>
 
