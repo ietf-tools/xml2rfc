@@ -4114,6 +4114,11 @@ Using CDATA:
          paginator could attempt to keep the paragraph with the next element. Note: this attribute
          is strictly a hint and not always actionable.
       </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"false" (default)</t>
+            <t>"true"</t>
+         </list>
+      </t>
    </section>
 
    <!--t/@keepwithprevious-->
@@ -4128,6 +4133,11 @@ Using CDATA:
          HTML output @media print CSS might translate this to page-break-before: avoid. For PDF, the
          paginator could attempt to keep the paragraph with the previous element. Note: this attribute
          is strictly a hint and not always actionable.
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"false" (default)</t>
+            <t>"true"</t>
+         </list>
       </t>
    </section>
 
@@ -6716,11 +6726,10 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     attribute anchor { xsd:ID }?,
     attribute hangText { text }?,
     attribute pn { text }?,
-    ([ a:defaultValue = "false" ] attribute keepwithnext { text },
-     ("false" | "true"))?,
-    ([ a:defaultValue = "false" ]
-     attribute keepwithprevious { text },
-     ("false" | "true"))?,
+    [ a:defaultValue = "false" ]
+    attribute keepwithnext { "false" | "true" }?,
+    [ a:defaultValue = "false" ]
+    attribute keepwithprevious { "false" | "true" }?,
     (text
      | b
      | bcp14
@@ -7529,11 +7538,10 @@ to the v3 schema.</t>
       attribute anchor { xsd:ID }?,
       attribute hangText { text }?,
 +     attribute pn { text }?,
-+     ([ a:defaultValue = "false" ] attribute keepwithnext { text },
-+      ("false" | "true"))?,
-+     ([ a:defaultValue = "false" ]
-+      attribute keepwithprevious { text },
-+      ("false" | "true"))?,
++     [ a:defaultValue = "false" ]
++     attribute keepwithnext { "false" | "true" }?,
++     [ a:defaultValue = "false" ]
++     attribute keepwithprevious { "false" | "true" }?,
       (text
 -      | \list
 -      | figure

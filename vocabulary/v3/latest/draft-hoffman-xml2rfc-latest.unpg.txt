@@ -2739,6 +2739,12 @@ Table of Contents
    element.  Note: this attribute is strictly a hint and not always
    actionable.
 
+   Allowed values:
+
+   o  "false" (default)
+
+   o  "true"
+
 2.54.4.  'keepwithprevious' attribute
 
    Acts as a hint to the output formatters that do pagination to do a
@@ -2748,6 +2754,12 @@ Table of Contents
    the paginator could attempt to keep the paragraph with the previous
    element.  Note: this attribute is strictly a hint and not always
    actionable.
+
+   Allowed values:
+
+   o  "false" (default)
+
+   o  "true"
 
 2.54.5.  'pn' attribute
 
@@ -4452,11 +4464,10 @@ Appendix C.  Relax NG Schema
        attribute anchor { xsd:ID }?,
        attribute hangText { text }?,
        attribute pn { text }?,
-       ([ a:defaultValue = "false" ] attribute keepwithnext { text },
-        ("false" | "true"))?,
-       ([ a:defaultValue = "false" ]
-        attribute keepwithprevious { text },
-        ("false" | "true"))?,
+       [ a:defaultValue = "false" ]
+       attribute keepwithnext { "false" | "true" }?,
+       [ a:defaultValue = "false" ]
+       attribute keepwithprevious { "false" | "true" }?,
        (text
         | b
         | bcp14
@@ -5262,11 +5273,10 @@ Appendix D.  Schema Differences from v2
          attribute anchor { xsd:ID }?,
          attribute hangText { text }?,
    +     attribute pn { text }?,
-   +     ([ a:defaultValue = "false" ] attribute keepwithnext { text },
-   +      ("false" | "true"))?,
-   +     ([ a:defaultValue = "false" ]
-   +      attribute keepwithprevious { text },
-   +      ("false" | "true"))?,
+   +     [ a:defaultValue = "false" ]
+   +     attribute keepwithnext { "false" | "true" }?,
+   +     [ a:defaultValue = "false" ]
+   +     attribute keepwithprevious { "false" | "true" }?,
          (text
    -      | \list
    -      | figure

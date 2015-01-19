@@ -212,11 +212,10 @@
       attribute anchor { xsd:ID }?,
       attribute hangText { text }?,
 +     attribute pn { text }?,
-+     ([ a:defaultValue = "false" ] attribute keepwithnext { text },
-+      ("false" | "true"))?,
-+     ([ a:defaultValue = "false" ]
-+      attribute keepwithprevious { text },
-+      ("false" | "true"))?,
++     [ a:defaultValue = "false" ]
++     attribute keepwithnext { "false" | "true" }?,
++     [ a:defaultValue = "false" ]
++     attribute keepwithprevious { "false" | "true" }?,
       (text
 -      | \list
 -      | figure
