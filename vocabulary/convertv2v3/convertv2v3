@@ -116,6 +116,8 @@ my $thCount = 0;
 my @thAlignment;
 my $tdCount = 0;
 my $seriesInfoSaved = '';
+my %addtrs;
+my $lastc = -1;
 
 my @emptyElements = (
     'date',	    'iref',	    'vspace',	    'seriesInfo',
@@ -527,12 +529,15 @@ sub startHandler {
 		$thCount = 1;
 		$thAlignment[0] = '';
 	    }
-	    if ($tdCount == 0) {
-		# close off the ttcol/th row
-		$output .= "</tr>";
-	    }
+	#    if ($tdCount == 0) {
+	#	# close off the ttcol/th row
+	#	$output .= "</tr>";
+	#    }
 	    my $tdCol = $tdCount % $thCount;
 	    if ($tdCol == 0) {
+		my $addtr = $elementCount - 1;
+		# $output .= "<!-- add tr after $addtr -->";
+		$addtrs{$addtr} = 1;
 		$output .= "<tr>";
 	    }
 	    if ($thAlignment[$tdCol] ne '') {
@@ -945,9 +950,14 @@ sub endHandler {
 	    my $p = pop @insideListElementCount;
 	    # $comments .= comment("popped elementCount=$p");
 	} elsif ($element eq 'texttable') {
-	    if ($tdCount > 0) {
-		$output .= "</tr>";
+	    # $output .= "<!-- tdCount=$tdCount -->";
+	    if ($lastc >= 0) {
+		$addtrs{$lastc} = 1;
 	    }
+	    #if ($tdCount > 0) {
+	    #	my $poppedElementCount = $elementCountStack[$#elementCountStack];
+	    #	$output .= "</tr>";
+	    #}
 	} elsif ($element eq 'postamble') {
 	} elsif ($element eq 'preamble') {
 	}
@@ -976,6 +986,10 @@ sub endHandler {
     if (!$skip && !$emptyElements{$element}) {
 	$output .= $prefix;
 	$output .= "</$element elementCount='$poppedElementCount'>";
+    }
+    if (($element eq 'td') || ($element eq 'th')) {
+	$lastc = $poppedElementCount;
+	# $output .= "<!-- lastc=$lastc -->";
     }
     $output .= $comments;
 
@@ -1454,6 +1468,8 @@ sub resetState {
     $thCount = 0;
     $tdCount = 0;
     $seriesInfoSaved = '';
+    %addtrs = ();
+    $lastc = -1;
 }
 
 sub ashex {
@@ -1843,6 +1859,12 @@ sub postProcessOutput {
 	    # print STDERR "movedContents='\n" . ashex($movedContents) . "'\n";
 	    $output = "$prefix$movedContents$moveToContents$rest";
 	}
+    }
+
+    # $output .= "adding trs\n";
+    for my $addtr (keys %addtrs) {
+	# $output .= "adding $addtr\n";
+	$output =~ s( elementCount='$addtr'>)( elementCount='$addtr'></tr>)g;
     }
 
     # remove the element counts
