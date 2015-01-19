@@ -34,11 +34,11 @@ if not  (V2FullMarker in FullDraftText):
 FullDraftText = FullDraftText.replace(V2FullMarker, EscapedFigure(FullV2ExampleText))
 
 # Do the conversion from v2 to v3
-p = subprocess.Popen("./convertv2v3.pl -C {} > {}".format(ExampleFullV2File, ExampleFullV3File),
+p = subprocess.Popen("./convertv2v3.pl -C < {0} > {1}".format(ExampleFullV2File, ExampleFullV3File),
 	stdout=subprocess.PIPE, shell=True)
 p.wait()
 TheOutput = (p.stdout.read()).decode("ascii")
-print("Running convertv2v3.pl said:\n{}".format(TheOutput))
+print("Running convertv2v3.pl said:\n{0}".format(TheOutput))
 try:
 	FullV3ExampleText = open(ExampleFullV3File, mode="r").read()
 except:
