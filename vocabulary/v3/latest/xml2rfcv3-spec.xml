@@ -225,7 +225,7 @@
       These four methods can also be used for including text artwork, but using a data: URI is probably
       confusing for text artwork.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       <xref format="none" target="grammar.artwork">Content model</xref>:
     </t>
@@ -1062,6 +1062,12 @@
       "September", "October", "November", or "December".
    </t>
    <t>
+      The draft processor will reject a submitted Internet Draft that has a &lt;<x:ref>date</x:ref>&gt;
+      element in the boilerplate for itself that is anything other than today. That is, the draft processor
+      will not allow a submitter to specify a date other than the day of submission. To avoid this problem,
+      authors might simply not include a &lt;<x:ref>date</x:ref>&gt; element in the boilerplate.
+   </t>
+   <t>
       In the case of bibliographic references, the date information can have prose text for the month or year.
       For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
       non-specific months (month="Second quarter") and so on, are allowed.
@@ -1510,7 +1516,7 @@
       Contains a figure with a caption with the figure number.
       If the element contains a &lt;<x:ref>name</x:ref>&gt; element, the caption will also show that name.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.figure.contents"><!--AG-->
       <xref format="none" target="grammar.figure">Content model</xref>:</t>
    <t><!--AG-->In this order:<list style="numbers">
@@ -1902,11 +1908,21 @@
       <xref format="none" target="grammar.li">Content model</xref>:
     </t>
    <t><!--AG-->Either:<list style="empty">
-          
-         <t><!--AG-->
-            <iref item="Elements" subitem="t"/>
-            <iref item="t element" subitem="inside li"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
-        
+         <t><!--AG-->In any order, but at least one of: <list style="symbols">
+               <t><!--AG-->
+                  <iref item="Elements" subitem="t"/>
+                  <iref item="t element" subitem="inside li"/>&lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="artwork"/>
+                  <iref item="artwork element" subitem="inside li"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="figure"/>
+                  <iref item="figure element" subitem="inside li"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="sourcecode"/>
+                  <iref item="sourcecode element" subitem="inside li"/>&lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</t>
+            </list>
+         </t>
       </list>
    </t>
    <t><!--AG-->Or:<list style="empty">
@@ -2713,8 +2729,9 @@
       <iref item="Attributes" subitem="pn"/>
       <iref item="references element" subitem="pn attribute"/>
       <iref item="pn attribute" subitem="in references element"/>
-      <t><!--AG-->
-         <cref anchor="element.references.attribute.pn.missing">attribute description missing</cref>
+      <t>
+         The number for this reference section. This attribute and its value are automatically generated by
+         the RFC Processor, and are ignored by other processors.
       </t>
    </section>
 
@@ -2724,8 +2741,9 @@
       <iref item="Attributes" subitem="title"/>
       <iref item="references element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in references element"/>
-      <t><!--AG-->
-         <cref anchor="element.references.attribute.title.missing">attribute description missing</cref>
+      <t>
+         Deprecated. Use &lt;<x:ref>name</x:ref>&gt; instead. Processors will flag reference sections that have
+         no &lt;<x:ref>name</x:ref>&gt; element as errors because all sections need a name.
       </t>
    </section>
 </section>
@@ -3386,7 +3404,7 @@ Using CDATA:
        Using CDATA is not a panacea, but it does help prevent having to use escapes in places where using
        using escapes can cause other problems, such as difficulty of inclusion from other documents.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->
       <xref format="none" target="grammar.sourcecode">Content model</xref>: only text content.</t>
 

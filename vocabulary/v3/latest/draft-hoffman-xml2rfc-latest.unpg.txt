@@ -578,8 +578,9 @@ Table of Contents
    using a data: URI is probably confusing for text artwork.
 
    This element appears as a child element of: <aside> (Section 2.6),
-   <blockquote> (Section 2.11), <figure> (Section 2.26), <section>
-   (Section 2.47), <td> (Section 2.57), and <th> (Section 2.59).
+   <blockquote> (Section 2.11), <figure> (Section 2.26), <li>
+   (Section 2.31), <section> (Section 2.47), <td> (Section 2.57), and
+   <th> (Section 2.59).
 
    Content model:
 
@@ -1354,8 +1355,8 @@ Table of Contents
    name.
 
    This element appears as a child element of: <aside> (Section 2.6),
-   <blockquote> (Section 2.11), <section> (Section 2.47), <td>
-   (Section 2.57), and <th> (Section 2.59).
+   <blockquote> (Section 2.11), <li> (Section 2.31), <section>
+   (Section 2.47), <td> (Section 2.57), and <th> (Section 2.59).
 
    Content model:
 
@@ -1580,7 +1581,15 @@ Table of Contents
 
    Either:
 
-      One or more <t> elements (Section 2.54)
+      In any order, but at least one of:
+
+      *  <t> elements (Section 2.54)
+
+      *  <artwork> elements (Section 2.5)
+
+      *  <figure> elements (Section 2.26)
+
+      *  <sourcecode> elements (Section 2.49)
 
    Or:
 
@@ -2478,8 +2487,9 @@ Table of Contents
    such as difficulty of inclusion from other documents.
 
    This element appears as a child element of: <blockquote>
-   (Section 2.11), <figure> (Section 2.26), <section> (Section 2.47),
-   <td> (Section 2.57), and <th> (Section 2.59).
+   (Section 2.11), <figure> (Section 2.26), <li> (Section 2.31),
+   <section> (Section 2.47), <td> (Section 2.57), and <th>
+   (Section 2.59).
 
    Content model: only text content.
 
@@ -4563,7 +4573,7 @@ Appendix C.  Relax NG Schema
      element li {
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
-       (t+
+       ((t | artwork | figure | sourcecode)+
         | (text
            | b
            | bcp14
@@ -5374,7 +5384,7 @@ Appendix D.  Schema Differences from v2
    +   element li {
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
-   +     (t+
+   +     ((t | artwork | figure | sourcecode)+
    +      | (text
    +         | b
    +         | bcp14
@@ -5909,6 +5919,7 @@ Index
          inside aside  1
          inside blockquote  1
          inside figure  1
+         inside li  1
          inside section  1
          inside td  1
          inside th  1
@@ -6307,6 +6318,7 @@ Index
          height attribute  1
          inside aside  1
          inside blockquote  1
+         inside li  1
          inside section  1
          inside td  1
          inside th  1
@@ -6611,6 +6623,7 @@ Index
          anchor attribute  1
          inside blockquote  1
          inside figure  1
+         inside li  1
          inside section  1
          inside td  1
          inside th  1

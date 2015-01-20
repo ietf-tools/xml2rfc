@@ -579,7 +579,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       These four methods can also be used for including text artwork, but using a data: URI is probably
       confusing for text artwork.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       Content model:
     </t>
@@ -1825,7 +1825,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       Contains a figure with a caption with the figure number.
       If the element contains a &lt;<xref target="element.name" format="none">name</xref>&gt; element, the caption will also show that name.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.figure.contents"><!--AG-->
       Content model:</t>
    <t><!--AG-->In this order:<list style="numbers">
@@ -2206,11 +2206,21 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       Content model:
     </t>
    <t><!--AG-->Either:<list style="empty">
-          
-         <t><!--AG-->
-            <iref item="Elements" subitem="t"/>
-            <iref item="t element" subitem="inside li"/>One or more &lt;<xref target="element.t" format="none">t</xref>&gt; elements (<xref target="element.t"/>)</t>
-        
+         <t><!--AG-->In any order, but at least one of: <list style="symbols">
+               <t><!--AG-->
+                  <iref item="Elements" subitem="t"/>
+                  <iref item="t element" subitem="inside li"/>&lt;<xref target="element.t" format="none">t</xref>&gt; elements (<xref target="element.t"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="artwork"/>
+                  <iref item="artwork element" subitem="inside li"/>&lt;<xref target="element.artwork" format="none">artwork</xref>&gt; elements (<xref target="element.artwork"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="figure"/>
+                  <iref item="figure element" subitem="inside li"/>&lt;<xref target="element.figure" format="none">figure</xref>&gt; elements (<xref target="element.figure"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="sourcecode"/>
+                  <iref item="sourcecode element" subitem="inside li"/>&lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt; elements (<xref target="element.sourcecode"/>)</t>
+            </list>
+         </t>
       </list>
    </t>
    <t><!--AG-->Or:<list style="empty">
@@ -3651,7 +3661,7 @@ Using CDATA:
        Using CDATA is not a panacea, but it does help prevent having to use escapes in places where using
        using escapes can cause other problems, such as difficulty of inclusion from other documents.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->
       Content model: only text content.</t>
 
@@ -6690,7 +6700,7 @@ li =
   element li {
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
-    (t+
+    ((t | artwork | figure | sourcecode)+
      | (text
         | b
         | bcp14
@@ -7504,7 +7514,7 @@ to the v3 schema.</t>
 +   element li {
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
-+     (t+
++     ((t | artwork | figure | sourcecode)+
 +      | (text
 +         | b
 +         | bcp14
