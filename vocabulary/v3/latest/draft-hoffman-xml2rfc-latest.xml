@@ -591,13 +591,17 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       These four methods can also be used for including text artwork, but using a data: URI is probably
       confusing for text artwork.
    </t>
+   <t>
+      Output formatters that do pagination should attempt to keep artwork on a single page. This is to prevent
+      artwork that is split across pages from looking like two separate pieces of artwork.
+   </t>
+
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       <xref format="none" target="grammar.artwork">Content model</xref>:
     </t>
         
    <t><!--AG-->Text</t>
-      
 
    <!--artwork/@align-->
    <section anchor="element.artwork.attribute.align" toc="exclude">
@@ -3774,6 +3778,10 @@ Using CDATA:
        Using CDATA is not a panacea, but it does help prevent having to use escapes in places where using
        using escapes can cause other problems, such as difficulty of inclusion from other documents.
    </t>
+   <t>
+      Output formatters that do pagination should attempt to keep source code on a single page. This is to prevent
+      source code that is split across pages from looking like two separate pieces of code.
+   </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->
       <xref format="none" target="grammar.sourcecode">Content model</xref>: only text content.</t>
@@ -4217,6 +4225,10 @@ Using CDATA:
       contain the rows that will be the table's heading and optionally a &lt;<x:ref>tfoot</x:ref>&gt; element
       to contain the rows of the table's footer. If the XML is converted to a representation that has page
       breaks (such as PDFs, or printed HTML), the header and footer are meant to appear on each page.
+   </t>
+   <t>
+      Output formatters that do pagination should attempt to keep a table on a single page. This is to prevent
+      a table that is split across pages from looking like two separate tables.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.table.contents"><!--AG-->
@@ -5400,7 +5412,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
       <t>
          Deprecated. Instead of &lt;spanx style="emph"&gt;, use &lt;b&gt;
       instead of &lt;spanx style="strong"&gt;, use &lt;i&gt;;
-      instead of &lt;spanx style="verg"&gt;, use &lt;tt&gt;.
+      instead of &lt;spanx style="verb"&gt;, use &lt;tt&gt;.
       </t>
    </section>
 
