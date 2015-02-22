@@ -1037,16 +1037,15 @@ class BaseRfcWriter:
             self._index.append(item)
 
         # Authors addresses section
-        if self.pis["rfcedstyle"] != "yes":
-            authors = self.r.findall('front/author')
-            autoAnchor = 'rfc.authors'
-            if len(authors) > 1:
-                title = "Authors' Addresses"
-            else:
-                title = "Author's Address"
-            # Add explicitly to index
-            item = _RfcItem(title, autoAnchor, title=title)
-            self._index.append(item)
+        authors = self.r.findall('front/author')
+        autoAnchor = 'rfc.authors'
+        if len(authors) > 1:
+            title = "Authors' Addresses"
+        else:
+            title = "Author's Address"
+        # Add explicitly to index
+        item = _RfcItem(title, autoAnchor, title=title)
+        self._index.append(item)
 
     def _build_document(self):
         self.indexmode = False
