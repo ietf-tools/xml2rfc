@@ -522,7 +522,10 @@ class RawTextRfcWriter(BaseRfcWriter):
             self.buf.extend([''] * blanklines)
             start_line = len(self.buf)
             # Format the input
-            lines = [line.rstrip() for line in text.expandtabs(4).split('\n')]
+            if "\t" in text:
+                xml2rfc.log.warn("Text %scontains tab characters.  These will be expanded, assuming a tab-size of 8." %
+                    (("around line %s "%source_line) if source_line else ""))
+            lines = [line.rstrip() for line in text.expandtabs().split('\n')]
             # Outdent if it helps anything
             longest_line = max(len(line.rstrip()) for line in lines)
             if (longest_line > self.width-indent):
