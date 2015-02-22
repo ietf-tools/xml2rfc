@@ -1367,7 +1367,7 @@ RFC 6787                         MRCPv2                    November 2012
    start-line      =   request-line / response-line / event-line
 
    message-header  =   1*(generic-header / resource-header /
-                  generic-field)
+                          generic-field)
 
    resource-header =   synthesizer-header
                    /   recognizer-header
@@ -3085,7 +3085,7 @@ RFC 6787                         MRCPv2                    November 2012
 
 
    fetch-hint          =   "Fetch-Hint" ":"
-                ("prefetch" / "safe") CRLF
+                            ("prefetch" / "safe") CRLF
 
 8.4.11.  Audio-Fetch-Hint
 
@@ -4888,7 +4888,7 @@ RFC 6787                         MRCPv2                    November 2012
    incomplete match to an active grammar.  The value is in milliseconds.
 
    speech-complete-timeout = "Speech-Complete-Timeout" ":"
-                 1*19DIGIT CRLF
+                             1*19DIGIT CRLF
 
    A long Speech-Complete-Timeout value delays the result to the client
    and therefore makes the application's response to a user slow.  A
@@ -4949,7 +4949,7 @@ RFC 6787                         MRCPv2                    November 2012
    in RECOGNIZE, SET-PARAMS, or GET-PARAMS.
 
    dtmf-interdigit-timeout = "DTMF-Interdigit-Timeout" ":"
-                  1*19DIGIT CRLF
+                              1*19DIGIT CRLF
 
 9.4.18.  DTMF-Term-Timeout
 
@@ -7145,7 +7145,7 @@ RFC 6787                         MRCPv2                    November 2012
    S->C:   MRCP/2.0 ... 543262 200 COMPLETE
            Channel-Identifier:32AECB23433801@speechrecog
            Waveform-URI:<http://mediaserver.com/recordings/file1324.wav>
-                ;size=242453;duration=25432
+                        ;size=242453;duration=25432
 
 9.18.  MODIFY-PHRASE
 
@@ -11463,7 +11463,7 @@ RFC 6787                         MRCPv2                    November 2012
                     /    verifier-event
 
    message-header   =  1*(generic-header / resource-header /
-                  generic-field)
+                          generic-field)
 
    generic-field    =    field-name ":" [ field-value ]
    field-name       =    token
@@ -11726,10 +11726,10 @@ RFC 6787                         MRCPv2                    November 2012
                               [";" 1*(UTFCHAR / %x20)] CRLF
 
    speech-language       =    "Speech-Language" ":"
-                  1*VCHAR CRLF
+                              1*VCHAR CRLF
 
    fetch-hint            =    "Fetch-Hint" ":"
-                  ("prefetch" / "safe") CRLF
+                              ("prefetch" / "safe") CRLF
 
    audio-fetch-hint      =    "Audio-Fetch-Hint" ":"
                              ("prefetch" / "safe" / "stream") CRLF
@@ -12133,7 +12133,7 @@ RFC 6787                         MRCPv2                    November 2012
                    <xs:complexType mixed="true">
                      <xs:sequence minOccurs="0">
                        <xs:any namespace="##other"
-                       processContents="lax"/>
+                               processContents="lax"/>
                      </xs:sequence>
                    </xs:complexType>
                  </xs:element>
