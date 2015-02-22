@@ -321,8 +321,6 @@ def _replace_unicode_characters(str):
     """ replace those Unicode characters that we do not use internally
         &wj; &zwsp; &nbsp; &nbhy;
     """
-#   Make this a non-op to get non-ascii characters in the output
-#    return str
     while True:
         match = re.search(u'([^ -\x7e\u2060\u200B\u00A0\u2011\r\n])', str)
         if not match:
