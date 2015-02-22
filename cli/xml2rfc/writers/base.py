@@ -6,6 +6,7 @@ import codecs
 import datetime
 import textwrap
 import lxml
+import re
 import xml2rfc.log
 import xml2rfc.utils
 try:
@@ -367,16 +368,20 @@ class BaseRfcWriter:
         return item
 
     def _indexSection(self, counter, title=None, anchor=None, toc=True, \
-                      level=1, appendix=False):
+                      level=1, appendix=False, numbered=True):
         counter = str(counter)
-        if appendix:
-            autoName = 'Appendix' + self.nbws_cond + counter
-            autoAnchor = 'rfc.appendix.' + counter
+        if numbered:
+            if appendix:
+                autoName = 'Appendix' + self.nbws_cond + counter
+                autoAnchor = 'rfc.appendix.' + counter
+            else:
+                autoName = 'Section' + self.nbws_cond + counter
+                autoAnchor = 'rfc.section.' + counter
+            item = _RfcItem(autoName, autoAnchor, counter=counter, title=title,
+                           anchor=anchor, toc=toc, level=level, appendix=appendix)
         else:
-            autoName = 'Section' + self.nbws_cond + counter
-            autoAnchor = 'rfc.section.' + counter
-        item = _RfcItem(autoName, autoAnchor, counter=counter, title=title, \
-                       anchor=anchor, toc=toc, level=level, appendix=appendix)
+            autoAnchor = 'rfc.' + re.sub('[^A-Za-z0-9]+', '_', title).lower()
+            item = _RfcItem(title, autoAnchor, title=title)
         self._index.append(item)
         return item
 
@@ -433,7 +438,6 @@ class BaseRfcWriter:
     def get_initials(self, author):
         """author is an rfc2629 author element.  Return the author initials,
         fixed up according to current flavour and policy."""
-        import re
         initials = author.attrib.get('initials', '')
         initials_list = re.split("[. ]+", initials)
         if self.pis["multiple-initials"] == "no":
@@ -792,8 +796,8 @@ class BaseRfcWriter:
         pass
         
 
-    def write_section_rec(self, section, count_str="1.", appendix=False, \
-                           level=0):
+    def write_section_rec(self, section, count_str="1.", appendix=False,
+                           level=0, numbered=True):
         """ Recursively writes <section> elements 
         
             We use the self.indexmode flag to determine whether or not we
@@ -805,21 +809,34 @@ class BaseRfcWriter:
             title = section.attrib.get('title')
             include_toc = section.attrib.get('toc', self.defaults['section_toc']) != 'exclude' \
                           and (not appendix or self.pis['tocappendix'] == 'yes')
+            if level == 1:
+                numbered = numbered and section.attrib.get('numbered') != "no"
+            else:
+                numbered = section.attrib.get('numbered') != "no"
+            if level > 1 and not numbered:
+                if not self.indexmode:
+                    xml2rfc.log.warn('Unnumbered subsections are not permitted: found section "%s" with attribute numbered="no"' % (title, ))
+                numbered = True
             if self.indexmode:
                 # Add section to the index
                 self._indexSection(count_str, title=title, anchor=anchor,
                                    toc=include_toc, level=level,
-                                   appendix=appendix)
+                                   appendix=appendix, numbered=numbered)
             else:
                 # Write the section heading
                 aa_prefix = appendix and 'rfc.appendix.' or 'rfc.section.'
+                if numbered:
+                    autoAnchor = 'rfc.' + ('section.' if not appendix else 'appendix.') + count_str
+                else:
+                    autoAnchor = 'rfc.' + re.sub('[^A-Za-z0-9]+', '_', title).lower()
                 bullet = appendix and level == 1 and 'Appendix %s' % count_str or count_str
-                self.write_heading(title, bullet=bullet + '.',
-                                   autoAnchor=aa_prefix + count_str,
+                self.write_heading(title, bullet=bullet + '.' if numbered else "",
+                                   autoAnchor=autoAnchor,
                                    anchor=anchor, level=level)
         else:
             # Must be <middle> or <back> element -- no title or index.
             count_str = ''
+            numbered = True
 
         p_count = 1  # Paragraph counter
         for element in section:
@@ -851,17 +868,25 @@ class BaseRfcWriter:
 
         # Recurse on sections
         for child_sec in section.findall('section'):
+            if level == 0:
+                if numbered:
+                    numbered = child_sec.attrib.get('numbered') != "no"
+                elif child_sec.attrib.get('numbered') != "no":
+                    title = child_sec.attrib.get('title')
+                    if not self.indexmode:
+                        xml2rfc.log.warn('Numbered sections are not permitted after unnumbered sections: found section "%s" without attribute numbered="no"' % (title,))
+                    numbered = False
             if appendix == True and not count_str:
                 if s_count == 1 and self.pis["rfcedstyle"] == "yes":
                    self.needLines(-1)
                 # Use an alphabetic counter for first-level appendix
                 uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 self.write_section_rec(child_sec, uppercase[s_count - 1],
-                                        level=level + 1, appendix=True)
+                                        level=level + 1, appendix=True, numbered=numbered)
             else:
                 # Use a numeric counter
                 self.write_section_rec(child_sec, count_str + str(s_count), 
-                                        level=level + 1, appendix=appendix)
+                                        level=level + 1, appendix=appendix, numbered=numbered)
 
             s_count += 1
 
@@ -1020,8 +1045,6 @@ class BaseRfcWriter:
                     ref_counter += 1
                     title = ref.find("front/title").text
                     self._indexRef(ref_counter, title=title, anchor=ref.attrib["anchor"])
-
-            
 
         # Appendix sections
         back = self.r.find('back')
