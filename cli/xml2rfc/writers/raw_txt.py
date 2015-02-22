@@ -35,6 +35,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.iref_marker = 0    # Line number in buffer to write index to
         self.list_counters = {} # Maintain counters for 'format' type lists
         self.edit_counter = 0   # Counter for edit marks
+        # Set this to False to permit utf+8 output:
         self.ascii = True       # Enable ascii flag
         self.cref_counter = 0   # Counter for cref anchors
         self.cref_list = []
@@ -1424,5 +1425,5 @@ class RawTextRfcWriter(BaseRfcWriter):
         else:
             file.write("\n"*5)
         for line in self.post_process_lines(self.output):
-            file.write(line.rstrip(" \t").encode('utf-8'))
+            file.write(line.rstrip(u" \t"))
             file.write("\n")
