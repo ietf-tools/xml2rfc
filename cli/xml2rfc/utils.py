@@ -27,6 +27,14 @@ class StrictUrlOpener(FancyURLopener):
     def http_error_default(self, url, fp, errcode, errmsg, headers):
         raise IOError('Document not found ' + url)
 
+    def retrieve(self, url, filename=None, reporthook=None, data=None):
+        try:
+            super(StrictUrlOpener, self).retrieve(self, url, filename, reporthook, data)
+        except TypeError:               
+            # under Python 2.6 on mac os x, urllib can raise TypeError in
+            # proxy_bypass_macosx_sysconf() if the host is offline.  Replace
+            # this with the expected exception when an URL can't be retrieved.
+            raise IOError('Document not found ' + url)
 
 class MyTextWrapper(textwrap.TextWrapper):
     """ Subclass that overrides a few things in the standard implementation """
@@ -313,6 +321,8 @@ def _replace_unicode_characters(str):
     """ replace those Unicode characters that we do not use internally
         &wj; &zwsp; &nbsp; &nbhy;
     """
+#   Make this a non-op to get non-ascii characters in the output
+#    return str
     while True:
         match = re.search(u'([^ -\x7e\u2060\u200B\u00A0\u2011\r\n])', str)
         if not match:

@@ -1421,5 +1421,5 @@ class RawTextRfcWriter(BaseRfcWriter):
         else:
             file.write("\n"*5)
         for line in self.post_process_lines(self.output):
-            file.write(line.rstrip(" \t"))
+            file.write(line.rstrip(" \t").encode('utf-8'))
             file.write("\n")
