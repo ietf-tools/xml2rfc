@@ -583,13 +583,13 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       Output formatters that do pagination should attempt to keep artwork on a single page. This is to prevent
       artwork that is split across pages from looking like two separate pieces of artwork.
    </t>
-
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       Content model:
     </t>
         
    <t><!--AG-->Text</t>
+      
 
    <!--artwork/@align-->
    <section anchor="element.artwork.attribute.align" toc="exclude" title="'align' attribute">
@@ -2897,6 +2897,23 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
         Document-wide unique identifier for this reference. Usually, this will
         be used both to "label" the reference in the references section, and
         as an identifier in links to this reference entry.
+      </t>
+   </section>
+
+   <!--reference/@quote-title-->
+   <section anchor="element.reference.attribute.quote-title" toc="exclude" title="'quote-title' attribute">
+      
+      <iref item="Attributes" subitem="quote-title"/>
+      <iref item="reference element" subitem="quote-title attribute"/>
+      <iref item="quote-title attribute" subitem="in reference element"/>
+      <t>
+         Specifies whether or not the title in the reference should be quoted.
+         This can be used to prevent quoting, such as on errata.
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"true" (default)</t>
+            <t>"false"</t>
+         </list>
       </t>
    </section>
 
@@ -7169,6 +7186,8 @@ reference =
   element reference {
     attribute anchor { xsd:ID },
     attribute target { text }?,
+    [ a:defaultValue = "true" ]
+    attribute quote-title { "true" | "false" }?,
     front,
     (annotation | format | refcontent | seriesInfo)*
   }
@@ -7960,6 +7979,8 @@ to the v3 schema.</t>
     element reference {
       attribute anchor { xsd:ID },
       attribute target { text }?,
++     [ a:defaultValue = "true" ]
++     attribute quote-title { "true" | "false" }?,
       front,
 -     seriesInfo*,
 -     format*,

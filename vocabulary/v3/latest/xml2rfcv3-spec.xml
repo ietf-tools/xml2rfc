@@ -225,6 +225,10 @@
       These four methods can also be used for including text artwork, but using a data: URI is probably
       confusing for text artwork.
    </t>
+   <t>
+      Output formatters that do pagination should attempt to keep artwork on a single page. This is to prevent
+      artwork that is split across pages from looking like two separate pieces of artwork.
+   </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       <xref format="none" target="grammar.artwork">Content model</xref>:
@@ -297,9 +301,13 @@
             A filename suitable for the contents (such as for extraction to a local file).
          </t>
       <t>
-            This attribute generally isn't used for document generation, but it can
+            This attribute can
             be helpful for other kinds of tools (such as automated syntax checkers
             which work by extracting the artwork).
+            Note that the "name" attribute does not need to be unique for artwork elements in a
+            document. If multiple artwork elements have the same name attribute, a processor might
+            assume that the elements are all fragments of a single file, and the processor can
+            collect those fragments for later processing.
          </t>
    </section>
 
@@ -2618,6 +2626,22 @@
       </t>
    </section>
 
+   <!--reference/@quote-title-->
+   <section anchor="element.reference.attribute.quote-title" toc="exclude">
+      <name>'quote-title' attribute</name>
+      <iref item="Attributes" subitem="quote-title"/>
+      <iref item="reference element" subitem="quote-title attribute"/>
+      <iref item="quote-title attribute" subitem="in reference element"/>
+      <t><!--AG-->
+         <cref anchor="element.reference.attribute.quote-title.missing">attribute description missing</cref>
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"true" (default)</t>
+            <t>"false"</t>
+         </list>
+      </t>
+   </section>
+
    <!--reference/@target-->
    <section anchor="element.reference.attribute.target" toc="exclude">
       <name>'target' attribute</name>
@@ -3404,6 +3428,10 @@ Using CDATA:
        Using CDATA is not a panacea, but it does help prevent having to use escapes in places where using
        using escapes can cause other problems, such as difficulty of inclusion from other documents.
    </t>
+   <t>
+      Output formatters that do pagination should attempt to keep source code on a single page. This is to prevent
+      source code that is split across pages from looking like two separate pieces of code.
+   </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->
       <xref format="none" target="grammar.sourcecode">Content model</xref>: only text content.</t>
@@ -3427,9 +3455,13 @@ Using CDATA:
       <iref item="name attribute" subitem="in sourcecode element"/>
       <t>
             A filename suitable for the contents (such as for extraction to a local file).
-            This attribute generally isn't used for document generation, but it can
+            This attribute can
             be helpful for other kinds of tools (such as automated syntax checkers
             which work by extracting the source code).
+            Note that the "name" attribute does not need to be unique for artwork elements in a
+            document. If multiple sourcecode elements have the same name attribute, a processor might
+            assume that the elements are all fragments of a single file, and the processor can
+            collect those fragments for later processing.
          </t>
    </section>
 

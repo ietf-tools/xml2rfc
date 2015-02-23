@@ -595,13 +595,13 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       Output formatters that do pagination should attempt to keep artwork on a single page. This is to prevent
       artwork that is split across pages from looking like two separate pieces of artwork.
    </t>
-
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       <xref format="none" target="grammar.artwork">Content model</xref>:
     </t>
         
    <t><!--AG-->Text</t>
+      
 
    <!--artwork/@align-->
    <section anchor="element.artwork.attribute.align" toc="exclude">
@@ -2989,6 +2989,23 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
         Document-wide unique identifier for this reference. Usually, this will
         be used both to "label" the reference in the references section, and
         as an identifier in links to this reference entry.
+      </t>
+   </section>
+
+   <!--reference/@quote-title-->
+   <section anchor="element.reference.attribute.quote-title" toc="exclude">
+      <name>'quote-title' attribute</name>
+      <iref item="Attributes" subitem="quote-title"/>
+      <iref item="reference element" subitem="quote-title attribute"/>
+      <iref item="quote-title attribute" subitem="in reference element"/>
+      <t>
+         Specifies whether or not the title in the reference should be quoted.
+         This can be used to prevent quoting, such as on errata.
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"true" (default)</t>
+            <t>"false"</t>
+         </list>
       </t>
    </section>
 
@@ -7315,6 +7332,8 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
   element reference {
     attribute anchor { xsd:ID },
     attribute target { text }?,
+    [ a:defaultValue = "true" ]
+    attribute quote-title { "true" | "false" }?,
     front,
     (annotation | format | refcontent | seriesInfo)*
   }
@@ -8106,6 +8125,8 @@ to the v3 schema.</t>
     element reference {
       attribute anchor { xsd:ID },
       attribute target { text }?,
++     [ a:defaultValue = "true" ]
++     attribute quote-title { "true" | "false" }?,
       front,
 -     seriesInfo*,
 -     format*,

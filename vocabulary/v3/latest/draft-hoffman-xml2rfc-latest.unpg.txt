@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                           February 4, 2015
+Obsoletes: 2629 (if approved)                          February 23, 2015
 Intended status: Informational
-Expires: August 8, 2015
+Expires: August 27, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 8, 2015.
+   This Internet-Draft will expire on August 27, 2015.
 
 Copyright Notice
 
@@ -2014,7 +2014,18 @@ Table of Contents
    will be used both to "label" the reference in the references section,
    and as an identifier in links to this reference entry.
 
-2.42.2.  'target' attribute
+2.42.2.  'quote-title' attribute
+
+   Specifies whether or not the title in the reference should be quoted.
+   This can be used to prevent quoting, such as on errata.
+
+   Allowed values:
+
+   o  "true" (default)
+
+   o  "false"
+
+2.42.3.  'target' attribute
 
    Holds the URI for the reference.
 
@@ -5042,6 +5053,8 @@ Appendix C.  Relax NG Schema
      element reference {
        attribute anchor { xsd:ID },
        attribute target { text }?,
+       [ a:defaultValue = "true" ]
+       attribute quote-title { "true" | "false" }?,
        front,
        (annotation | format | refcontent | seriesInfo)*
      }
@@ -5830,6 +5843,8 @@ Appendix D.  Schema Differences from v2
        element reference {
          attribute anchor { xsd:ID },
          attribute target { text }?,
+   +     [ a:defaultValue = "true" ]
+   +     attribute quote-title { "true" | "false" }?,
          front,
    -     seriesInfo*,
    -     format*,
@@ -6017,6 +6032,7 @@ Index
          pageno  1
          pn  1
          primary  1
+         quote-title  1
          quotedFrom  1
          rel  1
          relative  1
@@ -6551,6 +6567,8 @@ Index
          in iref element  1
 
    Q
+      quote-title attribute
+         in reference element  1
       quotedFrom attribute
          in blockquote element  1
 
@@ -6562,6 +6580,7 @@ Index
          anchor attribute  1
          inside referencegroup  1
          inside references  1
+         quote-title attribute  1
          target attribute  1
       referencegroup element  1
          anchor attribute  1
