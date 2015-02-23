@@ -63,7 +63,7 @@ setup(
     # Package metadata
     name='xml2rfc',
     version='2.4.9dev0',
-    author='Josh Bothun (Concentric Sky)',
+    author='Josh Bothun, Henrik Levkowetz ',
     author_email='tools-discuss@ietf.org',
     maintainer = "Henrik Levkowetz",
     maintainer_email = "henrik@levkowetz.com",
@@ -89,7 +89,6 @@ setup(
     package_data={'xml2rfc': ['templates/*',
                               ]},
 
-    setup_requires = [ 'setuptools >=0.8.0', 'wheel >=0.24.0', 'pyflakes >= 0.8.1', ],
     install_requires = ['lxml >=2.2.8'],
     zip_safe = False,                   # We're reading templates from a package directory.
 )
