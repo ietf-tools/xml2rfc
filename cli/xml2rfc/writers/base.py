@@ -824,7 +824,6 @@ class BaseRfcWriter:
                                    appendix=appendix, numbered=numbered)
             else:
                 # Write the section heading
-                aa_prefix = appendix and 'rfc.appendix.' or 'rfc.section.'
                 if numbered:
                     autoAnchor = 'rfc.' + ('section.' if not appendix else 'appendix.') + count_str
                 else:
