@@ -89,6 +89,7 @@ setup(
     package_data={'xml2rfc': ['templates/*',
                               ]},
 
+    setup_requires = [ 'setuptools >=0.8.0', 'wheel >=0.24.0', 'pyflakes >= 0.8.1', ],
     install_requires = ['lxml >=2.2.8'],
     zip_safe = False,                   # We're reading templates from a package directory.
 )
