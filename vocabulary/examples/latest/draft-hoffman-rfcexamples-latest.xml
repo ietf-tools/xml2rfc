@@ -99,7 +99,7 @@ Internet Drafts.</t>
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
 
-&lt;?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+&lt;?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
 &lt;?rfc strict="yes" ?>
 
 &lt;rfc
@@ -114,7 +114,7 @@ Internet Drafts.</t>
 
 &lt;front>
 &lt;title abbrev="XML Example">
-An Exmaple of Using XML for an Internet Draft
+An Example of Using XML for an Internet Draft
 &lt;/title>
 
 &lt;author fullname="Chris Smith" initials="C." surname="Smith">
@@ -201,7 +201,11 @@ of RFC 2119 was done at the top of the XML, while the information
 for RFC 6949 is done directly in the references section.&lt;/t>
 
 &lt;t>The &lt;eref target="http://www.ietf.org">IETF web site&lt;/eref> is
-quite nice, isn't it?&lt;/t>
+&lt;spanx style="emph">quite&lt;/spanx>
+&lt;spanx style="strong">nice&lt;/spanx>,
+&lt;spanx style="verb">isn't it&lt;/spanx>?
+Unlike other web sites, it doesn't use
+&lt;vspace blanklines="2" />gratuitous vertical space.&lt;/t>
 
 &lt;/section>
 
@@ -309,11 +313,11 @@ Remember to check whether that file still exists.&lt;/cref>&lt;/t>
 
 &lt;t>The following is a table example.&lt;/t>
 
-&lt;texttable>
-  &lt;preamble>The Noble Gases&lt;/preamble>
+&lt;texttable title="The Noble Gases">
+  &lt;preamble>These are sometimes called "inert" gasses.&lt;/preamble>
   &lt;ttcol>Name&lt;/ttcol>
-  &lt;ttcol align='center'>Symbol&lt;/ttcol>
-  &lt;ttcol align='center'>Atomic Number&lt;/ttcol>
+  &lt;ttcol align="center" widy="50%">Symbol&lt;/ttcol>
+  &lt;ttcol align="center">Atomic Number&lt;/ttcol>
 
   &lt;c>Helium&lt;/c>
   &lt;c>He&lt;/c>
@@ -339,7 +343,25 @@ Remember to check whether that file still exists.&lt;/cref>&lt;/t>
   &lt;c>Rn&lt;/c>
   &lt;c>86&lt;/c>
 
-  &lt;postamble>Source: Chem 101&lt;/postamble>
+  &lt;postamble>Source: Chemistry 101&lt;/postamble>
+&lt;/texttable>
+
+&lt;t>The following is a right-aligned table with "full" (but not "all") lines
+between cells.&lt;/t>
+
+&lt;texttable align="right" style="full">
+  &lt;ttcol>Time&lt;/ttcol>
+  &lt;ttcol align="right">Mood&lt;/ttcol>
+
+  &lt;c>Morning&lt;/c>
+  &lt;c>Happy!&lt;/c>
+
+  &lt;c>Afternoon&lt;/c>
+  &lt;c>Happy!&lt;/c>
+
+  &lt;c>Evening&lt;/c>
+  &lt;c>Somber&lt;/c>
+
 &lt;/texttable>
 
 &lt;/section>
@@ -431,7 +453,7 @@ Internet Drafts. It was converted from the example in <xref target="v2-basic"/>.
 
 &lt;front>&lt;seriesInfo name='Internet-Draft' value='draft-example-of-xml-00'/>&lt;seriesInfo name='std' value=''/>
 &lt;title abbrev='XML Example'>
-An Exmaple of Using XML for an Internet Draft
+An Example of Using XML for an Internet Draft
 &lt;/title>
 
 &lt;author fullname='Chris Smith' initials='C.' surname='Smith'>
@@ -518,7 +540,11 @@ of RFC 2119 was done at the top of the XML, while the information
 for RFC 6949 is done directly in the references section.&lt;/t>
 
 &lt;t>The &lt;eref target='http://www.ietf.org'>IETF web site&lt;/eref> is
-quite nice, isn't it?&lt;/t>
+&lt;em>quite&lt;/em>
+&lt;strong>nice&lt;/strong>,
+&lt;tt>isn't it&lt;/tt>?
+Unlike other web sites, it doesn't use
+gratuitous vertical space.&lt;/t>
 
 &lt;/section>
 
@@ -625,7 +651,7 @@ Remember to check whether that file still exists.&lt;/cref>&lt;/t>
 
 &lt;t>The following is a table example.&lt;/t>
 
-&lt;t keepwithnext='true'>The Noble Gases&lt;/t>&lt;table>
+&lt;t keepwithnext='true'>These are sometimes called "inert" gasses.&lt;/t>&lt;table title='The Noble Gases'>
   
   &lt;tr>&lt;th>Name&lt;/th>
   &lt;th>Symbol&lt;/th>
@@ -655,8 +681,26 @@ Remember to check whether that file still exists.&lt;/cref>&lt;/t>
   &lt;td align='center'>Rn&lt;/td>
   &lt;td align='center'>86&lt;/td>&lt;/tr>
 
-  &lt;/table>&lt;t keepwithprevious='true'>Source: Chem 101&lt;/t>
+  &lt;/table>&lt;t keepwithprevious='true'>Source: Chemistry 101&lt;/t>
 
+
+&lt;t>The following is a right-aligned table with "full" (but not "all") lines
+between cells.&lt;/t>
+
+&lt;table align='right' style='full'>
+  &lt;tr>&lt;th>Time&lt;/th>
+  &lt;th>&lt;/tr>Mood&lt;/th>&lt;/tr>
+
+  &lt;tr>&lt;td>Morning&lt;/td>
+  &lt;td align='right'>Happy!&lt;/td>&lt;/tr>
+
+  &lt;tr>&lt;td>Afternoon&lt;/td>
+  &lt;td align='right'>Happy!&lt;/td>&lt;/tr>
+
+  &lt;tr>&lt;td>Evening&lt;/td>
+  &lt;td align='right'>Somber&lt;/td>&lt;/tr>
+
+&lt;/table>
 
 &lt;/section>
 
