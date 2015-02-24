@@ -12,7 +12,7 @@ An Exmaple of Using XML for an Internet Draft
 </title>
 
 <author fullname='Chris Smith' initials='C.' surname='Smith'>
-<organization>Examplecorp</organization>
+<organization abbev='EC'>ExampleCorp</organization>
 <address>
 <postal>
 <street>123 Exemplar Way</street>
@@ -41,18 +41,19 @@ An Exmaple of Using XML for an Internet Draft
 
 <area>General</area>
 <workgroup>Imaginary WG</workgroup>
-
 <keyword>XML</keyword>
 <keyword>Imagination</keyword>
 
 <abstract>
-
 <t>This is an example of an abstract. It is a short paragraph that
 gives an overview of the document in order to help the
 reader determine whether or not they are interested in reading
 further.</t>
-
 </abstract>
+
+<note tile='Disclaimer'>
+<t>This isn't a real RFC, just an example.</t>
+</note>
 
 </front>
 
@@ -68,6 +69,8 @@ be for a real Internet Draft.</t>
 pointer to <xref target='protocol'/>, and one to
 <xref target='haiku'/>, both of which appear later in the
 document.</t>
+
+<iref item='Introduction' subitem='verbiage' primary='true'/>
 
 <!-- This is a comment. Comments in the XML do not appear in the
 output formats. -->
@@ -90,6 +93,9 @@ Actually, the reference itself is not all that interesting, but the
 way that the reference is incorporated is. Note that the inclusion
 of RFC 2119 was done at the top of the XML, while the information
 for RFC 6949 is done directly in the references section.</t>
+
+<t>The <eref target='http://www.ietf.org'>IETF web site</eref> is
+quite nice, isn't it?</t>
 
 </section>
 
@@ -115,9 +121,7 @@ and some more detail on the second sub-item.</t></li>
 
 <li>This is the item after the sub-list.</li>
 
-</ul>
-
-</t>
+</ul></t>
 
 <t>Numbered lists are good for items that are ordered:
 
@@ -125,9 +129,10 @@ and some more detail on the second sub-item.</t></li>
 
 <li>This is the first item.</li>
 
-<li>This is the second item. Here comes a sub-list:
+<li>This is the second item. Here comes a sub-list, but
+with letters:
 
-<ol style='1'>
+<ol style='a'>
 
 <li>This is the first sub-item.</li>
 
@@ -137,9 +142,25 @@ and some more detail on the second sub-item.</t></li>
 
 <li>This is the item after the sub-list.</li>
 
-</ol>
+</ol></t>
 
-</t>
+<t>And an example of hanging indent.
+
+<dl hangIndent='15'>
+
+<dt>Trees</dt><dd>These are gigger plants</dd>
+
+<dt>Lichen</dt><dd>These are smaller plants</dd>
+
+</dl></t>
+
+<t>And the always-interesting "format" for lists.
+
+<ol style='--%D--'>
+
+<li>An element that gets a funny bullet.</li>
+
+</ol></t>
 
 </section>
 
@@ -168,9 +189,12 @@ This might appear in the center.
 This might appear right-aligned.
 </artwork></figure>
 
+<t>Here is a figure that is actually pulled from somewhere else.
+<cref source='cs' anchor='rememberme'>
+Remember to check whether that file still exists.</cref></t>
+
 <figure><artwork src='http://www.example.com/~employees/chrissmith/artwork.txt'></artwork>
 </figure>
-
 
 </section>
 
@@ -256,6 +280,22 @@ Elwyn Davies' templates.</t>
 </front>
 <seriesInfo name='RFC' value='6949'/>
 <annotation>This is a primary reference work.</annotation>
+</reference>
+
+<reference anchor='RED' target='http://www.aciri.org/floyd/papers/early.pdf'>
+<front>
+<title>Random Early Detection (RED) gateways for Congestion
+Avoidance</title>
+<author fullname='Sally Floyd' initials='S' surname='Floyd'>
+<organization>LBL</organization>
+</author>
+<author fullname='Van Jacobson' initials='V' surname='Jacobson'>
+<organization>LBL</organization>
+</author>
+<date month='August' year='1993'/>
+</front>
+<seriesInfo name='IEEE/ACM Transactions on Networking' value='1(4) 397--413'/>
+
 </reference>
 
 </references>

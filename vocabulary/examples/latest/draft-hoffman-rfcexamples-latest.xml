@@ -114,7 +114,7 @@ An Exmaple of Using XML for an Internet Draft
 &lt;/title>
 
 &lt;author fullname="Chris Smith" initials="C." surname="Smith">
-&lt;organization>Examplecorp&lt;/organization>
+&lt;organization abbev="EC">ExampleCorp&lt;/organization>
 &lt;address>
 &lt;postal>
 &lt;street>123 Exemplar Way&lt;/street>
@@ -143,18 +143,19 @@ An Exmaple of Using XML for an Internet Draft
 
 &lt;area>General&lt;/area>
 &lt;workgroup>Imaginary WG&lt;/workgroup>
-
 &lt;keyword>XML&lt;/keyword>
 &lt;keyword>Imagination&lt;/keyword>
 
 &lt;abstract>
-
 &lt;t>This is an example of an abstract. It is a short paragraph that
 gives an overview of the document in order to help the
 reader determine whether or not they are interested in reading
 further.&lt;/t>
-
 &lt;/abstract>
+
+&lt;note tile="Disclaimer">
+&lt;t>This isn't a real RFC, just an example.&lt;/t>
+&lt;/note>
 
 &lt;/front>
 
@@ -170,6 +171,8 @@ be for a real Internet Draft.&lt;/t>
 pointer to &lt;xref target="protocol"/>, and one to
 &lt;xref target="haiku"/>, both of which appear later in the
 document.&lt;/t>
+
+&lt;iref item="Introduction" subitem="verbiage" primary="true"/>
 
 &lt;!-- This is a comment. Comments in the XML do not appear in the
 output formats. -->
@@ -192,6 +195,9 @@ Actually, the reference itself is not all that interesting, but the
 way that the reference is incorporated is. Note that the inclusion
 of RFC 2119 was done at the top of the XML, while the information
 for RFC 6949 is done directly in the references section.&lt;/t>
+
+&lt;t>The &lt;eref target="http://www.ietf.org">IETF web site&lt;/eref> is
+quite nice, isn't it?&lt;/t>
 
 &lt;/section>
 
@@ -217,9 +223,7 @@ and some more detail on the second sub-item.&lt;/t>
 
 &lt;t>This is the item after the sub-list.&lt;/t>
 
-&lt;/list>
-
-&lt;/t>
+&lt;/list>&lt;/t>
 
 &lt;t>Numbered lists are good for items that are ordered:
 
@@ -227,9 +231,10 @@ and some more detail on the second sub-item.&lt;/t>
 
 &lt;t>This is the first item.&lt;/t>
 
-&lt;t>This is the second item. Here comes a sub-list:
+&lt;t>This is the second item. Here comes a sub-list, but
+with letters:
 
-&lt;list style="numbers">
+&lt;list style="letters">
 
 &lt;t>This is the first sub-item.&lt;/t>
 
@@ -239,9 +244,25 @@ and some more detail on the second sub-item.&lt;/t>
 
 &lt;t>This is the item after the sub-list.&lt;/t>
 
-&lt;/list>
+&lt;/list>&lt;/t>
 
-&lt;/t>
+&lt;t>And an example of hanging indent.
+
+&lt;list style="hanging" hangIndent="15">
+
+&lt;t hangText="Trees">These are gigger plants&lt;/t>
+
+&lt;t hangText="Lichen">These are smaller plants&lt;/t>
+
+&lt;/list>&lt;/t>
+
+&lt;t>And the always-interesting "format" for lists.
+
+&lt;list style="format --%D--">
+
+&lt;t>An element that gets a funny bullet.&lt;/t>
+
+&lt;/list>&lt;/t>
 
 &lt;/section>
 
@@ -270,10 +291,13 @@ This might appear in the center.
 This might appear right-aligned.
 &lt;/artwork>&lt;/figure>
 
+&lt;t>Here is a figure that is actually pulled from somewhere else.
+&lt;cref source="cs" anchor="rememberme">
+Remember to check whether that file still exists.&lt;/cref>&lt;/t>
+
 &lt;figure>&lt;artwork
   src="http://www.example.com/~employees/chrissmith/artwork.txt" />
 &lt;/figure>
-
 
 &lt;/section>
 
@@ -361,6 +385,25 @@ Elwyn Davies' templates.&lt;/t>
 &lt;annotation>This is a primary reference work.&lt;/annotation>
 &lt;/reference>
 
+&lt;reference anchor="RED"
+target="http://www.aciri.org/floyd/papers/early.pdf">
+&lt;front>
+&lt;title>Random Early Detection (RED) gateways for Congestion
+Avoidance&lt;/title>
+&lt;author fullname="Sally Floyd" initials="S" surname="Floyd">
+&lt;organization>LBL&lt;/organization>
+&lt;/author>
+&lt;author fullname="Van Jacobson" initials="V" surname="Jacobson">
+&lt;organization>LBL&lt;/organization>
+&lt;/author>
+&lt;date month="August" year="1993"/>
+&lt;/front>
+&lt;seriesInfo name="IEEE/ACM Transactions on Networking"
+value="1(4) 397--413"/>
+&lt;format target="http://www.aciri.org/floyd/papers/early.pdf"
+octets="318703" type="PDF"/>
+&lt;/reference>
+
 &lt;/references>
 
 &lt;/back>
@@ -388,7 +431,7 @@ An Exmaple of Using XML for an Internet Draft
 &lt;/title>
 
 &lt;author fullname='Chris Smith' initials='C.' surname='Smith'>
-&lt;organization>Examplecorp&lt;/organization>
+&lt;organization abbev='EC'>ExampleCorp&lt;/organization>
 &lt;address>
 &lt;postal>
 &lt;street>123 Exemplar Way&lt;/street>
@@ -417,18 +460,19 @@ An Exmaple of Using XML for an Internet Draft
 
 &lt;area>General&lt;/area>
 &lt;workgroup>Imaginary WG&lt;/workgroup>
-
 &lt;keyword>XML&lt;/keyword>
 &lt;keyword>Imagination&lt;/keyword>
 
 &lt;abstract>
-
 &lt;t>This is an example of an abstract. It is a short paragraph that
 gives an overview of the document in order to help the
 reader determine whether or not they are interested in reading
 further.&lt;/t>
-
 &lt;/abstract>
+
+&lt;note tile='Disclaimer'>
+&lt;t>This isn't a real RFC, just an example.&lt;/t>
+&lt;/note>
 
 &lt;/front>
 
@@ -444,6 +488,8 @@ be for a real Internet Draft.&lt;/t>
 pointer to &lt;xref target='protocol'/>, and one to
 &lt;xref target='haiku'/>, both of which appear later in the
 document.&lt;/t>
+
+&lt;iref item='Introduction' subitem='verbiage' primary='true'/>
 
 &lt;!-- This is a comment. Comments in the XML do not appear in the
 output formats. -->
@@ -466,6 +512,9 @@ Actually, the reference itself is not all that interesting, but the
 way that the reference is incorporated is. Note that the inclusion
 of RFC 2119 was done at the top of the XML, while the information
 for RFC 6949 is done directly in the references section.&lt;/t>
+
+&lt;t>The &lt;eref target='http://www.ietf.org'>IETF web site&lt;/eref> is
+quite nice, isn't it?&lt;/t>
 
 &lt;/section>
 
@@ -491,9 +540,7 @@ and some more detail on the second sub-item.&lt;/t>&lt;/li>
 
 &lt;li>This is the item after the sub-list.&lt;/li>
 
-&lt;/ul>
-
-&lt;/t>
+&lt;/ul>&lt;/t>
 
 &lt;t>Numbered lists are good for items that are ordered:
 
@@ -501,9 +548,10 @@ and some more detail on the second sub-item.&lt;/t>&lt;/li>
 
 &lt;li>This is the first item.&lt;/li>
 
-&lt;li>This is the second item. Here comes a sub-list:
+&lt;li>This is the second item. Here comes a sub-list, but
+with letters:
 
-&lt;ol style='1'>
+&lt;ol style='a'>
 
 &lt;li>This is the first sub-item.&lt;/li>
 
@@ -513,9 +561,25 @@ and some more detail on the second sub-item.&lt;/t>&lt;/li>
 
 &lt;li>This is the item after the sub-list.&lt;/li>
 
-&lt;/ol>
+&lt;/ol>&lt;/t>
 
-&lt;/t>
+&lt;t>And an example of hanging indent.
+
+&lt;dl hangIndent='15'>
+
+&lt;dt>Trees&lt;/dt>&lt;dd>These are gigger plants&lt;/dd>
+
+&lt;dt>Lichen&lt;/dt>&lt;dd>These are smaller plants&lt;/dd>
+
+&lt;/dl>&lt;/t>
+
+&lt;t>And the always-interesting "format" for lists.
+
+&lt;ol style='--%D--'>
+
+&lt;li>An element that gets a funny bullet.&lt;/li>
+
+&lt;/ol>&lt;/t>
 
 &lt;/section>
 
@@ -544,9 +608,12 @@ This might appear in the center.
 This might appear right-aligned.
 &lt;/artwork>&lt;/figure>
 
+&lt;t>Here is a figure that is actually pulled from somewhere else.
+&lt;cref source='cs' anchor='rememberme'>
+Remember to check whether that file still exists.&lt;/cref>&lt;/t>
+
 &lt;figure>&lt;artwork src='http://www.example.com/~employees/chrissmith/artwork.txt'>&lt;/artwork>
 &lt;/figure>
-
 
 &lt;/section>
 
@@ -632,6 +699,22 @@ Elwyn Davies' templates.&lt;/t>
 &lt;/front>
 &lt;seriesInfo name='RFC' value='6949'/>
 &lt;annotation>This is a primary reference work.&lt;/annotation>
+&lt;/reference>
+
+&lt;reference anchor='RED' target='http://www.aciri.org/floyd/papers/early.pdf'>
+&lt;front>
+&lt;title>Random Early Detection (RED) gateways for Congestion
+Avoidance&lt;/title>
+&lt;author fullname='Sally Floyd' initials='S' surname='Floyd'>
+&lt;organization>LBL&lt;/organization>
+&lt;/author>
+&lt;author fullname='Van Jacobson' initials='V' surname='Jacobson'>
+&lt;organization>LBL&lt;/organization>
+&lt;/author>
+&lt;date month='August' year='1993'/>
+&lt;/front>
+&lt;seriesInfo name='IEEE/ACM Transactions on Networking' value='1(4) 397--413'/>
+
 &lt;/reference>
 
 &lt;/references>
