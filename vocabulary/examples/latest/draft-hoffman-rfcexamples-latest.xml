@@ -21,6 +21,10 @@ Have a section that is just examples of what is new in v3 (such as new table fea
 
 Add lots of link examples to v2 example for conversion.
 
+Things that will not be in a v3 document such as spanx preamble postamble lists, etc.
+
+In the v3-only examples, use "ascii" attributes liberally
+
 -->
 
 <rfc ipr="trust200902" docName="draft-hoffman-rfcexamples-latest" category="info">
@@ -30,7 +34,7 @@ Add lots of link examples to v2 example for conversion.
 <organization>VPN Consortium</organization>
 <address><email>paul.hoffman@vpnc.org</email></address>
 </author>
-<author initials='T.' surname='Hansen' fullname='Tony Hansen' role='editor'>
+<author initials='T.' surname='Hansen' fullname='Tony Hansen'>
 <organization>AT&amp;T Laboratories</organization>
 <address>
 <postal>
@@ -120,7 +124,9 @@ An Exmaple of Using XML for an Internet Draft
 &lt;country>US&lt;/country>
 &lt;/postal>
 &lt;phone>+1 123-456-7890&lt;/phone>
+&lt;facsimile>+1 123-456-7890&lt;/facsimile>
 &lt;email>chrissmith@example.com&lt;/email>
+&lt;uri>http://www.example.com/corporate/&lt;/uri>
 &lt;/address>
 &lt;/author>
 
@@ -246,12 +252,28 @@ Also, it uses the ampersand (&amp;amp;) and less than
 (&amp;lt;) characters in the example text.&lt;/t>
 
 &lt;figure title="This could be haiku" anchor="haiku">
-&lt;artwork>
+&lt;artwork type="haiku" align="left">
    The ampersand (&amp;amp;) and
    less than (&amp;lt;) are two characters
    that need escaping. 
 &lt;/artwork>
 &lt;/figure>
+
+&lt;t>Here are two short figures with no titles and with
+odd alignment.&lt;/t>
+
+&lt;figure>&lt;artwork align="center">
+This might appear in the center.
+&lt;/artwork>&lt;/figure>
+
+&lt;figure>&lt;artwork align="riht">
+This might appear right-aligned.
+&lt;/artwork>&lt;/figure>
+
+&lt;figure>&lt;artwork
+  src="http://www.example.com/~employees/chrissmith/artwork.txt" />
+&lt;/figure>
+
 
 &lt;/section>
 
@@ -336,6 +358,7 @@ Elwyn Davies' templates.&lt;/t>
 &lt;date year="2013" month="May"/>
 &lt;/front>
 &lt;seriesInfo name="RFC" value="6949"/>
+&lt;annotation>This is a primary reference work.&lt;/annotation>
 &lt;/reference>
 
 &lt;/references>
@@ -375,7 +398,9 @@ An Exmaple of Using XML for an Internet Draft
 &lt;country>US&lt;/country>
 &lt;/postal>
 &lt;phone>+1 123-456-7890&lt;/phone>
++1 123-456-7890
 &lt;email>chrissmith@example.com&lt;/email>
+&lt;uri>http://www.example.com/corporate/&lt;/uri>
 &lt;/address>
 &lt;/author>
 
@@ -501,12 +526,27 @@ Also, it uses the ampersand (&amp;amp;) and less than
 (&amp;lt;) characters in the example text.&lt;/t>
 
 &lt;figure anchor='haiku'>&lt;name>This could be haiku&lt;/name>
-&lt;artwork>
+&lt;artwork type='haiku' align='left'>
    The ampersand (&amp;amp;) and
    less than (&amp;lt;) are two characters
    that need escaping. 
 &lt;/artwork>
 &lt;/figure>
+
+&lt;t>Here are two short figures with no titles and with
+odd alignment.&lt;/t>
+
+&lt;figure>&lt;artwork align='center'>
+This might appear in the center.
+&lt;/artwork>&lt;/figure>
+
+&lt;figure>&lt;artwork align='riht'>
+This might appear right-aligned.
+&lt;/artwork>&lt;/figure>
+
+&lt;figure>&lt;artwork src='http://www.example.com/~employees/chrissmith/artwork.txt'>&lt;/artwork>
+&lt;/figure>
+
 
 &lt;/section>
 
@@ -591,6 +631,7 @@ Elwyn Davies' templates.&lt;/t>
 &lt;date year='2013' month='May'/>
 &lt;/front>
 &lt;seriesInfo name='RFC' value='6949'/>
+&lt;annotation>This is a primary reference work.&lt;/annotation>
 &lt;/reference>
 
 &lt;/references>
