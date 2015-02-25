@@ -60,6 +60,9 @@ OutFileNameBase = DraftOutputFile[:-4]
 
 # Prepare the .txt file
 if not os.path.isfile(Xml2rfcBin):
+	Xml2rfcBin = os.environ['XML2RFC']
+
+if not os.path.isfile(Xml2rfcBin):
 	print("{0} does not exist, so the .txt file was NOT UPDATED.".format(Xml2rfcBin))
 else:
 	p = subprocess.Popen("{0} {1}.xml --filename={2}.txt --text".format(Xml2rfcBin, OutFileNameBase, OutFileNameBase),
