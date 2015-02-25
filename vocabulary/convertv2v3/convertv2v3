@@ -10,7 +10,9 @@
 ## The code is in the public domain.
 
 ## TODO STILL: ????????????????
-## is hangIndent used somewhere?
+## can't track this one down yet:
+## sometimes too many </tr>s:  <th></tr>Mood</th></tr>
+
 
 #
 # document keepwithnext/keepwithprevious
@@ -390,6 +392,7 @@ sub startHandler {
 		$comments .= comment("converting empty style to <ul empty=true>");
 	    } elsif ($curStyle eq 'hanging') {
 		$newelement = 'dl';
+		push @newAttributeVals, "hanging", "true";
 	    } elsif ($curStyle eq 'empty') {
 		$newelement = 'ul';
 	    } elsif ($curStyle eq 'symbols') {
@@ -676,6 +679,7 @@ sub startHandler {
 	my $name = $attrvals[$i];
 	my $val = $attrvals[$i+1];
 
+	# print STDERR "element=$element, originalElement=$originalElement, name=$name, val=$val\n";
 	### startHandler
 	if ($element eq 'section') {
 	    if ($name eq 'title') {
@@ -820,10 +824,16 @@ sub startHandler {
 		$skip = 1;
 		$comments .= comment("<$element $name='$val'> deprecated and removed");
 	    } elsif ($name ne 'anchor') {
-		$comments .= comment("WARNING: unhandled attribute <$originalElement $name='$val'> removed");
 		$skip = 1;
+		$comments .= comment("WARNING: unhandled attribute <$originalElement $name='$val'> removed");
 	    }
 	    ### startHandler
+	} elsif ($element eq 'dl') {
+	    if ($name eq 'hangIndent') {
+		## When under a <list style=hanging>, hangIndent=val is not ignored
+		$skip = 1;
+		$comments .= comment("<$element $name='$val'> deprecated and removed");
+	    }
 	} elsif ($element eq 'li') {
 	    if ($name ne 'anchor') {
 		## When under a <list style=hanging>, <t> is handled above.
@@ -834,10 +844,11 @@ sub startHandler {
 	} elsif ($element eq 'th') {
 	    if ($name eq 'align') {
 		$comments .= comment("preserving $name='$val'");
-		$thAlignment[$thCount-1] = $val;
 		my $th1 = $thCount - 1;
+		$thAlignment[$th1] = $val;
+	    } else {
+		$skip = 1;
 	    }
-	    $skip = 1;
 	} elsif ($element eq 'rfc') {
 	    if ($name eq 'category') {
 		$categorySaved = $val;
