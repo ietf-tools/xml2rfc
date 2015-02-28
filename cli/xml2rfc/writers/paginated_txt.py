@@ -14,6 +14,7 @@ except ImportError:
 from xml2rfc.writers.base import BaseRfcWriter
 from xml2rfc.writers.raw_txt import RawTextRfcWriter
 import xml2rfc.utils
+import xml2rfc.log
 
 class PaginatedTextRfcWriter(RawTextRfcWriter):
     """ Writes to a text file, paginated with headers and footers
@@ -89,10 +90,14 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
 
     def needLines(self, count):
         """Deal with the PI directive needLines"""
-        if int(count) < 0:
-            self._set_break_hint(1, 'break', len(self.buf))
-        else:
-            self._set_break_hint(count, 'raw', len(self.buf))
+        try:
+            if int(count) < 0:
+                self._set_break_hint(1, 'break', len(self.buf))
+            else:
+                self._set_break_hint(count, 'raw', len(self.buf))
+        except ValueError as e:
+            if not self.indexmode:
+                xml2rfc.log.warn('%s, in processing instruction needlines="%s"' % (str(e).capitalize(), count))
 
     # Here we override some methods to mark line numbers for large sections.
     # We'll store each marking as a dictionary of line_num: section_length.
