@@ -9,6 +9,8 @@ import re
 import os
 import shutil
 import xml2rfc.log
+import requests
+import codecs
 
 try:
     from urllib.parse import urlparse, urljoin
@@ -21,7 +23,6 @@ except ImportError:
     pass
 
 __all__ = ['XmlRfcParser', 'XmlRfc', 'XmlRfcError']
-
 
 class XmlRfcError(Exception):
     """ Application XML errors with positional information
@@ -90,6 +91,8 @@ class CachingResolver(lxml.etree.Resolver):
             if not os.path.exists(pdir):
                 os.makedirs(pdir)
                 
+        self.sessions = {}
+
     def delete_cache(self, path=None):
         # Explicit path given?
         caches = path and [path] or self.read_caches
@@ -305,7 +308,8 @@ class CachingResolver(lxml.etree.Resolver):
 
             Checks for the existence of the cache and creates it if necessary.
         """
-        basename = os.path.basename(urlparse(url).path)
+        scheme, netloc, path, params, query, fragment = urlparse(url)
+        basename = os.path.basename(path)
         typename = self.include and 'include' or 'entity'
         # Try to load the URL from each cache in `read_cache`
         for dir in self.read_caches:
@@ -315,28 +319,25 @@ class CachingResolver(lxml.etree.Resolver):
                 xml2rfc.log.note('Loaded from cache', cached_path)
                 return cached_path
         # Not found, save to `write_cache`
-        if self.write_cache:
-            write_path = os.path.join(self.write_cache, 
-                                      xml2rfc.CACHE_PREFIX, basename)
-            try:
-                xml2rfc.log.note('Resolving ' + typename + '...', url)
-                xml2rfc.utils.StrictUrlOpener().retrieve(url, write_path)
-                xml2rfc.log.note('Created cache at', write_path)
+        xml2rfc.log.note('Resolving ' + typename + '...', url)
+        if not netloc in self.sessions:
+            self.sessions[netloc] = requests.Session()
+        session = self.sessions[netloc]
+        r = session.get(url)
+        if r.status_code == 200:
+            if self.write_cache:
+                write_path = os.path.join(self.write_cache, 
+                                          xml2rfc.CACHE_PREFIX, basename)
+                with codecs.open(write_path, 'w', encoding='utf-8') as cache_file:
+                    cache_file.write(r.text)
+                xml2rfc.log.note('Added file to cache: ', write_path)
                 return write_path
-            except IOError as e:
-                # Invalid URL -- Error will be displayed in getReferenceRequest
-                xml2rfc.log.note("I/O Error: %s" % e)
-                return ''
-        # No write cache available, test existance of URL and return
-        else:
-            try:
-                xml2rfc.log.write('Resolving ' + typename + '...', url)
-                xml2rfc.utils.StrictUrlOpener().open(url)
+            else:
                 return url
-            except IOError as e:
-                # Invalid URL
-                xml2rfc.log.note("I/O Error: %s" % e)
-                return ''
+        else:
+            # Invalid URL -- Error will be displayed in getReferenceRequest
+            xml2rfc.log.note("URL retrieval failed with status code %s for '%s'" % (r.status_code, r.url))
+            return ''
 
 class XmlRfcParser:
 

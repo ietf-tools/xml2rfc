@@ -6,10 +6,7 @@
 
 import re
 import textwrap
-try:
-    from urllib.request import FancyURLopener
-except ImportError:
-    from urllib import FancyURLopener
+
 try:
     import debug
     assert debug
@@ -17,24 +14,6 @@ except ImportError:
     pass
 
 import xml2rfc.log
-
-
-class StrictUrlOpener(FancyURLopener):
-    """ Override urllib opener to throw exceptions on 404s """
-    def __init__(self, *args, **kwargs):
-        FancyURLopener.__init__(self, *args, **kwargs)
-      
-    def http_error_default(self, url, fp, errcode, errmsg, headers):
-        raise IOError('Document not found ' + url)
-
-    def retrieve(self, url, filename=None, reporthook=None, data=None):
-        try:
-            super(StrictUrlOpener, self).retrieve(self, url, filename, reporthook, data)
-        except TypeError:               
-            # under Python 2.6 on mac os x, urllib can raise TypeError in
-            # proxy_bypass_macosx_sysconf() if the host is offline.  Replace
-            # this with the expected exception when an URL can't be retrieved.
-            raise IOError('Document not found ' + url)
 
 class MyTextWrapper(textwrap.TextWrapper):
     """ Subclass that overrides a few things in the standard implementation """
