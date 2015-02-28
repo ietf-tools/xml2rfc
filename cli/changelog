@@ -1,3 +1,39 @@
+xml2rfc (2.4.9) ietf; urgency=medium
+
+  * Applied a patch from Martin Thompson to render the ToC with sublevel 
+    indentation, instead of as a flat list, for html output, and updated the 
+    html regression test masters to match.
+
+  * Added an --omit-headers switch, valid only for paginated text.  
+    Specifying this omits the output of headers and footers, but retains form 
+    feed and top-of-page line padding.
+
+  * Consistently use utf-8 as output encoding.  As long as all content is 
+    forced to be ascii, this doesn't change anything; if we permit non-ascii 
+    content, this ensures it's utf-8 encoded.
+
+  * Issue a warning for input containing tab characters, and expand to 8, 
+    not 4 characters.  Fixes issue #276.
+
+  * Added 'i.e.' as a non-sentence-ending string.  Added a test for some 
+    abbreviations, including 'i.e.'.  Fixes issue #115
+
+  * Changed the handling of rfcedstyle so as to include the Authors' 
+    Addresses section in the TOC.  Fixes issue #273.
+
+  * Added the ability to create unnumbered sections by using the attribute 
+    numbered="no" on the section element, with the constraints specified in 
+    draft-hoffman-xml2rfc-15.  Fixes issue #105.
+
+  * In the front page top right-hand matter, don't keep the blank line 
+    between authors and date that would otherwise be used for authors without 
+    affiliation.  Fixes issue #272.
+
+  * Rewrote the network access code to use the requests package instead of 
+    urllib.  Added cache cleaning to the tox test actions.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  28 Feb 2015 10:27:05 -0100
+
 xml2rfc (2.4.8) ietf; urgency=medium
 
   * From Tony Hansen <tonyh@att.com>:
