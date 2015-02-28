@@ -679,6 +679,10 @@ class BaseRfcWriter:
                     lines.append(org_name)
                 last_org = org_name
                 last_pos = len(lines)-1
+            # remove blank lines between authors and date
+            if lines[last_pos] == '':
+                del lines[last_pos]
+                last_pos = len(lines)-1
 
         date = self.r.find('front/date')
         if date is not None:
