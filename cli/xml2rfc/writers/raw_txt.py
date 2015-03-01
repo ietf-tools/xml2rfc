@@ -1146,9 +1146,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                    plus.append(a-b)
                target, ttcol_widths = self.expand_cols(longest_words, target, plus)
 
+        # Ensure we don't have any zero-width columns; it breaks textwrap
+        ttcol_widths = [ k or 1 for k in ttcol_widths ] 
         # Now construct the cells using textwrap against ttcol_widths
         cell_lines = [
-            [ textwrap.wrap(cell, ttcol_widths[j]) if ttcol_widths[j] else [''] for j, cell in enumerate(matrix[i]) ]
+            [ textwrap.wrap(cell, ttcol_widths[j]) or [''] for j, cell in enumerate(matrix[i]) ]
             for i in range(0, len(matrix))
         ]
 
