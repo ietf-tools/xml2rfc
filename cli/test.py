@@ -133,13 +133,6 @@ output_format = [
         "writer": xml2rfc.HtmlRfcWriter,
         "postprocesslines": "post_process_lines"
     },
-    {
-        "ext": "exp.xml",
-        "spacefix": lambda x: x,
-        "unicodefix": lambda x: x,
-        "writer": xml2rfc.HtmlRfcWriter,
-        "postprocesslines": "post_process_lines"
-    },
 ]
 
 class WriterElementTest(unittest.TestCase):
