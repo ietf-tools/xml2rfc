@@ -289,7 +289,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 indent = 3
                 sub_indent = indent + len(bullet)
                 pagestr = '%4s' % item.page
-                lines = textwrap.wrap(bullet + (item.title if item.title else ""),
+                lines = textwrap.wrap(bullet + (item.title.strip() if item.title else ""),
                                       self.width - len(pagestr),
                                       initial_indent=' ' * indent,
                                       subsequent_indent=' ' * sub_indent)
@@ -377,7 +377,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         elif format == 'counter':
             target_text = item.counter
         elif format == 'title':
-            target_text = item.title
+            target_text = item.title.strip()
         else: #Default
             target_text = item.autoName
         target_text = re.sub("-", u"\u2011", target_text) # switch to non-breaking hyphens

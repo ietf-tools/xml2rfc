@@ -184,10 +184,10 @@ class HtmlRfcWriter(BaseRfcWriter):
                 link.attrib['rel'] = 'copyright' in item.autoAnchor and \
                                      'Copyright' or 'Chapter'
                 if item.title and item.counter:
-                    link.attrib['title'] = item.counter + ' ' + item.title
+                    link.attrib['title'] = item.counter + ' ' + item.title.strip()
                 self.buffers['toc_head_links'].append(self._serialize(link))
                 # Create actual toc list item
-                a = E.A(item.title, href='#' + item.autoAnchor)
+                a = E.A(item.title.strip(), href='#' + item.autoAnchor)
                 counter_text = item.counter and item.counter + '.   ' or ''
                 # Prepend appendix at first level
                 if item.level == 1 and item.appendix:
@@ -240,7 +240,7 @@ class HtmlRfcWriter(BaseRfcWriter):
                 elif format == 'counter':
                     text = item.counter
                 elif format == 'title':
-                    text = item.title
+                    text = item.title.strip()
                 else:
                     # Default
                     text = item.autoName
@@ -346,7 +346,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             h.append(a_bullet)
             if anchor:
                 # Use an anchor link for heading
-                a_text = E.A(text, href='#' + anchor, )
+                a_text = E.A(text.strip(), href='#' + anchor, )
                 a_text.attrib["id"] = anchor
                 h.append(a_text)
             else:
