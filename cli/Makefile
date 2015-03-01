@@ -25,7 +25,7 @@ pytests:
 drafttest: install
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
-	@PYTHONPATH=$$PWD python scripts/xml2rfc --cache tests/cache tests/input/draft-template.xml --base tmp/ --raw --text --nroff --html --exp
+	@PYTHONPATH=$$PWD python scripts/xml2rfc --cache tests/cache --no-network tests/input/draft-template.xml --base tmp/ --raw --text --nroff --html --exp
 	@groff -ms -Tascii tmp/draft-template.nroff | ./fix.pl | sed 1,2d > tmp/draft-template.nroff.txt
 	@diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-template.raw.txt	tmp/draft-template.raw.txt	|| { echo 'Diff failed for .raw.txt output'; exit 1; }
 	@diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-template.txt	tmp/draft-template.txt		|| { echo 'Diff failed for .txt output'; exit 1; }
@@ -37,7 +37,7 @@ drafttest: install
 miektest: install
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
-	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache tests/cache tests/input/draft-miek-test.xml --base tmp/ --raw --text --nroff --html --exp
+	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache tests/cache --no-network tests/input/draft-miek-test.xml --base tmp/ --raw --text --nroff --html --exp
 	@groff -ms -Tascii tmp/draft-miek-test.nroff | ./fix.pl | sed 1,2d > tmp/draft-miek-test.nroff.txt
 	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-miek-test.raw.txt	tmp/draft-miek-test.raw.txt	|| { echo 'Diff failed for .raw.txt output'; exit 1; }
 	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-miek-test.txt	tmp/draft-miek-test.txt		|| { echo 'Diff failed for .txt output'; exit 1; }
@@ -46,10 +46,19 @@ miektest: install
 	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-miek-test.exp.xml	tmp/draft-miek-test.exp.xml	|| { echo 'Diff failed for .exp.xml output'; exit 1; }
 	@diff -I '$(datetime_regex)' -I '$(version_regex)' tmp/draft-miek-test.nroff.txt tmp/draft-miek-test.txt	|| { echo 'Diff failed for .nroff.txt output'; exit 1; }
 
+cachetest: install
+	[ -d tmp ] || mkdir -p tmp
+	[ -d tmp ] && rm -f tmp/*
+	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache .cache --clear-cache
+	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache .cache tests/input/draft-miek-test.xml --base tmp/ --raw
+	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-miek-test.raw.txt	tmp/draft-miek-test.raw.txt	|| { echo 'Diff failed for .raw.txt output'; exit 1; }
+	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache .cache tests/input/draft-miek-test.xml --no-network --base tmp/ --raw
+	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-miek-test.raw.txt	tmp/draft-miek-test.raw.txt	|| { echo 'Diff failed for .raw.txt output'; exit 1; }
+
 rfctest:  bin/python install
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
-	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache tests/cache tests/input/rfc6787.xml --base tmp/ --raw --text --nroff --html --exp
+	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache tests/cache --no-network tests/input/rfc6787.xml --base tmp/ --raw --text --nroff --html --exp
 	@groff -ms -Tascii tmp/rfc6787.nroff | ./fix.pl > tmp/rfc6787.nroff.txt
 	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/rfc6787.raw.txt	tmp/rfc6787.raw.txt	|| { echo 'Diff failed for .raw.txt output'; exit 1; }
 	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/rfc6787.txt	tmp/rfc6787.txt 	|| { echo 'Diff failed for .txt output'; exit 1; }
@@ -58,14 +67,14 @@ rfctest:  bin/python install
 	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/rfc6787.exp.xml	tmp/rfc6787.exp.xml 	|| { echo 'Diff failed for .exp.xml output'; exit 1; }
 	@diff -I '$(datetime_regex)' -I '$(version_regex)' tmp/rfc6787.nroff.txt tmp/rfc6787.txt	|| { echo 'Diff failed for .nroff.txt output'; exit 1; }
 
-tests: test regressiontests
+tests: test regressiontests cachetest
 
 noflakestests: install pytests regressiontests
 
 regressiontests: drafttest miektest rfctest
 
 test2:	test
-	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache tests/cache tests/input/rfc6635.xml --text --out tmp/rfc6635.txt	&& diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/rfc6635.txt tmp/rfc6635.txt 
+	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache tests/cache --no-network tests/input/rfc6635.xml --text --out tmp/rfc6635.txt	&& diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/rfc6635.txt tmp/rfc6635.txt 
 
 upload:
 	rst2html changelog > /dev/null	# verify that the changelog is valid rst

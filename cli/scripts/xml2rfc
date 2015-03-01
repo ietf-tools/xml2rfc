@@ -70,6 +70,8 @@ def main():
                             help='purge the cache and exit', callback=clear_cache)
     plain_options.add_option('-n', '--no-dtd', dest='no_dtd', action='store_true',
                             help='disable DTD validation step')
+    plain_options.add_option('-N', '--no-network', dest='no_network', action='store_true',
+                            help='don\'t use the network to resolve references', default=False)
     plain_options.add_option('-q', '--quiet', action='store_true',
                             dest='quiet', help='dont print anything')
     plain_options.add_option('-v', '--verbose', action='store_true',
@@ -78,6 +80,7 @@ def main():
                             help='display the version number and exit',
                             callback=display_version)
     optionparser.add_option_group(plain_options)
+
 
     value_options = optparse.OptionGroup(optionparser, 'Other Options')
     value_options.add_option('-b', '--basename', dest='basename', metavar='NAME',
@@ -94,13 +97,13 @@ def main():
                             help='specify an explicit output filename')
     optionparser.add_option_group(value_options)
 
+
     formatoptions = optparse.OptionGroup(optionparser, 'Format Options', 
                                        ' Some formats accept additional format-specific options')
     formatoptions.add_option('', '--no-headers', dest='omit_headers', action='store_true',
                            help='with --text: calculate page breaks, and emit form feeds and page top'
                            ' spacing, but omit headers and footers from the paginated format'
                        )
-
     optionparser.add_option_group(formatoptions)
 
 
@@ -148,6 +151,7 @@ def main():
     parser = xml2rfc.XmlRfcParser(source, verbose=options.verbose,
                                   quiet=options.quiet,
                                   cache_path=options.cache,
+                                  no_network=options.no_network,
                                   templates_path=globals().get('_TEMPLATESPATH', None))
     try:
         xmlrfc = parser.parse()
