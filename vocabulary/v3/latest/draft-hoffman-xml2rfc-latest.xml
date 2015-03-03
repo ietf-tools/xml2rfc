@@ -744,18 +744,6 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       </t>
    </section>
 
-   <!--artwork/@xml:lang-->
-   <section anchor="element.artwork.attribute.xml-lang" toc="exclude">
-      <name>'xml:lang' attribute</name>
-      <iref item="Attributes" subitem="xml:lang"/>
-      <iref item="artwork element" subitem="xml:lang attribute"/>
-      <iref item="xml:lang attribute" subitem="in artwork element"/>
-      <t>
-            Allows specification of the language used. This is sometimes useful for renderers which display
-            different fonts for ideographic characters used in China and Japan.
-      </t>
-   </section>
-
    <!--artwork/@xml:space-->
    <section anchor="element.artwork.attribute.xml-space" toc="exclude">
       <name>'xml:space' attribute</name>
@@ -973,18 +961,6 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       <t>
             The author's surname (used on the front page and in references).
          </t>
-   </section>
-
-   <!--author/@xml:lang-->
-   <section anchor="element.author.attribute.xml-lang" toc="exclude">
-      <name>'xml:lang' attribute</name>
-      <iref item="Attributes" subitem="xml:lang"/>
-      <iref item="author element" subitem="xml:lang attribute"/>
-      <iref item="xml:lang attribute" subitem="in author element"/>
-      <t>
-            Allows specification of the language used. This is sometimes useful for renderers which display
-            different fonts for CJK characters.
-      </t>
    </section>
 </section>
 
@@ -2745,18 +2721,6 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          The ASCII equivalent of the organization's name.
       </t>
    </section>
-
-   <!--organization/@xml:lang-->
-   <section anchor="element.organization.attribute.xml-lang" toc="exclude">
-      <name>'xml:lang' attribute</name>
-      <iref item="Attributes" subitem="xml:lang"/>
-      <iref item="organization element" subitem="xml:lang attribute"/>
-      <iref item="xml:lang attribute" subitem="in organization element"/>
-      <t>
-            Allows specification of the language used. This is sometimes useful for renderers which display
-            different fonts for ideographic characters used in China and Japan.
-      </t>
-   </section>
 </section>
 
 <!--phone-->
@@ -2829,18 +2793,6 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
         
       </list>
    </t>
-
-   <!--postal/@xml:lang-->
-   <section anchor="element.postal.attribute.xml-lang" toc="exclude">
-      <name>'xml:lang' attribute</name>
-      <iref item="Attributes" subitem="xml:lang"/>
-      <iref item="postal element" subitem="xml:lang attribute"/>
-      <iref item="xml:lang attribute" subitem="in postal element"/>
-      <t>
-            Allows specification of the language used. This is sometimes useful for renderers which display
-            different fonts for CJK characters.
-      </t>
-   </section>
 </section>
 
 <!--postalLine-->
@@ -3445,21 +3397,6 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
             hyperlinks can be generated. Also, the value ought to be reformatted
             to insert whitespace after each comma if not already present.
       </t>
-   </section>
-
-   <!--rfc/@xml:lang-->
-   <section anchor="element.rfc.attribute.xml-lang" toc="exclude">
-      <name>'xml:lang' attribute</name>
-      <iref item="Attributes" subitem="xml:lang"/>
-      <iref item="rfc element" subitem="xml:lang attribute"/>
-      <iref item="xml:lang attribute" subitem="in rfc element"/>
-      <t>
-            The natural language used in the document (defaults to "en").
-         </t>
-      <t>
-            See <xref target="XML" x:fmt="of" x:sec="2.12" x:rel="#sec-lang-tag"/>
-            for more information.
-         </t>
    </section>
 </section>
 
@@ -6622,7 +6559,6 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
       "IETF" | "IAB" | "IRTF" | "independent"
     }?,
     attribute docName { text }?,
-    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     [ a:defaultValue = "no" ]
     attribute sortRefs { "true" | "false" }?,
     [ a:defaultValue = "yes" ]
@@ -6672,7 +6608,6 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     attribute asciiSurname { text }?,
     attribute fullname { text }?,
     attribute role { "editor" }?,
-    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     attribute asciiFullname { text }?,
     organization?,
     address?
@@ -6682,8 +6617,7 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
   element organization {
     attribute abbrev { text }?,
     attribute ascii { text }?,
-    text,
-    [ a:defaultValue = "en" ] attribute xml:lang { text }?
+    text
   }
 
 <b anchor="grammar.address">address</b><iref item="address element"/> =
@@ -6691,8 +6625,7 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
 <b anchor="grammar.postal">postal</b><iref item="postal element"/> =
   element postal {
-    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-    ((city | code | country | region | street)* | postalLine+)
+    (city | code | country | region | street)* | postalLine+
   }
 
 <b anchor="grammar.street">street</b><iref item="street element"/> =
@@ -7172,7 +7105,6 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     [ a:defaultValue = "" ] attribute alt { text }?,
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
-    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     text*
@@ -7452,7 +7384,7 @@ to the v3 schema.</t>
         "IETF" | "IAB" | "IRTF" | "independent"
       }?,
       attribute docName { text }?,
-      [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+-     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
 +     [ a:defaultValue = "no" ]
 +     attribute sortRefs { "true" | "false" }?,
 +     [ a:defaultValue = "yes" ]
@@ -7500,7 +7432,6 @@ to the v3 schema.</t>
 +     attribute asciiSurname { text }?,
       attribute fullname { text }?,
       attribute role { "editor" }?,
-+     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
 +     attribute asciiFullname { text }?,
       organization?,
       address?
@@ -7509,15 +7440,13 @@ to the v3 schema.</t>
     element organization {
       attribute abbrev { text }?,
 +     attribute ascii { text }?,
-+     text,
-+     [ a:defaultValue = "en" ] attribute xml:lang { text }?
++     text
 +   }
 + address =
 +   element address { postal?, phone?, facsimile?, email?, uri? }
 + postal =
 +   element postal {
-+     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-+     ((city | code | country | region | street)* | postalLine+)
++     (city | code | country | region | street)* | postalLine+
 +   }
 + street =
 +   element street {
@@ -7977,7 +7906,6 @@ to the v3 schema.</t>
       [ a:defaultValue = "" ] attribute alt { text }?,
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
-+     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
       text*

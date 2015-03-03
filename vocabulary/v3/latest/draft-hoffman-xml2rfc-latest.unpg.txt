@@ -678,13 +678,7 @@ Table of Contents
 
    Deprecated.
 
-2.5.10.  'xml:lang' attribute
-
-   Allows specification of the language used.  This is sometimes useful
-   for renderers which display different fonts for ideographic
-   characters used in China and Japan.
-
-2.5.11.  'xml:space' attribute
+2.5.10.  'xml:space' attribute
 
    Deprecated.
 
@@ -795,11 +789,6 @@ Table of Contents
 2.7.7.  'surname' attribute
 
    The author's surname (used on the front page and in references).
-
-2.7.8.  'xml:lang' attribute
-
-   Allows specification of the language used.  This is sometimes useful
-   for renderers which display different fonts for CJK characters.
 
 2.8.  <b>
 
@@ -1876,12 +1865,6 @@ Table of Contents
 
    The ASCII equivalent of the organization's name.
 
-2.37.3.  'xml:lang' attribute
-
-   Allows specification of the language used.  This is sometimes useful
-   for renderers which display different fonts for ideographic
-   characters used in China and Japan.
-
 2.38.  <phone>
 
    Represents a phone number.
@@ -1923,11 +1906,6 @@ Table of Contents
    Or:
 
       One or more <postalLine> elements (Section 2.40)
-
-2.39.1.  'xml:lang' attribute
-
-   Allows specification of the language used.  This is sometimes useful
-   for renderers which display different fonts for CJK characters.
 
 2.40.  <postalLine>
 
@@ -2289,12 +2267,6 @@ Table of Contents
    references can be detected and, depending on output representation,
    hyperlinks can be generated.  Also, the value ought to be reformatted
    to insert whitespace after each comma if not already present.
-
-2.46.16.  'xml:lang' attribute
-
-   The natural language used in the document (defaults to "en").
-
-   See Section 2.12 of [XML] for more information.
 
 2.47.  <section>
 
@@ -4345,7 +4317,6 @@ Appendix C.  Relax NG Schema
          "IETF" | "IAB" | "IRTF" | "independent"
        }?,
        attribute docName { text }?,
-       [ a:defaultValue = "en" ] attribute xml:lang { text }?,
        [ a:defaultValue = "no" ]
        attribute sortRefs { "true" | "false" }?,
        [ a:defaultValue = "yes" ]
@@ -4395,7 +4366,6 @@ Appendix C.  Relax NG Schema
        attribute asciiSurname { text }?,
        attribute fullname { text }?,
        attribute role { "editor" }?,
-       [ a:defaultValue = "en" ] attribute xml:lang { text }?,
        attribute asciiFullname { text }?,
        organization?,
        address?
@@ -4405,8 +4375,7 @@ Appendix C.  Relax NG Schema
      element organization {
        attribute abbrev { text }?,
        attribute ascii { text }?,
-       text,
-       [ a:defaultValue = "en" ] attribute xml:lang { text }?
+       text
      }
 
    address =
@@ -4414,8 +4383,7 @@ Appendix C.  Relax NG Schema
 
    postal =
      element postal {
-       [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-       ((city | code | country | region | street)* | postalLine+)
+       (city | code | country | region | street)* | postalLine+
      }
 
    street =
@@ -4895,7 +4863,6 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "" ] attribute alt { text }?,
        [ a:defaultValue = "" ] attribute width { text }?,
        [ a:defaultValue = "" ] attribute height { text }?,
-       [ a:defaultValue = "en" ] attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        text*
@@ -5172,7 +5139,7 @@ Appendix D.  Schema Differences from v2
            "IETF" | "IAB" | "IRTF" | "independent"
          }?,
          attribute docName { text }?,
-         [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+   -     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
    +     [ a:defaultValue = "no" ]
    +     attribute sortRefs { "true" | "false" }?,
    +     [ a:defaultValue = "yes" ]
@@ -5220,7 +5187,6 @@ Appendix D.  Schema Differences from v2
    +     attribute asciiSurname { text }?,
          attribute fullname { text }?,
          attribute role { "editor" }?,
-   +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
    +     attribute asciiFullname { text }?,
          organization?,
          address?
@@ -5229,15 +5195,13 @@ Appendix D.  Schema Differences from v2
        element organization {
          attribute abbrev { text }?,
    +     attribute ascii { text }?,
-   +     text,
-   +     [ a:defaultValue = "en" ] attribute xml:lang { text }?
+   +     text
    +   }
    + address =
    +   element address { postal?, phone?, facsimile?, email?, uri? }
    + postal =
    +   element postal {
-   +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-   +     ((city | code | country | region | street)* | postalLine+)
+   +     (city | code | country | region | street)* | postalLine+
    +   }
    + street =
    +   element street {
@@ -5697,7 +5661,6 @@ Appendix D.  Schema Differences from v2
          [ a:defaultValue = "" ] attribute alt { text }?,
          [ a:defaultValue = "" ] attribute width { text }?,
          [ a:defaultValue = "" ] attribute height { text }?,
-   +     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
          text*
@@ -5976,7 +5939,6 @@ Index
          src attribute  1
          type attribute  1
          width attribute  1
-         xml:lang attribute  1
          xml:space attribute  1
       ascii attribute
          in annotation element  1
@@ -6081,7 +6043,6 @@ Index
          updates  1
          value  1
          width  1
-         xml:lang  1
          xml:space  1
          year  1
       author element  1
@@ -6093,7 +6054,6 @@ Index
          inside front  1
          role attribute  1
          surname attribute  1
-         xml:lang attribute  1
 
    B
       b element  1
@@ -6547,7 +6507,6 @@ Index
          abbrev attribute  1
          ascii attribute  1
          inside author  1
-         xml:lang attribute  1
 
    P
       pageno attribute
@@ -6570,7 +6529,6 @@ Index
          in table element  1
       postal element  1
          inside address  1
-         xml:lang attribute  1
       postalLine element  1
          ascii attribute  1
          inside postal  1
@@ -6633,7 +6591,6 @@ Index
          tocDepth attribute  1
          tocInclude attribute  1
          updates attribute  1
-         xml:lang attribute  1
       role attribute
          in author element  1
       rowspan attribute
@@ -6913,12 +6870,6 @@ Index
          inside front  1
 
    X
-      xml:lang attribute
-         in artwork element  1
-         in author element  1
-         in organization element  1
-         in postal element  1
-         in rfc element  1
       xml:space attribute
          in artwork element  1
          in spanx element  1

@@ -33,7 +33,6 @@ rfc =
       "IETF" | "IAB" | "IRTF" | "independent"
     }?,
     attribute docName { text }?,
-    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     [ a:defaultValue = "no" ]
     attribute sortRefs { "true" | "false" }?,
     [ a:defaultValue = "yes" ]
@@ -79,7 +78,6 @@ author =
     attribute asciiSurname { text }?,
     attribute fullname { text }?,
     attribute role { "editor" }?,
-    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     attribute asciiFullname { text }?,
     organization?,
     address?
@@ -88,15 +86,13 @@ organization =
   element organization {
     attribute abbrev { text }?,
     attribute ascii { text }?,
-    text,
-    [ a:defaultValue = "en" ] attribute xml:lang { text }?
+    text
   }
 address =
   element address { postal?, phone?, facsimile?, email?, uri? }
 postal =
   element postal {
-    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-    ((city | code | country | region | street)* | postalLine+)
+    (city | code | country | region | street)* | postalLine+
   }
 street =
   element street {
@@ -529,7 +525,6 @@ artwork =
     [ a:defaultValue = "" ] attribute alt { text }?,
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
-    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     text*
