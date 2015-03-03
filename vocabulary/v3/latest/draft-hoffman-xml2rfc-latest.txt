@@ -74,10 +74,10 @@ Table of Contents
        1.2.2.  New Attributes for Existing Elements  . . . . . . . .   7
        1.2.3.  Elements and Attributes Deprecated from v2  . . . . .   8
        1.2.4.  Additional Changes from v2  . . . . . . . . . . . . .   9
-     1.3.  Syntax Notation . . . . . . . . . . . . . . . . . . . . .  10
+     1.3.  Syntax Notation . . . . . . . . . . . . . . . . . . . . .   9
    2.  Elements  . . . . . . . . . . . . . . . . . . . . . . . . . .  10
      2.1.  <abstract>  . . . . . . . . . . . . . . . . . . . . . . .  10
-     2.2.  <address> . . . . . . . . . . . . . . . . . . . . . . . .  10
+     2.2.  <address> . . . . . . . . . . . . . . . . . . . . . . . .  11
      2.3.  <annotation>  . . . . . . . . . . . . . . . . . . . . . .  11
      2.4.  <area>  . . . . . . . . . . . . . . . . . . . . . . . . .  12
      2.5.  <artwork> . . . . . . . . . . . . . . . . . . . . . . . .  12
@@ -364,11 +364,6 @@ Internet-Draft                  XML2RFCv3                     March 2015
       primary entry and still allow the ASCII-equivalent values to
       appear in the processed documents.
 
-   o  Add "xml:lang" attribute to <artwork>, <postal>, <author>, and
-      <organization>.  This is sometimes useful for renderers which
-      display different fonts for ideographic characters used in China
-      and Japan.
-
    o  Add the "section", "relative", and "sectionFormat" attributes to
       <xref>.
 
@@ -384,6 +379,11 @@ Internet-Draft                  XML2RFCv3                     March 2015
    o  Add "display" to <cref> to indicate to processors whether or not
       to display the comment.
 
+   o  Add "keepwithnext" and "keepwithprevious" to <t> as a hint to
+      processors that do pagination that the should try to keep the
+      paragraph with the next/previous element.
+
+
 
 
 
@@ -392,10 +392,6 @@ Hoffman                 Expires September 3, 2015               [Page 7]
 
 Internet-Draft                  XML2RFCv3                     March 2015
 
-
-   o  Add "keepwithnext" and "keepwithprevious" to <t> as a hint to
-      processors that do pagination that the should try to keep the
-      paragraph with the next/previous element.
 
 1.2.3.  Elements and Attributes Deprecated from v2
 
@@ -442,6 +438,10 @@ Internet-Draft                  XML2RFCv3                     March 2015
       in both <artwork> and <figure> because they are not needed for the
       new output formats.
 
+   o  Deprecate the "pageno" attribute in <xref> because it was unused
+      in v2.  Deprecate the "none" and "title" values for the "format"
+      attribute in <xref> because the former makes no sense semantically
+
 
 
 Hoffman                 Expires September 3, 2015               [Page 8]
@@ -449,9 +449,6 @@ Hoffman                 Expires September 3, 2015               [Page 8]
 Internet-Draft                  XML2RFCv3                     March 2015
 
 
-   o  Deprecate the "pageno" attribute in <xref> because it was unused
-      in v2.  Deprecate the "none" and "title" values for the "format"
-      attribute in <xref> because the former makes no sense semantically
       and the latter because it has unpredictable output.
 
 1.2.4.  Additional Changes from v2
@@ -494,8 +491,11 @@ Internet-Draft                  XML2RFCv3                     March 2015
    o  Do not generate the grammar from a DTD, but instead get it
       directly from the Relax Next Generation (RNG) grammar [RNG].
 
+1.3.  Syntax Notation
 
-
+   The XML vocabulary here is defined in prose, based on the Relax NG
+   schema ([RNC]) contained in Appendix C (specified in Relax NG Compact
+   Notation, "RNC").
 
 
 
@@ -504,12 +504,6 @@ Hoffman                 Expires September 3, 2015               [Page 9]
 
 Internet-Draft                  XML2RFCv3                     March 2015
 
-
-1.3.  Syntax Notation
-
-   The XML vocabulary here is defined in prose, based on the Relax NG
-   schema ([RNC]) contained in Appendix C (specified in Relax NG Compact
-   Notation, "RNC").
 
    Note that the schema can be used for automated validity checks, but
    certain constraints are only described in prose (example: the
@@ -533,6 +527,16 @@ Internet-Draft                  XML2RFCv3                     March 2015
    linebreaks are collapsed into a single whitespace, and leading and
    trailing whitespace are trimmed off.
 
+   Every element in the v3 vocabulary can have an "xml:lang" attribute,
+   an "xml:base" attribute, or both.  The xml:lang attribute specifies
+   the language used in the element.  This is sometimes useful for
+   renderers which display different fonts for ideographic characters
+   used in China and Japan.  The xml:base attribute is sometimes added
+   to an XML file when doing XML-to-XML conversion where the base file
+   has XInclude atttributes (see Appendix B.1).  These attributes are
+   not listed in the element descriptions here, but will later be added
+   to the RNG used for the v3 processors.
+
 2.1.  <abstract>
 
    Contains the abstract of the document.  See [RFC7322] for more
@@ -549,10 +553,6 @@ Internet-Draft                  XML2RFCv3                     March 2015
    The name for the abstract.  See Appendix B.2.1 for a description of
    this.
 
-2.2.  <address>
-
-   Provides address information for the author.
-
 
 
 
@@ -560,6 +560,10 @@ Hoffman                 Expires September 3, 2015              [Page 10]
 
 Internet-Draft                  XML2RFCv3                     March 2015
 
+
+2.2.  <address>
+
+   Provides address information for the author.
 
    This element appears as a child element of: <author> (Section 2.7).
 
@@ -604,10 +608,6 @@ Internet-Draft                  XML2RFCv3                     March 2015
 
    o  <iref> elements (Section 2.29)
 
-   o  <spanx> elements (Section 3.7)
-
-   o  <strong> elements (Section 2.51)
-
 
 
 
@@ -616,6 +616,10 @@ Hoffman                 Expires September 3, 2015              [Page 11]
 
 Internet-Draft                  XML2RFCv3                     March 2015
 
+
+   o  <spanx> elements (Section 3.7)
+
+   o  <strong> elements (Section 2.51)
 
    o  <sub> elements (Section 2.52)
 
@@ -661,10 +665,6 @@ Internet-Draft                  XML2RFCv3                     March 2015
 
    Alternatively, the "src" attribute allows referencing an external
    graphics file, such as a bitmap or a vector drawing in SVG, using a
-   URI.  In this case, the textual content acts as fallback for output
-   representations that do not support graphics, and thus ought to
-   contain either a "line art" variant of the graphics, or otherwise
-   prose that describes the included image in sufficient detail.
 
 
 
@@ -672,6 +672,11 @@ Hoffman                 Expires September 3, 2015              [Page 12]
 
 Internet-Draft                  XML2RFCv3                     March 2015
 
+
+   URI.  In this case, the textual content acts as fallback for output
+   representations that do not support graphics, and thus ought to
+   contain either a "line art" variant of the graphics, or otherwise
+   prose that describes the included image in sufficient detail.
 
    If the artwork includes either "&" or "<" characters, or the string
    "]]>" those characters need to be encoded using escaping or CDATA
@@ -687,8 +692,8 @@ Internet-Draft                  XML2RFCv3                     March 2015
    o  Inline, by including all of the SVG in the content of the element
       (such as "<artwork type="svg"><svg xmlns...">")
 
-   o  Inline, but using XInclude (see Appendix B.1 (such as "<artwork
-      type="svg"><xi:include href=...")
+   o  Inline, but using XInclude (see Appendix B.1), such as "<artwork
+      type="svg"><xi:include href=..."
 
    o  As a data: URI (such as "<artwork type="svg" src="data:image/
       svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3...">")
@@ -717,17 +722,16 @@ Internet-Draft                  XML2RFCv3                     March 2015
    Controls whether the artwork appears left justified (default),
    centered, or right justified.
 
-   Allowed values:
-
-   o  "left" (default)
-
-
 
 
 Hoffman                 Expires September 3, 2015              [Page 13]
 
 Internet-Draft                  XML2RFCv3                     March 2015
 
+
+   Allowed values:
+
+   o  "left" (default)
 
    o  "center"
 
@@ -773,10 +777,6 @@ Internet-Draft                  XML2RFCv3                     March 2015
    The URI reference of a graphics file ([RFC3986]).
 
    Note that this can be a "data" URI ([RFC2397]).
-
-
-
-
 
 
 
@@ -6987,7 +6987,7 @@ Index
       abstract element  10, 92
          inside front  32
          pn attribute  10
-      address element  10, 92
+      address element  11, 92
          inside author  17
       align attribute
          in artwork element  13
@@ -7352,7 +7352,7 @@ Internet-Draft                  XML2RFCv3                     March 2015
    E
       Elements
          abstract  10, 32
-         address  10, 17
+         address  11, 17
          annotation  11, 43
          area  12, 32
          artwork  12, 16, 20, 30, 35, 50, 62, 64
@@ -7421,9 +7421,9 @@ Internet-Draft                  XML2RFCv3                     March 2015
          section  19, 21, 37, 49-50
          seriesInfo  32, 43, 52
          sourcecode  20, 30, 35, 50, 53, 63, 65
-         spanx  11, 59, 73, 75-76
+         spanx  12, 59, 73, 75-76
          street  41, 56
-         strong  11, 20, 22, 25, 27-28, 33, 35, 43, 56, 58-59, 63, 65,
+         strong  12, 20, 22, 25, 27-28, 33, 35, 43, 56, 58-59, 63, 65,
             67, 73, 75-76
          sub  12, 18, 20, 22, 25, 27-28, 33, 35, 43, 57, 60, 63, 65, 68,
             73, 75-76
@@ -7897,7 +7897,7 @@ Hoffman                 Expires September 3, 2015             [Page 141]
 Internet-Draft                  XML2RFCv3                     March 2015
 
 
-         inside annotation  11
+         inside annotation  12
          inside c  73
          inside postamble  75
          inside preamble  76
@@ -7914,7 +7914,7 @@ Internet-Draft                  XML2RFCv3                     March 2015
          ascii attribute  56
          inside postal  41
       strong element  56, 92
-         inside annotation  11
+         inside annotation  12
          inside blockquote  20
          inside c  73
          inside cref  22

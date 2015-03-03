@@ -293,11 +293,6 @@ Table of Contents
       primary entry and still allow the ASCII-equivalent values to
       appear in the processed documents.
 
-   o  Add "xml:lang" attribute to <artwork>, <postal>, <author>, and
-      <organization>.  This is sometimes useful for renderers which
-      display different fonts for ideographic characters used in China
-      and Japan.
-
    o  Add the "section", "relative", and "sectionFormat" attributes to
       <xref>.
 
@@ -435,6 +430,16 @@ Table of Contents
    linebreaks are collapsed into a single whitespace, and leading and
    trailing whitespace are trimmed off.
 
+   Every element in the v3 vocabulary can have an "xml:lang" attribute,
+   an "xml:base" attribute, or both.  The xml:lang attribute specifies
+   the language used in the element.  This is sometimes useful for
+   renderers which display different fonts for ideographic characters
+   used in China and Japan.  The xml:base attribute is sometimes added
+   to an XML file when doing XML-to-XML conversion where the base file
+   has XInclude atttributes (see Appendix B.1).  These attributes are
+   not listed in the element descriptions here, but will later be added
+   to the RNG used for the v3 processors.
+
 2.1.  <abstract>
 
    Contains the abstract of the document.  See [RFC7322] for more
@@ -565,8 +570,8 @@ Table of Contents
    o  Inline, by including all of the SVG in the content of the element
       (such as "<artwork type="svg"><svg xmlns...">")
 
-   o  Inline, but using XInclude (see Appendix B.1 (such as "<artwork
-      type="svg"><xi:include href=...")
+   o  Inline, but using XInclude (see Appendix B.1), such as "<artwork
+      type="svg"><xi:include href=..."
 
    o  As a data: URI (such as "<artwork type="svg" src="data:image/
       svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3...">")

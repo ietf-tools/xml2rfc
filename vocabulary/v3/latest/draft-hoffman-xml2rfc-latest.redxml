@@ -19,8 +19,6 @@ Future threads:
 
 Think about all the "processor" wording, whether it should be here, and so on.
 
-Change all "yes/no" attributes to "true/false" except for rfc/@consensus: add true/false there.
-
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
 -->
@@ -191,10 +189,6 @@ Also add "asciiFullname", "asciiInitials", and "asciiSurname" to &lt;<xref targe
 This allows an author to specify their information in their native scripts as the primary
 entry and still allow the ASCII-equivalent values to appear in the processed documents.</t>
 
-<t>Add "xml:lang" attribute to &lt;<xref target="element.artwork" format="none">artwork</xref>&gt;, &lt;<xref target="element.postal" format="none">postal</xref>&gt;,
-&lt;<xref target="element.author" format="none">author</xref>&gt;, and &lt;<xref target="element.organization" format="none">organization</xref>&gt;. This is sometimes useful for renderers which display
-different fonts for ideographic characters used in China and Japan.</t>
-
 <t>Add the "section", "relative", and "sectionFormat" attributes to &lt;<xref target="element.xref" format="none">xref</xref>&gt;.</t>
 
 <t>Add the "numbered" and "removeInRFC" attributes to &lt;<xref target="element.section" format="none">section</xref>&gt;.</t>
@@ -358,6 +352,16 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
   Except inside &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; and &lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt;, horizontal
   whitespace and linebreaks are collapsed into a single whitespace, and leading and trailing
   whitespace are trimmed off.
+</t>
+
+<t>
+  Every element in the v3 vocabulary can have an "xml:lang" attribute, an "xml:base" attribute, or
+  both. The xml:lang attribute specifies the language used in the element. This is sometimes useful
+  for renderers which display different fonts for ideographic characters used in China and Japan.
+  The xml:base attribute is sometimes added to an XML file when doing XML-to-XML conversion where the
+  base file has XInclude atttributes (see <xref target="includingexternal"/>). These attributes are not
+  listed in the element descriptions here, but will later be added to the RNG used for the v3
+  processors.
 </t>
 
 
@@ -569,8 +573,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <list style="symbols">
          <t>Inline, by including all of the SVG in the content of the element
             (such as "&lt;artwork type="svg"&gt;&lt;svg xmlns..."&gt;")</t>
-         <t>Inline, but using XInclude (see <xref target="includingexternal"/>
-            (such as "&lt;artwork type="svg"&gt;&lt;xi:include href=...")</t>
+         <t>Inline, but using XInclude (see <xref target="includingexternal"/>),
+            such as "&lt;artwork type="svg"&gt;&lt;xi:include href=..."</t>
          <t>As a data: URI (such as "&lt;artwork type="svg"
             src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3..."&gt;")</t>
          <t>As a URI to an external entity (such as "&lt;artwork type="svg" src="http://www.example.com/..."&gt;")</t>
