@@ -7,7 +7,7 @@ rfc =
     [ a:defaultValue = "" ] attribute obsoletes { text }?,
     [ a:defaultValue = "" ] attribute updates { text }?,
     attribute category { text }?,
-    attribute consensus { "no" | "yes" }?,
+    attribute consensus { "no" | "yes" | "false" | "true" }?,
     attribute seriesNo { text }?,
     attribute ipr {
       "full2026"
@@ -34,10 +34,12 @@ rfc =
     }?,
     attribute docName { text }?,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-    [ a:defaultValue = "no" ] attribute sortRefs { "yes" | "no" }?,
-    [ a:defaultValue = "yes" ] attribute symRefs { "yes" | "no" }?,
+    [ a:defaultValue = "no" ]
+    attribute sortRefs { "true" | "false" }?,
     [ a:defaultValue = "yes" ]
-    attribute tocInclude { "yes" | "no" }?,
+    attribute symRefs { "true" | "false" }?,
+    [ a:defaultValue = "yes" ]
+    attribute tocInclude { "true" | "false" }?,
     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
     attribute finalizedTime { text }?,
     link*,
@@ -151,7 +153,7 @@ note =
     name,
     attribute pn { text }?,
     [ a:defaultValue = "no" ]
-    attribute removeInRFC { "yes" | "no" }?,
+    attribute removeInRFC { "true" | "false" }?,
     t+
   }
 boilerplate = element boilerplate { section+ }
@@ -160,11 +162,12 @@ section =
   element section {
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
-    [ a:defaultValue = "yes" ] attribute numbered { "yes" | "no" }?,
+    [ a:defaultValue = "yes" ]
+    attribute numbered { "true" | "false" }?,
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "no" ]
-    attribute removeInRFC { "yes" | "no" }?,
+    attribute removeInRFC { "true" | "false" }?,
     attribute pn { text }?,
     name?,
     (artwork

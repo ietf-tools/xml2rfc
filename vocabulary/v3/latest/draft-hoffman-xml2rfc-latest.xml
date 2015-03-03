@@ -19,8 +19,7 @@ Future threads:
 
 Think about all the "processor" wording, whether it should be here, and so on.
 
-Possibly kill <dl hanging>, but make sure that the list agrees.
-	**** Joe figured out that the current definition is probably fine ****
+Change all "yes/no" attributes to "true/false" except for rfc/@consensus: add true/false there.
 
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
@@ -2565,8 +2564,8 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          removed before the document is published as an RFC.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"yes"</t>
-            <t>"no" (default)</t>
+            <t>"true"</t>
+            <t>"false"</t>
          </list>
       </t>
    </section>
@@ -3231,6 +3230,8 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"no"</t>
             <t>"yes"</t>
+            <t>"false"</t>
+            <t>"true"</t>
          </list>
       </t>
    </section>
@@ -3353,8 +3354,8 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          Specifies whether or not a processor will sort the references in each reference section.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"yes"</t>
-            <t>"no" (default)</t>
+            <t>"true"</t>
+            <t>"false"</t>
          </list>
       </t>
    </section>
@@ -3391,8 +3392,8 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          value for this is "no", the references come out as numbers (such as "[3]").
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"yes" (default)</t>
-            <t>"no"</t>
+            <t>"true"</t>
+            <t>"false"</t>
          </list>
       </t>
    </section>
@@ -3418,8 +3419,8 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          Specifies whether or not a processor will include a table of contents in generated files.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"yes" (default)</t>
-            <t>"no"</t>
+            <t>"true"</t>
+            <t>"false"</t>
          </list>
       </t>
    </section>
@@ -3553,8 +3554,8 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          top-level section.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"yes" (default)</t>
-            <t>"no"</t>
+            <t>"true"</t>
+            <t>"false"</t>
          </list>
       </t>
    </section>
@@ -3583,8 +3584,8 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          removed before the document is published as an RFC.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"yes"</t>
-            <t>"no" (default)</t>
+            <t>"true"</t>
+            <t>"false"</t>
          </list>
       </t>
    </section>
@@ -6591,7 +6592,7 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     [ a:defaultValue = "" ] attribute obsoletes { text }?,
     [ a:defaultValue = "" ] attribute updates { text }?,
     attribute category { text }?,
-    attribute consensus { "no" | "yes" }?,
+    attribute consensus { "no" | "yes" | "false" | "true" }?,
     attribute seriesNo { text }?,
     attribute ipr {
       "full2026"
@@ -6618,10 +6619,12 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     }?,
     attribute docName { text }?,
     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-    [ a:defaultValue = "no" ] attribute sortRefs { "yes" | "no" }?,
-    [ a:defaultValue = "yes" ] attribute symRefs { "yes" | "no" }?,
+    [ a:defaultValue = "no" ]
+    attribute sortRefs { "true" | "false" }?,
     [ a:defaultValue = "yes" ]
-    attribute tocInclude { "yes" | "no" }?,
+    attribute symRefs { "true" | "false" }?,
+    [ a:defaultValue = "yes" ]
+    attribute tocInclude { "true" | "false" }?,
     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
     attribute finalizedTime { text }?,
     link*,
@@ -6758,7 +6761,7 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     name,
     attribute pn { text }?,
     [ a:defaultValue = "no" ]
-    attribute removeInRFC { "yes" | "no" }?,
+    attribute removeInRFC { "true" | "false" }?,
     t+
   }
 
@@ -6770,11 +6773,12 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
   element section {
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
-    [ a:defaultValue = "yes" ] attribute numbered { "yes" | "no" }?,
+    [ a:defaultValue = "yes" ]
+    attribute numbered { "true" | "false" }?,
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "no" ]
-    attribute removeInRFC { "yes" | "no" }?,
+    attribute removeInRFC { "true" | "false" }?,
     attribute pn { text }?,
     name?,
     (artwork
@@ -7416,8 +7420,9 @@ to the v3 schema.</t>
       [ a:defaultValue = "" ] attribute updates { text }?,
 -     attribute category { "std" | "bcp" | "info" | "exp" | 
 - "historic" }?,
+-     attribute consensus { "no" | "yes" }?,
 +     attribute category { text }?,
-      attribute consensus { "no" | "yes" }?,
++     attribute consensus { "no" | "yes" | "false" | "true" }?,
       attribute seriesNo { text }?,
       attribute ipr {
         "full2026"
@@ -7444,12 +7449,12 @@ to the v3 schema.</t>
       }?,
       attribute docName { text }?,
       [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-+     [ a:defaultValue = "no" ] attribute sortRefs { "yes" | "no" 
-+ }?,
-+     [ a:defaultValue = "yes" ] attribute symRefs { "yes" | "no" 
-+ }?,
++     [ a:defaultValue = "no" ]
++     attribute sortRefs { "true" | "false" }?,
 +     [ a:defaultValue = "yes" ]
-+     attribute tocInclude { "yes" | "no" }?,
++     attribute symRefs { "true" | "false" }?,
++     [ a:defaultValue = "yes" ]
++     attribute tocInclude { "true" | "false" }?,
 +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
 +     attribute finalizedTime { text }?,
 +     link*,
@@ -7576,7 +7581,7 @@ to the v3 schema.</t>
 +     name,
 +     attribute pn { text }?,
 +     [ a:defaultValue = "no" ]
-+     attribute removeInRFC { "yes" | "no" }?,
++     attribute removeInRFC { "true" | "false" }?,
       t+
     }
 + boilerplate = element boilerplate { section+ }
@@ -7586,13 +7591,13 @@ to the v3 schema.</t>
       attribute anchor { xsd:ID }?,
 -     attribute title { text },
 +     attribute title { text }?,
-+     [ a:defaultValue = "yes" ] attribute numbered { "yes" | "no" 
-+ }?,
++     [ a:defaultValue = "yes" ]
++     attribute numbered { "true" | "false" }?,
       [ a:defaultValue = "default" ]
       attribute toc { "include" | "exclude" | "default" }?,
 -     (t | figure | texttable | iref)*,
 +     [ a:defaultValue = "no" ]
-+     attribute removeInRFC { "yes" | "no" }?,
++     attribute removeInRFC { "true" | "false" }?,
 +     attribute pn { text }?,
 +     name?,
 +     (artwork

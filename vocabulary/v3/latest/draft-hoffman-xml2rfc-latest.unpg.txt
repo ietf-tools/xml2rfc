@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                          February 26, 2015
+Obsoletes: 2629 (if approved)                              March 2, 2015
 Intended status: Informational
-Expires: August 30, 2015
+Expires: September 3, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 30, 2015.
+   This Internet-Draft will expire on September 3, 2015.
 
 Copyright Notice
 
@@ -1755,9 +1755,9 @@ Table of Contents
 
    Allowed values:
 
-   o  "yes"
+   o  "true"
 
-   o  "no" (default)
+   o  "false"
 
 2.35.3.  'title' attribute
 
@@ -2144,6 +2144,10 @@ Table of Contents
 
    o  "yes"
 
+   o  "false"
+
+   o  "true"
+
 2.46.3.  'docName' attribute
 
    Deprecated; instead, use the "value" attribute in <seriesInfo>.
@@ -2224,9 +2228,9 @@ Table of Contents
 
    Allowed values:
 
-   o  "yes"
+   o  "true"
 
-   o  "no" (default)
+   o  "false"
 
 2.46.11.  'submissionType' attribute
 
@@ -2252,9 +2256,9 @@ Table of Contents
 
    Allowed values:
 
-   o  "yes" (default)
+   o  "true"
 
-   o  "no"
+   o  "false"
 
 2.46.13.  'tocDepth' attribute
 
@@ -2268,9 +2272,9 @@ Table of Contents
 
    Allowed values:
 
-   o  "yes" (default)
+   o  "true"
 
-   o  "no"
+   o  "false"
 
 2.46.15.  'updates' attribute
 
@@ -2346,9 +2350,9 @@ Table of Contents
 
    Allowed values:
 
-   o  "yes" (default)
+   o  "true"
 
-   o  "no"
+   o  "false"
 
 2.47.3.  'pn' attribute
 
@@ -2364,9 +2368,9 @@ Table of Contents
 
    Allowed values:
 
-   o  "yes"
+   o  "true"
 
-   o  "no" (default)
+   o  "false"
 
 2.47.5.  'title' attribute
 
@@ -4310,7 +4314,7 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "" ] attribute obsoletes { text }?,
        [ a:defaultValue = "" ] attribute updates { text }?,
        attribute category { text }?,
-       attribute consensus { "no" | "yes" }?,
+       attribute consensus { "no" | "yes" | "false" | "true" }?,
        attribute seriesNo { text }?,
        attribute ipr {
          "full2026"
@@ -4337,10 +4341,12 @@ Appendix C.  Relax NG Schema
        }?,
        attribute docName { text }?,
        [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-       [ a:defaultValue = "no" ] attribute sortRefs { "yes" | "no" }?,
-       [ a:defaultValue = "yes" ] attribute symRefs { "yes" | "no" }?,
+       [ a:defaultValue = "no" ]
+       attribute sortRefs { "true" | "false" }?,
        [ a:defaultValue = "yes" ]
-       attribute tocInclude { "yes" | "no" }?,
+       attribute symRefs { "true" | "false" }?,
+       [ a:defaultValue = "yes" ]
+       attribute tocInclude { "true" | "false" }?,
        [ a:defaultValue = "3" ] attribute tocDepth { text }?,
        attribute finalizedTime { text }?,
        link*,
@@ -4477,7 +4483,7 @@ Appendix C.  Relax NG Schema
        name,
        attribute pn { text }?,
        [ a:defaultValue = "no" ]
-       attribute removeInRFC { "yes" | "no" }?,
+       attribute removeInRFC { "true" | "false" }?,
        t+
      }
 
@@ -4489,11 +4495,12 @@ Appendix C.  Relax NG Schema
      element section {
        attribute anchor { xsd:ID }?,
        attribute title { text }?,
-       [ a:defaultValue = "yes" ] attribute numbered { "yes" | "no" }?,
+       [ a:defaultValue = "yes" ]
+       attribute numbered { "true" | "false" }?,
        [ a:defaultValue = "default" ]
        attribute toc { "include" | "exclude" | "default" }?,
        [ a:defaultValue = "no" ]
-       attribute removeInRFC { "yes" | "no" }?,
+       attribute removeInRFC { "true" | "false" }?,
        attribute pn { text }?,
        name?,
        (artwork
@@ -5132,8 +5139,9 @@ Appendix D.  Schema Differences from v2
          [ a:defaultValue = "" ] attribute updates { text }?,
    -     attribute category { "std" | "bcp" | "info" | "exp" |
    - "historic" }?,
+   -     attribute consensus { "no" | "yes" }?,
    +     attribute category { text }?,
-         attribute consensus { "no" | "yes" }?,
+   +     attribute consensus { "no" | "yes" | "false" | "true" }?,
          attribute seriesNo { text }?,
          attribute ipr {
            "full2026"
@@ -5160,12 +5168,12 @@ Appendix D.  Schema Differences from v2
          }?,
          attribute docName { text }?,
          [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-   +     [ a:defaultValue = "no" ] attribute sortRefs { "yes" | "no"
-   + }?,
-   +     [ a:defaultValue = "yes" ] attribute symRefs { "yes" | "no"
-   + }?,
+   +     [ a:defaultValue = "no" ]
+   +     attribute sortRefs { "true" | "false" }?,
    +     [ a:defaultValue = "yes" ]
-   +     attribute tocInclude { "yes" | "no" }?,
+   +     attribute symRefs { "true" | "false" }?,
+   +     [ a:defaultValue = "yes" ]
+   +     attribute tocInclude { "true" | "false" }?,
    +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
    +     attribute finalizedTime { text }?,
    +     link*,
@@ -5292,7 +5300,7 @@ Appendix D.  Schema Differences from v2
    +     name,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "no" ]
-   +     attribute removeInRFC { "yes" | "no" }?,
+   +     attribute removeInRFC { "true" | "false" }?,
          t+
        }
    + boilerplate = element boilerplate { section+ }
@@ -5302,13 +5310,13 @@ Appendix D.  Schema Differences from v2
          attribute anchor { xsd:ID }?,
    -     attribute title { text },
    +     attribute title { text }?,
-   +     [ a:defaultValue = "yes" ] attribute numbered { "yes" | "no"
-   + }?,
+   +     [ a:defaultValue = "yes" ]
+   +     attribute numbered { "true" | "false" }?,
          [ a:defaultValue = "default" ]
          attribute toc { "include" | "exclude" | "default" }?,
    -     (t | figure | texttable | iref)*,
    +     [ a:defaultValue = "no" ]
-   +     attribute removeInRFC { "yes" | "no" }?,
+   +     attribute removeInRFC { "true" | "false" }?,
    +     attribute pn { text }?,
    +     name?,
    +     (artwork
