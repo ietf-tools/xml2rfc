@@ -564,8 +564,6 @@ class HtmlRfcWriter(BaseRfcWriter):
                     ref_td.append(a)
                     last = a
                 a.tail = ', '
-            if len(authors):
-                last.tail = ', "'
             title = reference.find('front/title')
             if title is not None and title.text:
                 title_string = title.text.strip()
@@ -573,9 +571,16 @@ class HtmlRfcWriter(BaseRfcWriter):
                 xml2rfc.log.warn('No title specified in reference', \
                                  reference.attrib.get('anchor', ''))
                 title_string = ''
-            title_a = E.A(title_string)
-            title_a.tail = '", '
-            ref_td.append(title_a)
+            if title_string:
+                if reference.attrib.get("quote-title", "true") == "true": # attribute default value: yes
+                    last.tail = ', "' if len(authors) else '"'
+                    title_a = E.A(title_string)
+                    title_a.tail = '"'
+                else:
+                    last.tail = ', ' if len(authors) else ''
+                    title_a = E.A(title_string)
+                    title_a.tail = ''
+                ref_td.append(title_a)
             for seriesInfo in reference.findall('seriesInfo'):
                 # Create title's link to document from seriesInfo
                 if seriesInfo.attrib.get('name', '') == 'RFC':
@@ -586,8 +591,8 @@ class HtmlRfcWriter(BaseRfcWriter):
                     title_a.attrib['href'] = \
                         self.html_defaults['references_url'] + \
                         seriesInfo.attrib.get('value', '')
-                title_a.tail += seriesInfo.attrib.get('name', '') + ' ' + \
-                             seriesInfo.attrib.get('value', '') + ', '
+                title_a.tail += ', '+seriesInfo.attrib.get('name', '') + ' ' + \
+                             seriesInfo.attrib.get('value', '')
             if not title_a.attrib.has_key("href"):
                 href = reference.attrib.get("target", None)
                 if href:
@@ -595,10 +600,12 @@ class HtmlRfcWriter(BaseRfcWriter):
             date = reference.find('front/date')
             if date is not None:
                 month = date.attrib.get('month', '')
-                if month:
-                    month += ' '
                 year = date.attrib.get('year', '')
-                title_a.tail += month + year + '.'
+                if month or year:
+                    title_a.tail += ', '
+                    if month:
+                        month += ' '
+                    title_a.tail += month + year + '.'
             tr.append(bullet_td)
             tr.append(ref_td)
             refdict[bullet] = tr

@@ -738,16 +738,19 @@ class RawTextRfcWriter(BaseRfcWriter):
                 refstring.append(', ')
             title = ref.find('front/title')
             if title is not None and title.text:
-                refstring.append('"' + title.text.strip() + '", ')
+                if ref.attrib.get("quote-title", "true") == "true": # attribute default value: yes
+                    refstring.append('"' + title.text.strip() + '"')
+                else:
+                    refstring.append(title.text.strip())
             else:
                 xml2rfc.log.warn('No title specified in reference',
                                  ref.attrib.get('anchor', ''))
             for seriesInfo in ref.findall('seriesInfo'):
                 if seriesInfo.attrib['name'] == "Internet-Draft":
-                    refstring.append(seriesInfo.attrib['value'] + ' (work in progress), ')
+                    refstring.append(', '+seriesInfo.attrib['value'] + ' (work in progress)')
                 else:
-                    refstring.append(seriesInfo.attrib['name'] + ' ' +
-                                     seriesInfo.attrib['value'] + ', ')
+                    refstring.append(', '+seriesInfo.attrib['name'] + ' ' +
+                                     seriesInfo.attrib['value'])
             date = ref.find('front/date')
             if date is not None:
                 month = date.attrib.get('month', '')
@@ -755,13 +758,11 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if month or year:
                     if month:
                         month += ' '
-                    refstring.append(month + year)
+                    refstring.append(', '+month + year)
             # Target?
             target = ref.attrib.get('target')
             if target:
-                if not refstring[-1].endswith(', '):
-                    refstring.append(', ')
-                refstring.append('<' + target + '>')
+                refstring.append(', <' + target + '>')
             refstring.append('.')
             annotation = ref.find('annotation')
             # Use anchor or num depending on PI
