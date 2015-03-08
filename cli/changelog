@@ -1,3 +1,33 @@
+xml2rfc (2.4.10) ietf; urgency=medium
+
+  * Catch bad arguments to the 'needlines' processing instruction.  Fixes 
+    issue #282.
+
+  * Make sure we don't ask textwrap to wrap text with within a width of 
+    zero.  Fixes issue #277.
+
+  * Reorganized the presentation of options, and corrected some of the help 
+    strings.  Marked the -f, --filename options in use for output filename as 
+    deprecated.
+
+  * Added a switch --no-network to turn off all attempts to use the network 
+    to resolve references.  When using this, processing will fail if the 
+    references required by the source file aren't available in the file cache.  
+    Also added code to refresh cached content if it's older than 14 days.  
+    Modified some tests to suit.  This closes issues #275 and #284.
+
+  * Fixed a bug where leading whitespace in title attributes weren't 
+    handled properly.  Fixes issue #274.
+
+  * Tweaked tox.ini to work around an issue with the py27 and py33 
+    environments after upgrading to 2.7.8 and 3.3.5, respectively.
+
+  * Added the attribute quote-title (default: true) to schema and writers, 
+    and updated the tests accordingly.  Fixes issue #283.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  08 Mar 2015 20:55:36 +0000
+
+
 xml2rfc (2.4.9) ietf; urgency=medium
 
   * Applied a patch from Martin Thompson to render the ToC with sublevel 
