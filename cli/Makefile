@@ -11,12 +11,13 @@ bin/python:
 
 install:
 	python --version
-	python setup.py --quiet install
-
+	python setup.py --quiet install --skip-build
+	rm -rf xml2rfc.egg-info/
+		
 test:	install flaketests pytests
 
 flaketests:
-	pyflakes xml2rfc
+	pyflakes xml2rfc scripts/xml2rfc
 	[ -d tests/failed/ ] && rm -f tests/failed/*
 
 pytests:
