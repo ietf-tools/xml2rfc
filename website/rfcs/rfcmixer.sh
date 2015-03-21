@@ -4,12 +4,23 @@ DIR=/www/tools.ietf.org/tools/xml2rfc/rfcs/
 SKIPINDEXER=n
 SKIPMIXER=n
 
-while getopts d:IM c
+usage()
+{
+    exec 1>&2
+    echo "Usage: $0 [-d directory] [-I] [-M] [-v]"
+    echo "-d dir\trun in this directory instead of $WWW"
+    echo "-I\tskip the indexer step"
+    echo "-M\tskip the mixer step"
+    echo "-v\tbe verbose"
+}
+
+while getopts d:IMv c
 do
     case $c in
     d ) DIR="$OPTARG" ;;
     I ) SKIPINDEXER=y ;;
     M ) SKIPMIXER=y ;;
+    v ) set -x ;;
     ? ) usage ;;
     esac
 done
@@ -21,7 +32,7 @@ umask 0002
 TCLLIBPATH=/www/tools.ietf.org/tools/xml2rfc/rfcs/scripts/
 export TCLLIBPATH
 
-function fixlog() {
+fixlog() {
 python -c ' 
 import sys
 for line in sys.stdin:
