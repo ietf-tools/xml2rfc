@@ -467,7 +467,7 @@ sub callXml2rfc {
     my $suffix = shift;
     my $xml2rfcMode = shift;
     my $tmpout = getTempFileWithSuffix($suffix);
-    my ($ret, $out, $err) = runCommand("etc/xml2rfc2 --$xml2rfcMode --file=$tmpout $curfile", $curfile, $tmpout, "Expanding internal references and generating $expandedModes{$mode}");
+    my ($ret, $out, $err) = runCommand("etc/xml2rfc2 --$xml2rfcMode --out=$tmpout $curfile", $curfile, $tmpout, "Expanding internal references and generating $expandedModes{$mode}");
     $curfile = $tmpout;
     print "xml2rfc ret=$ret\n" if $debug;
     print "out='$out'\n" if $debug;

@@ -206,7 +206,7 @@ print "mode='$mode', xml2rfc2mode='$xml2rfc2mode'\n" if $debug;
 print "TMP1=$TMP1\n" if $debug;
 my $TMPERR = setTempFile("$inputfn.err");
 
-my ($ret, $out, $err) = runCommand("etc/xml2rfc2 --$xml2rfc2mode --file=$TMP1 $newinputfn", $newinputfn, $TMP1, 
+my ($ret, $out, $err) = runCommand("etc/xml2rfc2 --$xml2rfc2mode --out=$TMP1 $newinputfn", $newinputfn, $TMP1, 
     $needExpansionToXml ?  "Expanding internal references" : "Expanding internal references and generating $mode"
     );
 print "xml2rfc ret=$ret\n" if $debug;
