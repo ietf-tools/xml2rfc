@@ -1,7 +1,7 @@
 <!--
     Strip rfc2629.xslt extensions, generating XML input for MTR's xml2rfc
 
-    Copyright (c) 2006-2014, Julian Reschke (julian.reschke@greenbytes.de)
+    Copyright (c) 2006-2015, Julian Reschke (julian.reschke@greenbytes.de)
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -770,9 +770,6 @@
 <!-- referencing extensions -->
 <xsl:template match="iref/@x:for-anchor" mode="cleanup"/>
 
-<!-- section numbering -->
-<xsl:template match="section/@x:fixed-section-number" mode="cleanup"/>
-
 <!-- GRRDL info stripped -->
 <xsl:template match="@grddl:transformation" mode="cleanup"/>
 
@@ -845,6 +842,21 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- New reference attributes -->
+<xsl:template match="reference/@quote-title" mode="cleanup"/>
+<xsl:template match="reference" mode="cleanup">
+  <reference>
+    <xsl:copy-of select="@anchor|@target"/>
+    <xsl:if test="not(@target) and $xml2rfc-ext-link-rfc-to-info-page='yes' and seriesInfo[@name='RFC']">
+      <xsl:variable name="uri" select="concat('http://www.rfc-editor.org/info/rfc',seriesInfo[@name='RFC']/@value)"/>
+      <xsl:attribute name="target"><xsl:value-of select="$uri"/></xsl:attribute>
+    </xsl:if>
+    <xsl:apply-templates mode="cleanup"/>
+  </reference>
+</xsl:template>
+
+<xsl:template match="references/name" mode="cleanup"/>
+
 <!-- References titles -->
 <xsl:template match="references" mode="cleanup">
   <references>
@@ -890,6 +902,12 @@
     </xsl:attribute>
     <xsl:apply-templates mode="cleanup"/>
   </section>
+  <xsl:if test="@numbered='no'">
+    <xsl:call-template name="warning">
+      <xsl:with-param name="inline" select="'no'"/>
+      <xsl:with-param name="msg">unnumbered sections not supported</xsl:with-param>
+    </xsl:call-template>
+  </xsl:if>
 </xsl:template>
 <xsl:template match="section/name" mode="cleanup"/>
 
@@ -957,14 +975,43 @@
   </list>
 </xsl:template>
 
+<!-- List items -->
+<xsl:template match="li" mode="cleanup">
+  <t>
+    <xsl:copy-of select="@anchor"/>
+    <xsl:apply-templates mode="cleanup"/>
+  </t>
+</xsl:template>
+<xsl:template match="li/t" mode="cleanup">
+  <xsl:apply-templates mode="cleanup"/>
+  <xsl:if test="position()!=last()">
+    <vspace blankLines="1"/>
+  </xsl:if>
+</xsl:template>
+
+<!-- Ordered Lists -->
+<xsl:template match="ol" mode="cleanup">
+  <t>
+    <xsl:if test="@start and @start!='1'">
+      <xsl:call-template name="warning">
+        <xsl:with-param name="inline" select="'no'"/>
+        <xsl:with-param name="msg">list start != 1 not supported</xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
+    <list style="numbers">
+      <xsl:apply-templates mode="cleanup"/>
+    </list>
+  </t>
+</xsl:template>
+
 <!-- Display names for references -->
 <xsl:template match="displayreference" mode="cleanup"/>
-<xsl:template match="reference/@anchor[.=/rfc/back/displayreference/@from]" mode="cleanup">
+<xsl:template match="reference/@anchor[.=/rfc/back/displayreference/@target]" mode="cleanup">
   <xsl:attribute name="anchor">
     <xsl:call-template name="generate-ref-name"/>
   </xsl:attribute>
 </xsl:template>
-<xsl:template match="xref/@target[.=/rfc/back/displayreference/@from]" mode="cleanup">
+<xsl:template match="xref/@target[.=/rfc/back/displayreference/@target]" mode="cleanup">
   <xsl:attribute name="target">
     <xsl:call-template name="generate-ref-name"/>
   </xsl:attribute>
@@ -972,7 +1019,7 @@
 
 <xsl:template name="generate-ref-name">
   <xsl:variable name="tnewname">
-    <xsl:value-of select="/rfc/back/displayreference[@from=current()]/@to"/>
+    <xsl:value-of select="/rfc/back/displayreference[@target=current()]/@to"/>
   </xsl:variable>
   <xsl:choose>
     <xsl:when test="translate(substring($tnewname,1,1),$digits,'')=''">
