@@ -3473,11 +3473,13 @@ Hoffman                 Expires October 11, 2015               [Page 62]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
-   One or more sequences of:
+   Either:
 
-   1.  One <td> element
+      One or more <td> elements (Section 2.55)
 
-   2.  One <th> element
+   Or:
+
+      One or more <th> elements (Section 2.57)
 
 2.60.1.  'border' attribute
 
@@ -3518,8 +3520,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
 
    o  <strong> elements (Section 2.49)
 
-   o  <sub> elements (Section 2.50)
-
 
 
 
@@ -3528,6 +3528,8 @@ Hoffman                 Expires October 11, 2015               [Page 63]
 
 Internet-Draft                  XML2RFCv3                     April 2015
 
+
+   o  <sub> elements (Section 2.50)
 
    o  <sup> elements (Section 2.51)
 
@@ -3575,8 +3577,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
 
    The contents should be a valid URI (see Section 3 of [RFC3986]).
 
-   This element appears as a child element of: <address> (Section 2.2).
-
 
 
 
@@ -3584,6 +3584,8 @@ Hoffman                 Expires October 11, 2015               [Page 64]
 
 Internet-Draft                  XML2RFCv3                     April 2015
 
+
+   This element appears as a child element of: <address> (Section 2.2).
 
    Content model: only text content.
 
@@ -3631,8 +3633,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
    <preamble> (Section 3.6), <strong> (Section 2.49), <sub>
    (Section 2.50), <sup> (Section 2.51), <t> (Section 2.52), <td>
    (Section 2.55), <th> (Section 2.57), <tt> (Section 2.61), and <ttcol>
-   (Section 3.9).
-
 
 
 
@@ -3640,6 +3640,8 @@ Hoffman                 Expires October 11, 2015               [Page 65]
 
 Internet-Draft                  XML2RFCv3                     April 2015
 
+
+   (Section 3.9).
 
    Content model: only text content.
 
@@ -3688,14 +3690,14 @@ Internet-Draft                  XML2RFCv3                     April 2015
       reference, then the <title> element inside the <front> element is
       used.
 
-   Allowed values:
-
 
 
 Hoffman                 Expires October 11, 2015               [Page 66]
 
 Internet-Draft                  XML2RFCv3                     April 2015
 
+
+   Allowed values:
 
    o  "counter"
 
@@ -3742,8 +3744,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
 
    o  "parens"
 
-   o  "section"
-
 
 
 
@@ -3752,6 +3752,8 @@ Hoffman                 Expires October 11, 2015               [Page 67]
 
 Internet-Draft                  XML2RFCv3                     April 2015
 
+
+   o  "section"
 
    o  "number-only"
 
@@ -3798,8 +3800,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
    This section lists the elements from v2 that have been deprecated.
    Note that some elements in v3 have attributes from v2 that are
    deprecated; those are not listed here.
-
-
 
 
 
@@ -5521,7 +5521,7 @@ Internet-Draft                  XML2RFCv3                     April 2015
    tr =
      element tr {
        [ a:defaultValue = "0" ] attribute border { text }?,
-       (td, th)+
+       (td+ | th+)
      }
 
    td =
@@ -6352,7 +6352,7 @@ Internet-Draft                  XML2RFCv3                     April 2015
    + tr =
    +   element tr {
    +     [ a:defaultValue = "0" ] attribute border { text }?,
-   +     (td, th)+
+   +     (td+ | th+)
    +   }
    + td =
    +   element td {
@@ -6979,7 +6979,7 @@ Internet-Draft                  XML2RFCv3                     April 2015
          street  38, 52
          strong  11, 19, 21, 23, 26-27, 32, 40, 53-56, 59, 61, 63, 69,
             71-72
-         sub  11, 19, 21, 23, 26-27, 32, 40, 53, 56, 59, 61, 63, 69,
+         sub  11, 19, 21, 23, 26-27, 32, 40, 53, 56, 59, 61, 64, 69,
             71-72
          sup  11, 19, 21, 23, 26-27, 32, 40, 53-54, 56, 59, 61, 64, 69,
             71-72
@@ -7480,7 +7480,7 @@ Internet-Draft                  XML2RFCv3                     April 2015
          inside t  56
          inside td  59
          inside th  61
-         inside tt  63
+         inside tt  64
       subitem attribute
          in iref element  31
       submissionType attribute

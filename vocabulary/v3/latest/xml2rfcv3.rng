@@ -1118,7 +1118,7 @@
           <data type="ID"/>
         </attribute>
       </optional>
-      <optional> 
+      <optional>
         <attribute name="pn"/>
       </optional>
       <text/>
@@ -1150,10 +1150,14 @@
       <optional>
         <attribute name="border" a:defaultValue="0"/>
       </optional>
-      <oneOrMore>
-        <ref name="td"/>
-        <ref name="th"/>
-      </oneOrMore>
+      <choice>
+        <oneOrMore>
+          <ref name="td"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="th"/>
+        </oneOrMore>
+      </choice>
     </element>
   </define>
   <define name="td">
