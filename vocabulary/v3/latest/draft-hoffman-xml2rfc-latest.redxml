@@ -15,6 +15,8 @@
 
 Processors ignore case in attribute values that are important to it, such as for seriesInfo/@name
 
+Get rid of <b> and <i>?
+
 Think about all the "processor" wording, whether it should be here, and so on.
 
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
@@ -135,7 +137,7 @@ these elements is &lt;<xref target="element.li" format="none">li</xref>&gt;, not
 and other lists
 instead of &lt;<xref target="element.t" format="none">t</xref>&gt;.</t>
 
-<t>Add &lt;<xref target="element.strong" format="none">strong</xref>&gt;, &lt;<xref target="element.b" format="none">b</xref>&gt;, &lt;<xref target="element.em" format="none">em</xref>&gt;, &lt;<xref target="element.i" format="none">i</xref>&gt;,
+<t>Add &lt;<xref target="element.strong" format="none">strong</xref>&gt;, &lt;<xref target="element.em" format="none">em</xref>&gt;, &lt;<xref target="element.i" format="none">i</xref>&gt;,
 &lt;<xref target="element.tt" format="none">tt</xref>&gt;, &lt;<xref target="element.sub" format="none">sub</xref>&gt;, and &lt;<xref target="element.sup" format="none">sup</xref>&gt; for character formatting.</t>
 
 <t>Add &lt;<xref target="element.aside" format="none">aside</xref>&gt; for incidental text that will be indented when displayed.</t>
@@ -224,7 +226,7 @@ deprecated features.</t>
 and &lt;<xref target="element.ol" format="none">ol</xref>&gt;.</t>
 
 <t>Deprecate &lt;<xref target="element.spanx" format="none">spanx</xref>&gt;; replace it with &lt;<xref target="element.strong" format="none">strong</xref>&gt;,
-&lt;<xref target="element.b" format="none">b</xref>&gt;, &lt;<xref target="element.em" format="none">em</xref>&gt;, &lt;<xref target="element.i" format="none">i</xref>&gt;,
+&lt;<xref target="element.em" format="none">em</xref>&gt;, &lt;<xref target="element.i" format="none">i</xref>&gt;,
 and &lt;<xref target="element.tt" format="none">tt</xref>&gt;.</t>
 
 <t>Deprecate &lt;<xref target="element.vspace" format="none">vspace</xref>&gt; because the major use for it,
@@ -278,7 +280,7 @@ their own in &lt;<xref target="element.section" format="none">section</xref>&gt;
 
 <t>Give more specifics of handling the "type" attribute in &lt;<xref target="element.artwork" format="none">artwork</xref>&gt;.</t>
 
-<t>Allow &lt;<xref target="element.strong" format="none">strong</xref>&gt;, &lt;<xref target="element.b" format="none">b</xref>&gt;, &lt;<xref target="element.em" format="none">em</xref>&gt;,
+<t>Allow &lt;<xref target="element.strong" format="none">strong</xref>&gt;, &lt;<xref target="element.em" format="none">em</xref>&gt;,
 &lt;<xref target="element.i" format="none">i</xref>&gt;, &lt;<xref target="element.tt" format="none">tt</xref>&gt;, &lt;<xref target="element.eref" format="none">eref</xref>&gt;, and
 &lt;<xref target="element.xref" format="none">xref</xref>&gt; in &lt;<xref target="element.cref" format="none">cref</xref>&gt;.</t>
 
@@ -454,9 +456,6 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
     </t>
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside annotation"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside annotation"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -946,60 +945,6 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    </section>
 </section>
 
-<!--b-->
-<section anchor="element.b" title="&lt;b&gt;">
-   
-   
-   <iref item="Elements" subitem="b" primary="true"/>
-   <iref item="b element" primary="true"/>
-   <t>
-        Causes the text to be displayed in bold.  It is almost always a better idea
-        to use the &lt;<xref target="element.strong" format="none">strong</xref>&gt; element instead.
-        This element is in the vocabulary because people familiar with HTML are more familiar
-        with &lt;<xref target="element.b" format="none">b</xref>&gt; than &lt;<xref target="element.strong" format="none">strong</xref>&gt;.
-        This element can be combined with other character formatting elements, and the
-        formatting will be additive.
-   </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
-   <t anchor="element.b.contents"><!--AG-->
-      Content model:
-    </t>
-   <t><!--AG-->In any order: <list style="symbols">
-         <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="bcp14"/>
-            <iref item="bcp14 element" subitem="inside b"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="cref"/>
-            <iref item="cref element" subitem="inside b"/>&lt;<xref target="element.cref" format="none">cref</xref>&gt; elements (<xref target="element.cref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="em"/>
-            <iref item="em element" subitem="inside b"/>&lt;<xref target="element.em" format="none">em</xref>&gt; elements (<xref target="element.em"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="eref"/>
-            <iref item="eref element" subitem="inside b"/>&lt;<xref target="element.eref" format="none">eref</xref>&gt; elements (<xref target="element.eref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="i"/>
-            <iref item="i element" subitem="inside b"/>&lt;<xref target="element.i" format="none">i</xref>&gt; elements (<xref target="element.i"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="iref"/>
-            <iref item="iref element" subitem="inside b"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="sub"/>
-            <iref item="sub element" subitem="inside b"/>&lt;<xref target="element.sub" format="none">sub</xref>&gt; elements (<xref target="element.sub"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="sup"/>
-            <iref item="sup element" subitem="inside b"/>&lt;<xref target="element.sup" format="none">sup</xref>&gt; elements (<xref target="element.sup"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="tt"/>
-            <iref item="tt element" subitem="inside b"/>&lt;<xref target="element.tt" format="none">tt</xref>&gt; elements (<xref target="element.tt"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="xref"/>
-            <iref item="xref element" subitem="inside b"/>&lt;<xref target="element.xref" format="none">xref</xref>&gt; elements (<xref target="element.xref"/>)</t>
-      </list>
-   </t>
-</section>
-
 <!--back-->
 <section anchor="element.back" title="&lt;back&gt;">
    
@@ -1050,7 +995,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       "The packet &lt;bcp14&gt;MUST&lt;/bcp14&gt; be dropped.", but it not correct to say
       "&lt;bcp14&gt;The packet MUST be dropped.&lt;/bcp14&gt;".
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.b" format="none">b</xref>&gt; (<xref target="element.b"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.bcp14.contents"><!--AG-->
       Content model: only text content.</t>
 </section>
@@ -1073,9 +1018,6 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          <t><!--AG-->
             <iref item="Elements" subitem="artwork"/>
             <iref item="artwork element" subitem="inside blockquote"/>&lt;<xref target="element.artwork" format="none">artwork</xref>&gt; elements (<xref target="element.artwork"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside blockquote"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside blockquote"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -1272,15 +1214,12 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       (depending on file representation and settings of the processor), or not at
       all (when generating an RFC).
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.b" format="none">b</xref>&gt; (<xref target="element.b"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.cref.contents"><!--AG-->
       Content model:
     </t>
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside cref"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="em"/>
             <iref item="em element" subitem="inside cref"/>&lt;<xref target="element.em" format="none">em</xref>&gt; elements (<xref target="element.em"/>)</t>
@@ -1456,9 +1395,6 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          <t><!--AG-->In any order, but at least one of: <list style="symbols">
                <t><!--AG-->Text</t>
                <t><!--AG-->
-                  <iref item="Elements" subitem="b"/>
-                  <iref item="b element" subitem="inside dd"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
-               <t><!--AG-->
                   <iref item="Elements" subitem="bcp14"/>
                   <iref item="bcp14 element" subitem="inside dd"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
                <t><!--AG-->
@@ -1629,9 +1565,6 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
          <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside dt"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
-         <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside dt"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
          <t><!--AG-->
@@ -1701,15 +1634,12 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
         Indicates text that is semantically empahsized. This element will be displayed as italic after processing.
         This element has the same effects as &lt;<xref target="element.i" format="none">i</xref>&gt;.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.b" format="none">b</xref>&gt; (<xref target="element.b"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.em.contents"><!--AG-->
       Content model:
     </t>
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside em"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside em"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -1786,7 +1716,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       If the element has text content, that content will be used. Otherwise, the value of the
       target attribute will be inserted in angle brackets (<xref target="RFC3986"/>, Appendix C).
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.b" format="none">b</xref>&gt; (<xref target="element.b"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.eref.contents"><!--AG-->
       Content model: only text content.</t>
 
@@ -2056,15 +1986,12 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.b" format="none">b</xref>&gt; (<xref target="element.b"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.i.contents"><!--AG-->
       Content model:
     </t>
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside i"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside i"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -2117,7 +2044,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       considered to be relevant for that index entry. In some formats, index
       entries of this type might be displayed as range.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.b" format="none">b</xref>&gt; (<xref target="element.b"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.table" format="none">table</xref>&gt; (<xref target="element.table"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.table" format="none">table</xref>&gt; (<xref target="element.table"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.iref.contents"><!--AG-->
       Content model: this element does not have any contents.</t>
 
@@ -2217,9 +2144,6 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <t><!--AG-->Or:<list style="empty">
          <t><!--AG-->In any order, but at least one of: <list style="symbols">
                <t><!--AG-->Text</t>
-               <t><!--AG-->
-                  <iref item="Elements" subitem="b"/>
-                  <iref item="b element" subitem="inside li"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="bcp14"/>
                   <iref item="bcp14 element" subitem="inside li"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -2773,9 +2697,6 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
     </t>
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside refcontent"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside refcontent"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -3765,7 +3686,6 @@ Using CDATA:
    <iref item="strong element" primary="true"/>
    <t>
         Indicates text that is semantically strong. This element will be displayed as bold after processing.
-        This element has the same effects as &lt;<xref target="element.b" format="none">b</xref>&gt;.
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
@@ -3820,15 +3740,12 @@ Using CDATA:
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.b" format="none">b</xref>&gt; (<xref target="element.b"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.sub.contents"><!--AG-->
       Content model:
     </t>
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside sub"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside sub"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -3871,15 +3788,12 @@ Using CDATA:
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.b" format="none">b</xref>&gt; (<xref target="element.b"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.sup.contents"><!--AG-->
       Content model:
     </t>
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside sup"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside sup"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -3926,9 +3840,6 @@ Using CDATA:
     </t>
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside t"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside t"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -4172,9 +4083,6 @@ Using CDATA:
                   <iref item="Elements" subitem="artwork"/>
                   <iref item="artwork element" subitem="inside td"/>&lt;<xref target="element.artwork" format="none">artwork</xref>&gt; elements (<xref target="element.artwork"/>)</t>
                <t><!--AG-->
-                  <iref item="Elements" subitem="b"/>
-                  <iref item="b element" subitem="inside td"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
-               <t><!--AG-->
                   <iref item="Elements" subitem="bcp14"/>
                   <iref item="bcp14 element" subitem="inside td"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
                <t><!--AG-->
@@ -4334,9 +4242,6 @@ Using CDATA:
                <t><!--AG-->
                   <iref item="Elements" subitem="artwork"/>
                   <iref item="artwork element" subitem="inside th"/>&lt;<xref target="element.artwork" format="none">artwork</xref>&gt; elements (<xref target="element.artwork"/>)</t>
-               <t><!--AG-->
-                  <iref item="Elements" subitem="b"/>
-                  <iref item="b element" subitem="inside th"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="bcp14"/>
                   <iref item="bcp14 element" subitem="inside th"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -4564,15 +4469,12 @@ Using CDATA:
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.b" format="none">b</xref>&gt; (<xref target="element.b"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.tt.contents"><!--AG-->
       Content model:
     </t>
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside tt"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside tt"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -4727,7 +4629,7 @@ Using CDATA:
       make sure that the prose is sufficient for a reader to understand what
       is being referred to.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.b" format="none">b</xref>&gt; (<xref target="element.b"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.i" format="none">i</xref>&gt; (<xref target="element.i"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.xref.contents"><!--AG-->
       Content model: only text content.</t>
 
@@ -4961,9 +4863,6 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
          <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside c"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
-         <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside c"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
          <t><!--AG-->
@@ -5125,9 +5024,6 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
          <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside postamble"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
-         <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside postamble"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
          <t><!--AG-->
@@ -5181,9 +5077,6 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
     </t>
    <t><!--AG-->In any order: <list style="symbols">
          <t><!--AG-->Text</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="b"/>
-            <iref item="b element" subitem="inside preamble"/>&lt;<xref target="element.b" format="none">b</xref>&gt; elements (<xref target="element.b"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="bcp14"/>
             <iref item="bcp14 element" subitem="inside preamble"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -5241,8 +5134,8 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
       <iref item="spanx element" subitem="style attribute"/>
       <iref item="style attribute" subitem="in spanx element"/>
       <t>
-         Deprecated. Instead of &lt;spanx style="emph"&gt;, use &lt;b&gt;
-      instead of &lt;spanx style="strong"&gt;, use &lt;i&gt;;
+         Deprecated. Instead of &lt;spanx style="emph"&gt;, use &lt;<xref target="element.em" format="none">em</xref>&gt;;
+      instead of &lt;spanx style="strong"&gt;, use &lt;<xref target="element.strong" format="none">strong</xref>&gt;;
       instead of &lt;spanx style="verb"&gt;, use &lt;tt&gt;.
       </t>
    </section>
@@ -5631,7 +5524,7 @@ not those that are part of a sequence of resources.</t>
 
 <references title="Informative References">
 
-  <reference anchor="BCP13">
+  <reference anchor="BCP13" target="http://www.rfc-editor.org/info/rfc6838">
     <front>
       <title>Media Type Specifications and Registration Procedures</title>
       <author initials="N." surname="Freed" fullname="Ned Freed"/>
@@ -5679,7 +5572,7 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="Internet-Draft" value="draft-flanagan-nonascii"/>
   </reference>
 
-  <reference anchor="RFC2026">
+  <reference anchor="RFC2026" target="http://www.rfc-editor.org/info/rfc2026">
     <front>
       <title abbrev="Internet Standards Process">The Internet Standards Process -- Revision 3</title>
       <author initials="S." surname="Bradner" fullname="Scott O. Bradner"/>
@@ -5689,7 +5582,7 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="2026"/>
   </reference>
 
-  <reference anchor="RFC2397">
+  <reference anchor="RFC2397" target="http://www.rfc-editor.org/info/rfc2397">
     <front>
       <title abbrev="The &#34;data&#34; URL scheme">The "data" URL scheme</title>
       <author initials="L." surname="Masinter" fullname="Larry Masinter"/>
@@ -5698,7 +5591,7 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="2397"/>
   </reference>
 
-  <reference anchor="RFC2629">
+  <reference anchor="RFC2629" target="http://www.rfc-editor.org/info/rfc2629">
     <front>
       <title>Writing I-Ds and RFCs using XML</title>
       <author initials="M.T." surname="Rose" fullname="Marshall T. Rose"/>
@@ -5707,7 +5600,7 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="2629"/>
   </reference>
 
-  <reference anchor="RFC3339">
+  <reference anchor="RFC3339" target="http://www.rfc-editor.org/info/rfc3339">
     <front>
       <title>Date and Time on the Internet: Timestamps</title>
       <author initials="G." surname="Klyne" fullname="Graham Klyne" role="editor"/>
@@ -5717,7 +5610,7 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="3339"/>
   </reference>
 
-  <reference anchor="RFC3470">
+  <reference anchor="RFC3470" target="http://www.rfc-editor.org/info/rfc3470">
     <front>
       <title>Guidelines for the Use of Extensible Markup Language (XML) within IETF Protocols</title>
       <author initials="S." surname="Hollenbeck" fullname="Scott Hollenbeck"/>
@@ -5729,7 +5622,7 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="3470"/>
   </reference>
 
-  <reference anchor="RFC3667">
+  <reference anchor="RFC3667" target="http://www.rfc-editor.org/info/rfc3667">
     <front>
       <title>IETF Rights in Contributions</title>
       <author initials="S." surname="Bradner" fullname="S. Bradner"/>
@@ -5738,7 +5631,7 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="3667"/>
   </reference>
 
-  <reference anchor="RFC3966">
+  <reference anchor="RFC3966" target="http://www.rfc-editor.org/info/rfc3966">
     <front>
       <title>The tel URI for Telephone Numbers</title>
       <author initials="H." surname="Schulzrinne" fullname="H. Schulzrinne"/>
@@ -5747,7 +5640,7 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="3966"/>
   </reference>
 
-  <reference anchor="RFC3978">
+  <reference anchor="RFC3978" target="http://www.rfc-editor.org/info/rfc3978">
     <front>
       <title>IETF Rights in Contributions</title>
       <author initials="S." surname="Bradner" fullname="S. Bradner"/>
@@ -5756,7 +5649,7 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="3978"/>
   </reference>
 
-  <reference anchor="RFC3986">
+  <reference anchor="RFC3986" target="http://www.rfc-editor.org/info/rfc3986">
    <front>
     <title abbrev="URI Generic Syntax">Uniform Resource Identifier (URI): Generic Syntax</title>
     <author initials="T." surname="Berners-Lee" fullname="Tim Berners-Lee"/>
@@ -5780,7 +5673,7 @@ not those that are part of a sequence of resources.</t>
   </reference>
 -->
 
-  <reference anchor="RFC5741">
+  <reference anchor="RFC5741" target="http://www.rfc-editor.org/info/rfc5741">
     <front>
       <title>RFC Streams, Headers, and Boilerplates</title>
       <author initials="L." surname="Daigle" fullname="Leslie Daigle"/>
@@ -5790,7 +5683,7 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="5741"/>
   </reference>
 
-  <reference anchor="RFC6068">
+  <reference anchor="RFC6068" target="http://www.rfc-editor.org/info/rfc6068">
     <front>
       <title>The 'mailto' URI Scheme</title>
       <author initials="M." surname="Duerst" fullname="M. Duerst"/>
@@ -5801,7 +5694,7 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="6068"/>
   </reference>
 
-  <reference anchor="RFC6266">
+  <reference anchor="RFC6266" target="http://www.rfc-editor.org/info/rfc6266">
     <front>
       <title>Use of the Content-Disposition Header Field in the Hypertext Transfer Protocol (HTTP)</title>
       <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
@@ -5810,7 +5703,7 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="6266"/>
   </reference>
 
-<reference anchor="RFC6949">
+<reference anchor="RFC6949" target="http://www.rfc-editor.org/info/rfc6949">
 <front><title>RFC Series Format Requirements and Future Development</title>
 <author initials="H." surname="Flanagan" fullname="H. Flanagan"><organization/></author>
 <author initials="N." surname="Brownlee" fullname="N. Brownlee"><organization/></author>
@@ -5818,7 +5711,7 @@ not those that are part of a sequence of resources.</t>
 </front><seriesInfo name="RFC" value="6949"/><format type="TXT" octets="29181" target="http://www.rfc-editor.org/rfc/rfc6949.txt"/>
 </reference>
 
-  <reference anchor="RFC7303">
+  <reference anchor="RFC7303" target="http://www.rfc-editor.org/info/rfc7303">
     <front>
       <title>XML Media Types</title>
       <author initials="H." surname="Thompson" fullname="H. Thompson"/>
@@ -5828,7 +5721,7 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="7303"/>
   </reference>
 
-  <reference anchor="RFC7322">
+  <reference anchor="RFC7322" target="http://www.rfc-editor.org/info/rfc7322">
     <front>
       <title>RFC Style Guide</title>
       <author initials="H." surname="Heather" fullname="Heather Flanagan"/>
@@ -6391,7 +6284,7 @@ document.</t>
 
 <t>The following is the RelaxNG schema for the v3 format.</t>
 
-<figure><iref item="rfc element"/><iref item="link element"/><iref item="front element"/><iref item="title element"/><iref item="author element"/><iref item="organization element"/><iref item="address element"/><iref item="postal element"/><iref item="street element"/><iref item="city element"/><iref item="region element"/><iref item="code element"/><iref item="country element"/><iref item="postalLine element"/><iref item="phone element"/><iref item="facsimile element"/><iref item="email element"/><iref item="uri element"/><iref item="date element"/><iref item="area element"/><iref item="workgroup element"/><iref item="keyword element"/><iref item="abstract element"/><iref item="note element"/><iref item="boilerplate element"/><iref item="middle element"/><iref item="section element"/><iref item="name element"/><iref item="t element"/><iref item="aside element"/><iref item="blockquote element"/><iref item="list element"/><iref item="ol element"/><iref item="ul element"/><iref item="li element"/><iref item="dl element"/><iref item="dt element"/><iref item="dd element"/><iref item="xref element"/><iref item="eref element"/><iref item="iref element"/><iref item="cref element"/><iref item="tt element"/><iref item="b element"/><iref item="strong element"/><iref item="i element"/><iref item="em element"/><iref item="sub element"/><iref item="sup element"/><iref item="spanx element"/><iref item="vspace element"/><iref item="figure element"/><iref item="table element"/><iref item="preamble element"/><iref item="artwork element"/><iref item="sourcecode element"/><iref item="thead element"/><iref item="tbody element"/><iref item="tfoot element"/><iref item="tr element"/><iref item="td element"/><iref item="th element"/><iref item="postamble element"/><iref item="texttable element"/><iref item="ttcol element"/><iref item="c element"/><iref item="bcp14 element"/><iref item="br element"/><iref item="back element"/><iref item="displayreference element"/><iref item="references element"/><iref item="reference element"/><iref item="referencegroup element"/><iref item="seriesInfo element"/><iref item="format element"/><iref item="annotation element"/><iref item="refcontent element"/><artwork type="application/relax-ng-compact-syntax"><![CDATA[
+<figure><iref item="rfc element"/><iref item="link element"/><iref item="front element"/><iref item="title element"/><iref item="author element"/><iref item="organization element"/><iref item="address element"/><iref item="postal element"/><iref item="street element"/><iref item="city element"/><iref item="region element"/><iref item="code element"/><iref item="country element"/><iref item="postalLine element"/><iref item="phone element"/><iref item="facsimile element"/><iref item="email element"/><iref item="uri element"/><iref item="date element"/><iref item="area element"/><iref item="workgroup element"/><iref item="keyword element"/><iref item="abstract element"/><iref item="note element"/><iref item="boilerplate element"/><iref item="middle element"/><iref item="section element"/><iref item="name element"/><iref item="t element"/><iref item="aside element"/><iref item="blockquote element"/><iref item="list element"/><iref item="ol element"/><iref item="ul element"/><iref item="li element"/><iref item="dl element"/><iref item="dt element"/><iref item="dd element"/><iref item="xref element"/><iref item="eref element"/><iref item="iref element"/><iref item="cref element"/><iref item="tt element"/><iref item="strong element"/><iref item="i element"/><iref item="em element"/><iref item="sub element"/><iref item="sup element"/><iref item="spanx element"/><iref item="vspace element"/><iref item="figure element"/><iref item="table element"/><iref item="preamble element"/><iref item="artwork element"/><iref item="sourcecode element"/><iref item="thead element"/><iref item="tbody element"/><iref item="tfoot element"/><iref item="tr element"/><iref item="td element"/><iref item="th element"/><iref item="postamble element"/><iref item="texttable element"/><iref item="ttcol element"/><iref item="c element"/><iref item="bcp14 element"/><iref item="br element"/><iref item="back element"/><iref item="displayreference element"/><iref item="references element"/><iref item="reference element"/><iref item="referencegroup element"/><iref item="seriesInfo element"/><iref item="format element"/><iref item="annotation element"/><iref item="refcontent element"/><artwork type="application/relax-ng-compact-syntax"><![CDATA[
 
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
@@ -6619,7 +6512,6 @@ t =
     [ a:defaultValue = "false" ]
     attribute keepwithprevious { "false" | "true" }?,
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -6652,7 +6544,6 @@ blockquote =
     attribute quotedFrom { text }?,
     (text
      | artwork
-     | b
      | bcp14
      | em
      | figure
@@ -6698,7 +6589,6 @@ li =
     attribute pn { text }?,
     ((t | artwork | figure | sourcecode)+
      | (text
-        | b
         | bcp14
         | cref
         | em
@@ -6726,7 +6616,6 @@ dt =
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -6744,7 +6633,6 @@ dd =
   element dd {
     t+
     | (text
-       | b
        | bcp14
        | cref
        | em
@@ -6792,13 +6680,12 @@ cref =
     attribute source { text }?,
     [ a:defaultValue = "true" ]
     attribute display { "true" | "false" }?,
-    (text | b | em | eref | i | strong | sub | sup | tt | xref)*
+    (text | em | eref | i | strong | sub | sup | tt | xref)*
   }
 
 tt =
   element tt {
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -6808,21 +6695,6 @@ tt =
      | strong
      | sub
      | sup
-     | xref)*
-  }
-
-b =
-  element b {
-    (text
-     | bcp14
-     | cref
-     | em
-     | eref
-     | i
-     | iref
-     | sub
-     | sup
-     | tt
      | xref)*
   }
 
@@ -6844,7 +6716,6 @@ strong =
 i =
   element i {
     (text
-     | b
      | bcp14
      | cref
      | eref
@@ -6859,7 +6730,6 @@ i =
 em =
   element em {
     (text
-     | b
      | bcp14
      | cref
      | eref
@@ -6874,7 +6744,6 @@ em =
 sub =
   element sub {
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -6889,7 +6758,6 @@ sub =
 sup =
   element sup {
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -6949,7 +6817,6 @@ table =
 preamble =
   element preamble {
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -7012,7 +6879,6 @@ td =
     (t+
      | (text
         | artwork
-        | b
         | bcp14
         | br
         | cref
@@ -7042,7 +6908,6 @@ th =
     (t+
      | (text
         | artwork
-        | b
         | bcp14
         | br
         | cref
@@ -7065,7 +6930,6 @@ th =
 postamble =
   element postamble {
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -7108,7 +6972,6 @@ ttcol =
 c =
   element c {
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -7181,7 +7044,6 @@ annotation =
   element annotation {
     attribute ascii { text }?,
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -7199,7 +7061,7 @@ annotation =
 refcontent =
   element refcontent {
     attribute ascii { text }?,
-    (text | b | bcp14 | em | i | strong | sub | sup | tt)*
+    (text | bcp14 | em | i | strong | sub | sup | tt)*
   }
 
 start = rfc
@@ -7435,7 +7297,6 @@ to the v3 schema.</t>
 -      | \list
 -      | figure
 -      | xref
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -7468,7 +7329,6 @@ to the v3 schema.</t>
 +     attribute quotedFrom { text }?,
 +     (text
 +      | artwork
-+      | b
 +      | bcp14
 +      | em
 +      | figure
@@ -7511,7 +7371,6 @@ to the v3 schema.</t>
 +     attribute pn { text }?,
 +     ((t | artwork | figure | sourcecode)+
 +      | (text
-+         | b
 +         | bcp14
 +         | cref
 +         | em
@@ -7537,7 +7396,6 @@ to the v3 schema.</t>
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -7554,7 +7412,6 @@ to the v3 schema.</t>
 +   element dd {
 +     t+
 +     | (text
-+        | b
 +        | bcp14
 +        | cref
 +        | em
@@ -7602,12 +7459,11 @@ to the v3 schema.</t>
 -     text
 +     [ a:defaultValue = "true" ]
 +     attribute display { "true" | "false" }?,
-+     (text | b | em | eref | i | strong | sub | sup | tt | xref)*
++     (text | em | eref | i | strong | sub | sup | tt | xref)*
 +   }
 + tt =
 +   element tt {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -7617,20 +7473,6 @@ to the v3 schema.</t>
 +      | strong
 +      | sub
 +      | sup
-+      | xref)*
-+   }
-+ b =
-+   element b {
-+     (text
-+      | bcp14
-+      | cref
-+      | em
-+      | eref
-+      | i
-+      | iref
-+      | sub
-+      | sup
-+      | tt
 +      | xref)*
 +   }
 + strong =
@@ -7650,7 +7492,6 @@ to the v3 schema.</t>
 + i =
 +   element i {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | eref
@@ -7664,7 +7505,6 @@ to the v3 schema.</t>
 + em =
 +   element em {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | eref
@@ -7678,7 +7518,6 @@ to the v3 schema.</t>
 + sub =
 +   element sub {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -7692,7 +7531,6 @@ to the v3 schema.</t>
 + sup =
 +   element sup {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -7749,7 +7587,6 @@ to the v3 schema.</t>
 -   element preamble { (text | xref | eref | iref | cref | spanx)* }
 +   element preamble {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -7807,7 +7644,6 @@ to the v3 schema.</t>
 +     (t+
 +      | (text
 +         | artwork
-+         | b
 +         | bcp14
 +         | br
 +         | cref
@@ -7836,7 +7672,6 @@ to the v3 schema.</t>
 +     (t+
 +      | (text
 +         | artwork
-+         | b
 +         | bcp14
 +         | br
 +         | cref
@@ -7859,7 +7694,6 @@ to the v3 schema.</t>
 -   element postamble { (text | xref | eref | iref | cref | spanx)* 
 +   element postamble {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -7900,7 +7734,6 @@ to the v3 schema.</t>
 + c =
 +   element c {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -7972,7 +7805,6 @@ to the v3 schema.</t>
 +   element annotation {
 +     attribute ascii { text }?,
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -7989,7 +7821,7 @@ to the v3 schema.</t>
 + refcontent =
 +   element refcontent {
 +     attribute ascii { text }?,
-+     (text | b | bcp14 | em | i | strong | sub | sup | tt)*
++     (text | bcp14 | em | i | strong | sub | sup | tt)*
 +   }
   start = rfc
 

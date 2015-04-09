@@ -195,7 +195,6 @@ t =
     [ a:defaultValue = "false" ]
     attribute keepwithprevious { "false" | "true" }?,
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -226,7 +225,6 @@ blockquote =
     attribute quotedFrom { text }?,
     (text
      | artwork
-     | b
      | bcp14
      | em
      | figure
@@ -268,7 +266,6 @@ li =
     attribute pn { text }?,
     ((t | artwork | figure | sourcecode)+
      | (text
-        | b
         | bcp14
         | cref
         | em
@@ -294,7 +291,6 @@ dt =
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -311,7 +307,6 @@ dd =
   element dd {
     t+
     | (text
-       | b
        | bcp14
        | cref
        | em
@@ -355,12 +350,11 @@ cref =
     attribute source { text }?,
     [ a:defaultValue = "true" ]
     attribute display { "true" | "false" }?,
-    (text | b | em | eref | i | strong | sub | sup | tt | xref)*
+    (text | em | eref | i | strong | sub | sup | tt | xref)*
   }
 tt =
   element tt {
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -370,20 +364,6 @@ tt =
      | strong
      | sub
      | sup
-     | xref)*
-  }
-b =
-  element b {
-    (text
-     | bcp14
-     | cref
-     | em
-     | eref
-     | i
-     | iref
-     | sub
-     | sup
-     | tt
      | xref)*
   }
 strong =
@@ -403,7 +383,6 @@ strong =
 i =
   element i {
     (text
-     | b
      | bcp14
      | cref
      | eref
@@ -417,7 +396,6 @@ i =
 em =
   element em {
     (text
-     | b
      | bcp14
      | cref
      | eref
@@ -431,7 +409,6 @@ em =
 sub =
   element sub {
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -445,7 +422,6 @@ sub =
 sup =
   element sup {
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -500,7 +476,6 @@ table =
 preamble =
   element preamble {
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -556,7 +531,6 @@ td =
     (t+
      | (text
         | artwork
-        | b
         | bcp14
         | br
         | cref
@@ -585,7 +559,6 @@ th =
     (t+
      | (text
         | artwork
-        | b
         | bcp14
         | br
         | cref
@@ -607,7 +580,6 @@ th =
 postamble =
   element postamble {
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -647,7 +619,6 @@ ttcol =
 c =
   element c {
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -710,7 +681,6 @@ annotation =
   element annotation {
     attribute ascii { text }?,
     (text
-     | b
      | bcp14
      | cref
      | em
@@ -727,6 +697,6 @@ annotation =
 refcontent =
   element refcontent {
     attribute ascii { text }?,
-    (text | b | bcp14 | em | i | strong | sub | sup | tt)*
+    (text | bcp14 | em | i | strong | sub | sup | tt)*
   }
 start = rfc

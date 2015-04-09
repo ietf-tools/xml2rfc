@@ -218,7 +218,6 @@
 -      | \list
 -      | figure
 -      | xref
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -251,7 +250,6 @@
 +     attribute quotedFrom { text }?,
 +     (text
 +      | artwork
-+      | b
 +      | bcp14
 +      | em
 +      | figure
@@ -294,7 +292,6 @@
 +     attribute pn { text }?,
 +     ((t | artwork | figure | sourcecode)+
 +      | (text
-+         | b
 +         | bcp14
 +         | cref
 +         | em
@@ -320,7 +317,6 @@
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -337,7 +333,6 @@
 +   element dd {
 +     t+
 +     | (text
-+        | b
 +        | bcp14
 +        | cref
 +        | em
@@ -385,12 +380,11 @@
 -     text
 +     [ a:defaultValue = "true" ]
 +     attribute display { "true" | "false" }?,
-+     (text | b | em | eref | i | strong | sub | sup | tt | xref)*
++     (text | em | eref | i | strong | sub | sup | tt | xref)*
 +   }
 + tt =
 +   element tt {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -400,20 +394,6 @@
 +      | strong
 +      | sub
 +      | sup
-+      | xref)*
-+   }
-+ b =
-+   element b {
-+     (text
-+      | bcp14
-+      | cref
-+      | em
-+      | eref
-+      | i
-+      | iref
-+      | sub
-+      | sup
-+      | tt
 +      | xref)*
 +   }
 + strong =
@@ -433,7 +413,6 @@
 + i =
 +   element i {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | eref
@@ -447,7 +426,6 @@
 + em =
 +   element em {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | eref
@@ -461,7 +439,6 @@
 + sub =
 +   element sub {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -475,7 +452,6 @@
 + sup =
 +   element sup {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -532,7 +508,6 @@
 -   element preamble { (text | xref | eref | iref | cref | spanx)* }
 +   element preamble {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -590,7 +565,6 @@
 +     (t+
 +      | (text
 +         | artwork
-+         | b
 +         | bcp14
 +         | br
 +         | cref
@@ -619,7 +593,6 @@
 +     (t+
 +      | (text
 +         | artwork
-+         | b
 +         | bcp14
 +         | br
 +         | cref
@@ -642,7 +615,6 @@
 -   element postamble { (text | xref | eref | iref | cref | spanx)* 
 +   element postamble {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -683,7 +655,6 @@
 + c =
 +   element c {
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -755,7 +726,6 @@
 +   element annotation {
 +     attribute ascii { text }?,
 +     (text
-+      | b
 +      | bcp14
 +      | cref
 +      | em
@@ -772,6 +742,6 @@
 + refcontent =
 +   element refcontent {
 +     attribute ascii { text }?,
-+     (text | b | bcp14 | em | i | strong | sub | sup | tt)*
++     (text | bcp14 | em | i | strong | sub | sup | tt)*
 +   }
   start = rfc
