@@ -222,7 +222,6 @@
 +      | cref
 +      | em
        | eref
-+      | i
        | iref
 -      | cref
 +      | \list
@@ -253,7 +252,6 @@
 +      | bcp14
 +      | em
 +      | figure
-+      | i
 +      | sourcecode
 +      | strong
 +      | sub
@@ -296,7 +294,6 @@
 +         | cref
 +         | em
 +         | eref
-+         | i
 +         | iref
 +         | strong
 +         | sub
@@ -321,7 +318,6 @@
 +      | cref
 +      | em
 +      | eref
-+      | i
 +      | iref
 +      | strong
 +      | sub
@@ -337,7 +333,6 @@
 +        | cref
 +        | em
 +        | eref
-+        | i
 +        | iref
 +        | strong
 +        | sub
@@ -380,7 +375,7 @@
 -     text
 +     [ a:defaultValue = "true" ]
 +     attribute display { "true" | "false" }?,
-+     (text | em | eref | i | strong | sub | sup | tt | xref)*
++     (text | em | eref | strong | sub | sup | tt | xref)*
 +   }
 + tt =
 +   element tt {
@@ -389,7 +384,6 @@
 +      | cref
 +      | em
 +      | eref
-+      | i
 +      | iref
 +      | strong
 +      | sub
@@ -398,30 +392,8 @@
 +   }
 + strong =
 +   element strong {
-+     (text
-+      | bcp14
-+      | cref
-+      | em
-+      | eref
-+      | i
-+      | iref
-+      | sub
-+      | sup
-+      | tt
-+      | xref)*
-+   }
-+ i =
-+   element i {
-+     (text
-+      | bcp14
-+      | cref
-+      | eref
-+      | iref
-+      | strong
-+      | sub
-+      | sup
-+      | tt
-+      | xref)*
++     (text | bcp14 | cref | em | eref | iref | sub | sup | tt | 
++ xref)*
 +   }
 + em =
 +   element em {
@@ -438,29 +410,11 @@
 +   }
 + sub =
 +   element sub {
-+     (text
-+      | bcp14
-+      | cref
-+      | em
-+      | eref
-+      | i
-+      | iref
-+      | strong
-+      | tt
-+      | xref)*
++     (text | bcp14 | cref | em | eref | iref | strong | tt | xref)*
 +   }
 + sup =
 +   element sup {
-+     (text
-+      | bcp14
-+      | cref
-+      | em
-+      | eref
-+      | i
-+      | iref
-+      | strong
-+      | tt
-+      | xref)*
++     (text | bcp14 | cref | em | eref | iref | strong | tt | xref)*
     }
   spanx =
     element spanx {
@@ -512,7 +466,6 @@
 +      | cref
 +      | em
 +      | eref
-+      | i
 +      | iref
 +      | spanx
 +      | strong
@@ -572,7 +525,6 @@
 +         | em
 +         | eref
 +         | figure
-+         | i
 +         | iref
 +         | ol
 +         | sourcecode
@@ -600,7 +552,6 @@
 +         | em
 +         | eref
 +         | figure
-+         | i
 +         | iref
 +         | ol
 +         | sourcecode
@@ -619,7 +570,6 @@
 +      | cref
 +      | em
 +      | eref
-+      | i
 +      | iref
 +      | spanx
 +      | strong
@@ -659,7 +609,6 @@
 +      | cref
 +      | em
 +      | eref
-+      | i
 +      | iref
 +      | spanx
 +      | strong
@@ -730,7 +679,6 @@
 +      | cref
 +      | em
 +      | eref
-+      | i
 +      | iref
 +      | spanx
 +      | strong
@@ -742,6 +690,6 @@
 + refcontent =
 +   element refcontent {
 +     attribute ascii { text }?,
-+     (text | bcp14 | em | i | strong | sub | sup | tt)*
++     (text | bcp14 | em | strong | sub | sup | tt)*
 +   }
   start = rfc

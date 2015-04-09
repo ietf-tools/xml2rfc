@@ -199,7 +199,6 @@ t =
      | cref
      | em
      | eref
-     | i
      | iref
      | \list
      | ol
@@ -228,7 +227,6 @@ blockquote =
      | bcp14
      | em
      | figure
-     | i
      | sourcecode
      | strong
      | sub
@@ -270,7 +268,6 @@ li =
         | cref
         | em
         | eref
-        | i
         | iref
         | strong
         | sub
@@ -295,7 +292,6 @@ dt =
      | cref
      | em
      | eref
-     | i
      | iref
      | strong
      | sub
@@ -311,7 +307,6 @@ dd =
        | cref
        | em
        | eref
-       | i
        | iref
        | strong
        | sub
@@ -350,7 +345,7 @@ cref =
     attribute source { text }?,
     [ a:defaultValue = "true" ]
     attribute display { "true" | "false" }?,
-    (text | em | eref | i | strong | sub | sup | tt | xref)*
+    (text | em | eref | strong | sub | sup | tt | xref)*
   }
 tt =
   element tt {
@@ -359,7 +354,6 @@ tt =
      | cref
      | em
      | eref
-     | i
      | iref
      | strong
      | sub
@@ -368,30 +362,7 @@ tt =
   }
 strong =
   element strong {
-    (text
-     | bcp14
-     | cref
-     | em
-     | eref
-     | i
-     | iref
-     | sub
-     | sup
-     | tt
-     | xref)*
-  }
-i =
-  element i {
-    (text
-     | bcp14
-     | cref
-     | eref
-     | iref
-     | strong
-     | sub
-     | sup
-     | tt
-     | xref)*
+    (text | bcp14 | cref | em | eref | iref | sub | sup | tt | xref)*
   }
 em =
   element em {
@@ -408,29 +379,11 @@ em =
   }
 sub =
   element sub {
-    (text
-     | bcp14
-     | cref
-     | em
-     | eref
-     | i
-     | iref
-     | strong
-     | tt
-     | xref)*
+    (text | bcp14 | cref | em | eref | iref | strong | tt | xref)*
   }
 sup =
   element sup {
-    (text
-     | bcp14
-     | cref
-     | em
-     | eref
-     | i
-     | iref
-     | strong
-     | tt
-     | xref)*
+    (text | bcp14 | cref | em | eref | iref | strong | tt | xref)*
   }
 spanx =
   element spanx {
@@ -480,7 +433,6 @@ preamble =
      | cref
      | em
      | eref
-     | i
      | iref
      | spanx
      | strong
@@ -538,7 +490,6 @@ td =
         | em
         | eref
         | figure
-        | i
         | iref
         | ol
         | sourcecode
@@ -566,7 +517,6 @@ th =
         | em
         | eref
         | figure
-        | i
         | iref
         | ol
         | sourcecode
@@ -584,7 +534,6 @@ postamble =
      | cref
      | em
      | eref
-     | i
      | iref
      | spanx
      | strong
@@ -623,7 +572,6 @@ c =
      | cref
      | em
      | eref
-     | i
      | iref
      | spanx
      | strong
@@ -685,7 +633,6 @@ annotation =
      | cref
      | em
      | eref
-     | i
      | iref
      | spanx
      | strong
@@ -697,6 +644,6 @@ annotation =
 refcontent =
   element refcontent {
     attribute ascii { text }?,
-    (text | bcp14 | em | i | strong | sub | sup | tt)*
+    (text | bcp14 | em | strong | sub | sup | tt)*
   }
 start = rfc
