@@ -191,7 +191,7 @@
   <section anchor="{$anchor}" toc="exclude">
     <xsl:choose>
       <xsl:when test="$voc='v3'">
-        <name>'<xsl:value-of select="@name"/>' attribute<xsl:if test="$pf!=''"><xsl:text> </xsl:text><i>(mandatory)</i></xsl:if></name>
+        <name>'<xsl:value-of select="@name"/>' attribute<xsl:if test="$pf!=''"><xsl:text> </xsl:text><em>(mandatory)</em></xsl:if></name>
       </xsl:when>
       <xsl:otherwise>
         <xsl:attribute name="title">
