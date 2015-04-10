@@ -22,7 +22,7 @@
 <xsl:param name="deprecated" select="'no'"/>
 
 <!-- source of spec -->
-<xsl:param name="specsrc" select="'draft-iab-xml2rfcv2-latest.xml'"/>
+<xsl:param name="specsrc" select="'draft-reschke-xml2rfc-latest.xml'"/>
 <xsl:variable name="spec" select="document($specsrc)"/>
 
 <xsl:template match="rng:grammar">
@@ -82,12 +82,17 @@
   <t>
     <xsl:comment>AG</xsl:comment>
     <xsl:text>This element appears as a child element of: </xsl:text>
+    <xsl:variable name="name" select="@name"/>
     <xsl:for-each select="$appearsin">
       <xsl:sort select="@name"/>
-        <xsl:text>&lt;</xsl:text>
-        <x:ref><xsl:value-of select="@name"/></x:ref>
-        <xsl:text>&gt;</xsl:text> (<xref target="element.{@name}"/>)<xsl:if test="position() != last()">, </xsl:if>
-        <xsl:if test="position() = last() -1">and </xsl:if>
+      <xsl:text>&lt;</xsl:text>
+      <x:ref><xsl:value-of select="@name"/></x:ref>
+      <xsl:text>&gt; (</xsl:text>
+      <xref target="element.{@name}"/>
+      <xsl:if test=".//rng:ref[@name=$name]/processing-instruction('deprecated')">; deprecated in this context</xsl:if>
+      <xsl:text>)</xsl:text>
+      <xsl:if test="position() != last()">, </xsl:if>
+      <xsl:if test="position() = last() -1">and </xsl:if>
     </xsl:for-each>
     <xsl:text>.</xsl:text>
   </t>
@@ -186,7 +191,7 @@
   <section anchor="{$anchor}" toc="exclude">
     <xsl:choose>
       <xsl:when test="$voc='v3'">
-        <name>'<xsl:value-of select="@name"/>' attribute<xsl:if test="$pf!=''"><xsl:text> </xsl:text><i>(mandatory)</i></xsl:if></name>
+        <name>'<xsl:value-of select="@name"/>' attribute<xsl:if test="$pf!=''"><xsl:text> </xsl:text><em>(mandatory)</em></xsl:if></name>
       </xsl:when>
       <xsl:otherwise>
         <xsl:attribute name="title">
@@ -244,7 +249,11 @@
     <xsl:text>&lt;</xsl:text>
     <x:ref><xsl:value-of select="$elem"/></x:ref>
     <xsl:text>&gt; element</xsl:text>
-    <xsl:if test="parent::rng:zeroOrMore or parent::rng:oneOrMore or parent::rng:choice">s</xsl:if><xsl:text> (</xsl:text><xref target="element.{$elem}"/><xsl:text>)</xsl:text>
+    <xsl:if test="parent::rng:zeroOrMore or parent::rng:oneOrMore or parent::rng:choice">s</xsl:if>
+    <xsl:text> (</xsl:text>
+    <xref target="element.{$elem}"/>
+    <xsl:if test="processing-instruction('deprecated')">; deprecated in this context</xsl:if>
+    <xsl:text>)</xsl:text>
   </t>
 </xsl:template>
 
