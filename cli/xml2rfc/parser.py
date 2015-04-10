@@ -226,6 +226,8 @@ class CachingResolver(lxml.etree.Resolver):
                         result = self.cache(path)
                         if result:
                             break
+                if not result and self.no_network:
+                    xml2rfc.log.warn("Document not found in cache, and --no-network specified -- couldn't resolve %s" % request)
                 tried_cache = True
             else:
                 if os.path.dirname(paths[0]):
@@ -250,6 +252,9 @@ class CachingResolver(lxml.etree.Resolver):
                             if result:
                                 break
                         tried_cache = True
+                        if not result and self.no_network:
+                            xml2rfc.log.warn("Document not found in cache, and --no-network specified -- couldn't resolve %s" % request)
+
                         # if not result:
                         #     # Document didn't exist, default to source dir
                         #     result = os.path.join(self.source_dir, request)
@@ -280,6 +285,8 @@ class CachingResolver(lxml.etree.Resolver):
                             tried_cache = True
                             if result:
                                 break
+                        if not result and self.no_network:
+                            xml2rfc.log.warn("Document not found in cache, and --no-network specified -- couldn't resolve %s" % request)
                     # if not result:
                     #     # Default to source dir
                     #     result = os.path.join(self.source_dir, request)
@@ -326,8 +333,6 @@ class CachingResolver(lxml.etree.Resolver):
                     xml2rfc.log.note('Loaded from cache', cached_path)
                     return cached_path
         # Not found, save to `write_cache`
-        if self.no_network:
-            xml2rfc.log.warn("Document not found in cache, and --no-network specified -- couldn't resolve %s" % url)
             return ''
         else:
             xml2rfc.log.note('Resolving ' + typename + '...', url)
