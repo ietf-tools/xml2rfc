@@ -14,7 +14,7 @@ xml2rfcv2-annotated.rng: xml2rfcv2.rng annotate-rng.xslt draft-iab-xml2rfcv2-lat
 	saxon $< annotate-rng.xslt doc=draft-iab-xml2rfcv2-latest.xml > $@
 
 xml2rfcv2-spec.xml: xml2rfcv2.rng rng2xml2rfc.xslt
-	saxon $< rng2xml2rfc.xslt voc=v3 > $@
+	saxon $< rng2xml2rfc.xslt voc=v3 specsrc=draft-iab-xml2rfcv2-latest.xml > $@
 
 xml2rfcv2.rnc.folded: xml2rfcv2.rnc
 	./fold-rnc.sh $< > $@
