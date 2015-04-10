@@ -39,7 +39,7 @@ you can run pip to download and install the package::
 .. _lxml:				http://lxml.de/
 .. _pip:				https://pypi.python.org/pypi/pip
 .. _xml2rfc distribution package:	https://pypi.python.org/pypi/pip
-
+.. _requests:				http://docs.python-requests.org/
 
 
 User Install
@@ -92,17 +92,19 @@ xml2rfc accepts a single XML document as input and outputs to one or more conver
     ===============  ======================= ==================================================
     Short            Long                    Description
     ===============  ======================= ==================================================
+    ``-C``           ``--clear-cache``       purge the cache and exit
     ``-h``           ``--help``              show the help message and exit
-    ``-v``           ``--verbose``           print extra information
-    ``-q``           ``--quiet``             dont print anything
     ``-n``           ``--no-dtd``            disable DTD validation step
-    ``-c CACHE``     ``--cache=CACHE``       specify an alternate cache directory to write to
-    ``-d DTD``       ``--dtd=DTD``           specify an alternate dtd file
+    ``-N``           ``--no-network``        don't use the network to resolve references
+    ``-q``           ``--quiet``             dont print anything
+    ``-v``           ``--verbose``           print extra information
+    ``-V``           ``--version``           display the version number and exit
+
     ``-b BASENAME``  ``--basename=BASENAME`` specify the base name for output files
-    ``-f FILENAME``  ``--filename=FILENAME`` specify an output filename
-    (none)           ``--date=DATE``         run as if todays date is DATE (format: yyyy-mm-dd)
-    (none)           ``--clear-cache``       purge the cache and exit
-    (none)           ``--version``           display the version number and exit
+    ``-c CACHE``     ``--cache=CACHE``       specify an alternate cache directory to write to
+    ``-D DATE``      ``--date=DATE``         run as if todays date is DATE (format: yyyy-mm-dd)
+    ``-d DTD``       ``--dtd=DTD``           specify an alternate dtd file
+    ``-o FILENAME``  ``--out=FILENAME``      specify an output filename
     ===============  ======================= ==================================================
 
 **Formats**
@@ -132,6 +134,5 @@ Dependencies
 xml2rfc depends on the following packages:
 
 * lxml_ *(> 2.2.7)*
-
-
+* requests_ *(> 2.5.0)*
 
