@@ -191,9 +191,9 @@ t =
     attribute hangText { text }?,
     attribute pn { text }?,
     [ a:defaultValue = "false" ]
-    attribute keepwithnext { "false" | "true" }?,
+    attribute keepWithNext { "false" | "true" }?,
     [ a:defaultValue = "false" ]
-    attribute keepwithprevious { "false" | "true" }?,
+    attribute keepWithPrevious { "false" | "true" }?,
     (text
      | bcp14
      | cref
@@ -201,13 +201,11 @@ t =
      | eref
      | iref
      | \list
-     | ol
      | spanx
      | strong
      | sub
      | sup
      | tt
-     | ul
      | vspace
      | xref)*
   }
@@ -263,7 +261,7 @@ li =
   element li {
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
-    ((t | artwork | figure | sourcecode)+
+    ((artwork | dl | figure | ol | sourcecode | t | ul)+
      | (text
         | bcp14
         | cref
@@ -602,7 +600,7 @@ reference =
     attribute anchor { xsd:ID },
     attribute target { text }?,
     [ a:defaultValue = "true" ]
-    attribute quote-title { "true" | "false" }?,
+    attribute quoteTitle { "true" | "false" }?,
     front,
     (annotation | format | refcontent | seriesInfo)*
   }
@@ -615,8 +613,8 @@ seriesInfo =
   element seriesInfo {
     attribute name { text },
     attribute value { text },
-    attribute asciiname { text }?,
-    attribute asciivalue { text }?,
+    attribute asciiName { text }?,
+    attribute asciiValue { text }?,
     empty
   }
 format =

@@ -306,7 +306,7 @@ Table of Contents
    o  Add "display" to <cref> to indicate to processors whether or not
       to display the comment.
 
-   o  Add "keepwithnext" and "keepwithprevious" to <t> as a hint to
+   o  Add "keepWithNext" and "keepWithPrevious" to <t> as a hint to
       processors that do pagination that the should try to keep the
       paragraph with the next/previous element.
 
@@ -1125,8 +1125,8 @@ Table of Contents
    definition.)
 
    This element appears as a child element of: <aside> (Section 2.6),
-   <section> (Section 2.45), <td> (Section 2.55), and <th>
-   (Section 2.57).
+   <li> (Section 2.29), <section> (Section 2.45), <td> (Section 2.55),
+   and <th> (Section 2.57).
 
    Content model:
 
@@ -1479,13 +1479,19 @@ Table of Contents
 
       In any order, but at least one of:
 
-      *  <t> elements (Section 2.52)
-
       *  <artwork> elements (Section 2.5)
+
+      *  <dl> elements (Section 2.20)
 
       *  <figure> elements (Section 2.25)
 
+      *  <ol> elements (Section 2.34)
+
       *  <sourcecode> elements (Section 2.47)
+
+      *  <t> elements (Section 2.52)
+
+      *  <ul> elements (Section 2.62)
 
    Or:
 
@@ -1649,7 +1655,7 @@ Table of Contents
    a letter, depending on the value of the style attribute.
 
    This element appears as a child element of: <aside> (Section 2.6),
-   <section> (Section 2.45), <t> (Section 2.52), <td> (Section 2.55),
+   <li> (Section 2.29), <section> (Section 2.45), <td> (Section 2.55),
    and <th> (Section 2.57).
 
    Content model:
@@ -1883,7 +1889,7 @@ Table of Contents
    will be used both to "label" the reference in the references section,
    and as an identifier in links to this reference entry.
 
-2.40.2.  'quote-title' attribute
+2.40.2.  'quoteTitle' attribute
 
    Specifies whether or not the title in the reference should be quoted.
    This can be used to prevent quoting, such as on errata.
@@ -2278,11 +2284,11 @@ Table of Contents
 
    Content model: this element does not have any contents.
 
-2.46.1.  'asciiname' attribute
+2.46.1.  'asciiName' attribute
 
    The ASCII equivalent of the name field.
 
-2.46.2.  'asciivalue' attribute
+2.46.2.  'asciiValue' attribute
 
    The ASCII equivalent of the value field.
 
@@ -2610,8 +2616,6 @@ Table of Contents
 
    o  <list> elements (Section 3.4)
 
-   o  <ol> elements (Section 2.34)
-
    o  <spanx> elements (Section 3.7)
 
    o  <strong> elements (Section 2.49)
@@ -2621,8 +2625,6 @@ Table of Contents
    o  <sup> elements (Section 2.51)
 
    o  <tt> elements (Section 2.61)
-
-   o  <ul> elements (Section 2.62)
 
    o  <vspace> elements (Section 3.10)
 
@@ -2636,7 +2638,7 @@ Table of Contents
 
    Deprecated.  Instead use <dd> inside of a definition list (<dl>).
 
-2.52.3.  'keepwithnext' attribute
+2.52.3.  'keepWithNext' attribute
 
    Acts as a hint to the output formatters that do pagination to do a
    best effort attempt to keep the paragraph with the next element,
@@ -2652,7 +2654,7 @@ Table of Contents
 
    o  "true"
 
-2.52.4.  'keepwithprevious' attribute
+2.52.4.  'keepWithPrevious' attribute
 
    Acts as a hint to the output formatters that do pagination to do a
    best effort attempt to keep the paragraph with the previous element,
@@ -3002,7 +3004,7 @@ Table of Contents
    the processor.
 
    This element appears as a child element of: <aside> (Section 2.6),
-   <section> (Section 2.45), <t> (Section 2.52), <td> (Section 2.55),
+   <li> (Section 2.29), <section> (Section 2.45), <td> (Section 2.55),
    and <th> (Section 2.57).
 
    Content model:
@@ -4387,9 +4389,9 @@ Appendix C.  Relax NG Schema
        attribute hangText { text }?,
        attribute pn { text }?,
        [ a:defaultValue = "false" ]
-       attribute keepwithnext { "false" | "true" }?,
+       attribute keepWithNext { "false" | "true" }?,
        [ a:defaultValue = "false" ]
-       attribute keepwithprevious { "false" | "true" }?,
+       attribute keepWithPrevious { "false" | "true" }?,
        (text
         | bcp14
         | cref
@@ -4397,13 +4399,11 @@ Appendix C.  Relax NG Schema
         | eref
         | iref
         | \list
-        | ol
         | spanx
         | strong
         | sub
         | sup
         | tt
-        | ul
         | vspace
         | xref)*
      }
@@ -4465,7 +4465,7 @@ Appendix C.  Relax NG Schema
      element li {
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
-       ((t | artwork | figure | sourcecode)+
+       ((artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
            | cref
@@ -4839,7 +4839,7 @@ Appendix C.  Relax NG Schema
        attribute anchor { xsd:ID },
        attribute target { text }?,
        [ a:defaultValue = "true" ]
-       attribute quote-title { "true" | "false" }?,
+       attribute quoteTitle { "true" | "false" }?,
        front,
        (annotation | format | refcontent | seriesInfo)*
      }
@@ -4854,8 +4854,8 @@ Appendix C.  Relax NG Schema
      element seriesInfo {
        attribute name { text },
        attribute value { text },
-       attribute asciiname { text }?,
-       attribute asciivalue { text }?,
+       attribute asciiName { text }?,
+       attribute asciiValue { text }?,
        empty
      }
 
@@ -5113,9 +5113,9 @@ Appendix D.  Schema Differences from v2
          attribute hangText { text }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "false" ]
-   +     attribute keepwithnext { "false" | "true" }?,
+   +     attribute keepWithNext { "false" | "true" }?,
    +     [ a:defaultValue = "false" ]
-   +     attribute keepwithprevious { "false" | "true" }?,
+   +     attribute keepWithPrevious { "false" | "true" }?,
          (text
    -      | \list
    -      | figure
@@ -5127,14 +5127,12 @@ Appendix D.  Schema Differences from v2
           | iref
    -      | cref
    +      | \list
-   +      | ol
           | spanx
    -      | vspace)*
    +      | strong
    +      | sub
    +      | sup
    +      | tt
-   +      | ul
    +      | vspace
    +      | xref)*
    +   }
@@ -5191,7 +5189,7 @@ Appendix D.  Schema Differences from v2
    +   element li {
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
-   +     ((t | artwork | figure | sourcecode)+
+   +     ((artwork | dl | figure | ol | sourcecode | t | ul)+
    +      | (text
    +         | bcp14
    +         | cref
@@ -5545,7 +5543,7 @@ Appendix D.  Schema Differences from v2
          attribute anchor { xsd:ID },
          attribute target { text }?,
    +     [ a:defaultValue = "true" ]
-   +     attribute quote-title { "true" | "false" }?,
+   +     attribute quoteTitle { "true" | "false" }?,
          front,
    -     seriesInfo*,
    -     format*,
@@ -5561,8 +5559,8 @@ Appendix D.  Schema Differences from v2
        element seriesInfo {
          attribute name { text },
          attribute value { text },
-   +     attribute asciiname { text }?,
-   +     attribute asciivalue { text }?,
+   +     attribute asciiName { text }?,
+   +     attribute asciiValue { text }?,
          empty
        }
      format =
@@ -5674,11 +5672,11 @@ Index
          in author element  1
       asciiInitials attribute
          in author element  1
-      asciiname attribute
+      asciiName attribute
          in seriesInfo element  1
       asciiSurname attribute
          in author element  1
-      asciivalue attribute
+      asciiValue attribute
          in seriesInfo element  1
       aside element  1
          anchor attribute  1
@@ -5692,9 +5690,9 @@ Index
          ascii  1
          asciiFullname  1
          asciiInitials  1
-         asciiname  1
+         asciiName  1
          asciiSurname  1
-         asciivalue  1
+         asciiValue  1
          blankLines  1
          border  1
          category  1
@@ -5719,8 +5717,8 @@ Index
          ipr  1
          iprExtract  1
          item  1
-         keepwithnext  1
-         keepwithprevious  1
+         keepWithNext  1
+         keepWithPrevious  1
          month  1
          name  1
          number  1
@@ -5730,8 +5728,8 @@ Index
          pageno  1
          pn  1
          primary  1
-         quote-title  1
          quotedFrom  1
+         quoteTitle  1
          rel  1
          relative  1
          removeInRFC  1
@@ -5876,6 +5874,7 @@ Index
       dl element  1
          hanging attribute  1
          inside aside  1
+         inside li  1
          inside section  1
          inside td  1
          inside th  1
@@ -6103,9 +6102,9 @@ Index
          in iref element  1
 
    K
-      keepwithnext attribute
+      keepWithNext attribute
          in t element  1
-      keepwithprevious attribute
+      keepWithPrevious attribute
          in t element  1
       keyword element  1
          inside front  1
@@ -6166,8 +6165,8 @@ Index
       ol element  1
          group attribute  1
          inside aside  1
+         inside li  1
          inside section  1
-         inside t  1
          inside td  1
          inside th  1
          spacing attribute  1
@@ -6212,10 +6211,10 @@ Index
          in iref element  1
 
    Q
-      quote-title attribute
-         in reference element  1
       quotedFrom attribute
          in blockquote element  1
+      quoteTitle attribute
+         in reference element  1
 
    R
       refcontent element  1
@@ -6225,7 +6224,7 @@ Index
          anchor attribute  1
          inside referencegroup  1
          inside references  1
-         quote-title attribute  1
+         quoteTitle attribute  1
          target attribute  1
       referencegroup element  1
          anchor attribute  1
@@ -6284,8 +6283,8 @@ Index
       sectionFormat attribute
          in xref element  1
       seriesInfo element  1
-         asciiname attribute  1
-         asciivalue attribute  1
+         asciiName attribute  1
+         asciiValue attribute  1
          inside front  1
          inside reference  1
          name attribute  1
@@ -6414,8 +6413,8 @@ Index
          inside section  1
          inside td  1
          inside th  1
-         keepwithnext attribute  1
-         keepwithprevious attribute  1
+         keepWithNext attribute  1
+         keepWithPrevious attribute  1
          pn attribute  1
       table element  1
          anchor attribute  1
@@ -6508,8 +6507,8 @@ Index
       ul element  1
          empty attribute  1
          inside aside  1
+         inside li  1
          inside section  1
-         inside t  1
          inside td  1
          inside th  1
          spacing attribute  1

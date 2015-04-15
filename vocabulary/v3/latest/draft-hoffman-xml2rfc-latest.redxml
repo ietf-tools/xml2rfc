@@ -207,7 +207,7 @@ numbers for items in a section that don't have their own numbering (namely figur
 <t>Add "display" to &lt;<xref target="element.cref" format="none">cref</xref>&gt; to indicate to processors whether or not
 to display the comment.</t>
 
-<t>Add "keepwithnext" and "keepwithprevious" to &lt;<xref target="element.t" format="none">t</xref>&gt; as a hint to processors that
+<t>Add "keepWithNext" and "keepWithPrevious" to &lt;<xref target="element.t" format="none">t</xref>&gt; as a hint to processors that
 do pagination that the should try to keep the paragraph with the next/previous element.</t>
 
 </list></t>
@@ -1488,7 +1488,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       (This is slightly different than the model used in HTML, whicl allows for multiple terms for
       a single definition.)
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.dl.contents"><!--AG-->
       Content model:
     </t>
@@ -2067,17 +2067,26 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <t><!--AG-->Either:<list style="empty">
          <t><!--AG-->In any order, but at least one of: <list style="symbols">
                <t><!--AG-->
-                  <iref item="Elements" subitem="t"/>
-                  <iref item="t element" subitem="inside li"/>&lt;<xref target="element.t" format="none">t</xref>&gt; elements (<xref target="element.t"/>)</t>
-               <t><!--AG-->
                   <iref item="Elements" subitem="artwork"/>
                   <iref item="artwork element" subitem="inside li"/>&lt;<xref target="element.artwork" format="none">artwork</xref>&gt; elements (<xref target="element.artwork"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="dl"/>
+                  <iref item="dl element" subitem="inside li"/>&lt;<xref target="element.dl" format="none">dl</xref>&gt; elements (<xref target="element.dl"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="figure"/>
                   <iref item="figure element" subitem="inside li"/>&lt;<xref target="element.figure" format="none">figure</xref>&gt; elements (<xref target="element.figure"/>)</t>
                <t><!--AG-->
+                  <iref item="Elements" subitem="ol"/>
+                  <iref item="ol element" subitem="inside li"/>&lt;<xref target="element.ol" format="none">ol</xref>&gt; elements (<xref target="element.ol"/>)</t>
+               <t><!--AG-->
                   <iref item="Elements" subitem="sourcecode"/>
                   <iref item="sourcecode element" subitem="inside li"/>&lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt; elements (<xref target="element.sourcecode"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="t"/>
+                  <iref item="t element" subitem="inside li"/>&lt;<xref target="element.t" format="none">t</xref>&gt; elements (<xref target="element.t"/>)</t>
+               <t><!--AG-->
+                  <iref item="Elements" subitem="ul"/>
+                  <iref item="ul element" subitem="inside li"/>&lt;<xref target="element.ul" format="none">ul</xref>&gt; elements (<xref target="element.ul"/>)</t>
             </list>
          </t>
       </list>
@@ -2355,7 +2364,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       An ordered list. The labels on the items will be either a number or a letter, depending
       on the value of the style attribute. 
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.ol.contents"><!--AG-->
       Content model:
     </t>
@@ -2715,12 +2724,12 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       </t>
    </section>
 
-   <!--reference/@quote-title-->
-   <section anchor="element.reference.attribute.quote-title" toc="exclude" title="'quote-title' attribute">
+   <!--reference/@quoteTitle-->
+   <section anchor="element.reference.attribute.quoteTitle" toc="exclude" title="'quoteTitle' attribute">
       
-      <iref item="Attributes" subitem="quote-title"/>
-      <iref item="reference element" subitem="quote-title attribute"/>
-      <iref item="quote-title attribute" subitem="in reference element"/>
+      <iref item="Attributes" subitem="quoteTitle"/>
+      <iref item="reference element" subitem="quoteTitle attribute"/>
+      <iref item="quoteTitle attribute" subitem="in reference element"/>
       <t>
          Specifies whether or not the title in the reference should be quoted.
          This can be used to prevent quoting, such as on errata.
@@ -3348,23 +3357,23 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <t anchor="element.seriesInfo.contents"><!--AG-->
       Content model: this element does not have any contents.</t>
 
-   <!--seriesInfo/@asciiname-->
-   <section anchor="element.seriesInfo.attribute.asciiname" toc="exclude" title="'asciiname' attribute">
+   <!--seriesInfo/@asciiName-->
+   <section anchor="element.seriesInfo.attribute.asciiName" toc="exclude" title="'asciiName' attribute">
       
-      <iref item="Attributes" subitem="asciiname"/>
-      <iref item="seriesInfo element" subitem="asciiname attribute"/>
-      <iref item="asciiname attribute" subitem="in seriesInfo element"/>
+      <iref item="Attributes" subitem="asciiName"/>
+      <iref item="seriesInfo element" subitem="asciiName attribute"/>
+      <iref item="asciiName attribute" subitem="in seriesInfo element"/>
       <t>
          The ASCII equivalent of the name field.
       </t>
    </section>
 
-   <!--seriesInfo/@asciivalue-->
-   <section anchor="element.seriesInfo.attribute.asciivalue" toc="exclude" title="'asciivalue' attribute">
+   <!--seriesInfo/@asciiValue-->
+   <section anchor="element.seriesInfo.attribute.asciiValue" toc="exclude" title="'asciiValue' attribute">
       
-      <iref item="Attributes" subitem="asciivalue"/>
-      <iref item="seriesInfo element" subitem="asciivalue attribute"/>
-      <iref item="asciivalue attribute" subitem="in seriesInfo element"/>
+      <iref item="Attributes" subitem="asciiValue"/>
+      <iref item="seriesInfo element" subitem="asciiValue attribute"/>
+      <iref item="asciiValue attribute" subitem="in seriesInfo element"/>
       <t>
          The ASCII equivalent of the value field.
       </t>
@@ -3785,9 +3794,6 @@ Using CDATA:
             <iref item="Elements" subitem="list"/>
             <iref item="list element" subitem="inside t"/>&lt;<xref target="element.list" format="none">list</xref>&gt; elements (<xref target="element.list"/>)</t>
          <t><!--AG-->
-            <iref item="Elements" subitem="ol"/>
-            <iref item="ol element" subitem="inside t"/>&lt;<xref target="element.ol" format="none">ol</xref>&gt; elements (<xref target="element.ol"/>)</t>
-         <t><!--AG-->
             <iref item="Elements" subitem="spanx"/>
             <iref item="spanx element" subitem="inside t"/>&lt;<xref target="element.spanx" format="none">spanx</xref>&gt; elements (<xref target="element.spanx"/>)</t>
          <t><!--AG-->
@@ -3802,9 +3808,6 @@ Using CDATA:
          <t><!--AG-->
             <iref item="Elements" subitem="tt"/>
             <iref item="tt element" subitem="inside t"/>&lt;<xref target="element.tt" format="none">tt</xref>&gt; elements (<xref target="element.tt"/>)</t>
-         <t><!--AG-->
-            <iref item="Elements" subitem="ul"/>
-            <iref item="ul element" subitem="inside t"/>&lt;<xref target="element.ul" format="none">ul</xref>&gt; elements (<xref target="element.ul"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="vspace"/>
             <iref item="vspace element" subitem="inside t"/>&lt;<xref target="element.vspace" format="none">vspace</xref>&gt; elements (<xref target="element.vspace"/>)</t>
@@ -3836,17 +3839,17 @@ Using CDATA:
       </t>
    </section>
 
-   <!--t/@keepwithnext-->
-   <section anchor="element.t.attribute.keepwithnext" toc="exclude" title="'keepwithnext' attribute">
+   <!--t/@keepWithNext-->
+   <section anchor="element.t.attribute.keepWithNext" toc="exclude" title="'keepWithNext' attribute">
       
-      <iref item="Attributes" subitem="keepwithnext"/>
-      <iref item="t element" subitem="keepwithnext attribute"/>
-      <iref item="keepwithnext attribute" subitem="in t element"/>
+      <iref item="Attributes" subitem="keepWithNext"/>
+      <iref item="t element" subitem="keepWithNext attribute"/>
+      <iref item="keepWithNext attribute" subitem="in t element"/>
       <t>
          Acts as a hint to the output formatters that do pagination to do a best effort attempt to
-         keep the paragraph with the next element, whatever that happens to be. For example, the
-         HTML output @media print CSS might translate this to page-break-after: avoid. For PDF, the
-         paginator could attempt to keep the paragraph with the next element. Note: this attribute
+         keep the paragraph with the next element, whatever that happens to be.  For example, the
+         HTML output @media print CSS might translate this to page-break-after: avoid.  For PDF, the
+         paginator could attempt to keep the paragraph with the next element.  Note: this attribute
          is strictly a hint and not always actionable.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
@@ -3856,18 +3859,18 @@ Using CDATA:
       </t>
    </section>
 
-   <!--t/@keepwithprevious-->
-   <section anchor="element.t.attribute.keepwithprevious" toc="exclude" title="'keepwithprevious' attribute">
+   <!--t/@keepWithPrevious-->
+   <section anchor="element.t.attribute.keepWithPrevious" toc="exclude" title="'keepWithPrevious' attribute">
       
-      <iref item="Attributes" subitem="keepwithprevious"/>
-      <iref item="t element" subitem="keepwithprevious attribute"/>
-      <iref item="keepwithprevious attribute" subitem="in t element"/>
+      <iref item="Attributes" subitem="keepWithPrevious"/>
+      <iref item="t element" subitem="keepWithPrevious attribute"/>
+      <iref item="keepWithPrevious attribute" subitem="in t element"/>
       <t>
          Acts as a hint to the output formatters that do pagination to do a best effort attempt to
-         keep the paragraph with the previous element, whatever that happens to be. For example, the
-         HTML output @media print CSS might translate this to page-break-before: avoid. For PDF, the
-         paginator could attempt to keep the paragraph with the previous element. Note: this attribute
-         is strictly a hint and not always actionable.
+         keep the paragraph with the previous element, whatever that happens to be.  For example,
+         the HTML output @media print CSS might translate this to page-break-before: avoid.  For
+         PDF, the paginator could attempt to keep the paragraph with the previous element.  Note:
+         this attribute is strictly a hint and not always actionable.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"false" (default)</t>
@@ -4437,7 +4440,7 @@ Using CDATA:
    <t>
       An unordered list. The labels on the items will be symbols picked by the processor.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.ul.contents"><!--AG-->
       Content model:
     </t>
@@ -6427,9 +6430,9 @@ t =
     attribute hangText { text }?,
     attribute pn { text }?,
     [ a:defaultValue = "false" ]
-    attribute keepwithnext { "false" | "true" }?,
+    attribute keepWithNext { "false" | "true" }?,
     [ a:defaultValue = "false" ]
-    attribute keepwithprevious { "false" | "true" }?,
+    attribute keepWithPrevious { "false" | "true" }?,
     (text
      | bcp14
      | cref
@@ -6437,13 +6440,11 @@ t =
      | eref
      | iref
      | \list
-     | ol
      | spanx
      | strong
      | sub
      | sup
      | tt
-     | ul
      | vspace
      | xref)*
   }
@@ -6505,7 +6506,7 @@ li =
   element li {
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
-    ((t | artwork | figure | sourcecode)+
+    ((artwork | dl | figure | ol | sourcecode | t | ul)+
      | (text
         | bcp14
         | cref
@@ -6879,7 +6880,7 @@ reference =
     attribute anchor { xsd:ID },
     attribute target { text }?,
     [ a:defaultValue = "true" ]
-    attribute quote-title { "true" | "false" }?,
+    attribute quoteTitle { "true" | "false" }?,
     front,
     (annotation | format | refcontent | seriesInfo)*
   }
@@ -6894,8 +6895,8 @@ seriesInfo =
   element seriesInfo {
     attribute name { text },
     attribute value { text },
-    attribute asciiname { text }?,
-    attribute asciivalue { text }?,
+    attribute asciiName { text }?,
+    attribute asciiValue { text }?,
     empty
   }
 
@@ -7156,9 +7157,9 @@ to the v3 schema.</t>
       attribute hangText { text }?,
 +     attribute pn { text }?,
 +     [ a:defaultValue = "false" ]
-+     attribute keepwithnext { "false" | "true" }?,
++     attribute keepWithNext { "false" | "true" }?,
 +     [ a:defaultValue = "false" ]
-+     attribute keepwithprevious { "false" | "true" }?,
++     attribute keepWithPrevious { "false" | "true" }?,
       (text
 -      | \list
 -      | figure
@@ -7170,14 +7171,12 @@ to the v3 schema.</t>
        | iref
 -      | cref
 +      | \list
-+      | ol
        | spanx
 -      | vspace)*
 +      | strong
 +      | sub
 +      | sup
 +      | tt
-+      | ul
 +      | vspace
 +      | xref)*
 +   }
@@ -7234,7 +7233,7 @@ to the v3 schema.</t>
 +   element li {
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
-+     ((t | artwork | figure | sourcecode)+
++     ((artwork | dl | figure | ol | sourcecode | t | ul)+
 +      | (text
 +         | bcp14
 +         | cref
@@ -7588,7 +7587,7 @@ to the v3 schema.</t>
       attribute anchor { xsd:ID },
       attribute target { text }?,
 +     [ a:defaultValue = "true" ]
-+     attribute quote-title { "true" | "false" }?,
++     attribute quoteTitle { "true" | "false" }?,
       front,
 -     seriesInfo*,
 -     format*,
@@ -7604,8 +7603,8 @@ to the v3 schema.</t>
     element seriesInfo {
       attribute name { text },
       attribute value { text },
-+     attribute asciiname { text }?,
-+     attribute asciivalue { text }?,
++     attribute asciiName { text }?,
++     attribute asciiValue { text }?,
       empty
     }
   format =
