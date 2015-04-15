@@ -559,21 +559,34 @@
       <optional>
         <attribute name="quotedFrom"/>
       </optional>
-      <zeroOrMore>
-        <choice>
-          <text/>
-          <ref name="artwork"/>
-          <ref name="bcp14"/>
-          <ref name="em"/>
-          <ref name="figure"/>
-          <ref name="sourcecode"/>
-          <ref name="strong"/>
-          <ref name="sub"/>
-          <ref name="sup"/>
-          <ref name="t"/>
-          <ref name="tt"/>
-        </choice>
-      </zeroOrMore>
+      <choice>
+        <oneOrMore>
+          <choice>
+            <ref name="artwork"/>
+            <ref name="dl"/>
+            <ref name="figure"/>
+            <ref name="ol"/>
+            <ref name="sourcecode"/>
+            <ref name="t"/>
+            <ref name="ul"/>
+          </choice>
+        </oneOrMore>
+        <oneOrMore>
+          <choice>
+            <text/>
+            <ref name="bcp14"/>
+            <ref name="cref"/>
+            <ref name="em"/>
+            <ref name="eref"/>
+            <ref name="iref"/>
+            <ref name="strong"/>
+            <ref name="sub"/>
+            <ref name="sup"/>
+            <ref name="tt"/>
+            <ref name="xref"/>
+          </choice>
+        </oneOrMore>
+      </choice>
     </element>
   </define>
   <define name="list">
@@ -734,7 +747,15 @@
     <element name="dd">
       <choice>
         <oneOrMore>
-          <ref name="t"/>
+          <choice>
+            <ref name="artwork"/>
+            <ref name="dl"/>
+            <ref name="figure"/>
+            <ref name="ol"/>
+            <ref name="sourcecode"/>
+            <ref name="t"/>
+            <ref name="ul"/>
+          </choice>
         </oneOrMore>
         <oneOrMore>
           <choice>

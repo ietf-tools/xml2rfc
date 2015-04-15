@@ -247,17 +247,18 @@
 +     attribute pn { text }?,
 +     attribute cite { text }?,
 +     attribute quotedFrom { text }?,
-+     (text
-+      | artwork
-+      | bcp14
-+      | em
-+      | figure
-+      | sourcecode
-+      | strong
-+      | sub
-+      | sup
-+      | t
-+      | tt)*
++     ((artwork | dl | figure | ol | sourcecode | t | ul)+
++      | (text
++         | bcp14
++         | cref
++         | em
++         | eref
++         | iref
++         | strong
++         | sub
++         | sup
++         | tt
++         | xref)+)
     }
   \list =
     element list {
@@ -327,7 +328,7 @@
 +   }
 + dd =
 +   element dd {
-+     t+
++     (artwork | dl | figure | ol | sourcecode | t | ul)+
 +     | (text
 +        | bcp14
 +        | cref
