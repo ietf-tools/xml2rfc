@@ -28,12 +28,6 @@ to
 Why the change? Note that this change is inconsistent with the HTML5 table model, which says essentially
    0*(<td>|<th>)
 
-From Tony:
-<abstract> needs to accept all of <ol>/<ul>/<dl> now
-<note> needs to accept all of <ol>/<ul>/<dl> now
-<blockquot3> needs to accept all of <ol>/<ul>/<dl> now
-<dd> needs to accept all of <ol>/<ul>/<dl> now
-
 Think about all the "processor" wording, whether it should be here, and so on.
 
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
@@ -402,11 +396,28 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
    <t anchor="element.abstract.contents"><!--AG-->
       <xref format="none" target="grammar.abstract">Content model</xref>:
     </t>
-        
    <t><!--AG-->
-      <iref item="Elements" subitem="t"/>
-      <iref item="t element" subitem="inside abstract"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
+    One or more sequences of:
+    <list style="numbers">
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="dl"/>
+            <iref item="dl element" subitem="inside abstract"/>One &lt;<x:ref>dl</x:ref>&gt; element</t>
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="ol"/>
+            <iref item="ol element" subitem="inside abstract"/>One &lt;<x:ref>ol</x:ref>&gt; element</t>
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="t"/>
+            <iref item="t element" subitem="inside abstract"/>One &lt;<x:ref>t</x:ref>&gt; element</t>
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="ul"/>
+            <iref item="ul element" subitem="inside abstract"/>One &lt;<x:ref>ul</x:ref>&gt; element</t>
       
+      </list>
+   </t>
 
    <!--abstract/@pn-->
    <section anchor="element.abstract.attribute.pn" toc="exclude">
@@ -1547,7 +1558,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       (This is slightly different than the model used in HTML, whicl allows for multiple terms for
       a single definition.)
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.dl.contents"><!--AG-->
       <xref format="none" target="grammar.dl">Content model</xref>:
     </t>
@@ -2394,11 +2405,28 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          <t><!--AG-->
             <iref item="Elements" subitem="name"/>
             <iref item="name element" subitem="inside note"/>One &lt;<x:ref>name</x:ref>&gt; element (<xref target="element.name"/>)</t>
-        
          <t><!--AG-->
-            <iref item="Elements" subitem="t"/>
-            <iref item="t element" subitem="inside note"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
+    One or more sequences of:
+    <list style="numbers">
+        
+               <t><!--AG-->
+                  <iref item="Elements" subitem="dl"/>
+                  <iref item="dl element" subitem="inside note"/>One &lt;<x:ref>dl</x:ref>&gt; element</t>
+        
+               <t><!--AG-->
+                  <iref item="Elements" subitem="ol"/>
+                  <iref item="ol element" subitem="inside note"/>One &lt;<x:ref>ol</x:ref>&gt; element</t>
+        
+               <t><!--AG-->
+                  <iref item="Elements" subitem="t"/>
+                  <iref item="t element" subitem="inside note"/>One &lt;<x:ref>t</x:ref>&gt; element</t>
+        
+               <t><!--AG-->
+                  <iref item="Elements" subitem="ul"/>
+                  <iref item="ul element" subitem="inside note"/>One &lt;<x:ref>ul</x:ref>&gt; element</t>
       
+            </list>
+         </t>
       </list>
    </t>
 
@@ -2454,7 +2482,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       An ordered list. The labels on the items will be either a number or a letter, depending
       on the value of the style attribute. 
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.ol.contents"><!--AG-->
       <xref format="none" target="grammar.ol">Content model</xref>:
     </t>
@@ -4590,7 +4618,7 @@ Using CDATA:
    <t>
       An unordered list. The labels on the items will be symbols picked by the processor.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.ul.contents"><!--AG-->
       <xref format="none" target="grammar.ul">Content model</xref>:
     </t>
@@ -6531,7 +6559,7 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 <strong anchor="grammar.abstract">abstract</strong><iref item="abstract element"/> =
   element abstract {
     attribute pn { text }?,
-    t+
+    (dl, ol, t, ul)+
   }
 
 <strong anchor="grammar.note">note</strong><iref item="note element"/> =
@@ -6541,7 +6569,7 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     attribute pn { text }?,
     [ a:defaultValue = "no" ]
     attribute removeInRFC { "true" | "false" }?,
-    t+
+    (dl, ol, t, ul)+
   }
 
 <strong anchor="grammar.boilerplate">boilerplate</strong><iref item="boilerplate element"/> = element boilerplate { section+ }
@@ -7261,17 +7289,18 @@ to the v3 schema.</t>
 + abstract =
 +   element abstract {
 +     attribute pn { text }?,
-+     t+
++     (dl, ol, t, ul)+
 +   }
   note =
     element note {
 -     attribute title { text },
+-     t+
 +     attribute title { text }?,
 +     name,
 +     attribute pn { text }?,
 +     [ a:defaultValue = "no" ]
 +     attribute removeInRFC { "true" | "false" }?,
-      t+
++     (dl, ol, t, ul)+
     }
 + boilerplate = element boilerplate { section+ }
   middle = element middle { section+ }

@@ -16,11 +16,28 @@
    <t anchor="element.abstract.contents"><!--AG-->
       <xref format="none" target="grammar.abstract">Content model</xref>:
     </t>
-        
    <t><!--AG-->
-      <iref item="Elements" subitem="t"/>
-      <iref item="t element" subitem="inside abstract"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
+    One or more sequences of:
+    <list style="numbers">
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="dl"/>
+            <iref item="dl element" subitem="inside abstract"/>One &lt;<x:ref>dl</x:ref>&gt; element</t>
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="ol"/>
+            <iref item="ol element" subitem="inside abstract"/>One &lt;<x:ref>ol</x:ref>&gt; element</t>
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="t"/>
+            <iref item="t element" subitem="inside abstract"/>One &lt;<x:ref>t</x:ref>&gt; element</t>
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="ul"/>
+            <iref item="ul element" subitem="inside abstract"/>One &lt;<x:ref>ul</x:ref>&gt; element</t>
       
+      </list>
+   </t>
 
    <!--abstract/@pn-->
    <section anchor="element.abstract.attribute.pn" toc="exclude">
@@ -1161,7 +1178,7 @@
       (This is slightly different than the model used in HTML, whicl allows for multiple terms for
       a single definition.)
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.dl.contents"><!--AG-->
       <xref format="none" target="grammar.dl">Content model</xref>:
     </t>
@@ -2008,11 +2025,28 @@
          <t><!--AG-->
             <iref item="Elements" subitem="name"/>
             <iref item="name element" subitem="inside note"/>One &lt;<x:ref>name</x:ref>&gt; element (<xref target="element.name"/>)</t>
-        
          <t><!--AG-->
-            <iref item="Elements" subitem="t"/>
-            <iref item="t element" subitem="inside note"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
+    One or more sequences of:
+    <list style="numbers">
+        
+               <t><!--AG-->
+                  <iref item="Elements" subitem="dl"/>
+                  <iref item="dl element" subitem="inside note"/>One &lt;<x:ref>dl</x:ref>&gt; element</t>
+        
+               <t><!--AG-->
+                  <iref item="Elements" subitem="ol"/>
+                  <iref item="ol element" subitem="inside note"/>One &lt;<x:ref>ol</x:ref>&gt; element</t>
+        
+               <t><!--AG-->
+                  <iref item="Elements" subitem="t"/>
+                  <iref item="t element" subitem="inside note"/>One &lt;<x:ref>t</x:ref>&gt; element</t>
+        
+               <t><!--AG-->
+                  <iref item="Elements" subitem="ul"/>
+                  <iref item="ul element" subitem="inside note"/>One &lt;<x:ref>ul</x:ref>&gt; element</t>
       
+            </list>
+         </t>
       </list>
    </t>
 
@@ -2068,7 +2102,7 @@
       An ordered list. The labels on the items will be either a number or a letter, depending
       on the value of the style attribute. 
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.ol.contents"><!--AG-->
       <xref format="none" target="grammar.ol">Content model</xref>:
     </t>
@@ -2447,8 +2481,9 @@
       <iref item="Attributes" subitem="quoteTitle"/>
       <iref item="reference element" subitem="quoteTitle attribute"/>
       <iref item="quoteTitle attribute" subitem="in reference element"/>
-      <t><!--AG-->
-         <cref anchor="element.reference.attribute.quoteTitle.missing">attribute description missing</cref>
+      <t>
+         Specifies whether or not the title in the reference should be quoted.
+         This can be used to prevent quoting, such as on errata.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"true" (default)</t>
@@ -3092,8 +3127,8 @@
       <iref item="Attributes" subitem="asciiName"/>
       <iref item="seriesInfo element" subitem="asciiName attribute"/>
       <iref item="asciiName attribute" subitem="in seriesInfo element"/>
-      <t><!--AG-->
-         <cref anchor="element.seriesInfo.attribute.asciiName.missing">attribute description missing</cref>
+      <t>
+         The ASCII equivalent of the name field.
       </t>
    </section>
 
@@ -3103,8 +3138,8 @@
       <iref item="Attributes" subitem="asciiValue"/>
       <iref item="seriesInfo element" subitem="asciiValue attribute"/>
       <iref item="asciiValue attribute" subitem="in seriesInfo element"/>
-      <t><!--AG-->
-         <cref anchor="element.seriesInfo.attribute.asciiValue.missing">attribute description missing</cref>
+      <t>
+         The ASCII equivalent of the value field.
       </t>
    </section>
 
@@ -3588,8 +3623,12 @@ Using CDATA:
       <iref item="Attributes" subitem="keepWithNext"/>
       <iref item="t element" subitem="keepWithNext attribute"/>
       <iref item="keepWithNext attribute" subitem="in t element"/>
-      <t><!--AG-->
-         <cref anchor="element.t.attribute.keepWithNext.missing">attribute description missing</cref>
+      <t>
+         Acts as a hint to the output formatters that do pagination to do a best effort attempt to
+         keep the paragraph with the next element, whatever that happens to be.  For example, the
+         HTML output @media print CSS might translate this to page-break-after: avoid.  For PDF, the
+         paginator could attempt to keep the paragraph with the next element.  Note: this attribute
+         is strictly a hint and not always actionable.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"false" (default)</t>
@@ -3604,8 +3643,12 @@ Using CDATA:
       <iref item="Attributes" subitem="keepWithPrevious"/>
       <iref item="t element" subitem="keepWithPrevious attribute"/>
       <iref item="keepWithPrevious attribute" subitem="in t element"/>
-      <t><!--AG-->
-         <cref anchor="element.t.attribute.keepWithPrevious.missing">attribute description missing</cref>
+      <t>
+         Acts as a hint to the output formatters that do pagination to do a best effort attempt to
+         keep the paragraph with the previous element, whatever that happens to be.  For example,
+         the HTML output @media print CSS might translate this to page-break-before: avoid.  For
+         PDF, the paginator could attempt to keep the paragraph with the previous element.  Note:
+         this attribute is strictly a hint and not always actionable.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"false" (default)</t>
@@ -4195,7 +4238,7 @@ Using CDATA:
    <t>
       An unordered list. The labels on the items will be symbols picked by the processor.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.ul.contents"><!--AG-->
       <xref format="none" target="grammar.ul">Content model</xref>:
     </t>

@@ -16,8 +16,17 @@
 Processors ignore case in attribute values that are important to it, such as for seriesInfo/@name
 
 Need to at <svg> element for <artwork>
+	Waiting on Julian for fix to tooling to allow this
 
 When Julian finishes his review of references in v2, include all that here.
+
+From Tony:
+One of the changes is on <tr> from
+   1*(<td>|<th>)
+to
+   (1*<td>) | (1*<th>)
+Why the change? Note that this change is inconsistent with the HTML5 table model, which says essentially
+   0*(<td>|<th>)
 
 Think about all the "processor" wording, whether it should be here, and so on.
 
@@ -383,11 +392,28 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <t anchor="element.abstract.contents"><!--AG-->
       Content model:
     </t>
-        
    <t><!--AG-->
-      <iref item="Elements" subitem="t"/>
-      <iref item="t element" subitem="inside abstract"/>One or more &lt;<xref target="element.t" format="none">t</xref>&gt; elements (<xref target="element.t"/>)</t>
+    One or more sequences of:
+    <list style="numbers">
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="dl"/>
+            <iref item="dl element" subitem="inside abstract"/>One &lt;<xref target="element.dl" format="none">dl</xref>&gt; element</t>
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="ol"/>
+            <iref item="ol element" subitem="inside abstract"/>One &lt;<xref target="element.ol" format="none">ol</xref>&gt; element</t>
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="t"/>
+            <iref item="t element" subitem="inside abstract"/>One &lt;<xref target="element.t" format="none">t</xref>&gt; element</t>
+        
+         <t><!--AG-->
+            <iref item="Elements" subitem="ul"/>
+            <iref item="ul element" subitem="inside abstract"/>One &lt;<xref target="element.ul" format="none">ul</xref>&gt; element</t>
       
+      </list>
+   </t>
 
    <!--abstract/@pn-->
    <section anchor="element.abstract.attribute.pn" toc="exclude" title="'pn' attribute">
@@ -1488,7 +1514,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       (This is slightly different than the model used in HTML, whicl allows for multiple terms for
       a single definition.)
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.abstract" format="none">abstract</xref>&gt; (<xref target="element.abstract"/>), &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.note" format="none">note</xref>&gt; (<xref target="element.note"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.dl.contents"><!--AG-->
       Content model:
     </t>
@@ -2306,11 +2332,28 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          <t><!--AG-->
             <iref item="Elements" subitem="name"/>
             <iref item="name element" subitem="inside note"/>One &lt;<xref target="element.name" format="none">name</xref>&gt; element (<xref target="element.name"/>)</t>
-        
          <t><!--AG-->
-            <iref item="Elements" subitem="t"/>
-            <iref item="t element" subitem="inside note"/>One or more &lt;<xref target="element.t" format="none">t</xref>&gt; elements (<xref target="element.t"/>)</t>
+    One or more sequences of:
+    <list style="numbers">
+        
+               <t><!--AG-->
+                  <iref item="Elements" subitem="dl"/>
+                  <iref item="dl element" subitem="inside note"/>One &lt;<xref target="element.dl" format="none">dl</xref>&gt; element</t>
+        
+               <t><!--AG-->
+                  <iref item="Elements" subitem="ol"/>
+                  <iref item="ol element" subitem="inside note"/>One &lt;<xref target="element.ol" format="none">ol</xref>&gt; element</t>
+        
+               <t><!--AG-->
+                  <iref item="Elements" subitem="t"/>
+                  <iref item="t element" subitem="inside note"/>One &lt;<xref target="element.t" format="none">t</xref>&gt; element</t>
+        
+               <t><!--AG-->
+                  <iref item="Elements" subitem="ul"/>
+                  <iref item="ul element" subitem="inside note"/>One &lt;<xref target="element.ul" format="none">ul</xref>&gt; element</t>
       
+            </list>
+         </t>
       </list>
    </t>
 
@@ -2364,7 +2407,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       An ordered list. The labels on the items will be either a number or a letter, depending
       on the value of the style attribute. 
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.abstract" format="none">abstract</xref>&gt; (<xref target="element.abstract"/>), &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.note" format="none">note</xref>&gt; (<xref target="element.note"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.ol.contents"><!--AG-->
       Content model:
     </t>
@@ -4440,7 +4483,7 @@ Using CDATA:
    <t>
       An unordered list. The labels on the items will be symbols picked by the processor.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.abstract" format="none">abstract</xref>&gt; (<xref target="element.abstract"/>), &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.note" format="none">note</xref>&gt; (<xref target="element.note"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.ul.contents"><!--AG-->
       Content model:
     </t>
@@ -6374,7 +6417,7 @@ keyword = element keyword { text }
 abstract =
   element abstract {
     attribute pn { text }?,
-    t+
+    (dl, ol, t, ul)+
   }
 
 note =
@@ -6384,7 +6427,7 @@ note =
     attribute pn { text }?,
     [ a:defaultValue = "no" ]
     attribute removeInRFC { "true" | "false" }?,
-    t+
+    (dl, ol, t, ul)+
   }
 
 boilerplate = element boilerplate { section+ }
@@ -7104,17 +7147,18 @@ to the v3 schema.</t>
 + abstract =
 +   element abstract {
 +     attribute pn { text }?,
-+     t+
++     (dl, ol, t, ul)+
 +   }
   note =
     element note {
 -     attribute title { text },
+-     t+
 +     attribute title { text }?,
 +     name,
 +     attribute pn { text }?,
 +     [ a:defaultValue = "no" ]
 +     attribute removeInRFC { "true" | "false" }?,
-      t+
++     (dl, ol, t, ul)+
     }
 + boilerplate = element boilerplate { section+ }
   middle = element middle { section+ }

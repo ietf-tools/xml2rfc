@@ -158,17 +158,18 @@
 + abstract =
 +   element abstract {
 +     attribute pn { text }?,
-+     t+
++     (dl, ol, t, ul)+
 +   }
   note =
     element note {
 -     attribute title { text },
+-     t+
 +     attribute title { text }?,
 +     name,
 +     attribute pn { text }?,
 +     [ a:defaultValue = "no" ]
 +     attribute removeInRFC { "true" | "false" }?,
-      t+
++     (dl, ol, t, ul)+
     }
 + boilerplate = element boilerplate { section+ }
   middle = element middle { section+ }

@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                             April 14, 2015
+Obsoletes: 2629 (if approved)                             April 15, 2015
 Intended status: Informational
-Expires: October 16, 2015
+Expires: October 17, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 16, 2015.
+   This Internet-Draft will expire on October 17, 2015.
 
 Copyright Notice
 
@@ -445,7 +445,15 @@ Table of Contents
 
    Content model:
 
-   One or more <t> elements (Section 2.52)
+   One or more sequences of:
+
+   1.  One <dl> element
+
+   2.  One <ol> element
+
+   3.  One <t> element
+
+   4.  One <ul> element
 
 2.1.1.  'pn' attribute
 
@@ -1124,9 +1132,10 @@ Table of Contents
    used in HTML, whicl allows for multiple terms for a single
    definition.)
 
-   This element appears as a child element of: <aside> (Section 2.6),
-   <li> (Section 2.29), <section> (Section 2.45), <td> (Section 2.55),
-   and <th> (Section 2.57).
+   This element appears as a child element of: <abstract> (Section 2.1),
+   <aside> (Section 2.6), <li> (Section 2.29), <note> (Section 2.33),
+   <section> (Section 2.45), <td> (Section 2.55), and <th>
+   (Section 2.57).
 
    Content model:
 
@@ -1626,7 +1635,15 @@ Table of Contents
 
    1.  One <name> element (Section 2.32)
 
-   2.  One or more <t> elements (Section 2.52)
+   2.  One or more sequences of:
+
+       1.  One <dl> element
+
+       2.  One <ol> element
+
+       3.  One <t> element
+
+       4.  One <ul> element
 
 2.33.1.  'pn' attribute
 
@@ -1654,9 +1671,10 @@ Table of Contents
    An ordered list.  The labels on the items will be either a number or
    a letter, depending on the value of the style attribute.
 
-   This element appears as a child element of: <aside> (Section 2.6),
-   <li> (Section 2.29), <section> (Section 2.45), <td> (Section 2.55),
-   and <th> (Section 2.57).
+   This element appears as a child element of: <abstract> (Section 2.1),
+   <aside> (Section 2.6), <li> (Section 2.29), <note> (Section 2.33),
+   <section> (Section 2.45), <td> (Section 2.55), and <th>
+   (Section 2.57).
 
    Content model:
 
@@ -3003,9 +3021,10 @@ Table of Contents
    An unordered list.  The labels on the items will be symbols picked by
    the processor.
 
-   This element appears as a child element of: <aside> (Section 2.6),
-   <li> (Section 2.29), <section> (Section 2.45), <td> (Section 2.55),
-   and <th> (Section 2.57).
+   This element appears as a child element of: <abstract> (Section 2.1),
+   <aside> (Section 2.6), <li> (Section 2.29), <note> (Section 2.33),
+   <section> (Section 2.45), <td> (Section 2.55), and <th>
+   (Section 2.57).
 
    Content model:
 
@@ -4333,7 +4352,7 @@ Appendix C.  Relax NG Schema
    abstract =
      element abstract {
        attribute pn { text }?,
-       t+
+       (dl, ol, t, ul)+
      }
 
    note =
@@ -4343,7 +4362,7 @@ Appendix C.  Relax NG Schema
        attribute pn { text }?,
        [ a:defaultValue = "no" ]
        attribute removeInRFC { "true" | "false" }?,
-       t+
+       (dl, ol, t, ul)+
      }
 
    boilerplate = element boilerplate { section+ }
@@ -5060,17 +5079,18 @@ Appendix D.  Schema Differences from v2
    + abstract =
    +   element abstract {
    +     attribute pn { text }?,
-   +     t+
+   +     (dl, ol, t, ul)+
    +   }
      note =
        element note {
    -     attribute title { text },
+   -     t+
    +     attribute title { text }?,
    +     name,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "no" ]
    +     attribute removeInRFC { "true" | "false" }?,
-         t+
+   +     (dl, ol, t, ul)+
        }
    + boilerplate = element boilerplate { section+ }
      middle = element middle { section+ }
@@ -5873,8 +5893,10 @@ Index
          to attribute  1
       dl element  1
          hanging attribute  1
+         inside abstract  1
          inside aside  1
          inside li  1
+         inside note  1
          inside section  1
          inside td  1
          inside th  1
@@ -6164,8 +6186,10 @@ Index
          in format element  1
       ol element  1
          group attribute  1
+         inside abstract  1
          inside aside  1
          inside li  1
+         inside note  1
          inside section  1
          inside td  1
          inside th  1
@@ -6506,8 +6530,10 @@ Index
    U
       ul element  1
          empty attribute  1
+         inside abstract  1
          inside aside  1
          inside li  1
+         inside note  1
          inside section  1
          inside td  1
          inside th  1
