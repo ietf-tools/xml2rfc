@@ -13,12 +13,10 @@
 ## can't track this one down yet:
 ## sometimes too many </tr>s:  <th></tr>Mood</th></tr>
 
-
-#
-# document keepwithnext/keepwithprevious
-
-#
-# cleanup - remove empty preamble/postamble sections ?
+##
+## cleanup
+##    remove empty preamble/postamble sections ?
+##    after <ul/ol/dl> conversion, there may be an empty <t></t> either before or after the list now
 
 ## 1.2.4
 ##   o  In <section>, restricted the names of the anchors that can be used
@@ -563,8 +561,8 @@ sub startHandler {
 	    $replacementStack{$xmlPath} = $newelement;
 	    $comments .= comment("converting <$element> to <$newelement> and moving before $elements{$enclosingElementCount}");
   	    $element = $newelement;
-	    # 2.54.3 'keepwithnext' attribute
-	    push @newAttributeVals, 'keepwithnext', 'true';
+	    # 2.54.3 'keepWithNext' attribute
+	    push @newAttributeVals, 'keepWithNext', 'true';
 	    ### startHandler
 	} elsif ($element eq 'postamble') {
 	    # 1.2.3.  Elements and Attributes Deprecated from v2
@@ -581,8 +579,8 @@ sub startHandler {
 	    $replacementStack{$xmlPath} = $newelement;
 	    $comments .= comment("converting <$element> to <$newelement> and moving after $elements{$enclosingElementCount}");
   	    $element = $newelement;
-	    # 2.54.4 'keepwithprevious' attribute
-	    push @newAttributeVals, 'keepwithprevious', 'true';
+	    # 2.54.4 'keepWithPrevious' attribute
+	    push @newAttributeVals, 'keepWithPrevious', 'true';
 	}
     }
 
@@ -615,6 +613,10 @@ sub startHandler {
 	}
     }
 
+    # <ul/ol/dl> are moved up one level to be peers of <t>
+    if ($element eq 'ul' || $element eq 'ol' || $element eq 'dl') {
+	$output .= "</t>";
+    }
     $output .= "<$element elementCount='$elementCount'";
     push @elementCountStack, $elementCount;
     $elements{$elementCount} = $element;
@@ -691,6 +693,15 @@ sub startHandler {
 	    }
 	    ### startHandler
 	} elsif ($element eq 'texttable') {
+	    if ($name eq 'title') {
+		## 3.8.6 title
+		## ... move texttable/title to <name>
+		$comments .= comment("title= moved to <name>");
+		$titleSaved = $val;
+		$skip = 1;
+	    }
+	    ### startHandler
+	} elsif ($element eq 'references') {
 	    if ($name eq 'title') {
 		## 3.8.6 title
 		## ... move texttable/title to <name>
@@ -866,6 +877,10 @@ sub startHandler {
 		$numberSaved = $val;
 		$skip = 1;
 		$comments .= comment("moving number to <front/>");
+	    } elsif ($name eq 'consensus') {
+		my $oldval = $val;
+		$val = yesnoToTruefalse($val);
+		$comments .= comment("Converting consensus=$oldval to $val");
 	    }
 	}
 
@@ -997,6 +1012,10 @@ sub endHandler {
     if (!$skip && !$emptyElements{$element}) {
 	$output .= $prefix;
 	$output .= "</$element elementCount='$poppedElementCount'>";
+	# <ul/ol/dl> are moved up one level to be peers of <t>
+	if ($element eq 'ul' || $element eq 'ol' || $element eq 'dl') {
+	    $output .= "<t>";
+	}
     }
     if (($element eq 'td') || ($element eq 'th')) {
 	$lastc = $poppedElementCount;
@@ -1030,6 +1049,12 @@ sub yesno {
     return ($val eq 'yes') ? 'yes' : ($val eq 'no') ? 'no' : undef;
 }    
 
+sub yesnoToTruefalse {
+    my $val = shift;
+    $val = lc($val);
+    return ($val eq 'yes') ? 'true' : ($val eq 'no') ? 'false' : undef;
+}
+
 ## processing element handler
 sub procHandler {
     my ( $expat, $target, $data ) = @_;
@@ -1039,6 +1064,7 @@ sub procHandler {
     ## to <rfc> to cover processor instructions (PIs) that were in v2
     ## that are still needed in the grammar.
     ## ... replace the above with <rfc> attributes and other things.
+    ## ... convert sortRefs/symRefs/tocInclude/consensus to true/false
     ## Pass these PIs through unchanged:
     ##    editing=yes/no
     ##	 comments=yes/no
@@ -1077,14 +1103,17 @@ sub procHandler {
 
 	    if (($nm eq 'symrefs') && $yesno) {
 		$nm = "symRefs";
+		$val = yesnoToTruefalse($val);
 		$additionalRfcAttributes .= " $nm=$quote$val$quote";
 		$comments .= comment("moving PI <?$target $fullvalue?> to <rfc> element as $nm attribute");
 	    } elsif (($nm eq 'sortrefs') && $yesno) {
 		$nm = "sortRefs";
+		$val = yesnoToTruefalse($val);
 		$additionalRfcAttributes .= " $nm=$quote$val$quote";
 		$comments .= comment("moving PI <?$target $fullvalue?> to <rfc> element as $nm attribute");
 	    } elsif (($nm eq 'toc') && $yesno) {
 		$nm = "tocInclude";
+		$val = yesnoToTruefalse($val);
 		$additionalRfcAttributes .= " $nm=$quote$val$quote";
 		$comments .= comment("moving PI <?$target $fullvalue?> to <rfc> element as $nm attribute");
 	    } elsif (($nm eq 'compact') && $yesno) {
