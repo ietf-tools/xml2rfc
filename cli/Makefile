@@ -51,10 +51,8 @@ cachetest: install
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
 	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache .cache --clear-cache
-	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache .cache tests/input/draft-miek-test.xml --base tmp/ --raw
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-miek-test.raw.txt	tmp/draft-miek-test.raw.txt	|| { echo 'Diff failed for .raw.txt output'; exit 1; }
-	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache .cache tests/input/draft-miek-test.xml --no-network --base tmp/ --raw
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-miek-test.raw.txt	tmp/draft-miek-test.raw.txt	|| { echo 'Diff failed for .raw.txt output'; exit 1; }
+	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache .cache tests/input/rfc6787.xml --base tmp/ --raw
+	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache .cache tests/input/rfc6787.xml --no-network --base tmp/ --raw
 
 rfctest:  bin/python install
 	[ -d tmp ] || mkdir -p tmp
