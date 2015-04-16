@@ -26,7 +26,8 @@
 <xsl:variable name="spec" select="document($specsrc)"/>
 
 <xsl:template match="rng:grammar">
-  <xsl:apply-templates select="rng:define/rng:element">
+  <xsl:apply-templates select="rng:define/rng:element[@name]">
+    <xsl:sort select="@ns"/>
     <xsl:sort select="@name"/>
   </xsl:apply-templates>
 </xsl:template>
@@ -46,15 +47,16 @@
   </xsl:when>
   <xsl:otherwise>
 <xsl:text>&#10;&#10;</xsl:text>
-<xsl:comment><xsl:value-of select="@name"/></xsl:comment>
+<xsl:comment><xsl:if test="@ns">{<xsl:value-of select="@ns"/>}</xsl:if><xsl:value-of select="@name"/></xsl:comment>
 <section anchor="{$anchor}">
 <xsl:choose>
   <xsl:when test="$voc='v3'">
-    <name><tt>&lt;<xsl:value-of select="@name"/>&gt;</tt></name>
+    <name><tt>&lt;<xsl:value-of select="@name"/>&gt;</tt><xsl:if test="@ns"> (in namespace <tt><xsl:value-of select="@ns"/></tt>)</xsl:if></name>
   </xsl:when>
   <xsl:otherwise>
     <xsl:attribute name="title">
       <xsl:value-of select="concat('&lt;',@name,'&gt;')"/>
+      <xsl:if test="@ns">(in namespace <xsl:value-of select="@ns"/>)</xsl:if>
     </xsl:attribute>
   </xsl:otherwise>
 </xsl:choose>
@@ -62,7 +64,7 @@
 <iref item="Elements" subitem="{@name}" primary="true"/>
 <iref item="{@name} element" primary="true"/>
 
-<xsl:variable name="attributecontents" select="descendant-or-self::rng:attribute"/>
+<xsl:variable name="attributecontents" select="descendant-or-self::rng:attribute[@name]"/>
 <xsl:variable name="elementcontents" select="*[not(descendant-or-self::rng:attribute) and not(self::rng:empty)]"/>
 
 <xsl:variable name="appearsin" select="//rng:element[.//rng:ref/@name=current()/@name]"/>
@@ -109,6 +111,13 @@
     <t anchor="{$anchor}.contents">
       <xsl:comment>AG</xsl:comment>
       <xref format="none" target="grammar.{@name}">Content model</xref><xsl:text>: only text content.</xsl:text>
+    </t>
+  </xsl:when>
+  <xsl:when test="count($elementcontents)=1 and $elementcontents[1]/self::rng:ref and //rng:define[@name=$elementcontents[1]/@name]/rng:element/rng:anyName">
+    <!-- HACK: special case "any" elements-->
+    <t anchor="{$anchor}.contents">
+      <xsl:comment>AG</xsl:comment>
+      <xref format="none" target="grammar.{@name}">Content model</xref><xsl:text>: any elements.</xsl:text>
     </t>
   </xsl:when>
   <xsl:when test="count($elementcontents)=1">
