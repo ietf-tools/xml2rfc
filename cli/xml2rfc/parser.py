@@ -293,7 +293,7 @@ class CachingResolver(lxml.etree.Resolver):
                     #     attempts.append(result)
 
         # Verify the result -- either raise exception or return it
-        if not os.path.exists(result) and not urlparse(result).netloc:
+        if not result or (not os.path.exists(result) and not urlparse(original).netloc):
             if os.path.isabs(original):
                 xml2rfc.log.warn('A reference was requested with an absolute path, but not found '
                     'in that location.  Removing the path component will cause xml2rfc to look for'
@@ -332,8 +332,6 @@ class CachingResolver(lxml.etree.Resolver):
                     xml2rfc.log.note('Resolving ' + typename + '...', url)
                     xml2rfc.log.note('Loaded from cache', cached_path)
                     return cached_path
-        # Not found, save to `write_cache`
-            return ''
         else:
             xml2rfc.log.note('Resolving ' + typename + '...', url)
             if not netloc in self.sessions:
