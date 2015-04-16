@@ -15,9 +15,6 @@
 
 Processors ignore case in attribute values that are important to it, such as for seriesInfo/@name
 
-Need to at <svg> element for <artwork>
-	Waiting on Julian for fix to tooling to allow this
-
 When Julian finishes his review of references in v2, include all that here.
 
 From Tony:
@@ -180,6 +177,8 @@ as STDs and BCPs.</t>
 
 <t>Add &lt;<xref target="element.br" format="none">br</xref>&gt; to allow line breaks (but not blank lines) in the generated output
 for table cells.</t>
+
+<t>Add &lt;<xref target="element.svg" format="none">svg</xref>&gt; to allow easy inclusion of SVG drawings in &lt;<xref target="element.artwork" format="none">artwork</xref>&gt;.</t>
 
 </list></t>
 
@@ -602,7 +601,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          <t>As a URI to an external entity, such as: &lt;artwork type="svg" src="http://www.example.com/..."&gt;</t>
       </list>
       The use of SVG in Internet Drafts and RFCs is covered in much more detail in
-      <xref target="SVGforRFCs"/>
+      <xref target="SVGforRFCs"/>.
    </t>
    <t>
       The four methods for inclusion of SVG art can also be used for including text artwork, but using a data: URI is probably
@@ -616,9 +615,18 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <t anchor="element.artwork.contents"><!--AG-->
       Content model:
     </t>
+   <t><!--AG-->Either:<list style="empty">
+          
+         <t><!--AG-->Text</t>
         
-   <t><!--AG-->Text</t>
-      
+      </list>
+   </t>
+   <t><!--AG-->Or:<list style="empty">
+         <t><!--AG-->
+            <iref item="Elements" subitem="svg"/>
+            <iref item="svg element" subitem="inside artwork"/>&lt;<xref target="element.svg" format="none">svg</xref>&gt; elements (<xref target="element.svg"/>)</t>
+      </list>
+   </t>
 
    <!--artwork/@align-->
    <section anchor="element.artwork.attribute.align" toc="exclude" title="'align' attribute">
@@ -4014,12 +4022,12 @@ Using CDATA:
             <iref item="Elements" subitem="iref"/>
             <iref item="iref element" subitem="inside table"/>Optional &lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
       
-		
+    
          <t><!--AG-->
             <iref item="Elements" subitem="thead"/>
             <iref item="thead element" subitem="inside table"/>One optional &lt;<xref target="element.thead" format="none">thead</xref>&gt; element (<xref target="element.thead"/>)</t>
       
-		
+    
          <t><!--AG-->
             <iref item="Elements" subitem="tbody"/>
             <iref item="tbody element" subitem="inside table"/>One or more &lt;<xref target="element.tbody" format="none">tbody</xref>&gt; elements (<xref target="element.tbody"/>)</t>
@@ -4853,6 +4861,21 @@ would generate
         element in the document.
       </t>
    </section>
+</section>
+
+<!--{http://www.w3.org/2000/svg}svg-->
+<section anchor="element.svg" title="&lt;svg&gt; (in namespace http://www.w3.org/2000/svg)">
+   
+   
+   <iref item="Elements" subitem="svg" primary="true"/>
+   <iref item="svg element" primary="true"/>
+   <t>
+      This element holds SVG art. The use of SVG in Internet Drafts and RFCs is covered in much more detail in
+      <xref target="SVGforRFCs"/>. 
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; (<xref target="element.artwork"/>).</t>
+   <t anchor="element.svg.contents"><!--AG-->
+      Content model: any elements.</t>
 </section>
 
 </section>
@@ -6298,9 +6321,10 @@ document.</t>
 
 <t>The following is the RelaxNG schema for the v3 format.</t>
 
-<figure><iref item="rfc element"/><iref item="link element"/><iref item="front element"/><iref item="title element"/><iref item="author element"/><iref item="organization element"/><iref item="address element"/><iref item="postal element"/><iref item="street element"/><iref item="city element"/><iref item="region element"/><iref item="code element"/><iref item="country element"/><iref item="postalLine element"/><iref item="phone element"/><iref item="facsimile element"/><iref item="email element"/><iref item="uri element"/><iref item="date element"/><iref item="area element"/><iref item="workgroup element"/><iref item="keyword element"/><iref item="abstract element"/><iref item="note element"/><iref item="boilerplate element"/><iref item="middle element"/><iref item="section element"/><iref item="name element"/><iref item="t element"/><iref item="aside element"/><iref item="blockquote element"/><iref item="list element"/><iref item="ol element"/><iref item="ul element"/><iref item="li element"/><iref item="dl element"/><iref item="dt element"/><iref item="dd element"/><iref item="xref element"/><iref item="eref element"/><iref item="iref element"/><iref item="cref element"/><iref item="tt element"/><iref item="strong element"/><iref item="em element"/><iref item="sub element"/><iref item="sup element"/><iref item="spanx element"/><iref item="vspace element"/><iref item="figure element"/><iref item="table element"/><iref item="preamble element"/><iref item="artwork element"/><iref item="sourcecode element"/><iref item="thead element"/><iref item="tbody element"/><iref item="tfoot element"/><iref item="tr element"/><iref item="td element"/><iref item="th element"/><iref item="postamble element"/><iref item="texttable element"/><iref item="ttcol element"/><iref item="c element"/><iref item="bcp14 element"/><iref item="br element"/><iref item="back element"/><iref item="displayreference element"/><iref item="references element"/><iref item="reference element"/><iref item="referencegroup element"/><iref item="seriesInfo element"/><iref item="format element"/><iref item="annotation element"/><iref item="refcontent element"/><artwork type="application/relax-ng-compact-syntax"><![CDATA[
+<figure><iref item="rfc element"/><iref item="link element"/><iref item="front element"/><iref item="title element"/><iref item="author element"/><iref item="organization element"/><iref item="address element"/><iref item="postal element"/><iref item="street element"/><iref item="city element"/><iref item="region element"/><iref item="code element"/><iref item="country element"/><iref item="postalLine element"/><iref item="phone element"/><iref item="facsimile element"/><iref item="email element"/><iref item="uri element"/><iref item="date element"/><iref item="area element"/><iref item="workgroup element"/><iref item="keyword element"/><iref item="abstract element"/><iref item="note element"/><iref item="boilerplate element"/><iref item="middle element"/><iref item="section element"/><iref item="name element"/><iref item="t element"/><iref item="aside element"/><iref item="blockquote element"/><iref item="list element"/><iref item="ol element"/><iref item="ul element"/><iref item="li element"/><iref item="dl element"/><iref item="dt element"/><iref item="dd element"/><iref item="xref element"/><iref item="eref element"/><iref item="iref element"/><iref item="cref element"/><iref item="tt element"/><iref item="strong element"/><iref item="em element"/><iref item="sub element"/><iref item="sup element"/><iref item="spanx element"/><iref item="vspace element"/><iref item="figure element"/><iref item="table element"/><iref item="preamble element"/><iref item="artwork element"/><iref item="svg element"/><iref item="anything element"/><iref item="sourcecode element"/><iref item="thead element"/><iref item="tbody element"/><iref item="tfoot element"/><iref item="tr element"/><iref item="td element"/><iref item="th element"/><iref item="postamble element"/><iref item="texttable element"/><iref item="ttcol element"/><iref item="c element"/><iref item="bcp14 element"/><iref item="br element"/><iref item="back element"/><iref item="displayreference element"/><iref item="references element"/><iref item="reference element"/><iref item="referencegroup element"/><iref item="seriesInfo element"/><iref item="format element"/><iref item="annotation element"/><iref item="refcontent element"/><artwork type="application/relax-ng-compact-syntax"><![CDATA[
 
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+namespace ns1 = "http://www.w3.org/2000/svg"
 
 # xml2rfc Version 3 grammar
 
@@ -6809,7 +6833,19 @@ artwork =
     [ a:defaultValue = "" ] attribute height { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
-    text*
+    (text* | svg)
+  }
+
+svg =
+  element ns1:svg {
+    attribute * { text }*,
+    anything
+  }
+
+anything =
+  element * {
+    attribute * { text }*,
+    anything*
   }
 
 sourcecode =
@@ -7039,6 +7075,7 @@ to the v3 schema.</t>
 
   namespace a = 
   "http://relaxng.org/ns/compatibility/annotations/1.0"
++ namespace ns1 = "http://www.w3.org/2000/svg"
   
 + # xml2rfc Version 3 grammar
   rfc =
@@ -7527,10 +7564,21 @@ to the v3 schema.</t>
       [ a:defaultValue = "" ] attribute alt { text }?,
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
+-     text*
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
-      text*
-    }
++     (text* | svg)
++   }
++ svg =
++   element ns1:svg {
++     attribute * { text }*,
++     anything
++   }
++ anything =
++   element * {
++     attribute * { text }*,
++     anything*
++   }
 + sourcecode =
 +   element sourcecode {
 +     [ a:defaultValue = "" ] attribute name { text }?,
@@ -7601,7 +7649,7 @@ to the v3 schema.</t>
 +         | tt
 +         | ul
 +         | xref)+)
-+   }
+    }
   postamble =
 -   element postamble { (text | xref | eref | iref | cref | spanx)* 
 +   element postamble {

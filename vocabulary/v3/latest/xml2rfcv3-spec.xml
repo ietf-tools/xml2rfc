@@ -248,9 +248,18 @@
    <t anchor="element.artwork.contents"><!--AG-->
       <xref format="none" target="grammar.artwork">Content model</xref>:
     </t>
+   <t><!--AG-->Either:<list style="empty">
+          
+         <t><!--AG-->Text</t>
         
-   <t><!--AG-->Text</t>
-      
+      </list>
+   </t>
+   <t><!--AG-->Or:<list style="empty">
+         <t><!--AG-->
+            <iref item="Elements" subitem="svg"/>
+            <iref item="svg element" subitem="inside artwork"/>&lt;<x:ref>svg</x:ref>&gt; elements (<xref target="element.svg"/>)</t>
+      </list>
+   </t>
 
    <!--artwork/@align-->
    <section anchor="element.artwork.attribute.align" toc="exclude">
@@ -3751,12 +3760,12 @@ Using CDATA:
             <iref item="Elements" subitem="iref"/>
             <iref item="iref element" subitem="inside table"/>Optional &lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
       
-		
+    
          <t><!--AG-->
             <iref item="Elements" subitem="thead"/>
             <iref item="thead element" subitem="inside table"/>One optional &lt;<x:ref>thead</x:ref>&gt; element (<xref target="element.thead"/>)</t>
       
-		
+    
          <t><!--AG-->
             <iref item="Elements" subitem="tbody"/>
             <iref item="tbody element" subitem="inside table"/>One or more &lt;<x:ref>tbody</x:ref>&gt; elements (<xref target="element.tbody"/>)</t>
@@ -4615,4 +4624,19 @@ would generate
         element in the document.
       </t>
    </section>
+</section>
+
+<!--{http://www.w3.org/2000/svg}svg-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.svg">
+   <name>
+      <tt>&lt;svg&gt;</tt> (in namespace <tt>http://www.w3.org/2000/svg</tt>)</name>
+   <x:anchor-alias value="svg"/>
+   <iref item="Elements" subitem="svg" primary="true"/>
+   <iref item="svg element" primary="true"/>
+   <t><!--AG-->
+      <cref anchor="element.svg.missing">element description missing</cref>
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>artwork</x:ref>&gt; (<xref target="element.artwork"/>).</t>
+   <t anchor="element.svg.contents"><!--AG-->
+      <xref format="none" target="grammar.svg">Content model</xref>: any elements.</t>
 </section>

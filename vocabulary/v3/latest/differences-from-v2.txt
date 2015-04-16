@@ -1,5 +1,6 @@
   namespace a = 
   "http://relaxng.org/ns/compatibility/annotations/1.0"
++ namespace ns1 = "http://www.w3.org/2000/svg"
   
 + # xml2rfc Version 3 grammar
   rfc =
@@ -488,10 +489,21 @@
       [ a:defaultValue = "" ] attribute alt { text }?,
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
+-     text*
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
-      text*
-    }
++     (text* | svg)
++   }
++ svg =
++   element ns1:svg {
++     attribute * { text }*,
++     anything
++   }
++ anything =
++   element * {
++     attribute * { text }*,
++     anything*
++   }
 + sourcecode =
 +   element sourcecode {
 +     [ a:defaultValue = "" ] attribute name { text }?,
@@ -562,7 +574,7 @@
 +         | tt
 +         | ul
 +         | xref)+)
-+   }
+    }
   postamble =
 -   element postamble { (text | xref | eref | iref | cref | spanx)* 
 +   element postamble {

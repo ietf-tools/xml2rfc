@@ -15,9 +15,6 @@
 
 Processors ignore case in attribute values that are important to it, such as for seriesInfo/@name
 
-Need to at <svg> element for <artwork>
-	Waiting on Julian for fix to tooling to allow this
-
 When Julian finishes his review of references in v2, include all that here.
 
 From Tony:
@@ -181,6 +178,8 @@ as STDs and BCPs.</t>
 
 <t>Add &lt;<x:ref>br</x:ref>&gt; to allow line breaks (but not blank lines) in the generated output
 for table cells.</t>
+
+<t>Add &lt;<x:ref>svg</x:ref>&gt; to allow easy inclusion of SVG drawings in &lt;<x:ref>artwork</x:ref>&gt;.</t>
 
 </list></t>
 
@@ -614,7 +613,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          <t>As a URI to an external entity, such as: &lt;artwork type="svg" src="http://www.example.com/..."&gt;</t>
       </list>
       The use of SVG in Internet Drafts and RFCs is covered in much more detail in
-      <xref target="SVGforRFCs"/>
+      <xref target="SVGforRFCs"/>.
    </t>
    <t>
       The four methods for inclusion of SVG art can also be used for including text artwork, but using a data: URI is probably
@@ -628,9 +627,18 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
    <t anchor="element.artwork.contents"><!--AG-->
       <xref format="none" target="grammar.artwork">Content model</xref>:
     </t>
+   <t><!--AG-->Either:<list style="empty">
+          
+         <t><!--AG-->Text</t>
         
-   <t><!--AG-->Text</t>
-      
+      </list>
+   </t>
+   <t><!--AG-->Or:<list style="empty">
+         <t><!--AG-->
+            <iref item="Elements" subitem="svg"/>
+            <iref item="svg element" subitem="inside artwork"/>&lt;<x:ref>svg</x:ref>&gt; elements (<xref target="element.svg"/>)</t>
+      </list>
+   </t>
 
    <!--artwork/@align-->
    <section anchor="element.artwork.attribute.align" toc="exclude">
@@ -4131,12 +4139,12 @@ Using CDATA:
             <iref item="Elements" subitem="iref"/>
             <iref item="iref element" subitem="inside table"/>Optional &lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</t>
       
-		
+    
          <t><!--AG-->
             <iref item="Elements" subitem="thead"/>
             <iref item="thead element" subitem="inside table"/>One optional &lt;<x:ref>thead</x:ref>&gt; element (<xref target="element.thead"/>)</t>
       
-		
+    
          <t><!--AG-->
             <iref item="Elements" subitem="tbody"/>
             <iref item="tbody element" subitem="inside table"/>One or more &lt;<x:ref>tbody</x:ref>&gt; elements (<xref target="element.tbody"/>)</t>
@@ -4995,6 +5003,22 @@ would generate
         element in the document.
       </t>
    </section>
+</section>
+
+<!--{http://www.w3.org/2000/svg}svg-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.svg">
+   <name>
+      <tt>&lt;svg&gt;</tt> (in namespace <tt>http://www.w3.org/2000/svg</tt>)</name>
+   <x:anchor-alias value="svg"/>
+   <iref item="Elements" subitem="svg" primary="true"/>
+   <iref item="svg element" primary="true"/>
+   <t>
+      This element holds SVG art. The use of SVG in Internet Drafts and RFCs is covered in much more detail in
+      <xref target="SVGforRFCs"/>. 
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>artwork</x:ref>&gt; (<xref target="element.artwork"/>).</t>
+   <t anchor="element.svg.contents"><!--AG-->
+      <xref format="none" target="grammar.svg">Content model</xref>: any elements.</t>
 </section>
 <?ENDINC xml2rfcv3-spec.xml ?>
 </section>
@@ -6443,6 +6467,7 @@ document.</t>
 <figure><artwork type="application/relax-ng-compact-syntax">
 <?BEGININC xml2rfcv3.rnc.folded ?>
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+namespace ns1 = "http://www.w3.org/2000/svg"
 
 # xml2rfc Version 3 grammar
 
@@ -6951,7 +6976,19 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     [ a:defaultValue = "" ] attribute height { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
-    text*
+    (text* | svg)
+  }
+
+<strong anchor="grammar.svg">svg</strong><iref item="svg element"/> =
+  element ns1:svg {
+    attribute * { text }*,
+    anything
+  }
+
+<strong anchor="grammar.anything">anything</strong><iref item="anything element"/> =
+  element * {
+    attribute * { text }*,
+    anything*
   }
 
 <strong anchor="grammar.sourcecode">sourcecode</strong><iref item="sourcecode element"/> =
@@ -7181,6 +7218,7 @@ to the v3 schema.</t>
 <?BEGININC differences-from-v2.txt ?>
   namespace a = 
   "http://relaxng.org/ns/compatibility/annotations/1.0"
++ namespace ns1 = "http://www.w3.org/2000/svg"
   
 + # xml2rfc Version 3 grammar
   rfc =
@@ -7669,10 +7707,21 @@ to the v3 schema.</t>
       [ a:defaultValue = "" ] attribute alt { text }?,
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
+-     text*
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
-      text*
-    }
++     (text* | svg)
++   }
++ svg =
++   element ns1:svg {
++     attribute * { text }*,
++     anything
++   }
++ anything =
++   element * {
++     attribute * { text }*,
++     anything*
++   }
 + sourcecode =
 +   element sourcecode {
 +     [ a:defaultValue = "" ] attribute name { text }?,
@@ -7743,7 +7792,7 @@ to the v3 schema.</t>
 +         | tt
 +         | ul
 +         | xref)+)
-+   }
+    }
   postamble =
 -   element postamble { (text | xref | eref | iref | cref | spanx)* 
 +   element postamble {
