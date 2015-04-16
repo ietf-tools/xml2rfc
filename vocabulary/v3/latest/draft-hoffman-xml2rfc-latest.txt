@@ -3559,13 +3559,11 @@ Internet-Draft                  XML2RFCv3                     April 2015
 
    Content model:
 
-   Either:
+   In any order, but at least one of:
 
-      One or more <td> elements (Section 2.55)
+   o  <td> elements (Section 2.55)
 
-   Or:
-
-      One or more <th> elements (Section 2.57)
+   o  <th> elements (Section 2.57)
 
 2.60.1.  'border' attribute
 
@@ -3577,6 +3575,8 @@ Internet-Draft                  XML2RFCv3                     April 2015
 
    Causes the text to be displayed in a constant-width font.  This
    element can be combined with other character formatting elements, and
+   the formatting will be additive.
+
 
 
 
@@ -3584,8 +3584,6 @@ Hoffman                 Expires October 18, 2015               [Page 64]
 
 Internet-Draft                  XML2RFCv3                     April 2015
 
-
-   the formatting will be additive.
 
    This element appears as a child element of: <annotation>
    (Section 2.3), <blockquote> (Section 2.10), <c> (Section 3.1), <cref>
@@ -3633,6 +3631,8 @@ Internet-Draft                  XML2RFCv3                     April 2015
    Content model:
 
    One or more <li> elements (Section 2.29)
+
+
 
 
 
@@ -5660,7 +5660,7 @@ Internet-Draft                  XML2RFCv3                     April 2015
    tr =
      element tr {
        [ a:defaultValue = "0" ] attribute border { text }?,
-       (td+ | th+)
+       (td | th)+
      }
 
    td =
@@ -6504,7 +6504,7 @@ Internet-Draft                  XML2RFCv3                     April 2015
    + tr =
    +   element tr {
    +     [ a:defaultValue = "0" ] attribute border { text }?,
-   +     (td+ | th+)
+   +     (td | th)+
    +   }
    + td =
    +   element td {

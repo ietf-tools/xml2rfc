@@ -4452,20 +4452,13 @@ Using CDATA:
    <t anchor="element.tr.contents"><!--AG-->
       Content model:
     </t>
-   <t><!--AG-->Either:<list style="empty">
-          
+   <t><!--AG-->In any order, but at least one of: <list style="symbols">
          <t><!--AG-->
             <iref item="Elements" subitem="td"/>
-            <iref item="td element" subitem="inside tr"/>One or more &lt;<xref target="element.td" format="none">td</xref>&gt; elements (<xref target="element.td"/>)</t>
-        
-      </list>
-   </t>
-   <t><!--AG-->Or:<list style="empty">
-          
+            <iref item="td element" subitem="inside tr"/>&lt;<xref target="element.td" format="none">td</xref>&gt; elements (<xref target="element.td"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="th"/>
-            <iref item="th element" subitem="inside tr"/>One or more &lt;<xref target="element.th" format="none">th</xref>&gt; elements (<xref target="element.th"/>)</t>
-        
+            <iref item="th element" subitem="inside tr"/>&lt;<xref target="element.th" format="none">th</xref>&gt; elements (<xref target="element.th"/>)</t>
       </list>
    </t>
 
@@ -6867,7 +6860,7 @@ tfoot = element tfoot { tr+ }
 tr =
   element tr {
     [ a:defaultValue = "0" ] attribute border { text }?,
-    (td+ | th+)
+    (td | th)+
   }
 
 td =
@@ -7594,7 +7587,7 @@ to the v3 schema.</t>
 + tr =
 +   element tr {
 +     [ a:defaultValue = "0" ] attribute border { text }?,
-+     (td+ | th+)
++     (td | th)+
 +   }
 + td =
 +   element td {

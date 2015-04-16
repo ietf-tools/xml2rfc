@@ -4583,20 +4583,13 @@ Using CDATA:
    <t anchor="element.tr.contents"><!--AG-->
       <xref format="none" target="grammar.tr">Content model</xref>:
     </t>
-   <t><!--AG-->Either:<list style="empty">
-          
+   <t><!--AG-->In any order, but at least one of: <list style="symbols">
          <t><!--AG-->
             <iref item="Elements" subitem="td"/>
-            <iref item="td element" subitem="inside tr"/>One or more &lt;<x:ref>td</x:ref>&gt; elements (<xref target="element.td"/>)</t>
-        
-      </list>
-   </t>
-   <t><!--AG-->Or:<list style="empty">
-          
+            <iref item="td element" subitem="inside tr"/>&lt;<x:ref>td</x:ref>&gt; elements (<xref target="element.td"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="th"/>
-            <iref item="th element" subitem="inside tr"/>One or more &lt;<x:ref>th</x:ref>&gt; elements (<xref target="element.th"/>)</t>
-        
+            <iref item="th element" subitem="inside tr"/>&lt;<x:ref>th</x:ref>&gt; elements (<xref target="element.th"/>)</t>
       </list>
    </t>
 
@@ -7010,7 +7003,7 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 <strong anchor="grammar.tr">tr</strong><iref item="tr element"/> =
   element tr {
     [ a:defaultValue = "0" ] attribute border { text }?,
-    (td+ | th+)
+    (td | th)+
   }
 
 <strong anchor="grammar.td">td</strong><iref item="td element"/> =
@@ -7737,7 +7730,7 @@ to the v3 schema.</t>
 + tr =
 +   element tr {
 +     [ a:defaultValue = "0" ] attribute border { text }?,
-+     (td+ | th+)
++     (td | th)+
 +   }
 + td =
 +   element td {
