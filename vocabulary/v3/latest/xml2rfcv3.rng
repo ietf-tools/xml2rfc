@@ -345,10 +345,12 @@
         <attribute name="pn"/>
       </optional>
       <oneOrMore>
-        <ref name="dl"/>
-        <ref name="ol"/>
-        <ref name="t"/>
-        <ref name="ul"/>
+        <choice>
+          <ref name="dl"/>
+          <ref name="ol"/>
+          <ref name="t"/>
+          <ref name="ul"/>
+        </choice>
       </oneOrMore>
     </element>
   </define>
@@ -370,10 +372,12 @@
         </attribute>
       </optional>
       <oneOrMore>
-        <ref name="dl"/>
-        <ref name="ol"/>
-        <ref name="t"/>
-        <ref name="ul"/>
+        <choice>
+          <ref name="dl"/>
+          <ref name="ol"/>
+          <ref name="t"/>
+          <ref name="ul"/>
+        </choice>
       </oneOrMore>
     </element>
   </define>
@@ -1056,10 +1060,10 @@
         <ref name="iref"/>
       </zeroOrMore>
       <optional>
-    <ref name="thead"/>
+        <ref name="thead"/>
       </optional>
       <oneOrMore>
-    <ref name="tbody"/>
+        <ref name="tbody"/>
       </oneOrMore>
       <optional>
         <ref name="tfoot"/>

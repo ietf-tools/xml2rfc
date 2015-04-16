@@ -383,26 +383,19 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <t anchor="element.abstract.contents"><!--AG-->
       Content model:
     </t>
-   <t><!--AG-->
-    One or more sequences of:
-    <list style="numbers">
-        
+   <t><!--AG-->In any order, but at least one of: <list style="symbols">
          <t><!--AG-->
             <iref item="Elements" subitem="dl"/>
-            <iref item="dl element" subitem="inside abstract"/>One &lt;<xref target="element.dl" format="none">dl</xref>&gt; element</t>
-        
+            <iref item="dl element" subitem="inside abstract"/>&lt;<xref target="element.dl" format="none">dl</xref>&gt; elements (<xref target="element.dl"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="ol"/>
-            <iref item="ol element" subitem="inside abstract"/>One &lt;<xref target="element.ol" format="none">ol</xref>&gt; element</t>
-        
+            <iref item="ol element" subitem="inside abstract"/>&lt;<xref target="element.ol" format="none">ol</xref>&gt; elements (<xref target="element.ol"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="t"/>
-            <iref item="t element" subitem="inside abstract"/>One &lt;<xref target="element.t" format="none">t</xref>&gt; element</t>
-        
+            <iref item="t element" subitem="inside abstract"/>&lt;<xref target="element.t" format="none">t</xref>&gt; elements (<xref target="element.t"/>)</t>
          <t><!--AG-->
             <iref item="Elements" subitem="ul"/>
-            <iref item="ul element" subitem="inside abstract"/>One &lt;<xref target="element.ul" format="none">ul</xref>&gt; element</t>
-      
+            <iref item="ul element" subitem="inside abstract"/>&lt;<xref target="element.ul" format="none">ul</xref>&gt; elements (<xref target="element.ul"/>)</t>
       </list>
    </t>
 
@@ -2381,26 +2374,19 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          <t><!--AG-->
             <iref item="Elements" subitem="name"/>
             <iref item="name element" subitem="inside note"/>One &lt;<xref target="element.name" format="none">name</xref>&gt; element (<xref target="element.name"/>)</t>
-         <t><!--AG-->
-    One or more sequences of:
-    <list style="numbers">
-        
+         <t><!--AG-->In any order, but at least one of: <list style="symbols">
                <t><!--AG-->
                   <iref item="Elements" subitem="dl"/>
-                  <iref item="dl element" subitem="inside note"/>One &lt;<xref target="element.dl" format="none">dl</xref>&gt; element</t>
-        
+                  <iref item="dl element" subitem="inside note"/>&lt;<xref target="element.dl" format="none">dl</xref>&gt; elements (<xref target="element.dl"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="ol"/>
-                  <iref item="ol element" subitem="inside note"/>One &lt;<xref target="element.ol" format="none">ol</xref>&gt; element</t>
-        
+                  <iref item="ol element" subitem="inside note"/>&lt;<xref target="element.ol" format="none">ol</xref>&gt; elements (<xref target="element.ol"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="t"/>
-                  <iref item="t element" subitem="inside note"/>One &lt;<xref target="element.t" format="none">t</xref>&gt; element</t>
-        
+                  <iref item="t element" subitem="inside note"/>&lt;<xref target="element.t" format="none">t</xref>&gt; elements (<xref target="element.t"/>)</t>
                <t><!--AG-->
                   <iref item="Elements" subitem="ul"/>
-                  <iref item="ul element" subitem="inside note"/>One &lt;<xref target="element.ul" format="none">ul</xref>&gt; element</t>
-      
+                  <iref item="ul element" subitem="inside note"/>&lt;<xref target="element.ul" format="none">ul</xref>&gt; elements (<xref target="element.ul"/>)</t>
             </list>
          </t>
       </list>
@@ -4014,12 +4000,12 @@ Using CDATA:
             <iref item="Elements" subitem="iref"/>
             <iref item="iref element" subitem="inside table"/>Optional &lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
       
-    
+        
          <t><!--AG-->
             <iref item="Elements" subitem="thead"/>
             <iref item="thead element" subitem="inside table"/>One optional &lt;<xref target="element.thead" format="none">thead</xref>&gt; element (<xref target="element.thead"/>)</t>
       
-    
+        
          <t><!--AG-->
             <iref item="Elements" subitem="tbody"/>
             <iref item="tbody element" subitem="inside table"/>One or more &lt;<xref target="element.tbody" format="none">tbody</xref>&gt; elements (<xref target="element.tbody"/>)</t>
@@ -6475,7 +6461,7 @@ keyword = element keyword { text }
 abstract =
   element abstract {
     attribute pn { text }?,
-    (dl, ol, t, ul)+
+    (dl | ol | t | ul)+
   }
 
 note =
@@ -6485,7 +6471,7 @@ note =
     attribute pn { text }?,
     [ a:defaultValue = "no" ]
     attribute removeInRFC { "true" | "false" }?,
-    (dl, ol, t, ul)+
+    (dl | ol | t | ul)+
   }
 
 boilerplate = element boilerplate { section+ }
@@ -7219,7 +7205,7 @@ to the v3 schema.</t>
 + abstract =
 +   element abstract {
 +     attribute pn { text }?,
-+     (dl, ol, t, ul)+
++     (dl | ol | t | ul)+
 +   }
   note =
     element note {
@@ -7230,7 +7216,7 @@ to the v3 schema.</t>
 +     attribute pn { text }?,
 +     [ a:defaultValue = "no" ]
 +     attribute removeInRFC { "true" | "false" }?,
-+     (dl, ol, t, ul)+
++     (dl | ol | t | ul)+
     }
 + boilerplate = element boilerplate { section+ }
   middle = element middle { section+ }

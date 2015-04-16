@@ -542,15 +542,15 @@ Internet-Draft                  XML2RFCv3                     April 2015
 
    Content model:
 
-   One or more sequences of:
+   In any order, but at least one of:
 
-   1.  One <dl> element
+   o  <dl> elements (Section 2.20)
 
-   2.  One <ol> element
+   o  <ol> elements (Section 2.34)
 
-   3.  One <t> element
+   o  <t> elements (Section 2.52)
 
-   4.  One <ul> element
+   o  <ul> elements (Section 2.62)
 
 
 
@@ -1993,15 +1993,15 @@ Internet-Draft                  XML2RFCv3                     April 2015
 
    1.  One <name> element (Section 2.32)
 
-   2.  One or more sequences of:
+   2.  In any order, but at least one of:
 
-       1.  One <dl> element
+       *  <dl> elements (Section 2.20)
 
-       2.  One <ol> element
+       *  <ol> elements (Section 2.34)
 
-       3.  One <t> element
+       *  <t> elements (Section 2.52)
 
-       4.  One <ul> element
+       *  <ul> elements (Section 2.62)
 
 2.33.1.  'pn' attribute
 
@@ -5221,7 +5221,7 @@ Internet-Draft                  XML2RFCv3                     April 2015
    abstract =
      element abstract {
        attribute pn { text }?,
-       (dl, ol, t, ul)+
+       (dl | ol | t | ul)+
      }
 
    note =
@@ -5231,7 +5231,7 @@ Internet-Draft                  XML2RFCv3                     April 2015
        attribute pn { text }?,
        [ a:defaultValue = "no" ]
        attribute removeInRFC { "true" | "false" }?,
-       (dl, ol, t, ul)+
+       (dl | ol | t | ul)+
      }
 
    boilerplate = element boilerplate { section+ }
@@ -6080,7 +6080,7 @@ Internet-Draft                  XML2RFCv3                     April 2015
    + abstract =
    +   element abstract {
    +     attribute pn { text }?,
-   +     (dl, ol, t, ul)+
+   +     (dl | ol | t | ul)+
    +   }
      note =
        element note {
@@ -6091,7 +6091,7 @@ Internet-Draft                  XML2RFCv3                     April 2015
    +     attribute pn { text }?,
    +     [ a:defaultValue = "no" ]
    +     attribute removeInRFC { "true" | "false" }?,
-   +     (dl, ol, t, ul)+
+   +     (dl | ol | t | ul)+
        }
    + boilerplate = element boilerplate { section+ }
      middle = element middle { section+ }
