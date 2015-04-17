@@ -17,8 +17,6 @@ Processors ignore case in attribute values that are important to it, such as for
 
 When Julian finishes his review of references in v2, include all that here.
 
-Remove "complex tables" from <artwork>
-
 Think about all the "processor" wording, whether it should be here, and so on.
 
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
@@ -561,16 +559,9 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
    <iref item="artwork element" primary="true"/>
    <t>
       This element allows the inclusion of "artwork" into the document.
-   </t>
-   <t>
       &lt;artwork&gt; provides
       full control of horizontal whitespace and line breaks, and thus is
-      used for a variety of things, such as:
-      <list style="symbols">
-         <t>diagrams ("line art"),</t>
-         <t>complex tables, or</t>
-         <t>protocol unit diagrams.</t>
-      </list>
+      used for a variety of things, such as diagrams ("line art") and protocol unit diagrams.
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
@@ -652,10 +643,12 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       <iref item="artwork element" subitem="alt attribute"/>
       <iref item="alt attribute" subitem="in artwork element"/>
       <t>
-            Alternative text description of the artwork (which is more than just a summary or caption). This is primarily
-            used with artwork that is text-based. When the art comes from the "src" attribute,
+            Alternative text description of the artwork (which is more than just a summary or caption).
+            When the art comes from the "src" attribute,
             and the format of that artwork supports alternate text,
-            the alternative text comes from the text of the artwork itself.
+            the alternative text comes from the text of the artwork itself, not from this attribute.
+            The contents of this attribute are important to readers who are visually impaired, as well as
+            those reading on devices that cannot show the artwork well, or at all.
          </t>
    </section>
 
@@ -689,8 +682,6 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       <iref item="name attribute" subitem="in artwork element"/>
       <t>
             A filename suitable for the contents (such as for extraction to a local file).
-         </t>
-      <t>
             This attribute can
             be helpful for other kinds of tools (such as automated syntax checkers
             which work by extracting the artwork).
@@ -721,9 +712,10 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       <iref item="src attribute" subitem="in artwork element"/>
       <t>
          The URI reference of a graphics file (<xref target="RFC3986"/>).
-      </t>
-      <t>
-         Note that this can be a "data" URI (<xref target="RFC2397"/>).
+         This can be a "data" URI (<xref target="RFC2397"/>) that contains the contents of the graphics file.
+         Note that the inclusion of art with the "src" attribute depends on the capabilities of the processor
+         reading the XML document. Processors need to be able to handle the file: URI, and should
+         be able to handle http: and https: URIs as well.
       </t>
    </section>
 

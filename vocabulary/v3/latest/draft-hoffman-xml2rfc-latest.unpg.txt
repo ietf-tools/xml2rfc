@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                             April 16, 2015
+Obsoletes: 2629 (if approved)                             April 17, 2015
 Intended status: Informational
-Expires: October 18, 2015
+Expires: October 19, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 18, 2015.
+   This Internet-Draft will expire on October 19, 2015.
 
 Copyright Notice
 
@@ -542,15 +542,9 @@ Table of Contents
 2.5.  <artwork>
 
    This element allows the inclusion of "artwork" into the document.
-
    <artwork> provides full control of horizontal whitespace and line
-   breaks, and thus is used for a variety of things, such as:
-
-   o  diagrams ("line art"),
-
-   o  complex tables, or
-
-   o  protocol unit diagrams.
+   breaks, and thus is used for a variety of things, such as diagrams
+   ("line art") and protocol unit diagrams.
 
    Alternatively, the "src" attribute allows referencing an external
    graphics file, such as a bitmap or a vector drawing in SVG, using a
@@ -624,10 +618,12 @@ Table of Contents
 2.5.2.  'alt' attribute
 
    Alternative text description of the artwork (which is more than just
-   a summary or caption).  This is primarily used with artwork that is
-   text-based.  When the art comes from the "src" attribute, and the
-   format of that artwork supports alternate text, the alternative text
-   comes from the text of the artwork itself.
+   a summary or caption).  When the art comes from the "src" attribute,
+   and the format of that artwork supports alternate text, the
+   alternative text comes from the text of the artwork itself, not from
+   this attribute.  The contents of this attribute are important to
+   readers who are visually impaired, as well as those reading on
+   devices that cannot show the artwork well, or at all.
 
 2.5.3.  'anchor' attribute
 
@@ -640,15 +636,13 @@ Table of Contents
 2.5.5.  'name' attribute
 
    A filename suitable for the contents (such as for extraction to a
-   local file).
-
-   This attribute can be helpful for other kinds of tools (such as
-   automated syntax checkers which work by extracting the artwork).
-   Note that the "name" attribute does not need to be unique for artwork
-   elements in a document.  If multiple artwork elements have the same
-   name attribute, a processor might assume that the elements are all
-   fragments of a single file, and the processor can collect those
-   fragments for later processing.
+   local file).  This attribute can be helpful for other kinds of tools
+   (such as automated syntax checkers which work by extracting the
+   artwork).  Note that the "name" attribute does not need to be unique
+   for artwork elements in a document.  If multiple artwork elements
+   have the same name attribute, a processor might assume that the
+   elements are all fragments of a single file, and the processor can
+   collect those fragments for later processing.
 
 2.5.6.  'pn' attribute
 
@@ -658,9 +652,12 @@ Table of Contents
 
 2.5.7.  'src' attribute
 
-   The URI reference of a graphics file ([RFC3986]).
-
-   Note that this can be a "data" URI ([RFC2397]).
+   The URI reference of a graphics file ([RFC3986]).  This can be a
+   "data" URI ([RFC2397]) that contains the contents of the graphics
+   file.  Note that the inclusion of art with the "src" attribute
+   depends on the capabilities of the processor reading the XML
+   document.  Processors need to be able to handle the file: URI, and
+   should be able to handle http: and https: URIs as well.
 
 2.5.8.  'type' attribute
 
