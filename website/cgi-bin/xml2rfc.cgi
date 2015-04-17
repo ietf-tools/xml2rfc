@@ -264,7 +264,7 @@ given ($mode) {
     when("htmlrfcmarkup") {
 	my $TMP1 = callXml2rfc("txt", "text");
 	my $TMP2 = getTempFileWithSuffix("html");
-	($ret, $out, $err) = runCommand("env - /home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup url=file://$TMP1 > $TMP2", $TMP1, $TMP2, "Generating $expandedModes{$mode}");
+	($ret, $out, $err) = runCommand("env - /home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup 'staticpath=http://tools.ietf.org/html/&url=file://$TMP1' > $TMP2", $TMP1, $TMP2, "Generating $expandedModes{$mode}");
 	userError("Unable to Validate File", $err) if ($err =~ /Error/);
 	open(TMP2, "<", $TMP2) or userError("Unable to open temp file", $!);
 	my $firstLine = <TMP2>;
