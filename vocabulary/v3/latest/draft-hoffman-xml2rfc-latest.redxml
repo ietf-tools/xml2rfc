@@ -568,7 +568,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       languages; in v3, this is now done with &lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt;.
    </t>
    <t>
-      There are at least four ways to include SVG in artwork in Internet Drafts:
+      There are at least five ways to include SVG in artwork in Internet Drafts:
       <list style="symbols">
          <t>Inline, by including all of the SVG in the content of the element, 
             such as: &lt;artwork type="svg"&gt;&lt;svg xmlns..."&gt;</t>
@@ -577,6 +577,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          <t>As a data: URI, such as: &lt;artwork type="svg"
             src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3..."&gt;</t>
          <t>As a URI to an external entity, such as: &lt;artwork type="svg" src="http://www.example.com/..."&gt;</t>
+         <t>As a local file, such as: &lt;artwork type="svg" src="diagram12.svg"&gt;</t>
       </list>
       The use of SVG in Internet Drafts and RFCs is covered in much more detail in
       <xref target="SVGforRFCs"/>.
@@ -699,11 +700,16 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="artwork element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in artwork element"/>
       <t>
-         The URI reference of a graphics file (<xref target="RFC3986"/>).
+         The URI reference of a graphics file (<xref target="RFC3986"/>), or the name of a file on the local disk.
          This can be a "data" URI (<xref target="RFC2397"/>) that contains the contents of the graphics file.
          Note that the inclusion of art with the "src" attribute depends on the capabilities of the processor
          reading the XML document. Processors need to be able to handle the file: URI, and should
          be able to handle http: and https: URIs as well.
+       </t>
+       <t>
+         If no URI scheme is given in the attribute, the attribute is considered to be a local file name.
+         Processors must be careful to not accept dangerous values for the filename, particularly those that contain
+         absolute references outside the current directory.
       </t>
    </section>
 
@@ -5350,6 +5356,11 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
   Trusting this kind of information without pre-processing is a known
   security risk; see Section 4.3 of <xref target="RFC6266"/> for
   more information.
+</t>
+<t>
+    The "src" attribute on the &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; element can be used to read files from
+    the local system. Processors must be careful to not accept dangerous values for the filename,
+    particularly those that contain absolute references outside the current directory.
 </t>
 <t>
   The "type" attribute of the &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; and &lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt; elements is meant

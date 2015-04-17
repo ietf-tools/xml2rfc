@@ -580,7 +580,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       languages; in v3, this is now done with &lt;<x:ref>sourcecode</x:ref>&gt;.
    </t>
    <t>
-      There are at least four ways to include SVG in artwork in Internet Drafts:
+      There are at least five ways to include SVG in artwork in Internet Drafts:
       <list style="symbols">
          <t>Inline, by including all of the SVG in the content of the element, 
             such as: &lt;artwork type="svg"&gt;&lt;svg xmlns..."&gt;</t>
@@ -589,6 +589,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          <t>As a data: URI, such as: &lt;artwork type="svg"
             src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3..."&gt;</t>
          <t>As a URI to an external entity, such as: &lt;artwork type="svg" src="http://www.example.com/..."&gt;</t>
+         <t>As a local file, such as: &lt;artwork type="svg" src="diagram12.svg"&gt;</t>
       </list>
       The use of SVG in Internet Drafts and RFCs is covered in much more detail in
       <xref target="SVGforRFCs"/>.
@@ -711,11 +712,16 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       <iref item="artwork element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in artwork element"/>
       <t>
-         The URI reference of a graphics file (<xref target="RFC3986"/>).
+         The URI reference of a graphics file (<xref target="RFC3986"/>), or the name of a file on the local disk.
          This can be a "data" URI (<xref target="RFC2397"/>) that contains the contents of the graphics file.
          Note that the inclusion of art with the "src" attribute depends on the capabilities of the processor
          reading the XML document. Processors need to be able to handle the file: URI, and should
          be able to handle http: and https: URIs as well.
+       </t>
+       <t>
+         If no URI scheme is given in the attribute, the attribute is considered to be a local file name.
+         Processors must be careful to not accept dangerous values for the filename, particularly those that contain
+         absolute references outside the current directory.
       </t>
    </section>
 
@@ -5493,6 +5499,11 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
   Trusting this kind of information without pre-processing is a known
   security risk; see <xref target="RFC6266" x:fmt="of" x:sec="4.3"/> for
   more information.
+</t>
+<t>
+    The "src" attribute on the &lt;<x:ref>artwork</x:ref>&gt; element can be used to read files from
+    the local system. Processors must be careful to not accept dangerous values for the filename,
+    particularly those that contain absolute references outside the current directory.
 </t>
 <t>
   The "type" attribute of the &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt; elements is meant

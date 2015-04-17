@@ -561,7 +561,7 @@ Table of Contents
    In [XML2RFCv2], the <artwork> element was also used for source code
    and formal languages; in v3, this is now done with <sourcecode>.
 
-   There are at least four ways to include SVG in artwork in Internet
+   There are at least five ways to include SVG in artwork in Internet
    Drafts:
 
    o  Inline, by including all of the SVG in the content of the element,
@@ -575,6 +575,8 @@ Table of Contents
 
    o  As a URI to an external entity, such as: <artwork type="svg"
       src="http://www.example.com/...">
+
+   o  As a local file, such as: <artwork type="svg" src="diagram12.svg">
 
    The use of SVG in Internet Drafts and RFCs is covered in much more
    detail in [SVGforRFCs].
@@ -652,12 +654,18 @@ Table of Contents
 
 2.5.7.  'src' attribute
 
-   The URI reference of a graphics file ([RFC3986]).  This can be a
-   "data" URI ([RFC2397]) that contains the contents of the graphics
-   file.  Note that the inclusion of art with the "src" attribute
-   depends on the capabilities of the processor reading the XML
-   document.  Processors need to be able to handle the file: URI, and
-   should be able to handle http: and https: URIs as well.
+   The URI reference of a graphics file ([RFC3986]), or the name of a
+   file on the local disk.  This can be a "data" URI ([RFC2397]) that
+   contains the contents of the graphics file.  Note that the inclusion
+   of art with the "src" attribute depends on the capabilities of the
+   processor reading the XML document.  Processors need to be able to
+   handle the file: URI, and should be able to handle http: and https:
+   URIs as well.
+
+   If no URI scheme is given in the attribute, the attribute is
+   considered to be a local file name.  Processors must be careful to
+   not accept dangerous values for the filename, particularly those that
+   contain absolute references outside the current directory.
 
 2.5.8.  'type' attribute
 
@@ -3611,6 +3619,11 @@ Table of Contents
    used to derive a filename for saving to a local file system.
    Trusting this kind of information without pre-processing is a known
    security risk; see Section 4.3 of [RFC6266] for more information.
+
+   The "src" attribute on the <artwork> element can be used to read
+   files from the local system.  Processors must be careful to not
+   accept dangerous values for the filename, particularly those that
+   contain absolute references outside the current directory.
 
    The "type" attribute of the <artwork> and <sourcecode> elements is
    meant to encourage processors to automatically extract known types of
