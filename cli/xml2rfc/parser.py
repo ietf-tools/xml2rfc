@@ -441,13 +441,13 @@ class XmlRfcParser:
 
         # Get hold of the rfc number (if any) in the rfc element, so we can
         # later resolve the "&rfc.number;" entity.
+        self.rfc_number = None
         try:
             for action, element in context:
                 if element.tag == "rfc":
                     self.rfc_number = element.attrib.get("number", None)
         except lxml.etree.XMLSyntaxError as e:
             xml2rfc.log.warn("Parsing Error: %s" % e)
-            self.rfc_number = None
 
         # now get a regular parser, and parse again, this time resolving entities
         parser = lxml.etree.XMLParser(dtd_validation=False,
