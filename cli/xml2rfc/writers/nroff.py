@@ -47,6 +47,8 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
         '.ad l',          # Left margin adjustment only
     ]
 
+    in_list = False
+
     def __init__(self, xmlrfc, width=72, quiet=False, verbose=False, date=datetime.date.today()):
         PaginatedTextRfcWriter.__init__(self, xmlrfc, width=width, \
                                         quiet=quiet, verbose=verbose, date=date)
@@ -145,6 +147,9 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
 
         begin = len(buffer)
         
+        leading_blankline = kwargs.get("leading_blankline", False)
+        if self.in_list and not leading_blankline and len(buffer) and not buffer[-1].startswith('.sp'):
+            self.write_nroff('.br')
         RawTextRfcWriter.write_text(self, *args, **kwargs)
 
         # Escape as needed
@@ -185,6 +190,12 @@ class NroffRfcWriter(PaginatedTextRfcWriter):
             # print the bullet
             buf.append(initial)
         """
+
+    def write_list(self, *args, **kwargs):
+        save_in_list = self.in_list
+        self.in_list = True
+        PaginatedTextRfcWriter.write_list(self, *args, **kwargs)
+        self.in_list = save_in_list
 
     def write_ref_element(self, *args, **kwargs):
         begin = len(self.buf)
