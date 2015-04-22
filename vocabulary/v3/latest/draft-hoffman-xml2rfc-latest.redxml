@@ -15,6 +15,8 @@
 
 Processors ignore case in attribute values that are important to it, such as for seriesInfo/@name
 
+Maybe remove xref/@relative, depending on list traffic.
+
 When Julian finishes his review of references in v2, include all that here.
 
 Think about all the "processor" wording, whether it should be here, and so on.
@@ -4610,9 +4612,10 @@ Using CDATA:
       fragment), and the nature of the referenced document part.
    </t>
    <t>
-      If the element is empty, a converter must invent text to show for the reference. If the element is filled in
-      and the format being converted to supports links, the text from the element is surrounded by a link to
-      the reference.
+      If the element is empty, a converter must invent text to show for the reference.
+      If the element contains text other than whitespace, the processor ignores the "format", "section", and "sectionFormat" attributes.
+      If the output format being converted to supports inks, the text from the element or the invented text is surrounded by a
+      link to the appropriate target.
    </t>
    <t>   
       Any element that allows the "anchor" attribute can be referenced; however,
@@ -4698,7 +4701,14 @@ Using CDATA:
         "title"
         <list style="empty">
             <t>
-            Deprecated.
+            If the target is an anchor for a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element, this inserts
+            the name of the reference, extracted from the &lt;<xref target="element.name" format="none">name</xref>&gt; child of the
+            &lt;<xref target="element.front" format="none">front</xref>&gt; child of the reference.
+            If the target is an anchor for a &lt;<xref target="element.referencegroup" format="none">referencegroup</xref>&gt; element, this inserts
+            the name of the "anchor" attribute of that element.
+            If the target is any other type of anchor, this inserts the name of the target,
+            extracted from the &lt;<xref target="element.name" format="none">name</xref>&gt; child element; if there is no such child
+            element, this attribute is ignored.
           </t>
          </list>
       </t>
@@ -4768,7 +4778,11 @@ would generate
       <iref item="xref element" subitem="sectionFormat attribute"/>
       <iref item="sectionFormat attribute" subitem="in xref element"/>
       <t>
-         The format that the section reference will be displayed in. The acceptable values are:
+         The format that the section reference will be displayed in.
+         If both a "format" and "sectionFormat" attribute are present, the "format" attribute is ignored.
+      </t>
+      <t>
+         The acceptable values are:
          <list style="symbols">
             <t>"of" (default)</t>
             <t>"comma"</t>
