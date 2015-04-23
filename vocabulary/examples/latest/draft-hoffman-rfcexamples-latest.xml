@@ -48,7 +48,7 @@ Have a section that is just examples of what is new in v3 (such as new table fea
 <abstract>
 <t>
 This document gives examples of use of the "XML2RFC" vocabulary. The examples cover both version 2
-and version 3. The purposes of this draft it to give authors of Internet Drafts examples of how to
+and version 3. The purposes of this draft is to give authors of Internet-Drafts examples of how to
 use the XML vocabularies, and to show how use of the version 2 vocabulary will change with version 3.
 </t>
 </abstract>
@@ -86,12 +86,12 @@ topic-specific examples (such as lists, tables, and so on).
 <section anchor="v2-basic" title="Example of a v2 Document">
 
 <t>The following is a v2 document that has all the elements that are needed for typical
-Internet Drafts.</t>
+Internet-Drafts.</t>
 
 <figure><artwork>&lt;?xml version="1.0" encoding="US-ASCII"?>
 &lt;!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 &lt;!ENTITY RFC2119 SYSTEM
-  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+  "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
 
 &lt;?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
@@ -102,7 +102,7 @@ Internet Drafts.</t>
   docName="draft-example-of-xml-00"
   ipr="trust200902"
   consensus="no"
-  submissionType="IAB"
+  submissionType="IETF"
   updates="1234, 5678"
   xml:lang="en"
 >
@@ -113,7 +113,7 @@ An Example of Using XML for an Internet Draft
 &lt;/title>
 
 &lt;author fullname="Chris Smith" initials="C." surname="Smith">
-&lt;organization abbev="EC">ExampleCorp&lt;/organization>
+&lt;organization abbrev="EC">ExampleCorp&lt;/organization>
 &lt;address>
 &lt;postal>
 &lt;street>123 Exemplar Way&lt;/street>
@@ -200,7 +200,7 @@ for RFC 6949 is done directly in the references section.&lt;/t>
 &lt;spanx style="strong">nice&lt;/spanx>,
 &lt;spanx style="verb">isn't it&lt;/spanx>?
 Unlike other web sites, it doesn't use
-&lt;vspace blanklines="2" />gratuitous vertical space.&lt;/t>
+&lt;vspace blankLines="2" />gratuitous vertical space.&lt;/t>
 
 &lt;/section>
 
@@ -261,7 +261,7 @@ with letters:
 
 &lt;t>And the always-interesting "format" for lists.
 
-&lt;list style="format --%D--">
+&lt;list style="format --%d--">
 
 &lt;t>An element that gets a funny bullet.&lt;/t>
 
@@ -436,7 +436,7 @@ octets="318703" type="PDF"/>
 <section anchor="v3-basic" title="Example of a v3 Document">
 
 <t>The following is a v3 document that has all the elements that are needed for typical
-Internet Drafts. It was converted from the example in <xref target="v2-basic"/>.</t>
+Internet-Drafts. It was converted from the example in <xref target="v2-basic"/>.</t>
 
 <figure><artwork>&lt;?xml version='1.0' encoding='US-ASCII'?>
 &lt;!DOCTYPE rfc SYSTEM 'rfc2629.dtd'>
@@ -444,7 +444,7 @@ Internet Drafts. It was converted from the example in <xref target="v2-basic"/>.
 
 
 
-&lt;rfc ipr='trust200902' consensus='no' submissionType='IAB' updates='1234, 5678' xml:lang='en' xmlns:xi="http://www.w3.org/2001/XInclude">
+&lt;rfc ipr='trust200902' consensus='false' submissionType='IETF' updates='1234, 5678' xml:lang='en' xmlns:xi="http://www.w3.org/2001/XInclude">
 
 &lt;front>&lt;seriesInfo name='Internet-Draft' value='draft-example-of-xml-00'/>&lt;seriesInfo name='std' value=''/>
 &lt;title abbrev='XML Example'>
@@ -452,7 +452,7 @@ An Example of Using XML for an Internet Draft
 &lt;/title>
 
 &lt;author fullname='Chris Smith' initials='C.' surname='Smith'>
-&lt;organization abbev='EC'>ExampleCorp&lt;/organization>
+&lt;organization abbrev='EC'>ExampleCorp&lt;/organization>
 &lt;address>
 &lt;postal>
 &lt;street>123 Exemplar Way&lt;/street>
@@ -548,63 +548,63 @@ gratuitous vertical space.&lt;/t>
 &lt;t>Bulleted lists are good for items that
 are not ordered:
 
-&lt;ul>
+&lt;/t>&lt;ul>
 
 &lt;li>This is the first item.&lt;/li>
 
 &lt;li>This is the second item. Here comes a sub-list:
 
-&lt;ul>
+&lt;/t>&lt;ul>
 
 &lt;li>This is the first sub-item.&lt;/li>
 
 &lt;li>&lt;t>This is the second sub-item&lt;/t>&lt;t>
 and some more detail on the second sub-item.&lt;/t>&lt;/li>
 
-&lt;/ul>&lt;/li>
+&lt;/ul>&lt;t>&lt;/li>
 
 &lt;li>This is the item after the sub-list.&lt;/li>
 
-&lt;/ul>&lt;/t>
+&lt;/ul>&lt;t>&lt;/t>
 
 &lt;t>Numbered lists are good for items that are ordered:
 
-&lt;ol style='1'>
+&lt;/t>&lt;ol style='1'>
 
 &lt;li>This is the first item.&lt;/li>
 
 &lt;li>This is the second item. Here comes a sub-list, but
 with letters:
 
-&lt;ol style='a'>
+&lt;/t>&lt;ol style='a'>
 
 &lt;li>This is the first sub-item.&lt;/li>
 
 &lt;li>This is the second sub-item&lt;/li>
 
-&lt;/ol>&lt;/li>
+&lt;/ol>&lt;t>&lt;/li>
 
 &lt;li>This is the item after the sub-list.&lt;/li>
 
-&lt;/ol>&lt;/t>
+&lt;/ol>&lt;t>&lt;/t>
 
 &lt;t>And an example of hanging indent.
 
-&lt;dl hanging='true'>
+&lt;/t>&lt;dl hanging='true'>
 
 &lt;dt>Trees&lt;/dt>&lt;dd>These are bigger plants&lt;/dd>
 
 &lt;dt>Lichen&lt;/dt>&lt;dd>These are smaller plants&lt;/dd>
 
-&lt;/dl>&lt;/t>
+&lt;/dl>&lt;t>&lt;/t>
 
 &lt;t>And the always-interesting "format" for lists.
 
-&lt;ol style='--%D--'>
+&lt;/t>&lt;ol style='--%d--'>
 
 &lt;li>An element that gets a funny bullet.&lt;/li>
 
-&lt;/ol>&lt;/t>
+&lt;/ol>&lt;t>&lt;/t>
 
 &lt;/section>
 
@@ -646,7 +646,7 @@ Remember to check whether that file still exists.&lt;/cref>&lt;/t>
 
 &lt;t>The following is a table example.&lt;/t>
 
-&lt;t keepwithnext='true'>These are sometimes called "inert" gasses.&lt;/t>&lt;table title='The Noble Gases'>
+&lt;t keepWithNext='true'>These are sometimes called "inert" gasses.&lt;/t>&lt;table title='The Noble Gases'>
   
   &lt;tr>&lt;th>Name&lt;/th>
   &lt;th align='center'>Symbol&lt;/th>
@@ -676,7 +676,7 @@ Remember to check whether that file still exists.&lt;/cref>&lt;/t>
   &lt;td align='center'>Rn&lt;/td>
   &lt;td align='center'>86&lt;/td>&lt;/tr>
 
-  &lt;/table>&lt;t keepwithprevious='true'>Source: Chemistry 101&lt;/t>
+  &lt;/table>&lt;t keepWithPrevious='true'>Source: Chemistry 101&lt;/t>
 
 
 &lt;t>The following is a right-aligned table with "full" (but not "all") lines
@@ -723,13 +723,13 @@ Elwyn Davies' templates.&lt;/t>
 
 &lt;back>
 
-&lt;references title='Normative References'>
+&lt;references>&lt;name>Normative References&lt;/name>
 
-&lt;xi:include href='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'/>
+&lt;xi:include href='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'/>
 
 &lt;/references>
 
-&lt;references title='Informative References'>
+&lt;references>&lt;name>Informative References&lt;/name>
 
 &lt;reference anchor='RFC6949'>
 &lt;front>
@@ -788,6 +788,8 @@ There are no IANA considerations for this document.
 
 <t>
 The ideas for the examples in this document come from many people over a long period of time.
+Special thanks go to the Alice Russo and other members of the RFC Design Team for suggestions
+and debugging help.
 </t>
 
 </section>
