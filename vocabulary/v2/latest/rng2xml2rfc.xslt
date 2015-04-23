@@ -226,17 +226,18 @@
       <t>
         <xsl:comment>AG</xsl:comment>
         <xsl:text>Allowed values: </xsl:text>
-        <list style="symbols">
-          <xsl:for-each select="rng:choice/rng:value">
-            <t>
-              <xsl:text>"</xsl:text>
-              <xsl:value-of select="."/>
-              <xsl:text>"</xsl:text>
-              <xsl:if test=". = ../../@a:defaultValue"> (default)</xsl:if>
-            </t>
-          </xsl:for-each>
-        </list>
       </t>
+      <ul>
+        <xsl:comment>AG</xsl:comment>
+        <xsl:for-each select="rng:choice/rng:value">
+          <li>
+            <xsl:text>"</xsl:text>
+            <xsl:value-of select="."/>
+            <xsl:text>"</xsl:text>
+            <xsl:if test=". = ../../@a:defaultValue"> (default)</xsl:if>
+          </li>
+        </xsl:for-each>
+      </ul>
     </xsl:if>    
   </section>
 </xsl:template>
