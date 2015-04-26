@@ -942,6 +942,7 @@
         <xsl:if test="not($hang='true')">
           <vspace blankLines="0"/>
         </xsl:if>
+        <xsl:apply-templates select="iref" mode="cleanup"/>
         <xsl:variable name="desc" select="following-sibling::dd[1]"/>
         <!-- TODO: check for more block-level elements -->
         <xsl:variable name="block-level-children" select="$desc/t | $desc/dl"/>
