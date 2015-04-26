@@ -135,10 +135,11 @@
     <t>
       <xsl:comment>AG</xsl:comment>
       <xsl:text>In this order:</xsl:text>
-      <list style="numbers">
-        <xsl:apply-templates select="$elementcontents"/>
-      </list>
     </t>
+    <ol>
+      <xsl:comment>AG</xsl:comment>
+      <xsl:apply-templates select="$elementcontents"/>
+    </ol>
   </xsl:otherwise>
 </xsl:choose>
 
@@ -173,10 +174,11 @@
   <t>
     <xsl:comment>AG</xsl:comment>
     One or more sequences of:
-    <list style="numbers">
-      <xsl:apply-templates mode="simple"/>
-    </list>
   </t>
+  <ol>
+    <xsl:comment>AG</xsl:comment>
+    <xsl:apply-templates mode="simple"/>
+  </ol>
 </xsl:template>
 
 <xsl:template match="rng:optional[rng:attribute]">
@@ -243,7 +245,7 @@
 </xsl:template>
 
 <xsl:template match="rng:ref">
-  <t>
+  <li>
     <xsl:comment>AG</xsl:comment>
     <xsl:variable name="elem" select="//rng:define[@name=current()/@name]/rng:element/@name"/>
     <iref item="Elements" subitem="{$elem}"/>
@@ -264,7 +266,7 @@
     <xref target="element.{$elem}"/>
     <xsl:if test="processing-instruction('deprecated')">; deprecated in this context</xsl:if>
     <xsl:text>)</xsl:text>
-  </t>
+  </li>
 </xsl:template>
 
 <xsl:template match="rng:ref" mode="simple">
@@ -281,10 +283,10 @@
 </xsl:template>
 
 <xsl:template match="rng:text">
-  <t>
+  <li>
     <xsl:comment>AG</xsl:comment>
     <xsl:text>Text</xsl:text>
-  </t>
+  </li>
 </xsl:template>
 
 <xsl:template match="rng:choice">
@@ -311,13 +313,13 @@
 </xsl:template>
 
 <xsl:template match="rng:zeroOrMore[rng:choice]">
-<t>
+<li>
   <xsl:comment>AG</xsl:comment>
-  <xsl:text>In any order: </xsl:text>
-  <list style="symbols">
+  <t>In any order:</t>
+  <ul>
     <xsl:apply-templates select="rng:choice/*"/>
-  </list>
-</t>
+  </ul>
+</li>
 </xsl:template>
 
 <xsl:template match="rng:oneOrMore[rng:choice]">

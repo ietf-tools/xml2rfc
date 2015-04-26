@@ -986,6 +986,22 @@
     <vspace blankLines="1"/>
   </xsl:if>
 </xsl:template>
+<xsl:template match="li/ul" mode="cleanup">
+  <list style="symbols">
+    <xsl:apply-templates mode="cleanup"/>
+  </list>
+  <xsl:if test="position()!=last()">
+    <vspace blankLines="1"/>
+  </xsl:if>
+</xsl:template>
+<xsl:template match="li/ol" mode="cleanup">
+  <list style="numbers">
+    <xsl:apply-templates mode="cleanup"/>
+  </list>
+  <xsl:if test="position()!=last()">
+    <vspace blankLines="1"/>
+  </xsl:if>
+</xsl:template>
 
 <!-- Ordered Lists -->
 <xsl:template match="ol" mode="cleanup">
