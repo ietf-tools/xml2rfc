@@ -3159,6 +3159,26 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       </t>
    </section>
 
+   <!--rfc/@indexInclude-->
+   <section anchor="element.rfc.attribute.indexInclude" toc="exclude">
+      <name>'indexInclude' attribute</name>
+      <iref item="Attributes" subitem="indexInclude"/>
+      <iref item="rfc element" subitem="indexInclude attribute"/>
+      <iref item="indexInclude attribute" subitem="in rfc element"/>
+      <t>
+         Specifies whether or not a processor will include an index in generated files.
+         If the souce file has no &lt;<x:ref>iref</x:ref>&gt; elements, an index is
+         never generated. This option is useful for generating documents where the
+         source document has &lt;<x:ref>iref</x:ref>&gt; elements but the author no longer
+         wants an index. 
+      </t>
+      <t><!--AG-->Allowed values: <list style="symbols">
+            <t>"true" (default)</t>
+            <t>"false"</t>
+         </list>
+      </t>
+   </section>
+
    <!--rfc/@ipr-->
    <section anchor="element.rfc.attribute.ipr" toc="exclude">
       <name>'ipr' attribute</name>
@@ -6511,6 +6531,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     attribute tocInclude { "true" | "false" }?,
     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
     attribute finalizedTime { text }?,
+    [ a:defaultValue = "true" ]
+    attribute indexInclude { "true" | "false" }?,
     link*,
     front,
     middle,
@@ -7266,6 +7288,8 @@ to the v3 schema.</t>
 +     attribute tocInclude { "true" | "false" }?,
 +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
 +     attribute finalizedTime { text }?,
++     [ a:defaultValue = "true" ]
++     attribute indexInclude { "true" | "false" }?,
 +     link*,
       front,
       middle,
