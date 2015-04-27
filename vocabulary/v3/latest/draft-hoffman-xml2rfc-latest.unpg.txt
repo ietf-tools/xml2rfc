@@ -2076,7 +2076,9 @@ Table of Contents
 
 2.44.2.  'consensus' attribute
 
-   Affects the generated boilerplate.
+   Affects the generated boilerplate.  Note that the values of "no" and
+   "yes" are deprecated and are replaced by "false" (the default) and
+   "true".
 
    See [RFC5741] for more information.
 
@@ -2086,7 +2088,7 @@ Table of Contents
 
    o  "yes"
 
-   o  "false"
+   o  "false" (default)
 
    o  "true"
 
@@ -4275,6 +4277,7 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "" ] attribute obsoletes { text }?,
        [ a:defaultValue = "" ] attribute updates { text }?,
        attribute category { text }?,
+       [ a:defaultValue = "false" ]
        attribute consensus { "no" | "yes" | "false" | "true" }?,
        attribute seriesNo { text }?,
        attribute ipr {
@@ -5025,6 +5028,7 @@ Appendix D.  Schema Differences from v2
    - "historic" }?,
    -     attribute consensus { "no" | "yes" }?,
    +     attribute category { text }?,
+   +     [ a:defaultValue = "false" ]
    +     attribute consensus { "no" | "yes" | "false" | "true" }?,
          attribute seriesNo { text }?,
          attribute ipr {

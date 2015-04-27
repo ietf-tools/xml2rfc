@@ -2471,7 +2471,9 @@ Internet-Draft                  XML2RFCv3                     April 2015
 
 2.44.2.  'consensus' attribute
 
-   Affects the generated boilerplate.
+   Affects the generated boilerplate.  Note that the values of "no" and
+   "yes" are deprecated and are replaced by "false" (the default) and
+   "true".
 
    See [RFC5741] for more information.
 
@@ -2481,7 +2483,7 @@ Internet-Draft                  XML2RFCv3                     April 2015
 
    o  "yes"
 
-   o  "false"
+   o  "false" (default)
 
    o  "true"
 
@@ -2511,8 +2513,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
 
    o  "full3667"
 
-   o  "noModification3667"
-
 
 
 
@@ -2520,6 +2520,8 @@ Hoffman                 Expires October 29, 2015               [Page 45]
 
 Internet-Draft                  XML2RFCv3                     April 2015
 
+
+   o  "noModification3667"
 
    o  "noDerivatives3667"
 
@@ -2565,8 +2567,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
 2.44.9.  'seriesNo' attribute
 
    Deprecated; instead, use the "value" attribute in <seriesInfo>.
-
-
 
 
 
@@ -5063,6 +5063,7 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "" ] attribute obsoletes { text }?,
        [ a:defaultValue = "" ] attribute updates { text }?,
        attribute category { text }?,
+       [ a:defaultValue = "false" ]
        attribute consensus { "no" | "yes" | "false" | "true" }?,
        attribute seriesNo { text }?,
        attribute ipr {
@@ -5088,7 +5089,6 @@ Appendix C.  Relax NG Schema
        attribute submissionType {
          "IETF" | "IAB" | "IRTF" | "independent"
        }?,
-       attribute docName { text }?,
 
 
 
@@ -5097,6 +5097,7 @@ Hoffman                 Expires October 29, 2015               [Page 91]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+       attribute docName { text }?,
        [ a:defaultValue = "false" ]
        attribute sortRefs { "true" | "false" }?,
        [ a:defaultValue = "true" ]
@@ -5144,7 +5145,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
        attribute asciiInitials { text }?,
        attribute surname { text }?,
        attribute asciiSurname { text }?,
-       attribute fullname { text }?,
 
 
 
@@ -5153,6 +5153,7 @@ Hoffman                 Expires October 29, 2015               [Page 92]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+       attribute fullname { text }?,
        attribute role { "editor" }?,
        attribute asciiFullname { text }?,
        organization?,
@@ -5200,7 +5201,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
 
    country = element country { text }
 
-   postalLine =
 
 
 
@@ -5209,6 +5209,7 @@ Hoffman                 Expires October 29, 2015               [Page 93]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   postalLine =
      element postalLine {
        attribute ascii { text }?,
        text
@@ -5256,7 +5257,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
        (dl | ol | t | ul)+
      }
 
-   boilerplate = element boilerplate { section+ }
 
 
 
@@ -5264,6 +5264,8 @@ Hoffman                 Expires October 29, 2015               [Page 94]
 
 Internet-Draft                  XML2RFCv3                     April 2015
 
+
+   boilerplate = element boilerplate { section+ }
 
    middle = element middle { section+ }
 
@@ -5311,8 +5313,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
        attribute keepWithPrevious { "false" | "true" }?,
        (text
         | bcp14
-        | cref
-        | em
 
 
 
@@ -5321,6 +5321,8 @@ Hoffman                 Expires October 29, 2015               [Page 95]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+        | cref
+        | em
         | eref
         | iref
         | \list
@@ -5368,8 +5370,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
        t+
      }
 
-   ol =
-
 
 
 Hoffman                 Expires October 29, 2015               [Page 96]
@@ -5377,6 +5377,7 @@ Hoffman                 Expires October 29, 2015               [Page 96]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   ol =
      element ol {
        [ a:defaultValue = "1" ] attribute style { text }?,
        [ a:defaultValue = "1" ] attribute start { text }?,
@@ -5424,7 +5425,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
 
    dt =
      element dt {
-       attribute anchor { xsd:ID }?,
 
 
 
@@ -5433,6 +5433,7 @@ Hoffman                 Expires October 29, 2015               [Page 97]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+       attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        (text
         | bcp14
@@ -5480,7 +5481,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
      element eref {
        attribute target { text },
        text
-     }
 
 
 
@@ -5488,6 +5488,8 @@ Hoffman                 Expires October 29, 2015               [Page 98]
 
 Internet-Draft                  XML2RFCv3                     April 2015
 
+
+     }
 
    iref =
      element iref {
@@ -5535,8 +5537,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
         | iref
         | strong
         | sub
-        | sup
-        | tt
 
 
 
@@ -5545,6 +5545,8 @@ Hoffman                 Expires October 29, 2015               [Page 99]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+        | sup
+        | tt
         | xref)*
      }
 
@@ -5592,8 +5594,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
        postamble?
      }
 
-   table =
-
 
 
 Hoffman                 Expires October 29, 2015              [Page 100]
@@ -5601,6 +5601,7 @@ Hoffman                 Expires October 29, 2015              [Page 100]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   table =
      element table {
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
@@ -5648,7 +5649,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
        attribute * { text }*,
        anything
      }
-
 
 
 
@@ -5938,6 +5938,7 @@ Internet-Draft                  XML2RFCv3                     April 2015
 
 
    +     attribute category { text }?,
+   +     [ a:defaultValue = "false" ]
    +     attribute consensus { "no" | "yes" | "false" | "true" }?,
          attribute seriesNo { text }?,
          attribute ipr {
@@ -5984,7 +5985,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
    +     attribute rel { text }?
    +   }
      front =
-       element front {
 
 
 
@@ -5993,6 +5993,7 @@ Hoffman                 Expires October 29, 2015              [Page 107]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+       element front {
    -     title, author+, date, area*, workgroup*, keyword*, abstract?,
    - note*
    +     title,
@@ -6040,7 +6041,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
    +   element street {
    +     attribute ascii { text }?,
    +     text
-   +   }
 
 
 
@@ -6049,6 +6049,7 @@ Hoffman                 Expires October 29, 2015              [Page 108]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   +   }
    + city =
    +   element city {
    +     attribute ascii { text }?,
@@ -6096,7 +6097,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
        }
      area = element area { text }
      workgroup = element workgroup { text }
-     keyword = element keyword { text }
 
 
 
@@ -6105,6 +6105,7 @@ Hoffman                 Expires October 29, 2015              [Page 109]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+     keyword = element keyword { text }
    - abstract = element abstract { t+ }
    + abstract =
    +   element abstract {
@@ -6152,7 +6153,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
    +      | ul)*,
          section*
        }
-   + name =
 
 
 
@@ -6161,6 +6161,7 @@ Hoffman                 Expires October 29, 2015              [Page 110]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   + name =
    +   element name {
    +     attribute slugifiedName { text }?,
    +     (text | cref | eref | tt | xref)*
@@ -6208,7 +6209,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
    +     attribute quotedFrom { text }?,
    +     ((artwork | dl | figure | ol | sourcecode | t | ul)+
    +      | (text
-   +         | bcp14
 
 
 
@@ -6217,6 +6217,7 @@ Hoffman                 Expires October 29, 2015              [Page 111]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   +         | bcp14
    +         | cref
    +         | em
    +         | eref
@@ -6264,7 +6265,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
    +         | eref
    +         | iref
    +         | strong
-   +         | sub
 
 
 
@@ -6273,6 +6273,7 @@ Hoffman                 Expires October 29, 2015              [Page 112]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   +         | sub
    +         | sup
    +         | tt
    +         | xref)+)
@@ -6320,7 +6321,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
        element xref {
          attribute target { xsd:IDREF },
    -     [ a:defaultValue = "false" ] attribute pageno { "true" |
-   - "false" }?,
 
 
 
@@ -6329,6 +6329,7 @@ Hoffman                 Expires October 29, 2015              [Page 113]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   - "false" }?,
    +     [ a:defaultValue = "false" ]
    +     attribute pageno { "true" | "false" }?,
          [ a:defaultValue = "default" ]
@@ -6376,7 +6377,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
    +   }
    + strong =
    +   element strong {
-   +     (text | bcp14 | cref | em | eref | iref | sub | sup | tt |
 
 
 
@@ -6385,6 +6385,7 @@ Hoffman                 Expires October 29, 2015              [Page 114]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   +     (text | bcp14 | cref | em | eref | iref | sub | sup | tt |
    + xref)*
    +   }
    + em =
@@ -6432,7 +6433,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          [ a:defaultValue = "" ] attribute alt { text }?,
          [ a:defaultValue = "" ] attribute width { text }?,
          [ a:defaultValue = "" ] attribute height { text }?,
-   +     attribute pn { text }?,
 
 
 
@@ -6441,6 +6441,7 @@ Hoffman                 Expires October 29, 2015              [Page 115]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   +     attribute pn { text }?,
    +     name?,
          iref*,
          preamble?,
@@ -6488,7 +6489,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          [ a:defaultValue = "" ] attribute width { text }?,
          [ a:defaultValue = "" ] attribute height { text }?,
    -     text*
-   +     attribute anchor { xsd:ID }?,
 
 
 
@@ -6497,6 +6497,7 @@ Hoffman                 Expires October 29, 2015              [Page 116]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     (text* | svg)
    +   }
@@ -6544,7 +6545,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
    +         | em
    +         | eref
    +         | figure
-   +         | iref
 
 
 
@@ -6553,6 +6553,7 @@ Hoffman                 Expires October 29, 2015              [Page 117]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   +         | iref
    +         | ol
    +         | sourcecode
    +         | strong
@@ -6600,7 +6601,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
    +      | iref
    +      | spanx
    +      | strong
-   +      | sub
 
 
 
@@ -6609,6 +6609,7 @@ Hoffman                 Expires October 29, 2015              [Page 118]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   +      | sub
    +      | sup
    +      | tt
    +      | xref)*
@@ -6656,7 +6657,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
    + br = element br { empty }
    + back = element back { displayreference*, references*, section* }
    + displayreference =
-   +   element displayreference {
 
 
 
@@ -6665,6 +6665,7 @@ Hoffman                 Expires October 29, 2015              [Page 119]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   +   element displayreference {
    +     attribute target { xsd:IDREF },
    +     attribute to { text }
        }
@@ -6712,7 +6713,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          attribute octets { text }?,
          empty
        }
-     annotation =
 
 
 
@@ -6721,6 +6721,7 @@ Hoffman                 Expires October 29, 2015              [Page 120]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+     annotation =
    -   element annotation { (text | xref | eref | iref | cref |
    - spanx)* }
    +   element annotation {
@@ -6768,7 +6769,6 @@ Index
          in artwork element  14
          in figure element  30
       anchor attribute
-         in artwork element  14
 
 
 
@@ -6777,6 +6777,7 @@ Hoffman                 Expires October 29, 2015              [Page 121]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         in artwork element  14
          in aside element  16
          in blockquote element  20
          in cref element  22
@@ -6824,7 +6825,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          in email element  28
          in organization element  39
          in postalLine element  40
-         in refcontent element  41
 
 
 
@@ -6833,6 +6833,7 @@ Hoffman                 Expires October 29, 2015              [Page 122]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         in refcontent element  41
          in region element  44
          in street element  54
          in title element  64
@@ -6880,7 +6881,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          hanging  26
          hangText  58
          height  14, 30
-         href  35
 
 
 
@@ -6889,6 +6889,7 @@ Hoffman                 Expires October 29, 2015              [Page 123]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         href  35
          initials  17
          ipr  45
          iprExtract  46
@@ -6936,7 +6937,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          updates  48
          value  51
          width  15, 31, 77
-         xml:space  16, 75
 
 
 
@@ -6945,6 +6945,7 @@ Hoffman                 Expires October 29, 2015              [Page 124]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         xml:space  16, 75
          year  24
       author element  16, 91
          asciiFullname attribute  17
@@ -6992,7 +6993,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          in th element  63
          in tr element  65
       br element  20, 91
-         inside td  60
 
 
 
@@ -7001,6 +7001,7 @@ Hoffman                 Expires October 29, 2015              [Page 125]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         inside td  60
          inside th  62
 
    C
@@ -7048,7 +7049,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          inside ttcol  76
          source attribute  23
 
-   D
 
 
 
@@ -7057,6 +7057,7 @@ Hoffman                 Expires October 29, 2015              [Page 126]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+   D
       date element  23, 91
          day attribute  23
          inside front  31
@@ -7104,7 +7105,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          bcp14  11, 18-19, 24, 27-28, 34, 41, 55-57, 60, 62, 65, 71,
             73-74
          blockquote  19, 48
-         boilerplate  20, 32
 
 
 
@@ -7113,6 +7113,7 @@ Hoffman                 Expires October 29, 2015              [Page 127]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         boilerplate  20, 32
          br  20, 60, 62
          c  71, 75
          city  21, 40
@@ -7160,7 +7161,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          sourcecode  19, 24, 30, 33, 49, 52, 61, 63
          spanx  12, 57, 71, 73-74
          street  40, 54
-         strong  12, 20, 22, 25, 27-28, 34, 41, 55-58, 61, 63, 65, 71,
 
 
 
@@ -7169,6 +7169,7 @@ Hoffman                 Expires October 29, 2015              [Page 128]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         strong  12, 20, 22, 25, 27-28, 34, 41, 55-58, 61, 63, 65, 71,
             73-74
          sub  12, 20, 22, 25, 27-28, 34, 41, 55, 58, 61, 63, 65, 71,
             73-74
@@ -7216,7 +7217,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          inside address  11
       empty attribute
          in ul element  66
-      eref element  29, 91
 
 
 
@@ -7225,6 +7225,7 @@ Hoffman                 Expires October 29, 2015              [Page 129]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+      eref element  29, 91
          inside annotation  11
          inside blockquote  19
          inside c  71
@@ -7272,7 +7273,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          in xref element  68
       format element  72, 91
          inside reference  42
-         octets attribute  72
 
 
 
@@ -7281,6 +7281,7 @@ Hoffman                 Expires October 29, 2015              [Page 130]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         octets attribute  72
          target attribute  72
          type attribute  72
       front element  31, 91
@@ -7328,7 +7329,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          inside blockquote  19
          inside c  71
          inside dd  25
-         inside dt  27
 
 
 
@@ -7337,6 +7337,7 @@ Hoffman                 Expires October 29, 2015              [Page 131]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         inside dt  27
          inside em  28
          inside figure  29
          inside li  34
@@ -7384,7 +7385,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          style attribute  73
 
    M
-      Media Type
 
 
 
@@ -7393,6 +7393,7 @@ Hoffman                 Expires October 29, 2015              [Page 132]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+      Media Type
          application/rfc+xml  78
       middle element  35, 91
          inside rfc  44
@@ -7440,7 +7441,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          inside th  63
          spacing attribute  38
          start attribute  38
-         style attribute  38
 
 
 
@@ -7449,6 +7449,7 @@ Hoffman                 Expires October 29, 2015              [Page 133]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         style attribute  38
       organization element  39, 91
          abbrev attribute  39
          ascii attribute  39
@@ -7496,7 +7497,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
    R
       refcontent element  41, 91
          ascii attribute  41
-         inside reference  42
 
 
 
@@ -7505,6 +7505,7 @@ Hoffman                 Expires October 29, 2015              [Page 134]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         inside reference  42
       reference element  42, 91
          anchor attribute  42
          inside referencegroup  43
@@ -7552,7 +7553,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          in th element  63
 
    S
-      section attribute
 
 
 
@@ -7561,6 +7561,7 @@ Hoffman                 Expires October 29, 2015              [Page 135]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+      section attribute
          in xref element  69
       section element  48, 91
          anchor attribute  49
@@ -7608,7 +7609,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          in ol element  38
          in ul element  66
       spanx element  74, 91
-         inside annotation  12
 
 
 
@@ -7617,6 +7617,7 @@ Hoffman                 Expires October 29, 2015              [Page 136]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         inside annotation  12
          inside c  71
          inside postamble  73
          inside preamble  74
@@ -7664,7 +7665,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          inside dt  27
          inside em  28
          inside li  34
-         inside postamble  73
 
 
 
@@ -7673,6 +7673,7 @@ Hoffman                 Expires October 29, 2015              [Page 137]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         inside postamble  73
          inside preamble  74
          inside refcontent  41
          inside strong  55
@@ -7720,7 +7721,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          inside blockquote  19
          inside dd  24
          inside li  33
-         inside list  72
 
 
 
@@ -7729,6 +7729,7 @@ Hoffman                 Expires October 29, 2015              [Page 138]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         inside list  72
          inside note  36
          inside section  49
          inside td  60
@@ -7776,7 +7777,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          in figure element  31
          in note element  37
          in references element  44
-         in section element  50
 
 
 
@@ -7785,6 +7785,7 @@ Hoffman                 Expires October 29, 2015              [Page 139]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         in section element  50
          in texttable element  76
       title element  64, 91
          abbrev attribute  64
@@ -7832,7 +7833,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          in sourcecode element  53
 
    U
-      ul element  66, 91
 
 
 
@@ -7841,6 +7841,7 @@ Hoffman                 Expires October 29, 2015              [Page 140]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+      ul element  66, 91
          empty attribute  66
          inside abstract  10
          inside aside  16
@@ -7888,7 +7889,6 @@ Internet-Draft                  XML2RFCv3                     April 2015
          inside li  34
          inside name  36
          inside postamble  74
-         inside preamble  74
 
 
 
@@ -7897,6 +7897,7 @@ Hoffman                 Expires October 29, 2015              [Page 141]
 Internet-Draft                  XML2RFCv3                     April 2015
 
 
+         inside preamble  74
          inside strong  55
          inside sub  56
          inside sup  57
@@ -7926,7 +7927,6 @@ Author's Address
    VPN Consortium
 
    EMail: paul.hoffman@vpnc.org
-
 
 
 

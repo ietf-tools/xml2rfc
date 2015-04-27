@@ -3120,15 +3120,16 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       <iref item="rfc element" subitem="consensus attribute"/>
       <iref item="consensus attribute" subitem="in rfc element"/>
       <t>
-            Affects the generated boilerplate.
-         </t>
+            Affects the generated boilerplate. Note that the values of "no" and "yes" are deprecated and are
+            replaced by "false" (the default) and "true".
+      </t>
       <t>
             See <xref target="RFC5741"/> for more information.
-         </t>
+      </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"no"</t>
             <t>"yes"</t>
-            <t>"false"</t>
+            <t>"false" (default)</t>
             <t>"true"</t>
          </list>
       </t>
@@ -6475,6 +6476,7 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     [ a:defaultValue = "" ] attribute obsoletes { text }?,
     [ a:defaultValue = "" ] attribute updates { text }?,
     attribute category { text }?,
+    [ a:defaultValue = "false" ]
     attribute consensus { "no" | "yes" | "false" | "true" }?,
     attribute seriesNo { text }?,
     attribute ipr {
@@ -7228,6 +7230,7 @@ to the v3 schema.</t>
 - "historic" }?,
 -     attribute consensus { "no" | "yes" }?,
 +     attribute category { text }?,
++     [ a:defaultValue = "false" ]
 +     attribute consensus { "no" | "yes" | "false" | "true" }?,
       attribute seriesNo { text }?,
       attribute ipr {
