@@ -39,11 +39,11 @@
       }?,
       attribute docName { text }?,
 -     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-+     [ a:defaultValue = "no" ]
++     [ a:defaultValue = "false" ]
 +     attribute sortRefs { "true" | "false" }?,
-+     [ a:defaultValue = "yes" ]
++     [ a:defaultValue = "true" ]
 +     attribute symRefs { "true" | "false" }?,
-+     [ a:defaultValue = "yes" ]
++     [ a:defaultValue = "true" ]
 +     attribute tocInclude { "true" | "false" }?,
 +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
 +     attribute finalizedTime { text }?,
@@ -168,7 +168,7 @@
 +     attribute title { text }?,
 +     name,
 +     attribute pn { text }?,
-+     [ a:defaultValue = "no" ]
++     [ a:defaultValue = "false" ]
 +     attribute removeInRFC { "true" | "false" }?,
 +     (dl | ol | t | ul)+
     }
@@ -179,12 +179,12 @@
       attribute anchor { xsd:ID }?,
 -     attribute title { text },
 +     attribute title { text }?,
-+     [ a:defaultValue = "yes" ]
++     [ a:defaultValue = "true" ]
 +     attribute numbered { "true" | "false" }?,
       [ a:defaultValue = "default" ]
       attribute toc { "include" | "exclude" | "default" }?,
 -     (t | figure | texttable | iref)*,
-+     [ a:defaultValue = "no" ]
++     [ a:defaultValue = "false" ]
 +     attribute removeInRFC { "true" | "false" }?,
 +     attribute pn { text }?,
 +     name?,

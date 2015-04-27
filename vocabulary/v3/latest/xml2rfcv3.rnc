@@ -34,11 +34,11 @@ rfc =
       "IETF" | "IAB" | "IRTF" | "independent"
     }?,
     attribute docName { text }?,
-    [ a:defaultValue = "no" ]
+    [ a:defaultValue = "false" ]
     attribute sortRefs { "true" | "false" }?,
-    [ a:defaultValue = "yes" ]
+    [ a:defaultValue = "true" ]
     attribute symRefs { "true" | "false" }?,
-    [ a:defaultValue = "yes" ]
+    [ a:defaultValue = "true" ]
     attribute tocInclude { "true" | "false" }?,
     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
     attribute finalizedTime { text }?,
@@ -149,7 +149,7 @@ note =
     attribute title { text }?,
     name,
     attribute pn { text }?,
-    [ a:defaultValue = "no" ]
+    [ a:defaultValue = "false" ]
     attribute removeInRFC { "true" | "false" }?,
     (dl | ol | t | ul)+
   }
@@ -159,11 +159,11 @@ section =
   element section {
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
-    [ a:defaultValue = "yes" ]
+    [ a:defaultValue = "true" ]
     attribute numbered { "true" | "false" }?,
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
-    [ a:defaultValue = "no" ]
+    [ a:defaultValue = "false" ]
     attribute removeInRFC { "true" | "false" }?,
     attribute pn { text }?,
     name?,

@@ -719,7 +719,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          reading the XML document. Processors need to be able to handle the file: URI, and should
          be able to handle http: and https: URIs as well.
        </t>
-       <t>
+      <t>
          If no URI scheme is given in the attribute, the attribute is considered to be a local file name.
          Processors must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
@@ -2493,7 +2493,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"true"</t>
-            <t>"false"</t>
+            <t>"false" (default)</t>
          </list>
       </t>
    </section>
@@ -3253,7 +3253,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"true"</t>
-            <t>"false"</t>
+            <t>"false" (default)</t>
          </list>
       </t>
    </section>
@@ -3290,7 +3290,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          value for this is "no", the references come out as numbers (such as "[3]").
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"true"</t>
+            <t>"true" (default)</t>
             <t>"false"</t>
          </list>
       </t>
@@ -3317,7 +3317,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          Specifies whether or not a processor will include a table of contents in generated files.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"true"</t>
+            <t>"true" (default)</t>
             <t>"false"</t>
          </list>
       </t>
@@ -3437,7 +3437,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          top-level section.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"true"</t>
+            <t>"true" (default)</t>
             <t>"false"</t>
          </list>
       </t>
@@ -3468,7 +3468,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"true"</t>
-            <t>"false"</t>
+            <t>"false" (default)</t>
          </list>
       </t>
    </section>
@@ -4757,11 +4757,11 @@ Using CDATA:
       If the output format being converted to supports links, the text from the element or the
       invented text is surrounded by a link to the appropriate target.
       <list style="symbols">
-        <t>
+         <t>
           If the &lt;xref&gt; element contains text other than whitespace, the processor ignores all
           attributes other than "target", and uses the contained text in the output.
         </t>
-        <t>
+         <t>
           If the &lt;xref&gt; element is empty or only whitespace, the converter must invent text to
           show for the reference in the converted document. If the target is an anchor for a
           &lt;<x:ref>reference</x:ref>&gt; element, the invented text comes from the child elements
@@ -4769,7 +4769,7 @@ Using CDATA:
           the target element in the current document. The attributes of the
           &lt;<x:ref>xref</x:ref>&gt; element may affect the invented text in these cases.
         </t>
-        <t>
+         <t>
           If the processor cannot invent reasonable text, the processor uses the anchor name as the
           invented text.
         </t>
@@ -6501,11 +6501,11 @@ namespace ns1 = "http://www.w3.org/2000/svg"
       "IETF" | "IAB" | "IRTF" | "independent"
     }?,
     attribute docName { text }?,
-    [ a:defaultValue = "no" ]
+    [ a:defaultValue = "false" ]
     attribute sortRefs { "true" | "false" }?,
-    [ a:defaultValue = "yes" ]
+    [ a:defaultValue = "true" ]
     attribute symRefs { "true" | "false" }?,
-    [ a:defaultValue = "yes" ]
+    [ a:defaultValue = "true" ]
     attribute tocInclude { "true" | "false" }?,
     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
     attribute finalizedTime { text }?,
@@ -6639,7 +6639,7 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     attribute title { text }?,
     name,
     attribute pn { text }?,
-    [ a:defaultValue = "no" ]
+    [ a:defaultValue = "false" ]
     attribute removeInRFC { "true" | "false" }?,
     (dl | ol | t | ul)+
   }
@@ -6652,11 +6652,11 @@ namespace ns1 = "http://www.w3.org/2000/svg"
   element section {
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
-    [ a:defaultValue = "yes" ]
+    [ a:defaultValue = "true" ]
     attribute numbered { "true" | "false" }?,
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
-    [ a:defaultValue = "no" ]
+    [ a:defaultValue = "false" ]
     attribute removeInRFC { "true" | "false" }?,
     attribute pn { text }?,
     name?,
@@ -7255,11 +7255,11 @@ to the v3 schema.</t>
       }?,
       attribute docName { text }?,
 -     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-+     [ a:defaultValue = "no" ]
++     [ a:defaultValue = "false" ]
 +     attribute sortRefs { "true" | "false" }?,
-+     [ a:defaultValue = "yes" ]
++     [ a:defaultValue = "true" ]
 +     attribute symRefs { "true" | "false" }?,
-+     [ a:defaultValue = "yes" ]
++     [ a:defaultValue = "true" ]
 +     attribute tocInclude { "true" | "false" }?,
 +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
 +     attribute finalizedTime { text }?,
@@ -7384,7 +7384,7 @@ to the v3 schema.</t>
 +     attribute title { text }?,
 +     name,
 +     attribute pn { text }?,
-+     [ a:defaultValue = "no" ]
++     [ a:defaultValue = "false" ]
 +     attribute removeInRFC { "true" | "false" }?,
 +     (dl | ol | t | ul)+
     }
@@ -7395,12 +7395,12 @@ to the v3 schema.</t>
       attribute anchor { xsd:ID }?,
 -     attribute title { text },
 +     attribute title { text }?,
-+     [ a:defaultValue = "yes" ]
++     [ a:defaultValue = "true" ]
 +     attribute numbered { "true" | "false" }?,
       [ a:defaultValue = "default" ]
       attribute toc { "include" | "exclude" | "default" }?,
 -     (t | figure | texttable | iref)*,
-+     [ a:defaultValue = "no" ]
++     [ a:defaultValue = "false" ]
 +     attribute removeInRFC { "true" | "false" }?,
 +     attribute pn { text }?,
 +     name?,

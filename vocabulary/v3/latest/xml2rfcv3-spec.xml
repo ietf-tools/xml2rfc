@@ -188,16 +188,9 @@
    <iref item="artwork element" primary="true"/>
    <t>
       This element allows the inclusion of "artwork" into the document.
-   </t>
-   <t>
       &lt;artwork&gt; provides
       full control of horizontal whitespace and line breaks, and thus is
-      used for a variety of things, such as:
-      <list style="symbols">
-         <t>diagrams ("line art"),</t>
-         <t>complex tables, or</t>
-         <t>protocol unit diagrams.</t>
-      </list>
+      used for a variety of things, such as diagrams ("line art") and protocol unit diagrams.
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
@@ -216,7 +209,7 @@
       languages; in v3, this is now done with &lt;<x:ref>sourcecode</x:ref>&gt;.
    </t>
    <t>
-      There are at least four ways to include SVG in artwork in Internet Drafts:
+      There are at least five ways to include SVG in artwork in Internet Drafts:
       <list style="symbols">
          <t>Inline, by including all of the SVG in the content of the element, 
             such as: &lt;artwork type="svg"&gt;&lt;svg xmlns..."&gt;</t>
@@ -225,6 +218,7 @@
          <t>As a data: URI, such as: &lt;artwork type="svg"
             src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3..."&gt;</t>
          <t>As a URI to an external entity, such as: &lt;artwork type="svg" src="http://www.example.com/..."&gt;</t>
+         <t>As a local file, such as: &lt;artwork type="svg" src="diagram12.svg"&gt;</t>
       </list>
       The use of SVG in Internet Drafts and RFCs is covered in much more detail in
       <xref target="SVGforRFCs"/>.
@@ -279,10 +273,12 @@
       <iref item="artwork element" subitem="alt attribute"/>
       <iref item="alt attribute" subitem="in artwork element"/>
       <t>
-            Alternative text description of the artwork (which is more than just a summary or caption). This is primarily
-            used with artwork that is text-based. When the art comes from the "src" attribute,
+            Alternative text description of the artwork (which is more than just a summary or caption).
+            When the art comes from the "src" attribute,
             and the format of that artwork supports alternate text,
-            the alternative text comes from the text of the artwork itself.
+            the alternative text comes from the text of the artwork itself, not from this attribute.
+            The contents of this attribute are important to readers who are visually impaired, as well as
+            those reading on devices that cannot show the artwork well, or at all.
          </t>
    </section>
 
@@ -316,8 +312,6 @@
       <iref item="name attribute" subitem="in artwork element"/>
       <t>
             A filename suitable for the contents (such as for extraction to a local file).
-         </t>
-      <t>
             This attribute can
             be helpful for other kinds of tools (such as automated syntax checkers
             which work by extracting the artwork).
@@ -347,10 +341,16 @@
       <iref item="artwork element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in artwork element"/>
       <t>
-         The URI reference of a graphics file (<xref target="RFC3986"/>).
-      </t>
+         The URI reference of a graphics file (<xref target="RFC3986"/>), or the name of a file on the local disk.
+         This can be a "data" URI (<xref target="RFC2397"/>) that contains the contents of the graphics file.
+         Note that the inclusion of art with the "src" attribute depends on the capabilities of the processor
+         reading the XML document. Processors need to be able to handle the file: URI, and should
+         be able to handle http: and https: URIs as well.
+       </t>
       <t>
-         Note that this can be a "data" URI (<xref target="RFC2397"/>).
+         If no URI scheme is given in the attribute, the attribute is considered to be a local file name.
+         Processors must be careful to not accept dangerous values for the filename, particularly those that contain
+         absolute references outside the current directory.
       </t>
    </section>
 
@@ -1741,6 +1741,10 @@
       considered to be relevant for that index entry. In some formats, index
       entries of this type might be displayed as range.
    </t>
+   <t>
+      When a processor is creating index content, it collects the items in a case-senstive fashion
+      for both the item and subitem level.
+   </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.iref.contents"><!--AG-->
       <xref format="none" target="grammar.iref">Content model</xref>: this element does not have any contents.</t>
@@ -2117,7 +2121,7 @@
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"true"</t>
-            <t>"false"</t>
+            <t>"false" (default)</t>
          </list>
       </t>
    </section>
@@ -2877,7 +2881,7 @@
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"true"</t>
-            <t>"false"</t>
+            <t>"false" (default)</t>
          </list>
       </t>
    </section>
@@ -2914,7 +2918,7 @@
          value for this is "no", the references come out as numbers (such as "[3]").
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"true"</t>
+            <t>"true" (default)</t>
             <t>"false"</t>
          </list>
       </t>
@@ -2941,7 +2945,7 @@
          Specifies whether or not a processor will include a table of contents in generated files.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"true"</t>
+            <t>"true" (default)</t>
             <t>"false"</t>
          </list>
       </t>
@@ -3061,7 +3065,7 @@
          top-level section.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"true"</t>
+            <t>"true" (default)</t>
             <t>"false"</t>
          </list>
       </t>
@@ -3092,7 +3096,7 @@
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"true"</t>
-            <t>"false"</t>
+            <t>"false" (default)</t>
          </list>
       </t>
    </section>
@@ -4375,22 +4379,29 @@ Using CDATA:
       Inserts a reference to a different part of a document.
    </t>
    <t>
-      The generated text depends on whether the &lt;xref&gt; is empty
-      (in which case the processor will try to generate a meaningful text
-      fragment), and the nature of the referenced document part.
-   </t>
-   <t>
-      If the element is empty, a converter must invent text to show for the reference. If the element is filled in
-      and the format being converted to supports links, the text from the element is surrounded by a link to
-      the reference.
-   </t>
-   <t>   
-      Any element that allows the "anchor" attribute can be referenced; however,
-      there are restrictions with respect to the text content being generated.
-      For instance, a &lt;<x:ref>t</x:ref>&gt; can be a reference target, however, 
-      because paragraphs are not (visibly) numbered, the author will have to
-      make sure that the prose is sufficient for a reader to understand what
-      is being referred to.
+      The text that is generated by a processor depends on whether the &lt;xref&gt; element is
+      empty, the attributes of the &lt;xref&gt; element, and the nature of the referenced document
+      part.
+      If the output format being converted to supports links, the text from the element or the
+      invented text is surrounded by a link to the appropriate target.
+      <list style="symbols">
+         <t>
+          If the &lt;xref&gt; element contains text other than whitespace, the processor ignores all
+          attributes other than "target", and uses the contained text in the output.
+        </t>
+         <t>
+          If the &lt;xref&gt; element is empty or only whitespace, the converter must invent text to
+          show for the reference in the converted document. If the target is an anchor for a
+          &lt;<x:ref>reference</x:ref>&gt; element, the invented text comes from the child elements
+          in that &lt;<x:ref>reference</x:ref>&gt; element; otherwise, the invented text comes from
+          the target element in the current document. The attributes of the
+          &lt;<x:ref>xref</x:ref>&gt; element may affect the invented text in these cases.
+        </t>
+         <t>
+          If the processor cannot invent reasonable text, the processor uses the anchor name as the
+          invented text.
+        </t>
+      </list>
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.xref.contents"><!--AG-->
@@ -4459,8 +4470,7 @@ Using CDATA:
         "none"
         <list style="empty">
             <t>
-            There will be no auto-generated text. This is useful for creating
-            a link that will appear in the processed text.
+            Deprecated.
           </t>
          </list>
       </t>
@@ -4469,10 +4479,15 @@ Using CDATA:
         "title"
         <list style="empty">
             <t>
-            Inserts a title for the referenced element (usually obtained from
-            the referenced element's &lt;<x:ref>name</x:ref>&gt; child element.
-            If the target is a reference, then the &lt;<x:ref>title</x:ref>&gt; element
-            inside the &lt;<x:ref>front</x:ref>&gt; element is used.
+            If the target is a &lt;<x:ref>reference</x:ref>&gt; element, this inserts the name of
+            the reference, extracted from the &lt;<x:ref>name</x:ref>&gt; child of the
+            &lt;<x:ref>front</x:ref>&gt; child of the reference.
+            If the target element has a &lt;<x:ref>name</x:ref>&gt; child element, this inserts the
+            text content of the &lt;<x:ref>name</x:ref>&gt; concatenated with the text content of
+            each descendant node of &lt;<x:ref>name</x:ref>&gt; (that is, stripping out all of the
+            XML markup, leaving only the text).
+            If the target element does not contain a &lt;<x:ref>name</x:ref>&gt; child element, this
+            inserts the name of the "anchor" attribute of that element.
           </t>
          </list>
       </t>
@@ -4509,7 +4524,9 @@ Using CDATA:
       <iref item="relative attribute" subitem="in xref element"/>
       <t>
          Specifies a relative reference from the main target. Rendering relative references is based
-         on the format for the converted document.
+         on the format for the converted document. The value of this attribute is appended to the
+         end of the URL of the target item. This attribute can only be used with &lt;xref&gt;
+         elements where the target is an anchor for a &lt;<x:ref>reference</x:ref>&gt; element.
       </t>
    </section>
 
@@ -4542,7 +4559,11 @@ would generate
       <iref item="xref element" subitem="sectionFormat attribute"/>
       <iref item="sectionFormat attribute" subitem="in xref element"/>
       <t>
-         The format that the section reference will be displayed in. The acceptable values are:
+         The format that the section reference will be displayed in.
+         If both a "format" and "sectionFormat" attribute are present, the "format" attribute is ignored.
+      </t>
+      <t>
+         The acceptable values are:
          <list style="symbols">
             <t>"of" (default)</t>
             <t>"comma"</t>

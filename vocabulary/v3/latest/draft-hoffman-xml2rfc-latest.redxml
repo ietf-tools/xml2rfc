@@ -707,7 +707,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          reading the XML document. Processors need to be able to handle the file: URI, and should
          be able to handle http: and https: URIs as well.
        </t>
-       <t>
+      <t>
          If no URI scheme is given in the attribute, the attribute is considered to be a local file name.
          Processors must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
@@ -2054,6 +2054,10 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       considered to be relevant for that index entry. In some formats, index
       entries of this type might be displayed as range.
    </t>
+   <t>
+      When a processor is creating index content, it collects the items in a case-senstive fashion
+      for both the item and subitem level.
+   </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.table" format="none">table</xref>&gt; (<xref target="element.table"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.iref.contents"><!--AG-->
       Content model: this element does not have any contents.</t>
@@ -2416,7 +2420,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"true"</t>
-            <t>"false"</t>
+            <t>"false" (default)</t>
          </list>
       </t>
    </section>
@@ -3152,7 +3156,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"true"</t>
-            <t>"false"</t>
+            <t>"false" (default)</t>
          </list>
       </t>
    </section>
@@ -3189,7 +3193,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          value for this is "no", the references come out as numbers (such as "[3]").
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"true"</t>
+            <t>"true" (default)</t>
             <t>"false"</t>
          </list>
       </t>
@@ -3216,7 +3220,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          Specifies whether or not a processor will include a table of contents in generated files.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"true"</t>
+            <t>"true" (default)</t>
             <t>"false"</t>
          </list>
       </t>
@@ -3334,7 +3338,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          top-level section.
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
-            <t>"true"</t>
+            <t>"true" (default)</t>
             <t>"false"</t>
          </list>
       </t>
@@ -3365,7 +3369,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       </t>
       <t><!--AG-->Allowed values: <list style="symbols">
             <t>"true"</t>
-            <t>"false"</t>
+            <t>"false" (default)</t>
          </list>
       </t>
    </section>
@@ -4612,11 +4616,11 @@ Using CDATA:
       If the output format being converted to supports links, the text from the element or the
       invented text is surrounded by a link to the appropriate target.
       <list style="symbols">
-        <t>
+         <t>
           If the &lt;xref&gt; element contains text other than whitespace, the processor ignores all
           attributes other than "target", and uses the contained text in the output.
         </t>
-        <t>
+         <t>
           If the &lt;xref&gt; element is empty or only whitespace, the converter must invent text to
           show for the reference in the converted document. If the target is an anchor for a
           &lt;<xref target="element.reference" format="none">reference</xref>&gt; element, the invented text comes from the child elements
@@ -4624,7 +4628,7 @@ Using CDATA:
           the target element in the current document. The attributes of the
           &lt;<xref target="element.xref" format="none">xref</xref>&gt; element may affect the invented text in these cases.
         </t>
-        <t>
+         <t>
           If the processor cannot invent reasonable text, the processor uses the anchor name as the
           invented text.
         </t>
@@ -6354,11 +6358,11 @@ rfc =
       "IETF" | "IAB" | "IRTF" | "independent"
     }?,
     attribute docName { text }?,
-    [ a:defaultValue = "no" ]
+    [ a:defaultValue = "false" ]
     attribute sortRefs { "true" | "false" }?,
-    [ a:defaultValue = "yes" ]
+    [ a:defaultValue = "true" ]
     attribute symRefs { "true" | "false" }?,
-    [ a:defaultValue = "yes" ]
+    [ a:defaultValue = "true" ]
     attribute tocInclude { "true" | "false" }?,
     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
     attribute finalizedTime { text }?,
@@ -6492,7 +6496,7 @@ note =
     attribute title { text }?,
     name,
     attribute pn { text }?,
-    [ a:defaultValue = "no" ]
+    [ a:defaultValue = "false" ]
     attribute removeInRFC { "true" | "false" }?,
     (dl | ol | t | ul)+
   }
@@ -6505,11 +6509,11 @@ section =
   element section {
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
-    [ a:defaultValue = "yes" ]
+    [ a:defaultValue = "true" ]
     attribute numbered { "true" | "false" }?,
     [ a:defaultValue = "default" ]
     attribute toc { "include" | "exclude" | "default" }?,
-    [ a:defaultValue = "no" ]
+    [ a:defaultValue = "false" ]
     attribute removeInRFC { "true" | "false" }?,
     attribute pn { text }?,
     name?,
@@ -7108,11 +7112,11 @@ to the v3 schema.</t>
       }?,
       attribute docName { text }?,
 -     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-+     [ a:defaultValue = "no" ]
++     [ a:defaultValue = "false" ]
 +     attribute sortRefs { "true" | "false" }?,
-+     [ a:defaultValue = "yes" ]
++     [ a:defaultValue = "true" ]
 +     attribute symRefs { "true" | "false" }?,
-+     [ a:defaultValue = "yes" ]
++     [ a:defaultValue = "true" ]
 +     attribute tocInclude { "true" | "false" }?,
 +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
 +     attribute finalizedTime { text }?,
@@ -7237,7 +7241,7 @@ to the v3 schema.</t>
 +     attribute title { text }?,
 +     name,
 +     attribute pn { text }?,
-+     [ a:defaultValue = "no" ]
++     [ a:defaultValue = "false" ]
 +     attribute removeInRFC { "true" | "false" }?,
 +     (dl | ol | t | ul)+
     }
@@ -7248,12 +7252,12 @@ to the v3 schema.</t>
       attribute anchor { xsd:ID }?,
 -     attribute title { text },
 +     attribute title { text }?,
-+     [ a:defaultValue = "yes" ]
++     [ a:defaultValue = "true" ]
 +     attribute numbered { "true" | "false" }?,
       [ a:defaultValue = "default" ]
       attribute toc { "include" | "exclude" | "default" }?,
 -     (t | figure | texttable | iref)*,
-+     [ a:defaultValue = "no" ]
++     [ a:defaultValue = "false" ]
 +     attribute removeInRFC { "true" | "false" }?,
 +     attribute pn { text }?,
 +     name?,

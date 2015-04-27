@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                             April 23, 2015
+Obsoletes: 2629 (if approved)                             April 27, 2015
 Intended status: Informational
-Expires: October 25, 2015
+Expires: October 29, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 25, 2015.
+   This Internet-Draft will expire on October 29, 2015.
 
 Copyright Notice
 
@@ -1480,6 +1480,9 @@ Table of Contents
    relevant for that index entry.  In some formats, index entries of
    this type might be displayed as range.
 
+   When a processor is creating index content, it collects the items in
+   a case-senstive fashion for both the item and subitem level.
+
    This element appears as a child element of: <annotation>
    (Section 2.3), <aside> (Section 2.6), <blockquote> (Section 2.10),
    <c> (Section 3.1), <dd> (Section 2.18), <dt> (Section 2.21), <em>
@@ -1710,7 +1713,7 @@ Table of Contents
 
    o  "true"
 
-   o  "false"
+   o  "false" (default)
 
 2.33.3.  'title' attribute
 
@@ -2169,7 +2172,7 @@ Table of Contents
 
    o  "true"
 
-   o  "false"
+   o  "false" (default)
 
 2.44.11.  'submissionType' attribute
 
@@ -2195,7 +2198,7 @@ Table of Contents
 
    Allowed values:
 
-   o  "true"
+   o  "true" (default)
 
    o  "false"
 
@@ -2211,7 +2214,7 @@ Table of Contents
 
    Allowed values:
 
-   o  "true"
+   o  "true" (default)
 
    o  "false"
 
@@ -2283,7 +2286,7 @@ Table of Contents
 
    Allowed values:
 
-   o  "true"
+   o  "true" (default)
 
    o  "false"
 
@@ -2303,7 +2306,7 @@ Table of Contents
 
    o  "true"
 
-   o  "false"
+   o  "false" (default)
 
 2.45.5.  'title' attribute
 
@@ -4298,11 +4301,11 @@ Appendix C.  Relax NG Schema
          "IETF" | "IAB" | "IRTF" | "independent"
        }?,
        attribute docName { text }?,
-       [ a:defaultValue = "no" ]
+       [ a:defaultValue = "false" ]
        attribute sortRefs { "true" | "false" }?,
-       [ a:defaultValue = "yes" ]
+       [ a:defaultValue = "true" ]
        attribute symRefs { "true" | "false" }?,
-       [ a:defaultValue = "yes" ]
+       [ a:defaultValue = "true" ]
        attribute tocInclude { "true" | "false" }?,
        [ a:defaultValue = "3" ] attribute tocDepth { text }?,
        attribute finalizedTime { text }?,
@@ -4436,7 +4439,7 @@ Appendix C.  Relax NG Schema
        attribute title { text }?,
        name,
        attribute pn { text }?,
-       [ a:defaultValue = "no" ]
+       [ a:defaultValue = "false" ]
        attribute removeInRFC { "true" | "false" }?,
        (dl | ol | t | ul)+
      }
@@ -4449,11 +4452,11 @@ Appendix C.  Relax NG Schema
      element section {
        attribute anchor { xsd:ID }?,
        attribute title { text }?,
-       [ a:defaultValue = "yes" ]
+       [ a:defaultValue = "true" ]
        attribute numbered { "true" | "false" }?,
        [ a:defaultValue = "default" ]
        attribute toc { "include" | "exclude" | "default" }?,
-       [ a:defaultValue = "no" ]
+       [ a:defaultValue = "false" ]
        attribute removeInRFC { "true" | "false" }?,
        attribute pn { text }?,
        name?,
@@ -5049,11 +5052,11 @@ Appendix D.  Schema Differences from v2
          }?,
          attribute docName { text }?,
    -     [ a:defaultValue = "en" ] attribute xml:lang { text }?,
-   +     [ a:defaultValue = "no" ]
+   +     [ a:defaultValue = "false" ]
    +     attribute sortRefs { "true" | "false" }?,
-   +     [ a:defaultValue = "yes" ]
+   +     [ a:defaultValue = "true" ]
    +     attribute symRefs { "true" | "false" }?,
-   +     [ a:defaultValue = "yes" ]
+   +     [ a:defaultValue = "true" ]
    +     attribute tocInclude { "true" | "false" }?,
    +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
    +     attribute finalizedTime { text }?,
@@ -5178,7 +5181,7 @@ Appendix D.  Schema Differences from v2
    +     attribute title { text }?,
    +     name,
    +     attribute pn { text }?,
-   +     [ a:defaultValue = "no" ]
+   +     [ a:defaultValue = "false" ]
    +     attribute removeInRFC { "true" | "false" }?,
    +     (dl | ol | t | ul)+
        }
@@ -5189,12 +5192,12 @@ Appendix D.  Schema Differences from v2
          attribute anchor { xsd:ID }?,
    -     attribute title { text },
    +     attribute title { text }?,
-   +     [ a:defaultValue = "yes" ]
+   +     [ a:defaultValue = "true" ]
    +     attribute numbered { "true" | "false" }?,
          [ a:defaultValue = "default" ]
          attribute toc { "include" | "exclude" | "default" }?,
    -     (t | figure | texttable | iref)*,
-   +     [ a:defaultValue = "no" ]
+   +     [ a:defaultValue = "false" ]
    +     attribute removeInRFC { "true" | "false" }?,
    +     attribute pn { text }?,
    +     name?,
