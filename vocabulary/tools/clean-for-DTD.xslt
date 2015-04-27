@@ -937,15 +937,22 @@
       <xsl:variable name="txt">
         <xsl:apply-templates select="." mode="cleanup"/>
       </xsl:variable>
+      <!-- TODO: check for more block-level elements -->
+      <xsl:variable name="desc" select="following-sibling::dd[1]"/>
+      <xsl:variable name="block-level-children" select="$desc/t | $desc/dl | $desc/ol | $desc/ul"/>
       <t hangText="{normalize-space($txt)}">
         <xsl:copy-of select="@anchor"/>
         <xsl:if test="not($hang='true')">
-          <vspace blankLines="0"/>
+          <xsl:choose>
+            <xsl:when test="$block-level-children">
+              <vspace blankLines="1"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <vspace blankLines="0"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:if>
         <xsl:apply-templates select="iref" mode="cleanup"/>
-        <xsl:variable name="desc" select="following-sibling::dd[1]"/>
-        <!-- TODO: check for more block-level elements -->
-        <xsl:variable name="block-level-children" select="$desc/t | $desc/dl"/>
         <xsl:choose>
           <xsl:when test="$block-level-children">
             <xsl:for-each select="$block-level-children">

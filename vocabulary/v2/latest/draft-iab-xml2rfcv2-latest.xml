@@ -2676,51 +2676,41 @@
         This attribute is used to control the format of the generated 
         reference text.
       </t>
-      <t>
-         <iref item="xref formats" subitem="counter" primary="true"/>
-        "counter"
-        <list style="empty">
-            <t>
+      <dl>
+        <dt><iref item="xref formats" subitem="counter" primary="true"/>"counter"</dt>
+        <dd>
+          <t>
             Inserts a counter, such as the number of a section, figure, or
             table.
           </t>
-            <t>
+          <t>
             For targets that are not inherently numbered, such as references
             or comments, it uses the anchor name instead.
           </t>
-         </list>
-      </t>
-      <t>
-         <iref item="xref formats" subitem="default" primary="true"/>
-        "default"
-        <list style="empty">
-            <t>
+        </dd>
+        <dt><iref item="xref formats" subitem="default" primary="true"/>"default"</dt>
+        <dd>
+          <t>
             Inserts a text fragment that describes the referenced part 
             completely, such as "Section 2", "Table 4", or "[XML]".
           </t>
-         </list>
-      </t>
-      <t>
-         <iref item="xref formats" subitem="none" primary="true"/>
-        "none"
-        <list style="empty">
-            <t>
+        </dd>
+        <dt><iref item="xref formats" subitem="none" primary="true"/>"none"</dt>
+        <dd>
+          <t>
             There will be no auto-generated text.
           </t>
-         </list>
-      </t>
-      <t>
-         <iref item="xref formats" subitem="title" primary="true"/>
-        "title"
-        <list style="empty">
-            <t>
+        </dd>
+        <dt><iref item="xref formats" subitem="title" primary="true"/>"title"</dt>
+        <dd>
+          <t>
             Inserts a title for the referenced element (usually obtained from
             the referenced element's "title" attribute; some processors
             also use the &lt;title&gt; child element or a &lt;reference&gt;
             target).
           </t>
-         </list>
-      </t>
+        </dd>
+      </dl>
       <t><!--AG-->Allowed values: </t>
       <ul><!--AG-->
          <li>"counter"</li>
@@ -2799,35 +2789,31 @@
 <t>
   For instance:
 </t>
-<t>
-  non-breaking space (U+00A0)
-  <list>
+<dl>
+  <dt>non-breaking space (U+00A0)</dt>
+  <dd>
     <t>
       Represents a space character where no line break should happen. This is
       frequently used in titles (by excluding certain space characters from
       the line breaking algorithm, the processor will use the remaining
       whitespace occurrences for line breaks).
     </t> 
-  </list>
-</t>
-<t>
-  non-breaking hyphen (U+2011)
-  <list>
+  </dd>
+  <dt>non-breaking hyphen (U+2011)</dt>
+  <dd>
     <t>
       Similarly, this represents a hyphen character where nevertheless no
       line breaking ought to occur.
     </t>
-  </list>
-</t>
-<t>
-  word joiner (U+2060)
-  <list>
+  </dd>
+  <dt>word joiner (U+2060)</dt>
+  <dd>
     <t>
       Also called "zero width non-breaking space" &mdash; can be used to
       disallow line breaking between two non-whitespace characters.
     </t>
-  </list>
-</t>
+  </dd>
+</dl>
 <t>
   Note that in order to use these characters by name, they need to be 
   declared either in the Document Type Definition (DTD,
