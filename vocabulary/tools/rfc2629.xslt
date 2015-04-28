@@ -1461,7 +1461,7 @@
   <xsl:variable name="spac" select="@spacing"/>
   <xsl:variable name="class">
     <xsl:if test="$spac='compact'">compact </xsl:if>
-    <xsl:if test="not($hang='true')">nohang </xsl:if>
+    <xsl:if test="$hang='false'">nohang </xsl:if>
   </xsl:variable>
   <dl>
     <xsl:if test="normalize-space($class)!=''">
@@ -7859,11 +7859,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.721 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.721 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.722 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.722 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2015/04/22 05:53:35 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/04/22 05:53:35 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2015/04/27 20:16:04 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/04/27 20:16:04 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>

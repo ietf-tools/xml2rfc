@@ -942,7 +942,7 @@
       <xsl:variable name="block-level-children" select="$desc/t | $desc/dl | $desc/ol | $desc/ul"/>
       <t hangText="{normalize-space($txt)}">
         <xsl:copy-of select="@anchor"/>
-        <xsl:if test="not($hang='true')">
+        <xsl:if test="$hang='false'">
           <xsl:choose>
             <xsl:when test="$block-level-children">
               <vspace blankLines="1"/>
