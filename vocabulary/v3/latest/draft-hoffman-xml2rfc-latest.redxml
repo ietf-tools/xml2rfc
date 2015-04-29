@@ -184,7 +184,7 @@ for table cells.</t>
 
 <t>Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes to &lt;<xref target="element.rfc" format="none">rfc</xref>&gt;
 to cover processor instructions (PIs) that were in v2 that are still needed in the grammar.
-Also add "finalizedTime" to indicate the time that the XML is published.</t>
+Also add "prepTime" to indicate the time that the XML went through a preparation step.</t>
 
 <t>Add "ascii" attributes to &lt;<xref target="element.email" format="none">email</xref>&gt;,
 &lt;<xref target="element.organization" format="none">organization</xref>&gt;, &lt;<xref target="element.street" format="none">street</xref>&gt;,
@@ -3062,19 +3062,6 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       </t>
    </section>
 
-   <!--rfc/@finalizedTime-->
-   <section anchor="element.rfc.attribute.finalizedTime" toc="exclude" title="'finalizedTime' attribute">
-      
-      <iref item="Attributes" subitem="finalizedTime"/>
-      <iref item="rfc element" subitem="finalizedTime attribute"/>
-      <iref item="finalizedTime attribute" subitem="in rfc element"/>
-      <t>
-         The date that the XML was finalized by the RFC Editor when publising an RFC.
-         This is included in the XML file just before publication, and is stripped by processors from  all other XML files.
-         The value is formatted using the format from <xref target="RFC3339"/>.
-      </t>
-   </section>
-
    <!--rfc/@indexInclude-->
    <section anchor="element.rfc.attribute.indexInclude" toc="exclude" title="'indexInclude' attribute">
       
@@ -3165,6 +3152,19 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
             references can be detected and, depending on output representation, 
             hyperlinks can be generated. Also, the value ought to be reformatted
             to insert whitespace after each comma if not already present.
+      </t>
+   </section>
+
+   <!--rfc/@prepTime-->
+   <section anchor="element.rfc.attribute.prepTime" toc="exclude" title="'prepTime' attribute">
+      
+      <iref item="Attributes" subitem="prepTime"/>
+      <iref item="rfc element" subitem="prepTime attribute"/>
+      <iref item="prepTime attribute" subitem="in rfc element"/>
+      <t>
+         The date that the XML was processed by a preparation tool.
+         This is included in the XML file just before it is saved to disk.
+         The value is formatted using the format from <xref target="RFC3339"/>.
       </t>
    </section>
 
@@ -6401,7 +6401,7 @@ rfc =
     [ a:defaultValue = "true" ]
     attribute tocInclude { "true" | "false" }?,
     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
-    attribute finalizedTime { text }?,
+    attribute prepTime { text }?,
     [ a:defaultValue = "true" ]
     attribute indexInclude { "true" | "false" }?,
     link*,
@@ -7159,7 +7159,7 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "true" ]
 +     attribute tocInclude { "true" | "false" }?,
 +     [ a:defaultValue = "3" ] attribute tocDepth { text }?,
-+     attribute finalizedTime { text }?,
++     attribute prepTime { text }?,
 +     [ a:defaultValue = "true" ]
 +     attribute indexInclude { "true" | "false" }?,
 +     link*,
