@@ -1029,9 +1029,18 @@
 <!-- Unordered Lists -->
 <xsl:template match="ul" mode="cleanup">
   <t>
-    <list style="symbols">
-      <xsl:apply-templates mode="cleanup"/>
-    </list>
+    <xsl:choose>
+      <xsl:when test="@empty='true'">
+        <list style="empty">
+          <xsl:apply-templates mode="cleanup"/>
+        </list>
+      </xsl:when>
+      <xsl:otherwise>
+        <list style="symbols">
+          <xsl:apply-templates mode="cleanup"/>
+        </list>
+      </xsl:otherwise>
+    </xsl:choose>
   </t>
 </xsl:template>
 
