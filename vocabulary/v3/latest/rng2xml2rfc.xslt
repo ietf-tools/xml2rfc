@@ -68,8 +68,8 @@
 <xsl:variable name="elementcontents" select="*[not(descendant-or-self::rng:attribute) and not(self::rng:empty)]"/>
 
 <xsl:variable name="appearsin" select="//rng:element[.//rng:ref/@name=current()/@name]"/>
-
-<xsl:variable name="elemdoc" select="$spec/rfc/middle/section/section[@anchor=$anchor]/t[not(comment()='AG')] | $spec/rfc/middle/section/section[@anchor=$anchor]/figure | $spec/rfc/middle/section/section[@anchor=$anchor]/texttable | $spec/rfc/middle/section/section[@anchor=$anchor]/dl"/>
+<xsl:variable name="t" select="$spec/rfc/middle/section/section[@anchor=$anchor]"/>
+<xsl:variable name="elemdoc" select="$t/t[not(comment()='AG')] | $t/figure[not(comment()='AG')] | $t/texttable[not(comment()='AG')] | $t/dl[not(comment()='AG')] | $t/ul[not(comment()='AG')] | $t/ol[not(comment()='AG')]"/>
 <xsl:if test="not($elemdoc)">
   <t>
     <xsl:comment>AG</xsl:comment>
@@ -135,10 +135,11 @@
     <t>
       <xsl:comment>AG</xsl:comment>
       <xsl:text>In this order:</xsl:text>
-      <list style="numbers">
-        <xsl:apply-templates select="$elementcontents"/>
-      </list>
     </t>
+    <ol>
+      <xsl:comment>AG</xsl:comment>
+      <xsl:apply-templates select="$elementcontents"/>
+    </ol>
   </xsl:otherwise>
 </xsl:choose>
 
@@ -173,10 +174,11 @@
   <t>
     <xsl:comment>AG</xsl:comment>
     One or more sequences of:
-    <list style="numbers">
-      <xsl:apply-templates mode="simple"/>
-    </list>
   </t>
+  <ol>
+    <xsl:comment>AG</xsl:comment>
+    <xsl:apply-templates mode="simple"/>
+  </ol>
 </xsl:template>
 
 <xsl:template match="rng:optional[rng:attribute]">
@@ -212,7 +214,8 @@
     <iref item="{$elem/@name} element" subitem="{@name} attribute"/>
     <iref item="{@name} attribute" subitem="in {$elem/@name} element"/>
 
-    <xsl:variable name="attrdoc" select="$spec/rfc/middle/section/section/section[@anchor=$anchor]/t[not(comment()='AG')] | $spec/rfc/middle/section/section/section[@anchor=$anchor]/figure | $spec/rfc/middle/section/section/section[@anchor=$anchor]/texttable"/>
+    <xsl:variable name="t" select="$spec/rfc/middle/section/section/section[@anchor=$anchor]"/>
+    <xsl:variable name="attrdoc" select="$t/t[not(comment()='AG')] | $t/figure[not(comment()='AG')] | $t/texttable[not(comment()='AG')] | $t/dl[not(comment()='AG')] | $t/ul[not(comment()='AG')] | $t/ol[not(comment()='AG')]"/>
     <xsl:if test="not($attrdoc)">
       <t>
         <xsl:comment>AG</xsl:comment>
@@ -225,24 +228,25 @@
     <xsl:if test="rng:choice">
       <t>
         <xsl:comment>AG</xsl:comment>
-        <xsl:text>Allowed values: </xsl:text>
-        <list style="symbols">
-          <xsl:for-each select="rng:choice/rng:value">
-            <t>
-              <xsl:text>"</xsl:text>
-              <xsl:value-of select="."/>
-              <xsl:text>"</xsl:text>
-              <xsl:if test=". = ../../@a:defaultValue"> (default)</xsl:if>
-            </t>
-          </xsl:for-each>
-        </list>
+        <xsl:text>Allowed values:</xsl:text>
       </t>
+      <ul>
+        <xsl:comment>AG</xsl:comment>
+        <xsl:for-each select="rng:choice/rng:value">
+          <li>
+            <xsl:text>"</xsl:text>
+            <xsl:value-of select="."/>
+            <xsl:text>"</xsl:text>
+            <xsl:if test=". = ../../@a:defaultValue"> (default)</xsl:if>
+          </li>
+        </xsl:for-each>
+      </ul>
     </xsl:if>    
   </section>
 </xsl:template>
 
 <xsl:template match="rng:ref">
-  <t>
+  <li>
     <xsl:comment>AG</xsl:comment>
     <xsl:variable name="elem" select="//rng:define[@name=current()/@name]/rng:element/@name"/>
     <iref item="Elements" subitem="{$elem}"/>
@@ -263,11 +267,11 @@
     <xref target="element.{$elem}"/>
     <xsl:if test="processing-instruction('deprecated')">; deprecated in this context</xsl:if>
     <xsl:text>)</xsl:text>
-  </t>
+  </li>
 </xsl:template>
 
 <xsl:template match="rng:ref" mode="simple">
-  <t>
+  <li>
     <xsl:comment>AG</xsl:comment>
     <xsl:variable name="elem" select="//rng:define[@name=current()/@name]/rng:element/@name"/>
     <iref item="Elements" subitem="{$elem}"/>
@@ -276,21 +280,21 @@
     <xsl:text>One &lt;</xsl:text>
     <x:ref><xsl:value-of select="$elem"/></x:ref>
     <xsl:text>&gt; element</xsl:text>
-  </t>
+  </li>
 </xsl:template>
 
 <xsl:template match="rng:text">
-  <t>
+  <li>
     <xsl:comment>AG</xsl:comment>
     <xsl:text>Text</xsl:text>
-  </t>
+  </li>
 </xsl:template>
 
 <xsl:template match="rng:choice">
   <xsl:for-each select="*">
     <t>
       <xsl:comment>AG</xsl:comment>
-    <xsl:choose>
+      <xsl:choose>
         <xsl:when test="position()=1">
           <xsl:text>Either:</xsl:text>
         </xsl:when>
@@ -298,10 +302,11 @@
           <xsl:text>Or:</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
-      <list style="empty">
-        <xsl:apply-templates select="."/>
-      </list>
     </t>
+    <ul empty="true">
+      <xsl:comment>AG</xsl:comment>
+      <xsl:apply-templates select="."/>
+    </ul>
   </xsl:for-each>
 </xsl:template>
 
@@ -310,23 +315,24 @@
 </xsl:template>
 
 <xsl:template match="rng:zeroOrMore[rng:choice]">
-<t>
+<li>
   <xsl:comment>AG</xsl:comment>
-  <xsl:text>In any order: </xsl:text>
-  <list style="symbols">
+  <t>In any order:</t>
+  <ul>
     <xsl:apply-templates select="rng:choice/*"/>
-  </list>
-</t>
+  </ul>
+</li>
 </xsl:template>
 
 <xsl:template match="rng:oneOrMore[rng:choice]">
-<t>
+<li>
   <xsl:comment>AG</xsl:comment>
-  <xsl:text>In any order, but at least one of: </xsl:text>
-  <list style="symbols">
+  <t>In any order, but at least one of:</t>
+  <ul>
+    <xsl:comment>AG</xsl:comment>
     <xsl:apply-templates select="rng:choice/*"/>
-  </list>
-</t>
+  </ul>
+</li>
 </xsl:template>
 
 <xsl:template match="*" mode="copy">
