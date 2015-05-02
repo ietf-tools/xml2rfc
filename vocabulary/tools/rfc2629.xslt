@@ -2558,7 +2558,8 @@
 </xsl:template>
 
 <xsl:template match="title">
-  <xsl:variable name="tlen" select="string-length(.)"/>
+  <xsl:variable name="t" select="normalize-space(.)"/>
+  <xsl:variable name="tlen" select="string-length($t)"/>
   <xsl:variable name="alen" select="string-length(@abbrev)"/>
 
   <xsl:if test="@abbrev and $alen > 40">
@@ -2576,6 +2577,7 @@
   <xsl:if test="$tlen &lt;= 40 and @abbrev!=''">
     <xsl:call-template name="warning">
       <xsl:with-param name="msg">title/@abbrev was specified despite the title being short enough (<xsl:value-of select="$tlen"/>)</xsl:with-param>
+      <xsl:with-param name="msg2">Title: '<xsl:value-of select="normalize-space($t)"/>', abbreviated title='<xsl:value-of select="@abbrev"/>'</xsl:with-param>
     </xsl:call-template>
   </xsl:if>
 
@@ -7494,7 +7496,7 @@ dd, li, p {
   <xsl:param name="msg"/>
   <xsl:param name="msg2"/>
   <xsl:param name="inline"/>
-  <xsl:variable name="message"><xsl:value-of select="$level"/>: <xsl:value-of select="$msg"/><xsl:value-of select="$msg2"/><xsl:call-template name="lineno"/></xsl:variable>
+  <xsl:variable name="message"><xsl:value-of select="$level"/>: <xsl:value-of select="$msg"/><xsl:if test="$msg2!=''"> - <xsl:value-of select="$msg2"/></xsl:if><xsl:call-template name="lineno"/></xsl:variable>
   <xsl:choose>
     <xsl:when test="$inline!='no'">
       <xsl:choose>
@@ -7861,11 +7863,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.723 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.723 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.725 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.725 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2015/04/29 13:39:11 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/04/29 13:39:11 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2015/05/02 09:17:15 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/05/02 09:17:15 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>
@@ -8650,6 +8652,15 @@ prev: <xsl:value-of select="$prev"/>
   <xsl:apply-templates select="@*|*" mode="validate"/>
 </xsl:template>
 <xsl:template match="artwork" mode="validate">
+  <xsl:call-template name="warninvalid"/>
+  <xsl:apply-templates select="@*|*" mode="validate"/>
+</xsl:template>
+
+<!-- li element -->
+<xsl:template match="ol/li | ul/li" mode="validate" priority="9">
+  <xsl:apply-templates select="@*|*" mode="validate"/>
+</xsl:template>
+<xsl:template match="li" mode="validate">
   <xsl:call-template name="warninvalid"/>
   <xsl:apply-templates select="@*|*" mode="validate"/>
 </xsl:template>

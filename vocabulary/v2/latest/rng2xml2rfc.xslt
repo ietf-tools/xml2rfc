@@ -138,7 +138,9 @@
     </t>
     <ol>
       <xsl:comment>AG</xsl:comment>
-      <xsl:apply-templates select="$elementcontents"/>
+      <xsl:apply-templates select="$elementcontents">
+        <xsl:with-param name="in-list" select="true()"/>
+      </xsl:apply-templates>
     </ol>
   </xsl:otherwise>
 </xsl:choose>
@@ -167,7 +169,10 @@
 </xsl:template>
 
 <xsl:template match="rng:oneOrMore[count(rng:ref)=1]">
-  <xsl:apply-templates/>
+  <xsl:param name="in-list" select="false()"/>
+  <xsl:apply-templates>
+    <xsl:with-param name="in-list" select="$in-list"/>
+  </xsl:apply-templates>  
 </xsl:template>
 
 <xsl:template match="rng:oneOrMore[count(rng:ref) &gt; 1]">
@@ -186,7 +191,10 @@
 </xsl:template>
 
 <xsl:template match="rng:optional[count(rng:ref)=1]">
-  <xsl:apply-templates/>
+  <xsl:param name="in-list" select="false()"/>
+  <xsl:apply-templates>
+    <xsl:with-param name="in-list" select="$in-list"/>
+  </xsl:apply-templates>  
 </xsl:template>
 
 <xsl:template match="rng:attribute">
@@ -246,7 +254,14 @@
 </xsl:template>
 
 <xsl:template match="rng:ref">
-  <li>
+  <xsl:param name="in-list" select="false()"/>
+  <xsl:variable name="c">
+    <xsl:choose>
+      <xsl:when test="$in-list">li</xsl:when>
+      <xsl:otherwise>t</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:element name="{$c}">
     <xsl:comment>AG</xsl:comment>
     <xsl:variable name="elem" select="//rng:define[@name=current()/@name]/rng:element/@name"/>
     <iref item="Elements" subitem="{$elem}"/>
@@ -267,7 +282,7 @@
     <xref target="element.{$elem}"/>
     <xsl:if test="processing-instruction('deprecated')">; deprecated in this context</xsl:if>
     <xsl:text>)</xsl:text>
-  </li>
+  </xsl:element>
 </xsl:template>
 
 <xsl:template match="rng:ref" mode="simple">
@@ -305,34 +320,78 @@
     </t>
     <ul empty="true">
       <xsl:comment>AG</xsl:comment>
-      <xsl:apply-templates select="."/>
+      <xsl:apply-templates select=".">
+        <xsl:with-param name="in-list" select="true()"/>
+      </xsl:apply-templates>
     </ul>
   </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="rng:zeroOrMore[rng:ref | rng:text]">
-  <xsl:apply-templates/>
+  <xsl:param name="in-list" select="false()"/>
+  <xsl:apply-templates>
+    <xsl:with-param name="in-list" select="$in-list"/>
+  </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="rng:zeroOrMore[rng:choice]">
-<li>
-  <xsl:comment>AG</xsl:comment>
-  <t>In any order:</t>
-  <ul>
-    <xsl:apply-templates select="rng:choice/*"/>
-  </ul>
-</li>
+  <xsl:param name="in-list" select="false()"/>
+<xsl:choose>
+  <xsl:when test="$in-list">
+    <li>
+      <xsl:comment>AG</xsl:comment>
+      <t>In any order:</t>
+      <ul>
+        <xsl:comment>AG</xsl:comment>
+        <xsl:apply-templates select="rng:choice/*">
+          <xsl:with-param name="in-list" select="true()"/>
+        </xsl:apply-templates>
+      </ul>
+    </li>
+  </xsl:when>
+  <xsl:otherwise>
+    <t>
+      <xsl:comment>AG</xsl:comment>
+      <xsl:text>In any order:</xsl:text>
+    </t>
+    <ul>
+      <xsl:comment>AG</xsl:comment>
+      <xsl:apply-templates select="rng:choice/*">
+        <xsl:with-param name="in-list" select="true()"/>
+      </xsl:apply-templates>
+    </ul>
+  </xsl:otherwise>
+</xsl:choose>
 </xsl:template>
 
 <xsl:template match="rng:oneOrMore[rng:choice]">
-<li>
-  <xsl:comment>AG</xsl:comment>
-  <t>In any order, but at least one of:</t>
-  <ul>
-    <xsl:comment>AG</xsl:comment>
-    <xsl:apply-templates select="rng:choice/*"/>
-  </ul>
-</li>
+  <xsl:param name="in-list" select="false()"/>
+<xsl:choose>
+  <xsl:when test="$in-list">
+    <li>
+      <xsl:comment>AG</xsl:comment>
+      <t>In any order, but at least one of:</t>
+      <ul>
+        <xsl:comment>AG</xsl:comment>
+        <xsl:apply-templates select="rng:choice/*">
+          <xsl:with-param name="in-list" select="true()"/>
+        </xsl:apply-templates>
+      </ul>
+    </li>
+  </xsl:when>
+  <xsl:otherwise>
+    <t>
+      <xsl:comment>AG</xsl:comment>
+      <xsl:text>In any order, but at least one of:</xsl:text>
+    </t>
+    <ul>
+      <xsl:comment>AG</xsl:comment>
+      <xsl:apply-templates select="rng:choice/*">
+        <xsl:with-param name="in-list" select="true()"/>
+      </xsl:apply-templates>
+    </ul>
+  </xsl:otherwise>
+</xsl:choose>
 </xsl:template>
 
 <xsl:template match="*" mode="copy">
