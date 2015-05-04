@@ -1463,15 +1463,37 @@
     <xsl:if test="$spac='compact'">compact </xsl:if>
     <xsl:if test="$hang='false'">nohang </xsl:if>
   </xsl:variable>
-  <dl>
-    <xsl:if test="normalize-space($class)!=''">
-      <xsl:attribute name="class"><xsl:value-of select="normalize-space($class)"/></xsl:attribute>
-    </xsl:if>
-    <xsl:for-each select="dt">
-      <xsl:apply-templates select="."/>
-      <xsl:apply-templates select="following-sibling::dd[1]"/>
-    </xsl:for-each>
-  </dl>
+  <xsl:variable name="p">
+    <xsl:call-template name="get-paragraph-number" />
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="$p!='' and not(ancestor::list) and not(ancestor::ed:del) and not(ancestor::ed:ins)">
+      <div id="{$anchor-prefix}.section.{$p}">
+        <dl>
+          <xsl:call-template name="copy-anchor"/>
+          <xsl:if test="normalize-space($class)!=''">
+            <xsl:attribute name="class"><xsl:value-of select="normalize-space($class)"/></xsl:attribute>
+          </xsl:if>
+          <xsl:for-each select="dt">
+            <xsl:apply-templates select="."/>
+            <xsl:apply-templates select="following-sibling::dd[1]"/>
+          </xsl:for-each>
+        </dl>
+      </div>
+    </xsl:when>
+    <xsl:otherwise>
+      <dl>
+        <xsl:call-template name="copy-anchor"/>
+        <xsl:if test="normalize-space($class)!=''">
+          <xsl:attribute name="class"><xsl:value-of select="normalize-space($class)"/></xsl:attribute>
+        </xsl:if>
+        <xsl:for-each select="dt">
+          <xsl:apply-templates select="."/>
+          <xsl:apply-templates select="following-sibling::dd[1]"/>
+        </xsl:for-each>
+      </dl>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="dt">
@@ -1554,6 +1576,7 @@
     <xsl:if test="$compact='yes'">
       <xsl:attribute name="class">compact</xsl:attribute>
     </xsl:if>
+    <xsl:call-template name="copy-anchor"/>
     <xsl:call-template name="insertInsDelClass"/>
     <xsl:apply-templates />
   </dl>
@@ -1562,6 +1585,7 @@
 <xsl:template match="list[@style='numbers' or (not(@style) and ancestor::list[@style='numbers'])]">
   <xsl:call-template name="check-no-text-content"/>
   <ol>
+    <xsl:call-template name="copy-anchor"/>
     <xsl:call-template name="insertInsDelClass"/>
     <xsl:apply-templates />
   </ol>
@@ -1569,26 +1593,65 @@
 
 <xsl:template match="ol">
   <xsl:call-template name="check-no-text-content"/>
-  <ol>
-    <xsl:copy-of select="@start"/>
-    <xsl:call-template name="insertInsDelClass"/>
-    <xsl:apply-templates />
-  </ol>
+  <xsl:variable name="p">
+    <xsl:call-template name="get-paragraph-number" />
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="$p!='' and not(ancestor::list) and not(ancestor::ul) and not(ancestor::dl) and not(ancestor::ol) and not(ancestor::ed:del) and not(ancestor::ed:ins)">
+      <div id="{$anchor-prefix}.section.{$p}">
+        <ol>
+          <xsl:call-template name="copy-anchor"/>
+          <xsl:copy-of select="@start"/>
+          <xsl:call-template name="insertInsDelClass"/>
+          <xsl:apply-templates />
+        </ol>
+      </div>
+    </xsl:when>
+    <xsl:otherwise>
+      <ol>
+        <xsl:call-template name="copy-anchor"/>
+        <xsl:copy-of select="@start"/>
+        <xsl:call-template name="insertInsDelClass"/>
+        <xsl:apply-templates />
+      </ol>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="ul">
   <xsl:call-template name="check-no-text-content"/>
-  <ul>
-    <xsl:if test="@empty='true'">
-      <xsl:attribute name="class">empty</xsl:attribute>
-    </xsl:if>
-    <xsl:call-template name="insertInsDelClass"/>
-    <xsl:apply-templates />
-  </ul>
+  <xsl:variable name="p">
+    <xsl:call-template name="get-paragraph-number" />
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="$p!='' and not(ancestor::list) and not(ancestor::ul) and not(ancestor::dl) and not(ancestor::ol) and not(ancestor::ed:del) and not(ancestor::ed:ins)">
+      <div id="{$anchor-prefix}.section.{$p}">
+        <ul>
+          <xsl:call-template name="copy-anchor"/>
+          <xsl:if test="@empty='true'">
+            <xsl:attribute name="class">empty</xsl:attribute>
+          </xsl:if>
+          <xsl:call-template name="insertInsDelClass"/>
+          <xsl:apply-templates />
+        </ul>
+      </div>
+    </xsl:when>
+    <xsl:otherwise>
+      <ul>
+        <xsl:call-template name="copy-anchor"/>
+        <xsl:if test="@empty='true'">
+          <xsl:attribute name="class">empty</xsl:attribute>
+        </xsl:if>
+        <xsl:call-template name="insertInsDelClass"/>
+        <xsl:apply-templates />
+      </ul>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="li">
   <li>
+    <xsl:call-template name="copy-anchor"/>
     <xsl:apply-templates />
   </li>
 </xsl:template>
@@ -1604,6 +1667,7 @@
     </xsl:choose>
   </xsl:variable>
   <ol class="{$style}">
+    <xsl:call-template name="copy-anchor"/>
     <xsl:call-template name="insertInsDelClass"/>
     <xsl:apply-templates />
   </ol>
@@ -1612,6 +1676,7 @@
 <xsl:template match="list[@style='symbols' or (not(@style) and ancestor::list[@style='symbols'])]">
   <xsl:call-template name="check-no-text-content"/>
   <ul>
+    <xsl:call-template name="copy-anchor"/>
     <xsl:call-template name="insertInsDelClass"/>
     <xsl:apply-templates />
   </ul>
@@ -2475,7 +2540,7 @@
     </xsl:when>
     <xsl:otherwise>
       <xsl:choose>
-        <xsl:when test="$p!='' and not(ancestor::list) and not(ancestor::ed:del) and not(ancestor::ed:ins)">
+        <xsl:when test="$p!='' and not(ancestor::list) and not(ancestor::ol) and not(ancestor::ul) and not(ancestor::ed:del) and not(ancestor::ed:ins)">
           <div id="{$anchor-prefix}.section.{$p}">
             <xsl:apply-templates mode="t-content" select="node()[1]">
               <xsl:with-param name="inherited-self-link" select="$inherited-self-link"/>
@@ -2515,7 +2580,7 @@
     <xsl:if test="normalize-space($textcontent)!=''">
       <p>
         <xsl:variable name="anchor">
-          <xsl:if test="$p!='' and not(ancestor::ed:del) and not(ancestor::ed:ins) and not(ancestor::x:lt) and not(preceding-sibling::node())">
+          <xsl:if test="$p!='' and not(ancestor::ed:del) and not(ancestor::ed:ins) and not(ancestor::li) and not(ancestor::x:lt) and not(preceding-sibling::node())">
             <xsl:value-of select="concat($anchor-prefix,'.section.',$p)"/>
           </xsl:if>
         </xsl:variable>
@@ -6523,8 +6588,8 @@ dd, li, p {
 
 <xsl:template name="get-paragraph-number">
   <!-- get section number of ancestor section element, then add t number -->
-  <xsl:if test="ancestor::section and not(ancestor::section[@myns:unnumbered='unnumbered']) and not(ancestor::x:blockquote) and not(ancestor::blockquote) and not(ancestor::x:note) and not(ancestor::aside)">
-    <xsl:for-each select="ancestor::section[1]"><xsl:call-template name="get-section-number" />.p.</xsl:for-each><xsl:number count="t|x:blockquote|blockquote|x:note|aside" />
+  <xsl:if test="ancestor::section and not(ancestor::section[@myns:unnumbered='unnumbered']) and not(ancestor::x:blockquote) and not(ancestor::blockquote) and not(ancestor::x:note) and not(ancestor::aside) and not(ancestor::ul) and not(ancestor::dl) and not(ancestor>ol)">
+    <xsl:for-each select="ancestor::section[1]"><xsl:call-template name="get-section-number" />.p.</xsl:for-each><xsl:number count="t|x:blockquote|blockquote|x:note|aside|ul|dl|ol" />
   </xsl:if>
 </xsl:template>
 
@@ -7863,11 +7928,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.725 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.725 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.727 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.727 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2015/05/02 09:17:15 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/05/02 09:17:15 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2015/05/04 14:04:30 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/05/04 14:04:30 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>

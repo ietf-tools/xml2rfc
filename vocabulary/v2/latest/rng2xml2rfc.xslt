@@ -299,10 +299,21 @@
 </xsl:template>
 
 <xsl:template match="rng:text">
-  <li>
-    <xsl:comment>AG</xsl:comment>
-    <xsl:text>Text</xsl:text>
-  </li>
+  <xsl:param name="in-list" select="false()"/>
+<xsl:choose>
+  <xsl:when test="$in-list">
+    <li>
+      <xsl:comment>AG</xsl:comment>
+      <xsl:text>Text</xsl:text>
+    </li>
+  </xsl:when>
+  <xsl:otherwise>
+    <t>
+      <xsl:comment>AG</xsl:comment>
+      <xsl:text>Text</xsl:text>
+    </t>
+  </xsl:otherwise>
+</xsl:choose>
 </xsl:template>
 
 <xsl:template match="rng:choice">
