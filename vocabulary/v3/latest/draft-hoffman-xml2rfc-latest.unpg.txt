@@ -519,10 +519,6 @@ Table of Contents
 
    o  <xref> elements (Section 2.65)
 
-2.3.1.  'ascii' attribute
-
-   The ASCII equivalent of the annotation.
-
 2.4.  <area>
 
    Provides information about the IETF area to which this document
@@ -941,8 +937,8 @@ Table of Contents
 
    Indicates that a line break should be inserted in the generated
    output by the processor.  Multiple successive instances of this
-   element does not cause blank lines to appear in the output, and is
-   thus not useful.
+   element do not cause blank lines to appear in the output, and is thus
+   not useful.
 
    This element appears as a child element of: <td> (Section 2.55), and
    <th> (Section 2.57).
@@ -1956,10 +1952,6 @@ Table of Contents
    o  <sup> elements (Section 2.51)
 
    o  <tt> elements (Section 2.61)
-
-2.39.1.  'ascii' attribute
-
-   The ASCII equivalent of the added text.
 
 2.40.  <reference>
 
@@ -5045,7 +5037,6 @@ Appendix C.  Relax NG Schema
 
    annotation =
      element annotation {
-       attribute ascii { text }?,
        (text
         | bcp14
         | cref
@@ -5062,7 +5053,6 @@ Appendix C.  Relax NG Schema
 
    refcontent =
      element refcontent {
-       attribute ascii { text }?,
        (text | bcp14 | em | strong | sub | sup | tt)*
      }
 
@@ -5773,7 +5763,6 @@ Appendix D.  Schema Differences from v2
    -   element annotation { (text | xref | eref | iref | cref |
    - spanx)* }
    +   element annotation {
-   +     attribute ascii { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -5789,7 +5778,6 @@ Appendix D.  Schema Differences from v2
    +   }
    + refcontent =
    +   element refcontent {
-   +     attribute ascii { text }?,
    +     (text | bcp14 | em | strong | sub | sup | tt)*
    +   }
      start = rfc
@@ -5833,7 +5821,6 @@ Index
          in table element  1
          in texttable element  1
       annotation element  1
-         ascii attribute  1
          inside reference  1
       anything element  1
       application/rfc+xml Media Type  1
@@ -5859,14 +5846,12 @@ Index
          width attribute  1
          xml:space attribute  1
       ascii attribute
-         in annotation element  1
          in city element  1
          in code element  1
          in country element  1
          in email element  1
          in organization element  1
          in postalLine element  1
-         in refcontent element  1
          in region element  1
          in street element  1
          in title element  1
@@ -6441,7 +6426,6 @@ Index
 
    R
       refcontent element  1
-         ascii attribute  1
          inside reference  1
       reference element  1
          anchor attribute  1

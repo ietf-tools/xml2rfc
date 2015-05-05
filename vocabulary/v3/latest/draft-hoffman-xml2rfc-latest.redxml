@@ -17,10 +17,7 @@ Deal with xref/iref and incorporating the needed text in a processor
 
 Think about all the "processor" wording, whether it should be here, and so on.
 
-Joe questions multiple successive instances of <br>
-
 Joe asks: Any reason we can't use "type" instead of "style" for ol?  That way it's the same as HTML.
-
 
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
@@ -506,17 +503,6 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          <iref item="Elements" subitem="xref"/>
          <iref item="xref element" subitem="inside annotation"/>&lt;<xref target="element.xref" format="none">xref</xref>&gt; elements (<xref target="element.xref"/>)</t>
    </list></t>
-
-   <!--annotation/@ascii-->
-   <section anchor="element.annotation.attribute.ascii" toc="exclude" title="'ascii' attribute">
-      
-      <iref item="Attributes" subitem="ascii"/>
-      <iref item="annotation element" subitem="ascii attribute"/>
-      <iref item="ascii attribute" subitem="in annotation element"/>
-      <t>
-                  The ASCII equivalent of the annotation.
-      </t>
-   </section>
 </section>
 
 <!--area-->
@@ -1183,7 +1169,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <iref item="br element" primary="true"/>
    <t>
       Indicates that a line break should be inserted in the generated output by the processor.
-      Multiple successive instances of this element does not cause blank lines to appear in the output,
+      Multiple successive instances of this element do not cause blank lines to appear in the output,
       and is thus not useful.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
@@ -2791,17 +2777,6 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          <iref item="Elements" subitem="tt"/>
          <iref item="tt element" subitem="inside refcontent"/>&lt;<xref target="element.tt" format="none">tt</xref>&gt; elements (<xref target="element.tt"/>)</t>
    </list></t>
-
-   <!--refcontent/@ascii-->
-   <section anchor="element.refcontent.attribute.ascii" toc="exclude" title="'ascii' attribute">
-      
-      <iref item="Attributes" subitem="ascii"/>
-      <iref item="refcontent element" subitem="ascii attribute"/>
-      <iref item="ascii attribute" subitem="in refcontent element"/>
-      <t>
-         The ASCII equivalent of the added text.
-      </t>
-   </section>
 </section>
 
 <!--reference-->
@@ -7121,7 +7096,6 @@ format =
 
 annotation =
   element annotation {
-    attribute ascii { text }?,
     (text
      | bcp14
      | cref
@@ -7138,7 +7112,6 @@ annotation =
 
 refcontent =
   element refcontent {
-    attribute ascii { text }?,
     (text | bcp14 | em | strong | sub | sup | tt)*
   }
 
@@ -7852,7 +7825,6 @@ to the v3 schema.</t>
 -   element annotation { (text | xref | eref | iref | cref | 
 - spanx)* }
 +   element annotation {
-+     attribute ascii { text }?,
 +     (text
 +      | bcp14
 +      | cref
@@ -7868,7 +7840,6 @@ to the v3 schema.</t>
 +   }
 + refcontent =
 +   element refcontent {
-+     attribute ascii { text }?,
 +     (text | bcp14 | em | strong | sub | sup | tt)*
 +   }
   start = rfc
