@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                                May 4, 2015
+Obsoletes: 2629 (if approved)                                May 5, 2015
 Intended status: Informational
-Expires: November 5, 2015
+Expires: November 6, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 5, 2015.
+   This Internet-Draft will expire on November 6, 2015.
 
 Copyright Notice
 
@@ -973,11 +973,15 @@ Table of Contents
 
 2.15.  <country>
 
-   Gives the country in a postal address.
+   Gives the country name or code in a postal address.
 
    This element appears as a child element of: <postal> (Section 2.37).
 
    Content model: only text content.
+
+2.15.1.  'ascii' attribute
+
+   The ASCII equivalent of the country name.
 
 2.16.  <cref>
 
@@ -4448,7 +4452,11 @@ Appendix C.  Relax NG Schema
        text
      }
 
-   country = element country { text }
+   country =
+     element country {
+       attribute ascii { text }?,
+       text
+     }
 
    postalLine =
      element postalLine {
@@ -5191,6 +5199,16 @@ Appendix D.  Schema Differences from v2
    + code =
    +   element code {
    +     attribute ascii { text }?,
+   +     text
+   +   }
+   + country =
+   +   element country {
+   +     attribute ascii { text }?,
+   +     text
+   +   }
+   + postalLine =
+   +   element postalLine {
+   +     attribute ascii { text }?,
          text
        }
    - address = element address { postal?, phone?, facsimile?, email?,
@@ -5201,12 +5219,7 @@ Appendix D.  Schema Differences from v2
    - city = element city { text }
    - region = element region { text }
    - code = element code { text }
-     country = element country { text }
-   + postalLine =
-   +   element postalLine {
-   +     attribute ascii { text }?,
-   +     text
-   +   }
+   - country = element country { text }
      phone = element phone { text }
      facsimile = element facsimile { text }
    - email = element email { text }
@@ -5847,6 +5860,7 @@ Index
          in annotation element  1
          in city element  1
          in code element  1
+         in country element  1
          in email element  1
          in organization element  1
          in postalLine element  1
@@ -6020,6 +6034,7 @@ Index
       counter attribute
          in list element  1
       country element  1
+         ascii attribute  1
          inside postal  1
       cref element  1
          anchor attribute  1

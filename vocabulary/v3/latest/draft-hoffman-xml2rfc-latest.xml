@@ -17,6 +17,11 @@ Deal with xref/iref and incorporating the needed text in a processor
 
 Think about all the "processor" wording, whether it should be here, and so on.
 
+Joe questions multiple successive instances of <br>
+
+Joe asks: Any reason we can't use "type" instead of "style" for ol?  That way it's the same as HTML.
+
+
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
 -->
@@ -1274,11 +1279,22 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
    <iref item="Elements" subitem="country" primary="true"/>
    <iref item="country element" primary="true"/>
    <t>
-      Gives the country in a postal address.
+      Gives the country name or code in a postal address.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.country.contents"><!--AG-->
       <xref format="none" target="grammar.country">Content model</xref>: only text content.</t>
+
+   <!--country/@ascii-->
+   <section anchor="element.country.attribute.ascii" toc="exclude">
+      <name>'ascii' attribute</name>
+      <iref item="Attributes" subitem="ascii"/>
+      <iref item="country element" subitem="ascii attribute"/>
+      <iref item="ascii attribute" subitem="in country element"/>
+      <t>
+         The ASCII equivalent of the country name.
+      </t>
+   </section>
 </section>
 
 <!--cref-->
@@ -6656,7 +6672,11 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     text
   }
 
-<strong anchor="grammar.country">country</strong><iref item="country element"/> = element country { text }
+<strong anchor="grammar.country">country</strong><iref item="country element"/> =
+  element country {
+    attribute ascii { text }?,
+    text
+  }
 
 <strong anchor="grammar.postalLine">postalLine</strong><iref item="postalLine element"/> =
   element postalLine {
@@ -7402,6 +7422,16 @@ to the v3 schema.</t>
 + code =
 +   element code {
 +     attribute ascii { text }?,
++     text
++   }
++ country =
++   element country {
++     attribute ascii { text }?,
++     text
++   }
++ postalLine =
++   element postalLine {
++     attribute ascii { text }?,
       text
     }
 - address = element address { postal?, phone?, facsimile?, email?, 
@@ -7412,12 +7442,7 @@ to the v3 schema.</t>
 - city = element city { text }
 - region = element region { text }
 - code = element code { text }
-  country = element country { text }
-+ postalLine =
-+   element postalLine {
-+     attribute ascii { text }?,
-+     text
-+   }
+- country = element country { text }
   phone = element phone { text }
   facsimile = element facsimile { text }
 - email = element email { text }
