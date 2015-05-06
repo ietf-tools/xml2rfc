@@ -2528,14 +2528,14 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       </t>
    </section>
 
-   <!--ol/@style-->
-   <section anchor="element.ol.attribute.style" toc="exclude" title="'style' attribute">
+   <!--ol/@type-->
+   <section anchor="element.ol.attribute.type" toc="exclude" title="'type' attribute">
       
-      <iref item="Attributes" subitem="style"/>
-      <iref item="ol element" subitem="style attribute"/>
-      <iref item="style attribute" subitem="in ol element"/>
+      <iref item="Attributes" subitem="type"/>
+      <iref item="ol element" subitem="type attribute"/>
+      <iref item="type attribute" subitem="in ol element"/>
       <t>
-         The style of the labels on list items. If the length of the style value is 1, the
+         The type of the labels on list items. If the length of the type value is 1, the
          meaning is the same as it is for HTML:
          <list style="hanging">
             <t hangText="a">Lowercase letters (a, b, c, ...)</t>
@@ -2544,11 +2544,11 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
             <t hangText="i">Lowercase Roman numerals (i, ii, iii, ...)</t>
             <t hangText="I">Uppercase Roman numerals (I, II, III, ...)</t>
          </list>
-         For style "a" and "A", after the 26th entry, the numbering starts at "aa"/"AA", then
+         For type "a" and "A", after the 26th entry, the numbering starts at "aa"/"AA", then
          "ab"/"AB", and so on.
       </t>
       <t>
-        If the length of the style value is greater than 1, the value must contain a
+        If the length of the type value is greater than 1, the value must contain a
         percent-encoded indicator and other text.
         The value is a free-form text that allows counter values to be
         inserted using a "percent-letter" format. For instance, "[REQ%d]"
@@ -2568,14 +2568,14 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          Other formats are reserved for future use.
        </t>
       <t>
-        It is an error for the style string to be empty, and processors will reject documents
-        with an element that has such a style.
+        It is an error for the type string to be empty, and processors will reject documents
+        with an element that has such a type.
         For bulleted lists, you use the &lt;<xref target="element.ul" format="none">ul</xref>&gt; element.
         For lists that have neither bullets nor numbers, use the &lt;<xref target="element.ul" format="none">ul</xref>&gt; element with the
         'empty="true"' attribute.
       </t>
       <t>
-        If no "style" attribute is given, the default style is the same as "style='%d.'".
+        If no type attribute is given, the default type is the same as "type='%d.'".
       </t>
    </section>
 </section>
@@ -6658,7 +6658,7 @@ blockquote =
 
 ol =
   element ol {
-    [ a:defaultValue = "1" ] attribute style { text }?,
+    [ a:defaultValue = "1" ] attribute type { text }?,
     [ a:defaultValue = "1" ] attribute start { text }?,
     attribute group { text }?,
     [ a:defaultValue = "normal" ]
@@ -7409,7 +7409,7 @@ to the v3 schema.</t>
     }
 + ol =
 +   element ol {
-+     [ a:defaultValue = "1" ] attribute style { text }?,
++     [ a:defaultValue = "1" ] attribute type { text }?,
 +     [ a:defaultValue = "1" ] attribute start { text }?,
 +     attribute group { text }?,
 +     [ a:defaultValue = "normal" ]

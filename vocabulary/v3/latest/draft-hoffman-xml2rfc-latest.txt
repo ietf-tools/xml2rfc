@@ -2107,9 +2107,9 @@ Internet-Draft                  XML2RFCv3                       May 2015
    The ordinal value to start the list at.  This defaults to "1", and
    must be an integer of 0 or greater.
 
-2.34.4.  'style' attribute
+2.34.4.  'type' attribute
 
-   The style of the labels on list items.  If the length of the style
+   The type of the labels on list items.  If the length of the type
    value is 1, the meaning is the same as it is for HTML:
 
    a  Lowercase letters (a, b, c, ...)
@@ -2133,10 +2133,10 @@ Internet-Draft                  XML2RFCv3                       May 2015
 
    I  Uppercase Roman numerals (I, II, III, ...)
 
-   For style "a" and "A", after the 26th entry, the numbering starts at
+   For type "a" and "A", after the 26th entry, the numbering starts at
    "aa"/"AA", then "ab"/"AB", and so on.
 
-   If the length of the style value is greater than 1, the value must
+   If the length of the type value is greater than 1, the value must
    contain a percent-encoded indicator and other text.  The value is a
    free-form text that allows counter values to be inserted using a
    "percent-letter" format.  For instance, "[REQ%d]" generates labels of
@@ -2159,13 +2159,13 @@ Internet-Draft                  XML2RFCv3                       May 2015
 
    Other formats are reserved for future use.
 
-   It is an error for the style string to be empty, and processors will
-   reject documents with an element that has such a style.  For bulleted
+   It is an error for the type string to be empty, and processors will
+   reject documents with an element that has such a type.  For bulleted
    lists, you use the <ul> element.  For lists that have neither bullets
    nor numbers, use the <ul> element with the 'empty="true"' attribute.
 
-   If no "style" attribute is given, the default style is the same as
-   "style='%d.'".
+   If no type attribute is given, the default type is the same as
+   "type='%d.'".
 
 2.35.  <organization>
 
@@ -5417,7 +5417,7 @@ Internet-Draft                  XML2RFCv3                       May 2015
 
    ol =
      element ol {
-       [ a:defaultValue = "1" ] attribute style { text }?,
+       [ a:defaultValue = "1" ] attribute type { text }?,
        [ a:defaultValue = "1" ] attribute start { text }?,
        attribute group { text }?,
        [ a:defaultValue = "normal" ]
@@ -6291,7 +6291,7 @@ Internet-Draft                  XML2RFCv3                       May 2015
        }
    + ol =
    +   element ol {
-   +     [ a:defaultValue = "1" ] attribute style { text }?,
+   +     [ a:defaultValue = "1" ] attribute type { text }?,
    +     [ a:defaultValue = "1" ] attribute start { text }?,
    +     attribute group { text }?,
    +     [ a:defaultValue = "normal" ]
@@ -6973,7 +6973,7 @@ Internet-Draft                  XML2RFCv3                       May 2015
          spacing  26, 38, 67
          src  15, 31, 54
          start  38
-         style  38, 74-76
+         style  74-76
          subitem  33
          submissionType  47
          suppress-title  31, 77
@@ -6985,7 +6985,7 @@ Internet-Draft                  XML2RFCv3                       May 2015
          toc  50
          tocDepth  48
          tocInclude  48
-         type  15, 54, 73
+         type  15, 38, 54, 73
          updates  48
          value  52
          width  15, 31, 78
@@ -7506,7 +7506,7 @@ Internet-Draft                  XML2RFCv3                       May 2015
 
 
          start attribute  38
-         style attribute  38
+         type attribute  38
       organization element  39, 91
          abbrev attribute  40
          ascii attribute  40
@@ -7712,7 +7712,6 @@ Internet-Draft                  XML2RFCv3                       May 2015
          inside tt  66
       style attribute
          in list element  74
-         in ol element  38
          in spanx element  75
          in texttable element  76
       sub element  56, 91
@@ -7721,6 +7720,7 @@ Internet-Draft                  XML2RFCv3                       May 2015
          inside c  72
          inside cref  22
          inside dd  25
+         inside dt  27
 
 
 
@@ -7729,7 +7729,6 @@ Hoffman                 Expires November 6, 2015              [Page 138]
 Internet-Draft                  XML2RFCv3                       May 2015
 
 
-         inside dt  27
          inside em  28
          inside li  34
          inside postamble  74
@@ -7777,6 +7776,7 @@ Internet-Draft                  XML2RFCv3                       May 2015
          hangText attribute  59
          inside abstract  10
          inside aside  16
+         inside blockquote  19
 
 
 
@@ -7785,7 +7785,6 @@ Hoffman                 Expires November 6, 2015              [Page 139]
 Internet-Draft                  XML2RFCv3                       May 2015
 
 
-         inside blockquote  19
          inside dd  24
          inside li  34
          inside list  73
@@ -7833,6 +7832,7 @@ Internet-Draft                  XML2RFCv3                       May 2015
       thead element  64, 91
          inside table  60
       title attribute
+         in figure element  31
 
 
 
@@ -7841,7 +7841,6 @@ Hoffman                 Expires November 6, 2015              [Page 140]
 Internet-Draft                  XML2RFCv3                       May 2015
 
 
-         in figure element  31
          in note element  37
          in references element  44
          in section element  50
@@ -7889,6 +7888,7 @@ Internet-Draft                  XML2RFCv3                       May 2015
       type attribute
          in artwork element  15
          in format element  73
+         in ol element  38
 
 
 

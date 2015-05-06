@@ -1783,9 +1783,9 @@ Table of Contents
    The ordinal value to start the list at.  This defaults to "1", and
    must be an integer of 0 or greater.
 
-2.34.4.  'style' attribute
+2.34.4.  'type' attribute
 
-   The style of the labels on list items.  If the length of the style
+   The type of the labels on list items.  If the length of the type
    value is 1, the meaning is the same as it is for HTML:
 
    a  Lowercase letters (a, b, c, ...)
@@ -1798,10 +1798,10 @@ Table of Contents
 
    I  Uppercase Roman numerals (I, II, III, ...)
 
-   For style "a" and "A", after the 26th entry, the numbering starts at
+   For type "a" and "A", after the 26th entry, the numbering starts at
    "aa"/"AA", then "ab"/"AB", and so on.
 
-   If the length of the style value is greater than 1, the value must
+   If the length of the type value is greater than 1, the value must
    contain a percent-encoded indicator and other text.  The value is a
    free-form text that allows counter values to be inserted using a
    "percent-letter" format.  For instance, "[REQ%d]" generates labels of
@@ -1824,13 +1824,13 @@ Table of Contents
 
    Other formats are reserved for future use.
 
-   It is an error for the style string to be empty, and processors will
-   reject documents with an element that has such a style.  For bulleted
+   It is an error for the type string to be empty, and processors will
+   reject documents with an element that has such a type.  For bulleted
    lists, you use the <ul> element.  For lists that have neither bullets
    nor numbers, use the <ul> element with the 'empty="true"' attribute.
 
-   If no "style" attribute is given, the default style is the same as
-   "style='%d.'".
+   If no type attribute is given, the default type is the same as
+   "type='%d.'".
 
 2.35.  <organization>
 
@@ -4599,7 +4599,7 @@ Appendix C.  Relax NG Schema
 
    ol =
      element ol {
-       [ a:defaultValue = "1" ] attribute style { text }?,
+       [ a:defaultValue = "1" ] attribute type { text }?,
        [ a:defaultValue = "1" ] attribute start { text }?,
        attribute group { text }?,
        [ a:defaultValue = "normal" ]
@@ -5347,7 +5347,7 @@ Appendix D.  Schema Differences from v2
        }
    + ol =
    +   element ol {
-   +     [ a:defaultValue = "1" ] attribute style { text }?,
+   +     [ a:defaultValue = "1" ] attribute type { text }?,
    +     [ a:defaultValue = "1" ] attribute start { text }?,
    +     attribute group { text }?,
    +     [ a:defaultValue = "normal" ]
@@ -6377,7 +6377,7 @@ Index
          inside th  1
          spacing attribute  1
          start attribute  1
-         style attribute  1
+         type attribute  1
       organization element  1
          abbrev attribute  1
          ascii attribute  1
@@ -6559,7 +6559,6 @@ Index
          inside tt  1
       style attribute
          in list element  1
-         in ol element  1
          in spanx element  1
          in texttable element  1
       sub element  1
@@ -6712,6 +6711,7 @@ Index
       type attribute
          in artwork element  1
          in format element  1
+         in ol element  1
          in sourcecode element  1
 
    U
