@@ -9,6 +9,7 @@ import lxml
 import re
 import xml2rfc.log
 import xml2rfc.utils
+
 try:
     import debug
     assert debug
@@ -303,11 +304,12 @@ class BaseRfcWriter:
         self.ascii = False
         self.nbws_cond = u'\u00A0'
         self.eref_list = []
+        self.xmlrfc = xmlrfc
+        self.pis = self.xmlrfc.getpis()
 
         # We will refer to the XmlRfc document root as 'r'
         self.xmlrfc = xmlrfc
         self.r = xmlrfc.getroot()
-        self.pis = xmlrfc.getpis()
 
         # Document counters
         self.ref_start = 1              # Start of reference counters
@@ -446,6 +448,9 @@ class BaseRfcWriter:
         else:
             initials = ". ".join(initials_list) + "."
         return initials
+
+    def parse_pi(self, pi):
+        return xml2rfc.utils.parse_pi(pi, self.pis)
 
     def _getTocIndex(self):
         return [item for item in self._index if item.toc]
@@ -845,9 +850,9 @@ class BaseRfcWriter:
         for element in section:
             # Check for a PI
             if element.tag is lxml.etree.PI:
-                pis = self.xmlrfc.parse_pi(element)
-                if pis and "needLines" in pis:
-                    self.needLines(pis["needLines"])
+                pidict = self.parse_pi(element)
+                if pidict and "needLines" in pidict:
+                    self.needLines(pidict["needLines"])
             # Write elements in XML document order
             if element.tag == 't':
                 anchor = element.attrib.get('anchor')
@@ -1013,6 +1018,7 @@ class BaseRfcWriter:
         self.figure_count = 0
         self.table_count = 0
         self.eref_count = 0
+        self.pis = self.xmlrfc.getpis()
 
         # Middle sections
         middle = self.r.find('middle')
@@ -1081,6 +1087,7 @@ class BaseRfcWriter:
         self.figure_count = 0
         self.table_count = 0
         self.eref_count = 0
+        self.pis = self.xmlrfc.getpis()
 
         # Block header
         topblock = self.pis['topblock']

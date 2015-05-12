@@ -9,6 +9,7 @@ import re
 import os
 import shutil
 import xml2rfc.log
+import xml2rfc.utils
 import requests
 import codecs
 import time
@@ -326,7 +327,7 @@ class CachingResolver(lxml.etree.Resolver):
             cached_path = os.path.join(dir, xml2rfc.CACHE_PREFIX, basename)
             if os.path.exists(cached_path):
                 if os.path.getmtime(cached_path) < (time.time() - self.cache_refresh_secs) and not self.no_network:
-                    xml2rfc.log.note('Cached version too old; will refresh cache for %s %s' % (typename, url))
+                    xml2rfc.log.note('Cached version at %s too old; will refresh cache for %s %s' % (cached_path, typename, url))
                     break
                 else:
                     xml2rfc.log.note('Resolving ' + typename + '...', url)
@@ -583,7 +584,7 @@ class XmlRfc:
 
     def getpis(self):
         """ Returns a list of the XML processing instructions """
-        return self.pis
+        return self.pis.copy()
     
     def validate(self, dtd_path=None):
         """ Validate the document with its default dtd, or an optional one 
@@ -623,24 +624,9 @@ class XmlRfc:
             else:
                 # The document was not valid
                 return False, dtd.error_log
-    
+
     def parse_pi(self, pi):
-        """ Add a processing instruction to the current state 
-            
-            Will also return the dictionary containing the added instructions
-            for use in things like ?include instructions
-        """
-        if pi.text:
-            # Split text in the format 'key="val"'
-            chunks = re.split(r'=[\'"]([^\'"]*)[\'"]', pi.text)
-            # Create pairs from this flat list, discard last element if odd
-            tmp_dict = dict(zip(chunks[::2], chunks[1::2]))
-            for key, val in tmp_dict.items():
-                # Update main PI state
-                self.pis[key] = val
-            # Return the new values added
-            return tmp_dict
-        return {}
+        return xml2rfc.utils.parse_pi(pi, self.pis)
 
     def _eval_pre_pi(self):
         """ Evaluate pre-document processing instructions

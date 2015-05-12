@@ -188,7 +188,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         for element in list:
             # Check for PI
             if element.tag is lxml.etree.PI:
-                self.xmlrfc.parse_pi(element)
+                self.parse_pi(element)
             elif element.tag == 't':
                 # Disable linebreak if subcompact=yes AND not first list element
                 leading_blankline = True
@@ -425,7 +425,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         for i, element in enumerate(elements):
             # Check for a PI first
             if element.tag is lxml.etree.PI:
-                self.xmlrfc.parse_pi(element)
+                self.parse_pi(element)
             if element.tag not in self.inline_tags:
                 # Not an inline element, exit
                 return ''.join(line), elements[i:]

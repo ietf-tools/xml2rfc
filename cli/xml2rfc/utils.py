@@ -479,3 +479,21 @@ _unicode_replacements = {
     u'\u017e': 'z',
     u'\u2010': '-',
 }
+
+def parse_pi(pi, pis):
+    """ Add a processing instruction to the current state 
+
+        Will also return the dictionary containing the added instructions
+        for use in things like ?include instructions
+    """
+    if pi.text:
+        # Split text in the format 'key="val"'
+        chunks = re.split(r'=[\'"]([^\'"]*)[\'"]', pi.text)
+        # Create pairs from this flat list, discard last element if odd
+        tmp_dict = dict(zip(chunks[::2], chunks[1::2]))
+        for key, val in tmp_dict.items():
+            # Update main PI state
+            pis[key] = val
+        # Return the new values added
+        return tmp_dict
+    return {}
