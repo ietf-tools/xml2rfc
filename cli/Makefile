@@ -50,8 +50,11 @@ miektest: install
 cachetest: install
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
+	@ echo "Clearing cache ..."
 	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache .cache --clear-cache
+	@ echo "Filling cache ..."
 	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache .cache tests/input/rfc6787.xml --base tmp/ --raw
+	@ echo "Running without accessing network ..."
 	@ PYTHONPATH=$$PWD python scripts/xml2rfc --cache .cache tests/input/rfc6787.xml --no-network --base tmp/ --raw
 
 rfctest:  bin/python install
