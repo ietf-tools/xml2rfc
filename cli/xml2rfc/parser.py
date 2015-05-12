@@ -333,26 +333,26 @@ class CachingResolver(lxml.etree.Resolver):
                     xml2rfc.log.note('Resolving ' + typename + '...', url)
                     xml2rfc.log.note('Loaded from cache', cached_path)
                     return cached_path
-        else:
-            xml2rfc.log.note('Resolving ' + typename + '...', url)
-            if not netloc in self.sessions:
-                self.sessions[netloc] = requests.Session()
-            session = self.sessions[netloc]
-            r = session.get(url)
-            if r.status_code == 200:
-                if self.write_cache:
-                    write_path = os.path.join(self.write_cache, 
-                                              xml2rfc.CACHE_PREFIX, basename)
-                    with codecs.open(write_path, 'w', encoding='utf-8') as cache_file:
-                        cache_file.write(r.text)
-                    xml2rfc.log.note('Added file to cache: ', write_path)
-                    return write_path
-                else:
-                    return url
+
+        xml2rfc.log.note('Resolving ' + typename + '...', url)
+        if not netloc in self.sessions:
+            self.sessions[netloc] = requests.Session()
+        session = self.sessions[netloc]
+        r = session.get(url)
+        if r.status_code == 200:
+            if self.write_cache:
+                write_path = os.path.join(self.write_cache, 
+                                          xml2rfc.CACHE_PREFIX, basename)
+                with codecs.open(write_path, 'w', encoding='utf-8') as cache_file:
+                    cache_file.write(r.text)
+                xml2rfc.log.note('Added file to cache: ', write_path)
+                return write_path
             else:
-                # Invalid URL -- Error will be displayed in getReferenceRequest
-                xml2rfc.log.note("URL retrieval failed with status code %s for '%s'" % (r.status_code, r.url))
-                return ''
+                return url
+        else:
+            # Invalid URL -- Error will be displayed in getReferenceRequest
+            xml2rfc.log.note("URL retrieval failed with status code %s for '%s'" % (r.status_code, r.url))
+            return ''
 
 
 class XmlRfcParser:
