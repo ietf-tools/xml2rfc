@@ -182,7 +182,10 @@ for table cells.</t>
 
 <t>Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes to &lt;<xref target="element.rfc" format="none">rfc</xref>&gt;
 to cover processor instructions (PIs) that were in v2 that are still needed in the grammar.
-Also add "prepTime" to indicate the time that the XML went through a preparation step.</t>
+Add "prepTime" to indicate the time that the XML went through a preparation step.
+Add "version" to indicate the version of XML2RFC vocabulary used in the document.
+Add "scripts" to indicate which scripts are needed to render the document.
+</t>
 
 <t>Add "ascii" attributes to &lt;<xref target="element.email" format="none">email</xref>&gt;,
 &lt;<xref target="element.organization" format="none">organization</xref>&gt;, &lt;<xref target="element.street" format="none">street</xref>&gt;,
@@ -3178,6 +3181,20 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       </t>
    </section>
 
+   <!--rfc/@scripts-->
+   <section anchor="element.rfc.attribute.scripts" toc="exclude" title="'scripts' attribute">
+      
+      <iref item="Attributes" subitem="scripts"/>
+      <iref item="rfc element" subitem="scripts attribute"/>
+      <iref item="scripts attribute" subitem="in rfc element"/>
+      <t>
+         The list of scripts needed to render this document. The list is comma-separated,
+         with no spaces allowed. The order is unimportant. The names come from <xref target="UAX24"/>. This attriute is normally filled in by the prep tool.
+         For example, if the document has Chinese characters in it, the
+         value might be "Common,Latin,Han". 
+      </t>
+   </section>
+
    <!--rfc/@seriesNo-->
    <section anchor="element.rfc.attribute.seriesNo" toc="exclude" title="'seriesNo' attribute">
       
@@ -5896,14 +5913,25 @@ not those that are part of a sequence of resources.</t>
     </front>
   </reference>
   
-  <reference anchor="UNICODE" target="http://www.unicode.org/versions/Unicode6.3.0/">
+  <reference anchor="UAX24" target="http://www.unicode.org/reports/tr24/">
     <front>
-      <title>The Unicode Standard, Version 6.3.0</title>
+      <title>UAX #24: Unicode Script Property</title>
       <author>
         <organization>The Unicode Consortium</organization>
       </author>
-      <date year="2013" month="September"/>
     </front>
+  </reference>
+
+  <reference anchor="UNICODE">
+    <front>
+      <title>The Unicode Standard</title>
+      <author>
+        <organization>The Unicode Consortium</organization>
+      </author>
+    </front>
+    <annotation>
+      For the latest version, see <eref target="http://www.unicode.org/versions/latest/"/>.
+    </annotation>
   </reference>
 
   <reference anchor="USASCII">
@@ -6432,6 +6460,7 @@ rfc =
     [ a:defaultValue = "true" ]
     attribute indexInclude { "true" | "false" }?,
     attribute version { text }?,
+    [ a:defaultValue = "Common,Latin" ] attribute scripts { text }?,
     link*,
     front,
     middle,
@@ -7193,6 +7222,8 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "true" ]
 +     attribute indexInclude { "true" | "false" }?,
 +     attribute version { text }?,
++     [ a:defaultValue = "Common,Latin" ] attribute scripts { text 
++ }?,
 +     link*,
       front,
       middle,

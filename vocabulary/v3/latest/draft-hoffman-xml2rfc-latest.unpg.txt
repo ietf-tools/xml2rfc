@@ -284,8 +284,11 @@ Table of Contents
 
    o  Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes
       to <rfc> to cover processor instructions (PIs) that were in v2
-      that are still needed in the grammar.  Also add "prepTime" to
-      indicate the time that the XML went through a preparation step.
+      that are still needed in the grammar.  Add "prepTime" to indicate
+      the time that the XML went through a preparation step.  Add
+      "version" to indicate the version of XML2RFC vocabulary used in
+      the document.  Add "scripts" to indicate which scripts are needed
+      to render the document.
 
    o  Add "ascii" attributes to <email>, <organization>, <street>,
       <city>, <region> and <code>.  Also add "asciiFullname",
@@ -2201,11 +2204,19 @@ Table of Contents
    included in the XML file just before it is saved to disk.  The value
    is formatted using the format from [RFC3339].
 
-2.44.10.  'seriesNo' attribute
+2.44.10.  'scripts' attribute
+
+   The list of scripts needed to render this document.  The list is
+   comma-separated, with no spaces allowed.  The order is unimportant.
+   The names come from [UAX24].  This attriute is normally filled in by
+   the prep tool.  For example, if the document has Chinese characters
+   in it, the value might be "Common,Latin,Han".
+
+2.44.11.  'seriesNo' attribute
 
    Deprecated; instead, use the "value" attribute in <seriesInfo>.
 
-2.44.11.  'sortRefs' attribute
+2.44.12.  'sortRefs' attribute
 
    Specifies whether or not a processor will sort the references in each
    reference section.
@@ -2216,7 +2227,7 @@ Table of Contents
 
    o  "false" (default)
 
-2.44.12.  'submissionType' attribute
+2.44.13.  'submissionType' attribute
 
    The document stream.
 
@@ -2232,7 +2243,7 @@ Table of Contents
 
    o  "independent"
 
-2.44.13.  'symRefs' attribute
+2.44.14.  'symRefs' attribute
 
    Specifies whether or not a processor will use symbolic references
    (such as "[RFC2119]").  If the value for this is "no", the references
@@ -2244,12 +2255,12 @@ Table of Contents
 
    o  "false"
 
-2.44.14.  'tocDepth' attribute
+2.44.15.  'tocDepth' attribute
 
    Specifies number of levels of heading for a processor to include in
    the table of contents; the default is "3".
 
-2.44.15.  'tocInclude' attribute
+2.44.16.  'tocInclude' attribute
 
    Specifies whether or not a processor will include a table of contents
    in generated files.
@@ -2260,7 +2271,7 @@ Table of Contents
 
    o  "false"
 
-2.44.16.  'updates' attribute
+2.44.17.  'updates' attribute
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
@@ -2269,7 +2280,7 @@ Table of Contents
    hyperlinks can be generated.  Also, the value ought to be reformatted
    to insert whitespace after each comma if not already present.
 
-2.44.17.  'version' attribute
+2.44.18.  'version' attribute
 
    Specifies the version of xml2rfc syntax used in this document.  The
    only expected value (for now) is "3".
@@ -3178,7 +3189,7 @@ Table of Contents
    boilerplate, replacing the "Network Working Group" string.
    Formatting software can append the words "Working Group" or "Research
    Group", depending on the "submissionType" property on the <rfc>
-   element (Section 2.44.12).
+   element (Section 2.44.13).
 
    This element appears as a child element of: <front> (Section 2.26).
 
@@ -3932,9 +3943,13 @@ Table of Contents
                     Documents", December 2009, <http://trustee.ietf.org/
                     license-info/IETF-TLP-4.htm>.
 
-   [UNICODE]        The Unicode Consortium, "The Unicode Standard,
-                    Version 6.3.0", September 2013,
-                    <http://www.unicode.org/versions/Unicode6.3.0/>.
+   [UAX24]          The Unicode Consortium, "UAX #24: Unicode Script
+                    Property", <http://www.unicode.org/reports/tr24/>.
+
+   [UNICODE]        The Unicode Consortium, "The Unicode Standard".
+
+                    For the latest version, see
+                    <http://www.unicode.org/versions/latest/>.
 
    [USASCII]        American National Standards Institute, "Coded
                     Character Set -- 7-bit American Standard Code for
@@ -3978,7 +3993,7 @@ A.1.  The /rfc/@ipr Attribute
    refer to <http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf>.
 
    For the current "Status Of This Memo" text, the submissionType
-   attribute (Section 2.44.12) determines whether a statement about
+   attribute (Section 2.44.13) determines whether a statement about
    "Code Components" is inserted (which is the case for the value
    "IETF", which is the default).  Other values, such as "independent",
    suppress this part of the text.
@@ -4367,6 +4382,7 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "true" ]
        attribute indexInclude { "true" | "false" }?,
        attribute version { text }?,
+       [ a:defaultValue = "Common,Latin" ] attribute scripts { text }?,
        link*,
        front,
        middle,
@@ -5125,6 +5141,8 @@ Appendix D.  Schema Differences from v2
    +     [ a:defaultValue = "true" ]
    +     attribute indexInclude { "true" | "false" }?,
    +     attribute version { text }?,
+   +     [ a:defaultValue = "Common,Latin" ] attribute scripts { text
+   + }?,
    +     link*,
          front,
          middle,
@@ -5931,6 +5949,7 @@ Index
          removeInRFC  1
          role  1
          rowspan  1
+         scripts  1
          section  1
          sectionFormat  1
          seriesNo  1
@@ -6469,6 +6488,7 @@ Index
          number attribute  1
          obsoletes attribute  1
          prepTime attribute  1
+         scripts attribute  1
          seriesNo attribute  1
          sortRefs attribute  1
          submissionType attribute  1
@@ -6484,6 +6504,8 @@ Index
          in th element  1
 
    S
+      scripts attribute
+         in rfc element  1
       section attribute
          in xref element  1
       section element  1
