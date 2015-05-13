@@ -27,7 +27,7 @@ After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
 <rfc obsoletes="2629" ipr="trust200902" docName="draft-hoffman-xml2rfc-latest" category="info">
   
 	<front>
-  <title abbrev="XML2RFCv3">The 'XML2RFC' version 3 Vocabulary</title>
+  <title>The 'XML2RFC' version 3 Vocabulary</title>
   <author initials="P." surname="Hoffman" fullname="Paul Hoffman">
     <organization>VPN Consortium</organization>
 	<address><email>paul.hoffman@vpnc.org</email></address>
@@ -3287,6 +3287,17 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
             to insert whitespace after each comma if not already present.
       </t>
    </section>
+
+   <!--rfc/@version-->
+   <section anchor="element.rfc.attribute.version" toc="exclude" title="'version' attribute">
+      
+      <iref item="Attributes" subitem="version"/>
+      <iref item="rfc element" subitem="version attribute"/>
+      <iref item="version attribute" subitem="in rfc element"/>
+      <t>
+         Specifies the version of xml2rfc syntax used in this document. The only expected value (for now) is "3".
+      </t>
+   </section>
 </section>
 
 <!--section-->
@@ -6420,6 +6431,7 @@ rfc =
     attribute prepTime { text }?,
     [ a:defaultValue = "true" ]
     attribute indexInclude { "true" | "false" }?,
+    attribute version { text }?,
     link*,
     front,
     middle,
@@ -7180,6 +7192,7 @@ to the v3 schema.</t>
 +     attribute prepTime { text }?,
 +     [ a:defaultValue = "true" ]
 +     attribute indexInclude { "true" | "false" }?,
++     attribute version { text }?,
 +     link*,
       front,
       middle,

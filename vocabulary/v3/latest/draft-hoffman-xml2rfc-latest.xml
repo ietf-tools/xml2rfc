@@ -15,8 +15,6 @@
 
 Deal with xref/iref and incorporating the needed text in a processor
 
-May need an attribute that says "this is in v3 semantics"
-
 Think about all the "processor" wording, whether it should be here, and so on.
 
 Joe asks: Any reason we can't use "type" instead of "style" for ol?  That way it's the same as HTML.
@@ -30,7 +28,7 @@ After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
 <rfc xmlns:x="http://purl.org/net/xml2rfc/ext" obsoletes="2629" xmlns:ed="http://greenbytes.de/2002/rfcedit" ipr="trust200902" docName="draft-hoffman-xml2rfc-latest" category="info" xml:lang="en">
   <x:feedback template="mailto:xml2rfc@ietf.org?subject={docname},%20%22{section}%22&amp;body=&lt;{ref}&gt;:"/>
 	<front>
-  <title abbrev="XML2RFCv3">The 'XML2RFC' version 3 Vocabulary</title>
+  <title>The 'XML2RFC' version 3 Vocabulary</title>
   <author initials="P." surname="Hoffman" fullname="Paul Hoffman">
     <organization>VPN Consortium</organization>
 	<address><email>paul.hoffman@vpnc.org</email></address>
@@ -3386,6 +3384,17 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
             to insert whitespace after each comma if not already present.
       </t>
    </section>
+
+   <!--rfc/@version-->
+   <section anchor="element.rfc.attribute.version" toc="exclude">
+      <name>'version' attribute</name>
+      <iref item="Attributes" subitem="version"/>
+      <iref item="rfc element" subitem="version attribute"/>
+      <iref item="version attribute" subitem="in rfc element"/>
+      <t>
+         Specifies the version of xml2rfc syntax used in this document. The only expected value (for now) is "3".
+      </t>
+   </section>
 </section>
 
 <!--section-->
@@ -6565,6 +6574,7 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     attribute prepTime { text }?,
     [ a:defaultValue = "true" ]
     attribute indexInclude { "true" | "false" }?,
+    attribute version { text }?,
     link*,
     front,
     middle,
@@ -7325,6 +7335,7 @@ to the v3 schema.</t>
 +     attribute prepTime { text }?,
 +     [ a:defaultValue = "true" ]
 +     attribute indexInclude { "true" | "false" }?,
++     attribute version { text }?,
 +     link*,
       front,
       middle,

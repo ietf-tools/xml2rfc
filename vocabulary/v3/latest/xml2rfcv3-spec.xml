@@ -2239,8 +2239,48 @@
       <iref item="Attributes" subitem="type"/>
       <iref item="ol element" subitem="type attribute"/>
       <iref item="type attribute" subitem="in ol element"/>
-      <t><!--AG-->
-         <cref anchor="element.ol.attribute.type.missing">attribute description missing</cref>
+      <t>
+         The type of the labels on list items. If the length of the type value is 1, the
+         meaning is the same as it is for HTML:
+         <list style="hanging">
+            <t hangText="a">Lowercase letters (a, b, c, ...)</t>
+            <t hangText="A">Uppercase letters (A, B, C, ...)</t>
+            <t hangText="1">Decimal numbers (1, 2, 3, ...)</t>
+            <t hangText="i">Lowercase Roman numerals (i, ii, iii, ...)</t>
+            <t hangText="I">Uppercase Roman numerals (I, II, III, ...)</t>
+         </list>
+         For type "a" and "A", after the 26th entry, the numbering starts at "aa"/"AA", then
+         "ab"/"AB", and so on.
+      </t>
+      <t>
+        If the length of the type value is greater than 1, the value must contain a
+        percent-encoded indicator and other text.
+        The value is a free-form text that allows counter values to be
+        inserted using a "percent-letter" format. For instance, "[REQ%d]"
+        generates labels of the form "[REQ1]", where "%d" inserts the
+        item number as decimal number.
+      </t>
+      <t>
+         The following formats are supported:
+         <list style="hanging">
+            <t hangText="%c">Lowercase letters (a, b, c, ...)</t>
+            <t hangText="%C">Uppercase letters (A, B, C, ...)</t>
+            <t hangText="%d">Decimal numbers (1, 2, 3, ...)</t>
+            <t hangText="%i">Lowercase Roman numerals (i, ii, iii, ...)</t>
+            <t hangText="%I">Uppercase Roman numerals (I, II, III, ...)</t>
+            <t hangText="%%">Represents a percent sign</t>
+         </list>
+         Other formats are reserved for future use.
+       </t>
+      <t>
+        It is an error for the type string to be empty, and processors will reject documents
+        with an element that has such a type.
+        For bulleted lists, you use the &lt;<x:ref>ul</x:ref>&gt; element.
+        For lists that have neither bullets nor numbers, use the &lt;<x:ref>ul</x:ref>&gt; element with the
+        'empty="true"' attribute.
+      </t>
+      <t>
+        If no type attribute is given, the default type is the same as "type='%d.'".
       </t>
    </section>
 </section>
@@ -2972,6 +3012,17 @@
             references can be detected and, depending on output representation, 
             hyperlinks can be generated. Also, the value ought to be reformatted
             to insert whitespace after each comma if not already present.
+      </t>
+   </section>
+
+   <!--rfc/@version-->
+   <section anchor="element.rfc.attribute.version" toc="exclude">
+      <name>'version' attribute</name>
+      <iref item="Attributes" subitem="version"/>
+      <iref item="rfc element" subitem="version attribute"/>
+      <iref item="version attribute" subitem="in rfc element"/>
+      <t><!--AG-->
+         <cref anchor="element.rfc.attribute.version.missing">attribute description missing</cref>
       </t>
    </section>
 </section>

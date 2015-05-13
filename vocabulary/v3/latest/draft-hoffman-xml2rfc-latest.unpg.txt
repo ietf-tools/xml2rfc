@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                                May 5, 2015
+Obsoletes: 2629 (if approved)                               May 13, 2015
 Intended status: Informational
-Expires: November 6, 2015
+Expires: November 14, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 6, 2015.
+   This Internet-Draft will expire on November 14, 2015.
 
 Copyright Notice
 
@@ -2269,6 +2269,11 @@ Table of Contents
    hyperlinks can be generated.  Also, the value ought to be reformatted
    to insert whitespace after each comma if not already present.
 
+2.44.17.  'version' attribute
+
+   Specifies the version of xml2rfc syntax used in this document.  The
+   only expected value (for now) is "3".
+
 2.45.  <section>
 
    Represents a section (when inside a <middle> element) or an appendix
@@ -4361,6 +4366,7 @@ Appendix C.  Relax NG Schema
        attribute prepTime { text }?,
        [ a:defaultValue = "true" ]
        attribute indexInclude { "true" | "false" }?,
+       attribute version { text }?,
        link*,
        front,
        middle,
@@ -5118,6 +5124,7 @@ Appendix D.  Schema Differences from v2
    +     attribute prepTime { text }?,
    +     [ a:defaultValue = "true" ]
    +     attribute indexInclude { "true" | "false" }?,
+   +     attribute version { text }?,
    +     link*,
          front,
          middle,
@@ -5948,6 +5955,7 @@ Index
          type  1
          updates  1
          value  1
+         version  1
          width  1
          xml:space  1
          year  1
@@ -6468,6 +6476,7 @@ Index
          tocDepth attribute  1
          tocInclude attribute  1
          updates attribute  1
+         version attribute  1
       role attribute
          in author element  1
       rowspan attribute
@@ -6735,6 +6744,8 @@ Index
    V
       value attribute
          in seriesInfo element  1
+      version attribute
+         in rfc element  1
       vspace element  1
          blankLines attribute  1
          inside t  1
