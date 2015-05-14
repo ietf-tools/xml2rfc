@@ -615,7 +615,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             if annotation is not None and annotation.text:
                 ref_td.append(E.P(annotation.text))
         if self.pis['sortrefs'] == 'yes' and self.pis['symrefs'] == 'yes':
-            refkeys = sorted(refkeys)
+            refkeys.sort(key=str.lower)
         for key in refkeys:
             tbody.append(refdict[key])
         self.ref_start += i + 1                
