@@ -1619,34 +1619,32 @@
 </xsl:template>
 
 <xsl:template match="ul">
-  <xsl:call-template name="check-no-text-content"/>
-  <xsl:variable name="p">
-    <xsl:call-template name="get-paragraph-number" />
-  </xsl:variable>
   <xsl:choose>
-    <xsl:when test="$p!='' and not(ancestor::list) and not(ancestor::ul) and not(ancestor::dl) and not(ancestor::ol) and not(ancestor::ed:del) and not(ancestor::ed:ins)">
-      <div id="{$anchor-prefix}.section.{$p}">
-        <ul>
-          <xsl:call-template name="copy-anchor"/>
-          <xsl:if test="@empty='true'">
-            <xsl:attribute name="class">empty</xsl:attribute>
-          </xsl:if>
-          <xsl:call-template name="insertInsDelClass"/>
-          <xsl:apply-templates />
-        </ul>
+    <xsl:when test="@anchor">
+      <div id="{@anchor}">
+        <xsl:call-template name="ul"/>
       </div>
     </xsl:when>
     <xsl:otherwise>
-      <ul>
-        <xsl:call-template name="copy-anchor"/>
-        <xsl:if test="@empty='true'">
-          <xsl:attribute name="class">empty</xsl:attribute>
-        </xsl:if>
-        <xsl:call-template name="insertInsDelClass"/>
-        <xsl:apply-templates />
-      </ul>
+      <xsl:call-template name="ul"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template name="ul">
+  <xsl:variable name="p">
+    <xsl:call-template name="get-paragraph-number" />
+  </xsl:variable>
+  <ul>
+    <xsl:if test="$p!='' and not(ancestor::list) and not(ancestor::ul) and not(ancestor::dl) and not(ancestor::ol) and not(ancestor::ed:del) and not(ancestor::ed:ins)">
+      <xsl:attribute name="id"><xsl:value-of select="concat($anchor-prefix,'.section.',$p)"/></xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@empty='true'">
+      <xsl:attribute name="class">empty</xsl:attribute>
+    </xsl:if>
+    <xsl:call-template name="insertInsDelClass"/>
+    <xsl:apply-templates />
+  </ul>
 </xsl:template>
 
 <xsl:template match="li">
@@ -2175,6 +2173,12 @@
               <xsl:if test="@value!=''">&#0160;<xsl:value-of select="@value" /></xsl:if>
             </a>
           </xsl:when>
+          <xsl:when test="@name='DOI'">
+            <a href="http://dx.doi.org/{@value}">
+              <xsl:value-of select="@name" />
+              <xsl:if test="@value!=''">&#0160;<xsl:value-of select="@value" /></xsl:if>
+            </a>
+          </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="@name" />
             <xsl:if test="@value!=''">&#0160;<xsl:value-of select="@value" /></xsl:if>
@@ -2542,6 +2546,9 @@
       <xsl:choose>
         <xsl:when test="$p!='' and not(ancestor::list) and not(ancestor::ol) and not(ancestor::ul) and not(ancestor::ed:del) and not(ancestor::ed:ins)">
           <div id="{$anchor-prefix}.section.{$p}">
+            <xsl:if test="$keepwithnext">
+              <xsl:attribute name="class">avoidbreakafter</xsl:attribute>
+            </xsl:if>
             <xsl:apply-templates mode="t-content" select="node()[1]">
               <xsl:with-param name="inherited-self-link" select="$inherited-self-link"/>
             </xsl:apply-templates>
@@ -6711,12 +6718,23 @@ dd, li, p {
 </xsl:template>
 
 <xsl:template match="x:blockquote|blockquote">
+  <xsl:choose>
+    <xsl:when test="@anchor">
+      <div id="{@anchor}">
+        <xsl:call-template name="blockquote"/>
+      </div>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="blockquote"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="blockquote">
   <xsl:variable name="p">
     <xsl:call-template name="get-paragraph-number" />
   </xsl:variable>
-
   <blockquote>
-    <xsl:call-template name="copy-anchor"/>
     <xsl:if test="string-length($p) &gt; 0 and not(ancestor::ed:del) and not(ancestor::ed:ins)">
       <xsl:attribute name="id"><xsl:value-of select="$anchor-prefix"/>.section.<xsl:value-of select="$p"/></xsl:attribute>
     </xsl:if>
@@ -7928,11 +7946,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.727 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.727 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.729 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.729 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2015/05/04 14:04:30 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/05/04 14:04:30 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2015/05/14 13:36:11 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/05/14 13:36:11 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>
