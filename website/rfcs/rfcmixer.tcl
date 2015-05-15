@@ -1209,25 +1209,41 @@ proc be_do_get_id {} {
 
     catch { file delete -- [set newF data/1id-abstracts.new] }
 
-    if {![FTP::New ftp.ietf.org anonymous anonymous@[info hostname] \
-                   -mode passive]} {
+#    if {![FTP::New ftp.ietf.org anonymous anonymous@[info hostname] \
+#                   -mode passive]} {
+#        return
+#    }
+#
+#    FTP::What Type
+#    FTP::Type ascii
+#
+#    FTP::What Get
+#    FTP::Where 1id-abstracts.txt
+#    if {![FTP::Get internet-drafts/1id-abstracts.txt $newF]} {
+#        FTP::What Close
+#        FTP::Close
+#
+#        return
+#    }
+#
+#    FTP::What Close
+#    FTP::Close
+
+    set fd ""
+    set code [catch {
+        set httpT [http::geturl http://www.ietf.org/id/1id-abstracts.txt]
+        set fd [open $newF { WRONLY CREAT TRUNC }]
+        puts -nonewline $fd [set body [http::data $httpT]]
+        close $fd
+    } result]
+    catch { http::cleanup $httpT }
+    if {$code} {
+        catch { file delete -- $newF }
+        catch { close $fd }
         return
     }
 
-    FTP::What Type
-    FTP::Type ascii
 
-    FTP::What Get
-    FTP::Where 1id-abstracts.txt
-    if {![FTP::Get internet-drafts/1id-abstracts.txt $newF]} {
-        FTP::What Close
-        FTP::Close
-
-        return
-    }
-
-    FTP::What Close
-    FTP::Close
 
     array set id [parse_id_index $newF]
 
