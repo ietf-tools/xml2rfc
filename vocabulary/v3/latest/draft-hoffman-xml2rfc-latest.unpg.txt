@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                               May 13, 2015
+Obsoletes: 2629 (if approved)                               May 15, 2015
 Intended status: Informational
-Expires: November 14, 2015
+Expires: November 16, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 14, 2015.
+   This Internet-Draft will expire on November 16, 2015.
 
 Copyright Notice
 
@@ -160,7 +160,7 @@ Table of Contents
        A.1.2.  Historic Values
      A.2.  The /rfc/@submissionType Attribute
      A.3.  The /rfc/@consensus Attribute
-   Appendix B.  The v3 Format and Processors
+   Appendix B.  The v3 Format and Processing Tools
      B.1.  Including External Text
      B.2.  Anchors and IDs
        B.2.1.  Overlapping Values
@@ -182,10 +182,11 @@ Table of Contents
    incorporate as many of the changes as possible.
 
    The v3 format will be used as part of the new RFC series described in
-   [RFC6949].  The new format will be handled by one or more new
-   processors for checking the XML and converting it to other
-   representations.  Features of the expected processors are described
-   in Appendix B.
+   [RFC6949].  The new format will be handled by one or more new tools
+   for preparing the XML and converting it to other representations.
+   Features of the expected tools are described in Appendix B.  That
+   section defines some terms used throughout this document, such as
+   "prep tool" and "formatter".
 
    Note that the vocabulary contains certain constructs that might not
    be used when generating of the final text; however, they can provide
@@ -309,21 +310,20 @@ Table of Contents
       automatically generated numbers for items in a section that don't
       have their own numbering (namely figures and tables).
 
-   o  Add "display" to <cref> to indicate to processors whether or not
-      to display the comment.
+   o  Add "display" to <cref> to indicate to tools whether or not to
+      display the comment.
 
    o  Add "keepWithNext" and "keepWithPrevious" to <t> as a hint to
-      processors that do pagination that the should try to keep the
-      paragraph with the next/previous element.
+      tools that do pagination that the should try to keep the paragraph
+      with the next/previous element.
 
 1.2.3.  Elements and Attributes Deprecated from v2
 
    Deprecated elements and attributes are legacy vocabulary from v2 that
-   are supported for input to v3 processors.  They are likely to be
-   removed from those processors in the future.  Instead of being listed
-   in Section 2, they are listed in in Section 3.  See Appendix B for
-   more information on processors and how they will handle deprecated
-   features.
+   are supported for input to v3 tools.  They are likely to be removed
+   from those tools in the future.  Instead of being listed in
+   Section 2, they are listed in in Section 3.  See Appendix B for more
+   information on tools and how they will handle deprecated features.
 
    o  Deprecate <list> in favor of <dl>, <ul>, and <ol>.
 
@@ -439,7 +439,7 @@ Table of Contents
    to an XML file when doing XML-to-XML conversion where the base file
    has XInclude atttributes (see Appendix B.1).  These attributes are
    not listed in the element descriptions here, but will later be added
-   to the RNG used for the v3 processors.
+   to the RNG used for the v3 tools.
 
 2.1.  <abstract>
 
@@ -585,9 +585,9 @@ Table of Contents
    including text artwork, but using a data: URI is probably confusing
    for text artwork.
 
-   Output formatters that do pagination should attempt to keep artwork
-   on a single page.  This is to prevent artwork that is split across
-   pages from looking like two separate pieces of artwork.
+   Formatters that do pagination should attempt to keep artwork on a
+   single page.  This is to prevent artwork that is split across pages
+   from looking like two separate pieces of artwork.
 
    This element appears as a child element of: <aside> (Section 2.6),
    <blockquote> (Section 2.10), <dd> (Section 2.18), <figure>
@@ -642,9 +642,9 @@ Table of Contents
    (such as automated syntax checkers which work by extracting the
    artwork).  Note that the "name" attribute does not need to be unique
    for artwork elements in a document.  If multiple artwork elements
-   have the same name attribute, a processor might assume that the
-   elements are all fragments of a single file, and the processor can
-   collect those fragments for later processing.
+   have the same name attribute, a processing tool might assume that the
+   elements are all fragments of a single file, and the tool can collect
+   those fragments for later processing.
 
 2.5.6.  'pn' attribute
 
@@ -658,22 +658,20 @@ Table of Contents
    file on the local disk.  This can be a "data" URI ([RFC2397]) that
    contains the contents of the graphics file.  Note that the inclusion
    of art with the "src" attribute depends on the capabilities of the
-   processor reading the XML document.  Processors need to be able to
+   processing tool reading the XML document.  Tools need to be able to
    handle the file: URI, and should be able to handle http: and https:
    URIs as well.
 
    If no URI scheme is given in the attribute, the attribute is
-   considered to be a local file name.  Processors must be careful to
-   not accept dangerous values for the filename, particularly those that
-   contain absolute references outside the current directory.
+   considered to be a local file name. processing tools must be careful
+   to not accept dangerous values for the filename, particularly those
+   that contain absolute references outside the current directory.
 
 2.5.8.  'type' attribute
 
    Specifies the type of the artwork.  The value of this attribute is
-   free text with certain values designated as preferred.  A private
-   processor (as described in Appendix B) might add type-specific
-   formatting to artwork with the preferred values.  If a processor
-   encounters a value for "type" that is not one of the preferred
+   free text with certain values designated as preferred.  If the prep
+   tool encounters a value for "type" that is not one of the preferred
    values, it can issue a warning but should still use the artwork as if
    it had no "type" attribute.
 
@@ -910,8 +908,8 @@ Table of Contents
 2.10.2.  'cite' attribute
 
    The source of the citation.  This must be a URI.  If the quotedFrom
-   attribute is given, this URI will be used by processors as the link
-   for the text of that attribute.
+   attribute is given, this URI will be used by processing tools as the
+   link for the text of that attribute.
 
 2.10.3.  'pn' attribute
 
@@ -922,13 +920,13 @@ Table of Contents
 2.10.4.  'quotedFrom' attribute
 
    Name of person or document the text in this element is quoted from.
-   This will be rendered by the processor as visible text at the end of
-   the quotation.
+   A formatter should render this as visible text at the end of the
+   quotation.
 
 2.11.  <boilerplate>
 
    Holds the boilerplate text for the document.  This section is filled
-   in by the RFC Processor.
+   in by the prep tool.
 
    This element appears as a child element of: <front> (Section 2.26).
 
@@ -939,7 +937,7 @@ Table of Contents
 2.12.  <br>
 
    Indicates that a line break should be inserted in the generated
-   output by the processor.  Multiple successive instances of this
+   output by a formatting tool.  Multiple successive instances of this
    element do not cause blank lines to appear in the output, and is thus
    not useful.
 
@@ -989,9 +987,8 @@ Table of Contents
    Represents a comment.
 
    Comments can be used in a document while it is work-in-progress.
-   They usually appear either inline and visually highlighted, at the
-   end of the document (depending on file representation and settings of
-   the processor), or not at all (when generating an RFC).
+   They might appear either inline and visually highlighted, at the end
+   of the document, or not at all, depending on the formatting tool.
 
    This element appears as a child element of: <annotation>
    (Section 2.3), <blockquote> (Section 2.10), <c> (Section 3.1), <dd>
@@ -1028,8 +1025,8 @@ Table of Contents
 
 2.16.2.  'display' attribute
 
-   Says whether or not the the comment should be displayed by
-   processors.  This might be set to "false" if you want to keep a
+   Suggests whether or not the the comment should be displayed by
+   formatting tools.  This might be set to "false" if you want to keep a
    comment in a document after the contents of the comment have already
    been dealt with.
 
@@ -1054,23 +1051,22 @@ Table of Contents
 
    In the boilerplate case, it defines the date of publication for the
    current document (Internet Draft or RFC).  When producing Internet-
-   Drafts, the Draft Processor uses this date to compute the expiration
-   date (see [IDGUIDE]).  When one or more of "year", "month", or "day"
-   are left out, the processor will attempt to use the current system
-   date if the attributes that are present are consistent with that
-   date.
+   Drafts, the prep tool uses this date to compute the expiration date
+   (see [IDGUIDE]).  When one or more of "year", "month", or "day" are
+   left out, the prep tool will attempt to use the current system date
+   if the attributes that are present are consistent with that date.
 
    Also in the first case, that month names, if given, need to match the
    full English month name: "January", "February", "March", "April",
    "May, "June", "July", "August", "September", "October", "November",
    or "December".
 
-   The draft processor will reject a submitted Internet Draft that has a
-   <date> element in the boilerplate for itself that is anything other
-   than today.  That is, the draft processor will not allow a submitter
-   to specify a date other than the day of submission.  To avoid this
-   problem, authors might simply not include a <date> element in the
-   boilerplate.
+   When the prep tool is used to create Internet Drafts, it will reject
+   a submitted Internet Draft that has a <date> element in the
+   boilerplate for itself that is anything other than today.  That is,
+   the tool will not allow a submitter to specify a date other than the
+   day of submission.  To avoid this problem, authors might simply not
+   include a <date> element in the boilerplate.
 
    In the case of bibliographic references, the date information can
    have prose text for the month or year.  For example, vague dates
@@ -1416,7 +1412,7 @@ Table of Contents
 2.25.5.  'pn' attribute
 
    The number for this figure.  This attribute and its value are
-   automatically generated by the RFC Processor.
+   automatically generated by the prep tool.
 
 2.25.6.  'src' attribute
 
@@ -1495,8 +1491,8 @@ Table of Contents
    relevant for that index entry.  In some formats, index entries of
    this type might be displayed as range.
 
-   When a processor is creating index content, it collects the items in
-   a case-senstive fashion for both the item and subitem level.
+   When the prep tool is creating index content, it collects the items
+   in a case-senstive fashion for both the item and subitem level.
 
    This element appears as a child element of: <annotation>
    (Section 2.3), <aside> (Section 2.6), <blockquote> (Section 2.10),
@@ -1512,8 +1508,8 @@ Table of Contents
 
 2.27.1.  'irefid' attribute
 
-   An identifier for the processor to use when creating indexes.  The
-   content of this attribute is overwritten by the processor, and should
+   An identifier for the prep tool to use when creating indexes.  The
+   content of this attribute is overwritten by the prep tool, and should
    thus never be filled in by the document's author.  This is described
    in more detail in Appendix B.2.
 
@@ -1639,9 +1635,10 @@ Table of Contents
       The value for the "rel" attribute is "alternate".  The link can be
       to a personally-run web site.
 
-   The RFC Processor needs to check the values for <link> before an RFC
-   is published.  The Draft Processor might remove some <link> elements
-   during the draft submission process.
+   In RFC production mode, the prep tool needs to check the values for
+   <link> before an RFC is published.  In draft production mode, the
+   prep tool might remove some <link> elements during the draft
+   submission process.
 
    This element appears as a child element of: <rfc> (Section 2.44).
 
@@ -1694,9 +1691,9 @@ Table of Contents
 
 2.32.1.  'slugifiedName' attribute
 
-   This attribute is filled in by a processor with a "slugified" version
-   of the text in the element.  This attribute can be used in the output
-   formats for elements that have both names and numbers.
+   This attribute is filled in by the prep tool with a "slugified"
+   version of the text in the element.  This attribute can be used in
+   the output formats for elements that have both names and numbers.
 
 2.33.  <note>
 
@@ -1733,7 +1730,7 @@ Table of Contents
 
 2.33.2.  'removeInRFC' attribute
 
-   If set to "yes", this note is marked in the processor with text
+   If set to "true", this note is marked in the prep tool with text
    indicating that it should be removed before the document is published
    as an RFC.
 
@@ -1763,11 +1760,11 @@ Table of Contents
 
 2.34.1.  'group' attribute
 
-   When a processor sees an <ol> element with a "group" attribute that
-   has already been seen, the processor continues the numbering of the
-   list from where the previous list with the same group name left off.
-   If an <ol> element has both a "group" and "start" attribute, the
-   group's numbering is reset to the given start value.
+   When the prep tool sees an <ol> element with a "group" attribute that
+   has already been seen, it continues the numbering of the list from
+   where the previous list with the same group name left off.  If an
+   <ol> element has both a "group" and "start" attribute, the group's
+   numbering is reset to the given start value.
 
 2.34.2.  'spacing' attribute
 
@@ -1827,10 +1824,9 @@ Table of Contents
 
    Other formats are reserved for future use.
 
-   It is an error for the type string to be empty, and processors will
-   reject documents with an element that has such a type.  For bulleted
-   lists, you use the <ul> element.  For lists that have neither bullets
-   nor numbers, use the <ul> element with the 'empty="true"' attribute.
+   It is an error for the type string to be empty.  For bulleted lists,
+   you use the <ul> element.  For lists that have neither bullets nor
+   numbers, use the <ul> element with the 'empty="true"' attribute.
 
    If no type attribute is given, the default type is the same as
    "type='%d.'".
@@ -1871,10 +1867,10 @@ Table of Contents
 2.37.  <postal>
 
    Contains optional child elements providing postal information.  These
-   elements will be displayed in an order that is processor-specific.  A
-   postal address can contain only a set of <street>, <city>, <region>,
-   <code>, and <country> elements, or only an ordered set of
-   <postalLine> elements, but not both.
+   elements will be displayed in an order that is specific to
+   formatters.  A postal address can contain only a set of <street>,
+   <city>, <region>, <code>, and <country> elements, or only an ordered
+   set of <postalLine> elements, but not both.
 
    This element appears as a child element of: <address> (Section 2.2).
 
@@ -1903,7 +1899,7 @@ Table of Contents
 2.38.  <postalLine>
 
    Represents one line of a postal address.  When more than one
-   <postalLine> is given, the processor emits them in the order given.
+   <postalLine> is given, the prep tool emits them in the order given.
 
    This element appears as a child element of: <postal> (Section 2.37).
 
@@ -2035,8 +2031,9 @@ Table of Contents
    child element.  In general, the title should be either "Normative
    References" or "Informative References".
 
-   By default, the order of references is significant.  Processors,
-   however, can be instructed to sort them based on their anchor names.
+   By default, the order of references is significant.  Some formatters,
+   however, might be able to be requested to sort them based on their
+   anchor names.
 
    This element appears as a child element of: <back> (Section 2.8).
 
@@ -2056,21 +2053,16 @@ Table of Contents
 
 2.42.1.  'anchor' attribute
 
-   The number for this section.  This attribute and its value are
-   automatically generated by the RFC Processor, and are ignored by
-   other processors.
+   An optional user-supplied for this section.
 
 2.42.2.  'pn' attribute
 
    The number for this reference section.  This attribute and its value
-   are automatically generated by the RFC Processor, and are ignored by
-   other processors.
+   are automatically generated by the prep tool.
 
 2.42.3.  'title' attribute
 
-   Deprecated.  Use <name> instead.  Processors will flag reference
-   sections that have no <name> element as errors because all sections
-   need a name.
+   Deprecated.  Use <name> instead.
 
 2.43.  <region>
 
@@ -2128,11 +2120,11 @@ Table of Contents
 
 2.44.4.  'indexInclude' attribute
 
-   Specifies whether or not a processor will include an index in
-   generated files.  If the souce file has no <iref> elements, an index
-   is never generated.  This option is useful for generating documents
-   where the source document has <iref> elements but the author no
-   longer wants an index.
+   Specifies whether or not a formatter is requested to include an index
+   in generated files.  If the souce file has no <iref> elements, an
+   index is never generated.  This option is useful for generating
+   documents where the source document has <iref> elements but the
+   author no longer wants an index.
 
    Allowed values:
 
@@ -2193,10 +2185,8 @@ Table of Contents
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
-   Processors ought to parse the attribute value, so that incorrect
-   references can be detected and, depending on output representation,
-   hyperlinks can be generated.  Also, the value ought to be reformatted
-   to insert whitespace after each comma if not already present.
+   The prep tool will parse the attribute value so that incorrect
+   references can be detected.
 
 2.44.9.  'prepTime' attribute
 
@@ -2218,8 +2208,8 @@ Table of Contents
 
 2.44.12.  'sortRefs' attribute
 
-   Specifies whether or not a processor will sort the references in each
-   reference section.
+   Specifies whether or not a formatter is requested to sort the
+   references in each reference section.
 
    Allowed values:
 
@@ -2245,9 +2235,9 @@ Table of Contents
 
 2.44.14.  'symRefs' attribute
 
-   Specifies whether or not a processor will use symbolic references
-   (such as "[RFC2119]").  If the value for this is "no", the references
-   come out as numbers (such as "[3]").
+   Specifies whether or not a formatter is requested to use symbolic
+   references (such as "[RFC2119]").  If the value for this is "false",
+   the references come out as numbers (such as "[3]").
 
    Allowed values:
 
@@ -2257,13 +2247,13 @@ Table of Contents
 
 2.44.15.  'tocDepth' attribute
 
-   Specifies number of levels of heading for a processor to include in
-   the table of contents; the default is "3".
+   Specifies number of levels of heading that formatter is requested to
+   include in the table of contents; the default is "3".
 
 2.44.16.  'tocInclude' attribute
 
-   Specifies whether or not a processor will include a table of contents
-   in generated files.
+   Specifies whether or not a formatter is requested to include a table
+   of contents in generated files.
 
    Allowed values:
 
@@ -2275,10 +2265,8 @@ Table of Contents
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
-   Processors ought to parse the attribute value, so that incorrect
-   references can be detected and, depending on output representation,
-   hyperlinks can be generated.  Also, the value ought to be reformatted
-   to insert whitespace after each comma if not already present.
+   The prep tool will parse the attribute value so that incorrect
+   references can be detected.
 
 2.44.18.  'version' attribute
 
@@ -2339,10 +2327,10 @@ Table of Contents
 
 2.45.2.  'numbered' attribute
 
-   If set to "no", this section does not get a section number.
-   Processors will verify that such a section is not followed by a
-   numbered section in a part, and will verify that the section is a
-   top-level section.
+   If set to "false", the formatter is requested to not display a
+   section number.  The prep tool will verify that such a section is not
+   followed by a numbered section in a part, and will verify that the
+   section is a top-level section.
 
    Allowed values:
 
@@ -2352,15 +2340,14 @@ Table of Contents
 
 2.45.3.  'pn' attribute
 
-   The number for this section, if one is generated by the processor.
-   This attribute and its value are automatically generated by the RFC
-   Processor, and are ignored by other processors.
+   The number for this section.  This attribute and its value are
+   automatically generated by the prep tool.
 
 2.45.4.  'removeInRFC' attribute
 
-   If set to "yes", this section is marked in the processor with a
-   paragraph at the beginning of the section indicating that it should
-   be removed before the document is published as an RFC.
+   If set to "true", the formatter is requested to mark this section
+   with a paragraph at the beginning of the section indicating that it
+   should be removed before the document is published as an RFC.
 
    Allowed values:
 
@@ -2370,20 +2357,20 @@ Table of Contents
 
 2.45.5.  'title' attribute
 
-   Deprecated.  Use <name> instead.  Processors will flag sections that
-   have no <name> element as errors because all sections need a name.
+   Deprecated.  Use <name> instead.
 
 2.45.6.  'toc' attribute
 
-   Indicates to a processor whether or not the section is to be included
-   in the table of contents.  This only takes effect if the level of the
-   section would have appeared in the table of contents based on the
-   "tocDepth" attribute of the <rfc> element, and of course only if the
-   table of contents is being created based on the "tocInclude"
-   attribute of the <rfc> element.  If this is set to "exclude", any
-   section below this one will be excluded as well.  The "default" value
-   indicates to include the section if it would be included by the
-   tocDepth attribute of the <rfc> element.
+   Indicates to a formatter whether or not the section is to be included
+   in a table of contents, if such a table of contents is produced.
+   This only takes effect if the level of the section would have
+   appeared in the table of contents based on the "tocDepth" attribute
+   of the <rfc> element, and of course only if the table of contents is
+   being created based on the "tocInclude" attribute of the <rfc>
+   element.  If this is set to "exclude", any section below this one
+   will be excluded as well.  The "default" value indicates to include
+   the section if it would be included by the tocDepth attribute of the
+   <rfc> element.
 
    Allowed values:
 
@@ -2398,11 +2385,11 @@ Table of Contents
    Specifies the document series in which this document appears, and
    also specifies an identifier within that series.
 
-   A processor determines if it is working on an RFC or an Internet-
-   Draft by inspecting the "name" attribute of a <seriesInfo> element
-   inside the <front> element inside the <rfc> element, looking for
-   "rfc" or "Internet-Draft".  (Specifying neither value in any of the
-   <seriesInfo> elements can be useful for producing other types of
+   A processing tool determines if it is working on an RFC or an
+   Internet-Draft by inspecting the "name" attribute of a <seriesInfo>
+   element inside the <front> element inside the <rfc> element, looking
+   for "rfc" or "Internet-Draft".  (Specifying neither value in any of
+   the <seriesInfo> elements can be useful for producing other types of
    documents, but is out-of-scope for this specification.)
 
    It is invalid to have multiple <seriesInfo> elements inside the
@@ -2531,8 +2518,8 @@ Table of Contents
    (such as automated syntax checkers which work by extracting the
    source code).  Note that the "name" attribute does not need to be
    unique for artwork elements in a document.  If multiple sourcecode
-   elements have the same name attribute, a processor might assume that
-   the elements are all fragments of a single file, and the processor
+   elements have the same name attribute, a formatter might assume that
+   the elements are all fragments of a single file, and such a formatter
    can collect those fragments for later processing.
 
 2.47.3.  'pn' attribute
@@ -2548,12 +2535,10 @@ Table of Contents
 2.47.5.  'type' attribute
 
    Specifies the type of the sourcecode.  The value of this attribute is
-   free text with certain values designated as preferred.  A private
-   processor (as described in Appendix B) might add type-specific
-   formatting to sourcecode with the preferred values.  If a processor
-   encounters a value for "type" that is not one of the preferred
-   values, it can issue a warning but should still use the artwork as if
-   it had no "type" attribute.
+   free text with certain values designated as preferred.  If the prep
+   tool encounters a value for "type" that is not one of the preferred
+   values, it can issue a warning but should still use the sourcecode as
+   if it had no "type" attribute.
 
    The preferred values for <sourcecode> types are:
 
@@ -2844,7 +2829,7 @@ Table of Contents
 2.53.2.  'pn' attribute
 
    The number for this table.  This attribute and its value are
-   automatically generated by the RFC Processor.
+   automatically generated by the prep tool.
 
 2.54.  <tbody>
 
@@ -3134,7 +3119,7 @@ Table of Contents
 2.62.  <ul>
 
    An unordered list.  The labels on the items will be symbols picked by
-   the processor.
+   the formatter.
 
    This element appears as a child element of: <abstract> (Section 2.1),
    <aside> (Section 2.6), <blockquote> (Section 2.10), <dd>
@@ -3199,9 +3184,9 @@ Table of Contents
 
    Inserts a reference to a different part of a document.
 
-   The text that is generated by a processor depends on whether the
-   <xref> element is empty, the attributes of the <xref> element, and
-   the nature of the referenced document part.  If the output format
+   ##### The text that is generated by a processor depends on whether
+   the <xref> element is empty, the attributes of the <xref> element,
+   and the nature of the referenced document part.  If the output format
    being converted to supports links, the text from the element or the
    generated text is surrounded by a link to the appropriate target.
 
@@ -3700,19 +3685,19 @@ Table of Contents
    security risk; see Section 4.3 of [RFC6266] for more information.
 
    The "src" attribute on the <artwork> element can be used to read
-   files from the local system.  Processors must be careful to not
+   files from the local system.  Processing tools must be careful to not
    accept dangerous values for the filename, particularly those that
    contain absolute references outside the current directory.
 
    The "type" attribute of the <artwork> and <sourcecode> elements is
-   meant to encourage processors to automatically extract known types of
+   meant to encourage formatters to automatically extract known types of
    content from an RFC or Internet Draft.  While extraction is probably
-   safe, those processors might also think that they could further
-   process the extracted content such as by rendering artwork or
-   executing code.  Doing so without first sanity-checking the extracted
-   content is clearly a terrible idea from a security perspective.  More
-   generally, a processor that is reading RFCs or Internet Drafts needs
-   to be suspicious of any content that it intends to post-process.
+   safe, those tools might also think that they could further process
+   the extracted content such as by rendering artwork or executing code.
+   Doing so without first sanity-checking the extracted content is
+   clearly a terrible idea from a security perspective.  More generally,
+   a tool that is reading XML input needs to be suspicious of any
+   content that it intends to post-process.
 
    All security considerations related to XML processing are relevant as
    well (see Section 7 of [RFC3470]).
@@ -4009,7 +3994,7 @@ A.1.1.  Current Values: '*trust200902'
    information).  The actual text is located in Section 6 ("Text To Be
    Included in IETF Documents") of these documents.
 
-   Formatters will automatically produce the "correct" text depending on
+   The prep tool automatically produces the "correct" text depending on
    the document's date information (see above):
 
    +----------+--------------------------------+
@@ -4140,8 +4125,9 @@ A.3.  The /rfc/@consensus Attribute
    Of This Memo" section depends on whether there was a consensus to
    publish (again, see Section 3.2.2 of [RFC5741]).
 
-   The consensus attribute ("yes"/"no", defaulting to "yes") can be used
-   to supply this information.  The effect for the various streams is:
+   The consensus attribute can be used to supply this information.  The
+   acceptable values are "true" (the default) and "false"; "yes" and
+   "no" from v2 are deprecated.  The effect for the various streams is:
 
    o  "independent" and "IAB": none.
 
@@ -4151,71 +4137,68 @@ A.3.  The /rfc/@consensus Attribute
       the name of the research group is extracted from the <workgroup>
       element).
 
-Appendix B.  The v3 Format and Processors
+Appendix B.  The v3 Format and Processing Tools
 
-   This section describes topics that are specific to processors.  Note
-   that there is some discussion of processors in the main body of the
-   document as well.  For example, some elements have descriptions of
-   how a processor might create output from the element.
+   This section describes topics that are specific to v3 processing
+   tools.  Note that there is some discussion of tools in the main body
+   of the document as well.  For example, some elements have
+   descriptions of how a processing tool might create output from the
+   element.
 
-   A processor has multiple roles.  The processor checks whether or not
-   the input is valid XML; it also checks whether or not the input XML
-   matches this format.  It may have one or more outputs, depending on
-   the way that it is invoked.  It might convert the XML to different
-   XML, or to a different representation such as HTML or plain text, or
-   do no conversion at all.  It also might give diagnostic warnings
-   about how to improve the input.
+   The expected design of the tools that will be used with v3 documents
+   includes:
+
+   o  A "prep tool" that takes a v3 document, makes many checks, adds
+      and changes many attribute values, and creates a file that is a
+      "prepared document".  The prepared document is a valid v3
+      document.  The prep tool is expected to have many modes:
+
+      *  RFC mode -- The mode used by the RFC Editor to process the
+         input from one of the RFC streams, and to process XML produced
+         during the RFC editing process.  The restrictions on the
+         canonical XML for RFCs, as well as how the non-canonical
+         formats will look, are described at <https://
+         www.rfc-editor.org/rse/wiki/
+         doku.php?id=design:format-and-content-rfcs>.
+
+      *  Draft mode -- The mode used by the Internet Draft submission
+         tool.  The restrictions for the XML from this mode will be
+         described later.
+
+      *  Diagnostic mode -- A mode that can be used by document authors
+         to look for errors or warnings before they submit their
+         documents for publication.
+
+      *  Expansion mode -- Produces output whose only change is that the
+         XInclude entities are expanded in place.
+
+   o  Formatting tools that will create HTML, PDF, plain text, and
+      possibly other output formats.  These formatters will be created
+      by the IETF, but others can create such tools as well.  The IETF
+      tools are expected to take prepared documents as input.
+
+   There may also be processing tools that are meant to run on the
+   computers of authors.  These tools may be used to produce interim
+   versions of the non-canonical representations so that authors can see
+   how their XML might later be rendered; to create documents in
+   representations different than those supported by the RFC Editor; to
+   possibly create documents that are not meant to be Internet Drafts or
+   RFCs; and to convert XML that has external information into XML that
+   has that external information included.
+
+   The prep tool is expected to have clear error reporting, giving more
+   context than just a line number.  For example, the error messages
+   should differentiate between errors in XML and those from the v3
+   format.
 
    In v2, the grammar was specified as a DTD.  In v3, the grammar is
-   specified only as Relax Next Generation (RNG).  This means that
-   processors need to work from the RNG, not from a DTD.  Some of the
-   features of the v3 grammar cannot be specified as a DTD.
-
-   This section differentiates between three types of processors:
-
-   o  RFC Processor -- The processor used by the RFC Editor to process
-      the input from one of the RFC streams, and to process XML produced
-      during the RFC editing process.
-
-   o  Draft Processor -- The processor used by the Internet Draft
-      submission tool.  This processor will be defined in a different
-      document.
-
-   o  Private Processors -- There may be processors that are meant to
-      run on the computers of authors.  These processors may be used to
-      produce interim versions of the non-canonical representations so
-      that authors can see how their XML might later be rendered; to
-      create documents in representations different than those supported
-      by the RFC Editor; to possibly create documents that are not meant
-      to be Internet Drafts or RFCs; and to convert XML that has
-      external information into XML that has that external information
-      included.
-
-   It is expected that a single piece of software will be used for both
-   the RFC Processor and the Draft Processor, with different application
-   settings to differentiate between them.  It is also expected that the
-   same software could be used as a Private Processor; others might
-   create Private Processors independently, or using parts of, the
-   software used by the RFC Editor.
-
-   The RFC Processor and Draft Processor must have clear error
-   reporting, giving more context than just a line number.  For example,
-   the error messages will differentiate between errors in XML and those
-   from the v3 format.
-
-   It is expected that both the RFC Processor and the Draft Processor
-   will have options to produce different types of output.  For example,
-   they might have a "convert XML to XML" option that expands the XML
-   entities in the output.
-
-   The restrictions on the canonical XML for RFCs, as well as how the
-   non-canonical formats will look, are described at <https://
-   www.rfc-editor.org/rse/wiki/
-   doku.php?id=design:format-and-content-rfcs>.
+   specified only as Relax Next Generation (RNG).  This means that tools
+   need to work from the RNG, not from a DTD.  Some of the features of
+   the v3 grammar cannot be specified as a DTD.
 
 B.1.  Including External Text
 
-   All XML processors for v3 are expected to support XInclude
+   All tools for the v3 format are expected to support XInclude
    [XInclude].  XInclude specifies a processing model and syntax for
    general purpose inclusion of information that is either on the
    Internet or local to the user's computer.
@@ -4278,11 +4261,11 @@ B.2.  Anchors and IDs
    element that does not have an "anchor" attribute, but that element
    has "pn" attribute.
 
-   Processors add the "pn" attribute to many elements during processing.
-   This attribute and its value are automatically generated by the
-   processor if the attribute is not there; if the attribute is already
-   there, the processor may replace the value.  The same is true for the
-   "irefid" attribute in <iref>.
+   Processing tools add the "pn" attribute to many elements during
+   processing.  This attribute and its value are automatically generated
+   by the tool if the attribute is not there; if the attribute is
+   already there, the tool may replace the value.  The same is true for
+   the "irefid" attribute in <iref>.
 
 B.2.1.  Overlapping Values
 
@@ -4325,8 +4308,8 @@ B.2.1.  Overlapping Values
    o  Anchors must never overlap with any of the above.  The easiest way
       to assure that is to not pick an anchor name that starts with a
       single letter followed by a hyphen.  If an anchor does overlap
-      with one of the types of names above, the processor will reject
-      the document.
+      with one of the types of names above, the processing tool will
+      reject the document.
 
 Appendix C.  Relax NG Schema
 

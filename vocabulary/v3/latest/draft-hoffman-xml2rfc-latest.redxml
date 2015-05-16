@@ -15,8 +15,6 @@
 
 Deal with xref/iref and incorporating the needed text in a processor
 
-Think about all the "processor" wording, whether it should be here, and so on.
-
 Joe asks: Any reason we can't use "type" instead of "style" for ol?  That way it's the same as HTML.
 
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
@@ -70,10 +68,11 @@ After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
 </t>
 <t>
 The v3 format will be used as part of the new RFC series described in <xref target="RFC6949"/>.
-The new format will be handled by one or more new processors for checking the XML and
+The new format will be handled by one or more new tools for preparing the XML and
 converting it to other representations.
 Features of the expected
-processors are described in <xref target="processors"/>.
+tools are described in <xref target="tools"/>. That section defines some terms 
+used throughout this document, such as "prep tool" and "formatter".
 </t>
 <t>
   Note that the vocabulary contains certain constructs that might not be used when generating of
@@ -207,10 +206,10 @@ entry and still allow the ASCII-equivalent values to appear in the processed doc
 and &lt;<xref target="element.table" format="none">table</xref>&gt; to hold automatically generated
 numbers for items in a section that don't have their own numbering (namely figures and tables).</t>
 
-<t>Add "display" to &lt;<xref target="element.cref" format="none">cref</xref>&gt; to indicate to processors whether or not
+<t>Add "display" to &lt;<xref target="element.cref" format="none">cref</xref>&gt; to indicate to tools whether or not
 to display the comment.</t>
 
-<t>Add "keepWithNext" and "keepWithPrevious" to &lt;<xref target="element.t" format="none">t</xref>&gt; as a hint to processors that
+<t>Add "keepWithNext" and "keepWithPrevious" to &lt;<xref target="element.t" format="none">t</xref>&gt; as a hint to tools that
 do pagination that the should try to keep the paragraph with the next/previous element.</t>
 
 </list></t>
@@ -220,9 +219,9 @@ do pagination that the should try to keep the paragraph with the next/previous e
 <section anchor="deprecated_features" title="Elements and Attributes Deprecated from v2">
 
 <t>Deprecated elements and attributes are legacy vocabulary from v2 that are supported for input
-to v3 processors. They are likely to be removed from those processors in the future.
+to v3 tools. They are likely to be removed from those tools in the future.
 Instead of being listed in <xref target="elements"/>, they are listed in in <xref target="deprecatedelements"/>.
-See <xref target="processors"/> for more information on processors and how they will handle
+See <xref target="tools"/> for more information on tools and how they will handle
 deprecated features.</t>
 
 <t><list style="symbols">
@@ -365,7 +364,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
   The xml:base attribute is sometimes added to an XML file when doing XML-to-XML conversion where the
   base file has XInclude atttributes (see <xref target="includingexternal"/>). These attributes are not
   listed in the element descriptions here, but will later be added to the RNG used for the v3
-  processors.
+  tools.
 </t>
 
 
@@ -579,7 +578,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       confusing for text artwork.
    </t>
    <t>
-      Output formatters that do pagination should attempt to keep artwork on a single page. This is to prevent
+      Formatters that do pagination should attempt to keep artwork on a single page. This is to prevent
       artwork that is split across pages from looking like two separate pieces of artwork.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
@@ -667,8 +666,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
             be helpful for other kinds of tools (such as automated syntax checkers
             which work by extracting the artwork).
             Note that the "name" attribute does not need to be unique for artwork elements in a
-            document. If multiple artwork elements have the same name attribute, a processor might
-            assume that the elements are all fragments of a single file, and the processor can
+            document. If multiple artwork elements have the same name attribute, a processing tool might
+            assume that the elements are all fragments of a single file, and the tool can
             collect those fragments for later processing.
          </t>
    </section>
@@ -694,13 +693,13 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <t>
          The URI reference of a graphics file (<xref target="RFC3986"/>), or the name of a file on the local disk.
          This can be a "data" URI (<xref target="RFC2397"/>) that contains the contents of the graphics file.
-         Note that the inclusion of art with the "src" attribute depends on the capabilities of the processor
-         reading the XML document. Processors need to be able to handle the file: URI, and should
+         Note that the inclusion of art with the "src" attribute depends on the capabilities of the processing tool
+         reading the XML document. Tools need to be able to handle the file: URI, and should
          be able to handle http: and https: URIs as well.
        </t>
       <t>
          If no URI scheme is given in the attribute, the attribute is considered to be a local file name.
-         Processors must be careful to not accept dangerous values for the filename, particularly those that contain
+         processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
       </t>
    </section>
@@ -713,9 +712,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="type attribute" subitem="in artwork element"/>
       <t>
             Specifies the type of the artwork. The value of this attribute is free text with
-            certain values designated as preferred. A private processor (as described in <xref target="processors"/>) might add type-specific
-            formatting to artwork with the preferred values.
-            If a processor encounters a value for "type" that is not one of the
+            certain values designated as preferred.
+            If the prep tool encounters a value for "type" that is not one of the
             preferred values, it can issue a warning but should still use the artwork as if it had no "type" attribute.
          </t>
       <t>
@@ -1115,7 +1113,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="cite attribute" subitem="in blockquote element"/>
       <t>
          The source of the citation. This must be a URI. If the quotedFrom attribute is given, this URI will be
-         used by processors as the link for the text of that attribute.
+         used by processing tools as the link for the text of that attribute.
       </t>
    </section>
 
@@ -1138,8 +1136,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="blockquote element" subitem="quotedFrom attribute"/>
       <iref item="quotedFrom attribute" subitem="in blockquote element"/>
       <t>
-         Name of person or document the text in this element is quoted from. This will be rendered by the
-         processor as visible text at the end of the quotation.
+         Name of person or document the text in this element is quoted from. A formatter should render this
+         as visible text at the end of the quotation.
       </t>
    </section>
 </section>
@@ -1151,7 +1149,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <iref item="Elements" subitem="boilerplate" primary="true"/>
    <iref item="boilerplate element" primary="true"/>
    <t>
-      Holds the boilerplate text for the document. This section is filled in by the RFC Processor.
+      Holds the boilerplate text for the document. This section is filled in by the prep tool.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.front" format="none">front</xref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.boilerplate.contents"><!--AG-->
@@ -1171,7 +1169,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <iref item="Elements" subitem="br" primary="true"/>
    <iref item="br element" primary="true"/>
    <t>
-      Indicates that a line break should be inserted in the generated output by the processor.
+      Indicates that a line break should be inserted in the generated output by a formatting tool.
       Multiple successive instances of this element do not cause blank lines to appear in the output,
       and is thus not useful.
    </t>
@@ -1266,9 +1264,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    </t>
    <t>
       Comments can be used in a document while it is work-in-progress. They
-      usually appear either inline and visually highlighted, at the end of the document
-      (depending on file representation and settings of the processor), or not at
-      all (when generating an RFC).
+      might appear either inline and visually highlighted, at the end of the document,
+      or not at all, depending on the formatting tool.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.cref.contents"><!--AG-->
@@ -1318,7 +1315,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="cref element" subitem="display attribute"/>
       <iref item="display attribute" subitem="in cref element"/>
       <t>
-         Says whether or not the the comment should be displayed by processors. This might be
+         Suggests whether or not the the comment should be displayed by formatting tools. This might be
          set to "false" if you want to keep a comment in a document after the contents of the comment
          have already been dealt with.
       </t>
@@ -1357,9 +1354,9 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    </t>
    <t>
       In the boilerplate case, it defines the date of publication for the current document (Internet Draft or RFC).
-      When producing Internet-Drafts, the Draft Processor uses this date to compute the expiration date (see <xref target="IDGUIDE"/>).
+      When producing Internet-Drafts, the prep tool uses this date to compute the expiration date (see <xref target="IDGUIDE"/>).
       When one or more of "year",
-      "month", or "day" are left out, the processor will attempt to use the
+      "month", or "day" are left out, the prep tool will attempt to use the
       current system date if the attributes that are present are consistent with that
       date.
    </t>
@@ -1369,8 +1366,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       "September", "October", "November", or "December".
    </t>
    <t>
-      The draft processor will reject a submitted Internet Draft that has a &lt;<xref target="element.date" format="none">date</xref>&gt;
-      element in the boilerplate for itself that is anything other than today. That is, the draft processor
+      When the prep tool is used to create Internet Drafts, it will reject a submitted Internet Draft that has a &lt;<xref target="element.date" format="none">date</xref>&gt;
+      element in the boilerplate for itself that is anything other than today. That is, the tool
       will not allow a submitter to specify a date other than the day of submission. To avoid this problem,
       authors might simply not include a &lt;<xref target="element.date" format="none">date</xref>&gt; element in the boilerplate.
    </t>
@@ -1913,7 +1910,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="pn attribute" subitem="in figure element"/>
       <t>
          The number for this figure. This attribute and its value are automatically generated by
-         the RFC Processor.
+         the prep tool.
       </t>
    </section>
 
@@ -2067,7 +2064,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       entries of this type might be displayed as range.
    </t>
    <t>
-      When a processor is creating index content, it collects the items in a case-senstive fashion
+      When the prep tool is creating index content, it collects the items in a case-senstive fashion
       for both the item and subitem level.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.table" format="none">table</xref>&gt; (<xref target="element.table"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
@@ -2081,8 +2078,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="iref element" subitem="irefid attribute"/>
       <iref item="irefid attribute" subitem="in iref element"/>
       <t>
-         An identifier for the processor to use when creating indexes. The content of this attribute
-         is overwritten by the processor, and should thus never be filled in by the document's author.
+         An identifier for the prep tool to use when creating indexes. The content of this attribute
+         is overwritten by the prep tool, and should thus never be filled in by the document's author.
          This is described in more detail in <xref target="anchorsandids"/>.
       </t>
    </section>
@@ -2291,8 +2288,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       </list>
    </t>
    <t>
-        The RFC Processor needs to check the values for &lt;link&gt; before an RFC is published.
-        The Draft Processor might remove some &lt;link&gt; elements during the draft submission process.
+        In RFC production mode, the prep tool needs to check the values for &lt;link&gt; before an RFC is published.
+        In draft production mode, the prep tool might remove some &lt;link&gt; elements during the draft submission process.
       </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.link.contents"><!--AG-->
@@ -2380,7 +2377,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="name element" subitem="slugifiedName attribute"/>
       <iref item="slugifiedName attribute" subitem="in name element"/>
       <t>
-         This attribute is filled in by a processor with a "slugified" version of the text in the
+         This attribute is filled in by the prep tool with a "slugified" version of the text in the
          element. This attribute can be used in the output formats for elements that have both names
          and numbers.
       </t>
@@ -2446,7 +2443,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="note element" subitem="removeInRFC attribute"/>
       <iref item="removeInRFC attribute" subitem="in note element"/>
       <t>
-         If set to "yes", this note is marked in the processor with text indicating that it should be
+         If set to "true", this note is marked in the prep tool with text indicating that it should be
          removed before the document is published as an RFC.
       </t>
       <t><!--AG-->Allowed values:</t>
@@ -2495,8 +2492,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="ol element" subitem="group attribute"/>
       <iref item="group attribute" subitem="in ol element"/>
       <t>
-         When a processor sees an &lt;ol&gt; element with a "group" attribute that has already been seen,
-         the processor continues the numbering of the list from where the previous list with the same
+         When the prep tool sees an &lt;ol&gt; element with a "group" attribute that has already been seen,
+         it continues the numbering of the list from where the previous list with the same
          group name left off.
          If an &lt;ol&gt; element has both a "group" and "start" attribute, the group's
          numbering is reset to the given start value.
@@ -2571,8 +2568,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          Other formats are reserved for future use.
        </t>
       <t>
-        It is an error for the type string to be empty, and processors will reject documents
-        with an element that has such a type.
+        It is an error for the type string to be empty.
         For bulleted lists, you use the &lt;<xref target="element.ul" format="none">ul</xref>&gt; element.
         For lists that have neither bullets nor numbers, use the &lt;<xref target="element.ul" format="none">ul</xref>&gt; element with the
         'empty="true"' attribute.
@@ -2653,7 +2649,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <iref item="postal element" primary="true"/>
    <t>
       Contains optional child elements providing postal information. These elements will be
-      displayed in an order that is processor-specific.
+      displayed in an order that is specific to formatters.
       A postal address can contain only a set of &lt;<xref target="element.street" format="none">street</xref>&gt;, &lt;<xref target="element.city" format="none">city</xref>&gt;,
       &lt;<xref target="element.region" format="none">region</xref>&gt;, &lt;<xref target="element.code" format="none">code</xref>&gt;, and &lt;<xref target="element.country" format="none">country</xref>&gt;
       elements, or only an ordered set of &lt;<xref target="element.postalLine" format="none">postalLine</xref>&gt; elements, but not both.
@@ -2702,7 +2698,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <iref item="Elements" subitem="postalLine" primary="true"/>
    <iref item="postalLine element" primary="true"/>
    <t>
-      Represents one line of a postal address. When more than one &lt;postalLine&gt; is given, the processor
+      Represents one line of a postal address. When more than one &lt;postalLine&gt; is given, the prep tool
       emits them in the order given.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.postal" format="none">postal</xref>&gt; (<xref target="element.postal"/>).</t>
@@ -2912,8 +2908,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       In general, the title should be either "Normative References" or "Informative References".
    </t>
    <t>
-      By default, the order of references is significant. Processors, however,
-      can be instructed to sort them based on their anchor names.
+      By default, the order of references is significant. Some formatters, however,
+      might be able to be requested to sort them based on their anchor names.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.back" format="none">back</xref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.references.contents"><!--AG-->
@@ -2945,8 +2941,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="references element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in references element"/>
       <t>
-         The number for this section. This attribute and its value are automatically generated by
-         the RFC Processor, and are ignored by other processors.
+         An optional user-supplied for this section.
       </t>
    </section>
 
@@ -2958,7 +2953,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="pn attribute" subitem="in references element"/>
       <t>
          The number for this reference section. This attribute and its value are automatically generated by
-         the RFC Processor, and are ignored by other processors.
+         the prep tool.
       </t>
    </section>
 
@@ -2969,8 +2964,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="references element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in references element"/>
       <t>
-         Deprecated. Use &lt;<xref target="element.name" format="none">name</xref>&gt; instead. Processors will flag reference sections that have
-         no &lt;<xref target="element.name" format="none">name</xref>&gt; element as errors because all sections need a name.
+         Deprecated. Use &lt;<xref target="element.name" format="none">name</xref>&gt; instead.
       </t>
    </section>
 </section>
@@ -3082,7 +3076,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="rfc element" subitem="indexInclude attribute"/>
       <iref item="indexInclude attribute" subitem="in rfc element"/>
       <t>
-         Specifies whether or not a processor will include an index in generated files.
+         Specifies whether or not a formatter is requested to include an index in generated files.
          If the souce file has no &lt;<xref target="element.iref" format="none">iref</xref>&gt; elements, an index is
          never generated. This option is useful for generating documents where the
          source document has &lt;<xref target="element.iref" format="none">iref</xref>&gt; elements but the author no longer
@@ -3161,10 +3155,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
             Internet-Draft names.
          </t>
       <t>
-            Processors ought to parse the attribute value, so that incorrect
-            references can be detected and, depending on output representation, 
-            hyperlinks can be generated. Also, the value ought to be reformatted
-            to insert whitespace after each comma if not already present.
+            The prep tool will parse the attribute value so that incorrect
+            references can be detected.
       </t>
    </section>
 
@@ -3213,7 +3205,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="rfc element" subitem="sortRefs attribute"/>
       <iref item="sortRefs attribute" subitem="in rfc element"/>
       <t>
-         Specifies whether or not a processor will sort the references in each reference section.
+         Specifies whether or not a formatter is requested to sort the references in each reference section.
       </t>
       <t><!--AG-->Allowed values:</t>
       <t><list style="symbols"><!--AG-->
@@ -3250,8 +3242,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="rfc element" subitem="symRefs attribute"/>
       <iref item="symRefs attribute" subitem="in rfc element"/>
       <t>
-         Specifies whether or not a processor will use symbolic references (such as "[RFC2119]"). If the
-         value for this is "no", the references come out as numbers (such as "[3]").
+         Specifies whether or not a formatter is requested to use symbolic references (such as "[RFC2119]"). If the
+         value for this is "false", the references come out as numbers (such as "[3]").
       </t>
       <t><!--AG-->Allowed values:</t>
       <t><list style="symbols"><!--AG-->
@@ -3267,7 +3259,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="rfc element" subitem="tocDepth attribute"/>
       <iref item="tocDepth attribute" subitem="in rfc element"/>
       <t>
-         Specifies number of levels of heading for a processor to include in the table of contents; the default is "3".
+         Specifies number of levels of heading that formatter is requested to include in the table of contents; the default is "3".
       </t>
    </section>
 
@@ -3278,7 +3270,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="rfc element" subitem="tocInclude attribute"/>
       <iref item="tocInclude attribute" subitem="in rfc element"/>
       <t>
-         Specifies whether or not a processor will include a table of contents in generated files.
+         Specifies whether or not a formatter is requested to include a table of contents in generated files.
       </t>
       <t><!--AG-->Allowed values:</t>
       <t><list style="symbols"><!--AG-->
@@ -3297,11 +3289,9 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
             A comma-separated list of RFC numbers or
             Internet-Draft names.
          </t>
-      <t>
-            Processors ought to parse the attribute value, so that incorrect
-            references can be detected and, depending on output representation, 
-            hyperlinks can be generated. Also, the value ought to be reformatted
-            to insert whitespace after each comma if not already present.
+       <t>
+            The prep tool will parse the attribute value so that incorrect
+            references can be detected.
       </t>
    </section>
 
@@ -3407,7 +3397,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="section element" subitem="numbered attribute"/>
       <iref item="numbered attribute" subitem="in section element"/>
       <t>
-         If set to "no", this section does not get a section number. Processors will verify that such a
+         If set to "false", the formatter is requested to not display a section number. The prep tool will verify that such a
          section is not followed by a numbered section in a part, and will verify that the section is a
          top-level section.
       </t>
@@ -3425,8 +3415,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="section element" subitem="pn attribute"/>
       <iref item="pn attribute" subitem="in section element"/>
       <t>
-         The number for this section, if one is generated by the processor. This attribute and its value are automatically generated by
-         the RFC Processor, and are ignored by other processors.
+         The number for this section. This attribute and its value are automatically generated by
+         the prep tool.
       </t>
    </section>
 
@@ -3437,7 +3427,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="section element" subitem="removeInRFC attribute"/>
       <iref item="removeInRFC attribute" subitem="in section element"/>
       <t>
-         If set to "yes", this section is marked in the processor with a paragraph at the beginning of the section
+         If set to "true", the formatter is requested to mark this section with a paragraph at the beginning of the section
          indicating that it should be
          removed before the document is published as an RFC.
       </t>
@@ -3455,8 +3445,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="section element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in section element"/>
       <t>
-         Deprecated. Use &lt;<xref target="element.name" format="none">name</xref>&gt; instead. Processors will flag sections that have
-         no &lt;<xref target="element.name" format="none">name</xref>&gt; element as errors because all sections need a name. 
+         Deprecated. Use &lt;<xref target="element.name" format="none">name</xref>&gt; instead. 
       </t>
    </section>
 
@@ -3467,8 +3456,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="section element" subitem="toc attribute"/>
       <iref item="toc attribute" subitem="in section element"/>
       <t>
-            Indicates to a processor whether or not the section is to be included in the
-            table of contents. This only takes effect if the level of the section would have
+            Indicates to a formatter whether or not the section is to be included in a
+            table of contents, if such a table of contents is produced. This only takes effect if the level of the section would have
             appeared in the table of contents based on the "tocDepth" attribute of the
             &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element, and of course only if the table of contents
             is being created based on the "tocInclude" attribute of the
@@ -3497,7 +3486,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       specifies an identifier within that series.
    </t>
    <t>
-      A processor determines if it is working on an RFC or an Internet-Draft by inspecting the
+      A processing tool determines if it is working on an RFC or an Internet-Draft by inspecting the
       "name" attribute of a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element inside the
       &lt;<xref target="element.front" format="none">front</xref>&gt; element inside the &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element, looking
       for "rfc" or "Internet-Draft". (Specifying neither value in any of the
@@ -3685,8 +3674,8 @@ Using CDATA:
             be helpful for other kinds of tools (such as automated syntax checkers
             which work by extracting the source code).
             Note that the "name" attribute does not need to be unique for artwork elements in a
-            document. If multiple sourcecode elements have the same name attribute, a processor might
-            assume that the elements are all fragments of a single file, and the processor can
+            document. If multiple sourcecode elements have the same name attribute, a formatter might
+            assume that the elements are all fragments of a single file, and such a formatter can
             collect those fragments for later processing.
          </t>
    </section>
@@ -3722,10 +3711,9 @@ Using CDATA:
       <iref item="type attribute" subitem="in sourcecode element"/>
       <t>
             Specifies the type of the sourcecode. The value of this attribute is free text with
-            certain values designated as preferred. A private processor (as described in <xref target="processors"/>) might add type-specific
-            formatting to sourcecode with the preferred values.
-            If a processor encounters a value for "type" that is not one of the
-            preferred values, it can issue a warning but should still use the artwork as if it had no "type" attribute.
+            certain values designated as preferred.
+            If the prep tool encounters a value for "type" that is not one of the
+            preferred values, it can issue a warning but should still use the sourcecode as if it had no "type" attribute.
       </t>
       <t>
             The preferred values for &lt;sourcecode&gt; types are:
@@ -4116,7 +4104,7 @@ Using CDATA:
       <iref item="pn attribute" subitem="in table element"/>
       <t>
          The number for this table. This attribute and its value are automatically generated by
-         the RFC Processor.
+         the prep tool.
       </t>
    </section>
 </section>
@@ -4592,7 +4580,7 @@ Using CDATA:
    <iref item="Elements" subitem="ul" primary="true"/>
    <iref item="ul element" primary="true"/>
    <t>
-      An unordered list. The labels on the items will be symbols picked by the processor.
+      An unordered list. The labels on the items will be symbols picked by the formatter.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.abstract" format="none">abstract</xref>&gt; (<xref target="element.abstract"/>), &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.note" format="none">note</xref>&gt; (<xref target="element.note"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.ul.contents"><!--AG-->
@@ -4688,7 +4676,7 @@ Using CDATA:
       Inserts a reference to a different part of a document.
    </t>
    <t>
-      The text that is generated by a processor depends on whether the &lt;xref&gt; element is
+      ##### The text that is generated by a processor depends on whether the &lt;xref&gt; element is
       empty, the attributes of the &lt;xref&gt; element, and the nature of the referenced document
       part.
       If the output format being converted to supports links, the text from the element or the
@@ -5459,18 +5447,18 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
 </t>
 <t>
     The "src" attribute on the &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; element can be used to read files from
-    the local system. Processors must be careful to not accept dangerous values for the filename,
+    the local system. Processing tools must be careful to not accept dangerous values for the filename,
     particularly those that contain absolute references outside the current directory.
 </t>
 <t>
   The "type" attribute of the &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; and &lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt; elements is meant
-  to encourage processors to automatically extract known types of content from
-  an RFC or Internet Draft. While extraction is probably safe, those processors
+  to encourage formatters to automatically extract known types of content from
+  an RFC or Internet Draft. While extraction is probably safe, those tools
   might also think that they could further process the extracted content
   such as by rendering artwork or executing code. Doing so without first
   sanity-checking the extracted content is clearly a terrible idea
-  from a security perspective. More generally, a processor that is reading RFCs
-  or Internet Drafts needs to be suspicious of any content that it intends
+  from a security perspective. More generally, a tool that is reading XML input
+  needs to be suspicious of any content that it intends
   to post-process.
 </t>
 <t>
@@ -5919,6 +5907,7 @@ not those that are part of a sequence of resources.</t>
       <author>
         <organization>The Unicode Consortium</organization>
       </author>
+      <date/>
     </front>
   </reference>
 
@@ -5928,6 +5917,7 @@ not those that are part of a sequence of resources.</t>
       <author>
         <organization>The Unicode Consortium</organization>
       </author>
+      <date/>
     </front>
     <annotation>
       For the latest version, see <eref target="http://www.unicode.org/versions/latest/"/>.
@@ -6024,7 +6014,7 @@ not those that are part of a sequence of resources.</t>
   of these documents.
 </t>
 <t>  
-  Formatters will automatically produce the "correct" text depending on the
+  The prep tool automatically produces the "correct" text depending on the
   document's date information (see above):
 </t>
 <texttable align="left">
@@ -6216,8 +6206,10 @@ not those that are part of a sequence of resources.</t>
   to publish (again, see Section 3.2.2 of <xref target="RFC5741"/>).
 </t>
 <t>
-  The consensus attribute ("yes"/"no", defaulting to "yes")
-  can be used to supply this information. The effect for the various streams is:
+  The consensus attribute
+  can be used to supply this information. The acceptable values are "true" (the default) and "false";
+"yes" and "no" from v2 are deprecated.
+The effect for the various streams is:
   <list style="symbols">
     <t>"independent" and "IAB": none.</t>
     <t>"IETF": mention that there was an IETF consensus.</t>
@@ -6228,63 +6220,65 @@ not those that are part of a sequence of resources.</t>
 </section>
 
 </section>
-<section anchor="processors" title="The v3 Format and Processors">
+<section anchor="tools" title="The v3 Format and Processing Tools">
 
-<t>This section describes topics that are specific to processors. Note that there is some
-discussion of processors in the main body of the document as well. For example, some elements
-have descriptions of how a processor might create output from the element.</t>
+<t>This section describes topics that are specific to v3 processing tools.
+Note that there is some
+discussion of tools in the main body of the document as well. For example, some elements
+have descriptions of how a processing tool might create output from the element.</t>
 
-<t>A processor has multiple roles. The processor checks whether or not the input is valid
-XML; it also checks whether or not the input XML matches this format. It may have one or
-more outputs, depending on the way that it is invoked. It might convert the XML to different
-XML, or to a different representation such as HTML or plain text, or do no conversion at
-all. It also might give diagnostic warnings about how to improve the input.</t>
-
-<t>In v2, the grammar was specified as a DTD. In v3, the grammar is specified only as Relax
-Next Generation (RNG). This means that processors need to work from the RNG, not from a DTD.
-Some of the features of the v3 grammar cannot be specified as a DTD.</t>
-
-<t>This section differentiates between three types of processors:
+<t>The expected design of the tools that will be used with v3 documents includes:
 
 <list style="symbols">
 
-<t>RFC Processor -- The processor used by the RFC Editor to process the input from one of
-the RFC streams, and to process XML produced during the RFC editing process.</t>
+<t>A "prep tool" that takes a v3 document, makes many checks, adds and changes many attribute
+values, and creates a file that is a "prepared document". The prepared document is a valid v3
+document. The prep tool is expected to have many modes:
 
-<t>Draft Processor -- The processor used by the Internet Draft submission tool. This processor
-will be defined in a different document.</t>
+<list>
 
-<t>Private Processors -- There may be processors that are meant to run on the computers of
-authors. These processors may be used to produce interim versions of the non-canonical representations
+<t>RFC mode -- The mode used by the RFC Editor to process the input from one of
+the RFC streams, and to process XML produced during the RFC editing process.
+The restrictions on the canonical XML for RFCs, as well as how the non-canonical formats
+will look, are described at
+&lt;https://www.rfc-editor.org/rse/wiki/doku.php?id=design:format-and-content-rfcs&gt;.</t>
+
+<t>Draft mode -- The mode used by the Internet Draft submission tool. The restrictions
+for the XML from this mode will be described later.</t>
+
+<t>Diagnostic mode -- A mode that can be used by document authors to look for errors
+or warnings before they submit their documents for publication.</t>
+
+<t>Expansion mode -- Produces output whose only change is that the XInclude entities
+are expanded in place.</t>
+
+</list></t>
+
+<t>Formatting tools that will create HTML, PDF, plain text, and possibly other output formats.
+These formatters will be created by the IETF, but others can create such tools as well.
+The IETF tools are expected to take prepared documents as input.</t>
+
+</list></t>
+
+<t>There may also be processing tools that are meant to run on the computers of
+authors. These tools may be used to produce interim versions of the non-canonical representations
 so that authors can see how their XML might later be rendered; to
 create documents in representations different than those supported by the RFC Editor;
 to possibly create documents that are not meant to be Internet Drafts or RFCs;
 and to convert XML that has external information into XML that has that external information
 included.</t>
 
-</list></t>
-
-<t>It is expected that a single piece of software will be used for both the RFC Processor
-and the Draft Processor, with different application settings to differentiate between them.
-It is also expected that the same software could be used
-as a Private Processor; others might create Private Processors independently, or using parts
-of, the software used by the RFC Editor.</t>
-
-<t>The RFC Processor and Draft Processor must have clear error reporting, giving more
-context than just a line number. For example, the error messages will differentiate between
+<t>The prep tool is expected to have clear error reporting, giving more
+context than just a line number. For example, the error messages should differentiate between
 errors in XML and those from the v3 format.</t>
 
-<t>It is expected that both the RFC Processor and the Draft Processor will have options to
-produce different types of output. For example, they might have a "convert XML to XML" option
-that expands the XML entities in the output.</t>
-
-<t>The restrictions on the canonical XML for RFCs, as well as how the non-canonical formats
-will look, are described at
-&lt;https://www.rfc-editor.org/rse/wiki/doku.php?id=design:format-and-content-rfcs&gt;.</t>
+<t>In v2, the grammar was specified as a DTD. In v3, the grammar is specified only as Relax
+Next Generation (RNG). This means that tools need to work from the RNG, not from a DTD.
+Some of the features of the v3 grammar cannot be specified as a DTD.</t>
 
 <section anchor="includingexternal" title="Including External Text">
 
-<t>All XML processors for v3 are expected to support XInclude <xref target="XInclude"/>.
+<t>All tools for the v3 format are expected to support XInclude <xref target="XInclude"/>.
 XInclude specifies a processing model and syntax for general purpose inclusion of information
 that is either on the Internet or local to the user's computer.</t>
 
@@ -6351,9 +6345,9 @@ element.</t>
 that most of the time, elements won't have anchors. In the common case, the reader wants to refer to
 an element that does not have an "anchor" attribute, but that element has "pn" attribute.</t>
 
-<t>Processors add the "pn" attribute to many elements during processing. This attribute and
-its value are automatically generated by the processor if the attribute is not there; if the
-attribute is already there, the processor may replace the value.
+<t>Processing tools add the "pn" attribute to many elements during processing. This attribute and
+its value are automatically generated by the tool if the attribute is not there; if the
+attribute is already there, the tool may replace the value.
 The same is true for the "irefid" attribute in &lt;<xref target="element.iref" format="none">iref</xref>&gt;.</t>
 
 <section anchor="overlap" title="Overlapping Values">
@@ -6393,7 +6387,7 @@ The actual conversions done in slugification will be specified at a later time.<
 
 <t>Anchors must never overlap with any of the above. The easiest way to assure that is to
 not pick an anchor name that starts with a single letter followed by a hyphen. If an anchor
-does overlap with one of the types of names above, the processor will reject the
+does overlap with one of the types of names above, the processing tool will reject the
 document.</t>
 
 </list>
