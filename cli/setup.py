@@ -62,7 +62,7 @@ Changelog
 setup(
     # Package metadata
     name='xml2rfc',
-    version='2.4.13.dev0',
+    version='2.4.13.dev1',
     author='Josh Bothun, Henrik Levkowetz ',
     author_email='tools-discuss@ietf.org',
     maintainer = "Henrik Levkowetz",
@@ -84,7 +84,13 @@ setup(
     license="Simplified BSD Licence",
 
     # Program data
-    scripts=['scripts/xml2rfc'],
+    #scripts=['scripts/xml2rfc'],
+    entry_points = {
+        'console_scripts' : [
+            'xml2rfc = xml2rfc.run:main',
+        ],
+    },
+
     packages=['xml2rfc', 'xml2rfc/writers'],
     package_data={'xml2rfc': ['templates/*',
                               ]},
