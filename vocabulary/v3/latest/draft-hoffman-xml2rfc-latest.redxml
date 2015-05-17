@@ -3069,6 +3069,17 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       </t>
    </section>
 
+   <!--rfc/@expiresDate-->
+   <section anchor="element.rfc.attribute.expiresDate" toc="exclude" title="'expiresDate' attribute">
+      
+      <iref item="Attributes" subitem="expiresDate"/>
+      <iref item="rfc element" subitem="expiresDate attribute"/>
+      <iref item="expiresDate attribute" subitem="in rfc element"/>
+      <t>
+         Says with an Internet Draft expires. This value is filled in by the prep tool.
+      </t>
+   </section>
+
    <!--rfc/@indexInclude-->
    <section anchor="element.rfc.attribute.indexInclude" toc="exclude" title="'indexInclude' attribute">
       
@@ -3289,7 +3300,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
             A comma-separated list of RFC numbers or
             Internet-Draft names.
          </t>
-       <t>
+      <t>
             The prep tool will parse the attribute value so that incorrect
             references can be detected.
       </t>
@@ -6455,6 +6466,7 @@ rfc =
     attribute indexInclude { "true" | "false" }?,
     attribute version { text }?,
     [ a:defaultValue = "Common,Latin" ] attribute scripts { text }?,
+    attribute expiresDate { text }?,
     link*,
     front,
     middle,
@@ -7218,6 +7230,7 @@ to the v3 schema.</t>
 +     attribute version { text }?,
 +     [ a:defaultValue = "Common,Latin" ] attribute scripts { text 
 + }?,
++     attribute expiresDate { text }?,
 +     link*,
       front,
       middle,

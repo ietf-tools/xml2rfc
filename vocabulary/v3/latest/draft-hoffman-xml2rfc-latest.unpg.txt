@@ -2118,7 +2118,12 @@ Table of Contents
 
    Deprecated; instead, use the "value" attribute in <seriesInfo>.
 
-2.44.4.  'indexInclude' attribute
+2.44.4.  'expiresDate' attribute
+
+   Says with an Internet Draft expires.  This value is filled in by the
+   prep tool.
+
+2.44.5.  'indexInclude' attribute
 
    Specifies whether or not a formatter is requested to include an index
    in generated files.  If the souce file has no <iref> elements, an
@@ -2132,7 +2137,7 @@ Table of Contents
 
    o  "false"
 
-2.44.5.  'ipr' attribute
+2.44.6.  'ipr' attribute
 
    Represents the Intellectual Property status of the document.  See
    Appendix A.1 for details.
@@ -2171,30 +2176,30 @@ Table of Contents
 
    o  "pre5378Trust200902"
 
-2.44.6.  'iprExtract' attribute
+2.44.7.  'iprExtract' attribute
 
    Identifies a single section within the document for which extraction
    "as-is" is explicitly allowed (only relevant for historic values of
    the "ipr" attribute).
 
-2.44.7.  'number' attribute
+2.44.8.  'number' attribute
 
    Deprecated; instead, use the "value" attribute in <seriesInfo>.
 
-2.44.8.  'obsoletes' attribute
+2.44.9.  'obsoletes' attribute
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
    The prep tool will parse the attribute value so that incorrect
    references can be detected.
 
-2.44.9.  'prepTime' attribute
+2.44.10.  'prepTime' attribute
 
    The date that the XML was processed by a preparation tool.  This is
    included in the XML file just before it is saved to disk.  The value
    is formatted using the format from [RFC3339].
 
-2.44.10.  'scripts' attribute
+2.44.11.  'scripts' attribute
 
    The list of scripts needed to render this document.  The list is
    comma-separated, with no spaces allowed.  The order is unimportant.
@@ -2202,11 +2207,11 @@ Table of Contents
    the prep tool.  For example, if the document has Chinese characters
    in it, the value might be "Common,Latin,Han".
 
-2.44.11.  'seriesNo' attribute
+2.44.12.  'seriesNo' attribute
 
    Deprecated; instead, use the "value" attribute in <seriesInfo>.
 
-2.44.12.  'sortRefs' attribute
+2.44.13.  'sortRefs' attribute
 
    Specifies whether or not the prep tool will sort the references in
    each reference section.
@@ -2217,7 +2222,7 @@ Table of Contents
 
    o  "false" (default)
 
-2.44.13.  'submissionType' attribute
+2.44.14.  'submissionType' attribute
 
    The document stream.
 
@@ -2233,7 +2238,7 @@ Table of Contents
 
    o  "independent"
 
-2.44.14.  'symRefs' attribute
+2.44.15.  'symRefs' attribute
 
    Specifies whether or not a formatter is requested to use symbolic
    references (such as "[RFC2119]").  If the value for this is "false",
@@ -2245,12 +2250,12 @@ Table of Contents
 
    o  "false"
 
-2.44.15.  'tocDepth' attribute
+2.44.16.  'tocDepth' attribute
 
    Specifies number of levels of heading that formatter is requested to
    include in the table of contents; the default is "3".
 
-2.44.16.  'tocInclude' attribute
+2.44.17.  'tocInclude' attribute
 
    Specifies whether or not a formatter is requested to include a table
    of contents in generated files.
@@ -2261,14 +2266,14 @@ Table of Contents
 
    o  "false"
 
-2.44.17.  'updates' attribute
+2.44.18.  'updates' attribute
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
    The prep tool will parse the attribute value so that incorrect
    references can be detected.
 
-2.44.18.  'version' attribute
+2.44.19.  'version' attribute
 
    Specifies the version of xml2rfc syntax used in this document.  The
    only expected value (for now) is "3".
@@ -3174,7 +3179,7 @@ Table of Contents
    boilerplate, replacing the "Network Working Group" string.
    Formatting software can append the words "Working Group" or "Research
    Group", depending on the "submissionType" property on the <rfc>
-   element (Section 2.44.13).
+   element (Section 2.44.14).
 
    This element appears as a child element of: <front> (Section 2.26).
 
@@ -3961,7 +3966,7 @@ Appendix A.  Front Page ('Boilerplate') Generation
 A.1.  The /rfc/@ipr Attribute
 
    This attribute value can take a long list of values, each of which
-   describes an IPR policy for the document (Section 2.44.5).  The
+   describes an IPR policy for the document (Section 2.44.6).  The
    values are not the result of a grand design, but remain simply for
    historic reasons.  Of these values, only a few are currently in use;
    all others are supported by various tools for backwards compatibility
@@ -3978,7 +3983,7 @@ A.1.  The /rfc/@ipr Attribute
    refer to <http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf>.
 
    For the current "Status Of This Memo" text, the submissionType
-   attribute (Section 2.44.13) determines whether a statement about
+   attribute (Section 2.44.14) determines whether a statement about
    "Code Components" is inserted (which is the case for the value
    "IETF", which is the default).  Other values, such as "independent",
    suppress this part of the text.
@@ -4366,6 +4371,7 @@ Appendix C.  Relax NG Schema
        attribute indexInclude { "true" | "false" }?,
        attribute version { text }?,
        [ a:defaultValue = "Common,Latin" ] attribute scripts { text }?,
+       attribute expiresDate { text }?,
        link*,
        front,
        middle,
@@ -5126,6 +5132,7 @@ Appendix D.  Schema Differences from v2
    +     attribute version { text }?,
    +     [ a:defaultValue = "Common,Latin" ] attribute scripts { text
    + }?,
+   +     attribute expiresDate { text }?,
    +     link*,
          front,
          middle,
@@ -5899,6 +5906,7 @@ Index
          display  1
          docName  1
          empty  1
+         expiresDate  1
          format  1
          fullname  1
          group  1
@@ -6213,6 +6221,8 @@ Index
          inside tt  1
          inside ttcol  1
          target attribute  1
+      expiresDate attribute
+         in rfc element  1
 
    F
       facsimile element  1
@@ -6465,6 +6475,7 @@ Index
          category attribute  1
          consensus attribute  1
          docName attribute  1
+         expiresDate attribute  1
          indexInclude attribute  1
          ipr attribute  1
          iprExtract attribute  1
