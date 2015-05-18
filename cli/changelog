@@ -1,3 +1,33 @@
+xml2rfc (2.5.0) ietf; urgency=medium
+
+  This release uses different installation settings than previous releases,
+  which should make installation under MS Window easier.  It also contains
+  a few bugfixes.  For details, see below:
+
+  * Applied patches from julian.reschke@gmx.de: Render <eref target='uri'> 
+    without text as inline <uri>.  Fixes issue #234.
+
+  * Changed setup.py to use the entry_points option instead of the scripts 
+    option, in order to work better on mswin systems.  Fixes issue #291.
+
+  * Made the reference sorting when using symrefs=yes and sortrefs=yes 
+    case-insensitive by mapping the reference keys to lowercase.  This is 
+    correct for ASCII keys but not necessarily for non-ASCII keys, depending on 
+    locale.  Fixes issue #295 (for now).
+
+  * Changed the path through reference resolution so that too old cached
+    references will be updated in the same block where it was discovered that
+    they were too old, rather than (erroneously) relying on this happening on
+    a later attempt.
+
+  * Set things up so that the processing instrunction dictionary isn't shared
+    between the index-building and the document-building runs, which they were
+   earlier, with the result that pi values could be different at the start of
+    the document-building than they should have been.  Fixes issue #292.
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  18 May 2015 18:34:25 +0000
+
+
 xml2rfc (2.4.12) ietf; urgency=medium
 
   * Modified the nroff table output for PI subcompact=yes so as to produce 
