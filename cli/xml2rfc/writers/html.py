@@ -250,13 +250,16 @@ class HtmlRfcWriter(BaseRfcWriter):
                 return [a]
         elif element.tag == 'eref':
             target = element.attrib.get('target', '')
-            text = element.text or target
-            if text:
-                a = E.A(text, href=target)
+            if element.text:
+                a = E.A(element.text, href=target)
                 a.tail = element.tail
-#                cite = E.CITE('[' + target + ']', title='NONE')
-#                current.append(cite)
                 return [a]
+            else:
+                sp1 = E.SPAN('<')
+                a = E.A(target, href=target)
+                sp2 = E.SPAN('>')
+                sp2.tail = element.tail
+                return [sp1, a, sp2]
         elif element.tag == 'cref':
             self.cref_counter += 1
             anchor = element.attrib.get('anchor', None)

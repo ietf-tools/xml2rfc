@@ -435,11 +435,13 @@ class RawTextRfcWriter(BaseRfcWriter):
             elif element.tag == 'eref':
                 if element.text:
                     line.append(element.text + ' ')
-                self.eref_count += 1
-                if element.text != element.attrib['target']:
-                    line.append('[' + str(self.eref_count) + ']')
-                    if self.indexmode:
-                        self.eref_list.append([self.eref_count, element])
+                    self.eref_count += 1
+                    if element.text != element.attrib['target']:
+                        line.append('[' + str(self.eref_count) + ']')
+                        if self.indexmode:
+                            self.eref_list.append([self.eref_count, element])
+                else:
+                    line.append('<' + element.attrib['target'] + '>')
             elif element.tag == 'iref':
                 self._add_iref_to_index(element)
             elif element.tag == 'cref' and \
