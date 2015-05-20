@@ -8,8 +8,8 @@ TOOLS=../../tools
 
 include xml2rfcvoc.mk
 
-%.html:	%.xml $(TOOLS)/rfc2629.xslt
-	saxon -l $< $(TOOLS)/rfc2629.xslt > $@
+%.html:	%.xml $(TOOLS)/rfc2629.xslt myxml2rfc.xslt
+	saxon -l $< myxml2rfc.xslt > $@
 
 %.redxml:	%.xml $(TOOLS)/clean-for-DTD.xslt
 	saxon -l $< $(TOOLS)/clean-for-DTD.xslt > $@
