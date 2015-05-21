@@ -362,7 +362,9 @@
   <define name="abstract">
     <element name="abstract">
       <optional>
-        <attribute name="pn"/>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
       </optional>
       <oneOrMore>
         <choice>
@@ -403,6 +405,9 @@
   </define>
   <define name="boilerplate">
     <element name="boilerplate">
+      <optional>
+        <attribute name="pn"/>
+      </optional>
       <oneOrMore>
         <ref name="section"/>
       </oneOrMore>
@@ -421,6 +426,9 @@
         <attribute name="anchor">
           <data type="ID"/>
         </attribute>
+      </optional>
+      <optional>
+        <attribute name="pn"/>
       </optional>
       <optional>
         <attribute name="title"/>
@@ -449,9 +457,6 @@
             <value>false</value>
           </choice>
         </attribute>
-      </optional>
-      <optional>
-        <attribute name="pn"/>
       </optional>
       <optional>
         <ref name="name"/>
@@ -501,10 +506,10 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="hangText"/>
+        <attribute name="pn"/>
       </optional>
       <optional>
-        <attribute name="pn"/>
+        <attribute name="hangText"/>
       </optional>
       <optional>
         <attribute name="keepWithNext" a:defaultValue="false">
@@ -632,6 +637,14 @@
   <define name="ol">
     <element name="ol">
       <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pn"/>
+      </optional>
+      <optional>
         <attribute name="type" a:defaultValue="1"/>
       </optional>
       <optional>
@@ -655,6 +668,14 @@
   </define>
   <define name="ul">
     <element name="ul">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pn"/>
+      </optional>
       <optional>
         <attribute name="spacing" a:defaultValue="normal">
           <choice>
@@ -719,6 +740,14 @@
   <define name="dl">
     <element name="dl">
       <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pn"/>
+      </optional>
+      <optional>
         <attribute name="spacing" a:defaultValue="normal">
           <choice>
             <value>normal</value>
@@ -769,6 +798,14 @@
   </define>
   <define name="dd">
     <element name="dd">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pn"/>
+      </optional>
       <choice>
         <oneOrMore>
           <choice>
@@ -1012,6 +1049,9 @@
         </attribute>
       </optional>
       <optional>
+        <attribute name="pn"/>
+      </optional>
+      <optional>
         <attribute name="title" a:defaultValue=""/>
       </optional>
       <optional>
@@ -1042,9 +1082,6 @@
       </optional>
       <optional>
         <attribute name="height" a:defaultValue=""/>
-      </optional>
-      <optional>
-        <attribute name="pn"/>
       </optional>
       <optional>
         <ref name="name"/>
@@ -1115,7 +1152,15 @@
   </define>
   <define name="artwork">
     <element name="artwork">
+       <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
       <optional>
+        <attribute name="pn"/>
+      </optional>
+     <optional>
         <attribute name="xml:space"/>
       </optional>
       <optional>
@@ -1144,14 +1189,6 @@
       </optional>
       <optional>
         <attribute name="height" a:defaultValue=""/>
-      </optional>
-      <optional>
-        <attribute name="anchor">
-          <data type="ID"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="pn"/>
       </optional>
       <choice>
         <zeroOrMore>
@@ -1187,6 +1224,14 @@
   <define name="sourcecode">
     <element name="sourcecode">
       <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pn"/>
+      </optional>
+      <optional>
         <attribute name="name" a:defaultValue=""/>
       </optional>
       <optional>
@@ -1195,6 +1240,11 @@
       <optional>
         <attribute name="src"/>
       </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="thead">
+    <element name="thead">
       <optional>
         <attribute name="anchor">
           <data type="ID"/>
@@ -1203,11 +1253,6 @@
       <optional>
         <attribute name="pn"/>
       </optional>
-      <text/>
-    </element>
-  </define>
-  <define name="thead">
-    <element name="thead">
       <oneOrMore>
         <ref name="tr"/>
       </oneOrMore>
@@ -1215,6 +1260,14 @@
   </define>
   <define name="tbody">
     <element name="tbody">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pn"/>
+      </optional>
       <oneOrMore>
         <ref name="tr"/>
       </oneOrMore>
@@ -1222,13 +1275,29 @@
   </define>
   <define name="tfoot">
     <element name="tfoot">
-      <oneOrMore>
+       <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pn"/>
+      </optional>
+     <oneOrMore>
         <ref name="tr"/>
       </oneOrMore>
     </element>
   </define>
   <define name="tr">
     <element name="tr">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pn"/>
+      </optional>
       <optional>
         <attribute name="border" a:defaultValue="0"/>
       </optional>
@@ -1242,6 +1311,11 @@
   </define>
   <define name="td">
     <element name="td">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
       <optional>
         <attribute name="border" a:defaultValue="0"/>
       </optional>
@@ -1291,6 +1365,14 @@
   </define>
   <define name="th">
     <element name="th">
+      <optional>
+        <attribute name="anchor">
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="pn"/>
+      </optional>
       <optional>
         <attribute name="border" a:defaultValue="0"/>
       </optional>
@@ -1497,9 +1579,6 @@
       </optional>
       <optional>
         <attribute name="title"/>
-      </optional>
-      <optional>
-        <attribute name="pn"/>
       </optional>
       <optional>
         <ref name="name"/>

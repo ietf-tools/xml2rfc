@@ -151,7 +151,7 @@ workgroup = element workgroup { text }
 keyword = element keyword { text }
 abstract =
   element abstract {
-    attribute pn { text }?,
+    attribute anchor { xsd:ID }?,
     (dl | ol | t | ul)+
   }
 note =
@@ -163,11 +163,16 @@ note =
     attribute removeInRFC { "true" | "false" }?,
     (dl | ol | t | ul)+
   }
-boilerplate = element boilerplate { section+ }
+boilerplate =
+  element boilerplate {
+    attribute pn { text }?,
+    section+
+  }
 middle = element middle { section+ }
 section =
   element section {
     attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
     attribute title { text }?,
     [ a:defaultValue = "true" ]
     attribute numbered { "true" | "false" }?,
@@ -175,7 +180,6 @@ section =
     attribute toc { "include" | "exclude" | "default" }?,
     [ a:defaultValue = "false" ]
     attribute removeInRFC { "true" | "false" }?,
-    attribute pn { text }?,
     name?,
     (artwork
      | aside
@@ -199,8 +203,8 @@ name =
 t =
   element t {
     attribute anchor { xsd:ID }?,
-    attribute hangText { text }?,
     attribute pn { text }?,
+    attribute hangText { text }?,
     [ a:defaultValue = "false" ]
     attribute keepWithNext { "false" | "true" }?,
     [ a:defaultValue = "false" ]
@@ -254,6 +258,8 @@ blockquote =
   }
 ol =
   element ol {
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
     [ a:defaultValue = "1" ] attribute type { text }?,
     [ a:defaultValue = "1" ] attribute start { text }?,
     attribute group { text }?,
@@ -263,6 +269,8 @@ ol =
   }
 ul =
   element ul {
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
     [ a:defaultValue = "false" ]
@@ -288,6 +296,8 @@ li =
   }
 dl =
   element dl {
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
     [ a:defaultValue = "true" ]
@@ -312,18 +322,20 @@ dt =
   }
 dd =
   element dd {
-    (artwork | dl | figure | ol | sourcecode | t | ul)+
-    | (text
-       | bcp14
-       | cref
-       | em
-       | eref
-       | iref
-       | strong
-       | sub
-       | sup
-       | tt
-       | xref)+
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    ((artwork | dl | figure | ol | sourcecode | t | ul)+
+     | (text
+        | bcp14
+        | cref
+        | em
+        | eref
+        | iref
+        | strong
+        | sub
+        | sup
+        | tt
+        | xref)+)
   }
 xref =
   element xref {
@@ -412,6 +424,7 @@ vspace =
 figure =
   element figure {
     attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
     [ a:defaultValue = "" ] attribute title { text }?,
     [ a:defaultValue = "false" ]
     attribute suppress-title { "true" | "false" }?,
@@ -421,7 +434,6 @@ figure =
     [ a:defaultValue = "" ] attribute alt { text }?,
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
-    attribute pn { text }?,
     name?,
     iref*,
     preamble?,
@@ -455,6 +467,8 @@ preamble =
   }
 artwork =
   element artwork {
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
     attribute xml:space { text }?,
     [ a:defaultValue = "" ] attribute name { text }?,
     [ a:defaultValue = "" ] attribute type { text }?,
@@ -464,8 +478,6 @@ artwork =
     [ a:defaultValue = "" ] attribute alt { text }?,
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
-    attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     (text* | svg)
   }
 svg =
@@ -480,23 +492,41 @@ anything =
   }
 sourcecode =
   element sourcecode {
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
     [ a:defaultValue = "" ] attribute name { text }?,
     [ a:defaultValue = "" ] attribute type { text }?,
     attribute src { text }?,
-    attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     text
   }
-thead = element thead { tr+ }
-tbody = element tbody { tr+ }
-tfoot = element tfoot { tr+ }
+thead =
+  element thead {
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    tr+
+  }
+tbody =
+  element tbody {
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    tr+
+  }
+tfoot =
+  element tfoot {
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    tr+
+  }
 tr =
   element tr {
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
     [ a:defaultValue = "0" ] attribute border { text }?,
     (td | th)+
   }
 td =
   element td {
+    attribute anchor { xsd:ID }?,
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
     [ a:defaultValue = "0" ] attribute rowspan { text }?,
@@ -524,6 +554,8 @@ td =
   }
 th =
   element th {
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
     [ a:defaultValue = "0" ] attribute rowspan { text }?,
@@ -614,7 +646,6 @@ references =
   element references {
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
-    attribute pn { text }?,
     name?,
     (reference | referencegroup)*
   }
