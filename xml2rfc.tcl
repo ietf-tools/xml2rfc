@@ -11959,11 +11959,14 @@ proc eref_html {text counter target} {
 
     if {![string compare $text ""]} {
         set text $target
-    } elseif {$options(.EMOTICONIC)} {
-        set text [emoticonic_html $text]
+        set line "&lt;<a href='$target'>$text</a>&gt;"
+    } else {
+        if {$options(.EMOTICONIC)} {
+	    set text [emoticonic_html $text]
+        }
+        set line "<a href='$target'>$text</a>"
     }
 
-    set line "<a href='$target'>$text</a>"
     if {![cellP $line]} {
         global emptyP
 
