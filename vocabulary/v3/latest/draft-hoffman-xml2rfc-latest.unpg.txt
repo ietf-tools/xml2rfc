@@ -293,14 +293,18 @@ Table of Contents
       the time that the XML went through a preparation step.  Add
       "version" to indicate the version of XML2RFC vocabulary used in
       the document.  Add "scripts" to indicate which scripts are needed
-      to render the document.
+      to render the document.  Add "expiresDate" when an Internet Draft
+      expires.
 
    o  Add "ascii" attributes to <email>, <organization>, <street>,
-      <city>, <region> and <code>.  Also add "asciiFullname",
-      "asciiInitials", and "asciiSurname" to <author>.  This allows an
-      author to specify their information in their native scripts as the
-      primary entry and still allow the ASCII-equivalent values to
-      appear in the processed documents.
+      <city>, <region>, <country>, and <code>.  Also add
+      "asciiFullname", "asciiInitials", and "asciiSurname" to <author>.
+      This allows an author to specify their information in their native
+      scripts as the primary entry and still allow the ASCII-equivalent
+      values to appear in the processed documents.
+
+   o  Add "anchor" attributes to many block elements to allow them to be
+      linked with <relref> and <xref>.
 
    o  Add the "section", "relative", and "sectionFormat" attributes to
       <xref>.
@@ -309,13 +313,16 @@ Table of Contents
 
    o  Add the "removeInRFC" attribute to <note>.
 
-   o  Add "pn" to <artwork>, <aside>, <blockquote>, <dt>, <figure>,
-      <li>, <section> <sourcecode>, <t>, and <table> to hold
+   o  Add "pn" to <artwork>, <aside>, <blockquote>, <boilerplate>,<dt>,
+      <figure>, <li>, <section> <sourcecode>, <t>, and <table> to hold
       automatically generated numbers for items in a section that don't
       have their own numbering (namely figures and tables).
 
    o  Add "display" to <cref> to indicate to tools whether or not to
       display the comment.
+
+   o  Add "derivedContent" to <xref> to hold the text from the prep
+      tool.
 
    o  Add "keepWithNext" and "keepWithPrevious" to <t> as a hint to
       tools that do pagination that the should try to keep the paragraph

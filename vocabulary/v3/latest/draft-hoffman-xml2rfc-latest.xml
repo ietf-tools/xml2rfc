@@ -183,14 +183,18 @@ to cover processor instructions (PIs) that were in v2 that are still needed in t
 Add "prepTime" to indicate the time that the XML went through a preparation step.
 Add "version" to indicate the version of XML2RFC vocabulary used in the document.
 Add "scripts" to indicate which scripts are needed to render the document.
+Add "expiresDate" when an Internet Draft expires.
 </t>
 
 <t>Add "ascii" attributes to &lt;<x:ref>email</x:ref>&gt;,
 &lt;<x:ref>organization</x:ref>&gt;, &lt;<x:ref>street</x:ref>&gt;,
-&lt;<x:ref>city</x:ref>&gt;, &lt;<x:ref>region</x:ref>&gt; and &lt;<x:ref>code</x:ref>&gt;.
+&lt;<x:ref>city</x:ref>&gt;, &lt;<x:ref>region</x:ref>&gt;, &lt;<x:ref>country</x:ref>&gt;, and &lt;<x:ref>code</x:ref>&gt;.
 Also add "asciiFullname", "asciiInitials", and "asciiSurname" to &lt;<x:ref>author</x:ref>&gt;.
 This allows an author to specify their information in their native scripts as the primary
 entry and still allow the ASCII-equivalent values to appear in the processed documents.</t>
+
+<t>Add "anchor" attributes to many block elements to allow them to be linked with
+&lt;<x:ref>relref</x:ref>&gt; and &lt;<x:ref>xref</x:ref>&gt;.</t>
 
 <t>Add the "section", "relative", and "sectionFormat" attributes to &lt;<x:ref>xref</x:ref>&gt;.</t>
 
@@ -199,7 +203,7 @@ entry and still allow the ASCII-equivalent values to appear in the processed doc
 <t>Add the "removeInRFC" attribute to &lt;<x:ref>note</x:ref>&gt;.</t>
 
 <t>Add "pn" to &lt;<x:ref>artwork</x:ref>&gt;,
-&lt;<x:ref>aside</x:ref>&gt;, &lt;<x:ref>blockquote</x:ref>&gt;, &lt;<x:ref>dt</x:ref>&gt;,
+&lt;<x:ref>aside</x:ref>&gt;, &lt;<x:ref>blockquote</x:ref>&gt;, &lt;<x:ref>boilerplate</x:ref>&gt;,&lt;<x:ref>dt</x:ref>&gt;,
 &lt;<x:ref>figure</x:ref>&gt;, &lt;<x:ref>li</x:ref>&gt;, &lt;<x:ref>section</x:ref>&gt;
 &lt;<x:ref>sourcecode</x:ref>&gt;, &lt;<x:ref>t</x:ref>&gt;,
 and &lt;<x:ref>table</x:ref>&gt; to hold automatically generated
@@ -207,6 +211,8 @@ numbers for items in a section that don't have their own numbering (namely figur
 
 <t>Add "display" to &lt;<x:ref>cref</x:ref>&gt; to indicate to tools whether or not
 to display the comment.</t>
+
+<t>Add "derivedContent" to &lt;<x:ref>xref</x:ref>&gt; to hold the text from the prep tool.</t>
 
 <t>Add "keepWithNext" and "keepWithPrevious" to &lt;<x:ref>t</x:ref>&gt; as a hint to tools that
 do pagination that the should try to keep the paragraph with the next/previous element.</t>

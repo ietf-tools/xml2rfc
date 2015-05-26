@@ -843,10 +843,13 @@ blockquote > * .bcp14 {
                   <ul>
                      <li>Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes to &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; to cover processor instructions (PIs) that were in v2 that are still needed in the grammar. Add "prepTime" to indicate the
                         time that the XML went through a preparation step. Add "version" to indicate the version of XML2RFC vocabulary used in the
-                        document. Add "scripts" to indicate which scripts are needed to render the document.
+                        document. Add "scripts" to indicate which scripts are needed to render the document. Add "expiresDate" when an Internet Draft
+                        expires.
                      </li>
-                     <li>Add "ascii" attributes to &lt;<a href="#element.email" class="smpl">email</a>&gt;, &lt;<a href="#element.organization" class="smpl">organization</a>&gt;, &lt;<a href="#element.street" class="smpl">street</a>&gt;, &lt;<a href="#element.city" class="smpl">city</a>&gt;, &lt;<a href="#element.region" class="smpl">region</a>&gt; and &lt;<a href="#element.code" class="smpl">code</a>&gt;. Also add "asciiFullname", "asciiInitials", and "asciiSurname" to &lt;<a href="#element.author" class="smpl">author</a>&gt;. This allows an author to specify their information in their native scripts as the primary entry and still allow the ASCII-equivalent
+                     <li>Add "ascii" attributes to &lt;<a href="#element.email" class="smpl">email</a>&gt;, &lt;<a href="#element.organization" class="smpl">organization</a>&gt;, &lt;<a href="#element.street" class="smpl">street</a>&gt;, &lt;<a href="#element.city" class="smpl">city</a>&gt;, &lt;<a href="#element.region" class="smpl">region</a>&gt;, &lt;<a href="#element.country" class="smpl">country</a>&gt;, and &lt;<a href="#element.code" class="smpl">code</a>&gt;. Also add "asciiFullname", "asciiInitials", and "asciiSurname" to &lt;<a href="#element.author" class="smpl">author</a>&gt;. This allows an author to specify their information in their native scripts as the primary entry and still allow the ASCII-equivalent
                         values to appear in the processed documents.
+                     </li>
+                     <li>Add "anchor" attributes to many block elements to allow them to be linked with &lt;<a href="#element.relref" class="smpl">relref</a>&gt; and &lt;<a href="#element.xref" class="smpl">xref</a>&gt;.
                      </li>
                      <li>Add the "section", "relative", and "sectionFormat" attributes to &lt;<a href="#element.xref" class="smpl">xref</a>&gt;.
                      </li>
@@ -854,9 +857,11 @@ blockquote > * .bcp14 {
                      </li>
                      <li>Add the "removeInRFC" attribute to &lt;<a href="#element.note" class="smpl">note</a>&gt;.
                      </li>
-                     <li>Add "pn" to &lt;<a href="#element.artwork" class="smpl">artwork</a>&gt;, &lt;<a href="#element.aside" class="smpl">aside</a>&gt;, &lt;<a href="#element.blockquote" class="smpl">blockquote</a>&gt;, &lt;<a href="#element.dt" class="smpl">dt</a>&gt;, &lt;<a href="#element.figure" class="smpl">figure</a>&gt;, &lt;<a href="#element.li" class="smpl">li</a>&gt;, &lt;<a href="#element.section" class="smpl">section</a>&gt; &lt;<a href="#element.sourcecode" class="smpl">sourcecode</a>&gt;, &lt;<a href="#element.t" class="smpl">t</a>&gt;, and &lt;<a href="#element.table" class="smpl">table</a>&gt; to hold automatically generated numbers for items in a section that don't have their own numbering (namely figures and tables).
+                     <li>Add "pn" to &lt;<a href="#element.artwork" class="smpl">artwork</a>&gt;, &lt;<a href="#element.aside" class="smpl">aside</a>&gt;, &lt;<a href="#element.blockquote" class="smpl">blockquote</a>&gt;, &lt;<a href="#element.boilerplate" class="smpl">boilerplate</a>&gt;,&lt;<a href="#element.dt" class="smpl">dt</a>&gt;, &lt;<a href="#element.figure" class="smpl">figure</a>&gt;, &lt;<a href="#element.li" class="smpl">li</a>&gt;, &lt;<a href="#element.section" class="smpl">section</a>&gt; &lt;<a href="#element.sourcecode" class="smpl">sourcecode</a>&gt;, &lt;<a href="#element.t" class="smpl">t</a>&gt;, and &lt;<a href="#element.table" class="smpl">table</a>&gt; to hold automatically generated numbers for items in a section that don't have their own numbering (namely figures and tables).
                      </li>
                      <li>Add "display" to &lt;<a href="#element.cref" class="smpl">cref</a>&gt; to indicate to tools whether or not to display the comment.
+                     </li>
+                     <li>Add "derivedContent" to &lt;<a href="#element.xref" class="smpl">xref</a>&gt; to hold the text from the prep tool.
                      </li>
                      <li>Add "keepWithNext" and "keepWithPrevious" to &lt;<a href="#element.t" class="smpl">t</a>&gt; as a hint to tools that do pagination that the should try to keep the paragraph with the next/previous element.
                      </li>

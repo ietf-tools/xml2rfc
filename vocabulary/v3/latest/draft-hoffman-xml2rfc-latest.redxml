@@ -182,14 +182,18 @@ to cover processor instructions (PIs) that were in v2 that are still needed in t
 Add "prepTime" to indicate the time that the XML went through a preparation step.
 Add "version" to indicate the version of XML2RFC vocabulary used in the document.
 Add "scripts" to indicate which scripts are needed to render the document.
+Add "expiresDate" when an Internet Draft expires.
 </t>
 
 <t>Add "ascii" attributes to &lt;<xref target="element.email" format="none">email</xref>&gt;,
 &lt;<xref target="element.organization" format="none">organization</xref>&gt;, &lt;<xref target="element.street" format="none">street</xref>&gt;,
-&lt;<xref target="element.city" format="none">city</xref>&gt;, &lt;<xref target="element.region" format="none">region</xref>&gt; and &lt;<xref target="element.code" format="none">code</xref>&gt;.
+&lt;<xref target="element.city" format="none">city</xref>&gt;, &lt;<xref target="element.region" format="none">region</xref>&gt;, &lt;<xref target="element.country" format="none">country</xref>&gt;, and &lt;<xref target="element.code" format="none">code</xref>&gt;.
 Also add "asciiFullname", "asciiInitials", and "asciiSurname" to &lt;<xref target="element.author" format="none">author</xref>&gt;.
 This allows an author to specify their information in their native scripts as the primary
 entry and still allow the ASCII-equivalent values to appear in the processed documents.</t>
+
+<t>Add "anchor" attributes to many block elements to allow them to be linked with
+&lt;<xref target="element.relref" format="none">relref</xref>&gt; and &lt;<xref target="element.xref" format="none">xref</xref>&gt;.</t>
 
 <t>Add the "section", "relative", and "sectionFormat" attributes to &lt;<xref target="element.xref" format="none">xref</xref>&gt;.</t>
 
@@ -198,7 +202,7 @@ entry and still allow the ASCII-equivalent values to appear in the processed doc
 <t>Add the "removeInRFC" attribute to &lt;<xref target="element.note" format="none">note</xref>&gt;.</t>
 
 <t>Add "pn" to &lt;<xref target="element.artwork" format="none">artwork</xref>&gt;,
-&lt;<xref target="element.aside" format="none">aside</xref>&gt;, &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt;, &lt;<xref target="element.dt" format="none">dt</xref>&gt;,
+&lt;<xref target="element.aside" format="none">aside</xref>&gt;, &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt;, &lt;<xref target="element.boilerplate" format="none">boilerplate</xref>&gt;,&lt;<xref target="element.dt" format="none">dt</xref>&gt;,
 &lt;<xref target="element.figure" format="none">figure</xref>&gt;, &lt;<xref target="element.li" format="none">li</xref>&gt;, &lt;<xref target="element.section" format="none">section</xref>&gt;
 &lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt;, &lt;<xref target="element.t" format="none">t</xref>&gt;,
 and &lt;<xref target="element.table" format="none">table</xref>&gt; to hold automatically generated
@@ -206,6 +210,8 @@ numbers for items in a section that don't have their own numbering (namely figur
 
 <t>Add "display" to &lt;<xref target="element.cref" format="none">cref</xref>&gt; to indicate to tools whether or not
 to display the comment.</t>
+
+<t>Add "derivedContent" to &lt;<xref target="element.xref" format="none">xref</xref>&gt; to hold the text from the prep tool.</t>
 
 <t>Add "keepWithNext" and "keepWithPrevious" to &lt;<xref target="element.t" format="none">t</xref>&gt; as a hint to tools that
 do pagination that the should try to keep the paragraph with the next/previous element.</t>
