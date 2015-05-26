@@ -492,6 +492,7 @@
           <text/>
           <ref name="cref"/>
           <ref name="eref"/>
+          <ref name="relref"/>
           <ref name="tt"/>
           <ref name="xref"/>
         </choice>
@@ -536,6 +537,7 @@
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="list"/>
+          <ref name="relref"/>
           <ref name="spanx"/>
           <ref name="strong"/>
           <ref name="sub"/>
@@ -608,6 +610,7 @@
             <ref name="em"/>
             <ref name="eref"/>
             <ref name="iref"/>
+            <ref name="relref"/>
             <ref name="strong"/>
             <ref name="sub"/>
             <ref name="sup"/>
@@ -727,6 +730,7 @@
             <ref name="em"/>
             <ref name="eref"/>
             <ref name="iref"/>
+            <ref name="relref"/>
             <ref name="strong"/>
             <ref name="sub"/>
             <ref name="sup"/>
@@ -787,6 +791,7 @@
           <ref name="em"/>
           <ref name="eref"/>
           <ref name="iref"/>
+          <ref name="relref"/>
           <ref name="strong"/>
           <ref name="sub"/>
           <ref name="sup"/>
@@ -826,6 +831,7 @@
             <ref name="em"/>
             <ref name="eref"/>
             <ref name="iref"/>
+            <ref name="relref"/>
             <ref name="strong"/>
             <ref name="sub"/>
             <ref name="sup"/>
@@ -852,10 +858,30 @@
       <optional>
         <attribute name="format" a:defaultValue="default">
           <choice>
-            <value>counter</value>
-            <value>title</value>
-            <value>none</value>
             <value>default</value>
+            <value>title</value>
+            <value>counter</value>
+            <value>none</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="derivedContent"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="relref">
+    <element name="relref">
+      <attribute name="target">
+        <data type="IDREF"/>
+      </attribute>
+      <optional>
+        <attribute name="displayFormat" a:defaultValue="of">
+          <choice>
+            <value>of</value>
+            <value>comma</value>
+            <value>parens</value>
           </choice>
         </attribute>
       </optional>
@@ -864,9 +890,12 @@
         <optional>
           <attribute name="relative"/>
         </optional>
-        <optional>
-          <attribute name="sectionFormat"/>
-        </optional>
+      </optional>
+      <optional>
+        <attribute name="derivedRemoteContent"/>
+      </optional>
+      <optional>
+        <attribute name="derivedLink"/>
       </optional>
       <text/>
     </element>
@@ -920,6 +949,7 @@
           <text/>
           <ref name="em"/>
           <ref name="eref"/>
+          <ref name="relref"/>
           <ref name="strong"/>
           <ref name="sub"/>
           <ref name="sup"/>
@@ -939,6 +969,7 @@
           <ref name="em"/>
           <ref name="eref"/>
           <ref name="iref"/>
+          <ref name="relref"/>
           <ref name="strong"/>
           <ref name="sub"/>
           <ref name="sup"/>
@@ -957,6 +988,7 @@
           <ref name="em"/>
           <ref name="eref"/>
           <ref name="iref"/>
+          <ref name="relref"/>
           <ref name="sub"/>
           <ref name="sup"/>
           <ref name="tt"/>
@@ -974,6 +1006,7 @@
           <ref name="cref"/>
           <ref name="eref"/>
           <ref name="iref"/>
+          <ref name="relref"/>
           <ref name="strong"/>
           <ref name="sub"/>
           <ref name="sup"/>
@@ -993,6 +1026,7 @@
           <ref name="em"/>
           <ref name="eref"/>
           <ref name="iref"/>
+          <ref name="relref"/>
           <ref name="strong"/>
           <ref name="tt"/>
           <ref name="xref"/>
@@ -1010,6 +1044,7 @@
           <ref name="em"/>
           <ref name="eref"/>
           <ref name="iref"/>
+          <ref name="relref"/>
           <ref name="strong"/>
           <ref name="tt"/>
           <ref name="xref"/>
@@ -1140,6 +1175,7 @@
           <ref name="em"/>
           <ref name="eref"/>
           <ref name="iref"/>
+          <ref name="relref"/>
           <ref name="spanx"/>
           <ref name="strong"/>
           <ref name="sub"/>
@@ -1351,6 +1387,7 @@
             <ref name="figure"/>
             <ref name="iref"/>
             <ref name="ol"/>
+            <ref name="relref"/>
             <ref name="sourcecode"/>
             <ref name="strong"/>
             <ref name="sub"/>
@@ -1408,6 +1445,7 @@
             <ref name="figure"/>
             <ref name="iref"/>
             <ref name="ol"/>
+            <ref name="relref"/>
             <ref name="sourcecode"/>
             <ref name="strong"/>
             <ref name="sub"/>
@@ -1425,16 +1463,10 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="bcp14"/>
           <ref name="cref"/>
-          <ref name="em"/>
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="spanx"/>
-          <ref name="strong"/>
-          <ref name="sub"/>
-          <ref name="sup"/>
-          <ref name="tt"/>
           <ref name="xref"/>
         </choice>
       </zeroOrMore>
@@ -1524,16 +1556,10 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <ref name="bcp14"/>
           <ref name="cref"/>
-          <ref name="em"/>
           <ref name="eref"/>
           <ref name="iref"/>
           <ref name="spanx"/>
-          <ref name="strong"/>
-          <ref name="sub"/>
-          <ref name="sup"/>
-          <ref name="tt"/>
           <ref name="xref"/>
         </choice>
       </zeroOrMore>
@@ -1663,6 +1689,7 @@
           <ref name="em"/>
           <ref name="eref"/>
           <ref name="iref"/>
+          <ref name="relref"/>
           <ref name="spanx"/>
           <ref name="strong"/>
           <ref name="sub"/>

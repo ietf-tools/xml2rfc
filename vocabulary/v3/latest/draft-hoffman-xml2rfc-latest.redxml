@@ -13,8 +13,6 @@
 <?rfc linkmailto="no" ?>
 <?rfc rfcedstyle="yes"?><!--
 
-Deal with xref/iref and incorporating the needed text in a processor
-
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
 -->
@@ -150,7 +148,7 @@ to give table functionality like that in HTML.</t>
 <t>Add &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; to indicate a quotation as in a paragraph-like format.</t>
 
 <t>Add &lt;<xref target="element.name" format="none">name</xref>&gt; to sections, notes, figures, and texttables to allow character formatting
-(fixed-width font) in their titles, and to allow references.</t>
+(fixed-width font) in their titles, and to allow references in the names.</t>
 
 <t>Add &lt;<xref target="element.postalLine" format="none">postalLine</xref>&gt;, free text that represents one line of the address.</t>
 
@@ -159,8 +157,10 @@ for automatically-included references.</t>
 
 <t>Add &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; to allow better control of text in a reference.</t>
 
-<t>Add &lt;<xref target="element.referencegroup" format="none">referencegroup</xref>&gt; to allow referemcing multi-RFC documents such
+<t>Add &lt;<xref target="element.referencegroup" format="none">referencegroup</xref>&gt; to allow referencing multi-RFC documents such
 as STDs and BCPs.</t>
+
+<t>Add &lt;<xref target="element.relref" format="none">relref</xref>&gt; to allow referncing specific sections or anchors in references.</t>
 
 <t>Add &lt;<xref target="element.link" format="none">link</xref>&gt; to point to a resource related to the RFC.</t>
 
@@ -484,6 +484,9 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <t><!--AG-->
          <iref item="Elements" subitem="iref"/>
          <iref item="iref element" subitem="inside annotation"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
+      <t><!--AG-->
+         <iref item="Elements" subitem="relref"/>
+         <iref item="relref element" subitem="inside annotation"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
       <t><!--AG-->
          <iref item="Elements" subitem="spanx"/>
          <iref item="spanx element" subitem="inside annotation"/>&lt;<xref target="element.spanx" format="none">spanx</xref>&gt; elements (<xref target="element.spanx"/>)</t>
@@ -1005,7 +1008,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       "The packet &lt;bcp14&gt;MUST&lt;/bcp14&gt; be dropped.", but it not correct to say
       "&lt;bcp14&gt;The packet MUST be dropped.&lt;/bcp14&gt;".
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.bcp14.contents"><!--AG-->
       Content model: only text content.</t>
 </section>
@@ -1073,6 +1076,9 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
             <t><!--AG-->
                <iref item="Elements" subitem="iref"/>
                <iref item="iref element" subitem="inside blockquote"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
+            <t><!--AG-->
+               <iref item="Elements" subitem="relref"/>
+               <iref item="relref element" subitem="inside blockquote"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
             <t><!--AG-->
                <iref item="Elements" subitem="strong"/>
                <iref item="strong element" subitem="inside blockquote"/>&lt;<xref target="element.strong" format="none">strong</xref>&gt; elements (<xref target="element.strong"/>)</t>
@@ -1291,6 +1297,9 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          <iref item="Elements" subitem="eref"/>
          <iref item="eref element" subitem="inside cref"/>&lt;<xref target="element.eref" format="none">eref</xref>&gt; elements (<xref target="element.eref"/>)</t>
       <t><!--AG-->
+         <iref item="Elements" subitem="relref"/>
+         <iref item="relref element" subitem="inside cref"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
+      <t><!--AG-->
          <iref item="Elements" subitem="strong"/>
          <iref item="strong element" subitem="inside cref"/>&lt;<xref target="element.strong" format="none">strong</xref>&gt; elements (<xref target="element.strong"/>)</t>
       <t><!--AG-->
@@ -1493,6 +1502,9 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
             <t><!--AG-->
                <iref item="Elements" subitem="iref"/>
                <iref item="iref element" subitem="inside dd"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
+            <t><!--AG-->
+               <iref item="Elements" subitem="relref"/>
+               <iref item="relref element" subitem="inside dd"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
             <t><!--AG-->
                <iref item="Elements" subitem="strong"/>
                <iref item="strong element" subitem="inside dd"/>&lt;<xref target="element.strong" format="none">strong</xref>&gt; elements (<xref target="element.strong"/>)</t>
@@ -1707,6 +1719,9 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          <iref item="Elements" subitem="iref"/>
          <iref item="iref element" subitem="inside dt"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
       <t><!--AG-->
+         <iref item="Elements" subitem="relref"/>
+         <iref item="relref element" subitem="inside dt"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
+      <t><!--AG-->
          <iref item="Elements" subitem="strong"/>
          <iref item="strong element" subitem="inside dt"/>&lt;<xref target="element.strong" format="none">strong</xref>&gt; elements (<xref target="element.strong"/>)</t>
       <t><!--AG-->
@@ -1758,7 +1773,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.em.contents"><!--AG-->
       Content model:
     </t>
@@ -1777,6 +1792,9 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <t><!--AG-->
          <iref item="Elements" subitem="iref"/>
          <iref item="iref element" subitem="inside em"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
+      <t><!--AG-->
+         <iref item="Elements" subitem="relref"/>
+         <iref item="relref element" subitem="inside em"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
       <t><!--AG-->
          <iref item="Elements" subitem="strong"/>
          <iref item="strong element" subitem="inside em"/>&lt;<xref target="element.strong" format="none">strong</xref>&gt; elements (<xref target="element.strong"/>)</t>
@@ -1833,12 +1851,52 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <iref item="Elements" subitem="eref" primary="true"/>
    <iref item="eref element" primary="true"/>
    <t>
-      Represents an "external" link (as specified in the "target" attribute). This can be used for creating linked
-      references, such as in HTML output.
+      A link to URI that is not in the References section.
+      This is useful for embedding URIs in the body of a document.
    </t>
    <t>
-      If the element has text content, that content will be used. Otherwise, the value of the
-      target attribute will be inserted in angle brackets (<xref target="RFC3986"/>, Appendix C).
+      If the &lt;eref&gt; element has non-empty text content, formatters should use the content as the displayed text that is linked.
+      Otherwise the formatter should use the value of the "target" attribute as the displayed text.
+      Formatters will link the displayed text to the value of the "target" attribute in a manner appropriate for the output format.
+   </t>
+   <t>
+      For example, with an input of:
+<figure>
+         <artwork><![CDATA[
+      This is described at
+      <eref target="http://www.example.com/reports/r12.html"/>.
+]]></artwork>
+      </figure>
+   </t>
+   <t>
+      An HTML formatter might generate
+<figure>
+         <artwork><![CDATA[
+      This is described at
+      <a href="http://www.example.com/reports/r12.html">
+      http://www.example.com/reports/r12.html</a>.
+]]></artwork>
+      </figure>
+   </t>
+   <t>
+      With an input of:
+<figure>
+         <artwork><![CDATA[
+      This is described
+      <eref target="http://www.example.com/reports/r12.html">
+      in this interesting report</eref>.
+]]></artwork>
+      </figure>
+   </t>
+   <t>
+      An HTML formatter might generate
+<figure>
+         <artwork><![CDATA[
+      This is described
+      <a href="http://www.example.com/reports/r12.html">
+      in this interesting report</a>.
+]]></artwork>
+      </figure>
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.eref.contents"><!--AG-->
@@ -1851,7 +1909,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="eref element" subitem="target attribute"/>
       <iref item="target attribute" subitem="in eref element"/>
       <t>
-            URI of the link target (see Section 3 of <xref target="RFC3986"/>). 
+         URI of the link target. 
+         This must begin with a scheme name (such as "https://") and thus not be relative to the URL of the current document.
          </t>
    </section>
 </section>
@@ -2266,6 +2325,9 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
                <iref item="Elements" subitem="iref"/>
                <iref item="iref element" subitem="inside li"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
             <t><!--AG-->
+               <iref item="Elements" subitem="relref"/>
+               <iref item="relref element" subitem="inside li"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
+            <t><!--AG-->
                <iref item="Elements" subitem="strong"/>
                <iref item="strong element" subitem="inside li"/>&lt;<xref target="element.strong" format="none">strong</xref>&gt; elements (<xref target="element.strong"/>)</t>
             <t><!--AG-->
@@ -2418,6 +2480,9 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <t><!--AG-->
          <iref item="Elements" subitem="eref"/>
          <iref item="eref element" subitem="inside name"/>&lt;<xref target="element.eref" format="none">eref</xref>&gt; elements (<xref target="element.eref"/>)</t>
+      <t><!--AG-->
+         <iref item="Elements" subitem="relref"/>
+         <iref item="relref element" subitem="inside name"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
       <t><!--AG-->
          <iref item="Elements" subitem="tt"/>
          <iref item="tt element" subitem="inside name"/>&lt;<xref target="element.tt" format="none">tt</xref>&gt; elements (<xref target="element.tt"/>)</t>
@@ -3058,6 +3123,249 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="ascii attribute" subitem="in region element"/>
       <t>
          The ASCII equivalent of the region name.
+      </t>
+   </section>
+</section>
+
+<!--relref-->
+<section anchor="element.relref" title="&lt;relref&gt;">
+   
+   
+   <iref item="Elements" subitem="relref" primary="true"/>
+   <iref item="relref element" primary="true"/>
+   <t>
+      A relative link to a reference from the References section.
+      Formatters that have links (such as HTML and PDF) are likely to render &lt;relref&gt; elements as live external links
+      to the specified part of the reference, creating the link target by combining the base URI from the
+      &lt;<xref target="element.reference" format="none">reference</xref>&gt; element with the "relative" attribute from this element.
+      The "target" attribute is required, and it must be the anchor of a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element.
+   </t>
+   <t>   
+      Either the "relative" or the "section" attribute must be present, but both cannot be given for a &lt;relref&gt; element.
+      If a reference is an RFC or Internet-Draft that is in the v3 format and the desired relative reference is to
+      a section of that reference, the "section" attribute is easier to use than the "relative" attribute because
+      the value of "section" is just a section string such as "2.3".
+   </t>
+   <t>
+      When processing a &lt;relref&gt; element, the prep tool fills in the
+      "derivedRemoteContent" attribute if there is no content in the &lt;relref&gt; element; otherwise, it
+      leaves that attribute undefined.
+      The prep tool always fills in the "derivedLink" attribute.
+      If the "derivedRemoteContent" attribute exists, a formatter should ignore the
+      content of the &lt;relref&gt; element when it creates its output; this will only be the case for files
+      not processed by the prep tool.
+   </t>
+   <t>
+      An example of the &lt;relref&gt; element with text content might be:
+<figure>
+         <artwork><![CDATA[
+      See <relref section="2.3" target="RFC7878">
+      the protocol overview</relref>
+      for more information.
+]]></artwork>
+      </figure>
+   </t>
+   <t>
+       An HTML formatter might generate:
+<figure>
+         <artwork><![CDATA[
+      See 
+      <a href="http://www.rfc-editor.org/info/rfc7878#s-2.3">
+      the protocol overview</a>
+      for more information.
+]]></artwork>
+      </figure>
+   </t>
+   <t/>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
+   <t anchor="element.relref.contents"><!--AG-->
+      Content model: only text content.</t>
+
+   <!--relref/@derivedLink-->
+   <section anchor="element.relref.attribute.derivedLink" toc="exclude" title="'derivedLink' attribute">
+      
+      <iref item="Attributes" subitem="derivedLink"/>
+      <iref item="relref element" subitem="derivedLink attribute"/>
+      <iref item="derivedLink attribute" subitem="in relref element"/>
+      <t>
+         This attribute is filled in by the prep tool.
+         This is the link that is derived from combining the URI from the reference, a "#" character, and the
+         relative part that is either a copy of the "relative" attribute or a section number derived from the
+         "section" attribute.
+      </t>
+   </section>
+
+   <!--relref/@derivedRemoteContent-->
+   <section anchor="element.relref.attribute.derivedRemoteContent" toc="exclude" title="'derivedRemoteContent' attribute">
+      
+      <iref item="Attributes" subitem="derivedRemoteContent"/>
+      <iref item="relref element" subitem="derivedRemoteContent attribute"/>
+      <iref item="derivedRemoteContent attribute" subitem="in relref element"/>
+      <t>
+         This attribute is filled in by the prep tool.
+         If the &lt;relref&gt; element has no text content, this attribute contains the text for the remote link, such as
+         "Section 2.3" or "Table 5".
+         The prep tool might determine this text by reading the target reference and, if it is a RFC or Internet-Draft
+         in the v3 format, finding the anchor given in the "relative" attribute or derived from the "section"
+         attribute, and using the title of that element.
+      </t>
+      <t>
+         If the reference is not an RFC or Internet-Draft in the v3 format, the text fragment is simply the
+         value of the "relative" or "section" attribute.
+         This will rarely produce a good result in formatted output so, for these documents, the
+         &lt;relref&gt; element should contain text content.
+      </t>
+   </section>
+
+   <!--relref/@displayFormat-->
+   <section anchor="element.relref.attribute.displayFormat" toc="exclude" title="'displayFormat' attribute">
+      
+      <iref item="Attributes" subitem="displayFormat"/>
+      <iref item="relref element" subitem="displayFormat attribute"/>
+      <iref item="displayFormat attribute" subitem="in relref element"/>
+      <t>
+        This attribute is used to signal formatters what the desired format of the relative reference should be.
+        Formatters for document types that have linking capability should wrap each part of the displayed text in live links.
+        If there is content in the &lt;relref&gt; element, formatters will ignore the value of this attribute.
+      </t>
+      <t>
+        "of"
+        <list style="empty">
+            <t>
+            A formatter should display the relative reference as the contents of the "derivedRemoteContent" attribute
+            followed by a space, the word "of", another space, and the value from the "target" attribute enclosed in square brackets.
+            </t>
+            <t>
+            For example, if Section 2.3 of RFC 7878 has the title "Protocol Overview", with an input of:
+<figure>
+                  <artwork><![CDATA[
+      See
+      <relref section="2.3" target="RFC7878" displayFormat="of"/>
+      for an overview.
+]]></artwork>
+               </figure>
+            </t>
+            <t>
+               An HTML formatter might generate:
+<figure>
+                  <artwork><![CDATA[
+      See
+      <a href="http://www.rfc-editor.org/info/rfc7878#s-2.3">
+      Section 2.3</a> of
+      [<a href="#RFC7878">RFC7878</a>]
+      for an overview.
+]]></artwork>
+               </figure>
+            </t>
+            <t>
+            Note that "displayFormat='of'" is the default for &lt;relref&gt; so it does not need to be given in
+            a &lt;relref&gt; element if that format is desired.
+            </t>
+         </list>
+      </t>
+      <t>
+        "comma"
+        <list style="empty">
+            <t>
+            A formatter should display the relative reference as the value from the "target" attribute enclosed in square brackets,
+            a comma, a space, and the "derivedRemoteContent" attribute.
+            </t>
+            <t>
+            For example, if Section 2.3 of RFC 7878 has the title "Protocol Overview", with an input of:
+<figure>
+                  <artwork><![CDATA[
+      See
+      <relref section="2.3" target="RFC7878" displayFormat="comma"/>,
+      for an overview.
+]]></artwork>
+               </figure>
+            </t>
+            <t>
+               An HTML formatter might generate:
+<figure>
+                  <artwork><![CDATA[
+      See
+      [<a href="#RFC7878">RFC7878</a>], 
+      <a href="http://www.rfc-editor.org/info/rfc7878#s-2.3">
+      Section 2.3</a>, for an overview.
+]]></artwork>
+               </figure>
+            </t>
+         </list>
+      </t>
+      <t>
+        "parens"
+        <list style="empty">
+            <t>
+            A formatter should display the relative reference as the value from the "target" attribute enclosed in square brackets,
+            a space, a left parenthesis, the "derivedRemoteContent" attribute, and a right parenthesis.
+            </t>
+            <t>
+            For example, if Section 2.3 of RFC 7878 has the title "Protocol Overview", with an input of:
+<figure>
+                  <artwork><![CDATA[
+      See
+      <relref section="2.3" target="RFC7878" displayFormat="parens"/>
+      for an overview.
+]]></artwork>
+               </figure>
+            </t>
+            <t>
+               An HTML formatter might generate
+<figure>
+                  <artwork><![CDATA[
+      See
+      [<a href="#RFC7878">RFC7878</a>]
+      (<a href="http://www.rfc-editor.org/info/rfc7878#s-2.3"> 
+      Section 2.3</a>)
+      for an overview.
+]]></artwork>
+               </figure>
+            </t>
+         </list>
+      </t>
+      <t><!--AG-->Allowed values:</t>
+      <t><list style="symbols"><!--AG-->
+         <t>"of" (default)</t>
+         <t>"comma"</t>
+         <t>"parens"</t>
+      </list></t>
+   </section>
+
+   <!--relref/@relative-->
+   <section anchor="element.relref.attribute.relative" toc="exclude" title="'relative' attribute">
+      
+      <iref item="Attributes" subitem="relative"/>
+      <iref item="relref element" subitem="relative attribute"/>
+      <iref item="relative attribute" subitem="in relref element"/>
+      <t>
+         Specifies a relative reference from the URI in the target reference.
+         This value is given without the leading "#" character found in relative references.
+      </t>
+   </section>
+
+   <!--relref/@section-->
+   <section anchor="element.relref.attribute.section" toc="exclude" title="'section' attribute">
+      
+      <iref item="Attributes" subitem="section"/>
+      <iref item="relref element" subitem="section attribute"/>
+      <iref item="section attribute" subitem="in relref element"/>
+      <t>
+         Specifies a section of the target reference.
+         If the reference is not an RFC or Internet-Draft, it is an error.
+      </t>
+   </section>
+
+   <!--relref/@target-->
+   <section anchor="element.relref.attribute.target" toc="exclude" title="'target' attribute (mandatory)">
+      
+      <iref item="Attributes" subitem="target"/>
+      <iref item="relref element" subitem="target attribute"/>
+      <iref item="target attribute" subitem="in relref element"/>
+      <t>
+        The anchor of the reference for this element. If this value is not an anchor to a
+        &lt;<xref target="element.reference" format="none">reference</xref>&gt; or &lt;<xref target="element.referencegroup" format="none">referencegroup</xref>&gt; element, it is an error.
+        If the reference at the target has no URI, it is an error.
       </t>
    </section>
 </section>
@@ -3857,7 +4165,7 @@ Using CDATA:
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.strong.contents"><!--AG-->
       Content model:
     </t>
@@ -3879,6 +4187,9 @@ Using CDATA:
       <t><!--AG-->
          <iref item="Elements" subitem="iref"/>
          <iref item="iref element" subitem="inside strong"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
+      <t><!--AG-->
+         <iref item="Elements" subitem="relref"/>
+         <iref item="relref element" subitem="inside strong"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
       <t><!--AG-->
          <iref item="Elements" subitem="sub"/>
          <iref item="sub element" subitem="inside strong"/>&lt;<xref target="element.sub" format="none">sub</xref>&gt; elements (<xref target="element.sub"/>)</t>
@@ -3905,7 +4216,7 @@ Using CDATA:
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.sub.contents"><!--AG-->
       Content model:
     </t>
@@ -3927,6 +4238,9 @@ Using CDATA:
       <t><!--AG-->
          <iref item="Elements" subitem="iref"/>
          <iref item="iref element" subitem="inside sub"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
+      <t><!--AG-->
+         <iref item="Elements" subitem="relref"/>
+         <iref item="relref element" subitem="inside sub"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
       <t><!--AG-->
          <iref item="Elements" subitem="strong"/>
          <iref item="strong element" subitem="inside sub"/>&lt;<xref target="element.strong" format="none">strong</xref>&gt; elements (<xref target="element.strong"/>)</t>
@@ -3950,7 +4264,7 @@ Using CDATA:
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.sup.contents"><!--AG-->
       Content model:
     </t>
@@ -3972,6 +4286,9 @@ Using CDATA:
       <t><!--AG-->
          <iref item="Elements" subitem="iref"/>
          <iref item="iref element" subitem="inside sup"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
+      <t><!--AG-->
+         <iref item="Elements" subitem="relref"/>
+         <iref item="relref element" subitem="inside sup"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
       <t><!--AG-->
          <iref item="Elements" subitem="strong"/>
          <iref item="strong element" subitem="inside sup"/>&lt;<xref target="element.strong" format="none">strong</xref>&gt; elements (<xref target="element.strong"/>)</t>
@@ -4018,6 +4335,9 @@ Using CDATA:
       <t><!--AG-->
          <iref item="Elements" subitem="list"/>
          <iref item="list element" subitem="inside t"/>&lt;<xref target="element.list" format="none">list</xref>&gt; elements (<xref target="element.list"/>)</t>
+      <t><!--AG-->
+         <iref item="Elements" subitem="relref"/>
+         <iref item="relref element" subitem="inside t"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
       <t><!--AG-->
          <iref item="Elements" subitem="spanx"/>
          <iref item="spanx element" subitem="inside t"/>&lt;<xref target="element.spanx" format="none">spanx</xref>&gt; elements (<xref target="element.spanx"/>)</t>
@@ -4289,6 +4609,9 @@ Using CDATA:
                <iref item="Elements" subitem="ol"/>
                <iref item="ol element" subitem="inside td"/>&lt;<xref target="element.ol" format="none">ol</xref>&gt; elements (<xref target="element.ol"/>)</t>
             <t><!--AG-->
+               <iref item="Elements" subitem="relref"/>
+               <iref item="relref element" subitem="inside td"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
+            <t><!--AG-->
                <iref item="Elements" subitem="sourcecode"/>
                <iref item="sourcecode element" subitem="inside td"/>&lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt; elements (<xref target="element.sourcecode"/>)</t>
             <t><!--AG-->
@@ -4481,6 +4804,9 @@ Using CDATA:
             <t><!--AG-->
                <iref item="Elements" subitem="ol"/>
                <iref item="ol element" subitem="inside th"/>&lt;<xref target="element.ol" format="none">ol</xref>&gt; elements (<xref target="element.ol"/>)</t>
+            <t><!--AG-->
+               <iref item="Elements" subitem="relref"/>
+               <iref item="relref element" subitem="inside th"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
             <t><!--AG-->
                <iref item="Elements" subitem="sourcecode"/>
                <iref item="sourcecode element" subitem="inside th"/>&lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt; elements (<xref target="element.sourcecode"/>)</t>
@@ -4741,7 +5067,7 @@ Using CDATA:
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.tt.contents"><!--AG-->
       Content model:
     </t>
@@ -4763,6 +5089,9 @@ Using CDATA:
       <t><!--AG-->
          <iref item="Elements" subitem="iref"/>
          <iref item="iref element" subitem="inside tt"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
+      <t><!--AG-->
+         <iref item="Elements" subitem="relref"/>
+         <iref item="relref element" subitem="inside tt"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
       <t><!--AG-->
          <iref item="Elements" subitem="strong"/>
          <iref item="strong element" subitem="inside tt"/>&lt;<xref target="element.strong" format="none">strong</xref>&gt; elements (<xref target="element.strong"/>)</t>
@@ -4901,36 +5230,35 @@ Using CDATA:
    <iref item="Elements" subitem="xref" primary="true"/>
    <iref item="xref element" primary="true"/>
    <t>
-      Inserts a reference to a different part of a document.
+      A reference to an anchor in this document.
+      Formatters that have links (such as HTML and PDF) are likely to render &lt;xref&gt; elements as live internal links.
+      This element is useful for referring to references in the References section, to specific sections of this
+      document, to specific figures, and so on.
+      The "target" attribute is required.
    </t>
    <t>
-      ##### The text that is generated by a processor depends on whether the &lt;xref&gt; element is
-      empty, the attributes of the &lt;xref&gt; element, and the nature of the referenced document
-      part.
-      If the output format being converted to supports links, the text from the element or the
-      generated text is surrounded by a link to the appropriate target.
-      <list style="symbols">
-         <t>
-          If the &lt;xref&gt; element contains text other than whitespace, the processor ignores all
-          attributes other than "target", and uses the contained text in the output.
-        </t>
-         <t>
-          If the &lt;xref&gt; element is empty or only whitespace, the converter must generate text to
-          show for the reference in the converted document. If the target is an anchor for a
-          &lt;<xref target="element.reference" format="none">reference</xref>&gt; element, the generated text comes from the child elements
-          in that &lt;<xref target="element.reference" format="none">reference</xref>&gt; element; otherwise, the generated text comes from
-          the target element in the current document. The attributes of the
-          &lt;<xref target="element.xref" format="none">xref</xref>&gt; element may affect the generated text in these cases.
-        </t>
-         <t>
-          If the processor cannot generate reasonable text, the processor uses the anchor name as the
-          generated text.
-        </t>
-      </list>
+      When processing an &lt;xref&gt; element, the prep tool fills in the
+      "derivedContent" attribute if there is no content in the &lt;xref&gt; element; otherwise, it
+      leaves that attribute undefined.
+      If the "derivedContent" attribute exists, a formatter should ignore the
+      content of the &lt;xref&gt; element when it creates its output; this will only be the case for files
+      not processed by the prep tool.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.xref.contents"><!--AG-->
       Content model: only text content.</t>
+
+   <!--xref/@derivedContent-->
+   <section anchor="element.xref.attribute.derivedContent" toc="exclude" title="'derivedContent' attribute">
+      
+      <iref item="Attributes" subitem="derivedContent"/>
+      <iref item="xref element" subitem="derivedContent attribute"/>
+      <iref item="derivedContent attribute" subitem="in xref element"/>
+      <t>
+         This attribute is filled in by the prep tool if there is no content in the &lt;xref&gt; element.
+         The prep tool fills in this attribute based on the value in the "displayFormat" attribute.
+      </t>
+   </section>
 
    <!--xref/@format-->
    <section anchor="element.xref.attribute.format" toc="exclude" title="'format' attribute">
@@ -4939,30 +5267,33 @@ Using CDATA:
       <iref item="xref element" subitem="format attribute"/>
       <iref item="format attribute" subitem="in xref element"/>
       <t>
-        This attribute is used to control the format of the generated 
-        reference text.
+        This attribute is used to control the content of the "derivedContent" attribute that is filled in by the prep tool.
+        It also signals to formatters what the desired format of the reference should be.
+        Formatters for document types that have linking capability should wrap the displayed text in live links.
       </t>
       <t>
          <iref item="xref formats" subitem="counter" primary="true"/>
         "counter"
         <list style="empty">
             <t>
-            Inserts just a counter; this is used for the number of a section, figure, or
-            table. For example:
+            The "derivedContent" attribute will contain just a counter.
+            This is used for targets that are
+            &lt;<xref target="element.section" format="none">section</xref>&gt;, &lt;<xref target="element.figure" format="none">figure</xref>&gt;, or &lt;<xref target="element.table" format="none">table</xref>&gt;.
+            Using "format='counter'" where the target is any other type of element is an error.
+            </t>
+            <t>
+            For example, with an input of:
 <figure>
                   <artwork><![CDATA[
-  <section anchor="overview">Protocol Overview</section>
-  . . .
-  See Section <xref target="overview" format="counter"/>
-  for an overview.
+      <section anchor="overview">Protocol Overview</section>
+      . . .
+      See Section <xref target="overview" format="counter"/>
+      for an overview.
 ]]></artwork>
                </figure>
-         might generate
-<figure>
-                  <artwork><![CDATA[
-  See Section 1.7 for an overview.
-]]></artwork>
-               </figure>
+            </t>
+            <t>
+               An HTML formatter might generate "See Section &lt;a href="#overview"&gt;1.7&lt;/a&gt; for an overview.".
             </t>
          </list>
       </t>
@@ -4971,22 +5302,22 @@ Using CDATA:
         "default"
         <list style="empty">
             <t>
-            Inserts a text fragment that describes the referenced part 
-            completely, such as "Section 2" or "Table 4" for internal
-            links, or "[XML]" for links to references. For example:
+            The "derivedContent" attribute will contain a text fragment that describes the referenced part 
+            completely, such as "[XML]" for a target that is a &lt;<xref target="element.reference" format="none">reference</xref>&gt;,
+            or "Section 2" or "Table 4" for a target to a non-reference.
+            </t>
+            <t>
+            For example, with an input of:
 <figure>
                   <artwork><![CDATA[
-  <section anchor="overview">Protocol Overview</section>
-  . . .
-  See <xref target="overview"/> for an overview.
+      <section anchor="overview">Protocol Overview</section>
+      . . .
+      See <xref target="overview"/> for an overview.
 ]]></artwork>
                </figure>
-         might generate
-<figure>
-                  <artwork><![CDATA[
-  See Section 1.7 for an overview.
-]]></artwork>
-               </figure>
+            </t>
+            <t>
+               An HTML formatter might generate "See &lt;a href="#overview"&gt;Section 1.7&lt;/a&gt; for an overview.".
             </t>
          </list>
       </t>
@@ -5004,24 +5335,25 @@ Using CDATA:
         "title"
         <list style="empty">
             <t>
-            If the target is a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element, this inserts the name of
-            the reference, extracted from the &lt;<xref target="element.name" format="none">name</xref>&gt; child of the
+            If the target is a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element, the "derivedContent" attribute will contain the name of
+            the reference, extracted from the &lt;<xref target="element.title" format="none">title</xref>&gt; child of the
             &lt;<xref target="element.front" format="none">front</xref>&gt; child of the reference.
-            If the target element has a &lt;<xref target="element.name" format="none">name</xref>&gt; child element, this inserts the
-            text content of the &lt;<xref target="element.name" format="none">name</xref>&gt; concatenated with the text content of
+            Or, if the target element has a &lt;<xref target="element.name" format="none">name</xref>&gt; child element, the "derivedContent" attribute will contain the
+            text content of that &lt;<xref target="element.name" format="none">name</xref>&gt; element concatenated with the text content of
             each descendant node of &lt;<xref target="element.name" format="none">name</xref>&gt; (that is, stripping out all of the
             XML markup, leaving only the text).
-            If the target element does not contain a &lt;<xref target="element.name" format="none">name</xref>&gt; child element, this
-            inserts the name of the "anchor" attribute of that element.
+            Or, if the target element does not contain a &lt;<xref target="element.name" format="none">name</xref>&gt; child element,
+            the "derivedContent" attribute will contain the name of the "anchor" attribute of that element
+            with no other adornment.
           </t>
          </list>
       </t>
       <t><!--AG-->Allowed values:</t>
       <t><list style="symbols"><!--AG-->
-         <t>"counter"</t>
-         <t>"title"</t>
-         <t>"none"</t>
          <t>"default" (default)</t>
+         <t>"title"</t>
+         <t>"counter"</t>
+         <t>"none"</t>
       </list></t>
    </section>
 
@@ -5041,99 +5373,6 @@ Using CDATA:
       </list></t>
    </section>
 
-   <!--xref/@relative-->
-   <section anchor="element.xref.attribute.relative" toc="exclude" title="'relative' attribute">
-      
-      <iref item="Attributes" subitem="relative"/>
-      <iref item="xref element" subitem="relative attribute"/>
-      <iref item="relative attribute" subitem="in xref element"/>
-      <t>
-         Specifies a relative reference from the main target. Rendering relative references is based
-         on the format for the converted document. The value of this attribute is appended to the
-         end of the URL of the target item. This attribute can only be used with &lt;xref&gt;
-         elements where the target is an anchor for a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element.
-      </t>
-   </section>
-
-   <!--xref/@section-->
-   <section anchor="element.xref.attribute.section" toc="exclude" title="'section' attribute">
-      
-      <iref item="Attributes" subitem="section"/>
-      <iref item="xref element" subitem="section attribute"/>
-      <iref item="section attribute" subitem="in xref element"/>
-      <t>
-         Specifies a section for the generated reference. For example,
-<figure>
-            <artwork><![CDATA[
-     See <xref section="2.3" target="RFC6949"/> for more information.
-]]></artwork>
-         </figure>
-would generate
-<figure>
-            <artwork><![CDATA[
-     See Section 2.3 of [RFC6949] for more information.
-]]></artwork>
-         </figure>
-      </t>
-   </section>
-
-   <!--xref/@sectionFormat-->
-   <section anchor="element.xref.attribute.sectionFormat" toc="exclude" title="'sectionFormat' attribute">
-      
-      <iref item="Attributes" subitem="sectionFormat"/>
-      <iref item="xref element" subitem="sectionFormat attribute"/>
-      <iref item="sectionFormat attribute" subitem="in xref element"/>
-      <t>
-         The format that the section reference will be displayed in.
-         If both a "format" and "sectionFormat" attribute are present, the "format" attribute is ignored.
-      </t>
-      <t>
-         The acceptable values are:
-         <list style="symbols">
-            <t>"of" (default)</t>
-            <t>"comma"</t>
-            <t>"parens"</t>
-            <t>"section"</t>
-            <t>"number-only"</t>
-         </list>
-         For example:
-<figure>
-            <artwork><![CDATA[
-  See <xref target="RFC6949" section="2.3" sectionFormat="of"/>
-  for more information.
-  
-  See <xref target="RFC6949" section="2.4" sectionFormat="comma"/>
-  for more information.
-  
-  See <xref target="RFC6949" section="2.5" sectionFormat="parens"/>
-  for more information.
-  
-  See <xref target="RFC6949" section="2.6" sectionFormat="section"/>
-  of that document for more information.
-  
-  See Sections <xref target="RFC6949" section="2.7"
-  sectionFormat="number-only"/> and <xref target="RFC6949"
-  section="2.8" sectionFormat="number-only"/> of that
-  document for more information.
-]]></artwork>
-         </figure>
-         would generate
-<figure>
-            <artwork><![CDATA[
-   See Section 2.3 of [RFC6949] for more information.
-
-   See [RFC6949], Section 2.4 for more information.
-
-   See [RFC6949] (Section 2.5) for more information.
-
-   See Section 2.6 of that document for more information.
-
-   See Sections 2.7 and 2.8 of that document for more information.
-]]></artwork>
-         </figure>
-      </t>
-   </section>
-
    <!--xref/@target-->
    <section anchor="element.xref.attribute.target" toc="exclude" title="'target' attribute (mandatory)">
       
@@ -5142,10 +5381,8 @@ would generate
       <iref item="target attribute" subitem="in xref element"/>
       <t>
         Identifies the document component being referenced.
-      </t>
-      <t>
-        The value needs to match the value of the "anchor" attribute of another
-        element in the document.
+        The value needs to match the value of the "anchor" attribute of an
+        element in the document, otherwise it is an error.
       </t>
    </section>
 </section>
@@ -6530,7 +6767,7 @@ document.</t>
 
 <t>The following is the RelaxNG schema for the v3 format.</t>
 
-<figure><iref item="rfc element"/><iref item="link element"/><iref item="front element"/><iref item="title element"/><iref item="author element"/><iref item="organization element"/><iref item="address element"/><iref item="postal element"/><iref item="street element"/><iref item="city element"/><iref item="region element"/><iref item="code element"/><iref item="country element"/><iref item="postalLine element"/><iref item="phone element"/><iref item="facsimile element"/><iref item="email element"/><iref item="uri element"/><iref item="date element"/><iref item="area element"/><iref item="workgroup element"/><iref item="keyword element"/><iref item="abstract element"/><iref item="note element"/><iref item="boilerplate element"/><iref item="middle element"/><iref item="section element"/><iref item="name element"/><iref item="t element"/><iref item="aside element"/><iref item="blockquote element"/><iref item="list element"/><iref item="ol element"/><iref item="ul element"/><iref item="li element"/><iref item="dl element"/><iref item="dt element"/><iref item="dd element"/><iref item="xref element"/><iref item="eref element"/><iref item="iref element"/><iref item="cref element"/><iref item="tt element"/><iref item="strong element"/><iref item="em element"/><iref item="sub element"/><iref item="sup element"/><iref item="spanx element"/><iref item="vspace element"/><iref item="figure element"/><iref item="table element"/><iref item="preamble element"/><iref item="artwork element"/><iref item="svg element"/><iref item="anything element"/><iref item="sourcecode element"/><iref item="thead element"/><iref item="tbody element"/><iref item="tfoot element"/><iref item="tr element"/><iref item="td element"/><iref item="th element"/><iref item="postamble element"/><iref item="texttable element"/><iref item="ttcol element"/><iref item="c element"/><iref item="bcp14 element"/><iref item="br element"/><iref item="back element"/><iref item="displayreference element"/><iref item="references element"/><iref item="reference element"/><iref item="referencegroup element"/><iref item="seriesInfo element"/><iref item="format element"/><iref item="annotation element"/><iref item="refcontent element"/><artwork type="application/relax-ng-compact-syntax"><![CDATA[
+<figure><iref item="rfc element"/><iref item="link element"/><iref item="front element"/><iref item="title element"/><iref item="author element"/><iref item="organization element"/><iref item="address element"/><iref item="postal element"/><iref item="street element"/><iref item="city element"/><iref item="region element"/><iref item="code element"/><iref item="country element"/><iref item="postalLine element"/><iref item="phone element"/><iref item="facsimile element"/><iref item="email element"/><iref item="uri element"/><iref item="date element"/><iref item="area element"/><iref item="workgroup element"/><iref item="keyword element"/><iref item="abstract element"/><iref item="note element"/><iref item="boilerplate element"/><iref item="middle element"/><iref item="section element"/><iref item="name element"/><iref item="t element"/><iref item="aside element"/><iref item="blockquote element"/><iref item="list element"/><iref item="ol element"/><iref item="ul element"/><iref item="li element"/><iref item="dl element"/><iref item="dt element"/><iref item="dd element"/><iref item="xref element"/><iref item="relref element"/><iref item="eref element"/><iref item="iref element"/><iref item="cref element"/><iref item="tt element"/><iref item="strong element"/><iref item="em element"/><iref item="sub element"/><iref item="sup element"/><iref item="spanx element"/><iref item="vspace element"/><iref item="figure element"/><iref item="table element"/><iref item="preamble element"/><iref item="artwork element"/><iref item="svg element"/><iref item="anything element"/><iref item="sourcecode element"/><iref item="thead element"/><iref item="tbody element"/><iref item="tfoot element"/><iref item="tr element"/><iref item="td element"/><iref item="th element"/><iref item="postamble element"/><iref item="texttable element"/><iref item="ttcol element"/><iref item="c element"/><iref item="bcp14 element"/><iref item="br element"/><iref item="back element"/><iref item="displayreference element"/><iref item="references element"/><iref item="reference element"/><iref item="referencegroup element"/><iref item="seriesInfo element"/><iref item="format element"/><iref item="annotation element"/><iref item="refcontent element"/><artwork type="application/relax-ng-compact-syntax"><![CDATA[
 
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 namespace ns1 = "http://www.w3.org/2000/svg"
@@ -6760,7 +6997,7 @@ section =
 name =
   element name {
     attribute slugifiedName { text }?,
-    (text | cref | eref | tt | xref)*
+    (text | cref | eref | relref | tt | xref)*
   }
 
 t =
@@ -6779,6 +7016,7 @@ t =
      | eref
      | iref
      | \list
+     | relref
      | spanx
      | strong
      | sub
@@ -6808,6 +7046,7 @@ blockquote =
         | em
         | eref
         | iref
+        | relref
         | strong
         | sub
         | sup
@@ -6857,6 +7096,7 @@ li =
         | em
         | eref
         | iref
+        | relref
         | strong
         | sub
         | sup
@@ -6885,6 +7125,7 @@ dt =
      | em
      | eref
      | iref
+     | relref
      | strong
      | sub
      | sup
@@ -6903,6 +7144,7 @@ dd =
         | em
         | eref
         | iref
+        | relref
         | strong
         | sub
         | sup
@@ -6916,10 +7158,20 @@ xref =
     [ a:defaultValue = "false" ]
     attribute pageno { "true" | "false" }?,
     [ a:defaultValue = "default" ]
-    attribute format { "counter" | "title" | "none" | "default" }?,
+    attribute format { "default" | "title" | "counter" | "none" }?,
+    attribute derivedContent { text }?,
+    text
+  }
+
+relref =
+  element relref {
+    attribute target { xsd:IDREF },
+    [ a:defaultValue = "of" ]
+    attribute displayFormat { "of" | "comma" | "parens" }?,
     (attribute section { text },
-     attribute relative { text }?,
-     attribute sectionFormat { text }?)?,
+     attribute relative { text }?)?,
+    attribute derivedRemoteContent { text }?,
+    attribute derivedLink { text }?,
     text
   }
 
@@ -6945,7 +7197,7 @@ cref =
     attribute source { text }?,
     [ a:defaultValue = "true" ]
     attribute display { "true" | "false" }?,
-    (text | em | eref | strong | sub | sup | tt | xref)*
+    (text | em | eref | relref | strong | sub | sup | tt | xref)*
   }
 
 tt =
@@ -6956,6 +7208,7 @@ tt =
      | em
      | eref
      | iref
+     | relref
      | strong
      | sub
      | sup
@@ -6964,7 +7217,17 @@ tt =
 
 strong =
   element strong {
-    (text | bcp14 | cref | em | eref | iref | sub | sup | tt | xref)*
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | relref
+     | sub
+     | sup
+     | tt
+     | xref)*
   }
 
 em =
@@ -6974,6 +7237,7 @@ em =
      | cref
      | eref
      | iref
+     | relref
      | strong
      | sub
      | sup
@@ -6983,12 +7247,30 @@ em =
 
 sub =
   element sub {
-    (text | bcp14 | cref | em | eref | iref | strong | tt | xref)*
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | relref
+     | strong
+     | tt
+     | xref)*
   }
 
 sup =
   element sup {
-    (text | bcp14 | cref | em | eref | iref | strong | tt | xref)*
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | relref
+     | strong
+     | tt
+     | xref)*
   }
 
 spanx =
@@ -7044,6 +7326,7 @@ preamble =
      | em
      | eref
      | iref
+     | relref
      | spanx
      | strong
      | sub
@@ -7139,6 +7422,7 @@ td =
         | figure
         | iref
         | ol
+        | relref
         | sourcecode
         | strong
         | sub
@@ -7169,6 +7453,7 @@ th =
         | figure
         | iref
         | ol
+        | relref
         | sourcecode
         | strong
         | sub
@@ -7179,20 +7464,7 @@ th =
   }
 
 postamble =
-  element postamble {
-    (text
-     | bcp14
-     | cref
-     | em
-     | eref
-     | iref
-     | spanx
-     | strong
-     | sub
-     | sup
-     | tt
-     | xref)*
-  }
+  element postamble { (text | cref | eref | iref | spanx | xref)* }
 
 texttable =
   element texttable {
@@ -7219,21 +7491,7 @@ ttcol =
     (cref | eref | iref | xref | text)*
   }
 
-c =
-  element c {
-    (text
-     | bcp14
-     | cref
-     | em
-     | eref
-     | iref
-     | spanx
-     | strong
-     | sub
-     | sup
-     | tt
-     | xref)*
-  }
+c = element c { (text | cref | eref | iref | spanx | xref)* }
 
 bcp14 = element bcp14 { text }
 
@@ -7296,6 +7554,7 @@ annotation =
      | em
      | eref
      | iref
+     | relref
      | spanx
      | strong
      | sub
@@ -7545,7 +7804,7 @@ to the v3 schema.</t>
 + name =
 +   element name {
 +     attribute slugifiedName { text }?,
-+     (text | cref | eref | tt | xref)*
++     (text | cref | eref | relref | tt | xref)*
 +   }
   t =
     element t {
@@ -7567,6 +7826,7 @@ to the v3 schema.</t>
        | iref
 -      | cref
 +      | \list
++      | relref
        | spanx
 -      | vspace)*
 +      | strong
@@ -7595,6 +7855,7 @@ to the v3 schema.</t>
 +         | em
 +         | eref
 +         | iref
++         | relref
 +         | strong
 +         | sub
 +         | sup
@@ -7641,6 +7902,7 @@ to the v3 schema.</t>
 +         | em
 +         | eref
 +         | iref
++         | relref
 +         | strong
 +         | sub
 +         | sup
@@ -7667,6 +7929,7 @@ to the v3 schema.</t>
 +      | em
 +      | eref
 +      | iref
++      | relref
 +      | strong
 +      | sub
 +      | sup
@@ -7684,6 +7947,7 @@ to the v3 schema.</t>
 +         | em
 +         | eref
 +         | iref
++         | relref
 +         | strong
 +         | sub
 +         | sup
@@ -7698,11 +7962,21 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "false" ]
 +     attribute pageno { "true" | "false" }?,
       [ a:defaultValue = "default" ]
-      attribute format { "counter" | "title" | "none" | "default" 
+-     attribute format { "counter" | "title" | "none" | "default" 
++     attribute format { "default" | "title" | "counter" | "none" 
   }?,
++     attribute derivedContent { text }?,
++     text
++   }
++ relref =
++   element relref {
++     attribute target { xsd:IDREF },
++     [ a:defaultValue = "of" ]
++     attribute displayFormat { "of" | "comma" | "parens" }?,
 +     (attribute section { text },
-+      attribute relative { text }?,
-+      attribute sectionFormat { text }?)?,
++      attribute relative { text }?)?,
++     attribute derivedRemoteContent { text }?,
++     attribute derivedLink { text }?,
       text
     }
   eref =
@@ -7726,7 +8000,7 @@ to the v3 schema.</t>
 -     text
 +     [ a:defaultValue = "true" ]
 +     attribute display { "true" | "false" }?,
-+     (text | em | eref | strong | sub | sup | tt | xref)*
++     (text | em | eref | relref | strong | sub | sup | tt | xref)*
 +   }
 + tt =
 +   element tt {
@@ -7736,6 +8010,7 @@ to the v3 schema.</t>
 +      | em
 +      | eref
 +      | iref
++      | relref
 +      | strong
 +      | sub
 +      | sup
@@ -7743,8 +8018,17 @@ to the v3 schema.</t>
 +   }
 + strong =
 +   element strong {
-+     (text | bcp14 | cref | em | eref | iref | sub | sup | tt | 
-+ xref)*
++     (text
++      | bcp14
++      | cref
++      | em
++      | eref
++      | iref
++      | relref
++      | sub
++      | sup
++      | tt
++      | xref)*
 +   }
 + em =
 +   element em {
@@ -7753,6 +8037,7 @@ to the v3 schema.</t>
 +      | cref
 +      | eref
 +      | iref
++      | relref
 +      | strong
 +      | sub
 +      | sup
@@ -7761,11 +8046,29 @@ to the v3 schema.</t>
 +   }
 + sub =
 +   element sub {
-+     (text | bcp14 | cref | em | eref | iref | strong | tt | xref)*
++     (text
++      | bcp14
++      | cref
++      | em
++      | eref
++      | iref
++      | relref
++      | strong
++      | tt
++      | xref)*
 +   }
 + sup =
 +   element sup {
-+     (text | bcp14 | cref | em | eref | iref | strong | tt | xref)*
++     (text
++      | bcp14
++      | cref
++      | em
++      | eref
++      | iref
++      | relref
++      | strong
++      | tt
++      | xref)*
     }
   spanx =
     element spanx {
@@ -7818,6 +8121,7 @@ to the v3 schema.</t>
 +      | em
 +      | eref
 +      | iref
++      | relref
 +      | spanx
 +      | strong
 +      | sub
@@ -7907,6 +8211,7 @@ to the v3 schema.</t>
 +         | figure
 +         | iref
 +         | ol
++         | relref
 +         | sourcecode
 +         | strong
 +         | sub
@@ -7936,6 +8241,7 @@ to the v3 schema.</t>
 +         | figure
 +         | iref
 +         | ol
++         | relref
 +         | sourcecode
 +         | strong
 +         | sub
@@ -7946,19 +8252,7 @@ to the v3 schema.</t>
     }
   postamble =
 -   element postamble { (text | xref | eref | iref | cref | spanx)* 
-+   element postamble {
-+     (text
-+      | bcp14
-+      | cref
-+      | em
-+      | eref
-+      | iref
-+      | spanx
-+      | strong
-+      | sub
-+      | sup
-+      | tt
-+      | xref)*
++   element postamble { (text | cref | eref | iref | spanx | xref)* 
   }
   texttable =
     element texttable {
@@ -7984,21 +8278,7 @@ to the v3 schema.</t>
 -     text
 +     (cref | eref | iref | xref | text)*
 +   }
-+ c =
-+   element c {
-+     (text
-+      | bcp14
-+      | cref
-+      | em
-+      | eref
-+      | iref
-+      | spanx
-+      | strong
-+      | sub
-+      | sup
-+      | tt
-+      | xref)*
-+   }
++ c = element c { (text | cref | eref | iref | spanx | xref)* }
 + bcp14 = element bcp14 { text }
 + br = element br { empty }
 + back = element back { displayreference*, references*, section* }
@@ -8060,6 +8340,7 @@ to the v3 schema.</t>
 +      | em
 +      | eref
 +      | iref
++      | relref
 +      | spanx
 +      | strong
 +      | sub

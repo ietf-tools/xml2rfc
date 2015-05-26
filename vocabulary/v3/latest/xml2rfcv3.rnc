@@ -198,7 +198,7 @@ section =
 name =
   element name {
     attribute slugifiedName { text }?,
-    (text | cref | eref | tt | xref)*
+    (text | cref | eref | relref | tt | xref)*
   }
 t =
   element t {
@@ -216,6 +216,7 @@ t =
      | eref
      | iref
      | \list
+     | relref
      | spanx
      | strong
      | sub
@@ -243,6 +244,7 @@ blockquote =
         | em
         | eref
         | iref
+        | relref
         | strong
         | sub
         | sup
@@ -288,6 +290,7 @@ li =
         | em
         | eref
         | iref
+        | relref
         | strong
         | sub
         | sup
@@ -314,6 +317,7 @@ dt =
      | em
      | eref
      | iref
+     | relref
      | strong
      | sub
      | sup
@@ -331,6 +335,7 @@ dd =
         | em
         | eref
         | iref
+        | relref
         | strong
         | sub
         | sup
@@ -343,10 +348,19 @@ xref =
     [ a:defaultValue = "false" ]
     attribute pageno { "true" | "false" }?,
     [ a:defaultValue = "default" ]
-    attribute format { "counter" | "title" | "none" | "default" }?,
+    attribute format { "default" | "title" | "counter" | "none" }?,
+    attribute derivedContent { text }?,
+    text
+  }
+relref =
+  element relref {
+    attribute target { xsd:IDREF },
+    [ a:defaultValue = "of" ]
+    attribute displayFormat { "of" | "comma" | "parens" }?,
     (attribute section { text },
-     attribute relative { text }?,
-     attribute sectionFormat { text }?)?,
+     attribute relative { text }?)?,
+    attribute derivedRemoteContent { text }?,
+    attribute derivedLink { text }?,
     text
   }
 eref =
@@ -369,7 +383,7 @@ cref =
     attribute source { text }?,
     [ a:defaultValue = "true" ]
     attribute display { "true" | "false" }?,
-    (text | em | eref | strong | sub | sup | tt | xref)*
+    (text | em | eref | relref | strong | sub | sup | tt | xref)*
   }
 tt =
   element tt {
@@ -379,6 +393,7 @@ tt =
      | em
      | eref
      | iref
+     | relref
      | strong
      | sub
      | sup
@@ -386,7 +401,17 @@ tt =
   }
 strong =
   element strong {
-    (text | bcp14 | cref | em | eref | iref | sub | sup | tt | xref)*
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | relref
+     | sub
+     | sup
+     | tt
+     | xref)*
   }
 em =
   element em {
@@ -395,6 +420,7 @@ em =
      | cref
      | eref
      | iref
+     | relref
      | strong
      | sub
      | sup
@@ -403,11 +429,29 @@ em =
   }
 sub =
   element sub {
-    (text | bcp14 | cref | em | eref | iref | strong | tt | xref)*
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | relref
+     | strong
+     | tt
+     | xref)*
   }
 sup =
   element sup {
-    (text | bcp14 | cref | em | eref | iref | strong | tt | xref)*
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | relref
+     | strong
+     | tt
+     | xref)*
   }
 spanx =
   element spanx {
@@ -458,6 +502,7 @@ preamble =
      | em
      | eref
      | iref
+     | relref
      | spanx
      | strong
      | sub
@@ -544,6 +589,7 @@ td =
         | figure
         | iref
         | ol
+        | relref
         | sourcecode
         | strong
         | sub
@@ -573,6 +619,7 @@ th =
         | figure
         | iref
         | ol
+        | relref
         | sourcecode
         | strong
         | sub
@@ -582,20 +629,7 @@ th =
         | xref)+)
   }
 postamble =
-  element postamble {
-    (text
-     | bcp14
-     | cref
-     | em
-     | eref
-     | iref
-     | spanx
-     | strong
-     | sub
-     | sup
-     | tt
-     | xref)*
-  }
+  element postamble { (text | cref | eref | iref | spanx | xref)* }
 texttable =
   element texttable {
     attribute anchor { xsd:ID }?,
@@ -619,21 +653,7 @@ ttcol =
     attribute align { "left" | "center" | "right" }?,
     (cref | eref | iref | xref | text)*
   }
-c =
-  element c {
-    (text
-     | bcp14
-     | cref
-     | em
-     | eref
-     | iref
-     | spanx
-     | strong
-     | sub
-     | sup
-     | tt
-     | xref)*
-  }
+c = element c { (text | cref | eref | iref | spanx | xref)* }
 bcp14 = element bcp14 { text }
 br = element br { empty }
 back = element back { displayreference*, references*, section* }
@@ -686,6 +706,7 @@ annotation =
      | em
      | eref
      | iref
+     | relref
      | spanx
      | strong
      | sub

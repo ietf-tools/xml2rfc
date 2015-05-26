@@ -221,7 +221,7 @@
 + name =
 +   element name {
 +     attribute slugifiedName { text }?,
-+     (text | cref | eref | tt | xref)*
++     (text | cref | eref | relref | tt | xref)*
 +   }
   t =
     element t {
@@ -243,6 +243,7 @@
        | iref
 -      | cref
 +      | \list
++      | relref
        | spanx
 -      | vspace)*
 +      | strong
@@ -271,6 +272,7 @@
 +         | em
 +         | eref
 +         | iref
++         | relref
 +         | strong
 +         | sub
 +         | sup
@@ -317,6 +319,7 @@
 +         | em
 +         | eref
 +         | iref
++         | relref
 +         | strong
 +         | sub
 +         | sup
@@ -343,6 +346,7 @@
 +      | em
 +      | eref
 +      | iref
++      | relref
 +      | strong
 +      | sub
 +      | sup
@@ -360,6 +364,7 @@
 +         | em
 +         | eref
 +         | iref
++         | relref
 +         | strong
 +         | sub
 +         | sup
@@ -374,11 +379,21 @@
 +     [ a:defaultValue = "false" ]
 +     attribute pageno { "true" | "false" }?,
       [ a:defaultValue = "default" ]
-      attribute format { "counter" | "title" | "none" | "default" 
+-     attribute format { "counter" | "title" | "none" | "default" 
++     attribute format { "default" | "title" | "counter" | "none" 
   }?,
++     attribute derivedContent { text }?,
++     text
++   }
++ relref =
++   element relref {
++     attribute target { xsd:IDREF },
++     [ a:defaultValue = "of" ]
++     attribute displayFormat { "of" | "comma" | "parens" }?,
 +     (attribute section { text },
-+      attribute relative { text }?,
-+      attribute sectionFormat { text }?)?,
++      attribute relative { text }?)?,
++     attribute derivedRemoteContent { text }?,
++     attribute derivedLink { text }?,
       text
     }
   eref =
@@ -402,7 +417,7 @@
 -     text
 +     [ a:defaultValue = "true" ]
 +     attribute display { "true" | "false" }?,
-+     (text | em | eref | strong | sub | sup | tt | xref)*
++     (text | em | eref | relref | strong | sub | sup | tt | xref)*
 +   }
 + tt =
 +   element tt {
@@ -412,6 +427,7 @@
 +      | em
 +      | eref
 +      | iref
++      | relref
 +      | strong
 +      | sub
 +      | sup
@@ -419,8 +435,17 @@
 +   }
 + strong =
 +   element strong {
-+     (text | bcp14 | cref | em | eref | iref | sub | sup | tt | 
-+ xref)*
++     (text
++      | bcp14
++      | cref
++      | em
++      | eref
++      | iref
++      | relref
++      | sub
++      | sup
++      | tt
++      | xref)*
 +   }
 + em =
 +   element em {
@@ -429,6 +454,7 @@
 +      | cref
 +      | eref
 +      | iref
++      | relref
 +      | strong
 +      | sub
 +      | sup
@@ -437,11 +463,29 @@
 +   }
 + sub =
 +   element sub {
-+     (text | bcp14 | cref | em | eref | iref | strong | tt | xref)*
++     (text
++      | bcp14
++      | cref
++      | em
++      | eref
++      | iref
++      | relref
++      | strong
++      | tt
++      | xref)*
 +   }
 + sup =
 +   element sup {
-+     (text | bcp14 | cref | em | eref | iref | strong | tt | xref)*
++     (text
++      | bcp14
++      | cref
++      | em
++      | eref
++      | iref
++      | relref
++      | strong
++      | tt
++      | xref)*
     }
   spanx =
     element spanx {
@@ -494,6 +538,7 @@
 +      | em
 +      | eref
 +      | iref
++      | relref
 +      | spanx
 +      | strong
 +      | sub
@@ -583,6 +628,7 @@
 +         | figure
 +         | iref
 +         | ol
++         | relref
 +         | sourcecode
 +         | strong
 +         | sub
@@ -612,6 +658,7 @@
 +         | figure
 +         | iref
 +         | ol
++         | relref
 +         | sourcecode
 +         | strong
 +         | sub
@@ -622,19 +669,7 @@
     }
   postamble =
 -   element postamble { (text | xref | eref | iref | cref | spanx)* 
-+   element postamble {
-+     (text
-+      | bcp14
-+      | cref
-+      | em
-+      | eref
-+      | iref
-+      | spanx
-+      | strong
-+      | sub
-+      | sup
-+      | tt
-+      | xref)*
++   element postamble { (text | cref | eref | iref | spanx | xref)* 
   }
   texttable =
     element texttable {
@@ -660,21 +695,7 @@
 -     text
 +     (cref | eref | iref | xref | text)*
 +   }
-+ c =
-+   element c {
-+     (text
-+      | bcp14
-+      | cref
-+      | em
-+      | eref
-+      | iref
-+      | spanx
-+      | strong
-+      | sub
-+      | sup
-+      | tt
-+      | xref)*
-+   }
++ c = element c { (text | cref | eref | iref | spanx | xref)* }
 + bcp14 = element bcp14 { text }
 + br = element br { empty }
 + back = element back { displayreference*, references*, section* }
@@ -736,6 +757,7 @@
 +      | em
 +      | eref
 +      | iref
++      | relref
 +      | spanx
 +      | strong
 +      | sub
