@@ -489,7 +489,7 @@ blockquote > * .bcp14 {
        content: "Internet-Draft";
   }
   @top-right {
-       content: "May 2015";
+       content: "June 2015";
   }
   @top-center {
        content: "The 'XML2RFC' version 3 Vocabulary";
@@ -498,7 +498,7 @@ blockquote > * .bcp14 {
        content: "Hoffman";
   }
   @bottom-center {
-       content: "Expires November 27, 2015";
+       content: "Expires December 3, 2015";
   }
   @bottom-right {
        content: "[Page " counter(page) "]";
@@ -536,7 +536,7 @@ blockquote > * .bcp14 {
       <link rel="schema.dct" href="http://purl.org/dc/terms/">
       <meta name="dct.creator" content="Hoffman, P.">
       <meta name="dct.identifier" content="urn:ietf:id:draft-hoffman-xml2rfc-latest">
-      <meta name="dct.issued" scheme="ISO8601" content="2015-05-26">
+      <meta name="dct.issued" scheme="ISO8601" content="2015-06-01">
       <meta name="dct.replaces" content="urn:ietf:rfc:2629">
       <meta name="dct.abstract" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
       <meta name="description" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
@@ -555,14 +555,14 @@ blockquote > * .bcp14 {
             <tr>
                <td class="left">Obsoletes: <a href="https://tools.ietf.org/html/rfc2629">2629</a> (if approved)
                </td>
-               <td class="right">May 26, 2015</td>
+               <td class="right">June 1, 2015</td>
             </tr>
             <tr>
                <td class="left">Intended status: Informational</td>
                <td class="right"></td>
             </tr>
             <tr>
-               <td class="left">Expires: November 27, 2015</td>
+               <td class="left">Expires: December 3, 2015</td>
                <td class="right"></td>
             </tr>
          </tbody>
@@ -587,7 +587,7 @@ blockquote > * .bcp14 {
             documents at any time. It is inappropriate to use Internet-Drafts as reference material or to cite them other than as &#8220;work
             in progress&#8221;.
          </p>
-         <p>This Internet-Draft will expire on November 27, 2015.</p>
+         <p>This Internet-Draft will expire on December 3, 2015.</p>
       </div>
       <div id="rfc.copyrightnotice">
          <h1><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
@@ -1165,10 +1165,10 @@ blockquote > * .bcp14 {
                </p>
             </div>
             <div id="rfc.section.2.5.p.2">
-               <p>Alternatively, the "src" attribute allows referencing an external graphics file, such as a bitmap or a vector drawing in SVG,
-                  using a URI. In this case, the textual content acts as fallback for output representations that do not support graphics, and
-                  thus ought to contain either a "line art" variant of the graphics, or otherwise prose that describes the included image in
-                  sufficient detail.
+               <p>Alternatively, the "src" attribute allows referencing an external graphics file, such as a vector drawing in SVG or a bitmap
+                  graphic file, using a URI. In this case, the textual content acts as fallback for output representations that do not support
+                  graphics, and thus ought to contain either a "line art" variant of the graphics, or otherwise prose that describes the included
+                  image in sufficient detail.
                </p>
             </div>
             <div id="rfc.section.2.5.p.3">
@@ -1194,8 +1194,8 @@ blockquote > * .bcp14 {
                </p>
             </div>
             <div id="rfc.section.2.5.p.6">
-               <p>The four methods for inclusion of SVG art can also be used for including text artwork, but using a data: URI is probably confusing
-                  for text artwork.
+               <p>The above methods for inclusion of SVG art can also be used for including text artwork, but using a data: URI is probably
+                  confusing for text artwork.
                </p>
             </div>
             <div id="rfc.section.2.5.p.7">
@@ -1310,6 +1310,7 @@ blockquote > * .bcp14 {
                   <p>The preferred values for &lt;artwork&gt; types are: </p>
                   <ul>
                      <li>ascii-art</li>
+                     <li>binary-art</li>
                      <li>call-flow</li>
                      <li>hex-dump</li>
                      <li>svg</li>
@@ -3536,7 +3537,7 @@ blockquote > * .bcp14 {
             <h2 id="rfc.section.2.44"><a href="#rfc.section.2.44">2.44</a>&nbsp;<a href="#element.relref"><tt>&lt;relref&gt;</tt> </a></h2>
             <div id="rfc.section.2.44.p.1">
                <p>A relative link to a reference from the References section. Formatters that have links (such as HTML and PDF) are likely to
-                  render &lt;relref&gt; elements as live external links to the specified part of the reference, creating the link target by combining
+                  render &lt;relref&gt; elements as external hyperlinks to the specified part of the reference, creating the link target by combining
                   the base URI from the &lt;<a href="#element.reference" class="smpl">reference</a>&gt; element with the "relative" attribute from this element. The "target" attribute is required, and it must be the anchor of
                   a &lt;<a href="#element.reference" class="smpl">reference</a>&gt; element.
                </p>
@@ -3606,7 +3607,7 @@ blockquote > * .bcp14 {
                <h3 id="rfc.section.2.44.3"><a href="#rfc.section.2.44.3">2.44.3</a>&nbsp;<a href="#element.relref.attribute.displayFormat">'displayFormat' attribute</a></h3>
                <div id="rfc.section.2.44.3.p.1">
                   <p>This attribute is used to signal formatters what the desired format of the relative reference should be. Formatters for document
-                     types that have linking capability should wrap each part of the displayed text in live links. If there is content in the &lt;relref&gt;
+                     types that have linking capability should wrap each part of the displayed text in hyperlinks. If there is content in the &lt;relref&gt;
                      element, formatters will ignore the value of this attribute.
                   </p>
                </div>
@@ -5375,7 +5376,7 @@ Using CDATA:
             <h2 id="rfc.section.2.66"><a href="#rfc.section.2.66">2.66</a>&nbsp;<a href="#element.xref"><tt>&lt;xref&gt;</tt> </a></h2>
             <div id="rfc.section.2.66.p.1">
                <p>A reference to an anchor in this document. Formatters that have links (such as HTML and PDF) are likely to render &lt;xref&gt; elements
-                  as live internal links. This element is useful for referring to references in the References section, to specific sections
+                  as internal hyperlinks. This element is useful for referring to references in the References section, to specific sections
                   of this document, to specific figures, and so on. The "target" attribute is required.
                </p>
             </div>
@@ -5409,7 +5410,7 @@ Using CDATA:
                <div id="rfc.section.2.66.2.p.1">
                   <p>This attribute is used to control the content of the "derivedContent" attribute that is filled in by the prep tool. It also
                      signals to formatters what the desired format of the reference should be. Formatters for document types that have linking
-                     capability should wrap the displayed text in live links.
+                     capability should wrap the displayed text in hyperlinks.
                   </p>
                </div>
                <div id="rfc.section.2.66.2.p.2">
