@@ -498,7 +498,7 @@ blockquote > * .bcp14 {
        content: "Hoffman";
   }
   @bottom-center {
-       content: "Expires December 3, 2015";
+       content: "Expires December 4, 2015";
   }
   @bottom-right {
        content: "[Page " counter(page) "]";
@@ -536,7 +536,7 @@ blockquote > * .bcp14 {
       <link rel="schema.dct" href="http://purl.org/dc/terms/">
       <meta name="dct.creator" content="Hoffman, P.">
       <meta name="dct.identifier" content="urn:ietf:id:draft-hoffman-xml2rfc-latest">
-      <meta name="dct.issued" scheme="ISO8601" content="2015-06-01">
+      <meta name="dct.issued" scheme="ISO8601" content="2015-06-02">
       <meta name="dct.replaces" content="urn:ietf:rfc:2629">
       <meta name="dct.abstract" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
       <meta name="description" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
@@ -555,14 +555,14 @@ blockquote > * .bcp14 {
             <tr>
                <td class="left">Obsoletes: <a href="https://tools.ietf.org/html/rfc2629">2629</a> (if approved)
                </td>
-               <td class="right">June 1, 2015</td>
+               <td class="right">June 2, 2015</td>
             </tr>
             <tr>
                <td class="left">Intended status: Informational</td>
                <td class="right"></td>
             </tr>
             <tr>
-               <td class="left">Expires: December 3, 2015</td>
+               <td class="left">Expires: December 4, 2015</td>
                <td class="right"></td>
             </tr>
          </tbody>
@@ -587,7 +587,7 @@ blockquote > * .bcp14 {
             documents at any time. It is inappropriate to use Internet-Drafts as reference material or to cite them other than as &#8220;work
             in progress&#8221;.
          </p>
-         <p>This Internet-Draft will expire on December 3, 2015.</p>
+         <p>This Internet-Draft will expire on December 4, 2015.</p>
       </div>
       <div id="rfc.copyrightnotice">
          <h1><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
@@ -1275,38 +1275,49 @@ blockquote > * .bcp14 {
                   </p>
                </div>
             </div>
-            <div id="element.artwork.attribute.pn">
-               <h3 id="rfc.section.2.5.6"><a href="#rfc.section.2.5.6">2.5.6</a>&nbsp;<a href="#element.artwork.attribute.pn">'pn' attribute</a></h3>
+            <div id="element.artwork.attribute.originalSrc">
+               <h3 id="rfc.section.2.5.6"><a href="#rfc.section.2.5.6">2.5.6</a>&nbsp;<a href="#element.artwork.attribute.originalSrc">'originalSrc' attribute</a></h3>
                <div id="rfc.section.2.5.6.p.1">
+                  <p>This attribute is filled in by the prep tool. It contains the original value of the "src" attribute if that attribute is changed
+                     by the prep tool.
+                  </p>
+               </div>
+            </div>
+            <div id="element.artwork.attribute.pn">
+               <h3 id="rfc.section.2.5.7"><a href="#rfc.section.2.5.7">2.5.7</a>&nbsp;<a href="#element.artwork.attribute.pn">'pn' attribute</a></h3>
+               <div id="rfc.section.2.5.7.p.1">
                   <p>The number for this artwork within the section. The numbering is shared with other elements of a section. This is described
                      in more detail in <a href="#anchorsandids" title="Anchors and IDs">Appendix&nbsp;B.2</a>.
                   </p>
                </div>
             </div>
             <div id="element.artwork.attribute.src">
-               <h3 id="rfc.section.2.5.7"><a href="#rfc.section.2.5.7">2.5.7</a>&nbsp;<a href="#element.artwork.attribute.src">'src' attribute</a></h3>
-               <div id="rfc.section.2.5.7.p.1">
+               <h3 id="rfc.section.2.5.8"><a href="#rfc.section.2.5.8">2.5.8</a>&nbsp;<a href="#element.artwork.attribute.src">'src' attribute</a></h3>
+               <div id="rfc.section.2.5.8.p.1">
                   <p>The URI reference of a graphics file (<a href="#RFC3986" id="rfc.xref.RFC3986.1"><cite title="Uniform Resource Identifier (URI): Generic Syntax">[RFC3986]</cite></a>), or the name of a file on the local disk. This can be a "data" URI (<a href="#RFC2397" id="rfc.xref.RFC2397.1"><cite title="The &#34;data&#34; URL scheme">[RFC2397]</cite></a>) that contains the contents of the graphics file. Note that the inclusion of art with the "src" attribute depends on the
                      capabilities of the processing tool reading the XML document. Tools need to be able to handle the file: URI, and should be
                      able to handle http: and https: URIs as well.
                   </p>
                </div>
-               <div id="rfc.section.2.5.7.p.2">
-                  <p>If no URI scheme is given in the attribute, the attribute is considered to be a local file name. processing tools must be
+               <div id="rfc.section.2.5.8.p.2">
+                  <p>If no URI scheme is given in the attribute, the attribute is considered to be a local file name. Processing tools must be
                      careful to not accept dangerous values for the filename, particularly those that contain absolute references outside the current
                      directory.
                   </p>
                </div>
+               <div id="rfc.section.2.5.8.p.3">
+                  <p>It is an error to have both a "src" attribute and content in the &lt;artwork&gt; element.</p>
+               </div>
             </div>
             <div id="element.artwork.attribute.type">
-               <h3 id="rfc.section.2.5.8"><a href="#rfc.section.2.5.8">2.5.8</a>&nbsp;<a href="#element.artwork.attribute.type">'type' attribute</a></h3>
-               <div id="rfc.section.2.5.8.p.1">
+               <h3 id="rfc.section.2.5.9"><a href="#rfc.section.2.5.9">2.5.9</a>&nbsp;<a href="#element.artwork.attribute.type">'type' attribute</a></h3>
+               <div id="rfc.section.2.5.9.p.1">
                   <p>Specifies the type of the artwork. The value of this attribute is free text with certain values designated as preferred. If
                      the prep tool encounters a value for "type" that is not one of the preferred values, it can issue a warning but should still
                      use the artwork as if it had no "type" attribute.
                   </p>
                </div>
-               <div id="rfc.section.2.5.8.p.2">
+               <div id="rfc.section.2.5.9.p.2">
                   <p>The preferred values for &lt;artwork&gt; types are: </p>
                   <ul>
                      <li>ascii-art</li>
@@ -1321,14 +1332,14 @@ blockquote > * .bcp14 {
                </div>
             </div>
             <div id="element.artwork.attribute.width">
-               <h3 id="rfc.section.2.5.9"><a href="#rfc.section.2.5.9">2.5.9</a>&nbsp;<a href="#element.artwork.attribute.width">'width' attribute</a></h3>
-               <div id="rfc.section.2.5.9.p.1">
+               <h3 id="rfc.section.2.5.10"><a href="#rfc.section.2.5.10">2.5.10</a>&nbsp;<a href="#element.artwork.attribute.width">'width' attribute</a></h3>
+               <div id="rfc.section.2.5.10.p.1">
                   <p>Deprecated.</p>
                </div>
             </div>
             <div id="element.artwork.attribute.xml-space">
-               <h3 id="rfc.section.2.5.10"><a href="#rfc.section.2.5.10">2.5.10</a>&nbsp;<a href="#element.artwork.attribute.xml-space">'xml:space' attribute</a></h3>
-               <div id="rfc.section.2.5.10.p.1">
+               <h3 id="rfc.section.2.5.11"><a href="#rfc.section.2.5.11">2.5.11</a>&nbsp;<a href="#element.artwork.attribute.xml-space">'xml:space' attribute</a></h3>
+               <div id="rfc.section.2.5.11.p.1">
                   <p>Deprecated.</p>
                </div>
             </div>
@@ -4252,30 +4263,41 @@ Using CDATA:
                   </p>
                </div>
             </div>
-            <div id="element.sourcecode.attribute.pn">
-               <h3 id="rfc.section.2.48.3"><a href="#rfc.section.2.48.3">2.48.3</a>&nbsp;<a href="#element.sourcecode.attribute.pn">'pn' attribute</a></h3>
+            <div id="element.sourcecode.attribute.originalSrc">
+               <h3 id="rfc.section.2.48.3"><a href="#rfc.section.2.48.3">2.48.3</a>&nbsp;<a href="#element.sourcecode.attribute.originalSrc">'originalSrc' attribute</a></h3>
                <div id="rfc.section.2.48.3.p.1">
+                  <p>This attribute is filled in by the prep tool. It contains the original value of the "src" attribute if that attribute is changed
+                     by the prep tool.
+                  </p>
+               </div>
+            </div>
+            <div id="element.sourcecode.attribute.pn">
+               <h3 id="rfc.section.2.48.4"><a href="#rfc.section.2.48.4">2.48.4</a>&nbsp;<a href="#element.sourcecode.attribute.pn">'pn' attribute</a></h3>
+               <div id="rfc.section.2.48.4.p.1">
                   <p>The number for this sourceode within the section. The numbering is shared with other elements of a section. This is described
                      in more detail in <a href="#anchorsandids" title="Anchors and IDs">Appendix&nbsp;B.2</a>.
                   </p>
                </div>
             </div>
             <div id="element.sourcecode.attribute.src">
-               <h3 id="rfc.section.2.48.4"><a href="#rfc.section.2.48.4">2.48.4</a>&nbsp;<a href="#element.sourcecode.attribute.src">'src' attribute</a></h3>
-               <div id="rfc.section.2.48.4.p.1">
+               <h3 id="rfc.section.2.48.5"><a href="#rfc.section.2.48.5">2.48.5</a>&nbsp;<a href="#element.sourcecode.attribute.src">'src' attribute</a></h3>
+               <div id="rfc.section.2.48.5.p.1">
                   <p>The URI reference of a source file (<a href="#RFC3986" id="rfc.xref.RFC3986.2"><cite title="Uniform Resource Identifier (URI): Generic Syntax">[RFC3986]</cite></a>).
                   </p>
                </div>
+               <div id="rfc.section.2.48.5.p.2">
+                  <p>It is an error to have both a "src" attribute and content in the &lt;sourcecode&gt; element.</p>
+               </div>
             </div>
             <div id="element.sourcecode.attribute.type">
-               <h3 id="rfc.section.2.48.5"><a href="#rfc.section.2.48.5">2.48.5</a>&nbsp;<a href="#element.sourcecode.attribute.type">'type' attribute</a></h3>
-               <div id="rfc.section.2.48.5.p.1">
+               <h3 id="rfc.section.2.48.6"><a href="#rfc.section.2.48.6">2.48.6</a>&nbsp;<a href="#element.sourcecode.attribute.type">'type' attribute</a></h3>
+               <div id="rfc.section.2.48.6.p.1">
                   <p>Specifies the type of the sourcecode. The value of this attribute is free text with certain values designated as preferred.
                      If the prep tool encounters a value for "type" that is not one of the preferred values, it can issue a warning but should
                      still use the sourcecode as if it had no "type" attribute.
                   </p>
                </div>
-               <div id="rfc.section.2.48.5.p.2">
+               <div id="rfc.section.2.48.6.p.2">
                   <p>The preferred values for &lt;sourcecode&gt; types are: </p>
                   <ul>
                      <li>abnf</li>
@@ -7185,6 +7207,7 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     [ a:defaultValue = "" ] attribute alt { text }?,
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
+    attribute originalSrc { text }?,
     (text* | svg)
   }
 
@@ -7207,6 +7230,7 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     [ a:defaultValue = "" ] attribute name { text }?,
     [ a:defaultValue = "" ] attribute type { text }?,
     attribute src { text }?,
+    attribute originalSrc { text }?,
     text
   }
 
@@ -7982,6 +8006,7 @@ start = rfc
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
 -     text*
++     attribute originalSrc { text }?,
 +     (text* | svg)
 +   }
 + svg =
@@ -8001,6 +8026,7 @@ start = rfc
 +     [ a:defaultValue = "" ] attribute name { text }?,
 +     [ a:defaultValue = "" ] attribute type { text }?,
 +     attribute src { text }?,
++     attribute originalSrc { text }?,
 +     text
 +   }
 + thead =
@@ -8284,11 +8310,12 @@ start = rfc
                         <li>inside td&nbsp;&nbsp;<a href="#rfc.iref.a.13">2.56</a></li>
                         <li>inside th&nbsp;&nbsp;<a href="#rfc.iref.a.14">2.58</a></li>
                         <li>name attribute&nbsp;&nbsp;<a href="#rfc.section.2.5.5">2.5.5</a></li>
-                        <li>pn attribute&nbsp;&nbsp;<a href="#rfc.section.2.5.6">2.5.6</a></li>
-                        <li>src attribute&nbsp;&nbsp;<a href="#rfc.section.2.5.7">2.5.7</a></li>
-                        <li>type attribute&nbsp;&nbsp;<a href="#rfc.section.2.5.8">2.5.8</a></li>
-                        <li>width attribute&nbsp;&nbsp;<a href="#rfc.section.2.5.9">2.5.9</a></li>
-                        <li>xml:space attribute&nbsp;&nbsp;<a href="#rfc.section.2.5.10">2.5.10</a></li>
+                        <li>originalSrc attribute&nbsp;&nbsp;<a href="#rfc.section.2.5.6">2.5.6</a></li>
+                        <li>pn attribute&nbsp;&nbsp;<a href="#rfc.section.2.5.7">2.5.7</a></li>
+                        <li>src attribute&nbsp;&nbsp;<a href="#rfc.section.2.5.8">2.5.8</a></li>
+                        <li>type attribute&nbsp;&nbsp;<a href="#rfc.section.2.5.9">2.5.9</a></li>
+                        <li>width attribute&nbsp;&nbsp;<a href="#rfc.section.2.5.10">2.5.10</a></li>
+                        <li>xml:space attribute&nbsp;&nbsp;<a href="#rfc.section.2.5.11">2.5.11</a></li>
                      </ul>
                   </li>
                   <li>ascii attribute&nbsp;&nbsp;
@@ -8385,8 +8412,9 @@ start = rfc
                         <li>numbered&nbsp;&nbsp;<a href="#rfc.section.2.46.2">2.46.2</a></li>
                         <li>obsoletes&nbsp;&nbsp;<a href="#rfc.section.2.45.9">2.45.9</a></li>
                         <li>octets&nbsp;&nbsp;<a href="#rfc.section.3.3.1">3.3.1</a></li>
+                        <li>originalSrc&nbsp;&nbsp;<a href="#rfc.section.2.5.6">2.5.6</a>, <a href="#rfc.section.2.48.3">2.48.3</a></li>
                         <li>pageno&nbsp;&nbsp;<a href="#rfc.section.2.66.3">2.66.3</a></li>
-                        <li>pn&nbsp;&nbsp;<a href="#rfc.section.2.5.6">2.5.6</a>, <a href="#rfc.section.2.6.2">2.6.2</a>, <a href="#rfc.section.2.10.3">2.10.3</a>, <a href="#rfc.section.2.11.1">2.11.1</a>, <a href="#rfc.section.2.18.2">2.18.2</a>, <a href="#rfc.section.2.20.3">2.20.3</a>, <a href="#rfc.section.2.21.2">2.21.2</a>, <a href="#rfc.section.2.25.5">2.25.5</a>, <a href="#rfc.section.2.29.2">2.29.2</a>, <a href="#rfc.section.2.33.1">2.33.1</a>, <a href="#rfc.section.2.34.3">2.34.3</a>, <a href="#rfc.section.2.46.3">2.46.3</a>, <a href="#rfc.section.2.48.3">2.48.3</a>, <a href="#rfc.section.2.53.5">2.53.5</a>, <a href="#rfc.section.2.54.2">2.54.2</a>, <a href="#rfc.section.2.55.2">2.55.2</a>, <a href="#rfc.section.2.57.2">2.57.2</a>, <a href="#rfc.section.2.58.5">2.58.5</a>, <a href="#rfc.section.2.59.2">2.59.2</a>, <a href="#rfc.section.2.61.3">2.61.3</a>, <a href="#rfc.section.2.63.3">2.63.3</a></li>
+                        <li>pn&nbsp;&nbsp;<a href="#rfc.section.2.5.7">2.5.7</a>, <a href="#rfc.section.2.6.2">2.6.2</a>, <a href="#rfc.section.2.10.3">2.10.3</a>, <a href="#rfc.section.2.11.1">2.11.1</a>, <a href="#rfc.section.2.18.2">2.18.2</a>, <a href="#rfc.section.2.20.3">2.20.3</a>, <a href="#rfc.section.2.21.2">2.21.2</a>, <a href="#rfc.section.2.25.5">2.25.5</a>, <a href="#rfc.section.2.29.2">2.29.2</a>, <a href="#rfc.section.2.33.1">2.33.1</a>, <a href="#rfc.section.2.34.3">2.34.3</a>, <a href="#rfc.section.2.46.3">2.46.3</a>, <a href="#rfc.section.2.48.4">2.48.4</a>, <a href="#rfc.section.2.53.5">2.53.5</a>, <a href="#rfc.section.2.54.2">2.54.2</a>, <a href="#rfc.section.2.55.2">2.55.2</a>, <a href="#rfc.section.2.57.2">2.57.2</a>, <a href="#rfc.section.2.58.5">2.58.5</a>, <a href="#rfc.section.2.59.2">2.59.2</a>, <a href="#rfc.section.2.61.3">2.61.3</a>, <a href="#rfc.section.2.63.3">2.63.3</a></li>
                         <li>prepTime&nbsp;&nbsp;<a href="#rfc.section.2.45.10">2.45.10</a></li>
                         <li>primary&nbsp;&nbsp;<a href="#rfc.section.2.27.3">2.27.3</a></li>
                         <li>quotedFrom&nbsp;&nbsp;<a href="#rfc.section.2.10.4">2.10.4</a></li>
@@ -8403,7 +8431,7 @@ start = rfc
                         <li>sortRefs&nbsp;&nbsp;<a href="#rfc.section.2.45.13">2.45.13</a></li>
                         <li>source&nbsp;&nbsp;<a href="#rfc.section.2.16.3">2.16.3</a></li>
                         <li>spacing&nbsp;&nbsp;<a href="#rfc.section.2.20.4">2.20.4</a>, <a href="#rfc.section.2.34.4">2.34.4</a>, <a href="#rfc.section.2.63.4">2.63.4</a></li>
-                        <li>src&nbsp;&nbsp;<a href="#rfc.section.2.5.7">2.5.7</a>, <a href="#rfc.section.2.25.6">2.25.6</a>, <a href="#rfc.section.2.48.4">2.48.4</a></li>
+                        <li>src&nbsp;&nbsp;<a href="#rfc.section.2.5.8">2.5.8</a>, <a href="#rfc.section.2.25.6">2.25.6</a>, <a href="#rfc.section.2.48.5">2.48.5</a></li>
                         <li>start&nbsp;&nbsp;<a href="#rfc.section.2.34.5">2.34.5</a></li>
                         <li>style&nbsp;&nbsp;<a href="#rfc.section.3.4.3">3.4.3</a>, <a href="#rfc.section.3.7.1">3.7.1</a>, <a href="#rfc.section.3.8.3">3.8.3</a></li>
                         <li>subitem&nbsp;&nbsp;<a href="#rfc.section.2.27.4">2.27.4</a></li>
@@ -8417,12 +8445,12 @@ start = rfc
                         <li>toc&nbsp;&nbsp;<a href="#rfc.section.2.46.6">2.46.6</a></li>
                         <li>tocDepth&nbsp;&nbsp;<a href="#rfc.section.2.45.16">2.45.16</a></li>
                         <li>tocInclude&nbsp;&nbsp;<a href="#rfc.section.2.45.17">2.45.17</a></li>
-                        <li>type&nbsp;&nbsp;<a href="#rfc.section.2.5.8">2.5.8</a>, <a href="#rfc.section.2.34.6">2.34.6</a>, <a href="#rfc.section.2.48.5">2.48.5</a>, <a href="#rfc.section.3.3.3">3.3.3</a></li>
+                        <li>type&nbsp;&nbsp;<a href="#rfc.section.2.5.9">2.5.9</a>, <a href="#rfc.section.2.34.6">2.34.6</a>, <a href="#rfc.section.2.48.6">2.48.6</a>, <a href="#rfc.section.3.3.3">3.3.3</a></li>
                         <li>updates&nbsp;&nbsp;<a href="#rfc.section.2.45.18">2.45.18</a></li>
                         <li>value&nbsp;&nbsp;<a href="#rfc.section.2.47.4">2.47.4</a></li>
                         <li>version&nbsp;&nbsp;<a href="#rfc.section.2.45.19">2.45.19</a></li>
-                        <li>width&nbsp;&nbsp;<a href="#rfc.section.2.5.9">2.5.9</a>, <a href="#rfc.section.2.25.9">2.25.9</a>, <a href="#rfc.section.3.9.2">3.9.2</a></li>
-                        <li>xml:space&nbsp;&nbsp;<a href="#rfc.section.2.5.10">2.5.10</a>, <a href="#rfc.section.3.7.2">3.7.2</a></li>
+                        <li>width&nbsp;&nbsp;<a href="#rfc.section.2.5.10">2.5.10</a>, <a href="#rfc.section.2.25.9">2.25.9</a>, <a href="#rfc.section.3.9.2">3.9.2</a></li>
+                        <li>xml:space&nbsp;&nbsp;<a href="#rfc.section.2.5.11">2.5.11</a>, <a href="#rfc.section.3.7.2">3.7.2</a></li>
                         <li>year&nbsp;&nbsp;<a href="#rfc.section.2.17.3">2.17.3</a></li>
                      </ul>
                   </li>
@@ -9079,6 +9107,12 @@ start = rfc
                         <li>inside author&nbsp;&nbsp;<a href="#rfc.iref.o.3">2.7</a></li>
                      </ul>
                   </li>
+                  <li>originalSrc attribute&nbsp;&nbsp;
+                     <ul>
+                        <li>in artwork element&nbsp;&nbsp;<a href="#rfc.section.2.5.6">2.5.6</a></li>
+                        <li>in sourcecode element&nbsp;&nbsp;<a href="#rfc.section.2.48.3">2.48.3</a></li>
+                     </ul>
+                  </li>
                </ul>
             </li>
             <li><a id="rfc.index.P" href="#rfc.index.P"><b>P</b></a><ul>
@@ -9093,7 +9127,7 @@ start = rfc
                   </li>
                   <li>pn attribute&nbsp;&nbsp;
                      <ul>
-                        <li>in artwork element&nbsp;&nbsp;<a href="#rfc.section.2.5.6">2.5.6</a></li>
+                        <li>in artwork element&nbsp;&nbsp;<a href="#rfc.section.2.5.7">2.5.7</a></li>
                         <li>in aside element&nbsp;&nbsp;<a href="#rfc.section.2.6.2">2.6.2</a></li>
                         <li>in blockquote element&nbsp;&nbsp;<a href="#rfc.section.2.10.3">2.10.3</a></li>
                         <li>in boilerplate element&nbsp;&nbsp;<a href="#rfc.section.2.11.1">2.11.1</a></li>
@@ -9105,7 +9139,7 @@ start = rfc
                         <li>in note element&nbsp;&nbsp;<a href="#rfc.section.2.33.1">2.33.1</a></li>
                         <li>in ol element&nbsp;&nbsp;<a href="#rfc.section.2.34.3">2.34.3</a></li>
                         <li>in section element&nbsp;&nbsp;<a href="#rfc.section.2.46.3">2.46.3</a></li>
-                        <li>in sourcecode element&nbsp;&nbsp;<a href="#rfc.section.2.48.3">2.48.3</a></li>
+                        <li>in sourcecode element&nbsp;&nbsp;<a href="#rfc.section.2.48.4">2.48.4</a></li>
                         <li>in t element&nbsp;&nbsp;<a href="#rfc.section.2.53.5">2.53.5</a></li>
                         <li>in table element&nbsp;&nbsp;<a href="#rfc.section.2.54.2">2.54.2</a></li>
                         <li>in tbody element&nbsp;&nbsp;<a href="#rfc.section.2.55.2">2.55.2</a></li>
@@ -9256,7 +9290,7 @@ start = rfc
                         <li><em>Section 10</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC2026.2">A.1.2.4</a></li>
                      </ul>
                   </li>
-                  <li><em>RFC2397</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC2397.1">2.5.7</a>, <a href="#RFC2397"><b>8.2</b></a></li>
+                  <li><em>RFC2397</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC2397.1">2.5.8</a>, <a href="#RFC2397"><b>8.2</b></a></li>
                   <li><em>RFC2629</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC2629.1">1</a>, <a href="#RFC2629"><b>8.2</b></a></li>
                   <li><em>RFC3339</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC3339.1">2.45.10</a>, <a href="#RFC3339"><b>8.2</b></a></li>
                   <li><em>RFC3470</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC3470.1">5</a>, <a href="#RFC3470"><b>8.2</b></a><ul>
@@ -9275,7 +9309,7 @@ start = rfc
                         <li><em>Section 5</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC3978.1">A.1.2.2</a></li>
                      </ul>
                   </li>
-                  <li><em>RFC3986</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC3986.1">2.5.7</a>, <a href="#rfc.xref.RFC3986.2">2.48.4</a>, <a href="#rfc.xref.RFC3986.3">2.64</a>, <a href="#RFC3986"><b>8.2</b></a><ul>
+                  <li><em>RFC3986</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC3986.1">2.5.8</a>, <a href="#rfc.xref.RFC3986.2">2.48.5</a>, <a href="#rfc.xref.RFC3986.3">2.64</a>, <a href="#RFC3986"><b>8.2</b></a><ul>
                         <li><em>Section 3</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC3986.3">2.64</a></li>
                      </ul>
                   </li>
@@ -9378,9 +9412,10 @@ start = rfc
                         <li>inside td&nbsp;&nbsp;<a href="#rfc.iref.s.47">2.56</a></li>
                         <li>inside th&nbsp;&nbsp;<a href="#rfc.iref.s.51">2.58</a></li>
                         <li>name attribute&nbsp;&nbsp;<a href="#rfc.section.2.48.2">2.48.2</a></li>
-                        <li>pn attribute&nbsp;&nbsp;<a href="#rfc.section.2.48.3">2.48.3</a></li>
-                        <li>src attribute&nbsp;&nbsp;<a href="#rfc.section.2.48.4">2.48.4</a></li>
-                        <li>type attribute&nbsp;&nbsp;<a href="#rfc.section.2.48.5">2.48.5</a></li>
+                        <li>originalSrc attribute&nbsp;&nbsp;<a href="#rfc.section.2.48.3">2.48.3</a></li>
+                        <li>pn attribute&nbsp;&nbsp;<a href="#rfc.section.2.48.4">2.48.4</a></li>
+                        <li>src attribute&nbsp;&nbsp;<a href="#rfc.section.2.48.5">2.48.5</a></li>
+                        <li>type attribute&nbsp;&nbsp;<a href="#rfc.section.2.48.6">2.48.6</a></li>
                      </ul>
                   </li>
                   <li>spacing attribute&nbsp;&nbsp;
@@ -9402,9 +9437,9 @@ start = rfc
                   </li>
                   <li>src attribute&nbsp;&nbsp;
                      <ul>
-                        <li>in artwork element&nbsp;&nbsp;<a href="#rfc.section.2.5.7">2.5.7</a></li>
+                        <li>in artwork element&nbsp;&nbsp;<a href="#rfc.section.2.5.8">2.5.8</a></li>
                         <li>in figure element&nbsp;&nbsp;<a href="#rfc.section.2.25.6">2.25.6</a></li>
-                        <li>in sourcecode element&nbsp;&nbsp;<a href="#rfc.section.2.48.4">2.48.4</a></li>
+                        <li>in sourcecode element&nbsp;&nbsp;<a href="#rfc.section.2.48.5">2.48.5</a></li>
                      </ul>
                   </li>
                   <li>start attribute&nbsp;&nbsp;
@@ -9673,10 +9708,10 @@ start = rfc
                   </li>
                   <li>type attribute&nbsp;&nbsp;
                      <ul>
-                        <li>in artwork element&nbsp;&nbsp;<a href="#rfc.section.2.5.8">2.5.8</a></li>
+                        <li>in artwork element&nbsp;&nbsp;<a href="#rfc.section.2.5.9">2.5.9</a></li>
                         <li>in format element&nbsp;&nbsp;<a href="#rfc.section.3.3.3">3.3.3</a></li>
                         <li>in ol element&nbsp;&nbsp;<a href="#rfc.section.2.34.6">2.34.6</a></li>
-                        <li>in sourcecode element&nbsp;&nbsp;<a href="#rfc.section.2.48.5">2.48.5</a></li>
+                        <li>in sourcecode element&nbsp;&nbsp;<a href="#rfc.section.2.48.6">2.48.6</a></li>
                      </ul>
                   </li>
                </ul>
@@ -9733,7 +9768,7 @@ start = rfc
             <li><a id="rfc.index.W" href="#rfc.index.W"><b>W</b></a><ul>
                   <li>width attribute&nbsp;&nbsp;
                      <ul>
-                        <li>in artwork element&nbsp;&nbsp;<a href="#rfc.section.2.5.9">2.5.9</a></li>
+                        <li>in artwork element&nbsp;&nbsp;<a href="#rfc.section.2.5.10">2.5.10</a></li>
                         <li>in figure element&nbsp;&nbsp;<a href="#rfc.section.2.25.9">2.25.9</a></li>
                         <li>in ttcol element&nbsp;&nbsp;<a href="#rfc.section.3.9.2">3.9.2</a></li>
                      </ul>
@@ -9753,7 +9788,7 @@ start = rfc
                   <li><em>XML2RFCv2</em>&nbsp;&nbsp;<a href="#rfc.xref.XML2RFCv2.1">1</a>, <a href="#rfc.xref.XML2RFCv2.2">1</a>, <a href="#rfc.xref.XML2RFCv2.3">1</a>, <a href="#rfc.xref.XML2RFCv2.4">1.1</a>, <a href="#rfc.xref.XML2RFCv2.5">2.5</a>, <a href="#rfc.xref.XML2RFCv2.6">6.1</a>, <a href="#rfc.xref.XML2RFCv2.7">7</a>, <a href="#XML2RFCv2"><b>8.1</b></a></li>
                   <li>xml:space attribute&nbsp;&nbsp;
                      <ul>
-                        <li>in artwork element&nbsp;&nbsp;<a href="#rfc.section.2.5.10">2.5.10</a></li>
+                        <li>in artwork element&nbsp;&nbsp;<a href="#rfc.section.2.5.11">2.5.11</a></li>
                         <li>in spanx element&nbsp;&nbsp;<a href="#rfc.section.3.7.2">3.7.2</a></li>
                      </ul>
                   </li>

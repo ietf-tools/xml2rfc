@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                               June 1, 2015
+Obsoletes: 2629 (if approved)                               June 2, 2015
 Intended status: Informational
-Expires: December 3, 2015
+Expires: December 4, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 3, 2015.
+   This Internet-Draft will expire on December 4, 2015.
 
 Copyright Notice
 
@@ -659,13 +659,19 @@ Table of Contents
    elements are all fragments of a single file, and the tool can collect
    those fragments for later processing.
 
-2.5.6.  'pn' attribute
+2.5.6.  'originalSrc' attribute
+
+   This attribute is filled in by the prep tool.  It contains the
+   original value of the "src" attribute if that attribute is changed by
+   the prep tool.
+
+2.5.7.  'pn' attribute
 
    The number for this artwork within the section.  The numbering is
    shared with other elements of a section.  This is described in more
    detail in Appendix B.2.
 
-2.5.7.  'src' attribute
+2.5.8.  'src' attribute
 
    The URI reference of a graphics file ([RFC3986]), or the name of a
    file on the local disk.  This can be a "data" URI ([RFC2397]) that
@@ -676,11 +682,14 @@ Table of Contents
    URIs as well.
 
    If no URI scheme is given in the attribute, the attribute is
-   considered to be a local file name. processing tools must be careful
+   considered to be a local file name.  Processing tools must be careful
    to not accept dangerous values for the filename, particularly those
    that contain absolute references outside the current directory.
 
-2.5.8.  'type' attribute
+   It is an error to have both a "src" attribute and content in the
+   <artwork> element.
+
+2.5.9.  'type' attribute
 
    Specifies the type of the artwork.  The value of this attribute is
    free text with certain values designated as preferred.  If the prep
@@ -705,11 +714,11 @@ Table of Contents
    Thus, a consumer of v3 XML should not cause a failure when it
    encounters an unexpected type.
 
-2.5.9.  'width' attribute
+2.5.10.  'width' attribute
 
    Deprecated.
 
-2.5.10.  'xml:space' attribute
+2.5.11.  'xml:space' attribute
 
    Deprecated.
 
@@ -2785,17 +2794,26 @@ Table of Contents
    the elements are all fragments of a single file, and such a formatter
    can collect those fragments for later processing.
 
-2.48.3.  'pn' attribute
+2.48.3.  'originalSrc' attribute
+
+   This attribute is filled in by the prep tool.  It contains the
+   original value of the "src" attribute if that attribute is changed by
+   the prep tool.
+
+2.48.4.  'pn' attribute
 
    The number for this sourceode within the section.  The numbering is
    shared with other elements of a section.  This is described in more
    detail in Appendix B.2.
 
-2.48.4.  'src' attribute
+2.48.5.  'src' attribute
 
    The URI reference of a source file ([RFC3986]).
 
-2.48.5.  'type' attribute
+   It is an error to have both a "src" attribute and content in the
+   <sourcecode> element.
+
+2.48.6.  'type' attribute
 
    Specifies the type of the sourcecode.  The value of this attribute is
    free text with certain values designated as preferred.  If the prep
@@ -5181,6 +5199,7 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "" ] attribute alt { text }?,
        [ a:defaultValue = "" ] attribute width { text }?,
        [ a:defaultValue = "" ] attribute height { text }?,
+       attribute originalSrc { text }?,
        (text* | svg)
      }
 
@@ -5203,6 +5222,7 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "" ] attribute name { text }?,
        [ a:defaultValue = "" ] attribute type { text }?,
        attribute src { text }?,
+       attribute originalSrc { text }?,
        text
      }
 
@@ -5975,6 +5995,7 @@ Appendix D.  Schema Differences from v2
          [ a:defaultValue = "" ] attribute width { text }?,
          [ a:defaultValue = "" ] attribute height { text }?,
    -     text*
+   +     attribute originalSrc { text }?,
    +     (text* | svg)
    +   }
    + svg =
@@ -5994,6 +6015,7 @@ Appendix D.  Schema Differences from v2
    +     [ a:defaultValue = "" ] attribute name { text }?,
    +     [ a:defaultValue = "" ] attribute type { text }?,
    +     attribute src { text }?,
+   +     attribute originalSrc { text }?,
    +     text
    +   }
    + thead =
@@ -6253,6 +6275,7 @@ Index
          inside td  1
          inside th  1
          name attribute  1
+         originalSrc attribute  1
          pn attribute  1
          src attribute  1
          type attribute  1
@@ -6331,6 +6354,7 @@ Index
          numbered  1
          obsoletes  1
          octets  1
+         originalSrc  1
          pageno  1
          pn  1
          prepTime  1
@@ -6819,6 +6843,9 @@ Index
          abbrev attribute  1
          ascii attribute  1
          inside author  1
+      originalSrc attribute
+         in artwork element  1
+         in sourcecode element  1
 
    P
       pageno attribute
@@ -6984,6 +7011,7 @@ Index
          inside td  1
          inside th  1
          name attribute  1
+         originalSrc attribute  1
          pn attribute  1
          src attribute  1
          type attribute  1

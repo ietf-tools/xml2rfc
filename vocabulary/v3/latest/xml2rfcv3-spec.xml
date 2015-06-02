@@ -187,7 +187,7 @@
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
-      file, such as a bitmap or a vector drawing in SVG, using a URI. In this case, the textual
+      file, such as a vector drawing in SVG or a bitmap graphic file, using a URI. In this case, the textual
       content acts as fallback for output representations that do not support graphics,
       and thus ought to contain either a "line art" variant of the graphics, or
       otherwise prose that describes the included image in sufficient detail.
@@ -217,7 +217,7 @@
       <xref target="SVGforRFCs"/>.
    </t>
    <t>
-      The four methods for inclusion of SVG art can also be used for including text artwork, but using a data: URI is probably
+      The above methods for inclusion of SVG art can also be used for including text artwork, but using a data: URI is probably
       confusing for text artwork.
    </t>
    <t>
@@ -315,6 +315,17 @@
          </t>
    </section>
 
+   <!--artwork/@originalSrc-->
+   <section anchor="element.artwork.attribute.originalSrc" toc="exclude">
+      <name>'originalSrc' attribute</name>
+      <iref item="Attributes" subitem="originalSrc"/>
+      <iref item="artwork element" subitem="originalSrc attribute"/>
+      <iref item="originalSrc attribute" subitem="in artwork element"/>
+      <t><!--AG-->
+         <cref anchor="element.artwork.attribute.originalSrc.missing">attribute description missing</cref>
+      </t>
+   </section>
+
    <!--artwork/@pn-->
    <section anchor="element.artwork.attribute.pn" toc="exclude">
       <name>'pn' attribute</name>
@@ -339,11 +350,14 @@
          Note that the inclusion of art with the "src" attribute depends on the capabilities of the processing tool
          reading the XML document. Tools need to be able to handle the file: URI, and should
          be able to handle http: and https: URIs as well.
-       </t>
+      </t>
       <t>
          If no URI scheme is given in the attribute, the attribute is considered to be a local file name.
-         processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
+         Processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
+      </t>
+      <t>
+         It is an error to have both a "src" attribute and content in the &lt;artwork&gt; element.
       </t>
    </section>
 
@@ -363,6 +377,7 @@
             The preferred values for &lt;artwork&gt; types are:
             <list style="symbols">
             <t>ascii-art</t>
+            <t>binary-art</t>
             <t>call-flow</t>
             <t>hex-dump</t>
             <t>svg</t>
@@ -2862,7 +2877,7 @@
    <iref item="relref element" primary="true"/>
    <t>
       A relative link to a reference from the References section.
-      Formatters that have links (such as HTML and PDF) are likely to render &lt;relref&gt; elements as live external links
+      Formatters that have links (such as HTML and PDF) are likely to render &lt;relref&gt; elements as external hyperlinks
       to the specified part of the reference, creating the link target by combining the base URI from the
       &lt;<x:ref>reference</x:ref>&gt; element with the "relative" attribute from this element.
       The "target" attribute is required, and it must be the anchor of a &lt;<x:ref>reference</x:ref>&gt; element.
@@ -2952,7 +2967,7 @@
       <iref item="displayFormat attribute" subitem="in relref element"/>
       <t>
         This attribute is used to signal formatters what the desired format of the relative reference should be.
-        Formatters for document types that have linking capability should wrap each part of the displayed text in live links.
+        Formatters for document types that have linking capability should wrap each part of the displayed text in hyperlinks.
         If there is content in the &lt;relref&gt; element, formatters will ignore the value of this attribute.
       </t>
       <t>
@@ -3805,6 +3820,17 @@ Using CDATA:
          </t>
    </section>
 
+   <!--sourcecode/@originalSrc-->
+   <section anchor="element.sourcecode.attribute.originalSrc" toc="exclude">
+      <name>'originalSrc' attribute</name>
+      <iref item="Attributes" subitem="originalSrc"/>
+      <iref item="sourcecode element" subitem="originalSrc attribute"/>
+      <iref item="originalSrc attribute" subitem="in sourcecode element"/>
+      <t><!--AG-->
+         <cref anchor="element.sourcecode.attribute.originalSrc.missing">attribute description missing</cref>
+      </t>
+   </section>
+
    <!--sourcecode/@pn-->
    <section anchor="element.sourcecode.attribute.pn" toc="exclude">
       <name>'pn' attribute</name>
@@ -3825,6 +3851,9 @@ Using CDATA:
       <iref item="src attribute" subitem="in sourcecode element"/>
       <t>
          The URI reference of a source file (<xref target="RFC3986"/>).
+      </t>
+      <t>
+         It is an error to have both a "src" attribute and content in the &lt;sourcecode&gt; element.
       </t>
    </section>
 
@@ -5005,7 +5034,7 @@ Using CDATA:
    <iref item="xref element" primary="true"/>
    <t>
       A reference to an anchor in this document.
-      Formatters that have links (such as HTML and PDF) are likely to render &lt;xref&gt; elements as live internal links.
+      Formatters that have links (such as HTML and PDF) are likely to render &lt;xref&gt; elements as internal hyperlinks.
       This element is useful for referring to references in the References section, to specific sections of this
       document, to specific figures, and so on.
       The "target" attribute is required.
@@ -5043,7 +5072,7 @@ Using CDATA:
       <t>
         This attribute is used to control the content of the "derivedContent" attribute that is filled in by the prep tool.
         It also signals to formatters what the desired format of the reference should be.
-        Formatters for document types that have linking capability should wrap the displayed text in live links.
+        Formatters for document types that have linking capability should wrap the displayed text in hyperlinks.
       </t>
       <t>
          <iref item="xref formats" subitem="counter" primary="true"/>

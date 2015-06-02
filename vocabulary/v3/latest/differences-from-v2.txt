@@ -562,6 +562,7 @@
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
 -     text*
++     attribute originalSrc { text }?,
 +     (text* | svg)
 +   }
 + svg =
@@ -581,6 +582,7 @@
 +     [ a:defaultValue = "" ] attribute name { text }?,
 +     [ a:defaultValue = "" ] attribute type { text }?,
 +     attribute src { text }?,
++     attribute originalSrc { text }?,
 +     text
 +   }
 + thead =

@@ -681,6 +681,18 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          </t>
    </section>
 
+   <!--artwork/@originalSrc-->
+   <section anchor="element.artwork.attribute.originalSrc" toc="exclude" title="'originalSrc' attribute">
+      
+      <iref item="Attributes" subitem="originalSrc"/>
+      <iref item="artwork element" subitem="originalSrc attribute"/>
+      <iref item="originalSrc attribute" subitem="in artwork element"/>
+      <t>
+         This attribute is filled in by the prep tool. It contains the original value of the "src"
+         attribute if that attribute is changed by the prep tool.
+      </t>
+   </section>
+
    <!--artwork/@pn-->
    <section anchor="element.artwork.attribute.pn" toc="exclude" title="'pn' attribute">
       
@@ -705,11 +717,14 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
          Note that the inclusion of art with the "src" attribute depends on the capabilities of the processing tool
          reading the XML document. Tools need to be able to handle the file: URI, and should
          be able to handle http: and https: URIs as well.
-       </t>
+      </t>
       <t>
          If no URI scheme is given in the attribute, the attribute is considered to be a local file name.
-         processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
+         Processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
+      </t>
+      <t>
+         It is an error to have both a "src" attribute and content in the &lt;artwork&gt; element.
       </t>
    </section>
 
@@ -4076,6 +4091,18 @@ Using CDATA:
          </t>
    </section>
 
+   <!--sourcecode/@originalSrc-->
+   <section anchor="element.sourcecode.attribute.originalSrc" toc="exclude" title="'originalSrc' attribute">
+      
+      <iref item="Attributes" subitem="originalSrc"/>
+      <iref item="sourcecode element" subitem="originalSrc attribute"/>
+      <iref item="originalSrc attribute" subitem="in sourcecode element"/>
+      <t>
+         This attribute is filled in by the prep tool. It contains the original value of the "src"
+         attribute if that attribute is changed by the prep tool.
+      </t>
+   </section>
+
    <!--sourcecode/@pn-->
    <section anchor="element.sourcecode.attribute.pn" toc="exclude" title="'pn' attribute">
       
@@ -4096,6 +4123,9 @@ Using CDATA:
       <iref item="src attribute" subitem="in sourcecode element"/>
       <t>
          The URI reference of a source file (<xref target="RFC3986"/>).
+      </t>
+      <t>
+         It is an error to have both a "src" attribute and content in the &lt;sourcecode&gt; element.
       </t>
    </section>
 
@@ -7357,6 +7387,7 @@ artwork =
     [ a:defaultValue = "" ] attribute alt { text }?,
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
+    attribute originalSrc { text }?,
     (text* | svg)
   }
 
@@ -7379,6 +7410,7 @@ sourcecode =
     [ a:defaultValue = "" ] attribute name { text }?,
     [ a:defaultValue = "" ] attribute type { text }?,
     attribute src { text }?,
+    attribute originalSrc { text }?,
     text
   }
 
@@ -8154,6 +8186,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
 -     text*
++     attribute originalSrc { text }?,
 +     (text* | svg)
 +   }
 + svg =
@@ -8173,6 +8206,7 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "" ] attribute name { text }?,
 +     [ a:defaultValue = "" ] attribute type { text }?,
 +     attribute src { text }?,
++     attribute originalSrc { text }?,
 +     text
 +   }
 + thead =

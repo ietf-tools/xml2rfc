@@ -693,6 +693,18 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          </t>
    </section>
 
+   <!--artwork/@originalSrc-->
+   <section anchor="element.artwork.attribute.originalSrc" toc="exclude">
+      <name>'originalSrc' attribute</name>
+      <iref item="Attributes" subitem="originalSrc"/>
+      <iref item="artwork element" subitem="originalSrc attribute"/>
+      <iref item="originalSrc attribute" subitem="in artwork element"/>
+      <t>
+         This attribute is filled in by the prep tool. It contains the original value of the "src"
+         attribute if that attribute is changed by the prep tool.
+      </t>
+   </section>
+
    <!--artwork/@pn-->
    <section anchor="element.artwork.attribute.pn" toc="exclude">
       <name>'pn' attribute</name>
@@ -4187,6 +4199,18 @@ Using CDATA:
          </t>
    </section>
 
+   <!--sourcecode/@originalSrc-->
+   <section anchor="element.sourcecode.attribute.originalSrc" toc="exclude">
+      <name>'originalSrc' attribute</name>
+      <iref item="Attributes" subitem="originalSrc"/>
+      <iref item="sourcecode element" subitem="originalSrc attribute"/>
+      <iref item="originalSrc attribute" subitem="in sourcecode element"/>
+      <t>
+         This attribute is filled in by the prep tool. It contains the original value of the "src"
+         attribute if that attribute is changed by the prep tool.
+      </t>
+   </section>
+
    <!--sourcecode/@pn-->
    <section anchor="element.sourcecode.attribute.pn" toc="exclude">
       <name>'pn' attribute</name>
@@ -7611,6 +7635,7 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     [ a:defaultValue = "" ] attribute alt { text }?,
     [ a:defaultValue = "" ] attribute width { text }?,
     [ a:defaultValue = "" ] attribute height { text }?,
+    attribute originalSrc { text }?,
     (text* | svg)
   }
 
@@ -7633,6 +7658,7 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     [ a:defaultValue = "" ] attribute name { text }?,
     [ a:defaultValue = "" ] attribute type { text }?,
     attribute src { text }?,
+    attribute originalSrc { text }?,
     text
   }
 
@@ -8408,6 +8434,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "" ] attribute width { text }?,
       [ a:defaultValue = "" ] attribute height { text }?,
 -     text*
++     attribute originalSrc { text }?,
 +     (text* | svg)
 +   }
 + svg =
@@ -8427,6 +8454,7 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "" ] attribute name { text }?,
 +     [ a:defaultValue = "" ] attribute type { text }?,
 +     attribute src { text }?,
++     attribute originalSrc { text }?,
 +     text
 +   }
 + thead =
