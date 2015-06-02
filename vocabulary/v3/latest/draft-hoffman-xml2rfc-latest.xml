@@ -717,11 +717,14 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          Note that the inclusion of art with the "src" attribute depends on the capabilities of the processing tool
          reading the XML document. Tools need to be able to handle the file: URI, and should
          be able to handle http: and https: URIs as well.
-       </t>
+      </t>
       <t>
          If no URI scheme is given in the attribute, the attribute is considered to be a local file name.
-         processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
+         Processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
+      </t>
+      <t>
+         It is an error to have both a "src" attribute and content in the &lt;artwork&gt; element.
       </t>
    </section>
 
@@ -4204,6 +4207,9 @@ Using CDATA:
       <iref item="src attribute" subitem="in sourcecode element"/>
       <t>
          The URI reference of a source file (<xref target="RFC3986"/>).
+      </t>
+      <t>
+         It is an error to have both a "src" attribute and content in the &lt;sourcecode&gt; element.
       </t>
    </section>
 
