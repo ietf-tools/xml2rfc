@@ -498,7 +498,7 @@ blockquote > * .bcp14 {
        content: "Hoffman";
   }
   @bottom-center {
-       content: "Expires December 4, 2015";
+       content: "Expires December 6, 2015";
   }
   @bottom-right {
        content: "[Page " counter(page) "]";
@@ -536,7 +536,7 @@ blockquote > * .bcp14 {
       <link rel="schema.dct" href="http://purl.org/dc/terms/">
       <meta name="dct.creator" content="Hoffman, P.">
       <meta name="dct.identifier" content="urn:ietf:id:draft-hoffman-xml2rfc-latest">
-      <meta name="dct.issued" scheme="ISO8601" content="2015-06-02">
+      <meta name="dct.issued" scheme="ISO8601" content="2015-06-04">
       <meta name="dct.replaces" content="urn:ietf:rfc:2629">
       <meta name="dct.abstract" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
       <meta name="description" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
@@ -555,14 +555,14 @@ blockquote > * .bcp14 {
             <tr>
                <td class="left">Obsoletes: <a href="https://tools.ietf.org/html/rfc2629">2629</a> (if approved)
                </td>
-               <td class="right">June 2, 2015</td>
+               <td class="right">June 4, 2015</td>
             </tr>
             <tr>
                <td class="left">Intended status: Informational</td>
                <td class="right"></td>
             </tr>
             <tr>
-               <td class="left">Expires: December 4, 2015</td>
+               <td class="left">Expires: December 6, 2015</td>
                <td class="right"></td>
             </tr>
          </tbody>
@@ -587,7 +587,7 @@ blockquote > * .bcp14 {
             documents at any time. It is inappropriate to use Internet-Drafts as reference material or to cite them other than as &#8220;work
             in progress&#8221;.
          </p>
-         <p>This Internet-Draft will expire on December 4, 2015.</p>
+         <p>This Internet-Draft will expire on December 6, 2015.</p>
       </div>
       <div id="rfc.copyrightnotice">
          <h1><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
@@ -3592,9 +3592,8 @@ blockquote > * .bcp14 {
             <div id="element.relref.attribute.derivedLink">
                <h3 id="rfc.section.2.44.1"><a href="#rfc.section.2.44.1">2.44.1</a>&nbsp;<a href="#element.relref.attribute.derivedLink">'derivedLink' attribute</a></h3>
                <div id="rfc.section.2.44.1.p.1">
-                  <p>This attribute is filled in by the prep tool. This is the link that is derived from combining the URI from the reference,
-                     a "#" character, and the relative part that is either a copy of the "relative" attribute or a section number derived from
-                     the "section" attribute.
+                  <p>This attribute is filled in by the prep tool. This is the link that is derived from combining the URI from the reference and
+                     the relative part that is either a copy of the "relative" attribute or a section number derived from the "section" attribute.
                   </p>
                </div>
             </div>
@@ -3684,20 +3683,46 @@ blockquote > * .bcp14 {
                      </li>
                   </ul>
                </div>
-               <div id="rfc.section.2.44.3.p.5" class="avoidbreakafter">
+               <div id="rfc.section.2.44.3.p.5">
+                  <p>"bare" </p>
+                  <ul class="empty">
+                     <li>A formatter should display the relative reference as the contents of the "derivedRemoteContent" attribute and nothing else.
+                        This is useful when there are multiple relative references to a single base reference.
+                     </li>
+                     <li>For example: <span id="rfc.figure.u.16"><pre>      See
+      &lt;relref section="2.3" target="RFC7878" displayFormat="bare"/&gt;
+      and
+      &lt;relref section="2.4" target="RFC7878" displayFormat="of"/&gt;
+      for an overview.
+</pre></span> 
+                     </li>
+                     <li>An HTML formatter might generate: <span id="rfc.figure.u.17"><pre>      See
+      &lt;a href="http://www.rfc-editor.org/info/rfc7878#s-2.3"&gt;
+      Section 2.3&lt;/a&gt;
+      and
+      &lt;a href="http://www.rfc-editor.org/info/rfc7878#s-2.4"&gt;
+      Section 2.4&lt;/a&gt; of
+      [&lt;a href="#RFC7878"&gt;RFC7878&lt;/a&gt;]
+      for an overview.
+</pre></span> 
+                     </li>
+                  </ul>
+               </div>
+               <div id="rfc.section.2.44.3.p.6" class="avoidbreakafter">
                   <p>Allowed values:</p>
                </div>
-               <ul id="rfc.section.2.44.3.p.6"> 
+               <ul id="rfc.section.2.44.3.p.7"> 
                   <li>"of" (default)</li> 
                   <li>"comma"</li> 
                   <li>"parens"</li> 
+                  <li>"bare"</li> 
                </ul>
             </div>
             <div id="element.relref.attribute.relative">
                <h3 id="rfc.section.2.44.4"><a href="#rfc.section.2.44.4">2.44.4</a>&nbsp;<a href="#element.relref.attribute.relative">'relative' attribute</a></h3>
                <div id="rfc.section.2.44.4.p.1">
-                  <p>Specifies a relative reference from the URI in the target reference. This value is given without the leading "#" character
-                     found in relative references.
+                  <p>Specifies a relative reference from the URI in the target reference. This value must include whatever leading character is
+                     needed to create the relative reference; typically, this is "#" for HTML documents.
                   </p>
                </div>
             </div>
@@ -4215,7 +4240,7 @@ blockquote > * .bcp14 {
                   either the "&amp;" or "&lt;" character, or the string "]]&gt;". To avoid these problems, the "&amp;" and "&lt;" characters may be escaped using
                   the strings "&amp;amp;" and "&amp;lt;", respectively; the "]]&gt;" string can be represented as "]]&amp;gt;". Alternatively, they may be
                   surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;". For example: 
-               </p><span id="rfc.figure.u.16"><pre>Desired output:
+               </p><span id="rfc.figure.u.18"><pre>Desired output:
    allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"
 
 Using escaping:
@@ -5441,7 +5466,7 @@ Using CDATA:
                   <ul class="empty">
                      <li>The "derivedContent" attribute will contain just a counter. This is used for targets that are &lt;<a href="#element.section" class="smpl">section</a>&gt;, &lt;<a href="#element.figure" class="smpl">figure</a>&gt;, or &lt;<a href="#element.table" class="smpl">table</a>&gt;. Using "format='counter'" where the target is any other type of element is an error.
                      </li>
-                     <li>For example, with an input of: <span id="rfc.figure.u.17"><pre>      &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
+                     <li>For example, with an input of: <span id="rfc.figure.u.19"><pre>      &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
       . . .
       See Section &lt;xref target="overview" format="counter"/&gt;
       for an overview.
@@ -5457,7 +5482,7 @@ Using CDATA:
                      <li>The "derivedContent" attribute will contain a text fragment that describes the referenced part completely, such as "[XML]"
                         for a target that is a &lt;<a href="#element.reference" class="smpl">reference</a>&gt;, or "Section 2" or "Table 4" for a target to a non-reference.
                      </li>
-                     <li>For example, with an input of: <span id="rfc.figure.u.18"><pre>      &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
+                     <li>For example, with an input of: <span id="rfc.figure.u.20"><pre>      &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
       . . .
       See &lt;xref target="overview"/&gt; for an overview.
 </pre></span> 
@@ -6532,7 +6557,7 @@ Using CDATA:
             <div id="rfc.section.B.1.p.2">
                <p>In the v3 syntax, XInclude is expressed as the &lt;xi:include&gt; element. To use this element, you need to include the "xi" namespace
                   in the &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element; that is, you need to specify 
-               </p><span id="rfc.figure.u.19"><pre>xmlns:xi="http://www.w3.org/2001/XInclude"
+               </p><span id="rfc.figure.u.21"><pre>xmlns:xi="http://www.w3.org/2001/XInclude"
 </pre></span><p> as one of the attributes in the &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element.
                </p>
             </div>
@@ -6540,7 +6565,7 @@ Using CDATA:
                <p>The most common way to use &lt;xi:include&gt; is to pull in references that are already formed as XML. Currently, this can be done
                   from xml2rfc.tools.ietf.org, but later is expected to be from the RFC Editor. For example, if a document has three normative
                   references, all RFCs, the document might contain: 
-               </p><span id="rfc.figure.u.20"><pre>&lt;references&gt;
+               </p><span id="rfc.figure.u.22"><pre>&lt;references&gt;
     &lt;xi:include href="http://xml2rfc.tools.ietf.org/public/rfc/
        bibxml/reference.RFC.2119.xml"/&gt;
     &lt;xi:include href="http://xml2rfc.tools.ietf.org/public/rfc/
@@ -6553,7 +6578,7 @@ Using CDATA:
                <p>&lt;xi:include&gt; can be used anywhere an XML element could be used (but not where free text is used). For example, if three Internet
                   Drafts are all including a particular paragraph or section verbatim, that text can be kept either in a file or somewhere on
                   the web, and be included with &lt;xi:include&gt;. An example of pulling something from the local disk would be: 
-               </p><span id="rfc.figure.u.21"><pre>&lt;x:include href="file://home/chris/ietf/drafts/commontext.xml"/&gt;
+               </p><span id="rfc.figure.u.23"><pre>&lt;x:include href="file://home/chris/ietf/drafts/commontext.xml"/&gt;
 </pre></span></div>
             <div id="rfc.section.B.1.p.5">
                <p>In general, XInclude should be used instead of ENTITY references and XML Processor Instructions (PIs) that allow external
@@ -6627,7 +6652,7 @@ Using CDATA:
          <div id="rfc.section.C.p.1">
             <p>The following is the RelaxNG schema for the v3 format.</p>
          </div>
-         <div id="rfc.figure.u.22"><pre class="inline">
+         <div id="rfc.figure.u.24"><pre class="inline">
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 namespace ns1 = "http://www.w3.org/2000/svg"
 
@@ -7026,7 +7051,7 @@ namespace ns1 = "http://www.w3.org/2000/svg"
   element relref {
     attribute target { xsd:IDREF },
     [ a:defaultValue = "of" ]
-    attribute displayFormat { "of" | "comma" | "parens" }?,
+    attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
     (attribute section { text },
      attribute relative { text }?)?,
     attribute derivedRemoteContent { text }?,
@@ -7441,7 +7466,7 @@ start = rfc
                and a "+" indicates lines added to the v3 schema.
             </p>
          </div>
-         <div id="rfc.figure.u.23"><pre class="inline">
+         <div id="rfc.figure.u.25"><pre class="inline">
   namespace a = 
   "http://relaxng.org/ns/compatibility/annotations/1.0"
 + namespace ns1 = "http://www.w3.org/2000/svg"
@@ -7833,7 +7858,8 @@ start = rfc
 +   element relref {
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
-+     attribute displayFormat { "of" | "comma" | "parens" }?,
++     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
++ }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,

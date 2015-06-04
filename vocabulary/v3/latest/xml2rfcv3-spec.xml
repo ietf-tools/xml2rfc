@@ -321,8 +321,9 @@
       <iref item="Attributes" subitem="originalSrc"/>
       <iref item="artwork element" subitem="originalSrc attribute"/>
       <iref item="originalSrc attribute" subitem="in artwork element"/>
-      <t><!--AG-->
-         <cref anchor="element.artwork.attribute.originalSrc.missing">attribute description missing</cref>
+      <t>
+         This attribute is filled in by the prep tool. It contains the original value of the "src"
+         attribute if that attribute is changed by the prep tool.
       </t>
    </section>
 
@@ -2931,7 +2932,7 @@
       <iref item="derivedLink attribute" subitem="in relref element"/>
       <t>
          This attribute is filled in by the prep tool.
-         This is the link that is derived from combining the URI from the reference, a "#" character, and the
+         This is the link that is derived from combining the URI from the reference and the
          relative part that is either a copy of the "relative" attribute or a section number derived from the
          "section" attribute.
       </t>
@@ -3066,11 +3067,48 @@
             </t>
          </list>
       </t>
+      <t>
+        "bare"
+        <list style="empty">
+            <t>
+            A formatter should display the relative reference as the contents of the "derivedRemoteContent" attribute
+            and nothing else. This is useful when there are multiple relative references to a single base reference.
+            </t>
+            <t>
+            For example:
+<figure>
+                  <artwork>
+      See
+      &lt;relref section="2.3" target="RFC7878" displayFormat="bare"/&gt;
+      and
+      &lt;relref section="2.4" target="RFC7878" displayFormat="of"/&gt;
+      for an overview.
+</artwork>
+               </figure>
+            </t>
+            <t>
+               An HTML formatter might generate:
+<figure>
+                  <artwork>
+      See
+      &lt;a href="http://www.rfc-editor.org/info/rfc7878#s-2.3"&gt;
+      Section 2.3&lt;/a&gt;
+      and
+      &lt;a href="http://www.rfc-editor.org/info/rfc7878#s-2.4"&gt;
+      Section 2.4&lt;/a&gt; of
+      [&lt;a href="#RFC7878"&gt;RFC7878&lt;/a&gt;]
+      for an overview.
+</artwork>
+               </figure>
+            </t>
+         </list>
+      </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
          <li>"of" (default)</li>
          <li>"comma"</li>
          <li>"parens"</li>
+         <li>"bare"</li>
       </ul>
    </section>
 
@@ -3082,7 +3120,8 @@
       <iref item="relative attribute" subitem="in relref element"/>
       <t>
          Specifies a relative reference from the URI in the target reference.
-         This value is given without the leading "#" character found in relative references.
+         This value must include whatever leading character is needed to create
+         the relative reference; typically, this is "#" for HTML documents.
       </t>
    </section>
 
@@ -3826,8 +3865,9 @@ Using CDATA:
       <iref item="Attributes" subitem="originalSrc"/>
       <iref item="sourcecode element" subitem="originalSrc attribute"/>
       <iref item="originalSrc attribute" subitem="in sourcecode element"/>
-      <t><!--AG-->
-         <cref anchor="element.sourcecode.attribute.originalSrc.missing">attribute description missing</cref>
+      <t>
+         This attribute is filled in by the prep tool. It contains the original value of the "src"
+         attribute if that attribute is changed by the prep tool.
       </t>
    </section>
 

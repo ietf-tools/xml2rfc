@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                               June 2, 2015
+Obsoletes: 2629 (if approved)                               June 4, 2015
 Intended status: Informational
-Expires: December 4, 2015
+Expires: December 6, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 4, 2015.
+   This Internet-Draft will expire on December 6, 2015.
 
 Copyright Notice
 
@@ -2221,10 +2221,9 @@ Table of Contents
 2.44.1.  'derivedLink' attribute
 
    This attribute is filled in by the prep tool.  This is the link that
-   is derived from combining the URI from the reference, a "#"
-   character, and the relative part that is either a copy of the
-   "relative" attribute or a section number derived from the "section"
-   attribute.
+   is derived from combining the URI from the reference and the relative
+   part that is either a copy of the "relative" attribute or a section
+   number derived from the "section" attribute.
 
 2.44.2.  'derivedRemoteContent' attribute
 
@@ -2318,6 +2317,32 @@ Table of Contents
          Section 2.3</a>)
          for an overview.
 
+   "bare"
+
+      A formatter should display the relative reference as the contents
+      of the "derivedRemoteContent" attribute and nothing else.  This is
+      useful when there are multiple relative references to a single
+      base reference.
+
+      For example:
+
+         See
+         <relref section="2.3" target="RFC7878" displayFormat="bare"/>
+         and
+         <relref section="2.4" target="RFC7878" displayFormat="of"/>
+         for an overview.
+
+      An HTML formatter might generate:
+
+         See
+         <a href="http://www.rfc-editor.org/info/rfc7878#s-2.3">
+         Section 2.3</a>
+         and
+         <a href="http://www.rfc-editor.org/info/rfc7878#s-2.4">
+         Section 2.4</a> of
+         [<a href="#RFC7878">RFC7878</a>]
+         for an overview.
+
    Allowed values:
 
    o  "of" (default)
@@ -2326,11 +2351,14 @@ Table of Contents
 
    o  "parens"
 
+   o  "bare"
+
 2.44.4.  'relative' attribute
 
    Specifies a relative reference from the URI in the target reference.
-   This value is given without the leading "#" character found in
-   relative references.
+   This value must include whatever leading character is needed to
+   create the relative reference; typically, this is "#" for HTML
+   documents.
 
 2.44.5.  'section' attribute
 
@@ -5018,7 +5046,7 @@ Appendix C.  Relax NG Schema
      element relref {
        attribute target { xsd:IDREF },
        [ a:defaultValue = "of" ]
-       attribute displayFormat { "of" | "comma" | "parens" }?,
+       attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
        (attribute section { text },
         attribute relative { text }?)?,
        attribute derivedRemoteContent { text }?,
@@ -5822,7 +5850,8 @@ Appendix D.  Schema Differences from v2
    +   element relref {
    +     attribute target { xsd:IDREF },
    +     [ a:defaultValue = "of" ]
-   +     attribute displayFormat { "of" | "comma" | "parens" }?,
+   +     attribute displayFormat { "of" | "comma" | "parens" | "bare"
+   + }?,
    +     (attribute section { text },
    +      attribute relative { text }?)?,
    +     attribute derivedRemoteContent { text }?,

@@ -13,7 +13,7 @@
 <?rfc linkmailto="no" ?>
 <?rfc rfcedstyle="yes"?><!--
 
-Change relref/@relative to not prepend "#" ?
+Make <eref> clearer that "not in References" is advisory, not part of the vocabulary
 
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
@@ -3213,7 +3213,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="derivedLink attribute" subitem="in relref element"/>
       <t>
          This attribute is filled in by the prep tool.
-         This is the link that is derived from combining the URI from the reference, a "#" character, and the
+         This is the link that is derived from combining the URI from the reference and the
          relative part that is either a copy of the "relative" attribute or a section number derived from the
          "section" attribute.
       </t>
@@ -3348,11 +3348,48 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
             </t>
          </list>
       </t>
+      <t>
+        "bare"
+        <list style="empty">
+            <t>
+            A formatter should display the relative reference as the contents of the "derivedRemoteContent" attribute
+            and nothing else. This is useful when there are multiple relative references to a single base reference.
+            </t>
+            <t>
+            For example:
+<figure>
+                  <artwork><![CDATA[
+      See
+      <relref section="2.3" target="RFC7878" displayFormat="bare"/>
+      and
+      <relref section="2.4" target="RFC7878" displayFormat="of"/>
+      for an overview.
+]]></artwork>
+               </figure>
+            </t>
+            <t>
+               An HTML formatter might generate:
+<figure>
+                  <artwork><![CDATA[
+      See
+      <a href="http://www.rfc-editor.org/info/rfc7878#s-2.3">
+      Section 2.3</a>
+      and
+      <a href="http://www.rfc-editor.org/info/rfc7878#s-2.4">
+      Section 2.4</a> of
+      [<a href="#RFC7878">RFC7878</a>]
+      for an overview.
+]]></artwork>
+               </figure>
+            </t>
+         </list>
+      </t>
       <t><!--AG-->Allowed values:</t>
       <t><list style="symbols"><!--AG-->
          <t>"of" (default)</t>
          <t>"comma"</t>
          <t>"parens"</t>
+         <t>"bare"</t>
       </list></t>
    </section>
 
@@ -3364,7 +3401,8 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="relative attribute" subitem="in relref element"/>
       <t>
          Specifies a relative reference from the URI in the target reference.
-         This value is given without the leading "#" character found in relative references.
+         This value must include whatever leading character is needed to create
+         the relative reference; typically, this is "#" for HTML documents.
       </t>
    </section>
 
@@ -7206,7 +7244,7 @@ relref =
   element relref {
     attribute target { xsd:IDREF },
     [ a:defaultValue = "of" ]
-    attribute displayFormat { "of" | "comma" | "parens" }?,
+    attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
     (attribute section { text },
      attribute relative { text }?)?,
     attribute derivedRemoteContent { text }?,
@@ -8013,7 +8051,8 @@ to the v3 schema.</t>
 +   element relref {
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
-+     attribute displayFormat { "of" | "comma" | "parens" }?,
++     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
++ }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
