@@ -726,6 +726,7 @@ blockquote > * .bcp14 {
                         <li><a href="#rfc.section.B.2.1">B.2.1</a>&nbsp;&nbsp;&nbsp;<a href="#overlap">Overlapping Values</a></li>
                      </ul>
                   </li>
+                  <li><a href="#rfc.section.B.3">B.3</a>&nbsp;&nbsp;&nbsp;<a href="#prepatts">Attributes Controlled by the Prep Tool</a></li>
                </ul>
             </li>
             <li><a href="#rfc.section.C">C.</a>&nbsp;&nbsp;&nbsp;<a href="#schema">Relax NG Schema</a></li>
@@ -1278,8 +1279,8 @@ blockquote > * .bcp14 {
             <div id="element.artwork.attribute.originalSrc">
                <h3 id="rfc.section.2.5.6"><a href="#rfc.section.2.5.6">2.5.6</a>&nbsp;<a href="#element.artwork.attribute.originalSrc">'originalSrc' attribute</a></h3>
                <div id="rfc.section.2.5.6.p.1">
-                  <p>This attribute is filled in by the prep tool. It contains the original value of the "src" attribute if that attribute is changed
-                     by the prep tool.
+                  <p>This attribute is filled in by the prep tool, and contains the original value of the "src" attribute if that attribute is
+                     changed by the prep tool. See <a href="#prepatts" title="Attributes Controlled by the Prep Tool">Appendix&nbsp;B.3</a> for information about the control of this attribute.
                   </p>
                </div>
             </div>
@@ -2668,8 +2669,8 @@ blockquote > * .bcp14 {
             <div id="element.iref.attribute.irefid">
                <h3 id="rfc.section.2.27.1"><a href="#rfc.section.2.27.1">2.27.1</a>&nbsp;<a href="#element.iref.attribute.irefid">'irefid' attribute</a></h3>
                <div id="rfc.section.2.27.1.p.1">
-                  <p>An identifier for the prep tool to use when creating indexes. The content of this attribute is overwritten by the prep tool,
-                     and should thus never be filled in by the document's author. This is described in more detail in <a href="#anchorsandids" title="Anchors and IDs">Appendix&nbsp;B.2</a>.
+                  <p>This attribute is filled in by the prep tool and is an identifier used when creating indexes. This is described in more detail
+                     in <a href="#anchorsandids" title="Anchors and IDs">Appendix&nbsp;B.2</a>. See <a href="#prepatts" title="Attributes Controlled by the Prep Tool">Appendix&nbsp;B.3</a> for information about the control of this attribute.
                   </p>
                </div>
             </div>
@@ -2961,7 +2962,7 @@ blockquote > * .bcp14 {
                <h3 id="rfc.section.2.32.1"><a href="#rfc.section.2.32.1">2.32.1</a>&nbsp;<a href="#element.name.attribute.slugifiedName">'slugifiedName' attribute</a></h3>
                <div id="rfc.section.2.32.1.p.1">
                   <p>This attribute is filled in by the prep tool with a "slugified" version of the text in the element. This attribute can be
-                     used in the output formats for elements that have both names and numbers.
+                     used in the output formats for elements that have both names and numbers. See <a href="#prepatts" title="Attributes Controlled by the Prep Tool">Appendix&nbsp;B.3</a> for information about the control of this attribute.
                   </p>
                </div>
             </div>
@@ -3592,8 +3593,9 @@ blockquote > * .bcp14 {
             <div id="element.relref.attribute.derivedLink">
                <h3 id="rfc.section.2.44.1"><a href="#rfc.section.2.44.1">2.44.1</a>&nbsp;<a href="#element.relref.attribute.derivedLink">'derivedLink' attribute</a></h3>
                <div id="rfc.section.2.44.1.p.1">
-                  <p>This attribute is filled in by the prep tool. This is the link that is derived from combining the URI from the reference and
+                  <p>This attribute is filled in by the prep tool and is the link that is derived from combining the URI from the reference and
                      the relative part that is either a copy of the "relative" attribute or a section number derived from the "section" attribute.
+                     See <a href="#prepatts" title="Attributes Controlled by the Prep Tool">Appendix&nbsp;B.3</a> for information about the control of this attribute.
                   </p>
                </div>
             </div>
@@ -3603,7 +3605,7 @@ blockquote > * .bcp14 {
                   <p>This attribute is filled in by the prep tool. If the &lt;relref&gt; element has no text content, this attribute contains the text
                      for the remote link, such as "Section 2.3" or "Table 5". The prep tool might determine this text by reading the target reference
                      and, if it is a RFC or Internet-Draft in the v3 format, finding the anchor given in the "relative" attribute or derived from
-                     the "section" attribute, and using the title of that element.
+                     the "section" attribute, and using the title of that element. See <a href="#prepatts" title="Attributes Controlled by the Prep Tool">Appendix&nbsp;B.3</a> for information about the control of this attribute.
                   </p>
                </div>
                <div id="rfc.section.2.44.2.p.2">
@@ -3812,7 +3814,8 @@ blockquote > * .bcp14 {
             <div id="element.rfc.attribute.expiresDate">
                <h3 id="rfc.section.2.45.4"><a href="#rfc.section.2.45.4">2.45.4</a>&nbsp;<a href="#element.rfc.attribute.expiresDate">'expiresDate' attribute</a></h3>
                <div id="rfc.section.2.45.4.p.1">
-                  <p>Says with an Internet Draft expires. This value is filled in by the prep tool.</p>
+                  <p>This attribute is filled in by the prep tool with an Internet Draft expires. See <a href="#prepatts" title="Attributes Controlled by the Prep Tool">Appendix&nbsp;B.3</a> for information about the control of this attribute.
+                  </p>
                </div>
             </div>
             <div id="element.rfc.attribute.indexInclude">
@@ -3892,9 +3895,8 @@ blockquote > * .bcp14 {
             <div id="element.rfc.attribute.scripts">
                <h3 id="rfc.section.2.45.11"><a href="#rfc.section.2.45.11">2.45.11</a>&nbsp;<a href="#element.rfc.attribute.scripts">'scripts' attribute</a></h3>
                <div id="rfc.section.2.45.11.p.1">
-                  <p>The list of scripts needed to render this document. The list is comma-separated, with no spaces allowed. The order is unimportant.
-                     The names come from <a href="#UAX24" id="rfc.xref.UAX24.1"><cite title="UAX #24: Unicode Script Property">[UAX24]</cite></a>. This attriute is normally filled in by the prep tool. For example, if the document has Chinese characters in it, the value
-                     might be "Common,Latin,Han".
+                  <p>This attribute is filled in by the prep tool to list of scripts needed to render this document. The list is comma-separated,
+                     with no spaces allowed. The order is unimportant. The names come from <a href="#UAX24" id="rfc.xref.UAX24.1"><cite title="UAX #24: Unicode Script Property">[UAX24]</cite></a>. For example, if the document has Chinese characters in it, the value might be "Common,Latin,Han". See <a href="#prepatts" title="Attributes Controlled by the Prep Tool">Appendix&nbsp;B.3</a> for information about the control of this attribute.
                   </p>
                </div>
             </div>
@@ -4291,8 +4293,8 @@ Using CDATA:
             <div id="element.sourcecode.attribute.originalSrc">
                <h3 id="rfc.section.2.48.3"><a href="#rfc.section.2.48.3">2.48.3</a>&nbsp;<a href="#element.sourcecode.attribute.originalSrc">'originalSrc' attribute</a></h3>
                <div id="rfc.section.2.48.3.p.1">
-                  <p>This attribute is filled in by the prep tool. It contains the original value of the "src" attribute if that attribute is changed
-                     by the prep tool.
+                  <p>This attribute is filled in by the prep tool with the original value of the "src" attribute if that attribute is changed by
+                     the prep tool. See <a href="#prepatts" title="Attributes Controlled by the Prep Tool">Appendix&nbsp;B.3</a> for information about the control of this attribute.
                   </p>
                </div>
             </div>
@@ -5448,7 +5450,7 @@ Using CDATA:
                <h3 id="rfc.section.2.66.1"><a href="#rfc.section.2.66.1">2.66.1</a>&nbsp;<a href="#element.xref.attribute.derivedContent">'derivedContent' attribute</a></h3>
                <div id="rfc.section.2.66.1.p.1">
                   <p>This attribute is filled in by the prep tool if there is no content in the &lt;xref&gt; element. The prep tool fills in this attribute
-                     based on the value in the "displayFormat" attribute.
+                     based on the value in the "displayFormat" attribute. See <a href="#prepatts" title="Attributes Controlled by the Prep Tool">Appendix&nbsp;B.3</a> for information about the control of this attribute.
                   </p>
                </div>
             </div>
@@ -6644,6 +6646,34 @@ Using CDATA:
                      </li>
                   </ul>
                </div>
+            </div>
+         </div>
+         <div id="prepatts">
+            <h2 id="rfc.section.B.3"><a href="#rfc.section.B.3">B.3</a>&nbsp;<a href="#prepatts">Attributes Controlled by the Prep Tool</a></h2>
+            <div id="rfc.section.B.3.p.1">
+               <p>Many elements in the v3 vocabulary have new attributes whose role is to hold values generated by the prep tool. These attributes
+                  can exist in documents that are input to the prep tool; however, any of these attributes might be added, removed, or changed
+                  by the prep tool. Thus, it is explicitly unsafe for a document author to include these attributes and expect that their values
+                  will survive processing by the prep tool.
+               </p>
+            </div>
+            <div id="rfc.section.B.3.p.2">
+               <p>The attributes that are controlled by the prep tool are: </p>
+               <ul>
+                  <li>The "pn" attribute in any element</li>
+                  <li>&lt;artwork&gt; originalSrc</li>
+                  <li>&lt;iref&gt; irefid</li>
+                  <li>&lt;name&gt; slugifiedName</li>
+                  <li>&lt;relref&gt; derivedLink</li>
+                  <li>&lt;relref&gt; derivedRemoteContent</li>
+                  <li>&lt;rfc&gt; expiresDate</li>
+                  <li>&lt;rfc&gt; scripts</li>
+                  <li>&lt;sourcecode&gt; originalSrc</li>
+                  <li>&lt;xref&gt; derivedContent</li>
+               </ul>
+            </div>
+            <div id="rfc.section.B.3.p.3">
+               <p>In addition, note that the contents of the &lt;boilerplate&gt; element is controlled by the prep tool.</p>
             </div>
          </div>
       </div>

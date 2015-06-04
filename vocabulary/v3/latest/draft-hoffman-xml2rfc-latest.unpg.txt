@@ -165,6 +165,7 @@ Table of Contents
      B.1.  Including External Text
      B.2.  Anchors and IDs
        B.2.1.  Overlapping Values
+     B.3.  Attributes Controlled by the Prep Tool
    Appendix C.  Relax NG Schema
    Appendix D.  Schema Differences from v2
    Index
@@ -661,9 +662,10 @@ Table of Contents
 
 2.5.6.  'originalSrc' attribute
 
-   This attribute is filled in by the prep tool.  It contains the
+   This attribute is filled in by the prep tool, and contains the
    original value of the "src" attribute if that attribute is changed by
-   the prep tool.
+   the prep tool.  See Appendix B.3 for information about the control of
+   this attribute.
 
 2.5.7.  'pn' attribute
 
@@ -1593,10 +1595,10 @@ Table of Contents
 
 2.27.1.  'irefid' attribute
 
-   An identifier for the prep tool to use when creating indexes.  The
-   content of this attribute is overwritten by the prep tool, and should
-   thus never be filled in by the document's author.  This is described
-   in more detail in Appendix B.2.
+   This attribute is filled in by the prep tool and is an identifier
+   used when creating indexes.  This is described in more detail in
+   Appendix B.2.  See Appendix B.3 for information about the control of
+   this attribute.
 
 2.27.2.  'item' attribute (mandatory)
 
@@ -1783,6 +1785,7 @@ Table of Contents
    This attribute is filled in by the prep tool with a "slugified"
    version of the text in the element.  This attribute can be used in
    the output formats for elements that have both names and numbers.
+   See Appendix B.3 for information about the control of this attribute.
 
 2.33.  <note>
 
@@ -2220,10 +2223,11 @@ Table of Contents
 
 2.44.1.  'derivedLink' attribute
 
-   This attribute is filled in by the prep tool.  This is the link that
-   is derived from combining the URI from the reference and the relative
+   This attribute is filled in by the prep tool and is the link that is
+   derived from combining the URI from the reference and the relative
    part that is either a copy of the "relative" attribute or a section
-   number derived from the "section" attribute.
+   number derived from the "section" attribute.  See Appendix B.3 for
+   information about the control of this attribute.
 
 2.44.2.  'derivedRemoteContent' attribute
 
@@ -2233,7 +2237,8 @@ Table of Contents
    determine this text by reading the target reference and, if it is a
    RFC or Internet-Draft in the v3 format, finding the anchor given in
    the "relative" attribute or derived from the "section" attribute, and
-   using the title of that element.
+   using the title of that element.  See Appendix B.3 for information
+   about the control of this attribute.
 
    If the reference is not an RFC or Internet-Draft in the v3 format,
    the text fragment is simply the value of the "relative" or "section"
@@ -2415,8 +2420,9 @@ Table of Contents
 
 2.45.4.  'expiresDate' attribute
 
-   Says with an Internet Draft expires.  This value is filled in by the
-   prep tool.
+   This attribute is filled in by the prep tool with an Internet Draft
+   expires.  See Appendix B.3 for information about the control of this
+   attribute.
 
 2.45.5.  'indexInclude' attribute
 
@@ -2496,11 +2502,12 @@ Table of Contents
 
 2.45.11.  'scripts' attribute
 
-   The list of scripts needed to render this document.  The list is
-   comma-separated, with no spaces allowed.  The order is unimportant.
-   The names come from [UAX24].  This attriute is normally filled in by
-   the prep tool.  For example, if the document has Chinese characters
-   in it, the value might be "Common,Latin,Han".
+   This attribute is filled in by the prep tool to list of scripts
+   needed to render this document.  The list is comma-separated, with no
+   spaces allowed.  The order is unimportant.  The names come from
+   [UAX24].  For example, if the document has Chinese characters in it,
+   the value might be "Common,Latin,Han".  See Appendix B.3 for
+   information about the control of this attribute.
 
 2.45.12.  'seriesNo' attribute
 
@@ -2824,9 +2831,9 @@ Table of Contents
 
 2.48.3.  'originalSrc' attribute
 
-   This attribute is filled in by the prep tool.  It contains the
-   original value of the "src" attribute if that attribute is changed by
-   the prep tool.
+   This attribute is filled in by the prep tool with the original value
+   of the "src" attribute if that attribute is changed by the prep tool.
+   See Appendix B.3 for information about the control of this attribute.
 
 2.48.4.  'pn' attribute
 
@@ -3595,7 +3602,8 @@ Table of Contents
 
    This attribute is filled in by the prep tool if there is no content
    in the <xref> element.  The prep tool fills in this attribute based
-   on the value in the "displayFormat" attribute.
+   on the value in the "displayFormat" attribute.  See Appendix B.3 for
+   information about the control of this attribute.
 
 2.66.2.  'format' attribute
 
@@ -4642,6 +4650,41 @@ B.2.1.  Overlapping Values
       single letter followed by a hyphen.  If an anchor does overlap
       with one of the types of names above, the processing tool will
       reject the document.
+
+B.3.  Attributes Controlled by the Prep Tool
+
+   Many elements in the v3 vocabulary have new attributes whose role is
+   to hold values generated by the prep tool.  These attributes can
+   exist in documents that are input to the prep tool; however, any of
+   these attributes might be added, removed, or changed by the prep
+   tool.  Thus, it is explicitly unsafe for a document author to include
+   these attributes and expect that their values will survive processing
+   by the prep tool.
+
+   The attributes that are controlled by the prep tool are:
+
+   o  The "pn" attribute in any element
+
+   o  <artwork> originalSrc
+
+   o  <iref> irefid
+
+   o  <name> slugifiedName
+
+   o  <relref> derivedLink
+
+   o  <relref> derivedRemoteContent
+
+   o  <rfc> expiresDate
+
+   o  <rfc> scripts
+
+   o  <sourcecode> originalSrc
+
+   o  <xref> derivedContent
+
+   In addition, note that the contents of the <boilerplate> element is
+   controlled by the prep tool.
 
 Appendix C.  Relax NG Schema
 
