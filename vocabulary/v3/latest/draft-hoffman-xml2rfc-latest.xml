@@ -13,8 +13,6 @@
 
 <!--
 
-Change relref/@relative to not prepend "#" ?
-
 Make <eref> clearer that "not in References" is advisory, not part of the vocabulary
 
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
@@ -3312,7 +3310,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       <iref item="derivedLink attribute" subitem="in relref element"/>
       <t>
          This attribute is filled in by the prep tool.
-         This is the link that is derived from combining the URI from the reference, a "#" character, and the
+         This is the link that is derived from combining the URI from the reference and the
          relative part that is either a copy of the "relative" attribute or a section number derived from the
          "section" attribute.
       </t>
@@ -3463,7 +3461,8 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       <iref item="relative attribute" subitem="in relref element"/>
       <t>
          Specifies a relative reference from the URI in the target reference.
-         This value is given without the leading "#" character found in relative references.
+         This value must include whatever leading character is needed to create
+         the relative reference; typically, this is "#" for HTML documents.
       </t>
    </section>
 
