@@ -3,9 +3,9 @@
 
 Network Working Group                                         J. Reschke
 Internet-Draft                                                greenbytes
-Obsoletes: 2629 (if approved)                               May 20, 2015
+Obsoletes: 2629 (if approved)                               June 4, 2015
 Intended status: Informational
-Expires: November 21, 2015
+Expires: December 6, 2015
 
 
                    The 'XML2RFC' version 2 Vocabulary
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 21, 2015.
+   This Internet-Draft will expire on December 6, 2015.
 
 Copyright Notice
 
@@ -583,11 +583,15 @@ Table of Contents
    Represents an "external" link (as specified in the "target"
    attribute).
 
-   If the element has text content, that content will be used.
-   Otherwise, the value of the target attribute will be inserted in
-   angle brackets ([RFC3986], Appendix C).
+   If the element has no text content, the value of the target attribute
+   will be inserted in angle brackets ([RFC3986], Appendix C) and,
+   depending on the capabilities of the output format, hyperlinked.
 
-   [[oi-eref: Need to discuss what we can say for non-empty erefs]]
+   Otherwise, the text content will be used (and potentially
+   hyperlinked).  Depending on output format and formatter, additional
+   text might be inserted (such as a "URI" counter, and a "URIs" section
+   in the back of the document).  Avoid this variant when consistent
+   rendering across formats and formatters is desired.
 
    This element appears as a child element of: <annotation>
    (Section 2.3), <c> (Section 2.8), <postamble> (Section 2.28),
