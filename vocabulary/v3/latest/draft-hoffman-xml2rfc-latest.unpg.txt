@@ -663,7 +663,7 @@ Table of Contents
 2.5.6.  'originalSrc' attribute
 
    This attribute is filled in by the prep tool, and contains the
-   original value of the "src" attribute if that attribute is changed by
+   original value of the "src" attribute if that attribute is removed by
    the prep tool.  See Appendix B.3 for information about the control of
    this attribute.
 
@@ -681,12 +681,16 @@ Table of Contents
    of art with the "src" attribute depends on the capabilities of the
    processing tool reading the XML document.  Tools need to be able to
    handle the file: URI, and should be able to handle http: and https:
-   URIs as well.
+   URIs as well.  The prep tool will be able to handle reading the "src"
+   attribute.
 
    If no URI scheme is given in the attribute, the attribute is
    considered to be a local file name.  Processing tools must be careful
    to not accept dangerous values for the filename, particularly those
    that contain absolute references outside the current directory.
+
+   In some cases, the prep tool may remove the "src" attribute after
+   processing its value.  See [PREPTOOL] for a description of this.
 
    It is an error to have both a "src" attribute and content in the
    <artwork> element.
@@ -2832,7 +2836,7 @@ Table of Contents
 2.48.3.  'originalSrc' attribute
 
    This attribute is filled in by the prep tool with the original value
-   of the "src" attribute if that attribute is changed by the prep tool.
+   of the "src" attribute if that attribute is removed by the prep tool.
    See Appendix B.3 for information about the control of this attribute.
 
 2.48.4.  'pn' attribute
@@ -4163,7 +4167,11 @@ Table of Contents
 
    [NONASCII]       Flanagan, H., "The Use of Non-ASCII Characters in
                     RFCs", draft-flanagan-nonascii (work in progress),
-                    2014.
+                    2015.
+
+   [PREPTOOL]       Hoffman, P. and J. Hildebrand, "RFC v3 Prep Tool
+                    Description", draft-hoffman-rfcv3-preptool (work in
+                    progress), 2015.
 
    [RFC2026]        Bradner, S., "The Internet Standards Process --
                     Revision 3", BCP 9, RFC 2026, DOI 10.17487/RFC2026,
@@ -4490,7 +4498,9 @@ Appendix B.  The v3 Format and Processing Tools
    o  A "prep tool" that takes a v3 document, makes many checks, adds
       and changes many attribute values, and creates a file that is a
       "prepared document".  The prepared document is a valid v3
-      document.  The prep tool is expected to have many modes:
+      document.  The prep tool is described in [PREPTOOL].
+
+   o  The prep tool is expected to have many modes:
 
       *  RFC mode -- The mode used by the RFC Editor to process the
          input from one of the RFC streams, and to process XML produced

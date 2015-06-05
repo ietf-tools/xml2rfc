@@ -1280,7 +1280,7 @@ blockquote > * .bcp14 {
                <h3 id="rfc.section.2.5.6"><a href="#rfc.section.2.5.6">2.5.6</a>&nbsp;<a href="#element.artwork.attribute.originalSrc">'originalSrc' attribute</a></h3>
                <div id="rfc.section.2.5.6.p.1">
                   <p>This attribute is filled in by the prep tool, and contains the original value of the "src" attribute if that attribute is
-                     changed by the prep tool. See <a href="#prepatts" title="Attributes Controlled by the Prep Tool">Appendix&nbsp;B.3</a> for information about the control of this attribute.
+                     removed by the prep tool. See <a href="#prepatts" title="Attributes Controlled by the Prep Tool">Appendix&nbsp;B.3</a> for information about the control of this attribute.
                   </p>
                </div>
             </div>
@@ -1297,7 +1297,7 @@ blockquote > * .bcp14 {
                <div id="rfc.section.2.5.8.p.1">
                   <p>The URI reference of a graphics file (<a href="#RFC3986" id="rfc.xref.RFC3986.1"><cite title="Uniform Resource Identifier (URI): Generic Syntax">[RFC3986]</cite></a>), or the name of a file on the local disk. This can be a "data" URI (<a href="#RFC2397" id="rfc.xref.RFC2397.1"><cite title="The &#34;data&#34; URL scheme">[RFC2397]</cite></a>) that contains the contents of the graphics file. Note that the inclusion of art with the "src" attribute depends on the
                      capabilities of the processing tool reading the XML document. Tools need to be able to handle the file: URI, and should be
-                     able to handle http: and https: URIs as well.
+                     able to handle http: and https: URIs as well. The prep tool will be able to handle reading the "src" attribute.
                   </p>
                </div>
                <div id="rfc.section.2.5.8.p.2">
@@ -1307,6 +1307,10 @@ blockquote > * .bcp14 {
                   </p>
                </div>
                <div id="rfc.section.2.5.8.p.3">
+                  <p>In some cases, the prep tool may remove the "src" attribute after processing its value. See <a href="#PREPTOOL" id="rfc.xref.PREPTOOL.1"><cite title="RFC v3 Prep Tool Description">[PREPTOOL]</cite></a> for a description of this.
+                  </p>
+               </div>
+               <div id="rfc.section.2.5.8.p.4">
                   <p>It is an error to have both a "src" attribute and content in the &lt;artwork&gt; element.</p>
                </div>
             </div>
@@ -4293,7 +4297,7 @@ Using CDATA:
             <div id="element.sourcecode.attribute.originalSrc">
                <h3 id="rfc.section.2.48.3"><a href="#rfc.section.2.48.3">2.48.3</a>&nbsp;<a href="#element.sourcecode.attribute.originalSrc">'originalSrc' attribute</a></h3>
                <div id="rfc.section.2.48.3.p.1">
-                  <p>This attribute is filled in by the prep tool with the original value of the "src" attribute if that attribute is changed by
+                  <p>This attribute is filled in by the prep tool with the original value of the "src" attribute if that attribute is removed by
                      the prep tool. See <a href="#prepatts" title="Attributes Controlled by the Prep Tool">Appendix&nbsp;B.3</a> for information about the control of this attribute.
                   </p>
                </div>
@@ -6151,7 +6155,12 @@ Using CDATA:
          </tr>
          <tr>
             <td class="reference"><b id="NONASCII">[NONASCII]</b></td>
-            <td class="top">Flanagan, H., &#8220;<a href="https://tools.ietf.org/html/draft-flanagan-nonascii">The Use of Non-ASCII Characters in RFCs</a>&#8221;, Internet-Draft&nbsp;draft-flanagan-nonascii (work in progress), 2014.
+            <td class="top">Flanagan, H., &#8220;<a href="https://tools.ietf.org/html/draft-flanagan-nonascii">The Use of Non-ASCII Characters in RFCs</a>&#8221;, Internet-Draft&nbsp;draft-flanagan-nonascii (work in progress), 2015.
+            </td>
+         </tr>
+         <tr>
+            <td class="reference"><b id="PREPTOOL">[PREPTOOL]</b></td>
+            <td class="top">Hoffman, P. and J. Hildebrand, &#8220;<a href="https://tools.ietf.org/html/draft-hoffman-rfcv3-preptool">RFC v3 Prep Tool Description</a>&#8221;, Internet-Draft&nbsp;draft-hoffman-rfcv3-preptool (work in progress), 2015.
             </td>
          </tr>
          <tr>
@@ -6512,7 +6521,9 @@ Using CDATA:
             <p>The expected design of the tools that will be used with v3 documents includes: </p>
             <ul>
                <li>A "prep tool" that takes a v3 document, makes many checks, adds and changes many attribute values, and creates a file that
-                  is a "prepared document". The prepared document is a valid v3 document. The prep tool is expected to have many modes: 
+                  is a "prepared document". The prepared document is a valid v3 document. The prep tool is described in <a href="#PREPTOOL" id="rfc.xref.PREPTOOL.2"><cite title="RFC v3 Prep Tool Description">[PREPTOOL]</cite></a>.
+               </li>
+               <li>The prep tool is expected to have many modes: 
                   <ul>
                      <li>RFC mode -- The mode used by the RFC Editor to process the input from one of the RFC streams, and to process XML produced
                         during the RFC editing process. The restrictions on the canonical XML for RFCs, as well as how the non-canonical formats will
@@ -9230,6 +9241,7 @@ start = rfc
                         <li>in rfc element&nbsp;&nbsp;<a href="#rfc.section.2.45.10">2.45.10</a></li>
                      </ul>
                   </li>
+                  <li><em>PREPTOOL</em>&nbsp;&nbsp;<a href="#rfc.xref.PREPTOOL.1">2.5.8</a>, <a href="#PREPTOOL"><b>8.2</b></a>, <a href="#rfc.xref.PREPTOOL.2">B</a></li>
                   <li>primary attribute&nbsp;&nbsp;
                      <ul>
                         <li>in iref element&nbsp;&nbsp;<a href="#rfc.section.2.27.3">2.27.3</a></li>

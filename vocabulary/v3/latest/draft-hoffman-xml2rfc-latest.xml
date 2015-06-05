@@ -701,7 +701,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
       <iref item="originalSrc attribute" subitem="in artwork element"/>
       <t>
          This attribute is filled in by the prep tool, and contains the original value of the "src"
-         attribute if that attribute is changed by the prep tool.
+         attribute if that attribute is removed by the prep tool.
          See <xref target="prepatts"/> for information about the control of this attribute.
       </t>
    </section>
@@ -729,12 +729,16 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
          This can be a "data" URI (<xref target="RFC2397"/>) that contains the contents of the graphics file.
          Note that the inclusion of art with the "src" attribute depends on the capabilities of the processing tool
          reading the XML document. Tools need to be able to handle the file: URI, and should
-         be able to handle http: and https: URIs as well.
+         be able to handle http: and https: URIs as well. The prep tool will be able to handle reading the "src" attribute.
       </t>
       <t>
          If no URI scheme is given in the attribute, the attribute is considered to be a local file name.
          Processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
+      </t>
+      <t>
+         In some cases, the prep tool may remove the "src" attribute after processing its value.
+         See <xref target="PREPTOOL"/> for a description of this.
       </t>
       <t>
          It is an error to have both a "src" attribute and content in the &lt;artwork&gt; element.
@@ -4251,7 +4255,7 @@ Using CDATA:
       <iref item="originalSrc attribute" subitem="in sourcecode element"/>
       <t>
          This attribute is filled in by the prep tool with the original value of the "src"
-         attribute if that attribute is changed by the prep tool.
+         attribute if that attribute is removed by the prep tool.
          See <xref target="prepatts"/> for information about the control of this attribute.
       </t>
    </section>
@@ -6355,9 +6359,19 @@ not those that are part of a sequence of resources.</t>
     <front>
       <title>The Use of Non-ASCII Characters in RFCs</title>
       <author initials="H." surname="Flanagan" fullname="Heather Flanagan"/>
-      <date year="2014"/>
+      <date year="2015"/>
     </front>
     <seriesInfo name="Internet-Draft" value="draft-flanagan-nonascii"/>
+  </reference>
+
+  <reference anchor="PREPTOOL">
+    <front>
+      <title>RFC v3 Prep Tool Description</title>
+      <author initials="P." surname="Hoffman" fullname="Paul Hoffman"/>
+      <author initials="J." surname="Hildebrand" fullname="Joe Hildebrand"/>
+      <date year="2015"/>
+    </front>
+    <seriesInfo name="Internet-Draft" value="draft-hoffman-rfcv3-preptool"/>
   </reference>
 
   <reference anchor='RFC2026'>
@@ -6929,7 +6943,9 @@ have descriptions of how a processing tool might create output from the element.
 
 <t>A "prep tool" that takes a v3 document, makes many checks, adds and changes many attribute
 values, and creates a file that is a "prepared document". The prepared document is a valid v3
-document. The prep tool is expected to have many modes:
+document. The prep tool is described in <xref target="PREPTOOL"/>.</t>
+
+<t>The prep tool is expected to have many modes:
 
 <list>
 
