@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                               June 4, 2015
+Obsoletes: 2629 (if approved)                               June 9, 2015
 Intended status: Informational
-Expires: December 6, 2015
+Expires: December 11, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 6, 2015.
+   This Internet-Draft will expire on December 11, 2015.
 
 Copyright Notice
 
@@ -698,10 +698,7 @@ Table of Contents
 2.5.9.  'type' attribute
 
    Specifies the type of the artwork.  The value of this attribute is
-   free text with certain values designated as preferred.  If the prep
-   tool encounters a value for "type" that is not one of the preferred
-   values, it can issue a warning but should still use the artwork as if
-   it had no "type" attribute.
+   free text with certain values designated as preferred.
 
    The preferred values for <artwork> types are:
 
@@ -1392,8 +1389,9 @@ Table of Contents
 
 2.24.  <eref>
 
-   A link to URI that is not in the References section.  This is useful
-   for embedding URIs in the body of a document.
+   Represents an "external" link (as specified in the "target"
+   attribute).  This is useful for embedding URIs in the body of a
+   document.
 
    If the <eref> element has non-empty text content, formatters should
    use the content as the displayed text that is linked.  Otherwise the
@@ -1438,9 +1436,9 @@ Table of Contents
 
 2.24.1.  'target' attribute (mandatory)
 
-   URI of the link target.  This must begin with a scheme name (such as
-   "https://") and thus not be relative to the URL of the current
-   document.
+   URI of the link target (see Section 3 of [RFC3986]).  This must begin
+   with a scheme name (such as "https://") and thus not be relative to
+   the URL of the current document.
 
 2.25.  <figure>
 
@@ -2196,11 +2194,10 @@ Table of Contents
 
    When processing a <relref> element, the prep tool fills in the
    "derivedRemoteContent" attribute if there is no content in the
-   <relref> element; otherwise, it leaves that attribute undefined.  The
-   prep tool always fills in the "derivedLink" attribute.  If the
-   "derivedRemoteContent" attribute exists, a formatter should ignore
-   the content of the <relref> element when it creates its output; this
-   will only be the case for files not processed by the prep tool.
+   <relref> element; otherwise, it fills the "derivedRemoteContent"
+   attribute with the content and sets the "displayFormat" attribute to
+   "bare" if that attribute is not already set.  The prep tool always
+   fills in the "derivedLink" attribute.
 
    An example of the <relref> element with text content might be:
 
@@ -2855,10 +2852,7 @@ Table of Contents
 2.48.6.  'type' attribute
 
    Specifies the type of the sourcecode.  The value of this attribute is
-   free text with certain values designated as preferred.  If the prep
-   tool encounters a value for "type" that is not one of the preferred
-   values, it can issue a warning but should still use the sourcecode as
-   if it had no "type" attribute.
+   free text with certain values designated as preferred.
 
    The preferred values for <sourcecode> types are:
 
@@ -3586,10 +3580,7 @@ Table of Contents
 
    When processing an <xref> element, the prep tool fills in the
    "derivedContent" attribute if there is no content in the <xref>
-   element; otherwise, it leaves that attribute undefined.  If the
-   "derivedContent" attribute exists, a formatter should ignore the
-   content of the <xref> element when it creates its output; this will
-   only be the case for files not processed by the prep tool.
+   element; otherwise, it fills that attribute with the content.
 
    This element appears as a child element of: <annotation>
    (Section 2.3), <blockquote> (Section 2.10), <c> (Section 3.1), <cref>
@@ -3620,9 +3611,9 @@ Table of Contents
    "counter"
 
       The "derivedContent" attribute will contain just a counter.  This
-      is used for targets that are <section>, <figure>, or <table>.
-      Using "format='counter'" where the target is any other type of
-      element is an error.
+      is used for targets that are <section>, <figure>, <table>, or item
+      in an ordered list.  Using "format='counter'" where the target is
+      any other type of element is an error.
 
       For example, with an input of:
 
@@ -4152,8 +4143,8 @@ Table of Contents
 
    [BCP13]          Freed, N., Klensin, J., and T. Hansen, "Media Type
                     Specifications and Registration Procedures", BCP 13,
-                    RFC 6838, DOI 10.17487/RFC6838, January 2013,
-                    <http://www.rfc-editor.org/info/rfc6838>.
+                    RFC 6838, January 2013,
+                    <http://www.rfc-editor.org/info/bcp13>.
 
    [DOI]            Levine, J., "Assigning Digital Object Identifiers to
                     RFCs", draft-iab-doi (work in progress), 2014.

@@ -742,9 +742,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <t>
             Specifies the type of the artwork. The value of this attribute is free text with
             certain values designated as preferred.
-            If the prep tool encounters a value for "type" that is not one of the
-            preferred values, it can issue a warning but should still use the artwork as if it had no "type" attribute.
-         </t>
+      </t>
       <t>
             The preferred values for &lt;artwork&gt; types are:
             <list style="symbols">
@@ -1880,7 +1878,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <iref item="Elements" subitem="eref" primary="true"/>
    <iref item="eref element" primary="true"/>
    <t>
-      A link to URI that is not in the References section.
+      Represents an "external" link (as specified in the "target" attribute).
       This is useful for embedding URIs in the body of a document.
    </t>
    <t>
@@ -1938,7 +1936,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
       <iref item="eref element" subitem="target attribute"/>
       <iref item="target attribute" subitem="in eref element"/>
       <t>
-         URI of the link target. 
+         URI of the link target (see Section 3 of <xref target="RFC3986"/>).
          This must begin with a scheme name (such as "https://") and thus not be relative to the URL of the current document.
          </t>
    </section>
@@ -3179,11 +3177,9 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
    <t>
       When processing a &lt;relref&gt; element, the prep tool fills in the
       "derivedRemoteContent" attribute if there is no content in the &lt;relref&gt; element; otherwise, it
-      leaves that attribute undefined.
+      fills the "derivedRemoteContent" attribute with the content and sets the "displayFormat" attribute to "bare"
+      if that attribute is not already set.
       The prep tool always fills in the "derivedLink" attribute.
-      If the "derivedRemoteContent" attribute exists, a formatter should ignore the
-      content of the &lt;relref&gt; element when it creates its output; this will only be the case for files
-      not processed by the prep tool.
    </t>
    <t>
       An example of the &lt;relref&gt; element with text content might be:
@@ -4187,8 +4183,6 @@ Using CDATA:
       <t>
             Specifies the type of the sourcecode. The value of this attribute is free text with
             certain values designated as preferred.
-            If the prep tool encounters a value for "type" that is not one of the
-            preferred values, it can issue a warning but should still use the sourcecode as if it had no "type" attribute.
       </t>
       <t>
             The preferred values for &lt;sourcecode&gt; types are:
@@ -5327,10 +5321,7 @@ Using CDATA:
    <t>
       When processing an &lt;xref&gt; element, the prep tool fills in the
       "derivedContent" attribute if there is no content in the &lt;xref&gt; element; otherwise, it
-      leaves that attribute undefined.
-      If the "derivedContent" attribute exists, a formatter should ignore the
-      content of the &lt;xref&gt; element when it creates its output; this will only be the case for files
-      not processed by the prep tool.
+      fills that attribute with the content.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.cref" format="none">cref</xref>&gt; (<xref target="element.cref"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.name" format="none">name</xref>&gt; (<xref target="element.name"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.xref.contents"><!--AG-->
@@ -5367,7 +5358,7 @@ Using CDATA:
             <t>
             The "derivedContent" attribute will contain just a counter.
             This is used for targets that are
-            &lt;<xref target="element.section" format="none">section</xref>&gt;, &lt;<xref target="element.figure" format="none">figure</xref>&gt;, or &lt;<xref target="element.table" format="none">table</xref>&gt;.
+            &lt;<xref target="element.section" format="none">section</xref>&gt;, &lt;<xref target="element.figure" format="none">figure</xref>&gt;, &lt;<xref target="element.table" format="none">table</xref>&gt;, or item in an ordered list.
             Using "format='counter'" where the target is any other type of element is an error.
             </t>
             <t>
@@ -6163,13 +6154,13 @@ not those that are part of a sequence of resources.</t>
 
 <references title="Informative References">
 
-  <reference anchor="BCP13" target="http://www.rfc-editor.org/info/rfc6838"><front>
+  <reference anchor="BCP13" target="http://www.rfc-editor.org/info/bcp13"><front>
       <title>Media Type Specifications and Registration Procedures</title>
       <author initials="N." surname="Freed" fullname="Ned Freed"/>
       <author initials="J." surname="Klensin" fullname="John C. Klensin"/>
       <author initials="T." surname="Hansen" fullname="Tony Hansen"/>
       <date year="2013" month="January"/>
-    </front><seriesInfo name="BCP" value="13"/><seriesInfo name="RFC" value="6838"/><seriesInfo name="DOI" value="10.17487/RFC6838"/></reference>
+    </front><seriesInfo name="BCP" value="13"/><seriesInfo name="RFC" value="6838"/></reference>
 
   <reference anchor="DOI"><front>
       <title>Assigning Digital Object Identifiers to RFCs</title>
