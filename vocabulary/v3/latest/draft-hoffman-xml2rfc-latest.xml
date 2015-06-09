@@ -3274,11 +3274,9 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
    <t>
       When processing a &lt;relref&gt; element, the prep tool fills in the
       "derivedRemoteContent" attribute if there is no content in the &lt;relref&gt; element; otherwise, it
-      leaves that attribute undefined.
+      fills the "derivedRemoteContent" attribute with the content and sets the "displayFormat" attribute to "bare"
+      if that attribute is not already set.
       The prep tool always fills in the "derivedLink" attribute.
-      If the "derivedRemoteContent" attribute exists, a formatter should ignore the
-      content of the &lt;relref&gt; element when it creates its output; this will only be the case for files
-      not processed by the prep tool.
    </t>
    <t>
       An example of the &lt;relref&gt; element with text content might be:
@@ -5467,10 +5465,7 @@ Using CDATA:
    <t>
       When processing an &lt;xref&gt; element, the prep tool fills in the
       "derivedContent" attribute if there is no content in the &lt;xref&gt; element; otherwise, it
-      leaves that attribute undefined.
-      If the "derivedContent" attribute exists, a formatter should ignore the
-      content of the &lt;xref&gt; element when it creates its output; this will only be the case for files
-      not processed by the prep tool.
+      fills that attribute with the content.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.xref.contents"><!--AG-->
