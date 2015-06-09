@@ -1,0 +1,4076 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no" ?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc linkmailto="no" ?>
+<?rfc rfcedstyle="yes"?>
+<?rfc-ext allow-markup-in-artwork="yes" ?>
+<?rfc-ext include-references-in-index="yes" ?>
+<!--<?rfc-ext refresh-from="draft-xml2rfc-latest.xml"?>
+<?rfc-ext refresh-interval="5"?>-->
+
+<!DOCTYPE rfc [
+  <!ENTITY MAY "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>MAY</bcp14>">
+  <!ENTITY MUST "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>MUST</bcp14>">
+  <!ENTITY MUST-NOT "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>MUST NOT</bcp14>">
+  <!ENTITY OPTIONAL "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>OPTIONAL</bcp14>">
+  <!ENTITY RECOMMENDED "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>RECOMMENDED</bcp14>">
+  <!ENTITY REQUIRED "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>REQUIRED</bcp14>">
+  <!ENTITY SHALL "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>SHALL</bcp14>">
+  <!ENTITY SHALL-NOT "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>SHALL NOT</bcp14>">
+  <!ENTITY SHOULD "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>SHOULD</bcp14>">
+  <!ENTITY SHOULD-NOT "<bcp14 xmlns='http://purl.org/net/xml2rfc/ext'>SHOULD NOT</bcp14>">
+  <!ENTITY mdash "&#8212;">
+]>
+
+<rfc xmlns:x="http://purl.org/net/xml2rfc/ext" obsoletes="2629" xmlns:ed="http://greenbytes.de/2002/rfcedit" ipr="trust200902" docName="draft-iab-xml2rfcv2-latest" category="info" submissionType="IAB" xml:lang="en">
+  <x:feedback template="mailto:xml2rfc@ietf.org?subject={docname},%20%22{section}%22&amp;body=&lt;{ref}&gt;:"/>
+	<front>
+  <title>The 'XML2RFC' version 2 Vocabulary</title>
+  <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke">
+    <organization abbrev="greenbytes">greenbytes GmbH</organization>
+    <address>
+      <postal>
+        <street>Hafenweg 16</street>
+        <city>Muenster</city><region>NW</region><code>48155</code>
+        <country>Germany</country>
+      </postal>
+      <email>julian.reschke@greenbytes.de</email>	
+      <uri>http://greenbytes.de/tech/webdav/</uri>	
+    </address>
+  </author>
+
+  <date/>
+  
+  <abstract>
+    <t>
+      This document defines the 'XML2RFC' version 2 vocabulary; an XML-based
+      language used for writing RFCs and Internet-Drafts.
+    </t>
+    <t>
+      Version 2 represents the current state of the vocabulary (as implemented
+      by several tools and as used by the RFC Editor) around 2014.
+    </t>
+  </abstract>
+
+  <note title="Editorial Note (To be removed by RFC Editor)">
+    <t>
+      Discussion of this draft takes place on the XML2RFC
+      mailing list (xml2rfc@ietf.org), which has its home page at
+      <eref target="https://www.ietf.org/mailman/listinfo/xml2rfc"/>.
+    </t>
+  </note>
+
+  </front>
+
+  <middle>
+<section title="Introduction">
+<t>
+  This document describes version 2 ("v2") of the 'XML2RFC' vocabulary; an XML-based
+  language ('Extensible Markup Language', <xref target="XML"/>) used for writing RFCs
+  (<xref target="RFC7322"/>) and Internet-Drafts (<xref target="IDGUIDE"/>).
+</t>
+<t>
+  Version 2 represents the current state of the vocabulary (as implemented
+  by several tools and as used by the RFC Editor) around 2014.
+</t>
+<t>
+  It obsoletes the original version ("v1") <xref target="RFC2629"/>, which
+  contained the original language definition, and which was subsequently
+  extended. Many of the changes leading to version 2 have been described in
+  "Writing I-Ds and RFCs using XML (revised)" (<xref target="V1rev"/>), but
+  that document has not been updated since 2008.
+</t>
+<t>
+  Processing Instructions (<xref target="XML" sectionFormat="of" section="2.6" relative="#sec-pi"/>)
+  generally are specific to a given processor, and thus are not considered to
+  be part of the vocabulary. See <xref target="TCLReadme" sectionFormat="of" section="4.1" relative="#processing.instructions"/>
+  for a list of the processing instructions supported by the first implementation
+  of an xml2rfc processor.
+</t>
+<t>
+  Note that the vocabulary contains certain constructs that might not be
+  used when generating the final text; however, they can provide useful
+  data for other uses (such index generation, populating a keyword database, or
+  syntax checks).
+</t>
+
+<section title="Syntax Notation" anchor="syntax.notation">
+<t>
+  The XML vocabulary here is defined in prose, based on the Relax NG schema 
+  (<xref target="RNC"/>) contained in <xref target="schema"/> (specified in
+  Relax NG Compact Notation, "RNC").
+</t>
+<t>  
+  Note that the schema can be used for automated validity
+  checks, but certain constraints are only described in prose (example:
+  the conditionally required presence of the "abbrev" attribute).
+</t>
+</section>
+
+</section>
+
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" title="Elements" anchor="elements">
+<t>
+  The sections below describe all elements and their attributes.
+</t>
+<t>  
+  Note that attributes not labeled "mandatory" are optional.
+</t>
+<t>
+  Except inside &lt;<x:ref>artwork</x:ref>&gt;, horizontal
+  whitespace and linebreaks are collapsed into a single whitespace, and leading and trailing
+  whitespace are trimmed off.
+</t>
+<?BEGININC xml2rfcv2-spec.xml ?>
+<!--THIS IS AN AUTOGENERATED FILE. DO NOT EDIT!-->
+
+
+<!--abstract--><section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.abstract">
+   <name>
+      <tt>&lt;abstract&gt;</tt>
+   </name>
+   <x:anchor-alias value="abstract"/>
+   <iref item="Elements" subitem="abstract" primary="true"/>
+   <iref item="abstract element" primary="true"/>
+   <t>
+     Contains the abstract of the document. The abstract ought to be self-contained
+     and thus should not contain references or unexpanded abbreviations.
+     See <xref target="RFC7322" sectionFormat="of" section="4.3"/> for more information.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t anchor="element.abstract.contents"><!--AG-->
+      <xref format="none" target="grammar.abstract">Content model</xref>:
+    </t>
+        
+   <t><!--AG-->
+      <iref item="Elements" subitem="t"/>
+      <iref item="t element" subitem="inside abstract"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
+      
+</section>
+
+<!--address-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.address">
+   <name>
+      <tt>&lt;address&gt;</tt>
+   </name>
+   <x:anchor-alias value="address"/>
+   <iref item="Elements" subitem="address" primary="true"/>
+   <iref item="address element" primary="true"/>
+   <t>
+     Provides address information for the author.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>author</x:ref>&gt; (<xref target="element.author"/>).</t>
+   <t anchor="element.address.contents"><!--AG-->
+      <xref format="none" target="grammar.address">Content model</xref>:</t>
+   <t><!--AG-->In this order:</t>
+   <ol><!--AG-->
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="postal"/>
+         <iref item="postal element" subitem="inside address"/>One optional &lt;<x:ref>postal</x:ref>&gt; element (<xref target="element.postal"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="phone"/>
+         <iref item="phone element" subitem="inside address"/>One optional &lt;<x:ref>phone</x:ref>&gt; element (<xref target="element.phone"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="facsimile"/>
+         <iref item="facsimile element" subitem="inside address"/>One optional &lt;<x:ref>facsimile</x:ref>&gt; element (<xref target="element.facsimile"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="email"/>
+         <iref item="email element" subitem="inside address"/>One optional &lt;<x:ref>email</x:ref>&gt; element (<xref target="element.email"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="uri"/>
+         <iref item="uri element" subitem="inside address"/>One optional &lt;<x:ref>uri</x:ref>&gt; element (<xref target="element.uri"/>)</li>
+      
+   </ol>
+</section>
+
+<!--annotation-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.annotation">
+   <name>
+      <tt>&lt;annotation&gt;</tt>
+   </name>
+   <x:anchor-alias value="annotation"/>
+   <iref item="Elements" subitem="annotation" primary="true"/>
+   <iref item="annotation element" primary="true"/>
+   <t>
+      Provides additional prose augmenting a bibliographical reference.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
+   <t anchor="element.annotation.contents"><!--AG-->
+      <xref format="none" target="grammar.annotation">Content model</xref>:
+    </t>
+   <t><!--AG-->In any order:</t>
+   <ul><!--AG-->
+      <li><!--AG-->Text</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="xref"/>
+         <iref item="xref element" subitem="inside annotation"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="eref"/>
+         <iref item="eref element" subitem="inside annotation"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="iref"/>
+         <iref item="iref element" subitem="inside annotation"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="cref"/>
+         <iref item="cref element" subitem="inside annotation"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="spanx"/>
+         <iref item="spanx element" subitem="inside annotation"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</li>
+   </ul>
+</section>
+
+<!--area-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.area">
+   <name>
+      <tt>&lt;area&gt;</tt>
+   </name>
+   <x:anchor-alias value="area"/>
+   <iref item="Elements" subitem="area" primary="true"/>
+   <iref item="area element" primary="true"/>
+   <t>
+      Provides information about the IETF area to which this document relates
+      (currently not used when generating documents).
+   </t>
+   <t>
+      The value ought to be either the full name or the abbreviation of one of
+      the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
+      The list at the time that this document is being published is:
+      "Applications", "app", "General", "gen", "Internet", "int", "Operations
+      and Management", "ops", "Real-time Applications and Infrastructure", "rai",
+      "Routing", "rtg", "Security", "sec", "Transport", "tsv".
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t anchor="element.area.contents"><!--AG-->
+      <xref format="none" target="grammar.area">Content model</xref>: only text content.</t>
+</section>
+
+<!--artwork-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.artwork">
+   <name>
+      <tt>&lt;artwork&gt;</tt>
+   </name>
+   <x:anchor-alias value="artwork"/>
+   <iref item="Elements" subitem="artwork" primary="true"/>
+   <iref item="artwork element" primary="true"/>
+   <t>
+      This element allows the inclusion of "artwork" into the document.
+   </t>
+   <t>
+      &lt;artwork&gt; is the only element in the vocabulary that provides
+      full control of horizontal whitespace and line breaks, and thus is
+      used for a variety of things, such as:
+   </t>
+   <ul>
+      <li>diagrams ("line art"),</li>
+      <li>source code,</li>
+      <li>formal languages (such as ABNF or the RNC notation used in this document),</li>
+      <li>message flow diagrams,</li>
+      <li>complex tables, or</li>
+      <li>protocol unit diagrams.</li>
+   </ul>
+   <t>
+      Note that processors differ in the handling of horizontal TAB characters
+      (some expand them, some treat them as single space) and thus these ought
+      to be avoided. 
+   </t>
+   <t>
+      Alternatively, the "src" attribute allows referencing an external graphics
+      file, such as a bitmap or a vector drawing, using a URI ("Uniform Resource Identifier", <xref target="RFC3986"/>).
+      In this case, the textual
+      content acts as fallback for output formats that do not support graphics,
+      and thus ought to contain either a "line art" variant of the graphics, or
+      otherwise prose that describes the included image in sufficient detail.
+      Note that RFCs occasionally are published with enhanced diagrams;
+      a recent example is <xref target="RFC5598"/>.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>).</t>
+   <t anchor="element.artwork.contents"><!--AG-->
+      <xref format="none" target="grammar.artwork">Content model</xref>:
+    </t>
+        
+   <t><!--AG-->Text</t>
+      
+
+   <!--artwork/@align-->
+   <section anchor="element.artwork.attribute.align" toc="exclude">
+      <name>'align' attribute</name>
+      <iref item="Attributes" subitem="align"/>
+      <iref item="artwork element" subitem="align attribute"/>
+      <iref item="align attribute" subitem="in artwork element"/>
+      <t>
+            Controls whether the artwork appears left justified (default), centered,
+            or right justified.
+         </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"left" (default)</li>
+         <li>"center"</li>
+         <li>"right"</li>
+      </ul>
+   </section>
+
+   <!--artwork/@alt-->
+   <section anchor="element.artwork.attribute.alt" toc="exclude">
+      <name>'alt' attribute</name>
+      <iref item="Attributes" subitem="alt"/>
+      <iref item="artwork element" subitem="alt attribute"/>
+      <iref item="alt attribute" subitem="in artwork element"/>
+      <t>
+            Alternative text description of the artwork (not just the caption).
+         </t>
+   </section>
+
+   <!--artwork/@height-->
+   <section anchor="element.artwork.attribute.height" toc="exclude">
+      <name>'height' attribute</name>
+      <iref item="Attributes" subitem="height"/>
+      <iref item="artwork element" subitem="height attribute"/>
+      <iref item="height attribute" subitem="in artwork element"/>
+      <t>
+            The suggested height of the graphics included using the "src" attribute.
+         </t>
+      <t>
+            This attribute is format-dependent and ought to be avoided.
+         </t>
+      <t>
+            When generating HTML output, current implementations copy the attribute "as is".
+            For other output formats it is usually ignored.
+         </t>
+   </section>
+
+   <!--artwork/@name-->
+   <section anchor="element.artwork.attribute.name" toc="exclude">
+      <name>'name' attribute</name>
+      <iref item="Attributes" subitem="name"/>
+      <iref item="artwork element" subitem="name attribute"/>
+      <iref item="name attribute" subitem="in artwork element"/>
+      <t>
+            A filename suitable for the contents (such as for extraction to a local file).
+         </t>
+      <t>
+            This attribute generally isn't used for document generation, but it can
+            be helpful for other kinds of tools (such as automated syntax checkers
+            which work by extracting the source code).
+         </t>
+   </section>
+
+   <!--artwork/@src-->
+   <section anchor="element.artwork.attribute.src" toc="exclude">
+      <name>'src' attribute</name>
+      <iref item="Attributes" subitem="src"/>
+      <iref item="artwork element" subitem="src attribute"/>
+      <iref item="src attribute" subitem="in artwork element"/>
+      <t>
+            The URI reference of a graphics file (<xref target="RFC3986" sectionFormat="comma" section="4.1"/>).
+         </t>
+      <t>
+            Note that this can be a "data" URI (<xref target="RFC2397"/>) as well; in which case the graphics
+            file is wholly part of the XML file.
+         </t>
+   </section>
+
+   <!--artwork/@type-->
+   <section anchor="element.artwork.attribute.type" toc="exclude">
+      <name>'type' attribute</name>
+      <iref item="Attributes" subitem="type"/>
+      <iref item="artwork element" subitem="type attribute"/>
+      <iref item="type attribute" subitem="in artwork element"/>
+      <t>
+            Specifies the type of the artwork.
+         </t>
+      <t>
+            The value either is an Internet Media Type (see <xref target="RFC2046"/>)
+            or a keyword (such as "abnf"). The set of recognized keywords varies
+            across implementations.
+         </t>
+      <t>
+            How it is used depends on context and application. For instance, a formatter
+            can attempt to syntax-highlight code in certain known languages.
+         </t>
+   </section>
+
+   <!--artwork/@width-->
+   <section anchor="element.artwork.attribute.width" toc="exclude">
+      <name>'width' attribute</name>
+      <iref item="Attributes" subitem="width"/>
+      <iref item="artwork element" subitem="width attribute"/>
+      <iref item="width attribute" subitem="in artwork element"/>
+      <t>
+            The suggested width of the graphics included using the "src" attribute.
+         </t>
+      <t>
+            This attribute is format-dependent and ought to be avoided.
+         </t>
+      <t>
+            When generating HTML output, current implementations copy the attribute "as is".
+            For other output formats it is usually ignored.
+         </t>
+   </section>
+
+   <!--artwork/@xml:space-->
+   <section anchor="element.artwork.attribute.xml-space" toc="exclude">
+      <name>'xml:space' attribute</name>
+      <iref item="Attributes" subitem="xml:space"/>
+      <iref item="artwork element" subitem="xml:space attribute"/>
+      <iref item="xml:space attribute" subitem="in artwork element"/>
+      <t>
+            Determines whitespace handling.
+         </t>
+      <t>
+            "preserve" is both the default value and the only meaningful
+            setting anyway (because that's what the &lt;artwork&gt; element is for).
+         </t>
+      <t>
+            See also <xref target="XML" sectionFormat="of" section="2.10" relative="#sec-white-space"/>.
+         </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"default"</li>
+         <li>"preserve" (default)</li>
+      </ul>
+   </section>
+</section>
+
+<!--author-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.author">
+   <name>
+      <tt>&lt;author&gt;</tt>
+   </name>
+   <x:anchor-alias value="author"/>
+   <iref item="Elements" subitem="author" primary="true"/>
+   <iref item="author element" primary="true"/>
+   <t>
+      Provides information about a document's author. This is used both for
+      the document itself (at the beginning of the document) and for
+      referenced documents (inside of &lt;<x:ref>reference</x:ref>&gt;).
+   </t>
+   <t>
+      The &lt;author&gt; elements contained within the document's &lt;front&gt; element
+      are used to fill the boilerplate, and also to generate the "Author's Address"
+      section (see <xref target="RFC7322" sectionFormat="of" section="4.12"/>).
+   </t>
+   <t>
+      Note that an "author" can also be just an organization (by not specifying any
+      of the name attributes, but adding the &lt;<x:ref>organization</x:ref>&gt;
+      child element).
+   </t>
+   <t>
+      Furthermore, the "role" attribute can be used to mark an author as
+      "editor". This is reflected both on the front page and in bibliographical
+      references. Note that this specification does not define a precise
+      meaning for the term "editor".
+   </t>
+   <t>
+      See Section "Authors vs. Contributors" of <xref target="RFCPOLICY"/>
+      for more information.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t anchor="element.author.contents"><!--AG-->
+      <xref format="none" target="grammar.author">Content model</xref>:</t>
+   <t><!--AG-->In this order:</t>
+   <ol><!--AG-->
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="organization"/>
+         <iref item="organization element" subitem="inside author"/>One optional &lt;<x:ref>organization</x:ref>&gt; element (<xref target="element.organization"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="address"/>
+         <iref item="address element" subitem="inside author"/>One optional &lt;<x:ref>address</x:ref>&gt; element (<xref target="element.address"/>)</li>
+      
+   </ol>
+
+   <!--author/@fullname-->
+   <section anchor="element.author.attribute.fullname" toc="exclude">
+      <name>'fullname' attribute</name>
+      <iref item="Attributes" subitem="fullname"/>
+      <iref item="author element" subitem="fullname attribute"/>
+      <iref item="fullname attribute" subitem="in author element"/>
+      <t>
+            The full name (used in the automatically generated "Author's Address" section).
+         </t>
+   </section>
+
+   <!--author/@initials-->
+   <section anchor="element.author.attribute.initials" toc="exclude">
+      <name>'initials' attribute</name>
+      <iref item="Attributes" subitem="initials"/>
+      <iref item="author element" subitem="initials attribute"/>
+      <iref item="initials attribute" subitem="in author element"/>
+      <t>
+            Author initials (used on the front page and in references).
+         </t>
+      <t>
+            Initials should be provided as a whitespace separated list of
+            pairs of a letter and a dot.
+         </t>
+   </section>
+
+   <!--author/@role-->
+   <section anchor="element.author.attribute.role" toc="exclude">
+      <name>'role' attribute</name>
+      <iref item="Attributes" subitem="role"/>
+      <iref item="author element" subitem="role attribute"/>
+      <iref item="role attribute" subitem="in author element"/>
+      <t>
+            Specifies the role the author had in creating the document.
+         </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"editor"</li>
+      </ul>
+   </section>
+
+   <!--author/@surname-->
+   <section anchor="element.author.attribute.surname" toc="exclude">
+      <name>'surname' attribute</name>
+      <iref item="Attributes" subitem="surname"/>
+      <iref item="author element" subitem="surname attribute"/>
+      <iref item="surname attribute" subitem="in author element"/>
+      <t>
+            The author's surname (used on the front page and in references).
+         </t>
+   </section>
+</section>
+
+<!--back-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.back">
+   <name>
+      <tt>&lt;back&gt;</tt>
+   </name>
+   <x:anchor-alias value="back"/>
+   <iref item="Elements" subitem="back" primary="true"/>
+   <iref item="back element" primary="true"/>
+   <t>
+      Contains the "back" part of the document: the references and appendices. In &lt;back&gt;,
+      &lt;<x:ref>section</x:ref>&gt; elements indicate appendices.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
+   <t anchor="element.back.contents"><!--AG-->
+      <xref format="none" target="grammar.back">Content model</xref>:</t>
+   <t><!--AG-->In this order:</t>
+   <ol><!--AG-->
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="references"/>
+         <iref item="references element" subitem="inside back"/>Optional &lt;<x:ref>references</x:ref>&gt; elements (<xref target="element.references"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="section"/>
+         <iref item="section element" subitem="inside back"/>Optional &lt;<x:ref>section</x:ref>&gt; elements (<xref target="element.section"/>)</li>
+      
+   </ol>
+</section>
+
+<!--c-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.c">
+   <name>
+      <tt>&lt;c&gt;</tt>
+   </name>
+   <x:anchor-alias value="c"/>
+   <iref item="Elements" subitem="c" primary="true"/>
+   <iref item="c element" primary="true"/>
+   <t>
+      Provides the content of a cell in a table.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
+   <t anchor="element.c.contents"><!--AG-->
+      <xref format="none" target="grammar.c">Content model</xref>:
+    </t>
+   <t><!--AG-->In any order:</t>
+   <ul><!--AG-->
+      <li><!--AG-->Text</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="xref"/>
+         <iref item="xref element" subitem="inside c"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="eref"/>
+         <iref item="eref element" subitem="inside c"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="iref"/>
+         <iref item="iref element" subitem="inside c"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="cref"/>
+         <iref item="cref element" subitem="inside c"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="spanx"/>
+         <iref item="spanx element" subitem="inside c"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</li>
+   </ul>
+</section>
+
+<!--city-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.city">
+   <name>
+      <tt>&lt;city&gt;</tt>
+   </name>
+   <x:anchor-alias value="city"/>
+   <iref item="Elements" subitem="city" primary="true"/>
+   <iref item="city element" primary="true"/>
+   <t>
+      Gives the city name in a postal address.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
+   <t anchor="element.city.contents"><!--AG-->
+      <xref format="none" target="grammar.city">Content model</xref>: only text content.</t>
+</section>
+
+<!--code-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.code">
+   <name>
+      <tt>&lt;code&gt;</tt>
+   </name>
+   <x:anchor-alias value="code"/>
+   <iref item="Elements" subitem="code" primary="true"/>
+   <iref item="code element" primary="true"/>
+   <t>
+      Gives the postal region code.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
+   <t anchor="element.code.contents"><!--AG-->
+      <xref format="none" target="grammar.code">Content model</xref>: only text content.</t>
+</section>
+
+<!--country-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.country">
+   <name>
+      <tt>&lt;country&gt;</tt>
+   </name>
+   <x:anchor-alias value="country"/>
+   <iref item="Elements" subitem="country" primary="true"/>
+   <iref item="country element" primary="true"/>
+   <t>
+      Gives the country in a postal address.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
+   <t anchor="element.country.contents"><!--AG-->
+      <xref format="none" target="grammar.country">Content model</xref>: only text content.</t>
+</section>
+
+<!--cref-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.cref">
+   <name>
+      <tt>&lt;cref&gt;</tt>
+   </name>
+   <x:anchor-alias value="cref"/>
+   <iref item="Elements" subitem="cref" primary="true"/>
+   <iref item="cref element" primary="true"/>
+   <t>
+      Represents a comment.
+   </t>
+   <t>
+      Comments can be used in a document while it is work-in-progress. They
+      usually appear either inline and visually highlighted, at the end of the document
+      (depending on file format and settings of the formatter), or not at
+      all (when generating an RFC).
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t anchor="element.cref.contents"><!--AG-->
+      <xref format="none" target="grammar.cref">Content model</xref>: only text content.</t>
+
+   <!--cref/@anchor-->
+   <section anchor="element.cref.attribute.anchor" toc="exclude">
+      <name>'anchor' attribute</name>
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="cref element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in cref element"/>
+      <t>
+        Document-wide unique identifier for this comment. The processor
+        will auto-generate an identifier when none is given.
+      </t>
+      <t>
+        The value needs to be a valid XML "Name" (<xref target="XML" sectionFormat="of" section="2.3" relative="#sec-common-syn"/>),
+        additionally constrained to US-ASCII characters (<xref target="USASCII"/>).
+      </t>
+   </section>
+
+   <!--cref/@source-->
+   <section anchor="element.cref.attribute.source" toc="exclude">
+      <name>'source' attribute</name>
+      <iref item="Attributes" subitem="source"/>
+      <iref item="cref element" subitem="source attribute"/>
+      <iref item="source attribute" subitem="in cref element"/>
+      <t>
+            Holds the "source" of a comment, such as the name or the initials
+            of the person who made the comment.
+         </t>
+   </section>
+</section>
+
+<!--date-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.date">
+   <name>
+      <tt>&lt;date&gt;</tt>
+   </name>
+   <x:anchor-alias value="date"/>
+   <iref item="Elements" subitem="date" primary="true"/>
+   <iref item="date element" primary="true"/>
+   <t>
+      Provides information about the publication date.
+   </t>
+   <t>
+      Note that this element is used both for the boilerplate of the document
+      being produced, and also inside bibliographic references.
+   </t>
+   <t>
+      In the boilerplate case, it defines the publication date, which, when producing
+      Internet-Drafts, will be used for computing the expiration date (see <xref target="IDGUIDE" sectionFormat="of" section="8" relative="#expiry"/>).
+      When one or more of "year", "month", or "day" are left out, the processor
+      will attempt to use the current system date if the attributes that are
+      present are consistent with that date. 
+   </t>
+   <t>
+      Note that in this case, month names need to match the full (English) month name 
+      ("January", "February", "March", "April", "May, "June", "July", "August",
+      "September", "October", "November", or "December") in order for expiration
+      calculations to work (some implementations might support additional
+      formats, though).
+   </t>
+   <t>
+      In the case of bibliographic references, the date information can have prose text for the month or year.
+      For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
+      non-specific months (month="Second quarter") and so on, are allowed.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t anchor="element.date.contents"><!--AG-->
+      <xref format="none" target="grammar.date">Content model</xref>: this element does not have any contents.</t>
+
+   <!--date/@day-->
+   <section anchor="element.date.attribute.day" toc="exclude">
+      <name>'day' attribute</name>
+      <iref item="Attributes" subitem="day"/>
+      <iref item="date element" subitem="day attribute"/>
+      <iref item="day attribute" subitem="in date element"/>
+      <t>
+            In the "boilerplate" case: the day of publication; this is a number.
+            Otherwise: an indication of the publication day, with the format
+            not being restricted.
+         </t>
+   </section>
+
+   <!--date/@month-->
+   <section anchor="element.date.attribute.month" toc="exclude">
+      <name>'month' attribute</name>
+      <iref item="Attributes" subitem="month"/>
+      <iref item="date element" subitem="month attribute"/>
+      <iref item="month attribute" subitem="in date element"/>
+      <t>
+            In the "boilerplate" case: the month of publication; this is the English name of the month.
+            Otherwise: an indication of the publication month, with the format
+            not being restricted.
+         </t>
+   </section>
+
+   <!--date/@year-->
+   <section anchor="element.date.attribute.year" toc="exclude">
+      <name>'year' attribute</name>
+      <iref item="Attributes" subitem="year"/>
+      <iref item="date element" subitem="year attribute"/>
+      <iref item="year attribute" subitem="in date element"/>
+      <t>
+            In the "boilerplate" case: the year of publication; this is a number (usually four-digit).
+            Otherwise: an indication of the publication year, with the format
+            not being restricted.
+         </t>
+   </section>
+</section>
+
+<!--email-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.email">
+   <name>
+      <tt>&lt;email&gt;</tt>
+   </name>
+   <x:anchor-alias value="email"/>
+   <iref item="Elements" subitem="email" primary="true"/>
+   <iref item="email element" primary="true"/>
+   <t>
+      Provides an email address.
+   </t>
+   <t>
+      The value is expected to be the scheme-specific part of a "mailto" URI
+      (so does not include the prefix "mailto:"). See <xref target="RFC6068" sectionFormat="of" section="2"/> 
+      for details.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
+   <t anchor="element.email.contents"><!--AG-->
+      <xref format="none" target="grammar.email">Content model</xref>: only text content.</t>
+</section>
+
+<!--eref-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.eref">
+   <name>
+      <tt>&lt;eref&gt;</tt>
+   </name>
+   <x:anchor-alias value="eref"/>
+   <iref item="Elements" subitem="eref" primary="true"/>
+   <iref item="eref element" primary="true"/>
+   <t>
+      Represents an "external" link (as specified in the "target" attribute).
+   </t>
+   <t>
+      If the element has no text content, the value of the
+      target attribute will be inserted in angle brackets
+      (as described in <xref target="RFC3986" sectionFormat="comma" section="C"/>) and,
+      depending on the capabilities of the output format, hyperlinked.
+   </t>
+   <t>
+      Otherwise, the text content will be used (and potentially hyperlinked).
+      Depending on output format and formatter, additional text might be inserted
+      (such as a "URI" counter, and a "URIs" section in the back of the document).
+      Avoid this variant when consistent rendering across formats and formatters 
+      is desired.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t anchor="element.eref.contents"><!--AG-->
+      <xref format="none" target="grammar.eref">Content model</xref>: only text content.</t>
+
+   <!--eref/@target-->
+   <section anchor="element.eref.attribute.target" toc="exclude">
+      <name>'target' attribute <em>(mandatory)</em>
+      </name>
+      <iref item="Attributes" subitem="target"/>
+      <iref item="eref element" subitem="target attribute"/>
+      <iref item="target attribute" subitem="in eref element"/>
+      <t>
+            URI of the link target (see <xref target="RFC3986" sectionFormat="of" section="3"/>). 
+         </t>
+   </section>
+</section>
+
+<!--facsimile-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.facsimile">
+   <name>
+      <tt>&lt;facsimile&gt;</tt>
+   </name>
+   <x:anchor-alias value="facsimile"/>
+   <iref item="Elements" subitem="facsimile" primary="true"/>
+   <iref item="facsimile element" primary="true"/>
+   <t>
+      Represents the phone number of a fax machine.
+   </t>
+   <t>
+      The value is expected to be the scheme-specific part of a "tel" URI
+      (so does not include the prefix "tel:"), using the "global numbers"
+      syntax. See <xref target="RFC3966" sectionFormat="of" section="3"/> 
+      for details.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
+   <t anchor="element.facsimile.contents"><!--AG-->
+      <xref format="none" target="grammar.facsimile">Content model</xref>: only text content.</t>
+</section>
+
+<!--figure-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.figure">
+   <name>
+      <tt>&lt;figure&gt;</tt>
+   </name>
+   <x:anchor-alias value="figure"/>
+   <iref item="Elements" subitem="figure" primary="true"/>
+   <iref item="figure element" primary="true"/>
+   <t>
+      This element is used to represent a figure, consisting of an optional preamble,
+      the actual figure, an optional postamble, and an optional title.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t anchor="element.figure.contents"><!--AG-->
+      <xref format="none" target="grammar.figure">Content model</xref>:</t>
+   <t><!--AG-->In this order:</t>
+   <ol><!--AG-->
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="iref"/>
+         <iref item="iref element" subitem="inside figure"/>Optional &lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="preamble"/>
+         <iref item="preamble element" subitem="inside figure"/>One optional &lt;<x:ref>preamble</x:ref>&gt; element (<xref target="element.preamble"/>)</li>
+      
+      <li><!--AG-->
+         <iref item="Elements" subitem="artwork"/>
+         <iref item="artwork element" subitem="inside figure"/>One &lt;<x:ref>artwork</x:ref>&gt; element (<xref target="element.artwork"/>)</li>
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="postamble"/>
+         <iref item="postamble element" subitem="inside figure"/>One optional &lt;<x:ref>postamble</x:ref>&gt; element (<xref target="element.postamble"/>)</li>
+      
+   </ol>
+
+   <!--figure/@align-->
+   <section anchor="element.figure.attribute.align" toc="exclude">
+      <name>'align' attribute</name>
+      <iref item="Attributes" subitem="align"/>
+      <iref item="figure element" subitem="align attribute"/>
+      <iref item="align attribute" subitem="in figure element"/>
+      <t>
+          Used to change the alignment of &lt;<x:ref>preamble</x:ref>&gt;
+          and &lt;<x:ref>postamble</x:ref>&gt;.
+      </t>
+      <t> 
+          Note: does not affect title or &lt;<x:ref>artwork</x:ref>&gt; alignment.
+      </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"left" (default)</li>
+         <li>"center"</li>
+         <li>"right"</li>
+      </ul>
+   </section>
+
+   <!--figure/@alt-->
+   <section anchor="element.figure.attribute.alt" toc="exclude">
+      <name>'alt' attribute</name>
+      <iref item="Attributes" subitem="alt"/>
+      <iref item="figure element" subitem="alt attribute"/>
+      <iref item="alt attribute" subitem="in figure element"/>
+      <t>
+            Duplicates functionality available on &lt;artwork&gt;; avoid it.
+         </t>
+   </section>
+
+   <!--figure/@anchor-->
+   <section anchor="element.figure.attribute.anchor" toc="exclude">
+      <name>'anchor' attribute</name>
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="figure element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in figure element"/>
+      <t>
+        Document-wide unique identifier for this figure.
+      </t>
+      <t>
+        Furthermore, the presence of this attribute causes the figure to be numbered.
+      </t>
+      <t>
+        The value needs to be a valid XML "Name" (<xref target="XML" sectionFormat="of" section="2.3" relative="#sec-common-syn"/>).
+      </t>
+   </section>
+
+   <!--figure/@height-->
+   <section anchor="element.figure.attribute.height" toc="exclude">
+      <name>'height' attribute</name>
+      <iref item="Attributes" subitem="height"/>
+      <iref item="figure element" subitem="height attribute"/>
+      <iref item="height attribute" subitem="in figure element"/>
+      <t>
+            Duplicates functionality available on &lt;artwork&gt;; avoid it.
+         </t>
+   </section>
+
+   <!--figure/@src-->
+   <section anchor="element.figure.attribute.src" toc="exclude">
+      <name>'src' attribute</name>
+      <iref item="Attributes" subitem="src"/>
+      <iref item="figure element" subitem="src attribute"/>
+      <iref item="src attribute" subitem="in figure element"/>
+      <t>
+            Duplicates functionality available on &lt;artwork&gt;; avoid it.
+         </t>
+   </section>
+
+   <!--figure/@suppress-title-->
+   <section anchor="element.figure.attribute.suppress-title" toc="exclude">
+      <name>'suppress-title' attribute</name>
+      <iref item="Attributes" subitem="suppress-title"/>
+      <iref item="figure element" subitem="suppress-title attribute"/>
+      <iref item="suppress-title attribute" subitem="in figure element"/>
+      <t>
+            Figures that have an "anchor" attribute will automatically get
+            an autogenerated title (such as "Figure 1"), even if the "title"
+            attribute is absent. Setting this attribute to "true" will prevent this.
+         </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"true"</li>
+         <li>"false" (default)</li>
+      </ul>
+   </section>
+
+   <!--figure/@title-->
+   <section anchor="element.figure.attribute.title" toc="exclude">
+      <name>'title' attribute</name>
+      <iref item="Attributes" subitem="title"/>
+      <iref item="figure element" subitem="title attribute"/>
+      <iref item="title attribute" subitem="in figure element"/>
+      <t>
+          The title for the figure; this usually appears on a line after the figure.
+      </t>
+   </section>
+
+   <!--figure/@width-->
+   <section anchor="element.figure.attribute.width" toc="exclude">
+      <name>'width' attribute</name>
+      <iref item="Attributes" subitem="width"/>
+      <iref item="figure element" subitem="width attribute"/>
+      <iref item="width attribute" subitem="in figure element"/>
+      <t>
+            Duplicates functionality available on &lt;artwork&gt;; avoid it.
+         </t>
+   </section>
+</section>
+
+<!--format-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.format">
+   <name>
+      <tt>&lt;format&gt;</tt>
+   </name>
+   <x:anchor-alias value="format"/>
+   <iref item="Elements" subitem="format" primary="true"/>
+   <iref item="format element" primary="true"/>
+   <t>
+      Provides a link to an additional format variant for a reference. 
+   </t>
+   <t>
+      Note that these additional links are neither used in published RFCs, nor
+      supported by all tools. If the goal is to provide a single URI for
+      a reference, the "target" attribute on &lt;<x:ref>reference</x:ref>&gt;
+      can be used instead.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
+   <t anchor="element.format.contents"><!--AG-->
+      <xref format="none" target="grammar.format">Content model</xref>: this element does not have any contents.</t>
+
+   <!--format/@octets-->
+   <section anchor="element.format.attribute.octets" toc="exclude">
+      <name>'octets' attribute</name>
+      <iref item="Attributes" subitem="octets"/>
+      <iref item="format element" subitem="octets attribute"/>
+      <iref item="octets attribute" subitem="in format element"/>
+      <t>
+            Octet length of linked-to document.
+         </t>
+   </section>
+
+   <!--format/@target-->
+   <section anchor="element.format.attribute.target" toc="exclude">
+      <name>'target' attribute</name>
+      <iref item="Attributes" subitem="target"/>
+      <iref item="format element" subitem="target attribute"/>
+      <iref item="target attribute" subitem="in format element"/>
+      <t>
+            URI of document.
+         </t>
+   </section>
+
+   <!--format/@type-->
+   <section anchor="element.format.attribute.type" toc="exclude">
+      <name>'type' attribute <em>(mandatory)</em>
+      </name>
+      <iref item="Attributes" subitem="type"/>
+      <iref item="format element" subitem="type attribute"/>
+      <iref item="type attribute" subitem="in format element"/>
+      <t>
+            The type of the linked-to document, such as "TXT", "HTML", or "PDF".
+         </t>
+   </section>
+</section>
+
+<!--front-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.front">
+   <name>
+      <tt>&lt;front&gt;</tt>
+   </name>
+   <x:anchor-alias value="front"/>
+   <iref item="Elements" subitem="front" primary="true"/>
+   <iref item="front element" primary="true"/>
+   <t>
+      Represent the "front matter": metadata (such as author information),
+      abstract, and additional notes.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>), and &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
+   <t anchor="element.front.contents"><!--AG-->
+      <xref format="none" target="grammar.front">Content model</xref>:</t>
+   <t><!--AG-->In this order:</t>
+   <ol><!--AG-->
+      <li><!--AG-->
+         <iref item="Elements" subitem="title"/>
+         <iref item="title element" subitem="inside front"/>One &lt;<x:ref>title</x:ref>&gt; element (<xref target="element.title"/>)</li>
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="author"/>
+         <iref item="author element" subitem="inside front"/>One or more &lt;<x:ref>author</x:ref>&gt; elements (<xref target="element.author"/>)</li>
+      
+      <li><!--AG-->
+         <iref item="Elements" subitem="date"/>
+         <iref item="date element" subitem="inside front"/>One &lt;<x:ref>date</x:ref>&gt; element (<xref target="element.date"/>)</li>
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="area"/>
+         <iref item="area element" subitem="inside front"/>Optional &lt;<x:ref>area</x:ref>&gt; elements (<xref target="element.area"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="workgroup"/>
+         <iref item="workgroup element" subitem="inside front"/>Optional &lt;<x:ref>workgroup</x:ref>&gt; elements (<xref target="element.workgroup"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="keyword"/>
+         <iref item="keyword element" subitem="inside front"/>Optional &lt;<x:ref>keyword</x:ref>&gt; elements (<xref target="element.keyword"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="abstract"/>
+         <iref item="abstract element" subitem="inside front"/>One optional &lt;<x:ref>abstract</x:ref>&gt; element (<xref target="element.abstract"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="note"/>
+         <iref item="note element" subitem="inside front"/>Optional &lt;<x:ref>note</x:ref>&gt; elements (<xref target="element.note"/>)</li>
+      
+   </ol>
+</section>
+
+<!--iref-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.iref">
+   <name>
+      <tt>&lt;iref&gt;</tt>
+   </name>
+   <x:anchor-alias value="iref"/>
+   <iref item="Elements" subitem="iref" primary="true"/>
+   <iref item="iref element" primary="true"/>
+   <t>
+      Provides terms for the document's index.
+   </t>
+   <t>
+      Index entries can be either be regular entries (when just the "item"
+      attribute is given) or nested entries (by specifying "subitem" as well),
+      grouped under a regular entry.
+   </t>
+   <t>
+      In this document, for instance, every element definition appears
+      as a regular index entry ("iref element <xref format="counter" target="element.iref"/>"). In addition, for each use of that element inside
+      another parent element, a nested entry was added ("iref element <xref format="counter" target="element.iref"/>, 
+      ... inside annotation <xref format="counter" target="element.annotation"/>"). 
+   </t>
+   <t>
+      Index entries generally refer to the exact place where the &lt;iref&gt; element
+      occured. An exception is the occurence as a child element of
+      &lt;<x:ref>section</x:ref>&gt;, in which case the whole section is
+      considered to be relevant for that index entry. In some formats, index
+      entries of this type might be displayed as range.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t anchor="element.iref.contents"><!--AG-->
+      <xref format="none" target="grammar.iref">Content model</xref>: this element does not have any contents.</t>
+
+   <!--iref/@item-->
+   <section anchor="element.iref.attribute.item" toc="exclude">
+      <name>'item' attribute <em>(mandatory)</em>
+      </name>
+      <iref item="Attributes" subitem="item"/>
+      <iref item="iref element" subitem="item attribute"/>
+      <iref item="item attribute" subitem="in iref element"/>
+      <t>
+            The item to include.
+         </t>
+   </section>
+
+   <!--iref/@primary-->
+   <section anchor="element.iref.attribute.primary" toc="exclude">
+      <name>'primary' attribute</name>
+      <iref item="Attributes" subitem="primary"/>
+      <iref item="iref element" subitem="primary attribute"/>
+      <iref item="primary attribute" subitem="in iref element"/>
+      <t>
+            Setting this to "true" declares the occurrence as "primary",
+            which might cause it to be highlighted in the index.
+         </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"true"</li>
+         <li>"false" (default)</li>
+      </ul>
+   </section>
+
+   <!--iref/@subitem-->
+   <section anchor="element.iref.attribute.subitem" toc="exclude">
+      <name>'subitem' attribute</name>
+      <iref item="Attributes" subitem="subitem"/>
+      <iref item="iref element" subitem="subitem attribute"/>
+      <iref item="subitem attribute" subitem="in iref element"/>
+      <t>
+            The subitem to include.
+         </t>
+   </section>
+</section>
+
+<!--keyword-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.keyword">
+   <name>
+      <tt>&lt;keyword&gt;</tt>
+   </name>
+   <x:anchor-alias value="keyword"/>
+   <iref item="Elements" subitem="keyword" primary="true"/>
+   <iref item="keyword element" primary="true"/>
+   <t>
+      Specifies a keyword applicable to the document.
+   </t>
+   <t>
+      Note that each element should only contain a single keyword; for multiple keywords, the
+      element can simply be repeated.
+   </t>
+   <t>
+      Keywords are used both in the RFC Index and in the metadata of generated
+      documents.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t anchor="element.keyword.contents"><!--AG-->
+      <xref format="none" target="grammar.keyword">Content model</xref>: only text content.</t>
+</section>
+
+<!--list-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.list">
+   <name>
+      <tt>&lt;list&gt;</tt>
+   </name>
+   <x:anchor-alias value="list"/>
+   <iref item="Elements" subitem="list" primary="true"/>
+   <iref item="list element" primary="true"/>
+   <t>
+      Delineates a text list.
+   </t>
+   <t>
+      Each list item is represented by a &lt;<x:ref>t</x:ref>&gt; element.
+      The vocabulary currently does not directly support list items consisting
+      of multiple paragraphs; if this is needed, &lt;<x:ref>vspace</x:ref>&gt;
+      (<xref target="element.vspace"/>) can be used as a workaround.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t anchor="element.list.contents"><!--AG-->
+      <xref format="none" target="grammar.list">Content model</xref>:
+    </t>
+        
+   <t><!--AG-->
+      <iref item="Elements" subitem="t"/>
+      <iref item="t element" subitem="inside list"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
+      
+
+   <!--list/@counter-->
+   <section anchor="element.list.attribute.counter" toc="exclude">
+      <name>'counter' attribute</name>
+      <iref item="Attributes" subitem="counter"/>
+      <iref item="list element" subitem="counter attribute"/>
+      <iref item="counter attribute" subitem="in list element"/>
+      <t>
+        This attribute holds a token that serves as an identifier for a counter.
+        The intended use is continuation of lists, where the counter will
+        be incremented for every list item, and there is no way to reset the
+        counter.
+      </t>
+      <t>
+        Note that this attribute functions only when the style attribute is
+        using the "format..." syntax (<xref target="element.list.attribute.style"/>);
+        otherwise, it is ignored.
+      </t>
+   </section>
+
+   <!--list/@hangIndent-->
+   <section anchor="element.list.attribute.hangIndent" toc="exclude">
+      <name>'hangIndent' attribute</name>
+      <iref item="Attributes" subitem="hangIndent"/>
+      <iref item="list element" subitem="hangIndent attribute"/>
+      <iref item="hangIndent attribute" subitem="in list element"/>
+      <t>
+        For list styles with potentially wide labels, this attribute can
+        override the default indentation level, measured in number of characters.
+      </t>
+      <t>
+        Note that it only affects style with variable-width labels
+        ("format..." and "hanging", see below), and it may not affect formats
+        in which the list item text appears <em>below</em> the
+        label.
+      </t>
+   </section>
+
+   <!--list/@style-->
+   <section anchor="element.list.attribute.style" toc="exclude">
+      <name>'style' attribute</name>
+      <iref item="Attributes" subitem="style"/>
+      <iref item="list element" subitem="style attribute"/>
+      <iref item="style attribute" subitem="in list element"/>
+      <t>
+        This attribute is used to control the display of a list.
+      </t>
+      <t>
+        The value of this attribute is inherited by any nested lists that do
+        not have this attribute set. It may be set to:
+      </t>
+      <dl hanging="false">
+         <dt>
+            <iref item="list styles" subitem="empty" primary="true"/>"empty"</dt>
+         <dd>
+            <t>
+            For unlabeled list items; it can also be used for indentation
+            purposes (this is the default value when there is an enclosing
+            list where the style is specified).
+          </t>
+         </dd>
+         <dt>
+            <iref item="list styles" subitem="hanging" primary="true"/>"hanging"</dt>
+         <dd>
+            <t>
+            For lists where the items are labeled with a piece of text.
+          </t>
+            <t>
+            The label text is specified in the 'hangText' attribute of the &lt;<x:ref>t</x:ref>&gt;
+            element (<xref target="element.t.attribute.hangText"/>).
+          </t>
+         </dd>
+         <dt>
+            <iref item="list styles" subitem="letters" primary="true"/>"letters"</dt>
+         <dd>
+            <t>
+            For ordered lists using letters as labels (lowercase letters
+            followed by a period; after "z", it rolls over to a two-letter
+            format). For nested lists, processors usually flip between uppercase and lowercase.
+          </t>
+         </dd>
+         <dt>
+            <iref item="list styles" subitem="numbers" primary="true"/>"numbers"</dt>
+         <dd>
+            <t>
+            For ordered lists using numbers as labels.
+          </t>
+         </dd>
+         <dt>
+            <iref item="list styles" subitem="symbols" primary="true"/>"symbols"</dt>
+         <dd>
+            <t>
+            For unordered (bulleted) lists.
+          </t>
+            <t>
+            The style of the bullets is chosen automatically be the processor
+            (some implementations allow overriding the default using a
+            processing instruction).
+          </t>
+         </dd>
+      </dl>
+      <t>
+        And, finally:
+      </t>
+      <dl hanging="false">
+         <dt>
+            <iref item="list styles" subitem="format ..." primary="true"/>"format ..."</dt>
+         <dd>
+            <t>
+            For lists with customized labels, consisting of fixed text and
+            an item counter in various formats.
+          </t>
+            <t>
+            The value is a free-form text that allows counter values to be
+            inserted using a "percent-letter" format. For instance, "[REQ%d]"
+            generates labels of the form "[REQ1]", where "%d" inserts the
+            item number as decimal number.
+          </t>
+            <t>
+            The following formats are supported:
+          </t>
+            <dl hanging="true">
+               <dt>%c</dt>
+               <dd>lowercase letters (a, b, c, etc.)</dd>
+               <dt>%C</dt>
+               <dd>uppercase letters (A, B, C, etc.)</dd>
+               <dt>%d</dt>
+               <dd>decimal numbers (1, 2, 3, etc.)</dd>
+               <dt>%i</dt>
+               <dd>lowercase Roman numerals (i, ii, iii, etc.)</dd>
+               <dt>%I</dt>
+               <dd>uppercase Roman numerals (I, II, III, etc.)</dd>
+               <dt>%%</dt>
+               <dd>represents a percent sign</dd>
+            </dl>
+            <t>
+            Other formats are reserved for future use.
+          </t>
+         </dd>
+      </dl>
+   </section>
+</section>
+
+<!--middle-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.middle">
+   <name>
+      <tt>&lt;middle&gt;</tt>
+   </name>
+   <x:anchor-alias value="middle"/>
+   <iref item="Elements" subitem="middle" primary="true"/>
+   <iref item="middle element" primary="true"/>
+   <t>
+      Represents the main content of the document.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
+   <t anchor="element.middle.contents"><!--AG-->
+      <xref format="none" target="grammar.middle">Content model</xref>:
+    </t>
+        
+   <t><!--AG-->
+      <iref item="Elements" subitem="section"/>
+      <iref item="section element" subitem="inside middle"/>One or more &lt;<x:ref>section</x:ref>&gt; elements (<xref target="element.section"/>)</t>
+      
+</section>
+
+<!--note-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.note">
+   <name>
+      <tt>&lt;note&gt;</tt>
+   </name>
+   <x:anchor-alias value="note"/>
+   <iref item="Elements" subitem="note" primary="true"/>
+   <iref item="note element" primary="true"/>
+   <t>
+      Creates an unnumbered section that appears after the abstract.
+   </t>
+   <t>
+      It is usually used for additional information to reviewers (working
+      group information, mailing list, ...), or for additional publication
+      information such as "IESG Notes".
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t anchor="element.note.contents"><!--AG-->
+      <xref format="none" target="grammar.note">Content model</xref>:
+    </t>
+        
+   <t><!--AG-->
+      <iref item="Elements" subitem="t"/>
+      <iref item="t element" subitem="inside note"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</t>
+      
+
+   <!--note/@title-->
+   <section anchor="element.note.attribute.title" toc="exclude">
+      <name>'title' attribute <em>(mandatory)</em>
+      </name>
+      <iref item="Attributes" subitem="title"/>
+      <iref item="note element" subitem="title attribute"/>
+      <iref item="title attribute" subitem="in note element"/>
+      <t>
+            The title of the note.
+         </t>
+   </section>
+</section>
+
+<!--organization-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.organization">
+   <name>
+      <tt>&lt;organization&gt;</tt>
+   </name>
+   <x:anchor-alias value="organization"/>
+   <iref item="Elements" subitem="organization" primary="true"/>
+   <iref item="organization element" primary="true"/>
+   <t>
+      Specifies the affiliation of an author.
+   </t>
+   <t>
+      This information appears in both the "Author's Address" section and
+      on the front page (see <xref target="RFC7322" sectionFormat="comma" section="4.1.1"/> for more information).
+      If the value is long, an abbreviated variant can be specified in the
+      "abbrev" attribute.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>author</x:ref>&gt; (<xref target="element.author"/>).</t>
+   <t anchor="element.organization.contents"><!--AG-->
+      <xref format="none" target="grammar.organization">Content model</xref>: only text content.</t>
+
+   <!--organization/@abbrev-->
+   <section anchor="element.organization.attribute.abbrev" toc="exclude">
+      <name>'abbrev' attribute</name>
+      <iref item="Attributes" subitem="abbrev"/>
+      <iref item="organization element" subitem="abbrev attribute"/>
+      <iref item="abbrev attribute" subitem="in organization element"/>
+      <t>
+            Abbreviated variant.
+         </t>
+   </section>
+</section>
+
+<!--phone-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.phone">
+   <name>
+      <tt>&lt;phone&gt;</tt>
+   </name>
+   <x:anchor-alias value="phone"/>
+   <iref item="Elements" subitem="phone" primary="true"/>
+   <iref item="phone element" primary="true"/>
+   <t>
+      Represents a phone number.
+   </t>
+   <t>
+      The value is expected to be the scheme-specific part of a "tel" URI
+      (so does not include the prefix "tel:"), using the "global numbers"
+      syntax. See <xref target="RFC3966" sectionFormat="of" section="3"/> 
+      for details.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
+   <t anchor="element.phone.contents"><!--AG-->
+      <xref format="none" target="grammar.phone">Content model</xref>: only text content.</t>
+</section>
+
+<!--postal-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.postal">
+   <name>
+      <tt>&lt;postal&gt;</tt>
+   </name>
+   <x:anchor-alias value="postal"/>
+   <iref item="Elements" subitem="postal" primary="true"/>
+   <iref item="postal element" primary="true"/>
+   <t>
+      Contains child elements providing postal information.
+   </t>
+   <t>
+      Note that at least one &lt;<x:ref>street</x:ref>&gt; element needs
+      to be present; however formatters will handle empty values just fine.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
+   <t anchor="element.postal.contents"><!--AG-->
+      <xref format="none" target="grammar.postal">Content model</xref>:</t>
+   <t><!--AG-->In this order:</t>
+   <ol><!--AG-->
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="street"/>
+         <iref item="street element" subitem="inside postal"/>One or more &lt;<x:ref>street</x:ref>&gt; elements (<xref target="element.street"/>)</li>
+      
+      <li><!--AG-->
+         <t>In any order:</t>
+         <ul><!--AG-->
+            <li><!--AG-->
+               <iref item="Elements" subitem="city"/>
+               <iref item="city element" subitem="inside postal"/>&lt;<x:ref>city</x:ref>&gt; elements (<xref target="element.city"/>)</li>
+            <li><!--AG-->
+               <iref item="Elements" subitem="region"/>
+               <iref item="region element" subitem="inside postal"/>&lt;<x:ref>region</x:ref>&gt; elements (<xref target="element.region"/>)</li>
+            <li><!--AG-->
+               <iref item="Elements" subitem="code"/>
+               <iref item="code element" subitem="inside postal"/>&lt;<x:ref>code</x:ref>&gt; elements (<xref target="element.code"/>)</li>
+            <li><!--AG-->
+               <iref item="Elements" subitem="country"/>
+               <iref item="country element" subitem="inside postal"/>&lt;<x:ref>country</x:ref>&gt; elements (<xref target="element.country"/>)</li>
+         </ul>
+      </li>
+   </ol>
+</section>
+
+<!--postamble-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.postamble">
+   <name>
+      <tt>&lt;postamble&gt;</tt>
+   </name>
+   <x:anchor-alias value="postamble"/>
+   <iref item="Elements" subitem="postamble" primary="true"/>
+   <iref item="postamble element" primary="true"/>
+   <t>
+      Gives text that appears at the bottom of a figure or table.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), and &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
+   <t anchor="element.postamble.contents"><!--AG-->
+      <xref format="none" target="grammar.postamble">Content model</xref>:
+    </t>
+   <t><!--AG-->In any order:</t>
+   <ul><!--AG-->
+      <li><!--AG-->Text</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="xref"/>
+         <iref item="xref element" subitem="inside postamble"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="eref"/>
+         <iref item="eref element" subitem="inside postamble"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="iref"/>
+         <iref item="iref element" subitem="inside postamble"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="cref"/>
+         <iref item="cref element" subitem="inside postamble"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="spanx"/>
+         <iref item="spanx element" subitem="inside postamble"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</li>
+   </ul>
+</section>
+
+<!--preamble-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.preamble">
+   <name>
+      <tt>&lt;preamble&gt;</tt>
+   </name>
+   <x:anchor-alias value="preamble"/>
+   <iref item="Elements" subitem="preamble" primary="true"/>
+   <iref item="preamble element" primary="true"/>
+   <t>
+      Gives text that appears at the top of a figure or table.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), and &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
+   <t anchor="element.preamble.contents"><!--AG-->
+      <xref format="none" target="grammar.preamble">Content model</xref>:
+    </t>
+   <t><!--AG-->In any order:</t>
+   <ul><!--AG-->
+      <li><!--AG-->Text</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="xref"/>
+         <iref item="xref element" subitem="inside preamble"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="eref"/>
+         <iref item="eref element" subitem="inside preamble"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="iref"/>
+         <iref item="iref element" subitem="inside preamble"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="cref"/>
+         <iref item="cref element" subitem="inside preamble"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="spanx"/>
+         <iref item="spanx element" subitem="inside preamble"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</li>
+   </ul>
+</section>
+
+<!--reference-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.reference">
+   <name>
+      <tt>&lt;reference&gt;</tt>
+   </name>
+   <x:anchor-alias value="reference"/>
+   <iref item="Elements" subitem="reference" primary="true"/>
+   <iref item="reference element" primary="true"/>
+   <t>
+      Represents a bibliographical reference.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
+   <t anchor="element.reference.contents"><!--AG-->
+      <xref format="none" target="grammar.reference">Content model</xref>:</t>
+   <t><!--AG-->In this order:</t>
+   <ol><!--AG-->
+      <li><!--AG-->
+         <iref item="Elements" subitem="front"/>
+         <iref item="front element" subitem="inside reference"/>One &lt;<x:ref>front</x:ref>&gt; element (<xref target="element.front"/>)</li>
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="seriesInfo"/>
+         <iref item="seriesInfo element" subitem="inside reference"/>Optional &lt;<x:ref>seriesInfo</x:ref>&gt; elements (<xref target="element.seriesInfo"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="format"/>
+         <iref item="format element" subitem="inside reference"/>Optional &lt;<x:ref>format</x:ref>&gt; elements (<xref target="element.format"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="annotation"/>
+         <iref item="annotation element" subitem="inside reference"/>Optional &lt;<x:ref>annotation</x:ref>&gt; elements (<xref target="element.annotation"/>)</li>
+      
+   </ol>
+
+   <!--reference/@anchor-->
+   <section anchor="element.reference.attribute.anchor" toc="exclude">
+      <name>'anchor' attribute <em>(mandatory)</em>
+      </name>
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="reference element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in reference element"/>
+      <t>
+        Document-wide unique identifier for this reference. Usually, this will
+        be used both to "label" the reference in the references section, and
+        as an identifier in links to this reference entry.
+      </t>
+      <t>
+        The value needs to be a valid XML "Name" (<xref target="XML" sectionFormat="of" section="2.3" relative="#sec-common-syn"/>),
+        additionally constrained to US-ASCII characters (<xref target="USASCII"/>). Thus, the character repertoire consists of
+        "A-Z", "a-z", "0-9", "_", "-", ".", and ":", where "0-9", ".", and "-" are disallowed as start character.
+      </t>
+   </section>
+
+   <!--reference/@target-->
+   <section anchor="element.reference.attribute.target" toc="exclude">
+      <name>'target' attribute</name>
+      <iref item="Attributes" subitem="target"/>
+      <iref item="reference element" subitem="target attribute"/>
+      <iref item="target attribute" subitem="in reference element"/>
+      <t>
+            Holds the URI for the reference.
+         </t>
+      <t>
+            Note that depending on the &lt;<x:ref>seriesInfo</x:ref>&gt;
+            element, a URI might not be needed, nor desirable, as it can 
+            be automatically generated (for instance, for RFCs).
+         </t>
+   </section>
+</section>
+
+<!--references-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.references">
+   <name>
+      <tt>&lt;references&gt;</tt>
+   </name>
+   <x:anchor-alias value="references"/>
+   <iref item="Elements" subitem="references" primary="true"/>
+   <iref item="references element" primary="true"/>
+   <t>
+      Contains a set of bibliographical references.
+   </t>
+   <t>
+      In the early days of the RFC series, there was only one "References" section per RFC. This convention
+      was later changed to group references into two sets, "Normative" and "Informative"
+      as described in <xref target="RFC7322" sectionFormat="of" section="4.8.6"/>).
+      This vocabulary supports the split with the "title" attribute.
+   </t>
+   <t>
+      By default, the order of references is significant. Processors however
+      can be instructed to sort them based on their anchor names.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
+   <t anchor="element.references.contents"><!--AG-->
+      <xref format="none" target="grammar.references">Content model</xref>:
+    </t>
+        
+   <t><!--AG-->
+      <iref item="Elements" subitem="reference"/>
+      <iref item="reference element" subitem="inside references"/>One or more &lt;<x:ref>reference</x:ref>&gt; elements (<xref target="element.reference"/>)</t>
+      
+
+   <!--references/@title-->
+   <section anchor="element.references.attribute.title" toc="exclude">
+      <name>'title' attribute</name>
+      <iref item="Attributes" subitem="title"/>
+      <iref item="references element" subitem="title attribute"/>
+      <iref item="title attribute" subitem="in references element"/>
+      <t>
+            Provides the title for the References section (defaulting to
+            "References").
+         </t>
+      <t>
+            In general, the title should be either "Normative References" or
+            "Informative References".
+         </t>
+   </section>
+</section>
+
+<!--region-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.region">
+   <name>
+      <tt>&lt;region&gt;</tt>
+   </name>
+   <x:anchor-alias value="region"/>
+   <iref item="Elements" subitem="region" primary="true"/>
+   <iref item="region element" primary="true"/>
+   <t>
+      Provides the region name in a postal address.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
+   <t anchor="element.region.contents"><!--AG-->
+      <xref format="none" target="grammar.region">Content model</xref>: only text content.</t>
+</section>
+
+<!--rfc-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.rfc">
+   <name>
+      <tt>&lt;rfc&gt;</tt>
+   </name>
+   <x:anchor-alias value="rfc"/>
+   <iref item="Elements" subitem="rfc" primary="true"/>
+   <iref item="rfc element" primary="true"/>
+   <t>
+      This is the root element of the xml2rfc vocabulary.
+   </t>
+   <t>
+      Processors distinguish between RFC mode ("number" attribute being
+      present) and Internet-Draft mode ("docName" attribute being present):
+      it is invalid to specify both. Setting neither "number" nor "docName" can be useful for
+      producing other types of document but is out-of-scope for this specification.
+   </t>
+   <t anchor="element.rfc.contents"><!--AG-->
+      <xref format="none" target="grammar.rfc">Content model</xref>:</t>
+   <t><!--AG-->In this order:</t>
+   <ol><!--AG-->
+      <li><!--AG-->
+         <iref item="Elements" subitem="front"/>
+         <iref item="front element" subitem="inside rfc"/>One &lt;<x:ref>front</x:ref>&gt; element (<xref target="element.front"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="middle"/>
+         <iref item="middle element" subitem="inside rfc"/>One &lt;<x:ref>middle</x:ref>&gt; element (<xref target="element.middle"/>)</li>
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="back"/>
+         <iref item="back element" subitem="inside rfc"/>One optional &lt;<x:ref>back</x:ref>&gt; element (<xref target="element.back"/>)</li>
+      
+   </ol>
+
+   <!--rfc/@category-->
+   <section anchor="element.rfc.attribute.category" toc="exclude">
+      <name>'category' attribute</name>
+      <iref item="Attributes" subitem="category"/>
+      <iref item="rfc element" subitem="category attribute"/>
+      <iref item="category attribute" subitem="in rfc element"/>
+      <t>
+            Document category (see <xref target="attribute-category"/>).
+         </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"std"</li>
+         <li>"bcp"</li>
+         <li>"info"</li>
+         <li>"exp"</li>
+         <li>"historic"</li>
+      </ul>
+   </section>
+
+   <!--rfc/@consensus-->
+   <section anchor="element.rfc.attribute.consensus" toc="exclude">
+      <name>'consensus' attribute</name>
+      <iref item="Attributes" subitem="consensus"/>
+      <iref item="rfc element" subitem="consensus attribute"/>
+      <iref item="consensus attribute" subitem="in rfc element"/>
+      <t>
+            Affects the generated boilerplate.
+         </t>
+      <t>
+            See <xref target="RFC5741"/> for more information.
+         </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"no"</li>
+         <li>"yes"</li>
+      </ul>
+   </section>
+
+   <!--rfc/@docName-->
+   <section anchor="element.rfc.attribute.docName" toc="exclude">
+      <name>'docName' attribute</name>
+      <iref item="Attributes" subitem="docName"/>
+      <iref item="rfc element" subitem="docName attribute"/>
+      <iref item="docName attribute" subitem="in rfc element"/>
+      <t>
+            For Internet-Drafts, this specifies the draft name (which appears
+            below the title).
+         </t>
+      <t>
+            A processor should give an error if both the "docName" and "number"
+            attributes are given in the &lt;rfc&gt; element.
+      </t>
+      <t>
+            Note that the file extension is not part of the draft, so in
+            general it should end with the current draft number ("-", plus two
+            digits).
+         </t>
+      <t>
+            Furthermore, it is good practice to disambiguate current editor
+            copies from submitted drafts (for instance, by replacing the
+            draft number with the string "latest").
+         </t>
+      <t>
+            See <xref target="IDGUIDE" sectionFormat="of" section="7" relative="#naming"/>
+            for further information.
+         </t>
+   </section>
+
+   <!--rfc/@ipr-->
+   <section anchor="element.rfc.attribute.ipr" toc="exclude">
+      <name>'ipr' attribute</name>
+      <iref item="Attributes" subitem="ipr"/>
+      <iref item="rfc element" subitem="ipr attribute"/>
+      <iref item="ipr attribute" subitem="in rfc element"/>
+      <t>
+            Represents the Intellectual Property status of the document.
+            See <xref target="attribute-ipr"/> for details.
+         </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"full2026"</li>
+         <li>"noDerivativeWorks2026"</li>
+         <li>"none"</li>
+         <li>"full3667"</li>
+         <li>"noModification3667"</li>
+         <li>"noDerivatives3667"</li>
+         <li>"full3978"</li>
+         <li>"noModification3978"</li>
+         <li>"noDerivatives3978"</li>
+         <li>"trust200811"</li>
+         <li>"noModificationTrust200811"</li>
+         <li>"noDerivativesTrust200811"</li>
+         <li>"trust200902"</li>
+         <li>"noModificationTrust200902"</li>
+         <li>"noDerivativesTrust200902"</li>
+         <li>"pre5378Trust200902"</li>
+      </ul>
+   </section>
+
+   <!--rfc/@iprExtract-->
+   <section anchor="element.rfc.attribute.iprExtract" toc="exclude">
+      <name>'iprExtract' attribute</name>
+      <iref item="Attributes" subitem="iprExtract"/>
+      <iref item="rfc element" subitem="iprExtract attribute"/>
+      <iref item="iprExtract attribute" subitem="in rfc element"/>
+      <t>
+            Identifies a single section within the document (by its 'anchor'
+            attribute) for which extraction "as-is" is explicitly allowed (this
+            is only relevant for historic values of the "ipr" attribute).
+      </t>
+   </section>
+
+   <!--rfc/@number-->
+   <section anchor="element.rfc.attribute.number" toc="exclude">
+      <name>'number' attribute</name>
+      <iref item="Attributes" subitem="number"/>
+      <iref item="rfc element" subitem="number attribute"/>
+      <iref item="number attribute" subitem="in rfc element"/>
+      <t>
+            The number of the RFC to be produced.
+         </t>
+      <t>
+            A processor should give an error if both the "docName" and "number"
+            attributes are given in the &lt;rfc&gt; element.
+         </t>
+   </section>
+
+   <!--rfc/@obsoletes-->
+   <section anchor="element.rfc.attribute.obsoletes" toc="exclude">
+      <name>'obsoletes' attribute</name>
+      <iref item="Attributes" subitem="obsoletes"/>
+      <iref item="rfc element" subitem="obsoletes attribute"/>
+      <iref item="obsoletes attribute" subitem="in rfc element"/>
+      <t>
+            A comma-separated list of RFC <em>numbers</em> or
+            Internet-Draft names.
+         </t>
+      <t>
+            Processors ought to parse the attribute value, so that incorrect
+            references can be detected and, depending on output format, 
+            hyperlinks can be generated. Also, the value ought to be reformatted
+            to insert whitespace after each comma if not already present.
+      </t>
+   </section>
+
+   <!--rfc/@seriesNo-->
+   <section anchor="element.rfc.attribute.seriesNo" toc="exclude">
+      <name>'seriesNo' attribute</name>
+      <iref item="Attributes" subitem="seriesNo"/>
+      <iref item="rfc element" subitem="seriesNo attribute"/>
+      <iref item="seriesNo attribute" subitem="in rfc element"/>
+      <t>
+            Number within a document series.
+      </t>
+      <t>
+            The document series is defined by the "category" attribute; "seriesNo"
+            is only applicable to the values "info" ("FYI" series),
+            "std" ("STD" series), and "bcp" ("BCP" series).
+      </t>
+   </section>
+
+   <!--rfc/@submissionType-->
+   <section anchor="element.rfc.attribute.submissionType" toc="exclude">
+      <name>'submissionType' attribute</name>
+      <iref item="Attributes" subitem="submissionType"/>
+      <iref item="rfc element" subitem="submissionType attribute"/>
+      <iref item="submissionType attribute" subitem="in rfc element"/>
+      <t>
+            The document stream.
+         </t>
+      <t>
+            See <xref target="RFC5741" sectionFormat="of" section="2"/> for details.
+         </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"IETF" (default)</li>
+         <li>"IAB"</li>
+         <li>"IRTF"</li>
+         <li>"independent"</li>
+      </ul>
+   </section>
+
+   <!--rfc/@updates-->
+   <section anchor="element.rfc.attribute.updates" toc="exclude">
+      <name>'updates' attribute</name>
+      <iref item="Attributes" subitem="updates"/>
+      <iref item="rfc element" subitem="updates attribute"/>
+      <iref item="updates attribute" subitem="in rfc element"/>
+      <t>
+            A comma-separated list of RFC <em>numbers</em> or
+            Internet-Draft names.
+         </t>
+      <t>
+            Processors ought to parse the attribute value, so that incorrect
+            references can be detected and, depending on output format, 
+            hyperlinks can be generated. Also, the value ought to be reformatted
+            to insert whitespace after each comma if not already present.
+      </t>
+   </section>
+
+   <!--rfc/@xml:lang-->
+   <section anchor="element.rfc.attribute.xml-lang" toc="exclude">
+      <name>'xml:lang' attribute</name>
+      <iref item="Attributes" subitem="xml:lang"/>
+      <iref item="rfc element" subitem="xml:lang attribute"/>
+      <iref item="xml:lang attribute" subitem="in rfc element"/>
+      <t>
+            The natural language used in the document (defaults to "en").
+         </t>
+      <t>
+            See <xref target="XML" sectionFormat="of" section="2.12" relative="#sec-lang-tag"/>
+            for more information.
+         </t>
+   </section>
+</section>
+
+<!--section-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.section">
+   <name>
+      <tt>&lt;section&gt;</tt>
+   </name>
+   <x:anchor-alias value="section"/>
+   <iref item="Elements" subitem="section" primary="true"/>
+   <iref item="section element" primary="true"/>
+   <t>
+      Represents a section (when inside a &lt;middle&gt; element) or an appendix (when inside a
+      &lt;back&gt; element).
+   </t>
+   <t>
+      Sub-sections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>), &lt;<x:ref>middle</x:ref>&gt; (<xref target="element.middle"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t anchor="element.section.contents"><!--AG-->
+      <xref format="none" target="grammar.section">Content model</xref>:</t>
+   <t><!--AG-->In this order:</t>
+   <ol><!--AG-->
+      <li><!--AG-->
+         <t>In any order:</t>
+         <ul><!--AG-->
+            <li><!--AG-->
+               <iref item="Elements" subitem="t"/>
+               <iref item="t element" subitem="inside section"/>&lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</li>
+            <li><!--AG-->
+               <iref item="Elements" subitem="figure"/>
+               <iref item="figure element" subitem="inside section"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</li>
+            <li><!--AG-->
+               <iref item="Elements" subitem="texttable"/>
+               <iref item="texttable element" subitem="inside section"/>&lt;<x:ref>texttable</x:ref>&gt; elements (<xref target="element.texttable"/>)</li>
+            <li><!--AG-->
+               <iref item="Elements" subitem="iref"/>
+               <iref item="iref element" subitem="inside section"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</li>
+         </ul>
+      </li>
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="section"/>
+         <iref item="section element" subitem="inside section"/>Optional &lt;<x:ref>section</x:ref>&gt; elements (<xref target="element.section"/>)</li>
+      
+   </ol>
+
+   <!--section/@anchor-->
+   <section anchor="element.section.attribute.anchor" toc="exclude">
+      <name>'anchor' attribute</name>
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="section element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in section element"/>
+      <t>
+        Document-wide unique identifier for this section.
+      </t>
+      <t>
+        The value needs to be a valid XML "Name" (<xref target="XML" sectionFormat="of" section="2.3" relative="#sec-common-syn"/>).
+      </t>
+   </section>
+
+   <!--section/@title-->
+   <section anchor="element.section.attribute.title" toc="exclude">
+      <name>'title' attribute <em>(mandatory)</em>
+      </name>
+      <iref item="Attributes" subitem="title"/>
+      <iref item="section element" subitem="title attribute"/>
+      <iref item="title attribute" subitem="in section element"/>
+      <t>
+            The title of the section.
+         </t>
+   </section>
+
+   <!--section/@toc-->
+   <section anchor="element.section.attribute.toc" toc="exclude">
+      <name>'toc' attribute</name>
+      <iref item="Attributes" subitem="toc"/>
+      <iref item="section element" subitem="toc attribute"/>
+      <iref item="toc attribute" subitem="in section element"/>
+      <t>
+            Determines whether the section is included in the Table Of Contents.
+      </t>
+      <t>
+            The processor usually has defaults for whether a Table Of Contents
+            will be produced at all, and sections of which maximal depth will 
+            be included (frequently: 3). "include" and "exclude" allow overriding
+            the processor's default behavior for the element they are specified
+            on (they do not affect either nested or parent elements).
+      </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"include"</li>
+         <li>"exclude"</li>
+         <li>"default" (default)</li>
+      </ul>
+   </section>
+</section>
+
+<!--seriesInfo-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.seriesInfo">
+   <name>
+      <tt>&lt;seriesInfo&gt;</tt>
+   </name>
+   <x:anchor-alias value="seriesInfo"/>
+   <iref item="Elements" subitem="seriesInfo" primary="true"/>
+   <iref item="seriesInfo element" primary="true"/>
+   <t>
+      Specifies the document series in which this document appears, and also
+      specifies an identifier within that series.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
+   <t anchor="element.seriesInfo.contents"><!--AG-->
+      <xref format="none" target="grammar.seriesInfo">Content model</xref>: this element does not have any contents.</t>
+
+   <!--seriesInfo/@name-->
+   <section anchor="element.seriesInfo.attribute.name" toc="exclude">
+      <name>'name' attribute <em>(mandatory)</em>
+      </name>
+      <iref item="Attributes" subitem="name"/>
+      <iref item="seriesInfo element" subitem="name attribute"/>
+      <iref item="name attribute" subitem="in seriesInfo element"/>
+      <t>
+            The name of the series.
+      </t>
+      <t>
+            Some series names might trigger specific processing (such as for
+            auto-generating links, inserting descriptions such as
+            "work in progress", or additional functionality like reference diagnostics).
+            Examples for IETF-related series names are:
+            "BCP", "FYI", "Internet-Draft", "RFC", and "STD".
+      </t>
+   </section>
+
+   <!--seriesInfo/@value-->
+   <section anchor="element.seriesInfo.attribute.value" toc="exclude">
+      <name>'value' attribute <em>(mandatory)</em>
+      </name>
+      <iref item="Attributes" subitem="value"/>
+      <iref item="seriesInfo element" subitem="value attribute"/>
+      <iref item="value attribute" subitem="in seriesInfo element"/>
+      <t>
+            The identifier within the series specified by the "name" attribute.
+      </t>
+      <t>
+            For BCPs, FYIs, RFCs, and STDs this is the number within the series.
+      </t>
+      <t>
+            For Internet-Drafts, it is the full draft name (ending with the two-digit
+            version number).
+      </t>
+   </section>
+</section>
+
+<!--spanx-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.spanx">
+   <name>
+      <tt>&lt;spanx&gt;</tt>
+   </name>
+   <x:anchor-alias value="spanx"/>
+   <iref item="Elements" subitem="spanx" primary="true"/>
+   <iref item="spanx element" primary="true"/>
+   <t>
+      Wraps a piece of text, indicating special formatting styles.
+   </t>
+   <t>
+      When generating plain text, processors usually emulate font changes
+      using characters such as "*" and "_".
+   </t>
+   <t>
+      The following styles are defined:
+   </t>
+   <dl hanging="true">
+      <dt>
+         <tt>emph</tt>
+      </dt>
+      <dd>
+      Simple emphasis (this is the default).
+    </dd>
+      <dt>
+         <tt>strong</tt>
+      </dt>
+      <dd>
+      Strong emphasis.
+    </dd>
+      <dt>
+         <tt>verb</tt>
+      </dt>
+      <dd>
+     "Verbatim" text (usually displayed using a monospaced font face).
+    </dd>
+   </dl>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t anchor="element.spanx.contents"><!--AG-->
+      <xref format="none" target="grammar.spanx">Content model</xref>: only text content.</t>
+
+   <!--spanx/@style-->
+   <section anchor="element.spanx.attribute.style" toc="exclude">
+      <name>'style' attribute</name>
+      <iref item="Attributes" subitem="style"/>
+      <iref item="spanx element" subitem="style attribute"/>
+      <iref item="style attribute" subitem="in spanx element"/>
+      <t>
+          The style to be used (defaults to "emph").
+      </t>
+   </section>
+
+   <!--spanx/@xml:space-->
+   <section anchor="element.spanx.attribute.xml-space" toc="exclude">
+      <name>'xml:space' attribute</name>
+      <iref item="Attributes" subitem="xml:space"/>
+      <iref item="spanx element" subitem="xml:space attribute"/>
+      <iref item="xml:space attribute" subitem="in spanx element"/>
+      <t>
+            Determines whitespace handling.
+         </t>
+      <t>
+            According to the DTD, the default value is "preserve". Tests however
+            show that it doesn't have any effect on processing; thus this
+            attribute will be removed in future versions of the vocabulary.
+         </t>
+      <t>            
+            See also <xref target="XML" sectionFormat="of" section="2.10" relative="#sec-white-space"/>.
+         </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"default"</li>
+         <li>"preserve" (default)</li>
+      </ul>
+   </section>
+</section>
+
+<!--street-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.street">
+   <name>
+      <tt>&lt;street&gt;</tt>
+   </name>
+   <x:anchor-alias value="street"/>
+   <iref item="Elements" subitem="street" primary="true"/>
+   <iref item="street element" primary="true"/>
+   <t>
+      Provides a street address.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
+   <t anchor="element.street.contents"><!--AG-->
+      <xref format="none" target="grammar.street">Content model</xref>: only text content.</t>
+</section>
+
+<!--t-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.t">
+   <name>
+      <tt>&lt;t&gt;</tt>
+   </name>
+   <x:anchor-alias value="t"/>
+   <iref item="Elements" subitem="t" primary="true"/>
+   <iref item="t element" primary="true"/>
+   <t>
+      Contains a paragraph of text.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t anchor="element.t.contents"><!--AG-->
+      <xref format="none" target="grammar.t">Content model</xref>:
+    </t>
+   <t><!--AG-->In any order:</t>
+   <ul><!--AG-->
+      <li><!--AG-->Text</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="list"/>
+         <iref item="list element" subitem="inside t"/>&lt;<x:ref>list</x:ref>&gt; elements (<xref target="element.list"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="figure"/>
+         <iref item="figure element" subitem="inside t"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="xref"/>
+         <iref item="xref element" subitem="inside t"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="eref"/>
+         <iref item="eref element" subitem="inside t"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="iref"/>
+         <iref item="iref element" subitem="inside t"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="cref"/>
+         <iref item="cref element" subitem="inside t"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="spanx"/>
+         <iref item="spanx element" subitem="inside t"/>&lt;<x:ref>spanx</x:ref>&gt; elements (<xref target="element.spanx"/>)</li>
+      <li><!--AG-->
+         <iref item="Elements" subitem="vspace"/>
+         <iref item="vspace element" subitem="inside t"/>&lt;<x:ref>vspace</x:ref>&gt; elements (<xref target="element.vspace"/>)</li>
+   </ul>
+
+   <!--t/@anchor-->
+   <section anchor="element.t.attribute.anchor" toc="exclude">
+      <name>'anchor' attribute</name>
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="t element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in t element"/>
+      <t>
+        Document-wide unique identifier for this paragraph.
+      </t>
+      <t>
+        The value needs to be a valid XML "Name" (<xref target="XML" sectionFormat="of" section="2.3" relative="#sec-common-syn"/>).
+      </t>
+   </section>
+
+   <!--t/@hangText-->
+   <section anchor="element.t.attribute.hangText" toc="exclude">
+      <name>'hangText' attribute</name>
+      <iref item="Attributes" subitem="hangText"/>
+      <iref item="t element" subitem="hangText attribute"/>
+      <iref item="hangText attribute" subitem="in t element"/>
+      <t>
+        Holds the label ("hanging text") for items in lists using the "hanging"
+        style (see <xref target="element.list.attribute.style"/>).
+      </t>
+   </section>
+</section>
+
+<!--texttable-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.texttable">
+   <name>
+      <tt>&lt;texttable&gt;</tt>
+   </name>
+   <x:anchor-alias value="texttable"/>
+   <iref item="Elements" subitem="texttable" primary="true"/>
+   <iref item="texttable element" primary="true"/>
+   <t>
+      Contains a table, consisting of an optional preamble, a header line,
+      rows, an optional postamble, and an optional title.
+   </t>
+   <t>
+      The number of columns in the table is determined by the number of
+      &lt;<x:ref>ttcol</x:ref>&gt; elements. The number of rows in the table is
+      determined by the number of &lt;<x:ref>c</x:ref>&gt; elements divided
+      by the number of columns. There is no requirement that the number of
+      &lt;<x:ref>c</x:ref>&gt; elements be evenly divisible by the number of
+      columns.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t anchor="element.texttable.contents"><!--AG-->
+      <xref format="none" target="grammar.texttable">Content model</xref>:</t>
+   <t><!--AG-->In this order:</t>
+   <ol><!--AG-->
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="preamble"/>
+         <iref item="preamble element" subitem="inside texttable"/>One optional &lt;<x:ref>preamble</x:ref>&gt; element (<xref target="element.preamble"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="ttcol"/>
+         <iref item="ttcol element" subitem="inside texttable"/>One or more &lt;<x:ref>ttcol</x:ref>&gt; elements (<xref target="element.ttcol"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="c"/>
+         <iref item="c element" subitem="inside texttable"/>Optional &lt;<x:ref>c</x:ref>&gt; elements (<xref target="element.c"/>)</li>
+      
+        
+      <li><!--AG-->
+         <iref item="Elements" subitem="postamble"/>
+         <iref item="postamble element" subitem="inside texttable"/>One optional &lt;<x:ref>postamble</x:ref>&gt; element (<xref target="element.postamble"/>)</li>
+      
+   </ol>
+
+   <!--texttable/@align-->
+   <section anchor="element.texttable.attribute.align" toc="exclude">
+      <name>'align' attribute</name>
+      <iref item="Attributes" subitem="align"/>
+      <iref item="texttable element" subitem="align attribute"/>
+      <iref item="align attribute" subitem="in texttable element"/>
+      <t>
+            Determines the horizontal alignment of the table.
+         </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"left"</li>
+         <li>"center" (default)</li>
+         <li>"right"</li>
+      </ul>
+   </section>
+
+   <!--texttable/@anchor-->
+   <section anchor="element.texttable.attribute.anchor" toc="exclude">
+      <name>'anchor' attribute</name>
+      <iref item="Attributes" subitem="anchor"/>
+      <iref item="texttable element" subitem="anchor attribute"/>
+      <iref item="anchor attribute" subitem="in texttable element"/>
+      <t>
+        Document-wide unique identifier for this table.
+      </t>
+      <t>
+        Furthermore, the presence of this attribute causes the table to be numbered.
+      </t>
+      <t>
+        The value needs to be a valid XML "Name" (<xref target="XML" sectionFormat="of" section="2.3" relative="#sec-common-syn"/>).
+      </t>
+   </section>
+
+   <!--texttable/@style-->
+   <section anchor="element.texttable.attribute.style" toc="exclude">
+      <name>'style' attribute</name>
+      <iref item="Attributes" subitem="style"/>
+      <iref item="texttable element" subitem="style attribute"/>
+      <iref item="style attribute" subitem="in texttable element"/>
+      <t>
+        Selects which borders should be drawn, where
+      </t>
+      <ul>
+         <li>
+          "all" means borders around all table cells,
+        </li>
+         <li>
+          "full" is like "all" except no horizontal lines between table
+          rows (except below the column titles),
+        </li>
+         <li>
+          "headers" adds just a separator between column titles and rows, and
+        </li>
+         <li>
+          "none" means no borders at all.
+        </li>
+      </ul>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"all"</li>
+         <li>"none"</li>
+         <li>"headers"</li>
+         <li>"full" (default)</li>
+      </ul>
+   </section>
+
+   <!--texttable/@suppress-title-->
+   <section anchor="element.texttable.attribute.suppress-title" toc="exclude">
+      <name>'suppress-title' attribute</name>
+      <iref item="Attributes" subitem="suppress-title"/>
+      <iref item="texttable element" subitem="suppress-title attribute"/>
+      <iref item="suppress-title attribute" subitem="in texttable element"/>
+      <t>
+            Tables that have an "anchor" attribute will automatically get
+            an autogenerated title (such as "Table 1"), even if the "title"
+            attribute is absent. Setting this attribute to "true" will prevent this.
+      </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"true"</li>
+         <li>"false" (default)</li>
+      </ul>
+   </section>
+
+   <!--texttable/@title-->
+   <section anchor="element.texttable.attribute.title" toc="exclude">
+      <name>'title' attribute</name>
+      <iref item="Attributes" subitem="title"/>
+      <iref item="texttable element" subitem="title attribute"/>
+      <iref item="title attribute" subitem="in texttable element"/>
+      <t>
+         The title for the table; this usually appears on a line below the table body.
+      </t>
+   </section>
+</section>
+
+<!--title-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.title">
+   <name>
+      <tt>&lt;title&gt;</tt>
+   </name>
+   <x:anchor-alias value="title"/>
+   <iref item="Elements" subitem="title" primary="true"/>
+   <iref item="title element" primary="true"/>
+   <t>
+      Represents the document title.
+   </t>
+   <t>
+      When this element appears in the &lt;front&gt; element of the current document,
+      the title might also appear in page headers or footers. If it's long
+      (~40 characters), the "abbrev" attribute is used to specify an
+      abbreviated variant.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t anchor="element.title.contents"><!--AG-->
+      <xref format="none" target="grammar.title">Content model</xref>: only text content.</t>
+
+   <!--title/@abbrev-->
+   <section anchor="element.title.attribute.abbrev" toc="exclude">
+      <name>'abbrev' attribute</name>
+      <iref item="Attributes" subitem="abbrev"/>
+      <iref item="title element" subitem="abbrev attribute"/>
+      <iref item="abbrev attribute" subitem="in title element"/>
+      <t>
+            Specifies an abbreviated variant of the document title.
+         </t>
+   </section>
+</section>
+
+<!--ttcol-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.ttcol">
+   <name>
+      <tt>&lt;ttcol&gt;</tt>
+   </name>
+   <x:anchor-alias value="ttcol"/>
+   <iref item="Elements" subitem="ttcol" primary="true"/>
+   <iref item="ttcol element" primary="true"/>
+   <t>
+      Contains a column heading in a table.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
+   <t anchor="element.ttcol.contents"><!--AG-->
+      <xref format="none" target="grammar.ttcol">Content model</xref>: only text content.</t>
+
+   <!--ttcol/@align-->
+   <section anchor="element.ttcol.attribute.align" toc="exclude">
+      <name>'align' attribute</name>
+      <iref item="Attributes" subitem="align"/>
+      <iref item="ttcol element" subitem="align attribute"/>
+      <iref item="align attribute" subitem="in ttcol element"/>
+      <t>
+            Determines the horizontal alignment within the table column.
+         </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"left" (default)</li>
+         <li>"center"</li>
+         <li>"right"</li>
+      </ul>
+   </section>
+
+   <!--ttcol/@width-->
+   <section anchor="element.ttcol.attribute.width" toc="exclude">
+      <name>'width' attribute</name>
+      <iref item="Attributes" subitem="width"/>
+      <iref item="ttcol element" subitem="width attribute"/>
+      <iref item="width attribute" subitem="in ttcol element"/>
+      <t>
+         The desired column width (as integer 0..100 followed by "%").
+      </t>
+   </section>
+</section>
+
+<!--uri-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.uri">
+   <name>
+      <tt>&lt;uri&gt;</tt>
+   </name>
+   <x:anchor-alias value="uri"/>
+   <iref item="Elements" subitem="uri" primary="true"/>
+   <iref item="uri element" primary="true"/>
+   <t>
+      Contains a web address associated with the author.
+   </t>
+   <t>
+      The contents should be a valid URI (see <xref target="RFC3986" sectionFormat="of" section="3"/>). 
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
+   <t anchor="element.uri.contents"><!--AG-->
+      <xref format="none" target="grammar.uri">Content model</xref>: only text content.</t>
+</section>
+
+<!--vspace-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.vspace">
+   <name>
+      <tt>&lt;vspace&gt;</tt>
+   </name>
+   <x:anchor-alias value="vspace"/>
+   <iref item="Elements" subitem="vspace" primary="true"/>
+   <iref item="vspace element" primary="true"/>
+   <t>
+      This element can be used to force the inclusion of a single line break
+      or multiple blank lines.
+   </t>
+   <t>
+      Note that this is a purely presentational element and thus its use ought
+      to be avoided.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t anchor="element.vspace.contents"><!--AG-->
+      <xref format="none" target="grammar.vspace">Content model</xref>: this element does not have any contents.</t>
+
+   <!--vspace/@blankLines-->
+   <section anchor="element.vspace.attribute.blankLines" toc="exclude">
+      <name>'blankLines' attribute</name>
+      <iref item="Attributes" subitem="blankLines"/>
+      <iref item="vspace element" subitem="blankLines attribute"/>
+      <iref item="blankLines attribute" subitem="in vspace element"/>
+      <t>
+        Number of blank lines to be inserted, where "0" indicates
+        a single line break (defaults to "0").
+      </t>
+      <t>
+        For paged output formats, no additional blank lines should be generated
+        after a page break.
+      </t>
+   </section>
+</section>
+
+<!--workgroup-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.workgroup">
+   <name>
+      <tt>&lt;workgroup&gt;</tt>
+   </name>
+   <x:anchor-alias value="workgroup"/>
+   <iref item="Elements" subitem="workgroup" primary="true"/>
+   <iref item="workgroup element" primary="true"/>
+   <t>
+      This element is used to specify the Working Group (IETF) or Research Group (IRTF) from which the document originates,
+      if any. The recommended format is the official name of the Working Group
+      (with some capitalization).
+   </t>
+   <t>
+      In Internet-Drafts, this is used in the upper left corner of the boilerplate,
+      replacing the "Network Working Group" string. Formatting software can
+      append the words "Working Group" or "Research Group", depending on
+      the "submissionType" property on the &lt;<x:ref>rfc</x:ref>&gt; element
+      (<xref target="element.rfc.attribute.submissionType"/>).
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t anchor="element.workgroup.contents"><!--AG-->
+      <xref format="none" target="grammar.workgroup">Content model</xref>: only text content.</t>
+</section>
+
+<!--xref-->
+<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.xref">
+   <name>
+      <tt>&lt;xref&gt;</tt>
+   </name>
+   <x:anchor-alias value="xref"/>
+   <iref item="Elements" subitem="xref" primary="true"/>
+   <iref item="xref element" primary="true"/>
+   <t>
+      Inserts a cross reference to a different part of a document.
+   </t>
+   <t>
+      The generated text depends on whether the &lt;xref&gt; is empty
+      (in which case the processor will try to generate a meaningful text
+      fragment), the "format" attribute, and the nature (XML element type)
+      of the referenced document part.
+   </t>
+   <t>   
+      Any element that allows the "anchor" attribute can be referenced; however
+      there are restrictions with respect to the text content being generated.
+      For instance, a &lt;<x:ref>t</x:ref>&gt; can be a reference target, however, 
+      because paragraphs are not (visibly) numbered, the author will have to
+      make sure that the combination of prose and contained text content
+      is sufficient for a reader to understand what is being referred to.
+   </t>
+   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), and &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>).</t>
+   <t anchor="element.xref.contents"><!--AG-->
+      <xref format="none" target="grammar.xref">Content model</xref>: only text content.</t>
+
+   <!--xref/@format-->
+   <section anchor="element.xref.attribute.format" toc="exclude">
+      <name>'format' attribute</name>
+      <iref item="Attributes" subitem="format"/>
+      <iref item="xref element" subitem="format attribute"/>
+      <iref item="format attribute" subitem="in xref element"/>
+      <t>
+        This attribute is used to control the format of the generated 
+        reference text.
+      </t>
+      <dl hanging="false">
+         <dt>
+            <iref item="xref formats" subitem="counter" primary="true"/>"counter"</dt>
+         <dd>
+            <t>
+            Inserts a counter, such as the number of a section, figure, table,
+            or list item.
+          </t>
+            <t>
+            For targets that are not inherently numbered, such as references
+            or comments, it uses the anchor name instead.
+          </t>
+         </dd>
+         <dt>
+            <iref item="xref formats" subitem="default" primary="true"/>"default"</dt>
+         <dd>
+            <t>
+            Inserts a text fragment that describes the referenced part 
+            completely, such as "Section 2", "Table 4", or "[XML]".
+          </t>
+         </dd>
+         <dt>
+            <iref item="xref formats" subitem="none" primary="true"/>"none"</dt>
+         <dd>
+            <t>
+            There will be no auto-generated text.
+          </t>
+         </dd>
+         <dt>
+            <iref item="xref formats" subitem="title" primary="true"/>"title"</dt>
+         <dd>
+            <t>
+            Inserts a title for the referenced element (usually obtained from
+            the referenced element's "title" attribute; some processors
+            also use the &lt;title&gt; child element or a &lt;reference&gt;
+            target).
+          </t>
+         </dd>
+      </dl>
+      <t>
+        Not all combinations of text content, format attribute, and type of referenced part
+        lead to predictable results across different formatters. In case this matters,
+        the following combinations need to be avoided:
+      </t>
+      <ul>
+         <li>
+            Non-empty text content with any format other than "none".
+         </li>
+         <li>
+            Empty text content with format "counter" for any target that
+            isn't inherently numbered.
+         </li>
+         <li>
+            Empty text content with format "title" for any target that
+            doesn't have a title.
+         </li>
+      </ul>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"counter"</li>
+         <li>"title"</li>
+         <li>"none"</li>
+         <li>"default" (default)</li>
+      </ul>
+   </section>
+
+   <!--xref/@pageno-->
+   <section anchor="element.xref.attribute.pageno" toc="exclude">
+      <name>'pageno' attribute</name>
+      <iref item="Attributes" subitem="pageno"/>
+      <iref item="xref element" subitem="pageno attribute"/>
+      <iref item="pageno attribute" subitem="in xref element"/>
+      <t>
+            Unused.
+         </t>
+      <t>
+            It's unclear what the purpose of this attribute is; processors
+            seem to ignore it and it never was documented.
+         </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"true"</li>
+         <li>"false" (default)</li>
+      </ul>
+   </section>
+
+   <!--xref/@target-->
+   <section anchor="element.xref.attribute.target" toc="exclude">
+      <name>'target' attribute <em>(mandatory)</em>
+      </name>
+      <iref item="Attributes" subitem="target"/>
+      <iref item="xref element" subitem="target attribute"/>
+      <iref item="target attribute" subitem="in xref element"/>
+      <t>
+        Identifies the document component being referenced.
+      </t>
+      <t>
+        The value needs to match the value of the "anchor" attribute of another
+        element in the document.
+      </t>
+   </section>
+</section>
+<?ENDINC xml2rfcv2-spec.xml ?>
+</section>
+
+<section title="Escaping for Use in XML" anchor="escaping">
+<t>
+  Text in XML cannot use the literal characters "&lt;" and "&amp;", as they
+  have special meaning to the XML processor (starting entities, elements, etc.).
+  Usually, these characters will need to be substituted by "&amp;lt;" and
+  "&amp;amp;" (see <xref target="XML" section="4.6" relative="#sec-predefined-ent" sectionFormat="of"/>).
+</t>
+<t>
+  "&gt;" does not require escaping, unless it appears in the sequence "]]&gt;"
+  (which indicates the end of a CDATA section, see below).
+</t>
+<t>
+  Escaping the individual characters can be a lot of work (when done manually), 
+  and also messes up alignment in artwork. Another approach to escaping is
+  to use CDATA sections (<xref target="XML" section="2.7" relative="#sec-cdata-sect" sectionFormat="comma"/>).
+  Within these, no further escaping is needed, except when the "end-of-CDATA"
+  marker needs to be used (in that case, the CDATA section needs to be closed, 
+  and a new one needs to be started).
+</t>
+</section>
+
+<section title="Special Unicode Code Points" anchor="special.unicode.code.points">
+<t>
+  Although the current RFC format does not allow non-ASCII Unicode characters
+  (<xref target="UNICODE"/>), some of them can be used to enforce certain
+  behaviors of formatters.
+</t>
+<t>
+  For instance:
+</t>
+<dl hanging="false">
+  <dt>non-breaking space (U+00A0)</dt>
+  <dd>
+    <t>
+      Represents a space character where no line break should happen. This is
+      frequently used in titles (by excluding certain space characters from
+      the line breaking algorithm, the processor will use the remaining
+      whitespace occurrences for line breaks).
+    </t> 
+  </dd>
+  <dt>non-breaking hyphen (U+2011)</dt>
+  <dd>
+    <t>
+      Similarly, this represents a hyphen character where nevertheless no
+      line breaking ought to occur.
+    </t>
+  </dd>
+  <dt>word joiner (U+2060)</dt>
+  <dd>
+    <t>
+      Also called "zero width non-breaking space" &mdash; can be used to
+      disallow line breaking between two non-whitespace characters.
+    </t>
+  </dd>
+</dl>
+<t>
+  Note that in order to use these characters by name, they need to be 
+  declared either in the Document Type Definition (DTD,
+  <xref target="XML" section="2.9" sectionFormat="comma" relative="#sec-rmd"/>), or
+  in the "internal subset" (<xref target="XML" section="2.8" sectionFormat="comma" relative="#sec-prolog-dtd"/>),
+  like this:
+</t>
+<figure><artwork type="example">
+&lt;?xml version="1.0"?>
+
+&lt;!DOCTYPE rfc [
+
+  &lt;!-- <em>declare nbsp and friends</em> -->
+  &lt;!ENTITY nbsp    "&amp;#xa0;">
+  &lt;!ENTITY nbhy    "&amp;#x2011;">
+  &lt;!ENTITY wj      "&amp;#x2060;">
+]>
+</artwork></figure>
+</section>
+
+<section title="Including Files" anchor="including.files">
+<t>
+  This version of the vocabulary does not support an inclusion mechanism on
+  its own &mdash; thus, a document always needs to be self-contained.
+</t>
+<t>
+  That being said, some processors do support file inclusion using
+  processing instructions (<xref target="XML" sectionFormat="of" section="2.6" relative="#sec-pi"/>
+  and <xref target="TCLReadme" sectionFormat="of" section="4.1.2" relative="#include.file.facility"/>).
+</t>
+<t>
+  Furthermore, XML itself allows inclusion of external content using the
+  "internal subset" (<xref target="XML" sectionFormat="of" section="2.8" relative="#sec-prolog-dtd"/>).
+  Unfortunately, this requires declaring the external data in the DTD upfront.
+</t>
+  <figure>
+  <preamble>For instance:</preamble>
+  <artwork type="example">
+&lt;?xml version="1.0"?>
+
+&lt;!DOCTYPE rfc [
+
+  &lt;!-- <em>allow later RFC2616 reference using "&amp;rfc2616;"</em> -->
+  &lt;!-- <em>the data will be fetched from xml.resource.org</em> -->
+  &lt;!ENTITY rfc2616 PUBLIC
+  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml">
+]>
+</artwork>
+<postamble>...declares the entity "rfc2616", which then can be used in the "references" section:
+</postamble></figure>
+  <figure>
+  <artwork type="example">
+  &lt;references>
+    &amp;rfc2616;
+  &lt;/references>
+</artwork></figure>
+<t>
+  Note that this mechanism only works for well-formed XML fragments; thus
+  any plain text that would need to be escaped in XML can't be included as-is.
+</t>
+</section>
+
+<section title="Internationalization Considerations" anchor="i18n.considerations">
+<t>
+  This format is based on <xref target="XML"/>, thus does not have any
+  issues representing arbitrary Unicode <xref target="UNICODE"/> characters in text content.
+</t>
+<t>
+  However, the current canonical RFC format is restricted to US-ASCII
+  characters (<xref target="USASCII"/> and <xref target="RFC2223" section="3" sectionFormat="of"/>).
+  It is possible that this rule will be relaxed in future revisions of the
+  RFC format (for instance, to allow non-ASCII characters in examples and
+  contact information). In that case, it is
+  expected that the vocabulary will be extended accordingly.
+</t>
+</section>
+
+<section title="Security Considerations" anchor="security.considerations">
+<t>
+  The "name" attribute on the &lt;<x:ref>artwork</x:ref>&gt; element
+  (<xref target="element.artwork.attribute.name"/>)
+  can be used to derive a filename for saving to a local file system.
+  Trusting this kind of information without pre-processing is a known
+  security risk; see <xref target="RFC6266" sectionFormat="of" section="4.3"/> for
+  more information.
+</t>
+<t>
+  Furthermore, the nature of XML, plus vocabulary features such as typed artwork,
+  make it attractive to extract content from documents for further
+  processing, such for the purpose of checking syntax, or computing/verifying
+  examples. In the latter case, care needs to be taken that only trusted
+  content is processed.
+</t>
+<t>
+  All security considerations related to XML processing are
+  relevant as well (see <xref target="RFC3470" sectionFormat="of" section="7"/>).
+</t>
+</section>
+
+<section title="IANA Considerations" anchor="iana.considerations">
+<section title="Internet Media Type Registration">
+<iref item="Media Type" subitem="application/rfc+xml" primary="true"/>
+<iref item="application/rfc+xml Media Type" primary="true"/>
+<t>
+  IANA maintains the registry of Internet media types <xref target="BCP13"/>
+  at <eref target="http://www.iana.org/assignments/media-types"/>.
+</t>
+<t>
+  This document serves as the specification for the Internet media type
+  "application/rfc+xml". The following is to be registered with IANA.
+</t>
+<dl>
+  <dt>Type name:</dt>
+  <dd>application</dd>
+  
+  <dt>Subtype name:</dt>
+  <dd>rfc+xml</dd>
+
+  <dt>Required parameters:</dt>
+  <dd>There are no required parameters.</dd>
+
+  <dt>Optional parameters:</dt>
+  <dd>"charset": This parameter has identical semantics as the charset
+      parameter of the "application/xml" media type specified in <xref target="RFC7303" sectionFormat="of" section="9.1"/>.</dd>
+
+  <dt>Encoding considerations:</dt>
+  <dd>Identical to those of "application/xml" as described in <xref target="RFC7303" sectionFormat="of" section="9.1"/>.</dd>
+
+  <dt>Security considerations:</dt>
+  <dd>As defined in <xref target="security.considerations"/>. In addition, as
+      this media type uses the "+xml" convention, it inherits the security
+      considerations described in <xref target="RFC7303" sectionFormat="of" section="10"/>.</dd>
+
+  <dt>Interoperability considerations:</dt>
+  <dd>N/A</dd>
+
+  <dt>Published specification:</dt>
+  <dd>This specification.</dd>
+  
+  <dt>Applications that use this media type:</dt>
+  <dd>Applications that transform xml2rfc to output formats such
+      as plain text or HTML, plus additional analysis tools.</dd>
+
+  <dt>Fragment identifier considerations:</dt>
+  <dd>The "anchor" attribute is used for assigning document-wide unique
+      identifiers that can be used as shorthand pointers, as described
+      in <xref target="XPOINTER" sectionFormat="of" section="2.8" relative="#shorthand"/>.</dd>
+      
+  <dt>Additional information:</dt>
+  <dd>
+    <dl>
+      <dt>Deprecated alias names for this type:</dt>
+      <dd>None.</dd>
+
+      <dt>Magic number(s):</dt>
+      <dd>As specified for "application/xml" in <xref target="RFC7303" sectionFormat="of" section="9.1"/>.</dd>
+
+      <dt>File extension(s):</dt>
+      <dd>.xml or .rfcxml when disambiguation from other XML files is needed</dd>
+
+      <dt>Macintosh file type code(s):</dt>
+      <dd>TEXT</dd>
+    </dl>
+  </dd>
+  
+  <dt>Person &amp; email address to contact for further information:</dt>
+  <dd>See Authors Section.</dd>
+  
+  <dt>Intended usage:</dt>
+  <dd>COMMON</dd>
+
+  <dt>Restrictions on usage:</dt>
+  <dd>N/A</dd>
+
+  <dt>Author:</dt>
+  <dd>See Authors Section.</dd>
+
+  <dt>Change controller:</dt>
+  <dd>RFC Series Editor (rse@rfc-editor.org)</dd>
+</dl>
+</section>
+</section>
+
+<section title="Acknowledgments" anchor="acknowledgements">
+<t>
+  Thanks to everybody who reviewed this document and provided feedback and/or
+  specification text, in particular Brian Carpenter, Elwyn Davies, Tony Hansen,
+  Paul Hoffman, Henrik Levkowetz, Alice Russo, Tom Taylor, Jim Schaad, and Nico
+  Williams.
+</t>
+<t>
+  We also thank Marshall T. Rose for both the original design and the reference
+  implementation of the "xml2rfc" formatter.
+</t>
+</section>
+
+  </middle>
+  <back>
+  
+<references title="Normative References">
+
+  <reference anchor='XML' target='http://www.w3.org/TR/2008/REC-xml-20081126/'>
+    <front>
+      <title>Extensible Markup Language (XML) 1.0 (Fifth Edition)</title>
+      <author fullname='Eve Maler' surname='Maler' initials='E.'/>
+      <author fullname='Francois Yergeau' surname='Yergeau' initials='F.'/>
+      <author fullname='Jean Paoli' surname='Paoli' initials='J.'/>
+      <author fullname='Michael Sperberg-McQueen' surname='Sperberg-McQueen' initials='M.'/>
+      <author fullname='Tim Bray' surname='Bray' initials='T.'/>
+      <date year='2008' month='November' day='26'/>
+    </front>
+    <seriesInfo name='W3C Recommendation' value='REC-xml-20081126'/>
+    <annotation>
+      Latest version available at
+      <eref target='http://www.w3.org/TR/xml'/>.
+    </annotation>
+  </reference>
+
+</references>
+
+<references title="Informative References">
+
+  <reference anchor="BCP13">
+    <front>
+      <title>Media Type Specifications and Registration Procedures</title>
+      <author initials="N." surname="Freed" fullname="Ned Freed"/>
+      <author initials="J." surname="Klensin" fullname="John C. Klensin"/>
+      <author initials="T." surname="Hansen" fullname="Tony Hansen"/>
+      <date year="2013" month="January"/>
+    </front>
+    <seriesInfo name="BCP" value="13"/>
+    <seriesInfo name="RFC" value="6838"/>
+  </reference>
+
+  <reference anchor='RFC2026'>
+    <front>
+      <title abbrev='Internet Standards Process'>The Internet Standards Process -- Revision 3</title>
+      <author initials='S.' surname='Bradner' fullname='Scott O. Bradner'/>
+      <date year='1996' month='October' />
+    </front>
+    <seriesInfo name='BCP' value='9' />
+    <seriesInfo name='RFC' value='2026' />
+  </reference>
+
+  <reference anchor="RFC2046">
+    <front>
+      <title abbrev="Media Types">Multipurpose Internet Mail Extensions (MIME) Part Two: Media Types</title>
+      <author initials="N." surname="Freed" fullname="Ned Freed"/>
+      <author initials="N." surname="Borenstein" fullname="Nathaniel S. Borenstein"/>
+      <date month="November" year="1996"/>
+    </front>
+    <seriesInfo name="RFC" value="2046"/>
+  </reference>
+
+  <reference anchor='RFC2223'>
+    <front>
+      <title>Instructions to RFC Authors</title>
+      <author initials='J.' surname='Postel' fullname='Jon Postel'/>
+      <author initials='J.K.' surname='Reynolds' fullname='Joyce K. Reynolds'/>
+      <date year='1997' month='October' />
+    </front>
+    <seriesInfo name='RFC' value='2223' />
+  </reference>
+
+  <reference anchor='RFC2397'>
+    <front>
+      <title abbrev='The &quot;data&quot; URL scheme'>The &quot;data&quot; URL scheme</title>
+      <author initials='L.' surname='Masinter' fullname='Larry Masinter'/>
+      <date year='1998' month='August' />
+    </front>
+    <seriesInfo name='RFC' value='2397' />
+  </reference>
+
+  <reference anchor='RFC2629'>
+    <front>
+      <title>Writing I-Ds and RFCs using XML</title>
+      <author initials='M.T.' surname='Rose' fullname='Marshall T. Rose' />
+      <date month='June' year='1999' />
+    </front>
+    <seriesInfo name='RFC' value='2629' />
+  </reference>
+
+  <reference anchor="RFC3470">
+    <front>
+      <title>Guidelines for the Use of Extensible Markup Language (XML) within IETF Protocols</title>
+      <author initials="S." surname="Hollenbeck" fullname="Scott Hollenbeck"/>
+      <author initials="M." surname="Rose" fullname="Marshall T. Rose"/>
+      <author initials="L." surname="Masinter" fullname="Larry Masinter"/>
+      <date year="2003" month="January" day="23"/>
+    </front>
+    <seriesInfo name="BCP" value="70"/>
+    <seriesInfo name="RFC" value="3470"/>
+  </reference>
+
+  <reference anchor='RFC3966'>
+    <front>
+      <title>The tel URI for Telephone Numbers</title>
+      <author initials='H.' surname='Schulzrinne' fullname='H. Schulzrinne'/>
+      <date year='2004' month='December' />
+    </front>
+    <seriesInfo name='RFC' value='3966' />
+  </reference>
+
+  <reference anchor="RFC3986">
+   <front>
+    <title abbrev='URI Generic Syntax'>Uniform Resource Identifier (URI): Generic Syntax</title>
+    <author initials='T.' surname='Berners-Lee' fullname='Tim Berners-Lee'/>
+    <author initials='R.' surname='Fielding' fullname='Roy T. Fielding'/>
+    <author initials='L.' surname='Masinter' fullname='Larry Masinter'/>
+    <date month='January' year='2005'></date>
+   </front>
+   <seriesInfo name="STD" value="66"/>
+   <seriesInfo name="RFC" value="3986"/>
+  </reference>
+
+  <reference anchor='RFC5598'>
+    <front>
+    <title>Internet Mail Architecture</title>
+    <author initials='D.' surname='Crocker' fullname='D. Crocker'/>
+    <date year='2009' month='July' />
+    </front>
+    <seriesInfo name='RFC' value='5598' />
+    <annotation>PDF version: <eref target="http://www.rfc-editor.org/rfc/rfc5598.pdf"/></annotation>
+  </reference>
+
+  <reference anchor='RFC5741'>
+    <front>
+      <title>RFC Streams, Headers, and Boilerplates</title>
+      <author initials='L.' surname='Daigle' fullname='Leslie Daigle'/>
+      <author initials='O.' surname='Kolkman' fullname='Olaf Kolkman'/>
+      <date month='December' year='2009' />
+    </front>
+    <seriesInfo name='RFC' value='5741' />
+  </reference>
+
+  <reference anchor="RFC6068">
+    <front>
+      <title>The 'mailto' URI Scheme</title>
+      <author initials="M." surname="Duerst" fullname="M. Duerst"/>
+      <author initials="L." surname="Masinter" fullname="L. Masinter"/>
+      <author initials="J." surname="Zawinski" fullname="J. Zawinski"/>
+      <date year="2010" month="October"/>
+    </front>
+    <seriesInfo name="RFC" value="6068"/>
+  </reference>
+
+  <reference anchor="RFC6266">
+    <front>
+      <title>Use of the Content-Disposition Header Field in the Hypertext Transfer Protocol (HTTP)</title>
+      <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
+      <date month="June" year="2011"/>
+    </front>
+    <seriesInfo name='RFC' value='6266' />
+  </reference>
+
+  <reference anchor="RFC7303">
+    <front>
+      <title>XML Media Types</title>
+      <author initials="H." surname="Thompson" fullname="H. Thompson"/>
+      <author initials="C." surname="Lilley" fullname="C. Lilley"/>
+      <date year="2014" month="July"/>
+    </front>
+    <seriesInfo name="RFC" value="7303"/>
+  </reference>
+
+  <reference anchor="RNC" target="http://www.oasis-open.org/committees/relax-ng/compact-20021121.html">
+    <front>
+      <title>RELAX NG Compact Syntax</title>
+      <author initials="J." surname="Clark" fullname="James Clark">
+        <address>
+          <email>jjc@jclark.com</email>
+        </address>
+      </author>
+      <date month="November" year="2002" />
+    </front>
+    <seriesInfo name="OASIS" value=""/>
+  </reference>
+
+  <reference anchor="IDGUIDE" target="http://www.ietf.org/id-info/guidelines.html">
+    <front>
+      <title>Guidelines to Authors of Internet-Drafts</title>
+      <author initials="R." surname="Housley" fullname="R. Housley"/>
+      <date month="December" year="2010" />
+    </front>
+  </reference>
+
+  <reference anchor='RFC3667'>
+    <front>
+      <title>IETF Rights in Contributions</title>
+      <author initials='S.' surname='Bradner' fullname='S. Bradner'/>
+      <date year='2004' month='February' />
+    </front>
+    <seriesInfo name='RFC' value='3667' />
+  </reference>
+
+  <reference anchor="RFC3978">
+    <front>
+      <title>IETF Rights in Contributions</title>
+      <author initials="S." surname="Bradner" fullname="S. Bradner"/>
+      <date year="2005" month="March"/>
+    </front>
+    <seriesInfo name="RFC" value="3978"/>
+  </reference>
+
+  <reference anchor="RFCPOLICY" target="http://www.rfc-editor.org/policy.html">
+    <front>
+      <title>RFC Editorial Guidelines and Procedures</title>
+      <author>
+        <organization>RFC Editor</organization>
+      </author>
+      <date month="February" year="2012" />
+    </front>
+  </reference>
+
+  <reference anchor="RFC7322">
+    <front>
+      <title>RFC Style Guide</title>
+      <author initials="H." surname="Heather" fullname="Heather Flanagan"/>
+      <author initials="S." surname="Ginoza" fullname="Sandy Ginoza"/>
+      <date month="September" year="2014" />
+    </front>
+    <seriesInfo name="RFC" value="7322"/>
+  </reference>
+
+  <reference anchor="TLP2.0" target="http://trustee.ietf.org/license-info/IETF-TLP-2.htm">
+    <front>
+      <title>Legal Provisions Relating to IETF Documents</title>
+      <author>
+        <organization>IETF Trust</organization>
+      </author>
+      <date year="2009" month="February"/>
+    </front>
+  </reference>
+
+  <reference anchor="TLP3.0" target="http://trustee.ietf.org/license-info/IETF-TLP-3.htm">
+    <front>
+      <title>Legal Provisions Relating to IETF Documents</title>
+      <author>
+        <organization>IETF Trust</organization>
+      </author>
+      <date year="2009" month="September"/>
+    </front>
+  </reference>
+  
+  <reference anchor="TLP4.0" target="http://trustee.ietf.org/license-info/IETF-TLP-4.htm">
+    <front>
+      <title>Legal Provisions Relating to IETF Documents</title>
+      <author>
+        <organization>IETF Trust</organization>
+      </author>
+      <date year="2009" month="December"/>
+    </front>
+  </reference>
+  
+  <reference anchor="UNICODE" target="http://www.unicode.org/versions/Unicode6.3.0/">
+    <front>
+      <title>The Unicode Standard, Version 6.3.0</title>
+      <author>
+        <organization>The Unicode Consortium</organization>
+      </author>
+      <date year="2013" month="September"/>
+    </front>
+  </reference>
+
+  <reference anchor="USASCII">
+    <front>
+      <title>Coded Character Set -- 7-bit American Standard Code for Information Interchange</title>
+      <author>
+        <organization>American National Standards Institute</organization>
+      </author>
+      <date year="1986"/>
+    </front>
+    <seriesInfo name="ANSI" value="X3.4"/>
+  </reference>
+  
+  <reference anchor='XPOINTER' target='http://www.w3.org/TR/2003/REC-xptr-framework-20030325/'>
+    <front>
+      <title>XPointer Framework</title>
+      <author fullname='Paul Grosso' surname='Grosso' initials='P.'/>
+      <author fullname='Eve Maler' surname='Maler' initials='E.'/>
+      <author fullname='Jonathan Marsh' surname='Marsh' initials='J.'/>
+      <author fullname='Norman Walsh' surname='Walsh' initials='N.'/>
+      <date year='2003' month='March' day='25'/>
+    </front>
+    <seriesInfo name='W3C Recommendation' value='REC-xptr-framework-20030325'/>
+    <annotation>
+      Latest version available at
+      <eref target='http://www.w3.org/TR/xptr-framework/'/>.
+    </annotation>
+  </reference>
+
+  <reference anchor='JING' target='http://www.thaiopensource.com/relaxng/jing.html'>
+    <front>
+      <title>Jing - A RELAX NG validator in Java</title>
+      <author>
+        <organization>Thai Open Source Software Center Ltd</organization>
+      </author>
+      <date year='2008'/>
+    </front>
+    <annotation>
+      Downloads:
+      <eref target='https://code.google.com/p/jing-trang/downloads/list'/>.
+    </annotation>
+  </reference>
+
+  <reference anchor='V1rev' target='http://svn.tools.ietf.org/svn/tools/xml2rfc/archive/draft-mrose-writing-rfcs.html'>
+    <front>
+      <title>Writing I-Ds and RFCs using XML (revised)</title>
+      <author fullname="Marshall T. Rose" surname="Rose" initials="M."/>
+      <date year='2008' month="February"/>
+    </front>
+  </reference>
+
+  <reference anchor='TCLReadme' target='http://svn.tools.ietf.org/svn/tools/xml2rfc/archive/README.html'>
+    <front>
+      <title>xml2rfc v1.35pre1</title>
+      <author fullname="Marshall T. Rose" surname="Rose" initials="M."/>
+      <author fullname="Bill Fenner" surname="Fenner" initials="B."/>
+      <author fullname="Charles Levert" surname="Levert" initials="C."/>
+      <date year='2009' month="October"/>
+    </front>
+  </reference>
+
+</references>
+
+<section title="Front Page ('Boilerplate') Generation" anchor="front.page">
+
+<section title="The /rfc/@category Attribute" anchor="attribute-category">
+<t>
+  For RFCs, the category attribute (<xref target="element.rfc.attribute.category"/>)
+  determines the "maturity level" (see <xref target="RFC2026" sectionFormat="of" section="4"/>).
+  The allowed values are "std" for "Standards Track", "bcp" for "BCP", "info"
+  for "Informational", "exp" for "Experimental", and "historic" for "Historic".
+</t>
+<t>
+  For Internet-Drafts, the category attribute is not needed, but will
+  appear on the front page as "Intended Status". Supplying this information can 
+  be useful to reviewers.
+</t>
+</section>
+
+<section title="The /rfc/@ipr Attribute" anchor="attribute-ipr">
+<t>
+  This attribute value can take a long list of values, each of which describes an IPR policy for the document
+  (<xref target="element.rfc.attribute.ipr"/>). 
+  The values are not the result of a grand design, but remain simply for historic
+  reasons. Of these values, only a few are currently in use; all others are
+  supported by various tools for backwards compatibility with old source
+  files.
+</t>
+<aside>
+  <t>
+    <strong>Note:</strong> some variations of the boilerplate are selected based
+    on the document's date; therefore it is important to specify the "year",
+    "month" and "day" attributes of the &lt;<x:ref>date</x:ref>&gt; element
+    when archiving the XML source of an Internet-Draft on the day of submission.
+  </t>
+</aside>
+<t>
+  <em>Disclaimer: THIS ONLY PROVIDES IMPLEMENTATION INFORMATION. IF YOU NEED
+  LEGAL ADVICE, PLEASE CONTACT A LAWYER.</em>
+  For further information, refer to <eref target="http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf"/>.
+</t>
+<t>
+  For the current "Status Of This Memo" text, the submissionType attribute
+  (<xref target="element.rfc.attribute.submissionType"/>)
+  determines whether a statement about "Code Components" is inserted (which is the
+  case for the value "IETF", which is the default). Other values,
+  such as "independent", suppress this part of the text. 
+</t>
+
+
+<section title="Current Values: '*trust200902'" anchor="attribute-ipr-current">
+<iref item="ipr attribute" subitem="'*trust200902'"/>
+<t>
+  The name for these values refers to the "IETF TRUST Legal Provisions Relating 
+  to IETF Documents", sometimes simply called the "TLP", which went into effect on February 15, 2009 (<xref target="TLP2.0"/>).
+  Updates to this document were published on September 12, 2009 (<xref target="TLP3.0"/>)
+  and on December 28, 2009 (<xref target="TLP4.0"/>),
+  modifying the license for code components (see <eref target="http://trustee.ietf.org/license-info/"/>
+  for further information).
+  The actual text is located in Section 6 ("Text To Be Included in IETF Documents")
+  of these documents.
+</t>
+<t>  
+  Formatters will automatically produce the "correct" text depending on the
+  document's date information (see above):
+</t>
+<texttable align="left">
+  <ttcol>TLP</ttcol><ttcol>starting with publication date</ttcol>
+
+  <c><xref target="TLP3.0"/></c>
+  <c>2009-11-01</c>
+
+  <c><xref target="TLP4.0"/></c>
+  <c>2010-04-01</c>
+
+</texttable> 
+
+
+<section title="trust200902" anchor="attribute-ipr-trust200902">
+<iref item="ipr attribute" subitem="'trust200902'"/>
+<t>
+  This value should be used unless one of the more specific '*trust200902'
+  values is a better fit. It produces the text in Sections 6.a and 6.b of
+  the TLP.
+</t>
+</section>
+
+<section title="noModificationTrust200902" anchor="attribute-ipr-noModificationTrust200902">
+<iref item="ipr attribute" subitem="'noModificationTrust200902'"/>
+<t>
+  This produces additional text from Section 6.c.i of the TLP:
+</t>
+<blockquote>
+  <t>
+    This document may not be modified, and derivative works of it may
+    not be created, except to format it for publication as an RFC or
+    to translate it into languages other than English.
+  </t>
+</blockquote>
+<aside>
+  <t>
+    <strong>Note:</strong> this clause is incompatible with RFCs that are published
+    on the Standards Track.
+  </t>
+</aside>
+</section>
+
+<section title="noDerivativesTrust200902" anchor="attribute-ipr-noDerivativesTrust200902">
+<iref item="ipr attribute" subitem="'noDerivativesTrust200902'"/>
+<t>
+  This produces the additional text from Section 6.c.ii of the TLP:
+</t>
+<blockquote>
+  <t>
+    This document may not be modified, and derivative works of it may
+    not be created, and it may not be published except as an Internet-Draft.
+  </t>
+</blockquote>
+<aside>
+  <t>
+    <strong>Note:</strong> this clause is incompatible with RFCs.
+  </t>
+</aside>
+</section>
+
+<section title="pre5378Trust200902" anchor="attribute-ipr-pre5378Trust200902">
+<iref item="ipr attribute" subitem="'pre5378Trust200902'"/>
+<t>
+  This produces the additional text from Section 6.c.iii of the TLP, frequently
+  called the "pre-5378 escape clause":
+</t>
+<blockquote>
+  <t>
+    This document may contain material from IETF Documents or IETF Contributions published or
+    made publicly available before November 10, 2008. The person(s) controlling the copyright in
+    some of this material may not have granted the IETF Trust the right to allow modifications of such
+    material outside the IETF Standards Process. Without obtaining an adequate license from the
+    person(s) controlling the copyright in such materials, this document may not be modified outside
+    the IETF Standards Process, and derivative works of it may not be created outside the IETF
+    Standards Process, except to format it for publication as an RFC or to translate it into languages
+    other than English.
+  </t>
+</blockquote>
+<t>
+  See Section 4 of <eref target="http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf"/>
+  for further information about when to use this value.
+</t>
+<aside>
+  <t>
+    <strong>Note:</strong> this text appears under "Copyright Notice", unless the 
+    document was published before November 2009, in which case it appears
+    under "Status Of This Memo".
+  </t>
+</aside>
+</section>
+</section> 
+
+<section title="Historic Values" anchor="attribute-ipr-historic">
+
+<section title="Historic Values: '*trust200811'" anchor="attribute-ipr-200811">
+<iref item="ipr attribute" subitem="'*trust200811'"/>
+<t>
+  The attribute values "<x:span anchor="attribute-ipr-trust200811">trust200811</x:span>",
+  "<x:span anchor="attribute-ipr-noModificationTrust200811">noModificationTrust200811</x:span>" and
+  "<x:span anchor="attribute-ipr-noDerivativesTrust200811">noDerivativesTrust200811</x:span>"
+  are similar to their "trust200902" counterparts, except that they use text
+  specified in <eref target="http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy_11-10-08.pdf"/>.
+</t>
+</section>
+
+<section title="Historic Values: '*3978'" anchor="attribute-ipr-3978">
+<iref item="ipr attribute" subitem="'*3978'"/>
+<t>
+  The attribute values "<x:span anchor="attribute-ipr-full3978">full3978</x:span>",
+  "<x:span anchor="attribute-ipr-noModification3978">noModification3978</x:span>" and
+  "<x:span anchor="attribute-ipr-noDerivatives3978">noDerivatives3978</x:span>"
+  are similar to their counterparts above, except that they use text
+  specified in <xref target="RFC3978" section="5" sectionFormat="of"/>.
+</t>
+</section>
+
+<section title="Historic Values: '*3667'" anchor="attribute-ipr-3667">
+<iref item="ipr attribute" subitem="'*3667'"/>
+<t>
+  The attribute values "<x:span anchor="attribute-ipr-full3667">full3667</x:span>",
+  "<x:span anchor="attribute-ipr-noModification3667">noModification3667</x:span>" and
+  "<x:span anchor="attribute-ipr-noDerivatives3667">noDerivatives3667</x:span>"
+  are similar to their counterparts above, except that they use text
+  specified in <xref target="RFC3667" section="5" sectionFormat="of"/>.
+</t>
+</section>
+
+<section title="Historic Values: '*2026'" anchor="attribute-ipr-2026">
+<iref item="ipr attribute" subitem="'*2026'"/>
+<t>
+  The attribute values "<x:span anchor="attribute-ipr-full2026">full2026</x:span>" and
+  "<x:span anchor="attribute-ipr-noDerivativeWorks2026">noDerivativeWorks2026</x:span>"
+  are similar to their counterparts above, except that they use text
+  specified in <xref target="RFC2026" section="10" sectionFormat="of"/>.
+</t>
+<t>
+  The special value "<x:span anchor="attribute-ipr-none">none</x:span>"
+  was also used back then, and denied the IETF any rights beyond publication
+  as Internet-Draft.
+</t>
+</section>
+</section>
+</section>
+
+<section title="The /rfc/@submissionType Attribute" anchor="attribute-submissiontype">
+<t>
+  The RFC Editor publishes documents from different "document streams", of which
+  the "IETF stream" is the most prominent one. Other streams are the "independent stream"
+  (used for things such as administrative information or April 1st RFCs),
+  the "IAB stream" (Internet Architecture Board) and the "IRTF stream" (Internet Research Task Force).
+</t>
+<t>
+  The values for the attribute are "IETF" (the default value),
+  "independent", "IAB", and "IRTF".
+</t>
+<t>
+  Historically, this attribute did not affect the final appearance of RFCs, except for
+  subtle differences in Copyright notices.
+  Nowadays (as of <xref target="RFC5741"/>), the stream name appears in the first
+  line of the front page, and it also affects the text in the "Status Of This Memo"
+  section.
+</t>
+<t>
+  For current documents, setting submissionType attribute will
+  have the following effect:
+</t>
+<ul>
+  <li>
+    For RFCs, the stream name appears in the upper left corner of the 
+    first page (in Internet Drafts, this is either "Network Working Group",
+    or the value of the &lt;<x:ref>workgroup</x:ref>&gt; element).
+  </li>
+  <li>
+    For RFCs, if affects the whole "Status Of This Memo" section (see
+    <xref section="3.2.2" sectionFormat="of" target="RFC5741"/>).
+  </li>
+  <li>
+    For all RFCs and Internet Drafts, it determines whether the "Copyright
+    Notice" mentions the Copyright on Code Components (see TLP, Section "Text To Be Included in IETF Documents"). 
+  </li>
+</ul>
+</section>
+
+<section title="The /rfc/@consensus Attribute" anchor="attribute-consensus">
+<t>
+  For some of the publication streams (see <xref target="attribute-submissiontype"/>),
+  the "Status Of This Memo" section depends on whether there was a consensus
+  to publish (again, see <xref section="3.2.2" sectionFormat="of" target="RFC5741"/>).
+</t>
+<t>
+  The consensus attribute ("yes"/"no", defaulting to "yes")
+  can be used to supply this information. The effect for the various streams is:
+</t>
+<ul>
+  <li>"independent" and "IAB": none.</li>
+  <li>"IETF": mention that there was an IETF consensus.</li>
+  <li>"IRTF": mention that there was a research group consensus (where the name of the research
+  group is extracted from the &lt;<x:ref>workgroup</x:ref>&gt; element).</li>
+</ul>
+</section>
+
+</section>
+
+<section title="Changes from RFC 2629 ('v1')" anchor="changes.from.rfc2629">
+<section title="RNC Schema Differences" removeInRFC="yes">
+  <t>
+    See <eref target="http://greenbytes.de/tech/webdav/draft-reschke-xml2rfc-02.html#rfc.section.E"/>
+    for a comparison of the schemata.
+  </t>
+</section>
+
+<section title="Removed Elements">
+<t>
+  The &lt;appendix&gt; element has been removed; to generate an appendix,
+  place a &lt;<x:ref>section</x:ref>&gt; inside &lt;<x:ref>back</x:ref>&gt;.
+</t>
+</section>
+
+<section title="Changed Defaults">
+<t>
+  Many attributes have lost their "default" value; this is to avoid having document
+  semantics differ based on whether a DTD was specified and evaluated.
+  Processors will handle absent values the way the default value was specified before.
+</t>
+</section>
+
+<section title="Changed Elements">
+<t>
+  &lt;<x:ref>artwork</x:ref>&gt;: Has a set of new attributes:
+  "name", "type", "src", "align", "alt", "width", and "height".
+  (<xref target="element.artwork"/>)
+</t>
+<t>
+  &lt;<x:ref>author</x:ref>&gt;: The &lt;<x:ref>organization</x:ref>&gt; element
+  is now optional. The "role" attribute was added.
+  (<xref target="element.author"/>)
+</t>
+<t>
+  &lt;<x:ref>country</x:ref>&gt;: The requirement to use ISO 3166 codes was
+  removed.
+  (<xref target="element.country"/>)
+</t>
+<t>
+  &lt;<x:ref>date</x:ref>&gt;: All attributes are now optional.
+  (<xref target="element.date"/>)
+</t>
+<t>
+  &lt;<x:ref>figure</x:ref>&gt;: Has a set of new attributes:
+  "suppress-title", "src", "align", "alt", "width", and "height".
+  (<xref target="element.figure"/>)
+</t>
+<t>
+  &lt;<x:ref>iref</x:ref>&gt;: Has a new "primary" attribute.
+  (<xref target="element.iref"/>)
+</t>
+<t>
+  &lt;<x:ref>list</x:ref>&gt;: The "style" attribute isn't restricted to a set
+  of enumerated values anymore. The "hangIndent" and "counter" attributes have
+  been added.
+  (<xref target="element.list"/>)
+</t>
+<t>
+  &lt;<x:ref>reference</x:ref>&gt;:  &lt;<x:ref>annotation</x:ref>&gt; allows 
+  adding prose to a reference. The "anchor" attribute has been made mandatory.
+  (<xref target="element.reference"/>)
+</t>
+<t>
+  &lt;<x:ref>references</x:ref>&gt;:  Can now appear multiple times, and
+  carry a "title" attribute (so that normative and informative references
+  can be split).
+  (<xref target="element.references"/>)
+</t>
+<t>
+  &lt;<x:ref>rfc</x:ref>&gt;:  The "ipr" attribute has gained additional
+  values.  The attributes "consensus", "iprExtract", "submissionType", and
+  "xml:lang" have been added. 
+  (<xref target="element.rfc"/>)
+</t>
+<t>
+  &lt;<x:ref>section</x:ref>&gt;:  The new "toc" attribute controls whether
+  it will appear in the Table Of Contents. &lt;<x:ref>iref</x:ref>&gt;
+  can now appear as direct child element.
+  (<xref target="element.section"/>)
+</t>
+<t>
+  &lt;<x:ref>t</x:ref>&gt;:  The "anchor" attribute can now be used as well,
+  however there are restrictions on how they can be referred to.
+  (<xref target="element.t"/>)
+</t>
+</section>
+
+<section title="New Elements">
+<t>
+  The following elements have been added:
+  &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>),
+  &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>),
+  &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>),
+  &lt;<x:ref>format</x:ref>&gt; (<xref target="element.format"/>),
+  &lt;<x:ref>spanx</x:ref>&gt; (<xref target="element.spanx"/>),
+  &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>),
+  &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).
+</t>
+</section>
+</section>
+
+<section title="Relax NG Schema" anchor="schema">
+<figure><artwork type="application/relax-ng-compact-syntax"><?BEGININC xml2rfcv2.rnc.folded ?>
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+
+
+<strong anchor="grammar.rfc">rfc</strong><iref item="rfc element"/> =
+  element rfc {
+    attribute number { text }?,
+    [ a:defaultValue = "" ] attribute obsoletes { text }?,
+    [ a:defaultValue = "" ] attribute updates { text }?,
+    attribute category {
+      "std" | "bcp" | "info" | "exp" | "historic"
+    }?,
+    attribute consensus { "no" | "yes" }?,
+    attribute seriesNo { text }?,
+    attribute ipr {
+      "full2026"
+      | "noDerivativeWorks2026"
+      | "none"
+      | "full3667"
+      | "noModification3667"
+      | "noDerivatives3667"
+      | "full3978"
+      | "noModification3978"
+      | "noDerivatives3978"
+      | "trust200811"
+      | "noModificationTrust200811"
+      | "noDerivativesTrust200811"
+      | "trust200902"
+      | "noModificationTrust200902"
+      | "noDerivativesTrust200902"
+      | "pre5378Trust200902"
+    }?,
+    attribute iprExtract { xsd:IDREF }?,
+    [ a:defaultValue = "IETF" ]
+    attribute submissionType {
+      "IETF" | "IAB" | "IRTF" | "independent"
+    }?,
+    attribute docName { text }?,
+    [ a:defaultValue = "en" ] attribute xml:lang { text }?,
+    front,
+    middle,
+    back?
+  }
+
+<strong anchor="grammar.front">front</strong><iref item="front element"/> =
+  element front {
+    title,
+    author+,
+    date,
+    area*,
+    workgroup*,
+    keyword*,
+    abstract?,
+    note*
+  }
+
+<strong anchor="grammar.title">title</strong><iref item="title element"/> =
+  element title {
+    attribute abbrev { text }?,
+    text
+  }
+
+<strong anchor="grammar.author">author</strong><iref item="author element"/> =
+  element author {
+    attribute initials { text }?,
+    attribute surname { text }?,
+    attribute fullname { text }?,
+    attribute role { "editor" }?,
+    organization?,
+    address?
+  }
+
+<strong anchor="grammar.organization">organization</strong><iref item="organization element"/> =
+  element organization {
+    attribute abbrev { text }?,
+    text
+  }
+
+<strong anchor="grammar.address">address</strong><iref item="address element"/> =
+  element address { postal?, phone?, facsimile?, email?, uri? }
+
+<strong anchor="grammar.postal">postal</strong><iref item="postal element"/> =
+  element postal { street+, (city | region | code | country)* }
+
+<strong anchor="grammar.street">street</strong><iref item="street element"/> = element street { text }
+
+<strong anchor="grammar.city">city</strong><iref item="city element"/> = element city { text }
+
+<strong anchor="grammar.region">region</strong><iref item="region element"/> = element region { text }
+
+<strong anchor="grammar.code">code</strong><iref item="code element"/> = element code { text }
+
+<strong anchor="grammar.country">country</strong><iref item="country element"/> = element country { text }
+
+<strong anchor="grammar.phone">phone</strong><iref item="phone element"/> = element phone { text }
+
+<strong anchor="grammar.facsimile">facsimile</strong><iref item="facsimile element"/> = element facsimile { text }
+
+<strong anchor="grammar.email">email</strong><iref item="email element"/> = element email { text }
+
+<strong anchor="grammar.uri">uri</strong><iref item="uri element"/> = element uri { text }
+
+<strong anchor="grammar.date">date</strong><iref item="date element"/> =
+  element date {
+    attribute day { text }?,
+    attribute month { text }?,
+    attribute year { text }?,
+    empty
+  }
+
+<strong anchor="grammar.area">area</strong><iref item="area element"/> = element area { text }
+
+<strong anchor="grammar.workgroup">workgroup</strong><iref item="workgroup element"/> = element workgroup { text }
+
+<strong anchor="grammar.keyword">keyword</strong><iref item="keyword element"/> = element keyword { text }
+
+<strong anchor="grammar.abstract">abstract</strong><iref item="abstract element"/> = element abstract { t+ }
+
+<strong anchor="grammar.note">note</strong><iref item="note element"/> =
+  element note {
+    attribute title { text },
+    t+
+  }
+
+<strong anchor="grammar.middle">middle</strong><iref item="middle element"/> = element middle { section+ }
+
+<strong anchor="grammar.section">section</strong><iref item="section element"/> =
+  element section {
+    attribute anchor { xsd:ID }?,
+    attribute title { text },
+    [ a:defaultValue = "default" ]
+    attribute toc { "include" | "exclude" | "default" }?,
+    (t | figure | texttable | iref)*,
+    section*
+  }
+
+<strong anchor="grammar.t">t</strong><iref item="t element"/> =
+  element t {
+    attribute anchor { xsd:ID }?,
+    attribute hangText { text }?,
+    (text
+     | \list
+     | figure
+     | xref
+     | eref
+     | iref
+     | cref
+     | spanx
+     | vspace)*
+  }
+
+<strong anchor="grammar.list">\list</strong><iref item="list element"/> =
+  element list {
+    attribute style { text }?,
+    attribute hangIndent { text }?,
+    attribute counter { text }?,
+    t+
+  }
+
+<strong anchor="grammar.xref">xref</strong><iref item="xref element"/> =
+  element xref {
+    attribute target { xsd:IDREF },
+    [ a:defaultValue = "false" ]
+    attribute pageno { "true" | "false" }?,
+    [ a:defaultValue = "default" ]
+    attribute format { "counter" | "title" | "none" | "default" }?,
+    text
+  }
+
+<strong anchor="grammar.eref">eref</strong><iref item="eref element"/> =
+  element eref {
+    attribute target { text },
+    text
+  }
+
+<strong anchor="grammar.iref">iref</strong><iref item="iref element"/> =
+  element iref {
+    attribute item { text },
+    [ a:defaultValue = "" ] attribute subitem { text }?,
+    [ a:defaultValue = "false" ]
+    attribute primary { "true" | "false" }?,
+    empty
+  }
+
+<strong anchor="grammar.cref">cref</strong><iref item="cref element"/> =
+  element cref {
+    attribute anchor { xsd:ID }?,
+    attribute source { text }?,
+    text
+  }
+
+<strong anchor="grammar.spanx">spanx</strong><iref item="spanx element"/> =
+  element spanx {
+    [ a:defaultValue = "preserve" ]
+    attribute xml:space { "default" | "preserve" }?,
+    [ a:defaultValue = "emph" ] attribute style { text }?,
+    text
+  }
+
+<strong anchor="grammar.vspace">vspace</strong><iref item="vspace element"/> =
+  element vspace {
+    [ a:defaultValue = "0" ] attribute blankLines { text }?,
+    empty
+  }
+
+<strong anchor="grammar.figure">figure</strong><iref item="figure element"/> =
+  element figure {
+    attribute anchor { xsd:ID }?,
+    [ a:defaultValue = "" ] attribute title { text }?,
+    [ a:defaultValue = "false" ]
+    attribute suppress-title { "true" | "false" }?,
+    attribute src { text }?,
+    [ a:defaultValue = "left" ]
+    attribute align { "left" | "center" | "right" }?,
+    [ a:defaultValue = "" ] attribute alt { text }?,
+    [ a:defaultValue = "" ] attribute width { text }?,
+    [ a:defaultValue = "" ] attribute height { text }?,
+    iref*,
+    preamble?,
+    artwork,
+    postamble?
+  }
+
+<strong anchor="grammar.preamble">preamble</strong><iref item="preamble element"/> =
+  element preamble { (text | xref | eref | iref | cref | spanx)* }
+
+<strong anchor="grammar.artwork">artwork</strong><iref item="artwork element"/> =
+  element artwork {
+    [ a:defaultValue = "preserve" ]
+    attribute xml:space { "default" | "preserve" }?,
+    [ a:defaultValue = "" ] attribute name { text }?,
+    [ a:defaultValue = "" ] attribute type { text }?,
+    attribute src { text }?,
+    [ a:defaultValue = "left" ]
+    attribute align { "left" | "center" | "right" }?,
+    [ a:defaultValue = "" ] attribute alt { text }?,
+    [ a:defaultValue = "" ] attribute width { text }?,
+    [ a:defaultValue = "" ] attribute height { text }?,
+    text*
+  }
+
+<strong anchor="grammar.postamble">postamble</strong><iref item="postamble element"/> =
+  element postamble { (text | xref | eref | iref | cref | spanx)* }
+
+<strong anchor="grammar.texttable">texttable</strong><iref item="texttable element"/> =
+  element texttable {
+    attribute anchor { xsd:ID }?,
+    [ a:defaultValue = "" ] attribute title { text }?,
+    [ a:defaultValue = "false" ]
+    attribute suppress-title { "true" | "false" }?,
+    [ a:defaultValue = "center" ]
+    attribute align { "left" | "center" | "right" }?,
+    [ a:defaultValue = "full" ]
+    attribute style { "all" | "none" | "headers" | "full" }?,
+    preamble?,
+    ttcol+,
+    c*,
+    postamble?
+  }
+
+<strong anchor="grammar.ttcol">ttcol</strong><iref item="ttcol element"/> =
+  element ttcol {
+    attribute width { text }?,
+    [ a:defaultValue = "left" ]
+    attribute align { "left" | "center" | "right" }?,
+    text
+  }
+
+<strong anchor="grammar.c">c</strong><iref item="c element"/> = element c { (text | xref | eref | iref | cref | spanx)* }
+
+<strong anchor="grammar.back">back</strong><iref item="back element"/> = element back { references*, section* }
+
+<strong anchor="grammar.references">references</strong><iref item="references element"/> =
+  element references {
+    [ a:defaultValue = "References" ] attribute title { text }?,
+    reference+
+  }
+
+<strong anchor="grammar.reference">reference</strong><iref item="reference element"/> =
+  element reference {
+    attribute anchor { xsd:ID },
+    attribute target { text }?,
+    front,
+    seriesInfo*,
+    format*,
+    annotation*
+  }
+
+<strong anchor="grammar.seriesInfo">seriesInfo</strong><iref item="seriesInfo element"/> =
+  element seriesInfo {
+    attribute name { text },
+    attribute value { text },
+    empty
+  }
+
+<strong anchor="grammar.format">format</strong><iref item="format element"/> =
+  element format {
+    attribute target { text }?,
+    attribute type { text },
+    attribute octets { text }?,
+    empty
+  }
+
+<strong anchor="grammar.annotation">annotation</strong><iref item="annotation element"/> =
+  element annotation { (text | xref | eref | iref | cref | spanx)* }
+
+start = rfc
+<?ENDINC xml2rfcv2.rnc.folded ?></artwork></figure>
+<t>
+  (This schema was derived from version 1.3.6 of the xml2rfc DTD ('Document Type
+  Definition', <xref target="XML" sectionFormat="comma" section="2.8" relative='#sec-prolog-dtd'/>),
+  available from <eref target="http://svn.tools.ietf.org/svn/tools/xml2rfc/vocabulary/v2/03/xml2rfcv2.dtd"/>).
+</t>
+
+<section title="Checking Validity" anchor="checking.validity">
+<t>
+  The validity of XML files can be checked with any tool that supports Relax NG
+  (<xref target="RNC"/>). The reference implementation is the Java-based, open
+  sourced "JING" (<xref target="JING"/>).
+</t>
+<t>
+  To use JING, download the latest ZIP file from the "downloads" page
+  (currently <eref target="https://code.google.com/p/jing-trang/downloads/detail?name=jing-20091111.zip"/>),
+  extract the archive, copy "jing.jar" from the "bin" folder, and make
+  sure Java is installed).
+</t>
+<t>
+  To check a file "test.xml" using the RNC file "schema.rnc", run (from a command
+  line prompt):
+</t>
+<figure><artwork type="example">
+java -jar jing.jar -c schema.rnc test.xml
+</artwork></figure>
+<t>
+  In good Unix tradition, no output means the file is valid.
+</t>
+</section>
+
+</section>
+
+  </back>
+
+</rfc>
