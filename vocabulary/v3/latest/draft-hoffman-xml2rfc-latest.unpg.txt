@@ -322,9 +322,6 @@ Table of Contents
    o  Add "display" to <cref> to indicate to tools whether or not to
       display the comment.
 
-   o  Add "derivedContent" to <xref> to hold the text from the prep
-      tool.
-
    o  Add "keepWithNext" and "keepWithPrevious" to <t> as a hint to
       tools that do pagination that the should try to keep the paragraph
       with the next/previous element.
@@ -2108,13 +2105,6 @@ Table of Contents
    attribute is easier to use than the "relative" attribute because the
    value of "section" is just a section string such as "2.3".
 
-   When processing a <relref> element, the prep tool fills in the
-   "derivedRemoteContent" attribute if there is no content in the
-   <relref> element; otherwise, it fills the "derivedRemoteContent"
-   attribute with the content and sets the "displayFormat" attribute to
-   "bare" if that attribute is not already set.  The prep tool always
-   fills in the "derivedLink" attribute.
-
    An example of the <relref> element with text content might be:
 
          See <relref section="2.3" target="RFC7878">
@@ -3390,10 +3380,6 @@ Table of Contents
    document, to specific figures, and so on.  The "target" attribute is
    required.
 
-   When processing an <xref> element, the prep tool fills in the
-   "derivedContent" attribute if there is no content in the <xref>
-   element; otherwise, it fills that attribute with the content.
-
    This element appears as a child element of: <annotation>
    (Section 2.3), <blockquote> (Section 2.10), <c> (Section 3.1), <cref>
    (Section 2.16), <dd> (Section 2.18), <dt> (Section 2.21), <em>
@@ -3407,11 +3393,9 @@ Table of Contents
 
 2.66.1.  'format' attribute
 
-   This attribute is used to control the content of the "derivedContent"
-   attribute that is filled in by the prep tool.  It also signals to
-   formatters what the desired format of the reference should be.
-   Formatters for document types that have linking capability should
-   wrap the displayed text in hyperlinks.
+   This attribute signals to formatters what the desired format of the
+   reference should be.  Formatters for document types that have linking
+   capability should wrap the displayed text in hyperlinks.
 
    "counter"
 
@@ -4473,24 +4457,29 @@ B.3.  Attributes Controlled by the Prep Tool
       of a section.  The "pn" attribute is added to many block-level
       elements inside sections.
 
-   o  <artwork> originalSrc -- This attribute contains the original
-      value of the "src" attribute if that attribute is removed by the
-      prep tool.
+   o  <artwork> originalSrc -- This attribute is filled with the
+      original value of the "src" attribute if that attribute is removed
+      by the prep tool.
 
-   o  <iref> irefid -- This attribute contains an identifier used when
-      creating indexes.
+   o  <iref> "irefid" attribute -- This attribute is filled with an
+      identifier used when creating indexes.
 
-   o  <name> slugifiedName -- This attribute contains a "slugified"
-      version of the text in the element.  This attribute can be used in
-      the output formats for elements that have both names and numbers.
+   o  <name> "slugifiedName" attribute -- This attribute is filled with
+      a "slugified" version of the text in the element.  This attribute
+      can be used in the output formats for elements that have both
+      names and numbers.
 
-   o  <relref> derivedLink -- This attribute is the link that is derived
-      from combining the URI from the reference and the relative part
-      that is either a copy of the "relative" attribute or a section
-      number derived from the "section" attribute.
+   o  <relref> "derivedLink" attribute -- This attribute is filled with
+      the link that is derived from combining the URI from the reference
+      and the relative part that is either a copy of the "relative"
+      attribute or a section number derived from the "section"
+      attribute.
 
-   o  <relref> derivedRemoteContent -- If the <relref> element has no
-      text content, this attribute contains the text for the remote
+   o  <relref> "derivedRemoteContent" attribute -- If the <relref>
+      element has text content, this attribute is filled with that
+      content; the "displayFormat" attribute is set to "bare" if that
+      attribute is not already set.  If the <relref> element has no text
+      content, this attribute is filled with the text for the remote
       link, such as "Section 2.3" or "Table 5".  The prep tool might
       determine this text by reading the target reference and, if it is
       a RFC or Internet-Draft in the v3 format, finding the anchor given
@@ -4502,22 +4491,22 @@ B.3.  Attributes Controlled by the Prep Tool
       output so, for these documents, the <relref> element should
       contain text content.
 
-   o  <rfc> expiresDate -- This attribute has the date that an Internet
-      Draft expires.
+   o  <rfc> "expiresDate" attribute -- This attribute is filled with the
+      date that an Internet Draft expires.
 
-   o  <rfc> scripts -- This attribute has a list of scripts needed to
-      render this document.  The list is comma-separated, with no spaces
-      allowed.  The order is unimportant.  The names come from [UAX24].
-      For example, if the document has Chinese characters in it, the
-      value might be "Common,Latin,Han".
+   o  <rfc> "scripts" attribute -- This attribute is filled with a list
+      of scripts needed to render this document.  The list is comma-
+      separated, with no spaces allowed.  The order is unimportant.  The
+      names come from [UAX24].  For example, if the document has Chinese
+      characters in it, the value might be "Common,Latin,Han".
 
-   o  <sourcecode> originalSrc -- This attribute contains the original
-      value of the "src" attribute if that attribute is removed by the
-      prep tool.
+   o  <sourcecode> "originalSrc" attribute -- This attribute is filled
+      with the original value of the "src" attribute if that attribute
+      is removed by the prep tool.
 
-   o  <xref> derivedContent -- This attribute is filled in if there is
-      no content in the <xref> element.  The value for this attribute
-      based on the value in the "displayFormat" attribute.
+   o  <xref> "derivedContent" attribute -- This attribute is filled in
+      if there is no content in the <xref> element.  The value for this
+      attribute based on the value in the "displayFormat" attribute.
 
    In addition, note that the contents of the <boilerplate> element is
    controlled by the prep tool.
