@@ -660,20 +660,7 @@ Table of Contents
    elements are all fragments of a single file, and the tool can collect
    those fragments for later processing.
 
-2.5.6.  'originalSrc' attribute
-
-   This attribute is filled in by the prep tool, and contains the
-   original value of the "src" attribute if that attribute is removed by
-   the prep tool.  See Appendix B.3 for information about the control of
-   this attribute.
-
-2.5.7.  'pn' attribute
-
-   The number for this artwork within the section.  The numbering is
-   shared with other elements of a section.  This is described in more
-   detail in Appendix B.2.
-
-2.5.8.  'src' attribute
+2.5.6.  'src' attribute
 
    The URI reference of a graphics file ([RFC3986]), or the name of a
    file on the local disk.  This can be a "data" URI ([RFC2397]) that
@@ -695,7 +682,7 @@ Table of Contents
    It is an error to have both a "src" attribute and content in the
    <artwork> element.
 
-2.5.9.  'type' attribute
+2.5.7.  'type' attribute
 
    Specifies the type of the artwork.  The value of this attribute is
    free text with certain values designated as preferred.
@@ -717,11 +704,11 @@ Table of Contents
    Thus, a consumer of v3 XML should not cause a failure when it
    encounters an unexpected type.
 
-2.5.10.  'width' attribute
+2.5.8.  'width' attribute
 
    Deprecated.
 
-2.5.11.  'xml:space' attribute
+2.5.9.  'xml:space' attribute
 
    Deprecated.
 
@@ -757,12 +744,6 @@ Table of Contents
 2.6.1.  'anchor' attribute
 
    Document-wide unique identifier for this aside.
-
-2.6.2.  'pn' attribute
-
-   The number for this aside within the section.  The numbering is
-   shared with other elements of a section.  This is described in more
-   detail in Appendix B.2.
 
 2.7.  <author>
 
@@ -939,13 +920,7 @@ Table of Contents
    attribute is given, this URI will be used by processing tools as the
    link for the text of that attribute.
 
-2.10.3.  'pn' attribute
-
-   The number for this blockquote within the section.  The numbering is
-   shared with other elements of a section.  This is described in more
-   detail in Appendix B.2.
-
-2.10.4.  'quotedFrom' attribute
+2.10.3.  'quotedFrom' attribute
 
    Name of person or document the text in this element is quoted from.
    A formatter should render this as visible text at the end of the
@@ -961,11 +936,6 @@ Table of Contents
    Content model:
 
    One or more <section> elements (Section 2.46)
-
-2.11.1.  'pn' attribute
-
-   The name for this boilerplate.  This is described in more detail in
-   Appendix B.2.
 
 2.12.  <br>
 
@@ -1192,12 +1162,6 @@ Table of Contents
 
    Document-wide unique identifier for this definition.
 
-2.18.2.  'pn' attribute
-
-   The number for this definition within the section.  The numbering is
-   shared with other elements of a section.  This is described in more
-   detail in Appendix B.2.
-
 2.19.  <displayreference>
 
    This element gives a mapping between the anchor of a reference and a
@@ -1266,13 +1230,7 @@ Table of Contents
 
    o  "true" (default)
 
-2.20.3.  'pn' attribute
-
-   The number for this list within the section.  The numbering is shared
-   with other elements of a section.  This is described in more detail
-   in Appendix B.2.
-
-2.20.4.  'spacing' attribute
+2.20.3.  'spacing' attribute
 
    Defines whether or not there is a blank line between entries.
    spacing="normal" indicates a single blank line, while
@@ -1321,12 +1279,6 @@ Table of Contents
 2.21.1.  'anchor' attribute
 
    Document-wide unique identifier for this term.
-
-2.21.2.  'pn' attribute
-
-   The number for this term within the section.  The numbering is shared
-   with other elements of a section.  This is described in more detail
-   in Appendix B.2.
 
 2.22.  <em>
 
@@ -1498,16 +1450,11 @@ Table of Contents
 
    Deprecated.
 
-2.25.5.  'pn' attribute
-
-   The number for this figure.  This is described in more detail in
-   Appendix B.2.
-
-2.25.6.  'src' attribute
+2.25.5.  'src' attribute
 
    Deprecated.
 
-2.25.7.  'suppress-title' attribute
+2.25.6.  'suppress-title' attribute
 
    Deprecated.  Figures always now get captions.
 
@@ -1517,11 +1464,11 @@ Table of Contents
 
    o  "false" (default)
 
-2.25.8.  'title' attribute
+2.25.7.  'title' attribute
 
    Deprecated.  Use <name> instead.
 
-2.25.9.  'width' attribute
+2.25.8.  'width' attribute
 
    Deprecated.
 
@@ -1595,18 +1542,11 @@ Table of Contents
 
    Content model: this element does not have any contents.
 
-2.27.1.  'irefid' attribute
-
-   This attribute is filled in by the prep tool and is an identifier
-   used when creating indexes.  This is described in more detail in
-   Appendix B.2.  See Appendix B.3 for information about the control of
-   this attribute.
-
-2.27.2.  'item' attribute (mandatory)
+2.27.1.  'item' attribute (mandatory)
 
    The item to include.
 
-2.27.3.  'primary' attribute
+2.27.2.  'primary' attribute
 
    Setting this to "true" declares the occurrence as "primary", which
    might cause it to be highlighted in the index.
@@ -1617,7 +1557,7 @@ Table of Contents
 
    o  "false" (default)
 
-2.27.4.  'subitem' attribute
+2.27.3.  'subitem' attribute
 
    The subitem to include.
 
@@ -1698,12 +1638,6 @@ Table of Contents
 
    Document-wide unique identifier for this list item.
 
-2.29.2.  'pn' attribute
-
-   The number for this list item within the section.  The numbering is
-   shared with other elements of a section.  This is described in more
-   detail in Appendix B.2.
-
 2.30.  <link>
 
    A link to an external document that is related to the RFC.
@@ -1782,13 +1716,6 @@ Table of Contents
 
    o  <xref> elements (Section 2.66)
 
-2.32.1.  'slugifiedName' attribute
-
-   This attribute is filled in by the prep tool with a "slugified"
-   version of the text in the element.  This attribute can be used in
-   the output formats for elements that have both names and numbers.
-   See Appendix B.3 for information about the control of this attribute.
-
 2.33.  <note>
 
    Creates an unnumbered section that appears after the abstract.
@@ -1817,12 +1744,7 @@ Table of Contents
        *  <ul> elements (Section 2.63)
 
 
-2.33.1.  'pn' attribute
-
-   The number for this note.  This is described in more detail in
-   Appendix B.2.
-
-2.33.2.  'removeInRFC' attribute
+2.33.1.  'removeInRFC' attribute
 
    If set to "true", this note is marked in the prep tool with text
    indicating that it should be removed before the document is published
@@ -1834,7 +1756,7 @@ Table of Contents
 
    o  "false" (default)
 
-2.33.3.  'title' attribute
+2.33.2.  'title' attribute
 
    Deprecated.  Use <name> instead.
 
@@ -1864,13 +1786,7 @@ Table of Contents
    <ol> element has both a "group" and "start" attribute, the group's
    numbering is reset to the given start value.
 
-2.34.3.  'pn' attribute
-
-   The number for this list within the section.  The numbering is shared
-   with other elements of a section.  This is described in more detail
-   in Appendix B.2.
-
-2.34.4.  'spacing' attribute
+2.34.3.  'spacing' attribute
 
    Defines whether or not there is a blank line between entries.
    spacing="normal" indicates a single blank line, while
@@ -1882,12 +1798,12 @@ Table of Contents
 
    o  "compact"
 
-2.34.5.  'start' attribute
+2.34.4.  'start' attribute
 
    The ordinal value to start the list at.  This defaults to "1", and
    must be an integer of 0 or greater.
 
-2.34.6.  'type' attribute
+2.34.5.  'type' attribute
 
    The type of the labels on list items.  If the length of the type
    value is 1, the meaning is the same as it is for HTML:
@@ -2222,32 +2138,7 @@ Table of Contents
 
    Content model: only text content.
 
-2.44.1.  'derivedLink' attribute
-
-   This attribute is filled in by the prep tool and is the link that is
-   derived from combining the URI from the reference and the relative
-   part that is either a copy of the "relative" attribute or a section
-   number derived from the "section" attribute.  See Appendix B.3 for
-   information about the control of this attribute.
-
-2.44.2.  'derivedRemoteContent' attribute
-
-   This attribute is filled in by the prep tool.  If the <relref>
-   element has no text content, this attribute contains the text for the
-   remote link, such as "Section 2.3" or "Table 5".  The prep tool might
-   determine this text by reading the target reference and, if it is a
-   RFC or Internet-Draft in the v3 format, finding the anchor given in
-   the "relative" attribute or derived from the "section" attribute, and
-   using the title of that element.  See Appendix B.3 for information
-   about the control of this attribute.
-
-   If the reference is not an RFC or Internet-Draft in the v3 format,
-   the text fragment is simply the value of the "relative" or "section"
-   attribute.  This will rarely produce a good result in formatted
-   output so, for these documents, the <relref> element should contain
-   text content.
-
-2.44.3.  'displayFormat' attribute
+2.44.1.  'displayFormat' attribute
 
    This attribute is used to signal formatters what the desired format
    of the relative reference should be.  Formatters for document types
@@ -2359,19 +2250,19 @@ Table of Contents
 
    o  "bare"
 
-2.44.4.  'relative' attribute
+2.44.2.  'relative' attribute
 
    Specifies a relative reference from the URI in the target reference.
    This value must include whatever leading character is needed to
    create the relative reference; typically, this is "#" for HTML
    documents.
 
-2.44.5.  'section' attribute
+2.44.3.  'section' attribute
 
    Specifies a section of the target reference.  If the reference is not
    an RFC or Internet-Draft, it is an error.
 
-2.44.6.  'target' attribute (mandatory)
+2.44.4.  'target' attribute (mandatory)
 
    The anchor of the reference for this element.  If this value is not
    an anchor to a <reference> or <referencegroup> element, it is an
@@ -2419,13 +2310,7 @@ Table of Contents
 
    Deprecated; instead, use the "value" attribute in <seriesInfo>.
 
-2.45.4.  'expiresDate' attribute
-
-   This attribute is filled in by the prep tool with an Internet Draft
-   expires.  See Appendix B.3 for information about the control of this
-   attribute.
-
-2.45.5.  'indexInclude' attribute
+2.45.4.  'indexInclude' attribute
 
    Specifies whether or not a formatter is requested to include an index
    in generated files.  If the souce file has no <iref> elements, an
@@ -2439,7 +2324,7 @@ Table of Contents
 
    o  "false"
 
-2.45.6.  'ipr' attribute
+2.45.5.  'ipr' attribute
 
    Represents the Intellectual Property status of the document.  See
    Appendix A.1 for details.
@@ -2478,43 +2363,34 @@ Table of Contents
 
    o  "pre5378Trust200902"
 
-2.45.7.  'iprExtract' attribute
+2.45.6.  'iprExtract' attribute
 
    Identifies a single section within the document for which extraction
    "as-is" is explicitly allowed (only relevant for historic values of
    the "ipr" attribute).
 
-2.45.8.  'number' attribute
+2.45.7.  'number' attribute
 
    Deprecated; instead, use the "value" attribute in <seriesInfo>.
 
-2.45.9.  'obsoletes' attribute
+2.45.8.  'obsoletes' attribute
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
    The prep tool will parse the attribute value so that incorrect
    references can be detected.
 
-2.45.10.  'prepTime' attribute
+2.45.9.  'prepTime' attribute
 
    The date that the XML was processed by a preparation tool.  This is
    included in the XML file just before it is saved to disk.  The value
    is formatted using the format from [RFC3339].
 
-2.45.11.  'scripts' attribute
-
-   This attribute is filled in by the prep tool to list of scripts
-   needed to render this document.  The list is comma-separated, with no
-   spaces allowed.  The order is unimportant.  The names come from
-   [UAX24].  For example, if the document has Chinese characters in it,
-   the value might be "Common,Latin,Han".  See Appendix B.3 for
-   information about the control of this attribute.
-
-2.45.12.  'seriesNo' attribute
+2.45.10.  'seriesNo' attribute
 
    Deprecated; instead, use the "value" attribute in <seriesInfo>.
 
-2.45.13.  'sortRefs' attribute
+2.45.11.  'sortRefs' attribute
 
    Specifies whether or not the prep tool will sort the references in
    each reference section.
@@ -2525,7 +2401,7 @@ Table of Contents
 
    o  "false" (default)
 
-2.45.14.  'submissionType' attribute
+2.45.12.  'submissionType' attribute
 
    The document stream.
 
@@ -2541,7 +2417,7 @@ Table of Contents
 
    o  "independent"
 
-2.45.15.  'symRefs' attribute
+2.45.13.  'symRefs' attribute
 
    Specifies whether or not a formatter is requested to use symbolic
    references (such as "[RFC2119]").  If the value for this is "false",
@@ -2553,12 +2429,12 @@ Table of Contents
 
    o  "false"
 
-2.45.16.  'tocDepth' attribute
+2.45.14.  'tocDepth' attribute
 
    Specifies number of levels of heading that formatter is requested to
    include in the table of contents; the default is "3".
 
-2.45.17.  'tocInclude' attribute
+2.45.15.  'tocInclude' attribute
 
    Specifies whether or not a formatter is requested to include a table
    of contents in generated files.
@@ -2569,14 +2445,14 @@ Table of Contents
 
    o  "false"
 
-2.45.18.  'updates' attribute
+2.45.16.  'updates' attribute
 
    A comma-separated list of RFC numbers or Internet-Draft names.
 
    The prep tool will parse the attribute value so that incorrect
    references can be detected.
 
-2.45.19.  'version' attribute
+2.45.17.  'version' attribute
 
    Specifies the version of xml2rfc syntax used in this document.  The
    only expected value (for now) is "3".
@@ -2646,12 +2522,7 @@ Table of Contents
 
    o  "false"
 
-2.46.3.  'pn' attribute
-
-   The number for this section.  This is described in more detail in
-   Appendix B.2.
-
-2.46.4.  'removeInRFC' attribute
+2.46.3.  'removeInRFC' attribute
 
    If set to "true", the formatter is requested to mark this section
    with a paragraph at the beginning of the section indicating that it
@@ -2663,11 +2534,11 @@ Table of Contents
 
    o  "false" (default)
 
-2.46.5.  'title' attribute
+2.46.4.  'title' attribute
 
    Deprecated.  Use <name> instead.
 
-2.46.6.  'toc' attribute
+2.46.5.  'toc' attribute
 
    Indicates to a formatter whether or not the section is to be included
    in a table of contents, if such a table of contents is produced.
@@ -2830,26 +2701,14 @@ Table of Contents
    the elements are all fragments of a single file, and such a formatter
    can collect those fragments for later processing.
 
-2.48.3.  'originalSrc' attribute
-
-   This attribute is filled in by the prep tool with the original value
-   of the "src" attribute if that attribute is removed by the prep tool.
-   See Appendix B.3 for information about the control of this attribute.
-
-2.48.4.  'pn' attribute
-
-   The number for this sourceode within the section.  The numbering is
-   shared with other elements of a section.  This is described in more
-   detail in Appendix B.2.
-
-2.48.5.  'src' attribute
+2.48.3.  'src' attribute
 
    The URI reference of a source file ([RFC3986]).
 
    It is an error to have both a "src" attribute and content in the
    <sourcecode> element.
 
-2.48.6.  'type' attribute
+2.48.4.  'type' attribute
 
    Specifies the type of the sourcecode.  The value of this attribute is
    free text with certain values designated as preferred.
@@ -3106,12 +2965,6 @@ Table of Contents
 
    o  "true"
 
-2.53.5.  'pn' attribute
-
-   The number for this paragraph within the section.  The numbering is
-   shared with other elements of a section.  This is described in more
-   detail in Appendix B.2.
-
 2.54.  <table>
 
    Contains a table with a caption with the table number.  If the
@@ -3146,11 +2999,6 @@ Table of Contents
 
    Document-wide unique identifier for this table.
 
-2.54.2.  'pn' attribute
-
-   The number for this table.  This is described in more detail in
-   Appendix B.2.
-
 2.55.  <tbody>
 
    A container for a set of body rows for a table.
@@ -3164,12 +3012,6 @@ Table of Contents
 2.55.1.  'anchor' attribute
 
    Document-wide unique identifier for the tbody.
-
-2.55.2.  'pn' attribute
-
-   The number for this table part within the section.  The numbering is
-   shared with other elements of a section.  This is described in more
-   detail in Appendix B.2.
 
 2.56.  <td>
 
@@ -3277,12 +3119,6 @@ Table of Contents
 
    Document-wide unique identifier for the tfoot.
 
-2.57.2.  'pn' attribute
-
-   The number for this table part within the section.  The numbering is
-   shared with other elements of a section.  This is described in more
-   detail in Appendix B.2.
-
 2.58.  <th>
 
    A cell in a table row.  When rendered, this will normally come out in
@@ -3371,13 +3207,7 @@ Table of Contents
    "colspan='3'" indicates that the cell occupies the same horizontal
    space as three cells in the row above or below this one.
 
-2.58.5.  'pn' attribute
-
-   The number for this table part within the section.  The numbering is
-   shared with other elements of a section.  This is described in more
-   detail in Appendix B.2.
-
-2.58.6.  'rowspan' attribute
+2.58.5.  'rowspan' attribute
 
    The number of rows that the cell to span.  For example, setting
    "rowspan='3'" indicates that the cell occupies the same vertical
@@ -3396,12 +3226,6 @@ Table of Contents
 2.59.1.  'anchor' attribute
 
    Document-wide unique identifier for the thead.
-
-2.59.2.  'pn' attribute
-
-   The number for this table part within the section.  The numbering is
-   shared with other elements of a section.  This is described in more
-   detail in Appendix B.2.
 
 2.60.  <title>
 
@@ -3448,12 +3272,6 @@ Table of Contents
    The width of the border for this row.  The default is 0, meaning no
    border.  If the cells in this row also have "border" attributes,
    those values override this value for those cells.
-
-2.61.3.  'pn' attribute
-
-   The number for this table part within the section.  The numbering is
-   shared with other elements of a section.  This is described in more
-   detail in Appendix B.2.
 
 2.62.  <tt>
 
@@ -3524,13 +3342,7 @@ Table of Contents
 
    o  "true"
 
-2.63.3.  'pn' attribute
-
-   The number for this list within the section.  The numbering is shared
-   with other elements of a section.  This is described in more detail
-   in Appendix B.2.
-
-2.63.4.  'spacing' attribute
+2.63.3.  'spacing' attribute
 
    Defines whether or not there is a blank line between entries.
    spacing="normal" indicates a single blank line, while
@@ -3563,7 +3375,7 @@ Table of Contents
    boilerplate, replacing the "Network Working Group" string.
    Formatting software can append the words "Working Group" or "Research
    Group", depending on the "submissionType" property on the <rfc>
-   element (Section 2.45.14).
+   element (Section 2.45.12).
 
    This element appears as a child element of: <front> (Section 2.26).
 
@@ -3593,14 +3405,7 @@ Table of Contents
 
    Content model: only text content.
 
-2.66.1.  'derivedContent' attribute
-
-   This attribute is filled in by the prep tool if there is no content
-   in the <xref> element.  The prep tool fills in this attribute based
-   on the value in the "displayFormat" attribute.  See Appendix B.3 for
-   information about the control of this attribute.
-
-2.66.2.  'format' attribute
+2.66.1.  'format' attribute
 
    This attribute is used to control the content of the "derivedContent"
    attribute that is filled in by the prep tool.  It also signals to
@@ -3669,7 +3474,7 @@ Table of Contents
 
    o  "none"
 
-2.66.3.  'pageno' attribute
+2.66.2.  'pageno' attribute
 
    Deprecated.
 
@@ -3679,7 +3484,7 @@ Table of Contents
 
    o  "false" (default)
 
-2.66.4.  'target' attribute (mandatory)
+2.66.3.  'target' attribute (mandatory)
 
    Identifies the document component being referenced.  The value needs
    to match the value of the "anchor" attribute of an element in the
@@ -4299,7 +4104,7 @@ Appendix A.  Front Page ('Boilerplate') Generation
 A.1.  The /rfc/@ipr Attribute
 
    This attribute value can take a long list of values, each of which
-   describes an IPR policy for the document (Section 2.45.6).  The
+   describes an IPR policy for the document (Section 2.45.5).  The
    values are not the result of a grand design, but remain simply for
    historic reasons.  Of these values, only a few are currently in use;
    all others are supported by various tools for backwards compatibility
@@ -4316,7 +4121,7 @@ A.1.  The /rfc/@ipr Attribute
    refer to <http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf>.
 
    For the current "Status Of This Memo" text, the submissionType
-   attribute (Section 2.45.14) determines whether a statement about
+   attribute (Section 2.45.12) determines whether a statement about
    "Code Components" is inserted (which is the case for the value
    "IETF", which is the default).  Other values, such as "independent",
    suppress this part of the text.
@@ -4604,8 +4409,7 @@ B.2.  Anchors and IDs
    Processing tools add the "pn" attribute to many elements during
    processing.  This attribute and its value are automatically generated
    by the tool if the attribute is not there; if the attribute is
-   already there, the tool may replace the value.  The same is true for
-   the "irefid" attribute in <iref>.
+   already there, the tool may replace the value.
 
 B.2.1.  Overlapping Values
 
@@ -4664,25 +4468,56 @@ B.3.  Attributes Controlled by the Prep Tool
 
    The attributes that are controlled by the prep tool are:
 
-   o  The "pn" attribute in any element
+   o  The "pn" attribute in any element -- The number for this item
+      within the section.  The numbering is shared with other elements
+      of a section.  The "pn" attribute is added to many block-level
+      elements inside sections.
 
-   o  <artwork> originalSrc
+   o  <artwork> originalSrc -- This attribute contains the original
+      value of the "src" attribute if that attribute is removed by the
+      prep tool.
 
-   o  <iref> irefid
+   o  <iref> irefid -- This attribute contains an identifier used when
+      creating indexes.
 
-   o  <name> slugifiedName
+   o  <name> slugifiedName -- This attribute contains a "slugified"
+      version of the text in the element.  This attribute can be used in
+      the output formats for elements that have both names and numbers.
 
-   o  <relref> derivedLink
+   o  <relref> derivedLink -- This attribute is the link that is derived
+      from combining the URI from the reference and the relative part
+      that is either a copy of the "relative" attribute or a section
+      number derived from the "section" attribute.
 
-   o  <relref> derivedRemoteContent
+   o  <relref> derivedRemoteContent -- If the <relref> element has no
+      text content, this attribute contains the text for the remote
+      link, such as "Section 2.3" or "Table 5".  The prep tool might
+      determine this text by reading the target reference and, if it is
+      a RFC or Internet-Draft in the v3 format, finding the anchor given
+      in the "relative" attribute or derived from the "section"
+      attribute, and using the title of that element.  If the reference
+      is not an RFC or Internet-Draft in the v3 format, the text
+      fragment is simply the value of the "relative" or "section"
+      attribute.  This will rarely produce a good result in formatted
+      output so, for these documents, the <relref> element should
+      contain text content.
 
-   o  <rfc> expiresDate
+   o  <rfc> expiresDate -- This attribute has the date that an Internet
+      Draft expires.
 
-   o  <rfc> scripts
+   o  <rfc> scripts -- This attribute has a list of scripts needed to
+      render this document.  The list is comma-separated, with no spaces
+      allowed.  The order is unimportant.  The names come from [UAX24].
+      For example, if the document has Chinese characters in it, the
+      value might be "Common,Latin,Han".
 
-   o  <sourcecode> originalSrc
+   o  <sourcecode> originalSrc -- This attribute contains the original
+      value of the "src" attribute if that attribute is removed by the
+      prep tool.
 
-   o  <xref> derivedContent
+   o  <xref> derivedContent -- This attribute is filled in if there is
+      no content in the <xref> element.  The value for this attribute
+      based on the value in the "displayFormat" attribute.
 
    In addition, note that the contents of the <boilerplate> element is
    controlled by the prep tool.
@@ -6348,8 +6183,6 @@ Index
          inside td  1
          inside th  1
          name attribute  1
-         originalSrc attribute  1
-         pn attribute  1
          src attribute  1
          type attribute  1
          width attribute  1
@@ -6377,7 +6210,6 @@ Index
       aside element  1
          anchor attribute  1
          inside section  1
-         pn attribute  1
       Attributes
          abbrev  1
          align  1
@@ -6397,14 +6229,10 @@ Index
          consensus  1
          counter  1
          day  1
-         derivedContent  1
-         derivedLink  1
-         derivedRemoteContent  1
          display  1
          displayFormat  1
          docName  1
          empty  1
-         expiresDate  1
          format  1
          fullname  1
          group  1
@@ -6417,7 +6245,6 @@ Index
          initials  1
          ipr  1
          iprExtract  1
-         irefid  1
          item  1
          keepWithNext  1
          keepWithPrevious  1
@@ -6427,9 +6254,7 @@ Index
          numbered  1
          obsoletes  1
          octets  1
-         originalSrc  1
          pageno  1
-         pn  1
          prepTime  1
          primary  1
          quotedFrom  1
@@ -6439,10 +6264,8 @@ Index
          removeInRFC  1
          role  1
          rowspan  1
-         scripts  1
          section  1
          seriesNo  1
-         slugifiedName  1
          sortRefs  1
          source  1
          spacing  1
@@ -6504,11 +6327,9 @@ Index
          anchor attribute  1
          cite attribute  1
          inside section  1
-         pn attribute  1
          quotedFrom attribute  1
       boilerplate element  1
          inside front  1
-         pn attribute  1
       border attribute
          in td element  1
          in th element  1
@@ -6574,13 +6395,6 @@ Index
       dd element  1
          anchor attribute  1
          inside dl  1
-         pn attribute  1
-      derivedContent attribute
-         in xref element  1
-      derivedLink attribute
-         in relref element  1
-      derivedRemoteContent attribute
-         in relref element  1
       display attribute
          in cref element  1
       displayFormat attribute
@@ -6601,14 +6415,12 @@ Index
          inside section  1
          inside td  1
          inside th  1
-         pn attribute  1
          spacing attribute  1
       docName attribute
          in rfc element  1
       dt element  1
          anchor attribute  1
          inside dl  1
-         pn attribute  1
 
    E
       Elements
@@ -6733,8 +6545,6 @@ Index
          inside tt  1
          inside ttcol  1
          target attribute  1
-      expiresDate attribute
-         in rfc element  1
 
    F
       facsimile element  1
@@ -6751,7 +6561,6 @@ Index
          inside section  1
          inside td  1
          inside th  1
-         pn attribute  1
          src attribute  1
          suppress-title attribute  1
          title attribute  1
@@ -6826,12 +6635,9 @@ Index
          inside th  1
          inside tt  1
          inside ttcol  1
-         irefid attribute  1
          item attribute  1
          primary attribute  1
          subitem attribute  1
-      irefid attribute
-         in iref element  1
       item attribute
          in iref element  1
 
@@ -6848,7 +6654,6 @@ Index
          anchor attribute  1
          inside ol  1
          inside ul  1
-         pn attribute  1
       link element  1
          href attribute  1
          inside rfc  1
@@ -6880,10 +6685,8 @@ Index
          inside section  1
          inside table  1
          inside texttable  1
-         slugifiedName attribute  1
       note element  1
          inside front  1
-         pn attribute  1
          removeInRFC attribute  1
          title attribute  1
       number attribute
@@ -6908,7 +6711,6 @@ Index
          inside section  1
          inside td  1
          inside th  1
-         pn attribute  1
          spacing attribute  1
          start attribute  1
          type attribute  1
@@ -6916,37 +6718,12 @@ Index
          abbrev attribute  1
          ascii attribute  1
          inside author  1
-      originalSrc attribute
-         in artwork element  1
-         in sourcecode element  1
 
    P
       pageno attribute
          in xref element  1
       phone element  1
          inside address  1
-      pn attribute
-         in artwork element  1
-         in aside element  1
-         in blockquote element  1
-         in boilerplate element  1
-         in dd element  1
-         in dl element  1
-         in dt element  1
-         in figure element  1
-         in li element  1
-         in note element  1
-         in ol element  1
-         in section element  1
-         in sourcecode element  1
-         in t element  1
-         in table element  1
-         in tbody element  1
-         in tfoot element  1
-         in th element  1
-         in thead element  1
-         in tr element  1
-         in ul element  1
       postal element  1
          inside address  1
       postalLine element  1
@@ -6993,8 +6770,6 @@ Index
       relative attribute
          in relref element  1
       relref element  1
-         derivedLink attribute  1
-         derivedRemoteContent attribute  1
          displayFormat attribute  1
          inside annotation  1
          inside blockquote  1
@@ -7021,14 +6796,12 @@ Index
          category attribute  1
          consensus attribute  1
          docName attribute  1
-         expiresDate attribute  1
          indexInclude attribute  1
          ipr attribute  1
          iprExtract attribute  1
          number attribute  1
          obsoletes attribute  1
          prepTime attribute  1
-         scripts attribute  1
          seriesNo attribute  1
          sortRefs attribute  1
          submissionType attribute  1
@@ -7044,8 +6817,6 @@ Index
          in th element  1
 
    S
-      scripts attribute
-         in rfc element  1
       section attribute
          in relref element  1
       section element  1
@@ -7055,7 +6826,6 @@ Index
          inside middle  1
          inside section  1
          numbered attribute  1
-         pn attribute  1
          removeInRFC attribute  1
          title attribute  1
          toc attribute  1
@@ -7068,8 +6838,6 @@ Index
          value attribute  1
       seriesNo attribute
          in rfc element  1
-      slugifiedName attribute
-         in name element  1
       sortRefs attribute
          in rfc element  1
       source attribute
@@ -7084,8 +6852,6 @@ Index
          inside td  1
          inside th  1
          name attribute  1
-         originalSrc attribute  1
-         pn attribute  1
          src attribute  1
          type attribute  1
       spacing attribute
@@ -7195,12 +6961,10 @@ Index
          inside th  1
          keepWithNext attribute  1
          keepWithPrevious attribute  1
-         pn attribute  1
       table element  1
          anchor attribute  1
          inside aside  1
          inside section  1
-         pn attribute  1
       target attribute
          in displayreference element  1
          in eref element  1
@@ -7211,7 +6975,6 @@ Index
       tbody element  1
          anchor attribute  1
          inside table  1
-         pn attribute  1
       td element  1
          align attribute  1
          anchor attribute  1
@@ -7229,19 +6992,16 @@ Index
       tfoot element  1
          anchor attribute  1
          inside table  1
-         pn attribute  1
       th element  1
          align attribute  1
          anchor attribute  1
          border attribute  1
          colspan attribute  1
          inside tr  1
-         pn attribute  1
          rowspan attribute  1
       thead element  1
          anchor attribute  1
          inside table  1
-         pn attribute  1
       title attribute
          in figure element  1
          in note element  1
@@ -7266,7 +7026,6 @@ Index
          inside tbody  1
          inside tfoot  1
          inside thead  1
-         pn attribute  1
       tt element  1
          inside annotation  1
          inside blockquote  1
@@ -7309,7 +7068,6 @@ Index
          inside section  1
          inside td  1
          inside th  1
-         pn attribute  1
          spacing attribute  1
       updates attribute
          in rfc element  1
@@ -7338,7 +7096,6 @@ Index
          in artwork element  1
          in spanx element  1
       xref element  1
-         derivedContent attribute  1
          format attribute  1
          inside annotation  1
          inside blockquote  1
