@@ -322,8 +322,9 @@
       <iref item="artwork element" subitem="originalSrc attribute"/>
       <iref item="originalSrc attribute" subitem="in artwork element"/>
       <t>
-         This attribute is filled in by the prep tool. It contains the original value of the "src"
-         attribute if that attribute is changed by the prep tool.
+         This attribute is filled in by the prep tool, and contains the original value of the "src"
+         attribute if that attribute is removed by the prep tool.
+         See <xref target="prepatts"/> for information about the control of this attribute.
       </t>
    </section>
 
@@ -350,12 +351,16 @@
          This can be a "data" URI (<xref target="RFC2397"/>) that contains the contents of the graphics file.
          Note that the inclusion of art with the "src" attribute depends on the capabilities of the processing tool
          reading the XML document. Tools need to be able to handle the file: URI, and should
-         be able to handle http: and https: URIs as well.
+         be able to handle http: and https: URIs as well. The prep tool will be able to handle reading the "src" attribute.
       </t>
       <t>
          If no URI scheme is given in the attribute, the attribute is considered to be a local file name.
          Processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
+      </t>
+      <t>
+         In some cases, the prep tool may remove the "src" attribute after processing its value.
+         See <xref target="PREPTOOL"/> for a description of this.
       </t>
       <t>
          It is an error to have both a "src" attribute and content in the &lt;artwork&gt; element.
@@ -371,9 +376,7 @@
       <t>
             Specifies the type of the artwork. The value of this attribute is free text with
             certain values designated as preferred.
-            If the prep tool encounters a value for "type" that is not one of the
-            preferred values, it can issue a warning but should still use the artwork as if it had no "type" attribute.
-         </t>
+      </t>
       <t>
             The preferred values for &lt;artwork&gt; types are:
             <list style="symbols">
@@ -1549,7 +1552,7 @@
    <iref item="Elements" subitem="eref" primary="true"/>
    <iref item="eref element" primary="true"/>
    <t>
-      A link to URI that is not in the References section.
+      Represents an "external" link (as specified in the "target" attribute).
       This is useful for embedding URIs in the body of a document.
    </t>
    <t>
@@ -1608,7 +1611,7 @@
       <iref item="eref element" subitem="target attribute"/>
       <iref item="target attribute" subitem="in eref element"/>
       <t>
-         URI of the link target. 
+         URI of the link target (see Section 3 of <xref target="RFC3986"/>).
          This must begin with a scheme name (such as "https://") and thus not be relative to the URL of the current document.
          </t>
    </section>
@@ -1898,9 +1901,9 @@
       <iref item="iref element" subitem="irefid attribute"/>
       <iref item="irefid attribute" subitem="in iref element"/>
       <t>
-         An identifier for the prep tool to use when creating indexes. The content of this attribute
-         is overwritten by the prep tool, and should thus never be filled in by the document's author.
+         This attribute is filled in by the prep tool and is an identifier used when creating indexes.
          This is described in more detail in <xref target="anchorsandids"/>.
+         See <xref target="prepatts"/> for information about the control of this attribute.
       </t>
    </section>
 
@@ -2218,6 +2221,7 @@
          This attribute is filled in by the prep tool with a "slugified" version of the text in the
          element. This attribute can be used in the output formats for elements that have both names
          and numbers.
+         See <xref target="prepatts"/> for information about the control of this attribute.
       </t>
    </section>
 </section>
@@ -2892,11 +2896,9 @@
    <t>
       When processing a &lt;relref&gt; element, the prep tool fills in the
       "derivedRemoteContent" attribute if there is no content in the &lt;relref&gt; element; otherwise, it
-      leaves that attribute undefined.
+      fills the "derivedRemoteContent" attribute with the content and sets the "displayFormat" attribute to "bare"
+      if that attribute is not already set.
       The prep tool always fills in the "derivedLink" attribute.
-      If the "derivedRemoteContent" attribute exists, a formatter should ignore the
-      content of the &lt;relref&gt; element when it creates its output; this will only be the case for files
-      not processed by the prep tool.
    </t>
    <t>
       An example of the &lt;relref&gt; element with text content might be:
@@ -2931,10 +2933,11 @@
       <iref item="relref element" subitem="derivedLink attribute"/>
       <iref item="derivedLink attribute" subitem="in relref element"/>
       <t>
-         This attribute is filled in by the prep tool.
-         This is the link that is derived from combining the URI from the reference and the
+         This attribute is filled in by the prep tool and
+         is the link that is derived from combining the URI from the reference and the
          relative part that is either a copy of the "relative" attribute or a section number derived from the
          "section" attribute.
+         See <xref target="prepatts"/> for information about the control of this attribute.
       </t>
    </section>
 
@@ -2951,6 +2954,7 @@
          The prep tool might determine this text by reading the target reference and, if it is a RFC or Internet-Draft
          in the v3 format, finding the anchor given in the "relative" attribute or derived from the "section"
          attribute, and using the title of that element.
+         See <xref target="prepatts"/> for information about the control of this attribute.
       </t>
       <t>
          If the reference is not an RFC or Internet-Draft in the v3 format, the text fragment is simply the
@@ -3236,7 +3240,8 @@
       <iref item="rfc element" subitem="expiresDate attribute"/>
       <iref item="expiresDate attribute" subitem="in rfc element"/>
       <t>
-         Says with an Internet Draft expires.  This value is filled in by the prep tool.
+         This attribute is filled in by the prep tool with an Internet Draft expires.
+         See <xref target="prepatts"/> for information about the control of this attribute.
       </t>
    </section>
 
@@ -3351,10 +3356,11 @@
       <iref item="rfc element" subitem="scripts attribute"/>
       <iref item="scripts attribute" subitem="in rfc element"/>
       <t>
-         The list of scripts needed to render this document. The list is comma-separated,
-         with no spaces allowed. The order is unimportant. The names come from <xref target="UAX24"/>. This attriute is normally filled in by the prep tool.
+         This attribute is filled in by the prep tool to list of scripts needed to render this document. The list is comma-separated,
+         with no spaces allowed. The order is unimportant. The names come from <xref target="UAX24"/>.
          For example, if the document has Chinese characters in it, the
          value might be "Common,Latin,Han". 
+         See <xref target="prepatts"/> for information about the control of this attribute.
       </t>
    </section>
 
@@ -3866,8 +3872,9 @@ Using CDATA:
       <iref item="sourcecode element" subitem="originalSrc attribute"/>
       <iref item="originalSrc attribute" subitem="in sourcecode element"/>
       <t>
-         This attribute is filled in by the prep tool. It contains the original value of the "src"
-         attribute if that attribute is changed by the prep tool.
+         This attribute is filled in by the prep tool with the original value of the "src"
+         attribute if that attribute is removed by the prep tool.
+         See <xref target="prepatts"/> for information about the control of this attribute.
       </t>
    </section>
 
@@ -3906,8 +3913,6 @@ Using CDATA:
       <t>
             Specifies the type of the sourcecode. The value of this attribute is free text with
             certain values designated as preferred.
-            If the prep tool encounters a value for "type" that is not one of the
-            preferred values, it can issue a warning but should still use the sourcecode as if it had no "type" attribute.
       </t>
       <t>
             The preferred values for &lt;sourcecode&gt; types are:
@@ -5082,10 +5087,7 @@ Using CDATA:
    <t>
       When processing an &lt;xref&gt; element, the prep tool fills in the
       "derivedContent" attribute if there is no content in the &lt;xref&gt; element; otherwise, it
-      leaves that attribute undefined.
-      If the "derivedContent" attribute exists, a formatter should ignore the
-      content of the &lt;xref&gt; element when it creates its output; this will only be the case for files
-      not processed by the prep tool.
+      fills that attribute with the content.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.xref.contents"><!--AG-->
@@ -5100,6 +5102,7 @@ Using CDATA:
       <t>
          This attribute is filled in by the prep tool if there is no content in the &lt;xref&gt; element.
          The prep tool fills in this attribute based on the value in the "displayFormat" attribute.
+         See <xref target="prepatts"/> for information about the control of this attribute.
       </t>
    </section>
 
@@ -5121,7 +5124,7 @@ Using CDATA:
             <t>
             The "derivedContent" attribute will contain just a counter.
             This is used for targets that are
-            &lt;<x:ref>section</x:ref>&gt;, &lt;<x:ref>figure</x:ref>&gt;, or &lt;<x:ref>table</x:ref>&gt;.
+            &lt;<x:ref>section</x:ref>&gt;, &lt;<x:ref>figure</x:ref>&gt;, &lt;<x:ref>table</x:ref>&gt;, or item in an ordered list.
             Using "format='counter'" where the target is any other type of element is an error.
             </t>
             <t>
@@ -5146,7 +5149,7 @@ Using CDATA:
         <list style="empty">
             <t>
             The "derivedContent" attribute will contain a text fragment that describes the referenced part 
-            completely, such as "[XML]" for a target that is a &lt;<x:ref>reference</x:ref>&gt;,
+            completely, such as "XML" for a target that is a &lt;<x:ref>reference</x:ref>&gt;,
             or "Section 2" or "Table 4" for a target to a non-reference.
             </t>
             <t>
