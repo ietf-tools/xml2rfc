@@ -358,9 +358,15 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
 </t>
 
 <t>
-  Except inside &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt;, horizontal
-  whitespace and linebreaks are collapsed into a single whitespace, and leading and trailing
-  whitespace are trimmed off.
+Tools interpreting the XML described here will collapse horizontal whitespace and linebreaks to a
+single whitespace (except inside &lt;<x:ref>artwork</x:ref>&gt; and
+&lt;<x:ref>sourcecode</x:ref>&gt;), and will trim leading and trailing whitespace.
+</t>
+
+<t>
+Some of the elements have attributes that are not described in this section because those elements
+are specific to the prep tool. People writing tools to process this format should read all of
+the appendices for a complete description of these attributes.
 </t>
 
 <t>
@@ -6554,8 +6560,10 @@ for the XML from this mode will be described later.</t>
 <t>Diagnostic mode -- A mode that can be used by document authors to look for errors
 or warnings before they submit their documents for publication.</t>
 
-<t>Expansion mode -- Produces output whose only change is that the XInclude entities
-are expanded in place.</t>
+<t>Consolodation mode -- Produces output where no external resources are required to render the file
+output. This includes expanding the XInclude entities and DTD entities in place, and changing all
+elements that have "src" attributes with external links into either "data:" URI or
+content for the element, as specified in <xref target="PREPTOOL"/>.</t>
 
 </list></t>
 
@@ -6581,7 +6589,7 @@ errors in XML and those from the v3 format.</t>
 Next Generation (RNG). This means that tools need to work from the RNG, not from a DTD.
 Some of the features of the v3 grammar cannot be specified as a DTD.</t>
 
-<section title="Including External Text" anchor="includingexternal">
+<section title="Including External Text with XInclude" anchor="includingexternal">
 
 <t>All tools for the v3 format are expected to support XInclude <xref target="XInclude"/>.
 XInclude specifies a processing model and syntax for general purpose inclusion of information
