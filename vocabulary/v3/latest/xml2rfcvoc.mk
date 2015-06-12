@@ -34,6 +34,5 @@ differences-from-v2.txt:	xml2rfcv3.rnc $(xml2rfcv2)
 	rm -f $@.v2 $@.v3
 
 xml2rfcv3-full.rng: xml2rfcv3.rng
-	postprocess-rng.py
-
+	./postprocess-rng.py
 
