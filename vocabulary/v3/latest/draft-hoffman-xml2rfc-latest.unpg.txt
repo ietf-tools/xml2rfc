@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                              June 10, 2015
+Obsoletes: 2629 (if approved)                              June 11, 2015
 Intended status: Informational
-Expires: December 12, 2015
+Expires: December 13, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 12, 2015.
+   This Internet-Draft will expire on December 13, 2015.
 
 Copyright Notice
 
@@ -162,7 +162,7 @@ Table of Contents
      A.2.  The /rfc/@submissionType Attribute
      A.3.  The /rfc/@consensus Attribute
    Appendix B.  The v3 Format and Processing Tools
-     B.1.  Including External Text
+     B.1.  Including External Text with XInclude
      B.2.  Anchors and IDs
        B.2.1.  Overlapping Values
      B.3.  Attributes Controlled by the Prep Tool
@@ -436,9 +436,15 @@ Table of Contents
    "-" are disallowed as start character.  Anchors are described in more
    detail in Appendix B.2.
 
-   Except inside <artwork> and <sourcecode>, horizontal whitespace and
-   linebreaks are collapsed into a single whitespace, and leading and
-   trailing whitespace are trimmed off.
+   Tools interpreting the XML described here will collapse horizontal
+   whitespace and linebreaks to a single whitespace (except inside
+   <artwork> and <sourcecode>), and will trim leading and trailing
+   whitespace.
+
+   Some of the elements have attributes that are not described in this
+   section because those elements are specific to the prep tool.  People
+   writing tools to process this format should read all of the
+   appendices for a complete description of these attributes.
 
    Every element in the v3 vocabulary can have an "xml:lang" attribute,
    an "xml:base" attribute, or both.  The xml:lang attribute specifies
@@ -4298,8 +4304,12 @@ Appendix B.  The v3 Format and Processing Tools
          to look for errors or warnings before they submit their
          documents for publication.
 
-      *  Expansion mode -- Produces output whose only change is that the
-         XInclude entities are expanded in place.
+      *  Consolodation mode -- Produces output where no external
+         resources are required to render the file output.  This
+         includes expanding the XInclude entities and DTD entities in
+         place, and changing all elements that have "src" attributes
+         with external links into either "data:" URI or content for the
+         element, as specified in [PREPTOOL].
 
    o  Formatting tools that will create HTML, PDF, plain text, and
       possibly other output formats.  These formatters will be created
@@ -4325,7 +4335,7 @@ Appendix B.  The v3 Format and Processing Tools
    need to work from the RNG, not from a DTD.  Some of the features of
    the v3 grammar cannot be specified as a DTD.
 
-B.1.  Including External Text
+B.1.  Including External Text with XInclude
 
    All tools for the v3 format are expected to support XInclude
    [XInclude].  XInclude specifies a processing model and syntax for

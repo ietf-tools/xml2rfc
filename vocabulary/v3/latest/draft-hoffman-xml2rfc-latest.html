@@ -500,7 +500,7 @@ blockquote > * .bcp14 {
        content: "Hoffman";
   }
   @bottom-center {
-       content: "Expires December 12, 2015";
+       content: "Expires December 13, 2015";
   }
   @bottom-right {
        content: "[Page " counter(page) "]";
@@ -538,7 +538,7 @@ blockquote > * .bcp14 {
       <link rel="schema.dct" href="http://purl.org/dc/terms/">
       <meta name="dct.creator" content="Hoffman, P.">
       <meta name="dct.identifier" content="urn:ietf:id:draft-hoffman-xml2rfc-latest">
-      <meta name="dct.issued" scheme="ISO8601" content="2015-06-10">
+      <meta name="dct.issued" scheme="ISO8601" content="2015-06-11">
       <meta name="dct.replaces" content="urn:ietf:rfc:2629">
       <meta name="dct.abstract" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
       <meta name="description" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
@@ -557,14 +557,14 @@ blockquote > * .bcp14 {
             <tr>
                <td class="left">Obsoletes: <a href="https://tools.ietf.org/html/rfc2629">2629</a> (if approved)
                </td>
-               <td class="right">June 10, 2015</td>
+               <td class="right">June 11, 2015</td>
             </tr>
             <tr>
                <td class="left">Intended status: Informational</td>
                <td class="right"></td>
             </tr>
             <tr>
-               <td class="left">Expires: December 12, 2015</td>
+               <td class="left">Expires: December 13, 2015</td>
                <td class="right"></td>
             </tr>
          </tbody>
@@ -592,7 +592,7 @@ blockquote > * .bcp14 {
             documents at any time. It is inappropriate to use Internet-Drafts as reference material or to cite them other than as &#8220;work
             in progress&#8221;.
          </p>
-         <p>This Internet-Draft will expire on December 12, 2015.</p>
+         <p>This Internet-Draft will expire on December 13, 2015.</p>
       </div>
       <div id="rfc.copyrightnotice">
          <h2><a href="#rfc.copyrightnotice">Copyright Notice</a></h2>
@@ -726,7 +726,7 @@ blockquote > * .bcp14 {
                </ul>
             </li>
             <li><a href="#rfc.section.B">B.</a>&nbsp;&nbsp;&nbsp;<a href="#tools">The v3 Format and Processing Tools</a><ul>
-                  <li><a href="#rfc.section.B.1">B.1</a>&nbsp;&nbsp;&nbsp;<a href="#includingexternal">Including External Text</a></li>
+                  <li><a href="#rfc.section.B.1">B.1</a>&nbsp;&nbsp;&nbsp;<a href="#includingexternal">Including External Text with XInclude</a></li>
                   <li><a href="#rfc.section.B.2">B.2</a>&nbsp;&nbsp;&nbsp;<a href="#anchorsandids">Anchors and IDs</a><ul>
                         <li><a href="#rfc.section.B.2.1">B.2.1</a>&nbsp;&nbsp;&nbsp;<a href="#overlap">Overlapping Values</a></li>
                      </ul>
@@ -969,15 +969,20 @@ blockquote > * .bcp14 {
             </p>
          </div>
          <div id="rfc.section.2.p.4">
-            <p>Except inside &lt;<a href="#element.artwork" class="smpl">artwork</a>&gt; and &lt;<a href="#element.sourcecode" class="smpl">sourcecode</a>&gt;, horizontal whitespace and linebreaks are collapsed into a single whitespace, and leading and trailing whitespace are trimmed
-               off.
+            <p>Tools interpreting the XML described here will collapse horizontal whitespace and linebreaks to a single whitespace (except
+               inside &lt;<a href="#element.artwork" class="smpl">artwork</a>&gt; and &lt;<a href="#element.sourcecode" class="smpl">sourcecode</a>&gt;), and will trim leading and trailing whitespace.
             </p>
          </div>
          <div id="rfc.section.2.p.5">
+            <p>Some of the elements have attributes that are not described in this section because those elements are specific to the prep
+               tool. People writing tools to process this format should read all of the appendices for a complete description of these attributes.
+            </p>
+         </div>
+         <div id="rfc.section.2.p.6">
             <p>Every element in the v3 vocabulary can have an "xml:lang" attribute, an "xml:base" attribute, or both. The xml:lang attribute
                specifies the language used in the element. This is sometimes useful for renderers which display different fonts for ideographic
                characters used in China and Japan. The xml:base attribute is sometimes added to an XML file when doing XML-to-XML conversion
-               where the base file has XInclude atttributes (see <a href="#includingexternal" title="Including External Text">Appendix&nbsp;B.1</a>). These attributes are not listed in the element descriptions here, but will later be added to the RNG used for the v3 tools.
+               where the base file has XInclude atttributes (see <a href="#includingexternal" title="Including External Text with XInclude">Appendix&nbsp;B.1</a>). These attributes are not listed in the element descriptions here, but will later be added to the RNG used for the v3 tools.
             </p>
          </div>
          <div id="element.abstract">
@@ -1188,7 +1193,7 @@ blockquote > * .bcp14 {
                <p>There are at least five ways to include SVG in artwork in Internet Drafts: </p>
                <ul>
                   <li>Inline, by including all of the SVG in the content of the element, such as: &lt;artwork type="svg"&gt;&lt;svg xmlns..."&gt;</li>
-                  <li>Inline, but using XInclude (see <a href="#includingexternal" title="Including External Text">Appendix&nbsp;B.1</a>), such as: &lt;artwork type="svg"&gt;&lt;xi:include href=...&gt;
+                  <li>Inline, but using XInclude (see <a href="#includingexternal" title="Including External Text with XInclude">Appendix&nbsp;B.1</a>), such as: &lt;artwork type="svg"&gt;&lt;xi:include href=...&gt;
                   </li>
                   <li>As a data: URI, such as: &lt;artwork type="svg" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3..."&gt;</li>
                   <li>As a URI to an external entity, such as: &lt;artwork type="svg" src="http://www.example.com/..."&gt;</li>
@@ -6275,7 +6280,10 @@ Using CDATA:
                      <li>Diagnostic mode -- A mode that can be used by document authors to look for errors or warnings before they submit their documents
                         for publication.
                      </li>
-                     <li>Expansion mode -- Produces output whose only change is that the XInclude entities are expanded in place.</li>
+                     <li>Consolodation mode -- Produces output where no external resources are required to render the file output. This includes expanding
+                        the XInclude entities and DTD entities in place, and changing all elements that have "src" attributes with external links
+                        into either "data:" URI or content for the element, as specified in <a href="#PREPTOOL" id="rfc.xref.PREPTOOL.3"><cite title="RFC v3 Prep Tool Description">[PREPTOOL]</cite></a>.
+                     </li>
                   </ul>
                </li>
                <li>Formatting tools that will create HTML, PDF, plain text, and possibly other output formats. These formatters will be created
@@ -6301,7 +6309,7 @@ Using CDATA:
             </p>
          </div>
          <div id="includingexternal">
-            <h3 id="rfc.section.B.1"><a href="#rfc.section.B.1">B.1</a>&nbsp;<a href="#includingexternal">Including External Text</a></h3>
+            <h3 id="rfc.section.B.1"><a href="#rfc.section.B.1">B.1</a>&nbsp;<a href="#includingexternal">Including External Text with XInclude</a></h3>
             <div id="rfc.section.B.1.p.1">
                <p>All tools for the v3 format are expected to support XInclude <a href="#XInclude" id="rfc.xref.XInclude.1"><cite title="XML Inclusions (XInclude) Version 1.0 (Second Edition)">[XInclude]</cite></a>. XInclude specifies a processing model and syntax for general purpose inclusion of information that is either on the Internet
                   or local to the user's computer.
@@ -8924,7 +8932,7 @@ start = rfc
                         <li>in rfc element&nbsp;&nbsp;<a href="#rfc.section.2.45.9">2.45.9</a></li>
                      </ul>
                   </li>
-                  <li><em>PREPTOOL</em>&nbsp;&nbsp;<a href="#rfc.xref.PREPTOOL.1">2.5.6</a>, <a href="#PREPTOOL"><b>8.2</b></a>, <a href="#rfc.xref.PREPTOOL.2">B</a></li>
+                  <li><em>PREPTOOL</em>&nbsp;&nbsp;<a href="#rfc.xref.PREPTOOL.1">2.5.6</a>, <a href="#PREPTOOL"><b>8.2</b></a>, <a href="#rfc.xref.PREPTOOL.2">B</a>, <a href="#rfc.xref.PREPTOOL.3">B</a></li>
                   <li>primary attribute&nbsp;&nbsp;
                      <ul>
                         <li>in iref element&nbsp;&nbsp;<a href="#rfc.section.2.27.2">2.27.2</a></li>

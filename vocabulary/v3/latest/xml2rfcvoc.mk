@@ -33,5 +33,7 @@ differences-from-v2.txt:	xml2rfcv3.rnc $(xml2rfcv2)
 	| sed "s/\&/\&amp;/g" > $@
 	rm -f $@.v2 $@.v3
 
+xml2rfcv3-full.rng: xml2rfcv3.rng
+	postprocess-rng.py
 
-	
+
