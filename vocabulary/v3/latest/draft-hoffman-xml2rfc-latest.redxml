@@ -2405,29 +2405,22 @@ the appendices for a complete description of these attributes.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.front" format="none">front</xref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.note.contents"><!--AG-->
-      Content model:</t>
-   <t><!--AG-->In this order:</t>
-   <t><list style="numbers"><!--AG-->
+      Content model:
+    </t>
+   <t><!--AG-->In any order, but at least one of:</t>
+   <t><list style="symbols"><!--AG-->
       <t><!--AG-->
-         <iref item="Elements" subitem="name"/>
-         <iref item="name element" subitem="inside note"/>One &lt;<xref target="element.name" format="none">name</xref>&gt; element (<xref target="element.name"/>)</t>
+         <iref item="Elements" subitem="dl"/>
+         <iref item="dl element" subitem="inside note"/>&lt;<xref target="element.dl" format="none">dl</xref>&gt; elements (<xref target="element.dl"/>)</t>
       <t><!--AG-->
-         In any order, but at least one of:<vspace blankLines="1"/>
-         <list style="symbols"><!--AG-->
-            <t><!--AG-->
-               <iref item="Elements" subitem="dl"/>
-               <iref item="dl element" subitem="inside note"/>&lt;<xref target="element.dl" format="none">dl</xref>&gt; elements (<xref target="element.dl"/>)</t>
-            <t><!--AG-->
-               <iref item="Elements" subitem="ol"/>
-               <iref item="ol element" subitem="inside note"/>&lt;<xref target="element.ol" format="none">ol</xref>&gt; elements (<xref target="element.ol"/>)</t>
-            <t><!--AG-->
-               <iref item="Elements" subitem="t"/>
-               <iref item="t element" subitem="inside note"/>&lt;<xref target="element.t" format="none">t</xref>&gt; elements (<xref target="element.t"/>)</t>
-            <t><!--AG-->
-               <iref item="Elements" subitem="ul"/>
-               <iref item="ul element" subitem="inside note"/>&lt;<xref target="element.ul" format="none">ul</xref>&gt; elements (<xref target="element.ul"/>)</t>
-         </list><vspace blankLines="1"/>
-      </t>
+         <iref item="Elements" subitem="ol"/>
+         <iref item="ol element" subitem="inside note"/>&lt;<xref target="element.ol" format="none">ol</xref>&gt; elements (<xref target="element.ol"/>)</t>
+      <t><!--AG-->
+         <iref item="Elements" subitem="t"/>
+         <iref item="t element" subitem="inside note"/>&lt;<xref target="element.t" format="none">t</xref>&gt; elements (<xref target="element.t"/>)</t>
+      <t><!--AG-->
+         <iref item="Elements" subitem="ul"/>
+         <iref item="ul element" subitem="inside note"/>&lt;<xref target="element.ul" format="none">ul</xref>&gt; elements (<xref target="element.ul"/>)</t>
    </list></t>
 
    <!--note/@removeInRFC-->
@@ -6707,16 +6700,17 @@ keyword = element keyword { text }
 abstract =
   element abstract {
     attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
     (dl | ol | t | ul)+
   }
 
 note =
   element note {
     attribute title { text }?,
-    name,
     attribute pn { text }?,
-    [ a:defaultValue = "false" ]
-    attribute removeInRFC { "true" | "false" }?,
+    ([ a:defaultValue = "false" ]
+     attribute removeInRFC { "true" | "false" },
+     name)?,
     (dl | ol | t | ul)+
   }
 
@@ -7517,6 +7511,7 @@ to the v3 schema.</t>
 + abstract =
 +   element abstract {
 +     attribute anchor { xsd:ID }?,
++     attribute pn { text }?,
 +     (dl | ol | t | ul)+
 +   }
   note =
@@ -7524,10 +7519,10 @@ to the v3 schema.</t>
 -     attribute title { text },
 -     t+
 +     attribute title { text }?,
-+     name,
 +     attribute pn { text }?,
-+     [ a:defaultValue = "false" ]
-+     attribute removeInRFC { "true" | "false" }?,
++     ([ a:defaultValue = "false" ]
++      attribute removeInRFC { "true" | "false" },
++      name)?,
 +     (dl | ol | t | ul)+
 +   }
 + boilerplate =
@@ -7727,7 +7722,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-  }?,
++ }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -7736,7 +7731,7 @@ to the v3 schema.</t>
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-+ }?,
+  }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,

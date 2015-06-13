@@ -152,15 +152,16 @@ keyword = element keyword { text }
 abstract =
   element abstract {
     attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
     (dl | ol | t | ul)+
   }
 note =
   element note {
     attribute title { text }?,
-    name,
     attribute pn { text }?,
-    [ a:defaultValue = "false" ]
-    attribute removeInRFC { "true" | "false" }?,
+    ([ a:defaultValue = "false" ]
+     attribute removeInRFC { "true" | "false" },
+     name)?,
     (dl | ol | t | ul)+
   }
 boilerplate =

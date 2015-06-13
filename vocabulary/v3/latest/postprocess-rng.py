@@ -3,7 +3,7 @@
 '''
 Program to make full, real RNG from xml2rfcv3.rng
 This entails:
-	Add xml:lang and xml:base to every element
+	Add xml:lang and xml:base to every element except SVG
 	Remove PIs that were only there for other tools
 '''
 
@@ -25,7 +25,8 @@ OutLines = []
 for ThisLine in InLines:
 	OutLines.append(ThisLine)
 	if ThisLine.startswith("    <element name"):
-		OutLines.append(MoreAtts)
+		if not(ThisLine.startswith('<element name="svg"')):  # Don't add this to <svg>
+			OutLines.append(MoreAtts)
 
 # Remove the PIs
 OutText = "".join(OutLines)

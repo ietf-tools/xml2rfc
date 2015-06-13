@@ -171,6 +171,7 @@
 + abstract =
 +   element abstract {
 +     attribute anchor { xsd:ID }?,
++     attribute pn { text }?,
 +     (dl | ol | t | ul)+
 +   }
   note =
@@ -178,10 +179,10 @@
 -     attribute title { text },
 -     t+
 +     attribute title { text }?,
-+     name,
 +     attribute pn { text }?,
-+     [ a:defaultValue = "false" ]
-+     attribute removeInRFC { "true" | "false" }?,
++     ([ a:defaultValue = "false" ]
++      attribute removeInRFC { "true" | "false" },
++      name)?,
 +     (dl | ol | t | ul)+
 +   }
 + boilerplate =
@@ -381,7 +382,7 @@
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-  }?,
++ }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -390,7 +391,7 @@
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-+ }?,
+  }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
