@@ -13,8 +13,6 @@
 
 <!--
 
-Need to tool the RNG so that it has xml:lang and xml:base everywhere where they might actually go.
-
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
 -->
@@ -3482,9 +3480,8 @@ the appendices for a complete description of these attributes.
       <iref item="rfc element" subitem="obsoletes attribute"/>
       <iref item="obsoletes attribute" subitem="in rfc element"/>
       <t>
-            A comma-separated list of RFC numbers or
-            Internet-Draft names.
-         </t>
+            A list of RFC numbers, each separated by a command and a space, such as "4567, 5678".
+      </t>
       <t>
             The prep tool will parse the attribute value so that incorrect
             references can be detected.
@@ -3500,7 +3497,8 @@ the appendices for a complete description of these attributes.
       <t>
          The date that the XML was processed by a preparation tool.
          This is included in the XML file just before it is saved to disk.
-         The value is formatted using the format from <xref target="RFC3339"/>.
+         The value is formatted using the format from <xref target="RFC3339"/>,
+         such as 2015-06-15T23:06:26Z.
       </t>
    </section>
 
@@ -3603,9 +3601,8 @@ the appendices for a complete description of these attributes.
       <iref item="rfc element" subitem="updates attribute"/>
       <iref item="updates attribute" subitem="in rfc element"/>
       <t>
-            A comma-separated list of RFC numbers or
-            Internet-Draft names.
-         </t>
+            A list of RFC numbers, each separated by a command and a space, such as "4567, 5678".
+      </t>
       <t>
             The prep tool will parse the attribute value so that incorrect
             references can be detected.
@@ -6754,7 +6751,7 @@ will rarely produce a good result in formatted output so, for these documents, t
 element should contain text content.</t>
 
 <t>&lt;rfc&gt; "expiresDate" attribute -- This attribute is filled with the date that an Internet
-Draft expires.</t>
+Draft expires. The date is in the format yyyy-mm-dd.</t>
 
 <t>&lt;rfc&gt; "scripts" attribute -- This attribute is filled with a list of scripts needed to
 render this document.  The list is comma-separated, with no spaces allowed.  The order is
