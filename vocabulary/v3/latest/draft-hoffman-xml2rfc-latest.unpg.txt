@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                              June 13, 2015
+Obsoletes: 2629 (if approved)                              June 15, 2015
 Intended status: Informational
-Expires: December 15, 2015
+Expires: December 17, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 15, 2015.
+   This Internet-Draft will expire on December 17, 2015.
 
 Copyright Notice
 
@@ -1731,15 +1731,21 @@ Table of Contents
 
    Content model:
 
-   In any order, but at least one of:
+   In this order:
 
-   o  <dl> elements (Section 2.20)
+   1.  One optional <name> element (Section 2.32)
 
-   o  <ol> elements (Section 2.34)
+   2.  In any order, but at least one of:
 
-   o  <t> elements (Section 2.53)
 
-   o  <ul> elements (Section 2.63)
+       *  <dl> elements (Section 2.20)
+
+       *  <ol> elements (Section 2.34)
+
+       *  <t> elements (Section 2.53)
+
+       *  <ul> elements (Section 2.63)
+
 
 2.33.1.  'removeInRFC' attribute
 
@@ -4705,9 +4711,9 @@ Appendix C.  Relax NG Schema
      element note {
        attribute title { text }?,
        attribute pn { text }?,
-       ([ a:defaultValue = "false" ]
-        attribute removeInRFC { "true" | "false" },
-        name)?,
+       [ a:defaultValue = "false" ]
+       attribute removeInRFC { "true" | "false" }?,
+       name?,
        (dl | ol | t | ul)+
      }
 
@@ -5514,9 +5520,9 @@ Appendix D.  Schema Differences from v2
    -     t+
    +     attribute title { text }?,
    +     attribute pn { text }?,
-   +     ([ a:defaultValue = "false" ]
-   +      attribute removeInRFC { "true" | "false" },
-   +      name)?,
+   +     [ a:defaultValue = "false" ]
+   +     attribute removeInRFC { "true" | "false" }?,
+   +     name?,
    +     (dl | ol | t | ul)+
    +   }
    + boilerplate =
@@ -6675,6 +6681,7 @@ Index
          in sourcecode element  1
       name element  1
          inside figure  1
+         inside note  1
          inside references  1
          inside section  1
          inside table  1
