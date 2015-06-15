@@ -25,7 +25,7 @@ OutLines = []
 for ThisLine in InLines:
 	OutLines.append(ThisLine)
 	if ThisLine.startswith("    <element name"):
-		if not(ThisLine.startswith('<element name="svg"')):  # Don't add this to <svg>
+		if not(ThisLine.startswith('    <element name="svg"')):  # Don't add this to <svg>
 			OutLines.append(MoreAtts)
 
 # Remove the PIs
