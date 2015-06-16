@@ -3713,7 +3713,11 @@ the appendices for a complete description of these attributes.
       <iref item="section element" subitem="numbered attribute"/>
       <iref item="numbered attribute" subitem="in section element"/>
       <t>
-         If set to "false", the formatter is requested to not display a section number. The prep tool will verify that such a
+         If set to "false", the formatter is requested to not display a section number.
+         All un-numbered sections must be top-level sections,
+         must be a child of &lt;<x:ref>boilerplate</x:ref>&gt;, &lt;<x:ref>middle</x:ref>&gt;, or &lt;<x:ref>back</x:ref>&gt;,
+         and must not be followed by numbered sections.
+         The prep tool will verify that such a
          section is not followed by a numbered section in a part, and will verify that the section is a
          top-level section.
       </t>
