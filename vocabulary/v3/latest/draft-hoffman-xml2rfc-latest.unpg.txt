@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                              June 15, 2015
+Obsoletes: 2629 (if approved)                              June 16, 2015
 Intended status: Informational
-Expires: December 17, 2015
+Expires: December 18, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 17, 2015.
+   This Internet-Draft will expire on December 18, 2015.
 
 Copyright Notice
 
@@ -2371,7 +2371,8 @@ Table of Contents
 
 2.45.8.  'obsoletes' attribute
 
-   A comma-separated list of RFC numbers or Internet-Draft names.
+   A list of RFC numbers, each separated by a comma and a space, such as
+   "4567, 5678".
 
    The prep tool will parse the attribute value so that incorrect
    references can be detected.
@@ -2380,7 +2381,8 @@ Table of Contents
 
    The date that the XML was processed by a preparation tool.  This is
    included in the XML file just before it is saved to disk.  The value
-   is formatted using the format from [RFC3339].
+   is formatted using the format from [RFC3339], such as 2015-06-
+   15T23:06:26Z.
 
 2.45.10.  'seriesNo' attribute
 
@@ -2443,7 +2445,8 @@ Table of Contents
 
 2.45.16.  'updates' attribute
 
-   A comma-separated list of RFC numbers or Internet-Draft names.
+   A list of RFC numbers, each separated by a comma and a space, such as
+   "4567, 5678".
 
    The prep tool will parse the attribute value so that incorrect
    references can be detected.
@@ -2508,9 +2511,11 @@ Table of Contents
 2.46.2.  'numbered' attribute
 
    If set to "false", the formatter is requested to not display a
-   section number.  The prep tool will verify that such a section is not
-   followed by a numbered section in a part, and will verify that the
-   section is a top-level section.
+   section number.  All un-numbered sections must be top-level sections,
+   must be a child of <boilerplate>, <middle>, or <back>, and must not
+   be followed by numbered sections.  The prep tool will verify that
+   such a section is not followed by a numbered section in a part, and
+   will verify that the section is a top-level section.
 
    Allowed values:
 
@@ -4423,14 +4428,14 @@ B.2.1.  Overlapping Values
       <abstract> element, it is always "s-abstract".  For the <note>
       element, it is always "s-note-nnn", where "nnn" is a sequential
       value.  For the <boilerplate> element, it is always
-      "s-boilerplate".
+      "s-boilerplate-nnn", where "nnn" is a sequential value.
 
    o  "pn" for <figure> elements always has the format "f-nnn", where
       "nnn" is the figure number.  For example, this would be "f-5" for
       Figure 5.
 
    o  "pn" for <table> elements always has the format "t-nnn", where
-      "nnn" is the figure number.  For example, this would be "t-5" for
+      "nnn" is the table number.  For example, this would be "t-5" for
       Table 5.
 
    o  "pn" for all elements not listed above always has the format
@@ -4502,7 +4507,8 @@ B.3.  Attributes Controlled by the Prep Tool
       contain text content.
 
    o  <rfc> "expiresDate" attribute -- This attribute is filled with the
-      date that an Internet Draft expires.
+      date that an Internet Draft expires.  The date is in the format
+      yyyy-mm-dd.
 
    o  <rfc> "scripts" attribute -- This attribute is filled with a list
       of scripts needed to render this document.  The list is comma-

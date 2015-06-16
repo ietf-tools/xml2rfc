@@ -13,8 +13,6 @@
 <?rfc linkmailto="no" ?>
 <?rfc rfcedstyle="yes"?><!--
 
-Need to tool the RNG so that it has xml:lang and xml:base everywhere where they might actually go.
-
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
 -->
@@ -3382,9 +3380,8 @@ the appendices for a complete description of these attributes.
       <iref item="rfc element" subitem="obsoletes attribute"/>
       <iref item="obsoletes attribute" subitem="in rfc element"/>
       <t>
-            A comma-separated list of RFC numbers or
-            Internet-Draft names.
-         </t>
+            A list of RFC numbers, each separated by a comma and a space, such as "4567, 5678".
+      </t>
       <t>
             The prep tool will parse the attribute value so that incorrect
             references can be detected.
@@ -3400,7 +3397,8 @@ the appendices for a complete description of these attributes.
       <t>
          The date that the XML was processed by a preparation tool.
          This is included in the XML file just before it is saved to disk.
-         The value is formatted using the format from <xref target="RFC3339"/>.
+         The value is formatted using the format from <xref target="RFC3339"/>,
+         such as 2015-06-15T23:06:26Z.
       </t>
    </section>
 
@@ -3503,9 +3501,8 @@ the appendices for a complete description of these attributes.
       <iref item="rfc element" subitem="updates attribute"/>
       <iref item="updates attribute" subitem="in rfc element"/>
       <t>
-            A comma-separated list of RFC numbers or
-            Internet-Draft names.
-         </t>
+            A list of RFC numbers, each separated by a comma and a space, such as "4567, 5678".
+      </t>
       <t>
             The prep tool will parse the attribute value so that incorrect
             references can be detected.
@@ -3614,7 +3611,11 @@ the appendices for a complete description of these attributes.
       <iref item="section element" subitem="numbered attribute"/>
       <iref item="numbered attribute" subitem="in section element"/>
       <t>
-         If set to "false", the formatter is requested to not display a section number. The prep tool will verify that such a
+         If set to "false", the formatter is requested to not display a section number.
+         All un-numbered sections must be top-level sections,
+         must be a child of &lt;<xref target="element.boilerplate" format="none">boilerplate</xref>&gt;, &lt;<xref target="element.middle" format="none">middle</xref>&gt;, or &lt;<xref target="element.back" format="none">back</xref>&gt;,
+         and must not be followed by numbered sections.
+         The prep tool will verify that such a
          section is not followed by a numbered section in a part, and will verify that the section is a
          top-level section.
       </t>
@@ -6430,7 +6431,7 @@ sections can only have those anchor values.</t>
 For example, this would be "s-2.1.3" for Section 2.1.3 and "s-a" for Appendix A.
 For the &lt;<xref target="element.abstract" format="none">abstract</xref>&gt; element, it is always "s-abstract".
 For the &lt;<xref target="element.note" format="none">note</xref>&gt; element, it is always "s-note-nnn", where "nnn" is a sequential value.
-For the &lt;<xref target="element.boilerplate" format="none">boilerplate</xref>&gt; element, it is always "s-boilerplate".
+For the &lt;<xref target="element.boilerplate" format="none">boilerplate</xref>&gt; element, it is always "s-boilerplate-nnn", where "nnn" is a sequential value.
 </t>
 
 <t>"pn" for &lt;<xref target="element.figure" format="none">figure</xref>&gt; elements
@@ -6438,7 +6439,7 @@ always has the format "f-nnn", where "nnn" is the figure number.
 For example, this would be "f-5" for Figure 5.</t>
 
 <t>"pn" for &lt;<xref target="element.table" format="none">table</xref>&gt; elements
-always has the format "t-nnn", where "nnn" is the figure number.
+always has the format "t-nnn", where "nnn" is the table number.
 For example, this would be "t-5" for Table 5.</t>
 
 <t>"pn" for all elements not listed above
@@ -6503,7 +6504,7 @@ will rarely produce a good result in formatted output so, for these documents, t
 element should contain text content.</t>
 
 <t>&lt;rfc&gt; "expiresDate" attribute -- This attribute is filled with the date that an Internet
-Draft expires.</t>
+Draft expires. The date is in the format yyyy-mm-dd.</t>
 
 <t>&lt;rfc&gt; "scripts" attribute -- This attribute is filled with a list of scripts needed to
 render this document.  The list is comma-separated, with no spaces allowed.  The order is

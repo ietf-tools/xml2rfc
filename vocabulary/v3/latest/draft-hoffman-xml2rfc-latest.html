@@ -500,7 +500,7 @@ blockquote > * .bcp14 {
        content: "Hoffman";
   }
   @bottom-center {
-       content: "Expires December 17, 2015";
+       content: "Expires December 18, 2015";
   }
   @bottom-right {
        content: "[Page " counter(page) "]";
@@ -538,7 +538,7 @@ blockquote > * .bcp14 {
       <link rel="schema.dct" href="http://purl.org/dc/terms/">
       <meta name="dct.creator" content="Hoffman, P.">
       <meta name="dct.identifier" content="urn:ietf:id:draft-hoffman-xml2rfc-latest">
-      <meta name="dct.issued" scheme="ISO8601" content="2015-06-15">
+      <meta name="dct.issued" scheme="ISO8601" content="2015-06-16">
       <meta name="dct.replaces" content="urn:ietf:rfc:2629">
       <meta name="dct.abstract" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
       <meta name="description" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
@@ -557,14 +557,14 @@ blockquote > * .bcp14 {
             <tr>
                <td class="left">Obsoletes: <a href="https://tools.ietf.org/html/rfc2629">2629</a> (if approved)
                </td>
-               <td class="right">June 15, 2015</td>
+               <td class="right">June 16, 2015</td>
             </tr>
             <tr>
                <td class="left">Intended status: Informational</td>
                <td class="right"></td>
             </tr>
             <tr>
-               <td class="left">Expires: December 17, 2015</td>
+               <td class="left">Expires: December 18, 2015</td>
                <td class="right"></td>
             </tr>
          </tbody>
@@ -592,7 +592,7 @@ blockquote > * .bcp14 {
             documents at any time. It is inappropriate to use Internet-Drafts as reference material or to cite them other than as &#8220;work
             in progress&#8221;.
          </p>
-         <p>This Internet-Draft will expire on December 17, 2015.</p>
+         <p>This Internet-Draft will expire on December 18, 2015.</p>
       </div>
       <div id="rfc.copyrightnotice">
          <h2><a href="#rfc.copyrightnotice">Copyright Notice</a></h2>
@@ -3740,7 +3740,7 @@ blockquote > * .bcp14 {
             <div id="element.rfc.attribute.obsoletes">
                <h4 id="rfc.section.2.45.8"><a href="#rfc.section.2.45.8">2.45.8</a>&nbsp;<a href="#element.rfc.attribute.obsoletes">'obsoletes' attribute</a></h4>
                <div id="rfc.section.2.45.8.p.1">
-                  <p>A comma-separated list of RFC numbers or Internet-Draft names.</p>
+                  <p>A list of RFC numbers, each separated by a comma and a space, such as "4567, 5678".</p>
                </div>
                <div id="rfc.section.2.45.8.p.2">
                   <p>The prep tool will parse the attribute value so that incorrect references can be detected.</p>
@@ -3750,7 +3750,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.45.9"><a href="#rfc.section.2.45.9">2.45.9</a>&nbsp;<a href="#element.rfc.attribute.prepTime">'prepTime' attribute</a></h4>
                <div id="rfc.section.2.45.9.p.1">
                   <p>The date that the XML was processed by a preparation tool. This is included in the XML file just before it is saved to disk.
-                     The value is formatted using the format from <a href="#RFC3339" id="rfc.xref.RFC3339.1"><cite title="Date and Time on the Internet: Timestamps">[RFC3339]</cite></a>.
+                     The value is formatted using the format from <a href="#RFC3339" id="rfc.xref.RFC3339.1"><cite title="Date and Time on the Internet: Timestamps">[RFC3339]</cite></a>, such as 2015-06-15T23:06:26Z.
                   </p>
                </div>
             </div>
@@ -3830,7 +3830,7 @@ blockquote > * .bcp14 {
             <div id="element.rfc.attribute.updates">
                <h4 id="rfc.section.2.45.16"><a href="#rfc.section.2.45.16">2.45.16</a>&nbsp;<a href="#element.rfc.attribute.updates">'updates' attribute</a></h4>
                <div id="rfc.section.2.45.16.p.1">
-                  <p>A comma-separated list of RFC numbers or Internet-Draft names.</p>
+                  <p>A list of RFC numbers, each separated by a comma and a space, such as "4567, 5678".</p>
                </div>
                <div id="rfc.section.2.45.16.p.2">
                   <p>The prep tool will parse the attribute value so that incorrect references can be detected.</p>
@@ -3938,8 +3938,9 @@ blockquote > * .bcp14 {
             <div id="element.section.attribute.numbered">
                <h4 id="rfc.section.2.46.2"><a href="#rfc.section.2.46.2">2.46.2</a>&nbsp;<a href="#element.section.attribute.numbered">'numbered' attribute</a></h4>
                <div id="rfc.section.2.46.2.p.1">
-                  <p>If set to "false", the formatter is requested to not display a section number. The prep tool will verify that such a section
-                     is not followed by a numbered section in a part, and will verify that the section is a top-level section.
+                  <p>If set to "false", the formatter is requested to not display a section number. All un-numbered sections must be top-level
+                     sections, must be a child of &lt;<a href="#element.boilerplate" class="smpl">boilerplate</a>&gt;, &lt;<a href="#element.middle" class="smpl">middle</a>&gt;, or &lt;<a href="#element.back" class="smpl">back</a>&gt;, and must not be followed by numbered sections. The prep tool will verify that such a section is not followed by a numbered
+                     section in a part, and will verify that the section is a top-level section.
                   </p>
                </div>
                <div id="rfc.section.2.46.2.p.2" class="avoidbreakafter">
@@ -6385,11 +6386,11 @@ Using CDATA:
                   <p>The following rules prevent this overlap: </p>
                   <ul>
                      <li>"pn" for regular sections always has the format "s-nnn", where "nnn" is the section or appendix number. For example, this
-                        would be "s-2.1.3" for Section 2.1.3 and "s-a" for Appendix A. For the &lt;<a href="#element.abstract" class="smpl">abstract</a>&gt; element, it is always "s-abstract". For the &lt;<a href="#element.note" class="smpl">note</a>&gt; element, it is always "s-note-nnn", where "nnn" is a sequential value. For the &lt;<a href="#element.boilerplate" class="smpl">boilerplate</a>&gt; element, it is always "s-boilerplate".
+                        would be "s-2.1.3" for Section 2.1.3 and "s-a" for Appendix A. For the &lt;<a href="#element.abstract" class="smpl">abstract</a>&gt; element, it is always "s-abstract". For the &lt;<a href="#element.note" class="smpl">note</a>&gt; element, it is always "s-note-nnn", where "nnn" is a sequential value. For the &lt;<a href="#element.boilerplate" class="smpl">boilerplate</a>&gt; element, it is always "s-boilerplate-nnn", where "nnn" is a sequential value.
                      </li>
                      <li>"pn" for &lt;<a href="#element.figure" class="smpl">figure</a>&gt; elements always has the format "f-nnn", where "nnn" is the figure number. For example, this would be "f-5" for Figure 5.
                      </li>
-                     <li>"pn" for &lt;<a href="#element.table" class="smpl">table</a>&gt; elements always has the format "t-nnn", where "nnn" is the figure number. For example, this would be "t-5" for Table 5.
+                     <li>"pn" for &lt;<a href="#element.table" class="smpl">table</a>&gt; elements always has the format "t-nnn", where "nnn" is the table number. For example, this would be "t-5" for Table 5.
                      </li>
                      <li>"pn" for all elements not listed above always has the format "p-nnn-mmm", where "nnn" is the section number and "mmm" is the
                         relative position in the section. For example, this would be "p-2.1.3-7" for the seventh part number in Section 2.1.3.
@@ -6441,7 +6442,9 @@ Using CDATA:
                      or "section" attribute. This will rarely produce a good result in formatted output so, for these documents, the &lt;relref&gt; element
                      should contain text content.
                   </li>
-                  <li>&lt;rfc&gt; "expiresDate" attribute -- This attribute is filled with the date that an Internet Draft expires.</li>
+                  <li>&lt;rfc&gt; "expiresDate" attribute -- This attribute is filled with the date that an Internet Draft expires. The date is in the
+                     format yyyy-mm-dd.
+                  </li>
                   <li>&lt;rfc&gt; "scripts" attribute -- This attribute is filled with a list of scripts needed to render this document. The list is comma-separated,
                      with no spaces allowed. The order is unimportant. The names come from <a href="#UAX24" id="rfc.xref.UAX24.1"><cite title="UAX #24: Unicode Script Property">[UAX24]</cite></a>. For example, if the document has Chinese characters in it, the value might be "Common,Latin,Han".
                   </li>
