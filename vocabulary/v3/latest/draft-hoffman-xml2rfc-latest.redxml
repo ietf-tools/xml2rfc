@@ -13,6 +13,8 @@
 <?rfc linkmailto="no" ?>
 <?rfc rfcedstyle="yes"?><!--
 
+** Add a complete list of derived titles for xref/derivedContent in the appendix **
+
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
 -->
@@ -4967,7 +4969,7 @@ Using CDATA:
         "counter"
         <list style="empty">
             <t>
-            The "derivedContent" attribute will contain just a counter.
+            The displayed output will have just a counter.
             This is used for targets that are
             &lt;<xref target="element.section" format="none">section</xref>&gt;, &lt;<xref target="element.figure" format="none">figure</xref>&gt;, &lt;<xref target="element.table" format="none">table</xref>&gt;, or item in an ordered list.
             Using "format='counter'" where the target is any other type of element is an error.
@@ -4993,7 +4995,7 @@ Using CDATA:
         "default"
         <list style="empty">
             <t>
-            The "derivedContent" attribute will contain a text fragment that describes the referenced part 
+            The displayed output will have a text fragment that describes the referenced part 
             completely, such as "XML" for a target that is a &lt;<xref target="element.reference" format="none">reference</xref>&gt;,
             or "Section 2" or "Table 4" for a target to a non-reference.
             </t>
@@ -5026,15 +5028,15 @@ Using CDATA:
         "title"
         <list style="empty">
             <t>
-            If the target is a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element, the "derivedContent" attribute will contain the name of
+            If the target is a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element, the displayed output will have the name of
             the reference, extracted from the &lt;<xref target="element.title" format="none">title</xref>&gt; child of the
             &lt;<xref target="element.front" format="none">front</xref>&gt; child of the reference.
-            Or, if the target element has a &lt;<xref target="element.name" format="none">name</xref>&gt; child element, the "derivedContent" attribute will contain the
+            Or, if the target element has a &lt;<xref target="element.name" format="none">name</xref>&gt; child element, the displayed output will have the
             text content of that &lt;<xref target="element.name" format="none">name</xref>&gt; element concatenated with the text content of
             each descendant node of &lt;<xref target="element.name" format="none">name</xref>&gt; (that is, stripping out all of the
             XML markup, leaving only the text).
             Or, if the target element does not contain a &lt;<xref target="element.name" format="none">name</xref>&gt; child element,
-            the "derivedContent" attribute will contain the name of the "anchor" attribute of that element
+            the displayed output will have the name of the "anchor" attribute of that element
             with no other adornment.
           </t>
          </list>
@@ -6516,7 +6518,10 @@ the "src" attribute if that attribute is removed by the prep tool.</t>
 
 <t>&lt;xref&gt; "derivedContent" attribute -- This attribute is filled in if there is no content in
 the &lt;xref&gt; element.  The value for this attribute based on the value in the "displayFormat"
-attribute.</t>
+attribute.
+[[ More needs to be said here about the exact values based on the value of the "format" attribute,
+drawing from xref/@format ]]
+</t>
 
 </list></t>
 

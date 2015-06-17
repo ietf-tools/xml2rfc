@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                              June 16, 2015
+Obsoletes: 2629 (if approved)                              June 17, 2015
 Intended status: Informational
-Expires: December 18, 2015
+Expires: December 19, 2015
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 18, 2015.
+   This Internet-Draft will expire on December 19, 2015.
 
 Copyright Notice
 
@@ -3410,10 +3410,10 @@ Table of Contents
 
    "counter"
 
-      The "derivedContent" attribute will contain just a counter.  This
-      is used for targets that are <section>, <figure>, <table>, or item
-      in an ordered list.  Using "format='counter'" where the target is
-      any other type of element is an error.
+      The displayed output will have just a counter.  This is used for
+      targets that are <section>, <figure>, <table>, or item in an
+      ordered list.  Using "format='counter'" where the target is any
+      other type of element is an error.
 
       For example, with an input of:
 
@@ -3427,10 +3427,10 @@ Table of Contents
 
    "default"
 
-      The "derivedContent" attribute will contain a text fragment that
-      describes the referenced part completely, such as "XML" for a
-      target that is a <reference>, or "Section 2" or "Table 4" for a
-      target to a non-reference.
+      The displayed output will have a text fragment that describes the
+      referenced part completely, such as "XML" for a target that is a
+      <reference>, or "Section 2" or "Table 4" for a target to a non-
+      reference.
 
       For example, with an input of:
 
@@ -3447,17 +3447,16 @@ Table of Contents
 
    "title"
 
-      If the target is a <reference> element, the "derivedContent"
-      attribute will contain the name of the reference, extracted from
-      the <title> child of the <front> child of the reference.  Or, if
-      the target element has a <name> child element, the
-      "derivedContent" attribute will contain the text content of that
-      <name> element concatenated with the text content of each
-      descendant node of <name> (that is, stripping out all of the XML
-      markup, leaving only the text).  Or, if the target element does
-      not contain a <name> child element, the "derivedContent" attribute
-      will contain the name of the "anchor" attribute of that element
-      with no other adornment.
+      If the target is a <reference> element, the displayed output will
+      have the name of the reference, extracted from the <title> child
+      of the <front> child of the reference.  Or, if the target element
+      has a <name> child element, the displayed output will have the
+      text content of that <name> element concatenated with the text
+      content of each descendant node of <name> (that is, stripping out
+      all of the XML markup, leaving only the text).  Or, if the target
+      element does not contain a <name> child element, the displayed
+      output will have the name of the "anchor" attribute of that
+      element with no other adornment.
 
    Allowed values:
 
@@ -4522,7 +4521,9 @@ B.3.  Attributes Controlled by the Prep Tool
 
    o  <xref> "derivedContent" attribute -- This attribute is filled in
       if there is no content in the <xref> element.  The value for this
-      attribute based on the value in the "displayFormat" attribute.
+      attribute based on the value in the "displayFormat" attribute. [[
+      More needs to be said here about the exact values based on the
+      value of the "format" attribute, drawing from xref/@format ]]
 
    In addition, note that the contents of the <boilerplate> element is
    controlled by the prep tool.

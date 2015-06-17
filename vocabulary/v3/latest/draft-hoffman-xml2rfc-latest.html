@@ -500,7 +500,7 @@ blockquote > * .bcp14 {
        content: "Hoffman";
   }
   @bottom-center {
-       content: "Expires December 18, 2015";
+       content: "Expires December 19, 2015";
   }
   @bottom-right {
        content: "[Page " counter(page) "]";
@@ -538,7 +538,7 @@ blockquote > * .bcp14 {
       <link rel="schema.dct" href="http://purl.org/dc/terms/">
       <meta name="dct.creator" content="Hoffman, P.">
       <meta name="dct.identifier" content="urn:ietf:id:draft-hoffman-xml2rfc-latest">
-      <meta name="dct.issued" scheme="ISO8601" content="2015-06-16">
+      <meta name="dct.issued" scheme="ISO8601" content="2015-06-17">
       <meta name="dct.replaces" content="urn:ietf:rfc:2629">
       <meta name="dct.abstract" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
       <meta name="description" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
@@ -557,14 +557,14 @@ blockquote > * .bcp14 {
             <tr>
                <td class="left">Obsoletes: <a href="https://tools.ietf.org/html/rfc2629">2629</a> (if approved)
                </td>
-               <td class="right">June 16, 2015</td>
+               <td class="right">June 17, 2015</td>
             </tr>
             <tr>
                <td class="left">Intended status: Informational</td>
                <td class="right"></td>
             </tr>
             <tr>
-               <td class="left">Expires: December 18, 2015</td>
+               <td class="left">Expires: December 19, 2015</td>
                <td class="right"></td>
             </tr>
          </tbody>
@@ -592,7 +592,7 @@ blockquote > * .bcp14 {
             documents at any time. It is inappropriate to use Internet-Drafts as reference material or to cite them other than as &#8220;work
             in progress&#8221;.
          </p>
-         <p>This Internet-Draft will expire on December 18, 2015.</p>
+         <p>This Internet-Draft will expire on December 19, 2015.</p>
       </div>
       <div id="rfc.copyrightnotice">
          <h2><a href="#rfc.copyrightnotice">Copyright Notice</a></h2>
@@ -5216,7 +5216,7 @@ Using CDATA:
                   <p><span id="rfc.iref.x.16"></span> "counter" 
                   </p>
                   <ul class="empty">
-                     <li>The "derivedContent" attribute will contain just a counter. This is used for targets that are &lt;<a href="#element.section" class="smpl">section</a>&gt;, &lt;<a href="#element.figure" class="smpl">figure</a>&gt;, &lt;<a href="#element.table" class="smpl">table</a>&gt;, or item in an ordered list. Using "format='counter'" where the target is any other type of element is an error.
+                     <li>The displayed output will have just a counter. This is used for targets that are &lt;<a href="#element.section" class="smpl">section</a>&gt;, &lt;<a href="#element.figure" class="smpl">figure</a>&gt;, &lt;<a href="#element.table" class="smpl">table</a>&gt;, or item in an ordered list. Using "format='counter'" where the target is any other type of element is an error.
                      </li>
                      <li>For example, with an input of: <span id="rfc.figure.u.19"><pre>      &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
       . . .
@@ -5231,8 +5231,8 @@ Using CDATA:
                   <p><span id="rfc.iref.x.17"></span> "default" 
                   </p>
                   <ul class="empty">
-                     <li>The "derivedContent" attribute will contain a text fragment that describes the referenced part completely, such as "XML" for
-                        a target that is a &lt;<a href="#element.reference" class="smpl">reference</a>&gt;, or "Section 2" or "Table 4" for a target to a non-reference.
+                     <li>The displayed output will have a text fragment that describes the referenced part completely, such as "XML" for a target that
+                        is a &lt;<a href="#element.reference" class="smpl">reference</a>&gt;, or "Section 2" or "Table 4" for a target to a non-reference.
                      </li>
                      <li>For example, with an input of: <span id="rfc.figure.u.20"><pre>      &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
       . . .
@@ -5253,8 +5253,7 @@ Using CDATA:
                   <p><span id="rfc.iref.x.19"></span> "title" 
                   </p>
                   <ul class="empty">
-                     <li>If the target is a &lt;<a href="#element.reference" class="smpl">reference</a>&gt; element, the "derivedContent" attribute will contain the name of the reference, extracted from the &lt;<a href="#element.title" class="smpl">title</a>&gt; child of the &lt;<a href="#element.front" class="smpl">front</a>&gt; child of the reference. Or, if the target element has a &lt;<a href="#element.name" class="smpl">name</a>&gt; child element, the "derivedContent" attribute will contain the text content of that &lt;<a href="#element.name" class="smpl">name</a>&gt; element concatenated with the text content of each descendant node of &lt;<a href="#element.name" class="smpl">name</a>&gt; (that is, stripping out all of the XML markup, leaving only the text). Or, if the target element does not contain a &lt;<a href="#element.name" class="smpl">name</a>&gt; child element, the "derivedContent" attribute will contain the name of the "anchor" attribute of that element with no other
-                        adornment.
+                     <li>If the target is a &lt;<a href="#element.reference" class="smpl">reference</a>&gt; element, the displayed output will have the name of the reference, extracted from the &lt;<a href="#element.title" class="smpl">title</a>&gt; child of the &lt;<a href="#element.front" class="smpl">front</a>&gt; child of the reference. Or, if the target element has a &lt;<a href="#element.name" class="smpl">name</a>&gt; child element, the displayed output will have the text content of that &lt;<a href="#element.name" class="smpl">name</a>&gt; element concatenated with the text content of each descendant node of &lt;<a href="#element.name" class="smpl">name</a>&gt; (that is, stripping out all of the XML markup, leaving only the text). Or, if the target element does not contain a &lt;<a href="#element.name" class="smpl">name</a>&gt; child element, the displayed output will have the name of the "anchor" attribute of that element with no other adornment.
                      </li>
                   </ul>
                </div>
@@ -6452,7 +6451,8 @@ Using CDATA:
                      is removed by the prep tool.
                   </li>
                   <li>&lt;xref&gt; "derivedContent" attribute -- This attribute is filled in if there is no content in the &lt;xref&gt; element. The value for
-                     this attribute based on the value in the "displayFormat" attribute.
+                     this attribute based on the value in the "displayFormat" attribute. [[ More needs to be said here about the exact values based
+                     on the value of the "format" attribute, drawing from xref/@format ]]
                   </li>
                </ul>
             </div>
