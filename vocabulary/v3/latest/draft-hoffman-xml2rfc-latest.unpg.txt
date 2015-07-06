@@ -2,10 +2,10 @@
 
 
 Network Working Group                                         P. Hoffman
-Internet-Draft                                            VPN Consortium
-Obsoletes: 2629 (if approved)                              June 17, 2015
+Internet-Draft                                                     ICANN
+Obsoletes: 2629 (if approved)                               July 6, 2015
 Intended status: Informational
-Expires: December 19, 2015
+Expires: January 7, 2016
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 19, 2015.
+   This Internet-Draft will expire on January 7, 2016.
 
 Copyright Notice
 
@@ -2371,8 +2371,7 @@ Table of Contents
 
 2.45.8.  'obsoletes' attribute
 
-   A list of RFC numbers, each separated by a comma and a space, such as
-   "4567, 5678".
+   A comma-separated list of RFC numbers or Internet-Draft names.
 
    The prep tool will parse the attribute value so that incorrect
    references can be detected.
@@ -2381,8 +2380,7 @@ Table of Contents
 
    The date that the XML was processed by a preparation tool.  This is
    included in the XML file just before it is saved to disk.  The value
-   is formatted using the format from [RFC3339], such as 2015-06-
-   15T23:06:26Z.
+   is formatted using the format from [RFC3339].
 
 2.45.10.  'seriesNo' attribute
 
@@ -2445,8 +2443,7 @@ Table of Contents
 
 2.45.16.  'updates' attribute
 
-   A list of RFC numbers, each separated by a comma and a space, such as
-   "4567, 5678".
+   A comma-separated list of RFC numbers or Internet-Draft names.
 
    The prep tool will parse the attribute value so that incorrect
    references can be detected.
@@ -2511,11 +2508,9 @@ Table of Contents
 2.46.2.  'numbered' attribute
 
    If set to "false", the formatter is requested to not display a
-   section number.  All un-numbered sections must be top-level sections,
-   must be a child of <boilerplate>, <middle>, or <back>, and must not
-   be followed by numbered sections.  The prep tool will verify that
-   such a section is not followed by a numbered section in a part, and
-   will verify that the section is a top-level section.
+   section number.  The prep tool will verify that such a section is not
+   followed by a numbered section in a part, and will verify that the
+   section is a top-level section.
 
    Allowed values:
 
@@ -3410,10 +3405,10 @@ Table of Contents
 
    "counter"
 
-      The displayed output will have just a counter.  This is used for
-      targets that are <section>, <figure>, <table>, or item in an
-      ordered list.  Using "format='counter'" where the target is any
-      other type of element is an error.
+      The "derivedContent" attribute will contain just a counter.  This
+      is used for targets that are <section>, <figure>, <table>, or item
+      in an ordered list.  Using "format='counter'" where the target is
+      any other type of element is an error.
 
       For example, with an input of:
 
@@ -3427,10 +3422,10 @@ Table of Contents
 
    "default"
 
-      The displayed output will have a text fragment that describes the
-      referenced part completely, such as "XML" for a target that is a
-      <reference>, or "Section 2" or "Table 4" for a target to a non-
-      reference.
+      The "derivedContent" attribute will contain a text fragment that
+      describes the referenced part completely, such as "XML" for a
+      target that is a <reference>, or "Section 2" or "Table 4" for a
+      target to a non-reference.
 
       For example, with an input of:
 
@@ -3447,16 +3442,17 @@ Table of Contents
 
    "title"
 
-      If the target is a <reference> element, the displayed output will
-      have the name of the reference, extracted from the <title> child
-      of the <front> child of the reference.  Or, if the target element
-      has a <name> child element, the displayed output will have the
-      text content of that <name> element concatenated with the text
-      content of each descendant node of <name> (that is, stripping out
-      all of the XML markup, leaving only the text).  Or, if the target
-      element does not contain a <name> child element, the displayed
-      output will have the name of the "anchor" attribute of that
-      element with no other adornment.
+      If the target is a <reference> element, the "derivedContent"
+      attribute will contain the name of the reference, extracted from
+      the <title> child of the <front> child of the reference.  Or, if
+      the target element has a <name> child element, the
+      "derivedContent" attribute will contain the text content of that
+      <name> element concatenated with the text content of each
+      descendant node of <name> (that is, stripping out all of the XML
+      markup, leaving only the text).  Or, if the target element does
+      not contain a <name> child element, the "derivedContent" attribute
+      will contain the name of the "anchor" attribute of that element
+      with no other adornment.
 
    Allowed values:
 
@@ -3833,7 +3829,7 @@ Table of Contents
 6.1.  Internet Media Type Registration
 
    IANA maintains the registry of Internet media types [BCP13] at
-   <http://www.iana.org/assignments/media-types>.
+   <https://www.iana.org/assignments/media-types>.
 
    This document updates the specification for the Internet media type
    "application/rfc+xml" from the one in [XML2RFCv2].  The following is
@@ -3930,7 +3926,7 @@ Table of Contents
                     M., and T. Bray, "Extensible Markup Language (XML)
                     1.0 (Fifth Edition)", W3C Recommendation REC-xml-
                     20081126, November 2008,
-                    <http://www.w3.org/TR/2008/REC-xml-20081126/>.
+                    <https://www.w3.org/TR/2008/REC-xml-20081126/>.
 
                     Latest version available at
                     <http://www.w3.org/TR/xml>.
@@ -3950,9 +3946,9 @@ Table of Contents
 
    [IDGUIDE]        Housley, R., "Guidelines to Authors of Internet-
                     Drafts",
-                    <http://www.ietf.org/id-info/guidelines.html>.
+                    <https://www.ietf.org/id-info/guidelines.html>.
 
-   [LINKRELATIONS]  IANA, "Link Relations", <http://www.iana.org/
+   [LINKRELATIONS]  IANA, "Link Relations", <https://www.iana.org/
                     assignments/link-relations/link-relations.xhtml>.
 
    [NONASCII]       Flanagan, H., "The Use of Non-ASCII Characters in
@@ -4036,10 +4032,10 @@ Table of Contents
 
    [RFCPOLICY]      RFC Editor, "RFC Editorial Guidelines and
                     Procedures",
-                    <http://www.rfc-editor.org/policy.html>.
+                    <https://www.rfc-editor.org/policy.html>.
 
    [RNC]            Clark, J., "RELAX NG Compact Syntax", OASIS ,
-                    November 2002, <http://www.oasis-open.org/
+                    November 2002, <https://www.oasis-open.org/
                     committees/relax-ng/compact-20021121.html>.
 
    [RNG]            ISO/IEC, "Information Technology - Document Schema
@@ -4308,7 +4304,7 @@ Appendix B.  The v3 Format and Processing Tools
          to look for errors or warnings before they submit their
          documents for publication.
 
-      *  Consolodation mode -- Produces output where no external
+      *  Consolidation mode -- Produces output where no external
          resources are required to render the file output.  This
          includes expanding the XInclude entities and DTD entities in
          place, and changing all elements that have "src" attributes
@@ -7139,7 +7135,7 @@ Index
 Author's Address
 
    Paul Hoffman
-   VPN Consortium
+   ICANN
 
-   EMail: paul.hoffman@vpnc.org
+   EMail: paul.hoffman@icann.org
 
