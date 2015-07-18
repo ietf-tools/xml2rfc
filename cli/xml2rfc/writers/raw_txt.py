@@ -373,7 +373,9 @@ class RawTextRfcWriter(BaseRfcWriter):
         if not item:
             target_text = '[' + target + ']'
         elif format == 'none':
-            return xref.text.rstrip()
+            if xref.text:
+                return xref.text.rstrip()
+            return ''
         elif format == 'counter':
             target_text = item.counter
         elif format == 'title':
@@ -751,7 +753,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if seriesInfo.attrib['name'] == "Internet-Draft":
                     refstring.append(', '+seriesInfo.attrib['value'] + ' (work in progress)')
                 else:
-                    refstring.append(', '+seriesInfo.attrib['name'] + '\u00A0' +
+                    refstring.append(', '+seriesInfo.attrib['name'] + u'\u00A0' +
                                      seriesInfo.attrib['value'].replace('/', '/' + u'\u200B'))
             date = ref.find('front/date')
             if date is not None:
