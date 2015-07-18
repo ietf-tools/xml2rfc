@@ -1,8 +1,12 @@
 #!/bin/sh
 
-DIR=/www/tools.ietf.org/tools/xml2rfc/rfcs/
+XML2RFC=/www/tools.ietf.org/tools/xml2rfc
+DIR=$XML2RFC/rfcs/
+BIBDIR=$XML2RFC/web/public/rfc
+
 SKIPINDEXER=n
 SKIPMIXER=n
+SKIPRSYNC=n
 
 usage()
 {
@@ -11,17 +15,19 @@ usage()
     echo "-d dir\trun in this directory instead of $WWW"
     echo "-I\tskip the indexer step"
     echo "-M\tskip the mixer step"
+    echo "-R\tskip the bibxml rsync step"
     echo "-v\tbe verbose"
 }
 
-while getopts d:IMv c
+while getopts d:IMRv c
 do
     case $c in
-    d ) DIR="$OPTARG" ;;
-    I ) SKIPINDEXER=y ;;
-    M ) SKIPMIXER=y ;;
-    v ) set -x ;;
-    ? ) usage ;;
+	d ) DIR="$OPTARG" ;;
+	I ) SKIPINDEXER=y ;;
+	M ) SKIPMIXER=y ;;
+	R ) SKIPRSYNC=y ;;
+	v ) set -x ;;
+	? ) usage ;;
     esac
 done
 
@@ -29,7 +35,16 @@ cd $DIR
 
 umask 0002
 
-TCLLIBPATH=/www/tools.ietf.org/tools/xml2rfc/rfcs/scripts/
+PATH=$PATH:$DIR
+
+case $SKIPRSYNC in
+    y ) echo "Skipping rsync from rfc-editor for bibxml" ;;
+    n )
+	mkBibxml -v -t $BIBDIR -1 bibxml > logs/mkBibxml.log 2> logs/mkBibxml.err
+	;;
+esac
+
+TCLLIBPATH=$DIR/scripts/
 export TCLLIBPATH
 
 fixlog() {
@@ -49,12 +64,13 @@ for line in sys.stdin:
 #    parses rfc-index.xml to create data/rfc-index.tcl
 
 case $SKIPINDEXER in
+    y ) echo "Skipping invocation of rfcindexer.tcl" ;;
     n )
 	cp /dev/null logs/indexer.log
 
 	./rfcindexer.tcl . logs/indexer.log 2>&1 | grep -v "package mime 1.5.1 failed"
 
-	if [ `wc -l logs/indexer.log | awk '{print $1}'` -ne 2 ]; then
+	if [ "`wc -l logs/indexer.log | awk '{print $1}'`" -ne 2 ]; then
 	    echo " --- xml2rfc indexer.log --- "
 	    cat logs/indexer.log | fixlog
 	fi
@@ -63,14 +79,15 @@ esac
 
 # rfcmixer.tcl
 #    retrieves rfc-index.txt
-#    generates bibxml/*, bibxml3/*, bibxml4/*, bibxml5/*
+#    generates bibxml.old/*, bibxml3/*, bibxml4/*, bibxml5/*
 #    there are also other documents created as a side-affect
 # see comments in rfcmixer.tcl for more details
-# for bibxml/* (the RFC entries)
+# for bibxml.old/* (the RFC entries)
 #    most of the information comes from rfc-index.txt
 #    abstract and DOI comes from rfc-index.xml
 
 case $SKIPMIXER in
+    y ) echo "Skipping invocation of rfcmixer.tcl" ;;
     n )
 	cp /dev/null logs/mixer.log
 

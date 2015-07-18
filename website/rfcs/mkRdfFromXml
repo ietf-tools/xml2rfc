@@ -1,0 +1,179 @@
+#!/usr/bin/perl
+# Copyright (c) 2013 AT&T Intellectual Property. All rights reserved.
+# THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF AT&T
+# The copyright notice above does not evidence any
+# actual or intended publication of such source code.
+
+use strict vars;
+
+use XML::Parser;
+use Getopt::Std;
+
+my %optargs;
+getopts('i:o:v', \%optargs) or usage();
+sub usage {
+    print STDERR "Usage: $0 [-v] -i xml-file -o rdf-file\n";
+    print STDERR "Convert xml-file to rdf-file\n";
+    print STDERR "-v\tverbose debugging\n";
+    exit 1;
+}
+
+my $verbose = $optargs{v};
+my $input = $optargs{i};
+my $output = $optargs{o};
+
+usage() if !$input || !$output;
+
+
+#    <?xml version='1.0' encoding='UTF-8'?>
+#    <reference anchor='RFC###'>
+#    <front>
+#    <title>$TITLE</title>
+#    <author initials='S.' surname='Name1' fullname='S. Name1'>
+#    <organization /></author>
+#    <author initials='T.' surname='Name2' fullname='T. Name2'>
+#    <organization /></author>
+#    <author initials='B.' surname='Name3' fullname='B. Name3'>
+#    <organization /></author>
+#    <date year='$YEAR' month='$MONTH' />
+#    <abstract>
+#    <t>$ABSTRACT</t></abstract></front>
+#    <seriesInfo name='RFC' value='####' />
+#    <seriesInfo name='DOI' value='10.17487/RFC####' />
+#    <format type='TXT' octets='1759' target='http://www.rfc-editor.org/rfc/rfc####.txt' />
+#    </reference>
+#    
+#    convert months January, etc to 01, etc
+#    
+#    <item rdf:about='http://www.rfc-editor.org/rfc/rfc####.txt'>
+#        <link>http://www.rfc-editor.org/rfc/rfc####.txt</link>
+#        <title>RFC ####: $TITLE, S. Name1, T. Name2, B. Name3</title>
+#        <dc:date>$YEAR-$MONTH-31T23:00:00-00:00</dc:date>
+#        <description>$ABSTRACT $STANDARDSTRACE</description>
+#    </item>
+
+my %vals = ();
+
+my %monthMap = (
+    'Jan' => '01', 'January' => '01',
+    'Feb' => '02', 'February' => '02',
+    'Mar' => '03', 'March' => '03',
+    'Apr' => '04', 'April' => '04',
+    'May' => '05', 'May' => '05',
+    'Jun' => '06', 'June' => '06',
+    'Jul' => '07', 'July' => '07',
+    'Aug' => '08', 'August' => '08',
+    'Sep' => '09', 'September' => '09',
+    'Oct' => '10', 'October' => '10',
+    'Nov' => '11', 'November' => '11',
+    'Dec' => '12', 'December' => '12',
+);
+
+my $output;
+if ($optargs{o}) {
+    open($output, ">", $optargs{o}) or die "Cannot open output file '$optargs{o}': $!\n";
+} else {
+    $output = \*STDOUT;
+}
+
+
+my @xmlPath;
+my $xmlPath;
+my $xmlCharVal;
+
+sub handle_start {
+    my ($p, $txt, @attrs) = @_;
+    my %attrs = @attrs;
+    push @xmlPath, $txt;
+    $xmlPath = join('/', @xmlPath);
+    $xmlCharVal = '';
+
+    # reset the saved values when we hit a new <reference> block
+    if ($txt eq 'reference') {
+	%vals = ();
+	$vals{anchor} = $attrs{anchor};
+	$vals{num} = $vals{anchor};
+	$vals{num} =~ s/^RFC//;
+    } elsif ($txt eq 'author') {
+	# my $initials = $attrs{initials};
+	# my $surname = $attrs{surname};
+	my $fullname = $attrs{fullname};
+	$vals{authorlist} .= ", " . $attrs{fullname};
+    } elsif ($txt eq 'date') {
+	my $year = $attrs{year};
+	my $month = $attrs{month};
+	my $day = $attrs{day} ? $attrs{day} : "01";
+	my $monthNum;
+	if ($month =~ /^[0-9][0-9]$/) {
+	    $monthNum = $month;
+	} elsif ($monthMap{$month} ne '') {
+	    $monthNum = $monthMap{$month};
+	} else {
+	    print STDERR "Unmappable month value: $month\n";
+	}
+	if ($year !~ /^[0-9]{4}$/) {
+	    print STDERR "Unusable year value: $year\n";
+	}
+	if ($day !~ /^[0-9]{1,2}$/) {
+	    print STDERR "Unusable day value: $year\n";
+	} elsif ($day =~ /^[0-9]$/) {
+	    $day = "0$day";
+	}
+	$vals{datetime} = "${year}-${monthNum}-${day}T23:00:00-00:00";
+    }
+    print STDERR "start: p='$p', txt='$txt', path=$xmlPath\n" if $verbose;
+    print STDERR "attrs='", join("'\n'", @attrs), "'\n" if $verbose;
+}
+
+sub handle_end {
+    my ($p, $txt) = @_;
+    print STDERR "end: p='$p', txt='$txt', path=$xmlPath\n" if $verbose;
+
+    if ($txt eq 'title') {
+	$vals{title} = $xmlCharVal;
+    } elsif ($txt eq 'abstract') {
+	$vals{abstract} = $xmlCharVal;
+    } elsif ($txt eq 'reference') {
+	print $output <<EOF;
+    <item rdf:about='http://www.rfc-editor.org/rfc/rfc$vals{num}.txt'>
+        <link>http://www.rfc-editor.org/rfc/rfc$vals{num}.txt</link>
+        <title>RFC $vals{num}: $vals{title}$vals{authorlist}</title>
+        <dc:date>$vals{datetime}</dc:date>
+        <description>$vals{abstract} $vals{standardstrack}</description>
+    </item>
+
+EOF
+    }
+
+    pop @xmlPath;
+    $xmlPath = join('/', @xmlPath);
+}
+
+sub xml_char {
+    my ($p, $txt) = @_;
+    $xmlCharVal .= $txt;
+    print STDERR "char: p='$p', txt='$txt'\n" if $verbose;
+}
+
+
+my $p1 = new XML::Parser(Handlers => {
+    Start => \&handle_start,
+    Char => \&xml_char,
+    # Proc => \&xml_proc,
+    # Comment => \&xml_comment,
+    # Default => \&xml_default,
+    End => \&handle_end
+			 },
+			 Namespaces => true,
+			 ErrorContext => false
+    );
+
+eval {
+    if ($input eq '-') {
+        $p1->parse(\*STDIN);
+    } else {
+        $p1->parsefile($input);
+    }
+};
+print STDERR @_;
+print "\n" if $optargs{n};

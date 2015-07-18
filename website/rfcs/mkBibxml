@@ -1,0 +1,207 @@
+#!/bin/bash
+
+set -u		# error on unset variables
+
+PATH=$PATH:$PWD
+
+DEFTOPDIR=/unknown
+TOPDIR=$DEFTOPDIR
+DEFBIBXML=bibxml
+BIBXML=$DEFBIBXML
+verbose=false
+
+usage()
+{
+    exec 1>&2
+    [ $# -gt 0 ] && echo "$@"
+    echo "Usage: $0 [-t directory] [-1 bibxml-name]"
+    echo " -t top level directory to run in, above bibxml directories, default $DEFTOPDIR"
+    echo " -1 name of bibxml directory instead of default $DEFBIBXML"
+    echo " -d path to rfc2629.dtd file, no default"
+    echo " -v verbose"
+    exit 1
+}
+
+DORDF=true
+DOINDEXXML=true
+DTDFILE=
+
+while getopts 1:d:t:vRI c
+do
+    case "$c" in
+	1 ) BIBXML="$OPTARG" ;;
+	d ) DTDFILE="$OPTARG" ;;
+	t ) TOPDIR="$OPTARG" ;;
+	R ) DORDF=false ;;
+	I ) DOINDEXXML=false ;;
+	v ) verbose=:; set -x ;;
+    ? ) usage ;;
+    esac
+done
+shift $(($OPTIND - 1))
+
+# make sure bibxml is a simple name
+case "$BIBXML" in
+    */* ) usage "name of bibxml directory may not be a path: '$BIBXML'"
+esac
+
+# within the current directory
+cd $TOPDIR || usage "Cannot cd $TOPDIR"
+
+
+# create the bibxml directory:
+mkdir -p "$BIBXML" || usage "Cannot mkdir $BIBXML"
+[ -d "$BIBXML" ] || usage "Could not mkdir $BIBXML."
+
+TMP1=$(mktemp --suffix=t1)
+TMP2=$(mktemp --suffix=t2)
+TMP3=$(mktemp --suffix=t3)
+TMP4=$(mktemp --suffix=t4)
+trap 'rm -f $TMP1 $TMP2 $TMP3 $TMP4' 0 1 2 3 15
+
+# minor error if these are split on a time boundary
+DAY=`date +%d`
+MONTH=`date +%B`
+YEAR=`date +%Y`
+
+getnum()
+{
+    echo $1 | sed 's/^.*reference[.]RFC[.]\([0-9][0-9]*\)[.]xml$/\1/'
+}
+
+################################################################
+# for each RFC, generate reference.RFC.####.xml
+# (do this by rsyncing against rfc-editor.org)
+################################################################
+
+# rsync --times --compress --log-file=$TMP3 --log-file-format="%n" ftp.rfc-editor.org::refs bibxml > $TMP1 2> $TMP2
+rsync -az --log-file=$TMP3 --log-file-format="%n" ftp.rfc-editor.org::refs $BIBXML > $TMP1 2> $TMP2
+$verbose && head -1000 $TMP1 $TMP2 $TMP3
+
+
+################################################################
+# create index.xml
+################################################################
+
+$DOINDEXXML && {
+    NINDEX=$BIBXML/nindex.xml
+    INDEX=$BIBXML/index.xml
+
+    cat <<-EOF > $NINDEX
+	<?xml version='1.0' encoding='UTF-8'?>
+	<!DOCTYPE rfc SYSTEM 'rfc2629.dtd'>
+	
+	<?rfc private=' '?>
+	<?rfc symrefs='yes'?>
+	<?rfc topblock='no'?>
+	
+	<rfc>
+	<front>
+	<title abbrev='The (unofficial) RFC Index'>The (unofficial) RFC Index (as of $MONTH $DAY, $YEAR)</title>
+	
+	<date month='$MONTH' day='$DAY' year='$YEAR' />
+	</front>
+	
+	<middle />
+	
+	<back>
+	<references title='rfc-index'>
+EOF
+
+    find $BIBXML -name 'reference.RFC.*.xml' -print | sort | xargs cat >> $NINDEX
+
+    cat <<-EOF >> $NINDEX
+	</references>
+	</back>
+	</rfc>
+EOF
+
+    mv $NINDEX $INDEX
+}
+
+################################################################
+# create $BIBXML/rdf/index.RFC.*.rdf
+# If $BIBXML/rdf/index.RFC.FOO.rdf does not exist or is older than $BIBXML/reference.RFC.FOO.xml, create the RDF from the xml
+################################################################
+
+$DORDF && {
+
+    mkdir -p $BIBXML/rdf
+
+    for i in $BIBXML/reference.RFC.*.xml
+    do
+	num=$( getnum $i )
+	rdf=$BIBXML/rdf/index.RFC.$num.rdf
+	if [ ! -f "$rdf" -o $i -nt "$rdf" ]
+	then
+	    echo "making $rdf"
+	    mkRdfFromXml -i "$i" -o "$rdf"
+	fi
+    done
+}
+
+################################################################
+# for each RFC file that was new, create index.rdf
+################################################################
+
+
+NINDEXRDF=$BIBXML/nindex.rdf
+INDEXRDF=$BIBXML/index.rdf
+
+cat <<-EOF > $NINDEXRDF
+<?xml version='1.0' encoding='UTF-8'?>
+
+<rdf:RDF 
+  xmlns='http://purl.org/rss/1.0/'
+  xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+  xmlns:dc='http://purl.org/dc/elements/1.1/'>
+
+    <channel rdf:about='http://xml.resource.org/public/rfc/bibxml/index.rdf'>
+        <title>Recent RFCs</title>
+        <link>http://xml.resource.org/public/rfc/bibxml/index.rdf</link>
+        <description>Automatically generated from rfc-index.txt</description>
+        <dc:language>en-us</dc:language>
+        <dc:date>2007-05-31T23:58:48-00:00</dc:date>
+
+        <items><rdf:Seq>
+EOF
+
+awk 'match($0,/reference[.]RFC[.]([0-9][0-9]*)[.]xml/, a) {
+	print a[1];
+}' $TMP3 > $TMP4
+
+cat $TMP4 |
+    while read NUM
+    do
+	echo "Num $NUM is new" 1>&2
+	echo "<rdf:li resource='http://www.rfc-editor.org/rfc/rfc$NUM.txt' />"
+    done >> $NINDEXRDF
+
+cat <<-EOF >> $NINDEXRDF
+	        </rdf:Seq></items>
+	    </channel>
+EOF
+
+cat $TMP4 |
+    while read num
+    do
+	echo "Adding $BIBXML/rdf/index.RFC.$num.rdf" 1>&2
+	[ -f $BIBXML/rdf/index.RFC.$num.rdf ] &&
+	cat $BIBXML/rdf/index.RFC.$num.rdf
+    done >> $NINDEXRDF
+
+cat <<-EOF >> $NINDEXRDF
+	</rdf:RDF>
+EOF
+
+mv $NINDEXRDF $INDEXRDF
+
+# update rfc2629.dtd
+[ -n "$DTDFILE" -a "$DTDFILE" -nt "$BIBXML/rfc2629.dtd" ] &&
+    cp -p "$DTDFILE" "$BIBXML/rfc2629.dtd"
+
+# update $BIBXML.zip
+( cd $BIBXML && zip -r $TOPDIR/$BIBXML.tmp . && mv $TOPDIR/$BIBXML.tmp $TOPDIR/$BIBXML.zip )
+
+# update $BIBXML.tgz
+( cd $BIBXML && tar czf $TOPDIR/$BIBXML.tmp --exclude rdf . && mv $TOPDIR/$BIBXML.tmp $TOPDIR/$BIBXML.tgz )

@@ -600,7 +600,7 @@ proc be_do_get_rfc {} {
     cd ../htdocs/public/rfc/txt
     set txtD [pwd]
     cd $homeD
-    cd ../htdocs/public/rfc/bibxml
+    cd ../htdocs/public/rfc/bibxml.old
     set bibD [pwd]
     cd $homeD
 
@@ -2263,8 +2263,8 @@ set destD ../htdocs/public/rfc
 
 # create directories/files for use by the HTTP server
 
-foreach dir [list bibxml bibxml2 bibxml3 bibxml4 bibxml5 \
-                  bibxml/rdf bibxml3/rdf bibxml4/rdf bibxml5/rdf \
+foreach dir [list bibxml.old bibxml2 bibxml3 bibxml4 bibxml5 \
+                  bibxml.old/rdf bibxml3/rdf bibxml4/rdf bibxml5/rdf \
                   html txt xml] {
     if {![file isdirectory $destD/$dir]} {
         if {[catch { file mkdir $destD/$dir } result]} {
@@ -2276,7 +2276,7 @@ foreach dir [list bibxml bibxml2 bibxml3 bibxml4 bibxml5 \
 }
 
 set dtime [file mtime ../etc/rfc2629.dtd]
-foreach dir [list $destD/bibxml $destD/bibxml2 $destD/bibxml3 $destD/bibxml4 \
+foreach dir [list $destD/bibxml.old $destD/bibxml2 $destD/bibxml3 $destD/bibxml4 \
                   $destD/bibxml5 $destD/xml] {
     if {([catch { file mtime $dir/rfc2629.dtd } ntime]) \
             || ($dtime > $ntime)} {
@@ -2335,7 +2335,7 @@ switch -- $tcl_platform(platform) {
         set c ":"
     }
 }
-append env(XML_LIBRARY) "$c$destD/xml$c$destD/bibxml"
+append env(XML_LIBRARY) "$c$destD/xml$c$destD/bibxml.old"
 set guiP 0
 
 set files [lsort -dictionary [glob -nocomplain xml/complete/rfc*.xml]]
@@ -2379,7 +2379,7 @@ foreach file $files {
 
 # for all XML versions:
 #
-#     create biblio .xml files in ../htdocs/public/rfc/bibxml/
+#     create biblio .xml files in ../htdocs/public/rfc/bibxml.old/
 #     store blocks versions under doc.rfc
 
 set files [glob -nocomplain $destD/xml/rfc*.xml]
@@ -2411,13 +2411,13 @@ foreach file $files {
 
     set n [string range [file tail [file rootname $file]] 3 end]
     set tail reference.RFC.[format %04d $n].xml
-    if {(![catch { file mtime $destD/bibxml/$tail } ntime]) \
+    if {(![catch { file mtime $destD/bibxml.old/$tail } ntime]) \
             && ($mtime($file) <= $ntime)} {
         continue
     }
 
-    set tmp $destD/bibxml/$tail.tmp
-    set item $destD/bibxml/rdf/item.RFC.[format %04d $n].rdf
+    set tmp $destD/bibxml.old/$tail.tmp
+    set item $destD/bibxml.old/rdf/item.RFC.[format %04d $n].rdf
     catch { file delete -- $tmp }
 
     if {[catch { set rfcformats($n) } formats]} {
@@ -2444,12 +2444,12 @@ foreach file $files {
 
     if {[catch { xml2ref $file $tmp $formats $item } result]} {
         beepcore::log::entry $logT user $file $result
-    } elseif {[catch { file rename -force $tmp $destD/bibxml/$tail } result]} {
+    } elseif {[catch { file rename -force $tmp $destD/bibxml.old/$tail } result]} {
         beepcore::log::entry $logT user $file $result
         catch { file delete -- $tmp }
     } else {
-        beepcore::log::entry $logT info created $destD/bibxml/$tail
-        make_readonly $logT $destD/bibxml/$tail
+        beepcore::log::entry $logT info created $destD/bibxml.old/$tail
+        make_readonly $logT $destD/bibxml.old/$tail
         set refP 1
     }
 }
@@ -2459,7 +2459,7 @@ cd ../htdocs/public/rfc/
 set rfcD [pwd]
 cd $homeD
 
-make_rdf_index $rfcD/bibxml RFCs rfc-index.txt
+make_rdf_index $rfcD/bibxml.old RFCs rfc-index.txt
 
 be_do_get_id
 make_rdf_index $rfcD/bibxml3 Internet-drafts 1id-abstracts
@@ -2474,7 +2474,7 @@ set now [clock seconds]
 set later [expr $now+(24*60*60)]
 
 set args [list -title    "The (unofficial) RFC Index" -subtitle "rfc-index"]
-foreach bib [list bibxml bibxml2 bibxml3 bibxml4 bibxml5] {
+foreach bib [list bibxml.old bibxml2 bibxml3 bibxml4 bibxml5] {
     if {[lsearch -exact [list bibxml2] $bib] >= 0} {
         set indexP 1
     } else {

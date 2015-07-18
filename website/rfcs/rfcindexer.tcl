@@ -1,6 +1,6 @@
 #!/bin/sh
 # the following restarts using tclsh \
-PATH=/usr/pkg/bin:/usr/local/bin:/usr/bin:/bin LD_LIBRARY_PATH=/usr/pkg/lib:/usr/local/lib:/usr/lib export PATH LD_LIBRARY_PATH; exec tclsh "$0" "$@"
+DISPLAY= PATH=/usr/pkg/bin:/usr/local/bin:/usr/bin:/bin LD_LIBRARY_PATH=/usr/pkg/lib:/usr/local/lib:/usr/lib export DISPLAY PATH LD_LIBRARY_PATH; exec tclsh "$0" "$@"
 
 
 #
