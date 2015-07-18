@@ -307,7 +307,7 @@ def _replace_unicode_characters(str):
         if match.group(1) in _unicode_replacements:
             str = re.sub(match.group(1), _unicode_replacements[match.group(1)], str)
         else:
-            entity = match.group(1).encode('ascii', 'xmlcharrefreplace')
+            entity = match.group(1).encode('ascii', 'xmlcharrefreplace').decode('ascii')
             str = re.sub(match.group(1), entity, str)
             xml2rfc.log.warn('Illegal character replaced in string: ' + entity)
 

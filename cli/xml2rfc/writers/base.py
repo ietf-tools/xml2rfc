@@ -1022,6 +1022,13 @@ class BaseRfcWriter:
         self.eref_count = 0
         self.pis = self.xmlrfc.getpis()
 
+        # Abstract
+        abstract = self.r.find('front/abstract')
+        if abstract is not None:
+            self.write_heading('Abstract', autoAnchor='rfc.abstract')
+            for t in abstract.findall('t'):
+                self.write_t_rec(t)
+
         # Middle sections
         middle = self.r.find('middle')
         if middle is not None:
