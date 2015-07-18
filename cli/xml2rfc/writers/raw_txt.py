@@ -751,8 +751,8 @@ class RawTextRfcWriter(BaseRfcWriter):
                 if seriesInfo.attrib['name'] == "Internet-Draft":
                     refstring.append(', '+seriesInfo.attrib['value'] + ' (work in progress)')
                 else:
-                    refstring.append(', '+seriesInfo.attrib['name'] + ' ' +
-                                     seriesInfo.attrib['value'])
+                    refstring.append(', '+seriesInfo.attrib['name'] + '\u00A0' +
+                                     seriesInfo.attrib['value'].replace('/', '/' + u'\u200B'))
             date = ref.find('front/date')
             if date is not None:
                 month = date.attrib.get('month', '')
