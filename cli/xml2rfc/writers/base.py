@@ -488,7 +488,7 @@ class BaseRfcWriter:
                     if date.attrib['day'][0] == '0':
                         date.attrib['day'] = today.strftime('%d').replace('0', '')
             elif year != str(today.year) and not month:
-                xml2rfc.log.warn("Incomplete and out-of date <date/> element: %s" % lxml.etree.tostring(date))
+                xml2rfc.log.error("Incomplete and out-of date <date/> element: %s" % lxml.etree.tostring(date))
         try:
             datetime.datetime.strptime(date.attrib.get('year')+date.attrib.get('month'), '%Y%B')
         except ValueError:
@@ -496,6 +496,8 @@ class BaseRfcWriter:
                 datetime.datetime.strptime(date.attrib.get('year')+date.attrib.get('month'), '%Y%b')
             except ValueError:
                 xml2rfc.log.warn("Year and/or month are incorrect values in <date/> element: %s" % lxml.etree.tostring(date))
+        except TypeError:
+            pass
 
         # Setup the expiration string for drafts as published date + six months
         if self.draft:
