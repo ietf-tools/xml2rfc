@@ -13,7 +13,7 @@ install:
 	python --version
 	python setup.py --quiet install --skip-build
 	rm -rf xml2rfc.egg-info/
-		
+
 test:	install flaketests pytests
 
 flaketests:
@@ -23,33 +23,22 @@ flaketests:
 pytests:
 	python test.py --verbose
 
-drafttest: install
-	[ -d tmp ] || mkdir -p tmp
-	[ -d tmp ] && rm -f tmp/*
+CHECKOUTPUT=	\
+	groff -ms -Tascii tmp/$$doc.nroff | ./fix.pl | $$postnrofffix > tmp/$$doc.nroff.txt ; \
+	for type in .raw.txt .txt .nroff .html .exp.xml ; do \
+	diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/$$doc$$type tmp/$$doc$$type || { echo "Diff failed for $$doc$$type output"; exit 1; } \
+	done ; \
+	diff -I '$(datetime_regex)' -I '$(version_regex)' tmp/$$doc.nroff.txt tmp/$$doc.txt || { echo 'Diff failed for .nroff.txt output'; exit 1; }
+
+drafttest: cleantmp install
 	@ xml2rfc --cache tests/cache --no-network tests/input/draft-template.xml --base tmp/ --raw --text --nroff --html --exp
-	@ groff -ms -Tascii tmp/draft-template.nroff | ./fix.pl | sed 1,2d > tmp/draft-template.nroff.txt
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-template.raw.txt	tmp/draft-template.raw.txt	|| { echo 'Diff failed for .raw.txt output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-template.txt	tmp/draft-template.txt		|| { echo 'Diff failed for .txt output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-template.nroff	tmp/draft-template.nroff 	|| { echo 'Diff failed for .nroff output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-template.html	tmp/draft-template.html 	|| { echo 'Diff failed for .html output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-template.exp.xml	tmp/draft-template.exp.xml	|| { echo 'Diff failed for .exp.xml output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tmp/draft-template.nroff.txt tmp/draft-template.txt	|| { echo 'Diff failed for .nroff.txt output'; exit 1; }
+	doc=draft-template ; postnrofffix="sed 1,2d" ; $(CHECKOUTPUT)
 
-miektest: install
-	[ -d tmp ] || mkdir -p tmp
-	[ -d tmp ] && rm -f tmp/*
+miektest: cleantmp install
 	@ xml2rfc --cache tests/cache --no-network tests/input/draft-miek-test.xml --base tmp/ --raw --text --nroff --html --exp
-	@ groff -ms -Tascii tmp/draft-miek-test.nroff | ./fix.pl | sed 1,2d > tmp/draft-miek-test.nroff.txt
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-miek-test.raw.txt	tmp/draft-miek-test.raw.txt	|| { echo 'Diff failed for .raw.txt output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-miek-test.txt	tmp/draft-miek-test.txt		|| { echo 'Diff failed for .txt output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-miek-test.nroff	tmp/draft-miek-test.nroff 	|| { echo 'Diff failed for .nroff output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-miek-test.html	tmp/draft-miek-test.html 	|| { echo 'Diff failed for .html output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/draft-miek-test.exp.xml	tmp/draft-miek-test.exp.xml	|| { echo 'Diff failed for .exp.xml output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tmp/draft-miek-test.nroff.txt tmp/draft-miek-test.txt	|| { echo 'Diff failed for .nroff.txt output'; exit 1; }
+	doc=draft-miek-test ; postnrofffix="sed 1,2d" ; $(CHECKOUTPUT)
 
-cachetest: install
-	[ -d tmp ] || mkdir -p tmp
-	[ -d tmp ] && rm -f tmp/*
+cachetest: cleantmp install
 	@ echo "Clearing cache ..."
 	@ xml2rfc --cache .cache --clear-cache
 	@ echo "Filling cache ..."
@@ -57,17 +46,17 @@ cachetest: install
 	@ echo "Running without accessing network ..."
 	@ xml2rfc --cache .cache tests/input/rfc6787.xml --no-network --base tmp/ --raw
 
-rfctest:  bin/python install
+rfctest: cleantmp bin/python install
+	@ xml2rfc --cache tests/cache --no-network tests/input/rfc6787.xml --base tmp/ --raw --text --nroff --html --exp
+	doc=rfc6787 ; postnrofffix="cat" ; $(CHECKOUTPUT)
+
+unicodetest: cleantmp  bin/python install
+	@ xml2rfc --cache tests/cache --no-network tests/input/unicode.xml --base tmp/ --raw --text --nroff --html --exp
+	doc=unicode ; postnrofffix="sed 1,2d" ; $(CHECKOUTPUT)
+
+cleantmp:
 	[ -d tmp ] || mkdir -p tmp
 	[ -d tmp ] && rm -f tmp/*
-	@ xml2rfc --cache tests/cache --no-network tests/input/rfc6787.xml --base tmp/ --raw --text --nroff --html --exp
-	@ groff -ms -Tascii tmp/rfc6787.nroff | ./fix.pl > tmp/rfc6787.nroff.txt
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/rfc6787.raw.txt	tmp/rfc6787.raw.txt	|| { echo 'Diff failed for .raw.txt output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/rfc6787.txt	tmp/rfc6787.txt 	|| { echo 'Diff failed for .txt output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/rfc6787.nroff	tmp/rfc6787.nroff 	|| { echo 'Diff failed for .nroff output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/rfc6787.html	tmp/rfc6787.html 	|| { echo 'Diff failed for .html output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tests/valid/rfc6787.exp.xml	tmp/rfc6787.exp.xml 	|| { echo 'Diff failed for .exp.xml output'; exit 1; }
-	@ diff -I '$(datetime_regex)' -I '$(version_regex)' tmp/rfc6787.nroff.txt tmp/rfc6787.txt	|| { echo 'Diff failed for .nroff.txt output'; exit 1; }
 
 tests: test regressiontests cachetest
 
