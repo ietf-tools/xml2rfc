@@ -15,8 +15,6 @@
 
 ** Add a complete list of derived titles for xref/derivedContent in the appendix **
 
-Hopefully hear back from Lars about IRSG needs for Appendix A.
-
 After draft-iab-xml2rfc gets published as an RFC, update the "obsoletes" line.
 
 -->
@@ -86,6 +84,14 @@ In this document, the term "format" is used when describing types of documents, 
 XML and HTML. The term "representation" is used when talking about a specific instatiation
 of a format, such as an XML document or an HTML document that was created by an XML document.
 </t>
+
+<t>
+The details (particularly any vocabularies) described in this document are expected to change based
+on experience gained in implementing the RFC production center's toolset. Revised documents will be
+published capturing those changes as the toolset is completed. Other implementers must not expect
+those changes to remain backwards-compatible with the details described this document.
+</t>
+
 <t>
 The following two sections are a hopefully-complete list of all the technical changes between <xref target="XML2RFCv2"/>
 and this document, as well as the design criteria for those changes.</t>
@@ -6076,6 +6082,16 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name='RFC' value='5741' />
   </reference>
 
+<reference  anchor='RFC5743' target='http://www.rfc-editor.org/info/rfc5743'>
+<front>
+<title>Definition of an Internet Research Task Force (IRTF) Document Stream</title>
+<author initials='A.' surname='Falk' fullname='A. Falk'><organization /></author>
+<date year='2009' month='December' />
+</front>
+<seriesInfo name='RFC' value='5743'/>
+<seriesInfo name='DOI' value='10.17487/RFC5743'/>
+</reference>
+
   <reference anchor="RFC6068">
     <front>
       <title>The 'mailto' URI Scheme</title>
@@ -6510,12 +6526,15 @@ not those that are part of a sequence of resources.</t>
   The consensus attribute
   can be used to supply this information. The acceptable values are "true" (the default) and "false";
 "yes" and "no" from v2 are deprecated.
-The effect for the various streams is:
+For documents in the IRTF stream, this value must be "false".
+</t>
+<t>
+The effect of this value for the various streams is:
   <list style="symbols">
     <t>"independent" and "IAB": none.</t>
     <t>"IETF": mention that there was an IETF consensus.</t>
-    <t>"IRTF": mention that there was a research group consensus (where the name of the research
-    group is extracted from the &lt;<x:ref>workgroup</x:ref>&gt; element).</t>
+    <t>"IRTF": the text needs to describe the consensus/review as described in Section 2.1 of
+      <xref target="RFC5743"/>.</t>
   </list>
 </t>
 </section>
