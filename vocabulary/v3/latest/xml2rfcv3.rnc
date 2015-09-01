@@ -4,6 +4,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 # xml2rfc Version 3 grammar
 rfc =
   element rfc {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute number { text }?,
     [ a:defaultValue = "" ] attribute obsoletes { text }?,
     [ a:defaultValue = "" ] attribute updates { text }?,
@@ -56,11 +58,15 @@ rfc =
   }
 link =
   element link {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute href { text },
     attribute rel { text }?
   }
 front =
   element front {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     title,
     author+,
     date?,
@@ -74,12 +80,16 @@ front =
   }
 title =
   element title {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute abbrev { text }?,
     attribute ascii { text }?,
     text
   }
 author =
   element author {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute initials { text }?,
     attribute asciiInitials { text }?,
     attribute surname { text }?,
@@ -92,72 +102,134 @@ author =
   }
 organization =
   element organization {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute abbrev { text }?,
     attribute ascii { text }?,
     text
   }
 address =
-  element address { postal?, phone?, facsimile?, email?, uri? }
+  element address {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    postal?,
+    phone?,
+    facsimile?,
+    email?,
+    uri?
+  }
 postal =
   element postal {
-    (city | code | country | region | street)* | postalLine+
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    ((city | code | country | region | street)* | postalLine+)
   }
 street =
   element street {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
 city =
   element city {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
 region =
   element region {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
 code =
   element code {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
 country =
   element country {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
 postalLine =
   element postalLine {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
-phone = element phone { text }
-facsimile = element facsimile { text }
+phone =
+  element phone {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
+facsimile =
+  element facsimile {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
 email =
   element email {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
-uri = element uri { text }
+uri =
+  element uri {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
 date =
   element date {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute day { text }?,
     attribute month { text }?,
     attribute year { text }?,
     empty
   }
-area = element area { text }
-workgroup = element workgroup { text }
-keyword = element keyword { text }
+area =
+  element area {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
+workgroup =
+  element workgroup {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
+keyword =
+  element keyword {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
 abstract =
   element abstract {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     (dl | ol | t | ul)+
   }
 note =
   element note {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute title { text }?,
     attribute pn { text }?,
     [ a:defaultValue = "false" ]
@@ -167,12 +239,21 @@ note =
   }
 boilerplate =
   element boilerplate {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute pn { text }?,
     section+
   }
-middle = element middle { section+ }
+middle =
+  element middle {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    section+
+  }
 section =
   element section {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     attribute title { text }?,
@@ -199,11 +280,15 @@ section =
   }
 name =
   element name {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute slugifiedName { text }?,
     (text | cref | eref | relref | tt | xref)*
   }
 t =
   element t {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     attribute hangText { text }?,
@@ -229,12 +314,16 @@ t =
   }
 aside =
   element aside {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     (artwork | dl | figure | iref | \list | ol | t | table | ul)*
   }
 blockquote =
   element blockquote {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     attribute cite { text }?,
@@ -255,6 +344,8 @@ blockquote =
   }
 \list =
   element list {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     [ a:defaultValue = "empty" ] attribute style { text }?,
     attribute hangIndent { text }?,
     attribute counter { text }?,
@@ -262,6 +353,8 @@ blockquote =
   }
 ol =
   element ol {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "1" ] attribute type { text }?,
@@ -273,6 +366,8 @@ ol =
   }
 ul =
   element ul {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "normal" ]
@@ -283,6 +378,8 @@ ul =
   }
 li =
   element li {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -301,6 +398,8 @@ li =
   }
 dl =
   element dl {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "normal" ]
@@ -311,6 +410,8 @@ dl =
   }
 dt =
   element dt {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     (text
@@ -328,6 +429,8 @@ dt =
   }
 dd =
   element dd {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -346,6 +449,8 @@ dd =
   }
 xref =
   element xref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute target { xsd:IDREF },
     [ a:defaultValue = "false" ]
     attribute pageno { "true" | "false" }?,
@@ -356,6 +461,8 @@ xref =
   }
 relref =
   element relref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute target { xsd:IDREF },
     [ a:defaultValue = "of" ]
     attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
@@ -367,11 +474,15 @@ relref =
   }
 eref =
   element eref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute target { text },
     text
   }
 iref =
   element iref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute item { text },
     [ a:defaultValue = "" ] attribute subitem { text }?,
     [ a:defaultValue = "false" ]
@@ -381,6 +492,8 @@ iref =
   }
 cref =
   element cref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute source { text }?,
     [ a:defaultValue = "true" ]
@@ -389,6 +502,8 @@ cref =
   }
 tt =
   element tt {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -403,6 +518,8 @@ tt =
   }
 strong =
   element strong {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -417,6 +534,8 @@ strong =
   }
 em =
   element em {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -431,6 +550,8 @@ em =
   }
 sub =
   element sub {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -444,6 +565,8 @@ sub =
   }
 sup =
   element sup {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -457,6 +580,8 @@ sup =
   }
 spanx =
   element spanx {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     [ a:defaultValue = "preserve" ]
     attribute xml:space { "default" | "preserve" }?,
     [ a:defaultValue = "emph" ] attribute style { text }?,
@@ -464,11 +589,15 @@ spanx =
   }
 vspace =
   element vspace {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     [ a:defaultValue = "0" ] attribute blankLines { text }?,
     empty
   }
 figure =
   element figure {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "" ] attribute title { text }?,
@@ -488,6 +617,8 @@ figure =
   }
 table =
   element table {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     name?,
@@ -498,6 +629,8 @@ table =
   }
 preamble =
   element preamble {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -514,6 +647,8 @@ preamble =
   }
 artwork =
   element artwork {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     attribute xml:space { text }?,
@@ -530,6 +665,8 @@ artwork =
   }
 svg =
   element ns1:svg {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute * { text }*,
     anything
   }
@@ -540,6 +677,8 @@ anything =
   }
 sourcecode =
   element sourcecode {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "" ] attribute name { text }?,
@@ -550,24 +689,32 @@ sourcecode =
   }
 thead =
   element thead {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     tr+
   }
 tbody =
   element tbody {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     tr+
   }
 tfoot =
   element tfoot {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     tr+
   }
 tr =
   element tr {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "0" ] attribute border { text }?,
@@ -575,6 +722,8 @@ tr =
   }
 td =
   element td {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -604,6 +753,8 @@ td =
   }
 th =
   element th {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "0" ] attribute border { text }?,
@@ -633,9 +784,15 @@ th =
         | xref)+)
   }
 postamble =
-  element postamble { (text | cref | eref | iref | spanx | xref)* }
+  element postamble {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text | cref | eref | iref | spanx | xref)*
+  }
 texttable =
   element texttable {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     [ a:defaultValue = "" ] attribute title { text }?,
     [ a:defaultValue = "false" ]
@@ -652,22 +809,50 @@ texttable =
   }
 ttcol =
   element ttcol {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute width { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
     (cref | eref | iref | xref | text)*
   }
-c = element c { (text | cref | eref | iref | spanx | xref)* }
-bcp14 = element bcp14 { text }
-br = element br { empty }
-back = element back { displayreference*, references*, section* }
+c =
+  element c {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text | cref | eref | iref | spanx | xref)*
+  }
+bcp14 =
+  element bcp14 {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
+br =
+  element br {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    empty
+  }
+back =
+  element back {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    displayreference*,
+    references*,
+    section*
+  }
 displayreference =
   element displayreference {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute target { xsd:IDREF },
     attribute to { text }
   }
 references =
   element references {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
     name?,
@@ -675,6 +860,8 @@ references =
   }
 reference =
   element reference {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID },
     attribute target { text }?,
     [ a:defaultValue = "true" ]
@@ -684,11 +871,15 @@ reference =
   }
 referencegroup =
   element referencegroup {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID },
     reference+
   }
 seriesInfo =
   element seriesInfo {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute name { text },
     attribute value { text },
     attribute asciiName { text }?,
@@ -697,6 +888,8 @@ seriesInfo =
   }
 format =
   element format {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute target { text }?,
     attribute type { text },
     attribute octets { text }?,
@@ -704,6 +897,8 @@ format =
   }
 annotation =
   element annotation {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -720,6 +915,8 @@ annotation =
   }
 refcontent =
   element refcontent {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text | bcp14 | em | strong | sub | sup | tt)*
   }
 start = rfc

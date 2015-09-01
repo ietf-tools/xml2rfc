@@ -989,7 +989,7 @@ blockquote > * .bcp14 {
             <p>Every element in the v3 vocabulary can have an "xml:lang" attribute, an "xml:base" attribute, or both. The xml:lang attribute
                specifies the language used in the element. This is sometimes useful for renderers which display different fonts for ideographic
                characters used in China and Japan. The xml:base attribute is sometimes added to an XML file when doing XML-to-XML conversion
-               where the base file has XInclude atttributes (see <a href="#includingexternal" title="Including External Text with XInclude">Appendix&nbsp;B.1</a>). These attributes are not listed in the element descriptions here, but will later be added to the RNG used for the v3 tools.
+               where the base file has XInclude atttributes (see <a href="#includingexternal" title="Including External Text with XInclude">Appendix&nbsp;B.1</a>).
             </p>
          </div>
          <div id="element.abstract">
@@ -6491,6 +6491,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.rfc">rfc</strong><span id="rfc.iref.r.22"></span> =
   element rfc {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute number { text }?,
     [ a:defaultValue = "" ] attribute obsoletes { text }?,
     [ a:defaultValue = "" ] attribute updates { text }?,
@@ -6544,12 +6546,16 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.link">link</strong><span id="rfc.iref.l.6"></span> =
   element link {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute href { text },
     attribute rel { text }?
   }
 
 <strong id="grammar.front">front</strong><span id="rfc.iref.f.12"></span> =
   element front {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     title,
     author+,
     date?,
@@ -6564,6 +6570,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.title">title</strong><span id="rfc.iref.t.42"></span> =
   element title {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute abbrev { text }?,
     attribute ascii { text }?,
     text
@@ -6571,6 +6579,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.author">author</strong><span id="rfc.iref.a.15"></span> =
   element author {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute initials { text }?,
     attribute asciiInitials { text }?,
     attribute surname { text }?,
@@ -6584,83 +6594,143 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.organization">organization</strong><span id="rfc.iref.o.11"></span> =
   element organization {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute abbrev { text }?,
     attribute ascii { text }?,
     text
   }
 
 <strong id="grammar.address">address</strong><span id="rfc.iref.a.16"></span> =
-  element address { postal?, phone?, facsimile?, email?, uri? }
+  element address {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    postal?,
+    phone?,
+    facsimile?,
+    email?,
+    uri?
+  }
 
 <strong id="grammar.postal">postal</strong><span id="rfc.iref.p.8"></span> =
   element postal {
-    (city | code | country | region | street)* | postalLine+
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    ((city | code | country | region | street)* | postalLine+)
   }
 
 <strong id="grammar.street">street</strong><span id="rfc.iref.s.70"></span> =
   element street {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
 
 <strong id="grammar.city">city</strong><span id="rfc.iref.c.23"></span> =
   element city {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
 
 <strong id="grammar.region">region</strong><span id="rfc.iref.r.23"></span> =
   element region {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
 
 <strong id="grammar.code">code</strong><span id="rfc.iref.c.24"></span> =
   element code {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
 
 <strong id="grammar.country">country</strong><span id="rfc.iref.c.25"></span> =
   element country {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
 
 <strong id="grammar.postalLine">postalLine</strong><span id="rfc.iref.p.9"></span> =
   element postalLine {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
 
-<strong id="grammar.phone">phone</strong><span id="rfc.iref.p.10"></span> = element phone { text }
+<strong id="grammar.phone">phone</strong><span id="rfc.iref.p.10"></span> =
+  element phone {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
 
-<strong id="grammar.facsimile">facsimile</strong><span id="rfc.iref.f.13"></span> = element facsimile { text }
+<strong id="grammar.facsimile">facsimile</strong><span id="rfc.iref.f.13"></span> =
+  element facsimile {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
 
 <strong id="grammar.email">email</strong><span id="rfc.iref.e.371"></span> =
   element email {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute ascii { text }?,
     text
   }
 
-<strong id="grammar.uri">uri</strong><span id="rfc.iref.u.11"></span> = element uri { text }
+<strong id="grammar.uri">uri</strong><span id="rfc.iref.u.11"></span> =
+  element uri {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
 
 <strong id="grammar.date">date</strong><span id="rfc.iref.d.14"></span> =
   element date {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute day { text }?,
     attribute month { text }?,
     attribute year { text }?,
     empty
   }
 
-<strong id="grammar.area">area</strong><span id="rfc.iref.a.17"></span> = element area { text }
+<strong id="grammar.area">area</strong><span id="rfc.iref.a.17"></span> =
+  element area {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
 
-<strong id="grammar.workgroup">workgroup</strong><span id="rfc.iref.w.2"></span> = element workgroup { text }
+<strong id="grammar.workgroup">workgroup</strong><span id="rfc.iref.w.2"></span> =
+  element workgroup {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
 
-<strong id="grammar.keyword">keyword</strong><span id="rfc.iref.k.2"></span> = element keyword { text }
+<strong id="grammar.keyword">keyword</strong><span id="rfc.iref.k.2"></span> =
+  element keyword {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
 
 <strong id="grammar.abstract">abstract</strong><span id="rfc.iref.a.18"></span> =
   element abstract {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     (dl | ol | t | ul)+
@@ -6668,6 +6738,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.note">note</strong><span id="rfc.iref.n.8"></span> =
   element note {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute title { text }?,
     attribute pn { text }?,
     [ a:defaultValue = "false" ]
@@ -6678,14 +6750,23 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.boilerplate">boilerplate</strong><span id="rfc.iref.b.23"></span> =
   element boilerplate {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute pn { text }?,
     section+
   }
 
-<strong id="grammar.middle">middle</strong><span id="rfc.iref.m.2"></span> = element middle { section+ }
+<strong id="grammar.middle">middle</strong><span id="rfc.iref.m.2"></span> =
+  element middle {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    section+
+  }
 
 <strong id="grammar.section">section</strong><span id="rfc.iref.s.71"></span> =
   element section {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     attribute title { text }?,
@@ -6713,12 +6794,16 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.name">name</strong><span id="rfc.iref.n.9"></span> =
   element name {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute slugifiedName { text }?,
     (text | cref | eref | relref | tt | xref)*
   }
 
 <strong id="grammar.t">t</strong><span id="rfc.iref.t.43"></span> =
   element t {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     attribute hangText { text }?,
@@ -6745,6 +6830,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.aside">aside</strong><span id="rfc.iref.a.19"></span> =
   element aside {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     (artwork | dl | figure | iref | \list | ol | t | table | ul)*
@@ -6752,6 +6839,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.blockquote">blockquote</strong><span id="rfc.iref.b.24"></span> =
   element blockquote {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     attribute cite { text }?,
@@ -6773,6 +6862,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.list">\list</strong><span id="rfc.iref.l.7"></span> =
   element list {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     [ a:defaultValue = "empty" ] attribute style { text }?,
     attribute hangIndent { text }?,
     attribute counter { text }?,
@@ -6781,6 +6872,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.ol">ol</strong><span id="rfc.iref.o.12"></span> =
   element ol {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "1" ] attribute type { text }?,
@@ -6793,6 +6886,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.ul">ul</strong><span id="rfc.iref.u.12"></span> =
   element ul {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "normal" ]
@@ -6804,6 +6899,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.li">li</strong><span id="rfc.iref.l.8"></span> =
   element li {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -6823,6 +6920,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.dl">dl</strong><span id="rfc.iref.d.15"></span> =
   element dl {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "normal" ]
@@ -6834,6 +6933,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.dt">dt</strong><span id="rfc.iref.d.16"></span> =
   element dt {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     (text
@@ -6852,6 +6953,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.dd">dd</strong><span id="rfc.iref.d.17"></span> =
   element dd {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -6871,6 +6974,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.xref">xref</strong><span id="rfc.iref.x.24"></span> =
   element xref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute target { xsd:IDREF },
     [ a:defaultValue = "false" ]
     attribute pageno { "true" | "false" }?,
@@ -6882,6 +6987,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.relref">relref</strong><span id="rfc.iref.r.24"></span> =
   element relref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute target { xsd:IDREF },
     [ a:defaultValue = "of" ]
     attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
@@ -6894,12 +7001,16 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.eref">eref</strong><span id="rfc.iref.e.372"></span> =
   element eref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute target { text },
     text
   }
 
 <strong id="grammar.iref">iref</strong><span id="rfc.iref.i.22"></span> =
   element iref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute item { text },
     [ a:defaultValue = "" ] attribute subitem { text }?,
     [ a:defaultValue = "false" ]
@@ -6910,6 +7021,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.cref">cref</strong><span id="rfc.iref.c.26"></span> =
   element cref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute source { text }?,
     [ a:defaultValue = "true" ]
@@ -6919,6 +7032,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.tt">tt</strong><span id="rfc.iref.t.44"></span> =
   element tt {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -6934,6 +7049,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.strong">strong</strong><span id="rfc.iref.s.72"></span> =
   element strong {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -6949,6 +7066,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.em">em</strong><span id="rfc.iref.e.373"></span> =
   element em {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -6964,6 +7083,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.sub">sub</strong><span id="rfc.iref.s.73"></span> =
   element sub {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -6978,6 +7099,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.sup">sup</strong><span id="rfc.iref.s.74"></span> =
   element sup {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -6992,6 +7115,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.spanx">spanx</strong><span id="rfc.iref.s.75"></span> =
   element spanx {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     [ a:defaultValue = "preserve" ]
     attribute xml:space { "default" | "preserve" }?,
     [ a:defaultValue = "emph" ] attribute style { text }?,
@@ -7000,12 +7125,16 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.vspace">vspace</strong><span id="rfc.iref.v.2"></span> =
   element vspace {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     [ a:defaultValue = "0" ] attribute blankLines { text }?,
     empty
   }
 
 <strong id="grammar.figure">figure</strong><span id="rfc.iref.f.14"></span> =
   element figure {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "" ] attribute title { text }?,
@@ -7026,6 +7155,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.table">table</strong><span id="rfc.iref.t.45"></span> =
   element table {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     name?,
@@ -7037,6 +7168,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.preamble">preamble</strong><span id="rfc.iref.p.11"></span> =
   element preamble {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -7054,6 +7187,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.artwork">artwork</strong><span id="rfc.iref.a.20"></span> =
   element artwork {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     attribute xml:space { text }?,
@@ -7071,6 +7206,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.svg">svg</strong><span id="rfc.iref.s.76"></span> =
   element ns1:svg {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute * { text }*,
     anything
   }
@@ -7083,6 +7220,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.sourcecode">sourcecode</strong><span id="rfc.iref.s.77"></span> =
   element sourcecode {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "" ] attribute name { text }?,
@@ -7094,6 +7233,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.thead">thead</strong><span id="rfc.iref.t.46"></span> =
   element thead {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     tr+
@@ -7101,6 +7242,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.tbody">tbody</strong><span id="rfc.iref.t.47"></span> =
   element tbody {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     tr+
@@ -7108,6 +7251,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.tfoot">tfoot</strong><span id="rfc.iref.t.48"></span> =
   element tfoot {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     tr+
@@ -7115,6 +7260,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.tr">tr</strong><span id="rfc.iref.t.49"></span> =
   element tr {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "0" ] attribute border { text }?,
@@ -7123,6 +7270,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.td">td</strong><span id="rfc.iref.t.50"></span> =
   element td {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -7153,6 +7302,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.th">th</strong><span id="rfc.iref.t.51"></span> =
   element th {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute pn { text }?,
     [ a:defaultValue = "0" ] attribute border { text }?,
@@ -7183,10 +7334,16 @@ namespace ns1 = "http://www.w3.org/2000/svg"
   }
 
 <strong id="grammar.postamble">postamble</strong><span id="rfc.iref.p.12"></span> =
-  element postamble { (text | cref | eref | iref | spanx | xref)* }
+  element postamble {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text | cref | eref | iref | spanx | xref)*
+  }
 
 <strong id="grammar.texttable">texttable</strong><span id="rfc.iref.t.52"></span> =
   element texttable {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     [ a:defaultValue = "" ] attribute title { text }?,
     [ a:defaultValue = "false" ]
@@ -7204,28 +7361,56 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.ttcol">ttcol</strong><span id="rfc.iref.t.53"></span> =
   element ttcol {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute width { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
     (cref | eref | iref | xref | text)*
   }
 
-<strong id="grammar.c">c</strong><span id="rfc.iref.c.27"></span> = element c { (text | cref | eref | iref | spanx | xref)* }
+<strong id="grammar.c">c</strong><span id="rfc.iref.c.27"></span> =
+  element c {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text | cref | eref | iref | spanx | xref)*
+  }
 
-<strong id="grammar.bcp14">bcp14</strong><span id="rfc.iref.b.25"></span> = element bcp14 { text }
+<strong id="grammar.bcp14">bcp14</strong><span id="rfc.iref.b.25"></span> =
+  element bcp14 {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
 
-<strong id="grammar.br">br</strong><span id="rfc.iref.b.26"></span> = element br { empty }
+<strong id="grammar.br">br</strong><span id="rfc.iref.b.26"></span> =
+  element br {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    empty
+  }
 
-<strong id="grammar.back">back</strong><span id="rfc.iref.b.27"></span> = element back { displayreference*, references*, section* }
+<strong id="grammar.back">back</strong><span id="rfc.iref.b.27"></span> =
+  element back {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    displayreference*,
+    references*,
+    section*
+  }
 
 <strong id="grammar.displayreference">displayreference</strong><span id="rfc.iref.d.18"></span> =
   element displayreference {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute target { xsd:IDREF },
     attribute to { text }
   }
 
 <strong id="grammar.references">references</strong><span id="rfc.iref.r.25"></span> =
   element references {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
     name?,
@@ -7234,6 +7419,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.reference">reference</strong><span id="rfc.iref.r.26"></span> =
   element reference {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID },
     attribute target { text }?,
     [ a:defaultValue = "true" ]
@@ -7244,12 +7431,16 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.referencegroup">referencegroup</strong><span id="rfc.iref.r.27"></span> =
   element referencegroup {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute anchor { xsd:ID },
     reference+
   }
 
 <strong id="grammar.seriesInfo">seriesInfo</strong><span id="rfc.iref.s.78"></span> =
   element seriesInfo {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute name { text },
     attribute value { text },
     attribute asciiName { text }?,
@@ -7259,6 +7450,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.format">format</strong><span id="rfc.iref.f.15"></span> =
   element format {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     attribute target { text }?,
     attribute type { text },
     attribute octets { text }?,
@@ -7267,6 +7460,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.annotation">annotation</strong><span id="rfc.iref.a.22"></span> =
   element annotation {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text
      | bcp14
      | cref
@@ -7284,6 +7479,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.refcontent">refcontent</strong><span id="rfc.iref.r.28"></span> =
   element refcontent {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
     (text | bcp14 | em | strong | sub | sup | tt)*
   }
 
@@ -7307,6 +7504,8 @@ start = rfc
 + # xml2rfc Version 3 grammar
   rfc =
     element rfc {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute number { text }?,
       [ a:defaultValue = "" ] attribute obsoletes { text }?,
       [ a:defaultValue = "" ] attribute updates { text }?,
@@ -7364,6 +7563,8 @@ start = rfc
     }
 + link =
 +   element link {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute href { text },
 +     attribute rel { text }?
 +   }
@@ -7371,6 +7572,8 @@ start = rfc
     element front {
 -     title, author+, date, area*, workgroup*, keyword*, abstract?, 
 - note*
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     title,
 +     author+,
 +     date?,
@@ -7384,12 +7587,16 @@ start = rfc
     }
   title =
     element title {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute abbrev { text }?,
 +     attribute ascii { text }?,
       text
     }
   author =
     element author {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute initials { text }?,
 +     attribute asciiInitials { text }?,
       attribute surname { text }?,
@@ -7402,44 +7609,93 @@ start = rfc
     }
   organization =
     element organization {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute abbrev { text }?,
 +     attribute ascii { text }?,
 +     text
 +   }
 + address =
-+   element address { postal?, phone?, facsimile?, email?, uri? }
++   element address {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     postal?,
++     phone?,
++     facsimile?,
++     email?,
++     uri?
++   }
 + postal =
 +   element postal {
-+     (city | code | country | region | street)* | postalLine+
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     ((city | code | country | region | street)* | postalLine+)
 +   }
 + street =
 +   element street {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute ascii { text }?,
 +     text
 +   }
 + city =
 +   element city {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute ascii { text }?,
 +     text
 +   }
 + region =
 +   element region {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute ascii { text }?,
 +     text
 +   }
 + code =
 +   element code {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute ascii { text }?,
 +     text
 +   }
 + country =
 +   element country {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute ascii { text }?,
 +     text
 +   }
 + postalLine =
 +   element postalLine {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute ascii { text }?,
++     text
++   }
++ phone =
++   element phone {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     text
++   }
++ facsimile =
++   element facsimile {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     text
++   }
++ email =
++   element email {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     attribute ascii { text }?,
++     text
++   }
++ uri =
++   element uri {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       text
     }
 - address = element address { postal?, phone?, facsimile?, email?, 
@@ -7451,28 +7707,45 @@ start = rfc
 - region = element region { text }
 - code = element code { text }
 - country = element country { text }
-  phone = element phone { text }
-  facsimile = element facsimile { text }
+- phone = element phone { text }
+- facsimile = element facsimile { text }
 - email = element email { text }
-+ email =
-+   element email {
-+     attribute ascii { text }?,
-+     text
-+   }
-  uri = element uri { text }
+- uri = element uri { text }
   date =
     element date {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute day { text }?,
       attribute month { text }?,
       attribute year { text }?,
       empty
     }
-  area = element area { text }
-  workgroup = element workgroup { text }
-  keyword = element keyword { text }
+- area = element area { text }
+- workgroup = element workgroup { text }
+- keyword = element keyword { text }
 - abstract = element abstract { t+ }
++ area =
++   element area {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     text
++   }
++ workgroup =
++   element workgroup {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     text
++   }
++ keyword =
++   element keyword {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     text
++   }
 + abstract =
 +   element abstract {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     (dl | ol | t | ul)+
@@ -7481,6 +7754,8 @@ start = rfc
     element note {
 -     attribute title { text },
 -     t+
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute title { text }?,
 +     attribute pn { text }?,
 +     [ a:defaultValue = "false" ]
@@ -7490,12 +7765,22 @@ start = rfc
 +   }
 + boilerplate =
 +   element boilerplate {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute pn { text }?,
 +     section+
++   }
++ middle =
++   element middle {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     section+
     }
-  middle = element middle { section+ }
+- middle = element middle { section+ }
   section =
     element section {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute anchor { xsd:ID }?,
 -     attribute title { text },
 +     attribute pn { text }?,
@@ -7524,11 +7809,15 @@ start = rfc
     }
 + name =
 +   element name {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute slugifiedName { text }?,
 +     (text | cref | eref | relref | tt | xref)*
 +   }
   t =
     element t {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
       attribute hangText { text }?,
@@ -7559,12 +7848,16 @@ start = rfc
 +   }
 + aside =
 +   element aside {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     (artwork | dl | figure | iref | \list | ol | t | table | ul)*
 +   }
 + blockquote =
 +   element blockquote {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     attribute cite { text }?,
@@ -7586,6 +7879,8 @@ start = rfc
   \list =
     element list {
 -     attribute style { text }?,
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     [ a:defaultValue = "empty" ] attribute style { text }?,
       attribute hangIndent { text }?,
       attribute counter { text }?,
@@ -7593,6 +7888,8 @@ start = rfc
     }
 + ol =
 +   element ol {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     [ a:defaultValue = "1" ] attribute type { text }?,
@@ -7604,6 +7901,8 @@ start = rfc
 +   }
 + ul =
 +   element ul {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     [ a:defaultValue = "normal" ]
@@ -7614,6 +7913,8 @@ start = rfc
 +   }
 + li =
 +   element li {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -7632,6 +7933,8 @@ start = rfc
 +   }
 + dl =
 +   element dl {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     [ a:defaultValue = "normal" ]
@@ -7642,6 +7945,8 @@ start = rfc
 +   }
 + dt =
 +   element dt {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     (text
@@ -7659,6 +7964,8 @@ start = rfc
 +   }
 + dd =
 +   element dd {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -7677,6 +7984,8 @@ start = rfc
 +   }
   xref =
     element xref {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute target { xsd:IDREF },
 -     [ a:defaultValue = "false" ] attribute pageno { "true" | 
 - "false" }?,
@@ -7691,6 +8000,8 @@ start = rfc
 +   }
 + relref =
 +   element relref {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
@@ -7703,11 +8014,15 @@ start = rfc
     }
   eref =
     element eref {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute target { text },
       text
     }
   iref =
     element iref {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute item { text },
       [ a:defaultValue = "" ] attribute subitem { text }?,
       [ a:defaultValue = "false" ]
@@ -7717,6 +8032,8 @@ start = rfc
     }
   cref =
     element cref {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute anchor { xsd:ID }?,
       attribute source { text }?,
 -     text
@@ -7726,6 +8043,8 @@ start = rfc
 +   }
 + tt =
 +   element tt {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     (text
 +      | bcp14
 +      | cref
@@ -7740,6 +8059,8 @@ start = rfc
 +   }
 + strong =
 +   element strong {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     (text
 +      | bcp14
 +      | cref
@@ -7754,6 +8075,8 @@ start = rfc
 +   }
 + em =
 +   element em {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     (text
 +      | bcp14
 +      | cref
@@ -7768,6 +8091,8 @@ start = rfc
 +   }
 + sub =
 +   element sub {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     (text
 +      | bcp14
 +      | cref
@@ -7781,6 +8106,8 @@ start = rfc
 +   }
 + sup =
 +   element sup {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     (text
 +      | bcp14
 +      | cref
@@ -7794,6 +8121,8 @@ start = rfc
     }
   spanx =
     element spanx {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       [ a:defaultValue = "preserve" ]
       attribute xml:space { "default" | "preserve" }?,
       [ a:defaultValue = "emph" ] attribute style { text }?,
@@ -7801,11 +8130,15 @@ start = rfc
     }
   vspace =
     element vspace {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       [ a:defaultValue = "0" ] attribute blankLines { text }?,
       empty
     }
   figure =
     element figure {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
       [ a:defaultValue = "" ] attribute title { text }?,
@@ -7826,6 +8159,8 @@ start = rfc
     }
 + table =
 +   element table {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     name?,
@@ -7837,6 +8172,8 @@ start = rfc
   preamble =
 -   element preamble { (text | xref | eref | iref | cref | spanx)* }
 +   element preamble {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     (text
 +      | bcp14
 +      | cref
@@ -7855,6 +8192,8 @@ start = rfc
     element artwork {
 -     [ a:defaultValue = "preserve" ]
 -     attribute xml:space { "default" | "preserve" }?,
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     attribute xml:space { text }?,
@@ -7872,6 +8211,8 @@ start = rfc
 +   }
 + svg =
 +   element ns1:svg {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute * { text }*,
 +     anything
 +   }
@@ -7882,6 +8223,8 @@ start = rfc
 +   }
 + sourcecode =
 +   element sourcecode {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     [ a:defaultValue = "" ] attribute name { text }?,
@@ -7892,24 +8235,32 @@ start = rfc
 +   }
 + thead =
 +   element thead {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     tr+
 +   }
 + tbody =
 +   element tbody {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     tr+
 +   }
 + tfoot =
 +   element tfoot {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     tr+
 +   }
 + tr =
 +   element tr {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     [ a:defaultValue = "0" ] attribute border { text }?,
@@ -7917,6 +8268,8 @@ start = rfc
 +   }
 + td =
 +   element td {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     [ a:defaultValue = "0" ] attribute border { text }?,
 +     [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -7946,6 +8299,8 @@ start = rfc
 +   }
 + th =
 +   element th {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute pn { text }?,
 +     [ a:defaultValue = "0" ] attribute border { text }?,
@@ -7976,10 +8331,15 @@ start = rfc
     }
   postamble =
 -   element postamble { (text | xref | eref | iref | cref | spanx)* 
-+   element postamble { (text | cref | eref | iref | spanx | xref)* 
++   element postamble {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     (text | cref | eref | iref | spanx | xref)*
   }
   texttable =
     element texttable {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute anchor { xsd:ID }?,
       [ a:defaultValue = "" ] attribute title { text }?,
       [ a:defaultValue = "false" ]
@@ -7996,27 +8356,54 @@ start = rfc
     }
   ttcol =
     element ttcol {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute width { text }?,
       [ a:defaultValue = "left" ]
       attribute align { "left" | "center" | "right" }?,
--     text
 +     (cref | eref | iref | xref | text)*
 +   }
-+ c = element c { (text | cref | eref | iref | spanx | xref)* }
-+ bcp14 = element bcp14 { text }
-+ br = element br { empty }
-+ back = element back { displayreference*, references*, section* }
-+ displayreference =
-+   element displayreference {
-+     attribute target { xsd:IDREF },
-+     attribute to { text }
++ c =
++   element c {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     (text | cref | eref | iref | spanx | xref)*
++   }
++ bcp14 =
++   element bcp14 {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
+      text
     }
 - c = element c { (text | xref | eref | iref | cref | spanx)* }
 - back = element back { references*, section* }
++ br =
++   element br {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     empty
++   }
++ back =
++   element back {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     displayreference*,
++     references*,
++     section*
++   }
++ displayreference =
++   element displayreference {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
++     attribute target { xsd:IDREF },
++     attribute to { text }
++   }
   references =
     element references {
 -     [ a:defaultValue = "References" ] attribute title { text }?,
 -     reference+
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute title { text }?,
 +     name?,
@@ -8024,6 +8411,8 @@ start = rfc
     }
   reference =
     element reference {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute anchor { xsd:ID },
       attribute target { text }?,
 +     [ a:defaultValue = "true" ]
@@ -8036,11 +8425,15 @@ start = rfc
 +   }
 + referencegroup =
 +   element referencegroup {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID },
 +     reference+
     }
   seriesInfo =
     element seriesInfo {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute name { text },
       attribute value { text },
 +     attribute asciiName { text }?,
@@ -8049,6 +8442,8 @@ start = rfc
     }
   format =
     element format {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
       attribute target { text }?,
       attribute type { text },
       attribute octets { text }?,
@@ -8058,6 +8453,8 @@ start = rfc
 -   element annotation { (text | xref | eref | iref | cref | 
 - spanx)* }
 +   element annotation {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     (text
 +      | bcp14
 +      | cref
@@ -8074,6 +8471,8 @@ start = rfc
 +   }
 + refcontent =
 +   element refcontent {
++     attribute xml:base { text }?,
++     attribute xml:lang { text }?,
 +     (text | bcp14 | em | strong | sub | sup | tt)*
 +   }
   start = rfc

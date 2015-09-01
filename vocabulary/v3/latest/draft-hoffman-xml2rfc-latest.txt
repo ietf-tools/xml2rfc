@@ -191,8 +191,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        B.2.1.  Overlapping Values  . . . . . . . . . . . . . . . . .  94
      B.3.  Attributes Controlled by the Prep Tool  . . . . . . . . .  95
    Appendix C.  Relax NG Schema  . . . . . . . . . . . . . . . . . .  97
-   Appendix D.  Schema Differences from v2 . . . . . . . . . . . . . 114
-   Index . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 130
+   Appendix D.  Schema Differences from v2 . . . . . . . . . . . . . 118
+   Index . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 138
 
 
 
@@ -563,9 +563,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    used in China and Japan.  The xml:base attribute is sometimes added
    to an XML file when doing XML-to-XML conversion where the base file
-   has XInclude atttributes (see Appendix B.1).  These attributes are
-   not listed in the element descriptions here, but will later be added
-   to the RNG used for the v3 tools.
+   has XInclude atttributes (see Appendix B.1).
 
 2.1.  <abstract>
 
@@ -608,6 +606,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    4.  One optional <email> element (Section 2.23)
 
+   5.  One optional <uri> element (Section 2.64)
+
 
 
 
@@ -616,8 +616,6 @@ Hoffman                   Expires March 3, 2016                [Page 11]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
-
-   5.  One optional <uri> element (Section 2.64)
 
 2.3.  <annotation>
 
@@ -665,6 +663,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    The value ought to be either the full name or the abbreviation of one
    of the IETF areas as listed on <http://www.ietf.org/iesg/area.html>.
+   The list at the time that this document is being published is:
+   "Applications", "app", "General", "gen", "Internet", "int",
 
 
 
@@ -673,8 +673,6 @@ Hoffman                   Expires March 3, 2016                [Page 12]
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
 
-   The list at the time that this document is being published is:
-   "Applications", "app", "General", "gen", "Internet", "int",
    "Operations and Management", "ops", "Real-time Applications and
    Infrastructure", "rai", "Routing", "rtg", "Security", "sec",
    "Transport", "tsv".
@@ -721,6 +719,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    o  As a URI to an external entity, such as: <artwork type="svg"
       src="http://www.example.com/...">
 
+   o  As a local file, such as: <artwork type="svg" src="diagram12.svg">
+
 
 
 
@@ -728,8 +728,6 @@ Hoffman                   Expires March 3, 2016                [Page 13]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
-
-   o  As a local file, such as: <artwork type="svg" src="diagram12.svg">
 
    The use of SVG in Internet Drafts and RFCs is covered in much more
    detail in [SVGforRFCs].
@@ -777,6 +775,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    and the format of that artwork supports alternate text, the
    alternative text comes from the text of the artwork itself, not from
    this attribute.  The contents of this attribute are important to
+   readers who are visually impaired, as well as those reading on
+   devices that cannot show the artwork well, or at all.
 
 
 
@@ -784,9 +784,6 @@ Hoffman                   Expires March 3, 2016                [Page 14]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
-
-   readers who are visually impaired, as well as those reading on
-   devices that cannot show the artwork well, or at all.
 
 2.5.3.  'anchor' attribute
 
@@ -834,14 +831,15 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    Specifies the type of the artwork.  The value of this attribute is
    free text with certain values designated as preferred.
 
+   The preferred values for <artwork> types are:
+
+
 
 
 Hoffman                   Expires March 3, 2016                [Page 15]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
-
-   The preferred values for <artwork> types are:
 
    o  ascii-art
 
@@ -889,6 +887,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    o  <ol> elements (Section 2.34)
 
+   o  <t> elements (Section 2.53)
+
 
 
 
@@ -896,8 +896,6 @@ Hoffman                   Expires March 3, 2016                [Page 16]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
-
-   o  <t> elements (Section 2.53)
 
    o  <table> elements (Section 2.54)
 
@@ -943,7 +941,9 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    The ASCII equivalent of the author's full name.
 
+2.7.2.  'asciiInitials' attribute
 
+   The ASCII equivalent of the author's intials.
 
 
 
@@ -952,10 +952,6 @@ Hoffman                   Expires March 3, 2016                [Page 17]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
-
-2.7.2.  'asciiInitials' attribute
-
-   The ASCII equivalent of the author's intials.
 
 2.7.3.  'asciiSurname' attribute
 
@@ -1001,6 +997,10 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    2.  Optional <references> elements (Section 2.42)
 
+   3.  Optional <section> elements (Section 2.46)
+
+
+
 
 
 
@@ -1008,8 +1008,6 @@ Hoffman                   Expires March 3, 2016                [Page 18]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
-
-   3.  Optional <section> elements (Section 2.46)
 
 2.9.  <bcp14>
 
@@ -1057,15 +1055,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
       *  <t> elements (Section 2.53)
 
+      *  <ul> elements (Section 2.63)
+
 
 
 
 Hoffman                   Expires March 3, 2016                [Page 19]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
-      *  <ul> elements (Section 2.63)
 
 
    Or:
@@ -1113,6 +1110,9 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    Name of person or document the text in this element is quoted from.
    A formatter should render this as visible text at the end of the
    quotation.
+
+
+
 
 
 
@@ -5398,6 +5398,8 @@ Appendix C.  Relax NG Schema
 
    rfc =
      element rfc {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute number { text }?,
        [ a:defaultValue = "" ] attribute obsoletes { text }?,
        [ a:defaultValue = "" ] attribute updates { text }?,
@@ -5423,8 +5425,6 @@ Appendix C.  Relax NG Schema
          | "noModificationTrust200902"
          | "noDerivativesTrust200902"
          | "pre5378Trust200902"
-       }?,
-       attribute iprExtract { xsd:IDREF }?,
 
 
 
@@ -5433,6 +5433,8 @@ Hoffman                   Expires March 3, 2016                [Page 97]
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
 
+       }?,
+       attribute iprExtract { xsd:IDREF }?,
        [ a:defaultValue = "IETF" ]
        attribute submissionType {
          "IETF" | "IAB" | "IRTF" | "independent"
@@ -5459,12 +5461,16 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    link =
      element link {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute href { text },
        attribute rel { text }?
      }
 
    front =
      element front {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        title,
        author+,
        date?,
@@ -5475,12 +5481,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        seriesInfo*,
        note*,
        boilerplate?
-     }
-
-   title =
-     element title {
-       attribute abbrev { text }?,
-       attribute ascii { text }?,
 
 
 
@@ -5489,11 +5489,21 @@ Hoffman                   Expires March 3, 2016                [Page 98]
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
 
+     }
+
+   title =
+     element title {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute abbrev { text }?,
+       attribute ascii { text }?,
        text
      }
 
    author =
      element author {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute initials { text }?,
        attribute asciiInitials { text }?,
        attribute surname { text }?,
@@ -5507,36 +5517,26 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    organization =
      element organization {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute abbrev { text }?,
        attribute ascii { text }?,
        text
      }
 
    address =
-     element address { postal?, phone?, facsimile?, email?, uri? }
+     element address {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       postal?,
+       phone?,
+       facsimile?,
+       email?,
+       uri?
+     }
 
    postal =
      element postal {
-       (city | code | country | region | street)* | postalLine+
-     }
-
-   street =
-     element street {
-       attribute ascii { text }?,
-       text
-     }
-
-   city =
-     element city {
-       attribute ascii { text }?,
-       text
-     }
-
-   region =
-     element region {
-       attribute ascii { text }?,
-       text
-     }
 
 
 
@@ -5545,54 +5545,54 @@ Hoffman                   Expires March 3, 2016                [Page 99]
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
 
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       ((city | code | country | region | street)* | postalLine+)
+     }
+
+   street =
+     element street {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute ascii { text }?,
+       text
+     }
+
+   city =
+     element city {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute ascii { text }?,
+       text
+     }
+
+   region =
+     element region {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute ascii { text }?,
+       text
+     }
+
    code =
      element code {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute ascii { text }?,
        text
      }
 
    country =
      element country {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute ascii { text }?,
        text
      }
 
    postalLine =
      element postalLine {
-       attribute ascii { text }?,
-       text
-     }
-
-   phone = element phone { text }
-
-   facsimile = element facsimile { text }
-
-   email =
-     element email {
-       attribute ascii { text }?,
-       text
-     }
-
-   uri = element uri { text }
-
-   date =
-     element date {
-       attribute day { text }?,
-       attribute month { text }?,
-       attribute year { text }?,
-       empty
-     }
-
-   area = element area { text }
-
-   workgroup = element workgroup { text }
-
-   keyword = element keyword { text }
-
-   abstract =
-     element abstract {
-       attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
+       attribute xml:base { text }?,
 
 
 
@@ -5601,11 +5601,92 @@ Hoffman                   Expires March 3, 2016               [Page 100]
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
 
+       attribute xml:lang { text }?,
+       attribute ascii { text }?,
+       text
+     }
+
+   phone =
+     element phone {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       text
+     }
+
+   facsimile =
+     element facsimile {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       text
+     }
+
+   email =
+     element email {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute ascii { text }?,
+       text
+     }
+
+   uri =
+     element uri {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       text
+     }
+
+   date =
+     element date {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute day { text }?,
+       attribute month { text }?,
+       attribute year { text }?,
+       empty
+     }
+
+   area =
+     element area {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 101]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
+       text
+     }
+
+   workgroup =
+     element workgroup {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       text
+     }
+
+   keyword =
+     element keyword {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       text
+     }
+
+   abstract =
+     element abstract {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute anchor { xsd:ID }?,
+       attribute pn { text }?,
        (dl | ol | t | ul)+
      }
 
    note =
      element note {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute title { text }?,
        attribute pn { text }?,
        [ a:defaultValue = "false" ]
@@ -5616,14 +5697,31 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    boilerplate =
      element boilerplate {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute pn { text }?,
        section+
      }
 
-   middle = element middle { section+ }
+   middle =
+     element middle {
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 102]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       section+
+     }
 
    section =
      element section {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        attribute title { text }?,
@@ -5649,24 +5747,28 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        section*
      }
 
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 101]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
    name =
      element name {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute slugifiedName { text }?,
        (text | cref | eref | relref | tt | xref)*
      }
 
    t =
      element t {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 103]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
        attribute hangText { text }?,
        [ a:defaultValue = "false" ]
        attribute keepWithNext { "false" | "true" }?,
@@ -5691,6 +5793,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    aside =
      element aside {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        (artwork | dl | figure | iref | \list | ol | t | table | ul)*
@@ -5698,6 +5802,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    blockquote =
      element blockquote {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        attribute cite { text }?,
@@ -5705,20 +5811,20 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        ((artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 102]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
            | cref
            | em
            | eref
            | iref
            | relref
            | strong
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 104]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
            | sub
            | sup
            | tt
@@ -5727,6 +5833,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    \list =
      element list {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        [ a:defaultValue = "empty" ] attribute style { text }?,
        attribute hangIndent { text }?,
        attribute counter { text }?,
@@ -5735,6 +5843,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    ol =
      element ol {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "1" ] attribute type { text }?,
@@ -5747,6 +5857,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    ul =
      element ul {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "normal" ]
@@ -5758,17 +5870,19 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    li =
      element li {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
-       ((artwork | dl | figure | ol | sourcecode | t | ul)+
 
 
 
-Hoffman                   Expires March 3, 2016               [Page 103]
+Hoffman                   Expires March 3, 2016               [Page 105]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
 
+       attribute pn { text }?,
+       ((artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
            | cref
@@ -5785,6 +5899,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    dl =
      element dl {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "normal" ]
@@ -5796,6 +5912,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    dt =
      element dt {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        (text
@@ -5812,19 +5930,20 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
         | xref)*
      }
 
-   dd =
-     element dd {
-       attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
-       ((artwork | dl | figure | ol | sourcecode | t | ul)+
 
 
-
-Hoffman                   Expires March 3, 2016               [Page 104]
+Hoffman                   Expires March 3, 2016               [Page 106]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
 
+   dd =
+     element dd {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute anchor { xsd:ID }?,
+       attribute pn { text }?,
+       ((artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
            | cref
@@ -5841,6 +5960,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    xref =
      element xref {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute target { xsd:IDREF },
        [ a:defaultValue = "false" ]
        attribute pageno { "true" | "false" }?,
@@ -5852,6 +5973,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    relref =
      element relref {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute target { xsd:IDREF },
        [ a:defaultValue = "of" ]
        attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
@@ -5862,25 +5985,29 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        text
      }
 
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 107]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
    eref =
      element eref {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute target { text },
        text
      }
 
    iref =
      element iref {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute item { text },
        [ a:defaultValue = "" ] attribute subitem { text }?,
        [ a:defaultValue = "false" ]
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 105]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
        attribute primary { "true" | "false" }?,
        [ a:defaultValue = "" ] attribute irefid { text }?,
        empty
@@ -5888,6 +6015,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    cref =
      element cref {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute source { text }?,
        [ a:defaultValue = "true" ]
@@ -5897,6 +6026,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    tt =
      element tt {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
         | cref
@@ -5910,8 +6041,18 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
         | xref)*
      }
 
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 108]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
    strong =
      element strong {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
         | cref
@@ -5927,16 +6068,10 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    em =
      element em {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 106]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
         | cref
         | eref
         | iref
@@ -5950,6 +6085,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    sub =
      element sub {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
         | cref
@@ -5960,10 +6097,20 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
         | strong
         | tt
         | xref)*
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 109]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
      }
 
    sup =
      element sup {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
         | cref
@@ -5978,6 +6125,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    spanx =
      element spanx {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        [ a:defaultValue = "preserve" ]
        attribute xml:space { "default" | "preserve" }?,
        [ a:defaultValue = "emph" ] attribute style { text }?,
@@ -5985,21 +6134,17 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
      }
 
    vspace =
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 107]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
      element vspace {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        [ a:defaultValue = "0" ] attribute blankLines { text }?,
        empty
      }
 
    figure =
      element figure {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "" ] attribute title { text }?,
@@ -6008,6 +6153,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        attribute src { text }?,
        [ a:defaultValue = "left" ]
        attribute align { "left" | "center" | "right" }?,
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 110]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
        [ a:defaultValue = "" ] attribute alt { text }?,
        [ a:defaultValue = "" ] attribute width { text }?,
        [ a:defaultValue = "" ] attribute height { text }?,
@@ -6020,6 +6173,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    table =
      element table {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        name?,
@@ -6031,6 +6186,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    preamble =
      element preamble {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
         | cref
@@ -6041,14 +6198,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
         | spanx
         | strong
         | sub
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 108]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
         | sup
         | tt
         | xref)*
@@ -6056,8 +6205,18 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    artwork =
      element artwork {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 111]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
        attribute xml:space { text }?,
        [ a:defaultValue = "" ] attribute name { text }?,
        [ a:defaultValue = "" ] attribute type { text }?,
@@ -6073,6 +6232,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    svg =
      element ns1:svg {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute * { text }*,
        anything
      }
@@ -6085,6 +6246,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    sourcecode =
      element sourcecode {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "" ] attribute name { text }?,
@@ -6096,21 +6259,24 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    thead =
      element thead {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 109]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
        attribute pn { text }?,
        tr+
      }
 
+
+
+Hoffman                   Expires March 3, 2016               [Page 112]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
    tbody =
      element tbody {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        tr+
@@ -6118,6 +6284,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    tfoot =
      element tfoot {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        tr+
@@ -6125,6 +6293,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    tr =
      element tr {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "0" ] attribute border { text }?,
@@ -6133,6 +6303,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    td =
      element td {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        [ a:defaultValue = "0" ] attribute border { text }?,
        [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -6149,18 +6321,18 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
            | em
            | eref
            | figure
-           | iref
-           | ol
-           | relref
-           | sourcecode
 
 
 
-Hoffman                   Expires March 3, 2016               [Page 110]
+Hoffman                   Expires March 3, 2016               [Page 113]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
 
+           | iref
+           | ol
+           | relref
+           | sourcecode
            | strong
            | sub
            | sup
@@ -6171,6 +6343,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    th =
      element th {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "0" ] attribute border { text }?,
@@ -6201,22 +6375,28 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
      }
 
    postamble =
-     element postamble { (text | cref | eref | iref | spanx | xref)* }
-
-   texttable =
-     element texttable {
-       attribute anchor { xsd:ID }?,
-       [ a:defaultValue = "" ] attribute title { text }?,
-       [ a:defaultValue = "false" ]
-       attribute suppress-title { "true" | "false" }?,
+     element postamble {
+       attribute xml:base { text }?,
 
 
 
-Hoffman                   Expires March 3, 2016               [Page 111]
+Hoffman                   Expires March 3, 2016               [Page 114]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
 
+       attribute xml:lang { text }?,
+       (text | cref | eref | iref | spanx | xref)*
+     }
+
+   texttable =
+     element texttable {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       attribute anchor { xsd:ID }?,
+       [ a:defaultValue = "" ] attribute title { text }?,
+       [ a:defaultValue = "false" ]
+       attribute suppress-title { "true" | "false" }?,
        [ a:defaultValue = "center" ]
        attribute align { "left" | "center" | "right" }?,
        [ a:defaultValue = "full" ]
@@ -6230,28 +6410,64 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    ttcol =
      element ttcol {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute width { text }?,
        [ a:defaultValue = "left" ]
        attribute align { "left" | "center" | "right" }?,
        (cref | eref | iref | xref | text)*
      }
 
-   c = element c { (text | cref | eref | iref | spanx | xref)* }
+   c =
+     element c {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       (text | cref | eref | iref | spanx | xref)*
+     }
 
-   bcp14 = element bcp14 { text }
+   bcp14 =
+     element bcp14 {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       text
+     }
 
-   br = element br { empty }
+   br =
 
-   back = element back { displayreference*, references*, section* }
+
+
+Hoffman                   Expires March 3, 2016               [Page 115]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
+     element br {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       empty
+     }
+
+   back =
+     element back {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       displayreference*,
+       references*,
+       section*
+     }
 
    displayreference =
      element displayreference {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute target { xsd:IDREF },
        attribute to { text }
      }
 
    references =
      element references {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute title { text }?,
        name?,
@@ -6260,30 +6476,36 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    reference =
      element reference {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID },
        attribute target { text }?,
        [ a:defaultValue = "true" ]
        attribute quoteTitle { "true" | "false" }?,
        front,
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 112]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
        (annotation | format | refcontent | seriesInfo)*
      }
 
    referencegroup =
      element referencegroup {
+       attribute xml:base { text }?,
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 116]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID },
        reference+
      }
 
    seriesInfo =
      element seriesInfo {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute name { text },
        attribute value { text },
        attribute asciiName { text }?,
@@ -6293,6 +6515,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    format =
      element format {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute target { text }?,
        attribute type { text },
        attribute octets { text }?,
@@ -6301,6 +6525,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    annotation =
      element annotation {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
         | cref
@@ -6318,16 +6544,18 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    refcontent =
      element refcontent {
-       (text | bcp14 | em | strong | sub | sup | tt)*
-     }
+       attribute xml:base { text }?,
 
 
 
-
-Hoffman                   Expires March 3, 2016               [Page 113]
+Hoffman                   Expires March 3, 2016               [Page 117]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
+
+       attribute xml:lang { text }?,
+       (text | bcp14 | em | strong | sub | sup | tt)*
+     }
 
    start = rfc
 
@@ -6346,6 +6574,8 @@ Appendix D.  Schema Differences from v2
    + # xml2rfc Version 3 grammar
      rfc =
        element rfc {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute number { text }?,
          [ a:defaultValue = "" ] attribute obsoletes { text }?,
          [ a:defaultValue = "" ] attribute updates { text }?,
@@ -6371,20 +6601,20 @@ Appendix D.  Schema Differences from v2
            | "noModificationTrust200811"
            | "noDerivativesTrust200811"
            | "trust200902"
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 118]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
            | "noModificationTrust200902"
            | "noDerivativesTrust200902"
            | "pre5378Trust200902"
          }?,
          attribute iprExtract { xsd:IDREF }?,
          [ a:defaultValue = "IETF" ]
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 114]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          attribute submissionType {
            "IETF" | "IAB" | "IRTF" | "independent"
          }?,
@@ -6411,6 +6641,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        }
    + link =
    +   element link {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute href { text },
    +     attribute rel { text }?
    +   }
@@ -6418,11 +6650,21 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        element front {
    -     title, author+, date, area*, workgroup*, keyword*, abstract?,
    - note*
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     title,
    +     author+,
    +     date?,
    +     area*,
    +     workgroup*,
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 119]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
    +     keyword*,
    +     abstract?,
    +     seriesInfo*,
@@ -6431,20 +6673,16 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        }
      title =
        element title {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute abbrev { text }?,
    +     attribute ascii { text }?,
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 115]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          text
        }
      author =
        element author {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute initials { text }?,
    +     attribute asciiInitials { text }?,
          attribute surname { text }?,
@@ -6457,52 +6695,109 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        }
      organization =
        element organization {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute abbrev { text }?,
    +     attribute ascii { text }?,
    +     text
    +   }
    + address =
-   +   element address { postal?, phone?, facsimile?, email?, uri? }
+   +   element address {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     postal?,
+   +     phone?,
+   +     facsimile?,
+   +     email?,
+   +     uri?
+   +   }
    + postal =
    +   element postal {
-   +     (city | code | country | region | street)* | postalLine+
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 120]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     ((city | code | country | region | street)* | postalLine+)
    +   }
    + street =
    +   element street {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute ascii { text }?,
    +     text
    +   }
    + city =
    +   element city {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute ascii { text }?,
    +     text
    +   }
    + region =
    +   element region {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute ascii { text }?,
    +     text
    +   }
    + code =
    +   element code {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute ascii { text }?,
    +     text
    +   }
    + country =
    +   element country {
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 116]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute ascii { text }?,
    +     text
    +   }
    + postalLine =
    +   element postalLine {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute ascii { text }?,
+   +     text
+   +   }
+   + phone =
+   +   element phone {
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 121]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     text
+   +   }
+   + facsimile =
+   +   element facsimile {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     text
+   +   }
+   + email =
+   +   element email {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     attribute ascii { text }?,
+   +     text
+   +   }
+   + uri =
+   +   element uri {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          text
        }
    - address = element address { postal?, phone?, facsimile?, email?,
@@ -6514,28 +6809,53 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    - region = element region { text }
    - code = element code { text }
    - country = element country { text }
-     phone = element phone { text }
-     facsimile = element facsimile { text }
+   - phone = element phone { text }
+   - facsimile = element facsimile { text }
    - email = element email { text }
-   + email =
-   +   element email {
-   +     attribute ascii { text }?,
-   +     text
-   +   }
-     uri = element uri { text }
+   - uri = element uri { text }
      date =
        element date {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute day { text }?,
          attribute month { text }?,
          attribute year { text }?,
          empty
        }
-     area = element area { text }
-     workgroup = element workgroup { text }
-     keyword = element keyword { text }
+   - area = element area { text }
+   - workgroup = element workgroup { text }
+   - keyword = element keyword { text }
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 122]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
    - abstract = element abstract { t+ }
+   + area =
+   +   element area {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     text
+   +   }
+   + workgroup =
+   +   element workgroup {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     text
+   +   }
+   + keyword =
+   +   element keyword {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     text
+   +   }
    + abstract =
    +   element abstract {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     (dl | ol | t | ul)+
@@ -6544,15 +6864,9 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        element note {
    -     attribute title { text },
    -     t+
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute title { text }?,
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 117]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
    +     attribute pn { text }?,
    +     [ a:defaultValue = "false" ]
    +     attribute removeInRFC { "true" | "false" }?,
@@ -6561,12 +6875,30 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + boilerplate =
    +   element boilerplate {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute pn { text }?,
    +     section+
+   +   }
+   + middle =
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 123]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
+   +   element middle {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     section+
        }
-     middle = element middle { section+ }
+   - middle = element middle { section+ }
      section =
        element section {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute anchor { xsd:ID }?,
    -     attribute title { text },
    +     attribute pn { text }?,
@@ -6595,16 +6927,20 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        }
    + name =
    +   element name {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute slugifiedName { text }?,
    +     (text | cref | eref | relref | tt | xref)*
    +   }
      t =
        element t {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute anchor { xsd:ID }?,
 
 
 
-Hoffman                   Expires March 3, 2016               [Page 118]
+Hoffman                   Expires March 3, 2016               [Page 124]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
@@ -6638,12 +6974,16 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + aside =
    +   element aside {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     (artwork | dl | figure | iref | \list | ol | t | table | ul)*
    +   }
    + blockquote =
    +   element blockquote {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     attribute cite { text }?,
@@ -6653,18 +6993,18 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +         | bcp14
    +         | cref
    +         | em
-   +         | eref
-   +         | iref
-   +         | relref
-   +         | strong
 
 
 
-Hoffman                   Expires March 3, 2016               [Page 119]
+Hoffman                   Expires March 3, 2016               [Page 125]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
 
+   +         | eref
+   +         | iref
+   +         | relref
+   +         | strong
    +         | sub
    +         | sup
    +         | tt
@@ -6673,6 +7013,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
      \list =
        element list {
    -     attribute style { text }?,
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     [ a:defaultValue = "empty" ] attribute style { text }?,
          attribute hangIndent { text }?,
          attribute counter { text }?,
@@ -6680,6 +7022,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        }
    + ol =
    +   element ol {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "1" ] attribute type { text }?,
@@ -6691,6 +7035,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + ul =
    +   element ul {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "normal" ]
@@ -6701,6 +7047,16 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + li =
    +   element li {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 126]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -6713,20 +7069,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +         | relref
    +         | strong
    +         | sub
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 120]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
    +         | sup
    +         | tt
    +         | xref)+)
    +   }
    + dl =
    +   element dl {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "normal" ]
@@ -6737,6 +7087,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + dt =
    +   element dt {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     (text
@@ -6753,7 +7105,17 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +      | xref)*
    +   }
    + dd =
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 127]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
    +   element dd {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -6769,17 +7131,11 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +         | sup
    +         | tt
    +         | xref)+)
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 121]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
    +   }
      xref =
        element xref {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute target { xsd:IDREF },
    -     [ a:defaultValue = "false" ] attribute pageno { "true" |
    - "false" }?,
@@ -6794,6 +7150,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + relref =
    +   element relref {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute target { xsd:IDREF },
    +     [ a:defaultValue = "of" ]
    +     attribute displayFormat { "of" | "comma" | "parens" | "bare"
@@ -6803,14 +7161,26 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +     attribute derivedRemoteContent { text }?,
    +     attribute derivedLink { text }?,
          text
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 128]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
        }
      eref =
        element eref {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute target { text },
          text
        }
      iref =
        element iref {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute item { text },
          [ a:defaultValue = "" ] attribute subitem { text }?,
          [ a:defaultValue = "false" ]
@@ -6820,23 +7190,19 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        }
      cref =
        element cref {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute anchor { xsd:ID }?,
          attribute source { text }?,
    -     text
    +     [ a:defaultValue = "true" ]
    +     attribute display { "true" | "false" }?,
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 122]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
    +     (text | em | eref | relref | strong | sub | sup | tt | xref)*
    +   }
    + tt =
    +   element tt {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -6851,6 +7217,16 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + strong =
    +   element strong {
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 129]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -6865,6 +7241,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + em =
    +   element em {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -6879,16 +7257,10 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + sub =
    +   element sub {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 123]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
    +      | cref
    +      | em
    +      | eref
@@ -6900,6 +7272,16 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + sup =
    +   element sup {
+   +     attribute xml:base { text }?,
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 130]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -6913,6 +7295,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        }
      spanx =
        element spanx {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          [ a:defaultValue = "preserve" ]
          attribute xml:space { "default" | "preserve" }?,
          [ a:defaultValue = "emph" ] attribute style { text }?,
@@ -6920,11 +7304,15 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        }
      vspace =
        element vspace {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          [ a:defaultValue = "0" ] attribute blankLines { text }?,
          empty
        }
      figure =
        element figure {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
          [ a:defaultValue = "" ] attribute title { text }?,
@@ -6937,22 +7325,24 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          [ a:defaultValue = "" ] attribute width { text }?,
          [ a:defaultValue = "" ] attribute height { text }?,
    +     name?,
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 124]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          iref*,
          preamble?,
    -     artwork,
    +     (artwork | sourcecode)+,
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 131]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          postamble?
        }
    + table =
    +   element table {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     name?,
@@ -6964,6 +7354,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
      preamble =
    -   element preamble { (text | xref | eref | iref | cref | spanx)* }
    +   element preamble {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -6982,6 +7374,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        element artwork {
    -     [ a:defaultValue = "preserve" ]
    -     attribute xml:space { "default" | "preserve" }?,
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     attribute xml:space { text }?,
@@ -6991,22 +7385,24 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          [ a:defaultValue = "left" ]
          attribute align { "left" | "center" | "right" }?,
          [ a:defaultValue = "" ] attribute alt { text }?,
-         [ a:defaultValue = "" ] attribute width { text }?,
-         [ a:defaultValue = "" ] attribute height { text }?,
 
 
 
-Hoffman                   Expires March 3, 2016               [Page 125]
+Hoffman                   Expires March 3, 2016               [Page 132]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
 
+         [ a:defaultValue = "" ] attribute width { text }?,
+         [ a:defaultValue = "" ] attribute height { text }?,
    -     text*
    +     attribute originalSrc { text }?,
    +     (text* | svg)
    +   }
    + svg =
    +   element ns1:svg {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute * { text }*,
    +     anything
    +   }
@@ -7017,6 +7413,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + sourcecode =
    +   element sourcecode {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "" ] attribute name { text }?,
@@ -7027,39 +7425,49 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + thead =
    +   element thead {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     tr+
    +   }
    + tbody =
    +   element tbody {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     tr+
    +   }
    + tfoot =
    +   element tfoot {
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 133]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     tr+
    +   }
    + tr =
    +   element tr {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "0" ] attribute border { text }?,
    +     (td | th)+
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 126]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
    +   }
    + td =
    +   element td {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     [ a:defaultValue = "0" ] attribute border { text }?,
    +     [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -7089,6 +7497,16 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + th =
    +   element th {
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 134]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "0" ] attribute border { text }?,
@@ -7105,14 +7523,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +         | dl
    +         | em
    +         | eref
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 127]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
    +         | figure
    +         | iref
    +         | ol
@@ -7127,10 +7537,15 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        }
      postamble =
    -   element postamble { (text | xref | eref | iref | cref | spanx)*
-   +   element postamble { (text | cref | eref | iref | spanx | xref)*
+   +   element postamble {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     (text | cref | eref | iref | spanx | xref)*
      }
      texttable =
        element texttable {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute anchor { xsd:ID }?,
          [ a:defaultValue = "" ] attribute title { text }?,
          [ a:defaultValue = "false" ]
@@ -7138,6 +7553,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          [ a:defaultValue = "center" ]
          attribute align { "left" | "center" | "right" }?,
          [ a:defaultValue = "full" ]
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 135]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          attribute style { "all" | "none" | "headers" | "full" }?,
    +     name?,
          preamble?,
@@ -7147,35 +7570,62 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        }
      ttcol =
        element ttcol {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute width { text }?,
          [ a:defaultValue = "left" ]
          attribute align { "left" | "center" | "right" }?,
-   -     text
    +     (cref | eref | iref | xref | text)*
    +   }
-   + c = element c { (text | cref | eref | iref | spanx | xref)* }
-   + bcp14 = element bcp14 { text }
-   + br = element br { empty }
-   + back = element back { displayreference*, references*, section* }
+   + c =
+   +   element c {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     (text | cref | eref | iref | spanx | xref)*
+   +   }
+   + bcp14 =
+   +   element bcp14 {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+         text
+       }
+   - c = element c { (text | xref | eref | iref | cref | spanx)* }
+   - back = element back { references*, section* }
+   + br =
+   +   element br {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     empty
+   +   }
+   + back =
+   +   element back {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     displayreference*,
+   +     references*,
+   +     section*
+   +   }
    + displayreference =
    +   element displayreference {
-   +     attribute target { xsd:IDREF },
-   +     attribute to { text }
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
 
 
 
-Hoffman                   Expires March 3, 2016               [Page 128]
+Hoffman                   Expires March 3, 2016               [Page 136]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
 
-       }
-   - c = element c { (text | xref | eref | iref | cref | spanx)* }
-   - back = element back { references*, section* }
+   +     attribute target { xsd:IDREF },
+   +     attribute to { text }
+   +   }
      references =
        element references {
    -     [ a:defaultValue = "References" ] attribute title { text }?,
    -     reference+
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute title { text }?,
    +     name?,
@@ -7183,6 +7633,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        }
      reference =
        element reference {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute anchor { xsd:ID },
          attribute target { text }?,
    +     [ a:defaultValue = "true" ]
@@ -7195,11 +7647,15 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + referencegroup =
    +   element referencegroup {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID },
    +     reference+
        }
      seriesInfo =
        element seriesInfo {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute name { text },
          attribute value { text },
    +     attribute asciiName { text }?,
@@ -7208,6 +7664,16 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
        }
      format =
        element format {
+   +     attribute xml:base { text }?,
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 137]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
+   +     attribute xml:lang { text }?,
          attribute target { text }?,
          attribute type { text },
          attribute octets { text }?,
@@ -7217,14 +7683,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    -   element annotation { (text | xref | eref | iref | cref |
    - spanx)* }
    +   element annotation {
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 129]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -7241,6 +7701,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    +   }
    + refcontent =
    +   element refcontent {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text | bcp14 | em | strong | sub | sup | tt)*
    +   }
      start = rfc
@@ -7259,6 +7721,14 @@ Index
          inside author  17
       align attribute
          in artwork element  14
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 138]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          in figure element  31
          in td element  66
          in texttable element  79
@@ -7273,14 +7743,6 @@ Index
          in aside element  17
          in blockquote element  20
          in cref element  23
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 130]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          in dd element  25
          in dl element  27
          in dt element  28
@@ -7315,6 +7777,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          height attribute  15
          inside aside  16
          inside blockquote  19
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 139]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          inside dd  24
          inside figure  31
          inside li  35
@@ -7329,14 +7799,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
       ascii attribute
          in city element  21
          in code element  21
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 131]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          in country element  22
          in email element  29
          in organization element  41
@@ -7347,7 +7809,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
       asciiFullname attribute
          in author element  17
       asciiInitials attribute
-         in author element  18
+         in author element  17
       asciiName attribute
          in seriesInfo element  55
       asciiSurname attribute
@@ -7365,12 +7827,20 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
             58, 63-64, 66-71, 80
          ascii  21-22, 29, 41-42, 45, 59, 69
          asciiFullname  17
-         asciiInitials  18
+         asciiInitials  17
          asciiName  55
          asciiSurname  18
          asciiValue  56
          blankLines  81
          border  66, 68, 70
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 140]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          category  49
          cite  20
          colspan  66, 69
@@ -7385,14 +7855,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          fullname  18
          group  39
          hangIndent  77
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 132]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          hanging  27
          hangText  63
          height  15, 32
@@ -7427,6 +7889,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          spacing  27, 39, 72
          src  15, 32, 58
          start  39
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 141]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          style  77, 79-80
          subitem  34
          submissionType  52
@@ -7441,14 +7911,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          tocInclude  52
          type  15, 39, 58, 76
          updates  53
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 133]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          value  56
          version  53
          width  16, 32, 81
@@ -7456,7 +7918,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          year  24
       author element  17, 97
          asciiFullname attribute  17
-         asciiInitials attribute  18
+         asciiInitials attribute  17
          asciiSurname attribute  18
          fullname attribute  18
          initials attribute  18
@@ -7483,6 +7945,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          inside sup  61
          inside t  62
          inside td  65
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 142]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          inside th  67
          inside tt  70
       blankLines attribute
@@ -7497,14 +7967,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
       border attribute
          in td element  66
          in th element  68
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 134]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          in tr element  70
       br element  21, 97
          inside td  65
@@ -7539,6 +8001,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          inside annotation  12
          inside blockquote  20
          inside c  75
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 143]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          inside dd  25
          inside dt  28
          inside em  29
@@ -7553,14 +8023,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          inside td  65
          inside th  67
          inside tt  71
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 135]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          inside ttcol  80
          source attribute  23
 
@@ -7595,6 +8057,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          inside section  53
          inside td  65
          inside th  67
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 144]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          spacing attribute  27
       docName attribute
          in rfc element  50
@@ -7609,14 +8079,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          annotation  12, 43
          area  12, 33
          artwork  13, 16, 19, 24, 31, 35, 53, 65, 67
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 136]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          aside  16, 53
          author  17, 33
          back  18, 49
@@ -7651,6 +8113,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          link  36, 49
          list  16, 62, 76
          middle  37, 49
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 145]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          name  31, 37-38, 45, 53, 64, 79
          note  33, 37
          ol  11, 16, 19, 25, 35, 38, 53, 65, 68
@@ -7665,17 +8135,9 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          referencegroup  44-45
          references  18, 44
          region  41, 45
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 137]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          relref  12, 20, 22, 25, 28-29, 35, 37, 45, 60-62, 65, 68, 71
          rfc  49
-         section  19, 21, 37, 53-54
+         section  18, 21, 37, 53-54
          seriesInfo  33, 43, 55
          sourcecode  19, 25, 31, 35, 54, 57, 65, 68
          spanx  12, 62, 75, 77-78
@@ -7687,7 +8149,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          sup  12, 20, 22, 25, 28-29, 35, 43, 60-62, 66, 68, 71, 75,
             77-78
          svg  14, 75
-         t  11, 17, 19, 25, 35, 38, 54, 62, 65, 67, 76
+         t  11, 16, 19, 25, 35, 38, 54, 62, 65, 67, 76
          table  17, 54, 64
          tbody  64
          td  65, 70
@@ -7700,13 +8162,21 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          tt  12, 20, 23, 25, 28-29, 35, 37, 43, 60-63, 66, 68, 70, 75,
             77-78
          ttcol  79-80
-         ul  11, 17, 20, 25, 35, 38, 54, 66, 68, 71
-         uri  12, 72
+         ul  11, 17, 19, 25, 35, 38, 54, 66, 68, 71
+         uri  11, 72
          vspace  63, 81
          workgroup  33, 72
          xref  12, 20, 23, 25, 28-29, 35, 37, 60-63, 66, 68, 71-72, 76,
             78, 80
       em element  28, 97
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 146]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          inside annotation  12
          inside blockquote  20
          inside c  75
@@ -7721,14 +8191,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          inside sub  61
          inside sup  61
          inside t  62
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 138]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          inside td  65
          inside th  67
          inside tt  71
@@ -7763,6 +8225,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
       facsimile element  76, 97
          inside address  11
       figure element  30, 97
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 147]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          align attribute  31
          alt attribute  31
          anchor attribute  31
@@ -7777,14 +8247,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          src attribute  32
          suppress-title attribute  32
          title attribute  32
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 139]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          width attribute  32
       format attribute
          in xref element  73
@@ -7819,6 +8281,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    I
       indexInclude attribute
          in rfc element  50
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 148]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
       initials attribute
          in author element  18
       ipr attribute
@@ -7833,14 +8303,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          'trust200902'  89
          in rfc element  50
       iprExtract attribute
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 140]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          in rfc element  51
       iref element  33, 97
          inside annotation  12
@@ -7875,6 +8337,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          in t element  63
       keepWithPrevious attribute
          in t element  63
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 149]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
       keyword element  34, 97
          inside front  33
 
@@ -7889,14 +8359,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          rel attribute  36
       list element  76, 97
          counter attribute  77
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 141]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          hangIndent attribute  77
          inside aside  16
          inside t  62
@@ -7931,6 +8393,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
       numbered attribute
          in section element  54
 
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 150]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
    O
       obsoletes attribute
          in rfc element  51
@@ -7945,14 +8415,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          inside dd  25
          inside li  35
          inside note  38
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 142]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          inside section  53
          inside td  65
          inside th  68
@@ -7987,6 +8449,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    Q
       quotedFrom attribute
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 151]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          in blockquote element  20
       quoteTitle attribute
          in reference element  43
@@ -8001,14 +8471,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          quoteTitle attribute  43
          target attribute  44
       referencegroup element  44, 97
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 143]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          anchor attribute  44
          inside references  45
       references element  44, 97
@@ -8043,6 +8505,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          section attribute  49
          target attribute  49
       removeInRFC attribute
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 152]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          in note element  38
          in section element  54
       rfc element  49, 97
@@ -8057,14 +8527,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          prepTime attribute  51
          seriesNo attribute  51
          sortRefs attribute  51
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 144]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          submissionType attribute  52
          symRefs attribute  52
          tocDepth attribute  52
@@ -8082,7 +8544,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          in relref element  49
       section element  53, 97
          anchor attribute  54
-         inside back  19
+         inside back  18
          inside boilerplate  21
          inside middle  37
          inside section  54
@@ -8099,6 +8561,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          value attribute  56
       seriesNo attribute
          in rfc element  51
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 153]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
       sortRefs attribute
          in rfc element  51
       source attribute
@@ -8113,14 +8583,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          inside td  65
          inside th  68
          name attribute  58
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 145]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          src attribute  58
          type attribute  58
       spacing attribute
@@ -8155,6 +8617,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          inside li  35
          inside postamble  77
          inside preamble  78
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 154]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          inside refcontent  43
          inside sub  61
          inside sup  62
@@ -8169,14 +8639,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
       sub element  60, 97
          inside annotation  12
          inside blockquote  20
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 146]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          inside c  75
          inside cref  22
          inside dd  25
@@ -8211,6 +8673,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          inside t  62
          inside td  66
          inside th  68
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 155]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          inside tt  71
       suppress-title attribute
          in figure element  32
@@ -8225,17 +8695,9 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
    T
       t element  62, 97
          anchor attribute  63
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 147]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          hangText attribute  63
          inside abstract  11
-         inside aside  17
+         inside aside  16
          inside blockquote  19
          inside dd  25
          inside li  35
@@ -8267,6 +8729,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          colspan attribute  66
          inside tr  70
          rowspan attribute  66
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 156]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
       texttable element  79, 97
          align attribute  79
          anchor attribute  80
@@ -8281,14 +8751,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          align attribute  68
          anchor attribute  68
          border attribute  68
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 148]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          colspan attribute  69
          inside tr  70
          rowspan attribute  69
@@ -8323,6 +8785,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          inside annotation  12
          inside blockquote  20
          inside c  75
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 157]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          inside cref  23
          inside dd  25
          inside dt  28
@@ -8337,14 +8807,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          inside sup  62
          inside t  63
          inside td  66
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 149]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
          inside th  68
       ttcol element  80, 97
          align attribute  81
@@ -8362,7 +8824,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          empty attribute  71
          inside abstract  11
          inside aside  17
-         inside blockquote  20
+         inside blockquote  19
          inside dd  25
          inside li  35
          inside note  38
@@ -8373,12 +8835,20 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
       updates attribute
          in rfc element  53
       uri element  72, 97
-         inside address  12
+         inside address  11
 
    V
       value attribute
          in seriesInfo element  56
       version attribute
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 158]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          in rfc element  53
       vspace element  81, 97
          blankLines attribute  81
@@ -8393,14 +8863,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
          inside front  33
 
    X
-
-
-
-Hoffman                   Expires March 3, 2016               [Page 150]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
-
-
       xml:space attribute
          in artwork element  16
          in spanx element  79
@@ -8435,6 +8897,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
 
    Y
       year attribute
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 159]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary        August 2015
+
+
          in date element  24
 
 Author's Address
@@ -8452,5 +8922,39 @@ Author's Address
 
 
 
-Hoffman                   Expires March 3, 2016               [Page 151]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Hoffman                   Expires March 3, 2016               [Page 160]
 

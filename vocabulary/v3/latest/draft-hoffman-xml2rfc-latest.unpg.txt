@@ -460,9 +460,7 @@ Table of Contents
    renderers which display different fonts for ideographic characters
    used in China and Japan.  The xml:base attribute is sometimes added
    to an XML file when doing XML-to-XML conversion where the base file
-   has XInclude atttributes (see Appendix B.1).  These attributes are
-   not listed in the element descriptions here, but will later be added
-   to the RNG used for the v3 tools.
+   has XInclude atttributes (see Appendix B.1).
 
 2.1.  <abstract>
 
@@ -4557,6 +4555,8 @@ Appendix C.  Relax NG Schema
 
    rfc =
      element rfc {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute number { text }?,
        [ a:defaultValue = "" ] attribute obsoletes { text }?,
        [ a:defaultValue = "" ] attribute updates { text }?,
@@ -4610,12 +4610,16 @@ Appendix C.  Relax NG Schema
 
    link =
      element link {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute href { text },
        attribute rel { text }?
      }
 
    front =
      element front {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        title,
        author+,
        date?,
@@ -4630,6 +4634,8 @@ Appendix C.  Relax NG Schema
 
    title =
      element title {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute abbrev { text }?,
        attribute ascii { text }?,
        text
@@ -4637,6 +4643,8 @@ Appendix C.  Relax NG Schema
 
    author =
      element author {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute initials { text }?,
        attribute asciiInitials { text }?,
        attribute surname { text }?,
@@ -4650,83 +4658,143 @@ Appendix C.  Relax NG Schema
 
    organization =
      element organization {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute abbrev { text }?,
        attribute ascii { text }?,
        text
      }
 
    address =
-     element address { postal?, phone?, facsimile?, email?, uri? }
+     element address {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       postal?,
+       phone?,
+       facsimile?,
+       email?,
+       uri?
+     }
 
    postal =
      element postal {
-       (city | code | country | region | street)* | postalLine+
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       ((city | code | country | region | street)* | postalLine+)
      }
 
    street =
      element street {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute ascii { text }?,
        text
      }
 
    city =
      element city {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute ascii { text }?,
        text
      }
 
    region =
      element region {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute ascii { text }?,
        text
      }
 
    code =
      element code {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute ascii { text }?,
        text
      }
 
    country =
      element country {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute ascii { text }?,
        text
      }
 
    postalLine =
      element postalLine {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute ascii { text }?,
        text
      }
 
-   phone = element phone { text }
+   phone =
+     element phone {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       text
+     }
 
-   facsimile = element facsimile { text }
+   facsimile =
+     element facsimile {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       text
+     }
 
    email =
      element email {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute ascii { text }?,
        text
      }
 
-   uri = element uri { text }
+   uri =
+     element uri {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       text
+     }
 
    date =
      element date {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute day { text }?,
        attribute month { text }?,
        attribute year { text }?,
        empty
      }
 
-   area = element area { text }
+   area =
+     element area {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       text
+     }
 
-   workgroup = element workgroup { text }
+   workgroup =
+     element workgroup {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       text
+     }
 
-   keyword = element keyword { text }
+   keyword =
+     element keyword {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       text
+     }
 
    abstract =
      element abstract {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        (dl | ol | t | ul)+
@@ -4734,6 +4802,8 @@ Appendix C.  Relax NG Schema
 
    note =
      element note {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute title { text }?,
        attribute pn { text }?,
        [ a:defaultValue = "false" ]
@@ -4744,14 +4814,23 @@ Appendix C.  Relax NG Schema
 
    boilerplate =
      element boilerplate {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute pn { text }?,
        section+
      }
 
-   middle = element middle { section+ }
+   middle =
+     element middle {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       section+
+     }
 
    section =
      element section {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        attribute title { text }?,
@@ -4779,12 +4858,16 @@ Appendix C.  Relax NG Schema
 
    name =
      element name {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute slugifiedName { text }?,
        (text | cref | eref | relref | tt | xref)*
      }
 
    t =
      element t {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        attribute hangText { text }?,
@@ -4811,6 +4894,8 @@ Appendix C.  Relax NG Schema
 
    aside =
      element aside {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        (artwork | dl | figure | iref | \list | ol | t | table | ul)*
@@ -4818,6 +4903,8 @@ Appendix C.  Relax NG Schema
 
    blockquote =
      element blockquote {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        attribute cite { text }?,
@@ -4839,6 +4926,8 @@ Appendix C.  Relax NG Schema
 
    \list =
      element list {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        [ a:defaultValue = "empty" ] attribute style { text }?,
        attribute hangIndent { text }?,
        attribute counter { text }?,
@@ -4847,6 +4936,8 @@ Appendix C.  Relax NG Schema
 
    ol =
      element ol {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "1" ] attribute type { text }?,
@@ -4859,6 +4950,8 @@ Appendix C.  Relax NG Schema
 
    ul =
      element ul {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "normal" ]
@@ -4870,6 +4963,8 @@ Appendix C.  Relax NG Schema
 
    li =
      element li {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -4889,6 +4984,8 @@ Appendix C.  Relax NG Schema
 
    dl =
      element dl {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "normal" ]
@@ -4900,6 +4997,8 @@ Appendix C.  Relax NG Schema
 
    dt =
      element dt {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        (text
@@ -4918,6 +5017,8 @@ Appendix C.  Relax NG Schema
 
    dd =
      element dd {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -4937,6 +5038,8 @@ Appendix C.  Relax NG Schema
 
    xref =
      element xref {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute target { xsd:IDREF },
        [ a:defaultValue = "false" ]
        attribute pageno { "true" | "false" }?,
@@ -4948,6 +5051,8 @@ Appendix C.  Relax NG Schema
 
    relref =
      element relref {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute target { xsd:IDREF },
        [ a:defaultValue = "of" ]
        attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
@@ -4960,12 +5065,16 @@ Appendix C.  Relax NG Schema
 
    eref =
      element eref {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute target { text },
        text
      }
 
    iref =
      element iref {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute item { text },
        [ a:defaultValue = "" ] attribute subitem { text }?,
        [ a:defaultValue = "false" ]
@@ -4976,6 +5085,8 @@ Appendix C.  Relax NG Schema
 
    cref =
      element cref {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute source { text }?,
        [ a:defaultValue = "true" ]
@@ -4985,6 +5096,8 @@ Appendix C.  Relax NG Schema
 
    tt =
      element tt {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
         | cref
@@ -5000,6 +5113,8 @@ Appendix C.  Relax NG Schema
 
    strong =
      element strong {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
         | cref
@@ -5015,6 +5130,8 @@ Appendix C.  Relax NG Schema
 
    em =
      element em {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
         | cref
@@ -5030,6 +5147,8 @@ Appendix C.  Relax NG Schema
 
    sub =
      element sub {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
         | cref
@@ -5044,6 +5163,8 @@ Appendix C.  Relax NG Schema
 
    sup =
      element sup {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
         | cref
@@ -5058,6 +5179,8 @@ Appendix C.  Relax NG Schema
 
    spanx =
      element spanx {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        [ a:defaultValue = "preserve" ]
        attribute xml:space { "default" | "preserve" }?,
        [ a:defaultValue = "emph" ] attribute style { text }?,
@@ -5066,12 +5189,16 @@ Appendix C.  Relax NG Schema
 
    vspace =
      element vspace {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        [ a:defaultValue = "0" ] attribute blankLines { text }?,
        empty
      }
 
    figure =
      element figure {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "" ] attribute title { text }?,
@@ -5092,6 +5219,8 @@ Appendix C.  Relax NG Schema
 
    table =
      element table {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        name?,
@@ -5103,6 +5232,8 @@ Appendix C.  Relax NG Schema
 
    preamble =
      element preamble {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
         | cref
@@ -5120,6 +5251,8 @@ Appendix C.  Relax NG Schema
 
    artwork =
      element artwork {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        attribute xml:space { text }?,
@@ -5137,6 +5270,8 @@ Appendix C.  Relax NG Schema
 
    svg =
      element ns1:svg {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute * { text }*,
        anything
      }
@@ -5149,6 +5284,8 @@ Appendix C.  Relax NG Schema
 
    sourcecode =
      element sourcecode {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "" ] attribute name { text }?,
@@ -5160,6 +5297,8 @@ Appendix C.  Relax NG Schema
 
    thead =
      element thead {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        tr+
@@ -5167,6 +5306,8 @@ Appendix C.  Relax NG Schema
 
    tbody =
      element tbody {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        tr+
@@ -5174,6 +5315,8 @@ Appendix C.  Relax NG Schema
 
    tfoot =
      element tfoot {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        tr+
@@ -5181,6 +5324,8 @@ Appendix C.  Relax NG Schema
 
    tr =
      element tr {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "0" ] attribute border { text }?,
@@ -5189,6 +5334,8 @@ Appendix C.  Relax NG Schema
 
    td =
      element td {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        [ a:defaultValue = "0" ] attribute border { text }?,
        [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -5219,6 +5366,8 @@ Appendix C.  Relax NG Schema
 
    th =
      element th {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "0" ] attribute border { text }?,
@@ -5249,10 +5398,16 @@ Appendix C.  Relax NG Schema
      }
 
    postamble =
-     element postamble { (text | cref | eref | iref | spanx | xref)* }
+     element postamble {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       (text | cref | eref | iref | spanx | xref)*
+     }
 
    texttable =
      element texttable {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        [ a:defaultValue = "" ] attribute title { text }?,
        [ a:defaultValue = "false" ]
@@ -5270,28 +5425,56 @@ Appendix C.  Relax NG Schema
 
    ttcol =
      element ttcol {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute width { text }?,
        [ a:defaultValue = "left" ]
        attribute align { "left" | "center" | "right" }?,
        (cref | eref | iref | xref | text)*
      }
 
-   c = element c { (text | cref | eref | iref | spanx | xref)* }
+   c =
+     element c {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       (text | cref | eref | iref | spanx | xref)*
+     }
 
-   bcp14 = element bcp14 { text }
+   bcp14 =
+     element bcp14 {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       text
+     }
 
-   br = element br { empty }
+   br =
+     element br {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       empty
+     }
 
-   back = element back { displayreference*, references*, section* }
+   back =
+     element back {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
+       displayreference*,
+       references*,
+       section*
+     }
 
    displayreference =
      element displayreference {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute target { xsd:IDREF },
        attribute to { text }
      }
 
    references =
      element references {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute title { text }?,
        name?,
@@ -5300,6 +5483,8 @@ Appendix C.  Relax NG Schema
 
    reference =
      element reference {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID },
        attribute target { text }?,
        [ a:defaultValue = "true" ]
@@ -5310,12 +5495,16 @@ Appendix C.  Relax NG Schema
 
    referencegroup =
      element referencegroup {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute anchor { xsd:ID },
        reference+
      }
 
    seriesInfo =
      element seriesInfo {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute name { text },
        attribute value { text },
        attribute asciiName { text }?,
@@ -5325,6 +5514,8 @@ Appendix C.  Relax NG Schema
 
    format =
      element format {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        attribute target { text }?,
        attribute type { text },
        attribute octets { text }?,
@@ -5333,6 +5524,8 @@ Appendix C.  Relax NG Schema
 
    annotation =
      element annotation {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text
         | bcp14
         | cref
@@ -5350,6 +5543,8 @@ Appendix C.  Relax NG Schema
 
    refcontent =
      element refcontent {
+       attribute xml:base { text }?,
+       attribute xml:lang { text }?,
        (text | bcp14 | em | strong | sub | sup | tt)*
      }
 
@@ -5370,6 +5565,8 @@ Appendix D.  Schema Differences from v2
    + # xml2rfc Version 3 grammar
      rfc =
        element rfc {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute number { text }?,
          [ a:defaultValue = "" ] attribute obsoletes { text }?,
          [ a:defaultValue = "" ] attribute updates { text }?,
@@ -5427,6 +5624,8 @@ Appendix D.  Schema Differences from v2
        }
    + link =
    +   element link {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute href { text },
    +     attribute rel { text }?
    +   }
@@ -5434,6 +5633,8 @@ Appendix D.  Schema Differences from v2
        element front {
    -     title, author+, date, area*, workgroup*, keyword*, abstract?,
    - note*
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     title,
    +     author+,
    +     date?,
@@ -5447,12 +5648,16 @@ Appendix D.  Schema Differences from v2
        }
      title =
        element title {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute abbrev { text }?,
    +     attribute ascii { text }?,
          text
        }
      author =
        element author {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute initials { text }?,
    +     attribute asciiInitials { text }?,
          attribute surname { text }?,
@@ -5465,44 +5670,93 @@ Appendix D.  Schema Differences from v2
        }
      organization =
        element organization {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute abbrev { text }?,
    +     attribute ascii { text }?,
    +     text
    +   }
    + address =
-   +   element address { postal?, phone?, facsimile?, email?, uri? }
+   +   element address {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     postal?,
+   +     phone?,
+   +     facsimile?,
+   +     email?,
+   +     uri?
+   +   }
    + postal =
    +   element postal {
-   +     (city | code | country | region | street)* | postalLine+
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     ((city | code | country | region | street)* | postalLine+)
    +   }
    + street =
    +   element street {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute ascii { text }?,
    +     text
    +   }
    + city =
    +   element city {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute ascii { text }?,
    +     text
    +   }
    + region =
    +   element region {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute ascii { text }?,
    +     text
    +   }
    + code =
    +   element code {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute ascii { text }?,
    +     text
    +   }
    + country =
    +   element country {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute ascii { text }?,
    +     text
    +   }
    + postalLine =
    +   element postalLine {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute ascii { text }?,
+   +     text
+   +   }
+   + phone =
+   +   element phone {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     text
+   +   }
+   + facsimile =
+   +   element facsimile {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     text
+   +   }
+   + email =
+   +   element email {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     attribute ascii { text }?,
+   +     text
+   +   }
+   + uri =
+   +   element uri {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          text
        }
    - address = element address { postal?, phone?, facsimile?, email?,
@@ -5514,28 +5768,45 @@ Appendix D.  Schema Differences from v2
    - region = element region { text }
    - code = element code { text }
    - country = element country { text }
-     phone = element phone { text }
-     facsimile = element facsimile { text }
+   - phone = element phone { text }
+   - facsimile = element facsimile { text }
    - email = element email { text }
-   + email =
-   +   element email {
-   +     attribute ascii { text }?,
-   +     text
-   +   }
-     uri = element uri { text }
+   - uri = element uri { text }
      date =
        element date {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute day { text }?,
          attribute month { text }?,
          attribute year { text }?,
          empty
        }
-     area = element area { text }
-     workgroup = element workgroup { text }
-     keyword = element keyword { text }
+   - area = element area { text }
+   - workgroup = element workgroup { text }
+   - keyword = element keyword { text }
    - abstract = element abstract { t+ }
+   + area =
+   +   element area {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     text
+   +   }
+   + workgroup =
+   +   element workgroup {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     text
+   +   }
+   + keyword =
+   +   element keyword {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     text
+   +   }
    + abstract =
    +   element abstract {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     (dl | ol | t | ul)+
@@ -5544,6 +5815,8 @@ Appendix D.  Schema Differences from v2
        element note {
    -     attribute title { text },
    -     t+
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute title { text }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "false" ]
@@ -5553,12 +5826,22 @@ Appendix D.  Schema Differences from v2
    +   }
    + boilerplate =
    +   element boilerplate {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute pn { text }?,
    +     section+
+   +   }
+   + middle =
+   +   element middle {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     section+
        }
-     middle = element middle { section+ }
+   - middle = element middle { section+ }
      section =
        element section {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute anchor { xsd:ID }?,
    -     attribute title { text },
    +     attribute pn { text }?,
@@ -5587,11 +5870,15 @@ Appendix D.  Schema Differences from v2
        }
    + name =
    +   element name {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute slugifiedName { text }?,
    +     (text | cref | eref | relref | tt | xref)*
    +   }
      t =
        element t {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
          attribute hangText { text }?,
@@ -5622,12 +5909,16 @@ Appendix D.  Schema Differences from v2
    +   }
    + aside =
    +   element aside {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     (artwork | dl | figure | iref | \list | ol | t | table | ul)*
    +   }
    + blockquote =
    +   element blockquote {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     attribute cite { text }?,
@@ -5649,6 +5940,8 @@ Appendix D.  Schema Differences from v2
      \list =
        element list {
    -     attribute style { text }?,
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     [ a:defaultValue = "empty" ] attribute style { text }?,
          attribute hangIndent { text }?,
          attribute counter { text }?,
@@ -5656,6 +5949,8 @@ Appendix D.  Schema Differences from v2
        }
    + ol =
    +   element ol {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "1" ] attribute type { text }?,
@@ -5667,6 +5962,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + ul =
    +   element ul {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "normal" ]
@@ -5677,6 +5974,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + li =
    +   element li {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -5695,6 +5994,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + dl =
    +   element dl {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "normal" ]
@@ -5705,6 +6006,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + dt =
    +   element dt {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     (text
@@ -5722,6 +6025,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + dd =
    +   element dd {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     ((artwork | dl | figure | ol | sourcecode | t | ul)+
@@ -5740,6 +6045,8 @@ Appendix D.  Schema Differences from v2
    +   }
      xref =
        element xref {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute target { xsd:IDREF },
    -     [ a:defaultValue = "false" ] attribute pageno { "true" |
    - "false" }?,
@@ -5754,6 +6061,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + relref =
    +   element relref {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute target { xsd:IDREF },
    +     [ a:defaultValue = "of" ]
    +     attribute displayFormat { "of" | "comma" | "parens" | "bare"
@@ -5766,11 +6075,15 @@ Appendix D.  Schema Differences from v2
        }
      eref =
        element eref {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute target { text },
          text
        }
      iref =
        element iref {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute item { text },
          [ a:defaultValue = "" ] attribute subitem { text }?,
          [ a:defaultValue = "false" ]
@@ -5780,6 +6093,8 @@ Appendix D.  Schema Differences from v2
        }
      cref =
        element cref {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute anchor { xsd:ID }?,
          attribute source { text }?,
    -     text
@@ -5789,6 +6104,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + tt =
    +   element tt {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -5803,6 +6120,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + strong =
    +   element strong {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -5817,6 +6136,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + em =
    +   element em {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -5831,6 +6152,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + sub =
    +   element sub {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -5844,6 +6167,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + sup =
    +   element sup {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -5857,6 +6182,8 @@ Appendix D.  Schema Differences from v2
        }
      spanx =
        element spanx {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          [ a:defaultValue = "preserve" ]
          attribute xml:space { "default" | "preserve" }?,
          [ a:defaultValue = "emph" ] attribute style { text }?,
@@ -5864,11 +6191,15 @@ Appendix D.  Schema Differences from v2
        }
      vspace =
        element vspace {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          [ a:defaultValue = "0" ] attribute blankLines { text }?,
          empty
        }
      figure =
        element figure {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
          [ a:defaultValue = "" ] attribute title { text }?,
@@ -5889,6 +6220,8 @@ Appendix D.  Schema Differences from v2
        }
    + table =
    +   element table {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     name?,
@@ -5900,6 +6233,8 @@ Appendix D.  Schema Differences from v2
      preamble =
    -   element preamble { (text | xref | eref | iref | cref | spanx)* }
    +   element preamble {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -5918,6 +6253,8 @@ Appendix D.  Schema Differences from v2
        element artwork {
    -     [ a:defaultValue = "preserve" ]
    -     attribute xml:space { "default" | "preserve" }?,
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     attribute xml:space { text }?,
@@ -5935,6 +6272,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + svg =
    +   element ns1:svg {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute * { text }*,
    +     anything
    +   }
@@ -5945,6 +6284,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + sourcecode =
    +   element sourcecode {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "" ] attribute name { text }?,
@@ -5955,24 +6296,32 @@ Appendix D.  Schema Differences from v2
    +   }
    + thead =
    +   element thead {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     tr+
    +   }
    + tbody =
    +   element tbody {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     tr+
    +   }
    + tfoot =
    +   element tfoot {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     tr+
    +   }
    + tr =
    +   element tr {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "0" ] attribute border { text }?,
@@ -5980,6 +6329,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + td =
    +   element td {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     [ a:defaultValue = "0" ] attribute border { text }?,
    +     [ a:defaultValue = "0" ] attribute colspan { text }?,
@@ -6009,6 +6360,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + th =
    +   element th {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "0" ] attribute border { text }?,
@@ -6039,10 +6392,15 @@ Appendix D.  Schema Differences from v2
        }
      postamble =
    -   element postamble { (text | xref | eref | iref | cref | spanx)*
-   +   element postamble { (text | cref | eref | iref | spanx | xref)*
+   +   element postamble {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     (text | cref | eref | iref | spanx | xref)*
      }
      texttable =
        element texttable {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute anchor { xsd:ID }?,
          [ a:defaultValue = "" ] attribute title { text }?,
          [ a:defaultValue = "false" ]
@@ -6059,27 +6417,54 @@ Appendix D.  Schema Differences from v2
        }
      ttcol =
        element ttcol {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute width { text }?,
          [ a:defaultValue = "left" ]
          attribute align { "left" | "center" | "right" }?,
-   -     text
    +     (cref | eref | iref | xref | text)*
    +   }
-   + c = element c { (text | cref | eref | iref | spanx | xref)* }
-   + bcp14 = element bcp14 { text }
-   + br = element br { empty }
-   + back = element back { displayreference*, references*, section* }
-   + displayreference =
-   +   element displayreference {
-   +     attribute target { xsd:IDREF },
-   +     attribute to { text }
+   + c =
+   +   element c {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     (text | cref | eref | iref | spanx | xref)*
+   +   }
+   + bcp14 =
+   +   element bcp14 {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+         text
        }
    - c = element c { (text | xref | eref | iref | cref | spanx)* }
    - back = element back { references*, section* }
+   + br =
+   +   element br {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     empty
+   +   }
+   + back =
+   +   element back {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     displayreference*,
+   +     references*,
+   +     section*
+   +   }
+   + displayreference =
+   +   element displayreference {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
+   +     attribute target { xsd:IDREF },
+   +     attribute to { text }
+   +   }
      references =
        element references {
    -     [ a:defaultValue = "References" ] attribute title { text }?,
    -     reference+
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute title { text }?,
    +     name?,
@@ -6087,6 +6472,8 @@ Appendix D.  Schema Differences from v2
        }
      reference =
        element reference {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute anchor { xsd:ID },
          attribute target { text }?,
    +     [ a:defaultValue = "true" ]
@@ -6099,11 +6486,15 @@ Appendix D.  Schema Differences from v2
    +   }
    + referencegroup =
    +   element referencegroup {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID },
    +     reference+
        }
      seriesInfo =
        element seriesInfo {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute name { text },
          attribute value { text },
    +     attribute asciiName { text }?,
@@ -6112,6 +6503,8 @@ Appendix D.  Schema Differences from v2
        }
      format =
        element format {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
          attribute target { text }?,
          attribute type { text },
          attribute octets { text }?,
@@ -6121,6 +6514,8 @@ Appendix D.  Schema Differences from v2
    -   element annotation { (text | xref | eref | iref | cref |
    - spanx)* }
    +   element annotation {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
    +      | cref
@@ -6137,6 +6532,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + refcontent =
    +   element refcontent {
+   +     attribute xml:base { text }?,
+   +     attribute xml:lang { text }?,
    +     (text | bcp14 | em | strong | sub | sup | tt)*
    +   }
      start = rfc
