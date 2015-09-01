@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 2629 (if approved)                               July 6, 2015
+Obsoletes: 2629 (if approved)                            August 31, 2015
 Intended status: Informational
-Expires: January 7, 2016
+Expires: March 3, 2016
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 7, 2016.
+   This Internet-Draft will expire on March 3, 2016.
 
 Copyright Notice
 
@@ -199,6 +199,14 @@ Table of Contents
    documents, primarily XML and HTML.  The term "representation" is used
    when talking about a specific instatiation of a format, such as an
    XML document or an HTML document that was created by an XML document.
+
+   The details (particularly any vocabularies) described in this
+   document are expected to change based on experience gained in
+   implementing the RFC production center's toolset.  Revised documents
+   will be published capturing those changes as the toolset is
+   completed.  Other implementers must not expect those changes to
+   remain backwards-compatible with the details described in this
+   document.
 
    The following two sections are a hopefully-complete list of all the
    technical changes between [XML2RFCv2] and this document, as well as
@@ -1845,7 +1853,8 @@ Table of Contents
 
    %% Represents a percent sign
 
-   Other formats are reserved for future use.
+   Other formats are reserved for future use.  Only one percent encoding
+   other than "%%" is allowed in a type string.
 
    It is an error for the type string to be empty.  For bulleted lists,
    you use the <ul> element.  For lists that have neither bullets nor
@@ -4007,6 +4016,11 @@ Table of Contents
                     December 2009,
                     <http://www.rfc-editor.org/info/rfc5741>.
 
+   [RFC5743]        Falk, A., "Definition of an Internet Research Task
+                    Force (IRTF) Document Stream", RFC 5743,
+                    DOI 10.17487/RFC5743, December 2009,
+                    <http://www.rfc-editor.org/info/rfc5743>.
+
    [RFC6068]        Duerst, M., Masinter, L., and J. Zawinski, "The
                     'mailto' URI Scheme", RFC 6068, DOI 10.17487/
                     RFC6068, October 2010,
@@ -4260,15 +4274,17 @@ A.3.  The /rfc/@consensus Attribute
 
    The consensus attribute can be used to supply this information.  The
    acceptable values are "true" (the default) and "false"; "yes" and
-   "no" from v2 are deprecated.  The effect for the various streams is:
+   "no" from v2 are deprecated.  For documents in the IRTF stream, this
+   value must be "false".
+
+   The effect of this value for the various streams is:
 
    o  "independent" and "IAB": none.
 
    o  "IETF": mention that there was an IETF consensus.
 
-   o  "IRTF": mention that there was a research group consensus (where
-      the name of the research group is extracted from the <workgroup>
-      element).
+   o  "IRTF": the text needs to describe the consensus/review as
+      described in Section 2.1 of [RFC5743].
 
 Appendix B.  The v3 Format and Processing Tools
 
