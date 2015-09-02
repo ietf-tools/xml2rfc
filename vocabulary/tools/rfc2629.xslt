@@ -8044,11 +8044,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.736 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.736 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.737 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.737 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2015/06/05 18:58:55 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/06/05 18:58:55 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2015/08/31 15:28:42 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/08/31 15:28:42 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>
@@ -8873,11 +8873,13 @@ prev: <xsl:value-of select="$prev"/>
 </xsl:template>
 
 <xsl:template name="check-no-text-content">
-  <xsl:if test="normalize-space(text())!=''">
-    <xsl:call-template name="warning">
-      <xsl:with-param name="msg">No text content allowed inside &lt;<xsl:value-of select="name(.)"/>&gt;, but found: <xsl:value-of select="text()"/></xsl:with-param>
-    </xsl:call-template>
-  </xsl:if>
+  <xsl:for-each select="text()">
+    <xsl:if test="normalize-space(.)!=''">
+      <xsl:call-template name="warning">
+        <xsl:with-param name="msg">No text content allowed inside &lt;<xsl:value-of select="local-name(..)"/>&gt;, but found: <xsl:value-of select="."/></xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:for-each>
 </xsl:template>
 
 <!-- clean up links from HTML -->
