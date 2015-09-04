@@ -545,10 +545,7 @@ the appendices for a complete description of these attributes.
    <t>
       The value ought to be either the full name or the abbreviation of one of
       the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
-      The list at the time that this document is being published is:
-      "Applications", "app", "General", "gen", "Internet", "int", "Operations
-      and Management", "ops", "Real-time Applications and Infrastructure", "rai",
-      "Routing", "rtg", "Security", "sec", "Transport", "tsv".
+      The list will be kept by the RFC Editor.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.area.contents"><!--AG-->
@@ -696,6 +693,7 @@ the appendices for a complete description of these attributes.
             document. If multiple artwork elements have the same name attribute, a processing tool might
             assume that the elements are all fragments of a single file, and the tool can
             collect those fragments for later processing.
+            See <xref target="security.considerations"/> for a discussion of possible problems with the value of this attribute.
          </t>
    </section>
 
@@ -1809,9 +1807,7 @@ the appendices for a complete description of these attributes.
       Provides an email address.
    </t>
    <t>
-      The value is expected to be the scheme-specific part of a "mailto" URI
-      (so does not include the prefix "mailto:"). See <xref target="RFC6068" x:fmt="of" x:sec="2"/> 
-      for details.
+      The value is expected to be the addr-spec defined in <xref target="RFC6068" x:fmt="of" x:sec="2"/>.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.email.contents"><!--AG-->
@@ -2156,7 +2152,7 @@ the appendices for a complete description of these attributes.
    </t>
    <t>
       Index entries generally refer to the exact place where the &lt;iref&gt; element
-      occured. An exception is the occurence as a child element of
+      occurred. An exception is the occurrence as a child element of
       &lt;<x:ref>section</x:ref>&gt;, in which case the whole section is
       considered to be relevant for that index entry. In some formats, index
       entries of this type might be displayed as range.
@@ -4835,7 +4831,7 @@ Using CDATA:
    <t>
       When this element appears in the &lt;front&gt; element of the current document,
       the title might also appear in page headers or footers. If it is long
-      (~40 characters), the "abbrev" attribute is used to specify an
+      (~40 characters), the "abbrev" attribute can be used to specify an
       abbreviated variant.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
@@ -5806,7 +5802,9 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
       considerations described in <xref target="RFC7303" x:fmt="of" x:sec="10"/>.
     </t>
     <t hangText="Interoperability considerations:">
-      N/A
+      Different implementations of this format have had interoperability issues.
+      It is not expected that publication of this application will cause those
+      implementations to be fixed.
     </t>
     <t hangText="Published specification:">
       This specification.
@@ -5835,7 +5833,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
       COMMON
     </t>
     <t hangText="Restrictions on usage:">
-      N/A
+      None
     </t>
     <t hangText="Author:">
       See Authors Section.
@@ -6304,7 +6302,7 @@ not those that are part of a sequence of resources.</t>
   For further information, refer to <eref target="http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf"/>.
 </t>
 <t>
-  For the current "Status Of This Memo" text, the submissionType attribute
+  For the current "Status of This Memo" text, the submissionType attribute
   (<xref target="element.rfc.attribute.submissionType"/>)
   determines whether a statement about "Code Components" is inserted (which is the
   case for the value "IETF", which is the default). Other values,
