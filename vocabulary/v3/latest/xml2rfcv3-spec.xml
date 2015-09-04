@@ -161,10 +161,7 @@
    <t>
       The value ought to be either the full name or the abbreviation of one of
       the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
-      The list at the time that this document is being published is:
-      "Applications", "app", "General", "gen", "Internet", "int", "Operations
-      and Management", "ops", "Real-time Applications and Infrastructure", "rai",
-      "Routing", "rtg", "Security", "sec", "Transport", "tsv".
+      The list will be kept by the RFC Editor.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.area.contents"><!--AG-->
@@ -312,6 +309,7 @@
             document. If multiple artwork elements have the same name attribute, a processing tool might
             assume that the elements are all fragments of a single file, and the tool can
             collect those fragments for later processing.
+            See <xref target="security.considerations"/> for a discussion of possible problems with the value of this attribute.
          </t>
    </section>
 
@@ -1425,9 +1423,7 @@
       Provides an email address.
    </t>
    <t>
-      The value is expected to be the scheme-specific part of a "mailto" URI
-      (so does not include the prefix "mailto:"). See <xref target="RFC6068" x:fmt="of" x:sec="2"/> 
-      for details.
+      The value is expected to be the addr-spec defined in <xref target="RFC6068" x:fmt="of" x:sec="2"/>.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.email.contents"><!--AG-->
@@ -1772,7 +1768,7 @@
    </t>
    <t>
       Index entries generally refer to the exact place where the &lt;iref&gt; element
-      occured. An exception is the occurence as a child element of
+      occurred. An exception is the occurrence as a child element of
       &lt;<x:ref>section</x:ref>&gt;, in which case the whole section is
       considered to be relevant for that index entry. In some formats, index
       entries of this type might be displayed as range.
@@ -4451,7 +4447,7 @@ Using CDATA:
    <t>
       When this element appears in the &lt;front&gt; element of the current document,
       the title might also appear in page headers or footers. If it is long
-      (~40 characters), the "abbrev" attribute is used to specify an
+      (~40 characters), the "abbrev" attribute can be used to specify an
       abbreviated variant.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
@@ -4853,5 +4849,17 @@ Using CDATA:
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>artwork</x:ref>&gt; (<xref target="element.artwork"/>).</t>
    <t anchor="element.svg.contents"><!--AG-->
-      <xref format="none" target="grammar.svg">Content model</xref>: any elements.</t>
+      <xref format="none" target="grammar.svg">Content model</xref>: this element does not have any contents.</t>
+
+   <!--svg/@TheRealDefinition-->
+   <section anchor="element.svg.attribute.TheRealDefinition" toc="exclude">
+      <name>'TheRealDefinition' attribute <em>(mandatory)</em>
+      </name>
+      <iref item="Attributes" subitem="TheRealDefinition"/>
+      <iref item="svg element" subitem="TheRealDefinition attribute"/>
+      <iref item="TheRealDefinition attribute" subitem="in svg element"/>
+      <t><!--AG-->
+         <cref anchor="element.svg.attribute.TheRealDefinition.missing">attribute description missing</cref>
+      </t>
+   </section>
 </section>

@@ -534,7 +534,7 @@ blockquote > * .bcp14 {
       <link rel="Appendix" title="B The v3 Format and Processing Tools" href="#rfc.section.B">
       <link rel="Appendix" title="C Relax NG Schema" href="#rfc.section.C">
       <link rel="Appendix" title="D Schema Differences from v2" href="#rfc.section.D">
-      <meta name="generator" content="http://greenbytes.de/tech/webdav/rfc2629.xslt, Revision 1.736, 2015/06/05 18:58:55, XSLT vendor: SAXON 6.5.5 from Michael Kay http://saxon.sf.net/">
+      <meta name="generator" content="http://greenbytes.de/tech/webdav/rfc2629.xslt, Revision 1.738, 2015/09/03 09:04:03, XSLT vendor: SAXON 6.5.5 from Michael Kay http://saxon.sf.net/">
       <link rel="schema.dct" href="http://purl.org/dc/terms/">
       <meta name="dct.creator" content="Hoffman, P.">
       <meta name="dct.identifier" content="urn:ietf:id:draft-hoffman-xml2rfc-latest">
@@ -5306,7 +5306,14 @@ Using CDATA:
             </div>
             <div id="element.svg.contents">
                <div id="rfc.section.2.67.p.3">
-                  <p> <a href="#grammar.svg" id="rfc.xref.grammar.svg.1">Content model</a>: any elements.
+                  <p> <a href="#grammar.svg" id="rfc.xref.grammar.svg.1">Content model</a>: this element does not have any contents.
+                  </p>
+               </div>
+            </div>
+            <div id="element.svg.attribute.TheRealDefinition">
+               <h4 id="rfc.section.2.67.1"><a href="#rfc.section.2.67.1">2.67.1</a>&nbsp;<a href="#element.svg.attribute.TheRealDefinition">'TheRealDefinition' attribute <em>(mandatory)</em> </a></h4>
+               <div id="rfc.section.2.67.1.p.1">
+                  <p>(This is just a placeholder until <a href="#SVGforRFCs" id="rfc.xref.SVGforRFCs.3"><cite title="SVG Drawings for RFCs: SVG 1.2 RFC">[SVGforRFCs]</cite></a> has complete RNG that can be incorporated by reference in this draft.)
                   </p>
                </div>
             </div>
@@ -7206,16 +7213,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong id="grammar.svg">svg</strong><span id="rfc.iref.s.76"></span> =
   element ns1:svg {
-    attribute xml:base { text }?,
-    attribute xml:lang { text }?,
-    attribute * { text }*,
-    anything
-  }
-
-<strong id="grammar.anything">anything</strong><span id="rfc.iref.a.21"></span> =
-  element * {
-    attribute * { text }*,
-    anything*
+    [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
+    attribute TheRealDefinition { text }*
   }
 
 <strong id="grammar.sourcecode">sourcecode</strong><span id="rfc.iref.s.77"></span> =
@@ -7458,7 +7457,7 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     empty
   }
 
-<strong id="grammar.annotation">annotation</strong><span id="rfc.iref.a.22"></span> =
+<strong id="grammar.annotation">annotation</strong><span id="rfc.iref.a.21"></span> =
   element annotation {
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
@@ -7994,7 +7993,7 @@ start = rfc
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-  }?,
++ }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -8005,7 +8004,7 @@ start = rfc
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-+ }?,
+  }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
@@ -8211,15 +8210,8 @@ start = rfc
 +   }
 + svg =
 +   element ns1:svg {
-+     attribute xml:base { text }?,
-+     attribute xml:lang { text }?,
-+     attribute * { text }*,
-+     anything
-+   }
-+ anything =
-+   element * {
-+     attribute * { text }*,
-+     anything*
++     [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
++     attribute TheRealDefinition { text }*
 +   }
 + sourcecode =
 +   element sourcecode {
@@ -8546,11 +8538,10 @@ start = rfc
                         <li>in ul element&nbsp;&nbsp;<a href="#rfc.section.2.63.1">2.63.1</a></li>
                      </ul>
                   </li>
-                  <li>annotation element&nbsp;&nbsp;<a href="#rfc.section.2.3"><b>2.3</b></a>, <a href="#rfc.iref.a.22">C</a><ul>
+                  <li>annotation element&nbsp;&nbsp;<a href="#rfc.section.2.3"><b>2.3</b></a>, <a href="#rfc.iref.a.21">C</a><ul>
                         <li>inside reference&nbsp;&nbsp;<a href="#rfc.iref.a.10">2.40</a></li>
                      </ul>
                   </li>
-                  <li>anything element&nbsp;&nbsp;<a href="#rfc.iref.a.21">C</a></li>
                   <li>application/rfc+xml Media Type&nbsp;&nbsp;<a href="#rfc.section.6.1"><b>6.1</b></a></li>
                   <li>area element&nbsp;&nbsp;<a href="#rfc.section.2.4"><b>2.4</b></a>, <a href="#rfc.iref.a.17">C</a><ul>
                         <li>inside front&nbsp;&nbsp;<a href="#rfc.iref.a.7">2.26</a></li>
@@ -8688,6 +8679,7 @@ start = rfc
                         <li>surname&nbsp;&nbsp;<a href="#rfc.section.2.7.7">2.7.7</a></li>
                         <li>symRefs&nbsp;&nbsp;<a href="#rfc.section.2.45.13">2.45.13</a></li>
                         <li>target&nbsp;&nbsp;<a href="#rfc.section.2.19.1">2.19.1</a>, <a href="#rfc.section.2.24.1">2.24.1</a>, <a href="#rfc.section.2.40.3">2.40.3</a>, <a href="#rfc.section.2.44.4">2.44.4</a>, <a href="#rfc.section.2.66.3">2.66.3</a>, <a href="#rfc.section.3.3.2">3.3.2</a></li>
+                        <li>TheRealDefinition&nbsp;&nbsp;<a href="#rfc.section.2.67.1">2.67.1</a></li>
                         <li>title&nbsp;&nbsp;<a href="#rfc.section.2.25.7">2.25.7</a>, <a href="#rfc.section.2.33.2">2.33.2</a>, <a href="#rfc.section.2.42.2">2.42.2</a>, <a href="#rfc.section.2.46.4">2.46.4</a>, <a href="#rfc.section.3.8.5">3.8.5</a></li>
                         <li>to&nbsp;&nbsp;<a href="#rfc.section.2.19.2">2.19.2</a></li>
                         <li>toc&nbsp;&nbsp;<a href="#rfc.section.2.46.5">2.46.5</a></li>
@@ -9706,9 +9698,10 @@ start = rfc
                   </li>
                   <li>svg element&nbsp;&nbsp;<a href="#rfc.section.2.67"><b>2.67</b></a>, <a href="#rfc.iref.s.76">C</a><ul>
                         <li>inside artwork&nbsp;&nbsp;<a href="#rfc.iref.s.5">2.5</a></li>
+                        <li>TheRealDefinition attribute&nbsp;&nbsp;<a href="#rfc.section.2.67.1">2.67.1</a></li>
                      </ul>
                   </li>
-                  <li><em>SVGforRFCs</em>&nbsp;&nbsp;<a href="#rfc.xref.SVGforRFCs.1">2.5</a>, <a href="#rfc.xref.SVGforRFCs.2">2.67</a>, <a href="#SVGforRFCs"><b>8.2</b></a></li>
+                  <li><em>SVGforRFCs</em>&nbsp;&nbsp;<a href="#rfc.xref.SVGforRFCs.1">2.5</a>, <a href="#rfc.xref.SVGforRFCs.2">2.67</a>, <a href="#rfc.xref.SVGforRFCs.3">2.67.1</a>, <a href="#SVGforRFCs"><b>8.2</b></a></li>
                   <li>symRefs attribute&nbsp;&nbsp;
                      <ul>
                         <li>in rfc element&nbsp;&nbsp;<a href="#rfc.section.2.45.13">2.45.13</a></li>
@@ -9790,6 +9783,11 @@ start = rfc
                   <li>thead element&nbsp;&nbsp;<a href="#rfc.section.2.59"><b>2.59</b></a>, <a href="#rfc.iref.t.46">C</a><ul>
                         <li>anchor attribute&nbsp;&nbsp;<a href="#rfc.section.2.59.1">2.59.1</a></li>
                         <li>inside table&nbsp;&nbsp;<a href="#rfc.iref.t.25">2.54</a></li>
+                     </ul>
+                  </li>
+                  <li>TheRealDefinition attribute&nbsp;&nbsp;
+                     <ul>
+                        <li>in svg element&nbsp;&nbsp;<a href="#rfc.section.2.67.1">2.67.1</a></li>
                      </ul>
                   </li>
                   <li>title attribute&nbsp;&nbsp;

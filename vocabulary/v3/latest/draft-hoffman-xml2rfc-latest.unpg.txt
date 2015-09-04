@@ -3490,7 +3490,12 @@ Table of Contents
 
    This element appears as a child element of: <artwork> (Section 2.5).
 
-   Content model: any elements.
+   Content model: this element does not have any contents.
+
+2.67.1.  'TheRealDefinition' attribute (mandatory)
+
+   (This is just a placeholder until [SVGforRFCs] has complete RNG that
+   can be incorporated by reference in this draft.)
 
 3.  Elements from v2 That Have Been Deprecated
 
@@ -5269,16 +5274,8 @@ Appendix C.  Relax NG Schema
 
    svg =
      element ns1:svg {
-       attribute xml:base { text }?,
-       attribute xml:lang { text }?,
-       attribute * { text }*,
-       anything
-     }
-
-   anything =
-     element * {
-       attribute * { text }*,
-       anything*
+       [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
+       attribute TheRealDefinition { text }*
      }
 
    sourcecode =
@@ -6054,7 +6051,7 @@ Appendix D.  Schema Differences from v2
          [ a:defaultValue = "default" ]
    -     attribute format { "counter" | "title" | "none" | "default"
    +     attribute format { "default" | "title" | "counter" | "none"
-     }?,
+   + }?,
    +     attribute derivedContent { text }?,
    +     text
    +   }
@@ -6065,7 +6062,7 @@ Appendix D.  Schema Differences from v2
    +     attribute target { xsd:IDREF },
    +     [ a:defaultValue = "of" ]
    +     attribute displayFormat { "of" | "comma" | "parens" | "bare"
-   + }?,
+     }?,
    +     (attribute section { text },
    +      attribute relative { text }?)?,
    +     attribute derivedRemoteContent { text }?,
@@ -6271,15 +6268,8 @@ Appendix D.  Schema Differences from v2
    +   }
    + svg =
    +   element ns1:svg {
-   +     attribute xml:base { text }?,
-   +     attribute xml:lang { text }?,
-   +     attribute * { text }*,
-   +     anything
-   +   }
-   + anything =
-   +   element * {
-   +     attribute * { text }*,
-   +     anything*
+   +     [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
+   +     attribute TheRealDefinition { text }*
    +   }
    + sourcecode =
    +   element sourcecode {
@@ -6588,7 +6578,6 @@ Index
          in ul element  1
       annotation element  1
          inside reference  1
-      anything element  1
       application/rfc+xml Media Type  1
       area element  1
          inside front  1
@@ -6701,6 +6690,7 @@ Index
          surname  1
          symRefs  1
          target  1
+         TheRealDefinition  1
          title  1
          to  1
          toc  1
@@ -7365,6 +7355,7 @@ Index
          in author element  1
       svg element  1
          inside artwork  1
+         TheRealDefinition attribute  1
       symRefs attribute
          in rfc element  1
 
@@ -7425,6 +7416,8 @@ Index
       thead element  1
          anchor attribute  1
          inside table  1
+      TheRealDefinition attribute
+         in svg element  1
       title attribute
          in figure element  1
          in note element  1

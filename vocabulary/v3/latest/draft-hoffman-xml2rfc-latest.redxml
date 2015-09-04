@@ -5087,7 +5087,19 @@ Using CDATA:
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; (<xref target="element.artwork"/>).</t>
    <t anchor="element.svg.contents"><!--AG-->
-      Content model: any elements.</t>
+      Content model: this element does not have any contents.</t>
+
+   <!--svg/@TheRealDefinition-->
+   <section anchor="element.svg.attribute.TheRealDefinition" toc="exclude" title="'TheRealDefinition' attribute (mandatory)">
+      
+      <iref item="Attributes" subitem="TheRealDefinition"/>
+      <iref item="svg element" subitem="TheRealDefinition attribute"/>
+      <iref item="TheRealDefinition attribute" subitem="in svg element"/>
+      <t>
+         (This is just a placeholder until <xref target="SVGforRFCs"/> has complete RNG that can be incorporated by
+         reference in this draft.)
+      </t>
+   </section>
 </section>
 
 </section>
@@ -6533,7 +6545,7 @@ is controlled by the prep tool.</t>
 
 <t>The following is the RelaxNG schema for the v3 format.</t>
 
-<figure><iref item="rfc element"/><iref item="link element"/><iref item="front element"/><iref item="title element"/><iref item="author element"/><iref item="organization element"/><iref item="address element"/><iref item="postal element"/><iref item="street element"/><iref item="city element"/><iref item="region element"/><iref item="code element"/><iref item="country element"/><iref item="postalLine element"/><iref item="phone element"/><iref item="facsimile element"/><iref item="email element"/><iref item="uri element"/><iref item="date element"/><iref item="area element"/><iref item="workgroup element"/><iref item="keyword element"/><iref item="abstract element"/><iref item="note element"/><iref item="boilerplate element"/><iref item="middle element"/><iref item="section element"/><iref item="name element"/><iref item="t element"/><iref item="aside element"/><iref item="blockquote element"/><iref item="list element"/><iref item="ol element"/><iref item="ul element"/><iref item="li element"/><iref item="dl element"/><iref item="dt element"/><iref item="dd element"/><iref item="xref element"/><iref item="relref element"/><iref item="eref element"/><iref item="iref element"/><iref item="cref element"/><iref item="tt element"/><iref item="strong element"/><iref item="em element"/><iref item="sub element"/><iref item="sup element"/><iref item="spanx element"/><iref item="vspace element"/><iref item="figure element"/><iref item="table element"/><iref item="preamble element"/><iref item="artwork element"/><iref item="svg element"/><iref item="anything element"/><iref item="sourcecode element"/><iref item="thead element"/><iref item="tbody element"/><iref item="tfoot element"/><iref item="tr element"/><iref item="td element"/><iref item="th element"/><iref item="postamble element"/><iref item="texttable element"/><iref item="ttcol element"/><iref item="c element"/><iref item="bcp14 element"/><iref item="br element"/><iref item="back element"/><iref item="displayreference element"/><iref item="references element"/><iref item="reference element"/><iref item="referencegroup element"/><iref item="seriesInfo element"/><iref item="format element"/><iref item="annotation element"/><iref item="refcontent element"/><artwork type="application/relax-ng-compact-syntax"><![CDATA[
+<figure><iref item="rfc element"/><iref item="link element"/><iref item="front element"/><iref item="title element"/><iref item="author element"/><iref item="organization element"/><iref item="address element"/><iref item="postal element"/><iref item="street element"/><iref item="city element"/><iref item="region element"/><iref item="code element"/><iref item="country element"/><iref item="postalLine element"/><iref item="phone element"/><iref item="facsimile element"/><iref item="email element"/><iref item="uri element"/><iref item="date element"/><iref item="area element"/><iref item="workgroup element"/><iref item="keyword element"/><iref item="abstract element"/><iref item="note element"/><iref item="boilerplate element"/><iref item="middle element"/><iref item="section element"/><iref item="name element"/><iref item="t element"/><iref item="aside element"/><iref item="blockquote element"/><iref item="list element"/><iref item="ol element"/><iref item="ul element"/><iref item="li element"/><iref item="dl element"/><iref item="dt element"/><iref item="dd element"/><iref item="xref element"/><iref item="relref element"/><iref item="eref element"/><iref item="iref element"/><iref item="cref element"/><iref item="tt element"/><iref item="strong element"/><iref item="em element"/><iref item="sub element"/><iref item="sup element"/><iref item="spanx element"/><iref item="vspace element"/><iref item="figure element"/><iref item="table element"/><iref item="preamble element"/><iref item="artwork element"/><iref item="svg element"/><iref item="sourcecode element"/><iref item="thead element"/><iref item="tbody element"/><iref item="tfoot element"/><iref item="tr element"/><iref item="td element"/><iref item="th element"/><iref item="postamble element"/><iref item="texttable element"/><iref item="ttcol element"/><iref item="c element"/><iref item="bcp14 element"/><iref item="br element"/><iref item="back element"/><iref item="displayreference element"/><iref item="references element"/><iref item="reference element"/><iref item="referencegroup element"/><iref item="seriesInfo element"/><iref item="format element"/><iref item="annotation element"/><iref item="refcontent element"/><artwork type="application/relax-ng-compact-syntax"><![CDATA[
 
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 namespace ns1 = "http://www.w3.org/2000/svg"
@@ -7257,16 +7269,8 @@ artwork =
 
 svg =
   element ns1:svg {
-    attribute xml:base { text }?,
-    attribute xml:lang { text }?,
-    attribute * { text }*,
-    anything
-  }
-
-anything =
-  element * {
-    attribute * { text }*,
-    anything*
+    [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
+    attribute TheRealDefinition { text }*
   }
 
 sourcecode =
@@ -8045,7 +8049,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-  }?,
++ }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -8056,7 +8060,7 @@ to the v3 schema.</t>
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-+ }?,
+  }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
@@ -8262,15 +8266,8 @@ to the v3 schema.</t>
 +   }
 + svg =
 +   element ns1:svg {
-+     attribute xml:base { text }?,
-+     attribute xml:lang { text }?,
-+     attribute * { text }*,
-+     anything
-+   }
-+ anything =
-+   element * {
-+     attribute * { text }*,
-+     anything*
++     [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
++     attribute TheRealDefinition { text }*
 +   }
 + sourcecode =
 +   element sourcecode {

@@ -5233,7 +5233,20 @@ Using CDATA:
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>artwork</x:ref>&gt; (<xref target="element.artwork"/>).</t>
    <t anchor="element.svg.contents"><!--AG-->
-      <xref format="none" target="grammar.svg">Content model</xref>: any elements.</t>
+      <xref format="none" target="grammar.svg">Content model</xref>: this element does not have any contents.</t>
+
+   <!--svg/@TheRealDefinition-->
+   <section anchor="element.svg.attribute.TheRealDefinition" toc="exclude">
+      <name>'TheRealDefinition' attribute <em>(mandatory)</em>
+      </name>
+      <iref item="Attributes" subitem="TheRealDefinition"/>
+      <iref item="svg element" subitem="TheRealDefinition attribute"/>
+      <iref item="TheRealDefinition attribute" subitem="in svg element"/>
+      <t>
+         (This is just a placeholder until <xref target="SVGforRFCs"/> has complete RNG that can be incorporated by
+         reference in this draft.)
+      </t>
+   </section>
 </section>
 <?ENDINC xml2rfcv3-spec.xml ?>
 </section>
@@ -7512,16 +7525,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
 
 <strong anchor="grammar.svg">svg</strong><iref item="svg element"/> =
   element ns1:svg {
-    attribute xml:base { text }?,
-    attribute xml:lang { text }?,
-    attribute * { text }*,
-    anything
-  }
-
-<strong anchor="grammar.anything">anything</strong><iref item="anything element"/> =
-  element * {
-    attribute * { text }*,
-    anything*
+    [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
+    attribute TheRealDefinition { text }*
   }
 
 <strong anchor="grammar.sourcecode">sourcecode</strong><iref item="sourcecode element"/> =
@@ -8300,7 +8305,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-  }?,
++ }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -8311,7 +8316,7 @@ to the v3 schema.</t>
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-+ }?,
+  }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
@@ -8517,15 +8522,8 @@ to the v3 schema.</t>
 +   }
 + svg =
 +   element ns1:svg {
-+     attribute xml:base { text }?,
-+     attribute xml:lang { text }?,
-+     attribute * { text }*,
-+     anything
-+   }
-+ anything =
-+   element * {
-+     attribute * { text }*,
-+     anything*
++     [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
++     attribute TheRealDefinition { text }*
 +   }
 + sourcecode =
 +   element sourcecode {

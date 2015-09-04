@@ -495,7 +495,7 @@
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-  }?,
++ }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -506,7 +506,7 @@
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-+ }?,
+  }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
@@ -712,15 +712,8 @@
 +   }
 + svg =
 +   element ns1:svg {
-+     attribute xml:base { text }?,
-+     attribute xml:lang { text }?,
-+     attribute * { text }*,
-+     anything
-+   }
-+ anything =
-+   element * {
-+     attribute * { text }*,
-+     anything*
++     [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
++     attribute TheRealDefinition { text }*
 +   }
 + sourcecode =
 +   element sourcecode {
