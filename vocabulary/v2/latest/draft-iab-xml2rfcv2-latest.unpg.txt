@@ -3,9 +3,9 @@
 
 Network Working Group                                         J. Reschke
 Internet-Draft                                                greenbytes
-Obsoletes: 2629 (if approved)                          September 7, 2015
+Obsoletes: 2629 (if approved)                          September 9, 2015
 Intended status: Informational
-Expires: March 10, 2016
+Expires: March 12, 2016
 
 
                    The 'XML2RFC' version 2 Vocabulary
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 10, 2016.
+   This Internet-Draft will expire on March 12, 2016.
 
 Copyright Notice
 
@@ -419,10 +419,14 @@ Table of Contents
 
 2.6.2.  'initials' attribute
 
-   Author initials (used on the front page and in references).
+   An abbreviated variant of the given name, to be used in conjunction
+   with the separately specified surname.  It usually appears on the
+   front page, in footers, and in references.
 
-   Initials should be provided as a whitespace separated list of pairs
-   of a letter and a dot.
+   Some processors will post-process the value, for instance when it
+   only contains a single letter (in which case they might add a
+   trailing dot).  Relying on this kind of post-processing can lead to
+   results varying across formatters and thus ought to be avoided.
 
 2.6.3.  'role' attribute
 
@@ -434,7 +438,9 @@ Table of Contents
 
 2.6.4.  'surname' attribute
 
-   The author's surname (used on the front page and in references).
+   The author's surname, to be used in conjunction with the separately
+   specified initials.  It usually appears on the front page, in
+   footers, and in references.
 
 2.7.  <back>
 
