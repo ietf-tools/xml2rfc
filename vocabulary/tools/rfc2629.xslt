@@ -2146,6 +2146,9 @@
             <xsl:variable name="displayname">
               <!-- surname/initials is reversed for last author except when it's the only one -->
               <xsl:choose>
+                <xsl:when test="$truncated-initials='' and @surname">
+                  <xsl:value-of select="@surname"/>
+                </xsl:when>
                 <xsl:when test="position()=last() and position()!=1">
                   <xsl:value-of select="concat($truncated-initials,' ',@surname)" />
                 </xsl:when>
@@ -8055,11 +8058,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.738 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.738 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.739 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.739 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2015/09/03 09:04:03 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/09/03 09:04:03 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2015/09/06 15:45:25 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/09/06 15:45:25 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>
@@ -8196,19 +8199,28 @@ dd, li, p {
 
 <!-- reformat contents of author/@initials -->
 <xsl:template name="format-initials">
-  <xsl:variable name="r">
-    <xsl:call-template name="t-format-initials">
-      <xsl:with-param name="remainder" select="normalize-space(@initials)"/>
-    </xsl:call-template>
-  </xsl:variable>
+  <xsl:variable name="normalized" select="normalize-space(@initials)"/>
 
-  <xsl:if test="$r!=@initials">
-    <xsl:call-template name="warning">
-      <xsl:with-param name="msg">@initials '<xsl:value-of select="@initials"/>': did you mean '<xsl:value-of select="$r"/>'?</xsl:with-param>
-    </xsl:call-template>
-  </xsl:if>
-
-  <xsl:value-of select="$r"/>
+  <xsl:choose>
+    <xsl:when test="$normalized=''">
+      <!-- nothing to do -->
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:variable name="r">
+        <xsl:call-template name="t-format-initials">
+          <xsl:with-param name="remainder" select="$normalized"/>
+        </xsl:call-template>
+      </xsl:variable>
+    
+      <xsl:if test="$r!=@initials">
+        <xsl:call-template name="warning">
+          <xsl:with-param name="msg">@initials '<xsl:value-of select="@initials"/>': did you mean '<xsl:value-of select="$r"/>'?</xsl:with-param>
+        </xsl:call-template>
+      </xsl:if>
+    
+      <xsl:value-of select="$r"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="t-format-initials">
@@ -8266,6 +8278,7 @@ prev: <xsl:value-of select="$prev"/>
 <xsl:template name="truncate-initials">
   <xsl:param name="initials"/>
   <xsl:choose>
+    <xsl:when test="normalize-space($initials)=''"/>
     <xsl:when test="$xml2rfc-multiple-initials='yes'">
       <xsl:value-of select="$initials"/>
     </xsl:when>
