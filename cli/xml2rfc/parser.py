@@ -62,7 +62,10 @@ class CachingResolver(lxml.etree.Resolver):
         self.cache_refresh_secs = (60*60*24*14) # 14 days
 
         # Get directory of source
-        self.source_dir = os.path.abspath(os.path.dirname(self.source))
+        if self.source:
+            self.source_dir = os.path.abspath(os.path.dirname(self.source))
+        else:
+            self.source_dir = None
 
         # Determine cache directories to read/write to
         self.read_caches = [ os.path.expanduser(path) for path in xml2rfc.CACHES ]
