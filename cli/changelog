@@ -1,3 +1,42 @@
+xml2rfc (2.5.1) ietf; urgency=medium
+
+  This is a bugfix maintenance release.
+
+  * Handled a situation where xml2rfc could crash if no source file name
+    was available.
+
+  From tonyh@att.com:
+  * Modified some tests to match Jim's recent changes
+
+  From ietf@augustcellars.com:
+
+  * Add the valid versions of the text files for the unicode test file.
+
+  * Fixes URIs which didn't add up.  This includes correcting code to deal
+    with the difference in unicode strings on Python 2.7 vs Python 3.4.  Build
+    the abstract when doing the indexing pass so that any references in it
+    will be included both times through Add the start of a unicode test file.
+    Fixes issue #290
+
+  * Fixed an xref generation failure: Check to see if there is text, and do
+    the right thing if there isn't.  The HTML version seems to be producing
+    adequate results.  It does an <a> element around an empty piece of text.
+    That is what was asked for.  Fixes issue #226.
+
+  * Fixed an exception on out-of-date dates.  1.  We make it an error instead
+    of a warning to have an incomplete and not this year date.  2.  We catch
+    the type exception and continue.  Fixes issue #285
+
+  * Replaced the space between the series info and the series value with a
+    non-breaking space.  Changed any slashes in the series value so that there
+    is a non-breaking zero width space following it.  If a URL is placed in
+    the series value, then it is still not going to do correct breaking on
+    this.  However this is not something that people should do.  Fixes issue
+    #296
+
+ -- Henrik Levkowetz <henrik@levkowetz.com>  19 Oct 2015 18:54:05 +0000
+
+
 xml2rfc (2.5.0) ietf; urgency=medium
 
   This release uses different installation settings than previous releases,
