@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 2629 (if approved)                          September 4, 2015
+Obsoletes: 2629 (if approved)                           December 8, 2015
 Intended status: Informational
-Expires: March 7, 2016
+Expires: June 10, 2016
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 7, 2016.
+   This Internet-Draft will expire on June 10, 2016.
 
 Copyright Notice
 
@@ -802,11 +802,14 @@ Table of Contents
 
 2.7.5.  'initials' attribute
 
-   Author initials (used on the front page and in references).
+   An abbreviated variant of the given name(s), to be used in
+   conjunction with the separately specified surname.  It usually
+   appears on the front page, in footers, and in references.
 
-   The value contains one or more initials, each followed by a period.
-   Initials should be provided as a whitespace separated list of pairs
-   of a letter and a dot.
+   Some processors will post-process the value, for instance when it
+   only contains a single letter (in which case they might add a
+   trailing dot).  Relying on this kind of post-processing can lead to
+   results varying across formatters and thus ought to be avoided.
 
 2.7.6.  'role' attribute
 
@@ -818,7 +821,9 @@ Table of Contents
 
 2.7.7.  'surname' attribute
 
-   The author's surname (used on the front page and in references).
+   The author's surname, to be used in conjunction with the separately
+   specified initials.  It usually appears on the front page, in
+   footers, and in references.
 
 2.8.  <back>
 
@@ -1859,7 +1864,7 @@ Table of Contents
 
 2.35.  <organization>
 
-   Specifies the affiliation of an author.
+   Specifies the affiliation ([RFC7322]) of an author.
 
    This information appears in both the "Author's Address" section and
    on the front page (see [RFC7322] for more information).  If the value
@@ -2745,6 +2750,8 @@ Table of Contents
    o  rnc
 
    o  xml
+
+   o  yang
 
    The RFC Editor will maintain a complete list of the preferred values
    on its web site, and that list is expected to be updated over time.
@@ -4126,11 +4133,11 @@ A.1.  The /rfc/@ipr Attribute
    NEED LEGAL ADVICE, PLEASE CONTACT A LAWYER._ For further information,
    refer to <http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf>.
 
-   For the current "Status of This Memo" text, the submissionType
-   attribute (Section 2.45.12) determines whether a statement about
-   "Code Components" is inserted (which is the case for the value
-   "IETF", which is the default).  Other values, such as "independent",
-   suppress this part of the text.
+   For the current "Copyright Notice" text, the submissionType attribute
+   (Section 2.45.12) determines whether a statement about "Code
+   Components" is inserted (which is the case for the value "IETF",
+   which is the default).  Other values, such as "independent", suppress
+   this part of the text.
 
 A.1.1.  Current Values: '*trust200902'
 
