@@ -596,10 +596,10 @@ Table of Contents
    Represents an "external" link (as specified in the "target"
    attribute).
 
-   If the element has no text content, the value of the target attribute
-   will be inserted in angle brackets (as described in [RFC3986],
-   Appendix C) and, depending on the capabilities of the output format,
-   hyperlinked.
+   If the element has no text content, the value of the "target"
+   attribute will be inserted in angle brackets (as described in
+   [RFC3986], Appendix C) and, depending on the capabilities of the
+   output format, hyperlinked.
 
    Otherwise, the text content will be used (and potentially
    hyperlinked).  Depending on output format and formatter, additional
@@ -842,7 +842,7 @@ Table of Contents
    counter will be incremented for every list item, and there is no way
    to reset the counter.
 
-   Note that this attribute functions only when the style attribute is
+   Note that this attribute functions only when the "style" attribute is
    using the "format..." syntax (Section 2.22.3); otherwise, it is
    ignored.
 
@@ -873,7 +873,7 @@ Table of Contents
 
       For lists where the items are labeled with a piece of text.
 
-      The label text is specified in the 'hangText' attribute of the <t>
+      The label text is specified in the "hangText" attribute of the <t>
       element (Section 2.38.2).
 
    "letters"
@@ -1235,7 +1235,7 @@ Table of Contents
 
 2.33.5.  'iprExtract' attribute
 
-   Identifies a single section within the document (by its 'anchor'
+   Identifies a single section within the document (by its "anchor"
    attribute) for which extraction "as-is" is explicitly allowed (this
    is only relevant for historic values of the "ipr" attribute).
 
@@ -1699,7 +1699,7 @@ Table of Contents
       the referenced element's "title" attribute; some processors also
       use the <title> child element or a <reference> target).
 
-   Not all combinations of text content, format attribute, and type of
+   Not all combinations of text content, "format" attribute, and type of
    referenced part lead to predictable results across different
    formatters.  In case this matters, the following combinations need to
    be avoided:
@@ -2096,13 +2096,13 @@ Appendix A.  Front Page ('Boilerplate') Generation
 
 A.1.  The /rfc/@category Attribute
 
-   For RFCs, the category attribute (Section 2.33.1) determines the
+   For RFCs, the "category" attribute (Section 2.33.1) determines the
    "maturity level" (see Section 4 of [RFC2026]).  The allowed values
    are "std" for "Standards Track", "bcp" for "BCP", "info" for
    "Informational", "exp" for "Experimental", and "historic" for
    "Historic".
 
-   For Internet-Drafts, the category attribute is not needed, but will
+   For Internet-Drafts, the "category" attribute is not needed, but will
    appear on the front page as "Intended Status".  Supplying this
    information can be useful to reviewers.
 
@@ -2125,7 +2125,7 @@ A.2.  The /rfc/@ipr Attribute
    NEED LEGAL ADVICE, PLEASE CONTACT A LAWYER._ For further information,
    refer to <http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf>.
 
-   For the current "Status of This Memo" text, the submissionType
+   For the current "Status of This Memo" text, the "submissionType"
    attribute (Section 2.33.9) determines whether a statement about "Code
    Components" is inserted (which is the case for the value "IETF",
    which is the default).  Other values, such as "independent", suppress
@@ -2252,8 +2252,8 @@ A.3.  The /rfc/@submissionType Attribute
    front page, and it also affects the text in the "Status Of This Memo"
    section.
 
-   For current documents, setting submissionType attribute will have the
-   following effect:
+   For current documents, setting "submissionType" attribute will have
+   the following effect:
 
    o  For RFCs, the stream name appears in the upper left corner of the
       first page (in Internet Drafts, this is either "Network Working
@@ -2272,8 +2272,9 @@ A.4.  The /rfc/@consensus Attribute
    Of This Memo" section depends on whether there was a consensus to
    publish (again, see Section 3.2.2 of [RFC5741]).
 
-   The consensus attribute ("yes"/"no", defaulting to "yes") can be used
-   to supply this information.  The effect for the various streams is:
+   The "consensus" attribute ("yes"/"no", defaulting to "yes") can be
+   used to supply this information.  The effect for the various streams
+   is:
 
    o  "independent" and "IAB": none.
 
