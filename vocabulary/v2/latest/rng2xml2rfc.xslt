@@ -64,7 +64,7 @@
 <iref item="Elements" subitem="{@name}" primary="true"/>
 <iref item="{@name} element" primary="true"/>
 
-<xsl:variable name="attributecontents" select="descendant-or-self::rng:attribute[@name]"/>
+<xsl:variable name="attributecontents" select="descendant-or-self::rng:attribute[@name and not(processing-instruction('hidden-in-prose'))]"/>
 <xsl:variable name="elementcontents" select="*[not(descendant-or-self::rng:attribute) and not(self::rng:empty)]"/>
 
 <xsl:variable name="appearsin" select="//rng:element[.//rng:ref/@name=current()/@name]"/>
