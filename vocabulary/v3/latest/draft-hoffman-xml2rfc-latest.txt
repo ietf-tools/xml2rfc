@@ -68,17 +68,18 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   5
-     1.1.  Design Criteria for the Changes in v3 . . . . . . . . . .   5
-     1.2.  Differences from v2 to v3 . . . . . . . . . . . . . . . .   6
-       1.2.1.  New Elements in v3  . . . . . . . . . . . . . . . . .   6
-       1.2.2.  New Attributes for Existing Elements  . . . . . . . .   7
-       1.2.3.  Elements and Attributes Deprecated from v2  . . . . .   8
-       1.2.4.  Additional Changes from v2  . . . . . . . . . . . . .   9
-     1.3.  Syntax Notation . . . . . . . . . . . . . . . . . . . . .  10
+     1.1.  Expected Updates to the Specification . . . . . . . . . .   5
+     1.2.  Design Criteria for the Changes in v3 . . . . . . . . . .   5
+     1.3.  Differences from v2 to v3 . . . . . . . . . . . . . . . .   6
+       1.3.1.  New Elements in v3  . . . . . . . . . . . . . . . . .   6
+       1.3.2.  New Attributes for Existing Elements  . . . . . . . .   7
+       1.3.3.  Elements and Attributes Deprecated from v2  . . . . .   8
+       1.3.4.  Additional Changes from v2  . . . . . . . . . . . . .   9
+     1.4.  Syntax Notation . . . . . . . . . . . . . . . . . . . . .  10
    2.  Elements  . . . . . . . . . . . . . . . . . . . . . . . . . .  10
      2.1.  <abstract>  . . . . . . . . . . . . . . . . . . . . . . .  11
      2.2.  <address> . . . . . . . . . . . . . . . . . . . . . . . .  11
-     2.3.  <annotation>  . . . . . . . . . . . . . . . . . . . . . .  12
+     2.3.  <annotation>  . . . . . . . . . . . . . . . . . . . . . .  11
      2.4.  <area>  . . . . . . . . . . . . . . . . . . . . . . . . .  12
      2.5.  <artwork> . . . . . . . . . . . . . . . . . . . . . . . .  13
      2.6.  <aside> . . . . . . . . . . . . . . . . . . . . . . . . .  16
@@ -104,7 +105,6 @@ Table of Contents
      2.26. <front> . . . . . . . . . . . . . . . . . . . . . . . . .  32
      2.27. <iref>  . . . . . . . . . . . . . . . . . . . . . . . . .  33
      2.28. <keyword> . . . . . . . . . . . . . . . . . . . . . . . .  34
-     2.29. <li>  . . . . . . . . . . . . . . . . . . . . . . . . . .  34
 
 
 
@@ -113,6 +113,7 @@ Hoffman                   Expires June 15, 2016                 [Page 2]
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
 
+     2.29. <li>  . . . . . . . . . . . . . . . . . . . . . . . . . .  34
      2.30. <link>  . . . . . . . . . . . . . . . . . . . . . . . . .  36
      2.31. <middle>  . . . . . . . . . . . . . . . . . . . . . . . .  37
      2.32. <name>  . . . . . . . . . . . . . . . . . . . . . . . . .  37
@@ -160,7 +161,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
      3.6.  <preamble>  . . . . . . . . . . . . . . . . . . . . . . .  78
      3.7.  <spanx> . . . . . . . . . . . . . . . . . . . . . . . . .  78
      3.8.  <texttable> . . . . . . . . . . . . . . . . . . . . . . .  79
-     3.9.  <ttcol> . . . . . . . . . . . . . . . . . . . . . . . . .  80
 
 
 
@@ -169,6 +169,7 @@ Hoffman                   Expires June 15, 2016                 [Page 3]
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
 
+     3.9.  <ttcol> . . . . . . . . . . . . . . . . . . . . . . . . .  80
      3.10. <vspace>  . . . . . . . . . . . . . . . . . . . . . . . .  81
    4.  Internationalization Considerations . . . . . . . . . . . . .  81
    5.  Security Considerations . . . . . . . . . . . . . . . . . . .  81
@@ -193,7 +194,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    Appendix C.  Relax NG Schema  . . . . . . . . . . . . . . . . . .  97
    Appendix D.  Schema Differences from v2 . . . . . . . . . . . . . 118
    Index . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 138
-
 
 
 
@@ -246,7 +246,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    "prep tool" and "formatter".
 
    Note that the vocabulary contains certain constructs that might not
-   be used when generating of the final text; however, they can provide
+   be used when generating the final text; however, they can provide
    useful data for other uses (such as index generation, populating a
    keyword database, or syntax checks).
 
@@ -255,24 +255,24 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    when talking about a specific instatiation of a format, such as an
    XML document or an HTML document that was created by an XML document.
 
-   The details (particularly any vocabularies) described in this
-   document are expected to change based on experience gained in
-   implementing the RFC production center's toolset.  Revised documents
-   will be published capturing those changes as the toolset is
-   completed.  Other implementers must not expect those changes to
-   remain backwards-compatible with the details described in this
-   document.
+1.1.  Expected Updates to the Specification
 
-   The following two sections are a hopefully-complete list of all the
-   technical changes between [XML2RFCv2] and this document, as well as
-   the design criteria for those changes.
+   Non-interoperable changes in later versions of this specification are
+   likely based on experience gained in implementing the RFC production
+   center toolset.  Revised documents will be published capturing those
+   changes as the toolset is completed.  Other implementers must not
+   expect those changes to remain backwards-compatible with the details
+   described in this document.
 
-1.1.  Design Criteria for the Changes in v3
+1.2.  Design Criteria for the Changes in v3
 
    The design criteria of the changes from v2 to v3 are:
 
    o  The intention is that starting and editing a v3 document will be
       easier than for a v2 document.
+
+   o  There will be good v2-to-v3 conversion tools for when an author
+      wants to change versions.
 
 
 
@@ -281,12 +281,9 @@ Hoffman                   Expires June 15, 2016                 [Page 5]
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
 
-   o  There will be good v2-to-v3 conversion tools for when an author
-      wants to change versions.
-
    o  There are no current plans to make v3 XML the required submission
-      representation for drafts or RFCs.  That might happen eventually,
-      but it is likely to be years away.
+      format for drafts or RFCs.  That might happen eventually, but it
+      is likely to be years away.
 
    There is a desire to keep as much of the v2 grammar as makes sense
    within the above design criteria and not to make gratuitous changes
@@ -299,13 +296,14 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    v3 is upwards compatible with v2, meaning that a v2 document is meant
    to be a valid v3 document as well.  However, some features of v2 are
    deprecated in v3 in favor of new elements.  Deprecated features are
-   listed in Section 1.2.3, and are described in [XML2RFCv2].
+   listed in Section 1.3.3, and are described in [XML2RFCv2].
 
-1.2.  Differences from v2 to v3
+1.3.  Differences from v2 to v3
 
-   The format changes in v3 are listed in the following subsections.
+   This is a a hopefully-complete list of all the technical changes
+   between [XML2RFCv2] and this document.
 
-1.2.1.  New Elements in v3
+1.3.1.  New Elements in v3
 
    o  Add <dl>, <ul>, and <ol> as new ways to make lists.  This is a
       significant change from v2 in that the child under these elements
@@ -328,6 +326,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    o  Add <boilerplate> to hold the automatically-generated boilerplate
       text.
 
+   o  Add <blockquote> to indicate a quotation as in a paragraph-like
+      format.
 
 
 
@@ -336,9 +336,6 @@ Hoffman                   Expires June 15, 2016                 [Page 6]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
-
-   o  Add <blockquote> to indicate a quotation as in a paragraph-like
-      format.
 
    o  Add <name> to sections, notes, figures, and texttables to allow
       character formatting (fixed-width font) in their titles, and to
@@ -365,7 +362,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
    o  Add <svg> to allow easy inclusion of SVG drawings in <artwork>.
 
-1.2.2.  New Attributes for Existing Elements
+1.3.2.  New Attributes for Existing Elements
 
    o  Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes
       to <rfc> to cover processor instructions (PIs) that were in v2
@@ -386,15 +383,15 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    o  Add "anchor" attributes to many block elements to allow them to be
       linked with <relref> and <xref>.
 
+   o  Add the "section", "relative", and "sectionFormat" attributes to
+      <xref>.
+
 
 
 Hoffman                   Expires June 15, 2016                 [Page 7]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
-
-   o  Add the "section", "relative", and "sectionFormat" attributes to
-      <xref>.
 
    o  Add the "numbered" and "removeInRFC" attributes to <section>.
 
@@ -412,7 +409,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
       tools that do pagination that the should try to keep the paragraph
       with the next/previous element.
 
-1.2.3.  Elements and Attributes Deprecated from v2
+1.3.3.  Elements and Attributes Deprecated from v2
 
    Deprecated elements and attributes are legacy vocabulary from v2 that
    are supported for input to v3 tools.  They are likely to be removed
@@ -431,23 +428,12 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
       table elements (<table> and the elements that can be contained
       within it).
 
-   o  Deprecate <facsimile> because it is rarely used and is not
-      actually useful; <email> is a much more useful way to get in touch
-      with authors.
+   o  Deprecate <facsimile> because it is rarely used.
 
    o  Deprecate <format> because it is not useful and has caused
       surprise for authors in the past.  If the goal is to provide a
       single URI (Uniform Resource Identifier) for a reference, use the
       "target" attribute on <reference> instead.
-
-
-
-
-
-Hoffman                   Expires June 15, 2016                 [Page 8]
-
-Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
-
 
    o  Deprecate <preamble> and <postamble> in favor of simply using <t>
       before or after the figure.  This also deprecates the "align"
@@ -455,6 +441,13 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
    o  Deprecate the "title" attribute in <section>, <note>, <figure>,
       <references>, and <texttable> in favor of the new <name>.
+
+
+
+Hoffman                   Expires June 15, 2016                 [Page 8]
+
+Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
+
 
    o  Deprecate the "alt", and "src" attributes in <figure> because they
       overlap with the attributes in <artwork>.
@@ -468,7 +461,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
       in v2.  Deprecate the "none" values for the "format" attribute in
       <xref> because it makes no sense semantically.
 
-1.2.4.  Additional Changes from v2
+1.3.4.  Additional Changes from v2
 
    o  Allow non-ASCII characters in the format; the characters that are
       actually allowed will be determined by the RFC Editor.
@@ -497,6 +490,13 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    o  In <section>, restricted the names of the anchors that can be used
       on some types of sections.
 
+   o  Made <seriesInfo> a child of <front>, and deprecated it as a child
+      of <reference>.  This also deprecates some of the attributes from
+      <rfc> and moves them into <seriesInfo>.
+
+   o  <t> now only contains non-block elements, so it no longer contains
+      <figure> elements.
+
 
 
 
@@ -505,17 +505,10 @@ Hoffman                   Expires June 15, 2016                 [Page 9]
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
 
-   o  Made <seriesInfo> a child of <front>, and deprecated it as a child
-      of <reference>.  This also deprecates some of the attributes from
-      <rfc> and moves them into <seriesInfo>.
-
-   o  <t> now only contains non-block elements, so it no longer contains
-      <figure> elements.
-
    o  Do not generate the grammar from a DTD, but instead get it
       directly from the Relax Next Generation (RNG) grammar [RNG].
 
-1.3.  Syntax Notation
+1.4.  Syntax Notation
 
    The XML vocabulary here is defined in prose, based on the Relax NG
    schema ([RNC]) contained in Appendix C (specified in Relax NG Compact
@@ -545,14 +538,21 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    whitespace.
 
    Some of the elements have attributes that are not described in this
-   section because those elements are specific to the prep tool.  People
-   writing tools to process this format should read all of the
+   section because those attributes are specific to the prep tool.
+   People writing tools to process this format should read all of the
    appendices for a complete description of these attributes.
 
    Every element in the v3 vocabulary can have an "xml:lang" attribute,
    an "xml:base" attribute, or both.  The xml:lang attribute specifies
    the language used in the element.  This is sometimes useful for
    renderers which display different fonts for ideographic characters
+   used in China and Japan.  The xml:base attribute is sometimes added
+   to an XML file when doing XML-to-XML conversion where the base file
+   has XInclude atttributes (see Appendix B.1).
+
+
+
+
 
 
 
@@ -560,10 +560,6 @@ Hoffman                   Expires June 15, 2016                [Page 10]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
-
-   used in China and Japan.  The xml:base attribute is sometimes added
-   to an XML file when doing XML-to-XML conversion where the base file
-   has XInclude atttributes (see Appendix B.1).
 
 2.1.  <abstract>
 
@@ -608,7 +604,11 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
    5.  One optional <uri> element (Section 2.64)
 
+2.3.  <annotation>
 
+   Provides additional prose augmenting a bibliographical reference.
+   This text is intended to be shown after the rest of the generated
+   reference text.
 
 
 
@@ -616,12 +616,6 @@ Hoffman                   Expires June 15, 2016                [Page 11]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
-
-2.3.  <annotation>
-
-   Provides additional prose augmenting a bibliographical reference.
-   This text is intended to be shown after the rest of the generated
-   reference text.
 
    This element appears as a child element of: <reference>
    (Section 2.40).
@@ -665,6 +659,12 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    of the IETF areas as listed on <http://www.ietf.org/iesg/area.html>.
    The list will be kept by the RFC Editor.
 
+   This element appears as a child element of: <front> (Section 2.26).
+
+   Content model: only text content.
+
+
+
 
 
 
@@ -672,10 +672,6 @@ Hoffman                   Expires June 15, 2016                [Page 12]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
-
-   This element appears as a child element of: <front> (Section 2.26).
-
-   Content model: only text content.
 
 2.5.  <artwork>
 
@@ -721,6 +717,10 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    detail in [SVGforRFCs].
 
    The above methods for inclusion of SVG art can also be used for
+   including text artwork, but using a data: URI is probably confusing
+   for text artwork.
+
+   Formatters that do pagination should attempt to keep artwork on a
 
 
 
@@ -729,10 +729,6 @@ Hoffman                   Expires June 15, 2016                [Page 13]
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
 
-   including text artwork, but using a data: URI is probably confusing
-   for text artwork.
-
-   Formatters that do pagination should attempt to keep artwork on a
    single page.  This is to prevent artwork that is split across pages
    from looking like two separate pieces of artwork.
 
@@ -774,6 +770,10 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    readers who are visually impaired, as well as those reading on
    devices that cannot show the artwork well, or at all.
 
+2.5.3.  "anchor" attribute
+
+   Document-wide unique identifier for this artwork.
+
 
 
 
@@ -784,10 +784,6 @@ Hoffman                   Expires June 15, 2016                [Page 14]
 
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
-
-2.5.3.  "anchor" attribute
-
-   Document-wide unique identifier for this artwork.
 
 2.5.4.  "height" attribute
 
@@ -817,9 +813,13 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    attribute.
 
    If no URI scheme is given in the attribute, the attribute is
-   considered to be a local file name.  Processing tools must be careful
-   to not accept dangerous values for the filename, particularly those
-   that contain absolute references outside the current directory.
+   considered to be a local file name relative to the current directory.
+   Processing tools must be careful to not accept dangerous values for
+   the filename, particularly those that contain absolute references
+   outside the current directory.  Document creators should think hard
+   before using relative URIs due to possible later problems if files
+   move around on the disk.  Also, documents should most likely use
+   explicit URI schemes whereever possible.
 
    In some cases, the prep tool may remove the "src" attribute after
    processing its value.  See [PREPTOOL] for a description of this.
@@ -854,7 +854,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    The RFC Editor will maintain a complete list of the preferred values
    on its web site, and that list is expected to be updated over time.
    Thus, a consumer of v3 XML should not cause a failure when it
-   encounters an unexpected type.
+   encounters an unexpected type or no type is specified.
 
 2.5.8.  "width" attribute
 
@@ -1663,9 +1663,9 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
 2.24.1.  "target" attribute (mandatory)
 
-   URI of the link target (see Section 3 of [RFC3986]).  This must begin
-   with a scheme name (such as "https://") and thus not be relative to
-   the URL of the current document.
+   URI of the link target ([RFC3986]).  This must begin with a scheme
+   name (such as "https://") and thus not be relative to the URL of the
+   current document.
 
 2.25.  <figure>
 
@@ -2250,8 +2250,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    Represents a phone number.
 
    The value is expected to be the scheme-specific part of a "tel" URI
-   (so does not include the prefix "tel:"), using the "global numbers"
-   syntax.  See Section 3 of [RFC3966] for details.
+   (so does not include the prefix "tel:"), using the "global-number-
+   digits" syntax.  See Section 3 of [RFC3966] for details.
 
    This element appears as a child element of: <address> (Section 2.2).
 
@@ -3272,7 +3272,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    The RFC Editor will maintain a complete list of the preferred values
    on its web site, and that list is expected to be updated over time.
    Thus, a consumer of v3 XML should not cause a failure when it
-   encounters an unexpected type.
+   encounters an unexpected type or no type is specified.
 
 2.49.  <street>
 
@@ -3993,7 +3993,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
 
    Contains a web address associated with the author.
 
-   The contents should be a valid URI (see Section 3 of [RFC3986]).
+   The contents should be a valid URI; this most likely will be an
+   "http:" or "https:" URI.
 
    This element appears as a child element of: <address> (Section 2.2).
 
@@ -4024,7 +4025,6 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
    references in the References section, to specific sections of this
    document, to specific figures, and so on.  The "target" attribute is
    required.
-
 
 
 
@@ -7735,7 +7735,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
          in figure element  31
       anchor attribute
          in abstract element  11
-         in artwork element  15
+         in artwork element  14
          in aside element  17
          in blockquote element  20
          in cref element  23
@@ -7760,7 +7760,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
          in thead element  69
          in tr element  70
          in ul element  71
-      annotation element  12, 97
+      annotation element  11, 97
          inside reference  43
       application/rfc+xml Media Type  82
       area element  12, 97
@@ -7768,7 +7768,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
       artwork element  13, 97
          align attribute  14
          alt attribute  14
-         anchor attribute  15
+         anchor attribute  14
          height attribute  15
          inside aside  16
          inside blockquote  19
@@ -7818,7 +7818,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
          abbrev  40, 69
          align  14, 31, 66, 68, 79, 81
          alt  14, 31
-         anchor  11, 15, 17, 20, 23, 26-28, 31, 36, 39, 43-45, 54, 58,
+         anchor  11, 14, 17, 20, 23, 26-28, 31, 36, 39, 43-45, 54, 58,
             63-64, 66-71, 80
          ascii  21-22, 29, 41-42, 45, 59, 69
          asciiFullname  17
@@ -8072,7 +8072,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary      December 2015
       Elements
          abstract  11, 33
          address  11, 17
-         annotation  12, 43
+         annotation  11, 43
          area  12, 33
          artwork  13, 16, 19, 25, 31, 35, 53, 65, 67
          aside  16, 53

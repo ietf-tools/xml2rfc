@@ -60,13 +60,14 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
-     1.1.  Design Criteria for the Changes in v3
-     1.2.  Differences from v2 to v3
-       1.2.1.  New Elements in v3
-       1.2.2.  New Attributes for Existing Elements
-       1.2.3.  Elements and Attributes Deprecated from v2
-       1.2.4.  Additional Changes from v2
-     1.3.  Syntax Notation
+     1.1.  Expected Updates to the Specification
+     1.2.  Design Criteria for the Changes in v3
+     1.3.  Differences from v2 to v3
+       1.3.1.  New Elements in v3
+       1.3.2.  New Attributes for Existing Elements
+       1.3.3.  Elements and Attributes Deprecated from v2
+       1.3.4.  Additional Changes from v2
+     1.4.  Syntax Notation
    2.  Elements
      2.1.  <abstract>
      2.2.  <address>
@@ -191,7 +192,7 @@ Table of Contents
    "prep tool" and "formatter".
 
    Note that the vocabulary contains certain constructs that might not
-   be used when generating of the final text; however, they can provide
+   be used when generating the final text; however, they can provide
    useful data for other uses (such as index generation, populating a
    keyword database, or syntax checks).
 
@@ -200,19 +201,16 @@ Table of Contents
    when talking about a specific instatiation of a format, such as an
    XML document or an HTML document that was created by an XML document.
 
-   The details (particularly any vocabularies) described in this
-   document are expected to change based on experience gained in
-   implementing the RFC production center's toolset.  Revised documents
-   will be published capturing those changes as the toolset is
-   completed.  Other implementers must not expect those changes to
-   remain backwards-compatible with the details described in this
-   document.
+1.1.  Expected Updates to the Specification
 
-   The following two sections are a hopefully-complete list of all the
-   technical changes between [XML2RFCv2] and this document, as well as
-   the design criteria for those changes.
+   Non-interoperable changes in later versions of this specification are
+   likely based on experience gained in implementing the RFC production
+   center toolset.  Revised documents will be published capturing those
+   changes as the toolset is completed.  Other implementers must not
+   expect those changes to remain backwards-compatible with the details
+   described in this document.
 
-1.1.  Design Criteria for the Changes in v3
+1.2.  Design Criteria for the Changes in v3
 
    The design criteria of the changes from v2 to v3 are:
 
@@ -223,8 +221,8 @@ Table of Contents
       wants to change versions.
 
    o  There are no current plans to make v3 XML the required submission
-      representation for drafts or RFCs.  That might happen eventually,
-      but it is likely to be years away.
+      format for drafts or RFCs.  That might happen eventually, but it
+      is likely to be years away.
 
    There is a desire to keep as much of the v2 grammar as makes sense
    within the above design criteria and not to make gratuitous changes
@@ -237,13 +235,14 @@ Table of Contents
    v3 is upwards compatible with v2, meaning that a v2 document is meant
    to be a valid v3 document as well.  However, some features of v2 are
    deprecated in v3 in favor of new elements.  Deprecated features are
-   listed in Section 1.2.3, and are described in [XML2RFCv2].
+   listed in Section 1.3.3, and are described in [XML2RFCv2].
 
-1.2.  Differences from v2 to v3
+1.3.  Differences from v2 to v3
 
-   The format changes in v3 are listed in the following subsections.
+   This is a a hopefully-complete list of all the technical changes
+   between [XML2RFCv2] and this document.
 
-1.2.1.  New Elements in v3
+1.3.1.  New Elements in v3
 
    o  Add <dl>, <ul>, and <ol> as new ways to make lists.  This is a
       significant change from v2 in that the child under these elements
@@ -294,7 +293,7 @@ Table of Contents
 
    o  Add <svg> to allow easy inclusion of SVG drawings in <artwork>.
 
-1.2.2.  New Attributes for Existing Elements
+1.3.2.  New Attributes for Existing Elements
 
    o  Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes
       to <rfc> to cover processor instructions (PIs) that were in v2
@@ -334,7 +333,7 @@ Table of Contents
       tools that do pagination that the should try to keep the paragraph
       with the next/previous element.
 
-1.2.3.  Elements and Attributes Deprecated from v2
+1.3.3.  Elements and Attributes Deprecated from v2
 
    Deprecated elements and attributes are legacy vocabulary from v2 that
    are supported for input to v3 tools.  They are likely to be removed
@@ -353,9 +352,7 @@ Table of Contents
       table elements (<table> and the elements that can be contained
       within it).
 
-   o  Deprecate <facsimile> because it is rarely used and is not
-      actually useful; <email> is a much more useful way to get in touch
-      with authors.
+   o  Deprecate <facsimile> because it is rarely used.
 
    o  Deprecate <format> because it is not useful and has caused
       surprise for authors in the past.  If the goal is to provide a
@@ -381,7 +378,7 @@ Table of Contents
       in v2.  Deprecate the "none" values for the "format" attribute in
       <xref> because it makes no sense semantically.
 
-1.2.4.  Additional Changes from v2
+1.3.4.  Additional Changes from v2
 
    o  Allow non-ASCII characters in the format; the characters that are
       actually allowed will be determined by the RFC Editor.
@@ -420,7 +417,7 @@ Table of Contents
    o  Do not generate the grammar from a DTD, but instead get it
       directly from the Relax Next Generation (RNG) grammar [RNG].
 
-1.3.  Syntax Notation
+1.4.  Syntax Notation
 
    The XML vocabulary here is defined in prose, based on the Relax NG
    schema ([RNC]) contained in Appendix C (specified in Relax NG Compact
@@ -450,8 +447,8 @@ Table of Contents
    whitespace.
 
    Some of the elements have attributes that are not described in this
-   section because those elements are specific to the prep tool.  People
-   writing tools to process this format should read all of the
+   section because those attributes are specific to the prep tool.
+   People writing tools to process this format should read all of the
    appendices for a complete description of these attributes.
 
    Every element in the v3 vocabulary can have an "xml:lang" attribute,
@@ -678,9 +675,13 @@ Table of Contents
    attribute.
 
    If no URI scheme is given in the attribute, the attribute is
-   considered to be a local file name.  Processing tools must be careful
-   to not accept dangerous values for the filename, particularly those
-   that contain absolute references outside the current directory.
+   considered to be a local file name relative to the current directory.
+   Processing tools must be careful to not accept dangerous values for
+   the filename, particularly those that contain absolute references
+   outside the current directory.  Document creators should think hard
+   before using relative URIs due to possible later problems if files
+   move around on the disk.  Also, documents should most likely use
+   explicit URI schemes whereever possible.
 
    In some cases, the prep tool may remove the "src" attribute after
    processing its value.  See [PREPTOOL] for a description of this.
@@ -708,7 +709,7 @@ Table of Contents
    The RFC Editor will maintain a complete list of the preferred values
    on its web site, and that list is expected to be updated over time.
    Thus, a consumer of v3 XML should not cause a failure when it
-   encounters an unexpected type.
+   encounters an unexpected type or no type is specified.
 
 2.5.8.  "width" attribute
 
@@ -1398,9 +1399,9 @@ Table of Contents
 
 2.24.1.  "target" attribute (mandatory)
 
-   URI of the link target (see Section 3 of [RFC3986]).  This must begin
-   with a scheme name (such as "https://") and thus not be relative to
-   the URL of the current document.
+   URI of the link target ([RFC3986]).  This must begin with a scheme
+   name (such as "https://") and thus not be relative to the URL of the
+   current document.
 
 2.25.  <figure>
 
@@ -1888,8 +1889,8 @@ Table of Contents
    Represents a phone number.
 
    The value is expected to be the scheme-specific part of a "tel" URI
-   (so does not include the prefix "tel:"), using the "global numbers"
-   syntax.  See Section 3 of [RFC3966] for details.
+   (so does not include the prefix "tel:"), using the "global-number-
+   digits" syntax.  See Section 3 of [RFC3966] for details.
 
    This element appears as a child element of: <address> (Section 2.2).
 
@@ -2756,7 +2757,7 @@ Table of Contents
    The RFC Editor will maintain a complete list of the preferred values
    on its web site, and that list is expected to be updated over time.
    Thus, a consumer of v3 XML should not cause a failure when it
-   encounters an unexpected type.
+   encounters an unexpected type or no type is specified.
 
 2.49.  <street>
 
@@ -3364,7 +3365,8 @@ Table of Contents
 
    Contains a web address associated with the author.
 
-   The contents should be a valid URI (see Section 3 of [RFC3986]).
+   The contents should be a valid URI; this most likely will be an
+   "http:" or "https:" URI.
 
    This element appears as a child element of: <address> (Section 2.2).
 

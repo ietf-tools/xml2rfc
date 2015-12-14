@@ -69,7 +69,7 @@ tools are described in <xref target="tools"/>. That section defines some terms
 used throughout this document, such as "prep tool" and "formatter".
 </t>
 <t>
-  Note that the vocabulary contains certain constructs that might not be used when generating of
+  Note that the vocabulary contains certain constructs that might not be used when generating
   the final text; however, they can provide useful
   data for other uses (such as index generation, populating a keyword database, or
   syntax checks).
@@ -80,16 +80,17 @@ XML and HTML. The term "representation" is used when talking about a specific in
 of a format, such as an XML document or an HTML document that was created by an XML document.
 </t>
 
+<section title="Expected Updates to the Specification">
+
 <t>
-The details (particularly any vocabularies) described in this document are expected to change based
-on experience gained in implementing the RFC production center's toolset. Revised documents will be
+Non-interoperable changes in later versions of this specification are likely based on experience gained in
+implementing the RFC production center toolset.
+Revised documents will be
 published capturing those changes as the toolset is completed. Other implementers must not expect
 those changes to remain backwards-compatible with the details described in this document.
 </t>
 
-<t>
-The following two sections are a hopefully-complete list of all the technical changes between <xref target="XML2RFCv2"/>
-and this document, as well as the design criteria for those changes.</t>
+</section>
 
 <section title="Design Criteria for the Changes in v3">
 
@@ -101,7 +102,7 @@ and this document, as well as the design criteria for those changes.</t>
 
 <t>There will be good v2-to-v3 conversion tools for when an author wants to change versions.</t>
 
-<t>There are no current plans to make v3 XML the required submission representation for drafts or
+<t>There are no current plans to make v3 XML the required submission format for drafts or
 RFCs. That might happen eventually, but it is likely to be years away.</t>
 
 </list>
@@ -123,7 +124,10 @@ and are described in <xref target="XML2RFCv2"/>.
 
 <section anchor="differences.from.v2.to.v3" title="Differences from v2 to v3">
 
-<t>The format changes in v3 are listed in the following subsections.</t>
+<t>
+This is a a hopefully-complete list of all the technical changes between <xref target="XML2RFCv2"/>
+and this document.
+</t>
 
 <section title="New Elements in v3">
 
@@ -248,8 +252,7 @@ creating pseudo-paragraph-breaks in lists, is now handled properly.</t>
 replace them with the new table elements (&lt;<xref target="element.table" format="none">table</xref>&gt; and the elements that can be
 contained within it).</t>
 
-<t>Deprecate &lt;<xref target="element.facsimile" format="none">facsimile</xref>&gt; because it is rarely used and is not actually useful;
-&lt;<xref target="element.email" format="none">email</xref>&gt; is a much more useful way to get in touch with authors.</t>
+<t>Deprecate &lt;<xref target="element.facsimile" format="none">facsimile</xref>&gt; because it is rarely used.</t>
 
 <t>Deprecate &lt;<xref target="element.format" format="none">format</xref>&gt; because it is not useful and has caused surprise for authors in the past.
 If the goal is to provide a single URI (Uniform Resource Identifier) for
@@ -326,7 +329,6 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
 
 </section>
 
-
 </section>
 
 <section anchor="syntax.notation" title="Syntax Notation">
@@ -366,7 +368,7 @@ single whitespace (except inside &lt;<xref target="element.artwork" format="none
 </t>
 
 <t>
-Some of the elements have attributes that are not described in this section because those elements
+Some of the elements have attributes that are not described in this section because those attributes
 are specific to the prep tool. People writing tools to process this format should read all of
 the appendices for a complete description of these attributes.
 </t>
@@ -699,9 +701,12 @@ the appendices for a complete description of these attributes.
          be able to handle http: and https: URIs as well. The prep tool will be able to handle reading the "src" attribute.
       </t>
       <t>
-         If no URI scheme is given in the attribute, the attribute is considered to be a local file name.
+         If no URI scheme is given in the attribute, the attribute is considered to be a local file name
+         relative to the current directory.
          Processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
+         Document creators should think hard before using relative URIs due to possible later problems if files move
+         around on the disk. Also, documents should most likely use explicit URI schemes whereever possible.
       </t>
       <t>
          In some cases, the prep tool may remove the "src" attribute after processing its value.
@@ -733,7 +738,7 @@ the appendices for a complete description of these attributes.
          </list>
             The RFC Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
-            of v3 XML should not cause a failure when it encounters an unexpected type. 
+            of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified. 
          </t>
    </section>
 
@@ -1846,7 +1851,7 @@ the appendices for a complete description of these attributes.
       <iref item="eref element" subitem="target attribute"/>
       <iref item="target attribute" subitem="in eref element"/>
       <t>
-         URI of the link target (see Section 3 of <xref target="RFC3986"/>).
+         URI of the link target (<xref target="RFC3986"/>).
          This must begin with a scheme name (such as "https://") and thus not be relative to the URL of the current document.
          </t>
    </section>
@@ -2642,7 +2647,7 @@ the appendices for a complete description of these attributes.
    </t>
    <t>
       The value is expected to be the scheme-specific part of a "tel" URI
-      (so does not include the prefix "tel:"), using the "global numbers"
+      (so does not include the prefix "tel:"), using the "global-number-digits"
       syntax. See Section 3 of <xref target="RFC3966"/> 
       for details.
    </t>
@@ -3935,7 +3940,7 @@ Using CDATA:
          </list>
             The RFC Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
-            of v3 XML should not cause a failure when it encounters an unexpected type. 
+            of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified. 
          </t>
    </section>
 </section>
@@ -4908,7 +4913,7 @@ Using CDATA:
       Contains a web address associated with the author.
    </t>
    <t>
-      The contents should be a valid URI (see Section 3 of <xref target="RFC3986"/>). 
+      The contents should be a valid URI; this most likely will be an "http:" or "https:" URI. 
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.address" format="none">address</xref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.uri.contents"><!--AG-->
