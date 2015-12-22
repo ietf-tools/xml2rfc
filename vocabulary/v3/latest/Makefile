@@ -1,8 +1,8 @@
 all: \
-	draft-hoffman-xml2rfc-latest.html \
-	draft-hoffman-xml2rfc-latest.redxml \
-	draft-hoffman-xml2rfc-latest.unpg.txt \
-	draft-hoffman-xml2rfc-latest.txt
+	draft-iab-xml2rfc-latest.html \
+	draft-iab-xml2rfc-latest.redxml \
+	draft-iab-xml2rfc-latest.unpg.txt \
+	draft-iab-xml2rfc-latest.txt
 
 TOOLS=../../tools
 
