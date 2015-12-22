@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 2629 (if approved)                          December 13, 2015
+Obsoletes: 2629 (if approved)                          December 21, 2015
 Intended status: Informational
-Expires: June 15, 2016
+Expires: June 23, 2016
 
 
                    The 'XML2RFC' version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 15, 2016.
+   This Internet-Draft will expire on June 23, 2016.
 
 Copyright Notice
 
@@ -296,7 +296,7 @@ Table of Contents
 1.3.2.  New Attributes for Existing Elements
 
    o  Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes
-      to <rfc> to cover processor instructions (PIs) that were in v2
+      to <rfc> to cover Processing Instructions (PIs) that were in v2
       that are still needed in the grammar.  Add "prepTime" to indicate
       the time that the XML went through a preparation step.  Add
       "version" to indicate the version of XML2RFC vocabulary used in
@@ -564,9 +564,9 @@ Table of Contents
    Alternatively, the "src" attribute allows referencing an external
    graphics file, such as a vector drawing in SVG or a bitmap graphic
    file, using a URI.  In this case, the textual content acts as
-   fallback for output representations that do not support graphics, and
-   thus ought to contain either a "line art" variant of the graphics, or
-   otherwise prose that describes the included image in sufficient
+   fallback for output representations that do not support graphics;
+   thus, it ought to contain either (1) a "line art" variant of the
+   graphics or (2) prose that describes the included image in sufficient
    detail.
 
    If the artwork includes either "&" or "<" characters, or the string
@@ -767,11 +767,12 @@ Table of Contents
    child element).
 
    Furthermore, the "role" attribute can be used to mark an author as
-   "editor".  This is reflected both on the front page and in
-   bibliographical references.  Note that this specification does not
-   define a precise meaning for the term "editor".
+   "editor".  This is reflected both on the front page and in the
+   "Author's Address" section, as well as in bibliographical references.
+   Note that this specification does not define a precise meaning for
+   the term "editor".
 
-   See Section "Authors vs. Contributors" of [RFCPOLICY] for more
+   See Section "Authors vs. Contributors" of [RFC7322] for more
    information.
 
    This element appears as a child element of: <front> (Section 2.26).
@@ -3845,10 +3846,10 @@ Table of Contents
 
 6.1.  Internet Media Type Registration
 
-   IANA maintains the registry of Internet media types [BCP13] at
+   IANA maintains the registry of Internet Media Types [BCP13] at
    <https://www.iana.org/assignments/media-types>.
 
-   This document updates the specification for the Internet media type
+   This document updates the specification for the Internet Media Type
    "application/rfc+xml" from the one in [XML2RFCv2].  The following is
    to be registered with IANA.
 
@@ -3859,14 +3860,14 @@ Table of Contents
    Required parameters:  There are no required parameters.
 
    Optional parameters:  "charset": This parameter has identical
-      semantics as the charset parameter of the "application/xml" media
-      type specified in Section 9.1 of [RFC7303].
+      semantics as the charset parameter of the "application/xml" Media
+      Type specified in Section 9.1 of [RFC7303].
 
    Encoding considerations:  Identical to those of "application/xml" as
       described in Section 9.1 of [RFC7303].
 
    Security considerations:  As defined in Section 5.  In addition, as
-      this media type uses the "+xml" convention, it inherits the
+      this Media Type uses the "+xml" convention, it inherits the
       security considerations described in Section 10 of [RFC7303].
 
    Interoperability considerations:  Different implementations of this
@@ -3876,7 +3877,7 @@ Table of Contents
 
    Published specification:  This specification.
 
-   Applications that use this media type:  Applications that transform
+   Applications that use this Media Type:  Applications that transform
       xml2rfc to output representations such as plain text or HTML, plus
       additional analysis tools.
 
@@ -4058,10 +4059,6 @@ Table of Contents
    [RFC7322]        Heather, H. and S. Ginoza, "RFC Style Guide",
                     RFC 7322, DOI 10.17487/RFC7322, September 2014,
                     <http://www.rfc-editor.org/info/rfc7322>.
-
-   [RFCPOLICY]      RFC Editor, "RFC Editorial Guidelines and
-                    Procedures",
-                    <https://www.rfc-editor.org/policy.html>.
 
    [RNC]            Clark, J., "RELAX NG Compact Syntax", OASIS ,
                     November 2002, <https://www.oasis-open.org/
@@ -4414,7 +4411,7 @@ B.1.  Including External Text with XInclude
    <x:include href="file://home/chris/ietf/drafts/commontext.xml"/>
 
    In general, XInclude should be used instead of ENTITY references and
-   XML Processor Instructions (PIs) that allow external inclusions.
+   XML Processing Instructions (PIs) that allow external inclusions.
 
 B.2.  Anchors and IDs
 

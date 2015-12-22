@@ -189,7 +189,7 @@ for table cells.</t>
 <t><list style="symbols">
 
 <t>Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes to &lt;<x:ref>rfc</x:ref>&gt;
-to cover processor instructions (PIs) that were in v2 that are still needed in the grammar.
+to cover Processing Instructions (PIs) that were in v2 that are still needed in the grammar.
 Add "prepTime" to indicate the time that the XML went through a preparation step.
 Add "version" to indicate the version of XML2RFC vocabulary used in the document.
 Add "scripts" to indicate which scripts are needed to render the document.
@@ -571,9 +571,9 @@ the appendices for a complete description of these attributes.
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
       file, such as a vector drawing in SVG or a bitmap graphic file, using a URI. In this case, the textual
-      content acts as fallback for output representations that do not support graphics,
-      and thus ought to contain either a "line art" variant of the graphics, or
-      otherwise prose that describes the included image in sufficient detail.
+      content acts as fallback for output representations that do not support graphics;
+      thus, it ought to contain either (1) a "line art" variant of the graphics or (2)
+      prose that describes the included image in sufficient detail.
    </t>
    <t>
       If the artwork includes either "&amp;" or "&lt;" characters, or the string "]]&gt;" those characters
@@ -861,12 +861,12 @@ the appendices for a complete description of these attributes.
    </t>
    <t>
       Furthermore, the "role" attribute can be used to mark an author as
-      "editor". This is reflected both on the front page and in bibliographical
+      "editor". This is reflected both on the front page and in the "Author's Address" section, as well as in bibliographical
       references. Note that this specification does not define a precise
       meaning for the term "editor".
    </t>
    <t>
-      See Section "Authors vs. Contributors" of <xref target="RFCPOLICY"/>
+      See Section "Authors vs. Contributors" of <xref target="RFC7322"/>
       for more information.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
@@ -5795,11 +5795,11 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
 <iref item="Media Type" subitem="application/rfc+xml" primary="true"/>
 <iref item="application/rfc+xml Media Type" primary="true"/>
 <t>
-  IANA maintains the registry of Internet media types <xref target="BCP13"/>
+  IANA maintains the registry of Internet Media Types <xref target="BCP13"/>
   at <eref target="https://www.iana.org/assignments/media-types"/>.
 </t>
 <t>
-  This document updates the specification for the Internet media type
+  This document updates the specification for the Internet Media Type
   "application/rfc+xml" from the one in <xref target="XML2RFCv2"/>. The following is to be registered with IANA.
 </t>
 <t>
@@ -5815,14 +5815,14 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
     </t>
     <t hangText="Optional parameters:">
       "charset": This parameter has identical semantics as the charset
-      parameter of the "application/xml" media type specified in <xref target="RFC7303" x:fmt="of" x:sec="9.1"/>.
+      parameter of the "application/xml" Media Type specified in <xref target="RFC7303" x:fmt="of" x:sec="9.1"/>.
     </t>
     <t hangText="Encoding considerations:">
       Identical to those of "application/xml" as described in <xref target="RFC7303" x:fmt="of" x:sec="9.1"/>.
     </t>
     <t hangText="Security considerations:">
       As defined in <xref target="security.considerations"/>. In addition, as
-      this media type uses the "+xml" convention, it inherits the security
+      this Media Type uses the "+xml" convention, it inherits the security
       considerations described in <xref target="RFC7303" x:fmt="of" x:sec="10"/>.
     </t>
     <t hangText="Interoperability considerations:">
@@ -5833,7 +5833,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
     <t hangText="Published specification:">
       This specification.
     </t>
-    <t hangText="Applications that use this media type:">
+    <t hangText="Applications that use this Media Type:">
       Applications that transform xml2rfc to output representations such
       as plain text or HTML, plus additional analysis tools.
     </t>
@@ -6167,16 +6167,6 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="7322"/>
   </reference>
   
-  <reference anchor="RFCPOLICY" target="https://www.rfc-editor.org/policy.html">
-    <front>
-      <title>RFC Editorial Guidelines and Procedures</title>
-      <author>
-        <organization>RFC Editor</organization>
-      </author>
-      <date/>
-    </front>
-  </reference>
-
   <reference anchor="RNC" target="https://www.oasis-open.org/committees/relax-ng/compact-20021121.html">
     <front>
       <title>RELAX NG Compact Syntax</title>
@@ -6693,7 +6683,7 @@ be:
 </t>
 
 <t>
-In general, XInclude should be used instead of ENTITY references and XML Processor Instructions (PIs)
+In general, XInclude should be used instead of ENTITY references and XML Processing Instructions (PIs)
 that allow external inclusions.
 </t>
 
