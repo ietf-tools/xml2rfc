@@ -3811,10 +3811,10 @@ the appendices for a complete description of these attributes.
       documents, but is out-of-scope for this specification.)
    </t>
    <t>
-      It is invalid to have multiple
-      &lt;<x:ref>seriesInfo</x:ref>&gt; elements inside the &lt;<x:ref>front</x:ref>&gt; element
-      inside the &lt;<x:ref>rfc</x:ref>&gt; element that have "name" values of "rfc", or that have
-      "name" values of "Internet-Draft", or that have both "rfc" and "Internet-Draft".
+It is invalid to have multiple &lt;<x:ref>seriesInfo</x:ref>&gt; elements inside the same &lt;<x:ref>front</x:ref>&gt;
+element containing the same "name" value.  Some combinations of &lt;<x:ref>seriesInfo</x:ref>&gt; name attribute values
+make no sense, such as having both &lt;seriesInfo name="rfc"/&gt; and &lt;seriesInfo name="Internet-Draft"/&gt;
+in the same &lt;front&gt; element.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>), and &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>; deprecated in this context).</t>
    <t anchor="element.seriesInfo.contents"><!--AG-->
@@ -3850,7 +3850,9 @@ the appendices for a complete description of these attributes.
       <iref item="seriesInfo element" subitem="name attribute"/>
       <iref item="name attribute" subitem="in seriesInfo element"/>
       <t>
-            The name of the series.
+            The name of the series. The currently-known values are "RFC", "Internet-Draft";
+            "std", "bcp", "fyi", "exp", "info", "historic"; or "DOI". The RFC Series Editor
+            may change this list in the future.
       </t>
       <t>
             Some of the values for "name" interact as follows:
@@ -3867,7 +3869,7 @@ the appendices for a complete description of these attributes.
       </t>
             <t>
         If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt;
-        element with a name of "rfc", it can also have at most one additional
+        element with a name of "RFC", it can also have at most one additional
         &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of "std", "bcp", or "fyi" to indicate
         the current status of this RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt;
         element has one of those names, the value attribute for that name MUST be the number within
@@ -3888,9 +3890,6 @@ the appendices for a complete description of these attributes.
       </t>
          </list>
       </t>
-      <t>
-      Other values might be added at a later time by the RFC Editor.
-   </t>
    </section>
 
    <!--seriesInfo/@value-->
@@ -6320,6 +6319,9 @@ not those that are part of a sequence of resources.</t>
 </references>
 
 <section title="Front Page ('Boilerplate') Generation" anchor="front.page">
+
+<t>The values listed here will be defined by the RFC Editor. Those listed here
+are believed to be the current values in use.</t>
 
 <section title="The /rfc/@ipr Attribute" anchor="attribute-ipr">
 <t>
