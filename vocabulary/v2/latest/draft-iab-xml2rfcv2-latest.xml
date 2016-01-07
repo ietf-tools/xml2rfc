@@ -71,7 +71,7 @@
   <middle>
 <section title="Introduction">
 <t>
-  This document describes version 2 ("v2") of the 'XML2RFC' vocabulary; an XML-based
+  This document describes version 2 ("v2") of the 'XML2RFC' vocabulary: an XML-based
   language ('Extensible Markup Language', <xref target="XML"/>) used for writing RFCs
   (<xref target="RFC7322"/>) and Internet-Drafts (<xref target="IDGUIDE"/>).
 </t>
@@ -81,7 +81,7 @@
 </t>
 <t>
   It obsoletes the original version ("v1") <xref target="RFC2629"/>, which
-  contained the original language definition, and which was subsequently
+  contained the original language definition and which was subsequently
   extended. Many of the changes leading to version 2 have been described in
   "Writing I-Ds and RFCs using XML (revised)" (<xref target="V1rev"/>), but
   that document has not been updated since 2008.
@@ -249,13 +249,13 @@
    <t>
       The value ought to be either the full name or the abbreviation of one of
       the IETF areas as listed on <eref target="https://www.ietf.org/iesg/area.html"/>.
-      The list at the time that this document is being published is:
+      The list at the time that this document is being published is
       "Applications and Real-Time" ("art"),
       "General" ("gen"),
       "Internet" ("int"),
       "Operations and Management ("ops"),
       "Routing" ("rtg"),
-      "Security" ("sec"),
+      "Security" ("sec"), and
       "Transport" ("tsv").
    </t>
    <t>
@@ -294,7 +294,7 @@
    </ul>
    <t>
       Note that processors differ in the handling of horizontal TAB characters
-      (some expand them, some treat them as single space) and thus these ought
+      (some expand them, some treat them as single space), and thus these ought
       to be avoided. 
    </t>
    <t>
@@ -359,7 +359,7 @@
       <t>
             When generating HTML output (<xref target="HTML"/>), current implementations copy the attribute "as is",
             thus effectively treat it as CSS pixels (see <xref target="CSS" x:fmt="of" x:sec="4.3.2" x:rel="syndata.html#length-units"/>).
-            For other output formats it is usually ignored.
+            For other output formats, it is usually ignored.
          </t>
    </section>
 
@@ -374,7 +374,7 @@
          </t>
       <t>
             This attribute generally isn't used for document generation, but it can
-            be helpful for other kinds of tools (such as automated syntax checkers
+            be helpful for other kinds of tools (such as automated syntax checkers,
             which work by extracting the source code).
          </t>
    </section>
@@ -389,7 +389,7 @@
             The URI reference of a graphics file (<xref target="RFC3986" sectionFormat="comma" section="4.1"/>).
          </t>
       <t>
-            Note that this can be a "data" URI (<xref target="RFC2397"/>) as well; in which case the graphics
+            Note that this can be a "data" URI (<xref target="RFC2397"/>) as well, in which case the graphics
             file is wholly part of the XML file.
          </t>
    </section>
@@ -429,7 +429,7 @@
       <t>
             When generating HTML output (<xref target="HTML"/>), current implementations copy the attribute "as is",
             thus effectively treat it as CSS pixels (see <xref target="CSS" x:fmt="of" x:sec="4.3.2" x:rel="syndata.html#length-units"/>).
-            For other output formats it is usually ignored.
+            For other output formats, it is usually ignored.
          </t>
    </section>
 
@@ -530,7 +530,7 @@
             on the front page, in footers, and in references.
          </t>
       <t>
-            Some processors will post-process the value, for instance when
+            Some processors will post-process the value &mdash; for instance, when
             it only contains a single letter (in which case they might add a
             trailing dot).
             Relying on this kind of post-processing can lead to results
@@ -755,7 +755,7 @@
    </t>
    <t>
       Note that in this case, month names need to match the full (English) month name 
-      ("January", "February", "March", "April", "May, "June", "July", "August",
+      ("January", "February", "March", "April", "May", "June", "July", "August",
       "September", "October", "November", or "December") in order for expiration
       calculations to work (some implementations might support additional
       formats, though).
@@ -763,7 +763,7 @@
    <t>
       In the case of bibliographic references, the date information can have prose text for the month or year.
       For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
-      non-specific months (month="Second quarter") and so on, are allowed.
+      non-specific months (month="Second quarter") and so on are allowed.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.date.contents"><!--AG-->
@@ -776,8 +776,8 @@
       <iref item="date element" subitem="day attribute"/>
       <iref item="day attribute" subitem="in date element"/>
       <t>
-            In the "boilerplate" case: the day of publication; this is a number.
-            Otherwise: an indication of the publication day, with the format
+            In the "boilerplate" case, the day of publication; this is a number.
+            Otherwise, an indication of the publication day, with the format
             not being restricted.
          </t>
    </section>
@@ -789,8 +789,8 @@
       <iref item="date element" subitem="month attribute"/>
       <iref item="month attribute" subitem="in date element"/>
       <t>
-            In the "boilerplate" case: the month of publication; this is the English name of the month.
-            Otherwise: an indication of the publication month, with the format
+            In the "boilerplate" case, the month of publication; this is the English name of the month.
+            Otherwise, an indication of the publication month, with the format
             not being restricted.
          </t>
    </section>
@@ -802,8 +802,8 @@
       <iref item="date element" subitem="year attribute"/>
       <iref item="year attribute" subitem="in date element"/>
       <t>
-            In the "boilerplate" case: the year of publication; this is a number (usually four-digit).
-            Otherwise: an indication of the publication year, with the format
+            In the "boilerplate" case, the year of publication; this is a number (usually four-digit).
+            Otherwise, an indication of the publication year, with the format
             not being restricted.
          </t>
    </section>
@@ -1054,7 +1054,7 @@
       Provides a link to an additional format variant for a reference. 
    </t>
    <t>
-      Note that these additional links are neither used in published RFCs, nor
+      Note that these additional links are neither used in published RFCs nor
       supported by all tools. If the goal is to provide a single URI for
       a reference, the "target" attribute on &lt;<x:ref>reference</x:ref>&gt;
       can be used instead.
@@ -1310,7 +1310,7 @@
       </t>
       <t>
         Note that it only affects style with variable-width labels
-        ("format..." and "hanging", see below), and it may not affect formats
+        ("format..." and "hanging"; see below), and it may not affect formats
         in which the list item text appears <em>below</em> the
         label.
       </t>
@@ -1380,7 +1380,7 @@
          </dd>
       </dl>
       <t>
-        And, finally:
+        And finally:
       </t>
       <dl hanging="false">
          <dt>
@@ -1551,7 +1551,7 @@
    </t>
    <t>
       Note that at least one &lt;<x:ref>street</x:ref>&gt; element needs
-      to be present; however formatters will handle empty values just fine.
+      to be present; however, formatters will handle empty values just fine.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.postal.contents"><!--AG-->
@@ -1720,7 +1720,7 @@
             Holds the URI for the reference.
          </t>
       <t>
-            Note that depending on the &lt;<x:ref>seriesInfo</x:ref>&gt;
+            Note that, depending on the &lt;<x:ref>seriesInfo</x:ref>&gt;
             element, a URI might not be needed, nor desirable, as it can 
             be automatically generated (for instance, for RFCs).
          </t>
@@ -1740,12 +1740,12 @@
    </t>
    <t>
       In the early days of the RFC series, there was only one "References" section per RFC. This convention
-      was later changed to group references into two sets, "Normative" and "Informative"
-      as described in <xref target="RFC7322" sectionFormat="of" section="4.8.6"/>).
+      was later changed to group references into two sets &mdash; "Normative" and "Informative" &mdash;
+      as described in <xref target="RFC7322" sectionFormat="of" section="4.8.6"/>.
       This vocabulary supports the split with the "title" attribute.
    </t>
    <t>
-      By default, the order of references is significant. Processors however
+      By default, the order of references is significant. Processors, however,
       can be instructed to sort them based on their anchor names.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
@@ -2166,7 +2166,7 @@
             Some series names might trigger specific processing (such as for
             auto-generating links, inserting descriptions such as
             "work in progress", or additional functionality like reference diagnostics).
-            Examples for IETF-related series names are:
+            Examples for IETF-related series names are
             "BCP", "FYI", "Internet-Draft", "RFC", and "STD".
       </t>
    </section>
@@ -2182,7 +2182,7 @@
             The identifier within the series specified by the "name" attribute.
       </t>
       <t>
-            For BCPs, FYIs, RFCs, and STDs this is the number within the series.
+            For BCPs, FYIs, RFCs, and STDs, this is the number within the series.
       </t>
       <t>
             For Internet-Drafts, it is the full draft name (ending with the two-digit
@@ -2255,7 +2255,7 @@
          </t>
       <t>
             According to the DTD, the default value is "preserve". Tests however
-            show that it doesn't have any effect on processing; thus this
+            show that it doesn't have any effect on processing; thus, this
             attribute will be removed in future versions of the vocabulary.
          </t>
       <t>            
@@ -2365,7 +2365,7 @@
    <iref item="Elements" subitem="texttable" primary="true"/>
    <iref item="texttable element" primary="true"/>
    <t>
-      Contains a table, consisting of an optional preamble, a header line,
+      Contains a table consisting of an optional preamble, a header line,
       rows, an optional postamble, and an optional title.
    </t>
    <t>
@@ -2451,7 +2451,7 @@
           "all" means borders around all table cells,
         </li>
          <li>
-          "full" is like "all" except no horizontal lines between table
+          "full" is like "all", except no horizontal lines between table
           rows (except below the column titles),
         </li>
          <li>
@@ -2676,9 +2676,9 @@
       of the referenced document part.
    </t>
    <t>   
-      Any element that allows the "anchor" attribute can be referenced; however
+      Any element that allows the "anchor" attribute can be referenced; however,
       there are restrictions with respect to the text content being generated.
-      For instance, a &lt;<x:ref>t</x:ref>&gt; can be a reference target, however, 
+      For instance, a &lt;<x:ref>t</x:ref>&gt; can be a reference target; however, 
       because paragraphs are not (visibly) numbered, the author will have to
       make sure that the combination of prose and contained text content
       is sufficient for a reader to understand what is being referred to.
@@ -2774,7 +2774,7 @@
          </t>
       <t>
             It's unclear what the purpose of this attribute is; processors
-            seem to ignore it and it never was documented.
+            seem to ignore it, and it never was documented.
          </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -2811,10 +2811,10 @@
 </t>
 <t>
   "&gt;" does not require escaping, unless it appears in the sequence "]]&gt;"
-  (which indicates the end of a CDATA section, see below).
+  (which indicates the end of a CDATA section; see below).
 </t>
 <t>
-  Escaping the individual characters can be a lot of work (when done manually), 
+  Escaping the individual characters can be a lot of work (when done manually) 
   and also messes up alignment in artwork. Another approach to escaping is
   to use CDATA sections (<xref target="XML" section="2.7" relative="#sec-cdata-sect" sectionFormat="comma"/>).
   Within these, no further escaping is needed, except when the "end-of-CDATA"
@@ -2913,14 +2913,14 @@
   &lt;/references>
 </artwork></figure>
 <t>
-  Note that this mechanism only works for well-formed XML fragments; thus
+  Note that this mechanism only works for well-formed XML fragments; thus,
   any plain text that would need to be escaped in XML can't be included as-is.
 </t>
 </section>
 
 <section title="Internationalization Considerations" anchor="i18n.considerations">
 <t>
-  This format is based on <xref target="XML"/>, thus does not have any
+  This format is based on <xref target="XML"/> and thus does not have any
   issues representing arbitrary Unicode <xref target="UNICODE"/> characters in text content.
 </t>
 <t>
@@ -2945,7 +2945,7 @@
 <t>
   Furthermore, the nature of XML, plus vocabulary features such as typed artwork,
   make it attractive to extract content from documents for further
-  processing, such for the purpose of checking syntax, or computing/verifying
+  processing, such for the purpose of checking syntax or computing/verifying
   examples. In the latter case, care needs to be taken that only trusted
   content is processed.
 </t>
@@ -3019,7 +3019,7 @@
       <dd>As specified for "application/xml" in <xref target="RFC7303" sectionFormat="of" section="9.1"/>.</dd>
 
       <dt>File extension(s):</dt>
-      <dd>.xml or .rfcxml when disambiguation from other XML files is needed</dd>
+      <dd>.xml or .rfcxml when disambiguation from other XML files is needed.</dd>
 
       <dt>Macintosh file type code(s):</dt>
       <dd>TEXT</dd>
@@ -3033,7 +3033,7 @@
   <dd>COMMON</dd>
 
   <dt>Restrictions on usage:</dt>
-  <dd>None</dd>
+  <dd>None.</dd>
 
   <dt>Author:</dt>
   <dd>See Authors Section.</dd>
@@ -3469,8 +3469,8 @@
 <aside>
   <t>
     <strong>Note:</strong> some variations of the boilerplate are selected based
-    on the document's date; therefore it is important to specify the "year",
-    "month" and "day" attributes of the &lt;<x:ref>date</x:ref>&gt; element
+    on the document's date; therefore, it is important to specify the "year",
+    "month", and "day" attributes of the &lt;<x:ref>date</x:ref>&gt; element
     when archiving the XML source of an Internet-Draft on the day of submission.
   </t>
 </aside>
@@ -3501,7 +3501,7 @@
   of these documents.
 </t>
 <t>  
-  Formatters will automatically produce the "correct" text depending on the
+  Formatters will automatically produce the "correct" text, depending on the
   document's date information (see above):
 </t>
 <texttable align="left">
@@ -3607,7 +3607,7 @@
 <iref item="ipr attribute" subitem="'*trust200811'"/>
 <t>
   The attribute values "<x:span anchor="attribute-ipr-trust200811">trust200811</x:span>",
-  "<x:span anchor="attribute-ipr-noModificationTrust200811">noModificationTrust200811</x:span>" and
+  "<x:span anchor="attribute-ipr-noModificationTrust200811">noModificationTrust200811</x:span>", and
   "<x:span anchor="attribute-ipr-noDerivativesTrust200811">noDerivativesTrust200811</x:span>"
   are similar to their "trust200902" counterparts, except that they use text
   specified in <xref target="TLP1.0"/>.
@@ -3618,7 +3618,7 @@
 <iref item="ipr attribute" subitem="'*3978'"/>
 <t>
   The attribute values "<x:span anchor="attribute-ipr-full3978">full3978</x:span>",
-  "<x:span anchor="attribute-ipr-noModification3978">noModification3978</x:span>" and
+  "<x:span anchor="attribute-ipr-noModification3978">noModification3978</x:span>", and
   "<x:span anchor="attribute-ipr-noDerivatives3978">noDerivatives3978</x:span>"
   are similar to their counterparts above, except that they use text
   specified in <xref target="RFC3978" section="5" sectionFormat="of"/>.
@@ -3629,7 +3629,7 @@
 <iref item="ipr attribute" subitem="'*3667'"/>
 <t>
   The attribute values "<x:span anchor="attribute-ipr-full3667">full3667</x:span>",
-  "<x:span anchor="attribute-ipr-noModification3667">noModification3667</x:span>" and
+  "<x:span anchor="attribute-ipr-noModification3667">noModification3667</x:span>", and
   "<x:span anchor="attribute-ipr-noDerivatives3667">noDerivatives3667</x:span>"
   are similar to their counterparts above, except that they use text
   specified in <xref target="RFC3667" section="5" sectionFormat="of"/>.
@@ -3678,7 +3678,7 @@
 <ul>
   <li>
     For RFCs, the stream name appears in the upper left corner of the 
-    first page (in Internet Drafts, this is either "Network Working Group",
+    first page (in Internet Drafts, this is either "Network Working Group"
     or the value of the &lt;<x:ref>workgroup</x:ref>&gt; element).
   </li>
   <li>

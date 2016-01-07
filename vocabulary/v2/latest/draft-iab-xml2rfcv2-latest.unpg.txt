@@ -137,7 +137,7 @@ Table of Contents
 
 1.  Introduction
 
-   This document describes version 2 ("v2") of the 'XML2RFC' vocabulary;
+   This document describes version 2 ("v2") of the 'XML2RFC' vocabulary:
    an XML-based language ('Extensible Markup Language', [XML]) used for
    writing RFCs ([RFC7322]) and Internet-Drafts ([IDGUIDE]).
 
@@ -146,10 +146,10 @@ Table of Contents
    2014.
 
    It obsoletes the original version ("v1") [RFC2629], which contained
-   the original language definition, and which was subsequently
-   extended.  Many of the changes leading to version 2 have been
-   described in "Writing I-Ds and RFCs using XML (revised)" ([V1rev]),
-   but that document has not been updated since 2008.
+   the original language definition and which was subsequently extended.
+   Many of the changes leading to version 2 have been described in
+   "Writing I-Ds and RFCs using XML (revised)" ([V1rev]), but that
+   document has not been updated since 2008.
 
    Processing Instructions (Section 2.6 of [XML]) generally are specific
    to a given processor, and thus are not considered to be part of the
@@ -244,10 +244,10 @@ Table of Contents
 
    The value ought to be either the full name or the abbreviation of one
    of the IETF areas as listed on <https://www.ietf.org/iesg/area.html>.
-   The list at the time that this document is being published is:
+   The list at the time that this document is being published is
    "Applications and Real-Time" ("art"), "General" ("gen"), "Internet"
    ("int"), "Operations and Management ("ops"), "Routing" ("rtg"),
-   "Security" ("sec"), "Transport" ("tsv").
+   "Security" ("sec"), and "Transport" ("tsv").
 
    Note that the set of IETF areas can change over time; for instance,
    "Application and Real-Time" ("art") replaced "Applications" ("app")
@@ -279,7 +279,7 @@ Table of Contents
    o  protocol unit diagrams.
 
    Note that processors differ in the handling of horizontal TAB
-   characters (some expand them, some treat them as single space) and
+   characters (some expand them, some treat them as single space), and
    thus these ought to be avoided.
 
    Alternatively, the "src" attribute allows referencing an external
@@ -323,7 +323,7 @@ Table of Contents
 
    When generating HTML output ([HTML]), current implementations copy
    the attribute "as is", thus effectively treat it as CSS pixels (see
-   Section 4.3.2 of [CSS]).  For other output formats it is usually
+   Section 4.3.2 of [CSS]).  For other output formats, it is usually
    ignored.
 
 2.5.4.  "name" Attribute
@@ -333,13 +333,13 @@ Table of Contents
 
    This attribute generally isn't used for document generation, but it
    can be helpful for other kinds of tools (such as automated syntax
-   checkers which work by extracting the source code).
+   checkers, which work by extracting the source code).
 
 2.5.5.  "src" Attribute
 
    The URI reference of a graphics file ([RFC3986], Section 4.1).
 
-   Note that this can be a "data" URI ([RFC2397]) as well; in which case
+   Note that this can be a "data" URI ([RFC2397]) as well, in which case
    the graphics file is wholly part of the XML file.
 
 2.5.6.  "type" Attribute
@@ -363,7 +363,7 @@ Table of Contents
 
    When generating HTML output ([HTML]), current implementations copy
    the attribute "as is", thus effectively treat it as CSS pixels (see
-   Section 4.3.2 of [CSS]).  For other output formats it is usually
+   Section 4.3.2 of [CSS]).  For other output formats, it is usually
    ignored.
 
 2.5.8.  "xml:space" Attribute
@@ -425,7 +425,7 @@ Table of Contents
    conjunction with the separately specified surname.  It usually
    appears on the front page, in footers, and in references.
 
-   Some processors will post-process the value, for instance when it
+   Some processors will post-process the value -- for instance, when it
    only contains a single letter (in which case they might add a
    trailing dot).  Relying on this kind of post-processing can lead to
    results varying across formatters and thus ought to be avoided.
@@ -549,7 +549,7 @@ Table of Contents
    with that date.
 
    Note that in this case, month names need to match the full (English)
-   month name ("January", "February", "March", "April", "May, "June",
+   month name ("January", "February", "March", "April", "May", "June",
    "July", "August", "September", "October", "November", or "December")
    in order for expiration calculations to work (some implementations
    might support additional formats, though).
@@ -557,7 +557,7 @@ Table of Contents
    In the case of bibliographic references, the date information can
    have prose text for the month or year.  For example, vague dates
    (year="ca. 2000"), date ranges (year="2012-2013"), non-specific
-   months (month="Second quarter") and so on, are allowed.
+   months (month="Second quarter") and so on are allowed.
 
    This element appears as a child element of <front> (Section 2.19).
 
@@ -565,20 +565,20 @@ Table of Contents
 
 2.13.1.  "day" Attribute
 
-   In the "boilerplate" case: the day of publication; this is a number.
-   Otherwise: an indication of the publication day, with the format not
+   In the "boilerplate" case, the day of publication; this is a number.
+   Otherwise, an indication of the publication day, with the format not
    being restricted.
 
 2.13.2.  "month" Attribute
 
-   In the "boilerplate" case: the month of publication; this is the
-   English name of the month.  Otherwise: an indication of the
+   In the "boilerplate" case, the month of publication; this is the
+   English name of the month.  Otherwise, an indication of the
    publication month, with the format not being restricted.
 
 2.13.3.  "year" Attribute
 
-   In the "boilerplate" case: the year of publication; this is a number
-   (usually four-digit).  Otherwise: an indication of the publication
+   In the "boilerplate" case, the year of publication; this is a number
+   (usually four-digit).  Otherwise, an indication of the publication
    year, with the format not being restricted.
 
 2.14.  <email>
@@ -713,7 +713,7 @@ Table of Contents
 
    Provides a link to an additional format variant for a reference.
 
-   Note that these additional links are neither used in published RFCs,
+   Note that these additional links are neither used in published RFCs
    nor supported by all tools.  If the goal is to provide a single URI
    for a reference, the "target" attribute on <reference> can be used
    instead.
@@ -855,7 +855,7 @@ Table of Contents
    characters.
 
    Note that it only affects style with variable-width labels
-   ("format..." and "hanging", see below), and it may not affect formats
+   ("format..." and "hanging"; see below), and it may not affect formats
    in which the list item text appears _below_ the label.
 
 2.22.3.  "style" Attribute
@@ -897,7 +897,7 @@ Table of Contents
       (some implementations allow overriding the default using a
       Processing Instruction).
 
-   And, finally:
+   And finally:
 
    "format ..."
 
@@ -988,7 +988,7 @@ Table of Contents
 
    Contains child elements providing postal information.
 
-   Note that at least one <street> element needs to be present; however
+   Note that at least one <street> element needs to be present; however,
    formatters will handle empty values just fine.
 
    This element appears as a child element of <address> (Section 2.2).
@@ -1092,7 +1092,7 @@ Table of Contents
 
    Holds the URI for the reference.
 
-   Note that depending on the <seriesInfo> element, a URI might not be
+   Note that, depending on the <seriesInfo> element, a URI might not be
    needed, nor desirable, as it can be automatically generated (for
    instance, for RFCs).
 
@@ -1102,12 +1102,12 @@ Table of Contents
 
    In the early days of the RFC series, there was only one "References"
    section per RFC.  This convention was later changed to group
-   references into two sets, "Normative" and "Informative" as described
-   in Section 4.8.6 of [RFC7322]).  This vocabulary supports the split
-   with the "title" attribute.
+   references into two sets -- "Normative" and "Informative" -- as
+   described in Section 4.8.6 of [RFC7322].  This vocabulary supports
+   the split with the "title" attribute.
 
-   By default, the order of references is significant.  Processors
-   however can be instructed to sort them based on their anchor names.
+   By default, the order of references is significant.  Processors,
+   however, can be instructed to sort them based on their anchor names.
 
    This element appears as a child element of <back> (Section 2.7).
 
@@ -1370,14 +1370,14 @@ Table of Contents
    Some series names might trigger specific processing (such as for
    auto-generating links, inserting descriptions such as "work in
    progress", or additional functionality like reference diagnostics).
-   Examples for IETF-related series names are: "BCP", "FYI", "Internet-
+   Examples for IETF-related series names are "BCP", "FYI", "Internet-
    Draft", "RFC", and "STD".
 
 2.35.2.  "value" Attribute (Mandatory)
 
    The identifier within the series specified by the "name" attribute.
 
-   For BCPs, FYIs, RFCs, and STDs this is the number within the series.
+   For BCPs, FYIs, RFCs, and STDs, this is the number within the series.
 
    For Internet-Drafts, it is the full draft name (ending with the two-
    digit version number).
@@ -1413,7 +1413,7 @@ Table of Contents
    Determines whitespace handling.
 
    According to the DTD, the default value is "preserve".  Tests however
-   show that it doesn't have any effect on processing; thus this
+   show that it doesn't have any effect on processing; thus, this
    attribute will be removed in future versions of the vocabulary.
 
    See also Section 2.10 of [XML].
@@ -1475,7 +1475,7 @@ Table of Contents
 
 2.39.  <texttable>
 
-   Contains a table, consisting of an optional preamble, a header line,
+   Contains a table consisting of an optional preamble, a header line,
    rows, an optional postamble, and an optional title.
 
    The number of columns in the table is determined by the number of
@@ -1525,8 +1525,8 @@ Table of Contents
 
    o  "all" means borders around all table cells,
 
-   o  "full" is like "all" except no horizontal lines between table rows
-      (except below the column titles),
+   o  "full" is like "all", except no horizontal lines between table
+      rows (except below the column titles),
 
    o  "headers" adds just a separator between column titles and rows,
       and
@@ -1661,11 +1661,12 @@ Table of Contents
    element type) of the referenced document part.
 
    Any element that allows the "anchor" attribute can be referenced;
-   however there are restrictions with respect to the text content being
-   generated.  For instance, a <t> can be a reference target, however,
-   because paragraphs are not (visibly) numbered, the author will have
-   to make sure that the combination of prose and contained text content
-   is sufficient for a reader to understand what is being referred to.
+   however, there are restrictions with respect to the text content
+   being generated.  For instance, a <t> can be a reference target;
+   however, because paragraphs are not (visibly) numbered, the author
+   will have to make sure that the combination of prose and contained
+   text content is sufficient for a reader to understand what is being
+   referred to.
 
    This element appears as a child element of <annotation>
    (Section 2.3), <c> (Section 2.8), <postamble> (Section 2.28),
@@ -1729,7 +1730,7 @@ Table of Contents
    Unused.
 
    It's unclear what the purpose of this attribute is; processors seem
-   to ignore it and it never was documented.
+   to ignore it, and it never was documented.
 
    Allowed values:
 
@@ -1752,10 +1753,10 @@ Table of Contents
    substituted by "&lt;" and "&amp;" (see Section 4.6 of [XML]).
 
    ">" does not require escaping, unless it appears in the sequence
-   "]]>" (which indicates the end of a CDATA section, see below).
+   "]]>" (which indicates the end of a CDATA section; see below).
 
    Escaping the individual characters can be a lot of work (when done
-   manually), and also messes up alignment in artwork.  Another approach
+   manually) and also messes up alignment in artwork.  Another approach
    to escaping is to use CDATA sections ([XML], Section 2.7).  Within
    these, no further escaping is needed, except when the "end-of-CDATA"
    marker needs to be used (in that case, the CDATA section needs to be
@@ -1834,12 +1835,12 @@ Table of Contents
      </references>
 
    Note that this mechanism only works for well-formed XML fragments;
-   thus any plain text that would need to be escaped in XML can't be
+   thus, any plain text that would need to be escaped in XML can't be
    included as-is.
 
 6.  Internationalization Considerations
 
-   This format is based on [XML], thus does not have any issues
+   This format is based on [XML] and thus does not have any issues
    representing arbitrary Unicode [UNICODE] characters in text content.
 
    However, the current canonical RFC format is restricted to US-ASCII
@@ -1858,7 +1859,7 @@ Table of Contents
 
    Furthermore, the nature of XML, plus vocabulary features such as
    typed artwork, make it attractive to extract content from documents
-   for further processing, such for the purpose of checking syntax, or
+   for further processing, such for the purpose of checking syntax or
    computing/verifying examples.  In the latter case, care needs to be
    taken that only trusted content is processed.
 
@@ -1918,7 +1919,7 @@ Table of Contents
          9.1 of [RFC7303].
 
       File extension(s):  .xml or .rfcxml when disambiguation from other
-         XML files is needed
+         XML files is needed.
 
       Macintosh file type code(s):  TEXT
 
@@ -1927,7 +1928,7 @@ Table of Contents
 
    Intended usage:  COMMON
 
-   Restrictions on usage:  None
+   Restrictions on usage:  None.
 
    Author:  See Authors Section.
 
@@ -2130,8 +2131,8 @@ A.2.  The /rfc/@ipr Attribute
    with old source files.
 
       *Note:* some variations of the boilerplate are selected based on
-      the document's date; therefore it is important to specify the
-      "year", "month" and "day" attributes of the <date> element when
+      the document's date; therefore, it is important to specify the
+      "year", "month", and "day" attributes of the <date> element when
       archiving the XML source of an Internet-Draft on the day of
       submission.
 
@@ -2156,8 +2157,8 @@ A.2.1.  Current Values: '*trust200902'
    information).  The actual text is located in Section 6 ("Text To Be
    Included in IETF Documents") of these documents.
 
-   Formatters will automatically produce the "correct" text depending on
-   the document's date information (see above):
+   Formatters will automatically produce the "correct" text, depending
+   on the document's date information (see above):
 
    +----------+--------------------------------+
    | TLP      | starting with publication date |
@@ -2226,19 +2227,19 @@ A.2.2.  Historic Values
 
 A.2.2.1.  Historic Values: '*trust200811'
 
-   The attribute values "trust200811", "noModificationTrust200811" and
+   The attribute values "trust200811", "noModificationTrust200811", and
    "noDerivativesTrust200811" are similar to their "trust200902"
    counterparts, except that they use text specified in [TLP1.0].
 
 A.2.2.2.  Historic Values: '*3978'
 
-   The attribute values "full3978", "noModification3978" and
+   The attribute values "full3978", "noModification3978", and
    "noDerivatives3978" are similar to their counterparts above, except
    that they use text specified in Section 5 of [RFC3978].
 
 A.2.2.3.  Historic Values: '*3667'
 
-   The attribute values "full3667", "noModification3667" and
+   The attribute values "full3667", "noModification3667", and
    "noDerivatives3667" are similar to their counterparts above, except
    that they use text specified in Section 5 of [RFC3667].
 
@@ -2274,7 +2275,7 @@ A.3.  The /rfc/@submissionType Attribute
 
    o  For RFCs, the stream name appears in the upper left corner of the
       first page (in Internet Drafts, this is either "Network Working
-      Group", or the value of the <workgroup> element).
+      Group" or the value of the <workgroup> element).
 
    o  For RFCs, if affects the whole "Status Of This Memo" section (see
       Section 3.2.2 of [RFC5741]).
