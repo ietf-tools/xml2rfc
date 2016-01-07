@@ -83,7 +83,7 @@
 <xsl:if test="$appearsin">
   <t>
     <xsl:comment>AG</xsl:comment>
-    <xsl:text>This element appears as a child element of: </xsl:text>
+    <xsl:text>This element appears as a child element of </xsl:text>
     <xsl:variable name="name" select="@name"/>
     <xsl:for-each select="$appearsin">
       <xsl:sort select="@name"/>
@@ -93,7 +93,10 @@
       <xref target="element.{@name}"/>
       <xsl:if test=".//rng:ref[@name=$name]/processing-instruction('deprecated')">; deprecated in this context</xsl:if>
       <xsl:text>)</xsl:text>
-      <xsl:if test="position() != last()">, </xsl:if>
+      <xsl:if test="position() != last()">
+        <xsl:if test="count($appearsin) > 2">,</xsl:if>
+        <xsl:text> </xsl:text>
+      </xsl:if>
       <xsl:if test="position() = last() -1">and </xsl:if>
     </xsl:for-each>
     <xsl:text>.</xsl:text>
@@ -201,7 +204,7 @@
   <xsl:variable name="elem" select="ancestor::rng:element"/>
   <xsl:variable name="anchor" select="concat('element.',$elem/@name,'.attribute.',translate(@name,':','-'))"/>
   <xsl:variable name="pf">
-    <xsl:if test="not(parent::rng:optional)"> (mandatory)</xsl:if>
+    <xsl:if test="not(parent::rng:optional)"> (Mandatory)</xsl:if>
   </xsl:variable>
   
   <xsl:text>&#10;&#10;</xsl:text>
@@ -210,7 +213,7 @@
   <section anchor="{$anchor}" toc="exclude">
     <xsl:choose>
       <xsl:when test="$voc='v3'">
-        <name>"<xsl:value-of select="@name"/>" attribute<xsl:if test="$pf!=''"><xsl:text> </xsl:text><em>(mandatory)</em></xsl:if></name>
+        <name>"<xsl:value-of select="@name"/>" Attribute<xsl:if test="$pf!=''"><xsl:text> </xsl:text><em><xsl:value-of select="$pf"/></em></xsl:if></name>
       </xsl:when>
       <xsl:otherwise>
         <xsl:attribute name="title">

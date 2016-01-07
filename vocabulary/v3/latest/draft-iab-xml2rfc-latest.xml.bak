@@ -3444,25 +3444,6 @@ the appendices for a complete description of these attributes.
             Represents the Intellectual Property status of the document.
             See <xref target="attribute-ipr"/> for details.
          </t>
-      <t><!--AG-->Allowed values:</t>
-      <ul><!--AG-->
-         <li>"full2026"</li>
-         <li>"noDerivativeWorks2026"</li>
-         <li>"none"</li>
-         <li>"full3667"</li>
-         <li>"noModification3667"</li>
-         <li>"noDerivatives3667"</li>
-         <li>"full3978"</li>
-         <li>"noModification3978"</li>
-         <li>"noDerivatives3978"</li>
-         <li>"trust200811"</li>
-         <li>"noModificationTrust200811"</li>
-         <li>"noDerivativesTrust200811"</li>
-         <li>"trust200902"</li>
-         <li>"noModificationTrust200902"</li>
-         <li>"noDerivativesTrust200902"</li>
-         <li>"pre5378Trust200902"</li>
-      </ul>
    </section>
 
    <!--rfc/@iprExtract-->
@@ -3868,7 +3849,8 @@ in the same &lt;front&gt; element.
             <t>
          If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt;
          element with a name of "Internet-Draft", it can also have at most one additional
-         &lt;<x:ref>seriesInfo</x:ref>&gt; element with a "status" attribute whose value is of "std", "bcp", "fyi", "info", "exp", or
+         &lt;<x:ref>seriesInfo</x:ref>&gt; element with a "status" attribute whose value is of
+         "standard", "full-standard", "bcp", "fyi", "informational", "experimental", or
          "historic" to indicate the intended status of this Internet Draft, if it were to be later
          published as an RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt; element has
          one of those statuses, the name MUST be "".
@@ -3876,7 +3858,7 @@ in the same &lt;front&gt; element.
             <t>
         If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt;
         element with a name of "RFC", it can also have at most one additional
-        &lt;<x:ref>seriesInfo</x:ref>&gt; element with a "status" attribute whose value is of "std", "bcp", or "fyi" to indicate
+        &lt;<x:ref>seriesInfo</x:ref>&gt; element with a "status" attribute whose value is of "full-standard", "bcp", or "fyi" to indicate
         the current status of this RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt;
         element has one of those statuses, the value attribute for that name MUST be the number within
         that series. That &lt;<x:ref>front</x:ref>&gt; element might also contain an additional
@@ -3889,12 +3871,37 @@ in the same &lt;front&gt; element.
          element that has the name "RFC". 
       </t>
             <t>
-         The &lt;<x:ref>seriesInfo</x:ref>&gt; can contain the DOI for the referenced document.  This MUST NOT be used when &lt;<x:ref>seriesInfo</x:ref>&gt;
+         The &lt;<x:ref>seriesInfo</x:ref>&gt; can contain the DOI for the referenced document.
+         This MUST NOT be used when &lt;<x:ref>seriesInfo</x:ref>&gt;
          element is an eventual child element of a &lt;<x:ref>rfc</x:ref>&gt; element,
          only as an enventual child of a &lt;<x:ref>reference</x:ref>&gt; element.
          The value attribute should use the form specified in <xref target="DOI"/>.
       </t>
          </list>
+      </t>
+   </section>
+
+   <!--seriesInfo/@status-->
+   <section anchor="element.seriesInfo.attribute.status" toc="exclude">
+      <name>"status" attribute</name>
+      <iref item="Attributes" subitem="status"/>
+      <iref item="seriesInfo element" subitem="status attribute"/>
+      <iref item="status attribute" subitem="in seriesInfo element"/>
+      <t>
+         The status of this document. The currently-known values are "standard", "informational", "experimental", "bcp", "fyi", and "full-standard".
+         The RFC Series Editor may change this list in the future.
+      </t>
+   </section>
+
+   <!--seriesInfo/@stream-->
+   <section anchor="element.seriesInfo.attribute.stream" toc="exclude">
+      <name>"stream" attribute</name>
+      <iref item="Attributes" subitem="stream"/>
+      <iref item="seriesInfo element" subitem="stream attribute"/>
+      <iref item="stream attribute" subitem="in seriesInfo element"/>
+      <t>
+         The stream that originated of this document. The currently-known values are "iesg", "iab", "ise", and "irtf".
+         The RFC Series Editor may change this list in the future.
       </t>
    </section>
 
@@ -6865,24 +6872,7 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     [ a:defaultValue = "false" ]
     attribute consensus { "no" | "yes" | "false" | "true" }?,
     attribute seriesNo { text }?,
-    attribute ipr {
-      "full2026"
-      | "noDerivativeWorks2026"
-      | "none"
-      | "full3667"
-      | "noModification3667"
-      | "noDerivatives3667"
-      | "full3978"
-      | "noModification3978"
-      | "noDerivatives3978"
-      | "trust200811"
-      | "noModificationTrust200811"
-      | "noDerivativesTrust200811"
-      | "trust200902"
-      | "noModificationTrust200902"
-      | "noDerivativesTrust200902"
-      | "pre5378Trust200902"
-    }?,
+    attribute ipr { text }?,
     attribute iprExtract { xsd:IDREF }?,
     [ a:defaultValue = "IETF" ]
     attribute submissionType {
@@ -7801,6 +7791,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     attribute value { text },
     attribute asciiName { text }?,
     attribute asciiValue { text }?,
+    attribute status { text }?,
+    attribute stream { text }?,
     empty
   }
 
@@ -7873,24 +7865,25 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "false" ]
 +     attribute consensus { "no" | "yes" | "false" | "true" }?,
       attribute seriesNo { text }?,
-      attribute ipr {
-        "full2026"
-        | "noDerivativeWorks2026"
-        | "none"
-        | "full3667"
-        | "noModification3667"
-        | "noDerivatives3667"
-        | "full3978"
-        | "noModification3978"
-        | "noDerivatives3978"
-        | "trust200811"
-        | "noModificationTrust200811"
-        | "noDerivativesTrust200811"
-        | "trust200902"
-        | "noModificationTrust200902"
-        | "noDerivativesTrust200902"
-        | "pre5378Trust200902"
-      }?,
+-     attribute ipr {
+-       "full2026"
+-       | "noDerivativeWorks2026"
+-       | "none"
+-       | "full3667"
+-       | "noModification3667"
+-       | "noDerivatives3667"
+-       | "full3978"
+-       | "noModification3978"
+-       | "noDerivatives3978"
+-       | "trust200811"
+-       | "noModificationTrust200811"
+-       | "noDerivativesTrust200811"
+-       | "trust200902"
+-       | "noModificationTrust200902"
+-       | "noDerivativesTrust200902"
+-       | "pre5378Trust200902"
+-     }?,
++     attribute ipr { text }?,
       attribute iprExtract { xsd:IDREF }?,
       [ a:defaultValue = "IETF" ]
       attribute submissionType {
@@ -8350,7 +8343,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-+ }?,
+  }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -8361,7 +8354,7 @@ to the v3 schema.</t>
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-  }?,
++ }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
@@ -8787,6 +8780,8 @@ to the v3 schema.</t>
       attribute value { text },
 +     attribute asciiName { text }?,
 +     attribute asciiValue { text }?,
++     attribute status { text }?,
++     attribute stream { text }?,
       empty
     }
   format =
