@@ -201,7 +201,7 @@
   <xsl:variable name="elem" select="ancestor::rng:element"/>
   <xsl:variable name="anchor" select="concat('element.',$elem/@name,'.attribute.',translate(@name,':','-'))"/>
   <xsl:variable name="pf">
-    <xsl:if test="not(parent::rng:optional)"> (mandatory)</xsl:if>
+    <xsl:if test="not(parent::rng:optional)"> (Mandatory)</xsl:if>
   </xsl:variable>
   
   <xsl:text>&#10;&#10;</xsl:text>
@@ -210,7 +210,7 @@
   <section anchor="{$anchor}" toc="exclude">
     <xsl:choose>
       <xsl:when test="$voc='v3'">
-        <name>"<xsl:value-of select="@name"/>" attribute<xsl:if test="$pf!=''"><xsl:text> </xsl:text><em>(mandatory)</em></xsl:if></name>
+        <name>"<xsl:value-of select="@name"/>" Attribute<xsl:if test="$pf!=''"><xsl:text> </xsl:text><em><xsl:value-of select="$pf"/></em></xsl:if></name>
       </xsl:when>
       <xsl:otherwise>
         <xsl:attribute name="title">
