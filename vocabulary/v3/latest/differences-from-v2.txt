@@ -18,24 +18,25 @@
 +     [ a:defaultValue = "false" ]
 +     attribute consensus { "no" | "yes" | "false" | "true" }?,
       attribute seriesNo { text }?,
-      attribute ipr {
-        "full2026"
-        | "noDerivativeWorks2026"
-        | "none"
-        | "full3667"
-        | "noModification3667"
-        | "noDerivatives3667"
-        | "full3978"
-        | "noModification3978"
-        | "noDerivatives3978"
-        | "trust200811"
-        | "noModificationTrust200811"
-        | "noDerivativesTrust200811"
-        | "trust200902"
-        | "noModificationTrust200902"
-        | "noDerivativesTrust200902"
-        | "pre5378Trust200902"
-      }?,
+-     attribute ipr {
+-       "full2026"
+-       | "noDerivativeWorks2026"
+-       | "none"
+-       | "full3667"
+-       | "noModification3667"
+-       | "noDerivatives3667"
+-       | "full3978"
+-       | "noModification3978"
+-       | "noDerivatives3978"
+-       | "trust200811"
+-       | "noModificationTrust200811"
+-       | "noDerivativesTrust200811"
+-       | "trust200902"
+-       | "noModificationTrust200902"
+-       | "noDerivativesTrust200902"
+-       | "pre5378Trust200902"
+-     }?,
++     attribute ipr { text }?,
       attribute iprExtract { xsd:IDREF }?,
       [ a:defaultValue = "IETF" ]
       attribute submissionType {
@@ -495,7 +496,7 @@
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-+ }?,
+  }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -506,7 +507,7 @@
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-  }?,
++ }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
@@ -932,6 +933,8 @@
       attribute value { text },
 +     attribute asciiName { text }?,
 +     attribute asciiValue { text }?,
++     attribute status { text }?,
++     attribute stream { text }?,
       empty
     }
   format =

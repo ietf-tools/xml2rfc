@@ -492,7 +492,7 @@ blockquote > * .bcp14 {
        content: "Internet-Draft";
   }
   @top-right {
-       content: "December 2015";
+       content: "January 2016";
   }
   @top-center {
        content: "The 'XML2RFC' version 3 Vocabulary";
@@ -501,7 +501,7 @@ blockquote > * .bcp14 {
        content: "Hoffman";
   }
   @bottom-center {
-       content: "Expires June 23, 2016";
+       content: "Expires July 10, 2016";
   }
   @bottom-right {
        content: "[Page " counter(page) "]";
@@ -539,10 +539,10 @@ blockquote > * .bcp14 {
       <link rel="schema.dct" href="http://purl.org/dc/terms/">
       <meta name="dct.creator" content="Hoffman, P.">
       <meta name="dct.identifier" content="urn:ietf:id:draft-iab-xml2rfc-latest">
-      <meta name="dct.issued" scheme="ISO8601" content="2015-12-21">
+      <meta name="dct.issued" scheme="ISO8601" content="2016-01-07">
       <meta name="dct.replaces" content="urn:ietf:rfc:2629">
-      <meta name="dct.abstract" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
-      <meta name="description" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.">
+      <meta name="dct.abstract" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its followup, draft-iab-xml2rfcv2.">
+      <meta name="description" content="This document defines the &#34;XML2RFC&#34; version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its followup, draft-iab-xml2rfcv2.">
    </head>
    <body onload="initFeedback();">
       <table class="header" id="rfc.headerblock">
@@ -558,14 +558,14 @@ blockquote > * .bcp14 {
             <tr>
                <td class="left">Obsoletes: <a href="https://tools.ietf.org/html/rfc2629">2629</a> (if approved)
                </td>
-               <td class="right">December 21, 2015</td>
+               <td class="right">January 7, 2016</td>
             </tr>
             <tr>
                <td class="left">Intended status: Informational</td>
                <td class="right"></td>
             </tr>
             <tr>
-               <td class="left">Expires: June 23, 2016</td>
+               <td class="left">Expires: July 10, 2016</td>
                <td class="right"></td>
             </tr>
          </tbody>
@@ -577,7 +577,7 @@ blockquote > * .bcp14 {
       <h2 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h2>
       <p>This document defines the "XML2RFC" version 3 vocabulary; an XML-based language used for writing RFCs and Internet-Drafts.
          It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar
-         described in RFC 2629 and its expected followup, draft-iab-xml2rfc.
+         described in RFC 2629 and its followup, draft-iab-xml2rfcv2.
       </p>
       <h2 id="rfc.note.1"><a href="#rfc.note.1">Editorial Note (To be removed by RFC Editor)</a></h2>
       <p>Discussion of this draft takes place on the rfc-interest mailing list (rfc-interest@rfc-editor.org), which has its home page
@@ -593,11 +593,11 @@ blockquote > * .bcp14 {
             documents at any time. It is inappropriate to use Internet-Drafts as reference material or to cite them other than as &#8220;work
             in progress&#8221;.
          </p>
-         <p>This Internet-Draft will expire on June 23, 2016.</p>
+         <p>This Internet-Draft will expire on July 10, 2016.</p>
       </div>
       <div id="rfc.copyrightnotice">
          <h2><a href="#rfc.copyrightnotice">Copyright Notice</a></h2>
-         <p>Copyright &copy; 2015 IETF Trust and the persons identified as the document authors. All rights reserved.</p>
+         <p>Copyright &copy; 2016 IETF Trust and the persons identified as the document authors. All rights reserved.</p>
          <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (<a href="http://trustee.ietf.org/license-info">http://trustee.ietf.org/license-info</a>) in effect on the date of publication of this document. Please review these documents carefully, as they describe your rights
             and restrictions with respect to this document. Code Components extracted from this document must include Simplified BSD License
             text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified
@@ -2084,19 +2084,26 @@ blockquote > * .bcp14 {
             <h3 id="rfc.section.2.19"><a href="#rfc.section.2.19">2.19</a>&nbsp;<a href="#element.displayreference"><tt>&lt;displayreference&gt;</tt> </a></h3>
             <div id="rfc.section.2.19.p.1">
                <p>This element gives a mapping between the anchor of a reference and a name that will be displayed instead. This allows authors
-                  to display more mneumonic anchor names for automatically-included references. For example, if the reference uses the anchor
-                  "RFC6949", the following would cause that anchor in the body of displayed documents to be "RFC-dev": 
+                  to display more mneumonic anchor names for automatically-included references. The mapping in this element only applies to
+                  &lt;<a href="#element.xref" class="smpl">xref</a>&gt; elements whose format is "default". For example, if the reference uses the anchor "RFC6949", the following would cause that
+                  anchor in the body of displayed documents to be "RFC-dev": 
                </p><span id="rfc.figure.u.1"><pre>&lt;displayreference target="RFC6449" to="RFC-dev"/&gt;
 </pre></span></div>
             <div id="rfc.section.2.19.p.2">
                <p>If a reference section is sorted, this element changes the sort order.</p>
             </div>
             <div id="rfc.section.2.19.p.3">
+               <p>It is expected that this element will only be valid in input documents. It will be likely be removed by preparation tools
+                  when preparing a final version after those tools have replaced all of the associated anchors, targets, and derivedContent
+                  attributes.
+               </p>
+            </div>
+            <div id="rfc.section.2.19.p.4">
                <p>This element appears as a child element of: &lt;<a href="#element.back" class="smpl">back</a>&gt; (<a href="#element.back" title="&#xA;      <back&gt;&#xA;   ">Section&nbsp;2.8</a>).
                </p>
             </div>
             <div id="element.displayreference.contents">
-               <div id="rfc.section.2.19.p.4">
+               <div id="rfc.section.2.19.p.5">
                   <p> <a href="#grammar.displayreference" id="rfc.xref.grammar.displayreference.1">Content model</a>: this element does not have any contents.
                   </p>
                </div>
@@ -2104,7 +2111,7 @@ blockquote > * .bcp14 {
             <div id="element.displayreference.attribute.target">
                <h4 id="rfc.section.2.19.1"><a href="#rfc.section.2.19.1">2.19.1</a>&nbsp;<a href="#element.displayreference.attribute.target">"target" attribute <em>(mandatory)</em> </a></h4>
                <div id="rfc.section.2.19.1.p.1">
-                  <p>This attribute must be the name of an anchor in a &lt;<a href="#element.reference" class="smpl">reference</a>&gt; element.
+                  <p>This attribute must be the name of an anchor in a &lt;<a href="#element.reference" class="smpl">reference</a>&gt; or &lt;<a href="#element.referencegroup" class="smpl">referencegroup</a>&gt; element.
                   </p>
                </div>
             </div>
@@ -3715,27 +3722,6 @@ blockquote > * .bcp14 {
                   <p>Represents the Intellectual Property status of the document. See <a href="#attribute-ipr" title="The /rfc/@ipr Attribute">Appendix&nbsp;A.1</a> for details.
                   </p>
                </div>
-               <div id="rfc.section.2.45.5.p.2" class="avoidbreakafter">
-                  <p>Allowed values:</p>
-               </div>
-               <ul id="rfc.section.2.45.5.p.3"> 
-                  <li>"full2026"</li> 
-                  <li>"noDerivativeWorks2026"</li> 
-                  <li>"none"</li> 
-                  <li>"full3667"</li> 
-                  <li>"noModification3667"</li> 
-                  <li>"noDerivatives3667"</li> 
-                  <li>"full3978"</li> 
-                  <li>"noModification3978"</li> 
-                  <li>"noDerivatives3978"</li> 
-                  <li>"trust200811"</li> 
-                  <li>"noModificationTrust200811"</li> 
-                  <li>"noDerivativesTrust200811"</li> 
-                  <li>"trust200902"</li> 
-                  <li>"noModificationTrust200902"</li> 
-                  <li>"noDerivativesTrust200902"</li> 
-                  <li>"pre5378Trust200902"</li> 
-               </ul>
             </div>
             <div id="element.rfc.attribute.iprExtract">
                <h4 id="rfc.section.2.45.6"><a href="#rfc.section.2.45.6">2.45.6</a>&nbsp;<a href="#element.rfc.attribute.iprExtract">"iprExtract" attribute</a></h4>
@@ -4016,7 +4002,8 @@ blockquote > * .bcp14 {
                </p>
             </div>
             <div id="rfc.section.2.47.p.3">
-               <p>It is invalid to have multiple &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; elements inside the &lt;<a href="#element.front" class="smpl">front</a>&gt; element inside the &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element that have "name" values of "rfc", or that have "name" values of "Internet-Draft", or that have both "rfc" and "Internet-Draft".
+               <p>It is invalid to have multiple &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; elements inside the same &lt;<a href="#element.front" class="smpl">front</a>&gt; element containing the same "name" value. Some combinations of &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; name attribute values make no sense, such as having both &lt;seriesInfo name="rfc"/&gt; and &lt;seriesInfo name="Internet-Draft"/&gt;
+                  in the same &lt;front&gt; element.
                </p>
             </div>
             <div id="rfc.section.2.47.p.4">
@@ -4044,40 +4031,57 @@ blockquote > * .bcp14 {
             <div id="element.seriesInfo.attribute.name">
                <h4 id="rfc.section.2.47.3"><a href="#rfc.section.2.47.3">2.47.3</a>&nbsp;<a href="#element.seriesInfo.attribute.name">"name" attribute <em>(mandatory)</em> </a></h4>
                <div id="rfc.section.2.47.3.p.1">
-                  <p>The name of the series.</p>
+                  <p>The name of the series. The currently-known values are "RFC", "Internet-Draft" and "DOI". The RFC Series Editor may change
+                     this list in the future.
+                  </p>
                </div>
                <div id="rfc.section.2.47.3.p.2" class="avoidbreakafter">
                   <p>Some of the values for "name" interact as follows:</p>
                </div>
                <div id="rfc.section.2.47.3.p.3">
                   <ul>
-                     <li>If a &lt;<a href="#element.front" class="smpl">front</a>&gt; element contains a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element with a name of "Internet-Draft", it can also have at most one additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element with a name of "std", "bcp", "fyi", "exp", or "historic" to indicate the intended status of this Internet Draft,
-                        if it were to be later published as an RFC. If such an additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element has one of those names, the value attribute for that name MUST be "".
+                     <li>If a &lt;<a href="#element.front" class="smpl">front</a>&gt; element contains a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element with a name of "Internet-Draft", it can also have at most one additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element with a "status" attribute whose value is of "standard", "full-standard", "bcp", "fyi", "informational", "experimental",
+                        or "historic" to indicate the intended status of this Internet Draft, if it were to be later published as an RFC. If such
+                        an additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element has one of those statuses, the name MUST be "".
                      </li>
-                     <li>If a &lt;<a href="#element.front" class="smpl">front</a>&gt; element contains a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element with a name of "rfc", it can also have at most one additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element with a name of "std", "bcp", or "fyi" to indicate the current status of this RFC. If such an additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element has one of those names, the value attribute for that name MUST be the number within that series. That &lt;<a href="#element.front" class="smpl">front</a>&gt; element might also contain an additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; with the name "exp" or "historic" and a value of "" to indicate the status of the RFC.
+                     <li>If a &lt;<a href="#element.front" class="smpl">front</a>&gt; element contains a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element with a name of "RFC", it can also have at most one additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element with a "status" attribute whose value is of "full-standard", "bcp", or "fyi" to indicate the current status of this
+                        RFC. If such an additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element has one of those statuses, the value attribute for that name MUST be the number within that series. That &lt;<a href="#element.front" class="smpl">front</a>&gt; element might also contain an additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; with the status of "info, "exp", or "historic" and a name of "" to indicate the status of the RFC.
                      </li>
-                     <li>A &lt;<a href="#element.front" class="smpl">front</a>&gt; element that has a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element that has the name "Internet-Draft" MUST NOT also have a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element that has the name "rfc".
+                     <li>A &lt;<a href="#element.front" class="smpl">front</a>&gt; element that has a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element that has the name "Internet-Draft" MUST NOT also have a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element that has the name "RFC".
                      </li>
-                     <li>The DOI for the referenced document. This MUST NOT be used when &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element is an eventual child element of a &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element, only as an enventual child of a &lt;<a href="#element.reference" class="smpl">reference</a>&gt; element. The value attribute should use the form specified in <a href="#DOI" id="rfc.xref.DOI.2"><cite title="Assigning Digital Object Identifiers to RFCs">[DOI]</cite></a>.
+                     <li>The &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; can contain the DOI for the referenced document. This MUST NOT be used when &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element is an eventual child element of a &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element, only as an enventual child of a &lt;<a href="#element.reference" class="smpl">reference</a>&gt; element. The value attribute should use the form specified in <a href="#DOI" id="rfc.xref.DOI.2"><cite title="Assigning Digital Object Identifiers to RFCs">[DOI]</cite></a>.
                      </li>
                   </ul>
                </div>
-               <div id="rfc.section.2.47.3.p.4">
-                  <p>Other values might be added at a later time by the RFC Editor.</p>
+            </div>
+            <div id="element.seriesInfo.attribute.status">
+               <h4 id="rfc.section.2.47.4"><a href="#rfc.section.2.47.4">2.47.4</a>&nbsp;<a href="#element.seriesInfo.attribute.status">"status" attribute</a></h4>
+               <div id="rfc.section.2.47.4.p.1">
+                  <p>The status of this document. The currently-known values are "standard", "informational", "experimental", "bcp", "fyi", and
+                     "full-standard". The RFC Series Editor may change this list in the future.
+                  </p>
+               </div>
+            </div>
+            <div id="element.seriesInfo.attribute.stream">
+               <h4 id="rfc.section.2.47.5"><a href="#rfc.section.2.47.5">2.47.5</a>&nbsp;<a href="#element.seriesInfo.attribute.stream">"stream" attribute</a></h4>
+               <div id="rfc.section.2.47.5.p.1">
+                  <p>The stream that originated of this document. The currently-known values are "iesg", "iab", "ise", and "irtf". The RFC Series
+                     Editor may change this list in the future.
+                  </p>
                </div>
             </div>
             <div id="element.seriesInfo.attribute.value">
-               <h4 id="rfc.section.2.47.4"><a href="#rfc.section.2.47.4">2.47.4</a>&nbsp;<a href="#element.seriesInfo.attribute.value">"value" attribute <em>(mandatory)</em> </a></h4>
-               <div id="rfc.section.2.47.4.p.1">
+               <h4 id="rfc.section.2.47.6"><a href="#rfc.section.2.47.6">2.47.6</a>&nbsp;<a href="#element.seriesInfo.attribute.value">"value" attribute <em>(mandatory)</em> </a></h4>
+               <div id="rfc.section.2.47.6.p.1">
                   <p>The identifier within the series specified by the "name" attribute.</p>
                </div>
-               <div id="rfc.section.2.47.4.p.2">
+               <div id="rfc.section.2.47.6.p.2">
                   <p>For BCPs, FYIs, RFCs, and STDs this is the number within the series. For Internet-Drafts, it is the full draft name (ending
                      with the two-digit version number). For DOIs, the value is given such as "10.123456/rfc1149", (the actual value will be specified
                      later in <a href="#DOI" id="rfc.xref.DOI.3"><cite title="Assigning Digital Object Identifiers to RFCs">[DOI]</cite></a>).
                   </p>
                </div>
-               <div id="rfc.section.2.47.4.p.3">
+               <div id="rfc.section.2.47.6.p.3">
                   <p>The name in the value should be the document name without any file extension. For Internet Drafts, the value for this attribute
                      should be "draft-ietf-somewg-someprotocol-07", not "draft-ietf-somewg-someprotocol-07.txt".
                   </p>
@@ -5892,7 +5896,7 @@ Using CDATA:
          <dd>Maler, E., Yergeau, F., Paoli, J., Sperberg-McQueen, M., and T. Bray, &#8220;<a href="https://www.w3.org/TR/2008/REC-xml-20081126/">Extensible Markup Language (XML) 1.0 (Fifth Edition)</a>&#8221;, W3C Recommendation&nbsp;REC-xml-20081126, November&nbsp;2008, &lt;<a href="https://www.w3.org/TR/2008/REC-xml-20081126/">https://www.w3.org/TR/2008/REC-xml-20081126/</a>&gt;.<br>Latest version available at &lt;<a href="http://www.w3.org/TR/xml">http://www.w3.org/TR/xml</a>&gt;.
          </dd>
          <dt id="XML2RFCv2">[XML2RFCv2]</dt>
-         <dd>Reschke, J., &#8220;<a href="https://tools.ietf.org/html/draft-iab-xml2rfc">The 'XML2RFC' version 2 Vocabulary</a>&#8221;, Internet-Draft&nbsp;draft-iab-xml2rfc (work in progress), 2014.
+         <dd>Reschke, J., &#8220;<a href="https://tools.ietf.org/html/draft-iab-xml2rfcv2">The 'XML2RFC' version 2 Vocabulary</a>&#8221;, Internet-Draft&nbsp;draft-iab-xml2rfcv2 (work in progress), 2014.
          </dd>
       </dl>
       <h3 id="rfc.references.2"><a href="#rfc.section.8.2" id="rfc.section.8.2">8.2</a> Informative References
@@ -6009,6 +6013,9 @@ Using CDATA:
       </dl>
       <div id="front.page">
          <h2 id="rfc.section.A" class="np"><a href="#rfc.section.A">A.</a>&nbsp;<a href="#front.page">Front Page ('Boilerplate') Generation</a></h2>
+         <div id="rfc.section.A.p.1">
+            <p>The values listed here will be defined by the RFC Editor. Those listed here are believed to be the current values in use.</p>
+         </div>
          <div id="attribute-ipr">
             <h3 id="rfc.section.A.1"><a href="#rfc.section.A.1">A.1</a>&nbsp;<a href="#attribute-ipr">The /rfc/@ipr Attribute</a></h3>
             <div id="rfc.section.A.1.p.1">
@@ -6460,24 +6467,7 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     [ a:defaultValue = "false" ]
     attribute consensus { "no" | "yes" | "false" | "true" }?,
     attribute seriesNo { text }?,
-    attribute ipr {
-      "full2026"
-      | "noDerivativeWorks2026"
-      | "none"
-      | "full3667"
-      | "noModification3667"
-      | "noDerivatives3667"
-      | "full3978"
-      | "noModification3978"
-      | "noDerivatives3978"
-      | "trust200811"
-      | "noModificationTrust200811"
-      | "noDerivativesTrust200811"
-      | "trust200902"
-      | "noModificationTrust200902"
-      | "noDerivativesTrust200902"
-      | "pre5378Trust200902"
-    }?,
+    attribute ipr { text }?,
     attribute iprExtract { xsd:IDREF }?,
     [ a:defaultValue = "IETF" ]
     attribute submissionType {
@@ -7396,6 +7386,8 @@ namespace ns1 = "http://www.w3.org/2000/svg"
     attribute value { text },
     attribute asciiName { text }?,
     attribute asciiValue { text }?,
+    attribute status { text }?,
+    attribute stream { text }?,
     empty
   }
 
@@ -7468,24 +7460,25 @@ start = rfc
 +     [ a:defaultValue = "false" ]
 +     attribute consensus { "no" | "yes" | "false" | "true" }?,
       attribute seriesNo { text }?,
-      attribute ipr {
-        "full2026"
-        | "noDerivativeWorks2026"
-        | "none"
-        | "full3667"
-        | "noModification3667"
-        | "noDerivatives3667"
-        | "full3978"
-        | "noModification3978"
-        | "noDerivatives3978"
-        | "trust200811"
-        | "noModificationTrust200811"
-        | "noDerivativesTrust200811"
-        | "trust200902"
-        | "noModificationTrust200902"
-        | "noDerivativesTrust200902"
-        | "pre5378Trust200902"
-      }?,
+-     attribute ipr {
+-       "full2026"
+-       | "noDerivativeWorks2026"
+-       | "none"
+-       | "full3667"
+-       | "noModification3667"
+-       | "noDerivatives3667"
+-       | "full3978"
+-       | "noModification3978"
+-       | "noDerivatives3978"
+-       | "trust200811"
+-       | "noModificationTrust200811"
+-       | "noDerivativesTrust200811"
+-       | "trust200902"
+-       | "noModificationTrust200902"
+-       | "noDerivativesTrust200902"
+-       | "pre5378Trust200902"
+-     }?,
++     attribute ipr { text }?,
       attribute iprExtract { xsd:IDREF }?,
       [ a:defaultValue = "IETF" ]
       attribute submissionType {
@@ -7945,7 +7938,7 @@ start = rfc
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-+ }?,
+  }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -7956,7 +7949,7 @@ start = rfc
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-  }?,
++ }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
@@ -8382,6 +8375,8 @@ start = rfc
       attribute value { text },
 +     attribute asciiName { text }?,
 +     attribute asciiValue { text }?,
++     attribute status { text }?,
++     attribute stream { text }?,
       empty
     }
   format =
@@ -8624,6 +8619,8 @@ start = rfc
                         <li>spacing&nbsp;&nbsp;<a href="#rfc.section.2.20.3">2.20.3</a>, <a href="#rfc.section.2.34.3">2.34.3</a>, <a href="#rfc.section.2.63.3">2.63.3</a></li>
                         <li>src&nbsp;&nbsp;<a href="#rfc.section.2.5.6">2.5.6</a>, <a href="#rfc.section.2.25.5">2.25.5</a>, <a href="#rfc.section.2.48.3">2.48.3</a></li>
                         <li>start&nbsp;&nbsp;<a href="#rfc.section.2.34.4">2.34.4</a></li>
+                        <li>status&nbsp;&nbsp;<a href="#rfc.section.2.47.4">2.47.4</a></li>
+                        <li>stream&nbsp;&nbsp;<a href="#rfc.section.2.47.5">2.47.5</a></li>
                         <li>style&nbsp;&nbsp;<a href="#rfc.section.3.4.3">3.4.3</a>, <a href="#rfc.section.3.7.1">3.7.1</a>, <a href="#rfc.section.3.8.3">3.8.3</a></li>
                         <li>subitem&nbsp;&nbsp;<a href="#rfc.section.2.27.3">2.27.3</a></li>
                         <li>submissionType&nbsp;&nbsp;<a href="#rfc.section.2.45.12">2.45.12</a></li>
@@ -8639,7 +8636,7 @@ start = rfc
                         <li>tocInclude&nbsp;&nbsp;<a href="#rfc.section.2.45.15">2.45.15</a></li>
                         <li>type&nbsp;&nbsp;<a href="#rfc.section.2.5.7">2.5.7</a>, <a href="#rfc.section.2.34.5">2.34.5</a>, <a href="#rfc.section.2.48.4">2.48.4</a>, <a href="#rfc.section.3.3.3">3.3.3</a></li>
                         <li>updates&nbsp;&nbsp;<a href="#rfc.section.2.45.16">2.45.16</a></li>
-                        <li>value&nbsp;&nbsp;<a href="#rfc.section.2.47.4">2.47.4</a></li>
+                        <li>value&nbsp;&nbsp;<a href="#rfc.section.2.47.6">2.47.6</a></li>
                         <li>version&nbsp;&nbsp;<a href="#rfc.section.2.45.17">2.45.17</a></li>
                         <li>width&nbsp;&nbsp;<a href="#rfc.section.2.5.8">2.5.8</a>, <a href="#rfc.section.2.25.8">2.25.8</a>, <a href="#rfc.section.3.9.2">3.9.2</a></li>
                         <li>xml:space&nbsp;&nbsp;<a href="#rfc.section.2.5.9">2.5.9</a>, <a href="#rfc.section.3.7.2">3.7.2</a></li>
@@ -8841,7 +8838,7 @@ start = rfc
                         <li>in rfc element&nbsp;&nbsp;<a href="#rfc.section.2.45.3">2.45.3</a></li>
                      </ul>
                   </li>
-                  <li><em>DOI</em>&nbsp;&nbsp;<a href="#rfc.xref.DOI.1">2.30</a>, <a href="#rfc.xref.DOI.2">2.47.3</a>, <a href="#rfc.xref.DOI.3">2.47.4</a>, <a href="#DOI"><b>8.2</b></a></li>
+                  <li><em>DOI</em>&nbsp;&nbsp;<a href="#rfc.xref.DOI.1">2.30</a>, <a href="#rfc.xref.DOI.2">2.47.3</a>, <a href="#rfc.xref.DOI.3">2.47.6</a>, <a href="#DOI"><b>8.2</b></a></li>
                   <li>dt element&nbsp;&nbsp;<a href="#rfc.section.2.21"><b>2.21</b></a>, <a href="#rfc.iref.d.16">C</a><ul>
                         <li>anchor attribute&nbsp;&nbsp;<a href="#rfc.section.2.21.1">2.21.1</a></li>
                         <li>inside dl&nbsp;&nbsp;<a href="#rfc.iref.d.6">2.20</a></li>
@@ -9493,7 +9490,9 @@ start = rfc
                         <li>inside front&nbsp;&nbsp;<a href="#rfc.iref.s.26">2.26</a></li>
                         <li>inside reference&nbsp;&nbsp;<a href="#rfc.iref.s.36">2.40</a></li>
                         <li>name attribute&nbsp;&nbsp;<a href="#rfc.section.2.47.3">2.47.3</a></li>
-                        <li>value attribute&nbsp;&nbsp;<a href="#rfc.section.2.47.4">2.47.4</a></li>
+                        <li>status attribute&nbsp;&nbsp;<a href="#rfc.section.2.47.4">2.47.4</a></li>
+                        <li>stream attribute&nbsp;&nbsp;<a href="#rfc.section.2.47.5">2.47.5</a></li>
+                        <li>value attribute&nbsp;&nbsp;<a href="#rfc.section.2.47.6">2.47.6</a></li>
                      </ul>
                   </li>
                   <li>seriesNo attribute&nbsp;&nbsp;
@@ -9552,6 +9551,16 @@ start = rfc
                   <li>start attribute&nbsp;&nbsp;
                      <ul>
                         <li>in ol element&nbsp;&nbsp;<a href="#rfc.section.2.34.4">2.34.4</a></li>
+                     </ul>
+                  </li>
+                  <li>status attribute&nbsp;&nbsp;
+                     <ul>
+                        <li>in seriesInfo element&nbsp;&nbsp;<a href="#rfc.section.2.47.4">2.47.4</a></li>
+                     </ul>
+                  </li>
+                  <li>stream attribute&nbsp;&nbsp;
+                     <ul>
+                        <li>in seriesInfo element&nbsp;&nbsp;<a href="#rfc.section.2.47.5">2.47.5</a></li>
                      </ul>
                   </li>
                   <li>street element&nbsp;&nbsp;<a href="#rfc.section.2.49"><b>2.49</b></a>, <a href="#rfc.iref.s.70">C</a><ul>
@@ -9857,7 +9866,7 @@ start = rfc
             <li><a id="rfc.index.V" href="#rfc.index.V"><b>V</b></a><ul>
                   <li>value attribute&nbsp;&nbsp;
                      <ul>
-                        <li>in seriesInfo element&nbsp;&nbsp;<a href="#rfc.section.2.47.4">2.47.4</a></li>
+                        <li>in seriesInfo element&nbsp;&nbsp;<a href="#rfc.section.2.47.6">2.47.6</a></li>
                      </ul>
                   </li>
                   <li>version attribute&nbsp;&nbsp;

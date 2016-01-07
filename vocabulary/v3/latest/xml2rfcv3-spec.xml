@@ -185,9 +185,9 @@
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
       file, such as a vector drawing in SVG or a bitmap graphic file, using a URI. In this case, the textual
-      content acts as fallback for output representations that do not support graphics,
-      and thus ought to contain either a "line art" variant of the graphics, or
-      otherwise prose that describes the included image in sufficient detail.
+      content acts as fallback for output representations that do not support graphics;
+      thus, it ought to contain either (1) a "line art" variant of the graphics or (2)
+      prose that describes the included image in sufficient detail.
    </t>
    <t>
       If the artwork includes either "&amp;" or "&lt;" characters, or the string "]]&gt;" those characters
@@ -327,9 +327,12 @@
          be able to handle http: and https: URIs as well. The prep tool will be able to handle reading the "src" attribute.
       </t>
       <t>
-         If no URI scheme is given in the attribute, the attribute is considered to be a local file name.
+         If no URI scheme is given in the attribute, the attribute is considered to be a local file name
+         relative to the current directory.
          Processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
+         Document creators should think hard before using relative URIs due to possible later problems if files move
+         around on the disk. Also, documents should most likely use explicit URI schemes whereever possible.
       </t>
       <t>
          In some cases, the prep tool may remove the "src" attribute after processing its value.
@@ -361,7 +364,7 @@
          </list>
             The RFC Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
-            of v3 XML should not cause a failure when it encounters an unexpected type. 
+            of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified. 
          </t>
    </section>
 
@@ -472,12 +475,12 @@
    </t>
    <t>
       Furthermore, the "role" attribute can be used to mark an author as
-      "editor". This is reflected both on the front page and in bibliographical
+      "editor". This is reflected both on the front page and in the "Author's Address" section, as well as in bibliographical
       references. Note that this specification does not define a precise
       meaning for the term "editor".
    </t>
    <t>
-      See Section "Authors vs. Contributors" of <xref target="RFCPOLICY"/>
+      See Section "Authors vs. Contributors" of <xref target="RFC7322"/>
       for more information.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
@@ -1176,6 +1179,7 @@
    <t>
       This element gives a mapping between the anchor of a reference and a name that will be displayed instead.
       This allows authors to display more mneumonic anchor names for automatically-included references.
+      The mapping in this element only applies to &lt;<x:ref>xref</x:ref>&gt; elements whose format is "default".
       For example, if the reference uses the anchor "RFC6949", the following would cause that anchor in the body
       of displayed documents to be "RFC-dev":
 <figure>
@@ -1186,6 +1190,11 @@
    </t>
    <t>
      If a reference section is sorted, this element changes the sort order.
+   </t>
+   <t>
+     It is expected that this element will only be valid in input documents. It will be likely be removed by preparation
+     tools when preparing a final version after those tools have replaced all of the associated anchors, targets, and derivedContent
+     attributes.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.displayreference.contents"><!--AG-->
@@ -1199,7 +1208,7 @@
       <iref item="displayreference element" subitem="target attribute"/>
       <iref item="target attribute" subitem="in displayreference element"/>
       <t>
-         This attribute must be the name of an anchor in a &lt;<x:ref>reference</x:ref>&gt; element.
+         This attribute must be the name of an anchor in a &lt;<x:ref>reference</x:ref>&gt; or &lt;<x:ref>referencegroup</x:ref>&gt; element.
       </t>
    </section>
 
@@ -1515,7 +1524,7 @@
       <iref item="eref element" subitem="target attribute"/>
       <iref item="target attribute" subitem="in eref element"/>
       <t>
-         URI of the link target (see Section 3 of <xref target="RFC3986"/>).
+         URI of the link target (<xref target="RFC3986"/>).
          This must begin with a scheme name (such as "https://") and thus not be relative to the URL of the current document.
          </t>
    </section>
@@ -2337,7 +2346,7 @@
    </t>
    <t>
       The value is expected to be the scheme-specific part of a "tel" URI
-      (so does not include the prefix "tel:"), using the "global numbers"
+      (so does not include the prefix "tel:"), using the "global-number-digits"
       syntax. See <xref target="RFC3966" x:fmt="of" x:sec="3"/> 
       for details.
    </t>
@@ -3049,25 +3058,6 @@
             Represents the Intellectual Property status of the document.
             See <xref target="attribute-ipr"/> for details.
          </t>
-      <t><!--AG-->Allowed values:</t>
-      <ul><!--AG-->
-         <li>"full2026"</li>
-         <li>"noDerivativeWorks2026"</li>
-         <li>"none"</li>
-         <li>"full3667"</li>
-         <li>"noModification3667"</li>
-         <li>"noDerivatives3667"</li>
-         <li>"full3978"</li>
-         <li>"noModification3978"</li>
-         <li>"noDerivatives3978"</li>
-         <li>"trust200811"</li>
-         <li>"noModificationTrust200811"</li>
-         <li>"noDerivativesTrust200811"</li>
-         <li>"trust200902"</li>
-         <li>"noModificationTrust200902"</li>
-         <li>"noDerivativesTrust200902"</li>
-         <li>"pre5378Trust200902"</li>
-      </ul>
    </section>
 
    <!--rfc/@iprExtract-->
@@ -3422,10 +3412,10 @@
       documents, but is out-of-scope for this specification.)
    </t>
    <t>
-      It is invalid to have multiple
-      &lt;<x:ref>seriesInfo</x:ref>&gt; elements inside the &lt;<x:ref>front</x:ref>&gt; element
-      inside the &lt;<x:ref>rfc</x:ref>&gt; element that have "name" values of "rfc", or that have
-      "name" values of "Internet-Draft", or that have both "rfc" and "Internet-Draft".
+It is invalid to have multiple &lt;<x:ref>seriesInfo</x:ref>&gt; elements inside the same &lt;<x:ref>front</x:ref>&gt;
+element containing the same "name" value.  Some combinations of &lt;<x:ref>seriesInfo</x:ref>&gt; name attribute values
+make no sense, such as having both &lt;seriesInfo name="rfc"/&gt; and &lt;seriesInfo name="Internet-Draft"/&gt;
+in the same &lt;front&gt; element.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>), and &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>; deprecated in this context).</t>
    <t anchor="element.seriesInfo.contents"><!--AG-->
@@ -3461,7 +3451,9 @@
       <iref item="seriesInfo element" subitem="name attribute"/>
       <iref item="name attribute" subitem="in seriesInfo element"/>
       <t>
-            The name of the series.
+            The name of the series. The currently-known values are "RFC", "Internet-Draft"
+            and "DOI". The RFC Series Editor
+            may change this list in the future.
       </t>
       <t>
             Some of the values for "name" interact as follows:
@@ -3471,37 +3463,56 @@
             <t>
          If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt;
          element with a name of "Internet-Draft", it can also have at most one additional
-         &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of "std", "bcp", "fyi", "exp", or
+         &lt;<x:ref>seriesInfo</x:ref>&gt; element with a "status" attribute whose value is of "std", "bcp", "fyi", "info", "exp", or
          "historic" to indicate the intended status of this Internet Draft, if it were to be later
          published as an RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt; element has
-         one of those names, the value attribute for that name MUST be "".
+         one of those statuses, the name MUST be "".
       </t>
             <t>
         If a &lt;<x:ref>front</x:ref>&gt; element contains a &lt;<x:ref>seriesInfo</x:ref>&gt;
-        element with a name of "rfc", it can also have at most one additional
-        &lt;<x:ref>seriesInfo</x:ref>&gt; element with a name of "std", "bcp", or "fyi" to indicate
+        element with a name of "RFC", it can also have at most one additional
+        &lt;<x:ref>seriesInfo</x:ref>&gt; element with a "status" attribute whose value is of "std", "bcp", or "fyi" to indicate
         the current status of this RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt;
-        element has one of those names, the value attribute for that name MUST be the number within
+        element has one of those statuses, the value attribute for that name MUST be the number within
         that series. That &lt;<x:ref>front</x:ref>&gt; element might also contain an additional
-        &lt;<x:ref>seriesInfo</x:ref>&gt; with the name "exp" or "historic" and a value of "" to
+        &lt;<x:ref>seriesInfo</x:ref>&gt; with the status of "info, "exp", or "historic" and a name of "" to
         indicate the status of the RFC.
       </t>
             <t>
          A &lt;<x:ref>front</x:ref>&gt; element that has a &lt;<x:ref>seriesInfo</x:ref>&gt; element
          that has the name "Internet-Draft" MUST NOT also have a &lt;<x:ref>seriesInfo</x:ref>&gt;
-         element that has the name "rfc".
+         element that has the name "RFC". 
       </t>
             <t>
-         The DOI for the referenced document.  This MUST NOT be used when &lt;<x:ref>seriesInfo</x:ref>&gt;
+         The &lt;<x:ref>seriesInfo</x:ref>&gt; can contain the DOI for the referenced document.  This MUST NOT be used when &lt;<x:ref>seriesInfo</x:ref>&gt;
          element is an eventual child element of a &lt;<x:ref>rfc</x:ref>&gt; element,
          only as an enventual child of a &lt;<x:ref>reference</x:ref>&gt; element.
          The value attribute should use the form specified in <xref target="DOI"/>.
       </t>
          </list>
       </t>
-      <t>
-      Other values might be added at a later time by the RFC Editor.
-   </t>
+   </section>
+
+   <!--seriesInfo/@status-->
+   <section anchor="element.seriesInfo.attribute.status" toc="exclude">
+      <name>"status" attribute</name>
+      <iref item="Attributes" subitem="status"/>
+      <iref item="seriesInfo element" subitem="status attribute"/>
+      <iref item="status attribute" subitem="in seriesInfo element"/>
+      <t><!--AG-->
+         <cref anchor="element.seriesInfo.attribute.status.missing">attribute description missing</cref>
+      </t>
+   </section>
+
+   <!--seriesInfo/@stream-->
+   <section anchor="element.seriesInfo.attribute.stream" toc="exclude">
+      <name>"stream" attribute</name>
+      <iref item="Attributes" subitem="stream"/>
+      <iref item="seriesInfo element" subitem="stream attribute"/>
+      <iref item="stream attribute" subitem="in seriesInfo element"/>
+      <t><!--AG-->
+         <cref anchor="element.seriesInfo.attribute.stream.missing">attribute description missing</cref>
+      </t>
    </section>
 
    <!--seriesInfo/@value-->
@@ -3659,7 +3670,7 @@ Using CDATA:
          </list>
             The RFC Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
-            of v3 XML should not cause a failure when it encounters an unexpected type. 
+            of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified. 
          </t>
    </section>
 </section>
@@ -4664,7 +4675,7 @@ Using CDATA:
       Contains a web address associated with the author.
    </t>
    <t>
-      The contents should be a valid URI (see <xref target="RFC3986" x:fmt="of" x:sec="3"/>). 
+      The contents should be a valid URI; this most likely will be an "http:" or "https:" URI. 
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.uri.contents"><!--AG-->

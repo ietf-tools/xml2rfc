@@ -32,7 +32,7 @@
       This document defines the "XML2RFC" version 3 vocabulary; an XML-based
       language used for writing RFCs and Internet-Drafts. It is heavily derived
       from the version 2 vocabulary that is also under discussion. This document
-      obsoletes the v2 grammar described in RFC 2629 and its expected followup, draft-iab-xml2rfc.
+      obsoletes the v2 grammar described in RFC 2629 and its followup, draft-iab-xml2rfcv2.
     </t>
   </abstract>
 
@@ -1525,6 +1525,7 @@ the appendices for a complete description of these attributes.
    <t>
       This element gives a mapping between the anchor of a reference and a name that will be displayed instead.
       This allows authors to display more mneumonic anchor names for automatically-included references.
+      The mapping in this element only applies to &lt;<xref target="element.xref" format="none">xref</xref>&gt; elements whose format is "default".
       For example, if the reference uses the anchor "RFC6949", the following would cause that anchor in the body
       of displayed documents to be "RFC-dev":
 <figure>
@@ -1535,6 +1536,11 @@ the appendices for a complete description of these attributes.
    </t>
    <t>
      If a reference section is sorted, this element changes the sort order.
+   </t>
+   <t>
+     It is expected that this element will only be valid in input documents. It will be likely be removed by preparation
+     tools when preparing a final version after those tools have replaced all of the associated anchors, targets, and derivedContent
+     attributes.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.back" format="none">back</xref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.displayreference.contents"><!--AG-->
@@ -1547,7 +1553,7 @@ the appendices for a complete description of these attributes.
       <iref item="displayreference element" subitem="target attribute"/>
       <iref item="target attribute" subitem="in displayreference element"/>
       <t>
-         This attribute must be the name of an anchor in a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element.
+         This attribute must be the name of an anchor in a &lt;<xref target="element.reference" format="none">reference</xref>&gt; or &lt;<xref target="element.referencegroup" format="none">referencegroup</xref>&gt; element.
       </t>
    </section>
 
@@ -3338,25 +3344,6 @@ the appendices for a complete description of these attributes.
             Represents the Intellectual Property status of the document.
             See <xref target="attribute-ipr"/> for details.
          </t>
-      <t><!--AG-->Allowed values:</t>
-      <t><list style="symbols"><!--AG-->
-         <t>"full2026"</t>
-         <t>"noDerivativeWorks2026"</t>
-         <t>"none"</t>
-         <t>"full3667"</t>
-         <t>"noModification3667"</t>
-         <t>"noDerivatives3667"</t>
-         <t>"full3978"</t>
-         <t>"noModification3978"</t>
-         <t>"noDerivatives3978"</t>
-         <t>"trust200811"</t>
-         <t>"noModificationTrust200811"</t>
-         <t>"noDerivativesTrust200811"</t>
-         <t>"trust200902"</t>
-         <t>"noModificationTrust200902"</t>
-         <t>"noDerivativesTrust200902"</t>
-         <t>"pre5378Trust200902"</t>
-      </list></t>
    </section>
 
    <!--rfc/@iprExtract-->
@@ -3707,10 +3694,10 @@ the appendices for a complete description of these attributes.
       documents, but is out-of-scope for this specification.)
    </t>
    <t>
-      It is invalid to have multiple
-      &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements inside the &lt;<xref target="element.front" format="none">front</xref>&gt; element
-      inside the &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element that have "name" values of "rfc", or that have
-      "name" values of "Internet-Draft", or that have both "rfc" and "Internet-Draft".
+It is invalid to have multiple &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements inside the same &lt;<xref target="element.front" format="none">front</xref>&gt;
+element containing the same "name" value.  Some combinations of &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; name attribute values
+make no sense, such as having both &lt;seriesInfo name="rfc"/&gt; and &lt;seriesInfo name="Internet-Draft"/&gt;
+in the same &lt;front&gt; element.
    </t>
    <t><!--AG-->This element appears as a child element of: &lt;<xref target="element.front" format="none">front</xref>&gt; (<xref target="element.front"/>), and &lt;<xref target="element.reference" format="none">reference</xref>&gt; (<xref target="element.reference"/>; deprecated in this context).</t>
    <t anchor="element.seriesInfo.contents"><!--AG-->
@@ -3745,7 +3732,9 @@ the appendices for a complete description of these attributes.
       <iref item="seriesInfo element" subitem="name attribute"/>
       <iref item="name attribute" subitem="in seriesInfo element"/>
       <t>
-            The name of the series.
+            The name of the series. The currently-known values are "RFC", "Internet-Draft"
+            and "DOI". The RFC Series Editor
+            may change this list in the future.
       </t>
       <t>
             Some of the values for "name" interact as follows:
@@ -3755,37 +3744,60 @@ the appendices for a complete description of these attributes.
             <t>
          If a &lt;<xref target="element.front" format="none">front</xref>&gt; element contains a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
          element with a name of "Internet-Draft", it can also have at most one additional
-         &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element with a name of "std", "bcp", "fyi", "exp", or
+         &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element with a "status" attribute whose value is of
+         "standard", "full-standard", "bcp", "fyi", "informational", "experimental", or
          "historic" to indicate the intended status of this Internet Draft, if it were to be later
          published as an RFC. If such an additional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element has
-         one of those names, the value attribute for that name MUST be "".
+         one of those statuses, the name MUST be "".
       </t>
             <t>
         If a &lt;<xref target="element.front" format="none">front</xref>&gt; element contains a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
-        element with a name of "rfc", it can also have at most one additional
-        &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element with a name of "std", "bcp", or "fyi" to indicate
+        element with a name of "RFC", it can also have at most one additional
+        &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element with a "status" attribute whose value is of "full-standard", "bcp", or "fyi" to indicate
         the current status of this RFC. If such an additional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
-        element has one of those names, the value attribute for that name MUST be the number within
+        element has one of those statuses, the value attribute for that name MUST be the number within
         that series. That &lt;<xref target="element.front" format="none">front</xref>&gt; element might also contain an additional
-        &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; with the name "exp" or "historic" and a value of "" to
+        &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; with the status of "info, "exp", or "historic" and a name of "" to
         indicate the status of the RFC.
       </t>
             <t>
          A &lt;<xref target="element.front" format="none">front</xref>&gt; element that has a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element
          that has the name "Internet-Draft" MUST NOT also have a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
-         element that has the name "rfc".
+         element that has the name "RFC". 
       </t>
             <t>
-         The DOI for the referenced document.  This MUST NOT be used when &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
+         The &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; can contain the DOI for the referenced document.
+         This MUST NOT be used when &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
          element is an eventual child element of a &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element,
          only as an enventual child of a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element.
          The value attribute should use the form specified in <xref target="DOI"/>.
       </t>
          </list>
       </t>
+   </section>
+
+   <!--seriesInfo/@status-->
+   <section anchor="element.seriesInfo.attribute.status" toc="exclude" title="&#34;status&#34; attribute">
+      
+      <iref item="Attributes" subitem="status"/>
+      <iref item="seriesInfo element" subitem="status attribute"/>
+      <iref item="status attribute" subitem="in seriesInfo element"/>
       <t>
-      Other values might be added at a later time by the RFC Editor.
-   </t>
+         The status of this document. The currently-known values are "standard", "informational", "experimental", "bcp", "fyi", and "full-standard".
+         The RFC Series Editor may change this list in the future.
+      </t>
+   </section>
+
+   <!--seriesInfo/@stream-->
+   <section anchor="element.seriesInfo.attribute.stream" toc="exclude" title="&#34;stream&#34; attribute">
+      
+      <iref item="Attributes" subitem="stream"/>
+      <iref item="seriesInfo element" subitem="stream attribute"/>
+      <iref item="stream attribute" subitem="in seriesInfo element"/>
+      <t>
+         The stream that originated of this document. The currently-known values are "iesg", "iab", "ise", and "irtf".
+         The RFC Series Editor may change this list in the future.
+      </t>
    </section>
 
    <!--seriesInfo/@value-->
@@ -5781,7 +5793,7 @@ not those that are part of a sequence of resources.</t>
       <title>The 'XML2RFC' version 2 Vocabulary</title>
       <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
       <date year="2014"/>
-    </front><seriesInfo name="Internet-Draft" value="draft-iab-xml2rfc"/></reference>
+    </front><seriesInfo name="Internet-Draft" value="draft-iab-xml2rfcv2"/></reference>
 
 </references>
 
@@ -6059,6 +6071,9 @@ not those that are part of a sequence of resources.</t>
 </references>
 
 <section anchor="front.page" title="Front Page ('Boilerplate') Generation">
+
+<t>The values listed here will be defined by the RFC Editor. Those listed here
+are believed to be the current values in use.</t>
 
 <section anchor="attribute-ipr" title="The /rfc/@ipr Attribute">
 <t>
@@ -6596,24 +6611,7 @@ rfc =
     [ a:defaultValue = "false" ]
     attribute consensus { "no" | "yes" | "false" | "true" }?,
     attribute seriesNo { text }?,
-    attribute ipr {
-      "full2026"
-      | "noDerivativeWorks2026"
-      | "none"
-      | "full3667"
-      | "noModification3667"
-      | "noDerivatives3667"
-      | "full3978"
-      | "noModification3978"
-      | "noDerivatives3978"
-      | "trust200811"
-      | "noModificationTrust200811"
-      | "noDerivativesTrust200811"
-      | "trust200902"
-      | "noModificationTrust200902"
-      | "noDerivativesTrust200902"
-      | "pre5378Trust200902"
-    }?,
+    attribute ipr { text }?,
     attribute iprExtract { xsd:IDREF }?,
     [ a:defaultValue = "IETF" ]
     attribute submissionType {
@@ -7532,6 +7530,8 @@ seriesInfo =
     attribute value { text },
     attribute asciiName { text }?,
     attribute asciiValue { text }?,
+    attribute status { text }?,
+    attribute stream { text }?,
     empty
   }
 
@@ -7604,24 +7604,25 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "false" ]
 +     attribute consensus { "no" | "yes" | "false" | "true" }?,
       attribute seriesNo { text }?,
-      attribute ipr {
-        "full2026"
-        | "noDerivativeWorks2026"
-        | "none"
-        | "full3667"
-        | "noModification3667"
-        | "noDerivatives3667"
-        | "full3978"
-        | "noModification3978"
-        | "noDerivatives3978"
-        | "trust200811"
-        | "noModificationTrust200811"
-        | "noDerivativesTrust200811"
-        | "trust200902"
-        | "noModificationTrust200902"
-        | "noDerivativesTrust200902"
-        | "pre5378Trust200902"
-      }?,
+-     attribute ipr {
+-       "full2026"
+-       | "noDerivativeWorks2026"
+-       | "none"
+-       | "full3667"
+-       | "noModification3667"
+-       | "noDerivatives3667"
+-       | "full3978"
+-       | "noModification3978"
+-       | "noDerivatives3978"
+-       | "trust200811"
+-       | "noModificationTrust200811"
+-       | "noDerivativesTrust200811"
+-       | "trust200902"
+-       | "noModificationTrust200902"
+-       | "noDerivativesTrust200902"
+-       | "pre5378Trust200902"
+-     }?,
++     attribute ipr { text }?,
       attribute iprExtract { xsd:IDREF }?,
       [ a:defaultValue = "IETF" ]
       attribute submissionType {
@@ -8081,7 +8082,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-+ }?,
+  }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -8092,7 +8093,7 @@ to the v3 schema.</t>
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-  }?,
++ }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
@@ -8518,6 +8519,8 @@ to the v3 schema.</t>
       attribute value { text },
 +     attribute asciiName { text }?,
 +     attribute asciiValue { text }?,
++     attribute status { text }?,
++     attribute stream { text }?,
       empty
     }
   format =
