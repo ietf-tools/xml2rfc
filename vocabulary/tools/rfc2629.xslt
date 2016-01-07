@@ -7043,74 +7043,20 @@ dd, li, p {
 <xsl:template name="to-abnf-char-sequence">
   <xsl:param name="chars"/>
 
+  <xsl:variable name="asciistring">&#160; !"#$%&amp;'()*+,-./<xsl:value-of select="$digits"/>:;&lt;=>?@<xsl:value-of select="$ucase"/>[\]^_`<xsl:value-of select="$lcase"/>{|}~&#127;</xsl:variable> 
+  <xsl:variable name="hex">0123456789ABCDEF</xsl:variable>
+  
   <xsl:variable name="c" select="substring($chars,1,1)"/>
   <xsl:variable name="r" select="substring($chars,2)"/>
-
+  <xsl:variable name="pos" select="string-length(substring-before($asciistring,$c))"/>
+  
   <xsl:choose>
-    <xsl:when test="$c='-'">2D</xsl:when>
-    <xsl:when test="$c='/'">2F</xsl:when>
-    <xsl:when test="$c='0'">30</xsl:when>
-    <xsl:when test="$c='1'">31</xsl:when>
-    <xsl:when test="$c='2'">32</xsl:when>
-    <xsl:when test="$c='3'">33</xsl:when>
-    <xsl:when test="$c='4'">34</xsl:when>
-    <xsl:when test="$c='5'">35</xsl:when>
-    <xsl:when test="$c='6'">36</xsl:when>
-    <xsl:when test="$c='7'">37</xsl:when>
-    <xsl:when test="$c='8'">38</xsl:when>
-    <xsl:when test="$c='9'">39</xsl:when>
-    <xsl:when test="$c='A'">41</xsl:when>
-    <xsl:when test="$c='B'">42</xsl:when>
-    <xsl:when test="$c='C'">43</xsl:when>
-    <xsl:when test="$c='D'">44</xsl:when>
-    <xsl:when test="$c='E'">45</xsl:when>
-    <xsl:when test="$c='F'">46</xsl:when>
-    <xsl:when test="$c='G'">47</xsl:when>
-    <xsl:when test="$c='H'">48</xsl:when>
-    <xsl:when test="$c='I'">49</xsl:when>
-    <xsl:when test="$c='J'">4A</xsl:when>
-    <xsl:when test="$c='K'">4B</xsl:when>
-    <xsl:when test="$c='L'">4C</xsl:when>
-    <xsl:when test="$c='M'">4D</xsl:when>
-    <xsl:when test="$c='N'">4E</xsl:when>
-    <xsl:when test="$c='O'">4F</xsl:when>
-    <xsl:when test="$c='P'">50</xsl:when>
-    <xsl:when test="$c='Q'">51</xsl:when>
-    <xsl:when test="$c='R'">52</xsl:when>
-    <xsl:when test="$c='S'">53</xsl:when>
-    <xsl:when test="$c='T'">54</xsl:when>
-    <xsl:when test="$c='U'">55</xsl:when>
-    <xsl:when test="$c='V'">56</xsl:when>
-    <xsl:when test="$c='W'">57</xsl:when>
-    <xsl:when test="$c='X'">58</xsl:when>
-    <xsl:when test="$c='Y'">59</xsl:when>
-    <xsl:when test="$c='Z'">5A</xsl:when>
-    <xsl:when test="$c='a'">61</xsl:when>
-    <xsl:when test="$c='b'">62</xsl:when>
-    <xsl:when test="$c='c'">63</xsl:when>
-    <xsl:when test="$c='d'">64</xsl:when>
-    <xsl:when test="$c='e'">65</xsl:when>
-    <xsl:when test="$c='f'">66</xsl:when>
-    <xsl:when test="$c='g'">67</xsl:when>
-    <xsl:when test="$c='h'">68</xsl:when>
-    <xsl:when test="$c='i'">69</xsl:when>
-    <xsl:when test="$c='j'">6A</xsl:when>
-    <xsl:when test="$c='k'">6B</xsl:when>
-    <xsl:when test="$c='l'">6C</xsl:when>
-    <xsl:when test="$c='m'">6D</xsl:when>
-    <xsl:when test="$c='n'">6E</xsl:when>
-    <xsl:when test="$c='o'">6F</xsl:when>
-    <xsl:when test="$c='p'">70</xsl:when>
-    <xsl:when test="$c='q'">71</xsl:when>
-    <xsl:when test="$c='r'">72</xsl:when>
-    <xsl:when test="$c='s'">73</xsl:when>
-    <xsl:when test="$c='t'">74</xsl:when>
-    <xsl:when test="$c='u'">75</xsl:when>
-    <xsl:when test="$c='v'">76</xsl:when>
-    <xsl:when test="$c='w'">77</xsl:when>
-    <xsl:when test="$c='x'">78</xsl:when>
-    <xsl:when test="$c='y'">79</xsl:when>
-    <xsl:when test="$c='z'">7A</xsl:when>
+    <xsl:when test="$pos >= 1">
+      <xsl:variable name="ascii" select="$pos + 31"/>
+      <xsl:variable name="h" select="floor($ascii div 16)"/>
+      <xsl:variable name="l" select="floor($ascii mod 16)"/>
+      <xsl:value-of select="concat(substring($hex,1 + $h,1),substring($hex,1 + $l,1))"/>
+    </xsl:when>
     <xsl:otherwise>
       <xsl:text>??</xsl:text>
       <xsl:call-template name="error">
@@ -8112,11 +8058,11 @@ dd, li, p {
   <xsl:variable name="gen">
     <xsl:text>http://greenbytes.de/tech/webdav/rfc2629.xslt, </xsl:text>
     <!-- when RCS keyword substitution in place, add version info -->
-    <xsl:if test="contains('$Revision: 1.755 $',':')">
-      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.755 $', 'Revision: '),'$','')),', ')" />
+    <xsl:if test="contains('$Revision: 1.756 $',':')">
+      <xsl:value-of select="concat('Revision ',normalize-space(translate(substring-after('$Revision: 1.756 $', 'Revision: '),'$','')),', ')" />
     </xsl:if>
-    <xsl:if test="contains('$Date: 2015/11/29 11:14:21 $',':')">
-      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/11/29 11:14:21 $', 'Date: '),'$','')),', ')" />
+    <xsl:if test="contains('$Date: 2015/12/31 17:59:21 $',':')">
+      <xsl:value-of select="concat(normalize-space(translate(substring-after('$Date: 2015/12/31 17:59:21 $', 'Date: '),'$','')),', ')" />
     </xsl:if>
     <xsl:value-of select="concat('XSLT vendor: ',system-property('xsl:vendor'),' ',system-property('xsl:vendor-url'))" />
   </xsl:variable>
