@@ -83,7 +83,7 @@
 <xsl:if test="$appearsin">
   <t>
     <xsl:comment>AG</xsl:comment>
-    <xsl:text>This element appears as a child element of: </xsl:text>
+    <xsl:text>This element appears as a child element of </xsl:text>
     <xsl:variable name="name" select="@name"/>
     <xsl:for-each select="$appearsin">
       <xsl:sort select="@name"/>
@@ -93,7 +93,10 @@
       <xref target="element.{@name}"/>
       <xsl:if test=".//rng:ref[@name=$name]/processing-instruction('deprecated')">; deprecated in this context</xsl:if>
       <xsl:text>)</xsl:text>
-      <xsl:if test="position() != last()">, </xsl:if>
+      <xsl:if test="position() != last()">
+        <xsl:if test="count($appearsin) > 2">,</xsl:if>
+        <xsl:text> </xsl:text>
+      </xsl:if>
       <xsl:if test="position() = last() -1">and </xsl:if>
     </xsl:for-each>
     <xsl:text>.</xsl:text>
