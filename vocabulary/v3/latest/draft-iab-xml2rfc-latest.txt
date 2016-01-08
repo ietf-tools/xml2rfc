@@ -370,7 +370,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
       the time that the XML went through a preparation step.  Add
       "version" to indicate the version of XML2RFC vocabulary used in
       the document.  Add "scripts" to indicate which scripts are needed
-      to render the document.  Add "expiresDate" when an Internet Draft
+      to render the document.  Add "expiresDate" when an Internet-Draft
       expires.
 
    o  Add "ascii" attributes to <email>, <organization>, <street>,
@@ -475,7 +475,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
    o  Allow the sub-elements inside a <reference> to be in any order.
 
-   o  Turned off the auto-generation of anchors in <cref> because there
+   o  Turned off the autogeneration of anchors in <cref> because there
       is no use case for them that cannot be achieved in other ways.
 
    o  Allow more than one <artwork>, or more than one <sourcecode>, in
@@ -533,7 +533,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
    detail in Appendix B.2.
 
    Tools interpreting the XML described here will collapse horizontal
-   whitespace and linebreaks to a single whitespace (except inside
+   whitespace and line breaks to a single whitespace (except inside
    <artwork> and <sourcecode>), and will trim leading and trailing
    whitespace.
 
@@ -563,8 +563,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
 2.1.  <abstract>
 
-   Contains the abstract of the document.  See [RFC7322] for more
-   information on restrictions for the abstract.
+   Contains the Abstract of the document.  See [RFC7322] for more
+   information on restrictions for the Abstract.
 
    This element appears as a child element of <front> (Section 2.26).
 
@@ -582,7 +582,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
 2.1.1.  "anchor" Attribute
 
-   Document-wide unique identifier for the abstract.
+   Document-wide unique identifier for the Abstract.
 
 2.2.  <address>
 
@@ -696,7 +696,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
    In [XML2RFCv2], the <artwork> element was also used for source code
    and formal languages; in v3, this is now done with <sourcecode>.
 
-   There are at least five ways to include SVG in artwork in Internet
+   There are at least five ways to include SVG in artwork in Internet-
    Drafts:
 
    o  Inline, by including all of the SVG in the content of the element,
@@ -713,7 +713,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
    o  As a local file, such as: <artwork type="svg" src="diagram12.svg">
 
-   The use of SVG in Internet Drafts and RFCs is covered in much more
+   The use of SVG in Internet-Drafts and RFCs is covered in much more
    detail in [SVGforRFCs].
 
    The above methods for inclusion of SVG art can also be used for
@@ -1197,7 +1197,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
    Represents a comment.
 
-   Comments can be used in a document while it is work-in-progress.
+   Comments can be used in a document while it is work in progress.
    They might appear either inline and visually highlighted, at the end
    of the document, or not at all, depending on the formatting tool.
 
@@ -1272,7 +1272,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
    that use the <front> element.
 
    In the boilerplate case, it defines the date of publication for the
-   current document (Internet Draft or RFC).  When producing Internet-
+   current document (Internet-Draft or RFC).  When producing Internet-
    Drafts, the prep tool uses this date to compute the expiration date
    (see [IDGUIDE]).  When one or more of "year", "month", or "day" are
    left out, the prep tool will attempt to use the current system date
@@ -1291,8 +1291,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
    or "December".
 
-   When the prep tool is used to create Internet Drafts, it will reject
-   a submitted Internet Draft that has a <date> element in the
+   When the prep tool is used to create Internet-Drafts, it will reject
+   a submitted Internet-Draft that has a <date> element in the
    boilerplate for itself that is anything other than today.  That is,
    the tool will not allow a submitter to specify a date other than the
    day of submission.  To avoid this problem, authors might simply not
@@ -1775,7 +1775,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 2.26.  <front>
 
    Represent the "front matter": metadata (such as author information),
-   abstract, and additional notes.
+   Abstract, and additional notes.
 
    A <front> element may have more than one <seriesInfo> elements.  A
    <seriesInfo> element determines the document number (for RFCs) or
@@ -1983,10 +1983,10 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
    o  The DOI for this document.  The value for the "rel" attribute is
       "describedBy".  The link should use the form specified in [DOI].
 
-   o  The Internet Draft that was submitted to the RFC Editor to become
+   o  The Internet-Draft that was submitted to the RFC Editor to become
       the published RFC.  The value for the "rel" attribute is
       "derivedFrom".  The link should be to an IETF-controlled web site
-      that retains copies of Internet Drafts.
+      that retains copies of Internet-Drafts.
 
    o  A representation of the document offered by the document author.
       The value for the "rel" attribute is "alternate".  The link can be
@@ -2058,7 +2058,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
 2.33.  <note>
 
-   Creates an unnumbered section that appears after the abstract.
+   Creates an unnumbered section that appears after the Abstract.
 
    It is usually used for additional information to reviewers (working
    group information, mailing list, ...), or for additional publication
@@ -2392,8 +2392,8 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 2.40.1.  "anchor" Attribute (Mandatory)
 
    Document-wide unique identifier for this reference.  Usually, this
-   will be used both to "label" the reference in the references section,
-   and as an identifier in links to this reference entry.
+   will be used both to "label" the reference in the "References"
+   section, and as an identifier in links to this reference entry.
 
 2.40.2.  "quoteTitle" Attribute
 
@@ -2435,7 +2435,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
    Document-wide unique identifier for this reference group.  Usually,
    this will be used both to "label" the reference group in the
-   references section, and as an identifier in links to this reference
+   "References" section, and as an identifier in links to this reference
    entry.
 
 2.42.  <references>
@@ -2499,7 +2499,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
 2.44.  <relref>
 
-   A relative link to a reference from the References section.
+   A relative link to a reference from the "References" section.
    Formatters that have links (such as HTML and PDF) are likely to
    render <relref> elements as external hyperlinks to the specified part
    of the reference, creating the link target by combining the base URI
@@ -2773,7 +2773,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 2.45.6.  "iprExtract" Attribute
 
    Identifies a single section within the document for which extraction
-   "as-is" is explicitly allowed (only relevant for historic values of
+   "as is" is explicitly allowed (only relevant for historic values of
    the "ipr" attribute).
 
 2.45.7.  "number" Attribute
@@ -2885,7 +2885,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
    Represents a section (when inside a <middle> element) or an appendix
    (when inside a <back> element).
 
-   Sub-sections are created by nesting <section> elements inside
+   Subsections are created by nesting <section> elements inside
    <section> elements.  Sections are allowed to be empty.
 
    This element appears as a child element of <back> (Section 2.8),
@@ -3008,7 +3008,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
    element inside the <front> element inside the <rfc> element, looking
    for "rfc" or "Internet-Draft".  (Specifying neither value in any of
    the <seriesInfo> elements can be useful for producing other types of
-   documents, but is out-of-scope for this specification.)
+   documents, but is out of scope for this specification.)
 
    It is invalid to have multiple <seriesInfo> elements inside the same
    <front> element containing the same "name" value.  Some combinations
@@ -3050,7 +3050,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
       <seriesInfo> element with a "status" attribute whose value is of
       "standard", "full-standard", "bcp", "fyi", "informational",
       "experimental", or "historic" to indicate the intended status of
-      this Internet Draft, if it were to be later published as an RFC.
+      this Internet-Draft, if it were to be later published as an RFC.
       If such an additional <seriesInfo> element has one of those
       statuses, the name MUST be "".
 
@@ -3104,7 +3104,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
    [DOI]).
 
    The name in the value should be the document name without any file
-   extension.  For Internet Drafts, the value for this attribute should
+   extension.  For Internet-Drafts, the value for this attribute should
    be "draft-ietf-somewg-someprotocol-07", not
    "draft-ietf-somewg-someprotocol-07.txt".
 
@@ -3999,7 +3999,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
    A reference to an anchor in this document.  Formatters that have
    links (such as HTML and PDF) are likely to render <xref> elements as
    internal hyperlinks.  This element is useful for referring to
-   references in the References section, to specific sections of this
+   references in the "References" section, to specific sections of this
    document, to specific figures, and so on.  The "target" attribute is
    required.
 
@@ -4115,7 +4115,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
 2.67.  <svg> (in namespace http://www.w3.org/2000/svg)
 
-   This element holds SVG art.  The use of SVG in Internet Drafts and
+   This element holds SVG art.  The use of SVG in Internet-Drafts and
    RFCs is covered in much more detail in [SVGforRFCs].
 
    This element appears as a child element of <artwork> (Section 2.5).
@@ -4507,7 +4507,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
    The "type" attribute of the <artwork> and <sourcecode> elements is
    meant to encourage formatters to automatically extract known types of
-   content from an RFC or Internet Draft.  While extraction is probably
+   content from an RFC or Internet-Draft.  While extraction is probably
    safe, those tools might also think that they could further process
    the extracted content such as by rendering artwork or executing code.
    Doing so without first sanity-checking the extracted content is
@@ -4614,7 +4614,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
    Description: The document linked to was later converted to the
    document that contains this link relation.  For example, an RFC can
-   have a link to the Internet Draft that became the RFC; in that case,
+   have a link to the Internet-Draft that became the RFC; in that case,
    the link relation would be "convertedFrom".
 
    Reference: This document.
@@ -4911,7 +4911,7 @@ A.1.1.  Current Values: '*trust200902'
    document were published on September 12, 2009 ([TLP3.0]) and on
    December 28, 2009 ([TLP4.0]), modifying the license for code
    components (see <http://trustee.ietf.org/license-info/> for further
-   information).  The actual text is located in Section 6 ("Text To Be
+   information).  The actual text is located in Section 6 ("Text to Be
    Included in IETF Documents") of these documents.
 
    The prep tool automatically produces the "correct" text depending on
@@ -4998,7 +4998,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
       *Note:* this text appears under "Copyright Notice", unless the
       document was published before November 2009, in which case it
-      appears under "Status Of This Memo".
+      appears under "Status of This Memo".
 
 A.1.2.  Historic Values
 
@@ -5052,27 +5052,27 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
    Historically, this attribute did not affect the final appearance of
    RFCs, except for subtle differences in Copyright notices.  Nowadays
    (as of [RFC5741]), the stream name appears in the first line of the
-   front page, and it also affects the text in the "Status Of This Memo"
+   front page, and it also affects the text in the "Status of This Memo"
    section.
 
    For current documents, setting submissionType attribute will have the
    following effect:
 
    o  For RFCs, the stream name appears in the upper left corner of the
-      first page (in Internet Drafts, this is either "Network Working
+      first page (in Internet-Drafts, this is either "Network Working
       Group", or the value of the <workgroup> element).
 
-   o  For RFCs, if affects the whole "Status Of This Memo" section (see
+   o  For RFCs, if affects the whole "Status of This Memo" section (see
       Section 3.2.2 of [RFC5741]).
 
-   o  For all RFCs and Internet Drafts, it determines whether the
+   o  For all RFCs and Internet-Drafts, it determines whether the
       "Copyright Notice" mentions the Copyright on Code Components (see
-      TLP, Section "Text To Be Included in IETF Documents").
+      TLP, Section "Text to Be Included in IETF Documents").
 
 A.3.  The /rfc/@consensus Attribute
 
    For some of the publication streams (see Appendix A.2), the "Status
-   Of This Memo" section depends on whether there was a consensus to
+   of This Memo" section depends on whether there was a consensus to
    publish (again, see Section 3.2.2 of [RFC5741]).
 
    The consensus attribute can be used to supply this information.  The
@@ -5123,7 +5123,7 @@ Appendix B.  The v3 Format and Processing Tools
          www.rfc-editor.org/rse/wiki/
          doku.php?id=design:format-and-content-rfcs>.
 
-      *  Draft mode -- The mode used by the Internet Draft submission
+      *  Draft mode -- The mode used by the Internet-Draft submission
          tool.  The restrictions for the XML from this mode will be
          described later.
 
@@ -5156,7 +5156,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
    versions of the non-canonical representations so that authors can see
    how their XML might later be rendered; to create documents in
    representations different than those supported by the RFC Editor; to
-   possibly create documents that are not meant to be Internet Drafts or
+   possibly create documents that are not meant to be Internet-Drafts or
    RFCs; and to convert XML that has external information into XML that
    has that external information included.
 
@@ -5209,7 +5209,7 @@ Hoffman                   Expires July 11, 2016                [Page 93]
 Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
 
-   not where free text is used).  For example, if three Internet Drafts
+   not where free text is used).  For example, if three Internet-Drafts
    are all including a particular paragraph or section verbatim, that
    text can be kept either in a file or somewhere on the web, and be
    included with <xi:include>.  An example of pulling something from the
@@ -5222,7 +5222,7 @@ Internet-Draft     The 'XML2RFC' version 3 Vocabulary       January 2016
 
 B.2.  Anchors and IDs
 
-   People writing and reading Internet Drafts and RFCs often want to
+   People writing and reading Internet-Drafts and RFCs often want to
    make reference to specific locations in those documents.  In the case
    of RFC authors, it is common to want to reference another part of
    their document, such as "see Section 3.2 of this document".  Readers,
