@@ -195,7 +195,7 @@ to cover Processing Instructions (PIs) that were in v2 that are still needed in 
 Add "prepTime" to indicate the time that the XML went through a preparation step.
 Add "version" to indicate the version of XML2RFC vocabulary used in the document.
 Add "scripts" to indicate which scripts are needed to render the document.
-Add "expiresDate" when an Internet Draft expires.
+Add "expiresDate" when an Internet-Draft expires.
 </t>
 
 <t>Add "ascii" attributes to &lt;<x:ref>email</x:ref>&gt;,
@@ -303,7 +303,7 @@ their own in &lt;<x:ref>section</x:ref>&gt;
 
 <t>Allow the sub-elements inside a &lt;<x:ref>reference</x:ref>&gt; to be in any order.</t>
 
-<t>Turned off the auto-generation of anchors in &lt;<x:ref>cref</x:ref>&gt; because there is
+<t>Turned off the autogeneration of anchors in &lt;<x:ref>cref</x:ref>&gt; because there is
 no use case for them that cannot be achieved in other ways.</t>
 
 <t>Allow more than one &lt;<x:ref>artwork</x:ref>&gt;, or more than one
@@ -366,7 +366,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
 </t>
 
 <t>
-Tools interpreting the XML described here will collapse horizontal whitespace and linebreaks to a
+Tools interpreting the XML described here will collapse horizontal whitespace and line breaks to a
 single whitespace (except inside &lt;<x:ref>artwork</x:ref>&gt; and
 &lt;<x:ref>sourcecode</x:ref>&gt;), and will trim leading and trailing whitespace.
 </t>
@@ -587,7 +587,7 @@ the appendices for a complete description of these attributes.
       languages; in v3, this is now done with &lt;<x:ref>sourcecode</x:ref>&gt;.
    </t>
    <t>
-      There are at least five ways to include SVG in artwork in Internet Drafts:
+      There are at least five ways to include SVG in artwork in Internet-Drafts:
       <list style="symbols">
          <t>Inline, by including all of the SVG in the content of the element, 
             such as: &lt;artwork type="svg"&gt;&lt;svg xmlns..."&gt;</t>
@@ -598,7 +598,7 @@ the appendices for a complete description of these attributes.
          <t>As a URI to an external entity, such as: &lt;artwork type="svg" src="http://www.example.com/..."&gt;</t>
          <t>As a local file, such as: &lt;artwork type="svg" src="diagram12.svg"&gt;</t>
       </list>
-      The use of SVG in Internet Drafts and RFCs is covered in much more detail in
+      The use of SVG in Internet-Drafts and RFCs is covered in much more detail in
       <xref target="SVGforRFCs"/>.
    </t>
    <t>
@@ -1295,7 +1295,7 @@ the appendices for a complete description of these attributes.
       Represents a comment.
    </t>
    <t>
-      Comments can be used in a document while it is work-in-progress. They
+      Comments can be used in a document while it is work in progress. They
       might appear either inline and visually highlighted, at the end of the document,
       or not at all, depending on the formatting tool.
    </t>
@@ -1390,7 +1390,7 @@ the appendices for a complete description of these attributes.
       being produced, and also inside bibliographic references that use the &lt;<x:ref>front</x:ref>&gt; element.
    </t>
    <t>
-      In the boilerplate case, it defines the date of publication for the current document (Internet Draft or RFC).
+      In the boilerplate case, it defines the date of publication for the current document (Internet-Draft or RFC).
       When producing Internet-Drafts, the prep tool uses this date to compute the expiration date (see <xref target="IDGUIDE"/>).
       When one or more of "year",
       "month", or "day" are left out, the prep tool will attempt to use the
@@ -1403,7 +1403,7 @@ the appendices for a complete description of these attributes.
       "September", "October", "November", or "December".
    </t>
    <t>
-      When the prep tool is used to create Internet Drafts, it will reject a submitted Internet Draft that has a &lt;<x:ref>date</x:ref>&gt;
+      When the prep tool is used to create Internet-Drafts, it will reject a submitted Internet-Draft that has a &lt;<x:ref>date</x:ref>&gt;
       element in the boilerplate for itself that is anything other than today. That is, the tool
       will not allow a submitter to specify a date other than the day of submission. To avoid this problem,
       authors might simply not include a &lt;<x:ref>date</x:ref>&gt; element in the boilerplate.
@@ -2373,9 +2373,9 @@ the appendices for a complete description of these attributes.
                The link should use the form specified in <xref target="DOI"/>.
             </t>
          <t>
-               The Internet Draft that was submitted to the RFC Editor to become the published RFC.
+               The Internet-Draft that was submitted to the RFC Editor to become the published RFC.
                The value for the "rel" attribute is "derivedFrom".
-               The link should be to an IETF-controlled web site that retains copies of Internet Drafts.
+               The link should be to an IETF-controlled web site that retains copies of Internet-Drafts.
             </t>
          <t>
                A representation of the document offered by the document author.
@@ -3455,7 +3455,7 @@ the appendices for a complete description of these attributes.
       <iref item="rfc element" subitem="iprExtract attribute"/>
       <iref item="iprExtract attribute" subitem="in rfc element"/>
       <t>
-            Identifies a single section within the document for which extraction "as-is"
+            Identifies a single section within the document for which extraction "as is"
             is explicitly allowed (only relevant for historic values of the "ipr"
             attribute).
       </t>
@@ -3634,7 +3634,7 @@ the appendices for a complete description of these attributes.
       &lt;back&gt; element).
    </t>
    <t>
-      Sub-sections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
+      Subsections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
       Sections are allowed to be empty.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>), &lt;<x:ref>boilerplate</x:ref>&gt; (<xref target="element.boilerplate"/>), &lt;<x:ref>middle</x:ref>&gt; (<xref target="element.middle"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
@@ -3797,7 +3797,7 @@ the appendices for a complete description of these attributes.
       &lt;<x:ref>front</x:ref>&gt; element inside the &lt;<x:ref>rfc</x:ref>&gt; element, looking
       for "rfc" or "Internet-Draft". (Specifying neither value in any of the
       &lt;<x:ref>seriesInfo</x:ref>&gt; elements can be useful for producing other types of
-      documents, but is out-of-scope for this specification.)
+      documents, but is out of scope for this specification.)
    </t>
    <t>
 It is invalid to have multiple &lt;<x:ref>seriesInfo</x:ref>&gt; elements inside the same &lt;<x:ref>front</x:ref>&gt;
@@ -3853,7 +3853,7 @@ in the same &lt;front&gt; element.
          element with a name of "Internet-Draft", it can also have at most one additional
          &lt;<x:ref>seriesInfo</x:ref>&gt; element with a "status" attribute whose value is of
          "standard", "full-standard", "bcp", "fyi", "informational", "experimental", or
-         "historic" to indicate the intended status of this Internet Draft, if it were to be later
+         "historic" to indicate the intended status of this Internet-Draft, if it were to be later
          published as an RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt; element has
          one of those statuses, the name MUST be "".
       </t>
@@ -3925,7 +3925,7 @@ in the same &lt;front&gt; element.
       </t>
       <t>
             The name in the value should be the document name without any file
-            extension. For Internet Drafts, the value for this attribute should
+            extension. For Internet-Drafts, the value for this attribute should
             be "draft-ietf-somewg-someprotocol-07", not
             "draft-ietf-somewg-someprotocol-07.txt".
       </t>
@@ -5253,7 +5253,7 @@ Using CDATA:
    <iref item="Elements" subitem="svg" primary="true"/>
    <iref item="svg element" primary="true"/>
    <t>
-      This element holds SVG art. The use of SVG in Internet Drafts and RFCs is covered in much more detail in
+      This element holds SVG art. The use of SVG in Internet-Drafts and RFCs is covered in much more detail in
       <xref target="SVGforRFCs"/>. 
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>artwork</x:ref>&gt; (<xref target="element.artwork"/>).</t>
@@ -5790,7 +5790,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
 <t>
   The "type" attribute of the &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt; elements is meant
   to encourage formatters to automatically extract known types of content from
-  an RFC or Internet Draft. While extraction is probably safe, those tools
+  an RFC or Internet-Draft. While extraction is probably safe, those tools
   might also think that they could further process the extracted content
   such as by rendering artwork or executing code. Doing so without first
   sanity-checking the extracted content is clearly a terrible idea
@@ -5896,7 +5896,7 @@ and should have only a localized impact on the document processing and rendering
 
 <t>Description: The document linked to was later converted to the document
 that contains this link relation. For example, an RFC can have a link
-to the Internet Draft that became the RFC; in that case, the link
+to the Internet-Draft that became the RFC; in that case, the link
 relation would be "convertedFrom".</t>
 
 <t>Reference: This document.</t>
@@ -6582,7 +6582,7 @@ are believed to be the current values in use.</t>
   <list style="symbols">
     <t>
       For RFCs, the stream name appears in the upper left corner of the 
-      first page (in Internet Drafts, this is either "Network Working Group",
+      first page (in Internet-Drafts, this is either "Network Working Group",
       or the value of the &lt;<x:ref>workgroup</x:ref>&gt; element).
     </t>
     <t>
@@ -6590,7 +6590,7 @@ are believed to be the current values in use.</t>
       <xref x:sec="3.2.2" x:fmt="of" target="RFC5741"/>).
     </t>
     <t>
-      For all RFCs and Internet Drafts, it determines whether the "Copyright
+      For all RFCs and Internet-Drafts, it determines whether the "Copyright
       Notice" mentions the Copyright on Code Components (see TLP, Section "Text to Be Included in IETF Documents"). 
     </t>
   </list>
@@ -6646,7 +6646,7 @@ The restrictions on the canonical XML for RFCs, as well as how the non-canonical
 will look, are described at
 &lt;https://www.rfc-editor.org/rse/wiki/doku.php?id=design:format-and-content-rfcs&gt;.</t>
 
-<t>Draft mode -- The mode used by the Internet Draft submission tool. The restrictions
+<t>Draft mode -- The mode used by the Internet-Draft submission tool. The restrictions
 for the XML from this mode will be described later.</t>
 
 <t>Diagnostic mode -- A mode that can be used by document authors to look for errors
@@ -6669,7 +6669,7 @@ The IETF tools are expected to take prepared documents as input.</t>
 authors. These tools may be used to produce interim versions of the non-canonical representations
 so that authors can see how their XML might later be rendered; to
 create documents in representations different than those supported by the RFC Editor;
-to possibly create documents that are not meant to be Internet Drafts or RFCs;
+to possibly create documents that are not meant to be Internet-Drafts or RFCs;
 and to convert XML that has external information into XML that has that external information
 included.</t>
 
@@ -6712,7 +6712,7 @@ references, all RFCs, the document might contain:
 </t>
 
 <t>&lt;xi:include&gt; can be used anywhere an XML element could be used (but not where
-free text is used). For example, if three Internet Drafts are all including a particular paragraph
+free text is used). For example, if three Internet-Drafts are all including a particular paragraph
 or section verbatim, that text can be kept either in a file or somewhere on the web, and be
 included with &lt;xi:include&gt;. An example of pulling something from the local disk would
 be:
@@ -6730,7 +6730,7 @@ that allow external inclusions.
 
 <section anchor="anchorsandids" title="Anchors and IDs">
 
-<t>People writing and reading Internet Drafts and RFCs often want to make reference to
+<t>People writing and reading Internet-Drafts and RFCs often want to make reference to
 specific locations in those documents. In the case of RFC authors, it is common
 to want to reference another part of their document, such as "see Section 3.2 of this
 document". Readers, on the other hand, want to reference part of documents that they
