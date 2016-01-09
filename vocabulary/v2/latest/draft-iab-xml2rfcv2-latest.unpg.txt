@@ -3,9 +3,9 @@
 
 Network Working Group                                         J. Reschke
 Internet-Draft                                                greenbytes
-Obsoletes: 2629 (if approved)                            January 8, 2016
+Obsoletes: 2629 (if approved)                            January 9, 2016
 Intended status: Informational
-Expires: July 11, 2016
+Expires: July 12, 2016
 
 
                    The 'XML2RFC' version 2 Vocabulary
@@ -41,7 +41,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 11, 2016.
+   This Internet-Draft will expire on July 12, 2016.
 
 Copyright Notice
 
@@ -115,7 +115,7 @@ Table of Contents
    9.  References
      9.1.  Normative References
      9.2.  Informative References
-   Appendix A.  Front Page ("Boilerplate") Generation
+   Appendix A.  Front-Page ("Boilerplate") Generation
      A.1.  The /rfc/@category Attribute
      A.2.  The /rfc/@ipr Attribute
        A.2.1.  Current Values: "*trust200902"
@@ -152,14 +152,14 @@ Table of Contents
    document has not been updated since 2008.
 
    Processing Instructions (Section 2.6 of [XML]) generally are specific
-   to a given processor, and thus are not considered to be part of the
+   to a given processor and thus are not considered to be part of the
    vocabulary.  See Section 4.1 of [TCLReadme] for a list of the
    Processing Instructions supported by the first implementation of an
    xml2rfc processor.
 
    Note that the vocabulary contains certain constructs that might not
    be used when generating the final text; however, they can provide
-   useful data for other uses (such index generation, populating a
+   useful data for other uses (such as index generation, populating a
    keyword database, or syntax checks).
 
 1.1.  Syntax Notation
@@ -250,7 +250,7 @@ Table of Contents
    "Security" ("sec"), and "Transport" ("tsv").
 
    Note that the set of IETF areas can change over time; for instance,
-   "Application and Real-Time" ("art") replaced "Applications" ("app")
+   "Applications and Real-Time" ("art") replaced "Applications" ("app")
    and "Real-time Applications and Infrastructure" ("rai") in 2015.
 
    This element appears as a child element of <front> (Section 2.19).
@@ -259,11 +259,11 @@ Table of Contents
 
 2.5.  <artwork>
 
-   This element allows the inclusion of "artwork" into the document.
+   This element allows the inclusion of "artwork" in the document.
 
    <artwork> is the only element in the vocabulary that provides full
-   control of horizontal whitespace and line breaks, and thus is used
-   for a variety of things, such as:
+   control of horizontal whitespace and line breaks; thus it is used for
+   a variety of things, such as:
 
    o  diagrams ("line art"),
 
@@ -279,17 +279,18 @@ Table of Contents
    o  protocol unit diagrams.
 
    Note that processors differ in the handling of horizontal TAB
-   characters (some expand them, some treat them as single space), and
+   characters (some expand them, some treat them as single spaces), and
    thus these ought to be avoided.
 
    Alternatively, the "src" attribute allows referencing an external
    graphics file, such as a bitmap or a vector drawing, using a URI
    ("Uniform Resource Identifier", [RFC3986]).  In this case, the
-   textual content acts as fallback for output formats that do not
+   textual content acts as a fallback for output formats that do not
    support graphics; thus, it ought to contain either (1) a "line art"
    variant of the graphics or (2) prose that describes the included
    image in sufficient detail.  Note that RFCs occasionally are
-   published with enhanced diagrams; a recent example is [RFC5598].
+   published with enhanced diagrams; [RFC5598] is a recent example of an
+   RFC that was published along with a PDF with images.
 
    This element appears as a child element of <figure> (Section 2.17).
 
@@ -322,9 +323,9 @@ Table of Contents
    This attribute is format dependent and ought to be avoided.
 
    When generating HTML output ([HTML]), current implementations copy
-   the attribute "as is", thus effectively treat it as CSS pixels (see
-   Section 4.3.2 of [CSS]).  For other output formats, it is usually
-   ignored.
+   the attribute "as is", thus effectively treating it as CSS (Cascading
+   Style Sheets) pixels (see Section 4.3.2 of [CSS]).  For other output
+   formats, it is usually ignored.
 
 2.5.4.  "name" Attribute
 
@@ -346,7 +347,7 @@ Table of Contents
 
    Specifies the type of the artwork.
 
-   The value either is an Internet Media Type (see [RFC2046]) or a
+   The value is either an Internet Media Type (see [RFC2046]) or a
    keyword (such as "abnf").  The set of recognized keywords varies
    across implementations.
 
@@ -362,16 +363,16 @@ Table of Contents
    This attribute is format dependent and ought to be avoided.
 
    When generating HTML output ([HTML]), current implementations copy
-   the attribute "as is", thus effectively treat it as CSS pixels (see
-   Section 4.3.2 of [CSS]).  For other output formats, it is usually
-   ignored.
+   the attribute "as is", thus effectively treating it as CSS pixels
+   (see Section 4.3.2 of [CSS]).  For other output formats, it is
+   usually ignored.
 
 2.5.8.  "xml:space" Attribute
 
    Determines whitespace handling.
 
    "preserve" is both the default value and the only meaningful setting
-   anyway (because that's what the <artwork> element is for).
+   (because that's what the <artwork> element is for).
 
    See also Section 2.10 of [XML].
 
@@ -510,10 +511,10 @@ Table of Contents
 
    Represents a comment.
 
-   Comments can be used in a document while it is work in progress.
-   They usually appear either inline and visually highlighted, at the
+   Comments can be used in a document while it is a work in progress.
+   They usually appear (1) inline and visually highlighted, (2) at the
    end of the document (depending on file format and settings of the
-   formatter), or not at all (when generating an RFC).
+   formatter), or (3) not at all (when generating an RFC).
 
    This element appears as a child element of <annotation>
    (Section 2.3), <c> (Section 2.8), <postamble> (Section 2.28),
@@ -538,15 +539,15 @@ Table of Contents
 
    Provides information about the publication date.
 
-   Note that this element is used both for the boilerplate of the
-   document being produced, and also inside bibliographic references.
+   Note that this element is used for the boilerplate of the document
+   being produced, and also inside bibliographic references.
 
-   In the boilerplate case, it defines the publication date, which, when
-   producing Internet-Drafts, will be used for computing the expiration
-   date (see Section 8 of [IDGUIDE]).  When one or more of "year",
-   "month", or "day" are left out, the processor will attempt to use the
-   current system date if the attributes that are present are consistent
-   with that date.
+   In the "boilerplate" case, it defines the publication date, which,
+   when producing Internet-Drafts, will be used for computing the
+   expiration date (see Section 8 of [IDGUIDE]).  When one or more of
+   "year", "month", or "day" are left out, the processor will attempt to
+   use the current system date if the attributes that are present are
+   consistent with that date.
 
    Note that in this case, month names need to match the full (English)
    month name ("January", "February", "March", "April", "May", "June",
@@ -737,8 +738,8 @@ Table of Contents
 
 2.19.  <front>
 
-   Represent the "front matter": metadata (such as author information),
-   Abstract, and additional notes.
+   Represents the "front matter": metadata (such as author information),
+   the Abstract, and additional notes.
 
    This element appears as a child element of <reference> (Section 2.30)
    and <rfc> (Section 2.33).
@@ -767,7 +768,7 @@ Table of Contents
 
    Provides terms for the document's index.
 
-   Index entries can be either be regular entries (when just the "item"
+   Index entries can be either regular entries (when just the "item"
    attribute is given) or nested entries (by specifying "subitem" as
    well), grouped under a regular entry.
 
@@ -893,7 +894,7 @@ Table of Contents
 
       For unordered (bulleted) lists.
 
-      The style of the bullets is chosen automatically be the processor
+      The style of the bullets is chosen automatically by the processor
       (some implementations allow overriding the default using a
       Processing Instruction).
 
@@ -907,7 +908,7 @@ Table of Contents
       The value is a free-form text that allows counter values to be
       inserted using a "percent-letter" format.  For instance, "[REQ%d]"
       generates labels of the form "[REQ1]", where "%d" inserts the item
-      number as decimal number.
+      number as a decimal number.
 
       The following formats are supported:
 
@@ -959,7 +960,7 @@ Table of Contents
 
    Specifies the affiliation ([RFC7322], Section 4.1.2) of an author.
 
-   This information appears in both the "Author's Address" section and
+   This information appears both in the "Author's Address" section and
    on the front page (see Section 4.1.1 of [RFC7322] for more
    information).  If the value is long, an abbreviated variant can be
    specified in the "abbrev" attribute.
@@ -1093,8 +1094,8 @@ Table of Contents
    Holds the URI for the reference.
 
    Note that, depending on the <seriesInfo> element, a URI might not be
-   needed, nor desirable, as it can be automatically generated (for
-   instance, for RFCs).
+   needed and might not be desirable, as it can be automatically
+   generated (for instance, for RFCs).
 
 2.31.  <references>
 
@@ -1368,7 +1369,7 @@ Table of Contents
    The name of the series.
 
    Some series names might trigger specific processing (such as for
-   auto-generating links, inserting descriptions such as "work in
+   autogenerating links, inserting descriptions such as "work in
    progress", or additional functionality like reference diagnostics).
    Examples for IETF-related series names are "BCP", "FYI", "Internet-
    Draft", "RFC", and "STD".
@@ -1412,8 +1413,8 @@ Table of Contents
 
    Determines whitespace handling.
 
-   According to the DTD, the default value is "preserve".  Tests however
-   show that it doesn't have any effect on processing; thus, this
+   According to the DTD, the default value is "preserve".  However,
+   tests show that it doesn't have any effect on processing; thus, this
    attribute will be removed in future versions of the vocabulary.
 
    See also Section 2.10 of [XML].
@@ -1475,7 +1476,7 @@ Table of Contents
 
 2.39.  <texttable>
 
-   Contains a table consisting of an optional preamble, a header line,
+   Contains a table, consisting of an optional preamble, a header line,
    rows, an optional postamble, and an optional title.
 
    The number of columns in the table is determined by the number of
@@ -1618,7 +1619,7 @@ Table of Contents
    This element can be used to force the inclusion of a single line
    break or multiple blank lines.
 
-   Note that this is a purely presentational element and thus its use
+   Note that this is a purely presentational element; thus, its use
    ought to be avoided, except within a <list> as discussed in
    Section 2.22.
 
@@ -1644,7 +1645,7 @@ Table of Contents
    In Internet-Drafts, this is used in the upper left corner of the
    boilerplate, replacing the "Network Working Group" string.
    Formatting software can append the words "Working Group" or "Research
-   Group", depending on the "submissionType" property on the <rfc>
+   Group", depending on the "submissionType" property of the <rfc>
    element (Section 2.33.9).
 
    This element appears as a child element of <front> (Section 2.19).
@@ -1779,8 +1780,8 @@ Table of Contents
 
    non-breaking hyphen (U+2011)
 
-      Similarly, this represents a hyphen character where nevertheless
-      no line breaking ought to occur.
+      Similarly, this represents a hyphen character where no line
+      breaking ought to occur.
 
    word joiner (U+2060)
 
@@ -1788,7 +1789,7 @@ Table of Contents
       disallow line breaking between two non-whitespace characters.
 
    Note that in order to use these characters by name, they need to be
-   declared either in the Document Type Definition (DTD) or in the
+   declared in either the Document Type Definition (DTD) or the
    "internal subset" ([XML], Section 2.8), like this:
 
    <?xml version="1.0"?>
@@ -1852,14 +1853,14 @@ Table of Contents
 
 7.  Security Considerations
 
-   The "name" attribute on the <artwork> element (Section 2.5.4) can be
+   The "name" attribute of the <artwork> element (Section 2.5.4) can be
    used to derive a filename for saving to a local file system.
    Trusting this kind of information without pre-processing is a known
    security risk; see Section 4.3 of [RFC6266] for more information.
 
    Furthermore, the nature of XML, plus vocabulary features such as
    typed artwork, make it attractive to extract content from documents
-   for further processing, such for the purpose of checking syntax or
+   for further processing, such as for the purpose of checking syntax or
    computing/verifying examples.  In the latter case, care needs to be
    taken that only trusted content is processed.
 
@@ -1883,8 +1884,8 @@ Table of Contents
    Required parameters:  There are no required parameters.
 
    Optional parameters:  "charset": This parameter has identical
-      semantics as the charset parameter of the "application/xml" media
-      type specified in Section 9.1 of [RFC7303].
+      semantics to the charset parameter of the "application/xml" Media
+      Type specified in Section 9.1 of [RFC7303].
 
    Encoding considerations:  Identical to those of "application/xml" as
       described in Section 9.1 of [RFC7303].
@@ -2107,7 +2108,7 @@ Table of Contents
                 Latest version available at
                 <http://www.w3.org/TR/xptr-framework/>.
 
-Appendix A.  Front Page ("Boilerplate") Generation
+Appendix A.  Front-Page ("Boilerplate") Generation
 
 A.1.  The /rfc/@category Attribute
 
@@ -2117,18 +2118,18 @@ A.1.  The /rfc/@category Attribute
    "Informational", "exp" for "Experimental", and "historic" for
    "Historic".
 
-   For Internet-Drafts, the "category" attribute is not needed, but will
-   appear on the front page as "Intended Status".  Supplying this
+   For Internet-Drafts, the "category" attribute is not needed; when
+   supplied, it will appear as "Intended Status".  Supplying this
    information can be useful to reviewers.
 
 A.2.  The /rfc/@ipr Attribute
 
    This attribute value can take a long list of values, each of which
    describes an IPR policy for the document (Section 2.33.4).  The
-   values are not the result of a grand design, but remain simply for
-   historic reasons.  Of these values, only a few are currently in use;
-   all others are supported by various tools for backwards compatibility
-   with old source files.
+   values are not the result of a grand design, but they remain simply
+   for historic reasons.  Of these values, only a few are currently in
+   use; all others are supported by various tools for backwards
+   compatibility with old source files.
 
       *Note:* some variations of the boilerplate are selected based on
       the document's date; therefore, it is important to specify the
@@ -2148,14 +2149,14 @@ A.2.  The /rfc/@ipr Attribute
 
 A.2.1.  Current Values: "*trust200902"
 
-   The name for these values refers to the "IETF TRUST Legal Provisions
-   Relating to IETF Documents", sometimes simply called the "TLP", which
-   went into effect on February 15, 2009 ([TLP2.0]).  Updates to this
-   document were published on September 12, 2009 ([TLP3.0]) and on
-   December 28, 2009 ([TLP4.0]), modifying the license for code
-   components (see <http://trustee.ietf.org/license-info/> for further
-   information).  The actual text is located in Section 6 ("Text to Be
-   Included in IETF Documents") of these documents.
+   The name for these values refers to the IETF Trust's "Legal
+   Provisions Relating to IETF Documents", sometimes simply called the
+   "TLP", which went into effect on February 15, 2009 ([TLP2.0]).
+   Updates to this document were published on September 12, 2009
+   ([TLP3.0]) and on December 28, 2009 ([TLP4.0]), modifying the license
+   for code components (see <http://trustee.ietf.org/license-info/> for
+   further information).  The actual text is located in Section 6 ("Text
+   to Be Included in IETF Documents") of these documents.
 
    Formatters will automatically produce the "correct" text, depending
    on the document's date information (see above):
@@ -2249,39 +2250,39 @@ A.2.2.4.  Historic Values: "*2026"
    similar to their counterparts above, except that they use text
    specified in Section 10 of [RFC2026].
 
-   The special value "none" was also used back then, and denied the IETF
-   any rights beyond publication as Internet-Draft.
+   The special value "none" was also used back then; it denied the IETF
+   any rights beyond publication as an Internet-Draft.
 
 A.3.  The /rfc/@submissionType Attribute
 
-   The RFC Editor publishes documents from different "document streams",
-   of which the "IETF stream" is the most prominent one.  Other streams
-   are the "independent stream" (used for things such as administrative
-   information or April 1st RFCs), the "IAB stream" (Internet
-   Architecture Board) and the "IRTF stream" (Internet Research Task
-   Force).
+   The RFC Editor publishes documents from different document streams,
+   of which the IETF stream is the most prominent.  Other streams are
+   the independent stream (used for things such as discussion of
+   Internet-related technologies that are not part of the IETF agenda),
+   the IAB stream (Internet Architecture Board) and the IRTF stream
+   (Internet Research Task Force).
 
    The values for the attribute are "IETF" (the default value),
    "independent", "IAB", and "IRTF".
 
    Historically, this attribute did not affect the final appearance of
-   RFCs, except for subtle differences in Copyright notices.  Nowadays
+   RFCs, except for subtle differences in copyright notices.  Nowadays
    (as of [RFC5741]), the stream name appears in the first line of the
    front page, and it also affects the text in the "Status of This Memo"
    section.
 
-   For current documents, setting "submissionType" attribute will have
-   the following effect:
+   For current documents, setting the "submissionType" attribute will
+   have the following effect:
 
    o  For RFCs, the stream name appears in the upper left corner of the
       first page (in Internet-Drafts, this is either "Network Working
       Group" or the value of the <workgroup> element).
 
-   o  For RFCs, if affects the whole "Status of This Memo" section (see
+   o  For RFCs, it affects the whole "Status of This Memo" section (see
       Section 3.2.2 of [RFC5741]).
 
    o  For all RFCs and Internet-Drafts, it determines whether the
-      "Copyright Notice" mentions the Copyright on Code Components (see
+      "Copyright Notice" mentions the copyright on Code Components (see
       TLP, Section "Text to Be Included in IETF Documents").
 
 A.4.  The /rfc/@consensus Attribute
@@ -2366,7 +2367,7 @@ B.5.  New Elements
 
    The following elements have been added: <annotation> (Section 2.3),
    <c> (Section 2.8), <cref> (Section 2.12), <format> (Section 2.18),
-   <spanx> (Section 2.36), <texttable> (Section 2.39), <ttcol>
+   <spanx> (Section 2.36), <texttable> (Section 2.39), and <ttcol>
    (Section 2.41).
 
 Appendix C.  RELAX NG Schema
@@ -2687,12 +2688,12 @@ C.1.  Checking Validity
 
    The validity of XML files can be checked with any tool that supports
    RELAX NG ([RNC]).  The reference implementation is the Java-based,
-   open sourced "Jing" ([JING]).
+   open-sourced "Jing" ([JING]).
 
    To use Jing, download the latest ZIP file from the "downloads" page
    (currently <https://code.google.com/p/jing-trang/downloads/
    detail?name=jing-20091111.zip>), extract the archive, copy "jing.jar"
-   from the "bin" folder, and make sure Java is installed).
+   from the "bin" folder, and make sure Java is installed.
 
    To check a file "test.xml" using the RNC file "schema.rnc", run (from
    a command-line prompt):
