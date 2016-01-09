@@ -13,8 +13,6 @@
 <?rfc linkmailto="no" ?>
 <?rfc rfcedstyle="yes"?><!--
 
-*** Still need to do rev 2113 and 2114 from Julian's edits. ***
-
 rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rectified.
 
 -->
@@ -23,7 +21,7 @@ rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rec
 <rfc obsoletes="2629" ipr="trust200902" docName="draft-iab-xml2rfc-latest" category="info">
   
 	<front>
-  <title>The 'XML2RFC' version 3 Vocabulary</title>
+  <title>The "XML2RFC" version 3 Vocabulary</title>
   <author initials="P." surname="Hoffman" fullname="Paul Hoffman">
     <organization>ICANN</organization>
 	<address><email>paul.hoffman@icann.org</email></address>
@@ -54,7 +52,7 @@ rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rec
 <section title="Introduction">
 <t>
   This document describes version 3 ("v3") of the "XML2RFC" vocabulary; an XML-based
-  language ('Extensible Markup Language', <xref target="XML"/>) used for writing RFCs
+  language ("Extensible Markup Language", <xref target="XML"/>) used for writing RFCs
   (<xref target="RFC7322"/>) and Internet-Drafts (<xref target="IDGUIDE"/>).
 </t>
 <t>
@@ -339,7 +337,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
 <t>
   The XML vocabulary here is defined in prose, based on the Relax NG schema 
   (<xref target="RNC"/>) contained in <xref target="schema"/> (specified in
-  Relax NG Compact Notation, "RNC").
+  Relax NG Compact Notation, (RNC)).
 </t>
 <t>  
   Note that the schema can be used for automated validity
@@ -555,15 +553,15 @@ the appendices for a complete description of these attributes.
    <iref item="Elements" subitem="artwork" primary="true"/>
    <iref item="artwork element" primary="true"/>
    <t>
-      This element allows the inclusion of "artwork" into the document.
+      This element allows the inclusion of "artwork" in the document.
       &lt;artwork&gt; provides
-      full control of horizontal whitespace and line breaks, and thus is
+      full control of horizontal whitespace and line breaks; thus is
       used for a variety of things, such as diagrams ("line art") and protocol unit diagrams.
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
       file, such as a vector drawing in SVG or a bitmap graphic file, using a URI. In this case, the textual
-      content acts as fallback for output representations that do not support graphics;
+      content acts as a fallback for output representations that do not support graphics;
       thus, it ought to contain either (1) a "line art" variant of the graphics or (2)
       prose that describes the included image in sufficient detail.
    </t>
@@ -699,7 +697,7 @@ the appendices for a complete description of these attributes.
       <iref item="src attribute" subitem="in artwork element"/>
       <t>
          The URI reference of a graphics file (<xref target="RFC3986"/>), or the name of a file on the local disk.
-         This can be a "data" URI (<xref target="RFC2397"/>) that contains the contents of the graphics file.
+         This can be a "data" URI <xref target="RFC2397"/> that contains the contents of the graphics file.
          Note that the inclusion of art with the "src" attribute depends on the capabilities of the processing tool
          reading the XML document. Tools need to be able to handle the file: URI, and should
          be able to handle http: and https: URIs as well. The prep tool will be able to handle reading the "src" attribute.
@@ -1352,11 +1350,11 @@ the appendices for a complete description of these attributes.
       Provides information about the publication date.
    </t>
    <t>
-      Note that this element is used both for the boilerplate of the document
+      Note that this element is used for the boilerplate of the document
       being produced, and also inside bibliographic references that use the &lt;<xref target="element.front" format="none">front</xref>&gt; element.
    </t>
    <t>
-      In the boilerplate case, it defines the date of publication for the current document (Internet-Draft or RFC).
+      In the "boilerplate" case, it defines the date of publication for the current document (Internet-Draft or RFC).
       When producing Internet-Drafts, the prep tool uses this date to compute the expiration date (see <xref target="IDGUIDE"/>).
       When one or more of "year",
       "month", or "day" are left out, the prep tool will attempt to use the
@@ -2026,8 +2024,8 @@ the appendices for a complete description of these attributes.
    <iref item="Elements" subitem="front" primary="true"/>
    <iref item="front element" primary="true"/>
    <t>
-      Represent the "front matter": metadata (such as author information),
-      Abstract, and additional notes.
+      Represents the "front matter": metadata (such as author information),
+      the Abstract, and additional notes.
    </t>
    <t>
       A &lt;<xref target="element.front" format="none">front</xref>&gt; element may have more than one &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements.
@@ -2107,7 +2105,7 @@ the appendices for a complete description of these attributes.
       Provides terms for the document's index.
    </t>
    <t>
-      Index entries can be either be regular entries (when just the "item"
+      Index entries can be either regular entries (when just the "item"
       attribute is given) or nested entries (by specifying "subitem" as well),
       grouped under a regular entry.
    </t>
@@ -2578,7 +2576,7 @@ the appendices for a complete description of these attributes.
         The value is a free-form text that allows counter values to be
         inserted using a "percent-letter" format. For instance, "[REQ%d]"
         generates labels of the form "[REQ1]", where "%d" inserts the
-        item number as decimal number.
+        item number as a decimal number.
       </t>
       <t>
          The following formats are supported:
@@ -2614,7 +2612,7 @@ the appendices for a complete description of these attributes.
       Specifies the affiliation (<xref target="RFC7322"/>) of an author.
    </t>
    <t>
-      This information appears in both the "Author's Address" section and
+      This information appears both in the "Author's Address" section and
       on the front page (see <xref target="RFC7322"/> for more information).
       If the value is long, an abbreviated variant can be specified in the
       "abbrev" attribute.
@@ -4951,7 +4949,7 @@ Using CDATA:
       In Internet-Drafts, this is used in the upper left corner of the boilerplate,
       replacing the "Network Working Group" string. Formatting software can
       append the words "Working Group" or "Research Group", depending on
-      the "submissionType" property on the &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element
+      the "submissionType" property of the &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element
       (<xref target="element.rfc.attribute.submissionType"/>).
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.front" format="none">front</xref>&gt; (<xref target="element.front"/>).</t>
@@ -5630,7 +5628,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
 
 <section anchor="security.considerations" title="Security Considerations">
 <t>
-  The "name" attribute on the &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; element
+  The "name" attribute of the &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; element
   (<xref target="element.artwork.attribute.name"/>)
   can be used to derive a filename for saving to a local file system.
   Trusting this kind of information without pre-processing is a known
@@ -5673,7 +5671,7 @@ and should have only a localized impact on the document processing and rendering
 </t>
 <t>
   This document updates the specification for the Internet Media Type
-  "application/rfc+xml" from the one in <xref target="XML2RFCv2"/>. The following is to be registered with IANA.
+  "application/rfc+xml" from the one in <xref target="XML2RFCv2"/>. The following has been registered with IANA.
 </t>
 <t>
   <list style="hanging">
@@ -5687,7 +5685,7 @@ and should have only a localized impact on the document processing and rendering
       There are no required parameters.
     </t>
     <t hangText="Optional parameters:">
-      "charset": This parameter has identical semantics as the charset
+      "charset": This parameter has identical semantics to the charset
       parameter of the "application/xml" Media Type specified in Section 9.1 of <xref target="RFC7303"/>.
     </t>
     <t hangText="Encoding considerations:">
@@ -5724,7 +5722,7 @@ and should have only a localized impact on the document processing and rendering
       </list>
     </t>
     <t hangText="Person &amp; email address to contact for further information:">
-      See Authors Section.
+      ee the Author's Address section of RFC 7749.
     </t>
     <t hangText="Intended usage:">
       COMMON
@@ -5733,7 +5731,7 @@ and should have only a localized impact on the document processing and rendering
       None
     </t>
     <t hangText="Author:">
-      See Authors Section.
+      ee the Author's Address section of RFC 7749.
     </t>
     <t hangText="Change controller:">
       RFC Series Editor (rse@rfc-editor.org)
@@ -5816,7 +5814,7 @@ Suzanne Woolf
     </annotation></reference>
 
   <reference anchor="XML2RFCv2"><front>
-      <title>The 'XML2RFC' version 2 Vocabulary</title>
+      <title>The "XML2RFC" version 2 Vocabulary</title>
       <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
       <date year="2014"/>
     </front><seriesInfo name="Internet-Draft" value="draft-iab-xml2rfcv2"/></reference>
@@ -6096,7 +6094,7 @@ Suzanne Woolf
 
 </references>
 
-<section anchor="front.page" title="Front Page (&#34;Boilerplate&#34;) Generation">
+<section anchor="front.page" title="Front-Page (&#34;Boilerplate&#34;) Generation">
 
 <t>The values listed here will be defined by the RFC Editor. Those listed here
 are believed to be the current values in use.</t>
@@ -6105,7 +6103,7 @@ are believed to be the current values in use.</t>
 <t>
   This attribute value can take a long list of values, each of which describes an IPR policy for the document
   (<xref target="element.rfc.attribute.ipr"/>). 
-  The values are not the result of a grand design, but remain simply for historic
+  The values are not the result of a grand design, but they remain simply for historic
   reasons. Of these values, only a few are currently in use; all others are
   supported by various tools for backwards compatibility with old source
   files.
@@ -6135,10 +6133,10 @@ are believed to be the current values in use.</t>
 <section anchor="attribute-ipr-current" title="Current Values: &#34;*trust200902&#34;">
 <iref item="ipr attribute" subitem="&#34;*trust200902&#34;"/>
 <t>
-  The name for these values refers to the "IETF TRUST Legal Provisions Relating 
+  The name for these values refers tto the IETF Trust's "Legal Provisions Relating 
   to IETF Documents", sometimes simply called the "TLP", which went into effect on February 15, 2009 (<xref target="TLP2.0"/>).
-  Updates to this document were published on September 12, 2009 (<xref target="TLP3.0"/>)
-  and on December 28, 2009 (<xref target="TLP4.0"/>),
+  Updates to this document were published on September 12, 2009 <xref target="TLP3.0"/>
+  and on December 28, 2009 <xref target="TLP4.0"/>,
   modifying the license for code components (see <eref target="http://trustee.ietf.org/license-info/"/>
   for further information).
   The actual text is located in Section 6 ("Text to Be Included in IETF Documents")
@@ -6292,8 +6290,8 @@ are believed to be the current values in use.</t>
 </t>
 <t>
   The special value "none"
-  was also used back then, and denied the IETF any rights beyond publication
-  as Internet-Draft.
+  was also used back then; it denied the IETF any rights beyond publication
+  as an Internet-Draft.
 </t>
 </section>
 </section>
@@ -6302,8 +6300,9 @@ are believed to be the current values in use.</t>
 <section anchor="attribute-submissiontype" title="The /rfc/@submissionType Attribute">
 <t>
   The RFC Editor publishes documents from different "document streams", of which
-  the "IETF stream" is the most prominent one. Other streams are the "independent stream"
-  (used for things such as administrative information or April 1st RFCs),
+  the "IETF stream" is the most prominent. Other streams are the independent stream
+  (used for things such as discussion of Internet-related technologies that are
+  not part of the IETF agenda),
   the "IAB stream" (Internet Architecture Board) and the "IRTF stream" (Internet Research Task Force).
 </t>
 <t>
@@ -6312,13 +6311,13 @@ are believed to be the current values in use.</t>
 </t>
 <t>
   Historically, this attribute did not affect the final appearance of RFCs, except for
-  subtle differences in Copyright notices.
+  subtle differences in copyright notices.
   Nowadays (as of <xref target="RFC5741"/>), the stream name appears in the first
   line of the front page, and it also affects the text in the "Status of This Memo"
   section.
 </t>
 <t>
-  For current documents, setting submissionType attribute will
+  For current documents, setting the "submissionType" attribute will
   have the following effect:
   <list style="symbols">
     <t>
@@ -6327,12 +6326,13 @@ are believed to be the current values in use.</t>
       or the value of the &lt;<xref target="element.workgroup" format="none">workgroup</xref>&gt; element).
     </t>
     <t>
-      For RFCs, if affects the whole "Status of This Memo" section (see
+      For RFCs, it affects the whole "Status of This Memo" section (see
       Section 3.2.2 of <xref target="RFC5741"/>).
     </t>
     <t>
       For all RFCs and Internet-Drafts, it determines whether the "Copyright
-      Notice" mentions the Copyright on Code Components (see TLP, Section "Text to Be Included in IETF Documents"). 
+      Notice" mentions the Copyright on Code Components (see Section 6 of the TLP
+    ("Text to Be Included in IETF Documents")).
     </t>
   </list>
 </t>

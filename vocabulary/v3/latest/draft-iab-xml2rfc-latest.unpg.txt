@@ -3,12 +3,12 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 2629 (if approved)                            January 8, 2016
+Obsoletes: 2629 (if approved)                            January 9, 2016
 Intended status: Informational
-Expires: July 11, 2016
+Expires: July 12, 2016
 
 
-                   The 'XML2RFC' version 3 Vocabulary
+                   The "XML2RFC" version 3 Vocabulary
                         draft-iab-xml2rfc-latest
 
 Abstract
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 11, 2016.
+   This Internet-Draft will expire on July 12, 2016.
 
 Copyright Notice
 
@@ -157,7 +157,7 @@ Table of Contents
    9.  References
      9.1.  Normative References
      9.2.  Informative References
-   Appendix A.  Front Page ("Boilerplate") Generation
+   Appendix A.  Front-Page ("Boilerplate") Generation
      A.1.  The /rfc/@ipr Attribute
        A.1.1.  Current Values: "*trust200902"
        A.1.2.  Historic Values
@@ -175,7 +175,7 @@ Table of Contents
 1.  Introduction
 
    This document describes version 3 ("v3") of the "XML2RFC" vocabulary;
-   an XML-based language ('Extensible Markup Language', [XML]) used for
+   an XML-based language ("Extensible Markup Language", [XML]) used for
    writing RFCs ([RFC7322]) and Internet-Drafts ([IDGUIDE]).
 
    This document obsoletes the version 2 vocabulary ("v2") [XML2RFCv2],
@@ -422,7 +422,7 @@ Table of Contents
 
    The XML vocabulary here is defined in prose, based on the Relax NG
    schema ([RNC]) contained in Appendix C (specified in Relax NG Compact
-   Notation, "RNC").
+   Notation, (RNC)).
 
    Note that the schema can be used for automated validity checks, but
    certain constraints are only described in prose (example: the
@@ -557,14 +557,14 @@ Table of Contents
 
 2.5.  <artwork>
 
-   This element allows the inclusion of "artwork" into the document.
+   This element allows the inclusion of "artwork" in the document.
    <artwork> provides full control of horizontal whitespace and line
-   breaks, and thus is used for a variety of things, such as diagrams
-   ("line art") and protocol unit diagrams.
+   breaks; thus is used for a variety of things, such as diagrams ("line
+   art") and protocol unit diagrams.
 
    Alternatively, the "src" attribute allows referencing an external
    graphics file, such as a vector drawing in SVG or a bitmap graphic
-   file, using a URI.  In this case, the textual content acts as
+   file, using a URI.  In this case, the textual content acts as a
    fallback for output representations that do not support graphics;
    thus, it ought to contain either (1) a "line art" variant of the
    graphics or (2) prose that describes the included image in sufficient
@@ -667,7 +667,7 @@ Table of Contents
 2.5.6.  "src" Attribute
 
    The URI reference of a graphics file ([RFC3986]), or the name of a
-   file on the local disk.  This can be a "data" URI ([RFC2397]) that
+   file on the local disk.  This can be a "data" URI [RFC2397] that
    contains the contents of the graphics file.  Note that the inclusion
    of art with the "src" attribute depends on the capabilities of the
    processing tool reading the XML document.  Tools need to be able to
@@ -1064,11 +1064,11 @@ Table of Contents
 
    Provides information about the publication date.
 
-   Note that this element is used both for the boilerplate of the
-   document being produced, and also inside bibliographic references
-   that use the <front> element.
+   Note that this element is used for the boilerplate of the document
+   being produced, and also inside bibliographic references that use the
+   <front> element.
 
-   In the boilerplate case, it defines the date of publication for the
+   In the "boilerplate" case, it defines the date of publication for the
    current document (Internet-Draft or RFC).  When producing Internet-
    Drafts, the prep tool uses this date to compute the expiration date
    (see [IDGUIDE]).  When one or more of "year", "month", or "day" are
@@ -1493,8 +1493,8 @@ Table of Contents
 
 2.26.  <front>
 
-   Represent the "front matter": metadata (such as author information),
-   Abstract, and additional notes.
+   Represents the "front matter": metadata (such as author information),
+   the Abstract, and additional notes.
 
    A <front> element may have more than one <seriesInfo> elements.  A
    <seriesInfo> element determines the document number (for RFCs) or
@@ -1536,7 +1536,7 @@ Table of Contents
 
    Provides terms for the document's index.
 
-   Index entries can be either be regular entries (when just the "item"
+   Index entries can be either regular entries (when just the "item"
    attribute is given) or nested entries (by specifying "subitem" as
    well), grouped under a regular entry.
 
@@ -1844,7 +1844,7 @@ Table of Contents
    contain a percent-encoded indicator and other text.  The value is a
    free-form text that allows counter values to be inserted using a
    "percent-letter" format.  For instance, "[REQ%d]" generates labels of
-   the form "[REQ1]", where "%d" inserts the item number as decimal
+   the form "[REQ1]", where "%d" inserts the item number as a decimal
    number.
 
    The following formats are supported:
@@ -1875,7 +1875,7 @@ Table of Contents
 
    Specifies the affiliation ([RFC7322]) of an author.
 
-   This information appears in both the "Author's Address" section and
+   This information appears both in the "Author's Address" section and
    on the front page (see [RFC7322] for more information).  If the value
    is long, an abbreviated variant can be specified in the "abbrev"
    attribute.
@@ -3372,7 +3372,7 @@ Table of Contents
    In Internet-Drafts, this is used in the upper left corner of the
    boilerplate, replacing the "Network Working Group" string.
    Formatting software can append the words "Working Group" or "Research
-   Group", depending on the "submissionType" property on the <rfc>
+   Group", depending on the "submissionType" property of the <rfc>
    element (Section 2.45.12).
 
    This element appears as a child element of <front> (Section 2.26).
@@ -3808,7 +3808,7 @@ Table of Contents
 
 5.  Security Considerations
 
-   The "name" attribute on the <artwork> element (Section 2.5.5) can be
+   The "name" attribute of the <artwork> element (Section 2.5.5) can be
    used to derive a filename for saving to a local file system.
    Trusting this kind of information without pre-processing is a known
    security risk; see Section 4.3 of [RFC6266] for more information.
@@ -3843,8 +3843,8 @@ Table of Contents
    <https://www.iana.org/assignments/media-types>.
 
    This document updates the specification for the Internet Media Type
-   "application/rfc+xml" from the one in [XML2RFCv2].  The following is
-   to be registered with IANA.
+   "application/rfc+xml" from the one in [XML2RFCv2].  The following has
+   been registered with IANA.
 
    Type name:  application
 
@@ -3853,7 +3853,7 @@ Table of Contents
    Required parameters:  There are no required parameters.
 
    Optional parameters:  "charset": This parameter has identical
-      semantics as the charset parameter of the "application/xml" Media
+      semantics to the charset parameter of the "application/xml" Media
       Type specified in Section 9.1 of [RFC7303].
 
    Encoding considerations:  Identical to those of "application/xml" as
@@ -3889,14 +3889,14 @@ Table of Contents
 
       Macintosh file type code(s):  TEXT
 
-   Person & email address to contact for further information:  See
-      Authors Section.
+   Person & email address to contact for further information:  ee the
+      Author's Address section of RFC 7749.
 
    Intended usage:  COMMON
 
    Restrictions on usage:  None
 
-   Author:  See Authors Section.
+   Author:  ee the Author's Address section of RFC 7749.
 
    Change controller:  RFC Series Editor (rse@rfc-editor.org)
 
@@ -3960,7 +3960,7 @@ Table of Contents
                     Latest version available at
                     <http://www.w3.org/TR/xml>.
 
-   [XML2RFCv2]      Reschke, J., "The 'XML2RFC' version 2 Vocabulary",
+   [XML2RFCv2]      Reschke, J., "The "XML2RFC" version 2 Vocabulary",
                     draft-iab-xml2rfcv2 (work in progress), 2014.
 
 9.2.  Informative References
@@ -4130,7 +4130,7 @@ Table of Contents
                     Latest version available at
                     <http://www.w3.org/TR/xptr-framework/>.
 
-Appendix A.  Front Page ("Boilerplate") Generation
+Appendix A.  Front-Page ("Boilerplate") Generation
 
    The values listed here will be defined by the RFC Editor.  Those
    listed here are believed to be the current values in use.
@@ -4139,10 +4139,10 @@ A.1.  The /rfc/@ipr Attribute
 
    This attribute value can take a long list of values, each of which
    describes an IPR policy for the document (Section 2.45.5).  The
-   values are not the result of a grand design, but remain simply for
-   historic reasons.  Of these values, only a few are currently in use;
-   all others are supported by various tools for backwards compatibility
-   with old source files.
+   values are not the result of a grand design, but they remain simply
+   for historic reasons.  Of these values, only a few are currently in
+   use; all others are supported by various tools for backwards
+   compatibility with old source files.
 
       *Note:* some variations of the boilerplate are selected based on
       the document's date; therefore, it is important to specify the
@@ -4162,14 +4162,14 @@ A.1.  The /rfc/@ipr Attribute
 
 A.1.1.  Current Values: "*trust200902"
 
-   The name for these values refers to the "IETF TRUST Legal Provisions
-   Relating to IETF Documents", sometimes simply called the "TLP", which
-   went into effect on February 15, 2009 ([TLP2.0]).  Updates to this
-   document were published on September 12, 2009 ([TLP3.0]) and on
-   December 28, 2009 ([TLP4.0]), modifying the license for code
-   components (see <http://trustee.ietf.org/license-info/> for further
-   information).  The actual text is located in Section 6 ("Text to Be
-   Included in IETF Documents") of these documents.
+   The name for these values refers tto the IETF Trust's "Legal
+   Provisions Relating to IETF Documents", sometimes simply called the
+   "TLP", which went into effect on February 15, 2009 ([TLP2.0]).
+   Updates to this document were published on September 12, 2009
+   [TLP3.0] and on December 28, 2009 [TLP4.0], modifying the license for
+   code components (see <http://trustee.ietf.org/license-info/> for
+   further information).  The actual text is located in Section 6 ("Text
+   to Be Included in IETF Documents") of these documents.
 
    The prep tool automatically produces the "correct" text, depending on
    the document's date information (see above):
@@ -4263,40 +4263,40 @@ A.1.2.4.  Historic Values: "*2026"
    similar to their counterparts above, except that they use text
    specified in Section 10 of [RFC2026].
 
-   The special value "none" was also used back then, and denied the IETF
-   any rights beyond publication as Internet-Draft.
+   The special value "none" was also used back then; it denied the IETF
+   any rights beyond publication as an Internet-Draft.
 
 A.2.  The /rfc/@submissionType Attribute
 
    The RFC Editor publishes documents from different "document streams",
-   of which the "IETF stream" is the most prominent one.  Other streams
-   are the "independent stream" (used for things such as administrative
-   information or April 1st RFCs), the "IAB stream" (Internet
-   Architecture Board) and the "IRTF stream" (Internet Research Task
-   Force).
+   of which the "IETF stream" is the most prominent.  Other streams are
+   the independent stream (used for things such as discussion of
+   Internet-related technologies that are not part of the IETF agenda),
+   the "IAB stream" (Internet Architecture Board) and the "IRTF stream"
+   (Internet Research Task Force).
 
    The values for the attribute are "IETF" (the default value),
    "independent", "IAB", and "IRTF".
 
    Historically, this attribute did not affect the final appearance of
-   RFCs, except for subtle differences in Copyright notices.  Nowadays
+   RFCs, except for subtle differences in copyright notices.  Nowadays
    (as of [RFC5741]), the stream name appears in the first line of the
    front page, and it also affects the text in the "Status of This Memo"
    section.
 
-   For current documents, setting submissionType attribute will have the
-   following effect:
+   For current documents, setting the "submissionType" attribute will
+   have the following effect:
 
    o  For RFCs, the stream name appears in the upper left corner of the
       first page (in Internet-Drafts, this is either "Network Working
       Group" or the value of the <workgroup> element).
 
-   o  For RFCs, if affects the whole "Status of This Memo" section (see
+   o  For RFCs, it affects the whole "Status of This Memo" section (see
       Section 3.2.2 of [RFC5741]).
 
    o  For all RFCs and Internet-Drafts, it determines whether the
       "Copyright Notice" mentions the Copyright on Code Components (see
-      TLP, Section "Text to Be Included in IETF Documents").
+      Section 6 of the TLP ("Text to Be Included in IETF Documents")).
 
 A.3.  The /rfc/@consensus Attribute
 
