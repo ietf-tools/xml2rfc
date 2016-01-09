@@ -8,17 +8,16 @@ Intended status: Informational
 Expires: July 12, 2016
 
 
-                   The 'XML2RFC' version 2 Vocabulary
+                   The "XML2RFC" Version 2 Vocabulary
                        draft-iab-xml2rfcv2-latest
 
 Abstract
 
-   This document defines the 'XML2RFC' version 2 vocabulary; an XML-
+   This document defines the "XML2RFC" version 2 vocabulary: an XML-
    based language used for writing RFCs and Internet-Drafts.
 
-   Version 2 represents the current state of the vocabulary (as
-   implemented by several tools and as used by the RFC Editor) around
-   2014.
+   Version 2 represents the state of the vocabulary (as implemented by
+   several tools and as used by the RFC Editor) around 2014.
 
 Editorial Note (To be removed by RFC Editor)
 
@@ -135,18 +134,17 @@ Table of Contents
 
 1.  Introduction
 
-   This document describes version 2 ("v2") of the 'XML2RFC' vocabulary:
-   an XML-based language ('Extensible Markup Language', [XML]) used for
-   writing RFCs ([RFC7322]) and Internet-Drafts ([IDGUIDE]).
+   This document describes version 2 ("v2") of the "XML2RFC" vocabulary:
+   an XML-based language ("Extensible Markup Language" [XML]) used for
+   writing RFCs [RFC7322] and Internet-Drafts [IDGUIDE].
 
-   Version 2 represents the current state of the vocabulary (as
-   implemented by several tools and as used by the RFC Editor) around
-   2014.
+   Version 2 represents the state of the vocabulary (as implemented by
+   several tools and as used by the RFC Editor) around 2014.
 
    It obsoletes the original version ("v1") [RFC2629], which contained
    the original language definition and which was subsequently extended.
    Many of the changes leading to version 2 have been described in
-   "Writing I-Ds and RFCs using XML (revised)" ([V1rev]), but that
+   "Writing I-Ds and RFCs using XML (revised)" [V1rev], but that
    document has not been updated since 2008.
 
    Processing Instructions (Section 2.6 of [XML]) generally are specific
@@ -163,8 +161,8 @@ Table of Contents
 1.1.  Syntax Notation
 
    The XML vocabulary here is defined in prose, based on the RELAX NG
-   schema ([RNC]) contained in Appendix C (specified in RELAX NG Compact
-   Notation, "RNC").
+   schema [RNC] contained in Appendix C (specified in RELAX NG Compact
+   Notation (RNC)).
 
    Note that the schema can be used for automated validity checks, but
    certain constraints are only described in prose (example: the
@@ -260,8 +258,8 @@ Table of Contents
    This element allows the inclusion of "artwork" in the document.
 
    <artwork> is the only element in the vocabulary that provides full
-   control of horizontal whitespace and line breaks; thus it is used for
-   a variety of things, such as:
+   control of horizontal whitespace and line breaks; thus, it is used
+   for a variety of things, such as:
 
    o  diagrams ("line art"),
 
@@ -282,13 +280,13 @@ Table of Contents
 
    Alternatively, the "src" attribute allows referencing an external
    graphics file, such as a bitmap or a vector drawing, using a URI
-   ("Uniform Resource Identifier", [RFC3986]).  In this case, the
-   textual content acts as a fallback for output formats that do not
-   support graphics; thus, it ought to contain either (1) a "line art"
-   variant of the graphics or (2) prose that describes the included
-   image in sufficient detail.  Note that RFCs occasionally are
-   published with enhanced diagrams; [RFC5598] is a recent example of an
-   RFC that was published along with a PDF with images.
+   ("Uniform Resource Identifier") [RFC3986].  In this case, the textual
+   content acts as a fallback for output formats that do not support
+   graphics; thus, it ought to contain either (1) a "line art" variant
+   of the graphics or (2) prose that describes the included image in
+   sufficient detail.  Note that RFCs occasionally are published with
+   enhanced diagrams; [RFC5598] is a recent example of an RFC that was
+   published along with a PDF with images.
 
    This element appears as a child element of <figure> (Section 2.17).
 
@@ -320,8 +318,8 @@ Table of Contents
 
    This attribute is format dependent and ought to be avoided.
 
-   When generating HTML output ([HTML]), current implementations copy
-   the attribute "as is", thus effectively treating it as CSS (Cascading
+   When generating HTML output [HTML], current implementations copy the
+   attribute "as is", thus effectively treating it as CSS (Cascading
    Style Sheets) pixels (see Section 4.3.2 of [CSS]).  For other output
    formats, it is usually ignored.
 
@@ -336,9 +334,9 @@ Table of Contents
 
 2.5.5.  "src" Attribute
 
-   The URI reference of a graphics file ([RFC3986], Section 4.1).
+   The URI reference of a graphics file (Section 4.1 of [RFC3986]).
 
-   Note that this can be a "data" URI ([RFC2397]) as well, in which case
+   Note that this can be a "data" URI [RFC2397] as well, in which case
    the graphics file is wholly part of the XML file.
 
 2.5.6.  "type" Attribute
@@ -360,10 +358,10 @@ Table of Contents
 
    This attribute is format dependent and ought to be avoided.
 
-   When generating HTML output ([HTML]), current implementations copy
-   the attribute "as is", thus effectively treating it as CSS pixels
-   (see Section 4.3.2 of [CSS]).  For other output formats, it is
-   usually ignored.
+   When generating HTML output [HTML], current implementations copy the
+   attribute "as is", thus effectively treating it as CSS pixels (see
+   Section 4.3.2 of [CSS]).  For other output formats, it is usually
+   ignored.
 
 2.5.8.  "xml:space" Attribute
 
@@ -526,7 +524,7 @@ Table of Contents
    autogenerate an identifier when none is given.
 
    The value needs to be a valid XML "Name" (Section 2.3 of [XML]),
-   additionally constrained to US-ASCII characters ([USASCII]).
+   additionally constrained to US-ASCII characters [USASCII].
 
 2.12.2.  "source" Attribute
 
@@ -599,7 +597,7 @@ Table of Contents
 
    If the element has no text content, the value of the "target"
    attribute will be inserted in angle brackets (as described in
-   [RFC3986], Appendix C) and, depending on the capabilities of the
+   Appendix C of [RFC3986]) and, depending on the capabilities of the
    output format, hyperlinked.
 
    Otherwise, the text content will be used (and potentially
@@ -956,7 +954,7 @@ Table of Contents
 
 2.25.  <organization>
 
-   Specifies the affiliation ([RFC7322], Section 4.1.2) of an author.
+   Specifies the affiliation (Section 4.1.2 of [RFC7322]) of an author.
 
    This information appears both in the "Author's Address" section and
    on the front page (see Section 4.1.1 of [RFC7322] for more
@@ -1082,9 +1080,9 @@ Table of Contents
    section, and as an identifier in links to this reference entry.
 
    The value needs to be a valid XML "Name" (Section 2.3 of [XML]),
-   additionally constrained to US-ASCII characters ([USASCII]).  Thus,
-   the character repertoire consists of "A-Z", "a-z", "0-9", "_", "-",
-   ".", and ":", where "0-9", ".", and "-" are disallowed as start
+   additionally constrained to US-ASCII characters [USASCII].  Thus, the
+   character repertoire consists of "A-Z", "a-z", "0-9", "_", "-", ".",
+   and ":", where "0-9", ".", and "-" are disallowed as start
    characters.
 
 2.30.2.  "target" Attribute
@@ -1756,7 +1754,7 @@ Table of Contents
 
    Escaping the individual characters can be a lot of work (when done
    manually) and also messes up alignment in artwork.  Another approach
-   to escaping is to use CDATA sections ([XML], Section 2.7).  Within
+   to escaping is to use CDATA sections (Section 2.7 of [XML]).  Within
    these, no further escaping is needed, except when the "end-of-CDATA"
    marker needs to be used (in that case, the CDATA section needs to be
    closed, and a new one needs to be started).
@@ -1764,7 +1762,7 @@ Table of Contents
 4.  Special Unicode Code Points
 
    Although the current RFC format does not allow non-ASCII Unicode
-   characters ([UNICODE]), some of them can be used to enforce certain
+   characters [UNICODE], some of them can be used to enforce certain
    behaviors of formatters.
 
    For instance:
@@ -1788,7 +1786,7 @@ Table of Contents
 
    Note that in order to use these characters by name, they need to be
    declared in either the Document Type Definition (DTD) or the
-   "internal subset" ([XML], Section 2.8), like this:
+   "internal subset" (Section 2.8 of [XML]), like this:
 
    <?xml version="1.0"?>
 
@@ -1843,11 +1841,11 @@ Table of Contents
    representing arbitrary Unicode [UNICODE] characters in text content.
 
    However, the current canonical RFC format is restricted to US-ASCII
-   characters ([USASCII] and Section 3 of [RFC2223]).  It is possible
-   that this rule will be relaxed in future revisions of the RFC format
-   (for instance, to allow non-ASCII characters in examples and contact
-   information).  In that case, it is expected that the vocabulary will
-   be extended accordingly.
+   characters (see [USASCII] and Section 3 of [RFC2223]).  It is
+   possible that this rule will be relaxed in future revisions of the
+   RFC format (for instance, to allow non-ASCII characters in examples
+   and contact information).  In that case, it is expected that the
+   vocabulary will be extended accordingly.
 
 7.  Security Considerations
 
@@ -2150,12 +2148,12 @@ A.2.1.  Current Values: "*trust200902"
 
    The name for these values refers to the IETF Trust's "Legal
    Provisions Relating to IETF Documents", sometimes simply called the
-   "TLP", which went into effect on February 15, 2009 ([TLP2.0]).
-   Updates to this document were published on September 12, 2009
-   ([TLP3.0]) and on December 28, 2009 ([TLP4.0]), modifying the license
-   for code components (see <http://trustee.ietf.org/license-info/> for
-   further information).  The actual text is located in Section 6 ("Text
-   to Be Included in IETF Documents") of these documents.
+   "TLP", which went into effect on February 15, 2009 [TLP2.0].  Updates
+   to this document were published on September 12, 2009 [TLP3.0] and on
+   December 28, 2009 [TLP4.0], modifying the license for code components
+   (see <http://trustee.ietf.org/license-info/> for further
+   information).  The actual text is located in Section 6 ("Text to Be
+   Included in IETF Documents") of these documents.
 
    Formatters will automatically produce the "correct" text, depending
    on the document's date information (see above):
@@ -2282,7 +2280,7 @@ A.3.  The /rfc/@submissionType Attribute
 
    o  For all RFCs and Internet-Drafts, it determines whether the
       "Copyright Notice" mentions the copyright on Code Components (see
-      TLP, Section "Text to Be Included in IETF Documents").
+      Section 6 of the TLP ("Text to Be Included in IETF Documents")).
 
 A.4.  The /rfc/@consensus Attribute
 
@@ -2341,7 +2339,7 @@ B.3.  Changed Elements
    <reference>: <annotation> allows adding prose to a reference.  The
    "anchor" attribute has been made mandatory.  (Section 2.30)
 
-   <references>: Can now appear multiple times, and carry a "title"
+   <references>: Can now appear multiple times and can carry a "title"
    attribute (so that normative and informative references can be
    split).  (Section 2.31)
 
@@ -2350,10 +2348,10 @@ B.3.  Changed Elements
    lang" have been added.  (Section 2.33)
 
    <section>: The new "toc" attribute controls whether it will appear in
-   the Table Of Contents. <iref> can now appear as direct child element.
-   (Section 2.34)
+   the Table Of Contents. <iref> can now appear as a direct child
+   element.  (Section 2.34)
 
-   <t>: The "anchor" attribute can now be used as well, however there
+   <t>: The "anchor" attribute can now be used as well; however, there
    are restrictions on how they can be referred to.  (Section 2.38)
 
 B.4.  New Elements
@@ -2673,15 +2671,15 @@ Appendix C.  RELAX NG Schema
    start = rfc
 
    (This schema was derived from version 1.3.6 of the xml2rfc DTD
-   ('Document Type Definition', [XML], Section 2.8), available from <htt
-   p://svn.tools.ietf.org/svn/tools/xml2rfc/vocabulary/v2/03/
+   ("Document Type Definition") (Section 2.8 of [XML]), available from <
+   http://svn.tools.ietf.org/svn/tools/xml2rfc/vocabulary/v2/03/
    xml2rfcv2.dtd>).
 
 C.1.  Checking Validity
 
    The validity of XML files can be checked with any tool that supports
-   RELAX NG ([RNC]).  The reference implementation is the Java-based,
-   open-sourced "Jing" ([JING]).
+   RELAX NG [RNC].  The reference implementation is the Java-based,
+   open-sourced "Jing" [JING].
 
    To use Jing, download the latest ZIP file from the "downloads" page
    (currently <https://code.google.com/p/jing-trang/downloads/
