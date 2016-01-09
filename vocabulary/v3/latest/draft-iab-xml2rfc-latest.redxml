@@ -15,6 +15,8 @@
 
 *** Still need to do rev 2113 and 2114 from Julian's edits. ***
 
+rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rectified.
+
 -->
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
@@ -359,7 +361,7 @@ them into &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&
   Many elements have an optional "anchor" attribute. In all cases, the value of the "anchor"
   attribute needs to be a valid XML "Name" (Section 2.3 of <xref target="XML"/>),
   additionally constrained to US-ASCII characters (<xref target="USASCII"/>). Thus, the character repertoire consists of
-  "A-Z", "a-z", "0-9", "_", "-", ".", and ":", where "0-9", ".", and "-" are disallowed as start character.
+  "A-Z", "a-z", "0-9", "_", "-", ".", and ":", where "0-9", ".", and "-" are disallowed as start characters.
   Anchors are described in more detail in <xref target="anchorsandids"/>.
 </t>
 
@@ -679,7 +681,7 @@ the appendices for a complete description of these attributes.
       <t>
             A filename suitable for the contents (such as for extraction to a local file).
             This attribute can
-            be helpful for other kinds of tools (such as automated syntax checkers
+            be helpful for other kinds of tools (such as automated syntax checkers,
             which work by extracting the artwork).
             Note that the "name" attribute does not need to be unique for artwork elements in a
             document. If multiple artwork elements have the same name attribute, a processing tool might
@@ -1363,7 +1365,7 @@ the appendices for a complete description of these attributes.
    </t>
    <t>
       Also in the first case, that month names, if given, need to match the full English month name: 
-      "January", "February", "March", "April", "May, "June", "July", "August",
+      "January", "February", "March", "April", "May", "June", "July", "August",
       "September", "October", "November", or "December".
    </t>
    <t>
@@ -1375,7 +1377,7 @@ the appendices for a complete description of these attributes.
    <t>
       In the case of bibliographic references, the date information can have prose text for the month or year.
       For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
-      non-specific months (month="Second quarter") and so on, are allowed.
+      non-specific months (month="Second quarter") and so on are allowed.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.front" format="none">front</xref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.date.contents"><!--AG-->
@@ -1389,7 +1391,7 @@ the appendices for a complete description of these attributes.
       <iref item="day attribute" subitem="in date element"/>
       <t>
          In the "boilerplate" case: the day of publication; this is a number.
-         Otherwise: an indication of the publication day, with the format
+         Otherwise, an indication of the publication day, with the format
          not being restricted.
       </t>
    </section>
@@ -1402,7 +1404,7 @@ the appendices for a complete description of these attributes.
       <iref item="month attribute" subitem="in date element"/>
       <t>
           In the "boilerplate" case: the month of publication; this is the English name of the month.
-          Otherwise: an indication of the publication month, with the format
+          Otherwise, an indication of the publication month, with the format
           not being restricted.
        </t>
    </section>
@@ -1415,7 +1417,7 @@ the appendices for a complete description of these attributes.
       <iref item="year attribute" subitem="in date element"/>
       <t>
          In the "boilerplate" case: the year of publication; this is a number (usually four-digit).
-         Otherwise: an indication of the publication year, with the format
+         Otherwise, an indication of the publication year, with the format
          not being restricted.
       </t>
    </section>
@@ -2114,7 +2116,7 @@ the appendices for a complete description of these attributes.
       occurred. An exception is the occurrence as a child element of
       &lt;<xref target="element.section" format="none">section</xref>&gt;, in which case the whole section is
       considered to be relevant for that index entry. In some formats, index
-      entries of this type might be displayed as range.
+      entries of this type might be displayed as ranges.
    </t>
    <t>
       When the prep tool is creating index content, it collects the items in a case-senstive fashion
@@ -2925,7 +2927,7 @@ the appendices for a complete description of these attributes.
    </t>
    <t>
       In the early days of the RFC series, there was only one "References" section per RFC. This convention
-      was later changed to group references into two sets, "Normative" and "Informative"
+      was later changed to group references into two sets, "Normative" and "Informative",
       as described in <xref target="RFC7322"/>).
       This vocabulary supports the split with the &lt;<xref target="element.name" format="none">name</xref>&gt; child element.
       In general, the title should be either "Normative References" or "Informative References".
@@ -3812,7 +3814,7 @@ in the same &lt;front&gt; element.
             The identifier within the series specified by the "name" attribute.
       </t>
       <t>
-            For BCPs, FYIs, RFCs, and STDs this is the number within the series.
+            For BCPs, FYIs, RFCs, and STDs, this is the number within the series.
             For Internet-Drafts, it is the full draft name (ending with the two-digit
             version number). For DOIs, the value is given such as "10.123456/rfc1149",
             (the actual value will be specified later in <xref target="DOI"/>).
@@ -5619,7 +5621,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
 
 <section anchor="i18n.considerations" title="Internationalization Considerations">
 <t>
-  This format is based on <xref target="XML"/>, thus does not have any
+  This format is based on <xref target="XML"/> and thus does not have any
   issues representing arbitrary Unicode <xref target="UNICODE"/> characters in text content.
   The RFC Editor may restrict some of the characters that can be used in a particular RFC;
   the rules for such restrictions are covered in <xref target="NONASCII"/>.
@@ -6094,7 +6096,7 @@ Suzanne Woolf
 
 </references>
 
-<section anchor="front.page" title="Front Page ('Boilerplate') Generation">
+<section anchor="front.page" title="Front Page (&#34;Boilerplate&#34;) Generation">
 
 <t>The values listed here will be defined by the RFC Editor. Those listed here
 are believed to be the current values in use.</t>
@@ -6111,8 +6113,8 @@ are believed to be the current values in use.</t>
 <t><list>
   <t>
     <spanx style="strong">Note:</spanx> some variations of the boilerplate are selected based
-    on the document's date; therefore it is important to specify the "year",
-    "month" and "day" attributes of the &lt;<xref target="element.date" format="none">date</xref>&gt; element
+    on the document's date; therefore, it is important to specify the "year",
+    "month", and "day" attributes of the &lt;<xref target="element.date" format="none">date</xref>&gt; element
     when archiving the XML source of an Internet-Draft on the day of submission.
   </t>
 </list></t>
@@ -6130,8 +6132,8 @@ are believed to be the current values in use.</t>
 </t>
 
 
-<section anchor="attribute-ipr-current" title="Current Values: '*trust200902'">
-<iref item="ipr attribute" subitem="'*trust200902'"/>
+<section anchor="attribute-ipr-current" title="Current Values: &#34;*trust200902&#34;">
+<iref item="ipr attribute" subitem="&#34;*trust200902&#34;"/>
 <t>
   The name for these values refers to the "IETF TRUST Legal Provisions Relating 
   to IETF Documents", sometimes simply called the "TLP", which went into effect on February 15, 2009 (<xref target="TLP2.0"/>).
@@ -6143,7 +6145,7 @@ are believed to be the current values in use.</t>
   of these documents.
 </t>
 <t>  
-  The prep tool automatically produces the "correct" text depending on the
+  The prep tool automatically produces the "correct" text, depending on the
   document's date information (see above):
 </t>
 <texttable align="left">
@@ -6167,16 +6169,16 @@ are believed to be the current values in use.</t>
 
 
 <section anchor="attribute-ipr-trust200902" title="trust200902">
-<iref item="ipr attribute" subitem="'trust200902'"/>
+<iref item="ipr attribute" subitem="&#34;trust200902&#34;"/>
 <t>
-  This value should be used unless one of the more specific '*trust200902'
+  This value should be used unless one of the more specific "*trust200902"
   values is a better fit. It produces the text in Sections 6.a and 6.b of
   the TLP.
 </t>
 </section>
 
 <section anchor="attribute-ipr-noModificationTrust200902" title="noModificationTrust200902">
-<iref item="ipr attribute" subitem="'noModificationTrust200902'"/>
+<iref item="ipr attribute" subitem="&#34;noModificationTrust200902&#34;"/>
 <t>
   This produces additional text from Section 6.c.i of the TLP:
 </t>
@@ -6196,7 +6198,7 @@ are believed to be the current values in use.</t>
 </section>
 
 <section anchor="attribute-ipr-noDerivativesTrust200902" title="noDerivativesTrust200902">
-<iref item="ipr attribute" subitem="'noDerivativesTrust200902'"/>
+<iref item="ipr attribute" subitem="&#34;noDerivativesTrust200902&#34;"/>
 <t>
   This produces the additional text from Section 6.c.ii of the TLP:
 </t>
@@ -6214,7 +6216,7 @@ are believed to be the current values in use.</t>
 </section>
 
 <section anchor="attribute-ipr-pre5378Trust200902" title="pre5378Trust200902">
-<iref item="ipr attribute" subitem="'pre5378Trust200902'"/>
+<iref item="ipr attribute" subitem="&#34;pre5378Trust200902&#34;"/>
 <t>
   This produces the additional text from Section 6.c.iii of the TLP, frequently
   called the "pre-5378 escape clause" referring to changes introduced in <xref target="RFC5378"/>):
@@ -6247,41 +6249,41 @@ are believed to be the current values in use.</t>
 
 <section anchor="attribute-ipr-historic" title="Historic Values">
 
-<section anchor="attribute-ipr-200811" title="Historic Values: '*trust200811'">
-<iref item="ipr attribute" subitem="'*trust200811'"/>
+<section anchor="attribute-ipr-200811" title="Historic Values: &#34;*trust200811&#34;">
+<iref item="ipr attribute" subitem="&#34;*trust200811&#34;"/>
 <t>
   The attribute values "trust200811",
-  "noModificationTrust200811" and
+  "noModificationTrust200811", and
   "noDerivativesTrust200811"
   are similar to their "trust200902" counterparts, except that they use text
   specified in <xref target="TLP1.0"/>.
 </t>
 </section>
 
-<section anchor="attribute-ipr-3978" title="Historic Values: '*3978'">
-<iref item="ipr attribute" subitem="'*3978'"/>
+<section anchor="attribute-ipr-3978" title="Historic Values: &#34;*3978&#34;">
+<iref item="ipr attribute" subitem="&#34;*3978&#34;"/>
 <t>
   The attribute values "full3978",
-  "noModification3978" and
+  "noModification3978", and
   "noDerivatives3978"
   are similar to their counterparts above, except that they use text
   specified in Section 5 of <xref target="RFC3978"/>.
 </t>
 </section>
 
-<section anchor="attribute-ipr-3667" title="Historic Values: '*3667'">
-<iref item="ipr attribute" subitem="'*3667'"/>
+<section anchor="attribute-ipr-3667" title="Historic Values: &#34;*3667&#34;">
+<iref item="ipr attribute" subitem="&#34;*3667&#34;"/>
 <t>
   The attribute values "full3667",
-  "noModification3667" and
+  "noModification3667", and
   "noDerivatives3667"
   are similar to their counterparts above, except that they use text
   specified in Section 5 of <xref target="RFC3667"/>.
 </t>
 </section>
 
-<section anchor="attribute-ipr-2026" title="Historic Values: '*2026'">
-<iref item="ipr attribute" subitem="'*2026'"/>
+<section anchor="attribute-ipr-2026" title="Historic Values: &#34;*2026&#34;">
+<iref item="ipr attribute" subitem="&#34;*2026&#34;"/>
 <t>
   The attribute values "full2026" and
   "noDerivativeWorks2026"
@@ -6321,7 +6323,7 @@ are believed to be the current values in use.</t>
   <list style="symbols">
     <t>
       For RFCs, the stream name appears in the upper left corner of the 
-      first page (in Internet-Drafts, this is either "Network Working Group",
+      first page (in Internet-Drafts, this is either "Network Working Group"
       or the value of the &lt;<xref target="element.workgroup" format="none">workgroup</xref>&gt; element).
     </t>
     <t>
