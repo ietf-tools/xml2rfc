@@ -64,7 +64,7 @@ rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rec
   toward RFC publication, this document will incorporate as many of the changes as possible.
 </t>
 <t>
-The v3 format will be used as part of the new RFC series described in <xref target="RFC6949"/>.
+The v3 format will be used as part of the new RFC series format described in <xref target="RFC6949"/>.
 The new format will be handled by one or more new tools for preparing the XML and
 converting it to other representations.
 Features of the expected
@@ -165,7 +165,7 @@ to give table functionality like that in HTML.</t>
 
 <t>Add &lt;<x:ref>postalLine</x:ref>&gt;, free text that represents one line of the address.</t>
 
-<t>Add &lt;<x:ref>displayreference</x:ref>&gt; to allow display of more mneumonic anchor names
+<t>Add &lt;<x:ref>displayreference</x:ref>&gt; to allow display of more mnemonic anchor names
 for automatically-included references.</t>
 
 <t>Add &lt;<x:ref>refcontent</x:ref>&gt; to allow better control of text in a reference.</t>
@@ -1450,9 +1450,9 @@ the appendices for a complete description of these attributes.
       <iref item="date element" subitem="year attribute"/>
       <iref item="year attribute" subitem="in date element"/>
       <t>
-         In the "boilerplate" case: the year of publication; this is a number (usually four-digit).
+         In the "boilerplate" case: the year of publication.
          Otherwise, an indication of the publication year, with the format
-         not being restricted.
+         not being restricted. This must be a four-digit number.
       </t>
    </section>
 </section>
@@ -1566,7 +1566,7 @@ the appendices for a complete description of these attributes.
    <iref item="displayreference element" primary="true"/>
    <t>
       This element gives a mapping between the anchor of a reference and a name that will be displayed instead.
-      This allows authors to display more mneumonic anchor names for automatically-included references.
+      This allows authors to display more mnemonic anchor names for automatically-included references.
       The mapping in this element only applies to &lt;<x:ref>xref</x:ref>&gt; elements whose format is "default".
       For example, if the reference uses the anchor "RFC6949", the following would cause that anchor in the body
       of displayed documents to be "RFC-dev":
@@ -1626,7 +1626,7 @@ the appendices for a complete description of these attributes.
    <t>
       A definition list. Each entry has a pair of elements: a term (&lt;<x:ref>dt</x:ref>&gt;) and
       a definition (&lt;<x:ref>dd</x:ref>&gt;).
-      (This is slightly different than the model used in HTML, whicl allows for multiple terms for
+      (This is slightly different and simpler than the model used in HTML, which allows for multiple terms for
       a single definition.)
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
@@ -1839,7 +1839,7 @@ the appendices for a complete description of these attributes.
       <iref item="ascii attribute" subitem="in email element"/>
       <t>
          The ASCII equivalent of the author's email address. This is only used if the email address has
-         one or two internationalized components.
+         any internationalized components.
       </t>
    </section>
 </section>
@@ -2040,7 +2040,7 @@ the appendices for a complete description of these attributes.
       <iref item="figure element" subitem="suppress-title attribute"/>
       <iref item="suppress-title attribute" subitem="in figure element"/>
       <t>
-            Deprecated. Figures always now get captions.
+            Deprecated.
          </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
