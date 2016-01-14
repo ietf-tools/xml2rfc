@@ -3,17 +3,17 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 2629 (if approved)                            January 9, 2016
+Obsoletes: 2629 (if approved)                           January 13, 2016
 Intended status: Informational
-Expires: July 12, 2016
+Expires: July 16, 2016
 
 
-                   The "XML2RFC" version 3 Vocabulary
+                   The "xml2rfc" version 3 Vocabulary
                         draft-iab-xml2rfc-latest
 
 Abstract
 
-   This document defines the "XML2RFC" version 3 vocabulary: an XML-
+   This document defines the "xml2rfc" version 3 vocabulary: an XML-
    based language used for writing RFCs and Internet-Drafts.  It is
    heavily derived from the version 2 vocabulary that is also under
    discussion.  This document obsoletes the v2 grammar described in RFC
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 12, 2016.
+   This Internet-Draft will expire on July 16, 2016.
 
 Copyright Notice
 
@@ -158,11 +158,11 @@ Table of Contents
      9.1.  Normative References
      9.2.  Informative References
    Appendix A.  Front-Page ("Boilerplate") Generation
-     A.1.  The /rfc/@ipr Attribute
+     A.1.  The "ipr" Attribute
        A.1.1.  Current Values: "*trust200902"
        A.1.2.  Historic Values
-     A.2.  The /rfc/@submissionType Attribute
-     A.3.  The /rfc/@consensus Attribute
+     A.2.  The "submissionType" Attribute
+     A.3.  The "consensus" Attribute
    Appendix B.  The v3 Format and Processing Tools
      B.1.  Including External Text with XInclude
      B.2.  Anchors and IDs
@@ -174,7 +174,7 @@ Table of Contents
 
 1.  Introduction
 
-   This document describes version 3 ("v3") of the "XML2RFC" vocabulary;
+   This document describes version 3 ("v3") of the "xml2rfc" vocabulary;
    an XML-based language ("Extensible Markup Language", [XML]) used for
    writing RFCs ([RFC7322]) and Internet-Drafts ([IDGUIDE]).
 
@@ -185,12 +185,12 @@ Table of Contents
    document makes its way toward RFC publication, this document will
    incorporate as many of the changes as possible.
 
-   The v3 format will be used as part of the new RFC series described in
-   [RFC6949].  The new format will be handled by one or more new tools
-   for preparing the XML and converting it to other representations.
-   Features of the expected tools are described in Appendix B.  That
-   section defines some terms used throughout this document, such as
-   "prep tool" and "formatter".
+   The v3 format will be used as part of the new RFC series format
+   described in [RFC6949].  The new format will be handled by one or
+   more new tools for preparing the XML and converting it to other
+   representations.  Features of the expected tools are described in
+   Appendix B.  That section defines some terms used throughout this
+   document, such as "prep tool" and "formatter".
 
    Note that the vocabulary contains certain constructs that might not
    be used when generating the final text; however, they can provide
@@ -276,7 +276,7 @@ Table of Contents
    o  Add <postalLine>, free text that represents one line of the
       address.
 
-   o  Add <displayreference> to allow display of more mneumonic anchor
+   o  Add <displayreference> to allow display of more mnemonic anchor
       names for automatically-included references.
 
    o  Add <refcontent> to allow better control of text in a reference.
@@ -300,7 +300,7 @@ Table of Contents
       to <rfc> to cover Processing Instructions (PIs) that were in v2
       that are still needed in the grammar.  Add "prepTime" to indicate
       the time that the XML went through a preparation step.  Add
-      "version" to indicate the version of XML2RFC vocabulary used in
+      "version" to indicate the version of xml2rfc vocabulary used in
       the document.  Add "scripts" to indicate which scripts are needed
       to render the document.  Add "expiresDate" when an Internet-Draft
       expires.
@@ -400,6 +400,9 @@ Table of Contents
       <figure>.
 
    o  In <front>, make <date> optional.
+
+   o  In <date>, added restrictions to the "date" and "year" attribute
+      when used in the <front> for the document's boilerplate text.
 
    o  In <postal>, allow the sub-elements to be in any order.  Also
       allow the inclusion of the new <postalLine> instead of the older
@@ -1062,35 +1065,34 @@ Table of Contents
 
 2.17.  <date>
 
-   Provides information about the publication date.
+   Provides information about the publication date.  This element is
+   used for two cases: the boilerplate of the document being produced,
+   and inside bibliographic references that use the <front> element.
 
-   Note that this element is used for the boilerplate of the document
-   being produced, and also inside bibliographic references that use the
-   <front> element.
+   Boilerplate for Internet-Drafts and RFCs:  This element defines the
+      date of publication for the current document (Internet-Draft or
+      RFC).  When producing Internet-Drafts, the prep tool uses this
+      date to compute the expiration date (see [IDGUIDE]).  When one or
+      more of "year", "month", or "day" are left out, the prep tool will
+      attempt to use the current system date if the attributes that are
+      present are consistent with that date.
 
-   In the "boilerplate" case, it defines the date of publication for the
-   current document (Internet-Draft or RFC).  When producing Internet-
-   Drafts, the prep tool uses this date to compute the expiration date
-   (see [IDGUIDE]).  When one or more of "year", "month", or "day" are
-   left out, the prep tool will attempt to use the current system date
-   if the attributes that are present are consistent with that date.
+      If given, the month must be a number.  Note that this restriction
+      is different than that in that in [XML2RFCv2].  The prep tool will
+      silently change text month names to numbers.  The year must be a
+      four-digit number.
 
-   Also in the first case, that month names, if given, need to match the
-   full English month name: "January", "February", "March", "April",
-   "May", "June", "July", "August", "September", "October", "November",
-   or "December".
+      When the prep tool is used to create Internet-Drafts, it will
+      reject a submitted Internet-Draft that has a <date> element in the
+      boilerplate for itself that is anything other than today.  That
+      is, the tool will not allow a submitter to specify a date other
+      than the day of submission.  To avoid this problem, authors might
+      simply not include a <date> element in the boilerplate.
 
-   When the prep tool is used to create Internet-Drafts, it will reject
-   a submitted Internet-Draft that has a <date> element in the
-   boilerplate for itself that is anything other than today.  That is,
-   the tool will not allow a submitter to specify a date other than the
-   day of submission.  To avoid this problem, authors might simply not
-   include a <date> element in the boilerplate.
-
-   In the case of bibliographic references, the date information can
-   have prose text for the month or year.  For example, vague dates
-   (year="ca. 2000"), date ranges (year="2012-2013"), non-specific
-   months (month="Second quarter") and so on are allowed.
+   Bibliographic references:  The date information can have prose text
+      for the month or year.  For example, vague dates (year="ca.
+      2000"), date ranges (year="2012-2013"), non-specific months
+      (month="Second quarter") and so on are allowed.
 
    This element appears as a child element of <front> (Section 2.26).
 
@@ -1098,21 +1100,15 @@ Table of Contents
 
 2.17.1.  "day" Attribute
 
-   In the "boilerplate" case: the day of publication; this is a number.
-   Otherwise, an indication of the publication day, with the format not
-   being restricted.
+   The day of publication.
 
 2.17.2.  "month" Attribute
 
-   In the "boilerplate" case: the month of publication; this is the
-   English name of the month.  Otherwise, an indication of the
-   publication month, with the format not being restricted.
+   The month or months of publication.
 
 2.17.3.  "year" Attribute
 
-   In the "boilerplate" case: the year of publication; this is a number
-   (usually four-digit).  Otherwise, an indication of the publication
-   year, with the format not being restricted.
+   The year or years of publication.
 
 2.18.  <dd>
 
@@ -1180,7 +1176,7 @@ Table of Contents
 
    This element gives a mapping between the anchor of a reference and a
    name that will be displayed instead.  This allows authors to display
-   more mneumonic anchor names for automatically-included references.
+   more mnemonic anchor names for automatically-included references.
    The mapping in this element only applies to <xref> elements whose
    format is "default".  For example, if the reference uses the anchor
    "RFC6949", the following would cause that anchor in the body of
@@ -1216,9 +1212,9 @@ Table of Contents
 2.20.  <dl>
 
    A definition list.  Each entry has a pair of elements: a term (<dt>)
-   and a definition (<dd>).  (This is slightly different than the model
-   used in HTML, whicl allows for multiple terms for a single
-   definition.)
+   and a definition (<dd>).  (This is slightly different and simpler
+   than the model used in HTML, which allows for multiple terms for a
+   single definition.)
 
    This element appears as a child element of <abstract> (Section 2.1),
    <aside> (Section 2.6), <blockquote> (Section 2.10), <dd>
@@ -1355,8 +1351,7 @@ Table of Contents
 2.23.1.  "ascii" Attribute
 
    The ASCII equivalent of the author's email address.  This is only
-   used if the email address has one or two internationalized
-   components.
+   used if the email address has any internationalized components.
 
 2.24.  <eref>
 
@@ -1475,7 +1470,7 @@ Table of Contents
 
 2.25.6.  "suppress-title" Attribute
 
-   Deprecated.  Figures always now get captions.
+   Deprecated.
 
    Allowed values:
 
@@ -2639,8 +2634,8 @@ Table of Contents
 
    <sourcecode> provides full control of horizontal whitespace and line
    breaks.  It is thus useful for source code and formal languages (such
-   as ABNF or the RNC notation used in this document).  When rendered,
-   sourcecode is always shown in a monospace font.
+   as ABNF [RFC5234] or the RNC notation used in this document).  When
+   rendered, sourcecode is always shown in a monospace font.
 
    For artwork such as character-based art, diagrams of message layouts,
    and so on, use the <artwork> element instead.
@@ -4031,6 +4026,11 @@ Table of Contents
                     January 2005,
                     <http://www.rfc-editor.org/info/rfc3986>.
 
+   [RFC5234]        Crocker, D., Ed. and P. Overell, "Augmented BNF for
+                    Syntax Specifications: ABNF", STD 68, RFC 5234,
+                    DOI 10.17487/RFC5234, January 2008,
+                    <http://www.rfc-editor.org/info/rfc5234>.
+
    [RFC5378]        Bradner, S., Ed. and J. Contreras, Ed., "Rights
                     Contributors Provide to the IETF Trust", BCP 78,
                     RFC 5378, DOI 10.17487/RFC5378, November 2008,
@@ -4135,7 +4135,7 @@ Appendix A.  Front-Page ("Boilerplate") Generation
    The values listed here will be defined by the RFC Editor.  Those
    listed here are believed to be the current values in use.
 
-A.1.  The /rfc/@ipr Attribute
+A.1.  The "ipr" Attribute
 
    This attribute value can take a long list of values, each of which
    describes an IPR policy for the document (Section 2.45.5).  The
@@ -4182,7 +4182,7 @@ A.1.1.  Current Values: "*trust200902"
    +----------+--------------------------------+
 
       The TLP was again updated in March 2015 ([TLP5.0]), but the
-      changes made in this version do not affect the boilerplate text.
+      changes made in that version do not affect the boilerplate text.
 
 A.1.1.1.  trust200902
 
@@ -4266,7 +4266,7 @@ A.1.2.4.  Historic Values: "*2026"
    The special value "none" was also used back then; it denied the IETF
    any rights beyond publication as an Internet-Draft.
 
-A.2.  The /rfc/@submissionType Attribute
+A.2.  The "submissionType" Attribute
 
    The RFC Editor publishes documents from different "document streams",
    of which the "IETF stream" is the most prominent.  Other streams are
@@ -4298,7 +4298,7 @@ A.2.  The /rfc/@submissionType Attribute
       "Copyright Notice" mentions the Copyright on Code Components (see
       Section 6 of the TLP ("Text to Be Included in IETF Documents")).
 
-A.3.  The /rfc/@consensus Attribute
+A.3.  The "consensus" Attribute
 
    For some of the publication streams (see Appendix A.2), the "Status
    of This Memo" section depends on whether there was a consensus to

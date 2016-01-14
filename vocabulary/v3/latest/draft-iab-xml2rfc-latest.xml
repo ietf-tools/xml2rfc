@@ -311,6 +311,9 @@ no use case for them that cannot be achieved in other ways.</t>
 
 <t>In &lt;<x:ref>front</x:ref>&gt;, make &lt;<x:ref>date</x:ref>&gt; optional.</t>
 
+<t>In &lt;<x:ref>date</x:ref>&gt;, added restrictions to the "date" and "year" attribute
+when used in the &lt;<x:ref>front</x:ref>&gt; for the document's boilerplate text.</t>
+
 <t>In &lt;<x:ref>postal</x:ref>&gt;, allow the sub-elements to be in any order. Also allow the inclusion
 of the new &lt;<x:ref>postalLine</x:ref>&gt; instead of the older elements.</t>
 
@@ -1384,13 +1387,11 @@ the appendices for a complete description of these attributes.
    <iref item="date element" primary="true"/>
    <t>
       Provides information about the publication date.
-   </t>
-   <t>
-      Note that this element is used for the boilerplate of the document
-      being produced, and also inside bibliographic references that use the &lt;<x:ref>front</x:ref>&gt; element.
-   </t>
-   <t>
-      In the "boilerplate" case, it defines the date of publication for the current document (Internet-Draft or RFC).
+      This element is used for two cases: the boilerplate of the document
+      being produced, and inside bibliographic references that use the &lt;<x:ref>front</x:ref>&gt; element.
+   <list style="hanging">
+   <t hangText='Boilerplate for Internet-Drafts and RFCs:'>
+      This element defines the date of publication for the current document (Internet-Draft or RFC).
       When producing Internet-Drafts, the prep tool uses this date to compute the expiration date (see <xref target="IDGUIDE"/>).
       When one or more of "year",
       "month", or "day" are left out, the prep tool will attempt to use the
@@ -1398,9 +1399,9 @@ the appendices for a complete description of these attributes.
       date.
    </t>
    <t>
-      Also in the first case, that month names, if given, need to match the full English month name: 
-      "January", "February", "March", "April", "May", "June", "July", "August",
-      "September", "October", "November", or "December".
+      If given, the month must be a number. Note that this restriction is different than that in
+      that in <xref target="XML2RFCv2"/>. The prep tool will silently change text month names to numbers.
+      The year must be a four-digit number.
    </t>
    <t>
       When the prep tool is used to create Internet-Drafts, it will reject a submitted Internet-Draft that has a &lt;<x:ref>date</x:ref>&gt;
@@ -1408,11 +1409,12 @@ the appendices for a complete description of these attributes.
       will not allow a submitter to specify a date other than the day of submission. To avoid this problem,
       authors might simply not include a &lt;<x:ref>date</x:ref>&gt; element in the boilerplate.
    </t>
-   <t>
-      In the case of bibliographic references, the date information can have prose text for the month or year.
+   <t hangText='Bibliographic references:'>
+      The date information can have prose text for the month or year.
       For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
       non-specific months (month="Second quarter") and so on are allowed.
    </t>
+   </list></t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.date.contents"><!--AG-->
       <xref format="none" target="grammar.date">Content model</xref>: this element does not have any contents.</t>
@@ -1424,9 +1426,7 @@ the appendices for a complete description of these attributes.
       <iref item="date element" subitem="day attribute"/>
       <iref item="day attribute" subitem="in date element"/>
       <t>
-         In the "boilerplate" case: the day of publication; this is a number.
-         Otherwise, an indication of the publication day, with the format
-         not being restricted.
+         The day of publication.
       </t>
    </section>
 
@@ -1437,9 +1437,7 @@ the appendices for a complete description of these attributes.
       <iref item="date element" subitem="month attribute"/>
       <iref item="month attribute" subitem="in date element"/>
       <t>
-          In the "boilerplate" case: the month of publication; this is the English name of the month.
-          Otherwise, an indication of the publication month, with the format
-          not being restricted.
+          The month or months of publication.
        </t>
    </section>
 
@@ -1450,9 +1448,7 @@ the appendices for a complete description of these attributes.
       <iref item="date element" subitem="year attribute"/>
       <iref item="year attribute" subitem="in date element"/>
       <t>
-         In the "boilerplate" case: the year of publication.
-         Otherwise, an indication of the publication year, with the format
-         not being restricted. This must be a four-digit number.
+         The year or years of publication.
       </t>
    </section>
 </section>
@@ -3946,7 +3942,7 @@ in the same &lt;front&gt; element.
    <t>
       &lt;sourcecode&gt; provides
       full control of horizontal whitespace and line breaks.
-      It is thus useful for source code and formal languages (such as ABNF <xref target="5234"/> or the RNC notation used in this document).
+      It is thus useful for source code and formal languages (such as ABNF <xref target="RFC5234"/> or the RNC notation used in this document).
       When rendered, sourcecode is always shown in a monospace font.
    </t>
    <t>
@@ -6435,8 +6431,6 @@ are believed to be the current values in use.</t>
     the changes made in that version do not affect the boilerplate text.
   </t>
 </aside>
-
-
 
 <section title="trust200902" anchor="attribute-ipr-trust200902">
 <iref item="ipr attribute" subitem="&quot;trust200902&quot;"/>

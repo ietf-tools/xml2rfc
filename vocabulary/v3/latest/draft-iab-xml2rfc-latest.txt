@@ -3,17 +3,17 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 2629 (if approved)                            January 9, 2016
+Obsoletes: 2629 (if approved)                           January 13, 2016
 Intended status: Informational
-Expires: July 12, 2016
+Expires: July 16, 2016
 
 
-                   The "XML2RFC" version 3 Vocabulary
+                   The "xml2rfc" version 3 Vocabulary
                         draft-iab-xml2rfc-latest
 
 Abstract
 
-   This document defines the "XML2RFC" version 3 vocabulary: an XML-
+   This document defines the "xml2rfc" version 3 vocabulary: an XML-
    based language used for writing RFCs and Internet-Drafts.  It is
    heavily derived from the version 2 vocabulary that is also under
    discussion.  This document obsoletes the v2 grammar described in RFC
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 12, 2016.
+   This Internet-Draft will expire on July 16, 2016.
 
 Copyright Notice
 
@@ -52,9 +52,9 @@ Copyright Notice
 
 
 
-Hoffman                   Expires July 12, 2016                 [Page 1]
+Hoffman                   Expires July 16, 2016                 [Page 1]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    (http://trustee.ietf.org/license-info) in effect on the date of
@@ -95,22 +95,22 @@ Table of Contents
      2.16. <cref>  . . . . . . . . . . . . . . . . . . . . . . . . .  22
      2.17. <date>  . . . . . . . . . . . . . . . . . . . . . . . . .  23
      2.18. <dd>  . . . . . . . . . . . . . . . . . . . . . . . . . .  24
-     2.19. <displayreference>  . . . . . . . . . . . . . . . . . . .  26
+     2.19. <displayreference>  . . . . . . . . . . . . . . . . . . .  25
      2.20. <dl>  . . . . . . . . . . . . . . . . . . . . . . . . . .  26
      2.21. <dt>  . . . . . . . . . . . . . . . . . . . . . . . . . .  27
      2.22. <em>  . . . . . . . . . . . . . . . . . . . . . . . . . .  28
      2.23. <email> . . . . . . . . . . . . . . . . . . . . . . . . .  29
      2.24. <eref>  . . . . . . . . . . . . . . . . . . . . . . . . .  29
-     2.25. <figure>  . . . . . . . . . . . . . . . . . . . . . . . .  31
+     2.25. <figure>  . . . . . . . . . . . . . . . . . . . . . . . .  30
      2.26. <front> . . . . . . . . . . . . . . . . . . . . . . . . .  32
      2.27. <iref>  . . . . . . . . . . . . . . . . . . . . . . . . .  33
      2.28. <keyword> . . . . . . . . . . . . . . . . . . . . . . . .  34
 
 
 
-Hoffman                   Expires July 12, 2016                 [Page 2]
+Hoffman                   Expires July 16, 2016                 [Page 2]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
      2.29. <li>  . . . . . . . . . . . . . . . . . . . . . . . . . .  34
@@ -164,9 +164,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                 [Page 3]
+Hoffman                   Expires July 16, 2016                 [Page 3]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
      3.9.  <ttcol> . . . . . . . . . . . . . . . . . . . . . . . . .  80
@@ -182,16 +182,16 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .  84
      9.2.  Informative References  . . . . . . . . . . . . . . . . .  84
    Appendix A.  Front-Page ("Boilerplate") Generation  . . . . . . .  88
-     A.1.  The /rfc/@ipr Attribute . . . . . . . . . . . . . . . . .  88
+     A.1.  The "ipr" Attribute . . . . . . . . . . . . . . . . . . .  88
        A.1.1.  Current Values: "*trust200902"  . . . . . . . . . . .  88
        A.1.2.  Historic Values . . . . . . . . . . . . . . . . . . .  90
-     A.2.  The /rfc/@submissionType Attribute  . . . . . . . . . . .  90
-     A.3.  The /rfc/@consensus Attribute . . . . . . . . . . . . . .  91
+     A.2.  The "submissionType" Attribute  . . . . . . . . . . . . .  91
+     A.3.  The "consensus" Attribute . . . . . . . . . . . . . . . .  91
    Appendix B.  The v3 Format and Processing Tools . . . . . . . . .  92
      B.1.  Including External Text with XInclude . . . . . . . . . .  93
      B.2.  Anchors and IDs . . . . . . . . . . . . . . . . . . . . .  94
-       B.2.1.  Overlapping Values  . . . . . . . . . . . . . . . . .  94
-     B.3.  Attributes Controlled by the Prep Tool  . . . . . . . . .  95
+       B.2.1.  Overlapping Values  . . . . . . . . . . . . . . . . .  95
+     B.3.  Attributes Controlled by the Prep Tool  . . . . . . . . .  96
    Appendix C.  Relax NG Schema  . . . . . . . . . . . . . . . . . .  97
    Appendix D.  Schema Differences from v2 . . . . . . . . . . . . . 118
    Index . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 138
@@ -220,14 +220,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                 [Page 4]
+Hoffman                   Expires July 16, 2016                 [Page 4]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 1.  Introduction
 
-   This document describes version 3 ("v3") of the "XML2RFC" vocabulary;
+   This document describes version 3 ("v3") of the "xml2rfc" vocabulary;
    an XML-based language ("Extensible Markup Language", [XML]) used for
    writing RFCs ([RFC7322]) and Internet-Drafts ([IDGUIDE]).
 
@@ -238,12 +238,12 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    document makes its way toward RFC publication, this document will
    incorporate as many of the changes as possible.
 
-   The v3 format will be used as part of the new RFC series described in
-   [RFC6949].  The new format will be handled by one or more new tools
-   for preparing the XML and converting it to other representations.
-   Features of the expected tools are described in Appendix B.  That
-   section defines some terms used throughout this document, such as
-   "prep tool" and "formatter".
+   The v3 format will be used as part of the new RFC series format
+   described in [RFC6949].  The new format will be handled by one or
+   more new tools for preparing the XML and converting it to other
+   representations.  Features of the expected tools are described in
+   Appendix B.  That section defines some terms used throughout this
+   document, such as "prep tool" and "formatter".
 
    Note that the vocabulary contains certain constructs that might not
    be used when generating the final text; however, they can provide
@@ -276,9 +276,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                 [Page 5]
+Hoffman                   Expires July 16, 2016                 [Page 5]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  There are no current plans to make v3 XML the required submission
@@ -332,9 +332,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                 [Page 6]
+Hoffman                   Expires July 16, 2016                 [Page 6]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  Add <name> to sections, notes, figures, and texttables to allow
@@ -344,7 +344,7 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    o  Add <postalLine>, free text that represents one line of the
       address.
 
-   o  Add <displayreference> to allow display of more mneumonic anchor
+   o  Add <displayreference> to allow display of more mnemonic anchor
       names for automatically-included references.
 
    o  Add <refcontent> to allow better control of text in a reference.
@@ -368,7 +368,7 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       to <rfc> to cover Processing Instructions (PIs) that were in v2
       that are still needed in the grammar.  Add "prepTime" to indicate
       the time that the XML went through a preparation step.  Add
-      "version" to indicate the version of XML2RFC vocabulary used in
+      "version" to indicate the version of xml2rfc vocabulary used in
       the document.  Add "scripts" to indicate which scripts are needed
       to render the document.  Add "expiresDate" when an Internet-Draft
       expires.
@@ -388,9 +388,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                 [Page 7]
+Hoffman                   Expires July 16, 2016                 [Page 7]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  Add the "numbered" and "removeInRFC" attributes to <section>.
@@ -444,9 +444,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                 [Page 8]
+Hoffman                   Expires July 16, 2016                 [Page 8]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  Deprecate the "alt", and "src" attributes in <figure> because they
@@ -483,6 +483,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    o  In <front>, make <date> optional.
 
+   o  In <date>, added restrictions to the "date" and "year" attribute
+      when used in the <front> for the document's boilerplate text.
+
    o  In <postal>, allow the sub-elements to be in any order.  Also
       allow the inclusion of the new <postalLine> instead of the older
       elements.
@@ -494,16 +497,16 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       of <reference>.  This also deprecates some of the attributes from
       <rfc> and moves them into <seriesInfo>.
 
+
+
+
+Hoffman                   Expires July 16, 2016                 [Page 9]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    o  <t> now only contains non-block elements, so it no longer contains
       <figure> elements.
-
-
-
-
-Hoffman                   Expires July 12, 2016                 [Page 9]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
 
    o  Do not generate the grammar from a DTD, but instead get it
       directly from the Relax Next Generation (RNG) grammar [RNG].
@@ -553,12 +556,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 10]
+Hoffman                   Expires July 16, 2016                [Page 10]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.1.  <abstract>
@@ -612,9 +612,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 11]
+Hoffman                   Expires July 16, 2016                [Page 11]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    This element appears as a child element of <reference>
@@ -668,9 +668,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 12]
+Hoffman                   Expires July 16, 2016                [Page 12]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.5.  <artwork>
@@ -724,9 +724,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 13]
+Hoffman                   Expires July 16, 2016                [Page 13]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    single page.  This is to prevent artwork that is split across pages
@@ -780,9 +780,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 14]
+Hoffman                   Expires July 16, 2016                [Page 14]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.5.4.  "height" Attribute
@@ -836,9 +836,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 15]
+Hoffman                   Expires July 16, 2016                [Page 15]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  ascii-art
@@ -892,9 +892,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 16]
+Hoffman                   Expires July 16, 2016                [Page 16]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  <table> elements (Section 2.54)
@@ -948,9 +948,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 17]
+Hoffman                   Expires July 16, 2016                [Page 17]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.7.2.  "asciiInitials" Attribute
@@ -1004,9 +1004,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 18]
+Hoffman                   Expires July 16, 2016                [Page 18]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    1.  Optional <displayreference> elements (Section 2.19)
@@ -1060,9 +1060,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 19]
+Hoffman                   Expires July 16, 2016                [Page 19]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
       *  <sourcecode> elements (Section 2.48)
@@ -1116,9 +1116,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 20]
+Hoffman                   Expires July 16, 2016                [Page 20]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.10.3.  "quotedFrom" Attribute
@@ -1172,9 +1172,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 21]
+Hoffman                   Expires July 16, 2016                [Page 21]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.14.1.  "ascii" Attribute
@@ -1228,9 +1228,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 22]
+Hoffman                   Expires July 16, 2016                [Page 22]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  <sub> elements (Section 2.51)
@@ -1265,43 +1265,41 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 2.17.  <date>
 
-   Provides information about the publication date.
+   Provides information about the publication date.  This element is
+   used for two cases: the boilerplate of the document being produced,
+   and inside bibliographic references that use the <front> element.
 
-   Note that this element is used for the boilerplate of the document
-   being produced, and also inside bibliographic references that use the
-   <front> element.
+   Boilerplate for Internet-Drafts and RFCs:  This element defines the
+      date of publication for the current document (Internet-Draft or
+      RFC).  When producing Internet-Drafts, the prep tool uses this
+      date to compute the expiration date (see [IDGUIDE]).  When one or
+      more of "year", "month", or "day" are left out, the prep tool will
+      attempt to use the current system date if the attributes that are
+      present are consistent with that date.
 
-   In the "boilerplate" case, it defines the date of publication for the
-   current document (Internet-Draft or RFC).  When producing Internet-
-   Drafts, the prep tool uses this date to compute the expiration date
-   (see [IDGUIDE]).  When one or more of "year", "month", or "day" are
-   left out, the prep tool will attempt to use the current system date
-   if the attributes that are present are consistent with that date.
-
-   Also in the first case, that month names, if given, need to match the
-   full English month name: "January", "February", "March", "April",
-   "May", "June", "July", "August", "September", "October", "November",
+      If given, the month must be a number.  Note that this restriction
+      is different than that in that in [XML2RFCv2].  The prep tool will
+      silently change text month names to numbers.  The year must be a
+      four-digit number.
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 23]
+Hoffman                   Expires July 16, 2016                [Page 23]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
-   or "December".
+      When the prep tool is used to create Internet-Drafts, it will
+      reject a submitted Internet-Draft that has a <date> element in the
+      boilerplate for itself that is anything other than today.  That
+      is, the tool will not allow a submitter to specify a date other
+      than the day of submission.  To avoid this problem, authors might
+      simply not include a <date> element in the boilerplate.
 
-   When the prep tool is used to create Internet-Drafts, it will reject
-   a submitted Internet-Draft that has a <date> element in the
-   boilerplate for itself that is anything other than today.  That is,
-   the tool will not allow a submitter to specify a date other than the
-   day of submission.  To avoid this problem, authors might simply not
-   include a <date> element in the boilerplate.
-
-   In the case of bibliographic references, the date information can
-   have prose text for the month or year.  For example, vague dates
-   (year="ca. 2000"), date ranges (year="2012-2013"), non-specific
-   months (month="Second quarter") and so on are allowed.
+   Bibliographic references:  The date information can have prose text
+      for the month or year.  For example, vague dates (year="ca.
+      2000"), date ranges (year="2012-2013"), non-specific months
+      (month="Second quarter") and so on are allowed.
 
    This element appears as a child element of <front> (Section 2.26).
 
@@ -1309,21 +1307,15 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 2.17.1.  "day" Attribute
 
-   In the "boilerplate" case: the day of publication; this is a number.
-   Otherwise, an indication of the publication day, with the format not
-   being restricted.
+   The day of publication.
 
 2.17.2.  "month" Attribute
 
-   In the "boilerplate" case: the month of publication; this is the
-   English name of the month.  Otherwise, an indication of the
-   publication month, with the format not being restricted.
+   The month or months of publication.
 
 2.17.3.  "year" Attribute
 
-   In the "boilerplate" case: the year of publication; this is a number
-   (usually four-digit).  Otherwise, an indication of the publication
-   year, with the format not being restricted.
+   The year or years of publication.
 
 2.18.  <dd>
 
@@ -1335,16 +1327,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    Either:
 
-
-
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 24]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
       In any order, but at least one of:
 
 
@@ -1353,6 +1335,15 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       *  <dl> elements (Section 2.20)
 
       *  <figure> elements (Section 2.25)
+
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 24]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
 
       *  <ol> elements (Section 2.34)
 
@@ -1393,14 +1384,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       *  <xref> elements (Section 2.66)
 
 
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 25]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
 2.18.1.  "anchor" Attribute
 
    Document-wide unique identifier for this definition.
@@ -1409,7 +1392,15 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    This element gives a mapping between the anchor of a reference and a
    name that will be displayed instead.  This allows authors to display
-   more mneumonic anchor names for automatically-included references.
+   more mnemonic anchor names for automatically-included references.
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 25]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    The mapping in this element only applies to <xref> elements whose
    format is "default".  For example, if the reference uses the anchor
    "RFC6949", the following would cause that anchor in the body of
@@ -1445,17 +1436,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 2.20.  <dl>
 
    A definition list.  Each entry has a pair of elements: a term (<dt>)
-   and a definition (<dd>).  (This is slightly different than the model
-   used in HTML, whicl allows for multiple terms for a single
-   definition.)
-
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 26]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
+   and a definition (<dd>).  (This is slightly different and simpler
+   than the model used in HTML, which allows for multiple terms for a
+   single definition.)
 
    This element appears as a child element of <abstract> (Section 2.1),
    <aside> (Section 2.6), <blockquote> (Section 2.10), <dd>
@@ -1465,6 +1448,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    Content model:
 
    One or more sequences of:
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 26]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
 
    1.  One <dt> element
 
@@ -1505,14 +1496,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    This element appears as a child element of <dl> (Section 2.20).
 
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 27]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    Content model:
 
    In any order:
@@ -1520,6 +1503,15 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    o  Text
 
    o  <bcp14> elements (Section 2.9)
+
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 27]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
 
    o  <cref> elements (Section 2.16)
 
@@ -1562,18 +1554,20 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    Content model:
 
-
-
-Hoffman                   Expires July 12, 2016                [Page 28]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    In any order:
 
    o  Text
 
    o  <bcp14> elements (Section 2.9)
+
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 28]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
 
    o  <cref> elements (Section 2.16)
 
@@ -1607,8 +1601,7 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 2.23.1.  "ascii" Attribute
 
    The ASCII equivalent of the author's email address.  This is only
-   used if the email address has one or two internationalized
-   components.
+   used if the email address has any internationalized components.
 
 2.24.  <eref>
 
@@ -1617,14 +1610,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    document.
 
    If the <eref> element has non-empty text content, formatters should
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 29]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    use the content as the displayed text that is linked.  Otherwise the
    formatter should use the value of the "target" attribute as the
    displayed text.  Formatters will link the displayed text to the value
@@ -1632,6 +1617,13 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    format.
 
    For example, with an input of:
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 29]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
 
          This is described at
          <eref target="http://www.example.com/reports/r12.html"/>.
@@ -1671,16 +1663,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    name (such as "https://") and thus not be relative to the URL of the
    current document.
 
-
-
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 30]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
 2.25.  <figure>
 
    Contains a figure with a caption with the figure number.  If the
@@ -1691,6 +1673,13 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    <blockquote> (Section 2.10), <dd> (Section 2.18), <li>
    (Section 2.29), <section> (Section 2.46), <td> (Section 2.56), and
    <th> (Section 2.58).
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 30]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
 
    Content model:
 
@@ -1726,17 +1715,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    o  "right"
 
-
-
-
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 31]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
 2.25.2.  "alt" Attribute
 
    Deprecated.  If the goal is to provide a single URI for a reference,
@@ -1750,13 +1728,22 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    Deprecated.
 
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 31]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
 2.25.5.  "src" Attribute
 
    Deprecated.
 
 2.25.6.  "suppress-title" Attribute
 
-   Deprecated.  Figures always now get captions.
+   Deprecated.
 
    Allowed values:
 
@@ -1786,13 +1773,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    "Historic".  The "name" attributes of those multiple <seriesInfo>
    elements interact as described in the section on <seriesInfo>.
 
-
-
-Hoffman                   Expires July 12, 2016                [Page 32]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    This element appears as a child element of <reference> (Section 2.40)
    and <rfc> (Section 2.45).
 
@@ -1803,6 +1783,15 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    1.   One <title> element (Section 2.60)
 
    2.   One or more <author> elements (Section 2.7)
+
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 32]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
 
    3.   One optional <date> element (Section 2.17)
 
@@ -1841,14 +1830,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    (Section 2.3), <aside> (Section 2.6), <blockquote> (Section 2.10),
    <c> (Section 3.1), <dd> (Section 2.18), <dt> (Section 2.21), <em>
    (Section 2.22), <figure> (Section 2.25), <li> (Section 2.29),
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 33]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    <postamble> (Section 3.5), <preamble> (Section 3.6), <section>
    (Section 2.46), <strong> (Section 2.50), <sub> (Section 2.51), <sup>
    (Section 2.52), <t> (Section 2.53), <table> (Section 2.54), <td>
@@ -1856,6 +1837,17 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    (Section 3.9).
 
    Content model: this element does not have any contents.
+
+
+
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 33]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
 
 2.27.1.  "item" Attribute (Mandatory)
 
@@ -1897,19 +1889,20 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    This element appears as a child element of <ol> (Section 2.34) and
    <ul> (Section 2.63).
 
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 34]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    Content model:
 
    Either:
 
       In any order, but at least one of:
+
+
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 34]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
       *  <artwork> elements (Section 2.5)
@@ -1952,18 +1945,20 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
       *  <sup> elements (Section 2.52)
 
-
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 35]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
       *  <tt> elements (Section 2.62)
 
       *  <xref> elements (Section 2.66)
+
+
+
+
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 35]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.29.1.  "anchor" Attribute
@@ -2009,15 +2004,18 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    The relationship of the external document to this one.  The
    relationships are taken from Link Relations registry maintained by
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 36]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    IANA [LINKRELATIONS].
+
+
+
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 36]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
 
 2.31.  <middle>
 
@@ -2066,14 +2064,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    This element appears as a child element of <front> (Section 2.26).
 
-
-
-Hoffman                   Expires July 12, 2016                [Page 37]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    Content model:
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 37]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
 
    In this order:
 
@@ -2124,9 +2122,11 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 38]
+
+
+Hoffman                   Expires July 16, 2016                [Page 38]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.34.1.  "anchor" Attribute
@@ -2180,9 +2180,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 39]
+Hoffman                   Expires July 16, 2016                [Page 39]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    contain a percent-encoded indicator and other text.  The value is a
@@ -2236,9 +2236,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 40]
+Hoffman                   Expires July 16, 2016                [Page 40]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.35.2.  "ascii" Attribute
@@ -2292,9 +2292,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 41]
+Hoffman                   Expires July 16, 2016                [Page 41]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
       One or more <postalLine> elements (Section 2.38)
@@ -2348,9 +2348,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 42]
+Hoffman                   Expires July 16, 2016                [Page 42]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  <em> elements (Section 2.22)
@@ -2404,9 +2404,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 43]
+Hoffman                   Expires July 16, 2016                [Page 43]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  "true" (default)
@@ -2460,9 +2460,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 44]
+Hoffman                   Expires July 16, 2016                [Page 44]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    In this order:
@@ -2516,9 +2516,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 45]
+Hoffman                   Expires July 16, 2016                [Page 45]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    An example of the <relref> element with text content might be:
@@ -2572,9 +2572,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 46]
+Hoffman                   Expires July 16, 2016                [Page 46]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
          See
@@ -2628,9 +2628,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 47]
+Hoffman                   Expires July 16, 2016                [Page 47]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
          See
@@ -2684,9 +2684,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 48]
+Hoffman                   Expires July 16, 2016                [Page 48]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.44.3.  "section" Attribute
@@ -2740,9 +2740,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 49]
+Hoffman                   Expires July 16, 2016                [Page 49]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  "true"
@@ -2796,9 +2796,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 50]
+Hoffman                   Expires July 16, 2016                [Page 50]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.45.10.  "seriesNo" Attribute
@@ -2852,9 +2852,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 51]
+Hoffman                   Expires July 16, 2016                [Page 51]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.45.15.  "tocInclude" Attribute
@@ -2908,9 +2908,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 52]
+Hoffman                   Expires July 16, 2016                [Page 52]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
        *  <blockquote> elements (Section 2.10)
@@ -2964,9 +2964,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 53]
+Hoffman                   Expires July 16, 2016                [Page 53]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  "true"
@@ -3020,9 +3020,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 54]
+Hoffman                   Expires July 16, 2016                [Page 54]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    <reference> (Section 2.40; deprecated in this context).
@@ -3076,9 +3076,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 55]
+Hoffman                   Expires July 16, 2016                [Page 55]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.47.4.  "status" Attribute
@@ -3114,8 +3114,8 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    <sourcecode> provides full control of horizontal whitespace and line
    breaks.  It is thus useful for source code and formal languages (such
-   as ABNF or the RNC notation used in this document).  When rendered,
-   sourcecode is always shown in a monospace font.
+   as ABNF [RFC5234] or the RNC notation used in this document).  When
+   rendered, sourcecode is always shown in a monospace font.
 
    For artwork such as character-based art, diagrams of message layouts,
    and so on, use the <artwork> element instead.
@@ -3132,9 +3132,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 56]
+Hoffman                   Expires July 16, 2016                [Page 56]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    Desired output:
@@ -3188,9 +3188,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 57]
+Hoffman                   Expires July 16, 2016                [Page 57]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    <sourcecode> element.
@@ -3244,9 +3244,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 58]
+Hoffman                   Expires July 16, 2016                [Page 58]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.49.  <street>
@@ -3300,9 +3300,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 59]
+Hoffman                   Expires July 16, 2016                [Page 59]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  <sup> elements (Section 2.52)
@@ -3356,9 +3356,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 60]
+Hoffman                   Expires July 16, 2016                [Page 60]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.52.  <sup>
@@ -3412,9 +3412,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 61]
+Hoffman                   Expires July 16, 2016                [Page 61]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    Content model:
@@ -3468,9 +3468,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 62]
+Hoffman                   Expires July 16, 2016                [Page 62]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    the paginator could attempt to keep the paragraph with the next
@@ -3524,9 +3524,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 63]
+Hoffman                   Expires July 16, 2016                [Page 63]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    1.  One optional <name> element (Section 2.32)
@@ -3580,9 +3580,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 64]
+Hoffman                   Expires July 16, 2016                [Page 64]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
       *  <artwork> elements (Section 2.5)
@@ -3636,9 +3636,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 65]
+Hoffman                   Expires July 16, 2016                [Page 65]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  "left" (default)
@@ -3692,9 +3692,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 66]
+Hoffman                   Expires July 16, 2016                [Page 66]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    Content model:
@@ -3748,9 +3748,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 67]
+Hoffman                   Expires July 16, 2016                [Page 67]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
       *  <xref> elements (Section 2.66)
@@ -3804,9 +3804,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 68]
+Hoffman                   Expires July 16, 2016                [Page 68]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.59.1.  "anchor" Attribute
@@ -3860,9 +3860,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 69]
+Hoffman                   Expires July 16, 2016                [Page 69]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    those values override this value for those cells.
@@ -3916,9 +3916,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 70]
+Hoffman                   Expires July 16, 2016                [Page 70]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    <aside> (Section 2.6), <blockquote> (Section 2.10), <dd>
@@ -3972,9 +3972,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 71]
+Hoffman                   Expires July 16, 2016                [Page 71]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 2.65.  <workgroup>
@@ -4028,9 +4028,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 72]
+Hoffman                   Expires July 16, 2016                [Page 72]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
       any other type of element is an error.
@@ -4084,9 +4084,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 73]
+Hoffman                   Expires July 16, 2016                [Page 73]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  "default" (default)
@@ -4140,9 +4140,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 74]
+Hoffman                   Expires July 16, 2016                [Page 74]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    This element appears as a child element of: <texttable>
@@ -4196,9 +4196,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 75]
+Hoffman                   Expires July 16, 2016                [Page 75]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    Content model: this element does not have any contents.
@@ -4252,9 +4252,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 76]
+Hoffman                   Expires July 16, 2016                [Page 76]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    In any order:
@@ -4308,9 +4308,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 77]
+Hoffman                   Expires July 16, 2016                [Page 77]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    o  <iref> elements (Section 2.27)
@@ -4364,9 +4364,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 78]
+Hoffman                   Expires July 16, 2016                [Page 78]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    In this order:
@@ -4420,9 +4420,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 79]
+Hoffman                   Expires July 16, 2016                [Page 79]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 3.9.  <ttcol>
@@ -4476,9 +4476,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 80]
+Hoffman                   Expires July 16, 2016                [Page 80]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
 3.10.1.  'blankLines' attribute
@@ -4532,9 +4532,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 81]
+Hoffman                   Expires July 16, 2016                [Page 81]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    This document updates the specification for the Internet Media Type
@@ -4588,9 +4588,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 82]
+Hoffman                   Expires July 16, 2016                [Page 82]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
       Macintosh file type code(s):  TEXT
@@ -4644,9 +4644,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 83]
+Hoffman                   Expires July 16, 2016                [Page 83]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    Suzanne Woolf
@@ -4700,9 +4700,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 84]
+Hoffman                   Expires July 16, 2016                [Page 84]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
    [PREPTOOL]       Hoffman, P. and J. Hildebrand, "RFC v3 Prep Tool
@@ -4752,15 +4752,20 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
                     January 2005,
                     <http://www.rfc-editor.org/info/rfc3986>.
 
-   [RFC5378]        Bradner, S., Ed. and J. Contreras, Ed., "Rights
+   [RFC5234]        Crocker, D., Ed. and P. Overell, "Augmented BNF for
 
 
 
-Hoffman                   Expires July 12, 2016                [Page 85]
+Hoffman                   Expires July 16, 2016                [Page 85]
 
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
 
 
+                    Syntax Specifications: ABNF", STD 68, RFC 5234,
+                    DOI 10.17487/RFC5234, January 2008,
+                    <http://www.rfc-editor.org/info/rfc5234>.
+
+   [RFC5378]        Bradner, S., Ed. and J. Contreras, Ed., "Rights
                     Contributors Provide to the IETF Trust", BCP 78,
                     RFC 5378, DOI 10.17487/RFC5378, November 2008,
                     <http://www.rfc-editor.org/info/rfc5378>.
@@ -4804,18 +4809,19 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    [RNG]            ISO/IEC, "Information Technology - Document Schema
                     Definition Languages (DSDL) - Part 2: Regular-
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 86]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
                     Grammar-Based Validation - RELAX NG. Second
                     Edition.", ISO/IEC 19757-2:2008(E), December 2008.
 
                     A useful source of RNG-related information is
                     <http://relaxng.org/>.
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 86]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
 
    [SVGforRFCs]     Brownlee, N., "SVG Drawings for RFCs: SVG 1.2 RFC",
                     draft-brownlee-svg-rfc (work in progress), 2015.
@@ -4859,6 +4865,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
                     <http://www.w3.org/TR/xinclude/>.
 
    [XPOINTER]       Grosso, P., Maler, E., Marsh, J., and N. Walsh,
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 87]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
                     "XPointer Framework", W3C Recommendation REC-xptr-
                     framework-20030325, March 2003, <http://www.w3.org/
                     TR/2003/REC-xptr-framework-20030325/>.
@@ -4866,19 +4880,12 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
                     Latest version available at
                     <http://www.w3.org/TR/xptr-framework/>.
 
-
-
-Hoffman                   Expires July 12, 2016                [Page 87]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
 Appendix A.  Front-Page ("Boilerplate") Generation
 
    The values listed here will be defined by the RFC Editor.  Those
    listed here are believed to be the current values in use.
 
-A.1.  The /rfc/@ipr Attribute
+A.1.  The "ipr" Attribute
 
    This attribute value can take a long list of values, each of which
    describes an IPR policy for the document (Section 2.45.5).  The
@@ -4914,20 +4921,16 @@ A.1.1.  Current Values: "*trust200902"
    further information).  The actual text is located in Section 6 ("Text
    to Be Included in IETF Documents") of these documents.
 
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 88]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    The prep tool automatically produces the "correct" text, depending on
    the document's date information (see above):
-
-
-
-
-
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 88]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
 
    +----------+--------------------------------+
    | TLP      | starting with publication date |
@@ -4937,7 +4940,7 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +----------+--------------------------------+
 
       The TLP was again updated in March 2015 ([TLP5.0]), but the
-      changes made in this version do not affect the boilerplate text.
+      changes made in that version do not affect the boilerplate text.
 
 A.1.1.1.  trust200902
 
@@ -4972,19 +4975,21 @@ A.1.1.4.  pre5378Trust200902
    frequently called the "pre-5378 escape clause" referring to changes
    introduced in [RFC5378]):
 
+
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 89]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
       This document may contain material from IETF Documents or IETF
       Contributions published or made publicly available before November
       10, 2008.  The person(s) controlling the copyright in some of this
       material may not have granted the IETF Trust the right to allow
       modifications of such material outside the IETF Standards Process.
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 89]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
       Without obtaining an adequate license from the person(s)
       controlling the copyright in such materials, this document may not
       be modified outside the IETF Standards Process, and derivative
@@ -5029,18 +5034,17 @@ A.1.2.4.  Historic Values: "*2026"
    The special value "none" was also used back then; it denied the IETF
    any rights beyond publication as an Internet-Draft.
 
-A.2.  The /rfc/@submissionType Attribute
+
+
+Hoffman                   Expires July 16, 2016                [Page 90]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
+A.2.  The "submissionType" Attribute
 
    The RFC Editor publishes documents from different "document streams",
    of which the "IETF stream" is the most prominent.  Other streams are
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 90]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    the independent stream (used for things such as discussion of
    Internet-related technologies that are not part of the IETF agenda),
    the "IAB stream" (Internet Architecture Board) and the "IRTF stream"
@@ -5069,7 +5073,7 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       "Copyright Notice" mentions the Copyright on Code Components (see
       Section 6 of the TLP ("Text to Be Included in IETF Documents")).
 
-A.3.  The /rfc/@consensus Attribute
+A.3.  The "consensus" Attribute
 
    For some of the publication streams (see Appendix A.2), the "Status
    of This Memo" section depends on whether there was a consensus to
@@ -5084,18 +5088,19 @@ A.3.  The /rfc/@consensus Attribute
 
    o  "independent" and "IAB": none.
 
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 91]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    o  "IETF": mention that there was an IETF consensus.
 
    o  "IRTF": the text needs to describe the consensus/review as
       described in Section 2.1 of [RFC5743].
-
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 91]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
 
 Appendix B.  The v3 Format and Processing Tools
 
@@ -5138,6 +5143,16 @@ Appendix B.  The v3 Format and Processing Tools
          with external links into either "data:" URI or content for the
          element, as specified in [PREPTOOL].
 
+
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 92]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    o  Formatting tools that will create HTML, PDF, plain text, and
       possibly other output formats.  These formatters will be created
       by the IETF, but others can create such tools as well.  The IETF
@@ -5145,14 +5160,6 @@ Appendix B.  The v3 Format and Processing Tools
 
    There may also be processing tools that are meant to run on the
    computers of authors.  These tools may be used to produce interim
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 92]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    versions of the non-canonical representations so that authors can see
    how their XML might later be rendered; to create documents in
    representations different than those supported by the RFC Editor; to
@@ -5191,6 +5198,17 @@ B.1.  Including External Text with XInclude
    Editor.  For example, if a document has three normative references,
    all RFCs, the document might contain:
 
+
+
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 93]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    <references>
        <xi:include href="http://xml2rfc.tools.ietf.org/public/rfc/
           bibxml/reference.RFC.2119.xml"/>
@@ -5201,14 +5219,6 @@ B.1.  Including External Text with XInclude
    </references>
 
    <xi:include> can be used anywhere an XML element could be used (but
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 93]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    not where free text is used).  For example, if three Internet-Drafts
    are all including a particular paragraph or section verbatim, that
    text can be kept either in a file or somewhere on the web, and be
@@ -5248,6 +5258,13 @@ B.2.  Anchors and IDs
    by the tool if the attribute is not there; if the attribute is
    already there, the tool may replace the value.
 
+
+
+Hoffman                   Expires July 16, 2016                [Page 94]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
 B.2.1.  Overlapping Values
 
    In the HTML representation of this XML vocabulary, both anchors and
@@ -5257,13 +5274,6 @@ B.2.1.  Overlapping Values
    generated for the "pn" attributes.  Also, there are some values for
    the "anchor" values that are reserved for sections, and those
    sections can only have those anchor values.
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 94]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
 
    The following rules prevent this overlap:
 
@@ -5300,6 +5310,17 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       with one of the types of names above, the processing tool will
       reject the document.
 
+
+
+
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 95]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
 B.3.  Attributes Controlled by the Prep Tool
 
    Many elements in the v3 vocabulary have new attributes whose role is
@@ -5311,15 +5332,6 @@ B.3.  Attributes Controlled by the Prep Tool
    by the prep tool.
 
    The attributes that are controlled by the prep tool are:
-
-
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 95]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
 
    o  The "pn" attribute in any element -- The number for this item
       within the section.  The numbering is shared with other elements
@@ -5357,6 +5369,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       is not an RFC or Internet-Draft in the v3 format, the text
       fragment is simply the value of the "relative" or "section"
       attribute.  This will rarely produce a good result in formatted
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 96]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
       output so, for these documents, the <relref> element should
       contain text content.
 
@@ -5368,14 +5388,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       that indicates what mode the prep tool was in when it processed
       the XML, such as whether it was processing a file to become an
       Internet-Draft or an RFC.
-
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 96]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
 
    o  <rfc> "scripts" attribute -- This attribute is filled with a list
       of scripts needed to render this document.  The list is comma-
@@ -5413,6 +5425,14 @@ Appendix C.  Relax NG Schema
        attribute number { text }?,
        [ a:defaultValue = "" ] attribute obsoletes { text }?,
        [ a:defaultValue = "" ] attribute updates { text }?,
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 97]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
        attribute category { text }?,
        attribute mode { text }?,
        [ a:defaultValue = "false" ]
@@ -5425,14 +5445,6 @@ Appendix C.  Relax NG Schema
          "IETF" | "IAB" | "IRTF" | "independent"
        }?,
        attribute docName { text }?,
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 97]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        [ a:defaultValue = "false" ]
        attribute sortRefs { "true" | "false" }?,
        [ a:defaultValue = "true" ]
@@ -5469,6 +5481,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        date?,
        area*,
        workgroup*,
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 98]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
        keyword*,
        abstract?,
        seriesInfo*,
@@ -5481,14 +5501,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute abbrev { text }?,
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 98]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        attribute ascii { text }?,
        text
      }
@@ -5525,6 +5537,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        phone?,
        facsimile?,
        email?,
+
+
+
+Hoffman                   Expires July 16, 2016                [Page 99]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
        uri?
      }
 
@@ -5537,14 +5557,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    street =
      element street {
-
-
-
-Hoffman                   Expires July 12, 2016                [Page 99]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute ascii { text }?,
@@ -5581,6 +5593,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        attribute xml:lang { text }?,
        attribute ascii { text }?,
        text
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 100]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
      }
 
    postalLine =
@@ -5593,14 +5613,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    phone =
      element phone {
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 100]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        text
@@ -5638,6 +5650,13 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        empty
      }
 
+
+
+Hoffman                   Expires July 16, 2016               [Page 101]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    area =
      element area {
        attribute xml:base { text }?,
@@ -5649,14 +5668,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
      element workgroup {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 101]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        text
      }
 
@@ -5694,6 +5705,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        attribute xml:lang { text }?,
        attribute pn { text }?,
        section+
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 102]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
      }
 
    middle =
@@ -5705,14 +5724,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    section =
      element section {
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 102]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
@@ -5750,6 +5761,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    t =
      element t {
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 103]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
@@ -5761,14 +5780,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        attribute keepWithPrevious { "false" | "true" }?,
        (text
         | bcp14
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 103]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
         | cref
         | em
         | eref
@@ -5806,6 +5817,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
            | bcp14
            | cref
            | em
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 104]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
            | eref
            | iref
            | relref
@@ -5817,14 +5836,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
      }
 
    \list =
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 104]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
      element list {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
@@ -5862,6 +5873,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
      }
 
    li =
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 105]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
      element li {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
@@ -5873,14 +5892,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
            | cref
            | em
            | eref
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 105]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
            | iref
            | relref
            | strong
@@ -5918,6 +5929,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
         | relref
         | strong
         | sub
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 106]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
         | sup
         | tt
         | xref)*
@@ -5929,14 +5948,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 106]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        ((artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
@@ -5974,6 +5985,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
        (attribute section { text },
         attribute relative { text }?)?,
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 107]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
        attribute derivedRemoteContent { text }?,
        attribute derivedLink { text }?,
        text
@@ -5985,14 +6004,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        attribute xml:lang { text }?,
        attribute target { text },
        text
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 107]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
      }
 
    iref =
@@ -6030,6 +6041,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
         | iref
         | relref
         | strong
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 108]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
         | sub
         | sup
         | xref)*
@@ -6041,14 +6060,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        attribute xml:lang { text }?,
        (text
         | bcp14
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 108]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
         | cref
         | em
         | eref
@@ -6086,6 +6097,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
         | cref
         | em
         | eref
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 109]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
         | iref
         | relref
         | strong
@@ -6097,14 +6116,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
      element sup {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 109]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        (text
         | bcp14
         | cref
@@ -6142,6 +6153,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        [ a:defaultValue = "" ] attribute title { text }?,
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 110]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
        [ a:defaultValue = "false" ]
        attribute suppress-title { "true" | "false" }?,
        attribute src { text }?,
@@ -6153,14 +6172,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        name?,
        iref*,
        preamble?,
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 110]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        (artwork | sourcecode)+,
        postamble?
      }
@@ -6198,6 +6209,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
      }
 
    artwork =
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 111]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
      element artwork {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
@@ -6209,14 +6228,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        attribute src { text }?,
        [ a:defaultValue = "left" ]
        attribute align { "left" | "center" | "right" }?,
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 111]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        [ a:defaultValue = "" ] attribute alt { text }?,
        [ a:defaultValue = "" ] attribute width { text }?,
        [ a:defaultValue = "" ] attribute height { text }?,
@@ -6254,6 +6265,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    tbody =
      element tbody {
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 112]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
@@ -6265,14 +6284,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
      element tfoot {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 112]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        attribute anchor { xsd:ID }?,
        attribute pn { text }?,
        tr+
@@ -6310,6 +6321,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
            | figure
            | iref
            | ol
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 113]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
            | relref
            | sourcecode
            | strong
@@ -6321,14 +6340,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
      }
 
    th =
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 113]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
      element th {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
@@ -6366,6 +6377,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        (text | cref | eref | iref | spanx | xref)*
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 114]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
      }
 
    texttable =
@@ -6377,14 +6396,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        [ a:defaultValue = "false" ]
        attribute suppress-title { "true" | "false" }?,
        [ a:defaultValue = "center" ]
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 114]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        attribute align { "left" | "center" | "right" }?,
        [ a:defaultValue = "full" ]
        attribute style { "all" | "none" | "headers" | "full" }?,
@@ -6422,6 +6433,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    br =
      element br {
        attribute xml:base { text }?,
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 115]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
        attribute xml:lang { text }?,
        empty
      }
@@ -6433,14 +6452,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        displayreference*,
        references*,
        section*
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 115]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
      }
 
    displayreference =
@@ -6478,6 +6489,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID },
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 116]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
        reference+
      }
 
@@ -6489,14 +6508,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        attribute value { text },
        attribute asciiName { text }?,
        attribute asciiValue { text }?,
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 116]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        attribute status { text }?,
        attribute stream { text }?,
        empty
@@ -6534,23 +6545,19 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    refcontent =
      element refcontent {
        attribute xml:base { text }?,
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 117]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
        attribute xml:lang { text }?,
        (text | bcp14 | em | strong | sub | sup | tt)*
      }
 
    start = rfc
-
-
-
-
-
-
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 117]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
 
 Appendix D.  Schema Differences from v2
@@ -6594,6 +6601,14 @@ Appendix D.  Schema Differences from v2
    -       | "noModificationTrust200811"
    -       | "noDerivativesTrust200811"
    -       | "trust200902"
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 118]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    -       | "noModificationTrust200902"
    -       | "noDerivativesTrust200902"
    -       | "pre5378Trust200902"
@@ -6601,14 +6616,6 @@ Appendix D.  Schema Differences from v2
    +     attribute ipr { text }?,
          attribute iprExtract { xsd:IDREF }?,
          [ a:defaultValue = "IETF" ]
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 118]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          attribute submissionType {
            "IETF" | "IAB" | "IRTF" | "independent"
          }?,
@@ -6650,6 +6657,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     author+,
    +     date?,
    +     area*,
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 119]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    +     workgroup*,
    +     keyword*,
    +     abstract?,
@@ -6657,14 +6672,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     note*,
    +     boilerplate?
        }
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 119]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
      title =
        element title {
    +     attribute xml:base { text }?,
@@ -6706,6 +6713,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     uri?
    +   }
    + postal =
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 120]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    +   element postal {
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
@@ -6713,14 +6728,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +   }
    + street =
    +   element street {
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 120]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
    +     attribute ascii { text }?,
@@ -6762,6 +6769,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     text
    +   }
    + phone =
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 121]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    +   element phone {
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
@@ -6769,14 +6784,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +   }
    + facsimile =
    +   element facsimile {
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 121]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
    +     text
@@ -6818,6 +6825,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        }
    - area = element area { text }
    - workgroup = element workgroup { text }
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 122]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    - keyword = element keyword { text }
    - abstract = element abstract { t+ }
    + area =
@@ -6825,14 +6840,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
    +     text
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 122]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    +   }
    + workgroup =
    +   element workgroup {
@@ -6874,6 +6881,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     attribute pn { text }?,
    +     section+
    +   }
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 123]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    + middle =
    +   element middle {
    +     attribute xml:base { text }?,
@@ -6881,14 +6896,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     section+
        }
    - middle = element middle { section+ }
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 123]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
      section =
        element section {
    +     attribute xml:base { text }?,
@@ -6930,6 +6937,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
        element t {
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 124]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
          attribute hangText { text }?,
@@ -6937,14 +6952,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     attribute keepWithNext { "false" | "true" }?,
    +     [ a:defaultValue = "false" ]
    +     attribute keepWithPrevious { "false" | "true" }?,
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 124]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          (text
    -      | \list
    -      | figure
@@ -6986,6 +6993,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +      | (text
    +         | bcp14
    +         | cref
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 125]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    +         | em
    +         | eref
    +         | iref
@@ -6993,14 +7008,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +         | strong
    +         | sub
    +         | sup
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 125]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    +         | tt
    +         | xref)+)
        }
@@ -7042,6 +7049,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    + li =
    +   element li {
    +     attribute xml:base { text }?,
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 126]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
@@ -7049,14 +7064,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +      | (text
    +         | bcp14
    +         | cref
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 126]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    +         | em
    +         | eref
    +         | iref
@@ -7098,6 +7105,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +      | tt
    +      | xref)*
    +   }
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 127]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    + dd =
    +   element dd {
    +     attribute xml:base { text }?,
@@ -7105,14 +7120,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     ((artwork | dl | figure | ol | sourcecode | t | ul)+
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 127]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    +      | (text
    +         | bcp14
    +         | cref
@@ -7154,6 +7161,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +      attribute relative { text }?)?,
    +     attribute derivedRemoteContent { text }?,
    +     attribute derivedLink { text }?,
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 128]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          text
        }
      eref =
@@ -7161,14 +7176,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
          attribute target { text },
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 128]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          text
        }
      iref =
@@ -7210,6 +7217,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +      | xref)*
    +   }
    + strong =
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 129]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    +   element strong {
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
@@ -7217,14 +7232,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +      | bcp14
    +      | cref
    +      | em
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 129]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    +      | eref
    +      | iref
    +      | relref
@@ -7266,6 +7273,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +   }
    + sup =
    +   element sup {
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 130]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
    +     (text
@@ -7273,14 +7288,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +      | cref
    +      | em
    +      | eref
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 130]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    +      | iref
    +      | relref
    +      | strong
@@ -7322,6 +7329,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          iref*,
          preamble?,
    -     artwork,
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 131]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    +     (artwork | sourcecode)+,
          postamble?
        }
@@ -7329,14 +7344,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +   element table {
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 131]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     name?,
@@ -7378,6 +7385,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          attribute src { text }?,
          [ a:defaultValue = "left" ]
          attribute align { "left" | "center" | "right" }?,
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 132]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          [ a:defaultValue = "" ] attribute alt { text }?,
          [ a:defaultValue = "" ] attribute width { text }?,
          [ a:defaultValue = "" ] attribute height { text }?,
@@ -7385,14 +7400,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     attribute originalSrc { text }?,
    +     (text* | svg)
    +   }
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 132]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    + svg =
    +   element ns1:svg {
    +     [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
@@ -7434,6 +7441,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     attribute pn { text }?,
    +     tr+
    +   }
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 133]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    + tr =
    +   element tr {
    +     attribute xml:base { text }?,
@@ -7441,14 +7456,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     attribute anchor { xsd:ID }?,
    +     attribute pn { text }?,
    +     [ a:defaultValue = "0" ] attribute border { text }?,
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 133]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    +     (td | th)+
    +   }
    + td =
@@ -7490,6 +7497,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     attribute pn { text }?,
    +     [ a:defaultValue = "0" ] attribute border { text }?,
    +     [ a:defaultValue = "0" ] attribute colspan { text }?,
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 134]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    +     [ a:defaultValue = "0" ] attribute rowspan { text }?,
    +     [ a:defaultValue = "left" ]
    +     attribute align { "left" | "center" | "right" }?,
@@ -7497,14 +7512,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +      | (text
    +         | artwork
    +         | bcp14
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 134]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    +         | br
    +         | cref
    +         | dl
@@ -7546,6 +7553,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          ttcol+,
          c*,
          postamble?
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 135]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
        }
      ttcol =
        element ttcol {
@@ -7553,14 +7568,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     attribute xml:lang { text }?,
          attribute width { text }?,
          [ a:defaultValue = "left" ]
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 135]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          attribute align { "left" | "center" | "right" }?,
    +     (cref | eref | iref | xref | text)*
    +   }
@@ -7602,6 +7609,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
      references =
        element references {
    -     [ a:defaultValue = "References" ] attribute title { text }?,
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 136]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    -     reference+
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
@@ -7609,14 +7624,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    +     attribute title { text }?,
    +     name?,
    +     (reference | referencegroup)*
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 136]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
        }
      reference =
        element reference {
@@ -7658,6 +7665,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          attribute target { text }?,
          attribute type { text },
          attribute octets { text }?,
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 137]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          empty
        }
      annotation =
@@ -7665,14 +7680,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    - spanx)* }
    +   element annotation {
    +     attribute xml:base { text }?,
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 137]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
    +     attribute xml:lang { text }?,
    +     (text
    +      | bcp14
@@ -7714,28 +7721,28 @@ Index
          in td element  65
          in texttable element  79
          in th element  68
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 138]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          in ttcol element  80
       alt attribute
          in artwork element  14
-         in figure element  32
+         in figure element  31
       anchor attribute
          in abstract element  11
          in artwork element  14
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 138]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          in aside element  17
          in blockquote element  20
          in cref element  23
-         in dd element  26
+         in dd element  25
          in dl element  27
          in dt element  28
-         in figure element  32
+         in figure element  31
          in li element  36
          in ol element  39
          in reference element  43
@@ -7765,11 +7772,19 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          height attribute  15
          inside aside  16
          inside blockquote  19
-         inside dd  25
+         inside dd  24
          inside figure  31
          inside li  35
          inside section  52
          inside td  65
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 139]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          inside th  67
          name attribute  15
          src attribute  15
@@ -7777,14 +7792,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          width attribute  16
          xml:space attribute  16
       ascii attribute
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 139]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          in city element  21
          in code element  22
          in country element  22
@@ -7810,9 +7817,9 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       Attributes
          abbrev  40, 69
          align  14, 31, 65, 68, 79-80
-         alt  14, 32
-         anchor  11, 14, 17, 20, 23, 26-28, 32, 36, 39, 43-45, 53, 57,
-            62, 64, 66, 68-69, 71, 79
+         alt  14, 31
+         anchor  11, 14, 17, 20, 23, 25, 27-28, 31, 36, 39, 43-45, 53,
+            57, 62, 64, 66, 68-69, 71, 79
          ascii  21-22, 29, 41-42, 45, 59, 69
          asciiFullname  17
          asciiInitials  18
@@ -7826,6 +7833,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          colspan  66, 68
          consensus  49
          counter  76
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 140]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          day  24
          display  23
          displayFormat  46
@@ -7833,19 +7848,11 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          empty  71
          format  72
          fullname  18
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 140]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          group  39
          hangIndent  76
          hanging  27
          hangText  62
-         height  15, 32
+         height  15, 31
          href  36
          indexInclude  50
          initials  18
@@ -7882,6 +7889,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          style  76, 78-79
          subitem  34
          submissionType  51
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 141]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          suppress-title  32, 79
          surname  18
          symRefs  51
@@ -7889,14 +7904,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          TheRealDefinition  74
          title  32, 38, 45, 54, 79
          to  26
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 141]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          toc  54
          tocDepth  51
          tocInclude  52
@@ -7913,7 +7920,7 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          asciiSurname attribute  18
          fullname attribute  18
          initials attribute  18
-         inside front  33
+         inside front  32
          role attribute  18
          surname attribute  18
 
@@ -7925,8 +7932,8 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          inside blockquote  20
          inside c  75
          inside dd  25
-         inside dt  28
-         inside em  29
+         inside dt  27
+         inside em  28
          inside li  35
          inside postamble  77
          inside preamble  77
@@ -7938,6 +7945,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          inside td  65
          inside th  67
          inside tt  70
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 142]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
       blankLines attribute
          in vspace element  81
       blockquote element  19, 97
@@ -7945,14 +7960,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          cite attribute  20
          inside section  53
          quotedFrom attribute  21
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 142]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
       boilerplate element  21, 97
          inside front  33
       border attribute
@@ -7994,6 +8001,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          inside c  75
          inside dd  25
          inside dt  28
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 143]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          inside em  29
          inside li  35
          inside name  37
@@ -8001,14 +8016,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          inside preamble  77
          inside strong  59
          inside sub  60
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 143]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          inside sup  61
          inside t  62
          inside td  65
@@ -8026,13 +8033,13 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       day attribute
          in date element  24
       dd element  24, 97
-         anchor attribute  26
+         anchor attribute  25
          inside dl  27
       display attribute
          in cref element  23
       displayFormat attribute
          in relref element  46
-      displayreference element  26, 97
+      displayreference element  25, 97
          inside back  19
          target attribute  26
          to attribute  26
@@ -8042,7 +8049,7 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          inside abstract  11
          inside aside  16
          inside blockquote  19
-         inside dd  25
+         inside dd  24
          inside li  35
          inside note  38
          inside section  53
@@ -8050,6 +8057,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          inside th  67
          spacing attribute  27
       docName attribute
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 144]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          in rfc element  50
       dt element  27, 97
          anchor attribute  28
@@ -8057,23 +8072,15 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
 
    E
       Elements
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 144]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          abstract  11, 33
          address  11, 17
          annotation  11, 43
          area  12, 33
-         artwork  13, 16, 19, 25, 31, 35, 52, 65, 67
+         artwork  13, 16, 19, 24, 31, 35, 52, 65, 67
          aside  16, 52
-         author  17, 33
+         author  17, 32
          back  18, 49
-         bcp14  12, 19-20, 25, 28-29, 35, 42, 59-62, 65, 67, 70, 75, 77
+         bcp14  12, 19-20, 25, 27-28, 35, 42, 59-62, 65, 67, 70, 75, 77
          blockquote  19, 53
          boilerplate  21, 33
          br  21, 65, 67
@@ -8085,15 +8092,15 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
             80
          date  23, 33
          dd  24, 27
-         displayreference  19, 26
-         dl  11, 16, 19, 25-26, 35, 38, 53, 65, 67
+         displayreference  19, 25
+         dl  11, 16, 19, 24, 26, 35, 38, 53, 65, 67
          dt  27
          em  12, 20, 22, 25, 28, 35, 43, 59-62, 65, 67, 70, 75, 77
          email  11, 29
          eref  12, 20, 22, 25, 28-29, 35, 37, 59-62, 65, 67, 70, 75, 77,
             80
          facsimile  11, 75
-         figure  16, 19, 25, 31, 35, 53, 65, 67
+         figure  16, 19, 24, 30, 35, 53, 65, 67
          format  43, 75
          front  32, 43, 49
          iref  12, 16, 20, 25, 28-29, 31, 33, 35, 53, 59-62, 64-65, 67,
@@ -8106,6 +8113,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          name  31, 37-38, 45, 52, 64, 79
          note  33, 37
          ol  11, 16, 19, 25, 35, 38, 53, 65, 67
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 145]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          organization  17, 40
          phone  11, 41
          postal  11, 41
@@ -8113,14 +8128,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          postamble  31, 76, 79
          preamble  31, 77, 79
          refcontent  42-43
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 145]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          reference  43-45
          referencegroup  44-45
          references  19, 44
@@ -8147,21 +8154,29 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          tfoot  64, 66
          th  66, 69
          thead  64, 68
-         title  33, 69
+         title  32, 69
          tr  64, 66, 68-69
-         tt  12, 20, 23, 25, 28-29, 36-37, 43, 60-62, 65, 67, 70, 75,
+         tt  12, 20, 23, 25, 28-29, 35, 37, 43, 60-62, 65, 67, 70, 75,
             77-78
          ttcol  79-80
          ul  11, 17, 20, 25, 35, 38, 53, 65, 67, 70
          uri  11, 71
          vspace  62, 80
          workgroup  33, 72
-         xref  12, 20, 23, 25, 28-29, 36-37, 60-62, 65, 68, 70, 72, 75,
+         xref  12, 20, 23, 25, 28-29, 35, 37, 60-62, 65, 68, 70, 72, 75,
             77-78, 80
       em element  28, 97
          inside annotation  12
          inside blockquote  20
          inside c  75
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 146]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          inside cref  22
          inside dd  25
          inside dt  28
@@ -8169,14 +8184,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          inside postamble  77
          inside preamble  77
          inside refcontent  43
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 146]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          inside strong  59
          inside sub  60
          inside sup  61
@@ -8214,25 +8221,25 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    F
       facsimile element  75, 97
          inside address  11
-      figure element  31, 97
+      figure element  30, 97
          align attribute  31
-         alt attribute  32
-         anchor attribute  32
-         height attribute  32
+         alt attribute  31
+         anchor attribute  31
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 147]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
+         height attribute  31
          inside aside  16
          inside blockquote  19
-         inside dd  25
+         inside dd  24
          inside li  35
          inside section  53
          inside td  65
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 147]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          inside th  67
          src attribute  32
          suppress-title attribute  32
@@ -8264,7 +8271,7 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          in t element  62
       height attribute
          in artwork element  15
-         in figure element  32
+         in figure element  31
       href attribute
          in link element  36
 
@@ -8274,6 +8281,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       initials attribute
          in author element  18
       ipr attribute
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 148]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          "*2026"  90
          "*3667"  90
          "*3978"  90
@@ -8281,14 +8296,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          "*trust200902"  88
          "noDerivativesTrust200902"  89
          "noModificationTrust200902"  89
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 148]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          "pre5378Trust200902"  89
          "trust200902"  89
          in rfc element  50
@@ -8330,6 +8337,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       keyword element  34, 97
          inside front  33
 
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 149]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    L
       li element  34, 97
          anchor attribute  36
@@ -8337,14 +8352,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          inside ul  71
       link element  36, 97
          href attribute  36
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 149]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          inside rfc  49
          rel attribute  36
       list element  76, 97
@@ -8386,6 +8393,14 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
    O
       obsoletes attribute
          in rfc element  50
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 150]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
       octets attribute
          in format element  76
       ol element  38, 97
@@ -8393,14 +8408,6 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          group attribute  39
          inside abstract  11
          inside aside  16
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 150]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          inside blockquote  19
          inside dd  25
          inside li  35
@@ -8443,20 +8450,19 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       quoteTitle attribute
          in reference element  43
 
+
+
+Hoffman                   Expires July 16, 2016               [Page 151]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    R
       refcontent element  42, 97
          inside reference  43
       reference element  43, 97
          anchor attribute  43
          inside referencegroup  44
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 151]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          inside references  45
          quoteTitle attribute  43
          target attribute  44
@@ -8499,20 +8505,20 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          in section element  53
       rfc element  49, 97
          category attribute  49
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 152]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          consensus attribute  49
          docName attribute  50
          indexInclude attribute  50
          ipr attribute  50
          iprExtract attribute  50
          number attribute  50
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 152]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          obsoletes attribute  50
          prepTime attribute  50
          seriesNo attribute  51
@@ -8555,20 +8561,20 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          in rfc element  51
       sortRefs attribute
          in rfc element  51
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 153]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
       source attribute
          in cref element  23
       sourcecode element  56, 97
          anchor attribute  57
          inside blockquote  20
          inside dd  25
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 153]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          inside figure  31
          inside li  35
          inside section  53
@@ -8611,20 +8617,20 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          inside dt  28
          inside em  29
          inside li  35
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 154]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          inside postamble  77
          inside preamble  78
          inside refcontent  43
          inside sub  60
          inside sup  61
          inside t  62
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 154]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          inside td  65
          inside th  67
          inside tt  70
@@ -8667,20 +8673,20 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          inside refcontent  43
          inside strong  60
          inside t  62
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 155]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          inside td  65
          inside th  67
          inside tt  70
       suppress-title attribute
          in figure element  32
          in texttable element  79
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 155]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
       surname attribute
          in author element  18
       svg element  74, 97
@@ -8723,20 +8729,20 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          align attribute  65
          anchor attribute  66
          border attribute  66
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 156]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          colspan attribute  66
          inside tr  69
          rowspan attribute  66
       texttable element  78, 97
          align attribute  79
          anchor attribute  79
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 156]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          inside section  53
          style attribute  79
          suppress-title attribute  79
@@ -8765,7 +8771,7 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       title element  69, 97
          abbrev attribute  69
          ascii attribute  69
-         inside front  33
+         inside front  32
       to attribute
          in displayreference element  26
       toc attribute
@@ -8779,24 +8785,24 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          border attribute  69
          inside tbody  64
          inside tfoot  66
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 157]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          inside thead  68
       tt element  70, 97
          inside annotation  12
          inside blockquote  20
          inside c  75
          inside cref  23
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 157]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
          inside dd  25
          inside dt  28
          inside em  29
-         inside li  36
+         inside li  35
          inside name  37
          inside postamble  77
          inside preamble  78
@@ -8836,19 +8842,18 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
       uri element  71, 97
          inside address  11
 
+
+
+Hoffman                   Expires July 16, 2016               [Page 158]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
    V
       value attribute
          in seriesInfo element  56
       version attribute
          in rfc element  52
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 158]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
-
       vspace element  80, 97
          blankLines attribute  81
          inside t  62
@@ -8874,7 +8879,7 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          inside dd  25
          inside dt  28
          inside em  29
-         inside li  36
+         inside li  35
          inside name  37
          inside postamble  77
          inside preamble  78
@@ -8892,18 +8897,19 @@ Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
          counter  72
          default  73
          none  73
+
+
+
+Hoffman                   Expires July 16, 2016               [Page 159]
+
+Internet-Draft     The "xml2rfc" version 3 Vocabulary       January 2016
+
+
          title  73
 
    Y
       year attribute
          in date element  24
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 159]
-
-Internet-Draft     The "XML2RFC" version 3 Vocabulary       January 2016
-
 
 Author's Address
 
@@ -8950,11 +8956,5 @@ Author's Address
 
 
 
-
-
-
-
-
-
-Hoffman                   Expires July 12, 2016               [Page 160]
+Hoffman                   Expires July 16, 2016               [Page 160]
 
