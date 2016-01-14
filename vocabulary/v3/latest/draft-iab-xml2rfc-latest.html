@@ -842,7 +842,7 @@ blockquote > * .bcp14 {
                      </li>
                      <li>Add &lt;<a href="#element.referencegroup" class="smpl">referencegroup</a>&gt; to allow referencing multi-RFC documents such as STDs and BCPs.
                      </li>
-                     <li>Add &lt;<a href="#element.relref" class="smpl">relref</a>&gt; to allow referncing specific sections or anchors in references.
+                     <li>Add &lt;<a href="#element.relref" class="smpl">relref</a>&gt; to allow referencing specific sections or anchors in references.
                      </li>
                      <li>Add &lt;<a href="#element.link" class="smpl">link</a>&gt; to point to a resource related to the RFC.
                      </li>
@@ -878,7 +878,7 @@ blockquote > * .bcp14 {
                      </li>
                      <li>Add "display" to &lt;<a href="#element.cref" class="smpl">cref</a>&gt; to indicate to tools whether or not to display the comment.
                      </li>
-                     <li>Add "keepWithNext" and "keepWithPrevious" to &lt;<a href="#element.t" class="smpl">t</a>&gt; as a hint to tools that do pagination that the should try to keep the paragraph with the next/previous element.
+                     <li>Add "keepWithNext" and "keepWithPrevious" to &lt;<a href="#element.t" class="smpl">t</a>&gt; as a hint to tools that do pagination that they should try to keep the paragraph with the next/previous element.
                      </li>
                   </ul>
                </div>
@@ -887,7 +887,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.1.3.3"><a href="#rfc.section.1.3.3">1.3.3</a>&nbsp;<a href="#deprecated_features">Elements and Attributes Deprecated from v2</a></h4>
                <div id="rfc.section.1.3.3.p.1">
                   <p>Deprecated elements and attributes are legacy vocabulary from v2 that are supported for input to v3 tools. They are likely
-                     to be removed from those tools in the future. Instead of being listed in <a href="#elements" title="Elements">Section&nbsp;2</a>, they are listed in in <a href="#deprecatedelements" title="Elements from v2 That Have Been Deprecated">Section&nbsp;3</a>. See <a href="#tools" title="The v3 Format and Processing Tools">Appendix&nbsp;B</a> for more information on tools and how they will handle deprecated features.
+                     to be removed from those tools in the future. Instead of being listed in <a href="#elements" title="Elements">Section&nbsp;2</a>, they are listed in <a href="#deprecatedelements" title="Elements from v2 That Have Been Deprecated">Section&nbsp;3</a>. See <a href="#tools" title="The v3 Format and Processing Tools">Appendix&nbsp;B</a> for more information on tools and how they will handle deprecated features.
                   </p>
                </div>
                <div id="rfc.section.1.3.3.p.2">
@@ -1307,7 +1307,7 @@ blockquote > * .bcp14 {
                   <p>If no URI scheme is given in the attribute, the attribute is considered to be a local file name relative to the current directory.
                      Processing tools must be careful to not accept dangerous values for the filename, particularly those that contain absolute
                      references outside the current directory. Document creators should think hard before using relative URIs due to possible later
-                     problems if files move around on the disk. Also, documents should most likely use explicit URI schemes whereever possible.
+                     problems if files move around on the disk. Also, documents should most likely use explicit URI schemes wherever possible.
                   </p>
                </div>
                <div id="rfc.section.2.5.6.p.3">
@@ -1473,13 +1473,13 @@ blockquote > * .bcp14 {
             <div id="element.author.attribute.asciiInitials">
                <h4 id="rfc.section.2.7.2"><a href="#rfc.section.2.7.2">2.7.2</a>&nbsp;<a href="#element.author.attribute.asciiInitials">"asciiInitials" Attribute</a></h4>
                <div id="rfc.section.2.7.2.p.1">
-                  <p>The ASCII equivalent of the author's intials.</p>
+                  <p>The ASCII equivalent of the author's initials, to be used in conjunction with the separately specified asciiSurname.</p>
                </div>
             </div>
             <div id="element.author.attribute.asciiSurname">
                <h4 id="rfc.section.2.7.3"><a href="#rfc.section.2.7.3">2.7.3</a>&nbsp;<a href="#element.author.attribute.asciiSurname">"asciiSurname" Attribute</a></h4>
                <div id="rfc.section.2.7.3.p.1">
-                  <p>The ASCII equivalent of the author's surname.</p>
+                  <p>The ASCII equivalent of the author's surname, to be used in conjunction with the separately specified asciiInitials.</p>
                </div>
             </div>
             <div id="element.author.attribute.fullname">
@@ -1568,7 +1568,8 @@ blockquote > * .bcp14 {
             </div>
             <div id="rfc.section.2.9.p.2">
                <p>This element is only to be used around the actual phrase from BCP 14, not the full definition of a requirement. For example,
-                  it is correct to say "The packet &lt;bcp14&gt;MUST&lt;/bcp14&gt; be dropped.", but it not correct to say "&lt;bcp14&gt;The packet MUST be dropped.&lt;/bcp14&gt;".
+                  it is correct to say "The packet &lt;bcp14&gt;MUST&lt;/bcp14&gt; be dropped.", but it is not correct to say "&lt;bcp14&gt;The packet MUST be
+                  dropped.&lt;/bcp14&gt;".
                </p>
             </div>
             <div id="rfc.section.2.9.p.3">
@@ -1736,8 +1737,8 @@ blockquote > * .bcp14 {
          <div id="element.br">
             <h3 id="rfc.section.2.12"><a href="#rfc.section.2.12">2.12</a>&nbsp;<a href="#element.br"><tt>&lt;br&gt;</tt> </a></h3>
             <div id="rfc.section.2.12.p.1">
-               <p>Indicates that a line break should be inserted in the generated output by a formatting tool. Multiple successive instances
-                  of this element do not cause blank lines to appear in the output, and is thus not useful.
+               <p>Indicates that a line break should be inserted in the generated output by a formatting tool. It is always expressed as &lt;br
+                  /&gt;. Multiple successive instances of this element do not cause blank lines to appear in the output, and is thus not useful.
                </p>
             </div>
             <div id="rfc.section.2.12.p.2">
@@ -1884,8 +1885,8 @@ blockquote > * .bcp14 {
             <div id="element.cref.attribute.display">
                <h4 id="rfc.section.2.16.2"><a href="#rfc.section.2.16.2">2.16.2</a>&nbsp;<a href="#element.cref.attribute.display">"display" Attribute</a></h4>
                <div id="rfc.section.2.16.2.p.1">
-                  <p>Suggests whether or not the the comment should be displayed by formatting tools. This might be set to "false" if you want
-                     to keep a comment in a document after the contents of the comment have already been dealt with.
+                  <p>Suggests whether or not the comment should be displayed by formatting tools. This might be set to "false" if you want to keep
+                     a comment in a document after the contents of the comment have already been dealt with.
                   </p>
                </div>
                <div id="rfc.section.2.16.2.p.2" class="avoidbreakafter">
@@ -2082,9 +2083,8 @@ blockquote > * .bcp14 {
                <p>If a reference section is sorted, this element changes the sort order.</p>
             </div>
             <div id="rfc.section.2.19.p.3">
-               <p>It is expected that this element will only be valid in input documents. It will be likely be removed by preparation tools
-                  when preparing a final version after those tools have replaced all of the associated anchors, targets, and derivedContent
-                  attributes.
+               <p>It is expected that this element will only be valid in input documents. It will be likely be removed by prep tools when preparing
+                  a final version after those tools have replaced all of the associated anchors, targets, and derivedContent attributes.
                </p>
             </div>
             <div id="rfc.section.2.19.p.4">
@@ -2256,7 +2256,7 @@ blockquote > * .bcp14 {
          <div id="element.em">
             <h3 id="rfc.section.2.22"><a href="#rfc.section.2.22">2.22</a>&nbsp;<a href="#element.em"><tt>&lt;em&gt;</tt> </a></h3>
             <div id="rfc.section.2.22.p.1">
-               <p>Indicates text that is semantically empahsized. This element will be displayed as italic after processing. This element can
+               <p>Indicates text that is semantically emphasized. This element will be displayed as italic after processing. This element can
                   be combined with other character formatting elements, and the formatting will be additive.
                </p>
             </div>
@@ -2600,7 +2600,7 @@ blockquote > * .bcp14 {
                </p>
             </div>
             <div id="rfc.section.2.27.p.4">
-               <p>When the prep tool is creating index content, it collects the items in a case-senstive fashion for both the item and subitem
+               <p>When the prep tool is creating index content, it collects the items in a case-sensitive fashion for both the item and subitem
                   level.
                </p>
             </div>
@@ -2623,7 +2623,9 @@ blockquote > * .bcp14 {
             <div id="element.iref.attribute.primary">
                <h4 id="rfc.section.2.27.2"><a href="#rfc.section.2.27.2">2.27.2</a>&nbsp;<a href="#element.iref.attribute.primary">"primary" Attribute</a></h4>
                <div id="rfc.section.2.27.2.p.1">
-                  <p>Setting this to "true" declares the occurrence as "primary", which might cause it to be highlighted in the index.</p>
+                  <p>Setting this to "true" declares the occurrence as "primary", which might cause it to be highlighted in the index. There is
+                     no restriction on the number of occurrences that can be "primary".
+                  </p>
                </div>
                <div id="rfc.section.2.27.2.p.2" class="avoidbreakafter">
                   <p>Allowed values:</p>
@@ -2787,7 +2789,7 @@ blockquote > * .bcp14 {
                <p>The following are the supported types of external documents that can be pointed to in a &lt;link&gt; element: </p>
                <ul>
                   <li>The current ISSN for the RFC Series. The value for the "rel" attribute is "item". The link should use the form "urn:issn:".</li>
-                  <li>The DOI for this document. The value for the "rel" attribute is "describedBy". The link should use the form specified in <a href="#DOI" id="rfc.xref.DOI.1"><cite title="Assigning Digital Object Identifiers to RFCs">[DOI]</cite></a>.
+                  <li>The DOI for this document. The value for the "rel" attribute is "describedBy". The link should use the form specified in <a href="#RFC7669" id="rfc.xref.RFC7669.1"><cite title="Assigning Digital Object Identifiers to RFCs">[RFC7669]</cite></a>.
                   </li>
                   <li>The Internet-Draft that was submitted to the RFC Editor to become the published RFC. The value for the "rel" attribute is
                      "derivedFrom". The link should be to an IETF-controlled web site that retains copies of Internet-Drafts.
@@ -3064,7 +3066,7 @@ blockquote > * .bcp14 {
                   <p> Other formats are reserved for future use. Only one percent encoding other than "%%" is allowed in a type string.</p>
                </div>
                <div id="rfc.section.2.34.5.p.4">
-                  <p>It is an error for the type string to be empty. For bulleted lists, you use the &lt;<a href="#element.ul" class="smpl">ul</a>&gt; element. For lists that have neither bullets nor numbers, use the &lt;<a href="#element.ul" class="smpl">ul</a>&gt; element with the 'empty="true"' attribute.
+                  <p>It is an error for the type string to be empty. For bulleted lists, use the &lt;<a href="#element.ul" class="smpl">ul</a>&gt; element. For lists that have neither bullets nor numbers, use the &lt;<a href="#element.ul" class="smpl">ul</a>&gt; element with the 'empty="true"' attribute.
                   </p>
                </div>
                <div id="rfc.section.2.34.5.p.5">
@@ -3692,7 +3694,7 @@ blockquote > * .bcp14 {
             <div id="element.rfc.attribute.indexInclude">
                <h4 id="rfc.section.2.45.4"><a href="#rfc.section.2.45.4">2.45.4</a>&nbsp;<a href="#element.rfc.attribute.indexInclude">"indexInclude" Attribute</a></h4>
                <div id="rfc.section.2.45.4.p.1">
-                  <p>Specifies whether or not a formatter is requested to include an index in generated files. If the souce file has no &lt;<a href="#element.iref" class="smpl">iref</a>&gt; elements, an index is never generated. This option is useful for generating documents where the source document has &lt;<a href="#element.iref" class="smpl">iref</a>&gt; elements but the author no longer wants an index.
+                  <p>Specifies whether or not a formatter is requested to include an index in generated files. If the source file has no &lt;<a href="#element.iref" class="smpl">iref</a>&gt; elements, an index is never generated. This option is useful for generating documents where the source document has &lt;<a href="#element.iref" class="smpl">iref</a>&gt; elements but the author no longer wants an index.
                   </p>
                </div>
                <div id="rfc.section.2.45.4.p.2" class="avoidbreakafter">
@@ -3737,8 +3739,8 @@ blockquote > * .bcp14 {
             <div id="element.rfc.attribute.prepTime">
                <h4 id="rfc.section.2.45.9"><a href="#rfc.section.2.45.9">2.45.9</a>&nbsp;<a href="#element.rfc.attribute.prepTime">"prepTime" Attribute</a></h4>
                <div id="rfc.section.2.45.9.p.1">
-                  <p>The date that the XML was processed by a preparation tool. This is included in the XML file just before it is saved to disk.
-                     The value is formatted using the format from <a href="#RFC3339" id="rfc.xref.RFC3339.1"><cite title="Date and Time on the Internet: Timestamps">[RFC3339]</cite></a>.
+                  <p>The date that the XML was processed by a prep tool. This is included in the XML file just before it is saved to disk. The
+                     value is formatted using the format from <a href="#RFC3339" id="rfc.xref.RFC3339.1"><cite title="Date and Time on the Internet: Timestamps">[RFC3339]</cite></a>.
                   </p>
                </div>
             </div>
@@ -4036,7 +4038,7 @@ blockquote > * .bcp14 {
                      </li>
                      <li>A &lt;<a href="#element.front" class="smpl">front</a>&gt; element that has a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element that has the name "Internet-Draft" MUST NOT also have a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element that has the name "RFC".
                      </li>
-                     <li>The &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; can contain the DOI for the referenced document. This MUST NOT be used when &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element is an eventual child element of a &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element, only as an enventual child of a &lt;<a href="#element.reference" class="smpl">reference</a>&gt; element. The value attribute should use the form specified in <a href="#DOI" id="rfc.xref.DOI.2"><cite title="Assigning Digital Object Identifiers to RFCs">[DOI]</cite></a>.
+                     <li>The &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; can contain the DOI for the referenced document. This MUST NOT be used when &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element is an eventual child element of a &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element, only as an enventual child of a &lt;<a href="#element.reference" class="smpl">reference</a>&gt; element. The value attribute should use the form specified in <a href="#RFC7669" id="rfc.xref.RFC7669.2"><cite title="Assigning Digital Object Identifiers to RFCs">[RFC7669]</cite></a>.
                      </li>
                   </ul>
                </div>
@@ -4065,7 +4067,7 @@ blockquote > * .bcp14 {
                <div id="rfc.section.2.47.6.p.2">
                   <p>For BCPs, FYIs, RFCs, and STDs, this is the number within the series. For Internet-Drafts, it is the full draft name (ending
                      with the two-digit version number). For DOIs, the value is given such as "10.123456/rfc1149", (the actual value will be specified
-                     later in <a href="#DOI" id="rfc.xref.DOI.3"><cite title="Assigning Digital Object Identifiers to RFCs">[DOI]</cite></a>).
+                     later in <a href="#RFC7669" id="rfc.xref.RFC7669.3"><cite title="Assigning Digital Object Identifiers to RFCs">[RFC7669]</cite></a>).
                   </p>
                </div>
                <div id="rfc.section.2.47.6.p.3">
@@ -4522,7 +4524,7 @@ Using CDATA:
                </p>
             </div>
             <div id="rfc.section.2.54.p.2">
-               <p>Insde the &lt;<a href="#element.table" class="smpl">table</a>&gt; element is optionlly a &lt;<a href="#element.thead" class="smpl">thead</a>&gt; element to contain the rows that will be the table's heading and optionally a &lt;<a href="#element.tfoot" class="smpl">tfoot</a>&gt; element to contain the rows of the table's footer. If the XML is converted to a representation that has page breaks (such
+               <p>Inside the &lt;<a href="#element.table" class="smpl">table</a>&gt; element is optionally a &lt;<a href="#element.thead" class="smpl">thead</a>&gt; element to contain the rows that will be the table's heading and optionally a &lt;<a href="#element.tfoot" class="smpl">tfoot</a>&gt; element to contain the rows of the table's footer. If the XML is converted to a representation that has page breaks (such
                   as PDFs, or printed HTML), the header and footer are meant to appear on each page.
                </p>
             </div>
@@ -4734,7 +4736,7 @@ Using CDATA:
             <div id="element.td.attribute.colspan">
                <h4 id="rfc.section.2.56.4"><a href="#rfc.section.2.56.4">2.56.4</a>&nbsp;<a href="#element.td.attribute.colspan">"colspan" Attribute</a></h4>
                <div id="rfc.section.2.56.4.p.1">
-                  <p>The number of columns that the cell to span. For example, setting "colspan='3'" indicates that the cell occupies the same
+                  <p>The number of columns that the cell is to span. For example, setting "colspan='3'" indicates that the cell occupies the same
                      horizontal space as three cells in the row above or below this one.
                   </p>
                </div>
@@ -4742,8 +4744,8 @@ Using CDATA:
             <div id="element.td.attribute.rowspan">
                <h4 id="rfc.section.2.56.5"><a href="#rfc.section.2.56.5">2.56.5</a>&nbsp;<a href="#element.td.attribute.rowspan">"rowspan" Attribute</a></h4>
                <div id="rfc.section.2.56.5.p.1">
-                  <p>The number of rows that the cell to span. For example, setting "rowspan='3'" indicates that the cell occupies the same vertical
-                     space as three rows.
+                  <p>The number of rows that the cell is to span. For example, setting "rowspan='3'" indicates that the cell occupies the same
+                     vertical space as three rows.
                   </p>
                </div>
             </div>
@@ -4914,7 +4916,7 @@ Using CDATA:
             <div id="element.th.attribute.colspan">
                <h4 id="rfc.section.2.58.4"><a href="#rfc.section.2.58.4">2.58.4</a>&nbsp;<a href="#element.th.attribute.colspan">"colspan" Attribute</a></h4>
                <div id="rfc.section.2.58.4.p.1">
-                  <p>The number of columns that the cell to span. For example, setting "colspan='3'" indicates that the cell occupies the same
+                  <p>The number of columns that the cell is to span. For example, setting "colspan='3'" indicates that the cell occupies the same
                      horizontal space as three cells in the row above or below this one.
                   </p>
                </div>
@@ -4922,8 +4924,8 @@ Using CDATA:
             <div id="element.th.attribute.rowspan">
                <h4 id="rfc.section.2.58.5"><a href="#rfc.section.2.58.5">2.58.5</a>&nbsp;<a href="#element.th.attribute.rowspan">"rowspan" Attribute</a></h4>
                <div id="rfc.section.2.58.5.p.1">
-                  <p>The number of rows that the cell to span. For example, setting "rowspan='3'" indicates that the cell occupies the same vertical
-                     space as three rows.
+                  <p>The number of rows that the cell is to span. For example, setting "rowspan='3'" indicates that the cell occupies the same
+                     vertical space as three rows.
                   </p>
                </div>
             </div>
@@ -5903,9 +5905,6 @@ Using CDATA:
          <dt id="BCP13">[BCP13]</dt>
          <dd>Freed, N., Klensin, J., and T. Hansen, &#8220;<a href="https://tools.ietf.org/html/rfc6838">Media Type Specifications and Registration Procedures</a>&#8221;, BCP&nbsp;13, RFC&nbsp;6838, January&nbsp;2013, &lt;<a href="http://www.rfc-editor.org/info/bcp13">http://www.rfc-editor.org/info/bcp13</a>&gt;.
          </dd>
-         <dt id="DOI">[DOI]</dt>
-         <dd>Levine, J., &#8220;<a href="https://tools.ietf.org/html/draft-iab-doi">Assigning Digital Object Identifiers to RFCs</a>&#8221;, Internet-Draft&nbsp;draft-iab-doi (work in progress), 2014.
-         </dd>
          <dt id="IDGUIDE">[IDGUIDE]</dt>
          <dd>Housley, R., &#8220;<a href="https://www.ietf.org/id-info/guidelines.html">Guidelines to Authors of Internet-Drafts</a>&#8221;, &lt;<a href="https://www.ietf.org/id-info/guidelines.html">https://www.ietf.org/id-info/guidelines.html</a>&gt;.
          </dd>
@@ -5971,6 +5970,9 @@ Using CDATA:
          </dd>
          <dt id="RFC7322">[RFC7322]</dt>
          <dd>Heather, H. and S. Ginoza, &#8220;<a href="https://tools.ietf.org/html/rfc7322">RFC Style Guide</a>&#8221;, RFC&nbsp;7322, <a href="http://dx.doi.org/10.17487/RFC7322">DOI&nbsp;10.17487/RFC7322</a>, September&nbsp;2014, &lt;<a href="http://www.rfc-editor.org/info/rfc7322">http://www.rfc-editor.org/info/rfc7322</a>&gt;.
+         </dd>
+         <dt id="RFC7669">[RFC7669]</dt>
+         <dd>Levine, J., &#8220;<a href="https://tools.ietf.org/html/rfc7669">Assigning Digital Object Identifiers to RFCs</a>&#8221;, RFC&nbsp;7669, <a href="http://dx.doi.org/10.17487/RFC7669">DOI&nbsp;10.17487/RFC7669</a>, 2015, &lt;<a href="http://www.rfc-editor.org/info/rfc7669">http://www.rfc-editor.org/info/rfc7669</a>&gt;.
          </dd>
          <dt id="RNC">[RNC]</dt>
          <dd>Clark, J., &#8220;<a href="https://www.oasis-open.org/committees/relax-ng/compact-20021121.html">RELAX NG Compact Syntax</a>&#8221;, OASIS, November&nbsp;2002, &lt;<a href="https://www.oasis-open.org/committees/relax-ng/compact-20021121.html">https://www.oasis-open.org/committees/relax-ng/compact-20021121.html</a>&gt;.
@@ -6187,8 +6189,9 @@ Using CDATA:
             <h3 id="rfc.section.A.2"><a href="#rfc.section.A.2">A.2</a>&nbsp;<a href="#attribute-submissiontype">The "submissionType" Attribute</a></h3>
             <div id="rfc.section.A.2.p.1">
                <p>The RFC Editor publishes documents from different "document streams", of which the "IETF stream" is the most prominent. Other
-                  streams are the independent stream (used for things such as discussion of Internet-related technologies that are not part
-                  of the IETF agenda), the "IAB stream" (Internet Architecture Board) and the "IRTF stream" (Internet Research Task Force).
+                  streams are the Independent Submission stream (used for things such as discussion of Internet-related technologies that are
+                  not part of the IETF agenda), the "IAB stream" (Internet Architecture Board) and the "IRTF stream" (Internet Research Task
+                  Force).
                </p>
             </div>
             <div id="rfc.section.A.2.p.2">
@@ -6417,7 +6420,7 @@ Using CDATA:
                   <li>&lt;relref&gt; "derivedRemoteContent" attribute -- If the &lt;relref&gt; element has text content, this attribute is filled with that
                      content; the "displayFormat" attribute is set to "bare" if that attribute is not already set. If the &lt;relref&gt; element has
                      no text content, this attribute is filled with the text for the remote link, such as "Section 2.3" or "Table 5". The prep
-                     tool might determine this text by reading the target reference and, if it is a RFC or Internet-Draft in the v3 format, finding
+                     tool might determine this text by reading the target reference and, if it is an RFC or Internet-Draft in the v3 format, finding
                      the anchor given in the "relative" attribute or derived from the "section" attribute, and using the title of that element.
                      If the reference is not an RFC or Internet-Draft in the v3 format, the text fragment is simply the value of the "relative"
                      or "section" attribute. This will rarely produce a good result in formatted output so, for these documents, the &lt;relref&gt; element
@@ -8839,7 +8842,6 @@ start = rfc
                         <li>in rfc element&nbsp;&nbsp;<a href="#rfc.section.2.45.3">2.45.3</a></li>
                      </ul>
                   </li>
-                  <li><em>DOI</em>&nbsp;&nbsp;<a href="#rfc.xref.DOI.1">2.30</a>, <a href="#rfc.xref.DOI.2">2.47.3</a>, <a href="#rfc.xref.DOI.3">2.47.6</a>, <a href="#DOI"><b>9.2</b></a></li>
                   <li>dt element&nbsp;&nbsp;<a href="#rfc.section.2.21"><b>2.21</b></a>, <a href="#rfc.iref.d.16">C</a><ul>
                         <li>anchor attribute&nbsp;&nbsp;<a href="#rfc.section.2.21.1">2.21.1</a></li>
                         <li>inside dl&nbsp;&nbsp;<a href="#rfc.iref.d.6">2.20</a></li>
@@ -9453,6 +9455,7 @@ start = rfc
                      </ul>
                   </li>
                   <li><em>RFC7322</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC7322.1">1</a>, <a href="#rfc.xref.RFC7322.2">2.1</a>, <a href="#rfc.xref.RFC7322.3">2.7</a>, <a href="#rfc.xref.RFC7322.4">2.7</a>, <a href="#rfc.xref.RFC7322.5">2.35</a>, <a href="#rfc.xref.RFC7322.6">2.35</a>, <a href="#rfc.xref.RFC7322.7">2.42</a>, <a href="#RFC7322"><b>9.2</b></a></li>
+                  <li><em>RFC7669</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC7669.1">2.30</a>, <a href="#rfc.xref.RFC7669.2">2.47.3</a>, <a href="#rfc.xref.RFC7669.3">2.47.6</a>, <a href="#RFC7669"><b>9.2</b></a></li>
                   <li><em>RNC</em>&nbsp;&nbsp;<a href="#rfc.xref.RNC.1">1.4</a>, <a href="#RNC"><b>9.2</b></a></li>
                   <li><em>RNG</em>&nbsp;&nbsp;<a href="#rfc.xref.RNG.1">1.3.4</a>, <a href="#RNG"><b>9.2</b></a></li>
                   <li>role attribute&nbsp;&nbsp;

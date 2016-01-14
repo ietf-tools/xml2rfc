@@ -172,7 +172,7 @@ for automatically-included references.</t>
 <t>Add &lt;<xref target="element.referencegroup" format="none">referencegroup</xref>&gt; to allow referencing multi-RFC documents such
 as STDs and BCPs.</t>
 
-<t>Add &lt;<xref target="element.relref" format="none">relref</xref>&gt; to allow referncing specific sections or anchors in references.</t>
+<t>Add &lt;<xref target="element.relref" format="none">relref</xref>&gt; to allow referencing specific sections or anchors in references.</t>
 
 <t>Add &lt;<xref target="element.link" format="none">link</xref>&gt; to point to a resource related to the RFC.</t>
 
@@ -224,7 +224,7 @@ numbers for items in a section that don't have their own numbering (namely figur
 to display the comment.</t>
 
 <t>Add "keepWithNext" and "keepWithPrevious" to &lt;<xref target="element.t" format="none">t</xref>&gt; as a hint to tools that
-do pagination that the should try to keep the paragraph with the next/previous element.</t>
+do pagination that they should try to keep the paragraph with the next/previous element.</t>
 
 </list></t>
 
@@ -234,7 +234,7 @@ do pagination that the should try to keep the paragraph with the next/previous e
 
 <t>Deprecated elements and attributes are legacy vocabulary from v2 that are supported for input
 to v3 tools. They are likely to be removed from those tools in the future.
-Instead of being listed in <xref target="elements"/>, they are listed in in <xref target="deprecatedelements"/>.
+Instead of being listed in <xref target="elements"/>, they are listed in <xref target="deprecatedelements"/>.
 See <xref target="tools"/> for more information on tools and how they will handle
 deprecated features.</t>
 
@@ -711,7 +711,7 @@ the appendices for a complete description of these attributes.
          Processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
          Document creators should think hard before using relative URIs due to possible later problems if files move
-         around on the disk. Also, documents should most likely use explicit URI schemes whereever possible.
+         around on the disk. Also, documents should most likely use explicit URI schemes wherever possible.
       </t>
       <t>
          In some cases, the prep tool may remove the "src" attribute after processing its value.
@@ -893,7 +893,7 @@ the appendices for a complete description of these attributes.
       <iref item="author element" subitem="asciiInitials attribute"/>
       <iref item="asciiInitials attribute" subitem="in author element"/>
       <t>
-         The ASCII equivalent of the author's intials.
+         The ASCII equivalent of the author's initials, to be used in conjunction with the separately specified asciiSurname.
       </t>
    </section>
 
@@ -904,7 +904,7 @@ the appendices for a complete description of these attributes.
       <iref item="author element" subitem="asciiSurname attribute"/>
       <iref item="asciiSurname attribute" subitem="in author element"/>
       <t>
-         The ASCII equivalent of the author's surname.
+         The ASCII equivalent of the author's surname, to be used in conjunction with the separately specified asciiInitials.
       </t>
    </section>
 
@@ -1014,7 +1014,7 @@ the appendices for a complete description of these attributes.
    <t>
       This element is only to be used around the actual phrase from BCP 14, not the full
       definition of a requirement. For example, it is correct to say
-      "The packet &lt;bcp14&gt;MUST&lt;/bcp14&gt; be dropped.", but it not correct to say
+      "The packet &lt;bcp14&gt;MUST&lt;/bcp14&gt; be dropped.", but it is not correct to say
       "&lt;bcp14&gt;The packet MUST be dropped.&lt;/bcp14&gt;".
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.refcontent" format="none">refcontent</xref>&gt; (<xref target="element.refcontent"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), and &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>).</t>
@@ -1171,6 +1171,7 @@ the appendices for a complete description of these attributes.
    <iref item="br element" primary="true"/>
    <t>
       Indicates that a line break should be inserted in the generated output by a formatting tool.
+      It is always expressed as &lt;br /&gt;.
       Multiple successive instances of this element do not cause blank lines to appear in the output,
       and is thus not useful.
    </t>
@@ -1319,7 +1320,7 @@ the appendices for a complete description of these attributes.
       <iref item="cref element" subitem="display attribute"/>
       <iref item="display attribute" subitem="in cref element"/>
       <t>
-         Suggests whether or not the the comment should be displayed by formatting tools. This might be
+         Suggests whether or not the comment should be displayed by formatting tools. This might be
          set to "false" if you want to keep a comment in a document after the contents of the comment
          have already been dealt with.
       </t>
@@ -1536,7 +1537,7 @@ the appendices for a complete description of these attributes.
      If a reference section is sorted, this element changes the sort order.
    </t>
    <t>
-     It is expected that this element will only be valid in input documents. It will be likely be removed by preparation
+     It is expected that this element will only be valid in input documents. It will be likely be removed by prep
      tools when preparing a final version after those tools have replaced all of the associated anchors, targets, and derivedContent
      attributes.
    </t>
@@ -1717,7 +1718,7 @@ the appendices for a complete description of these attributes.
    <iref item="Elements" subitem="em" primary="true"/>
    <iref item="em element" primary="true"/>
    <t>
-        Indicates text that is semantically empahsized. This element will be displayed as italic after processing.
+        Indicates text that is semantically emphasized. This element will be displayed as italic after processing.
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
@@ -2113,7 +2114,7 @@ the appendices for a complete description of these attributes.
       entries of this type might be displayed as ranges.
    </t>
    <t>
-      When the prep tool is creating index content, it collects the items in a case-senstive fashion
+      When the prep tool is creating index content, it collects the items in a case-sensitive fashion
       for both the item and subitem level.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.annotation" format="none">annotation</xref>&gt; (<xref target="element.annotation"/>), &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.c" format="none">c</xref>&gt; (<xref target="element.c"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.dt" format="none">dt</xref>&gt; (<xref target="element.dt"/>), &lt;<xref target="element.em" format="none">em</xref>&gt; (<xref target="element.em"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.postamble" format="none">postamble</xref>&gt; (<xref target="element.postamble"/>), &lt;<xref target="element.preamble" format="none">preamble</xref>&gt; (<xref target="element.preamble"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.strong" format="none">strong</xref>&gt; (<xref target="element.strong"/>), &lt;<xref target="element.sub" format="none">sub</xref>&gt; (<xref target="element.sub"/>), &lt;<xref target="element.sup" format="none">sup</xref>&gt; (<xref target="element.sup"/>), &lt;<xref target="element.t" format="none">t</xref>&gt; (<xref target="element.t"/>), &lt;<xref target="element.table" format="none">table</xref>&gt; (<xref target="element.table"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>), &lt;<xref target="element.tt" format="none">tt</xref>&gt; (<xref target="element.tt"/>), and &lt;<xref target="element.ttcol" format="none">ttcol</xref>&gt; (<xref target="element.ttcol"/>).</t>
@@ -2140,6 +2141,7 @@ the appendices for a complete description of these attributes.
       <t>
             Setting this to "true" declares the occurrence as "primary",
             which might cause it to be highlighted in the index.
+            There is no restriction on the number of occurrences that can be "primary".
          </t>
       <t><!--AG-->Allowed values:</t>
       <t><list style="symbols"><!--AG-->
@@ -2300,7 +2302,7 @@ the appendices for a complete description of these attributes.
          <t>
                The DOI for this document.
                The value for the "rel" attribute is "describedBy".
-               The link should use the form specified in <xref target="DOI"/>.
+               The link should use the form specified in <xref target="RFC7669"/>.
             </t>
          <t>
                The Internet-Draft that was submitted to the RFC Editor to become the published RFC.
@@ -2588,7 +2590,7 @@ the appendices for a complete description of these attributes.
        </t>
       <t>
         It is an error for the type string to be empty.
-        For bulleted lists, you use the &lt;<xref target="element.ul" format="none">ul</xref>&gt; element.
+        For bulleted lists, use the &lt;<xref target="element.ul" format="none">ul</xref>&gt; element.
         For lists that have neither bullets nor numbers, use the &lt;<xref target="element.ul" format="none">ul</xref>&gt; element with the
         'empty="true"' attribute.
       </t>
@@ -3320,7 +3322,7 @@ the appendices for a complete description of these attributes.
       <iref item="indexInclude attribute" subitem="in rfc element"/>
       <t>
          Specifies whether or not a formatter is requested to include an index in generated files.
-         If the souce file has no &lt;<xref target="element.iref" format="none">iref</xref>&gt; elements, an index is
+         If the source file has no &lt;<xref target="element.iref" format="none">iref</xref>&gt; elements, an index is
          never generated. This option is useful for generating documents where the
          source document has &lt;<xref target="element.iref" format="none">iref</xref>&gt; elements but the author no longer
          wants an index. 
@@ -3391,7 +3393,7 @@ the appendices for a complete description of these attributes.
       <iref item="rfc element" subitem="prepTime attribute"/>
       <iref item="prepTime attribute" subitem="in rfc element"/>
       <t>
-         The date that the XML was processed by a preparation tool.
+         The date that the XML was processed by a prep tool.
          This is included in the XML file just before it is saved to disk.
          The value is formatted using the format from <xref target="RFC3339"/>.
       </t>
@@ -3768,7 +3770,7 @@ in the same &lt;front&gt; element.
          This MUST NOT be used when &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
          element is an eventual child element of a &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element,
          only as an enventual child of a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element.
-         The value attribute should use the form specified in <xref target="DOI"/>.
+         The value attribute should use the form specified in <xref target="RFC7669"/>.
       </t>
          </list>
       </t>
@@ -3811,7 +3813,7 @@ in the same &lt;front&gt; element.
             For BCPs, FYIs, RFCs, and STDs, this is the number within the series.
             For Internet-Drafts, it is the full draft name (ending with the two-digit
             version number). For DOIs, the value is given such as "10.123456/rfc1149",
-            (the actual value will be specified later in <xref target="DOI"/>).
+            (the actual value will be specified later in <xref target="RFC7669"/>).
       </t>
       <t>
             The name in the value should be the document name without any file
@@ -4261,7 +4263,7 @@ Using CDATA:
       If the element contains a &lt;<xref target="element.name" format="none">name</xref>&gt; element, the caption will also show that name. 
    </t>
    <t>
-      Insde the &lt;<xref target="element.table" format="none">table</xref>&gt; element is optionlly a &lt;<xref target="element.thead" format="none">thead</xref>&gt; element to
+      Inside the &lt;<xref target="element.table" format="none">table</xref>&gt; element is optionally a &lt;<xref target="element.thead" format="none">thead</xref>&gt; element to
       contain the rows that will be the table's heading and optionally a &lt;<xref target="element.tfoot" format="none">tfoot</xref>&gt; element
       to contain the rows of the table's footer. If the XML is converted to a representation that has page
       breaks (such as PDFs, or printed HTML), the header and footer are meant to appear on each page.
@@ -4474,7 +4476,7 @@ Using CDATA:
       <iref item="td element" subitem="colspan attribute"/>
       <iref item="colspan attribute" subitem="in td element"/>
       <t>
-         The number of columns that the cell to span. For example, setting "colspan='3'"
+         The number of columns that the cell is to span. For example, setting "colspan='3'"
          indicates that the cell occupies the same horizontal space as three cells in the
          row above or below this one.
       </t>
@@ -4487,7 +4489,7 @@ Using CDATA:
       <iref item="td element" subitem="rowspan attribute"/>
       <iref item="rowspan attribute" subitem="in td element"/>
       <t>
-         The number of rows that the cell to span. For example, setting "rowspan='3'"
+         The number of rows that the cell is to span. For example, setting "rowspan='3'"
          indicates that the cell occupies the same vertical space as three rows.
       </t>
    </section>
@@ -4658,7 +4660,7 @@ Using CDATA:
       <iref item="th element" subitem="colspan attribute"/>
       <iref item="colspan attribute" subitem="in th element"/>
       <t>
-         The number of columns that the cell to span. For example, setting "colspan='3'"
+         The number of columns that the cell is to span. For example, setting "colspan='3'"
          indicates that the cell occupies the same horizontal space as three cells in the
          row above or below this one.
       </t>
@@ -4671,7 +4673,7 @@ Using CDATA:
       <iref item="th element" subitem="rowspan attribute"/>
       <iref item="rowspan attribute" subitem="in th element"/>
       <t>
-         The number of rows that the cell to span. For example, setting "rowspan='3'"
+         The number of rows that the cell is to span. For example, setting "rowspan='3'"
          indicates that the cell occupies the same vertical space as three rows.
       </t>
    </section>
@@ -5827,12 +5829,6 @@ Suzanne Woolf
       <date year="2013" month="January"/>
     </front><seriesInfo name="BCP" value="13"/><seriesInfo name="RFC" value="6838"/></reference>
 
-  <reference anchor="DOI"><front>
-      <title>Assigning Digital Object Identifiers to RFCs</title>
-      <author initials="J." surname="Levine" fullname="John Levine"/>
-      <date year="2014"/>
-    </front><seriesInfo name="Internet-Draft" value="draft-iab-doi"/></reference>
-
   <reference anchor="IDGUIDE" target="https://www.ietf.org/id-info/guidelines.html"><front>
       <title>Guidelines to Authors of Internet-Drafts</title>
       <author initials="R." surname="Housley" fullname="R. Housley"/>
@@ -5980,6 +5976,12 @@ Suzanne Woolf
       <date month="September" year="2014"/>
     </front><seriesInfo name="RFC" value="7322"/><seriesInfo name="DOI" value="10.17487/RFC7322"/></reference>
   
+  <reference anchor="RFC7669" target="http://www.rfc-editor.org/info/rfc7669"><front>
+      <title>Assigning Digital Object Identifiers to RFCs</title>
+      <author initials="J." surname="Levine" fullname="John Levine"/>
+      <date year="2015"/>
+    </front><seriesInfo name="RFC" value="7669"/><seriesInfo name="DOI" value="10.17487/RFC7669"/></reference>
+
   <reference anchor="RNC" target="https://www.oasis-open.org/committees/relax-ng/compact-20021121.html"><front>
       <title>RELAX NG Compact Syntax</title>
       <author initials="J." surname="Clark" fullname="James Clark">
@@ -6301,7 +6303,7 @@ are believed to be the current values in use.</t>
 <section anchor="attribute-submissiontype" title="The &#34;submissionType&#34; Attribute">
 <t>
   The RFC Editor publishes documents from different "document streams", of which
-  the "IETF stream" is the most prominent. Other streams are the independent stream
+  the "IETF stream" is the most prominent. Other streams are the Independent Submission stream
   (used for things such as discussion of Internet-related technologies that are
   not part of the IETF agenda),
   the "IAB stream" (Internet Architecture Board) and the "IRTF stream" (Internet Research Task Force).
@@ -6578,7 +6580,7 @@ from combining the URI from the reference and the relative part that is either a
 content, this attribute is filled with that content; the "displayFormat" attribute is set to "bare"
 if that attribute is not already set. If the &lt;relref&gt; element has no text content, this
 attribute is filled with the text for the remote link, such as "Section 2.3" or "Table 5".  The prep
-tool might determine this text by reading the target reference and, if it is a RFC or Internet-Draft
+tool might determine this text by reading the target reference and, if it is an RFC or Internet-Draft
 in the v3 format, finding the anchor given in the "relative" attribute or derived from the "section"
 attribute, and using the title of that element. If the reference is not an RFC or Internet-Draft in
 the v3 format, the text fragment is simply the value of the "relative" or "section" attribute.  This

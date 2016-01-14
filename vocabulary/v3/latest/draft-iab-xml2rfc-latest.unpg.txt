@@ -284,7 +284,7 @@ Table of Contents
    o  Add <referencegroup> to allow referencing multi-RFC documents such
       as STDs and BCPs.
 
-   o  Add <relref> to allow referncing specific sections or anchors in
+   o  Add <relref> to allow referencing specific sections or anchors in
       references.
 
    o  Add <link> to point to a resource related to the RFC.
@@ -331,15 +331,15 @@ Table of Contents
       display the comment.
 
    o  Add "keepWithNext" and "keepWithPrevious" to <t> as a hint to
-      tools that do pagination that the should try to keep the paragraph
-      with the next/previous element.
+      tools that do pagination that they should try to keep the
+      paragraph with the next/previous element.
 
 1.3.3.  Elements and Attributes Deprecated from v2
 
    Deprecated elements and attributes are legacy vocabulary from v2 that
    are supported for input to v3 tools.  They are likely to be removed
    from those tools in the future.  Instead of being listed in
-   Section 2, they are listed in in Section 3.  See Appendix B for more
+   Section 2, they are listed in Section 3.  See Appendix B for more
    information on tools and how they will handle deprecated features.
 
    o  Deprecate <list> in favor of <dl>, <ul>, and <ol>.
@@ -685,7 +685,7 @@ Table of Contents
    outside the current directory.  Document creators should think hard
    before using relative URIs due to possible later problems if files
    move around on the disk.  Also, documents should most likely use
-   explicit URI schemes whereever possible.
+   explicit URI schemes wherever possible.
 
    In some cases, the prep tool may remove the "src" attribute after
    processing its value.  See [PREPTOOL] for a description of this.
@@ -795,11 +795,13 @@ Table of Contents
 
 2.7.2.  "asciiInitials" Attribute
 
-   The ASCII equivalent of the author's intials.
+   The ASCII equivalent of the author's initials, to be used in
+   conjunction with the separately specified asciiSurname.
 
 2.7.3.  "asciiSurname" Attribute
 
-   The ASCII equivalent of the author's surname.
+   The ASCII equivalent of the author's surname, to be used in
+   conjunction with the separately specified asciiInitials.
 
 2.7.4.  "fullname" Attribute
 
@@ -857,7 +859,7 @@ Table of Contents
 
    This element is only to be used around the actual phrase from BCP 14,
    not the full definition of a requirement.  For example, it is correct
-   to say "The packet <bcp14>MUST</bcp14> be dropped.", but it not
+   to say "The packet <bcp14>MUST</bcp14> be dropped.", but it is not
    correct to say "<bcp14>The packet MUST be dropped.</bcp14>".
 
    This element appears as a child element of <annotation>
@@ -957,9 +959,9 @@ Table of Contents
 2.12.  <br>
 
    Indicates that a line break should be inserted in the generated
-   output by a formatting tool.  Multiple successive instances of this
-   element do not cause blank lines to appear in the output, and is thus
-   not useful.
+   output by a formatting tool.  It is always expressed as <br />.
+   Multiple successive instances of this element do not cause blank
+   lines to appear in the output, and is thus not useful.
 
    This element appears as a child element of <td> (Section 2.56) and
    <th> (Section 2.58).
@@ -1047,10 +1049,10 @@ Table of Contents
 
 2.16.2.  "display" Attribute
 
-   Suggests whether or not the the comment should be displayed by
-   formatting tools.  This might be set to "false" if you want to keep a
-   comment in a document after the contents of the comment have already
-   been dealt with.
+   Suggests whether or not the comment should be displayed by formatting
+   tools.  This might be set to "false" if you want to keep a comment in
+   a document after the contents of the comment have already been dealt
+   with.
 
    Allowed values:
 
@@ -1188,9 +1190,9 @@ Table of Contents
    order.
 
    It is expected that this element will only be valid in input
-   documents.  It will be likely be removed by preparation tools when
-   preparing a final version after those tools have replaced all of the
-   associated anchors, targets, and derivedContent attributes.
+   documents.  It will be likely be removed by prep tools when preparing
+   a final version after those tools have replaced all of the associated
+   anchors, targets, and derivedContent attributes.
 
    This element appears as a child element of <back> (Section 2.8).
 
@@ -1298,7 +1300,7 @@ Table of Contents
 
 2.22.  <em>
 
-   Indicates text that is semantically empahsized.  This element will be
+   Indicates text that is semantically emphasized.  This element will be
    displayed as italic after processing.  This element can be combined
    with other character formatting elements, and the formatting will be
    additive.
@@ -1542,7 +1544,7 @@ Table of Contents
    this type might be displayed as ranges.
 
    When the prep tool is creating index content, it collects the items
-   in a case-senstive fashion for both the item and subitem level.
+   in a case-sensitive fashion for both the item and subitem level.
 
    This element appears as a child element of <annotation>
    (Section 2.3), <aside> (Section 2.6), <blockquote> (Section 2.10),
@@ -1563,7 +1565,8 @@ Table of Contents
 2.27.2.  "primary" Attribute
 
    Setting this to "true" declares the occurrence as "primary", which
-   might cause it to be highlighted in the index.
+   might cause it to be highlighted in the index.  There is no
+   restriction on the number of occurrences that can be "primary".
 
    Allowed values:
 
@@ -1663,7 +1666,8 @@ Table of Contents
       attribute is "item".  The link should use the form "urn:issn:".
 
    o  The DOI for this document.  The value for the "rel" attribute is
-      "describedBy".  The link should use the form specified in [DOI].
+      "describedBy".  The link should use the form specified in
+      [RFC7669].
 
    o  The Internet-Draft that was submitted to the RFC Editor to become
       the published RFC.  The value for the "rel" attribute is
@@ -1860,7 +1864,7 @@ Table of Contents
    other than "%%" is allowed in a type string.
 
    It is an error for the type string to be empty.  For bulleted lists,
-   you use the <ul> element.  For lists that have neither bullets nor
+   use the <ul> element.  For lists that have neither bullets nor
    numbers, use the <ul> element with the 'empty="true"' attribute.
 
    If no type attribute is given, the default type is the same as
@@ -2321,7 +2325,7 @@ Table of Contents
 2.45.4.  "indexInclude" Attribute
 
    Specifies whether or not a formatter is requested to include an index
-   in generated files.  If the souce file has no <iref> elements, an
+   in generated files.  If the source file has no <iref> elements, an
    index is never generated.  This option is useful for generating
    documents where the source document has <iref> elements but the
    author no longer wants an index.
@@ -2356,9 +2360,9 @@ Table of Contents
 
 2.45.9.  "prepTime" Attribute
 
-   The date that the XML was processed by a preparation tool.  This is
-   included in the XML file just before it is saved to disk.  The value
-   is formatted using the format from [RFC3339].
+   The date that the XML was processed by a prep tool.  This is included
+   in the XML file just before it is saved to disk.  The value is
+   formatted using the format from [RFC3339].
 
 2.45.10.  "seriesNo" Attribute
 
@@ -2599,7 +2603,7 @@ Table of Contents
       This MUST NOT be used when <seriesInfo> element is an eventual
       child element of a <rfc> element, only as an enventual child of a
       <reference> element.  The value attribute should use the form
-      specified in [DOI].
+      specified in [RFC7669].
 
 2.47.4.  "status" Attribute
 
@@ -2621,7 +2625,7 @@ Table of Contents
    For Internet-Drafts, it is the full draft name (ending with the two-
    digit version number).  For DOIs, the value is given such as
    "10.123456/rfc1149", (the actual value will be specified later in
-   [DOI]).
+   [RFC7669]).
 
    The name in the value should be the document name without any file
    extension.  For Internet-Drafts, the value for this attribute should
@@ -2963,7 +2967,7 @@ Table of Contents
    element contains a <name> element, the caption will also show that
    name.
 
-   Insde the <table> element is optionlly a <thead> element to contain
+   Inside the <table> element is optionally a <thead> element to contain
    the rows that will be the table's heading and optionally a <tfoot>
    element to contain the rows of the table's footer.  If the XML is
    converted to a representation that has page breaks (such as PDFs, or
@@ -3087,13 +3091,13 @@ Table of Contents
 
 2.56.4.  "colspan" Attribute
 
-   The number of columns that the cell to span.  For example, setting
+   The number of columns that the cell is to span.  For example, setting
    "colspan='3'" indicates that the cell occupies the same horizontal
    space as three cells in the row above or below this one.
 
 2.56.5.  "rowspan" Attribute
 
-   The number of rows that the cell to span.  For example, setting
+   The number of rows that the cell is to span.  For example, setting
    "rowspan='3'" indicates that the cell occupies the same vertical
    space as three rows.
 
@@ -3195,13 +3199,13 @@ Table of Contents
 
 2.58.4.  "colspan" Attribute
 
-   The number of columns that the cell to span.  For example, setting
+   The number of columns that the cell is to span.  For example, setting
    "colspan='3'" indicates that the cell occupies the same horizontal
    space as three cells in the row above or below this one.
 
 2.58.5.  "rowspan" Attribute
 
-   The number of rows that the cell to span.  For example, setting
+   The number of rows that the cell is to span.  For example, setting
    "rowspan='3'" indicates that the cell occupies the same vertical
    space as three rows.
 
@@ -3965,9 +3969,6 @@ Table of Contents
                     RFC 6838, January 2013,
                     <http://www.rfc-editor.org/info/bcp13>.
 
-   [DOI]            Levine, J., "Assigning Digital Object Identifiers to
-                    RFCs", draft-iab-doi (work in progress), 2014.
-
    [IDGUIDE]        Housley, R., "Guidelines to Authors of Internet-
                     Drafts",
                     <https://www.ietf.org/id-info/guidelines.html>.
@@ -4068,6 +4069,10 @@ Table of Contents
    [RFC7322]        Heather, H. and S. Ginoza, "RFC Style Guide",
                     RFC 7322, DOI 10.17487/RFC7322, September 2014,
                     <http://www.rfc-editor.org/info/rfc7322>.
+
+   [RFC7669]        Levine, J., "Assigning Digital Object Identifiers to
+                    RFCs", RFC 7669, DOI 10.17487/RFC7669, 2015,
+                    <http://www.rfc-editor.org/info/rfc7669>.
 
    [RNC]            Clark, J., "RELAX NG Compact Syntax", OASIS ,
                     November 2002, <https://www.oasis-open.org/
@@ -4270,10 +4275,10 @@ A.2.  The "submissionType" Attribute
 
    The RFC Editor publishes documents from different "document streams",
    of which the "IETF stream" is the most prominent.  Other streams are
-   the independent stream (used for things such as discussion of
-   Internet-related technologies that are not part of the IETF agenda),
-   the "IAB stream" (Internet Architecture Board) and the "IRTF stream"
-   (Internet Research Task Force).
+   the Independent Submission stream (used for things such as discussion
+   of Internet-related technologies that are not part of the IETF
+   agenda), the "IAB stream" (Internet Architecture Board) and the "IRTF
+   stream" (Internet Research Task Force).
 
    The values for the attribute are "IETF" (the default value),
    "independent", "IAB", and "IRTF".
@@ -4540,8 +4545,8 @@ B.3.  Attributes Controlled by the Prep Tool
       content, this attribute is filled with the text for the remote
       link, such as "Section 2.3" or "Table 5".  The prep tool might
       determine this text by reading the target reference and, if it is
-      a RFC or Internet-Draft in the v3 format, finding the anchor given
-      in the "relative" attribute or derived from the "section"
+      an RFC or Internet-Draft in the v3 format, finding the anchor
+      given in the "relative" attribute or derived from the "section"
       attribute, and using the title of that element.  If the reference
       is not an RFC or Internet-Draft in the v3 format, the text
       fragment is simply the value of the "relative" or "section"
