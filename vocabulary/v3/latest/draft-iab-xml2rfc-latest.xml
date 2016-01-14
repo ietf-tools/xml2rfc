@@ -22,7 +22,7 @@ rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rec
 <rfc xmlns:x="http://purl.org/net/xml2rfc/ext" obsoletes="2629" xmlns:ed="http://greenbytes.de/2002/rfcedit" ipr="trust200902" docName="draft-iab-xml2rfc-latest" category="info" xml:lang="en">
   <x:feedback template="mailto:xml2rfc@ietf.org?subject={docname},%20%22{section}%22&amp;body=&lt;{ref}&gt;:"/>
 	<front>
-  <title>The "XML2RFC" version 3 Vocabulary</title>
+  <title>The "xml2rfc" version 3 Vocabulary</title>
   <author initials="P." surname="Hoffman" fullname="Paul Hoffman">
     <organization>ICANN</organization>
 	<address><email>paul.hoffman@icann.org</email></address>
@@ -32,7 +32,7 @@ rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rec
   
   <abstract>
     <t>
-      This document defines the "XML2RFC" version 3 vocabulary: an XML-based
+      This document defines the "xml2rfc" version 3 vocabulary: an XML-based
       language used for writing RFCs and Internet-Drafts. It is heavily derived
       from the version 2 vocabulary that is also under discussion. This document
       obsoletes the v2 grammar described in RFC 2629 and its followup, draft-iab-xml2rfcv2.
@@ -52,7 +52,7 @@ rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rec
   <middle>
 <section title="Introduction">
 <t>
-  This document describes version 3 ("v3") of the "XML2RFC" vocabulary; an XML-based
+  This document describes version 3 ("v3") of the "xml2rfc" vocabulary; an XML-based
   language ("Extensible Markup Language", <xref target="XML"/>) used for writing RFCs
   (<xref target="RFC7322"/>) and Internet-Drafts (<xref target="IDGUIDE"/>).
 </t>
@@ -193,7 +193,7 @@ for table cells.</t>
 <t>Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes to &lt;<x:ref>rfc</x:ref>&gt;
 to cover Processing Instructions (PIs) that were in v2 that are still needed in the grammar.
 Add "prepTime" to indicate the time that the XML went through a preparation step.
-Add "version" to indicate the version of XML2RFC vocabulary used in the document.
+Add "version" to indicate the version of xml2rfc vocabulary used in the document.
 Add "scripts" to indicate which scripts are needed to render the document.
 Add "expiresDate" when an Internet-Draft expires.
 </t>
@@ -3946,7 +3946,7 @@ in the same &lt;front&gt; element.
    <t>
       &lt;sourcecode&gt; provides
       full control of horizontal whitespace and line breaks.
-      It is thus useful for source code and formal languages (such as ABNF or the RNC notation used in this document).
+      It is thus useful for source code and formal languages (such as ABNF <xref target="5234"/> or the RNC notation used in this document).
       When rendered, sourcecode is always shown in a monospace font.
    </t>
    <t>
@@ -6124,6 +6124,17 @@ Suzanne Woolf
    <seriesInfo name="RFC" value="3986"/>
   </reference>
 
+  <reference anchor="RFC5234">
+    <front>
+      <title>Augmented BNF for Syntax Specifications: ABNF</title>
+      <author initials="D." surname="Crocker" fullname="D. Crocker" role="editor"/>
+      <author initials="P." surname="Overell" fullname="P. Overell"/>
+      <date year="2008" month="January"/>
+    </front>
+    <seriesInfo name="STD" value="68"/>
+    <seriesInfo name="RFC" value="5234"/>
+  </reference>
+
   <reference anchor="RFC5378">
     <front>
       <title>Rights Contributors Provide to the IETF Trust</title>
@@ -6360,7 +6371,7 @@ Suzanne Woolf
 <t>The values listed here will be defined by the RFC Editor. Those listed here
 are believed to be the current values in use.</t>
 
-<section title="The /rfc/@ipr Attribute" anchor="attribute-ipr">
+<section title="The &quot;ipr&quot; Attribute" anchor="attribute-ipr">
 <t>
   This attribute value can take a long list of values, each of which describes an IPR policy for the document
   (<xref target="element.rfc.attribute.ipr"/>). 
@@ -6421,7 +6432,7 @@ are believed to be the current values in use.</t>
 <aside>
   <t>
     The TLP was again updated in March 2015 (<xref target="TLP5.0"/>), but
-    the changes made in this version do not affect the boilerplate text.
+    the changes made in that version do not affect the boilerplate text.
   </t>
 </aside>
 
@@ -6558,7 +6569,7 @@ are believed to be the current values in use.</t>
 </section>
 </section>
 
-<section title="The /rfc/@submissionType Attribute" anchor="attribute-submissiontype">
+<section title="The &quot;submissionType&quot; Attribute" anchor="attribute-submissiontype">
 <t>
   The RFC Editor publishes documents from different "document streams", of which
   the "IETF stream" is the most prominent. Other streams are the independent stream
@@ -6599,7 +6610,7 @@ are believed to be the current values in use.</t>
 </t>
 </section>
 
-<section title="The /rfc/@consensus Attribute" anchor="attribute-consensus">
+<section title="The &quot;consensus&quot; Attribute" anchor="attribute-consensus">
 <t>
   For some of the publication streams (see <xref target="attribute-submissiontype"/>),
   the "Status of This Memo" section depends on whether there was a consensus
