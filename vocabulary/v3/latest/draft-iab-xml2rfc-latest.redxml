@@ -179,7 +179,7 @@ as STDs and BCPs.</t>
 <t>Add &lt;<xref target="element.br" format="none">br</xref>&gt; to allow line breaks (but not blank lines) in the generated output
 for table cells.</t>
 
-<t>Add &lt;<xref target="element.svg" format="none">svg</xref>&gt; to allow easy inclusion of SVG drawings in &lt;<xref target="element.artwork" format="none">artwork</xref>&gt;.</t>
+<t>Add &lt;svg&gt; to allow easy inclusion of SVG drawings in &lt;<xref target="element.artwork" format="none">artwork</xref>&gt;.</t>
 
 </list></t>
 
@@ -288,7 +288,7 @@ because it makes no sense semantically.</t>
 <t><list style="symbols">
 
 <t>Allow non-ASCII characters in the format; the characters that are actually allowed will
-be determined by the RFC Editor.</t>
+be determined by the RFC Series Editor.</t>
 
 <t>Allow &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; and &lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt; to be used on
 their own in &lt;<xref target="element.section" format="none">section</xref>&gt;
@@ -542,7 +542,7 @@ the appendices for a complete description of these attributes.
    <t>
       The value ought to be either the full name or the abbreviation of one of
       the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
-      The list will be kept by the RFC Editor.
+      The list will be kept by the RFC Series Editor.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.front" format="none">front</xref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.area.contents"><!--AG-->
@@ -613,8 +613,8 @@ the appendices for a complete description of these attributes.
    <t><!--AG-->Or:</t>
    <t><list style="empty"><!--AG-->
       <t><!--AG-->
-         <iref item="Elements" subitem="svg"/>
-         <iref item="svg element" subitem="inside artwork"/>&lt;<xref target="element.svg" format="none">svg</xref>&gt; elements (<xref target="element.svg"/>)</t>
+         <iref item="Elements" subitem=""/>
+         <iref item=" element" subitem="inside artwork"/>&lt;&gt; elements (<xref target="element."/>)</t>
    </list></t>
 
    <!--artwork/@align-->
@@ -741,7 +741,7 @@ the appendices for a complete description of these attributes.
             <t>hex-dump</t>
             <t>svg</t>
          </list>
-            The RFC Editor will maintain a complete list of the preferred values on its
+            The RFC Series Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
             of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified. 
          </t>
@@ -1355,7 +1355,7 @@ the appendices for a complete description of these attributes.
       This element is used for two cases: the boilerplate of the document
       being produced, and inside bibliographic references that use the &lt;<xref target="element.front" format="none">front</xref>&gt; element.
    <list style="hanging">
-   <t hangText="Boilerplate for Internet-Drafts and RFCs:">
+         <t hangText="Boilerplate for Internet-Drafts and RFCs:">
       This element defines the date of publication for the current document (Internet-Draft or RFC).
       When producing Internet-Drafts, the prep tool uses this date to compute the expiration date (see <xref target="IDGUIDE"/>).
       When one or more of "year",
@@ -1363,23 +1363,24 @@ the appendices for a complete description of these attributes.
       current system date if the attributes that are present are consistent with that
       date.
    </t>
-   <t>
+         <t>
       If given, the month must be a number. Note that this restriction is different than that in
       that in <xref target="XML2RFCv2"/>. The prep tool will silently change text month names to numbers.
       The year must be a four-digit number.
    </t>
-   <t>
+         <t>
       When the prep tool is used to create Internet-Drafts, it will reject a submitted Internet-Draft that has a &lt;<xref target="element.date" format="none">date</xref>&gt;
       element in the boilerplate for itself that is anything other than today. That is, the tool
       will not allow a submitter to specify a date other than the day of submission. To avoid this problem,
       authors might simply not include a &lt;<xref target="element.date" format="none">date</xref>&gt; element in the boilerplate.
    </t>
-   <t hangText="Bibliographic references:">
+         <t hangText="Bibliographic references:">
       The date information can have prose text for the month or year.
       For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
       non-specific months (month="Second quarter") and so on are allowed.
    </t>
-   </list></t>
+      </list>
+   </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.front" format="none">front</xref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.date.contents"><!--AG-->
       Content model: this element does not have any contents.</t>
@@ -2295,7 +2296,7 @@ the appendices for a complete description of these attributes.
       a &lt;link&gt; element:
          <list style="symbols">
          <t>
-               The current ISSN for the RFC Series.
+               The current ISSN for the RFC series.
                The value for the "rel" attribute is "item".
                The link should use the form "urn:issn:".
             </t>
@@ -3950,7 +3951,7 @@ Using CDATA:
             <t>xml</t>
             <t>yang</t>
          </list>
-            The RFC Editor will maintain a complete list of the preferred values on its
+            The RFC Series Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
             of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified. 
          </t>
@@ -5098,33 +5099,6 @@ Using CDATA:
    </section>
 </section>
 
-<!--{http://www.w3.org/2000/svg}svg-->
-<section anchor="element.svg" title="&lt;svg&gt; (in namespace http://www.w3.org/2000/svg)">
-   
-   
-   <iref item="Elements" subitem="svg" primary="true"/>
-   <iref item="svg element" primary="true"/>
-   <t>
-      This element holds SVG art. The use of SVG in Internet-Drafts and RFCs is covered in much more detail in
-      <xref target="SVGforRFCs"/>. 
-   </t>
-   <t><!--AG-->This element appears as a child element of &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; (<xref target="element.artwork"/>).</t>
-   <t anchor="element.svg.contents"><!--AG-->
-      Content model: this element does not have any contents.</t>
-
-   <!--svg/@TheRealDefinition-->
-   <section anchor="element.svg.attribute.TheRealDefinition" toc="exclude" title="&#34;TheRealDefinition&#34; Attribute (Mandatory)">
-      
-      <iref item="Attributes" subitem="TheRealDefinition"/>
-      <iref item="svg element" subitem="TheRealDefinition attribute"/>
-      <iref item="TheRealDefinition attribute" subitem="in svg element"/>
-      <t>
-         (This is just a placeholder until <xref target="SVGforRFCs"/> has complete RNG that can be incorporated by
-         reference in this draft.)
-      </t>
-   </section>
-</section>
-
 </section>
 
 <section anchor="deprecatedelements" title="Elements from v2 That Have Been Deprecated">
@@ -5619,7 +5593,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
 <t>
   This format is based on <xref target="XML"/> and thus does not have any
   issues representing arbitrary Unicode <xref target="UNICODE"/> characters in text content.
-  The RFC Editor may restrict some of the characters that can be used in a particular RFC;
+  The RFC Series Editor may restrict some of the characters that can be used in a particular RFC;
   the rules for such restrictions are covered in <xref target="NONASCII"/>.
 </t>
 </section>
@@ -5729,7 +5703,7 @@ and should have only a localized impact on the document processing and rendering
       None
     </t>
     <t hangText="Author:">
-      ee the Author's Address section of RFC 7749.
+      See the Author's Address section of RFC 7749.
     </t>
     <t hangText="Change controller:">
       RFC Series Editor (rse@rfc-editor.org)
@@ -6101,7 +6075,7 @@ Suzanne Woolf
 
 <section anchor="front.page" title="Front-Page (&#34;Boilerplate&#34;) Generation">
 
-<t>The values listed here will be defined by the RFC Editor. Those listed here
+<t>The values listed here will be defined by the RFC Series Editor. Those listed here
 are believed to be the current values in use.</t>
 
 <section anchor="attribute-ipr" title="The &#34;ipr&#34; Attribute">
@@ -6621,10 +6595,9 @@ is controlled by the prep tool.</t>
 
 <t>The following is the RelaxNG schema for the v3 format.</t>
 
-<figure><iref item="rfc element"/><iref item="link element"/><iref item="front element"/><iref item="title element"/><iref item="author element"/><iref item="organization element"/><iref item="address element"/><iref item="postal element"/><iref item="street element"/><iref item="city element"/><iref item="region element"/><iref item="code element"/><iref item="country element"/><iref item="postalLine element"/><iref item="phone element"/><iref item="facsimile element"/><iref item="email element"/><iref item="uri element"/><iref item="date element"/><iref item="area element"/><iref item="workgroup element"/><iref item="keyword element"/><iref item="abstract element"/><iref item="note element"/><iref item="boilerplate element"/><iref item="middle element"/><iref item="section element"/><iref item="name element"/><iref item="t element"/><iref item="aside element"/><iref item="blockquote element"/><iref item="list element"/><iref item="ol element"/><iref item="ul element"/><iref item="li element"/><iref item="dl element"/><iref item="dt element"/><iref item="dd element"/><iref item="xref element"/><iref item="relref element"/><iref item="eref element"/><iref item="iref element"/><iref item="cref element"/><iref item="tt element"/><iref item="strong element"/><iref item="em element"/><iref item="sub element"/><iref item="sup element"/><iref item="spanx element"/><iref item="vspace element"/><iref item="figure element"/><iref item="table element"/><iref item="preamble element"/><iref item="artwork element"/><iref item="svg element"/><iref item="sourcecode element"/><iref item="thead element"/><iref item="tbody element"/><iref item="tfoot element"/><iref item="tr element"/><iref item="td element"/><iref item="th element"/><iref item="postamble element"/><iref item="texttable element"/><iref item="ttcol element"/><iref item="c element"/><iref item="bcp14 element"/><iref item="br element"/><iref item="back element"/><iref item="displayreference element"/><iref item="references element"/><iref item="reference element"/><iref item="referencegroup element"/><iref item="seriesInfo element"/><iref item="format element"/><iref item="annotation element"/><iref item="refcontent element"/><artwork type="application/relax-ng-compact-syntax"><![CDATA[
+<figure><iref item="rfc element"/><iref item="link element"/><iref item="front element"/><iref item="title element"/><iref item="author element"/><iref item="organization element"/><iref item="address element"/><iref item="postal element"/><iref item="street element"/><iref item="city element"/><iref item="region element"/><iref item="code element"/><iref item="country element"/><iref item="postalLine element"/><iref item="phone element"/><iref item="facsimile element"/><iref item="email element"/><iref item="uri element"/><iref item="date element"/><iref item="area element"/><iref item="workgroup element"/><iref item="keyword element"/><iref item="abstract element"/><iref item="note element"/><iref item="boilerplate element"/><iref item="middle element"/><iref item="section element"/><iref item="name element"/><iref item="t element"/><iref item="aside element"/><iref item="blockquote element"/><iref item="list element"/><iref item="ol element"/><iref item="ul element"/><iref item="li element"/><iref item="dl element"/><iref item="dt element"/><iref item="dd element"/><iref item="xref element"/><iref item="relref element"/><iref item="eref element"/><iref item="iref element"/><iref item="cref element"/><iref item="tt element"/><iref item="strong element"/><iref item="em element"/><iref item="sub element"/><iref item="sup element"/><iref item="spanx element"/><iref item="vspace element"/><iref item="figure element"/><iref item="table element"/><iref item="preamble element"/><iref item="artwork element"/><iref item="sourcecode element"/><iref item="thead element"/><iref item="tbody element"/><iref item="tfoot element"/><iref item="tr element"/><iref item="td element"/><iref item="th element"/><iref item="postamble element"/><iref item="texttable element"/><iref item="ttcol element"/><iref item="c element"/><iref item="bcp14 element"/><iref item="br element"/><iref item="back element"/><iref item="displayreference element"/><iref item="references element"/><iref item="reference element"/><iref item="referencegroup element"/><iref item="seriesInfo element"/><iref item="format element"/><iref item="annotation element"/><iref item="refcontent element"/><artwork type="application/relax-ng-compact-syntax"><![CDATA[
 
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
-namespace ns1 = "http://www.w3.org/2000/svg"
 
 # xml2rfc Version 3 grammar
 
@@ -7325,12 +7298,8 @@ artwork =
     attribute originalSrc { text }?,
     (text* | svg)
   }
-
-svg =
-  element ns1:svg {
-    [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
-    attribute TheRealDefinition { text }*
-  }
+# TODO: replace with link to RSE site, or provide an inline version
+include "svg.rnc"
 
 sourcecode =
   element sourcecode {
@@ -7599,8 +7568,7 @@ refcontent =
     attribute xml:lang { text }?,
     (text | bcp14 | em | strong | sub | sup | tt)*
   }
-
-start = rfc
+start |= rfc
 
 ]]></artwork></figure>
 </section>
@@ -7615,7 +7583,6 @@ to the v3 schema.</t>
 
   namespace a = 
   "http://relaxng.org/ns/compatibility/annotations/1.0"
-+ namespace ns1 = "http://www.w3.org/2000/svg"
   
 + # xml2rfc Version 3 grammar
   rfc =
@@ -8326,11 +8293,9 @@ to the v3 schema.</t>
 +     attribute originalSrc { text }?,
 +     (text* | svg)
 +   }
-+ svg =
-+   element ns1:svg {
-+     [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
-+     attribute TheRealDefinition { text }*
-+   }
++ # TODO: replace with link to RSE site, or provide an inline 
++ version
++ include "svg.rnc"
 + sourcecode =
 +   element sourcecode {
 +     attribute xml:base { text }?,
@@ -8564,6 +8529,7 @@ to the v3 schema.</t>
   annotation =
 -   element annotation { (text | xref | eref | iref | cref | 
 - spanx)* }
+- start = rfc
 +   element annotation {
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
@@ -8587,7 +8553,7 @@ to the v3 schema.</t>
 +     attribute xml:lang { text }?,
 +     (text | bcp14 | em | strong | sub | sup | tt)*
 +   }
-  start = rfc
++ start |= rfc
 
 ]]></artwork></figure>
 </section>

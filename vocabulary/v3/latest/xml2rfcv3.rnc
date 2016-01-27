@@ -1,5 +1,4 @@
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
-namespace ns1 = "http://www.w3.org/2000/svg"
 
 # xml2rfc Version 3 grammar
 rfc =
@@ -646,11 +645,8 @@ artwork =
     attribute originalSrc { text }?,
     (text* | svg)
   }
-svg =
-  element ns1:svg {
-    [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
-    attribute TheRealDefinition { text }*
-  }
+# TODO: replace with link to RSE site, or provide an inline version
+include "svg.rnc"
 sourcecode =
   element sourcecode {
     attribute xml:base { text }?,
@@ -897,4 +893,4 @@ refcontent =
     attribute xml:lang { text }?,
     (text | bcp14 | em | strong | sub | sup | tt)*
   }
-start = rfc
+start |= rfc

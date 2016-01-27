@@ -13,6 +13,8 @@
 
 <!--
 
+rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rectified.
+
 -->
 
 <!DOCTYPE rfc []>
@@ -20,7 +22,7 @@
 <rfc xmlns:x="http://purl.org/net/xml2rfc/ext" obsoletes="2629" xmlns:ed="http://greenbytes.de/2002/rfcedit" ipr="trust200902" docName="draft-iab-xml2rfc-latest" category="info" xml:lang="en">
   <x:feedback template="mailto:xml2rfc@ietf.org?subject={docname},%20%22{section}%22&amp;body=&lt;{ref}&gt;:"/>
 	<front>
-  <title>The 'XML2RFC' version 3 Vocabulary</title>
+  <title>The "xml2rfc" version 3 Vocabulary</title>
   <author initials="P." surname="Hoffman" fullname="Paul Hoffman">
     <organization>ICANN</organization>
 	<address><email>paul.hoffman@icann.org</email></address>
@@ -30,7 +32,7 @@
   
   <abstract>
     <t>
-      This document defines the "XML2RFC" version 3 vocabulary; an XML-based
+      This document defines the "xml2rfc" version 3 vocabulary: an XML-based
       language used for writing RFCs and Internet-Drafts. It is heavily derived
       from the version 2 vocabulary that is also under discussion. This document
       obsoletes the v2 grammar described in RFC 2629 and its followup, draft-iab-xml2rfcv2.
@@ -50,8 +52,8 @@
   <middle>
 <section title="Introduction">
 <t>
-  This document describes version 3 ("v3") of the "XML2RFC" vocabulary; an XML-based
-  language ('Extensible Markup Language', <xref target="XML"/>) used for writing RFCs
+  This document describes version 3 ("v3") of the "xml2rfc" vocabulary; an XML-based
+  language ("Extensible Markup Language", <xref target="XML"/>) used for writing RFCs
   (<xref target="RFC7322"/>) and Internet-Drafts (<xref target="IDGUIDE"/>).
 </t>
 <t>
@@ -62,7 +64,7 @@
   toward RFC publication, this document will incorporate as many of the changes as possible.
 </t>
 <t>
-The v3 format will be used as part of the new RFC series described in <xref target="RFC6949"/>.
+The v3 format will be used as part of the new RFC series format described in <xref target="RFC6949"/>.
 The new format will be handled by one or more new tools for preparing the XML and
 converting it to other representations.
 Features of the expected
@@ -163,7 +165,7 @@ to give table functionality like that in HTML.</t>
 
 <t>Add &lt;<x:ref>postalLine</x:ref>&gt;, free text that represents one line of the address.</t>
 
-<t>Add &lt;<x:ref>displayreference</x:ref>&gt; to allow display of more mneumonic anchor names
+<t>Add &lt;<x:ref>displayreference</x:ref>&gt; to allow display of more mnemonic anchor names
 for automatically-included references.</t>
 
 <t>Add &lt;<x:ref>refcontent</x:ref>&gt; to allow better control of text in a reference.</t>
@@ -171,7 +173,7 @@ for automatically-included references.</t>
 <t>Add &lt;<x:ref>referencegroup</x:ref>&gt; to allow referencing multi-RFC documents such
 as STDs and BCPs.</t>
 
-<t>Add &lt;<x:ref>relref</x:ref>&gt; to allow referncing specific sections or anchors in references.</t>
+<t>Add &lt;<x:ref>relref</x:ref>&gt; to allow referencing specific sections or anchors in references.</t>
 
 <t>Add &lt;<x:ref>link</x:ref>&gt; to point to a resource related to the RFC.</t>
 
@@ -191,9 +193,9 @@ for table cells.</t>
 <t>Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes to &lt;<x:ref>rfc</x:ref>&gt;
 to cover Processing Instructions (PIs) that were in v2 that are still needed in the grammar.
 Add "prepTime" to indicate the time that the XML went through a preparation step.
-Add "version" to indicate the version of XML2RFC vocabulary used in the document.
+Add "version" to indicate the version of xml2rfc vocabulary used in the document.
 Add "scripts" to indicate which scripts are needed to render the document.
-Add "expiresDate" when an Internet Draft expires.
+Add "expiresDate" when an Internet-Draft expires.
 </t>
 
 <t>Add "ascii" attributes to &lt;<x:ref>email</x:ref>&gt;,
@@ -223,7 +225,7 @@ numbers for items in a section that don't have their own numbering (namely figur
 to display the comment.</t>
 
 <t>Add "keepWithNext" and "keepWithPrevious" to &lt;<x:ref>t</x:ref>&gt; as a hint to tools that
-do pagination that the should try to keep the paragraph with the next/previous element.</t>
+do pagination that they should try to keep the paragraph with the next/previous element.</t>
 
 </list></t>
 
@@ -233,7 +235,7 @@ do pagination that the should try to keep the paragraph with the next/previous e
 
 <t>Deprecated elements and attributes are legacy vocabulary from v2 that are supported for input
 to v3 tools. They are likely to be removed from those tools in the future.
-Instead of being listed in <xref target="elements"/>, they are listed in in <xref target="deprecatedelements"/>.
+Instead of being listed in <xref target="elements"/>, they are listed in <xref target="deprecatedelements"/>.
 See <xref target="tools"/> for more information on tools and how they will handle
 deprecated features.</t>
 
@@ -287,7 +289,7 @@ because it makes no sense semantically.</t>
 <t><list style="symbols">
 
 <t>Allow non-ASCII characters in the format; the characters that are actually allowed will
-be determined by the RFC Editor.</t>
+be determined by the RFC Series Editor.</t>
 
 <t>Allow &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt; to be used on
 their own in &lt;<x:ref>section</x:ref>&gt;
@@ -301,13 +303,16 @@ their own in &lt;<x:ref>section</x:ref>&gt;
 
 <t>Allow the sub-elements inside a &lt;<x:ref>reference</x:ref>&gt; to be in any order.</t>
 
-<t>Turned off the auto-generation of anchors in &lt;<x:ref>cref</x:ref>&gt; because there is
+<t>Turned off the autogeneration of anchors in &lt;<x:ref>cref</x:ref>&gt; because there is
 no use case for them that cannot be achieved in other ways.</t>
 
 <t>Allow more than one &lt;<x:ref>artwork</x:ref>&gt;, or more than one
 &lt;<x:ref>sourcecode</x:ref>&gt;, in &lt;<x:ref>figure</x:ref>&gt;.</t>
 
 <t>In &lt;<x:ref>front</x:ref>&gt;, make &lt;<x:ref>date</x:ref>&gt; optional.</t>
+
+<t>In &lt;<x:ref>date</x:ref>&gt;, added restrictions to the "date" and "year" attribute
+when used in the &lt;<x:ref>front</x:ref>&gt; for the document's boilerplate text.</t>
 
 <t>In &lt;<x:ref>postal</x:ref>&gt;, allow the sub-elements to be in any order. Also allow the inclusion
 of the new &lt;<x:ref>postalLine</x:ref>&gt; instead of the older elements.</t>
@@ -336,7 +341,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
 <t>
   The XML vocabulary here is defined in prose, based on the Relax NG schema 
   (<xref target="RNC"/>) contained in <xref target="schema"/> (specified in
-  Relax NG Compact Notation, "RNC").
+  Relax NG Compact Notation, (RNC)).
 </t>
 <t>  
   Note that the schema can be used for automated validity
@@ -359,12 +364,12 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
   attribute needs to be a valid XML "Name" (<xref target="XML" x:fmt="of" x:sec="2.3"
   x:rel="#sec-common-syn"/>),
   additionally constrained to US-ASCII characters (<xref target="USASCII"/>). Thus, the character repertoire consists of
-  "A-Z", "a-z", "0-9", "_", "-", ".", and ":", where "0-9", ".", and "-" are disallowed as start character.
+  "A-Z", "a-z", "0-9", "_", "-", ".", and ":", where "0-9", ".", and "-" are disallowed as start characters.
   Anchors are described in more detail in <xref target="anchorsandids"/>.
 </t>
 
 <t>
-Tools interpreting the XML described here will collapse horizontal whitespace and linebreaks to a
+Tools interpreting the XML described here will collapse horizontal whitespace and line breaks to a
 single whitespace (except inside &lt;<x:ref>artwork</x:ref>&gt; and
 &lt;<x:ref>sourcecode</x:ref>&gt;), and will trim leading and trailing whitespace.
 </t>
@@ -395,10 +400,10 @@ the appendices for a complete description of these attributes.
    <iref item="Elements" subitem="abstract" primary="true"/>
    <iref item="abstract element" primary="true"/>
    <t>
-     Contains the abstract of the document.
-     See <xref target="RFC7322"/> for more information on restrictions for the abstract.
+     Contains the Abstract of the document.
+     See <xref target="RFC7322"/> for more information on restrictions for the Abstract.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.abstract.contents"><!--AG-->
       <xref format="none" target="grammar.abstract">Content model</xref>:
     </t>
@@ -420,12 +425,12 @@ the appendices for a complete description of these attributes.
 
    <!--abstract/@anchor-->
    <section anchor="element.abstract.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="abstract element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in abstract element"/>
       <t>
-        Document-wide unique identifier for the abstract.
+        Document-wide unique identifier for the Abstract.
       </t>
    </section>
 </section>
@@ -441,7 +446,7 @@ the appendices for a complete description of these attributes.
    <t>
      Provides address information for the author.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>author</x:ref>&gt; (<xref target="element.author"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>author</x:ref>&gt; (<xref target="element.author"/>).</t>
    <t anchor="element.address.contents"><!--AG-->
       <xref format="none" target="grammar.address">Content model</xref>:</t>
    <t><!--AG-->In this order:</t>
@@ -486,7 +491,7 @@ the appendices for a complete description of these attributes.
       Provides additional prose augmenting a bibliographical reference.
       This text is intended to be shown after the rest of the generated reference text.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
    <t anchor="element.annotation.contents"><!--AG-->
       <xref format="none" target="grammar.annotation">Content model</xref>:
     </t>
@@ -547,9 +552,9 @@ the appendices for a complete description of these attributes.
    <t>
       The value ought to be either the full name or the abbreviation of one of
       the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
-      The list will be kept by the RFC Editor.
+      The list will be kept by the RFC Series Editor.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.area.contents"><!--AG-->
       <xref format="none" target="grammar.area">Content model</xref>: only text content.</t>
 </section>
@@ -563,15 +568,15 @@ the appendices for a complete description of these attributes.
    <iref item="Elements" subitem="artwork" primary="true"/>
    <iref item="artwork element" primary="true"/>
    <t>
-      This element allows the inclusion of "artwork" into the document.
+      This element allows the inclusion of "artwork" in the document.
       &lt;artwork&gt; provides
-      full control of horizontal whitespace and line breaks, and thus is
+      full control of horizontal whitespace and line breaks; thus is
       used for a variety of things, such as diagrams ("line art") and protocol unit diagrams.
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
       file, such as a vector drawing in SVG or a bitmap graphic file, using a URI. In this case, the textual
-      content acts as fallback for output representations that do not support graphics;
+      content acts as a fallback for output representations that do not support graphics;
       thus, it ought to contain either (1) a "line art" variant of the graphics or (2)
       prose that describes the included image in sufficient detail.
    </t>
@@ -585,7 +590,7 @@ the appendices for a complete description of these attributes.
       languages; in v3, this is now done with &lt;<x:ref>sourcecode</x:ref>&gt;.
    </t>
    <t>
-      There are at least five ways to include SVG in artwork in Internet Drafts:
+      There are at least five ways to include SVG in artwork in Internet-Drafts:
       <list style="symbols">
          <t>Inline, by including all of the SVG in the content of the element, 
             such as: &lt;artwork type="svg"&gt;&lt;svg xmlns..."&gt;</t>
@@ -596,7 +601,7 @@ the appendices for a complete description of these attributes.
          <t>As a URI to an external entity, such as: &lt;artwork type="svg" src="http://www.example.com/..."&gt;</t>
          <t>As a local file, such as: &lt;artwork type="svg" src="diagram12.svg"&gt;</t>
       </list>
-      The use of SVG in Internet Drafts and RFCs is covered in much more detail in
+      The use of SVG in Internet-Drafts and RFCs is covered in much more detail in
       <xref target="SVGforRFCs"/>.
    </t>
    <t>
@@ -607,7 +612,7 @@ the appendices for a complete description of these attributes.
       Formatters that do pagination should attempt to keep artwork on a single page. This is to prevent
       artwork that is split across pages from looking like two separate pieces of artwork.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       <xref format="none" target="grammar.artwork">Content model</xref>:
     </t>
@@ -626,7 +631,7 @@ the appendices for a complete description of these attributes.
 
    <!--artwork/@align-->
    <section anchor="element.artwork.attribute.align" toc="exclude">
-      <name>"align" attribute</name>
+      <name>"align" Attribute</name>
       <iref item="Attributes" subitem="align"/>
       <iref item="artwork element" subitem="align attribute"/>
       <iref item="align attribute" subitem="in artwork element"/>
@@ -644,7 +649,7 @@ the appendices for a complete description of these attributes.
 
    <!--artwork/@alt-->
    <section anchor="element.artwork.attribute.alt" toc="exclude">
-      <name>"alt" attribute</name>
+      <name>"alt" Attribute</name>
       <iref item="Attributes" subitem="alt"/>
       <iref item="artwork element" subitem="alt attribute"/>
       <iref item="alt attribute" subitem="in artwork element"/>
@@ -660,7 +665,7 @@ the appendices for a complete description of these attributes.
 
    <!--artwork/@anchor-->
    <section anchor="element.artwork.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="artwork element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in artwork element"/>
@@ -671,7 +676,7 @@ the appendices for a complete description of these attributes.
 
    <!--artwork/@height-->
    <section anchor="element.artwork.attribute.height" toc="exclude">
-      <name>"height" attribute</name>
+      <name>"height" Attribute</name>
       <iref item="Attributes" subitem="height"/>
       <iref item="artwork element" subitem="height attribute"/>
       <iref item="height attribute" subitem="in artwork element"/>
@@ -682,14 +687,14 @@ the appendices for a complete description of these attributes.
 
    <!--artwork/@name-->
    <section anchor="element.artwork.attribute.name" toc="exclude">
-      <name>"name" attribute</name>
+      <name>"name" Attribute</name>
       <iref item="Attributes" subitem="name"/>
       <iref item="artwork element" subitem="name attribute"/>
       <iref item="name attribute" subitem="in artwork element"/>
       <t>
             A filename suitable for the contents (such as for extraction to a local file).
             This attribute can
-            be helpful for other kinds of tools (such as automated syntax checkers
+            be helpful for other kinds of tools (such as automated syntax checkers,
             which work by extracting the artwork).
             Note that the "name" attribute does not need to be unique for artwork elements in a
             document. If multiple artwork elements have the same name attribute, a processing tool might
@@ -701,13 +706,13 @@ the appendices for a complete description of these attributes.
 
    <!--artwork/@src-->
    <section anchor="element.artwork.attribute.src" toc="exclude">
-      <name>"src" attribute</name>
+      <name>"src" Attribute</name>
       <iref item="Attributes" subitem="src"/>
       <iref item="artwork element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in artwork element"/>
       <t>
          The URI reference of a graphics file (<xref target="RFC3986"/>), or the name of a file on the local disk.
-         This can be a "data" URI (<xref target="RFC2397"/>) that contains the contents of the graphics file.
+         This can be a "data" URI <xref target="RFC2397"/> that contains the contents of the graphics file.
          Note that the inclusion of art with the "src" attribute depends on the capabilities of the processing tool
          reading the XML document. Tools need to be able to handle the file: URI, and should
          be able to handle http: and https: URIs as well. The prep tool will be able to handle reading the "src" attribute.
@@ -718,7 +723,7 @@ the appendices for a complete description of these attributes.
          Processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
          Document creators should think hard before using relative URIs due to possible later problems if files move
-         around on the disk. Also, documents should most likely use explicit URI schemes whereever possible.
+         around on the disk. Also, documents should most likely use explicit URI schemes wherever possible.
       </t>
       <t>
          In some cases, the prep tool may remove the "src" attribute after processing its value.
@@ -731,7 +736,7 @@ the appendices for a complete description of these attributes.
 
    <!--artwork/@type-->
    <section anchor="element.artwork.attribute.type" toc="exclude">
-      <name>"type" attribute</name>
+      <name>"type" Attribute</name>
       <iref item="Attributes" subitem="type"/>
       <iref item="artwork element" subitem="type attribute"/>
       <iref item="type attribute" subitem="in artwork element"/>
@@ -748,7 +753,7 @@ the appendices for a complete description of these attributes.
             <t>hex-dump</t>
             <t>svg</t>
          </list>
-            The RFC Editor will maintain a complete list of the preferred values on its
+            The RFC Series Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
             of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified. 
          </t>
@@ -756,7 +761,7 @@ the appendices for a complete description of these attributes.
 
    <!--artwork/@width-->
    <section anchor="element.artwork.attribute.width" toc="exclude">
-      <name>"width" attribute</name>
+      <name>"width" Attribute</name>
       <iref item="Attributes" subitem="width"/>
       <iref item="artwork element" subitem="width attribute"/>
       <iref item="width attribute" subitem="in artwork element"/>
@@ -767,7 +772,7 @@ the appendices for a complete description of these attributes.
 
    <!--artwork/@xml:space-->
    <section anchor="element.artwork.attribute.xml-space" toc="exclude">
-      <name>"xml:space" attribute</name>
+      <name>"xml:space" Attribute</name>
       <iref item="Attributes" subitem="xml:space"/>
       <iref item="artwork element" subitem="xml:space attribute"/>
       <iref item="xml:space attribute" subitem="in artwork element"/>
@@ -789,7 +794,7 @@ the appendices for a complete description of these attributes.
       This element is a container for content that is semantically less important or tangential
       to the content that surrounds it.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.aside.contents"><!--AG-->
       <xref format="none" target="grammar.aside">Content model</xref>:
     </t>
@@ -826,7 +831,7 @@ the appendices for a complete description of these attributes.
 
    <!--aside/@anchor-->
    <section anchor="element.aside.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="aside element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in aside element"/>
@@ -869,7 +874,7 @@ the appendices for a complete description of these attributes.
       See Section "Authors vs. Contributors" of <xref target="RFC7322"/>
       for more information.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.author.contents"><!--AG-->
       <xref format="none" target="grammar.author">Content model</xref>:</t>
    <t><!--AG-->In this order:</t>
@@ -888,7 +893,7 @@ the appendices for a complete description of these attributes.
 
    <!--author/@asciiFullname-->
    <section anchor="element.author.attribute.asciiFullname" toc="exclude">
-      <name>"asciiFullname" attribute</name>
+      <name>"asciiFullname" Attribute</name>
       <iref item="Attributes" subitem="asciiFullname"/>
       <iref item="author element" subitem="asciiFullname attribute"/>
       <iref item="asciiFullname attribute" subitem="in author element"/>
@@ -899,29 +904,29 @@ the appendices for a complete description of these attributes.
 
    <!--author/@asciiInitials-->
    <section anchor="element.author.attribute.asciiInitials" toc="exclude">
-      <name>"asciiInitials" attribute</name>
+      <name>"asciiInitials" Attribute</name>
       <iref item="Attributes" subitem="asciiInitials"/>
       <iref item="author element" subitem="asciiInitials attribute"/>
       <iref item="asciiInitials attribute" subitem="in author element"/>
       <t>
-         The ASCII equivalent of the author's intials.
+         The ASCII equivalent of the author's initials, to be used in conjunction with the separately specified asciiSurname.
       </t>
    </section>
 
    <!--author/@asciiSurname-->
    <section anchor="element.author.attribute.asciiSurname" toc="exclude">
-      <name>"asciiSurname" attribute</name>
+      <name>"asciiSurname" Attribute</name>
       <iref item="Attributes" subitem="asciiSurname"/>
       <iref item="author element" subitem="asciiSurname attribute"/>
       <iref item="asciiSurname attribute" subitem="in author element"/>
       <t>
-         The ASCII equivalent of the author's surname.
+         The ASCII equivalent of the author's surname, to be used in conjunction with the separately specified asciiInitials.
       </t>
    </section>
 
    <!--author/@fullname-->
    <section anchor="element.author.attribute.fullname" toc="exclude">
-      <name>"fullname" attribute</name>
+      <name>"fullname" Attribute</name>
       <iref item="Attributes" subitem="fullname"/>
       <iref item="author element" subitem="fullname attribute"/>
       <iref item="fullname attribute" subitem="in author element"/>
@@ -932,7 +937,7 @@ the appendices for a complete description of these attributes.
 
    <!--author/@initials-->
    <section anchor="element.author.attribute.initials" toc="exclude">
-      <name>"initials" attribute</name>
+      <name>"initials" Attribute</name>
       <iref item="Attributes" subitem="initials"/>
       <iref item="author element" subitem="initials attribute"/>
       <iref item="initials attribute" subitem="in author element"/>
@@ -951,7 +956,7 @@ the appendices for a complete description of these attributes.
 
    <!--author/@role-->
    <section anchor="element.author.attribute.role" toc="exclude">
-      <name>"role" attribute</name>
+      <name>"role" Attribute</name>
       <iref item="Attributes" subitem="role"/>
       <iref item="author element" subitem="role attribute"/>
       <iref item="role attribute" subitem="in author element"/>
@@ -966,7 +971,7 @@ the appendices for a complete description of these attributes.
 
    <!--author/@surname-->
    <section anchor="element.author.attribute.surname" toc="exclude">
-      <name>"surname" attribute</name>
+      <name>"surname" Attribute</name>
       <iref item="Attributes" subitem="surname"/>
       <iref item="author element" subitem="surname attribute"/>
       <iref item="surname attribute" subitem="in author element"/>
@@ -990,7 +995,7 @@ the appendices for a complete description of these attributes.
       Contains the "back" part of the document: the references and appendices. In &lt;back&gt;,
       &lt;<x:ref>section</x:ref>&gt; elements indicate appendices.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.back.contents"><!--AG-->
       <xref format="none" target="grammar.back">Content model</xref>:</t>
    <t><!--AG-->In this order:</t>
@@ -1029,10 +1034,10 @@ the appendices for a complete description of these attributes.
    <t>
       This element is only to be used around the actual phrase from BCP 14, not the full
       definition of a requirement. For example, it is correct to say
-      "The packet &lt;bcp14&gt;MUST&lt;/bcp14&gt; be dropped.", but it not correct to say
+      "The packet &lt;bcp14&gt;MUST&lt;/bcp14&gt; be dropped.", but it is not correct to say
       "&lt;bcp14&gt;The packet MUST be dropped.&lt;/bcp14&gt;".
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.bcp14.contents"><!--AG-->
       <xref format="none" target="grammar.bcp14">Content model</xref>: only text content.</t>
 </section>
@@ -1048,7 +1053,7 @@ the appendices for a complete description of these attributes.
    <t>
       Specifies a block of text is a quotation.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.blockquote.contents"><!--AG-->
       <xref format="none" target="grammar.blockquote">Content model</xref>:
     </t>
@@ -1126,7 +1131,7 @@ the appendices for a complete description of these attributes.
 
    <!--blockquote/@anchor-->
    <section anchor="element.blockquote.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="blockquote element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in blockquote element"/>
@@ -1137,7 +1142,7 @@ the appendices for a complete description of these attributes.
 
    <!--blockquote/@cite-->
    <section anchor="element.blockquote.attribute.cite" toc="exclude">
-      <name>"cite" attribute</name>
+      <name>"cite" Attribute</name>
       <iref item="Attributes" subitem="cite"/>
       <iref item="blockquote element" subitem="cite attribute"/>
       <iref item="cite attribute" subitem="in blockquote element"/>
@@ -1149,7 +1154,7 @@ the appendices for a complete description of these attributes.
 
    <!--blockquote/@quotedFrom-->
    <section anchor="element.blockquote.attribute.quotedFrom" toc="exclude">
-      <name>"quotedFrom" attribute</name>
+      <name>"quotedFrom" Attribute</name>
       <iref item="Attributes" subitem="quotedFrom"/>
       <iref item="blockquote element" subitem="quotedFrom attribute"/>
       <iref item="quotedFrom attribute" subitem="in blockquote element"/>
@@ -1171,7 +1176,7 @@ the appendices for a complete description of these attributes.
    <t>
       Holds the boilerplate text for the document. This section is filled in by the prep tool.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.boilerplate.contents"><!--AG-->
       <xref format="none" target="grammar.boilerplate">Content model</xref>:
     </t>
@@ -1192,10 +1197,11 @@ the appendices for a complete description of these attributes.
    <iref item="br element" primary="true"/>
    <t>
       Indicates that a line break should be inserted in the generated output by a formatting tool.
+      It is always expressed as &lt;br /&gt;.
       Multiple successive instances of this element do not cause blank lines to appear in the output,
       and is thus not useful.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>) and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.br.contents"><!--AG-->
       <xref format="none" target="grammar.br">Content model</xref>: this element does not have any contents.</t>
 </section>
@@ -1211,13 +1217,13 @@ the appendices for a complete description of these attributes.
    <t>
       Gives the city name in a postal address.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.city.contents"><!--AG-->
       <xref format="none" target="grammar.city">Content model</xref>: only text content.</t>
 
    <!--city/@ascii-->
    <section anchor="element.city.attribute.ascii" toc="exclude">
-      <name>"ascii" attribute</name>
+      <name>"ascii" Attribute</name>
       <iref item="Attributes" subitem="ascii"/>
       <iref item="city element" subitem="ascii attribute"/>
       <iref item="ascii attribute" subitem="in city element"/>
@@ -1238,13 +1244,13 @@ the appendices for a complete description of these attributes.
    <t>
       Gives the postal region code.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.code.contents"><!--AG-->
       <xref format="none" target="grammar.code">Content model</xref>: only text content.</t>
 
    <!--code/@ascii-->
    <section anchor="element.code.attribute.ascii" toc="exclude">
-      <name>"ascii" attribute</name>
+      <name>"ascii" Attribute</name>
       <iref item="Attributes" subitem="ascii"/>
       <iref item="code element" subitem="ascii attribute"/>
       <iref item="ascii attribute" subitem="in code element"/>
@@ -1265,13 +1271,13 @@ the appendices for a complete description of these attributes.
    <t>
       Gives the country name or code in a postal address.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.country.contents"><!--AG-->
       <xref format="none" target="grammar.country">Content model</xref>: only text content.</t>
 
    <!--country/@ascii-->
    <section anchor="element.country.attribute.ascii" toc="exclude">
-      <name>"ascii" attribute</name>
+      <name>"ascii" Attribute</name>
       <iref item="Attributes" subitem="ascii"/>
       <iref item="country element" subitem="ascii attribute"/>
       <iref item="ascii attribute" subitem="in country element"/>
@@ -1293,11 +1299,11 @@ the appendices for a complete description of these attributes.
       Represents a comment.
    </t>
    <t>
-      Comments can be used in a document while it is work-in-progress. They
+      Comments can be used in a document while it is work in progress. They
       might appear either inline and visually highlighted, at the end of the document,
       or not at all, depending on the formatting tool.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.cref.contents"><!--AG-->
       <xref format="none" target="grammar.cref">Content model</xref>:
     </t>
@@ -1332,7 +1338,7 @@ the appendices for a complete description of these attributes.
 
    <!--cref/@anchor-->
    <section anchor="element.cref.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="cref element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in cref element"/>
@@ -1343,12 +1349,12 @@ the appendices for a complete description of these attributes.
 
    <!--cref/@display-->
    <section anchor="element.cref.attribute.display" toc="exclude">
-      <name>"display" attribute</name>
+      <name>"display" Attribute</name>
       <iref item="Attributes" subitem="display"/>
       <iref item="cref element" subitem="display attribute"/>
       <iref item="display attribute" subitem="in cref element"/>
       <t>
-         Suggests whether or not the the comment should be displayed by formatting tools. This might be
+         Suggests whether or not the comment should be displayed by formatting tools. This might be
          set to "false" if you want to keep a comment in a document after the contents of the comment
          have already been dealt with.
       </t>
@@ -1361,7 +1367,7 @@ the appendices for a complete description of these attributes.
 
    <!--cref/@source-->
    <section anchor="element.cref.attribute.source" toc="exclude">
-      <name>"source" attribute</name>
+      <name>"source" Attribute</name>
       <iref item="Attributes" subitem="source"/>
       <iref item="cref element" subitem="source attribute"/>
       <iref item="source attribute" subitem="in cref element"/>
@@ -1382,75 +1388,69 @@ the appendices for a complete description of these attributes.
    <iref item="date element" primary="true"/>
    <t>
       Provides information about the publication date.
-   </t>
-   <t>
-      Note that this element is used both for the boilerplate of the document
-      being produced, and also inside bibliographic references that use the &lt;<x:ref>front</x:ref>&gt; element.
-   </t>
-   <t>
-      In the boilerplate case, it defines the date of publication for the current document (Internet Draft or RFC).
+      This element is used for two cases: the boilerplate of the document
+      being produced, and inside bibliographic references that use the &lt;<x:ref>front</x:ref>&gt; element.
+   <list style="hanging">
+         <t hangText="Boilerplate for Internet-Drafts and RFCs:">
+      This element defines the date of publication for the current document (Internet-Draft or RFC).
       When producing Internet-Drafts, the prep tool uses this date to compute the expiration date (see <xref target="IDGUIDE"/>).
       When one or more of "year",
       "month", or "day" are left out, the prep tool will attempt to use the
       current system date if the attributes that are present are consistent with that
       date.
    </t>
-   <t>
-      Also in the first case, that month names, if given, need to match the full English month name: 
-      "January", "February", "March", "April", "May, "June", "July", "August",
-      "September", "October", "November", or "December".
+         <t>
+      If given, the month must be a number. Note that this restriction is different than that in
+      that in <xref target="XML2RFCv2"/>. The prep tool will silently change text month names to numbers.
+      The year must be a four-digit number.
    </t>
-   <t>
-      When the prep tool is used to create Internet Drafts, it will reject a submitted Internet Draft that has a &lt;<x:ref>date</x:ref>&gt;
+         <t>
+      When the prep tool is used to create Internet-Drafts, it will reject a submitted Internet-Draft that has a &lt;<x:ref>date</x:ref>&gt;
       element in the boilerplate for itself that is anything other than today. That is, the tool
       will not allow a submitter to specify a date other than the day of submission. To avoid this problem,
       authors might simply not include a &lt;<x:ref>date</x:ref>&gt; element in the boilerplate.
    </t>
-   <t>
-      In the case of bibliographic references, the date information can have prose text for the month or year.
+         <t hangText="Bibliographic references:">
+      The date information can have prose text for the month or year.
       For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
-      non-specific months (month="Second quarter") and so on, are allowed.
+      non-specific months (month="Second quarter") and so on are allowed.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+      </list>
+   </t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.date.contents"><!--AG-->
       <xref format="none" target="grammar.date">Content model</xref>: this element does not have any contents.</t>
 
    <!--date/@day-->
    <section anchor="element.date.attribute.day" toc="exclude">
-      <name>"day" attribute</name>
+      <name>"day" Attribute</name>
       <iref item="Attributes" subitem="day"/>
       <iref item="date element" subitem="day attribute"/>
       <iref item="day attribute" subitem="in date element"/>
       <t>
-         In the "boilerplate" case: the day of publication; this is a number.
-         Otherwise: an indication of the publication day, with the format
-         not being restricted.
+         The day of publication.
       </t>
    </section>
 
    <!--date/@month-->
    <section anchor="element.date.attribute.month" toc="exclude">
-      <name>"month" attribute</name>
+      <name>"month" Attribute</name>
       <iref item="Attributes" subitem="month"/>
       <iref item="date element" subitem="month attribute"/>
       <iref item="month attribute" subitem="in date element"/>
       <t>
-          In the "boilerplate" case: the month of publication; this is the English name of the month.
-          Otherwise: an indication of the publication month, with the format
-          not being restricted.
+          The month or months of publication.
        </t>
    </section>
 
    <!--date/@year-->
    <section anchor="element.date.attribute.year" toc="exclude">
-      <name>"year" attribute</name>
+      <name>"year" Attribute</name>
       <iref item="Attributes" subitem="year"/>
       <iref item="date element" subitem="year attribute"/>
       <iref item="year attribute" subitem="in date element"/>
       <t>
-         In the "boilerplate" case: the year of publication; this is a number (usually four-digit).
-         Otherwise: an indication of the publication year, with the format
-         not being restricted.
+         The year or years of publication.
       </t>
    </section>
 </section>
@@ -1466,7 +1466,7 @@ the appendices for a complete description of these attributes.
    <t>
       The definition part of an entry in a definition list.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>dl</x:ref>&gt; (<xref target="element.dl"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>dl</x:ref>&gt; (<xref target="element.dl"/>).</t>
    <t anchor="element.dd.contents"><!--AG-->
       <xref format="none" target="grammar.dd">Content model</xref>:
     </t>
@@ -1544,7 +1544,7 @@ the appendices for a complete description of these attributes.
 
    <!--dd/@anchor-->
    <section anchor="element.dd.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="dd element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in dd element"/>
@@ -1564,7 +1564,7 @@ the appendices for a complete description of these attributes.
    <iref item="displayreference element" primary="true"/>
    <t>
       This element gives a mapping between the anchor of a reference and a name that will be displayed instead.
-      This allows authors to display more mneumonic anchor names for automatically-included references.
+      This allows authors to display more mnemonic anchor names for automatically-included references.
       The mapping in this element only applies to &lt;<x:ref>xref</x:ref>&gt; elements whose format is "default".
       For example, if the reference uses the anchor "RFC6949", the following would cause that anchor in the body
       of displayed documents to be "RFC-dev":
@@ -1578,17 +1578,17 @@ the appendices for a complete description of these attributes.
      If a reference section is sorted, this element changes the sort order.
    </t>
    <t>
-     It is expected that this element will only be valid in input documents. It will be likely be removed by preparation
+     It is expected that this element will only be valid in input documents. It will be likely be removed by prep
      tools when preparing a final version after those tools have replaced all of the associated anchors, targets, and derivedContent
      attributes.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.displayreference.contents"><!--AG-->
       <xref format="none" target="grammar.displayreference">Content model</xref>: this element does not have any contents.</t>
 
    <!--displayreference/@target-->
    <section anchor="element.displayreference.attribute.target" toc="exclude">
-      <name>"target" attribute <em>(mandatory)</em>
+      <name>"target" Attribute <em> (Mandatory)</em>
       </name>
       <iref item="Attributes" subitem="target"/>
       <iref item="displayreference element" subitem="target attribute"/>
@@ -1600,7 +1600,7 @@ the appendices for a complete description of these attributes.
 
    <!--displayreference/@to-->
    <section anchor="element.displayreference.attribute.to" toc="exclude">
-      <name>"to" attribute <em>(mandatory)</em>
+      <name>"to" Attribute <em> (Mandatory)</em>
       </name>
       <iref item="Attributes" subitem="to"/>
       <iref item="displayreference element" subitem="to attribute"/>
@@ -1624,10 +1624,10 @@ the appendices for a complete description of these attributes.
    <t>
       A definition list. Each entry has a pair of elements: a term (&lt;<x:ref>dt</x:ref>&gt;) and
       a definition (&lt;<x:ref>dd</x:ref>&gt;).
-      (This is slightly different than the model used in HTML, whicl allows for multiple terms for
+      (This is slightly different and simpler than the model used in HTML, which allows for multiple terms for
       a single definition.)
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.dl.contents"><!--AG-->
       <xref format="none" target="grammar.dl">Content model</xref>:
     </t>
@@ -1648,7 +1648,7 @@ the appendices for a complete description of these attributes.
 
    <!--dl/@anchor-->
    <section anchor="element.dl.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="dl element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in dl element"/>
@@ -1659,7 +1659,7 @@ the appendices for a complete description of these attributes.
 
    <!--dl/@hanging-->
    <section anchor="element.dl.attribute.hanging" toc="exclude">
-      <name>"hanging" attribute</name>
+      <name>"hanging" Attribute</name>
       <iref item="Attributes" subitem="hanging"/>
       <iref item="dl element" subitem="hanging attribute"/>
       <iref item="hanging attribute" subitem="in dl element"/>
@@ -1677,7 +1677,7 @@ the appendices for a complete description of these attributes.
 
    <!--dl/@spacing-->
    <section anchor="element.dl.attribute.spacing" toc="exclude">
-      <name>"spacing" attribute</name>
+      <name>"spacing" Attribute</name>
       <iref item="Attributes" subitem="spacing"/>
       <iref item="dl element" subitem="spacing attribute"/>
       <iref item="spacing attribute" subitem="in dl element"/>
@@ -1704,7 +1704,7 @@ the appendices for a complete description of these attributes.
    <t>
       The term being defined in a definition list.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>dl</x:ref>&gt; (<xref target="element.dl"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>dl</x:ref>&gt; (<xref target="element.dl"/>).</t>
    <t anchor="element.dt.contents"><!--AG-->
       <xref format="none" target="grammar.dt">Content model</xref>:
     </t>
@@ -1748,7 +1748,7 @@ the appendices for a complete description of these attributes.
 
    <!--dt/@anchor-->
    <section anchor="element.dt.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="dt element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in dt element"/>
@@ -1767,11 +1767,11 @@ the appendices for a complete description of these attributes.
    <iref item="Elements" subitem="em" primary="true"/>
    <iref item="em element" primary="true"/>
    <t>
-        Indicates text that is semantically empahsized. This element will be displayed as italic after processing.
+        Indicates text that is semantically emphasized. This element will be displayed as italic after processing.
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.em.contents"><!--AG-->
       <xref format="none" target="grammar.em">Content model</xref>:
     </t>
@@ -1825,19 +1825,19 @@ the appendices for a complete description of these attributes.
    <t>
       The value is expected to be the addr-spec defined in <xref target="RFC6068" x:fmt="of" x:sec="2"/>.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.email.contents"><!--AG-->
       <xref format="none" target="grammar.email">Content model</xref>: only text content.</t>
 
    <!--email/@ascii-->
    <section anchor="element.email.attribute.ascii" toc="exclude">
-      <name>"ascii" attribute</name>
+      <name>"ascii" Attribute</name>
       <iref item="Attributes" subitem="ascii"/>
       <iref item="email element" subitem="ascii attribute"/>
       <iref item="ascii attribute" subitem="in email element"/>
       <t>
          The ASCII equivalent of the author's email address. This is only used if the email address has
-         one or two internationalized components.
+         any internationalized components.
       </t>
    </section>
 </section>
@@ -1898,13 +1898,13 @@ the appendices for a complete description of these attributes.
 </artwork>
       </figure>
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.eref.contents"><!--AG-->
       <xref format="none" target="grammar.eref">Content model</xref>: only text content.</t>
 
    <!--eref/@target-->
    <section anchor="element.eref.attribute.target" toc="exclude">
-      <name>"target" attribute <em>(mandatory)</em>
+      <name>"target" Attribute <em> (Mandatory)</em>
       </name>
       <iref item="Attributes" subitem="target"/>
       <iref item="eref element" subitem="target attribute"/>
@@ -1928,7 +1928,7 @@ the appendices for a complete description of these attributes.
       Contains a figure with a caption with the figure number.
       If the element contains a &lt;<x:ref>name</x:ref>&gt; element, the caption will also show that name.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.figure.contents"><!--AG-->
       <xref format="none" target="grammar.figure">Content model</xref>:</t>
    <t><!--AG-->In this order:</t>
@@ -1968,7 +1968,7 @@ the appendices for a complete description of these attributes.
 
    <!--figure/@align-->
    <section anchor="element.figure.attribute.align" toc="exclude">
-      <name>"align" attribute</name>
+      <name>"align" Attribute</name>
       <iref item="Attributes" subitem="align"/>
       <iref item="figure element" subitem="align attribute"/>
       <iref item="align attribute" subitem="in figure element"/>
@@ -1988,7 +1988,7 @@ the appendices for a complete description of these attributes.
 
    <!--figure/@alt-->
    <section anchor="element.figure.attribute.alt" toc="exclude">
-      <name>"alt" attribute</name>
+      <name>"alt" Attribute</name>
       <iref item="Attributes" subitem="alt"/>
       <iref item="figure element" subitem="alt attribute"/>
       <iref item="alt attribute" subitem="in figure element"/>
@@ -2000,7 +2000,7 @@ the appendices for a complete description of these attributes.
 
    <!--figure/@anchor-->
    <section anchor="element.figure.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="figure element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in figure element"/>
@@ -2011,7 +2011,7 @@ the appendices for a complete description of these attributes.
 
    <!--figure/@height-->
    <section anchor="element.figure.attribute.height" toc="exclude">
-      <name>"height" attribute</name>
+      <name>"height" Attribute</name>
       <iref item="Attributes" subitem="height"/>
       <iref item="figure element" subitem="height attribute"/>
       <iref item="height attribute" subitem="in figure element"/>
@@ -2022,7 +2022,7 @@ the appendices for a complete description of these attributes.
 
    <!--figure/@src-->
    <section anchor="element.figure.attribute.src" toc="exclude">
-      <name>"src" attribute</name>
+      <name>"src" Attribute</name>
       <iref item="Attributes" subitem="src"/>
       <iref item="figure element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in figure element"/>
@@ -2033,12 +2033,12 @@ the appendices for a complete description of these attributes.
 
    <!--figure/@suppress-title-->
    <section anchor="element.figure.attribute.suppress-title" toc="exclude">
-      <name>"suppress-title" attribute</name>
+      <name>"suppress-title" Attribute</name>
       <iref item="Attributes" subitem="suppress-title"/>
       <iref item="figure element" subitem="suppress-title attribute"/>
       <iref item="suppress-title attribute" subitem="in figure element"/>
       <t>
-            Deprecated. Figures always now get captions.
+            Deprecated.
          </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -2049,7 +2049,7 @@ the appendices for a complete description of these attributes.
 
    <!--figure/@title-->
    <section anchor="element.figure.attribute.title" toc="exclude">
-      <name>"title" attribute</name>
+      <name>"title" Attribute</name>
       <iref item="Attributes" subitem="title"/>
       <iref item="figure element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in figure element"/>
@@ -2060,7 +2060,7 @@ the appendices for a complete description of these attributes.
 
    <!--figure/@width-->
    <section anchor="element.figure.attribute.width" toc="exclude">
-      <name>"width" attribute</name>
+      <name>"width" Attribute</name>
       <iref item="Attributes" subitem="width"/>
       <iref item="figure element" subitem="width attribute"/>
       <iref item="width attribute" subitem="in figure element"/>
@@ -2079,8 +2079,8 @@ the appendices for a complete description of these attributes.
    <iref item="Elements" subitem="front" primary="true"/>
    <iref item="front element" primary="true"/>
    <t>
-      Represent the "front matter": metadata (such as author information),
-      abstract, and additional notes.
+      Represents the "front matter": metadata (such as author information),
+      the Abstract, and additional notes.
    </t>
    <t>
       A &lt;<x:ref>front</x:ref>&gt; element may have more than one &lt;<x:ref>seriesInfo</x:ref>&gt; elements.
@@ -2094,7 +2094,7 @@ the appendices for a complete description of these attributes.
       multiple &lt;<x:ref>seriesInfo</x:ref>&gt; elements interact as described in the section on
       &lt;<x:ref>seriesInfo</x:ref>&gt;.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>), and &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>) and &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.front.contents"><!--AG-->
       <xref format="none" target="grammar.front">Content model</xref>:</t>
    <t><!--AG-->In this order:</t>
@@ -2162,7 +2162,7 @@ the appendices for a complete description of these attributes.
       Provides terms for the document's index.
    </t>
    <t>
-      Index entries can be either be regular entries (when just the "item"
+      Index entries can be either regular entries (when just the "item"
       attribute is given) or nested entries (by specifying "subitem" as well),
       grouped under a regular entry.
    </t>
@@ -2171,19 +2171,19 @@ the appendices for a complete description of these attributes.
       occurred. An exception is the occurrence as a child element of
       &lt;<x:ref>section</x:ref>&gt;, in which case the whole section is
       considered to be relevant for that index entry. In some formats, index
-      entries of this type might be displayed as range.
+      entries of this type might be displayed as ranges.
    </t>
    <t>
-      When the prep tool is creating index content, it collects the items in a case-senstive fashion
+      When the prep tool is creating index content, it collects the items in a case-sensitive fashion
       for both the item and subitem level.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.iref.contents"><!--AG-->
       <xref format="none" target="grammar.iref">Content model</xref>: this element does not have any contents.</t>
 
    <!--iref/@item-->
    <section anchor="element.iref.attribute.item" toc="exclude">
-      <name>"item" attribute <em>(mandatory)</em>
+      <name>"item" Attribute <em> (Mandatory)</em>
       </name>
       <iref item="Attributes" subitem="item"/>
       <iref item="iref element" subitem="item attribute"/>
@@ -2195,13 +2195,14 @@ the appendices for a complete description of these attributes.
 
    <!--iref/@primary-->
    <section anchor="element.iref.attribute.primary" toc="exclude">
-      <name>"primary" attribute</name>
+      <name>"primary" Attribute</name>
       <iref item="Attributes" subitem="primary"/>
       <iref item="iref element" subitem="primary attribute"/>
       <iref item="primary attribute" subitem="in iref element"/>
       <t>
             Setting this to "true" declares the occurrence as "primary",
             which might cause it to be highlighted in the index.
+            There is no restriction on the number of occurrences that can be "primary".
          </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -2212,7 +2213,7 @@ the appendices for a complete description of these attributes.
 
    <!--iref/@subitem-->
    <section anchor="element.iref.attribute.subitem" toc="exclude">
-      <name>"subitem" attribute</name>
+      <name>"subitem" Attribute</name>
       <iref item="Attributes" subitem="subitem"/>
       <iref item="iref element" subitem="subitem attribute"/>
       <iref item="subitem attribute" subitem="in iref element"/>
@@ -2241,7 +2242,7 @@ the appendices for a complete description of these attributes.
       Keywords are used both in the RFC Index and in the metadata of generated
       document representations.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.keyword.contents"><!--AG-->
       <xref format="none" target="grammar.keyword">Content model</xref>: only text content.</t>
 </section>
@@ -2257,7 +2258,7 @@ the appendices for a complete description of these attributes.
    <t>
       A list element, used in &lt;<x:ref>ol</x:ref>&gt; and &lt;<x:ref>ul</x:ref>&gt;.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>ol</x:ref>&gt; (<xref target="element.ol"/>), and &lt;<x:ref>ul</x:ref>&gt; (<xref target="element.ul"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>ol</x:ref>&gt; (<xref target="element.ol"/>) and &lt;<x:ref>ul</x:ref>&gt; (<xref target="element.ul"/>).</t>
    <t anchor="element.li.contents"><!--AG-->
       <xref format="none" target="grammar.li">Content model</xref>:
     </t>
@@ -2335,7 +2336,7 @@ the appendices for a complete description of these attributes.
 
    <!--li/@anchor-->
    <section anchor="element.li.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="li element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in li element"/>
@@ -2361,19 +2362,19 @@ the appendices for a complete description of these attributes.
       a &lt;link&gt; element:
          <list style="symbols">
          <t>
-               The current ISSN for the RFC Series.
+               The current ISSN for the RFC series.
                The value for the "rel" attribute is "item".
                The link should use the form "urn:issn:".
             </t>
          <t>
                The DOI for this document.
                The value for the "rel" attribute is "describedBy".
-               The link should use the form specified in <xref target="DOI"/>.
+               The link should use the form specified in <xref target="RFC7669"/>.
             </t>
          <t>
-               The Internet Draft that was submitted to the RFC Editor to become the published RFC.
+               The Internet-Draft that was submitted to the RFC Editor to become the published RFC.
                The value for the "rel" attribute is "derivedFrom".
-               The link should be to an IETF-controlled web site that retains copies of Internet Drafts.
+               The link should be to an IETF-controlled web site that retains copies of Internet-Drafts.
             </t>
          <t>
                A representation of the document offered by the document author.
@@ -2386,13 +2387,13 @@ the appendices for a complete description of these attributes.
         In RFC production mode, the prep tool needs to check the values for &lt;link&gt; before an RFC is published.
         In draft production mode, the prep tool might remove some &lt;link&gt; elements during the draft submission process.
       </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.link.contents"><!--AG-->
       <xref format="none" target="grammar.link">Content model</xref>: this element does not have any contents.</t>
 
    <!--link/@href-->
    <section anchor="element.link.attribute.href" toc="exclude">
-      <name>"href" attribute <em>(mandatory)</em>
+      <name>"href" Attribute <em> (Mandatory)</em>
       </name>
       <iref item="Attributes" subitem="href"/>
       <iref item="link element" subitem="href attribute"/>
@@ -2404,7 +2405,7 @@ the appendices for a complete description of these attributes.
 
    <!--link/@rel-->
    <section anchor="element.link.attribute.rel" toc="exclude">
-      <name>"rel" attribute</name>
+      <name>"rel" Attribute</name>
       <iref item="Attributes" subitem="rel"/>
       <iref item="link element" subitem="rel attribute"/>
       <iref item="rel attribute" subitem="in link element"/>
@@ -2426,7 +2427,7 @@ the appendices for a complete description of these attributes.
    <t>
       Represents the main content of the document.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>rfc</x:ref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.middle.contents"><!--AG-->
       <xref format="none" target="grammar.middle">Content model</xref>:
     </t>
@@ -2449,7 +2450,7 @@ the appendices for a complete description of these attributes.
       The name of the section, note, figure, or texttable. This name can have flow markup such
       as to make some characters use a fixed-width font, or to include references.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>), and &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>), and &lt;<x:ref>texttable</x:ref>&gt; (<xref target="element.texttable"/>).</t>
    <t anchor="element.name.contents"><!--AG-->
       <xref format="none" target="grammar.name">Content model</xref>:
     </t>
@@ -2483,14 +2484,14 @@ the appendices for a complete description of these attributes.
    <iref item="Elements" subitem="note" primary="true"/>
    <iref item="note element" primary="true"/>
    <t>
-      Creates an unnumbered section that appears after the abstract.
+      Creates an unnumbered section that appears after the Abstract.
    </t>
    <t>
       It is usually used for additional information to reviewers (working
       group information, mailing list, ...), or for additional publication
       information such as "IESG Notes".
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.note.contents"><!--AG-->
       <xref format="none" target="grammar.note">Content model</xref>:</t>
    <t><!--AG-->In this order:</t>
@@ -2521,7 +2522,7 @@ the appendices for a complete description of these attributes.
 
    <!--note/@removeInRFC-->
    <section anchor="element.note.attribute.removeInRFC" toc="exclude">
-      <name>"removeInRFC" attribute</name>
+      <name>"removeInRFC" Attribute</name>
       <iref item="Attributes" subitem="removeInRFC"/>
       <iref item="note element" subitem="removeInRFC attribute"/>
       <iref item="removeInRFC attribute" subitem="in note element"/>
@@ -2538,7 +2539,7 @@ the appendices for a complete description of these attributes.
 
    <!--note/@title-->
    <section anchor="element.note.attribute.title" toc="exclude">
-      <name>"title" attribute</name>
+      <name>"title" Attribute</name>
       <iref item="Attributes" subitem="title"/>
       <iref item="note element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in note element"/>
@@ -2560,7 +2561,7 @@ the appendices for a complete description of these attributes.
       An ordered list. The labels on the items will be either a number or a letter, depending
       on the value of the style attribute. 
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.ol.contents"><!--AG-->
       <xref format="none" target="grammar.ol">Content model</xref>:
     </t>
@@ -2572,7 +2573,7 @@ the appendices for a complete description of these attributes.
 
    <!--ol/@anchor-->
    <section anchor="element.ol.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="ol element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in ol element"/>
@@ -2583,7 +2584,7 @@ the appendices for a complete description of these attributes.
 
    <!--ol/@group-->
    <section anchor="element.ol.attribute.group" toc="exclude">
-      <name>"group" attribute</name>
+      <name>"group" Attribute</name>
       <iref item="Attributes" subitem="group"/>
       <iref item="ol element" subitem="group attribute"/>
       <iref item="group attribute" subitem="in ol element"/>
@@ -2598,7 +2599,7 @@ the appendices for a complete description of these attributes.
 
    <!--ol/@spacing-->
    <section anchor="element.ol.attribute.spacing" toc="exclude">
-      <name>"spacing" attribute</name>
+      <name>"spacing" Attribute</name>
       <iref item="Attributes" subitem="spacing"/>
       <iref item="ol element" subitem="spacing attribute"/>
       <iref item="spacing attribute" subitem="in ol element"/>
@@ -2615,7 +2616,7 @@ the appendices for a complete description of these attributes.
 
    <!--ol/@start-->
    <section anchor="element.ol.attribute.start" toc="exclude">
-      <name>"start" attribute</name>
+      <name>"start" Attribute</name>
       <iref item="Attributes" subitem="start"/>
       <iref item="ol element" subitem="start attribute"/>
       <iref item="start attribute" subitem="in ol element"/>
@@ -2626,7 +2627,7 @@ the appendices for a complete description of these attributes.
 
    <!--ol/@type-->
    <section anchor="element.ol.attribute.type" toc="exclude">
-      <name>"type" attribute</name>
+      <name>"type" Attribute</name>
       <iref item="Attributes" subitem="type"/>
       <iref item="ol element" subitem="type attribute"/>
       <iref item="type attribute" subitem="in ol element"/>
@@ -2649,7 +2650,7 @@ the appendices for a complete description of these attributes.
         The value is a free-form text that allows counter values to be
         inserted using a "percent-letter" format. For instance, "[REQ%d]"
         generates labels of the form "[REQ1]", where "%d" inserts the
-        item number as decimal number.
+        item number as a decimal number.
       </t>
       <t>
          The following formats are supported:
@@ -2665,7 +2666,7 @@ the appendices for a complete description of these attributes.
        </t>
       <t>
         It is an error for the type string to be empty.
-        For bulleted lists, you use the &lt;<x:ref>ul</x:ref>&gt; element.
+        For bulleted lists, use the &lt;<x:ref>ul</x:ref>&gt; element.
         For lists that have neither bullets nor numbers, use the &lt;<x:ref>ul</x:ref>&gt; element with the
         'empty="true"' attribute.
       </t>
@@ -2687,18 +2688,18 @@ the appendices for a complete description of these attributes.
       Specifies the affiliation (<xref target="RFC7322"/>) of an author.
    </t>
    <t>
-      This information appears in both the "Author's Address" section and
+      This information appears both in the "Author's Address" section and
       on the front page (see <xref target="RFC7322"/> for more information).
       If the value is long, an abbreviated variant can be specified in the
       "abbrev" attribute.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>author</x:ref>&gt; (<xref target="element.author"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>author</x:ref>&gt; (<xref target="element.author"/>).</t>
    <t anchor="element.organization.contents"><!--AG-->
       <xref format="none" target="grammar.organization">Content model</xref>: only text content.</t>
 
    <!--organization/@abbrev-->
    <section anchor="element.organization.attribute.abbrev" toc="exclude">
-      <name>"abbrev" attribute</name>
+      <name>"abbrev" Attribute</name>
       <iref item="Attributes" subitem="abbrev"/>
       <iref item="organization element" subitem="abbrev attribute"/>
       <iref item="abbrev attribute" subitem="in organization element"/>
@@ -2709,7 +2710,7 @@ the appendices for a complete description of these attributes.
 
    <!--organization/@ascii-->
    <section anchor="element.organization.attribute.ascii" toc="exclude">
-      <name>"ascii" attribute</name>
+      <name>"ascii" Attribute</name>
       <iref item="Attributes" subitem="ascii"/>
       <iref item="organization element" subitem="ascii attribute"/>
       <iref item="ascii attribute" subitem="in organization element"/>
@@ -2736,7 +2737,7 @@ the appendices for a complete description of these attributes.
       syntax. See <xref target="RFC3966" x:fmt="of" x:sec="3"/> 
       for details.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.phone.contents"><!--AG-->
       <xref format="none" target="grammar.phone">Content model</xref>: only text content.</t>
 </section>
@@ -2756,7 +2757,7 @@ the appendices for a complete description of these attributes.
       &lt;<x:ref>region</x:ref>&gt;, &lt;<x:ref>code</x:ref>&gt;, and &lt;<x:ref>country</x:ref>&gt;
       elements, or only an ordered set of &lt;<x:ref>postalLine</x:ref>&gt; elements, but not both.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.postal.contents"><!--AG-->
       <xref format="none" target="grammar.postal">Content model</xref>:
     </t>
@@ -2805,13 +2806,13 @@ the appendices for a complete description of these attributes.
       Represents one line of a postal address. When more than one &lt;postalLine&gt; is given, the prep tool
       emits them in the order given.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.postalLine.contents"><!--AG-->
       <xref format="none" target="grammar.postalLine">Content model</xref>: only text content.</t>
 
    <!--postalLine/@ascii-->
    <section anchor="element.postalLine.attribute.ascii" toc="exclude">
-      <name>"ascii" attribute</name>
+      <name>"ascii" Attribute</name>
       <iref item="Attributes" subitem="ascii"/>
       <iref item="postalLine element" subitem="ascii attribute"/>
       <iref item="ascii attribute" subitem="in postalLine element"/>
@@ -2856,7 +2857,7 @@ the appendices for a complete description of these attributes.
 </artwork>
       </figure>
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
    <t anchor="element.refcontent.contents"><!--AG-->
       <xref format="none" target="grammar.refcontent">Content model</xref>:
     </t>
@@ -2895,7 +2896,7 @@ the appendices for a complete description of these attributes.
    <t>
       Represents a bibliographical reference.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>referencegroup</x:ref>&gt; (<xref target="element.referencegroup"/>), and &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>referencegroup</x:ref>&gt; (<xref target="element.referencegroup"/>) and &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
    <t anchor="element.reference.contents"><!--AG-->
       <xref format="none" target="grammar.reference">Content model</xref>:</t>
    <t><!--AG-->In this order:</t>
@@ -2924,21 +2925,21 @@ the appendices for a complete description of these attributes.
 
    <!--reference/@anchor-->
    <section anchor="element.reference.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute <em>(mandatory)</em>
+      <name>"anchor" Attribute <em> (Mandatory)</em>
       </name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="reference element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in reference element"/>
       <t>
         Document-wide unique identifier for this reference. Usually, this will
-        be used both to "label" the reference in the references section, and
+        be used both to "label" the reference in the "References" section, and
         as an identifier in links to this reference entry.
       </t>
    </section>
 
    <!--reference/@quoteTitle-->
    <section anchor="element.reference.attribute.quoteTitle" toc="exclude">
-      <name>"quoteTitle" attribute</name>
+      <name>"quoteTitle" Attribute</name>
       <iref item="Attributes" subitem="quoteTitle"/>
       <iref item="reference element" subitem="quoteTitle attribute"/>
       <iref item="quoteTitle attribute" subitem="in reference element"/>
@@ -2955,7 +2956,7 @@ the appendices for a complete description of these attributes.
 
    <!--reference/@target-->
    <section anchor="element.reference.attribute.target" toc="exclude">
-      <name>"target" attribute</name>
+      <name>"target" Attribute</name>
       <iref item="Attributes" subitem="target"/>
       <iref item="reference element" subitem="target attribute"/>
       <iref item="target attribute" subitem="in reference element"/>
@@ -2978,7 +2979,7 @@ the appendices for a complete description of these attributes.
       This is most often used for references in the STD and BCP series, where a single reference
       (such as "BCP 9") encompasses more than one RFC.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>references</x:ref>&gt; (<xref target="element.references"/>).</t>
    <t anchor="element.referencegroup.contents"><!--AG-->
       <xref format="none" target="grammar.referencegroup">Content model</xref>:
     </t>
@@ -2990,14 +2991,14 @@ the appendices for a complete description of these attributes.
 
    <!--referencegroup/@anchor-->
    <section anchor="element.referencegroup.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute <em>(mandatory)</em>
+      <name>"anchor" Attribute <em> (Mandatory)</em>
       </name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="referencegroup element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in referencegroup element"/>
       <t>
         Document-wide unique identifier for this reference group. Usually, this will
-        be used both to "label" the reference group in the references section, and
+        be used both to "label" the reference group in the "References" section, and
         as an identifier in links to this reference entry.
       </t>
    </section>
@@ -3016,7 +3017,7 @@ the appendices for a complete description of these attributes.
    </t>
    <t>
       In the early days of the RFC series, there was only one "References" section per RFC. This convention
-      was later changed to group references into two sets, "Normative" and "Informative"
+      was later changed to group references into two sets, "Normative" and "Informative",
       as described in <xref target="RFC7322"/>).
       This vocabulary supports the split with the &lt;<x:ref>name</x:ref>&gt; child element.
       In general, the title should be either "Normative References" or "Informative References".
@@ -3025,7 +3026,7 @@ the appendices for a complete description of these attributes.
       By default, the order of references is significant. Some formatters, however,
       might be able to be requested to sort them based on their anchor names.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.references.contents"><!--AG-->
       <xref format="none" target="grammar.references">Content model</xref>:</t>
    <t><!--AG-->In this order:</t>
@@ -3050,7 +3051,7 @@ the appendices for a complete description of these attributes.
 
    <!--references/@anchor-->
    <section anchor="element.references.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="references element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in references element"/>
@@ -3061,7 +3062,7 @@ the appendices for a complete description of these attributes.
 
    <!--references/@title-->
    <section anchor="element.references.attribute.title" toc="exclude">
-      <name>"title" attribute</name>
+      <name>"title" Attribute</name>
       <iref item="Attributes" subitem="title"/>
       <iref item="references element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in references element"/>
@@ -3082,13 +3083,13 @@ the appendices for a complete description of these attributes.
    <t>
       Provides the region name in a postal address.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.region.contents"><!--AG-->
       <xref format="none" target="grammar.region">Content model</xref>: only text content.</t>
 
    <!--region/@ascii-->
    <section anchor="element.region.attribute.ascii" toc="exclude">
-      <name>"ascii" attribute</name>
+      <name>"ascii" Attribute</name>
       <iref item="Attributes" subitem="ascii"/>
       <iref item="region element" subitem="ascii attribute"/>
       <iref item="ascii attribute" subitem="in region element"/>
@@ -3107,7 +3108,7 @@ the appendices for a complete description of these attributes.
    <iref item="Elements" subitem="relref" primary="true"/>
    <iref item="relref element" primary="true"/>
    <t>
-      A relative link to a reference from the References section.
+      A relative link to a reference from the "References" section.
       Formatters that have links (such as HTML and PDF) are likely to render &lt;relref&gt; elements as external hyperlinks
       to the specified part of the reference, creating the link target by combining the base URI from the
       &lt;<x:ref>reference</x:ref>&gt; element with the "relative" attribute from this element.
@@ -3141,13 +3142,13 @@ the appendices for a complete description of these attributes.
       </figure>
    </t>
    <t/>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.relref.contents"><!--AG-->
       <xref format="none" target="grammar.relref">Content model</xref>: only text content.</t>
 
    <!--relref/@displayFormat-->
    <section anchor="element.relref.attribute.displayFormat" toc="exclude">
-      <name>"displayFormat" attribute</name>
+      <name>"displayFormat" Attribute</name>
       <iref item="Attributes" subitem="displayFormat"/>
       <iref item="relref element" subitem="displayFormat attribute"/>
       <iref item="displayFormat attribute" subitem="in relref element"/>
@@ -3299,7 +3300,7 @@ the appendices for a complete description of these attributes.
 
    <!--relref/@relative-->
    <section anchor="element.relref.attribute.relative" toc="exclude">
-      <name>"relative" attribute</name>
+      <name>"relative" Attribute</name>
       <iref item="Attributes" subitem="relative"/>
       <iref item="relref element" subitem="relative attribute"/>
       <iref item="relative attribute" subitem="in relref element"/>
@@ -3312,7 +3313,7 @@ the appendices for a complete description of these attributes.
 
    <!--relref/@section-->
    <section anchor="element.relref.attribute.section" toc="exclude">
-      <name>"section" attribute</name>
+      <name>"section" Attribute</name>
       <iref item="Attributes" subitem="section"/>
       <iref item="relref element" subitem="section attribute"/>
       <iref item="section attribute" subitem="in relref element"/>
@@ -3324,7 +3325,7 @@ the appendices for a complete description of these attributes.
 
    <!--relref/@target-->
    <section anchor="element.relref.attribute.target" toc="exclude">
-      <name>"target" attribute <em>(mandatory)</em>
+      <name>"target" Attribute <em> (Mandatory)</em>
       </name>
       <iref item="Attributes" subitem="target"/>
       <iref item="relref element" subitem="target attribute"/>
@@ -3372,7 +3373,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@category-->
    <section anchor="element.rfc.attribute.category" toc="exclude">
-      <name>"category" attribute</name>
+      <name>"category" Attribute</name>
       <iref item="Attributes" subitem="category"/>
       <iref item="rfc element" subitem="category attribute"/>
       <iref item="category attribute" subitem="in rfc element"/>
@@ -3383,7 +3384,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@consensus-->
    <section anchor="element.rfc.attribute.consensus" toc="exclude">
-      <name>"consensus" attribute</name>
+      <name>"consensus" Attribute</name>
       <iref item="Attributes" subitem="consensus"/>
       <iref item="rfc element" subitem="consensus attribute"/>
       <iref item="consensus attribute" subitem="in rfc element"/>
@@ -3405,7 +3406,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@docName-->
    <section anchor="element.rfc.attribute.docName" toc="exclude">
-      <name>"docName" attribute</name>
+      <name>"docName" Attribute</name>
       <iref item="Attributes" subitem="docName"/>
       <iref item="rfc element" subitem="docName attribute"/>
       <iref item="docName attribute" subitem="in rfc element"/>
@@ -3416,13 +3417,13 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@indexInclude-->
    <section anchor="element.rfc.attribute.indexInclude" toc="exclude">
-      <name>"indexInclude" attribute</name>
+      <name>"indexInclude" Attribute</name>
       <iref item="Attributes" subitem="indexInclude"/>
       <iref item="rfc element" subitem="indexInclude attribute"/>
       <iref item="indexInclude attribute" subitem="in rfc element"/>
       <t>
          Specifies whether or not a formatter is requested to include an index in generated files.
-         If the souce file has no &lt;<x:ref>iref</x:ref>&gt; elements, an index is
+         If the source file has no &lt;<x:ref>iref</x:ref>&gt; elements, an index is
          never generated. This option is useful for generating documents where the
          source document has &lt;<x:ref>iref</x:ref>&gt; elements but the author no longer
          wants an index. 
@@ -3436,7 +3437,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@ipr-->
    <section anchor="element.rfc.attribute.ipr" toc="exclude">
-      <name>"ipr" attribute</name>
+      <name>"ipr" Attribute</name>
       <iref item="Attributes" subitem="ipr"/>
       <iref item="rfc element" subitem="ipr attribute"/>
       <iref item="ipr attribute" subitem="in rfc element"/>
@@ -3448,12 +3449,12 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@iprExtract-->
    <section anchor="element.rfc.attribute.iprExtract" toc="exclude">
-      <name>"iprExtract" attribute</name>
+      <name>"iprExtract" Attribute</name>
       <iref item="Attributes" subitem="iprExtract"/>
       <iref item="rfc element" subitem="iprExtract attribute"/>
       <iref item="iprExtract attribute" subitem="in rfc element"/>
       <t>
-            Identifies a single section within the document for which extraction "as-is"
+            Identifies a single section within the document for which extraction "as is"
             is explicitly allowed (only relevant for historic values of the "ipr"
             attribute).
       </t>
@@ -3461,7 +3462,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@number-->
    <section anchor="element.rfc.attribute.number" toc="exclude">
-      <name>"number" attribute</name>
+      <name>"number" Attribute</name>
       <iref item="Attributes" subitem="number"/>
       <iref item="rfc element" subitem="number attribute"/>
       <iref item="number attribute" subitem="in rfc element"/>
@@ -3472,7 +3473,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@obsoletes-->
    <section anchor="element.rfc.attribute.obsoletes" toc="exclude">
-      <name>"obsoletes" attribute</name>
+      <name>"obsoletes" Attribute</name>
       <iref item="Attributes" subitem="obsoletes"/>
       <iref item="rfc element" subitem="obsoletes attribute"/>
       <iref item="obsoletes attribute" subitem="in rfc element"/>
@@ -3488,12 +3489,12 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@prepTime-->
    <section anchor="element.rfc.attribute.prepTime" toc="exclude">
-      <name>"prepTime" attribute</name>
+      <name>"prepTime" Attribute</name>
       <iref item="Attributes" subitem="prepTime"/>
       <iref item="rfc element" subitem="prepTime attribute"/>
       <iref item="prepTime attribute" subitem="in rfc element"/>
       <t>
-         The date that the XML was processed by a preparation tool.
+         The date that the XML was processed by a prep tool.
          This is included in the XML file just before it is saved to disk.
          The value is formatted using the format from <xref target="RFC3339"/>.
       </t>
@@ -3501,7 +3502,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@seriesNo-->
    <section anchor="element.rfc.attribute.seriesNo" toc="exclude">
-      <name>"seriesNo" attribute</name>
+      <name>"seriesNo" Attribute</name>
       <iref item="Attributes" subitem="seriesNo"/>
       <iref item="rfc element" subitem="seriesNo attribute"/>
       <iref item="seriesNo attribute" subitem="in rfc element"/>
@@ -3512,7 +3513,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@sortRefs-->
    <section anchor="element.rfc.attribute.sortRefs" toc="exclude">
-      <name>"sortRefs" attribute</name>
+      <name>"sortRefs" Attribute</name>
       <iref item="Attributes" subitem="sortRefs"/>
       <iref item="rfc element" subitem="sortRefs attribute"/>
       <iref item="sortRefs attribute" subitem="in rfc element"/>
@@ -3528,7 +3529,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@submissionType-->
    <section anchor="element.rfc.attribute.submissionType" toc="exclude">
-      <name>"submissionType" attribute</name>
+      <name>"submissionType" Attribute</name>
       <iref item="Attributes" subitem="submissionType"/>
       <iref item="rfc element" subitem="submissionType attribute"/>
       <iref item="submissionType attribute" subitem="in rfc element"/>
@@ -3549,7 +3550,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@symRefs-->
    <section anchor="element.rfc.attribute.symRefs" toc="exclude">
-      <name>"symRefs" attribute</name>
+      <name>"symRefs" Attribute</name>
       <iref item="Attributes" subitem="symRefs"/>
       <iref item="rfc element" subitem="symRefs attribute"/>
       <iref item="symRefs attribute" subitem="in rfc element"/>
@@ -3566,7 +3567,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@tocDepth-->
    <section anchor="element.rfc.attribute.tocDepth" toc="exclude">
-      <name>"tocDepth" attribute</name>
+      <name>"tocDepth" Attribute</name>
       <iref item="Attributes" subitem="tocDepth"/>
       <iref item="rfc element" subitem="tocDepth attribute"/>
       <iref item="tocDepth attribute" subitem="in rfc element"/>
@@ -3577,7 +3578,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@tocInclude-->
    <section anchor="element.rfc.attribute.tocInclude" toc="exclude">
-      <name>"tocInclude" attribute</name>
+      <name>"tocInclude" Attribute</name>
       <iref item="Attributes" subitem="tocInclude"/>
       <iref item="rfc element" subitem="tocInclude attribute"/>
       <iref item="tocInclude attribute" subitem="in rfc element"/>
@@ -3593,7 +3594,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@updates-->
    <section anchor="element.rfc.attribute.updates" toc="exclude">
-      <name>"updates" attribute</name>
+      <name>"updates" Attribute</name>
       <iref item="Attributes" subitem="updates"/>
       <iref item="rfc element" subitem="updates attribute"/>
       <iref item="updates attribute" subitem="in rfc element"/>
@@ -3609,7 +3610,7 @@ the appendices for a complete description of these attributes.
 
    <!--rfc/@version-->
    <section anchor="element.rfc.attribute.version" toc="exclude">
-      <name>"version" attribute</name>
+      <name>"version" Attribute</name>
       <iref item="Attributes" subitem="version"/>
       <iref item="rfc element" subitem="version attribute"/>
       <iref item="version attribute" subitem="in rfc element"/>
@@ -3632,10 +3633,10 @@ the appendices for a complete description of these attributes.
       &lt;back&gt; element).
    </t>
    <t>
-      Sub-sections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
+      Subsections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
       Sections are allowed to be empty.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>), &lt;<x:ref>boilerplate</x:ref>&gt; (<xref target="element.boilerplate"/>), &lt;<x:ref>middle</x:ref>&gt; (<xref target="element.middle"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>), &lt;<x:ref>boilerplate</x:ref>&gt; (<xref target="element.boilerplate"/>), &lt;<x:ref>middle</x:ref>&gt; (<xref target="element.middle"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.section.contents"><!--AG-->
       <xref format="none" target="grammar.section">Content model</xref>:</t>
    <t><!--AG-->In this order:</t>
@@ -3695,7 +3696,7 @@ the appendices for a complete description of these attributes.
 
    <!--section/@anchor-->
    <section anchor="element.section.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="section element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in section element"/>
@@ -3706,7 +3707,7 @@ the appendices for a complete description of these attributes.
 
    <!--section/@numbered-->
    <section anchor="element.section.attribute.numbered" toc="exclude">
-      <name>"numbered" attribute</name>
+      <name>"numbered" Attribute</name>
       <iref item="Attributes" subitem="numbered"/>
       <iref item="section element" subitem="numbered attribute"/>
       <iref item="numbered attribute" subitem="in section element"/>
@@ -3724,7 +3725,7 @@ the appendices for a complete description of these attributes.
 
    <!--section/@removeInRFC-->
    <section anchor="element.section.attribute.removeInRFC" toc="exclude">
-      <name>"removeInRFC" attribute</name>
+      <name>"removeInRFC" Attribute</name>
       <iref item="Attributes" subitem="removeInRFC"/>
       <iref item="section element" subitem="removeInRFC attribute"/>
       <iref item="removeInRFC attribute" subitem="in section element"/>
@@ -3742,7 +3743,7 @@ the appendices for a complete description of these attributes.
 
    <!--section/@title-->
    <section anchor="element.section.attribute.title" toc="exclude">
-      <name>"title" attribute</name>
+      <name>"title" Attribute</name>
       <iref item="Attributes" subitem="title"/>
       <iref item="section element" subitem="title attribute"/>
       <iref item="title attribute" subitem="in section element"/>
@@ -3753,7 +3754,7 @@ the appendices for a complete description of these attributes.
 
    <!--section/@toc-->
    <section anchor="element.section.attribute.toc" toc="exclude">
-      <name>"toc" attribute</name>
+      <name>"toc" Attribute</name>
       <iref item="Attributes" subitem="toc"/>
       <iref item="section element" subitem="toc attribute"/>
       <iref item="toc attribute" subitem="in section element"/>
@@ -3795,7 +3796,7 @@ the appendices for a complete description of these attributes.
       &lt;<x:ref>front</x:ref>&gt; element inside the &lt;<x:ref>rfc</x:ref>&gt; element, looking
       for "rfc" or "Internet-Draft". (Specifying neither value in any of the
       &lt;<x:ref>seriesInfo</x:ref>&gt; elements can be useful for producing other types of
-      documents, but is out-of-scope for this specification.)
+      documents, but is out of scope for this specification.)
    </t>
    <t>
 It is invalid to have multiple &lt;<x:ref>seriesInfo</x:ref>&gt; elements inside the same &lt;<x:ref>front</x:ref>&gt;
@@ -3803,13 +3804,13 @@ element containing the same "name" value.  Some combinations of &lt;<x:ref>serie
 make no sense, such as having both &lt;seriesInfo name="rfc"/&gt; and &lt;seriesInfo name="Internet-Draft"/&gt;
 in the same &lt;front&gt; element.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>), and &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>; deprecated in this context).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>) and &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>; deprecated in this context).</t>
    <t anchor="element.seriesInfo.contents"><!--AG-->
       <xref format="none" target="grammar.seriesInfo">Content model</xref>: this element does not have any contents.</t>
 
    <!--seriesInfo/@asciiName-->
    <section anchor="element.seriesInfo.attribute.asciiName" toc="exclude">
-      <name>"asciiName" attribute</name>
+      <name>"asciiName" Attribute</name>
       <iref item="Attributes" subitem="asciiName"/>
       <iref item="seriesInfo element" subitem="asciiName attribute"/>
       <iref item="asciiName attribute" subitem="in seriesInfo element"/>
@@ -3820,7 +3821,7 @@ in the same &lt;front&gt; element.
 
    <!--seriesInfo/@asciiValue-->
    <section anchor="element.seriesInfo.attribute.asciiValue" toc="exclude">
-      <name>"asciiValue" attribute</name>
+      <name>"asciiValue" Attribute</name>
       <iref item="Attributes" subitem="asciiValue"/>
       <iref item="seriesInfo element" subitem="asciiValue attribute"/>
       <iref item="asciiValue attribute" subitem="in seriesInfo element"/>
@@ -3831,7 +3832,7 @@ in the same &lt;front&gt; element.
 
    <!--seriesInfo/@name-->
    <section anchor="element.seriesInfo.attribute.name" toc="exclude">
-      <name>"name" attribute <em>(mandatory)</em>
+      <name>"name" Attribute <em> (Mandatory)</em>
       </name>
       <iref item="Attributes" subitem="name"/>
       <iref item="seriesInfo element" subitem="name attribute"/>
@@ -3851,7 +3852,7 @@ in the same &lt;front&gt; element.
          element with a name of "Internet-Draft", it can also have at most one additional
          &lt;<x:ref>seriesInfo</x:ref>&gt; element with a "status" attribute whose value is of
          "standard", "full-standard", "bcp", "fyi", "informational", "experimental", or
-         "historic" to indicate the intended status of this Internet Draft, if it were to be later
+         "historic" to indicate the intended status of this Internet-Draft, if it were to be later
          published as an RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt; element has
          one of those statuses, the name MUST be "".
       </t>
@@ -3875,7 +3876,7 @@ in the same &lt;front&gt; element.
          This MUST NOT be used when &lt;<x:ref>seriesInfo</x:ref>&gt;
          element is an eventual child element of a &lt;<x:ref>rfc</x:ref>&gt; element,
          only as an enventual child of a &lt;<x:ref>reference</x:ref>&gt; element.
-         The value attribute should use the form specified in <xref target="DOI"/>.
+         The value attribute should use the form specified in <xref target="RFC7669"/>.
       </t>
          </list>
       </t>
@@ -3883,7 +3884,7 @@ in the same &lt;front&gt; element.
 
    <!--seriesInfo/@status-->
    <section anchor="element.seriesInfo.attribute.status" toc="exclude">
-      <name>"status" attribute</name>
+      <name>"status" Attribute</name>
       <iref item="Attributes" subitem="status"/>
       <iref item="seriesInfo element" subitem="status attribute"/>
       <iref item="status attribute" subitem="in seriesInfo element"/>
@@ -3895,7 +3896,7 @@ in the same &lt;front&gt; element.
 
    <!--seriesInfo/@stream-->
    <section anchor="element.seriesInfo.attribute.stream" toc="exclude">
-      <name>"stream" attribute</name>
+      <name>"stream" Attribute</name>
       <iref item="Attributes" subitem="stream"/>
       <iref item="seriesInfo element" subitem="stream attribute"/>
       <iref item="stream attribute" subitem="in seriesInfo element"/>
@@ -3907,7 +3908,7 @@ in the same &lt;front&gt; element.
 
    <!--seriesInfo/@value-->
    <section anchor="element.seriesInfo.attribute.value" toc="exclude">
-      <name>"value" attribute <em>(mandatory)</em>
+      <name>"value" Attribute <em> (Mandatory)</em>
       </name>
       <iref item="Attributes" subitem="value"/>
       <iref item="seriesInfo element" subitem="value attribute"/>
@@ -3916,14 +3917,14 @@ in the same &lt;front&gt; element.
             The identifier within the series specified by the "name" attribute.
       </t>
       <t>
-            For BCPs, FYIs, RFCs, and STDs this is the number within the series.
+            For BCPs, FYIs, RFCs, and STDs, this is the number within the series.
             For Internet-Drafts, it is the full draft name (ending with the two-digit
             version number). For DOIs, the value is given such as "10.123456/rfc1149",
-            (the actual value will be specified later in <xref target="DOI"/>).
+            (the actual value will be specified later in <xref target="RFC7669"/>).
       </t>
       <t>
             The name in the value should be the document name without any file
-            extension. For Internet Drafts, the value for this attribute should
+            extension. For Internet-Drafts, the value for this attribute should
             be "draft-ietf-somewg-someprotocol-07", not
             "draft-ietf-somewg-someprotocol-07.txt".
       </t>
@@ -3944,7 +3945,7 @@ in the same &lt;front&gt; element.
    <t>
       &lt;sourcecode&gt; provides
       full control of horizontal whitespace and line breaks.
-      It is thus useful for source code and formal languages (such as ABNF or the RNC notation used in this document).
+      It is thus useful for source code and formal languages (such as ABNF <xref target="RFC5234"/> or the RNC notation used in this document).
       When rendered, sourcecode is always shown in a monospace font.
    </t>
    <t>
@@ -3980,13 +3981,13 @@ Using CDATA:
       Output formatters that do pagination should attempt to keep source code on a single page. This is to prevent
       source code that is split across pages from looking like two separate pieces of code.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->
       <xref format="none" target="grammar.sourcecode">Content model</xref>: only text content.</t>
 
    <!--sourcecode/@anchor-->
    <section anchor="element.sourcecode.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="sourcecode element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in sourcecode element"/>
@@ -3997,7 +3998,7 @@ Using CDATA:
 
    <!--sourcecode/@name-->
    <section anchor="element.sourcecode.attribute.name" toc="exclude">
-      <name>"name" attribute</name>
+      <name>"name" Attribute</name>
       <iref item="Attributes" subitem="name"/>
       <iref item="sourcecode element" subitem="name attribute"/>
       <iref item="name attribute" subitem="in sourcecode element"/>
@@ -4015,7 +4016,7 @@ Using CDATA:
 
    <!--sourcecode/@src-->
    <section anchor="element.sourcecode.attribute.src" toc="exclude">
-      <name>"src" attribute</name>
+      <name>"src" Attribute</name>
       <iref item="Attributes" subitem="src"/>
       <iref item="sourcecode element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in sourcecode element"/>
@@ -4029,7 +4030,7 @@ Using CDATA:
 
    <!--sourcecode/@type-->
    <section anchor="element.sourcecode.attribute.type" toc="exclude">
-      <name>"type" attribute</name>
+      <name>"type" Attribute</name>
       <iref item="Attributes" subitem="type"/>
       <iref item="sourcecode element" subitem="type attribute"/>
       <iref item="type attribute" subitem="in sourcecode element"/>
@@ -4058,7 +4059,7 @@ Using CDATA:
             <t>xml</t>
             <t>yang</t>
          </list>
-            The RFC Editor will maintain a complete list of the preferred values on its
+            The RFC Series Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
             of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified. 
          </t>
@@ -4076,13 +4077,13 @@ Using CDATA:
    <t>
       Provides a street address.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>postal</x:ref>&gt; (<xref target="element.postal"/>).</t>
    <t anchor="element.street.contents"><!--AG-->
       <xref format="none" target="grammar.street">Content model</xref>: only text content.</t>
 
    <!--street/@ascii-->
    <section anchor="element.street.attribute.ascii" toc="exclude">
-      <name>"ascii" attribute</name>
+      <name>"ascii" Attribute</name>
       <iref item="Attributes" subitem="ascii"/>
       <iref item="street element" subitem="ascii attribute"/>
       <iref item="ascii attribute" subitem="in street element"/>
@@ -4105,7 +4106,7 @@ Using CDATA:
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.strong.contents"><!--AG-->
       <xref format="none" target="grammar.strong">Content model</xref>:
     </t>
@@ -4158,7 +4159,7 @@ Using CDATA:
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.sub.contents"><!--AG-->
       <xref format="none" target="grammar.sub">Content model</xref>:
     </t>
@@ -4208,7 +4209,7 @@ Using CDATA:
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
    <t anchor="element.sup.contents"><!--AG-->
       <xref format="none" target="grammar.sup">Content model</xref>:
     </t>
@@ -4256,7 +4257,7 @@ Using CDATA:
    <t>
       Contains a paragraph of text.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>list</x:ref>&gt; (<xref target="element.list"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.t.contents"><!--AG-->
       <xref format="none" target="grammar.t">Content model</xref>:
     </t>
@@ -4309,7 +4310,7 @@ Using CDATA:
 
    <!--t/@anchor-->
    <section anchor="element.t.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="t element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in t element"/>
@@ -4320,7 +4321,7 @@ Using CDATA:
 
    <!--t/@hangText-->
    <section anchor="element.t.attribute.hangText" toc="exclude">
-      <name>"hangText" attribute</name>
+      <name>"hangText" Attribute</name>
       <iref item="Attributes" subitem="hangText"/>
       <iref item="t element" subitem="hangText attribute"/>
       <iref item="hangText attribute" subitem="in t element"/>
@@ -4331,7 +4332,7 @@ Using CDATA:
 
    <!--t/@keepWithNext-->
    <section anchor="element.t.attribute.keepWithNext" toc="exclude">
-      <name>"keepWithNext" attribute</name>
+      <name>"keepWithNext" Attribute</name>
       <iref item="Attributes" subitem="keepWithNext"/>
       <iref item="t element" subitem="keepWithNext attribute"/>
       <iref item="keepWithNext attribute" subitem="in t element"/>
@@ -4351,7 +4352,7 @@ Using CDATA:
 
    <!--t/@keepWithPrevious-->
    <section anchor="element.t.attribute.keepWithPrevious" toc="exclude">
-      <name>"keepWithPrevious" attribute</name>
+      <name>"keepWithPrevious" Attribute</name>
       <iref item="Attributes" subitem="keepWithPrevious"/>
       <iref item="t element" subitem="keepWithPrevious attribute"/>
       <iref item="keepWithPrevious attribute" subitem="in t element"/>
@@ -4383,12 +4384,12 @@ Using CDATA:
       If the element contains a &lt;<x:ref>name</x:ref>&gt; element, the caption will also show that name. 
    </t>
    <t>
-      Insde the &lt;<x:ref>table</x:ref>&gt; element is optionlly a &lt;<x:ref>thead</x:ref>&gt; element to
+      Inside the &lt;<x:ref>table</x:ref>&gt; element is optionally a &lt;<x:ref>thead</x:ref>&gt; element to
       contain the rows that will be the table's heading and optionally a &lt;<x:ref>tfoot</x:ref>&gt; element
       to contain the rows of the table's footer. If the XML is converted to a representation that has page
       breaks (such as PDFs, or printed HTML), the header and footer are meant to appear on each page.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>) and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.table.contents"><!--AG-->
       <xref format="none" target="grammar.table">Content model</xref>:</t>
    <t><!--AG-->In this order:</t>
@@ -4422,7 +4423,7 @@ Using CDATA:
 
    <!--table/@anchor-->
    <section anchor="element.table.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="table element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in table element"/>
@@ -4443,7 +4444,7 @@ Using CDATA:
    <t>
       A container for a set of body rows for a table.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>).</t>
    <t anchor="element.tbody.contents"><!--AG-->
       <xref format="none" target="grammar.tbody">Content model</xref>:
     </t>
@@ -4455,7 +4456,7 @@ Using CDATA:
 
    <!--tbody/@anchor-->
    <section anchor="element.tbody.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="tbody element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in tbody element"/>
@@ -4476,7 +4477,7 @@ Using CDATA:
    <t>
       A cell in a table row.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>tr</x:ref>&gt; (<xref target="element.tr"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>tr</x:ref>&gt; (<xref target="element.tr"/>).</t>
    <t anchor="element.td.contents"><!--AG-->
       <xref format="none" target="grammar.td">Content model</xref>:
     </t>
@@ -4554,7 +4555,7 @@ Using CDATA:
 
    <!--td/@align-->
    <section anchor="element.td.attribute.align" toc="exclude">
-      <name>"align" attribute</name>
+      <name>"align" Attribute</name>
       <iref item="Attributes" subitem="align"/>
       <iref item="td element" subitem="align attribute"/>
       <iref item="align attribute" subitem="in td element"/>
@@ -4573,7 +4574,7 @@ Using CDATA:
 
    <!--td/@anchor-->
    <section anchor="element.td.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="td element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in td element"/>
@@ -4584,7 +4585,7 @@ Using CDATA:
 
    <!--td/@border-->
    <section anchor="element.td.attribute.border" toc="exclude">
-      <name>"border" attribute</name>
+      <name>"border" Attribute</name>
       <iref item="Attributes" subitem="border"/>
       <iref item="td element" subitem="border attribute"/>
       <iref item="border attribute" subitem="in td element"/>
@@ -4595,12 +4596,12 @@ Using CDATA:
 
    <!--td/@colspan-->
    <section anchor="element.td.attribute.colspan" toc="exclude">
-      <name>"colspan" attribute</name>
+      <name>"colspan" Attribute</name>
       <iref item="Attributes" subitem="colspan"/>
       <iref item="td element" subitem="colspan attribute"/>
       <iref item="colspan attribute" subitem="in td element"/>
       <t>
-         The number of columns that the cell to span. For example, setting "colspan='3'"
+         The number of columns that the cell is to span. For example, setting "colspan='3'"
          indicates that the cell occupies the same horizontal space as three cells in the
          row above or below this one.
       </t>
@@ -4608,12 +4609,12 @@ Using CDATA:
 
    <!--td/@rowspan-->
    <section anchor="element.td.attribute.rowspan" toc="exclude">
-      <name>"rowspan" attribute</name>
+      <name>"rowspan" Attribute</name>
       <iref item="Attributes" subitem="rowspan"/>
       <iref item="td element" subitem="rowspan attribute"/>
       <iref item="rowspan attribute" subitem="in td element"/>
       <t>
-         The number of rows that the cell to span. For example, setting "rowspan='3'"
+         The number of rows that the cell is to span. For example, setting "rowspan='3'"
          indicates that the cell occupies the same vertical space as three rows.
       </t>
    </section>
@@ -4630,7 +4631,7 @@ Using CDATA:
    <t>
       A container for a set of footer rows for a table.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>).</t>
    <t anchor="element.tfoot.contents"><!--AG-->
       <xref format="none" target="grammar.tfoot">Content model</xref>:
     </t>
@@ -4642,7 +4643,7 @@ Using CDATA:
 
    <!--tfoot/@anchor-->
    <section anchor="element.tfoot.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="tfoot element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in tfoot element"/>
@@ -4664,7 +4665,7 @@ Using CDATA:
       A cell in a table row. When rendered, this will normally come out in boldface; other than that,
       there is no difference between this and the &lt;<x:ref>td</x:ref>&gt; element.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>tr</x:ref>&gt; (<xref target="element.tr"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>tr</x:ref>&gt; (<xref target="element.tr"/>).</t>
    <t anchor="element.th.contents"><!--AG-->
       <xref format="none" target="grammar.th">Content model</xref>:
     </t>
@@ -4742,7 +4743,7 @@ Using CDATA:
 
    <!--th/@align-->
    <section anchor="element.th.attribute.align" toc="exclude">
-      <name>"align" attribute</name>
+      <name>"align" Attribute</name>
       <iref item="Attributes" subitem="align"/>
       <iref item="th element" subitem="align attribute"/>
       <iref item="align attribute" subitem="in th element"/>
@@ -4761,7 +4762,7 @@ Using CDATA:
 
    <!--th/@anchor-->
    <section anchor="element.th.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="th element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in th element"/>
@@ -4772,7 +4773,7 @@ Using CDATA:
 
    <!--th/@border-->
    <section anchor="element.th.attribute.border" toc="exclude">
-      <name>"border" attribute</name>
+      <name>"border" Attribute</name>
       <iref item="Attributes" subitem="border"/>
       <iref item="th element" subitem="border attribute"/>
       <iref item="border attribute" subitem="in th element"/>
@@ -4783,12 +4784,12 @@ Using CDATA:
 
    <!--th/@colspan-->
    <section anchor="element.th.attribute.colspan" toc="exclude">
-      <name>"colspan" attribute</name>
+      <name>"colspan" Attribute</name>
       <iref item="Attributes" subitem="colspan"/>
       <iref item="th element" subitem="colspan attribute"/>
       <iref item="colspan attribute" subitem="in th element"/>
       <t>
-         The number of columns that the cell to span. For example, setting "colspan='3'"
+         The number of columns that the cell is to span. For example, setting "colspan='3'"
          indicates that the cell occupies the same horizontal space as three cells in the
          row above or below this one.
       </t>
@@ -4796,12 +4797,12 @@ Using CDATA:
 
    <!--th/@rowspan-->
    <section anchor="element.th.attribute.rowspan" toc="exclude">
-      <name>"rowspan" attribute</name>
+      <name>"rowspan" Attribute</name>
       <iref item="Attributes" subitem="rowspan"/>
       <iref item="th element" subitem="rowspan attribute"/>
       <iref item="rowspan attribute" subitem="in th element"/>
       <t>
-         The number of rows that the cell to span. For example, setting "rowspan='3'"
+         The number of rows that the cell is to span. For example, setting "rowspan='3'"
          indicates that the cell occupies the same vertical space as three rows.
       </t>
    </section>
@@ -4818,7 +4819,7 @@ Using CDATA:
    <t>
       A container for a set of header rows for a table.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>).</t>
    <t anchor="element.thead.contents"><!--AG-->
       <xref format="none" target="grammar.thead">Content model</xref>:
     </t>
@@ -4830,7 +4831,7 @@ Using CDATA:
 
    <!--thead/@anchor-->
    <section anchor="element.thead.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="thead element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in thead element"/>
@@ -4857,13 +4858,13 @@ Using CDATA:
       (~40 characters), the "abbrev" attribute can be used to specify an
       abbreviated variant.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.title.contents"><!--AG-->
       <xref format="none" target="grammar.title">Content model</xref>: only text content.</t>
 
    <!--title/@abbrev-->
    <section anchor="element.title.attribute.abbrev" toc="exclude">
-      <name>"abbrev" attribute</name>
+      <name>"abbrev" Attribute</name>
       <iref item="Attributes" subitem="abbrev"/>
       <iref item="title element" subitem="abbrev attribute"/>
       <iref item="abbrev attribute" subitem="in title element"/>
@@ -4874,7 +4875,7 @@ Using CDATA:
 
    <!--title/@ascii-->
    <section anchor="element.title.attribute.ascii" toc="exclude">
-      <name>"ascii" attribute</name>
+      <name>"ascii" Attribute</name>
       <iref item="Attributes" subitem="ascii"/>
       <iref item="title element" subitem="ascii attribute"/>
       <iref item="ascii attribute" subitem="in title element"/>
@@ -4895,7 +4896,7 @@ Using CDATA:
    <t>
       A row of a table.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>tbody</x:ref>&gt; (<xref target="element.tbody"/>), &lt;<x:ref>tfoot</x:ref>&gt; (<xref target="element.tfoot"/>), and &lt;<x:ref>thead</x:ref>&gt; (<xref target="element.thead"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>tbody</x:ref>&gt; (<xref target="element.tbody"/>), &lt;<x:ref>tfoot</x:ref>&gt; (<xref target="element.tfoot"/>), and &lt;<x:ref>thead</x:ref>&gt; (<xref target="element.thead"/>).</t>
    <t anchor="element.tr.contents"><!--AG-->
       <xref format="none" target="grammar.tr">Content model</xref>:
     </t>
@@ -4911,7 +4912,7 @@ Using CDATA:
 
    <!--tr/@anchor-->
    <section anchor="element.tr.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="tr element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in tr element"/>
@@ -4922,7 +4923,7 @@ Using CDATA:
 
    <!--tr/@border-->
    <section anchor="element.tr.attribute.border" toc="exclude">
-      <name>"border" attribute</name>
+      <name>"border" Attribute</name>
       <iref item="Attributes" subitem="border"/>
       <iref item="tr element" subitem="border attribute"/>
       <iref item="border attribute" subitem="in tr element"/>
@@ -4947,7 +4948,7 @@ Using CDATA:
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.tt.contents"><!--AG-->
       <xref format="none" target="grammar.tt">Content model</xref>:
     </t>
@@ -4998,7 +4999,7 @@ Using CDATA:
    <t>
       An unordered list. The labels on the items will be symbols picked by the formatter.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.ul.contents"><!--AG-->
       <xref format="none" target="grammar.ul">Content model</xref>:
     </t>
@@ -5010,7 +5011,7 @@ Using CDATA:
 
    <!--ul/@anchor-->
    <section anchor="element.ul.attribute.anchor" toc="exclude">
-      <name>"anchor" attribute</name>
+      <name>"anchor" Attribute</name>
       <iref item="Attributes" subitem="anchor"/>
       <iref item="ul element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in ul element"/>
@@ -5021,7 +5022,7 @@ Using CDATA:
 
    <!--ul/@empty-->
    <section anchor="element.ul.attribute.empty" toc="exclude">
-      <name>"empty" attribute</name>
+      <name>"empty" Attribute</name>
       <iref item="Attributes" subitem="empty"/>
       <iref item="ul element" subitem="empty attribute"/>
       <iref item="empty attribute" subitem="in ul element"/>
@@ -5037,7 +5038,7 @@ Using CDATA:
 
    <!--ul/@spacing-->
    <section anchor="element.ul.attribute.spacing" toc="exclude">
-      <name>"spacing" attribute</name>
+      <name>"spacing" Attribute</name>
       <iref item="Attributes" subitem="spacing"/>
       <iref item="ul element" subitem="spacing attribute"/>
       <iref item="spacing attribute" subitem="in ul element"/>
@@ -5067,7 +5068,7 @@ Using CDATA:
    <t>
       The contents should be a valid URI; this most likely will be an "http:" or "https:" URI. 
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>address</x:ref>&gt; (<xref target="element.address"/>).</t>
    <t anchor="element.uri.contents"><!--AG-->
       <xref format="none" target="grammar.uri">Content model</xref>: only text content.</t>
 </section>
@@ -5089,10 +5090,10 @@ Using CDATA:
       In Internet-Drafts, this is used in the upper left corner of the boilerplate,
       replacing the "Network Working Group" string. Formatting software can
       append the words "Working Group" or "Research Group", depending on
-      the "submissionType" property on the &lt;<x:ref>rfc</x:ref>&gt; element
+      the "submissionType" property of the &lt;<x:ref>rfc</x:ref>&gt; element
       (<xref target="element.rfc.attribute.submissionType"/>).
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.workgroup.contents"><!--AG-->
       <xref format="none" target="grammar.workgroup">Content model</xref>: only text content.</t>
 </section>
@@ -5108,17 +5109,17 @@ Using CDATA:
    <t>
       A reference to an anchor in this document.
       Formatters that have links (such as HTML and PDF) are likely to render &lt;xref&gt; elements as internal hyperlinks.
-      This element is useful for referring to references in the References section, to specific sections of this
+      This element is useful for referring to references in the "References" section, to specific sections of this
       document, to specific figures, and so on.
       The "target" attribute is required.
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
    <t anchor="element.xref.contents"><!--AG-->
       <xref format="none" target="grammar.xref">Content model</xref>: only text content.</t>
 
    <!--xref/@format-->
    <section anchor="element.xref.attribute.format" toc="exclude">
-      <name>"format" attribute</name>
+      <name>"format" Attribute</name>
       <iref item="Attributes" subitem="format"/>
       <iref item="xref element" subitem="format attribute"/>
       <iref item="format attribute" subitem="in xref element"/>
@@ -5214,7 +5215,7 @@ Using CDATA:
 
    <!--xref/@pageno-->
    <section anchor="element.xref.attribute.pageno" toc="exclude">
-      <name>"pageno" attribute</name>
+      <name>"pageno" Attribute</name>
       <iref item="Attributes" subitem="pageno"/>
       <iref item="xref element" subitem="pageno attribute"/>
       <iref item="pageno attribute" subitem="in xref element"/>
@@ -5230,7 +5231,7 @@ Using CDATA:
 
    <!--xref/@target-->
    <section anchor="element.xref.attribute.target" toc="exclude">
-      <name>"target" attribute <em>(mandatory)</em>
+      <name>"target" Attribute <em> (Mandatory)</em>
       </name>
       <iref item="Attributes" subitem="target"/>
       <iref item="xref element" subitem="target attribute"/>
@@ -5251,16 +5252,16 @@ Using CDATA:
    <iref item="Elements" subitem="svg" primary="true"/>
    <iref item="svg element" primary="true"/>
    <t>
-      This element holds SVG art. The use of SVG in Internet Drafts and RFCs is covered in much more detail in
+      This element holds SVG art. The use of SVG in Internet-Drafts and RFCs is covered in much more detail in
       <xref target="SVGforRFCs"/>. 
    </t>
-   <t><!--AG-->This element appears as a child element of: &lt;<x:ref>artwork</x:ref>&gt; (<xref target="element.artwork"/>).</t>
+   <t><!--AG-->This element appears as a child element of &lt;<x:ref>artwork</x:ref>&gt; (<xref target="element.artwork"/>).</t>
    <t anchor="element.svg.contents"><!--AG-->
       <xref format="none" target="grammar.svg">Content model</xref>: this element does not have any contents.</t>
 
    <!--svg/@TheRealDefinition-->
    <section anchor="element.svg.attribute.TheRealDefinition" toc="exclude">
-      <name>"TheRealDefinition" attribute <em>(mandatory)</em>
+      <name>"TheRealDefinition" Attribute <em> (Mandatory)</em>
       </name>
       <iref item="Attributes" subitem="TheRealDefinition"/>
       <iref item="svg element" subitem="TheRealDefinition attribute"/>
@@ -5764,16 +5765,16 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
 
 <section title="Internationalization Considerations" anchor="i18n.considerations">
 <t>
-  This format is based on <xref target="XML"/>, thus does not have any
+  This format is based on <xref target="XML"/> and thus does not have any
   issues representing arbitrary Unicode <xref target="UNICODE"/> characters in text content.
-  The RFC Editor may restrict some of the characters that can be used in a particular RFC;
+  The RFC Series Editor may restrict some of the characters that can be used in a particular RFC;
   the rules for such restrictions are covered in <xref target="NONASCII"/>.
 </t>
 </section>
 
 <section title="Security Considerations" anchor="security.considerations">
 <t>
-  The "name" attribute on the &lt;<x:ref>artwork</x:ref>&gt; element
+  The "name" attribute of the &lt;<x:ref>artwork</x:ref>&gt; element
   (<xref target="element.artwork.attribute.name"/>)
   can be used to derive a filename for saving to a local file system.
   Trusting this kind of information without pre-processing is a known
@@ -5788,13 +5789,17 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
 <t>
   The "type" attribute of the &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt; elements is meant
   to encourage formatters to automatically extract known types of content from
-  an RFC or Internet Draft. While extraction is probably safe, those tools
+  an RFC or Internet-Draft. While extraction is probably safe, those tools
   might also think that they could further process the extracted content
   such as by rendering artwork or executing code. Doing so without first
   sanity-checking the extracted content is clearly a terrible idea
   from a security perspective. More generally, a tool that is reading XML input
   needs to be suspicious of any content that it intends
   to post-process.
+</t>
+<t>
+When there is an external reference to a URL, a processor or renderer should fetch the content into a sandbox,
+and should have only a localized impact on the document processing and rendering.
 </t>
 <t>
   All security considerations related to XML processing are
@@ -5812,7 +5817,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
 </t>
 <t>
   This document updates the specification for the Internet Media Type
-  "application/rfc+xml" from the one in <xref target="XML2RFCv2"/>. The following is to be registered with IANA.
+  "application/rfc+xml" from the one in <xref target="XML2RFCv2"/>. The following has been registered with IANA.
 </t>
 <t>
   <list style="hanging" x:indent="12em">
@@ -5826,7 +5831,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
       There are no required parameters.
     </t>
     <t hangText="Optional parameters:">
-      "charset": This parameter has identical semantics as the charset
+      "charset": This parameter has identical semantics to the charset
       parameter of the "application/xml" Media Type specified in <xref target="RFC7303" x:fmt="of" x:sec="9.1"/>.
     </t>
     <t hangText="Encoding considerations:">
@@ -5863,7 +5868,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
       </list>
     </t>
     <t hangText="Person &amp; email address to contact for further information:">
-      See Authors Section.
+      ee the Author's Address section of RFC 7749.
     </t>
     <t hangText="Intended usage:">
       COMMON
@@ -5872,7 +5877,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
       None
     </t>
     <t hangText="Author:">
-      See Authors Section.
+      See the Author's Address section of RFC 7749.
     </t>
     <t hangText="Change controller:">
       RFC Series Editor (rse@rfc-editor.org)
@@ -5890,7 +5895,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
 
 <t>Description: The document linked to was later converted to the document
 that contains this link relation. For example, an RFC can have a link
-to the Internet Draft that became the RFC; in that case, the link
+to the Internet-Draft that became the RFC; in that case, the link
 relation would be "convertedFrom".</t>
 
 <t>Reference: This document.</t>
@@ -5904,6 +5909,24 @@ not those that are part of a sequence of resources.</t>
 
 </section>
 
+</section>
+
+<section title="IAB Members at the Time of Publication" numbered="false">
+<t>
+Jari Arkko (IETF Chair) <vspace blankLines="0"/>
+Mary Barnes <vspace blankLines="0"/>
+Marc Blanchet <vspace blankLines="0"/>
+Ralph Droms <vspace blankLines="0"/>
+Ted Hardie <vspace blankLines="0"/>
+Joe Hildebrand <vspace blankLines="0"/>
+Russ Housley <vspace blankLines="0"/>
+Erik Nordmark <vspace blankLines="0"/>
+Robert Sparks <vspace blankLines="0"/>
+Andrew Sullivan <vspace blankLines="0"/>
+Dave Thaler <vspace blankLines="0"/>
+Brian Trammell <vspace blankLines="0"/>
+Suzanne Woolf
+</t>
 </section>
 
 <section title="Acknowledgments" anchor="acknowledgements">
@@ -5940,15 +5963,6 @@ not those that are part of a sequence of resources.</t>
     </annotation>
   </reference>
 
-  <reference anchor="XML2RFCv2">
-    <front>
-      <title>The 'XML2RFC' version 2 Vocabulary</title>
-      <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
-      <date year="2014"/>
-    </front>
-    <seriesInfo name="Internet-Draft" value="draft-iab-xml2rfcv2"/>
-  </reference>
-
 </references>
 
 <references title="Informative References">
@@ -5963,15 +5977,6 @@ not those that are part of a sequence of resources.</t>
     </front>
     <seriesInfo name="BCP" value="13"/>
     <seriesInfo name="RFC" value="6838"/>
-  </reference>
-
-  <reference anchor="DOI">
-    <front>
-      <title>Assigning Digital Object Identifiers to RFCs</title>
-      <author initials="J." surname="Levine" fullname="John Levine"/>
-      <date year="2014"/>
-    </front>
-    <seriesInfo name="Internet-Draft" value="draft-iab-doi"/>
   </reference>
 
   <reference anchor="IDGUIDE" target="https://www.ietf.org/id-info/guidelines.html">
@@ -6100,6 +6105,17 @@ not those that are part of a sequence of resources.</t>
    <seriesInfo name="RFC" value="3986"/>
   </reference>
 
+  <reference anchor="RFC5234">
+    <front>
+      <title>Augmented BNF for Syntax Specifications: ABNF</title>
+      <author initials="D." surname="Crocker" fullname="D. Crocker" role="editor"/>
+      <author initials="P." surname="Overell" fullname="P. Overell"/>
+      <date year="2008" month="January"/>
+    </front>
+    <seriesInfo name="STD" value="68"/>
+    <seriesInfo name="RFC" value="5234"/>
+  </reference>
+
   <reference anchor="RFC5378">
     <front>
       <title>Rights Contributors Provide to the IETF Trust</title>
@@ -6179,6 +6195,15 @@ not those that are part of a sequence of resources.</t>
     <seriesInfo name="RFC" value="7322"/>
   </reference>
   
+  <reference anchor="RFC7669">
+    <front>
+      <title>Assigning Digital Object Identifiers to RFCs</title>
+      <author initials="J." surname="Levine" fullname="John Levine"/>
+      <date year="2015"/>
+    </front>
+    <seriesInfo name="RFC" value="7669"/>
+  </reference>
+
   <reference anchor="RNC" target="https://www.oasis-open.org/committees/relax-ng/compact-20021121.html">
     <front>
       <title>RELAX NG Compact Syntax</title>
@@ -6313,6 +6338,15 @@ not those that are part of a sequence of resources.</t>
     </annotation>
   </reference>
 
+  <reference anchor="XML2RFCv2">
+    <front>
+      <title>The "XML2RFC" version 2 Vocabulary</title>
+      <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
+      <date year="2014"/>
+    </front>
+    <seriesInfo name="Internet-Draft" value="draft-iab-xml2rfcv2"/>
+  </reference>
+
   <reference anchor='XPOINTER' target='http://www.w3.org/TR/2003/REC-xptr-framework-20030325/'>
     <front>
       <title>XPointer Framework</title>
@@ -6331,16 +6365,16 @@ not those that are part of a sequence of resources.</t>
 
 </references>
 
-<section title="Front Page ('Boilerplate') Generation" anchor="front.page">
+<section title="Front-Page (&quot;Boilerplate&quot;) Generation" anchor="front.page">
 
-<t>The values listed here will be defined by the RFC Editor. Those listed here
+<t>The values listed here will be defined by the RFC Series Editor. Those listed here
 are believed to be the current values in use.</t>
 
-<section title="The /rfc/@ipr Attribute" anchor="attribute-ipr">
+<section title="The &quot;ipr&quot; Attribute" anchor="attribute-ipr">
 <t>
   This attribute value can take a long list of values, each of which describes an IPR policy for the document
   (<xref target="element.rfc.attribute.ipr"/>). 
-  The values are not the result of a grand design, but remain simply for historic
+  The values are not the result of a grand design, but they remain simply for historic
   reasons. Of these values, only a few are currently in use; all others are
   supported by various tools for backwards compatibility with old source
   files.
@@ -6348,8 +6382,8 @@ are believed to be the current values in use.</t>
 <aside>
   <t>
     <strong>Note:</strong> some variations of the boilerplate are selected based
-    on the document's date; therefore it is important to specify the "year",
-    "month" and "day" attributes of the &lt;<x:ref>date</x:ref>&gt; element
+    on the document's date; therefore, it is important to specify the "year",
+    "month", and "day" attributes of the &lt;<x:ref>date</x:ref>&gt; element
     when archiving the XML source of an Internet-Draft on the day of submission.
   </t>
 </aside>
@@ -6367,20 +6401,20 @@ are believed to be the current values in use.</t>
 </t>
 
 
-<section title="Current Values: '*trust200902'" anchor="attribute-ipr-current">
-<iref item="ipr attribute" subitem="'*trust200902'"/>
+<section title="Current Values: &quot;*trust200902&quot;" anchor="attribute-ipr-current">
+<iref item="ipr attribute" subitem="&quot;*trust200902&quot;"/>
 <t>
-  The name for these values refers to the "IETF TRUST Legal Provisions Relating 
+  The name for these values refers tto the IETF Trust's "Legal Provisions Relating 
   to IETF Documents", sometimes simply called the "TLP", which went into effect on February 15, 2009 (<xref target="TLP2.0"/>).
-  Updates to this document were published on September 12, 2009 (<xref target="TLP3.0"/>)
-  and on December 28, 2009 (<xref target="TLP4.0"/>),
+  Updates to this document were published on September 12, 2009 <xref target="TLP3.0"/>
+  and on December 28, 2009 <xref target="TLP4.0"/>,
   modifying the license for code components (see <eref target="http://trustee.ietf.org/license-info/"/>
   for further information).
-  The actual text is located in Section 6 ("Text To Be Included in IETF Documents")
+  The actual text is located in Section 6 ("Text to Be Included in IETF Documents")
   of these documents.
 </t>
 <t>  
-  The prep tool automatically produces the "correct" text depending on the
+  The prep tool automatically produces the "correct" text, depending on the
   document's date information (see above):
 </t>
 <texttable align="left">
@@ -6397,23 +6431,21 @@ are believed to be the current values in use.</t>
 <aside>
   <t>
     The TLP was again updated in March 2015 (<xref target="TLP5.0"/>), but
-    the changes made in this version do not affect the boilerplate text.
+    the changes made in that version do not affect the boilerplate text.
   </t>
 </aside>
 
-
-
 <section title="trust200902" anchor="attribute-ipr-trust200902">
-<iref item="ipr attribute" subitem="'trust200902'"/>
+<iref item="ipr attribute" subitem="&quot;trust200902&quot;"/>
 <t>
-  This value should be used unless one of the more specific '*trust200902'
+  This value should be used unless one of the more specific &quot;*trust200902&quot;
   values is a better fit. It produces the text in Sections 6.a and 6.b of
   the TLP.
 </t>
 </section>
 
 <section title="noModificationTrust200902" anchor="attribute-ipr-noModificationTrust200902">
-<iref item="ipr attribute" subitem="'noModificationTrust200902'"/>
+<iref item="ipr attribute" subitem="&quot;noModificationTrust200902&quot;"/>
 <t>
   This produces additional text from Section 6.c.i of the TLP:
 </t>
@@ -6433,7 +6465,7 @@ are believed to be the current values in use.</t>
 </section>
 
 <section title="noDerivativesTrust200902" anchor="attribute-ipr-noDerivativesTrust200902">
-<iref item="ipr attribute" subitem="'noDerivativesTrust200902'"/>
+<iref item="ipr attribute" subitem="&quot;noDerivativesTrust200902&quot;"/>
 <t>
   This produces the additional text from Section 6.c.ii of the TLP:
 </t>
@@ -6451,7 +6483,7 @@ are believed to be the current values in use.</t>
 </section>
 
 <section title="pre5378Trust200902" anchor="attribute-ipr-pre5378Trust200902">
-<iref item="ipr attribute" subitem="'pre5378Trust200902'"/>
+<iref item="ipr attribute" subitem="&quot;pre5378Trust200902&quot;"/>
 <t>
   This produces the additional text from Section 6.c.iii of the TLP, frequently
   called the "pre-5378 escape clause" referring to changes introduced in <xref target="RFC5378"/>):
@@ -6476,7 +6508,7 @@ are believed to be the current values in use.</t>
   <t>
     <strong>Note:</strong> this text appears under "Copyright Notice", unless the 
     document was published before November 2009, in which case it appears
-    under "Status Of This Memo".
+    under "Status of This Memo".
   </t>
 </aside>
 </section>
@@ -6484,41 +6516,41 @@ are believed to be the current values in use.</t>
 
 <section title="Historic Values" anchor="attribute-ipr-historic">
 
-<section title="Historic Values: '*trust200811'" anchor="attribute-ipr-200811">
-<iref item="ipr attribute" subitem="'*trust200811'"/>
+<section title="Historic Values: &quot;*trust200811&quot;" anchor="attribute-ipr-200811">
+<iref item="ipr attribute" subitem="&quot;*trust200811&quot;"/>
 <t>
   The attribute values "<x:span anchor="attribute-ipr-trust200811">trust200811</x:span>",
-  "<x:span anchor="attribute-ipr-noModificationTrust200811">noModificationTrust200811</x:span>" and
+  "<x:span anchor="attribute-ipr-noModificationTrust200811">noModificationTrust200811</x:span>", and
   "<x:span anchor="attribute-ipr-noDerivativesTrust200811">noDerivativesTrust200811</x:span>"
   are similar to their "trust200902" counterparts, except that they use text
   specified in <xref target="TLP1.0"/>.
 </t>
 </section>
 
-<section title="Historic Values: '*3978'" anchor="attribute-ipr-3978">
-<iref item="ipr attribute" subitem="'*3978'"/>
+<section title="Historic Values: &quot;*3978&quot;" anchor="attribute-ipr-3978">
+<iref item="ipr attribute" subitem="&quot;*3978&quot;"/>
 <t>
   The attribute values "<x:span anchor="attribute-ipr-full3978">full3978</x:span>",
-  "<x:span anchor="attribute-ipr-noModification3978">noModification3978</x:span>" and
+  "<x:span anchor="attribute-ipr-noModification3978">noModification3978</x:span>", and
   "<x:span anchor="attribute-ipr-noDerivatives3978">noDerivatives3978</x:span>"
   are similar to their counterparts above, except that they use text
   specified in <xref target="RFC3978" section="5" sectionFormat="of"/>.
 </t>
 </section>
 
-<section title="Historic Values: '*3667'" anchor="attribute-ipr-3667">
-<iref item="ipr attribute" subitem="'*3667'"/>
+<section title="Historic Values: &quot;*3667&quot;" anchor="attribute-ipr-3667">
+<iref item="ipr attribute" subitem="&quot;*3667&quot;"/>
 <t>
   The attribute values "<x:span anchor="attribute-ipr-full3667">full3667</x:span>",
-  "<x:span anchor="attribute-ipr-noModification3667">noModification3667</x:span>" and
+  "<x:span anchor="attribute-ipr-noModification3667">noModification3667</x:span>", and
   "<x:span anchor="attribute-ipr-noDerivatives3667">noDerivatives3667</x:span>"
   are similar to their counterparts above, except that they use text
   specified in <xref target="RFC3667" section="5" sectionFormat="of"/>.
 </t>
 </section>
 
-<section title="Historic Values: '*2026'" anchor="attribute-ipr-2026">
-<iref item="ipr attribute" subitem="'*2026'"/>
+<section title="Historic Values: &quot;*2026&quot;" anchor="attribute-ipr-2026">
+<iref item="ipr attribute" subitem="&quot;*2026&quot;"/>
 <t>
   The attribute values "<x:span anchor="attribute-ipr-full2026">full2026</x:span>" and
   "<x:span anchor="attribute-ipr-noDerivativeWorks2026">noDerivativeWorks2026</x:span>"
@@ -6527,18 +6559,19 @@ are believed to be the current values in use.</t>
 </t>
 <t>
   The special value "<x:span anchor="attribute-ipr-none">none</x:span>"
-  was also used back then, and denied the IETF any rights beyond publication
-  as Internet-Draft.
+  was also used back then; it denied the IETF any rights beyond publication
+  as an Internet-Draft.
 </t>
 </section>
 </section>
 </section>
 
-<section title="The /rfc/@submissionType Attribute" anchor="attribute-submissiontype">
+<section title="The &quot;submissionType&quot; Attribute" anchor="attribute-submissiontype">
 <t>
   The RFC Editor publishes documents from different "document streams", of which
-  the "IETF stream" is the most prominent one. Other streams are the "independent stream"
-  (used for things such as administrative information or April 1st RFCs),
+  the "IETF stream" is the most prominent. Other streams are the Independent Submission stream
+  (used for things such as discussion of Internet-related technologies that are
+  not part of the IETF agenda),
   the "IAB stream" (Internet Architecture Board) and the "IRTF stream" (Internet Research Task Force).
 </t>
 <t>
@@ -6547,36 +6580,37 @@ are believed to be the current values in use.</t>
 </t>
 <t>
   Historically, this attribute did not affect the final appearance of RFCs, except for
-  subtle differences in Copyright notices.
+  subtle differences in copyright notices.
   Nowadays (as of <xref target="RFC5741"/>), the stream name appears in the first
-  line of the front page, and it also affects the text in the "Status Of This Memo"
+  line of the front page, and it also affects the text in the "Status of This Memo"
   section.
 </t>
 <t>
-  For current documents, setting submissionType attribute will
+  For current documents, setting the "submissionType" attribute will
   have the following effect:
   <list style="symbols">
     <t>
       For RFCs, the stream name appears in the upper left corner of the 
-      first page (in Internet Drafts, this is either "Network Working Group",
+      first page (in Internet-Drafts, this is either "Network Working Group"
       or the value of the &lt;<x:ref>workgroup</x:ref>&gt; element).
     </t>
     <t>
-      For RFCs, if affects the whole "Status Of This Memo" section (see
+      For RFCs, it affects the whole "Status of This Memo" section (see
       <xref x:sec="3.2.2" x:fmt="of" target="RFC5741"/>).
     </t>
     <t>
-      For all RFCs and Internet Drafts, it determines whether the "Copyright
-      Notice" mentions the Copyright on Code Components (see TLP, Section "Text To Be Included in IETF Documents"). 
+      For all RFCs and Internet-Drafts, it determines whether the "Copyright
+      Notice" mentions the Copyright on Code Components (see Section 6 of the TLP
+    ("Text to Be Included in IETF Documents")).
     </t>
   </list>
 </t>
 </section>
 
-<section title="The /rfc/@consensus Attribute" anchor="attribute-consensus">
+<section title="The &quot;consensus&quot; Attribute" anchor="attribute-consensus">
 <t>
   For some of the publication streams (see <xref target="attribute-submissiontype"/>),
-  the "Status Of This Memo" section depends on whether there was a consensus
+  the "Status of This Memo" section depends on whether there was a consensus
   to publish (again, see <xref x:sec="3.2.2" x:fmt="of" target="RFC5741"/>).
 </t>
 <t>
@@ -6622,7 +6656,7 @@ The restrictions on the canonical XML for RFCs, as well as how the non-canonical
 will look, are described at
 &lt;https://www.rfc-editor.org/rse/wiki/doku.php?id=design:format-and-content-rfcs&gt;.</t>
 
-<t>Draft mode -- The mode used by the Internet Draft submission tool. The restrictions
+<t>Draft mode -- The mode used by the Internet-Draft submission tool. The restrictions
 for the XML from this mode will be described later.</t>
 
 <t>Diagnostic mode -- A mode that can be used by document authors to look for errors
@@ -6645,7 +6679,7 @@ The IETF tools are expected to take prepared documents as input.</t>
 authors. These tools may be used to produce interim versions of the non-canonical representations
 so that authors can see how their XML might later be rendered; to
 create documents in representations different than those supported by the RFC Editor;
-to possibly create documents that are not meant to be Internet Drafts or RFCs;
+to possibly create documents that are not meant to be Internet-Drafts or RFCs;
 and to convert XML that has external information into XML that has that external information
 included.</t>
 
@@ -6688,7 +6722,7 @@ references, all RFCs, the document might contain:
 </t>
 
 <t>&lt;xi:include&gt; can be used anywhere an XML element could be used (but not where
-free text is used). For example, if three Internet Drafts are all including a particular paragraph
+free text is used). For example, if three Internet-Drafts are all including a particular paragraph
 or section verbatim, that text can be kept either in a file or somewhere on the web, and be
 included with &lt;xi:include&gt;. An example of pulling something from the local disk would
 be:
@@ -6706,7 +6740,7 @@ that allow external inclusions.
 
 <section anchor="anchorsandids" title="Anchors and IDs">
 
-<t>People writing and reading Internet Drafts and RFCs often want to make reference to
+<t>People writing and reading Internet-Drafts and RFCs often want to make reference to
 specific locations in those documents. In the case of RFC authors, it is common
 to want to reference another part of their document, such as "see Section 3.2 of this
 document". Readers, on the other hand, want to reference part of documents that they
@@ -6812,7 +6846,7 @@ from combining the URI from the reference and the relative part that is either a
 content, this attribute is filled with that content; the "displayFormat" attribute is set to "bare"
 if that attribute is not already set. If the &lt;relref&gt; element has no text content, this
 attribute is filled with the text for the remote link, such as "Section 2.3" or "Table 5".  The prep
-tool might determine this text by reading the target reference and, if it is a RFC or Internet-Draft
+tool might determine this text by reading the target reference and, if it is an RFC or Internet-Draft
 in the v3 format, finding the anchor given in the "relative" attribute or derived from the "section"
 attribute, and using the title of that element. If the reference is not an RFC or Internet-Draft in
 the v3 format, the text fragment is simply the value of the "relative" or "section" attribute.  This

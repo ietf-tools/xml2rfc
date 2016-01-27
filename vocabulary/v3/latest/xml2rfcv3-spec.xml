@@ -9,8 +9,8 @@
    <iref item="Elements" subitem="abstract" primary="true"/>
    <iref item="abstract element" primary="true"/>
    <t>
-     Contains the abstract of the document.
-     See <xref target="RFC7322"/> for more information on restrictions for the abstract.
+     Contains the Abstract of the document.
+     See <xref target="RFC7322"/> for more information on restrictions for the Abstract.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.abstract.contents"><!--AG-->
@@ -39,7 +39,7 @@
       <iref item="abstract element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in abstract element"/>
       <t>
-        Document-wide unique identifier for the abstract.
+        Document-wide unique identifier for the Abstract.
       </t>
    </section>
 </section>
@@ -161,7 +161,7 @@
    <t>
       The value ought to be either the full name or the abbreviation of one of
       the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
-      The list will be kept by the RFC Editor.
+      The list will be kept by the RFC Series Editor.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.area.contents"><!--AG-->
@@ -177,15 +177,15 @@
    <iref item="Elements" subitem="artwork" primary="true"/>
    <iref item="artwork element" primary="true"/>
    <t>
-      This element allows the inclusion of "artwork" into the document.
+      This element allows the inclusion of "artwork" in the document.
       &lt;artwork&gt; provides
-      full control of horizontal whitespace and line breaks, and thus is
+      full control of horizontal whitespace and line breaks; thus is
       used for a variety of things, such as diagrams ("line art") and protocol unit diagrams.
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
       file, such as a vector drawing in SVG or a bitmap graphic file, using a URI. In this case, the textual
-      content acts as fallback for output representations that do not support graphics;
+      content acts as a fallback for output representations that do not support graphics;
       thus, it ought to contain either (1) a "line art" variant of the graphics or (2)
       prose that describes the included image in sufficient detail.
    </t>
@@ -199,7 +199,7 @@
       languages; in v3, this is now done with &lt;<x:ref>sourcecode</x:ref>&gt;.
    </t>
    <t>
-      There are at least five ways to include SVG in artwork in Internet Drafts:
+      There are at least five ways to include SVG in artwork in Internet-Drafts:
       <list style="symbols">
          <t>Inline, by including all of the SVG in the content of the element, 
             such as: &lt;artwork type="svg"&gt;&lt;svg xmlns..."&gt;</t>
@@ -210,7 +210,7 @@
          <t>As a URI to an external entity, such as: &lt;artwork type="svg" src="http://www.example.com/..."&gt;</t>
          <t>As a local file, such as: &lt;artwork type="svg" src="diagram12.svg"&gt;</t>
       </list>
-      The use of SVG in Internet Drafts and RFCs is covered in much more detail in
+      The use of SVG in Internet-Drafts and RFCs is covered in much more detail in
       <xref target="SVGforRFCs"/>.
    </t>
    <t>
@@ -234,8 +234,8 @@
    <t><!--AG-->Or:</t>
    <ul empty="true"><!--AG-->
       <li><!--AG-->
-         <iref item="Elements" subitem="svg"/>
-         <iref item="svg element" subitem="inside artwork"/>&lt;<x:ref>svg</x:ref>&gt; elements (<xref target="element.svg"/>)</li>
+         <iref item="Elements" subitem=""/>
+         <iref item=" element" subitem="inside artwork"/>&lt;<x:ref/>&gt; elements (<xref target="element."/>)</li>
    </ul>
 
    <!--artwork/@align-->
@@ -303,7 +303,7 @@
       <t>
             A filename suitable for the contents (such as for extraction to a local file).
             This attribute can
-            be helpful for other kinds of tools (such as automated syntax checkers
+            be helpful for other kinds of tools (such as automated syntax checkers,
             which work by extracting the artwork).
             Note that the "name" attribute does not need to be unique for artwork elements in a
             document. If multiple artwork elements have the same name attribute, a processing tool might
@@ -321,7 +321,7 @@
       <iref item="src attribute" subitem="in artwork element"/>
       <t>
          The URI reference of a graphics file (<xref target="RFC3986"/>), or the name of a file on the local disk.
-         This can be a "data" URI (<xref target="RFC2397"/>) that contains the contents of the graphics file.
+         This can be a "data" URI <xref target="RFC2397"/> that contains the contents of the graphics file.
          Note that the inclusion of art with the "src" attribute depends on the capabilities of the processing tool
          reading the XML document. Tools need to be able to handle the file: URI, and should
          be able to handle http: and https: URIs as well. The prep tool will be able to handle reading the "src" attribute.
@@ -332,7 +332,7 @@
          Processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
          Document creators should think hard before using relative URIs due to possible later problems if files move
-         around on the disk. Also, documents should most likely use explicit URI schemes whereever possible.
+         around on the disk. Also, documents should most likely use explicit URI schemes wherever possible.
       </t>
       <t>
          In some cases, the prep tool may remove the "src" attribute after processing its value.
@@ -362,7 +362,7 @@
             <t>hex-dump</t>
             <t>svg</t>
          </list>
-            The RFC Editor will maintain a complete list of the preferred values on its
+            The RFC Series Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
             of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified. 
          </t>
@@ -518,7 +518,7 @@
       <iref item="author element" subitem="asciiInitials attribute"/>
       <iref item="asciiInitials attribute" subitem="in author element"/>
       <t>
-         The ASCII equivalent of the author's intials.
+         The ASCII equivalent of the author's initials, to be used in conjunction with the separately specified asciiSurname.
       </t>
    </section>
 
@@ -529,7 +529,7 @@
       <iref item="author element" subitem="asciiSurname attribute"/>
       <iref item="asciiSurname attribute" subitem="in author element"/>
       <t>
-         The ASCII equivalent of the author's surname.
+         The ASCII equivalent of the author's surname, to be used in conjunction with the separately specified asciiInitials.
       </t>
    </section>
 
@@ -643,7 +643,7 @@
    <t>
       This element is only to be used around the actual phrase from BCP 14, not the full
       definition of a requirement. For example, it is correct to say
-      "The packet &lt;bcp14&gt;MUST&lt;/bcp14&gt; be dropped.", but it not correct to say
+      "The packet &lt;bcp14&gt;MUST&lt;/bcp14&gt; be dropped.", but it is not correct to say
       "&lt;bcp14&gt;The packet MUST be dropped.&lt;/bcp14&gt;".
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>refcontent</x:ref>&gt; (<xref target="element.refcontent"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
@@ -806,6 +806,7 @@
    <iref item="br element" primary="true"/>
    <t>
       Indicates that a line break should be inserted in the generated output by a formatting tool.
+      It is always expressed as &lt;br /&gt;.
       Multiple successive instances of this element do not cause blank lines to appear in the output,
       and is thus not useful.
    </t>
@@ -907,7 +908,7 @@
       Represents a comment.
    </t>
    <t>
-      Comments can be used in a document while it is work-in-progress. They
+      Comments can be used in a document while it is work in progress. They
       might appear either inline and visually highlighted, at the end of the document,
       or not at all, depending on the formatting tool.
    </t>
@@ -962,7 +963,7 @@
       <iref item="cref element" subitem="display attribute"/>
       <iref item="display attribute" subitem="in cref element"/>
       <t>
-         Suggests whether or not the the comment should be displayed by formatting tools. This might be
+         Suggests whether or not the comment should be displayed by formatting tools. This might be
          set to "false" if you want to keep a comment in a document after the contents of the comment
          have already been dealt with.
       </t>
@@ -996,34 +997,34 @@
    <iref item="date element" primary="true"/>
    <t>
       Provides information about the publication date.
-   </t>
-   <t>
-      Note that this element is used both for the boilerplate of the document
-      being produced, and also inside bibliographic references that use the &lt;<x:ref>front</x:ref>&gt; element.
-   </t>
-   <t>
-      In the boilerplate case, it defines the date of publication for the current document (Internet Draft or RFC).
+      This element is used for two cases: the boilerplate of the document
+      being produced, and inside bibliographic references that use the &lt;<x:ref>front</x:ref>&gt; element.
+   <list style="hanging">
+         <t hangText="Boilerplate for Internet-Drafts and RFCs:">
+      This element defines the date of publication for the current document (Internet-Draft or RFC).
       When producing Internet-Drafts, the prep tool uses this date to compute the expiration date (see <xref target="IDGUIDE"/>).
       When one or more of "year",
       "month", or "day" are left out, the prep tool will attempt to use the
       current system date if the attributes that are present are consistent with that
       date.
    </t>
-   <t>
-      Also in the first case, that month names, if given, need to match the full English month name: 
-      "January", "February", "March", "April", "May, "June", "July", "August",
-      "September", "October", "November", or "December".
+         <t>
+      If given, the month must be a number. Note that this restriction is different than that in
+      that in <xref target="XML2RFCv2"/>. The prep tool will silently change text month names to numbers.
+      The year must be a four-digit number.
    </t>
-   <t>
-      When the prep tool is used to create Internet Drafts, it will reject a submitted Internet Draft that has a &lt;<x:ref>date</x:ref>&gt;
+         <t>
+      When the prep tool is used to create Internet-Drafts, it will reject a submitted Internet-Draft that has a &lt;<x:ref>date</x:ref>&gt;
       element in the boilerplate for itself that is anything other than today. That is, the tool
       will not allow a submitter to specify a date other than the day of submission. To avoid this problem,
       authors might simply not include a &lt;<x:ref>date</x:ref>&gt; element in the boilerplate.
    </t>
-   <t>
-      In the case of bibliographic references, the date information can have prose text for the month or year.
+         <t hangText="Bibliographic references:">
+      The date information can have prose text for the month or year.
       For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
-      non-specific months (month="Second quarter") and so on, are allowed.
+      non-specific months (month="Second quarter") and so on are allowed.
+   </t>
+      </list>
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.date.contents"><!--AG-->
@@ -1036,9 +1037,7 @@
       <iref item="date element" subitem="day attribute"/>
       <iref item="day attribute" subitem="in date element"/>
       <t>
-         In the "boilerplate" case: the day of publication; this is a number.
-         Otherwise: an indication of the publication day, with the format
-         not being restricted.
+         The day of publication.
       </t>
    </section>
 
@@ -1049,9 +1048,7 @@
       <iref item="date element" subitem="month attribute"/>
       <iref item="month attribute" subitem="in date element"/>
       <t>
-          In the "boilerplate" case: the month of publication; this is the English name of the month.
-          Otherwise: an indication of the publication month, with the format
-          not being restricted.
+          The month or months of publication.
        </t>
    </section>
 
@@ -1062,9 +1059,7 @@
       <iref item="date element" subitem="year attribute"/>
       <iref item="year attribute" subitem="in date element"/>
       <t>
-         In the "boilerplate" case: the year of publication; this is a number (usually four-digit).
-         Otherwise: an indication of the publication year, with the format
-         not being restricted.
+         The year or years of publication.
       </t>
    </section>
 </section>
@@ -1178,7 +1173,7 @@
    <iref item="displayreference element" primary="true"/>
    <t>
       This element gives a mapping between the anchor of a reference and a name that will be displayed instead.
-      This allows authors to display more mneumonic anchor names for automatically-included references.
+      This allows authors to display more mnemonic anchor names for automatically-included references.
       The mapping in this element only applies to &lt;<x:ref>xref</x:ref>&gt; elements whose format is "default".
       For example, if the reference uses the anchor "RFC6949", the following would cause that anchor in the body
       of displayed documents to be "RFC-dev":
@@ -1192,7 +1187,7 @@
      If a reference section is sorted, this element changes the sort order.
    </t>
    <t>
-     It is expected that this element will only be valid in input documents. It will be likely be removed by preparation
+     It is expected that this element will only be valid in input documents. It will be likely be removed by prep
      tools when preparing a final version after those tools have replaced all of the associated anchors, targets, and derivedContent
      attributes.
    </t>
@@ -1238,7 +1233,7 @@
    <t>
       A definition list. Each entry has a pair of elements: a term (&lt;<x:ref>dt</x:ref>&gt;) and
       a definition (&lt;<x:ref>dd</x:ref>&gt;).
-      (This is slightly different than the model used in HTML, whicl allows for multiple terms for
+      (This is slightly different and simpler than the model used in HTML, which allows for multiple terms for
       a single definition.)
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>abstract</x:ref>&gt; (<xref target="element.abstract"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>note</x:ref>&gt; (<xref target="element.note"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
@@ -1381,7 +1376,7 @@
    <iref item="Elements" subitem="em" primary="true"/>
    <iref item="em element" primary="true"/>
    <t>
-        Indicates text that is semantically empahsized. This element will be displayed as italic after processing.
+        Indicates text that is semantically emphasized. This element will be displayed as italic after processing.
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
@@ -1451,7 +1446,7 @@
       <iref item="ascii attribute" subitem="in email element"/>
       <t>
          The ASCII equivalent of the author's email address. This is only used if the email address has
-         one or two internationalized components.
+         any internationalized components.
       </t>
    </section>
 </section>
@@ -1652,7 +1647,7 @@
       <iref item="figure element" subitem="suppress-title attribute"/>
       <iref item="suppress-title attribute" subitem="in figure element"/>
       <t>
-            Deprecated. Figures always now get captions.
+            Deprecated.
          </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -1693,8 +1688,8 @@
    <iref item="Elements" subitem="front" primary="true"/>
    <iref item="front element" primary="true"/>
    <t>
-      Represent the "front matter": metadata (such as author information),
-      abstract, and additional notes.
+      Represents the "front matter": metadata (such as author information),
+      the Abstract, and additional notes.
    </t>
    <t>
       A &lt;<x:ref>front</x:ref>&gt; element may have more than one &lt;<x:ref>seriesInfo</x:ref>&gt; elements.
@@ -1776,7 +1771,7 @@
       Provides terms for the document's index.
    </t>
    <t>
-      Index entries can be either be regular entries (when just the "item"
+      Index entries can be either regular entries (when just the "item"
       attribute is given) or nested entries (by specifying "subitem" as well),
       grouped under a regular entry.
    </t>
@@ -1785,10 +1780,10 @@
       occurred. An exception is the occurrence as a child element of
       &lt;<x:ref>section</x:ref>&gt;, in which case the whole section is
       considered to be relevant for that index entry. In some formats, index
-      entries of this type might be displayed as range.
+      entries of this type might be displayed as ranges.
    </t>
    <t>
-      When the prep tool is creating index content, it collects the items in a case-senstive fashion
+      When the prep tool is creating index content, it collects the items in a case-sensitive fashion
       for both the item and subitem level.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>c</x:ref>&gt; (<xref target="element.c"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>postamble</x:ref>&gt; (<xref target="element.postamble"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>table</x:ref>&gt; (<xref target="element.table"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>), and &lt;<x:ref>ttcol</x:ref>&gt; (<xref target="element.ttcol"/>).</t>
@@ -1816,6 +1811,7 @@
       <t>
             Setting this to "true" declares the occurrence as "primary",
             which might cause it to be highlighted in the index.
+            There is no restriction on the number of occurrences that can be "primary".
          </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -1975,19 +1971,19 @@
       a &lt;link&gt; element:
          <list style="symbols">
          <t>
-               The current ISSN for the RFC Series.
+               The current ISSN for the RFC series.
                The value for the "rel" attribute is "item".
                The link should use the form "urn:issn:".
             </t>
          <t>
                The DOI for this document.
                The value for the "rel" attribute is "describedBy".
-               The link should use the form specified in <xref target="DOI"/>.
+               The link should use the form specified in <xref target="RFC7669"/>.
             </t>
          <t>
-               The Internet Draft that was submitted to the RFC Editor to become the published RFC.
+               The Internet-Draft that was submitted to the RFC Editor to become the published RFC.
                The value for the "rel" attribute is "derivedFrom".
-               The link should be to an IETF-controlled web site that retains copies of Internet Drafts.
+               The link should be to an IETF-controlled web site that retains copies of Internet-Drafts.
             </t>
          <t>
                A representation of the document offered by the document author.
@@ -2097,7 +2093,7 @@
    <iref item="Elements" subitem="note" primary="true"/>
    <iref item="note element" primary="true"/>
    <t>
-      Creates an unnumbered section that appears after the abstract.
+      Creates an unnumbered section that appears after the Abstract.
    </t>
    <t>
       It is usually used for additional information to reviewers (working
@@ -2263,7 +2259,7 @@
         The value is a free-form text that allows counter values to be
         inserted using a "percent-letter" format. For instance, "[REQ%d]"
         generates labels of the form "[REQ1]", where "%d" inserts the
-        item number as decimal number.
+        item number as a decimal number.
       </t>
       <t>
          The following formats are supported:
@@ -2279,7 +2275,7 @@
        </t>
       <t>
         It is an error for the type string to be empty.
-        For bulleted lists, you use the &lt;<x:ref>ul</x:ref>&gt; element.
+        For bulleted lists, use the &lt;<x:ref>ul</x:ref>&gt; element.
         For lists that have neither bullets nor numbers, use the &lt;<x:ref>ul</x:ref>&gt; element with the
         'empty="true"' attribute.
       </t>
@@ -2301,7 +2297,7 @@
       Specifies the affiliation (<xref target="RFC7322"/>) of an author.
    </t>
    <t>
-      This information appears in both the "Author's Address" section and
+      This information appears both in the "Author's Address" section and
       on the front page (see <xref target="RFC7322"/> for more information).
       If the value is long, an abbreviated variant can be specified in the
       "abbrev" attribute.
@@ -2545,7 +2541,7 @@
       <iref item="anchor attribute" subitem="in reference element"/>
       <t>
         Document-wide unique identifier for this reference. Usually, this will
-        be used both to "label" the reference in the references section, and
+        be used both to "label" the reference in the "References" section, and
         as an identifier in links to this reference entry.
       </t>
    </section>
@@ -2611,7 +2607,7 @@
       <iref item="anchor attribute" subitem="in referencegroup element"/>
       <t>
         Document-wide unique identifier for this reference group. Usually, this will
-        be used both to "label" the reference group in the references section, and
+        be used both to "label" the reference group in the "References" section, and
         as an identifier in links to this reference entry.
       </t>
    </section>
@@ -2630,7 +2626,7 @@
    </t>
    <t>
       In the early days of the RFC series, there was only one "References" section per RFC. This convention
-      was later changed to group references into two sets, "Normative" and "Informative"
+      was later changed to group references into two sets, "Normative" and "Informative",
       as described in <xref target="RFC7322"/>).
       This vocabulary supports the split with the &lt;<x:ref>name</x:ref>&gt; child element.
       In general, the title should be either "Normative References" or "Informative References".
@@ -2721,7 +2717,7 @@
    <iref item="Elements" subitem="relref" primary="true"/>
    <iref item="relref element" primary="true"/>
    <t>
-      A relative link to a reference from the References section.
+      A relative link to a reference from the "References" section.
       Formatters that have links (such as HTML and PDF) are likely to render &lt;relref&gt; elements as external hyperlinks
       to the specified part of the reference, creating the link target by combining the base URI from the
       &lt;<x:ref>reference</x:ref>&gt; element with the "relative" attribute from this element.
@@ -3036,7 +3032,7 @@
       <iref item="indexInclude attribute" subitem="in rfc element"/>
       <t>
          Specifies whether or not a formatter is requested to include an index in generated files.
-         If the souce file has no &lt;<x:ref>iref</x:ref>&gt; elements, an index is
+         If the source file has no &lt;<x:ref>iref</x:ref>&gt; elements, an index is
          never generated. This option is useful for generating documents where the
          source document has &lt;<x:ref>iref</x:ref>&gt; elements but the author no longer
          wants an index. 
@@ -3067,7 +3063,7 @@
       <iref item="rfc element" subitem="iprExtract attribute"/>
       <iref item="iprExtract attribute" subitem="in rfc element"/>
       <t>
-            Identifies a single section within the document for which extraction "as-is"
+            Identifies a single section within the document for which extraction "as is"
             is explicitly allowed (only relevant for historic values of the "ipr"
             attribute).
       </t>
@@ -3107,7 +3103,7 @@
       <iref item="rfc element" subitem="prepTime attribute"/>
       <iref item="prepTime attribute" subitem="in rfc element"/>
       <t>
-         The date that the XML was processed by a preparation tool.
+         The date that the XML was processed by a prep tool.
          This is included in the XML file just before it is saved to disk.
          The value is formatted using the format from <xref target="RFC3339"/>.
       </t>
@@ -3246,7 +3242,7 @@
       &lt;back&gt; element).
    </t>
    <t>
-      Sub-sections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
+      Subsections are created by nesting &lt;section&gt; elements inside &lt;section&gt; elements.
       Sections are allowed to be empty.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>), &lt;<x:ref>boilerplate</x:ref>&gt; (<xref target="element.boilerplate"/>), &lt;<x:ref>middle</x:ref>&gt; (<xref target="element.middle"/>), and &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
@@ -3409,7 +3405,7 @@
       &lt;<x:ref>front</x:ref>&gt; element inside the &lt;<x:ref>rfc</x:ref>&gt; element, looking
       for "rfc" or "Internet-Draft". (Specifying neither value in any of the
       &lt;<x:ref>seriesInfo</x:ref>&gt; elements can be useful for producing other types of
-      documents, but is out-of-scope for this specification.)
+      documents, but is out of scope for this specification.)
    </t>
    <t>
 It is invalid to have multiple &lt;<x:ref>seriesInfo</x:ref>&gt; elements inside the same &lt;<x:ref>front</x:ref>&gt;
@@ -3465,7 +3461,7 @@ in the same &lt;front&gt; element.
          element with a name of "Internet-Draft", it can also have at most one additional
          &lt;<x:ref>seriesInfo</x:ref>&gt; element with a "status" attribute whose value is of
          "standard", "full-standard", "bcp", "fyi", "informational", "experimental", or
-         "historic" to indicate the intended status of this Internet Draft, if it were to be later
+         "historic" to indicate the intended status of this Internet-Draft, if it were to be later
          published as an RFC. If such an additional &lt;<x:ref>seriesInfo</x:ref>&gt; element has
          one of those statuses, the name MUST be "".
       </t>
@@ -3489,7 +3485,7 @@ in the same &lt;front&gt; element.
          This MUST NOT be used when &lt;<x:ref>seriesInfo</x:ref>&gt;
          element is an eventual child element of a &lt;<x:ref>rfc</x:ref>&gt; element,
          only as an enventual child of a &lt;<x:ref>reference</x:ref>&gt; element.
-         The value attribute should use the form specified in <xref target="DOI"/>.
+         The value attribute should use the form specified in <xref target="RFC7669"/>.
       </t>
          </list>
       </t>
@@ -3530,14 +3526,14 @@ in the same &lt;front&gt; element.
             The identifier within the series specified by the "name" attribute.
       </t>
       <t>
-            For BCPs, FYIs, RFCs, and STDs this is the number within the series.
+            For BCPs, FYIs, RFCs, and STDs, this is the number within the series.
             For Internet-Drafts, it is the full draft name (ending with the two-digit
             version number). For DOIs, the value is given such as "10.123456/rfc1149",
-            (the actual value will be specified later in <xref target="DOI"/>).
+            (the actual value will be specified later in <xref target="RFC7669"/>).
       </t>
       <t>
             The name in the value should be the document name without any file
-            extension. For Internet Drafts, the value for this attribute should
+            extension. For Internet-Drafts, the value for this attribute should
             be "draft-ietf-somewg-someprotocol-07", not
             "draft-ietf-somewg-someprotocol-07.txt".
       </t>
@@ -3558,7 +3554,7 @@ in the same &lt;front&gt; element.
    <t>
       &lt;sourcecode&gt; provides
       full control of horizontal whitespace and line breaks.
-      It is thus useful for source code and formal languages (such as ABNF or the RNC notation used in this document).
+      It is thus useful for source code and formal languages (such as ABNF <xref target="RFC5234"/> or the RNC notation used in this document).
       When rendered, sourcecode is always shown in a monospace font.
    </t>
    <t>
@@ -3672,7 +3668,7 @@ Using CDATA:
             <t>xml</t>
             <t>yang</t>
          </list>
-            The RFC Editor will maintain a complete list of the preferred values on its
+            The RFC Series Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
             of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified. 
          </t>
@@ -3997,7 +3993,7 @@ Using CDATA:
       If the element contains a &lt;<x:ref>name</x:ref>&gt; element, the caption will also show that name. 
    </t>
    <t>
-      Insde the &lt;<x:ref>table</x:ref>&gt; element is optionlly a &lt;<x:ref>thead</x:ref>&gt; element to
+      Inside the &lt;<x:ref>table</x:ref>&gt; element is optionally a &lt;<x:ref>thead</x:ref>&gt; element to
       contain the rows that will be the table's heading and optionally a &lt;<x:ref>tfoot</x:ref>&gt; element
       to contain the rows of the table's footer. If the XML is converted to a representation that has page
       breaks (such as PDFs, or printed HTML), the header and footer are meant to appear on each page.
@@ -4214,7 +4210,7 @@ Using CDATA:
       <iref item="td element" subitem="colspan attribute"/>
       <iref item="colspan attribute" subitem="in td element"/>
       <t>
-         The number of columns that the cell to span. For example, setting "colspan='3'"
+         The number of columns that the cell is to span. For example, setting "colspan='3'"
          indicates that the cell occupies the same horizontal space as three cells in the
          row above or below this one.
       </t>
@@ -4227,7 +4223,7 @@ Using CDATA:
       <iref item="td element" subitem="rowspan attribute"/>
       <iref item="rowspan attribute" subitem="in td element"/>
       <t>
-         The number of rows that the cell to span. For example, setting "rowspan='3'"
+         The number of rows that the cell is to span. For example, setting "rowspan='3'"
          indicates that the cell occupies the same vertical space as three rows.
       </t>
    </section>
@@ -4402,7 +4398,7 @@ Using CDATA:
       <iref item="th element" subitem="colspan attribute"/>
       <iref item="colspan attribute" subitem="in th element"/>
       <t>
-         The number of columns that the cell to span. For example, setting "colspan='3'"
+         The number of columns that the cell is to span. For example, setting "colspan='3'"
          indicates that the cell occupies the same horizontal space as three cells in the
          row above or below this one.
       </t>
@@ -4415,7 +4411,7 @@ Using CDATA:
       <iref item="th element" subitem="rowspan attribute"/>
       <iref item="rowspan attribute" subitem="in th element"/>
       <t>
-         The number of rows that the cell to span. For example, setting "rowspan='3'"
+         The number of rows that the cell is to span. For example, setting "rowspan='3'"
          indicates that the cell occupies the same vertical space as three rows.
       </t>
    </section>
@@ -4703,7 +4699,7 @@ Using CDATA:
       In Internet-Drafts, this is used in the upper left corner of the boilerplate,
       replacing the "Network Working Group" string. Formatting software can
       append the words "Working Group" or "Research Group", depending on
-      the "submissionType" property on the &lt;<x:ref>rfc</x:ref>&gt; element
+      the "submissionType" property of the &lt;<x:ref>rfc</x:ref>&gt; element
       (<xref target="element.rfc.attribute.submissionType"/>).
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
@@ -4722,7 +4718,7 @@ Using CDATA:
    <t>
       A reference to an anchor in this document.
       Formatters that have links (such as HTML and PDF) are likely to render &lt;xref&gt; elements as internal hyperlinks.
-      This element is useful for referring to references in the References section, to specific sections of this
+      This element is useful for referring to references in the "References" section, to specific sections of this
       document, to specific figures, and so on.
       The "target" attribute is required.
    </t>
@@ -4853,35 +4849,6 @@ Using CDATA:
         Identifies the document component being referenced.
         The value needs to match the value of the "anchor" attribute of an
         element in the document, otherwise it is an error.
-      </t>
-   </section>
-</section>
-
-<!--{http://www.w3.org/2000/svg}svg-->
-<section xmlns:x="http://purl.org/net/xml2rfc/ext" anchor="element.svg">
-   <name>
-      <tt>&lt;svg&gt;</tt> (in namespace <tt>http://www.w3.org/2000/svg</tt>)</name>
-   <x:anchor-alias value="svg"/>
-   <iref item="Elements" subitem="svg" primary="true"/>
-   <iref item="svg element" primary="true"/>
-   <t>
-      This element holds SVG art. The use of SVG in Internet Drafts and RFCs is covered in much more detail in
-      <xref target="SVGforRFCs"/>. 
-   </t>
-   <t><!--AG-->This element appears as a child element of &lt;<x:ref>artwork</x:ref>&gt; (<xref target="element.artwork"/>).</t>
-   <t anchor="element.svg.contents"><!--AG-->
-      <xref format="none" target="grammar.svg">Content model</xref>: this element does not have any contents.</t>
-
-   <!--svg/@TheRealDefinition-->
-   <section anchor="element.svg.attribute.TheRealDefinition" toc="exclude">
-      <name>"TheRealDefinition" Attribute <em> (Mandatory)</em>
-      </name>
-      <iref item="Attributes" subitem="TheRealDefinition"/>
-      <iref item="svg element" subitem="TheRealDefinition attribute"/>
-      <iref item="TheRealDefinition attribute" subitem="in svg element"/>
-      <t>
-         (This is just a placeholder until <xref target="SVGforRFCs"/> has complete RNG that can be incorporated by
-         reference in this draft.)
       </t>
    </section>
 </section>
