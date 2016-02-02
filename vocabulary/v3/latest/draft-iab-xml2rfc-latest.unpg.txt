@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 2629 (if approved)                           January 26, 2016
+Obsoletes: 2629 (if approved)                           February 2, 2016
 Intended status: Informational
-Expires: July 29, 2016
+Expires: August 5, 2016
 
 
                    The "xml2rfc" version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 29, 2016.
+   This Internet-Draft will expire on August 5, 2016.
 
 Copyright Notice
 
@@ -135,7 +135,6 @@ Table of Contents
      2.64. <uri>
      2.65. <workgroup>
      2.66. <xref>
-     2.67. <svg> (in namespace http://www.w3.org/2000/svg)
    3.  Elements from v2 That Have Been Deprecated
      3.1.  <c>
      3.2.  <facsimile>
@@ -147,16 +146,17 @@ Table of Contents
      3.8.  <texttable>
      3.9.  <ttcol>
      3.10. <vspace>
-   4.  Internationalization Considerations
-   5.  Security Considerations
-   6.  IANA Considerations
-     6.1.  Internet Media Type Registration
-     6.2.  Link Relation Registration
-   7.  IAB Members at the Time of Publication
-   8.  Acknowledgments
-   9.  References
-     9.1.  Normative References
-     9.2.  Informative References
+   4.  SVG
+   5.  Internationalization Considerations
+   6.  Security Considerations
+   7.  IANA Considerations
+     7.1.  Internet Media Type Registration
+     7.2.  Link Relation Registration
+   8.  IAB Members at the Time of Publication
+   9.  Acknowledgments
+   10. References
+     10.1. Normative References
+     10.2. Informative References
    Appendix A.  Front-Page ("Boilerplate") Generation
      A.1.  The "ipr" Attribute
        A.1.1.  Current Values: "*trust200902"
@@ -622,7 +622,7 @@ Table of Contents
 
    Or:
 
-      <svg> elements (Section 2.67)
+      <svg> elements (Section 4)
 
 2.5.1.  "align" Attribute
 
@@ -664,7 +664,7 @@ Table of Contents
    for artwork elements in a document.  If multiple artwork elements
    have the same name attribute, a processing tool might assume that the
    elements are all fragments of a single file, and the tool can collect
-   those fragments for later processing.  See Section 5 for a discussion
+   those fragments for later processing.  See Section 6 for a discussion
    of possible problems with the value of this attribute.
 
 2.5.6.  "src" Attribute
@@ -3481,20 +3481,6 @@ Table of Contents
    to match the value of the "anchor" attribute of an element in the
    document, otherwise it is an error.
 
-2.67.  <svg> (in namespace http://www.w3.org/2000/svg)
-
-   This element holds SVG art.  The use of SVG in Internet-Drafts and
-   RFCs is covered in much more detail in [SVGforRFCs].
-
-   This element appears as a child element of <artwork> (Section 2.5).
-
-   Content model: this element does not have any contents.
-
-2.67.1.  "TheRealDefinition" Attribute (Mandatory)
-
-   (This is just a placeholder until [SVGforRFCs] has complete RNG that
-   can be incorporated by reference in this draft.)
-
 3.  Elements from v2 That Have Been Deprecated
 
    This section lists the elements from v2 that have been deprecated.
@@ -3797,7 +3783,11 @@ Table of Contents
 
    Deprecated.
 
-4.  Internationalization Considerations
+4.  SVG
+
+   [[anchor7: Discuss relation to SVG draft.]]
+
+5.  Internationalization Considerations
 
    This format is based on [XML] and thus does not have any issues
    representing arbitrary Unicode [UNICODE] characters in text content.
@@ -3805,7 +3795,7 @@ Table of Contents
    used in a particular RFC; the rules for such restrictions are covered
    in [NONASCII].
 
-5.  Security Considerations
+6.  Security Considerations
 
    The "name" attribute of the <artwork> element (Section 2.5.5) can be
    used to derive a filename for saving to a local file system.
@@ -3834,9 +3824,9 @@ Table of Contents
    All security considerations related to XML processing are relevant as
    well (see Section 7 of [RFC3470]).
 
-6.  IANA Considerations
+7.  IANA Considerations
 
-6.1.  Internet Media Type Registration
+7.1.  Internet Media Type Registration
 
    IANA maintains the registry of Internet Media Types [BCP13] at
    <https://www.iana.org/assignments/media-types>.
@@ -3858,7 +3848,7 @@ Table of Contents
    Encoding considerations:  Identical to those of "application/xml" as
       described in Section 9.1 of [RFC7303].
 
-   Security considerations:  As defined in Section 5.  In addition, as
+   Security considerations:  As defined in Section 6.  In addition, as
       this Media Type uses the "+xml" convention, it inherits the
       security considerations described in Section 10 of [RFC7303].
 
@@ -3899,7 +3889,7 @@ Table of Contents
 
    Change controller:  RFC Series Editor (rse@rfc-editor.org)
 
-6.2.  Link Relation Registration
+7.2.  Link Relation Registration
 
    The following is a proposed addition to [LINKRELATIONS].
 
@@ -3920,7 +3910,7 @@ Table of Contents
 
    Application Data: none
 
-7.  IAB Members at the Time of Publication
+8.  IAB Members at the Time of Publication
 
    Jari Arkko (IETF Chair)
    Mary Barnes
@@ -3936,7 +3926,7 @@ Table of Contents
    Brian Trammell
    Suzanne Woolf
 
-8.  Acknowledgments
+9.  Acknowledgments
 
    Thanks to everybody who reviewed this document and provided feedback
    and/or specification text.  Thanks especially go to Julian Reschke
@@ -3946,9 +3936,9 @@ Table of Contents
    We also thank Marshall T. Rose for both the original design and the
    reference implementation of the "xml2rfc" processor.
 
-9.  References
+10.  References
 
-9.1.  Normative References
+10.1.  Normative References
 
    [XML]            Maler, E., Yergeau, F., Paoli, J., Sperberg-McQueen,
                     M., and T. Bray, "Extensible Markup Language (XML)
@@ -3959,7 +3949,7 @@ Table of Contents
                     Latest version available at
                     <http://www.w3.org/TR/xml>.
 
-9.2.  Informative References
+10.2.  Informative References
 
    [BCP13]          Freed, N., Klensin, J., and T. Hansen, "Media Type
                     Specifications and Registration Procedures", BCP 13,
@@ -4588,7 +4578,6 @@ Appendix C.  Relax NG Schema
 
 
    namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
-   namespace ns1 = "http://www.w3.org/2000/svg"
 
    # xml2rfc Version 3 grammar
 
@@ -5289,12 +5278,8 @@ Appendix C.  Relax NG Schema
        attribute originalSrc { text }?,
        (text* | svg)
      }
-
-   svg =
-     element ns1:svg {
-       [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
-       attribute TheRealDefinition { text }*
-     }
+   # TODO: replace with link to RSE site, or provide an inline version
+   include "svg.rnc"
 
    sourcecode =
      element sourcecode {
@@ -5563,8 +5548,7 @@ Appendix C.  Relax NG Schema
        attribute xml:lang { text }?,
        (text | bcp14 | em | strong | sub | sup | tt)*
      }
-
-   start = rfc
+   start |= rfc
 
 
 Appendix D.  Schema Differences from v2
@@ -5576,7 +5560,6 @@ Appendix D.  Schema Differences from v2
 
      namespace a =
      "http://relaxng.org/ns/compatibility/annotations/1.0"
-   + namespace ns1 = "http://www.w3.org/2000/svg"
 
    + # xml2rfc Version 3 grammar
      rfc =
@@ -6287,11 +6270,9 @@ Appendix D.  Schema Differences from v2
    +     attribute originalSrc { text }?,
    +     (text* | svg)
    +   }
-   + svg =
-   +   element ns1:svg {
-   +     [ a:defaultValue = "can be found in draft-brownlee-svg-rfc" ]
-   +     attribute TheRealDefinition { text }*
-   +   }
+   + # TODO: replace with link to RSE site, or provide an inline
+   + version
+   + include "svg.rnc"
    + sourcecode =
    +   element sourcecode {
    +     attribute xml:base { text }?,
@@ -6525,6 +6506,7 @@ Appendix D.  Schema Differences from v2
      annotation =
    -   element annotation { (text | xref | eref | iref | cref |
    - spanx)* }
+   - start = rfc
    +   element annotation {
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
@@ -6548,7 +6530,7 @@ Appendix D.  Schema Differences from v2
    +     attribute xml:lang { text }?,
    +     (text | bcp14 | em | strong | sub | sup | tt)*
    +   }
-     start = rfc
+   + start |= rfc
 
 
 Index
@@ -6715,7 +6697,6 @@ Index
          surname  1
          symRefs  1
          target  1
-         TheRealDefinition  1
          title  1
          to  1
          toc  1
@@ -7384,9 +7365,8 @@ Index
          in texttable element  1
       surname attribute
          in author element  1
-      svg element  1
+      svg element
          inside artwork  1
-         TheRealDefinition attribute  1
       symRefs attribute
          in rfc element  1
 
@@ -7447,8 +7427,6 @@ Index
       thead element  1
          anchor attribute  1
          inside table  1
-      TheRealDefinition attribute
-         in svg element  1
       title attribute
          in figure element  1
          in note element  1

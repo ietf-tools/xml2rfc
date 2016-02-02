@@ -266,7 +266,21 @@
   </xsl:variable>
   <xsl:element name="{$c}">
     <xsl:comment>AG</xsl:comment>
-    <xsl:variable name="elem" select="//rng:define[@name=current()/@name]/rng:element/@name"/>
+    <xsl:variable name="lookup" select="current()/@name"/>
+    <xsl:variable name="elem">
+      <xsl:choose>
+        <xsl:when test="//rng:define[@name=$lookup]/rng:element/@name">
+          <xsl:value-of select="//rng:define[@name=$lookup]/rng:element/@name"/>
+        </xsl:when>
+        <xsl:when test="$spec//section[@anchor=concat('element.',$lookup)]">
+          <xsl:message>INFO: no RNG definition found for <xsl:value-of select="@name"/>, using prose link instead</xsl:message>
+          <xsl:value-of select="$lookup"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message>ERROR: nothing found for element <xsl:value-of select="@name"/></xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <iref item="Elements" subitem="{$elem}"/>
     <xsl:variable name="container" select="ancestor::rng:element[1]"/>
     <iref item="{$elem} element" subitem="inside {$container/@name}"/>
