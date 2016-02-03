@@ -35,7 +35,7 @@ rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rec
       This document defines the "xml2rfc" version 3 vocabulary: an XML-based
       language used for writing RFCs and Internet-Drafts. It is heavily derived
       from the version 2 vocabulary that is also under discussion. This document
-      obsoletes the v2 grammar described in RFC 2629 and its followup, draft-iab-xml2rfcv2.
+      obsoletes the v2 grammar described in RFC 2629 and its followup, RFC 7749.
     </t>
   </abstract>
 
@@ -57,10 +57,10 @@ rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rec
   (<xref target="RFC7322"/>) and Internet-Drafts (<xref target="IDGUIDE"/>).
 </t>
 <t>
-  This document obsoletes the version 2 vocabulary ("v2") <xref target="XML2RFCv2"/>, which
+  This document obsoletes the version 2 vocabulary ("v2") <xref target="RFC7749"/>, which
   contains the extended language definition. That document in turn obsoletes
   the original version ("v1") <xref target="RFC2629"/>. This document directly copies the
-  material from <xref target="XML2RFCv2"/> where possible; as that document makes its way
+  material from <xref target="RFC7749"/> where possible; as that document makes its way
   toward RFC publication, this document will incorporate as many of the changes as possible.
 </t>
 <t>
@@ -120,7 +120,7 @@ important than backwards compatibility with v2, given the latter two design crit
 v3 is upwards compatible with v2, meaning that a v2 document is meant to be a valid v3
 document as well. However, some features of v2 are deprecated in v3 in favor of new
 elements. Deprecated features are listed in <xref target="deprecated_features"/>,
-and are described in <xref target="XML2RFCv2"/>.
+and are described in <xref target="RFC7749"/>.
 </t>
 
 </section>
@@ -128,7 +128,7 @@ and are described in <xref target="XML2RFCv2"/>.
 <section title="Differences from v2 to v3" anchor="differences.from.v2.to.v3">
 
 <t>
-This is a a hopefully-complete list of all the technical changes between <xref target="XML2RFCv2"/>
+This is a a hopefully-complete list of all the technical changes between <xref target="RFC7749"/>
 and this document.
 </t>
 
@@ -586,7 +586,7 @@ the appendices for a complete description of these attributes.
       description of these solutions.
    </t>
    <t>
-      In <xref target="XML2RFCv2"/>, the &lt;artwork&gt; element was also used for source code and formal
+      In <xref target="RFC7749"/>, the &lt;artwork&gt; element was also used for source code and formal
       languages; in v3, this is now done with &lt;<x:ref>sourcecode</x:ref>&gt;.
    </t>
    <t>
@@ -1401,7 +1401,7 @@ the appendices for a complete description of these attributes.
    </t>
          <t>
       If given, the month must be a number. Note that this restriction is different than that in
-      that in <xref target="XML2RFCv2"/>. The prep tool will silently change text month names to numbers.
+      that in <xref target="RFC7749"/>. The prep tool will silently change text month names to numbers.
       The year must be a four-digit number.
    </t>
          <t>
@@ -2373,7 +2373,7 @@ the appendices for a complete description of these attributes.
             </t>
          <t>
                The Internet-Draft that was submitted to the RFC Editor to become the published RFC.
-               The value for the "rel" attribute is "derivedFrom".
+               The value for the "rel" attribute is "convertedFrom".
                The link should be to an IETF-controlled web site that retains copies of Internet-Drafts.
             </t>
          <t>
@@ -5795,7 +5795,7 @@ and should have only a localized impact on the document processing and rendering
 </t>
 <t>
   This document updates the specification for the Internet Media Type
-  "application/rfc+xml" from the one in <xref target="XML2RFCv2"/>. The following has been registered with IANA.
+  "application/rfc+xml" from the one in <xref target="RFC7749"/>. The following has been registered with IANA.
 </t>
 <t>
   <list style="hanging" x:indent="12em">
@@ -5846,7 +5846,7 @@ and should have only a localized impact on the document processing and rendering
       </list>
     </t>
     <t hangText="Person &amp; email address to contact for further information:">
-      ee the Author's Address section of RFC 7749.
+      See the Author's Address section of RFC 7749.
     </t>
     <t hangText="Intended usage:">
       COMMON
@@ -5910,7 +5910,7 @@ Suzanne Woolf
 <section title="Acknowledgments" anchor="acknowledgements">
 <t>
   Thanks to everybody who reviewed this document and provided feedback and/or
-  specification text. Thanks especially go to Julian Reschke for editing <xref target="XML2RFCv2"/>
+  specification text. Thanks especially go to Julian Reschke for editing <xref target="RFC7749"/>
   and those who provided feedback on that document. 
 </t>
 <t>
@@ -6182,6 +6182,15 @@ Suzanne Woolf
     <seriesInfo name="RFC" value="7669"/>
   </reference>
 
+  <reference anchor="RFC7749">
+    <front>
+      <title>The "xml2rfc" Version 2 Vocabulary</title>
+      <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
+      <date year="2016"/>
+    </front>
+    <seriesInfo name="RFC" value="7749"/>
+  </reference>
+
   <reference anchor="RNC" target="https://www.oasis-open.org/committees/relax-ng/compact-20021121.html">
     <front>
       <title>RELAX NG Compact Syntax</title>
@@ -6314,15 +6323,6 @@ Suzanne Woolf
       Latest version available at
       <eref target='http://www.w3.org/TR/xinclude/'/>.
     </annotation>
-  </reference>
-
-  <reference anchor="XML2RFCv2">
-    <front>
-      <title>The "XML2RFC" version 2 Vocabulary</title>
-      <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
-      <date year="2014"/>
-    </front>
-    <seriesInfo name="Internet-Draft" value="draft-iab-xml2rfcv2"/>
   </reference>
 
   <reference anchor='XPOINTER' target='http://www.w3.org/TR/2003/REC-xptr-framework-20030325/'>
