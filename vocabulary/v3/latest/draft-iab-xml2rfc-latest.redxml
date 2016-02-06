@@ -15,6 +15,11 @@
 
 rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rectified.
 
+sourcecode / number - wait
+sourcecode / indent - wait for Tony, probably not
+
+Get rid of figure/@align - separate thread
+
 -->
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
@@ -626,6 +631,7 @@ the appendices for a complete description of these attributes.
       <t>
             Controls whether the artwork appears left justified (default), centered,
             or right justified.
+            Artwork is aligned relative to left margin of document.
          </t>
       <t><!--AG-->Allowed values:</t>
       <t><list style="symbols"><!--AG-->
@@ -3835,10 +3841,12 @@ in the same &lt;front&gt; element.
       This element allows the inclusion of sourcecode into the document.
    </t>
    <t>
-      &lt;sourcecode&gt; provides
-      full control of horizontal whitespace and line breaks.
-      It is thus useful for source code and formal languages (such as ABNF <xref target="RFC5234"/> or the RNC notation used in this document).
       When rendered, sourcecode is always shown in a monospace font.
+      When &lt;sourcecode&gt; is a child of &lt;<xref target="element.figure" format="none">figure</xref>&gt; or &lt;<xref target="element.section" format="none">section</xref>&gt;, it provides
+      full control of horizontal whitespace and line breaks.
+      When formatted, it is indented indented relative to the left margin of the enclosing element.
+      It is thus useful for source code and formal languages (such as ABNF <xref target="RFC5234"/> or the RNC notation used in this document).
+      (When &lt;sourcecode&gt; is a child of other elements, if flows with the text that surrounds it.)
    </t>
    <t>
       For artwork such as character-based art, diagrams of message layouts, and so on,
@@ -5831,137 +5839,199 @@ Suzanne Woolf
       <date year="2016"/>
     </front><seriesInfo name="Internet-Draft" value="draft-iab-rfcv3-preptool"/></reference>
 
-  <reference anchor="RFC2026" target="http://www.rfc-editor.org/info/rfc2026"><front>
-      <title abbrev="Internet Standards Process">The Internet Standards Process -- Revision 3</title>
-      <author initials="S." surname="Bradner" fullname="Scott O. Bradner"/>
-      <date year="1996" month="October"/>
-    </front><seriesInfo name="BCP" value="9"/><seriesInfo name="RFC" value="2026"/><seriesInfo name="DOI" value="10.17487/RFC2026"/></reference>
 
-  <reference anchor="RFC2397" target="http://www.rfc-editor.org/info/rfc2397"><front>
-      <title abbrev="The &#34;data&#34; URL scheme">The "data" URL scheme</title>
-      <author initials="L." surname="Masinter" fullname="Larry Masinter"/>
-      <date year="1998" month="August"/>
-    </front><seriesInfo name="RFC" value="2397"/><seriesInfo name="DOI" value="10.17487/RFC2397"/></reference>
 
-  <reference anchor="RFC2629" target="http://www.rfc-editor.org/info/rfc2629"><front>
-      <title>Writing I-Ds and RFCs using XML</title>
-      <author initials="M.T." surname="Rose" fullname="Marshall T. Rose"/>
-      <date month="June" year="1999"/>
-    </front><seriesInfo name="RFC" value="2629"/><seriesInfo name="DOI" value="10.17487/RFC2629"/></reference>
+<reference anchor="RFC2026" target="http://www.rfc-editor.org/info/rfc2026"><front>
+<title>The Internet Standards Process -- Revision 3</title>
+<author initials="S." surname="Bradner" fullname="S. Bradner"><organization/></author>
+<date year="1996" month="October"/>
+<abstract><t>This memo documents the process used by the Internet community for the standardization of protocols and procedures.  It defines the stages in the standardization process, the requirements for moving a document between stages and the types of documents used during this process. This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t></abstract>
+</front><seriesInfo name="BCP" value="9"/><seriesInfo name="RFC" value="2026"/><seriesInfo name="DOI" value="10.17487/RFC2026"/></reference>
 
-  <reference anchor="RFC3339" target="http://www.rfc-editor.org/info/rfc3339"><front>
-      <title>Date and Time on the Internet: Timestamps</title>
-      <author initials="G." surname="Klyne" fullname="Graham Klyne" role="editor"/>
-      <author initials="C." surname="Newman" fullname="Chris Newman"/>
-      <date year="2002" month="July"/>
-    </front><seriesInfo name="RFC" value="3339"/><seriesInfo name="DOI" value="10.17487/RFC3339"/></reference>
 
-  <reference anchor="RFC3470" target="http://www.rfc-editor.org/info/rfc3470"><front>
-      <title>Guidelines for the Use of Extensible Markup Language (XML) within IETF Protocols</title>
-      <author initials="S." surname="Hollenbeck" fullname="Scott Hollenbeck"/>
-      <author initials="M." surname="Rose" fullname="Marshall T. Rose"/>
-      <author initials="L." surname="Masinter" fullname="Larry Masinter"/>
-      <date year="2003" month="January" day="23"/>
-    </front><seriesInfo name="BCP" value="70"/><seriesInfo name="RFC" value="3470"/><seriesInfo name="DOI" value="10.17487/RFC3470"/></reference>
 
-  <reference anchor="RFC3667" target="http://www.rfc-editor.org/info/rfc3667"><front>
-      <title>IETF Rights in Contributions</title>
-      <author initials="S." surname="Bradner" fullname="S. Bradner"/>
-      <date year="2004" month="February"/>
-    </front><seriesInfo name="RFC" value="3667"/><seriesInfo name="DOI" value="10.17487/RFC3667"/></reference>
+<reference anchor="RFC2397" target="http://www.rfc-editor.org/info/rfc2397"><front>
+<title>The "data" URL scheme</title>
+<author initials="L." surname="Masinter" fullname="L. Masinter"><organization/></author>
+<date year="1998" month="August"/>
+<abstract><t>A new URL scheme, "data", is defined. It allows inclusion of small data items as "immediate" data, as if it had been included externally. [STANDARDS-TRACK]</t></abstract>
+</front><seriesInfo name="RFC" value="2397"/><seriesInfo name="DOI" value="10.17487/RFC2397"/></reference>
 
-  <reference anchor="RFC3966" target="http://www.rfc-editor.org/info/rfc3966"><front>
-      <title>The tel URI for Telephone Numbers</title>
-      <author initials="H." surname="Schulzrinne" fullname="H. Schulzrinne"/>
-      <date year="2004" month="December"/>
-    </front><seriesInfo name="RFC" value="3966"/><seriesInfo name="DOI" value="10.17487/RFC3966"/></reference>
 
-  <reference anchor="RFC3978" target="http://www.rfc-editor.org/info/rfc3978"><front>
-      <title>IETF Rights in Contributions</title>
-      <author initials="S." surname="Bradner" fullname="S. Bradner"/>
-      <date year="2005" month="March"/>
-    </front><seriesInfo name="RFC" value="3978"/><seriesInfo name="DOI" value="10.17487/RFC3978"/></reference>
 
-  <reference anchor="RFC3986" target="http://www.rfc-editor.org/info/rfc3986"><front>
-    <title abbrev="URI Generic Syntax">Uniform Resource Identifier (URI): Generic Syntax</title>
-    <author initials="T." surname="Berners-Lee" fullname="Tim Berners-Lee"/>
-    <author initials="R." surname="Fielding" fullname="Roy T. Fielding"/>
-    <author initials="L." surname="Masinter" fullname="Larry Masinter"/>
-    <date month="January" year="2005"/>
-   </front><seriesInfo name="STD" value="66"/><seriesInfo name="RFC" value="3986"/><seriesInfo name="DOI" value="10.17487/RFC3986"/></reference>
+<reference anchor="RFC2629" target="http://www.rfc-editor.org/info/rfc2629"><front>
+<title>Writing I-Ds and RFCs using XML</title>
+<author initials="M." surname="Rose" fullname="M. Rose"><organization/></author>
+<date year="1999" month="June"/>
+<abstract><t>This memo presents a technique for using XML (Extensible Markup Language) as a source format for documents in the Internet-Drafts (I-Ds) and Request for Comments (RFC) series.  This memo provides information for the Internet community.</t></abstract>
+</front><seriesInfo name="RFC" value="2629"/><seriesInfo name="DOI" value="10.17487/RFC2629"/></reference>
 
-  <reference anchor="RFC5234" target="http://www.rfc-editor.org/info/rfc5234"><front>
-      <title>Augmented BNF for Syntax Specifications: ABNF</title>
-      <author initials="D." surname="Crocker" fullname="D. Crocker" role="editor"/>
-      <author initials="P." surname="Overell" fullname="P. Overell"/>
-      <date year="2008" month="January"/>
-    </front><seriesInfo name="STD" value="68"/><seriesInfo name="RFC" value="5234"/><seriesInfo name="DOI" value="10.17487/RFC5234"/></reference>
 
-  <reference anchor="RFC5378" target="http://www.rfc-editor.org/info/rfc5378"><front>
-      <title>Rights Contributors Provide to the IETF Trust</title>
-      <author initials="S." surname="Bradner" fullname="S. Bradner" role="editor"/>
-      <author initials="J." surname="Contreras" fullname="J. Contreras" role="editor"/>
-      <date year="2008" month="November"/>
-    </front><seriesInfo name="BCP" value="78"/><seriesInfo name="RFC" value="5378"/><seriesInfo name="DOI" value="10.17487/RFC5378"/></reference>
 
-  <reference anchor="RFC5741" target="http://www.rfc-editor.org/info/rfc5741"><front>
-      <title>RFC Streams, Headers, and Boilerplates</title>
-      <author initials="L." surname="Daigle" fullname="Leslie Daigle"/>
-      <author initials="O." surname="Kolkman" fullname="Olaf Kolkman"/>
-      <date month="December" year="2009"/>
-    </front><seriesInfo name="RFC" value="5741"/><seriesInfo name="DOI" value="10.17487/RFC5741"/></reference>
+<reference anchor="RFC3339" target="http://www.rfc-editor.org/info/rfc3339"><front>
+<title>Date and Time on the Internet: Timestamps</title>
+<author initials="G." surname="Klyne" fullname="G. Klyne"><organization/></author>
+<author initials="C." surname="Newman" fullname="C. Newman"><organization/></author>
+<date year="2002" month="July"/>
+</front><seriesInfo name="RFC" value="3339"/><seriesInfo name="DOI" value="10.17487/RFC3339"/></reference>
+
+
+
+<reference anchor="RFC3470" target="http://www.rfc-editor.org/info/rfc3470"><front>
+<title>Guidelines for the Use of Extensible Markup Language (XML) within IETF Protocols</title>
+<author initials="S." surname="Hollenbeck" fullname="S. Hollenbeck"><organization/></author>
+<author initials="M." surname="Rose" fullname="M. Rose"><organization/></author>
+<author initials="L." surname="Masinter" fullname="L. Masinter"><organization/></author>
+<date year="2003" month="January"/>
+<abstract><t>The Extensible Markup Language (XML) is a framework for structuring data.  While it evolved from Standard Generalized Markup Language (SGML) -- a markup language primarily focused on structuring documents -- XML has evolved to be a widely-used mechanism for representing structured data. There are a wide variety of Internet protocols being developed; many have need for a representation for structured data relevant to their application.  There has been much interest in the use of XML as a representation method.  This document describes basic XML concepts, analyzes various alternatives in the use of XML, and provides guidelines for the use of XML within IETF standards-track protocols.  This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t></abstract>
+</front><seriesInfo name="BCP" value="70"/><seriesInfo name="RFC" value="3470"/><seriesInfo name="DOI" value="10.17487/RFC3470"/></reference>
+
+
+
+<reference anchor="RFC3667" target="http://www.rfc-editor.org/info/rfc3667"><front>
+<title>IETF Rights in Contributions</title>
+<author initials="S." surname="Bradner" fullname="S. Bradner"><organization/></author>
+<date year="2004" month="February"/>
+<abstract><t>The IETF policies about rights in Contributions to the IETF are designed to ensure that such Contributions can be made available to the IETF and Internet communities while permitting the authors to retain as many rights as possible.  This memo details the IETF policies on rights in Contributions to the IETF.  It also describes the objectives that the policies are designed to meet.  This memo updates RFC 2026, and, with RFC 3668, replaces Section 10 of RFC 2026.  This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t></abstract>
+</front><seriesInfo name="RFC" value="3667"/><seriesInfo name="DOI" value="10.17487/RFC3667"/></reference>
+
+
+
+<reference anchor="RFC3966" target="http://www.rfc-editor.org/info/rfc3966"><front>
+<title>The tel URI for Telephone Numbers</title>
+<author initials="H." surname="Schulzrinne" fullname="H. Schulzrinne"><organization/></author>
+<date year="2004" month="December"/>
+<abstract><t>This document specifies the URI (Uniform Resource Identifier) scheme "tel".  The "tel" URI describes resources identified by telephone numbers.  This document obsoletes RFC 2806.  [STANDARDS-TRACK]</t></abstract>
+</front><seriesInfo name="RFC" value="3966"/><seriesInfo name="DOI" value="10.17487/RFC3966"/></reference>
+
+
+
+<reference anchor="RFC3978" target="http://www.rfc-editor.org/info/rfc3978"><front>
+<title>IETF Rights in Contributions</title>
+<author initials="S." surname="Bradner" fullname="S. Bradner" role="editor"><organization/></author>
+<date year="2005" month="March"/>
+<abstract><t>The IETF policies about rights in Contributions to the IETF are designed to ensure that such Contributions can be made available to the IETF and Internet communities while permitting the authors to retain as many rights as possible.  This memo details the IETF policies on rights in Contributions to the IETF.  It also describes the objectives that the policies are designed to meet.  This memo updates RFC 2026, and, with RFC 3979, replaces Section 10 of RFC 2026.  This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t></abstract>
+</front><seriesInfo name="RFC" value="3978"/><seriesInfo name="DOI" value="10.17487/RFC3978"/></reference>
+
+
+
+<reference anchor="RFC3986" target="http://www.rfc-editor.org/info/rfc3986"><front>
+<title>Uniform Resource Identifier (URI): Generic Syntax</title>
+<author initials="T." surname="Berners-Lee" fullname="T. Berners-Lee"><organization/></author>
+<author initials="R." surname="Fielding" fullname="R. Fielding"><organization/></author>
+<author initials="L." surname="Masinter" fullname="L. Masinter"><organization/></author>
+<date year="2005" month="January"/>
+<abstract><t>A Uniform Resource Identifier (URI) is a compact sequence of characters that identifies an abstract or physical resource.  This specification defines the generic URI syntax and a process for resolving URI references that might be in relative form, along with guidelines and security considerations for the use of URIs on the Internet.  The URI syntax defines a grammar that is a superset of all valid URIs, allowing an implementation to parse the common components of a URI reference without knowing the scheme-specific requirements of every possible identifier.  This specification does not define a generative grammar for URIs; that task is performed by the individual specifications of each URI scheme.  [STANDARDS-TRACK]</t></abstract>
+</front><seriesInfo name="STD" value="66"/><seriesInfo name="RFC" value="3986"/><seriesInfo name="DOI" value="10.17487/RFC3986"/></reference>
+
+
+
+<reference anchor="RFC5234" target="http://www.rfc-editor.org/info/rfc5234"><front>
+<title>Augmented BNF for Syntax Specifications: ABNF</title>
+<author initials="D." surname="Crocker" fullname="D. Crocker" role="editor"><organization/></author>
+<author initials="P." surname="Overell" fullname="P. Overell"><organization/></author>
+<date year="2008" month="January"/>
+<abstract><t>Internet technical specifications often need to define a formal syntax.  Over the years, a modified version of Backus-Naur Form (BNF), called Augmented BNF (ABNF), has been popular among many Internet specifications.  The current specification documents ABNF. It balances compactness and simplicity with reasonable representational power.  The differences between standard BNF and ABNF involve naming rules, repetition, alternatives, order-independence, and value ranges.  This specification also supplies additional rule definitions and encoding for a core lexical analyzer of the type common to several Internet specifications.  [STANDARDS-TRACK]</t></abstract>
+</front><seriesInfo name="STD" value="68"/><seriesInfo name="RFC" value="5234"/><seriesInfo name="DOI" value="10.17487/RFC5234"/></reference>
+
+
+
+<reference anchor="RFC5378" target="http://www.rfc-editor.org/info/rfc5378"><front>
+<title>Rights Contributors Provide to the IETF Trust</title>
+<author initials="S." surname="Bradner" fullname="S. Bradner" role="editor"><organization/></author>
+<author initials="J." surname="Contreras" fullname="J. Contreras" role="editor"><organization/></author>
+<date year="2008" month="November"/>
+<abstract><t>The IETF policies about rights in Contributions to the IETF are designed to ensure that such Contributions can be made available to the IETF and Internet communities while permitting the authors to retain as many rights as possible.  This memo details the IETF policies on rights in Contributions to the IETF.  It also describes the objectives that the policies are designed to meet.  This memo obsoletes RFCs 3978 and 4748 and, with BCP 79 and RFC 5377, replaces Section 10 of RFC 2026.  This document  specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t></abstract>
+</front><seriesInfo name="BCP" value="78"/><seriesInfo name="RFC" value="5378"/><seriesInfo name="DOI" value="10.17487/RFC5378"/></reference>
+
+
+
+<reference anchor="RFC5741" target="http://www.rfc-editor.org/info/rfc5741"><front>
+<title>RFC Streams, Headers, and Boilerplates</title>
+<author initials="L." surname="Daigle" fullname="L. Daigle" role="editor"><organization/></author>
+<author initials="O." surname="Kolkman" fullname="O. Kolkman" role="editor"><organization/></author>
+<author><organization>IAB</organization></author>
+<date year="2009" month="December"/>
+<abstract><t>RFC documents contain a number of fixed elements such as the title page header, standard boilerplates, and copyright/IPR statements. This document describes them and introduces some updates to reflect current usage and requirements of RFC publication.  In particular, this updated structure is intended to communicate clearly the source of RFC creation and review.  This document is not an Internet Standards  Track specification; it is published for informational purposes.</t></abstract>
+</front><seriesInfo name="RFC" value="5741"/><seriesInfo name="DOI" value="10.17487/RFC5741"/></reference>
+
+
 
 <reference anchor="RFC5743" target="http://www.rfc-editor.org/info/rfc5743"><front>
 <title>Definition of an Internet Research Task Force (IRTF) Document Stream</title>
 <author initials="A." surname="Falk" fullname="A. Falk"><organization/></author>
 <date year="2009" month="December"/>
+<abstract><t>This memo defines the publication stream for RFCs from the Internet Research Task Force.  Most documents undergoing this process will come from IRTF Research Groups, and it is expected that they will be published as Informational or Experimental RFCs by the RFC Editor.   This document is not an Internet Standards Track specification; it is published for informational purposes.</t></abstract>
 </front><seriesInfo name="RFC" value="5743"/><seriesInfo name="DOI" value="10.17487/RFC5743"/></reference>
 
-  <reference anchor="RFC6068" target="http://www.rfc-editor.org/info/rfc6068"><front>
-      <title>The 'mailto' URI Scheme</title>
-      <author initials="M." surname="Duerst" fullname="M. Duerst"/>
-      <author initials="L." surname="Masinter" fullname="L. Masinter"/>
-      <author initials="J." surname="Zawinski" fullname="J. Zawinski"/>
-      <date year="2010" month="October"/>
-    </front><seriesInfo name="RFC" value="6068"/><seriesInfo name="DOI" value="10.17487/RFC6068"/></reference>
 
-  <reference anchor="RFC6266" target="http://www.rfc-editor.org/info/rfc6266"><front>
-      <title>Use of the Content-Disposition Header Field in the Hypertext Transfer Protocol (HTTP)</title>
-      <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
-      <date month="June" year="2011"/>
-    </front><seriesInfo name="RFC" value="6266"/><seriesInfo name="DOI" value="10.17487/RFC6266"/></reference>
 
-<reference anchor="RFC6949" target="http://www.rfc-editor.org/info/rfc6949"><front><title>RFC Series Format Requirements and Future Development</title>
+<reference anchor="RFC6068" target="http://www.rfc-editor.org/info/rfc6068"><front>
+<title>The 'mailto' URI Scheme</title>
+<author initials="M." surname="Duerst" fullname="M. Duerst"><organization/></author>
+<author initials="L." surname="Masinter" fullname="L. Masinter"><organization/></author>
+<author initials="J." surname="Zawinski" fullname="J. Zawinski"><organization/></author>
+<date year="2010" month="October"/>
+<abstract><t>This document defines the format of Uniform Resource Identifiers (URIs) to identify resources that are reached using Internet mail. It adds better internationalization and compatibility with Internationalized Resource Identifiers (IRIs; RFC 3987) to the previous syntax of 'mailto' URIs (RFC 2368).  [STANDARDS-TRACK]</t></abstract>
+</front><seriesInfo name="RFC" value="6068"/><seriesInfo name="DOI" value="10.17487/RFC6068"/></reference>
+
+
+
+<reference anchor="RFC6266" target="http://www.rfc-editor.org/info/rfc6266"><front>
+<title>Use of the Content-Disposition Header Field in the Hypertext Transfer Protocol (HTTP)</title>
+<author initials="J." surname="Reschke" fullname="J. Reschke"><organization/></author>
+<date year="2011" month="June"/>
+<abstract><t>RFC 2616 defines the Content-Disposition response header field, but points out that it is not part of the HTTP/1.1 Standard.  This specification takes over the definition and registration of Content-Disposition, as used in HTTP, and clarifies internationalization aspects.  [STANDARDS-TRACK]</t></abstract>
+</front><seriesInfo name="RFC" value="6266"/><seriesInfo name="DOI" value="10.17487/RFC6266"/></reference>
+
+
+
+<reference anchor="RFC6949" target="http://www.rfc-editor.org/info/rfc6949"><front>
+<title>RFC Series Format Requirements and Future Development</title>
 <author initials="H." surname="Flanagan" fullname="H. Flanagan"><organization/></author>
 <author initials="N." surname="Brownlee" fullname="N. Brownlee"><organization/></author>
 <date year="2013" month="May"/>
-</front><seriesInfo name="RFC" value="6949"/><seriesInfo name="DOI" value="10.17487/RFC6949"/><format type="TXT" octets="29181" target="https://www.rfc-editor.org/rfc/rfc6949.txt"/></reference>
+<abstract><t>This document describes the current requirements and requests for enhancements for the format of the canonical version of RFCs.  Terms are defined to help clarify exactly which stages of document production are under discussion for format changes.  The requirements described in this document will determine what changes will be made to RFC format.  This document updates RFC 2223.</t></abstract>
+</front><seriesInfo name="RFC" value="6949"/><seriesInfo name="DOI" value="10.17487/RFC6949"/></reference>
 
-  <reference anchor="RFC7303" target="http://www.rfc-editor.org/info/rfc7303"><front>
-      <title>XML Media Types</title>
-      <author initials="H." surname="Thompson" fullname="H. Thompson"/>
-      <author initials="C." surname="Lilley" fullname="C. Lilley"/>
-      <date year="2014" month="July"/>
-    </front><seriesInfo name="RFC" value="7303"/><seriesInfo name="DOI" value="10.17487/RFC7303"/></reference>
 
-  <reference anchor="RFC7322" target="http://www.rfc-editor.org/info/rfc7322"><front>
-      <title>RFC Style Guide</title>
-      <author initials="H." surname="Heather" fullname="Heather Flanagan"/>
-      <author initials="S." surname="Ginoza" fullname="Sandy Ginoza"/>
-      <date month="September" year="2014"/>
-    </front><seriesInfo name="RFC" value="7322"/><seriesInfo name="DOI" value="10.17487/RFC7322"/></reference>
-  
-  <reference anchor="RFC7669" target="http://www.rfc-editor.org/info/rfc7669"><front>
-      <title>Assigning Digital Object Identifiers to RFCs</title>
-      <author initials="J." surname="Levine" fullname="John Levine"/>
-      <date year="2015"/>
-    </front><seriesInfo name="RFC" value="7669"/><seriesInfo name="DOI" value="10.17487/RFC7669"/></reference>
 
-  <reference anchor="RFC7749" target="http://www.rfc-editor.org/info/rfc7749"><front>
-      <title>The "xml2rfc" Version 2 Vocabulary</title>
-      <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
-      <date year="2016" month="February"/>
-    </front><seriesInfo name="RFC" value="7749"/><seriesInfo name="DOI" value="10.17487/RFC7749"/></reference>
+<reference anchor="RFC7303" target="http://www.rfc-editor.org/info/rfc7303"><front>
+<title>XML Media Types</title>
+<author initials="H." surname="Thompson" fullname="H. Thompson"><organization/></author>
+<author initials="C." surname="Lilley" fullname="C. Lilley"><organization/></author>
+<date year="2014" month="July"/>
+<abstract><t>This specification standardizes three media types -- application/xml, application/xml-external-parsed-entity, and application/xml-dtd -- for use in exchanging network entities that are related to the Extensible Markup Language (XML) while defining text/xml and text/ xml-external-parsed-entity as aliases for the respective application/ types.  This specification also standardizes the '+xml' suffix for naming media types outside of these five types when those media types represent XML MIME entities.</t></abstract>
+</front><seriesInfo name="RFC" value="7303"/><seriesInfo name="DOI" value="10.17487/RFC7303"/></reference>
+
+
+
+<reference anchor="RFC7322" target="http://www.rfc-editor.org/info/rfc7322"><front>
+<title>RFC Style Guide</title>
+<author initials="H." surname="Flanagan" fullname="H. Flanagan"><organization/></author>
+<author initials="S." surname="Ginoza" fullname="S. Ginoza"><organization/></author>
+<date year="2014" month="September"/>
+<abstract><t>This document describes the fundamental and unique style conventions and editorial policies currently in use for the RFC Series.  It captures the RFC Editor's basic requirements and offers guidance regarding the style and structure of an RFC.  Additional guidance is captured on a website that reflects the experimental nature of that guidance and prepares it for future inclusion in the RFC Style Guide.  This document obsoletes RFC 2223, "Instructions to RFC Authors".</t></abstract>
+</front><seriesInfo name="RFC" value="7322"/><seriesInfo name="DOI" value="10.17487/RFC7322"/></reference>
+
+
+
+<reference anchor="RFC7669" target="http://www.rfc-editor.org/info/rfc7669"><front>
+<title>Assigning Digital Object Identifiers to RFCs</title>
+<author initials="J." surname="Levine" fullname="J. Levine"><organization/></author>
+<date year="2015" month="October"/>
+<abstract><t>This document describes the way that Digital Object Identifiers (DOIs) are assigned to past and future RFCs.  The DOI is a widely used system that assigns unique identifiers to digital documents that can be queried and managed in a consistent fashion.</t></abstract>
+</front><seriesInfo name="RFC" value="7669"/><seriesInfo name="DOI" value="10.17487/RFC7669"/></reference>
+
+
+
+<reference anchor="RFC7749" target="http://www.rfc-editor.org/info/rfc7749"><front>
+<title>The "xml2rfc" Version 2 Vocabulary</title>
+<author initials="J." surname="Reschke" fullname="J. Reschke"><organization/></author>
+<date year="2016" month="February"/>
+<abstract><t>This document defines the "xml2rfc" version 2 vocabulary: an XML-based language used for writing RFCs and Internet-Drafts.</t><t>Version 2 represents the state of the vocabulary (as implemented by several tools and as used by the RFC Editor) around 2014.</t><t>This document obsoletes RFC 2629.</t></abstract>
+</front><seriesInfo name="RFC" value="7749"/><seriesInfo name="DOI" value="10.17487/RFC7749"/></reference>
+
 
   <reference anchor="RNC" target="https://www.oasis-open.org/committees/relax-ng/compact-20021121.html"><front>
       <title>RELAX NG Compact Syntax</title>

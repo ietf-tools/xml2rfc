@@ -15,9 +15,35 @@
 
 rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rectified.
 
+sourcecode / number - wait
+sourcecode / indent - wait for Tony, probably not
+
+Get rid of figure/@align - separate thread
+
 -->
 
-<!DOCTYPE rfc []>
+<!DOCTYPE rfc [
+<!ENTITY rfc2026 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2026.xml">
+<!ENTITY rfc2397 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2397.xml">
+<!ENTITY rfc2629 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2629.xml">
+<!ENTITY rfc3339 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3339.xml">
+<!ENTITY rfc3470 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3470.xml">
+<!ENTITY rfc3667 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3667.xml">
+<!ENTITY rfc3966 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3966.xml">
+<!ENTITY rfc3978 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3978.xml">
+<!ENTITY rfc3986 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml">
+<!ENTITY rfc5234 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml">
+<!ENTITY rfc5378 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5378.xml">
+<!ENTITY rfc5741 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5741.xml">
+<!ENTITY rfc5743 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5743.xml">
+<!ENTITY rfc6068 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6068.xml">
+<!ENTITY rfc6266 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6266.xml">
+<!ENTITY rfc6949 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6949.xml">
+<!ENTITY rfc7303 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7303.xml">
+<!ENTITY rfc7322 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7322.xml">
+<!ENTITY rfc7669 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7669.xml">
+<!ENTITY rfc7749 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7749.xml">
+]>
 
 <rfc xmlns:x="http://purl.org/net/xml2rfc/ext" obsoletes="7749" xmlns:ed="http://greenbytes.de/2002/rfcedit" ipr="trust200902" docName="draft-iab-xml2rfc-latest" category="info" xml:lang="en">
   <x:feedback template="mailto:xml2rfc@ietf.org?subject={docname},%20%22{section}%22&amp;body=&lt;{ref}&gt;:"/>
@@ -638,6 +664,7 @@ the appendices for a complete description of these attributes.
       <t>
             Controls whether the artwork appears left justified (default), centered,
             or right justified.
+            Artwork is aligned relative to left margin of document.
          </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -3943,10 +3970,12 @@ in the same &lt;front&gt; element.
       This element allows the inclusion of sourcecode into the document.
    </t>
    <t>
-      &lt;sourcecode&gt; provides
-      full control of horizontal whitespace and line breaks.
-      It is thus useful for source code and formal languages (such as ABNF <xref target="RFC5234"/> or the RNC notation used in this document).
       When rendered, sourcecode is always shown in a monospace font.
+      When &lt;sourcecode&gt; is a child of &lt;<x:ref>figure</x:ref>&gt; or &lt;<x:ref>section</x:ref>&gt;, it provides
+      full control of horizontal whitespace and line breaks.
+      When formatted, it is indented indented relative to the left margin of the enclosing element.
+      It is thus useful for source code and formal languages (such as ABNF <xref target="RFC5234"/> or the RNC notation used in this document).
+      (When &lt;sourcecode&gt; is a child of other elements, if flows with the text that surrounds it.)
    </t>
    <t>
       For artwork such as character-based art, diagrams of message layouts, and so on,
@@ -5994,202 +6023,26 @@ Suzanne Woolf
     <seriesInfo name="Internet-Draft" value="draft-iab-rfcv3-preptool"/>
   </reference>
 
-  <reference anchor='RFC2026'>
-    <front>
-      <title abbrev='Internet Standards Process'>The Internet Standards Process -- Revision 3</title>
-      <author initials='S.' surname='Bradner' fullname='Scott O. Bradner'/>
-      <date year='1996' month='October' />
-    </front>
-    <seriesInfo name='BCP' value='9' />
-    <seriesInfo name='RFC' value='2026' />
-  </reference>
-
-  <reference anchor='RFC2397'>
-    <front>
-      <title abbrev='The &quot;data&quot; URL scheme'>The &quot;data&quot; URL scheme</title>
-      <author initials='L.' surname='Masinter' fullname='Larry Masinter'/>
-      <date year='1998' month='August' />
-    </front>
-    <seriesInfo name='RFC' value='2397' />
-  </reference>
-
-  <reference anchor='RFC2629'>
-    <front>
-      <title>Writing I-Ds and RFCs using XML</title>
-      <author initials='M.T.' surname='Rose' fullname='Marshall T. Rose' />
-      <date month='June' year='1999' />
-    </front>
-    <seriesInfo name='RFC' value='2629' />
-  </reference>
-
-  <reference anchor="RFC3339">
-    <front>
-      <title>Date and Time on the Internet: Timestamps</title>
-      <author initials='G.' surname='Klyne' fullname='Graham Klyne' role='editor'/>
-      <author initials='C.' surname='Newman' fullname='Chris Newman'/>
-      <date year='2002' month='July' />
-    </front>
-    <seriesInfo name='RFC' value='3339' />
-  </reference>
-
-  <reference anchor="RFC3470">
-    <front>
-      <title>Guidelines for the Use of Extensible Markup Language (XML) within IETF Protocols</title>
-      <author initials="S." surname="Hollenbeck" fullname="Scott Hollenbeck"/>
-      <author initials="M." surname="Rose" fullname="Marshall T. Rose"/>
-      <author initials="L." surname="Masinter" fullname="Larry Masinter"/>
-      <date year="2003" month="January" day="23"/>
-    </front>
-    <seriesInfo name="BCP" value="70"/>
-    <seriesInfo name="RFC" value="3470"/>
-  </reference>
-
-  <reference anchor='RFC3667'>
-    <front>
-      <title>IETF Rights in Contributions</title>
-      <author initials='S.' surname='Bradner' fullname='S. Bradner'/>
-      <date year='2004' month='February' />
-    </front>
-    <seriesInfo name='RFC' value='3667' />
-  </reference>
-
-  <reference anchor='RFC3966'>
-    <front>
-      <title>The tel URI for Telephone Numbers</title>
-      <author initials='H.' surname='Schulzrinne' fullname='H. Schulzrinne'/>
-      <date year='2004' month='December' />
-    </front>
-    <seriesInfo name='RFC' value='3966' />
-  </reference>
-
-  <reference anchor="RFC3978">
-    <front>
-      <title>IETF Rights in Contributions</title>
-      <author initials="S." surname="Bradner" fullname="S. Bradner"/>
-      <date year="2005" month="March"/>
-    </front>
-    <seriesInfo name="RFC" value="3978"/>
-  </reference>
-
-  <reference anchor="RFC3986">
-   <front>
-    <title abbrev='URI Generic Syntax'>Uniform Resource Identifier (URI): Generic Syntax</title>
-    <author initials='T.' surname='Berners-Lee' fullname='Tim Berners-Lee'/>
-    <author initials='R.' surname='Fielding' fullname='Roy T. Fielding'/>
-    <author initials='L.' surname='Masinter' fullname='Larry Masinter'/>
-    <date month='January' year='2005'></date>
-   </front>
-   <seriesInfo name="STD" value="66"/>
-   <seriesInfo name="RFC" value="3986"/>
-  </reference>
-
-  <reference anchor="RFC5234">
-    <front>
-      <title>Augmented BNF for Syntax Specifications: ABNF</title>
-      <author initials="D." surname="Crocker" fullname="D. Crocker" role="editor"/>
-      <author initials="P." surname="Overell" fullname="P. Overell"/>
-      <date year="2008" month="January"/>
-    </front>
-    <seriesInfo name="STD" value="68"/>
-    <seriesInfo name="RFC" value="5234"/>
-  </reference>
-
-  <reference anchor="RFC5378">
-    <front>
-      <title>Rights Contributors Provide to the IETF Trust</title>
-      <author initials='S.' surname='Bradner' fullname='S. Bradner' role='editor'/>
-      <author initials='J.' surname='Contreras' fullname='J. Contreras' role='editor'/>
-      <date year='2008' month='November' />
-    </front>
-    <seriesInfo name='BCP' value='78'/>
-    <seriesInfo name='RFC' value='5378'/>
-  </reference>
-
-  <reference anchor='RFC5741'>
-    <front>
-      <title>RFC Streams, Headers, and Boilerplates</title>
-      <author initials='L.' surname='Daigle' fullname='Leslie Daigle'/>
-      <author initials='O.' surname='Kolkman' fullname='Olaf Kolkman'/>
-      <date month='December' year='2009' />
-    </front>
-    <seriesInfo name='RFC' value='5741' />
-  </reference>
-
-<reference  anchor='RFC5743'>
-<front>
-<title>Definition of an Internet Research Task Force (IRTF) Document Stream</title>
-<author initials='A.' surname='Falk' fullname='A. Falk'><organization /></author>
-<date year='2009' month='December' />
-</front>
-<seriesInfo name='RFC' value='5743'/>
-<seriesInfo name='DOI' value='10.17487/RFC5743'/>
-</reference>
-
-  <reference anchor="RFC6068">
-    <front>
-      <title>The 'mailto' URI Scheme</title>
-      <author initials="M." surname="Duerst" fullname="M. Duerst"/>
-      <author initials="L." surname="Masinter" fullname="L. Masinter"/>
-      <author initials="J." surname="Zawinski" fullname="J. Zawinski"/>
-      <date year="2010" month="October"/>
-    </front>
-    <seriesInfo name="RFC" value="6068"/>
-  </reference>
-
-  <reference anchor="RFC6266">
-    <front>
-      <title>Use of the Content-Disposition Header Field in the Hypertext Transfer Protocol (HTTP)</title>
-      <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
-      <date month="June" year="2011"/>
-    </front>
-    <seriesInfo name='RFC' value='6266' />
-  </reference>
-
-<reference anchor="RFC6949">
-<front><title>RFC Series Format Requirements and Future Development</title>
-<author initials="H." surname="Flanagan" fullname="H. Flanagan"><organization/></author>
-<author initials="N." surname="Brownlee" fullname="N. Brownlee"><organization/></author>
-<date year="2013" month="May"/>
-</front><seriesInfo name="RFC" value="6949"/><format type="TXT" octets="29181" target="https://www.rfc-editor.org/rfc/rfc6949.txt"/>
-</reference>
-
-  <reference anchor="RFC7303">
-    <front>
-      <title>XML Media Types</title>
-      <author initials="H." surname="Thompson" fullname="H. Thompson"/>
-      <author initials="C." surname="Lilley" fullname="C. Lilley"/>
-      <date year="2014" month="July"/>
-    </front>
-    <seriesInfo name="RFC" value="7303"/>
-  </reference>
-
-  <reference anchor="RFC7322">
-    <front>
-      <title>RFC Style Guide</title>
-      <author initials="H." surname="Heather" fullname="Heather Flanagan"/>
-      <author initials="S." surname="Ginoza" fullname="Sandy Ginoza"/>
-      <date month="September" year="2014" />
-    </front>
-    <seriesInfo name="RFC" value="7322"/>
-  </reference>
-  
-  <reference anchor="RFC7669">
-    <front>
-      <title>Assigning Digital Object Identifiers to RFCs</title>
-      <author initials="J." surname="Levine" fullname="John Levine"/>
-      <date year="2015"/>
-    </front>
-    <seriesInfo name="RFC" value="7669"/>
-  </reference>
-
-  <reference anchor="RFC7749">
-    <front>
-      <title>The "xml2rfc" Version 2 Vocabulary</title>
-      <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
-      <date year="2016" month="February"/>
-    </front>
-    <seriesInfo name="RFC" value="7749"/>
-  </reference>
+&rfc2026;
+&rfc2397;
+&rfc2629;
+&rfc3339;
+&rfc3470;
+&rfc3667;
+&rfc3966;
+&rfc3978;
+&rfc3986;
+&rfc5234;
+&rfc5378;
+&rfc5741;
+&rfc5743;
+&rfc6068;
+&rfc6266;
+&rfc6949;
+&rfc7303;
+&rfc7322;
+&rfc7669;
+&rfc7749;
 
   <reference anchor="RNC" target="https://www.oasis-open.org/committees/relax-ng/compact-20021121.html">
     <front>

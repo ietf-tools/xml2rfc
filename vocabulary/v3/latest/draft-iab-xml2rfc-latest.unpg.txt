@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 7749 (if approved)                           February 4, 2016
+Obsoletes: 7749 (if approved)                           February 5, 2016
 Intended status: Informational
-Expires: August 7, 2016
+Expires: August 8, 2016
 
 
                    The "xml2rfc" version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 7, 2016.
+   This Internet-Draft will expire on August 8, 2016.
 
 Copyright Notice
 
@@ -627,7 +627,8 @@ Table of Contents
 2.5.1.  "align" Attribute
 
    Controls whether the artwork appears left justified (default),
-   centered, or right justified.
+   centered, or right justified.  Artwork is aligned relative to left
+   margin of document.
 
    Allowed values:
 
@@ -2636,10 +2637,14 @@ Table of Contents
 
    This element allows the inclusion of sourcecode into the document.
 
-   <sourcecode> provides full control of horizontal whitespace and line
-   breaks.  It is thus useful for source code and formal languages (such
-   as ABNF [RFC5234] or the RNC notation used in this document).  When
-   rendered, sourcecode is always shown in a monospace font.
+   When rendered, sourcecode is always shown in a monospace font.  When
+   <sourcecode> is a child of <figure> or <section>, it provides full
+   control of horizontal whitespace and line breaks.  When formatted, it
+   is indented indented relative to the left margin of the enclosing
+   element.  It is thus useful for source code and formal languages
+   (such as ABNF [RFC5234] or the RNC notation used in this document).
+   (When <sourcecode> is a child of other elements, if flows with the
+   text that surrounds it.)
 
    For artwork such as character-based art, diagrams of message layouts,
    and so on, use the <artwork> element instead.
@@ -3984,7 +3989,7 @@ Table of Contents
                     RFC 2629, DOI 10.17487/RFC2629, June 1999,
                     <http://www.rfc-editor.org/info/rfc2629>.
 
-   [RFC3339]        Klyne, G., Ed. and C. Newman, "Date and Time on the
+   [RFC3339]        Klyne, G. and C. Newman, "Date and Time on the
                     Internet: Timestamps", RFC 3339, DOI 10.17487/
                     RFC3339, July 2002,
                     <http://www.rfc-editor.org/info/rfc3339>.
@@ -4004,7 +4009,7 @@ Table of Contents
                     December 2004,
                     <http://www.rfc-editor.org/info/rfc3966>.
 
-   [RFC3978]        Bradner, S., "IETF Rights in Contributions",
+   [RFC3978]        Bradner, S., Ed., "IETF Rights in Contributions",
                     RFC 3978, DOI 10.17487/RFC3978, March 2005,
                     <http://www.rfc-editor.org/info/rfc3978>.
 
@@ -4024,9 +4029,9 @@ Table of Contents
                     RFC 5378, DOI 10.17487/RFC5378, November 2008,
                     <http://www.rfc-editor.org/info/rfc5378>.
 
-   [RFC5741]        Daigle, L. and O. Kolkman, "RFC Streams, Headers,
-                    and Boilerplates", RFC 5741, DOI 10.17487/RFC5741,
-                    December 2009,
+   [RFC5741]        Daigle, L., Ed., Kolkman, O., Ed., and IAB, "RFC
+                    Streams, Headers, and Boilerplates", RFC 5741,
+                    DOI 10.17487/RFC5741, December 2009,
                     <http://www.rfc-editor.org/info/rfc5741>.
 
    [RFC5743]        Falk, A., "Definition of an Internet Research Task
@@ -4053,12 +4058,12 @@ Table of Contents
                     RFC 7303, DOI 10.17487/RFC7303, July 2014,
                     <http://www.rfc-editor.org/info/rfc7303>.
 
-   [RFC7322]        Heather, H. and S. Ginoza, "RFC Style Guide",
+   [RFC7322]        Flanagan, H. and S. Ginoza, "RFC Style Guide",
                     RFC 7322, DOI 10.17487/RFC7322, September 2014,
                     <http://www.rfc-editor.org/info/rfc7322>.
 
    [RFC7669]        Levine, J., "Assigning Digital Object Identifiers to
-                    RFCs", RFC 7669, DOI 10.17487/RFC7669, 2015,
+                    RFCs", RFC 7669, DOI 10.17487/RFC7669, October 2015,
                     <http://www.rfc-editor.org/info/rfc7669>.
 
    [RFC7749]        Reschke, J., "The "xml2rfc" Version 2 Vocabulary",
