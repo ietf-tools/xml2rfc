@@ -18,9 +18,7 @@ rfc/@submissionType is now duplicated in seriesInfo/stream. This needs to be rec
 sourcecode / number - wait
 sourcecode / indent - wait for Tony, probably not
 
-Move the CDATA stuff into its own section and point to it from <artwork> and <sourcecode>
-
-Adding <example>?
+Adding <example>? Hopefully not.
 
 -->
 
@@ -405,6 +403,8 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
 Tools interpreting the XML described here will collapse horizontal whitespace and line breaks to a
 single whitespace (except inside &lt;<x:ref>artwork</x:ref>&gt; and
 &lt;<x:ref>sourcecode</x:ref>&gt;), and will trim leading and trailing whitespace.
+Tab characters (U+0009) inside &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt; are
+prohibited.
 </t>
 
 <t>
@@ -605,6 +605,7 @@ the appendices for a complete description of these attributes.
       &lt;artwork&gt; provides
       full control of horizontal whitespace and line breaks; thus is
       used for a variety of things, such as diagrams ("line art") and protocol unit diagrams.
+      Tab characters (U+0009) inside of this element are prohibited.
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
@@ -612,11 +613,6 @@ the appendices for a complete description of these attributes.
       content acts as a fallback for output representations that do not support graphics;
       thus, it ought to contain either (1) a "line art" variant of the graphics or (2)
       prose that describes the included image in sufficient detail.
-   </t>
-   <t>
-      If the artwork includes either "&amp;" or "&lt;" characters, or the string "]]&gt;" those characters
-      need to be encoded using escaping or CDATA block(s); see &lt;<x:ref>sourcecode</x:ref>&gt; for a fuller
-      description of these solutions.
    </t>
    <t>
       In <xref target="RFC7749"/>, the &lt;artwork&gt; element was also used for source code and formal
@@ -645,6 +641,11 @@ the appendices for a complete description of these attributes.
       Formatters that do pagination should attempt to keep artwork on a single page. This is to prevent
       artwork that is split across pages from looking like two separate pieces of artwork.
    </t>
+<t>
+See <xref target="cdata.and.escaping"/> for a description of to deal with issues of using
+"&amp;" and "&lt;" characters in artwork.
+</t>
+
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       <xref format="none" target="grammar.artwork">Content model</xref>:
@@ -3983,40 +3984,21 @@ in the same &lt;front&gt; element.
       When formatted, it is indented indented relative to the left margin of the enclosing element.
       It is thus useful for source code and formal languages (such as ABNF <xref target="RFC5234"/> or the RNC notation used in this document).
       (When &lt;sourcecode&gt; is a child of other elements, if flows with the text that surrounds it.)
+      Tab characters (U+0009) inside of this element are prohibited.
+
    </t>
    <t>
       For artwork such as character-based art, diagrams of message layouts, and so on,
       use the &lt;<x:ref>artwork</x:ref>&gt; element instead.
    </t>
    <t>
-       A common problem authors have with &lt;sourcecode&gt; is that the XML processor returns errors
-       if the text in the artwork contains either the "&amp;" or "&lt;" character, or the string "]]&gt;". To avoid these problems,
-       the "&amp;" and "&lt;" characters may be escaped using the strings
-       "&amp;amp;" and "&amp;lt;", respectively; the "]]&gt;" string can be represented as "]]&amp;gt;".
-       Alternatively, they may be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;".  For example:
-<figure>
-         <artwork>
-Desired output:
-   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"
-
-Using escaping:
-&lt;sourcecode&gt;
-   allowed-chars = "." | "," | "&amp;amp;" | "&amp;lt;" | "&amp;gt;" | "|"
-&lt;/sourcecode&gt;
-
-Using CDATA:
-&lt;sourcecode&gt;
-&lt;![CDATA[   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]&gt;
-&lt;/sourcecode&gt;
-</artwork>
-      </figure>
-       Using CDATA is not a panacea, but it does help prevent having to use escapes in places where using
-       using escapes can cause other problems, such as difficulty of inclusion from other documents.
-   </t>
-   <t>
       Output formatters that do pagination should attempt to keep source code on a single page. This is to prevent
       source code that is split across pages from looking like two separate pieces of code.
    </t>
+<t>
+See <xref target="cdata.and.escaping"/> for a description of to deal with issues of using
+"&amp;" and "&lt;" characters in sourcecode.
+</t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->
       <xref format="none" target="grammar.sourcecode">Content model</xref>: only text content.</t>
@@ -5776,6 +5758,38 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
 The discussion of the use of SVG can be found in <xref target="SVGforRFCs"/>.
 This element is part of the namespace "http://www.w3.org/2000/svg".
 </t>
+</section>
+
+<section title="Use of CDATA Structures and Escaping" anchor="cdata.and.escaping">
+
+<t>
+A common problem authors have with &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt;
+elements is that the XML processor returns errors
+if the text in the artwork contains either the "&amp;" or "&lt;" character, or the string "]]&gt;".
+To avoid these problems, the "&amp;" and "&lt;" characters may be escaped using the strings
+"&amp;amp;" and "&amp;lt;", respectively; the "]]&gt;" string can be represented as "]]&amp;gt;".
+Alternatively, they may be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;".  For example:
+
+<figure><artwork>
+Desired output:
+   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"
+
+Using escaping:
+&lt;sourcecode&gt;
+   allowed-chars = "." | "," | "&amp;amp;" | "&amp;lt;" | "&amp;gt;" | "|"
+&lt;/sourcecode&gt;
+
+Using CDATA:
+&lt;sourcecode&gt;
+&lt;![CDATA[   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]&gt;
+&lt;/sourcecode&gt;
+
+</artwork></figure>
+
+Using CDATA is not a panacea, but it does help prevent having to use escapes in places where using
+using escapes can cause other problems, such as difficulty of inclusion from other documents.
+</t>
+
 </section>
 
 <section title="Internationalization Considerations" anchor="i18n.considerations">

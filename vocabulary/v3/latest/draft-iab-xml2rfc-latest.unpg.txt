@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 7749 (if approved)                          February 10, 2016
+Obsoletes: 7749 (if approved)                          February 16, 2016
 Intended status: Informational
-Expires: August 13, 2016
+Expires: August 19, 2016
 
 
                    The "xml2rfc" version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 13, 2016.
+   This Internet-Draft will expire on August 19, 2016.
 
 Copyright Notice
 
@@ -147,16 +147,17 @@ Table of Contents
      3.9.  <ttcol>
      3.10. <vspace>
    4.  SVG
-   5.  Internationalization Considerations
-   6.  Security Considerations
-   7.  IANA Considerations
-     7.1.  Internet Media Type Registration
-     7.2.  Link Relation Registration
-   8.  IAB Members at the Time of Publication
-   9.  Acknowledgments
-   10. References
-     10.1. Normative References
-     10.2. Informative References
+   5.  Use of CDATA Structures and Escaping
+   6.  Internationalization Considerations
+   7.  Security Considerations
+   8.  IANA Considerations
+     8.1.  Internet Media Type Registration
+     8.2.  Link Relation Registration
+   9.  IAB Members at the Time of Publication
+   10. Acknowledgments
+   11. References
+     11.1. Normative References
+     11.2. Informative References
    Appendix A.  Front-Page ("Boilerplate") Generation
      A.1.  The "ipr" Attribute
        A.1.1.  Current Values: "*trust200902"
@@ -454,7 +455,8 @@ Table of Contents
    Tools interpreting the XML described here will collapse horizontal
    whitespace and line breaks to a single whitespace (except inside
    <artwork> and <sourcecode>), and will trim leading and trailing
-   whitespace.
+   whitespace.  Tab characters (U+0009) inside <artwork> and
+   <sourcecode> are prohibited.
 
    Some of the elements have attributes that are not described in this
    section because those attributes are specific to the prep tool.
@@ -569,7 +571,8 @@ Table of Contents
    This element allows the inclusion of "artwork" in the document.
    <artwork> provides full control of horizontal whitespace and line
    breaks; thus is used for a variety of things, such as diagrams ("line
-   art") and protocol unit diagrams.
+   art") and protocol unit diagrams.  Tab characters (U+0009) inside of
+   this element are prohibited.
 
    Alternatively, the "src" attribute allows referencing an external
    graphics file, such as a vector drawing in SVG or a bitmap graphic
@@ -579,11 +582,6 @@ Table of Contents
    graphics or (2) prose that describes the included image in sufficient
    detail.
 
-   If the artwork includes either "&" or "<" characters, or the string
-   "]]>" those characters need to be encoded using escaping or CDATA
-   block(s); see <sourcecode> for a fuller description of these
-   solutions.
-
    In [RFC7749], the <artwork> element was also used for source code and
    formal languages; in v3, this is now done with <sourcecode>.
 
@@ -591,7 +589,8 @@ Table of Contents
    Drafts:
 
    o  Inline, by including all of the SVG in the content of the element,
-      such as: <artwork type="svg"><svg xmlns...">
+      such as: <artwork type="svg"><svg xmlns http://www.w3.org/2000/svg
+      ...">
 
    o  Inline, but using XInclude (see Appendix B.1), such as: <artwork
       type="svg"><xi:include href=...>
@@ -614,6 +613,9 @@ Table of Contents
    Formatters that do pagination should attempt to keep artwork on a
    single page.  This is to prevent artwork that is split across pages
    from looking like two separate pieces of artwork.
+
+   See Section 5 for a description of to deal with issues of using "&"
+   and "<" characters in artwork.
 
    This element appears as a child element of <aside> (Section 2.6),
    <blockquote> (Section 2.10), <dd> (Section 2.18), <figure>
@@ -671,7 +673,7 @@ Table of Contents
    for artwork elements in a document.  If multiple artwork elements
    have the same name attribute, a processing tool might assume that the
    elements are all fragments of a single file, and the tool can collect
-   those fragments for later processing.  See Section 6 for a discussion
+   those fragments for later processing.  See Section 7 for a discussion
    of possible problems with the value of this attribute.
 
 2.5.6.  "src" Attribute
@@ -2649,39 +2651,18 @@ Table of Contents
    element.  It is thus useful for source code and formal languages
    (such as ABNF [RFC5234] or the RNC notation used in this document).
    (When <sourcecode> is a child of other elements, if flows with the
-   text that surrounds it.)
+   text that surrounds it.)  Tab characters (U+0009) inside of this
+   element are prohibited.
 
    For artwork such as character-based art, diagrams of message layouts,
    and so on, use the <artwork> element instead.
 
-   A common problem authors have with <sourcecode> is that the XML
-   processor returns errors if the text in the artwork contains either
-   the "&" or "<" character, or the string "]]>".  To avoid these
-   problems, the "&" and "<" characters may be escaped using the strings
-   "&amp;" and "&lt;", respectively; the "]]>" string can be represented
-   as "]]&gt;".  Alternatively, they may be surrounded in a CDATA
-   structure: "<![CDATA[]]>".  For example:
-
-   Desired output:
-      allowed-chars = "." | "," | "&" | "<" | ">" | "|"
-
-   Using escaping:
-   <sourcecode>
-      allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"
-   </sourcecode>
-
-   Using CDATA:
-   <sourcecode>
-   <![CDATA[   allowed-chars = "." | "," | "&" | "<" | ">" | "|"]]>
-   </sourcecode>
-
-   Using CDATA is not a panacea, but it does help prevent having to use
-   escapes in places where using using escapes can cause other problems,
-   such as difficulty of inclusion from other documents.
-
    Output formatters that do pagination should attempt to keep source
    code on a single page.  This is to prevent source code that is split
    across pages from looking like two separate pieces of code.
+
+   See Section 5 for a description of to deal with issues of using "&"
+   and "<" characters in sourcecode.
 
    This element appears as a child element of <blockquote>
    (Section 2.10), <dd> (Section 2.18), <figure> (Section 2.25), <li>
@@ -3795,9 +3776,38 @@ Table of Contents
 
 4.  SVG
 
-   The discussion of the use of SVG can be found in [SVGforRFCs].
+   The discussion of the use of SVG can be found in [SVGforRFCs].  This
+   element is part of the namespace "http://www.w3.org/2000/svg".
 
-5.  Internationalization Considerations
+5.  Use of CDATA Structures and Escaping
+
+   A common problem authors have with <artwork> and <sourcecode>
+   elements is that the XML processor returns errors if the text in the
+   artwork contains either the "&" or "<" character, or the string
+   "]]>".  To avoid these problems, the "&" and "<" characters may be
+   escaped using the strings "&amp;" and "&lt;", respectively; the "]]>"
+   string can be represented as "]]&gt;".  Alternatively, they may be
+   surrounded in a CDATA structure: "<![CDATA[]]>".  For example:
+
+   Desired output:
+      allowed-chars = "." | "," | "&" | "<" | ">" | "|"
+
+   Using escaping:
+   <sourcecode>
+      allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"
+   </sourcecode>
+
+   Using CDATA:
+   <sourcecode>
+   <![CDATA[   allowed-chars = "." | "," | "&" | "<" | ">" | "|"]]>
+   </sourcecode>
+
+
+   Using CDATA is not a panacea, but it does help prevent having to use
+   escapes in places where using using escapes can cause other problems,
+   such as difficulty of inclusion from other documents.
+
+6.  Internationalization Considerations
 
    This format is based on [XML] and thus does not have any issues
    representing arbitrary Unicode [UNICODE] characters in text content.
@@ -3805,7 +3815,7 @@ Table of Contents
    used in a particular RFC; the rules for such restrictions are covered
    in [NONASCII].
 
-6.  Security Considerations
+7.  Security Considerations
 
    The "name" attribute of the <artwork> element (Section 2.5.5) can be
    used to derive a filename for saving to a local file system.
@@ -3834,9 +3844,9 @@ Table of Contents
    All security considerations related to XML processing are relevant as
    well (see Section 7 of [RFC3470]).
 
-7.  IANA Considerations
+8.  IANA Considerations
 
-7.1.  Internet Media Type Registration
+8.1.  Internet Media Type Registration
 
    IANA maintains the registry of Internet Media Types [BCP13] at
    <https://www.iana.org/assignments/media-types>.
@@ -3858,7 +3868,7 @@ Table of Contents
    Encoding considerations:  Identical to those of "application/xml" as
       described in Section 9.1 of [RFC7303].
 
-   Security considerations:  As defined in Section 6.  In addition, as
+   Security considerations:  As defined in Section 7.  In addition, as
       this Media Type uses the "+xml" convention, it inherits the
       security considerations described in Section 10 of [RFC7303].
 
@@ -3899,7 +3909,7 @@ Table of Contents
 
    Change controller:  RFC Series Editor (rse@rfc-editor.org)
 
-7.2.  Link Relation Registration
+8.2.  Link Relation Registration
 
    The following is a proposed addition to [LINKRELATIONS].
 
@@ -3920,7 +3930,7 @@ Table of Contents
 
    Application Data: none
 
-8.  IAB Members at the Time of Publication
+9.  IAB Members at the Time of Publication
 
    Jari Arkko (IETF Chair)
    Mary Barnes
@@ -3936,7 +3946,7 @@ Table of Contents
    Brian Trammell
    Suzanne Woolf
 
-9.  Acknowledgments
+10.  Acknowledgments
 
    Thanks to everybody who reviewed this document and provided feedback
    and/or specification text.  Thanks especially go to Julian Reschke
@@ -3946,9 +3956,9 @@ Table of Contents
    We also thank Marshall T. Rose for both the original design and the
    reference implementation of the "xml2rfc" processor.
 
-10.  References
+11.  References
 
-10.1.  Normative References
+11.1.  Normative References
 
    [XML]            Maler, E., Yergeau, F., Paoli, J., Sperberg-McQueen,
                     M., and T. Bray, "Extensible Markup Language (XML)
@@ -3959,7 +3969,7 @@ Table of Contents
                     Latest version available at
                     <http://www.w3.org/TR/xml>.
 
-10.2.  Informative References
+11.2.  Informative References
 
    [BCP13]          Freed, N., Klensin, J., and T. Hansen, "Media Type
                     Specifications and Registration Procedures", BCP 13,
