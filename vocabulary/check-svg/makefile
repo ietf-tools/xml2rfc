@@ -9,4 +9,4 @@ tests:
 	diff -r $(CHECKS) $(OUT)
 
 clean:
-	rm -rf __pycache__ $(OUT) *.pyc
+	rm -rf __pycache__ $(OUT) *.pyc *~
