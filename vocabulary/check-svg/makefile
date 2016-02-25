@@ -1,5 +1,12 @@
 
+SAMPLES=svg-samples
+CHECKS=svg-samples-check
+OUT=svg-samples-out
+
 tests:
-	rm -rf svg-samples-out; mkdir svg-samples-out
-	./check-svg.py -O svg-samples-out svg-samples/*.svg
-	diff -r svg-samples-check svg-samples-out
+	rm -rf $(OUT); mkdir $(OUT)
+	./check-svg.py -O $(OUT) $(SAMPLES)/*.svg
+	diff -r $(CHECKS) $(OUT)
+
+clean:
+	rm -rf __pycache__ $(OUT) *.pyc
