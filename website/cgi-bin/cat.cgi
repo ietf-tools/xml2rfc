@@ -30,6 +30,8 @@ userError("The file is not there -- check for error messages or you may have cli
 userError("Invalid filename (unwritable)") if (!-w $fn);
 userError("Invalid filename (bad path)") if ($fn =~ "/../");
 
+print "fn=$fn\n" if $debug;
+
 if ($fn =~ /\.xml$/) {
     my $outputfn = ($ENV{PATH_INFO} ne '') ? basename($ENV{PATH_INFO}) : basename($fn);
     printHeaders("application/octet-stream", "Content-Disposition: attachment; filename=\"$outputfn\"");
@@ -100,6 +102,7 @@ sub getContentType {
     if ($format eq 'ps') { return "application/postscript"; }
     if ($format eq 'nr') { return "text/plain"; }
     if ($format eq 'unpg') { return "text/plain"; }
+    if ($format eq 'svg') { return "image/svg+xml"; }
     return "application/octet-stream";
 }
 
