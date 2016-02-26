@@ -57,7 +57,7 @@ my ($ret, $out, $err);
 my $TMP2 = getTempFileWithSuffix("txt");
 my $noCommentsFlag = $addComments ? "" : "-C";
 my $showRulesFlag = $showRules ? "-#" : "";
-my ($ret, $out, $err) = runCommand("./convertv2v3 $noCommentsFlag $showRulesFlag < $inputfn", $inputfn, $TMP2, "Calling convertv2v3");
+my ($ret, $out, $err) = runCommand("../etc/convertv2v3 $noCommentsFlag $showRulesFlag < $inputfn", $inputfn, $TMP2, "Calling convertv2v3");
 
 printHeaders("text/plain");
 print $out;
