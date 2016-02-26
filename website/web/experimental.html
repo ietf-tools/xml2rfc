@@ -1,15 +1,256 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
-    <meta http-equiv="Refresh" CONTENT="5; URL=index.html">
-    <title>xml2rfc (experimental)</title>
-    <link rel="stylesheet" type="text/css" href="xml2rfc.css">
-    <link rel="stylesheet" type="text/css" href="xml2rfc-experimental.css">
+    <title>xml2rfc (version v3)</title>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" type="text/css" href="xml2rfc.css">
   </head>
   <body>
-There is currently no experimental version.
-You should be redirected there automatically in 5 seconds.
-If not, please return to the main <a href=".">xml2rfc web site</a>.
+    <h1 align="center">xml2rfc (version v3)</h1>
+    <p><br clear="all">
+      This page will contain experimental tools around the new xml2rfc version 3.
+      To use xml2rfc version 2, switch <a href='.'>here</a>.
+    </p>
+    <p>
+      BEWARE: The tools here are not fully stitched in yet.
+      This warning will go away when they are deemed to be working enough
+      for people to bang on them.
+    </p>
+    <p>
+      The v3 tools and formats are being discussed on <a href="mailto:rfc-interest@rfc-editor.org">rfc-interest@rfc-editor.org</a>.
+      <list style='display: inline; list-style-type: circle'>
+	<li style='display: inline; list-style-type: circle'><a href="http://tools.ietf.org/html/draft-iab-xml2rfc">xml2rfc v3 vocabulary</a></li>
+	<li style='display: inline; list-style-type: circle'><a href='http://tools.ietf.org/html/draft-iab-html-rfc'>HTML format</a></li>
+	<li style='display: inline; list-style-type: circle'><a href='http://tools.ietf.org/html/draft-iab-rfc-css'>CSS for HTML and PDF</a></li>
+	<li style='display: inline; list-style-type: circle'><a href='http://tools.ietf.org/html/draft-iab-rfc-nonascii'>Non-ASCII</a></li>
+	<li style='display: inline; list-style-type: circle'><a href='http://tools.ietf.org/html/draft-iab-rfc-plaintext'>Plaintext Format</a></li>
+	<li style='display: inline; list-style-type: circle'><a href='http://tools.ietf.org/html/draft-iab-rfc-use-of-pdf'>PDF Format</a></li>
+	<li style='display: inline; list-style-type: circle'><a href='http://tools.ietf.org/html/draft-iab-svg-rfc'>SVG use</a></li>
+	<li style='display: inline; list-style-type: circle'><a href='http://tools.ietf.org/html/draft-iab-rfc-framework'>RFC Framework</a></li>
+	<li style='display: inline; list-style-type: circle'><a href='http://tools.ietf.org/html/draft-iab-rfcv3-preptool'>RFCv3 Preptool</a></li>
+      </list>
+    </p>
+
+    <center>
+      <h1>Prototype xml2rfc V2 to V3 Converter</h1>
+      <p>
+      </p>
+      <form action="../cgi-bin/convertv2v3.cgi" method="post" enctype="multipart/form-data">
+	<table bgcolor="#3ab" border="0" cellpadding="1" cellspacing="0">
+	  <tbody>
+	    <tr>
+	      <td>
+		<table style='border: 1px solid black;' border="0" cellpadding="2" cellspacing="0" width="600">
+		  <tbody>
+		    <tr>
+		      <td colspan="2" bgcolor="#cccccc" align="center">
+			<font color="#333333" size="3"><b>Convert Your XML Source</b></font>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="2">
+			<p>
+			Try converting your xml2rfc v2 XML document to xml2rfc v3 XML.
+			</p>
+			<p>
+			In particular, this conversion tool removes all elements that are marked as "deprecated" in
+			<a href="http://tools.ietf.org/html/draft-iab-xml2rfc">draft-hoffman-xml2rfc</a>,
+			and converts them to their intended replacements.
+			<!-- This conversion should be correct to version 14 of that draft. -->
+			</p>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="2" class="converter " height="24" align="left">
+			<font color="#333333" size="medium"><b>Input Source:</b></font>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24" >
+			<font color="#333333" size="1"><b>&nbsp;File:</b></font>
+		      </td>
+		      <td class="converter" align="left" ><input size="30" name="input" type="file"/>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24" >
+			<font color="#333333" size="1"><b>&nbsp;URL:</b></font>
+		      </td>
+		      <td class="converter" align="left" ><input size="30" name="url" type="text"/>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="2" class="converter " height="24" align="left">
+			<font color="#333333" size="medium"><b>Options:</b></font>
+		      </td>
+		    </tr>
+		    <!-- tr>
+			 <td class="converter small" height="24" >
+			   <b>&nbsp;Output result</b>
+			 </td>
+		    <td class="converter small">
+		      <input checked="checked" value="toframe" name="type" type="radio"/> Use frames to show Warnings &amp; Errors
+		      <input value="ascii" name="type" type="radio"/> Window
+		      <input value="binary" name="type" type="radio"/> File
+		    </td>
+		    </tr -->
+		    <tr>
+		      <td class="converter small" height="24" >
+			<b>&nbsp;Output Comments About Conversions</b>
+			<br/>
+			Note: warnings and error messages may still be found in the output.
+			Search for the string 'CONVERT'.
+		      </td>
+		      <td class="converter small">
+			<input value="0" name="addcomments" type="radio"/> Off
+			<input checked="checked" value="1" name="addcomments" type="radio"/> On
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24" >
+			<b>&nbsp;Fix some common input errors</b>
+			For example, fix the use of "--" with comments.
+		      </td>
+		      <td class="converter small">
+			<input value="0" name="fixerrors" type="radio"/> Off
+			<input checked="checked" value="1" name="fixerrors" type="radio"/> On
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24" >
+			<b>&nbsp;Show the Conversion Rules Being Followed</b>
+			<br/>
+			(Extracts the set of rules being followed by the converter and prints them along with the file .)
+		      </td>
+		      <td class="converter small">
+			<input checked="checked" value="0" name="showrules" type="radio"/> Off
+			<input value="1" name="showrules" type="radio"/> On
+		      </td>
+		    </tr>
+		    <!-- start debug section --><!-- ! tr>
+		      <td class="converter small" height="24">
+			<b>&nbsp;Debugging</b>
+		      </td>
+		      <td class="converter small">
+		        <input checked="checked" value="0" name="debug" type="radio"/> Off
+		        <input value="1" name="debug" type="radio"/> On
+		      </td>
+		    </tr --><!-- end debug section -->
+		    <tr>
+		      <td class="converter small"><br>
+		      </td>
+		      <td class="converter small" align="right">
+			<input value="Submit" name="Submit" type="submit"/>
+			<input value="Reset" name="Reset" type="reset"/>
+		      </td>
+		    </tr>
+		  </tbody>
+		</table>
+	      </td>
+	    </tr>
+	  </tbody>
+	</table>
+      </form>
+      &lt;<a href="convertv2v3.txt">source</a>&gt;<br/>
+      &lt;Report issues <a href='mailto:tony@att.com'>here</a>.&gt;<br/>
+    </center>
+
+    <center>
+      <h1>SVG 1.2 Tiny Checker and Converter</h1>
+      <p>
+      </p>
+      <form action="../cgi-bin/check-svg.cgi" method="post" enctype="multipart/form-data">
+	<table bgcolor="#3ab" border="0" cellpadding="1" cellspacing="0">
+	  <tbody>
+	    <tr>
+	      <td>
+		<table style='border: 1px solid black;' border="0" cellpadding="2" cellspacing="0" width="600">
+		  <tbody>
+		    <tr>
+		      <td colspan="2" bgcolor="#cccccc" align="center">
+			<font color="#333333" size="3"><b>Check and Fix Up Your SVG Source</b></font>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="2">
+			<p>
+			Check your SVG file against the SVG Tiny 1.2 spec, and generate
+			a new version that has been fixed up to be compatible.
+			</p>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="2" class="converter " height="24" align="left">
+			<font color="#333333" size="medium"><b>Input Source:</b></font>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24" >
+			<font color="#333333" size="1"><b>&nbsp;File:</b></font>
+		      </td>
+		      <td class="converter" align="left" ><input size="30" name="input" type="file"/>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24" >
+			<font color="#333333" size="1"><b>&nbsp;URL:</b></font>
+		      </td>
+		      <td class="converter" align="left" ><input size="30" name="url" type="text"/>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="2" class="converter " height="24" align="left">
+			<font color="#333333" size="medium"><b>Options:</b></font>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24" >
+			<b>&nbsp;Output result</b>
+		      </td>
+		      <td class="converter small">
+			<input checked="checked" value="toframe" name="type" type="radio"/> Use frames to show Warnings
+			<input value="ascii" name="type" type="radio"/> Window
+			<input value="binary" name="type" type="radio"/> File
+		      </td>
+		    </tr>
+		    <!-- start debug section --><!-- ! tr>
+		      <td class="converter small" height="24">
+			<b>&nbsp;Debugging</b>
+		      </td>
+		      <td class="converter small">
+		        <input checked="checked" value="0" name="debug" type="radio"/> Off
+		        <input value="1" name="debug" type="radio"/> On
+		      </td>
+		      </tr><tr>
+		      <td class="converter small" height="24">
+			<b>&nbsp;Frame&nbsp;Debugging</b>
+		      </td>
+		      <td class="converter small">
+		        <input checked="checked" value="0" name="framedebug" type="radio"/> Off
+		        <input value="1" name="framedebug" type="radio"/> On
+		      </td>
+		    </tr --><!-- end debug section -->
+		    <tr>
+		      <td class="converter small"><br>
+		      </td>
+		      <td class="converter small" align="right">
+			<input value="Submit" name="Submit" type="submit"/>
+			<input value="Reset" name="Reset" type="reset"/>
+		      </td>
+		    </tr>
+		  </tbody>
+		</table>
+	      </td>
+	    </tr>
+	  </tbody>
+	</table>
+      </form>
+      &lt;<a href="convertv2v3.txt">source</a>&gt;<br/>
+      &lt;Report issues <a href='mailto:tony@att.com'>here</a>.&gt;<br/>
+    </center>
+
+
+    <p>Questions? Try the <a href="https://www.ietf.org/mailman/listinfo/xml2rfc"><b>mailing list</b></a>.
+    </p>
   </body>
 </html>

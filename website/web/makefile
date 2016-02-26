@@ -2,7 +2,7 @@ DIR=web
 PUB= $$HOME/public_html/$(DIR)
 CSS= xml2rfc.css xml2rfc-experimental.css xml2rfc-old.css
 PNG= blue-stripe.png stripe.png
-HTML= experimental.html index.html old.html xml2rfcFAQ.html
+HTML= experimental.html index.html old.html xml2rfcFAQ.html rfc7749.html
 INS= $(HTML) $(PNG) $(CSS)
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
 DERIVATIVES= experimental-debug.html index-debug.html old-debug.html \
@@ -12,7 +12,7 @@ DERIVATIVES= experimental-debug.html index-debug.html old-debug.html \
 all: $(DERIVATIVES)
 
 experimental-debug.html: experimental.html
-	sed < experimental.html -e '/start debug section/s/!-- tr/tr/' -e '/end debug section/s/ --//' > experimental-debug.html
+	sed < experimental.html -e '/start debug section/s/!-- ! tr/tr/' -e '/end debug section/s/ --//' > experimental-debug.html
 
 experimental-new.html: experimental.html
 	sed 's/xml2rfc-dev.cgi/xml2rfc-new.cgi/' < experimental.html > experimental-new.html
