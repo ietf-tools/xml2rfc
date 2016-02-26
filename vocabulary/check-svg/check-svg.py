@@ -11,11 +11,7 @@
 # Updates from Tony Hansen for ietf web backend use
 
 # TODO 
-# warn goes to stderr ?
-# trace goes to stderr ?
-# add quite option? or reuse -v option for verbose and extra verbose
-# output filename option ?
-# append newline to new_fn
+# add quiet option? or reuse -v option for verbose and extra verbose
 
 
 #'''  # ElementTree doesn't have nsmap
@@ -36,11 +32,13 @@ indent = 4
 warn_nbr = 0
 current_file = None
 
-verbose = False   # set by -v
-warn_limit = 40   # set by -w nnn
-new_file = False  # set by -n
-output_dir = None # set by -O
-trace = False     # set by -t
+quiet = False         # set by -q
+verbose = False       # set by -v
+warn_limit = 40       # set by -w nnn
+new_file = False      # set by -n
+output_dir = None     # set by -O
+trace = False         # set by -t
+output_file = None    # set by -o
 
 bad_namespaces = []
 
@@ -48,19 +46,22 @@ def help_msg(msg):
     suffix = ''
     if msg:
         suffix = ": %s" % msg
-    print( "Nevil's SVG checker%s" % suffix )
-    print( "\n  ./check-svg.py [options] input-svg-file(s)\n" )
-    print( "options:" )
-    print( "  -n/--writenew       write .new.svg file, stripping out anything\n" +
-           "                      not allowed in SVG 1.2 RFC" )
-    print( "  -O dir/--odir=dir   write files to dir (may be combined with -n)" )
-    print( "  -w nn/--warnmax=nn  stop after nn warning messages\n" )
+    print( "Nevil's SVG checker%s" % suffix, file=sys.stderr )
+    print( "\n  %s [options] input-svg-file(s)\n" % sys.argv[0], file=sys.stderr )
+    print( "options:", file=sys.stderr )
+    print( "  -n/--writenew         write .new.svg file, stripping out anything\n" +
+           "                        not allowed in SVG 1.2 RFC", file=sys.stderr )
+    print( "  -O dir/--odir=dir     write files to dir (may be combined with -n)", file=sys.stderr )
+    print( "  -w nn/--warnmax=nn    stop after nn warning messages\n", file=sys.stderr )
+    print( "  -o file/--output=file set output file for a single input file\n", file=sys.stderr )
+    print( "  -q                    quiet\n", file=sys.stderr )
+    print( "  -v                    verbose\n", file=sys.stderr )
     exit()
 
 def main():
     try:
-        options, rem_args = getopt.getopt(sys.argv[1:], "hntvO:w:",
-                                          ["warnmax=",
+        options, rem_args = getopt.getopt(sys.argv[1:], "hntvO:o:w:",
+                                          ["warnmax=", "output="
                                            "verbose", "help", "trace",
                                            "writenew", "odir="])
     except getopt.GetoptError:
@@ -74,6 +75,9 @@ def main():
         elif o in ("-O", "--odir"):
             global output_dir
             output_dir = v
+        elif o in ("-o", "--output"):
+            global output_file
+            output_file = v
         elif o in ("-w", "--warnmax"):
             global warn_limit
             warn_limit = int(v)
@@ -89,18 +93,26 @@ def main():
     if len(rem_args) == 0:
         help_msg("No input file(s) specified!")
 
+    if len(rem_args) != 1 and output_file:
+        help_msg("--output can only be used with a single input file")
+
     for arg in rem_args:
+        global warn_nbr
         warn_nbr = 0
         checkFile(arg)
-        print( "%d warnings for %s\n" % (warn_nbr, arg) )
+        if warn_nbr > 0:
+            print( "%d warnings for %s\n" % (warn_nbr, arg), file=sys.stderr )
+        else:
+            notquiet( "%d warnings for %s\n" % (warn_nbr, arg) )
 
 def warn(msg, depth):
     global indent, warn_nbr, warn_limit, current_file
     warn_nbr += 1
-    print( "%5d %s%s" % (warn_nbr, ' '*(depth*indent), msg) )
+    print( "WARNING: %5d %s%s" % (warn_nbr, ' '*(depth*indent), msg), file=sys.stderr )
     if warn_nbr == warn_limit:
-        print( "warning limit (%d) reached for %s" % ( 
-            warn_nbr, current_file) )
+        print( "WARNING: warning limit (%d) reached for %s" % ( 
+            warn_nbr, current_file), file=sys.stderr )
+        sys.exit()
 
 def check_some_props(attr, val, depth):  # For [style] properties
     vals = wp.properties[attr]
@@ -185,11 +197,10 @@ def strip_prefix(element):  # Remove {namespace} prefix
     return element, ns_ok  # return ns = False if it's not allowed
 
 def check(el, depth):
-    global new_file, trace, output_dir
+    global new_file, trace, output_dir, output_file
     #print( "tag=%s<  text=%s<" % (el.tag, el.text) )
     #print( "tail=%s<  attrib=%s<" % (el.tail,el.attrib) )
-    if trace:
-        print( "%s tag = %s" % (' ' * (depth*indent), el.tag) )
+    printtrace( "%s tag = %s" % (' ' * (depth*indent), el.tag) )
     if warn_nbr >= warn_limit:
         return
     element, ns_ok = strip_prefix(el.tag)  # name of element
@@ -206,8 +217,7 @@ def check(el, depth):
         attribs = wp.elements[element]  # Allowed attributes for element
         for attrib, val in el.attrib.items():
             attr, ns_ok = strip_prefix(attrib)
-            if trace:
-                print( "%s attr %s = %s (ns_ok = %s)" % (
+            printtrace( "%s attr %s = %s (ns_ok = %s)" % (
                     ' ' * (depth*indent), attr, val, ns_ok) )
             if not ns_ok or ((attr not in attribs) and (attr not in wp.properties)):
                 warn("--- element '%s' does not allow attribute '%s'" % (
@@ -218,25 +228,24 @@ def check(el, depth):
                 ## print( "vals = ", ); print( vals, ) ; print( "<<<<<" )
                 if vals and vals[0] == '[':
                     ok, new_val = check_some_props(attr, val, depth)
-                    if (new_file or output_dir) and not ok:
+                    if (new_file or output_dir or output_file) and not ok:
                         el.attrib[attr] = new_val[1:]
                 else:
                     ok, new_val = value_ok(val, attr)
                     if vals and not ok:
                         warn("=== %s not allowed as value for %s" % (val, attr),
                              depth)
-                        if new_file or output_dir:
+                        if new_file or output_dir or output_file:
                             if new_val != None:
                                 el.attrib[attrib] = new_val
                             else:
                                 del el.attrib[attrib]  # remove this attribute
     els_to_rm = []  # Can't remove them inside the iteration!
     for child in el:
-        if trace:
-            print( "%schild, tag = %s" % (' ' * (depth*indent), child.tag) )
+        printtrace( "%schild, tag = %s" % (' ' * (depth*indent), child.tag) )
         if not check(child, depth+1):
             els_to_rm.append(child)
-    if (new_file or output_dir) and len(els_to_rm) != 0:
+    if (new_file or output_dir or output_file) and len(els_to_rm) != 0:
         for child in els_to_rm:
             el.remove(child)
     return True  # OK
@@ -248,14 +257,22 @@ def remove_namespace(doc, namespace):
     nsl = len(ns)
     for elem in doc.getiterator():
         if elem.tag.startswith(ns):
-            print( "elem.tag before=%s," % elem.tag )
+            printtrace( "elem.tag before=%s," % elem.tag )
             elem.tag = elem.tag[nsl:]
-            print( "after=%s." % elem.tag )
+            printtrace( "after=%s." % elem.tag )
+
+def printtrace(msg, file=sys.stderr):
+    if trace:
+        print(msg, file=file)
+
+def notquiet(msg, file=None):
+    if not quiet:
+        print(msg, file=file)
 
 def checkFile(fn):
     global current_file, warn_nbr, root
     current_file = fn
-    print( "Starting %s" % current_file )
+    notquiet( "Starting %s" % current_file )
     tree = ET.parse(fn)
     root = tree.getroot()
     #print( "root.attrib=%s, test -> %d" % (root.attrib, "xmlns" in root.attrib) )
@@ -267,11 +284,10 @@ def checkFile(fn):
     ET.register_namespace("", "http://www.w3.org/2000/svg")
         # Stops tree.write() from prefixing above with "ns0"
     check(root, 0)
-    print( "bad_namespaces = %s" % bad_namespaces )
-    if trace and len(bad_namespaces) != 0:
-        print( "bad_namespaces = %s" % bad_namespaces )
-    if new_file or output_dir:
-        new_fn = None
+    if len(bad_namespaces) != 0:
+        print( "WARNING: bad_namespaces = %s" % bad_namespaces, file=sys.stderr )
+    if new_file or output_dir or output_file:
+        new_fn = output_file
         if output_dir:
             p = re.compile("^.*/")
             if p.match(fn):
@@ -283,12 +299,12 @@ def checkFile(fn):
         if new_file:
             sp = fn.rfind('.svg')
             if sp+3 != len(fn)-1:  # Indices of last chars
-                print( "filename doesn't end in '.svg' (%d, %d)" % (sp, len(fn)) )
+                print( "ERROR: filename doesn't end in '.svg' (%d, %d)" % (sp, len(fn)), file=sys.stderr )
             else:
                 new_fn = fn.replace(".svg", ".new.svg")
 
         if new_fn:
-            print( "writing to %s" % (new_fn) )
+            notquiet( "Writing to %s" % (new_fn) )
             if no_ns:
                 root.attrib["xmlns"] = "http://www.w3.org/2000/svg"
             for ns in bad_namespaces:
