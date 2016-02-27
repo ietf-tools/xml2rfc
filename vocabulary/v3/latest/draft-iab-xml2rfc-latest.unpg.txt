@@ -153,11 +153,9 @@ Table of Contents
    8.  IANA Considerations
      8.1.  Internet Media Type Registration
      8.2.  Link Relation Registration
-   9.  IAB Members at the Time of Publication
-   10. Acknowledgments
-   11. References
-     11.1. Normative References
-     11.2. Informative References
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
    Appendix A.  Front-Page ("Boilerplate") Generation
      A.1.  The "ipr" Attribute
        A.1.1.  Current Values: "*trust200902"
@@ -171,6 +169,7 @@ Table of Contents
      B.3.  Attributes Controlled by the Prep Tool
    Appendix C.  Relax NG Schema
    Appendix D.  Schema Differences from v2
+   Appendix E.  Acknowledgments
    Index
 
 1.  Introduction
@@ -1504,11 +1503,11 @@ Table of Contents
    A <front> element may have more than one <seriesInfo> elements.  A
    <seriesInfo> element determines the document number (for RFCs) or
    name (for Internet-Drafts).  Another <seriesInfo> element determines
-   the "maturity level" (see Section 4 of [RFC2026]), using values of
-   "std" for "Standards Track", "bcp" for "BCP", "info" for
-   "Informational", "exp" for "Experimental", and "historic" for
-   "Historic".  The "name" attributes of those multiple <seriesInfo>
-   elements interact as described in the section on <seriesInfo>.
+   the "maturity level" (defined in [RFC2026]), using values of "std"
+   for "Standards Track", "bcp" for "BCP", "info" for "Informational",
+   "exp" for "Experimental", and "historic" for "Historic".  The "name"
+   attributes of those multiple <seriesInfo> elements interact as
+   described in the section on <seriesInfo>.
 
    This element appears as a child element of <reference> (Section 2.40)
    and <rfc> (Section 2.45).
@@ -2077,10 +2076,6 @@ Table of Contents
    in [RFC7322]).  This vocabulary supports the split with the <name>
    child element.  In general, the title should be either "Normative
    References" or "Informative References".
-
-   By default, the order of references is significant.  Some formatters,
-   however, might be able to be requested to sort them based on their
-   anchor names.
 
    This element appears as a child element of <back> (Section 2.8).
 
@@ -3930,35 +3925,9 @@ Table of Contents
 
    Application Data: none
 
-9.  IAB Members at the Time of Publication
+9.  References
 
-   Jari Arkko (IETF Chair)
-   Mary Barnes
-   Marc Blanchet
-   Ralph Droms
-   Ted Hardie
-   Joe Hildebrand
-   Russ Housley
-   Erik Nordmark
-   Robert Sparks
-   Andrew Sullivan
-   Dave Thaler
-   Brian Trammell
-   Suzanne Woolf
-
-10.  Acknowledgments
-
-   Thanks to everybody who reviewed this document and provided feedback
-   and/or specification text.  Thanks especially go to Julian Reschke
-   for editing [RFC7749] and those who provided feedback on that
-   document.
-
-   We also thank Marshall T. Rose for both the original design and the
-   reference implementation of the "xml2rfc" processor.
-
-11.  References
-
-11.1.  Normative References
+9.1.  Normative References
 
    [XML]            Maler, E., Yergeau, F., Paoli, J., Sperberg-McQueen,
                     M., and T. Bray, "Extensible Markup Language (XML)
@@ -3969,7 +3938,7 @@ Table of Contents
                     Latest version available at
                     <http://www.w3.org/TR/xml>.
 
-11.2.  Informative References
+9.2.  Informative References
 
    [BCP13]          Freed, N., Klensin, J., and T. Hansen, "Media Type
                     Specifications and Registration Procedures", BCP 13,
@@ -4265,13 +4234,13 @@ A.1.2.2.  Historic Values: "*3978"
 
    The attribute values "full3978", "noModification3978", and
    "noDerivatives3978" are similar to their counterparts above, except
-   that they use text specified in Section 5 of [RFC3978].
+   that they use text specified in [RFC3978].
 
 A.1.2.3.  Historic Values: "*3667"
 
    The attribute values "full3667", "noModification3667", and
    "noDerivatives3667" are similar to their counterparts above, except
-   that they use text specified in Section 5 of [RFC3667].
+   that they use text specified in [RFC3667].
 
 A.1.2.4.  Historic Values: "*2026"
 
@@ -6553,6 +6522,16 @@ Appendix D.  Schema Differences from v2
    +   }
    + start |= rfc
 
+
+Appendix E.  Acknowledgments
+
+   Thanks to everybody who reviewed this document and provided feedback
+   and/or specification text.  Thanks especially go to Julian Reschke
+   for editing [RFC7749] and those who provided feedback on that
+   document.
+
+   We also thank Marshall T. Rose for both the original design and the
+   reference implementation of the "xml2rfc" processor.
 
 Index
 
