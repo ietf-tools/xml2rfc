@@ -15,10 +15,16 @@
 
 Change <tt> to <kbd>?
 
+Maybe add <referencesection>
+
 rfc/@submissionType is now duplicated in seriesInfo/stream. This needs to be rectified.
 
 sourcecode / number - wait
 sourcecode / indent - wait for Tony, probably not
+
+Does the types table in <artwork> need a second column for what can appear in plaintext?
+
+Maybe have to add prose about fullname being required if there is ascii* in <author>
 
 Adding <example>? Hopefully not.
 
@@ -591,7 +597,7 @@ the appendices for a complete description of these attributes.
       There are at least five ways to include SVG in artwork in Internet-Drafts:
       <list style="symbols">
          <t>Inline, by including all of the SVG in the content of the element, 
-            such as: &lt;artwork type="svg"&gt;&lt;svg xmlns http://www.w3.org/2000/svg ..."&gt;</t>
+            such as: &lt;artwork type="svg"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" ..."&gt;</t>
          <t>Inline, but using XInclude (see <xref target="includingexternal"/>),
             such as: &lt;artwork type="svg"&gt;&lt;xi:include href=...&gt;</t>
          <t>As a data: URI, such as: &lt;artwork type="svg"
@@ -2472,6 +2478,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <t>
          If set to "true", this note is marked in the prep tool with text indicating that it should be
          removed before the document is published as an RFC.
+         That text will be “This note is to be removed before publishing as an RFC.”.
       </t>
       <t><!--AG-->Allowed values:</t>
       <t><list style="symbols"><!--AG-->
@@ -3702,7 +3709,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       A processing tool determines if it is working on an RFC or an Internet-Draft by inspecting the
       "name" attribute of a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element inside the
       &lt;<xref target="element.front" format="none">front</xref>&gt; element inside the &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element, looking
-      for "rfc" or "Internet-Draft". (Specifying neither value in any of the
+      for "RFC" or "Internet-Draft". (Specifying neither value in any of the
       &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements can be useful for producing other types of
       documents, but is out of scope for this specification.)
    </t>
