@@ -1,0 +1,570 @@
+<html><head>
+<title>XML2RFC Internet Draft Creation Wizard</title>
+<link href="xml2rfc-wizard.css" rel="stylesheet" type="text/css"/>
+<script type='text/javascript' src='prototype.js'></script>
+<script type='text/javascript' src='xml2rfc-wizard.js'></script>
+</head><body onload='updateXml()'>
+<noscript>
+<h1>Note: This page requires javascript to work.</h1>
+</noscript>
+<form>
+<div id='infoholder'><div id='info' style='display:none;'><img id='infoX' onclick='closeInstruction()' src='x.gif'/><div id='innerinfo'></div></div></div>
+<div id='page1' class='page' style='display: block'>
+<h1>XML2RFC Internet Draft Creation Wizard</h1>
+<!-- input type='button' value='Create a New XML2RFC Document' onclick='nextPage()'/><br/ -->
+<br/>
+This XML2RFC Internet Draft Creation Wizard is designed to help you create a new internet draft using the XML2RFC XML directives.
+The XML is constantly displayed at the bottom, and all changes are immediately reflected there.
+<br/><br/>
+In the following pages, you will be asked a series of questions about your draft.
+<ul>
+    <li>Any answers that are required will appear as a box with a solid border, as in:
+        <input size='3' type='text' class='required'/>.
+    </li>
+    <li>Any answers that are optional will appear as a box with a dotted border, as in:
+        <input size='3' type='text' class='optional'/>.
+    </li>
+    <li>You may click on
+        <img src='info.gif' onclick='showInstruction(
+	     "<p>Many instructional notes will have information " +
+	     "from the RFC Editor__s " +
+	     "<a target=\"_blank\" href=\"http://www.rfc-editor.org/rfc-style-guide/rfc-style\">" +
+	     "RFC Document Style</a> Guide.</p>" +
+	     "<p>Other references will be noted as used.</p>" +
+	     "<p>Please click the X in the upper right corner to close this box.</p>"
+	     )'/>
+	<!-- "<p>Some instructional notes will have information from XML2RFC__s " +
+	     "<a target=\"blank\" href=\"http://xml.resource.org/authoring/README.html\">readme</a> file.</p>" + -->
+        to get more information about specific questions.
+	If you click it right now, you will find information on where the instructional material has been derived.
+    </li>
+
+</ul>
+Click <em>Create a New Internet Draft</em> to continue.
+<br/><br/>
+<input type='button' value='Create a New Internet Draft' onclick='nextPage()'/><br/><br/>
+</div>
+<div id='page2' class='page' style='display: none'>
+<h2>XML2RFC Wizard: Title &mdash; Page 2</h2>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+
+What is the title for your Internet Draft? (e.g. 'My Great New Protocol Version 1.0') 
+        <img src='info.gif' onclick='showInstruction(
+	     "Style Guide 3.4.  Capitalization Rules" +
+	     "<p>The major words in RFC titles and section titles should be " +
+	     "capitalized (this is sometimes called <em>title case</em>).  Minor words " +
+	     "such as articles or prepositions should be lower-cased (e.g., " +
+	     "<em>and</em>, <em>of</em>).  Typically, all words in a title will be " +
+	     "capitalized, except for internal articles, prepositions, and " +
+	     "conjunctions.</p>" +
+
+	     "Style Guide 4.2.  Full Title<p>" +
+	     "The RFC title must be centered, preceded by, and followed by at least " +
+	     "one blank line." +
+	     "</p><p>" +
+	     "Choosing a good title for an RFC can be a challenge.  A good title " +
+	     "should fairly represent the scope and purpose of the document without " +
+	     "being either too general or too specific." +
+	     "</p><p>" +
+	     "Abbreviations (e.g., acronyms) [ABBR] in a title (as well as the " +
+	     "Abstract and the body) must generally be expanded when first " +
+	     "encountered.  The exception is abbreviations that are so common that " +
+	     "every participant in the IETF can be expected to recognize them " +
+	     "immediately; examples include (but are not limited to) TCP, IP, SNMP, " +
+	     "and FTP.  Some cases are marginal, and the decision on expansion may " +
+	     "depend upon the specific title.  The RFC Editor will make the final " +
+	     "judgment, weighing obscurity against complexity. " +
+	     "</p><p>" +
+	     "It is often helpful to follow the expansion with the parenthesized " +
+	     "abbreviation, as in the following example: " +
+	     "</p><p align=\"center\">" +
+	     "Encoding Rules for the<br/>" +
+	     "Common Routing Encapsulation Extension Protocol (CREEP)" +
+	     "</p><p>" +
+	     "The RFC title may be subject to policy considerations in addition to " +
+	     "the requirement that it provide a concise and technically sound " +
+	     "summary of the document contents.  For example, at various times in " +
+	     "the history of the IETF the words <em>Requirements</em> and <em>Policies</em> as " +
+	     "well as the phrase <em>The Directory</em> have been banned from RFC titles, " +
+	     "for various reasons." +
+	     "</p><p>" +
+	     "An RFC that documents a particular company__s private protocol should " +
+	     "bear a title of the form <em>XXX__s ... Protocol</em> (where XXX is a company " +
+	     "name), to clearly differentiate it from an IETF product." +
+	     "</p>"
+	     )'/>
+<input onchange='checkTitle(); updateXml()' type='text' id='idtitle' value='' class='required page2'/><br/>
+What "short title" should be associated with the internet draft? (e.g., 'GNP v1.0'.)
+    <img src='info.gif' onclick='showInstruction(
+	 "Style Guide 4.10 Running Headers and Footers<ul>" +
+	 "<li>Running Footers" +
+	 "<p>All pages contain a one-line running footer, with the author__s " +
+	 "last name on the left, the category centered, and the page number " +
+	 "on the right as <em>[Page nn]</em>.</p>" +
+	 "<hr/>" +
+	 "<p>Because of the information on both the letf and right, the length of the title " +
+	 "in the running footer is limited in length. " +
+	 "This wizard requires the short title if the title is longer than 35 characters.</p>"
+	 )'/>
+<input onchange='updateXml()' type='text' id='idshorttitle' value='' class='optional page2'/><br/>
+What category does your document belong in? 
+    <img src='info.gif' onclick='showInstruction(
+	 "The Style Guide provides these definitions of the different categories:" +
+	 "<p>Style Guide A.2.1.  RFC Publications</p>" +
+	 "<ul><li>Standards Track" +
+	 "<p>This document specifies an Internet standards track protocol " +
+	 "for the Internet community, and requests discussion and " +
+	 "suggestions for improvements.  Please refer to the current " +
+	 "edition of the <em>Internet Official Protocol Standards</em> (STD 1) " +
+	 "for the standardization state and status of this protocol. " +
+	 "Distribution of this memo is unlimited.</p></li>" +
+	 "<li>Best Current Practice " +
+	 "<p>This document specifies an Internet Best Current Practices for " +
+	 "the Internet Community, and requests discussion and suggestions " +
+	 "for improvements.  Distribution of this memo is unlimited.</p></li>" +
+	 "<li>Experimental " +
+	 "<p>This memo defines an Experimental Protocol for the Internet " +
+	 "community.  This memo does not specify an Internet standard of " +
+	 "any kind.  Discussion and suggestions for improvement are " +
+	 "requested.  Distribution of this memo is unlimited.</p></li>" +
+	 "<li>Informational " +
+	 "<p>This memo provides information for the Internet community. " +
+	 "This memo does not specify an Internet standard of any kind. " +
+	 "Distribution of this memo is unlimited.</p></li>"
+	 )'/>
+
+
+<select onchange='updateXml()' id='category' class='required page2'>
+<option value=''>-- Pick a category ---</option>
+<option value='info'>Informational</option>
+<option value='std'>Standards Track</option>
+<option value='bcp'>Best Current Practice</option>
+<option value='exp'>Experimental</option>
+</select><br/>
+What filename should be associated with your I-D? (e.g., draft-foo-????) 
+        <img src='info.gif' onclick='showInstruction(
+	     "All parts of an internet-draft are separated by dashes. " +
+	     "An internet draft filename always starts with <em>draft-</em>. " +
+	     "<p> " +
+	     "If this draft is part of the official work of an IETF working group, the keyword <em>ietf-</em> should come next, followed " +
+	     "by the acronym for that working group. " +
+	     "(Other streams include <em>iab-</em> and <em>irtf</em>.) " +
+	     "Otherwise, if this draft is an individual submission, your surname should come next. " +
+	     "(If an individual submissiond is related to the work of a working group, the acronym for that working group should come next.) " +
+	     "<p> " +
+	     "It then includes enough keywords to allow someone to tell at a glance what the draft is about. " +
+	     "If this is a revision or update of an existing document, it is recommended that you include both " +
+	     "a reference to the RFC number for that document,  " +
+	     "followed by the suffix <em>bis</em> (for a revision) or the suffix <em>upd</em> (for an update), " +
+	     "<strong>plus</strong> a keyword reference to that spec. " +
+	     "<p> " +
+	     "Finally, <em>-00</em> should be appended, to indicate that this is the first internet draft in this series. " +
+	     "<p> " +
+	     "Examples would be " +
+	     "<ul><li>draft-raggarwa-l3vpn-2547bis-mcast-bgp-00 (individual submission, surname: <em>raggarwa</em>,  " +
+	     "working group: <em>l3vpn</em>, revision to <em>2547</em>, which was about <em>mcast bgp</em>)</li> " +
+	     "<li>draft-barnes-sipcore-rfc4244bis-callflows-00 (individual submission, surname: <em>barnes</em>, working group: <em>sipcore</em>, " +
+	     "revision to <em>4244</em>, which was about <em>callflows</em>)</li> " +
+	     "<li>draft-ietf-dnsext-rfc2671bis-edns0-00 (official working group submission, working group: <em>dnsext</em>, revision to <em>2671</em>,  " +
+	     "which was about <em>edns0</em>)</li> " +
+	     "<li>draft-ietf-httpbis-authscheme-registrations-00 (official working group submission, working group: <em>httpbis</em>, " +
+	     "topic is <em>authscheme registrations</em>)</li> " +
+	     "<li>draft-mekking-dnsop-dnssec-key-timing-00 (individual submission, surname: <em>mekking</em>, working group: <em>dnsop</em>, topic: <em>dnssec key timing</em>)</li> " +
+	     "<li>draft-iulian-advanced-groupware-access-protocol-00 (individual submission, surname: <em>iulian</em>, topic: <em>advanced groupware access protocol</em>)</li> " +
+	     "</ul> "
+	     )'/>
+    <input onchange='checkDocName(); updateXml()' type='text' id='filename' value='' class='required page2'/><br/>
+What Intellectual Property Statement (IPR) should be used?
+    <img src='info.gif' onclick='showInstruction(
+	 "<p>The rules for the IPR are defined in the " +
+	 "<a target=\"_blank\" href=\"http://trustee.ietf.org/license-info/archive/IETF-Trust-License-Policy-20090215.pdf\">" +
+	 "Trust License Policy (TLP)</a> published by the IETF Trust.</p>" +
+	 "<ul><li>trust200902 should be the default, unless one of the more specific " +
+	 "<em>*trust200902</em> values is a better fit.  It produces this text (TLP 6.2.a and 6.2.b):" +
+	 "<ul><li>This Internet-Draft is submitted to IETF in full conformance with the provisions of BCP 78 and BCP 79.</li>" +
+	 "<li>Copyright (c) <insert year> IETF Trust and the persons identified as the document authors. All " +
+	 "rights reserved. " +
+	 "<p>This document is subject to BCP 78 and the IETF Trust__s Legal Provisions Relating to IETF " +
+	 "Documents in effect on the date of publication of this document (" +
+	 "<a target=\"_blank\" href=\"http://trustee.ietf.org/licenseinfo\">http://trustee.ietf.org/licenseinfo</a>). " +
+	 "Please review these documents carefully, as they describe your rights and restrictions with " +
+	 "respect to this document.</p>" +
+	 "</li></ul>" +
+	 "</li><li>" +
+	 "noModificationTrust200902 produces this additional text (TLP 6.c.i):" +
+	 "<ul><li>This document may not be modified, and derivative works of it may " +
+	 "not be created, except to format it for publication as an RFC or " +
+	 "to translate it into languages other than English.</li></ul><p/>" +
+	 "</li><li>noDerivativesTrust200902 produces this additional text (TLP 6.c.ii):" +
+	 "<ul><li>This document may not be modified, and derivative works of it may " +
+	 "not be created, and it may not be published except as an Internet-Draft.</li></ul><p/>" +
+	 "</li><li>pre5378Trust200902 produces this additional text (TLP 6.c.iii), " +
+	 "frequently called the <em>pre-5378 escape clause</em>. " +
+	 "It was designed for the situation when a document includes material from Internet Drafts or RFCs " +
+	 "published prior to RFC 5378 and the authors of that material are not available to grant permissions " +
+	 "to the IETF Trust." +
+	 "<ul><li>This document may contain material from IETF Documents or IETF " +
+	 "Contributions published or made publicly available before November " +
+	 "10, 2008.  The person(s) controlling the copyright in some of this " +
+	 "material may not have granted the IETF Trust the right to allow " +
+	 "modifications of such material outside the IETF Standards Process. " +
+	 "Without obtaining an adequate license from the person(s) " +
+	 "controlling the copyright in such materials, this document may not " +
+	 "be modified outside the IETF Standards Process, and derivative " +
+	 "works of it may not be created outside the IETF Standards Process, " +
+	 "except to format it for publication as an RFC or to translate it " +
+	 "into languages other than English.</li></ul>" +
+	 "See Section 4 of the " +
+	 "<a target=\"_blank\" href=\"http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf\">IETF Copyright FAQ</a> " +
+	 "for further information about when to use this value." +
+	 "</li></ul>"
+	 )'/>
+    <select onchange='updateXml()' id='ipr' class='required page2'>
+      <option value=''>-- Pick an ipr statement ---</option>
+      <option value='trust200902'>Normal IETF IPR (trust200902)</option>
+      <option value='noModificationTrust200902'>No Modifications</option>
+      <option value='noDerivativesTrust200902'>No Derivatives</option>
+      <option value='pre5378Trust200902'>Add pre-5378 Escape Clause</option>
+    </select><br/>
+What Working Group (if any) is your draft associated with?
+    <input onchange='updateXml()' type='text' id='workgroup' value='' class='optional'/><br/>
+What area is that Working Group in? 
+    <input onchange='updateXml()' type='text' id='area' value='' class='optional'/><br/>
+    <script>var styleGuideUpdatesAndObsoletes = 
+	     "Style Guide 4.1.1.  Updates and Obsoletes " +
+	     "<p>When authors produce a document that obsoletes or updates a " +
+	     "previously published RFC(s), this information should be indicated " +
+	     "clearly, preferably in the header. ...</p>" +
+	     "<p>Clearly stating this information helps call attention to the RFC " +
+	     "Editor that other actions are necessary (e.g., insert additional " +
+	     "fields in the RFC header and update the corresponding database " +
+	     "entries).</p>" +
+	     "<p>Authors often also include a statement in the Abstract and/or " +
+	     "Introduction sections that read similarly to the following:<ul>" +
+
+	     "<li>This document obsoletes RFC XXXX.</li>" +
+
+	     "</ul></p><p>This helps clarify the status of the document and its relation to the " +
+	     "updated/obsoleted RFC to the reader.</p>";
+</script>
+Does this document update an existing RFC? 
+    <img src='info.gif' onclick='showInstruction(styleGuideUpdatesAndObsoletes)'/>
+    If so, list them (comma separated): 
+    <input onchange='updateXml()' type='text' id='updates' value='' class='optional'/><br/>
+Does this document obsolete an existing RFC? 
+    <img src='info.gif' onclick='showInstruction(styleGuideUpdatesAndObsoletes)'/>
+    If so, list them (comma separated):
+    <input onchange='updateXml()' type='text' id='obsoletes' value='' class='optional'/><br/>
+
+
+<br/><br/>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+</div>
+<div id='page3' class='page' style='display: none'>
+<h2>XML2RFC Wizard: Authors &mdash; Page 3</h2>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+Fill out the following for the each author.
+
+    <img src='info.gif' onclick='showInstruction(
+	 "Style Guide 4.9.  <em>Author__s Address</em> Section " +
+
+	 "<p>This required section gives contact information for the author(s) " +
+	 "listed in the first-page header, and perhaps those listed in a " +
+	 "Contributors section.</p>" +
+
+	 "<p>Contact information must include at least one, and ideally would " +
+	 "include all, of a postal address, a telephone number and/or FAX " +
+	 "number, and a long-lived email address.  The purpose of this section " +
+	 "is to (1) unambiguously define author/contributor identity (e.g., the " +
+	 "John Smith who works for FooBar Systems) and to (2) provide contact " +
+	 "information for future readers who have questions or comments.  Note " +
+	 "that some professional societies offer long-lived email addresses for " +
+	 "their members.</p>"
+	 )'/>
+
+  <input type='button' onclick='showAuthor(1)' value='First'/>
+  <input type='button' onclick='showAuthor(2)' value='Second'/>
+  <input type='button' onclick='showAuthor(3)' value='Third'/>
+  <input type='button' onclick='showAuthor(4)' value='Fourth'/>
+  <input type='button' onclick='showAuthor(5)' value='Fifth'/>:
+    <div id='author1' style='display: block'>
+      <h3>First Author</h3>
+      <ul>
+        <li>Full Name? <input onchange='updateXml()' type='text' id='author1_fullname' value='' class='required author1_page3'/></li>
+        <li>Your initials? <input onchange='updateXml()' type='text' id='author1_initials' value='' class='required author1_page3'/></li>
+        <li>Your Surname? <input onchange='updateXml()' type='text' id='author1_surname' value='' class='required author1_page3'/></li>
+        <li>Email address? <input onchange='updateXml()' type='text' id='author1_email' value='' class='required author1_page3'/></li>
+        <li>Is this author a Working Group Document Editor of the document?
+	  <img src='info.gif' onclick='showInstruction(
+	       "A Document Editor is a specific role in internet draft preparation. " +
+	       "As compared to authors, a Document Editor works at reflecting the consensus " +
+	       "from the working group."
+	       )'/>
+	  <select onchange='updateXml()' id='author1_editor'><option value='no'>No</option><option value='yes'>Yes</option></select></li>
+        <li>Your organization? <input onchange='updateXml()' type='text' id='author1_organization' value='' class='optional'/></li>
+        <li>Address:
+          <ul>
+            <li>Street? <input onchange='updateXml()' type='text' id='author1_street' value='' class='optional'/></li>
+            <li>City? <input onchange='updateXml()' type='text' id='author1_city' value='' class='optional'/></li>
+            <li>State/Region? <input onchange='updateXml()' type='text' id='author1_region' value='' class='optional'/></li>
+            <li>Postal code? <input onchange='updateXml()' type='text' id='author1_code' value='' class='optional'/></li>
+            <li>Country? <input onchange='updateXml()' type='text' id='author1_country' value='' class='optional'/></li>
+          </ul></li>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author1_phone' value='' class='optional'/></li>
+        <li>URI? <input onchange='updateXml()' type='text' id='author1_uri' value='' class='optional'/></li>
+        <li>Fax? <input onchange='updateXml()' type='text' id='author1_facsimile' value='' class='optional'/></li>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author1_phone' value='' class='optional'/></li>
+      </ul>
+    </div>
+    <div id='author2' style='display: none'>
+      <h3>Second Author</h3>
+      <ul>
+        <li>Full Name? <input onchange='updateXml()' type='text' id='author2_fullname' value='' class='required author2_page3'/></li>
+        <li>Your initials? <input onchange='updateXml()' type='text' id='author2_initials' value='' class='required author2_page3'/></li>
+        <li>Your Surname? <input onchange='updateXml()' type='text' id='author2_surname' value='' class='required author2_page3'/></li>
+        <li>Email address? <input onchange='updateXml()' type='text' id='author2_email' value='' class='required author2_page3'/></li>
+        <li>Is this author an editor of the document? <select onchange='updateXml()' id='author2_editor'><option value='no'>No</option><option value='yes'>Yes</option></select></li>
+        <li>Your organization? <input onchange='updateXml()' type='text' id='author2_organization' value='' class='optional'/></li>
+        <li>Address:
+          <ul>
+            <li>Street? <input onchange='updateXml()' type='text' id='author2_street' value='' class='optional'/></li>
+            <li>City? <input onchange='updateXml()' type='text' id='author2_city' value='' class='optional'/></li>
+            <li>State/Region? <input onchange='updateXml()' type='text' id='author2_region' value='' class='optional'/></li>
+            <li>Postal code? <input onchange='updateXml()' type='text' id='author2_code' value='' class='optional'/></li>
+            <li>Country? <input onchange='updateXml()' type='text' id='author2_country' value='' class='optional'/></li>
+          </ul></li>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author2_phone' value='' class='optional'/></li>
+        <li>URI? <input onchange='updateXml()' type='text' id='author2_uri' value='' class='optional'/></li>
+        <li>Fax? <input onchange='updateXml()' type='text' id='author2_facsimile' value='' class='optional'/></li>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author2_phone' value='' class='optional'/></li>
+      </ul>
+    </div>
+    <div id='author3' style='display: none'>
+      <h3>Third Author</h3>
+      <ul>
+        <li>Full Name? <input onchange='updateXml()' type='text' id='author3_fullname' value='' class='required author3_page3'/></li>
+        <li>Your initials? <input onchange='updateXml()' type='text' id='author3_initials' value='' class='required author3_page3'/></li>
+        <li>Your Surname? <input onchange='updateXml()' type='text' id='author3_surname' value='' class='required author3_page3'/></li>
+        <li>Email address? <input onchange='updateXml()' type='text' id='author3_email' value='' class='required author3_page3'/></li>
+        <li>Is this author an editor of the document? <select onchange='updateXml()' id='author3_editor'><option value='no'>No</option><option value='yes'>Yes</option></select></li>
+        <li>Your organization? <input onchange='updateXml()' type='text' id='author3_organization' value='' class='optional'/></li>
+        <li>Address:
+          <ul>
+            <li>Street? <input onchange='updateXml()' type='text' id='author3_street' value='' class='optional'/></li>
+            <li>City? <input onchange='updateXml()' type='text' id='author3_city' value='' class='optional'/></li>
+            <li>State/Region? <input onchange='updateXml()' type='text' id='author3_region' value='' class='optional'/></li>
+            <li>Postal code? <input onchange='updateXml()' type='text' id='author3_code' value='' class='optional'/></li>
+            <li>Country? <input onchange='updateXml()' type='text' id='author3_country' value='' class='optional'/></li>
+          </ul></li>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author3_phone' value='' class='optional'/></li>
+        <li>URI? <input onchange='updateXml()' type='text' id='author3_uri' value='' class='optional'/></li>
+        <li>Fax? <input onchange='updateXml()' type='text' id='author3_facsimile' value='' class='optional'/></li>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author3_phone' value='' class='optional'/></li>
+      </ul>
+    </div>
+    <div id='author4' style='display: none'>
+      <h3>Fourth Author</h3>
+      <ul>
+        <li>Full Name? <input onchange='updateXml()' type='text' id='author4_fullname' value='' class='required author4_page3'/></li>
+        <li>Your initials? <input onchange='updateXml()' type='text' id='author4_initials' value='' class='required author4_page3'/></li>
+        <li>Your Surname? <input onchange='updateXml()' type='text' id='author4_surname' value='' class='required author4_page3'/></li>
+        <li>Email address? <input onchange='updateXml()' type='text' id='author4_email' value='' class='required author4_page3'/></li>
+        <li>Is this author an editor of the document? <select onchange='updateXml()' id='author4_editor'><option value='no'>No</option><option value='yes'>Yes</option></select></li>
+        <li>Your organization? <input onchange='updateXml()' type='text' id='author4_organization' value='' class='optional'/></li>
+        <li>Address:
+          <ul>
+            <li>Street? <input onchange='updateXml()' type='text' id='author4_street' value='' class='optional'/></li>
+            <li>City? <input onchange='updateXml()' type='text' id='author4_city' value='' class='optional'/></li>
+            <li>State/Region? <input onchange='updateXml()' type='text' id='author4_region' value='' class='optional'/></li>
+            <li>Postal code? <input onchange='updateXml()' type='text' id='author4_code' value='' class='optional'/></li>
+            <li>Country? <input onchange='updateXml()' type='text' id='author4_country' value='' class='optional'/></li>
+          </ul></li>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author4_phone' value='' class='optional'/></li>
+        <li>URI? <input onchange='updateXml()' type='text' id='author4_uri' value='' class='optional'/></li>
+        <li>Fax? <input onchange='updateXml()' type='text' id='author4_facsimile' value='' class='optional'/></li>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author4_phone' value='' class='optional'/></li>
+      </ul>
+    </div>
+    <div id='author5' style='display: none'>
+      <h3>Fifth Author</h3>
+      <ul>
+        <li>Full Name? <input onchange='updateXml()' type='text' id='author5_fullname' value='' class='required author5_page3'/></li>
+        <li>Your initials? <input onchange='updateXml()' type='text' id='author5_initials' value='' class='required author5_page3'/></li>
+        <li>Your Surname? <input onchange='updateXml()' type='text' id='author5_surname' value='' class='required author5_page3'/></li>
+        <li>Email address? <input onchange='updateXml()' type='text' id='author5_email' value='' class='required author5_page3'/></li>
+        <li>Is this author an editor of the document? <select onchange='updateXml()' id='author5_editor'><option value='no'>No</option><option value='yes'>Yes</option></select></li>
+        <li>Your organization? <input onchange='updateXml()' type='text' id='author5_organization' value='' class='optional'/></li>
+        <li>Address:
+          <ul>
+            <li>Street? <input onchange='updateXml()' type='text' id='author5_street' value='' class='optional'/></li>
+            <li>City? <input onchange='updateXml()' type='text' id='author5_city' value='' class='optional'/></li>
+            <li>State/Region? <input onchange='updateXml()' type='text' id='author5_region' value='' class='optional'/></li>
+            <li>Postal code? <input onchange='updateXml()' type='text' id='author5_code' value='' class='optional'/></li>
+            <li>Country? <input onchange='updateXml()' type='text' id='author5_country' value='' class='optional'/></li>
+          </ul></li>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author5_phone' value='' class='optional'/></li>
+        <li>URI? <input onchange='updateXml()' type='text' id='author5_uri' value='' class='optional'/></li>
+        <li>Fax? <input onchange='updateXml()' type='text' id='author5_facsimile' value='' class='optional'/></li>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author5_phone' value='' class='optional'/></li>
+      </ul>
+    </div>
+
+<br/><br/>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+</div>
+<div id='page4' class='page' style='display: none'>
+<h2>XML2RFC Wizard: Keywords/Abstract &mdash; Page 4</h2>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+        Keyword(s)? <br/>
+            <input onchange='updateXml()' type='text' id='keyword1' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='keyword2' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='keyword3' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='keyword4' value='' class='optional'/><br/>
+
+        Abstract?
+        <img src='info.gif' onclick='showInstruction(
+	     "Style Guide 4.3.  Abstract" +
+	     "<p>Every RFC must have an Abstract section, a maximum of 20 lines.</p>" +
+	     "<p>The Abstract section should provide a concise and comprehensive " +
+	     "overview of the purpose and contents of the entire document, to give " +
+	     "a technically knowledgeable reader a general overview of the function " +
+	     "of the document.</p>" +
+	     "<p>Composing a useful Abstract generally requires thought and care. " +
+	     "Usually an Abstract should begin with a phrase like <em>This memo ...</em> " +
+	     "or <em>This document ...</em>.  A satisfactory abstract can often be " +
+	     "constructed in part from material within the Introduction section, " +
+	     "but an effective abstract may be shorter, less detailed, and perhaps " +
+	     "broader in scope than the Introduction.  Simply copying and pasting " +
+	     "the first few paragraphs of the Introduction is allowed, but it may " +
+	     "result in an Abstract that is both incomplete and redundant.  Note " +
+	     "also that an Abstract is not a substitute for an Introduction; the " +
+	     "RFC should be self-contained as if there were no Abstract section.</p>" +
+
+	     "<p>Similarly, the Abstract should be complete in itself.  It will appear " +
+	     "in isolation in publication announcements and in the online index of " +
+	     "RFCs.  Therefore, the Abstract must not contain citations.</p>" +
+
+	     "<p>Abbreviations appearing in the Abstract should generally be expanded " +
+	     "in parentheses, with the exceptions noted above.  When in doubt, " +
+	     "expand an abbreviation (refer to the online <em>Table of decisions on " +
+	     "consistent usage of terms in RFCs</em> [PubProcess]).</p>"
+	     ')/>
+<br/> <textarea class='required page4' onchange='updateXml()' id='abstract' rows='10' cols='80'></textarea><br/>
+            
+<br/><br/>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+</div>
+<div id='page5' class='page' style='display: none'>
+<h2>XML2RFC Wizard: References &mdash; Page 5</h2>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+        Any RFC References? (List the RFC #s here. Note: RFC 2119 will be included by default.)  <br/>
+            <input type='hidden' id='rfc0' value='2119'/>
+            <input onchange='updateXml()' type='text' id='rfc1' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='rfc2' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='rfc3' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='rfc4' value='' class='optional'/><br/>
+<br/>
+        Any Internet-Draft References? (List the draft names here.)  <br/>
+            <input onchange='updateXml()' type='text' id='id1' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='id2' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='id3' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='id4' value='' class='optional'/><br/>
+
+<br/><br/>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+</div>
+<div id='page6' class='page' style='display: none'>
+<h2>XML2RFC Wizard: Options &mdash; Page 6</h2>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='updateAction(); nextPage()'/><br/><br/>
+
+Do you want a table of contents? 
+  <img src='info.gif' onclick='showInstruction(  "Style Guide 4.7.  Table of Contents" +
+  "<p>A Table of Contents (TOC) section is required in RFCs longer than 30 " +
+  "pages and recommended for an RFC longer than 15 pages.  ...</p>")'/>
+<select onchange='updateXml()' id='toc'><option value='yes'>Yes</option><option value='no'>No</option></select><br/>
+How deep do you want the table of contents?
+  <img src='info.gif' onclick='showInstruction(
+  "Style Guide 4.7.  Table of Contents" +
+  "<p>... The TOC itself should not be too long or detailed, or it loses value. " +
+  "For example, if many successive TOC entries point to the same pages " +
+  "of the memo, the TOC granularity probably needs to be coarser.</p>" +
+  "<p>The RFC Editor uses a program to generate and format the TOC at the " +
+  "final stage of editing an RFC.</p>")'/>
+ <select onchange='updateXml()' id='tocdepth'><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select><br/>
+Do you want symbolic references or numeric references? 
+  <img src='info.gif' onclick='showInstruction(
+       "4.8.  Body of the Memo<br/>" +
+       "x)  References" +
+       "<p>... The RFC Editor strongly recommends against the use of simple " +
+       "numeric citations (<em>[53]</em>).  Using numeric citations often creates " +
+       "a burden on the Authors and/or RFC Editor (except when an XML " +
+       "source file is provided) when citations/references need to be " +
+       "added or deleted, or when they need to be moved from informative " +
+       "to normative (and vice versa).</p>" +
+       "<p>We recommend using citations that are symbolic of the subject " +
+       "matter (e.g., [IKEv2]), a unique name affiliated with the document " +
+       "(e.g., [RFC2119], [IEEE.802]), or possibly the academic convention " +
+       "of some brief encoding of the title and year (e.g., [MPLS99a]).</p>")'/>
+    <select onchange='updateXml()' id='symrefs'><option value='yes'>Symbolic: [RFC2121]</option><option value='no'>Numeric: [1]</option></select><br/>
+Should the reference entries be sorted alphabetically? <select onchange='updateXml()' id='sortrefs'><option value='yes'>Yes</option><option value='no'>No</option></select><br/>
+Should new main sections be started on a new page? <select onchange='updateXml()' id='compact'><option value='yes'>No</option><option value='no'>Yes</option></select><br/>
+Should lists keep a blank line between list items? <select onchange='updateXml()' id='subcompact'><option value='no'>No</option><option value='yes'>Yes</option></select><br/>
+
+<br/><br/>
+<input type='button' value='<<Prev' onclick='prevPage(1)'/>
+<input type='button' value='Next>>' onclick='updateAction(); nextPage()'/><br/><br/>
+</div>
+<div id='page7' class='page' style='display: none'>
+<h2>XML2RFC Wizard: Last Page</h2>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='submit' value='Download a Copy'/><br/>
+<h3>Congratulations!</h3>
+Your XML2RFC document is now complete and it's now your turn to fill in the rest of the blanks.
+Either copy and paste the document from below, or click <em>Download a Copy</em> to save to a file.
+<br/><br/>
+After downloading the XML file, edit the XML using your favorite XML editing tools.
+A description of various tools that you can use to help edit your document can be found on the
+<a href='http://tools.ietf.org/inventory/author-tools.shtml'>Author Tools</a> and
+<a href='http://tools.ietf.org/'>IETF Tools</a> pages.
+<br/><br/>
+To convert your XML to an internet draft, 
+follow the directions found on the <a href='http://xml.resource.org'>XML2RFC</a> resource page.
+<br/><br/>
+To upload your new internet draft into the Internet Drafts repository, use the 
+<a href='http://datatracker.ietf.org/idst/upload.cgi'>I-D Upload</a> page.
+<br/><br/>
+<input type='button' value='<<Prev' onclick='prevPage(1)'/>
+<input type='submit' value='Download a Copy'/><br/>
+</div>
+
+<!-- input value='Update' type='button' onclick='updateXml()'/ -->
+<!-- a href='#' onclick='javascript: updateXml()'>Update</a -->
+</form>
+<div id='outputouter' style='display: none'>
+<br/>
+The output so far looks like this:
+<div src='#' id='output'></div></div>
+
+<!-- div style="width: 100%; text-align: right; color: rgb(102, 102, 102); font-style: italic; font-family: Arial; font-size: 95%;">XML2RFC Creation Wizard by Tony Hansen</div -->
+<div style="width: 100%; text-align: right; color: rgb(102, 102, 102); font-style: italic; font-family: Arial; font-size: 95%;">Issues with this tool should be sent to the <a href="mailto:xml2rfc@ietf.org">xml2rfc</a> mailing list.</div>
+<div style="width: 100%; text-align: right; color: rgb(102, 102, 102); font-style: italic; font-family: Arial; font-size: 95%;">
+<input type='button' onclick='fillForm()' value='fill'/>
+<input type='button' onclick='setPage(1)' value='1'/>
+<input type='button' onclick='setPage(2)' value='2'/>
+<input type='button' onclick='setPage(3)' value='3'/>
+<input type='button' onclick='setPage(4)' value='4'/>
+<input type='button' onclick='setPage(5)' value='5'/>
+<input type='button' onclick='setPage(6)' value='6'/>
+<input type='button' onclick='setPage(7)' value='7'/></div>
+<form id='form'><input type='hidden' name='xml' id='xml'/>
+</form>
+</body></html>

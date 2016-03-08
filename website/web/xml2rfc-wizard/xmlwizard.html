@@ -1,0 +1,255 @@
+<html><head>
+<title>XML2RFC Creation Wizard</title>
+<link href="xml2rfc-wizard.css" rel="stylesheet" type="text/css">
+<script type='text/javascript' src='prototype.js'></script>
+<script type='text/javascript' src='xml2rfc-wizard.html'></script>
+</head><body onload='updateXml()'>
+<form>
+<div id='page1' class='page' style='display: block'>
+<h1>XML2RFC Creation Wizard</h1>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+This XML2RFC Creation Wizard is designed to help you create a new internet draft using the XML2RFC XML directives.
+The XML is constantly displayed at the bottom, and all changes are immediately reflected there.
+<br/><br/>
+In the following pages, you will be asked a series of questions about your draft.
+<br/><br/>
+Any answers that are required will appear as a box with a solid border, as in:
+<input size='5' type='text' class='required'/>.
+<br/><br/>
+Any answers that are optional will appear as a smaller box with a dotted border, as in:
+<input size='5' type='text' class='optional'/>.
+<br/><br/>
+Note: This page requires javascript to work.
+<br/><br/>
+Click <em>Next</em> to continue.
+<br/><br/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+</div>
+<div id='page2' class='page' style='display: none'>
+<h2>XML2RFC Wizard: Page 2</h2>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+
+What is the title for your Internet Draft? (e.g. 'My Great New Protocol Version 1.0') <input onchange='updateXml()' type='text' id='idtitle' value='' class='required page2'/><br/>
+What "short title" should be associated with the internet draft? (e.g., 'GNP v1.0'. This is only required if the title is longer than about 35 characters.)
+<input onchange='updateXml()' type='text' id='idshorttitle' value='' class='required page2'/><br/>
+What category does your document belong in? <select onchange='updateXml()' id='category' class='required page2'>
+<option value=''>-- Pick a category ---</option>
+<option value='info'>Informational</option>
+<option value='std'>Standards Track</option>
+<option value='bcp'>Best Current Practice</option>
+<option value='exp'>Experimental</option>
+</select><br/>
+What filename should be associated with your I-D? (e.g., draft-foo-???? or draft-ietf-foo-????) <input onchange='updateXml()' type='text' id='filename' value='' class='required page2'/><br/>
+Is your draft associated with any particular WG? <input onchange='updateXml()' type='text' id='wgname' value='' class='optional'/><br/>
+Does this document update an existing RFC? If so, list them (comma separated): <input onchange='updateXml()' type='text' id='updates' value='' class='optional'/><br/>
+Does this document obsolete an existing RFC? If so, list them (comma separated): <input onchange='updateXml()' type='text' id='obsoletes' value='' class='optional'/><br/>
+
+<br/><br/>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+</div>
+<div id='page3' class='page' style='display: none'>
+<h2>XML2RFC Wizard: Page 3</h2>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+Fill out the following for the each author.
+  <input type='button' onclick='showAuthor(1)' value='First'>
+  <input type='button' onclick='showAuthor(2)' value='Second'>
+  <input type='button' onclick='showAuthor(3)' value='Third'>
+  <input type='button' onclick='showAuthor(4)' value='Fourth'>
+  <input type='button' onclick='showAuthor(5)' value='Fifth'>:
+    <div id='author1' style='display: block'>
+      <h3>First Author</h3>
+      <ul>
+        <li>Full Name? <input onchange='updateXml()' type='text' id='author1_fullname' value='' class='required author1_page3'/>
+        <li>Your initials? <input onchange='updateXml()' type='text' id='author1_initials' value='' class='required author1_page3'/>
+        <li>Your Surname? <input onchange='updateXml()' type='text' id='author1_surname' value='' class='required author1_page3'/>
+        <li>Email address? <input onchange='updateXml()' type='text' id='author1_email' value='' class='required author1_page3'/>
+        <li>Is this author an editor of the document? <select onchange='updateXml()' id='author1_editor'><option value='no'>No</option><option value='yes'>Yes</option></select><br/>
+        <li>Your organization? <input onchange='updateXml()' type='text' id='author1_organization' value='' class='optional'/>
+        <li>Address:
+          <ul>
+            <li>Street? <input onchange='updateXml()' type='text' id='author1_street' value='' class='optional'/>
+            <li>City? <input onchange='updateXml()' type='text' id='author1_city' value='' class='optional'/>
+            <li>State/Region? <input onchange='updateXml()' type='text' id='author1_region' value='' class='optional'/>
+            <li>Postal code? <input onchange='updateXml()' type='text' id='author1_code' value='' class='optional'/>
+            <li>Country? <input onchange='updateXml()' type='text' id='author1_country' value='' class='optional'/>
+          </ul>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author1_phone' value='' class='optional'/>
+        <li>URI? <input onchange='updateXml()' type='text' id='author1_uri' value='' class='optional'/>
+        <li>Fax? <input onchange='updateXml()' type='text' id='author1_facsimile' value='' class='optional'/>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author1_phone' value='' class='optional'/>
+      </ul>
+    </div>
+    <div id='author2' style='display: none'>
+      <h3>Second Author</h3>
+      <ul>
+        <li>Full Name? <input onchange='updateXml()' type='text' id='author2_fullname' value='' class='required author2_page3'/>
+        <li>Your initials? <input onchange='updateXml()' type='text' id='author2_initials' value='' class='required author2_page3'/>
+        <li>Your Surname? <input onchange='updateXml()' type='text' id='author2_surname' value='' class='required author2_page3'/>
+        <li>Email address? <input onchange='updateXml()' type='text' id='author2_email' value='' class='required author2_page3'/>
+        <li>Is this author an editor of the document? <select onchange='updateXml()' id='author2_editor'><option value='no'>No</option><option value='yes'>Yes</option></select><br/>
+        <li>Your organization? <input onchange='updateXml()' type='text' id='author2_organization' value='' class='optional'/>
+        <li>Address:
+          <ul>
+            <li>Street? <input onchange='updateXml()' type='text' id='author2_street' value='' class='optional'/>
+            <li>City? <input onchange='updateXml()' type='text' id='author2_city' value='' class='optional'/>
+            <li>State/Region? <input onchange='updateXml()' type='text' id='author2_region' value='' class='optional'/>
+            <li>Postal code? <input onchange='updateXml()' type='text' id='author2_code' value='' class='optional'/>
+            <li>Country? <input onchange='updateXml()' type='text' id='author2_country' value='' class='optional'/>
+          </ul>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author2_phone' value='' class='optional'/>
+        <li>URI? <input onchange='updateXml()' type='text' id='author2_uri' value='' class='optional'/>
+        <li>Fax? <input onchange='updateXml()' type='text' id='author2_facsimile' value='' class='optional'/>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author2_phone' value='' class='optional'/>
+      </ul>
+    </div>
+    <div id='author3' style='display: none'>
+      <h3>Third Author</h3>
+      <ul>
+        <li>Full Name? <input onchange='updateXml()' type='text' id='author3_fullname' value='' class='required author3_page3'/>
+        <li>Your initials? <input onchange='updateXml()' type='text' id='author3_initials' value='' class='required author3_page3'/>
+        <li>Your Surname? <input onchange='updateXml()' type='text' id='author3_surname' value='' class='required author3_page3'/>
+        <li>Email address? <input onchange='updateXml()' type='text' id='author3_email' value='' class='required author3_page3'/>
+        <li>Is this author an editor of the document? <select onchange='updateXml()' id='author3_editor'><option value='no'>No</option><option value='yes'>Yes</option></select><br/>
+        <li>Your organization? <input onchange='updateXml()' type='text' id='author3_organization' value='' class='optional'/>
+        <li>Address:
+          <ul>
+            <li>Street? <input onchange='updateXml()' type='text' id='author3_street' value='' class='optional'/>
+            <li>City? <input onchange='updateXml()' type='text' id='author3_city' value='' class='optional'/>
+            <li>State/Region? <input onchange='updateXml()' type='text' id='author3_region' value='' class='optional'/>
+            <li>Postal code? <input onchange='updateXml()' type='text' id='author3_code' value='' class='optional'/>
+            <li>Country? <input onchange='updateXml()' type='text' id='author3_country' value='' class='optional'/>
+          </ul>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author3_phone' value='' class='optional'/>
+        <li>URI? <input onchange='updateXml()' type='text' id='author3_uri' value='' class='optional'/>
+        <li>Fax? <input onchange='updateXml()' type='text' id='author3_facsimile' value='' class='optional'/>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author3_phone' value='' class='optional'/>
+      </ul>
+    </div>
+    <div id='author4' style='display: none'>
+      <h3>Fourth Author</h3>
+      <ul>
+        <li>Full Name? <input onchange='updateXml()' type='text' id='author4_fullname' value='' class='required author4_page3'/>
+        <li>Your initials? <input onchange='updateXml()' type='text' id='author4_initials' value='' class='required author4_page3'/>
+        <li>Your Surname? <input onchange='updateXml()' type='text' id='author4_surname' value='' class='required author4_page3'/>
+        <li>Email address? <input onchange='updateXml()' type='text' id='author4_email' value='' class='required author4_page3'/>
+        <li>Is this author an editor of the document? <select onchange='updateXml()' id='author4_editor'><option value='no'>No</option><option value='yes'>Yes</option></select><br/>
+        <li>Your organization? <input onchange='updateXml()' type='text' id='author4_organization' value='' class='optional'/>
+        <li>Address:
+          <ul>
+            <li>Street? <input onchange='updateXml()' type='text' id='author4_street' value='' class='optional'/>
+            <li>City? <input onchange='updateXml()' type='text' id='author4_city' value='' class='optional'/>
+            <li>State/Region? <input onchange='updateXml()' type='text' id='author4_region' value='' class='optional'/>
+            <li>Postal code? <input onchange='updateXml()' type='text' id='author4_code' value='' class='optional'/>
+            <li>Country? <input onchange='updateXml()' type='text' id='author4_country' value='' class='optional'/>
+          </ul>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author4_phone' value='' class='optional'/>
+        <li>URI? <input onchange='updateXml()' type='text' id='author4_uri' value='' class='optional'/>
+        <li>Fax? <input onchange='updateXml()' type='text' id='author4_facsimile' value='' class='optional'/>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author4_phone' value='' class='optional'/>
+      </ul>
+    </div>
+    <div id='author5' style='display: none'>
+      <h3>Fifth Author</h3>
+      <ul>
+        <li>Full Name? <input onchange='updateXml()' type='text' id='author5_fullname' value='' class='required author5_page3'/>
+        <li>Your initials? <input onchange='updateXml()' type='text' id='author5_initials' value='' class='required author5_page3'/>
+        <li>Your Surname? <input onchange='updateXml()' type='text' id='author5_surname' value='' class='required author5_page3'/>
+        <li>Email address? <input onchange='updateXml()' type='text' id='author5_email' value='' class='required author5_page3'/>
+        <li>Is this author an editor of the document? <select onchange='updateXml()' id='author5_editor'><option value='no'>No</option><option value='yes'>Yes</option></select><br/>
+        <li>Your organization? <input onchange='updateXml()' type='text' id='author5_organization' value='' class='optional'/>
+        <li>Address:
+          <ul>
+            <li>Street? <input onchange='updateXml()' type='text' id='author5_street' value='' class='optional'/>
+            <li>City? <input onchange='updateXml()' type='text' id='author5_city' value='' class='optional'/>
+            <li>State/Region? <input onchange='updateXml()' type='text' id='author5_region' value='' class='optional'/>
+            <li>Postal code? <input onchange='updateXml()' type='text' id='author5_code' value='' class='optional'/>
+            <li>Country? <input onchange='updateXml()' type='text' id='author5_country' value='' class='optional'/>
+          </ul>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author5_phone' value='' class='optional'/>
+        <li>URI? <input onchange='updateXml()' type='text' id='author5_uri' value='' class='optional'/>
+        <li>Fax? <input onchange='updateXml()' type='text' id='author5_facsimile' value='' class='optional'/>
+        <li>Phone? <input onchange='updateXml()' type='text' id='author5_phone' value='' class='optional'/>
+      </ul>
+    </div>
+</ul>
+
+<br/><br/>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+</div>
+<div id='page4' class='page' style='display: none'>
+<h2>XML2RFC Wizard: Page 4</h2>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+        Keyword(s)? <br/>
+            <input onchange='updateXml()' type='text' id='keyword1' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='keyword2' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='keyword3' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='keyword4' value='' class='optional'/><br/>
+
+        Abstract?<br/> <textarea class='required page4' onchange='updateXml()' id='abstract' rows='10' cols='80'></textarea><br/>
+            
+<br/><br/>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+</div>
+<div id='page5' class='page' style='display: none'>
+<h2>XML2RFC Wizard: Page 5</h2>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+        Any RFC References? (List the RFC #s here. Note: RFC 2119 will be included by default.)  <br/>
+            <input type='hidden' id='rfc0' value='2119'/>
+            <input onchange='updateXml()' type='text' id='rfc1' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='rfc2' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='rfc3' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='rfc4' value='' class='optional'/><br/>
+<br/>
+        Any Internet-Draft References? (List the draft names here.)  <br/>
+            <input onchange='updateXml()' type='text' id='id1' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='id2' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='id3' value='' class='optional'/><br/>
+            <input onchange='updateXml()' type='text' id='id4' value='' class='optional'/><br/>
+
+<br/><br/>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+</div>
+<div id='page6' class='page' style='display: none'>
+<h2>XML2RFC Wizard: Page 6</h2>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+
+Do you want a table of contents? <select onchange='updateXml()' id='toc'><option value='yes'>Yes</option><option value='no'>No</option></select><br/>
+How deep do you want the table of contents? <select onchange='updateXml()' id='tocdepth'><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select><br/>
+Do you want symbolic references or numeric references? <select onchange='updateXml()' id='symrefs'><option value='yes'>Symbolic: [RFC2121]</option><option value='no'>Numeric: [1]</option></select><br/>
+Should the reference entries be sorted alphabetically? <select onchange='updateXml()' id='sortrefs'><option value='yes'>Yes</option><option value='no'>No</option></select><br/>
+Should new main sections be started on a new page? <select onchange='updateXml()' id='compact'><option value='yes'>No</option><option value='no'>Yes</option></select><br/>
+Should lists keep a blank line between list items? <select onchange='updateXml()' id='subcompact'><option value='no'>No</option><option value='yes'>Yes</option></select><br/>
+
+<br/><br/>
+<input type='button' value='<<Prev' onclick='prevPage(1)'/>
+<input type='button' value='Next>>' onclick='nextPage()'/><br/><br/>
+</div>
+<div id='page7' class='page' style='display: none'>
+<h2>XML2RFC Wizard: Last Page</h2>
+<input type='button' value='<<Prev' onclick='prevPage()'/>
+<input type='button' value='Download a Copy'/><br/>
+<h3>Congratulations!</h3>
+Your XML2RFC document is now complete and it's now your turn to fill in the rest of the blanks.
+Either copy and paste the document from below, or click <em>Download a Copy</em> to save to a file.
+<br/><br/>
+<input type='button' value='<<Prev' onclick='prevPage(1)'/>
+<input type='button' value='Download a Copy'/><br/>
+</div>
+
+<!-- input value='Update' type='button' onclick='updateXml()'/ -->
+<!-- a href='#' onclick='javascript: updateXml()'>Update</a -->
+</form>
+<br/>
+The output so far looks like this:
+<div src='#' id='output'></div>
+
+</body></html>
