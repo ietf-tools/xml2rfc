@@ -181,6 +181,7 @@
       &lt;artwork&gt; provides
       full control of horizontal whitespace and line breaks; thus is
       used for a variety of things, such as diagrams ("line art") and protocol unit diagrams.
+      Tab characters (U+0009) inside of this element are prohibited.
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
@@ -190,19 +191,14 @@
       prose that describes the included image in sufficient detail.
    </t>
    <t>
-      If the artwork includes either "&amp;" or "&lt;" characters, or the string "]]&gt;" those characters
-      need to be encoded using escaping or CDATA block(s); see &lt;<x:ref>sourcecode</x:ref>&gt; for a fuller
-      description of these solutions.
-   </t>
-   <t>
-      In <xref target="XML2RFCv2"/>, the &lt;artwork&gt; element was also used for source code and formal
+      In <xref target="RFC7749"/>, the &lt;artwork&gt; element was also used for source code and formal
       languages; in v3, this is now done with &lt;<x:ref>sourcecode</x:ref>&gt;.
    </t>
    <t>
       There are at least five ways to include SVG in artwork in Internet-Drafts:
       <list style="symbols">
          <t>Inline, by including all of the SVG in the content of the element, 
-            such as: &lt;artwork type="svg"&gt;&lt;svg xmlns..."&gt;</t>
+            such as: &lt;artwork type="svg"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" ..."&gt;</t>
          <t>Inline, but using XInclude (see <xref target="includingexternal"/>),
             such as: &lt;artwork type="svg"&gt;&lt;xi:include href=...&gt;</t>
          <t>As a data: URI, such as: &lt;artwork type="svg"
@@ -221,6 +217,10 @@
       Formatters that do pagination should attempt to keep artwork on a single page. This is to prevent
       artwork that is split across pages from looking like two separate pieces of artwork.
    </t>
+   <t>
+See <xref target="cdata.and.escaping"/> for a description of to deal with issues of using
+"&amp;" and "&lt;" characters in artwork.
+</t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       <xref format="none" target="grammar.artwork">Content model</xref>:
@@ -247,6 +247,7 @@
       <t>
             Controls whether the artwork appears left justified (default), centered,
             or right justified.
+            Artwork is aligned relative to left margin of document.
          </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -1009,8 +1010,8 @@
       date.
    </t>
          <t>
-      If given, the month must be a number. Note that this restriction is different than that in
-      that in <xref target="XML2RFCv2"/>. The prep tool will silently change text month names to numbers.
+      If given, the month must be a number or a month in English. 
+      The prep tool will silently change text month names to numbers.
       The year must be a four-digit number.
    </t>
          <t>
@@ -1696,7 +1697,7 @@
       A &lt;<x:ref>seriesInfo</x:ref>&gt; element determines the document number (for RFCs)
       or name (for Internet-Drafts).
       Another &lt;<x:ref>seriesInfo</x:ref>&gt; element determines the "maturity level"
-      (see <xref target="RFC2026" sectionFormat="of" section="4"/>), using values of "std" for
+      (defined in <xref target="RFC2026"/>), using values of "std" for
       "Standards Track", "bcp" for "BCP", "info" for "Informational", "exp" for "Experimental", and
       "historic" for "Historic".
       The "name" attributes of those
@@ -1982,7 +1983,7 @@
             </t>
          <t>
                The Internet-Draft that was submitted to the RFC Editor to become the published RFC.
-               The value for the "rel" attribute is "derivedFrom".
+               The value for the "rel" attribute is "convertedFrom".
                The link should be to an IETF-controlled web site that retains copies of Internet-Drafts.
             </t>
          <t>
@@ -2138,6 +2139,7 @@
       <t>
          If set to "true", this note is marked in the prep tool with text indicating that it should be
          removed before the document is published as an RFC.
+         That text will be “This note is to be removed before publishing as an RFC.”.
       </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -2630,10 +2632,6 @@
       as described in <xref target="RFC7322"/>).
       This vocabulary supports the split with the &lt;<x:ref>name</x:ref>&gt; child element.
       In general, the title should be either "Normative References" or "Informative References".
-   </t>
-   <t>
-      By default, the order of references is significant. Some formatters, however,
-      might be able to be requested to sort them based on their anchor names.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.references.contents"><!--AG-->
@@ -3403,7 +3401,7 @@
       A processing tool determines if it is working on an RFC or an Internet-Draft by inspecting the
       "name" attribute of a &lt;<x:ref>seriesInfo</x:ref>&gt; element inside the
       &lt;<x:ref>front</x:ref>&gt; element inside the &lt;<x:ref>rfc</x:ref>&gt; element, looking
-      for "rfc" or "Internet-Draft". (Specifying neither value in any of the
+      for "RFC" or "Internet-Draft". (Specifying neither value in any of the
       &lt;<x:ref>seriesInfo</x:ref>&gt; elements can be useful for producing other types of
       documents, but is out of scope for this specification.)
    </t>
@@ -3528,8 +3526,8 @@ in the same &lt;front&gt; element.
       <t>
             For BCPs, FYIs, RFCs, and STDs, this is the number within the series.
             For Internet-Drafts, it is the full draft name (ending with the two-digit
-            version number). For DOIs, the value is given such as "10.123456/rfc1149",
-            (the actual value will be specified later in <xref target="RFC7669"/>).
+            version number). For DOIs, the value is given such as "10.17487/rfc1149",
+            as described in <xref target="RFC7669"/>.
       </t>
       <t>
             The name in the value should be the document name without any file
@@ -3552,44 +3550,27 @@ in the same &lt;front&gt; element.
       This element allows the inclusion of sourcecode into the document.
    </t>
    <t>
-      &lt;sourcecode&gt; provides
-      full control of horizontal whitespace and line breaks.
-      It is thus useful for source code and formal languages (such as ABNF <xref target="RFC5234"/> or the RNC notation used in this document).
       When rendered, sourcecode is always shown in a monospace font.
+      When &lt;sourcecode&gt; is a child of &lt;<x:ref>figure</x:ref>&gt; or &lt;<x:ref>section</x:ref>&gt;, it provides
+      full control of horizontal whitespace and line breaks.
+      When formatted, it is indented indented relative to the left margin of the enclosing element.
+      It is thus useful for source code and formal languages (such as ABNF <xref target="RFC5234"/> or the RNC notation used in this document).
+      (When &lt;sourcecode&gt; is a child of other elements, if flows with the text that surrounds it.)
+      Tab characters (U+0009) inside of this element are prohibited.
+
    </t>
    <t>
       For artwork such as character-based art, diagrams of message layouts, and so on,
       use the &lt;<x:ref>artwork</x:ref>&gt; element instead.
    </t>
    <t>
-       A common problem authors have with &lt;sourcecode&gt; is that the XML processor returns errors
-       if the text in the artwork contains either the "&amp;" or "&lt;" character, or the string "]]&gt;". To avoid these problems,
-       the "&amp;" and "&lt;" characters may be escaped using the strings
-       "&amp;amp;" and "&amp;lt;", respectively; the "]]&gt;" string can be represented as "]]&amp;gt;".
-       Alternatively, they may be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;".  For example:
-<figure>
-         <artwork>
-Desired output:
-   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"
-
-Using escaping:
-&lt;sourcecode&gt;
-   allowed-chars = "." | "," | "&amp;amp;" | "&amp;lt;" | "&amp;gt;" | "|"
-&lt;/sourcecode&gt;
-
-Using CDATA:
-&lt;sourcecode&gt;
-&lt;![CDATA[   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]&gt;
-&lt;/sourcecode&gt;
-</artwork>
-      </figure>
-       Using CDATA is not a panacea, but it does help prevent having to use escapes in places where using
-       using escapes can cause other problems, such as difficulty of inclusion from other documents.
-   </t>
-   <t>
       Output formatters that do pagination should attempt to keep source code on a single page. This is to prevent
       source code that is split across pages from looking like two separate pieces of code.
    </t>
+   <t>
+See <xref target="cdata.and.escaping"/> for a description of to deal with issues of using
+"&amp;" and "&lt;" characters in sourcecode.
+</t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->
       <xref format="none" target="grammar.sourcecode">Content model</xref>: only text content.</t>

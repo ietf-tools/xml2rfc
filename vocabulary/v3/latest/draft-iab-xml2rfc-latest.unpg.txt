@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 7749 (if approved)                              March 4, 2016
+Obsoletes: 7749 (if approved)                              March 9, 2016
 Intended status: Informational
-Expires: September 5, 2016
+Expires: September 10, 2016
 
 
                    The "xml2rfc" version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 5, 2016.
+   This Internet-Draft will expire on September 10, 2016.
 
 Copyright Notice
 
@@ -2628,8 +2628,7 @@ Table of Contents
    For BCPs, FYIs, RFCs, and STDs, this is the number within the series.
    For Internet-Drafts, it is the full draft name (ending with the two-
    digit version number).  For DOIs, the value is given such as
-   "10.123456/rfc1149", (the actual value will be specified later in
-   [RFC7669]).
+   "10.17487/rfc1149", as described in [RFC7669].
 
    The name in the value should be the document name without any file
    extension.  For Internet-Drafts, the value for this attribute should
@@ -4505,6 +4504,10 @@ B.3.  Attributes Controlled by the Prep Tool
       original value of the "src" attribute if that attribute is removed
       by the prep tool.
 
+   o  <figure> originalSrc -- This attribute is filled with the original
+      value of the "src" attribute if that attribute is removed by the
+      prep tool.
+
    o  <iref> "irefid" attribute -- This attribute is filled with an
       identifier used when creating indexes.
 
@@ -5207,6 +5210,7 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "false" ]
        attribute suppress-title { "true" | "false" }?,
        attribute src { text }?,
+       attribute originalSrc { text }?,
        [ a:defaultValue = "left" ]
        attribute align { "left" | "center" | "right" }?,
        [ a:defaultValue = "" ] attribute alt { text }?,
@@ -6197,6 +6201,7 @@ Appendix D.  Schema Differences from v2
          [ a:defaultValue = "false" ]
          attribute suppress-title { "true" | "false" }?,
          attribute src { text }?,
+   +     attribute originalSrc { text }?,
          [ a:defaultValue = "left" ]
          attribute align { "left" | "center" | "right" }?,
          [ a:defaultValue = "" ] attribute alt { text }?,

@@ -649,11 +649,10 @@ the appendices for a complete description of these attributes.
       Formatters that do pagination should attempt to keep artwork on a single page. This is to prevent
       artwork that is split across pages from looking like two separate pieces of artwork.
    </t>
-<t>
+   <t>
 See <xref target="cdata.and.escaping"/> for a description of to deal with issues of using
 "&amp;" and "&lt;" characters in artwork.
 </t>
-
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       <xref format="none" target="grammar.artwork">Content model</xref>:
@@ -4000,7 +3999,7 @@ in the same &lt;front&gt; element.
       Output formatters that do pagination should attempt to keep source code on a single page. This is to prevent
       source code that is split across pages from looking like two separate pieces of code.
    </t>
-<t>
+   <t>
 See <xref target="cdata.and.escaping"/> for a description of to deal with issues of using
 "&amp;" and "&lt;" characters in sourcecode.
 </t>
@@ -6681,6 +6680,9 @@ inside sections.</t>
 <t>&lt;artwork&gt; originalSrc -- This attribute is filled with the original value of the "src"
 attribute if that attribute is removed by the prep tool.</t>
 
+<t>&lt;figure&gt; originalSrc -- This attribute is filled with the original value of the "src"
+attribute if that attribute is removed by the prep tool.</t>
+
 <t>&lt;iref&gt; "irefid" attribute -- This attribute is filled with an identifier used when creating
 indexes.</t>
 
@@ -7378,6 +7380,7 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     [ a:defaultValue = "false" ]
     attribute suppress-title { "true" | "false" }?,
     attribute src { text }?,
+    attribute originalSrc { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
     [ a:defaultValue = "" ] attribute alt { text }?,
@@ -8371,6 +8374,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "false" ]
       attribute suppress-title { "true" | "false" }?,
       attribute src { text }?,
++     attribute originalSrc { text }?,
       [ a:defaultValue = "left" ]
       attribute align { "left" | "center" | "right" }?,
       [ a:defaultValue = "" ] attribute alt { text }?,

@@ -13,14 +13,48 @@
 
 <!--
 
-rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rectified.
+Change <tt> to <kbd>?
+
+Maybe add <referencesection>
+
+rfc/@submissionType is now duplicated in seriesInfo/stream. This needs to be rectified.
+
+sourcecode / number - wait
+sourcecode / indent - wait for Tony, probably not
+
+Does the types table in <artwork> need a second column for what can appear in plaintext?
+
+Maybe have to add prose about fullname being required if there is ascii* in <author>
+
+Adding <example>? Hopefully not.
 
 -->
 
-<!DOCTYPE rfc []>
+<!DOCTYPE rfc [
+<!ENTITY rfc2026 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2026.xml">
+<!ENTITY rfc2397 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2397.xml">
+<!ENTITY rfc2629 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2629.xml">
+<!ENTITY rfc3339 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3339.xml">
+<!ENTITY rfc3470 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3470.xml">
+<!ENTITY rfc3667 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3667.xml">
+<!ENTITY rfc3966 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3966.xml">
+<!ENTITY rfc3978 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3978.xml">
+<!ENTITY rfc3986 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml">
+<!ENTITY rfc5234 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml">
+<!ENTITY rfc5378 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5378.xml">
+<!ENTITY rfc5741 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5741.xml">
+<!ENTITY rfc5743 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5743.xml">
+<!ENTITY rfc6068 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6068.xml">
+<!ENTITY rfc6266 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6266.xml">
+<!ENTITY rfc6949 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6949.xml">
+<!ENTITY rfc7303 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7303.xml">
+<!ENTITY rfc7322 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7322.xml">
+<!ENTITY rfc7669 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7669.xml">
+<!ENTITY rfc7749 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7749.xml">
+]>
 
-<rfc xmlns:x="http://purl.org/net/xml2rfc/ext" obsoletes="2629" xmlns:ed="http://greenbytes.de/2002/rfcedit" ipr="trust200902" docName="draft-iab-xml2rfc-latest" category="info" xml:lang="en">
-  <x:feedback template="mailto:xml2rfc@ietf.org?subject={docname},%20%22{section}%22&amp;body=&lt;{ref}&gt;:"/>
+<rfc xmlns:x="http://purl.org/net/xml2rfc/ext" obsoletes="7749" xmlns:ed="http://greenbytes.de/2002/rfcedit" ipr="trust200902" docName="draft-iab-xml2rfc-latest" category="info" xml:lang="en">
+  <x:feedback template="mailto:rfc-interest@rfc-editor.org,iab@iab.org?subject={docname},%20%22{section}%22&amp;body=&lt;{ref}&gt;:"/>
 	<front>
   <title>The "xml2rfc" version 3 Vocabulary</title>
   <author initials="P." surname="Hoffman" fullname="Paul Hoffman">
@@ -35,7 +69,7 @@ rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rec
       This document defines the "xml2rfc" version 3 vocabulary: an XML-based
       language used for writing RFCs and Internet-Drafts. It is heavily derived
       from the version 2 vocabulary that is also under discussion. This document
-      obsoletes the v2 grammar described in RFC 2629 and its followup, draft-iab-xml2rfcv2.
+      obsoletes the v2 grammar described in RFC 2629 and its followup, RFC 7749.
     </t>
   </abstract>
 
@@ -57,10 +91,10 @@ rfc/@submissionType is now duplicated in seriesInfo/status. This needs to be rec
   (<xref target="RFC7322"/>) and Internet-Drafts (<xref target="IDGUIDE"/>).
 </t>
 <t>
-  This document obsoletes the version 2 vocabulary ("v2") <xref target="XML2RFCv2"/>, which
+  This document obsoletes the version 2 vocabulary ("v2") <xref target="RFC7749"/>, which
   contains the extended language definition. That document in turn obsoletes
   the original version ("v1") <xref target="RFC2629"/>. This document directly copies the
-  material from <xref target="XML2RFCv2"/> where possible; as that document makes its way
+  material from <xref target="RFC7749"/> where possible; as that document makes its way
   toward RFC publication, this document will incorporate as many of the changes as possible.
 </t>
 <t>
@@ -93,6 +127,11 @@ published capturing those changes as the toolset is completed. Other implementer
 those changes to remain backwards-compatible with the details described in this document.
 </t>
 
+<t>NOTE: there is a significant known issue with this version that needs to be discussed and fixed
+before the specification is complete. This version describes two ways to say which stream the
+document is in, one in &lt;rfc&gt; and the other in &lt;seriesInfo&gt;. This will be rectified
+in the next draft.</t>
+
 </section>
 
 <section title="Design Criteria for the Changes in v3">
@@ -120,7 +159,7 @@ important than backwards compatibility with v2, given the latter two design crit
 v3 is upwards compatible with v2, meaning that a v2 document is meant to be a valid v3
 document as well. However, some features of v2 are deprecated in v3 in favor of new
 elements. Deprecated features are listed in <xref target="deprecated_features"/>,
-and are described in <xref target="XML2RFCv2"/>.
+and are described in <xref target="RFC7749"/>.
 </t>
 
 </section>
@@ -128,7 +167,7 @@ and are described in <xref target="XML2RFCv2"/>.
 <section title="Differences from v2 to v3" anchor="differences.from.v2.to.v3">
 
 <t>
-This is a a hopefully-complete list of all the technical changes between <xref target="XML2RFCv2"/>
+This is a a hopefully-complete list of all the technical changes between <xref target="RFC7749"/>
 and this document.
 </t>
 
@@ -372,6 +411,8 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
 Tools interpreting the XML described here will collapse horizontal whitespace and line breaks to a
 single whitespace (except inside &lt;<x:ref>artwork</x:ref>&gt; and
 &lt;<x:ref>sourcecode</x:ref>&gt;), and will trim leading and trailing whitespace.
+Tab characters (U+0009) inside &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt; are
+prohibited.
 </t>
 
 <t>
@@ -572,6 +613,7 @@ the appendices for a complete description of these attributes.
       &lt;artwork&gt; provides
       full control of horizontal whitespace and line breaks; thus is
       used for a variety of things, such as diagrams ("line art") and protocol unit diagrams.
+      Tab characters (U+0009) inside of this element are prohibited.
    </t>
    <t>
       Alternatively, the "src" attribute allows referencing an external graphics
@@ -581,19 +623,14 @@ the appendices for a complete description of these attributes.
       prose that describes the included image in sufficient detail.
    </t>
    <t>
-      If the artwork includes either "&amp;" or "&lt;" characters, or the string "]]&gt;" those characters
-      need to be encoded using escaping or CDATA block(s); see &lt;<x:ref>sourcecode</x:ref>&gt; for a fuller
-      description of these solutions.
-   </t>
-   <t>
-      In <xref target="XML2RFCv2"/>, the &lt;artwork&gt; element was also used for source code and formal
+      In <xref target="RFC7749"/>, the &lt;artwork&gt; element was also used for source code and formal
       languages; in v3, this is now done with &lt;<x:ref>sourcecode</x:ref>&gt;.
    </t>
    <t>
       There are at least five ways to include SVG in artwork in Internet-Drafts:
       <list style="symbols">
          <t>Inline, by including all of the SVG in the content of the element, 
-            such as: &lt;artwork type="svg"&gt;&lt;svg xmlns..."&gt;</t>
+            such as: &lt;artwork type="svg"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" ..."&gt;</t>
          <t>Inline, but using XInclude (see <xref target="includingexternal"/>),
             such as: &lt;artwork type="svg"&gt;&lt;xi:include href=...&gt;</t>
          <t>As a data: URI, such as: &lt;artwork type="svg"
@@ -612,6 +649,11 @@ the appendices for a complete description of these attributes.
       Formatters that do pagination should attempt to keep artwork on a single page. This is to prevent
       artwork that is split across pages from looking like two separate pieces of artwork.
    </t>
+<t>
+See <xref target="cdata.and.escaping"/> for a description of to deal with issues of using
+"&amp;" and "&lt;" characters in artwork.
+</t>
+
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       <xref format="none" target="grammar.artwork">Content model</xref>:
@@ -638,6 +680,7 @@ the appendices for a complete description of these attributes.
       <t>
             Controls whether the artwork appears left justified (default), centered,
             or right justified.
+            Artwork is aligned relative to left margin of document.
          </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -1400,8 +1443,8 @@ the appendices for a complete description of these attributes.
       date.
    </t>
          <t>
-      If given, the month must be a number. Note that this restriction is different than that in
-      that in <xref target="XML2RFCv2"/>. The prep tool will silently change text month names to numbers.
+      If given, the month must be a number or a month in English. 
+      The prep tool will silently change text month names to numbers.
       The year must be a four-digit number.
    </t>
          <t>
@@ -2087,7 +2130,7 @@ the appendices for a complete description of these attributes.
       A &lt;<x:ref>seriesInfo</x:ref>&gt; element determines the document number (for RFCs)
       or name (for Internet-Drafts).
       Another &lt;<x:ref>seriesInfo</x:ref>&gt; element determines the "maturity level"
-      (see <xref target="RFC2026" sectionFormat="of" section="4"/>), using values of "std" for
+      (defined in <xref target="RFC2026"/>), using values of "std" for
       "Standards Track", "bcp" for "BCP", "info" for "Informational", "exp" for "Experimental", and
       "historic" for "Historic".
       The "name" attributes of those
@@ -2373,7 +2416,7 @@ the appendices for a complete description of these attributes.
             </t>
          <t>
                The Internet-Draft that was submitted to the RFC Editor to become the published RFC.
-               The value for the "rel" attribute is "derivedFrom".
+               The value for the "rel" attribute is "convertedFrom".
                The link should be to an IETF-controlled web site that retains copies of Internet-Drafts.
             </t>
          <t>
@@ -2529,6 +2572,7 @@ the appendices for a complete description of these attributes.
       <t>
          If set to "true", this note is marked in the prep tool with text indicating that it should be
          removed before the document is published as an RFC.
+         That text will be “This note is to be removed before publishing as an RFC.”.
       </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -3021,10 +3065,6 @@ the appendices for a complete description of these attributes.
       as described in <xref target="RFC7322"/>).
       This vocabulary supports the split with the &lt;<x:ref>name</x:ref>&gt; child element.
       In general, the title should be either "Normative References" or "Informative References".
-   </t>
-   <t>
-      By default, the order of references is significant. Some formatters, however,
-      might be able to be requested to sort them based on their anchor names.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
    <t anchor="element.references.contents"><!--AG-->
@@ -3794,7 +3834,7 @@ the appendices for a complete description of these attributes.
       A processing tool determines if it is working on an RFC or an Internet-Draft by inspecting the
       "name" attribute of a &lt;<x:ref>seriesInfo</x:ref>&gt; element inside the
       &lt;<x:ref>front</x:ref>&gt; element inside the &lt;<x:ref>rfc</x:ref>&gt; element, looking
-      for "rfc" or "Internet-Draft". (Specifying neither value in any of the
+      for "RFC" or "Internet-Draft". (Specifying neither value in any of the
       &lt;<x:ref>seriesInfo</x:ref>&gt; elements can be useful for producing other types of
       documents, but is out of scope for this specification.)
    </t>
@@ -3919,8 +3959,8 @@ in the same &lt;front&gt; element.
       <t>
             For BCPs, FYIs, RFCs, and STDs, this is the number within the series.
             For Internet-Drafts, it is the full draft name (ending with the two-digit
-            version number). For DOIs, the value is given such as "10.123456/rfc1149",
-            (the actual value will be specified later in <xref target="RFC7669"/>).
+            version number). For DOIs, the value is given such as "10.17487/rfc1149",
+            as described in <xref target="RFC7669"/>.
       </t>
       <t>
             The name in the value should be the document name without any file
@@ -3943,44 +3983,27 @@ in the same &lt;front&gt; element.
       This element allows the inclusion of sourcecode into the document.
    </t>
    <t>
-      &lt;sourcecode&gt; provides
-      full control of horizontal whitespace and line breaks.
-      It is thus useful for source code and formal languages (such as ABNF <xref target="RFC5234"/> or the RNC notation used in this document).
       When rendered, sourcecode is always shown in a monospace font.
+      When &lt;sourcecode&gt; is a child of &lt;<x:ref>figure</x:ref>&gt; or &lt;<x:ref>section</x:ref>&gt;, it provides
+      full control of horizontal whitespace and line breaks.
+      When formatted, it is indented indented relative to the left margin of the enclosing element.
+      It is thus useful for source code and formal languages (such as ABNF <xref target="RFC5234"/> or the RNC notation used in this document).
+      (When &lt;sourcecode&gt; is a child of other elements, if flows with the text that surrounds it.)
+      Tab characters (U+0009) inside of this element are prohibited.
+
    </t>
    <t>
       For artwork such as character-based art, diagrams of message layouts, and so on,
       use the &lt;<x:ref>artwork</x:ref>&gt; element instead.
    </t>
    <t>
-       A common problem authors have with &lt;sourcecode&gt; is that the XML processor returns errors
-       if the text in the artwork contains either the "&amp;" or "&lt;" character, or the string "]]&gt;". To avoid these problems,
-       the "&amp;" and "&lt;" characters may be escaped using the strings
-       "&amp;amp;" and "&amp;lt;", respectively; the "]]&gt;" string can be represented as "]]&amp;gt;".
-       Alternatively, they may be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;".  For example:
-<figure>
-         <artwork>
-Desired output:
-   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"
-
-Using escaping:
-&lt;sourcecode&gt;
-   allowed-chars = "." | "," | "&amp;amp;" | "&amp;lt;" | "&amp;gt;" | "|"
-&lt;/sourcecode&gt;
-
-Using CDATA:
-&lt;sourcecode&gt;
-&lt;![CDATA[   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]&gt;
-&lt;/sourcecode&gt;
-</artwork>
-      </figure>
-       Using CDATA is not a panacea, but it does help prevent having to use escapes in places where using
-       using escapes can cause other problems, such as difficulty of inclusion from other documents.
-   </t>
-   <t>
       Output formatters that do pagination should attempt to keep source code on a single page. This is to prevent
       source code that is split across pages from looking like two separate pieces of code.
    </t>
+<t>
+See <xref target="cdata.and.escaping"/> for a description of to deal with issues of using
+"&amp;" and "&lt;" characters in sourcecode.
+</t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->
       <xref format="none" target="grammar.sourcecode">Content model</xref>: only text content.</t>
@@ -5737,8 +5760,41 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
 <section title="SVG" anchor="element.svg">
    <x:anchor-alias value="svg"/>
 <t>
-<cref>Discuss relation to SVG draft.</cref>
+The discussion of the use of SVG can be found in <xref target="SVGforRFCs"/>.
+This element is part of the namespace "http://www.w3.org/2000/svg".
 </t>
+</section>
+
+<section title="Use of CDATA Structures and Escaping" anchor="cdata.and.escaping">
+
+<t>
+A common problem authors have with &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt;
+elements is that the XML processor returns errors
+if the text in the artwork contains either the "&amp;" or "&lt;" character, or the string "]]&gt;".
+To avoid these problems, the "&amp;" and "&lt;" characters may be escaped using the strings
+"&amp;amp;" and "&amp;lt;", respectively; the "]]&gt;" string can be represented as "]]&amp;gt;".
+Alternatively, they may be surrounded in a CDATA structure: "&lt;![CDATA[]]&gt;".  For example:
+
+<figure><artwork>
+Desired output:
+   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"
+
+Using escaping:
+&lt;sourcecode&gt;
+   allowed-chars = "." | "," | "&amp;amp;" | "&amp;lt;" | "&amp;gt;" | "|"
+&lt;/sourcecode&gt;
+
+Using CDATA:
+&lt;sourcecode&gt;
+&lt;![CDATA[   allowed-chars = "." | "," | "&amp;" | "&lt;" | "&gt;" | "|"]]&gt;
+&lt;/sourcecode&gt;
+
+</artwork></figure>
+
+Using CDATA is not a panacea, but it does help prevent having to use escapes in places where using
+using escapes can cause other problems, such as difficulty of inclusion from other documents.
+</t>
+
 </section>
 
 <section title="Internationalization Considerations" anchor="i18n.considerations">
@@ -5795,7 +5851,7 @@ and should have only a localized impact on the document processing and rendering
 </t>
 <t>
   This document updates the specification for the Internet Media Type
-  "application/rfc+xml" from the one in <xref target="XML2RFCv2"/>. The following has been registered with IANA.
+  "application/rfc+xml" from the one in <xref target="RFC7749"/>. The following has been registered with IANA.
 </t>
 <t>
   <list style="hanging" x:indent="12em">
@@ -5846,7 +5902,7 @@ and should have only a localized impact on the document processing and rendering
       </list>
     </t>
     <t hangText="Person &amp; email address to contact for further information:">
-      ee the Author's Address section of RFC 7749.
+      See the Author's Address section of RFC 7749.
     </t>
     <t hangText="Intended usage:">
       COMMON
@@ -5889,6 +5945,8 @@ not those that are part of a sequence of resources.</t>
 
 </section>
 
+<!--
+
 <section title="IAB Members at the Time of Publication" numbered="false">
 <t>
 Jari Arkko (IETF Chair) <vspace blankLines="0"/>
@@ -5907,17 +5965,7 @@ Suzanne Woolf
 </t>
 </section>
 
-<section title="Acknowledgments" anchor="acknowledgements">
-<t>
-  Thanks to everybody who reviewed this document and provided feedback and/or
-  specification text. Thanks especially go to Julian Reschke for editing <xref target="XML2RFCv2"/>
-  and those who provided feedback on that document. 
-</t>
-<t>
-  We also thank Marshall T. Rose for both the original design and the reference
-  implementation of the "xml2rfc" processor.
-</t>
-</section>
+-->
 
   </middle>
   <back>
@@ -5979,9 +6027,9 @@ Suzanne Woolf
     <front>
       <title>The Use of Non-ASCII Characters in RFCs</title>
       <author initials="H." surname="Flanagan" fullname="Heather Flanagan"/>
-      <date year="2015"/>
+      <date year="2016"/>
     </front>
-    <seriesInfo name="Internet-Draft" value="draft-flanagan-nonascii"/>
+    <seriesInfo name="Internet-Draft" value="draft-iab-rfc-nonascii"/>
   </reference>
 
   <reference anchor="PREPTOOL">
@@ -5989,198 +6037,31 @@ Suzanne Woolf
       <title>RFC v3 Prep Tool Description</title>
       <author initials="P." surname="Hoffman" fullname="Paul Hoffman"/>
       <author initials="J." surname="Hildebrand" fullname="Joe Hildebrand"/>
-      <date year="2015"/>
+      <date year="2016"/>
     </front>
-    <seriesInfo name="Internet-Draft" value="draft-hoffman-rfcv3-preptool"/>
+    <seriesInfo name="Internet-Draft" value="draft-iab-rfcv3-preptool"/>
   </reference>
 
-  <reference anchor='RFC2026'>
-    <front>
-      <title abbrev='Internet Standards Process'>The Internet Standards Process -- Revision 3</title>
-      <author initials='S.' surname='Bradner' fullname='Scott O. Bradner'/>
-      <date year='1996' month='October' />
-    </front>
-    <seriesInfo name='BCP' value='9' />
-    <seriesInfo name='RFC' value='2026' />
-  </reference>
-
-  <reference anchor='RFC2397'>
-    <front>
-      <title abbrev='The &quot;data&quot; URL scheme'>The &quot;data&quot; URL scheme</title>
-      <author initials='L.' surname='Masinter' fullname='Larry Masinter'/>
-      <date year='1998' month='August' />
-    </front>
-    <seriesInfo name='RFC' value='2397' />
-  </reference>
-
-  <reference anchor='RFC2629'>
-    <front>
-      <title>Writing I-Ds and RFCs using XML</title>
-      <author initials='M.T.' surname='Rose' fullname='Marshall T. Rose' />
-      <date month='June' year='1999' />
-    </front>
-    <seriesInfo name='RFC' value='2629' />
-  </reference>
-
-  <reference anchor="RFC3339">
-    <front>
-      <title>Date and Time on the Internet: Timestamps</title>
-      <author initials='G.' surname='Klyne' fullname='Graham Klyne' role='editor'/>
-      <author initials='C.' surname='Newman' fullname='Chris Newman'/>
-      <date year='2002' month='July' />
-    </front>
-    <seriesInfo name='RFC' value='3339' />
-  </reference>
-
-  <reference anchor="RFC3470">
-    <front>
-      <title>Guidelines for the Use of Extensible Markup Language (XML) within IETF Protocols</title>
-      <author initials="S." surname="Hollenbeck" fullname="Scott Hollenbeck"/>
-      <author initials="M." surname="Rose" fullname="Marshall T. Rose"/>
-      <author initials="L." surname="Masinter" fullname="Larry Masinter"/>
-      <date year="2003" month="January" day="23"/>
-    </front>
-    <seriesInfo name="BCP" value="70"/>
-    <seriesInfo name="RFC" value="3470"/>
-  </reference>
-
-  <reference anchor='RFC3667'>
-    <front>
-      <title>IETF Rights in Contributions</title>
-      <author initials='S.' surname='Bradner' fullname='S. Bradner'/>
-      <date year='2004' month='February' />
-    </front>
-    <seriesInfo name='RFC' value='3667' />
-  </reference>
-
-  <reference anchor='RFC3966'>
-    <front>
-      <title>The tel URI for Telephone Numbers</title>
-      <author initials='H.' surname='Schulzrinne' fullname='H. Schulzrinne'/>
-      <date year='2004' month='December' />
-    </front>
-    <seriesInfo name='RFC' value='3966' />
-  </reference>
-
-  <reference anchor="RFC3978">
-    <front>
-      <title>IETF Rights in Contributions</title>
-      <author initials="S." surname="Bradner" fullname="S. Bradner"/>
-      <date year="2005" month="March"/>
-    </front>
-    <seriesInfo name="RFC" value="3978"/>
-  </reference>
-
-  <reference anchor="RFC3986">
-   <front>
-    <title abbrev='URI Generic Syntax'>Uniform Resource Identifier (URI): Generic Syntax</title>
-    <author initials='T.' surname='Berners-Lee' fullname='Tim Berners-Lee'/>
-    <author initials='R.' surname='Fielding' fullname='Roy T. Fielding'/>
-    <author initials='L.' surname='Masinter' fullname='Larry Masinter'/>
-    <date month='January' year='2005'></date>
-   </front>
-   <seriesInfo name="STD" value="66"/>
-   <seriesInfo name="RFC" value="3986"/>
-  </reference>
-
-  <reference anchor="RFC5234">
-    <front>
-      <title>Augmented BNF for Syntax Specifications: ABNF</title>
-      <author initials="D." surname="Crocker" fullname="D. Crocker" role="editor"/>
-      <author initials="P." surname="Overell" fullname="P. Overell"/>
-      <date year="2008" month="January"/>
-    </front>
-    <seriesInfo name="STD" value="68"/>
-    <seriesInfo name="RFC" value="5234"/>
-  </reference>
-
-  <reference anchor="RFC5378">
-    <front>
-      <title>Rights Contributors Provide to the IETF Trust</title>
-      <author initials='S.' surname='Bradner' fullname='S. Bradner' role='editor'/>
-      <author initials='J.' surname='Contreras' fullname='J. Contreras' role='editor'/>
-      <date year='2008' month='November' />
-    </front>
-    <seriesInfo name='BCP' value='78'/>
-    <seriesInfo name='RFC' value='5378'/>
-  </reference>
-
-  <reference anchor='RFC5741'>
-    <front>
-      <title>RFC Streams, Headers, and Boilerplates</title>
-      <author initials='L.' surname='Daigle' fullname='Leslie Daigle'/>
-      <author initials='O.' surname='Kolkman' fullname='Olaf Kolkman'/>
-      <date month='December' year='2009' />
-    </front>
-    <seriesInfo name='RFC' value='5741' />
-  </reference>
-
-<reference  anchor='RFC5743'>
-<front>
-<title>Definition of an Internet Research Task Force (IRTF) Document Stream</title>
-<author initials='A.' surname='Falk' fullname='A. Falk'><organization /></author>
-<date year='2009' month='December' />
-</front>
-<seriesInfo name='RFC' value='5743'/>
-<seriesInfo name='DOI' value='10.17487/RFC5743'/>
-</reference>
-
-  <reference anchor="RFC6068">
-    <front>
-      <title>The 'mailto' URI Scheme</title>
-      <author initials="M." surname="Duerst" fullname="M. Duerst"/>
-      <author initials="L." surname="Masinter" fullname="L. Masinter"/>
-      <author initials="J." surname="Zawinski" fullname="J. Zawinski"/>
-      <date year="2010" month="October"/>
-    </front>
-    <seriesInfo name="RFC" value="6068"/>
-  </reference>
-
-  <reference anchor="RFC6266">
-    <front>
-      <title>Use of the Content-Disposition Header Field in the Hypertext Transfer Protocol (HTTP)</title>
-      <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
-      <date month="June" year="2011"/>
-    </front>
-    <seriesInfo name='RFC' value='6266' />
-  </reference>
-
-<reference anchor="RFC6949">
-<front><title>RFC Series Format Requirements and Future Development</title>
-<author initials="H." surname="Flanagan" fullname="H. Flanagan"><organization/></author>
-<author initials="N." surname="Brownlee" fullname="N. Brownlee"><organization/></author>
-<date year="2013" month="May"/>
-</front><seriesInfo name="RFC" value="6949"/><format type="TXT" octets="29181" target="https://www.rfc-editor.org/rfc/rfc6949.txt"/>
-</reference>
-
-  <reference anchor="RFC7303">
-    <front>
-      <title>XML Media Types</title>
-      <author initials="H." surname="Thompson" fullname="H. Thompson"/>
-      <author initials="C." surname="Lilley" fullname="C. Lilley"/>
-      <date year="2014" month="July"/>
-    </front>
-    <seriesInfo name="RFC" value="7303"/>
-  </reference>
-
-  <reference anchor="RFC7322">
-    <front>
-      <title>RFC Style Guide</title>
-      <author initials="H." surname="Heather" fullname="Heather Flanagan"/>
-      <author initials="S." surname="Ginoza" fullname="Sandy Ginoza"/>
-      <date month="September" year="2014" />
-    </front>
-    <seriesInfo name="RFC" value="7322"/>
-  </reference>
-  
-  <reference anchor="RFC7669">
-    <front>
-      <title>Assigning Digital Object Identifiers to RFCs</title>
-      <author initials="J." surname="Levine" fullname="John Levine"/>
-      <date year="2015"/>
-    </front>
-    <seriesInfo name="RFC" value="7669"/>
-  </reference>
+&rfc2026;
+&rfc2397;
+&rfc2629;
+&rfc3339;
+&rfc3470;
+&rfc3667;
+&rfc3966;
+&rfc3978;
+&rfc3986;
+&rfc5234;
+&rfc5378;
+&rfc5741;
+&rfc5743;
+&rfc6068;
+&rfc6266;
+&rfc6949;
+&rfc7303;
+&rfc7322;
+&rfc7669;
+&rfc7749;
 
   <reference anchor="RNC" target="https://www.oasis-open.org/committees/relax-ng/compact-20021121.html">
     <front>
@@ -6215,9 +6096,9 @@ Suzanne Woolf
     <front>
       <title>SVG Drawings for RFCs: SVG 1.2 RFC</title>
       <author initials="N." surname="Brownlee" fullname="Nevil Brownlee"/>
-      <date year="2015"/>
+      <date year="2016"/>
     </front>
-    <seriesInfo name="Internet-Draft" value="draft-brownlee-svg-rfc"/>
+    <seriesInfo name="Internet-Draft" value="draft-iab-svg-rfc"/>
   </reference>
 
   <reference anchor="TLP1.0" target="http://trustee.ietf.org/license-info/IETF-TLP-1.htm">
@@ -6316,15 +6197,6 @@ Suzanne Woolf
     </annotation>
   </reference>
 
-  <reference anchor="XML2RFCv2">
-    <front>
-      <title>The "XML2RFC" version 2 Vocabulary</title>
-      <author initials="J. F." surname="Reschke" fullname="Julian F. Reschke"/>
-      <date year="2014"/>
-    </front>
-    <seriesInfo name="Internet-Draft" value="draft-iab-xml2rfcv2"/>
-  </reference>
-
   <reference anchor='XPOINTER' target='http://www.w3.org/TR/2003/REC-xptr-framework-20030325/'>
     <front>
       <title>XPointer Framework</title>
@@ -6371,7 +6243,7 @@ are believed to be the current values in use.</t>
   For further information, refer to <eref target="http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf"/>.
 </t>
 <t>
-  For the current "Copyright Notice" text, the submissionType attribute
+  For the current "Copyright Notice" text, the submissionType attribute of the &lt;rfc&gt; element
   (<xref target="element.rfc.attribute.submissionType"/>)
   determines whether a statement about "Code Components" is inserted (which is the
   case for the value "IETF", which is the default). Other values,
@@ -6512,7 +6384,7 @@ are believed to be the current values in use.</t>
   "<x:span anchor="attribute-ipr-noModification3978">noModification3978</x:span>", and
   "<x:span anchor="attribute-ipr-noDerivatives3978">noDerivatives3978</x:span>"
   are similar to their counterparts above, except that they use text
-  specified in <xref target="RFC3978" section="5" sectionFormat="of"/>.
+  specified in <xref target="RFC3978"/>.
 </t>
 </section>
 
@@ -6523,7 +6395,7 @@ are believed to be the current values in use.</t>
   "<x:span anchor="attribute-ipr-noModification3667">noModification3667</x:span>", and
   "<x:span anchor="attribute-ipr-noDerivatives3667">noDerivatives3667</x:span>"
   are similar to their counterparts above, except that they use text
-  specified in <xref target="RFC3667" section="5" sectionFormat="of"/>.
+  specified in <xref target="RFC3667"/>.
 </t>
 </section>
 
@@ -6533,7 +6405,7 @@ are believed to be the current values in use.</t>
   The attribute values "<x:span anchor="attribute-ipr-full2026">full2026</x:span>" and
   "<x:span anchor="attribute-ipr-noDerivativeWorks2026">noDerivativeWorks2026</x:span>"
   are similar to their counterparts above, except that they use text
-  specified in <xref target="RFC2026" section="10" sectionFormat="of"/>.
+  specified in Section 10 of <xref target="RFC2026"/>.
 </t>
 <t>
   The special value "<x:span anchor="attribute-ipr-none">none</x:span>"
@@ -8826,6 +8698,18 @@ to the v3 schema.</t>
 + start |= rfc
 <?ENDINC differences-from-v2.txt ?>
 </artwork></figure>
+</section>
+
+<section title="Acknowledgments" anchor="acknowledgements">
+<t>
+  Thanks to everybody who reviewed this document and provided feedback and/or
+  specification text. Thanks especially go to Julian Reschke for editing <xref target="RFC7749"/>
+  and those who provided feedback on that document. 
+</t>
+<t>
+  We also thank Marshall T. Rose for both the original design and the reference
+  implementation of the "xml2rfc" processor.
+</t>
 </section>
 
 </back>

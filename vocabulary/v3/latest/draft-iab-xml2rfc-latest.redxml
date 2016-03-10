@@ -616,11 +616,10 @@ the appendices for a complete description of these attributes.
       Formatters that do pagination should attempt to keep artwork on a single page. This is to prevent
       artwork that is split across pages from looking like two separate pieces of artwork.
    </t>
-<t>
+   <t>
 See <xref target="cdata.and.escaping"/> for a description of to deal with issues of using
 "&amp;" and "&lt;" characters in artwork.
 </t>
-
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>), &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.artwork.contents"><!--AG-->
       Content model:
@@ -3832,8 +3831,8 @@ in the same &lt;front&gt; element.
       <t>
             For BCPs, FYIs, RFCs, and STDs, this is the number within the series.
             For Internet-Drafts, it is the full draft name (ending with the two-digit
-            version number). For DOIs, the value is given such as "10.123456/rfc1149",
-            (the actual value will be specified later in <xref target="RFC7669"/>).
+            version number). For DOIs, the value is given such as "10.17487/rfc1149",
+            as described in <xref target="RFC7669"/>.
       </t>
       <t>
             The name in the value should be the document name without any file
@@ -3871,7 +3870,7 @@ in the same &lt;front&gt; element.
       Output formatters that do pagination should attempt to keep source code on a single page. This is to prevent
       source code that is split across pages from looking like two separate pieces of code.
    </t>
-<t>
+   <t>
 See <xref target="cdata.and.escaping"/> for a description of to deal with issues of using
 "&amp;" and "&lt;" characters in sourcecode.
 </t>
@@ -6635,6 +6634,9 @@ inside sections.</t>
 <t>&lt;artwork&gt; originalSrc -- This attribute is filled with the original value of the "src"
 attribute if that attribute is removed by the prep tool.</t>
 
+<t>&lt;figure&gt; originalSrc -- This attribute is filled with the original value of the "src"
+attribute if that attribute is removed by the prep tool.</t>
+
 <t>&lt;iref&gt; "irefid" attribute -- This attribute is filled with an identifier used when creating
 indexes.</t>
 
@@ -7332,6 +7334,7 @@ figure =
     [ a:defaultValue = "false" ]
     attribute suppress-title { "true" | "false" }?,
     attribute src { text }?,
+    attribute originalSrc { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
     [ a:defaultValue = "" ] attribute alt { text }?,
@@ -8325,6 +8328,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "false" ]
       attribute suppress-title { "true" | "false" }?,
       attribute src { text }?,
++     attribute originalSrc { text }?,
       [ a:defaultValue = "left" ]
       attribute align { "left" | "center" | "right" }?,
       [ a:defaultValue = "" ] attribute alt { text }?,
