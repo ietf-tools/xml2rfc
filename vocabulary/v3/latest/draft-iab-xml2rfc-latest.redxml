@@ -17,8 +17,6 @@ rfc/@submissionType is now duplicated in seriesInfo/stream. This needs to be rec
 
 Does the types table in <artwork> need a second column for what can appear in plaintext?
 
-Maybe have to add prose about fullname being required if there is ascii* in <author>
-
 -->
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
@@ -928,7 +926,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="fullname attribute" subitem="in author element"/>
       <t>
             The full name (used in the automatically generated "Author's Address" section).
-         </t>
+            Although this attribute is optional, if one or more of the "asciiFullname", "asciiInitials",
+            or "asciiSurname" attributes have values, the "fullname" attribute will be required by
+            tools preparing Internet-Drafts or RFCs.
+      </t>
    </section>
 
    <!--author/@initials-->
