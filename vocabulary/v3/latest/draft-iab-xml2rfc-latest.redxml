@@ -13,20 +13,11 @@
 <?rfc linkmailto="no" ?>
 <?rfc rfcedstyle="yes"?><!--
 
-Change <tt> to <kbd>?
-
-Maybe add <referencesection>
-
 rfc/@submissionType is now duplicated in seriesInfo/stream. This needs to be rectified.
-
-sourcecode / number - wait
-sourcecode / indent - wait for Tony, probably not
 
 Does the types table in <artwork> need a second column for what can appear in plaintext?
 
 Maybe have to add prose about fullname being required if there is ascii* in <author>
-
-Adding <example>? Hopefully not.
 
 -->
 <!DOCTYPE rfc
@@ -233,7 +224,7 @@ entry and still allow the ASCII-equivalent values to appear in the processed doc
 
 <t>Add "pn" to &lt;<xref target="element.artwork" format="none">artwork</xref>&gt;,
 &lt;<xref target="element.aside" format="none">aside</xref>&gt;, &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt;, &lt;<xref target="element.boilerplate" format="none">boilerplate</xref>&gt;,&lt;<xref target="element.dt" format="none">dt</xref>&gt;,
-&lt;<xref target="element.figure" format="none">figure</xref>&gt;, &lt;<xref target="element.li" format="none">li</xref>&gt;, &lt;<xref target="element.section" format="none">section</xref>&gt;
+&lt;<xref target="element.figure" format="none">figure</xref>&gt;, &lt;<xref target="element.li" format="none">li</xref>&gt;, &lt;<xref target="element.references" format="none">references</xref>&gt;, &lt;<xref target="element.section" format="none">section</xref>&gt;,
 &lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt;, &lt;<xref target="element.t" format="none">t</xref>&gt;,
 and &lt;<xref target="element.table" format="none">table</xref>&gt; to hold automatically generated
 numbers for items in a section that don't have their own numbering (namely figures and tables).</t>
@@ -7593,6 +7584,7 @@ references =
   element references {
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
+    attribute pn { text }?,
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
     name?,
@@ -8579,6 +8571,7 @@ to the v3 schema.</t>
 -     reference+
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
++     attribute pn { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute title { text }?,
 +     name?,

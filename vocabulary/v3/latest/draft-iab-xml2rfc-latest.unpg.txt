@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 7749 (if approved)                              March 9, 2016
+Obsoletes: 7749 (if approved)                             March 11, 2016
 Intended status: Informational
-Expires: September 10, 2016
+Expires: September 12, 2016
 
 
                    The "xml2rfc" version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 10, 2016.
+   This Internet-Draft will expire on September 12, 2016.
 
 Copyright Notice
 
@@ -329,9 +329,10 @@ Table of Contents
    o  Add the "removeInRFC" attribute to <note>.
 
    o  Add "pn" to <artwork>, <aside>, <blockquote>, <boilerplate>,<dt>,
-      <figure>, <li>, <section> <sourcecode>, <t>, and <table> to hold
-      automatically generated numbers for items in a section that don't
-      have their own numbering (namely figures and tables).
+      <figure>, <li>, <references>, <section>, <sourcecode>, <t>, and
+      <table> to hold automatically generated numbers for items in a
+      section that don't have their own numbering (namely figures and
+      tables).
 
    o  Add "display" to <cref> to indicate to tools whether or not to
       display the comment.
@@ -5469,6 +5470,7 @@ Appendix C.  Relax NG Schema
      element references {
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
+       attribute pn { text }?,
        attribute anchor { xsd:ID }?,
        attribute title { text }?,
        name?,
@@ -6452,6 +6454,7 @@ Appendix D.  Schema Differences from v2
    -     reference+
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
+   +     attribute pn { text }?,
    +     attribute anchor { xsd:ID }?,
    +     attribute title { text }?,
    +     name?,
