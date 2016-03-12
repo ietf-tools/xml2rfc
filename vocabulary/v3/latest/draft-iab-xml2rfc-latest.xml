@@ -16,6 +16,22 @@
 rfc/@submissionType is now duplicated in seriesInfo/stream. This needs to be rectified.
 	rfc/@submissionType is in v2
 
+v3 is currently deprecating <rfc> attributes from v2: 
+	v2 category -> v3 seriesInfo/name
+	v2 docname -> v3 seriesInfo/value
+	v2 number -> v3 seriesInfo/value
+	v2 seriesNo -> v3 seriesInfo/value
+
+
+Joe, 2016-01-05:
+	My opinion is we could either un-deprecate rfc/@category, or add seriesInfo/@category.  I prefer the latter, since it would be nice to have the category for references also.
+Paul then suggested adding status and stream to seriesInfo
+Julian, 2016-01-06:
+	These attributes would be very specific to the IETF, and only needed for the use of <seriesInfo> outside <reference>. I think the simplest possible fix is to simply go back to what v2 had (undeprecate the top-level attributes, and move <seriesInfo> back to <reference>).
+Joe responded
+	If we were to un-deprecate rfc/@category, we would not have to move seriesInfo back to just being in reference. However, I do think it would be nice to have access to the status and stream bits in references as well.  For some of the external streams, they may have similar semantics that can map into those attributes.
+
+
 -->
 
 <!DOCTYPE rfc [
@@ -114,11 +130,6 @@ Revised documents will be
 published capturing those changes as the toolset is completed. Other implementers must not expect
 those changes to remain backwards-compatible with the details described in this document.
 </t>
-
-<t>NOTE: there is a significant known issue with this version that needs to be discussed and fixed
-before the specification is complete. This version describes two ways to say which stream the
-document is in, one in &lt;rfc&gt; and the other in &lt;seriesInfo&gt;. This will be rectified
-in the next draft.</t>
 
 </section>
 
