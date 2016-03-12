@@ -86,7 +86,7 @@ Table of Contents
      2.7.  <author>  . . . . . . . . . . . . . . . . . . . . . . . .  17
      2.8.  <back>  . . . . . . . . . . . . . . . . . . . . . . . . .  19
      2.9.  <bcp14> . . . . . . . . . . . . . . . . . . . . . . . . .  19
-     2.10. <blockquote>  . . . . . . . . . . . . . . . . . . . . . .  19
+     2.10. <blockquote>  . . . . . . . . . . . . . . . . . . . . . .  20
      2.11. <boilerplate> . . . . . . . . . . . . . . . . . . . . . .  21
      2.12. <br>  . . . . . . . . . . . . . . . . . . . . . . . . . .  21
      2.13. <city>  . . . . . . . . . . . . . . . . . . . . . . . . .  22
@@ -869,7 +869,9 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
    The RFC Series Editor will maintain a complete list of the preferred
    values on its web site, and that list is expected to be updated over
    time.  Thus, a consumer of v3 XML should not cause a failure when it
-   encounters an unexpected type or no type is specified.
+   encounters an unexpected type or no type is specified.  The table
+   will also indicate which type of art can appear in plaintext output
+   (for example, type="svg" cannot).
 
 2.5.8.  "width" Attribute
 
@@ -888,14 +890,14 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
 
    Content model:
 
-   In any order:
-
 
 
 Hoffman                Expires September 12, 2016              [Page 16]
 
 Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
 
+
+   In any order:
 
    o  <artwork> elements (Section 2.5)
 
@@ -944,14 +946,14 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
 
    This element appears as a child element of <front> (Section 2.26).
 
-   Content model:
-
 
 
 Hoffman                Expires September 12, 2016              [Page 17]
 
 Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
 
+
+   Content model:
 
    In this order:
 
@@ -998,8 +1000,6 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
 
    Allowed values:
 
-   o  "editor"
-
 
 
 
@@ -1008,6 +1008,8 @@ Hoffman                Expires September 12, 2016              [Page 18]
 
 Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
 
+
+   o  "editor"
 
 2.7.7.  "surname" Attribute
 
@@ -1053,9 +1055,7 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
 
    Content model: only text content.
 
-2.10.  <blockquote>
 
-   Specifies a block of text is a quotation.
 
 
 
@@ -1064,6 +1064,10 @@ Hoffman                Expires September 12, 2016              [Page 19]
 
 Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
 
+
+2.10.  <blockquote>
+
+   Specifies a block of text is a quotation.
 
    This element appears as a child element of <section> (Section 2.46).
 
@@ -1108,10 +1112,6 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
 
       *  <relref> elements (Section 2.44)
 
-      *  <strong> elements (Section 2.50)
-
-      *  <sub> elements (Section 2.51)
-
 
 
 
@@ -1120,6 +1120,10 @@ Hoffman                Expires September 12, 2016              [Page 20]
 
 Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
 
+
+      *  <strong> elements (Section 2.50)
+
+      *  <sub> elements (Section 2.51)
 
       *  <sup> elements (Section 2.52)
 
@@ -1165,10 +1169,6 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
    This element appears as a child element of <td> (Section 2.56) and
    <th> (Section 2.58).
 
-   Content model: this element does not have any contents.
-
-
-
 
 
 
@@ -1176,6 +1176,8 @@ Hoffman                Expires September 12, 2016              [Page 21]
 
 Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
 
+
+   Content model: this element does not have any contents.
 
 2.13.  <city>
 
@@ -1223,8 +1225,6 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
 
    This element appears as a child element of <annotation>
    (Section 2.3), <blockquote> (Section 2.10), <c> (Section 3.1), <dd>
-   (Section 2.18), <dt> (Section 2.21), <em> (Section 2.22), <li>
-   (Section 2.29), <name> (Section 2.32), <postamble> (Section 3.5),
 
 
 
@@ -1233,6 +1233,8 @@ Hoffman                Expires September 12, 2016              [Page 22]
 Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
 
 
+   (Section 2.18), <dt> (Section 2.21), <em> (Section 2.22), <li>
+   (Section 2.29), <name> (Section 2.32), <postamble> (Section 3.5),
    <preamble> (Section 3.6), <strong> (Section 2.50), <sub>
    (Section 2.51), <sup> (Section 2.52), <t> (Section 2.53), <td>
    (Section 2.56), <th> (Section 2.58), <tt> (Section 2.62), and <ttcol>
@@ -1276,8 +1278,6 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
    o  "true" (default)
 
    o  "false"
-
-
 
 
 
@@ -7973,7 +7973,7 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
          inside tt  70
       blankLines attribute
          in vspace element  81
-      blockquote element  19, 97
+      blockquote element  20, 97
          anchor attribute  21
          cite attribute  21
          inside section  53
@@ -8099,7 +8099,7 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
          author  17, 33
          back  19, 50
          bcp14  12, 19-20, 25, 28-29, 36, 43, 59-62, 65, 67, 70, 75, 77
-         blockquote  19, 53
+         blockquote  20, 53
          boilerplate  21, 34
          br  21, 65, 67
          c  74, 79
@@ -8157,9 +8157,9 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
          sourcecode  20, 25, 32, 35, 53, 57, 65, 68
          spanx  12, 62, 75, 77-78
          street  42, 59
-         strong  12, 20, 23, 26, 28-29, 36, 43, 59, 61-62, 65, 68, 71,
+         strong  12, 21, 23, 26, 28-29, 36, 43, 59, 61-62, 65, 68, 71,
             75, 77-78
-         sub  12, 20, 23, 26, 28-29, 36, 43, 60, 62, 65, 68, 71, 75,
+         sub  12, 21, 23, 26, 28-29, 36, 43, 60, 62, 65, 68, 71, 75,
             77-78
          sup  12, 21, 23, 26, 28-29, 36, 43, 60-62, 65, 68, 71, 75,
             77-78
@@ -8637,7 +8637,7 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
          inside postal  42
       strong element  59, 97
          inside annotation  12
-         inside blockquote  20
+         inside blockquote  21
          inside c  75
          inside cref  23
          inside dd  26
@@ -8659,7 +8659,7 @@ Internet-Draft     The "xml2rfc" version 3 Vocabulary         March 2016
          in texttable element  79
       sub element  60, 97
          inside annotation  12
-         inside blockquote  20
+         inside blockquote  21
          inside c  75
          inside cref  23
          inside dd  26
