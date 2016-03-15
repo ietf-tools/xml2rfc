@@ -1221,6 +1221,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <t>
       Holds the boilerplate text for the document. This section is filled in by the prep tool.
    </t>
+   <t>
+      This element contains &lt;<x:ref>section</x:ref>&gt; elements. Every &lt;<x:ref>section</x:ref>&gt;
+      element in this element must have the "numbered" attribute set to "false".
+   </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.boilerplate.contents"><!--AG-->
       <xref format="none" target="grammar.boilerplate">Content model</xref>:
@@ -2529,7 +2533,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="Elements" subitem="note" primary="true"/>
    <iref item="note element" primary="true"/>
    <t>
-      Creates an unnumbered section that appears after the Abstract.
+      Creates an unnumbered, titled block of text that appears after the Abstract.
    </t>
    <t>
       It is usually used for additional information to reviewers (working
@@ -5183,9 +5187,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
         "default"
         <list style="empty">
             <t>
-            The "derivedContent" attribute will contain a text fragment that describes the referenced part 
+            If the element has no content, the "derivedContent" attribute will contain a text fragment that describes the referenced part 
             completely, such as "XML" for a target that is a &lt;<x:ref>reference</x:ref>&gt;,
             or "Section 2" or "Table 4" for a target to a non-reference.
+            (If the element has content, the "derivedContent" attribute is filled with the content.)
             </t>
             <t>
             For example, with an input of:
@@ -6629,12 +6634,20 @@ sections can only have those anchor values.</t>
 
 <list style="symbols">
 
-<t>"pn" for regular sections always has the format "s-nnn", where "nnn" is the section or appendix number.
+<t>"pn" for regular sections always has the format "s-nnn", where "nnn" is the section number or appendix letter.
 For example, this would be "s-2.1.3" for Section 2.1.3 and "s-a" for Appendix A.
 For the &lt;<x:ref>abstract</x:ref>&gt; element, it is always "s-abstract".
 For the &lt;<x:ref>note</x:ref>&gt; element, it is always "s-note-nnn", where "nnn" is a sequential value.
 For the &lt;<x:ref>boilerplate</x:ref>&gt; element, it is always "s-boilerplate-nnn", where "nnn" is a sequential value.
 </t>
+
+<t>"pn" for &lt;<x:ref>references</x:ref>&gt; elements
+has the format "s-nnn". It is important to note that "nnn" is a number, not letters,
+even though the &lt;<x:ref>references</x:ref>&gt; appear in the back.
+It is the number that is one higher than the highest top-level section number in &lt;<x:ref>middle</x:ref>&gt;.
+If there are two or more &lt;<x:ref>references</x:ref>&gt;, "nnn" will include a dot as if
+the &lt;<x:ref>references</x:ref>&gt; are a subsection of a section that is
+numbered one higher than the highest top-level section number in &lt;<x:ref>middle</x:ref>&gt;.</t>
 
 <t>"pn" for &lt;<x:ref>figure</x:ref>&gt; elements
 always has the format "f-nnn", where "nnn" is the figure number.

@@ -527,7 +527,7 @@ blockquote > * .bcp14 {
        content: "Hoffman";
   }
   @bottom-center {
-       content: "Expires September 12, 2016";
+       content: "Expires September 16, 2016";
   }
   @bottom-right {
        content: "[Page " counter(page) "]";
@@ -567,7 +567,7 @@ blockquote > * .bcp14 {
       <link rel="schema.dcterms" href="http://purl.org/dc/terms/">
       <meta name="dcterms.creator" content="Hoffman, P.">
       <meta name="dcterms.identifier" content="urn:ietf:id:draft-iab-xml2rfc-latest">
-      <meta name="dcterms.issued" content="2016-03-11">
+      <meta name="dcterms.issued" content="2016-03-15">
       <meta name="dct.replaces" content="urn:ietf:rfc:7749">
       <meta name="dcterms.abstract" content="This document defines the &#34;xml2rfc&#34; version 3 vocabulary: an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its followup, RFC 7749.">
       <meta name="description" content="This document defines the &#34;xml2rfc&#34; version 3 vocabulary: an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its followup, RFC 7749.">
@@ -587,14 +587,14 @@ blockquote > * .bcp14 {
                <tr>
                   <td class="left">Obsoletes: <a href="https://tools.ietf.org/html/rfc7749">7749</a> (if approved)
                   </td>
-                  <td class="right">March 11, 2016</td>
+                  <td class="right">March 15, 2016</td>
                </tr>
                <tr>
                   <td class="left">Intended status: Informational</td>
                   <td class="right"></td>
                </tr>
                <tr>
-                  <td class="left">Expires: September 12, 2016</td>
+                  <td class="left">Expires: September 16, 2016</td>
                   <td class="right"></td>
                </tr>
             </tbody>
@@ -627,7 +627,7 @@ blockquote > * .bcp14 {
             documents at any time. It is inappropriate to use Internet-Drafts as reference material or to cite them other than as &#8220;work
             in progress&#8221;.
          </p>
-         <p>This Internet-Draft will expire on September 12, 2016.</p>
+         <p>This Internet-Draft will expire on September 16, 2016.</p>
       </section>
       <section id="rfc.copyrightnotice">
          <h2><a href="#rfc.copyrightnotice">Copyright Notice</a></h2>
@@ -812,12 +812,6 @@ blockquote > * .bcp14 {
                <p>Non-interoperable changes in later versions of this specification are likely based on experience gained in implementing the
                   RFC production center toolset. Revised documents will be published capturing those changes as the toolset is completed. Other
                   implementers must not expect those changes to remain backwards-compatible with the details described in this document.
-               </p>
-            </div>
-            <div id="rfc.section.1.1.p.2">
-               <p>NOTE: there is a significant known issue with this version that needs to be discussed and fixed before the specification is
-                  complete. This version describes two ways to say which stream the document is in, one in &lt;rfc&gt; and the other in &lt;seriesInfo&gt;.
-                  This will be rectified in the next draft.
                </p>
             </div>
          </section>
@@ -1767,16 +1761,20 @@ blockquote > * .bcp14 {
                <p>Holds the boilerplate text for the document. This section is filled in by the prep tool.</p>
             </div>
             <div id="rfc.section.2.11.p.2">
+               <p>This element contains &lt;<a href="#element.section" class="smpl">section</a>&gt; elements. Every &lt;<a href="#element.section" class="smpl">section</a>&gt; element in this element must have the "numbered" attribute set to "false".
+               </p>
+            </div>
+            <div id="rfc.section.2.11.p.3">
                <p>This element appears as a child element of &lt;<a href="#element.front" class="smpl">front</a>&gt; (<a href="#element.front" title="&#xA;      <front&gt;&#xA;   ">Section&nbsp;2.26</a>).
                </p>
             </div>
             <div id="element.boilerplate.contents" class="avoidbreakafter">
-               <div id="rfc.section.2.11.p.3">
+               <div id="rfc.section.2.11.p.4">
                   <p> <a href="#grammar.boilerplate" id="rfc.xref.grammar.boilerplate.1">Content model</a>:
                   </p>
                </div>
             </div>
-            <div id="rfc.section.2.11.p.4">
+            <div id="rfc.section.2.11.p.5">
                <p> <span id="rfc.iref.e.60"></span> <span id="rfc.iref.s.11"></span>One or more &lt;<a href="#element.section" class="smpl">section</a>&gt; elements (<a href="#element.section" title="&#xA;      <section&gt;&#xA;   ">Section&nbsp;2.46</a>)
                </p>
             </div>
@@ -2944,7 +2942,7 @@ blockquote > * .bcp14 {
          <section id="element.note">
             <h3 id="rfc.section.2.33"><a href="#rfc.section.2.33">2.33</a>&nbsp;<a href="#element.note"><span class="tt">&lt;note&gt;</span> </a></h3>
             <div id="rfc.section.2.33.p.1">
-               <p>Creates an unnumbered section that appears after the Abstract.</p>
+               <p>Creates an unnumbered, titled block of text that appears after the Abstract.</p>
             </div>
             <div id="rfc.section.2.33.p.2">
                <p>It is usually used for additional information to reviewers (working group information, mailing list, ...), or for additional
@@ -5264,8 +5262,9 @@ blockquote > * .bcp14 {
                   <p><span id="rfc.iref.x.17"></span> "default" 
                   </p>
                   <ul class="empty">
-                     <li>The "derivedContent" attribute will contain a text fragment that describes the referenced part completely, such as "XML" for
-                        a target that is a &lt;<a href="#element.reference" class="smpl">reference</a>&gt;, or "Section 2" or "Table 4" for a target to a non-reference.
+                     <li>If the element has no content, the "derivedContent" attribute will contain a text fragment that describes the referenced part
+                        completely, such as "XML" for a target that is a &lt;<a href="#element.reference" class="smpl">reference</a>&gt;, or "Section 2" or "Table 4" for a target to a non-reference. (If the element has content, the "derivedContent" attribute
+                        is filled with the content.)
                      </li>
                      <li>For example, with an input of: <span id="rfc.figure.u.19"><pre>      &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
       . . .
@@ -6394,8 +6393,10 @@ Using CDATA:
                <div id="rfc.section.B.2.1.p.2">
                   <p>The following rules prevent this overlap: </p>
                   <ul>
-                     <li>"pn" for regular sections always has the format "s-nnn", where "nnn" is the section or appendix number. For example, this
-                        would be "s-2.1.3" for Section 2.1.3 and "s-a" for Appendix A. For the &lt;<a href="#element.abstract" class="smpl">abstract</a>&gt; element, it is always "s-abstract". For the &lt;<a href="#element.note" class="smpl">note</a>&gt; element, it is always "s-note-nnn", where "nnn" is a sequential value. For the &lt;<a href="#element.boilerplate" class="smpl">boilerplate</a>&gt; element, it is always "s-boilerplate-nnn", where "nnn" is a sequential value.
+                     <li>"pn" for regular sections always has the format "s-nnn", where "nnn" is the section number or appendix letter. For example,
+                        this would be "s-2.1.3" for Section 2.1.3 and "s-a" for Appendix A. For the &lt;<a href="#element.abstract" class="smpl">abstract</a>&gt; element, it is always "s-abstract". For the &lt;<a href="#element.note" class="smpl">note</a>&gt; element, it is always "s-note-nnn", where "nnn" is a sequential value. For the &lt;<a href="#element.boilerplate" class="smpl">boilerplate</a>&gt; element, it is always "s-boilerplate-nnn", where "nnn" is a sequential value.
+                     </li>
+                     <li>"pn" for &lt;<a href="#element.references" class="smpl">references</a>&gt; elements has the format "s-nnn". It is important to note that "nnn" is a number, not letters, even though the &lt;<a href="#element.references" class="smpl">references</a>&gt; appear in the back. It is the number that is one higher than the highest top-level section number in &lt;<a href="#element.middle" class="smpl">middle</a>&gt;. If there are two or more &lt;<a href="#element.references" class="smpl">references</a>&gt;, "nnn" will include a dot as if the &lt;<a href="#element.references" class="smpl">references</a>&gt; are a subsection of a section that is numbered one higher than the highest top-level section number in &lt;<a href="#element.middle" class="smpl">middle</a>&gt;.
                      </li>
                      <li>"pn" for &lt;<a href="#element.figure" class="smpl">figure</a>&gt; elements always has the format "f-nnn", where "nnn" is the figure number. For example, this would be "f-5" for Figure 5.
                      </li>

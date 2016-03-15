@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 7749 (if approved)                             March 11, 2016
+Obsoletes: 7749 (if approved)                             March 15, 2016
 Intended status: Informational
-Expires: September 12, 2016
+Expires: September 16, 2016
 
 
                    The "xml2rfc" version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 12, 2016.
+   This Internet-Draft will expire on September 16, 2016.
 
 Copyright Notice
 
@@ -210,12 +210,6 @@ Table of Contents
    changes as the toolset is completed.  Other implementers must not
    expect those changes to remain backwards-compatible with the details
    described in this document.
-
-   NOTE: there is a significant known issue with this version that needs
-   to be discussed and fixed before the specification is complete.  This
-   version describes two ways to say which stream the document is in,
-   one in <rfc> and the other in <seriesInfo>.  This will be rectified
-   in the next draft.
 
 1.2.  Design Criteria for the Changes in v3
 
@@ -963,6 +957,9 @@ Table of Contents
 
    Holds the boilerplate text for the document.  This section is filled
    in by the prep tool.
+
+   This element contains <section> elements.  Every <section> element in
+   this element must have the "numbered" attribute set to "false".
 
    This element appears as a child element of <front> (Section 2.26).
 
@@ -1749,7 +1746,8 @@ Table of Contents
 
 2.33.  <note>
 
-   Creates an unnumbered section that appears after the Abstract.
+   Creates an unnumbered, titled block of text that appears after the
+   Abstract.
 
    It is usually used for additional information to reviewers (working
    group information, mailing list, ...), or for additional publication
@@ -3415,10 +3413,12 @@ Table of Contents
 
    "default"
 
-      The "derivedContent" attribute will contain a text fragment that
-      describes the referenced part completely, such as "XML" for a
-      target that is a <reference>, or "Section 2" or "Table 4" for a
-      target to a non-reference.
+      If the element has no content, the "derivedContent" attribute will
+      contain a text fragment that describes the referenced part
+      completely, such as "XML" for a target that is a <reference>, or
+      "Section 2" or "Table 4" for a target to a non-reference.  (If the
+      element has content, the "derivedContent" attribute is filled with
+      the content.)
 
       For example, with an input of:
 
@@ -4457,12 +4457,20 @@ B.2.1.  Overlapping Values
    The following rules prevent this overlap:
 
    o  "pn" for regular sections always has the format "s-nnn", where
-      "nnn" is the section or appendix number.  For example, this would
-      be "s-2.1.3" for Section 2.1.3 and "s-a" for Appendix A.  For the
-      <abstract> element, it is always "s-abstract".  For the <note>
-      element, it is always "s-note-nnn", where "nnn" is a sequential
-      value.  For the <boilerplate> element, it is always
+      "nnn" is the section number or appendix letter.  For example, this
+      would be "s-2.1.3" for Section 2.1.3 and "s-a" for Appendix A.
+      For the <abstract> element, it is always "s-abstract".  For the
+      <note> element, it is always "s-note-nnn", where "nnn" is a
+      sequential value.  For the <boilerplate> element, it is always
       "s-boilerplate-nnn", where "nnn" is a sequential value.
+
+   o  "pn" for <references> elements has the format "s-nnn".  It is
+      important to note that "nnn" is a number, not letters, even though
+      the <references> appear in the back.  It is the number that is one
+      higher than the highest top-level section number in <middle>.  If
+      there are two or more <references>, "nnn" will include a dot as if
+      the <references> are a subsection of a section that is numbered
+      one higher than the highest top-level section number in <middle>.
 
    o  "pn" for <figure> elements always has the format "f-nnn", where
       "nnn" is the figure number.  For example, this would be "f-5" for
