@@ -527,7 +527,7 @@ blockquote > * .bcp14 {
        content: "Hoffman";
   }
   @bottom-center {
-       content: "Expires September 16, 2016";
+       content: "Expires September 17, 2016";
   }
   @bottom-right {
        content: "[Page " counter(page) "]";
@@ -567,7 +567,7 @@ blockquote > * .bcp14 {
       <link rel="schema.dcterms" href="http://purl.org/dc/terms/">
       <meta name="dcterms.creator" content="Hoffman, P.">
       <meta name="dcterms.identifier" content="urn:ietf:id:draft-iab-xml2rfc-latest">
-      <meta name="dcterms.issued" content="2016-03-15">
+      <meta name="dcterms.issued" content="2016-03-16">
       <meta name="dct.replaces" content="urn:ietf:rfc:7749">
       <meta name="dcterms.abstract" content="This document defines the &#34;xml2rfc&#34; version 3 vocabulary: an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its followup, RFC 7749.">
       <meta name="description" content="This document defines the &#34;xml2rfc&#34; version 3 vocabulary: an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its followup, RFC 7749.">
@@ -587,14 +587,14 @@ blockquote > * .bcp14 {
                <tr>
                   <td class="left">Obsoletes: <a href="https://tools.ietf.org/html/rfc7749">7749</a> (if approved)
                   </td>
-                  <td class="right">March 15, 2016</td>
+                  <td class="right">March 16, 2016</td>
                </tr>
                <tr>
                   <td class="left">Intended status: Informational</td>
                   <td class="right"></td>
                </tr>
                <tr>
-                  <td class="left">Expires: September 16, 2016</td>
+                  <td class="left">Expires: September 17, 2016</td>
                   <td class="right"></td>
                </tr>
             </tbody>
@@ -627,7 +627,7 @@ blockquote > * .bcp14 {
             documents at any time. It is inappropriate to use Internet-Drafts as reference material or to cite them other than as &#8220;work
             in progress&#8221;.
          </p>
-         <p>This Internet-Draft will expire on September 16, 2016.</p>
+         <p>This Internet-Draft will expire on September 17, 2016.</p>
       </section>
       <section id="rfc.copyrightnotice">
          <h2><a href="#rfc.copyrightnotice">Copyright Notice</a></h2>
@@ -6393,8 +6393,8 @@ Using CDATA:
                <div id="rfc.section.B.2.1.p.2">
                   <p>The following rules prevent this overlap: </p>
                   <ul>
-                     <li>"pn" for regular sections always has the format "s-nnn", where "nnn" is the section number or appendix letter. For example,
-                        this would be "s-2.1.3" for Section 2.1.3 and "s-a" for Appendix A. For the &lt;<a href="#element.abstract" class="smpl">abstract</a>&gt; element, it is always "s-abstract". For the &lt;<a href="#element.note" class="smpl">note</a>&gt; element, it is always "s-note-nnn", where "nnn" is a sequential value. For the &lt;<a href="#element.boilerplate" class="smpl">boilerplate</a>&gt; element, it is always "s-boilerplate-nnn", where "nnn" is a sequential value.
+                     <li>"pn" for regular sections always has the format "s-nnn", where "nnn" is the section number, or the appendix identifier (which
+                        starts with a letter). For example, this would be "s-2.1.3" for Section 2.1.3 and "s-a" for Appendix A. For the &lt;<a href="#element.abstract" class="smpl">abstract</a>&gt; element, it is always "s-abstract". For the &lt;<a href="#element.note" class="smpl">note</a>&gt; element, it is always "s-note-nnn", where "nnn" is a sequential value. For sections in the &lt;<a href="#element.boilerplate" class="smpl">boilerplate</a>&gt; element, it is always "s-boilerplate-nnn", where "nnn" is a sequential value.
                      </li>
                      <li>"pn" for &lt;<a href="#element.references" class="smpl">references</a>&gt; elements has the format "s-nnn". It is important to note that "nnn" is a number, not letters, even though the &lt;<a href="#element.references" class="smpl">references</a>&gt; appear in the back. It is the number that is one higher than the highest top-level section number in &lt;<a href="#element.middle" class="smpl">middle</a>&gt;. If there are two or more &lt;<a href="#element.references" class="smpl">references</a>&gt;, "nnn" will include a dot as if the &lt;<a href="#element.references" class="smpl">references</a>&gt; are a subsection of a section that is numbered one higher than the highest top-level section number in &lt;<a href="#element.middle" class="smpl">middle</a>&gt;.
                      </li>
@@ -6733,7 +6733,6 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
   element boilerplate {
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
-    attribute pn { text }?,
     section+
   }
 
@@ -6937,7 +6936,6 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     ((artwork | dl | figure | ol | sourcecode | t | ul)+
      | (text
         | bcp14
@@ -7206,7 +7204,6 @@ include "svg.rnc"
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     tr+
   }
 
@@ -7215,7 +7212,6 @@ include "svg.rnc"
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     tr+
   }
 
@@ -7224,7 +7220,6 @@ include "svg.rnc"
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     tr+
   }
 
@@ -7233,7 +7228,6 @@ include "svg.rnc"
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     [ a:defaultValue = "0" ] attribute border { text }?,
     (td | th)+
   }
@@ -7275,7 +7269,6 @@ include "svg.rnc"
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
     [ a:defaultValue = "0" ] attribute rowspan { text }?,
@@ -7739,7 +7732,6 @@ start |= rfc
 +   element boilerplate {
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
-+     attribute pn { text }?,
 +     section+
 +   }
 + middle =
@@ -7939,7 +7931,6 @@ start |= rfc
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     ((artwork | dl | figure | ol | sourcecode | t | ul)+
 +      | (text
 +         | bcp14
@@ -7966,7 +7957,7 @@ start |= rfc
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-  }?,
++ }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -7977,7 +7968,7 @@ start |= rfc
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-+ }?,
+  }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
@@ -8202,7 +8193,6 @@ start |= rfc
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     tr+
 +   }
 + tbody =
@@ -8210,7 +8200,6 @@ start |= rfc
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     tr+
 +   }
 + tfoot =
@@ -8218,7 +8207,6 @@ start |= rfc
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     tr+
 +   }
 + tr =
@@ -8226,7 +8214,6 @@ start |= rfc
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     [ a:defaultValue = "0" ] attribute border { text }?,
 +     (td | th)+
 +   }
@@ -8266,7 +8253,6 @@ start |= rfc
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     [ a:defaultValue = "0" ] attribute border { text }?,
 +     [ a:defaultValue = "0" ] attribute colspan { text }?,
 +     [ a:defaultValue = "0" ] attribute rowspan { text }?,

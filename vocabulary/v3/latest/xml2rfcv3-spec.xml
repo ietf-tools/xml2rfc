@@ -365,7 +365,8 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
          </list>
             The RFC Series Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
-            of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified. 
+            of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified.
+            The table will also indicate which type of art can appear in plaintext output (for example, type="svg" cannot).
          </t>
    </section>
 
@@ -542,7 +543,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="fullname attribute" subitem="in author element"/>
       <t>
             The full name (used in the automatically generated "Author's Address" section).
-         </t>
+            Although this attribute is optional, if one or more of the "asciiFullname", "asciiInitials",
+            or "asciiSurname" attributes have values, the "fullname" attribute will be required by
+            tools preparing Internet-Drafts or RFCs.
+      </t>
    </section>
 
    <!--author/@initials-->
@@ -785,6 +789,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="boilerplate element" primary="true"/>
    <t>
       Holds the boilerplate text for the document. This section is filled in by the prep tool.
+   </t>
+   <t>
+      This element contains &lt;<x:ref>section</x:ref>&gt; elements. Every &lt;<x:ref>section</x:ref>&gt;
+      element in this element must have the "numbered" attribute set to "false".
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.boilerplate.contents"><!--AG-->
@@ -2094,7 +2102,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="Elements" subitem="note" primary="true"/>
    <iref item="note element" primary="true"/>
    <t>
-      Creates an unnumbered section that appears after the Abstract.
+      Creates an unnumbered, titled block of text that appears after the Abstract.
    </t>
    <t>
       It is usually used for additional information to reviewers (working
@@ -4748,9 +4756,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
         "default"
         <list style="empty">
             <t>
-            The "derivedContent" attribute will contain a text fragment that describes the referenced part 
+            If the element has no content, the "derivedContent" attribute will contain a text fragment that describes the referenced part 
             completely, such as "XML" for a target that is a &lt;<x:ref>reference</x:ref>&gt;,
             or "Section 2" or "Table 4" for a target to a non-reference.
+            (If the element has content, the "derivedContent" attribute is filled with the content.)
             </t>
             <t>
             For example, with an input of:

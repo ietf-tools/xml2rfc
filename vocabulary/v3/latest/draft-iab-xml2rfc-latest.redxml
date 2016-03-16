@@ -6588,11 +6588,12 @@ sections can only have those anchor values.</t>
 
 <list style="symbols">
 
-<t>"pn" for regular sections always has the format "s-nnn", where "nnn" is the section number or appendix letter.
+<t>"pn" for regular sections always has the format "s-nnn", where "nnn" is the section number, or the appendix
+identifier (which starts with a letter).
 For example, this would be "s-2.1.3" for Section 2.1.3 and "s-a" for Appendix A.
 For the &lt;<xref target="element.abstract" format="none">abstract</xref>&gt; element, it is always "s-abstract".
 For the &lt;<xref target="element.note" format="none">note</xref>&gt; element, it is always "s-note-nnn", where "nnn" is a sequential value.
-For the &lt;<xref target="element.boilerplate" format="none">boilerplate</xref>&gt; element, it is always "s-boilerplate-nnn", where "nnn" is a sequential value.
+For sections in the &lt;<xref target="element.boilerplate" format="none">boilerplate</xref>&gt; element, it is always "s-boilerplate-nnn", where "nnn" is a sequential value.
 </t>
 
 <t>"pn" for &lt;<xref target="element.references" format="none">references</xref>&gt; elements
@@ -6961,7 +6962,6 @@ boilerplate =
   element boilerplate {
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
-    attribute pn { text }?,
     section+
   }
 
@@ -7165,7 +7165,6 @@ dd =
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     ((artwork | dl | figure | ol | sourcecode | t | ul)+
      | (text
         | bcp14
@@ -7434,7 +7433,6 @@ thead =
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     tr+
   }
 
@@ -7443,7 +7441,6 @@ tbody =
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     tr+
   }
 
@@ -7452,7 +7449,6 @@ tfoot =
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     tr+
   }
 
@@ -7461,7 +7457,6 @@ tr =
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     [ a:defaultValue = "0" ] attribute border { text }?,
     (td | th)+
   }
@@ -7503,7 +7498,6 @@ th =
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    attribute pn { text }?,
     [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
     [ a:defaultValue = "0" ] attribute rowspan { text }?,
@@ -7967,7 +7961,6 @@ to the v3 schema.</t>
 +   element boilerplate {
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
-+     attribute pn { text }?,
 +     section+
 +   }
 + middle =
@@ -8167,7 +8160,6 @@ to the v3 schema.</t>
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     ((artwork | dl | figure | ol | sourcecode | t | ul)+
 +      | (text
 +         | bcp14
@@ -8194,7 +8186,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-  }?,
++ }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -8205,7 +8197,7 @@ to the v3 schema.</t>
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-+ }?,
+  }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
@@ -8430,7 +8422,6 @@ to the v3 schema.</t>
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     tr+
 +   }
 + tbody =
@@ -8438,7 +8429,6 @@ to the v3 schema.</t>
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     tr+
 +   }
 + tfoot =
@@ -8446,7 +8436,6 @@ to the v3 schema.</t>
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     tr+
 +   }
 + tr =
@@ -8454,7 +8443,6 @@ to the v3 schema.</t>
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     [ a:defaultValue = "0" ] attribute border { text }?,
 +     (td | th)+
 +   }
@@ -8494,7 +8482,6 @@ to the v3 schema.</t>
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     [ a:defaultValue = "0" ] attribute border { text }?,
 +     [ a:defaultValue = "0" ] attribute colspan { text }?,
 +     [ a:defaultValue = "0" ] attribute rowspan { text }?,

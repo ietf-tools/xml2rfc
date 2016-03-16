@@ -14,10 +14,23 @@
 <!--
 
 rfc/@submissionType is now duplicated in seriesInfo/stream. This needs to be rectified.
+	rfc/@submissionType is in v2
 
-Does the types table in <artwork> need a second column for what can appear in plaintext?
+v3 is currently deprecating <rfc> attributes from v2: 
+	v2 category -> v3 seriesInfo/name
+	v2 docname -> v3 seriesInfo/value
+	v2 number -> v3 seriesInfo/value
+	v2 seriesNo -> v3 seriesInfo/value
 
-Maybe have to add prose about fullname being required if there is ascii* in <author>
+
+Joe, 2016-01-05:
+	My opinion is we could either un-deprecate rfc/@category, or add seriesInfo/@category.  I prefer the latter, since it would be nice to have the category for references also.
+Paul then suggested adding status and stream to seriesInfo
+Julian, 2016-01-06:
+	These attributes would be very specific to the IETF, and only needed for the use of <seriesInfo> outside <reference>. I think the simplest possible fix is to simply go back to what v2 had (undeprecate the top-level attributes, and move <seriesInfo> back to <reference>).
+Joe responded
+	If we were to un-deprecate rfc/@category, we would not have to move seriesInfo back to just being in reference. However, I do think it would be nice to have access to the status and stream bits in references as well.  For some of the external streams, they may have similar semantics that can map into those attributes.
+
 
 -->
 
@@ -117,11 +130,6 @@ Revised documents will be
 published capturing those changes as the toolset is completed. Other implementers must not expect
 those changes to remain backwards-compatible with the details described in this document.
 </t>
-
-<t>NOTE: there is a significant known issue with this version that needs to be discussed and fixed
-before the specification is complete. This version describes two ways to say which stream the
-document is in, one in &lt;rfc&gt; and the other in &lt;seriesInfo&gt;. This will be rectified
-in the next draft.</t>
 
 </section>
 
@@ -788,7 +796,8 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
          </list>
             The RFC Series Editor will maintain a complete list of the preferred values on its
             web site, and that list is expected to be updated over time. Thus, a consumer
-            of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified. 
+            of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified.
+            The table will also indicate which type of art can appear in plaintext output (for example, type="svg" cannot).
          </t>
    </section>
 
@@ -965,7 +974,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="fullname attribute" subitem="in author element"/>
       <t>
             The full name (used in the automatically generated "Author's Address" section).
-         </t>
+            Although this attribute is optional, if one or more of the "asciiFullname", "asciiInitials",
+            or "asciiSurname" attributes have values, the "fullname" attribute will be required by
+            tools preparing Internet-Drafts or RFCs.
+      </t>
    </section>
 
    <!--author/@initials-->
@@ -1208,6 +1220,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="boilerplate element" primary="true"/>
    <t>
       Holds the boilerplate text for the document. This section is filled in by the prep tool.
+   </t>
+   <t>
+      This element contains &lt;<x:ref>section</x:ref>&gt; elements. Every &lt;<x:ref>section</x:ref>&gt;
+      element in this element must have the "numbered" attribute set to "false".
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.boilerplate.contents"><!--AG-->
@@ -2517,7 +2533,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="Elements" subitem="note" primary="true"/>
    <iref item="note element" primary="true"/>
    <t>
-      Creates an unnumbered section that appears after the Abstract.
+      Creates an unnumbered, titled block of text that appears after the Abstract.
    </t>
    <t>
       It is usually used for additional information to reviewers (working
@@ -5171,9 +5187,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
         "default"
         <list style="empty">
             <t>
-            The "derivedContent" attribute will contain a text fragment that describes the referenced part 
+            If the element has no content, the "derivedContent" attribute will contain a text fragment that describes the referenced part 
             completely, such as "XML" for a target that is a &lt;<x:ref>reference</x:ref>&gt;,
             or "Section 2" or "Table 4" for a target to a non-reference.
+            (If the element has content, the "derivedContent" attribute is filled with the content.)
             </t>
             <t>
             For example, with an input of:
@@ -6617,12 +6634,21 @@ sections can only have those anchor values.</t>
 
 <list style="symbols">
 
-<t>"pn" for regular sections always has the format "s-nnn", where "nnn" is the section or appendix number.
+<t>"pn" for regular sections always has the format "s-nnn", where "nnn" is the section number, or the appendix
+identifier (which starts with a letter).
 For example, this would be "s-2.1.3" for Section 2.1.3 and "s-a" for Appendix A.
 For the &lt;<x:ref>abstract</x:ref>&gt; element, it is always "s-abstract".
 For the &lt;<x:ref>note</x:ref>&gt; element, it is always "s-note-nnn", where "nnn" is a sequential value.
 For the &lt;<x:ref>boilerplate</x:ref>&gt; element, it is always "s-boilerplate-nnn", where "nnn" is a sequential value.
 </t>
+
+<t>"pn" for &lt;<x:ref>references</x:ref>&gt; elements
+has the format "s-nnn". It is important to note that "nnn" is a number, not letters,
+even though the &lt;<x:ref>references</x:ref>&gt; appear in the back.
+It is the number that is one higher than the highest top-level section number in &lt;<x:ref>middle</x:ref>&gt;.
+If there are two or more &lt;<x:ref>references</x:ref>&gt;, "nnn" will include a dot as if
+the &lt;<x:ref>references</x:ref>&gt; are a subsection of a section that is
+numbered one higher than the highest top-level section number in &lt;<x:ref>middle</x:ref>&gt;.</t>
 
 <t>"pn" for &lt;<x:ref>figure</x:ref>&gt; elements
 always has the format "f-nnn", where "nnn" is the figure number.
@@ -7630,6 +7656,7 @@ include "svg.rnc"
   element references {
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
+    attribute pn { text }?,
     attribute anchor { xsd:ID }?,
     attribute title { text }?,
     name?,
@@ -8616,6 +8643,7 @@ to the v3 schema.</t>
 -     reference+
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
++     attribute pn { text }?,
 +     attribute anchor { xsd:ID }?,
 +     attribute title { text }?,
 +     name?,

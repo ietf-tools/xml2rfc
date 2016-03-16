@@ -268,7 +268,6 @@
 +   element boilerplate {
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
-+     attribute pn { text }?,
 +     section+
 +   }
 + middle =
@@ -468,7 +467,6 @@
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     ((artwork | dl | figure | ol | sourcecode | t | ul)+
 +      | (text
 +         | bcp14
@@ -495,7 +493,7 @@
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-  }?,
++ }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -506,7 +504,7 @@
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-+ }?,
+  }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
@@ -731,7 +729,6 @@
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     tr+
 +   }
 + tbody =
@@ -739,7 +736,6 @@
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     tr+
 +   }
 + tfoot =
@@ -747,7 +743,6 @@
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     tr+
 +   }
 + tr =
@@ -755,7 +750,6 @@
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     [ a:defaultValue = "0" ] attribute border { text }?,
 +     (td | th)+
 +   }
@@ -795,7 +789,6 @@
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     attribute pn { text }?,
 +     [ a:defaultValue = "0" ] attribute border { text }?,
 +     [ a:defaultValue = "0" ] attribute colspan { text }?,
 +     [ a:defaultValue = "0" ] attribute rowspan { text }?,
