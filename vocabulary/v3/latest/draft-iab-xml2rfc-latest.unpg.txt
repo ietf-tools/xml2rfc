@@ -4958,7 +4958,6 @@ Appendix C.  Relax NG Schema
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
        [ a:defaultValue = "1" ] attribute type { text }?,
        [ a:defaultValue = "1" ] attribute start { text }?,
        attribute group { text }?,
@@ -4972,7 +4971,6 @@ Appendix C.  Relax NG Schema
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
        [ a:defaultValue = "false" ]
@@ -5006,7 +5004,6 @@ Appendix C.  Relax NG Schema
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
-       attribute pn { text }?,
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
        [ a:defaultValue = "true" ]
@@ -5955,7 +5952,6 @@ Appendix D.  Schema Differences from v2
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
-   +     attribute pn { text }?,
    +     [ a:defaultValue = "1" ] attribute type { text }?,
    +     [ a:defaultValue = "1" ] attribute start { text }?,
    +     attribute group { text }?,
@@ -5968,7 +5964,6 @@ Appendix D.  Schema Differences from v2
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
-   +     attribute pn { text }?,
    +     [ a:defaultValue = "normal" ]
    +     attribute spacing { "normal" | "compact" }?,
    +     [ a:defaultValue = "false" ]
@@ -6000,7 +5995,6 @@ Appendix D.  Schema Differences from v2
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
-   +     attribute pn { text }?,
    +     [ a:defaultValue = "normal" ]
    +     attribute spacing { "normal" | "compact" }?,
    +     [ a:defaultValue = "true" ]
@@ -6057,7 +6051,7 @@ Appendix D.  Schema Differences from v2
          [ a:defaultValue = "default" ]
    -     attribute format { "counter" | "title" | "none" | "default"
    +     attribute format { "default" | "title" | "counter" | "none"
-   + }?,
+     }?,
    +     attribute derivedContent { text }?,
    +     text
    +   }
@@ -6068,7 +6062,7 @@ Appendix D.  Schema Differences from v2
    +     attribute target { xsd:IDREF },
    +     [ a:defaultValue = "of" ]
    +     attribute displayFormat { "of" | "comma" | "parens" | "bare"
-     }?,
+   + }?,
    +     (attribute section { text },
    +      attribute relative { text }?)?,
    +     attribute derivedRemoteContent { text }?,
