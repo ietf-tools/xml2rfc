@@ -4613,17 +4613,6 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       </t>
    </section>
 
-   <!--td/@border-->
-   <section anchor="element.td.attribute.border" toc="exclude">
-      <name>"border" Attribute</name>
-      <iref item="Attributes" subitem="border"/>
-      <iref item="td element" subitem="border attribute"/>
-      <iref item="border attribute" subitem="in td element"/>
-      <t>
-         The width of the border for this cell. The default is 0, meaning no border.
-      </t>
-   </section>
-
    <!--td/@colspan-->
    <section anchor="element.td.attribute.colspan" toc="exclude">
       <name>"colspan" Attribute</name>
@@ -4801,17 +4790,6 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       </t>
    </section>
 
-   <!--th/@border-->
-   <section anchor="element.th.attribute.border" toc="exclude">
-      <name>"border" Attribute</name>
-      <iref item="Attributes" subitem="border"/>
-      <iref item="th element" subitem="border attribute"/>
-      <iref item="border attribute" subitem="in th element"/>
-      <t>
-         The width of the border for this cell, measured in CSS pixels. The default is 0, meaning no border.
-      </t>
-   </section>
-
    <!--th/@colspan-->
    <section anchor="element.th.attribute.colspan" toc="exclude">
       <name>"colspan" Attribute</name>
@@ -4948,19 +4926,6 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="anchor attribute" subitem="in tr element"/>
       <t>
         Document-wide unique identifier for the row.
-      </t>
-   </section>
-
-   <!--tr/@border-->
-   <section anchor="element.tr.attribute.border" toc="exclude">
-      <name>"border" Attribute</name>
-      <iref item="Attributes" subitem="border"/>
-      <iref item="tr element" subitem="border attribute"/>
-      <iref item="border attribute" subitem="in tr element"/>
-      <t>
-         The width of the border for this row. The default is 0, meaning no border. If the
-         cells in this row also have "border" attributes, those values override this value
-         for those cells.
       </t>
    </section>
 </section>
@@ -7501,7 +7466,6 @@ include "svg.rnc"
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    [ a:defaultValue = "0" ] attribute border { text }?,
     (td | th)+
   }
 
@@ -7510,7 +7474,6 @@ include "svg.rnc"
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
     [ a:defaultValue = "0" ] attribute rowspan { text }?,
     [ a:defaultValue = "left" ]
@@ -7542,7 +7505,6 @@ include "svg.rnc"
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
-    [ a:defaultValue = "0" ] attribute border { text }?,
     [ a:defaultValue = "0" ] attribute colspan { text }?,
     [ a:defaultValue = "0" ] attribute rowspan { text }?,
     [ a:defaultValue = "left" ]
@@ -8227,7 +8189,7 @@ to the v3 schema.</t>
       [ a:defaultValue = "default" ]
 -     attribute format { "counter" | "title" | "none" | "default" 
 +     attribute format { "default" | "title" | "counter" | "none" 
-  }?,
++ }?,
 +     attribute derivedContent { text }?,
 +     text
 +   }
@@ -8238,7 +8200,7 @@ to the v3 schema.</t>
 +     attribute target { xsd:IDREF },
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
-+ }?,
+  }?,
 +     (attribute section { text },
 +      attribute relative { text }?)?,
 +     attribute derivedRemoteContent { text }?,
@@ -8484,7 +8446,6 @@ to the v3 schema.</t>
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     [ a:defaultValue = "0" ] attribute border { text }?,
 +     (td | th)+
 +   }
 + td =
@@ -8492,7 +8453,6 @@ to the v3 schema.</t>
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     [ a:defaultValue = "0" ] attribute border { text }?,
 +     [ a:defaultValue = "0" ] attribute colspan { text }?,
 +     [ a:defaultValue = "0" ] attribute rowspan { text }?,
 +     [ a:defaultValue = "left" ]
@@ -8523,7 +8483,6 @@ to the v3 schema.</t>
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     attribute anchor { xsd:ID }?,
-+     [ a:defaultValue = "0" ] attribute border { text }?,
 +     [ a:defaultValue = "0" ] attribute colspan { text }?,
 +     [ a:defaultValue = "0" ] attribute rowspan { text }?,
 +     [ a:defaultValue = "left" ]

@@ -2723,9 +2723,9 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="Elements" subitem="relref" primary="true"/>
    <iref item="relref element" primary="true"/>
    <t>
-      A relative link to a reference from the "References" section.
-      Formatters that have links (such as HTML and PDF) are likely to render &lt;relref&gt; elements as external hyperlinks
-      to the specified part of the reference, creating the link target by combining the base URI from the
+      A relative link to a reference in the "References" section.
+      Formatters that have links (such as HTML and PDF) render &lt;relref&gt; elements as external hyperlinks
+      to the specified part of the HTML version of the reference, creating the link target by combining the base URI from the
       &lt;<x:ref>reference</x:ref>&gt; element with the "relative" attribute from this element.
       The "target" attribute is required, and it must be the anchor of a &lt;<x:ref>reference</x:ref>&gt; element.
    </t>
@@ -2750,11 +2750,12 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
 <figure>
          <artwork>
       See 
-      &lt;a href="http://www.rfc-editor.org/info/rfc7878#s-2.3"&gt;
+      &lt;a href="http://www.rfc-editor.org/rfc/rfc7878.html#s-2.3"&gt;
       the protocol overview&lt;/a&gt;
       for more information.
 </artwork>
       </figure>
+   Note that the URL in the above example might be different when the RFC Editor deploys the v3 format.
    </t>
    <t/>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>annotation</x:ref>&gt; (<xref target="element.annotation"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>cref</x:ref>&gt; (<xref target="element.cref"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>dt</x:ref>&gt; (<xref target="element.dt"/>), &lt;<x:ref>em</x:ref>&gt; (<xref target="element.em"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>name</x:ref>&gt; (<xref target="element.name"/>), &lt;<x:ref>preamble</x:ref>&gt; (<xref target="element.preamble"/>), &lt;<x:ref>strong</x:ref>&gt; (<xref target="element.strong"/>), &lt;<x:ref>sub</x:ref>&gt; (<xref target="element.sub"/>), &lt;<x:ref>sup</x:ref>&gt; (<xref target="element.sup"/>), &lt;<x:ref>t</x:ref>&gt; (<xref target="element.t"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>), and &lt;<x:ref>tt</x:ref>&gt; (<xref target="element.tt"/>).</t>
@@ -2879,7 +2880,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             For example:
 <figure>
                   <artwork>
-      See
+      See Section
       &lt;relref section="2.3" target="RFC7878" displayFormat="bare"/&gt;
       and
       &lt;relref section="2.4" target="RFC7878" displayFormat="of"/&gt;
@@ -2891,9 +2892,9 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
                An HTML formatter might generate:
 <figure>
                   <artwork>
-      See
+      See Section
       &lt;a href="http://www.rfc-editor.org/info/rfc7878#s-2.3"&gt;
-      Section 2.3&lt;/a&gt;
+      2.3&lt;/a&gt;
       and
       &lt;a href="http://www.rfc-editor.org/info/rfc7878#s-2.4"&gt;
       Section 2.4&lt;/a&gt; of
@@ -4181,17 +4182,6 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       </t>
    </section>
 
-   <!--td/@border-->
-   <section anchor="element.td.attribute.border" toc="exclude">
-      <name>"border" Attribute</name>
-      <iref item="Attributes" subitem="border"/>
-      <iref item="td element" subitem="border attribute"/>
-      <iref item="border attribute" subitem="in td element"/>
-      <t>
-         The width of the border for this cell. The default is 0, meaning no border.
-      </t>
-   </section>
-
    <!--td/@colspan-->
    <section anchor="element.td.attribute.colspan" toc="exclude">
       <name>"colspan" Attribute</name>
@@ -4369,17 +4359,6 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       </t>
    </section>
 
-   <!--th/@border-->
-   <section anchor="element.th.attribute.border" toc="exclude">
-      <name>"border" Attribute</name>
-      <iref item="Attributes" subitem="border"/>
-      <iref item="th element" subitem="border attribute"/>
-      <iref item="border attribute" subitem="in th element"/>
-      <t>
-         The width of the border for this cell. The default is 0, meaning no border.
-      </t>
-   </section>
-
    <!--th/@colspan-->
    <section anchor="element.th.attribute.colspan" toc="exclude">
       <name>"colspan" Attribute</name>
@@ -4516,19 +4495,6 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="anchor attribute" subitem="in tr element"/>
       <t>
         Document-wide unique identifier for the row.
-      </t>
-   </section>
-
-   <!--tr/@border-->
-   <section anchor="element.tr.attribute.border" toc="exclude">
-      <name>"border" Attribute</name>
-      <iref item="Attributes" subitem="border"/>
-      <iref item="tr element" subitem="border attribute"/>
-      <iref item="border attribute" subitem="in tr element"/>
-      <t>
-         The width of the border for this row. The default is 0, meaning no border. If the
-         cells in this row also have "border" attributes, those values override this value
-         for those cells.
       </t>
    </section>
 </section>
