@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 7749 (if approved)                              April 7, 2016
+Obsoletes: 7749 (if approved)                             April 11, 2016
 Intended status: Informational
-Expires: October 9, 2016
+Expires: October 13, 2016
 
 
                    The "xml2rfc" version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 9, 2016.
+   This Internet-Draft will expire on October 13, 2016.
 
 Copyright Notice
 
@@ -2120,13 +2120,13 @@ Table of Contents
 
 2.44.  <relref>
 
-   A relative link to a reference from the "References" section.
-   Formatters that have links (such as HTML and PDF) are likely to
-   render <relref> elements as external hyperlinks to the specified part
-   of the reference, creating the link target by combining the base URI
-   from the <reference> element with the "relative" attribute from this
-   element.  The "target" attribute is required, and it must be the
-   anchor of a <reference> element.
+   A relative link to a reference in the "References" section.
+   Formatters that have links (such as HTML and PDF) render <relref>
+   elements as external hyperlinks to the specified part of the HTML
+   version of the reference, creating the link target by combining the
+   base URI from the <reference> element with the "relative" attribute
+   from this element.  The "target" attribute is required, and it must
+   be the anchor of a <reference> element.
 
    Either the "relative" or the "section" attribute must be present, but
    both cannot be given for a <relref> element.  If a reference is an
@@ -2144,9 +2144,12 @@ Table of Contents
    An HTML formatter might generate:
 
          See
-         <a href="http://www.rfc-editor.org/info/rfc7878#s-2.3">
+         <a href="http://www.rfc-editor.org/rfc/rfc7878.html#s-2.3">
          the protocol overview</a>
          for more information.
+
+   Note that the URL in the above example might be different when the
+   RFC Editor deploys the v3 format.
 
    This element appears as a child element of <annotation>
    (Section 2.3), <blockquote> (Section 2.10), <cref> (Section 2.16),
