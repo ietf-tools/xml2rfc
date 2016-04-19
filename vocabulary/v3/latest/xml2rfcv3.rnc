@@ -330,6 +330,7 @@ blockquote =
     [ a:defaultValue = "empty" ] attribute style { text }?,
     attribute hangIndent { text }?,
     attribute counter { text }?,
+    attribute pn { text }?,
     t+
   }
 ol =
@@ -342,6 +343,7 @@ ol =
     attribute group { text }?,
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
+    attribute pn { text }?,
     li+
   }
 ul =
@@ -351,8 +353,9 @@ ul =
     attribute anchor { xsd:ID }?,
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
-    [ a:defaultValue = "false" ]
-    attribute empty { "false" | "true" }?,
+    ([ a:defaultValue = "false" ]
+     attribute empty { "false" | "true" },
+     attribute pn { text }?)?,
     li+
   }
 li =
@@ -384,6 +387,7 @@ dl =
     attribute spacing { "normal" | "compact" }?,
     [ a:defaultValue = "true" ]
     attribute hanging { "false" | "true" }?,
+    attribute pn { text }?,
     (dt, dd)+
   }
 dt =
@@ -410,6 +414,7 @@ dd =
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
     ((artwork | dl | figure | ol | sourcecode | t | ul)+
      | (text
         | bcp14

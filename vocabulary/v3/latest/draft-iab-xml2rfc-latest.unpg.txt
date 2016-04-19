@@ -4941,6 +4941,7 @@ Appendix C.  Relax NG Schema
        [ a:defaultValue = "empty" ] attribute style { text }?,
        attribute hangIndent { text }?,
        attribute counter { text }?,
+       attribute pn { text }?,
        t+
      }
 
@@ -4954,6 +4955,7 @@ Appendix C.  Relax NG Schema
        attribute group { text }?,
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
+       attribute pn { text }?,
        li+
      }
 
@@ -4964,8 +4966,9 @@ Appendix C.  Relax NG Schema
        attribute anchor { xsd:ID }?,
        [ a:defaultValue = "normal" ]
        attribute spacing { "normal" | "compact" }?,
-       [ a:defaultValue = "false" ]
-       attribute empty { "false" | "true" }?,
+       ([ a:defaultValue = "false" ]
+        attribute empty { "false" | "true" },
+        attribute pn { text }?)?,
        li+
      }
 
@@ -4999,6 +5002,7 @@ Appendix C.  Relax NG Schema
        attribute spacing { "normal" | "compact" }?,
        [ a:defaultValue = "true" ]
        attribute hanging { "false" | "true" }?,
+       attribute pn { text }?,
        (dt, dd)+
      }
 
@@ -5027,6 +5031,7 @@ Appendix C.  Relax NG Schema
        attribute xml:base { text }?,
        attribute xml:lang { text }?,
        attribute anchor { xsd:ID }?,
+       attribute pn { text }?,
        ((artwork | dl | figure | ol | sourcecode | t | ul)+
         | (text
            | bcp14
@@ -5933,6 +5938,7 @@ Appendix D.  Schema Differences from v2
    +     [ a:defaultValue = "empty" ] attribute style { text }?,
          attribute hangIndent { text }?,
          attribute counter { text }?,
+   +     attribute pn { text }?,
          t+
        }
    + ol =
@@ -5945,6 +5951,7 @@ Appendix D.  Schema Differences from v2
    +     attribute group { text }?,
    +     [ a:defaultValue = "normal" ]
    +     attribute spacing { "normal" | "compact" }?,
+   +     attribute pn { text }?,
    +     li+
    +   }
    + ul =
@@ -5954,8 +5961,9 @@ Appendix D.  Schema Differences from v2
    +     attribute anchor { xsd:ID }?,
    +     [ a:defaultValue = "normal" ]
    +     attribute spacing { "normal" | "compact" }?,
-   +     [ a:defaultValue = "false" ]
-   +     attribute empty { "false" | "true" }?,
+   +     ([ a:defaultValue = "false" ]
+   +      attribute empty { "false" | "true" },
+   +      attribute pn { text }?)?,
    +     li+
    +   }
    + li =
@@ -5987,6 +5995,7 @@ Appendix D.  Schema Differences from v2
    +     attribute spacing { "normal" | "compact" }?,
    +     [ a:defaultValue = "true" ]
    +     attribute hanging { "false" | "true" }?,
+   +     attribute pn { text }?,
    +     (dt, dd)+
    +   }
    + dt =
@@ -6013,6 +6022,7 @@ Appendix D.  Schema Differences from v2
    +     attribute xml:base { text }?,
    +     attribute xml:lang { text }?,
    +     attribute anchor { xsd:ID }?,
+   +     attribute pn { text }?,
    +     ((artwork | dl | figure | ol | sourcecode | t | ul)+
    +      | (text
    +         | bcp14

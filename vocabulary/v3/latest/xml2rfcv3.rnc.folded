@@ -362,6 +362,7 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     [ a:defaultValue = "empty" ] attribute style { text }?,
     attribute hangIndent { text }?,
     attribute counter { text }?,
+    attribute pn { text }?,
     t+
   }
 
@@ -375,6 +376,7 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     attribute group { text }?,
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
+    attribute pn { text }?,
     li+
   }
 
@@ -385,8 +387,9 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     attribute anchor { xsd:ID }?,
     [ a:defaultValue = "normal" ]
     attribute spacing { "normal" | "compact" }?,
-    [ a:defaultValue = "false" ]
-    attribute empty { "false" | "true" }?,
+    ([ a:defaultValue = "false" ]
+     attribute empty { "false" | "true" },
+     attribute pn { text }?)?,
     li+
   }
 
@@ -420,6 +423,7 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     attribute spacing { "normal" | "compact" }?,
     [ a:defaultValue = "true" ]
     attribute hanging { "false" | "true" }?,
+    attribute pn { text }?,
     (dt, dd)+
   }
 
@@ -448,6 +452,7 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
     ((artwork | dl | figure | ol | sourcecode | t | ul)+
      | (text
         | bcp14
