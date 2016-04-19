@@ -3507,14 +3507,14 @@ blockquote > * .bcp14 {
                </p>
             </div>
             <div id="rfc.section.2.44.p.2">
-               <p>Either the "relative" or the "section" attribute must be present, but both cannot be given for a &lt;relref&gt; element. If a reference
-                  is an RFC or Internet-Draft that is in the v3 format and the desired relative reference is to a section of that reference,
-                  the "section" attribute is easier to use than the "relative" attribute because the value of "section" is just a section string
-                  such as "2.3".
+               <p>The "section" attribute is required, and the "relative" attribute is option. If reference is not an RFC or Internet-Draft
+                  that is in the v3 format, the element MUST have a "relative" attribute; in this case, the value of the "section" attribute
+                  is ignored.
                </p>
             </div>
             <div id="rfc.section.2.44.p.3">
-               <p>An example of the &lt;relref&gt; element with text content might be: </p><span id="rfc.figure.u.8"><pre>      See &lt;relref section="2.3" target="RFC7878"&gt;
+               <p>An example of the &lt;relref&gt; element with text content might be: </p><span id="rfc.figure.u.8"><pre>      See
+      &lt;relref section="2.3" target="RFC7878" displayFormat="bare"&gt;
       the protocol overview&lt;/relref&gt;
       for more information.
 </pre></span></div>
@@ -3547,10 +3547,11 @@ blockquote > * .bcp14 {
                <div id="rfc.section.2.44.1.p.2">
                   <p>"of" </p>
                   <ul class="empty">
-                     <li>A formatter should display the relative reference as the contents of the "derivedRemoteContent" attribute followed by a space,
-                        the word "of", another space, and the value from the "target" attribute enclosed in square brackets.
+                     <li>A formatter should display the relative reference as the word "Section" followed by a space, the contents of the "section"
+                        attribute followed by a space, the word "of", another space, and the value from the "target" attribute enclosed in square
+                        brackets.
                      </li>
-                     <li>For example, if Section 2.3 of RFC 7878 has the title "Protocol Overview", with an input of: <span id="rfc.figure.u.10"><pre>      See
+                     <li>For example, with an input of: <span id="rfc.figure.u.10"><pre>      See
       &lt;relref section="2.3" target="RFC7878" displayFormat="of"/&gt;
       for an overview.
 </pre></span> 
@@ -3571,9 +3572,9 @@ blockquote > * .bcp14 {
                   <p>"comma" </p>
                   <ul class="empty">
                      <li>A formatter should display the relative reference as the value from the "target" attribute enclosed in square brackets, a
-                        comma, a space, and the "derivedRemoteContent" attribute.
+                        comma, a space, the word "Section" followed by a space, and the "section" attribute.
                      </li>
-                     <li>For example, if Section 2.3 of RFC 7878 has the title "Protocol Overview", with an input of: <span id="rfc.figure.u.12"><pre>      See
+                     <li>For example, with an input of: <span id="rfc.figure.u.12"><pre>      See
       &lt;relref section="2.3" target="RFC7878" displayFormat="comma"/&gt;,
       for an overview.
 </pre></span> 
@@ -3590,9 +3591,9 @@ blockquote > * .bcp14 {
                   <p>"parens" </p>
                   <ul class="empty">
                      <li>A formatter should display the relative reference as the value from the "target" attribute enclosed in square brackets, a
-                        space, a left parenthesis, the "derivedRemoteContent" attribute, and a right parenthesis.
+                        space, a left parenthesis, the word "Section" followed by a space, the "section" attribute, and a right parenthesis.
                      </li>
-                     <li>For example, if Section 2.3 of RFC 7878 has the title "Protocol Overview", with an input of: <span id="rfc.figure.u.14"><pre>      See
+                     <li>For example, with an input of: <span id="rfc.figure.u.14"><pre>      See
       &lt;relref section="2.3" target="RFC7878" displayFormat="parens"/&gt;
       for an overview.
 </pre></span> 
@@ -3609,8 +3610,8 @@ blockquote > * .bcp14 {
                <div id="rfc.section.2.44.1.p.5">
                   <p>"bare" </p>
                   <ul class="empty">
-                     <li>A formatter should display the relative reference as the contents of the "derivedRemoteContent" attribute and nothing else.
-                        This is useful when there are multiple relative references to a single base reference.
+                     <li>A formatter should display the relative reference as the contents of the "section" attribute and nothing else. This is useful
+                        when there are multiple relative references to a single base reference.
                      </li>
                      <li>For example: <span id="rfc.figure.u.16"><pre>      See Section
       &lt;relref section="2.3" target="RFC7878" displayFormat="bare"/&gt;
@@ -3650,9 +3651,9 @@ blockquote > * .bcp14 {
                </div>
             </section>
             <section id="element.relref.attribute.section">
-               <h4 id="rfc.section.2.44.3"><a href="#rfc.section.2.44.3">2.44.3</a>&nbsp;<a href="#element.relref.attribute.section">"section" Attribute</a></h4>
+               <h4 id="rfc.section.2.44.3"><a href="#rfc.section.2.44.3">2.44.3</a>&nbsp;<a href="#element.relref.attribute.section">"section" Attribute <em>(Mandatory)</em> </a></h4>
                <div id="rfc.section.2.44.3.p.1">
-                  <p>Specifies a section of the target reference. If the reference is not an RFC or Internet-Draft, it is an error.</p>
+                  <p>Specifies a section of the target reference. If the reference is not an RFC or Internet-Draft in the v3 format, it is an error.</p>
                </div>
             </section>
             <section id="element.relref.attribute.target">
@@ -6429,15 +6430,6 @@ Using CDATA:
                      reference and the relative part that is either a copy of the "relative" attribute or a section number derived from the "section"
                      attribute.
                   </li>
-                  <li>&lt;relref&gt; "derivedRemoteContent" attribute -- If the &lt;relref&gt; element has text content, this attribute is filled with that
-                     content; the "displayFormat" attribute is set to "bare" if that attribute is not already set. If the &lt;relref&gt; element has
-                     no text content, this attribute is filled with the text for the remote link, such as "Section 2.3" or "Table 5". The prep
-                     tool might determine this text by reading the target reference and, if it is an RFC or Internet-Draft in the v3 format, finding
-                     the anchor given in the "relative" attribute or derived from the "section" attribute, and using the title of that element.
-                     If the reference is not an RFC or Internet-Draft in the v3 format, the text fragment is simply the value of the "relative"
-                     or "section" attribute. This will rarely produce a good result in formatted output so, for these documents, the &lt;relref&gt; element
-                     should contain text content.
-                  </li>
                   <li>&lt;rfc&gt; "expiresDate" attribute -- This attribute is filled with the date that an Internet Draft expires. The date is in the
                      format yyyy-mm-dd.
                   </li>
@@ -6956,9 +6948,8 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     attribute target { xsd:IDREF },
     [ a:defaultValue = "of" ]
     attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
-    (attribute section { text },
-     attribute relative { text }?)?,
-    attribute derivedRemoteContent { text }?,
+    attribute section { text },
+    attribute relative { text }?,
     attribute derivedLink { text }?,
     text
   }
@@ -7953,9 +7944,8 @@ start |= rfc
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
   }?,
-+     (attribute section { text },
-+      attribute relative { text }?)?,
-+     attribute derivedRemoteContent { text }?,
++     attribute section { text },
++     attribute relative { text }?,
 +     attribute derivedLink { text }?,
       text
     }

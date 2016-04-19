@@ -2730,16 +2730,15 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       The "target" attribute is required, and it must be the anchor of a &lt;<x:ref>reference</x:ref>&gt; element.
    </t>
    <t>   
-      Either the "relative" or the "section" attribute must be present, but both cannot be given for a &lt;relref&gt; element.
-      If a reference is an RFC or Internet-Draft that is in the v3 format and the desired relative reference is to
-      a section of that reference, the "section" attribute is easier to use than the "relative" attribute because
-      the value of "section" is just a section string such as "2.3".
+      The "section" attribute is required, and the "relative" attribute is option.
+      If reference is not an RFC or Internet-Draft that is in the v3 format, the element MUST have a "relative" attribute;
+      in this case, the value of the "section" attribute is ignored.
    </t>
    <t>
       An example of the &lt;relref&gt; element with text content might be:
 <figure>
          <artwork>
-      See &lt;relref section="2.3" target="RFC7878"&gt;
+      See &lt;relref section="2.3" target="RFC7878" displayFormat="bare"&gt;
       the protocol overview&lt;/relref&gt;
       for more information.
 </artwork>
@@ -2777,11 +2776,11 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
         "of"
         <list style="empty">
             <t>
-            A formatter should display the relative reference as the contents of the "derivedRemoteContent" attribute
+            A formatter should display the relative reference as the word "Section" followed by a space, the contents of the "section" attribute
             followed by a space, the word "of", another space, and the value from the "target" attribute enclosed in square brackets.
             </t>
             <t>
-            For example, if Section 2.3 of RFC 7878 has the title "Protocol Overview", with an input of:
+            For example, with an input of:
 <figure>
                   <artwork>
       See
@@ -2813,10 +2812,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
         <list style="empty">
             <t>
             A formatter should display the relative reference as the value from the "target" attribute enclosed in square brackets,
-            a comma, a space, and the "derivedRemoteContent" attribute.
+            a comma, a space, the word "Section" followed by a space, and the "section" attribute.
             </t>
             <t>
-            For example, if Section 2.3 of RFC 7878 has the title "Protocol Overview", with an input of:
+            For example, with an input of:
 <figure>
                   <artwork>
       See
@@ -2843,10 +2842,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
         <list style="empty">
             <t>
             A formatter should display the relative reference as the value from the "target" attribute enclosed in square brackets,
-            a space, a left parenthesis, the "derivedRemoteContent" attribute, and a right parenthesis.
+            a space, a left parenthesis, the word "Section" followed by a space, the "section" attribute, and a right parenthesis.
             </t>
             <t>
-            For example, if Section 2.3 of RFC 7878 has the title "Protocol Overview", with an input of:
+            For example, with an input of:
 <figure>
                   <artwork>
       See
@@ -2873,7 +2872,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
         "bare"
         <list style="empty">
             <t>
-            A formatter should display the relative reference as the contents of the "derivedRemoteContent" attribute
+            A formatter should display the relative reference as the contents of the "section" attribute
             and nothing else. This is useful when there are multiple relative references to a single base reference.
             </t>
             <t>
@@ -2929,13 +2928,14 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
 
    <!--relref/@section-->
    <section anchor="element.relref.attribute.section" toc="exclude">
-      <name>"section" Attribute</name>
+      <name>"section" Attribute <em> (Mandatory)</em>
+      </name>
       <iref item="Attributes" subitem="section"/>
       <iref item="relref element" subitem="section attribute"/>
       <iref item="section attribute" subitem="in relref element"/>
       <t>
          Specifies a section of the target reference.
-         If the reference is not an RFC or Internet-Draft, it is an error.
+         If the reference is not an RFC or Internet-Draft in the v3 format, it is an error.
       </t>
    </section>
 
