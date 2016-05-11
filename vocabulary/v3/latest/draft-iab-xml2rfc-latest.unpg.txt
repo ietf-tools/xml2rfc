@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 7749 (if approved)                             April 18, 2016
+Obsoletes: 7749 (if approved)                               May 10, 2016
 Intended status: Informational
-Expires: October 20, 2016
+Expires: November 11, 2016
 
 
                    The "xml2rfc" version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 20, 2016.
+   This Internet-Draft will expire on November 11, 2016.
 
 Copyright Notice
 
@@ -813,8 +813,7 @@ Table of Contents
    The full name (used in the automatically generated "Author's Address"
    section).  Although this attribute is optional, if one or more of the
    "asciiFullname", "asciiInitials", or "asciiSurname" attributes have
-   values, the "fullname" attribute will be required by tools preparing
-   Internet-Drafts or RFCs.
+   values, the "fullname" attribute is required.
 
 2.7.5.  "initials" Attribute
 
@@ -971,8 +970,9 @@ Table of Contents
 
    Indicates that a line break should be inserted in the generated
    output by a formatting tool.  It is always expressed as <br />.
-   Multiple successive instances of this element do not cause blank
-   lines to appear in the output, and is thus not useful.
+   Multiple successive instances of this element are ignored.
+   Successive instances with an intervening white space (such as "<br />
+   <br />") will create a single blank line.
 
    This element appears as a child element of <td> (Section 2.56) and
    <th> (Section 2.58).
@@ -1090,9 +1090,9 @@ Table of Contents
       attempt to use the current system date if the attributes that are
       present are consistent with that date.
 
-      If given, the month must be a number or a month in English.  The
-      prep tool will silently change text month names to numbers.  The
-      year must be a four-digit number.
+      In dates in <rfc> elements, the month must be a number or a month
+      in English.  The prep tool will silently change text month names
+      to numbers.  Similarly, the year must be a four-digit number.
 
       When the prep tool is used to create Internet-Drafts, it will
       reject a submitted Internet-Draft that has a <date> element in the
@@ -1101,10 +1101,11 @@ Table of Contents
       than the day of submission.  To avoid this problem, authors might
       simply not include a <date> element in the boilerplate.
 
-   Bibliographic references:  The date information can have prose text
-      for the month or year.  For example, vague dates (year="ca.
-      2000"), date ranges (year="2012-2013"), non-specific months
-      (month="Second quarter") and so on are allowed.
+   Bibliographic references:  In dates in <reference> elements, the date
+      information can have prose text for the month or year.  For
+      example, vague dates (year="ca. 2000"), date ranges (year="2012-
+      2013"), non-specific months (month="Second quarter") and so on are
+      allowed.
 
    This element appears as a child element of <front> (Section 2.26).
 
@@ -2369,7 +2370,8 @@ Table of Contents
 
    The date that the XML was processed by a prep tool.  This is included
    in the XML file just before it is saved to disk.  The value is
-   formatted using the format from [RFC3339].
+   formatted using the 'date-time' format defined in Section 5.6 of
+   [RFC3339].  The "time-offset" should be "Z".
 
 2.45.10.  "seriesNo" Attribute
 
@@ -2509,9 +2511,10 @@ Table of Contents
 
 2.46.3.  "removeInRFC" Attribute
 
-   If set to "true", the formatter is requested to mark this section
-   with a paragraph at the beginning of the section indicating that it
-   should be removed before the document is published as an RFC.
+   If set to "true", this note is marked in the prep tool with text
+   indicating that it should be removed before the document is published
+   as an RFC.  That text will be "This note is to be removed before
+   publishing as an RFC.".
 
    Allowed values:
 
@@ -3077,7 +3080,7 @@ Table of Contents
 
    The number of columns that the cell is to span.  For example, setting
    "colspan='3'" indicates that the cell occupies the same horizontal
-   space as three cells in the row above or below this one.
+   space as three cells of a row without any "colspan" attributes.
 
 2.56.4.  "rowspan" Attribute
 
@@ -3180,7 +3183,7 @@ Table of Contents
 
    The number of columns that the cell is to span.  For example, setting
    "colspan='3'" indicates that the cell occupies the same horizontal
-   space as three cells in the row above or below this one.
+   space as three cells of a row without any "colspan" attributes.
 
 2.58.4.  "rowspan" Attribute
 
@@ -4411,10 +4414,8 @@ B.2.  Anchors and IDs
 
    Authors can leave anchors in a document that can later be used for
    references with the "anchor" attribute.  Anchors can be included in
-   the following elements: <artwork>, <aside>, <blockquote>, <cref>,
-   <figure>, <li>, <reference>, <referencegroup>, <section>,
-   <sourcecode>, <t>, and <table>.  The author can then refer to that
-   anchor in the "target" attribute of the <xref> element.
+   the numerous elements.  The author can then refer to that anchor in
+   the "target" attribute of the <xref> element.
 
    Readers can refer to any element that has an "anchor" attribute by
    that attribute.  Note, however, that most of the time, elements won't

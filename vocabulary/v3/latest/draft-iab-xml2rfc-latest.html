@@ -518,7 +518,7 @@ blockquote > * .bcp14 {
        content: "Internet-Draft";
   }
   @top-right {
-       content: "April 2016";
+       content: "May 2016";
   }
   @top-center {
        content: "The "xml2rfc" version 3 Vocabulary";
@@ -527,7 +527,7 @@ blockquote > * .bcp14 {
        content: "Hoffman";
   }
   @bottom-center {
-       content: "Expires October 20, 2016";
+       content: "Expires November 11, 2016";
   }
   @bottom-right {
        content: "[Page " counter(page) "]";
@@ -567,7 +567,7 @@ blockquote > * .bcp14 {
       <link rel="schema.dcterms" href="http://purl.org/dc/terms/">
       <meta name="dcterms.creator" content="Hoffman, P.">
       <meta name="dcterms.identifier" content="urn:ietf:id:draft-iab-xml2rfc-latest">
-      <meta name="dcterms.issued" content="2016-04-18">
+      <meta name="dcterms.issued" content="2016-05-10">
       <meta name="dct.replaces" content="urn:ietf:rfc:7749">
       <meta name="dcterms.abstract" content="This document defines the &#34;xml2rfc&#34; version 3 vocabulary: an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its followup, RFC 7749.">
       <meta name="description" content="This document defines the &#34;xml2rfc&#34; version 3 vocabulary: an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its followup, RFC 7749.">
@@ -587,14 +587,14 @@ blockquote > * .bcp14 {
                <tr>
                   <td class="left">Obsoletes: <a href="https://tools.ietf.org/html/rfc7749">7749</a> (if approved)
                   </td>
-                  <td class="right">April 18, 2016</td>
+                  <td class="right">May 10, 2016</td>
                </tr>
                <tr>
                   <td class="left">Intended status: Informational</td>
                   <td class="right"></td>
                </tr>
                <tr>
-                  <td class="left">Expires: October 20, 2016</td>
+                  <td class="left">Expires: November 11, 2016</td>
                   <td class="right"></td>
                </tr>
             </tbody>
@@ -627,7 +627,7 @@ blockquote > * .bcp14 {
             documents at any time. It is inappropriate to use Internet-Drafts as reference material or to cite them other than as &#8220;work
             in progress&#8221;.
          </p>
-         <p>This Internet-Draft will expire on October 20, 2016.</p>
+         <p>This Internet-Draft will expire on November 11, 2016.</p>
       </section>
       <section id="rfc.copyrightnotice">
          <h2><a href="#rfc.copyrightnotice">Copyright Notice</a></h2>
@@ -1524,8 +1524,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.7.4"><a href="#rfc.section.2.7.4">2.7.4</a>&nbsp;<a href="#element.author.attribute.fullname">"fullname" Attribute</a></h4>
                <div id="rfc.section.2.7.4.p.1">
                   <p>The full name (used in the automatically generated "Author's Address" section). Although this attribute is optional, if one
-                     or more of the "asciiFullname", "asciiInitials", or "asciiSurname" attributes have values, the "fullname" attribute will be
-                     required by tools preparing Internet-Drafts or RFCs.
+                     or more of the "asciiFullname", "asciiInitials", or "asciiSurname" attributes have values, the "fullname" attribute is required.
                   </p>
                </div>
             </section>
@@ -1783,7 +1782,8 @@ blockquote > * .bcp14 {
             <h3 id="rfc.section.2.12"><a href="#rfc.section.2.12">2.12</a>&nbsp;<a href="#element.br"><span class="tt">&lt;br&gt;</span> </a></h3>
             <div id="rfc.section.2.12.p.1">
                <p>Indicates that a line break should be inserted in the generated output by a formatting tool. It is always expressed as &lt;br
-                  /&gt;. Multiple successive instances of this element do not cause blank lines to appear in the output, and is thus not useful.
+                  /&gt;. Multiple successive instances of this element are ignored. Successive instances with an intervening white space (such
+                  as "&lt;br /&gt; &lt;br /&gt;") will create a single blank line.
                </p>
             </div>
             <div id="rfc.section.2.12.p.2">
@@ -1961,15 +1961,15 @@ blockquote > * .bcp14 {
                      the prep tool uses this date to compute the expiration date (see <a href="#IDGUIDE" id="rfc.xref.IDGUIDE.2"><cite title="Guidelines to Authors of Internet-Drafts">[IDGUIDE]</cite></a>). When one or more of "year", "month", or "day" are left out, the prep tool will attempt to use the current system date if
                      the attributes that are present are consistent with that date.
                   </dd>
-                  <dd>If given, the month must be a number or a month in English. The prep tool will silently change text month names to numbers.
-                     The year must be a four-digit number.
+                  <dd>In dates in &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; elements, the month must be a number or a month in English. The prep tool will silently change text month names to numbers.
+                     Similarly, the year must be a four-digit number.
                   </dd>
                   <dd>When the prep tool is used to create Internet-Drafts, it will reject a submitted Internet-Draft that has a &lt;<a href="#element.date" class="smpl">date</a>&gt; element in the boilerplate for itself that is anything other than today. That is, the tool will not allow a submitter to
                      specify a date other than the day of submission. To avoid this problem, authors might simply not include a &lt;<a href="#element.date" class="smpl">date</a>&gt; element in the boilerplate.
                   </dd>
                   <dt>Bibliographic references:</dt>
-                  <dd>The date information can have prose text for the month or year. For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
-                     non-specific months (month="Second quarter") and so on are allowed.
+                  <dd>In dates in &lt;<a href="#element.reference" class="smpl">reference</a>&gt; elements, the date information can have prose text for the month or year. For example, vague dates (year="ca. 2000"), date
+                     ranges (year="2012-2013"), non-specific months (month="Second quarter") and so on are allowed.
                   </dd>
                </dl>
             </div>
@@ -3782,7 +3782,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.45.9"><a href="#rfc.section.2.45.9">2.45.9</a>&nbsp;<a href="#element.rfc.attribute.prepTime">"prepTime" Attribute</a></h4>
                <div id="rfc.section.2.45.9.p.1">
                   <p>The date that the XML was processed by a prep tool. This is included in the XML file just before it is saved to disk. The
-                     value is formatted using the format from <a href="#RFC3339" id="rfc.xref.RFC3339.1"><cite title="Date and Time on the Internet: Timestamps">[RFC3339]</cite></a>.
+                     value is formatted using the 'date-time' format defined in Section 5.6 of <a href="#RFC3339" id="rfc.xref.RFC3339.1"><cite title="Date and Time on the Internet: Timestamps">[RFC3339]</cite></a>. The "time-offset" should be "Z".
                   </p>
                </div>
             </section>
@@ -3985,8 +3985,8 @@ blockquote > * .bcp14 {
             <section id="element.section.attribute.removeInRFC">
                <h4 id="rfc.section.2.46.3"><a href="#rfc.section.2.46.3">2.46.3</a>&nbsp;<a href="#element.section.attribute.removeInRFC">"removeInRFC" Attribute</a></h4>
                <div id="rfc.section.2.46.3.p.1">
-                  <p>If set to "true", the formatter is requested to mark this section with a paragraph at the beginning of the section indicating
-                     that it should be removed before the document is published as an RFC.
+                  <p>If set to "true", this note is marked in the prep tool with text indicating that it should be removed before the document
+                     is published as an RFC. That text will be &#8220;This note is to be removed before publishing as an RFC.&#8221;.
                   </p>
                </div>
                <div id="rfc.section.2.46.3.p.2" class="avoidbreakafter">
@@ -4757,7 +4757,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.56.3"><a href="#rfc.section.2.56.3">2.56.3</a>&nbsp;<a href="#element.td.attribute.colspan">"colspan" Attribute</a></h4>
                <div id="rfc.section.2.56.3.p.1">
                   <p>The number of columns that the cell is to span. For example, setting "colspan='3'" indicates that the cell occupies the same
-                     horizontal space as three cells in the row above or below this one.
+                     horizontal space as three cells of a row without any "colspan" attributes.
                   </p>
                </div>
             </section>
@@ -4931,7 +4931,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.58.3"><a href="#rfc.section.2.58.3">2.58.3</a>&nbsp;<a href="#element.th.attribute.colspan">"colspan" Attribute</a></h4>
                <div id="rfc.section.2.58.3.p.1">
                   <p>The number of columns that the cell is to span. For example, setting "colspan='3'" indicates that the cell occupies the same
-                     horizontal space as three cells in the row above or below this one.
+                     horizontal space as three cells of a row without any "colspan" attributes.
                   </p>
                </div>
             </section>
@@ -6348,7 +6348,7 @@ Using CDATA:
             </div>
             <div id="rfc.section.B.2.p.2">
                <p>Authors can leave anchors in a document that can later be used for references with the "anchor" attribute. Anchors can be
-                  included in the following elements: &lt;<a href="#element.artwork" class="smpl">artwork</a>&gt;, &lt;<a href="#element.aside" class="smpl">aside</a>&gt;, &lt;<a href="#element.blockquote" class="smpl">blockquote</a>&gt;, &lt;<a href="#element.cref" class="smpl">cref</a>&gt;, &lt;<a href="#element.figure" class="smpl">figure</a>&gt;, &lt;<a href="#element.li" class="smpl">li</a>&gt;, &lt;<a href="#element.reference" class="smpl">reference</a>&gt;, &lt;<a href="#element.referencegroup" class="smpl">referencegroup</a>&gt;, &lt;<a href="#element.section" class="smpl">section</a>&gt;, &lt;<a href="#element.sourcecode" class="smpl">sourcecode</a>&gt;, &lt;<a href="#element.t" class="smpl">t</a>&gt;, and &lt;<a href="#element.table" class="smpl">table</a>&gt;. The author can then refer to that anchor in the "target" attribute of the &lt;<a href="#element.xref" class="smpl">xref</a>&gt; element.
+                  included in the numerous elements. The author can then refer to that anchor in the "target" attribute of the &lt;<a href="#element.xref" class="smpl">xref</a>&gt; element.
                </p>
             </div>
             <div id="rfc.section.B.2.p.3">
