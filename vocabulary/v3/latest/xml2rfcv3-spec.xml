@@ -544,8 +544,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <t>
             The full name (used in the automatically generated "Author's Address" section).
             Although this attribute is optional, if one or more of the "asciiFullname", "asciiInitials",
-            or "asciiSurname" attributes have values, the "fullname" attribute will be required by
-            tools preparing Internet-Drafts or RFCs.
+            or "asciiSurname" attributes have values, the "fullname" attribute is required.
       </t>
    </section>
 
@@ -815,9 +814,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="br element" primary="true"/>
    <t>
       Indicates that a line break should be inserted in the generated output by a formatting tool.
-      It is always expressed as &lt;br /&gt;.
-      Multiple successive instances of this element do not cause blank lines to appear in the output,
-      and is thus not useful.
+      Multiple successive instances of this element are ignored.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>) and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.br.contents"><!--AG-->
@@ -1018,9 +1015,9 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       date.
    </t>
          <t>
-      If given, the month must be a number or a month in English. 
+      In dates in &lt;<x:ref>rfc</x:ref>&gt; elements, the month must be a number or a month in English. 
       The prep tool will silently change text month names to numbers.
-      The year must be a four-digit number.
+      Similarly, the year must be a four-digit number.
    </t>
          <t>
       When the prep tool is used to create Internet-Drafts, it will reject a submitted Internet-Draft that has a &lt;<x:ref>date</x:ref>&gt;
@@ -1029,7 +1026,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       authors might simply not include a &lt;<x:ref>date</x:ref>&gt; element in the boilerplate.
    </t>
          <t hangText="Bibliographic references:">
-      The date information can have prose text for the month or year.
+      In dates in &lt;<x:ref>reference</x:ref>&gt; elements, the date information can have prose text for the month or year.
       For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
       non-specific months (month="Second quarter") and so on are allowed.
    </t>
@@ -2738,7 +2735,8 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       An example of the &lt;relref&gt; element with text content might be:
 <figure>
          <artwork>
-      See &lt;relref section="2.3" target="RFC7878" displayFormat="bare"&gt;
+      See
+      &lt;relref section="2.3" target="RFC7878" displayFormat="bare"&gt;
       the protocol overview&lt;/relref&gt;
       for more information.
 </artwork>
@@ -3009,7 +3007,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             replaced by "false" (the default) and "true".
       </t>
       <t>
-            See <xref target="RFC5741"/> for more information.
+            See <xref target="RFC7841"/> for more information.
       </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -3112,7 +3110,8 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <t>
          The date that the XML was processed by a prep tool.
          This is included in the XML file just before it is saved to disk.
-         The value is formatted using the format from <xref target="RFC3339"/>.
+         The value is formatted using the 'date-time' format defined in Section 5.6 of <xref target="RFC3339"/>.
+         The "time-offset" should be "Z".
       </t>
    </section>
 
@@ -3153,7 +3152,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             The document stream.
          </t>
       <t>
-            See <xref target="RFC5741" x:fmt="of" x:sec="2"/> for details.
+            See <xref target="RFC7841" x:fmt="of" x:sec="2"/> for details.
          </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -3346,9 +3345,9 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="section element" subitem="removeInRFC attribute"/>
       <iref item="removeInRFC attribute" subitem="in section element"/>
       <t>
-         If set to "true", the formatter is requested to mark this section with a paragraph at the beginning of the section
-         indicating that it should be
+         If set to "true", this note is marked in the prep tool with text indicating that it should be
          removed before the document is published as an RFC.
+         That text will be “This note is to be removed before publishing as an RFC.”.
       </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -4082,21 +4081,47 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
     </t>
    <t><!--AG-->Either:</t>
    <ul empty="true"><!--AG-->
+      <t><!--AG-->
+    One or more sequences of:
+  </t>
+      <ol><!--AG-->
           
-      <li><!--AG-->
-         <iref item="Elements" subitem="t"/>
-         <iref item="t element" subitem="inside td"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</li>
+         <li><!--AG-->
+            <iref item="Elements" subitem="artwork"/>
+            <iref item="artwork element" subitem="inside td"/>One &lt;<x:ref>artwork</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="dl"/>
+            <iref item="dl element" subitem="inside td"/>One &lt;<x:ref>dl</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="figure"/>
+            <iref item="figure element" subitem="inside td"/>One &lt;<x:ref>figure</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="ol"/>
+            <iref item="ol element" subitem="inside td"/>One &lt;<x:ref>ol</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="sourcecode"/>
+            <iref item="sourcecode element" subitem="inside td"/>One &lt;<x:ref>sourcecode</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="t"/>
+            <iref item="t element" subitem="inside td"/>One &lt;<x:ref>t</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="ul"/>
+            <iref item="ul element" subitem="inside td"/>One &lt;<x:ref>ul</x:ref>&gt; element</li>
         
+      </ol>
    </ul>
    <t><!--AG-->Or:</t>
    <ul empty="true"><!--AG-->
       <li><!--AG-->
-         <t>In any order, but at least one of:</t>
+         <t>In any order:</t>
          <ul><!--AG-->
             <li><!--AG-->Text</li>
-            <li><!--AG-->
-               <iref item="Elements" subitem="artwork"/>
-               <iref item="artwork element" subitem="inside td"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</li>
             <li><!--AG-->
                <iref item="Elements" subitem="bcp14"/>
                <iref item="bcp14 element" subitem="inside td"/>&lt;<x:ref>bcp14</x:ref>&gt; elements (<xref target="element.bcp14"/>)</li>
@@ -4107,29 +4132,17 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
                <iref item="Elements" subitem="cref"/>
                <iref item="cref element" subitem="inside td"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</li>
             <li><!--AG-->
-               <iref item="Elements" subitem="dl"/>
-               <iref item="dl element" subitem="inside td"/>&lt;<x:ref>dl</x:ref>&gt; elements (<xref target="element.dl"/>)</li>
-            <li><!--AG-->
                <iref item="Elements" subitem="em"/>
                <iref item="em element" subitem="inside td"/>&lt;<x:ref>em</x:ref>&gt; elements (<xref target="element.em"/>)</li>
             <li><!--AG-->
                <iref item="Elements" subitem="eref"/>
                <iref item="eref element" subitem="inside td"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</li>
             <li><!--AG-->
-               <iref item="Elements" subitem="figure"/>
-               <iref item="figure element" subitem="inside td"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</li>
-            <li><!--AG-->
                <iref item="Elements" subitem="iref"/>
                <iref item="iref element" subitem="inside td"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</li>
             <li><!--AG-->
-               <iref item="Elements" subitem="ol"/>
-               <iref item="ol element" subitem="inside td"/>&lt;<x:ref>ol</x:ref>&gt; elements (<xref target="element.ol"/>)</li>
-            <li><!--AG-->
                <iref item="Elements" subitem="relref"/>
                <iref item="relref element" subitem="inside td"/>&lt;<x:ref>relref</x:ref>&gt; elements (<xref target="element.relref"/>)</li>
-            <li><!--AG-->
-               <iref item="Elements" subitem="sourcecode"/>
-               <iref item="sourcecode element" subitem="inside td"/>&lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</li>
             <li><!--AG-->
                <iref item="Elements" subitem="strong"/>
                <iref item="strong element" subitem="inside td"/>&lt;<x:ref>strong</x:ref>&gt; elements (<xref target="element.strong"/>)</li>
@@ -4142,9 +4155,6 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             <li><!--AG-->
                <iref item="Elements" subitem="tt"/>
                <iref item="tt element" subitem="inside td"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</li>
-            <li><!--AG-->
-               <iref item="Elements" subitem="ul"/>
-               <iref item="ul element" subitem="inside td"/>&lt;<x:ref>ul</x:ref>&gt; elements (<xref target="element.ul"/>)</li>
             <li><!--AG-->
                <iref item="Elements" subitem="xref"/>
                <iref item="xref element" subitem="inside td"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</li>
@@ -4190,8 +4200,8 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="colspan attribute" subitem="in td element"/>
       <t>
          The number of columns that the cell is to span. For example, setting "colspan='3'"
-         indicates that the cell occupies the same horizontal space as three cells in the
-         row above or below this one.
+         indicates that the cell occupies the same horizontal space as three cells of
+         a row without any "colspan" attributes.
       </t>
    </section>
 
@@ -4259,21 +4269,47 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
     </t>
    <t><!--AG-->Either:</t>
    <ul empty="true"><!--AG-->
+      <t><!--AG-->
+    One or more sequences of:
+  </t>
+      <ol><!--AG-->
           
-      <li><!--AG-->
-         <iref item="Elements" subitem="t"/>
-         <iref item="t element" subitem="inside th"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</li>
+         <li><!--AG-->
+            <iref item="Elements" subitem="artwork"/>
+            <iref item="artwork element" subitem="inside th"/>One &lt;<x:ref>artwork</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="dl"/>
+            <iref item="dl element" subitem="inside th"/>One &lt;<x:ref>dl</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="figure"/>
+            <iref item="figure element" subitem="inside th"/>One &lt;<x:ref>figure</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="ol"/>
+            <iref item="ol element" subitem="inside th"/>One &lt;<x:ref>ol</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="sourcecode"/>
+            <iref item="sourcecode element" subitem="inside th"/>One &lt;<x:ref>sourcecode</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="t"/>
+            <iref item="t element" subitem="inside th"/>One &lt;<x:ref>t</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="ul"/>
+            <iref item="ul element" subitem="inside th"/>One &lt;<x:ref>ul</x:ref>&gt; element</li>
         
+      </ol>
    </ul>
    <t><!--AG-->Or:</t>
    <ul empty="true"><!--AG-->
       <li><!--AG-->
-         <t>In any order, but at least one of:</t>
+         <t>In any order:</t>
          <ul><!--AG-->
             <li><!--AG-->Text</li>
-            <li><!--AG-->
-               <iref item="Elements" subitem="artwork"/>
-               <iref item="artwork element" subitem="inside th"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</li>
             <li><!--AG-->
                <iref item="Elements" subitem="bcp14"/>
                <iref item="bcp14 element" subitem="inside th"/>&lt;<x:ref>bcp14</x:ref>&gt; elements (<xref target="element.bcp14"/>)</li>
@@ -4284,29 +4320,17 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
                <iref item="Elements" subitem="cref"/>
                <iref item="cref element" subitem="inside th"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</li>
             <li><!--AG-->
-               <iref item="Elements" subitem="dl"/>
-               <iref item="dl element" subitem="inside th"/>&lt;<x:ref>dl</x:ref>&gt; elements (<xref target="element.dl"/>)</li>
-            <li><!--AG-->
                <iref item="Elements" subitem="em"/>
                <iref item="em element" subitem="inside th"/>&lt;<x:ref>em</x:ref>&gt; elements (<xref target="element.em"/>)</li>
             <li><!--AG-->
                <iref item="Elements" subitem="eref"/>
                <iref item="eref element" subitem="inside th"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</li>
             <li><!--AG-->
-               <iref item="Elements" subitem="figure"/>
-               <iref item="figure element" subitem="inside th"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</li>
-            <li><!--AG-->
                <iref item="Elements" subitem="iref"/>
                <iref item="iref element" subitem="inside th"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</li>
             <li><!--AG-->
-               <iref item="Elements" subitem="ol"/>
-               <iref item="ol element" subitem="inside th"/>&lt;<x:ref>ol</x:ref>&gt; elements (<xref target="element.ol"/>)</li>
-            <li><!--AG-->
                <iref item="Elements" subitem="relref"/>
                <iref item="relref element" subitem="inside th"/>&lt;<x:ref>relref</x:ref>&gt; elements (<xref target="element.relref"/>)</li>
-            <li><!--AG-->
-               <iref item="Elements" subitem="sourcecode"/>
-               <iref item="sourcecode element" subitem="inside th"/>&lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</li>
             <li><!--AG-->
                <iref item="Elements" subitem="strong"/>
                <iref item="strong element" subitem="inside th"/>&lt;<x:ref>strong</x:ref>&gt; elements (<xref target="element.strong"/>)</li>
@@ -4319,9 +4343,6 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             <li><!--AG-->
                <iref item="Elements" subitem="tt"/>
                <iref item="tt element" subitem="inside th"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</li>
-            <li><!--AG-->
-               <iref item="Elements" subitem="ul"/>
-               <iref item="ul element" subitem="inside th"/>&lt;<x:ref>ul</x:ref>&gt; elements (<xref target="element.ul"/>)</li>
             <li><!--AG-->
                <iref item="Elements" subitem="xref"/>
                <iref item="xref element" subitem="inside th"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</li>
@@ -4367,8 +4388,8 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="colspan attribute" subitem="in th element"/>
       <t>
          The number of columns that the cell is to span. For example, setting "colspan='3'"
-         indicates that the cell occupies the same horizontal space as three cells in the
-         row above or below this one.
+         indicates that the cell occupies the same horizontal space as three cells of
+         a row without any "colspan" attributes.
       </t>
    </section>
 

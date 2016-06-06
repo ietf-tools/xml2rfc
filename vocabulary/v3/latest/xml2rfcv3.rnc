@@ -696,26 +696,20 @@ td =
     [ a:defaultValue = "0" ] attribute rowspan { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
-    (t+
+    ((artwork, dl, figure, ol, sourcecode, t, ul)+
      | (text
-        | artwork
         | bcp14
         | br
         | cref
-        | dl
         | em
         | eref
-        | figure
         | iref
-        | ol
         | relref
-        | sourcecode
         | strong
         | sub
         | sup
         | tt
-        | ul
-        | xref)+)
+        | xref)*)
   }
 th =
   element th {
@@ -726,26 +720,20 @@ th =
     [ a:defaultValue = "0" ] attribute rowspan { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
-    (t+
+    ((artwork, dl, figure, ol, sourcecode, t, ul)+
      | (text
-        | artwork
         | bcp14
         | br
         | cref
-        | dl
         | em
         | eref
-        | figure
         | iref
-        | ol
         | relref
-        | sourcecode
         | strong
         | sub
         | sup
         | tt
-        | ul
-        | xref)+)
+        | xref)*)
   }
 postamble =
   element postamble {

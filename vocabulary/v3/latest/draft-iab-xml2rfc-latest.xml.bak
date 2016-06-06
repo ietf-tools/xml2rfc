@@ -13,6 +13,8 @@
 
 <!--
 
+#### Need an unpreptool ###
+
 rfc/@submissionType is now duplicated in seriesInfo/stream. This needs to be rectified.
 	rfc/@submissionType is in v2
 
@@ -45,7 +47,6 @@ Joe responded
 <!ENTITY rfc3986 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml">
 <!ENTITY rfc5234 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml">
 <!ENTITY rfc5378 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5378.xml">
-<!ENTITY rfc5741 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5741.xml">
 <!ENTITY rfc5743 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5743.xml">
 <!ENTITY rfc6068 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6068.xml">
 <!ENTITY rfc6266 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6266.xml">
@@ -54,6 +55,7 @@ Joe responded
 <!ENTITY rfc7322 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7322.xml">
 <!ENTITY rfc7669 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7669.xml">
 <!ENTITY rfc7749 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7749.xml">
+<!ENTITY rfc7841 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7841.xml">
 ]>
 
 <rfc xmlns:x="http://purl.org/net/xml2rfc/ext" obsoletes="7749" xmlns:ed="http://greenbytes.de/2002/rfcedit" ipr="trust200902" docName="draft-iab-xml2rfc-latest" category="info" xml:lang="en">
@@ -974,8 +976,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <t>
             The full name (used in the automatically generated "Author's Address" section).
             Although this attribute is optional, if one or more of the "asciiFullname", "asciiInitials",
-            or "asciiSurname" attributes have values, the "fullname" attribute will be required by
-            tools preparing Internet-Drafts or RFCs.
+            or "asciiSurname" attributes have values, the "fullname" attribute is required.
       </t>
    </section>
 
@@ -1245,9 +1246,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="br element" primary="true"/>
    <t>
       Indicates that a line break should be inserted in the generated output by a formatting tool.
-      It is always expressed as &lt;br /&gt;.
-      Multiple successive instances of this element do not cause blank lines to appear in the output,
-      and is thus not useful.
+      Multiple successive instances of this element are ignored.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>) and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.br.contents"><!--AG-->
@@ -1448,9 +1447,9 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       date.
    </t>
          <t>
-      If given, the month must be a number or a month in English. 
+      In dates in &lt;<x:ref>rfc</x:ref>&gt; elements, the month must be a number or a month in English. 
       The prep tool will silently change text month names to numbers.
-      The year must be a four-digit number.
+      Similarly, the year must be a four-digit number.
    </t>
          <t>
       When the prep tool is used to create Internet-Drafts, it will reject a submitted Internet-Draft that has a &lt;<x:ref>date</x:ref>&gt;
@@ -1459,7 +1458,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       authors might simply not include a &lt;<x:ref>date</x:ref>&gt; element in the boilerplate.
    </t>
          <t hangText="Bibliographic references:">
-      The date information can have prose text for the month or year.
+      In dates in &lt;<x:ref>reference</x:ref>&gt; elements, the date information can have prose text for the month or year.
       For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
       non-specific months (month="Second quarter") and so on are allowed.
    </t>
@@ -3168,7 +3167,8 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       An example of the &lt;relref&gt; element with text content might be:
 <figure>
          <artwork>
-      See &lt;relref section="2.3" target="RFC7878" displayFormat="bare"&gt;
+      See
+      &lt;relref section="2.3" target="RFC7878" displayFormat="bare"&gt;
       the protocol overview&lt;/relref&gt;
       for more information.
 </artwork>
@@ -3358,7 +3358,8 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
 
    <!--relref/@section-->
    <section anchor="element.relref.attribute.section" toc="exclude">
-      <name>"section" Attribute</name>
+      <name>"section" Attribute <em> (Mandatory)</em>
+      </name>
       <iref item="Attributes" subitem="section"/>
       <iref item="relref element" subitem="section attribute"/>
       <iref item="section attribute" subitem="in relref element"/>
@@ -3438,7 +3439,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             replaced by "false" (the default) and "true".
       </t>
       <t>
-            See <xref target="RFC5741"/> for more information.
+            See <xref target="RFC7841"/> for more information.
       </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -3541,7 +3542,8 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <t>
          The date that the XML was processed by a prep tool.
          This is included in the XML file just before it is saved to disk.
-         The value is formatted using the format from <xref target="RFC3339"/>.
+         The value is formatted using the 'date-time' format defined in Section 5.6 of <xref target="RFC3339"/>.
+         The "time-offset" should be "Z".
       </t>
    </section>
 
@@ -3582,7 +3584,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             The document stream.
          </t>
       <t>
-            See <xref target="RFC5741" x:fmt="of" x:sec="2"/> for details.
+            See <xref target="RFC7841" x:fmt="of" x:sec="2"/> for details.
          </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -3775,9 +3777,9 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="section element" subitem="removeInRFC attribute"/>
       <iref item="removeInRFC attribute" subitem="in section element"/>
       <t>
-         If set to "true", the formatter is requested to mark this section with a paragraph at the beginning of the section
-         indicating that it should be
+         If set to "true", this note is marked in the prep tool with text indicating that it should be
          removed before the document is published as an RFC.
+         That text will be “This note is to be removed before publishing as an RFC.”.
       </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -4511,21 +4513,47 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
     </t>
    <t><!--AG-->Either:</t>
    <ul empty="true"><!--AG-->
+      <t><!--AG-->
+    One or more sequences of:
+  </t>
+      <ol><!--AG-->
           
-      <li><!--AG-->
-         <iref item="Elements" subitem="t"/>
-         <iref item="t element" subitem="inside td"/>One or more &lt;<x:ref>t</x:ref>&gt; elements (<xref target="element.t"/>)</li>
+         <li><!--AG-->
+            <iref item="Elements" subitem="artwork"/>
+            <iref item="artwork element" subitem="inside td"/>One &lt;<x:ref>artwork</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="dl"/>
+            <iref item="dl element" subitem="inside td"/>One &lt;<x:ref>dl</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="figure"/>
+            <iref item="figure element" subitem="inside td"/>One &lt;<x:ref>figure</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="ol"/>
+            <iref item="ol element" subitem="inside td"/>One &lt;<x:ref>ol</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="sourcecode"/>
+            <iref item="sourcecode element" subitem="inside td"/>One &lt;<x:ref>sourcecode</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="t"/>
+            <iref item="t element" subitem="inside td"/>One &lt;<x:ref>t</x:ref>&gt; element</li>
+          
+         <li><!--AG-->
+            <iref item="Elements" subitem="ul"/>
+            <iref item="ul element" subitem="inside td"/>One &lt;<x:ref>ul</x:ref>&gt; element</li>
         
+      </ol>
    </ul>
    <t><!--AG-->Or:</t>
    <ul empty="true"><!--AG-->
       <li><!--AG-->
-         <t>In any order, but at least one of:</t>
+         <t>In any order:</t>
          <ul><!--AG-->
             <li><!--AG-->Text</li>
-            <li><!--AG-->
-               <iref item="Elements" subitem="artwork"/>
-               <iref item="artwork element" subitem="inside td"/>&lt;<x:ref>artwork</x:ref>&gt; elements (<xref target="element.artwork"/>)</li>
             <li><!--AG-->
                <iref item="Elements" subitem="bcp14"/>
                <iref item="bcp14 element" subitem="inside td"/>&lt;<x:ref>bcp14</x:ref>&gt; elements (<xref target="element.bcp14"/>)</li>
@@ -4536,29 +4564,17 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
                <iref item="Elements" subitem="cref"/>
                <iref item="cref element" subitem="inside td"/>&lt;<x:ref>cref</x:ref>&gt; elements (<xref target="element.cref"/>)</li>
             <li><!--AG-->
-               <iref item="Elements" subitem="dl"/>
-               <iref item="dl element" subitem="inside td"/>&lt;<x:ref>dl</x:ref>&gt; elements (<xref target="element.dl"/>)</li>
-            <li><!--AG-->
                <iref item="Elements" subitem="em"/>
                <iref item="em element" subitem="inside td"/>&lt;<x:ref>em</x:ref>&gt; elements (<xref target="element.em"/>)</li>
             <li><!--AG-->
                <iref item="Elements" subitem="eref"/>
                <iref item="eref element" subitem="inside td"/>&lt;<x:ref>eref</x:ref>&gt; elements (<xref target="element.eref"/>)</li>
             <li><!--AG-->
-               <iref item="Elements" subitem="figure"/>
-               <iref item="figure element" subitem="inside td"/>&lt;<x:ref>figure</x:ref>&gt; elements (<xref target="element.figure"/>)</li>
-            <li><!--AG-->
                <iref item="Elements" subitem="iref"/>
                <iref item="iref element" subitem="inside td"/>&lt;<x:ref>iref</x:ref>&gt; elements (<xref target="element.iref"/>)</li>
             <li><!--AG-->
-               <iref item="Elements" subitem="ol"/>
-               <iref item="ol element" subitem="inside td"/>&lt;<x:ref>ol</x:ref>&gt; elements (<xref target="element.ol"/>)</li>
-            <li><!--AG-->
                <iref item="Elements" subitem="relref"/>
                <iref item="relref element" subitem="inside td"/>&lt;<x:ref>relref</x:ref>&gt; elements (<xref target="element.relref"/>)</li>
-            <li><!--AG-->
-               <iref item="Elements" subitem="sourcecode"/>
-               <iref item="sourcecode element" subitem="inside td"/>&lt;<x:ref>sourcecode</x:ref>&gt; elements (<xref target="element.sourcecode"/>)</li>
             <li><!--AG-->
                <iref item="Elements" subitem="strong"/>
                <iref item="strong element" subitem="inside td"/>&lt;<x:ref>strong</x:ref>&gt; elements (<xref target="element.strong"/>)</li>
@@ -4571,9 +4587,6 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             <li><!--AG-->
                <iref item="Elements" subitem="tt"/>
                <iref item="tt element" subitem="inside td"/>&lt;<x:ref>tt</x:ref>&gt; elements (<xref target="element.tt"/>)</li>
-            <li><!--AG-->
-               <iref item="Elements" subitem="ul"/>
-               <iref item="ul element" subitem="inside td"/>&lt;<x:ref>ul</x:ref>&gt; elements (<xref target="element.ul"/>)</li>
             <li><!--AG-->
                <iref item="Elements" subitem="xref"/>
                <iref item="xref element" subitem="inside td"/>&lt;<x:ref>xref</x:ref>&gt; elements (<xref target="element.xref"/>)</li>
@@ -4619,8 +4632,8 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="colspan attribute" subitem="in td element"/>
       <t>
          The number of columns that the cell is to span. For example, setting "colspan='3'"
-         indicates that the cell occupies the same horizontal space as three cells in the
-         row above or below this one.
+         indicates that the cell occupies the same horizontal space as three cells of
+         a row without any "colspan" attributes.
       </t>
    </section>
 
@@ -4796,8 +4809,8 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="colspan attribute" subitem="in th element"/>
       <t>
          The number of columns that the cell is to span. For example, setting "colspan='3'"
-         indicates that the cell occupies the same horizontal space as three cells in the
-         row above or below this one.
+         indicates that the cell occupies the same horizontal space as three cells of
+         a row without any "colspan" attributes.
       </t>
    </section>
 
@@ -6024,7 +6037,6 @@ Suzanne Woolf
 &rfc3986;
 &rfc5234;
 &rfc5378;
-&rfc5741;
 &rfc5743;
 &rfc6068;
 &rfc6266;
@@ -6033,6 +6045,7 @@ Suzanne Woolf
 &rfc7322;
 &rfc7669;
 &rfc7749;
+&rfc7841;
 
   <reference anchor="RNC" target="https://www.oasis-open.org/committees/relax-ng/compact-20021121.html">
     <front>
@@ -6402,7 +6415,7 @@ are believed to be the current values in use.</t>
 <t>
   Historically, this attribute did not affect the final appearance of RFCs, except for
   subtle differences in copyright notices.
-  Nowadays (as of <xref target="RFC5741"/>), the stream name appears in the first
+  Nowadays (as of <xref target="RFC7841"/>), the stream name appears in the first
   line of the front page, and it also affects the text in the "Status of This Memo"
   section.
 </t>
@@ -6417,7 +6430,7 @@ are believed to be the current values in use.</t>
     </t>
     <t>
       For RFCs, it affects the whole "Status of This Memo" section (see
-      <xref x:sec="3.2.2" x:fmt="of" target="RFC5741"/>).
+      <xref x:sec="3.2" x:fmt="of" target="RFC7841"/>).
     </t>
     <t>
       For all RFCs and Internet-Drafts, it determines whether the "Copyright
@@ -6432,7 +6445,7 @@ are believed to be the current values in use.</t>
 <t>
   For some of the publication streams (see <xref target="attribute-submissiontype"/>),
   the "Status of This Memo" section depends on whether there was a consensus
-  to publish (again, see <xref x:sec="3.2.2" x:fmt="of" target="RFC5741"/>).
+  to publish (again, see <xref x:sec="3.4" x:fmt="of" target="RFC7841"/>).
 </t>
 <t>
   The consensus attribute
@@ -6569,11 +6582,7 @@ didn't write, such as "see Section 3.2 of RFC 6949".
 The XML vocabulary in this document attempts to support both sets of people.</t>
 
 <t>Authors can leave anchors in a document that can later be used for references with the "anchor"
-attribute. Anchors can be included in the following elements: &lt;<x:ref>artwork</x:ref>&gt;,
-&lt;<x:ref>aside</x:ref>&gt;, &lt;<x:ref>blockquote</x:ref>&gt;,  &lt;<x:ref>cref</x:ref>&gt;,
-&lt;<x:ref>figure</x:ref>&gt;, &lt;<x:ref>li</x:ref>&gt;, &lt;<x:ref>reference</x:ref>&gt;,
-&lt;<x:ref>referencegroup</x:ref>&gt;, &lt;<x:ref>section</x:ref>&gt;,
-&lt;<x:ref>sourcecode</x:ref>&gt;, &lt;<x:ref>t</x:ref>&gt;, and &lt;<x:ref>table</x:ref>&gt;. The
+attribute. Anchors can be included in the numerous elements. The
 author can then refer to that anchor in the "target" attribute of the &lt;<x:ref>xref</x:ref>&gt;
 element.</t>
 
@@ -7206,9 +7215,8 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     attribute target { xsd:IDREF },
     [ a:defaultValue = "of" ]
     attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
-    (attribute section { text },
-     attribute relative { text }?)?,
-    attribute derivedRemoteContent { text }?,
+    attribute section { text },
+    attribute relative { text }?,
     attribute derivedLink { text }?,
     text
   }
@@ -7475,26 +7483,20 @@ include "svg.rnc"
     [ a:defaultValue = "0" ] attribute rowspan { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
-    (t+
+    ((artwork, dl, figure, ol, sourcecode, t, ul)+
      | (text
-        | artwork
         | bcp14
         | br
         | cref
-        | dl
         | em
         | eref
-        | figure
         | iref
-        | ol
         | relref
-        | sourcecode
         | strong
         | sub
         | sup
         | tt
-        | ul
-        | xref)+)
+        | xref)*)
   }
 
 <strong anchor="grammar.th">th</strong><iref item="th element"/> =
@@ -8203,9 +8205,8 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "of" ]
 +     attribute displayFormat { "of" | "comma" | "parens" | "bare" 
   }?,
-+     (attribute section { text },
-+      attribute relative { text }?)?,
-+     attribute derivedRemoteContent { text }?,
++     attribute section { text },
++     attribute relative { text }?,
 +     attribute derivedLink { text }?,
       text
     }
@@ -8459,26 +8460,20 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "0" ] attribute rowspan { text }?,
 +     [ a:defaultValue = "left" ]
 +     attribute align { "left" | "center" | "right" }?,
-+     (t+
++     ((artwork, dl, figure, ol, sourcecode, t, ul)+
 +      | (text
-+         | artwork
 +         | bcp14
 +         | br
 +         | cref
-+         | dl
 +         | em
 +         | eref
-+         | figure
 +         | iref
-+         | ol
 +         | relref
-+         | sourcecode
 +         | strong
 +         | sub
 +         | sup
 +         | tt
-+         | ul
-+         | xref)+)
++         | xref)*)
 +   }
 + th =
 +   element th {

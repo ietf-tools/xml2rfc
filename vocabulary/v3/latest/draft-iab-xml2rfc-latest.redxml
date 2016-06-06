@@ -1199,9 +1199,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="br element" primary="true"/>
    <t>
       Indicates that a line break should be inserted in the generated output by a formatting tool.
-      It is always expressed as &lt;br /&gt;.
-      Multiple successive instances of this element are ignored. Successive instances with an
-      intervening white space (such as "&lt;br /&gt; &lt;br /&gt;") will create a single blank line.
+      Multiple successive instances of this element are ignored.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>) and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.br.contents"><!--AG-->
@@ -3319,7 +3317,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             replaced by "false" (the default) and "true".
       </t>
       <t>
-            See <xref target="RFC5741"/> for more information.
+            See <xref target="RFC7841"/> for more information.
       </t>
       <t><!--AG-->Allowed values:</t>
       <t><list style="symbols"><!--AG-->
@@ -3464,7 +3462,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             The document stream.
          </t>
       <t>
-            See Section 2 of <xref target="RFC5741"/> for details.
+            See Section 2 of <xref target="RFC7841"/> for details.
          </t>
       <t><!--AG-->Allowed values:</t>
       <t><list style="symbols"><!--AG-->
@@ -4369,21 +4367,47 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
     </t>
    <t><!--AG-->Either:</t>
    <t><list style="empty"><!--AG-->
-          
       <t><!--AG-->
-         <iref item="Elements" subitem="t"/>
-         <iref item="t element" subitem="inside td"/>One or more &lt;<xref target="element.t" format="none">t</xref>&gt; elements (<xref target="element.t"/>)</t>
+    One or more sequences of:
+  </t>
+      <t><list style="numbers"><!--AG-->
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="artwork"/>
+            <iref item="artwork element" subitem="inside td"/>One &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; element</t>
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="dl"/>
+            <iref item="dl element" subitem="inside td"/>One &lt;<xref target="element.dl" format="none">dl</xref>&gt; element</t>
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="figure"/>
+            <iref item="figure element" subitem="inside td"/>One &lt;<xref target="element.figure" format="none">figure</xref>&gt; element</t>
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="ol"/>
+            <iref item="ol element" subitem="inside td"/>One &lt;<xref target="element.ol" format="none">ol</xref>&gt; element</t>
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="sourcecode"/>
+            <iref item="sourcecode element" subitem="inside td"/>One &lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt; element</t>
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="t"/>
+            <iref item="t element" subitem="inside td"/>One &lt;<xref target="element.t" format="none">t</xref>&gt; element</t>
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="ul"/>
+            <iref item="ul element" subitem="inside td"/>One &lt;<xref target="element.ul" format="none">ul</xref>&gt; element</t>
         
+      </list></t>
    </list></t>
    <t><!--AG-->Or:</t>
    <t><list style="empty"><!--AG-->
       <t><!--AG-->
-         In any order, but at least one of:<vspace blankLines="1"/>
+         In any order:<vspace blankLines="1"/>
          <list style="symbols"><!--AG-->
             <t><!--AG-->Text</t>
-            <t><!--AG-->
-               <iref item="Elements" subitem="artwork"/>
-               <iref item="artwork element" subitem="inside td"/>&lt;<xref target="element.artwork" format="none">artwork</xref>&gt; elements (<xref target="element.artwork"/>)</t>
             <t><!--AG-->
                <iref item="Elements" subitem="bcp14"/>
                <iref item="bcp14 element" subitem="inside td"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -4394,29 +4418,17 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
                <iref item="Elements" subitem="cref"/>
                <iref item="cref element" subitem="inside td"/>&lt;<xref target="element.cref" format="none">cref</xref>&gt; elements (<xref target="element.cref"/>)</t>
             <t><!--AG-->
-               <iref item="Elements" subitem="dl"/>
-               <iref item="dl element" subitem="inside td"/>&lt;<xref target="element.dl" format="none">dl</xref>&gt; elements (<xref target="element.dl"/>)</t>
-            <t><!--AG-->
                <iref item="Elements" subitem="em"/>
                <iref item="em element" subitem="inside td"/>&lt;<xref target="element.em" format="none">em</xref>&gt; elements (<xref target="element.em"/>)</t>
             <t><!--AG-->
                <iref item="Elements" subitem="eref"/>
                <iref item="eref element" subitem="inside td"/>&lt;<xref target="element.eref" format="none">eref</xref>&gt; elements (<xref target="element.eref"/>)</t>
             <t><!--AG-->
-               <iref item="Elements" subitem="figure"/>
-               <iref item="figure element" subitem="inside td"/>&lt;<xref target="element.figure" format="none">figure</xref>&gt; elements (<xref target="element.figure"/>)</t>
-            <t><!--AG-->
                <iref item="Elements" subitem="iref"/>
                <iref item="iref element" subitem="inside td"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
             <t><!--AG-->
-               <iref item="Elements" subitem="ol"/>
-               <iref item="ol element" subitem="inside td"/>&lt;<xref target="element.ol" format="none">ol</xref>&gt; elements (<xref target="element.ol"/>)</t>
-            <t><!--AG-->
                <iref item="Elements" subitem="relref"/>
                <iref item="relref element" subitem="inside td"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
-            <t><!--AG-->
-               <iref item="Elements" subitem="sourcecode"/>
-               <iref item="sourcecode element" subitem="inside td"/>&lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt; elements (<xref target="element.sourcecode"/>)</t>
             <t><!--AG-->
                <iref item="Elements" subitem="strong"/>
                <iref item="strong element" subitem="inside td"/>&lt;<xref target="element.strong" format="none">strong</xref>&gt; elements (<xref target="element.strong"/>)</t>
@@ -4429,9 +4441,6 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             <t><!--AG-->
                <iref item="Elements" subitem="tt"/>
                <iref item="tt element" subitem="inside td"/>&lt;<xref target="element.tt" format="none">tt</xref>&gt; elements (<xref target="element.tt"/>)</t>
-            <t><!--AG-->
-               <iref item="Elements" subitem="ul"/>
-               <iref item="ul element" subitem="inside td"/>&lt;<xref target="element.ul" format="none">ul</xref>&gt; elements (<xref target="element.ul"/>)</t>
             <t><!--AG-->
                <iref item="Elements" subitem="xref"/>
                <iref item="xref element" subitem="inside td"/>&lt;<xref target="element.xref" format="none">xref</xref>&gt; elements (<xref target="element.xref"/>)</t>
@@ -4542,21 +4551,47 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
     </t>
    <t><!--AG-->Either:</t>
    <t><list style="empty"><!--AG-->
-          
       <t><!--AG-->
-         <iref item="Elements" subitem="t"/>
-         <iref item="t element" subitem="inside th"/>One or more &lt;<xref target="element.t" format="none">t</xref>&gt; elements (<xref target="element.t"/>)</t>
+    One or more sequences of:
+  </t>
+      <t><list style="numbers"><!--AG-->
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="artwork"/>
+            <iref item="artwork element" subitem="inside th"/>One &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; element</t>
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="dl"/>
+            <iref item="dl element" subitem="inside th"/>One &lt;<xref target="element.dl" format="none">dl</xref>&gt; element</t>
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="figure"/>
+            <iref item="figure element" subitem="inside th"/>One &lt;<xref target="element.figure" format="none">figure</xref>&gt; element</t>
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="ol"/>
+            <iref item="ol element" subitem="inside th"/>One &lt;<xref target="element.ol" format="none">ol</xref>&gt; element</t>
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="sourcecode"/>
+            <iref item="sourcecode element" subitem="inside th"/>One &lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt; element</t>
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="t"/>
+            <iref item="t element" subitem="inside th"/>One &lt;<xref target="element.t" format="none">t</xref>&gt; element</t>
+          
+         <t><!--AG-->
+            <iref item="Elements" subitem="ul"/>
+            <iref item="ul element" subitem="inside th"/>One &lt;<xref target="element.ul" format="none">ul</xref>&gt; element</t>
         
+      </list></t>
    </list></t>
    <t><!--AG-->Or:</t>
    <t><list style="empty"><!--AG-->
       <t><!--AG-->
-         In any order, but at least one of:<vspace blankLines="1"/>
+         In any order:<vspace blankLines="1"/>
          <list style="symbols"><!--AG-->
             <t><!--AG-->Text</t>
-            <t><!--AG-->
-               <iref item="Elements" subitem="artwork"/>
-               <iref item="artwork element" subitem="inside th"/>&lt;<xref target="element.artwork" format="none">artwork</xref>&gt; elements (<xref target="element.artwork"/>)</t>
             <t><!--AG-->
                <iref item="Elements" subitem="bcp14"/>
                <iref item="bcp14 element" subitem="inside th"/>&lt;<xref target="element.bcp14" format="none">bcp14</xref>&gt; elements (<xref target="element.bcp14"/>)</t>
@@ -4567,29 +4602,17 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
                <iref item="Elements" subitem="cref"/>
                <iref item="cref element" subitem="inside th"/>&lt;<xref target="element.cref" format="none">cref</xref>&gt; elements (<xref target="element.cref"/>)</t>
             <t><!--AG-->
-               <iref item="Elements" subitem="dl"/>
-               <iref item="dl element" subitem="inside th"/>&lt;<xref target="element.dl" format="none">dl</xref>&gt; elements (<xref target="element.dl"/>)</t>
-            <t><!--AG-->
                <iref item="Elements" subitem="em"/>
                <iref item="em element" subitem="inside th"/>&lt;<xref target="element.em" format="none">em</xref>&gt; elements (<xref target="element.em"/>)</t>
             <t><!--AG-->
                <iref item="Elements" subitem="eref"/>
                <iref item="eref element" subitem="inside th"/>&lt;<xref target="element.eref" format="none">eref</xref>&gt; elements (<xref target="element.eref"/>)</t>
             <t><!--AG-->
-               <iref item="Elements" subitem="figure"/>
-               <iref item="figure element" subitem="inside th"/>&lt;<xref target="element.figure" format="none">figure</xref>&gt; elements (<xref target="element.figure"/>)</t>
-            <t><!--AG-->
                <iref item="Elements" subitem="iref"/>
                <iref item="iref element" subitem="inside th"/>&lt;<xref target="element.iref" format="none">iref</xref>&gt; elements (<xref target="element.iref"/>)</t>
             <t><!--AG-->
-               <iref item="Elements" subitem="ol"/>
-               <iref item="ol element" subitem="inside th"/>&lt;<xref target="element.ol" format="none">ol</xref>&gt; elements (<xref target="element.ol"/>)</t>
-            <t><!--AG-->
                <iref item="Elements" subitem="relref"/>
                <iref item="relref element" subitem="inside th"/>&lt;<xref target="element.relref" format="none">relref</xref>&gt; elements (<xref target="element.relref"/>)</t>
-            <t><!--AG-->
-               <iref item="Elements" subitem="sourcecode"/>
-               <iref item="sourcecode element" subitem="inside th"/>&lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt; elements (<xref target="element.sourcecode"/>)</t>
             <t><!--AG-->
                <iref item="Elements" subitem="strong"/>
                <iref item="strong element" subitem="inside th"/>&lt;<xref target="element.strong" format="none">strong</xref>&gt; elements (<xref target="element.strong"/>)</t>
@@ -4602,9 +4625,6 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             <t><!--AG-->
                <iref item="Elements" subitem="tt"/>
                <iref item="tt element" subitem="inside th"/>&lt;<xref target="element.tt" format="none">tt</xref>&gt; elements (<xref target="element.tt"/>)</t>
-            <t><!--AG-->
-               <iref item="Elements" subitem="ul"/>
-               <iref item="ul element" subitem="inside th"/>&lt;<xref target="element.ul" format="none">ul</xref>&gt; elements (<xref target="element.ul"/>)</t>
             <t><!--AG-->
                <iref item="Elements" subitem="xref"/>
                <iref item="xref element" subitem="inside th"/>&lt;<xref target="element.xref" format="none">xref</xref>&gt; elements (<xref target="element.xref"/>)</t>
@@ -5939,17 +5959,6 @@ Suzanne Woolf
 
 
 
-<reference anchor="RFC5741" target="http://www.rfc-editor.org/info/rfc5741"><front>
-<title>RFC Streams, Headers, and Boilerplates</title>
-<author initials="L." surname="Daigle" fullname="L. Daigle" role="editor"><organization/></author>
-<author initials="O." surname="Kolkman" fullname="O. Kolkman" role="editor"><organization/></author>
-<author><organization>IAB</organization></author>
-<date year="2009" month="December"/>
-<abstract><t>RFC documents contain a number of fixed elements such as the title page header, standard boilerplates, and copyright/IPR statements. This document describes them and introduces some updates to reflect current usage and requirements of RFC publication.  In particular, this updated structure is intended to communicate clearly the source of RFC creation and review.  This document is not an Internet Standards  Track specification; it is published for informational purposes.</t></abstract>
-</front><seriesInfo name="RFC" value="5741"/><seriesInfo name="DOI" value="10.17487/RFC5741"/></reference>
-
-
-
 <reference anchor="RFC5743" target="http://www.rfc-editor.org/info/rfc5743"><front>
 <title>Definition of an Internet Research Task Force (IRTF) Document Stream</title>
 <author initials="A." surname="Falk" fullname="A. Falk"><organization/></author>
@@ -6024,6 +6033,17 @@ Suzanne Woolf
 <date year="2016" month="February"/>
 <abstract><t>This document defines the "xml2rfc" version 2 vocabulary: an XML-based language used for writing RFCs and Internet-Drafts.</t><t>Version 2 represents the state of the vocabulary (as implemented by several tools and as used by the RFC Editor) around 2014.</t><t>This document obsoletes RFC 2629.</t></abstract>
 </front><seriesInfo name="RFC" value="7749"/><seriesInfo name="DOI" value="10.17487/RFC7749"/></reference>
+
+
+
+<reference anchor="RFC7841" target="http://www.rfc-editor.org/info/rfc7841"><front>
+<title>RFC Streams, Headers, and Boilerplates</title>
+<author initials="J." surname="Halpern" fullname="J. Halpern" role="editor"><organization/></author>
+<author initials="L." surname="Daigle" fullname="L. Daigle" role="editor"><organization/></author>
+<author initials="O." surname="Kolkman" fullname="O. Kolkman" role="editor"><organization/></author>
+<date year="2016" month="May"/>
+<abstract><t>RFC documents contain a number of fixed elements such as the title page header, standard boilerplates, and copyright/IPR statements. This document describes them and introduces some updates to reflect current usage and requirements of RFC publication.  In particular, this updated structure is intended to communicate clearly the source of RFC creation and review.  This document obsoletes RFC 5741, moving detailed content to an IAB web page and preparing for more flexible output formats.</t></abstract>
+</front><seriesInfo name="RFC" value="7841"/><seriesInfo name="DOI" value="10.17487/RFC7841"/></reference>
 
 
   <reference anchor="RNC" target="https://www.oasis-open.org/committees/relax-ng/compact-20021121.html"><front>
@@ -6359,7 +6379,7 @@ are believed to be the current values in use.</t>
 <t>
   Historically, this attribute did not affect the final appearance of RFCs, except for
   subtle differences in copyright notices.
-  Nowadays (as of <xref target="RFC5741"/>), the stream name appears in the first
+  Nowadays (as of <xref target="RFC7841"/>), the stream name appears in the first
   line of the front page, and it also affects the text in the "Status of This Memo"
   section.
 </t>
@@ -6374,7 +6394,7 @@ are believed to be the current values in use.</t>
     </t>
     <t>
       For RFCs, it affects the whole "Status of This Memo" section (see
-      Section 3.2.2 of <xref target="RFC5741"/>).
+      Section 3.2 of <xref target="RFC7841"/>).
     </t>
     <t>
       For all RFCs and Internet-Drafts, it determines whether the "Copyright
@@ -6389,7 +6409,7 @@ are believed to be the current values in use.</t>
 <t>
   For some of the publication streams (see <xref target="attribute-submissiontype"/>),
   the "Status of This Memo" section depends on whether there was a consensus
-  to publish (again, see Section 3.2.2 of <xref target="RFC5741"/>).
+  to publish (again, see Section 3.4 of <xref target="RFC7841"/>).
 </t>
 <t>
   The consensus attribute
@@ -7427,26 +7447,20 @@ td =
     [ a:defaultValue = "0" ] attribute rowspan { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
-    (t+
+    ((artwork, dl, figure, ol, sourcecode, t, ul)+
      | (text
-        | artwork
         | bcp14
         | br
         | cref
-        | dl
         | em
         | eref
-        | figure
         | iref
-        | ol
         | relref
-        | sourcecode
         | strong
         | sub
         | sup
         | tt
-        | ul
-        | xref)+)
+        | xref)*)
   }
 
 th =
@@ -7458,26 +7472,20 @@ th =
     [ a:defaultValue = "0" ] attribute rowspan { text }?,
     [ a:defaultValue = "left" ]
     attribute align { "left" | "center" | "right" }?,
-    (t+
+    ((artwork, dl, figure, ol, sourcecode, t, ul)+
      | (text
-        | artwork
         | bcp14
         | br
         | cref
-        | dl
         | em
         | eref
-        | figure
         | iref
-        | ol
         | relref
-        | sourcecode
         | strong
         | sub
         | sup
         | tt
-        | ul
-        | xref)+)
+        | xref)*)
   }
 
 postamble =
@@ -8410,26 +8418,20 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "0" ] attribute rowspan { text }?,
 +     [ a:defaultValue = "left" ]
 +     attribute align { "left" | "center" | "right" }?,
-+     (t+
++     ((artwork, dl, figure, ol, sourcecode, t, ul)+
 +      | (text
-+         | artwork
 +         | bcp14
 +         | br
 +         | cref
-+         | dl
 +         | em
 +         | eref
-+         | figure
 +         | iref
-+         | ol
 +         | relref
-+         | sourcecode
 +         | strong
 +         | sub
 +         | sup
 +         | tt
-+         | ul
-+         | xref)+)
++         | xref)*)
 +   }
 + th =
 +   element th {
@@ -8440,26 +8442,20 @@ to the v3 schema.</t>
 +     [ a:defaultValue = "0" ] attribute rowspan { text }?,
 +     [ a:defaultValue = "left" ]
 +     attribute align { "left" | "center" | "right" }?,
-+     (t+
++     ((artwork, dl, figure, ol, sourcecode, t, ul)+
 +      | (text
-+         | artwork
 +         | bcp14
 +         | br
 +         | cref
-+         | dl
 +         | em
 +         | eref
-+         | figure
 +         | iref
-+         | ol
 +         | relref
-+         | sourcecode
 +         | strong
 +         | sub
 +         | sup
 +         | tt
-+         | ul
-+         | xref)+)
++         | xref)*)
     }
   postamble =
 -   element postamble { (text | xref | eref | iref | cref | spanx)* 
