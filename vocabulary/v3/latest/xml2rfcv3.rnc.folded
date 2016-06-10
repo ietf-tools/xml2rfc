@@ -911,7 +911,8 @@ include "svg.rnc"
     attribute asciiName { text }?,
     attribute asciiValue { text }?,
     attribute status { text }?,
-    attribute stream { text }?,
+    [ a:defaultValue = "IETF" ]
+    attribute stream { "IETF" | "IAB" | "IRTF" | "independent" }?,
     empty
   }
 

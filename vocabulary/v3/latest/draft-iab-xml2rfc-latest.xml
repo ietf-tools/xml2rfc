@@ -13,25 +13,7 @@
 
 <!--
 
-#### Need an unpreptool ###
-
-rfc/@submissionType is now duplicated in seriesInfo/stream. This needs to be rectified.
-	rfc/@submissionType is in v2
-
-v3 is currently deprecating <rfc> attributes from v2: 
-	v2 category -> v3 seriesInfo/name
-	v2 docname -> v3 seriesInfo/value
-	v2 number -> v3 seriesInfo/value
-	v2 seriesNo -> v3 seriesInfo/value
-
-
-Joe, 2016-01-05:
-	My opinion is we could either un-deprecate rfc/@category, or add seriesInfo/@category.  I prefer the latter, since it would be nice to have the category for references also.
-Paul then suggested adding status and stream to seriesInfo
-Julian, 2016-01-06:
-	These attributes would be very specific to the IETF, and only needed for the use of <seriesInfo> outside <reference>. I think the simplest possible fix is to simply go back to what v2 had (undeprecate the top-level attributes, and move <seriesInfo> back to <reference>).
-Joe responded
-	If we were to un-deprecate rfc/@category, we would not have to move seriesInfo back to just being in reference. However, I do think it would be nice to have access to the status and stream bits in references as well.  For some of the external streams, they may have similar semantics that can map into those attributes.
+...some notes might still go in here...
 
 -->
 
@@ -3581,11 +3563,9 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="rfc element" subitem="submissionType attribute"/>
       <iref item="submissionType attribute" subitem="in rfc element"/>
       <t>
-            The document stream.
-         </t>
-      <t>
-            See <xref target="RFC7841" x:fmt="of" x:sec="2"/> for details.
-         </t>
+            The document stream, as described in <xref target="RFC7841"/>.
+            (The RFC Series Editor may change the list of allowed values in the future.)
+      </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
          <li>"IETF" (default)</li>
@@ -3948,9 +3928,16 @@ in the same &lt;front&gt; element.
       <iref item="seriesInfo element" subitem="stream attribute"/>
       <iref item="stream attribute" subitem="in seriesInfo element"/>
       <t>
-         The stream that originated of this document. The currently-known values are "iesg", "iab", "ise", and "irtf".
-         The RFC Series Editor may change this list in the future.
+         The stream (as described in <xref target="RFC7841"/>) that originated of this document.
+         (The RFC Series Editor may change this list in the future.)
       </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"IETF" (default)</li>
+         <li>"IAB"</li>
+         <li>"IRTF"</li>
+         <li>"independent"</li>
+      </ul>
    </section>
 
    <!--seriesInfo/@value-->
@@ -7633,7 +7620,8 @@ include "svg.rnc"
     attribute asciiName { text }?,
     attribute asciiValue { text }?,
     attribute status { text }?,
-    attribute stream { text }?,
+    [ a:defaultValue = "IETF" ]
+    attribute stream { "IETF" | "IAB" | "IRTF" | "independent" }?,
     empty
   }
 
@@ -8599,7 +8587,8 @@ to the v3 schema.</t>
 +     attribute asciiName { text }?,
 +     attribute asciiValue { text }?,
 +     attribute status { text }?,
-+     attribute stream { text }?,
++     [ a:defaultValue = "IETF" ]
++     attribute stream { "IETF" | "IAB" | "IRTF" | "independent" }?,
       empty
     }
   format =

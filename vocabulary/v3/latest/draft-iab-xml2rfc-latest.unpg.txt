@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 7749 (if approved)                               June 6, 2016
+Obsoletes: 7749 (if approved)                              June 10, 2016
 Intended status: Informational
-Expires: December 8, 2016
+Expires: December 12, 2016
 
 
                    The "xml2rfc" version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 8, 2016.
+   This Internet-Draft will expire on December 12, 2016.
 
 Copyright Notice
 
@@ -2388,9 +2388,8 @@ Table of Contents
 
 2.45.12.  "submissionType" Attribute
 
-   The document stream.
-
-   See Section 2 of [RFC7841] for details.
+   The document stream, as described in [RFC7841].  (The RFC Series
+   Editor may change the list of allowed values in the future.)
 
    Allowed values:
 
@@ -2621,9 +2620,19 @@ Table of Contents
 
 2.47.5.  "stream" Attribute
 
-   The stream that originated of this document.  The currently-known
-   values are "iesg", "iab", "ise", and "irtf".  The RFC Series Editor
-   may change this list in the future.
+   The stream (as described in [RFC7841]) that originated of this
+   document.  (The RFC Series Editor may change this list in the
+   future.)
+
+   Allowed values:
+
+   o  "IETF" (default)
+
+   o  "IAB"
+
+   o  "IRTF"
+
+   o  "independent"
 
 2.47.6.  "value" Attribute (Mandatory)
 
@@ -5477,7 +5486,8 @@ Appendix C.  Relax NG Schema
        attribute asciiName { text }?,
        attribute asciiValue { text }?,
        attribute status { text }?,
-       attribute stream { text }?,
+       [ a:defaultValue = "IETF" ]
+       attribute stream { "IETF" | "IAB" | "IRTF" | "independent" }?,
        empty
      }
 
@@ -6440,7 +6450,8 @@ Appendix D.  Schema Differences from v2
    +     attribute asciiName { text }?,
    +     attribute asciiValue { text }?,
    +     attribute status { text }?,
-   +     attribute stream { text }?,
+   +     [ a:defaultValue = "IETF" ]
+   +     attribute stream { "IETF" | "IAB" | "IRTF" | "independent" }?,
          empty
        }
      format =

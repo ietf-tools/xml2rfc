@@ -3149,11 +3149,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="rfc element" subitem="submissionType attribute"/>
       <iref item="submissionType attribute" subitem="in rfc element"/>
       <t>
-            The document stream.
-         </t>
-      <t>
-            See <xref target="RFC7841" x:fmt="of" x:sec="2"/> for details.
-         </t>
+            The document stream, as described in <xref target="RFC7841"/>.
+            Either this attribute, or the "stream" attribute of the &lt;<x:ref>seriesInfo</x:ref>&gt; element, or both, must be given.
+            (The RFC Series Editor may change the list of allowed values in the future.)
+      </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
          <li>"IETF" (default)</li>
@@ -3516,9 +3515,17 @@ in the same &lt;front&gt; element.
       <iref item="seriesInfo element" subitem="stream attribute"/>
       <iref item="stream attribute" subitem="in seriesInfo element"/>
       <t>
-         The stream that originated of this document. The currently-known values are "iesg", "iab", "ise", and "irtf".
-         The RFC Series Editor may change this list in the future.
+         The stream (as described in <xref target="RFC7841"/>) that originated of this document.
+         Either this attribute, or the "submissionType" attribute of the &lt;<x:ref>rfc</x:ref>&gt; element, or both, must be given.
+         (The RFC Series Editor may change this list in the future.)
       </t>
+      <t><!--AG-->Allowed values:</t>
+      <ul><!--AG-->
+         <li>"IETF" (default)</li>
+         <li>"IAB"</li>
+         <li>"IRTF"</li>
+         <li>"independent"</li>
+      </ul>
    </section>
 
    <!--seriesInfo/@value-->
