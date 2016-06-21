@@ -2133,6 +2133,11 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
          <iref item="title element" subitem="inside front"/>One &lt;<x:ref>title</x:ref>&gt; element (<xref target="element.title"/>)</li>
         
       <li><!--AG-->
+         <iref item="Elements" subitem="seriesInfo"/>
+         <iref item="seriesInfo element" subitem="inside front"/>Optional &lt;<x:ref>seriesInfo</x:ref>&gt; elements (<xref target="element.seriesInfo"/>)</li>
+      
+        
+      <li><!--AG-->
          <iref item="Elements" subitem="author"/>
          <iref item="author element" subitem="inside front"/>One or more &lt;<x:ref>author</x:ref>&gt; elements (<xref target="element.author"/>)</li>
       
@@ -2160,11 +2165,6 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <li><!--AG-->
          <iref item="Elements" subitem="abstract"/>
          <iref item="abstract element" subitem="inside front"/>One optional &lt;<x:ref>abstract</x:ref>&gt; element (<xref target="element.abstract"/>)</li>
-      
-        
-      <li><!--AG-->
-         <iref item="Elements" subitem="seriesInfo"/>
-         <iref item="seriesInfo element" subitem="inside front"/>Optional &lt;<x:ref>seriesInfo</x:ref>&gt; elements (<xref target="element.seriesInfo"/>)</li>
       
         
       <li><!--AG-->
@@ -6762,13 +6762,13 @@ namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     title,
+    seriesInfo*,
     author+,
     date?,
     area*,
     workgroup*,
     keyword*,
     abstract?,
-    seriesInfo*,
     note*,
     boilerplate?
   }
@@ -7751,13 +7751,13 @@ to the v3 schema.</t>
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     title,
++     seriesInfo*,
 +     author+,
 +     date?,
 +     area*,
 +     workgroup*,
 +     keyword*,
 +     abstract?,
-+     seriesInfo*,
 +     note*,
 +     boilerplate?
     }

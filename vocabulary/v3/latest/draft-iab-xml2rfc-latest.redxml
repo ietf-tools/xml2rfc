@@ -2055,6 +2055,11 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
          <iref item="title element" subitem="inside front"/>One &lt;<xref target="element.title" format="none">title</xref>&gt; element (<xref target="element.title"/>)</t>
         
       <t><!--AG-->
+         <iref item="Elements" subitem="seriesInfo"/>
+         <iref item="seriesInfo element" subitem="inside front"/>Optional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements (<xref target="element.seriesInfo"/>)</t>
+      
+        
+      <t><!--AG-->
          <iref item="Elements" subitem="author"/>
          <iref item="author element" subitem="inside front"/>One or more &lt;<xref target="element.author" format="none">author</xref>&gt; elements (<xref target="element.author"/>)</t>
       
@@ -2082,11 +2087,6 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <t><!--AG-->
          <iref item="Elements" subitem="abstract"/>
          <iref item="abstract element" subitem="inside front"/>One optional &lt;<xref target="element.abstract" format="none">abstract</xref>&gt; element (<xref target="element.abstract"/>)</t>
-      
-        
-      <t><!--AG-->
-         <iref item="Elements" subitem="seriesInfo"/>
-         <iref item="seriesInfo element" subitem="inside front"/>Optional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements (<xref target="element.seriesInfo"/>)</t>
       
         
       <t><!--AG-->
@@ -6715,13 +6715,13 @@ front =
     attribute xml:base { text }?,
     attribute xml:lang { text }?,
     title,
+    seriesInfo*,
     author+,
     date?,
     area*,
     workgroup*,
     keyword*,
     abstract?,
-    seriesInfo*,
     note*,
     boilerplate?
   }
@@ -7704,13 +7704,13 @@ to the v3 schema.</t>
 +     attribute xml:base { text }?,
 +     attribute xml:lang { text }?,
 +     title,
++     seriesInfo*,
 +     author+,
 +     date?,
 +     area*,
 +     workgroup*,
 +     keyword*,
 +     abstract?,
-+     seriesInfo*,
 +     note*,
 +     boilerplate?
     }
