@@ -1,0 +1,954 @@
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+
+# xml2rfc Version 3 grammar
+
+<strong anchor="grammar.rfc">rfc</strong><iref item="rfc element"/> =
+  element rfc {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute number { text }?,
+    [ a:defaultValue = "" ] attribute obsoletes { text }?,
+    [ a:defaultValue = "" ] attribute updates { text }?,
+    attribute category { text }?,
+    attribute mode { text }?,
+    [ a:defaultValue = "false" ]
+    attribute consensus { "no" | "yes" | "false" | "true" }?,
+    attribute seriesNo { text }?,
+    attribute ipr { text }?,
+    attribute iprExtract { xsd:IDREF }?,
+    [ a:defaultValue = "IETF" ]
+    attribute submissionType {
+      "IETF" | "IAB" | "IRTF" | "independent"
+    }?,
+    attribute docName { text }?,
+    [ a:defaultValue = "false" ]
+    attribute sortRefs { "true" | "false" }?,
+    [ a:defaultValue = "true" ]
+    attribute symRefs { "true" | "false" }?,
+    [ a:defaultValue = "true" ]
+    attribute tocInclude { "true" | "false" }?,
+    [ a:defaultValue = "3" ] attribute tocDepth { text }?,
+    attribute prepTime { text }?,
+    [ a:defaultValue = "true" ]
+    attribute indexInclude { "true" | "false" }?,
+    attribute version { text }?,
+    [ a:defaultValue = "Common,Latin" ] attribute scripts { text }?,
+    attribute expiresDate { text }?,
+    link*,
+    front,
+    middle,
+    back?
+  }
+
+<strong anchor="grammar.link">link</strong><iref item="link element"/> =
+  element link {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute href { text },
+    attribute rel { text }?
+  }
+
+<strong anchor="grammar.front">front</strong><iref item="front element"/> =
+  element front {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    title,
+    seriesInfo*,
+    author+,
+    date?,
+    area*,
+    workgroup*,
+    keyword*,
+    abstract?,
+    note*,
+    boilerplate?
+  }
+
+<strong anchor="grammar.title">title</strong><iref item="title element"/> =
+  element title {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute abbrev { text }?,
+    attribute ascii { text }?,
+    text
+  }
+
+<strong anchor="grammar.author">author</strong><iref item="author element"/> =
+  element author {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute initials { text }?,
+    attribute asciiInitials { text }?,
+    attribute surname { text }?,
+    attribute asciiSurname { text }?,
+    attribute fullname { text }?,
+    attribute role { "editor" }?,
+    attribute asciiFullname { text }?,
+    organization?,
+    address?
+  }
+
+<strong anchor="grammar.organization">organization</strong><iref item="organization element"/> =
+  element organization {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute abbrev { text }?,
+    attribute ascii { text }?,
+    text
+  }
+
+<strong anchor="grammar.address">address</strong><iref item="address element"/> =
+  element address {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    postal?,
+    phone?,
+    facsimile?,
+    email?,
+    uri?
+  }
+
+<strong anchor="grammar.postal">postal</strong><iref item="postal element"/> =
+  element postal {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    ((city | code | country | region | street)* | postalLine+)
+  }
+
+<strong anchor="grammar.street">street</strong><iref item="street element"/> =
+  element street {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute ascii { text }?,
+    text
+  }
+
+<strong anchor="grammar.city">city</strong><iref item="city element"/> =
+  element city {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute ascii { text }?,
+    text
+  }
+
+<strong anchor="grammar.region">region</strong><iref item="region element"/> =
+  element region {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute ascii { text }?,
+    text
+  }
+
+<strong anchor="grammar.code">code</strong><iref item="code element"/> =
+  element code {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute ascii { text }?,
+    text
+  }
+
+<strong anchor="grammar.country">country</strong><iref item="country element"/> =
+  element country {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute ascii { text }?,
+    text
+  }
+
+<strong anchor="grammar.postalLine">postalLine</strong><iref item="postalLine element"/> =
+  element postalLine {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute ascii { text }?,
+    text
+  }
+
+<strong anchor="grammar.phone">phone</strong><iref item="phone element"/> =
+  element phone {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
+
+<strong anchor="grammar.facsimile">facsimile</strong><iref item="facsimile element"/> =
+  element facsimile {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
+
+<strong anchor="grammar.email">email</strong><iref item="email element"/> =
+  element email {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute ascii { text }?,
+    text
+  }
+
+<strong anchor="grammar.uri">uri</strong><iref item="uri element"/> =
+  element uri {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
+
+<strong anchor="grammar.date">date</strong><iref item="date element"/> =
+  element date {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute day { text }?,
+    attribute month { text }?,
+    attribute year { text }?,
+    empty
+  }
+
+<strong anchor="grammar.area">area</strong><iref item="area element"/> =
+  element area {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
+
+<strong anchor="grammar.workgroup">workgroup</strong><iref item="workgroup element"/> =
+  element workgroup {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
+
+<strong anchor="grammar.keyword">keyword</strong><iref item="keyword element"/> =
+  element keyword {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
+
+<strong anchor="grammar.abstract">abstract</strong><iref item="abstract element"/> =
+  element abstract {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    (dl | ol | t | ul)+
+  }
+
+<strong anchor="grammar.note">note</strong><iref item="note element"/> =
+  element note {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute title { text }?,
+    attribute pn { text }?,
+    [ a:defaultValue = "false" ]
+    attribute removeInRFC { "true" | "false" }?,
+    name?,
+    (dl | ol | t | ul)+
+  }
+
+<strong anchor="grammar.boilerplate">boilerplate</strong><iref item="boilerplate element"/> =
+  element boilerplate {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    section+
+  }
+
+<strong anchor="grammar.middle">middle</strong><iref item="middle element"/> =
+  element middle {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    section+
+  }
+
+<strong anchor="grammar.section">section</strong><iref item="section element"/> =
+  element section {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    attribute title { text }?,
+    [ a:defaultValue = "true" ]
+    attribute numbered { "true" | "false" }?,
+    [ a:defaultValue = "default" ]
+    attribute toc { "include" | "exclude" | "default" }?,
+    [ a:defaultValue = "false" ]
+    attribute removeInRFC { "true" | "false" }?,
+    name?,
+    (artwork
+     | aside
+     | blockquote
+     | dl
+     | figure
+     | iref
+     | ol
+     | sourcecode
+     | t
+     | table
+     | texttable
+     | ul)*,
+    section*
+  }
+
+<strong anchor="grammar.name">name</strong><iref item="name element"/> =
+  element name {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute slugifiedName { text }?,
+    (text | cref | eref | relref | tt | xref)*
+  }
+
+<strong anchor="grammar.t">t</strong><iref item="t element"/> =
+  element t {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    attribute hangText { text }?,
+    [ a:defaultValue = "false" ]
+    attribute keepWithNext { "false" | "true" }?,
+    [ a:defaultValue = "false" ]
+    attribute keepWithPrevious { "false" | "true" }?,
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | \list
+     | relref
+     | spanx
+     | strong
+     | sub
+     | sup
+     | tt
+     | vspace
+     | xref)*
+  }
+
+<strong anchor="grammar.aside">aside</strong><iref item="aside element"/> =
+  element aside {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    (artwork | dl | figure | iref | \list | ol | t | table | ul)*
+  }
+
+<strong anchor="grammar.blockquote">blockquote</strong><iref item="blockquote element"/> =
+  element blockquote {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    attribute cite { text }?,
+    attribute quotedFrom { text }?,
+    ((artwork | dl | figure | ol | sourcecode | t | ul)+
+     | (text
+        | bcp14
+        | cref
+        | em
+        | eref
+        | iref
+        | relref
+        | strong
+        | sub
+        | sup
+        | tt
+        | xref)+)
+  }
+
+<strong anchor="grammar.list">\list</strong><iref item="list element"/> =
+  element list {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    [ a:defaultValue = "empty" ] attribute style { text }?,
+    attribute hangIndent { text }?,
+    attribute counter { text }?,
+    attribute pn { text }?,
+    t+
+  }
+
+<strong anchor="grammar.ol">ol</strong><iref item="ol element"/> =
+  element ol {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    [ a:defaultValue = "1" ] attribute type { text }?,
+    [ a:defaultValue = "1" ] attribute start { text }?,
+    attribute group { text }?,
+    [ a:defaultValue = "normal" ]
+    attribute spacing { "normal" | "compact" }?,
+    attribute pn { text }?,
+    li+
+  }
+
+<strong anchor="grammar.ul">ul</strong><iref item="ul element"/> =
+  element ul {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    [ a:defaultValue = "normal" ]
+    attribute spacing { "normal" | "compact" }?,
+    ([ a:defaultValue = "false" ]
+     attribute empty { "false" | "true" },
+     attribute pn { text }?)?,
+    li+
+  }
+
+<strong anchor="grammar.li">li</strong><iref item="li element"/> =
+  element li {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    ((artwork | dl | figure | ol | sourcecode | t | ul)+
+     | (text
+        | bcp14
+        | cref
+        | em
+        | eref
+        | iref
+        | relref
+        | strong
+        | sub
+        | sup
+        | tt
+        | xref)+)
+  }
+
+<strong anchor="grammar.dl">dl</strong><iref item="dl element"/> =
+  element dl {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    [ a:defaultValue = "normal" ]
+    attribute spacing { "normal" | "compact" }?,
+    [ a:defaultValue = "true" ]
+    attribute hanging { "false" | "true" }?,
+    attribute pn { text }?,
+    (dt, dd)+
+  }
+
+<strong anchor="grammar.dt">dt</strong><iref item="dt element"/> =
+  element dt {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | relref
+     | strong
+     | sub
+     | sup
+     | tt
+     | xref)*
+  }
+
+<strong anchor="grammar.dd">dd</strong><iref item="dd element"/> =
+  element dd {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    ((artwork | dl | figure | ol | sourcecode | t | ul)+
+     | (text
+        | bcp14
+        | cref
+        | em
+        | eref
+        | iref
+        | relref
+        | strong
+        | sub
+        | sup
+        | tt
+        | xref)+)
+  }
+
+<strong anchor="grammar.xref">xref</strong><iref item="xref element"/> =
+  element xref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute target { xsd:IDREF },
+    [ a:defaultValue = "false" ]
+    attribute pageno { "true" | "false" }?,
+    [ a:defaultValue = "default" ]
+    attribute format { "default" | "title" | "counter" | "none" }?,
+    attribute derivedContent { text }?,
+    text
+  }
+
+<strong anchor="grammar.relref">relref</strong><iref item="relref element"/> =
+  element relref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute target { xsd:IDREF },
+    [ a:defaultValue = "of" ]
+    attribute displayFormat { "of" | "comma" | "parens" | "bare" }?,
+    attribute section { text },
+    attribute relative { text }?,
+    attribute derivedLink { text }?,
+    text
+  }
+
+<strong anchor="grammar.eref">eref</strong><iref item="eref element"/> =
+  element eref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute target { text },
+    text
+  }
+
+<strong anchor="grammar.iref">iref</strong><iref item="iref element"/> =
+  element iref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute item { text },
+    [ a:defaultValue = "" ] attribute subitem { text }?,
+    [ a:defaultValue = "false" ]
+    attribute primary { "true" | "false" }?,
+    attribute pn { text }?,
+    empty
+  }
+
+<strong anchor="grammar.cref">cref</strong><iref item="cref element"/> =
+  element cref {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute source { text }?,
+    [ a:defaultValue = "true" ]
+    attribute display { "true" | "false" }?,
+    (text | em | eref | relref | strong | sub | sup | tt | xref)*
+  }
+
+<strong anchor="grammar.tt">tt</strong><iref item="tt element"/> =
+  element tt {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | relref
+     | strong
+     | sub
+     | sup
+     | xref)*
+  }
+
+<strong anchor="grammar.strong">strong</strong><iref item="strong element"/> =
+  element strong {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | relref
+     | sub
+     | sup
+     | tt
+     | xref)*
+  }
+
+<strong anchor="grammar.em">em</strong><iref item="em element"/> =
+  element em {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text
+     | bcp14
+     | cref
+     | eref
+     | iref
+     | relref
+     | strong
+     | sub
+     | sup
+     | tt
+     | xref)*
+  }
+
+<strong anchor="grammar.sub">sub</strong><iref item="sub element"/> =
+  element sub {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | relref
+     | strong
+     | tt
+     | xref)*
+  }
+
+<strong anchor="grammar.sup">sup</strong><iref item="sup element"/> =
+  element sup {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | relref
+     | strong
+     | tt
+     | xref)*
+  }
+
+<strong anchor="grammar.spanx">spanx</strong><iref item="spanx element"/> =
+  element spanx {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    [ a:defaultValue = "preserve" ]
+    attribute xml:space { "default" | "preserve" }?,
+    [ a:defaultValue = "emph" ] attribute style { text }?,
+    text
+  }
+
+<strong anchor="grammar.vspace">vspace</strong><iref item="vspace element"/> =
+  element vspace {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    [ a:defaultValue = "0" ] attribute blankLines { text }?,
+    empty
+  }
+
+<strong anchor="grammar.figure">figure</strong><iref item="figure element"/> =
+  element figure {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    [ a:defaultValue = "" ] attribute title { text }?,
+    [ a:defaultValue = "false" ]
+    attribute suppress-title { "true" | "false" }?,
+    attribute src { text }?,
+    attribute originalSrc { text }?,
+    [ a:defaultValue = "left" ]
+    attribute align { "left" | "center" | "right" }?,
+    [ a:defaultValue = "" ] attribute alt { text }?,
+    [ a:defaultValue = "" ] attribute width { text }?,
+    [ a:defaultValue = "" ] attribute height { text }?,
+    name?,
+    iref*,
+    preamble?,
+    (artwork | sourcecode)+,
+    postamble?
+  }
+
+<strong anchor="grammar.table">table</strong><iref item="table element"/> =
+  element table {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    name?,
+    iref*,
+    thead?,
+    tbody+,
+    tfoot?
+  }
+
+<strong anchor="grammar.preamble">preamble</strong><iref item="preamble element"/> =
+  element preamble {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | relref
+     | spanx
+     | strong
+     | sub
+     | sup
+     | tt
+     | xref)*
+  }
+
+<strong anchor="grammar.artwork">artwork</strong><iref item="artwork element"/> =
+  element artwork {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    attribute xml:space { text }?,
+    [ a:defaultValue = "" ] attribute name { text }?,
+    [ a:defaultValue = "" ] attribute type { text }?,
+    attribute src { text }?,
+    [ a:defaultValue = "left" ]
+    attribute align { "left" | "center" | "right" }?,
+    [ a:defaultValue = "" ] attribute alt { text }?,
+    [ a:defaultValue = "" ] attribute width { text }?,
+    [ a:defaultValue = "" ] attribute height { text }?,
+    attribute originalSrc { text }?,
+    (text* | svg)
+  }
+# TODO: replace with link to RSE site, or provide an inline version
+include "svg.rnc"
+
+<strong anchor="grammar.sourcecode">sourcecode</strong><iref item="sourcecode element"/> =
+  element sourcecode {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute pn { text }?,
+    [ a:defaultValue = "" ] attribute name { text }?,
+    [ a:defaultValue = "" ] attribute type { text }?,
+    attribute src { text }?,
+    attribute originalSrc { text }?,
+    text
+  }
+
+<strong anchor="grammar.thead">thead</strong><iref item="thead element"/> =
+  element thead {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    tr+
+  }
+
+<strong anchor="grammar.tbody">tbody</strong><iref item="tbody element"/> =
+  element tbody {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    tr+
+  }
+
+<strong anchor="grammar.tfoot">tfoot</strong><iref item="tfoot element"/> =
+  element tfoot {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    tr+
+  }
+
+<strong anchor="grammar.tr">tr</strong><iref item="tr element"/> =
+  element tr {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    (td | th)+
+  }
+
+<strong anchor="grammar.td">td</strong><iref item="td element"/> =
+  element td {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    [ a:defaultValue = "0" ] attribute colspan { text }?,
+    [ a:defaultValue = "0" ] attribute rowspan { text }?,
+    [ a:defaultValue = "left" ]
+    attribute align { "left" | "center" | "right" }?,
+    ((artwork | dl | figure | ol | sourcecode | t | ul)+
+     | (text
+        | bcp14
+        | br
+        | cref
+        | em
+        | eref
+        | iref
+        | relref
+        | strong
+        | sub
+        | sup
+        | tt
+        | xref)*)
+  }
+
+<strong anchor="grammar.th">th</strong><iref item="th element"/> =
+  element th {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    [ a:defaultValue = "0" ] attribute colspan { text }?,
+    [ a:defaultValue = "0" ] attribute rowspan { text }?,
+    [ a:defaultValue = "left" ]
+    attribute align { "left" | "center" | "right" }?,
+    ((artwork | dl | figure | ol | sourcecode | t | ul)+
+     | (text
+        | bcp14
+        | br
+        | cref
+        | em
+        | eref
+        | iref
+        | relref
+        | strong
+        | sub
+        | sup
+        | tt
+        | xref)*)
+  }
+
+<strong anchor="grammar.postamble">postamble</strong><iref item="postamble element"/> =
+  element postamble {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text | cref | eref | iref | spanx | xref)*
+  }
+
+<strong anchor="grammar.texttable">texttable</strong><iref item="texttable element"/> =
+  element texttable {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID }?,
+    [ a:defaultValue = "" ] attribute title { text }?,
+    [ a:defaultValue = "false" ]
+    attribute suppress-title { "true" | "false" }?,
+    [ a:defaultValue = "center" ]
+    attribute align { "left" | "center" | "right" }?,
+    [ a:defaultValue = "full" ]
+    attribute style { "all" | "none" | "headers" | "full" }?,
+    name?,
+    preamble?,
+    ttcol+,
+    c*,
+    postamble?
+  }
+
+<strong anchor="grammar.ttcol">ttcol</strong><iref item="ttcol element"/> =
+  element ttcol {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute width { text }?,
+    [ a:defaultValue = "left" ]
+    attribute align { "left" | "center" | "right" }?,
+    (cref | eref | iref | xref | text)*
+  }
+
+<strong anchor="grammar.c">c</strong><iref item="c element"/> =
+  element c {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text | cref | eref | iref | spanx | xref)*
+  }
+
+<strong anchor="grammar.bcp14">bcp14</strong><iref item="bcp14 element"/> =
+  element bcp14 {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    text
+  }
+
+<strong anchor="grammar.br">br</strong><iref item="br element"/> =
+  element br {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    empty
+  }
+
+<strong anchor="grammar.back">back</strong><iref item="back element"/> =
+  element back {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    displayreference*,
+    references*,
+    section*
+  }
+
+<strong anchor="grammar.displayreference">displayreference</strong><iref item="displayreference element"/> =
+  element displayreference {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute target { xsd:IDREF },
+    attribute to { text }
+  }
+
+<strong anchor="grammar.references">references</strong><iref item="references element"/> =
+  element references {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute pn { text }?,
+    attribute anchor { xsd:ID }?,
+    attribute title { text }?,
+    name?,
+    (reference | referencegroup)*
+  }
+
+<strong anchor="grammar.reference">reference</strong><iref item="reference element"/> =
+  element reference {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID },
+    attribute target { text }?,
+    [ a:defaultValue = "true" ]
+    attribute quoteTitle { "true" | "false" }?,
+    front,
+    (annotation | format | refcontent | seriesInfo)*
+  }
+
+<strong anchor="grammar.referencegroup">referencegroup</strong><iref item="referencegroup element"/> =
+  element referencegroup {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute anchor { xsd:ID },
+    reference+
+  }
+
+<strong anchor="grammar.seriesInfo">seriesInfo</strong><iref item="seriesInfo element"/> =
+  element seriesInfo {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute name { text },
+    attribute value { text },
+    attribute asciiName { text }?,
+    attribute asciiValue { text }?,
+    attribute status { text }?,
+    [ a:defaultValue = "IETF" ]
+    attribute stream { "IETF" | "IAB" | "IRTF" | "independent" }?,
+    empty
+  }
+
+<strong anchor="grammar.format">format</strong><iref item="format element"/> =
+  element format {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    attribute target { text }?,
+    attribute type { text },
+    attribute octets { text }?,
+    empty
+  }
+
+<strong anchor="grammar.annotation">annotation</strong><iref item="annotation element"/> =
+  element annotation {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text
+     | bcp14
+     | cref
+     | em
+     | eref
+     | iref
+     | relref
+     | spanx
+     | strong
+     | sub
+     | sup
+     | tt
+     | xref)*
+  }
+
+<strong anchor="grammar.refcontent">refcontent</strong><iref item="refcontent element"/> =
+  element refcontent {
+    attribute xml:base { text }?,
+    attribute xml:lang { text }?,
+    (text | bcp14 | em | strong | sub | sup | tt)*
+  }
+start |= rfc
