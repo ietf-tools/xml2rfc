@@ -807,6 +807,15 @@ class BaseRfcWriter:
         pass
         
 
+    def numToAlpha(self, n):
+        str = ""
+        az = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        while n > 0:
+            r = (n-1) % 26
+            n = int((n-1)/26)
+            str = az[r] + str
+        return str
+
     def write_section_rec(self, section, count_str="1.", appendix=False,
                            level=0, numbered=True):
         """ Recursively writes <section> elements 
@@ -890,8 +899,7 @@ class BaseRfcWriter:
                 if s_count == 1 and self.pis["rfcedstyle"] == "yes":
                    self.needLines(-1)
                 # Use an alphabetic counter for first-level appendix
-                uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                self.write_section_rec(child_sec, uppercase[s_count - 1],
+                self.write_section_rec(child_sec, self.numToAlpha(s_count),
                                         level=level + 1, appendix=True, numbered=numbered)
             else:
                 # Use a numeric counter
