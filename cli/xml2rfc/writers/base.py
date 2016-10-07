@@ -125,6 +125,9 @@ class BaseRfcWriter:
         'info': {},
         'historic': {},
     }
+    # 'Status of this Memo' boilerplate for RFCs
+    boilerplate['status_5741'] = {
+    }
 
     # Paragraph 1
     boilerplate['status']['std']['p1'] = \
@@ -190,13 +193,26 @@ class BaseRfcWriter:
     # Paragraph 2 last sentence
     boilerplate['status']['p2end_ietf_std'] = \
         'Further information on Internet Standards is available ' \
-        'in Section 2 of RFC 5741.'
+        'in Section 2 of RFC 7841.'
     boilerplate['status']['p2end_ietf_bcp'] = \
-        'Further information on BCPs is available in Section 2 of RFC 5741.'
+        'Further information on BCPs is available in Section 2 of RFC 7841.'
     boilerplate['status']['p2end_ietf_other'] = \
         'Not all documents approved by the IESG are a candidate for any ' \
-        'level of Internet Standard; see Section 2 of RFC 5741.'
+        'level of Internet Standard; see Section 2 of RFC 7841.'
     boilerplate['status']['p2end_other'] = \
+        'Documents approved for publication by the %s are not a ' \
+        'candidate for any level of Internet Standard; see Section 2 of RFC ' \
+        '7841.'
+
+    boilerplate['status_5741']['p2end_ietf_std'] = \
+        'Further information on Internet Standards is available ' \
+        'in Section 2 of RFC 5741.'
+    boilerplate['status_5741']['p2end_ietf_bcp'] = \
+        'Further information on BCPs is available in Section 2 of RFC 5741.'
+    boilerplate['status_5741']['p2end_ietf_other'] = \
+        'Not all documents approved by the IESG are a candidate for any ' \
+        'level of Internet Standard; see Section 2 of RFC 5741.'
+    boilerplate['status_5741']['p2end_other'] = \
         'Documents approved for publication by the %s are not a ' \
         'candidate for any level of Internet Standard; see Section 2 of RFC ' \
         '5741.'
@@ -473,51 +489,60 @@ class BaseRfcWriter:
         """ Fix the date data """
         today = self.date
         date = self.r.find('front/date')
-        if date is not None:
-            year = date.attrib.get('year', '')
-            month = date.attrib.get('month', '')
-            day = date.attrib.get('day', '')
-            if not year or (year == str(today.year) and\
-               (not month or month.lower() == today.strftime("%B").lower() or \
-                month.lower() == today.strftime("%b").lower())):
-                # Set everything to today
-                date.attrib['year'] = today.strftime('%Y')
-                date.attrib['month'] = today.strftime('%B')
-                if self.draft and not day:
-                    date.attrib['day'] = today.strftime('%d')
-                    if date.attrib['day'][0] == '0':
-                        date.attrib['day'] = today.strftime('%d').replace('0', '')
-            elif year != str(today.year) and not month:
-                xml2rfc.log.error("Incomplete and out-of date <date/> element: %s" % lxml.etree.tostring(date))
+        assert date is not None, "Bug in schema validation: no date element in document"
+
+        year = date.attrib.get('year', '')
+        month = date.attrib.get('month', '')
+        day = date.attrib.get('day', '')
+        if not year or (year == str(today.year) and\
+           (not month or month.lower() == today.strftime("%B").lower() or \
+            month.lower() == today.strftime("%b").lower())):
+            # Set everything to today
+            date.attrib['year'] = today.strftime('%Y')
+            date.attrib['month'] = today.strftime('%B')
+            if self.draft and not day:
+                date.attrib['day'] = today.strftime('%d')
+                if date.attrib['day'][0] == '0':
+                    date.attrib['day'] = today.strftime('%d').replace('0', '')
+        elif year != str(today.year) and not month:
+            xml2rfc.log.error("Incomplete and out-of date <date/> element: %s" % lxml.etree.tostring(date))
+
         try:
+            # Full month name
             datetime.datetime.strptime(date.attrib.get('year')+date.attrib.get('month'), '%Y%B')
         except ValueError:
             try:
-                datetime.datetime.strptime(date.attrib.get('year')+date.attrib.get('month'), '%Y%b')
+                # Abbreviated month name
+                d = datetime.datetime.strptime(date.attrib.get('year')+date.attrib.get('month'), '%Y%b')
+                date.attrib['month'] = d.strftime('%B')
             except ValueError:
                 xml2rfc.log.warn("Year and/or month are incorrect values in <date/> element: %s" % lxml.etree.tostring(date))
         except TypeError:
             pass
 
+        self.date = datetime.datetime.strptime(date.attrib['year']+date.attrib['month']+date.attrib.get('day','1'), '%Y%B%d')
+
         # Setup the expiration string for drafts as published date + six months
+        # FIXME: The following code undoes some of the code above.  Determine
+        # which should actually be in effect, and get rid of the other.
         if self.draft:
             date = self.r.find('front/date')
-            if date is not None:
-                month = date.attrib.get('month', '')
-                year = date.attrib.get('year', '')
-                day = date.attrib.get('day', '1')  # Default to first of month
+
+            month = date.attrib.get('month', '')
+            year = date.attrib.get('year', '')
+            day = date.attrib.get('day', '1')  # Default to first of month
+            try:
+                start_date = datetime.datetime.strptime(year + month + day, \
+                                                        '%Y%B%d')
+            except ValueError:
                 try:
                     start_date = datetime.datetime.strptime(year + month + day, \
-                                                            '%Y%B%d')
+                                                            '%Y%b%d')
                 except ValueError:
-                    try:
-                        start_date = datetime.datetime.strptime(year + month + day, \
-                                                                '%Y%b%d')
-                    except ValueError:
-                        start_date = today
+                    start_date = today
 
-                expire_date = start_date + datetime.timedelta(185)
-                self.expire_string = expire_date.strftime('%B %d, %Y').replace(' 0', ' ')
+            expire_date = start_date + datetime.timedelta(185)
+            self.expire_string = expire_date.strftime('%B %d, %Y').replace(' 0', ' ')
 
 
     def _format_counter(self, text, count, list_length=1):
@@ -960,15 +985,20 @@ class BaseRfcWriter:
                 p2.append(self.boilerplate['status'].get(stream, ''))
 
             # Last sentence of p2
-            if stream == 'IETF' and category == 'std':
-                p2.append(self.boilerplate['status']['p2end_ietf_std'])
-            elif stream == 'IETF' and category == 'bcp':
-                p2.append(self.boilerplate['status']['p2end_ietf_bcp'])
-            elif stream == 'IETF':
-                p2.append(self.boilerplate['status']['p2end_ietf_other'])
+            if self.date < datetime.datetime(year=2016, month=6, day=1):
+                status="status_5741"
             else:
-                p2.append(self.boilerplate['status']['p2end_other'] \
+                status="status"         # Current boilerplate
+            if stream == 'IETF' and category == 'std':
+                p2.append(self.boilerplate[status]['p2end_ietf_std'])
+            elif stream == 'IETF' and category == 'bcp':
+                p2.append(self.boilerplate[status]['p2end_ietf_bcp'])
+            elif stream == 'IETF':
+                p2.append(self.boilerplate[status]['p2end_ietf_other'])
+            else:
+                p2.append(self.boilerplate[status]['p2end_other'] \
                           % self.approvers.get(stream, ''))
+
 
             # Write second paragraph
             self.write_paragraph('  '.join(p2))

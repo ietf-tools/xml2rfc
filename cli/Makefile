@@ -49,6 +49,8 @@ cachetest: cleantmp install
 rfctest: cleantmp bin/python install
 	@ xml2rfc --cache tests/cache --no-network tests/input/rfc6787.xml --base tmp/ --raw --text --nroff --html --exp
 	doc=rfc6787 ; postnrofffix="cat" ; $(CHECKOUTPUT)
+	@ xml2rfc --cache tests/cache --no-network tests/input/rfc7911.xml --base tmp/ --raw --text --nroff --html --exp
+	doc=rfc7911 ; postnrofffix="cat" ; $(CHECKOUTPUT)
 
 unicodetest: cleantmp  bin/python install
 	@ xml2rfc --cache tests/cache --no-network tests/input/unicode.xml --base tmp/ --raw --text --nroff --html --exp
@@ -71,7 +73,7 @@ upload:
 	rst2html changelog > /dev/null	# verify that the changelog is valid rst
 	python setup.py sdist upload --sign
 	python setup.py install
-	rsync dist/xml2rfc-$(shell xml2rfc --version).tar.gz /www/tools.ietf.org/tools/xml2rfc2/cli/
+	rsync dist/xml2rfc-$(shell xml2rfc --version).tar.gz /www/tools.ietf.org/tools/xml2rfc2/cli/ || true
 	toolpush /www/tools.ietf.org/tools/xml2rfc2/cli/
 
 
