@@ -47,7 +47,6 @@ class CachingResolver(lxml.etree.Resolver):
                  no_network=False, network_locs= [
                      'http://xml2rfc.ietf.org/public/rfc/',
                      'http://xml2rfc.tools.ietf.org/public/rfc/',
-                     'http://xml.resource.org/public/rfc/',
                  ],
                  rfc_number=None):
         self.verbose = verbose
@@ -168,7 +167,7 @@ class CachingResolver(lxml.etree.Resolver):
               ['/usr/share/xml2rfc'].  On the GUI this can be configured
               manually but has the same initial defaults.
             - NETWORK refers to the online citation library.  On the CLI this
-              is http://xml.resource.org/public/rfc/.  On the GUI this 
+              is http://xml2rfc.ietf.org/public/rfc/.  On the GUI this 
               can be configured manually but has the same initial default.
 
             The caches in read_dirs are consulted in sequence order to find the
@@ -366,7 +365,6 @@ class XmlRfcParser:
                  no_network=False, network_locs=[
                      'http://xml2rfc.ietf.org/public/rfc/',
                      'http://xml2rfc.tools.ietf.org/public/rfc/',
-                     'http://xml.resource.org/public/rfc/',
                  ]
                  ):
         self.verbose = verbose
