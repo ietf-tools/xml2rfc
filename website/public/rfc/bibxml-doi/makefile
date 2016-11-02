@@ -1,6 +1,19 @@
+# This requires apache2 conf changes to be made to
+# /etc/apache2/sites-available/xml2rfc.tools.ietf.org.conf
+#	ScriptAlias /public/rfc/bibxml7  /www/tools.ietf.org/tools/xml2rfc/web/public/rfc/bibxml7/nph-index.cgi
+#	ScriptAlias /public/rfc/bibxml-doi  /www/tools.ietf.org/tools/xml2rfc/web/public/rfc/bibxml7/nph-index.cgi
+#	<Directory "/www/tools.ietf.org/tools/xml2rfc/web/public/rfc/bibxml7/">
+#		AllowOverride None
+#		Options ExecCGI -MultiViews +SymLinksIfOwnerMatch
+#		Order allow,deny
+#		Allow from all
+#	</Directory>
+# sudo /etc/init.d/apache2 reload
+
+
 DIR=web/public/rfc/bibxml-doi
 PUB= $$HOME/public_html/$(DIR)
-INS= nph-index.cgi htaccess README.md
+INS= nph-index.cgi README.md
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
 DERIVATIVES= index.cgi
 

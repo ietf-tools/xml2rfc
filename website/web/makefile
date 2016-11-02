@@ -65,4 +65,4 @@ test-install: all
 	done
 
 clean:
-	rm -f $(DERIVATIVES)
+	rm -f $(DERIVATIVES) *~

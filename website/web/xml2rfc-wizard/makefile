@@ -1,16 +1,19 @@
-DIR=cgi-bin
+DIR=web/xml2rfc-wizard
 PUB= $$HOME/public_html/$(DIR)
-INS= cat.cgi xml2rfc-dev.cgi xml2rfc.cgi xml2rfc-old.cgi xml2rfc-version check-svg.cgi kramdown.cgi kramdown-version.cgi
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
-DERIVATIVES= 
+GIF= info.gif x.gif
+JS=  prototype.js  xml2rfc-wizard.js
+CSS= xml2rfc-wizard.css
+HTML= xml2rfc-wizard.html
+INS= $(HTML) $(CSS) $(JS) $(GIF)
 
-all: $(DERIVATIVES)
+all:
 
 install: all
 	@for i in $(INS); do \
-	    if [ $$i -nt $(WEB)/$$i -o ! -f $(WEB)/$$i ];then \
+	    if [ $$i -nt $(WEB)/$$i ];then \
 	        echo cp $$i $(WEB)/$$i; \
-	        chmod a+x $$i && cp $$i $(WEB)/$$i; \
+	        cp $$i $(WEB)/$$i; \
 	    fi; \
 	done
 
@@ -24,8 +27,10 @@ test-install: all
 	@for i in $(INS); do \
 	    if [ $$i -nt $(PUB)/$$i ];then \
 	        echo cp $$i $(PUB)/$$i; \
-	        chmod a+x $$i && cp $$i $(PUB)/$$i; \
+	        sed 's/cgi-bin/..\/cgi-bin/g' < $$i > $(PUB)/$$i; \
 	    fi; \
 	done
 
 clean:
+	rm -f *~
+

@@ -21,14 +21,14 @@ if ($#ARGV >= 0) {
 
 # for each DOI:
 for my $DOIref (@DOIrefs) {
-    #    if cache has file already
+    #    if cache has file already and < 24 hours old
     #        cat cached copy
     #    else
     #        grab dx.doi.org/$DOI
     #        convert to appropriate format
     #        save in cache
     # print STDERR "DOIref=$DOIref\n";
-    if ($DOIref =~ m(^/?reference.DOI[.](\d+[.]\d+)[/.](\d+[.]\d+)[.](xml|kramdown)$)) {
+    if ($DOIref =~ m(^/?reference.DOI[.](\d+[.]\d+)[/._](\d+[.]\d+)[.](xml|kramdown)$)) {
 	my $DOIpt1 = $1;
 	my $DOIpt2 = $2;
 	my $type = $3;
@@ -36,8 +36,16 @@ for my $DOIref (@DOIrefs) {
 	my $opt = $type eq 'xml' ? "x" : "h";
 	print "HTTP/1.0 200 OK\n" if $nph;
 	print "Content-Type: text/$type\n\n";
-	print STDERR "Running: doilit -$opt=DOI_${DOIpt1}_${DOIpt2} ${DOIpt1}/${DOIpt2}";
-	print `doilit -$opt=DOI_${DOIpt1}_${DOIpt2} ${DOIpt1}/${DOIpt2}`;
+	my $CACHEDIR = "/var/tmp/doi-cache";
+	my $TMP = "$CACHEDIR/reference.DOI_${DOIpt1}_${DOIpt2}.${type}";
+	# print STDERR "-s $TMP=" . (-s $TMP) . ", -M $TMP=" . (-M _);
+	if (-s $TMP && -M _ < 1) {
+	    print STDERR "Using cached file $TMP";
+	    print `cat $TMP`;
+	} else {
+	    print STDERR "Running: doilit -$opt=DOI_${DOIpt1}_${DOIpt2} ${DOIpt1}/${DOIpt2}";
+	    print `mkdir -p $CACHEDIR;doilit -$opt=DOI_${DOIpt1}_${DOIpt2} ${DOIpt1}/${DOIpt2} | tee "$TMP.tmp";mv "$TMP.tmp" "$TMP"`;
+	}
     } else {
 	print "HTTP/1.0 404 NOT FOUND\n" if $nph;
 	print "Content-type: text/plain\n\n";

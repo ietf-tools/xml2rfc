@@ -1,6 +1,7 @@
 #!/usr/bin/perl -T
 
-use strict vars;
+use 5.014;
+use strict;
 use CGI;
 use Cwd qw(chdir getcwd);
 use HTML::Entities ();
@@ -15,38 +16,88 @@ umask(02);
 my $dir = untaint(getcwd());
 my $q = CGI->new;
 my $debug = $q->param('debug') ? 1 : undef;
-my $trace;
+my $trace = '';
 my $sharedsecret = 'zzxoiuakjwefya%^&@#*(*(&@dflaskiouioiuklasfq';
 my $salt = time();
 my @filesToRemove;
 my @dirsToRemove;
 my %fileValues;
 
-####### ########################### #######
-####### # Process an xml2rfc HTTP request
-####### #
-####### # invoking form has these fields:
-####### #       file "input" - contains the XML file
-####### #       radiobutton "mode" - either txt, unpg, html, htmlxslt, nr, or xml
-####### #       radiobutton "type" - either ascii (output to window), toframe (separate warnings/output windows) 
-####### #		or binary (output to file)
-####### #       radiobutton "format" - either ascii, pdf, epub, rtf, ps
-####### #
-####### #	radiobutton "checking" - either "strict" or "fast"
-####### #
-####### ########################### #######
+<<COMMENT;
+########################### #######
+ Process an xml2rfc HTTP request
 
-my @modes = ('txt', 'unpg', 'html', 'htmlxslt', 'nr', 'xml');
-my @formats = ('ascii',  'pdf',  'epub',  'rtf',  'ps');
+ invoking form has these fields:
+	file "input" or "url"
+	    contains the XML file
+	radio button "mode"
+	    one of txt, unpg, html, htmlxslt, htmlrfcmarkup, nr, or xml
+	radio button "format"
+	    one of ascii, pdf, epub, mobi, rtf, ps
+            epub and mobi requires an html* mode to be used
+	    rtp does not allow an html* mode to be used
+	radio button "type"
+	    either ascii (output to window), toframe (separate warnings/output windows)
+	    or binary (output to file)
+
+	radiobutton "checking" - either "strict" or "fast"
+
+########################## #######
+
+input:
+TODO *.xml		continue and process using xml2rfc
+TODO *.mkd, *.md	pre-process using kramdown-rfc2629
+
+inputtype:
+xml2rfc		continue and process using xml2rfc
+kramdown	pre-process using kramdown-rfc2629
+
+mode:
+txt		xml2rfc --text > text
+unpg		xml2rfc --raw > unpg
+nroff		xml2rfc --nroff > nroff
+xml		xml2rfc --exp > xml
+html		xml2rfc --html > html
+htmlxslt	xml2rfc --exp > xml, xslt process > html
+htmlrfcmarkup	xml2rfc --text > text, rfcmarkup > html
+
+format:
+*/ascii		done
+
+html*/pdf	wkhtmltopdf < html* > pdf
+*/pdf		enscript < * > ps; ps2pdf < ps > pdf
+
+html*/ps	wkhtmltopdf < html* > pdf; pdf2ps < pdf > ps
+*/ps		enscript < * > ps
+
+html*/rtf	not allowed
+*/rtf		enscript < * > rtf
+
+htmlxslt/epub	xml2rfc-html2epub-viaxslt < xml > epub
+html*/epub	ebook-convert < html* > epub
+*/epub		rename to *.txt; ebook-convert < txt > epub
+
+html*/mobi	ebook-convert < html* > mobi
+*/mobi		rename to *.txt; ebook-convert < txt > mobi
+
+COMMENT
+
+my @inputtypes = ('xml2rfc', 'kramdown');
+my @modes = ('txt', 'unpg', 'html', 'htmlxslt', 'htmlrfcmarkup', 'nr', 'xml');
+my @formats = ('ascii',  'pdf',  'epub', 'mobi',  'rtf',  'ps');
 
 umask(0);
 my $input    = $q->param('input');
 my $inputfn  = untaint($q->tmpFileName($input));
 my $url = $q->param('url');
+printHeaders("text/plain") if $debug;
+print "input='$input', inputfn='$inputfn'\n" if $debug;
 if (($input eq '') || ($inputfn eq '')) {
     userError("No input file") if ($url eq '');
+    print "Getting URL=" . untaint($url) . "\n" if $debug;
     my ($content, $err) = wget($url);
     userError($err) if ($err ne '');
+    $input = "url.xml";
     $inputfn = "/tmp/CGItemp$$.txt";
     createFile($inputfn, $content);
 }
@@ -57,18 +108,26 @@ if ($modeAsFormat =~ m((.*)/(.*))) {
    $q->param('mode', $1);
    $q->param('format', $2);
 }
+my $inputtype = checkValue('inputtype', @inputtypes);
 my $mode = checkValue('mode', @modes);
 my $format = checkValue('format', @formats);
 my $type     = checkValue('type', 'ascii', 'binary', 'toframe', 'towindow', 'tofile');
 my $checking = checkValue('checking', 'strict', 'fast');
 $checking = 'fast';
-$type = 'towindow' if $type eq 'ascii';
-$type = 'tofile' if $type eq 'binary';
+if ($type eq 'ascii') {
+    $type = 'towindow';
+} elsif ($type eq 'binary') {
+    $type = 'tofile';
+}
+userError("Error: epub requires an html mode") if (($format eq "epub") && ($mode !~ /^html/));
+userError("Error: mobi requires html mode") if (($format eq "mobi") && ($mode !~ /^html$/));
+userError("Error: rtf does not allow an html mode") if (($format eq "rtf") && ($mode =~ /^html/));
 
 my %expandedModes = (
     txt => "Text",
     html => "HTML",
     htmlxslt => "HTML via XSLT",
+    htmlrfcmarkup => "HTML via RfcMarkup",
     nr => "Nroff",
     unpg => "Unpaginated Text",
     xml => "XML"
@@ -77,6 +136,7 @@ my %expandedFormats = (
     ascii => "ASCII",
     pdf => "PDF",
     epub => "ePub",
+    mobi => "MOBI",
     rtf => "Rich Text Format",
     ps => "PostScript"
     );
@@ -84,20 +144,32 @@ my %extensions = (
     txt => 'txt',
     html => 'html',
     htmlxslt => 'html',
+    htmlrfcmarkup => 'html',
     nr => 'nr',
     unpg => 'unpg',
     xml => 'xml',
     pdf => 'pdf',
     epub => 'epub',
+    mobi => 'mobi',
     rtf => 'rtf',
     ps => 'ps'
     );
+my %xml2rfc2modes = (
+    html => 'html',
+    htmlxslt => 'exp',
+    htmlrfcmarkup => 'text',
+    nr => 'nroff',
+    pdf => 'text',
+    ps => 'text',
+    txt => 'text',
+    unpg => 'raw',
+    xml => 'exp',
+    );
 
-printHeaders("text/plain") if $debug;
 my $outputfn = getOutputName($input, $mode, $format);
 my $basename = $outputfn;
 $basename =~ s/.[^.]*$//;
-print "input='$input', inputfn='$inputfn', outputfn='$outputfn', basename='$basename'\n" if $debug;
+print "input='$input', inputtype='$inputtype', inputfn='$inputfn', outputfn='$outputfn', basename='$basename'\n" if $debug;
 print "mode=$mode, format=$format, checking=$checking, type=$type\n" if $debug;
 saveTracePass("Generating $expandedModes{$mode} output in $expandedFormats{$format} format", "h1");
 
@@ -127,6 +199,7 @@ $ENV{SERVER_ADMIN} = 'tony@att.com';
 # $ENV{HOME} = "/var/tmp";
 # $ENV{HOME} = "/home/tonyh";
 $ENV{LANG} = "en_US";
+$ENV{KRAMDOWN_SAFE} = "y";
 
 $ENV{XML_LIBRARY} = "$dir/web/public/rfc/bibxml";
 foreach my $bibxml (<$dir/web/public/rfc/bibxml?>) {
@@ -149,7 +222,11 @@ $type = 'tofile' if (($type eq 'towindow') && ($mode eq 'xml'));
 my $newinputfn = setSubTempFile("$basename.xml");
 my $ret = rename($inputfn, $newinputfn);
 print "rename($inputfn,$newinputfn) ret='$ret'\n" if $debug;
-# userError("Unable to rename temp file", $!) if $ret;
+$ret = chmod 0666, $newinputfn;
+# print "chmod 0666, $newinputfn: ret='$ret'\n" if $debug;
+print "newinputfn=$newinputfn\n" if $debug;
+my $TMPERR = getTempFileWithSuffix("err");
+my ($ret, $out, $err);
 
 
 ####### ########################### #######
@@ -159,221 +236,198 @@ print "rename($inputfn,$newinputfn) ret='$ret'\n" if $debug;
 ####### #	sax < $TMP1
 ####### #		check for errors
 ####### ########################### #######
+####### #
+####### # Run xml2rfc to: expand internal references and includes.
+####### #
+####### ########################### #######
 
+my $curfile = $newinputfn;
 
-# Run xml2rfc to: expand internal references and includes.
-# If not doing strict checking, this will generate the final version as well.
-my $needExpansionToXml =
-	($checking eq 'strict') ||
-	($format eq 'epub') ||
-	($mode eq 'htmlxslt')
-	;
-my $finalTclPassHere;
-if ($mode eq 'xml') {
-    $finalTclPassHere = 1;
-} else {
-    if ($mode eq 'htmlxslt') {
-	if ($format eq 'epub') {
-	    $finalTclPassHere = 1;
-	}
-    } elsif (!$needExpansionToXml) {
-	$finalTclPassHere = 1;
+given ($inputtype) {
+    when("xml2rfc") {
+    }
+    when("kramdown") {
+        my $tmpout = callKramdown($curfile);
+        $curfile = $tmpout;
     }
 }
 
-my $TMP1 = $finalTclPassHere ?
-    ($needExpansionToXml ?  setSubTempFile("$basename-2.xml") : setSubTempFile("$basename-2." . $extensions{$mode})) :
-    ($needExpansionToXml ?  setTempFile("$inputfn-1.xml") : setTempFile("$inputfn-1." . $extensions{$mode}));
-
-my %xml2rfc2modes = (
-    epub => 'text',
-    html => 'html',
-    htmlxslt => 'exp',
-    nr => 'nroff',
-    pdf => 'text',
-    ps => 'text',
-    rtf => 'text',
-    txt => 'text',
-    unpg => 'raw',
-    xml => 'exp',
-    );
-# for my $key (keys %xml2rfc2modes) {
-#     print "key=$key, mode='$xml2rfc2modes{$key}'\n";
-# }
-my $xml2rfc2mode = $xml2rfc2modes{$mode};
-
-print "mode='$mode', xml2rfc2mode='$xml2rfc2mode'\n" if $debug;
-print "TMP1=$TMP1\n" if $debug;
-my $TMPERR = setTempFile("$inputfn.err");
-
-my ($ret, $out, $err) = runCommand("etc/xml2rfc2 --$xml2rfc2mode --out=$TMP1 $newinputfn", $newinputfn, $TMP1, 
-    $needExpansionToXml ?  "Expanding internal references" : "Expanding internal references and generating $mode"
-    );
-print "xml2rfc ret=$ret\n" if $debug;
-print "out='$out'\n" if $debug;
-print "err='$err'\n" if $debug;
-userError("Unable to Validate File", $err) if ($err ne '');
-
-# Do the strict DTD checking.
-if ($checking eq 'strict') {
-    ($ret, $out, $err) = runCommand("java -cp etc/xercesImpl.jar:etc/xercesSamples.jar sax.Counter -v $TMP1", $TMP1, $TMP1, "Strict DTD check");
-    print "xerces ret=$ret\n" if $debug;
-    print "out='$out'\n" if $debug;
-    print "err='$err'\n" if $debug;
-
-    if ($err =~ /no grammar found/) {
-       $out .= "\nAre you missing the statement <!DOCTYPE rfc SYSTEM \"rfc2629.dtd\"> in your source file?\n\n";
-       $out .= $err;
-    } else {
-       $out .= $err;
+given ($mode) {
+    when("txt") {
+	my $tmpout = callXml2rfc("txt", "text");
+	$curfile = $tmpout;
     }
-    $out .= "\n\nTo proceed, you should fix your input file.\n" .
-      "You may also try doing the conversion with Strict Checking turned off.\n";
-    userError("Unable to Validate File", $out) if (($out =~ /\[Error\]/) || ($out =~ /\[Fatal Error\]/));
-}
-
-
-####### ########################### #######
-####### # pass 2 - expand xml2rfc
-####### #	if mode == xml
-####### #		TMP2.xml = TMP1
-####### #	else
-####### #		xml2rfc TMP1 TMP2.$mode
-####### ########################### #######
-
-
-my $TMP2;
-if ($mode eq 'xml') {
-    $TMP2 = $TMP1;
-    print "TMP2=$TMP2\n" if $debug;
-} else {
-    # $TMP2 = setTempFile("$inputfn-2." . $extensions{$mode});
-    if ($mode eq 'htmlxslt') {
-	if ($format eq 'epub') {
-	    $TMP2 = $TMP1;
-	    print "TMP2=$TMP2\n" if $debug;
+    when("unpg") {
+	my $tmpout = callXml2rfc("txt", "raw");
+	$curfile = $tmpout;
+    }
+    when("nr") {
+	my $tmpout = callXml2rfc("nr", "nroff");
+	$curfile = $tmpout;
+    }
+    when("xml") {
+	my $tmpout = callXml2rfc("xml", "exp");
+	$curfile = $tmpout;
+    }
+    when("html") {
+	my $tmpout = callXml2rfc("html", "html");
+	$curfile = $tmpout;
+    }
+    when("htmlxslt") {
+	my $TMP1 = callXml2rfc("xml", "exp");
+	if (($format eq "epub") || ($format eq "mobi")) {
+	    $curfile = $TMP1;
 	} else {
-	    $TMP2 = setTempFile("$inputfn-2." . $extensions{$mode});
-	    print "TMP2=$TMP2\n" if $debug;
-	    my ($ret, $out, $err) = runCommand("xsltproc $dir/etc/xslt/rfc2629.xslt $TMP1 > $TMP2", $TMP1, $TMP2, "Generating $mode");
-	    print "xsltproc ret=$ret\n" if $debug;
-	    print "out='$out'\n" if $debug;
-	    print "err='$err'\n" if $debug;
+	    my $TMP2 = getTempFileWithSuffix("html");
+	    ($ret, $out, $err) = runCommand("xsltproc $dir/etc/xslt/rfc2629.xslt $TMP1 > $TMP2", $TMP1, $TMP2, "Generating $expandedModes{$mode}");
 	    userError("Unable to Validate File", $err) if ($err =~ /Error/);
+	    $curfile = $TMP2;
 	}
-    } elsif (!$needExpansionToXml) {
-	$TMP2 = $TMP1;
-	print "TMP2=$TMP2\n" if $debug;
-    } else {
-	$TMP2 = setSubTempFile("$basename." . $extensions{$mode});
-	print "TMP2=$TMP2\n" if $debug;
-	my ($ret, $out, $err) = runCommand("tclsh etc/xml2rfc-dev.tcl xml2rfc $TMP1 $TMP2", $TMP1, $TMP2, "Generating $mode");
-	print "xml2rfc ret=$ret\n" if $debug;
-	print "out='$out'\n" if $debug;
-	print "err='$err'\n" if $debug;
-	userError("Unable to Validate File", $err) if ($err ne '');
+    }
+    when("htmlrfcmarkup") {
+	my $TMP1 = callXml2rfc("txt", "text");
+	my $TMP2 = getTempFileWithSuffix("html");
+	($ret, $out, $err) = runCommand("env - /home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup 'staticpath=http://tools.ietf.org/html/&url=file://$TMP1' > $TMP2", $TMP1, $TMP2, "Generating $expandedModes{$mode}");
+	userError("Unable to Validate File", $err) if ($err =~ /Error/);
+	open(TMP2, "<", $TMP2) or userError("Unable to open temp file", $!);
+	my $firstLine = <TMP2>;
+	if ($firstLine =~ /^content-type:/i) {
+	    print "Skipping '$firstLine'\n" if $debug;
+	    while (<TMP2>) {
+	        print "Skipping '$_'\n" if $debug;
+		last if $_ =~ /^$/;
+	    }
+	    my $TMP3 = getTempFileWithSuffix("html");
+	    open(TMP3, ">", $TMP3) or userError("Unable to create temp file", $!);
+	    while (<TMP2>) {
+		print TMP3 $_;
+	    }
+	    close(TMP2);
+	    close(TMP3);
+	    $curfile = $TMP3;
+	} else {
+	    $curfile = $TMP2;
+	}
+    }
+    default {
+	userError("unknown mode $mode");
     }
 }
 
+print "at end of first pass, curfile=$curfile\n" if $debug;
 
 ####### ########################### #######
-####### # pass 3 - convert to output format
+####### # pass 2 - convert to output format
 ####### #	if format == ascii
-####### #		TMP3.$mode = TMP2.$mode
+####### #		done
 ####### #	else
-####### #		convert $TMP2.$mode $TMP3.$mode.$format
+####### #		convert $TMP2.$mode $TMP3.$format
 ####### ########################### #######
 
-
-my $TMP3;
-if ($format eq 'ascii') {
-    $TMP3 = $TMP2;
-} else {
-    $TMP3 = setTempFile("$inputfn-3." . $extensions{$format});
-    if ($mode eq 'txt') {
-	my $filesize = -s $TMP2;
-	my $ret = truncate($TMP2, $filesize - 2);
-	print "truncate ret=$ret\n" if $debug;
+my $enscriptPsArguments = "--font=Courier12 --language=PostScript --no-header --quiet";
+given($format) {
+    when("ascii") { # all done
     }
-    my ($ret, $out, $err);
-    my $enscriptPsArguments = "--font=Courier12 --language=PostScript --no-header --quiet";
-    if ($format eq 'pdf') {
-	if (($mode eq 'html') || ($mode eq 'htmlxslt')) {
-	    ($ret, $out, $err) = runCommand("etc/wkhtmltopdf-i386 --quiet $TMP2 $TMP3", $TMP2, $TMP3, "Converting to $format");
-	    print "wkhtmltopdf ret=$ret\n" if $debug;
-	    print "out='$out'\n" if $debug;
-	    print "err='$err'\n" if $debug;
-	    userError("Conversion error to pdf", $err) if ($err ne '');
+    when("pdf") {
+        if ($mode =~ /^html/) {
+	    my $TMP2 = getTempFileWithSuffix("pdf");
+	    ($ret, $out, $err) = runCommand("etc/wkhtmltopdf-i386 --quiet $curfile $TMP2", $curfile, $TMP2, "Converting to PDF");
+	    userError("Unable to Convert File", $err) if ($err ne '');
+	    $curfile = $TMP2;
 	} else {
-	    my $TMP4 = setTempFile("$inputfn-4.ps");
-	    print "TMP3=$TMP3\n" if $debug;
-	    print "TMP4=$TMP4\n" if $debug;
-	    ($ret, $out, $err) = runCommand("enscript $enscriptPsArguments --output=$TMP4 < $TMP2", $TMP2, $TMP4, "Converting to $format");
-	    print "enscript ret=$ret\n" if $debug;
-	    print "out='$out'\n" if $debug;
-	    print "err='$err'\n" if $debug;
+	    my $TMP2 = getTempFileWithSuffix("ps");
+	    ($ret, $out, $err) = runCommand("enscript $enscriptPsArguments --output=$TMP2 < $curfile", $curfile, $TMP2, "Converting to intermediate PS");
 	    userError("Conversion error to intermediate postscript", $err) if ($err ne '');
-	    ($ret, $out, $err) = runCommand("ps2pdf $TMP4 $TMP3", $TMP4, $TMP3);
+	    my $TMP3 = getTempFileWithSuffix("pdf");
+	    ($ret, $out, $err) = runCommand("ps2pdf $TMP2 $TMP3", $TMP2, $TMP3);
+	    userError("Conversion error to final PDF", $err) if ($err ne '');
+	    $curfile = $TMP3;
 	}
-    } elsif ($format eq 'rtf') {
-	if (($mode eq 'html') || ($mode eq 'htmlxslt')) {
-	    $err = "HTML => RTF is not supported";
+    }
+    when("ps") {
+        if ($mode =~ /^html/) {
+	    my $TMP2 = getTempFileWithSuffix("pdf");
+	    ($ret, $out, $err) = runCommand("etc/wkhtmltopdf-i386 --quiet $curfile $TMP2", $curfile, $TMP2, "Converting to intermediate PDF");
+	    userError("Unable to Convert File", $err) if ($err ne '');
+	    my $TMP3 = getTempFileWithSuffix("ps");
+	    ($ret, $out, $err) = runCommand("pdf2ps $TMP2 $TMP3", $TMP2, $TMP3, "Converting to final PS");
+	    userError("Conversion error to final PS", $err) if ($err ne '');
+	    $curfile = $TMP3;
 	} else {
-	    ($ret, $out, $err) = runCommand("enscript --language=rtf --no-header --quiet --output=$TMP3 < $TMP2", $TMP2, $TMP3, "Converting to $format");
+	    my $TMP2 = getTempFileWithSuffix("ps");
+	    ($ret, $out, $err) = runCommand("enscript $enscriptPsArguments --output=$TMP2 < $curfile", $curfile, $TMP2, "Converting to PS");
+	    userError("Conversion error to final postscript", $err) if ($err ne '');
+	    $curfile = $TMP2;
 	}
-    } elsif ($format eq 'ps') {
-	if (($mode eq 'html') || ($mode eq 'htmlxslt')) {
-	    my $TMP4 = setTempFile("$inputfn-4.pdf");
-	    print "TMP3=$TMP3, TMP4=$TMP4\n" if $debug;
-	    ($ret, $out, $err) = runCommand("etc/wkhtmltopdf-i386 --quiet $TMP2 $TMP4", $TMP2, $TMP4, "Converting to intermediate PDF");
-	    print "wkhtmltopdf ret=$ret\n" if $debug;
-	    print "out='$out'\n" if $debug;
-	    print "err='$err'\n" if $debug;
-	    userError("Conversion error to intermediate pdf", $err) if ($err ne '');
-	    ($ret, $out, $err) = runCommand("pdf2ps $TMP4 $TMP3", $TMP4, $TMP3, "Converting to $format");
+    }
+    when("rtf") {
+	if ($mode =~ /^html/) {
+	    userError("RTF is not supported for HTML modes");
 	} else {
-	    ($ret, $out, $err) = runCommand("enscript $enscriptPsArguments --output=$TMP3 < $TMP2", $TMP2, $TMP3, "Converting to $format");
+	    my $TMP2 = getTempFileWithSuffix("rtf");
+	    ($ret, $out, $err) = runCommand("enscript --language=rtf --no-header --quiet --output=$TMP2 < $curfile", $curfile, $TMP2, "Converting to RTF");
+	    userError("Conversion error to intermediate postscript", $err) if ($err ne '');
+	    $curfile = $TMP2;
 	}
-    } elsif ($format eq 'epub') {
-	if ($mode eq 'htmlxslt') {
-	    print "TMP2=$TMP2, TMP3=$TMP3\n" if $debug;
-	    ($ret, $out, $err) = runCommand("etc/xml2rfc-html2epub-viaxslt $TMP2 $TMP3", $TMP2, $TMP3, "Converting to $format");
-	    if ($err !~ /error/i) {
-		$out .= $err;
-		$err = '';
+    }
+    when("epub") {
+	my $TMP2 = getTempFileWithSuffix("epub");
+	if ($mode eq "htmlxslt") {
+	    ($ret, $out, $err) = runCommand("etc/xml2rfc-html2epub-viaxslt $curfile $TMP2", $curfile, $TMP2, "Converting to epub");
+	    userError("Conversion error to epub", $err) if ($err =~ /error/i);
+	} else {
+	    if ($mode !~ /^html/) {
+		my $TMP3 = getTempFileWithSuffix("txt");
+		rename($curfile, $TMP3);
+		$curfile = $TMP3;
 	    }
-	} else {
-	    my $TMP4;
-	    if ($mode eq 'html') {
-		$TMP4 = $TMP2;
-	    } else {
-		$TMP4 = setTempFile("$TMP2.txt");
-		print "TMP3=$TMP3, TMP4=$TMP4\n" if $debug;
-		rename($TMP2, $TMP4);
-	    }
-	    getFileValues($TMP1);
+	    getFileValues($newinputfn);
 	    $fileValues{"rfc/front/title"} =~ s/'/_/g;
 	    $fileValues{"rfc/front/keyword"} =~ s/'/_/g;
 	    $fileValues{authors} =~ s/'/_/g;
-	    ($ret, $out, $err) = runCommand("ebook-convert $TMP4 $TMP3 " .
+	    my $TMP4 = getTempFileWithSuffix("html");
+	    ($ret, $out, $err) = runCommand("sed -e '/\@page {/,/]]>/d' -e '/<\\/style/s/^/\\/*]]>*\\//' < $curfile > $TMP4; ebook-convert $TMP4 $TMP2 " .
+	    # ($ret, $out, $err) = runCommand("ebook-convert $curfile $TMP2 " .
 		# "--no-svg-cover " .
 		"--no-default-epub-cover " .
 		"--authors='" . untaint($fileValues{authors}) . "' " .
-		"--title='" .  untaint($fileValues{"rfc/front/title"}) . "'" . 
-		"--tags='" .  untaint($fileValues{"rfc/front/keyword"}) . "'", 
-		$TMP4, $TMP3, "Converting to $format");
+		"--title='" .  untaint($fileValues{"rfc/front/title"}) . "' " .
+		"--tags='" .  untaint($fileValues{"rfc/front/keyword"}) . "' ",
+		$curfile, $TMP2, "Converting to $format");
 	}
+	$curfile = $TMP2;
     }
-
-    print "conversion ret=$ret\n" if $debug;
-    print "out='$out'\n" if $debug;
-    print "err='$err'\n" if $debug;
-    userError("Conversion error to $format", $err) if ($err ne '');
+    when("mobi") {
+	my $TMP2 = getTempFileWithSuffix("mobi");
+        if ($mode !~ /^html/) {
+	    my $TMP3 = getTempFileWithSuffix("txt");
+	    rename($curfile, $TMP3);
+	    $curfile = $TMP3;
+	}
+	getFileValues($newinputfn);
+	$fileValues{"rfc/front/title"} =~ s/'/_/g;
+	$fileValues{"rfc/front/keyword"} =~ s/'/_/g;
+	$fileValues{authors} =~ s/'/_/g;
+	my $TMP4 = getTempFileWithSuffix("html");
+	($ret, $out, $err) = runCommand("sed -e '/\@page {/,/]]>/d' -e '/<\\/style/s/^/\\/*]]>*\\//' < $curfile > $TMP4; ebook-convert $TMP4 $TMP2 " .
+	# ($ret, $out, $err) = runCommand("ebook-convert $curfile $TMP2 " .
+		# "--no-svg-cover " .
+		# "--no-default-epub-cover " .
+		"--authors='" . untaint($fileValues{authors}) . "' " .
+		"--title='" .  untaint($fileValues{"rfc/front/title"}) . "' " .
+		"--tags='" .  untaint($fileValues{"rfc/front/keyword"}) . "' ",
+		$curfile, $TMP2, "Converting to $format");
+	$curfile = $TMP2;
+    }
+    default {
+	userError("unknown format $format");
+    }
 }
 
+print "at end of second pass, curfile=$curfile\n" if $debug;
 
 ####### ########################### #######
-####### # pass 4 - send back to browser
+####### # pass 3 - send back to browser
 ####### #	if type = towindow
 ####### #		output to window
 ####### #	else if type = toframe
@@ -386,13 +440,17 @@ if ($format eq 'ascii') {
 
 if ($type eq 'towindow') {
     printHeaders(getContentType($mode, $format));
-    catFile($TMP3);
+    catFile($curfile);
 } elsif ($type eq 'toframe') {
     my $TMPTRACE = "$inputfn-5.html";
-    createFile($TMPTRACE, $trace, "<hr/>\n");
+    # my $errorMessage = "<h2 style='color: red'>Errors exist</h2>";
+    my $warningMessage = "<h2 style='color: orange'>Warnings exist</h2>";
+    # my $errorsExist = ($trace =~ /error/i) ? $errorMessage : "";
+    my $warningsExist = ($trace =~ /warning/i) ? $warningMessage : "";
+    createFile($TMPTRACE, $warningsExist, $trace, "<hr/>\n");
 
     # my $outputfn = getOutputName($input, $mode, $format);
-    my $KEEP = keepTempFile($TMP3, "$inputfn-6." . getExtension($TMP3), $debug);
+    my $KEEP = keepTempFile($curfile, "$inputfn-6." . getExtension($curfile), $debug);
     printHeaders("text/html");
     print "<html><head><title>XML2RFC Processor with Warnings &amp; Errors</title></head>\n";
     my $rows = (($format eq 'ascii') && ($mode ne 'xml')) ? '25%,*' : '50%,*';
@@ -412,22 +470,54 @@ if ($type eq 'towindow') {
     # my $outputfn = getOutputName($input, $mode, $format);
     # cgi_content_type "unknown/exe"
     printHeaders("application/octet-stream", "Content-Disposition: attachment; filename=\"$outputfn\"");
-    catFile($TMP3);
+    catFile($curfile);
+} else {
+    userError("unknown output type $type");
 }
-
 
 ####### ########################### #######
 ####### # all done
 ####### ########################### #######
 
-
 cleanup();
-
+exit;
 
 ####### ########################### #######
 ####### #### utility functions
 ####### ########################### #######
 
+sub callXml2rfc {
+    my $suffix = shift;
+    my $xml2rfcMode = shift;
+    my $tmpout = getTempFileWithSuffix($suffix);
+    my ($ret, $out, $err) = runCommand("etc/xml2rfc2 --$xml2rfcMode --out=$tmpout $curfile", $curfile, $tmpout, "Expanding internal references and generating $expandedModes{$mode}");
+    $curfile = $tmpout;
+    print "xml2rfc ret=$ret\n" if $debug;
+    print "out='$out'\n" if $debug;
+    print "err='$err'\n" if $debug;
+    if ($err =~ /ERROR/) {
+	userError("Unable to Validate File", $err, $out);
+    } else {
+	$out .= $err;
+    }
+    return $tmpout;
+}
+
+sub callKramdown {
+    my $infile = shift;
+    my $tmpout = getTempFileWithSuffix("xml");
+    my ($ret, $out, $err) = runCommand("/usr/local/bin/kramdown-rfc2629 $infile > $tmpout", $infile, $tmpout, "Running kramdown");
+    $curfile = $tmpout;
+    print "kramdown ret=$ret\n" if $debug;
+    print "out='$out'\n" if $debug;
+    print "err='$err'\n" if $debug;
+    if ($err =~ /ERROR/) {
+	userError("Unable to Validate File", $err, $out);
+    } else {
+	$out .= $err;
+    }
+    return $tmpout;
+}
 
 ####### execute an external command, capturing
 ####### its standard output, standard error, error code
@@ -439,7 +529,7 @@ sub runCommand {
     saveTracePass($pass);
     print "\n--- $pass ---\n" if $debug;
     $cmd .= " 2>$TMPERR";
-    print "runCommand($cmd)\n" if $debug;
+    print "\n!!!!!!!!!!!!!!!! runCommand($cmd)\n\n" if $debug;
     my $out = `$cmd`;
     my $ret = $?;
     my $err = getFile($TMPERR);
@@ -450,10 +540,15 @@ sub runCommand {
     $err =~ s($infn|$binfn)(INPUT)gm;
     $err =~ s($outfn|$boutfn)(OUTPUT)gm;
     saveTrace($ret, $out, $err);
+    if ($debug) {
+	print "command ret=$ret\n";
+	print "out='$out'\n";
+	print "err='$err'\n";
+    }
     return ($ret, $out, $err);
 }
 
-####### save an external command's standard output, 
+####### save an external command's standard output,
 ####### standard error, error code for later printing
 sub saveTrace {
     return if $type ne 'toframe';
@@ -501,17 +596,30 @@ sub checkValue {
 sub userError {
     printHeaders("text/html");
     print "<html><head><title>You lose</title></head><body>";
- 
+
     my $event = HTML::Entities::encode(shift);
     my $info = HTML::Entities::encode(shift);
+    my $text = HTML::Entities::encode(shift);
 
-    print "<h1>$event</h1>\n";
-    print "<pre>$info</pre>\n";
+    print "<style>.error { color: red; }</style>\n";
+    print "<h1 class='error'>$event</h1>\n";
+    print "<pre class='error'>$info</pre>\n";
+    print "<pre>$text</pre>\n";
     print "<hr/>\n";
     print $ENV{SERVER_SIGNATURE};
+    print " <span style='font-size: xx-small'>" . `uname -n` . "</span>";
     print "</body></html>\n";
     cleanup();
     exit();
+}
+
+my $suffixCount = 0;
+sub getTempFileWithSuffix {
+    my $suffix = shift;
+    $suffixCount++;
+    my $tmp = setSubTempFile("$basename-$suffixCount.$suffix");
+    print "getTempFileWithSuffix() => '$tmp'\n" if $debug;
+    return $tmp;
 }
 
 ####### add a temporary file to the removal list
@@ -602,7 +710,7 @@ sub createFile {
     close TMPTRACE;
 }
 
-####### if not already generated, make sure there is a content 
+####### if not already generated, make sure there is a content
 ####### type header, along with any other headers we will need
 my $printedHeader;
 sub printHeaders {
@@ -624,14 +732,15 @@ sub getContentType {
     my $format = shift;
     if ($format eq 'ascii') {
 	if ($mode eq 'txt') { return "text/plain"; }
-	if ($mode eq 'html') { return "text/html"; }
-	if ($mode eq 'htmlxslt') { return "text/html"; }
+	if ($mode =~ /^html/) { return "text/html"; }
 	if ($mode eq 'xml') { return "text/xml"; }
 	return "text/plain";	# nr, unpg
     } elsif ($format eq 'pdf') {
 	return "application/pdf";
     } elsif ($format eq 'epub') {
 	return "application/epub+zip";
+    } elsif ($format eq 'mobi') {
+	return "application/x-mobipocket-ebook";
     } elsif ($format eq 'rtf') {
 	return "application/rtf";
     } elsif ($format eq 'ps') {
@@ -680,7 +789,7 @@ sub mail_error {
         $smtp->datasend("REMOTE_ADDR: $ENV{REMOTE_ADDR}");
         $smtp->datasend("cgi.tcl version: 1.4.3");
         $smtp->datasend("input:");
-        $smtp->datasend($q->param(input));
+        $smtp->datasend($q->param("input"));
         $smtp->datasend("cookie: $ENV{HTTP_COOKIE}");
         $smtp->datasend("errorInfo: $errorInfo");
 	$smtp->dataend();

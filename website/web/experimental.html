@@ -11,10 +11,16 @@
 --></style>
   </head>
   <body>
-    <h1 align="center">xml2rfc (version v3)</h1>
+    <h1 align="center">Experiments with xml2rfc</h1>
     <p><br clear="all">
-      This page will contain experimental tools around the new xml2rfc version 3.
+      This page will contain experimental tools around xml2rfc, incuding the new xml2rfc version 3.
       To use xml2rfc version 2, switch <a href='.'>here</a>.
+      <ul>
+	<li><a href='#xml2rfcv2'>Dev Version of XML2RFC version 2</a></li>
+	<li><a href='#xml2rfcv2tov3'>Prototype xml2rfc V2 to V3 Converter</a></li>
+	<li><a href='#svg12checker'>SVG 1.2 Tiny Checker and Converter</a></li>
+	<li><a href='#kramdown'>Carsten Bormann's KramDown Converter</a></li>
+      </ul>
     </p>
     <p>
       The v3 tools and formats are being discussed on <a href="mailto:rfc-interest@rfc-editor.org">rfc-interest@rfc-editor.org</a>.<br/>
@@ -30,9 +36,133 @@
       <a href='http://tools.ietf.org/html/draft-iab-rfc-framework'>RFC Framework</a> |
       <a href='http://tools.ietf.org/html/draft-iab-rfcv3-preptool'>RFCv3 Preptool</a>
     </p>
-
+    
     <center>
-      <h1>Prototype xml2rfc V2 to V3 Converter</h1>
+      <h1><a name='xml2rfcv2'>Dev Version of XML2RFC version 2</a></h1>
+      <p>
+	This exercises the current dev version of the xml2rfc conversion program. 
+      </p>
+      <form action="cgi-bin/xml2rfc-dev.cgi" method="post" enctype="multipart/form-data">
+	<table bgcolor="#333333" border="0" cellpadding="1" cellspacing="0">
+	  <tbody>
+	    <tr>
+	      <td>
+		<table style='border: 1px solid black;' border="0" cellpadding="2" cellspacing="0">
+		  <tbody>
+		    <tr>
+		      <td colspan="2" bgcolor="#cccccc" align="center">
+			<font color="#333333" size="3"><b>Convert Your XML Source</b></font>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="2" class="converter " height="24" align="left">
+			<font color="#333333" size="medium"><b>Input Source:</b></font>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24" >
+			<font color="#333333" size="1"><b>&nbsp;File:</b></font>
+		      </td>
+		      <td class="converter" align="left" ><input size="30" name="input" type="file"/>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24" >
+			<font color="#333333" size="1"><b>&nbsp;URL:</b></font>
+		      </td>
+		      <td class="converter" align="left" ><input size="30" name="url" type="text"/>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24"><b> Input Type: </b> </td>
+		      <td class="converter">
+			<input type="radio" checked="checked" value="xml2rfc" name="inputtype"/> xml2rfc
+			<input type="radio" value="kramdown" name="inputtype"/> kramdown
+		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="2" class="converter " height="24" align="left">
+			<font color="#333333" size="medium"><b>Output format:</b></font>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24"><b> Text: </b> </td>
+		      <td class="converter">
+			<input type="radio" checked="checked" value="txt/ascii" name="modeAsFormat"/> plaintext
+			<input type="radio" value="txt/pdf" name="modeAsFormat"/> as PDF
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24"></td>
+		      <td class="converter">
+			<input type="radio" value="unpg/ascii" name="modeAsFormat"/> unpaginated
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24"><b> Web page: </b> </td>
+		      <td class="converter">
+			<input type="radio" value="html/ascii" name="modeAsFormat"/> HTML
+			<input type="radio" value="html/pdf" name="modeAsFormat"/> as PDF<br/>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24">&nbsp;</td>
+		      <td class="converter">
+			<input type="radio" value="htmlrfcmarkup/ascii" name="modeAsFormat"/> RfcMarkup
+			<input type="radio" value="htmlrfcmarkup/pdf" name="modeAsFormat"/> as PDF
+			<input type="radio" value="html/epub" name="modeAsFormat"/> ePub
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24"><b> Other: </b> </td>
+		      <td class="converter">
+			<input type="radio" value="nr/ascii" name="modeAsFormat"/> nroff
+			<input type="radio" value="xml/ascii" name="modeAsFormat"/> expanded XML
+		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="2" class="converter " height="24" align="left">
+			<font color="#333333" size="medium"><b>Options:</b></font>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24" >
+			<b>&nbsp;Output result</b>
+		      </td>
+		      <td class="converter small">
+			<input checked="checked" value="toframe" name="type" type="radio"/> Use frames to show Warnings &amp; Errors
+			<input value="ascii" name="type" type="radio"/> Window
+			<input value="binary" name="type" type="radio"/> File
+		      </td>
+		    </tr>
+		    <!-- start debug section --><!-- ! tr>
+						     <td class="converter small" height="24" >
+						       <b>&nbsp;Debugging</b>
+						     </td>
+		    <td class="converter small">
+		      <input checked="checked" value="0" name="debug" type="radio"/> Off
+		      <input value="1" name="debug" type="radio"/> On
+		    </td>
+		    </tr --><!-- end debug section -->
+		    <tr>
+		      <td class="converter small"><br/>
+		      </td>
+		      <td class="converter small" align="right">
+			<input value="Submit" name="Submit" type="submit"/>
+			<input value="Reset" name="Reset" type="reset"/>
+		      </td>
+		    </tr>
+		  </tbody>
+		</table>
+	      </td>
+	    </tr>
+	  </tbody>
+	</table>
+      </form>
+    </center>
+    
+    <center>
+      <h1><a name='xml2rfcv2tov3'>Prototype xml2rfc V2 to V3 Converter</a></h1>
       <p>
       </p>
       <form action="../cgi-bin/convertv2v3.cgi" method="post" enctype="multipart/form-data">
@@ -50,13 +180,13 @@
 		    <tr>
 		      <td colspan="2">
 			<p>
-			Try converting your xml2rfc v2 XML document to xml2rfc v3 XML.
+			  Try converting your xml2rfc v2 XML document to xml2rfc v3 XML.
 			</p>
 			<p>
-			In particular, this conversion tool removes all elements that are marked as "deprecated" in
-			<a href="http://tools.ietf.org/html/draft-iab-xml2rfc">draft-hoffman-xml2rfc</a>,
-			and converts them to their intended replacements.
-			<!-- This conversion should be correct to version 14 of that draft. -->
+			  In particular, this conversion tool removes all elements that are marked as "deprecated" in
+			  <a href="http://tools.ietf.org/html/draft-iab-xml2rfc">draft-hoffman-xml2rfc</a>,
+			  and converts them to their intended replacements.
+			  <!-- This conversion should be correct to version 14 of that draft. -->
 			</p>
 		      </td>
 		    </tr>
@@ -128,13 +258,13 @@
 		      </td>
 		    </tr>
 		    <!-- start debug section --><!-- ! tr>
-		      <td class="converter small" height="24">
-			<b>&nbsp;Debugging</b>
-		      </td>
-		      <td class="converter small">
-		        <input checked="checked" value="0" name="debug" type="radio"/> Off
-		        <input value="1" name="debug" type="radio"/> On
-		      </td>
+						     <td class="converter small" height="24">
+						       <b>&nbsp;Debugging</b>
+						     </td>
+		    <td class="converter small">
+		      <input checked="checked" value="0" name="debug" type="radio"/> Off
+		      <input value="1" name="debug" type="radio"/> On
+		    </td>
 		    </tr --><!-- end debug section -->
 		    <tr>
 		      <td class="converter small"><br>
@@ -154,9 +284,9 @@
       <!-- &lt;<a href="convertv2v3.txt">source</a>&gt;<br/> -->
       &lt;Report issues <a href='mailto:tony@att.com'>here</a>.&gt;<br/>
     </center>
-
+    
     <center>
-      <h1>SVG 1.2 Tiny Checker and Converter</h1>
+      <h1><a name='svg12checker'>SVG 1.2 Tiny Checker and Converter</a></h1>
       <p>
       </p>
       <form action="../cgi-bin/check-svg.cgi" method="post" enctype="multipart/form-data">
@@ -174,8 +304,8 @@
 		    <tr>
 		      <td colspan="2">
 			<p>
-			Check your SVG file against the SVG Tiny 1.2 spec, and generate
-			a new version that has been fixed up to be compatible.
+			  Check your SVG file against the SVG Tiny 1.2 spec, and generate
+			  a new version that has been fixed up to be compatible.
 			</p>
 		      </td>
 		    </tr>
@@ -214,21 +344,21 @@
 		      </td>
 		    </tr>
 		    <!-- start debug section --><!-- ! tr>
-		      <td class="converter small" height="24">
-			<b>&nbsp;Debugging</b>
-		      </td>
-		      <td class="converter small">
-		        <input checked="checked" value="0" name="debug" type="radio"/> Off
-		        <input value="1" name="debug" type="radio"/> On
-		      </td>
-		      </tr><tr>
-		      <td class="converter small" height="24">
-			<b>&nbsp;Frame&nbsp;Debugging</b>
-		      </td>
-		      <td class="converter small">
-		        <input checked="checked" value="0" name="framedebug" type="radio"/> Off
-		        <input value="1" name="framedebug" type="radio"/> On
-		      </td>
+						     <td class="converter small" height="24">
+						       <b>&nbsp;Debugging</b>
+						     </td>
+		    <td class="converter small">
+		      <input checked="checked" value="0" name="debug" type="radio"/> Off
+		      <input value="1" name="debug" type="radio"/> On
+		    </td>
+	    </tr><tr>
+	      <td class="converter small" height="24">
+		<b>&nbsp;Frame&nbsp;Debugging</b>
+	      </td>
+	      <td class="converter small">
+		<input checked="checked" value="0" name="framedebug" type="radio"/> Off
+		<input value="1" name="framedebug" type="radio"/> On
+	      </td>
 		    </tr --><!-- end debug section -->
 		    <tr>
 		      <td class="converter small"><br>
@@ -247,7 +377,101 @@
       </form>
       &lt;Report issues <a href='mailto:tony@att.com'>here</a>.&gt;<br/>
     </center>
-
+    
+    <center>
+      <h1><a name='kramdown'>Carsten Bormann's KramDown Converter</a></h1>
+      <p>
+      </p>
+      <form action="../cgi-bin/kramdown.cgi" method="post" enctype="multipart/form-data">
+	<table bgcolor="#3ab" border="0" cellpadding="1" cellspacing="0">
+	  <tbody>
+	    <tr>
+	      <td>
+		<table style='border: 1px solid black;' border="0" cellpadding="2" cellspacing="0" width="600">
+		  <tbody>
+		    <tr>
+		      <td colspan="2" bgcolor="#cccccc" align="center">
+			<font color="#333333" size="3"><b>Convert a KramDown File to Xml2rfc format</b></font>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="2">
+			<p>
+			  Convert your kramdown file to xml2rfc format.
+			  See Carsten Bormann's <a href='https://github.com/cabo/kramdown-rfc2629'>page</a> for more details.
+			  (The current version supported can be seen <a href='../cgi-bin/kramdown-version.cgi'>here</a>.
+			</p>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="2" class="converter " height="24" align="left">
+			<font color="#333333" size="medium"><b>Input Source:</b></font>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24" >
+			<font color="#333333" size="1"><b>&nbsp;File:</b></font>
+		      </td>
+		      <td class="converter" align="left" ><input size="30" name="input" type="file"/>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24" >
+			<font color="#333333" size="1"><b>&nbsp;URL:</b></font>
+		      </td>
+		      <td class="converter" align="left" ><input size="30" name="url" type="text"/>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="2" class="converter " height="24" align="left">
+			<font color="#333333" size="medium"><b>Options:</b></font>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td class="converter small" height="24" >
+			<b>&nbsp;Output result</b>
+		      </td>
+		      <td class="converter small">
+			<input checked="checked" value="toframe" name="type" type="radio"/> Use frames to show Warnings
+			<input value="ascii" name="type" type="radio"/> Window
+			<input value="binary" name="type" type="radio"/> File
+		      </td>
+		    </tr>
+		    <!-- start debug section --><!-- ! tr>
+						     <td class="converter small" height="24">
+						       <b>&nbsp;Debugging</b>
+						     </td>
+		    <td class="converter small">
+		      <input checked="checked" value="0" name="debug" type="radio"/> Off
+		      <input value="1" name="debug" type="radio"/> On
+		    </td>
+	    </tr><tr>
+	      <td class="converter small" height="24">
+		<b>&nbsp;Frame&nbsp;Debugging</b>
+	      </td>
+	      <td class="converter small">
+		<input checked="checked" value="0" name="framedebug" type="radio"/> Off
+		<input value="1" name="framedebug" type="radio"/> On
+	      </td>
+		    </tr --><!-- end debug section -->
+		    <tr>
+		      <td class="converter small"><br>
+		      </td>
+		      <td class="converter small" align="right">
+			<input value="Submit" name="Submit" type="submit"/>
+			<input value="Reset" name="Reset" type="reset"/>
+		      </td>
+		    </tr>
+		  </tbody>
+		</table>
+	      </td>
+	    </tr>
+	  </tbody>
+	</table>
+      </form>
+      &lt;Report issues <a href='mailto:tony@att.com'>here</a>.&gt;<br/>
+    </center>
+    
     <p>Questions? Try the RFC Interest mailing list &lt;<a href="mailto:rfc-interest@rfc-editor.org"><b>rfc-interest@rfc-editor.org</b></a>&gt;.
     </p>
   </body>

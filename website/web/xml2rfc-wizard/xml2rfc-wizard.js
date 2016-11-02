@@ -414,7 +414,7 @@ function updateAction()
     var f = $('form');
     f.method = 'POST';
     f.action = "../cgi-bin/echoXml.cgi/" + fn + ".xml";
-    f.submit();
+    //    f.submit();
 }
 
 function fillForm()
