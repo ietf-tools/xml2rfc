@@ -40,6 +40,10 @@ function toggleButton(node) {
     var template = "mailto:rfc-interest@rfc-editor.org,iab@iab.org?subject={docname},%20%22{section}%22&body=<{ref}>:";
 
     var id = node.getAttribute("id");
+    // try also parent
+    if (id == null || id == "") {
+      var id = node.parentNode.getAttribute("id");
+    }
     // better id available?
     var titlelinks = node.getElementsByTagName("a");
     for (var i = 0; i < titlelinks.length; i++) {
@@ -48,14 +52,14 @@ function toggleButton(node) {
         id = tl.getAttribute("id");
       }
     }
-
+    
     // ref
     var ref = window.location.toString();
     var hash = ref.indexOf("#");
     if (hash != -1) {
       ref = ref.substring(0, hash);
     }
-    if (id != "") {
+    if (id != null && id != "") {
       ref += "#" + id;
     }
 
@@ -64,7 +68,7 @@ function toggleButton(node) {
 
     // section
     var section = node.textContent;
-    section = section.replace("\u00a0", " ");
+    section = section.replace("\u00a0", " ").trim();
 
     // build URI from template
     var uri = template.replace("{docname}", encodeURIComponent(docname));
@@ -93,14 +97,22 @@ function anchorRewrite() {
     var fragid = window.location.hash.substr(1);
     if (fragid) {
       if (! document.getElementById(fragid)) {
-        var prefix = "rfc";
+        var prefix = "rfc.";
         var mapped = map[fragid];
         if (mapped) {
           window.location.hash = mapped;
         } else if (fragid.indexOf("section-") == 0) {
-          window.location.hash = prefix + ".section." + fragid.substring(8);
+          window.location.hash = prefix + "section." + fragid.substring(8);
         } else if (fragid.indexOf("appendix-") == 0) {
-          window.location.hash = prefix + ".section." + fragid.substring(9);
+          window.location.hash = prefix + "section." + fragid.substring(9);
+        } else if (fragid.indexOf("s-") == 0) {
+          window.location.hash = prefix + "section." + fragid.substring(2);
+        } else if (fragid.indexOf("p-") == 0) {
+          var r = fragid.substring(2);
+          var p = r.indexOf("-");
+          if (p >= 0) {
+            window.location.hash = prefix + "section." + r.substring(0, p) + ".p." + r.substring(p + 1);
+          }
         }
       }
     }  
@@ -146,7 +158,7 @@ samp, span.tt, code, pre {
 cite {
   font-style: normal;
 }
-div.note {
+aside {
   margin-left: 2em;
 }
 dl {
@@ -267,6 +279,9 @@ pre.drawing {
 table {
   margin-left: 2em;
 }
+div.tt {
+  margin-left: 2em;
+} 
 table.tt {
   border-collapse: collapse;
   border-color: gray;
@@ -351,9 +366,6 @@ table.header td {
 }
 table.header a {
   color: white;
-}
-thead {
-  display:table-header-group;
 }
 ul.toc, ul.toc ul {
   list-style: none;
@@ -464,6 +476,9 @@ blockquote > * .bcp14 {
   padding: 1px 4px;
   border: 1px solid silver;
   border-radius: 5px;
+  -webkit-user-select: none; 
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 @media screen {
@@ -512,13 +527,12 @@ blockquote > * .bcp14 {
     column-fill: auto;
   }
 }
-
 @page {
   @top-left {
        content: "Internet-Draft";
   }
   @top-right {
-       content: "June 2016";
+       content: "January 2017";
   }
   @top-center {
        content: "The "xml2rfc" version 3 Vocabulary";
@@ -527,13 +541,12 @@ blockquote > * .bcp14 {
        content: "Hoffman";
   }
   @bottom-center {
-       content: "Expires December 24, 2016";
+       content: "Expires July 18, 2017";
   }
   @bottom-right {
        content: "[Page " counter(page) "]";
   }
 }
-
 @page:first {
     @top-left {
       content: normal;
@@ -563,11 +576,11 @@ blockquote > * .bcp14 {
       <link rel="Appendix" title="C Relax NG Schema" href="#rfc.section.C">
       <link rel="Appendix" title="D Schema Differences from v2" href="#rfc.section.D">
       <link rel="Appendix" title="E Acknowledgments" href="#rfc.section.E">
-      <meta name="generator" content="http://greenbytes.de/tech/webdav/rfc2629.xslt, Revision 1.781, 2016/02/27 11:32:41, XSLT vendor: SAXON 6.5.5 from Michael Kay http://saxon.sf.net/">
+      <meta name="generator" content="http://greenbytes.de/tech/webdav/rfc2629.xslt, Revision 1.840, 2016/11/16 05:32:10, XSLT vendor: SAXON 6.5.5 from Michael Kay http://saxon.sf.net/">
       <link rel="schema.dcterms" href="http://purl.org/dc/terms/">
       <meta name="dcterms.creator" content="Hoffman, P.">
       <meta name="dcterms.identifier" content="urn:ietf:id:draft-iab-xml2rfc-latest">
-      <meta name="dcterms.issued" content="2016-06-22">
+      <meta name="dcterms.issued" content="2017-01-14">
       <meta name="dct.replaces" content="urn:ietf:rfc:7749">
       <meta name="dcterms.abstract" content="This document defines the &#34;xml2rfc&#34; version 3 vocabulary: an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its followup, RFC 7749.">
       <meta name="description" content="This document defines the &#34;xml2rfc&#34; version 3 vocabulary: an XML-based language used for writing RFCs and Internet-Drafts. It is heavily derived from the version 2 vocabulary that is also under discussion. This document obsoletes the v2 grammar described in RFC 2629 and its followup, RFC 7749.">
@@ -587,14 +600,14 @@ blockquote > * .bcp14 {
                <tr>
                   <td class="left">Obsoletes: <a href="https://tools.ietf.org/html/rfc7749">7749</a> (if approved)
                   </td>
-                  <td class="right">June 22, 2016</td>
+                  <td class="right">January 14, 2017</td>
                </tr>
                <tr>
                   <td class="left">Intended status: Informational</td>
                   <td class="right"></td>
                </tr>
                <tr>
-                  <td class="left">Expires: December 24, 2016</td>
+                  <td class="left">Expires: July 18, 2017</td>
                   <td class="right"></td>
                </tr>
             </tbody>
@@ -627,11 +640,11 @@ blockquote > * .bcp14 {
             documents at any time. It is inappropriate to use Internet-Drafts as reference material or to cite them other than as &#8220;work
             in progress&#8221;.
          </p>
-         <p>This Internet-Draft will expire on December 24, 2016.</p>
+         <p>This Internet-Draft will expire on July 18, 2017.</p>
       </section>
       <section id="rfc.copyrightnotice">
          <h2><a href="#rfc.copyrightnotice">Copyright Notice</a></h2>
-         <p>Copyright &copy; 2016 IETF Trust and the persons identified as the document authors. All rights reserved.</p>
+         <p>Copyright &copy; 2017 IETF Trust and the persons identified as the document authors. All rights reserved.</p>
          <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (<a href="http://trustee.ietf.org/license-info">http://trustee.ietf.org/license-info</a>) in effect on the date of publication of this document. Please review these documents carefully, as they describe your rights
             and restrictions with respect to this document. Code Components extracted from this document must include Simplified BSD License
             text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified
@@ -777,9 +790,8 @@ blockquote > * .bcp14 {
             <li><a href="#rfc.authors">Author's Address</a></li>
          </ul>
       </nav>
-      <section>
-         <h2 id="rfc.section.1" class="np"><a href="#rfc.section.1">1.</a>&nbsp;Introduction
-         </h2>
+      <section id="n-introduction">
+         <h2 id="rfc.section.1" class="np"><a href="#rfc.section.1">1.</a>&nbsp;<a href="#n-introduction">Introduction</a></h2>
          <div id="rfc.section.1.p.1">
             <p>This document describes version 3 ("v3") of the "xml2rfc" vocabulary; an XML-based language ("Extensible Markup Language", <a href="#XML" id="rfc.xref.XML.1"><cite title="Extensible Markup Language (XML) 1.0 (Fifth Edition)">[XML]</cite></a>) used for writing RFCs (<a href="#RFC7322" id="rfc.xref.RFC7322.1"><cite title="RFC Style Guide">[RFC7322]</cite></a>) and Internet-Drafts (<a href="#IDGUIDE" id="rfc.xref.IDGUIDE.1"><cite title="Guidelines to Authors of Internet-Drafts">[IDGUIDE]</cite></a>).
             </p>
@@ -805,9 +817,8 @@ blockquote > * .bcp14 {
                by an XML document.
             </p>
          </div>
-         <section>
-            <h3 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1</a>&nbsp;Expected Updates to the Specification
-            </h3>
+         <section id="n-expected-updates-to-the-specification">
+            <h3 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1</a>&nbsp;<a href="#n-expected-updates-to-the-specification">Expected Updates to the Specification</a></h3>
             <div id="rfc.section.1.1.p.1">
                <p>Non-interoperable changes in later versions of this specification are likely based on experience gained in implementing the
                   RFC production center toolset. Revised documents will be published capturing those changes as the toolset is completed. Other
@@ -815,9 +826,8 @@ blockquote > * .bcp14 {
                </p>
             </div>
          </section>
-         <section>
-            <h3 id="rfc.section.1.2"><a href="#rfc.section.1.2">1.2</a>&nbsp;Design Criteria for the Changes in v3
-            </h3>
+         <section id="n-design-criteria-for-the-changes-in-v3">
+            <h3 id="rfc.section.1.2"><a href="#rfc.section.1.2">1.2</a>&nbsp;<a href="#n-design-criteria-for-the-changes-in-v3">Design Criteria for the Changes in v3</a></h3>
             <div id="rfc.section.1.2.p.1">
                <p>The design criteria of the changes from v2 to v3 are: </p>
                <ul>
@@ -845,9 +855,8 @@ blockquote > * .bcp14 {
                <p>This is a a hopefully-complete list of all the technical changes between <a href="#RFC7749" id="rfc.xref.RFC7749.4"><cite title="The &#34;xml2rfc&#34; Version 2 Vocabulary">[RFC7749]</cite></a> and this document.
                </p>
             </div>
-            <section>
-               <h4 id="rfc.section.1.3.1"><a href="#rfc.section.1.3.1">1.3.1</a>&nbsp;New Elements in v3
-               </h4>
+            <section id="n-new-elements-in-v3">
+               <h4 id="rfc.section.1.3.1"><a href="#rfc.section.1.3.1">1.3.1</a>&nbsp;<a href="#n-new-elements-in-v3">New Elements in v3</a></h4>
                <div id="rfc.section.1.3.1.p.1">
                   <ul>
                      <li>Add &lt;<a href="#element.dl" class="smpl">dl</a>&gt;, &lt;<a href="#element.ul" class="smpl">ul</a>&gt;, and &lt;<a href="#element.ol" class="smpl">ol</a>&gt; as new ways to make lists. This is a significant change from v2 in that the child under these elements is &lt;<a href="#element.li" class="smpl">li</a>&gt;, not &lt;<a href="#element.t" class="smpl">t</a>&gt;. &lt;<a href="#element.li" class="smpl">li</a>&gt; has a model of either containing one or more &lt;<a href="#element.t" class="smpl">t</a>&gt; elements, or containing the flowing text normally found in &lt;<a href="#element.t" class="smpl">t</a>&gt;. These lists are children of &lt;<a href="#element.section" class="smpl">section</a>&gt;s and other lists instead of &lt;<a href="#element.t" class="smpl">t</a>&gt;.
@@ -886,9 +895,8 @@ blockquote > * .bcp14 {
                   </ul>
                </div>
             </section>
-            <section>
-               <h4 id="rfc.section.1.3.2"><a href="#rfc.section.1.3.2">1.3.2</a>&nbsp;New Attributes for Existing Elements
-               </h4>
+            <section id="n-new-attributes-for-existing-elements">
+               <h4 id="rfc.section.1.3.2"><a href="#rfc.section.1.3.2">1.3.2</a>&nbsp;<a href="#n-new-attributes-for-existing-elements">New Attributes for Existing Elements</a></h4>
                <div id="rfc.section.1.3.2.p.1">
                   <ul>
                      <li>Add "sortRefs", "symRefs", "tocDepth", and "tocInclude" attributes to &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; to cover Processing Instructions (PIs) that were in v2 that are still needed in the grammar. Add "prepTime" to indicate
@@ -951,9 +959,8 @@ blockquote > * .bcp14 {
                   </ul>
                </div>
             </section>
-            <section>
-               <h4 id="rfc.section.1.3.4"><a href="#rfc.section.1.3.4">1.3.4</a>&nbsp;Additional Changes from v2
-               </h4>
+            <section id="n-additional-changes-from-v2">
+               <h4 id="rfc.section.1.3.4"><a href="#rfc.section.1.3.4">1.3.4</a>&nbsp;<a href="#n-additional-changes-from-v2">Additional Changes from v2</a></h4>
                <div id="rfc.section.1.3.4.p.1">
                   <ul>
                      <li>Allow non-ASCII characters in the format; the characters that are actually allowed will be determined by the RFC Series Editor.</li>
@@ -5802,9 +5809,8 @@ Using CDATA:
       </section>
       <section id="iana.considerations">
          <h2 id="rfc.section.8"><a href="#rfc.section.8">8.</a>&nbsp;<a href="#iana.considerations">IANA Considerations</a></h2>
-         <section>
-            <h3 id="rfc.section.8.1"><a href="#rfc.section.8.1">8.1</a>&nbsp;Internet Media Type Registration
-            </h3>
+         <section id="n-internet-media-type-registration">
+            <h3 id="rfc.section.8.1"><a href="#rfc.section.8.1">8.1</a>&nbsp;<a href="#n-internet-media-type-registration">Internet Media Type Registration</a></h3>
             <div id="rfc.section.8.1.p.1">
                <p>IANA maintains the registry of Internet Media Types <a href="#BCP13" id="rfc.xref.BCP13.1"><cite title="Media Type Specifications and Registration Procedures">[BCP13]</cite></a> at &lt;<a href="https://www.iana.org/assignments/media-types">https://www.iana.org/assignments/media-types</a>&gt;.
                </p>
@@ -5869,9 +5875,8 @@ Using CDATA:
                </dl>
             </div>
          </section>
-         <section>
-            <h3 id="rfc.section.8.2"><a href="#rfc.section.8.2">8.2</a>&nbsp;Link Relation Registration
-            </h3>
+         <section id="n-link-relation-registration">
+            <h3 id="rfc.section.8.2"><a href="#rfc.section.8.2">8.2</a>&nbsp;<a href="#n-link-relation-registration">Link Relation Registration</a></h3>
             <div id="rfc.section.8.2.p.1">
                <p>The following is a proposed addition to <a href="#LINKRELATIONS" id="rfc.xref.LINKRELATIONS.2"><cite title="Link Relations">[LINKRELATIONS]</cite></a>.
                </p>
@@ -6045,13 +6050,13 @@ Using CDATA:
                   are currently in use; all others are supported by various tools for backwards compatibility with old source files.
                </p>
             </div>
-            <div class="note">
+            <aside>
                <div id="rfc.section.A.1.p.2">
                   <p><strong>Note:</strong> some variations of the boilerplate are selected based on the document's date; therefore, it is important to specify the "year",
                      "month", and "day" attributes of the &lt;<a href="#element.date" class="smpl">date</a>&gt; element when archiving the XML source of an Internet-Draft on the day of submission.
                   </p>
                </div>
-            </div>
+            </aside>
             <div id="rfc.section.A.1.p.3">
                <p><em>Disclaimer: THIS ONLY PROVIDES IMPLEMENTATION INFORMATION. IF YOU NEED LEGAL ADVICE, PLEASE CONTACT A LAWYER.</em> For further information, refer to &lt;<a href="http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf">http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf</a>&gt;.
                </p>
@@ -6071,7 +6076,7 @@ Using CDATA:
                <div id="rfc.section.A.1.1.p.2" class="avoidbreakafter">
                   <p>The prep tool automatically produces the "correct" text, depending on the document's date information (see above):</p>
                </div>
-               <div id="rfc.table.u.1">
+               <div id="rfc.table.u.1" class="tt">
                   <table class="tt full tleft">
                      <thead>
                         <tr>
@@ -6091,12 +6096,12 @@ Using CDATA:
                      </tbody>
                   </table>
                </div>
-               <div class="note">
+               <aside>
                   <div id="rfc.section.A.1.1.p.3">
                      <p>The TLP was again updated in March 2015 (<a href="#TLP5.0" id="rfc.xref.TLP5.0.1"><cite title="Legal Provisions Relating to IETF Documents">[TLP5.0]</cite></a>), but the changes made in that version do not affect the boilerplate text.
                      </p>
                   </div>
-               </div>
+               </aside>
                <section id="attribute-ipr-trust200902">
                   <h5 id="rfc.section.A.1.1.1"><a href="#rfc.section.A.1.1.1">A.1.1.1</a>&nbsp;<a href="#attribute-ipr-trust200902">trust200902</a></h5>
                   <div id="rfc.section.A.1.1.1.p.1">
@@ -6115,12 +6120,12 @@ Using CDATA:
                         RFC or to translate it into languages other than English.
                      </p> 
                   </blockquote>
-                  <div class="note">
+                  <aside>
                      <div id="rfc.section.A.1.1.2.p.3">
                         <p><strong>Note:</strong> this clause is incompatible with RFCs that are published on the Standards Track.
                         </p>
                      </div>
-                  </div>
+                  </aside>
                </section>
                <section id="attribute-ipr-noDerivativesTrust200902">
                   <h5 id="rfc.section.A.1.1.3"><a href="#rfc.section.A.1.1.3">A.1.1.3</a>&nbsp;<a href="#attribute-ipr-noDerivativesTrust200902">noDerivativesTrust200902</a></h5>
@@ -6132,12 +6137,12 @@ Using CDATA:
                         Internet-Draft.
                      </p> 
                   </blockquote>
-                  <div class="note">
+                  <aside>
                      <div id="rfc.section.A.1.1.3.p.3">
                         <p><strong>Note:</strong> this clause is incompatible with RFCs.
                         </p>
                      </div>
-                  </div>
+                  </aside>
                </section>
                <section id="attribute-ipr-pre5378Trust200902">
                   <h5 id="rfc.section.A.1.1.4"><a href="#rfc.section.A.1.1.4">A.1.1.4</a>&nbsp;<a href="#attribute-ipr-pre5378Trust200902">pre5378Trust200902</a></h5>
@@ -6159,13 +6164,13 @@ Using CDATA:
                      <p>See Section 4 of &lt;<a href="http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf">http://trustee.ietf.org/docs/IETF-Copyright-FAQ.pdf</a>&gt; for further information about when to use this value.
                      </p>
                   </div>
-                  <div class="note">
+                  <aside>
                      <div id="rfc.section.A.1.1.4.p.4">
                         <p><strong>Note:</strong> this text appears under "Copyright Notice", unless the document was published before November 2009, in which case it appears
                            under "Status of This Memo".
                         </p>
                      </div>
-                  </div>
+                  </aside>
                </section>
             </section>
             <section id="attribute-ipr-historic">
@@ -7429,9 +7434,8 @@ start |= rfc
 
 </pre></div>
       </section>
-      <section>
-         <h2 id="rfc.section.D"><a href="#rfc.section.D">D.</a>&nbsp;Schema Differences from v2
-         </h2>
+      <section id="n-schema-differences-from-v2">
+         <h2 id="rfc.section.D"><a href="#rfc.section.D">D.</a>&nbsp;<a href="#n-schema-differences-from-v2">Schema Differences from v2</a></h2>
          <div id="rfc.section.D.p.1">
             <p>The following is a non-normative comparison of the v3 format to the v2 format. A "-" indicates lines removed from the v2 schema,
                and a "+" indicates lines added to the v3 schema.
@@ -9921,8 +9925,8 @@ start |= rfc
       </section>
       <section id="rfc.authors" class="avoidbreakinside">
          <h2><a href="#rfc.authors">Author's Address</a></h2>
-         <p><b>Paul Hoffman</b><br>ICANN<br>Email: paul.hoffman@icann.org
-         </p>
+         <address><b>Paul Hoffman</b><br>ICANN<br>Email: paul.hoffman@icann.org
+         </address>
       </section>
    </body>
 </html>
