@@ -17,7 +17,7 @@ Abstract
    based language used for writing RFCs and Internet-Drafts.  It is
    heavily derived from the version 2 vocabulary that is also under
    discussion.  This document obsoletes the v2 grammar described in RFC
-   2629 and its followup, RFC 7749.
+   7749.
 
 Editorial Note (To be removed by RFC Editor)
 
@@ -174,18 +174,16 @@ Table of Contents
 
 1.  Introduction
 
-   This document describes version 3 ("v3") of the "xml2rfc" vocabulary;
-   an XML-based language ("Extensible Markup Language", [XML]) used for
-   writing RFCs ([RFC7322]) and Internet-Drafts ([IDGUIDE]).
+   This document describes version 3 ("v3") of the "xml2rfc" vocabulary:
+   an XML-based language ("Extensible Markup Language" [XML]) used for
+   writing RFCs [RFC7322] and Internet-Drafts [IDGUIDE].
 
    This document obsoletes the version 2 vocabulary ("v2") [RFC7749],
    which contains the extended language definition.  That document in
    turn obsoletes the original version ("v1") [RFC2629].  This document
-   directly copies the material from [RFC7749] where possible; as that
-   document makes its way toward RFC publication, this document will
-   incorporate as many of the changes as possible.
+   directly copies the material from [RFC7749] where possible.
 
-   The v3 format will be used as part of the new RFC series format
+   The v3 format will be used as part of the new RFC Series format
    described in [RFC6949].  The new format will be handled by one or
    more new tools for preparing the XML and converting it to other
    representations.  Features of the expected tools are described in
@@ -199,21 +197,21 @@ Table of Contents
 
    In this document, the term "format" is used when describing types of
    documents, primarily XML and HTML.  The term "representation" is used
-   when talking about a specific instatiation of a format, such as an
+   when talking about a specific instantiation of a format, such as an
    XML document or an HTML document that was created by an XML document.
 
 1.1.  Expected Updates to the Specification
 
    Non-interoperable changes in later versions of this specification are
-   likely based on experience gained in implementing the RFC production
-   center toolset.  Revised documents will be published capturing those
-   changes as the toolset is completed.  Other implementers must not
+   likely based on experience gained in implementing the new publication
+   toolsets.  Revised documents will be published capturing those
+   changes as the toolsets are completed.  Other implementers must not
    expect those changes to remain backwards-compatible with the details
    described in this document.
 
 1.2.  Design Criteria for the Changes in v3
 
-   The design criteria of the changes from v2 to v3 are:
+   The design criteria of the changes from v2 to v3 are as follows:
 
    o  The intention is that starting and editing a v3 document will be
       easier than for a v2 document.
@@ -228,7 +226,7 @@ Table of Contents
    There is a desire to keep as much of the v2 grammar as makes sense
    within the above design criteria and not to make gratuitous changes
    to the v2 grammar.  Another way to say this is "we would rather
-   encourage backward compatibility but not be constrained by it".
+   encourage backwards compatibility but not be constrained by it."
    Still, the goal of starting and editing a v3 document being easier
    than for a v2 document is more important than backwards compatibility
    with v2, given the latter two design criteria.
@@ -236,11 +234,11 @@ Table of Contents
    v3 is upwards compatible with v2, meaning that a v2 document is meant
    to be a valid v3 document as well.  However, some features of v2 are
    deprecated in v3 in favor of new elements.  Deprecated features are
-   listed in Section 1.3.3, and are described in [RFC7749].
+   listed in Section 1.3.3 and are described in [RFC7749].
 
 1.3.  Differences from v2 to v3
 
-   This is a a hopefully-complete list of all the technical changes
+   This is a (hopefully) complete list of all the technical changes
    between [RFC7749] and this document.
 
 1.3.1.  New Elements in v3
@@ -263,21 +261,21 @@ Table of Contents
    o  Add <table>, <thead>, <tbody>, <tfoot>, <tr>, <td>, and <th> to
       give table functionality like that in HTML.
 
-   o  Add <boilerplate> to hold the automatically-generated boilerplate
+   o  Add <boilerplate> to hold the automatically generated boilerplate
       text.
 
    o  Add <blockquote> to indicate a quotation as in a paragraph-like
       format.
 
    o  Add <name> to sections, notes, figures, and texttables to allow
-      character formatting (fixed-width font) in their titles, and to
+      character formatting (fixed-width font) in their titles and to
       allow references in the names.
 
    o  Add <postalLine>, free text that represents one line of the
       address.
 
    o  Add <displayreference> to allow display of more mnemonic anchor
-      names for automatically-included references.
+      names for automatically included references.
 
    o  Add <refcontent> to allow better control of text in a reference.
 
@@ -322,7 +320,7 @@ Table of Contents
 
    o  Add the "removeInRFC" attribute to <note>.
 
-   o  Add "pn" to <artwork>, <aside>, <blockquote>, <boilerplate>,<dt>,
+   o  Add "pn" to <artwork>, <aside>, <blockquote>, <boilerplate>, <dt>,
       <figure>, <iref>, <li>, <references>, <section>, <sourcecode>,
       <t>, and <table> to hold automatically generated numbers for items
       in a section that don't have their own numbering (namely figures
@@ -339,9 +337,10 @@ Table of Contents
 
    Deprecated elements and attributes are legacy vocabulary from v2 that
    are supported for input to v3 tools.  They are likely to be removed
-   from those tools in the future.  Instead of being listed in
-   Section 2, they are listed in Section 3.  See Appendix B for more
-   information on tools and how they will handle deprecated features.
+   from those tools in the future.  Deprecated attributes are still
+   listed in Section 2, and deprecated elements are listed in Section 3.
+   See Appendix B for more information on tools and how they will handle
+   deprecated features.
 
    o  Deprecate <list> in favor of <dl>, <ul>, and <ol>.
 
@@ -359,7 +358,7 @@ Table of Contents
    o  Deprecate <format> because it is not useful and has caused
       surprise for authors in the past.  If the goal is to provide a
       single URI (Uniform Resource Identifier) for a reference, use the
-      "target" attribute on <reference> instead.
+      "target" attribute in <reference> instead.
 
    o  Deprecate <preamble> and <postamble> in favor of simply using <t>
       before or after the figure.  This also deprecates the "align"
@@ -368,13 +367,13 @@ Table of Contents
    o  Deprecate the "title" attribute in <section>, <note>, <figure>,
       <references>, and <texttable> in favor of the new <name>.
 
-   o  Deprecate the "alt", and "src" attributes in <figure> because they
+   o  Deprecate the "alt" and "src" attributes in <figure> because they
       overlap with the attributes in <artwork>.
 
    o  Deprecate the "xml:space" attribute in <artwork> because there was
-      only one useful value.  Deprecate "height" and "width" attribute
-      in both <artwork> and <figure> because they are not needed for the
-      new output formats.
+      only one useful value.  Deprecate the "height" and "width"
+      attributes in both <artwork> and <figure> because they are not
+      needed for the new output formats.
 
    o  Deprecate the "pageno" attribute in <xref> because it was unused
       in v2.  Deprecate the "none" values for the "format" attribute in
@@ -394,25 +393,25 @@ Table of Contents
 
    o  Allow the sub-elements inside a <reference> to be in any order.
 
-   o  Turned off the autogeneration of anchors in <cref> because there
-      is no use case for them that cannot be achieved in other ways.
+   o  Turn off the autogeneration of anchors in <cref> because there is
+      no use case for them that cannot be achieved in other ways.
 
    o  Allow more than one <artwork>, or more than one <sourcecode>, in
       <figure>.
 
    o  In <front>, make <date> optional.
 
-   o  In <date>, added restrictions to the "date" and "year" attribute
+   o  In <date>, add restrictions to the "date" and "year" attributes
       when used in the <front> for the document's boilerplate text.
 
    o  In <postal>, allow the sub-elements to be in any order.  Also
       allow the inclusion of the new <postalLine> instead of the older
       elements.
 
-   o  In <section>, restricted the names of the anchors that can be used
+   o  In <section>, restrict the names of the anchors that can be used
       on some types of sections.
 
-   o  Made <seriesInfo> a child of <front>, and deprecated it as a child
+   o  Make <seriesInfo> a child of <front>, and deprecated it as a child
       of <reference>.  This also deprecates some of the attributes from
       <rfc> and moves them into <seriesInfo>.
 
@@ -420,13 +419,13 @@ Table of Contents
       <figure> elements.
 
    o  Do not generate the grammar from a DTD, but instead get it
-      directly from the Relax Next Generation (RNG) grammar [RNG].
+      directly from the RELAX Next Generation (RNG) grammar [RNG].
 
 1.4.  Syntax Notation
 
-   The XML vocabulary here is defined in prose, based on the Relax NG
-   schema ([RNC]) contained in Appendix C (specified in Relax NG Compact
-   Notation, (RNC)).
+   The XML vocabulary here is defined in prose, based on the RELAX NG
+   schema [RNC] contained in Appendix C (specified in RELAX NG Compact
+   Notation (RNC)).
 
    Note that the schema can be used for automated validity checks, but
    certain constraints are only described in prose (example: the

@@ -56,7 +56,7 @@
       This document defines the "xml2rfc" version 3 vocabulary: an XML-based
       language used for writing RFCs and Internet-Drafts. It is heavily derived
       from the version 2 vocabulary that is also under discussion. This document
-      obsoletes the v2 grammar described in RFC 2629 and its followup, RFC 7749.
+      obsoletes the v2 grammar described in RFC 7749.
     </t>
   </abstract>
 
@@ -73,19 +73,18 @@
   <middle>
 <section title="Introduction">
 <t>
-  This document describes version 3 ("v3") of the "xml2rfc" vocabulary; an XML-based
-  language ("Extensible Markup Language", <xref target="XML"/>) used for writing RFCs
-  (<xref target="RFC7322"/>) and Internet-Drafts (<xref target="IDGUIDE"/>).
+  This document describes version 3 ("v3") of the "xml2rfc" vocabulary: an XML-based
+  language ("Extensible Markup Language" <xref target="XML"/>) used for writing RFCs
+  <xref target="RFC7322"/> and Internet-Drafts <xref target="IDGUIDE"/>.
 </t>
 <t>
   This document obsoletes the version 2 vocabulary ("v2") <xref target="RFC7749"/>, which
   contains the extended language definition. That document in turn obsoletes
   the original version ("v1") <xref target="RFC2629"/>. This document directly copies the
-  material from <xref target="RFC7749"/> where possible; as that document makes its way
-  toward RFC publication, this document will incorporate as many of the changes as possible.
+  material from <xref target="RFC7749"/> where possible.
 </t>
 <t>
-The v3 format will be used as part of the new RFC series format described in <xref target="RFC6949"/>.
+The v3 format will be used as part of the new RFC Series format described in <xref target="RFC6949"/>.
 The new format will be handled by one or more new tools for preparing the XML and
 converting it to other representations.
 Features of the expected
@@ -100,7 +99,7 @@ used throughout this document, such as "prep tool" and "formatter".
 </t>
 <t>
 In this document, the term "format" is used when describing types of documents, primarily
-XML and HTML. The term "representation" is used when talking about a specific instatiation
+XML and HTML. The term "representation" is used when talking about a specific instantiation
 of a format, such as an XML document or an HTML document that was created by an XML document.
 </t>
 
@@ -108,9 +107,9 @@ of a format, such as an XML document or an HTML document that was created by an 
 
 <t>
 Non-interoperable changes in later versions of this specification are likely based on experience gained in
-implementing the RFC production center toolset.
+implementing the new publication toolsets.
 Revised documents will be
-published capturing those changes as the toolset is completed. Other implementers must not expect
+published capturing those changes as the toolsets are completed. Other implementers must not expect
 those changes to remain backwards-compatible with the details described in this document.
 </t>
 
@@ -118,7 +117,7 @@ those changes to remain backwards-compatible with the details described in this 
 
 <section title="Design Criteria for the Changes in v3">
 
-<t>The design criteria of the changes from v2 to v3 are:
+<t>The design criteria of the changes from v2 to v3 are as follows:
 
 <list style="symbols">
 
@@ -133,14 +132,14 @@ RFCs. That might happen eventually, but it is likely to be years away.</t>
 
 There is a desire to keep as much of the v2 grammar as makes sense within the above design
 criteria and not to make gratuitous changes to the v2 grammar. Another way to say this is
-"we would rather encourage backward compatibility but not be constrained by it". Still, the
+"we would rather encourage backwards compatibility but not be constrained by it." Still, the
 goal of starting and editing a v3 document being easier than for a v2 document is more
 important than backwards compatibility with v2, given the latter two design criteria.</t>
 
 <t>
 v3 is upwards compatible with v2, meaning that a v2 document is meant to be a valid v3
 document as well. However, some features of v2 are deprecated in v3 in favor of new
-elements. Deprecated features are listed in <xref target="deprecated_features"/>,
+elements. Deprecated features are listed in <xref target="deprecated_features"/>
 and are described in <xref target="RFC7749"/>.
 </t>
 
@@ -149,7 +148,7 @@ and are described in <xref target="RFC7749"/>.
 <section title="Differences from v2 to v3" anchor="differences.from.v2.to.v3">
 
 <t>
-This is a a hopefully-complete list of all the technical changes between <xref target="RFC7749"/>
+This is a (hopefully) complete list of all the technical changes between <xref target="RFC7749"/>
 and this document.
 </t>
 
@@ -177,17 +176,17 @@ instead of &lt;<x:ref>t</x:ref>&gt;.</t>
 &lt;<x:ref>tr</x:ref>&gt;, &lt;<x:ref>td</x:ref>&gt;, and &lt;<x:ref>th</x:ref>&gt;
 to give table functionality like that in HTML.</t>
 
-<t>Add &lt;<x:ref>boilerplate</x:ref>&gt; to hold the automatically-generated boilerplate text.</t>
+<t>Add &lt;<x:ref>boilerplate</x:ref>&gt; to hold the automatically generated boilerplate text.</t>
 
 <t>Add &lt;<x:ref>blockquote</x:ref>&gt; to indicate a quotation as in a paragraph-like format.</t>
 
 <t>Add &lt;<x:ref>name</x:ref>&gt; to sections, notes, figures, and texttables to allow character formatting
-(fixed-width font) in their titles, and to allow references in the names.</t>
+(fixed-width font) in their titles and to allow references in the names.</t>
 
 <t>Add &lt;<x:ref>postalLine</x:ref>&gt;, free text that represents one line of the address.</t>
 
 <t>Add &lt;<x:ref>displayreference</x:ref>&gt; to allow display of more mnemonic anchor names
-for automatically-included references.</t>
+for automatically included references.</t>
 
 <t>Add &lt;<x:ref>refcontent</x:ref>&gt; to allow better control of text in a reference.</t>
 
@@ -236,7 +235,7 @@ entry and still allow the ASCII-equivalent values to appear in the processed doc
 <t>Add the "removeInRFC" attribute to &lt;<x:ref>note</x:ref>&gt;.</t>
 
 <t>Add "pn" to &lt;<x:ref>artwork</x:ref>&gt;,
-&lt;<x:ref>aside</x:ref>&gt;, &lt;<x:ref>blockquote</x:ref>&gt;, &lt;<x:ref>boilerplate</x:ref>&gt;,&lt;<x:ref>dt</x:ref>&gt;,
+&lt;<x:ref>aside</x:ref>&gt;, &lt;<x:ref>blockquote</x:ref>&gt;, &lt;<x:ref>boilerplate</x:ref>&gt;, &lt;<x:ref>dt</x:ref>&gt;,
 &lt;<x:ref>figure</x:ref>&gt;, &lt;<x:ref>iref</x:ref>&gt;, &lt;<x:ref>li</x:ref>&gt;, &lt;<x:ref>references</x:ref>&gt;, &lt;<x:ref>section</x:ref>&gt;,
 &lt;<x:ref>sourcecode</x:ref>&gt;, &lt;<x:ref>t</x:ref>&gt;,
 and &lt;<x:ref>table</x:ref>&gt; to hold automatically generated
@@ -256,7 +255,7 @@ do pagination that they should try to keep the paragraph with the next/previous 
 
 <t>Deprecated elements and attributes are legacy vocabulary from v2 that are supported for input
 to v3 tools. They are likely to be removed from those tools in the future.
-Instead of being listed in <xref target="elements"/>, they are listed in <xref target="deprecatedelements"/>.
+Deprecated attributes are still listed in <xref target="elements"/>, and deprecated elements are listed in <xref target="deprecatedelements"/>.
 See <xref target="tools"/> for more information on tools and how they will handle
 deprecated features.</t>
 
@@ -280,7 +279,7 @@ contained within it).</t>
 
 <t>Deprecate &lt;<x:ref>format</x:ref>&gt; because it is not useful and has caused surprise for authors in the past.
 If the goal is to provide a single URI (Uniform Resource Identifier) for
-a reference, use the "target" attribute on &lt;<x:ref>reference</x:ref>&gt; instead.</t>
+a reference, use the "target" attribute in &lt;<x:ref>reference</x:ref>&gt; instead.</t>
 
 <t>Deprecate &lt;<x:ref>preamble</x:ref>&gt; and &lt;<x:ref>postamble</x:ref>&gt; in favor of 
 simply using &lt;<x:ref>t</x:ref>&gt; before or after the figure. This also deprecates the "align" attribute in
@@ -290,11 +289,11 @@ simply using &lt;<x:ref>t</x:ref>&gt; before or after the figure. This also depr
 &lt;<x:ref>figure</x:ref>&gt;, &lt;<x:ref>references</x:ref>&gt;, and 
 &lt;<x:ref>texttable</x:ref>&gt; in favor of the new &lt;<x:ref>name</x:ref>&gt;.</t>
 
-<t>Deprecate the "alt", and "src" attributes in &lt;<x:ref>figure</x:ref>&gt;
+<t>Deprecate the "alt" and "src" attributes in &lt;<x:ref>figure</x:ref>&gt;
 because they overlap with the attributes in &lt;<x:ref>artwork</x:ref>&gt;.</t>
 
 <t>Deprecate the "xml:space" attribute in &lt;<x:ref>artwork</x:ref>&gt; because there was only one useful value.
-Deprecate "height" and "width" attribute in both &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>figure</x:ref>&gt;
+Deprecate the "height" and "width" attributes in both &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>figure</x:ref>&gt;
 because they are not needed for the new output formats.</t>
 
 <t>Deprecate the "pageno" attribute in &lt;<x:ref>xref</x:ref>&gt; because it was unused in v2.
@@ -324,7 +323,7 @@ their own in &lt;<x:ref>section</x:ref>&gt;
 
 <t>Allow the sub-elements inside a &lt;<x:ref>reference</x:ref>&gt; to be in any order.</t>
 
-<t>Turned off the autogeneration of anchors in &lt;<x:ref>cref</x:ref>&gt; because there is
+<t>Turn off the autogeneration of anchors in &lt;<x:ref>cref</x:ref>&gt; because there is
 no use case for them that cannot be achieved in other ways.</t>
 
 <t>Allow more than one &lt;<x:ref>artwork</x:ref>&gt;, or more than one
@@ -332,16 +331,16 @@ no use case for them that cannot be achieved in other ways.</t>
 
 <t>In &lt;<x:ref>front</x:ref>&gt;, make &lt;<x:ref>date</x:ref>&gt; optional.</t>
 
-<t>In &lt;<x:ref>date</x:ref>&gt;, added restrictions to the "date" and "year" attribute
+<t>In &lt;<x:ref>date</x:ref>&gt;, add restrictions to the "date" and "year" attributes
 when used in the &lt;<x:ref>front</x:ref>&gt; for the document's boilerplate text.</t>
 
 <t>In &lt;<x:ref>postal</x:ref>&gt;, allow the sub-elements to be in any order. Also allow the inclusion
 of the new &lt;<x:ref>postalLine</x:ref>&gt; instead of the older elements.</t>
 
-<t>In &lt;<x:ref>section</x:ref>&gt;, restricted the names of the anchors that can be used on
+<t>In &lt;<x:ref>section</x:ref>&gt;, restrict the names of the anchors that can be used on
 some types of sections.</t>
 
-<t>Made &lt;<x:ref>seriesInfo</x:ref>&gt; a child of &lt;<x:ref>front</x:ref>&gt;,
+<t>Make &lt;<x:ref>seriesInfo</x:ref>&gt; a child of &lt;<x:ref>front</x:ref>&gt;,
 and deprecated it as a child of &lt;<x:ref>reference</x:ref>&gt;. This also
 deprecates some of the attributes from &lt;<x:ref>rfc</x:ref>&gt; and moves
 them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
@@ -349,7 +348,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
 <t>&lt;<x:ref>t</x:ref>&gt; now only contains non-block elements, so it no longer contains
 &lt;<x:ref>figure</x:ref>&gt; elements.</t>
 
-<t>Do not generate the grammar from a DTD, but instead get it directly from the Relax Next Generation (RNG) grammar
+<t>Do not generate the grammar from a DTD, but instead get it directly from the RELAX Next Generation (RNG) grammar
 <xref target="RNG"/>.</t>
 
 </list></t>
@@ -360,9 +359,9 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
 
 <section title="Syntax Notation" anchor="syntax.notation">
 <t>
-  The XML vocabulary here is defined in prose, based on the Relax NG schema 
-  (<xref target="RNC"/>) contained in <xref target="schema"/> (specified in
-  Relax NG Compact Notation, (RNC)).
+  The XML vocabulary here is defined in prose, based on the RELAX NG schema 
+  <xref target="RNC"/> contained in <xref target="schema"/> (specified in
+  RELAX NG Compact Notation (RNC)).
 </t>
 <t>  
   Note that the schema can be used for automated validity
