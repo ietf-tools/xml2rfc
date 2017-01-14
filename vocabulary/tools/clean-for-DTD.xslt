@@ -31,13 +31,15 @@
 
 <xsl:transform xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0"
+                xmlns:exslt="http://exslt.org/common"
                 xmlns:ed="http://greenbytes.de/2002/rfcedit"
                 xmlns:grddl="http://www.w3.org/2003/g/data-view#"
                 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                 xmlns:svg="http://www.w3.org/2000/svg"
                 xmlns:x="http://purl.org/net/xml2rfc/ext"
+                xmlns:xi="http://www.w3.org/2001/XInclude"
                 xmlns:xhtml="http://www.w3.org/1999/xhtml"
-                exclude-result-prefixes="ed grddl rdf svg x xhtml"
+                exclude-result-prefixes="ed exslt grddl rdf svg x xi xhtml"
 >
 
 <!-- re-use some of the default RFC2629.xslt rules -->
@@ -89,6 +91,29 @@
 <xsl:template match="processing-instruction('rfc-ext')" mode="cleanup"/>
 <xsl:template match="processing-instruction('BEGININC')" mode="cleanup"/>
 <xsl:template match="processing-instruction('ENDINC')" mode="cleanup"/>
+
+<!-- process include PI -->
+<xsl:template match="processing-instruction('rfc')" mode="cleanup">
+  <xsl:variable name="include">
+    <xsl:call-template name="parse-pis">
+      <xsl:with-param name="nodes" select="."/>
+      <xsl:with-param name="attr" select="'include'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="$include=''">
+      <xsl:text>&#10;</xsl:text>
+      <xsl:copy/>
+    </xsl:when>
+    <xsl:when test="substring($include, string-length($include) - 3) != '.xml'">
+      <xsl:copy-of select="document(concat($include,'.xml'))"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:copy-of select="document($include)"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 
 <!-- add issues appendix -->
 
@@ -398,7 +423,7 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="xref[node() and (@target=//preamble/@anchor or @target=//spanx/@anchor)]" mode="cleanup">
+<xsl:template match="xref[node() and (@target=//preamble/@anchor or @target=//spanx/@anchor or @target=//name//@anchor)]" mode="cleanup">
   <!-- remove the link -->
   <xsl:apply-templates select="node()" mode="cleanup"/>
 </xsl:template>
@@ -643,7 +668,7 @@
 
 <!-- markup inside artwork element -->
 
-<xsl:template match="figure[.//artwork//iref | .//artwork//xref]" mode="cleanup">
+<xsl:template match="figure" mode="cleanup">
   <!-- move up iref elements -->
   <xsl:for-each select=".//artwork//xref">
     <xsl:if test="not(ancestor::ed:del)">
@@ -651,11 +676,28 @@
     </xsl:if>
   </xsl:for-each>
   <figure>
-    <xsl:apply-templates select="@*" mode="cleanup" />
+    <xsl:apply-templates select="@align|@alt|@anchor|@height|@src|@suppress-title|@width" mode="cleanup" />
+    <xsl:variable name="title">
+      <xsl:choose>
+        <xsl:when test="name">
+          <xsl:variable name="hold">
+            <xsl:apply-templates select="name/node()"/>
+          </xsl:variable>
+          <xsl:value-of select="normalize-space($hold)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@title"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$title!=''">
+      <xsl:attribute name="title"><xsl:value-of select="$title"/></xsl:attribute>
+    </xsl:if>
     <xsl:apply-templates select=".//artwork//iref" mode="cleanup"/>
-    <xsl:apply-templates select="iref|preamble|artwork|postamble|ed:replace|ed:ins|ed:del" mode="cleanup" />
+    <xsl:apply-templates select="iref|preamble|artwork|sourcecode|postamble|ed:replace|ed:ins|ed:del" mode="cleanup" />
   </figure>
 </xsl:template>
+<xsl:template match="figure/name" mode="cleanup"/>
 
 <xsl:template name="insert-begin-code"/>
 <xsl:template name="insert-end-code"/>
@@ -669,7 +711,7 @@
 </xsl:template>
 
 <xsl:template match="artwork" mode="cleanup">
-  <xsl:variable name="content2"><xsl:apply-templates select="."/></xsl:variable>
+  <xsl:variable name="content2"><xsl:apply-templates select="node()"/></xsl:variable>
   <xsl:variable name="content" select="translate($content2,'&#160;&#x2500;&#x2502;&#x2508;&#x250c;&#x2510;&#x2514;&#x2518;&#x251c;&#x2524;',' -|+++++++')"/>
   <artwork>
     <xsl:apply-templates select="@*" mode="cleanup" />
@@ -814,6 +856,29 @@
 </xsl:template>
 
 <!-- v3 features -->
+<xsl:template match="rfc/@sortRefs" mode="cleanup"/>
+<xsl:template match="rfc/@symRefs" mode="cleanup"/>
+<xsl:template match="rfc/@tocInclude" mode="cleanup"/>
+<xsl:template match="rfc/@tocDepth" mode="cleanup"/>
+
+<xsl:template match="rfc" mode="cleanup">
+  <xsl:if test="@sortRefs='true'">
+    <xsl:processing-instruction name="rfc">sortrefs="yes"</xsl:processing-instruction>
+  </xsl:if>
+  <xsl:if test="@symRefs='false'">
+    <xsl:processing-instruction name="rfc">symrefs="no"</xsl:processing-instruction>
+  </xsl:if>
+  <xsl:if test="@parsedTocDepth!=3">
+    <xsl:processing-instruction name="rfc">tocdepth="<xsl:value-of select="$parsedTocDepth"/>"</xsl:processing-instruction>
+  </xsl:if>
+  <xsl:if test="@version and (not(@tocInclude) or @tocInclude='true')">
+    <xsl:processing-instruction name="rfc">toc="yes"</xsl:processing-instruction>
+  </xsl:if>
+  <rfc>
+    <xsl:apply-templates select="@*|node()" mode="cleanup"/>
+  </rfc>
+</xsl:template>
+
 <xsl:template match="strong" mode="cleanup">
   <xsl:choose>
     <xsl:when test="*">
@@ -879,7 +944,7 @@
       <xsl:otherwise/>
     </xsl:choose>
     <xsl:apply-templates select="front" mode="cleanup"/>
-    <xsl:apply-templates select="seriesInfo" mode="cleanup"/>
+    <xsl:apply-templates select="seriesInfo|front/seriesInfo" mode="cleanup"/>
 
     <!-- Insert DOI for RFCs -->
     <xsl:variable name="doi">
@@ -902,6 +967,11 @@
       <seriesInfo name="{@name}" value="{@value}"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+<xsl:template match="front" mode="cleanup">
+  <front>
+    <xsl:apply-templates select="text()|node()[not(self::seriesInfo)]" mode="cleanup"/>
+  </front>
 </xsl:template>
 
 <!-- References titles -->
@@ -1060,14 +1130,35 @@
 </xsl:template>
 
 <!-- Ordered Lists -->
-<xsl:template match="ol" mode="cleanup">
+<xsl:template match="ol[not(@type) or string-length(@type)=1]" mode="cleanup">
   <t>
     <xsl:if test="@start and @start!='1'">
-      <xsl:call-template name="warning">
+      <xsl:call-template name="error">
         <xsl:with-param name="msg">list start != 1 not supported</xsl:with-param>
       </xsl:call-template>
     </xsl:if>
+    <xsl:if test="@group">
+      <xsl:call-template name="error">
+        <xsl:with-param name="msg">ol/@group not supported</xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
     <list style="numbers">
+      <xsl:apply-templates mode="cleanup"/>
+    </list>
+  </t>
+</xsl:template>
+
+<xsl:template match="ol[string-length(@type)>1]" mode="cleanup">
+  <t>
+    <xsl:if test="@start and @start!='1'">
+      <xsl:call-template name="error">
+        <xsl:with-param name="msg">list start != 1 not supported</xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
+    <list style="format {@type}">
+      <xsl:if test="@group">
+        <xsl:attribute name="counter"><xsl:value-of select="@group"/></xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates mode="cleanup"/>
     </list>
   </t>
@@ -1111,6 +1202,81 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- Tables -->
+<xsl:template match="table" mode="cleanup">
+  <texttable>
+    <xsl:apply-templates select="@anchor" mode="cleanup"/>
+    <xsl:variable name="title">
+      <xsl:choose>
+        <xsl:when test="name">
+          <xsl:variable name="hold">
+            <xsl:apply-templates select="name/node()"/>
+          </xsl:variable>
+          <xsl:value-of select="normalize-space($hold)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@title"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$title!=''">
+      <xsl:attribute name="title"><xsl:value-of select="$title"/></xsl:attribute>
+    </xsl:if>
+    <xsl:for-each select="thead/tr/*">
+      <xsl:variable name="p" select="position()"/>
+      <!-- in texttable the whole column has the same alignment; we try
+      either the first non-header row or the header itself-->
+      <xsl:variable name="align">
+        <xsl:choose>
+          <xsl:when test="tbody/tr[1]/*[1] and tbody/tr[1]/*[1]/@align"><xsl:value-of select="tbody/tr[1]/*[1]/@align"/></xsl:when>
+          <xsl:when test="@align"><xsl:value-of select="@align"/></xsl:when>
+          <xsl:otherwise>center</xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <ttcol align="{$align}">
+        <xsl:apply-templates mode="cleanup"/>
+      </ttcol>
+    </xsl:for-each>
+    <xsl:for-each select="tbody/tr/*">
+      <c>
+        <xsl:if test="position()=1">
+          <xsl:copy-of select="../../../iref"/>
+        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="t|sourcecode|ol|dl|uo">
+            <xsl:apply-templates select="t/node()|sourcecode/node()|ol/li/node()|ul/li/node()|dl/*/node()" mode="cleanup"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates mode="cleanup"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </c>
+      <xsl:if test="@rowspan and @rowspan!='1'">
+        <xsl:call-template name="error">
+          <xsl:with-param name="inline">no</xsl:with-param>
+          <xsl:with-param name="msg">rowspan attribute not supported (dropped, table will be ugly)</xsl:with-param>
+        </xsl:call-template>
+      </xsl:if>
+      <xsl:if test="@colspan and @colspan!='1'">
+        <xsl:call-template name="error">
+          <xsl:with-param name="inline">no</xsl:with-param>
+          <xsl:with-param name="msg">colspan attribute not supported (dropped, table will be ugly)</xsl:with-param>
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:if test="tfoot">
+      <xsl:call-template name="error">
+        <xsl:with-param name="inline">no</xsl:with-param>
+        <xsl:with-param name="msg">tfoot element not supported (dropped)</xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
+  </texttable>
+</xsl:template>
+
+<xsl:template match="td/br|th/br" mode="cleanup">
+  <xsl:text> </xsl:text>
+</xsl:template>
+
 <!-- date formats -->
 <xsl:template match="/rfc/front/date/@month" mode="cleanup">
   <xsl:attribute name="month">
@@ -1125,6 +1291,30 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
+</xsl:template>
+
+<!-- x:contributor -->
+<xsl:template match="x:contributor" mode="cleanup">
+  <xsl:variable name="content">
+    <xsl:apply-templates select="."/>
+  </xsl:variable>
+  <t>
+    <xsl:apply-templates select="exslt:node-set($content)/*" mode="text"/>
+  </t>
+</xsl:template>
+<xsl:template match="*" mode="text">
+  <xsl:apply-templates mode="text"/>
+</xsl:template>
+<xsl:template match="text()" mode="text">
+  <xsl:value-of select="."/>
+</xsl:template>
+<xsl:template match="br" mode="text">
+  <vspace blankLines="0"/>
+</xsl:template>
+
+<!-- x:include -->
+<xsl:template match="/rfc/back/references/xi:include" mode="cleanup">
+  <xsl:copy-of select="document(@href)"/>
 </xsl:template>
 
 <!-- Display names for references -->
@@ -1145,6 +1335,12 @@
     <xsl:value-of select="/rfc/back/displayreference[@target=current()]/@to"/>
   </xsl:variable>
   <xsl:choose>
+    <xsl:when test="count(/rfc/back/displayreference[@to=current()])>1 or //reference[@anchor=$tnewname]">
+      <xsl:value-of select="current()"/>
+      <xsl:call-template name="warning">
+        <xsl:with-param name="msg">Not rewriting reference name <xsl:value-of select="current()"/> as it would conflict</xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
     <xsl:when test="translate(substring($tnewname,1,1),$digits,'')=''">
       <xsl:value-of select="concat('_',$tnewname)"/>
       <xsl:call-template name="warning">
