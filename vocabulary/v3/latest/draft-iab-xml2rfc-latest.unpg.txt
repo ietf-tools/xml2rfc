@@ -3,9 +3,9 @@
 
 Network Working Group                                         P. Hoffman
 Internet-Draft                                                     ICANN
-Obsoletes: 7749 (if approved)                           January 14, 2017
+Obsoletes: 7749 (if approved)                           January 15, 2017
 Intended status: Informational
-Expires: July 18, 2017
+Expires: July 19, 2017
 
 
                    The "xml2rfc" version 3 Vocabulary
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 18, 2017.
+   This Internet-Draft will expire on July 19, 2017.
 
 Copyright Notice
 
@@ -440,14 +440,14 @@ Table of Contents
    Many elements have an optional "anchor" attribute.  In all cases, the
    value of the "anchor" attribute needs to be a valid XML "Name"
    (Section 2.3 of [XML]), additionally constrained to US-ASCII
-   characters ([USASCII]).  Thus, the character repertoire consists of
+   characters [USASCII].  Thus, the character repertoire consists of
    "A-Z", "a-z", "0-9", "_", "-", ".", and ":", where "0-9", ".", and
    "-" are disallowed as start characters.  Anchors are described in
    more detail in Appendix B.2.
 
    Tools interpreting the XML described here will collapse horizontal
    whitespace and line breaks to a single whitespace (except inside
-   <artwork> and <sourcecode>), and will trim leading and trailing
+   <artwork> and <sourcecode>) and will trim leading and trailing
    whitespace.  Tab characters (U+0009) inside <artwork> and
    <sourcecode> are prohibited.
 
@@ -459,10 +459,10 @@ Table of Contents
    Every element in the v3 vocabulary can have an "xml:lang" attribute,
    an "xml:base" attribute, or both.  The xml:lang attribute specifies
    the language used in the element.  This is sometimes useful for
-   renderers which display different fonts for ideographic characters
+   renderers that display different fonts for ideographic characters
    used in China and Japan.  The xml:base attribute is sometimes added
    to an XML file when doing XML-to-XML conversion where the base file
-   has XInclude atttributes (see Appendix B.1).
+   has XInclude attributes (see Appendix B.1).
 
 2.1.  <abstract>
 
@@ -509,8 +509,8 @@ Table of Contents
 
 2.3.  <annotation>
 
-   Provides additional prose augmenting a bibliographical reference.
-   This text is intended to be shown after the rest of the generated
+   Provides additional prose augmenting a bibliographic reference.  This
+   text is intended to be shown after the rest of the generated
    reference text.
 
    This element appears as a child element of <reference>
@@ -553,7 +553,8 @@ Table of Contents
 
    The value ought to be either the full name or the abbreviation of one
    of the IETF areas as listed on <http://www.ietf.org/iesg/area.html>.
-   The list will be kept by the RFC Series Editor.
+   A list of full names and abbreviations will be kept by the RFC Series
+   Editor.
 
    This element appears as a child element of <front> (Section 2.26).
 
@@ -563,9 +564,9 @@ Table of Contents
 
    This element allows the inclusion of "artwork" in the document.
    <artwork> provides full control of horizontal whitespace and line
-   breaks; thus is used for a variety of things, such as diagrams ("line
-   art") and protocol unit diagrams.  Tab characters (U+0009) inside of
-   this element are prohibited.
+   breaks; thus, it is used for a variety of things, such as diagrams
+   ("line art") and protocol unit diagrams.  Tab characters (U+0009)
+   inside of this element are prohibited.
 
    Alternatively, the "src" attribute allows referencing an external
    graphics file, such as a vector drawing in SVG or a bitmap graphic
@@ -583,7 +584,7 @@ Table of Contents
 
    o  Inline, by including all of the SVG in the content of the element,
       such as: <artwork type="svg"><svg
-      xmlns="http://www.w3.org/2000/svg" ...">
+      xmlns="http://www.w3.org/2000/svg...">
 
    o  Inline, but using XInclude (see Appendix B.1), such as: <artwork
       type="svg"><xi:include href=...>
@@ -597,7 +598,7 @@ Table of Contents
    o  As a local file, such as: <artwork type="svg" src="diagram12.svg">
 
    The use of SVG in Internet-Drafts and RFCs is covered in much more
-   detail in [SVGforRFCs].
+   detail in [RFC7996].
 
    The above methods for inclusion of SVG art can also be used for
    including text artwork, but using a data: URI is probably confusing
@@ -607,8 +608,8 @@ Table of Contents
    single page.  This is to prevent artwork that is split across pages
    from looking like two separate pieces of artwork.
 
-   See Section 5 for a description of to deal with issues of using "&"
-   and "<" characters in artwork.
+   See Section 5 for a description of how to deal with issues of using
+   "&" and "<" characters in artwork.
 
    This element appears as a child element of <aside> (Section 2.6),
    <blockquote> (Section 2.10), <dd> (Section 2.18), <figure>
@@ -628,8 +629,8 @@ Table of Contents
 2.5.1.  "align" Attribute
 
    Controls whether the artwork appears left justified (default),
-   centered, or right justified.  Artwork is aligned relative to left
-   margin of document.
+   centered, or right justified.  Artwork is aligned relative to the
+   left margin of the document.
 
    Allowed values:
 
@@ -642,7 +643,7 @@ Table of Contents
 2.5.2.  "alt" Attribute
 
    Alternative text description of the artwork (which is more than just
-   a summary or caption).  When the art comes from the "src" attribute,
+   a summary or caption).  When the art comes from the "src" attribute
    and the format of that artwork supports alternate text, the
    alternative text comes from the text of the artwork itself, not from
    this attribute.  The contents of this attribute are important to
@@ -663,25 +664,25 @@ Table of Contents
    local file).  This attribute can be helpful for other kinds of tools
    (such as automated syntax checkers, which work by extracting the
    artwork).  Note that the "name" attribute does not need to be unique
-   for artwork elements in a document.  If multiple artwork elements
-   have the same name attribute, a processing tool might assume that the
-   elements are all fragments of a single file, and the tool can collect
-   those fragments for later processing.  See Section 7 for a discussion
-   of possible problems with the value of this attribute.
+   for <artwork> elements in a document.  If multiple <artwork> elements
+   have the same "name" attribute, a processing tool might assume that
+   the elements are all fragments of a single file, and the tool can
+   collect those fragments for later processing.  See Section 7 for a
+   discussion of possible problems with the value of this attribute.
 
 2.5.6.  "src" Attribute
 
-   The URI reference of a graphics file ([RFC3986]), or the name of a
-   file on the local disk.  This can be a "data" URI [RFC2397] that
-   contains the contents of the graphics file.  Note that the inclusion
-   of art with the "src" attribute depends on the capabilities of the
+   The URI reference of a graphics file [RFC3986], or the name of a file
+   on the local disk.  This can be a "data" URI [RFC2397] that contains
+   the contents of the graphics file.  Note that the inclusion of art
+   with the "src" attribute depends on the capabilities of the
    processing tool reading the XML document.  Tools need to be able to
-   handle the file: URI, and should be able to handle http: and https:
-   URIs as well.  The prep tool will be able to handle reading the "src"
-   attribute.
+   handle the file: URI, and they should be able to handle http: and
+   https: URIs as well.  The prep tool will be able to handle reading
+   the "src" attribute.
 
    If no URI scheme is given in the attribute, the attribute is
-   considered to be a local file name relative to the current directory.
+   considered to be a local filename relative to the current directory.
    Processing tools must be careful to not accept dangerous values for
    the filename, particularly those that contain absolute references
    outside the current directory.  Document creators should think hard
@@ -690,7 +691,7 @@ Table of Contents
    explicit URI schemes wherever possible.
 
    In some cases, the prep tool may remove the "src" attribute after
-   processing its value.  See [PREPTOOL] for a description of this.
+   processing its value.  See [RFC7998] for a description of this.
 
    It is an error to have both a "src" attribute and content in the
    <artwork> element.
@@ -713,11 +714,11 @@ Table of Contents
    o  svg
 
    The RFC Series Editor will maintain a complete list of the preferred
-   values on its web site, and that list is expected to be updated over
-   time.  Thus, a consumer of v3 XML should not cause a failure when it
-   encounters an unexpected type or no type is specified.  The table
-   will also indicate which type of art can appear in plaintext output
-   (for example, type="svg" cannot).
+   values on the RFC Editor web site, and that list is expected to be
+   updated over time.  Thus, a consumer of v3 XML should not cause a
+   failure when it encounters an unexpected type or no type is
+   specified.  The table will also indicate which type of art can appear
+   in plain-text output (for example, type="svg" cannot).
 
 2.5.8.  "width" Attribute
 
@@ -767,21 +768,18 @@ Table of Contents
    referenced documents.
 
    The <author> elements contained within the document's <front> element
-   are used to fill the boilerplate, and also to generate the "Author's
+   are used to fill the boilerplate and also to generate the "Author's
    Address" section (see [RFC7322]).
 
    Note that an "author" can also be just an organization (by not
-   specifying any of the name attributes, but adding the <organization>
-   child element).
+   specifying any of the "name" attributes, but adding the
+   <organization> child element).
 
    Furthermore, the "role" attribute can be used to mark an author as
    "editor".  This is reflected both on the front page and in the
-   "Author's Address" section, as well as in bibliographical references.
+   "Author's Address" section, as well as in bibliographic references.
    Note that this specification does not define a precise meaning for
    the term "editor".
-
-   See Section "Authors vs. Contributors" of [RFC7322] for more
-   information.
 
    This element appears as a child element of <front> (Section 2.26).
 
@@ -858,10 +856,10 @@ Table of Contents
 
 2.9.  <bcp14>
 
-   Marks text that are phrases defined in BCP 14 such as "MUST", "SHOULD
-   NOT", and so on.  When shown in some of the output representations,
-   the text in this element might be highlighted.  The use of this
-   element is optional.
+   Marks text that are phrases defined in [BCP14] such as "MUST",
+   "SHOULD NOT", and so on.  When shown in some of the output
+   representations, the text in this element might be highlighted.  The
+   use of this element is optional.
 
    This element is only to be used around the actual phrase from BCP 14,
    not the full definition of a requirement.  For example, it is correct
@@ -879,7 +877,7 @@ Table of Contents
 
 2.10.  <blockquote>
 
-   Specifies a block of text is a quotation.
+   Specifies that a block of text is a quotation.
 
    This element appears as a child element of <section> (Section 2.46).
 
@@ -941,7 +939,7 @@ Table of Contents
 
 2.10.2.  "cite" Attribute
 
-   The source of the citation.  This must be a URI.  If the quotedFrom
+   The source of the citation.  This must be a URI.  If the "quotedFrom"
    attribute is given, this URI will be used by processing tools as the
    link for the text of that attribute.
 
@@ -953,7 +951,7 @@ Table of Contents
 
 2.11.  <boilerplate>
 
-   Holds the boilerplate text for the document.  This section is filled
+   Holds the boilerplate text for the document.  This element is filled
    in by the prep tool.
 
    This element contains <section> elements.  Every <section> element in
@@ -1101,8 +1099,8 @@ Table of Contents
    Bibliographic references:  In dates in <reference> elements, the date
       information can have prose text for the month or year.  For
       example, vague dates (year="ca. 2000"), date ranges (year="2012-
-      2013"), non-specific months (month="Second quarter") and so on are
-      allowed.
+      2013"), non-specific months (month="Second quarter"), and so on
+      are allowed.
 
    This element appears as a child element of <front> (Section 2.26).
 
@@ -1186,21 +1184,21 @@ Table of Contents
 
    This element gives a mapping between the anchor of a reference and a
    name that will be displayed instead.  This allows authors to display
-   more mnemonic anchor names for automatically-included references.
+   more mnemonic anchor names for automatically included references.
    The mapping in this element only applies to <xref> elements whose
    format is "default".  For example, if the reference uses the anchor
    "RFC6949", the following would cause that anchor in the body of
    displayed documents to be "RFC-dev":
 
-   <displayreference target="RFC6449" to="RFC-dev"/>
+   <displayreference target="RFC6949" to="RFC-dev"/>
 
    If a reference section is sorted, this element changes the sort
    order.
 
    It is expected that this element will only be valid in input
-   documents.  It will be likely be removed by prep tools when preparing
-   a final version after those tools have replaced all of the associated
-   anchors, targets, and derivedContent attributes.
+   documents.  It will likely be removed by prep tools when preparing a
+   final version after those tools have replaced all of the associated
+   anchors, targets, and "derivedContent" attributes.
 
    This element appears as a child element of <back> (Section 2.8).
 
@@ -1215,9 +1213,9 @@ Table of Contents
 
    This attribute is a name that will be displayed as the anchor instead
    of the anchor that is given in the <reference> element.  The string
-   given must start with one of the following characters: 0-9, a-z, A-Z.
-   The other characters in the string must be 0-9, a-z, A-Z, "-", ".",
-   and "_".
+   given must start with one of the following characters: 0-9, a-z, or
+   A-Z.  The other characters in the string must be 0-9, a-z, A-Z, "-",
+   ".", or "_".
 
 2.20.  <dl>
 
@@ -1245,10 +1243,10 @@ Table of Contents
 
 2.20.2.  "hanging" Attribute
 
-   The hanging attribute defines whether or not the term appears on the
-   same line as the definition. hanging="true" indicates that the term
-   is to the left of the definition, while hanging="false" indicates
-   that the term will be on a separate line.
+   The "hanging" attribute defines whether or not the term appears on
+   the same line as the definition. hanging="true" indicates that the
+   term is to the left of the definition, while hanging="false"
+   indicates that the term will be on a separate line.
 
    Allowed values:
 
@@ -1308,10 +1306,10 @@ Table of Contents
 
 2.22.  <em>
 
-   Indicates text that is semantically emphasized.  This element will be
-   displayed as italic after processing.  This element can be combined
-   with other character formatting elements, and the formatting will be
-   additive.
+   Indicates text that is semantically emphasized.  Text enclosed within
+   this element will be displayed as italic after processing.  This
+   element can be combined with other character formatting elements, and
+   the formatting will be additive.
 
    This element appears as a child element of <annotation>
    (Section 2.3), <blockquote> (Section 2.10), <cref> (Section 2.16),
@@ -1370,7 +1368,7 @@ Table of Contents
    document.
 
    If the <eref> element has non-empty text content, formatters should
-   use the content as the displayed text that is linked.  Otherwise the
+   use the content as the displayed text that is linked.  Otherwise, the
    formatter should use the value of the "target" attribute as the
    displayed text.  Formatters will link the displayed text to the value
    of the "target" attribute in a manner appropriate for the output
@@ -1412,8 +1410,8 @@ Table of Contents
 
 2.24.1.  "target" Attribute (Mandatory)
 
-   URI of the link target ([RFC3986]).  This must begin with a scheme
-   name (such as "https://") and thus not be relative to the URL of the
+   URI of the link target [RFC3986].  This must begin with a scheme name
+   (such as "https://") and thus not be relative to the URL of the
    current document.
 
 2.25.  <figure>
@@ -3777,7 +3775,7 @@ Table of Contents
 
 4.  SVG
 
-   The discussion of the use of SVG can be found in [SVGforRFCs].  This
+   The discussion of the use of SVG can be found in [RFC7996].  This
    element is part of the namespace "http://www.w3.org/2000/svg".
 
 5.  Use of CDATA Structures and Escaping
@@ -3951,6 +3949,10 @@ Table of Contents
                     RFC 6838, January 2013,
                     <http://www.rfc-editor.org/info/bcp13>.
 
+   [BCP14]          Bradner, S., "Key words for use in RFCs to Indicate
+                    Requirement Levels", BCP 14, RFC 2119, March 1997,
+                    <http://www.rfc-editor.org/info/bcp14>.
+
    [IDGUIDE]        Housley, R., "Guidelines to Authors of Internet-
                     Drafts",
                     <https://www.ietf.org/id-info/guidelines.html>.
@@ -3961,10 +3963,6 @@ Table of Contents
    [NONASCII]       Flanagan, H., "The Use of Non-ASCII Characters in
                     RFCs", draft-iab-rfc-nonascii (work in progress),
                     2016.
-
-   [PREPTOOL]       Hoffman, P. and J. Hildebrand, "RFC v3 Prep Tool
-                    Description", draft-iab-rfcv3-preptool (work in
-                    progress), 2016.
 
    [RFC2026]        Bradner, S., "The Internet Standards Process --
                     Revision 3", BCP 9, RFC 2026, DOI 10.17487/RFC2026,
@@ -4060,6 +4058,15 @@ Table of Contents
                     RFC 7841, DOI 10.17487/RFC7841, May 2016,
                     <http://www.rfc-editor.org/info/rfc7841>.
 
+   [RFC7996]        Brownlee, N., "SVG Drawings for RFCs: SVG 1.2 RFC",
+                    RFC 7996, DOI 10.17487/RFC7996, December 2016,
+                    <http://www.rfc-editor.org/info/rfc7996>.
+
+   [RFC7998]        Hoffman, P. and J. Hildebrand, ""xml2rfc" Version 3
+                    Preparation Tool Description", RFC 7998,
+                    DOI 10.17487/RFC7998, December 2016,
+                    <http://www.rfc-editor.org/info/rfc7998>.
+
    [RNC]            Clark, J., "RELAX NG Compact Syntax", OASIS ,
                     November 2002, <https://www.oasis-open.org/
                     committees/relax-ng/compact-20021121.html>.
@@ -4071,9 +4078,6 @@ Table of Contents
 
                     A useful source of RNG-related information is
                     <http://relaxng.org/>.
-
-   [SVGforRFCs]     Brownlee, N., "SVG Drawings for RFCs: SVG 1.2 RFC",
-                    draft-iab-svg-rfc (work in progress), 2016.
 
    [TLP1.0]         IETF Trust, "Legal Provisions Relating to IETF
                     Documents", November 2008, <http://trustee.ietf.org/
@@ -4323,7 +4327,7 @@ Appendix B.  The v3 Format and Processing Tools
    o  A "prep tool" that takes a v3 document, makes many checks, adds
       and changes many attribute values, and creates a file that is a
       "prepared document".  The prepared document is a valid v3
-      document.  The prep tool is described in [PREPTOOL].
+      document.  The prep tool is described in [RFC7998].
 
    o  The prep tool is expected to have many modes:
 
@@ -4348,7 +4352,7 @@ Appendix B.  The v3 Format and Processing Tools
          includes expanding the XInclude entities and DTD entities in
          place, and changing all elements that have "src" attributes
          with external links into either "data:" URI or content for the
-         element, as specified in [PREPTOOL].
+         element, as specified in [RFC7998].
 
    o  Formatting tools that will create HTML, PDF, plain text, and
       possibly other output formats.  These formatters will be created

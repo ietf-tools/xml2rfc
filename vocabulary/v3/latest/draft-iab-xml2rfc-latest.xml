@@ -38,6 +38,8 @@
 <!ENTITY rfc7669 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7669.xml">
 <!ENTITY rfc7749 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7749.xml">
 <!ENTITY rfc7841 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7841.xml">
+<!ENTITY rfc7996 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7996.xml">
+<!ENTITY rfc7998 PUBLIC "" "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7998.xml">
 ]>
 
 <rfc xmlns:x="http://purl.org/net/xml2rfc/ext" obsoletes="7749" xmlns:ed="http://greenbytes.de/2002/rfcedit" ipr="trust200902" docName="draft-iab-xml2rfc-latest" category="info" xml:lang="en">
@@ -383,7 +385,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
   Many elements have an optional "anchor" attribute. In all cases, the value of the "anchor"
   attribute needs to be a valid XML "Name" (<xref target="XML" x:fmt="of" x:sec="2.3"
   x:rel="#sec-common-syn"/>),
-  additionally constrained to US-ASCII characters (<xref target="USASCII"/>). Thus, the character repertoire consists of
+  additionally constrained to US-ASCII characters <xref target="USASCII"/>. Thus, the character repertoire consists of
   "A-Z", "a-z", "0-9", "_", "-", ".", and ":", where "0-9", ".", and "-" are disallowed as start characters.
   Anchors are described in more detail in <xref target="anchorsandids"/>.
 </t>
@@ -391,7 +393,7 @@ them into &lt;<x:ref>seriesInfo</x:ref>&gt;.</t>
 <t>
 Tools interpreting the XML described here will collapse horizontal whitespace and line breaks to a
 single whitespace (except inside &lt;<x:ref>artwork</x:ref>&gt; and
-&lt;<x:ref>sourcecode</x:ref>&gt;), and will trim leading and trailing whitespace.
+&lt;<x:ref>sourcecode</x:ref>&gt;) and will trim leading and trailing whitespace.
 Tab characters (U+0009) inside &lt;<x:ref>artwork</x:ref>&gt; and &lt;<x:ref>sourcecode</x:ref>&gt; are
 prohibited.
 </t>
@@ -405,9 +407,9 @@ the appendices for a complete description of these attributes.
 <t>
   Every element in the v3 vocabulary can have an "xml:lang" attribute, an "xml:base" attribute, or
   both. The xml:lang attribute specifies the language used in the element. This is sometimes useful
-  for renderers which display different fonts for ideographic characters used in China and Japan.
+  for renderers that display different fonts for ideographic characters used in China and Japan.
   The xml:base attribute is sometimes added to an XML file when doing XML-to-XML conversion where the
-  base file has XInclude atttributes (see <xref target="includingexternal"/>).
+  base file has XInclude attributes (see <xref target="includingexternal"/>).
 </t>
 
 <?BEGININC xml2rfcv3-spec.xml ?>
@@ -510,7 +512,7 @@ the appendices for a complete description of these attributes.
    <iref item="Elements" subitem="annotation" primary="true"/>
    <iref item="annotation element" primary="true"/>
    <t>
-      Provides additional prose augmenting a bibliographical reference.
+      Provides additional prose augmenting a bibliographic reference.
       This text is intended to be shown after the rest of the generated reference text.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>reference</x:ref>&gt; (<xref target="element.reference"/>).</t>
@@ -574,7 +576,7 @@ the appendices for a complete description of these attributes.
    <t>
       The value ought to be either the full name or the abbreviation of one of
       the IETF areas as listed on <eref target="http://www.ietf.org/iesg/area.html"/>.
-      The list will be kept by the RFC Series Editor.
+      A list of full names and abbreviations will be kept by the RFC Series Editor.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.area.contents"><!--AG-->
@@ -592,7 +594,7 @@ the appendices for a complete description of these attributes.
    <t>
       This element allows the inclusion of "artwork" in the document.
       &lt;artwork&gt; provides
-      full control of horizontal whitespace and line breaks; thus is
+      full control of horizontal whitespace and line breaks; thus, it is
       used for a variety of things, such as diagrams ("line art") and protocol unit diagrams.
       Tab characters (U+0009) inside of this element are prohibited.
    </t>
@@ -611,7 +613,7 @@ the appendices for a complete description of these attributes.
       There are at least five ways to include SVG in artwork in Internet-Drafts:
       <list style="symbols">
          <t>Inline, by including all of the SVG in the content of the element, 
-            such as: &lt;artwork type="svg"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg" ..."&gt;</t>
+            such as: &lt;artwork type="svg"&gt;&lt;svg xmlns="http://www.w3.org/2000/svg..."&gt;</t>
          <t>Inline, but using XInclude (see <xref target="includingexternal"/>),
             such as: &lt;artwork type="svg"&gt;&lt;xi:include href=...&gt;</t>
          <t>As a data: URI, such as: &lt;artwork type="svg"
@@ -620,7 +622,7 @@ the appendices for a complete description of these attributes.
          <t>As a local file, such as: &lt;artwork type="svg" src="diagram12.svg"&gt;</t>
       </list>
       The use of SVG in Internet-Drafts and RFCs is covered in much more detail in
-      <xref target="SVGforRFCs"/>.
+      <xref target="RFC7996"/>.
    </t>
    <t>
       The above methods for inclusion of SVG art can also be used for including text artwork, but using a data: URI is probably
@@ -631,7 +633,7 @@ the appendices for a complete description of these attributes.
       artwork that is split across pages from looking like two separate pieces of artwork.
    </t>
    <t>
-See <xref target="cdata.and.escaping"/> for a description of to deal with issues of using
+See <xref target="cdata.and.escaping"/> for a description of how to deal with issues of using
 "&amp;" and "&lt;" characters in artwork.
 </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>aside</x:ref>&gt; (<xref target="element.aside"/>), &lt;<x:ref>blockquote</x:ref>&gt; (<xref target="element.blockquote"/>), &lt;<x:ref>dd</x:ref>&gt; (<xref target="element.dd"/>), &lt;<x:ref>figure</x:ref>&gt; (<xref target="element.figure"/>), &lt;<x:ref>li</x:ref>&gt; (<xref target="element.li"/>), &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>), &lt;<x:ref>td</x:ref>&gt; (<xref target="element.td"/>), and &lt;<x:ref>th</x:ref>&gt; (<xref target="element.th"/>).</t>
@@ -660,7 +662,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <t>
             Controls whether the artwork appears left justified (default), centered,
             or right justified.
-            Artwork is aligned relative to left margin of document.
+            Artwork is aligned relative to the left margin of the document.
          </t>
       <t><!--AG-->Allowed values:</t>
       <ul><!--AG-->
@@ -678,7 +680,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="alt attribute" subitem="in artwork element"/>
       <t>
             Alternative text description of the artwork (which is more than just a summary or caption).
-            When the art comes from the "src" attribute,
+            When the art comes from the "src" attribute
             and the format of that artwork supports alternate text,
             the alternative text comes from the text of the artwork itself, not from this attribute.
             The contents of this attribute are important to readers who are visually impaired, as well as
@@ -719,8 +721,8 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             This attribute can
             be helpful for other kinds of tools (such as automated syntax checkers,
             which work by extracting the artwork).
-            Note that the "name" attribute does not need to be unique for artwork elements in a
-            document. If multiple artwork elements have the same name attribute, a processing tool might
+            Note that the "name" attribute does not need to be unique for  &lt;<x:ref>artwork</x:ref>&gt; elements in a
+            document. If multiple  &lt;<x:ref>artwork</x:ref>&gt; elements have the same "name" attribute, a processing tool might
             assume that the elements are all fragments of a single file, and the tool can
             collect those fragments for later processing.
             See <xref target="security.considerations"/> for a discussion of possible problems with the value of this attribute.
@@ -734,14 +736,14 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="artwork element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in artwork element"/>
       <t>
-         The URI reference of a graphics file (<xref target="RFC3986"/>), or the name of a file on the local disk.
+         The URI reference of a graphics file <xref target="RFC3986"/>, or the name of a file on the local disk.
          This can be a "data" URI <xref target="RFC2397"/> that contains the contents of the graphics file.
          Note that the inclusion of art with the "src" attribute depends on the capabilities of the processing tool
-         reading the XML document. Tools need to be able to handle the file: URI, and should
+         reading the XML document. Tools need to be able to handle the file: URI, and they should
          be able to handle http: and https: URIs as well. The prep tool will be able to handle reading the "src" attribute.
       </t>
       <t>
-         If no URI scheme is given in the attribute, the attribute is considered to be a local file name
+         If no URI scheme is given in the attribute, the attribute is considered to be a local filename
          relative to the current directory.
          Processing tools must be careful to not accept dangerous values for the filename, particularly those that contain
          absolute references outside the current directory.
@@ -750,7 +752,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       </t>
       <t>
          In some cases, the prep tool may remove the "src" attribute after processing its value.
-         See <xref target="PREPTOOL"/> for a description of this.
+         See <xref target="RFC7998"/> for a description of this.
       </t>
       <t>
          It is an error to have both a "src" attribute and content in the &lt;artwork&gt; element.
@@ -776,10 +778,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             <t>hex-dump</t>
             <t>svg</t>
          </list>
-            The RFC Series Editor will maintain a complete list of the preferred values on its
+            The RFC Series Editor will maintain a complete list of the preferred values on the RFC Editor
             web site, and that list is expected to be updated over time. Thus, a consumer
             of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified.
-            The table will also indicate which type of art can appear in plaintext output (for example, type="svg" cannot).
+            The table will also indicate which type of art can appear in plain-text output (for example, type="svg" cannot).
          </t>
    </section>
 
@@ -880,23 +882,19 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    </t>
    <t>
       The &lt;author&gt; elements contained within the document's &lt;front&gt; element
-      are used to fill the boilerplate, and also to generate the "Author's Address"
+      are used to fill the boilerplate and also to generate the "Author's Address"
       section (see <xref target="RFC7322"/>).
    </t>
    <t>
       Note that an "author" can also be just an organization (by not specifying any
-      of the name attributes, but adding the &lt;<x:ref>organization</x:ref>&gt;
+      of the "name" attributes, but adding the &lt;<x:ref>organization</x:ref>&gt;
       child element).
    </t>
    <t>
       Furthermore, the "role" attribute can be used to mark an author as
-      "editor". This is reflected both on the front page and in the "Author's Address" section, as well as in bibliographical
+      "editor". This is reflected both on the front page and in the "Author's Address" section, as well as in bibliographic
       references. Note that this specification does not define a precise
       meaning for the term "editor".
-   </t>
-   <t>
-      See Section "Authors vs. Contributors" of <xref target="RFC7322"/>
-      for more information.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>front</x:ref>&gt; (<xref target="element.front"/>).</t>
    <t anchor="element.author.contents"><!--AG-->
@@ -1053,7 +1051,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="Elements" subitem="bcp14" primary="true"/>
    <iref item="bcp14 element" primary="true"/>
    <t>
-      Marks text that are phrases defined in BCP 14 such as "MUST", "SHOULD NOT", and so on. When shown
+      Marks text that are phrases defined in <xref target="BCP14"/> such as "MUST", "SHOULD NOT", and so on. When shown
       in some of the output representations, the text in this element might be highlighted.
       The use of this element is optional.
    </t>
@@ -1077,7 +1075,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="Elements" subitem="blockquote" primary="true"/>
    <iref item="blockquote element" primary="true"/>
    <t>
-      Specifies a block of text is a quotation.
+      Specifies that a block of text is a quotation.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>section</x:ref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.blockquote.contents"><!--AG-->
@@ -1173,7 +1171,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="blockquote element" subitem="cite attribute"/>
       <iref item="cite attribute" subitem="in blockquote element"/>
       <t>
-         The source of the citation. This must be a URI. If the quotedFrom attribute is given, this URI will be
+         The source of the citation. This must be a URI. If the "quotedFrom" attribute is given, this URI will be
          used by processing tools as the link for the text of that attribute.
       </t>
    </section>
@@ -1200,7 +1198,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="Elements" subitem="boilerplate" primary="true"/>
    <iref item="boilerplate element" primary="true"/>
    <t>
-      Holds the boilerplate text for the document. This section is filled in by the prep tool.
+      Holds the boilerplate text for the document. This element is filled in by the prep tool.
    </t>
    <t>
       This element contains &lt;<x:ref>section</x:ref>&gt; elements. Every &lt;<x:ref>section</x:ref>&gt;
@@ -1441,7 +1439,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
          <t hangText="Bibliographic references:">
       In dates in &lt;<x:ref>reference</x:ref>&gt; elements, the date information can have prose text for the month or year.
       For example, vague dates (year="ca. 2000"), date ranges (year="2012-2013"),
-      non-specific months (month="Second quarter") and so on are allowed.
+      non-specific months (month="Second quarter"), and so on are allowed.
    </t>
       </list>
    </t>
@@ -1592,13 +1590,13 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="displayreference element" primary="true"/>
    <t>
       This element gives a mapping between the anchor of a reference and a name that will be displayed instead.
-      This allows authors to display more mnemonic anchor names for automatically-included references.
+      This allows authors to display more mnemonic anchor names for automatically included references.
       The mapping in this element only applies to &lt;<x:ref>xref</x:ref>&gt; elements whose format is "default".
       For example, if the reference uses the anchor "RFC6949", the following would cause that anchor in the body
       of displayed documents to be "RFC-dev":
 <figure>
          <artwork>
-&lt;displayreference target="RFC6449" to="RFC-dev"/&gt;
+&lt;displayreference target="RFC6949" to="RFC-dev"/&gt;
 </artwork>
       </figure>
    </t>
@@ -1606,8 +1604,8 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
      If a reference section is sorted, this element changes the sort order.
    </t>
    <t>
-     It is expected that this element will only be valid in input documents. It will be likely be removed by prep
-     tools when preparing a final version after those tools have replaced all of the associated anchors, targets, and derivedContent
+     It is expected that this element will only be valid in input documents. It will likely be removed by prep
+     tools when preparing a final version after those tools have replaced all of the associated anchors, targets, and "derivedContent"
      attributes.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<x:ref>back</x:ref>&gt; (<xref target="element.back"/>).</t>
@@ -1636,7 +1634,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <t>
         This attribute is a name that will be displayed as the anchor instead of the anchor that is given
         in the &lt;<x:ref>reference</x:ref>&gt; element. The string given must start with one of the following
-        characters: 0-9, a-z, A-Z. The other characters in the string must be 0-9, a-z, A-Z, "-", ".", and "_".
+        characters: 0-9, a-z, or A-Z. The other characters in the string must be 0-9, a-z, A-Z, "-", ".", or "_".
       </t>
    </section>
 </section>
@@ -1692,7 +1690,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="dl element" subitem="hanging attribute"/>
       <iref item="hanging attribute" subitem="in dl element"/>
       <t>
-         The hanging attribute defines whether or not the term appears on the same line as the definition.
+         The "hanging" attribute defines whether or not the term appears on the same line as the definition.
          hanging="true" indicates that the term is to the left of the definition, while hanging="false"
          indicates that the term will be on a separate line.
       </t>
@@ -1795,7 +1793,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="Elements" subitem="em" primary="true"/>
    <iref item="em element" primary="true"/>
    <t>
-        Indicates text that is semantically emphasized. This element will be displayed as italic after processing.
+        Indicates text that is semantically emphasized. Text enclosed within this element will be displayed as italic after processing.
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
@@ -1884,7 +1882,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    </t>
    <t>
       If the &lt;eref&gt; element has non-empty text content, formatters should use the content as the displayed text that is linked.
-      Otherwise the formatter should use the value of the "target" attribute as the displayed text.
+      Otherwise, the formatter should use the value of the "target" attribute as the displayed text.
       Formatters will link the displayed text to the value of the "target" attribute in a manner appropriate for the output format.
    </t>
    <t>
@@ -1938,7 +1936,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="eref element" subitem="target attribute"/>
       <iref item="target attribute" subitem="in eref element"/>
       <t>
-         URI of the link target (<xref target="RFC3986"/>).
+         URI of the link target <xref target="RFC3986"/>.
          This must begin with a scheme name (such as "https://") and thus not be relative to the URL of the current document.
          </t>
    </section>
@@ -5725,7 +5723,7 @@ v3 have attributes from v2 that are deprecated; those are not listed here.</t>
 <section title="SVG" anchor="element.svg">
    <x:anchor-alias value="svg"/>
 <t>
-The discussion of the use of SVG can be found in <xref target="SVGforRFCs"/>.
+The discussion of the use of SVG can be found in <xref target="RFC7996"/>.
 This element is part of the namespace "http://www.w3.org/2000/svg".
 </t>
 </section>
@@ -5970,6 +5968,16 @@ Suzanne Woolf
     <seriesInfo name="RFC" value="6838"/>
   </reference>
 
+  <reference anchor='BCP14' target='http://www.rfc-editor.org/info/bcp14'>
+    <front>
+      <title>Key words for use in RFCs to Indicate Requirement Levels</title>
+      <author initials='S.' surname='Bradner' fullname='S. Bradner'/>
+      <date year='1997' month='March' />
+    </front>
+    <seriesInfo name='BCP' value='14'/>
+    <seriesInfo name='RFC' value='2119'/>
+  </reference>
+
   <reference anchor="IDGUIDE" target="https://www.ietf.org/id-info/guidelines.html">
     <front>
       <title>Guidelines to Authors of Internet-Drafts</title>
@@ -5997,16 +6005,6 @@ Suzanne Woolf
     <seriesInfo name="Internet-Draft" value="draft-iab-rfc-nonascii"/>
   </reference>
 
-  <reference anchor="PREPTOOL">
-    <front>
-      <title>RFC v3 Prep Tool Description</title>
-      <author initials="P." surname="Hoffman" fullname="Paul Hoffman"/>
-      <author initials="J." surname="Hildebrand" fullname="Joe Hildebrand"/>
-      <date year="2016"/>
-    </front>
-    <seriesInfo name="Internet-Draft" value="draft-iab-rfcv3-preptool"/>
-  </reference>
-
 &rfc2026;
 &rfc2397;
 &rfc2629;
@@ -6027,6 +6025,8 @@ Suzanne Woolf
 &rfc7669;
 &rfc7749;
 &rfc7841;
+&rfc7996;
+&rfc7998;
 
   <reference anchor="RNC" target="https://www.oasis-open.org/committees/relax-ng/compact-20021121.html">
     <front>
@@ -6055,15 +6055,6 @@ Suzanne Woolf
     <annotation>
       A useful source of RNG-related information is <eref target="http://relaxng.org/"/>.
     </annotation>
-  </reference>
-
-  <reference anchor="SVGforRFCs">
-    <front>
-      <title>SVG Drawings for RFCs: SVG 1.2 RFC</title>
-      <author initials="N." surname="Brownlee" fullname="Nevil Brownlee"/>
-      <date year="2016"/>
-    </front>
-    <seriesInfo name="Internet-Draft" value="draft-iab-svg-rfc"/>
   </reference>
 
   <reference anchor="TLP1.0" target="http://trustee.ietf.org/license-info/IETF-TLP-1.htm">
@@ -6459,7 +6450,7 @@ have descriptions of how a processing tool might create output from the element.
 
 <t>A "prep tool" that takes a v3 document, makes many checks, adds and changes many attribute
 values, and creates a file that is a "prepared document". The prepared document is a valid v3
-document. The prep tool is described in <xref target="PREPTOOL"/>.</t>
+document. The prep tool is described in <xref target="RFC7998"/>.</t>
 
 <t>The prep tool is expected to have many modes:
 
@@ -6480,7 +6471,7 @@ or warnings before they submit their documents for publication.</t>
 <t>Consolidation mode -- Produces output where no external resources are required to render the file
 output. This includes expanding the XInclude entities and DTD entities in place, and changing all
 elements that have "src" attributes with external links into either "data:" URI or
-content for the element, as specified in <xref target="PREPTOOL"/>.</t>
+content for the element, as specified in <xref target="RFC7998"/>.</t>
 
 </list></t>
 
