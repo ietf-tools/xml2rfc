@@ -932,7 +932,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
          page, in footers, and in references.
       </t>
       <t>
-         Some processors will post-process the value, for instance when it only
+         Some processors will post-process the value -- for instance, when it only
          contains a single letter (in which case they might add a trailing dot).
          Relying on this kind of post-processing can lead to results varying
          across formatters and thus ought to be avoided.
@@ -1816,7 +1816,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
 ]]></artwork></figure>
    </t>
    <t>
-      An HTML formatter might generate
+      An HTML formatter might generate:
 <figure><artwork><![CDATA[
       This is described at
       <a href="http://www.example.com/reports/r12.html">
@@ -1832,7 +1832,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
 ]]></artwork></figure>
    </t>
    <t>
-      An HTML formatter might generate
+      An HTML formatter might generate:
 <figure><artwork><![CDATA[
       This is described
       <a href="http://www.example.com/reports/r12.html">
@@ -1932,7 +1932,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       <iref item="alt attribute" subitem="in figure element"/>
       <t>
          Deprecated. If the goal is to provide a single URI for
-         a reference, use the "target" attribute on &lt;<xref target="element.reference" format="none">reference</xref>&gt; instead.
+         a reference, use the "target" attribute in &lt;<xref target="element.reference" format="none">reference</xref>&gt; instead.
        </t>
    </section>
 
@@ -2019,7 +2019,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       the Abstract, and additional notes.
    </t>
    <t>
-      A &lt;<xref target="element.front" format="none">front</xref>&gt; element may have more than one &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements.
+      A &lt;<xref target="element.front" format="none">front</xref>&gt; element may have more than one &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element.
       A &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element determines the document number (for RFCs)
       or name (for Internet-Drafts).
       Another &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element determines the "maturity level"
@@ -2027,8 +2027,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       "Standards Track", "bcp" for "BCP", "info" for "Informational", "exp" for "Experimental", and
       "historic" for "Historic".
       The "name" attributes of those
-      multiple &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements interact as described in the section on
-      &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;.
+      multiple &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements interact as described in <xref target="element.seriesInfo"/>.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.reference" format="none">reference</xref>&gt; (<xref target="element.reference"/>) and &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; (<xref target="element.rfc"/>).</t>
    <t anchor="element.front.contents"><!--AG-->
@@ -2289,14 +2288,15 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       a &lt;link&gt; element:
          <list style="symbols">
          <t>
-               The current ISSN for the RFC series.
+               The current International Standard Serial Number (ISSN) for the RFC Series.
                The value for the "rel" attribute is "item".
                The link should use the form "urn:issn:".
             </t>
          <t>
-               The DOI for this document.
+               The Digital Object Identifier (DOI) for this document.
                The value for the "rel" attribute is "describedBy".
-               The link should use the form specified in <xref target="RFC7669"/>.
+               The link should use the form specified in <xref target="RFC7669"/>;
+               this is expected to change in the future.
             </t>
          <t>
                The Internet-Draft that was submitted to the RFC Editor to become the published RFC.
@@ -2306,7 +2306,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
          <t>
                A representation of the document offered by the document author.
                The value for the "rel" attribute is "alternate".
-               The link can be to a personally-run web site.
+               The link can be to a personally run web site.
             </t>
       </list>
    </t>
@@ -2337,7 +2337,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       <iref item="rel attribute" subitem="in link element"/>
       <t>
          The relationship of the external document to this one. The relationships are taken from
-         Link Relations registry maintained by IANA <xref target="LINKRELATIONS"/>.
+         the "Link Relations" registry maintained by IANA <xref target="LINKRELATIONS"/>.
        </t>
    </section>
 </section>
@@ -2369,8 +2369,9 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
    <iref item="Elements" subitem="name" primary="true"/>
    <iref item="name element" primary="true"/>
    <t>
-      The name of the section, note, figure, or texttable. This name can have flow markup such
-      as to make some characters use a fixed-width font, or to include references.
+      The name of the section, note, figure, or texttable. This name can
+      indicate markup of flowing text (for example, including references or
+      making some characters use a fixed-width font).
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.note" format="none">note</xref>&gt; (<xref target="element.note"/>), &lt;<xref target="element.references" format="none">references</xref>&gt; (<xref target="element.references"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.table" format="none">table</xref>&gt; (<xref target="element.table"/>), and &lt;<xref target="element.texttable" format="none">texttable</xref>&gt; (<xref target="element.texttable"/>).</t>
    <t anchor="element.name.contents"><!--AG-->
@@ -2407,8 +2408,8 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       Creates an unnumbered, titled block of text that appears after the Abstract.
    </t>
    <t>
-      It is usually used for additional information to reviewers (working
-      group information, mailing list, ...), or for additional publication
+      It is usually used for additional information to reviewers (Working
+      Group information, mailing list, ...) or for additional publication
       information such as "IESG Notes".
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.front" format="none">front</xref>&gt; (<xref target="element.front"/>).</t>
@@ -2449,7 +2450,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       <t>
          If set to "true", this note is marked in the prep tool with text indicating that it should be
          removed before the document is published as an RFC.
-         That text will be “This note is to be removed before publishing as an RFC.”.
+         That text will be "This note is to be removed before publishing as an RFC."
       </t>
       <t><!--AG-->Allowed values:</t>
       <t><list style="symbols"><!--AG-->
@@ -2511,7 +2512,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
          When the prep tool sees an &lt;ol&gt; element with a "group" attribute that has already been seen,
          it continues the numbering of the list from where the previous list with the same
          group name left off.
-         If an &lt;ol&gt; element has both a "group" and "start" attribute, the group's
+         If an &lt;ol&gt; element has both a "group" attribute and a "start" attribute, the group's
          numbering is reset to the given start value.
       </t>
    </section>
@@ -2540,7 +2541,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       <iref item="ol element" subitem="start attribute"/>
       <iref item="start attribute" subitem="in ol element"/>
       <t>
-         The ordinal value to start the list at. This defaults to "1", and must be an integer of 0 or greater.
+         The ordinal value at which to start the list. This defaults to "1" and must be an integer of 0 or greater.
       </t>
    </section>
 
@@ -2560,7 +2561,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
             <t hangText="i">Lowercase Roman numerals (i, ii, iii, ...)</t>
             <t hangText="I">Uppercase Roman numerals (I, II, III, ...)</t>
          </list>
-         For type "a" and "A", after the 26th entry, the numbering starts at "aa"/"AA", then
+         For types "a" and "A", after the 26th entry, the numbering starts at "aa"/"AA", then
          "ab"/"AB", and so on.
       </t>
       <t>
@@ -2602,7 +2603,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
    <iref item="Elements" subitem="organization" primary="true"/>
    <iref item="organization element" primary="true"/>
    <t>
-      Specifies the affiliation (<xref target="RFC7322"/>) of an author.
+      Specifies the affiliation <xref target="RFC7322"/> of an author.
    </t>
    <t>
       This information appears both in the "Author's Address" section and
@@ -2648,7 +2649,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
    </t>
    <t>
       The value is expected to be the scheme-specific part of a "tel" URI
-      (so does not include the prefix "tel:"), using the "global-number-digits"
+      (and so does not include the prefix "tel:"), using the "global-number-digits"
       syntax. See Section 3 of <xref target="RFC3966"/> 
       for details.
    </t>
@@ -2797,7 +2798,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
    <iref item="Elements" subitem="reference" primary="true"/>
    <iref item="reference element" primary="true"/>
    <t>
-      Represents a bibliographical reference.
+      Represents a bibliographic reference.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.referencegroup" format="none">referencegroup</xref>&gt; (<xref target="element.referencegroup"/>) and &lt;<xref target="element.references" format="none">references</xref>&gt; (<xref target="element.references"/>).</t>
    <t anchor="element.reference.contents"><!--AG-->
@@ -2834,7 +2835,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       <iref item="anchor attribute" subitem="in reference element"/>
       <t>
         Document-wide unique identifier for this reference. Usually, this will
-        be used both to "label" the reference in the "References" section, and
+        be used both to "label" the reference in the "References" section and
         as an identifier in links to this reference entry.
       </t>
    </section>
@@ -2876,8 +2877,8 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
    <iref item="referencegroup element" primary="true"/>
    <t>
       Represents a list of bibliographic references that will be represented as a single reference.
-      This is most often used for references in the STD and BCP series, where a single reference
-      (such as "BCP 9") encompasses more than one RFC.
+      This is most often used to reference STDs and BCPs, where a single reference
+      (such as "BCP 9") may encompass more than one RFC.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.references" format="none">references</xref>&gt; (<xref target="element.references"/>).</t>
    <t anchor="element.referencegroup.contents"><!--AG-->
@@ -2897,7 +2898,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       <iref item="anchor attribute" subitem="in referencegroup element"/>
       <t>
         Document-wide unique identifier for this reference group. Usually, this will
-        be used both to "label" the reference group in the "References" section, and
+        be used both to "label" the reference group in the "References" section and
         as an identifier in links to this reference entry.
       </t>
    </section>
@@ -2910,12 +2911,12 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
    <iref item="Elements" subitem="references" primary="true"/>
    <iref item="references element" primary="true"/>
    <t>
-      Contains a set of bibliographical references.
+      Contains a set of bibliographic references.
    </t>
    <t>
-      In the early days of the RFC series, there was only one "References" section per RFC. This convention
+      In the early days of the RFC Series, there was only one "References" section per RFC. This convention
       was later changed to group references into two sets, "Normative" and "Informative",
-      as described in <xref target="RFC7322"/>).
+      as described in <xref target="RFC7322"/>.
       This vocabulary supports the split with the &lt;<xref target="element.name" format="none">name</xref>&gt; child element.
       In general, the title should be either "Normative References" or "Informative References".
    </t>
@@ -2949,7 +2950,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       <iref item="references element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in references element"/>
       <t>
-         An optional user-supplied for this section.
+         An optional user-supplied identifier for this set of references.
       </t>
    </section>
 
@@ -3004,15 +3005,15 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       The "target" attribute is required, and it must be the anchor of a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element.
    </t>
    <t>   
-      The "section" attribute is required, and the "relative" attribute is option.
-      If reference is not an RFC or Internet-Draft that is in the v3 format, the element MUST have a "relative" attribute;
+      The "section" attribute is required, and the "relative" attribute is optional.
+      If the reference is not an RFC or Internet-Draft that is in the v3 format, the element needs to have a "relative" attribute;
       in this case, the value of the "section" attribute is ignored.
    </t>
    <t>
       An example of the &lt;relref&gt; element with text content might be:
 <figure><artwork><![CDATA[
       See
-      <relref section="2.3" target="RFC7878" displayFormat="bare">
+      <relref section="2.3" target="RFC9999" displayFormat="bare">
       the protocol overview</relref>
       for more information.
 ]]></artwork></figure>
@@ -3021,7 +3022,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
        An HTML formatter might generate:
 <figure><artwork><![CDATA[
       See 
-      <a href="http://www.rfc-editor.org/rfc/rfc7878.html#s-2.3">
+      <a href="http://www.rfc-editor.org/rfc/rfc9999.html#s-2.3">
       the protocol overview</a>
       for more information.
 ]]></artwork></figure>
@@ -3054,7 +3055,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
             For example, with an input of:
 <figure><artwork><![CDATA[
       See
-      <relref section="2.3" target="RFC7878" displayFormat="of"/>
+      <relref section="2.3" target="RFC9999" displayFormat="of"/>
       for an overview.
 ]]></artwork></figure>
             </t>
@@ -3062,14 +3063,14 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
                An HTML formatter might generate:
 <figure><artwork><![CDATA[
       See
-      <a href="http://www.rfc-editor.org/info/rfc7878#s-2.3">
+      <a href="http://www.rfc-editor.org/info/rfc9999#s-2.3">
       Section 2.3</a> of
-      [<a href="#RFC7878">RFC7878</a>]
+      [<a href="#RFC9999">RFC9999</a>]
       for an overview.
 ]]></artwork></figure>
             </t>
             <t>
-            Note that "displayFormat='of'" is the default for &lt;relref&gt; so it does not need to be given in
+            Note that "displayFormat='of'" is the default for &lt;relref&gt;, so it does not need to be given in
             a &lt;relref&gt; element if that format is desired.
             </t>
          </list>
@@ -3085,7 +3086,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
             For example, with an input of:
 <figure><artwork><![CDATA[
       See
-      <relref section="2.3" target="RFC7878" displayFormat="comma"/>,
+      <relref section="2.3" target="RFC9999" displayFormat="comma"/>,
       for an overview.
 ]]></artwork></figure>
             </t>
@@ -3093,8 +3094,8 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
                An HTML formatter might generate:
 <figure><artwork><![CDATA[
       See
-      [<a href="#RFC7878">RFC7878</a>], 
-      <a href="http://www.rfc-editor.org/info/rfc7878#s-2.3">
+      [<a href="#RFC9999">RFC9999</a>], 
+      <a href="http://www.rfc-editor.org/info/rfc9999#s-2.3">
       Section 2.3</a>, for an overview.
 ]]></artwork></figure>
             </t>
@@ -3111,16 +3112,16 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
             For example, with an input of:
 <figure><artwork><![CDATA[
       See
-      <relref section="2.3" target="RFC7878" displayFormat="parens"/>
+      <relref section="2.3" target="RFC9999" displayFormat="parens"/>
       for an overview.
 ]]></artwork></figure>
             </t>
             <t>
-               An HTML formatter might generate
+               An HTML formatter might generate:
 <figure><artwork><![CDATA[
       See
-      [<a href="#RFC7878">RFC7878</a>]
-      (<a href="http://www.rfc-editor.org/info/rfc7878#s-2.3"> 
+      [<a href="#RFC9999">RFC9999</a>]
+      (<a href="http://www.rfc-editor.org/info/rfc9999#s-2.3"> 
       Section 2.3</a>)
       for an overview.
 ]]></artwork></figure>
@@ -3137,23 +3138,23 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
             <t>
             For example:
 <figure><artwork><![CDATA[
-      See Section
-      <relref section="2.3" target="RFC7878" displayFormat="bare"/>
+      See Sections
+      <relref section="2.3" target="RFC9999" displayFormat="bare"/>
       and
-      <relref section="2.4" target="RFC7878" displayFormat="of"/>
+      <relref section="2.4" target="RFC9999" displayFormat="of"/>
       for an overview.
 ]]></artwork></figure>
             </t>
             <t>
                An HTML formatter might generate:
 <figure><artwork><![CDATA[
-      See Section
-      <a href="http://www.rfc-editor.org/info/rfc7878#s-2.3">
+      See Sections
+      <a href="http://www.rfc-editor.org/info/rfc9999#s-2.3">
       2.3</a>
       and
-      <a href="http://www.rfc-editor.org/info/rfc7878#s-2.4">
+      <a href="http://www.rfc-editor.org/info/rfc9999#s-2.4">
       Section 2.4</a> of
-      [<a href="#RFC7878">RFC7878</a>]
+      [<a href="#RFC9999">RFC9999</a>]
       for an overview.
 ]]></artwork></figure>
             </t>
@@ -3363,7 +3364,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       <t>
          The date that the XML was processed by a prep tool.
          This is included in the XML file just before it is saved to disk.
-         The value is formatted using the 'date-time' format defined in Section 5.6 of <xref target="RFC3339"/>.
+         The value is formatted using the "date-time" format defined in Section 5.6 of <xref target="RFC3339"/>.
          The "time-offset" should be "Z".
       </t>
    </section>
@@ -3438,7 +3439,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       <iref item="rfc element" subitem="tocDepth attribute"/>
       <iref item="tocDepth attribute" subitem="in rfc element"/>
       <t>
-         Specifies number of levels of heading that formatter is requested to include in the table of contents; the default is "3".
+         Specifies the number of levels of headings that a formatter is requested to include in the table of contents; the default is "3".
       </t>
    </section>
 
@@ -3577,7 +3578,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       <iref item="numbered attribute" subitem="in section element"/>
       <t>
          If set to "false", the formatter is requested to not display a section number. The prep tool will verify that such a
-         section is not followed by a numbered section in a part, and will verify that the section is a
+         section is not followed by a numbered section in this part of the document and will verify that the section is a
          top-level section.
       </t>
       <t><!--AG-->Allowed values:</t>
@@ -3596,7 +3597,7 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       <t>
          If set to "true", this note is marked in the prep tool with text indicating that it should be
          removed before the document is published as an RFC.
-         That text will be “This note is to be removed before publishing as an RFC.”.
+         That text will be "This note is to be removed before publishing as an RFC."
       </t>
       <t><!--AG-->Allowed values:</t>
       <t><list style="symbols"><!--AG-->
@@ -3629,8 +3630,8 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
             &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element, and of course only if the table of contents
             is being created based on the "tocInclude" attribute of the
             &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element. If this is set to "exclude", any section
-            below this one will be excluded as well. The "default" value indicates to
-            include the section if it would be included by the tocDepth attribute of the
+            below this one will be excluded as well. The "default" value indicates
+            inclusion of the section if it would be included by the tocDepth attribute of the
             &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element.
          </t>
       <t><!--AG-->Allowed values:</t>
@@ -3653,16 +3654,16 @@ See <xref target="cdata.and.escaping"/> for a description of how to deal with is
       specifies an identifier within that series.
    </t>
    <t>
-      A processing tool determines if it is working on an RFC or an Internet-Draft by inspecting the
+      A processing tool determines whether it is working on an RFC or an Internet-Draft by inspecting the
       "name" attribute of a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element inside the
       &lt;<xref target="element.front" format="none">front</xref>&gt; element inside the &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element, looking
       for "RFC" or "Internet-Draft". (Specifying neither value in any of the
       &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements can be useful for producing other types of
-      documents, but is out of scope for this specification.)
+      documents but is out of scope for this specification.)
    </t>
    <t>
 It is invalid to have multiple &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; elements inside the same &lt;<xref target="element.front" format="none">front</xref>&gt;
-element containing the same "name" value.  Some combinations of &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; name attribute values
+element containing the same "name" value.  Some combinations of &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; "name" attribute values
 make no sense, such as having both &lt;seriesInfo name="rfc"/&gt; and &lt;seriesInfo name="Internet-Draft"/&gt;
 in the same &lt;front&gt; element.
    </t>
@@ -3699,7 +3700,7 @@ in the same &lt;front&gt; element.
       <iref item="seriesInfo element" subitem="name attribute"/>
       <iref item="name attribute" subitem="in seriesInfo element"/>
       <t>
-            The name of the series. The currently-known values are "RFC", "Internet-Draft"
+            The name of the series. The currently known values are "RFC", "Internet-Draft",
             and "DOI". The RFC Series Editor
             may change this list in the future.
       </t>
@@ -3715,29 +3716,29 @@ in the same &lt;front&gt; element.
          "standard", "full-standard", "bcp", "fyi", "informational", "experimental", or
          "historic" to indicate the intended status of this Internet-Draft, if it were to be later
          published as an RFC. If such an additional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element has
-         one of those statuses, the name MUST be "".
+         one of those statuses, the name needs to be "".
       </t>
             <t>
         If a &lt;<xref target="element.front" format="none">front</xref>&gt; element contains a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
         element with a name of "RFC", it can also have at most one additional
         &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element with a "status" attribute whose value is of "full-standard", "bcp", or "fyi" to indicate
         the current status of this RFC. If such an additional &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
-        element has one of those statuses, the value attribute for that name MUST be the number within
+        element has one of those statuses, the "value" attribute for that name needs to be the number within
         that series. That &lt;<xref target="element.front" format="none">front</xref>&gt; element might also contain an additional
-        &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; with the status of "info, "exp", or "historic" and a name of "" to
+        &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element with the status of "info", "exp", or "historic" and a name of "" to
         indicate the status of the RFC.
       </t>
             <t>
          A &lt;<xref target="element.front" format="none">front</xref>&gt; element that has a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element
-         that has the name "Internet-Draft" MUST NOT also have a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
+         that has the name "Internet-Draft" cannot also have a &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
          element that has the name "RFC". 
       </t>
             <t>
-         The &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; can contain the DOI for the referenced document.
-         This MUST NOT be used when &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
-         element is an eventual child element of a &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element,
-         only as an enventual child of a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element.
-         The value attribute should use the form specified in <xref target="RFC7669"/>.
+         The &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt; element can contain the DOI for the referenced document.
+         This cannot be used when the &lt;<xref target="element.seriesInfo" format="none">seriesInfo</xref>&gt;
+         element is an eventual child element of an &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element --
+         only as an eventual child of a &lt;<xref target="element.reference" format="none">reference</xref>&gt; element.
+         The "value" attribute should use the form specified in <xref target="RFC7669"/>.
       </t>
          </list>
       </t>
@@ -3750,7 +3751,7 @@ in the same &lt;front&gt; element.
       <iref item="seriesInfo element" subitem="status attribute"/>
       <iref item="status attribute" subitem="in seriesInfo element"/>
       <t>
-         The status of this document. The currently-known values are "standard", "informational", "experimental", "bcp", "fyi", and "full-standard".
+         The status of this document. The currently known values are "standard", "informational", "experimental", "bcp", "fyi", and "full-standard".
          The RFC Series Editor may change this list in the future.
       </t>
    </section>
@@ -3762,7 +3763,7 @@ in the same &lt;front&gt; element.
       <iref item="seriesInfo element" subitem="stream attribute"/>
       <iref item="stream attribute" subitem="in seriesInfo element"/>
       <t>
-         The stream (as described in <xref target="RFC7841"/>) that originated of this document.
+         The stream (as described in <xref target="RFC7841"/>) that originated the document.
          (The RFC Series Editor may change this list in the future.)
       </t>
       <t><!--AG-->Allowed values:</t>
@@ -3786,7 +3787,7 @@ in the same &lt;front&gt; element.
       <t>
             For BCPs, FYIs, RFCs, and STDs, this is the number within the series.
             For Internet-Drafts, it is the full draft name (ending with the two-digit
-            version number). For DOIs, the value is given such as "10.17487/rfc1149",
+            version number). For DOIs, the value is given, such as "10.17487/rfc1149",
             as described in <xref target="RFC7669"/>.
       </t>
       <t>
@@ -3805,15 +3806,15 @@ in the same &lt;front&gt; element.
    <iref item="Elements" subitem="sourcecode" primary="true"/>
    <iref item="sourcecode element" primary="true"/>
    <t>
-      This element allows the inclusion of sourcecode into the document.
+      This element allows the inclusion of source code into the document.
    </t>
    <t>
-      When rendered, sourcecode is always shown in a monospace font.
+      When rendered, source code is always shown in a monospace font.
       When &lt;sourcecode&gt; is a child of &lt;<xref target="element.figure" format="none">figure</xref>&gt; or &lt;<xref target="element.section" format="none">section</xref>&gt;, it provides
       full control of horizontal whitespace and line breaks.
-      When formatted, it is indented indented relative to the left margin of the enclosing element.
+      When formatted, it is indented relative to the left margin of the enclosing element.
       It is thus useful for source code and formal languages (such as ABNF <xref target="RFC5234"/> or the RNC notation used in this document).
-      (When &lt;sourcecode&gt; is a child of other elements, if flows with the text that surrounds it.)
+      (When &lt;sourcecode&gt; is a child of other elements, it flows with the text that surrounds it.)
       Tab characters (U+0009) inside of this element are prohibited.
 
    </t>
@@ -3826,8 +3827,8 @@ in the same &lt;front&gt; element.
       source code that is split across pages from looking like two separate pieces of code.
    </t>
    <t>
-See <xref target="cdata.and.escaping"/> for a description of to deal with issues of using
-"&amp;" and "&lt;" characters in sourcecode.
+See <xref target="cdata.and.escaping"/> for a description of how to deal with issues of using
+"&amp;" and "&lt;" characters in source code.
 </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.blockquote" format="none">blockquote</xref>&gt; (<xref target="element.blockquote"/>), &lt;<xref target="element.dd" format="none">dd</xref>&gt; (<xref target="element.dd"/>), &lt;<xref target="element.figure" format="none">figure</xref>&gt; (<xref target="element.figure"/>), &lt;<xref target="element.li" format="none">li</xref>&gt; (<xref target="element.li"/>), &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>), &lt;<xref target="element.td" format="none">td</xref>&gt; (<xref target="element.td"/>), and &lt;<xref target="element.th" format="none">th</xref>&gt; (<xref target="element.th"/>).</t>
    <t anchor="element.sourcecode.contents"><!--AG-->
@@ -3840,7 +3841,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="sourcecode element" subitem="anchor attribute"/>
       <iref item="anchor attribute" subitem="in sourcecode element"/>
       <t>
-        Document-wide unique identifier for this sourcecode.
+        Document-wide unique identifier for this source code.
       </t>
    </section>
 
@@ -3853,10 +3854,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <t>
             A filename suitable for the contents (such as for extraction to a local file).
             This attribute can
-            be helpful for other kinds of tools (such as automated syntax checkers
+            be helpful for other kinds of tools (such as automated syntax checkers,
             which work by extracting the source code).
-            Note that the "name" attribute does not need to be unique for artwork elements in a
-            document. If multiple sourcecode elements have the same name attribute, a formatter might
+            Note that the "name" attribute does not need to be unique for &lt;<xref target="element.artwork" format="none">artwork</xref>&gt; elements in a
+            document. If multiple &lt;<xref target="element.sourcecode" format="none">sourcecode</xref>&gt; elements have the same "name" attribute, a formatter might
             assume that the elements are all fragments of a single file, and such a formatter can
             collect those fragments for later processing.
          </t>
@@ -3869,7 +3870,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="sourcecode element" subitem="src attribute"/>
       <iref item="src attribute" subitem="in sourcecode element"/>
       <t>
-         The URI reference of a source file (<xref target="RFC3986"/>).
+         The URI reference of a source file <xref target="RFC3986"/>.
       </t>
       <t>
          It is an error to have both a "src" attribute and content in the &lt;sourcecode&gt; element.
@@ -3883,7 +3884,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="sourcecode element" subitem="type attribute"/>
       <iref item="type attribute" subitem="in sourcecode element"/>
       <t>
-            Specifies the type of the sourcecode. The value of this attribute is free text with
+            Specifies the type of the source code. The value of this attribute is free text with
             certain values designated as preferred.
       </t>
       <t>
@@ -3907,7 +3908,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             <t>xml</t>
             <t>yang</t>
          </list>
-            The RFC Series Editor will maintain a complete list of the preferred values on its
+            The RFC Series Editor will maintain a complete list of the preferred values on the RFC Editor
             web site, and that list is expected to be updated over time. Thus, a consumer
             of v3 XML should not cause a failure when it encounters an unexpected type or no type is specified. 
          </t>
@@ -3946,7 +3947,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
    <iref item="Elements" subitem="strong" primary="true"/>
    <iref item="strong element" primary="true"/>
    <t>
-        Indicates text that is semantically strong. This element will be displayed as bold after processing.
+        Indicates text that is semantically strong. Text enclosed within this element will be displayed as bold after processing.
         This element can be combined with other character formatting elements, and the
         formatting will be additive.
    </t>
@@ -4164,7 +4165,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="t element" subitem="hangText attribute"/>
       <iref item="hangText attribute" subitem="in t element"/>
       <t>
-         Deprecated. Instead use &lt;<xref target="element.dd" format="none">dd</xref>&gt; inside of a definition list (&lt;<xref target="element.dl" format="none">dl</xref>&gt;).
+         Deprecated. Instead, use &lt;<xref target="element.dd" format="none">dd</xref>&gt; inside of a definition list (&lt;<xref target="element.dl" format="none">dl</xref>&gt;).
       </t>
    </section>
 
@@ -4175,9 +4176,9 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="t element" subitem="keepWithNext attribute"/>
       <iref item="keepWithNext attribute" subitem="in t element"/>
       <t>
-         Acts as a hint to the output formatters that do pagination to do a best effort attempt to
+         Acts as a hint to the output formatters that do pagination to do a best-effort attempt to
          keep the paragraph with the next element, whatever that happens to be.  For example, the
-         HTML output @media print CSS might translate this to page-break-after: avoid.  For PDF, the
+         HTML output @media print CSS ("CSS" refers to Cascading Style Sheets) might translate this to page-break-after: avoid.  For PDF, the
          paginator could attempt to keep the paragraph with the next element.  Note: this attribute
          is strictly a hint and not always actionable.
       </t>
@@ -4195,7 +4196,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="t element" subitem="keepWithPrevious attribute"/>
       <iref item="keepWithPrevious attribute" subitem="in t element"/>
       <t>
-         Acts as a hint to the output formatters that do pagination to do a best effort attempt to
+         Acts as a hint to the output formatters that do pagination to do a best-effort attempt to
          keep the paragraph with the previous element, whatever that happens to be.  For example,
          the HTML output @media print CSS might translate this to page-break-before: avoid.  For
          PDF, the paginator could attempt to keep the paragraph with the previous element.  Note:
@@ -4220,10 +4221,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       If the element contains a &lt;<xref target="element.name" format="none">name</xref>&gt; element, the caption will also show that name. 
    </t>
    <t>
-      Inside the &lt;<xref target="element.table" format="none">table</xref>&gt; element is optionally a &lt;<xref target="element.thead" format="none">thead</xref>&gt; element to
-      contain the rows that will be the table's heading and optionally a &lt;<xref target="element.tfoot" format="none">tfoot</xref>&gt; element
+      Inside the &lt;<xref target="element.table" format="none">table</xref>&gt; element is, optionally, a &lt;<xref target="element.thead" format="none">thead</xref>&gt; element to
+      contain the rows that will be the table's heading and, optionally, a &lt;<xref target="element.tfoot" format="none">tfoot</xref>&gt; element
       to contain the rows of the table's footer. If the XML is converted to a representation that has page
-      breaks (such as PDFs, or printed HTML), the header and footer are meant to appear on each page.
+      breaks (such as PDFs or printed HTML), the header and footer are meant to appear on each page.
    </t>
    <t><!--AG-->This element appears as a child element of &lt;<xref target="element.aside" format="none">aside</xref>&gt; (<xref target="element.aside"/>) and &lt;<xref target="element.section" format="none">section</xref>&gt; (<xref target="element.section"/>).</t>
    <t anchor="element.table.contents"><!--AG-->
@@ -4396,7 +4397,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="align attribute" subitem="in td element"/>
       <t>
          Controls whether the content of the cell appears left justified (default), centered,
-         or right justified. Note that "center" or "right" probably only work well in cells with plain text; any
+         or right justified. Note that "center" or "right" will probably only work well in cells with plain text; any
          other elements might make the contents render badly.
       </t>
       <t><!--AG-->Allowed values:</t>
@@ -4572,7 +4573,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="align attribute" subitem="in th element"/>
       <t>
          Controls whether the content of the cell appears left justified (default), centered,
-         or right justified. Note that "center" or "right" probably only work well in cells with plain text; any
+         or right justified. Note that "center" or "right" will probably only work well in cells with plain text; any
          other elements might make the contents render badly.
       </t>
       <t><!--AG-->Allowed values:</t>
@@ -4816,7 +4817,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <iref item="ul element" subitem="empty attribute"/>
       <iref item="empty attribute" subitem="in ul element"/>
       <t>
-         Defines whether or not the label is empty. empty="true" indicates that no label be shown.
+         Defines whether or not the label is empty. empty="true" indicates that no label will be shown.
       </t>
       <t><!--AG-->Allowed values:</t>
       <t><list style="symbols"><!--AG-->
@@ -4917,7 +4918,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
             <t>
             The "derivedContent" attribute will contain just a counter.
             This is used for targets that are
-            &lt;<xref target="element.section" format="none">section</xref>&gt;, &lt;<xref target="element.figure" format="none">figure</xref>&gt;, &lt;<xref target="element.table" format="none">table</xref>&gt;, or item in an ordered list.
+            &lt;<xref target="element.section" format="none">section</xref>&gt;, &lt;<xref target="element.figure" format="none">figure</xref>&gt;, &lt;<xref target="element.table" format="none">table</xref>&gt;, or items in an ordered list.
             Using "format='counter'" where the target is any other type of element is an error.
             </t>
             <t>
@@ -4930,7 +4931,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
 ]]></artwork></figure>
             </t>
             <t>
-               An HTML formatter might generate "See Section &lt;a href="#overview"&gt;1.7&lt;/a&gt; for an overview.".
+               An HTML formatter might generate:
+            </t>
+            <t>
+              See Section &lt;a href="#overview"&gt;1.7&lt;/a&gt; for an overview.
             </t>
          </list>
       </t>
@@ -4953,7 +4957,10 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
 ]]></artwork></figure>
             </t>
             <t>
-               An HTML formatter might generate "See &lt;a href="#overview"&gt;Section 1.7&lt;/a&gt; for an overview.".
+               An HTML formatter might generate:
+            </t>
+            <t>
+              See &lt;a href="#overview"&gt;Section 1.7&lt;/a&gt; for an overview.
             </t>
          </list>
       </t>
@@ -5018,7 +5025,7 @@ See <xref target="cdata.and.escaping"/> for a description of to deal with issues
       <t>
         Identifies the document component being referenced.
         The value needs to match the value of the "anchor" attribute of an
-        element in the document, otherwise it is an error.
+        element in the document; otherwise, it is an error.
       </t>
    </section>
 </section>

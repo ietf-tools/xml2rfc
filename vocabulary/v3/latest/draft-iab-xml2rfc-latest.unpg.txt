@@ -818,7 +818,7 @@ Table of Contents
    conjunction with the separately specified surname.  It usually
    appears on the front page, in footers, and in references.
 
-   Some processors will post-process the value, for instance when it
+   Some processors will post-process the value -- for instance, when it
    only contains a single letter (in which case they might add a
    trailing dot).  Relying on this kind of post-processing can lead to
    results varying across formatters and thus ought to be avoided.
@@ -1379,7 +1379,7 @@ Table of Contents
          This is described at
          <eref target="http://www.example.com/reports/r12.html"/>.
 
-   An HTML formatter might generate
+   An HTML formatter might generate:
 
          This is described at
          <a href="http://www.example.com/reports/r12.html">
@@ -1391,7 +1391,7 @@ Table of Contents
          <eref target="http://www.example.com/reports/r12.html">
          in this interesting report</eref>.
 
-   An HTML formatter might generate
+   An HTML formatter might generate:
 
          This is described
          <a href="http://www.example.com/reports/r12.html">
@@ -1462,7 +1462,7 @@ Table of Contents
 2.25.2.  "alt" Attribute
 
    Deprecated.  If the goal is to provide a single URI for a reference,
-   use the "target" attribute on <reference> instead.
+   use the "target" attribute in <reference> instead.
 
 2.25.3.  "anchor" Attribute
 
@@ -1499,14 +1499,14 @@ Table of Contents
    Represents the "front matter": metadata (such as author information),
    the Abstract, and additional notes.
 
-   A <front> element may have more than one <seriesInfo> elements.  A
+   A <front> element may have more than one <seriesInfo> element.  A
    <seriesInfo> element determines the document number (for RFCs) or
    name (for Internet-Drafts).  Another <seriesInfo> element determines
    the "maturity level" (defined in [RFC2026]), using values of "std"
    for "Standards Track", "bcp" for "BCP", "info" for "Informational",
    "exp" for "Experimental", and "historic" for "Historic".  The "name"
    attributes of those multiple <seriesInfo> elements interact as
-   described in the section on <seriesInfo>.
+   described in Section 2.47.
 
    This element appears as a child element of <reference> (Section 2.40)
    and <rfc> (Section 2.45).
@@ -1668,12 +1668,14 @@ Table of Contents
    The following are the supported types of external documents that can
    be pointed to in a <link> element:
 
-   o  The current ISSN for the RFC series.  The value for the "rel"
-      attribute is "item".  The link should use the form "urn:issn:".
+   o  The current International Standard Serial Number (ISSN) for the
+      RFC Series.  The value for the "rel" attribute is "item".  The
+      link should use the form "urn:issn:".
 
-   o  The DOI for this document.  The value for the "rel" attribute is
-      "describedBy".  The link should use the form specified in
-      [RFC7669].
+   o  The Digital Object Identifier (DOI) for this document.  The value
+      for the "rel" attribute is "describedBy".  The link should use the
+      form specified in [RFC7669]; this is expected to change in the
+      future.
 
    o  The Internet-Draft that was submitted to the RFC Editor to become
       the published RFC.  The value for the "rel" attribute is
@@ -1682,7 +1684,7 @@ Table of Contents
 
    o  A representation of the document offered by the document author.
       The value for the "rel" attribute is "alternate".  The link can be
-      to a personally-run web site.
+      to a personally run web site.
 
    In RFC production mode, the prep tool needs to check the values for
    <link> before an RFC is published.  In draft production mode, the
@@ -1700,8 +1702,8 @@ Table of Contents
 2.30.2.  "rel" Attribute
 
    The relationship of the external document to this one.  The
-   relationships are taken from Link Relations registry maintained by
-   IANA [LINKRELATIONS].
+   relationships are taken from the "Link Relations" registry maintained
+   by IANA [LINKRELATIONS].
 
 2.31.  <middle>
 
@@ -1716,8 +1718,8 @@ Table of Contents
 2.32.  <name>
 
    The name of the section, note, figure, or texttable.  This name can
-   have flow markup such as to make some characters use a fixed-width
-   font, or to include references.
+   indicate markup of flowing text (for example, including references or
+   making some characters use a fixed-width font).
 
    This element appears as a child element of <figure> (Section 2.25),
    <note> (Section 2.33), <references> (Section 2.42), <section>
@@ -1745,8 +1747,8 @@ Table of Contents
    Creates an unnumbered, titled block of text that appears after the
    Abstract.
 
-   It is usually used for additional information to reviewers (working
-   group information, mailing list, ...), or for additional publication
+   It is usually used for additional information to reviewers (Working
+   Group information, mailing list, ...) or for additional publication
    information such as "IESG Notes".
 
    This element appears as a child element of <front> (Section 2.26).
@@ -1774,7 +1776,7 @@ Table of Contents
    If set to "true", this note is marked in the prep tool with text
    indicating that it should be removed before the document is published
    as an RFC.  That text will be "This note is to be removed before
-   publishing as an RFC.".
+   publishing as an RFC."
 
    Allowed values:
 
@@ -1809,8 +1811,8 @@ Table of Contents
    When the prep tool sees an <ol> element with a "group" attribute that
    has already been seen, it continues the numbering of the list from
    where the previous list with the same group name left off.  If an
-   <ol> element has both a "group" and "start" attribute, the group's
-   numbering is reset to the given start value.
+   <ol> element has both a "group" attribute and a "start" attribute,
+   the group's numbering is reset to the given start value.
 
 2.34.3.  "spacing" Attribute
 
@@ -1826,8 +1828,8 @@ Table of Contents
 
 2.34.4.  "start" Attribute
 
-   The ordinal value to start the list at.  This defaults to "1", and
-   must be an integer of 0 or greater.
+   The ordinal value at which to start the list.  This defaults to "1"
+   and must be an integer of 0 or greater.
 
 2.34.5.  "type" Attribute
 
@@ -1844,7 +1846,7 @@ Table of Contents
 
    I  Uppercase Roman numerals (I, II, III, ...)
 
-   For type "a" and "A", after the 26th entry, the numbering starts at
+   For types "a" and "A", after the 26th entry, the numbering starts at
    "aa"/"AA", then "ab"/"AB", and so on.
 
    If the length of the type value is greater than 1, the value must
@@ -1880,7 +1882,7 @@ Table of Contents
 
 2.35.  <organization>
 
-   Specifies the affiliation ([RFC7322]) of an author.
+   Specifies the affiliation [RFC7322] of an author.
 
    This information appears both in the "Author's Address" section and
    on the front page (see [RFC7322] for more information).  If the value
@@ -1904,8 +1906,8 @@ Table of Contents
    Represents a phone number.
 
    The value is expected to be the scheme-specific part of a "tel" URI
-   (so does not include the prefix "tel:"), using the "global-number-
-   digits" syntax.  See Section 3 of [RFC3966] for details.
+   (and so does not include the prefix "tel:"), using the "global-
+   number-digits" syntax.  See Section 3 of [RFC3966] for details.
 
    This element appears as a child element of <address> (Section 2.2).
 
@@ -2001,7 +2003,7 @@ Table of Contents
 
 2.40.  <reference>
 
-   Represents a bibliographical reference.
+   Represents a bibliographic reference.
 
    This element appears as a child element of <referencegroup>
    (Section 2.41) and <references> (Section 2.42).
@@ -2029,7 +2031,7 @@ Table of Contents
 
    Document-wide unique identifier for this reference.  Usually, this
    will be used both to "label" the reference in the "References"
-   section, and as an identifier in links to this reference entry.
+   section and as an identifier in links to this reference entry.
 
 2.40.2.  "quoteTitle" Attribute
 
@@ -2049,9 +2051,9 @@ Table of Contents
 2.41.  <referencegroup>
 
    Represents a list of bibliographic references that will be
-   represented as a single reference.  This is most often used for
-   references in the STD and BCP series, where a single reference (such
-   as "BCP 9") encompasses more than one RFC.
+   represented as a single reference.  This is most often used to
+   reference STDs and BCPs, where a single reference (such as "BCP 9")
+   may encompass more than one RFC.
 
    This element appears as a child element of <references>
    (Section 2.42).
@@ -2064,17 +2066,17 @@ Table of Contents
 
    Document-wide unique identifier for this reference group.  Usually,
    this will be used both to "label" the reference group in the
-   "References" section, and as an identifier in links to this reference
+   "References" section and as an identifier in links to this reference
    entry.
 
 2.42.  <references>
 
-   Contains a set of bibliographical references.
+   Contains a set of bibliographic references.
 
-   In the early days of the RFC series, there was only one "References"
+   In the early days of the RFC Series, there was only one "References"
    section per RFC.  This convention was later changed to group
    references into two sets, "Normative" and "Informative", as described
-   in [RFC7322]).  This vocabulary supports the split with the <name>
+   in [RFC7322].  This vocabulary supports the split with the <name>
    child element.  In general, the title should be either "Normative
    References" or "Informative References".
 
@@ -2096,7 +2098,7 @@ Table of Contents
 
 2.42.1.  "anchor" Attribute
 
-   An optional user-supplied for this section.
+   An optional user-supplied identifier for this set of references.
 
 2.42.2.  "title" Attribute
 
@@ -2125,21 +2127,21 @@ Table of Contents
    anchor of a <reference> element.
 
    The "section" attribute is required, and the "relative" attribute is
-   option.  If reference is not an RFC or Internet-Draft that is in the
-   v3 format, the element MUST have a "relative" attribute; in this
-   case, the value of the "section" attribute is ignored.
+   optional.  If the reference is not an RFC or Internet-Draft that is
+   in the v3 format, the element needs to have a "relative" attribute;
+   in this case, the value of the "section" attribute is ignored.
 
    An example of the <relref> element with text content might be:
 
          See
-         <relref section="2.3" target="RFC7878" displayFormat="bare">
+         <relref section="2.3" target="RFC9999" displayFormat="bare">
          the protocol overview</relref>
          for more information.
 
    An HTML formatter might generate:
 
          See
-         <a href="http://www.rfc-editor.org/rfc/rfc7878.html#s-2.3">
+         <a href="http://www.rfc-editor.org/rfc/rfc9999.html#s-2.3">
          the protocol overview</a>
          for more information.
 
@@ -2174,18 +2176,18 @@ Table of Contents
       For example, with an input of:
 
          See
-         <relref section="2.3" target="RFC7878" displayFormat="of"/>
+         <relref section="2.3" target="RFC9999" displayFormat="of"/>
          for an overview.
 
       An HTML formatter might generate:
 
          See
-         <a href="http://www.rfc-editor.org/info/rfc7878#s-2.3">
+         <a href="http://www.rfc-editor.org/info/rfc9999#s-2.3">
          Section 2.3</a> of
-         [<a href="#RFC7878">RFC7878</a>]
+         [<a href="#RFC9999">RFC9999</a>]
          for an overview.
 
-      Note that "displayFormat='of'" is the default for <relref> so it
+      Note that "displayFormat='of'" is the default for <relref>, so it
       does not need to be given in a <relref> element if that format is
       desired.
 
@@ -2199,14 +2201,14 @@ Table of Contents
       For example, with an input of:
 
          See
-         <relref section="2.3" target="RFC7878" displayFormat="comma"/>,
+         <relref section="2.3" target="RFC9999" displayFormat="comma"/>,
          for an overview.
 
       An HTML formatter might generate:
 
          See
-         [<a href="#RFC7878">RFC7878</a>],
-         <a href="http://www.rfc-editor.org/info/rfc7878#s-2.3">
+         [<a href="#RFC9999">RFC9999</a>],
+         <a href="http://www.rfc-editor.org/info/rfc9999#s-2.3">
          Section 2.3</a>, for an overview.
 
    "parens"
@@ -2219,14 +2221,14 @@ Table of Contents
       For example, with an input of:
 
          See
-         <relref section="2.3" target="RFC7878" displayFormat="parens"/>
+         <relref section="2.3" target="RFC9999" displayFormat="parens"/>
          for an overview.
 
-      An HTML formatter might generate
+      An HTML formatter might generate:
 
          See
-         [<a href="#RFC7878">RFC7878</a>]
-         (<a href="http://www.rfc-editor.org/info/rfc7878#s-2.3">
+         [<a href="#RFC9999">RFC9999</a>]
+         (<a href="http://www.rfc-editor.org/info/rfc9999#s-2.3">
          Section 2.3</a>)
          for an overview.
 
@@ -2238,21 +2240,21 @@ Table of Contents
 
       For example:
 
-         See Section
-         <relref section="2.3" target="RFC7878" displayFormat="bare"/>
+         See Sections
+         <relref section="2.3" target="RFC9999" displayFormat="bare"/>
          and
-         <relref section="2.4" target="RFC7878" displayFormat="of"/>
+         <relref section="2.4" target="RFC9999" displayFormat="of"/>
          for an overview.
 
       An HTML formatter might generate:
 
-         See Section
-         <a href="http://www.rfc-editor.org/info/rfc7878#s-2.3">
+         See Sections
+         <a href="http://www.rfc-editor.org/info/rfc9999#s-2.3">
          2.3</a>
          and
-         <a href="http://www.rfc-editor.org/info/rfc7878#s-2.4">
+         <a href="http://www.rfc-editor.org/info/rfc9999#s-2.4">
          Section 2.4</a> of
-         [<a href="#RFC7878">RFC7878</a>]
+         [<a href="#RFC9999">RFC9999</a>]
          for an overview.
 
    Allowed values:
@@ -2365,7 +2367,7 @@ Table of Contents
 
    The date that the XML was processed by a prep tool.  This is included
    in the XML file just before it is saved to disk.  The value is
-   formatted using the 'date-time' format defined in Section 5.6 of
+   formatted using the "date-time" format defined in Section 5.6 of
    [RFC3339].  The "time-offset" should be "Z".
 
 2.45.10.  "seriesNo" Attribute
@@ -2412,8 +2414,8 @@ Table of Contents
 
 2.45.14.  "tocDepth" Attribute
 
-   Specifies number of levels of heading that formatter is requested to
-   include in the table of contents; the default is "3".
+   Specifies the number of levels of headings that a formatter is
+   requested to include in the table of contents; the default is "3".
 
 2.45.15.  "tocInclude" Attribute
 
@@ -2494,8 +2496,8 @@ Table of Contents
 
    If set to "false", the formatter is requested to not display a
    section number.  The prep tool will verify that such a section is not
-   followed by a numbered section in a part, and will verify that the
-   section is a top-level section.
+   followed by a numbered section in this part of the document and will
+   verify that the section is a top-level section.
 
    Allowed values:
 
@@ -2508,7 +2510,7 @@ Table of Contents
    If set to "true", this note is marked in the prep tool with text
    indicating that it should be removed before the document is published
    as an RFC.  That text will be "This note is to be removed before
-   publishing as an RFC.".
+   publishing as an RFC."
 
    Allowed values:
 
@@ -2529,7 +2531,7 @@ Table of Contents
    of the <rfc> element, and of course only if the table of contents is
    being created based on the "tocInclude" attribute of the <rfc>
    element.  If this is set to "exclude", any section below this one
-   will be excluded as well.  The "default" value indicates to include
+   will be excluded as well.  The "default" value indicates inclusion of
    the section if it would be included by the tocDepth attribute of the
    <rfc> element.
 
@@ -2546,16 +2548,16 @@ Table of Contents
    Specifies the document series in which this document appears, and
    also specifies an identifier within that series.
 
-   A processing tool determines if it is working on an RFC or an
+   A processing tool determines whether it is working on an RFC or an
    Internet-Draft by inspecting the "name" attribute of a <seriesInfo>
    element inside the <front> element inside the <rfc> element, looking
    for "RFC" or "Internet-Draft".  (Specifying neither value in any of
    the <seriesInfo> elements can be useful for producing other types of
-   documents, but is out of scope for this specification.)
+   documents but is out of scope for this specification.)
 
    It is invalid to have multiple <seriesInfo> elements inside the same
    <front> element containing the same "name" value.  Some combinations
-   of <seriesInfo> name attribute values make no sense, such as having
+   of <seriesInfo> "name" attribute values make no sense, such as having
    both <seriesInfo name="rfc"/> and <seriesInfo name="Internet-Draft"/>
    in the same <front> element.
 
@@ -2574,8 +2576,8 @@ Table of Contents
 
 2.47.3.  "name" Attribute (Mandatory)
 
-   The name of the series.  The currently-known values are "RFC",
-   "Internet-Draft" and "DOI".  The RFC Series Editor may change this
+   The name of the series.  The currently known values are "RFC",
+   "Internet-Draft", and "DOI".  The RFC Series Editor may change this
    list in the future.
 
    Some of the values for "name" interact as follows:
@@ -2587,39 +2589,39 @@ Table of Contents
       "experimental", or "historic" to indicate the intended status of
       this Internet-Draft, if it were to be later published as an RFC.
       If such an additional <seriesInfo> element has one of those
-      statuses, the name MUST be "".
+      statuses, the name needs to be "".
 
    o  If a <front> element contains a <seriesInfo> element with a name
       of "RFC", it can also have at most one additional <seriesInfo>
       element with a "status" attribute whose value is of "full-
       standard", "bcp", or "fyi" to indicate the current status of this
       RFC.  If such an additional <seriesInfo> element has one of those
-      statuses, the value attribute for that name MUST be the number
-      within that series.  That <front> element might also contain an
-      additional <seriesInfo> with the status of "info, "exp", or
-      "historic" and a name of "" to indicate the status of the RFC.
+      statuses, the "value" attribute for that name needs to be the
+      number within that series.  That <front> element might also
+      contain an additional <seriesInfo> element with the status of
+      "info", "exp", or "historic" and a name of "" to indicate the
+      status of the RFC.
 
    o  A <front> element that has a <seriesInfo> element that has the
-      name "Internet-Draft" MUST NOT also have a <seriesInfo> element
-      that has the name "RFC".
+      name "Internet-Draft" cannot also have a <seriesInfo> element that
+      has the name "RFC".
 
-   o  The <seriesInfo> can contain the DOI for the referenced document.
-      This MUST NOT be used when <seriesInfo> element is an eventual
-      child element of a <rfc> element, only as an enventual child of a
-      <reference> element.  The value attribute should use the form
-      specified in [RFC7669].
+   o  The <seriesInfo> element can contain the DOI for the referenced
+      document.  This cannot be used when the <seriesInfo> element is an
+      eventual child element of an <rfc> element -- only as an eventual
+      child of a <reference> element.  The "value" attribute should use
+      the form specified in [RFC7669].
 
 2.47.4.  "status" Attribute
 
-   The status of this document.  The currently-known values are
+   The status of this document.  The currently known values are
    "standard", "informational", "experimental", "bcp", "fyi", and "full-
    standard".  The RFC Series Editor may change this list in the future.
 
 2.47.5.  "stream" Attribute
 
-   The stream (as described in [RFC7841]) that originated of this
-   document.  (The RFC Series Editor may change this list in the
-   future.)
+   The stream (as described in [RFC7841]) that originated the document.
+   (The RFC Series Editor may change this list in the future.)
 
    Allowed values:
 
@@ -2637,7 +2639,7 @@ Table of Contents
 
    For BCPs, FYIs, RFCs, and STDs, this is the number within the series.
    For Internet-Drafts, it is the full draft name (ending with the two-
-   digit version number).  For DOIs, the value is given such as
+   digit version number).  For DOIs, the value is given, such as
    "10.17487/rfc1149", as described in [RFC7669].
 
    The name in the value should be the document name without any file
@@ -2647,17 +2649,17 @@ Table of Contents
 
 2.48.  <sourcecode>
 
-   This element allows the inclusion of sourcecode into the document.
+   This element allows the inclusion of source code into the document.
 
-   When rendered, sourcecode is always shown in a monospace font.  When
+   When rendered, source code is always shown in a monospace font.  When
    <sourcecode> is a child of <figure> or <section>, it provides full
    control of horizontal whitespace and line breaks.  When formatted, it
-   is indented indented relative to the left margin of the enclosing
-   element.  It is thus useful for source code and formal languages
-   (such as ABNF [RFC5234] or the RNC notation used in this document).
-   (When <sourcecode> is a child of other elements, if flows with the
-   text that surrounds it.)  Tab characters (U+0009) inside of this
-   element are prohibited.
+   is indented relative to the left margin of the enclosing element.  It
+   is thus useful for source code and formal languages (such as ABNF
+   [RFC5234] or the RNC notation used in this document).  (When
+   <sourcecode> is a child of other elements, it flows with the text
+   that surrounds it.)  Tab characters (U+0009) inside of this element
+   are prohibited.
 
    For artwork such as character-based art, diagrams of message layouts,
    and so on, use the <artwork> element instead.
@@ -2666,8 +2668,8 @@ Table of Contents
    code on a single page.  This is to prevent source code that is split
    across pages from looking like two separate pieces of code.
 
-   See Section 5 for a description of to deal with issues of using "&"
-   and "<" characters in sourcecode.
+   See Section 5 for a description of how to deal with issues of using
+   "&" and "<" characters in source code.
 
    This element appears as a child element of <blockquote>
    (Section 2.10), <dd> (Section 2.18), <figure> (Section 2.25), <li>
@@ -2678,30 +2680,31 @@ Table of Contents
 
 2.48.1.  "anchor" Attribute
 
-   Document-wide unique identifier for this sourcecode.
+   Document-wide unique identifier for this source code.
 
 2.48.2.  "name" Attribute
 
    A filename suitable for the contents (such as for extraction to a
    local file).  This attribute can be helpful for other kinds of tools
-   (such as automated syntax checkers which work by extracting the
+   (such as automated syntax checkers, which work by extracting the
    source code).  Note that the "name" attribute does not need to be
-   unique for artwork elements in a document.  If multiple sourcecode
-   elements have the same name attribute, a formatter might assume that
-   the elements are all fragments of a single file, and such a formatter
-   can collect those fragments for later processing.
+   unique for <artwork> elements in a document.  If multiple
+   <sourcecode> elements have the same "name" attribute, a formatter
+   might assume that the elements are all fragments of a single file,
+   and such a formatter can collect those fragments for later
+   processing.
 
 2.48.3.  "src" Attribute
 
-   The URI reference of a source file ([RFC3986]).
+   The URI reference of a source file [RFC3986].
 
    It is an error to have both a "src" attribute and content in the
    <sourcecode> element.
 
 2.48.4.  "type" Attribute
 
-   Specifies the type of the sourcecode.  The value of this attribute is
-   free text with certain values designated as preferred.
+   Specifies the type of the source code.  The value of this attribute
+   is free text with certain values designated as preferred.
 
    The preferred values for <sourcecode> types are:
 
@@ -2740,9 +2743,10 @@ Table of Contents
    o  yang
 
    The RFC Series Editor will maintain a complete list of the preferred
-   values on its web site, and that list is expected to be updated over
-   time.  Thus, a consumer of v3 XML should not cause a failure when it
-   encounters an unexpected type or no type is specified.
+   values on the RFC Editor web site, and that list is expected to be
+   updated over time.  Thus, a consumer of v3 XML should not cause a
+   failure when it encounters an unexpected type or no type is
+   specified.
 
 2.49.  <street>
 
@@ -2758,10 +2762,10 @@ Table of Contents
 
 2.50.  <strong>
 
-   Indicates text that is semantically strong.  This element will be
-   displayed as bold after processing.  This element can be combined
-   with other character formatting elements, and the formatting will be
-   additive.
+   Indicates text that is semantically strong.  Text enclosed within
+   this element will be displayed as bold after processing.  This
+   element can be combined with other character formatting elements, and
+   the formatting will be additive.
 
    This element appears as a child element of <annotation>
    (Section 2.3), <blockquote> (Section 2.10), <cref> (Section 2.16),
@@ -2923,17 +2927,17 @@ Table of Contents
 
 2.53.2.  "hangText" Attribute
 
-   Deprecated.  Instead use <dd> inside of a definition list (<dl>).
+   Deprecated.  Instead, use <dd> inside of a definition list (<dl>).
 
 2.53.3.  "keepWithNext" Attribute
 
    Acts as a hint to the output formatters that do pagination to do a
-   best effort attempt to keep the paragraph with the next element,
+   best-effort attempt to keep the paragraph with the next element,
    whatever that happens to be.  For example, the HTML output @media
-   print CSS might translate this to page-break-after: avoid.  For PDF,
-   the paginator could attempt to keep the paragraph with the next
-   element.  Note: this attribute is strictly a hint and not always
-   actionable.
+   print CSS ("CSS" refers to Cascading Style Sheets) might translate
+   this to page-break-after: avoid.  For PDF, the paginator could
+   attempt to keep the paragraph with the next element.  Note: this
+   attribute is strictly a hint and not always actionable.
 
    Allowed values:
 
@@ -2944,7 +2948,7 @@ Table of Contents
 2.53.4.  "keepWithPrevious" Attribute
 
    Acts as a hint to the output formatters that do pagination to do a
-   best effort attempt to keep the paragraph with the previous element,
+   best-effort attempt to keep the paragraph with the previous element,
    whatever that happens to be.  For example, the HTML output @media
    print CSS might translate this to page-break-before: avoid.  For PDF,
    the paginator could attempt to keep the paragraph with the previous
@@ -2963,12 +2967,12 @@ Table of Contents
    element contains a <name> element, the caption will also show that
    name.
 
-   Inside the <table> element is optionally a <thead> element to contain
-   the rows that will be the table's heading and optionally a <tfoot>
-   element to contain the rows of the table's footer.  If the XML is
-   converted to a representation that has page breaks (such as PDFs, or
-   printed HTML), the header and footer are meant to appear on each
-   page.
+   Inside the <table> element is, optionally, a <thead> element to
+   contain the rows that will be the table's heading and, optionally, a
+   <tfoot> element to contain the rows of the table's footer.  If the
+   XML is converted to a representation that has page breaks (such as
+   PDFs or printed HTML), the header and footer are meant to appear on
+   each page.
 
    This element appears as a child element of <aside> (Section 2.6) and
    <section> (Section 2.46).
@@ -3069,8 +3073,8 @@ Table of Contents
 
    Controls whether the content of the cell appears left justified
    (default), centered, or right justified.  Note that "center" or
-   "right" probably only work well in cells with plain text; any other
-   elements might make the contents render badly.
+   "right" will probably only work well in cells with plain text; any
+   other elements might make the contents render badly.
 
    Allowed values:
 
@@ -3176,8 +3180,8 @@ Table of Contents
 
    Controls whether the content of the cell appears left justified
    (default), centered, or right justified.  Note that "center" or
-   "right" probably only work well in cells with plain text; any other
-   elements might make the contents render badly.
+   "right" will probably only work well in cells with plain text; any
+   other elements might make the contents render badly.
 
    Allowed values:
 
@@ -3318,7 +3322,7 @@ Table of Contents
 2.63.2.  "empty" Attribute
 
    Defines whether or not the label is empty. empty="true" indicates
-   that no label be shown.
+   that no label will be shown.
 
    Allowed values:
 
@@ -3395,9 +3399,9 @@ Table of Contents
    "counter"
 
       The "derivedContent" attribute will contain just a counter.  This
-      is used for targets that are <section>, <figure>, <table>, or item
-      in an ordered list.  Using "format='counter'" where the target is
-      any other type of element is an error.
+      is used for targets that are <section>, <figure>, <table>, or
+      items in an ordered list.  Using "format='counter'" where the
+      target is any other type of element is an error.
 
       For example, with an input of:
 
@@ -3406,8 +3410,9 @@ Table of Contents
          See Section <xref target="overview" format="counter"/>
          for an overview.
 
-      An HTML formatter might generate "See Section <a href="#
-      overview">1.7</a> for an overview.".
+      An HTML formatter might generate:
+
+      See Section <a href="#overview">1.7</a> for an overview.
 
    "default"
 
@@ -3424,8 +3429,9 @@ Table of Contents
          . . .
          See <xref target="overview"/> for an overview.
 
-      An HTML formatter might generate "See <a href="#overview">Section
-      1.7</a> for an overview.".
+      An HTML formatter might generate:
+
+      See <a href="#overview">Section 1.7</a> for an overview.
 
    "none"
 
@@ -3469,7 +3475,7 @@ Table of Contents
 
    Identifies the document component being referenced.  The value needs
    to match the value of the "anchor" attribute of an element in the
-   document, otherwise it is an error.
+   document; otherwise, it is an error.
 
 3.  Elements from v2 That Have Been Deprecated
 

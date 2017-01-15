@@ -1536,7 +1536,7 @@ blockquote > * .bcp14 {
                   </p>
                </div>
                <div id="rfc.section.2.7.5.p.2">
-                  <p>Some processors will post-process the value, for instance when it only contains a single letter (in which case they might
+                  <p>Some processors will post-process the value -- for instance, when it only contains a single letter (in which case they might
                      add a trailing dot). Relying on this kind of post-processing can lead to results varying across formatters and thus ought
                      to be avoided.
                   </p>
@@ -2406,7 +2406,7 @@ blockquote > * .bcp14 {
       &lt;eref target="http://www.example.com/reports/r12.html"/&gt;.
 </pre></span></div>
             <div id="rfc.section.2.24.p.4">
-               <p>An HTML formatter might generate </p><span id="rfc.figure.u.3"><pre>      This is described at
+               <p>An HTML formatter might generate: </p><span id="rfc.figure.u.3"><pre>      This is described at
       &lt;a href="http://www.example.com/reports/r12.html"&gt;
       http://www.example.com/reports/r12.html&lt;/a&gt;.
 </pre></span></div>
@@ -2416,7 +2416,7 @@ blockquote > * .bcp14 {
       in this interesting report&lt;/eref&gt;.
 </pre></span></div>
             <div id="rfc.section.2.24.p.6">
-               <p>An HTML formatter might generate </p><span id="rfc.figure.u.5"><pre>      This is described
+               <p>An HTML formatter might generate: </p><span id="rfc.figure.u.5"><pre>      This is described
       &lt;a href="http://www.example.com/reports/r12.html"&gt;
       in this interesting report&lt;/a&gt;.
 </pre></span></div>
@@ -2511,7 +2511,7 @@ blockquote > * .bcp14 {
             <section id="element.figure.attribute.alt">
                <h4 id="rfc.section.2.25.2"><a href="#rfc.section.2.25.2">2.25.2</a>&nbsp;<a href="#element.figure.attribute.alt">"alt" Attribute</a></h4>
                <div id="rfc.section.2.25.2.p.1">
-                  <p>Deprecated. If the goal is to provide a single URI for a reference, use the "target" attribute on &lt;<a href="#element.reference" class="smpl">reference</a>&gt; instead.
+                  <p>Deprecated. If the goal is to provide a single URI for a reference, use the "target" attribute in &lt;<a href="#element.reference" class="smpl">reference</a>&gt; instead.
                   </p>
                </div>
             </section>
@@ -2566,8 +2566,8 @@ blockquote > * .bcp14 {
                <p>Represents the "front matter": metadata (such as author information), the Abstract, and additional notes.</p>
             </div>
             <div id="rfc.section.2.26.p.2">
-               <p>A &lt;<a href="#element.front" class="smpl">front</a>&gt; element may have more than one &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; elements. A &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element determines the document number (for RFCs) or name (for Internet-Drafts). Another &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element determines the "maturity level" (defined in <a href="#RFC2026" id="rfc.xref.RFC2026.1"><cite title="The Internet Standards Process -- Revision 3">[RFC2026]</cite></a>), using values of "std" for "Standards Track", "bcp" for "BCP", "info" for "Informational", "exp" for "Experimental", and
-                  "historic" for "Historic". The "name" attributes of those multiple &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; elements interact as described in the section on &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt;.
+               <p>A &lt;<a href="#element.front" class="smpl">front</a>&gt; element may have more than one &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element. A &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element determines the document number (for RFCs) or name (for Internet-Drafts). Another &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element determines the "maturity level" (defined in <a href="#RFC2026" id="rfc.xref.RFC2026.1"><cite title="The Internet Standards Process -- Revision 3">[RFC2026]</cite></a>), using values of "std" for "Standards Track", "bcp" for "BCP", "info" for "Informational", "exp" for "Experimental", and
+                  "historic" for "Historic". The "name" attributes of those multiple &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; elements interact as described in <a href="#element.seriesInfo" title="&#xA;      <seriesInfo&gt;&#xA;   ">Section&nbsp;2.47</a>.
                </p>
             </div>
             <div id="rfc.section.2.26.p.3">
@@ -2833,14 +2833,17 @@ blockquote > * .bcp14 {
             <div id="rfc.section.2.30.p.2">
                <p>The following are the supported types of external documents that can be pointed to in a &lt;link&gt; element: </p>
                <ul>
-                  <li>The current ISSN for the RFC series. The value for the "rel" attribute is "item". The link should use the form "urn:issn:".</li>
-                  <li>The DOI for this document. The value for the "rel" attribute is "describedBy". The link should use the form specified in <a href="#RFC7669" id="rfc.xref.RFC7669.1"><cite title="Assigning Digital Object Identifiers to RFCs">[RFC7669]</cite></a>.
+                  <li>The current International Standard Serial Number (ISSN) for the RFC Series. The value for the "rel" attribute is "item". The
+                     link should use the form "urn:issn:".
+                  </li>
+                  <li>The Digital Object Identifier (DOI) for this document. The value for the "rel" attribute is "describedBy". The link should
+                     use the form specified in <a href="#RFC7669" id="rfc.xref.RFC7669.1"><cite title="Assigning Digital Object Identifiers to RFCs">[RFC7669]</cite></a>; this is expected to change in the future.
                   </li>
                   <li>The Internet-Draft that was submitted to the RFC Editor to become the published RFC. The value for the "rel" attribute is
                      "convertedFrom". The link should be to an IETF-controlled web site that retains copies of Internet-Drafts.
                   </li>
                   <li>A representation of the document offered by the document author. The value for the "rel" attribute is "alternate". The link
-                     can be to a personally-run web site.
+                     can be to a personally run web site.
                   </li>
                </ul>
             </div>
@@ -2868,7 +2871,7 @@ blockquote > * .bcp14 {
             <section id="element.link.attribute.rel">
                <h4 id="rfc.section.2.30.2"><a href="#rfc.section.2.30.2">2.30.2</a>&nbsp;<a href="#element.link.attribute.rel">"rel" Attribute</a></h4>
                <div id="rfc.section.2.30.2.p.1">
-                  <p>The relationship of the external document to this one. The relationships are taken from Link Relations registry maintained
+                  <p>The relationship of the external document to this one. The relationships are taken from the "Link Relations" registry maintained
                      by IANA <a href="#LINKRELATIONS" id="rfc.xref.LINKRELATIONS.1"><cite title="Link Relations">[LINKRELATIONS]</cite></a>.
                   </p>
                </div>
@@ -2897,8 +2900,8 @@ blockquote > * .bcp14 {
          <section id="element.name">
             <h3 id="rfc.section.2.32"><a href="#rfc.section.2.32">2.32</a>&nbsp;<a href="#element.name"><span class="tt">&lt;name&gt;</span> </a></h3>
             <div id="rfc.section.2.32.p.1">
-               <p>The name of the section, note, figure, or texttable. This name can have flow markup such as to make some characters use a
-                  fixed-width font, or to include references.
+               <p>The name of the section, note, figure, or texttable. This name can indicate markup of flowing text (for example, including
+                  references or making some characters use a fixed-width font).
                </p>
             </div>
             <div id="rfc.section.2.32.p.2">
@@ -2944,7 +2947,7 @@ blockquote > * .bcp14 {
                <p>Creates an unnumbered, titled block of text that appears after the Abstract.</p>
             </div>
             <div id="rfc.section.2.33.p.2">
-               <p>It is usually used for additional information to reviewers (working group information, mailing list, ...), or for additional
+               <p>It is usually used for additional information to reviewers (Working Group information, mailing list, ...) or for additional
                   publication information such as "IESG Notes".
                </p>
             </div>
@@ -2994,7 +2997,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.33.1"><a href="#rfc.section.2.33.1">2.33.1</a>&nbsp;<a href="#element.note.attribute.removeInRFC">"removeInRFC" Attribute</a></h4>
                <div id="rfc.section.2.33.1.p.1">
                   <p>If set to "true", this note is marked in the prep tool with text indicating that it should be removed before the document
-                     is published as an RFC. That text will be &#8220;This note is to be removed before publishing as an RFC.&#8221;.
+                     is published as an RFC. That text will be "This note is to be removed before publishing as an RFC."
                   </p>
                </div>
                <div id="rfc.section.2.33.1.p.2" class="avoidbreakafter">
@@ -3042,8 +3045,8 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.34.2"><a href="#rfc.section.2.34.2">2.34.2</a>&nbsp;<a href="#element.ol.attribute.group">"group" Attribute</a></h4>
                <div id="rfc.section.2.34.2.p.1">
                   <p>When the prep tool sees an &lt;ol&gt; element with a "group" attribute that has already been seen, it continues the numbering of
-                     the list from where the previous list with the same group name left off. If an &lt;ol&gt; element has both a "group" and "start"
-                     attribute, the group's numbering is reset to the given start value.
+                     the list from where the previous list with the same group name left off. If an &lt;ol&gt; element has both a "group" attribute and
+                     a "start" attribute, the group's numbering is reset to the given start value.
                   </p>
                </div>
             </section>
@@ -3065,7 +3068,7 @@ blockquote > * .bcp14 {
             <section id="element.ol.attribute.start">
                <h4 id="rfc.section.2.34.4"><a href="#rfc.section.2.34.4">2.34.4</a>&nbsp;<a href="#element.ol.attribute.start">"start" Attribute</a></h4>
                <div id="rfc.section.2.34.4.p.1">
-                  <p>The ordinal value to start the list at. This defaults to "1", and must be an integer of 0 or greater.</p>
+                  <p>The ordinal value at which to start the list. This defaults to "1" and must be an integer of 0 or greater.</p>
                </div>
             </section>
             <section id="element.ol.attribute.type">
@@ -3084,7 +3087,7 @@ blockquote > * .bcp14 {
                      <dt>I</dt>
                      <dd>Uppercase Roman numerals (I, II, III, ...)</dd>
                   </dl>
-                  <p> For type "a" and "A", after the 26th entry, the numbering starts at "aa"/"AA", then "ab"/"AB", and so on.</p>
+                  <p> For types "a" and "A", after the 26th entry, the numbering starts at "aa"/"AA", then "ab"/"AB", and so on.</p>
                </div>
                <div id="rfc.section.2.34.5.p.2">
                   <p>If the length of the type value is greater than 1, the value must contain a percent-encoded indicator and other text. The
@@ -3122,7 +3125,7 @@ blockquote > * .bcp14 {
          <section id="element.organization">
             <h3 id="rfc.section.2.35"><a href="#rfc.section.2.35">2.35</a>&nbsp;<a href="#element.organization"><span class="tt">&lt;organization&gt;</span> </a></h3>
             <div id="rfc.section.2.35.p.1">
-               <p>Specifies the affiliation (<a href="#RFC7322" id="rfc.xref.RFC7322.4"><cite title="RFC Style Guide">[RFC7322]</cite></a>) of an author.
+               <p>Specifies the affiliation <a href="#RFC7322" id="rfc.xref.RFC7322.4"><cite title="RFC Style Guide">[RFC7322]</cite></a> of an author.
                </p>
             </div>
             <div id="rfc.section.2.35.p.2">
@@ -3158,8 +3161,8 @@ blockquote > * .bcp14 {
                <p>Represents a phone number.</p>
             </div>
             <div id="rfc.section.2.36.p.2">
-               <p>The value is expected to be the scheme-specific part of a "tel" URI (so does not include the prefix "tel:"), using the "global-number-digits"
-                  syntax. See <a href="https://tools.ietf.org/html/rfc3966#section-3">Section 3</a> of <a href="#RFC3966" id="rfc.xref.RFC3966.1"><cite title="The tel URI for Telephone Numbers">[RFC3966]</cite></a> for details.
+               <p>The value is expected to be the scheme-specific part of a "tel" URI (and so does not include the prefix "tel:"), using the
+                  "global-number-digits" syntax. See <a href="https://tools.ietf.org/html/rfc3966#section-3">Section 3</a> of <a href="#RFC3966" id="rfc.xref.RFC3966.1"><cite title="The tel URI for Telephone Numbers">[RFC3966]</cite></a> for details.
                </p>
             </div>
             <div id="rfc.section.2.36.p.3">
@@ -3315,7 +3318,7 @@ blockquote > * .bcp14 {
          <section id="element.reference">
             <h3 id="rfc.section.2.40"><a href="#rfc.section.2.40">2.40</a>&nbsp;<a href="#element.reference"><span class="tt">&lt;reference&gt;</span> </a></h3>
             <div id="rfc.section.2.40.p.1">
-               <p>Represents a bibliographical reference.</p>
+               <p>Represents a bibliographic reference.</p>
             </div>
             <div id="rfc.section.2.40.p.2">
                <p>This element appears as a child element of &lt;<a href="#element.referencegroup" class="smpl">referencegroup</a>&gt; (<a href="#element.referencegroup" title="&#xA;      <referencegroup&gt;&#xA;   ">Section&nbsp;2.41</a>) and &lt;<a href="#element.references" class="smpl">references</a>&gt; (<a href="#element.references" title="&#xA;      <references&gt;&#xA;   ">Section&nbsp;2.42</a>).
@@ -3363,7 +3366,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.40.1"><a href="#rfc.section.2.40.1">2.40.1</a>&nbsp;<a href="#element.reference.attribute.anchor">"anchor" Attribute <em>(Mandatory)</em> </a></h4>
                <div id="rfc.section.2.40.1.p.1">
                   <p>Document-wide unique identifier for this reference. Usually, this will be used both to "label" the reference in the "References"
-                     section, and as an identifier in links to this reference entry.
+                     section and as an identifier in links to this reference entry.
                   </p>
                </div>
             </section>
@@ -3390,8 +3393,8 @@ blockquote > * .bcp14 {
          <section id="element.referencegroup">
             <h3 id="rfc.section.2.41"><a href="#rfc.section.2.41">2.41</a>&nbsp;<a href="#element.referencegroup"><span class="tt">&lt;referencegroup&gt;</span> </a></h3>
             <div id="rfc.section.2.41.p.1">
-               <p>Represents a list of bibliographic references that will be represented as a single reference. This is most often used for
-                  references in the STD and BCP series, where a single reference (such as "BCP 9") encompasses more than one RFC.
+               <p>Represents a list of bibliographic references that will be represented as a single reference. This is most often used to reference
+                  STDs and BCPs, where a single reference (such as "BCP 9") may encompass more than one RFC.
                </p>
             </div>
             <div id="rfc.section.2.41.p.2">
@@ -3412,7 +3415,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.41.1"><a href="#rfc.section.2.41.1">2.41.1</a>&nbsp;<a href="#element.referencegroup.attribute.anchor">"anchor" Attribute <em>(Mandatory)</em> </a></h4>
                <div id="rfc.section.2.41.1.p.1">
                   <p>Document-wide unique identifier for this reference group. Usually, this will be used both to "label" the reference group in
-                     the "References" section, and as an identifier in links to this reference entry.
+                     the "References" section and as an identifier in links to this reference entry.
                   </p>
                </div>
             </section>
@@ -3420,11 +3423,11 @@ blockquote > * .bcp14 {
          <section id="element.references">
             <h3 id="rfc.section.2.42"><a href="#rfc.section.2.42">2.42</a>&nbsp;<a href="#element.references"><span class="tt">&lt;references&gt;</span> </a></h3>
             <div id="rfc.section.2.42.p.1">
-               <p>Contains a set of bibliographical references.</p>
+               <p>Contains a set of bibliographic references.</p>
             </div>
             <div id="rfc.section.2.42.p.2">
-               <p>In the early days of the RFC series, there was only one "References" section per RFC. This convention was later changed to
-                  group references into two sets, "Normative" and "Informative", as described in <a href="#RFC7322" id="rfc.xref.RFC7322.6"><cite title="RFC Style Guide">[RFC7322]</cite></a>). This vocabulary supports the split with the &lt;<a href="#element.name" class="smpl">name</a>&gt; child element. In general, the title should be either "Normative References" or "Informative References".
+               <p>In the early days of the RFC Series, there was only one "References" section per RFC. This convention was later changed to
+                  group references into two sets, "Normative" and "Informative", as described in <a href="#RFC7322" id="rfc.xref.RFC7322.6"><cite title="RFC Style Guide">[RFC7322]</cite></a>. This vocabulary supports the split with the &lt;<a href="#element.name" class="smpl">name</a>&gt; child element. In general, the title should be either "Normative References" or "Informative References".
                </p>
             </div>
             <div id="rfc.section.2.42.p.3">
@@ -3464,7 +3467,7 @@ blockquote > * .bcp14 {
             <section id="element.references.attribute.anchor">
                <h4 id="rfc.section.2.42.1"><a href="#rfc.section.2.42.1">2.42.1</a>&nbsp;<a href="#element.references.attribute.anchor">"anchor" Attribute</a></h4>
                <div id="rfc.section.2.42.1.p.1">
-                  <p>An optional user-supplied for this section.</p>
+                  <p>An optional user-supplied identifier for this set of references.</p>
                </div>
             </section>
             <section id="element.references.attribute.title">
@@ -3506,20 +3509,20 @@ blockquote > * .bcp14 {
                </p>
             </div>
             <div id="rfc.section.2.44.p.2">
-               <p>The "section" attribute is required, and the "relative" attribute is option. If reference is not an RFC or Internet-Draft
-                  that is in the v3 format, the element MUST have a "relative" attribute; in this case, the value of the "section" attribute
+               <p>The "section" attribute is required, and the "relative" attribute is optional. If the reference is not an RFC or Internet-Draft
+                  that is in the v3 format, the element needs to have a "relative" attribute; in this case, the value of the "section" attribute
                   is ignored.
                </p>
             </div>
             <div id="rfc.section.2.44.p.3">
                <p>An example of the &lt;relref&gt; element with text content might be: </p><span id="rfc.figure.u.8"><pre>      See
-      &lt;relref section="2.3" target="RFC7878" displayFormat="bare"&gt;
+      &lt;relref section="2.3" target="RFC9999" displayFormat="bare"&gt;
       the protocol overview&lt;/relref&gt;
       for more information.
 </pre></span></div>
             <div id="rfc.section.2.44.p.4">
                <p>An HTML formatter might generate: </p><span id="rfc.figure.u.9"><pre>      See 
-      &lt;a href="http://www.rfc-editor.org/rfc/rfc7878.html#s-2.3"&gt;
+      &lt;a href="http://www.rfc-editor.org/rfc/rfc9999.html#s-2.3"&gt;
       the protocol overview&lt;/a&gt;
       for more information.
 </pre></span><p> Note that the URL in the above example might be different when the RFC Editor deploys the v3 format.</p>
@@ -3551,19 +3554,19 @@ blockquote > * .bcp14 {
                         brackets.
                      </li>
                      <li>For example, with an input of: <span id="rfc.figure.u.10"><pre>      See
-      &lt;relref section="2.3" target="RFC7878" displayFormat="of"/&gt;
+      &lt;relref section="2.3" target="RFC9999" displayFormat="of"/&gt;
       for an overview.
 </pre></span> 
                      </li>
                      <li>An HTML formatter might generate: <span id="rfc.figure.u.11"><pre>      See
-      &lt;a href="http://www.rfc-editor.org/info/rfc7878#s-2.3"&gt;
+      &lt;a href="http://www.rfc-editor.org/info/rfc9999#s-2.3"&gt;
       Section 2.3&lt;/a&gt; of
-      [&lt;a href="#RFC7878"&gt;RFC7878&lt;/a&gt;]
+      [&lt;a href="#RFC9999"&gt;RFC9999&lt;/a&gt;]
       for an overview.
 </pre></span> 
                      </li>
-                     <li>Note that "displayFormat='of'" is the default for &lt;relref&gt; so it does not need to be given in a &lt;relref&gt; element if that format
-                        is desired.
+                     <li>Note that "displayFormat='of'" is the default for &lt;relref&gt;, so it does not need to be given in a &lt;relref&gt; element if that
+                        format is desired.
                      </li>
                   </ul>
                </div>
@@ -3574,13 +3577,13 @@ blockquote > * .bcp14 {
                         comma, a space, the word "Section" followed by a space, and the "section" attribute.
                      </li>
                      <li>For example, with an input of: <span id="rfc.figure.u.12"><pre>      See
-      &lt;relref section="2.3" target="RFC7878" displayFormat="comma"/&gt;,
+      &lt;relref section="2.3" target="RFC9999" displayFormat="comma"/&gt;,
       for an overview.
 </pre></span> 
                      </li>
                      <li>An HTML formatter might generate: <span id="rfc.figure.u.13"><pre>      See
-      [&lt;a href="#RFC7878"&gt;RFC7878&lt;/a&gt;], 
-      &lt;a href="http://www.rfc-editor.org/info/rfc7878#s-2.3"&gt;
+      [&lt;a href="#RFC9999"&gt;RFC9999&lt;/a&gt;], 
+      &lt;a href="http://www.rfc-editor.org/info/rfc9999#s-2.3"&gt;
       Section 2.3&lt;/a&gt;, for an overview.
 </pre></span> 
                      </li>
@@ -3593,13 +3596,13 @@ blockquote > * .bcp14 {
                         space, a left parenthesis, the word "Section" followed by a space, the "section" attribute, and a right parenthesis.
                      </li>
                      <li>For example, with an input of: <span id="rfc.figure.u.14"><pre>      See
-      &lt;relref section="2.3" target="RFC7878" displayFormat="parens"/&gt;
+      &lt;relref section="2.3" target="RFC9999" displayFormat="parens"/&gt;
       for an overview.
 </pre></span> 
                      </li>
-                     <li>An HTML formatter might generate <span id="rfc.figure.u.15"><pre>      See
-      [&lt;a href="#RFC7878"&gt;RFC7878&lt;/a&gt;]
-      (&lt;a href="http://www.rfc-editor.org/info/rfc7878#s-2.3"&gt; 
+                     <li>An HTML formatter might generate: <span id="rfc.figure.u.15"><pre>      See
+      [&lt;a href="#RFC9999"&gt;RFC9999&lt;/a&gt;]
+      (&lt;a href="http://www.rfc-editor.org/info/rfc9999#s-2.3"&gt; 
       Section 2.3&lt;/a&gt;)
       for an overview.
 </pre></span> 
@@ -3612,20 +3615,20 @@ blockquote > * .bcp14 {
                      <li>A formatter should display the relative reference as the contents of the "section" attribute and nothing else. This is useful
                         when there are multiple relative references to a single base reference.
                      </li>
-                     <li>For example: <span id="rfc.figure.u.16"><pre>      See Section
-      &lt;relref section="2.3" target="RFC7878" displayFormat="bare"/&gt;
+                     <li>For example: <span id="rfc.figure.u.16"><pre>      See Sections
+      &lt;relref section="2.3" target="RFC9999" displayFormat="bare"/&gt;
       and
-      &lt;relref section="2.4" target="RFC7878" displayFormat="of"/&gt;
+      &lt;relref section="2.4" target="RFC9999" displayFormat="of"/&gt;
       for an overview.
 </pre></span> 
                      </li>
-                     <li>An HTML formatter might generate: <span id="rfc.figure.u.17"><pre>      See Section
-      &lt;a href="http://www.rfc-editor.org/info/rfc7878#s-2.3"&gt;
+                     <li>An HTML formatter might generate: <span id="rfc.figure.u.17"><pre>      See Sections
+      &lt;a href="http://www.rfc-editor.org/info/rfc9999#s-2.3"&gt;
       2.3&lt;/a&gt;
       and
-      &lt;a href="http://www.rfc-editor.org/info/rfc7878#s-2.4"&gt;
+      &lt;a href="http://www.rfc-editor.org/info/rfc9999#s-2.4"&gt;
       Section 2.4&lt;/a&gt; of
-      [&lt;a href="#RFC7878"&gt;RFC7878&lt;/a&gt;]
+      [&lt;a href="#RFC9999"&gt;RFC9999&lt;/a&gt;]
       for an overview.
 </pre></span> 
                      </li>
@@ -3781,7 +3784,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.45.9"><a href="#rfc.section.2.45.9">2.45.9</a>&nbsp;<a href="#element.rfc.attribute.prepTime">"prepTime" Attribute</a></h4>
                <div id="rfc.section.2.45.9.p.1">
                   <p>The date that the XML was processed by a prep tool. This is included in the XML file just before it is saved to disk. The
-                     value is formatted using the 'date-time' format defined in Section 5.6 of <a href="#RFC3339" id="rfc.xref.RFC3339.1"><cite title="Date and Time on the Internet: Timestamps">[RFC3339]</cite></a>. The "time-offset" should be "Z".
+                     value is formatted using the "date-time" format defined in <a href="https://tools.ietf.org/html/rfc3339#section-5.6">Section 5.6</a> of <a href="#RFC3339" id="rfc.xref.RFC3339.1"><cite title="Date and Time on the Internet: Timestamps">[RFC3339]</cite></a>. The "time-offset" should be "Z".
                   </p>
                </div>
             </section>
@@ -3839,7 +3842,9 @@ blockquote > * .bcp14 {
             <section id="element.rfc.attribute.tocDepth">
                <h4 id="rfc.section.2.45.14"><a href="#rfc.section.2.45.14">2.45.14</a>&nbsp;<a href="#element.rfc.attribute.tocDepth">"tocDepth" Attribute</a></h4>
                <div id="rfc.section.2.45.14.p.1">
-                  <p>Specifies number of levels of heading that formatter is requested to include in the table of contents; the default is "3".</p>
+                  <p>Specifies the number of levels of headings that a formatter is requested to include in the table of contents; the default
+                     is "3".
+                  </p>
                </div>
             </section>
             <section id="element.rfc.attribute.tocInclude">
@@ -3967,7 +3972,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.46.2"><a href="#rfc.section.2.46.2">2.46.2</a>&nbsp;<a href="#element.section.attribute.numbered">"numbered" Attribute</a></h4>
                <div id="rfc.section.2.46.2.p.1">
                   <p>If set to "false", the formatter is requested to not display a section number. The prep tool will verify that such a section
-                     is not followed by a numbered section in a part, and will verify that the section is a top-level section.
+                     is not followed by a numbered section in this part of the document and will verify that the section is a top-level section.
                   </p>
                </div>
                <div id="rfc.section.2.46.2.p.2" class="avoidbreakafter">
@@ -3982,7 +3987,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.46.3"><a href="#rfc.section.2.46.3">2.46.3</a>&nbsp;<a href="#element.section.attribute.removeInRFC">"removeInRFC" Attribute</a></h4>
                <div id="rfc.section.2.46.3.p.1">
                   <p>If set to "true", this note is marked in the prep tool with text indicating that it should be removed before the document
-                     is published as an RFC. That text will be &#8220;This note is to be removed before publishing as an RFC.&#8221;.
+                     is published as an RFC. That text will be "This note is to be removed before publishing as an RFC."
                   </p>
                </div>
                <div id="rfc.section.2.46.3.p.2" class="avoidbreakafter">
@@ -4006,7 +4011,7 @@ blockquote > * .bcp14 {
                   <p>Indicates to a formatter whether or not the section is to be included in a table of contents, if such a table of contents
                      is produced. This only takes effect if the level of the section would have appeared in the table of contents based on the
                      "tocDepth" attribute of the &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element, and of course only if the table of contents is being created based on the "tocInclude" attribute of the &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element. If this is set to "exclude", any section below this one will be excluded as well. The "default" value indicates
-                     to include the section if it would be included by the tocDepth attribute of the &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element.
+                     inclusion of the section if it would be included by the tocDepth attribute of the &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element.
                   </p>
                </div>
                <div id="rfc.section.2.46.5.p.2" class="avoidbreakafter">
@@ -4025,11 +4030,12 @@ blockquote > * .bcp14 {
                <p>Specifies the document series in which this document appears, and also specifies an identifier within that series.</p>
             </div>
             <div id="rfc.section.2.47.p.2">
-               <p>A processing tool determines if it is working on an RFC or an Internet-Draft by inspecting the "name" attribute of a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element inside the &lt;<a href="#element.front" class="smpl">front</a>&gt; element inside the &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element, looking for "RFC" or "Internet-Draft". (Specifying neither value in any of the &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; elements can be useful for producing other types of documents, but is out of scope for this specification.)
+               <p>A processing tool determines whether it is working on an RFC or an Internet-Draft by inspecting the "name" attribute of a
+                  &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element inside the &lt;<a href="#element.front" class="smpl">front</a>&gt; element inside the &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element, looking for "RFC" or "Internet-Draft". (Specifying neither value in any of the &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; elements can be useful for producing other types of documents but is out of scope for this specification.)
                </p>
             </div>
             <div id="rfc.section.2.47.p.3">
-               <p>It is invalid to have multiple &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; elements inside the same &lt;<a href="#element.front" class="smpl">front</a>&gt; element containing the same "name" value. Some combinations of &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; name attribute values make no sense, such as having both &lt;seriesInfo name="rfc"/&gt; and &lt;seriesInfo name="Internet-Draft"/&gt;
+               <p>It is invalid to have multiple &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; elements inside the same &lt;<a href="#element.front" class="smpl">front</a>&gt; element containing the same "name" value. Some combinations of &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; "name" attribute values make no sense, such as having both &lt;seriesInfo name="rfc"/&gt; and &lt;seriesInfo name="Internet-Draft"/&gt;
                   in the same &lt;front&gt; element.
                </p>
             </div>
@@ -4058,7 +4064,7 @@ blockquote > * .bcp14 {
             <section id="element.seriesInfo.attribute.name">
                <h4 id="rfc.section.2.47.3"><a href="#rfc.section.2.47.3">2.47.3</a>&nbsp;<a href="#element.seriesInfo.attribute.name">"name" Attribute <em>(Mandatory)</em> </a></h4>
                <div id="rfc.section.2.47.3.p.1">
-                  <p>The name of the series. The currently-known values are "RFC", "Internet-Draft" and "DOI". The RFC Series Editor may change
+                  <p>The name of the series. The currently known values are "RFC", "Internet-Draft", and "DOI". The RFC Series Editor may change
                      this list in the future.
                   </p>
                </div>
@@ -4069,14 +4075,14 @@ blockquote > * .bcp14 {
                   <ul>
                      <li>If a &lt;<a href="#element.front" class="smpl">front</a>&gt; element contains a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element with a name of "Internet-Draft", it can also have at most one additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element with a "status" attribute whose value is of "standard", "full-standard", "bcp", "fyi", "informational", "experimental",
                         or "historic" to indicate the intended status of this Internet-Draft, if it were to be later published as an RFC. If such
-                        an additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element has one of those statuses, the name MUST be "".
+                        an additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element has one of those statuses, the name needs to be "".
                      </li>
                      <li>If a &lt;<a href="#element.front" class="smpl">front</a>&gt; element contains a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element with a name of "RFC", it can also have at most one additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element with a "status" attribute whose value is of "full-standard", "bcp", or "fyi" to indicate the current status of this
-                        RFC. If such an additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element has one of those statuses, the value attribute for that name MUST be the number within that series. That &lt;<a href="#element.front" class="smpl">front</a>&gt; element might also contain an additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; with the status of "info, "exp", or "historic" and a name of "" to indicate the status of the RFC.
+                        RFC. If such an additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element has one of those statuses, the "value" attribute for that name needs to be the number within that series. That &lt;<a href="#element.front" class="smpl">front</a>&gt; element might also contain an additional &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element with the status of "info", "exp", or "historic" and a name of "" to indicate the status of the RFC.
                      </li>
-                     <li>A &lt;<a href="#element.front" class="smpl">front</a>&gt; element that has a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element that has the name "Internet-Draft" MUST NOT also have a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element that has the name "RFC".
+                     <li>A &lt;<a href="#element.front" class="smpl">front</a>&gt; element that has a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element that has the name "Internet-Draft" cannot also have a &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element that has the name "RFC".
                      </li>
-                     <li>The &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; can contain the DOI for the referenced document. This MUST NOT be used when &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element is an eventual child element of a &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element, only as an enventual child of a &lt;<a href="#element.reference" class="smpl">reference</a>&gt; element. The value attribute should use the form specified in <a href="#RFC7669" id="rfc.xref.RFC7669.2"><cite title="Assigning Digital Object Identifiers to RFCs">[RFC7669]</cite></a>.
+                     <li>The &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element can contain the DOI for the referenced document. This cannot be used when the &lt;<a href="#element.seriesInfo" class="smpl">seriesInfo</a>&gt; element is an eventual child element of an &lt;<a href="#element.rfc" class="smpl">rfc</a>&gt; element -- only as an eventual child of a &lt;<a href="#element.reference" class="smpl">reference</a>&gt; element. The "value" attribute should use the form specified in <a href="#RFC7669" id="rfc.xref.RFC7669.2"><cite title="Assigning Digital Object Identifiers to RFCs">[RFC7669]</cite></a>.
                      </li>
                   </ul>
                </div>
@@ -4084,7 +4090,7 @@ blockquote > * .bcp14 {
             <section id="element.seriesInfo.attribute.status">
                <h4 id="rfc.section.2.47.4"><a href="#rfc.section.2.47.4">2.47.4</a>&nbsp;<a href="#element.seriesInfo.attribute.status">"status" Attribute</a></h4>
                <div id="rfc.section.2.47.4.p.1">
-                  <p>The status of this document. The currently-known values are "standard", "informational", "experimental", "bcp", "fyi", and
+                  <p>The status of this document. The currently known values are "standard", "informational", "experimental", "bcp", "fyi", and
                      "full-standard". The RFC Series Editor may change this list in the future.
                   </p>
                </div>
@@ -4092,7 +4098,7 @@ blockquote > * .bcp14 {
             <section id="element.seriesInfo.attribute.stream">
                <h4 id="rfc.section.2.47.5"><a href="#rfc.section.2.47.5">2.47.5</a>&nbsp;<a href="#element.seriesInfo.attribute.stream">"stream" Attribute</a></h4>
                <div id="rfc.section.2.47.5.p.1">
-                  <p>The stream (as described in <a href="#RFC7841" id="rfc.xref.RFC7841.3"><cite title="RFC Streams, Headers, and Boilerplates">[RFC7841]</cite></a>) that originated of this document. (The RFC Series Editor may change this list in the future.)
+                  <p>The stream (as described in <a href="#RFC7841" id="rfc.xref.RFC7841.3"><cite title="RFC Streams, Headers, and Boilerplates">[RFC7841]</cite></a>) that originated the document. (The RFC Series Editor may change this list in the future.)
                   </p>
                </div>
                <div id="rfc.section.2.47.5.p.2" class="avoidbreakafter">
@@ -4112,7 +4118,7 @@ blockquote > * .bcp14 {
                </div>
                <div id="rfc.section.2.47.6.p.2">
                   <p>For BCPs, FYIs, RFCs, and STDs, this is the number within the series. For Internet-Drafts, it is the full draft name (ending
-                     with the two-digit version number). For DOIs, the value is given such as "10.17487/rfc1149", as described in <a href="#RFC7669" id="rfc.xref.RFC7669.3"><cite title="Assigning Digital Object Identifiers to RFCs">[RFC7669]</cite></a>.
+                     with the two-digit version number). For DOIs, the value is given, such as "10.17487/rfc1149", as described in <a href="#RFC7669" id="rfc.xref.RFC7669.3"><cite title="Assigning Digital Object Identifiers to RFCs">[RFC7669]</cite></a>.
                   </p>
                </div>
                <div id="rfc.section.2.47.6.p.3">
@@ -4125,11 +4131,11 @@ blockquote > * .bcp14 {
          <section id="element.sourcecode">
             <h3 id="rfc.section.2.48"><a href="#rfc.section.2.48">2.48</a>&nbsp;<a href="#element.sourcecode"><span class="tt">&lt;sourcecode&gt;</span> </a></h3>
             <div id="rfc.section.2.48.p.1">
-               <p>This element allows the inclusion of sourcecode into the document.</p>
+               <p>This element allows the inclusion of source code into the document.</p>
             </div>
             <div id="rfc.section.2.48.p.2">
-               <p>When rendered, sourcecode is always shown in a monospace font. When &lt;sourcecode&gt; is a child of &lt;<a href="#element.figure" class="smpl">figure</a>&gt; or &lt;<a href="#element.section" class="smpl">section</a>&gt;, it provides full control of horizontal whitespace and line breaks. When formatted, it is indented indented relative to
-                  the left margin of the enclosing element. It is thus useful for source code and formal languages (such as ABNF <a href="#RFC5234" id="rfc.xref.RFC5234.1"><cite title="Augmented BNF for Syntax Specifications: ABNF">[RFC5234]</cite></a> or the RNC notation used in this document). (When &lt;sourcecode&gt; is a child of other elements, if flows with the text that surrounds
+               <p>When rendered, source code is always shown in a monospace font. When &lt;sourcecode&gt; is a child of &lt;<a href="#element.figure" class="smpl">figure</a>&gt; or &lt;<a href="#element.section" class="smpl">section</a>&gt;, it provides full control of horizontal whitespace and line breaks. When formatted, it is indented relative to the left
+                  margin of the enclosing element. It is thus useful for source code and formal languages (such as ABNF <a href="#RFC5234" id="rfc.xref.RFC5234.1"><cite title="Augmented BNF for Syntax Specifications: ABNF">[RFC5234]</cite></a> or the RNC notation used in this document). (When &lt;sourcecode&gt; is a child of other elements, it flows with the text that surrounds
                   it.) Tab characters (U+0009) inside of this element are prohibited.
                </p>
             </div>
@@ -4143,7 +4149,7 @@ blockquote > * .bcp14 {
                </p>
             </div>
             <div id="rfc.section.2.48.p.5">
-               <p>See <a href="#cdata.and.escaping" title="Use of CDATA Structures and Escaping">Section&nbsp;5</a> for a description of to deal with issues of using "&amp;" and "&lt;" characters in sourcecode.
+               <p>See <a href="#cdata.and.escaping" title="Use of CDATA Structures and Escaping">Section&nbsp;5</a> for a description of how to deal with issues of using "&amp;" and "&lt;" characters in source code.
                </p>
             </div>
             <div id="rfc.section.2.48.p.6">
@@ -4159,24 +4165,23 @@ blockquote > * .bcp14 {
             <section id="element.sourcecode.attribute.anchor">
                <h4 id="rfc.section.2.48.1"><a href="#rfc.section.2.48.1">2.48.1</a>&nbsp;<a href="#element.sourcecode.attribute.anchor">"anchor" Attribute</a></h4>
                <div id="rfc.section.2.48.1.p.1">
-                  <p>Document-wide unique identifier for this sourcecode.</p>
+                  <p>Document-wide unique identifier for this source code.</p>
                </div>
             </section>
             <section id="element.sourcecode.attribute.name">
                <h4 id="rfc.section.2.48.2"><a href="#rfc.section.2.48.2">2.48.2</a>&nbsp;<a href="#element.sourcecode.attribute.name">"name" Attribute</a></h4>
                <div id="rfc.section.2.48.2.p.1">
                   <p>A filename suitable for the contents (such as for extraction to a local file). This attribute can be helpful for other kinds
-                     of tools (such as automated syntax checkers which work by extracting the source code). Note that the "name" attribute does
-                     not need to be unique for artwork elements in a document. If multiple sourcecode elements have the same name attribute, a
-                     formatter might assume that the elements are all fragments of a single file, and such a formatter can collect those fragments
-                     for later processing.
+                     of tools (such as automated syntax checkers, which work by extracting the source code). Note that the "name" attribute does
+                     not need to be unique for &lt;<a href="#element.artwork" class="smpl">artwork</a>&gt; elements in a document. If multiple &lt;<a href="#element.sourcecode" class="smpl">sourcecode</a>&gt; elements have the same "name" attribute, a formatter might assume that the elements are all fragments of a single file,
+                     and such a formatter can collect those fragments for later processing.
                   </p>
                </div>
             </section>
             <section id="element.sourcecode.attribute.src">
                <h4 id="rfc.section.2.48.3"><a href="#rfc.section.2.48.3">2.48.3</a>&nbsp;<a href="#element.sourcecode.attribute.src">"src" Attribute</a></h4>
                <div id="rfc.section.2.48.3.p.1">
-                  <p>The URI reference of a source file (<a href="#RFC3986" id="rfc.xref.RFC3986.3"><cite title="Uniform Resource Identifier (URI): Generic Syntax">[RFC3986]</cite></a>).
+                  <p>The URI reference of a source file <a href="#RFC3986" id="rfc.xref.RFC3986.3"><cite title="Uniform Resource Identifier (URI): Generic Syntax">[RFC3986]</cite></a>.
                   </p>
                </div>
                <div id="rfc.section.2.48.3.p.2">
@@ -4186,7 +4191,7 @@ blockquote > * .bcp14 {
             <section id="element.sourcecode.attribute.type">
                <h4 id="rfc.section.2.48.4"><a href="#rfc.section.2.48.4">2.48.4</a>&nbsp;<a href="#element.sourcecode.attribute.type">"type" Attribute</a></h4>
                <div id="rfc.section.2.48.4.p.1">
-                  <p>Specifies the type of the sourcecode. The value of this attribute is free text with certain values designated as preferred.</p>
+                  <p>Specifies the type of the source code. The value of this attribute is free text with certain values designated as preferred.</p>
                </div>
                <div id="rfc.section.2.48.4.p.2">
                   <p>The preferred values for &lt;sourcecode&gt; types are: </p>
@@ -4209,9 +4214,9 @@ blockquote > * .bcp14 {
                      <li>xml</li>
                      <li>yang</li>
                   </ul>
-                  <p> The RFC Series Editor will maintain a complete list of the preferred values on its web site, and that list is expected to
-                     be updated over time. Thus, a consumer of v3 XML should not cause a failure when it encounters an unexpected type or no type
-                     is specified.
+                  <p> The RFC Series Editor will maintain a complete list of the preferred values on the RFC Editor web site, and that list is expected
+                     to be updated over time. Thus, a consumer of v3 XML should not cause a failure when it encounters an unexpected type or no
+                     type is specified.
                   </p>
                </div>
             </section>
@@ -4241,8 +4246,8 @@ blockquote > * .bcp14 {
          <section id="element.strong">
             <h3 id="rfc.section.2.50"><a href="#rfc.section.2.50">2.50</a>&nbsp;<a href="#element.strong"><span class="tt">&lt;strong&gt;</span> </a></h3>
             <div id="rfc.section.2.50.p.1">
-               <p>Indicates text that is semantically strong. This element will be displayed as bold after processing. This element can be combined
-                  with other character formatting elements, and the formatting will be additive.
+               <p>Indicates text that is semantically strong. Text enclosed within this element will be displayed as bold after processing.
+                  This element can be combined with other character formatting elements, and the formatting will be additive.
                </p>
             </div>
             <div id="rfc.section.2.50.p.2">
@@ -4508,17 +4513,17 @@ blockquote > * .bcp14 {
             <section id="element.t.attribute.hangText">
                <h4 id="rfc.section.2.53.2"><a href="#rfc.section.2.53.2">2.53.2</a>&nbsp;<a href="#element.t.attribute.hangText">"hangText" Attribute</a></h4>
                <div id="rfc.section.2.53.2.p.1">
-                  <p>Deprecated. Instead use &lt;<a href="#element.dd" class="smpl">dd</a>&gt; inside of a definition list (&lt;<a href="#element.dl" class="smpl">dl</a>&gt;).
+                  <p>Deprecated. Instead, use &lt;<a href="#element.dd" class="smpl">dd</a>&gt; inside of a definition list (&lt;<a href="#element.dl" class="smpl">dl</a>&gt;).
                   </p>
                </div>
             </section>
             <section id="element.t.attribute.keepWithNext">
                <h4 id="rfc.section.2.53.3"><a href="#rfc.section.2.53.3">2.53.3</a>&nbsp;<a href="#element.t.attribute.keepWithNext">"keepWithNext" Attribute</a></h4>
                <div id="rfc.section.2.53.3.p.1">
-                  <p>Acts as a hint to the output formatters that do pagination to do a best effort attempt to keep the paragraph with the next
-                     element, whatever that happens to be. For example, the HTML output @media print CSS might translate this to page-break-after:
-                     avoid. For PDF, the paginator could attempt to keep the paragraph with the next element. Note: this attribute is strictly
-                     a hint and not always actionable.
+                  <p>Acts as a hint to the output formatters that do pagination to do a best-effort attempt to keep the paragraph with the next
+                     element, whatever that happens to be. For example, the HTML output @media print CSS ("CSS" refers to Cascading Style Sheets)
+                     might translate this to page-break-after: avoid. For PDF, the paginator could attempt to keep the paragraph with the next
+                     element. Note: this attribute is strictly a hint and not always actionable.
                   </p>
                </div>
                <div id="rfc.section.2.53.3.p.2" class="avoidbreakafter">
@@ -4532,7 +4537,7 @@ blockquote > * .bcp14 {
             <section id="element.t.attribute.keepWithPrevious">
                <h4 id="rfc.section.2.53.4"><a href="#rfc.section.2.53.4">2.53.4</a>&nbsp;<a href="#element.t.attribute.keepWithPrevious">"keepWithPrevious" Attribute</a></h4>
                <div id="rfc.section.2.53.4.p.1">
-                  <p>Acts as a hint to the output formatters that do pagination to do a best effort attempt to keep the paragraph with the previous
+                  <p>Acts as a hint to the output formatters that do pagination to do a best-effort attempt to keep the paragraph with the previous
                      element, whatever that happens to be. For example, the HTML output @media print CSS might translate this to page-break-before:
                      avoid. For PDF, the paginator could attempt to keep the paragraph with the previous element. Note: this attribute is strictly
                      a hint and not always actionable.
@@ -4554,8 +4559,8 @@ blockquote > * .bcp14 {
                </p>
             </div>
             <div id="rfc.section.2.54.p.2">
-               <p>Inside the &lt;<a href="#element.table" class="smpl">table</a>&gt; element is optionally a &lt;<a href="#element.thead" class="smpl">thead</a>&gt; element to contain the rows that will be the table's heading and optionally a &lt;<a href="#element.tfoot" class="smpl">tfoot</a>&gt; element to contain the rows of the table's footer. If the XML is converted to a representation that has page breaks (such
-                  as PDFs, or printed HTML), the header and footer are meant to appear on each page.
+               <p>Inside the &lt;<a href="#element.table" class="smpl">table</a>&gt; element is, optionally, a &lt;<a href="#element.thead" class="smpl">thead</a>&gt; element to contain the rows that will be the table's heading and, optionally, a &lt;<a href="#element.tfoot" class="smpl">tfoot</a>&gt; element to contain the rows of the table's footer. If the XML is converted to a representation that has page breaks (such
+                  as PDFs or printed HTML), the header and footer are meant to appear on each page.
                </p>
             </div>
             <div id="rfc.section.2.54.p.3">
@@ -4744,7 +4749,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.56.1"><a href="#rfc.section.2.56.1">2.56.1</a>&nbsp;<a href="#element.td.attribute.align">"align" Attribute</a></h4>
                <div id="rfc.section.2.56.1.p.1">
                   <p>Controls whether the content of the cell appears left justified (default), centered, or right justified. Note that "center"
-                     or "right" probably only work well in cells with plain text; any other elements might make the contents render badly.
+                     or "right" will probably only work well in cells with plain text; any other elements might make the contents render badly.
                   </p>
                </div>
                <div id="rfc.section.2.56.1.p.2" class="avoidbreakafter">
@@ -4923,7 +4928,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.58.1"><a href="#rfc.section.2.58.1">2.58.1</a>&nbsp;<a href="#element.th.attribute.align">"align" Attribute</a></h4>
                <div id="rfc.section.2.58.1.p.1">
                   <p>Controls whether the content of the cell appears left justified (default), centered, or right justified. Note that "center"
-                     or "right" probably only work well in cells with plain text; any other elements might make the contents render badly.
+                     or "right" will probably only work well in cells with plain text; any other elements might make the contents render badly.
                   </p>
                </div>
                <div id="rfc.section.2.58.1.p.2" class="avoidbreakafter">
@@ -5144,7 +5149,7 @@ blockquote > * .bcp14 {
             <section id="element.ul.attribute.empty">
                <h4 id="rfc.section.2.63.2"><a href="#rfc.section.2.63.2">2.63.2</a>&nbsp;<a href="#element.ul.attribute.empty">"empty" Attribute</a></h4>
                <div id="rfc.section.2.63.2.p.1">
-                  <p>Defines whether or not the label is empty. empty="true" indicates that no label be shown.</p>
+                  <p>Defines whether or not the label is empty. empty="true" indicates that no label will be shown.</p>
                </div>
                <div id="rfc.section.2.63.2.p.2" class="avoidbreakafter">
                   <p>Allowed values:</p>
@@ -5242,7 +5247,7 @@ blockquote > * .bcp14 {
                   <p><span id="rfc.iref.x.16"></span> "counter" 
                   </p>
                   <ul class="empty">
-                     <li>The "derivedContent" attribute will contain just a counter. This is used for targets that are &lt;<a href="#element.section" class="smpl">section</a>&gt;, &lt;<a href="#element.figure" class="smpl">figure</a>&gt;, &lt;<a href="#element.table" class="smpl">table</a>&gt;, or item in an ordered list. Using "format='counter'" where the target is any other type of element is an error.
+                     <li>The "derivedContent" attribute will contain just a counter. This is used for targets that are &lt;<a href="#element.section" class="smpl">section</a>&gt;, &lt;<a href="#element.figure" class="smpl">figure</a>&gt;, &lt;<a href="#element.table" class="smpl">table</a>&gt;, or items in an ordered list. Using "format='counter'" where the target is any other type of element is an error.
                      </li>
                      <li>For example, with an input of: <span id="rfc.figure.u.18"><pre>      &lt;section anchor="overview"&gt;Protocol Overview&lt;/section&gt;
       . . .
@@ -5250,7 +5255,8 @@ blockquote > * .bcp14 {
       for an overview.
 </pre></span> 
                      </li>
-                     <li>An HTML formatter might generate "See Section &lt;a href="#overview"&gt;1.7&lt;/a&gt; for an overview.".</li>
+                     <li>An HTML formatter might generate:</li>
+                     <li>See Section &lt;a href="#overview"&gt;1.7&lt;/a&gt; for an overview.</li>
                   </ul>
                </div>
                <div id="rfc.section.2.66.1.p.3">
@@ -5266,7 +5272,8 @@ blockquote > * .bcp14 {
       See &lt;xref target="overview"/&gt; for an overview.
 </pre></span> 
                      </li>
-                     <li>An HTML formatter might generate "See &lt;a href="#overview"&gt;Section 1.7&lt;/a&gt; for an overview.".</li>
+                     <li>An HTML formatter might generate:</li>
+                     <li>See &lt;a href="#overview"&gt;Section 1.7&lt;/a&gt; for an overview.</li>
                   </ul>
                </div>
                <div id="rfc.section.2.66.1.p.4">
@@ -5312,7 +5319,7 @@ blockquote > * .bcp14 {
                <h4 id="rfc.section.2.66.3"><a href="#rfc.section.2.66.3">2.66.3</a>&nbsp;<a href="#element.xref.attribute.target">"target" Attribute <em>(Mandatory)</em> </a></h4>
                <div id="rfc.section.2.66.3.p.1">
                   <p>Identifies the document component being referenced. The value needs to match the value of the "anchor" attribute of an element
-                     in the document, otherwise it is an error.
+                     in the document; otherwise, it is an error.
                   </p>
                </div>
             </section>
@@ -9387,7 +9394,10 @@ start |= rfc
                      <li><em>RFC2026</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC2026.1">2.26</a>, <a href="#RFC2026"><b>9.2</b></a>, <a href="#rfc.xref.RFC2026.2">A.1.2.4</a></li>
                      <li><em>RFC2397</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC2397.1">2.5.6</a>, <a href="#RFC2397"><b>9.2</b></a></li>
                      <li><em>RFC2629</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC2629.1">1</a>, <a href="#RFC2629"><b>9.2</b></a></li>
-                     <li><em>RFC3339</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC3339.1">2.45.9</a>, <a href="#RFC3339"><b>9.2</b></a></li>
+                     <li><em>RFC3339</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC3339.1">2.45.9</a>, <a href="#RFC3339"><b>9.2</b></a><ul>
+                           <li><em>Section 5.6</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC3339.1">2.45.9</a></li>
+                        </ul>
+                     </li>
                      <li><em>RFC3470</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC3470.1">7</a>, <a href="#RFC3470"><b>9.2</b></a><ul>
                            <li><em>Section 7</em>&nbsp;&nbsp;<a href="#rfc.xref.RFC3470.1">7</a></li>
                         </ul>
