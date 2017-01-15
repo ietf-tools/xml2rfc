@@ -4336,10 +4336,10 @@ Appendix B.  The v3 Format and Processing Tools
       "prepared document".  The prepared document is a valid v3
       document.  The prep tool is described in [RFC7998].
 
-   o  The prep tool is expected to have many modes:
+      The prep tool is expected to have many modes:
 
       *  RFC mode -- The mode used by the RFC Editor to process the
-         input from one of the RFC streams, and to process XML produced
+         input from one of the RFC streams and to process XML produced
          during the RFC editing process.  The restrictions on the
          canonical XML for RFCs, as well as how the non-canonical
          formats will look, are described at <https://
@@ -4369,10 +4369,10 @@ Appendix B.  The v3 Format and Processing Tools
    There may also be processing tools that are meant to run on the
    computers of authors.  These tools may be used to produce interim
    versions of the non-canonical representations so that authors can see
-   how their XML might later be rendered; to create documents in
-   representations different than those supported by the RFC Editor; to
+   how their XML might later be rendered, to create documents in
+   representations different than those supported by the RFC Editor, to
    possibly create documents that are not meant to be Internet-Drafts or
-   RFCs; and to convert XML that has external information into XML that
+   RFCs, and to convert XML that has external information into XML that
    has that external information included.
 
    The prep tool is expected to have clear error reporting, giving more
@@ -4381,7 +4381,7 @@ Appendix B.  The v3 Format and Processing Tools
    format.
 
    In v2, the grammar was specified as a DTD.  In v3, the grammar is
-   specified only as Relax Next Generation (RNG).  This means that tools
+   specified only as RELAX Next Generation (RNG).  This means that tools
    need to work from the RNG, not from a DTD.  Some of the features of
    the v3 grammar cannot be specified as a DTD.
 
@@ -4389,7 +4389,7 @@ B.1.  Including External Text with XInclude
 
    All tools for the v3 format are expected to support XInclude
    [XInclude].  XInclude specifies a processing model and syntax for
-   general purpose inclusion of information that is either on the
+   general-purpose inclusion of information that is either on the
    Internet or local to the user's computer.
 
    In the v3 syntax, XInclude is expressed as the <xi:include> element.
@@ -4402,7 +4402,7 @@ B.1.  Including External Text with XInclude
 
    The most common way to use <xi:include> is to pull in references that
    are already formed as XML.  Currently, this can be done from
-   xml2rfc.tools.ietf.org, but later is expected to be from the RFC
+   xml2rfc.tools.ietf.org, but later this is expected to be from the RFC
    Editor.  For example, if a document has three normative references,
    all RFCs, the document might contain:
 
@@ -4418,7 +4418,7 @@ B.1.  Including External Text with XInclude
    <xi:include> can be used anywhere an XML element could be used (but
    not where free text is used).  For example, if three Internet-Drafts
    are all including a particular paragraph or section verbatim, that
-   text can be kept either in a file or somewhere on the web, and be
+   text can be kept either in a file or somewhere on the web and can be
    included with <xi:include>.  An example of pulling something from the
    local disk would be:
 
@@ -4432,9 +4432,9 @@ B.2.  Anchors and IDs
    People writing and reading Internet-Drafts and RFCs often want to
    make reference to specific locations in those documents.  In the case
    of RFC authors, it is common to want to reference another part of
-   their document, such as "see Section 3.2 of this document".  Readers,
-   on the other hand, want to reference part of documents that they
-   didn't write, such as "see Section 3.2 of RFC 6949".  The XML
+   their document, such as "see Section 3.2 of this document."  Readers,
+   on the other hand, want to reference parts of documents that they
+   didn't write, such as "see Section 3.2 of RFC 6949."  The XML
    vocabulary in this document attempts to support both sets of people.
 
    Authors can leave anchors in a document that can later be used for
@@ -4446,7 +4446,7 @@ B.2.  Anchors and IDs
    that attribute.  Note, however, that most of the time, elements won't
    have anchors.  In the common case, the reader wants to refer to an
    element that does not have an "anchor" attribute, but that element
-   has "pn" attribute.
+   has a "pn" attribute.
 
    Processing tools add the "pn" attribute to many elements during
    processing.  This attribute and its value are automatically generated
@@ -4551,7 +4551,7 @@ B.3.  Attributes Controlled by the Prep Tool
       attribute.
 
    o  <rfc> "expiresDate" attribute -- This attribute is filled with the
-      date that an Internet Draft expires.  The date is in the format
+      date that an Internet-Draft expires.  The date is in the format
       yyyy-mm-dd.
 
    o  <rfc> "mode" attribute -- This attribute is filled with a string
@@ -4571,11 +4571,11 @@ B.3.  Attributes Controlled by the Prep Tool
 
    o  <xref> "derivedContent" attribute -- This attribute is filled in
       if there is no content in the <xref> element.  The value for this
-      attribute based on the value in the "displayFormat" attribute.
-      Examples of how this value is filled can be found at
+      attribute is based on the value in the "displayFormat" attribute.
+      Examples of how this value is filled can be found in
       Section 2.66.1.
 
-   In addition, note that the contents of the <boilerplate> element is
+   In addition, note that the contents of the <boilerplate> element are
    controlled by the prep tool.
 
 Appendix C.  Relax NG Schema

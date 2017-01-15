@@ -6383,18 +6383,17 @@ have descriptions of how a processing tool might create output from the element.
 
 <t>The expected design of the tools that will be used with v3 documents includes:
 
+
 <list style="symbols">
 
 <t>A "prep tool" that takes a v3 document, makes many checks, adds and changes many attribute
 values, and creates a file that is a "prepared document". The prepared document is a valid v3
-document. The prep tool is described in <xref target="RFC7998"/>.</t>
-
-<t>The prep tool is expected to have many modes:
+document. The prep tool is described in <xref target="RFC7998"/>.<vspace blankLines="1"/>The prep tool is expected to have many modes:
 
 <list>
 
 <t>RFC mode -- The mode used by the RFC Editor to process the input from one of
-the RFC streams, and to process XML produced during the RFC editing process.
+the RFC streams and to process XML produced during the RFC editing process.
 The restrictions on the canonical XML for RFCs, as well as how the non-canonical formats
 will look, are described at
 &lt;https://www.rfc-editor.org/rse/wiki/doku.php?id=design:format-and-content-rfcs&gt;.</t>
@@ -6420,9 +6419,9 @@ The IETF tools are expected to take prepared documents as input.</t>
 
 <t>There may also be processing tools that are meant to run on the computers of
 authors. These tools may be used to produce interim versions of the non-canonical representations
-so that authors can see how their XML might later be rendered; to
-create documents in representations different than those supported by the RFC Editor;
-to possibly create documents that are not meant to be Internet-Drafts or RFCs;
+so that authors can see how their XML might later be rendered, to
+create documents in representations different than those supported by the RFC Editor,
+to possibly create documents that are not meant to be Internet-Drafts or RFCs,
 and to convert XML that has external information into XML that has that external information
 included.</t>
 
@@ -6430,14 +6429,14 @@ included.</t>
 context than just a line number. For example, the error messages should differentiate between
 errors in XML and those from the v3 format.</t>
 
-<t>In v2, the grammar was specified as a DTD. In v3, the grammar is specified only as Relax
+<t>In v2, the grammar was specified as a DTD. In v3, the grammar is specified only as RELAX
 Next Generation (RNG). This means that tools need to work from the RNG, not from a DTD.
 Some of the features of the v3 grammar cannot be specified as a DTD.</t>
 
 <section anchor="includingexternal" title="Including External Text with XInclude">
 
 <t>All tools for the v3 format are expected to support XInclude <xref target="XInclude"/>.
-XInclude specifies a processing model and syntax for general purpose inclusion of information
+XInclude specifies a processing model and syntax for general-purpose inclusion of information
 that is either on the Internet or local to the user's computer.</t>
 
 <t>
@@ -6449,7 +6448,7 @@ xmlns:xi="http://www.w3.org/2001/XInclude"
 as one of the attributes in the &lt;<xref target="element.rfc" format="none">rfc</xref>&gt; element.</t>
 
 <t>The most common way to use &lt;xi:include&gt; is to pull in references
-that are already formed as XML. Currently, this can be done from xml2rfc.tools.ietf.org, but later is
+that are already formed as XML. Currently, this can be done from xml2rfc.tools.ietf.org, but later this is
 expected to be from the RFC Editor. For example, if a document has three normative
 references, all RFCs, the document might contain:
 <figure><artwork><![CDATA[
@@ -6466,7 +6465,7 @@ references, all RFCs, the document might contain:
 
 <t>&lt;xi:include&gt; can be used anywhere an XML element could be used (but not where
 free text is used). For example, if three Internet-Drafts are all including a particular paragraph
-or section verbatim, that text can be kept either in a file or somewhere on the web, and be
+or section verbatim, that text can be kept either in a file or somewhere on the web and can be
 included with &lt;xi:include&gt;. An example of pulling something from the local disk would
 be:
 <figure><artwork><![CDATA[
@@ -6486,8 +6485,8 @@ that allow external inclusions.
 <t>People writing and reading Internet-Drafts and RFCs often want to make reference to
 specific locations in those documents. In the case of RFC authors, it is common
 to want to reference another part of their document, such as "see Section 3.2 of this
-document". Readers, on the other hand, want to reference part of documents that they
-didn't write, such as "see Section 3.2 of RFC 6949".
+document." Readers, on the other hand, want to reference parts of documents that they
+didn't write, such as "see Section 3.2 of RFC 6949."
 The XML vocabulary in this document attempts to support both sets of people.</t>
 
 <t>Authors can leave anchors in a document that can later be used for references with the "anchor"
@@ -6497,7 +6496,7 @@ element.</t>
 
 <t>Readers can refer to any element that has an "anchor" attribute by that attribute. Note, however,
 that most of the time, elements won't have anchors. In the common case, the reader wants to refer to
-an element that does not have an "anchor" attribute, but that element has "pn" attribute.</t>
+an element that does not have an "anchor" attribute, but that element has a "pn" attribute.</t>
 
 <t>Processing tools add the "pn" attribute to many elements during processing. This attribute and
 its value are automatically generated by the tool if the attribute is not there; if the
@@ -6598,8 +6597,8 @@ both names and numbers.</t>
 from combining the URI from the reference and the relative part that is either a copy of the
 "relative" attribute or a section number derived from the "section" attribute.</t>
 
-<t>&lt;rfc&gt; "expiresDate" attribute -- This attribute is filled with the date that an Internet
-Draft expires. The date is in the format yyyy-mm-dd.</t>
+<t>&lt;rfc&gt; "expiresDate" attribute -- This attribute is filled with the date that an Internet-Draft
+expires. The date is in the format yyyy-mm-dd.</t>
 
 <t>&lt;rfc&gt; "mode" attribute -- This attribute is filled with a string that indicates what
 mode the prep tool was in when it processed the XML, such as whether it was processing a file
@@ -6614,15 +6613,15 @@ characters in it, the value might be "Common,Latin,Han". </t>
 the "src" attribute if that attribute is removed by the prep tool.</t>
 
 <t>&lt;xref&gt; "derivedContent" attribute -- This attribute is filled in if there is no content in
-the &lt;xref&gt; element.  The value for this attribute based on the value in the "displayFormat"
+the &lt;xref&gt; element.  The value for this attribute is based on the value in the "displayFormat"
 attribute.
-Examples of how this value is filled can be found at <xref target="element.xref.attribute.format"/>.
+Examples of how this value is filled can be found in <xref target="element.xref.attribute.format"/>.
 </t>
 
 </list></t>
 
 <t>In addition, note that the contents of the &lt;boilerplate&gt; element
-is controlled by the prep tool.</t>
+are controlled by the prep tool.</t>
 
 </section>
 

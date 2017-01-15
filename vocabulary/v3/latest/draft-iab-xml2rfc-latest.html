@@ -6277,14 +6277,15 @@ Using CDATA:
          <div id="rfc.section.B.p.2">
             <p>The expected design of the tools that will be used with v3 documents includes: </p>
             <ul>
-               <li>A "prep tool" that takes a v3 document, makes many checks, adds and changes many attribute values, and creates a file that
-                  is a "prepared document". The prepared document is a valid v3 document. The prep tool is described in <a href="#RFC7998" id="rfc.xref.RFC7998.2"><cite title="&#34;xml2rfc&#34; Version 3 Preparation Tool Description">[RFC7998]</cite></a>.
-               </li>
-               <li>The prep tool is expected to have many modes: 
+               <li>
+                  <p>A "prep tool" that takes a v3 document, makes many checks, adds and changes many attribute values, and creates a file that
+                     is a "prepared document". The prepared document is a valid v3 document. The prep tool is described in <a href="#RFC7998" id="rfc.xref.RFC7998.2"><cite title="&#34;xml2rfc&#34; Version 3 Preparation Tool Description">[RFC7998]</cite></a>.
+                  </p>
+                  <p>The prep tool is expected to have many modes: </p>
                   <ul>
-                     <li>RFC mode -- The mode used by the RFC Editor to process the input from one of the RFC streams, and to process XML produced
-                        during the RFC editing process. The restrictions on the canonical XML for RFCs, as well as how the non-canonical formats will
-                        look, are described at &lt;https://www.rfc-editor.org/rse/wiki/doku.php?id=design:format-and-content-rfcs&gt;.
+                     <li>RFC mode -- The mode used by the RFC Editor to process the input from one of the RFC streams and to process XML produced during
+                        the RFC editing process. The restrictions on the canonical XML for RFCs, as well as how the non-canonical formats will look,
+                        are described at &lt;https://www.rfc-editor.org/rse/wiki/doku.php?id=design:format-and-content-rfcs&gt;.
                      </li>
                      <li>Draft mode -- The mode used by the Internet-Draft submission tool. The restrictions for the XML from this mode will be described
                         later.
@@ -6298,16 +6299,18 @@ Using CDATA:
                      </li>
                   </ul>
                </li>
-               <li>Formatting tools that will create HTML, PDF, plain text, and possibly other output formats. These formatters will be created
-                  by the IETF, but others can create such tools as well. The IETF tools are expected to take prepared documents as input.
+               <li>
+                  <p>Formatting tools that will create HTML, PDF, plain text, and possibly other output formats. These formatters will be created
+                     by the IETF, but others can create such tools as well. The IETF tools are expected to take prepared documents as input.
+                  </p>
                </li>
             </ul>
          </div>
          <div id="rfc.section.B.p.3">
             <p>There may also be processing tools that are meant to run on the computers of authors. These tools may be used to produce interim
-               versions of the non-canonical representations so that authors can see how their XML might later be rendered; to create documents
-               in representations different than those supported by the RFC Editor; to possibly create documents that are not meant to be
-               Internet-Drafts or RFCs; and to convert XML that has external information into XML that has that external information included.
+               versions of the non-canonical representations so that authors can see how their XML might later be rendered, to create documents
+               in representations different than those supported by the RFC Editor, to possibly create documents that are not meant to be
+               Internet-Drafts or RFCs, and to convert XML that has external information into XML that has that external information included.
             </p>
          </div>
          <div id="rfc.section.B.p.4">
@@ -6316,14 +6319,14 @@ Using CDATA:
             </p>
          </div>
          <div id="rfc.section.B.p.5">
-            <p>In v2, the grammar was specified as a DTD. In v3, the grammar is specified only as Relax Next Generation (RNG). This means
+            <p>In v2, the grammar was specified as a DTD. In v3, the grammar is specified only as RELAX Next Generation (RNG). This means
                that tools need to work from the RNG, not from a DTD. Some of the features of the v3 grammar cannot be specified as a DTD.
             </p>
          </div>
          <section id="includingexternal">
             <h3 id="rfc.section.B.1"><a href="#rfc.section.B.1">B.1</a>&nbsp;<a href="#includingexternal">Including External Text with XInclude</a></h3>
             <div id="rfc.section.B.1.p.1">
-               <p>All tools for the v3 format are expected to support XInclude <a href="#XInclude" id="rfc.xref.XInclude.1"><cite title="XML Inclusions (XInclude) Version 1.0 (Second Edition)">[XInclude]</cite></a>. XInclude specifies a processing model and syntax for general purpose inclusion of information that is either on the Internet
+               <p>All tools for the v3 format are expected to support XInclude <a href="#XInclude" id="rfc.xref.XInclude.1"><cite title="XML Inclusions (XInclude) Version 1.0 (Second Edition)">[XInclude]</cite></a>. XInclude specifies a processing model and syntax for general-purpose inclusion of information that is either on the Internet
                   or local to the user's computer.
                </p>
             </div>
@@ -6336,7 +6339,7 @@ Using CDATA:
             </div>
             <div id="rfc.section.B.1.p.3">
                <p>The most common way to use &lt;xi:include&gt; is to pull in references that are already formed as XML. Currently, this can be done
-                  from xml2rfc.tools.ietf.org, but later is expected to be from the RFC Editor. For example, if a document has three normative
+                  from xml2rfc.tools.ietf.org, but later this is expected to be from the RFC Editor. For example, if a document has three normative
                   references, all RFCs, the document might contain: 
                </p><span id="rfc.figure.u.22"><pre>&lt;references&gt;
     &lt;xi:include href="http://xml2rfc.tools.ietf.org/public/rfc/
@@ -6349,8 +6352,8 @@ Using CDATA:
 </pre></span></div>
             <div id="rfc.section.B.1.p.4">
                <p>&lt;xi:include&gt; can be used anywhere an XML element could be used (but not where free text is used). For example, if three Internet-Drafts
-                  are all including a particular paragraph or section verbatim, that text can be kept either in a file or somewhere on the web,
-                  and be included with &lt;xi:include&gt;. An example of pulling something from the local disk would be: 
+                  are all including a particular paragraph or section verbatim, that text can be kept either in a file or somewhere on the web
+                  and can be included with &lt;xi:include&gt;. An example of pulling something from the local disk would be: 
                </p><span id="rfc.figure.u.23"><pre>&lt;x:include href="file://home/chris/ietf/drafts/commontext.xml"/&gt;
 </pre></span></div>
             <div id="rfc.section.B.1.p.5">
@@ -6364,8 +6367,8 @@ Using CDATA:
             <div id="rfc.section.B.2.p.1">
                <p>People writing and reading Internet-Drafts and RFCs often want to make reference to specific locations in those documents.
                   In the case of RFC authors, it is common to want to reference another part of their document, such as "see Section 3.2 of
-                  this document". Readers, on the other hand, want to reference part of documents that they didn't write, such as "see Section
-                  3.2 of RFC 6949". The XML vocabulary in this document attempts to support both sets of people.
+                  this document." Readers, on the other hand, want to reference parts of documents that they didn't write, such as "see Section
+                  3.2 of RFC 6949." The XML vocabulary in this document attempts to support both sets of people.
                </p>
             </div>
             <div id="rfc.section.B.2.p.2">
@@ -6376,7 +6379,7 @@ Using CDATA:
             <div id="rfc.section.B.2.p.3">
                <p>Readers can refer to any element that has an "anchor" attribute by that attribute. Note, however, that most of the time, elements
                   won't have anchors. In the common case, the reader wants to refer to an element that does not have an "anchor" attribute,
-                  but that element has "pn" attribute.
+                  but that element has a "pn" attribute.
                </p>
             </div>
             <div id="rfc.section.B.2.p.4">
@@ -6452,7 +6455,7 @@ Using CDATA:
                      reference and the relative part that is either a copy of the "relative" attribute or a section number derived from the "section"
                      attribute.
                   </li>
-                  <li>&lt;rfc&gt; "expiresDate" attribute -- This attribute is filled with the date that an Internet Draft expires. The date is in the
+                  <li>&lt;rfc&gt; "expiresDate" attribute -- This attribute is filled with the date that an Internet-Draft expires. The date is in the
                      format yyyy-mm-dd.
                   </li>
                   <li>&lt;rfc&gt; "mode" attribute -- This attribute is filled with a string that indicates what mode the prep tool was in when it processed
@@ -6465,12 +6468,12 @@ Using CDATA:
                      is removed by the prep tool.
                   </li>
                   <li>&lt;xref&gt; "derivedContent" attribute -- This attribute is filled in if there is no content in the &lt;xref&gt; element. The value for
-                     this attribute based on the value in the "displayFormat" attribute. Examples of how this value is filled can be found at <a href="#element.xref.attribute.format" title="&#34;format&#34; Attribute">Section&nbsp;2.66.1</a>.
+                     this attribute is based on the value in the "displayFormat" attribute. Examples of how this value is filled can be found in <a href="#element.xref.attribute.format" title="&#34;format&#34; Attribute">Section&nbsp;2.66.1</a>.
                   </li>
                </ul>
             </div>
             <div id="rfc.section.B.3.p.3">
-               <p>In addition, note that the contents of the &lt;boilerplate&gt; element is controlled by the prep tool.</p>
+               <p>In addition, note that the contents of the &lt;boilerplate&gt; element are controlled by the prep tool.</p>
             </div>
          </section>
       </section>
