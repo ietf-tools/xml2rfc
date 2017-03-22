@@ -41,7 +41,7 @@ for my $DOIref (@DOIrefs) {
     #        convert to appropriate format
     #        save in cache
     # print STDERR "DOIref=$DOIref\n";
-    if ($DOIref =~ m(^/?reference.DOI[.](\d+[.]\d+)[/._](\d+[.]\d+)[.](xml|kramdown)$)) {
+    if ($DOIref =~ m(^/?reference.DOI[.](\d+[.][^/_]+)[/_]([^/]+)[.](xml|kramdown)$)) {
 	my $DOIpt1 = $1;
 	my $DOIpt2 = $2;
 	my $type = $3;
