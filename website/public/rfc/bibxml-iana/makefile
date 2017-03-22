@@ -19,8 +19,8 @@ DERIVATIVES= index.cgi
 
 all: $(DERIVATIVES)
 
-index.cgi: nph-index.cgi
-	sed 's/nph = 1;/nph = undef;/' < nph-index.cgi > index.cgi
+index.cgi: nph-index.cgi makefile
+	sed 's/nph = 1;/nph = undef;/' < nph-index.cgi > index.cgi && chmod a+x index.cgi
 
 install: all
 	@for i in $(INS) $(DERIVATIVES); do \
@@ -57,8 +57,9 @@ test-install: all
 	    fi; \
 	done
 
-test:
-	./index.cgi reference-DOI.10.1145/1355734.1355746.xml
+test: index.cgi
+	./index.cgi reference-IANA.ancp.xml
+	./index.cgi reference-IANA.application/samlassertion.xml
 
 clean:
-	rm -f *~
+	rm -f *~ $(DERIVATIVES)

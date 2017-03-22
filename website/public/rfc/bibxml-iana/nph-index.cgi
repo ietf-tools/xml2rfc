@@ -45,7 +45,6 @@ for my $IANAref (@IANArefs) {
 	my $IANAref = $1;
 	my $type = $2;
 	# print STDERR "IANAref=$IANAref type=$3\n";
-	my $opt = $type eq 'xml' ? "x" : "h";
 	print "HTTP/1.0 200 OK\n" if $nph;
 	print "Content-Type: text/$type\n\n";
 	my $CACHEDIR = "/var/tmp/iana-cache";
@@ -72,33 +71,38 @@ for my $IANAref (@IANArefs) {
 
 	    my $a = get("http://www.iana.org/assignments/$IANAref/");
 
-	    # print STDERR "a=====\n$a\n====\n";
-	    # print STDERR "====\n";
-	    $a =~ m(<title>([^<]*)</title>)m;
-	    my $title = $1;
-
-	    # print STDERR "title=$title\n";
-	    if ($title =~ /page not found/i) {
-		printNotFound();
+	    if (!defined($a)) {
+	       printNotFound();
 	    } else {
-		my $anchor = mungeAnchor($IANAref);
+	       # print STDERR "a=====\n$a\n====\n";
+	       # print STDERR "====\n";
+	       $a =~ m(<title>([^<]*)</title>)m;
+	       my $title = $1;
 
-		my $ref = "<reference anchor='$anchor' target='http://www.iana.org/assignments/$IANAref'>\n" .
-		    "<front>\n" .
-		    "<title>$title</title>\n" .
-		    "<author><organization>IANA</organization></author>\n" .
-		    "</front>\n" .
-		    "</reference>\n";
-		
-		if (!open(TMP, ">", $TMP)) {
-		    print STDERR "Cannot create $TMP: $!\n";
-		} else {
-		    print TMP $ref;
-		}
+	       # print STDERR "title=$title\n";
+	       if ($title =~ /page not found/i) {
+		   printNotFound();
+	       } else {
+		   my $anchor = mungeAnchor($IANAref);
 
-		$ref = replaceAnchor($ref, $type, $replacementAnchor);
-		print $ref;
-	    }
+		   my $ref = "<reference anchor='$anchor' target='http://www.iana.org/assignments/$IANAref'>\n" .
+		       "<front>\n" .
+		       "<title>$title</title>\n" .
+		       "<author><organization>IANA</organization></author>\n" .
+		       "<date/>\n" .
+		       "</front>\n" .
+		       "</reference>\n";
+		   
+		   if (!open(TMP, ">", $TMP)) {
+		       print STDERR "Cannot create $TMP: $!\n";
+		   } else {
+		       print TMP $ref;
+		   }
+
+		   $ref = replaceAnchor($ref, $type, $replacementAnchor);
+		   print $ref;
+	       }
+	   }
 	}
     } else {
 	printNotFound();
