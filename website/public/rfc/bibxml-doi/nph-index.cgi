@@ -47,8 +47,6 @@ for my $DOIref (@DOIrefs) {
 	my $type = $3;
 	# print STDERR "DOIpt1=$DOIpt1 DOIpt2=$DOIpt2 type=$3\n";
 	my $opt = $type eq 'xml' ? "x" : "h";
-	print "HTTP/1.0 200 OK\n" if $nph;
-	print "Content-Type: text/$type\n\n";
 	my $CACHEDIR = "/var/tmp/doi-cache";
 	my $TMP = "$CACHEDIR/reference.DOI_${DOIpt1}_${DOIpt2}.${type}";
 	# print STDERR "-s $TMP=" . (-s $TMP) . ", -M $TMP=" . (-M _);
@@ -62,6 +60,8 @@ for my $DOIref (@DOIrefs) {
 		my $ref = <TMP>;
 		close TMP;
 		$ref = replaceAnchor($ref, $type, $replacementAnchor);
+		print "HTTP/1.0 200 OK\n" if $nph;
+		print "Content-Type: text/$type\n\n";
 		print $ref;
 		$printed = 1
 	    }
@@ -71,19 +71,17 @@ for my $DOIref (@DOIrefs) {
 	    mkdir($CACHEDIR);
 	    print STDERR "Running: doilit -$opt=DOI_${DOIpt1}_${DOIpt2} ${DOIpt1}/${DOIpt2}";
 	    my $ref = `doilit -$opt=DOI_${DOIpt1}_${DOIpt2} ${DOIpt1}/${DOIpt2} | tee "$TMP.tmp";mv "$TMP.tmp" "$TMP"`;
-	    if (!open(TMP, ">", $TMP)) {
-		print STDERR "Cannot create $TMP: $!\n";
+	    if ($ref eq '') {
+		printNotFound();
 	    } else {
-		print TMP $ref;
+		$ref = replaceAnchor($ref, $type, $replacementAnchor);
+		print "HTTP/1.0 200 OK\n" if $nph;
+		print "Content-Type: text/$type\n\n";
+		print $ref;
 	    }
-
-	    $ref = replaceAnchor($ref, $type, $replacementAnchor);
-	    print $ref;
 	}
     } else {
-	print "HTTP/1.0 404 NOT FOUND\n" if $nph;
-	print "Content-type: text/plain\n\n";
-	print "invalid DOI or type\n";
+	printNotFound();
     }
 }
 
@@ -105,4 +103,10 @@ sub replaceAnchor {
 	}
     }
     return $ref;    
+}
+
+sub printNotFound {
+    print "HTTP/1.0 404 NOT FOUND\n" if $nph;
+    print "Content-type: text/plain\n\n";
+    print "invalid DOI or type\n";
 }
