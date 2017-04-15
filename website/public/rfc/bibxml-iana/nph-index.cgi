@@ -45,8 +45,6 @@ for my $IANAref (@IANArefs) {
 	my $IANAref = $1;
 	my $type = $2;
 	# print STDERR "IANAref=$IANAref type=$3\n";
-	print "HTTP/1.0 200 OK\n" if $nph;
-	print "Content-Type: text/$type\n\n";
 	my $CACHEDIR = "/var/tmp/iana-cache";
 	my $TMP = "$CACHEDIR/reference.IANA.${IANAref}.${type}";
 	# print STDERR "-s $TMP=" . (-s $TMP) . ", -M $TMP=" . (-M _);
@@ -60,6 +58,8 @@ for my $IANAref (@IANArefs) {
 		my $ref = <TMP>;
 		close TMP;
 		$ref = replaceAnchor($ref, $type, $replacementAnchor);
+		print "HTTP/1.0 200 OK\n" if $nph;
+		print "Content-Type: text/$type\n\n";
 		print $ref;
 		$printed = 1
 	    }
@@ -100,6 +100,8 @@ for my $IANAref (@IANArefs) {
 		   }
 
 		   $ref = replaceAnchor($ref, $type, $replacementAnchor);
+		   print "HTTP/1.0 200 OK\n" if $nph;
+		   print "Content-Type: text/$type\n\n";
 		   print $ref;
 	       }
 	   }

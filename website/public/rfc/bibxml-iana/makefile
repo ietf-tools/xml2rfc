@@ -58,8 +58,10 @@ test-install: all
 	done
 
 test: index.cgi
-	./index.cgi reference-IANA.ancp.xml
-	./index.cgi reference-IANA.application/samlassertion.xml
+	./nph-index.cgi reference-IANA.ancp.xml
+	./nph-index.cgi reference-IANA.application/samlassertion.xml
+	./nph-index.cgi reference-IANA.application.samlassertion.xml
+	./nph-index.cgi reference-IANA.cbor-tag.xml
 
 clean:
 	rm -f *~ $(DERIVATIVES)
