@@ -200,6 +200,7 @@ $ENV{SERVER_ADMIN} = 'tony@att.com';
 # $ENV{HOME} = "/home/tonyh";
 $ENV{LANG} = "en_US";
 $ENV{KRAMDOWN_SAFE} = "y";
+$ENV{KRAMDOWN_REFCACHEDIR} = "/var/tmp/.refcache";
 
 $ENV{XML_LIBRARY} = "$dir/web/public/rfc/bibxml";
 foreach my $bibxml (<$dir/web/public/rfc/bibxml?>) {
@@ -506,7 +507,7 @@ sub callXml2rfc {
 sub callKramdown {
     my $infile = shift;
     my $tmpout = getTempFileWithSuffix("xml");
-    my ($ret, $out, $err) = runCommand("/usr/local/bin/kramdown-rfc2629 $infile > $tmpout", $infile, $tmpout, "Running kramdown");
+    my ($ret, $out, $err) = runCommand("umask 0;/usr/local/bin/kramdown-rfc2629 $infile > $tmpout", $infile, $tmpout, "Running kramdown");
     $curfile = $tmpout;
     print "kramdown ret=$ret\n" if $debug;
     print "out='$out'\n" if $debug;
