@@ -95,6 +95,7 @@ $ENV{SERVER_ADMIN} = 'tony@att.com';
 # $ENV{HOME} = "/home/tonyh";
 $ENV{LANG} = "en_US";
 $ENV{KRAMDOWN_SAFE} = "y";
+$ENV{KRAMDOWN_REFCACHEDIR} = "/var/tmp/.refcache";
 
 my $newinputfn = setSubTempFile("$basename.mkd");
 my $ret = rename($inputfn, $newinputfn);
@@ -187,7 +188,7 @@ exit;
 sub callKramDown {
     my $suffix = shift;
     my $tmpout = getTempFileWithSuffix($suffix);
-    my ($ret, $out, $err) = runCommand("/usr/local/bin/kramdown-rfc2629 $curfile > $tmpout", $curfile, $tmpout, "Running kramdown-rfc2629");
+    my ($ret, $out, $err) = runCommand("umask 0;/usr/local/bin/kramdown-rfc2629 $curfile > $tmpout", $curfile, $tmpout, "Running kramdown-rfc2629");
     $curfile = $tmpout;
     print "kramdown-rfc2629 ret=$ret\n" if $debug;
     print "out='$out'\n" if $debug;
