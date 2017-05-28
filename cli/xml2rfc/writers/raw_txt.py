@@ -206,7 +206,7 @@ class RawTextRfcWriter(BaseRfcWriter):
                     bullet = self._format_counter(letter_style, t_count+1, listlength)
                 elif style == 'hanging':
                     bullet = element.attrib.get('hangText', '')
-                    if not hangIndent:
+                    if hangIndent is None:
                         hangIndent = 3
                     if len(bullet) < hangIndent:
                         # Insert whitespace up to hangIndent
