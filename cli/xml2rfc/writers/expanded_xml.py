@@ -6,6 +6,7 @@ import sys
 import lxml.etree
 import xml2rfc
 import datetime
+from optparse import Values
 
 class ExpandedXmlWriter:
     """ Writes a duplicate XML file but with all references expanded """
@@ -13,10 +14,11 @@ class ExpandedXmlWriter:
     # Note -- we don't need to subclass BaseRfcWriter because the behavior
     # is so different and so trivial
 
-    def __init__(self, xmlrfc, quiet=False, verbose=False, date=datetime.date.today()):
+    def __init__(self, xmlrfc, options=Values(defaults=dict(quiet=False, verbose=False)), date=datetime.date.today()):
         self.root = xmlrfc.getroot()
-        self.quiet = quiet
-        self.verbose = verbose
+        self.options = options
+        self.quiet = options.quiet
+        self.verbose = options.verbose
 
     def post_process_lines(self, lines):
         output = [ line.replace(u'\u00A0', ' ') for line in lines ]

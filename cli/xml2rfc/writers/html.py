@@ -10,6 +10,8 @@ import string
 import sys
 import datetime
 import cgi
+from optparse import Values
+
 try:
     import debug
     assert debug
@@ -31,8 +33,8 @@ class HtmlRfcWriter(BaseRfcWriter):
         'references_url': 'http://tools.ietf.org/html/',
     }
 
-    def __init__(self, xmlrfc, quiet=False, verbose=False, date=datetime.date.today(), templates_dir=None):
-        BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, date=date, verbose=verbose)
+    def __init__(self, xmlrfc, options=Values(defaults=dict(quiet=False, verbose=False)), date=datetime.date.today(), templates_dir=None):
+        BaseRfcWriter.__init__(self, xmlrfc, options=options)
         self.list_counters = {}
         self.iref_index = []
         self.nbws_cond = ' '    # Use space as they are in an anchor element anyway

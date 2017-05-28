@@ -4,6 +4,8 @@
 
 # Python libs
 import datetime
+from optparse import Values
+
 try:
     import debug
     assert debug
@@ -22,10 +24,9 @@ class PaginatedTextRfcWriter(RawTextRfcWriter):
         The page width is controlled by the *width* parameter.
     """
 
-    def __init__(self, xmlrfc, width=72, quiet=False, verbose=False, date=datetime.date.today(),
+    def __init__(self, xmlrfc, width=72, options=Values(defaults=dict(quiet=False, verbose=False)), date=datetime.date.today(),
                     omit_headers=False):
-        RawTextRfcWriter.__init__(self, xmlrfc, width=width, quiet=quiet, \
-                                  verbose=verbose, date=date)
+        RawTextRfcWriter.__init__(self, xmlrfc, options=options, date=date)
         self.left_header = ''
         self.center_header = ''
         self.right_header = ''

@@ -7,6 +7,8 @@ import textwrap
 import lxml
 import datetime
 import re
+from optparse import Values
+
 try:
     import debug
     assert debug
@@ -24,8 +26,8 @@ class RawTextRfcWriter(BaseRfcWriter):
         The page width is controlled by the *width* parameter.
     """
 
-    def __init__(self, xmlrfc, width=72, margin=3, quiet=False, verbose=False, date=datetime.date.today()):
-        BaseRfcWriter.__init__(self, xmlrfc, quiet=quiet, verbose=verbose, date=date)
+    def __init__(self, xmlrfc, width=72, margin=3, options=Values(defaults=dict(quiet=False, verbose=False)), date=datetime.date.today()):
+        BaseRfcWriter.__init__(self, xmlrfc, options=options, date=date)
         # Document processing data
         self.width = width      # Page width
         self.margin = margin    # Page margin
@@ -36,7 +38,7 @@ class RawTextRfcWriter(BaseRfcWriter):
         self.list_counters = {} # Maintain counters for 'format' type lists
         self.edit_counter = 0   # Counter for edit marks
         # Set this to False to permit utf+8 output:
-        self.ascii = True       # Enable ascii flag
+        self.ascii = not options.utf8       # Enable ascii flag
         self.cref_counter = 0   # Counter for cref anchors
         self.cref_list = []
 
@@ -163,7 +165,7 @@ class RawTextRfcWriter(BaseRfcWriter):
             # Check for optional hangIndent
             try:
                 hangIndent = list.attrib.get('hangIndent', None)
-                if hangIndent:
+                if hangIndent != None:
                     hangIndent = int(hangIndent)
             except (ValueError, TypeError):
                 xml2rfc.log.error("hangIndent value '%s' is not an integer" % hangIndent)

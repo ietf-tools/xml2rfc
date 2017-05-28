@@ -68,6 +68,8 @@ def main():
                             help='don\'t use the network to resolve references', default=False)
     plain_options.add_option('-q', '--quiet', action='store_true',
                             dest='quiet', help='dont print anything')
+    plain_options.add_option('-u', '--utf8', action='store_true',
+                            dest='utf8', help='generate utf8 output')
     plain_options.add_option('-v', '--verbose', action='store_true',
                             dest='verbose', help='print extra information')
     plain_options.add_option('-V', '--version', action='callback',
@@ -194,8 +196,7 @@ def main():
             # parsing.
             new_xmlrfc = parser.parse(remove_comments=False, quiet=True)
             expwriter = xml2rfc.ExpandedXmlWriter(new_xmlrfc,
-                                                  quiet=options.quiet,
-                                                  verbose=options.verbose,
+                                                  options=options,
                                                   date=options.date)
             filename = options.output_filename
             if not filename:
@@ -203,8 +204,7 @@ def main():
             expwriter.write(filename)
         if options.html:
             htmlwriter = xml2rfc.HtmlRfcWriter(xmlrfc,
-                                               quiet=options.quiet,
-                                               verbose=options.verbose,
+                                               options=options,
                                                date=options.date,
                                                templates_dir=globals().get('_TEMPLATESPATH', None))
             filename = options.output_filename
@@ -213,8 +213,7 @@ def main():
             htmlwriter.write(filename)
         if options.raw:
             rawwriter = xml2rfc.RawTextRfcWriter(xmlrfc,
-                                                 quiet=options.quiet,
-                                                 verbose=options.verbose,
+                                                 options=options,
                                                  date=options.date)
             filename = options.output_filename
             if not filename:
@@ -222,8 +221,7 @@ def main():
             rawwriter.write(filename)
         if options.text:
             pagedwriter = xml2rfc.PaginatedTextRfcWriter(xmlrfc,
-                                                         quiet=options.quiet,
-                                                         verbose=options.verbose,
+                                                         options=options,
                                                          date=options.date,
                                                          omit_headers=options.omit_headers,
                                                      )
@@ -233,8 +231,7 @@ def main():
             pagedwriter.write(filename)
         if options.nroff:
             nroffwriter = xml2rfc.NroffRfcWriter(xmlrfc,
-                                                 quiet=options.quiet,
-                                                 verbose=options.verbose,
+                                                 options=options,
                                                  date=options.date)
             filename = options.output_filename
             if not filename:

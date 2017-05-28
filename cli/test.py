@@ -7,6 +7,7 @@ import xml2rfc.utils
 import lxml
 import tempfile
 import re
+from optparse import Values
 
 def arrstrip(arr):
     """ Strip beginning and end blanklines of an array """
@@ -149,7 +150,7 @@ class WriterElementTest(unittest.TestCase):
             ext = format["ext"]
             spacefix = format["spacefix"]
             unicodefix = format["unicodefix"]
-            writer = format["writer"](XmlRfcDummy(), quiet=True)
+            writer = format["writer"](XmlRfcDummy(), options=Values(defaults=dict(quiet=True, verbose=False, utf8=False)))
             testfunc = getattr(writer, func_name)
             postprocessing = getattr(writer, format["postprocesslines"])
             #
@@ -219,7 +220,7 @@ class WriterRootTest(unittest.TestCase):
         """ Parse a minimal RFC tree and instantiate a writer """
         self.parser = xml2rfc.XmlRfcParser(path, quiet=True)
         self.xmlrfc = self.parser.parse()
-        self.writer = xml2rfc.PaginatedTextRfcWriter(self.xmlrfc, quiet=True)
+        self.writer = xml2rfc.PaginatedTextRfcWriter(self.xmlrfc, options=Values(defaults=dict(quiet=True, verbose=False, utf8=False)))
         self.writer._format_date()
         self.writer.pre_rendering()
 

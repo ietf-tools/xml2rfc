@@ -9,6 +9,7 @@ import lxml
 import re
 import xml2rfc.log
 import xml2rfc.utils
+from optparse import Values
 
 try:
     import debug
@@ -312,9 +313,10 @@ class BaseRfcWriter:
 
     # -------------------------------------------------------------------------
 
-    def __init__(self, xmlrfc, quiet=False, verbose=False, date=datetime.date.today()):
-        self.quiet = quiet
-        self.verbose = verbose
+    def __init__(self, xmlrfc, options=Values(defaults=dict(quiet=False, verbose=False)), date=datetime.date.today()):
+        self.options = options
+        self.quiet = options.quiet
+        self.verbose = options.verbose
         self.date = date
         self.expire_string = ''
         self.ascii = False
