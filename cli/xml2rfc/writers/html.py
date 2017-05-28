@@ -750,7 +750,7 @@ class HtmlRfcWriter(BaseRfcWriter):
         # Grab values that haven't been inserted yet
         background_image = (self.pis['background'] and 
             "background-image:url('%s');" % self.pis['background'] or '')
-        title = self.r.find('front/title').text
+        title = self.r.find('front/title').text or ''
         docName = self.r.attrib.get('docName', '')
         description = ''
         abs_t = self.r.find('front/abstract/t')
