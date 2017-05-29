@@ -540,7 +540,7 @@ class HtmlRfcWriter(BaseRfcWriter):
             bullet_td.attrib['class'] = 'reference'
             ref_td = E.TD()
             ref_td.attrib['class'] = 'top'
-            last = ref_td
+            last = None
             authors = reference.findall('front/author')
             for j, author in enumerate(authors):
                 for e in author:
@@ -588,11 +588,15 @@ class HtmlRfcWriter(BaseRfcWriter):
                 title_string = ''
             if title_string:
                 if reference.attrib.get("quote-title", "true") == "true": # attribute default value: yes
-                    last.tail = ', "' if len(authors) else '"'
+                    if last is not None:
+                        last.tail = ', "' 
+                    else:
+                        ref_td.text = '"'
                     title_a = E.A(title_string)
                     title_a.tail = '"'
                 else:
-                    last.tail = ', ' if len(authors) else ''
+                    if last is not None:
+                        last.tail = ', '
                     title_a = E.A(title_string)
                     title_a.tail = ''
                 ref_td.append(title_a)
