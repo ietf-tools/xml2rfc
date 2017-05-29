@@ -546,7 +546,14 @@ class HtmlRfcWriter(BaseRfcWriter):
                 organization = author.find('organization')
                 email = author.find('address/email')
                 surname = author.attrib.get('surname')
-                initials = self.get_initials(author)
+                multipleInitials = False
+                if surname:
+                    if author[0].tag is lxml.etree.PI:
+                        pidict = self.parse_pi(author[0])
+                        if pidict and "multiple-initials" in pidict and pidict["multiple-initials"] == "yes":
+                            multipleInitials = True
+                initials = self.get_initials(author, multipleInitials)
+                a = None
                 if j == len(authors) - 1 and len(authors) > 1:
                     last.tail = ' and '
                 if surname is not None:
@@ -567,13 +574,13 @@ class HtmlRfcWriter(BaseRfcWriter):
                             a.attrib['href'] = 'mailto:' + email.text
                     if organization is not None and organization.text:
                         a.attrib['title'] = organization.text.strip()
-                    ref_td.append(a)
-                    last = a
                 elif organization is not None and organization.text:
                     # Use organization instead of name
                     a = E.A(organization.text.strip())
-                    ref_td.append(a)
-                    last = a
+                else:
+                    continue
+                ref_td.append(a)
+                last = a
                 a.tail = ', '
             title = reference.find('front/title')
             if title is not None and title.text:

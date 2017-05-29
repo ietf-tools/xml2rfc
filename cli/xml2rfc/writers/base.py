@@ -455,7 +455,7 @@ class BaseRfcWriter:
         self._index.append(item)
         return item
 
-    def get_initials(self, author):
+    def get_initials(self, author, multiple=False):
         """author is an rfc2629 author element.  Return the author initials,
         fixed up according to current flavour and policy."""
         initials = author.attrib.get('initials', '')
@@ -465,7 +465,10 @@ class BaseRfcWriter:
         except:
             pass
         if len(initials_list) > 0:
-            initials = ". ".join(initials_list) + "."
+            if multiple:
+                initials = ". ".join(initials_list) + "."
+            else:
+                initials = initials_list[0] + "."
         return initials
 
     def parse_pi(self, pi):
@@ -597,7 +600,13 @@ class BaseRfcWriter:
             if i == len(authors) - 1 and len(authors) > 1:
                 buf.append('and ')
             if surname:
-                initials = self.get_initials(author)
+                multipleInitials = False
+                if author[0].tag is lxml.etree.PI:
+                    pidict = self.parse_pi(author[0])
+                    if pidict and "multiple-initials" in pidict and pidict["multiple-initials"] == "yes":
+                        multipleInitials = True
+                        
+                initials = self.get_initials(author, multipleInitials)
                 if i == len(authors) - 1 and len(authors) > 1:
                     # Last author is rendered in reverse
                     if len(initials) > 0:
@@ -614,6 +623,8 @@ class BaseRfcWriter:
             elif organization is not None and organization.text:
                 # Use organization instead of name
                 buf.append(organization.text.strip())
+            else:
+                continue
             if len(authors) == 2 and i == 0:
                 buf.append(' ')
             elif i < len(authors) - 1:
