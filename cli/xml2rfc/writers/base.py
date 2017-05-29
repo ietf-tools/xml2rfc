@@ -460,10 +460,11 @@ class BaseRfcWriter:
         fixed up according to current flavour and policy."""
         initials = author.attrib.get('initials', '')
         initials_list = re.split("[. ]+", initials)
-        if self.pis["multiple-initials"] == "no":
-            if not initials_list[0] == "":
-                initials = initials_list[0] + "."
-        else:
+        try:
+            initials_list.remove('')
+        except:
+            pass
+        if len(initials_list) > 0:
             initials = ". ".join(initials_list) + "."
         return initials
 
@@ -599,10 +600,15 @@ class BaseRfcWriter:
                 initials = self.get_initials(author)
                 if i == len(authors) - 1 and len(authors) > 1:
                     # Last author is rendered in reverse
-                    buf.append(initials + ' ' + \
+                    if len(initials) > 0:
+                        buf.append(initials + ' ' + \
                                      surname)
-                else:
+                    else:
+                        buf.append(surname)
+                elif len(initials) > 0:
                     buf.append(surname + ', ' + initials)
+                else:
+                    buf.append(surname)
                 if author.attrib.get('role', '') == 'editor':
                     buf.append(', Ed.')
             elif organization is not None and organization.text:
