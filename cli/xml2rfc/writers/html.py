@@ -552,9 +552,15 @@ class HtmlRfcWriter(BaseRfcWriter):
                 if surname is not None:
                     if j == len(authors) - 1 and len(authors) > 1:
                         # Last author, render in reverse
-                        name_string = initials + ' ' + surname 
+                        if len(initials) > 0:
+                            name_string = initials + ' ' + surname
+                        else:
+                            name_string = surname
                     else:
-                        name_string = surname + ', ' + initials
+                        if len(initials) > 0:
+                            name_string = surname + ', ' + initials
+                        else:
+                            name_string = surname
                     a = E.A(name_string)
                     if email is not None and email.text:
                         if self.pis['linkmailto'] == 'yes':
