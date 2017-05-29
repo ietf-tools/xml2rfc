@@ -46,7 +46,7 @@
   </front>
   <middle>
     <!--This document was prepared using Pandoc2rfc https://github.com/miekg/pandoc2rfc -->
-    <section title="Introduction" anchor="introduction" toc="default">
+    <section title="Introduction" anchor="introduction" toc="default" numbered="true">
       <t>This document presents a technique for using Pandoc syntax as a source format for documents in the Internet-Drafts (I-Ds) and Request for Comments (RFC) series.  </t>
       <t>This version is adapted to work with <spanx style="verb" xml:space="preserve">xml2rfc</spanx> version 2.x.  </t>
       <t>Pandoc is an "almost plain text" format and therefor particularly well suited for editing RFC-like documents.  </t>
@@ -56,7 +56,7 @@
         </list>
       </t>
     </section>
-    <section title="Pandoc to RFC" anchor="pandoc-to-rfc" toc="default">
+    <section title="Pandoc to RFC" anchor="pandoc-to-rfc" toc="default" numbered="true">
       <t>
         <list style="empty">
           <t>Pandoc2rfc -- designed to do the right thing, until it doesn't.  </t>
@@ -113,7 +113,7 @@ non-existent  |                       | xsltproc
         </list>
       </t>
       <t>The draft (<spanx style="verb" xml:space="preserve">draft.txt</spanx>) you are reading now, is automatically created when you call <spanx style="verb" xml:space="preserve">make</spanx>. The homepage of Pandoc2rfc is <eref target="https://github.com/miekg/pandoc2rfc">this github repository</eref>.  </t>
-      <section title="Dependencies" anchor="dependencies" toc="default">
+      <section title="Dependencies" anchor="dependencies" toc="default" numbered="true">
         <t>It needs <spanx style="verb" xml:space="preserve">xsltproc</spanx> and <spanx style="verb" xml:space="preserve">pandoc</spanx> to be installed. See the <eref target="http://johnmacfarlane.net/pandoc/README.html">Pandoc user manual for the details</eref> on how to type in Pandoc style. And ofcourse <spanx style="verb" xml:space="preserve">xml2rfc</spanx> version two.  </t>
         <t>When using Pandoc2rfc consider adding the following sentence to an Acknowledgements section: </t>
         <figure title="" suppress-title="false" align="left" alt="" width="" height="">
@@ -123,7 +123,7 @@ non-existent  |                       | xsltproc
         </figure>
       </section>
     </section>
-    <section title="Starting a new project" anchor="starting-a-new-project" toc="default">
+    <section title="Starting a new project" anchor="starting-a-new-project" toc="default" numbered="true">
       <t>When starting a new project with <spanx style="verb" xml:space="preserve">pandoc2rfc</spanx> you'll need to copy the following files: </t>
       <t>
         <list style="symbols">
@@ -134,7 +134,7 @@ non-existent  |                       | xsltproc
       </t>
       <t>After that you can start editing.  </t>
     </section>
-    <section title="Supported Features" anchor="supported-features" toc="default">
+    <section title="Supported Features" anchor="supported-features" toc="default" numbered="true">
       <t>
         <list style="symbols">
           <t>Sections with an anchor and title attributes (<xref target="section" pageno="false" format="default"/>); </t>
@@ -149,7 +149,7 @@ non-existent  |                       | xsltproc
         </list>
       </t>
     </section>
-    <section title="Unsupported Features" anchor="unsupported-features" toc="default">
+    <section title="Unsupported Features" anchor="unsupported-features" toc="default" numbered="true">
       <t>
         <list style="symbols">
           <t>Lists inside a table (<spanx style="verb" xml:space="preserve">xml2rfc</spanx> doesn't handle this); </t>
@@ -158,17 +158,17 @@ non-existent  |                       | xsltproc
         </list>
       </t>
     </section>
-    <section title="Acknowledgements" anchor="acknowledgements" toc="default">
+    <section title="Acknowledgements" anchor="acknowledgements" toc="default" numbered="true">
       <t>The following people have helped to make Pandoc2rfc what it is today: Benno Overeinder, Erlend Hamnaberg, Matthijs Mekking, Trygve Laugst&#248;l.  </t>
       <t>This document was prepared using Pandoc2rfc.  </t>
     </section>
-    <section title="Pandoc Constructs" anchor="pandoc-constructs" toc="default">
+    <section title="Pandoc Constructs" anchor="pandoc-constructs" toc="default" numbered="true">
       <t>So, what syntax do you need to use to get the correct output? Well, it is <spanx style="emph" xml:space="preserve">just</spanx> Pandoc. The best introduction to the Pandoc style is given in this <eref target="http://johnmacfarlane.net/pandoc/README.html">README from Pandoc itself</eref>.  </t>
       <t>For convenience we list the most important ones in the following sections.  </t>
-      <section title="Paragraph" anchor="paragraph" toc="default">
+      <section title="Paragraph" anchor="paragraph" toc="default" numbered="true">
         <t>Paragraphs are separated with an empty line.  </t>
       </section>
-      <section title="Section" anchor="section" toc="default">
+      <section title="Section" anchor="section" toc="default" numbered="true">
         <t>Just use the normal sectioning commands available in Pandoc, for instance: </t>
         <figure title="" suppress-title="false" align="left" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
@@ -179,9 +179,9 @@ Bla
         <t>Converts to: <spanx style="verb" xml:space="preserve">&lt;section title="Section1 One" anchor="section1-one"&gt;</spanx> If you have another section that is also named "Section1 One", that anchor will be called "section1-one-1", but <spanx style="emph" xml:space="preserve">only</spanx> when the sections are in the <spanx style="emph" xml:space="preserve">same</spanx> source file! </t>
         <t>Referencing the section is done with <spanx style="verb" xml:space="preserve">see [](#section1-one)</spanx>, as in see <xref target="section" pageno="false" format="default"/>.  </t>
       </section>
-      <section title="List Styles" anchor="list-styles" toc="default">
+      <section title="List Styles" anchor="list-styles" toc="default" numbered="true">
         <t>A good number of styles are supported.  </t>
-        <section title="Symbol" anchor="symbol" toc="default">
+        <section title="Symbol" anchor="symbol" toc="default" numbered="true">
           <figure title="" suppress-title="false" align="left" alt="" width="" height="">
             <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
 A symbol list.
@@ -198,7 +198,7 @@ A symbol list.
             </list>
           </t>
         </section>
-        <section title="Number" anchor="number" toc="default">
+        <section title="Number" anchor="number" toc="default" numbered="true">
           <figure title="" suppress-title="false" align="left" alt="" width="" height="">
             <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
 A numbered list.
@@ -215,7 +215,7 @@ A numbered list.
             </list>
           </t>
         </section>
-        <section title="Empty" anchor="empty" toc="default">
+        <section title="Empty" anchor="empty" toc="default" numbered="true">
           <t>Using the default list markers from Pandoc: </t>
           <figure title="" suppress-title="false" align="left" alt="" width="" height="">
             <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
@@ -233,7 +233,7 @@ A list using the default list markers.
             </list>
           </t>
         </section>
-        <section title="Roman" anchor="roman" toc="default">
+        <section title="Roman" anchor="roman" toc="default" numbered="true">
           <t>Use the supported Pandoc syntax: </t>
           <figure title="" suppress-title="false" align="left" alt="" width="" height="">
             <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
@@ -263,7 +263,7 @@ II. Item two.
             </list>
           </t>
         </section>
-        <section title="Letter" anchor="letter" toc="default">
+        <section title="Letter" anchor="letter" toc="default" numbered="true">
           <t>A numbered list.  </t>
           <figure title="" suppress-title="false" align="left" alt="" width="" height="">
             <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
@@ -293,7 +293,7 @@ B.  Item two.
             </list>
           </t>
         </section>
-        <section title="Hanging" anchor="hanging" toc="default">
+        <section title="Hanging" anchor="hanging" toc="default" numbered="true">
           <t>This is more like a description list, so we need to use: </t>
           <figure title="" suppress-title="false" align="left" alt="" width="" height="">
             <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
@@ -313,7 +313,7 @@ Second item that needs clarification:
           <t>If you want a newline after the hangTexts, search for the string <spanx style="verb" xml:space="preserve">OPTION</spanx> in <spanx style="verb" xml:space="preserve">transform.xsl</spanx> and uncomment it.  </t>
         </section>
       </section>
-      <section title="Figure/Artwork" anchor="figureartwork" toc="default">
+      <section title="Figure/Artwork" anchor="figureartwork" toc="default" numbered="true">
         <t>Indent the paragraph with 4 spaces.  </t>
         <figure title="" suppress-title="false" align="left" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
@@ -321,7 +321,7 @@ Like this
 </artwork>
         </figure>
         <t>Converts to: <spanx style="verb" xml:space="preserve">&lt;figure&gt;&lt;artwork&gt; ...</spanx> Note that <spanx style="verb" xml:space="preserve">xml2rfc</spanx> supports a caption with <spanx style="verb" xml:space="preserve">&lt;artwork&gt;</spanx>. Pandoc does not support this, but Pandoc2rfc does. If you add a <spanx style="verb" xml:space="preserve">@Figure: some text</spanx> as the last line, the artwork gets a <spanx style="verb" xml:space="preserve">title</spanx> attribute with the text after <spanx style="verb" xml:space="preserve">@Figure:</spanx>. It will also be possible to reference the artwork. If a caption is supplied the artwork will be centered. If a caption is needed but the figure should not be centered use <spanx style="verb" xml:space="preserve">@figure:\</spanx>.  </t>
-        <section title="References" anchor="references" toc="default">
+        <section title="References" anchor="references" toc="default" numbered="true">
           <t>The reference anchor attribute will be: <spanx style="verb" xml:space="preserve">fig:</spanx> + <spanx style="verb" xml:space="preserve">first 10 (normalized) characters from the caption</spanx>.  Where normalized means: </t>
           <t>
             <list style="symbols">
@@ -334,7 +334,7 @@ Like this
           <t>This anchoring is completely handled from within the <spanx style="verb" xml:space="preserve">xslt</spanx>. Note that duplicate anchors are an XML validation error which will make <spanx style="verb" xml:space="preserve">xml2rfc</spanx> fail.  </t>
         </section>
       </section>
-      <section title="Block Quote" anchor="block-quote" toc="default">
+      <section title="Block Quote" anchor="block-quote" toc="default" numbered="true">
         <t>Any paragraph like: </t>
         <figure title="" suppress-title="false" align="left" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
@@ -343,8 +343,8 @@ Like this
         </figure>
         <t>Converts to: <spanx style="verb" xml:space="preserve">&lt;t&gt;&lt;list style="empty"&gt; ...</spanx> paragraph, making it indented.  </t>
       </section>
-      <section title="References" anchor="references-1" toc="default">
-        <section title="External" anchor="external" toc="default">
+      <section title="References" anchor="references-1" toc="default" numbered="true">
+        <section title="External" anchor="external" toc="default" numbered="true">
           <t>Any reference like: </t>
           <figure title="" suppress-title="false" align="left" alt="" width="" height="">
             <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
@@ -353,7 +353,7 @@ Like this
           </figure>
           <t>Converts to: <spanx style="verb" xml:space="preserve">&lt;ulink target="URI"&gt;Click here ...</spanx> </t>
         </section>
-        <section title="Internal" anchor="internal" toc="default">
+        <section title="Internal" anchor="internal" toc="default" numbered="true">
           <t>Any reference like: </t>
           <figure title="" suppress-title="false" align="left" alt="" width="" height="">
             <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
@@ -376,12 +376,12 @@ See [](#pandoc-constructs)
           <t>The word 'Section' is inserted automatically: ... see <xref target="pandoc-constructs" pageno="false" format="default"/> ... For referencing figures/artworks see <xref target="figureartwork" pageno="false" format="default"/>. For referencing tables see <xref target="tables" pageno="false" format="default"/>.  </t>
         </section>
       </section>
-      <section title="Spanx Styles" anchor="spanx-styles" toc="default">
+      <section title="Spanx Styles" anchor="spanx-styles" toc="default" numbered="true">
         <t>The verb style can be selected with back-tics: <spanx style="verb" xml:space="preserve">`text`</spanx> Converts to: <spanx style="verb" xml:space="preserve">&lt;spanx style="verb"&gt; ...</spanx> </t>
         <t>And the emphasis style with asterisks: <spanx style="verb" xml:space="preserve">*text*</spanx> or underscores: <spanx style="verb" xml:space="preserve">_text_</spanx> Converts to: <spanx style="verb" xml:space="preserve">&lt;spanx style="emph"&gt; ...</spanx> </t>
         <t>And the emphasis style with double asterisks: <spanx style="verb" xml:space="preserve">**text**</spanx> Converts to: <spanx style="verb" xml:space="preserve">&lt;spanx style="strong"&gt; ...</spanx> </t>
       </section>
-      <section title="Tables" anchor="tables" toc="default">
+      <section title="Tables" anchor="tables" toc="default" numbered="true">
         <t>A table can be entered as: </t>
         <figure anchor="fig:a-caption-" align="center" title="A caption describing the figure describing the table." suppress-title="false" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
@@ -395,7 +395,7 @@ See [](#pandoc-constructs)
   </artwork>
         </figure>
         <t>Is translated to <spanx style="verb" xml:space="preserve">&lt;texttable&gt;</spanx> element in <spanx style="verb" xml:space="preserve">xml2rfc</spanx>. You can choose multiple styles as input, but they all are converted to the same style (plain <spanx style="verb" xml:space="preserve">&lt;texttable&gt;</spanx>) table in <spanx style="verb" xml:space="preserve">xml2rfc</spanx>. The column alignment is copied over to the generated XML.  </t>
-        <section title="References" anchor="references-2" toc="default">
+        <section title="References" anchor="references-2" toc="default" numbered="true">
           <t>The caption is <spanx style="emph" xml:space="preserve">always</spanx> translated to a <spanx style="verb" xml:space="preserve">title</spanx> attribute. If a table has a caption, it will <spanx style="emph" xml:space="preserve">also</spanx> get a reference. The reference anchor attribute will be: <spanx style="verb" xml:space="preserve">tab:</spanx> + <spanx style="verb" xml:space="preserve">first 10 (normalized) characters from the caption</spanx>.  Where normalized means: </t>
           <t>
             <list style="symbols">
@@ -408,7 +408,7 @@ See [](#pandoc-constructs)
           <t>This anchoring is completely handled from within the <spanx style="verb" xml:space="preserve">xslt</spanx>. Note that duplicate anchors are an XML validation error which will make <spanx style="verb" xml:space="preserve">xml2rfc</spanx> fail.  </t>
         </section>
       </section>
-      <section title="Indexes" anchor="indexes" toc="default">
+      <section title="Indexes" anchor="indexes" toc="default" numbered="true">
         <t>The footnote syntax of Pandoc is slightly abused to support an index. Footnotes are entered in two steps, you have a marker in the text, and later you give actual footnote text. Like this: </t>
         <figure title="" suppress-title="false" align="left" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
@@ -431,8 +431,8 @@ See [](#pandoc-constructs)
         </figure>
       </section>
     </section>
-    <section title="Usage guidelines" anchor="usage-guidelines" toc="default">
-      <section title="Working with multiple files" anchor="working-with-multiple-files" toc="default">
+    <section title="Usage guidelines" anchor="usage-guidelines" toc="default" numbered="true">
+      <section title="Working with multiple files" anchor="working-with-multiple-files" toc="default" numbered="true">
         <t>As an author you will probably break up a draft in multiple files, each dealing with a subject or section. When doing so sections with the same title will clash with each other. Pandoc can deal with this situation, but only if the different sections are in the <spanx style="emph" xml:space="preserve">same</spanx> file or processed in the same Pandoc run. Concatenating the different section files before processing them is a solution to this problem. You can, for instance, amend the <spanx style="verb" xml:space="preserve">Makefile</spanx> and add something like this: </t>
         <figure title="" suppress-title="false" align="left" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
@@ -442,7 +442,7 @@ allsections.pdc: section.pdc.1 section.pdc.2 section.pdc.3
         </figure>
         <t>And then process <spanx style="verb" xml:space="preserve">allsection.pdc</spanx> in the normal way.  </t>
       </section>
-      <section title="Setting the title" anchor="setting-the-title" toc="default">
+      <section title="Setting the title" anchor="setting-the-title" toc="default" numbered="true">
         <t>If you use double quotes in the documents title in the <spanx style="verb" xml:space="preserve">docName</spanx> attribute, like: </t>
         <figure title="" suppress-title="false" align="left" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
@@ -457,17 +457,17 @@ draft-gieben-writing-rfcs-pandoc-00.txt -&gt; draft.txt
         </figure>
         <t>This makes uploading the file to the i-d tracker a bit easier.  </t>
       </section>
-      <section title="Uploading the XML/txt" anchor="uploading-the-xmltxt" toc="default">
+      <section title="Uploading the XML/txt" anchor="uploading-the-xmltxt" toc="default" numbered="true">
         <t>The <spanx style="verb" xml:space="preserve">draft.xml</spanx> target will generate an XML file with all XML included, so you can upload just one file to the I-D tracker.  </t>
       </section>
-      <section title="VIM syntax highlighting" anchor="vim-syntax-highlighting" toc="default">
+      <section title="VIM syntax highlighting" anchor="vim-syntax-highlighting" toc="default" numbered="true">
         <t>If you are a VIM user you might be interested in a syntax highlighting file (see <xref target="VIM" pageno="false" format="default"/>) that slightly lightens up your reading experience while viewing a draft.txt from VIM.  </t>
       </section>
     </section>
-    <section title="Security Considerations" anchor="security-considerations" toc="default">
+    <section title="Security Considerations" anchor="security-considerations" toc="default" numbered="true">
       <t>This document raises no security issues.  </t>
     </section>
-    <section title="IANA Considerations" anchor="iana-considerations" toc="default">
+    <section title="IANA Considerations" anchor="iana-considerations" toc="default" numbered="true">
       <t>This document has no actions for IANA.  </t>
     </section>
   </middle>
@@ -536,22 +536,22 @@ draft-gieben-writing-rfcs-pandoc-00.txt -&gt; draft.txt
       </reference>
     </references>
     <!--This document was prepared using Pandoc2rfc https://github.com/miekg/pandoc2rfc -->
-    <section title="Tests" anchor="tests" toc="default">
+    <section title="Tests" anchor="tests" toc="default" numbered="true">
       <t>This appendix consists out of a few tests that should all render to proper <spanx style="verb" xml:space="preserve">xml2rfc</spanx> XML.  </t>
-      <section title="A Very Long Title Considerations With Regards to the Already Deployed Routing Policy" anchor="a-very-long-title-considerations-with-regards-to-the-already-deployed-routing-policy" toc="default">
+      <section title="A Very Long Title Considerations With Regards to the Already Deployed Routing Policy" anchor="a-very-long-title-considerations-with-regards-to-the-already-deployed-routing-policy" toc="default" numbered="true">
         <t>Test a very long title.  </t>
       </section>
-      <section title="Markup in heading" anchor="markup-in-heading" toc="default">
+      <section title="Markup in heading" anchor="markup-in-heading" toc="default" numbered="true">
         <t>This is discarded by <spanx style="verb" xml:space="preserve">xml2rfc</spanx>.  </t>
       </section>
-      <section title="Blockquote" anchor="blockquote" toc="default">
+      <section title="Blockquote" anchor="blockquote" toc="default" numbered="true">
         <t>
           <list style="empty">
             <t>This is a blockquote, how does it look? </t>
           </list>
         </t>
       </section>
-      <section title="Verbatim code blocks" anchor="verbatim-code-blocks" toc="default">
+      <section title="Verbatim code blocks" anchor="verbatim-code-blocks" toc="default" numbered="true">
         <figure title="" suppress-title="false" align="left" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
 A verbatim code block
@@ -559,10 +559,10 @@ jkasjksajassjasjsajsajkas
 </artwork>
         </figure>
       </section>
-      <section title="Reference Tests" anchor="reference-tests" toc="default">
+      <section title="Reference Tests" anchor="reference-tests" toc="default" numbered="true">
         <t>Refer to <xref target="RFC2119" pageno="false" format="default">RFC 2119</xref> if you will. Or maybe you want to inspect <xref target="fig:a-minimal-" pageno="false" format="default"/> in <xref target="pandoc-to-rfc" pageno="false" format="default"/> again. Or you might want to <eref target="http://miek.nl">Click here</eref>.  </t>
       </section>
-      <section title="Spanx Tests" anchor="spanx-tests" toc="default">
+      <section title="Spanx Tests" anchor="spanx-tests" toc="default" numbered="true">
         <t>
           <list style="empty">
             <t>underscores: <spanx style="emph" xml:space="preserve">underscores</spanx> </t>
@@ -572,7 +572,7 @@ jkasjksajassjasjsajsajkas
           </list>
         </t>
       </section>
-      <section title="List Tests" anchor="list-tests" toc="default">
+      <section title="List Tests" anchor="list-tests" toc="default" numbered="true">
         <t>
           <list style="numbers">
             <t>First we do </t>
@@ -692,7 +692,7 @@ a.miek.nl.  IN  A   192.0.2.1    ; &lt;- this is glue
           </list>
         </t>
       </section>
-      <section title="Table Tests" anchor="table-tests" toc="default">
+      <section title="Table Tests" anchor="table-tests" toc="default" numbered="true">
         <texttable anchor="tab:demonstrat" title="&#10;        Demonstration of simple table&#10;        syntax.&#10;      " suppress-title="false" align="center" style="full">
           <ttcol align="right">Right </ttcol>
           <ttcol align="left">Left </ttcol>
@@ -759,7 +759,7 @@ See [](#tab:here-s-the)
         <t><iref item="table" subitem="grid" primary="false"/> </t>
         <t>We should also be able to refer to the table numbers directly, to say things like 'Look at Tables <xref target="tab:demonstrat" format="counter" pageno="false"/>, <xref target="tab:here-s-the" format="counter" pageno="false"/> and <xref target="tab:sample-gri" format="counter" pageno="false"/>.'</t>
       </section>
-      <section title="Numbered examples" anchor="numbered-examples" toc="default">
+      <section title="Numbered examples" anchor="numbered-examples" toc="default" numbered="true">
         <t>This is another example: </t>
         <t>
           <list style="numbers">
@@ -768,7 +768,7 @@ See [](#tab:here-s-the)
         </t>
         <t>as (1) shows...  </t>
       </section>
-      <section title="Figure tests" anchor="figure-tests" toc="default">
+      <section title="Figure tests" anchor="figure-tests" toc="default" numbered="true">
         <figure anchor="fig:this-is-th" align="center" title="This is the caption, with text in `typewriter`. Which isnt converted to a &lt;spanx&gt; style, because this is copied as-is." suppress-title="false" alt="" width="" height="">
           <artwork xml:space="preserve" name="" type="" align="left" alt="" width="" height="">
 This is a figure
@@ -793,7 +793,7 @@ This is a figure with a title
 </artwork>
         </figure>
       </section>
-      <section title="Verse tests" anchor="verse-tests" toc="default">
+      <section title="Verse tests" anchor="verse-tests" toc="default" numbered="true">
         <t>This is a verse text This is another line </t>
       </section>
     </section>

@@ -495,6 +495,10 @@ class BaseRfcWriter:
             raise RfcWriterError('No boilerplate text available for '
             'ipr: \'%s\'.  Acceptable values are: ' % ipr + \
             ', '.join(self.supported_ipr))
+        
+    def is_numbered(self, node):
+        attr = node.attrib.get('numbered', 'true')
+        return attr in ['yes', 'true', ]
     
     def _format_date(self):
         """ Fix the date data """
@@ -873,12 +877,12 @@ class BaseRfcWriter:
             include_toc = section.attrib.get('toc', self.defaults['section_toc']) != 'exclude' \
                           and (not appendix or self.pis['tocappendix'] == 'yes')
             if level == 1:
-                numbered = numbered and section.attrib.get('numbered') != "no"
+                numbered = numbered and self.is_numbered(section)
             else:
-                numbered = section.attrib.get('numbered') != "no"
+                numbered = self.is_numbered(section)
             if level > 1 and not numbered:
                 if not self.indexmode:
-                    xml2rfc.log.warn('Unnumbered subsections are not permitted: found section "%s" with attribute numbered="no"' % (title, ))
+                    xml2rfc.log.warn('Unnumbered subsections are not permitted: found section "%s" with attribute numbered="no" or "false"' % (title, ))
                 numbered = True
             if self.indexmode:
                 # Add section to the index
@@ -932,8 +936,8 @@ class BaseRfcWriter:
         for child_sec in section.findall('section'):
             if level == 0:
                 if numbered:
-                    numbered = child_sec.attrib.get('numbered') != "no"
-                elif child_sec.attrib.get('numbered') != "no":
+                    numbered = self.is_numbered(child_sec)
+                elif self.is_numbered(child_sec):
                     title = child_sec.attrib.get('title')
                     if not self.indexmode:
                         xml2rfc.log.warn('Numbered sections are not permitted after unnumbered sections: found section "%s" without attribute numbered="no"' % (title,))
