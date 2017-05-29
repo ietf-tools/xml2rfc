@@ -217,39 +217,39 @@ class HtmlRfcWriter(BaseRfcWriter):
         """ Return a list of HTML elements that represent the reference """   
         if element.tag == 'xref':
             target = element.attrib.get('target', '')
+            format = element.attrib.get('format', self.defaults['xref_format'])
             item = self._getItemByAnchor(target)
             if not self.indexmode:
                 if not item:
                     xml2rfc.log.warn("Can't resolve xref target %s" % target)
                 else:
                     item.used = True
-            if element.text:
-                cite = E.CITE('[' + target + ']', title='NONE')
-                a = E.A(element.text, href='#' + target)
-                a.tail = ' '
-                if element.tail:
-                    cite.tail = element.tail
-                return [a, cite]
+            # Create xref from index lookup
+            if not item:
+                text = '[' + target + ']'
+            elif format == 'none':
+                text = ''
+            elif format == 'counter':
+                text = item.counter
+            elif format == 'title':
+                text = item.title.strip()
             else:
-                # Create xref from index lookup
-                format = element.attrib.get('format', 
-                                            self.defaults['xref_format'])
-                a = E.A(href='#' + target)
-                if not item:
-                    text = '[' + target + ']'
-                elif format == 'none':
-                    text = ''
-                elif format == 'counter':
-                    text = item.counter
-                elif format == 'title':
-                    text = item.title.strip()
-                else:
-                    # Default
-                    text = item.autoName
-                a.text = text
-                if element.tail:
-                    a.tail = element.tail
-                return [a]
+                # Default
+                text = item.autoName
+
+            # following the V3 HTML -
+            #  If you specify text, that is what you get.
+            if element.text:
+                text = element.text.rstrip()
+             
+            a = E.A(href='#' + target)
+            a.attrib["class"] = "xref"
+            a.text = text
+            if element.tail:
+                a.tail = element.tail
+            
+            return [a]
+
         elif element.tag == 'eref':
             target = element.attrib.get('target', '')
             if element.text:
