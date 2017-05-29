@@ -704,7 +704,7 @@ class BaseRfcWriter:
         lines = []
         # Render author?
         authorship = self.pis['authorship']
-        if authorship == 'yes':
+        if authorship in ['yes', 'IAB', ]:
             # Keep track of previous organization and remove if redundant.
             last_org = None
             last_pos = None
@@ -720,13 +720,13 @@ class BaseRfcWriter:
                              get('surname', '') + role)
                 organization = author.find('organization')
                 org_name = ''
-                if organization is not None:
+                if organization is not None and authorship == 'yes':
                     abbrev = organization.attrib.get("abbrev", None)
                     if  abbrev != None and abbrev.strip() != '':
                         org_name = abbrev.strip()
                     elif organization.text and organization.text.strip() != '':
                         org_name = organization.text.strip()
-                if org_name == '':
+                if org_name == '' and authorship == 'yes':
                     lines.append('')
                 else:
                     if org_name == last_org:
