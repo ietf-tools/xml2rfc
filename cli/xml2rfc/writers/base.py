@@ -605,9 +605,6 @@ class BaseRfcWriter:
             if i == len(authors) - 1 and len(authors) > 1:
                 buf.append('and ')
             if surname:
-                for e in author:
-                    if e.tag is lxml.etree.PI:
-                        self.parse_pi(e)
                 initials = self.get_initials(author)
                 if i == len(authors) - 1 and len(authors) > 1:
                     # Last author is rendered in reverse
@@ -712,9 +709,6 @@ class BaseRfcWriter:
                 role = author.attrib.get('role', '')
                 if role == 'editor':
                     role = ', Ed.'
-                for e in author:
-                    if e.tag is lxml.etree.PI:
-                        self.parse_pi(e)
                 initials = self.get_initials(author)
                 lines.append(initials + ' ' + author.attrib.\
                              get('surname', '') + role)

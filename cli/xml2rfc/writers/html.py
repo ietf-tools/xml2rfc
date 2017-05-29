@@ -543,9 +543,6 @@ class HtmlRfcWriter(BaseRfcWriter):
             last = None
             authors = reference.findall('front/author')
             for j, author in enumerate(authors):
-                for e in author:
-                    if e.tag is lxml.etree.PI:
-                        self.parse_pi(e)
                 organization = author.find('organization')
                 email = author.find('address/email')
                 surname = author.attrib.get('surname')

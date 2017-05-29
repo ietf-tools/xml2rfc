@@ -189,15 +189,13 @@ class RawTextRfcWriter(BaseRfcWriter):
         t_count = 0
         for element in list:
             # Check for PI
-            if element.tag is lxml.etree.PI:
-                self.parse_pi(element)
-            elif element.tag == 't':
+            if element.tag == 't':
                 # Disable linebreak if subcompact=yes AND not first list element
                 leading_blankline = True
                 if t_count > 0 and element.pis['subcompact'] == 'yes':
                     leading_blankline = False
                 if style == 'symbols':
-                    bullet = element.pis['text-list-symbols'][level % len(self.pis['text-list-symbols'])]
+                    bullet = element.pis['text-list-symbols'][level % len(element.pis['text-list-symbols'])]
                     bullet += '  '
                 elif style == 'numbers':
                     bullet = self._format_counter("%d.", t_count+1, listlength)
@@ -427,9 +425,6 @@ class RawTextRfcWriter(BaseRfcWriter):
         """
         line = ['']
         for i, element in enumerate(elements):
-            # Check for a PI first
-            if element.tag is lxml.etree.PI:
-                self.parse_pi(element)
             if element.tag not in self.inline_tags:
                 # Not an inline element, exit
                 return ''.join(line), elements[i:]
